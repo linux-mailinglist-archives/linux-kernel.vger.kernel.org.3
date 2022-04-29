@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0AF95155DD
+	by mail.lfdr.de (Postfix) with ESMTP id 889DC5155DB
 	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:39:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381009AbiD2Uls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 16:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53412 "EHLO
+        id S1381084AbiD2Ul5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 16:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381028AbiD2UlG (ORCPT
+        with ESMTP id S1380976AbiD2UlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 29 Apr 2022 16:41:06 -0400
 Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8F583B22
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:37:34 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2f7c322f770so84425997b3.20
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:37:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF05CC535
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:37:36 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2f825f8c944so84511767b3.15
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:37:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=dAD7TU5bxFw4+mtb6XZpH6YJckvLCjHt6y7FOMRwG5M=;
-        b=sF4rYvxurIR8HSYS3JDDW5zN4WVtRvWJLoykvKPRZlF2xUvwg49nOitD3FnwryJfzG
-         q7yNxY2NXlCrhtPLxo9ZiAN5PVyxyXvMyHMP8TI78vutHXo4STj7VEhf7492C2Y+tsV+
-         /S6COa3b8gLTsTS6KwkR/kpJc/tmJ0jEDFXPv4WRePnoKxxqRUFo+kdbrbCuldPWepY4
-         scMjYHWSDzPDQcxdpgp2KwRs/AmLjQ+Jo93U1R8SCCGwY4XZEVOved3HyMyFTtqqZKtg
-         fc+57Z4pGr2BfvmrY+PS4Z/ooYTznRcTEbHo9uQI0RVSXnPSEr9Piu6r59wPLL/8Og0A
-         AM3g==
+        bh=c3P0Hz4r3G9OpLG/quSc8J3HkB5RqmI/gpWW3ubqRHw=;
+        b=L3b4tsGo9U6EKhT1enH+lnwRGBAriMT04pxJOWGmkTh/LOTTSEf7+ZnnodamgedxF/
+         0cwAbqdA5BTRqaVaWO9cIk3CrgrGdAh+jueAcHfV8Bg8TTAZ+khVx+B8eXyacA4mY4Xx
+         K3TQUEqnaXw1lY5l03iwoFMiQRQsJmRAKWpBy5VlbUJzdl8A2l7wvJu19Rol8flqku9I
+         WNZ/yUORvsGxlp+SHTywXjv/cQ3+dFZB9Bv+ISu7Xf8nMdBe2LwKPup9v4pkWEFDDPFS
+         kaimPMTLgDV3p2dFB9fsB4bsR6Vkc62TMrM/JjgmNdYT0fQUUEBM5oeL8rAQdxi3N/ib
+         ZNmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=dAD7TU5bxFw4+mtb6XZpH6YJckvLCjHt6y7FOMRwG5M=;
-        b=v5WDzelX8i0TZSGkPhavJaAWz0H6FcXFsW8GeYif796MLn/6khoqG8A2Ug3BFBkDCk
-         3FZ7On00/QOdhwgAr9w8xQSAP3z0loy5u/r5wGPea1QaeOtfAeOvkwCD/RxiSFPJy0zP
-         C7Ix/0zOzvQAChsCIza5nOJOnYrk/Mr+hcvnBQGHFZ37RLJsG0nSTN0OOtyF3eu87lry
-         Y2JvTpjhI/DHXsz1ugIR+b6vj6sLclz41BioWdN+Lv1rQUH0TJzPNTvEbZRypH7MdPZ2
-         wg5z2KapRasTVBpkLbF3r8tCbqj1LBpm10Rkq21mCRTkhvSw54iAGtKMakUNk1J6dIqX
-         M9mg==
-X-Gm-Message-State: AOAM530d+53Ue7YtgV25W4X/qWE/CyLzaorjdTDZUhFTB6i/3mdNiNR7
-        JB/z7ULJNj5ovRMZ5KJzdfZr2m73uSJFvTIHIggL91/fY2S+cFk7FqSz4w4NjtHO8gbhuhPbQJ0
-        r0zCGgByelyNmVjv/zURqGgc1iKpgyJqYlX4W52qXa9VpteDLG7e+oadgZLGPmivJj0fKHVAVX3
-        JpNrG9ghujbg==
-X-Google-Smtp-Source: ABdhPJyNThaiFHtVkOlq27b/IsKVC7XcaL87tiPVfnWjDS5LKEWWfPb5Rc+LRi2xmrClI0aQlv/FhNCy8ypRoBYPdOA=
+        bh=c3P0Hz4r3G9OpLG/quSc8J3HkB5RqmI/gpWW3ubqRHw=;
+        b=IAVtoSiTHw6IMxW+I3Jh+xWFZF48WyqojAoPDa61ONyo1SUlUOCmtvU+SlL2CwTkn5
+         qGacmwF/kYGmrLdvNtZkQaJK1QjjwSrHV+6YZnT7XgfLOWRYm4eD6nX9TOmmrmrZuBUK
+         fE9YjoaF4lmqPuOnxF3IC4y11VYR/HgH/HTbEgEp2/7gUZDL9s+A+2ijXrMi6o3n806q
+         MeHZ/uVCJBDZfufivhopgA9u7X+9VgbcmxyWdgAeA9UmMEQ7OnDT5j4MaZw3otIYRY8n
+         QtfurpzZ7N20bn7m7jz+WT+kzAJxcXcoiCHQNsL4Mpl2kzVV2JU4YGUacwZk3q2eH2EF
+         9Cgw==
+X-Gm-Message-State: AOAM530yLk31PgJjbKEZIpV3oToPy8JcFzUemNgK1S+LblQWnDdCOLgc
+        oDkQDDaxV2UKWxBtzsOgsSnFX4vsZSlY7zMEqJIAOZG+ZsMsdFsTZGFRvA6IsgD+iAqJCJ5nMW+
+        tF5D7B9gCGSboAo+YETzLRIItu8cgctFE6TE8FkjuPNfllecxDlgIhklG6Peyug68NgdBKUfULc
+        Uri6UKvdlFLA==
+X-Google-Smtp-Source: ABdhPJy48Ta9ddvMIF4e+65DRSdxotM1XKnrKu3boCyUAK2XttelwSr/WCmbVBiS9zrXdXlk0V9aV262+2v6W6Pe/+Y=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:351:bea9:f158:1021])
- (user=samitolvanen job=sendgmr) by 2002:a25:1443:0:b0:63d:6c01:d26f with SMTP
- id 64-20020a251443000000b0063d6c01d26fmr1397777ybu.296.1651264653259; Fri, 29
- Apr 2022 13:37:33 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 13:36:42 -0700
+ (user=samitolvanen job=sendgmr) by 2002:a81:8493:0:b0:2f7:d7c3:15f8 with SMTP
+ id u141-20020a818493000000b002f7d7c315f8mr1216311ywf.196.1651264655480; Fri,
+ 29 Apr 2022 13:37:35 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 13:36:43 -0700
 In-Reply-To: <20220429203644.2868448-1-samitolvanen@google.com>
-Message-Id: <20220429203644.2868448-20-samitolvanen@google.com>
+Message-Id: <20220429203644.2868448-21-samitolvanen@google.com>
 Mime-Version: 1.0
 References: <20220429203644.2868448-1-samitolvanen@google.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=867; h=from:subject;
- bh=up7BEek35o0M0XxxZGb0YVxeAOsDA2frVViAIISPcAE=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBibExYVHtzXXfVkfpC4f30GmwEWwVNyJTrvW77sDTZ
- wzWWtoaJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYmxMWAAKCRBMtfaEi7xW7mGLDA
- CTEoA/YLkPzO4RCaefNoqVsLm/slm3eKAb0EBTNjPQnz5eXoKCVQRKj9PWoPlcKYv0zhhpUXtVDSTh
- ac1XDqL26rGZoUjODIYRAKzZesDGF6mk0vMZegM83LL0VgP+HiMZb3/+JRnyO5lXl9biI+PKRs9yao
- cB6eP6nxZ2oJoZ3wi8wRjZa2dq6HwI1vjgqvc6wkIVZQB1hn1iiX4jK2s+b1RI6sSKL1KoBnu8ruUc
- XnRlTBjlHvsg3sv+Oo60X+xtVo4jt5qSlxPjVS36s+rcz8PjrRYMwuyiX1owAbYAx6891grqZ/Rtja
- zgQtJMT25Vbp1i0Ch4rkcNHucaP6MceaEMqi96kngq6U8NlFl+N4JSFjR9NwvRPX4zPYA/hjeYCpG/
- AzTNfBREHLnSC45xKO3dgHPlu7+SNR2AwuC0gBm9U9UpzBYdOAHJEKi3xrii9tnkvtP20793/d3GJb
- h5zaP+BZ4RGrD05vaq3ji8gcCm/xu4Nv1ehokRtYYrvXM=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1427; h=from:subject;
+ bh=qwzizA85BcxzgY6DCPbuVyLVCg+lMcvwRT1NDXtCdLs=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBibExYM8ehL1/+o0aCrhRJzqnXsps5M4p21c1LQlC3
+ sSVsl4WJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYmxMWAAKCRBMtfaEi7xW7tTEDA
+ CIw6jCzNraux3uPsdGgkoAmjqy1E308ymvORumKcO9YZjpCWgxUG+wrt+QoMZR3WsGxUe2zWhOF83/
+ GBMcbJoiHwlX4DbEEk02ZUts9xuqk851PS5XPj4XupWl8F+kbRnXqWj7hSkLGOAkDS71i8n4fC9xr0
+ 6Ez6wHIz/0fvbvzjy2pHl3vX2S1oouofjPnfB6+NNmsyEb/K8pceL8f2CcR6jIzAd/J0QmzZTj76WT
+ O4AwX/0ZNLkWjMQpGtuKzzGFHozskjUdwKRyIsCMnHGCm2py2s1oLV/ZY9mk7yD4IoRB3MrC0v0FDM
+ Fl8hcWy38RiLdiG2OvGkUee959W0eF+qPDLNNpHfpiSB1J1t43APoJLX+iPYsGLObYHe9DGTllVo0x
+ kt56P/u268sda8zQK7JrAuU3qLye5d96mt/FiDL13+rXzBZuloXyNLx7trQLbxVhiAQkGYOvGEGt2D
+ lY6u8L5nEHbyCOCMu0kfKXPQzqa6gVH7sa1innsuiCfcA=
 X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [RFC PATCH 19/21] x86/purgatory: Disable CFI
+Subject: [RFC PATCH 20/21] x86/vdso: Disable CFI
 From:   Sami Tolvanen <samitolvanen@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Kees Cook <keescook@chromium.org>,
@@ -85,7 +85,7 @@ Cc:     Kees Cook <keescook@chromium.org>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,31 +93,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Disable CONFIG_CFI_CLANG for the stand-alone purgatory.ro.
+CC_FLAGS_LTO no longer includes CC_FLAGS_CFI, so filter these flags
+out as well.
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Tested-by: Nick Desaulniers <ndesaulniers@google.com>
-Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
 ---
- arch/x86/purgatory/Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/x86/entry/vdso/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
-index ae53d54d7959..b3fa947fa38b 100644
---- a/arch/x86/purgatory/Makefile
-+++ b/arch/x86/purgatory/Makefile
-@@ -55,6 +55,10 @@ ifdef CONFIG_RETPOLINE
- PURGATORY_CFLAGS_REMOVE		+= $(RETPOLINE_CFLAGS)
+diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
+index 693f8b9031fb..abf41ef0f89e 100644
+--- a/arch/x86/entry/vdso/Makefile
++++ b/arch/x86/entry/vdso/Makefile
+@@ -91,7 +91,7 @@ ifneq ($(RETPOLINE_VDSO_CFLAGS),)
+ endif
  endif
  
-+ifdef CONFIG_CFI_CLANG
-+PURGATORY_CFLAGS_REMOVE		+= $(CC_FLAGS_CFI)
-+endif
-+
- CFLAGS_REMOVE_purgatory.o	+= $(PURGATORY_CFLAGS_REMOVE)
- CFLAGS_purgatory.o		+= $(PURGATORY_CFLAGS)
+-$(vobjs): KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO) $(GCC_PLUGINS_CFLAGS) $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
++$(vobjs): KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO) $(CC_FLAGS_CFI) $(GCC_PLUGINS_CFLAGS) $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
  
+ #
+ # vDSO code runs in userspace and -pg doesn't help with profiling anyway.
+@@ -151,6 +151,7 @@ KBUILD_CFLAGS_32 := $(filter-out -mfentry,$(KBUILD_CFLAGS_32))
+ KBUILD_CFLAGS_32 := $(filter-out $(GCC_PLUGINS_CFLAGS),$(KBUILD_CFLAGS_32))
+ KBUILD_CFLAGS_32 := $(filter-out $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS_32))
+ KBUILD_CFLAGS_32 := $(filter-out $(CC_FLAGS_LTO),$(KBUILD_CFLAGS_32))
++KBUILD_CFLAGS_32 := $(filter-out $(CC_FLAGS_CFI),$(KBUILD_CFLAGS_32))
+ KBUILD_CFLAGS_32 += -m32 -msoft-float -mregparm=0 -fpic
+ KBUILD_CFLAGS_32 += -fno-stack-protector
+ KBUILD_CFLAGS_32 += $(call cc-option, -foptimize-sibling-calls)
 -- 
 2.36.0.464.gb9c8b46e94-goog
 

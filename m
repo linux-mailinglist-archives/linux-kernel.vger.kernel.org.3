@@ -2,90 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5209D514D47
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:37:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCBB9514D55
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377547AbiD2Oi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 10:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54310 "EHLO
+        id S1356703AbiD2Ojo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 10:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239368AbiD2Ois (ORCPT
+        with ESMTP id S1377580AbiD2OjG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 10:38:48 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFFEF2AC68;
-        Fri, 29 Apr 2022 07:35:28 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TEKVNM003396;
-        Fri, 29 Apr 2022 14:35:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=HiKnQFIKsWb1SgG7NveoXB9VxlV6FkOiyjN8a2ffYFc=;
- b=bnS87YATFDyE9QNWTBBh0G2HNFztxMZ4zV6FOD+akIq+zK+nh294iahGuf3XLt9IA6aM
- pNpkR7/ADvxpFtn3c8d4ZZmhrOskUijOtkXo3bN0LPEKrGZb9DwPdX21Cp9GjSnnjs02
- tEoEbynX3vz0OoGTxJBWpGn7DONDrWIyLztJPc9yAcIX3lUTInJ/Y8Q3FH66pD2DWPm1
- V61nttroY+k63XuhFRBIRIiIvNhHUit7Uw4dDpbfmpP6jhZ/XGl5LxzipHJifVbkG9D3
- xctfcCoW7aC9w2sXnNdOJO2r47tmV6Xr99Gho7t10Op1ghCF8NBpvgWo8lzFCI7SGGuK bg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqu6p62fh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 14:35:23 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23TEZNEZ019658;
-        Fri, 29 Apr 2022 14:35:23 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqu6p62ep-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 14:35:23 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TEKKZ2010052;
-        Fri, 29 Apr 2022 14:35:21 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma05fra.de.ibm.com with ESMTP id 3fm938ybuf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 14:35:21 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TEZIX741484546
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 29 Apr 2022 14:35:18 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D53245204F;
-        Fri, 29 Apr 2022 14:35:18 +0000 (GMT)
-Received: from sig-9-145-61-57.uk.ibm.com (unknown [9.145.61.57])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 491C85204E;
-        Fri, 29 Apr 2022 14:35:18 +0000 (GMT)
-Message-ID: <fe7c9d345791bcd8eb72486098a332e086ee99ae.camel@linux.ibm.com>
-Subject: Re: [PATCH 25/37] video: handle HAS_IOPORT dependencies
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        Helge Deller <deller@gmx.de>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <dri-devel@lists.freedesktop.org>
-Date:   Fri, 29 Apr 2022 16:35:17 +0200
-In-Reply-To: <20220429135108.2781579-45-schnelle@linux.ibm.com>
-References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
-         <20220429135108.2781579-45-schnelle@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: WTH9ABT2_cvAURJcMc5Gj6PtM920RVlN
-X-Proofpoint-ORIG-GUID: VhsrnNK0hcl0L6Y-QWH99-EwiYthy5sh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-29_07,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- spamscore=0 malwarescore=0 adultscore=0 mlxlogscore=444 priorityscore=1501
- suspectscore=0 phishscore=0 clxscore=1015 mlxscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204290080
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Fri, 29 Apr 2022 10:39:06 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9D320196
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:35:48 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id iq2-20020a17090afb4200b001d93cf33ae9so10670920pjb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:35:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xzOPqzABS1nn10SFsKraP30CXjOcxe5i5LRmTq00vq4=;
+        b=OtLJiInqAuYIoacxZCT7Y5xsyPousHs93Nc1Z7C6HsmDByhW/K3+9dUg8/gLZJXNuu
+         +E5ZzsFQQZMB+Tf56QgXPtrLXgWond+HOSkCR7nbqFR+R5cklAFPvf6DEPeWD9T3H4j4
+         RIe8LWLwMe1OU17fuaC0BIxmSZGFLN8jAdu1FzEQlf2sTALrR/hOGwipxepdmFcksrgp
+         GKWID9t175PZC5jATnvrw39hvKLSjG9oHlt73ELdOSFeo8LHTuh6NXZnjJrhAGR8eGsr
+         YtgXQVhY0eb3Jg2dEkW6LhWJAqpsL58HmO3bDkAhiI1JWewIElvEdq49egmGlbZoe5ny
+         iyqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xzOPqzABS1nn10SFsKraP30CXjOcxe5i5LRmTq00vq4=;
+        b=nGxGpMaeX7fnCzmp4k3uUH5tK9F6hSOl26uzWBOfpsefleuV4B+ceTXOMPgqAwqcOp
+         /6ZNJv49ZbWpJOsSxF2Uc/dVsI757nlPW32F0kQ6kKzBsHwMs04x43uZ4C6JouI66jMN
+         vIBnDbnbwzOaJsa5CdNBW4GKqXO9Df54FQ9HVWxpxLtIpTGffxBV23tShs6D/EEAPk4l
+         Y715nSfKfnQhlFfQDHHebiqhhNFgYG1LzVhUF67lhoK1qQU6OG/TtSZdkfQdU+iE2B67
+         Z/fN1gT4Z3G5XybK0h1/I5TSo7WRHaukP9JD9o/cYM78oyDY7EVKiXGoxCsVNtngaxZr
+         jJgg==
+X-Gm-Message-State: AOAM5303zdRTJchOSPDa2GLrPPbfln5lOJPglkS+RD2+REn0X9mpvIaQ
+        pOzPIoFiwpX9X/qTPYs8H2GmuA==
+X-Google-Smtp-Source: ABdhPJzPPvpjjUg7d3EJhwF0w6+Bk6GIAwzBw2RDYI/6H6CGZOIBYXHvNvxD8Uu1fFNy6Lpeg2pbvA==
+X-Received: by 2002:a17:902:ef45:b0:156:1858:71fc with SMTP id e5-20020a170902ef4500b00156185871fcmr38772270plx.23.1651242947441;
+        Fri, 29 Apr 2022 07:35:47 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id g17-20020a625211000000b005056a6313a7sm3191028pfb.87.2022.04.29.07.35.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 07:35:46 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 14:35:43 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Mingwei Zhang <mizhang@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: x86/mmu: fix potential races when walking host page
+ table
+Message-ID: <Ymv3vwBEgCH0CMPH@google.com>
+References: <20220429031757.2042406-1-mizhang@google.com>
+ <4b0936bf-fd3e-950a-81af-fd393475553f@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4b0936bf-fd3e-950a-81af-fd393475553f@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,16 +77,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-29 at 15:50 +0200, Niklas Schnelle wrote:
-> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> not being declared. We thus need to add HAS_IOPORT as dependency for
-> those drivers using them and guard inline code in headers.
+On Fri, Apr 29, 2022, Paolo Bonzini wrote:
+> > +out:
+> > +	local_irq_restore(flags);
+> > +	return level;
+> > +}
+> > +EXPORT_SYMBOL_GPL(kvm_lookup_address_level_in_mm);
 > 
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> ---
+> Exporting is not needed.
+> 
+> Thanks for writing the walk code though.  I'll adapt it and integrate the
+> patch.
 
-Sorry everyone. I sent this as PATCH in error while preparing to sent
-the same series as RFC. Since e-mail has no remote delete and I lack a
-time machine let's just all pretend you only got the RFC.
+But why are we fixing this only in KVM?  I liked the idea of stealing perf's
+implementation because it was a seemlingly perfect fit and wouldn't introduce
+new code (ignoring wrappers, etc...).
 
+We _know_ that at least one subsystem is misusing lookup_address_in_pgd() and
+given that its wrappers are exported, I highly doubt KVM is the only offender.
+It really feels like we're passing the buck here by burying the fix in KVM.

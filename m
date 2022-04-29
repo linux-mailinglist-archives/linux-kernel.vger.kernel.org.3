@@ -2,99 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF99C514073
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 04:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1B37514078
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 04:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354123AbiD2CBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 22:01:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36714 "EHLO
+        id S1354129AbiD2CGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 22:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350360AbiD2CBK (ORCPT
+        with ESMTP id S231903AbiD2CGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 22:01:10 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B92BF526;
-        Thu, 28 Apr 2022 18:57:54 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 4D1D11F891;
-        Fri, 29 Apr 2022 01:57:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1651197473; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Thu, 28 Apr 2022 22:06:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 186B3BAB98
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 19:02:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651197764;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=f6SWF/nGzhsjwq5ARATRVet+UBJFK9TgWKy2UT2xPXM=;
-        b=U8L2w6H02ZPq7rqO5DJ0G2KO0ozM0gXG5jxSla0+RuSUHKTcGzpozSVMnFSJD5xmhDq8ad
-        2uyZ3apVsDcOxO6E8thPaHk3V8U3QwE2H7it2GRgun7Ft+q1sS0Y6dAuRBjTiqB4BbldL0
-        UKa0F/nGDA/bdxrLQvJ4wZUVWx6f5OA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1651197473;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=f6SWF/nGzhsjwq5ARATRVet+UBJFK9TgWKy2UT2xPXM=;
-        b=y33957Ckvud8SaVQpfdx8Oo831Ez0W23CrChHWBUdp0Vg6adczUx3ofOTzcWn8qyMebGIp
-        ebijTSE+d4Ipx8Bg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 35C8813446;
-        Fri, 29 Apr 2022 01:57:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id x6U6OR5Ga2JHXgAAMHmgww
-        (envelope-from <neilb@suse.de>); Fri, 29 Apr 2022 01:57:50 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        bh=Dvj9G0/4wUIqSyOJTfvrlWtHyKpXimLlrMN8i333+hY=;
+        b=RKG22wbD7Y11yaRV1jckzFWf0gqUNde7zf/9kaQVHXJVqkbn1UMsvvtNFUlkLNFO9L7FWW
+        PXlJax8SAAccDXE6Ef/b8pa+h1KtwdhqdjX9FZmnCitD5K6o+rskNVX6FXdm8YYwSelDCk
+        BOPSh3GC7t1pOajMGInhWVuDMFhjLYA=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-7-fqYgiyJmO_2ZLYBgnH3-IA-1; Thu, 28 Apr 2022 22:02:22 -0400
+X-MC-Unique: fqYgiyJmO_2ZLYBgnH3-IA-1
+Received: by mail-lf1-f70.google.com with SMTP id bt27-20020a056512261b00b004720e026d4dso2703336lfb.16
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 19:02:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Dvj9G0/4wUIqSyOJTfvrlWtHyKpXimLlrMN8i333+hY=;
+        b=hRDtqSxiMjr0wg4Pt2NuAdNDXXpcIS73RrfZ5MM6DB5AYg63qdJOoNfhcbfyMQFmhy
+         zrNyuHA0GpqG+E/FLOrK0/T/15ehcgbtEgP/WUsymwaaSrAeT7/lZOuVLw0t9YI8+YyO
+         3VDnLZc2WURAaSvghv6u45GRYaD+f3Csdb34kOp2WUIWFwwCu6gpP5UHXAMW2bGihTcJ
+         R9wCoJbo/ngyhBKuX7Ky6fZNWZ0wRPjtIjZfkHMJs5gIVHfgQOpOgAb9veBlcEOHbLGF
+         VeLzXlU7Al+73qAQSdfFHiUaaVSbTa8e3y8Okdtp2hDmLTvfi1ggIhJ5giNWLrnidaBn
+         pdqA==
+X-Gm-Message-State: AOAM53076M0xXht/KFDW/v9vkfgZ42zd/Kon5ttHRBhG5oQGEaNMRBf7
+        CiVwjSx6TgbtaGG5VBtIxD5W2r5eRKanockP7ypfukRRLJ0xjk9HN71jEeDYpEKQO/lUQ9jrx7k
+        Y8fFtxWihOd+KKLlVX2evrAr6m7A+5IsokzhLQvyn
+X-Received: by 2002:a05:6512:1526:b0:471:44fa:c367 with SMTP id bq38-20020a056512152600b0047144fac367mr25928157lfb.376.1651197741184;
+        Thu, 28 Apr 2022 19:02:21 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxRwhr5Cr2fURlu5+J1sQU4pjDclODzlVYVdEfWUhon2IrguY2W6JlRc8rJ3htPCEJZ1xLuCNvxsMLxtCZHwxg=
+X-Received: by 2002:a05:6512:1526:b0:471:44fa:c367 with SMTP id
+ bq38-20020a056512152600b0047144fac367mr25928142lfb.376.1651197740985; Thu, 28
+ Apr 2022 19:02:20 -0700 (PDT)
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Andrew Morton" <akpm@linux-foundation.org>
-Cc:     "Geert Uytterhoeven" <geert+renesas@glider.be>,
-        "Christoph Hellwig" <hch@lst.de>,
-        "Miaohe Lin" <linmiaohe@huawei.com>, linux-nfs@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] MM: handle THP in swap_*page_fs()
-In-reply-to: <20220428182132.883a082ad8918fd5f8073130@linux-foundation.org>
-References: <165119280115.15698.2629172320052218921.stgit@noble.brown>,
- <165119301488.15698.9457662928942765453.stgit@noble.brown>,
- <20220428182132.883a082ad8918fd5f8073130@linux-foundation.org>
-Date:   Fri, 29 Apr 2022 11:57:45 +1000
-Message-id: <165119746546.1648.12856939779038565632@noble.neil.brown.name>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <ba0c3977-c471-3275-2327-c5910cdd506a@redhat.com>
+ <20220425235134-mutt-send-email-mst@kernel.org> <20220425235415-mutt-send-email-mst@kernel.org>
+ <87o80n7soq.fsf@redhat.com> <20220426124243-mutt-send-email-mst@kernel.org>
+ <87ilqu7u6w.fsf@redhat.com> <20220428044315.3945e660.pasic@linux.ibm.com>
+ <CACGkMEudDf=XXhV2tV+xZ586AnDyrQEotGAiSQZ4k1CTAWHZJQ@mail.gmail.com>
+ <20220428012156-mutt-send-email-mst@kernel.org> <CACGkMEsd+WHp=LN0BnnDKfzv+nbS2hjgVC-tdemZWuPTc60HBQ@mail.gmail.com>
+ <20220428015318-mutt-send-email-mst@kernel.org> <CACGkMEutdd=9c-2h5ijMkgUzEqNPtUCXAum7bm8W7a6m62i_Mg@mail.gmail.com>
+ <87zgk5lkme.fsf@redhat.com>
+In-Reply-To: <87zgk5lkme.fsf@redhat.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Fri, 29 Apr 2022 10:02:09 +0800
+Message-ID: <CACGkMEtAXGdWKTSh90DH-=0YHhoSFxR43jwA8eROHqxUxdrVYQ@mail.gmail.com>
+Subject: Re: [PATCH V3 6/9] virtio-ccw: implement synchronize_cbs()
+To:     Cornelia Huck <cohuck@redhat.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        eperezma <eperezma@redhat.com>, Cindy Lu <lulu@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Marc Zyngier <maz@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 29 Apr 2022, Andrew Morton wrote:
-> On Fri, 29 Apr 2022 10:43:34 +1000 NeilBrown <neilb@suse.de> wrote:
-> 
-> > Pages passed to swap_readpage()/swap_writepage() are not necessarily all
-> > the same size - there may be transparent-huge-pages involves.
-> > 
-> > The BIO paths of swap_*page() handle this correctly, but the SWP_FS_OPS
-> > path does not.
-> > 
-> > So we need to use thp_size() to find the size, not just assume
-> > PAGE_SIZE, and we need to track the total length of the request, not
-> > just assume it is "page * PAGE_SIZE".
-> 
-> Cool.  I added this in the series after
-> mm-submit-multipage-write-for-swp_fs_ops-swap-space.patch.  I could
-> later squash it into that patch if you think that's more logical.
+On Thu, Apr 28, 2022 at 3:42 PM Cornelia Huck <cohuck@redhat.com> wrote:
+>
+> On Thu, Apr 28 2022, Jason Wang <jasowang@redhat.com> wrote:
+>
+> > On Thu, Apr 28, 2022 at 1:55 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> >>
+> >> On Thu, Apr 28, 2022 at 01:51:59PM +0800, Jason Wang wrote:
+> >> > On Thu, Apr 28, 2022 at 1:24 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> >> > >
+> >> > > On Thu, Apr 28, 2022 at 11:04:41AM +0800, Jason Wang wrote:
+> >> > > > > But my guess is that rwlock + some testing for the legacy indicator case
+> >> > > > > just to double check if there is a heavy regression despite of our
+> >> > > > > expectations to see none should do the trick.
+> >> > > >
+> >> > > > I suggest this, rwlock (for not airq) seems better than spinlock, but
+> >> > > > at worst case it will cause cache line bouncing. But I wonder if it's
+> >> > > > noticeable (anyhow it has been used for airq).
+> >> > > >
+> >> > > > Thanks
+> >> > >
+> >> > > Which existing rwlock does airq use right now? Can we take it to sync?
+> >> >
+> >> > It's the rwlock in airq_info, it has already been used in this patch.
+> >> >
+> >> >                 write_lock(&info->lock);
+> >> >                 write_unlock(&info->lock);
+> >> >
+> >> > But the problem is, it looks to me there could be a case that airq is
+> >> > not used, (virtio_ccw_int_hander()). That's why the patch use a
+> >> > spinlock, it could be optimized with using a rwlock as well.
+> >> >
+> >> > Thanks
+> >>
+> >> Ah, right. So let's take that on the legacy path too and Halil promises
+> >> to test to make sure performance isn't impacted too badly?
+> >
+> > I think what you meant is using a dedicated rwlock instead of trying
+> > to reuse one of the airq_info locks.
+> >
+> > If this is true, it should be fine.
+>
+> FWIW, that approach makes sense to me as well.
+>
 
-I think it best to keep it separate, though that position is good.
-If we were to squash, some would need to go into the "submit multipage
-reads" patch, and some in "submit multipage writes".  IF you wanted to
-do that I wouldn't object but I don't think it is needed.
+Good to know that. Let me post a new version.
 
-Thanks,
-NeilBrown
+Thanks
+

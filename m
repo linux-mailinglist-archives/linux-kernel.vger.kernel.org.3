@@ -2,45 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AAE0514522
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 11:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E5D951452A
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 11:14:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356326AbiD2JQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 05:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
+        id S1356352AbiD2JRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 05:17:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356324AbiD2JQr (ORCPT
+        with ESMTP id S1356340AbiD2JRb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 05:16:47 -0400
-Received: from outbound-smtp40.blacknight.com (outbound-smtp40.blacknight.com [46.22.139.223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F056F491
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 02:13:26 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
-        by outbound-smtp40.blacknight.com (Postfix) with ESMTPS id 3EEEA1C3ED0
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:13:24 +0100 (IST)
-Received: (qmail 15734 invoked from network); 29 Apr 2022 09:13:23 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 29 Apr 2022 09:13:23 -0000
-Date:   Fri, 29 Apr 2022 10:13:21 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        Minchan Kim <minchan@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Subject: Re: [PATCH 5/6] mm/page_alloc: Protect PCP lists with a spinlock
-Message-ID: <20220429091321.GB3441@techsingularity.net>
-References: <20220420095906.27349-1-mgorman@techsingularity.net>
- <20220420095906.27349-6-mgorman@techsingularity.net>
- <0d6bf5a97777bec1e0b425f2fb33dbb80d848621.camel@redhat.com>
+        Fri, 29 Apr 2022 05:17:31 -0400
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BEA646F4B1;
+        Fri, 29 Apr 2022 02:14:12 -0700 (PDT)
+Received: by ajax-webmail-mail-app4 (Coremail) ; Fri, 29 Apr 2022 17:13:24
+ +0800 (GMT+08:00)
+X-Originating-IP: [10.190.70.197]
+Date:   Fri, 29 Apr 2022 17:13:24 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, kuba@kernel.org,
+        gregkh@linuxfoundation.org, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, alexander.deucher@amd.com,
+        akpm@linux-foundation.org, broonie@kernel.org,
+        netdev@vger.kernel.org, linma@zju.edu.cn
+Subject: Re: Re: [PATCH net v5 2/2] nfc: nfcmrvl: main: reorder destructive
+ operations in nfcmrvl_nci_unregister_dev to avoid bugs
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <8656d527-94ab-228f-66f1-06e5d533e16a@linaro.org>
+References: <cover.1651194245.git.duoming@zju.edu.cn>
+ <bb2769acc79f42d25d61ed8988c8d240c8585f33.1651194245.git.duoming@zju.edu.cn>
+ <8656d527-94ab-228f-66f1-06e5d533e16a@linaro.org>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <0d6bf5a97777bec1e0b425f2fb33dbb80d848621.camel@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Message-ID: <73fe1723.69fe.1807498ab4d.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cS_KCgDnzkU0rGtiltIJAg--.10925W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgoPAVZdtZdqKgAAsv
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,228 +54,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 06:42:43PM +0200, Nicolas Saenz Julienne wrote:
-> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> > index dc0fdeb3795c..813c84b67c65 100644
-> > --- a/mm/page_alloc.c
-> > +++ b/mm/page_alloc.c
-> > @@ -132,6 +132,17 @@ static DEFINE_PER_CPU(struct pagesets, pagesets) __maybe_unused = {
-> >  	.lock = INIT_LOCAL_LOCK(lock),
-> >  };
-> >  
-> > +#ifdef CONFIG_SMP
-> > +/* On SMP, spin_trylock is sufficient protection */
-> > +#define pcp_trylock_prepare(flags)	do { } while (0)
-> > +#define pcp_trylock_finish(flag)	do { } while (0)
-> > +#else
-> > +
-> > +/* UP spin_trylock always succeeds so disable IRQs to prevent re-entrancy. */
-> 
-> This is only needed on non-RT kernels. RT UP builds go through
-> rt_spin_trylock(), which behaves like its SMP counterpart.
-> 
-
-I missed that.
-
-> > +#define pcp_trylock_prepare(flags)	local_irq_save(flags)
-> > +#define pcp_trylock_finish(flags)	local_irq_restore(flags)
-> > +#endif
-> > +
-> >  #ifdef CONFIG_USE_PERCPU_NUMA_NODE_ID
-> >  DEFINE_PER_CPU(int, numa_node);
-> >  EXPORT_PER_CPU_SYMBOL(numa_node);
-> > @@ -3082,15 +3093,22 @@ static int rmqueue_bulk(struct zone *zone, unsigned int order,
-> >   */
-> >  void drain_zone_pages(struct zone *zone, struct per_cpu_pages *pcp)
-> >  {
-> > -	unsigned long flags;
-> >  	int to_drain, batch;
-> >  
-> > -	local_lock_irqsave(&pagesets.lock, flags);
-> >  	batch = READ_ONCE(pcp->batch);
-> >  	to_drain = min(pcp->count, batch);
-> > -	if (to_drain > 0)
-> > +	if (to_drain > 0) {
-> > +		unsigned long flags;
-> > +
-> > +		/* free_pcppages_bulk expects IRQs disabled for zone->lock */
-> > +		local_irq_save(flags);
-> 
-> Why dropping the local_lock? That approach is nicer to RT builds, and I don't
-> think it makes a difference from a non-RT perspective.
-> 
-
-The local_lock was dropped because local_lock stabilises the lookup of
-pcp but in this context, we are looking at a remote pcp and local_lock
-does not protect the pcp reference. It confuses what local_lock is
-protecting exactly.
-
-> That said, IIUC, this will eventually disappear with subsequent patches, right?
-> 
-
-It would have but this patch as also wrong as pointed out by Vlastimil.
-So even if it was eventually correct, it would not be safe to add this
-patch as-is and spin_lock_irqsave is required.
-
-> > +
-> > +		spin_lock(&pcp->lock);
-> >  		free_pcppages_bulk(zone, to_drain, pcp, 0);
-> > -	local_unlock_irqrestore(&pagesets.lock, flags);
-> > +		spin_unlock(&pcp->lock);
-> > +
-> > +		local_irq_restore(flags);
-> > +	}
-> >  }
-> >  #endif
-> >  
-> 
-> [...]
-> 
-> > @@ -3668,9 +3748,30 @@ struct page *__rmqueue_pcplist(struct zone *zone, unsigned int order,
-> >  			int migratetype,
-> >  			unsigned int alloc_flags,
-> >  			struct per_cpu_pages *pcp,
-> > -			struct list_head *list)
-> > +			struct list_head *list,
-> > +			bool locked)
-> >  {
-> >  	struct page *page;
-> > +	unsigned long __maybe_unused UP_flags;
-> > +
-> > +	/*
-> > +	 * spin_trylock is not necessary right now due to due to
-> > +	 * local_lock_irqsave and is a preparation step for
-> > +	 * a conversion to local_lock using the trylock to prevent
-> > +	 * IRQ re-entrancy. If pcp->lock cannot be acquired, the caller
-> > +	 * uses rmqueue_buddy.
-> > +	 *
-> > +	 * TODO: Convert local_lock_irqsave to local_lock. Care
-> > +	 * 	 is needed as the type of local_lock would need a
-> > +	 * 	 PREEMPT_RT version due to threaded IRQs.
-> > +	 */
-> 
-> I missed this in our previous conversation, but as far as RT is concerned
-> local_lock_irqsave() is the same as local_lock(), see in local_lock_internal.h:
-> 
-> #define __local_lock_irqsave(lock, flags)			\
-> 	do {							\
-> 		typecheck(unsigned long, flags);		\
-> 		flags = 0;					\
-> 		__local_lock(lock);				\
-> 	} while (0)
-> 
-> Something similar happens with spin_lock_irqsave(), see in spinlock_rt.h:
-> 
-> #define spin_lock_irqsave(lock, flags)			 \
-> 	do {						 \
-> 		typecheck(unsigned long, flags);	 \
-> 		flags = 0;				 \
-> 		spin_lock(lock);			 \
-> 	} while (0)
-> 
-> IIUC, RT will run this code paths in threaded IRQ context, where we can think
-> of RT spinlocks as mutexes (plus some extra priority inheritance magic).
-> 
-
-Ah, thanks for the explanation.
-
-Based on your feedback, Vlastimil's and Minchan's, the current delta
-between this series and what I'm preparing for testing is
-
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 17d11eb0413e..4ac39d30ec8f 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -132,8 +132,11 @@ static DEFINE_PER_CPU(struct pagesets, pagesets) __maybe_unused = {
- 	.lock = INIT_LOCAL_LOCK(lock),
- };
- 
--#ifdef CONFIG_SMP
--/* On SMP, spin_trylock is sufficient protection */
-+#if defined(CONFIG_SMP) || defined(CONFIG_PREEMPT_RT)
-+/*
-+ * On SMP, spin_trylock is sufficient protection.
-+ * On PREEMPT_RT, spin_trylock is equivalent on both SMP and UP.
-+ */
- #define pcp_trylock_prepare(flags)	do { } while (0)
- #define pcp_trylock_finish(flag)	do { } while (0)
- #else
-@@ -3091,14 +3094,14 @@ void drain_zone_pages(struct zone *zone, struct per_cpu_pages *pcp)
- 	if (to_drain > 0) {
- 		unsigned long flags;
- 
--		/* free_pcppages_bulk expects IRQs disabled for zone->lock */
--		local_irq_save(flags);
--
--		spin_lock(&pcp->lock);
-+		/*
-+		 * free_pcppages_bulk expects IRQs disabled for zone->lock
-+		 * so even though pcp->lock is not intended to be IRQ-safe,
-+		 * it's needed in this context.
-+		 */
-+		spin_lock_irqsave(&pcp->lock, flags);
- 		free_pcppages_bulk(zone, to_drain, pcp, 0);
--		spin_unlock(&pcp->lock);
--
--		local_irq_restore(flags);
-+		spin_unlock_irqrestore(&pcp->lock, flags);
- 	}
- }
- #endif
-@@ -3114,14 +3117,10 @@ static void drain_pages_zone(unsigned int cpu, struct zone *zone)
- 	if (pcp->count) {
- 		unsigned long flags;
- 
--		/* free_pcppages_bulk expects IRQs disabled for zone->lock */
--		local_irq_save(flags);
--
--		spin_lock(&pcp->lock);
-+		/* See drain_zone_pages on why this is disabling IRQs */
-+		spin_lock_irqsave(&pcp->lock, flags);
- 		free_pcppages_bulk(zone, pcp->count, pcp, 0);
--		spin_unlock(&pcp->lock);
--
--		local_irq_restore(flags);
-+		spin_unlock_irqrestore(&pcp->lock, flags);
- 	}
- }
- 
-@@ -3480,6 +3479,13 @@ void free_unref_page_list(struct list_head *list)
- 		}
- 	}
- 
-+	/*
-+	 * Preparation could have drained the list due to failing to prepare
-+	 * or all pages are being isolated.
-+	 */
-+	if (list_empty(list))
-+		return;
-+
- 	VM_BUG_ON(in_hardirq());
- 
- 	local_lock_irqsave(&pagesets.lock, flags);
-@@ -3515,6 +3521,9 @@ void free_unref_page_list(struct list_head *list)
- 		 * allocator directly. This is expensive as the zone lock will
- 		 * be acquired multiple times but if a drain is in progress
- 		 * then an expensive operation is already taking place.
-+		 *
-+		 * TODO: Always false at the moment due to local_lock_irqsave
-+		 *       and is preparation for converting to local_lock.
- 		 */
- 		if (unlikely(!free_unref_page_commit(page, migratetype, 0, true)))
- 			free_one_page(page_zone(page), page, page_to_pfn(page), 0, migratetype, FPI_NONE);
-@@ -3717,9 +3726,7 @@ struct page *__rmqueue_pcplist(struct zone *zone, unsigned int order,
- 	 * IRQ re-entrancy. If pcp->lock cannot be acquired, the caller
- 	 * uses rmqueue_buddy.
- 	 *
--	 * TODO: Convert local_lock_irqsave to local_lock. Care
--	 * 	 is needed as the type of local_lock would need a
--	 * 	 PREEMPT_RT version due to threaded IRQs.
-+	 * TODO: Convert local_lock_irqsave to local_lock.
- 	 */
- 	if (unlikely(!locked)) {
- 		pcp_trylock_prepare(UP_flags);
-
--- 
-Mel Gorman
-SUSE Labs
+SGVsbG8sCgpPbiBGcmksIDI5IEFwciAyMDIyIDA5OjI3OjQ4ICswMjAwIEtyenlzenRvZiB3cm90
+ZToKCj4gPiBUaGVyZSBhcmUgZGVzdHJ1Y3RpdmUgb3BlcmF0aW9ucyBzdWNoIGFzIG5mY21ydmxf
+ZndfZG5sZF9hYm9ydCBhbmQKPiA+IGdwaW9fZnJlZSBpbiBuZmNtcnZsX25jaV91bnJlZ2lzdGVy
+X2Rldi4gVGhlIHJlc291cmNlcyBzdWNoIGFzIGZpcm13YXJlLAo+ID4gZ3BpbyBhbmQgc28gb24g
+Y291bGQgYmUgZGVzdHJ1Y3RlZCB3aGlsZSB0aGUgdXBwZXIgbGF5ZXIgZnVuY3Rpb25zIHN1Y2gg
+YXMKPiA+IG5mY21ydmxfZndfZG5sZF9zdGFydCBhbmQgbmZjbXJ2bF9uY2lfcmVjdl9mcmFtZSBp
+cyBleGVjdXRpbmcsIHdoaWNoIGxlYWRzCj4gPiB0byBkb3VibGUtZnJlZSwgdXNlLWFmdGVyLWZy
+ZWUgYW5kIG51bGwtcHRyLWRlcmVmIGJ1Z3MuCj4gPiAKPiA+IFRoZXJlIGFyZSB0aHJlZSBzaXR1
+YXRpb25zIHRoYXQgY291bGQgbGVhZCB0byBkb3VibGUtZnJlZSBidWdzLgo+ID4gCj4gPiBUaGUg
+Zmlyc3Qgc2l0dWF0aW9uIGlzIHNob3duIGJlbG93Ogo+ID4gCj4gPiAgICAoVGhyZWFkIDEpICAg
+ICAgICAgICAgICAgICB8ICAgICAgKFRocmVhZCAyKQo+ID4gbmZjbXJ2bF9md19kbmxkX3N0YXJ0
+ICAgICAgICAgfAo+ID4gIC4uLiAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgbmZjbXJ2bF9u
+Y2lfdW5yZWdpc3Rlcl9kZXYKPiA+ICByZWxlYXNlX2Zpcm13YXJlKCkgICAgICAgICAgIHwgICBu
+ZmNtcnZsX2Z3X2RubGRfYWJvcnQKPiA+ICAga2ZyZWUoZncpIC8vKDEpICAgICAgICAgICAgIHwg
+ICAgZndfZG5sZF9vdmVyCj4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgICBy
+ZWxlYXNlX2Zpcm13YXJlCj4gPiAgIC4uLiAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgICAg
+a2ZyZWUoZncpIC8vKDIpCj4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgICAu
+Li4KPiA+IAo+ID4gVGhlIHNlY29uZCBzaXR1YXRpb24gaXMgc2hvd24gYmVsb3c6Cj4gPiAKPiA+
+ICAgIChUaHJlYWQgMSkgICAgICAgICAgICAgICAgIHwgICAgICAoVGhyZWFkIDIpCj4gPiBuZmNt
+cnZsX2Z3X2RubGRfc3RhcnQgICAgICAgICB8Cj4gPiAgLi4uICAgICAgICAgICAgICAgICAgICAg
+ICAgICB8Cj4gPiAgbW9kX3RpbWVyICAgICAgICAgICAgICAgICAgICB8Cj4gPiAgKHdhaXQgYSB0
+aW1lKSAgICAgICAgICAgICAgICB8Cj4gPiAgZndfZG5sZF90aW1lb3V0ICAgICAgICAgICAgICB8
+ICBuZmNtcnZsX25jaV91bnJlZ2lzdGVyX2Rldgo+ID4gICAgZndfZG5sZF9vdmVyICAgICAgICAg
+ICAgICAgfCAgIG5mY21ydmxfZndfZG5sZF9hYm9ydAo+ID4gICAgIHJlbGVhc2VfZmlybXdhcmUg
+ICAgICAgICAgfCAgICBmd19kbmxkX292ZXIKPiA+ICAgICAga2ZyZWUoZncpIC8vKDEpICAgICAg
+ICAgIHwgICAgIHJlbGVhc2VfZmlybXdhcmUKPiA+ICAgICAgLi4uICAgICAgICAgICAgICAgICAg
+ICAgIHwgICAgICBrZnJlZShmdykgLy8oMikKPiAKPiBIb3cgZXhhY3RseSB0aGUgY2FzZSBoZXJl
+IGlzIGJlaW5nIHByZXZlbnRlZD8KPiAKPiBJZiBuZmNtcnZsX25jaV91bnJlZ2lzdGVyX2Rldigp
+IGhhcHBlbnMgc2xpZ2h0bHkgZWFybGllciwgYmVmb3JlCj4gZndfZG5sZF90aW1lb3V0KCkgb24g
+dGhlIGxlZnQgc2lkZSAoVDEpLCB0aGUgVDEgd2lsbCBzdGlsbCBoaXQgaXQsIHdvbid0IGl0PwoK
+SSB0aGluayBpdCBjb3VsZCBiZSBwcmV2ZW50ZWQuIFdlIHVzZSBuY2lfdW5yZWdpc3Rlcl9kZXZp
+Y2UoKSB0byBzeW5jaHJvbml6ZSwgaWYgdGhlCmZpcm13YXJlIGRvd25sb2FkIHJvdXRpbmUgaXMg
+cnVubmluZywgdGhlIGNsZWFudXAgcm91dGluZSB3aWxsIHdhaXQgaXQgdG8gZmluaXNoLiAKVGhl
+IGZsYWcgImZ3X2Rvd25sb2FkX2luX3Byb2dyZXNzIiB3aWxsIGJlIHNldCB0byBmYWxzZSwgaWYg
+dGhlIHRoZSBmaXJtd2FyZSBkb3dubG9hZApyb3V0aW5lIGlzIGZpbmlzaGVkLiAKCkFsdGhvdWdo
+IHRoZSB0aW1lciBoYW5kbGVyIGZ3X2RubGRfdGltZW91dCgpIGNvdWxkIGJlIHJ1bm5pbmcsIG5m
+Y21ydmxfbmNpX3VucmVnaXN0ZXJfZGV2KCkKd2lsbCBjaGVjayB0aGUgZmxhZyAiZndfZG93bmxv
+YWRfaW5fcHJvZ3Jlc3MiIHdoaWNoIGlzIGFscmVhZHkgc2V0IHRvIGZhbHNlIGFuZCBuZmNtcnZs
+X2Z3X2RubGRfYWJvcnQoKQppbiBuZmNtcnZsX25jaV91bnJlZ2lzdGVyX2RldigpIHdpbGwgbm90
+IGV4ZWN1dGUuCgo+ID4gCj4gPiBUaGUgdGhpcmQgc2l0dWF0aW9uIGlzIHNob3duIGJlbG93Ogo+
+ID4gCj4gPiAgICAgICAgKFRocmVhZCAxKSAgICAgICAgICAgICAgIHwgICAgICAgKFRocmVhZCAy
+KQo+ID4gbmZjbXJ2bF9uY2lfcmVjdl9mcmFtZSAgICAgICAgICB8Cj4gPiAgaWYoLi4tPmZ3X2Rv
+d25sb2FkX2luX3Byb2dyZXNzKXwKPiA+ICAgbmZjbXJ2bF9md19kbmxkX3JlY3ZfZnJhbWUgICAg
+fAo+ID4gICAgcXVldWVfd29yayAgICAgICAgICAgICAgICAgICB8Cj4gPiAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIHwKPiA+IGZ3X2RubGRfcnhfd29yayAgICAgICAgICAgICAgICAg
+fCBuZmNtcnZsX25jaV91bnJlZ2lzdGVyX2Rldgo+ID4gIGZ3X2RubGRfb3ZlciAgICAgICAgICAg
+ICAgICAgICB8ICBuZmNtcnZsX2Z3X2RubGRfYWJvcnQKPiA+ICAgcmVsZWFzZV9maXJtd2FyZSAg
+ICAgICAgICAgICAgfCAgIGZ3X2RubGRfb3Zlcgo+ID4gICAga2ZyZWUoZncpIC8vKDEpICAgICAg
+ICAgICAgICB8ICAgIHJlbGVhc2VfZmlybXdhcmUKPiA+ICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgfCAgICAga2ZyZWUoZncpIC8vKDIpCj4gPiAKPiA+IFRoZSBmaXJtd2FyZSBzdHJ1
+Y3QgaXMgZGVhbGxvY2F0ZWQgaW4gcG9zaXRpb24gKDEpIGFuZCBkZWFsbG9jYXRlZAo+ID4gaW4g
+cG9zaXRpb24gKDIpIGFnYWluLgo+ID4gCj4gPiBUaGUgY3Jhc2ggdHJhY2UgdHJpZ2dlcmVkIGJ5
+IFBPQyBpcyBsaWtlIGJlbG93Ogo+ID4gCj4gPiBbICAxMjIuNjQwNDU3XSBCVUc6IEtBU0FOOiBk
+b3VibGUtZnJlZSBvciBpbnZhbGlkLWZyZWUgaW4gZndfZG5sZF9vdmVyKzB4MjgvMHhmMAo+ID4g
+WyAgMTIyLjY0MDQ1N10gQ2FsbCBUcmFjZToKPiA+IFsgIDEyMi42NDA0NTddICA8VEFTSz4KPiA+
+IFsgIDEyMi42NDA0NTddICBrZnJlZSsweGIwLzB4MzMwCj4gPiBbICAxMjIuNjQwNDU3XSAgZndf
+ZG5sZF9vdmVyKzB4MjgvMHhmMAo+ID4gWyAgMTIyLjY0MDQ1N10gIG5mY21ydmxfbmNpX3VucmVn
+aXN0ZXJfZGV2KzB4NjEvMHg3MAo+ID4gWyAgMTIyLjY0MDQ1N10gIG5jaV91YXJ0X3R0eV9jbG9z
+ZSsweDg3LzB4ZDAKPiA+IFsgIDEyMi42NDA0NTddICB0dHlfbGRpc2Nfa2lsbCsweDNlLzB4ODAK
+PiA+IFsgIDEyMi42NDA0NTddICB0dHlfbGRpc2NfaGFuZ3VwKzB4MWIyLzB4MmMwCj4gPiBbICAx
+MjIuNjQwNDU3XSAgX190dHlfaGFuZ3VwLnBhcnQuMCsweDMxNi8weDUyMAo+ID4gWyAgMTIyLjY0
+MDQ1N10gIHR0eV9yZWxlYXNlKzB4MjAwLzB4NjcwCj4gPiBbICAxMjIuNjQwNDU3XSAgX19mcHV0
+KzB4MTEwLzB4NDEwCj4gPiBbICAxMjIuNjQwNDU3XSAgdGFza193b3JrX3J1bisweDg2LzB4ZDAK
+PiA+IFsgIDEyMi42NDA0NTddICBleGl0X3RvX3VzZXJfbW9kZV9wcmVwYXJlKzB4MWFhLzB4MWIw
+Cj4gPiBbICAxMjIuNjQwNDU3XSAgc3lzY2FsbF9leGl0X3RvX3VzZXJfbW9kZSsweDE5LzB4NTAK
+PiA+IFsgIDEyMi42NDA0NTddICBkb19zeXNjYWxsXzY0KzB4NDgvMHg5MAo+ID4gWyAgMTIyLjY0
+MDQ1N10gIGVudHJ5X1NZU0NBTExfNjRfYWZ0ZXJfaHdmcmFtZSsweDQ0LzB4YWUKPiA+IFsgIDEy
+Mi42NDA0NTddIFJJUDogMDAzMzoweDdmNjg0MzNmNmJlYgo+IAo+IFBsZWFzZSBhbHdheXMgc3Ry
+aXAgdW5yZWxhdGVkIHBhcnRzIG9mIG9vcHMsIHNvIG1pbmltdW0gdGhlIHRpbWluZy4gVGhlCj4g
+YWRkcmVzc2VzIGNvdWxkIGJlIHJlbW92ZWQgYXMgd2VsbC4KClRoYW5rcywgSSB3aWxsIHN0cmlw
+IHVucmVsYXRlZCBwYXJ0cyBvZiBvb3BzLgoKPiA+IAo+ID4gV2hhdCdzIG1vcmUsIHRoZXJlIGFy
+ZSBhbHNvIHVzZS1hZnRlci1mcmVlIGFuZCBudWxsLXB0ci1kZXJlZiBidWdzCj4gPiBpbiBuZmNt
+cnZsX2Z3X2RubGRfc3RhcnQuIElmIHdlIGRlYWxsb2NhdGUgZmlybXdhcmUgc3RydWN0LCBncGlv
+IG9yCj4gPiBzZXQgbnVsbCB0byB0aGUgbWVtYmVycyBvZiBwcml2LT5md19kbmxkIGluIG5mY21y
+dmxfbmNpX3VucmVnaXN0ZXJfZGV2LAo+ID4gdGhlbiwgd2UgZGVyZWZlcmVuY2UgZmlybXdhcmUs
+IGdwaW8gb3IgdGhlIG1lbWJlcnMgb2YgcHJpdi0+ZndfZG5sZCBpbgo+ID4gbmZjbXJ2bF9md19k
+bmxkX3N0YXJ0LCB0aGUgVUFGIG9yIE5QRCBidWdzIHdpbGwgaGFwcGVuLgo+ID4gCj4gPiBUaGlz
+IHBhdGNoIHJlb3JkZXJzIGRlc3RydWN0aXZlIG9wZXJhdGlvbnMgYWZ0ZXIgbmNpX3VucmVnaXN0
+ZXJfZGV2aWNlCj4gPiBhbmQgdXNlcyBib29sIHZhcmlhYmxlIGluIG5mY19kZXYgdG8gc3luY2hy
+b25pemUgYmV0d2VlbiBjbGVhbnVwIHJvdXRpbmUKPiA+IGFuZCBmaXJtd2FyZSBkb3dubG9hZCBy
+b3V0aW5lLiBUaGUgcHJvY2VzcyBpcyBzaG93biBiZWxvdy4KPiA+IAo+ID4gICAgICAgIChUaHJl
+YWQgMSkgICAgICAgICAgICAgICAgIHwgICAgICAgKFRocmVhZCAyKQo+ID4gbmZjbXJ2bF9uY2lf
+dW5yZWdpc3Rlcl9kZXYgICAgICAgIHwKPiA+ICAgbmNpX3VucmVnaXN0ZXJfZGV2aWNlICAgICAg
+ICAgICB8Cj4gPiAgICAgbmZjX3VucmVnaXN0ZXJfZGV2aWNlICAgICAgICAgfCBuZmNfZndfZG93
+bmxvYWQKPiA+ICAgICAgIGRldmljZV9sb2NrKCkgICAgICAgICAgICAgICB8Cj4gPiAgICAgICAu
+Li4gICAgICAgICAgICAgICAgICAgICAgICAgfAo+ID4gICAgICAgZGV2LT5kZXZfcmVnaXN0ZXIg
+PSBmYWxzZTsgIHwgICAuLi4KPiA+ICAgICAgIGRldmljZV91bmxvY2soKSAgICAgICAgICAgICB8
+Cj4gPiAgIC4uLiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgIGRldmljZV9sb2NrKCkK
+PiA+ICAgKGRlc3RydWN0aXZlIG9wZXJhdGlvbnMpICAgICAgICB8ICAgaWYoIWRldi0+ZGV2X3Jl
+Z2lzdGVyKQo+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAgIGdvdG8g
+ZXJyb3I7Cj4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCBlcnJvcjoKPiA+
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgZGV2aWNlX3VubG9jaygpCj4g
+Cj4gSG93IFQyIGNhbGxzIGFwcGVhcmVkIGhlcmU/IFRoZXkgd2VyZSBub3QgcHJlc2VudCBpbiBh
+bnkgb2YgeW91cgo+IHByZXZpb3VzIHByb2Nlc3MtZXhhbXBsZXMuLi4KClRoZSBmaXJtd2FyZSBk
+b3dubG9hZCBwcm9jZXNzIGlzIHNob3duIGJlbG93OgogCm5mY19nZW5sX2Z3X2Rvd25sb2FkKCkt
+Pm5mY19md19kb3dubG9hZCgpLT5uY2lfZndfZG93bmxvYWQoKS0+bmZjbXJ2bF9uY2lfZndfZG93
+bmxvYWQoKQotPm5mY21ydmxfZndfZG5sZF9zdGFydCgpCgpTbyBUMiBjYWxscyBpcyBhIHBhcnQg
+b2YgZmlybXdhcmUgZG93bmxvYWQgcm91dGluZSBpbiBuZmMgY29yZSBsYXllci4KCldlIHVzZSBi
+b29sIHZhcmlhYmxlIGFuZCBkZXZpY2VfbG9jaygpIHRvIHN5bmNocm9uaXplIGJldHdlZW4gY2xl
+YW51cCByb3V0aW5lIGFuZApmaXJtd2FyZSBkb3dubG9hZCByb3V0aW5lIGluIG5mYyBjb3JlIGxh
+eWVyLiBUaGUgYWJvdmUgcGljdHVyZSBpcyBhdHRlbXB0IHRvIHNob3cgCnRoaXMgc3luY2hyb25p
+emVkIHByb2Nlc3MuCgo+ID4gCj4gPiBJZiB0aGUgZGV2aWNlIGlzIGRldGFjaGluZywgdGhlIGRv
+d25sb2FkIGZ1bmN0aW9uIHdpbGwgZ290byBlcnJvci4KPiA+IElmIHRoZSBkb3dubG9hZCBmdW5j
+dGlvbiBpcyBleGVjdXRpbmcsIG5jaV91bnJlZ2lzdGVyX2RldmljZSB3aWxsCj4gPiB3YWl0IHVu
+dGlsIGRvd25sb2FkIGZ1bmN0aW9uIGlzIGZpbmlzaGVkLgo+ID4gCj4gPiBGaXhlczogMzE5NGM2
+ODcwMTU4ICgiTkZDOiBuZmNtcnZsOiBhZGQgZmlybXdhcmUgZG93bmxvYWQgc3VwcG9ydCIpCj4g
+PiBTaWduZWQtb2ZmLWJ5OiBEdW9taW5nIFpob3UgPGR1b21pbmdAemp1LmVkdS5jbj4KPiA+IC0t
+LQo+ID4gQ2hhbmdlcyBpbiB2NToKPiA+ICAgLSBVc2UgYm9vbCB2YXJpYWJsZSBhZGRlZCBpbiBw
+YXRjaCAxLzIgdG8gc3luY2hyb25pemUuCj4gPiAKPiA+ICBkcml2ZXJzL25mYy9uZmNtcnZsL21h
+aW4uYyB8IDIgKy0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRp
+b24oLSkKPiA+IAo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmZjL25mY21ydmwvbWFpbi5jIGIv
+ZHJpdmVycy9uZmMvbmZjbXJ2bC9tYWluLmMKPiA+IGluZGV4IDJmY2Y1NDUwMTJiLi4xYTUyODRk
+ZTQzNCAxMDA2NDQKPiA+IC0tLSBhL2RyaXZlcnMvbmZjL25mY21ydmwvbWFpbi5jCj4gPiArKysg
+Yi9kcml2ZXJzL25mYy9uZmNtcnZsL21haW4uYwo+ID4gQEAgLTE4Myw2ICsxODMsNyBAQCB2b2lk
+IG5mY21ydmxfbmNpX3VucmVnaXN0ZXJfZGV2KHN0cnVjdCBuZmNtcnZsX3ByaXZhdGUgKnByaXYp
+Cj4gPiAgewo+ID4gIAlzdHJ1Y3QgbmNpX2RldiAqbmRldiA9IHByaXYtPm5kZXY7Cj4gPiAgCj4g
+PiArCW5jaV91bnJlZ2lzdGVyX2RldmljZShuZGV2KTsKPiA+ICAJaWYgKHByaXYtPm5kZXYtPm5m
+Y19kZXYtPmZ3X2Rvd25sb2FkX2luX3Byb2dyZXNzKQo+ID4gIAkJbmZjbXJ2bF9md19kbmxkX2Fi
+b3J0KHByaXYpOwo+ID4gIAo+ID4gQEAgLTE5MSw3ICsxOTIsNiBAQCB2b2lkIG5mY21ydmxfbmNp
+X3VucmVnaXN0ZXJfZGV2KHN0cnVjdCBuZmNtcnZsX3ByaXZhdGUgKnByaXYpCj4gPiAgCWlmIChn
+cGlvX2lzX3ZhbGlkKHByaXYtPmNvbmZpZy5yZXNldF9uX2lvKSkKPiA+ICAJCWdwaW9fZnJlZShw
+cml2LT5jb25maWcucmVzZXRfbl9pbyk7Cj4gPiAgCj4gPiAtCW5jaV91bnJlZ2lzdGVyX2Rldmlj
+ZShuZGV2KTsKPiA+ICAJbmNpX2ZyZWVfZGV2aWNlKG5kZXYpOwo+ID4gIAlrZnJlZShwcml2KTsK
+PiA+ICB9CgoKQmVzdCByZWdhcmRzLApEdW9taW5nIFpob3UK

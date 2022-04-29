@@ -2,53 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2E12514665
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C52851466B
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357266AbiD2KRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 06:17:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57068 "EHLO
+        id S1357285AbiD2KSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 06:18:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234485AbiD2KRI (ORCPT
+        with ESMTP id S1357277AbiD2KSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 06:17:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B14718E3B;
-        Fri, 29 Apr 2022 03:13:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 89D7262310;
-        Fri, 29 Apr 2022 10:13:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4B50C385A4;
-        Fri, 29 Apr 2022 10:13:47 +0000 (UTC)
-Message-ID: <a10a255c-e3b7-4c5f-2a7e-9474e0526a61@xs4all.nl>
-Date:   Fri, 29 Apr 2022 12:13:46 +0200
+        Fri, 29 Apr 2022 06:18:45 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 311013A5F4;
+        Fri, 29 Apr 2022 03:15:26 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6F9301063;
+        Fri, 29 Apr 2022 03:15:26 -0700 (PDT)
+Received: from lpieralisi (unknown [10.57.10.213])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 732BD3F73B;
+        Fri, 29 Apr 2022 03:15:23 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 11:15:17 +0100
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Dexuan Cui <decui@microsoft.com>
+Cc:     wei.liu@kernel.org, kys@microsoft.com, haiyangz@microsoft.com,
+        sthemmin@microsoft.com, bhelgaas@google.com,
+        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mikelley@microsoft.com,
+        robh@kernel.org, kw@linux.com, jakeo@microsoft.com
+Subject: Re: [PATCH] PCI: hv: Do not set PCI_COMMAND_MEMORY to reduce VM boot
+ time
+Message-ID: <Ymu6tYItgM6dtNdd@lpieralisi>
+References: <20220419220007.26550-1-decui@microsoft.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v9 08/13] media: atmel: atmel-isc: change format
- propagation to subdev into only verification
-Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Cc:     Eugen.Hristev@microchip.com, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Claudiu.Beznea@microchip.com,
-        robh+dt@kernel.org, Nicolas.Ferre@microchip.com
-References: <20220310095202.2701399-1-eugen.hristev@microchip.com>
- <20220310095202.2701399-9-eugen.hristev@microchip.com>
- <39f541ec-313f-fe15-b93f-dd78469b2366@xs4all.nl>
- <b6630c65-0720-3633-d5ed-aadf4716f206@microchip.com>
- <dabbff36-a10c-0a8a-94e8-ce7c2d896403@xs4all.nl>
- <20220429095848.ec4xnul6tin6n7sf@uno.localdomain>
- <Ymu4ywjEvX5HbE/W@pendragon.ideasonboard.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <Ymu4ywjEvX5HbE/W@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220419220007.26550-1-decui@microsoft.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,150 +45,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/04/2022 12:07, Laurent Pinchart wrote:
-> On Fri, Apr 29, 2022 at 11:58:48AM +0200, Jacopo Mondi wrote:
->> On Fri, Apr 29, 2022 at 10:43:09AM +0200, Hans Verkuil wrote:
->>> On 29/04/2022 10:28, Eugen.Hristev@microchip.com wrote:
->>>> On 4/29/22 11:17 AM, Hans Verkuil wrote:
->>>>> On 10/03/2022 10:51, Eugen Hristev wrote:
->>>>>> As a top MC video driver, the atmel-isc should not propagate the format to the
->>>>>> subdevice, it should rather check at start_streaming() time if the subdev is properly
->>>>>> configured with a compatible format.
->>>>>> Removed the whole format finding logic, and reworked the format verification
->>>>>> at start_streaming time, such that the ISC will return an error if the subdevice
->>>>>> is not properly configured. To achieve this, media_pipeline_start
->>>>>> is called and a link_validate callback is created to check the formats.
->>>>>> With this being done, the module parameter 'sensor_preferred' makes no sense
->>>>>> anymore. The ISC should not decide which format the sensor is using. The
->>>>>> ISC should only cope with the situation and inform userspace if the streaming
->>>>>> is possible in the current configuration.
->>>>>> The redesign of the format propagation has also risen the question of the
->>>>>> enumfmt callback. If enumfmt is called with an mbus_code, the enumfmt handler
->>>>>> should only return the formats that are supported for this mbus_code.
->>>>>> Otherwise, the enumfmt will report all the formats that the ISC could output.
->>>>>> With this rework, the dynamic list of user formats is removed. It makes no
->>>>>> more sense to identify at complete time which formats the sensor could emit,
->>>>>> and add those into a separate dynamic list.
->>>>>> The ISC will start with a simple preconfigured default format, and at
->>>>>> link validate time, decide whether it can use the format that is configured
->>>>>> on the sink or not.
->>>>>>
->>>>>> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
->>>>>> Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
->>>>>> ---
->>>>>> Changes in v9:
->>>>>> - isc_link_validate now static
->>>>>>
->>>>>> Changes in v7:
->>>>>> - minor typos as suggested by Jacopo
->>>>>> - small changes, reduce some indentation, modified an index, as suggested by
->>>>>> Jacopo
->>>>>>
->>>>>> Changes in v6:
->>>>>> - reworked a bit enum_fmt as suggested by Jacopo
->>>>>>
->>>>>> Changes in v5:
->>>>>> - removed user_formats dynamic list as it is now pointless
->>>>>> - greatly simplified the enum_fmt function
->>>>>> - removed some init code that was useless now
->>>>>>
->>>>>> Changes in v4:
->>>>>> - moved validation code into link_validate and used media_pipeline_start
->>>>>> - merged this patch with the enum_fmt patch which was previously in v3 of
->>>>>> the series
->>>>>>
->>>>>> Changes in v3:
->>>>>> - clamp to maximum resolution once the frame size from the subdev is found
->>>>>>   drivers/media/platform/atmel/atmel-isc-base.c | 412 ++++++++----------
->>>>>>   .../media/platform/atmel/atmel-isc-scaler.c   |   5 +
->>>>>>   drivers/media/platform/atmel/atmel-isc.h      |  13 +-
->>>>>>   .../media/platform/atmel/atmel-sama5d2-isc.c  |  20 +
->>>>>>   .../media/platform/atmel/atmel-sama7g5-isc.c  |  20 +
->>>>>>   5 files changed, 236 insertions(+), 234 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
->>>>>> index ee1dda6707a0..fe2c0af58060 100644
->>>>>> --- a/drivers/media/platform/atmel/atmel-isc-base.c
->>>>>> +++ b/drivers/media/platform/atmel/atmel-isc-base.c
->>>>>> @@ -36,11 +36,6 @@ static unsigned int debug;
->>>>>>   module_param(debug, int, 0644);
->>>>>>   MODULE_PARM_DESC(debug, "debug level (0-2)");
->>>>>>
->>>>>> -static unsigned int sensor_preferred = 1;
->>>>>> -module_param(sensor_preferred, uint, 0644);
->>>>>> -MODULE_PARM_DESC(sensor_preferred,
->>>>>> -              "Sensor is preferred to output the specified format (1-on 0-off), default 1");
->>>>>> -
->>>>>>   #define ISC_IS_FORMAT_RAW(mbus_code) \
->>>>>>        (((mbus_code) & 0xf000) == 0x3000)
->>>>>>
->>>>>> @@ -337,6 +332,10 @@ static int isc_start_streaming(struct vb2_queue *vq, unsigned int count)
->>>>>>        unsigned long flags;
->>>>>>        int ret;
->>>>>>
->>>>>> +     ret = media_pipeline_start(&isc->video_dev.entity, &isc->mpipe);
->>>>>
->>>>> The pipeline validation is done in start_streaming, but I don't think that
->>>>> is the best place: if STREAMON is called before buffers are queued, then
->>>>> an invalid pipeline isn't discovered until enough buffers are queued to
->>>>> kick off start_streaming.
->>>>>
->>>>> Drivers like vsp1, omap3isp and the samsung drivers all do this in streamon().
->>>>>
->>>>> I think that is the correct time to do this.
->>>>
->>>> Hello Hans,
->>>>
->>>> Initially (v2, v3) I had this in streamon(). The problem that I faced at
->>>> that time was that streamoff was never called, so I could not call
->>>> media_pipeline_stop(). Then Jacopo told me to move it to start_streaming
->>>> (see change log for v4) , and I did not face any more problems.
->>
->> Yes indeed, seems I suggested to use media_pipeline_handler in a
->> comment on your v3
->>
->> "at s_stream time your top driver calls media_pipeline_start()"
->>
->> sorry about that, I should have looked around a bit more carefully and
->> notice most drivers do so at vb2 streamon
->>
->> However I don't see media_pipeline_start being called at all in v3 of
->> the patch
->>
->>> It's a mess. Looking at some drivers I see that omap3isp calls media_pipeline_stop
->>> in streamoff (so will have the same problem as you described if VIDIOC_STREAMOFF
->>> isn't called), exynos4-is does the same, but it also checks the streaming state in
->>> the release() fop callback, so that would fix this problem. And vimc does this
->>> in stop_streaming.
->>>
->>> I'm in favor of fixing this in vb2, that framework knows exactly when this needs
->>> to be called.
->>
->> Are you suggesting to have vb2 to call media_pipeline_start() or is it
->> more complex than this ?
+On Tue, Apr 19, 2022 at 03:00:07PM -0700, Dexuan Cui wrote:
+> A VM on Azure can have 14 GPUs, and each GPU may have a huge MMIO BAR,
+> e.g. 128 GB. Currently the boot time of such a VM can be 4+ minutes, and
+> most of the time is used by the host to unmap/map the vBAR from/to pBAR
+> when the VM clears and sets the PCI_COMMAND_MEMORY bit: each unmap/map
+> operation for a 128GB BAR needs about 1.8 seconds, and the pci-hyperv
+> driver and the Linux PCI subsystem flip the PCI_COMMAND_MEMORY bit
+> eight times (see pci_setup_device() -> pci_read_bases() and
+> pci_std_update_resource()), increasing the boot time by 1.8 * 8 = 14.4
+> seconds per GPU, i.e. 14.4 * 14 = 201.6 seconds in total.
 > 
-> I think Hans meant adding a .validate() operation to vb2.
+> Fix the slowness by not turning on the PCI_COMMAND_MEMORY in pci-hyperv.c,
+> so the bit stays in the off state before the PCI device driver calls
+> pci_enable_device(): when the bit is off, pci_read_bases() and
+> pci_std_update_resource() don't cause Hyper-V to unmap/map the vBARs.
+> With this change, the boot time of such a VM is reduced by
+> 1.8 * (8-1) * 14 = 176.4 seconds.
+
+I believe you need to clarify this commit message. It took me a while
+to understand what you are really doing.
+
+What this patch is doing is bootstrapping PCI devices with command
+memory clear because there is no need to have it set (?) in the first
+place and because, if it is set, the PCI core layer needs to toggle it
+on and off in order to eg size BAR regions, which causes the slow down
+you are reporting.
+
+I assume, given the above, that there is strictly no need to have
+devices with command memory set at kernel startup handover and if
+there was it would not be set in the PCI Hyper-V host controller
+driver (because that's what you are _removing_).
+
+I think this should not be merged as a fix and I'd be careful
+about possible regressions before sending it to stable kernels,
+if you wish to do so.
+
+It is fine by me to go via the Hyper-V tree even though I don't
+see why that's better, unless you want to send it as a fix and
+I think you should not.
+
+You can add my tag but the commit log should be rewritten and
+you should add a Link: to the discussion thread.
+
+Acked-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+
+> Tested-by: Boqun Feng (Microsoft) <boqun.feng@gmail.com>
+> Signed-off-by: Dexuan Cui <decui@microsoft.com>
+> Cc: Jake Oshins <jakeo@microsoft.com>
+> ---
+>  drivers/pci/controller/pci-hyperv.c | 17 +++++++++++------
+>  1 file changed, 11 insertions(+), 6 deletions(-)
 > 
-> vb2 is already quite complex, I don't think adding more features is a
-> good idea. I'd rather have vb2 focus on buffer management only
-> (.start_streaming() and .stop_streaming() shouldn't have been in there
-> in my opinion), and handle validation in the .streamon() handler. I'd
-> expect most drivers that deal with media pipelines to do more work in
-> .streamon() anyway.
-
-I disagree with that :-)
-
-It's vb2 that keeps track of the streaming state and when what actions
-need to be taken. Drivers really shouldn't need to care about the ioctls
-themselves, and just implement the relevant vb2 callbacks. Relying on
-drivers to handle any of the streaming ioctls is asking for problems,
-as this shows: most drivers implement this wrong today.
-
-The vb2 framework knows when e.g. the pipeline needs to be started or
-stopped, and can do this at the best time, without drivers needing to
-keep track of when streamon/off/release is called. Keep that logic in
-vb2.
-
-Regards,
-
-	Hans
+> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+> index d270a204324e..f9fbbd8d94db 100644
+> --- a/drivers/pci/controller/pci-hyperv.c
+> +++ b/drivers/pci/controller/pci-hyperv.c
+> @@ -2082,12 +2082,17 @@ static void prepopulate_bars(struct hv_pcibus_device *hbus)
+>  				}
+>  			}
+>  			if (high_size <= 1 && low_size <= 1) {
+> -				/* Set the memory enable bit. */
+> -				_hv_pcifront_read_config(hpdev, PCI_COMMAND, 2,
+> -							 &command);
+> -				command |= PCI_COMMAND_MEMORY;
+> -				_hv_pcifront_write_config(hpdev, PCI_COMMAND, 2,
+> -							  command);
+> +				/*
+> +				 * No need to set the PCI_COMMAND_MEMORY bit as
+> +				 * the core PCI driver doesn't require the bit
+> +				 * to be pre-set. Actually here we intentionally
+> +				 * keep the bit off so that the PCI BAR probing
+> +				 * in the core PCI driver doesn't cause Hyper-V
+> +				 * to unnecessarily unmap/map the virtual BARs
+> +				 * from/to the physical BARs multiple times.
+> +				 * This reduces the VM boot time significantly
+> +				 * if the BAR sizes are huge.
+> +				 */
+>  				break;
+>  			}
+>  		}
+> -- 
+> 2.17.1
+> 

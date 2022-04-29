@@ -2,72 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 556CB515620
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4627B515623
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380953AbiD2U43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 16:56:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
+        id S1381089AbiD2U5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 16:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239591AbiD2U40 (ORCPT
+        with ESMTP id S1381048AbiD2U5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 16:56:26 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254FECC517
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:53:07 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id k27so10358538edk.4
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:53:07 -0700 (PDT)
+        Fri, 29 Apr 2022 16:57:22 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00BF5CC517
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:54:03 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id k23so17602308ejd.3
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:54:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=5rueA+5P6DTgRKhYiRtmSze3ymkDAf5ytcrTJ+jun9M=;
-        b=Lld+U214U5FpR4tHUMml0PeDOJMDTHUSspkT9J9PRSGdfHLrXLUZh5TzNZKVksNGyn
-         lsJIeEyOuKjndcsMU3i11HFYeUeGHR8whS5ERQjMdMJRtK7cHF7813uS1Pf1K7Kkk9LB
-         TB9F7PnvpLhSQfqKea+3KLbAEuB1BeslNWWrd//LCgYFGiqTe43gOuVgJgMOl3YWqlbu
-         Z6NO7+NVFMoo93e6PcPFIVj9eK8M43N8GM4G+6c/ZXJG5m9g7x2te+LAVhrygp7wpmFg
-         oqqdXY79pVug5hMWwJGwAD+BD/gXE5EaNPdBbuhT0QCGlKtR3hEeM41Iu8JGITrZdn3u
-         Bb4A==
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=8ijMUHM6BZmaa7c0hm3mqC8JYHeyH09dTjrvSxZy1BY=;
+        b=jDZcRUA3YzPLHYV5bc8rvjIuyIhPN6BMCalJK0LvbKoFfLp8PIrNIwur1Crf2WZqx/
+         lEcirE4D5zqId9wjGmYP+xL+MSyb/DO7h3ILtI0cO2wiFNhb5Uv0jNIXYpKoP6VpyyJI
+         Hf7qNN32GMy6FdJvONI4uSRYmi4G50C/xuQS4uo1uiZsBpMYNqk2RPbzIG+oUfV0iOke
+         GfF0i7cGnflrgrn++seNwA+YI2Hn/RkkZS57sn/7q1e3AgpxcrMSnt/oSSY8GiVjo1c4
+         Bs0up1vL/19NSFtazp9B2WY0//RTnNc8V9LYU24i8mPVrFBqGg2lOG/3tclkKOYyg96S
+         VDtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=5rueA+5P6DTgRKhYiRtmSze3ymkDAf5ytcrTJ+jun9M=;
-        b=B+hFRnbjH7Dxptg86cQGuWK44WvyU4op/dpN5Hzym+QOLWE3ASTqQj5938dk6nXiH7
-         fX9/xksCsbVJfLSM9oaOnA9UuG8m+6B/KQfspFIf222hrgZThX5j/6spl9bRSEK2K1PM
-         CFSaAZWPtAg6Yn+5oNToJqqY1ZNRAtpXigyxO9iXLoi/lFWtGePGqfqv7v6REUo/j8dY
-         Q5RUtFKNJ71AlBFwoq3F0SGA4BDg9PRW6Yhb426Nho427ydqnC+nlQ7NjkbhIDyXoExe
-         w3oClZhYnoVK3wR3s68Td7mWjLE646naKayj2l3V40gc6+BRzb1Llkh7iZftCA1YZHTG
-         3ByA==
-X-Gm-Message-State: AOAM5300FNXr6selgeKLJbZ0f8nsyp53cO7Y7aKP3DMH5REkczRobEtn
-        88uYrfd6IiXpyzuzVzIi/KQ7Jg==
-X-Google-Smtp-Source: ABdhPJy8IUwbb2odNT7CTTekNssjCh4o9qQLalWP0g+aNBCPfam0Wsuwz3cMRZqb5yANHs0LGjORGQ==
-X-Received: by 2002:aa7:ce84:0:b0:425:d2e0:a75f with SMTP id y4-20020aa7ce84000000b00425d2e0a75fmr1119803edv.263.1651265585758;
-        Fri, 29 Apr 2022 13:53:05 -0700 (PDT)
+        bh=8ijMUHM6BZmaa7c0hm3mqC8JYHeyH09dTjrvSxZy1BY=;
+        b=HvT/+Ho45K/7Yd+vqSMEg0sjOaufgg0tJ4pSg/nlMNMXspDVIR/gAq64UEriC93vkf
+         eJeZCDlaTE/j2D+l6TvmyjtwJWxoGBxaoEMDAoOH83IR3R46Co6mnBgGjSr7Saq0Sa81
+         +Yvyx40FDdTxya2XNCXdf6qLpLoWX6DeoikYoMqzYcb9EAWMTw5TCF1Rj19K7Wxgz7bO
+         AjF0uPomsnvVs5+FWbMAANZ/AFiQBj8O755VZDmnEp8ihyrwqGy9SLI/x4GRp6+iMrZV
+         bN5d+35pGvlgiicezlkqjjLtIkXxkOCWlmgtZacjx3X7ljZomHRQ6xLPgOe51wAATIan
+         1fnA==
+X-Gm-Message-State: AOAM532PNvm+7/pwOdGzNjIcBi9c0KdanBO0kdUXAZLh8ybHIcUgU3NK
+        hpUcHXaqw5p1BKIe9yy99nzbgQ==
+X-Google-Smtp-Source: ABdhPJyEiU/AYnt4FO/n9XbiqqNZdHoU6dwECTZ1TVLYSRRs21KAKVHRfb4kQfHEM4Oa1Qws3c12bw==
+X-Received: by 2002:a17:907:eab:b0:6da:8ec5:d386 with SMTP id ho43-20020a1709070eab00b006da8ec5d386mr1070959ejc.668.1651265641594;
+        Fri, 29 Apr 2022 13:54:01 -0700 (PDT)
 Received: from [192.168.0.176] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id u26-20020aa7d99a000000b0042617ba63b7sm3418077eds.65.2022.04.29.13.53.04
+        by smtp.gmail.com with ESMTPSA id gv19-20020a1709072bd300b006f3ef214df4sm991090ejc.90.2022.04.29.13.54.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 13:53:05 -0700 (PDT)
-Message-ID: <5866fb85-37ee-76ce-a1c4-a0d9b9aebda4@linaro.org>
-Date:   Fri, 29 Apr 2022 22:53:04 +0200
+        Fri, 29 Apr 2022 13:54:01 -0700 (PDT)
+Message-ID: <069b274d-1460-cd70-89f9-6abda4e3b4fa@linaro.org>
+Date:   Fri, 29 Apr 2022 22:54:00 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v4 2/2] dt-bindings: usb: Add bindings doc for Sunplus
- EHCI driver
+Subject: Re: [PATCH v2 1/1] dt-bindings: rtc: mediatek: add mt6358 and mt6366
+ compatible
 Content-Language: en-US
-To:     Vincent Shih <vincent.sunplus@gmail.com>,
-        gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        p.zabel@pengutronix.de, davem@davemloft.net,
-        vladimir.oltean@nxp.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        wells.lu@sunplus.com
-References: <1651220876-26705-1-git-send-email-vincent.sunplus@gmail.com>
- <1651220876-26705-3-git-send-email-vincent.sunplus@gmail.com>
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Yuchen Huang <yuchen.huang@mediatek.com>
+References: <20220428092726.25814-1-allen-kh.cheng@mediatek.com>
+ <20220428092726.25814-2-allen-kh.cheng@mediatek.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1651220876-26705-3-git-send-email-vincent.sunplus@gmail.com>
+In-Reply-To: <20220428092726.25814-2-allen-kh.cheng@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,18 +82,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/04/2022 10:27, Vincent Shih wrote:
-> Add bindings doc for Sunplus EHCI driver
+On 28/04/2022 11:27, Allen-KH Cheng wrote:
+> Add mt6358 and mt6366 compatible in devicetree-binding document for
+> MediaTek PMIC based RTC. mt6358 and mt6366 use same compatible data
+> to store RTC_WRTGR address offset.
 > 
-> Signed-off-by: Vincent Shih <vincent.sunplus@gmail.com>
-> ---
-> Changes in v2:
->   - Address the comments from Mr. Krzysztof Kozlowski and Mr. Rob Herring
+> mt6358-rts should be used as fallback for mt6366-rtc.
+> 
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> Signed-off-by: Yuchen Huang <yuchen.huang@mediatek.com>
 
-Improved, but still I don't think you applied all of my comments. Please
-go through them one more time.
-
-https://lore.kernel.org/all/67ec6f3a-1579-f77a-a54d-381472252d6b@canonical.com/
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
 Best regards,

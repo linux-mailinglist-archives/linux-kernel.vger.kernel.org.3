@@ -2,74 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCBB9514D55
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EECD0514DA5
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356703AbiD2Ojo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 10:39:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55362 "EHLO
+        id S1377705AbiD2Omx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 10:42:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377580AbiD2OjG (ORCPT
+        with ESMTP id S1377723AbiD2Olc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 10:39:06 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9D320196
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:35:48 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id iq2-20020a17090afb4200b001d93cf33ae9so10670920pjb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:35:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xzOPqzABS1nn10SFsKraP30CXjOcxe5i5LRmTq00vq4=;
-        b=OtLJiInqAuYIoacxZCT7Y5xsyPousHs93Nc1Z7C6HsmDByhW/K3+9dUg8/gLZJXNuu
-         +E5ZzsFQQZMB+Tf56QgXPtrLXgWond+HOSkCR7nbqFR+R5cklAFPvf6DEPeWD9T3H4j4
-         RIe8LWLwMe1OU17fuaC0BIxmSZGFLN8jAdu1FzEQlf2sTALrR/hOGwipxepdmFcksrgp
-         GKWID9t175PZC5jATnvrw39hvKLSjG9oHlt73ELdOSFeo8LHTuh6NXZnjJrhAGR8eGsr
-         YtgXQVhY0eb3Jg2dEkW6LhWJAqpsL58HmO3bDkAhiI1JWewIElvEdq49egmGlbZoe5ny
-         iyqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xzOPqzABS1nn10SFsKraP30CXjOcxe5i5LRmTq00vq4=;
-        b=nGxGpMaeX7fnCzmp4k3uUH5tK9F6hSOl26uzWBOfpsefleuV4B+ceTXOMPgqAwqcOp
-         /6ZNJv49ZbWpJOsSxF2Uc/dVsI757nlPW32F0kQ6kKzBsHwMs04x43uZ4C6JouI66jMN
-         vIBnDbnbwzOaJsa5CdNBW4GKqXO9Df54FQ9HVWxpxLtIpTGffxBV23tShs6D/EEAPk4l
-         Y715nSfKfnQhlFfQDHHebiqhhNFgYG1LzVhUF67lhoK1qQU6OG/TtSZdkfQdU+iE2B67
-         Z/fN1gT4Z3G5XybK0h1/I5TSo7WRHaukP9JD9o/cYM78oyDY7EVKiXGoxCsVNtngaxZr
-         jJgg==
-X-Gm-Message-State: AOAM5303zdRTJchOSPDa2GLrPPbfln5lOJPglkS+RD2+REn0X9mpvIaQ
-        pOzPIoFiwpX9X/qTPYs8H2GmuA==
-X-Google-Smtp-Source: ABdhPJzPPvpjjUg7d3EJhwF0w6+Bk6GIAwzBw2RDYI/6H6CGZOIBYXHvNvxD8Uu1fFNy6Lpeg2pbvA==
-X-Received: by 2002:a17:902:ef45:b0:156:1858:71fc with SMTP id e5-20020a170902ef4500b00156185871fcmr38772270plx.23.1651242947441;
-        Fri, 29 Apr 2022 07:35:47 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id g17-20020a625211000000b005056a6313a7sm3191028pfb.87.2022.04.29.07.35.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 07:35:46 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 14:35:43 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Mingwei Zhang <mizhang@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: x86/mmu: fix potential races when walking host page
- table
-Message-ID: <Ymv3vwBEgCH0CMPH@google.com>
-References: <20220429031757.2042406-1-mizhang@google.com>
- <4b0936bf-fd3e-950a-81af-fd393475553f@redhat.com>
+        Fri, 29 Apr 2022 10:41:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C0D366B9;
+        Fri, 29 Apr 2022 07:37:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE571615B1;
+        Fri, 29 Apr 2022 14:37:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D82EDC385A7;
+        Fri, 29 Apr 2022 14:37:23 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="nmURRhmF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1651243042;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=n4+Hrsa3/2uZn2FjMlvF3cp+u5Zrs5QPWYxXzJ56pZo=;
+        b=nmURRhmF7lDoOMEuvqYf5EPmb7EXSskhUre4xdQLNsIN+4cuYCHOmHNQhBaPDYGm/gbqHu
+        FIEb7BcrkFVYDN+GU04ur3OVWSYQ0HDv5fi/JxtwxcTtuIky5uSNDSjqPkBZFToy7rwhd2
+        xqjE2Xs3Jg20BItfi3t2/9BNQJa0aew=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 9798adb4 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 29 Apr 2022 14:37:21 +0000 (UTC)
+Date:   Fri, 29 Apr 2022 16:37:12 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Willy Tarreau <w@1wt.eu>, edumazet@google.com
+Cc:     netdev@vger.kernel.org, David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Moshe Kol <moshe.kol@mail.huji.ac.il>,
+        Yossi Gilad <yossi.gilad@mail.huji.ac.il>,
+        Amit Klein <aksecurity@gmail.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 net 3/7] tcp: resalt the secret every 10 seconds
+Message-ID: <Ymv4GAezJlA1+Vfs@zx2c4.com>
+References: <20220428124001.7428-1-w@1wt.eu>
+ <20220428124001.7428-4-w@1wt.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <4b0936bf-fd3e-950a-81af-fd393475553f@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+In-Reply-To: <20220428124001.7428-4-w@1wt.eu>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,22 +62,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022, Paolo Bonzini wrote:
-> > +out:
-> > +	local_irq_restore(flags);
-> > +	return level;
-> > +}
-> > +EXPORT_SYMBOL_GPL(kvm_lookup_address_level_in_mm);
-> 
-> Exporting is not needed.
-> 
-> Thanks for writing the walk code though.  I'll adapt it and integrate the
-> patch.
+Hi Eric,
 
-But why are we fixing this only in KVM?  I liked the idea of stealing perf's
-implementation because it was a seemlingly perfect fit and wouldn't introduce
-new code (ignoring wrappers, etc...).
+On Thu, Apr 28, 2022 at 02:39:57PM +0200, Willy Tarreau wrote:
+> From: Eric Dumazet <edumazet@google.com>
+> 
+> In order to limit the ability for an observer to recognize the source
+> ports sequence used to contact a set of destinations, we should
+> periodically shuffle the secret. 10 seconds looks effective enough
+Nit: "periodically re-salt the input".
+> without causing particular issues.
 
-We _know_ that at least one subsystem is misusing lookup_address_in_pgd() and
-given that its wrappers are exported, I highly doubt KVM is the only offender.
-It really feels like we're passing the buck here by burying the fix in KVM.
+Just FYI, moving from siphash_3u32 to siphash_4u32 is not free, as it
+bumps us up from siphash_3u32 to siphash_2u64, which does two more
+siphash rounds. Maybe this doesn't matter much, but just FYI.
+
+I wonder, though, about your "10 seconds looks effective enough without
+causing particular issues." I surmise from that sentence that a lower
+value might cause particular issues, but that you found 10 seconds to be
+okay in practice. Fine. But what happens if one caller hits this at
+second 9 and the next caller hits it at second 0? In that case, the
+interval might have been 1 second, not 10. In other words, if you need
+a certain minimum quantization for this to not cause "particular
+issues", it might not work the way you wanted it to.
+
+Additionally, that problem aside, if you round EPHEMERAL_PORT_SHUFFLE_PERIOD
+to the nearest power of two, you can turn the expensive division into a
+bit shift right.
+
+Regards,
+Jason

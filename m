@@ -2,42 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C52851466B
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C536951466A
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:15:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357285AbiD2KSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 06:18:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58832 "EHLO
+        id S1357318AbiD2KTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 06:19:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357277AbiD2KSp (ORCPT
+        with ESMTP id S1357289AbiD2KTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 06:18:45 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 311013A5F4;
-        Fri, 29 Apr 2022 03:15:26 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6F9301063;
-        Fri, 29 Apr 2022 03:15:26 -0700 (PDT)
-Received: from lpieralisi (unknown [10.57.10.213])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 732BD3F73B;
-        Fri, 29 Apr 2022 03:15:23 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 11:15:17 +0100
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     wei.liu@kernel.org, kys@microsoft.com, haiyangz@microsoft.com,
-        sthemmin@microsoft.com, bhelgaas@google.com,
-        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mikelley@microsoft.com,
-        robh@kernel.org, kw@linux.com, jakeo@microsoft.com
-Subject: Re: [PATCH] PCI: hv: Do not set PCI_COMMAND_MEMORY to reduce VM boot
- time
-Message-ID: <Ymu6tYItgM6dtNdd@lpieralisi>
-References: <20220419220007.26550-1-decui@microsoft.com>
+        Fri, 29 Apr 2022 06:19:04 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB654B872
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 03:15:43 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23TAFQLn036375;
+        Fri, 29 Apr 2022 05:15:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1651227326;
+        bh=0CLxmnDtB6/A+kmf8Kcha/AUP+LquXNbEjVqjWdMvYY=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=uFF7B/3//hmiFG9scr6E9P9vIJ+EJ3ECUEU4/n0LGaFynjD+RyMPKOZvsjoAFEEDO
+         KTB3+Q8BHO/7OdHtCDydwDOIbDv4FnnqFbMfb2ewkqIdf4zn1vwqHLclFnx/8xfOn0
+         yeZNtg45HvMYI965w4kSChGwQd7pYc9JIMtOXQJY=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23TAFQAF092312
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 29 Apr 2022 05:15:26 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 29
+ Apr 2022 05:15:26 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 29 Apr 2022 05:15:26 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23TAFPo5056582;
+        Fri, 29 Apr 2022 05:15:26 -0500
+Date:   Fri, 29 Apr 2022 15:45:25 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] mtd: spi-nor: move spi_nor_write_ear() to winbond
+ module
+Message-ID: <20220429101525.w2wcnhkxyb46pe2j@ti.com>
+References: <20220429100153.2338501-1-michael@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220419220007.26550-1-decui@microsoft.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220429100153.2338501-1-michael@walle.cc>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,86 +66,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 03:00:07PM -0700, Dexuan Cui wrote:
-> A VM on Azure can have 14 GPUs, and each GPU may have a huge MMIO BAR,
-> e.g. 128 GB. Currently the boot time of such a VM can be 4+ minutes, and
-> most of the time is used by the host to unmap/map the vBAR from/to pBAR
-> when the VM clears and sets the PCI_COMMAND_MEMORY bit: each unmap/map
-> operation for a 128GB BAR needs about 1.8 seconds, and the pci-hyperv
-> driver and the Linux PCI subsystem flip the PCI_COMMAND_MEMORY bit
-> eight times (see pci_setup_device() -> pci_read_bases() and
-> pci_std_update_resource()), increasing the boot time by 1.8 * 8 = 14.4
-> seconds per GPU, i.e. 14.4 * 14 = 201.6 seconds in total.
+On 29/04/22 12:01PM, Michael Walle wrote:
+> The "Extended Address Register" is winbond specific. If the flash is
+> larger than 16MiB and is used in 3 byte address mode, it is used to set
+> the remaining address bits. Move the write_ear() function, the opcode
+> macros and the spimem op template into the winbond module and rename
+> them accordingly.
 > 
-> Fix the slowness by not turning on the PCI_COMMAND_MEMORY in pci-hyperv.c,
-> so the bit stays in the off state before the PCI device driver calls
-> pci_enable_device(): when the bit is off, pci_read_bases() and
-> pci_std_update_resource() don't cause Hyper-V to unmap/map the vBARs.
-> With this change, the boot time of such a VM is reduced by
-> 1.8 * (8-1) * 14 = 176.4 seconds.
+> Signed-off-by: Michael Walle <michael@walle.cc>
 
-I believe you need to clarify this commit message. It took me a while
-to understand what you are really doing.
+Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
 
-What this patch is doing is bootstrapping PCI devices with command
-memory clear because there is no need to have it set (?) in the first
-place and because, if it is set, the PCI core layer needs to toggle it
-on and off in order to eg size BAR regions, which causes the slow down
-you are reporting.
-
-I assume, given the above, that there is strictly no need to have
-devices with command memory set at kernel startup handover and if
-there was it would not be set in the PCI Hyper-V host controller
-driver (because that's what you are _removing_).
-
-I think this should not be merged as a fix and I'd be careful
-about possible regressions before sending it to stable kernels,
-if you wish to do so.
-
-It is fine by me to go via the Hyper-V tree even though I don't
-see why that's better, unless you want to send it as a fix and
-I think you should not.
-
-You can add my tag but the commit log should be rewritten and
-you should add a Link: to the discussion thread.
-
-Acked-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-
-> Tested-by: Boqun Feng (Microsoft) <boqun.feng@gmail.com>
-> Signed-off-by: Dexuan Cui <decui@microsoft.com>
-> Cc: Jake Oshins <jakeo@microsoft.com>
-> ---
->  drivers/pci/controller/pci-hyperv.c | 17 +++++++++++------
->  1 file changed, 11 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
-> index d270a204324e..f9fbbd8d94db 100644
-> --- a/drivers/pci/controller/pci-hyperv.c
-> +++ b/drivers/pci/controller/pci-hyperv.c
-> @@ -2082,12 +2082,17 @@ static void prepopulate_bars(struct hv_pcibus_device *hbus)
->  				}
->  			}
->  			if (high_size <= 1 && low_size <= 1) {
-> -				/* Set the memory enable bit. */
-> -				_hv_pcifront_read_config(hpdev, PCI_COMMAND, 2,
-> -							 &command);
-> -				command |= PCI_COMMAND_MEMORY;
-> -				_hv_pcifront_write_config(hpdev, PCI_COMMAND, 2,
-> -							  command);
-> +				/*
-> +				 * No need to set the PCI_COMMAND_MEMORY bit as
-> +				 * the core PCI driver doesn't require the bit
-> +				 * to be pre-set. Actually here we intentionally
-> +				 * keep the bit off so that the PCI BAR probing
-> +				 * in the core PCI driver doesn't cause Hyper-V
-> +				 * to unnecessarily unmap/map the virtual BARs
-> +				 * from/to the physical BARs multiple times.
-> +				 * This reduces the VM boot time significantly
-> +				 * if the BAR sizes are huge.
-> +				 */
->  				break;
->  			}
->  		}
-> -- 
-> 2.17.1
-> 
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

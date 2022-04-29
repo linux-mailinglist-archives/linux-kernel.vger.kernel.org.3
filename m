@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 215515158FD
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 01:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0426C5158FB
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 01:29:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381747AbiD2XdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 19:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51642 "EHLO
+        id S1381802AbiD2XdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 19:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381795AbiD2Xc7 (ORCPT
+        with ESMTP id S1381789AbiD2Xc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 19:32:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44595CD64A;
-        Fri, 29 Apr 2022 16:29:40 -0700 (PDT)
+        Fri, 29 Apr 2022 19:32:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4551CD335;
+        Fri, 29 Apr 2022 16:29:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01396B828F1;
-        Fri, 29 Apr 2022 23:29:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B76C4C385A7;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7097A623E0;
+        Fri, 29 Apr 2022 23:29:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CE2EBC385AC;
         Fri, 29 Apr 2022 23:29:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1651274977;
-        bh=kZrs/xiAEckX+b0ic9RlGktgTrirB1chaLCHBLfQVEU=;
+        bh=SOxvHWF/MTb7rLbkQ3GAVki1VB4HwbPvKhMHS+vEjFE=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=PF6C0k2AyIDq/f7Vlj67fHL0ychlUlAZzUl24SoNmdpMhrsuwIudm6ngma0FPt04s
-         VFW5aObZKNnlPYEzWlHR82lF5OeLVCQQf4n8lXR3WY9WjLwnUI7C9wtrtD2Ps2Py/N
-         LQ/MeOG76qt0qaeKWGYeI6dhw3mxBrLT16nj+N4R7t/JzLUm0DkH6dWHCibHVm6i1m
-         TtctMYQR4nzkeYXV52UeBG3s2QLKyx5YGx3uKM5iheZIFHTilUqB8awPvQOGeWeu/r
-         CmYPTbeqx77/MoTiaVSeohhVYFEK0l143TxFTVnvh2T93Qu2BhO1Efc7Slbe+h5Jp0
-         eY8po4Jpg2hFA==
+        b=tzUYzbv4w3Ll7bQp5Vqp5y+Ck9U9qhFeR3w9xzeOxPDXwZBw1Cgdw2MmkqPj2JmiY
+         1FEQ9SAjwC20TpYjMSHp2YS0Ot3h7rCav5qKfWS94HfjCytp7jDWTrMmdPc11jS1t8
+         GIQkgQ4epgx4TLWiFMdTMSUFDygoe615XWJh2Y2XyP1V/Wq3DJVctRFGpYrCe94pZo
+         nsYZnvoRqOT4SUc/rKmqxc1kdvUVQMIlX9CVOlY5wxtpwm1WURW5S4NYq+H7l32SVP
+         4eUBFdtcekwphRfQRN/lSZYRugSsT7Tg9qcrBxo1Y9Nl83GktKusGhqK8dw9cSDWPO
+         1pUnxmsKwM3vA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A15CBF0383D;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BAE91F67CA0;
         Fri, 29 Apr 2022 23:29:37 +0000 (UTC)
-Subject: Re: [GIT PULL] Ceph fixes for 5.18-rc5
+Subject: Re: [GIT PULL] clk fixes for v5.18-rc4
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220429162632.29934-1-idryomov@gmail.com>
-References: <20220429162632.29934-1-idryomov@gmail.com>
+In-Reply-To: <20220429204451.2794649-1-sboyd@kernel.org>
+References: <20220429204451.2794649-1-sboyd@kernel.org>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220429162632.29934-1-idryomov@gmail.com>
-X-PR-Tracked-Remote: https://github.com/ceph/ceph-client.git tags/ceph-for-5.18-rc5
-X-PR-Tracked-Commit-Id: 7acae6183cf37c48b8da48bbbdb78820fb3913f3
+X-PR-Tracked-Message-Id: <20220429204451.2794649-1-sboyd@kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-fixes-for-linus
+X-PR-Tracked-Commit-Id: a91b05f6b928e8fab750fc953d7df0aa6dc43547
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: bd383b8e32f6aab08c9485b1fe86e2e932b1df69
-Message-Id: <165127497765.20495.16396468291637508679.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: c0e6265e6c2dd3f1bc37d929194c97079f7ffd3f
+Message-Id: <165127497776.20495.3183521395094456296.pr-tracker-bot@kernel.org>
 Date:   Fri, 29 Apr 2022 23:29:37 +0000
-To:     Ilya Dryomov <idryomov@gmail.com>
+To:     Stephen Boyd <sboyd@kernel.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,12 +61,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 29 Apr 2022 18:26:32 +0200:
+The pull request you sent on Fri, 29 Apr 2022 13:44:51 -0700:
 
-> https://github.com/ceph/ceph-client.git tags/ceph-for-5.18-rc5
+> https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-fixes-for-linus
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/bd383b8e32f6aab08c9485b1fe86e2e932b1df69
+https://git.kernel.org/torvalds/c/c0e6265e6c2dd3f1bc37d929194c97079f7ffd3f
 
 Thank you!
 

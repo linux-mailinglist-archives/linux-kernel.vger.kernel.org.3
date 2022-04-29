@@ -2,190 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 784D2514021
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 03:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0BD8514026
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 03:16:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353853AbiD2BS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 21:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39730 "EHLO
+        id S1353860AbiD2BT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 21:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345538AbiD2BSX (ORCPT
+        with ESMTP id S1353759AbiD2BT4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 21:18:23 -0400
-Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4632F5F5C;
-        Thu, 28 Apr 2022 18:15:05 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [10.15.192.164])
-        by mail-app4 (Coremail) with SMTP id cS_KCgAnDkX6O2tidX4EAg--.28704S4;
-        Fri, 29 Apr 2022 09:14:54 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-kernel@vger.kernel.org, kuba@kernel.org,
-        krzysztof.kozlowski@linaro.org, gregkh@linuxfoundation.org
-Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        alexander.deucher@amd.com, akpm@linux-foundation.org,
-        broonie@kernel.org, netdev@vger.kernel.org, linma@zju.edu.cn,
-        Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH net v5 2/2] nfc: nfcmrvl: main: reorder destructive operations in nfcmrvl_nci_unregister_dev to avoid bugs
-Date:   Fri, 29 Apr 2022 09:14:33 +0800
-Message-Id: <bb2769acc79f42d25d61ed8988c8d240c8585f33.1651194245.git.duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1651194245.git.duoming@zju.edu.cn>
-References: <cover.1651194245.git.duoming@zju.edu.cn>
-In-Reply-To: <cover.1651194245.git.duoming@zju.edu.cn>
-References: <cover.1651194245.git.duoming@zju.edu.cn>
-X-CM-TRANSID: cS_KCgAnDkX6O2tidX4EAg--.28704S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxAFW5Xw43WrWUAw17ZFy7Wrg_yoWrZrWUpF
-        4FgFy5Cr1DKr4FqF45tF4qgFyruFZ3GFW5CryfJryfZws0yFWvyw1qyay5ZFnruryUJFWY
-        ka43A348GF4vyFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvm1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I8E
-        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
-        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
-        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
-        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
-        c2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r
-        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
-        67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
-        x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
-        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
-        UI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgIOAVZdtZdEXAA7sF
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 28 Apr 2022 21:19:56 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C474C42D
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 18:16:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651195000; x=1682731000;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JKAWPyMmGWeSqGKBDfdla8W3JVW6ENVJgotiQ/gpd0k=;
+  b=JefPqd0bwkIiXMo1EGx+k9zKmvtfeXN/Lf+XLsMKnpcaSC1/pt10hlhJ
+   yvE/TmbNDDqWc306S9D/cCCoImUNTwS5qvbKmwcHjb8/yxCH+Jx4tSQqr
+   ZAHrgIZPP/oWPmtnQezN4gwiy6iIpACP2fPy/CXgwuhw0T2nxoFiM9M9u
+   EGAeEqAK0B9QmUVWAK00SlgmZeLardLe4xGBe2BK13Zr0OAoWw26kggno
+   9lfIFVk9xY0vvL3IEk5IalZqLr3xHgwN4YhpsHzXNCuddhvATmHJfiE42
+   ECkybxmqeawH7EFNDmLHEotFFBsUNlIdENH+MQd/YaXY1ShPUB9oUA8w0
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="266301000"
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="266301000"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 18:16:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="731798937"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 28 Apr 2022 18:16:38 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nkFFO-0005qB-8I;
+        Fri, 29 Apr 2022 01:16:38 +0000
+Date:   Fri, 29 Apr 2022 09:15:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Trond Myklebust <trond.myklebust@hammerspace.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [trondmy-nfs-2.6:testing 4/10] net/sunrpc/xprtsock.c:1436:23:
+ warning: variable 'transport' is uninitialized when used here
+Message-ID: <202204290947.alhq7Gbj-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are destructive operations such as nfcmrvl_fw_dnld_abort and
-gpio_free in nfcmrvl_nci_unregister_dev. The resources such as firmware,
-gpio and so on could be destructed while the upper layer functions such as
-nfcmrvl_fw_dnld_start and nfcmrvl_nci_recv_frame is executing, which leads
-to double-free, use-after-free and null-ptr-deref bugs.
+tree:   git://git.linux-nfs.org/projects/trondmy/nfs-2.6.git testing
+head:   b44c0c653b27127aba20075ef53b0d641a36a3ae
+commit: 8869b563cd42a4cb725604322454ed4fb29a0c18 [4/10] SUNRPC: Ensure timely close of disconnected AF_LOCAL sockets
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220429/202204290947.alhq7Gbj-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c59473aacce38cd7dd77eebceaf3c98c5707ab3b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add trondmy-nfs-2.6 git://git.linux-nfs.org/projects/trondmy/nfs-2.6.git
+        git fetch --no-tags trondmy-nfs-2.6 testing
+        git checkout 8869b563cd42a4cb725604322454ed4fb29a0c18
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/sunrpc/
 
-There are three situations that could lead to double-free bugs.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The first situation is shown below:
+All warnings (new ones prefixed by >>):
 
-   (Thread 1)                 |      (Thread 2)
-nfcmrvl_fw_dnld_start         |
- ...                          |  nfcmrvl_nci_unregister_dev
- release_firmware()           |   nfcmrvl_fw_dnld_abort
-  kfree(fw) //(1)             |    fw_dnld_over
-                              |     release_firmware
-  ...                         |      kfree(fw) //(2)
-                              |     ...
+   In file included from net/sunrpc/xprtsock.c:36:
+   In file included from include/linux/sunrpc/clnt.h:20:
+   In file included from include/linux/sunrpc/sched.h:19:
+   include/linux/sunrpc/xdr.h:734:10: warning: result of comparison of constant 4611686018427387903 with expression of type '__u32' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+           if (len > SIZE_MAX / sizeof(*p))
+               ~~~ ^ ~~~~~~~~~~~~~~~~~~~~~
+>> net/sunrpc/xprtsock.c:1436:23: warning: variable 'transport' is uninitialized when used here [-Wuninitialized]
+                   xs_run_error_worker(transport, XPRT_SOCK_WAKE_DISCONNECT);
+                                       ^~~~~~~~~
+   net/sunrpc/xprtsock.c:1429:29: note: initialize the variable 'transport' to silence this warning
+           struct sock_xprt *transport;
+                                      ^
+                                       = NULL
+   2 warnings generated.
 
-The second situation is shown below:
 
-   (Thread 1)                 |      (Thread 2)
-nfcmrvl_fw_dnld_start         |
- ...                          |
- mod_timer                    |
- (wait a time)                |
- fw_dnld_timeout              |  nfcmrvl_nci_unregister_dev
-   fw_dnld_over               |   nfcmrvl_fw_dnld_abort
-    release_firmware          |    fw_dnld_over
-     kfree(fw) //(1)          |     release_firmware
-     ...                      |      kfree(fw) //(2)
+vim +/transport +1436 net/sunrpc/xprtsock.c
 
-The third situation is shown below:
+  1420	
+  1421	/**
+  1422	 * xs_local_state_change - callback to handle AF_LOCAL socket state changes
+  1423	 * @sk: socket whose state has changed
+  1424	 *
+  1425	 */
+  1426	static void xs_local_state_change(struct sock *sk)
+  1427	{
+  1428		struct rpc_xprt *xprt;
+  1429		struct sock_xprt *transport;
+  1430	
+  1431		if (!(xprt = xprt_from_sock(sk)))
+  1432			return;
+  1433		if (sk->sk_shutdown & SHUTDOWN_MASK) {
+  1434			clear_bit(XPRT_CONNECTED, &xprt->state);
+  1435			/* Trigger the socket release */
+> 1436			xs_run_error_worker(transport, XPRT_SOCK_WAKE_DISCONNECT);
+  1437		}
+  1438	}
+  1439	
 
-       (Thread 1)               |       (Thread 2)
-nfcmrvl_nci_recv_frame          |
- if(..->fw_download_in_progress)|
-  nfcmrvl_fw_dnld_recv_frame    |
-   queue_work                   |
-                                |
-fw_dnld_rx_work                 | nfcmrvl_nci_unregister_dev
- fw_dnld_over                   |  nfcmrvl_fw_dnld_abort
-  release_firmware              |   fw_dnld_over
-   kfree(fw) //(1)              |    release_firmware
-                                |     kfree(fw) //(2)
-
-The firmware struct is deallocated in position (1) and deallocated
-in position (2) again.
-
-The crash trace triggered by POC is like below:
-
-[  122.640457] BUG: KASAN: double-free or invalid-free in fw_dnld_over+0x28/0xf0
-[  122.640457] Call Trace:
-[  122.640457]  <TASK>
-[  122.640457]  kfree+0xb0/0x330
-[  122.640457]  fw_dnld_over+0x28/0xf0
-[  122.640457]  nfcmrvl_nci_unregister_dev+0x61/0x70
-[  122.640457]  nci_uart_tty_close+0x87/0xd0
-[  122.640457]  tty_ldisc_kill+0x3e/0x80
-[  122.640457]  tty_ldisc_hangup+0x1b2/0x2c0
-[  122.640457]  __tty_hangup.part.0+0x316/0x520
-[  122.640457]  tty_release+0x200/0x670
-[  122.640457]  __fput+0x110/0x410
-[  122.640457]  task_work_run+0x86/0xd0
-[  122.640457]  exit_to_user_mode_prepare+0x1aa/0x1b0
-[  122.640457]  syscall_exit_to_user_mode+0x19/0x50
-[  122.640457]  do_syscall_64+0x48/0x90
-[  122.640457]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[  122.640457] RIP: 0033:0x7f68433f6beb
-
-What's more, there are also use-after-free and null-ptr-deref bugs
-in nfcmrvl_fw_dnld_start. If we deallocate firmware struct, gpio or
-set null to the members of priv->fw_dnld in nfcmrvl_nci_unregister_dev,
-then, we dereference firmware, gpio or the members of priv->fw_dnld in
-nfcmrvl_fw_dnld_start, the UAF or NPD bugs will happen.
-
-This patch reorders destructive operations after nci_unregister_device
-and uses bool variable in nfc_dev to synchronize between cleanup routine
-and firmware download routine. The process is shown below.
-
-       (Thread 1)                 |       (Thread 2)
-nfcmrvl_nci_unregister_dev        |
-  nci_unregister_device           |
-    nfc_unregister_device         | nfc_fw_download
-      device_lock()               |
-      ...                         |
-      dev->dev_register = false;  |   ...
-      device_unlock()             |
-  ...                             |   device_lock()
-  (destructive operations)        |   if(!dev->dev_register)
-                                  |     goto error;
-                                  | error:
-                                  |   device_unlock()
-
-If the device is detaching, the download function will goto error.
-If the download function is executing, nci_unregister_device will
-wait until download function is finished.
-
-Fixes: 3194c6870158 ("NFC: nfcmrvl: add firmware download support")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
-Changes in v5:
-  - Use bool variable added in patch 1/2 to synchronize.
-
- drivers/nfc/nfcmrvl/main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/nfc/nfcmrvl/main.c b/drivers/nfc/nfcmrvl/main.c
-index 2fcf545012b..1a5284de434 100644
---- a/drivers/nfc/nfcmrvl/main.c
-+++ b/drivers/nfc/nfcmrvl/main.c
-@@ -183,6 +183,7 @@ void nfcmrvl_nci_unregister_dev(struct nfcmrvl_private *priv)
- {
- 	struct nci_dev *ndev = priv->ndev;
- 
-+	nci_unregister_device(ndev);
- 	if (priv->ndev->nfc_dev->fw_download_in_progress)
- 		nfcmrvl_fw_dnld_abort(priv);
- 
-@@ -191,7 +192,6 @@ void nfcmrvl_nci_unregister_dev(struct nfcmrvl_private *priv)
- 	if (gpio_is_valid(priv->config.reset_n_io))
- 		gpio_free(priv->config.reset_n_io);
- 
--	nci_unregister_device(ndev);
- 	nci_free_device(ndev);
- 	kfree(priv);
- }
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

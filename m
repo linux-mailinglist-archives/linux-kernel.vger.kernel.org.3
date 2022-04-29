@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0898D51496B
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCEF3514971
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:33:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359225AbiD2MgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 08:36:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59488 "EHLO
+        id S1359289AbiD2MgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 08:36:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238640AbiD2MgD (ORCPT
+        with ESMTP id S1350304AbiD2MgE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 08:36:03 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA01BC90DF;
-        Fri, 29 Apr 2022 05:32:44 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id bv19so15169759ejb.6;
-        Fri, 29 Apr 2022 05:32:44 -0700 (PDT)
+        Fri, 29 Apr 2022 08:36:04 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F54C90DA;
+        Fri, 29 Apr 2022 05:32:45 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id z19so8884931edx.9;
+        Fri, 29 Apr 2022 05:32:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=d/OGdX6ezZfA+C3V9bkjavIidBPFXQJ8k9aS4M9oYCU=;
-        b=RNR5FBdfY2fbTwEZHpnPn5nrS4OjzLjJLlmWqKSanKzBjCEiva2xKgiAzqC/oYRkry
-         t5RPSbnerXz+aQS7T1Hf6Yk+c15GvQ2wsguiNc1LS4y/nCDet00oJdqFlkWyr/OUBiWS
-         3JbI0Djze8F0PNReQQjygqVA08gzB7o7QycgZm75Jn9S1qyk3K41naF703kPgzMvBVPa
-         16NviTl86/v83NHgcpR/vGJq4uUnwgsRXf/JZCli4gGdxdcSgejwxW0hQ8s7jcYn9UaW
-         0mTB60RLQ/0/S/Q9bR028GcVUe0I69fuQNPI6XB8u0zIHp0c5d08bIbqRfrv8px6CwRd
-         IQJQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=BiMnA4TFSr6pbrf2v1jYlsNpIwtbaZqdPagqNdNxTZA=;
+        b=U3RJHzAANKbk8TbiWJ/7n7kqBW/pM7WkVdq7taLcVE7X/Mdb1LSEv88GMlVNxFT0Je
+         szxcPB53G5uv1MJpEiWNLDILZKyRsl6b9nxG9OJqubrsu0fzSsPCDnuV30cxklrTg8Hl
+         Sm91yafEhkbxmiXTFDI7bpSsN3GFKIZ6BowlsxL/Oa3zhgpva1bahAi/hSzswYHyvOZq
+         UDpTCHM8M9YF4pHsQHy6z//pdABZy1bHUQBnF0Vsb+5jjwIAD5EHfenSeCB/rKou6Cuz
+         gKJ8s5e8LyBpIAfOMJhye+/vXBVr13d1BRbiR7ftSOdN2SlHBhwILtB8jAriMqvpSotx
+         z64Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=d/OGdX6ezZfA+C3V9bkjavIidBPFXQJ8k9aS4M9oYCU=;
-        b=RdvxsRX7RlNOIHdID07Mrrad+B3t75wTk8FAK5TWZS279Zyr320ZCddkrEJ5PD5dDf
-         wT7eBwOcA2XcaUVqcT1QodzZ6X2VZ2ZQMK8sbK4icZiAIrBrRKnfV/uCl0dMSzJIzzKw
-         /nThdpA9z5onN7dUUV5LrD+fXGOFfTw+AuGAyIOyVcST8xNWRbsNTkyHA8XCOQSx2nr2
-         rR8+hflf7gRu5DSTx85oEgqW/SwFejeZb4WdtzxsOxNA+X/Az7L6p4IappGU5hWDXHCW
-         kUk+CBdL6JV3nUMdbmg+iY8Okln3VUAKdwpYwjJySdEGAzjoIRIngcT6PusMcEvMbYXg
-         h6vw==
-X-Gm-Message-State: AOAM533PPJGzPQFTev2mVLroObJGrdrBmkrTGJsoypYgppWi7WvG7Szx
-        QHQhm4ksIgt7f84ttvSSbQ8=
-X-Google-Smtp-Source: ABdhPJx6nxFL98kXdmVpNp7vq698ZpWhXj2R9jvlVWWQzwmDnbBITQOZM6fHRhopcYJ+00jwsMIV4A==
-X-Received: by 2002:a17:906:8306:b0:6f3:da72:5ca1 with SMTP id j6-20020a170906830600b006f3da725ca1mr8025427ejx.606.1651235563426;
-        Fri, 29 Apr 2022 05:32:43 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=BiMnA4TFSr6pbrf2v1jYlsNpIwtbaZqdPagqNdNxTZA=;
+        b=lzdpzvU7s8i5PhV1G7o4eKqTJLuCHFTBK57OLWxevVGBWBnAXD1UWhYN6NSgPJsdKs
+         4NEaQ6BtuLSYPOjLLDE9jOE8yE3aZEOQl9LeNkVSeXv/HAsYHa44C/A1t7ZSOxWYtMDJ
+         RdoP5FEY5xOG5RjKfNh7hEPfvyWRQXyVdcpoCH5lM/tlP3sFnIr9tel0q6LG3CgvwuLj
+         cXBI2VzoaXph3IRloJBsQfLomkFt4D+OLOlW8WCgwBmrw7iOlQLdEMcWmu2Xxg2gk4Mi
+         kjrxLz+DtKy27/t3QAH1q79lRJcNfTo8mEX4yoQOtg00DLXWrYGKDdp0qd/QWC5PaBOC
+         RXAQ==
+X-Gm-Message-State: AOAM530wvSt4ehPcdtnimBzL8K2lWRbvJYBaBN6Rq+MaOsblOAWVQ2UV
+        jla9n4twFhDFRC3vhs55WMQ=
+X-Google-Smtp-Source: ABdhPJySRsdH9GJm7JRed1pmA9Q7WECQr2VBBuEavY80eSwbkyxC/V5Dwg8FUtRO7BUTp4cwY2GE3w==
+X-Received: by 2002:a05:6402:42d4:b0:412:c26b:789 with SMTP id i20-20020a05640242d400b00412c26b0789mr41514148edc.232.1651235564337;
+        Fri, 29 Apr 2022 05:32:44 -0700 (PDT)
 Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id hf27-20020a1709072c5b00b006f3ef214e33sm601176ejc.153.2022.04.29.05.32.42
+        by smtp.googlemail.com with ESMTPSA id hf27-20020a1709072c5b00b006f3ef214e33sm601176ejc.153.2022.04.29.05.32.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 29 Apr 2022 05:32:43 -0700 (PDT)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
@@ -55,11 +55,14 @@ To:     Andy Gross <agross@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>
-Subject: [PATCH 0/2] PXO fixes for ipq8064 dtsi
-Date:   Fri, 29 Apr 2022 14:29:49 +0200
-Message-Id: <20220429122951.13828-1-ansuelsmth@gmail.com>
+Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: [PATCH 1/2] ARM: dts: qcom: add syscon and cxo/pxo clock to gcc node for ipq8064
+Date:   Fri, 29 Apr 2022 14:29:50 +0200
+Message-Id: <20220429122951.13828-2-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220429122951.13828-1-ansuelsmth@gmail.com>
+References: <20220429122951.13828-1-ansuelsmth@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,24 +75,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This small series is a fix for a long lasting error present in ipq8064
-dtsi. At times the kpss-gcc driver was defined in the dts with
-<&gcc PXO_SRC> a pxo clock. While PXO_SRC exist in the includes, the gcc
-driver never expose it and if a driver try to actually use it the result
-is a kernel panic even before any log is init.
+Add syscon compatible required for tsens driver to correctly probe driver
+and access the reg. Also add cxo and pxo tag and declare them as gcc clock
+now requires them for the ipq8064 gcc driver that has now been modernized.
 
-To prepare for correct conversion of the different krait drivers to
-parent data and to reflect what is defined in the Documentation with
-actual driver and dts implementation, fix this error by using the now
-defined pxo_board fixed clock.
+Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+---
+ arch/arm/boot/dts/qcom-ipq8064.dtsi | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-Ansuel Smith (2):
-  ARM: dts: qcom: add syscon and cxo/pxo clock to gcc node for ipq8064
-  ARM: dts: qcom: replace gcc PXO with pxo_board fixed clock
-
- arch/arm/boot/dts/qcom-ipq8064.dtsi | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
+diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+index 996f4458d9fc..9817448cfa95 100644
+--- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
++++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+@@ -298,13 +298,13 @@ smem: smem@41000000 {
+ 	};
+ 
+ 	clocks {
+-		cxo_board {
++		cxo_board: cxo_board {
+ 			compatible = "fixed-clock";
+ 			#clock-cells = <0>;
+ 			clock-frequency = <25000000>;
+ 		};
+ 
+-		pxo_board {
++		pxo_board: pxo_board {
+ 			compatible = "fixed-clock";
+ 			#clock-cells = <0>;
+ 			clock-frequency = <25000000>;
+@@ -736,7 +736,9 @@ tsens_calib_backup: calib_backup@410 {
+ 		};
+ 
+ 		gcc: clock-controller@900000 {
+-			compatible = "qcom,gcc-ipq8064";
++			compatible = "qcom,gcc-ipq8064", "syscon";
++			clocks = <&pxo_board>, <&cxo_board>;
++			clock-names = "pxo", "cxo";
+ 			reg = <0x00900000 0x4000>;
+ 			#clock-cells = <1>;
+ 			#reset-cells = <1>;
 -- 
 2.34.1
 

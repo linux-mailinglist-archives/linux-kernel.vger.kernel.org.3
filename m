@@ -2,108 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F8C7514A36
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 15:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBD32514A37
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 15:06:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359694AbiD2NHo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 29 Apr 2022 09:07:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49336 "EHLO
+        id S233368AbiD2NJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 09:09:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238686AbiD2NHm (ORCPT
+        with ESMTP id S1359679AbiD2NIu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 09:07:42 -0400
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA62BCAB85;
-        Fri, 29 Apr 2022 06:04:19 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id g28so14318516ybj.10;
-        Fri, 29 Apr 2022 06:04:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ycd1bPuiSrNE0SR6b+uO4l9ZEm/fD3tp9CiU84zTTmU=;
-        b=5zPZXmz+32c5o1tN5qdniB8ttQuR2ZHlD7U09g20gj5hHBDxvpLbzHU8EZN51wyZ+g
-         8rtvy5cWcaAPVoAPTJnUDu50SPshf5x9ahZRZIXlOn62OK388H/Eqc16OAScxyoKIPj3
-         E/7CbrGqyRdsfWofxqtSLkM6+gtPeEscai2sTl8u9gaXRGyHNK7CuyZxOaPzIMpSHh/M
-         E3ygBF86NFU2ob6KZuoGArocQNlP/Z7GL+AV0mSBBUnS+nDKYZ/8GbmBaDwfHCNO2qhY
-         BdLUvcs6QqcBTyFbbhMFKXyqPyvtWrT6zB2LRaOTnSU/Sq8KrcsdwFzQLd+uZDFPzDp4
-         woYA==
-X-Gm-Message-State: AOAM532sWV3t2a7k8r/+wIcvIEyqtZSlJg8PsarYQxruQ7yPT0wwuDLe
-        Ago1PjRpnK5KrXXRDyMtSsT3sljEc0RP30nX1Fj20ilXHk0=
-X-Google-Smtp-Source: ABdhPJxZooP6OXVMOJBlu2rNQgt4VBjevrGHyY768DhaEwUitikkXWtnYUcIktDJU/bwFtVBVPGLmLbgEz3WX/gAZ1A=
-X-Received: by 2002:a25:6e89:0:b0:642:57b:ccd7 with SMTP id
- j131-20020a256e89000000b00642057bccd7mr35395074ybc.115.1651237458734; Fri, 29
- Apr 2022 06:04:18 -0700 (PDT)
+        Fri, 29 Apr 2022 09:08:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F4D10EA
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 06:05:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B8F25B833F7
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:05:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DED5C385A4;
+        Fri, 29 Apr 2022 13:05:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651237528;
+        bh=1Ze5xcZmIt0iaugrJOOHAsDQ1jS8pGbPcfOZEJjBSXA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ue1y8pzmI86FlPEl4Hxcw8XH40ZuLTdYNNjiMZwE1Lr9igH/pVJhrKEg5JWTBA30D
+         byRO8WgFWlyOF5ErrRvySIwBmCy2l/D9dMHSSFYOib1JeUnY0pE5dguNYZe2Pac/lG
+         BKJ+arvAFkb3WSxXk2voqzQ9kRltV6Nbiz3aKTivfU3/AnzCJGW8B8cfT3RWIYRE3/
+         4FE/iv0hfx1g4rDc/fLY5FhK7EyvacsmjEflhDnApVZHswoKUQXXVOBmlr2ZIRQZ63
+         wxfJIikQ7lHNg4/BB8CmO6y4c0cqhlPNLLEnB1T3J/gEwGNedyCAERzNRRcG/EYq3w
+         6fwWOIQecjTQA==
+Received: by pali.im (Postfix)
+        id F2463CAF; Fri, 29 Apr 2022 15:05:24 +0200 (CEST)
+Date:   Fri, 29 Apr 2022 15:05:24 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] irqchip/armada-370-xp: Do not touch Performance
+ Counter Overflow on A375, A38x, A39x
+Message-ID: <20220429130524.vs6mlzvotvaortbw@pali>
+References: <20220425113706.29310-1-pali@kernel.org>
+ <YmvYrFUfIUvfjrmY@lunn.ch>
 MIME-Version: 1.0
-References: <alpine.DEB.2.21.2204240214430.9383@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2204240214430.9383@angie.orcam.me.uk>
-From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
-Date:   Fri, 29 Apr 2022 15:04:07 +0200
-Message-ID: <CAAdtpL6=b9hYeBggV3XNUtkOMxd=Zt0_7-TkKKdCTku2y1ip+g@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: Fix CP0 counter erratum detection for R4k CPUs
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YmvYrFUfIUvfjrmY@lunn.ch>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 9:39 AM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
->
-> Fix the discrepancy between the two places we check for the CP0 counter
-> erratum in along with the incorrect comparison of the R4400 revision
-> number against 0x30 which matches none and consistently consider all
-> R4000 and R4400 processors affected, as documented in processor errata
-> publications[1][2][3], following the mapping between CP0 PRId register
-> values and processor models:
->
->   PRId   |  Processor Model
-> ---------+--------------------
-> 00000422 | R4000 Revision 2.2
-> 00000430 | R4000 Revision 3.0
-> 00000440 | R4400 Revision 1.0
-> 00000450 | R4400 Revision 2.0
-> 00000460 | R4400 Revision 3.0
->
-> No other revision of either processor has ever been spotted.
->
-> Contrary to what has been stated in commit ce202cbb9e0b ("[MIPS] Assume
-> R4000/R4400 newer than 3.0 don't have the mfc0 count bug") marking the
-> CP0 counter as buggy does not preclude it from being used as either a
-> clock event or a clock source device.  It just cannot be used as both at
-> a time, because in that case clock event interrupts will be occasionally
-> lost, and the use as a clock event device takes precedence.
->
-> Compare against 0x4ff in `can_use_mips_counter' so that a single machine
-> instruction is produced.
->
-> References:
->
-> [1] "MIPS R4000PC/SC Errata, Processor Revision 2.2 and 3.0", MIPS
->     Technologies Inc., May 10, 1994, Erratum 53, p.13
->
-> [2] "MIPS R4400PC/SC Errata, Processor Revision 1.0", MIPS Technologies
->     Inc., February 9, 1994, Erratum 21, p.4
->
-> [3] "MIPS R4400PC/SC Errata, Processor Revision 2.0 & 3.0", MIPS
->     Technologies Inc., January 24, 1995, Erratum 14, p.3
->
-> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-> Fixes: ce202cbb9e0b ("[MIPS] Assume R4000/R4400 newer than 3.0 don't have the mfc0 count bug")
-> Cc: stable@vger.kernel.org # v2.6.24+
-> ---
->  arch/mips/include/asm/timex.h |    8 ++++----
->  arch/mips/kernel/time.c       |   11 +++--------
->  2 files changed, 7 insertions(+), 12 deletions(-)
+On Friday 29 April 2022 14:23:08 Andrew Lunn wrote:
+> On Mon, Apr 25, 2022 at 01:37:05PM +0200, Pali Rohár wrote:
+> > Register ARMADA_370_XP_INT_FABRIC_MASK_OFFS is Armada 370 and XP specific
+> > and on new Armada platforms it has different meaning. It does not configure
+> > Performance Counter Overflow interrupt masking. So do not touch this
+> > register on non-A370/XP platforms (A375, A38x and A39x).
+> 
+> Hi Pali
+> 
+> Do the Armada 375, 38x and 39x have an over flow interrupt? I assume
+> not.
 
-Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+Hello! According to documentation there is something named performance
+counter interrupt, but it is in different register... and this register
+is not per-cpu.
+
+> Does this need a fixes tag? Should it be back ported in stable?
+
+git blame show that this functionality appeared in commit 28da06dfd9e4
+("irqchip: armada-370-xp: Enable the PMU interrupts").

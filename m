@@ -2,204 +2,379 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F8651459B
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 11:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9AD55145CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 11:46:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356694AbiD2JrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 05:47:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
+        id S1356951AbiD2Jti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 05:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244541AbiD2JrJ (ORCPT
+        with ESMTP id S1356760AbiD2Jsg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 05:47:09 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A70E4BE9F1;
-        Fri, 29 Apr 2022 02:43:48 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2ef5380669cso79408227b3.9;
-        Fri, 29 Apr 2022 02:43:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4Kg3hGg7aSQtOExCKtXSFZRSUP75e6nI3Aslv19Y7vA=;
-        b=TZF6d1SWhW6T1e7EkSodGQRYWm/8NaFP8evsK09WZzyAdjhiFi3leY8CW5P+6jJryI
-         j4zxovudMYqZPPzH8LLnKztlVEwxwVGfeks9injDB80fcmwjvwipeAjbCJSV0QzLQHkh
-         /gdK3nQ9svbNJdEOOCq2Igc83rASG+dciYrOu+IIwfH4iuobI3dbh33Uur7VEIol8YYB
-         4ThkbHnT8gLtnzS+Vk5mDTOcGHqb4oBzBHw+ajZOj0WYtE6CTKSxJFobJm/WneFC6Q/L
-         FkyTeoCSXiJy9Q90dJOQilWD7mJiQ0sDMD7JeNBiMB+Ohbz2ZvUGFic8NkdArAn/is/t
-         cgjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4Kg3hGg7aSQtOExCKtXSFZRSUP75e6nI3Aslv19Y7vA=;
-        b=Irvbuu/WqS5S8yDKcHSUDQCiuDdx16TB0Bu2CAcqaVW6sj/8utcWimrJLLWAk+XPLg
-         Os6bjBEM43J73mywG+Fq3kDcCdO2kLLRzUgok7F21ufJWcXG9V7gF5reLncdf4pvOMwf
-         Y4LmrnU3Hvnl88OJ5+/FzAei+Fc0e9wzqinhwJyGku+o1bWOkEZiVa744hher0W7Wnv8
-         pUfkP/VLRYordBmAtEdGosj86BFLanCfId8vKmWcDSG2O/HtrpxnuvnnPxGhXeLtEUss
-         56/MaNcByUSgqEl0a7wthVmqe/kDt3U87vBaFsM3EagLlRMQG8Vhw5a8mRaunY39Dh+w
-         dFLQ==
-X-Gm-Message-State: AOAM5323pIFxQnDCXxPhgZAsMlRBD5zkhz7t+XuEndtF2tskRNwR0agU
-        l3xzZbMifIT/Jdum5MIycKJ7ygwaX2RMc20v8Ow=
-X-Google-Smtp-Source: ABdhPJx1hDX7pnjETYTkdntFjdt5Nq6fxhad4iQ13SDXFdm2nMnRkoJufGnLbvDiVVAaEHweo2vkFXH2I0QzR4maH4Y=
-X-Received: by 2002:a81:6a46:0:b0:2f4:dc3f:e8f8 with SMTP id
- f67-20020a816a46000000b002f4dc3fe8f8mr38317183ywc.292.1651225427891; Fri, 29
- Apr 2022 02:43:47 -0700 (PDT)
+        Fri, 29 Apr 2022 05:48:36 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000EA8566F;
+        Fri, 29 Apr 2022 02:45:17 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KqSFh0Q6vzGpWc;
+        Fri, 29 Apr 2022 17:42:32 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 29 Apr 2022 17:45:10 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.36) by
+ dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 29 Apr 2022 17:45:09 +0800
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+To:     <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arch@vger.kernel.org>
+CC:     <jthierry@redhat.com>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <masahiroy@kernel.org>, <jpoimboe@redhat.com>,
+        <peterz@infradead.org>, <ycote@redhat.com>,
+        <herbert@gondor.apana.org.au>, <mark.rutland@arm.com>,
+        <davem@davemloft.net>, <ardb@kernel.org>, <maz@kernel.org>,
+        <tglx@linutronix.de>, <luc.vanoostenryck@gmail.com>,
+        <chenzhongjin@huawei.com>
+Subject: [RFC PATCH v4 04/37] objtool: arm64: Add base definition for arm64 backend
+Date:   Fri, 29 Apr 2022 17:43:22 +0800
+Message-ID: <20220429094355.122389-5-chenzhongjin@huawei.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220429094355.122389-1-chenzhongjin@huawei.com>
+References: <20220429094355.122389-1-chenzhongjin@huawei.com>
 MIME-Version: 1.0
-References: <20220421221159.31729-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220421221159.31729-3-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdVqk1ryzzK9-BZCMDPeyjfF1-8hMpzUoEPCcg8pJ2-ang@mail.gmail.com>
-In-Reply-To: <CAMuHMdVqk1ryzzK9-BZCMDPeyjfF1-8hMpzUoEPCcg8pJ2-ang@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Fri, 29 Apr 2022 10:43:21 +0100
-Message-ID: <CA+V-a8tosEeNqzPZsdX=VCKTrkQfAhpMRWQDwva+fpQGc8x+jA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] irqchip: Add RZ/G2L IA55 Interrupt Controller driver
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.36]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+From: Julien Thierry <jthierry@redhat.com>
 
-Thank you for the review.
+Provide needed definitions for a new architecture instruction decoder.
+No proper decoding is done yet.
 
-On Thu, Apr 28, 2022 at 10:42 AM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
->
-> Hi Prabhakar,
->
-> On Fri, Apr 22, 2022 at 12:12 AM Lad Prabhakar
-> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > Add a driver for the Renesas RZ/G2L Interrupt Controller.
-> >
-> > This supports external pins being used as interrupts. It supports
-> > one line for NMI, 8 external pins and 32 GPIO pins (out of 123)
-> > to be used as IRQ lines.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Thanks for your patch!
->
-> > --- /dev/null
-> > +++ b/drivers/irqchip/irq-renesas-rzg2l.c
-> > @@ -0,0 +1,447 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Renesas RZ/G2L IRQC Driver
-> > + *
-> > + * Copyright (C) 2022 Renesas Electronics Corporation.
-> > + *
-> > + * Author: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > + */
-> > +
-> > +#include <linux/clk.h>
-> > +#include <linux/err.h>
-> > +#include <linux/io.h>
-> > +#include <linux/irqchip.h>
-> > +#include <linux/irqdomain.h>
-> > +#include <linux/of_address.h>
-> > +#include <linux/reset.h>
-> > +#include <linux/spinlock.h>
-> > +
-> > +#define IRQC_IRQ_START                 1
-> > +#define IRQC_IRQ_COUNT                 8
-> > +#define IRQC_TINT_START                        9
->
-> = IRQC_IRQ_START + IRQC_IRQ_COUNT
->
-OK
+Signed-off-by: Julien Thierry <jthierry@redhat.com>
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+---
+ tools/objtool/Makefile                        |   5 +
+ tools/objtool/arch/arm64/Build                |   8 ++
+ tools/objtool/arch/arm64/decode.c             | 136 ++++++++++++++++++
+ .../arch/arm64/include/arch/cfi_regs.h        |  14 ++
+ tools/objtool/arch/arm64/include/arch/elf.h   |   8 ++
+ .../arch/arm64/include/arch/endianness.h      |   9 ++
+ .../objtool/arch/arm64/include/arch/special.h |  22 +++
+ tools/objtool/arch/arm64/special.c            |  21 +++
+ tools/objtool/sync-check.sh                   |   5 +
+ 9 files changed, 228 insertions(+)
+ create mode 100644 tools/objtool/arch/arm64/Build
+ create mode 100644 tools/objtool/arch/arm64/decode.c
+ create mode 100644 tools/objtool/arch/arm64/include/arch/cfi_regs.h
+ create mode 100644 tools/objtool/arch/arm64/include/arch/elf.h
+ create mode 100644 tools/objtool/arch/arm64/include/arch/endianness.h
+ create mode 100644 tools/objtool/arch/arm64/include/arch/special.h
+ create mode 100644 tools/objtool/arch/arm64/special.c
 
-> > +#define IRQC_TINT_COUNT                        32
-> > +#define IRQC_NUM_IRQ                   41
->
-> = IRQC_TINT_START + IRQC_TINT_COUNT
->
-OK.
+diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
+index 0dbd397f319d..d62102f55f69 100644
+--- a/tools/objtool/Makefile
++++ b/tools/objtool/Makefile
+@@ -47,6 +47,11 @@ ifeq ($(SRCARCH),x86)
+ 	SUBCMD_ORC := y
+ endif
+ 
++ifeq ($(SRCARCH),arm64)
++	SUBCMD_CHECK := y
++	CFLAGS  += -Wno-nested-externs
++endif
++
+ export SUBCMD_CHECK SUBCMD_ORC
+ export srctree OUTPUT CFLAGS SRCARCH AWK
+ include $(srctree)/tools/build/Makefile.include
+diff --git a/tools/objtool/arch/arm64/Build b/tools/objtool/arch/arm64/Build
+new file mode 100644
+index 000000000000..f3de3a50d541
+--- /dev/null
++++ b/tools/objtool/arch/arm64/Build
+@@ -0,0 +1,8 @@
++objtool-y += special.o
++objtool-y += decode.o
++
++objtool-y += libhweight.o
++
++$(OUTPUT)arch/arm64/libhweight.o: ../lib/hweight.c FORCE
++	$(call rule_mkdir)
++	$(call if_changed_dep,cc_o_c)
+diff --git a/tools/objtool/arch/arm64/decode.c b/tools/objtool/arch/arm64/decode.c
+new file mode 100644
+index 000000000000..42a9ce4aab87
+--- /dev/null
++++ b/tools/objtool/arch/arm64/decode.c
+@@ -0,0 +1,136 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <stdint.h>
++
++#include <asm/insn.h>
++
++#include <objtool/check.h>
++#include <objtool/arch.h>
++#include <objtool/elf.h>
++#include <objtool/warn.h>
++#include <objtool/builtin.h>
++#include <arch/cfi_regs.h>
++
++bool arch_callee_saved_reg(unsigned char reg)
++{
++	switch (reg) {
++	case AARCH64_INSN_REG_19:
++	case AARCH64_INSN_REG_20:
++	case AARCH64_INSN_REG_21:
++	case AARCH64_INSN_REG_22:
++	case AARCH64_INSN_REG_23:
++	case AARCH64_INSN_REG_24:
++	case AARCH64_INSN_REG_25:
++	case AARCH64_INSN_REG_26:
++	case AARCH64_INSN_REG_27:
++	case AARCH64_INSN_REG_28:
++	case AARCH64_INSN_REG_FP:
++	case AARCH64_INSN_REG_LR:
++		return true;
++	default:
++		return false;
++	}
++}
++
++void arch_initial_func_cfi_state(struct cfi_init_state *state)
++{
++	int i;
++
++	for (i = 0; i < CFI_NUM_REGS; i++) {
++		state->regs[i].base = CFI_UNDEFINED;
++		state->regs[i].offset = 0;
++	}
++
++	/* initial CFA (call frame address) */
++	state->cfa.base = CFI_SP;
++	state->cfa.offset = 0;
++}
++
++unsigned long arch_dest_reloc_offset(int addend)
++{
++	return addend;
++}
++
++unsigned long arch_jump_destination(struct instruction *insn)
++{
++	return insn->offset + insn->immediate;
++}
++
++const char *arch_nop_insn(int len)
++{
++	static u32 nop;
++
++	if (len != AARCH64_INSN_SIZE)
++		WARN("invalid NOP size: %d\n", len);
++
++	if (!nop)
++		nop = aarch64_insn_gen_nop();
++
++	return (const char *)&nop;
++}
++
++const char *arch_ret_insn(int len)
++{
++	static u32 ret;
++
++	if (len != AARCH64_INSN_SIZE)
++		WARN("invalid RET size: %d\n", len);
++
++	if (!ret) {
++		ret = aarch64_insn_gen_branch_reg(AARCH64_INSN_REG_LR,
++				AARCH64_INSN_BRANCH_RETURN);
++	}
++
++	return (const char *)&ret;
++}
++
++static int is_arm64(const struct elf *elf)
++{
++	switch (elf->ehdr.e_machine) {
++	case EM_AARCH64: //0xB7
++		return 1;
++	default:
++		WARN("unexpected ELF machine type %x",
++		     elf->ehdr.e_machine);
++		return 0;
++	}
++}
++
++int arch_decode_hint_reg(u8 sp_reg, int *base)
++{
++	return -1;
++}
++
++int arch_decode_instruction(struct objtool_file *file, const struct section *sec,
++			    unsigned long offset, unsigned int maxlen,
++			    unsigned int *len, enum insn_type *type,
++			    unsigned long *immediate,
++			    struct list_head *ops_list)
++{
++	const struct elf *elf = file->elf;
++	u32 insn;
++
++	if (!is_arm64(elf))
++		return -1;
++
++	if (maxlen < AARCH64_INSN_SIZE)
++		return 0;
++
++	*len = AARCH64_INSN_SIZE;
++	*immediate = 0;
++	*type = INSN_OTHER;
++
++	insn = *(u32 *)(sec->data->d_buf + offset);
++
++	switch (aarch64_get_insn_class(insn)) {
++	case AARCH64_INSN_CLS_UNKNOWN:
++		WARN("can't decode instruction at %s:0x%lx", sec->name, offset);
++		return -1;
++	default:
++		break;
++	}
++
++	return 0;
++}
+diff --git a/tools/objtool/arch/arm64/include/arch/cfi_regs.h b/tools/objtool/arch/arm64/include/arch/cfi_regs.h
+new file mode 100644
+index 000000000000..a5185649686b
+--- /dev/null
++++ b/tools/objtool/arch/arm64/include/arch/cfi_regs.h
+@@ -0,0 +1,14 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++
++#ifndef _OBJTOOL_CFI_REGS_H
++#define _OBJTOOL_CFI_REGS_H
++
++#include <asm/insn.h>
++
++#define CFI_BP			AARCH64_INSN_REG_FP
++#define CFI_RA			AARCH64_INSN_REG_LR
++#define CFI_SP			AARCH64_INSN_REG_SP
++
++#define CFI_NUM_REGS		32
++
++#endif /* _OBJTOOL_CFI_REGS_H */
+diff --git a/tools/objtool/arch/arm64/include/arch/elf.h b/tools/objtool/arch/arm64/include/arch/elf.h
+new file mode 100644
+index 000000000000..e8c78cfc5fe1
+--- /dev/null
++++ b/tools/objtool/arch/arm64/include/arch/elf.h
+@@ -0,0 +1,8 @@
++/* SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0 */
++
++#ifndef _OBJTOOL_ARCH_ELF
++#define _OBJTOOL_ARCH_ELF
++
++#define R_NONE R_AARCH64_NONE
++
++#endif /* _OBJTOOL_ARCH_ELF */
+diff --git a/tools/objtool/arch/arm64/include/arch/endianness.h b/tools/objtool/arch/arm64/include/arch/endianness.h
+new file mode 100644
+index 000000000000..7c362527da20
+--- /dev/null
++++ b/tools/objtool/arch/arm64/include/arch/endianness.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++#ifndef _ARCH_ENDIANNESS_H
++#define _ARCH_ENDIANNESS_H
++
++#include <endian.h>
++
++#define __TARGET_BYTE_ORDER __LITTLE_ENDIAN
++
++#endif /* _ARCH_ENDIANNESS_H */
+diff --git a/tools/objtool/arch/arm64/include/arch/special.h b/tools/objtool/arch/arm64/include/arch/special.h
+new file mode 100644
+index 000000000000..63a705c622a4
+--- /dev/null
++++ b/tools/objtool/arch/arm64/include/arch/special.h
+@@ -0,0 +1,22 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++
++#ifndef _ARM64_ARCH_SPECIAL_H
++#define _ARM64_ARCH_SPECIAL_H
++
++#define EX_ENTRY_SIZE		12
++#define EX_ORIG_OFFSET		0
++#define EX_NEW_OFFSET		4
++
++#define JUMP_ENTRY_SIZE		16
++#define JUMP_ORIG_OFFSET	0
++#define JUMP_NEW_OFFSET		4
++#define JUMP_KEY_OFFSET		8
++
++#define ALT_ENTRY_SIZE		12
++#define ALT_ORIG_OFFSET		0
++#define ALT_NEW_OFFSET		4
++#define ALT_FEATURE_OFFSET	8
++#define ALT_ORIG_LEN_OFFSET	10
++#define ALT_NEW_LEN_OFFSET	11
++
++#endif /* _ARM64_ARCH_SPECIAL_H */
+diff --git a/tools/objtool/arch/arm64/special.c b/tools/objtool/arch/arm64/special.c
+new file mode 100644
+index 000000000000..45f283283091
+--- /dev/null
++++ b/tools/objtool/arch/arm64/special.c
+@@ -0,0 +1,21 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++
++#include <objtool/special.h>
++
++void arch_handle_alternative(unsigned short feature, struct special_alt *alt)
++{
++}
++
++bool arch_support_alt_relocation(struct special_alt *special_alt,
++				 struct instruction *insn,
++				 struct reloc *reloc)
++{
++	return false;
++}
++
++
++struct reloc *arch_find_switch_table(struct objtool_file *file,
++				     struct instruction *insn)
++{
++	return NULL;
++}
+diff --git a/tools/objtool/sync-check.sh b/tools/objtool/sync-check.sh
+index 105a291ff8e7..14bb89100d70 100755
+--- a/tools/objtool/sync-check.sh
++++ b/tools/objtool/sync-check.sh
+@@ -25,6 +25,11 @@ arch/x86/include/asm/insn.h
+ arch/x86/lib/inat.c
+ arch/x86/lib/insn.c
+ '
++elif [ "$SRCARCH" = "arm64" ]; then
++FILES="$FILES
++arch/arm64/include/asm/insn.h
++arch/arm64/lib/insn.c -I '^#include [\"<]\(asm/\)*kprobes.h[\">]' -I '^#include [\"<]\(asm/\)*debug-monitors.h[\">]'
++"
+ fi
+ 
+ check_2 () {
+-- 
+2.17.1
 
-> Should these be in a DT binding header file?
->
-> Combining all types into a single linear number space makes it hard
-> to extend the range, when reusing for an SoC that supports more
-> interrupt sources.
->
-Or  DT data maybe?
-
-> > +static void rzg2l_irq_eoi(struct irq_data *d)
-> > +{
-> > +       struct rzg2l_irqc_priv *priv = irq_data_to_priv(d);
-> > +       unsigned int hw_irq = irqd_to_hwirq(d) - IRQC_IRQ_START;
-> > +       u16 bit = BIT(hw_irq);
->
-> I guess you can just use u32?
->
-OK, will do
-
-> > +       u32 reg;
-> > +
-> > +       reg = readl_relaxed(priv->base + ISCR);
-> > +       if (reg & bit)
-> > +               writel_relaxed(GENMASK(IRQC_IRQ_COUNT - 1, 0) & ~bit,
->
-> As writes to the unused upper bits are ignored, you can drop the
-> masking with GENMASK(IRQC_IRQ_COUNT - 1, 0), and be prepared for more
-> interrupt sources.
->
-Agreed.
-
-> > +                              priv->base + ISCR);
-> > +}
-> > +
-> > +static void rzg2l_tint_eoi(struct irq_data *d)
-> > +{
-> > +       struct rzg2l_irqc_priv *priv = irq_data_to_priv(d);
-> > +       unsigned int hw_irq = irqd_to_hwirq(d);
->
-> "irqd_to_hwirq(d) - IRQC_TINT_START", for symmetry with
-> rzg2l_irq_eoi()?
->
-OK.
-
-> > +       u32 bit = BIT(hw_irq - IRQC_TINT_START);
-> > +       u32 reg;
-> > +
-> > +       reg = readl_relaxed(priv->base + TSCR);
-> > +       if (reg & bit)
-> > +               writel_relaxed(GENMASK(IRQC_TINT_COUNT - 1, 0) & ~bit,
->
-> Drop the masking with all-ones?
->
-You mean instead of a mask just use the reg instead?
-
-Cheers,
-Prabhakar
-
-> > +                              priv->base + TSCR);
-> > +}
->
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds

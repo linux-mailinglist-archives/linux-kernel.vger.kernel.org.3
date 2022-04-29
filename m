@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C10A51572E
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:45:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F0BE51572C
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239082AbiD2VsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 17:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59680 "EHLO
+        id S239021AbiD2Vr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 17:47:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238929AbiD2Vrw (ORCPT
+        with ESMTP id S238760AbiD2Vrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 17:47:52 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07702D95CC
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:44:31 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id h12so8212328plf.12
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:44:31 -0700 (PDT)
+        Fri, 29 Apr 2022 17:47:53 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3210DB0F1
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:44:33 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id n14so1352224plf.3
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:44:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=G+b/5mZlFuHtU2XDozomo84+nsQCdCx5HIlm6/xmsSw=;
-        b=Lk7L4IygC+lKFXqlatdS4sTNMrlHQVhH4QHq/GcQWEOUR6yjyfqapWDnENI0syOUvP
-         Pzv1QdFuuw86sXzVfRNyM1MpUmh2rZFLO84tTRpO1RKk4nE8A79vzXTk6vg+/EpXwhl3
-         GhmbUD8NL9c5bj5oiGDKHapJL4bLvGZP8hYJKNjbpf4YwyFIV/A704gevl80qAnna8dw
-         6z/7oAuCmHf9MYIdniHiHYo+yFKWsKFck1vKvl2O02zcet1rDAya5x/AlXPuy64iE0ev
-         rU9n9WSGcs5Bhnby8BeF5QDgxgMy2rAenTRY41M2Y2Y/gvok6CsFMUe1AndjZKQUXG74
-         hapA==
+        bh=3bM9obd8ZUcuxP0enz30vvUZW9ZRPh152lks3wc9yEE=;
+        b=jx/9RFouIHwDBbb5ltParsJO8zX0BXtnSKD44EmOWMp7kf4ItGUYTnPJxMQxvAMJti
+         l1vXQBN4cx1+gql8oX4TyH8vmJavYdYs/533vJ87dfxi5K6G92ypZx4C5R+sMzLbyNot
+         BHn9RIJavZM332RZWSSP/EiVQgdziwCoFMZTYFzzRvqc+TtV8t3sKe9PiRA6BdPvYE8I
+         Sw80enWWUtwh67pOWxl3Q4mPvWgWmQIXIUcCV5E3ixX+bH8xsJ6aCeAR3mEN6Rdw5lIa
+         ki5V5dRe0uH6OC/NdkQXn5oqOGKMaw9891eLUSfSDyFr9Lgemhv7j74ZsLXWZj75PCfH
+         y4DQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=G+b/5mZlFuHtU2XDozomo84+nsQCdCx5HIlm6/xmsSw=;
-        b=lsBzWOxOT5DR8L1yt5nhFh0NGcvGDSfV2OI+RC5Emd64ZYLYyUUcVf0F5v7rMUoPmG
-         +29nB0Mv/Tno+chwQvTs3lvMLs49OyzQDGhJF68rZZjs/iSPuE6UDqSAA3ARZaZaPyXj
-         J4eAB40isQZzAaP8eZ4Fq1EeCSXX8o8dEvFwcg3lO15AhyzvtkX/TxRT25VG8CtrLuX3
-         8KCxkY9azVK1uOn4ziXzZkm2sa48vENZpOWxudQqVR8nmGWmPg6BIimNwv5rOUi2axIA
-         5VByVQpXzR5Y+H7jjmdBg5ixi3iYAqMBHlCk8oOjXbRDcdfuKTs2v02sH8aRghJQG6sp
-         z8BA==
-X-Gm-Message-State: AOAM531B7I9Oxi6IgPEsWGWPKqm6hxo/5mydzCkRJD607m2GhVSavve3
-        j3N0qlcQVkRXoZevqnIO35gxbQ==
-X-Google-Smtp-Source: ABdhPJwx9C+GPVAfhw27WAXdFgQUSO3zeFDI+lxbdL2k29gyzRGPqHdj1Zd+ey7umQd4Li4UnuYzKw==
-X-Received: by 2002:a17:903:1252:b0:154:ca85:59a0 with SMTP id u18-20020a170903125200b00154ca8559a0mr1273711plh.169.1651268670521;
-        Fri, 29 Apr 2022 14:44:30 -0700 (PDT)
+        bh=3bM9obd8ZUcuxP0enz30vvUZW9ZRPh152lks3wc9yEE=;
+        b=kYXuUhGnZhN/nraI46IOR8W5is/DRxeaDVreVCF76lmx8j4uSgs2N9ea69HOs9/JRM
+         XACeu9xpFrIiY4jewUR6up7TURafPXMyd+zHIpB0ko6sZ10GAlESPDtcTb98Mptsp1jm
+         3KlbogCi55oBe4wk8i3J+qGNg6Es0wDwOdKd0y8QPCe8Fl9spNBasmPeqIO5Tn3odxXh
+         YwqRKNjaWTSoiIAXTPdI9Gdz0HPDHtdiJ7+SOayjCtDHdJCVwjfjPjE2hIvLx62ZUSGB
+         ruuDIQaFzP3b5LJLt3KVvR3kVVeE0mph65fEyZlttjERKjRyqbapO8Tif//0I5HdQfuG
+         mqtA==
+X-Gm-Message-State: AOAM531zlQIrRADa4dGM4p5JMvgtpe4hsBpWPvy/wBMHC4obCsL5tVFS
+        haTB1eB/j4WTpXbM7JC5MK1XjQnT4pmUnQ==
+X-Google-Smtp-Source: ABdhPJwLfzQU028dFeAhHJWHK0rfrF/8yy59TSbfdsh5ltBwLCdTmQIhgdRePazCnUeMWPW5UEx4sQ==
+X-Received: by 2002:a17:902:ce81:b0:15d:29ba:7808 with SMTP id f1-20020a170902ce8100b0015d29ba7808mr1061485plg.153.1651268673158;
+        Fri, 29 Apr 2022 14:44:33 -0700 (PDT)
 Received: from localhost.localdomain ([223.233.64.97])
-        by smtp.gmail.com with ESMTPSA id fv12-20020a17090b0e8c00b001cd4989fed0sm15271086pjb.28.2022.04.29.14.44.27
+        by smtp.gmail.com with ESMTPSA id fv12-20020a17090b0e8c00b001cd4989fed0sm15271086pjb.28.2022.04.29.14.44.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 14:44:30 -0700 (PDT)
+        Fri, 29 Apr 2022 14:44:32 -0700 (PDT)
 From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
         linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
         Rob Herring <robh@kernel.org>
-Subject: [PATCH 1/3] arm64: dts: qcom: sdm630: Fix 'interconnect-names' for sdhci nodes
-Date:   Sat, 30 Apr 2022 03:14:18 +0530
-Message-Id: <20220429214420.854335-2-bhupesh.sharma@linaro.org>
+Subject: [PATCH 2/3] arm64: dts: qcom: Fix node names for sdhci 'opp-table' nodes (across dts files)
+Date:   Sat, 30 Apr 2022 03:14:19 +0530
+Message-Id: <20220429214420.854335-3-bhupesh.sharma@linaro.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220429214420.854335-1-bhupesh.sharma@linaro.org>
 References: <20220429214420.854335-1-bhupesh.sharma@linaro.org>
@@ -63,7 +63,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -71,8 +72,10 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Since the Qualcomm sdhci-msm device-tree binding has been converted
-to yaml format, 'make dtbs_check' reports issues with
-inconsistent 'interconnect-names' used for sdhci nodes.
+to yaml format, 'make dtbs_check' reports a number of issues with
+node names for sdhci 'opp-table' nodes, as it doesn't seem to like
+any 'preceding text or numbers' before 'opp-table' pattern in the
+node names.
 
 Fix the same.
 
@@ -80,30 +83,82 @@ Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
 Cc: Rob Herring <robh@kernel.org>
 Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sdm630.dtsi | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/qcom/sc7180.dtsi | 4 ++--
+ arch/arm64/boot/dts/qcom/sm6350.dtsi | 4 ++--
+ arch/arm64/boot/dts/qcom/sm8150.dtsi | 2 +-
+ arch/arm64/boot/dts/qcom/sm8250.dtsi | 2 +-
+ 4 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-index 7f875bf9390a..db18b35d4a7d 100644
---- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-@@ -1285,6 +1285,7 @@ sdhc_2: sdhci@c084000 {
+diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+index 86175d257b1e..b6df3186e94c 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+@@ -725,7 +725,7 @@ sdhc_1: sdhci@7c4000 {
  
- 			interconnects = <&a2noc 3 &a2noc 10>,
- 					<&gnoc 0 &cnoc 28>;
-+			interconnect-names = "sdhc-ddr","cpu-sdhc";
- 			operating-points-v2 = <&sdhc2_opp_table>;
+ 			status = "disabled";
  
- 			pinctrl-names = "default", "sleep";
-@@ -1337,7 +1338,7 @@ sdhc_1: sdhci@c0c4000 {
+-			sdhc1_opp_table: sdhc1-opp-table {
++			sdhc1_opp_table: opp-table-sdhc1 {
+ 				compatible = "operating-points-v2";
  
- 			interconnects = <&a2noc 2 &a2noc 10>,
- 					<&gnoc 0 &cnoc 27>;
--			interconnect-names = "sdhc1-ddr", "cpu-sdhc1";
-+			interconnect-names = "sdhc-ddr", "cpu-sdhc";
- 			operating-points-v2 = <&sdhc1_opp_table>;
- 			pinctrl-names = "default", "sleep";
- 			pinctrl-0 = <&sdc1_state_on>;
+ 				opp-100000000 {
+@@ -2609,7 +2609,7 @@ sdhc_2: sdhci@8804000 {
+ 
+ 			status = "disabled";
+ 
+-			sdhc2_opp_table: sdhc2-opp-table {
++			sdhc2_opp_table: opp-table-sdhc2 {
+ 				compatible = "operating-points-v2";
+ 
+ 				opp-100000000 {
+diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+index fb1a0f662575..87a5d72b2ca0 100644
+--- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+@@ -497,7 +497,7 @@ sdhc_1: sdhci@7c4000 {
+ 
+ 			status = "disabled";
+ 
+-			sdhc1_opp_table: sdhc1-opp-table {
++			sdhc1_opp_table: opp-table-sdhc1 {
+ 				compatible = "operating-points-v2";
+ 
+ 				opp-19200000 {
+@@ -941,7 +941,7 @@ sdhc_2: sdhci@8804000 {
+ 
+ 			status = "disabled";
+ 
+-			sdhc2_opp_table: sdhc2-opp-table {
++			sdhc2_opp_table: opp-table-sdhc2 {
+ 				compatible = "operating-points-v2";
+ 
+ 				opp-100000000 {
+diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+index 2700a8145cb9..e265d61f7c05 100644
+--- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+@@ -3563,7 +3563,7 @@ sdhc_2: sdhci@8804000 {
+ 
+ 			status = "disabled";
+ 
+-			sdhc2_opp_table: sdhc2-opp-table {
++			sdhc2_opp_table: opp-table {
+ 				compatible = "operating-points-v2";
+ 
+ 				opp-19200000 {
+diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+index dc2562070336..5ca16f76ddeb 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+@@ -2937,7 +2937,7 @@ sdhc_2: sdhci@8804000 {
+ 
+ 			status = "disabled";
+ 
+-			sdhc2_opp_table: sdhc2-opp-table {
++			sdhc2_opp_table: opp-table {
+ 				compatible = "operating-points-v2";
+ 
+ 				opp-19200000 {
 -- 
 2.35.1
 

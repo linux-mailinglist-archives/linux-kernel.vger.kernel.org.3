@@ -2,110 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55C0C51550D
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D89515512
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380469AbiD2UDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 16:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34888 "EHLO
+        id S1379345AbiD2UEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 16:04:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380478AbiD2UDP (ORCPT
+        with ESMTP id S1380506AbiD2UD6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 16:03:15 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A48A88B1
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 12:59:54 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id i19so17323855eja.11
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 12:59:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=6GGGspCpTAF4+99JVypFG14EZxu60b7+uyzMSAWdsj8=;
-        b=mg0YVXkCFw9WcvKIC2gqT9LvZFjGgZ/etWM/vssS6AogRR0+Gizm+Adt+8o7gckoRp
-         NHIdA/SlY7qfFuhF48VX7PguaAiEAyzi3fMK8fNUOMg1GQ9MOTnArURvwDxNXxaJRMLT
-         zzIDNYH6YFvIiayCkW67s2hCPPxvdP0OktVqZXlzNQofG8iyoJnTvfltfwNowU2kFsvN
-         s4NLmGxzR7MNMjSqfac4x+1EztHbPbGc68mNy5eM1phZaYUtsO91ZfUp2Pn1Shc8p3f5
-         CfshL/nD5QksFe9vFu5wqDu956C9dPvoNRp4jHfc60UKMvVG0AfaWVc7nnaOrbc0WsXY
-         entQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=6GGGspCpTAF4+99JVypFG14EZxu60b7+uyzMSAWdsj8=;
-        b=fSPJJXpaWY4xK5yga6z7prPzuRjFfByDQJsHYz6U877XzfpTxsipM6p51t5PIvqyvY
-         uRUfeeGmIGpDt/Ns8tSzGAD2g+JGbEsuqMfwTeHGK9Y//+1vOlL/Vzu/3HPT2a7wsjkY
-         BZ4HBIkbNmpQ+uCwbxkPKg6EoRAIBEGYPCX6QZuGBzUFpYyGHCmLreeUyDe7IlUPix6p
-         hBxz7DK3RxXk3KfNmESuI+1K0THG8AmoArEIWQRmB0wvZIwRdEkveUjSlHnr21tuEi1F
-         BTB5k/+V3etOKF5udBrvoA8v3fAW19j/BhMLpCNwe34rg5bXiZcO6rHHjdeCy5riOFlt
-         TMdQ==
-X-Gm-Message-State: AOAM531YOHFSEjJHm5EVi7DnIRBiWrhlA1XUQreqRZMk5V4bE6Zs0Sip
-        J+jamo0ITML84PzZXxVzK/KjdA==
-X-Google-Smtp-Source: ABdhPJyv8UENxg6HIl+91LjuLUzautPcnzrePWq/skb36plX7jAvd0Hm86jAvadZYuzJ3q3r7h33sQ==
-X-Received: by 2002:a17:907:6d10:b0:6f3:f56a:4620 with SMTP id sa16-20020a1709076d1000b006f3f56a4620mr841346ejc.733.1651262392907;
-        Fri, 29 Apr 2022 12:59:52 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id en8-20020a17090728c800b006f3ef214de7sm929486ejc.77.2022.04.29.12.59.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 12:59:52 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] rpmsg: use local 'dev' variable
-Date:   Fri, 29 Apr 2022 21:59:46 +0200
-Message-Id: <20220429195946.1061725-3-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220429195946.1061725-1-krzysztof.kozlowski@linaro.org>
-References: <20220429195946.1061725-1-krzysztof.kozlowski@linaro.org>
+        Fri, 29 Apr 2022 16:03:58 -0400
+Received: from twin.jikos.cz (twin.jikos.cz [91.219.245.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6DC9F654C
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:00:36 -0700 (PDT)
+Received: from twin.jikos.cz (dave@localhost [127.0.0.1])
+        by twin.jikos.cz (8.13.6/8.13.6) with ESMTP id 23TJxqce021173
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO);
+        Fri, 29 Apr 2022 21:59:53 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=jikos.cz; s=twin;
+        t=1651262393; bh=VzLGIghLtW44gaV6piRFTko5CkCVGLje8VzOmGvSv9I=;
+        h=Received:Date:From:To:Cc:Subject:Message-ID:Reply-To:
+         Mail-Followup-To:References:MIME-Version:Content-Type:
+         Content-Disposition:In-Reply-To:User-Agent; b=Of48yY/gsil0Fi9ss77I
+        BasrlP3ehM2uPO8+pQXXT9JQhWG4aaeDR1RhhKXSEZ1MPOk+ZIiCEP/KNfYc7hgJIDX
+        0laaGG0aFQvyLJTpWPZF2J7AoBXPoA1T6eN/kt7dEGlt7KXMqTFReuO1utYmBVdWvGi
+        EQdGFyi16QxwOP7hU=
+Received: (from dave@localhost)
+        by twin.jikos.cz (8.13.6/8.13.6/Submit) id 23TJxonk021168;
+        Fri, 29 Apr 2022 21:59:50 +0200
+Date:   Fri, 29 Apr 2022 21:59:50 +0200
+From:   David Sterba <dave@jikos.cz>
+To:     Kari Argillander <kari.argillander@stargateuniverse.net>
+Cc:     Namjae Jeon <linkinjeon@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        ntfs3@lists.linux.dev, "Theodore Ts'o" <tytso@mit.edu>,
+        Christoph Hellwig <hch@lst.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: NTFS3 driver is orphan already. What we do?
+Message-ID: <20220429195950.GQ3658@twin.jikos.cz>
+Reply-To: dave@jikos.cz
+Mail-Followup-To: Kari Argillander <kari.argillander@stargateuniverse.net>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        ntfs3@lists.linux.dev, Theodore Ts'o <tytso@mit.edu>,
+        Christoph Hellwig <hch@lst.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <da20d32b-5185-f40b-48b8-2986922d8b25@stargateuniverse.net>
+ <CAHk-=wihuvzVTozzNLZT=uFzJH6uM7ZNKN7fYVpm0v2KkY6Jxg@mail.gmail.com>
+ <CAKYAXd89Ypc09ZkuZT+w3TDscpB8_=wHY=JpZJb7LY1LDg+7Uw@mail.gmail.com>
+ <0bf74850-fa56-9dbe-7b08-f66a9fcd39e2@stargateuniverse.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0bf74850-fa56-9dbe-7b08-f66a9fcd39e2@stargateuniverse.net>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'&rpdev->dev' is already cached as local variable, so use it to simplify
-the code.
+On Fri, Apr 29, 2022 at 07:45:42PM +0300, Kari Argillander wrote:
+> On 28.4.2022 3.47, Namjae Jeon wrote:
+> > 2022-04-28 2:47 GMT+09:00, Linus Torvalds <torvalds@linux-foundation.org>:
+> >> [ Sad state of affairs mostly edited out ]
+> >>
+> >> On Tue, Apr 26, 2022 at 2:22 AM Kari Argillander
+> >> <kari.argillander@stargateuniverse.net> wrote:
+> >>>
+> >>> I also did suggest that I could co maintain this driver to take burden
+> >>> from
+> >>> Konstantin, but haven't got any replay.
+> >>
+> >> If you are willing to maintain it (and maybe find other like-minded
+> >> people to help you), I think that would certainly be a thing to try.
+> > I can help him.
+> 
+> We have now discuss with Namjae and we will start this and let's see
+> where it goes. I will get my PGP signed soon. I really want code to be
+> in kernel.org so that maintainership is easily transfer if necessary,
+> but let's hope long and steady route now on.
+> 
+> Hopefully we are ready to start by next merge window.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/rpmsg/rpmsg_core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
-index 4938fc4eff00..290c1f02da10 100644
---- a/drivers/rpmsg/rpmsg_core.c
-+++ b/drivers/rpmsg/rpmsg_core.c
-@@ -606,10 +606,10 @@ int rpmsg_register_device_override(struct rpmsg_device *rpdev,
- 	if (driver_override)
- 		strcpy(rpdev->id.name, driver_override);
- 
--	dev_set_name(&rpdev->dev, "%s.%s.%d.%d", dev_name(dev->parent),
-+	dev_set_name(dev, "%s.%s.%d.%d", dev_name(dev->parent),
- 		     rpdev->id.name, rpdev->src, rpdev->dst);
- 
--	rpdev->dev.bus = &rpmsg_bus;
-+	dev->bus = &rpmsg_bus;
- 
- 	device_initialize(dev);
- 	if (driver_override) {
-@@ -627,7 +627,7 @@ int rpmsg_register_device_override(struct rpmsg_device *rpdev,
- 		dev_err(dev, "device_add failed: %d\n", ret);
- 		kfree(rpdev->driver_override);
- 		rpdev->driver_override = NULL;
--		put_device(&rpdev->dev);
-+		put_device(dev);
- 	}
- 
- 	return ret;
--- 
-2.32.0
-
+Feel free to ping me if you have questions regarding the pull requests
+or would like to have it checked before sending. It would be
+disappointing to see the NTFS3 module removed, thanks for taking up the
+torch.

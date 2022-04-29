@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C129514A8F
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 15:35:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23B6F514A91
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 15:36:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237418AbiD2Ni7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 09:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48138 "EHLO
+        id S1347934AbiD2Nji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 09:39:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiD2Ni5 (ORCPT
+        with ESMTP id S229673AbiD2Njg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 09:38:57 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F133B80226;
-        Fri, 29 Apr 2022 06:35:38 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id cq17-20020a17090af99100b001dc0386cd8fso1898513pjb.5;
-        Fri, 29 Apr 2022 06:35:38 -0700 (PDT)
+        Fri, 29 Apr 2022 09:39:36 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F4CC8A84
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 06:36:16 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id j6so6915053pfe.13
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 06:36:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=d77kFU+9eiqSJaQTuYIx7qKaKqXTgR0JP17JofrmVSE=;
-        b=fBMzoMoUPvaLV2dDu8oIPX08t5t3YWip3be5fkbk+LnTmlekDGdZ/JZyxY4UPj74+t
-         7RWw5n3ftCT/JmMhGOZ5Z3U08VUKeKA2PcBQ9mU7Gh4AmCKbXKftX2mEPU4rPUi2g4tq
-         xbjsu6bDJ1X00gc7jHvcr+E2oZVFLehNrtKh1uSQfTyf+Bj3wIihOQ0H1EaA0Ax2prbD
-         Wyxtf30g/6l7JjHr9shlfeJedlpTE60F77u2Ywvm/xQ/Hk2yhx4F8X5UgdGUG9kCv+Mm
-         1AlsuItIVQNu9kCgTWeaha6GgW7EIhhMl1nYkcwuEQJQFUledE3YgUU9leg/A0Uv2pEK
-         GFKA==
+        bh=dpbde/vaZRRFySCr85iPpDzqYqW+eIo3XY8pE4lO6sM=;
+        b=ecGalpDz8llCqz+zXe8P6mTGdoUAiMgYIVGYu0HUBQH78AbPHlKQrKuujMDWaTYbpq
+         mYAGEt3y1jeMMN6q1+wUH1yPXfM9+cxR4ZMo5cKthMRTBJDMyMtzHut3ETZODuzD1WtW
+         +h0gx8sWt2DfqRO339NQFG2D/wje4F/h/r67YCun0rpJ5eNPYoloyyOyGj9/0RUV49E6
+         KA20ldAGAjuKP0rMWwd0bMuSdnWortC/3GlpcNz86YufkwZzMPSzw9tjPW39O9XqADDA
+         5ScIWptHZM719pknZrA/CI/BRFMkDhZ0xUZinkNQBjiunQ9nmjA8N0JWxXSJHnyXXwzH
+         ajPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=d77kFU+9eiqSJaQTuYIx7qKaKqXTgR0JP17JofrmVSE=;
-        b=TU5twmgtZPGYQqM5zXWc01G7b4yOMw60KKkIFraLMVB1rmLwULSitXPJpeHD3sItBO
-         KAasXsb1z5IeRDa81ixCURPb3oMhZ4VTt8vjXYGFy/dqWKrK2krww/bi7xP4HV0me5OW
-         ZFpL9wlxzV8qeSzHDV1eu8C3BRS6HvVlchhFPRn0P6cWxE+OsjM5+Ljmli4trDzcUm+G
-         Y/UaESp2QWRpnOtoegbHPfFmNKya57yz4VtCK5uswAxDA6sJ8pyfe8MZHYAGrqiJvbT0
-         JV5AU21zCOsbY0xFFcpiVIAFkiN1BXIJriZa/fNOWTvmsrg0Wyf7DSMxkV9JbcVruqU4
-         Cx9Q==
-X-Gm-Message-State: AOAM532JJbOug2SLITGXQFjL83cvh22y+2X/hnq6Tx9XBsohFRjCQLI+
-        0KDe+LEqywyE/fBJmFKnFdXLZJmITJnf4A==
-X-Google-Smtp-Source: ABdhPJzyMNHjx1aPPP1zAhwe6arong2uZJ38Qxm0YT/rxr58atd9jxvDNxvkTAt410EQo457/80f6g==
-X-Received: by 2002:a17:902:e78e:b0:15d:29ba:77fe with SMTP id cp14-20020a170902e78e00b0015d29ba77femr22040994plb.119.1651239338209;
-        Fri, 29 Apr 2022 06:35:38 -0700 (PDT)
-Received: from localhost.localdomain (164.174.128.101.dy.bbexcite.jp. [101.128.174.164])
-        by smtp.gmail.com with ESMTPSA id u2-20020a62d442000000b0050d404f837fsm3221828pfl.156.2022.04.29.06.35.35
+        bh=dpbde/vaZRRFySCr85iPpDzqYqW+eIo3XY8pE4lO6sM=;
+        b=Q2HQ14WyDOt1zM+J1ygLcd1aGFGbOh33YD7vKQQgTu0vSp5jv1RBepa9/okWEtGMD6
+         aJlSFudxVQdGcbaRu4HePJH2ngCTQADLHzFSNB+2qRBPerXWs0gLLiyu6be9rFHIwPs0
+         klay/1lMCZCV0LhFTlddu98ZeYfWDXHjw/H0NOHTtThP4ps52ZOJXZhi+kKNkqBJcZ9t
+         pALy3sfQPoAx1kd1YBbxhX/li1r7ou16AfeTiHiZSuIld/aY379LM1ZFWSs59LRMk53I
+         o4F4JpeYM5+ROVlupmJpPWyJuEjhkRFI48NBaGAPpP3+Tebnt3b9MSwT6tGp/gHkRs0j
+         OvZQ==
+X-Gm-Message-State: AOAM533O8bRQQwF2aWf7qoEm4Pt5BFXUrL1sJPR1GFc0PD6aNkbwSesN
+        tifkdwe7NAregqGZJYkpajiYWA==
+X-Google-Smtp-Source: ABdhPJxeRhBFbkwTHIaM2b9Mdnm1pxMN/wK2KEcBoO7TNdUijwgyiXrx2s/neJyAY//6saUNM26sdA==
+X-Received: by 2002:a65:60d3:0:b0:39c:f431:5859 with SMTP id r19-20020a6560d3000000b0039cf4315859mr32419170pgv.442.1651239376174;
+        Fri, 29 Apr 2022 06:36:16 -0700 (PDT)
+Received: from localhost.localdomain ([139.177.225.240])
+        by smtp.gmail.com with ESMTPSA id m8-20020a17090a414800b001d81a30c437sm10681977pjg.50.2022.04.29.06.36.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 06:35:37 -0700 (PDT)
-From:   Kosuke Fujimoto <fujimotokosuke0@gmail.com>
-To:     shibata@linuxfoundation.org
-Cc:     Kosuke Fujimoto <fujimotokosuke0@gmail.com>, corbet@lwn.net,
-        akiyks@gmail.com, skhan@linuxfoundation.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] docs/trans/ja_JP/howto: Don't mention specific kernel versions
-Date:   Fri, 29 Apr 2022 22:35:22 +0900
-Message-Id: <20220429133522.41013-1-fujimotokosuke0@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 29 Apr 2022 06:36:15 -0700 (PDT)
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+To:     akpm@linux-foundation.org, tglx@linutronix.de,
+        kirill.shutemov@linux.intel.com, mika.penttila@nextfour.com,
+        david@redhat.com, jgg@nvidia.com, tj@kernel.org, dennis@kernel.org,
+        ming.lei@redhat.com
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, songmuchun@bytedance.com,
+        zhouchengming@bytedance.com, Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: [RFC PATCH 00/18] Try to free user PTE page table pages
+Date:   Fri, 29 Apr 2022 21:35:34 +0800
+Message-Id: <20220429133552.33768-1-zhengqi.arch@bytedance.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,118 +71,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This change is based on commit d2b008f134b7
-("Documentation/process/howto: Update for 4.x -> 5.x versioning").
+Hi,
 
-Replace "4.x kernel version" with generic term such as "mainline tree"
+This patch series aims to try to free user PTE page table pages when no one is
+using it.
 
-Signed-off-by: Kosuke Fujimoto <fujimotokosuke0@gmail.com>
----
-V2: Reformatted commit log message
-V3: Updated some expressions
-- added "version number" in mainline tree section
-- updated from "stable kernel" to "stable tree"
----
----
- Documentation/translations/ja_JP/howto.rst | 44 +++++++++++-----------
- 1 file changed, 21 insertions(+), 23 deletions(-)
+The beginning of this story is that some malloc libraries(e.g. jemalloc or
+tcmalloc) usually allocate the amount of VAs by mmap() and do not unmap those
+VAs. They will use madvise(MADV_DONTNEED) to free physical memory if they want.
+But the page tables do not be freed by madvise(), so it can produce many
+page tables when the process touches an enormous virtual address space.
 
-diff --git a/Documentation/translations/ja_JP/howto.rst b/Documentation/translations/ja_JP/howto.rst
-index d667f9d8a02a..deac41eb038a 100644
---- a/Documentation/translations/ja_JP/howto.rst
-+++ b/Documentation/translations/ja_JP/howto.rst
-@@ -262,21 +262,21 @@ Linux カーネルの開発プロセスは現在幾つかの異なるメイン
- チ」と多数のサブシステム毎のカーネルブランチから構成されます。これらの
- ブランチとは -
- 
--  - メインの 4.x カーネルツリー
--  - 4.x.y -stable カーネルツリー
--  - サブシステム毎のカーネルツリーとパッチ
--  - 統合テストのための 4.x -next カーネルツリー
-+  - Linus のメインラインツリー
-+  - メジャー番号をまたぐ数本の安定版ツリー
-+  - サブシステム毎のカーネルツリー
-+  - 統合テストのための linux-next カーネルツリー
- 
--4.x カーネルツリー
-+メインラインツリー
- ~~~~~~~~~~~~~~~~~~
- 
--4.x カーネルは Linus Torvalds によってメンテナンスされ、
--https://kernel.org の pub/linux/kernel/v4.x/ ディレクトリに存在します。
-+メインラインツリーは Linus Torvalds によってメンテナンスされ、
-+https://kernel.org のリポジトリに存在します。
- この開発プロセスは以下のとおり -
- 
-   - 新しいカーネルがリリースされた直後に、2週間の特別期間が設けられ、
-     この期間中に、メンテナ達は Linus に大きな差分を送ることができます。
--    このような差分は通常 -next カーネルに数週間含まれてきたパッチです。
-+    このような差分は通常 linux-next カーネルに数週間含まれてきたパッチです。
-     大きな変更は git(カーネルのソース管理ツール、詳細は
-     http://git-scm.com/ 参照) を使って送るのが好ましいやり方ですが、パッ
-     チファイルの形式のまま送るのでも十分です。
-@@ -303,20 +303,18 @@ Andrew Morton が Linux-kernel メーリングリストにカーネルリリー
-         前もって決められた計画によってリリースされるものではないから
-         です。」*
- 
--4.x.y -stable カーネルツリー
--~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+メジャー番号をまたぐ数本の安定版ツリー
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 
- バージョン番号が3つの数字に分かれているカーネルは -stable カーネルです。
--これには、4.x カーネルで見つかったセキュリティ問題や重大な後戻りに対す
--る比較的小さい重要な修正が含まれます。
-+これには最初の2つのバージョン番号の数字に対応した、
-+メインラインリリースで見つかったセキュリティ問題や
-+重大な後戻りに対する比較的小さい重要な修正が含まれます。
- 
- これは、開発/実験的バージョンのテストに協力することに興味が無く、最新
- の安定したカーネルを使いたいユーザに推奨するブランチです。
- 
--もし、4.x.y カーネルが存在しない場合には、番号が一番大きい 4.x が最新
--の安定版カーネルです。
--
--4.x.y は "stable" チーム <stable@vger.kernel.org> でメンテされており、
-+安定版ツリーは"stable" チーム <stable@vger.kernel.org> でメンテされており、
- 必要に応じてリリースされます。通常のリリース期間は 2週間毎ですが、差
- し迫った問題がなければもう少し長くなることもあります。セキュリティ関
- 連の問題の場合はこれに対してだいたいの場合、すぐにリリースがされます。
-@@ -326,7 +324,7 @@ Documentation/process/stable-kernel-rules.rst ファイルにはどのような
- 類の変更が -stable ツリーに受け入れ可能か、またリリースプロセスがどう
- 動くかが記述されています。
- 
--サブシステム毎のカーネルツリーとパッチ
-+サブシステム毎のカーネルツリー
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 
- それぞれのカーネルサブシステムのメンテナ達は --- そして多くのカーネル
-@@ -351,19 +349,19 @@ quilt シリーズとして公開されているパッチキューも使われ
- けることができます。大部分のこれらの patchwork のサイトは
- https://patchwork.kernel.org/ でリストされています。
- 
--統合テストのための 4.x -next カーネルツリー
--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+統合テストのための linux-next カーネルツリー
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 
--サブシステムツリーの更新内容がメインラインの 4.x ツリーにマージされる
-+サブシステムツリーの更新内容がメインラインツリーにマージされる
- 前に、それらは統合テストされる必要があります。この目的のため、実質的に
- 全サブシステムツリーからほぼ毎日プルされてできる特別なテスト用のリポジ
- トリが存在します-
- 
-        https://git.kernel.org/?p=linux/kernel/git/next/linux-next.git
- 
--このやり方によって、-next カーネルは次のマージ機会でどんなものがメイン
--ラインカーネルにマージされるか、おおまかなの展望を提供します。-next カー
--ネルの実行テストを行う冒険好きなテスターは大いに歓迎されます。
-+このやり方によって、linux-next は次のマージ機会でどんなものがメイン
-+ラインにマージされるか、おおまかなの展望を提供します。
-+linux-next の実行テストを行う冒険好きなテスターは大いに歓迎されます。
- 
- バグレポート
- -------------
+The following figures are a memory usage snapshot of one process which actually
+happened on our server:
+
+        VIRT:  55t
+        RES:   590g
+        VmPTE: 110g
+
+As we can see, the PTE page tables size is 110g, while the RES is 590g. In
+theory, the process only need 1.2g PTE page tables to map those physical
+memory. The reason why PTE page tables occupy a lot of memory is that
+madvise(MADV_DONTNEED) only empty the PTE and free physical memory but
+doesn't free the PTE page table pages. So we can free those empty PTE page
+tables to save memory. In the above cases, we can save memory about 108g(best
+case). And the larger the difference between the size of VIRT and RES, the
+more memory we save.
+
+In this patch series, we add a pte_ref field to the struct page of page table
+to track how many users of user PTE page table. Similar to the mechanism of page
+refcount, the user of PTE page table should hold a refcount to it before
+accessing. The user PTE page table page may be freed when the last refcount is
+dropped.
+
+Different from the idea of another patchset of mine before[1], the pte_ref
+becomes a struct percpu_ref type, and we switch it to atomic mode only in cases
+such as MADV_DONTNEED and MADV_FREE that may clear the user PTE page table
+entryies, and then release the user PTE page table page when checking that
+pte_ref is 0. The advantage of this is that there is basically no performance
+overhead in percpu mode, but it can also free the empty PTEs. In addition, the
+code implementation of this patchset is much simpler and more portable than the
+another patchset[1].
+
+Testing:
+
+The following code snippet can show the effect of optimization:
+
+        mmap 50G
+        while (1) {
+                for (; i < 1024 * 25; i++) {
+                        touch 2M memory
+                        madvise MADV_DONTNEED 2M
+                }
+        }
+
+As we can see, the memory usage of VmPTE is reduced:
+
+                        before                          after
+VIRT                   50.0 GB                        50.0 GB
+RES                     3.1 MB                         3.1 MB
+VmPTE                102640 kB                          96 kB
+
+I also have tested the stability by LTP[2] for several weeks. I have not seen
+any crash so far.
+
+This series is based on v5.18-rc2.
+
+Comments and suggestions are welcome.
+
+Thanks,
+Qi.
+
+[1] https://patchwork.kernel.org/project/linux-mm/cover/20211110105428.32458-1-zhengqi.arch@bytedance.com/
+[2] https://github.com/linux-test-project/ltp
+
+Qi Zheng (18):
+  x86/mm/encrypt: add the missing pte_unmap() call
+  percpu_ref: make ref stable after percpu_ref_switch_to_atomic_sync()
+    returns
+  percpu_ref: make percpu_ref_switch_lock per percpu_ref
+  mm: convert to use ptep_clear() in pte_clear_not_present_full()
+  mm: split the related definitions of pte_offset_map_lock() into
+    pgtable.h
+  mm: introduce CONFIG_FREE_USER_PTE
+  mm: add pte_to_page() helper
+  mm: introduce percpu_ref for user PTE page table page
+  pte_ref: add pte_tryget() and {__,}pte_put() helper
+  mm: add pte_tryget_map{_lock}() helper
+  mm: convert to use pte_tryget_map_lock()
+  mm: convert to use pte_tryget_map()
+  mm: add try_to_free_user_pte() helper
+  mm: use try_to_free_user_pte() in MADV_DONTNEED case
+  mm: use try_to_free_user_pte() in MADV_FREE case
+  pte_ref: add track_pte_{set, clear}() helper
+  x86/mm: add x86_64 support for pte_ref
+  Documentation: add document for pte_ref
+
+ Documentation/vm/index.rst         |   1 +
+ Documentation/vm/pte_ref.rst       | 210 ++++++++++++++++++++++++++
+ arch/x86/Kconfig                   |   1 +
+ arch/x86/include/asm/pgtable.h     |   7 +-
+ arch/x86/mm/mem_encrypt_identity.c |  10 +-
+ fs/proc/task_mmu.c                 |  16 +-
+ fs/userfaultfd.c                   |  10 +-
+ include/linux/mm.h                 | 162 ++------------------
+ include/linux/mm_types.h           |   1 +
+ include/linux/percpu-refcount.h    |   6 +-
+ include/linux/pgtable.h            | 196 +++++++++++++++++++++++-
+ include/linux/pte_ref.h            |  73 +++++++++
+ include/linux/rmap.h               |   2 +
+ include/linux/swapops.h            |   4 +-
+ kernel/events/core.c               |   5 +-
+ lib/percpu-refcount.c              |  86 +++++++----
+ mm/Kconfig                         |  10 ++
+ mm/Makefile                        |   2 +-
+ mm/damon/vaddr.c                   |  30 ++--
+ mm/debug_vm_pgtable.c              |   2 +-
+ mm/filemap.c                       |   4 +-
+ mm/gup.c                           |  20 ++-
+ mm/hmm.c                           |   9 +-
+ mm/huge_memory.c                   |   4 +-
+ mm/internal.h                      |   3 +-
+ mm/khugepaged.c                    |  18 ++-
+ mm/ksm.c                           |   4 +-
+ mm/madvise.c                       |  35 +++--
+ mm/memcontrol.c                    |   8 +-
+ mm/memory-failure.c                |  15 +-
+ mm/memory.c                        | 187 +++++++++++++++--------
+ mm/mempolicy.c                     |   4 +-
+ mm/migrate.c                       |   8 +-
+ mm/migrate_device.c                |  22 ++-
+ mm/mincore.c                       |   5 +-
+ mm/mlock.c                         |   5 +-
+ mm/mprotect.c                      |   4 +-
+ mm/mremap.c                        |  10 +-
+ mm/oom_kill.c                      |   3 +-
+ mm/page_table_check.c              |   2 +-
+ mm/page_vma_mapped.c               |  59 +++++++-
+ mm/pagewalk.c                      |   6 +-
+ mm/pte_ref.c                       | 230 +++++++++++++++++++++++++++++
+ mm/rmap.c                          |   9 ++
+ mm/swap_state.c                    |   4 +-
+ mm/swapfile.c                      |  18 ++-
+ mm/userfaultfd.c                   |  11 +-
+ mm/vmalloc.c                       |   2 +-
+ 48 files changed, 1203 insertions(+), 340 deletions(-)
+ create mode 100644 Documentation/vm/pte_ref.rst
+ create mode 100644 include/linux/pte_ref.h
+ create mode 100644 mm/pte_ref.c
+
 -- 
-2.25.1
+2.20.1
 

@@ -2,286 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C620514936
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F36351493B
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359124AbiD2M2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 08:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57546 "EHLO
+        id S1359080AbiD2MaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 08:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359060AbiD2M2A (ORCPT
+        with ESMTP id S1345891AbiD2MaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 08:28:00 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E69C90CE;
-        Fri, 29 Apr 2022 05:24:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651235082; x=1682771082;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=WBeNJbnk+nYPnNLAhN6BWtp9lz/+LOiHKZF1y2QLDTE=;
-  b=Byzvsbcp5l+rRA9G8dFoz/+lsEilTGa3dwXfNHRm918v620pR2CMm+KO
-   JkBI95p91gHvAyii7psCEaP2Re3VbTcaNfuYBU/DjSsZA+xFcCgRC1QDl
-   MyEsVmgWrAx0PIrYhbykVSinu+M/tMFsfnvCmidZmLAFqZtv1kk1wJF03
-   ptw5uIwlqWg0+IC8N81FnRKUuFNxzQR1V7ZGKF0RL4bvuK3hXHzuFtrg9
-   57R1KSDEVgrXtiPjzrg3TEgZrBnsiMIvge6DNAHLWldjs0zrNtHNRWBkO
-   jKxu1M7YWpCRORcexf1OwUIVVZGLyMv7BeyC3SIDf3TskUuMW1kY+Mj9o
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="254014487"
-X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
-   d="scan'208";a="254014487"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 05:24:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
-   d="scan'208";a="597301968"
-Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
-  by orsmga001.jf.intel.com with ESMTP; 29 Apr 2022 05:24:41 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 29 Apr 2022 05:24:41 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 29 Apr 2022 05:24:40 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Fri, 29 Apr 2022 05:24:40 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.173)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Fri, 29 Apr 2022 05:24:40 -0700
+        Fri, 29 Apr 2022 08:30:00 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7555C852FA
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 05:26:42 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TA3xwt003733;
+        Fri, 29 Apr 2022 12:26:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : content-type : mime-version; s=corp-2021-07-09;
+ bh=9lIz3y1ThEQEej1uwEmM8TLzx71n6+0a+rHf7Qgzp80=;
+ b=rFYeMsMZ+WtoXMuN/vt6rxLEPF/3IRsLK2VLDgw5w3EiENi4fzT2+f58Qxbc05R1szez
+ 02k+M6HxiIxy/av4DF/JE/3u2Hms2/pZYqLfPT84ykJ0iVNZhjKJRtLldKDcbrDVV4hR
+ aGDKmwt30GzzsNWBkN4FMLqROrq040k12YT+ZtR31RhNlxoe/jFDBQu0KJoc8QWn9H1A
+ lNm2gSOivg250sKc4PKZgI32CWB+EUZ30c0NDWO0iq4NVvaGPkF5UV1gFi4hzeyyineA
+ 4TuqZSXcyFxvm4TZBIWnhNUg1wjA3HZNb6ciB8zl9YkwRMDzrbyBqGNn8Y/0fI4iu/AO Cg== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3fmbb4x52g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 29 Apr 2022 12:26:37 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23TCBDOT034199;
+        Fri, 29 Apr 2022 12:26:37 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2177.outbound.protection.outlook.com [104.47.56.177])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fm7w80nbc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 29 Apr 2022 12:26:36 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YsWYYX3MqnKg+DlSmsWUUI+npI76XVFAutaM7Be8IqdtXPaNPgvD8rPCaVZe1+W5Wc7FFjHvM6b7jH8SWg8tDmSa8Dlwopa5/i+uCJBh8Pmajk9xrTm0JnhZj9EE6l+sf+U0GQ9LE8mV/VMKVvSDR65CXfOsHzM21s4rIcIfr7NeGze34DOBHLCFbw0HoKbf5gaMwt/I5t4GXJEHZTP0WV2lzeCkTP9OKlC0EeeFmriCFX5MbnH2847qI30xChFVAjsHdf4aV1UWhNS2l1kK+66++ZjPnBvlRCn+OkfZYvs9CsbRp20Tsilk+gQbkW4daZt1X03dYFKOMC79hrHoMg==
+ b=JTGyoMVOVWsGozuiSbWniZbpXuFh6zlJX6M2t8ec0v5qVlLDbSqz//QdYD91sp2KIOK5QxCkT/6/djplpDh8lrE5RmQAalRMFIwRCU6kr4p93bB8AVi6WlduQEUf5XwfET3v1W1xJOikUaBD4DrDI3vyPQoVqU+3hBR0Z9TzSRQDFsWSsTVHHpADUpfVImhBAtH4YL+o4fRGHRh5PUBAQaNc1mNh+PyG7HLlJnUmJENoZ1ai7NTLFDw/M2eDv7ZBAfXeCBNkBgfmVjiz29gRGkVnVRt1YBe7pNwwkrDd1EB4KrBpPtAdFc3I3n3YVwLPzJEthi7afv4fFgg2PYcZcA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bCeryRei3+VrpJJZn1IJhoSB38DemNb5lbGQdvC0Ca4=;
- b=GzHfty+n/WAslpduX+G6Y4blEqni+UVIbLEEUIfINu44cnh2AeDn/SXvkoYjmNd9L7n1sm+c8r83wck8xJNK6tzjbPaLn95p6fkmQvM5jzj9tPRrlnxAR0ESlPaOju00ovR6Za6SkemIvzxL0w/GnKq/R5UvnZ54HWb4f3ipFMNdjTnmTu8CWaiSZV1rOq9nvLk+LvGvkunN1pkeTJIir2h3GoJL5B24xnLVckrsehCEUstzfCBVlm8A8h1H3a15O9UVqx2ONtT8X+o2eCx8oZ4lYEfs41UPjB+nCTHo1/lzhLSnJsLsRSakyhixfZGei/SLP6YLw9arPV/zTLoClg==
+ bh=9lIz3y1ThEQEej1uwEmM8TLzx71n6+0a+rHf7Qgzp80=;
+ b=hrgIpZ5pumh9BwVo4Qe17RjIjuNOJdriloZ34KxnoM5+dCS8sDoEoFNruFf5ZEqnja/qlUpPOhEDGsIx2RrdIHbGgX6TOsl+F/2ij50SjcdQd1TFd3PrkmrYee/6R7lxoIaw5x1BoQ6d0IoMBnOuqk2yrwwIe6zNaq2qNcBVTE9pC8d5nERK9Ap0GACVf49Ra2DBth+uzQOCNM3OYh0BY9j6gHaLQ2DVP3Bn0XER3ggp+vArzT/85K5U1RHiHIiyDZ48v/dyrQFTjlBkrJTdvUSPXhajjCYXJGf40BnDpNR9NjWIYKpF9I1z/BWJn2sVWJcw7N0FzBVUSCW6J0iPwA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from PH0PR11MB5880.namprd11.prod.outlook.com (2603:10b6:510:143::14)
- by SJ0PR11MB5813.namprd11.prod.outlook.com (2603:10b6:a03:422::19) with
- Microsoft SMTP Server (version=TLS1_2,
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9lIz3y1ThEQEej1uwEmM8TLzx71n6+0a+rHf7Qgzp80=;
+ b=gAZZL2EBrzh3u7L1FPzhDHWUOjeOm6dm9vEdBrrDe3Y0t9fMhbF9C8VK89u+DGY9oQrT4l5QjpcuIa7zyvXZHy1CHMrA9HToIFLRldnY4WyiHonIRiuiJl7aTWuCrfh0/WLfCJbRLavjifHCuED3pXyLOdHlwBq29G7BYcRlwXg=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by CY4PR10MB1959.namprd10.prod.outlook.com
+ (2603:10b6:903:126::15) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Fri, 29 Apr
- 2022 12:24:39 +0000
-Received: from PH0PR11MB5880.namprd11.prod.outlook.com
- ([fe80::c579:f1c1:28b3:610f]) by PH0PR11MB5880.namprd11.prod.outlook.com
- ([fe80::c579:f1c1:28b3:610f%8]) with mapi id 15.20.5186.021; Fri, 29 Apr 2022
- 12:24:39 +0000
-From:   "Zhang, Qiang1" <qiang1.zhang@intel.com>
-To:     "paulmck@kernel.org" <paulmck@kernel.org>
-CC:     "frederic@kernel.org" <frederic@kernel.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        lkp <lkp@intel.com>
-Subject: RE: [PATCH v2] rcu: Add nocb_cb_kthread check to
- rcu_is_callbacks_kthread()
-Thread-Topic: [PATCH v2] rcu: Add nocb_cb_kthread check to
- rcu_is_callbacks_kthread()
-Thread-Index: AQHYWTteAMSEHqddYEaNU2h/OC67jK0FioWAgAFGIhA=
-Date:   Fri, 29 Apr 2022 12:24:39 +0000
-Message-ID: <PH0PR11MB5880DBC7E302EFA3A552B6ABDAFC9@PH0PR11MB5880.namprd11.prod.outlook.com>
-References: <20220426070031.3759998-1-qiang1.zhang@intel.com>
- <20220428163913.GI1790663@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20220428163913.GI1790663@paulmck-ThinkPad-P17-Gen-1>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-version: 11.6.401.20
-dlp-reaction: no-action
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3262dd17-2a4b-4f86-e19b-08da29db3b3d
-x-ms-traffictypediagnostic: SJ0PR11MB5813:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <SJ0PR11MB5813284645DEA0DC59F20480DAFC9@SJ0PR11MB5813.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hQSC31ssOyykd5KELTthnSFstTvNbBtfnByb5QYbstv6Y3NKiSUTq1gy6NgIdYxMynocYPJWo4Z5lhu2k71Nc04N3b8od2jvnBD5rAV7H3Pck1nuUSXRQHd2TudcxCwU3vXo8Gj61F79lMX3cYTyrlckbIg2koSzVta5UfpI9U8mocMIzh9wgeVJM3ogw6QpC77/IxniUQHcrjMBJwCcY5JoI+NYxZ7i9wIxtv/fYl2pqjJ6HL9oNzgyLF6fqLxuEC+6zTqgG14SeDsyz4oKnJ+Geot6RvO0JlyK2RYgP3uwnLmrGNUThN5vk9TttprKU20/c6k1UhVTSQB1EyURwdYLIkI4hpp6bBhdhX2Sm/UJCmwkX6ZkK2RDvBi1VoogQ82/KAi3IP/RTxY7k2HXBbbPRnKyENW3Fz56l2XWGEo4tuikdXuBTPT7bk4bV6JDRp/B2uemFYEG+VHQJZ7oSBs4zvp9GGuQN3Z+JGNef0XUmHQvHgvpiJbHKdYWKxIpUl3qIIy9pcg22ntvwt4ZShWRbGVm+KqVzu+heQ3dUSBNjHnjFWbSSFQwIicwoqd35ZTSli1Fw8px6tbhR5DpxeqJ+GXu3DRBUr6SWiXVF24cTBS5mHFjrUKUQOTLCjKj7VgtDKU0RpCtMd41MNp8mnIJ3NyvpY/6iEYNYPrbFxDTcmTWp21Iw0MhE6hpNAVjdu2LfXy7nOvFfFfvrqeLVUvFvIv+Tx0pjE1zyeWyWOs=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5880.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(122000001)(86362001)(54906003)(33656002)(76116006)(52536014)(66574015)(71200400001)(8936002)(508600001)(2906002)(107886003)(55016003)(82960400001)(83380400001)(8676002)(186003)(5660300002)(4326008)(66946007)(64756008)(66556008)(66476007)(66446008)(6506007)(26005)(7696005)(316002)(9686003)(6916009)(38070700005)(38100700002)(309714004);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?CCMyWDM/8729skj7k16frg6QxaiWZmTKm/epdE8hxGff4YUh0FTiemTHegyM?=
- =?us-ascii?Q?oIFzsIXeR3Ccb+1iEgI4kaOP4d/OdiYzG8OU3Q/6+RwdWUBW/ZT9xKMvNmtu?=
- =?us-ascii?Q?DoTXqczZ12rX+wfeoftHrAvC8jvdzCZCmaazw0jVMd6w1qQZ7atHe7lqSHZn?=
- =?us-ascii?Q?Kr85YgracAWxLAFNTx5qM3wP9jvGNeonHFxZ//wAYBjY87QxtcEQBA3qV1q8?=
- =?us-ascii?Q?QzhZciMEFiQmALuiPPu5Efv515P5A5M+iqNCtdmfWRY1jDh0s2RTYU8Uk6Eg?=
- =?us-ascii?Q?zWxqrzivJcO6yLqiyQXGEyYoxz33K+vJ7+uWExPbv0zvc3xtD2FvwZha4Sk1?=
- =?us-ascii?Q?366+6pxaAhkjTn7JOc1CavCu02Ea8JetYyiq/NHtoaIVMEEsOo+/CcfNUO5i?=
- =?us-ascii?Q?RcdfEyd5pV9Jq6OLuZ3qgmrM2UOS7NABZCK0u96QPErF1xggCl0ftipHVUGB?=
- =?us-ascii?Q?wBaEvPO5q7uOJnQqy0JJN7qcXkhlcCwmx4xdPf1HLkMsD5ir31IprH7Gea27?=
- =?us-ascii?Q?e0cVCKKmzKfIDee50pWw5NZu1/7jZXne63sailChvDrhuE9eQkmxGbJOm7i+?=
- =?us-ascii?Q?bQXFoV0dlknBMFYlCyKMhj2T5EsgNV39q2csymCkei7Fdw3z8kAP2rNTkdUP?=
- =?us-ascii?Q?KAKkmr1F2Vsiq1eHbPdEzQGrW3LYvoEDdU830G0jPxgG1ot2h5sYhBQfgbVr?=
- =?us-ascii?Q?dQ0iqek6dJuXx67AFpaZOmUrrSImaHDBwiHq05fJwbiS7w+lEPG6Au5FzYx7?=
- =?us-ascii?Q?Rhy06eY/Y8DTy4akDQfHvieTglH73tQd/HOObNoP10UXLjwHo62Iup8Pnk7O?=
- =?us-ascii?Q?pLY7m1KJ8vmUc+qHwJ5NJlsh49YuNVqKzDci8fEnoYKInVFOLJQBU9IKRGdW?=
- =?us-ascii?Q?VX3wEhtta1f3aDSbJ13UHa/M0NB56h4Y8pgVTlJ2aLxV3gC1dbcxoZpEZSM6?=
- =?us-ascii?Q?QQR214zu6I2Xic5ZSXvvvVbjB0kfiMTmgv8z6IWcTRb9nTS6PALxvV9P7lGT?=
- =?us-ascii?Q?QiRprSKAKjppbrjM9DqUeVH1DPHTUbHkR/QCuoZUjD+Yygj+Aodz6h9GpihR?=
- =?us-ascii?Q?4XupxZiv6ydWJa3ra99dUO4/cCZp7Icuf5DaOvdpSHtYODzLD1X83iztKMi+?=
- =?us-ascii?Q?mMVeIlOMte2gUFwzOb93VANiVEf7geNg5aTTceJL5b8l41mhzeCcD2COhpoN?=
- =?us-ascii?Q?0vy2/5m6wPXF2zczr7rhzXlNvcB2XY8oW5G0T947s1oFFzDOdvRmkK8kMJ3y?=
- =?us-ascii?Q?5inn8MpSWUkgj5KNBqBDXpwfkcUhRM+mtLNrahiKHhLHvagccOm/iqfg/GJn?=
- =?us-ascii?Q?fxwJhWBxUzAzkx5nrXrfLBBO5a8QEkyKJrWiO1yD/spXHPR50Od1oHsgkTKG?=
- =?us-ascii?Q?n2/w9hGFp7fVwszMBb8gaN33uH8286bpJ+cIZEEhbpdJC0KIYkLDcWYctUho?=
- =?us-ascii?Q?LIiUnWDVtEpXKZbdZfprMMTTArwafprNINhPGgtZm/gD2FMrF2KMSKF5S6cz?=
- =?us-ascii?Q?zo94YKy/fuAgOY5lPHzTca9/ysRKXnsfE/H7fi9b2iLZLiLukPALbAVI79kZ?=
- =?us-ascii?Q?n9L/vRnFBBeZrxLcB9DjZiGbZfVRTqelB1ZpOcqRr/hghEXE9RwkLoLbS6M3?=
- =?us-ascii?Q?YsJYej+TsZUyS4720PxKDD187Q94wV0kANZwTT9xNVwLv+08OQ3+/9bvsomL?=
- =?us-ascii?Q?I36rgN1yaiiBeqA+LVAwQPvF7YPfO+TebqF7Pl/7lCN5SnpQVg0q3/5NeufB?=
- =?us-ascii?Q?cIhMQS6M1Q=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ 2022 12:26:34 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::b5d5:7b39:ca2d:1b87]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::b5d5:7b39:ca2d:1b87%5]) with mapi id 15.20.5164.025; Fri, 29 Apr 2022
+ 12:26:34 +0000
+Date:   Fri, 29 Apr 2022 15:26:24 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     kbuild@lists.01.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+Cc:     lkp@intel.com, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [trondmy-nfs-2.6:testing 4/10] net/sunrpc/xprtsock.c:1436
+ xs_local_state_change() error: uninitialized symbol 'transport'.
+Message-ID: <202204291840.vXJc8xQ6-lkp@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: MRXP264CA0010.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:500:15::22) To MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 45926802-32bc-4cac-a08b-08da29db7fa5
+X-MS-TrafficTypeDiagnostic: CY4PR10MB1959:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR10MB1959B3C2ABAF046D78B35ED08EFC9@CY4PR10MB1959.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sqqOEgx0a0ExTkuOC+jwpgfgaqz1Rch/BQq/D2uoI1n5p8DtE8hACZJQ+m3N2cqBvrkTcT6mimRjctZWfcBe9hanbTl8AuW4OJ0B3SUAq9UgomlkQ2A9JuDJM2LhGw/flIyaaByWPswEKRwRiB3frC8UozvaxvbQNlfHMKrJ0lrx9o7QXXDemKxRwO7LuD/3Ksu3ct0DVgBW6kgcTpDWb8zwXvpZFRFKDIX/9kBWUsaahPQ8QioiPdLd7u3x4Tgxwc0G65FIRBUVB88fVeN+EaICUmYNsG03ZLFx2iBXkuPf087BNZr4GSHzUs+KcMVadL76wyHfUKOzHzMlyRQtkP3dSafm/6UmNnIYYs0vphr++cMwnaNV1/MJpElP7E3FvNhbhIWZMbQ4udGPFNTVfQjv34P5/Wg49Sz6CIcel82WV9wbTIVnS6ONnTIgd0cza/Evbu30RTtF41Cb13O7Ep2lc+0BijhSk/sv/agpeIk1NUa9GkuFszCDxMESmm8tIjlmxZxlEkT4VeGYnTxJwdrt6fqInb024FAjSAEf0fN9332dIfx4h+W1KMGZiD5oIZ9ziMLBBTXkabelB79wqoS0dWrH/uyFx6ApjOpH1ME0SnHfUgajESEQRT7xVAIhLPbr5Y26gDpdeLBkMlfH4xNvukE4eMbRTc/PgjUM8ItM555ccFmFIlpxSMWi54kZ7orsU/XNTzYAo9v0M8MUMFzIgYWaoGjtZ+EkQX3Lunbp7xL7cLop/QLaETeGaQOIegeZyexBJ5gEo+l9FkMPbu1FoUSRMSLtFzlEVNrrp5nu4dsvdooXLpeUURAT7wBBB9qu2m561ev0rNK8//01+Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(8676002)(66476007)(66556008)(44832011)(4326008)(8936002)(66946007)(508600001)(83380400001)(6486002)(966005)(6506007)(52116002)(86362001)(2906002)(9686003)(6512007)(5660300002)(26005)(6666004)(186003)(38350700002)(38100700002)(1076003)(6916009)(36756003)(316002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hxVxozlt5zGQ/Vyv5ZHbgwUfJbPtwqgZFrVnnjp+7y1vOSq5HyksTepj1wsd?=
+ =?us-ascii?Q?2FU7u7a2pHzLxMH8dSUSCl8to8+2vwwLmYLDet6I4dFP0PNW0qv+eEHM6OJC?=
+ =?us-ascii?Q?vHsO7muD562OY3W+HffaR+5ywwCT+kucxyvCCB1ZEoO1s/d8Ry9w1gbGOwur?=
+ =?us-ascii?Q?ToTmoy6BK2uwPdKhq+YFUCr78Se8JgyN8wBWlkdeFjA9r3ZQ7F/a6TA+zEzO?=
+ =?us-ascii?Q?ftZsoXeAbhd13WNtzPfVkqNfq8xn05i/q+dpaJYXGjvFFvLwO0ZrBoM5w9ou?=
+ =?us-ascii?Q?2/Rm3Z4R6t7Q40qLgg4WOb8/0jhLliBY1/Xa276TObT7edvi4RVBUhqXy4vZ?=
+ =?us-ascii?Q?yO0n8DDgtnFZHNcxwYvT4ZcGid4veU6fSb5nLusIhIyEJIHhQiStdCB7fSOV?=
+ =?us-ascii?Q?cL5qYqcRwnGBNPOZnlCBnklpw/Uvw1d48gsoGB8f5As6uaUSfn9vQ8Cqlc8b?=
+ =?us-ascii?Q?Q3IgMdllzwRACYfX2ezS4pgWyTp5Y24hk1s0fYvWVF2EZyYVkxEyhVV0hzRO?=
+ =?us-ascii?Q?Ohhl4dwDqAW1IdPjg2c+HEI1qZqF1wBjSxdLv7d4lfVK9RTjNTk9RGG5uYK6?=
+ =?us-ascii?Q?3Tqy/B2CUyqG6D9hEBXteauCzdW+zUpht0T6FPqNmTocAuxn2ZbrAGgtEmOv?=
+ =?us-ascii?Q?DMTwys5TXXS4dqslpfRm5STtYCgE005lkfz5QYNhs5ZZQAvDEH7140ezr4eQ?=
+ =?us-ascii?Q?pd3BuDF2KXh+WYgpD5qihL/zIZzkR+Q6LOjXPw5pcerGn9Trv1AF3eX/N05s?=
+ =?us-ascii?Q?g8/ac9z47S1FMTTFq8NVQattiBMlnrmpsI/VP8qp8tCYJwDjTr49IwLZ88Hw?=
+ =?us-ascii?Q?iKdRxP3UjK3s/+Kjom53K0QTLhFDCYlQ27mYZWHhde+X6y+WYUdajM3kXNFd?=
+ =?us-ascii?Q?019L13StseD5sPEfGEGTvXKLd9M/N04zV866ZLBW0A+L0YvqXAWS+UOTyPAn?=
+ =?us-ascii?Q?fWfIdIEVtq1BOhwPTdu9dmw0bKx0smMR9kcMH9VWx9z8ThV1sxRAVt0xpIGm?=
+ =?us-ascii?Q?5NCjCJbEEl4X8NiRw+K6GCvUXdckfsvFZldpUlpzOnzYZqfV+qcwur6w1HNx?=
+ =?us-ascii?Q?hO+O//i1DWWX/S2vGpKYRJAH8nTmkLMwPqf2MtUkCYd7UbSMl9oy9aE+8M3C?=
+ =?us-ascii?Q?qzymuZnPuLxEF/FaMz76zNYkZ0mwoNo5RjwNZ5/vLrvVMmpj8RbVEou0jHol?=
+ =?us-ascii?Q?VrXjBu/AzdRcn4dKw2HmUkKsAd7afrjKyXXd25hdyzDZ1rFmrS0FDms42Mcl?=
+ =?us-ascii?Q?s56oBi+SCVE/o9QpXZHet2Tsw0MJmq+ZiBFOcFN87B/QOmn2K9Fly//qna4v?=
+ =?us-ascii?Q?x5pvbAZOHj5KJwZWvQQNy9GYhOnrxDcGE8X4mj+n4l1PsWDrsf+k46Yltr7v?=
+ =?us-ascii?Q?b/viXf6+N/u34ULZQKarWplkoqGnX85cQ4LT//lIuOhw+9L3ZLIN5XCNtx9L?=
+ =?us-ascii?Q?UWeNmhTgWBJh7F3ZFZqT394xBinoLM4EI1sEgiluzok+iOKxVX8FYhceOEye?=
+ =?us-ascii?Q?r9FvM40X9s4bMQDdRkw16KUCSSAhesxa0Qzy1ACg9aTprksyGKqC3jpLS37i?=
+ =?us-ascii?Q?zSE4ArmPyDxQJAcAR7Tml8TBJxFds8GbE2pj/Lclksn1B4EHeGwyASqvfVox?=
+ =?us-ascii?Q?HtJAh8SljkXEiGFUGi5xUb24x8c7m2f4WanCloYAukKz/w2SXAw0batFnM3P?=
+ =?us-ascii?Q?NFZdxZ7K+lNRgsArwOS7Ky6WC+78tVDLnS0ZO0zx62UR05bkXH4T4Ko/KAQd?=
+ =?us-ascii?Q?4Ifr96DogECh5oJZpGjpvvQM+5J1lUw=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 45926802-32bc-4cac-a08b-08da29db7fa5
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5880.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3262dd17-2a4b-4f86-e19b-08da29db3b3d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Apr 2022 12:24:39.4521
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2022 12:26:34.7639
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: uwMWKbkqJzlJ7+brq4hEufQ6xFV5CQS/wbDLV+WatYEcIFiX3QSUewfvRq5kTvFvD6Rnj3lzM2oSDEFSmjLjzQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5813
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4QHv1SD1SreaoJfRf++ISymoUSgR+wurVQCAihBie8X/h/DBmfaPOKJYRCD/M8UZSCQatIYms/YDN5DFVjp+3YaGPqkvO5i1OA0lC6dHR8U=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR10MB1959
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
+ definitions=2022-04-29_04:2022-04-28,2022-04-29 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 adultscore=0
+ mlxscore=0 bulkscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204290071
+X-Proofpoint-ORIG-GUID: 47q9z8jGdeQOMLUK8RHy0kGYspc33M3Z
+X-Proofpoint-GUID: 47q9z8jGdeQOMLUK8RHy0kGYspc33M3Z
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 03:00:31PM +0800, Zqiang wrote:
-> At present, there are two situations which the rcu callback function=20
-> be exectued in the kthreads, one is if the use_softirq is set to zero,=20
-> the RCU_SOFTIRQ processing is carried out by the per-CPU rcuc=20
-> kthreads, for non-offload rdp, the rdp's rcu callback function be=20
-> exectued in rcuc kthreads. another one is if the rdp is set to=20
-> offloaded, the rdp's rcu callback function be exectued in the rcuop kthre=
-ads.
->=20
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+tree:   git://git.linux-nfs.org/projects/trondmy/nfs-2.6.git testing
+head:   b44c0c653b27127aba20075ef53b0d641a36a3ae
+commit: 8869b563cd42a4cb725604322454ed4fb29a0c18 [4/10] SUNRPC: Ensure timely close of disconnected AF_LOCAL sockets
+config: x86_64-randconfig-m001 (https://download.01.org/0day-ci/archive/20220429/202204291840.vXJc8xQ6-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
 
->Good catch!
->
->From what I can see, this affects only tracing.  Or did I miss a use case?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-Yes it is affects tracing, it was add make tracing info more accurate.
+smatch warnings:
+net/sunrpc/xprtsock.c:1436 xs_local_state_change() error: uninitialized symbol 'transport'.
 
->
->Also, should the two definitions of rcu_is_callbacks_kthread() be merged?
->It looks like the current situation dates back to when the only time rcuc =
-kthreads were created was in kernels built with CONFIG_RCU_BOOST=3Dy.
->If so, the definition of this function should move from tree_plugin.h to t=
-ree.c.
+vim +/transport +1436 net/sunrpc/xprtsock.c
 
-Yes it should not depend on CONFIG_RCU_BOOST option.
+8869b563cd42a4 Trond Myklebust 2022-04-28  1426  static void xs_local_state_change(struct sock *sk)
+8869b563cd42a4 Trond Myklebust 2022-04-28  1427  {
+8869b563cd42a4 Trond Myklebust 2022-04-28  1428  	struct rpc_xprt *xprt;
+8869b563cd42a4 Trond Myklebust 2022-04-28  1429  	struct sock_xprt *transport;
+8869b563cd42a4 Trond Myklebust 2022-04-28  1430  
+8869b563cd42a4 Trond Myklebust 2022-04-28  1431  	if (!(xprt = xprt_from_sock(sk)))
+8869b563cd42a4 Trond Myklebust 2022-04-28  1432  		return;
+8869b563cd42a4 Trond Myklebust 2022-04-28  1433  	if (sk->sk_shutdown & SHUTDOWN_MASK) {
+8869b563cd42a4 Trond Myklebust 2022-04-28  1434  		clear_bit(XPRT_CONNECTED, &xprt->state);
+8869b563cd42a4 Trond Myklebust 2022-04-28  1435  		/* Trigger the socket release */
+8869b563cd42a4 Trond Myklebust 2022-04-28 @1436  		xs_run_error_worker(transport, XPRT_SOCK_WAKE_DISCONNECT);
+                                                                                    ^^^^^^^^^
+Never initialized.
 
->
->							Thanx, Paul
+8869b563cd42a4 Trond Myklebust 2022-04-28  1437  	}
+8869b563cd42a4 Trond Myklebust 2022-04-28  1438  }
 
-> ---
->  v1->v2:
->  fix compilation error when CONFIG_RCU_NOCB_CPU is no define
->=20
->  kernel/rcu/tree.c        |  4 ++--
->  kernel/rcu/tree.h        |  2 +-
->  kernel/rcu/tree_plugin.h | 12 +++++++++---
->  3 files changed, 12 insertions(+), 6 deletions(-)
->=20
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c index=20
-> 5c587e00811c..9dc4c4e82db6 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -2610,7 +2610,7 @@ static void rcu_do_batch(struct rcu_data *rdp)
->  		trace_rcu_batch_end(rcu_state.name, 0,
->  				    !rcu_segcblist_empty(&rdp->cblist),
->  				    need_resched(), is_idle_task(current),
-> -				    rcu_is_callbacks_kthread());
-> +				    rcu_is_callbacks_kthread(rdp));
->  		return;
->  	}
-> =20
-> @@ -2688,7 +2688,7 @@ static void rcu_do_batch(struct rcu_data *rdp)
->  	rcu_nocb_lock_irqsave(rdp, flags);
->  	rdp->n_cbs_invoked +=3D count;
->  	trace_rcu_batch_end(rcu_state.name, count, !!rcl.head, need_resched(),
-> -			    is_idle_task(current), rcu_is_callbacks_kthread());
-> +			    is_idle_task(current), rcu_is_callbacks_kthread(rdp));
-> =20
->  	/* Update counts and requeue any remaining callbacks. */
->  	rcu_segcblist_insert_done_cbs(&rdp->cblist, &rcl); diff --git=20
-> a/kernel/rcu/tree.h b/kernel/rcu/tree.h index=20
-> 996387962de3..3cdc18997a38 100644
-> --- a/kernel/rcu/tree.h
-> +++ b/kernel/rcu/tree.h
-> @@ -433,7 +433,7 @@ static void rcu_flavor_sched_clock_irq(int user); =20
-> static void dump_blkd_tasks(struct rcu_node *rnp, int ncheck);  static=20
-> void rcu_initiate_boost(struct rcu_node *rnp, unsigned long flags); =20
-> static void rcu_preempt_boost_start_gp(struct rcu_node *rnp); -static=20
-> bool rcu_is_callbacks_kthread(void);
-> +static bool rcu_is_callbacks_kthread(struct rcu_data *rdp);
->  static void rcu_cpu_kthread_setup(unsigned int cpu);  static void=20
-> rcu_spawn_one_boost_kthread(struct rcu_node *rnp);  static bool=20
-> rcu_preempt_has_tasks(struct rcu_node *rnp); diff --git=20
-> a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h index=20
-> 971bb6a00ede..120bade40e02 100644
-> --- a/kernel/rcu/tree_plugin.h
-> +++ b/kernel/rcu/tree_plugin.h
-> @@ -1155,9 +1155,15 @@ static void rcu_initiate_boost(struct rcu_node *rn=
-p, unsigned long flags)
->   * Is the current CPU running the RCU-callbacks kthread?
->   * Caller must have preemption disabled.
->   */
-> -static bool rcu_is_callbacks_kthread(void)
-> +static bool rcu_is_callbacks_kthread(struct rcu_data *rdp)
->  {
-> -	return __this_cpu_read(rcu_data.rcu_cpu_kthread_task) =3D=3D current;
-> +	bool ret;
-> +#ifdef CONFIG_RCU_NOCB_CPU
-> +	ret =3D rdp->rcu_cpu_kthread_task =3D=3D current || rdp->nocb_cb_kthrea=
-d=20
-> +=3D=3D current; #else
-> +	ret =3D rdp->rcu_cpu_kthread_task =3D=3D current; #endif
->
->The problem here is that the first part of that condition is duplicated.
->This is an accident waiting to happen when someone fixes one side of that =
-#ifdef without also adjusting the other side.  One approach is to define a =
-function that tests "nocb_cb_kthread =3D=3D current" in CONFIG_RCU_NOCB_CPU=
-=3Dy kernels and just returns "false" otherwise.
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
 
-Thanks for your suggestion, I will resend.
-
->
->Alternatively, you could make ->nocb_cb_kthread defined unconditionally, b=
-ut left always NULL in CONFIG_RCU_NOCB_CPU=3Dn kernels.
-
-> +	return ret;
->  }
-> =20
->  #define RCU_BOOST_DELAY_JIFFIES DIV_ROUND_UP(CONFIG_RCU_BOOST_DELAY *=20
-> HZ, 1000) @@ -1242,7 +1248,7 @@ static void rcu_initiate_boost(struct rcu=
-_node *rnp, unsigned long flags)
->  	raw_spin_unlock_irqrestore_rcu_node(rnp, flags);  }
-> =20
-> -static bool rcu_is_callbacks_kthread(void)
-> +static bool rcu_is_callbacks_kthread(struct rcu_data *rdp)
->  {
->  	return false;
->  }
-> --
-> 2.25.1
->=20

@@ -2,76 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BBB6515259
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:34:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07EDA515264
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:36:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379713AbiD2Rhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 13:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33972 "EHLO
+        id S236052AbiD2Rjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 13:39:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379029AbiD2Rha (ORCPT
+        with ESMTP id S1379727AbiD2Riw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 13:37:30 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BEAD4132A
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:34:12 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id j4so15253678lfh.8
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:34:11 -0700 (PDT)
+        Fri, 29 Apr 2022 13:38:52 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDFD0A94E5
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:35:32 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id p8so7487731pfh.8
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:35:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=A1VTFJE968v5GHpvmbVSvv7tzCFKNqranep89YCahco=;
-        b=FgZVFGyKAlcmm7+KHCsydqDe/OWhm1Tfax+GzbxCKfwolWa55sMS5nG0dA9rPZgq2m
-         EJkl4ahYxA3niUEu2nWkdFhhPQk+svsaX/K17RXYIt57xc/go9cBRWPSY25hcd9MvN5N
-         XdYX9/C44U0Dqv3sAPePvqB17Qft4wMIdoKGwz9UfG4Lbi4Th6xvMONGoS8yfEgNsqxT
-         NsygHY2Lao2TgkbBUCIEwXWMk3icUslJeTR8MyVh5sDcsfU2Qj2P5QA6ua64sGvlOj/p
-         D3cks9hLuyfEM2E2I6Mc58SkX5SrOjJo97N97Ye4zs2KDRKRO6ToWYCVFqjwCXM3I9pW
-         nIsQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=A2o+Ws1INtn1MzI5In4+SjIaL3aTcpeQBl4+z8iQMc4=;
+        b=NYOSSTKbRD04TVB73Y0G8dVDDfWwHH/CPTSC7daECEsRY/h46kd7k6dLGhMDlrO1s0
+         JvVKQn0GcojLy5mGg40A8qxM6FQZIPQi4E3s2mKqKKJv1jzvkw7Se89NURix2hwEHt+H
+         MtTv2gISdz6cnht5Tg5kg6rrV6Fx/cSjRSn7pGTnc+7EPv9mPozYNWHGWwqgp2tXR2J9
+         AGd9rij6dqLuXxB/ysKy16JHfzxL4TVnj0tTvZO4vvsqiepcOV1fqKW5w7XrakLIZ828
+         TsckfsDGxa6bcewapYWOT2P0Nj7VjF3Hf6IbOd47FClYM0iOw0IF590tdnx7A93nrUyb
+         RxZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=A1VTFJE968v5GHpvmbVSvv7tzCFKNqranep89YCahco=;
-        b=AxwOF/+6/VXwhQnNtVWKHGpB9bmhOBdjCe+C/GPRvqtqsjMuAvL2HoaPK6Mn0QL6IC
-         y4IsdrK6QbouCHzyiXZmJ+toewdQYdOpdY++vFFsZ20cbJU3saRHiYYOhTOegiqu8dzy
-         jRU2RTyW+B8CwcttTBQlxf9ynwgzKSMgt6L5mp4fQrn35WxvDcdx3HqfLTl4jPDL+9TV
-         hqKxYVYEbzkZaq+/2LcCDw+WttIfRkS4uhiBg+BuBd7TybNbicjTeiQ5PGBJ/JMGRn3m
-         2Ev6N8rx45otzfZNJUoreya6r5GRn+F7/vlaNyz0i8p6uLDgE4/mI7bNmaPZ3JwKBmKt
-         rcfQ==
-X-Gm-Message-State: AOAM531f6H0wblXKrSZ/FUtVBdkMNVHNhZdvt0z3156TWfuBudex6ZJ+
-        HoD1ZUklSMjPhjlJvoSdlAW8MHttDVaS/lG9Z84Q0Q==
-X-Google-Smtp-Source: ABdhPJwnaLo2jma4swv1OpPoyEX/Cp4DjStcxkoqeDaMCOCT3MDEeqR2D+Eu0BYhsgfVT0ruHGefqlR9SQfCtYFY8s4=
-X-Received: by 2002:a05:6512:12c6:b0:44a:650f:3b86 with SMTP id
- p6-20020a05651212c600b0044a650f3b86mr211123lfg.79.1651253650122; Fri, 29 Apr
- 2022 10:34:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220407195908.633003-1-pgonda@google.com> <CAMkAt6r-Mc_YN-gVHuCpTj4E1EmcvyYpP9jhtHo5HRHnoNJAdA@mail.gmail.com>
- <CAMkAt6r+OMPWCbV_svUyGWa0qMzjj2UEG29G6P7jb6uH6yko2w@mail.gmail.com>
- <62e9ece1-5d71-f803-3f65-2755160cf1d1@redhat.com> <CAMkAt6q6YLBfo2RceduSXTafckEehawhD4K4hUEuB4ZNqe2kKg@mail.gmail.com>
- <4c0edc90-36a1-4f4c-1923-4b20e7bdbb4c@redhat.com> <CAMkAt6oL5qi7z-eh4z7z8WBhpc=Ow6WtcJA5bDi6-aGMnz135A@mail.gmail.com>
- <CAMkAt6rmDrZfN5DbNOTsKFV57PwEnK2zxgBTCbEPeE206+5v5w@mail.gmail.com>
- <0d282be4-d612-374d-84ba-067994321bab@redhat.com> <CAMkAt6ragq4OmnX+n628Yd5pn51qFv4qV20upGR6tTvyYw3U5A@mail.gmail.com>
- <8a2c5f8c-503c-b4f0-75e7-039533c9852d@redhat.com> <CAMkAt6qAW5zFyTAqX_Az2DT2J3KROPo4u-Ak1sC0J+UTUeFfXA@mail.gmail.com>
- <4afce434-ab25-66d6-76f4-3a987f64e88e@redhat.com> <CAMkAt6o8u9=H_kjr_xyRO05J=RDFUZRiTc_Bw-FFDKEUaiyp2Q@mail.gmail.com>
- <CABgObfa0ubOwNv2Vi9ziEjHXQMR_Sa6P-fwuXfPq76qy0N61kA@mail.gmail.com>
- <CAMkAt6pcg_Eg49nN5hS=wbeVWtPV1N_12G9Lvfgoq_bS_tUYog@mail.gmail.com> <d53df9d3-5de2-c1e6-11ce-a3b61e9e630e@redhat.com>
-In-Reply-To: <d53df9d3-5de2-c1e6-11ce-a3b61e9e630e@redhat.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Fri, 29 Apr 2022 11:33:58 -0600
-Message-ID: <CAMkAt6o+tA9=DvHjv-zJtvZHiFaXhiO-7iV8ts3p6JWog-V9og@mail.gmail.com>
-Subject: Re: [PATCH v3] KVM: SEV: Mark nested locking of vcpu->lock
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=A2o+Ws1INtn1MzI5In4+SjIaL3aTcpeQBl4+z8iQMc4=;
+        b=ihakYvgNO63i386gifoU8lfV9PSewixrdtvEbzd7a/9PF2fR6Mu8mJDGk7dTCLYU89
+         q0uUgWysy/gTJmTRTVnnFBzuZyvlmjWZF5P6xpjkCAaeK/jt/cVGP7mzJ3uRep1bmtS0
+         FFgBule2S5p+3WUImUoRR1Ly+v4qnM3rAECXiUJpPZ4Q4vok8N505obo0S3w1FCVkl1Q
+         yFDf7sQ7ty4p8PLi+RjGDrV9ytbmZsqZvTQO8yplUMZ53UIH/3pZ6BGSDASmfuRXablR
+         9gBH7h8YYi0QxFq9RRfj2acFjlY4cuM38T8xbX2KpTfzpOGsIJLzYTmHvv5RWiijkNhE
+         npdg==
+X-Gm-Message-State: AOAM530kR5hQMR41OmtXO8Hz2ZVTxMpPOlSus2StFjnT842KHXY6jxUE
+        XZFSujE3Of+GcYPXYP5f2RzdcQ==
+X-Google-Smtp-Source: ABdhPJySHzOFet3agObDF17Dhwfya9aBtbqQNVx7EZSgv30DDlpfHWNXSSP+dep1o8EZziq4Eyq0uA==
+X-Received: by 2002:a63:1c1d:0:b0:39d:9a7c:593b with SMTP id c29-20020a631c1d000000b0039d9a7c593bmr367462pgc.157.1651253732177;
+        Fri, 29 Apr 2022 10:35:32 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id y38-20020a056a001ca600b0050dafe16d7bsm2804025pfw.26.2022.04.29.10.35.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 10:35:31 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 17:35:28 +0000
+From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     John Sperbeck <jsperbeck@google.com>,
-        kvm list <kvm@vger.kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        mlevitsk@redhat.com, stable@vger.kernel.org
+Subject: Re: [PATCH 1/3] KVM: x86: make vendor code check for all nested
+ events
+Message-ID: <Ymwh4PEZHDvWyR1f@google.com>
+References: <20220427173758.517087-1-pbonzini@redhat.com>
+ <20220427173758.517087-2-pbonzini@redhat.com>
+ <YmwaVY5vERO43CRI@google.com>
+ <0b554e22-6766-8299-287c-c40240c08536@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0b554e22-6766-8299-287c-c40240c08536@redhat.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,18 +77,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 11:32 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> On 4/29/22 19:27, Peter Gonda wrote:
-> > Ah yes I missed that. I would suggest `role = SEV_NR_MIGRATION_ROLES`
-> > or something else instead of role++ to avoid leaking this
-> > implementation detail outside of the function signature / enum.
->
-> Sure.
+On Fri, Apr 29, 2022, Paolo Bonzini wrote:
+> On 4/29/22 19:03, Sean Christopherson wrote:
+> > This doesn't even compile...
+> > 
+> > arch/x86/kvm/vmx/nested.c: In function ‘vmx_has_nested_events’:
+> > arch/x86/kvm/vmx/nested.c:3862:61: error: ‘vmx’ undeclared (first use in this function)
+> >   3862 |         return nested_vmx_preemption_timer_pending(vcpu) || vmx->nested.mtf_pending;
+> >        |                                                             ^~~
+> > arch/x86/kvm/vmx/nested.c:3862:61: note: each undeclared identifier is reported only once for each function it appears in
+> >    CC [M]  arch/x86/kvm/svm/svm_onhyperv.o
+> > arch/x86/kvm/vmx/nested.c:3863:1: error: control reaches end of non-void function [-Werror=return-type]
+> >   3863 | }
+> >        | ^
+> > cc1: all warnings being treated as errors
+> >    LD [M]  arch/x86/kvm/kvm.o
+> 
+> Yeah, it doesn't.  Of course this will need a v2, also because there are
+> failures in the vmx tests.
 
-OK. I'll get that tested and get a V4 out. Thank you for all the help
-here Paolo!!
+Heh, I suspected there would be failures, I was about to type up a response to
+patch 3.  MTF is subtly relying on the call from kvm_vcpu_running() to inject
+the event.
 
->
-> Paolo
->
+From: Sean Christopherson <seanjc@google.com>
+Date: Fri, 29 Apr 2022 17:30:54 +0000
+Subject: [PATCH] KVM: nVMX: Make an event request when pending an MTF nested
+ VM-Exit
+
+Set KVM_REQ_EVENT when MTF becomes pending to ensure that KVM will run
+through inject_pending_event() and thus vmx_check_nested_events() prior
+to re-entering the guest.  MTF currently works by virtue of KVM's hack
+that calls kvm_check_nested_events() from kvm_vcpu_running(), but that
+hack will be removed in the near future.
+
+Fixes: 5ef8acbdd687 ("KVM: nVMX: Emulate MTF when performing instruction emulation")
+Cc: stable@vger.kernel.org
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/vmx/vmx.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index d58b763df855..4c635bc08105 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -1577,10 +1577,12 @@ static void vmx_update_emulated_instruction(struct kvm_vcpu *vcpu)
+ 	 */
+ 	if (nested_cpu_has_mtf(vmcs12) &&
+ 	    (!vcpu->arch.exception.pending ||
+-	     vcpu->arch.exception.nr == DB_VECTOR))
++	     vcpu->arch.exception.nr == DB_VECTOR)) {
+ 		vmx->nested.mtf_pending = true;
+-	else
++		kvm_make_request(KVM_REQ_EVENT, vcpu);
++	} else {
+ 		vmx->nested.mtf_pending = false;
++	}
+ }
+
+ static int vmx_skip_emulated_instruction(struct kvm_vcpu *vcpu)
+
+base-commit: 39aa5903e8c407e5128c15aeabb0717b275b007e
+--
+

@@ -2,167 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4646B514F2E
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D456514F37
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378301AbiD2PYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 11:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55516 "EHLO
+        id S1378315AbiD2PZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 11:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241558AbiD2PYa (ORCPT
+        with ESMTP id S241558AbiD2PZ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 11:24:30 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8388B4CD48
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:21:11 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id y2so15043737ybi.7
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:21:11 -0700 (PDT)
+        Fri, 29 Apr 2022 11:25:28 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ABB5689A4;
+        Fri, 29 Apr 2022 08:22:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=Y9ZcDqJuLqa5JXE44N2GTKKL7QLt6s4hAdWbOVk4GKA=;
-        b=Ui44ujrM/Zb0gG6w993gsGhOHJJo4hJpMy5YNqMlQ1UBxypMqUeZmQ0vQR7zv43aoq
-         ysDTzwPOaXcMJdAgaQ75aaFaKccNh9YzoWgUyuBazDKHo05B72uXLnf6GOuFGr+YjOhb
-         CqmBqnbFsKscTmFpZomlQtNTgyCMw6ijgNKi9RtxOdjwtTfEQZUtxW5GY0kFI7vmbPEd
-         iyQjLd93QR48gkJfiDsyihFfeFvPeCdY0ygAs4xaGmcwpoglEDViVmR2LTurXIY2q4cB
-         4yV5cGfoba+QxaXmO6t+ligH1pohAdpq21zsLB0z5rlHCgxpRDTt3W3Lre8Dxe82rSsU
-         +OFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=Y9ZcDqJuLqa5JXE44N2GTKKL7QLt6s4hAdWbOVk4GKA=;
-        b=TG9IYhE8YNYcQqrzuJxr2ZTHbTOc3czNZELJ6WEkpsZ7fBDcRTqXWajicJNGwXgG3/
-         1HnRO4/+gbU/gCTiN3snm55Ds1cjBanhCgyBcHqByuStKmK+ypSXAIRIBICJf6dlljro
-         LQo45hvr3qa2S0Hm7br0Ac8zDduPOkHAyLgkC11OXlYcflnorZ1wRPNVTgXS9GPin6vl
-         K1rTgyReUvXi/8Ee1FrilRXfaEkp86p5JEnyL+hqKcMdgr3zImfqVR92vZ3bVE89om1G
-         Xq59qEH56NyMr1esyylmi9AacinZnoQfvQboX1GfsX+bIE8nE11pEf6r6wDUcSsdPTb4
-         x6ew==
-X-Gm-Message-State: AOAM532KbWPM67Of4PruFN9KK8Xr4PgJSqkAn3LQXywg881fs0YDNmak
-        zzSF50Y2AlESm8IqeiVb/H8Ep5ZyYBo5Cvo1pY8IMw==
-X-Google-Smtp-Source: ABdhPJwLCCaV2PcxMcgGMdB0/M2/IvKlelR9da+uyTInErh3cDr6csPbgJ1kHhRHPIcQAkVXAy/BgNTq4VYaz6VK/f4=
-X-Received: by 2002:a25:9909:0:b0:624:57e:d919 with SMTP id
- z9-20020a259909000000b00624057ed919mr36075867ybn.494.1651245670446; Fri, 29
- Apr 2022 08:21:10 -0700 (PDT)
+  d=axis.com; q=dns/txt; s=axis-central1; t=1651245727;
+  x=1682781727;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xenmPUOXW+RZJN9qBuvo/3MkIoPU8IrRSy9rcS8hUiY=;
+  b=UeM6p+50yGpDPgGq8Xz9wtdT2t35h45DaXetIDo5DRLpncv3FHq3tOuC
+   CKrcDvKDOJztYFB4LgvmE7cqwmxEwsLXzR6Jc/ogGiElGounW7+BPPjX/
+   Ehz3EZiveGlf+R31BRHnaXwWtWVfJTFEpKJ2fV0ykUqDrkrpM2BiF6Cli
+   VTnsHMHzPYUccOOr075dPHfxLywFL1vSU2wVbtqrkiYoSRNwT1Hk1Xog0
+   V5XPBFqbWXBXs3xijrDaeKX9E6KyRwqK5AJE/87AOa3/LrXUHB1jqXJVf
+   BjYVGK+V5QtvN519jgUR0iGFxPV8Pk86e2WW24Ocrrwc5d5Bg7cHy54bP
+   w==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+CC:     <kernel@axis.com>, <linux-block@vger.kernel.org>, <tytso@mit.edu>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] mmc: core: support zeroout using TRIM
+Date:   Fri, 29 Apr 2022 17:21:18 +0200
+Message-ID: <20220429152118.3617303-1-vincent.whitchurch@axis.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 29 Apr 2022 20:50:59 +0530
-Message-ID: <CA+G9fYu2kS0wR4WqMRsj2rePKV9XLgOU1PiXnMvpT+Z=c2ucHA@mail.gmail.com>
-Subject: [next] i386: kunit: ASSERTION FAILED at mm/kfence/kfence_test.c:547
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, linux-mm <linux-mm@kvack.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following kernel regressions have been noticed on Linux next-20220426
-(till date) on qemu_i386. This is a special build with KFENCE and KUNIT enabled
-but not KASAN on i386.
+If the device supports TRIM and indicates that it erases to zeros, we
+can use it to support hardware offloading of REQ_OP_WRITE_ZEROES.
 
-snippet of Kconfigs from the build:
-    CONFIG_CC_HAS_KASAN_GENERIC=y
-    CONFIG_KFENCE=y
-    CONFIG_KFENCE_KUNIT_TEST=y
-    CONFIG_KUNIT=y
-    CONFIG_KUNIT_DEBUGFS=y
-    CONFIG_KUNIT_TEST=y
-    CONFIG_KUNIT_EXAMPLE_TEST=y
-    CONFIG_KUNIT_ALL_TESTS=y
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+---
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Notes:
+    https://lore.kernel.org/lkml/20160303182146.GG9772@thunk.org/ seems to agree
+    that BLKZEROOUT can use TRIM on eMMC.
+    
+    BLKDISCARD uses DISCARD when available so it can't be used to send TRIM.
+    
+    If TRIM should not be used for BLKZEROOUT for some reason I guess the only way
+    is to use MMC_IOC_MULTI_CMD like in this commit in mmc-utils but that's a
+    rather low-level interface:
+    
+     https://git.kernel.org/pub/scm/utils/mmc/mmc-utils.git/commit/?id=43282e80e174cc73b09b81a4d17cb3a7b4dc5cfc
 
-Regressions found on qemu_i386;:
+ drivers/mmc/core/block.c | 26 ++++++++++++++++++++++----
+ drivers/mmc/core/queue.c |  2 ++
+ 2 files changed, 24 insertions(+), 4 deletions(-)
 
-   - kunit/test_free_bulk
-   - kunit/test_memcache_typesafe_by_rcu
-   - kunit/test_out_of_bounds_read-memcache
-   - kunit/test_invalid_access
-   - kunit/test_krealloc
-   - kunit/test_invalid_addr_free
-   - kunit/test_gfpzero
-   - kunit/test_kmalloc_aligned_oob_write
-   - kunit/kfence
-   - kunit/test_out_of_bounds_read
-   - kunit/test_out_of_bounds_write
-   - kunit/test_invalid_addr_free-memcache
-   - kunit/test_double_free
-   - kunit/test_corruption-memcache
-   - kunit/test_use_after_free_read-memcache
-   - kunit/test_corruption
-   - kunit/test_use_after_free_read
-   - kunit/test_shrink_memcache
-   - kunit/test_double_free-memcache
-   - kunit/test_out_of_bounds_write-memcache
-   - kunit/test_kmalloc_aligned_oob_read
+diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+index 506dc900f5c7..0398b205a285 100644
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -126,6 +126,7 @@ struct mmc_blk_data {
+ #define MMC_BLK_DISCARD		BIT(2)
+ #define MMC_BLK_SECDISCARD	BIT(3)
+ #define MMC_BLK_CQE_RECOVERY	BIT(4)
++#define MMC_BLK_TRIM		BIT(5)
+ 
+ 	/*
+ 	 * Only set in main mmc_blk_data associated
+@@ -1090,12 +1091,13 @@ static void mmc_blk_issue_drv_op(struct mmc_queue *mq, struct request *req)
+ 	blk_mq_end_request(req, ret ? BLK_STS_IOERR : BLK_STS_OK);
+ }
+ 
+-static void mmc_blk_issue_discard_rq(struct mmc_queue *mq, struct request *req)
++static void mmc_blk_issue_erase_rq(struct mmc_queue *mq, struct request *req,
++				   int type, unsigned int erase_arg)
+ {
+ 	struct mmc_blk_data *md = mq->blkdata;
+ 	struct mmc_card *card = md->queue.card;
+ 	unsigned int from, nr;
+-	int err = 0, type = MMC_BLK_DISCARD;
++	int err = 0;
+ 	blk_status_t status = BLK_STS_OK;
+ 
+ 	if (!mmc_can_erase(card)) {
+@@ -1111,13 +1113,13 @@ static void mmc_blk_issue_discard_rq(struct mmc_queue *mq, struct request *req)
+ 		if (card->quirks & MMC_QUIRK_INAND_CMD38) {
+ 			err = mmc_switch(card, EXT_CSD_CMD_SET_NORMAL,
+ 					 INAND_CMD38_ARG_EXT_CSD,
+-					 card->erase_arg == MMC_TRIM_ARG ?
++					 erase_arg == MMC_TRIM_ARG ?
+ 					 INAND_CMD38_ARG_TRIM :
+ 					 INAND_CMD38_ARG_ERASE,
+ 					 card->ext_csd.generic_cmd6_time);
+ 		}
+ 		if (!err)
+-			err = mmc_erase(card, from, nr, card->erase_arg);
++			err = mmc_erase(card, from, nr, erase_arg);
+ 	} while (err == -EIO && !mmc_blk_reset(md, card->host, type));
+ 	if (err)
+ 		status = BLK_STS_IOERR;
+@@ -1127,6 +1129,19 @@ static void mmc_blk_issue_discard_rq(struct mmc_queue *mq, struct request *req)
+ 	blk_mq_end_request(req, status);
+ }
+ 
++static void mmc_blk_issue_trim_rq(struct mmc_queue *mq, struct request *req)
++{
++	mmc_blk_issue_erase_rq(mq, req, MMC_BLK_TRIM, MMC_TRIM_ARG);
++}
++
++static void mmc_blk_issue_discard_rq(struct mmc_queue *mq, struct request *req)
++{
++	struct mmc_blk_data *md = mq->blkdata;
++	struct mmc_card *card = md->queue.card;
++
++	mmc_blk_issue_erase_rq(mq, req, MMC_BLK_DISCARD, card->erase_arg);
++}
++
+ static void mmc_blk_issue_secdiscard_rq(struct mmc_queue *mq,
+ 				       struct request *req)
+ {
+@@ -2327,6 +2342,9 @@ enum mmc_issued mmc_blk_mq_issue_rq(struct mmc_queue *mq, struct request *req)
+ 		case REQ_OP_SECURE_ERASE:
+ 			mmc_blk_issue_secdiscard_rq(mq, req);
+ 			break;
++		case REQ_OP_WRITE_ZEROES:
++			mmc_blk_issue_trim_rq(mq, req);
++			break;
+ 		case REQ_OP_FLUSH:
+ 			mmc_blk_issue_flush(mq, req);
+ 			break;
+diff --git a/drivers/mmc/core/queue.c b/drivers/mmc/core/queue.c
+index c69b2d9df6f1..bbe2ea829ea7 100644
+--- a/drivers/mmc/core/queue.c
++++ b/drivers/mmc/core/queue.c
+@@ -191,6 +191,8 @@ static void mmc_queue_setup_discard(struct request_queue *q,
+ 		q->limits.discard_granularity = SECTOR_SIZE;
+ 	if (mmc_can_secure_erase_trim(card))
+ 		blk_queue_flag_set(QUEUE_FLAG_SECERASE, q);
++	if (mmc_can_trim(card) && card->erased_byte == 0)
++		blk_queue_max_write_zeroes_sectors(q, max_discard);
+ }
+ 
+ static unsigned short mmc_get_max_segments(struct mmc_host *host)
+-- 
+2.34.1
 
-
-full test log link [1]
-
-snippet of test log:
-[    4.168302]     # test_free_bulk: test_alloc: size=271, gfp=cc0,
-policy=right, cache=0
-[    4.271599]     # test_free_bulk: test_alloc: size=271, gfp=cc0,
-policy=none, cache=0
-[    4.271611]     # test_free_bulk: test_alloc: size=271, gfp=cc0,
-policy=left, cache=0
-[    4.687568]     # test_free_bulk: test_alloc: size=271, gfp=cc0,
-policy=none, cache=0
-[    4.687581]     # test_free_bulk: test_alloc: size=271, gfp=cc0,
-policy=none, cache=0
-[    4.687616]     # test_free_bulk: ASSERTION FAILED at
-mm/kfence/kfence_test.c:547
-[    4.687616]     Expected report_available() to be false, but is true
-[    4.687789]     not ok 13 - test_free_bulk
-...
-[   33.294007]     # test_memcache_typesafe_by_rcu: EXPECTATION FAILED
-at mm/kfence/kfence_test.c:687
-[   33.294007]     Expected report_matches(&expect) to be true, but is false
-[   33.294182]     not ok 23 - test_memcache_typesafe_by_rcu
-[   33.294183] kunit_try_catch (209) used greatest stack depth: 5840 bytes left
-[   33.294619]     # test_krealloc: test_alloc: size=32, gfp=cc0,
-policy=any, cache=0
-[   33.391637]     # test_krealloc: ASSERTION FAILED at
-mm/kfence/kfence_test.c:724
-[   33.391637]     Expected report_available() to be false, but is true
-[   33.391658]     not ok 24 - test_krealloc
-[   33.391902]     # test_memcache_alloc_bulk: setup_test_cache:
-size=32, ctor=0x0
-[   33.495801]     ok 25 - test_memcache_alloc_bulk
-[   33.495808] # kfence: pass:3 fail:20 skip:2 total:25
-[   33.495817] # Totals: pass:3 fail:20 skip:2 total:25
-[   33.495833] not ok 1 - kfence
-
-
-metadata:
-  git_ref: master
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-  git_sha: 088fb7eff3496e0f61fdf68bda89b81a4d0a4434
-  git_describe: next-20220426
-  kernel-config: https://builds.tuxbuild.com/28KafYBlDWOxI3qyNmGDwb63GuX/config
-
---
-Linaro LKFT
-https://lkft.linaro.org
-
-[1] https://lkft.validation.linaro.org/scheduler/job/4950383#L770
-[2] https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220426/testrun/9235043/suite/kunit/test/test_use_after_free_read/log

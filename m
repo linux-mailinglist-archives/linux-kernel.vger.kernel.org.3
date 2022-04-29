@@ -2,131 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D2C3514312
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 09:15:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAE4451432C
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 09:19:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355032AbiD2HSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 03:18:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36214 "EHLO
+        id S1355084AbiD2HXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 03:23:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351856AbiD2HSN (ORCPT
+        with ESMTP id S1355122AbiD2HXA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 03:18:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 16AA536177
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 00:14:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651216496;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bmhVhWxwujManEWb7Tvvt40ys1VYDFgv5QSh1ts7YSs=;
-        b=fFIzZnNe8+/lmrsFqQbJJHduIekfgj3NeoTNwWqKIwat0xBQnRK0cvXqgRxsOFXi0snOqw
-        2sMHTyjn5Vf6oZ21Y8YS0vHPkMvo0BysB9QX8zEsYZ6/8u0egSoNv5ZIeprBQrZWcHlJcx
-        /tETHmQAyUoWvXgGcrOs+T2e2XSd17g=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-148-TcYEM2wENJKFO7GqZDXUBw-1; Fri, 29 Apr 2022 03:14:54 -0400
-X-MC-Unique: TcYEM2wENJKFO7GqZDXUBw-1
-Received: by mail-ej1-f71.google.com with SMTP id o8-20020a170906974800b006f3a8be7502so4106368ejy.8
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 00:14:54 -0700 (PDT)
+        Fri, 29 Apr 2022 03:23:00 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D22C0D07
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 00:19:39 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id i19so13701858eja.11
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 00:19:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=W1qTXQHkAUTgIS5H0qkRUjmUVz3cheTFAjxA6UltZ10=;
+        b=VaqWAtqBsb8Z3atRuosBuidY7OP62YvuZ+sVu8KD7DgOfq3jjkKx6UP9I0axEDWuuV
+         CaW2zRJ29cyD0aHpRIr8M69irsU0pAGRiyYVR8iBHZw27lVgPsUVmJGJeOy6xy4s+9vn
+         h64W332vI6oY5Hzaf169RRPxUwSzeks2jEdWj2Kv9edvjIB8kphDlfl+kvb67IJV1ksH
+         wPOS81v49Ho1P1cGqEmVqHH+4i6pd8PlWQBHVh+BH6/FGY0vo+E3tnckiCiqkIOUCO4m
+         pxgg7Pi7CfVAtOXv/9H7Podp1JyFNjDa8ZioS26/5Q12rITjC8s3HW8tX8UB8pqYehZj
+         tSxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bmhVhWxwujManEWb7Tvvt40ys1VYDFgv5QSh1ts7YSs=;
-        b=3UL8Bads6g4yBE1pTEQ65+XEM1/bXBtMDT2dsoHUrPUa5RrrEw9Et/6KBWihmi/KTY
-         Nc2h0x1ykacIFTc8GLlfVxbPzi8OKVYMymh8Vuk0LCRDYqzlWcI44A90YVpLNjZhHBU9
-         E0rGxsj5SWtUh5FJkAWifMMoybWu9lKrGbsjmU7Asm2hGIwzfg8GHO0fzols2u8R0q7D
-         tyG2LmF1dMKr+9ZMWrcetSaPuG7ROOqSdJxEurVu83AKF4KGWTMKEw7xNh1y2L5kmwcp
-         KkSd7pg7VrrAIOf6YDtpMqbedrKaZsH8atUjcihmfEuWFcXL8wLhl8Clsar1ISp9RU7x
-         8PbA==
-X-Gm-Message-State: AOAM532FUTd1eoAXOqStk/RV9ADUJrMIZUqaAqLSn4kZvxS6RU8x9ED4
-        hRmxWbmJ+AmLm7+oyBZuYRTB5bq/xusJFj1fdMONzUtBZuldl2YUqBM7H+7kC0KSKB3ahH9qv5C
-        q+yDoQwlvvIR5vHr1DJUixSjd
-X-Received: by 2002:a05:6402:518f:b0:426:25ed:4a2 with SMTP id q15-20020a056402518f00b0042625ed04a2mr8255001edd.9.1651216493621;
-        Fri, 29 Apr 2022 00:14:53 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwnz8bMf2XUMgzQMQyMU1WLAZsmiRkEckvQzc3dWSmAMEIfI6u9vul2juptEqaiz0ZzC8QlpQ==
-X-Received: by 2002:a05:6402:518f:b0:426:25ed:4a2 with SMTP id q15-20020a056402518f00b0042625ed04a2mr8254987edd.9.1651216493364;
-        Fri, 29 Apr 2022 00:14:53 -0700 (PDT)
-Received: from sgarzare-redhat (host-87-11-6-234.retail.telecomitalia.it. [87.11.6.234])
-        by smtp.gmail.com with ESMTPSA id og31-20020a1709071ddf00b006f3ef214da2sm364183ejc.8.2022.04.29.00.14.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 00:14:52 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 09:14:49 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>
-Subject: Re: [PATCH] vdpa_sim_blk: add support for VIRTIO_BLK_T_FLUSH
-Message-ID: <20220429071449.pycbkk2dvvxmtvay@sgarzare-redhat>
-References: <20220428151242.213824-1-sgarzare@redhat.com>
- <CACGkMEv=0VWh_NxhvM+6_TRHEx0f2RGRWbR1n5RhKfq0a7xJUw@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=W1qTXQHkAUTgIS5H0qkRUjmUVz3cheTFAjxA6UltZ10=;
+        b=1PKABrgR5CkUvzAw++/P39CDJGcH5kEiwtsPPyifmI2OTVqvx+PO0I4oap6YZAN3IR
+         5+uNyrl8SlF7lsFuHNRekMYiknk33yntFPSNKjTgcfJNxhFjFIexZ3PDI0wye9PclXdg
+         FONNOUInaD3YsQN9zZskrbkX3IwVGwdqqk5uRyaHhWt+FlBTG2WRufgFWGjyytg09d11
+         DJ9YI/8jjZoA42iRe2VlwioEbBcwzw8vTe6vrWVFQy/aMRkQ5F8ICSST2daV1dVCbUQT
+         4n+FiMntVvTxh/+2/+Xt6eBi0QUtTOy5FkG50AUEFrS6q8Z80Ra0k57K9F7OWg0+2nv9
+         80Yw==
+X-Gm-Message-State: AOAM530C+CqBC5PkX2lWFh6T4poekeEPEbP9afthpxN/xV32PZeftodo
+        7bAMbNUA15EV64jv+C8DGVw3wg==
+X-Google-Smtp-Source: ABdhPJyAcOzo78/7vNbS/EM8tjt1S6GONjFd3lsVUIY7OyzfjiTXJMjrA6sK33YCY/EOFrTfJzb7nw==
+X-Received: by 2002:a17:907:3d89:b0:6ef:eebf:1708 with SMTP id he9-20020a1709073d8900b006efeebf1708mr36257371ejc.620.1651216777725;
+        Fri, 29 Apr 2022 00:19:37 -0700 (PDT)
+Received: from [192.168.0.169] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id mm25-20020a170906cc5900b006f3ef214dddsm369629ejb.67.2022.04.29.00.19.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 00:19:36 -0700 (PDT)
+Message-ID: <aedb4e56-99c4-4f33-bb9c-e122fb87f45b@linaro.org>
+Date:   Fri, 29 Apr 2022 09:19:36 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CACGkMEv=0VWh_NxhvM+6_TRHEx0f2RGRWbR1n5RhKfq0a7xJUw@mail.gmail.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH net v5 1/2] nfc: replace improper check
+ device_is_registered() in netlink related functions
+Content-Language: en-US
+To:     Duoming Zhou <duoming@zju.edu.cn>, linux-kernel@vger.kernel.org,
+        kuba@kernel.org, gregkh@linuxfoundation.org
+Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        alexander.deucher@amd.com, akpm@linux-foundation.org,
+        broonie@kernel.org, netdev@vger.kernel.org, linma@zju.edu.cn
+References: <cover.1651194245.git.duoming@zju.edu.cn>
+ <33a282a82c18f942f1f5f9ee0ffcb16c2c7b0ece.1651194245.git.duoming@zju.edu.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <33a282a82c18f942f1f5f9ee0ffcb16c2c7b0ece.1651194245.git.duoming@zju.edu.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 10:46:40AM +0800, Jason Wang wrote:
->On Thu, Apr 28, 2022 at 11:13 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
->>
->> The simulator behaves like a ramdisk, so we don't have to do
->> anything when a VIRTIO_BLK_T_FLUSH request is received, but it
->> could be useful to test driver behavior.
->>
->> Let's expose the VIRTIO_BLK_F_FLUSH feature to inform the driver
->> that we support the flush command.
->>
->> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
->> ---
->>  drivers/vdpa/vdpa_sim/vdpa_sim_blk.c | 12 ++++++++++++
->>  1 file changed, 12 insertions(+)
->>
->> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
->> index 42d401d43911..a6dd1233797c 100644
->> --- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
->> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
->> @@ -25,6 +25,7 @@
->>  #define DRV_LICENSE  "GPL v2"
->>
->>  #define VDPASIM_BLK_FEATURES   (VDPASIM_FEATURES | \
->> +                                (1ULL << VIRTIO_BLK_F_FLUSH)    | \
->>                                  (1ULL << VIRTIO_BLK_F_SIZE_MAX) | \
->>                                  (1ULL << VIRTIO_BLK_F_SEG_MAX)  | \
->>                                  (1ULL << VIRTIO_BLK_F_BLK_SIZE) | \
->> @@ -166,6 +167,17 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vdpasim,
->>                 pushed += bytes;
->>                 break;
->>
->> +       case VIRTIO_BLK_T_FLUSH:
->> +               if (sector != 0) {
->> +                       dev_err(&vdpasim->vdpa.dev,
->> +                               "A driver MUST set sector to 0 for a VIRTIO_BLK_T_FLUSH request - sector: 0x%llx\n",
->> +                               sector);
->
->If this is something that could be triggered by userspace/guest, then
->we should avoid this.
+On 29/04/2022 03:14, Duoming Zhou wrote:
+> The device_is_registered() in nfc core is used to check whether
+> nfc device is registered in netlink related functions such as
+> nfc_fw_download(), nfc_dev_up() and so on. Although device_is_registered()
+> is protected by device_lock, there is still a race condition between
+> device_del() and device_is_registered(). The root cause is that
+> kobject_del() in device_del() is not protected by device_lock.
+> 
+>    (cleanup task)         |     (netlink task)
+>                           |
+> nfc_unregister_device     | nfc_fw_download
+>  device_del               |  device_lock
+>   ...                     |   if (!device_is_registered)//(1)
+>   kobject_del//(2)        |   ...
+>  ...                      |  device_unlock
+> 
+> The device_is_registered() returns the value of state_in_sysfs and
+> the state_in_sysfs is set to zero in kobject_del(). If we pass check in
+> position (1), then set zero in position (2). As a result, the check
+> in position (1) is useless.
+> 
+> This patch uses bool variable instead of device_is_registered() to judge
+> whether the nfc device is registered, which is well synchronized.
+> 
+> Fixes: 3e256b8f8dfa ("NFC: add nfc subsystem core")
+> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+> ---
+> Changes in v5:
+>   - Replace device_is_registered() to bool variable.
+> 
+>  include/net/nfc/nfc.h |  1 +
+>  net/nfc/core.c        | 26 ++++++++++++++------------
+>  2 files changed, 15 insertions(+), 12 deletions(-)
+> 
+> diff --git a/include/net/nfc/nfc.h b/include/net/nfc/nfc.h
+> index 5dee575fbe8..7bb4ccb1830 100644
+> --- a/include/net/nfc/nfc.h
+> +++ b/include/net/nfc/nfc.h
+> @@ -167,6 +167,7 @@ struct nfc_dev {
+>  	int n_targets;
+>  	int targets_generation;
+>  	struct device dev;
+> +	bool dev_register;
+>  	bool dev_up;
+>  	bool fw_download_in_progress;
+>  	u8 rf_mode;
+> diff --git a/net/nfc/core.c b/net/nfc/core.c
+> index dc7a2404efd..52147da2286 100644
+> --- a/net/nfc/core.c
+> +++ b/net/nfc/core.c
+> @@ -38,7 +38,7 @@ int nfc_fw_download(struct nfc_dev *dev, const char *firmware_name)
+>  
+>  	device_lock(&dev->dev);
+>  
+> -	if (!device_is_registered(&dev->dev)) {
+> +	if (!dev->dev_register) {
+>  		rc = -ENODEV;
+>  		goto error;
+>  	}
+> @@ -94,7 +94,7 @@ int nfc_dev_up(struct nfc_dev *dev)
+>  
+>  	device_lock(&dev->dev);
+>  
+> -	if (!device_is_registered(&dev->dev)) {
+> +	if (!dev->dev_register) {
+>  		rc = -ENODEV;
+>  		goto error;
+>  	}
+> @@ -142,7 +142,7 @@ int nfc_dev_down(struct nfc_dev *dev)
+>  
+>  	device_lock(&dev->dev);
+>  
+> -	if (!device_is_registered(&dev->dev)) {
+> +	if (!dev->dev_register) {
+>  		rc = -ENODEV;
+>  		goto error;
+>  	}
+> @@ -207,7 +207,7 @@ int nfc_start_poll(struct nfc_dev *dev, u32 im_protocols, u32 tm_protocols)
+>  
+>  	device_lock(&dev->dev);
+>  
+> -	if (!device_is_registered(&dev->dev)) {
+> +	if (!dev->dev_register) {
+>  		rc = -ENODEV;
+>  		goto error;
+>  	}
+> @@ -246,7 +246,7 @@ int nfc_stop_poll(struct nfc_dev *dev)
+>  
+>  	device_lock(&dev->dev);
+>  
+> -	if (!device_is_registered(&dev->dev)) {
+> +	if (!dev->dev_register) {
+>  		rc = -ENODEV;
+>  		goto error;
+>  	}
+> @@ -291,7 +291,7 @@ int nfc_dep_link_up(struct nfc_dev *dev, int target_index, u8 comm_mode)
+>  
+>  	device_lock(&dev->dev);
+>  
+> -	if (!device_is_registered(&dev->dev)) {
+> +	if (!dev->dev_register) {
+>  		rc = -ENODEV;
+>  		goto error;
+>  	}
+> @@ -335,7 +335,7 @@ int nfc_dep_link_down(struct nfc_dev *dev)
+>  
+>  	device_lock(&dev->dev);
+>  
+> -	if (!device_is_registered(&dev->dev)) {
+> +	if (!dev->dev_register) {
+>  		rc = -ENODEV;
+>  		goto error;
+>  	}
+> @@ -401,7 +401,7 @@ int nfc_activate_target(struct nfc_dev *dev, u32 target_idx, u32 protocol)
+>  
+>  	device_lock(&dev->dev);
+>  
+> -	if (!device_is_registered(&dev->dev)) {
+> +	if (!dev->dev_register) {
+>  		rc = -ENODEV;
+>  		goto error;
+>  	}
+> @@ -448,7 +448,7 @@ int nfc_deactivate_target(struct nfc_dev *dev, u32 target_idx, u8 mode)
+>  
+>  	device_lock(&dev->dev);
+>  
+> -	if (!device_is_registered(&dev->dev)) {
+> +	if (!dev->dev_register) {
+>  		rc = -ENODEV;
+>  		goto error;
+>  	}
+> @@ -495,7 +495,7 @@ int nfc_data_exchange(struct nfc_dev *dev, u32 target_idx, struct sk_buff *skb,
+>  
+>  	device_lock(&dev->dev);
+>  
+> -	if (!device_is_registered(&dev->dev)) {
+> +	if (!dev->dev_register) {
+>  		rc = -ENODEV;
+>  		kfree_skb(skb);
+>  		goto error;
+> @@ -552,7 +552,7 @@ int nfc_enable_se(struct nfc_dev *dev, u32 se_idx)
+>  
+>  	device_lock(&dev->dev);
+>  
+> -	if (!device_is_registered(&dev->dev)) {
+> +	if (!dev->dev_register) {
+>  		rc = -ENODEV;
+>  		goto error;
+>  	}
+> @@ -601,7 +601,7 @@ int nfc_disable_se(struct nfc_dev *dev, u32 se_idx)
+>  
+>  	device_lock(&dev->dev);
+>  
+> -	if (!device_is_registered(&dev->dev)) {
+> +	if (!dev->dev_register) {
+>  		rc = -ENODEV;
+>  		goto error;
+>  	}
+> @@ -1134,6 +1134,7 @@ int nfc_register_device(struct nfc_dev *dev)
+>  			dev->rfkill = NULL;
+>  		}
+>  	}
+> +	dev->dev_register = true;
+>  	device_unlock(&dev->dev);
+>  
+>  	rc = nfc_genl_device_added(dev);
+> @@ -1166,6 +1167,7 @@ void nfc_unregister_device(struct nfc_dev *dev)
+>  		rfkill_unregister(dev->rfkill);
+>  		rfkill_destroy(dev->rfkill);
+>  	}
+> +	dev->dev_register = false;
 
-It can only be triggered by an erratic driver.
+We already have flag for it - dev->shutting_down. Currently it is used
+only in if device implements check_presence but I think it can be easily
+moved to common path.
 
-I was using the simulator to test a virtio-blk driver that I'm writing 
-in userspace and I forgot to set `sector` to zero, so I thought it would 
-be useful.
+Having multiple fields for similar, but slightly different cases, is
+getting us closer and closer to spaghetti code.
 
-Do you mean to remove the error message?
 
-Thanks,
-Stefano
-
+Best regards,
+Krzysztof

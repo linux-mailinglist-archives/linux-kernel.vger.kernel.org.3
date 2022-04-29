@@ -2,147 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8424515679
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:13:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 755AB515685
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:14:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233782AbiD2VQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 17:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34174 "EHLO
+        id S234443AbiD2VRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 17:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233633AbiD2VQy (ORCPT
+        with ESMTP id S234189AbiD2VRe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 17:16:54 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2866ED3DB0
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:13:35 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id z19so10384329edx.9
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:13:35 -0700 (PDT)
+        Fri, 29 Apr 2022 17:17:34 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9FE9D3AF2
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:14:14 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2f7d621d1caso97558207b3.11
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:14:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=oq0Zya7alVgrjes/Aox+txkeo77UdQpWJ11CNaZCjU4=;
-        b=DSDaYI2+JOc5fVJeq4O73f88PTpo/fjuytmL6ZOqRjaI2Eyegq1yOrp93DIeTBrMOx
-         xZgBDlf7sdT33mwl3sUpRzO0giyNNlS/dxV2yWOgTh9nwy/frejL36p9dkMkNwod3Xz6
-         iwM2EXuiDQbWBDUpiFOq6N2ZOU+SB+7ZMt8CGmDtu6LddcKKsUug8DIUXdSU/Zg2n4jm
-         dL+u8LQFc6C2F1ZtYwrqHkZFZiCrbAm+330p8lk7pPSacMviChAy44LsiTaJeyzkMGq/
-         EIuW8+biX6E0jVY9bwX5M2SxksjrZ7ir/F1xlbrJC2o1tAGpCBo0nIrAvEUdam3thJi7
-         70lw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=HHiNWR4Gj+7WX0sCAUa6tn2uhhIucy+5z2qpTD06QQI=;
+        b=JSHLmibei0jgkcWbPj9HXgdd+MhHC+OyPSKhuI2XV6AHUd3y3m296Nxh89oFkAvEVr
+         gAOcLc8V+8EnUVsL20yuw8mVQN59JVIbjbWtowpSKuGn459PWbiqv0aOHp0eMpmS7/C9
+         GIIUZdg+2wcbmV+RcHfAfaQjYxe3tIUZ1dkRZZXo2X12l9WF1hVT3HiSaXby6h/Wyv8T
+         gWT+OXFy1d+ABcoA7M4M0UuVVzHoEeLgoryOnJ2ABJFPvGNg2GShgdXy0P148AVAwSxE
+         osCh6JkPgoWtaMxXbuwuVmehGTQ4QFQyx+xal3y46aLeldq4DRLtclvp4LO4MWPXV1/b
+         w7Vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=oq0Zya7alVgrjes/Aox+txkeo77UdQpWJ11CNaZCjU4=;
-        b=oT8ibUWuXfieKBFebAjuxxkHO6hFrjTj0HffUlrhZ3oY3EQ2+4czyflzzZ+YnJsUx/
-         mPZ83hcNel+ROlAbGuVy3nYtTLaAz0oarSr6ToBw2uXwCiwJDMa8jD9IBU3WATtoQyT/
-         YjRinMkCzsmTM5a0wIu8S03UEwO2zldAN6r/RY5Vwyu3DdzC2wOC5O7eel8kKF49Xuue
-         d8TTBMrdrN71P0DMYDL+TX7m6UDwQp7P8H5Z20Z/SpXwfMXB610XPbGz7AeBIiPyrYlT
-         a1HAjF3hPHjxlhlPYE/9QvlsVi7u/Yz/UgTjT2DG1Uj3UdEi1TMpveb2mI8LuYGcJOB/
-         bYeA==
-X-Gm-Message-State: AOAM532yG3V59uuI5WAaJYWzk8SZowXYe+ReOdVuPbFZulkSJpKCfKau
-        BnM9jMzcAmvzAgVBdmGqzHIS5A==
-X-Google-Smtp-Source: ABdhPJyVVhDYODMbBzhBifXA7nLpCfzCbTw5ofkKpFDmyCaG4pqIVxjAa/d1qFy9oGOViVNgIBZM+A==
-X-Received: by 2002:a05:6402:51d3:b0:426:3a20:738b with SMTP id r19-20020a05640251d300b004263a20738bmr1249084edd.342.1651266813682;
-        Fri, 29 Apr 2022 14:13:33 -0700 (PDT)
-Received: from [192.168.0.176] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id e16-20020a170906845000b006f3ef214dc7sm952984ejy.45.2022.04.29.14.13.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 14:13:33 -0700 (PDT)
-Message-ID: <839978c5-c337-7784-a04f-26b9883c703b@linaro.org>
-Date:   Fri, 29 Apr 2022 23:13:31 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=HHiNWR4Gj+7WX0sCAUa6tn2uhhIucy+5z2qpTD06QQI=;
+        b=4UXS1/QnoeZ4OvLImmTUov4ConQJGE6fVfoGP7Kds0iHtGK9R5kIXlAS69gPtMRQLi
+         RuIx1qqAgVuzBuV0x4obt3Mtpb0lvkcIXOAOlzqmQ08g+VZ6JVRtFRWeTS/Xf6fhPktr
+         PxoxtvRdzm8wIxr0r+9lC5DqXbwEASSPrke5a01GQ1bU2oqFtKvj2B++iiLoG4Dh5H5W
+         fuLpXlynLd64Mi5RfhZhnRl+icRwS/lqa73Ico95hbuquIaCUTCNK113MIH9phBxWAU0
+         6U7tAbNEv3zpQHphxYkvT0YKQbSKSxMAOgEeq7oJw4Q4oCHEfsj34cT2JxSHA70wrzpk
+         zGaw==
+X-Gm-Message-State: AOAM533KEUslzADSiMY8P8bIxkU5b3mwvEwZtnN+Mdd6vrq6+6wVlTFG
+        91JNeO9B+QU3NF+FwBvNkBAeX/4inst+9CT/+UFjgA==
+X-Google-Smtp-Source: ABdhPJxMEXOOz7/3ZcLI/C+SyN5tKSdtu6eoAlmQKG5g155dtcRnngUP4k9RCkDxyuI/1C3yeScBL5Tbp72EbYKfZWk=
+X-Received: by 2002:a81:3ac2:0:b0:2f7:f777:a43 with SMTP id
+ h185-20020a813ac2000000b002f7f7770a43mr1356235ywa.60.1651266853771; Fri, 29
+ Apr 2022 14:14:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V5 12/16] dt-bindings: reset: mediatek: Add infra_ao reset
- bit for MT8195
-Content-Language: en-US
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, mturquette@baylibre.com,
-        sboyd@kernel.org, matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     p.zabel@pengutronix.de, angelogioacchino.delregno@collabora.com,
-        chun-jie.chen@mediatek.com, wenst@chromium.org,
-        runyang.chen@mediatek.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220428115620.13512-1-rex-bc.chen@mediatek.com>
- <20220428115620.13512-13-rex-bc.chen@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220428115620.13512-13-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220429104052.345760505@linuxfoundation.org>
+In-Reply-To: <20220429104052.345760505@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 30 Apr 2022 02:44:02 +0530
+Message-ID: <CA+G9fYs4hjCbTE-OQjgXiGFVQ2dD4FW4-iSQV8aqHR57Fv06uw@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/33] 5.15.37-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/04/2022 13:56, Rex-BC Chen wrote:
-> To support reset of infra_ao, add the bit definitions for MT8195.
-> The infra_ao reset includes 5 banks and 32 bits for each bank.
-> 
-> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> ---
->  include/dt-bindings/reset/mt8195-resets.h | 170 ++++++++++++++++++++++
->  1 file changed, 170 insertions(+)
-> 
-> diff --git a/include/dt-bindings/reset/mt8195-resets.h b/include/dt-bindings/reset/mt8195-resets.h
-> index a26bccc8b957..463114014483 100644
-> --- a/include/dt-bindings/reset/mt8195-resets.h
-> +++ b/include/dt-bindings/reset/mt8195-resets.h
-> @@ -7,6 +7,7 @@
->  #ifndef _DT_BINDINGS_RESET_CONTROLLER_MT8195
->  #define _DT_BINDINGS_RESET_CONTROLLER_MT8195
->  
-> +/* TOPRGU resets */
->  #define MT8195_TOPRGU_CONN_MCU_SW_RST          0
->  #define MT8195_TOPRGU_INFRA_GRST_SW_RST        1
->  #define MT8195_TOPRGU_APU_SW_RST               2
-> @@ -26,4 +27,173 @@
->  
->  #define MT8195_TOPRGU_SW_RST_NUM               16
->  
-> +/* INFRA RST0 */
-> +#define MT8195_INFRA_RST0_THERM_CTRL_SWRST	0
-> +#define MT8195_INFRA_RST0_RSV0			1
-> +#define MT8195_INFRA_RST0_DISP_PWM1_SWRST	2
-> +#define MT8195_INFRA_RST0_RSV1			3
-> +#define MT8195_INFRA_RST0_MSDC3_SWRST		4
-> +#define MT8195_INFRA_RST0_MSDC2_SWRST		5
-> +#define MT8195_INFRA_RST0_MSDC1_SWRST		6
-> +#define MT8195_INFRA_RST0_MSDC0_SWRST		7
-> +#define MT8195_INFRA_RST0_RSV2			8
-> +#define MT8195_INFRA_RST0_AP_DMA_SWRST		9
-> +#define MT8195_INFRA_RST0_MIPI_D_SWRST		10
-> +#define MT8195_INFRA_RST0_RSV3			11
-> +#define MT8195_INFRA_RST0_RSV4			12
-> +#define MT8195_INFRA_RST0_SSUSB_TOP_SWRST	13
-> +#define MT8195_INFRA_RST0_DISP_PWM_SWRST	14
-> +#define MT8195_INFRA_RST0_AUXADC_SWRST		15
-> +#define MT8195_INFRA_RST0_RSV5			16
-> +#define MT8195_INFRA_RST0_RSV6			17
-> +#define MT8195_INFRA_RST0_RSV7			18
-> +#define MT8195_INFRA_RST0_RSV8			19
-> +#define MT8195_INFRA_RST0_RSV9			20
-> +#define MT8195_INFRA_RST0_RSV10			21
-> +#define MT8195_INFRA_RST0_RSV11			22
-> +#define MT8195_INFRA_RST0_RSV12			23
-> +#define MT8195_INFRA_RST0_RSV13			24
-> +#define MT8195_INFRA_RST0_RSV14			25
-> +#define MT8195_INFRA_RST0_RSV15			26
-> +#define MT8195_INFRA_RST0_RSV16			27
-> +#define MT8195_INFRA_RST0_RSV17			28
-> +#define MT8195_INFRA_RST0_RSV18			29
-> +#define MT8195_INFRA_RST0_RSV19			30
-> +#define MT8195_INFRA_RST0_RSV20			31
+On Fri, 29 Apr 2022 at 16:12, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.37 release.
+> There are 33 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 01 May 2022 10:40:41 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.37-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-These are not proper IDs... don't work-around usage of bits with fake
-reserved IDs...
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Best regards,
-Krzysztof
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 5.15.37-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: ff3177a2b8b333ce1007cb22d7e2adafdcda9720
+* git describe: v5.15.36-34-gff3177a2b8b3
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.36-34-gff3177a2b8b3
+
+## Test Regressions (compared to v5.15.35)
+No test regressions found.
+
+## Metric Regressions (compared to v5.15.35)
+No metric regressions found.
+
+## Test Fixes (compared to v5.15.35)
+No test fixes found.
+
+## Metric Fixes (compared to v5.15.35)
+No metric fixes found.
+
+## Test result summary
+total: 102673, pass: 87138, fail: 713, skip: 13898, xfail: 924
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 291 total, 291 passed, 0 failed
+* arm64: 41 total, 41 passed, 0 failed
+* i386: 39 total, 39 passed, 0 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 60 total, 54 passed, 6 failed
+* riscv: 27 total, 22 passed, 5 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 41 total, 41 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

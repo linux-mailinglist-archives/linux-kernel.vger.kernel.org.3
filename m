@@ -2,143 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 952FF514D3C
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:35:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB9D514D5B
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:37:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377474AbiD2OiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 10:38:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
+        id S1377498AbiD2Oiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 10:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344646AbiD2OiV (ORCPT
+        with ESMTP id S1346935AbiD2Oir (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 10:38:21 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDEC72A71A
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:35:02 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso7185553wma.0
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:35:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MNfUquSBQXRdU8AFXuKgswA3BnrGyLe9et79dGaHCHo=;
-        b=aCrclNQan4DsysNx5+Nj3TiV0fkI/4mECyTS4zEiZJ1dbrslZNfdTJXWueSAZWJnj9
-         DwSOotBRoD0nJ/o2/tSmtSJ5R306TVL+nnpVT5ZaYo5fsHtkNVj8ZEHVmr176n4+JxPx
-         SjomnHzojd/oFkir7xR7lTB3rXs3zZOZtmb3rziM8Pbx95QK36YxjUQC9D7AUyOGlfPJ
-         6pXmo870wnuuYI1pL69PpSShVXLUfeCJy82zRSiD0TAKehsScy7PPWZdcH+jqaCj02QL
-         kFZCgZunayVK8ji/YGjOacvZv+7UCpBUAbWAN+ZvMnrNGupxBZg4rfrn4HU1c5SoPpA/
-         JKcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MNfUquSBQXRdU8AFXuKgswA3BnrGyLe9et79dGaHCHo=;
-        b=i3MNFuPOVGB0T2I3QvWpwl4jnDBTlMtkwod6dVpU/0nTKsTfcpoJgiwubb+1nwf9gD
-         G86Cbv6cNwHnMeG0y80DvPSChITXnBUESXyjZAt8QR6LricAwmcnrLCv9LjSX95z0xYz
-         SZrRjfJNbY06RQa7Y40O5Q0QwUBDcLHp2IsBp+5wQrh9o20SfGi2A10RB5s/wuh+mm0K
-         jZCyal6MVzbH2mKu8MixJmy4+KMyvN71B53zHXQbgvAB1RpnB+7/aReE7jDdMmTLybGb
-         b8mPFTmntFKiktDJ6r2WwszC6j0warCHbCbaVKKhi8x1o6qbfo8dQrZjOMjt1kQaQQEA
-         mDjw==
-X-Gm-Message-State: AOAM53222ARsdhQqcWZJH7IZ15riMouO7Koa2v3AvdmglV3iG3TKtkdm
-        I+t76Q0qfo0CcYsWNQW3IuYG0w==
-X-Google-Smtp-Source: ABdhPJxKHrquOOAsrXP0Ic/O71Wk33ou9E5855eyzUO0XSRyB3TpmdWISR92SDQl7rOKCjBmfNPoLA==
-X-Received: by 2002:a05:600c:2e08:b0:394:24c:2da4 with SMTP id o8-20020a05600c2e0800b00394024c2da4mr3532185wmf.134.1651242901408;
-        Fri, 29 Apr 2022 07:35:01 -0700 (PDT)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id m35-20020a05600c3b2300b00393ebe201a6sm7075995wms.44.2022.04.29.07.35.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 07:35:00 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 15:34:36 +0100
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Fenghua Yu <fenghua.yu@intel.com>
-Cc:     Baolu Lu <baolu.lu@linux.intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>, robin.murphy@arm.com,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86 <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        iommu <iommu@lists.linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>, zhangfei.gao@linaro.org,
-        Thomas Gleixner <tglx@linutronix.de>, will@kernel.org
-Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
- allocation and free it on mm exit
-Message-ID: <Ymv3fC4xXqe+oMRK@myrica>
-References: <76ec6342-0d7c-7c7b-c132-2892e4048fa1@intel.com>
- <YmavoKkVu+hd+x0M@myrica>
- <22b659c7-e972-7a56-2bd7-8df3b4820d4e@intel.com>
- <YmbO/l5IwfBCHrl8@myrica>
- <8c044e49-74bb-df56-8a60-663013c0910e@intel.com>
- <YmgiQZZyFxsJ+9um@myrica>
- <63582490-a794-fd11-0380-44b27cc660b7@intel.com>
- <YmpSv48aPIbVXqGi@myrica>
- <044595e6-e5d0-26c2-af8e-fc9d06906179@linux.intel.com>
- <YmvtVRlwVJjStXc0@fyu1.sc.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YmvtVRlwVJjStXc0@fyu1.sc.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 29 Apr 2022 10:38:47 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC08C37A0F;
+        Fri, 29 Apr 2022 07:35:24 -0700 (PDT)
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TDrq4H021532;
+        Fri, 29 Apr 2022 14:34:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=ketWtwQc6p860ZjQPz+m0Q+Zt6j8WdLrGyqUM+8QIm4=;
+ b=lciRZAEGdFTx8gBXpAZVZpFHOqM+qGJ9qqeosLkV1rXbv+3Ljfw4jsuxCBBsFXv0v7iq
+ HBIrvT8/of5cOUBiYsNLQdNGzSsbUlGo7/d0s/EIydPyvBLD4hz7uuFF8d/ORFKJqcnd
+ p7E8So6eRQtUrfd6bZsNF6y3gECsW0x/v+sEeyX5R8Sv7pFIeyq5IlDT5ysXlGQFkZRh
+ F3mq/Zr17uTAv00d29481QqW5Cbf1Kk2KSwL67W6kxCzoXoHv0cpMaU3vGrD1WvDBHg9
+ sNEWYTu8NQeDN/stQ29xatn+vqcjcBZfOF9ocJLQ+bVB4qVHl8M0mg8AUvxdBWjCW0Ef xA== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqs3nqrk0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Apr 2022 14:34:45 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TEKsgc008128;
+        Fri, 29 Apr 2022 14:34:42 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3fm93919ew-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Apr 2022 14:34:42 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TEYedt40567086
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 29 Apr 2022 14:34:40 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2C6E2A404D;
+        Fri, 29 Apr 2022 14:34:40 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6AF21A4055;
+        Fri, 29 Apr 2022 14:34:39 +0000 (GMT)
+Received: from sig-9-145-61-57.uk.ibm.com (unknown [9.145.61.57])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 29 Apr 2022 14:34:39 +0000 (GMT)
+Message-ID: <8273126cf59b734ef50f753e868457a3b0e24968.camel@linux.ibm.com>
+Subject: Re: [PATCH 23/37] pnp: add HAS_IOPORT dependencies
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        "open list:PNP SUPPORT" <linux-acpi@vger.kernel.org>
+Date:   Fri, 29 Apr 2022 16:34:39 +0200
+In-Reply-To: <20220429135108.2781579-41-schnelle@linux.ibm.com>
+References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
+         <20220429135108.2781579-41-schnelle@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: JuFoR-u5GMZ1xr80tq6I9RJtj6Ugbgce
+X-Proofpoint-ORIG-GUID: JuFoR-u5GMZ1xr80tq6I9RJtj6Ugbgce
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-29_07,2022-04-28_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=489
+ suspectscore=0 lowpriorityscore=0 spamscore=0 phishscore=0 adultscore=0
+ priorityscore=1501 clxscore=1015 mlxscore=0 malwarescore=0 impostorscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204290080
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 06:51:17AM -0700, Fenghua Yu wrote:
-> Hi, Baolu,
+On Fri, 2022-04-29 at 15:50 +0200, Niklas Schnelle wrote:
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. We thus need to depend on HAS_IOPORT even when
+> compile testing only.
 > 
-> On Fri, Apr 29, 2022 at 03:53:57PM +0800, Baolu Lu wrote:
-> > On 2022/4/28 16:39, Jean-Philippe Brucker wrote:
-> > > > The address space is what the OOM killer is after.  That gets refcounted
-> > > > with mmget()/mmput()/mm->mm_users.  The OOM killer is satiated by the
-> > > > page freeing done in __mmput()->exit_mmap().
-> > > > 
-> > > > Also, all the VMAs should be gone after exit_mmap().  So, even if
-> > > > vma->vm_file was holding a reference to a device driver, that reference
-> > > > should be gone by the time __mmdrop() is actually freeing the PASID.
-> > > 
-> > > I agree with all that. The concern was about tearing down the PASID in the
-> > > IOMMU and device from the release() MMU notifier, which would happen in
-> > > exit_mmap(). But doing the teardown at or before __mmdrop() is fine. And
-> > > since the IOMMU drivers need to hold mm->mm_count anyway between bind()
-> > > and unbind(), I think Fenghua's fix works.
-> > 
-> > But I didn't find mmgrab()/mmdrop() get called in both arm and intel
-> > IOMMU drivers.
-> > 
-> > $ git grep mmgrab drivers/iommu/
-> > [no output]
-> > 
-> > Do we need to add these in a separated fix patch, or I missed anything
-> > here?
-> 
-> On both ARM and X86, sva_bind() calls mmu_notifier_register()->mmgrab() and
-> sva_unbind() calls mmu_notifier_unregister()/mmu_notifier_put()->mmdrop().
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> ---
 
-Yes, although for Arm I realized the mmu_notifier grab wasn't sufficient
-so I sent a separate fix that should go in 5.18 as well
-https://lore.kernel.org/linux-iommu/20220426130444.300556-1-jean-philippe@linaro.org/
-The Arm driver still touches the arch mm context after mmu_notifier_put().
-I don't think X86 has that problem.
+Sorry everyone. I sent this as PATCH in error while preparing to sent
+the same series as RFC. Since e-mail has no remote delete and I lack a
+time machine let's just all pretend you only got the RFC.
 
-Thanks,
-Jean
-
-> So mm->mm_count are already counted in existing ARM and X86 binding and
-> unbinding. The fix patch just frees the PASID in __mmdrop() after
-> no more mm->mm_count.
-> 
-> There is no need to add extra  mmgrab() and mmdrop() pair.
-> 
-> Thanks.
-> 
-> -Fenghua
-> 
->  

@@ -2,78 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1B1351488D
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 13:51:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF042514898
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 13:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358644AbiD2Ly3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 07:54:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49932 "EHLO
+        id S1358704AbiD2L43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 07:56:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236184AbiD2LyY (ORCPT
+        with ESMTP id S239277AbiD2L42 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 07:54:24 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C46BCAA;
-        Fri, 29 Apr 2022 04:51:06 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id r13so14958408ejd.5;
-        Fri, 29 Apr 2022 04:51:06 -0700 (PDT)
+        Fri, 29 Apr 2022 07:56:28 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FAA1C6ED3;
+        Fri, 29 Apr 2022 04:53:09 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id 1so5140222qvs.8;
+        Fri, 29 Apr 2022 04:53:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=qpiHoeXtT6bCajJr3pmoRuTkgohV62q00/CK6KJlrC8=;
-        b=Z5KwGaqDlv2xwy4oNuaKmZ8dflQwv1KDwu60+7H/W8OH3PcqC84qUJReN+bktFypLp
-         JK1EdhERzMp/z3LpygA2MVMvZlSEtP7/Dto1jzOD/TriTdOPNpzssejGk4/qIOhhwhjE
-         X4faIhuqF5Pm7Jea4pKddmKDnslWyNtu5aVofMF7KfhjFUvkoaVlhn4VBAoacXYf5sba
-         03BAXSXGLB9CRAHyDfKsJICYavfii82f4R8DDtelPKlpPjPOt+YW07kwlExAMRlwBcJe
-         1ajwPVr/ywq9QQT76ZydYyTRluOZtPTwHhGB5w1y3C92pkRifr0mrLxqTDSqMW1cF4ab
-         CgpA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KV4krtbeGPg3XtA9N0Vc8Z5tufyrmUvw/0E9B0OLsiM=;
+        b=bCg9/ayXoHRN9e6lsctLLef7ix2gfMMKa/r4qdO+HNeS55VwVPCYqz8uXCcjK/iA7N
+         prqAXk0pQeyCk4gTT8MesUWBka9IN/hQY8Mi8XtV7w8yYW4n2jRmnQCq0W4WeoPMQEKe
+         f4S7jC3c0no7ev4gGIfv3+OueOO7896ImFwOma5vS+NXamSEsABgTguZbe2AWKGYvLo1
+         vGFPw76l0o9pqrpkzsD0v5JfvgbVk6h2w3HToY/vHlac6g270OsvzqIMuaMbZZvmgSj6
+         ITU6mkl8Qdlznxb4LLzxe7WeZaUqqeMEBY9SsNQ+Ede04cAE1+f2iZIiLMGMpbsqc6bn
+         ZEjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=qpiHoeXtT6bCajJr3pmoRuTkgohV62q00/CK6KJlrC8=;
-        b=NA+0+tpkarw3KF2L5fp1t4mJrAgcKYbcxrGIWZm6Jq3v2Hb90asO8ZNtIR8B3T7OHW
-         snWwNADliFis+RYmRwwX5ztmZvqwz4mpDFuwqOd7uoBuGz58CAcRwenVNF58TNLYfAZZ
-         cSeEATaqveHSn3L1zt1QFvQyd3km45DRkGZX8PgVosRDYXmKOHbt2ZOdhAk2XjPNrdsu
-         ADViPS5Bon2w5mc0MT1o+k5rCwfr3BeZpU4uSpil4EzEf288531DB+yxr01tGGgFUeW8
-         rQmSMKMdPUpM2v5ycs7YJydc0duZDZsLWu34kdJeXkPhCktG7sLjb7XL4XqaEOpwaL5U
-         4y3g==
-X-Gm-Message-State: AOAM532uXWdJatPejntI+YHGqHk6Rnb30ezT1IjeqrnrRya+zfY3MGKz
-        MvIUinRiYVhi4yCywT2L4Io=
-X-Google-Smtp-Source: ABdhPJycRE7Z/4NozWquIfWH/J3WCO6gsbfEPi4M5HUv0S8J8xlKazDwLC7ZIv8c8LYRc7nrWb9edA==
-X-Received: by 2002:a17:907:338b:b0:6f4:6e1:ed66 with SMTP id zj11-20020a170907338b00b006f406e1ed66mr770793ejb.341.1651233065473;
-        Fri, 29 Apr 2022 04:51:05 -0700 (PDT)
-Received: from [192.168.35.91] ([194.39.226.133])
-        by smtp.gmail.com with ESMTPSA id k6-20020aa7d8c6000000b0042617ba63d0sm2887694eds.90.2022.04.29.04.51.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 04:51:05 -0700 (PDT)
-Message-ID: <2a18073b-974f-00d4-5811-8df577e943a8@gmail.com>
-Date:   Fri, 29 Apr 2022 14:51:03 +0300
+        bh=KV4krtbeGPg3XtA9N0Vc8Z5tufyrmUvw/0E9B0OLsiM=;
+        b=5j0KrbPamXnX9JMZBu2hauP5JLPUPgB2qE5Cu5+KH9rN1RLFT7QV/Ju74BZEiEEryO
+         Zu8h0LRXYh7gtdln6yAV3TRv6eDx9htTX+NJloecjc+8mysvST1eUjIbqIL4/jKEyPPO
+         SnDsQPcLSmG19Og7XQbsDFjHJoaCFOQnnniOvexRY+TiUjPcS+rxgXqj0ib/0I9M/7N1
+         QSIUPiahmVmGhzyLRu+yd4DOA9LyTYLCrVngaTFbcBh6GLTkAETcvz3thH0fUnyvldKO
+         24jhGNce7uaCCn+OF+DU2744hd1rn85qeDFH55UGVp9jukMFXjmoBrpEOhWpw3+jexL/
+         uc2w==
+X-Gm-Message-State: AOAM530Eq3xPw+YZiss1yLy+BkUnQo732AziEfCndRQLUHZzsvkUiI0v
+        hBUpyZlWZx/e+KuAuLqNdxo=
+X-Google-Smtp-Source: ABdhPJyndl9VV7x3EmnaA3IRvanqu204IsjralKYKEmODgRhfVALtn1dA1ft8TDBZ0kzHckZzoJw6w==
+X-Received: by 2002:ad4:5b85:0:b0:458:1192:77c2 with SMTP id 5-20020ad45b85000000b00458119277c2mr1772036qvp.124.1651233188084;
+        Fri, 29 Apr 2022 04:53:08 -0700 (PDT)
+Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
+        by smtp.gmail.com with ESMTPSA id 123-20020a370c81000000b0069fa408fdb7sm1382505qkm.24.2022.04.29.04.53.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 04:53:07 -0700 (PDT)
+From:   Peter Geis <pgwipeout@gmail.com>
+To:     linux-rockchip@lists.infradead.org
+Cc:     heiko@sntech.de, Peter Geis <pgwipeout@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/7] Add support for several new rk3566 SBCs
+Date:   Fri, 29 Apr 2022 07:52:45 -0400
+Message-Id: <20220429115252.2360496-1-pgwipeout@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v6 2/5] dt-bindings: regulator: Add bindings for Silicon
- Mitus SM5703 regulators
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        lee.jones@linaro.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        devicetree@vger.kernel.org
-References: <20220429113927.5145-1-markuss.broks@gmail.com>
- <YmvQhpO8dg6VLHNP@sirena.org.uk>
-From:   Markuss Broks <markuss.broks@gmail.com>
-In-Reply-To: <YmvQhpO8dg6VLHNP@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,19 +69,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+The following series adds support for the following single board
+computers:
+- Pine64 Quartz64 Model B
+- Pine64 SoQuartz SoM with RPi CM4IO carrier board
+- Firefly Station M2
 
-On 4/29/22 14:48, Mark Brown wrote:
-> On Fri, Apr 29, 2022 at 02:39:25PM +0300, Markuss Broks wrote:
->> This patch adds device-tree bindings for regulators on Silicon Mitus
->> SM5703 MFD.
->>
->> Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
->> ---
->>   .../siliconmitus,sm5703-regulator.yaml        | 49 +++++++++++++++++++
->>   1 file changed, 49 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/regulator/siliconmitus,sm5703-regulator.yaml
-> As Rob said please send an incremental patch with any fixes needed.
-I'm sorry, I didn't understand it correctly. Does "incremental patch" 
-mean I should send a separate follow-up patch with those fixes?
-- Markuss
+Patches 1, 2, and 3 add the requisite dt-bindings.
+Patch 4 adds support for the SFC to the rk356x device tree.
+Patch 5 adds the Quartz64 Model B device tree.
+Patch 6 adds the SoQuartz CM4IO device tree.
+Patch 7 adds the Firefly Station M2 device tree.
+
+Please review and apply at your convenience.
+
+Very Respectfully,
+Peter Geis
+
+Changelog:
+v2:
+- squash Model B into Model A binding
+- collect acks
+
+Furkan Kardame (1):
+  arm64: dts: rockchip: add dts for Firefly Station M2 rk3566
+
+Peter Geis (6):
+  dt-bindings: arm: rockchip: Add Pine64 Quartz64 Model B
+  dt-bindings: arm: rockchip: Add Pine64 SoQuartz SoM
+  dt-bindings: arm: rockchip: Add Firefly Station M2
+  arm64: dts: rockchip: add rk356x sfc support
+  arm64: dts: rockchip: add Pine64 Quartz64-B device tree
+  arm64: dts: rockchip: add SoQuartz CM4IO dts
+
+ .../devicetree/bindings/arm/rockchip.yaml     |  18 +-
+ arch/arm64/boot/dts/rockchip/Makefile         |   3 +
+ .../boot/dts/rockchip/rk3566-quartz64-b.dts   | 615 ++++++++++++++++++
+ .../arm64/boot/dts/rockchip/rk3566-roc-pc.dts | 580 +++++++++++++++++
+ .../boot/dts/rockchip/rk3566-soquartz-cm4.dts | 167 +++++
+ .../boot/dts/rockchip/rk3566-soquartz.dtsi    | 607 +++++++++++++++++
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi      |  11 +
+ 7 files changed, 1999 insertions(+), 2 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-roc-pc.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-soquartz-cm4.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3566-soquartz.dtsi
+
+-- 
+2.25.1
+

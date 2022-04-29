@@ -2,150 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E23515470
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 21:28:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F8F515491
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 21:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239333AbiD2Tbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 15:31:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
+        id S1380303AbiD2TfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 15:35:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239127AbiD2Tbs (ORCPT
+        with ESMTP id S238144AbiD2TfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 15:31:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B88FCE48A;
-        Fri, 29 Apr 2022 12:28:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3519362456;
-        Fri, 29 Apr 2022 19:28:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D4D0C385A7;
-        Fri, 29 Apr 2022 19:28:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651260508;
-        bh=QMmBWhBX8CuK9uzgkZSoFMSRG4Ul5UEIPvLyrJvtXKo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=UM2gWZkEn4zYP2H2JMS/7K6Vf0e7hbq5oYEdhK6LKzvj2iBjZtOzN82kkTH1/O9lr
-         9L7GMuDu6qyzwCSF9YNtqsaaSQInVrYFrANKD6YL5X8wvLMidgZlbnQLsYpo/YcbPI
-         OJUITJLeU56I9hN9QZsor94AD/+n6ol2LqxBgtsuDKC8LAnvoJhx0hVy162mXaB9gk
-         /hPJLw1KOoFoPf6X81f7XFHPgNzb36Q0l9cv26hMMIPnSQTyLsgu6+OKx71aBHRguG
-         mo5Flhn219Q4KS/uTpo8j1/RgFdpfA8+4+NJXM5tioFHITGecCN6FWI5kIef098rP9
-         Di29AjpNO5XHQ==
-Date:   Fri, 29 Apr 2022 14:28:25 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        linux-kernel@vger.kernel.org, Tom Joseph <tjoseph@cadence.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Subject: Re: [PATCH] PCI: cadence: respond to received PTM Requests
-Message-ID: <20220429192825.GA82239@bhelgaas>
+        Fri, 29 Apr 2022 15:35:09 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25E049938;
+        Fri, 29 Apr 2022 12:31:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=juYOl8ucSjuSHKXBe+1Ir5OPZr6pZdgx66h4OReE1Ko=; b=pi8CeEHRcdz9D2M05lfyhONNOe
+        Il5P/FNtKNDpfNnQvQkUO53LGYEhZ3HsOKcMT79tXUkEM7BDaPWYeiTRxruHlFJpgYZGLdkNZ+Vsx
+        oyZivn3CQn+HYfOJsn02OXmy5/HYryfVse/FM/IqF31FwAMG26clpYwK7OV3zBWRhtbMoUne9k8x/
+        cgyBslKy2FDshbzCm4dWwDcEIOqWM+BTXUAPCGsxBvDFlTKuVtiafdc18oTYk2LsBlxeiWqHf76sU
+        fr20/x47wOCPaQYIMtyh+VGeHVXZk4bWHmVx7ebZUj8zme4Hs0U5M9F5U1lcdb0DAeivSR+YRjiw8
+        sBGOVwOQ==;
+Received: from [179.113.53.197] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nkWKu-000A9h-7O; Fri, 29 Apr 2022 21:31:28 +0200
+Message-ID: <039cdf14-efc5-383b-3f3d-294a5ed9243e@igalia.com>
+Date:   Fri, 29 Apr 2022 16:31:00 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220429105627.GA28438@lpieralisi>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 13/30] s390/consoles: Improve panic notifiers reliability
+Content-Language: en-US
+To:     Heiko Carstens <hca@linux.ibm.com>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-14-gpiccoli@igalia.com> <YmwyjMtT7QTZiHaa@osiris>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <YmwyjMtT7QTZiHaa@osiris>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 11:56:27AM +0100, Lorenzo Pieralisi wrote:
-> On Tue, Feb 22, 2022 at 07:40:54PM +0530, Kishon Vijay Abraham I wrote:
-> > On 18/02/22 6:50 pm, Bjorn Helgaas wrote:
-> > > On Fri, Feb 18, 2022 at 04:26:48PM +0530, Kishon Vijay Abraham I wrote:
-> > >> On 01/02/22 3:35 am, Bjorn Helgaas wrote:
-> > >>> Update subject line to match previous conventions ("git log --oneline
-> > >>> drivers/pci/controller/cadence/pcie-cadence-host.c" to see).
-> > >>>
-> > >>> On Mon, Jan 31, 2022 at 01:08:27PM +0100, Christian Gmeiner wrote:
-> > >>>> This enables the Controller [RP] to automatically respond
-> > >>>> with Response/ResponseD messages.
-> > > 
-> > >>>> +static void cdns_pcie_host_enable_ptm_response(struct cdns_pcie *pcie)
-> > >>>> +{
-> > >>>> +	u32 val;
-> > >>>> +
-> > >>>> +	val = cdns_pcie_readl(pcie, CDNS_PCIE_LM_PTM_CTRL);
-> > >>>> +	cdns_pcie_writel(pcie, CDNS_PCIE_LM_PTM_CTRL, val | CDNS_PCIE_LM_TPM_CTRL_PTMRSEN);
-> > >>>
-> > >>> I assume this is some device-specific enable bit that is effectively
-> > >>> ANDed with PCI_PTM_CTRL_ENABLE in the Precision Time Measurement
-> > >>> Capability?
-> > >>
-> > >> That's correct. This bit enables Controller [RP] to respond to the
-> > >> received PTM Requests.
-> > > 
-> > > Great!  Christian, can you update the commit log to reflect that
-> > > both this bit *and* PCI_PTM_CTRL_ENABLE must be set for the RP to
-> > > respond to received PTM Requests?
-> > > 
-> > > When CDNS_PCIE_LM_TPM_CTRL_PTMRSEN is cleared, do PCI_PTM_CAP_ROOT
-> > > and the PTM Responder Capable bit (for which we don't have a #define)
-> > > read as zero?
-> > 
-> > I see both PTM Responder Capable bit and PTM Root Capable is
-> > by-default set to '1'.
+On 29/04/2022 15:46, Heiko Carstens wrote:
+> [...]
 > 
-> Without this patch applied and with no other SW setting
-> CDNS_PCIE_LM_TPM_CTRL_PTMRSEN, correct ?
+> Code looks good, and everything still seems to work. I applied this
+> internally for the time being, and if it passes testing, I'll schedule
+> it for the next merge window.
 > 
-> > root@am64xx-evm:~# devmem2 0xD000A24
-> > 
-> > /dev/mem opened.
-> > Memory mapped at address 0xffffa8980000.
-> > Read at address  0x0D000A24 (0xffffa8980a24): 0x00000406
-> > 
-> > And this bit can be programmed through the local management APB
-> > interface if required.
-> 
-> Which bit ? CDNS_PCIE_LM_TPM_CTRL_PTMRSEN ?
-> 
-> > But with this patch which enables PTM by default for RC, it
-> > wouldn't be required to clear those bits.
-> 
-> Yes but that does not comply with the specifications as Bjorn
-> pointed out below.
-> 
-> We can merge this patch but it would be good to investigate on this
-> point.
+> Thanks!
 
-I *think* this is OK.  Correct me if I'm wrong:
+Perfect Heiko, thanks a bunch for your review and tests!
+Let me know if anything breaks heh
+Cheers,
 
-  - We're talking about a Root Port.
 
-  - The Root Port's PTM Capability reads as 0x00000406 (PTM Responder
-    Capable and PTM Root Capable set).
-
-  - Without this patch, setting PTM Enable does nothing, and the Root
-    Port does not send PTM Responses.
-
-    This is the non-conforming situation because the Port claims that
-    it implements the PTM Responder role, but it can't actually be
-    enabled.
-
-  - With this patch that sets CDNS_PCIE_LM_TPM_CTRL_PTMRSEN, the PTM
-    Enable bit still powers up as zero, so the Port does not send PTM
-    Responses, but setting PTM Enable enables PTM Responses from the
-    Root Port.
-
-So I think that after setting CDNS_PCIE_LM_TPM_CTRL_PTMRSEN, the PTM
-capability works as per spec.
-
-I think the proposed subject of "Enable Controller to respond to
-received PTM Requests" is somewhat misleading, though, because PTM
-responses still aren't enabled until we set PTM Enable.  I suggest
-something like:
-
-  PCI: cadence: Allow PTM Responder to be enabled
-
-> > > I think that would be the correct behavior per PCIe r6.0, sec
-> > > 7.9.15.2, and it would avoid the confusion of having the PTM
-> > > Capability register advertise functionality that cannot be enabled via
-> > > the PTM Control register.
+Guilherme

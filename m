@@ -2,76 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1662B51513C
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:01:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E7751513E
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379373AbiD2RET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 13:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46070 "EHLO
+        id S1379372AbiD2REu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 13:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378917AbiD2RER (ORCPT
+        with ESMTP id S1379377AbiD2REj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 13:04:17 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E8714DF44
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:00:57 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id cx11-20020a17090afd8b00b001d9fe5965b3so9112498pjb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:00:57 -0700 (PDT)
+        Fri, 29 Apr 2022 13:04:39 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60045DE40
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:01:20 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id r83so6977628pgr.2
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:01:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9p9eVD7iEikBC4jxuapL3VYhAWQBtz27pVnAlOGf5zE=;
-        b=fzyXgX/Hvc4RANCjLs/z+2QFceApoWrIuJrLyV+Ogz+4rJYaG8ih8IKOKjKHHza6+K
-         1ynm/CiyQSgcS6fIHCjrXSX0OJPpf90YOogGOeKMf7/5qnJEbMVhPD8S74sLbDif7sVi
-         vFd1Zi4PDIOBfiRf0nWsGQf9xHRUCz+pSxAtsvbgpyqauE69sgNYeQL/VVUQYDhALLhA
-         KuA5yY6OIy7QNF0q2GCaKDqaJmEg4Iyk0bHQmx4tUnQEGhB+CmNvnTzFvYqOOEmONDPx
-         q2u/9OQqCKdg/QQPjitOvn5czH3chLldwTFF5/Tt8vLAOuHO4P2JXSxlCgOrk2LtcbyZ
-         bFww==
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/8ErL6BnP6C5QttTgTp9GzvHjxiM+QiRr/nJIg3XkE4=;
+        b=3AXQ4KydmCXy9v5o5uLNP2D/LCb/Ti8kCwfBEaowrO4CHjOHcBLJiSgxmff9vsVC4z
+         JlcLFy9Q+NoAIywws86MIMutchNRuBep6qA1WTb4RwBRDaSFXmjdCjq91bvubvcwG0Ce
+         cvwphaU2ZtLFVTFLTIfCnYog58BmQjfewwTvFjYOlLaSB/dL1bclqzFTBCXDUQyKDDMf
+         X1KhgmYv2L/ubL6KWcPsrMG3tB6LJnhykVjcn10JmXpcyc42PD/5so77YW8P2A1KVLvJ
+         5UWtO6zZ33qxX/P6k2H/M9anJpUw+p77IO/Bb0p8FjTlSCjupknbQI4SnObzRkJObz5u
+         GL+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9p9eVD7iEikBC4jxuapL3VYhAWQBtz27pVnAlOGf5zE=;
-        b=aXEHfVf7ymwdgfpVJyMWmxSHjNWnW20APyOFLTxXDsmok+ewwIBt258Pn5cE2zS1cY
-         /0DWA1BIkQnDWw2BOihrauv8szSVS7j+EyYU5IxWVy7px6aOlVmz8HGdD7EiPJJ0rOQt
-         VPZmhKWhCnLNmK+AEdbKXOwmcCNPrSHi624GJlVnmFkPqdASWEfETcUfFYpkVQbLaSBC
-         8OVTEDXne+xIsFvGZ05Hqc7zT0XYpP8dg9ciZjXaWzTrNhE31siGHZtFhGqmpVj6vLRI
-         iK5L/hDau1UgRMp/c/cu5fMiVVcw8RuCf+BkK6WMoRRG7/ItgLz/P3ko7cyDJGsX30cG
-         +pQQ==
-X-Gm-Message-State: AOAM533pC7D4MJLdiq1gkzyrZL6U/g2eZObGs/pYPE6q90Pn3FS+5IKd
-        07LeVjZQohs8SskxDdKejZAEog==
-X-Google-Smtp-Source: ABdhPJyg0c0xfEePFDAfiEKVwFjS/OFrsTaLMjnglwUOt9AxLJHqFm5OEEm8eUBOdTZqvAW4ZCPK3A==
-X-Received: by 2002:a17:90a:9bc6:b0:1d8:2d8e:1b97 with SMTP id b6-20020a17090a9bc600b001d82d8e1b97mr81799pjw.45.1651251656592;
-        Fri, 29 Apr 2022 10:00:56 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id o3-20020a63f143000000b003c14af5062asm6196820pgk.66.2022.04.29.10.00.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 10:00:56 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 17:00:52 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        pbonzini@redhat.com, joro@8bytes.org, jon.grimm@amd.com,
-        wei.huang2@amd.com, terry.bowman@amd.com
-Subject: Re: [PATCH v2 11/12] KVM: SVM: Do not inhibit APICv when x2APIC is
- present
-Message-ID: <YmwZxAWJ8KqHodbf@google.com>
-References: <20220412115822.14351-1-suravee.suthikulpanit@amd.com>
- <20220412115822.14351-12-suravee.suthikulpanit@amd.com>
- <3fd0aabb6288a5703760da854fd6b09a485a2d69.camel@redhat.com>
- <01460b72-1189-fef1-9718-816f2f658d42@amd.com>
- <b9ee5f62e904a690d7e2d8837ade8ece7e24a359.camel@redhat.com>
- <41b1e63ad6e45be019bbedc93bd18cfcb9475b06.camel@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/8ErL6BnP6C5QttTgTp9GzvHjxiM+QiRr/nJIg3XkE4=;
+        b=5VMUTf9818COGCF/TAEaRv2jSHXTytxOYQ8hqf267FAelr/XbEJhOFxoUilMEFHPgA
+         +8ZSFab1E4D0vm8Imm5Y/NM9FDToYu35Ow3fssv4Lz3EY9wrYF643lIw3QqMjGw95vDQ
+         XIjw2HDSXiRr1BIFzfvLThacoPeC7vHkwsYbctOT4OxKFjiIIk68Ym6ZXZwQvRNc9FZm
+         /RQj8yKi8Ojx2iPS/BibRQOvxqleorRccm7VaL2/cU3JqO3Go8mjv9EYOi5Q3dar/jsV
+         jSMYrVvPdEBC7CHEOynZuhVTZ3RgybNHtXuHjFXcH6BypY+zrbLfXieO30AfCTEbfRRm
+         vwGw==
+X-Gm-Message-State: AOAM532GaCaAGjhS5jUXShhcaM/D1HE9l9byeukp23WVVwqYXyZgwiZS
+        afcnwbA9njtDsp0rqeWpzoxhss1RXAVbpWcgS5b4uPd0ew4=
+X-Google-Smtp-Source: ABdhPJxK8MRKlKZjWavG8oR7gJ2mH52BBFfoWkuWHlQn2wWEpwlN0+7vspKLie2AvBeVUI9fwsOsI3VK+xLthfSE+qc=
+X-Received: by 2002:a65:6e0e:0:b0:399:26d7:a224 with SMTP id
+ bd14-20020a656e0e000000b0039926d7a224mr256012pgb.437.1651251680182; Fri, 29
+ Apr 2022 10:01:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <41b1e63ad6e45be019bbedc93bd18cfcb9475b06.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+References: <20220414203237.2198665-1-ira.weiny@intel.com> <20220414203237.2198665-5-ira.weiny@intel.com>
+ <20220427181942.00003492@Huawei.com> <YmsCfHf/HMuqBkTk@iweiny-server> <20220429173843.00006dcd@Huawei.com>
+In-Reply-To: <20220429173843.00006dcd@Huawei.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Fri, 29 Apr 2022 10:01:09 -0700
+Message-ID: <CAPcyv4huH2TPnVEzMmsKR=EGXv5A-4wd38M2nzRa-tkxeECV_Q@mail.gmail.com>
+Subject: Re: [PATCH V8 04/10] cxl/pci: Create auxiliary devices for each DOE mailbox
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     "Weiny, Ira" <ira.weiny@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-cxl@vger.kernel.org, Linux PCI <linux-pci@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,35 +71,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022, Maxim Levitsky wrote:
-> On Tue, 2022-04-26 at 10:06 +0300, Maxim Levitsky wrote:
-> BTW, can I ask you to check something on the AMD side of things of AVIC?
-> 
-> I noticed that AMD's manual states that:
-> 
-> "Multiprocessor VM requirements. When running a VM which has multiple virtual CPUs, and the
-> VMM runs a virtual CPU on a core which had last run a different virtual CPU from the same VM,
-> regardless of the respective ASID values, care must be taken to flush the TLB on the VMRUN using a
-> TLB_CONTROL value of 3h. Failure to do so may result in stale mappings misdirecting virtual APIC
-> accesses to the previous virtual CPU's APIC backing page."
-> 
-> It it relevant to KVM? I don't fully understand why it was mentioned that ASID doesn't matter,
-> what makes it special about 'virtual CPU from the same VM' if ASID doesn't matter? 
+On Fri, Apr 29, 2022 at 9:39 AM Jonathan Cameron
+<Jonathan.Cameron@huawei.com> wrote:
+>
+> On Thu, 28 Apr 2022 14:09:38 -0700
+> ira.weiny@intel.com wrote:
+>
+> > On Wed, Apr 27, 2022 at 06:19:42PM +0100, Jonathan Cameron wrote:
+> > > On Thu, 14 Apr 2022 13:32:31 -0700
+> > > ira.weiny@intel.com wrote:
+> > >
+> > > > From: Ira Weiny <ira.weiny@intel.com>
+> > > >
+> > > > CXL kernel drivers optionally need to access DOE mailbox capabilities.
+> > > > Access to mailboxes for things such as CDAT, SPDM, and IDE are needed by
+> > > > the kernel while other access is designed towards user space usage.  An
+> > > > example of this is for CXL Compliance Testing (see CXL 2.0 14.16.4
+> > > > Compliance Mode DOE) which offers a mechanism to set different test
+> > > > modes for a device.
+> > > >
+> > > > There is no anticipated need for the kernel to share an individual
+> > > > mailbox with user space.  Thus developing an interface to marshal access
+> > > > between the kernel and user space for a single mailbox is unnecessary
+> > > > overhead.  However, having the kernel relinquish some mailboxes to be
+> > > > controlled by user space is a reasonable compromise to share access to
+> > > > the device.
+> > > >
+> > > > The auxiliary bus provides an elegant solution for this.  Each DOE
+> > > > capability is given its own auxiliary device.  This device is controlled
+> > > > by a kernel driver by default which restricts access to the mailbox.
+> > > > Unbinding the driver from a single auxiliary device (DOE mailbox
+> > > > capability) frees the mailbox for user space access.  This architecture
+> > > > also allows a clear picture on which mailboxes are kernel controlled vs
+> > > > not.
+> > > >
+> > > > Iterate each DOE mailbox capability and create auxiliary bus devices.
+> > > > Follow on patches will define a driver for the newly created devices.
+> > > >
+> > > > sysfs shows the devices.
+> > > >
+> > > > $ ls -l /sys/bus/auxiliary/devices/
+> > > > total 0
+> > > > lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.0 -> ../../../devices/pci0000:bf/0000:bf:00.0/0000:c0:00.0/cxl_pci.doe.0
+> > > > lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.1 -> ../../../devices/pci0000:bf/0000:bf:01.0/0000:c1:00.0/cxl_pci.doe.1
+> > > > lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.2 -> ../../../devices/pci0000:35/0000:35:00.0/0000:36:00.0/cxl_pci.doe.2
+> > > > lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.3 -> ../../../devices/pci0000:35/0000:35:01.0/0000:37:00.0/cxl_pci.doe.3
+> > > > lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.4 -> ../../../devices/pci0000:35/0000:35:00.0/0000:36:00.0/cxl_pci.doe.4
+> > > > lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.5 -> ../../../devices/pci0000:bf/0000:bf:00.0/0000:c0:00.0/cxl_pci.doe.5
+> > > > lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.6 -> ../../../devices/pci0000:35/0000:35:01.0/0000:37:00.0/cxl_pci.doe.6
+> > > > lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.7 -> ../../../devices/pci0000:bf/0000:bf:01.0/0000:c1:00.0/cxl_pci.doe.7
+> > > >
+> > > > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> > >
+> > > I'm not 100% happy with effectively having one solution for CXL
+> > > and probably a different one for DOEs on switch ports
+> > > (which I just hacked into a port service driver to convince
+> > > myself there was at least one plausible way of doing that) but if
+> > > this effectively separates the two discussions then I guess I can
+> > > live with it for now ;)
+> >
+> > I took some time this morning to mull this over and talk to Dan...
+> >
+> > :-(
+> >
+> > Truthfully the aux driver does very little except provide a way for admins to
+> > trigger the driver to stop/start accessing the Mailbox.
+> >
+> > I suppose a simple sysfs interface could be done to do the same?
+> >
+> > I'll let Dan weigh in here.
+>
+> I wonder if best short term option is to not provide a means of
+> removing it at all (separate from the PCI driver that is).
+> Then we can take our time to decide on the interface if we ever
+> get much demand for one.
+>
+> >
+> > >
+> > > Once this is merged we can start the discussion about how to
+> > > handle switch ports with DOEs both for CDAT and SPDM.
+> >
+> > I'm ok with that too.  However, I was thinking that this was not a user ABI.
+> > But it really is.  If user space starts writing script to unbind drivers and
+> > then we drop the aux driver support it will break them...
+> >
+> > >
+> > > I'll send out an RFC that is so hideous it will get people to
+> > > suggestion how to do it better!
+> >
+> > I think I'd like to see that.
+>
+> Fair enough. It may muddy the waters a bit :( I'll send an RFC
+> next week.  I've not looked at how the CXL region code etc would
+> actually get to the latency / bandwidth info from the driver yet
+> it just goes as far as reading a CDAT length. I also want to actually
+> hook up some decent switch CDAT emulation in the QEMU code
+> (right now it's giving the same default table as for a type 3 device).
+>
+> I just hope we don't bikeshed around the RFC in a fashion that slows
+> this series moving forwards.
 
-I believe it's calling out that, because vCPUs from the same VM likely share an ASID,
-the magic TLB entry for the APIC-access page, which redirects to the virtual APIC page,
-will be preserved.  And so if the hypervisor doesn't flush the ASID/TLB, accelerated
-xAPIC accesses for the new vCPU will go to the previous vCPU's virtual APIC page.
+I think we have time in the sense that the worst that happens is that
+tooling picks the wrong CFMWS to dynamically create a region and the
+performance ends up being sub-optimal. That's tolerable to work around
+in userspace in the near term. I want to get some wider confidence in
+the DOE ABI with respect to the known protocols and what to do about
+the vendor-specific protocols that may conflict and will be driven
+from userspace issued config-cycles. That likely means that no DOE ABI
+is the best ABI to start which means not moving forward with
+aux-devices so scripts do not become attached to something that is not
+fully committed to being carried forward.
 
-Intel has the same requirement, though this specific scenario isn't as well documented.
-E.g. even if using EPT and VPID, the EPT still needs to be invalidated because the
-TLB can cache guest-physical mappings, which are not associated with a VPID.
-
-Huh.  I was going to say that KVM does the necessary flushes in vmx_vcpu_load_vmcs()
-and pre_svm_run(), but I don't think that's true.  KVM flushes if the _new_ VMCS/VMCB
-is being migrated to a different pCPU, but neither VMX nor SVM flush when switching
-between vCPUs that are both "loaded" on the current pCPU.
-
-Switching between vmcs01 and vmcs02 is ok, because KVM always forces a different
-EPTP, even if L1 is using shadow paging (the guest_mode bit in the role prevents
-reusing a root).  nSVM is "ok" because it flushes on every transition anyways.
+I still want to refresh the request_config_region() support for at
+least having the kernel warn on userspace conflicting configuration
+writes to config areas claimed by a driver.

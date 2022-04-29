@@ -2,216 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E1B7514EBE
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C744514EC4
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377722AbiD2POK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 11:14:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59046 "EHLO
+        id S1378121AbiD2POu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 11:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238261AbiD2POH (ORCPT
+        with ESMTP id S1378115AbiD2POn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 11:14:07 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BC3D445B
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:10:49 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 17so10903870lji.1
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:10:49 -0700 (PDT)
+        Fri, 29 Apr 2022 11:14:43 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D0B8D4470
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:11:24 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id w1so14603568lfa.4
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:11:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=pBiFdJVBK7XJGcpZMBcNpezNa6QIqErstaAn3kJpmDo=;
-        b=dZwSRZ2uUt8/WpZywemY6gH9zX1bSy62uuhUOu5pOWQT+dn18k2SDQQu6GJeCR1fmI
-         B9i/eUnvM463HnUn9gPQ4mIHvkU2iyDkHZb6gVT4C6czaSHmrvBGn8LgplqbU9XWyyGU
-         J4w9GZKmjIVcfqj51GhpnuXtNWhRwHVmfxq8rrhs2c+yKxtv/p5YTOUohXke7TESuHwl
-         ngFhgzPPHRJotN6GR9+KG4f0FM0F+tyMW9UsJtBUtKHgKcdM7uXUD7PlGvKOFStGFvkC
-         ZRhqVMfg6QSxwiqmYL54PQdkBEtWRtax0cv5wzeGjGXGRBFFqty9gQWjVObdZ5Jwma+l
-         W+wA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=TvFsyI7NAksekaViwUx4f2psKYTKDusGU6diNyW4wEY=;
+        b=T8o72y8HKqohLMREw3MtTyqotxs7B5HFBhFLyKmIfaTKxZBXu3ZutL0Azktumql+b5
+         4pG5NpDWFKiFDQ/LQrOkkRzRjQQEH7WrNV9Dzvqi5uslhe85raPC2PNEwxQWMwSdKLaO
+         rBXloVU9g6kkznIBzursT9frKbk8tXM5outfJOSwUdjcjyU7M8MASSYi9udAUWb2JnPX
+         8IE8WLsna9DNKNt0MrnaCBVVhsJNp2FlRs5DL8COBeTLr1jHddjAbDoMk9VbGWWKCsgh
+         svs8h7vojmZkbRP3cIw0c0Bhg5cYnssId94RwzAcqvNZrt0+nvYzwI9pvAZgpEl/JqWU
+         7diw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=pBiFdJVBK7XJGcpZMBcNpezNa6QIqErstaAn3kJpmDo=;
-        b=Hn+N2ZI3k0VYHgDPuHdOzJaxJWiLMZQWs/9TJ0EsQQFtcnI7/Jx/8HOu7RtTKdMrmD
-         rMi4+avhJ8NIk+7BW6aMXF2McJNPtPp8wNC6oU67pmfZY5sJFSI8YIyhkqw8dji3paGT
-         w9jqzdvAwjOHtml97Qa0EWOIgG8f+sFoXS6eBrC2cBbw6W2L6IeoB1bims2DSSuI/qCw
-         t/2djmx4LE4bM14sDS+hpiA8LFChT+eDlqIZy1flRzfUIlcXIGwPBIpZMpVgFxpHNaeq
-         Pjkeozv3MSeKzUoZGhV+bGGk1G73tC1AFj7t8obKBfx028HfnMvhIz9kVV1aF81YC1u1
-         fHgQ==
-X-Gm-Message-State: AOAM531wQqcJJ7HDdNMzQrLxam8WxMGoOP7JOJOHDRHxw6yLyypHRqG8
-        6xvXdh20SzXr5WswIl34l+BSGW9/lJM=
-X-Google-Smtp-Source: ABdhPJwIjn/TgfjiVJ+PFQMmSwVNO9odm3G/qZjzSdU0Ck0X7LMwl8OoTfIdYYrpdzx9s+oxgWnlKg==
-X-Received: by 2002:a2e:9e8e:0:b0:24a:d2d4:4509 with SMTP id f14-20020a2e9e8e000000b0024ad2d44509mr24544459ljk.69.1651245047368;
-        Fri, 29 Apr 2022 08:10:47 -0700 (PDT)
-Received: from [192.168.1.7] ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id i14-20020a198c4e000000b0044a279d25d2sm258572lfj.244.2022.04.29.08.10.46
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=TvFsyI7NAksekaViwUx4f2psKYTKDusGU6diNyW4wEY=;
+        b=SqS/MejHBrZBMcbMrBNoOnHLObqNmgq5M6Qmn08OJteg/JkEwzQpsi2LkiwchYLikD
+         d/BIz0I2qoUnF0o4fN970mBDjh8TxvvJKzNov2r1KQwb31L0Fvpl/ItyOFfvjPTSKFsK
+         mwLn1AUmDwqUS8glHpN+oWSi9YrQc7r8ao4xKP5HcMIw617gj0p73rU0pePJVEwgACBk
+         WX9X2dhXmAlNGUqnfpGKgvFFiIVvaWH4OJUJUuCIRtSZthzGjS+GsG6nvz06xqmYCoMX
+         OPHQF198dDEF/pmXi7Dte4nz9o/rSYkhhkzUl/grQ/iPok16IPY/f8JSrSnvn7fUYi17
+         I8hQ==
+X-Gm-Message-State: AOAM5308x6qAjmpFYEbaMCBJiIv50afbs/EJLWyEqun2VUgzFtOclWYH
+        KzA5B1TCkx9SAR1lZo3u9CsiNQ==
+X-Google-Smtp-Source: ABdhPJxRjwQAnlbxeqaHOGvshYhAXFOvclIamfeS7o45Me22vXNEXn5PNl4tpW2ISRMWPCvf3MslZQ==
+X-Received: by 2002:ac2:4c53:0:b0:471:a9db:5d15 with SMTP id o19-20020ac24c53000000b00471a9db5d15mr28179347lfk.634.1651245083092;
+        Fri, 29 Apr 2022 08:11:23 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id l6-20020a2e9086000000b0024f3d1daf04sm286705ljg.140.2022.04.29.08.11.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 08:10:46 -0700 (PDT)
-Subject: Re: [PATCH v2 19/19] xen/xenbus: eliminate xenbus_grant_ring()
-To:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
-        linux-kernel@vger.kernel.org
-Cc:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>
-References: <20220428082743.16593-1-jgross@suse.com>
- <20220428082743.16593-20-jgross@suse.com>
-From:   Oleksandr <olekstysh@gmail.com>
-Message-ID: <bf14e3e1-fc4d-1eee-1dfb-1ba3423f0b6f@gmail.com>
-Date:   Fri, 29 Apr 2022 18:10:45 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Fri, 29 Apr 2022 08:11:22 -0700 (PDT)
+Message-ID: <f260cf81-9db9-710b-1242-45a232e7c7c4@linaro.org>
+Date:   Fri, 29 Apr 2022 18:11:21 +0300
 MIME-Version: 1.0
-In-Reply-To: <20220428082743.16593-20-jgross@suse.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 2/2] ARM: dts: qcom: replace gcc PXO with pxo_board fixed
+ clock
+Content-Language: en-GB
+To:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220429122951.13828-1-ansuelsmth@gmail.com>
+ <20220429122951.13828-3-ansuelsmth@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220429122951.13828-3-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Content-Language: en-US
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 29/04/2022 15:29, Ansuel Smith wrote:
+> Replace gcc PXO phandle to pxo_board fixed clock declared in the dts.
+> gcc driver doesn't provide PXO_SRC as it's a fixed-clock. This cause a
+> kernel panic if any driver actually try to use it.
+> 
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 
-On 28.04.22 11:27, Juergen Gross wrote:
+Fixes: 40cf5c884a96 ("ARM: dts: qcom: add L2CC and RPM for IPQ8064")
 
+It would be nice if you add Fixes tags to your patches in future. Fixes 
+tags allow picking up patches for stable/LTS trees.
 
-Hello Juergen
+For these two patches I'd suggest reordering them. A fix should go first 
+(you'll have to define pxa_board label in it). It can then be accepted 
+into other kernel without dependency on the other patch.
 
+The gcc patch will come next, it will define cxo_board label and use 
+both clocks in the gcc node. It is not fixing a bug, so there is no need 
+about backporting it.
 
-> There is no external user of xenbus_grant_ring() left, so merge it into
-> the only caller xenbus_setup_ring().
->
-> Signed-off-by: Juergen Gross <jgross@suse.com>
+Generic rule: fixes go first (in the patch series), so that they have 
+minimum inter-dependencies.
+
 > ---
-> V2:
-> - make error message more precise (Andrew Cooper)
-> ---
->   drivers/xen/xenbus/xenbus_client.c | 65 +++++++++---------------------
->   include/xen/xenbus.h               |  2 -
->   2 files changed, 19 insertions(+), 48 deletions(-)
->
-> diff --git a/drivers/xen/xenbus/xenbus_client.c b/drivers/xen/xenbus/xenbus_client.c
-> index 1a2e0d94ccd1..d6fdd2d209d3 100644
-> --- a/drivers/xen/xenbus/xenbus_client.c
-> +++ b/drivers/xen/xenbus/xenbus_client.c
-> @@ -363,50 +363,6 @@ static void xenbus_switch_fatal(struct xenbus_device *dev, int depth, int err,
->   		__xenbus_switch_state(dev, XenbusStateClosing, 1);
->   }
->   
-> -/**
-> - * xenbus_grant_ring
-> - * @dev: xenbus device
-> - * @vaddr: starting virtual address of the ring
-> - * @nr_pages: number of pages to be granted
-> - * @grefs: grant reference array to be filled in
-> - *
-> - * Grant access to the given @vaddr to the peer of the given device.
-> - * Then fill in @grefs with grant references.  Return 0 on success, or
-> - * -errno on error.  On error, the device will switch to
-> - * XenbusStateClosing, and the error will be saved in the store.
-> - */
-> -int xenbus_grant_ring(struct xenbus_device *dev, void *vaddr,
-> -		      unsigned int nr_pages, grant_ref_t *grefs)
-> -{
-> -	int err;
-> -	unsigned int i;
-> -	grant_ref_t gref_head;
-> -
-> -	err = gnttab_alloc_grant_references(nr_pages, &gref_head);
-> -	if (err) {
-> -		xenbus_dev_fatal(dev, err, "granting access to ring page");
-> -		return err;
-> -	}
-> -
-> -	for (i = 0; i < nr_pages; i++) {
-> -		unsigned long gfn;
-> -
-> -		if (is_vmalloc_addr(vaddr))
-> -			gfn = pfn_to_gfn(vmalloc_to_pfn(vaddr));
-> -		else
-> -			gfn = virt_to_gfn(vaddr);
-> -
-> -		grefs[i] = gnttab_claim_grant_reference(&gref_head);
-> -		gnttab_grant_foreign_access_ref(grefs[i], dev->otherend_id,
-> -						gfn, 0);
-> -
-> -		vaddr = vaddr + XEN_PAGE_SIZE;
-> -	}
-> -
-> -	return 0;
-> -}
-> -EXPORT_SYMBOL_GPL(xenbus_grant_ring);
-> -
->   /*
->    * xenbus_setup_ring
->    * @dev: xenbus device
-> @@ -424,6 +380,7 @@ int xenbus_setup_ring(struct xenbus_device *dev, gfp_t gfp, void **vaddr,
->   		      unsigned int nr_pages, grant_ref_t *grefs)
->   {
->   	unsigned long ring_size = nr_pages * XEN_PAGE_SIZE;
-> +	grant_ref_t gref_head;
->   	unsigned int i;
->   	int ret;
->   
-> @@ -433,9 +390,25 @@ int xenbus_setup_ring(struct xenbus_device *dev, gfp_t gfp, void **vaddr,
->   		goto err;
->   	}
->   
-> -	ret = xenbus_grant_ring(dev, *vaddr, nr_pages, grefs);
-> -	if (ret)
-> +	ret = gnttab_alloc_grant_references(nr_pages, &gref_head);
-> +	if (ret) {
-> +		xenbus_dev_fatal(dev, ret, "granting access to %u ring pages",
-> +				 nr_pages);
->   		goto err;
-> +	}
-> +
-> +	for (i = 0; i < nr_pages; i++) {
-> +		unsigned long gfn;
-> +
-> +		if (is_vmalloc_addr(*vaddr))
-> +			gfn = pfn_to_gfn(vmalloc_to_pfn(vaddr[i]));
-> +		else
-> +			gfn = virt_to_gfn(vaddr[i]);
-> +
-> +		grefs[i] = gnttab_claim_grant_reference(&gref_head);
+>   arch/arm/boot/dts/qcom-ipq8064.dtsi | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> index 9817448cfa95..ad30f7c8a5a7 100644
+> --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> @@ -784,7 +784,7 @@ tcsr: syscon@1a400000 {
+>   		l2cc: clock-controller@2011000 {
+>   			compatible = "qcom,kpss-gcc", "syscon";
+>   			reg = <0x2011000 0x1000>;
+> -			clocks = <&gcc PLL8_VOTE>, <&gcc PXO_SRC>;
+> +			clocks = <&gcc PLL8_VOTE>, <&pxo_board>;
+>   			clock-names = "pll8_vote", "pxo";
+>   			clock-output-names = "acpu_l2_aux";
+>   		};
 
-gnttab_claim_grant_reference() can return error if no free grant 
-reference remains.
-
-I understand this patch only moves the code, but probably it would be 
-better to add a missing check here (and likely rollback already 
-processed grants if any?).
-
-
-
-> +		gnttab_grant_foreign_access_ref(grefs[i], dev->otherend_id,
-> +						gfn, 0);
-> +	}
->   
->   	return 0;
->   
-> diff --git a/include/xen/xenbus.h b/include/xen/xenbus.h
-> index b533b4adc835..eaa932b99d8a 100644
-> --- a/include/xen/xenbus.h
-> +++ b/include/xen/xenbus.h
-> @@ -224,8 +224,6 @@ int xenbus_watch_pathfmt(struct xenbus_device *dev, struct xenbus_watch *watch,
->   			 const char *pathfmt, ...);
->   
->   int xenbus_switch_state(struct xenbus_device *dev, enum xenbus_state new_state);
-> -int xenbus_grant_ring(struct xenbus_device *dev, void *vaddr,
-> -		      unsigned int nr_pages, grant_ref_t *grefs);
->   int xenbus_setup_ring(struct xenbus_device *dev, gfp_t gfp, void **vaddr,
->   		      unsigned int nr_pages, grant_ref_t *grefs);
->   void xenbus_teardown_ring(void **vaddr, unsigned int nr_pages,
 
 -- 
-Regards,
-
-Oleksandr Tyshchenko
-
+With best wishes
+Dmitry

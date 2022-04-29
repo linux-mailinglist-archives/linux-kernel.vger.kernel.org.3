@@ -2,153 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 637A5515286
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88CAA5152F9
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379773AbiD2Rqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 13:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52850 "EHLO
+        id S1379822AbiD2RwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 13:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355320AbiD2Rqf (ORCPT
+        with ESMTP id S1379817AbiD2Rv7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 13:46:35 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4955939A3;
-        Fri, 29 Apr 2022 10:43:16 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TGGkF3005014;
-        Fri, 29 Apr 2022 17:43:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=1AZ+KFh/rzC4r2O+HkoiofULh4tefGIG3w3U8CMIGDY=;
- b=RlJATUCivjsHEH2igqJjQ2/vXzL84l6GzfT/UqqXUKsGmL8JZMnk9KIinHfOIeP75Pd5
- yb8Oovgqocptg9viiFLwWT/v0xgofzfU2s/OxA7sqKunk3+AQfhMf62QSLOD3m7kQDf/
- Z7Ox17Hw1xpAmJI3NnxMenPisv8mp55WPzCjZsJjZZetEuQRi/Y+SesIurwoOIiYJoOP
- LNRnSvFe3hRGyuTysgHlQzGYT94ClPeTHpDQRdpLONX3JUN6O18uiNypZFLNDIEQ6cnh
- An0+jBOUCKP6yeiuHm2Fnwkv5MncbpTv/SAc1DenbAu6l+d9cunxZt/dfYBnYVy8CQ1o mA== 
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqu6p9x11-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 17:43:13 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23THbmKr006745;
-        Fri, 29 Apr 2022 17:43:12 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma02dal.us.ibm.com with ESMTP id 3fm93anx4c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 17:43:12 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23THhBAl14418310
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 29 Apr 2022 17:43:11 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 93465BE059;
-        Fri, 29 Apr 2022 17:43:11 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 34295BE05D;
-        Fri, 29 Apr 2022 17:43:11 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 29 Apr 2022 17:43:11 +0000 (GMT)
-Message-ID: <d3f6dad3-3f0a-481d-3067-36c0a4ea279f@linux.ibm.com>
-Date:   Fri, 29 Apr 2022 13:42:55 -0400
+        Fri, 29 Apr 2022 13:51:59 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EBC1D4C6F;
+        Fri, 29 Apr 2022 10:48:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651254520; x=1682790520;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5nf6dQ2n0VV5pIH0jfSN6QopQJy5UODqlRTGczslSjk=;
+  b=bwzv6/E3Bb+l62kp1snAABw1w9xTYoLBL4TQnL5FnIA5udFG7HwbsZSb
+   9SDiHGaH31NJfBqKdJHVovi7tQSj2hgTvmyUowWaoEwCC4x0aW6FFtVaF
+   nf3Fl2exD+hcvyIVXhSWguWPhJpmMirQy+a4a4mXcvrz9998f6C9MBfMQ
+   +9hxdht1uDA9/BaVjzJLUdlgx6ptOJJT5Sb0QegcU0YXzZB5qP/Se9wpZ
+   4LwnlLRoiUK1hj/LrfudLSxKw2C5KZLYfM5peOknjes1H2XW/PXqdxhZz
+   W5UdMoqJBh0L1j9HKGUhT+lNovcK4/v4WIRP1zQxcvTXZerd/yExySxyM
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="266545761"
+X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
+   d="scan'208";a="266545761"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 10:46:40 -0700
+X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
+   d="scan'208";a="582296660"
+Received: from jinggu-mobl1.amr.corp.intel.com (HELO [10.212.30.227]) ([10.212.30.227])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 10:46:39 -0700
+Message-ID: <c875fc4a-c3c0-dab1-c7cb-525b0bff5ae3@intel.com>
+Date:   Fri, 29 Apr 2022 10:46:56 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v8 7/7] fsverity: update the documentation
+Subject: Re: [PATCH v3 13/21] x86/virt/tdx: Allocate and set up PAMTs for
+ TDMRs
 Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220429112601.1421947-1-zohar@linux.ibm.com>
- <20220429112601.1421947-8-zohar@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20220429112601.1421947-8-zohar@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+References: <cover.1649219184.git.kai.huang@intel.com>
+ <ffc2eefdd212a31278978e8bfccd571355db69b0.1649219184.git.kai.huang@intel.com>
+ <c9b17e50-e665-3fc6-be8c-5bb16afa784e@intel.com>
+ <3664ab2a8e0b0fcbb4b048b5c3aa5a6e85f9618a.camel@intel.com>
+ <5984b61f-6a4a-c12a-944d-f4a78bdefc3d@intel.com>
+ <Ymv2h1GYCMQ9ZQvJ@google.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <Ymv2h1GYCMQ9ZQvJ@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 3IlPq9HPSo5ooC5ZOneflsv1WG9s3ASS
-X-Proofpoint-ORIG-GUID: 3IlPq9HPSo5ooC5ZOneflsv1WG9s3ASS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-29_08,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- spamscore=0 malwarescore=0 adultscore=0 mlxlogscore=947 priorityscore=1501
- suspectscore=0 phishscore=0 clxscore=1015 mlxscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204290088
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/29/22 07:26, Mimi Zohar wrote:
-> Update the fsverity documentation related to IMA signature support.
+On 4/29/22 07:30, Sean Christopherson wrote:
+> On Fri, Apr 29, 2022, Dave Hansen wrote:
+...
+>> A *good* way (although not foolproof) is to launch a TDX VM early
+>> in boot before memory gets fragmented or consumed.  You might even
+>> want to recommend this in the documentation.
 > 
-> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> ---
->   Documentation/filesystems/fsverity.rst | 35 +++++++++++++++++---------
->   1 file changed, 23 insertions(+), 12 deletions(-)
-> 
-> diff --git a/Documentation/filesystems/fsverity.rst b/Documentation/filesystems/fsverity.rst
-> index 8cc536d08f51..b7d42fd65e9d 100644
-> --- a/Documentation/filesystems/fsverity.rst
-> +++ b/Documentation/filesystems/fsverity.rst
-> @@ -70,12 +70,23 @@ must live on a read-write filesystem because they are independently
->   updated and potentially user-installed, so dm-verity cannot be used.
->   
->   The base fs-verity feature is a hashing mechanism only; actually
-> -authenticating the files is up to userspace.  However, to meet some
-> -users' needs, fs-verity optionally supports a simple signature
-> -verification mechanism where users can configure the kernel to require
-> -that all fs-verity files be signed by a key loaded into a keyring; see
-> -`Built-in signature verification`_.  Support for fs-verity file hashes
-> -in IMA (Integrity Measurement Architecture) policies is also planned.
-> +authenticating the files may be done by:
-> +
-> +* Userspace-only
-> +
-> +* Builtin signature verification + userspace policy
-> +
-> +  fs-verity optionally supports a simple signature verification
-> +  mechanism where users can configure the kernel to require that
-> +  all fs-verity files be signed by a key loaded into a keyring;
-> +  see `Built-in signature verification`_.
-> +
-> +* Integrity Measurement Architecture (IMA)
-> +
-> +  IMA supports including fs-verity file digests and signatures in the
-> +  IMA measurement list and verifying fs-verity based file signatures
-> +  stored as security.ima xattrs, based on policy.
-> +
->   
->   User API
->   ========
-> @@ -653,12 +664,12 @@ weren't already directly answered in other parts of this document.
->       hashed and what to do with those hashes, such as log them,
->       authenticate them, or add them to a measurement list.
->   
-> -    IMA is planned to support the fs-verity hashing mechanism as an
-> -    alternative to doing full file hashes, for people who want the
-> -    performance and security benefits of the Merkle tree based hash.
-> -    But it doesn't make sense to force all uses of fs-verity to be
-> -    through IMA.  As a standalone filesystem feature, fs-verity
-> -    already meets many users' needs, and it's testable like other
-> +    IMA supports the fs-verity hashing mechanism as an alternative
-> +    to full file hashes, for those who want the performance and
-> +    security benefits of the Merkle tree based hash.  However, it
-> +    doesn't make sense to force all uses of fs-verity to be through
-> +    IMA.  fs-verity already meets many users' needs even as a
-> +    standalone filesystem feature, and it's testable like other
->       filesystem features e.g. with xfstests.
->   
->   :Q: Isn't fs-verity useless because the attacker can just modify the
+> What about providing a kernel param to tell the kernel to do the
+> allocation during boot?
 
-Acked-by: Stefan Berger <stefanb@linux.ibm.com>
+I think that's where we'll end up eventually.  But, I also want to defer
+that discussion until after we have something merged.
+
+Right now, allocating the PAMTs precisely requires running the TDX
+module.  Running the TDX module requires VMXON.  VMXON is only done by
+KVM.  KVM isn't necessarily there during boot.  So, it's hard to do
+precisely today without a bunch of mucking with VMX.
+
+But, it would be really easy to do something less precise like:
+
+	tdx_reserve_ratio=255
+
+...
+
+u8 *pamt_reserve[MAX_NR_NODES]
+
+	for_each_online_node(n) {
+		pamt_pages = (node_spanned_pages(n)/tdx_reserve_ratio) /
+			     PAGE_SIZE;
+		pamt_reserve[n] = alloc_bootmem([pamt_pages);
+	}
+
+Then have the TDX code use pamt_reserve[] instead of allocating more
+memory when it is needed later.
+
+That will work just fine as long as you know up front how much metadata
+TDX needs.  If the metadata requirements change in an updated TDX
+module, the command-line will need to be updated to regain the
+guarantee.  But, it can still fall back to the best-effort code that is
+ in the series today.
+
+In other words, I think we want what is in the series today no matter
+what, and we'll want it forever.  That's why it's the *one* way of doing
+things now.  I entirely agree that there will be TDX users that want a
+stronger guarantee.
+
+You can arm-wrestle the distro folks who hate adding command-line tweaks
+when the time comes. ;)

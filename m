@@ -2,361 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D922D514C48
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09140514C66
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377049AbiD2OJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 10:09:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
+        id S1349846AbiD2OLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 10:11:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377115AbiD2OJb (ORCPT
+        with ESMTP id S1377154AbiD2OLR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 10:09:31 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FA1D117B;
-        Fri, 29 Apr 2022 07:01:10 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TBDTcs021204;
-        Fri, 29 Apr 2022 13:51:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=DSYmU2KyqXgcAYYRjyeArvgju810FAKBNpHnSvEJAOk=;
- b=VSKE1evyZCC76igMGiQhDdrXgKlUgBp9E4rGzJEMpEl+r+FtKKRfe0GPBelcbfDoI0OA
- pRQpK3XIySZFZUERD0SEKUK0/vB45gjEvQzoPFu4j8SW7xV1PjEbwCmpWf2Xz8p1mFnX
- 5VN3qOC/XfXyoYEdC2S9NAubnSDDwSluJP+FTgGde/6/pnY15+3EcfzeIY+PqXq0RBSp
- fieeTMm7OY5w9Ex+S0DzS95m9wLf3d5YarZBjvL6Eo4T8UhJmzoQJFAGizulSJF0DArR
- KwLnXgutqDPaWsvAYuiCMR24XDxm2ycWIVax7pwi3QMgnfd0T2bWQ7Ablex/adugEKiH jQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fr27h15yk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 13:51:17 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23TDm9iZ018377;
-        Fri, 29 Apr 2022 13:51:16 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fr27h15xf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 13:51:16 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TDS7M1025989;
-        Fri, 29 Apr 2022 13:51:14 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma05fra.de.ibm.com with ESMTP id 3fm938yafv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 13:51:13 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TDc24F51577340
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 29 Apr 2022 13:38:02 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 418974C044;
-        Fri, 29 Apr 2022 13:51:11 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 32F8D4C040;
-        Fri, 29 Apr 2022 13:51:10 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 29 Apr 2022 13:51:10 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-        linux-alpha@vger.kernel.org (open list:ALPHA PORT),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM PORT),
-        linux-ia64@vger.kernel.org (open list:IA64 (Itanium) PLATFORM),
-        linux-m68k@lists.linux-m68k.org (open list:M68K ARCHITECTURE),
-        linux-mips@vger.kernel.org (open list:MIPS),
-        linux-parisc@vger.kernel.org (open list:PARISC ARCHITECTURE),
-        linuxppc-dev@lists.ozlabs.org (open list:LINUX FOR POWERPC (32-BIT AND
-        64-BIT)),
-        linux-riscv@lists.infradead.org (open list:RISC-V ARCHITECTURE),
-        linux-sh@vger.kernel.org (open list:SUPERH),
-        sparclinux@vger.kernel.org (open list:SPARC + UltraSPARC
-        (sparc/sparc64))
-Subject: [RFC v2 01/39] Kconfig: introduce HAS_IOPORT option and select it as necessary
-Date:   Fri, 29 Apr 2022 15:49:59 +0200
-Message-Id: <20220429135108.2781579-2-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220429135108.2781579-1-schnelle@linux.ibm.com>
-References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
+        Fri, 29 Apr 2022 10:11:17 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F84685944
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:07:23 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220429135334euoutp01d4bfca43955b6db73f3fd383e46141fe~qYmiIRWoS0325003250euoutp01j
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:53:34 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220429135334euoutp01d4bfca43955b6db73f3fd383e46141fe~qYmiIRWoS0325003250euoutp01j
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1651240414;
+        bh=0VAhn2JbS8HsCUQk6e21RHHU2VGIiodKXd5WObE+o0s=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=hkHitVgRdfRDiMgKa05w/C3LEsrMhxxr2NYgBjyGwdQ5Oe+Y6brGktwi89nA/zxuC
+         8TITMBiOBlZjPyFCG5Hf2wvf7DDeReUuK2GEL2nfzby74tWgur6XglbNX0PqtgUPPp
+         gXCbWWuNwDTUJcOcg3oXgmPKXTT6L1vpupkC8pWo=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220429135334eucas1p1abf0f1f46a376a73d660515541a96631~qYmh5BO143245632456eucas1p1V;
+        Fri, 29 Apr 2022 13:53:34 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id AE.0E.10009.EDDEB626; Fri, 29
+        Apr 2022 14:53:34 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220429135333eucas1p2283a518d0f595d2101e662af4878dc99~qYmhlrMNI0878208782eucas1p2j;
+        Fri, 29 Apr 2022 13:53:33 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220429135333eusmtrp26ec90e961dd9caf6df74cb144b53d0a3~qYmhk9ZAm2499424994eusmtrp2M;
+        Fri, 29 Apr 2022 13:53:33 +0000 (GMT)
+X-AuditID: cbfec7f2-e95ff70000002719-81-626bedde3dec
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 47.B8.09522.DDDEB626; Fri, 29
+        Apr 2022 14:53:33 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220429135333eusmtip2495b17828f100ae10d2d1482eaad124b~qYmg7jDsY1977219772eusmtip2T;
+        Fri, 29 Apr 2022 13:53:33 +0000 (GMT)
+Message-ID: <51dfc4a0-f6cf-092f-109f-a04eeb240655@samsung.com>
+Date:   Fri, 29 Apr 2022 15:53:33 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: -P9J6AB2n6AMBUugkA7mMRpNV34BmBS_
-X-Proofpoint-GUID: RcRk9MDBXbun4qDsErZKbZJh7zT5Xep-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-29_06,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- clxscore=1011 adultscore=0 priorityscore=1501 mlxlogscore=804
- suspectscore=0 malwarescore=0 spamscore=0 phishscore=0 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204290078
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.8.0
+Subject: Re: [PATCH printk v5 1/1] printk: extend console_lock for
+ per-console locking
+Content-Language: en-US
+To:     John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-amlogic@lists.infradead.org
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <87fslyv6y3.fsf@jogness.linutronix.de>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrJKsWRmVeSWpSXmKPExsWy7djPc7r33mYnGazs57JoXryezWLblfmM
+        Fgtmc1tc3jWHzeL/46+sFvs6HjBZ7N64iM1i86apzA4cHrMbLrJ4tOy7xe7x7tw5do/9c9ew
+        e2xeUu+xfstVFo/Pm+QC2KO4bFJSczLLUov07RK4Ms79/s1ccEKiov/pHvYGxufCXYycHBIC
+        JhKLl3czdjFycQgJrGCUuN08mR3C+cIo8XZCL5TzmVFix7+nbDAty3f2sEAkljNKPFx2Bqr/
+        I6PE+mcNjCBVvAJ2EgvXLwazWQRUJRYebWeDiAtKnJz5hAXEFhVIkpi77x5zFyMHh7BAhETb
+        3lCQMLOAuMStJ/OZQGwRAW+JVa/3gl3BLPCVUWLy5P9gM9kEDCW63naBzeQUMJZ4uv4hI0Sz
+        vMT2t3OYQRokBL5wSKydeoAR4mwXiUddD1kgbGGJV8e3sEPYMhL/d4Js4wCy8yX+zjCGCFdI
+        XHu9hhnCtpa4c+4XG0gJs4CmxPpd+hBhR4kpv/rYITr5JG68FYS4gE9i0rbpzBBhXomONiGI
+        ajWJWcfXwe08eOES8wRGpVlIYTILyfOzkPwyC2HvAkaWVYziqaXFuempxYZ5qeV6xYm5xaV5
+        6XrJ+bmbGIGp6fS/4592MM599VHvECMTB+MhRgkOZiUR3i+7M5KEeFMSK6tSi/Lji0pzUosP
+        MUpzsCiJ8yZnbkgUEkhPLEnNTk0tSC2CyTJxcEo1MAlofIl+KWTe13zsR3qs9r3Uxo36ujOb
+        90m/4o/hj4ib/ldurvfb399+mbCWH/27P6J+0s83m/a8n3zVZ+bdV2nr1gHVBM96d4/1hrPt
+        up3vTuWG7X/4favSnnRd/txP914G9icZ/M3XvNhmkjTl8qVgqSsOlV3v7zlnZXqIF9U3XJwU
+        sUA/6GGKjnaHGfOK6rWJMfGP5B9GdXaYxdfWTDq/1/rv1O0J1qtq1m4w+mrgfG5DzR2vgHVi
+        bct0cqUnnl4Y9Tk4attunmiZRsZYT5tpAR+1H4msrTtgFnv06MMNbL+WJk57lPPog8UB80KH
+        oyIHnNV/ZGTFb1zrfYQ3IMh9ysyzqkuMhOSqDcyeKbEUZyQaajEXFScCAGzC46a8AwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrHIsWRmVeSWpSXmKPExsVy+t/xe7p332YnGex+qmvRvHg9m8W2K/MZ
+        LRbM5ra4vGsOm8X/x19ZLfZ1PGCy2L1xEZvF5k1TmR04PGY3XGTxaNl3i93j3blz7B77565h
+        99i8pN5j/ZarLB6fN8kFsEfp2RTll5akKmTkF5fYKkUbWhjpGVpa6BmZWOoZGpvHWhmZKunb
+        2aSk5mSWpRbp2yXoZZz7/Zu54IRERf/TPewNjM+Fuxg5OSQETCSW7+xh6WLk4hASWMooMfnY
+        IjaIhIzEyWkNrBC2sMSfa11sEEXvGSU6p59iAUnwCthJLFy/mBHEZhFQlVh4tJ0NIi4ocXLm
+        E7AaUYEkiRfbngPVcHAIC0RIvO8FCzMLiEvcejKfCcQWEfCWWPV6LzvIfGaBr4wSaz88Y4RY
+        dplZ4tet+WBD2QQMJbredoHZnALGEk/XP2SEmGQm0bW1C8qWl9j+dg7zBEahWUjumIVk4Swk
+        LbOQtCxgZFnFKJJaWpybnltsqFecmFtcmpeul5yfu4kRGJHbjv3cvINx3quPeocYmTgYDzFK
+        cDArifB+2Z2RJMSbklhZlVqUH19UmpNafIjRFBgYE5mlRJPzgSkhryTe0MzA1NDEzNLA1NLM
+        WEmc17OgI1FIID2xJDU7NbUgtQimj4mDU6qBKZBBouX97N41pg6u0+Z0piw1O9KY53Q/Zypb
+        16t23v6rpZ+Sz/uvs3u2Z9bj27HRc0TtZ/2/pyxw+e68OStefKli3i3c4Mpq+2p9E7d0+p/S
+        6TymAdzrtfO+MzzaFizxivOV1Mu0bU/9BJ5dST7vsOjJ/daSREM5Y8HshY8Xb134e5ag3f0r
+        07kDml9/TzPlOnNs/i7lBNfDB9fX3J0veLXztfPqsp0SdXO0Z67fzXmb9c+eqsn/Tsyzuvkp
+        NpWp+8Dfltzr3GV1bS+WzheUSqmVXqC/s+LvjPY4jRnllkLvd27RKXQ8fPPBr2UT/557Pr/o
+        dll54OacLSu4Wmcc/ByZ22r6+lfbuo6PRlkfTkxWYinOSDTUYi4qTgQArtAwzFEDAAA=
+X-CMS-MailID: 20220429135333eucas1p2283a518d0f595d2101e662af4878dc99
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c
+References: <20220421212250.565456-1-john.ogness@linutronix.de>
+        <20220421212250.565456-15-john.ogness@linutronix.de>
+        <878rrs6ft7.fsf@jogness.linutronix.de> <Ymfgis0EAw0Oxoa5@alley>
+        <Ymfwk+X0CHq6ex3s@alley>
+        <CGME20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c@eucas1p2.samsung.com>
+        <2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com> <Ymjy3rHRenba7r7R@alley>
+        <b6c1a8ac-c691-a84d-d3a1-f99984d32f06@samsung.com>
+        <87fslyv6y3.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We introduce a new HAS_IOPORT Kconfig option to indicate support for
-I/O Port access. In a future patch HAS_IOPORT=n will disable compilation
-of the I/O accessor functions inb()/outb() and friends on architectures
-which can not meaningfully support legacy I/O spaces such as s390 or
-where such support is optional. The "depends on" relations on HAS_IOPORT
-in drivers as well as ifdefs for HAS_IOPORT specific sections will be
-added in subsequent patches on a per subsystem basis.
+Hi John,
 
-Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
----
- arch/alpha/Kconfig      | 1 +
- arch/arm/Kconfig        | 1 +
- arch/arm64/Kconfig      | 1 +
- arch/ia64/Kconfig       | 1 +
- arch/m68k/Kconfig       | 1 +
- arch/microblaze/Kconfig | 1 +
- arch/mips/Kconfig       | 1 +
- arch/parisc/Kconfig     | 1 +
- arch/powerpc/Kconfig    | 1 +
- arch/riscv/Kconfig      | 1 +
- arch/sh/Kconfig         | 1 +
- arch/sparc/Kconfig      | 1 +
- arch/x86/Kconfig        | 1 +
- drivers/bus/Kconfig     | 2 +-
- lib/Kconfig             | 4 ++++
- lib/Kconfig.kgdb        | 1 +
- 16 files changed, 19 insertions(+), 1 deletion(-)
+On 27.04.2022 18:15, John Ogness wrote:
+> On 2022-04-27, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
+>> Here is the full serial console log:
+>>
+>> https://protect2.fireeye.com/v1/url?k=087c101e-57e728e3-087d9b51-000babff317b-69d8576a8b9d481f&q=1&e=5f72c413-9d23-4e64-98e4-377fcc2038de&u=https%3A%2F%2Fpastebin.com%2FE5CDH88L
+> Here are a few ideas from me:
+>
+> 1. For next-20220427 the printk-threaded series was slightly changed. I
+> do not expect it to work any different, but I would prefer we are
+> debugging the current version. If possible, could you move to
+> next-20220427?
 
-diff --git a/arch/alpha/Kconfig b/arch/alpha/Kconfig
-index 7d0d26b5b3f5..2b9cf1b0bdb8 100644
---- a/arch/alpha/Kconfig
-+++ b/arch/alpha/Kconfig
-@@ -27,6 +27,7 @@ config ALPHA
- 	select AUDIT_ARCH
- 	select GENERIC_CPU_VULNERABILITIES
- 	select GENERIC_SMP_IDLE_THREAD
-+	select HAS_IOPORT
- 	select HAVE_ARCH_AUDITSYSCALL
- 	select HAVE_MOD_ARCH_SPECIFIC
- 	select MODULES_USE_ELF_RELA
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 2e8091e2d8a8..603ce00033a5 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -69,6 +69,7 @@ config ARM
- 	select GENERIC_SCHED_CLOCK
- 	select GENERIC_SMP_IDLE_THREAD
- 	select HARDIRQS_SW_RESEND
-+	select HAS_IOPORT
- 	select HAVE_ARCH_AUDITSYSCALL if AEABI && !OABI_COMPAT
- 	select HAVE_ARCH_BITREVERSE if (CPU_32v7M || CPU_32v7) && !CPU_32v6
- 	select HAVE_ARCH_JUMP_LABEL if !XIP_KERNEL && !CPU_ENDIAN_BE32 && MMU
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 20ea89d9ac2f..234dc89a7654 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -136,6 +136,7 @@ config ARM64
- 	select GENERIC_GETTIMEOFDAY
- 	select GENERIC_VDSO_TIME_NS
- 	select HARDIRQS_SW_RESEND
-+	select HAS_IOPORT
- 	select HAVE_MOVE_PMD
- 	select HAVE_MOVE_PUD
- 	select HAVE_PCI
-diff --git a/arch/ia64/Kconfig b/arch/ia64/Kconfig
-index cb93769a9f2a..0fffe5130a80 100644
---- a/arch/ia64/Kconfig
-+++ b/arch/ia64/Kconfig
-@@ -25,6 +25,7 @@ config IA64
- 	select PCI_DOMAINS if PCI
- 	select PCI_MSI
- 	select PCI_SYSCALL if PCI
-+	select HAS_IOPORT
- 	select HAVE_ASM_MODVERSIONS
- 	select HAVE_UNSTABLE_SCHED_CLOCK
- 	select HAVE_EXIT_THREAD
-diff --git a/arch/m68k/Kconfig b/arch/m68k/Kconfig
-index 936cce42ae9a..54bf0a40c2f0 100644
---- a/arch/m68k/Kconfig
-+++ b/arch/m68k/Kconfig
-@@ -18,6 +18,7 @@ config M68K
- 	select GENERIC_CPU_DEVICES
- 	select GENERIC_IOMAP
- 	select GENERIC_IRQ_SHOW
-+	select HAS_IOPORT if PCI || ISA || ATARI_ROM_ISA
- 	select HAVE_ASM_MODVERSIONS
- 	select HAVE_DEBUG_BUGVERBOSE
- 	select HAVE_EFFICIENT_UNALIGNED_ACCESS if !CPU_HAS_NO_UNALIGNED
-diff --git a/arch/microblaze/Kconfig b/arch/microblaze/Kconfig
-index 8cf429ad1c84..966a6682f1fc 100644
---- a/arch/microblaze/Kconfig
-+++ b/arch/microblaze/Kconfig
-@@ -21,6 +21,7 @@ config MICROBLAZE
- 	select GENERIC_IRQ_SHOW
- 	select GENERIC_PCI_IOMAP
- 	select GENERIC_SCHED_CLOCK
-+	select HAS_IOPORT if PCI
- 	select HAVE_ARCH_HASH
- 	select HAVE_ARCH_KGDB
- 	select HAVE_ARCH_SECCOMP
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index de3b32a507d2..4c55df08d6f1 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -47,6 +47,7 @@ config MIPS
- 	select GENERIC_SMP_IDLE_THREAD
- 	select GENERIC_TIME_VSYSCALL
- 	select GUP_GET_PTE_LOW_HIGH if CPU_MIPS32 && PHYS_ADDR_T_64BIT
-+	select HAS_IOPORT
- 	select HAVE_ARCH_COMPILER_H
- 	select HAVE_ARCH_JUMP_LABEL
- 	select HAVE_ARCH_KGDB if MIPS_FP_SUPPORT
-diff --git a/arch/parisc/Kconfig b/arch/parisc/Kconfig
-index 52e550b45692..741c5c64c173 100644
---- a/arch/parisc/Kconfig
-+++ b/arch/parisc/Kconfig
-@@ -46,6 +46,7 @@ config PARISC
- 	select MODULES_USE_ELF_RELA
- 	select CLONE_BACKWARDS
- 	select TTY # Needed for pdc_cons.c
-+	select HAS_IOPORT if PCI || EISA
- 	select HAVE_DEBUG_STACKOVERFLOW
- 	select HAVE_ARCH_AUDITSYSCALL
- 	select HAVE_ARCH_HASH
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 174edabb74fa..7133cc35b777 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -182,6 +182,7 @@ config PPC
- 	select GENERIC_SMP_IDLE_THREAD
- 	select GENERIC_TIME_VSYSCALL
- 	select GENERIC_VDSO_TIME_NS
-+	select HAS_IOPORT			if PCI
- 	select HAVE_ARCH_AUDITSYSCALL
- 	select HAVE_ARCH_HUGE_VMALLOC		if HAVE_ARCH_HUGE_VMAP
- 	select HAVE_ARCH_HUGE_VMAP		if PPC_RADIX_MMU || PPC_8xx
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 00fd9c548f26..27fc8a450478 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -67,6 +67,7 @@ config RISCV
- 	select GENERIC_SMP_IDLE_THREAD
- 	select GENERIC_TIME_VSYSCALL if MMU && 64BIT
- 	select GENERIC_VDSO_TIME_NS if HAVE_GENERIC_VDSO
-+	select HAS_IOPORT if MMU
- 	select HAVE_ARCH_AUDITSYSCALL
- 	select HAVE_ARCH_JUMP_LABEL if !XIP_KERNEL
- 	select HAVE_ARCH_JUMP_LABEL_RELATIVE if !XIP_KERNEL
-diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
-index 5f220e903e5a..6c1694e82b89 100644
---- a/arch/sh/Kconfig
-+++ b/arch/sh/Kconfig
-@@ -25,6 +25,7 @@ config SUPERH
- 	select GENERIC_SCHED_CLOCK
- 	select GENERIC_SMP_IDLE_THREAD
- 	select GUP_GET_PTE_LOW_HIGH if X2TLB
-+	select HAS_IOPORT if HAS_IOPORT_MAP
- 	select HAVE_ARCH_AUDITSYSCALL
- 	select HAVE_ARCH_KGDB
- 	select HAVE_ARCH_SECCOMP_FILTER
-diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
-index 9200bc04701c..64736476dde8 100644
---- a/arch/sparc/Kconfig
-+++ b/arch/sparc/Kconfig
-@@ -32,6 +32,7 @@ config SPARC
- 	select GENERIC_IRQ_SHOW
- 	select ARCH_WANT_IPC_PARSE_VERSION
- 	select GENERIC_PCI_IOMAP
-+	select HAS_IOPORT
- 	select HAVE_NMI_WATCHDOG if SPARC64
- 	select HAVE_CBPF_JIT if SPARC32
- 	select HAVE_EBPF_JIT if SPARC64
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index b0142e01002e..9ef0438d1b7d 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -155,6 +155,7 @@ config X86
- 	select GUP_GET_PTE_LOW_HIGH		if X86_PAE
- 	select HARDIRQS_SW_RESEND
- 	select HARDLOCKUP_CHECK_TIMESTAMP	if X86_64
-+	select HAS_IOPORT
- 	select HAVE_ACPI_APEI			if ACPI
- 	select HAVE_ACPI_APEI_NMI		if ACPI
- 	select HAVE_ALIGNED_STRUCT_PAGE		if SLUB
-diff --git a/drivers/bus/Kconfig b/drivers/bus/Kconfig
-index 3c68e174a113..a61285100224 100644
---- a/drivers/bus/Kconfig
-+++ b/drivers/bus/Kconfig
-@@ -81,7 +81,7 @@ config MOXTET
- config HISILICON_LPC
- 	bool "Support for ISA I/O space on HiSilicon Hip06/7"
- 	depends on (ARM64 && ARCH_HISI) || (COMPILE_TEST && !ALPHA && !HEXAGON && !PARISC)
--	depends on HAS_IOMEM
-+	depends on HAS_IOPORT
- 	select INDIRECT_PIO if ARM64
- 	help
- 	  Driver to enable I/O access to devices attached to the Low Pin
-diff --git a/lib/Kconfig b/lib/Kconfig
-index 087e06b4cdfd..177fed9cf20a 100644
---- a/lib/Kconfig
-+++ b/lib/Kconfig
-@@ -91,6 +91,7 @@ config ARCH_USE_SYM_ANNOTATIONS
- config INDIRECT_PIO
- 	bool "Access I/O in non-MMIO mode"
- 	depends on ARM64
-+	depends on HAS_IOPORT
- 	help
- 	  On some platforms where no separate I/O space exists, there are I/O
- 	  hosts which can not be accessed in MMIO mode. Using the logical PIO
-@@ -493,6 +494,9 @@ config HAS_IOMEM
- 	depends on !NO_IOMEM
- 	default y
- 
-+config HAS_IOPORT
-+	def_bool ISA
-+
- config HAS_IOPORT_MAP
- 	bool
- 	depends on HAS_IOMEM && !NO_IOPORT_MAP
-diff --git a/lib/Kconfig.kgdb b/lib/Kconfig.kgdb
-index 05dae05b6cc9..c68e4d9dcecb 100644
---- a/lib/Kconfig.kgdb
-+++ b/lib/Kconfig.kgdb
-@@ -121,6 +121,7 @@ config KDB_DEFAULT_ENABLE
- 
- config KDB_KEYBOARD
- 	bool "KGDB_KDB: keyboard as input device"
-+	depends on HAS_IOPORT
- 	depends on VT && KGDB_KDB
- 	default n
- 	help
+I've moved to next-20220429. Nothing changed compared to next-20220427.
+
+
+> 2. I noticed you boot with the kernel boot arguments "earlycon" and
+> "no_console_suspend". Could you try booting without this? I expect this
+> will make no difference.
+
+Well, nothing changed.
+
+
+> 3. It looks like the problem happens quite late in the boot process. I
+> expect it is due to some userspace process that is running that is
+> interacting with printk (either /dev/kmsg or /proc/kmsg) and is causing
+> problems. If you boot with init=/bin/sh then I expect the system is
+> running fine. (You don't have much of a system running, but it should
+> not hang.) We need to isolate which userspace process is triggering the
+> issue.
+
+The same issue happens if I boot with init=/bin/bash
+
+
+> 4. Have you tried issuing magic sysrq commands on the serial line? (For
+> example, sending a break signal and then the letter 't' or sending a
+> break signal and then the letter 'c'?) That might trigger various dumps
+> so that we can see the system state.
+>
+> 5. You are not running a VT console, so the graphics driver should not
+> be affecting the printk subsystem at all. I expect your autologin is
+> also starting various services and programs. If you disable the
+> automatic login and instead manually login (perhaps as another user) can
+> you manually start those services one at a time to see at what point the
+> system hangs?
+>
+> Thanks for you help with this!
+
+I found something really interesting. When lockup happens, I'm still 
+able to log via ssh and trigger any magic sysrq action via 
+/proc/sysrq-trigger (triggering it from UART console via break doesn't 
+work).
+
+It turned out that the UART console is somehow blocked, but it receives 
+and buffers all the input. For example after issuing "echo 
+ >/proc/sysrq-trigger" from the ssh console, the UART console has been 
+updated and I see the magic sysrq banner and then all the commands I 
+blindly typed in the UART console! However this doesn't unblock the console.
+
+Here is the output of 't' magic sys request:
+
+https://pastebin.com/fjbRuy4f
+
+If you have any more suggestion what to check let me know.
+
+This issue must be somehow related to the way the UART driver works on 
+the Amlogic Meson boards. The other boards based on different SoCs 
+(Exynos, QCOM, BCM) I have in my test farm (with the same userspace and 
+configuration) work fine with those patches.
+
+Best regards
 -- 
-2.32.0
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 

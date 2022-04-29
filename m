@@ -2,158 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C84D51413B
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 06:17:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5DB851413C
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 06:19:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237100AbiD2EUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 00:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34020 "EHLO
+        id S237152AbiD2EWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 00:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiD2EUJ (ORCPT
+        with ESMTP id S230133AbiD2EWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 00:20:09 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679F1BABA8
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 21:16:51 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KqK1Z0Y7qzhYST;
-        Fri, 29 Apr 2022 12:16:34 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 29 Apr 2022 12:16:49 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 29 Apr 2022 12:16:49 +0800
-Subject: Re: [PATCH v2] arm64: add the printing of tpidr_elx in __show_regs()
-To:     Will Deacon <will@kernel.org>
-CC:     Catalin Marinas <catalin.marinas@arm.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, "James Morse" <james.morse@arm.com>
-References: <20220316062408.1113-1-thunder.leizhen@huawei.com>
- <20220428102156.GA14123@willie-the-truck>
- <4c956c17-6e13-37a1-7da3-b2c8243c2c01@huawei.com>
- <d3570761-1273-831f-dfbe-aefbadfa37f7@huawei.com>
- <20220428131259.GA14810@willie-the-truck>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <c06c15c1-5c8e-2d03-4fbc-c8e5a5dff956@huawei.com>
-Date:   Fri, 29 Apr 2022 12:16:48 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Fri, 29 Apr 2022 00:22:12 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C0BCBABAB
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 21:18:51 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23T4ILPd116781;
+        Thu, 28 Apr 2022 23:18:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1651205901;
+        bh=IU5qN/m9vf7a5xu5+NjS2c5sZ6lm7tv5VMviUNrWiBU=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=xfbYQj8BUdgb5W576nT6+0j7U7V82nvFtEjKIC6wIWV4+2q3i41EqypVnxT5OENjQ
+         3/184nL1x1N77Szw4pydxBwF5eqbxRCz2TnlrNq6ofiKDnQIEkqmYYFhV02mg40Eff
+         C89Cr9BHJkPplrPbpklcMpOm06pTYXmqzsjWGrNk=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23T4ILU6096763
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 28 Apr 2022 23:18:21 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 28
+ Apr 2022 23:18:20 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 28 Apr 2022 23:18:20 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23T4IKDk014910;
+        Thu, 28 Apr 2022 23:18:20 -0500
+Date:   Fri, 29 Apr 2022 09:48:19 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-kernel@vger.kernel.org>, <linux-mtd@lists.infradead.org>
+Subject: Re: [PATCH v2 1/2] mtd: spi-nor: export spi_nor_hwcaps_pp2cmd()
+Message-ID: <20220429041819.pwfixbh4v65yasbg@ti.com>
+References: <20220428122840.1496876-1-michael@walle.cc>
 MIME-Version: 1.0
-In-Reply-To: <20220428131259.GA14810@willie-the-truck>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220428122840.1496876-1-michael@walle.cc>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/4/28 21:13, Will Deacon wrote:
-> On Thu, Apr 28, 2022 at 08:03:50PM +0800, Leizhen (ThunderTown) wrote:
->>
->>
->> On 2022/4/28 19:07, Leizhen (ThunderTown) wrote:
->>>
->>>
->>> On 2022/4/28 18:21, Will Deacon wrote:
->>>> On Wed, Mar 16, 2022 at 02:24:08PM +0800, Zhen Lei wrote:
->>>>> Commit 7158627686f0 ("arm64: percpu: implement optimised pcpu access
->>>>> using tpidr_el1") and commit 6d99b68933fb ("arm64: alternatives: use
->>>>> tpidr_el2 on VHE hosts") use tpidr_elx to cache my_cpu_offset to optimize
->>>>> pcpu access. However, when performing reverse execution based on the
->>>>> registers and the memory contents in kdump, this information is sometimes
->>>>> required if there is a pcpu access.
->>>>>
->>>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->>>>> ---
->>>>>  arch/arm64/kernel/process.c | 11 +++++++++++
->>>>>  1 file changed, 11 insertions(+)
->>>>>
->>>>> v1 --> v2:
->>>>> Directly print the tpidr_elx register of the current exception level.
->>>>> Avoid coupling with the implementation of 'my_cpu_offset'.
->>>>>
->>>>> diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
->>>>> index 5369e649fa79ff8..738932e6fa4e947 100644
->>>>> --- a/arch/arm64/kernel/process.c
->>>>> +++ b/arch/arm64/kernel/process.c
->>>>> @@ -216,6 +216,17 @@ void __show_regs(struct pt_regs *regs)
->>>>>  	show_regs_print_info(KERN_DEFAULT);
->>>>>  	print_pstate(regs);
->>>>>  
->>>>> +	switch (read_sysreg(CurrentEL)) {
->>>>
->>>> This should use is_kernel_in_hyp_mode() to detect if we're running at El2.
->>
->> static inline bool is_kernel_in_hyp_mode(void)
->> {
->>         return read_sysreg(CurrentEL) == CurrentEL_EL2;
->> }
->>
->> I think it's more intuitive to use "switch (read_sysreg(CurrentEL))".
+On 28/04/22 02:28PM, Michael Walle wrote:
+> The function will also be used by the debugfs module.
 > 
-> No, I disagree with you here, sorry.
+> Signed-off-by: Michael Walle <michael@walle.cc>
 
-OK. Change it to the following form in v3?
-
-+       if (is_kernel_in_hyp_mode())
-+               printk("tpidr_el2 : %016llx\n", read_sysreg(TPIDR_EL2));
-+       else
-+               printk("tpidr_el1 : %016llx\n", read_sysreg(TPIDR_EL1));
-
-By the way, Is there a requirement on the case of register names?
-I see some use TPIDR_EL1 and some use tpidr_el1.
-
-
-> 
->>>>> +	case CurrentEL_EL1:
->>>>> +		printk("tpidr_el1 : %016llx\n", read_sysreg(TPIDR_EL1));
->>>>> +		break;
->>>>> +	case CurrentEL_EL2:
->>>>> +		printk("tpidr_el2 : %016llx\n", read_sysreg(TPIDR_EL2));
->>>>> +		break;
->>>>> +	default:
->>>>> +		break;
->>>>> +	}
->>>>
->>>> I think this path can be triggered directly from usermode, so we really
->>>> shouldn't be printing raw kernel virtual addresses here.
->>>
->>> I run echo c > /proc/sysrq-trigger and didn't trigger this path, but maybe
->>> there's another way. Analysis from the other side, except for the instruction
->>> address, all generic registers r0-r31 is output as raw. There's also an
->>> opportunity to contain the instruction address.
->>
->> On second thought, there seemed to be nothing wrong with it. The user need
->> to have capable() first. Then the address of the perpcu memory is not static,
->> the memory is dynamically allocated, exposing it is no different than exposing sp.
-> 
-> If show_unhandled_signals is set, then I think any fatal signal takes this
-> path, no?
-
-I looked at the implementation of arm64_show_signal(), and there must be a
-chance to take this path. But last night, I came to my senses, the value
-stored in tpidr is actually an offset, not an address. So there should be
-no kernel address leakage problem.
-
-> 
-> Will
-> .
-> 
+Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
 
 -- 
 Regards,
-  Zhen Lei
+Pratyush Yadav
+Texas Instruments Inc.

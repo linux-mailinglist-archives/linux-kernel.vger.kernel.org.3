@@ -2,113 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1829515931
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 01:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADCE251592F
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 01:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381870AbiD3AAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 20:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58898 "EHLO
+        id S1381845AbiD2X7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 19:59:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381866AbiD2X75 (ORCPT
+        with ESMTP id S1345729AbiD2X7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 19:59:57 -0400
-Received: from mail-il1-x163.google.com (mail-il1-x163.google.com [IPv6:2607:f8b0:4864:20::163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A467C3DDE8
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 16:56:35 -0700 (PDT)
-Received: by mail-il1-x163.google.com with SMTP id r17so4946831iln.9
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 16:56:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:dkim-signature:from:to:cc:subject:date
-         :message-id:content-transfer-encoding;
-        bh=rhWp1AKBOyqcG3QjLO4nWaJXvvyqXsoLu/c9Xuqgxf4=;
-        b=RSDgpDWo+RSjrZBYxLZTRVspT/5zgtu8p2xJK3rCMfv0+Sb/NBUAsSfsR0QeNybNuz
-         8aO6OnzngGYTgUcsIZiT1FDYkDhLD6bfxM0d/rBsrSMJS9acIoiTNb9sumSIhaWg51eG
-         L2Xh2lhwheI96K0DnNTmtkZlYkWABimrrO8MaRKyEpIzfdpefTQVNFeyp2AtHvKg4k6/
-         +m/r3aM+on2cUW+MbPTFjLGvZSh5jwQ6XZY0AFfvI2ayfseHyfjBWokJuwpsnvD3+UXA
-         nSLSQY6OFGrXEEUTH1ZWF3ETtP4EybmIN//ncQ5ODHJSOuJOxU+sC6JzDPsXeLrJT1VW
-         lHMg==
-X-Gm-Message-State: AOAM532s9y2lBQWm2q22KkUPZFUYux/YbKxw23XFya/pMNsnWbDm+J1L
-        fly76uc3Gm5z3JEHDE/Mc96AOLTavotWZ1Fmpb0CLURVsWrw
-X-Google-Smtp-Source: ABdhPJxAayWgz3tZPEUuIHsUOIZfNThDXu/GbVfddf4sHIZaslnH/EGHTdkX1w8JoBMbbmcLLpl59JjhogjM
-X-Received: by 2002:a05:6e02:1c45:b0:2cd:95dd:ae1a with SMTP id d5-20020a056e021c4500b002cd95ddae1amr701931ilg.100.1651276595115;
-        Fri, 29 Apr 2022 16:56:35 -0700 (PDT)
-Received: from smtp.aristanetworks.com (smtp.aristanetworks.com. [54.193.82.35])
-        by smtp-relay.gmail.com with ESMTPS id a7-20020a056638164700b0032b3a7363f6sm235056jat.20.2022.04.29.16.56.34
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 29 Apr 2022 16:56:35 -0700 (PDT)
-X-Relaying-Domain: arista.com
-Received: from chmeee (unknown [10.95.70.41])
-        by smtp.aristanetworks.com (Postfix) with ESMTPS id 2D1CA3045064;
-        Fri, 29 Apr 2022 16:56:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arista.com;
-        s=Arista-A; t=1651276594;
-        bh=rhWp1AKBOyqcG3QjLO4nWaJXvvyqXsoLu/c9Xuqgxf4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=o4iJMhSMeeqwukInPgtCBAav5GBwiKBq4YBQxSYpINNXybYE3dNsSH2nBiDWetj5Q
-         9huzeLWStt2Yh/qUvoBEvZKegxKs8NzLoFnK0N27kAbq230EJ3QKCoNFR5HL77wCHc
-         N7Oy74d3ymAVp8hSsgzY65yTWmK/dVbD3VMLbSpMz1fZPBVjvGN/k909n57ICGqDoq
-         ijOYjejoCZ/vTeCkc144dWzX9biyOT4xC2OgnHwwdaxF11EQbjheUibmKZrf85eIyH
-         mYflXpTndSTs7Da6KV8zhE8PPMmM3ab+jzTxpRRrfmfIx9a7LcMxKOqfoMIr1MWX0l
-         yJsYIxYZXasAg==
-Received: from kevmitch by chmeee with local (Exim 4.95)
-        (envelope-from <kevmitch@chmeee>)
-        id 1nkaTN-0003Sm-TX;
-        Fri, 29 Apr 2022 16:56:29 -0700
-From:   Kevin Mitchell <kevmitch@arista.com>
-Cc:     kevmitch@arista.com, Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        Takuma Ueba <t.ueba11@gmail.com>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] igb: skip phy status check where unavailable
-Date:   Fri, 29 Apr 2022 16:55:54 -0700
-Message-Id: <20220429235554.13290-1-kevmitch@arista.com>
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Fri, 29 Apr 2022 19:59:49 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1460F2B1A9
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 16:56:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651276590; x=1682812590;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=h9FcGcVtvJBwLlMdmU+fvN9kgL7m36MVzocVRQWblJs=;
+  b=IU2hdeprezFYlwqglqRaMVvpqzvjJCk8Vq1e16CtJoc++xZOciTDQQxt
+   9OC8UQ6kOls+vgvkF5p2nHBmW52STmzHG8+JL1loVm1wcKdspnG7ypvhH
+   LAouxxOADKIzTMOaWEqel7hxF6ImDbKcqzVrTEeFRrkewiLHlmP/HeyM9
+   nYbFfMqSnt9Fkg6p1yePtXmpjcxLzjLxrYPMAZfmIIWDvDCD7oNhl1DDh
+   5NbIBxe5cbolnMzJhoV/58NsdeEqU6cnroQWSOpIJnz5ydFUEfgMGlpD9
+   f2E/RTfojsFF5NPxWyI4SYK+Uw7KoY4km5uGktGdTefcgw3Jq/pGmZXMa
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="264386032"
+X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
+   d="scan'208";a="264386032"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 16:56:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
+   d="scan'208";a="597584611"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 29 Apr 2022 16:56:26 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nkaTK-0006h7-67;
+        Fri, 29 Apr 2022 23:56:26 +0000
+Date:   Sat, 30 Apr 2022 07:56:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: [mark:arm64/ftrace/per-callsite-ops 1/6]
+ kernel/trace/fgraph.c:37:12: warning: no previous prototype for
+ 'ftrace_enable_ftrace_graph_caller'
+Message-ID: <202204300758.ces9aD6G-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-igb_read_phy_reg() will silently return, leaving phy_data untouched, if
-hw->ops.read_reg isn't set. Depending on the uninitialized value of
-phy_data, this led to the phy status check either succeeding immediately
-or looping continuously for 2 seconds before emitting a noisy err-level
-timeout. This message went out to the console even though there was no
-actual problem.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/ftrace/per-callsite-ops
+head:   2aaba224d039a36f7eca5ad68c77686d3546e4fa
+commit: 718b0fd1ccf6f04340cb3ad48b667ca05bb7a31c [1/6] ftrace: cleanup ftrace_graph_caller enable and disable
+config: sh-buildonly-randconfig-r002-20220428 (https://download.01.org/0day-ci/archive/20220430/202204300758.ces9aD6G-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=718b0fd1ccf6f04340cb3ad48b667ca05bb7a31c
+        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
+        git fetch --no-tags mark arm64/ftrace/per-callsite-ops
+        git checkout 718b0fd1ccf6f04340cb3ad48b667ca05bb7a31c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash kernel/trace/
 
-Instead, first check if there is read_reg function pointer. If not,
-proceed without trying to check the phy status register.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Fixes: b72f3f72005d ("igb: When GbE link up, wait for Remote receiver status condition")
-Signed-off-by: Kevin Mitchell <kevmitch@arista.com>
----
- drivers/net/ethernet/intel/igb/igb_main.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+All warnings (new ones prefixed by >>):
 
-diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
-index 34b33b21e0dc..68be2976f539 100644
---- a/drivers/net/ethernet/intel/igb/igb_main.c
-+++ b/drivers/net/ethernet/intel/igb/igb_main.c
-@@ -5505,7 +5505,8 @@ static void igb_watchdog_task(struct work_struct *work)
- 				break;
- 			}
- 
--			if (adapter->link_speed != SPEED_1000)
-+			if (adapter->link_speed != SPEED_1000 ||
-+			    !hw->phy.ops.read_reg)
- 				goto no_wait;
- 
- 			/* wait for Remote receiver status OK */
+>> kernel/trace/fgraph.c:37:12: warning: no previous prototype for 'ftrace_enable_ftrace_graph_caller' [-Wmissing-prototypes]
+      37 | int __weak ftrace_enable_ftrace_graph_caller(void)
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> kernel/trace/fgraph.c:46:12: warning: no previous prototype for 'ftrace_disable_ftrace_graph_caller' [-Wmissing-prototypes]
+      46 | int __weak ftrace_disable_ftrace_graph_caller(void)
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/trace/fgraph.c:241:15: warning: no previous prototype for 'ftrace_return_to_handler' [-Wmissing-prototypes]
+     241 | unsigned long ftrace_return_to_handler(unsigned long frame_pointer)
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/trace/fgraph.c:356:6: warning: no previous prototype for 'ftrace_graph_sleep_time_control' [-Wmissing-prototypes]
+     356 | void ftrace_graph_sleep_time_control(bool enable)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/ftrace_enable_ftrace_graph_caller +37 kernel/trace/fgraph.c
+
+    32	
+    33	/*
+    34	 * archs can override this function if they must do something
+    35	 * to enable hook for graph tracer.
+    36	 */
+  > 37	int __weak ftrace_enable_ftrace_graph_caller(void)
+    38	{
+    39		return 0;
+    40	}
+    41	
+    42	/*
+    43	 * archs can override this function if they must do something
+    44	 * to disable hook for graph tracer.
+    45	 */
+  > 46	int __weak ftrace_disable_ftrace_graph_caller(void)
+    47	{
+    48		return 0;
+    49	}
+    50	
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

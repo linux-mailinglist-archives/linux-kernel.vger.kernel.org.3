@@ -2,119 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE7151418B
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 06:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C44E8514190
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 06:49:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237709AbiD2Eun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 00:50:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34090 "EHLO
+        id S237736AbiD2EwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 00:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237685AbiD2Euk (ORCPT
+        with ESMTP id S237302AbiD2EwO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 00:50:40 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE952DF8C;
-        Thu, 28 Apr 2022 21:47:23 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KqKj61Hrfz4ySg;
-        Fri, 29 Apr 2022 14:47:21 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651207642;
-        bh=1AfKLldYT0hNlL/xJTa21EI2h2yp4L/ZF+EJuxdtr8c=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=T520rKdBuIvWBGis2dIa4UnVvkMcioel+rfpFYaOpnPNFr3WfCp2CX7LaeP7X2lSq
-         cCUuxJ1b23qnBLyra49ayigyKiZj6qEyE9qXi81Npr2sDFQdvm615YbrIyJeN+2LtY
-         AHoL4cJfKMhP0SzjKWU81ompEmskBis+rTuaFxGKoqyTgWMRDcxUwbVPFBXxwoiSBD
-         OB6qEBpF7NGOm7PHYaRXLNd/3aK3Js2mdxqIJ4xv5FeExHr44wOTOgmvKuwzFhi0Qn
-         B+8UROXS/k6g9M1E964PuZK4bjtlMLhL1Tu75bfOQcnBUyI/8j3Nonyq1+dmu9XDUg
-         9vTKZ8D2U9e4w==
-Date:   Fri, 29 Apr 2022 14:47:21 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Jose Cazarin <joseespiriki@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Peter Rosin <peda@axentia.se>
-Subject: Re: linux-next: manual merge of the iio tree with the
- char-misc.current tree
-Message-ID: <20220429144721.63ae260f@canb.auug.org.au>
-In-Reply-To: <20220429143517.75be9c04@canb.auug.org.au>
-References: <20220429143517.75be9c04@canb.auug.org.au>
+        Fri, 29 Apr 2022 00:52:14 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E762316F;
+        Thu, 28 Apr 2022 21:48:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651207737; x=1682743737;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Jj2HJdFD+WzFuEtVuuAOpTSCLb1M1zXw4IDK1AusbpA=;
+  b=eos+kAtnWd41KOe5P6ZuMlzTGAunnKNn83LMFVoA9TtTNpGnofKSouJd
+   aqJDzU4gzmfzpLF8NREMeZVTzlKA3Bml4AlQb7M//NzoerBSA/mA6p9Kd
+   068xxInQ5Y/JoEo982dOA7JmpgiDRy60yjhtveh0mmbCkf1w9sHcRJq7F
+   jCQbu7ZfIheo35JJb0JL92hN+4Pb4Z3rnl7o1h8H2B5jRfAC77mFWit6H
+   10astohG7J9GwCRSxtBdDDQQGflMRfLGCwGtMR7gXSvBk5jux9XFXTv2X
+   x8+tTpnYvxl6KEwl4WLPgv5cyaC11Wfgg94Abi4dEg2hmihUgKDvDA5T3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="352960684"
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="352960684"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 21:48:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="542062208"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 28 Apr 2022 21:48:54 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nkIYn-0005zX-Fj;
+        Fri, 29 Apr 2022 04:48:53 +0000
+Date:   Fri, 29 Apr 2022 12:48:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>,
+        s.nawrocki@samsung.com, andrzej.hajda@intel.com, mchehab@kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] media: s5c73m3: replace legacy gpio interface for
+ gpiod
+Message-ID: <202204291212.g99NfHX0-lkp@intel.com>
+References: <YmsuDHwjUwxtjiyq@fedora>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/o/r1K=4hnAYC/5da6X6W1tw";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YmsuDHwjUwxtjiyq@fedora>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/o/r1K=4hnAYC/5da6X6W1tw
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi "Maíra,
 
-Hi all,
+Thank you for the patch! Yet something to improve:
 
-On Fri, 29 Apr 2022 14:35:17 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> diff --cc drivers/iio/dac/ti-dac5571.c
-> index 0b775f943db3,96b86e2dcc6b..000000000000
-> --- a/drivers/iio/dac/ti-dac5571.c
-> +++ b/drivers/iio/dac/ti-dac5571.c
-> @@@ -393,15 -386,16 +394,16 @@@ static int dac5571_remove(struct i2c_cl
->   }
->  =20
->   static const struct of_device_id dac5571_of_id[] =3D {
->  -	{.compatible =3D "ti,dac5571"},
->  -	{.compatible =3D "ti,dac6571"},
->  -	{.compatible =3D "ti,dac7571"},
->  -	{.compatible =3D "ti,dac5574"},
->  -	{.compatible =3D "ti,dac6574"},
->  -	{.compatible =3D "ti,dac7574"},
->  -	{.compatible =3D "ti,dac5573"},
->  -	{.compatible =3D "ti,dac6573"},
->  -	{.compatible =3D "ti,dac7573"},
->  -	{.compatible =3D "ti,dac121c081"},
->  +	{.compatible =3D "ti,dac5571", .data =3D (void *)single_8bit},
->  +	{.compatible =3D "ti,dac6571", .data =3D (void *)single_10bit},
->  +	{.compatible =3D "ti,dac7571", .data =3D (void *)single_12bit},
->  +	{.compatible =3D "ti,dac5574", .data =3D (void *)quad_8bit},
->  +	{.compatible =3D "ti,dac6574", .data =3D (void *)quad_10bit},
->  +	{.compatible =3D "ti,dac7574", .data =3D (void *)quad_12bit},
->  +	{.compatible =3D "ti,dac5573", .data =3D (void *)quad_8bit},
->  +	{.compatible =3D "ti,dac6573", .data =3D (void *)quad_10bit},
->  +	{.compatible =3D "ti,dac7573", .data =3D (void *)quad_12bit},
-> ++	{.compatible =3D "ti,dac121c081", data =3D (void *)single_12bit},
-                                        ^
-I fixed up the missing '.'
+[auto build test ERROR on media-tree/master]
+[also build test ERROR on v5.18-rc4 next-20220428]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
---=20
-Cheers,
-Stephen Rothwell
+url:    https://github.com/intel-lab-lkp/linux/commits/Ma-ra-Canal/media-s5c73m3-replace-legacy-gpio-interface-for-gpiod/20220429-081656
+base:   git://linuxtv.org/media_tree.git master
+config: arm64-randconfig-r022-20220428 (https://download.01.org/0day-ci/archive/20220429/202204291212.g99NfHX0-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c59473aacce38cd7dd77eebceaf3c98c5707ab3b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/427ae1b9cae644d199f9ffc260480dd1c32ec9d6
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ma-ra-Canal/media-s5c73m3-replace-legacy-gpio-interface-for-gpiod/20220429-081656
+        git checkout 427ae1b9cae644d199f9ffc260480dd1c32ec9d6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/media/i2c/s5c73m3/
 
---Sig_/o/r1K=4hnAYC/5da6X6W1tw
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
------BEGIN PGP SIGNATURE-----
+All errors (new ones prefixed by >>):
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJrbdkACgkQAVBC80lX
-0Gzb6wgAgb2XqmbYBM8xNGf1bZ8NCMvk2jJwJx/92+bu9W7EjVednVr8rS+VZ/x0
-vJogcElAk1GlNVmvt9w3/7PimoOFZJLTH3loEaGgusm3SZfr9JbFW/kvNUD/dBop
-vYaT88Uert2/HNWE1CIcmKgbn62r9WlviNTEjBINrxs6R+gAjWHMtGn0jjfiIibB
-UnYGZfMVAnPx6aJAtd3d21xBogBS8YqKug2bB/S7dQ2Z2ubFD86t7FTQnCuQTAUb
-9tLZIYD3gdBn8F2F5BHfNqacLJqvXRt62PtziTcfysLEgpOJAj8BKLNfFTdlE6iT
-e8zqxaY1G2TrrQx4Q8yiPR1nfydvJA==
-=SSlf
------END PGP SIGNATURE-----
+>> drivers/media/i2c/s5c73m3/s5c73m3-core.c:1359:32: error: too few arguments to function call, expected 2, have 1
+           int val = gpiod_set_value(gpio);
+                     ~~~~~~~~~~~~~~~     ^
+   include/linux/gpio/consumer.h:119:6: note: 'gpiod_set_value' declared here
+   void gpiod_set_value(struct gpio_desc *desc, int value);
+        ^
+   drivers/media/i2c/s5c73m3/s5c73m3-core.c:1366:32: error: too few arguments to function call, expected 2, have 1
+           int val = gpiod_set_value(gpio);
+                     ~~~~~~~~~~~~~~~     ^
+   include/linux/gpio/consumer.h:119:6: note: 'gpiod_set_value' declared here
+   void gpiod_set_value(struct gpio_desc *desc, int value);
+        ^
+   2 errors generated.
 
---Sig_/o/r1K=4hnAYC/5da6X6W1tw--
+
+vim +1359 drivers/media/i2c/s5c73m3/s5c73m3-core.c
+
+  1356	
+  1357	static int s5c73m3_gpio_assert(struct gpio_desc *gpio)
+  1358	{
+> 1359		int val = gpiod_set_value(gpio);
+  1360	
+  1361		return s5c73m3_gpio_set_value(gpio, val);
+  1362	}
+  1363	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

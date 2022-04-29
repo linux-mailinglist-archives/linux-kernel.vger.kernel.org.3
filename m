@@ -2,67 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0668851512A
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C2D51512D
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379337AbiD2Q4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 12:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
+        id S1379341AbiD2Q4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 12:56:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242283AbiD2Q4i (ORCPT
+        with ESMTP id S242283AbiD2Q4p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 12:56:38 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BC9DA6C4
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:53:20 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id e24so11524937wrc.9
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:53:20 -0700 (PDT)
+        Fri, 29 Apr 2022 12:56:45 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86612D5E94
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:53:26 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id k126so1545034wme.2
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:53:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Y88LxLAo1nli95Xm48q+VVmonwLpJPWWjtF+CYOqhhg=;
-        b=kS0rLjIyQx4LL9BzaS8ekgzOXMz5x7UtOlmNj8ZPfhfk6Vac1b5tVtEPfTOw0NGIXU
-         fCCCfb/tKTQUy3u1/0En3ZMcASkSEF8O3X/lcqEYhqBouaDdu3bE94L/w92RCp46nRpm
-         1mie0gAthvPqIUPCYOWv+NQ5vYgmGAu5cRTWxUvtq8bPlM8MIoxR/NDHE54stJgXBCS/
-         i6pCixktzJtRZOXajWExqFNgHpYrEQrkf5jnEItlbqoeLB590JZWBtlRmmHeMd/RpuCI
-         QKlyIncNJsN+x82rDKsJY4juduOHt/PWHClkpFN5DXUczOKM34JHTqf82+9GDXFY5anL
-         NJRw==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=gF0XSQXvhEerOtZQE67Fv/RM3gJgfWvh3o2fwzeA8OY=;
+        b=hELuasXky3HZCxMFNpSgD5FdIPEXNRdTxdKAxbkPN05aGII+4JoICUbBkMAlUTurAQ
+         L6rq3PGkAHUUnTQyc77gwoC8jb5v/4xaWEPra41O5oJAGpi+LgDune8CEKlVMPUtHY5P
+         O/eEEHdM+XZr2XIG5aK+qgjTUCrdJ2kHBbMajpFupqsvaP9vRtzwB0Uz4+Gf5AIA7gk1
+         KPjzG5830EmbPOv1yaRsPTilWcM1cjJVjRJl5rDGhF8BxYtXAaIZptSN0yV0YbnkLHQr
+         wwI4EMsxsemAwyf5szkcjYyIShJriszMFsxF7nBAvq0Ooi0nz6OicKvtuEQr7uHCvJX5
+         ePBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=Y88LxLAo1nli95Xm48q+VVmonwLpJPWWjtF+CYOqhhg=;
-        b=agfZRmM5Pu1ZkgFtNsmCQm27DLUp/Ec2dvbpJxJbHZuGBjw2/lbzeoU9Vur68CtEnx
-         JyGQcKN8CeWZ2W/Gbz819mG1dakVUz0p6C8lk0hqz/IXnqOynbPdBFK3zeODcwXUUIiX
-         IUxjqPOub7VRY0VGn9FDj/gDoSPZ3rKnA/2X/gW2d4WujoTgXIDkUkv9CbYchIEHIZpL
-         ewDIb2yzQeF7LCJq0W9jq0zkONyZ4mQ7m3lu3hS9CCNhSapFKDe2FWK7/ecuIDswRZtI
-         urA/kwnwgfYdDnTaFY2ABGqLPXMRRitEPe81TkDzWAWEUoOJkrKsBPae2giPeHob8Onv
-         aL6A==
-X-Gm-Message-State: AOAM5306AeN4huFT2m+0s/s42IEtOSq4F4yeh67H68fu97GSvLLcb4Ba
-        KWTchsjmuyiu7zKXKsTX7BmTfz2+/bO7k6zH
-X-Google-Smtp-Source: ABdhPJzwer+SFr6WMGhlQdZX7bXuKXtmeQyttshlEfVpyCWfe1WLLeyjMlbv0DmRBMCU+MECobo61Q==
-X-Received: by 2002:a05:6000:1810:b0:20a:d512:96b9 with SMTP id m16-20020a056000181000b0020ad51296b9mr5762wrh.611.1651251198660;
-        Fri, 29 Apr 2022 09:53:18 -0700 (PDT)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id l5-20020adfa385000000b0020adb3ae75dsm2913406wrb.3.2022.04.29.09.53.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 09:53:17 -0700 (PDT)
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@linutronix.de>
-Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] irqchip/exiu: Fix acknowledgment of edge triggered interrupts
-Date:   Fri, 29 Apr 2022 17:53:14 +0100
-Message-Id: <20220429165314.2343705-1-daniel.thompson@linaro.org>
-X-Mailer: git-send-email 2.35.1
+        bh=gF0XSQXvhEerOtZQE67Fv/RM3gJgfWvh3o2fwzeA8OY=;
+        b=IXq+sfODLjTphbleFXwmrD+3ZLJgF09PQltSRcFIYKozAl3xhUnQSOvIP8urv6EOeF
+         6rWBxikCpt8nYI9uYkNd3Yq2P6gYuupQkZmBZvrNXNVkJDqcDaZ21bGuDVL3InnDocdV
+         5ilSF+EbDGIQ8htNWcGA+wc/beUbjLqhxvWIRUwW4ZWekWTVhLB+IViO6FnziZFyDTZm
+         alL+rVQt9EQC+2n2cVyRVa2ejduvWM+7HbferEaALP8O0rCSzXXxnfqywJ3HAvNnS2pV
+         msmdfQ4m+mBC4vrIA5wGSgtUc7Lo7M1uQHQI7pO148yYQfiNmsgdb0uPfX59ok4Oc7Mo
+         QMSw==
+X-Gm-Message-State: AOAM533v0E5sBBFWR0lbQtFE25eDT8mJLxyKJnf7qiYarRi6LOs9XPtK
+        Ic4wF98c9kLuoFQ7hg/WKHsT5A==
+X-Google-Smtp-Source: ABdhPJx4wGrPBGJPFmNxW8tuM/QQdlgSJgzr9IKK/k91ySYvrwxQTmHM+rRPDy4KJY2hydWvfeXNAg==
+X-Received: by 2002:a05:600c:3547:b0:393:eee3:39df with SMTP id i7-20020a05600c354700b00393eee339dfmr3998609wmq.181.1651251205114;
+        Fri, 29 Apr 2022 09:53:25 -0700 (PDT)
+Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id o11-20020a05600c4fcb00b00391447f7fd4sm3642655wmq.24.2022.04.29.09.53.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 09:53:24 -0700 (PDT)
+Message-ID: <e368b193-48f9-c8b8-ea70-59bf7ea7304a@linaro.org>
+Date:   Fri, 29 Apr 2022 17:53:23 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] misc: fastrpc: fix an incorrect NULL check on list
+ iterator
+Content-Language: en-US
+To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Cc:     amahesh@qti.qualcomm.com, arnd@arndb.de,
+        gregkh@linuxfoundation.org, jorge.ramirez-ortiz@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20220327062202.5720-1-xiam0nd.tong@gmail.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20220327062202.5720-1-xiam0nd.tong@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,133 +76,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the EXIU uses the fasteoi interrupt flow that is configured by
-it's parent (irq-gic-v3.c). With this flow the only chance to clear the
-interrupt request happens during .irq_eoi() and (obviously) this happens
-after the interrupt handler has run. EXIU requires edge triggered
-interrupts to be acked prior to interrupt handling. Without this we
-risk incorrect interrupt dismissal when a new interrupt is delivered
-after the handler reads and acknowledges the peripheral but before the
-irq_eoi() takes place.
 
-Fix this by clearing the interrupt request from .irq_ack() if we are
-configured for edge triggered interrupts. This requires adopting the
-fasteoi-ack flow instead of the fasteoi to ensure the ack gets called.
 
-These changes have been tested using the power button on a
-Developerbox/SC2A11 combined with some hackery in gpio-keys so I can
-play with the different trigger mode (and an mdelay(500) so I can
-can check what happens on a double click in both modes.
+On 27/03/2022 07:22, Xiaomeng Tong wrote:
+> The bug is here:
+> 	if (!buf) {
+> 
+> The list iterator value 'buf' will *always* be set and non-NULL
+> by list_for_each_entry(), so it is incorrect to assume that the
+> iterator value will be NULL if the list is empty (in this case, the
+> check 'if (!buf) {' will always be false and never exit expectly).
+> 
+> To fix the bug, use a new variable 'iter' as the list iterator,
+> while use the original variable 'buf' as a dedicated pointer to
+> point to the found element.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 2419e55e532de ("misc: fastrpc: add mmap/unmap support")
+> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+LGTM,
 
-Fixes: 706cffc1b912 ("irqchip/exiu: Add support for Socionext Synquacer EXIU controller")
-Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
----
+Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 
-Notes:
-    Changes in v2:
-    
-     * Switch to dynamic selection of handle_fasteoi_irq and
-       handle_fasteoi_ack_irq and reintroduce exiu_irq_eoi() since we need
-       that for level triggered interrupts (Ard B).
-     * Above changes mean we are no longer using sun6i NMI code as a
-       template to tidy up the description accordingly.
-
- arch/arm64/Kconfig.platforms   |  1 +
- drivers/irqchip/irq-sni-exiu.c | 33 +++++++++++++++++++++++++++++----
- 2 files changed, 30 insertions(+), 4 deletions(-)
-
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index 30b123cde02c..aaeaf57c8222 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -253,6 +253,7 @@ config ARCH_INTEL_SOCFPGA
-
- config ARCH_SYNQUACER
- 	bool "Socionext SynQuacer SoC Family"
-+	select IRQ_FASTEOI_HIERARCHY_HANDLERS
-
- config ARCH_TEGRA
- 	bool "NVIDIA Tegra SoC Family"
-diff --git a/drivers/irqchip/irq-sni-exiu.c b/drivers/irqchip/irq-sni-exiu.c
-index abd011fcecf4..651a82dead01 100644
---- a/drivers/irqchip/irq-sni-exiu.c
-+++ b/drivers/irqchip/irq-sni-exiu.c
-@@ -37,11 +37,20 @@ struct exiu_irq_data {
- 	u32		spi_base;
- };
-
--static void exiu_irq_eoi(struct irq_data *d)
-+static void exiu_irq_ack(struct irq_data *d)
- {
- 	struct exiu_irq_data *data = irq_data_get_irq_chip_data(d);
-
- 	writel(BIT(d->hwirq), data->base + EIREQCLR);
-+}
-+
-+static void exiu_irq_eoi(struct irq_data *d)
-+{
-+	struct exiu_irq_data *data = irq_data_get_irq_chip_data(d);
-+	u32 edge_triggered = readl_relaxed(data->base + EIEDG);
-+
-+	if (!(edge_triggered & BIT(d->hwirq)))
-+		writel(BIT(d->hwirq), data->base + EIREQCLR);
- 	irq_chip_eoi_parent(d);
- }
-
-@@ -91,10 +100,13 @@ static int exiu_irq_set_type(struct irq_data *d, unsigned int type)
- 	writel_relaxed(val, data->base + EILVL);
-
- 	val = readl_relaxed(data->base + EIEDG);
--	if (type == IRQ_TYPE_LEVEL_LOW || type == IRQ_TYPE_LEVEL_HIGH)
-+	if (type == IRQ_TYPE_LEVEL_LOW || type == IRQ_TYPE_LEVEL_HIGH) {
- 		val &= ~BIT(d->hwirq);
--	else
-+		irq_set_handler_locked(d, handle_fasteoi_irq);
-+	} else {
- 		val |= BIT(d->hwirq);
-+		irq_set_handler_locked(d, handle_fasteoi_ack_irq);
-+	}
- 	writel_relaxed(val, data->base + EIEDG);
-
- 	writel_relaxed(BIT(d->hwirq), data->base + EIREQCLR);
-@@ -104,6 +116,7 @@ static int exiu_irq_set_type(struct irq_data *d, unsigned int type)
-
- static struct irq_chip exiu_irq_chip = {
- 	.name			= "EXIU",
-+	.irq_ack		= exiu_irq_ack,
- 	.irq_eoi		= exiu_irq_eoi,
- 	.irq_enable		= exiu_irq_enable,
- 	.irq_mask		= exiu_irq_mask,
-@@ -148,6 +161,8 @@ static int exiu_domain_alloc(struct irq_domain *dom, unsigned int virq,
- 	struct irq_fwspec parent_fwspec;
- 	struct exiu_irq_data *info = dom->host_data;
- 	irq_hw_number_t hwirq;
-+	int i, ret;
-+	u32 edge_triggered;
-
- 	parent_fwspec = *fwspec;
- 	if (is_of_node(dom->parent->fwnode)) {
-@@ -165,7 +180,17 @@ static int exiu_domain_alloc(struct irq_domain *dom, unsigned int virq,
- 	irq_domain_set_hwirq_and_chip(dom, virq, hwirq, &exiu_irq_chip, info);
-
- 	parent_fwspec.fwnode = dom->parent->fwnode;
--	return irq_domain_alloc_irqs_parent(dom, virq, nr_irqs, &parent_fwspec);
-+	ret = irq_domain_alloc_irqs_parent(dom, virq, nr_irqs, &parent_fwspec);
-+	if (ret)
-+		return ret;
-+
-+	edge_triggered = readl_relaxed(info->base + EIEDG);
-+	for (i = 0; i < nr_irqs; i++)
-+		irq_set_handler(virq + i, edge_triggered & BIT(i) ?
-+						  handle_fasteoi_ack_irq :
-+							handle_fasteoi_irq);
-+
-+	return 0;
- }
-
- static const struct irq_domain_ops exiu_domain_ops = {
-
-base-commit: b2d229d4ddb17db541098b83524d901257e93845
---
-2.35.1
-
+> --- >   drivers/misc/fastrpc.c | 9 +++++----
+>   1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
+> index aa1682b94a23..45aaf54a7560 100644
+> --- a/drivers/misc/fastrpc.c
+> +++ b/drivers/misc/fastrpc.c
+> @@ -1353,17 +1353,18 @@ static int fastrpc_req_munmap_impl(struct fastrpc_user *fl,
+>   				   struct fastrpc_req_munmap *req)
+>   {
+>   	struct fastrpc_invoke_args args[1] = { [0] = { 0 } };
+> -	struct fastrpc_buf *buf, *b;
+> +	struct fastrpc_buf *buf = NULL, *iter, *b;
+>   	struct fastrpc_munmap_req_msg req_msg;
+>   	struct device *dev = fl->sctx->dev;
+>   	int err;
+>   	u32 sc;
+>   
+>   	spin_lock(&fl->lock);
+> -	list_for_each_entry_safe(buf, b, &fl->mmaps, node) {
+> -		if ((buf->raddr == req->vaddrout) && (buf->size == req->size))
+> +	list_for_each_entry_safe(iter, b, &fl->mmaps, node) {
+> +		if ((iter->raddr == req->vaddrout) && (iter->size == req->size)) {
+> +			buf = iter;
+>   			break;
+> -		buf = NULL;
+> +		}
+>   	}
+>   	spin_unlock(&fl->lock);
+>   

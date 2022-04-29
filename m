@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ACE451491B
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 276DC514927
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358984AbiD2MYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 08:24:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41440 "EHLO
+        id S1359045AbiD2MZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 08:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353508AbiD2MXh (ORCPT
+        with ESMTP id S1359021AbiD2MXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 08:23:37 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276CD205CD;
-        Fri, 29 Apr 2022 05:20:18 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id z99so8869574ede.5;
-        Fri, 29 Apr 2022 05:20:18 -0700 (PDT)
+        Fri, 29 Apr 2022 08:23:38 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE4922B3C;
+        Fri, 29 Apr 2022 05:20:19 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id d6so8862943ede.8;
+        Fri, 29 Apr 2022 05:20:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=2jO8iQFRsavkZH0i8n1gjUFOf09L/MY+4sf/fbVG9MQ=;
-        b=f2BZWRV2LBKXH/7uVWkd9+7wi7GfY27JxC45DIQ7OQEAz9gy9aa+EY2WFjHsbj7Fdr
-         /YGVKX7hgu/LFnjIvCrzybjYHH3Jgf2VvGPh1Yt3wL3Ho27zujWp/2u49/YhHwCPeVG/
-         z0ppT0JeP9FNG5TMJDemWdqRmAoicXbX+yqVr0LWmgDwlA0ViosYecmG6/KKuiDjBDPc
-         UeGxFeofIshTU2kju8Z57a5uJw9U+VIUaCb8TDZ6vtwB0oV570jGPvyG2uvHJJmRMyRO
-         6OL6z0ZbPO7/ZopL+saXJnHwmdTnkqGCFCNQg03ENHMEYXEt2qO6NjxcOxmhPPPLtVhI
-         WaUA==
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=WNKRQObsIv5de+nakfwyTd/ChTKSJMv+D7NV3DOkQmk=;
+        b=koXKwyF0Qd9+c5S1iJfHv0THBVPr2zB7X7eQ4Rkjr3LpNjDo8nPaD45QByIOwA3sPU
+         Swm9mDHFv8Q9DBifimBYuklmkp4UrwXnhI7ENjrfsCACNpRqWNTwf+v58pK1CCFNjRtr
+         f2F7E2UYv2rgkStzE903i45DZHtsd442NVHdJ+ocZYGGC3iWHAN4SZJ7+pk4qkFDUAk4
+         aTEUntG2CY6sX8trbmYotZoO02fxmu7lcGY10vEZa7NQIVY1ADPNm7Q7ahnXJBAfu5NV
+         Qg0e67W0OBrNJ4ADHhVthZeA4RcUEM6SYXlKaUfKN+R4Q0PK/mlqZTwE1QQH8HuvO5ZN
+         GngA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=2jO8iQFRsavkZH0i8n1gjUFOf09L/MY+4sf/fbVG9MQ=;
-        b=ONkAb/DHsbCpro8rTcKFcd6EX5jTfaEvvtUEMqgNAYrTxnfVuRVar/o6sNqwBTnT7b
-         JkeWqUUOjlrYsyGytA5SRpQAhngiADbwE+LE7bWtwvBQocnrBI7hpLGKZgiWT/+eUx3Y
-         NL9Xh63HbkXI2vmeVcEOJKkjTwOVMiqIiwljlS0Q7n+gfC1Kl4tpBnbObNiAP/CXex+0
-         bnPoZ357LjxQNVfj+dCGJtO7vx6l38K8MGr75ol8x3sL/SRU/oCa5tGC0D1YnKxwxHlm
-         gNCqVsAuJVABA56sVPAfX9N9yO7YQ4jmLoQzefOs6iMv9ZIohba9zoRH0zuqomxOcRF9
-         hmcg==
-X-Gm-Message-State: AOAM533iF77efVUyJrQvnJs3m6m4PqEI1QLgIs6ToqZdKii6CFV5M0+a
-        oUp0MJfkxBFu29CMjkRCRuU=
-X-Google-Smtp-Source: ABdhPJxE3LKcCgKYwMS/eAlJbMIZso8DmyhEMwuUf34ioGF2XkQtIS5Ufq8i/IiL8nk6qXNEUsrbWg==
-X-Received: by 2002:a05:6402:3492:b0:426:19be:bf36 with SMTP id v18-20020a056402349200b0042619bebf36mr12678605edc.36.1651234816564;
-        Fri, 29 Apr 2022 05:20:16 -0700 (PDT)
+        bh=WNKRQObsIv5de+nakfwyTd/ChTKSJMv+D7NV3DOkQmk=;
+        b=6jmmEWHeyAz0VJFhGk7skkc7+y7nTuQStNa1XCvnYQafAY8rstK+HomZXlb7/OyLrn
+         iq1lEQfBPvO8xD3fZcb5RO/hJRmKcs2931sdi8Hm8+3B4NsrpjBUfi5WERyRIIYFTB9I
+         tLTu3kwVqg+P6KMopHJ56gUHLktVXhdYtmlmYrykut1C9tFZwqI3ecWIhuiiJt/P//Y0
+         SRmmzFgK1/o0HgrpeRVxhIhLjGOtnAzNI77cn8LbJWQuBxr2egbIF9OCOpQWlZ/M2IWf
+         4YIFCXrtGX8CWnrg+nLuxaNscHolwXVGMZyW2ZnrtgQ+3bahIVpP/UYevhx5OG4c7saP
+         onQw==
+X-Gm-Message-State: AOAM533sDwRqtSgb7fG1adKWigvvoaqT4+2SY1d4GeDgO2YuHEVFeiex
+        m2qXJ7JiCcDK1DRh7Gz8v4A=
+X-Google-Smtp-Source: ABdhPJxoKEb9PkXg7l8L/ICVkoFkiNpoq9mBxcw4Ae42CERC1fE83cbEPRwfIcnN/wjCWWUMoL3nkg==
+X-Received: by 2002:a05:6402:350a:b0:423:e41e:75cb with SMTP id b10-20020a056402350a00b00423e41e75cbmr41201090edd.178.1651234817820;
+        Fri, 29 Apr 2022 05:20:17 -0700 (PDT)
 Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id rb48-20020a170907693000b006f3ef214e10sm602694ejc.118.2022.04.29.05.20.15
+        by smtp.googlemail.com with ESMTPSA id rb48-20020a170907693000b006f3ef214e10sm602694ejc.118.2022.04.29.05.20.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 05:20:16 -0700 (PDT)
+        Fri, 29 Apr 2022 05:20:17 -0700 (PDT)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -58,10 +58,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
         Ansuel Smith <ansuelsmth@gmail.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH 2/3] dt-bindings: arm: msm: Convert kpss-acc driver Documentation to yaml
-Date:   Fri, 29 Apr 2022 14:17:38 +0200
-Message-Id: <20220429121739.28584-3-ansuelsmth@gmail.com>
+Subject: [PATCH 3/3] dt-bindings: arm: msm: Convert kpss-gcc driver Documentation to yaml
+Date:   Fri, 29 Apr 2022 14:17:39 +0200
+Message-Id: <20220429121739.28584-4-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220429121739.28584-1-ansuelsmth@gmail.com>
 References: <20220429121739.28584-1-ansuelsmth@gmail.com>
@@ -77,112 +76,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert kpss-acc driver Documentation to yaml.
-The original Documentation was wrong all along. Fix it while we are
-converting it.
-The example was wrong as kpss-acc-v2 should only expose the regs but we
-don't have any driver that expose additional clocks. The kpss-acc driver
-is only specific to v1. For this exact reason, limit all the additional
-bindings (clocks, clock-names, clock-output-names and #clock-cells) to
-v1 and also flag that these bindings should NOT be used for v2.
+Convert kpss-gcc driver Documentation to yaml.
 
 Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- .../bindings/arm/msm/qcom,kpss-acc.txt        | 49 ----------
- .../bindings/arm/msm/qcom,kpss-acc.yaml       | 94 +++++++++++++++++++
- 2 files changed, 94 insertions(+), 49 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.txt
- create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.yaml
+ .../bindings/arm/msm/qcom,kpss-gcc.txt        | 44 -------------
+ .../bindings/arm/msm/qcom,kpss-gcc.yaml       | 63 +++++++++++++++++++
+ 2 files changed, 63 insertions(+), 44 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
+ create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
 
-diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.txt b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.txt
+diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
 deleted file mode 100644
-index 7f696362a4a1..000000000000
---- a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.txt
+index e628758950e1..000000000000
+--- a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
 +++ /dev/null
-@@ -1,49 +0,0 @@
--Krait Processor Sub-system (KPSS) Application Clock Controller (ACC)
--
--The KPSS ACC provides clock, power domain, and reset control to a Krait CPU.
--There is one ACC register region per CPU within the KPSS remapped region as
--well as an alias register region that remaps accesses to the ACC associated
--with the CPU accessing the region.
+@@ -1,44 +0,0 @@
+-Krait Processor Sub-system (KPSS) Global Clock Controller (GCC)
 -
 -PROPERTIES
 -
 -- compatible:
 -	Usage: required
 -	Value type: <string>
--	Definition: should be one of:
--			"qcom,kpss-acc-v1"
--			"qcom,kpss-acc-v2"
+-	Definition: should be one of the following. The generic compatible
+-			"qcom,kpss-gcc" should also be included.
+-			"qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc"
+-			"qcom,kpss-gcc-apq8064", "qcom,kpss-gcc"
+-			"qcom,kpss-gcc-msm8974", "qcom,kpss-gcc"
+-			"qcom,kpss-gcc-msm8960", "qcom,kpss-gcc"
 -
 -- reg:
 -	Usage: required
 -	Value type: <prop-encoded-array>
--	Definition: the first element specifies the base address and size of
--		    the register region. An optional second element specifies
--		    the base address and size of the alias register region.
+-	Definition: base address and size of the register region
 -
 -- clocks:
--        Usage: required
--        Value type: <prop-encoded-array>
--        Definition: reference to the pll parents.
+-	Usage: required
+-	Value type: <prop-encoded-array>
+-	Definition: reference to the pll parents.
 -
 -- clock-names:
--        Usage: required
--        Value type: <stringlist>
--        Definition: must be "pll8_vote", "pxo".
+-	Usage: required
+-	Value type: <stringlist>
+-	Definition: must be "pll8_vote", "pxo".
 -
 -- clock-output-names:
--	Usage: optional
+-	Usage: required
 -	Value type: <string>
--	Definition: Name of the output clock. Typically acpuX_aux where X is a
--		    CPU number starting at 0.
+-	Definition: Name of the output clock. Typically acpu_l2_aux indicating
+-		    an L2 cache auxiliary clock.
 -
 -Example:
 -
--	clock-controller@2088000 {
--		compatible = "qcom,kpss-acc-v2";
--		reg = <0x02088000 0x1000>,
--		      <0x02008000 0x1000>;
+-	l2cc: clock-controller@2011000 {
+-		compatible = "qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc";
+-		reg = <0x2011000 0x1000>;
 -		clocks = <&gcc PLL8_VOTE>, <&gcc PXO_SRC>;
 -		clock-names = "pll8_vote", "pxo";
--		clock-output-names = "acpu0_aux";
+-		clock-output-names = "acpu_l2_aux";
 -	};
-diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.yaml b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.yaml
+diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
 new file mode 100644
-index 000000000000..707a81a6c30e
+index 000000000000..17616ef7ba88
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.yaml
-@@ -0,0 +1,94 @@
++++ b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
+@@ -0,0 +1,63 @@
 +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/arm/msm/qcom,kpss-acc.yaml#
++$id: http://devicetree.org/schemas/arm/msm/qcom,kpss-gcc.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Krait Processor Sub-system (KPSS) Application Clock Controller (ACC)
++title: Krait Processor Sub-system (KPSS) Global Clock Controller (GCC)
 +
 +maintainers:
 +  - Ansuel Smith <ansuelsmth@gmail.com>
 +
 +description: |
-+  The KPSS ACC provides clock, power domain, and reset control to a Krait CPU.
-+  There is one ACC register region per CPU within the KPSS remapped region as
-+  well as an alias register region that remaps accesses to the ACC associated
-+  with the CPU accessing the region.
++  Krait Processor Sub-system (KPSS) Global Clock Controller (GCC). Used
++  to control L2 mux (in the current implementation).
 +
 +properties:
 +  compatible:
-+    enum:
-+      - qcom,kpss-acc-v1
-+      - qcom,kpss-acc-v2
++    items:
++      - enum:
++          - qcom,kpss-gcc-ipq8064
++          - qcom,kpss-gcc-apq8064
++          - qcom,kpss-gcc-msm8974
++          - qcom,kpss-gcc-msm8960
++      - const: qcom,kpss-gcc
 +
 +  reg:
-+    items:
-+      - description: Base address and size of the register region
-+      - description: Optional base address and size of the alias register region
++    maxItems: 1
 +
 +  clocks:
 +    items:
@@ -195,38 +181,14 @@ index 000000000000..707a81a6c30e
 +      - const: pxo
 +
 +  clock-output-names:
-+    description: Name of the aux clock. Krait can have at most 4 cpu.
-+    enum:
-+      - acpu0_aux
-+      - acpu1_aux
-+      - acpu2_aux
-+      - acpu3_aux
-+
-+  '#clock-cells':
-+    const: 0
++    const: acpu_l2_aux
 +
 +required:
 +  - compatible
 +  - reg
-+
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: qcom,kpss-acc-v1
-+      then:
-+        required:
-+          - clocks
-+          - clock-names
-+          - clock-output-names
-+          - '#clock-cells'
-+    else:
-+      properties:
-+        clocks: false
-+        clock-names: false
-+        clock-output-names: false
-+        '#clock-cells': false
++  - clocks
++  - clock-names
++  - clock-output-names
 +
 +additionalProperties: false
 +
@@ -234,22 +196,15 @@ index 000000000000..707a81a6c30e
 +  - |
 +    #include <dt-bindings/clock/qcom,gcc-ipq806x.h>
 +
-+    clock-controller@2088000 {
-+      compatible = "qcom,kpss-acc-v1";
-+      reg = <0x02088000 0x1000>, <0x02008000 0x1000>;
++    clock-controller@2011000 {
++      compatible = "qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc";
++      reg = <0x2011000 0x1000>;
 +      clocks = <&gcc PLL8_VOTE>, <&pxo_board>;
 +      clock-names = "pll8_vote", "pxo";
-+      clock-output-names = "acpu0_aux";
-+      #clock-cells = <0>;
-+    };
-+
-+  - |
-+    clock-controller@f9088000 {
-+      compatible = "qcom,kpss-acc-v2";
-+      reg = <0xf9088000 0x1000>,
-+            <0xf9008000 0x1000>;
++      clock-output-names = "acpu_l2_aux";
 +    };
 +...
++
 -- 
 2.34.1
 

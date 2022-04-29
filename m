@@ -2,206 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4575851422E
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 08:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE22514231
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 08:13:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354411AbiD2GMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 02:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
+        id S1354427AbiD2GQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 02:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345879AbiD2GMa (ORCPT
+        with ESMTP id S1354419AbiD2GQr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 02:12:30 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBAE571A14
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 23:09:12 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23T68sjS061532;
-        Fri, 29 Apr 2022 01:08:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1651212534;
-        bh=RZgucMwnPVvB+o/MrUBt8zsOyMFS8ZhmghhtAvhsMoo=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=Nafu+WeqBgkJZLIlDaT0EZQwTS6ed5dyWCw29smBf6mNkwsrD2lobMHIk7cAaZbON
-         XcZYWQvaIkR3nqjisWt04WHXCsIBCd3h4W8cnDlDa22Z0mKlbFmXlycHfWOgYL+wY5
-         svMYWrm1ULNGPuOZdvVBm21m0Rd/mNXT3EKMtRBw=
-Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23T68sGc028429
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 29 Apr 2022 01:08:54 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 29
- Apr 2022 01:08:54 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 29 Apr 2022 01:08:54 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23T68rfp035139;
-        Fri, 29 Apr 2022 01:08:53 -0500
-Date:   Fri, 29 Apr 2022 11:38:53 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Michael Walle <michael@walle.cc>
-CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mtd: spi-nor: move spi_nor_write_ear() to winbond module
-Message-ID: <20220429060852.whf5puyf6nkvm4jn@ti.com>
-References: <20220418112404.2790469-1-michael@walle.cc>
+        Fri, 29 Apr 2022 02:16:47 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF697E5B3
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 23:13:26 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id i19so13455008eja.11
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 23:13:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qVdXSHSh7EwA/4nqmLTvK4Lay7sxQolbudvBwlJyLB8=;
+        b=gQOVoQeNfTBai5DFopXLol0qcvPH+FLsNpUjfjRfy2qL4OVU6Q2vYHplc1VNAQndU+
+         YGiPmTXclJbU4IOL85DTmUCdIatSO6fYbIxAZFPpOF+vVGtfaiSqKyAK6L9i8ECLWZQi
+         QHZwtzEBVay2bJjvMWpccuYhjoa5HJupJPBlPjDS4Jlx/2I2mviW5AGFOMZjC55d1C6z
+         OKaKSsdJeqAmG/MvHfbYOu9XUHKRoVMRN3NPLfcc7OmcR/P4z0hrC+h1ZCiDwkvZCGT2
+         eanOlarvyLc+gGwdUzSeZns0Gg6fRRfiqZaflrPCftX66MRzTi7t08lN3AJ+MIlhqUbN
+         RU7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qVdXSHSh7EwA/4nqmLTvK4Lay7sxQolbudvBwlJyLB8=;
+        b=cwVv1Gf7H8LeTLA2IC5EUqnb57a0SQ2FSM5E4QgPtMc+0YLLAUyOT6puBtJnU1BFt8
+         HROMiQhcSzkpjEvD74W6O3aX/rzO/3q6uT+NbWYAxoT+1mw1vNsKMwSLERzEI/Fz0mo+
+         pZpg+s8QB1n0y/2x+DRXC5EvngAqi6BrESlodBPB5W8Y4oPdGWpB9koKDBAD66+fHNog
+         1PKSP/IOwsqX+qT4A4JMfy1iiJGFHHI6WL8mV4al0XOyzlf+3KXZtOz66+c1veVpg0W1
+         1sZ4iZ8aamd4MNM+EOPq6yuh35vjaqpCG+dM6WDtVuFeIIU7gxlZjvcriY5QHRo2Jido
+         ZWkg==
+X-Gm-Message-State: AOAM533DpA10jPDREK03sz0EsoKQnszfMKGY6rfAQlcAVjUJZ3/1JCcK
+        dHmHZFH9AiUpTeTiigABX6kfgg==
+X-Google-Smtp-Source: ABdhPJx9AFEol2KkE4AyRlTaUgsGtUiyykZiEpX6D8UZc2S0zDAJ2YF4sSjK1LMV90bxH51xflHx7Q==
+X-Received: by 2002:a17:906:a0ce:b0:6d1:cb30:3b3b with SMTP id bh14-20020a170906a0ce00b006d1cb303b3bmr34598141ejb.582.1651212805367;
+        Thu, 28 Apr 2022 23:13:25 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id eg51-20020a05640228b300b0042617ba63casm2469039edb.84.2022.04.28.23.13.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 23:13:24 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3] pinctrl: nuvoton: Fix irq_of_parse_and_map() return value
+Date:   Fri, 29 Apr 2022 08:13:20 +0200
+Message-Id: <20220429061320.25032-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220418112404.2790469-1-michael@walle.cc>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
 
-On 18/04/22 01:24PM, Michael Walle wrote:
-> The "Extended Address Register" is winbond specific. If the flash is
-> larger than 16MiB and is used in 3 byte address mode, it is used to set
-> the remaining address bits. Move the write_ear() function the winbond
-> module and rename it accordingly.
+Fixes: 3b588e43ee5c ("pinctrl: nuvoton: add NPCM7xx pinctrl and GPIO driver")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-This patch no longer applies due to Tudor's patch c0abb861c5d0 ("mtd: 
-spi-nor: Introduce templates for SPI NOR operations") which changes the 
-contents of spi_nor_write_ear() to use a template. Please rebase and 
-resend so I can apply it.
+---
 
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
->  drivers/mtd/spi-nor/core.c    | 34 ---------------------------------
->  drivers/mtd/spi-nor/core.h    |  1 -
->  drivers/mtd/spi-nor/winbond.c | 36 ++++++++++++++++++++++++++++++++++-
->  3 files changed, 35 insertions(+), 36 deletions(-)
-> 
-> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-> index b4f141ad9c9c..848836535cdd 100644
-> --- a/drivers/mtd/spi-nor/core.c
-> +++ b/drivers/mtd/spi-nor/core.c
-> @@ -520,40 +520,6 @@ static int spansion_set_4byte_addr_mode(struct spi_nor *nor, bool enable)
->  	return ret;
->  }
->  
-> -/**
-> - * spi_nor_write_ear() - Write Extended Address Register.
-> - * @nor:	pointer to 'struct spi_nor'.
-> - * @ear:	value to write to the Extended Address Register.
-> - *
-> - * Return: 0 on success, -errno otherwise.
-> - */
-> -int spi_nor_write_ear(struct spi_nor *nor, u8 ear)
-> -{
-> -	int ret;
-> -
-> -	nor->bouncebuf[0] = ear;
-> -
-> -	if (nor->spimem) {
-> -		struct spi_mem_op op =
-> -			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_WREAR, 0),
-> -				   SPI_MEM_OP_NO_ADDR,
-> -				   SPI_MEM_OP_NO_DUMMY,
-> -				   SPI_MEM_OP_DATA_OUT(1, nor->bouncebuf, 0));
-> -
-> -		spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
-> -
-> -		ret = spi_mem_exec_op(nor->spimem, &op);
-> -	} else {
-> -		ret = spi_nor_controller_ops_write_reg(nor, SPINOR_OP_WREAR,
-> -						       nor->bouncebuf, 1);
-> -	}
-> -
-> -	if (ret)
-> -		dev_dbg(nor->dev, "error %d writing EAR\n", ret);
-> -
-> -	return ret;
-> -}
-> -
->  /**
->   * spi_nor_sr_ready() - Query the Status Register to see if the flash is ready
->   * for new commands.
-> diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
-> index b7fd760e3b47..14bf28473cf3 100644
-> --- a/drivers/mtd/spi-nor/core.h
-> +++ b/drivers/mtd/spi-nor/core.h
-> @@ -526,7 +526,6 @@ void spi_nor_spimem_setup_op(const struct spi_nor *nor,
->  int spi_nor_write_enable(struct spi_nor *nor);
->  int spi_nor_write_disable(struct spi_nor *nor);
->  int spi_nor_set_4byte_addr_mode(struct spi_nor *nor, bool enable);
-> -int spi_nor_write_ear(struct spi_nor *nor, u8 ear);
->  int spi_nor_wait_till_ready(struct spi_nor *nor);
->  int spi_nor_global_block_unlock(struct spi_nor *nor);
->  int spi_nor_lock_and_prep(struct spi_nor *nor);
-> diff --git a/drivers/mtd/spi-nor/winbond.c b/drivers/mtd/spi-nor/winbond.c
-> index 1e8fb571680b..0ca96efee5c9 100644
-> --- a/drivers/mtd/spi-nor/winbond.c
-> +++ b/drivers/mtd/spi-nor/winbond.c
-> @@ -130,6 +130,40 @@ static const struct flash_info winbond_nor_parts[] = {
->  			      SPI_NOR_QUAD_READ) },
->  };
->  
-> +/**
-> + * winbond_nor_write_ear() - Write Extended Address Register.
-> + * @nor:	pointer to 'struct spi_nor'.
-> + * @ear:	value to write to the Extended Address Register.
-> + *
-> + * Return: 0 on success, -errno otherwise.
-> + */
-> +static int winbond_nor_write_ear(struct spi_nor *nor, u8 ear)
-> +{
-> +	int ret;
-> +
-> +	nor->bouncebuf[0] = ear;
-> +
-> +	if (nor->spimem) {
-> +		struct spi_mem_op op =
-> +			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_WREAR, 0),
-> +				   SPI_MEM_OP_NO_ADDR,
-> +				   SPI_MEM_OP_NO_DUMMY,
-> +				   SPI_MEM_OP_DATA_OUT(1, nor->bouncebuf, 0));
-> +
-> +		spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
-> +
-> +		ret = spi_mem_exec_op(nor->spimem, &op);
-> +	} else {
-> +		ret = spi_nor_controller_ops_write_reg(nor, SPINOR_OP_WREAR,
-> +						       nor->bouncebuf, 1);
-> +	}
-> +
-> +	if (ret)
-> +		dev_dbg(nor->dev, "error %d writing EAR\n", ret);
-> +
-> +	return ret;
-> +}
-> +
->  /**
->   * winbond_nor_set_4byte_addr_mode() - Set 4-byte address mode for Winbond
->   * flashes.
-> @@ -156,7 +190,7 @@ static int winbond_nor_set_4byte_addr_mode(struct spi_nor *nor, bool enable)
->  	if (ret)
->  		return ret;
->  
-> -	ret = spi_nor_write_ear(nor, 0);
-> +	ret = winbond_nor_write_ear(nor, 0);
->  	if (ret)
->  		return ret;
->  
-> -- 
-> 2.30.2
-> 
+Changes since v2:
+1. Rebase on Linus' devel branch.
+   Will later conflict with: "pinctrl: npcm7xx: Switch to use
+   for_each_gpiochip_node() helper"
 
+Changes since v1:
+1. Correct the return value passed further.
+---
+ drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c b/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
+index 9557fac5d11c..44b77dd06d90 100644
+--- a/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
++++ b/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
+@@ -1879,11 +1879,10 @@ static int npcm7xx_gpio_of(struct npcm7xx_pinctrl *pctrl)
+ 				ioremap(res.start, resource_size(&res));
+ 
+ 			irq = irq_of_parse_and_map(np, 0);
+-			if (irq < 0) {
++			if (!irq) {
+ 				dev_err(pctrl->dev,
+ 					"No IRQ for GPIO bank %u\n", id);
+-				ret = irq;
+-				return ret;
++				return -EINVAL;
+ 			}
+ 
+ 			ret = bgpio_init(&pctrl->gpio_bank[id].gc,
 -- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+2.32.0
+

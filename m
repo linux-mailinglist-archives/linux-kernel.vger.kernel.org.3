@@ -2,47 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77BCA51451A
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 11:07:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1A4251450E
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 11:06:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356314AbiD2JKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 05:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44712 "EHLO
+        id S1356250AbiD2JJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 05:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356300AbiD2JKN (ORCPT
+        with ESMTP id S1349144AbiD2JJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 05:10:13 -0400
+        Fri, 29 Apr 2022 05:09:06 -0400
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A1AC614A;
-        Fri, 29 Apr 2022 02:06:53 -0700 (PDT)
-Received: from kwepemi100021.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KqRS62TLDzhYt1;
-        Fri, 29 Apr 2022 17:06:30 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- kwepemi100021.china.huawei.com (7.221.188.223) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 29 Apr 2022 17:06:51 +0800
-Received: from ubuntu1804.huawei.com (10.67.174.61) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 29 Apr 2022 17:06:51 +0800
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>, <ak@linux.intel.com>,
-        <adrian.hunter@intel.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <yangjihong1@huawei.com>
-Subject: [PATCH] perf: make util/data.h self-contained
-Date:   Fri, 29 Apr 2022 17:05:39 +0800
-Message-ID: <20220429090539.212448-1-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519D04DF79
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 02:05:48 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KqRQR6mG0zhYtW;
+        Fri, 29 Apr 2022 17:05:03 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 29 Apr
+ 2022 17:05:24 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <cl@linux.com>, <penberg@kernel.org>, <rientjes@google.com>,
+        <iamjoonsoo.kim@lge.com>, <akpm@linux-foundation.org>,
+        <vbabka@suse.cz>
+CC:     <roman.gushchin@linux.dev>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
+Subject: [PATCH] mm/slub: remove unused kmem_cache_order_objects max
+Date:   Fri, 29 Apr 2022 17:05:45 +0800
+Message-ID: <20220429090545.33413-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.174.61]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600003.china.huawei.com (7.193.23.202)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -52,34 +47,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-struct perf_data in util/data.h uses "u64" data type, which is defined in
-"linux/types.h". If only include util/data.h, following compilation error
-occur:
+max field holds the largest slab order that was ever used for a slab cache.
+But it's unused now. Remove it.
 
-util/data.h:38:3: error: unknown type name ‘u64’
-   u64    version;
-   ^~~
-
-Solution: include "linux/types.h." to resolve self-contained issues
-
-Fixes: 258031c017c35 (perf header: Add DIR_FORMAT feature to describe directory data)
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- tools/perf/util/data.h | 1 +
- 1 file changed, 1 insertion(+)
+ include/linux/slub_def.h | 1 -
+ mm/slub.c                | 2 --
+ 2 files changed, 3 deletions(-)
 
-diff --git a/tools/perf/util/data.h b/tools/perf/util/data.h
-index c9de82af5584..1402d9657ef2 100644
---- a/tools/perf/util/data.h
-+++ b/tools/perf/util/data.h
-@@ -4,6 +4,7 @@
+diff --git a/include/linux/slub_def.h b/include/linux/slub_def.h
+index 33c5c0e3bd8d..f9c68a9dac04 100644
+--- a/include/linux/slub_def.h
++++ b/include/linux/slub_def.h
+@@ -105,7 +105,6 @@ struct kmem_cache {
+ 	struct kmem_cache_order_objects oo;
  
- #include <stdio.h>
- #include <stdbool.h>
-+#include <linux/types.h>
+ 	/* Allocation and freeing of slabs */
+-	struct kmem_cache_order_objects max;
+ 	struct kmem_cache_order_objects min;
+ 	gfp_t allocflags;	/* gfp flags to use on each alloc */
+ 	int refcount;		/* Refcount for slab cache destroy */
+diff --git a/mm/slub.c b/mm/slub.c
+index 1f699ddfff7f..e5535020e0fd 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -4162,8 +4162,6 @@ static int calculate_sizes(struct kmem_cache *s)
+ 	 */
+ 	s->oo = oo_make(order, size);
+ 	s->min = oo_make(get_order(size), size);
+-	if (oo_objects(s->oo) > oo_objects(s->max))
+-		s->max = s->oo;
  
- enum perf_data_mode {
- 	PERF_DATA_MODE_WRITE,
+ 	return !!oo_objects(s->oo);
+ }
 -- 
-2.30.GIT
+2.23.0
 

@@ -2,312 +2,464 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9005143F8
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 10:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98A515143FC
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 10:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355651AbiD2IXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 04:23:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38248 "EHLO
+        id S1355623AbiD2IX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 04:23:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355634AbiD2IXa (ORCPT
+        with ESMTP id S235676AbiD2IXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 04:23:30 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37750E52;
-        Fri, 29 Apr 2022 01:20:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651220413; x=1682756413;
-  h=message-id:date:mime-version:subject:from:to:references:
-   in-reply-to:content-transfer-encoding;
-  bh=d4NvQ6VIkJB/SwZn0WfryYlTQz19a+1gOMLT1GNrgqI=;
-  b=b2BMBwnz0+jv1iwLUSP1DMPrp3ehR3gt8CgSX+e8u0AlfoKZqHAd0uNW
-   cP0C8/7jxsR76jAYbSeY2Wqoke0kkDDgWMuTBsapOOWeNHtNMiju/lbby
-   9ArjlF56qzo4vh5Dhz4z4BqZz+fBUZbY0m27IGETu309g6cdNPPwtuMoE
-   HmHAVRCn4/nI9KzTfMvRCprWsv/2/89DWT64h02L8uZB32w3cZH61x+aU
-   TQRYZQkvOMeqXl1/ZV4TrzCmPOBWB2OAla1yXtFSyZa6fQ0CNBWmqNOSr
-   JsYQNx4RCutiB2pq2baWRyulhLG4mdstQC5aOBIv+pO0+GhTfsdMeyY7L
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="327068171"
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="327068171"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 01:20:12 -0700
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="581985431"
-Received: from yangweij-mobl.ccr.corp.intel.com (HELO [10.249.171.134]) ([10.249.171.134])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 01:20:08 -0700
-Message-ID: <59dd98ad-f12e-b44c-bcb7-e0fabed4b882@intel.com>
-Date:   Fri, 29 Apr 2022 16:19:54 +0800
+        Fri, 29 Apr 2022 04:23:25 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18403251
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 01:20:05 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id bg25so4200065wmb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 01:20:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=mIiWrSDnEr769MRWXtiqMLC4ddlzh7URqpu+ue7XBoo=;
+        b=T9a+FZHHCyRSkK+3dGkHc7v/L6Sq+5KSTL2T14AwBLF5UweUCRz4K2C/5rKaNtfujl
+         Z5hFrYxeX83hJV7kaEmkNL9vEGtYxhvi12JeT3m7oPo6rTeUETI0lYNYU53lzKN8x+iv
+         qKEGy5TPcjiK9SveUlHUle/HO0u8NmCh1zUkiy1QsZ3cks+Gj6cvLX+mDtvOeWBN3WR/
+         yA2CZ5sOydULm12SXnb0j5HI3DrmJQb4SCBScoVoAh5bce1QJGYHePmLbxtBIFMjk07Z
+         jKGjaqqQIp9mjkxKMxEuK5c9uy4kHD6Ek2O3oNFmqBs9fJ0YMl8l9cdXC1/gwuU356Cb
+         +dnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=mIiWrSDnEr769MRWXtiqMLC4ddlzh7URqpu+ue7XBoo=;
+        b=8IdSmbA3WDvbVfrBlJPFjSVfcMeMtHIWSzrJT3xvUCMKSBXdNU9VIaVjxbw9QhoSeY
+         sNEbZwFzxluZndjWOgSvtnBXKWb+rqq7W1kY3qV4s4TEeHwJ7NJsruun6WmA9/HgQ/T0
+         tji4bXwnSx9WXAGITl6GvqPcUmzaO/2hRl0Z9IDv7wrJAVL0KDs0KjFjZ8YsPyCMiqcL
+         DFkrG23V3VsdGn1M3hKDY4V2vTn0zEyBQdVmGN7fqX9FBXwVUHfK8ShCajig2CXunAqT
+         VfOCtQow0xiCq5BNifpfej4C637DZPg1RI19Gc0lMa0yMPwVDa0usNst/WxN8Bo+ZZQw
+         GeSA==
+X-Gm-Message-State: AOAM531E/OmODvvxIIBFzt1PMt2SwMbD0XYZvLnkX9M/15nxP3gq0p5E
+        jF6Sdd+8up1JKqkEO9Aq3fcAMg==
+X-Google-Smtp-Source: ABdhPJxv5/pLcfAv3LQuQNA6qnvgMK98AofAhcJwGiAylUMxX5DhwU3/bWAJoWA2Mjtajg2m/PvAgA==
+X-Received: by 2002:a05:600c:1ca5:b0:393:e846:4ea1 with SMTP id k37-20020a05600c1ca500b00393e8464ea1mr2153552wms.32.1651220403449;
+        Fri, 29 Apr 2022 01:20:03 -0700 (PDT)
+Received: from vingu-book ([2a01:e0a:f:6020:440d:c2b8:4c2:5904])
+        by smtp.gmail.com with ESMTPSA id q1-20020a1c4301000000b00394145534bbsm2104601wma.9.2022.04.29.01.20.02
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 29 Apr 2022 01:20:02 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 10:20:00 +0200
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+To:     Tao Zhou <tao.zhou@linux.dev>
+Cc:     Vincent Donnefort <vincent.donnefort@arm.com>,
+        peterz@infradead.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        morten.rasmussen@arm.com, chris.redpath@arm.com, qperret@google.com
+Subject: Re: [PATCH v7 2/7] sched/fair: Decay task PELT values during wakeup
+ migration
+Message-ID: <20220429082000.GA14214@vingu-book>
+References: <20220427143304.3950488-1-vincent.donnefort@arm.com>
+ <20220427143304.3950488-3-vincent.donnefort@arm.com>
+ <Yml/icTe26CfweCd@geo.homenetwork>
+ <CAKfTPtCsZTm_jx-BS00UkFUqW66x--6T8Bb2LRsD1S0a3rN0iQ@mail.gmail.com>
+ <YmrNS6JmjkMDj8SL@geo.homenetwork>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v10 07/16] KVM: vmx/pmu: Emulate MSR_ARCH_LBR_CTL for
- guest Arch LBR
-Content-Language: en-US
-From:   "Yang, Weijiang" <weijiang.yang@intel.com>
-To:     "Liang, Kan" <kan.liang@linux.intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "like.xu.linux@gmail.com" <like.xu.linux@gmail.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "Wang, Wei W" <wei.w.wang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220422075509.353942-1-weijiang.yang@intel.com>
- <20220422075509.353942-8-weijiang.yang@intel.com>
- <bc3b3f6c-8d68-ffc1-cb6e-604d84797da1@linux.intel.com>
- <63068c6c-ae60-078b-0a9e-70f1dfd8362c@intel.com>
-In-Reply-To: <63068c6c-ae60-078b-0a9e-70f1dfd8362c@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YmrNS6JmjkMDj8SL@geo.homenetwork>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Le vendredi 29 avril 2022 � 01:22:19 (+0800), Tao Zhou a �crit :
+> Hi Vincent,
+> 
+> On Thu, Apr 28, 2022 at 03:38:39PM +0200, Vincent Guittot wrote:
+> 
+> > On Wed, 27 Apr 2022 at 19:37, Tao Zhou <tao.zhou@linux.dev> wrote:
+> > >
 
-On 4/29/2022 11:20 AM, Yang, Weijiang wrote:
->
-> On 4/28/2022 10:16 PM, Liang, Kan wrote:
->>
->> On 4/22/2022 3:55 AM, Yang Weijiang wrote:
->>> From: Like Xu <like.xu@linux.intel.com>
->>>
->>> Arch LBR is enabled by setting MSR_ARCH_LBR_CTL.LBREn to 1. A new guest
->>> state field named "Guest IA32_LBR_CTL" is added to enhance guest LBR 
->>> usage.
->>> When guest Arch LBR is enabled, a guest LBR event will be created 
->>> like the
->>> model-specific LBR does. Clear guest LBR enable bit on host PMI 
->>> handling so
->>> guest can see expected config.
->>>
->>> On processors that support Arch LBR, MSR_IA32_DEBUGCTLMSR[bit 0] has no
->>> meaning. It can be written to 0 or 1, but reads will always return 0.
->>> Like IA32_DEBUGCTL, IA32_ARCH_LBR_CTL msr is also preserved on INIT.
->>>
->>> Regardless of the Arch LBR or legacy LBR, when the LBR_EN bit 0 of the
->>> corresponding control MSR is set to 1, LBR recording will be enabled.
->>>
->>> Signed-off-by: Like Xu <like.xu@linux.intel.com>
->>> Co-developed-by: Yang Weijiang <weijiang.yang@intel.com>
->>> Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
->>> ---
->>>    arch/x86/events/intel/lbr.c      |  2 --
->>>    arch/x86/include/asm/msr-index.h |  1 +
->>>    arch/x86/include/asm/vmx.h       |  2 ++
->>>    arch/x86/kvm/vmx/pmu_intel.c     | 58 
->>> +++++++++++++++++++++++++++++---
->>>    arch/x86/kvm/vmx/vmx.c           | 12 +++++++
->>>    5 files changed, 68 insertions(+), 7 deletions(-)
->>>
->>> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
->>> index 4529ce448b2e..4fe6c3b50fc3 100644
->>> --- a/arch/x86/events/intel/lbr.c
->>> +++ b/arch/x86/events/intel/lbr.c
->>> @@ -160,8 +160,6 @@ enum {
->>>         ARCH_LBR_RETURN        |\
->>>         ARCH_LBR_OTHER_BRANCH)
->>>    -#define ARCH_LBR_CTL_MASK            0x7f000e
->>> -
->>>    static void intel_pmu_lbr_filter(struct cpu_hw_events *cpuc);
->>>       static __always_inline bool is_lbr_call_stack_bit_set(u64 config)
->>> diff --git a/arch/x86/include/asm/msr-index.h 
->>> b/arch/x86/include/asm/msr-index.h
->>> index 0eb90d21049e..60e0ab108dc0 100644
->>> --- a/arch/x86/include/asm/msr-index.h
->>> +++ b/arch/x86/include/asm/msr-index.h
->>> @@ -169,6 +169,7 @@
->>>    #define LBR_INFO_BR_TYPE        (0xfull << LBR_INFO_BR_TYPE_OFFSET)
->>>       #define MSR_ARCH_LBR_CTL        0x000014ce
->>> +#define ARCH_LBR_CTL_MASK        0x7f000e
->>>    #define ARCH_LBR_CTL_LBREN        BIT(0)
->>>    #define ARCH_LBR_CTL_CPL_OFFSET        1
->>>    #define ARCH_LBR_CTL_CPL        (0x3ull << ARCH_LBR_CTL_CPL_OFFSET)
->>> diff --git a/arch/x86/include/asm/vmx.h b/arch/x86/include/asm/vmx.h
->>> index 0ffaa3156a4e..ea3be961cc8e 100644
->>> --- a/arch/x86/include/asm/vmx.h
->>> +++ b/arch/x86/include/asm/vmx.h
->>> @@ -245,6 +245,8 @@ enum vmcs_field {
->>>        GUEST_BNDCFGS_HIGH              = 0x00002813,
->>>        GUEST_IA32_RTIT_CTL        = 0x00002814,
->>>        GUEST_IA32_RTIT_CTL_HIGH    = 0x00002815,
->>> +    GUEST_IA32_LBR_CTL        = 0x00002816,
->>> +    GUEST_IA32_LBR_CTL_HIGH        = 0x00002817,
->>>        HOST_IA32_PAT            = 0x00002c00,
->>>        HOST_IA32_PAT_HIGH        = 0x00002c01,
->>>        HOST_IA32_EFER            = 0x00002c02,
->>> diff --git a/arch/x86/kvm/vmx/pmu_intel.c 
->>> b/arch/x86/kvm/vmx/pmu_intel.c
->>> index c8e6c1e1e00c..7dc8a5783df7 100644
->>> --- a/arch/x86/kvm/vmx/pmu_intel.c
->>> +++ b/arch/x86/kvm/vmx/pmu_intel.c
->>> @@ -19,6 +19,7 @@
->>>    #include "pmu.h"
->>>       #define MSR_PMC_FULL_WIDTH_BIT      (MSR_IA32_PMC0 - 
->>> MSR_IA32_PERFCTR0)
->>> +#define KVM_ARCH_LBR_CTL_MASK  (ARCH_LBR_CTL_MASK | 
->>> ARCH_LBR_CTL_LBREN)
->>>       static struct kvm_event_hw_type_mapping intel_arch_events[] = {
->>>        [0] = { 0x3c, 0x00, PERF_COUNT_HW_CPU_CYCLES },
->>> @@ -215,6 +216,7 @@ static bool intel_is_valid_msr(struct kvm_vcpu 
->>> *vcpu, u32 msr)
->>>            ret = pmu->version > 1;
->>>            break;
->>>        case MSR_ARCH_LBR_DEPTH:
->>> +    case MSR_ARCH_LBR_CTL:
->>>            if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR))
->>>                ret = guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR);
->>>            break;
->>> @@ -361,6 +363,35 @@ static bool arch_lbr_depth_is_valid(struct 
->>> kvm_vcpu *vcpu, u64 depth)
->>>        return (depth == pmu->kvm_arch_lbr_depth);
->>>    }
->>>    +#define ARCH_LBR_CTL_BRN_MASK   GENMASK_ULL(22, 16)
->>> +
->>> +static bool arch_lbr_ctl_is_valid(struct kvm_vcpu *vcpu, u64 ctl)
->>> +{
->>> +    struct kvm_cpuid_entry2 *entry;
->>> +
->>> +    if (!kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR))
->>> +        return false;
->>> +
->>> +    if (ctl & ~KVM_ARCH_LBR_CTL_MASK)
->>> +        goto warn;
->>> +
->>> +    entry = kvm_find_cpuid_entry(vcpu, 0x1c, 0);
->>> +    if (!entry)
->>> +        return false;
->>> +
->>> +    if (!(entry->ebx & BIT(0)) && (ctl & ARCH_LBR_CTL_CPL))
->>> +        return false;
->>> +    if (!(entry->ebx & BIT(2)) && (ctl & ARCH_LBR_CTL_STACK))
->>> +        return false;
->>> +    if (!(entry->ebx & BIT(1)) && (ctl & ARCH_LBR_CTL_BRN_MASK))
->> Why KVM wants to define this mask by itself? Cannot we use the
->> ARCH_LBR_CTL_FILTER?
->
-> Thanks Ken for review!
-Please ignore below reply, I must be blind at the moment :-), will use 
-the existing mask.
->
-> Sounds like the ISE has been updated, per section "CPUID for Ach LBRs":
->
-> EBX 1 Branch Filtering Supported If set, the processor supports 
-> setting IA32_LBR_CTL[22:16] to non-zero value.
->
-> but the FILTER definition looks like:
->
-> #define ARCH_LBR_CTL_FILTER_OFFSET      16
->
-> #define ARCH_LBR_CTL_FILTER             (0x7full << 
-> ARCH_LBR_CTL_FILTER_OFFSET)
->
-> Maybe I need to update the FILTER and re-use it.
->
->>
->> Thanks,
->> Kan
->>
->>> +        return false;
->>> +    return true;
->>> +warn:
->>> +    pr_warn_ratelimited("kvm: vcpu-%d: invalid arch lbr ctl.\n",
->>> +                vcpu->vcpu_id);
->>> +    return false;
->>> +}
->>> +
->>>    static int intel_pmu_get_msr(struct kvm_vcpu *vcpu, struct 
->>> msr_data *msr_info)
->>>    {
->>>        struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
->>> @@ -384,6 +415,9 @@ static int intel_pmu_get_msr(struct kvm_vcpu 
->>> *vcpu, struct msr_data *msr_info)
->>>        case MSR_ARCH_LBR_DEPTH:
->>>            msr_info->data = lbr_desc->records.nr;
->>>            return 0;
->>> +    case MSR_ARCH_LBR_CTL:
->>> +        msr_info->data = vmcs_read64(GUEST_IA32_LBR_CTL);
->>> +        return 0;
->>>        default:
->>>            if ((pmc = get_gp_pmc(pmu, msr, MSR_IA32_PERFCTR0)) ||
->>>                (pmc = get_gp_pmc(pmu, msr, MSR_IA32_PMC0))) {
->>> @@ -455,6 +489,16 @@ static int intel_pmu_set_msr(struct kvm_vcpu 
->>> *vcpu, struct msr_data *msr_info)
->>>             */
->>>            wrmsrl(MSR_ARCH_LBR_DEPTH, lbr_desc->records.nr);
->>>            return 0;
->>> +    case MSR_ARCH_LBR_CTL:
->>> +        if (!arch_lbr_ctl_is_valid(vcpu, data))
->>> +            break;
->>> +
->>> +        vmcs_write64(GUEST_IA32_LBR_CTL, data);
->>> +
->>> +        if (intel_pmu_lbr_is_enabled(vcpu) && !lbr_desc->event &&
->>> +            (data & ARCH_LBR_CTL_LBREN))
->>> +            intel_pmu_create_guest_lbr_event(vcpu);
->>> +        return 0;
->>>        default:
->>>            if ((pmc = get_gp_pmc(pmu, msr, MSR_IA32_PERFCTR0)) ||
->>>                (pmc = get_gp_pmc(pmu, msr, MSR_IA32_PMC0))) {
->>> @@ -668,12 +712,16 @@ static void intel_pmu_reset(struct kvm_vcpu 
->>> *vcpu)
->>>     */
->>>    static void intel_pmu_legacy_freezing_lbrs_on_pmi(struct kvm_vcpu 
->>> *vcpu)
->>>    {
->>> -    u64 data = vmcs_read64(GUEST_IA32_DEBUGCTL);
->>> +    u32 lbr_ctl_field = GUEST_IA32_DEBUGCTL;
->>>    -    if (data & DEBUGCTLMSR_FREEZE_LBRS_ON_PMI) {
->>> -        data &= ~DEBUGCTLMSR_LBR;
->>> -        vmcs_write64(GUEST_IA32_DEBUGCTL, data);
->>> -    }
->>> +    if (!(vmcs_read64(GUEST_IA32_DEBUGCTL) & 
->>> DEBUGCTLMSR_FREEZE_LBRS_ON_PMI))
->>> +        return;
->>> +
->>> +    if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR) &&
->>> +        guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR))
->>> +        lbr_ctl_field = GUEST_IA32_LBR_CTL;
->>> +
->>> +    vmcs_write64(lbr_ctl_field, vmcs_read64(lbr_ctl_field) & ~0x1ULL);
->>>    }
->>>       static void intel_pmu_deliver_pmi(struct kvm_vcpu *vcpu)
->>> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
->>> index 04d170c4b61e..73961fcfb62d 100644
->>> --- a/arch/x86/kvm/vmx/vmx.c
->>> +++ b/arch/x86/kvm/vmx/vmx.c
->>> @@ -2022,6 +2022,13 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, 
->>> struct msr_data *msr_info)
->>>                            VM_EXIT_SAVE_DEBUG_CONTROLS)
->>>                get_vmcs12(vcpu)->guest_ia32_debugctl = data;
->>>    +        /*
->>> +         * For Arch LBR, IA32_DEBUGCTL[bit 0] has no meaning.
->>> +         * It can be written to 0 or 1, but reads will always 
->>> return 0.
->>> +         */
->>> +        if (guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR))
->>> +            data &= ~DEBUGCTLMSR_LBR;
->>> +
->>>            vmcs_write64(GUEST_IA32_DEBUGCTL, data);
->>>            if (intel_pmu_lbr_is_enabled(vcpu) && 
->>> !to_vmx(vcpu)->lbr_desc.event &&
->>>                (data & DEBUGCTLMSR_LBR))
->>> @@ -4548,6 +4555,11 @@ static void vmx_vcpu_reset(struct kvm_vcpu 
->>> *vcpu, bool init_event)
->>>        kvm_make_request(KVM_REQ_APIC_PAGE_RELOAD, vcpu);
->>>           vpid_sync_context(vmx->vpid);
->>> +
->>> +    if (!init_event) {
->>> +        if (static_cpu_has(X86_FEATURE_ARCH_LBR))
->>> +            vmcs_write64(GUEST_IA32_LBR_CTL, 0);
->>> +    }
->>>    }
->>>       static void vmx_enable_irq_window(struct kvm_vcpu *vcpu)
+[..]
+
+> > > > +                     /* sync clock_pelt_idle with last update */
+> > > > +                     if (cfs_rq->nr_running == 0)
+> > > > +                             update_idle_cfs_rq_clock_pelt(cfs_rq);
+> > >
+> > > I think that if cfs_rq->nr_running == 0 then use cfs rq pelt_idle to update
+> > > idle cfs rq.
+> > 
+> > update_blocked_averages() updates all cfs rq to be aligned with now so
+> > we don't need to calculate an estimated now. update_rq_clock(rq) is
+> > called 1st to update the rq->clock and childs
+> > 
+> > With only need to save when happened the last update which is done in
+> > update_rq_clock_pelt(rq) for rq->clock_pelt and with
+> > update_idle_cfs_rq_clock_pelt(cfs) for the cfs_rq_clock_pelt
+> 
+> I missed this.
+
+I ended up with something a bit different:
+
+---
+ kernel/sched/fair.c  | 133 ++++++++++++++++++++++++++++++++++---------
+ kernel/sched/pelt.h  |  66 ++++++++++++++++++---
+ kernel/sched/sched.h |  10 ++++
+ 3 files changed, 174 insertions(+), 35 deletions(-)
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index abd1feeec0c2..63e4cf225292 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -3335,27 +3335,12 @@ static inline bool cfs_rq_is_decayed(struct cfs_rq *cfs_rq)
+ 	if (cfs_rq->load.weight)
+ 		return false;
+ 
+-	if (cfs_rq->avg.load_sum)
+-		return false;
+-
+-	if (cfs_rq->avg.util_sum)
+-		return false;
+-
+-	if (cfs_rq->avg.runnable_sum)
++	if (load_avg_is_decayed(&cfs_rq->avg))
+ 		return false;
+ 
+ 	if (child_cfs_rq_on_list(cfs_rq))
+ 		return false;
+ 
+-	/*
+-	 * _avg must be null when _sum are null because _avg = _sum / divider
+-	 * Make sure that rounding and/or propagation of PELT values never
+-	 * break this.
+-	 */
+-	SCHED_WARN_ON(cfs_rq->avg.load_avg ||
+-		      cfs_rq->avg.util_avg ||
+-		      cfs_rq->avg.runnable_avg);
+-
+ 	return true;
+ }
+ 
+@@ -3694,6 +3679,88 @@ static inline void add_tg_cfs_propagate(struct cfs_rq *cfs_rq, long runnable_sum
+ 
+ #endif /* CONFIG_FAIR_GROUP_SCHED */
+ 
++#ifdef CONFIG_NO_HZ_COMMON
++static inline void migrate_se_pelt_lag(struct sched_entity *se)
++{
++	struct cfs_rq *cfs_rq;
++	struct rq *rq;
++	bool is_idle;
++	u64 now, throttled = 0;
++
++	/* utilization is already fully decayed */
++	if (load_avg_is_decayed(&se->avg))
++		return;
++
++	cfs_rq = cfs_rq_of(se);
++	rq = rq_of(cfs_rq);
++
++	rcu_read_lock();
++	is_idle = is_idle_task(rcu_dereference(rq->curr));
++	rcu_read_unlock();
++
++	/*
++	 * The lag estimation comes with a cost we don't want to pay all the
++	 * time. Hence, limiting to the case where the source CPU is idle and
++	 * we know we are at the greatest risk to have an outdated clock.
++	 */
++	if (!is_idle)
++		return;
++
++	/*
++	 * Estimated "now" is:
++	 *   last_update_time: last update of the cfs_lock_pelt +
++	 *   cfs_idle_lag: rq_clock_pelt delta bewteen last cfs update and last rq update +
++	 *   rq_idle_lag: rq_clock delta between last rq update and now
++	 *
++	 * with
++	 *
++	 * last_update_time == cfs_clock_pelt()
++	 *                  == rq_clock_pelt() - cfs->throttled_clock_pelt_time
++	 *
++	 * cfs_idle_lag: rq_clock_pelt() when rq is idle - rq_clock_pelt() when cfs is idle
++	 *
++	 * rq_idle_lag : sched_clock_cpu() - rq_clock() when rq is idle
++	 *
++	 * In fact, rq_clock_pelt() that is used for last_update_time and when
++	 * cfs is idle are the same because their last update happens atthe
++	 * same time.
++	 *
++	 * We can optimize "now" to be:
++	 *   rq_clock_pelt when rq is idle - cfs->throttled_clock_pelt_time when cfs is idle +
++	 *   sched_clock_cpu() - rq_clock() when rq is idle
++	 *
++	 * when rq is idle
++	 *   rq_clock_pelt() is saved in rq->clock_pelt_idle
++	 *   rq_clock()  is saved in rq->enter idle
++	 *
++	 * when cfs is idle
++	 *    cfs->throttled_clock_pelt_time is saved in cfs_rq->throttled_pelt_idle
++	 *
++	 * When !CFS_BANDWIDTH, cfs->throttled_clock_pelt_time is null
++	 */
++
++#ifdef CONFIG_CFS_BANDWIDTH
++	throttled = u64_u32_load(cfs_rq->throttled_pelt_idle);
++	/* The clock has been stopped for throttling */
++	if (throttled == U64_MAX)
++		return;
++#endif
++
++	now = u64_u32_load(rq->clock_pelt_idle);
++	now -= throttled;
++
++	/* An update happened while computing lag */
++	if (now < cfs_rq_last_update_time(cfs_rq))
++		return;
++
++	now += sched_clock_cpu(cpu_of(rq)) - u64_u32_load(rq->enter_idle);
++
++	__update_load_avg_blocked_se(now, se);
++}
++#else
++static void migrate_se_pelt_lag(struct sched_entity *se) {}
++#endif
++
+ /**
+  * update_cfs_rq_load_avg - update the cfs_rq's load/util averages
+  * @now: current time, as per cfs_rq_clock_pelt()
+@@ -4429,6 +4496,9 @@ dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+ 	 */
+ 	if ((flags & (DEQUEUE_SAVE | DEQUEUE_MOVE)) != DEQUEUE_SAVE)
+ 		update_min_vruntime(cfs_rq);
++
++	if (cfs_rq->nr_running == 0)
++		update_idle_cfs_rq_clock_pelt(cfs_rq);
+ }
+ 
+ /*
+@@ -6946,6 +7016,8 @@ static void detach_entity_cfs_rq(struct sched_entity *se);
+  */
+ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
+ {
++	struct sched_entity *se = &p->se;
++
+ 	/*
+ 	 * As blocked tasks retain absolute vruntime the migration needs to
+ 	 * deal with this by subtracting the old and adding the new
+@@ -6953,7 +7025,6 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
+ 	 * the task on the new runqueue.
+ 	 */
+ 	if (READ_ONCE(p->__state) == TASK_WAKING) {
+-		struct sched_entity *se = &p->se;
+ 		struct cfs_rq *cfs_rq = cfs_rq_of(se);
+ 
+ 		se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
+@@ -6965,25 +7036,29 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
+ 		 * rq->lock and can modify state directly.
+ 		 */
+ 		lockdep_assert_rq_held(task_rq(p));
+-		detach_entity_cfs_rq(&p->se);
++		detach_entity_cfs_rq(se);
+ 
+ 	} else {
++		remove_entity_load_avg(se);
++
+ 		/*
+-		 * We are supposed to update the task to "current" time, then
+-		 * its up to date and ready to go to new CPU/cfs_rq. But we
+-		 * have difficulty in getting what current time is, so simply
+-		 * throw away the out-of-date time. This will result in the
+-		 * wakee task is less decayed, but giving the wakee more load
+-		 * sounds not bad.
++		 * Here, the task's PELT values have been updated according to
++		 * the current rq's clock. But if that clock hasn't been
++		 * updated in a while, a substantial idle time will be missed,
++		 * leading to an inflation after wake-up on the new rq.
++		 *
++		 * Estimate the missing time from the cfs_rq last_update_time
++		 * and update sched_avg to improve the PELT continuity after
++		 * migration.
+ 		 */
+-		remove_entity_load_avg(&p->se);
++		migrate_se_pelt_lag(se);
+ 	}
+ 
+ 	/* Tell new CPU we are migrated */
+-	p->se.avg.last_update_time = 0;
++	se->avg.last_update_time = 0;
+ 
+ 	/* We have migrated, no longer consider this task hot */
+-	p->se.exec_start = 0;
++	se->exec_start = 0;
+ 
+ 	update_scan_period(p, new_cpu);
+ }
+@@ -8149,6 +8224,10 @@ static bool __update_blocked_fair(struct rq *rq, bool *done)
+ 		if (update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq)) {
+ 			update_tg_load_avg(cfs_rq);
+ 
++			/* sync clock_pelt_idle with last update */
++			if (cfs_rq->nr_running == 0)
++				update_idle_cfs_rq_clock_pelt(cfs_rq);
++
+ 			if (cfs_rq == &rq->cfs)
+ 				decayed = true;
+ 		}
+diff --git a/kernel/sched/pelt.h b/kernel/sched/pelt.h
+index 4ff2ed4f8fa1..4143c6dc64dc 100644
+--- a/kernel/sched/pelt.h
++++ b/kernel/sched/pelt.h
+@@ -37,6 +37,29 @@ update_irq_load_avg(struct rq *rq, u64 running)
+ }
+ #endif
+ 
++static inline bool load_avg_is_decayed(struct sched_avg *sa)
++{
++	if (sa->load_sum)
++		return false;
++
++	if (sa->util_sum)
++		return false;
++
++	if (sa->runnable_sum)
++		return false;
++
++	/*
++	 * _avg must be null when _sum are null because _avg = _sum / divider
++	 * Make sure that rounding and/or propagation of PELT values never
++	 * break this.
++	 */
++	SCHED_WARN_ON(sa->load_avg ||
++		      sa->util_avg ||
++		      sa->runnable_avg);
++
++	return true;
++}
++
+ #define PELT_MIN_DIVIDER	(LOAD_AVG_MAX - 1024)
+ 
+ static inline u32 get_pelt_divider(struct sched_avg *avg)
+@@ -61,6 +84,23 @@ static inline void cfs_se_util_change(struct sched_avg *avg)
+ 	WRITE_ONCE(avg->util_est.enqueued, enqueued);
+ }
+ 
++static inline u64 rq_clock_pelt(struct rq *rq)
++{
++	lockdep_assert_rq_held(rq);
++	assert_clock_updated(rq);
++
++	return rq->clock_pelt - rq->lost_idle_time;
++}
++
++/* The rq is idle, we can sync to clock_task */
++static inline void _update_idle_rq_clock_pelt(struct rq *rq)
++{
++	rq->clock_pelt  = rq_clock_task(rq);
++
++	u64_u32_store(rq->enter_idle, rq_clock(rq));
++	u64_u32_store(rq->clock_pelt_idle, rq_clock_pelt(rq));
++}
++
+ /*
+  * The clock_pelt scales the time to reflect the effective amount of
+  * computation done during the running delta time but then sync back to
+@@ -76,8 +116,7 @@ static inline void cfs_se_util_change(struct sched_avg *avg)
+ static inline void update_rq_clock_pelt(struct rq *rq, s64 delta)
+ {
+ 	if (unlikely(is_idle_task(rq->curr))) {
+-		/* The rq is idle, we can sync to clock_task */
+-		rq->clock_pelt  = rq_clock_task(rq);
++		_update_idle_rq_clock_pelt(rq);
+ 		return;
+ 	}
+ 
+@@ -130,17 +169,26 @@ static inline void update_idle_rq_clock_pelt(struct rq *rq)
+ 	 */
+ 	if (util_sum >= divider)
+ 		rq->lost_idle_time += rq_clock_task(rq) - rq->clock_pelt;
++
++	_update_idle_rq_clock_pelt(rq);
+ }
+ 
+-static inline u64 rq_clock_pelt(struct rq *rq)
++#ifdef CONFIG_CFS_BANDWIDTH
++static inline void update_idle_cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
+ {
+-	lockdep_assert_rq_held(rq);
+-	assert_clock_updated(rq);
+-
+-	return rq->clock_pelt - rq->lost_idle_time;
++	/*
++	 * Make sure that pending update of rq->clock_pelt_idle and
++	 * rq->enter_idle are visible during update_blocked_average() before
++	 * updating cfs_rq->throttled_pelt_idle.
++	 */
++	smp_wmb();
++	if (unlikely(cfs_rq->throttle_count))
++		u64_u32_store(cfs_rq->throttled_pelt_idle, U64_MAX);
++	else
++		u64_u32_store(cfs_rq->throttled_pelt_idle,
++			      cfs_rq->throttled_clock_pelt_time);
+ }
+ 
+-#ifdef CONFIG_CFS_BANDWIDTH
+ /* rq->task_clock normalized against any time this cfs_rq has spent throttled */
+ static inline u64 cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
+ {
+@@ -150,6 +198,7 @@ static inline u64 cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
+ 	return rq_clock_pelt(rq_of(cfs_rq)) - cfs_rq->throttled_clock_pelt_time;
+ }
+ #else
++static inline void update_idle_cfs_rq_clock_pelt(struct cfs_rq *cfs_rq) { }
+ static inline u64 cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
+ {
+ 	return rq_clock_pelt(rq_of(cfs_rq));
+@@ -204,6 +253,7 @@ update_rq_clock_pelt(struct rq *rq, s64 delta) { }
+ static inline void
+ update_idle_rq_clock_pelt(struct rq *rq) { }
+ 
++static inline void update_idle_cfs_rq_clock_pelt(struct cfs_rq *cfs_rq) { }
+ #endif
+ 
+ 
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index e2cf6e48b165..ea9365e1a24e 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -641,6 +641,10 @@ struct cfs_rq {
+ 	int			runtime_enabled;
+ 	s64			runtime_remaining;
+ 
++	u64			throttled_pelt_idle;
++#ifndef CONFIG_64BIT
++	u64                     throttled_pelt_idle_copy;
++#endif
+ 	u64			throttled_clock;
+ 	u64			throttled_clock_pelt;
+ 	u64			throttled_clock_pelt_time;
+@@ -1013,6 +1017,12 @@ struct rq {
+ 	u64			clock_task ____cacheline_aligned;
+ 	u64			clock_pelt;
+ 	unsigned long		lost_idle_time;
++	u64			clock_pelt_idle;
++	u64			enter_idle;
++#ifndef CONFIG_64BIT
++	u64			clock_pelt_idle_copy;
++	u64			enter_idle_copy;
++#endif
+ 
+ 	atomic_t		nr_iowait;
+ 
+-- 
+2.17.1
+

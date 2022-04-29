@@ -2,166 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE376514013
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 03:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15001514023
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 03:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350934AbiD2BRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 21:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
+        id S1353727AbiD2BSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 21:18:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiD2BRP (ORCPT
+        with ESMTP id S1352786AbiD2BSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 21:17:15 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A8436300;
-        Thu, 28 Apr 2022 18:13:58 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KqDyq4p5Tz4ySf;
-        Fri, 29 Apr 2022 11:13:55 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651194836;
-        bh=JKudEto56hkdtDEXe6pYOk1Gxjv2rBMewH8G3gmz+Ok=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ul6O/K/qdKqclNjpEv94zZbvB9l8rwUaR9IyBr7bBeZSMZW3phDEpfGnfKVcb3GGl
-         WE6uFX5uiTzo4zV4Tc4mZPtAqH/p6F571uzwIAOmYu5cFa4ZCBE3BDl9KvrrpimuYV
-         BV3dI37bFDLBqYRLMHucOAjAflnrZljTaUdOeK2/szEh7I75qtTWEgIKcXRPmgyzh7
-         IiBHt2DkqGXA0hANiw1LzPeSSFU2QON4Ya/nnvBbgz58xDiTN9TcUFlw7cpWW1V/r8
-         ZcH3qlWAmJE3jr+fLdMOXEwh9LFGJ8PSvf8qL9MgPizIWUI7bGQgPew35gTar4QDQg
-         xdN1eAjnQYZ5g==
-Date:   Fri, 29 Apr 2022 11:13:54 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>,
-        Dave Airlie <airlied@linux.ie>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the amdgpu tree with the drm-misc
- tree
-Message-ID: <20220429111354.197c6dee@canb.auug.org.au>
-In-Reply-To: <20220413101014.6b6c4db2@canb.auug.org.au>
-References: <20220406103405.299c06b9@canb.auug.org.au>
-        <20220413101014.6b6c4db2@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/IkXKkyei2vl1p3JTY1CZNbt";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 28 Apr 2022 21:18:17 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E0EE0BCB41;
+        Thu, 28 Apr 2022 18:14:59 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [10.15.192.164])
+        by mail-app4 (Coremail) with SMTP id cS_KCgAnDkX6O2tidX4EAg--.28704S2;
+        Fri, 29 Apr 2022 09:14:46 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-kernel@vger.kernel.org, kuba@kernel.org,
+        krzysztof.kozlowski@linaro.org, gregkh@linuxfoundation.org
+Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        alexander.deucher@amd.com, akpm@linux-foundation.org,
+        broonie@kernel.org, netdev@vger.kernel.org, linma@zju.edu.cn,
+        Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH net v5 0/2] Replace improper checks and fix bugs in nfc subsystem
+Date:   Fri, 29 Apr 2022 09:14:31 +0800
+Message-Id: <cover.1651194245.git.duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cS_KCgAnDkX6O2tidX4EAg--.28704S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY-7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr1j
+        6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxa
+        n2IY04v7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GFWkJr1UJwCFx2IqxV
+        CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
+        6r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
+        WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG
+        6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
+        1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgIOAVZdtZdEXAA3sJ
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/IkXKkyei2vl1p3JTY1CZNbt
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The first patch is used to replace improper checks in netlink related
+functions of nfc core, the second patch is used to fix bugs in
+nfcmrvl driver.
 
-Hi all,
+Duoming Zhou (2):
+  nfc: replace improper check device_is_registered() in netlink related
+    functions
+  nfc: nfcmrvl: main: reorder destructive operations in
+    nfcmrvl_nci_unregister_dev to avoid bugs
 
-On Wed, 13 Apr 2022 10:10:14 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> On Wed, 6 Apr 2022 10:34:05 +1000 Stephen Rothwell <sfr@canb.auug.org.au>=
- wrote:
-> >
-> > Today's linux-next merge of the amdgpu tree got a conflict in:
-> >=20
-> >   drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
-> >=20
-> > between commit:
-> >=20
-> >   fee2ede15542 ("drm/ttm: rework bulk move handling v5")
-> >=20
-> > from the drm-misc tree and commit:
-> >=20
-> >   184a69ca4d41 ("drm/amdgpu: separate VM PT handling into amdgpu_vm_pt.=
-c")
-> >=20
-> > from the amdgpu tree.
-> >=20
-> > I fixed it up (I used this file from the latter and added the following
-> > patch) and can carry the fix as necessary. This is now fixed as far as
-> > linux-next is concerned, but any non trivial conflicts should be mentio=
-ned
-> > to your upstream maintainer when your tree is submitted for merging.
-> > You may also want to consider cooperating with the maintainer of the
-> > conflicting tree to minimise any particularly complex conflicts.
-> >=20
-> > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Date: Wed, 6 Apr 2022 10:28:53 +1000
-> > Subject: [PATCH] fix up for "drm/ttm: rework bulk move handling v5"
-> >=20
-> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > ---
-> >  drivers/gpu/drm/amd/amdgpu/amdgpu_vm_pt.c | 9 +++++++--
-> >  1 file changed, 7 insertions(+), 2 deletions(-)
-> >=20
-> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_pt.c b/drivers/gpu/dr=
-m/amd/amdgpu/amdgpu_vm_pt.c
-> > index 958d7ed97882..a29933fa001f 100644
-> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_pt.c
-> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_pt.c
-> > @@ -630,7 +630,14 @@ static void amdgpu_vm_pt_free(struct amdgpu_vm_bo_=
-base *entry)
-> > =20
-> >  	if (!entry->bo)
-> >  		return;
-> > +
-> >  	shadow =3D amdgpu_bo_shadowed(entry->bo);
-> > +	if (shadow) {
-> > +		ttm_bo_set_bulk_move(&shadow->tbo, NULL);
-> > +		amdgpu_bo_unref(&shadow);
-> > +	}
-> > +
-> > +	ttm_bo_set_bulk_move(&entry->bo->tbo, NULL);
-> >  	entry->bo->vm_bo =3D NULL;
-> >  	list_del(&entry->vm_status);
-> >  	amdgpu_bo_unref(&shadow);
-> > @@ -653,8 +660,6 @@ static void amdgpu_vm_pt_free_dfs(struct amdgpu_dev=
-ice *adev,
-> >  	struct amdgpu_vm_pt_cursor cursor;
-> >  	struct amdgpu_vm_bo_base *entry;
-> > =20
-> > -	vm->bulk_moveable =3D false;
-> > -
-> >  	for_each_amdgpu_vm_pt_dfs_safe(adev, vm, start, cursor, entry)
-> >  		amdgpu_vm_pt_free(entry);
-> > =20
-> > --=20
-> > 2.35.1 =20
->=20
-> This is now a conflict between the drm tree and the amdgpu tree.
+ drivers/nfc/nfcmrvl/main.c |  2 +-
+ include/net/nfc/nfc.h      |  1 +
+ net/nfc/core.c             | 26 ++++++++++++++------------
+ 3 files changed, 16 insertions(+), 13 deletions(-)
 
-I noticed that commit 184a69ca4d41 was merged into the drm tree but
-only the second hunk of this merge fixup was applied.  So is the first
-hunk above unnecessary?
+-- 
+2.17.1
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/IkXKkyei2vl1p3JTY1CZNbt
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJrO9IACgkQAVBC80lX
-0GxCTQgAlhLO3UAe6juc9E9Jkvm4SgXtBEkla/qeqaYtIVYSYQbat2pNpdmBAHhM
-HCN+7O+lPMkX9AkCMwqCxQJ1eAwor4jFlblP6q5IwoHrHLkXAXOR7dVqCTUQYLJV
-dUlCy+N3uDZR6EUHIeeyR2j6qaR1WI7VTs3lQYVTOjzq+CLvOjVt8s0u4qjUu+t2
-7oqNt6ujs940L4bzuGq8dYEyJ3fkibjrdmlnkUyHDs650ZtgBfRK335fiz/Ojeus
-D/yiS5K4wgn+0gY8liMDESeyzciDt9W7iVHaAU6E8GRhgUVKGKliXcdM+t5u6Vzv
-eDg1c4OfL4xvu7UTGWiaQR0SHYVi2Q==
-=Z4Tp
------END PGP SIGNATURE-----
-
---Sig_/IkXKkyei2vl1p3JTY1CZNbt--

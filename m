@@ -2,75 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FE12514FAD
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46638514FB1
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343710AbiD2Pkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 11:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39880 "EHLO
+        id S1378586AbiD2Pks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 11:40:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344267AbiD2Pkl (ORCPT
+        with ESMTP id S1378568AbiD2Pkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 11:40:41 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24604D64E2
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:37:21 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id v4so10943624ljd.10
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:37:21 -0700 (PDT)
+        Fri, 29 Apr 2022 11:40:42 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDE1D64C0
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:37:22 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id z126so6201214qkb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:37:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=tX5B+XNuprxeTIlbG/3H80IXDOGiNxtXPtXER0/ilC4=;
-        b=vMpBLAWofJB14kAEHBpFa1NC+M7Xli8t96vO27YJcrZbbvDae0THbnSOs/DVKdddCJ
-         TkDlo+al/pq8PvU5q07Wlsj7A499DxWEpYGvR3nThJe5ASqtPWBp23YJwFuyAtuyty46
-         q8cLDnhKLFUpu8bW8YVCpGK0E38IR2r2V3q4CdrW6xVN6WOtDaJ90SbHkRhgU3pj/a/v
-         UWUWH9xu8dsnM339mhngjhCtIgWEPi+0oVEjCy+DMLO7ZsoQbk8iU/+9QTr0UjBUYEbQ
-         9Ou4r+Oal1LwfxbG7Wcmv2EekpglJNKoBVgQ1NI9ZQhzjH8wiFWROovtZgbx4w4WatCD
-         LeSw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=bZXp9UdtwQUhq4ByWWPM2fGxW46dWdEnK/AAX/Cv5Mk=;
+        b=K7k1NR2iw9kVdnCUnxPN/AGmdqZLJYlSXYLXaJhLiudcd1Mtfwu8JpG1ZiL21PbPDl
+         cZKLE89rhE2vHHzVazDpdjx/0YSML1XahKPVknxXXd3hsT2Oz+bwVvWGWPMtv3uucyup
+         IrWcjmwiZ4ehml0LcXKVLkAuFRzWVjst1EZEsV/Ag4yMMWb8ZQn9Is5yrcfTKQSKO32C
+         v39WiD/8BkGWUU0aCAosD6uGHsWt8/WCfg1025NmSs6w3Qzp7mwsQZ2PXyD+5M28iOlZ
+         S/C4saM3TAbiCrvaCL8cBRRByxhaJdVo87fa/f6cpD6YSIrtgXx7MAZ4o6kS9t+CxrbX
+         jsGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tX5B+XNuprxeTIlbG/3H80IXDOGiNxtXPtXER0/ilC4=;
-        b=E29DBXHAnFDjew79yyGeZi+3Hq/np7RLCFlAQn0hVbSJP2Zk42knL0T3grw6vMV8XT
-         KPvDfLST6AC1/gg0ymtKVYqKRoirbHF7Smetpv+trJzvxnbsBEI6SvLELbqMUMJ6Rm0y
-         ngY11yqYTzKwd38KAU8TuCmA+09se8ZNodVbliA06ebjT0+FVmkcQIhYDmZ88urjIEsU
-         ZL/n4VMzXFfgbDEkwGHnoidqvCffBVf6HicOqaVkPhfqs7b3F/CaAdgOaBMz+xwtWIdl
-         7D+6MY/IreonxOT2Q75Rgfgr5a0K9SqQxUB/yszoCqo2y00IedCZ3KkXcjrYgV+6RL+a
-         ZHBQ==
-X-Gm-Message-State: AOAM5312NREc9pUmqot0AJ3ra8o4/S/QFdQU3nbheAe1jVzx0FT2clj2
-        tb5gpaw6arrOgIvsmsl5c7NSRw==
-X-Google-Smtp-Source: ABdhPJz0MkxQGLGnvyGJvXL0G1mJRGSzAa8m+lcGzUyGNkLb1KxdXRVLuJsuhMrQwqZbPpz1LUmhJQ==
-X-Received: by 2002:a2e:8346:0:b0:24d:ac67:42c7 with SMTP id l6-20020a2e8346000000b0024dac6742c7mr24657567ljh.323.1651246639214;
-        Fri, 29 Apr 2022 08:37:19 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id f2-20020a193802000000b004721714d2a2sm263121lfa.214.2022.04.29.08.37.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 08:37:18 -0700 (PDT)
-Message-ID: <65d2fc77-fb4b-b53b-d1bd-41c9688891e2@linaro.org>
-Date:   Fri, 29 Apr 2022 18:37:18 +0300
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bZXp9UdtwQUhq4ByWWPM2fGxW46dWdEnK/AAX/Cv5Mk=;
+        b=uROCZYDCIM6ErJMtsSEM5efWrE38Gg1aWwFK3sjT0uabY88uvaeWjM2+idZx6bZ5DM
+         mhqWqldiOJQmmSiMe5nTVHs5g/eteg1GwZR+9XL3SVBjFoB7i8dWczyOKol/YfPB/dDE
+         Bcy+2hJ7t5nAkJtxqZxqfavE49eTTzrVXS0kElj8V/MlkebCor10Eh5jf9BT6Tp8Tynz
+         uQgDh6hU7zuxHPXdwI6A2Zd/TaAw5Y9pWLKP8UdV+IUJJN6V76qZ5FqkD2PJeDXLyr9P
+         BZ0oq6UM4JijebGkAGf6wWQy9LM/0iYFquUfDFLVklIqIB80Gi576PGJoIBMW4nVM+4G
+         CICA==
+X-Gm-Message-State: AOAM530JQe3pUJaWh/jZOOPMEgCi6xFsuCR5nTsstm8Wck9mgHEE6yDY
+        m9W9fLWHGSNGahKc+oHT/112CA==
+X-Google-Smtp-Source: ABdhPJw2cY0R0MGKHsfQdnqbWfaWvp4skgSgNWcuhYrHEFDV9lMBXC/qRnYVkHx3ENkOwGHbC2LFiw==
+X-Received: by 2002:a05:620a:1906:b0:67b:3ac1:8f72 with SMTP id bj6-20020a05620a190600b0067b3ac18f72mr22573943qkb.478.1651246641508;
+        Fri, 29 Apr 2022 08:37:21 -0700 (PDT)
+Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id r9-20020ac85c89000000b002f378738ed4sm1906774qta.7.2022.04.29.08.37.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 08:37:20 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 11:37:18 -0400
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
+Subject: Re: [RFC v2 10/39] gpio: add HAS_IOPORT dependencies
+Message-ID: <YmwGLrh4U+pVJo0m@fedora>
+References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
+ <20220429135108.2781579-19-schnelle@linux.ibm.com>
+ <Ymv3DnS1vPMY8QIg@fedora>
+ <f006229ae056d4cdcf57fc5722a695ad4c257182.camel@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v1 8/9] arm64: dts: qcom: sm8350: Power up dispcc using
- MMCX regulator
-Content-Language: en-GB
-To:     Robert Foss <robert.foss@linaro.org>, bjorn.andersson@linaro.org,
-        agross@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzk+dt@kernel.org, jonathan@marek.ca,
-        tdas@codeaurora.org, anischal@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220429151247.388837-1-robert.foss@linaro.org>
- <20220429151247.388837-8-robert.foss@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220429151247.388837-8-robert.foss@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="UN0ca/LPGGPy0rfH"
+Content-Disposition: inline
+In-Reply-To: <f006229ae056d4cdcf57fc5722a695ad4c257182.camel@linux.ibm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,39 +79,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/04/2022 18:12, Robert Foss wrote:
-> Add regulator controlling MMCX power domain to be used by display clock
-> controller on SM8350.
 
-NAK. rgulator-fixed-domain is deprecated and is going to be removed shortly.
+--UN0ca/LPGGPy0rfH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> Signed-off-by: Robert Foss <robert.foss@linaro.org>
-> ---
->   arch/arm64/boot/dts/qcom/sm8350.dtsi | 8 ++++++++
->   1 file changed, 8 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> index c0137bdcf94b..c49735d1b458 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> @@ -278,6 +278,14 @@ memory@80000000 {
->   		reg = <0x0 0x80000000 0x0 0x0>;
->   	};
->   
-> +	mmcx_reg: mmcx-reg {
-> +		compatible = "regulator-fixed-domain";
-> +		power-domains = <&rpmhpd SM8350_MMCX>;
-> +		required-opps = <&rpmhpd_opp_nom>;
-> +		regulator-name = "MMCX";
-> +		regulator-always-on;
-> +	};
-> +
->   	pmu {
->   		compatible = "arm,armv8-pmuv3";
->   		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_LOW>;
+On Fri, Apr 29, 2022 at 04:46:00PM +0200, Niklas Schnelle wrote:
+> On Fri, 2022-04-29 at 10:32 -0400, William Breathitt Gray wrote:
+> > On Fri, Apr 29, 2022 at 03:50:16PM +0200, Niklas Schnelle wrote:
+> > > In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and frie=
+nds
+> > > not being declared. We thus need to add HAS_IOPORT as dependency for
+> > > those drivers using them.
+> > >=20
+> > > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> > > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > > ---
+> > >  drivers/gpio/Kconfig | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >=20
+> > > diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+> > > index 45764ec3b2eb..14e5998ee95c 100644
+> > > --- a/drivers/gpio/Kconfig
+> > > +++ b/drivers/gpio/Kconfig
+> > > @@ -697,7 +697,7 @@ config GPIO_VR41XX
+> > > =20
+> > >  config GPIO_VX855
+> > >  	tristate "VIA VX855/VX875 GPIO"
+> > > -	depends on (X86 || COMPILE_TEST) && PCI
+> > > +	depends on (X86 || COMPILE_TEST) && PCI && HAS_IOPORT
+> > >  	select MFD_CORE
+> > >  	select MFD_VX855
+> > >  	help
+> > > --=20
+> > > 2.32.0
+> >=20
+> > I noticed a number of other GPIO drivers make use of inb()/outb() -- for
+> > example the PC104 drivers -- should the respective Kconfigs for those
+> > drivers also be adjusted here?
+> >=20
+> > William Breathitt Gray
+>=20
+> Good question. As far as I can see most (all?) of these have "select
+> ISA_BUS_API" which is "def_bool ISA". Now "config ISA" seems to
+> currently be repeated in architectures and doesn't have an explicit
+> HAS_IOPORT dependency (it maybe should have one). But it does only make
+> sense on architectures with HAS_IOPORT set.
 
+There is such a thing as ISA DMA, but you'll still need to initialize
+the device via the IO Port bus first, so perhaps setting HAS_IOPORT for
+"config ISA" is the right thing to do: all ISA devices are expected to
+communicate in some way via ioport.
 
--- 
-With best wishes
-Dmitry
+William Breathitt Gray
+
+--UN0ca/LPGGPy0rfH
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCYmwGKgAKCRC1SFbKvhIj
+K8KEAP0TKKesiZ/wUezoJg8+48qr5yK22ZRd1gc3a6/67xLQNgEAvu4pev2XF5/q
+8PHoF5Bmkx2ZgF9O5X8qFa9zGNUxqAk=
+=PRGE
+-----END PGP SIGNATURE-----
+
+--UN0ca/LPGGPy0rfH--

@@ -2,122 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A44E5514DC7
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D295A514DC4
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:43:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377772AbiD2Opa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 10:45:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33382 "EHLO
+        id S1377732AbiD2Opz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 10:45:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377668AbiD2OpH (ORCPT
+        with ESMTP id S1377628AbiD2Opo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 10:45:07 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CA060AA5
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:41:43 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id bn33so10773367ljb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:41:43 -0700 (PDT)
+        Fri, 29 Apr 2022 10:45:44 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F5068304
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:42:25 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id g8so4688554pfh.5
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:42:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=v2gZtm1Y9EnOM5Lz97MhvmGZH6fMaQCNcq4ssrGXHvA=;
-        b=ClMCvVPqnQvsDrQSnAHoGq7Vw5jDkH20m6A/jFylwgb5q97jAdRdcW5Tq/ZaNiH+Cp
-         yIg47tN6GtmlTBH5mtys7w9mDlDFu5S/h+p9aL/puwS8bYuXt/nFHomvmU3LgQAF6YSY
-         r037KVH5Hozn7/KWxmUuGVfe2fRViCWWRM0skggmZKD3leNVKeniAzLHjebi28EOK5Nr
-         n6giekI/b+HkE2c8faKP8PebkDDPCvZNdKFVksYUzucQrGdb9y63esEM2xL1deU8a37x
-         p1AI8Br8SMlk0CuUVXdCLcjGT+EQfv9Pw3SDNLA28y2JJrwSVpHcX1QA+HZAnMN07QBG
-         NwjQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Q8Sf/GbjZKXQvTHW2LwW4qAGOz3b9F7JEp6h77YJ1Oo=;
+        b=qkeV4CtdSEM5tiWHb1MIxWYVlPfLgGE7UevmkBnAbFH9057fEACF93fsFXKz4W78kT
+         GolFOevTDcjA6d9cOVyV8wm7NnCDZpJ6qMGTbgJLEXqq7xa/3ulb+5ZzBKpxqGlXSq6d
+         HdtRm0U0qlohOxBJOOLjb0QyzAAA1vC+e25Kdwxz+tYDp/PmNt/RK28EeG0VakCxkJJK
+         tIn2Dj9i9H7HBZiiN7/80Ce64afhJkaLQ5tq338mVjJ18i/IyRjej+Bl2QfkoUPXP+lJ
+         onZ+lHU0vcjwafKhTaKJtkxRFdBtVZeG362TZVEFKS87HvQrmMzWvPKqEKkT8HPhRqVV
+         aosA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=v2gZtm1Y9EnOM5Lz97MhvmGZH6fMaQCNcq4ssrGXHvA=;
-        b=1UlTjKlcQWbmrRZT9q69bREK7qgaJ0qO+05tu4fqi7u5aCrNi/agM/A6wMv7u/N+47
-         64pmkiquTZZTI/OnCW3pCRbuuvk6VeOZvTYhiilChqTcQs0IqLYzjak5mVs5s4tx6tlT
-         He9HQnDpvODE/u5Ks/cy8HZhxgXP+pb0fm2/Tu8V9ppKywdZ2IzckoHOmW1AZQtV1+z0
-         NVl2hZibaYK7br8TaHEdkjlN8AvVaBrRTv2VR8qQXzvQTNHJV8Wl+vdsvgvtXx+S4OUJ
-         jXGwG//qeCwblLYnzb92Kmvo2jkHnpIHn/T2OAZV5qxWbxzwi+NfI2dC1QP72yCr6cp1
-         ULqQ==
-X-Gm-Message-State: AOAM530s1R5enHepyketzuRtBUtXG9y0uy7uaJ3qJ3K9k2H5U4xqnLPj
-        AZa6nzpsxKPJQqtpJYxV/GUZKErCPEDm5w==
-X-Google-Smtp-Source: ABdhPJx293qUvuCappYWJV4aCE2Kp2oJ/m2hcMh6SW9WP1q60AEQCRl17k3YoPhVKTLl4IVO2KI5Mg==
-X-Received: by 2002:a2e:8e98:0:b0:24f:15e9:ed39 with SMTP id z24-20020a2e8e98000000b0024f15e9ed39mr14240296ljk.460.1651243302165;
-        Fri, 29 Apr 2022 07:41:42 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id h7-20020ac24d27000000b004720819b691sm255343lfk.130.2022.04.29.07.41.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 07:41:41 -0700 (PDT)
-Message-ID: <beb3bd74-a550-b0c1-b6bd-99536dc9b2e1@linaro.org>
-Date:   Fri, 29 Apr 2022 17:41:40 +0300
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Q8Sf/GbjZKXQvTHW2LwW4qAGOz3b9F7JEp6h77YJ1Oo=;
+        b=ShrW3v66T7RZFVwnQxXWu+7a0IDL7/7jeLpgpgg+x+Ge+w7Ug+LcSv22hwcd/CsTxQ
+         2OrqiJjOK5wFqk/9RReNtZdvNORpp3/9zhYoFwz/XiZMM+puL0LCES2xZUuOld7Dwa0w
+         O52FE2DySWeGO94p6teyPO0jCvl0vdOlN+dK7QoVX+VRjGNCtxfLJXNo0/w7TgzudyLN
+         uG2gUMYnVkGTqNJetyAP4Ju0qVTxmzLJ4DZ9+Y90Pq3otjzc7s4KPsBu10mGYJYMGTBL
+         pIbta/srZ+ULztA1xeKJu/Jy+dSkGrKmcziB1V4KbTa4hX39w0EZ3BXVZf6jeUF5ujeb
+         m6HQ==
+X-Gm-Message-State: AOAM532vm4FuLhgeia/DKJs99iTw7ToMm6OGIBUItKxFr4EXwW2QhFlK
+        G3HCxGJxBb6YNcPcG0N3lofjjg==
+X-Google-Smtp-Source: ABdhPJzTZJpSp9OxdNz1eGasYYqmBNDjW6EMNn24fFlY6RotVQJetGMsjQZrSR30PRSCZy5b5WZcYA==
+X-Received: by 2002:a63:d758:0:b0:380:fba9:f6e5 with SMTP id w24-20020a63d758000000b00380fba9f6e5mr32765775pgi.330.1651243345281;
+        Fri, 29 Apr 2022 07:42:25 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id n2-20020aa79042000000b005057336554bsm3382348pfo.128.2022.04.29.07.42.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 07:42:24 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 14:42:21 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
+        Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>
+Subject: Re: [PATCH] KVM: x86/mmu: Do not create SPTEs for GFNs that exceed
+ host.MAXPHYADDR
+Message-ID: <Ymv5TR76RNvFBQhz@google.com>
+References: <20220428233416.2446833-1-seanjc@google.com>
+ <337332ca-835c-087c-c99b-92c35ea8dcd3@redhat.com>
+ <Ymv1I5ixX1+k8Nst@google.com>
+ <20e1e7b1-ece7-e9e7-9085-999f7a916ac2@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 2/4] clk: qcom: clk-krait: unlock spin after mux
- completion
-Content-Language: en-GB
-To:     Ansuel Smith <ansuelsmth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sricharan R <sricharan@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220429120108.9396-1-ansuelsmth@gmail.com>
- <20220429120108.9396-3-ansuelsmth@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220429120108.9396-3-ansuelsmth@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20e1e7b1-ece7-e9e7-9085-999f7a916ac2@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/04/2022 15:01, Ansuel Smith wrote:
-> Unlock spinlock after the mux switch is completed to prevent any corner
-> case of mux request while the switch still needs to be done.
+On Fri, Apr 29, 2022, Paolo Bonzini wrote:
+> On 4/29/22 16:24, Sean Christopherson wrote:
+> > I don't love the divergent memslot behavior, but it's technically correct, so I
+> > can't really argue.  Do we want to "officially" document the memslot behavior?
+> > 
 > 
-> Fixes: 4d7dc77babfe ("clk: qcom: Add support for Krait clocks")
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> I don't know what you mean by officially document,
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Something in kvm/api.rst under KVM_SET_USER_MEMORY_REGION.
 
-> ---
->   drivers/clk/qcom/clk-krait.c | 7 ++++++-
->   1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clk/qcom/clk-krait.c b/drivers/clk/qcom/clk-krait.c
-> index 59f1af415b58..90046428693c 100644
-> --- a/drivers/clk/qcom/clk-krait.c
-> +++ b/drivers/clk/qcom/clk-krait.c
-> @@ -32,11 +32,16 @@ static void __krait_mux_set_sel(struct krait_mux_clk *mux, int sel)
->   		regval |= (sel & mux->mask) << (mux->shift + LPL_SHIFT);
->   	}
->   	krait_set_l2_indirect_reg(mux->offset, regval);
-> -	spin_unlock_irqrestore(&krait_clock_reg_lock, flags);
->   
->   	/* Wait for switch to complete. */
->   	mb();
->   	udelay(1);
-> +
-> +	/*
-> +	 * Unlock now to make sure the mux register is not
-> +	 * modified while switching to the new parent.
-> +	 */
-> +	spin_unlock_irqrestore(&krait_clock_reg_lock, flags);
->   }
->   
->   static int krait_mux_set_parent(struct clk_hw *hw, u8 index)
+> but at least I have relied on it to test KVM's MAXPHYADDR=52 cases before
+> such hardware existed.  :)
 
-
--- 
-With best wishes
-Dmitry
+Ah, that's a very good reason to support this for shadow paging.  Maybe throw
+something about testing in the changelog?  Without considering the testing angle,
+it looks like KVM supports max=52 for !TDP just because it can, because practically
+speaking there's unlikely to be a use case for exposing that much memory to a
+guest when using shadow paging.

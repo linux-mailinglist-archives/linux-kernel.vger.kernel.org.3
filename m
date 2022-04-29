@@ -2,108 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 541A7513F8D
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 02:32:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15549513F93
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 02:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352363AbiD2AfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 20:35:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36606 "EHLO
+        id S1352481AbiD2Aky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 20:40:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234331AbiD2AfO (ORCPT
+        with ESMTP id S234331AbiD2Akx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 20:35:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288A6B9F02;
-        Thu, 28 Apr 2022 17:31:57 -0700 (PDT)
+        Thu, 28 Apr 2022 20:40:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A831DBB09E;
+        Thu, 28 Apr 2022 17:37:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AD912B83260;
-        Fri, 29 Apr 2022 00:31:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D298DC385A9;
-        Fri, 29 Apr 2022 00:31:53 +0000 (UTC)
-Date:   Thu, 28 Apr 2022 20:31:52 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>
-Subject: Re: [RFC bpf-next 4/4] selftests/bpf: Add attach bench test
-Message-ID: <20220428203152.41693bbe@gandalf.local.home>
-In-Reply-To: <20220428200945.5f6a5ba2@gandalf.local.home>
-References: <20220407125224.310255-1-jolsa@kernel.org>
-        <20220407125224.310255-5-jolsa@kernel.org>
-        <CAEf4BzbE1n3Lie+tWTzN69RQUWgjxePorxRr9J8CuiQVUfy-kA@mail.gmail.com>
-        <20220412094923.0abe90955e5db486b7bca279@kernel.org>
-        <CAEf4BzaQRcZGMqq5wqHo3wSHZAAVvY6AhizDk_dV_GtnwHuxLQ@mail.gmail.com>
-        <20220416232103.c0b241c2ec7f2b3b985a2f99@kernel.org>
-        <20220428095803.66c17c32@gandalf.local.home>
-        <CAADnVQKi+4oBt2C__qz7QoHqTtXYLUjaqwTNFoSE=up9c9k4cA@mail.gmail.com>
-        <20220428160519.04cc40c0@gandalf.local.home>
-        <CAEf4Bzbu3zuDcPj3ue8D6VCdMTw2PEREJBU42CbR1Pe=5qOrTQ@mail.gmail.com>
-        <20220428195303.6295e90b@gandalf.local.home>
-        <20220428200945.5f6a5ba2@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 64823B83260;
+        Fri, 29 Apr 2022 00:37:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85C67C385AD;
+        Fri, 29 Apr 2022 00:37:33 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="e47KqLhw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1651192651;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=r804qhBejoVRexAENK1j1o67bq5qDN1KpREo3y7KOtk=;
+        b=e47KqLhw/1igQfy2eq3mJRM+YKpFgfTeNVmmeloNuybW9n/gRtZfG9CKImVVy4zzsZqaeG
+        E9wn4CaaV3+67u0mIoqw6qkfQwAL6xzFLbXJFTZXFqx/NqjgC3SlBSkxkSRmLKvpxHgjFb
+        OVV4fCm184F9dbbGT7amlrUDDvNI3m0=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a2875674 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 29 Apr 2022 00:37:31 +0000 (UTC)
+Date:   Fri, 29 Apr 2022 02:37:29 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Eric Dumazet <eric.dumazet@gmail.com>
+Cc:     Netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, kuba@kernel.org,
+        hannes@stressinduktion.org
+Subject: Re: Routing loops & TTL tracking with tunnel devices
+Message-ID: <YmszSXueTxYOC41G@zx2c4.com>
+References: <CAHmME9r_DbZWe4FsfebHSSf_iPctSe5S-w9bU3o8BN43raeURg@mail.gmail.com>
+ <20151116203709.GA27178@oracle.com>
+ <CAHmME9pNCqbcoqbOnx6p8poehAntyyy1jQhy=0_HjkJ8nvMQdw@mail.gmail.com>
+ <1447712932.22599.77.camel@edumazet-glaptop2.roam.corp.google.com>
+ <CAHmME9oTU7HwP5=qo=aFWe0YXv5EPGoREpF2k-QY7qTmkDeXEA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHmME9oTU7HwP5=qo=aFWe0YXv5EPGoREpF2k-QY7qTmkDeXEA@mail.gmail.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Apr 2022 20:09:45 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+Hey Eric,
 
-> OK, I think I see the issue you have. Because the functions shown in
-> available_filter_functions which uses the simple "%ps" to show the function
-> name:
+On Tue, Nov 17, 2015 at 03:41:35AM +0100, Jason A. Donenfeld wrote:
+> On Mon, Nov 16, 2015 at 11:28 PM, Eric Dumazet <eric.dumazet@gmail.com> wrote:
+> > There is very little chance we'll accept a new member in sk_buff, unless
+> > proven needed.
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/trace/ftrace.c#n3692
-> 
-> And the code that does the actual matching uses kallsyms_lookup()
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/trace/ftrace.c#n4017
-> 
-> Which appears not to match the function for the address, you can't pass in
-> __bpf_tramp_exit because it wont match the symbol returned by
-> kallsyms_lookup.
+> I actually have no intention of doing this! I'm wondering if there
+> already is a member in sk_buff that moonlights as my desired ttl
+> counter, or if there's another mechanism for avoiding routing loops. I
+> want to work with what's already there, rather than meddling with the
+> innards of important and memory sensitive structures such as sk_buff.
 
-Never mind, in testing this I had marked the weak function as notrace,
-which was the reason I couldn't add it to the set_ftrace_notrace.
+Well, 7 years later... Maybe you have a better idea now of what I was
+working on then. :)
 
-After removing the notrace, kallsyms_lookup() doesn't make a difference. It
-appears that kallsyms will include overridden weak functions into the size
-of the function before it. I tried:
+As an update on this issue, it's still quasi problematic. To review, I
+can't use the TTL value, because the outer packet always must get the
+TTL of the route to the outer destination, not the inner packet minus
+one. I can't rely on reaching MTU size, because people want this to work
+with fragmentation (see [1] for my attempt to disallow fragmentation for
+this issue, which resulted in hoots and hollers). I can't use the
+per-cpu xmit_recursion variable, because I use threads.
 
-	ret = kallsyms_lookup(rec->ip, &size, &offset, &modname, str);
-	if (!ret || offset > size) {
-		seq_printf(m, "no function at %lx", rec->ip);
-	} else {
-		seq_printf(m, "%s", str);
-		if (modname)
-			seq_printf(m, " [%s]", modname);
-	}
+What I can sort of use is taking advantage of what looks like a bug in
+pskb expansion, such that it always allocates too much, and pretty
+quickly fails allocations after a few loops. Only powerpc64 and s390x
+don't appear to have this bug. See [2] for a description of this in
+depth I wrote a few months ago to you.
 
-And it made no difference.
+Anyway, it'd be nice if there were a free u8 somewhere in sk_buff that I
+could use for tracking times through the stack. Other kernels have this
+but afaict Linux still does not. I looked into trying to overload some
+existing fields -- tstamp/skb_mstamp_ns or queue_mapping -- which I was
+thinking might be totally unused on TX?
 
-> 
-> This does indeed look like a bug in %ps.
-> 
+Any ideas about this?
 
-Yes, this does appear to be a issue with kallsyms in general.
+Thanks,
+Jason
 
--- Steve
+[1] https://lore.kernel.org/wireguard/CAHmME9rNnBiNvBstb7MPwK-7AmAN0sOfnhdR=eeLrowWcKxaaQ@mail.gmail.com/
+[2] https://lore.kernel.org/netdev/CAHmME9pv1x6C4TNdL6648HydD8r+txpV4hTUXOBVkrapBXH4QQ@mail.gmail.com/

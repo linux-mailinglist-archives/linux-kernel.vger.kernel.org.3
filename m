@@ -2,88 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA1DF514DFE
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:47:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1117514E05
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:47:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377883AbiD2Oty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 10:49:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40374 "EHLO
+        id S1377861AbiD2Otv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 10:49:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377963AbiD2Ot3 (ORCPT
+        with ESMTP id S1377925AbiD2OtY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 10:49:29 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77DDC84EF4;
-        Fri, 29 Apr 2022 07:46:11 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TEUbfq019124;
-        Fri, 29 Apr 2022 14:46:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=+e0OS0jdwM0ste0CCTZic6/ixhDPnmAaqxN6Co5MrLM=;
- b=oH96y0DFo5ryBziODc8t13MjfzAcy8bISyG+R3DIfm1nTyqsgHGkN8dLoVCo0a76TqZV
- rNmmP3QIKtEd9Sx3598ujmp9RLfxeR5Ti2RZrDAKTAFHIwohFSlP1/wTFte57X9PbFjy
- mexOZRTCacr7Dyb7kag1VXci6h+mQKDUVws6nMryCi3+yN8isFETvH/qZTWd/uVjlU8Z
- Oi9NPnkruc4y7SNRbst/WUmLpHVH6RxESuG5wJVJkr8Q2w6HedzemstuKRO0g+SsNYiz
- wDJezV1e36vo2i4qxNwiY+v2/2q9MYx4UmwUhzCdn/xjKXOv2uhbmGGENBKipClKOb8i Pg== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fr27h2eva-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 14:46:06 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TEhmCC030518;
-        Fri, 29 Apr 2022 14:46:04 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma05fra.de.ibm.com with ESMTP id 3fm938yc6t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 14:46:04 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TEk13O42336612
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 29 Apr 2022 14:46:01 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B9542AE053;
-        Fri, 29 Apr 2022 14:46:01 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 28965AE04D;
-        Fri, 29 Apr 2022 14:46:01 +0000 (GMT)
-Received: from sig-9-145-61-57.uk.ibm.com (unknown [9.145.61.57])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 29 Apr 2022 14:46:00 +0000 (GMT)
-Message-ID: <f006229ae056d4cdcf57fc5722a695ad4c257182.camel@linux.ibm.com>
-Subject: Re: [RFC v2 10/39] gpio: add HAS_IOPORT dependencies
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Fri, 29 Apr 2022 10:49:24 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA998302E
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:46:04 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id hf18so5938167qtb.0
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:46:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :content-transfer-encoding:user-agent:mime-version;
+        bh=9gYARbcsROoRQuSPoSpdSfdzjCUBFI/hupA+J6RCICM=;
+        b=MPIYQZwB0Uh/nZRz3paU+fYelB3PvD9iOyiFKynpzfDgpHL2BlgVCuZYT8qQnGHUyy
+         qhc7Z/odasMpp5DlUG3P/9+W1Mn0t7pvFFqcXOcLPcFp9T1WhUWgO2qxUw0apTR3C62j
+         m2hHEDL4JnVNDAlcPUKx5TovyU60q7sUlhGM6quVBjRgXDQxi3a6iTd2q3jjL0xVWuxb
+         j0cczeIKTJJGIvchVfn879alN1Lv8NzMNI1sV+I/23AH/dnhIzI8UIjiSUAuAYTeIFfi
+         QcgkZ8e0rsLiA7itATS1IDrQaO47fvOLTwINVwWxaIAvHhPt5GKqQtV2KdzC+BQEqQf2
+         s5UQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:content-transfer-encoding:user-agent:mime-version;
+        bh=9gYARbcsROoRQuSPoSpdSfdzjCUBFI/hupA+J6RCICM=;
+        b=eZQLleZy7mi2IlfJeArcQg8RRbvBP5wS4hhB9MTgxKDrUJ9Et/x4qXO5xBs1P0F15B
+         2dyw4QMk179ls8m+J87iw6cyW3X6c9pywI+Yo69yg+rKZuhI83NnugluOQ3JDkZiRAh4
+         MqBR5hDdVNPf4DFsJxyREbB9Uz9m3f/OtGwv7b5t7qsLFHM9FHHPX6/iUqBQOylfsJyn
+         FvW+BbMlebDJ8lpC6Z8ZcGDP6jfapi2MssofkuEK4wBAFspWdbT9iIonDTIapHIQemYP
+         TWQYKRnHfpRXQJCLkDwUcVEQlr+VTwynF0agCM8+q8/qJI4gFC4ESEmkrbxl2C/nLyk5
+         9o8g==
+X-Gm-Message-State: AOAM532Bn/2TA7mxcNM2LEBHXI12upgoOyRd7Fz9rs2smIQ9N1693bDF
+        rB4rxqN+fchQba+/ssJSZZsPIQ==
+X-Google-Smtp-Source: ABdhPJyQlCnjwbzppNjeoRa4lp/DB/LMiYCu/zkxnyLyc/FgC/Ihsp/mns5E09890GNRLtvRLppcCA==
+X-Received: by 2002:a05:622a:1714:b0:2f3:5758:c789 with SMTP id h20-20020a05622a171400b002f35758c789mr26722108qtk.299.1651243563653;
+        Fri, 29 Apr 2022 07:46:03 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
+        by smtp.gmail.com with ESMTPSA id i14-20020ac85e4e000000b002f364a81d79sm1900279qtx.4.2022.04.29.07.46.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 07:46:03 -0700 (PDT)
+Message-ID: <198ce3981ad15844627581f9519cab67ed2a81c1.camel@ndufresne.ca>
+Subject: Re: [PATCH 0/3] Enable JPEG Encoder on RK3566/RK3568
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Date:   Fri, 29 Apr 2022 16:46:00 +0200
-In-Reply-To: <Ymv3DnS1vPMY8QIg@fedora>
-References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
-         <20220429135108.2781579-19-schnelle@linux.ibm.com>
-         <Ymv3DnS1vPMY8QIg@fedora>
+        Peter Geis <pgwipeout@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Liang Chen <cl@rock-chips.com>
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Date:   Fri, 29 Apr 2022 10:46:01 -0400
+In-Reply-To: <20220427224438.335327-1-frattaroli.nicolas@gmail.com>
+References: <20220427224438.335327-1-frattaroli.nicolas@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 4tyF1YQXcKzZEbdTsAgzd5uvwySxGP6J
-X-Proofpoint-GUID: 4tyF1YQXcKzZEbdTsAgzd5uvwySxGP6J
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-29_07,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- clxscore=1011 adultscore=0 priorityscore=1501 mlxlogscore=512
- suspectscore=0 malwarescore=0 spamscore=0 phishscore=0 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204290080
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,43 +81,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-29 at 10:32 -0400, William Breathitt Gray wrote:
-> On Fri, Apr 29, 2022 at 03:50:16PM +0200, Niklas Schnelle wrote:
-> > In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> > not being declared. We thus need to add HAS_IOPORT as dependency for
-> > those drivers using them.
-> > 
-> > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> > ---
-> >  drivers/gpio/Kconfig | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-> > index 45764ec3b2eb..14e5998ee95c 100644
-> > --- a/drivers/gpio/Kconfig
-> > +++ b/drivers/gpio/Kconfig
-> > @@ -697,7 +697,7 @@ config GPIO_VR41XX
-> >  
-> >  config GPIO_VX855
-> >  	tristate "VIA VX855/VX875 GPIO"
-> > -	depends on (X86 || COMPILE_TEST) && PCI
-> > +	depends on (X86 || COMPILE_TEST) && PCI && HAS_IOPORT
-> >  	select MFD_CORE
-> >  	select MFD_VX855
-> >  	help
-> > -- 
-> > 2.32.0
-> 
-> I noticed a number of other GPIO drivers make use of inb()/outb() -- for
-> example the PC104 drivers -- should the respective Kconfigs for those
-> drivers also be adjusted here?
-> 
-> William Breathitt Gray
+Le jeudi 28 avril 2022 =C3=A0 00:44 +0200, Nicolas Frattaroli a =C3=A9crit=
+=C2=A0:
+> Hello,
+>=20
+> the following series adds support for and enables the hardware JPEG
+> encoder on the RK3566 and RK3568 line of SoCs by Rockchip.
+>=20
+> The JPEG encoder is its own little Hantro instance with seemingly just
+> the encode functionality.
 
-Good question. As far as I can see most (all?) of these have "select
-ISA_BUS_API" which is "def_bool ISA". Now "config ISA" seems to
-currently be repeated in architectures and doesn't have an explicit
-HAS_IOPORT dependency (it maybe should have one). But it does only make
-sense on architectures with HAS_IOPORT set.
+I'm a little suspicious about this statement. I believe the Hantro combo is
+identical to RK3399 and that you are confusing with Rockchip JPEG encoder h=
+ere.
+Here's the source of my suspicion:
+
+https://github.com/JeffyCN/rockchip_mirrors/blob/mpp/osal/mpp_soc.cpp#L637
+
+As this get burnt into DT, we really need to get this right. Perhaps we nee=
+d to
+run the reference software to verify ? Ping me if you need help with that.
+
+>=20
+> The first patch modifies the bindings with a new compatible, and adds
+> the ability to just have a vepu interrupt without a vdpu interrupt.
+>=20
+> The second patch makes the actual driver changes to support this variant.
+>=20
+> The third and final patch makes the necessary device tree changes for
+> the rk356x device tree file to add both the node for the encoder and
+> its MMU.
+>=20
+> The series has been tested on a PINE64 Quartz64 Model A with an RK3566
+> SoC using GStreamer.
+>=20
+> Regards,
+> Nicolas Frattaroli
+>=20
+> Nicolas Frattaroli (3):
+>   dt-bindings: media: rockchip-vpu: Add RK3568 JPEG compatible
+>   media: hantro: Add support for RK356x JPEG encoder
+>   arm64: dts: rockchip: Add JPEG encoder node to rk356x
+>=20
+>  .../bindings/media/rockchip-vpu.yaml          |  2 +
+>  arch/arm64/boot/dts/rockchip/rk356x.dtsi      | 21 +++++++
+>  drivers/staging/media/hantro/hantro_drv.c     |  1 +
+>  drivers/staging/media/hantro/hantro_hw.h      |  1 +
+>  .../staging/media/hantro/rockchip_vpu_hw.c    | 62 +++++++++++++++++++
+>  5 files changed, 87 insertions(+)
+>=20
 

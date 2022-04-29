@@ -2,68 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE22514231
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 08:13:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BD26514232
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 08:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354427AbiD2GQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 02:16:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
+        id S1354460AbiD2GRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 02:17:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354419AbiD2GQr (ORCPT
+        with ESMTP id S1354447AbiD2GRF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 02:16:47 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF697E5B3
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 23:13:26 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id i19so13455008eja.11
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 23:13:26 -0700 (PDT)
+        Fri, 29 Apr 2022 02:17:05 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443CEA94D1
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 23:13:47 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id r13so13502428ejd.5
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 23:13:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=qVdXSHSh7EwA/4nqmLTvK4Lay7sxQolbudvBwlJyLB8=;
-        b=gQOVoQeNfTBai5DFopXLol0qcvPH+FLsNpUjfjRfy2qL4OVU6Q2vYHplc1VNAQndU+
-         YGiPmTXclJbU4IOL85DTmUCdIatSO6fYbIxAZFPpOF+vVGtfaiSqKyAK6L9i8ECLWZQi
-         QHZwtzEBVay2bJjvMWpccuYhjoa5HJupJPBlPjDS4Jlx/2I2mviW5AGFOMZjC55d1C6z
-         OKaKSsdJeqAmG/MvHfbYOu9XUHKRoVMRN3NPLfcc7OmcR/P4z0hrC+h1ZCiDwkvZCGT2
-         eanOlarvyLc+gGwdUzSeZns0Gg6fRRfiqZaflrPCftX66MRzTi7t08lN3AJ+MIlhqUbN
-         RU7A==
+        bh=viXcLhXltMgVR3wPsqIa9KtMGQ0jNk7lgpVp7rd3Rfw=;
+        b=c4S2DE6YQasUz7KtVf9WKicc51SIwdA4vtns/C0gbrBKxX752dqlpGq5nrrdu9ttDG
+         4AS0XIWR+DiDf+gl78G23wL4MALcaanxjf2qcQu+68jJWlJYo6/iMHObdtVx++NDK0L0
+         aEYJfH3j74coSi8uP/iUjGUNNfBZTvWqoZLhEWjayN4MkCBjZOLKaO0VBEVEvbN4DDkW
+         wFlm6Cxodm0nnoPafgK3SJnO6vopQvJw3QouDMfIw8osaUj6tAuxwxp2BdToIKWmVC/T
+         LYNHmLEu50NLl+W2N7QxA1R2T4/jUrqQ4yYkK/oqIQzo7YkKlMglHbhXDJNvGx5t8X6D
+         bVqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=qVdXSHSh7EwA/4nqmLTvK4Lay7sxQolbudvBwlJyLB8=;
-        b=cwVv1Gf7H8LeTLA2IC5EUqnb57a0SQ2FSM5E4QgPtMc+0YLLAUyOT6puBtJnU1BFt8
-         HROMiQhcSzkpjEvD74W6O3aX/rzO/3q6uT+NbWYAxoT+1mw1vNsKMwSLERzEI/Fz0mo+
-         pZpg+s8QB1n0y/2x+DRXC5EvngAqi6BrESlodBPB5W8Y4oPdGWpB9koKDBAD66+fHNog
-         1PKSP/IOwsqX+qT4A4JMfy1iiJGFHHI6WL8mV4al0XOyzlf+3KXZtOz66+c1veVpg0W1
-         1sZ4iZ8aamd4MNM+EOPq6yuh35vjaqpCG+dM6WDtVuFeIIU7gxlZjvcriY5QHRo2Jido
-         ZWkg==
-X-Gm-Message-State: AOAM533DpA10jPDREK03sz0EsoKQnszfMKGY6rfAQlcAVjUJZ3/1JCcK
-        dHmHZFH9AiUpTeTiigABX6kfgg==
-X-Google-Smtp-Source: ABdhPJx9AFEol2KkE4AyRlTaUgsGtUiyykZiEpX6D8UZc2S0zDAJ2YF4sSjK1LMV90bxH51xflHx7Q==
-X-Received: by 2002:a17:906:a0ce:b0:6d1:cb30:3b3b with SMTP id bh14-20020a170906a0ce00b006d1cb303b3bmr34598141ejb.582.1651212805367;
-        Thu, 28 Apr 2022 23:13:25 -0700 (PDT)
+        bh=viXcLhXltMgVR3wPsqIa9KtMGQ0jNk7lgpVp7rd3Rfw=;
+        b=bcUW6RLpHk80LS4CD9a+bv+sqmTSXyFNNviXCxwLJ9rzYKgMb9nnbnc+BAb1CCIOL8
+         ichGSywGk/D5eGzjJWwvh5oQCmLXDedpgVNB78a2b+JxJ9/z8PnqED48+0scBB6cThQj
+         3GQv6n2G6XzqypS+YUrQDibcaMtai3pM41by6BWL0c10HgUig4NPe0PbgtQjbpd+hY5d
+         shh/InV0t9cZ3pURhG2OEjTWiaY4ePfNXr8vNgxQhbWCFeVN5Kmj8bVFvGVen0w3y+h0
+         rnsghRK7p/y4/Or2sghme0iXtLNk45wl9AOP/f8tvwuK90b6d7CoC9U5VZVWDTMi/nyA
+         Lm7Q==
+X-Gm-Message-State: AOAM530dDGJ4vhTtbANnE5E6aBdsWV1Qyv2ysj9yV2sb3Q0gltSUGugX
+        e1NBEe2Bbl51jcVdkTQGK5E/Pw==
+X-Google-Smtp-Source: ABdhPJzibRTftl8rRIfJFXNZNDkzUnH8FJ1U5QhJrp0S97Px3s2qSHl6zZovZaiIRGJ1vbejJA19rw==
+X-Received: by 2002:a17:907:e88:b0:6ef:bce9:ff6a with SMTP id ho8-20020a1709070e8800b006efbce9ff6amr36798968ejc.275.1651212825606;
+        Thu, 28 Apr 2022 23:13:45 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id eg51-20020a05640228b300b0042617ba63casm2469039edb.84.2022.04.28.23.13.23
+        by smtp.gmail.com with ESMTPSA id t25-20020aa7db19000000b0042617ba63besm2532191eds.72.2022.04.28.23.13.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 23:13:24 -0700 (PDT)
+        Thu, 28 Apr 2022 23:13:45 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Prathamesh Shete <pshete@nvidia.com>,
+        linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3] pinctrl: nuvoton: Fix irq_of_parse_and_map() return value
-Date:   Fri, 29 Apr 2022 08:13:20 +0200
-Message-Id: <20220429061320.25032-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] pinctrl: tegra: tegra194: drop unused pin groups
+Date:   Fri, 29 Apr 2022 08:13:32 +0200
+Message-Id: <20220429061332.25135-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -75,42 +73,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
+The sdmmc1_hv_trim_pins, sdmmc3_hv_trim_pins and sys_reset_n_pins are
+not defined as pin groups:
 
-Fixes: 3b588e43ee5c ("pinctrl: nuvoton: add NPCM7xx pinctrl and GPIO driver")
+  drivers/pinctrl/tegra/pinctrl-tegra194.c:1119:27: error: ‘sdmmc3_hv_trim_pins’ defined but not used [-Werror=unused-const-variable=]
+   1119 | static const unsigned int sdmmc3_hv_trim_pins[] = {
+
+Proper fix would be to define them, but this requires knowledge from
+datasheet.  Removal should not cause any harm and at least it silences
+the warnings.
+
+Fixes: 613c0826081b ("pinctrl: tegra: Add pinmux support for Tegra194")
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
 ---
+ drivers/pinctrl/tegra/pinctrl-tegra194.c | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-Changes since v2:
-1. Rebase on Linus' devel branch.
-   Will later conflict with: "pinctrl: npcm7xx: Switch to use
-   for_each_gpiochip_node() helper"
-
-Changes since v1:
-1. Correct the return value passed further.
----
- drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c b/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
-index 9557fac5d11c..44b77dd06d90 100644
---- a/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
-+++ b/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
-@@ -1879,11 +1879,10 @@ static int npcm7xx_gpio_of(struct npcm7xx_pinctrl *pctrl)
- 				ioremap(res.start, resource_size(&res));
- 
- 			irq = irq_of_parse_and_map(np, 0);
--			if (irq < 0) {
-+			if (!irq) {
- 				dev_err(pctrl->dev,
- 					"No IRQ for GPIO bank %u\n", id);
--				ret = irq;
--				return ret;
-+				return -EINVAL;
- 			}
- 
- 			ret = bgpio_init(&pctrl->gpio_bank[id].gc,
+diff --git a/drivers/pinctrl/tegra/pinctrl-tegra194.c b/drivers/pinctrl/tegra/pinctrl-tegra194.c
+index 5c1dfcb46749..f6c5d5e6dbb6 100644
+--- a/drivers/pinctrl/tegra/pinctrl-tegra194.c
++++ b/drivers/pinctrl/tegra/pinctrl-tegra194.c
+@@ -1110,24 +1110,15 @@ static const unsigned int sdmmc4_dat0_pins[] = {
+ static const unsigned int sdmmc1_comp_pins[] = {
+ 	TEGRA_PIN_SDMMC1_COMP,
+ };
+-static const unsigned int sdmmc1_hv_trim_pins[] = {
+-	TEGRA_PIN_SDMMC1_HV_TRIM,
+-};
+ static const unsigned int sdmmc3_comp_pins[] = {
+ 	TEGRA_PIN_SDMMC3_COMP,
+ };
+-static const unsigned int sdmmc3_hv_trim_pins[] = {
+-	TEGRA_PIN_SDMMC3_HV_TRIM,
+-};
+ static const unsigned int eqos_comp_pins[] = {
+ 	TEGRA_PIN_EQOS_COMP,
+ };
+ static const unsigned int qspi_comp_pins[] = {
+ 	TEGRA_PIN_QSPI_COMP,
+ };
+-static const unsigned int sys_reset_n_pins[] = {
+-	TEGRA_PIN_SYS_RESET_N,
+-};
+ static const unsigned int shutdown_n_pins[] = {
+ 	TEGRA_PIN_SHUTDOWN_N,
+ };
 -- 
 2.32.0
 

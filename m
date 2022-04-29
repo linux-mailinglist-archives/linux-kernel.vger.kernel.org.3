@@ -2,170 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 215CC514E9D
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0929514EA4
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:02:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378146AbiD2PEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 11:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38142 "EHLO
+        id S1377967AbiD2PFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 11:05:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377480AbiD2PEG (ORCPT
+        with ESMTP id S1377483AbiD2PFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 11:04:06 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A79249274
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:00:48 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id k12so14519894lfr.9
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:00:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=NgFkGj6t89cfDU8h18lUmisWIQlxbc4WZbzdRxKCz3k=;
-        b=ZM760YPSenzfkt5aBOoPjNBgfTdCSoJabilxAb31qUx0+VOyg/Rvq1RSyyfthjlack
-         jaPIsBBJa9FfKzabWuy0hU0klkaaJiRUNTJv7viZZZ3rIniQFoc+fFS14Am0OE1OLc/8
-         qHQUXE1OjRmio8fPFYt3y9S+tyJsChNCf56o4pb1pXd4/ITENpa9rt3zTNkXtqw5c1ul
-         XWk3AaCrI/cCu7Regsnr7m0ovfUXDCv8p0BWMJ8nXO9dSNSQxNv7OCscZu/O9QL7nYIy
-         8yJGyrKCFS5u2lEMCiDxO3Lfb/VA7VYF291UArHY0SWE6DC6sZgVo2lkcoT4QCQZZcDb
-         aGgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=NgFkGj6t89cfDU8h18lUmisWIQlxbc4WZbzdRxKCz3k=;
-        b=UeWqutRLonmtPbSswIfbiifLHYkdy43wtUfhU/6x3j3P2B6xFSRkkWJ9sya8EIRKqE
-         abZ9JeaJwq/UQICaznxzOo2JftqPulfcwrTAD/Brygl861N5hKo8TTCcjUwGrCEX0vUh
-         cdGz6ZfC+ipS3iXcUGQq8i9f7v2NHfJPzCmoP1q2bO7MRwPUkdRZDL02jqv9qVWa0oRl
-         WJ5Y2DzZ6d7DxGB9CVeOHf0ojoFRFaducIDfRdo6SoTh6MnvLZFxgzWCUtDlOkr49jDh
-         REoe2cGXD0ditGJW0auXg8Ez1GSJM00VYZKGu6Bh0UtI+liZpi7APmJsA5HEy0NlmzAq
-         5lhA==
-X-Gm-Message-State: AOAM530u5SL2TWPaOkzIXSIyYQAAruo03QHLqawLPUABHUs+9ntd6M+O
-        tv0yYXEC66ZC6cqv98FLlAMsPg==
-X-Google-Smtp-Source: ABdhPJzWIXVhuKwvYZXjinlH9r7h5lT6+559NNN6Eh6+ovZcHLnhD1b/kd0AUEPpSfSv69hOp7fAHg==
-X-Received: by 2002:a05:6512:3a89:b0:471:c6ba:c522 with SMTP id q9-20020a0565123a8900b00471c6bac522mr27979319lfu.371.1651244446464;
-        Fri, 29 Apr 2022 08:00:46 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id d19-20020a193853000000b0047210b434ffsm259348lfj.27.2022.04.29.08.00.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 08:00:46 -0700 (PDT)
-Message-ID: <1f013429-8a5b-47c8-a146-41bb66af3f03@linaro.org>
-Date:   Fri, 29 Apr 2022 18:00:45 +0300
+        Fri, 29 Apr 2022 11:05:43 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2691CCD67E;
+        Fri, 29 Apr 2022 08:02:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=FWCGga2NwFtl2WJVRbR0+x5nY0E6GFEiFEIQiEh0aDI=; b=nd0C0YhSkMyx/VBQxvNGDviF35
+        b4hcz/MDiayfv5OMOwHlMLqrdxLyiopVPrSBCUV3hcRluZw2OXonnN/JE7Xec2kXWDlJJKfxpE5Vr
+        JY6z1zQFxlB9DeUZB7BShcOFFqfzvowQiekvk8OGmTXQZLSrl4uOQbIwfwZcABkvc0Jd3yneVopit
+        jVz9FcQM+iPF1WUBDfQFMSdkt0Nr1Bf2a/4fdSmkCrbZ5Ic9zy84ZNxcGXqPwpIpIhdtnb936B410
+        cI2AJ/uPCj1pCUrbDhnJFi18oyOScAjfpoLCGyep1fytQ5prukL7IiVtTC5Lx0xrSL+ozLQOceWa9
+        6wHE0rkQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nkS8H-00BhoU-W1; Fri, 29 Apr 2022 15:02:10 +0000
+Date:   Fri, 29 Apr 2022 08:02:09 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        kernel test robot <lkp@intel.com>,
+        Jens Frederich <jfrederich@gmail.com>,
+        Jon Nettleton <jon.nettleton@gmail.com>,
+        linux-staging@lists.linux.dev,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        linux-fbdev@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Changcheng Deng <deng.changcheng@zte.com.cn>
+Subject: Re: [RFC PATCH v4 11/11] fbdev: Make registered_fb[] private to
+ fbmem.c
+Message-ID: <Ymv98Y85rW/2r9m8@infradead.org>
+References: <20220429084253.1085911-1-javierm@redhat.com>
+ <20220429084253.1085911-12-javierm@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 4/4] clk: qcom: clk-krait: add apq/ipq8064 errata
- workaround
-Content-Language: en-GB
-To:     Ansuel Smith <ansuelsmth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sricharan R <sricharan@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220429120108.9396-1-ansuelsmth@gmail.com>
- <20220429120108.9396-5-ansuelsmth@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220429120108.9396-5-ansuelsmth@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220429084253.1085911-12-javierm@redhat.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/04/2022 15:01, Ansuel Smith wrote:
-> Add apq/ipq8064 errata workaround where the sec_src clock gating needs to
-> be disabled during switching. To enable this set disable_sec_src_gating
-> in the mux struct.
+On Fri, Apr 29, 2022 at 10:42:53AM +0200, Javier Martinez Canillas wrote:
+> From: Daniel Vetter <daniel.vetter@ffwll.ch>
 > 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> ---
->   drivers/clk/qcom/clk-krait.c | 16 ++++++++++++++++
->   drivers/clk/qcom/clk-krait.h |  1 +
->   drivers/clk/qcom/krait-cc.c  |  1 +
->   3 files changed, 18 insertions(+)
+> Well except when the olpc dcon fbdev driver is enabled, that thing
+> digs around in there in rather unfixable ways.
 > 
-> diff --git a/drivers/clk/qcom/clk-krait.c b/drivers/clk/qcom/clk-krait.c
-> index 6c367ad6506a..4a9b3296c45b 100644
-> --- a/drivers/clk/qcom/clk-krait.c
-> +++ b/drivers/clk/qcom/clk-krait.c
-> @@ -18,13 +18,23 @@
->   static DEFINE_SPINLOCK(krait_clock_reg_lock);
->   
->   #define LPL_SHIFT	8
-> +#define SECCLKAGD	BIT(4)
-> +
->   static void __krait_mux_set_sel(struct krait_mux_clk *mux, int sel)
->   {
->   	unsigned long flags;
->   	u32 regval;
->   
->   	spin_lock_irqsave(&krait_clock_reg_lock, flags);
-> +
->   	regval = krait_get_l2_indirect_reg(mux->offset);
-> +
-> +	/* apq/ipq8064 Errata: disable sec_src clock gating during switch. */
-> +	if (mux->disable_sec_src_gating) {
-> +		regval |= SECCLKAGD;
-> +		krait_set_l2_indirect_reg(mux->offset, regval);
-> +	}
-> +
->   	regval &= ~(mux->mask << mux->shift);
->   	regval |= (sel & mux->mask) << mux->shift;
->   	if (mux->lpl) {
-> @@ -33,6 +43,12 @@ static void __krait_mux_set_sel(struct krait_mux_clk *mux, int sel)
->   	}
->   	krait_set_l2_indirect_reg(mux->offset, regval);
->   
-> +	/* apq/ipq8064 Errata: re-enabled sec_src clock gating. */
-> +	if (mux->disable_sec_src_gating) {
-> +		regval &= ~SECCLKAGD;
-> +		krait_set_l2_indirect_reg(mux->offset, regval);
-> +	}
-> +
->   	/* Wait for switch to complete. */
->   	mb();
->   	udelay(1);
-> diff --git a/drivers/clk/qcom/clk-krait.h b/drivers/clk/qcom/clk-krait.h
-> index 9120bd2f5297..f930538c539e 100644
-> --- a/drivers/clk/qcom/clk-krait.h
-> +++ b/drivers/clk/qcom/clk-krait.h
-> @@ -15,6 +15,7 @@ struct krait_mux_clk {
->   	u8		safe_sel;
->   	u8		old_index;
->   	bool		reparent;
-> +	bool		disable_sec_src_gating;
->   
->   	struct clk_hw	hw;
->   	struct notifier_block   clk_nb;
-> diff --git a/drivers/clk/qcom/krait-cc.c b/drivers/clk/qcom/krait-cc.c
-> index 4d4b657d33c3..0f88bf41ec6e 100644
-> --- a/drivers/clk/qcom/krait-cc.c
-> +++ b/drivers/clk/qcom/krait-cc.c
-> @@ -138,6 +138,7 @@ krait_add_sec_mux(struct device *dev, int id, const char *s,
->   	mux->parent_map = sec_mux_map;
->   	mux->hw.init = &init;
->   	mux->safe_sel = 0;
-> +	mux->disable_sec_src_gating = true;
+> Cc oldc_dcon maintainers as fyi.
+> 
+> v2: I typoed the config name (0day)
 
-This has to be guarded with the of_compatible checks. Otherwise you'd 
-apply this errata to all Krait CPUs, not only apq/ipq8064.
-
-At least this should be limited to krait-cc-v1 with the note that there 
-is no way to distinguish between platforms.
-
->   
->   	init.name = kasprintf(GFP_KERNEL, "krait%s_sec_mux", s);
->   	if (!init.name)
-
-
--- 
-With best wishes
-Dmitry
+We should not keep broken code and/or core code ifdefs around for
+staging drivers.  Just disable the driver if it is in such a bad
+state.

@@ -2,147 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46638514FB1
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72583514FAB
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378586AbiD2Pks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 11:40:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39514 "EHLO
+        id S1378600AbiD2PlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 11:41:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378568AbiD2Pkm (ORCPT
+        with ESMTP id S1378571AbiD2Pky (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 11:40:42 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDE1D64C0
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:37:22 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id z126so6201214qkb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:37:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=bZXp9UdtwQUhq4ByWWPM2fGxW46dWdEnK/AAX/Cv5Mk=;
-        b=K7k1NR2iw9kVdnCUnxPN/AGmdqZLJYlSXYLXaJhLiudcd1Mtfwu8JpG1ZiL21PbPDl
-         cZKLE89rhE2vHHzVazDpdjx/0YSML1XahKPVknxXXd3hsT2Oz+bwVvWGWPMtv3uucyup
-         IrWcjmwiZ4ehml0LcXKVLkAuFRzWVjst1EZEsV/Ag4yMMWb8ZQn9Is5yrcfTKQSKO32C
-         v39WiD/8BkGWUU0aCAosD6uGHsWt8/WCfg1025NmSs6w3Qzp7mwsQZ2PXyD+5M28iOlZ
-         S/C4saM3TAbiCrvaCL8cBRRByxhaJdVo87fa/f6cpD6YSIrtgXx7MAZ4o6kS9t+CxrbX
-         jsGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bZXp9UdtwQUhq4ByWWPM2fGxW46dWdEnK/AAX/Cv5Mk=;
-        b=uROCZYDCIM6ErJMtsSEM5efWrE38Gg1aWwFK3sjT0uabY88uvaeWjM2+idZx6bZ5DM
-         mhqWqldiOJQmmSiMe5nTVHs5g/eteg1GwZR+9XL3SVBjFoB7i8dWczyOKol/YfPB/dDE
-         Bcy+2hJ7t5nAkJtxqZxqfavE49eTTzrVXS0kElj8V/MlkebCor10Eh5jf9BT6Tp8Tynz
-         uQgDh6hU7zuxHPXdwI6A2Zd/TaAw5Y9pWLKP8UdV+IUJJN6V76qZ5FqkD2PJeDXLyr9P
-         BZ0oq6UM4JijebGkAGf6wWQy9LM/0iYFquUfDFLVklIqIB80Gi576PGJoIBMW4nVM+4G
-         CICA==
-X-Gm-Message-State: AOAM530JQe3pUJaWh/jZOOPMEgCi6xFsuCR5nTsstm8Wck9mgHEE6yDY
-        m9W9fLWHGSNGahKc+oHT/112CA==
-X-Google-Smtp-Source: ABdhPJw2cY0R0MGKHsfQdnqbWfaWvp4skgSgNWcuhYrHEFDV9lMBXC/qRnYVkHx3ENkOwGHbC2LFiw==
-X-Received: by 2002:a05:620a:1906:b0:67b:3ac1:8f72 with SMTP id bj6-20020a05620a190600b0067b3ac18f72mr22573943qkb.478.1651246641508;
-        Fri, 29 Apr 2022 08:37:21 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id r9-20020ac85c89000000b002f378738ed4sm1906774qta.7.2022.04.29.08.37.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 08:37:20 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 11:37:18 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Subject: Re: [RFC v2 10/39] gpio: add HAS_IOPORT dependencies
-Message-ID: <YmwGLrh4U+pVJo0m@fedora>
-References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
- <20220429135108.2781579-19-schnelle@linux.ibm.com>
- <Ymv3DnS1vPMY8QIg@fedora>
- <f006229ae056d4cdcf57fc5722a695ad4c257182.camel@linux.ibm.com>
+        Fri, 29 Apr 2022 11:40:54 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 55BF4D64FA
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:37:33 -0700 (PDT)
+Received: (qmail 950759 invoked by uid 1000); 29 Apr 2022 11:37:32 -0400
+Date:   Fri, 29 Apr 2022 11:37:32 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Vincent Shih <vincent.sunplus@gmail.com>
+Cc:     gregkh@linuxfoundation.org, p.zabel@pengutronix.de,
+        davem@davemloft.net, vladimir.oltean@nxp.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, wells.lu@sunplus.com
+Subject: Re: [PATCH v4 1/2] usb: host: ehci-sunplus: Add driver for ehci in
+ Sunplus SP7021
+Message-ID: <YmwGPDNXNfx2RqLY@rowland.harvard.edu>
+References: <1651220876-26705-1-git-send-email-vincent.sunplus@gmail.com>
+ <1651220876-26705-2-git-send-email-vincent.sunplus@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="UN0ca/LPGGPy0rfH"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f006229ae056d4cdcf57fc5722a695ad4c257182.camel@linux.ibm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1651220876-26705-2-git-send-email-vincent.sunplus@gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Apr 29, 2022 at 04:27:55PM +0800, Vincent Shih wrote:
+> Add driver for ehci in Sunplus SP7021
+> 
+> Signed-off-by: Vincent Shih <vincent.sunplus@gmail.com>
+> ---
+> Changes in v4:
+>   - Implement power_on, power_off and power_suspend functions.
 
---UN0ca/LPGGPy0rfH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Did you test these?  Did you try to rmmod the ehci-sunplus module after 
+adding these functions?
 
-On Fri, Apr 29, 2022 at 04:46:00PM +0200, Niklas Schnelle wrote:
-> On Fri, 2022-04-29 at 10:32 -0400, William Breathitt Gray wrote:
-> > On Fri, Apr 29, 2022 at 03:50:16PM +0200, Niklas Schnelle wrote:
-> > > In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and frie=
-nds
-> > > not being declared. We thus need to add HAS_IOPORT as dependency for
-> > > those drivers using them.
-> > >=20
-> > > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> > > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> > > ---
-> > >  drivers/gpio/Kconfig | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >=20
-> > > diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-> > > index 45764ec3b2eb..14e5998ee95c 100644
-> > > --- a/drivers/gpio/Kconfig
-> > > +++ b/drivers/gpio/Kconfig
-> > > @@ -697,7 +697,7 @@ config GPIO_VR41XX
-> > > =20
-> > >  config GPIO_VX855
-> > >  	tristate "VIA VX855/VX875 GPIO"
-> > > -	depends on (X86 || COMPILE_TEST) && PCI
-> > > +	depends on (X86 || COMPILE_TEST) && PCI && HAS_IOPORT
-> > >  	select MFD_CORE
-> > >  	select MFD_VX855
-> > >  	help
-> > > --=20
-> > > 2.32.0
-> >=20
-> > I noticed a number of other GPIO drivers make use of inb()/outb() -- for
-> > example the PC104 drivers -- should the respective Kconfigs for those
-> > drivers also be adjusted here?
-> >=20
-> > William Breathitt Gray
->=20
-> Good question. As far as I can see most (all?) of these have "select
-> ISA_BUS_API" which is "def_bool ISA". Now "config ISA" seems to
-> currently be repeated in architectures and doesn't have an explicit
-> HAS_IOPORT dependency (it maybe should have one). But it does only make
-> sense on architectures with HAS_IOPORT set.
+> diff --git a/drivers/usb/host/ehci-sunplus.c b/drivers/usb/host/ehci-sunplus.c
+> new file mode 100644
+> index 0000000..4d8e20d
+> --- /dev/null
+> +++ b/drivers/usb/host/ehci-sunplus.c
+> @@ -0,0 +1,289 @@
 
-There is such a thing as ISA DMA, but you'll still need to initialize
-the device via the IO Port bus first, so perhaps setting HAS_IOPORT for
-"config ISA" is the right thing to do: all ISA devices are expected to
-communicate in some way via ioport.
+...
 
-William Breathitt Gray
+> +static void sp_ehci_platform_power_off(struct platform_device *pdev)
+> +{
+> +	struct usb_hcd *hcd = platform_get_drvdata(pdev);
+> +	struct sp_ehci_priv *sp_priv = hcd_to_sp_ehci_priv(hcd);
+> +
+> +	phy_power_off(sp_priv->phy);
+> +	phy_exit(sp_priv->phy);
 
---UN0ca/LPGGPy0rfH
-Content-Type: application/pgp-signature; name="signature.asc"
+Notice that this dereferences a field contained in the sp_ehci_priv 
+extension to the usb_hcd structure.
 
------BEGIN PGP SIGNATURE-----
+...
 
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCYmwGKgAKCRC1SFbKvhIj
-K8KEAP0TKKesiZ/wUezoJg8+48qr5yK22ZRd1gc3a6/67xLQNgEAvu4pev2XF5/q
-8PHoF5Bmkx2ZgF9O5X8qFa9zGNUxqAk=
-=PRGE
------END PGP SIGNATURE-----
+> +static int ehci_sunplus_remove(struct platform_device *pdev)
+> +{
+> +	struct usb_hcd *hcd = platform_get_drvdata(pdev);
+> +	struct usb_ehci_pdata *pdata = pdev->dev.platform_data;
+> +
+> +	usb_remove_hcd(hcd);
+> +	usb_put_hcd(hcd);
 
---UN0ca/LPGGPy0rfH--
+This call deallocates the usb_hcd structure.
+
+> +
+> +	if (pdata->power_off)
+> +		pdata->power_off(pdev);
+
+But here you dereference a field that it contains.  This power-off 
+operation must occur _before_ the usb_put_hcd() call.
+
+Alan Stern

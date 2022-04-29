@@ -2,142 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DACB514D17
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:32:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02224514CFF
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377381AbiD2Ofi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 10:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35860 "EHLO
+        id S1377353AbiD2OeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 10:34:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377376AbiD2Odx (ORCPT
+        with ESMTP id S1377394AbiD2OeA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 10:33:53 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D71A5E97
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:30:31 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A18601F892;
-        Fri, 29 Apr 2022 14:30:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1651242629; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IbK2VEqmYvpAFl5tGkzJpb/gXsPJVD0IA8jHw9TPBBk=;
-        b=zb3JmXdLKXZdz1SwxC3xXgYjGHX9p5y+S0k/iQ0ddBWXXwriLGxqFXaAj/HZDqWBpHvtg7
-        lppkHfqFouL41dY0l05RcDB5FyWCPsccPM1yLlT/1clnOgZgP3M8KKi235D4DPup8pegLP
-        rdsrc36ZcYAHO2xiNFl6g9InqAgBuro=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1651242629;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IbK2VEqmYvpAFl5tGkzJpb/gXsPJVD0IA8jHw9TPBBk=;
-        b=wSCik5wU9movZ6tpuQnC+FTt9dt6fvNtbO5+a2+LMTGXrv2DvT6D+6Piy4299sC+GcxeUk
-        ug8mqwoAP8H1KsBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7887313AE0;
-        Fri, 29 Apr 2022 14:30:29 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id RKVyHIX2a2JIFwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 29 Apr 2022 14:30:29 +0000
-Message-ID: <3a12e66d-58cb-d768-7b2e-4eb239c03ee6@suse.cz>
-Date:   Fri, 29 Apr 2022 16:30:29 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 18/23] mm/sl[au]b: generalize kmalloc subsystem
-Content-Language: en-US
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     Marco Elver <elver@google.com>,
-        Matthew WilCox <willy@infradead.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220414085727.643099-1-42.hyeyoo@gmail.com>
- <20220414085727.643099-19-42.hyeyoo@gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220414085727.643099-19-42.hyeyoo@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+        Fri, 29 Apr 2022 10:34:00 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5347FF7A;
+        Fri, 29 Apr 2022 07:30:42 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TELUxW024690;
+        Fri, 29 Apr 2022 14:30:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=+Pd3boeYYOqUdToIy6lpJJ2YBcwWkKSMUxL2UvbDusM=;
+ b=exfwSuFtsi/V/uKPfjCDuRqQMCbsyO9dSqfPoUq0Q3DuHUwyWuQa0AosM6gfjvOreVsl
+ ukzCa3dcQTqPf96ipu1r9SEopNHxNLe6RHxQpaFy5haYFQY1uwDphoXoLZYuOuMVbeQx
+ KyLMEVl6cGRAxwzg6U+BGXWxVrVk5ehakBxnKjL4+qUqF8pqNJZtlbi/Nq5AOlQMxMCm
+ C5X3dtKhwMuZzJjcYUz8OSliREWqB+ILv1YacxKMXXbgd1OlW9vjXdU0EF7+0Vg8yd6K
+ E0Dq2W+PBSp/1YwNWYzTFAAhykDc6MKfIqiZOLbnHBgxSBp1K180nVZZCIGms/3VHwP7 cg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3frhq4066v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Apr 2022 14:30:36 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23TENm6I003365;
+        Fri, 29 Apr 2022 14:30:36 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3frhq4066d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Apr 2022 14:30:36 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TEKrOh000926;
+        Fri, 29 Apr 2022 14:30:34 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma02fra.de.ibm.com with ESMTP id 3fpuygbabg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Apr 2022 14:30:34 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TEUVWC49217888
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 29 Apr 2022 14:30:31 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B8A1D4C046;
+        Fri, 29 Apr 2022 14:30:31 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 437F24C04E;
+        Fri, 29 Apr 2022 14:30:31 +0000 (GMT)
+Received: from sig-9-145-61-57.uk.ibm.com (unknown [9.145.61.57])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 29 Apr 2022 14:30:31 +0000 (GMT)
+Message-ID: <197e458ed5db61271b48f2a510b7ac2b0e64bc2d.camel@linux.ibm.com>
+Subject: Re: [PATCH 09/37] counter: add HAS_IOPORT dependencies
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        "open list:COUNTER SUBSYSTEM" <linux-iio@vger.kernel.org>
+Date:   Fri, 29 Apr 2022 16:30:30 +0200
+In-Reply-To: <20220429135108.2781579-17-schnelle@linux.ibm.com>
+References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
+         <20220429135108.2781579-17-schnelle@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: QWB1eKsbubXGvZrUIpjKV2XwF9s2_hEV
+X-Proofpoint-ORIG-GUID: f96Wy9o2GUbfrjToWtYuTJJsNARNKEFD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-29_07,2022-04-28_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ malwarescore=0 phishscore=0 priorityscore=1501 mlxlogscore=549 mlxscore=0
+ impostorscore=0 spamscore=0 suspectscore=0 lowpriorityscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204290079
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/14/22 10:57, Hyeonggon Yoo wrote:
-> Now everything in kmalloc subsystem can be generalized.
-> Let's do it!
+On Fri, 2022-04-29 at 15:50 +0200, Niklas Schnelle wrote:
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. We thus need to add HAS_IOPORT as dependency for
+> those drivers using them.
 > 
-> Generalize __kmalloc_node_track_caller(), kfree(), __ksize(),
-> __kmalloc_node() and move them to slab_common.c.
-> 
-> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 > ---
->  mm/slab.c        | 94 -----------------------------------------------
->  mm/slab_common.c | 95 ++++++++++++++++++++++++++++++++++++++++++++++++
->  mm/slub.c        | 88 --------------------------------------------
->  3 files changed, 95 insertions(+), 182 deletions(-)
-> 
-> diff --git a/mm/slab.c b/mm/slab.c
-> index d35873da5572..fc00aca62ae3 100644
-> --- a/mm/slab.c
-> +++ b/mm/slab.c
-> @@ -3527,36 +3527,6 @@ void *kmem_cache_alloc_node_trace(struct kmem_cache *cachep,
->  EXPORT_SYMBOL(kmem_cache_alloc_node_trace);
->  #endif
->  
-> -static __always_inline void *
-> -__do_kmalloc_node(size_t size, gfp_t flags, int node, unsigned long caller)
-> -{
-> -	struct kmem_cache *cachep;
-> -	void *ret;
-> -
-> -	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE))
-> -		return kmalloc_large_node(size, flags, node);
-> -	cachep = kmalloc_slab(size, flags);
-> -	if (unlikely(ZERO_OR_NULL_PTR(cachep)))
-> -		return cachep;
-> -	ret = kmem_cache_alloc_node_trace(cachep, flags, node, size);
-> -	ret = kasan_kmalloc(cachep, ret, size, flags);
 
-SLAB did kasan_kmalloc() when called from __kmalloc_node_track_caller(), and
-will not do after this patch, until the next patch 19/23. So I would just
-fold it to this patch.
+Sorry everyone. I sent this as PATCH in error while preparing to sent
+the same series as RFC. Since e-mail has no remote delete and I lack a
+time machine let's just all pretend you only got the RFC.
 
-> -
-> -	return ret;
-> -}
-> -
-> -void *__kmalloc_node(size_t size, gfp_t flags, int node)
-> -{
-> -	return __do_kmalloc_node(size, flags, node, _RET_IP_);
-> -}
-> -EXPORT_SYMBOL(__kmalloc_node);
-> -
-> -void *__kmalloc_node_track_caller(size_t size, gfp_t flags,
-> -		int node, unsigned long caller)
-> -{
-> -	return __do_kmalloc_node(size, flags, node, caller);
-> -}
-> -EXPORT_SYMBOL(__kmalloc_node_track_caller);
-> -
->  #ifdef CONFIG_PRINTK
->  void kmem_obj_info(struct kmem_obj_info *kpp, void *object, struct slab *slab)
->  {

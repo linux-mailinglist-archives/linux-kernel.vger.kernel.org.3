@@ -2,210 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4515651458F
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 11:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB3F514591
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 11:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356673AbiD2Jnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 05:43:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48850 "EHLO
+        id S1356627AbiD2Jol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 05:44:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356627AbiD2Jnc (ORCPT
+        with ESMTP id S1356676AbiD2Joa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 05:43:32 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C3238AD;
-        Fri, 29 Apr 2022 02:40:10 -0700 (PDT)
-X-UUID: 144feaeb2add4d3b98ffa866a261fc3c-20220429
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:e54a13ef-e425-4c35-a96e-b8fa1264c69f,OB:0,LO
-        B:0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:25
-X-CID-META: VersionHash:faefae9,CLOUDID:f0372d2f-6199-437e-8ab4-9920b4bc5b76,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 144feaeb2add4d3b98ffa866a261fc3c-20220429
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-        (envelope-from <jiaxin.yu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1916973249; Fri, 29 Apr 2022 17:40:04 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 29 Apr 2022 17:40:03 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 29 Apr 2022 17:40:02 +0800
-Message-ID: <5e400f7ccb3b208a033e2ad8f220331851ff9c7e.camel@mediatek.com>
-Subject: Re: [v4 16/18] dt-bindings: mediatek: mt8186: add
- mt8186-mt6366-da7219-max98357 document
-From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     <broonie@kernel.org>, <angelogioacchino.delregno@collabora.com>,
-        <devicetree@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <tzungbi@google.com>, <linux-mediatek@lists.infradead.org>,
-        <trevor.wu@mediatek.com>, <matthias.bgg@gmail.com>,
-        <aaronyu@google.com>, <julianbraha@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>
-Date:   Fri, 29 Apr 2022 17:40:02 +0800
-In-Reply-To: <YmqlNV31FrcAyuN9@robh.at.kernel.org>
-References: <20220428093355.16172-1-jiaxin.yu@mediatek.com>
-         <20220428093355.16172-17-jiaxin.yu@mediatek.com>
-         <YmqlNV31FrcAyuN9@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Fri, 29 Apr 2022 05:44:30 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DF035AA9
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 02:41:12 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8777F210DB;
+        Fri, 29 Apr 2022 09:41:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1651225271; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TLN93rTB7llJ/DviTuLPV8Vw8InbmxfO6KMnH2jX3Tg=;
+        b=vNjNDSI2Wes8ONnaVEGXMqkr+7o8qgPdZ22+ueEmBrM1qo3apGIpHeHWQ0XaBqrb6krNld
+        LpdM0USytIMix47Y9FPv2h6wkS09vRhtIFiKUDe7sRvZ9gIehJfIfTYNjK8gnwMT8yLT9q
+        qlMKZ6OoCwXf5v8iRyJ6yCTtxtqzSQg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1651225271;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TLN93rTB7llJ/DviTuLPV8Vw8InbmxfO6KMnH2jX3Tg=;
+        b=W/XlIb45DUWyXfJqS2V+DNIWA4NO+UI6p7qCWKXeqsPLz+BmjrTqOEEe4HcYZ/h8nvD6Y+
+        CG1m+9HRo8Le/EAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5874113AE0;
+        Fri, 29 Apr 2022 09:41:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id PuvFFLeya2IHCgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 29 Apr 2022 09:41:11 +0000
+Message-ID: <6b31f436-5bfb-9d8f-9418-55036f342f2e@suse.cz>
+Date:   Fri, 29 Apr 2022 11:41:11 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 1/2] mm: slab: fix comment for ARCH_KMALLOC_MINALIGN
+Content-Language: en-US
+To:     andrey.konovalov@linux.dev,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Peter Collingbourne <pcc@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+References: <fe1ca7a25a054b61d1038686d07569416e287e7b.1651161548.git.andreyknvl@google.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <fe1ca7a25a054b61d1038686d07569416e287e7b.1651161548.git.andreyknvl@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-04-28 at 09:31 -0500, Rob Herring wrote:
-> On Thu, Apr 28, 2022 at 05:33:53PM +0800, Jiaxin Yu wrote:
-> > Add document for mt8186 board with mt6366, da7219 and max98357.
-> > 
-> > Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
-> > ---
-> >  .../sound/mt8186-mt6366-da7219-max98357.yaml  | 71
-> > +++++++++++++++++++
-> >  1 file changed, 71 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/sound/mt8186-
-> > mt6366-da7219-max98357.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/sound/mt8186-mt6366-
-> > da7219-max98357.yaml
-> > b/Documentation/devicetree/bindings/sound/mt8186-mt6366-da7219-
-> > max98357.yaml
-> > new file mode 100644
-> > index 000000000000..55e8649f2aea
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/sound/mt8186-mt6366-da7219-
-> > max98357.yaml
-> > @@ -0,0 +1,71 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: 
-> > http://devicetree.org/schemas/sound/mt8186-mt6366-da7219-max98357.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Mediatek MT8186 with MT6366, DA7219 and MAX98357 ASoC sound
-> > card driver
-> > +
-> > +maintainers:
-> > +  - Jiaxin Yu <jiaxin.yu@mediatek.com>
-> > +
-> > +description:
-> > +  This binding describes the MT8186 sound card.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - mediatek,mt8186_mt6366_da7219_max98357_sound
+On 4/28/22 17:59, andrey.konovalov@linux.dev wrote:
+> From: Andrey Konovalov <andreyknvl@google.com>
 > 
-> s/_/-/
+> The comment next to the ARCH_KMALLOC_MINALIGN definition says that
+> ARCH_KMALLOC_MINALIGN can be defined in arch headers. This is incorrect:
+> it's actually ARCH_DMA_MINALIGN that can be defined there.
 > 
-Got it.
-> > +
-> > +  mediatek,platform:
-> > +    $ref: "/schemas/types.yaml#/definitions/phandle"
-> > +    description: The phandle of MT8186 ASoC platform.
-> > +
-> > +  headset-codec:
-> > +    type: object
+> Fix the comment.
 > 
->        additionalProperties: false
-Ditto.
-> 
-> > +    properties:
-> > +      sound-dai:
-> > +        $ref: /schemas/types.yaml#/definitions/phandle
-> 
-> sound-dai already has a type, so drop and define how many entries.
-> 
-Ditto.
-> > +    required:
-> > +        - sound-dai
-> > +
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 
-The indentation of this line is incorrect. I will fix it.
+Thanks, added both patches to the slab tree.
 
-> > +  playback-codecs:
-> > +    type: object
+> ---
+>  include/linux/slab.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->        additionalProperties: false
-> 
-Got it.
-> > +    properties:
-> > +      sound-dai:
-> > +        minItems: 2
-> > +        maxItems: 3
-> 
-> If more than 1 entry, then you need to define what each one is and
-> the 
-> order. Just like reg, interrupts, clocks, etc.
-> 
-Hi Rob,
-
-Should I correct them as below?
-
----
-properties:
-  sound-dai:
-    minItems: 2
-    maxItems: 3
-    items:
-      - items:
-          - description: xxx
-          - description: yyy
-          - description: zzz
-
-> > +        $ref: /schemas/types.yaml#/definitions/phandle-array
-> 
-> Drop
-> 
-Got it.
-> > +    required:
-> > +        - sound-dai
-> > +
-> > +additionalProperties: false
-> > +
-> > +required:
-> > +  - compatible
-> > +  - mediatek,platform
-> > +  - headset-codec
-> > +  - playback-codecs
-> > +
-> > +examples:
-> > +  - |
-> > +
-> > +    sound: mt8186-sound {
-> > +        compatible =
-> > "mediatek,mt8186_mt6366_da7219_max98357_sound";
-> > +        mediatek,platform = <&afe>;
-> > +        pinctrl-names = "aud_clk_mosi_off",
-> > +                        "aud_clk_mosi_on";
-> > +        pinctrl-0 = <&aud_clk_mosi_off>;
-> > +        pinctrl-1 = <&aud_clk_mosi_on>;
-> > +
-> > +        headset-codec {
-> > +            sound-dai = <&da7219>;
-> > +        };
-> > +
-> > +        playback-codecs {
-> > +            sound-dai = <&anx_bridge_dp>,
-> > +                        <&max98357a>;
-> > +        };
-> > +    };
-> > +
-> > +...
-> > -- 
-> > 2.25.1
-> > 
+> diff --git a/include/linux/slab.h b/include/linux/slab.h
+> index 373b3ef99f4e..8cc1d54e56ad 100644
+> --- a/include/linux/slab.h
+> +++ b/include/linux/slab.h
+> @@ -190,7 +190,7 @@ void kmem_dump_obj(void *object);
+>  /*
+>   * Some archs want to perform DMA into kmalloc caches and need a guaranteed
+>   * alignment larger than the alignment of a 64-bit integer.
+> - * Setting ARCH_KMALLOC_MINALIGN in arch headers allows that.
+> + * Setting ARCH_DMA_MINALIGN in arch headers allows that.
+>   */
+>  #if defined(ARCH_DMA_MINALIGN) && ARCH_DMA_MINALIGN > 8
+>  #define ARCH_KMALLOC_MINALIGN ARCH_DMA_MINALIGN
 

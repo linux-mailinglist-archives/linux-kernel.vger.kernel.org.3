@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CFC35155CD
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:39:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3986C5155CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380887AbiD2Ukw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 16:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51080 "EHLO
+        id S1380888AbiD2Ukz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 16:40:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380867AbiD2UkY (ORCPT
+        with ESMTP id S1380878AbiD2Uk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 16:40:24 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6782B83B38
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:37:05 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id h16-20020a056902009000b00628a70584b2so8328232ybs.6
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:37:05 -0700 (PDT)
+        Fri, 29 Apr 2022 16:40:26 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991ED8302E
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:37:07 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id d129-20020a254f87000000b006411bf3f331so8383756ybb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:37:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=gEbHgFs6lZ2lHqINgip3igp2EHgtJN39yys4lM28Yvo=;
-        b=SaFVW3jXVx8M6aolNzkLVyQeDYZbzqRO7KWtEU0s7ci1omw18PaWzOYuK5758tDqgJ
-         /pdjdxdei9jWmzk3zIw3oTE+XswiK7PorZHzgsq4bL1+VChgPuz0iC/N21WzcGY/qRM2
-         6JWLbIrhTS9SAvQz7MMzKl0+WgH4XmbeFbiBh2+IVPL72dZ5iBaKryX3AN1s0hPVY4YP
-         9bQt1yqW6LnkKYulq8WAbtjiiEhgkR1G+Rp0rnFrwV8hN5rsQYtFyb6s5lo8ZXCf+7D6
-         +m7c1oAJxWXgtwRGknWfZgz5PiGIewZRKWdX5+TRIcmMl/JLQ64JSXrUoonAfSIFb+BK
-         TB5g==
+        bh=toNjlzYxqQcjAnQGwFPffr4qkB53a+Hv7lcj5bGaBXY=;
+        b=jT2IjI35/b2hVboGLC+3ooZRUd4Cub9P+C1GAq5Lzi2RpnBI3nprAEP2ONx0TVgYm7
+         RKQUcusXWuRlX/RSwyRoevlkYnze8FoZ0cgWs0XkmJqrkmbzD/iTVcyFjW+7lBIrx62H
+         /5rgh472pg0znBMROIcX+aZAbTykh8odIhd1d1eZt3Xhiezsk+ssRCOfRqGk8nkxZYmt
+         ARLP84GFUuoI5iTnarTZJWo/NmZGIqMZ514LXqX1L9+OC5K07pwoLWEacuVGILpzB6pm
+         2o3vScassDAgL2/k3dHkvufJRo2sRVu6AtNiuj4EIghSxVaW+pLsQMGc5wu3M1WI7cGe
+         WneA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=gEbHgFs6lZ2lHqINgip3igp2EHgtJN39yys4lM28Yvo=;
-        b=Iri0s7Ms/TP0Tw88NqhNPv/4VL16oZ7ojNKmH7cxpsvXauHUijjzQc90GBJJ1wL4xv
-         IDf2Xs1i4ansJI4TQvWycmCv6Gjvc7fZDRlnTC9VbTe9JAF9AQU1CF2LOEkc/ElOHUC3
-         eIgOHY7bhiCmPkQS5AHNcRfGjMxisednJYTD3yq9Mg/ksjw99HUUPQuLjK2At7TI495K
-         CoObV/VzpQRA6FYUAGdh/eUCl++9q0xnTPwwJ8NJ8HuCatykKhqV8AkEnOxtcZnQs1So
-         4QX5Ep6OwNs5AQiWy7AzLUxIKBX0r3SsL+qTfCnOqxUqR6hS07xHfRLN+BYctVRIYqft
-         ggVQ==
-X-Gm-Message-State: AOAM530buA54WvxLgElJLLR2G2Eeuegxm4OnR2d6zlAigsKwc9E0HE+c
-        DO1E+082UKKamv+iXsZV7pWqEuciwoREJvnlhkdMa54AgTrCsOmBqM56owE0fG8VDxxokls2cyQ
-        u+O1CG6XFNppF0ZZ+1PeQQ2uZ8+CLOSjZ4rI0nh7085j+TSGdD5yzjQvJl3SKihszIDggl6ttHu
-        UJybEHaxiHKw==
-X-Google-Smtp-Source: ABdhPJxgT/9aX0dsDa8KW+mzDJMfQTvkgU1FZElGfOjFMsqeYE38W+fgWXvD8McWD+ilA728NnLgBmCmjrnuTB/FeAI=
+        bh=toNjlzYxqQcjAnQGwFPffr4qkB53a+Hv7lcj5bGaBXY=;
+        b=KkLqDPc3AvAhkX8V52VJrZsicZuqWHPQMvks5gFUIcF35erM4JN44txSsa9K4CLXAy
+         niz2cvgFdCjnZjSU43ZN1Mg58iyBq5e5TpUFMHi24uBKmnVxdBOrJvLKgkYqZomyZi+W
+         94qrl7KFvM6e0Dq1finyy3ogIko6R10YqmeNcmwxw3SfFviAippKrv49hOTdFPbLlrNF
+         aJiSVGQO4wY3hIOoXLxoxC+JllN6HKvaXzuslDYaH6qbyIGYCWbSDkThKbP7n8zsFixU
+         bzWBIaNhK5xJXrcN+M5RsJHwWLhAMQNC2RFLGtIOU0AI/EdSQTJ3EjRhVFlUFrvWjLnc
+         ugfA==
+X-Gm-Message-State: AOAM532cuoh4Q6l7cMvJq8yHqZnCPfVc6HNLg/zUMzl5nrIAqbG3jMid
+        B5zzKIQI/eTtEe6gM7aAp40OHeBQvTDoneskEZg/RASlWCekVfUFxczLLJ6L/lOyFBi8l+WHofw
+        slKoz3bwJuOcCQmBD3KC3o7Qty1SnZVJqgh22+/GpIzFpY0fUtvRhtH3g6pvAJWMYLoqS4Tc4Lg
+        UCmcaqshjPeQ==
+X-Google-Smtp-Source: ABdhPJzdzB9TYiBo0cH3i7IETZo7Vtx6hAzbF9aM1cgVRBMhpZILTfH4t0qUn8eq/RY/6gNn7ogPmqoZuJIkbfyQUcw=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:351:bea9:f158:1021])
- (user=samitolvanen job=sendgmr) by 2002:a25:50c1:0:b0:645:8827:ccee with SMTP
- id e184-20020a2550c1000000b006458827cceemr1235151ybb.191.1651264624520; Fri,
- 29 Apr 2022 13:37:04 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 13:36:30 -0700
+ (user=samitolvanen job=sendgmr) by 2002:a5b:2c3:0:b0:645:6565:fafa with SMTP
+ id h3-20020a5b02c3000000b006456565fafamr1378832ybp.323.1651264626792; Fri, 29
+ Apr 2022 13:37:06 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 13:36:31 -0700
 In-Reply-To: <20220429203644.2868448-1-samitolvanen@google.com>
-Message-Id: <20220429203644.2868448-8-samitolvanen@google.com>
+Message-Id: <20220429203644.2868448-9-samitolvanen@google.com>
 Mime-Version: 1.0
 References: <20220429203644.2868448-1-samitolvanen@google.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2369; h=from:subject;
- bh=Og1wzH6F2UpL15DjmLD4N886OfryrjOOCzdPAdTewLk=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBibExWDDNV9KXYBM56nCJGHcU0XSslxkQdvoI9sPjn
- UaGSs/mJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYmxMVgAKCRBMtfaEi7xW7s4kDA
- CayRTWp0pfbkNNkWzA1sCM4Jf74dHv2rjrsx0M4Mu5sNdiCt2HqSZqZ16xxzlHJd3QA+Q/0K9CwUjY
- 4ms0S0URAxH9BFNtjc2F9WTrQHV4OGR/ct8SM76W0FjA3jwqKJg4Rbaq636Ftg5FNF748bcjT1BogU
- N6yNWvZSXXQ62G7HD9dXV2ytAikPt71vmX/I7ly/kl6or31Z6G2Br8BUHs2zvPs7OgtfbOIRN/TgX/
- Z/f7/UEILECdxD84CZs9Hfe11i5gANBQmtBgyxURHHIsVe962bP9m+Zn3DDkuql3d+LlM3k1ZwgNfl
- sK2Kq1l4YRTLUcQNcgPXGemiFFX1lWzMxTYQwCzMfDeUlyaHVrs5EQR7ro7n7CEZv61G4bH7w4ysNo
- TAPIP8YcvmvYJaquDG+aMSVUwNrrDVPwRbjy0KkylxqzDhWqsDNhiBIdTK/HvX3PuPB6dxUU+UufwP
- +9unVtIcNlT3JMTufz/3caq6rKwQhkZ0mavOKMcl5DjVY=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1874; h=from:subject;
+ bh=1h/ukcHKrQmO+sSN3rxH1Ur6msZUgu7FigRGuH22//0=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBibExWegFw7CQHbGR62Fd6xfcRvARj359xlrSpoucc
+ ArdcVGSJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYmxMVgAKCRBMtfaEi7xW7nlfC/
+ 9Gb3x9jy2vor5Y8IfV4iZYQJ6l0SNWdPk8O9fG2ALgkAE9IAoY3yNt7CInVDl3Up/jUDXm4GdmPnik
+ 7to6P2rxmV8pQNKUSi67KiH3hmMrB0fIU4J/MvSzBHUWdgHSZn3aQPH3Rc079Y5V61E2jD8VlPZKaV
+ 1u6KN3yidWSWuQ77JZWWHoYh1Bv+flKFATCRKjS5HkAVSbVRC5Y7rW05p1iUMkjP+4OIlVfQ2+BIlQ
+ 9o2QzOGq3ZtadJoEnDu7xld7MjP+sYgMbheQX+Q5w0Yy+1IsJsrvp5SbLmLVPQTNr087q7N3Wukgcq
+ Fe3AntpsILle4R1Z8Q5dScpj0rfxzvTIXFLUM1de97js+7Gw1Kk5FdXtb39myqLExTtew1nu0eu/sI
+ SmNQU7Yh+eAXFSkB0/bpxyZXcO+/eYjmueqmPwLiJvXqZ9L21Tg7yUlB530p3vgKhgMOAOaCTMaPxh
+ ig39Vl4Nop4cdSOyLMlDd+4kAlJ6y+2uWnMBYCMybx2lg=
 X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [RFC PATCH 07/21] cfi: Add type helper macros
+Subject: [RFC PATCH 08/21] arm64/crypto: Add types to indirect called assembly functions
 From:   Sami Tolvanen <samitolvanen@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Kees Cook <keescook@chromium.org>,
@@ -85,7 +85,7 @@ Cc:     Kees Cook <keescook@chromium.org>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,83 +93,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With CONFIG_CFI_CLANG, assembly functions called indirectly
-from C code must be annotated with type identifiers to pass CFI
-checking. The compiler emits a __kcfi_typeid_<function> symbol for
-each address-taken function declaration in C, which contains the
-expected type identifier. Add typed versions of SYM_FUNC_START and
-SYM_FUNC_START_ALIAS, which emit the type identifier before the
-function.
+With CONFIG_CFI_CLANG, assembly functions indirectly called from C code
+must be annotated with type identifiers to pass CFI checking. Use
+SYM_TYPED_FUNC_START for indirectly called functions in the crypto code.
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 ---
- include/linux/cfi_types.h | 57 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
- create mode 100644 include/linux/cfi_types.h
+ arch/arm64/crypto/ghash-ce-core.S | 5 +++--
+ arch/arm64/crypto/sm3-ce-core.S   | 3 ++-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/cfi_types.h b/include/linux/cfi_types.h
-new file mode 100644
-index 000000000000..dd16e755a197
---- /dev/null
-+++ b/include/linux/cfi_types.h
-@@ -0,0 +1,57 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Clang Control Flow Integrity (CFI) type definitions.
-+ */
-+#ifndef _LINUX_CFI_TYPES_H
-+#define _LINUX_CFI_TYPES_H
-+
-+#ifdef CONFIG_CFI_CLANG
-+#include <linux/linkage.h>
-+
-+#ifdef __ASSEMBLY__
-+/*
-+ * Use the __kcfi_typeid_<function> type identifier symbol to
-+ * annotate indirectly called assembly functions. The compiler emits
-+ * these symbols for all address-taken function declarations in C
-+ * code.
-+ */
-+#ifndef __CFI_TYPE
-+#define __CFI_TYPE(name)				\
-+	.4byte __kcfi_typeid_##name
-+#endif
-+
-+#define SYM_TYPED_ENTRY(name, fname, linkage, align...)	\
-+	linkage(name) ASM_NL				\
-+	align ASM_NL					\
-+	__CFI_TYPE(fname) ASM_NL			\
-+	name:
-+
-+#define __SYM_TYPED_FUNC_START_ALIAS(name, fname) \
-+	SYM_TYPED_ENTRY(name, fname, SYM_L_GLOBAL, SYM_A_ALIGN)
-+
-+#define __SYM_TYPED_FUNC_START(name, fname) \
-+	SYM_TYPED_ENTRY(name, fname, SYM_L_GLOBAL, SYM_A_ALIGN)
-+
-+#endif /* __ASSEMBLY__ */
-+
-+#else /* CONFIG_CFI_CLANG */
-+
-+#ifdef __ASSEMBLY__
-+#define __SYM_TYPED_FUNC_START_ALIAS(name, fname) \
-+	SYM_FUNC_START_ALIAS(name)
-+
-+#define __SYM_TYPED_FUNC_START(name, fname) \
-+	SYM_FUNC_START(name)
-+#endif /* __ASSEMBLY__ */
-+
-+#endif /* CONFIG_CFI_CLANG */
-+
-+#ifdef __ASSEMBLY__
-+#define SYM_TYPED_FUNC_START_ALIAS(name) \
-+	__SYM_TYPED_FUNC_START_ALIAS(name, name)
-+
-+#define SYM_TYPED_FUNC_START(name) \
-+	__SYM_TYPED_FUNC_START(name, name)
-+#endif /* __ASSEMBLY__ */
-+
-+#endif /* _LINUX_CFI_TYPES_H */
+diff --git a/arch/arm64/crypto/ghash-ce-core.S b/arch/arm64/crypto/ghash-ce-core.S
+index 7868330dd54e..ebe5558929b7 100644
+--- a/arch/arm64/crypto/ghash-ce-core.S
++++ b/arch/arm64/crypto/ghash-ce-core.S
+@@ -6,6 +6,7 @@
+  */
+ 
+ #include <linux/linkage.h>
++#include <linux/cfi_types.h>
+ #include <asm/assembler.h>
+ 
+ 	SHASH		.req	v0
+@@ -350,11 +351,11 @@ CPU_LE(	rev64		T1.16b, T1.16b	)
+ 	 * void pmull_ghash_update(int blocks, u64 dg[], const char *src,
+ 	 *			   struct ghash_key const *k, const char *head)
+ 	 */
+-SYM_FUNC_START(pmull_ghash_update_p64)
++SYM_TYPED_FUNC_START(pmull_ghash_update_p64)
+ 	__pmull_ghash	p64
+ SYM_FUNC_END(pmull_ghash_update_p64)
+ 
+-SYM_FUNC_START(pmull_ghash_update_p8)
++SYM_TYPED_FUNC_START(pmull_ghash_update_p8)
+ 	__pmull_ghash	p8
+ SYM_FUNC_END(pmull_ghash_update_p8)
+ 
+diff --git a/arch/arm64/crypto/sm3-ce-core.S b/arch/arm64/crypto/sm3-ce-core.S
+index ef97d3187cb7..ca70cfacd0d0 100644
+--- a/arch/arm64/crypto/sm3-ce-core.S
++++ b/arch/arm64/crypto/sm3-ce-core.S
+@@ -6,6 +6,7 @@
+  */
+ 
+ #include <linux/linkage.h>
++#include <linux/cfi_types.h>
+ #include <asm/assembler.h>
+ 
+ 	.irp		b, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+@@ -73,7 +74,7 @@
+ 	 *                       int blocks)
+ 	 */
+ 	.text
+-SYM_FUNC_START(sm3_ce_transform)
++SYM_TYPED_FUNC_START(sm3_ce_transform)
+ 	/* load state */
+ 	ld1		{v8.4s-v9.4s}, [x0]
+ 	rev64		v8.4s, v8.4s
 -- 
 2.36.0.464.gb9c8b46e94-goog
 

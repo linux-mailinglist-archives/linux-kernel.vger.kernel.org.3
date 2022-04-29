@@ -2,71 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EBE0514970
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:33:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C16FA51495A
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359304AbiD2MgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 08:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59662 "EHLO
+        id S1359256AbiD2Me3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 08:34:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359275AbiD2MgE (ORCPT
+        with ESMTP id S1359243AbiD2Me0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 08:36:04 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36EFC90DF;
-        Fri, 29 Apr 2022 05:32:46 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id k27so8907782edk.4;
-        Fri, 29 Apr 2022 05:32:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=wjZep7+Tgf5lr7Kg5bt8mtQgziDmuU0ShQxCZx6j8dQ=;
-        b=MbPJgWF+lEghy4d5Wiupu3E2Thc8xUAOZneHtBhr4vYIpLGqh8lu2a6jTHd6QmxNbm
-         2sg6A1g2/ICL2DtYWSPDUAxx1yyC6JsyVMiqCWdyYIRMs2rmbconqcYUf38BT4H8z1WO
-         T22VeDtv6a1fA62WwZeKxV4GWUnr+uxXViRF1SN4mmAUFB/XfqGbvKaOjWcODg8cwG1j
-         npAhUGarTWUb0ZQ7d/A2cOM93B4Md0da7QW2s9bmDE1OWXxim/n43tASFU5pv7GzgVJj
-         4flLE2Dt0pOjM2tOXl/1bh2jpJPK4XXIPE0o2jltBkYZeBIDfnPzQcmroZXhkzKBPN3p
-         hmzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=wjZep7+Tgf5lr7Kg5bt8mtQgziDmuU0ShQxCZx6j8dQ=;
-        b=y5jWPZDb6MWOVByXcdGA/J+WV6/KGfcFRC6CYRCZvHZAkEbnbsbsVw2pJegQRCsPB0
-         0igspuxKgF1pd3VEUNXU/ahzTLruZR1VIFOvE8pEKzrSBw5QiX1UMygOo39vFpGjh2/i
-         MmlkRsn5wJV8zKa5DBmZg7aZkhPW/SvRzWUCZG1ISxJ70KzwRHzeqlPWUJrg2jF/3feO
-         DC941wdi3IZuaQwi45UVEr0i8SwBq+hk8zyS2xspNlOZ22S4ugC4FeUFdubflgQVeBid
-         e0Ir7e5aH9aihjezqOKtgPzErTq2hc1Fk2qQaj8l0Mnm7tSyYeLD4jXQonvYcAF+bosg
-         IGgQ==
-X-Gm-Message-State: AOAM5305HIBAQlgoyot4OS9JFXFFWTo31/52L0uNhvvx8p/IUlxrxX6f
-        jN7XlZYooaH8qzLz1m3Hn54=
-X-Google-Smtp-Source: ABdhPJzQqM5gYC/o6KCtToz3A3zuh5BarSASylRN98Q+vC0KnezUvqiQATi8io0zsBAKQP5wWQvrMA==
-X-Received: by 2002:a05:6402:2815:b0:420:c32e:ebe2 with SMTP id h21-20020a056402281500b00420c32eebe2mr40348109ede.1.1651235565228;
-        Fri, 29 Apr 2022 05:32:45 -0700 (PDT)
-Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id hf27-20020a1709072c5b00b006f3ef214e33sm601176ejc.153.2022.04.29.05.32.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 05:32:44 -0700 (PDT)
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>
-Subject: [PATCH 2/2] ARM: dts: qcom: replace gcc PXO with pxo_board fixed clock
-Date:   Fri, 29 Apr 2022 14:29:51 +0200
-Message-Id: <20220429122951.13828-3-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220429122951.13828-1-ansuelsmth@gmail.com>
-References: <20220429122951.13828-1-ansuelsmth@gmail.com>
-MIME-Version: 1.0
+        Fri, 29 Apr 2022 08:34:26 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2087.outbound.protection.outlook.com [40.107.20.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1456AC8BCB;
+        Fri, 29 Apr 2022 05:31:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BRQ0BlPTFaFe26JO7vhTmTBfETKlJlwDFke2Rz76LMOPb7o+lmkOgDZg0OWsQFUzHV+DqwczPOWWju4awgKfV6UMTVECCOODREf2v2tGGufaO+xlJhqmF6pwlyMrceJsdlgQMXVjQQ6PjLbGsJaO4F0Ww+oTsZdP2zfMsFRbxjmUYpvE9HNaekyAzJ+QhVwFyY0opQPq6ld8CVuuUGuS9t+zmVMGHNDzacK0xOwpm1sWHAFLQO+heyh7jeg6YZjBYsvJhgPZisUnbQYOMs3gy6gv/mJOh5ZkV/nTobmwwmWciiIKh9xA+rLyDDw1zZE6sKQ4pdFiRC5wLlHL0X7ADQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=i1AvEDK5QlOiiZbusUC4RoQIN3aACsTkdbKESwe66TQ=;
+ b=WpmRWcrMtULVeobhuuOSCZybYz0Dmh2pRDq4mfzn2bpmaxGnU/twUNAdknwYqtYWF1kz5bg64N3K4ebSpwIeDwD6de/ybddMjhZohKqDJKQNzHeM2yCZZTi9VU0aaCtV0qxrQWT16ouzeITxORcqVx9tFE66ODPIiDMIrgwgKuFbxUkgV4suNqdWiaprMnUPnSmjgSpZHk2/Xuz0f2/ciduUv2VuGkB94q+nJ6MTRzaLhj5XHzZf5QIoSegoPbTz3YtZ0orp9MGfV1fhLD5QeDkpV+wn7QJCMr1uEu8RTRtJH5YrPbzW0O4Ed5h6CQaSPrt8moO5PLz740LDD6ECCA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=i1AvEDK5QlOiiZbusUC4RoQIN3aACsTkdbKESwe66TQ=;
+ b=F4aNZkJtKNXMhg8I22XqHg9cTLWx5P6JZfID+Bo8ohIVy907ROvqgdm9VWbBS5gngnECFvASzfsg5fNgqlZOEs6cE/GoUweMaoMnMgpSy1WI4bjGOxkWuqQ+lhfWbxf9rDt6eUHi7i2S6ZN1wbUbaURvJLTvnemTmO0tNQTrlK4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
+ by PA4PR04MB7646.eurprd04.prod.outlook.com (2603:10a6:102:f3::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.14; Fri, 29 Apr
+ 2022 12:30:57 +0000
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::f5d8:2b7b:6f48:51f8]) by AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::f5d8:2b7b:6f48:51f8%4]) with mapi id 15.20.5206.013; Fri, 29 Apr 2022
+ 12:30:57 +0000
+Message-ID: <538339829534d8ef10c68198016d198a9ec037fc.camel@nxp.com>
+Subject: Re: [PATCH resend v8 1/5] drm/bridge: nwl-dsi: Set PHY mode in
+ nwl_dsi_mode_set()
+From:   Liu Ying <victor.liu@nxp.com>
+To:     Guido =?ISO-8859-1?Q?G=FCnther?= <guido.gunther@puri.sm>
+Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, kishon@ti.com,
+        vkoul@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        andrzej.hajda@intel.com, narmstrong@baylibre.com,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        robert.chiras@nxp.com, martin.kepplinger@puri.sm
+Date:   Fri, 29 Apr 2022 20:30:43 +0800
+In-Reply-To: <YmLkv4PYsi+XiFr5@qwark.sigxcpu.org>
+References: <20220419010852.452169-1-victor.liu@nxp.com>
+         <20220419010852.452169-2-victor.liu@nxp.com>
+         <YmLkv4PYsi+XiFr5@qwark.sigxcpu.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: HK2PR04CA0067.apcprd04.prod.outlook.com
+ (2603:1096:202:15::11) To AM7PR04MB7046.eurprd04.prod.outlook.com
+ (2603:10a6:20b:113::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c03723eb-aa99-42d9-6dfc-08da29dc1b88
+X-MS-TrafficTypeDiagnostic: PA4PR04MB7646:EE_
+X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+X-Microsoft-Antispam-PRVS: <PA4PR04MB764620923CEA9A1EC1BF2E0A98FC9@PA4PR04MB7646.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: veFj4RPSYyG/jFTPxMQ+dQEu6e3Hnrs1lCp56P1p8QJOfPcAG8GhxizQnEmQwVRuxfQKknLvsAxzb0YuJ4kf0TTkI3JeWBnZCDZoOpWhaZcUrIK/VI5+0KSdjxSVcO+Inqovv4gd1uOWCELLg6RriKYbBNsp7qON6GGnkgo/mZ3QjBL5x5y5rfYJQxW48wP+/qI9IM6b65MKSR2PPDD2slLEhRVddHdQ0n48wLY977ve4BUtu1mBvjogEPbZeGmY96zCo64iMw7e8mJ8l/Av2BgJtTET3NoQRgQFs/6603ElU6UFiCkmpKnX6wcJekUtxzqJO6Rz5op6uP9BAFby9KOka7sTANbXnNPN5mwmXDBb4Z/Bcc2BQUyQTRBdphgqQSxUUhmOo+KnpcyYMNTWbcx+iq+LosYKJlAKsEj2peJ+JBMCG1BJDlBuaPifyFjogbKIhKvQ2BYOTbgqoi0ppa2zu65lE5HRlQS0HyRFqut8pbBlWYFrpVX3URe+8A4KXpkkxka/tnTEL6ojakgKd6Qz47wMSSJlqOKUshuwNMVajxWJ3Vp2fenfMwGY9Z7kVf6uB+HfqcMXI1lzPd1fobmYMETLVh6Qc8hL+tWnOz4ulOu9AbK1+ASOiCtVLHm4YvprRXCPhZAH6I4dbvZQdcRZ2xxNys5fTWW4qunD/yqhE3kJqJbhdEXg9cGN1Y5Cp6k4FgzLxXkv8TuxcdxZXUbaw9yEiFb6w+sPoLfMnAc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(26005)(6512007)(508600001)(6916009)(316002)(83380400001)(6486002)(4326008)(36756003)(8676002)(66946007)(66556008)(2616005)(66476007)(186003)(38350700002)(8936002)(5660300002)(38100700002)(86362001)(52116002)(6506007)(6666004)(7416002)(2906002)(99106002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WXR0dTVtNVRvL3pjODZlUXAxNHRSRG5oRHl3bzU5TUJkVlZaS0E2dHo0QXJj?=
+ =?utf-8?B?U1pUN0czd2YyWXRaZDVKak8zKzdQWkxOWmdEVUlEU0dnNlMrVHlMODV0S3JY?=
+ =?utf-8?B?RzBGbXNhOEdPcFYvM0p1bUtmWTBnbFVMSFB5QWpjWWlYYmNoUkszYkF5Mjhz?=
+ =?utf-8?B?VXVKZVpLQmlhYWZJVTlYVU8vUzJsS25rNnpVTTVOUXJhc0RuZUhkcURBMytu?=
+ =?utf-8?B?Q0xXVzlaK0cySDlkdktLcmJjNlhXU3RIQ3Rid3Bkdzg5aWxOU1dwZlpnL2J2?=
+ =?utf-8?B?NWk5V3dtclBhbkZzK1dXOXpHMmlDWVJvQzFpdnMxamxQckdqNldMNGZEZXEr?=
+ =?utf-8?B?OWRiRG9NenZQR2tjZEdrZGdhandCZkEzeFRXRVEwWjkvMlJ6R1ZRYmxuRk5O?=
+ =?utf-8?B?TUJxVVJFZ2hFdm9KdVR5bUpKdlptNFNLeUxTdEI1UWF5T2NhcmFOaTVXdUY4?=
+ =?utf-8?B?MTFUaEd2TlJjT1JaR0xOVzZtTjBHNUZrTSsxZlI1c1BXclNoSzJMT3JSNUJE?=
+ =?utf-8?B?RlFCQ2I2WG95WXZDci9uMVpmckNrSjZCNlEyQ1VqaUZDdkNMZTJEc2FYUEJk?=
+ =?utf-8?B?ME5NOVZOUVZ3OEMwc0wweDR1bWVOYmx5L1pqVzdRV3dIUEFjRmhqMHNVZmpw?=
+ =?utf-8?B?WC9HMVlpb3JTd3dIT3ZvbDN3RlByZUExZzJkRjBiaDdlL0hQd1hYSThGV2c5?=
+ =?utf-8?B?WXd2Tmh2ZE5LK3U4K09rUmxZSFR6YkZkM3VZS1RMZUNSeXdBbU51M3FNSjl1?=
+ =?utf-8?B?Yk1TNWMxWWNaZVN2UWg5OWQxd0xhQzI2RnFjdDVhaGxJYjhNWE1FRk83b2ha?=
+ =?utf-8?B?Vy94dmZ0dm94T0RkNWVHYmtIcnYyOUV4OTVpVS92djRXQzlDd3dndENRZmQw?=
+ =?utf-8?B?S0lMN3R5Q0xEYUx5TWYrRWFtMnV2L05zbGtXVUowb1ZzUWw2aWNWd3VsZE5U?=
+ =?utf-8?B?bHAva1NwS2RRYkYwMTJNZU1YVHNyRVRmamFDc0xVbEplQ21sSEwrMzdPWUVJ?=
+ =?utf-8?B?MjFFU2dwMW1XUEloUUtjZkhNd0FVOVhYVExibmo2UVFRWmxuaVV1OFFmR1lX?=
+ =?utf-8?B?cnpIc0FsUDB3TzZZU0p6a2U3RCsvVjU3SXJadks5bDJ0S0t1bHZYV3FlblU3?=
+ =?utf-8?B?dVhDRkNUVk8wdzdmM1MzekhKT09hVUJxN3RnbVRES0hnZmZGd3JPNkdYVHlT?=
+ =?utf-8?B?cytiVFlqSk5pT0JzNE5CK1FOVjJESVJkeDdxSytKU0tvUGdiKzMzSVZRMlF4?=
+ =?utf-8?B?L3hiUyszQlZ0TWxkZnNrYll2VnMzZ2FVT0loVkVPdmloaEcxcUVxN0VMNmVl?=
+ =?utf-8?B?U3QraTRVdytPajd5bVY3UVR0REJIZTdXdytHMEtUZzlSSWppTWd5ckxURU5S?=
+ =?utf-8?B?T2VQSlorbnVFMFBkMkhyZjBBRnR2RE4wcnZuZklneFZVZEtJOWtkUFhITHhv?=
+ =?utf-8?B?L3Buc1IwdzY3c1gyKytUMzNVVW9mOFgwUDM5TnNlNW1KT0F1SzN6Y1RqeUg4?=
+ =?utf-8?B?WS81WmhDaUZHMysvcGkyY2FKc3REYk5wRDZkaHVSdjd6ajNaQ1k2Y2o2Tkwx?=
+ =?utf-8?B?clBVUlBHOWoyTzYwRitNU1lpNytKR3JST1hxT2srK0xyRXJKT2ZyOW1XOUd0?=
+ =?utf-8?B?b2RHVlpPVU5nTDAzb2s0RW5heWdVK0pkK1BKM3dDekNmclpKZ29rNnhrWEdk?=
+ =?utf-8?B?Lzl1V0ZpTE1FWHhwSDlJNmtMUEsyTE50eTY2b1RlSFl3K05UbjJCU0RkMVBX?=
+ =?utf-8?B?Wm9iYTAyamdOam1YTm1zSExmVldFbkpLN3NnU0c5NldwdTNlcmd5N2NhaU01?=
+ =?utf-8?B?NHAzZXBZZmRtNkEzWGJ0NUNXcVNFWm5DUkhnd3N2SC95aVhrWlhic1VkTmE4?=
+ =?utf-8?B?bGV0dzdYdjczL2tVVzlETWRTS1l4dVYveWtURS8vZG0yMi9YRVFrSVhYOFhE?=
+ =?utf-8?B?SnplSlRXaEViTXczSkZsT3JUZzlySkI5QnpqaWowUTRZOGMrbGNheU4zT3lF?=
+ =?utf-8?B?RU9jZWtrN2hqNzlneEtsMkJhd0c1cE9PQWsxV2JYb1oxRjllZVgrWG5zajdq?=
+ =?utf-8?B?aFo1RklacVJHZ0k4V1VpUng1ZDZJQVZJTjlZSzBDZFI1bktXNzIyU2JzUDBI?=
+ =?utf-8?B?TERKbHlaZnhjMnRnVWNaZExPc3piblI0RWFzbnlIeVNBVUN1amRXNERSYUdS?=
+ =?utf-8?B?Vi9rMXNYdzJqTjkxN3Q1WERvRHd4RzA3bTc1b0todXNsSVIybmhzbnZKU2Y4?=
+ =?utf-8?B?aTJtNkpvUkFXZ1FIQmI1bGNWWHpucVdwT3ZSN3hIcStVNFFZMFpoNDB1alQx?=
+ =?utf-8?B?S0FCQm9aM21aSzRpRDhST3JydktYQks1ZFNOQ1VkZHE3OCtUNmgwQT09?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c03723eb-aa99-42d9-6dfc-08da29dc1b88
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2022 12:30:57.2371
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AFD3dnmoY4YQamWOL/SHZSxxf5i6EXvuipOJYkIRU78biPDWntoOzQVBodsx5DnheHrLpZznll9qA+2otlxMOQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7646
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,28 +138,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace gcc PXO phandle to pxo_board fixed clock declared in the dts.
-gcc driver doesn't provide PXO_SRC as it's a fixed-clock. This cause a
-kernel panic if any driver actually try to use it.
+Hi,
 
-Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
----
- arch/arm/boot/dts/qcom-ipq8064.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, 2022-04-22 at 19:24 +0200, Guido Günther wrote:
+> Hi,
+> On Tue, Apr 19, 2022 at 09:08:48AM +0800, Liu Ying wrote:
+> > The Northwest Logic MIPI DSI host controller embedded in i.MX8qxp
+> > works with a Mixel MIPI DPHY + LVDS PHY combo to support either
+> > a MIPI DSI display or a LVDS display.  So, this patch calls
+> > phy_set_mode() from nwl_dsi_mode_set() to set PHY mode to MIPI DPHY
+> > explicitly.
+> > 
+> > Cc: Guido Günther <agx@sigxcpu.org>
+> > Cc: Robert Chiras <robert.chiras@nxp.com>
+> > Cc: Martin Kepplinger <martin.kepplinger@puri.sm>
+> > Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+> > Cc: Neil Armstrong <narmstrong@baylibre.com>
+> > Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+> > Cc: Jonas Karlman <jonas@kwiboo.se>
+> > Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
+> > Cc: David Airlie <airlied@linux.ie>
+> > Cc: Daniel Vetter <daniel@ffwll.ch>
+> > Cc: NXP Linux Team <linux-imx@nxp.com>
+> > Signed-off-by: Liu Ying <victor.liu@nxp.com>
 
-diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-index 9817448cfa95..ad30f7c8a5a7 100644
---- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
-+++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-@@ -784,7 +784,7 @@ tcsr: syscon@1a400000 {
- 		l2cc: clock-controller@2011000 {
- 			compatible = "qcom,kpss-gcc", "syscon";
- 			reg = <0x2011000 0x1000>;
--			clocks = <&gcc PLL8_VOTE>, <&gcc PXO_SRC>;
-+			clocks = <&gcc PLL8_VOTE>, <&pxo_board>;
- 			clock-names = "pll8_vote", "pxo";
- 			clock-output-names = "acpu_l2_aux";
- 		};
--- 
-2.34.1
+Hope this patch won't fall through the cracks.
+Can someone please apply it to drm-misc-next? Robert?
+
+Thanks,
+Liu Ying
+
+> > ---
+> > v7->v8:
+> > * Resend with Andrzej's and Jernej's mail addressed updated.
+> > 
+> > v6->v7:
+> > * No change.
+> > 
+> > v5->v6:
+> > * Rebase the series upon v5.17-rc1.
+> > * Set PHY mode in ->mode_set() instead of ->pre_enable() in the
+> > nwl-dsi
+> >   bridge driver due to the rebase.
+> > * Drop Guido's R-b tag due to the rebase.
+> > 
+> > v4->v5:
+> > * No change.
+> > 
+> > v3->v4:
+> > * No change.
+> > 
+> > v2->v3:
+> > * No change.
+> > 
+> > v1->v2:
+> > * Add Guido's R-b tag.
+> > 
+> >  drivers/gpu/drm/bridge/nwl-dsi.c | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> > 
+> > diff --git a/drivers/gpu/drm/bridge/nwl-dsi.c
+> > b/drivers/gpu/drm/bridge/nwl-dsi.c
+> > index d5945501a5ee..85bab7372af1 100644
+> > --- a/drivers/gpu/drm/bridge/nwl-dsi.c
+> > +++ b/drivers/gpu/drm/bridge/nwl-dsi.c
+> > @@ -666,6 +666,12 @@ static int nwl_dsi_mode_set(struct nwl_dsi
+> > *dsi)
+> >  		return ret;
+> >  	}
+> >  
+> > +	ret = phy_set_mode(dsi->phy, PHY_MODE_MIPI_DPHY);
+> > +	if (ret < 0) {
+> > +		DRM_DEV_ERROR(dev, "Failed to set DSI phy mode: %d\n",
+> > ret);
+> > +		goto uninit_phy;
+> > +	}
+> > +
+> >  	ret = phy_configure(dsi->phy, phy_cfg);
+> >  	if (ret < 0) {
+> >  		DRM_DEV_ERROR(dev, "Failed to configure DSI phy: %d\n",
+> > ret);
+> 
+> I can't currently test this but it still looks good so
+> 
+> Reviewed-by: Guido Günther <agx@sigxcpu.org>
+> 
+> Cheers,
+>  -- Guido
+> 
+> > -- 
+> > 2.25.1
+> > 
 

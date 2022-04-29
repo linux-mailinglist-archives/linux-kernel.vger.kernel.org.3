@@ -2,83 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1E6951402C
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 03:17:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6830A514036
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 03:21:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353904AbiD2BVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 21:21:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51202 "EHLO
+        id S1348211AbiD2BY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 21:24:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353899AbiD2BU7 (ORCPT
+        with ESMTP id S1353804AbiD2BYz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 21:20:59 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F148A27D7;
-        Thu, 28 Apr 2022 18:17:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=O9pUYhhH3JjB4bYekaDZNfAjeT/hCD3xZYJMBVY/T/M=; b=bftl6e4qZsIoErRIgXmGOj/NPT
-        0qG6PYkJlvp59JBGHrEngE0vsNggUacvelu46RvmaMfPdtR1MTEwywmIJ2gXQMTxceju31QP3C4yC
-        VwLSB1GsFhY5sg/GncOkUuHEsRwbaYsKxfQYOhl8VfP3KaeENbREJ1hg14TMA25bC93g=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nkFGK-000P75-Dh; Fri, 29 Apr 2022 03:17:36 +0200
-Date:   Fri, 29 Apr 2022 03:17:36 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        michal.simek@xilinx.com, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        git@xilinx.com, Shravya Kumbham <shravya.kumbham@xilinx.com>
-Subject: Re: [PATCH 2/2] net: emaclite: Add error handling for
- of_address_to_resource()
-Message-ID: <Yms8sJzJe6Cl2x7J@lunn.ch>
-References: <1651163278-12701-1-git-send-email-radhey.shyam.pandey@xilinx.com>
- <1651163278-12701-3-git-send-email-radhey.shyam.pandey@xilinx.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1651163278-12701-3-git-send-email-radhey.shyam.pandey@xilinx.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 28 Apr 2022 21:24:55 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40AFBF30E;
+        Thu, 28 Apr 2022 18:21:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1144FCE2F98;
+        Fri, 29 Apr 2022 01:21:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6AEBC385AA;
+        Fri, 29 Apr 2022 01:21:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1651195294;
+        bh=LVmESRAb1gVwgkXczgSW1uhSdkcv4gprtILUykh3+mI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KeDZQgtbOHfR1luP+KoPEwbEiQyg/IVcr6+bK0+rwQykOGkuHCb+FMYlJYPfuXRhG
+         aTGzp5+5m2u0TABgbsvUTjUIck6kVJCezjgK/EY5AfkJfjfZK5jEqZC/UdRv+w8hV/
+         aTag5Eezz7HJ7YqYKJNjKoYiXJo+wxacZbU6eEv0=
+Date:   Thu, 28 Apr 2022 18:21:32 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     NeilBrown <neilb@suse.de>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Christoph Hellwig <hch@lst.de>,
+        Miaohe Lin <linmiaohe@huawei.com>, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] MM: handle THP in swap_*page_fs()
+Message-Id: <20220428182132.883a082ad8918fd5f8073130@linux-foundation.org>
+In-Reply-To: <165119301488.15698.9457662928942765453.stgit@noble.brown>
+References: <165119280115.15698.2629172320052218921.stgit@noble.brown>
+        <165119301488.15698.9457662928942765453.stgit@noble.brown>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 09:57:58PM +0530, Radhey Shyam Pandey wrote:
-> From: Shravya Kumbham <shravya.kumbham@xilinx.com>
-> 
-> check the return value of of_address_to_resource() and also add
-> missing of_node_put() for np and npp nodes.
-> 
-> Addresses-Coverity: Event check_return value.
-> Signed-off-by: Shravya Kumbham <shravya.kumbham@xilinx.com>
-> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-> ---
->  drivers/net/ethernet/xilinx/xilinx_emaclite.c |   15 ++++++++++++---
->  1 files changed, 12 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/xilinx/xilinx_emaclite.c b/drivers/net/ethernet/xilinx/xilinx_emaclite.c
-> index f9cf86e..c281423 100644
-> --- a/drivers/net/ethernet/xilinx/xilinx_emaclite.c
-> +++ b/drivers/net/ethernet/xilinx/xilinx_emaclite.c
-> @@ -803,7 +803,7 @@ static int xemaclite_mdio_write(struct mii_bus *bus, int phy_id, int reg,
->  static int xemaclite_mdio_setup(struct net_local *lp, struct device *dev)
->  {
->  	struct mii_bus *bus;
-> -	int rc;
-> +	int rc, ret;
->  	struct resource res;
->  	struct device_node *np = of_get_parent(lp->phy_node);
->  	struct device_node *npp;
+On Fri, 29 Apr 2022 10:43:34 +1000 NeilBrown <neilb@suse.de> wrote:
 
-Reverse Chritmas tree is messed up here, but you could make it a bet
-less messed up by moving rc, ret further down.
+> Pages passed to swap_readpage()/swap_writepage() are not necessarily all
+> the same size - there may be transparent-huge-pages involves.
+> 
+> The BIO paths of swap_*page() handle this correctly, but the SWP_FS_OPS
+> path does not.
+> 
+> So we need to use thp_size() to find the size, not just assume
+> PAGE_SIZE, and we need to track the total length of the request, not
+> just assume it is "page * PAGE_SIZE".
 
-     Andrew
+Cool.  I added this in the series after
+mm-submit-multipage-write-for-swp_fs_ops-swap-space.patch.  I could
+later squash it into that patch if you think that's more logical.
+

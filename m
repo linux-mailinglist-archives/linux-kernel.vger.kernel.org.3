@@ -2,63 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9982A51420D
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 07:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3978E51420F
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 07:53:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239742AbiD2Fzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 01:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60138 "EHLO
+        id S1349888AbiD2F41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 01:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345638AbiD2Fzv (ORCPT
+        with ESMTP id S1348927AbiD2F4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 01:55:51 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA96B82E3;
-        Thu, 28 Apr 2022 22:52:34 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id e15so5051973qtp.3;
-        Thu, 28 Apr 2022 22:52:34 -0700 (PDT)
+        Fri, 29 Apr 2022 01:56:25 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 422AAB8982;
+        Thu, 28 Apr 2022 22:53:08 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id kj18so4717660qvb.6;
+        Thu, 28 Apr 2022 22:53:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=JC3gAOVtyar8r7B0FmZVo83iTqm/cSJvOukGohskpvA=;
-        b=U/o7Rv143/JYGZsKVzORlbo0+H8wYncpzuJm5ymKEumCeLt+hgRiKslnafGDiY3WBr
-         AnFFd6ReEXHIBAOkcy5pGWDqkPETXnWEJh/QgvnxCq0cZrpaoUJk0lPonZEdIPXmi10r
-         s3VWoj1paDDjdbDeCqtrPm/ZRXHWH4rMB8fjiqWYcWrd+cy8DpkxQrw0CXSZL079rphp
-         PbEU1OnvssS2T1tzcTymOi0VtBC+ORs7SumL3STW4ZK2gK5QNL7wnqpkX5aymwz/Mxhn
-         3XvqKehysLn/RJ5lGD5DIMzKhzjFsAB3U2QG17Me+Q94H1l6nnIhUy97hhGONWDqOdWY
-         vhgA==
+        bh=hxrBfFItji/WQyP7QlbaCq3BY0YlFKYJeXNKCSHM/Wc=;
+        b=a4g4PHFXKbPlz8P62gkAnav0Q6xF8O2QN8tcCzGabzDcKKEti+RNRvh+DffjK+AzAP
+         RUibPBaq58KRahwMmAGxsgOlyuVBOukIpNNPAXIBPYnshzetRFr4bCNK0V8rWO4OTCT1
+         HYDua9o9RIg0VmKjgPWvEbI8jsmNimhvbRosAKLrmwpfS58alebfmR06sCIkHJH/hYJr
+         92aRtKe6lHcGm3y5iBHg9f06sVQV0hM+7RMFyJ9jZ08pbTrlGher9GSm8mVtXAhXk0p0
+         eAUd8jeWoXtCUP2SHQIafDsA9LUouEtM1oJsZUhAjqYD9Zovk40PJuEhxGTtXQPFIBvh
+         rtbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=JC3gAOVtyar8r7B0FmZVo83iTqm/cSJvOukGohskpvA=;
-        b=rUb2vbpvl4a73yYhCmuQgr0BkdMqxP1Cqtq993iaa4mIZ1KjEp0xgNYcO4AefVZzhl
-         zug+pci7cfgg3JlZ7LtTGY2cvMtuosZBcDRZ5YV8eD2RtZaPgAK464/B3ZQrOJW9L9En
-         N42HJactgTy3JkZbAPpY8jlrXYitbCIu8kEGbOaXPvSxhh9i6bMW3wq93GBgF0A6zanA
-         egtFz0GhCcvCAs7AK9sz3G2YUWwk41TyabOOWThwn0DMn7UEOYKra8sKRWakIgzUdQ3I
-         tflbQYvxlQR3PDO58P59oNiTvVCRR88NqUI+bIiyYNh3Gm4VzxKTiygQ98dtF5FWzl4H
-         7eng==
-X-Gm-Message-State: AOAM532LxxvU4CNki/KuHi9gVm5R3HVCAcTChD6TBrgyKxxqgOJ7LXWS
-        94K+oibclwVRBh+vHkUsYs0=
-X-Google-Smtp-Source: ABdhPJyd5PWeuodON1ywIUeRQKF+Xle1mrQagnHngi0wx7pJot/YY/V/lakNDqOnbRrqqfE17neAZQ==
-X-Received: by 2002:a05:622a:413:b0:2f3:7c4e:4303 with SMTP id n19-20020a05622a041300b002f37c4e4303mr11877167qtx.57.1651211553800;
-        Thu, 28 Apr 2022 22:52:33 -0700 (PDT)
+        bh=hxrBfFItji/WQyP7QlbaCq3BY0YlFKYJeXNKCSHM/Wc=;
+        b=xMon3Ex6w4knhoWyesDnm8lruE3aESiab5USPigfXbRdoplDKvb1VWWEiE03fA426v
+         lshmQ3dHufWmBFlP0xaIvoVfTPX7I51Ge6dc7/jkJ9KcgseBCkgEh3e/Gml5O/FqyS1q
+         SrnLQpUcVvodo+yBZAXY5qP3hjoABJys6/OV67Wd0vOHmk6ZGAANaUiv1D2H6U4bZm29
+         Ta1dsSmnS493V+FwFmt7ZY94RaZ1uP0IhhlmUgpXNnfhAl+/wb/F/+f8C20yLfQW7T65
+         +/siFiPHwWtcMr3/sv6vWVQ9rikNhsCTJA3QUfTXbWIWpAPef+39P3XOQRB5rA4vsHwl
+         oMUA==
+X-Gm-Message-State: AOAM533Qom3a3SsO+V47ON9d5Rx733ipc5RMXYz9LRHKmPcjdLkc0YV6
+        dKdo6Zm9+hqa0wI3nGVeLIX/rbWgdVs=
+X-Google-Smtp-Source: ABdhPJwXvkkzx1CKKLOi/lBuE7+f2p9Lsex00hkFsa3tO/wZLtsLiLTks3itvNptjVBafZ/ojp32Ow==
+X-Received: by 2002:a05:6214:c82:b0:446:7a39:41a with SMTP id r2-20020a0562140c8200b004467a39041amr26749899qvr.81.1651211587347;
+        Thu, 28 Apr 2022 22:53:07 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id j1-20020a37a001000000b0069f9e4bd8b9sm985532qke.17.2022.04.28.22.52.30
+        by smtp.gmail.com with ESMTPSA id y13-20020a05622a164d00b002f1ff52c518sm1273625qtj.28.2022.04.28.22.53.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 22:52:33 -0700 (PDT)
+        Thu, 28 Apr 2022 22:53:06 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     olteanv@gmail.com
-Cc:     andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+To:     dmitry.torokhov@gmail.com
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
         Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] net: dsa: sja1105: simplify the return expression of sja1105_cls_flower_stats()
-Date:   Fri, 29 Apr 2022 05:52:26 +0000
-Message-Id: <20220429055226.3852334-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] Input: simplify the return expression of da9034_touch_probe()
+Date:   Fri, 29 Apr 2022 05:53:00 +0000
+Message-Id: <20220429055300.3852396-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -79,35 +77,34 @@ Simplify the return expression.
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- drivers/net/dsa/sja1105/sja1105_flower.c | 7 +------
+ drivers/input/touchscreen/da9034-ts.c | 7 +------
  1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/net/dsa/sja1105/sja1105_flower.c b/drivers/net/dsa/sja1105/sja1105_flower.c
-index fad5afe3819c..16c93159e475 100644
---- a/drivers/net/dsa/sja1105/sja1105_flower.c
-+++ b/drivers/net/dsa/sja1105/sja1105_flower.c
-@@ -501,7 +501,6 @@ int sja1105_cls_flower_stats(struct dsa_switch *ds, int port,
- {
- 	struct sja1105_private *priv = ds->priv;
- 	struct sja1105_rule *rule = sja1105_rule_find(priv, cls->cookie);
--	int rc;
+diff --git a/drivers/input/touchscreen/da9034-ts.c b/drivers/input/touchscreen/da9034-ts.c
+index 2943f6a58388..dfb2604381d2 100644
+--- a/drivers/input/touchscreen/da9034-ts.c
++++ b/drivers/input/touchscreen/da9034-ts.c
+@@ -298,7 +298,6 @@ static int da9034_touch_probe(struct platform_device *pdev)
+ 	struct da9034_touch_pdata *pdata = dev_get_platdata(&pdev->dev);
+ 	struct da9034_touch *touch;
+ 	struct input_dev *input_dev;
+-	int error;
  
- 	if (!rule)
- 		return 0;
-@@ -509,12 +508,8 @@ int sja1105_cls_flower_stats(struct dsa_switch *ds, int port,
- 	if (rule->type != SJA1105_RULE_VL)
- 		return 0;
+ 	touch = devm_kzalloc(&pdev->dev, sizeof(struct da9034_touch),
+ 			     GFP_KERNEL);
+@@ -344,11 +343,7 @@ static int da9034_touch_probe(struct platform_device *pdev)
+ 	touch->input_dev = input_dev;
+ 	input_set_drvdata(input_dev, touch);
  
--	rc = sja1105_vl_stats(priv, port, rule, &cls->stats,
-+	return sja1105_vl_stats(priv, port, rule, &cls->stats,
- 			      cls->common.extack);
--	if (rc)
--		return rc;
+-	error = input_register_device(input_dev);
+-	if (error)
+-		return error;
 -
 -	return 0;
++	return input_register_device(input_dev);
  }
  
- void sja1105_flower_setup(struct dsa_switch *ds)
+ static struct platform_driver da9034_touch_driver = {
 -- 
 2.25.1
 

@@ -2,57 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEFC651422C
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 08:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4575851422E
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 08:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354403AbiD2GJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 02:09:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56232 "EHLO
+        id S1354411AbiD2GMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 02:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354390AbiD2GJs (ORCPT
+        with ESMTP id S1345879AbiD2GMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 02:09:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7D34ECE8;
-        Thu, 28 Apr 2022 23:06:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 068CAB832F0;
-        Fri, 29 Apr 2022 06:06:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E366C385A4;
-        Fri, 29 Apr 2022 06:06:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651212387;
-        bh=fOZngMG49/S1ZUbL+kjMvqWelI1jEAECMwdZnFHw9TU=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=MuLgH2GKjhHaruwXrCbfflfbNBwxhByXKZD6oQ6xVjO0lmNTt05+Zm8ijLu+BwdWq
-         2v0p/q0BdxXmfareGn7NIhUKsuCwyHoq8PCFnno+pJHkVDoR8v7d0NHwzBxzsAlMtF
-         ox3jOfrT7lH0bpqjnCwC9P53D14nbU7g93bND5vvxLsxDO7hbXRj7Ki9hMvjLB/kgt
-         NXkt1bnpkBUKbUeuZEhQPm5ZItADBe1a+FEyNVvWSFdZOuiN0cWF5IvtO66QJ2REnM
-         XNtGzUbvl7Z1xYU/4zV9EfjDaQ8HyhS7netxXDUkjJ+fgBbcfYfc0fBjx7cGK1nUi5
-         kDc4KH+NXrqTQ==
-Content-Type: text/plain; charset="utf-8"
+        Fri, 29 Apr 2022 02:12:30 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBAE571A14
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 23:09:12 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23T68sjS061532;
+        Fri, 29 Apr 2022 01:08:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1651212534;
+        bh=RZgucMwnPVvB+o/MrUBt8zsOyMFS8ZhmghhtAvhsMoo=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=Nafu+WeqBgkJZLIlDaT0EZQwTS6ed5dyWCw29smBf6mNkwsrD2lobMHIk7cAaZbON
+         XcZYWQvaIkR3nqjisWt04WHXCsIBCd3h4W8cnDlDa22Z0mKlbFmXlycHfWOgYL+wY5
+         svMYWrm1ULNGPuOZdvVBm21m0Rd/mNXT3EKMtRBw=
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23T68sGc028429
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 29 Apr 2022 01:08:54 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 29
+ Apr 2022 01:08:54 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 29 Apr 2022 01:08:54 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23T68rfp035139;
+        Fri, 29 Apr 2022 01:08:53 -0500
+Date:   Fri, 29 Apr 2022 11:38:53 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mtd: spi-nor: move spi_nor_write_ear() to winbond module
+Message-ID: <20220429060852.whf5puyf6nkvm4jn@ti.com>
+References: <20220418112404.2790469-1-michael@walle.cc>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v2] ath10k: skip ath10k_halt during suspend for driver
- state
- RESTARTING
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20220426221859.v2.1.I650b809482e1af8d0156ed88b5dc2677a0711d46@changeid>
-References: <20220426221859.v2.1.I650b809482e1af8d0156ed88b5dc2677a0711d46@changeid>
-To:     Abhishek Kumar <kuabhs@chromium.org>
-Cc:     quic_wgong@quicinc.com, kuabhs@chromium.org,
-        briannorris@chromium.org, linux-kernel@vger.kernel.org,
-        linux-wireless@vger.kernel.org, ath10k@lists.infradead.org,
-        netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <165121238072.2322.15176530222754995177.kvalo@kernel.org>
-Date:   Fri, 29 Apr 2022 06:06:25 +0000 (UTC)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220418112404.2790469-1-michael@walle.cc>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,75 +65,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Abhishek Kumar <kuabhs@chromium.org> wrote:
+Hi Michael,
 
-> Double free crash is observed when FW recovery(caused by wmi
-> timeout/crash) is followed by immediate suspend event. The FW recovery
-> is triggered by ath10k_core_restart() which calls driver clean up via
-> ath10k_halt(). When the suspend event occurs between the FW recovery,
-> the restart worker thread is put into frozen state until suspend completes.
-> The suspend event triggers ath10k_stop() which again triggers ath10k_halt()
-> The double invocation of ath10k_halt() causes ath10k_htt_rx_free() to be
-> called twice(Note: ath10k_htt_rx_alloc was not called by restart worker
-> thread because of its frozen state), causing the crash.
-> 
-> To fix this, during the suspend flow, skip call to ath10k_halt() in
-> ath10k_stop() when the current driver state is ATH10K_STATE_RESTARTING.
-> Also, for driver state ATH10K_STATE_RESTARTING, call
-> ath10k_wait_for_suspend() in ath10k_stop(). This is because call to
-> ath10k_wait_for_suspend() is skipped later in
-> [ath10k_halt() > ath10k_core_stop()] for the driver state
-> ATH10K_STATE_RESTARTING.
-> 
-> The frozen restart worker thread will be cancelled during resume when the
-> device comes out of suspend.
-> 
-> Below is the crash stack for reference:
-> 
-> [  428.469167] ------------[ cut here ]------------
-> [  428.469180] kernel BUG at mm/slub.c:4150!
-> [  428.469193] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
-> [  428.469219] Workqueue: events_unbound async_run_entry_fn
-> [  428.469230] RIP: 0010:kfree+0x319/0x31b
-> [  428.469241] RSP: 0018:ffffa1fac015fc30 EFLAGS: 00010246
-> [  428.469247] RAX: ffffedb10419d108 RBX: ffff8c05262b0000
-> [  428.469252] RDX: ffff8c04a8c07000 RSI: 0000000000000000
-> [  428.469256] RBP: ffffa1fac015fc78 R08: 0000000000000000
-> [  428.469276] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [  428.469285] Call Trace:
-> [  428.469295]  ? dma_free_attrs+0x5f/0x7d
-> [  428.469320]  ath10k_core_stop+0x5b/0x6f
-> [  428.469336]  ath10k_halt+0x126/0x177
-> [  428.469352]  ath10k_stop+0x41/0x7e
-> [  428.469387]  drv_stop+0x88/0x10e
-> [  428.469410]  __ieee80211_suspend+0x297/0x411
-> [  428.469441]  rdev_suspend+0x6e/0xd0
-> [  428.469462]  wiphy_suspend+0xb1/0x105
-> [  428.469483]  ? name_show+0x2d/0x2d
-> [  428.469490]  dpm_run_callback+0x8c/0x126
-> [  428.469511]  ? name_show+0x2d/0x2d
-> [  428.469517]  __device_suspend+0x2e7/0x41b
-> [  428.469523]  async_suspend+0x1f/0x93
-> [  428.469529]  async_run_entry_fn+0x3d/0xd1
-> [  428.469535]  process_one_work+0x1b1/0x329
-> [  428.469541]  worker_thread+0x213/0x372
-> [  428.469547]  kthread+0x150/0x15f
-> [  428.469552]  ? pr_cont_work+0x58/0x58
-> [  428.469558]  ? kthread_blkcg+0x31/0x31
-> 
-> Tested-on: QCA6174 hw3.2 PCI WLAN.RM.4.4.1-00288-QCARMSWPZ-1
-> Co-developed-by: Wen Gong <quic_wgong@quicinc.com>
-> Signed-off-by: Wen Gong <quic_wgong@quicinc.com>
-> Signed-off-by: Abhishek Kumar <kuabhs@chromium.org>
-> Reviewed-by: Brian Norris <briannorris@chromium.org>
-> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+On 18/04/22 01:24PM, Michael Walle wrote:
+> The "Extended Address Register" is winbond specific. If the flash is
+> larger than 16MiB and is used in 3 byte address mode, it is used to set
+> the remaining address bits. Move the write_ear() function the winbond
+> module and rename it accordingly.
 
-Patch applied to ath-next branch of ath.git, thanks.
+This patch no longer applies due to Tudor's patch c0abb861c5d0 ("mtd: 
+spi-nor: Introduce templates for SPI NOR operations") which changes the 
+contents of spi_nor_write_ear() to use a template. Please rebase and 
+resend so I can apply it.
 
-b72a4aff947b ath10k: skip ath10k_halt during suspend for driver state RESTARTING
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+>  drivers/mtd/spi-nor/core.c    | 34 ---------------------------------
+>  drivers/mtd/spi-nor/core.h    |  1 -
+>  drivers/mtd/spi-nor/winbond.c | 36 ++++++++++++++++++++++++++++++++++-
+>  3 files changed, 35 insertions(+), 36 deletions(-)
+> 
+> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+> index b4f141ad9c9c..848836535cdd 100644
+> --- a/drivers/mtd/spi-nor/core.c
+> +++ b/drivers/mtd/spi-nor/core.c
+> @@ -520,40 +520,6 @@ static int spansion_set_4byte_addr_mode(struct spi_nor *nor, bool enable)
+>  	return ret;
+>  }
+>  
+> -/**
+> - * spi_nor_write_ear() - Write Extended Address Register.
+> - * @nor:	pointer to 'struct spi_nor'.
+> - * @ear:	value to write to the Extended Address Register.
+> - *
+> - * Return: 0 on success, -errno otherwise.
+> - */
+> -int spi_nor_write_ear(struct spi_nor *nor, u8 ear)
+> -{
+> -	int ret;
+> -
+> -	nor->bouncebuf[0] = ear;
+> -
+> -	if (nor->spimem) {
+> -		struct spi_mem_op op =
+> -			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_WREAR, 0),
+> -				   SPI_MEM_OP_NO_ADDR,
+> -				   SPI_MEM_OP_NO_DUMMY,
+> -				   SPI_MEM_OP_DATA_OUT(1, nor->bouncebuf, 0));
+> -
+> -		spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
+> -
+> -		ret = spi_mem_exec_op(nor->spimem, &op);
+> -	} else {
+> -		ret = spi_nor_controller_ops_write_reg(nor, SPINOR_OP_WREAR,
+> -						       nor->bouncebuf, 1);
+> -	}
+> -
+> -	if (ret)
+> -		dev_dbg(nor->dev, "error %d writing EAR\n", ret);
+> -
+> -	return ret;
+> -}
+> -
+>  /**
+>   * spi_nor_sr_ready() - Query the Status Register to see if the flash is ready
+>   * for new commands.
+> diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
+> index b7fd760e3b47..14bf28473cf3 100644
+> --- a/drivers/mtd/spi-nor/core.h
+> +++ b/drivers/mtd/spi-nor/core.h
+> @@ -526,7 +526,6 @@ void spi_nor_spimem_setup_op(const struct spi_nor *nor,
+>  int spi_nor_write_enable(struct spi_nor *nor);
+>  int spi_nor_write_disable(struct spi_nor *nor);
+>  int spi_nor_set_4byte_addr_mode(struct spi_nor *nor, bool enable);
+> -int spi_nor_write_ear(struct spi_nor *nor, u8 ear);
+>  int spi_nor_wait_till_ready(struct spi_nor *nor);
+>  int spi_nor_global_block_unlock(struct spi_nor *nor);
+>  int spi_nor_lock_and_prep(struct spi_nor *nor);
+> diff --git a/drivers/mtd/spi-nor/winbond.c b/drivers/mtd/spi-nor/winbond.c
+> index 1e8fb571680b..0ca96efee5c9 100644
+> --- a/drivers/mtd/spi-nor/winbond.c
+> +++ b/drivers/mtd/spi-nor/winbond.c
+> @@ -130,6 +130,40 @@ static const struct flash_info winbond_nor_parts[] = {
+>  			      SPI_NOR_QUAD_READ) },
+>  };
+>  
+> +/**
+> + * winbond_nor_write_ear() - Write Extended Address Register.
+> + * @nor:	pointer to 'struct spi_nor'.
+> + * @ear:	value to write to the Extended Address Register.
+> + *
+> + * Return: 0 on success, -errno otherwise.
+> + */
+> +static int winbond_nor_write_ear(struct spi_nor *nor, u8 ear)
+> +{
+> +	int ret;
+> +
+> +	nor->bouncebuf[0] = ear;
+> +
+> +	if (nor->spimem) {
+> +		struct spi_mem_op op =
+> +			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_WREAR, 0),
+> +				   SPI_MEM_OP_NO_ADDR,
+> +				   SPI_MEM_OP_NO_DUMMY,
+> +				   SPI_MEM_OP_DATA_OUT(1, nor->bouncebuf, 0));
+> +
+> +		spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
+> +
+> +		ret = spi_mem_exec_op(nor->spimem, &op);
+> +	} else {
+> +		ret = spi_nor_controller_ops_write_reg(nor, SPINOR_OP_WREAR,
+> +						       nor->bouncebuf, 1);
+> +	}
+> +
+> +	if (ret)
+> +		dev_dbg(nor->dev, "error %d writing EAR\n", ret);
+> +
+> +	return ret;
+> +}
+> +
+>  /**
+>   * winbond_nor_set_4byte_addr_mode() - Set 4-byte address mode for Winbond
+>   * flashes.
+> @@ -156,7 +190,7 @@ static int winbond_nor_set_4byte_addr_mode(struct spi_nor *nor, bool enable)
+>  	if (ret)
+>  		return ret;
+>  
+> -	ret = spi_nor_write_ear(nor, 0);
+> +	ret = winbond_nor_write_ear(nor, 0);
+>  	if (ret)
+>  		return ret;
+>  
+> -- 
+> 2.30.2
+> 
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220426221859.v2.1.I650b809482e1af8d0156ed88b5dc2677a0711d46@changeid/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

@@ -2,149 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5503515072
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:10:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D4551506F
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:10:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378455AbiD2QMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 12:12:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57270 "EHLO
+        id S238152AbiD2QNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 12:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235285AbiD2QMm (ORCPT
+        with ESMTP id S1378470AbiD2QND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 12:12:42 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B5DD64D6;
-        Fri, 29 Apr 2022 09:09:23 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TG1ZIc012437;
-        Fri, 29 Apr 2022 16:09:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=/gKjBJm8Ng3Z02hjWqZNYdcaPfpsNP9MRodWRR1hczA=;
- b=Q+UZ/hkalq8vv58S8ODxArExXt67Lvi6li3uewqdxXvWfi1eoiBW7R9RpPekEPbiSSu+
- mGDqZXQf1jZs/rsYO0Nw5g71A/kNUTtdCVtnjs61/xmlFTY3nbJtcjUoIL+2iiyTjG5g
- 6WeTcfZ5iSCnhq5xf6ijRY1qCBWYS7EJ+3E6mWUpuoIhk80/7+23GLK8tsRJYr3eoJHK
- CzrmvXZ+DNibaQZgrL7I/NtNUMEiYujkQvmpS7ONTtrhWBlQYFBrACvqVwgZNCLRwtSv
- ftqrbsPQvztFtvQ20V41/dQLEs5U3xo6eT0ysYmwvEOBn6Z54Zcap3IlFkqHYnuPGL/K Cw== 
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqt9ee8rs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 16:09:19 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TFwmkM006777;
-        Fri, 29 Apr 2022 16:09:17 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma01dal.us.ibm.com with ESMTP id 3fm93bdetw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 16:09:17 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TG9GDd36897136
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 29 Apr 2022 16:09:16 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 83FE16A04F;
-        Fri, 29 Apr 2022 16:09:16 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 28E526A047;
-        Fri, 29 Apr 2022 16:09:16 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 29 Apr 2022 16:09:16 +0000 (GMT)
-Message-ID: <20697475-1b31-4db7-d1e7-afe2d50e2bca@linux.ibm.com>
-Date:   Fri, 29 Apr 2022 12:09:15 -0400
+        Fri, 29 Apr 2022 12:13:03 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69942D76DE
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:09:44 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id u3so11408436wrg.3
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:09:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JWMAn/Bn8ohxKs6BvOjyYpQ71mruJeatGTg+RHO7TDU=;
+        b=hqE8BOyx/OO+QvPg/NFycXPm1WifkvLBScYG4S0tODof3BwXf9egD1HH+z/2HRa88h
+         Wl7/0Mu5TyFJxNZvCEJOUAWZbSqhagKV5cXC1EPTltZOm4HOQfkYRJFYm+NO0elI/Kf6
+         oRRHthAd3vSAuzSLhR2udVVEaxcYJsuu039DoQrrV9fVH8i+353v34sqg/cpDy+pHydX
+         St2j+JlRt5iJfrZkM+stvUmzv5ZqTFhipJgLkOli6YzuyxEbZXQ+esnxPXD3n/jPxNmF
+         C/pbaVSfPlAjSN6oCRYpyTD569PX15RVUkHolHBFAJbegJQC9NB6kcsLRyG+uWkFk+Ix
+         JKEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JWMAn/Bn8ohxKs6BvOjyYpQ71mruJeatGTg+RHO7TDU=;
+        b=2C1Lwjt5hhpdEZAaw6TaPvwzkYT762IMaUDwuKrbNqWfd355m5DgXNDpWW5Ftzjgdi
+         Um8sZWk0hRkiME72/4kTx30Bytn2tazEujt7+XjKROI3R+G7nAAvrZPvf8ePW57Z1ZJk
+         H/LJyetyVGQxLhe7dXn2eIy14dxJn3E9QVMErsbXT1qy+t4HzAwys3c3kTmLGWgimsFG
+         WBMqWiEwhuTCgqqHPfhWnKYpqBlhUJbfD6ubuQNyNwbvyahJeHy0w4augqpYbdTroL6G
+         3w81Teh514aLpawoQsLqdYV6D/gEBVpUOtMyC9GfIUiX5QRLprDPoS2fwR4vQp87ByQq
+         Vx/w==
+X-Gm-Message-State: AOAM531+u7IG/fQseeX+YMZfUUoD9ZPD3KXVlr+qCpTHL0Sg960uR5ZG
+        +gYDq3MbWBIFEDV3VhkhWDTqamlXHgeehA==
+X-Google-Smtp-Source: ABdhPJzZ/2OiJVcoHnRZLspX+t/FHdW4FlaxULi9G0U+ixxQ6FdHjGbd2IzZrLvCjcTb7ZyapRlOgg==
+X-Received: by 2002:a05:6000:1844:b0:20a:f429:f80c with SMTP id c4-20020a056000184400b0020af429f80cmr8474722wri.643.1651248582988;
+        Fri, 29 Apr 2022 09:09:42 -0700 (PDT)
+Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.gmail.com with ESMTPSA id z11-20020a05600c220b00b00393ffde5f5fsm7827863wml.36.2022.04.29.09.09.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 09:09:42 -0700 (PDT)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     vkoul@kernel.org
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        pierre-louis.bossart@linux.intel.com, bard.liao@intel.com,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [PATCH] soundwire: qcom: adjust autoenumeration timeout
+Date:   Fri, 29 Apr 2022 17:09:28 +0100
+Message-Id: <20220429160928.24614-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v8 2/7] ima: use IMA default hash algorithm for integrity
- violations
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220429112601.1421947-1-zohar@linux.ibm.com>
- <20220429112601.1421947-3-zohar@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20220429112601.1421947-3-zohar@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Hx2U6jPwJesozZKWDNHUMPP0zmbRsYgK
-X-Proofpoint-ORIG-GUID: Hx2U6jPwJesozZKWDNHUMPP0zmbRsYgK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-29_07,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- mlxscore=0 suspectscore=0 priorityscore=1501 spamscore=0 mlxlogscore=999
- adultscore=0 lowpriorityscore=0 impostorscore=0 clxscore=1015 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204290085
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Currently timeout for autoenumeration during probe and bus reset is set to
+2 secs which is really a big value. This can have an adverse effect on
+boot time if the slave device is not ready/reset.
+This was the case with wcd938x which was not reset yet but we spent 2
+secs waiting in the soundwire controller probe. Reduce this time to
+1/10 of Hz which should be good enough time to finish autoenumeration
+if any slaves are available on the bus.
 
+Reported-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+---
+ drivers/soundwire/qcom.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 4/29/22 07:25, Mimi Zohar wrote:
-> Integrity file violations - ToM/ToU, open writers - are recorded in the IMA
-> measurement list, containing 0x00's in both the template data and file data
-> hash fields, but 0xFF's are actually extended into TPM PCRs.  Although the
-> original 'ima' template data field ('d') is limited to 20 bytes, the 'd-ng'
-> template digest field is not.
-> 
-> The violation file data hash template field ('d-ng') is unnecessarily hard
-> coded to SHA1.  Instead of simply replacing the hard coded SHA1 hash
-> algorithm with a larger hash algorithm, use the hash algorithm as defined
-> in "ima_hash_algo".  ima_hash_algo is set to either the Kconfig IMA default
-> hash algorithm or as defined on the boot command line (ima_hash=).
-> 
-> Including a non-SHA1 file data hash algorithm in the 'd-ng' field of
-> violations is a cosmetic change.  The template data hash field, which is
-> extended into the TPM PCRs, is not affected by this change and should not
-> affect attestation of the IMA measurement list.
-> 
-> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
+index da1ad7ebb1aa..432e5cb9a4d2 100644
+--- a/drivers/soundwire/qcom.c
++++ b/drivers/soundwire/qcom.c
+@@ -105,7 +105,7 @@
+ 
+ #define SWRM_SPECIAL_CMD_ID	0xF
+ #define MAX_FREQ_NUM		1
+-#define TIMEOUT_MS		(2 * HZ)
++#define TIMEOUT_MS		(HZ/10)
+ #define QCOM_SWRM_MAX_RD_LEN	0x1
+ #define QCOM_SDW_MAX_PORTS	14
+ #define DEFAULT_CLK_FREQ	9600000
+-- 
+2.21.0
 
-The effect seems to be that violations that have previously looked like 
-this
-
-10 0000000000000000000000000000000000000000 ima-ng 
-sha1:0000000000000000000000000000000000000000 /var/log/audit/audit.log
-
-now look like this:
-
-10 0000000000000000000000000000000000000000 ima-ng 
-sha256:0000000000000000000000000000000000000000 /var/log/audit/audit.log
-
-evmctl [1.3.2] still works fine:
-
-# evmctl ima_measurement --ignore-violations 
-/sys/kernel/security/ima/binary_runtime_measurements
-Matched per TPM bank calculated digest(s).
-
-
-Tested-by: Stefan Berger <stefanb@linux.ibm.com>
-
-
-> ---
->   security/integrity/ima/ima_template_lib.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
-> index e9d65f6fe2ae..4b6706f864d4 100644
-> --- a/security/integrity/ima/ima_template_lib.c
-> +++ b/security/integrity/ima/ima_template_lib.c
-> @@ -370,7 +370,7 @@ int ima_eventdigest_init(struct ima_event_data *event_data,
->   int ima_eventdigest_ng_init(struct ima_event_data *event_data,
->   			    struct ima_field_data *field_data)
->   {
-> -	u8 *cur_digest = NULL, hash_algo = HASH_ALGO_SHA1;
-> +	u8 *cur_digest = NULL, hash_algo = ima_hash_algo;
->   	u32 cur_digestsize = 0;
->   
->   	if (event_data->violation)	/* recording a violation. */

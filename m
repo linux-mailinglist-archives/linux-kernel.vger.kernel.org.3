@@ -2,78 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9552515032
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:03:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4158C51503F
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378764AbiD2QGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 12:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39106 "EHLO
+        id S1378796AbiD2QIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 12:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378762AbiD2QGm (ORCPT
+        with ESMTP id S1378476AbiD2QII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 12:06:42 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9095E72E0F;
-        Fri, 29 Apr 2022 09:03:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651248204; x=1682784204;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sSK/o9FhKlUdMjW2NdP5Bg7dQkRtO4bEr5mQPkXPNXs=;
-  b=tP5uiMhaIEVwDhNNk++kQsCk2nBi9S34OJdiD03ws7NkRWf4Znij5z/u
-   W3EhPQXpcoybhPU/fBorMt33oYchbgJJpicbuc0SuTN53fqTJ1gPa+Qep
-   nOys+pnbPvmBquqxxpVrtYdc81gkakqZ3wZm1+CLrBSuguCn8NAT4T7cy
-   4=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 29 Apr 2022 09:03:24 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 09:03:23 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 29 Apr 2022 09:03:22 -0700
-Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 29 Apr
- 2022 09:03:19 -0700
-Date:   Fri, 29 Apr 2022 12:03:17 -0400
-From:   Qian Cai <quic_qiancai@quicinc.com>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-CC:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        <lkft-triage@lists.linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>, "Zi Yan" <ziy@nvidia.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David Hildenbrand" <david@redhat.com>,
-        Eric Ren <renzhengeek@gmail.com>,
-        "kernel test robot" <lkp@intel.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        "Mike Rapoport" <rppt@linux.ibm.com>,
-        Minchan Kim <minchan@kernel.org>,
-        "Oscar Salvador" <osalvador@suse.de>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Chen Wandun <chenwandun@huawei.com>, NeilBrown <neilb@suse.de>,
-        <joao.m.martins@oracle.com>, <mawupeng1@huawei.com>,
-        Wei Yang <richard.weiyang@gmail.com>,
-        Song Liu <song@kernel.org>
-Subject: Re: [next] mm: libhugetlbfs: WARNING: at mm/page_alloc.c:5368
- __alloc_pages
-Message-ID: <20220429160317.GA71@qian>
-References: <CA+G9fYveMF-NU-rvrsbaora2g2QWxrkF7AWViuDrJyN9mNScJg@mail.gmail.com>
+        Fri, 29 Apr 2022 12:08:08 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8519D84ED1;
+        Fri, 29 Apr 2022 09:04:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=QQI5zmi1djYWNz2i53I6KuQGatDa49BWqjEk2Pav1i4=; b=dYOwdCYz8mfW6uRaErWUoCqmdx
+        5T0+vzZBt6UK85jUK/bYBffPO6pHVBukVXgw40Mng8+hfEFyxsYupbDv17vw0eY73RVtJNUJhZeIk
+        wjL2oPNMg0UJQkop2tznLUBtpwTgs2tJTFrh96RXyi3iI9oJ7Xg0HjOO5wFLxxatzCt/a1kjKIm+q
+        GG90XSMTUteF9uAfx+0HJjQF0T7y90PJaZRFs3aM6M51tA02d53awi4I7n5GpC6cVQif5RrGFpU1r
+        QhiVEfyVqroi50IPYPzYRbjvCqabrqPiHclqX4UZkfFE4tLq7njetpvB7ea+qAjYTdFscbWw6lpa8
+        5AxSRVRQ==;
+Received: from [179.113.53.197] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nkT6a-0001BR-MS; Fri, 29 Apr 2022 18:04:28 +0200
+Message-ID: <7518924e-5bb4-e6e9-0e3e-3f5cb03bf946@igalia.com>
+Date:   Fri, 29 Apr 2022 13:04:01 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYveMF-NU-rvrsbaora2g2QWxrkF7AWViuDrJyN9mNScJg@mail.gmail.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 24/30] panic: Refactor the panic path
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>, akpm@linux-foundation.org,
+        bhe@redhat.com, pmladek@suse.com, kexec@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-25-gpiccoli@igalia.com>
+ <4fe85e9c-4e96-e9d5-9fd8-f062bafcda4f@infradead.org>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <4fe85e9c-4e96-e9d5-9fd8-f062bafcda4f@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,38 +81,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 04:50:25PM +0530, Naresh Kamboju wrote:
-> Following kernel warning notices on Linux next-20220427 till date next-20220429
-> on qemu_arm64 and arm64 devices.
+On 27/04/2022 21:28, Randy Dunlap wrote:
 > 
-> While testing libhugetlbfs test suite and ltp mm and hugetlb.
 > 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> On 4/27/22 15:49, Guilherme G. Piccoli wrote:
+>> +	crash_kexec_post_notifiers
+>> +			This was DEPRECATED - users should always prefer the
 > 
-> Test log:
-> ----------
-> truncate_above_4GB (2M: 64): PASS
-> brk_near_huge (2M: 64): brk_near_huge: malloc.c:2401: sysmalloc:
-> Assertion `(old_top == initial_top (av) && old_size == 0) ||
-> ((unsigned long) (old_size) >= MINSIZE && prev_inuse (old_top) &&
-> ((unsigned long) old_end & (pagesize - 1)) == 0)' failed.
-> [   15.685019] audit: type=1701 audit(1651222753.772:25):
-> auid=4294967295 uid=0 gid=0 ses=4294967295 pid=454
-> comm=\"brk_near_huge\"
-> exe=\"/usr/lib/libhugetlbfs/tests/obj64/brk_near_huge\" sig=6 res=1
-> [   15.685629] ------------[ cut here ]------------
-> [   15.685631] WARNING: CPU: 2 PID: 454 at mm/page_alloc.c:5368
+> 			This is DEPRECATED - users should always prefer the
+> 
+>> +			parameter "panic_notifiers_level" - check its entry
+>> +			in this documentation for details on how it works.
+>> +			Setting this parameter is exactly the same as setting
+>> +			"panic_notifiers_level=4".
+> 
 
-Naresh, I am having difficult to reproduce this reliablely. If you have
-spare cycles, do you mind reverting those to see if you can still
-reproduce? I can't seems to find other recent commits more suspicious
-than that series.
+Thanks Randy, for your suggestion - but I confess I couldn't understand
+it properly. It's related to spaces/tabs, right? What you suggest me to
+change in this formatting? Just by looking the email I can't parse.
 
-37e73e3b0a9d drivers: virtio_mem: use pageblock size as the minimum virtio_mem size.
-d2b9cd2acb2b mm: cma: use pageblock_order as the single alignment
-7f125582227e mm: page_isolation: enable arbitrary range page isolation.
-fb009b307b21 mm: make alloc_contig_range work at pageblock granularity
-7c7e18d510f4 mm: page_isolation: check specified range for unmovable pages
-6a242a94b883 mm: page_isolation: move has_unmovable_pages() to mm/page_isolation.c
+Cheers,
 
-$ git revert --no-edit e389355485b7..37e73e3b0a9d
+
+Guilherme

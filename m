@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81D5F515726
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:45:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C10A51572E
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:45:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238936AbiD2Vrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 17:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59560 "EHLO
+        id S239082AbiD2VsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 17:48:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238913AbiD2Vrr (ORCPT
+        with ESMTP id S238929AbiD2Vrw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 17:47:47 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4396FD8936
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:44:28 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id iq2-20020a17090afb4200b001d93cf33ae9so11603750pjb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:44:28 -0700 (PDT)
+        Fri, 29 Apr 2022 17:47:52 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07702D95CC
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:44:31 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id h12so8212328plf.12
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:44:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cPKs9GVKGDSLOQL2zQiD6oZiNSnA4Ko5SyLdG3pcspE=;
-        b=AQeKf5X42YQmvfUJhMz5xEM+z1so3kgd8cgzlQRhphzfmIkWk5CbVzdl6shGEqD4yJ
-         aHGeeKKT1kQvEZtcsPARhWXSC67sEXZ0c3pBD4E+1gxvKXgIiZH0RcAb525/oGg96Oue
-         h1CDWGzlKDp42/eFcr4lSF0HX3+B1LO7gWa94VIbUcm9IXd88/80DuRsOtmGHLnZxzic
-         Ci99uxxgEq7uURLkMtF0JIUHuIUQHfnbadpaPaB7ASfGdT2yguHuAiijrCEm9A5fcV0N
-         Tuz9u1Iw3BmADrBBnw2ZNpPJ9uM0dguAn4I9UXj0Z2jE49yfoDnKUZgexnnnwVrKS4OQ
-         ggTA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=G+b/5mZlFuHtU2XDozomo84+nsQCdCx5HIlm6/xmsSw=;
+        b=Lk7L4IygC+lKFXqlatdS4sTNMrlHQVhH4QHq/GcQWEOUR6yjyfqapWDnENI0syOUvP
+         Pzv1QdFuuw86sXzVfRNyM1MpUmh2rZFLO84tTRpO1RKk4nE8A79vzXTk6vg+/EpXwhl3
+         GhmbUD8NL9c5bj5oiGDKHapJL4bLvGZP8hYJKNjbpf4YwyFIV/A704gevl80qAnna8dw
+         6z/7oAuCmHf9MYIdniHiHYo+yFKWsKFck1vKvl2O02zcet1rDAya5x/AlXPuy64iE0ev
+         rU9n9WSGcs5Bhnby8BeF5QDgxgMy2rAenTRY41M2Y2Y/gvok6CsFMUe1AndjZKQUXG74
+         hapA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cPKs9GVKGDSLOQL2zQiD6oZiNSnA4Ko5SyLdG3pcspE=;
-        b=f6bPqSrMf27p8tR+MzHh0pjNNslQ7sqtpXbIuoKW6P1PkcXz2EDxqksxPzXarw+JBW
-         EprkshvzMfXht2qxx3C27SQBwcMBWfiIt0+ggXfGuYereaZBudeXWkTWm4Hv3zHVAZ+S
-         BznkYrN+fJ3ig/sDZxXXUErghkx6TuF52gd09PD4pfuFG61Jnxr8+X1CPvC9t7ygjf/R
-         oGNQoANcq5KahcFdWwwiu91xxEzP1zdUd9HaESkpr20DCwZGGZjAdAjM7/eZISMGbEFT
-         mL9lPLHA8ZyeDAXAe3kGvV6EpOpVcbzos+bIBFTBN5wC5q1ShnH4o8RYI5lQGfISVBZs
-         sgYw==
-X-Gm-Message-State: AOAM531euTJ1r5sr9J92VIijxmdM4yh5zCfCOqkku8nHg3F+zzmNNeCn
-        ong1O175RO+jOfuyIBsaDGAPkuSfJYaFEg==
-X-Google-Smtp-Source: ABdhPJyD5nledjZldpVBkUeIHwtkPn86Y8kWM9/OKUm3v0yMu1s2avwykyzK1dXTyzhQDRDdazX/3w==
-X-Received: by 2002:a17:90b:304:b0:1d9:752b:437f with SMTP id ay4-20020a17090b030400b001d9752b437fmr5964663pjb.242.1651268667658;
-        Fri, 29 Apr 2022 14:44:27 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=G+b/5mZlFuHtU2XDozomo84+nsQCdCx5HIlm6/xmsSw=;
+        b=lsBzWOxOT5DR8L1yt5nhFh0NGcvGDSfV2OI+RC5Emd64ZYLYyUUcVf0F5v7rMUoPmG
+         +29nB0Mv/Tno+chwQvTs3lvMLs49OyzQDGhJF68rZZjs/iSPuE6UDqSAA3ARZaZaPyXj
+         J4eAB40isQZzAaP8eZ4Fq1EeCSXX8o8dEvFwcg3lO15AhyzvtkX/TxRT25VG8CtrLuX3
+         8KCxkY9azVK1uOn4ziXzZkm2sa48vENZpOWxudQqVR8nmGWmPg6BIimNwv5rOUi2axIA
+         5VByVQpXzR5Y+H7jjmdBg5ixi3iYAqMBHlCk8oOjXbRDcdfuKTs2v02sH8aRghJQG6sp
+         z8BA==
+X-Gm-Message-State: AOAM531B7I9Oxi6IgPEsWGWPKqm6hxo/5mydzCkRJD607m2GhVSavve3
+        j3N0qlcQVkRXoZevqnIO35gxbQ==
+X-Google-Smtp-Source: ABdhPJwx9C+GPVAfhw27WAXdFgQUSO3zeFDI+lxbdL2k29gyzRGPqHdj1Zd+ey7umQd4Li4UnuYzKw==
+X-Received: by 2002:a17:903:1252:b0:154:ca85:59a0 with SMTP id u18-20020a170903125200b00154ca8559a0mr1273711plh.169.1651268670521;
+        Fri, 29 Apr 2022 14:44:30 -0700 (PDT)
 Received: from localhost.localdomain ([223.233.64.97])
-        by smtp.gmail.com with ESMTPSA id fv12-20020a17090b0e8c00b001cd4989fed0sm15271086pjb.28.2022.04.29.14.44.25
+        by smtp.gmail.com with ESMTPSA id fv12-20020a17090b0e8c00b001cd4989fed0sm15271086pjb.28.2022.04.29.14.44.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 14:44:27 -0700 (PDT)
+        Fri, 29 Apr 2022 14:44:30 -0700 (PDT)
 From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org
-Subject: [PATCH 0/3] arm64: dts: qcom: Fix 'sdhci' nodes for 'make dtbs_check'
-Date:   Sat, 30 Apr 2022 03:14:17 +0530
-Message-Id: <20220429214420.854335-1-bhupesh.sharma@linaro.org>
+        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH 1/3] arm64: dts: qcom: sdm630: Fix 'interconnect-names' for sdhci nodes
+Date:   Sat, 30 Apr 2022 03:14:18 +0530
+Message-Id: <20220429214420.854335-2-bhupesh.sharma@linaro.org>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220429214420.854335-1-bhupesh.sharma@linaro.org>
+References: <20220429214420.854335-1-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -67,31 +70,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since I sent a separate patchset to convert the Qualcomm 'sdhci-msm'
-device-tree binding to yaml format, 'make dtbs_check' now reports several
-issues with sdhci nodes used across qcom dts files.
+Since the Qualcomm sdhci-msm device-tree binding has been converted
+to yaml format, 'make dtbs_check' reports issues with
+inconsistent 'interconnect-names' used for sdhci nodes.
 
-This patchset fixes the same.
+Fix the same.
 
-Bhupesh Sharma (3):
-  arm64: dts: qcom: sdm630: Fix 'interconnect-names' for sdhci nodes
-  arm64: dts: qcom: Fix node names for sdhci 'opp-table' nodes (across
-    dts files)
-  arm64: dts: qcom: Fix ordering of 'clocks' & 'clock-names' for sdhci
-    nodes
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Rob Herring <robh@kernel.org>
+Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/sdm630.dtsi | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- arch/arm64/boot/dts/qcom/ipq8074.dtsi |  8 ++++----
- arch/arm64/boot/dts/qcom/msm8916.dtsi | 12 ++++++------
- arch/arm64/boot/dts/qcom/msm8994.dtsi | 14 +++++++-------
- arch/arm64/boot/dts/qcom/qcs404.dtsi  |  6 +++---
- arch/arm64/boot/dts/qcom/sc7180.dtsi  | 16 ++++++++--------
- arch/arm64/boot/dts/qcom/sc7280.dtsi  | 12 ++++++------
- arch/arm64/boot/dts/qcom/sdm630.dtsi  | 17 ++++++++++-------
- arch/arm64/boot/dts/qcom/sm6350.dtsi  |  4 ++--
- arch/arm64/boot/dts/qcom/sm8150.dtsi  |  2 +-
- arch/arm64/boot/dts/qcom/sm8250.dtsi  |  2 +-
- 10 files changed, 48 insertions(+), 45 deletions(-)
-
+diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+index 7f875bf9390a..db18b35d4a7d 100644
+--- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+@@ -1285,6 +1285,7 @@ sdhc_2: sdhci@c084000 {
+ 
+ 			interconnects = <&a2noc 3 &a2noc 10>,
+ 					<&gnoc 0 &cnoc 28>;
++			interconnect-names = "sdhc-ddr","cpu-sdhc";
+ 			operating-points-v2 = <&sdhc2_opp_table>;
+ 
+ 			pinctrl-names = "default", "sleep";
+@@ -1337,7 +1338,7 @@ sdhc_1: sdhci@c0c4000 {
+ 
+ 			interconnects = <&a2noc 2 &a2noc 10>,
+ 					<&gnoc 0 &cnoc 27>;
+-			interconnect-names = "sdhc1-ddr", "cpu-sdhc1";
++			interconnect-names = "sdhc-ddr", "cpu-sdhc";
+ 			operating-points-v2 = <&sdhc1_opp_table>;
+ 			pinctrl-names = "default", "sleep";
+ 			pinctrl-0 = <&sdc1_state_on>;
 -- 
 2.35.1
 

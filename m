@@ -2,217 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 428B1514F95
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D4BA514F97
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:36:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378541AbiD2Pie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 11:38:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59028 "EHLO
+        id S1378553AbiD2PjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 11:39:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377782AbiD2Pib (ORCPT
+        with ESMTP id S229886AbiD2PjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 11:38:31 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473A918344
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:35:11 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id n14so14671868lfu.13
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:35:11 -0700 (PDT)
+        Fri, 29 Apr 2022 11:39:17 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67020D5EB2
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:35:58 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id g16so5470243lja.3
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:35:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=jMT4TT5P8owVF9luCAEwViUwvrHVEy/mXna8eqg97zA=;
-        b=SzULoFPTREh5J1EJTLKiZTodpVReUG3V/vfT97A+wewEEmxkbfiWYZQJnURGS2NXjm
-         gUTcF0tGDYJ4K7PGFOJ2ixEbR/rDAZZU6LV3Z8savNifOukpI9B6TUgFAt2yGJIkxNr+
-         KUA/0StRmBy34UL8boJ9dJ6iZXx7jM8b3YavaZmtI9m44GzuWfYtf8QcfpgBRg+GPMqI
-         cju/LHYOaV3S6QUxnlJFZP3dcGlAy/mPTiA4QAFptL7+Yz1zhLHEOjlZq00CWKp+IusX
-         7drnezSDe3rxtP699UcVkt2r3DQ/P9T94XdIRUNDsUMMib6EvOzxE+wQOsxPm8UAC4av
-         wKqg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6s1nwoJRGgRDD+cc6eVnKDXhc5zKGyzdqBiCfjhgACw=;
+        b=QRe3ug7K1fccdkgWK9+JEOfzzP1wXoDKVm5M/ouWALA2QAkiM9sM5mQaCM+wK7D+v3
+         vosrmviy1SYp/52eVj7aSP8AN0D8VAU5Okvb4Ww8xgcqiXF9ZElmdP2YOFbhm7XV0qCz
+         OrPJDhWWzcWkt5ISnaWJp4UWFQSRujN2mYmOd3ptUuFcjqk7kK0xf02f8kQk/8GxjGYv
+         R8dlQH1h9WQLZqOX7d7Vbo/s7c+YzOvhAVSm7esn70hVYOYtl6QPHQW/lR70eu6ztjZD
+         pKiaKcokFfvJ242z+zynG0IN4GowpMyhRJWo/gnYQwpL2wc3PwtK2z0FlehP2gRrMqKr
+         MO6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=jMT4TT5P8owVF9luCAEwViUwvrHVEy/mXna8eqg97zA=;
-        b=BVROQ5yHiQfKmSvnQPZm1io+Nv84XqZm9HeKbNHseLFRbkrsxYafirt6PJLpp1ypyx
-         JSKYMGIwr2EysaeACVNsAx4d7ZsC7+ty3mdtSNWYHUfXl4HTfqdwEwhkwyvJBjh8AWna
-         2Kqzq1g//AAtftEbMLenfBSFrihjunx15otV5pKGldVJM01HJU4kg1I5/0QX24+bQHGF
-         rtwNIxXdk5v/X9bpUUoR9H7LSm4mbYO8fNFCseJzzIZSKwuGDA9B81A0pVWOecJEd5x/
-         0bNPAPT8H+/CJru76Oc/Fg4YRRTm1kbeBuoXTVa2NdwAdiaftHp0PxaCpDgueLYrEG4I
-         miWA==
-X-Gm-Message-State: AOAM531g3/hif973nEaHkw2oWpLNPNf1xiqedrr2a/QCFBk2I0m8iZ4C
-        F6PlLJU26fmENgcVJe4OyMAOfA==
-X-Google-Smtp-Source: ABdhPJzFaFgjdiH85+8IVOWWBKjwzo3XK8EinNHm4PmoTCXk/aS7qA0GQkVBWOCMJN5uYEOA/uCxvA==
-X-Received: by 2002:a05:6512:169e:b0:470:2124:63fb with SMTP id bu30-20020a056512169e00b00470212463fbmr28468748lfb.616.1651246509965;
-        Fri, 29 Apr 2022 08:35:09 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id s3-20020ac24643000000b0047213921f71sm261759lfo.290.2022.04.29.08.35.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 08:35:09 -0700 (PDT)
-Message-ID: <2012e99c-9303-b92f-fb38-be3064352094@linaro.org>
-Date:   Fri, 29 Apr 2022 18:35:09 +0300
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6s1nwoJRGgRDD+cc6eVnKDXhc5zKGyzdqBiCfjhgACw=;
+        b=yJ5d8VqcF8WhW119OyCjicY30QRqgCaR/3yqdFoeCB+baaVZKE1fGyq+8xDovldFvc
+         qz/Eldb1YBG86KdJlq1t/YZx/YcGiMguE4jXEnTxzAEKQWQlM4gap2+7kA+NFcvgDrx1
+         sposYfFdrMUprIHa4x8EfU2QvGfvBHB+8gtQxUsBMz/fDpP4SitYtnFv3vJ1uNRYDk6X
+         R5J0WceYybhkiktLerS4dn7DTmA7QT35GelzN3gM3BCU6uEyxX1882oh0ktsOUUwCTmN
+         TTchiMDUeb6fsJEK0BGJGUBhc46fmCmNZbi9CQ9r+yFaO+QXsNpkvOOU6D4Y5nc4jOb8
+         3x8A==
+X-Gm-Message-State: AOAM5305IoGliWwCErAZVsZEG9YVn1Li3moqTYizjvqcaj8CiVnCRLak
+        50JlPOR3BDExWbE3imr0FQLuUSLd/zmtmxVP4rQDjw==
+X-Google-Smtp-Source: ABdhPJyN+azZ/dxOkvmmY0WVIZMlkjaocYqwrPftbufCjEDjpdvoZ1xb9ffcGeGw5Jbxb8q7SMK3CoZJfVIG0FB5O0U=
+X-Received: by 2002:a05:651c:1508:b0:24f:2fa6:89a4 with SMTP id
+ e8-20020a05651c150800b0024f2fa689a4mr6252956ljf.132.1651246556519; Fri, 29
+ Apr 2022 08:35:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v1 6/9] clk: qcom: add support for SM8350 DISPCC
-Content-Language: en-GB
-To:     Robert Foss <robert.foss@linaro.org>, bjorn.andersson@linaro.org,
-        agross@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzk+dt@kernel.org, jonathan@marek.ca,
-        tdas@codeaurora.org, anischal@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220429151247.388837-1-robert.foss@linaro.org>
- <20220429151247.388837-6-robert.foss@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220429151247.388837-6-robert.foss@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220407195908.633003-1-pgonda@google.com> <CAFNjLiXC0AdOw5f8Ovu47D==ex7F0=WN_Ocirymz4xL=mWvC5A@mail.gmail.com>
+ <CAMkAt6r-Mc_YN-gVHuCpTj4E1EmcvyYpP9jhtHo5HRHnoNJAdA@mail.gmail.com>
+ <CAMkAt6r+OMPWCbV_svUyGWa0qMzjj2UEG29G6P7jb6uH6yko2w@mail.gmail.com>
+ <62e9ece1-5d71-f803-3f65-2755160cf1d1@redhat.com> <CAMkAt6q6YLBfo2RceduSXTafckEehawhD4K4hUEuB4ZNqe2kKg@mail.gmail.com>
+ <4c0edc90-36a1-4f4c-1923-4b20e7bdbb4c@redhat.com> <CAMkAt6oL5qi7z-eh4z7z8WBhpc=Ow6WtcJA5bDi6-aGMnz135A@mail.gmail.com>
+ <CAMkAt6rmDrZfN5DbNOTsKFV57PwEnK2zxgBTCbEPeE206+5v5w@mail.gmail.com> <0d282be4-d612-374d-84ba-067994321bab@redhat.com>
+In-Reply-To: <0d282be4-d612-374d-84ba-067994321bab@redhat.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Fri, 29 Apr 2022 09:35:45 -0600
+Message-ID: <CAMkAt6ragq4OmnX+n628Yd5pn51qFv4qV20upGR6tTvyYw3U5A@mail.gmail.com>
+Subject: Re: [PATCH v3] KVM: SEV: Mark nested locking of vcpu->lock
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     John Sperbeck <jsperbeck@google.com>,
+        kvm list <kvm@vger.kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/04/2022 18:12, Robert Foss wrote:
-> From: Jonathan Marek <jonathan@marek.ca>
-> 
-> Add support to the SM8350 display clock controller by extending the SM8250
-> display clock controller, which is almost identical but has some minor
-> differences.
-> 
-> Signed-off-by: Jonathan Marek <jonathan@marek.ca>
-> ---
->   drivers/clk/qcom/Kconfig         |  4 +--
->   drivers/clk/qcom/dispcc-sm8250.c | 61 +++++++++++++++++++++++++++++++-
->   2 files changed, 62 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-> index 9b1f54e634b9..1752ca0ee405 100644
-> --- a/drivers/clk/qcom/Kconfig
-> +++ b/drivers/clk/qcom/Kconfig
-> @@ -609,11 +609,11 @@ config SM_DISPCC_6125
->   	  splash screen
->   
->   config SM_DISPCC_8250
-> -	tristate "SM8150 and SM8250 Display Clock Controller"
-> +	tristate "SM8150/SM8250/SM8350 Display Clock Controller"
->   	depends on SM_GCC_8150 || SM_GCC_8250
->   	help
->   	  Support for the display clock controller on Qualcomm Technologies, Inc
-> -	  SM8150 and SM8250 devices.
-> +	  SM8150/SM8250/SM8350 devices.
->   	  Say Y if you want to support display devices and functionality such as
->   	  splash screen.
->   
-> diff --git a/drivers/clk/qcom/dispcc-sm8250.c b/drivers/clk/qcom/dispcc-sm8250.c
-> index 22d9cbabecab..95f86ffcc3b3 100644
-> --- a/drivers/clk/qcom/dispcc-sm8250.c
-> +++ b/drivers/clk/qcom/dispcc-sm8250.c
-> @@ -43,6 +43,10 @@ static struct pll_vco vco_table[] = {
->   	{ 249600000, 2000000000, 0 },
->   };
->   
-> +static struct pll_vco lucid_5lpe_vco[] = {
-> +	{ 249600000, 1750000000, 0 },
-> +};
-> +
->   static struct alpha_pll_config disp_cc_pll0_config = {
->   	.l = 0x47,
->   	.alpha = 0xE000,
-> @@ -1228,6 +1232,7 @@ static const struct of_device_id disp_cc_sm8250_match_table[] = {
->   	{ .compatible = "qcom,sc8180x-dispcc" },
->   	{ .compatible = "qcom,sm8150-dispcc" },
->   	{ .compatible = "qcom,sm8250-dispcc" },
-> +	{ .compatible = "qcom,sm8350-dispcc" },
->   	{ }
->   };
->   MODULE_DEVICE_TABLE(of, disp_cc_sm8250_match_table);
-> @@ -1258,7 +1263,7 @@ static int disp_cc_sm8250_probe(struct platform_device *pdev)
->   		return PTR_ERR(regmap);
->   	}
->   
-> -	/* note: trion == lucid, except for the prepare() op */
-> +	/* Apply differences for SM8150 and SM8350 */
->   	BUILD_BUG_ON(CLK_ALPHA_PLL_TYPE_TRION != CLK_ALPHA_PLL_TYPE_LUCID);
->   	if (of_device_is_compatible(pdev->dev.of_node, "qcom,sc8180x-dispcc") ||
->   	    of_device_is_compatible(pdev->dev.of_node, "qcom,sm8150-dispcc")) {
-> @@ -1270,8 +1275,62 @@ static int disp_cc_sm8250_probe(struct platform_device *pdev)
->   		disp_cc_pll1_config.config_ctl_hi1_val = 0x00000024;
->   		disp_cc_pll1_config.user_ctl_hi1_val = 0x000000D0;
->   		disp_cc_pll1_init.ops = &clk_alpha_pll_trion_ops;
-> +	} else if (of_device_is_compatible(pdev->dev.of_node, "qcom,sm8350-dispcc")) {
-> +		static struct clk_rcg2 * const rcgs[] = {
-> +			&disp_cc_mdss_byte0_clk_src,
-> +			&disp_cc_mdss_byte1_clk_src,
-> +			&disp_cc_mdss_dp_aux1_clk_src,
-> +			&disp_cc_mdss_dp_aux_clk_src,
-> +			&disp_cc_mdss_dp_link1_clk_src,
-> +			&disp_cc_mdss_dp_link_clk_src,
-> +			&disp_cc_mdss_dp_pixel1_clk_src,
-> +			&disp_cc_mdss_dp_pixel2_clk_src,
-> +			&disp_cc_mdss_dp_pixel_clk_src,
-> +			&disp_cc_mdss_esc0_clk_src,
-> +			&disp_cc_mdss_mdp_clk_src,
-> +			&disp_cc_mdss_pclk0_clk_src,
-> +			&disp_cc_mdss_pclk1_clk_src,
-> +			&disp_cc_mdss_rot_clk_src,
-> +			&disp_cc_mdss_vsync_clk_src,
-> +		};
-> +		static struct clk_regmap_div * const divs[] = {
-> +			&disp_cc_mdss_byte0_div_clk_src,
-> +			&disp_cc_mdss_byte1_div_clk_src,
-> +			&disp_cc_mdss_dp_link1_div_clk_src,
-> +			&disp_cc_mdss_dp_link_div_clk_src,
-> +		};
-> +		unsigned int i;
-> +		static bool offset_applied;
-> +
-> +		/* only apply the offsets once (in case of deferred probe) */
-> +		if (!offset_applied) {
-> +			for (i = 0; i < ARRAY_SIZE(rcgs); i++)
-> +				rcgs[i]->cmd_rcgr -= 4;
-> +
-> +			for (i = 0; i < ARRAY_SIZE(divs); i++) {
-> +				divs[i]->reg -= 4;
-> +				divs[i]->width = 4;
-> +			}
-> +
-> +			disp_cc_mdss_ahb_clk.halt_reg -= 4;
-> +			disp_cc_mdss_ahb_clk.clkr.enable_reg -= 4;
-> +
-> +			offset_applied = true;
-> +		}
-> +
-> +		disp_cc_mdss_ahb_clk_src.cmd_rcgr = 0x22a0;
-> +
-> +		disp_cc_pll0_config.config_ctl_hi1_val = 0x2A9A699C;
-> +		disp_cc_pll0_config.test_ctl_hi1_val = 0x01800000;
-> +		disp_cc_pll0_init.ops = &clk_alpha_pll_lucid_5lpe_ops;
-> +		disp_cc_pll0.vco_table = lucid_5lpe_vco;
-> +		disp_cc_pll1_config.config_ctl_hi1_val = 0x2A9A699C;
-> +		disp_cc_pll1_config.test_ctl_hi1_val = 0x01800000;
-> +		disp_cc_pll1_init.ops = &clk_alpha_pll_lucid_5lpe_ops;
-> +		disp_cc_pll1.vco_table = lucid_5lpe_vco;
->   	}
->   
-> +	/* note for SM8350: downstream lucid_5lpe configure differs slightly */
+On Thu, Apr 28, 2022 at 5:59 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> On 4/28/22 23:28, Peter Gonda wrote:
+> >
+> > So when actually trying this out I noticed that we are releasing the
+> > current vcpu iterator but really we haven't actually taken that lock
+> > yet. So we'd need to maintain a prev_* pointer and release that one.
+>
+> Not entirely true because all vcpu->mutex.dep_maps will be for the same
+> lock.  The dep_map is essentially a fancy string, in this case
+> "&vcpu->mutex".
+>
+> See the definition of mutex_init:
+>
+> #define mutex_init(mutex)                                              \
+> do {                                                                   \
+>          static struct lock_class_key __key;                            \
+>                                                                         \
+>          __mutex_init((mutex), #mutex, &__key);                         \
+> } while (0)
+>
+> and the dep_map field is initialized with
+>
+>          lockdep_init_map_wait(&lock->dep_map, name, key, 0, LD_WAIT_SLEEP);
+>
+> (i.e. all vcpu->mutexes share the same name and key because they have a
+> single mutex_init-ialization site).  Lockdep is as crude in theory as it
+> is effective in practice!
+>
+> >
+> >           bool acquired = false;
+> >           kvm_for_each_vcpu(...) {
+> >                   if (!acquired) {
+> >                      if (mutex_lock_killable_nested(&vcpu->mutex, role)
+> >                          goto out_unlock;
+> >                      acquired = true;
+> >                   } else {
+> >                      if (mutex_lock_killable(&vcpu->mutex, role)
+> >                          goto out_unlock;
+>
+> This will cause a lockdep splat because it uses subclass 0.  All the
+> *_nested functions is allow you to specify a subclass other than zero.
 
-Isn't this already being taken care by the previous code?
+OK got it. I now have this to lock:
 
-With this comment removed:
+         kvm_for_each_vcpu (i, vcpu, kvm) {
+                  if (prev_vcpu != NULL) {
+                          mutex_release(&prev_vcpu->mutex.dep_map, _THIS_IP_);
+                          prev_vcpu = NULL;
+                  }
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+                  if (mutex_lock_killable_nested(&vcpu->mutex, role))
+                          goto out_unlock;
+                  prev_vcpu = vcpu;
+          }
 
+But I've noticed the unlocking is in the wrong order since we are
+using kvm_for_each_vcpu() I think we need a kvm_for_each_vcpu_rev() or
+something. Which maybe a bit for work:
+https://elixir.bootlin.com/linux/latest/source/lib/xarray.c#L1119.
+Then I think we could something like this to unlock:
 
->   	clk_lucid_pll_configure(&disp_cc_pll0, regmap, &disp_cc_pll0_config);
->   	clk_lucid_pll_configure(&disp_cc_pll1, regmap, &disp_cc_pll1_config);
->   
-
-
--- 
-With best wishes
-Dmitry
+         bool acquired = true;
+          kvm_for_each_vcpu_rev(i, vcpu, kvm) {
+                  if (!acquired) {
+                          mutex_acquire(&vcpu->mutex.dep_map, 0, role,
+_THIS_IP_);
+                  }
+                  mutex_unlock(&vcpu->mutex);
+                  acquired = false;
+          }
+>
+> Paolo
+>
+> >                   }
+> >           }
+> >
+> > To unlock:
+> >
+> >           kvm_for_each_vcpu(...) {
+> >              mutex_unlock(&vcpu->mutex);
+> >           }
+> >
+> > This way instead of mocking and releasing the lock_dep we just lock
+> > the fist vcpu with mutex_lock_killable_nested(). I think this
+> > maintains the property you suggested of "coalesces all the mutexes for
+> > a vm in a single subclass".  Thoughts?
+>

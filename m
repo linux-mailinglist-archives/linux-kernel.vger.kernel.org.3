@@ -2,214 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B466C514C94
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:16:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F87514C9E
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377172AbiD2OT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 10:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54944 "EHLO
+        id S1377179AbiD2OX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 10:23:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377133AbiD2OT4 (ORCPT
+        with ESMTP id S1355718AbiD2OXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 10:19:56 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A80090CC5
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:16:36 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id bv19so15728465ejb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:16:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=UdINARUtzcFoW7h6RyjDI8lgOBSw6WOSOqD14X2CFJU=;
-        b=R3GZ3IwUpu5UUm3UrgEWZ4yVRf5jvXz7GwFUllasFjFFL0aBEmLKNpewMp+KpvazTf
-         g8p8hr+kOKGqyfgS7Y6uQhzrVoBaclahGzEyJPahetcB4lmaLSZiOEXz2JI6zFxDHQpC
-         maW0lcQI5+oePb8/E6eX0hAdKzV8yvr+mZ4vk1i/OguhilfBrgpfSdkLeZzOH/QGszCI
-         RH2NayuUkJaUmwHXmH4I6VtjsZF4R1jZUbZ8lGtIMUIXu5uVYHzuEr+3e8Zq7RWXMNWD
-         XG+381AkVI2TTgKMvdTb9CLibCPzJlooCB/siw0KduRzu5GuQpMZWdmfj293jx06HRzp
-         Ng6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UdINARUtzcFoW7h6RyjDI8lgOBSw6WOSOqD14X2CFJU=;
-        b=Jh28X6ecOslSfEwtGTOamYpMKCLMNbaZnUTdo6V21SWUmZajd3c0yLYYyPlw5dss+o
-         rmpbty4vk3XLzRBTBonj4jnidg57JDcVwS6hQN4qpSFKU/ZfCU0gFhaJOx2hJnOXyer4
-         L7gc2dBYwTwSuQHV9T3iC5EXH8yYxUnF0Xt34s9s60Fkdojscy5AflMJ1xpvwfEvU54b
-         tB2JERCBAfyqm1dNBzPR3J5y5N6dLL6C+klQHL1r9Swczu84BFZhnesooKjCubYCL0yv
-         i9cUdUa8NDwTajCxic2eXKvKV5y8bj5XU+o4QMpHRDTeXL9ajN1N6j907ygjo6DrrdOU
-         wFTw==
-X-Gm-Message-State: AOAM5324RU7EA979Yw2Ja2fn5vHLi1/SsTeLB92xNTgGSPPKp8eSLtgL
-        QGJ9Z2e2Q0E5Mn2NJSitGw8PGQ==
-X-Google-Smtp-Source: ABdhPJykYBCwe9aQMDhIZ8XGDNf9p2LGcca3xyCDUbkpjt15wUq7VCOYejWxIXJEzJpfvaAJeCOHOw==
-X-Received: by 2002:a17:907:6d12:b0:6f3:d304:e259 with SMTP id sa18-20020a1709076d1200b006f3d304e259mr10624053ejc.110.1651241795135;
-        Fri, 29 Apr 2022 07:16:35 -0700 (PDT)
-Received: from [192.168.0.170] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id j12-20020a50ed0c000000b0042617ba63d4sm2982642eds.94.2022.04.29.07.16.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 07:16:34 -0700 (PDT)
-Message-ID: <75b94ccd-b739-2164-bc4a-20025356cc34@linaro.org>
-Date:   Fri, 29 Apr 2022 16:16:32 +0200
+        Fri, 29 Apr 2022 10:23:25 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6C72BCF;
+        Fri, 29 Apr 2022 07:20:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651242007; x=1682778007;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/bGhVKHoEh7eHUDyaw5m0yQ3oS5lWEnkoQ/GQvJerek=;
+  b=c9ITCokXFmq+Z7NsDa4qGXrnaYFJUNENfuVWSnu02Jz0jUGrAfCwCpYV
+   xIrPgShsbJIaATPpKxMkxXkBglePDJyFCHT3sSRpSzwMrEWau0SGBS4Ha
+   J0yg9LXf4468CC2PT3YA0cruM7tBgVmyyUJBujwiBVbbHQEAobIWC5VhN
+   7697wGuM1eAeW2lySAtkfoQVw9h+puGkoPXiiYkRue/GAd6FNjYEFVW7E
+   fHguXUiH2ucqFhZeiiDZ718k4fw2jSlYKE4Q/3p20V1KpjkrZg2qaG2xy
+   ya/n2VUXy0srFexolBZIpOwqhq5P33j17YEQn4UynEVd3ch2YK/jxYwdr
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="329600105"
+X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
+   d="scan'208";a="329600105"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 07:20:06 -0700
+X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
+   d="scan'208";a="582148551"
+Received: from jinggu-mobl1.amr.corp.intel.com (HELO [10.212.30.227]) ([10.212.30.227])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 07:20:05 -0700
+Message-ID: <5984b61f-6a4a-c12a-944d-f4a78bdefc3d@intel.com>
+Date:   Fri, 29 Apr 2022 07:20:21 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v7 12/12] rpmsg: Fix kfree() of static memory on setting
- driver_override
+Subject: Re: [PATCH v3 13/21] x86/virt/tdx: Allocate and set up PAMTs for
+ TDMRs
 Content-Language: en-US
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Stuart Yoder <stuyoder@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-References: <20220419113435.246203-1-krzysztof.kozlowski@linaro.org>
- <20220419113435.246203-13-krzysztof.kozlowski@linaro.org>
- <CGME20220429122942eucas1p1820d0cd17a871d4953bac2b3de1dcdd9@eucas1p1.samsung.com>
- <870885de-33f3-e0ba-4d56-71c3c993ac87@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <870885de-33f3-e0ba-4d56-71c3c993ac87@samsung.com>
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+References: <cover.1649219184.git.kai.huang@intel.com>
+ <ffc2eefdd212a31278978e8bfccd571355db69b0.1649219184.git.kai.huang@intel.com>
+ <c9b17e50-e665-3fc6-be8c-5bb16afa784e@intel.com>
+ <3664ab2a8e0b0fcbb4b048b5c3aa5a6e85f9618a.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <3664ab2a8e0b0fcbb4b048b5c3aa5a6e85f9618a.camel@intel.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/04/2022 14:29, Marek Szyprowski wrote:
-> Hi Krzysztof,
+On 4/29/22 00:46, Kai Huang wrote:
+> On Thu, 2022-04-28 at 10:12 -0700, Dave Hansen wrote:
+>> This is also a good place to note the downsides of using
+>> alloc_contig_pages().
 > 
-> On 19.04.2022 13:34, Krzysztof Kozlowski wrote:
->> The driver_override field from platform driver should not be initialized
->> from static memory (string literal) because the core later kfree() it,
->> for example when driver_override is set via sysfs.
+> For instance:
+> 
+> 	The allocation may fail when memory usage is under pressure.
+
+It's not really memory pressure, though.  The larger the allocation, the
+more likely it is to fail.  The more likely it is that the kernel can't
+free the memory or that if you need 1GB of contiguous memory that
+999.996MB gets freed, but there is one stubborn page left.
+
+alloc_contig_pages() can and will fail.  The only mitigation which is
+guaranteed to avoid this is doing the allocation at boot.  But, you're
+not doing that to avoid wasting memory on every TDX system that doesn't
+use TDX.
+
+A *good* way (although not foolproof) is to launch a TDX VM early in
+boot before memory gets fragmented or consumed.  You might even want to
+recommend this in the documentation.
+
+>>> +/*
+>>> + * Locate the NUMA node containing the start of the given TDMR's first
+>>> + * RAM entry.  The given TDMR may also cover memory in other NUMA nodes.
+>>> + */
 >>
->> Use dedicated helper to set driver_override properly.
+>> Please add a sentence or two on the implications here of what this means
+>> when it happens.  Also, the joining of e820 regions seems like it might
+>> span NUMA nodes.  What prevents that code from just creating one large
+>> e820 area that leads to one large TDMR and horrible NUMA affinity for
+>> these structures?
+> 
+> How about adding:
+> 
+> 	When TDMR is created, it stops spanning at NUAM boundary.
+
+I actually don't know what that means at all.  I was thinking of
+something like this.
+
+/*
+ * Pick a NUMA node on which to allocate this TDMR's metadata.
+ *
+ * This is imprecise since TDMRs are 1GB aligned and NUMA nodes might
+ * not be.  If the TDMR covers more than one node, just use the _first_
+ * one.  This can lead to small areas of off-node metadata for some
+ * memory.
+ */
+
+>>> +static int tdmr_get_nid(struct tdmr_info *tdmr)
+>>> +{
+>>> +	u64 start, end;
+>>> +	int i;
+>>> +
+>>> +	/* Find the first RAM entry covered by the TDMR */
+
+There's something else missing in here.  Why not just do:
+
+	return phys_to_target_node(TDMR_START(tdmr));
+
+This would explain it:
+
+	/*
+	 * The beginning of the TDMR might not point to RAM.
+	 * Find its first RAM address which which its node can
+	 * be found.
+	 */
+
+>>> +	e820_for_each_mem(i, start, end)
+>>> +		if (end > TDMR_START(tdmr))
+>>> +			break;
 >>
->> Fixes: 950a7388f02b ("rpmsg: Turn name service into a stand alone driver")
->> Fixes: c0cdc19f84a4 ("rpmsg: Driver for user space endpoint interface")
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>> Brackets around the big loop, please.
 > 
-> This patch landed recently in linux-next as commit 42cd402b8fd4 ("rpmsg: 
-> Fix kfree() of static memory on setting driver_override"). In my tests I 
-> found that it triggers the following issue during boot of the 
-> DragonBoard410c SBC (arch/arm64/boot/dts/qcom/apq8016-sbc.dtb):
+> OK.
 > 
-> ------------[ cut here ]------------
-> DEBUG_LOCKS_WARN_ON(lock->magic != lock)
-> WARNING: CPU: 1 PID: 8 at kernel/locking/mutex.c:582 
-> __mutex_lock+0x1ec/0x430
-> Modules linked in:
-> CPU: 1 PID: 8 Comm: kworker/u8:0 Not tainted 5.18.0-rc4-next-20220429 #11815
-> Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
-> Workqueue: events_unbound deferred_probe_work_func
-> pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> pc : __mutex_lock+0x1ec/0x430
-> lr : __mutex_lock+0x1ec/0x430
-> ..
-> Call trace:
->   __mutex_lock+0x1ec/0x430
->   mutex_lock_nested+0x38/0x64
->   driver_set_override+0x124/0x150
->   qcom_smd_register_edge+0x2a8/0x4ec
->   qcom_smd_probe+0x54/0x80
->   platform_probe+0x68/0xe0
->   really_probe.part.0+0x9c/0x29c
->   __driver_probe_device+0x98/0x144
->   driver_probe_device+0xac/0x14c
->   __device_attach_driver+0xb8/0x120
->   bus_for_each_drv+0x78/0xd0
->   __device_attach+0xd8/0x180
->   device_initial_probe+0x14/0x20
->   bus_probe_device+0x9c/0xa4
->   deferred_probe_work_func+0x88/0xc4
->   process_one_work+0x288/0x6bc
->   worker_thread+0x248/0x450
->   kthread+0x118/0x11c
->   ret_from_fork+0x10/0x20
-> irq event stamp: 3599
-> hardirqs last  enabled at (3599): [<ffff80000919053c>] 
-> _raw_spin_unlock_irqrestore+0x98/0x9c
-> hardirqs last disabled at (3598): [<ffff800009190ba4>] 
-> _raw_spin_lock_irqsave+0xc0/0xcc
-> softirqs last  enabled at (3554): [<ffff800008010470>] _stext+0x470/0x5e8
-> softirqs last disabled at (3549): [<ffff8000080a4514>] 
-> __irq_exit_rcu+0x180/0x1ac
-> ---[ end trace 0000000000000000 ]---
+>>
+>>> +	/*
+>>> +	 * One TDMR must cover at least one (or partial) RAM entry,
+>>> +	 * otherwise it is kernel bug.  WARN_ON() in this case.
+>>> +	 */
+>>> +	if (WARN_ON_ONCE((start >= end) || start >= TDMR_END(tdmr)))
+>>> +		return 0;
+
+This really means "no RAM found for this TDMR", right?  Can we say that,
+please.
+
+
+>>> +	/*
+>>> +	 * Allocate one chunk of physically contiguous memory for all
+>>> +	 * PAMTs.  This helps minimize the PAMT's use of reserved areas
+>>> +	 * in overlapped TDMRs.
+>>> +	 */
+>>
+>> Ahh, this explains it.  Considering that tdmr_get_pamt_sz() is really
+>> just two lines of code, I'd probably just the helper and open-code it
+>> here.  Then you only have one place to comment on it.
 > 
-> I don't see any direct relation between the $subject and the above log, 
-> but reverting the $subject on top of linux next-20220429 hides/fixes it. 
-> Maybe there is a kind of memory trashing somewhere there and your change 
-> only revealed it?
+> It has a loop and internally calls __tdmr_get_pamt_sz().  It looks doesn't fit
+> if we open-code it here.
+> 
+> How about move this comment to tdmr_get_pamt_sz()?
 
-Thanks for the report. I think the error path of my patch is wrong - I
-should not kfree(rpdev->driver_override) from the rpmsg code. That's the
-only thing I see now...
-
-Could you test following patch and tell if it helps?
-https://pastebin.ubuntu.com/p/rp3q9Z5fXj/
-
------
-
-diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
-index 3e81642238d2..1e2ad944e2ec 100644
---- a/drivers/rpmsg/rpmsg_internal.h
-+++ b/drivers/rpmsg/rpmsg_internal.h
-@@ -102,11 +102,7 @@ static inline int
-rpmsg_ctrldev_register_device(struct rpmsg_device *rpdev)
-        if (ret)
-                return ret;
-
--       ret = rpmsg_register_device(rpdev);
--       if (ret)
--               kfree(rpdev->driver_override);
--
--       return ret;
-+       return rpmsg_register_device(rpdev);
- }
-
- #endif
-diff --git a/drivers/rpmsg/rpmsg_ns.c b/drivers/rpmsg/rpmsg_ns.c
-index 8eb8f328237e..f26078467899 100644
---- a/drivers/rpmsg/rpmsg_ns.c
-+++ b/drivers/rpmsg/rpmsg_ns.c
-@@ -31,11 +31,7 @@ int rpmsg_ns_register_device(struct rpmsg_device *rpdev)
-        rpdev->src = RPMSG_NS_ADDR;
-        rpdev->dst = RPMSG_NS_ADDR;
-
--       ret = rpmsg_register_device(rpdev);
--       if (ret)
--               kfree(rpdev->driver_override);
--
--       return ret;
-+       return rpmsg_register_device(rpdev);
- }
- EXPORT_SYMBOL(rpmsg_ns_register_device);
+I thought about that.  But tdmr_get_pamt_sz() isn't itself doing any
+allocation so it doesn't make a whole lot of logical sense.  This is a
+place where a helper _can_ be removed.  Remove it, please.

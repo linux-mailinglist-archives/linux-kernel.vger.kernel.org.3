@@ -2,95 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7DB515588
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:26:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 248F6515594
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380703AbiD2U3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 16:29:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43470 "EHLO
+        id S1380716AbiD2UcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 16:32:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232546AbiD2U3G (ORCPT
+        with ESMTP id S232546AbiD2UcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 16:29:06 -0400
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BE63C734;
-        Fri, 29 Apr 2022 13:25:47 -0700 (PDT)
-Received: by mail-oi1-f174.google.com with SMTP id r1so9502005oie.4;
-        Fri, 29 Apr 2022 13:25:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TVAQuGhjd9n0kUWsH2GbUvhmDBHPRxTlldbJix1Anrg=;
-        b=CeiDrd4FIXIhhIYXskh88hnDxjSqj5iZkpQkt9LRjm/GZS/XipdyPQsDZ/idWtCdPt
-         IRrrVX0LFBIZcz3BZuILco7jQNkSNz/EGZhwc3j2E5efJ5Yk4TvcDk8m9FLArEqZy5jR
-         5Un0UM8If0PlDdrO6ml/R2ghjAvD7JUcxPY5RcNfY8baoTeMbRGB+6bqRAc7pPlp2MWe
-         hj+62ut8OmwSVA59AZryIIbqe9aSg3FPpBBxsX2CSdNr7TthX7T9DwO9q9y808BXuCi8
-         V9oN7/uJ7m8vngkbR9QjQBpvOHw2qq7vzvSlynw1OwB1dY93CCvsz+HreFwutyRDFgsa
-         T28w==
-X-Gm-Message-State: AOAM532CNjz4tNXCN85Le/JqMpWanm8UsiUx3fI6xUzSCO98rJfrANTV
-        sG2JWP3WOuxUxSjywKpfDg==
-X-Google-Smtp-Source: ABdhPJy2MbnQXUPWfyt7SN9UKSlKCEDbzz/8Ju2fEu5V/tdV0sNBK9tYmlnWcNQUQgRQWENvDvnuTg==
-X-Received: by 2002:a05:6808:f8d:b0:325:1e81:ffe5 with SMTP id o13-20020a0568080f8d00b003251e81ffe5mr551243oiw.253.1651263946535;
-        Fri, 29 Apr 2022 13:25:46 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id h3-20020a056870d24300b000e686d1386fsm3375710oac.9.2022.04.29.13.25.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 13:25:46 -0700 (PDT)
-Received: (nullmailer pid 2808184 invoked by uid 1000);
-        Fri, 29 Apr 2022 20:25:45 -0000
-Date:   Fri, 29 Apr 2022 15:25:45 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sebastian Ene <sebastianene@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        maz@kernel.org, will@kernel.org, qperret@google.com,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v4 0/2] Detect stalls on guest vCPUS
-Message-ID: <YmxJyUqdsZmm8yE2@robh.at.kernel.org>
-References: <20220429083030.3241640-1-sebastianene@google.com>
+        Fri, 29 Apr 2022 16:32:09 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9760CAFADA;
+        Fri, 29 Apr 2022 13:28:50 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 20:28:47 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651264129;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mbp17fyLwlEyz2BeXAlp1mUHkc9KspsBlTpY+NSuEQc=;
+        b=kzsTcxCuv2rWHVevdeL9XJ079k0LuXRDgDKg24dQOF++XUVH0H7pZvngSeiXnKxFP7a/mK
+        viG2Wd0VYkMXDsTdkjhlchtWAJoJX/idq0SIn2w3hF2galPae/hh6QsN/rJikDvJD1kB2S
+        /fhhOCbwzDw3tbN4b8sjikskvXwRU27R2ja00IzbCb3qgDdhsJ1NUr8PiNMtP7CeygzTTS
+        M8zH3kdJ0FAvbQlLZ+LJ/x8MwHLsBvgVBrysqeG64HXTiof84iNKZ/USIoaaOWFHwdwRC9
+        AdFdW6DE9hJmb323z9vdhAMut79qKs/2SH7cHaT8QbMEw9K+qgnQty6rZOKSaw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651264129;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mbp17fyLwlEyz2BeXAlp1mUHkc9KspsBlTpY+NSuEQc=;
+        b=aRCgbWZ9tZwgj2/LAlBDKOUUvO+M6xtqLm8A33Ryo5ZPB5dyk0FvcB18UoNlv0FoZX4+qQ
+        xQ5JILHyRGSdRrBw==
+From:   "tip-bot2 for Ravi Bangoria" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: perf/core] perf/amd/ibs: Use interrupt regs ip for stack unwinding
+Cc:     Dmitry Monakhov <dmtrmonakhov@yandex-team.ru>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ravi Bangoria <ravi.bangoria@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220429051441.14251-1-ravi.bangoria@amd.com>
+References: <20220429051441.14251-1-ravi.bangoria@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220429083030.3241640-1-sebastianene@google.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Message-ID: <165126412736.4207.15087781273067031127.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 08:30:29AM +0000, Sebastian Ene wrote:
-> This adds a mechanism to detect stalls on the guest vCPUS by creating a
-> per CPU hrtimer which periodically 'pets' the host backend driver.
-> On a conventional watchdog-core driver, the userspace is responsible for
-> delivering the 'pet' events by writing to the particular /dev/watchdogN node.
-> In this case we require a strong thread affinity to be able to
-> account for lost time on a per vCPU basis.
-> 
-> This device driver acts as a soft lockup detector by relying on the host
-> backend driver to measure the elapesed time between subsequent 'pet' events.
-> If the elapsed time doesn't match an expected value, the backend driver
-> decides that the guest vCPU is locked and resets the guest. The host
-> backend driver takes into account the time that the guest is not
-> running. The communication with the backend driver is done through MMIO
-> and the register layout of the virtual watchdog is described as part of
-> the backend driver changes.
-> 
-> The host backend driver is implemented as part of:
-> https://chromium-review.googlesource.com/c/chromiumos/platform/crosvm/+/3548817
-> 
-> Changelog v4:
->  - rename the source from vm-wdt.c -> vm-watchdog.c
->  - convert all the error logging calls from pr_* to dev_* calls
->  - rename the DTS node "clock" to "clock-frequency"
+The following commit has been merged into the perf/core branch of tip:
 
-Why do I have a v4 now when the discussion on v3 is not concluded. Give 
-folks some time to respond. We're busy drinking from the firehose.
+Commit-ID:     1989455e0196f59741d81601284a6058acfaf225
+Gitweb:        https://git.kernel.org/tip/1989455e0196f59741d81601284a6058acfaf225
+Author:        Ravi Bangoria <ravi.bangoria@amd.com>
+AuthorDate:    Fri, 29 Apr 2022 10:44:41 +05:30
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Fri, 29 Apr 2022 11:06:28 +02:00
 
-Rob
+perf/amd/ibs: Use interrupt regs ip for stack unwinding
+
+IbsOpRip is recorded when IBS interrupt is triggered. But there is
+a skid from the time IBS interrupt gets triggered to the time the
+interrupt is presented to the core. Meanwhile processor would have
+moved ahead and thus IbsOpRip will be inconsistent with rsp and rbp
+recorded as part of the interrupt regs. This causes issues while
+unwinding stack using the ORC unwinder as it needs consistent rip,
+rsp and rbp. Fix this by using rip from interrupt regs instead of
+IbsOpRip for stack unwinding.
+
+Fixes: ee9f8fce99640 ("x86/unwind: Add the ORC unwinder")
+Reported-by: Dmitry Monakhov <dmtrmonakhov@yandex-team.ru>
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20220429051441.14251-1-ravi.bangoria@amd.com
+---
+ arch/x86/events/amd/ibs.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
+index 9739019..11e8b49 100644
+--- a/arch/x86/events/amd/ibs.c
++++ b/arch/x86/events/amd/ibs.c
+@@ -304,6 +304,16 @@ static int perf_ibs_init(struct perf_event *event)
+ 	hwc->config_base = perf_ibs->msr;
+ 	hwc->config = config;
+ 
++	/*
++	 * rip recorded by IbsOpRip will not be consistent with rsp and rbp
++	 * recorded as part of interrupt regs. Thus we need to use rip from
++	 * interrupt regs while unwinding call stack. Setting _EARLY flag
++	 * makes sure we unwind call-stack before perf sample rip is set to
++	 * IbsOpRip.
++	 */
++	if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN)
++		event->attr.sample_type |= __PERF_SAMPLE_CALLCHAIN_EARLY;
++
+ 	return 0;
+ }
+ 
+@@ -687,6 +697,14 @@ fail:
+ 		data.raw = &raw;
+ 	}
+ 
++	/*
++	 * rip recorded by IbsOpRip will not be consistent with rsp and rbp
++	 * recorded as part of interrupt regs. Thus we need to use rip from
++	 * interrupt regs while unwinding call stack.
++	 */
++	if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN)
++		data.callchain = perf_callchain(event, iregs);
++
+ 	throttle = perf_event_overflow(event, &data, &regs);
+ out:
+ 	if (throttle) {

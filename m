@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 856C5514485
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 10:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DFDA5144A1
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 10:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355939AbiD2Iqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 04:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45270 "EHLO
+        id S1355959AbiD2Iqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 04:46:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355907AbiD2Iqb (ORCPT
+        with ESMTP id S1355924AbiD2Iqf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 04:46:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B7A0C3EAC
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 01:43:14 -0700 (PDT)
+        Fri, 29 Apr 2022 04:46:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 144F4C400A
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 01:43:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651221793;
+        s=mimecast20190719; t=1651221795;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vubZvz77eO0eWEbWF5Lc06RI0x4vo6zT37jaMVflNHg=;
-        b=XiAxzgHB2Dhdc8YX1ld9APi3S4VS01INXXVof4NqCySwhWEn99enr4vmtsvB8fy2HCF5lW
-        xNGPVJutHoSqRavyUv/FgitWGyQnDzCzyxTkONI79ExgZC32XaeWip1Nk67zp6HySvcPc8
-        70T2XFV0AyYOO6neQTVoCHXxe+1Z+6Y=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=q0jhE2KzgkBGMgjTP5+WkaIB21znzdT6itwPcWaa2Oc=;
+        b=cC15IyhnMSRrGXnIQiTb6iTY3dwzngNWQEZ3/g+0wdL1nAZXonQzfC8vE83416cQ+bZ1ld
+        DiXTPfsl5huAC1XtK9mPlF3g1JN/iFKbm6337m7ts5Bb3Xz6JPYKSjriNamSWDXYC9CQhp
+        /I4/gOwTTZhMPETABUAor04/VdscO8E=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-551-iY_5bua_PUiItje3bFtS4Q-1; Fri, 29 Apr 2022 04:43:12 -0400
-X-MC-Unique: iY_5bua_PUiItje3bFtS4Q-1
-Received: by mail-wm1-f71.google.com with SMTP id k16-20020a7bc310000000b0038e6cf00439so2224862wmj.0
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 01:43:11 -0700 (PDT)
+ us-mta-496-eCdzz4NzO8-70lyr6LIjYg-1; Fri, 29 Apr 2022 04:43:13 -0400
+X-MC-Unique: eCdzz4NzO8-70lyr6LIjYg-1
+Received: by mail-wr1-f71.google.com with SMTP id e21-20020adfa455000000b0020ae075cf35so2828438wra.11
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 01:43:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vubZvz77eO0eWEbWF5Lc06RI0x4vo6zT37jaMVflNHg=;
-        b=7X8v58dKXu/C6UIcmm6rR+hCqAQqSmj3/XAOq9mtTbOQGMynp9URwAVhib2luRAPRh
-         sbetmUXOmQdPn2CLkHgM18hraUp6RasPg0ONU61k3dBaFbhYpDh+ts2IYyNrqO6cgFkT
-         4hAaS4IHUe85xkrnuTfdKvg0bpzw1LiJ5dAXg9KnBHdp1cIYhnHlu121P9erlAZj0aa/
-         CpRvXZswDQGWICvbK/pwBC1lB7w5J/KdxrF7u1RbH+81RyymFn+HOXCv1In+rvM+mbMF
-         RPRXmJlcNyLzsjL2jVZT3YBqnlUSU0dbozBrBzPGnPPpDqzFwVbr3SjnXiWGD7LQOFuO
-         xcOg==
-X-Gm-Message-State: AOAM532cjVQoOppFDLdNwrFWkbZoGbaXfq+Wz3njHnamajJJiqGc7kMA
-        pHzK5vIttczzpzqcV9vtgF1htYOd6fsQ0Daeuc6e7JZUnEXwIdI3KJ71/VoBIS3asnD4LaaCfSD
-        YOGqlsbnqekbKpycsEEPIVFIxo9IMiNNGK5xh7htsC1M+5iPixa44gCWhxZGw/AbhZfxx5QF4rJ
-        I=
-X-Received: by 2002:a05:6000:c:b0:20a:df2e:2c38 with SMTP id h12-20020a056000000c00b0020adf2e2c38mr17607758wrx.481.1651221790788;
-        Fri, 29 Apr 2022 01:43:10 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy0tFeN1mlsIlAflE3jz2oXywVPeAUCPmToSm7Z6Ls+OM8AB5Vsy2UusgOW1eoW8qfxPH/hvw==
-X-Received: by 2002:a05:6000:c:b0:20a:df2e:2c38 with SMTP id h12-20020a056000000c00b0020adf2e2c38mr17607737wrx.481.1651221790579;
-        Fri, 29 Apr 2022 01:43:10 -0700 (PDT)
+        bh=q0jhE2KzgkBGMgjTP5+WkaIB21znzdT6itwPcWaa2Oc=;
+        b=UaZPJJo+EG6OMI7Cw6w/8ec6FB0eczXGXgCesRurS2+g/NmyxqOcLWMyZlg9Ns7EGU
+         lktotNejOS5QPDdq5JLVBytjIekB+jQKZVxatDymL9YgKNl0zngL8VGcyMT2IY4a6cDp
+         gcI8kSP6OvZhSjhZQrOWm/n1uaDR0zD1qPrL8+sLO7oQOJIxYPd0+6+O/QcFTY2x9MO4
+         oOJlhva73Bc9XGJZmEYOZ8lugcjnC3bH5ycJsctJl2twZhm/cPbTnwW6x0cc6AxofkFd
+         Ajss7fDvAbeNTVdvTYt1stBBNVP5VYrIwzRle5YfTj7xLDn3lODZFGS7lOk2olQvYIOF
+         cX7g==
+X-Gm-Message-State: AOAM5334QoXPJiV4AU/Q7HW+lM1dYg2tetdvPkZx+AXws8WAf+CzkeAL
+        f104O+MNizP1qpeq78TsXHj+RFR2ESFO/+fMVYI523V8chSjzdUjAQFT3giHJJZw3oHDcSoeVvE
+        T5RnjjULacGl7p117LqwFtM61V0PvKbUXwE9XQCFKjmWC5gRWGhTpvgJjFzzZKZ0ncWqhb3KLQ4
+        s=
+X-Received: by 2002:adf:f0c6:0:b0:20a:d31b:6 with SMTP id x6-20020adff0c6000000b0020ad31b0006mr24327956wro.162.1651221792197;
+        Fri, 29 Apr 2022 01:43:12 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwiDzTMN+tsLyAkQvCYvCbzjZUOqN+LljnyCVjIFyMHvW0HFddAhKjNR9BnBHuyZkt2O2lUoA==
+X-Received: by 2002:adf:f0c6:0:b0:20a:d31b:6 with SMTP id x6-20020adff0c6000000b0020ad31b0006mr24327932wro.162.1651221791918;
+        Fri, 29 Apr 2022 01:43:11 -0700 (PDT)
 Received: from minerva.home ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id f7-20020a05600c4e8700b00393f1393abfsm7199256wmq.41.2022.04.29.01.43.09
+        by smtp.gmail.com with ESMTPSA id f7-20020a05600c4e8700b00393f1393abfsm7199256wmq.41.2022.04.29.01.43.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 01:43:10 -0700 (PDT)
+        Fri, 29 Apr 2022 01:43:11 -0700 (PDT)
 From:   Javier Martinez Canillas <javierm@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     dri-devel@lists.freedesktop.org,
@@ -63,11 +63,11 @@ Cc:     dri-devel@lists.freedesktop.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thomas Zimmermann <tzimmermann@suse.de>,
         Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>
-Subject: [RFC PATCH v4 03/11] drm/simpledrm: Set the DRM_FIRMWARE capability
-Date:   Fri, 29 Apr 2022 10:42:45 +0200
-Message-Id: <20220429084253.1085911-4-javierm@redhat.com>
+        Borislav Petkov <bp@suse.de>, Johan Hovold <johan@kernel.org>,
+        Miaoqian Lin <linmq006@gmail.com>
+Subject: [RFC PATCH v4 04/11] firmware: sysfb: Make sysfb_create_simplefb() return a pdev pointer
+Date:   Fri, 29 Apr 2022 10:42:46 +0200
+Message-Id: <20220429084253.1085911-5-javierm@redhat.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220429084253.1085911-1-javierm@redhat.com>
 References: <20220429084253.1085911-1-javierm@redhat.com>
@@ -82,31 +82,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DRIVER_FIRMWARE flag denotes that a DRM driver uses a framebuffer
-that was initialized and provided by the system firmware for scanout,
-which is the case for simpledrm.
+This function just returned 0 on success or an errno code on error, but it
+could be useful for sysfb_init() callers to have a pointer to the device.
 
 Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+
 ---
 
-(no changes since v1)
+Changes in v4:
+- Make sysfb_disable() to also attempt to unregister a device.
 
- drivers/gpu/drm/tiny/simpledrm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in v3:
+- Add Thomas Zimmermann's Reviewed-by tag to patch #1.
 
-diff --git a/drivers/gpu/drm/tiny/simpledrm.c b/drivers/gpu/drm/tiny/simpledrm.c
-index f5b8e864a5cd..f039419d4d36 100644
---- a/drivers/gpu/drm/tiny/simpledrm.c
-+++ b/drivers/gpu/drm/tiny/simpledrm.c
-@@ -878,7 +878,7 @@ static struct drm_driver simpledrm_driver = {
- 	.date			= DRIVER_DATE,
- 	.major			= DRIVER_MAJOR,
- 	.minor			= DRIVER_MINOR,
--	.driver_features	= DRIVER_ATOMIC | DRIVER_GEM | DRIVER_MODESET,
-+	.driver_features	= DRIVER_ATOMIC | DRIVER_GEM | DRIVER_MODESET | DRIVER_FIRMWARE,
- 	.fops			= &simpledrm_fops,
- };
+Changes in v2:
+- Rebase on top of latest drm-misc-next and fix conflicts (Daniel Vetter).
+
+ drivers/firmware/sysfb.c          |  4 ++--
+ drivers/firmware/sysfb_simplefb.c | 16 ++++++++--------
+ include/linux/sysfb.h             | 10 +++++-----
+ 3 files changed, 15 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/firmware/sysfb.c b/drivers/firmware/sysfb.c
+index 2bfbb05f7d89..b032f40a92de 100644
+--- a/drivers/firmware/sysfb.c
++++ b/drivers/firmware/sysfb.c
+@@ -46,8 +46,8 @@ static __init int sysfb_init(void)
+ 	/* try to create a simple-framebuffer device */
+ 	compatible = sysfb_parse_mode(si, &mode);
+ 	if (compatible) {
+-		ret = sysfb_create_simplefb(si, &mode);
+-		if (!ret)
++		pd = sysfb_create_simplefb(si, &mode);
++		if (!IS_ERR(pd))
+ 			return 0;
+ 	}
  
+diff --git a/drivers/firmware/sysfb_simplefb.c b/drivers/firmware/sysfb_simplefb.c
+index bda8712bfd8c..a353e27f83f5 100644
+--- a/drivers/firmware/sysfb_simplefb.c
++++ b/drivers/firmware/sysfb_simplefb.c
+@@ -57,8 +57,8 @@ __init bool sysfb_parse_mode(const struct screen_info *si,
+ 	return false;
+ }
+ 
+-__init int sysfb_create_simplefb(const struct screen_info *si,
+-				 const struct simplefb_platform_data *mode)
++__init struct platform_device *sysfb_create_simplefb(const struct screen_info *si,
++						     const struct simplefb_platform_data *mode)
+ {
+ 	struct platform_device *pd;
+ 	struct resource res;
+@@ -76,7 +76,7 @@ __init int sysfb_create_simplefb(const struct screen_info *si,
+ 		base |= (u64)si->ext_lfb_base << 32;
+ 	if (!base || (u64)(resource_size_t)base != base) {
+ 		printk(KERN_DEBUG "sysfb: inaccessible VRAM base\n");
+-		return -EINVAL;
++		return ERR_PTR(-EINVAL);
+ 	}
+ 
+ 	/*
+@@ -93,7 +93,7 @@ __init int sysfb_create_simplefb(const struct screen_info *si,
+ 	length = mode->height * mode->stride;
+ 	if (length > size) {
+ 		printk(KERN_WARNING "sysfb: VRAM smaller than advertised\n");
+-		return -EINVAL;
++		return ERR_PTR(-EINVAL);
+ 	}
+ 	length = PAGE_ALIGN(length);
+ 
+@@ -104,11 +104,11 @@ __init int sysfb_create_simplefb(const struct screen_info *si,
+ 	res.start = base;
+ 	res.end = res.start + length - 1;
+ 	if (res.end <= res.start)
+-		return -EINVAL;
++		return ERR_PTR(-EINVAL);
+ 
+ 	pd = platform_device_alloc("simple-framebuffer", 0);
+ 	if (!pd)
+-		return -ENOMEM;
++		return ERR_PTR(-ENOMEM);
+ 
+ 	sysfb_apply_efi_quirks(pd);
+ 
+@@ -124,10 +124,10 @@ __init int sysfb_create_simplefb(const struct screen_info *si,
+ 	if (ret)
+ 		goto err_put_device;
+ 
+-	return 0;
++	return pd;
+ 
+ err_put_device:
+ 	platform_device_put(pd);
+ 
+-	return ret;
++	return ERR_PTR(ret);
+ }
+diff --git a/include/linux/sysfb.h b/include/linux/sysfb.h
+index b0dcfa26d07b..708152e9037b 100644
+--- a/include/linux/sysfb.h
++++ b/include/linux/sysfb.h
+@@ -72,8 +72,8 @@ static inline void sysfb_apply_efi_quirks(struct platform_device *pd)
+ 
+ bool sysfb_parse_mode(const struct screen_info *si,
+ 		      struct simplefb_platform_data *mode);
+-int sysfb_create_simplefb(const struct screen_info *si,
+-			  const struct simplefb_platform_data *mode);
++struct platform_device *sysfb_create_simplefb(const struct screen_info *si,
++					      const struct simplefb_platform_data *mode);
+ 
+ #else /* CONFIG_SYSFB_SIMPLE */
+ 
+@@ -83,10 +83,10 @@ static inline bool sysfb_parse_mode(const struct screen_info *si,
+ 	return false;
+ }
+ 
+-static inline int sysfb_create_simplefb(const struct screen_info *si,
+-					 const struct simplefb_platform_data *mode)
++static inline struct platform_device *sysfb_create_simplefb(const struct screen_info *si,
++							    const struct simplefb_platform_data *mode)
+ {
+-	return -EINVAL;
++	return ERR_PTR(-EINVAL);
+ }
+ 
+ #endif /* CONFIG_SYSFB_SIMPLE */
 -- 
 2.35.1
 

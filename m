@@ -2,76 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDB90514CB6
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D7D9514CB8
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:24:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377209AbiD2O1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 10:27:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44044 "EHLO
+        id S1377227AbiD2O2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 10:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376827AbiD2O12 (ORCPT
+        with ESMTP id S1350249AbiD2O17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 10:27:28 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82BF891356;
-        Fri, 29 Apr 2022 07:24:10 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1nkRXR-001viz-GH; Fri, 29 Apr 2022 16:24:05 +0200
-Received: from p5b13aa55.dip0.t-ipconnect.de ([91.19.170.85] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_128_GCM_SHA256
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1nkRXR-000gNQ-9t; Fri, 29 Apr 2022 16:24:05 +0200
-Message-ID: <11021433-66c0-3c56-42bd-207a5ae8d267@physik.fu-berlin.de>
-Date:   Fri, 29 Apr 2022 16:24:04 +0200
+        Fri, 29 Apr 2022 10:27:59 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD25F91363
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:24:40 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id t11-20020a17090ad50b00b001d95bf21996so10655049pju.2
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:24:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7tC/JKOk9L0c4P3431GOxph3zjvk5J8dJFmkqVAnJxc=;
+        b=F0+Y3mMT0AqdA2ZfjnbeDVfDmZPiiSQXRHQCLASaN7eLfv15TfF0iLNRdE6IOoeC/g
+         6GkXEEBq0PSKDjB2LJstij0jmH99SMZXxtjVbtiDjgY2vdjLCU+EE5SoMc5FV4TR9tG5
+         ehRV+g9B5kQNJtwCJEoRKDuSMT/SV+oYmWMEAUsVtFJnPTYB5/qUX4MBdp8WlNfn0fyB
+         3ld1a7DlYAa61TIpVQunTEelniygDy9n7MOGhFEb2bhWuoZunIZEfAgiXofhJWVX062S
+         EB3po2+BTr4QWUV/PcCKFE/2uDBMP2pS/prgXU/+a7qr9JylszfvPmOveqX8gGS0sCOs
+         qOzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7tC/JKOk9L0c4P3431GOxph3zjvk5J8dJFmkqVAnJxc=;
+        b=sH3b0EJNW1aoHrPSuUMeDG0WfzXKGPo0J61LawmjcF3o0i9+v90ebcP3UU3V5yEP+v
+         GGc1GvadKRRPtmWNbsRW5WWgc1qTb75H88mNv1aK71lsKaKoFhG7N30x48CplsWdPfA7
+         BbnbjgeeQGixBwQxH/H4Bvwx60baQJXkmOKXZ0UiIgUJPkeaiUjQ1bS76n5NnZtATQ5H
+         vMIciW2t/qnwGZiZFacFROIYAKe+A4v8Fmwzs9AXsnbTHhUe8CW45v4adtKgPQFL76S0
+         sb5pu4ulOH8OEQw/LcVTZUZssafqjMd6TwoBzWfUGjvihvOjYU/sOO/4HOytw6BFe3in
+         bVWA==
+X-Gm-Message-State: AOAM532u81h+ejfu3jzNyNgzNa4w9KfPIp57JkLHkm09czxZHBYHmRQX
+        Ca/+Bsoex6R3kH9DScZJtwN0Yg==
+X-Google-Smtp-Source: ABdhPJwedY/+Y+SN/KDf33mBRLNyBEObEHex1x/IqkMk86Yt4Fukf5wpBrFB7Bnr5BKAbNwLSzjrUA==
+X-Received: by 2002:a17:902:e748:b0:15c:e3b9:bba3 with SMTP id p8-20020a170902e74800b0015ce3b9bba3mr33249235plf.139.1651242279947;
+        Fri, 29 Apr 2022 07:24:39 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id g17-20020a625211000000b005056a6313a7sm3168604pfb.87.2022.04.29.07.24.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 07:24:38 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 14:24:35 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
+        Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>
+Subject: Re: [PATCH] KVM: x86/mmu: Do not create SPTEs for GFNs that exceed
+ host.MAXPHYADDR
+Message-ID: <Ymv1I5ixX1+k8Nst@google.com>
+References: <20220428233416.2446833-1-seanjc@google.com>
+ <337332ca-835c-087c-c99b-92c35ea8dcd3@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v3] sh: avoid using IRQ0 on SH3/4
-Content-Language: en-US
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>, Rich Felker <dalias@libc.org>,
-        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <2584ba18-9653-9310-efc1-8b3b3e221eea@omp.ru>
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-In-Reply-To: <2584ba18-9653-9310-efc1-8b3b3e221eea@omp.ru>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 91.19.170.85
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <337332ca-835c-087c-c99b-92c35ea8dcd3@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sergey!
-
-On 4/27/22 20:46, Sergey Shtylyov wrote:
-> Using IRQ0 by the platform devices is going to be disallowed soon (see [1])
-> and even now, when IRQ0 is about to be returned by platfrom_get_irq(), you
-> see a big warning.  The code supporting SH3/4 SoCs maps the IRQ #s starting
-> at 0 -- modify that code to start the IRQ #s from 16 instead.
+On Fri, Apr 29, 2022, Paolo Bonzini wrote:
+> On 4/29/22 01:34, Sean Christopherson wrote:
 > 
-> The patch should mostly affect the AP-SH4A-3A/AP-SH4AD-0A boards as they
-> indeed use IRQ0 for the SMSC911x compatible Ethernet chip...
+> > +static inline gfn_t kvm_mmu_max_gfn_host(void)
+> > +{
+> > +	/*
+> > +	 * Disallow SPTEs (via memslots or cached MMIO) whose gfn would exceed
+> > +	 * host.MAXPHYADDR.  Assuming KVM is running on bare metal, guest
+> > +	 * accesses beyond host.MAXPHYADDR will hit a #PF(RSVD) and never hit
+> > +	 * an EPT Violation/Misconfig / #NPF, and so KVM will never install a
+> > +	 * SPTE for such addresses.  That doesn't hold true if KVM is running
+> > +	 * as a VM itself, e.g. if the MAXPHYADDR KVM sees is less than
+> > +	 * hardware's real MAXPHYADDR, but since KVM can't honor such behavior
+> > +	 * on bare metal, disallow it entirely to simplify e.g. the TDP MMU.
+> > +	 */
+> > +	return (1ULL << (shadow_phys_bits - PAGE_SHIFT)) - 1;
+> 
+> The host.MAXPHYADDR however does not matter if EPT/NPT is not in use, because
+> the shadow paging fault path can accept any gfn.
 
-Maybe try getting it landed through Andrew Morton's tree?
+... 
 
-Adrian
+> diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
+> index e6cae6f22683..dba275d323a7 100644
+> --- a/arch/x86/kvm/mmu.h
+> +++ b/arch/x86/kvm/mmu.h
+> @@ -65,6 +65,30 @@ static __always_inline u64 rsvd_bits(int s, int e)
+>  	return ((2ULL << (e - s)) - 1) << s;
+>  }
+> +/*
+> + * The number of non-reserved physical address bits irrespective of features
+> + * that repurpose legal bits, e.g. MKTME.
+> + */
+> +extern u8 __read_mostly shadow_phys_bits;
+> +
+> +static inline gfn_t kvm_mmu_max_gfn(void)
+> +{
+> +	/*
+> +	 * Note that this uses the host MAXPHYADDR, not the guest's.
+> +	 * EPT/NPT cannot support GPAs that would exceed host.MAXPHYADDR;
+> +	 * assuming KVM is running on bare metal, guest accesses beyond
+> +	 * host.MAXPHYADDR will hit a #PF(RSVD) and never cause a vmexit
+> +	 * (either EPT Violation/Misconfig or #NPF), and so KVM will never
+> +	 * install a SPTE for such addresses.  If KVM is running as a VM
+> +	 * itself, on the other hand, it might see a MAXPHYADDR that is less
+> +	 * than hardware's real MAXPHYADDR.  Using the host MAXPHYADDR
+> +	 * disallows such SPTEs entirely and simplifies the TDP MMU.
+> +	 */
+> +	int max_gpa_bits = likely(tdp_enabled) ? shadow_phys_bits : 52;
 
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+I don't love the divergent memslot behavior, but it's technically correct, so I
+can't really argue.  Do we want to "officially" document the memslot behavior?
 
+> +
+> +	return (1ULL << (max_gpa_bits - PAGE_SHIFT)) - 1;
+> +}
+> +
+>  void kvm_mmu_set_mmio_spte_mask(u64 mmio_value, u64 mmio_mask, u64 access_mask);
+>  void kvm_mmu_set_ept_masks(bool has_ad_bits, bool has_exec_only);

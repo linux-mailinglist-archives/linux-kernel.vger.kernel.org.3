@@ -2,133 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8661514967
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:31:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F318F514975
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:34:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359271AbiD2MfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 08:35:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54660 "EHLO
+        id S1359209AbiD2Mht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 08:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359220AbiD2MfI (ORCPT
+        with ESMTP id S242740AbiD2Mhr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 08:35:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00986C90CA;
-        Fri, 29 Apr 2022 05:31:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 92897621B7;
-        Fri, 29 Apr 2022 12:31:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EE14C385B4;
-        Fri, 29 Apr 2022 12:31:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651235509;
-        bh=SR30SRUGpIrkdXGfxFhbhtwcmEyED8PObTGdvWsRM14=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y3ixgwhgWJLEfARoa3da3astT6U/FbRks8z3kgcvOsg79q+rLvyJ2qKg2H5JdxeE+
-         gYDIMnLGHHZEx3y4taU3uC8mQSMtrItRW5MlajvOvP4ts/bsdxGqnksVcGEQxKgQ4K
-         Qg7Xiwr9/Ajh5PA3IZZQEVDoV1oqbS8W2KnMOAnOIa2hfycJ6qzAAkN01oCCOYMzeD
-         xH3LSsaTufCVdkEDblV1LZyWTDNkCcOnT3rXGylReSPEutZjHgVavYiDgkRKRZSv2y
-         NSiLA1QuyxJ/naJb/PWVs284Rr0GzvCPJHIrunzxbPQtGwtPP7cUBBCh/GBowaiszc
-         741KnnTeixmgw==
-From:   matthias.bgg@kernel.org
-To:     mturquette@baylibre.com, sboyd@kernel.org
-Cc:     allen-kh.cheng@mediatek.com, weiyi.lu@mediatek.com,
-        chun-jie.chen@mediatek.com, linux-kernel@vger.kernel.org,
-        ikjn@chromium.org, miles.chen@mediatek.com, robh+dt@kernel.org,
-        linux-mediatek@lists.infradead.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        angelogioacchino.delregno@collabora.com,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Subject: [PATCH v2 2/2] clk: mediatek: Delete MT8192 msdc gate
-Date:   Fri, 29 Apr 2022 14:31:32 +0200
-Message-Id: <20220429123133.28869-3-matthias.bgg@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220429123133.28869-1-matthias.bgg@kernel.org>
-References: <20220429123133.28869-1-matthias.bgg@kernel.org>
+        Fri, 29 Apr 2022 08:37:47 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FB0C90FB;
+        Fri, 29 Apr 2022 05:34:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651235669; x=1682771669;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+xWYa8I50q7FRALTpyXM0YXJgGA7IXSjZNqvAviJjnY=;
+  b=A0m2nJteuHp4JQd3msz6oNWNUVyLTawqhtlK3LG/MNGA8BXjxDxKcTqK
+   5gahTICbNIKK2s6BGvUPLBtiys6psfID+SCDkcsSIi1qoeenpGnbKWbjP
+   MomfEGHomQDY1TVlfRYfYGBcniuCkhRKf/Dt/FjuuJW9NAOc1LUTnyZQM
+   TOXTrQKYKY4mZIDCJj6PUMk+Ld49HHLhxFIjtR59Kyrju76wBb150KrZx
+   16QoKSFZYjqEUXOP6Rdgn6aDlemhlAnEmOKVvFwqVJgI34BpZjTF280YQ
+   MOkcXPviIaT0Hlbc3QjLNOvyLu84RpRvJnGxVE6Jg8xML+GvZcr3a8I9y
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="266449631"
+X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
+   d="scan'208";a="266449631"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 05:34:28 -0700
+X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
+   d="scan'208";a="662328794"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 05:34:26 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nkPpH-009hyp-Hb;
+        Fri, 29 Apr 2022 15:34:23 +0300
+Date:   Fri, 29 Apr 2022 15:34:23 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Paul Gortmaker <paul.gortmaker@windriver.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH 0/4] platform: allow ATOM PMC code to be optional
+Message-ID: <YmvbT9D6v67S+svB@smile.fi.intel.com>
+References: <20220428062430.31010-1-paul.gortmaker@windriver.com>
+ <YmpoeJtFNSyCq1QL@smile.fi.intel.com>
+ <20220428181131.GG12977@windriver.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220428181131.GG12977@windriver.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthias Brugger <matthias.bgg@gmail.com>
+On Thu, Apr 28, 2022 at 02:11:31PM -0400, Paul Gortmaker wrote:
+> [Re: [PATCH 0/4] platform: allow ATOM PMC code to be optional] On 28/04/2022 (Thu 13:12) Andy Shevchenko wrote:
+> > On Thu, Apr 28, 2022 at 02:24:26AM -0400, Paul Gortmaker wrote:
+> > > A few months back I was doing a test build for "defconfig-like" COTS
+> > > hardware and happened to notice some pmc-atom stuff being built.  Fine,
+> > > I thought - the defconfig isn't minimal - we all know that - what Kconfig
+> > > do I use to turn that off?  Well, imagine my surprise when I found out
+> > > you couldn't turn it [Atom Power Management Controller] code off!
+> > 
+> > Turning it off on BayTrail and CherryTrail devices will be devastating
+> > to the users' experience. And plenty of cheap tablets are exactly made
+> > on that SoCs.
+> 
+> Sure, but I could say the same thing for DRM_I915 and millions of
+> desktop PC users - yet we still give all the other non i915 users the
+> option to be able to turn it off.  Pick any other Kconfig value you like
+> and the same thing holds true.
+> 
+> Just so we are on the same page - I want to give the option to let
+> people opt out, and at the same time not break existing users. If you
+> think the defconfig default of being off is too risky, then I am OK with
+> that and we can just start by exposing the option with "default y".
+> 
+> So, to that end - are you OK with exposing the Kconfig so people can
+> opt out, or are you 100% against exposing the Kconfig at all?  That
+> obviously has the most impact on what I do or don't do next.
+> 
+> > > Normally we all agree to not use "default y" unless unavoidable, but
+> > > somehow this was added as "def_bool y" which is even worse ; you can
+> > > see the Kconfig setting but there is *no* way you can turn it off.
+> > > 
+> > > After investigating, I found no reason why the atom code couldn't be
+> > > opt-out with just minor changes that the original addition overlooked.
+> > > 
+> > > And so this series addreses that.  I tried to be sensitive to not
+> > > break any existing configs in the process, but the defconfig will
+> > > now intentionally be different and exclude this atom specific code.
+> > > 
+> > > Using a defconfig on today's linux-next, here is the delta summary:
+> > > 
+> > > $ ./scripts/bloat-o-meter -c ../pmc-atom-pre/vmlinux ../pmc-atom-post/vmlinux|grep add/remove
+> > > add/remove: 0/410 grow/shrink: 0/7 up/down: 0/-47659 (-47659)
+> > > add/remove: 0/105 grow/shrink: 0/1 up/down: 0/-6848 (-6848)
+> > > add/remove: 0/56 grow/shrink: 0/1 up/down: 0/-10155 (-10155)
+> > > 
+> > > $ ./scripts/bloat-o-meter -c ../pmc-atom-pre/vmlinux ../pmc-atom-post/vmlinux|grep Total
+> > > Total: Before=13626994, After=13579335, chg -0.35%
+> > > Total: Before=3572137, After=3565289, chg -0.19%
+> > > Total: Before=1235335, After=1225180, chg -0.82%
+> > > 
+> > > It is hard to reclaim anything against the inevitable growth in
+> > > footprint, so I'd say we should be glad to take whatever we can.
+> > > 
+> > > Boot tested defconfig on today's linux-next on older non-atom COTS.
+> > 
+> > I believe this needs an extensive test done by Hans who possesses a lot of
+> > problematic devices that require that module to be present.
+> 
+> Input from Hans is 100% welcome - but maybe again if we just consider
+> using "default y" even though it isn't typical - then your concerns are
+> not as extensive?
+> 
+> > Note to all your patches, please, use --cc option instead of putting noisy
+> > lines in the each of the commit messages. For myself I created a "smart"
+> > script [1] to avoid bothering with that. Feel free to use, modify, send PRs
+> > back to improve.
+> 
+> Thanks - I'm used to explicitly capturing who was looped into the
+> discussion.  But I hadn't considered how things have evolved so that in
+> certain circumstances that might be considered just noise with the wider
+> audience we see in the typical patch sets of today.
+> 
+> Assuming you are OK with exposing the option as a choice, I'll make
+> things "default y" in v2 to ensure we've minimized risk to existing
+> users who rely on it, but wait a while for others like Hans to put in
+> their input.  I'll probably follow up in the individual patches to ask
+> for clarification if I'm not clear on what you had in mind.
 
-The msdc gate is part of the MMC driver. Delete the not used code.
+My main concern is the existing users' experience. Opting-out the option is a
+good to have, I'm not against it.
 
-Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
----
-
-Changes in v2:
-- add Reviewed-by tag
-
- drivers/clk/mediatek/clk-mt8192-msdc.c | 21 ---------------------
- 1 file changed, 21 deletions(-)
-
-diff --git a/drivers/clk/mediatek/clk-mt8192-msdc.c b/drivers/clk/mediatek/clk-mt8192-msdc.c
-index 87c3b79b79cf..635f7a0b629a 100644
---- a/drivers/clk/mediatek/clk-mt8192-msdc.c
-+++ b/drivers/clk/mediatek/clk-mt8192-msdc.c
-@@ -12,28 +12,15 @@
- 
- #include <dt-bindings/clock/mt8192-clk.h>
- 
--static const struct mtk_gate_regs msdc_cg_regs = {
--	.set_ofs = 0xb4,
--	.clr_ofs = 0xb4,
--	.sta_ofs = 0xb4,
--};
--
- static const struct mtk_gate_regs msdc_top_cg_regs = {
- 	.set_ofs = 0x0,
- 	.clr_ofs = 0x0,
- 	.sta_ofs = 0x0,
- };
- 
--#define GATE_MSDC(_id, _name, _parent, _shift)	\
--	GATE_MTK(_id, _name, _parent, &msdc_cg_regs, _shift, &mtk_clk_gate_ops_no_setclr_inv)
--
- #define GATE_MSDC_TOP(_id, _name, _parent, _shift)	\
- 	GATE_MTK(_id, _name, _parent, &msdc_top_cg_regs, _shift, &mtk_clk_gate_ops_no_setclr_inv)
- 
--static const struct mtk_gate msdc_clks[] = {
--	GATE_MSDC(CLK_MSDC_AXI_WRAP, "msdc_axi_wrap", "axi_sel", 22),
--};
--
- static const struct mtk_gate msdc_top_clks[] = {
- 	GATE_MSDC_TOP(CLK_MSDC_TOP_AES_0P, "msdc_top_aes_0p", "aes_msdcfde_sel", 0),
- 	GATE_MSDC_TOP(CLK_MSDC_TOP_SRC_0P, "msdc_top_src_0p", "infra_msdc0_src", 1),
-@@ -52,11 +39,6 @@ static const struct mtk_gate msdc_top_clks[] = {
- 	GATE_MSDC_TOP(CLK_MSDC_TOP_AHB2AXI_BRG_AXI, "msdc_top_ahb2axi_brg_axi", "axi_sel", 14),
- };
- 
--static const struct mtk_clk_desc msdc_desc = {
--	.clks = msdc_clks,
--	.num_clks = ARRAY_SIZE(msdc_clks),
--};
--
- static const struct mtk_clk_desc msdc_top_desc = {
- 	.clks = msdc_top_clks,
- 	.num_clks = ARRAY_SIZE(msdc_top_clks),
-@@ -64,9 +46,6 @@ static const struct mtk_clk_desc msdc_top_desc = {
- 
- static const struct of_device_id of_match_clk_mt8192_msdc[] = {
- 	{
--		.compatible = "mediatek,mt8192-msdc",
--		.data = &msdc_desc,
--	}, {
- 		.compatible = "mediatek,mt8192-msdc_top",
- 		.data = &msdc_top_desc,
- 	}, {
 -- 
-2.34.1
+With Best Regards,
+Andy Shevchenko
+
 

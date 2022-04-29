@@ -2,464 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A515143FC
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 10:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A062F5143FE
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 10:21:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355623AbiD2IX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 04:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37894 "EHLO
+        id S1355640AbiD2IYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 04:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235676AbiD2IXZ (ORCPT
+        with ESMTP id S1355670AbiD2IXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 04:23:25 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18403251
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 01:20:05 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id bg25so4200065wmb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 01:20:05 -0700 (PDT)
+        Fri, 29 Apr 2022 04:23:52 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63526D8F;
+        Fri, 29 Apr 2022 01:20:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1651220434; x=1682756434;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=YEy66dqIvVt554CXlGGwT02HRskcbYjqiaqCrLgSDXc=;
+  b=uDewBHxbLzwQK287LD7poh/flhxdSfXrQimDI/+EDeFt/qqA7TxuFI3b
+   79tLQ0aoYCLxQvoWJuxzXCpsOSXR8Dx4hhD65v09DOjRiI1cXcClsPqtK
+   33nHDmXuWT/nCii/LYL7EqZipBwEXq0pQAHW1992MgKoWooeZThTxJMmb
+   FOLtXrM5sZKnOTK8UimQqVK44Yrj4k1nivwUwXEIc7ugqGvTn28xgH5fR
+   1gwF1lybZ1EpNZ7Fme0+O/h90aUUq+8idzchPom8NHrWjnfkUgh+5R5xS
+   b0Lit8oM3ugVH5VeeYA/0dgKcKIseoSO3hOuPBYa/OVXBq41hgEor8A6P
+   A==;
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="157267357"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Apr 2022 01:20:31 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 29 Apr 2022 01:20:30 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
+ Transport; Fri, 29 Apr 2022 01:20:30 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OjTtOumaZa9lVcgbQ7+C7XfAEce/yZgiCA9GklrwUcUaKFuTzWZvOjM9/wHVTyioOBsR/kq8ssQVNpm08Rtq0bIS8GjzpsWaRNA7s/7PCDMBES4KKwSzWB/x66Wr9F31All49+LA2Lobly0Z7P7GU6I8LVuFCXQe92qhQ/L4op1whGIaCc0s48icjhoSK8G/8LMEo7ZZPNU6UqQB77x92mAUjPVPveK3Ya/BGR6iFqN3oRioFmUXG4o/+z8kShUu7Hz/cg3p5FJ1zI47u5JCXRNCVzqsEqq3vTHcTqPOSPCu0L+IlYHdN8cYU35XKUEaVgx/YBjC6mvLL1lwQmI9DQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YEy66dqIvVt554CXlGGwT02HRskcbYjqiaqCrLgSDXc=;
+ b=H5iNMElF1T7Zk0LSZKOtMDRjw7nOc2X9DyAboKPnEmXtTDdBpOg2J2ZYzFtFP8Q/qk9LhVy8Tgp08KFAl9s2QgLCi0tr9FnbpkUwvnKQwgPqK858q043TzjbIUdzLi1YKIaB66lRpENsFcr3o9Cl65lBh0qb+dXJ6XeaIlfZ8TmsX5kWDR6w8Ez3Xp77euwfpJ2XJ7O1ncVtPB9J+th1baTUWqs1n57Ztd9p0U6vathUNp6CP19p9h+g5TasrF+827YvTsbsXlnGeZkZrWn/4O+pqoBd/VZiCCQUseP875DLDyF51Uqy+FYWfvx7wpr/bsMbVFWEgO2ZLxDZsMkMrQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=mIiWrSDnEr769MRWXtiqMLC4ddlzh7URqpu+ue7XBoo=;
-        b=T9a+FZHHCyRSkK+3dGkHc7v/L6Sq+5KSTL2T14AwBLF5UweUCRz4K2C/5rKaNtfujl
-         Z5hFrYxeX83hJV7kaEmkNL9vEGtYxhvi12JeT3m7oPo6rTeUETI0lYNYU53lzKN8x+iv
-         qKEGy5TPcjiK9SveUlHUle/HO0u8NmCh1zUkiy1QsZ3cks+Gj6cvLX+mDtvOeWBN3WR/
-         yA2CZ5sOydULm12SXnb0j5HI3DrmJQb4SCBScoVoAh5bce1QJGYHePmLbxtBIFMjk07Z
-         jKGjaqqQIp9mjkxKMxEuK5c9uy4kHD6Ek2O3oNFmqBs9fJ0YMl8l9cdXC1/gwuU356Cb
-         +dnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=mIiWrSDnEr769MRWXtiqMLC4ddlzh7URqpu+ue7XBoo=;
-        b=8IdSmbA3WDvbVfrBlJPFjSVfcMeMtHIWSzrJT3xvUCMKSBXdNU9VIaVjxbw9QhoSeY
-         sNEbZwFzxluZndjWOgSvtnBXKWb+rqq7W1kY3qV4s4TEeHwJ7NJsruun6WmA9/HgQ/T0
-         tji4bXwnSx9WXAGITl6GvqPcUmzaO/2hRl0Z9IDv7wrJAVL0KDs0KjFjZ8YsPyCMiqcL
-         DFkrG23V3VsdGn1M3hKDY4V2vTn0zEyBQdVmGN7fqX9FBXwVUHfK8ShCajig2CXunAqT
-         VfOCtQow0xiCq5BNifpfej4C637DZPg1RI19Gc0lMa0yMPwVDa0usNst/WxN8Bo+ZZQw
-         GeSA==
-X-Gm-Message-State: AOAM531E/OmODvvxIIBFzt1PMt2SwMbD0XYZvLnkX9M/15nxP3gq0p5E
-        jF6Sdd+8up1JKqkEO9Aq3fcAMg==
-X-Google-Smtp-Source: ABdhPJxv5/pLcfAv3LQuQNA6qnvgMK98AofAhcJwGiAylUMxX5DhwU3/bWAJoWA2Mjtajg2m/PvAgA==
-X-Received: by 2002:a05:600c:1ca5:b0:393:e846:4ea1 with SMTP id k37-20020a05600c1ca500b00393e8464ea1mr2153552wms.32.1651220403449;
-        Fri, 29 Apr 2022 01:20:03 -0700 (PDT)
-Received: from vingu-book ([2a01:e0a:f:6020:440d:c2b8:4c2:5904])
-        by smtp.gmail.com with ESMTPSA id q1-20020a1c4301000000b00394145534bbsm2104601wma.9.2022.04.29.01.20.02
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 29 Apr 2022 01:20:02 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 10:20:00 +0200
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-To:     Tao Zhou <tao.zhou@linux.dev>
-Cc:     Vincent Donnefort <vincent.donnefort@arm.com>,
-        peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        morten.rasmussen@arm.com, chris.redpath@arm.com, qperret@google.com
-Subject: Re: [PATCH v7 2/7] sched/fair: Decay task PELT values during wakeup
- migration
-Message-ID: <20220429082000.GA14214@vingu-book>
-References: <20220427143304.3950488-1-vincent.donnefort@arm.com>
- <20220427143304.3950488-3-vincent.donnefort@arm.com>
- <Yml/icTe26CfweCd@geo.homenetwork>
- <CAKfTPtCsZTm_jx-BS00UkFUqW66x--6T8Bb2LRsD1S0a3rN0iQ@mail.gmail.com>
- <YmrNS6JmjkMDj8SL@geo.homenetwork>
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YEy66dqIvVt554CXlGGwT02HRskcbYjqiaqCrLgSDXc=;
+ b=nvhTynSVh/YF7Qo5IIBeD7QSTyedTN0m3YTSuB1QwOGXQVTwkXSNLFAk/UpbOSg031jDk/x8T6T9fbGPfWt4GO84mUZVvT73VZFY1Rx3kVD1J5rpj5KusgKw5IJYFUQmJXmFrz7b8OT+Zzkh2q4EbAFmvJzwLZovRkPv5SSy/pI=
+Received: from BL1PR11MB5384.namprd11.prod.outlook.com (2603:10b6:208:311::14)
+ by DM5PR11MB1305.namprd11.prod.outlook.com (2603:10b6:3:13::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Fri, 29 Apr
+ 2022 08:20:25 +0000
+Received: from BL1PR11MB5384.namprd11.prod.outlook.com
+ ([fe80::39cb:eae2:1dbc:a5f2]) by BL1PR11MB5384.namprd11.prod.outlook.com
+ ([fe80::39cb:eae2:1dbc:a5f2%8]) with mapi id 15.20.5186.026; Fri, 29 Apr 2022
+ 08:20:25 +0000
+From:   <Eugen.Hristev@microchip.com>
+To:     <hverkuil@xs4all.nl>, <linux-media@vger.kernel.org>,
+        <jacopo@jmondi.org>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Claudiu.Beznea@microchip.com>, <robh+dt@kernel.org>,
+        <Nicolas.Ferre@microchip.com>
+Subject: Re: [PATCH v9 00/13] media: atmel: atmel-isc: implement media
+ controller
+Thread-Topic: [PATCH v9 00/13] media: atmel: atmel-isc: implement media
+ controller
+Thread-Index: AQHYNGSL7RD2tHVvQUiepBZFYhl0460G1v0AgAAEK4A=
+Date:   Fri, 29 Apr 2022 08:20:25 +0000
+Message-ID: <9111ee7f-9eb9-5da5-f65b-6e868f2e72f4@microchip.com>
+References: <20220310095202.2701399-1-eugen.hristev@microchip.com>
+ <d76bab1c-6547-5b9a-ad17-25a73bcc899d@xs4all.nl>
+In-Reply-To: <d76bab1c-6547-5b9a-ad17-25a73bcc899d@xs4all.nl>
+Accept-Language: en-US, ro-RO
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: fd14c0cf-20eb-4c15-e587-08da29b91c8f
+x-ms-traffictypediagnostic: DM5PR11MB1305:EE_
+x-microsoft-antispam-prvs: <DM5PR11MB13053D9B5AC4D8D84BB9D8DEE8FC9@DM5PR11MB1305.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: IbnxGNp8xQ2+dReBAbFvoSXlcHI5dkPD7Fvt+4raBaz5f0/+i9Idxr2pwnHm9iMJWQZqaE/JhXDp7dlAFxMEBBrp1wRhLyGPeZ5gsg94jUhi+hfVrG2ofkwbnnfVI8lPgTziNe1AQAsfPH24lZSMqIptnStpzSJ39hbTjxfTqkq95xqjOzva4hmUwvcgIb2TJEYhyNL/SooQ/DVmPUkDb1vOzoGWl9ZyzYa0SfzZgQ8UIV5Zichb9wGWTXC7/pkN4wN8XwK15ZBT2/Kad7MTBFL3Ydga5DsxmiieuJd1mV65TCV87PO/EgplF//IkWErXVxCPBVFYLHyVCVxwYW4XsrJpToiHKmdgf9BCTvmd1yEdu9XhtJa4deVtnrrSJk75+Gfekeg/xbJMR0rXKT05HmBXRejvTCn4Tp7qWvtIzp1ZJlu1s7z0Gc4+iT/AA59eYtXj7GvgzqO8DfvBvifA+3TQQSO8wbJCHT7cHPwODaUJni34wucnSbERNzKAnF/taf+6dhEwneLNtoKnL/PldIWF0iZVuw6AyehkDU19vsTr+B7g+732tYtfBr83liCLenGzLWx2theae4+2K8ZDJ9GbXInamzc9yFto+nanPstVGLq/fOGPsZf8jlYFd1UvRffrDf+FnHI/39XRjKV14Wp+iWPs+9tu4UAfZpJb11K9D3nrgpVuNAMB2B2IHQW6u7hiVrBNsk9Jmzqd22NA/5OIFseF3sD9sP3XtKK7UqOV/ZzxXfxZVyxfbRqefmr/M247lu7iT/k3F43eDEWaQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5384.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(2616005)(122000001)(38100700002)(107886003)(38070700005)(83380400001)(54906003)(66946007)(31686004)(4326008)(8676002)(91956017)(66556008)(76116006)(110136005)(64756008)(36756003)(71200400001)(66446008)(66476007)(316002)(26005)(508600001)(6486002)(31696002)(53546011)(6506007)(6512007)(86362001)(2906002)(186003)(8936002)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?K0RleDVTTXZsSDBLY2tWZlIzUXJWOUZnMFdHSkxLZ1hWKzRnTU83cFpDa1ZG?=
+ =?utf-8?B?a1VoNnJxbzFnNWlDQW4waVdWQUZ4VmRmWWlYQzhZSDdldkk2NS9jZDRXOENU?=
+ =?utf-8?B?OU5PS2ZObk10b0toSFNISUtVR3MyYUpDREdvcUFrbE9Ua1VzSXZvS3kxT1Jz?=
+ =?utf-8?B?bHl4S1ZtNndWNnhMRVpVN0V6RVlPazZxek5ZT0sxK1VFeEpLVUhEUnozand0?=
+ =?utf-8?B?MFFPUzdGbDBVbHVOV203bEZ1R05lNVJKYjRBeEpqdi9jT1A3dEpydGZtQVFR?=
+ =?utf-8?B?clB6NkxiMTlYRlpjb3dKUVVjYWJQMW9wM1VtNjVjSDgvM1RxOWFmSHhvaHR3?=
+ =?utf-8?B?WnZyMWxHaFhIbU5mK0xkbytWcVEzalVaU2hYeXd1UzlDWXZwd011bUJhSStt?=
+ =?utf-8?B?Nko3eXNCTTlLYlk4U2gwUDVoTzF0dzJWRXpBY1VXUHZyUXVMOWtpUUpWZ3VX?=
+ =?utf-8?B?c2cxYzlJWnQzS1NLb0RlVm5kTmdNT2d4Q0lydERnY3hJbTc1U1hUSktHLzV6?=
+ =?utf-8?B?L0hoejdPRlZ0TTJjWlFOR0c1YWkzaCtnK08vSEpBYUV3ODl3eUpFMnd1LzNW?=
+ =?utf-8?B?ejRteFdlNEFwMVJBL1BsSDZ0b2VuMkZpbXBtdktDSHNHQks3dG1pZmM3WnVm?=
+ =?utf-8?B?enZvUWMzM1NFb2c5a1VZaGMxYVQ2OEZ4T2poWkxPSEw3VEl5NG5COUd1b3Nh?=
+ =?utf-8?B?b09OOG5DakdCRkdLeGhGcjJ1VTBkOGIwUnQ1bXZOT1hxQlhTZXZJYzlQNE5Z?=
+ =?utf-8?B?dVVjRGtpMlFMV1VCNlowL2VkSk1IQlRCdWd1OG02MUJKTFBRTndBRVVsNFFX?=
+ =?utf-8?B?N2FHUUtUZTNvRDNWcVlJUkFqVVZINCsvNHp0VTJweWNURjFCb0Q3aVdJV0Fy?=
+ =?utf-8?B?UExrTERtbnF5YllJSGhFZ1cycjZWVlUvQ2RLUzZOUU5lZ3ErUFhUZzhGNXg5?=
+ =?utf-8?B?Z3FycEZWc1RsRkdSS093YU15TVBzN1g0YzdkVXRNeHRtNkhGbStFMlR1UmtV?=
+ =?utf-8?B?OG00cGEyYytUMnJwTWNWMEdnT0RxcWJFOElrV3ZMT0NDSXhGVEh1eThxcU1Q?=
+ =?utf-8?B?SU5NSXMxZ1NOOGp4ZGZoUmN3dG1uOVZEdk5kWC9iaTVNcTFMa1R0ZEtQN1JK?=
+ =?utf-8?B?WjZEVVBnUkNpY1paRjViYzNhakl3OVhGSm1zRmY3NWJNY0NacWd0SGo5RE1y?=
+ =?utf-8?B?djhGT0IvdFppYVlyRmExTUdONXA4QjBvblVpVVhhcFJwUXQyNGRqellTMzRn?=
+ =?utf-8?B?WExJVzhmQXUxbFJFWGdRemtreEFuZWhIa3I0eURFRGpFUncxOXJrNzUyQ2Rh?=
+ =?utf-8?B?SFU2ekx5VGpPQ2tXOTFnZGhBbTJKdEpiY0ZmNElNcTBybWdrZ05zdk5rQVNF?=
+ =?utf-8?B?UzNlcFd5NXhLV29ZUFVZSExURUJGR052L3c1QkhJYTlKbnVuY2N5VDBXOVF6?=
+ =?utf-8?B?WXZBOU1qNGlNeUFzS2FSVFNQaytZL3pvaHEwOFFzb3JpVHJHbnAzVVhVSDhJ?=
+ =?utf-8?B?ZUtZc3pCano4WlEzVW45VytDMGExa1U3a2FHNXM0ZmtXMW1wR2EvTzJOTlFa?=
+ =?utf-8?B?QmM0b3l0RHR5Q2xFV2JtUkhCWmhXclM4SHhjVHNnK0FSOHdENjhua0xVd2xo?=
+ =?utf-8?B?YkcwWHpKQ0szU0hnRHZZTTFRcUFTWXlvcmNHUUZ1aVVFQklhUStJZFpFckZa?=
+ =?utf-8?B?bjFIRzlmS1ZkNDJZeW1DSHd2YmFScHRmNGpQclIwWnJ5eXcwOFBmeitBbFpz?=
+ =?utf-8?B?eithcllmVHVOaWZkYnI3NGtVYzllc1pMNEMxR3l5cHJocXA2eWF6ZWxBcmZk?=
+ =?utf-8?B?SWtab2loM3V0QWxNNFN2MTlNcFVMSFhVSUdSTG5aaE9uNGhZbndVYjRlbWdZ?=
+ =?utf-8?B?dWRrNWQ3QkszRlZiUHVycDZHa1Y0NXFNZDVtWDNCSjFmT28zTjU1S0g4eXVr?=
+ =?utf-8?B?djl3dko2NFhYN3FTZUZGbEtPWEJaMytwY0svKzdpTU8vbzRxcG9xUGxlT0wy?=
+ =?utf-8?B?T3ZYQnpMNnVweW5GbUExVUZYemdhTFFQakNkZ0l2d0NKRzJPMTdGYmVjdEkv?=
+ =?utf-8?B?UWlsVzd0QWIwY3BkckNsOCtKV05IZEh3L0N2dHVrcWI4Q1BnaWZiMEJVSVI4?=
+ =?utf-8?B?a0dUV0pzVElYcEUzZGZyS2U5TUhyaE10U2R2Mm5BRG9OMXhkeHlvWmxFRkdU?=
+ =?utf-8?B?Zy8wOHhvaDF2b2l2OHV1N0hjNXJwS0xvU0lxV1ZUTWVhKzd2R3d6aFBuQlhP?=
+ =?utf-8?B?bFlFTUk2SjJsOG4wVGhIQkYvQjh4aHNzN0xDVUllRVRGaElteFk4UGRQSitq?=
+ =?utf-8?B?WWxtNzNqQ3Rlem9EYzlYcEVIVUVIUU9DaExIWFc4M1BzbWxUOGZNWTZmcVpI?=
+ =?utf-8?Q?Gv60we22CIUZQ6tY=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <0C6FE96EAF84AD43827699B90A045E34@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YmrNS6JmjkMDj8SL@geo.homenetwork>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5384.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fd14c0cf-20eb-4c15-e587-08da29b91c8f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Apr 2022 08:20:25.0758
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: WyWN1k/TdYc0MuTRVNTdirdWwZrUq23dBxWMQwEEVmcvAHpP7RMev3L3m8bmfs7A/2dpIcFG1aFHcNdO12d1hjKuMGOkMYmT8gFw8juwB4g=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1305
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le vendredi 29 avril 2022 à 01:22:19 (+0800), Tao Zhou a écrit :
-> Hi Vincent,
-> 
-> On Thu, Apr 28, 2022 at 03:38:39PM +0200, Vincent Guittot wrote:
-> 
-> > On Wed, 27 Apr 2022 at 19:37, Tao Zhou <tao.zhou@linux.dev> wrote:
-> > >
-
-[..]
-
-> > > > +                     /* sync clock_pelt_idle with last update */
-> > > > +                     if (cfs_rq->nr_running == 0)
-> > > > +                             update_idle_cfs_rq_clock_pelt(cfs_rq);
-> > >
-> > > I think that if cfs_rq->nr_running == 0 then use cfs rq pelt_idle to update
-> > > idle cfs rq.
-> > 
-> > update_blocked_averages() updates all cfs rq to be aligned with now so
-> > we don't need to calculate an estimated now. update_rq_clock(rq) is
-> > called 1st to update the rq->clock and childs
-> > 
-> > With only need to save when happened the last update which is done in
-> > update_rq_clock_pelt(rq) for rq->clock_pelt and with
-> > update_idle_cfs_rq_clock_pelt(cfs) for the cfs_rq_clock_pelt
-> 
-> I missed this.
-
-I ended up with something a bit different:
-
----
- kernel/sched/fair.c  | 133 ++++++++++++++++++++++++++++++++++---------
- kernel/sched/pelt.h  |  66 ++++++++++++++++++---
- kernel/sched/sched.h |  10 ++++
- 3 files changed, 174 insertions(+), 35 deletions(-)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index abd1feeec0c2..63e4cf225292 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -3335,27 +3335,12 @@ static inline bool cfs_rq_is_decayed(struct cfs_rq *cfs_rq)
- 	if (cfs_rq->load.weight)
- 		return false;
- 
--	if (cfs_rq->avg.load_sum)
--		return false;
--
--	if (cfs_rq->avg.util_sum)
--		return false;
--
--	if (cfs_rq->avg.runnable_sum)
-+	if (load_avg_is_decayed(&cfs_rq->avg))
- 		return false;
- 
- 	if (child_cfs_rq_on_list(cfs_rq))
- 		return false;
- 
--	/*
--	 * _avg must be null when _sum are null because _avg = _sum / divider
--	 * Make sure that rounding and/or propagation of PELT values never
--	 * break this.
--	 */
--	SCHED_WARN_ON(cfs_rq->avg.load_avg ||
--		      cfs_rq->avg.util_avg ||
--		      cfs_rq->avg.runnable_avg);
--
- 	return true;
- }
- 
-@@ -3694,6 +3679,88 @@ static inline void add_tg_cfs_propagate(struct cfs_rq *cfs_rq, long runnable_sum
- 
- #endif /* CONFIG_FAIR_GROUP_SCHED */
- 
-+#ifdef CONFIG_NO_HZ_COMMON
-+static inline void migrate_se_pelt_lag(struct sched_entity *se)
-+{
-+	struct cfs_rq *cfs_rq;
-+	struct rq *rq;
-+	bool is_idle;
-+	u64 now, throttled = 0;
-+
-+	/* utilization is already fully decayed */
-+	if (load_avg_is_decayed(&se->avg))
-+		return;
-+
-+	cfs_rq = cfs_rq_of(se);
-+	rq = rq_of(cfs_rq);
-+
-+	rcu_read_lock();
-+	is_idle = is_idle_task(rcu_dereference(rq->curr));
-+	rcu_read_unlock();
-+
-+	/*
-+	 * The lag estimation comes with a cost we don't want to pay all the
-+	 * time. Hence, limiting to the case where the source CPU is idle and
-+	 * we know we are at the greatest risk to have an outdated clock.
-+	 */
-+	if (!is_idle)
-+		return;
-+
-+	/*
-+	 * Estimated "now" is:
-+	 *   last_update_time: last update of the cfs_lock_pelt +
-+	 *   cfs_idle_lag: rq_clock_pelt delta bewteen last cfs update and last rq update +
-+	 *   rq_idle_lag: rq_clock delta between last rq update and now
-+	 *
-+	 * with
-+	 *
-+	 * last_update_time == cfs_clock_pelt()
-+	 *                  == rq_clock_pelt() - cfs->throttled_clock_pelt_time
-+	 *
-+	 * cfs_idle_lag: rq_clock_pelt() when rq is idle - rq_clock_pelt() when cfs is idle
-+	 *
-+	 * rq_idle_lag : sched_clock_cpu() - rq_clock() when rq is idle
-+	 *
-+	 * In fact, rq_clock_pelt() that is used for last_update_time and when
-+	 * cfs is idle are the same because their last update happens atthe
-+	 * same time.
-+	 *
-+	 * We can optimize "now" to be:
-+	 *   rq_clock_pelt when rq is idle - cfs->throttled_clock_pelt_time when cfs is idle +
-+	 *   sched_clock_cpu() - rq_clock() when rq is idle
-+	 *
-+	 * when rq is idle
-+	 *   rq_clock_pelt() is saved in rq->clock_pelt_idle
-+	 *   rq_clock()  is saved in rq->enter idle
-+	 *
-+	 * when cfs is idle
-+	 *    cfs->throttled_clock_pelt_time is saved in cfs_rq->throttled_pelt_idle
-+	 *
-+	 * When !CFS_BANDWIDTH, cfs->throttled_clock_pelt_time is null
-+	 */
-+
-+#ifdef CONFIG_CFS_BANDWIDTH
-+	throttled = u64_u32_load(cfs_rq->throttled_pelt_idle);
-+	/* The clock has been stopped for throttling */
-+	if (throttled == U64_MAX)
-+		return;
-+#endif
-+
-+	now = u64_u32_load(rq->clock_pelt_idle);
-+	now -= throttled;
-+
-+	/* An update happened while computing lag */
-+	if (now < cfs_rq_last_update_time(cfs_rq))
-+		return;
-+
-+	now += sched_clock_cpu(cpu_of(rq)) - u64_u32_load(rq->enter_idle);
-+
-+	__update_load_avg_blocked_se(now, se);
-+}
-+#else
-+static void migrate_se_pelt_lag(struct sched_entity *se) {}
-+#endif
-+
- /**
-  * update_cfs_rq_load_avg - update the cfs_rq's load/util averages
-  * @now: current time, as per cfs_rq_clock_pelt()
-@@ -4429,6 +4496,9 @@ dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
- 	 */
- 	if ((flags & (DEQUEUE_SAVE | DEQUEUE_MOVE)) != DEQUEUE_SAVE)
- 		update_min_vruntime(cfs_rq);
-+
-+	if (cfs_rq->nr_running == 0)
-+		update_idle_cfs_rq_clock_pelt(cfs_rq);
- }
- 
- /*
-@@ -6946,6 +7016,8 @@ static void detach_entity_cfs_rq(struct sched_entity *se);
-  */
- static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
- {
-+	struct sched_entity *se = &p->se;
-+
- 	/*
- 	 * As blocked tasks retain absolute vruntime the migration needs to
- 	 * deal with this by subtracting the old and adding the new
-@@ -6953,7 +7025,6 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
- 	 * the task on the new runqueue.
- 	 */
- 	if (READ_ONCE(p->__state) == TASK_WAKING) {
--		struct sched_entity *se = &p->se;
- 		struct cfs_rq *cfs_rq = cfs_rq_of(se);
- 
- 		se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
-@@ -6965,25 +7036,29 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
- 		 * rq->lock and can modify state directly.
- 		 */
- 		lockdep_assert_rq_held(task_rq(p));
--		detach_entity_cfs_rq(&p->se);
-+		detach_entity_cfs_rq(se);
- 
- 	} else {
-+		remove_entity_load_avg(se);
-+
- 		/*
--		 * We are supposed to update the task to "current" time, then
--		 * its up to date and ready to go to new CPU/cfs_rq. But we
--		 * have difficulty in getting what current time is, so simply
--		 * throw away the out-of-date time. This will result in the
--		 * wakee task is less decayed, but giving the wakee more load
--		 * sounds not bad.
-+		 * Here, the task's PELT values have been updated according to
-+		 * the current rq's clock. But if that clock hasn't been
-+		 * updated in a while, a substantial idle time will be missed,
-+		 * leading to an inflation after wake-up on the new rq.
-+		 *
-+		 * Estimate the missing time from the cfs_rq last_update_time
-+		 * and update sched_avg to improve the PELT continuity after
-+		 * migration.
- 		 */
--		remove_entity_load_avg(&p->se);
-+		migrate_se_pelt_lag(se);
- 	}
- 
- 	/* Tell new CPU we are migrated */
--	p->se.avg.last_update_time = 0;
-+	se->avg.last_update_time = 0;
- 
- 	/* We have migrated, no longer consider this task hot */
--	p->se.exec_start = 0;
-+	se->exec_start = 0;
- 
- 	update_scan_period(p, new_cpu);
- }
-@@ -8149,6 +8224,10 @@ static bool __update_blocked_fair(struct rq *rq, bool *done)
- 		if (update_cfs_rq_load_avg(cfs_rq_clock_pelt(cfs_rq), cfs_rq)) {
- 			update_tg_load_avg(cfs_rq);
- 
-+			/* sync clock_pelt_idle with last update */
-+			if (cfs_rq->nr_running == 0)
-+				update_idle_cfs_rq_clock_pelt(cfs_rq);
-+
- 			if (cfs_rq == &rq->cfs)
- 				decayed = true;
- 		}
-diff --git a/kernel/sched/pelt.h b/kernel/sched/pelt.h
-index 4ff2ed4f8fa1..4143c6dc64dc 100644
---- a/kernel/sched/pelt.h
-+++ b/kernel/sched/pelt.h
-@@ -37,6 +37,29 @@ update_irq_load_avg(struct rq *rq, u64 running)
- }
- #endif
- 
-+static inline bool load_avg_is_decayed(struct sched_avg *sa)
-+{
-+	if (sa->load_sum)
-+		return false;
-+
-+	if (sa->util_sum)
-+		return false;
-+
-+	if (sa->runnable_sum)
-+		return false;
-+
-+	/*
-+	 * _avg must be null when _sum are null because _avg = _sum / divider
-+	 * Make sure that rounding and/or propagation of PELT values never
-+	 * break this.
-+	 */
-+	SCHED_WARN_ON(sa->load_avg ||
-+		      sa->util_avg ||
-+		      sa->runnable_avg);
-+
-+	return true;
-+}
-+
- #define PELT_MIN_DIVIDER	(LOAD_AVG_MAX - 1024)
- 
- static inline u32 get_pelt_divider(struct sched_avg *avg)
-@@ -61,6 +84,23 @@ static inline void cfs_se_util_change(struct sched_avg *avg)
- 	WRITE_ONCE(avg->util_est.enqueued, enqueued);
- }
- 
-+static inline u64 rq_clock_pelt(struct rq *rq)
-+{
-+	lockdep_assert_rq_held(rq);
-+	assert_clock_updated(rq);
-+
-+	return rq->clock_pelt - rq->lost_idle_time;
-+}
-+
-+/* The rq is idle, we can sync to clock_task */
-+static inline void _update_idle_rq_clock_pelt(struct rq *rq)
-+{
-+	rq->clock_pelt  = rq_clock_task(rq);
-+
-+	u64_u32_store(rq->enter_idle, rq_clock(rq));
-+	u64_u32_store(rq->clock_pelt_idle, rq_clock_pelt(rq));
-+}
-+
- /*
-  * The clock_pelt scales the time to reflect the effective amount of
-  * computation done during the running delta time but then sync back to
-@@ -76,8 +116,7 @@ static inline void cfs_se_util_change(struct sched_avg *avg)
- static inline void update_rq_clock_pelt(struct rq *rq, s64 delta)
- {
- 	if (unlikely(is_idle_task(rq->curr))) {
--		/* The rq is idle, we can sync to clock_task */
--		rq->clock_pelt  = rq_clock_task(rq);
-+		_update_idle_rq_clock_pelt(rq);
- 		return;
- 	}
- 
-@@ -130,17 +169,26 @@ static inline void update_idle_rq_clock_pelt(struct rq *rq)
- 	 */
- 	if (util_sum >= divider)
- 		rq->lost_idle_time += rq_clock_task(rq) - rq->clock_pelt;
-+
-+	_update_idle_rq_clock_pelt(rq);
- }
- 
--static inline u64 rq_clock_pelt(struct rq *rq)
-+#ifdef CONFIG_CFS_BANDWIDTH
-+static inline void update_idle_cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
- {
--	lockdep_assert_rq_held(rq);
--	assert_clock_updated(rq);
--
--	return rq->clock_pelt - rq->lost_idle_time;
-+	/*
-+	 * Make sure that pending update of rq->clock_pelt_idle and
-+	 * rq->enter_idle are visible during update_blocked_average() before
-+	 * updating cfs_rq->throttled_pelt_idle.
-+	 */
-+	smp_wmb();
-+	if (unlikely(cfs_rq->throttle_count))
-+		u64_u32_store(cfs_rq->throttled_pelt_idle, U64_MAX);
-+	else
-+		u64_u32_store(cfs_rq->throttled_pelt_idle,
-+			      cfs_rq->throttled_clock_pelt_time);
- }
- 
--#ifdef CONFIG_CFS_BANDWIDTH
- /* rq->task_clock normalized against any time this cfs_rq has spent throttled */
- static inline u64 cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
- {
-@@ -150,6 +198,7 @@ static inline u64 cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
- 	return rq_clock_pelt(rq_of(cfs_rq)) - cfs_rq->throttled_clock_pelt_time;
- }
- #else
-+static inline void update_idle_cfs_rq_clock_pelt(struct cfs_rq *cfs_rq) { }
- static inline u64 cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
- {
- 	return rq_clock_pelt(rq_of(cfs_rq));
-@@ -204,6 +253,7 @@ update_rq_clock_pelt(struct rq *rq, s64 delta) { }
- static inline void
- update_idle_rq_clock_pelt(struct rq *rq) { }
- 
-+static inline void update_idle_cfs_rq_clock_pelt(struct cfs_rq *cfs_rq) { }
- #endif
- 
- 
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index e2cf6e48b165..ea9365e1a24e 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -641,6 +641,10 @@ struct cfs_rq {
- 	int			runtime_enabled;
- 	s64			runtime_remaining;
- 
-+	u64			throttled_pelt_idle;
-+#ifndef CONFIG_64BIT
-+	u64                     throttled_pelt_idle_copy;
-+#endif
- 	u64			throttled_clock;
- 	u64			throttled_clock_pelt;
- 	u64			throttled_clock_pelt_time;
-@@ -1013,6 +1017,12 @@ struct rq {
- 	u64			clock_task ____cacheline_aligned;
- 	u64			clock_pelt;
- 	unsigned long		lost_idle_time;
-+	u64			clock_pelt_idle;
-+	u64			enter_idle;
-+#ifndef CONFIG_64BIT
-+	u64			clock_pelt_idle_copy;
-+	u64			enter_idle_copy;
-+#endif
- 
- 	atomic_t		nr_iowait;
- 
--- 
-2.17.1
-
+T24gNC8yOS8yMiAxMTowNSBBTSwgSGFucyBWZXJrdWlsIHdyb3RlOg0KPiBIaSBFdWdlbiwNCj4g
+DQo+IE9uIDEwLzAzLzIwMjIgMTA6NTEsIEV1Z2VuIEhyaXN0ZXYgd3JvdGU6DQo+PiBUaGlzIHNl
+cmllcyBpcyB0aGUgdjkgc2VyaWVzIHRoYXQgYXR0ZW1wdHMgdG8gc3VwcG9ydCBtZWRpYSBjb250
+cm9sbGVyIGluIHRoZQ0KPj4gYXRtZWwgSVNDIGFuZCBYSVNDIGRyaXZlcnMuDQo+PiBUaGUgQ1NJ
+MkRDIGRyaXZlciB3YXMgYWNjZXB0ZWQgdGh1cyByZW1vdmVkIGZyb20gdGhlIHBhdGNoIHNlcmll
+cywgdG9nZXRoZXIgd2l0aA0KPj4gb3RoZXIgcGF0Y2hlcy4NCj4+DQo+PiBJbXBvcnRhbnQgbm90
+ZTogdGhpcyBzZXJpZXMgYXBwbGllcyBvbiB0b3Agb2YgY3VycmVudCBtZWRpYV9zdGFnaW5nIHRy
+ZWUsIGFzIGl0DQo+PiByZWxpZXMgb24gcHJldmlvdXMgcGF0Y2hlcyBpbiB0aGUgc2VyaWVzIHdo
+aWNoIHdlcmUgYWNjZXB0ZWQuDQo+Pg0KPj4gVGhhbmtzIHRvIGV2ZXJ5b25lIHdobyByZXZpZXdl
+ZCBteSB3b3JrICENCj4+DQo+PiBFdWdlbg0KPj4NCj4+IENoYW5nZXMgaW4gdjk6DQo+PiAtPiBr
+ZXJuZWwgcm9ib3QgcmVwb3J0ZWQgaXNjX2xpbmtfdmFsaWRhdGUgaXMgbm90IHN0YXRpYywgY2hh
+bmdlZCB0byBzdGF0aWMuDQo+Pg0KPj4gQ2hhbmdlcyBpbiB2ODoNCj4+IC0+IHNjYWxlcjogbW9k
+aWZpZWQgY3JvcCBib3VuZHMgdG8gaGF2ZSB0aGUgZXhhY3Qgc291cmNlIHNpemUNCj4+DQo+PiBD
+aGFuZ2VzIGluIHY3Og0KPj4gLT4gc2NhbGVyOiBtb2RpZmllZCBjcm9wIGJvdW5kcyB0byBoYXZl
+IG1heGltdW0gaXNjIHNpemUNCj4+IC0+IGZvcm1hdCBwcm9wYWdhdGlvbjogZGlkIHNtYWxsIGNo
+YW5nZXMgYXMgcGVyIEphY29wbyByZXZpZXcNCj4+DQo+Pg0KPj4gQ2hhbmdlcyBpbiB2NjoNCj4+
+IC0+IHdvcmtlZCBhIGJpdCBvbiBzY2FsZXIsIGFkZGVkIHRyeSBjcm9wIGFuZCBvdGhlciBjaGFu
+Z2VzIGFzIHBlciBKYWNvcG8gcmV2aWV3DQo+PiAtPiB3b3JrZWQgb24gaXNjLWJhc2UgZW51bV9m
+bXQgLCByZXdvcmtlZCBhcyBwZXIgSmFjb3BvIHJldmlldw0KPj4NCj4+IENoYW5nZXMgaW4gdjU6
+DQo+PiAtPiByZW1vdmVkIHBhdGNoIHRoYXQgcmVtb3ZlZCB0aGUgJ3N0b3AnIHZhcmlhYmxlIGFz
+IGl0IHdhcyBzdGlsbCByZXF1aXJlZA0KPj4gLT4gYWRkZWQgdHdvIG5ldyB0cml2aWFsIHBhdGNo
+ZXMNCj4+IC0+IHJld29ya2VkIHNvbWUgcGFydHMgb2YgdGhlIHNjYWxlciBhbmQgZm9ybWF0IHBy
+b3BhZ2F0aW9uIGFmdGVyIGRpc2N1c3Npb25zIHdpdGggSmFjb3BvDQo+Pg0KPj4NCj4+IENoYW5n
+ZXMgaW4gdjQ6DQo+PiAtPiBhcyByZXZpZXdlZCBieSBIYW5zLCBhZGRlZCBuZXcgcGF0Y2ggdG8g
+cmVtb3ZlIHRoZSAnc3RvcCcgdmFyaWFibGUgYW5kIHJld29ya2VkDQo+PiBvbmUgcGF0Y2ggdGhh
+dCB3YXMgdXNpbmcgaXQNCj4+IC0+IGFzIHJldmlld2VkIGJ5IEphY29wbywgcmV3b3JrZWQgc29t
+ZSBwYXJ0cyBvZiB0aGUgbWVkaWEgY29udHJvbGxlciBpbXBsZW1lbnRhdGlvbg0KPj4NCj4+DQo+
+PiBDaGFuZ2VzIGluIHYzOg0KPj4gLSBjaGFuZ2UgaW4gYmluZGluZ3MsIHNtYWxsIGZpeGVzIGlu
+IGNzaTJkYyBkcml2ZXIgYW5kIGNvbnZlcnNpb24gdG8gbWMNCj4+IGZvciB0aGUgaXNjLWJhc2Uu
+DQo+PiAtIHJlbW92ZWQgc29tZSBNQUlOVEFJTkVSUyBwYXRjaGVzIGFuZCB1c2VkIHBhdHRlcm5z
+IGluIE1BSU5UQUlORVJTDQo+Pg0KPj4gQ2hhbmdlcyBpbiB2MjoNCj4+IC0gaW50ZWdyYXRlZCBt
+YW55IGNoYW5nZXMgc3VnZ2VzdGVkIGJ5IEphY29wbyBpbiB0aGUgcmV2aWV3IG9mIHRoZSB2MSBz
+ZXJpZXMuDQo+PiAtIGFkZCBhIGZldyBuZXcgcGF0Y2hlcw0KPj4NCj4+DQo+Pg0KPj4gRXVnZW4g
+SHJpc3RldiAoMTMpOg0KPj4gICAgbWVkaWE6IGF0bWVsOiBhdG1lbC1pc2MtYmFzZTogdXNlIHN0
+cmVhbWluZyBzdGF0dXMgd2hlbiBxdWV1ZWluZw0KPj4gICAgICBidWZmZXJzDQo+PiAgICBtZWRp
+YTogYXRtZWw6IGF0bWVsLWlzYy1iYXNlOiByZXBsYWNlIGlzX3N0cmVhbWluZyBjYWxsIGluDQo+
+PiAgICAgIHNfZm10X3ZpZF9jYXANCj4+ICAgIG1lZGlhOiBhdG1lbDogYXRtZWwtaXNjOiByZW1v
+dmUgcmVkdW5kYW50IGNvbW1lbnRzDQo+PiAgICBtZWRpYTogYXRtZWw6IGF0bWVsLWlzYzogaW1w
+bGVtZW50IG1lZGlhIGNvbnRyb2xsZXINCj4+ICAgIG1lZGlhOiBhdG1lbDogYXRtZWwtc2FtYTVk
+Mi1pc2M6IGZpeCB3cm9uZyBtYXNrIGluIFlVWVYgZm9ybWF0IGNoZWNrDQo+PiAgICBtZWRpYTog
+YXRtZWw6IGF0bWVsLWlzYy1iYXNlOiB1c2UgbXV0ZXggdG8gbG9jayBhd2Igd29ya3F1ZXVlIGZy
+b20NCj4+ICAgICAgc3RyZWFtaW5nDQo+PiAgICBtZWRpYTogYXRtZWw6IGF0bWVsLWlzYzogY29t
+cGFjdCB0aGUgY29udHJvbGxlciBmb3JtYXRzIGxpc3QNCj4+ICAgIG1lZGlhOiBhdG1lbDogYXRt
+ZWwtaXNjOiBjaGFuZ2UgZm9ybWF0IHByb3BhZ2F0aW9uIHRvIHN1YmRldiBpbnRvIG9ubHkNCj4+
+ICAgICAgdmVyaWZpY2F0aW9uDQo+PiAgICBtZWRpYTogYXRtZWw6IGF0bWVsLXNhbWE3ZzUtaXNj
+OiByZW1vdmUgc3RyYXkgbGluZQ0KPj4gICAgZHQtYmluZGluZ3M6IG1lZGlhOiBtaWNyb2NoaXAs
+eGlzYzogYWRkIGJ1cy13aWR0aCBvZiAxNA0KPiANCj4gSSdtIGEgYml0IHVuaGFwcHkgd2l0aCB0
+aGUgb3JkZXIgb2YgdGhlc2UgcGF0Y2hlcy4gTW9zdGx5IHRoZXNlIGFyZSBmaXhlcywNCj4gZXhj
+ZXB0IGZvciBwYXRjaGVzIDQgYW5kIDgsIHdoaWNoIGFyZSB0aGUgbWVhdCBvZiB0aGlzIHNlcmll
+cyBhbmQgYWN0dWFsbHkNCj4gc3dpdGNoaW5nIG9uIHRoZSBNQyBzdXBwb3J0Lg0KPiANCj4gQ2Fu
+IHRob3NlIGJlIG1vdmVkIHRvIHRoZSBlbmQ/IFRoYXQgYWxzbyBtYWtlcyBpdCBlYXNpZXIgdG8g
+bWVyZ2UgdGhlIGVhcmxpZXINCj4gcGF0Y2hlcyBpZiBzb21lIG1vcmUgd29yayBpcyBuZWVkZWQg
+Zm9yIHRoZSBNQyBwYXJ0Lg0KPiANCj4gSSdtIGFsc28gbm90IHN1cmUgd2hldGhlciBwYXRjaGVz
+IDQgYW5kIDggc2hvdWxkbid0IGJlIGEgc2luZ2xlIHBhdGNoLA0KPiBzaW5jZSBwYXRjaCA0IGxl
+YXZlcyB0aGUgZHJpdmVyIGluIGFuIGluY29uc2lzdGVudCBzdGF0ZSBzaW5jZSBpdCBpcw0KPiBt
+aXNzaW5nIHRoZSBsaW5rIHZhbGlkYXRpb24gY29kZSB0aGF0IHBhdGNoIDggYWRkcy4gVW5sZXNz
+IEkgbWlzc2VkDQo+IHNvbWV0aGluZz8NCg0KSGVsbG8gSGFucywNCg0KVGhlIGRpZmZlcmVuY2Ug
+dGhhdCBwYXRjaCA4IGlzIG1ha2luZyBpcyB0aGF0IHRoZSAnb2xkIHdheScgb2YgDQpjb25maWd1
+cmluZyB0aGUgSVNDIGlzIG5vIGxvbmdlciBwb3NzaWJsZS4NCg0KUGF0Y2ggNCBtYWtlcyB0aGUg
+SVNDICdtYy1yZWFkeScgd2l0aCBhbGwgZW50aXRpZXMsIGxpbmtzLCBidXQgdGhlIG9sZCANCndh
+eSBzdGlsbCB3b3JrcyAobWVhbmluZyB0aGF0IHRoZSB0b3AgZHJpdmVyIHdpbGwgY2FsbCBzX2Zt
+dCBkb3duIHRvIHRoZSANCnN1YmRldiApLg0KQWZ0ZXIgcGF0Y2ggOCwgdGhlIGRyaXZlciBubyBs
+b25nZXIgaGFzIHRoaXMgc3VwcG9ydCBhdCBhbGwsIGFuZCANCnZhbGlkYXRlcyBsaW5rcyBhdCBz
+dGFydF9zdHJlYW1pbmcsIGFuZCBubyBsb25nZXIgc2V0cyBhbnl0aGluZyB0byB0aGUgDQpzdWJk
+ZXYsIGp1c3QgdmFsaWRhdGVzIHRoZSBjb25maWcgdGhhdCB0aGUgc3ViZGV2IGFscmVhZHkgaGFz
+Lg0KU28gb25lIHJlYXNvbiB0aGF0IEkgaGFkIHRoaW5ncyBpbiB0d28gcGF0Y2hlcyB3YXMgdGhh
+dCBwYXRjaCA4IG1ha2VzIA0KdGhpcyBiaWcgY2hhbmdlIHRoYXQgYWxzbyBtYWtlcyB1c2Vyc3Bh
+Y2UgYmVoYXZlIGRpZmZlcmVudGx5IGFuZCBoYXMgdG8gDQpjb25maWd1cmUgYWxsIHRoZSBzdWJk
+ZXZzIGFuZCBtZWRpYSBwaXBlbGluZS4NCg0KSWYgeW91IGZlZWwgcGF0Y2ggNCBhbmQgcGF0Y2gg
+OCBzaG91bGQgYmUgc3F1YXNoZWQsIEkgY2FuIGRvIGl0LCBkZWZpbml0ZWx5Lg0KDQpMZXQgbWUg
+a25vdyBob3cgdG8gcHJvY2VlZCA/DQoNClRoYW5rcywNCkV1Z2VuDQoNCj4gDQo+IFJlZ2FyZHMs
+DQo+IA0KPiAgICAgICAgICBIYW5zDQo+IA0KPj4gICAgQVJNOiBkdHM6IGF0OTE6IHNhbWE3ZzU6
+IGFkZCBub2RlcyBmb3IgdmlkZW8gY2FwdHVyZQ0KPj4gICAgQVJNOiBjb25maWdzOiBhdDkxOiBz
+YW1hNzogYWRkIHhpc2MgYW5kIGNzaTJkYw0KPj4gICAgQVJNOiBtdWx0aV92N19kZWZjb25maWc6
+IGFkZCBhdG1lbCB2aWRlbyBwaXBlbGluZSBtb2R1bGVzDQo+Pg0KPj4gICAuLi4vYmluZGluZ3Mv
+bWVkaWEvbWljcm9jaGlwLHhpc2MueWFtbCAgICAgICAgfCAgIDIgKy0NCj4+ICAgYXJjaC9hcm0v
+Ym9vdC9kdHMvc2FtYTdnNS5kdHNpICAgICAgICAgICAgICAgIHwgIDQ5ICsrDQo+PiAgIGFyY2gv
+YXJtL2NvbmZpZ3MvbXVsdGlfdjdfZGVmY29uZmlnICAgICAgICAgICB8ICAgMyArDQo+PiAgIGFy
+Y2gvYXJtL2NvbmZpZ3Mvc2FtYTdfZGVmY29uZmlnICAgICAgICAgICAgICB8ICAgMiArDQo+PiAg
+IGRyaXZlcnMvbWVkaWEvcGxhdGZvcm0vYXRtZWwvTWFrZWZpbGUgICAgICAgICB8ICAgMiArLQ0K
+Pj4gICBkcml2ZXJzL21lZGlhL3BsYXRmb3JtL2F0bWVsL2F0bWVsLWlzYy1iYXNlLmMgfCA1MTgg
+KysrKysrKysrKy0tLS0tLS0tDQo+PiAgIC4uLi9tZWRpYS9wbGF0Zm9ybS9hdG1lbC9hdG1lbC1p
+c2Mtc2NhbGVyLmMgICB8IDI2NyArKysrKysrKysNCj4+ICAgZHJpdmVycy9tZWRpYS9wbGF0Zm9y
+bS9hdG1lbC9hdG1lbC1pc2MuaCAgICAgIHwgIDU4ICstDQo+PiAgIC4uLi9tZWRpYS9wbGF0Zm9y
+bS9hdG1lbC9hdG1lbC1zYW1hNWQyLWlzYy5jICB8ICA4NyArLS0NCj4+ICAgLi4uL21lZGlhL3Bs
+YXRmb3JtL2F0bWVsL2F0bWVsLXNhbWE3ZzUtaXNjLmMgIHwgIDkzICsrLS0NCj4+ICAgMTAgZmls
+ZXMgY2hhbmdlZCwgNzU0IGluc2VydGlvbnMoKyksIDMyNyBkZWxldGlvbnMoLSkNCj4+ICAgY3Jl
+YXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvbWVkaWEvcGxhdGZvcm0vYXRtZWwvYXRtZWwtaXNjLXNj
+YWxlci5jDQo+Pg0KPiANCg0K

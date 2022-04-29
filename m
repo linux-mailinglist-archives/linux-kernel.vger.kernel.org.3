@@ -2,101 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1FA651544D
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 21:18:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4969651545A
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 21:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380246AbiD2TVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 15:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39974 "EHLO
+        id S1380270AbiD2TWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 15:22:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380239AbiD2TVo (ORCPT
+        with ESMTP id S1380261AbiD2TWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 15:21:44 -0400
-Received: from mailgate.ics.forth.gr (mailgate.ics.forth.gr [139.91.1.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCFAAC93C
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 12:18:24 -0700 (PDT)
-Received: from av3.ics.forth.gr (av3in.ics.forth.gr [139.91.1.77])
-        by mailgate.ics.forth.gr (8.15.2/ICS-FORTH/V10-1.8-GATE) with ESMTP id 23TJIKui068991
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 22:18:20 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; d=ics.forth.gr; s=av; c=relaxed/simple;
-        q=dns/txt; i=@ics.forth.gr; t=1651259895; x=1653851895;
-        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=BqOKa8AtSZmxxbB7EZVp+eH4ck8Ou2iydBBlT5ZDTMI=;
-        b=YMQHCjdYRN5ORiMTOPRaTYnEnL4FVJkozhCD7/XQyF3XmXKFnBGO1kR6LJchQVsV
-        31vV+Jp7iSMQrD0vVYGBm0faLsPTLG4Vaq+54zHfZZeePulDR2W+6NDivCfV/lR5
-        PfLGY92Upr5HVTss3tyfjyXOqF2vJJ86Sy4li/arXjKIyjRThWyXgFa0cCMJEdwg
-        r/suP0yonWoYPDytHJo9hZajelf1g0Ps+b6oo+xqQoDlDaLdF6KHLXOwwsvCgeyl
-        UiEWGOuegdDS2sCDzHS2YaWB+tOQh6+GhqwuGcUjS5mmqE0mfQ7OPjki9e7frQlp
-        LWefAiNmBwL9s6xhoTYL3A==;
-X-AuditID: 8b5b014d-f2ab27000000641e-9f-626c39f728d9
-Received: from enigma.ics.forth.gr (enigma-2.ics.forth.gr [139.91.151.35])
-        by av3.ics.forth.gr (Symantec Messaging Gateway) with SMTP id 4F.50.25630.7F93C626; Fri, 29 Apr 2022 22:18:15 +0300 (EEST)
-X-ICS-AUTH-INFO: Authenticated user: mick at ics.forth.gr
+        Fri, 29 Apr 2022 15:22:45 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4112CC50F
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 12:19:25 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id p6so7933986plf.9
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 12:19:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Nbl1l94NSe3Fek2fXmDdi1dWs+tZMPUUMy0P2EiLPLg=;
+        b=e+923uX3L34JoxH8inI2ZslZuVikT2P6I5OcFSRPPg8PWVOj34lfOUIuKdw5y2eIN+
+         vGUUvNtdpS7vGCww/uqb2kGFOd9R/L99ldLU+nWZITJlCqJONw41uN3MQZD3uQ2//N+M
+         crhXv+T8QnJFSY/NAUSKR1o4ahHUVk7dBVY18=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Nbl1l94NSe3Fek2fXmDdi1dWs+tZMPUUMy0P2EiLPLg=;
+        b=xWvKCwO1+pCi5ZEo+I3tiHFNpv9WTjbGC4r78pggDQiBL/Wd6NFMgV6344KemHhOJ0
+         0XH90xfHT7KCr8Ep9B2+zC8So500eK5FLJvEpUgxwHnshPW2HfyJydgqcFOUJz9woh0/
+         vw3TKG4uihtyT9LblSkOSNmUygQ4sMU4SSEA6IFpYsO/0+WRYd+a/L6fTW4jZchQfyC7
+         s1fvmcl7jOQRwRzGzn6mFpjWsZDDLeBV1VzFAJAMCDSOjHsunHX15ToVmrOFAS8/iMqY
+         ITlMG2WmUWKeYYDh8tKGnWYzEiFx7d6etQHYGCjLbsr+r+H3zrVQiK8+IXOLHh5m4AXP
+         kYPQ==
+X-Gm-Message-State: AOAM532R7FePASovg08ibGKDkNmoeQJoiZBWtdBUtO6xk5rcRtWrzoab
+        ZoDAyezAGV09Bi9Z5t5UAjr6xA==
+X-Google-Smtp-Source: ABdhPJx5izOWf80ef6ldgjmrgWzIUTHlyiEV4R/ZZm5TorJpza0hZq8zsUWD1pcGPG5bzvzzP3PbRg==
+X-Received: by 2002:a17:90b:4a09:b0:1d2:de49:9be8 with SMTP id kk9-20020a17090b4a0900b001d2de499be8mr5668726pjb.68.1651259965279;
+        Fri, 29 Apr 2022 12:19:25 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:7d14:5f45:9377:9b6a])
+        by smtp.gmail.com with UTF8SMTPSA id m8-20020a17090a414800b001d81a30c437sm11380455pjg.50.2022.04.29.12.19.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 12:19:24 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 12:19:22 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        quic_ppratap@quicinc.com, quic_kriskura@quicinc.com,
+        quic_vpulyala@quicinc.com
+Subject: Re: [PATCH v14 2/7] PM / wakeup: Add device_children_wakeup_capable()
+Message-ID: <Ymw6Og/qhg3D0mx+@google.com>
+References: <1650395470-31333-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1650395470-31333-3-git-send-email-quic_c_sanm@quicinc.com>
+ <CAJZ5v0h2ZKPN6SERPnASPywZfeOWXWncJgNZ1WZa80+=M4DCiQ@mail.gmail.com>
+ <YmL3lMaR79wPMEfY@google.com>
+ <20220425130303.GA16319@hu-pkondeti-hyd.qualcomm.com>
+ <20220429125956.GD16319@hu-pkondeti-hyd.qualcomm.com>
 MIME-Version: 1.0
-Date:   Fri, 29 Apr 2022 22:18:14 +0300
-From:   Nick Kossifidis <mick@ics.forth.gr>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     mick@ics.forth.gr, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] RISC-V-fixes: relocate DTB if it's outside memory region
-Organization: FORTH
-In-Reply-To: <mhng-6c123e84-9530-46f6-a5ec-6b908bb92f95@palmer-ri-x1c9>
-References: <mhng-6c123e84-9530-46f6-a5ec-6b908bb92f95@palmer-ri-x1c9>
-Message-ID: <e3b6a7ed7dc612d7338bc95d8fbbfdfc@mailhost.ics.forth.gr>
-X-Sender: mick@mailhost.ics.forth.gr
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrGLMWRmVeSWpSXmKPExsXSHT1dWfe7ZU6Swd9ZfBZbf89it7i8aw6b
-        xbbPLWwWze/OsVu8vNzDbNE2i9+BzePNy5csHoc7vrB7PNx0iclj85J6j0vN19k9Pm+SC2CL
-        4rJJSc3JLEst0rdL4Mr48LabsaCTveLjg68sDYx7WbsYOTkkBEwkfv9ZytbFyMUhJHCcUWL3
-        9ZVsEAlLic2fXrKA2LwCghInZz4Bs1kEVCX2nN0HVsMmoCkx/9JBsLiIgLrEgdd3mEFsZoHl
-        jBKv/tqA2MICvhKTVu4AW8YvICzx6e5FMJtTwF1i5+7d7F2MHECL3SSW/8+EWOUisezKX6jb
-        VCQ+/H7ADjHSQmLqlf2MELa8RPPW2cwTGAVmIbluFpKyWUjKFjAyr2IUSCwz1stMLtZLyy8q
-        ydBLL9rECA5qRt8djLc3v9U7xMjEwXiIUYKDWUmE98vujCQh3pTEyqrUovz4otKc1OJDjNIc
-        LErivOzPwpOEBNITS1KzU1MLUotgskwcnFINTBIuNsXft8RwnSn3qlu8pMxnieulBRlbZ+Tv
-        eX+eO3anW2LHBfFHteHWeXWWltHZi2TDLd4pJR8zinadYpW4O3LWn86j+jVpHZPMz70TKLnZ
-        ed7k09P7Uvxhuidfxl+aNGFyOsfXJq+nvpuuMap67VfSv/Eg5JNMnXP2w/tlm4PVd26rKTS/
-        mnLKdGvr8T2H5R0XdS9gZJFmZGExbz75sFD0dbHKKQ+rc1/rJp2cYrLpVNfBzz5STyWq+G5u
-        OzgvO7vEZdIDo4/XLn7aI3XybUz5CTX5X8lPp3fM0ytdd/flrE+Pj/kvPZw9TV3gtsznqLsO
-        RiWi6YydXC+mqUWKKruX6ujrrhcT/+M85dTSC0osxRmJhlrMRcWJAMDVrWzZAgAA
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220429125956.GD16319@hu-pkondeti-hyd.qualcomm.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Στις 2022-04-29 18:28, Palmer Dabbelt έγραψε:
-> On Thu, 28 Apr 2022 14:48:14 PDT (-0700), Palmer Dabbelt wrote:
->> On Mon, 25 Apr 2022 23:11:23 PDT (-0700), mick@ics.forth.gr wrote:
->>> Hello Palmer,
->>> 
->>> Any updates on this ?
->> 
->> Sorry about that, it's on fixes.
-> 
-> Not sure if I just wasn't paying attention yesterday or if I'm
-> grumpier this morning, but that "RISC-V-fixes: " prefix is just a bit
-> too odd -- I know we've got a split between "RISC-V" and "riscv" so
-> maybe it doesn't matter, but even that is kind of ugly.
-> 
-> I re-wrote it, but I'm going to let it round trip through linux-next
-> so I'll send it up next time.
-> 
-> Sorry, I know this happened twice recently but I'll try not to make a
-> habit of it.
-> 
+Hi Pavan,
 
-Don't worry about it, just let me know what works better for you, would 
-"[PATCH -fixes] riscv:" be ok next time ?
+On Fri, Apr 29, 2022 at 06:29:56PM +0530, Pavan Kondeti wrote:
+> Hi Matthias,
+> 
+> On Mon, Apr 25, 2022 at 06:33:03PM +0530, Pavan Kondeti wrote:
+> > Hi Matthias,
+> > 
+> > On Fri, Apr 22, 2022 at 11:44:36AM -0700, Matthias Kaehlcke wrote:
+> > > On Fri, Apr 22, 2022 at 01:57:17PM +0200, Rafael J. Wysocki wrote:
+> > > > On Tue, Apr 19, 2022 at 9:11 PM Sandeep Maheswaram
+> > > > <quic_c_sanm@quicinc.com> wrote:
+> > > > >
+> > > > > From: Matthias Kaehlcke <mka@chromium.org>
+> > > > >
+> > > > > Add device_children_wakeup_capable() which checks whether the device itself
+> > > > > or one if its descendants is wakeup capable.
+> > > > 
+> > > > device_wakeup_path() exists for a very similar purpose.
+> > > > 
+> > > > Is it not usable for whatever you need the new function introduced here?
+> > > 
+> > > I wasn't aware of it's function, there are no doc comments and the
+> > > name isn't really self explanatory.
+> > > 
+> > > In a quick test device_wakeup_path() returned inconsistent values for the
+> > > root hub, sometimes true, others false when a wakeup capable USB device was
+> > > connected.
+> > 
+> > We will also test the same to double confirm the behavior of
+> > device_wakeup_path(). I am assuming that you checked device_wakeup_path()
+> > only during system suspend path.
+> > 
+> > Here is what I understood by looking at __device_suspend(). Please share
+> > your thoughts on this.
+> > 
+> > power.wakeup_path is set to true for the parent *after* a wakeup capable
+> > device is suspended. This means when the root hub(s) is suspended, it is
+> > propagated to xhci-plat and when xhci-plat is suspended, it is propagated
+> > to dwc3. bottom up propgation during system suspend.
+> > 
+> > I believe we can directly check something like this in the dwc3 driver
+> > instead of having another wrapper like device_children_wakeup_capable().
+> > 
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index 1170b80..a783257 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -1878,8 +1878,14 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> >  		break;
+> >  	case DWC3_GCTL_PRTCAP_HOST:
+> >  		if (!PMSG_IS_AUTO(msg)) {
+> > +			/*
+> > +			 * Don't kill the host when dwc3 is wakeup capable and
+> > +			 * its children needs wakeup.
+> > +			 */
+> > +			if (device_may_wakeup(dwc->dev) && device_wakeup_path(dwc->dev))
+> > +				handle_it();
+> > +		} else {
+> >  			dwc3_core_exit(dwc);
+> > -			break;
+> >  		}
+> >  
+> >  		/* Let controller to suspend HSPHY before PHY driver suspends */
+> > 
+> 
+> device_wakeup_path(dwc->dev) is returning true all the time irrespective of
+> the wakeup capability (and enabled status) of the connected USB devices. That
+> is because xhci-plat device is configured to wakeup all the time. Since the
+> child is wakeup capable, its parent i.e dwc3 has device_wakeup_path() set.
+> device_children_wakeup_capable() will also suffer the problem. However,
+> 
+> device_children_wakeup_capable(&hcd->self.root_hub->dev) is what Sandeep's
+> patch is using. That is not correct. we have two root hubs (HS and SS) associated
+> with a USB3 controller and calling it on one root hub is incorrect. 
+> device_children_wakeup_capable() must be called on xhci-plat so that it covers
+> both HS and SS root hubs
 
-Regards,
-Nick
+Thanks for pointing that out!
+
+> I am thinking of dynamically enabling/disabling xhci-plat wakeup capability so
+> that the wakeup path is correctly propagated to dwc3. something like below.
+> Does it make sense to you?
+> 
+> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+> index 649ffd8..be0c55b 100644
+> --- a/drivers/usb/host/xhci-plat.c
+> +++ b/drivers/usb/host/xhci-plat.c
+> @@ -412,6 +412,9 @@ static int __maybe_unused xhci_plat_suspend(struct device *dev)
+>  	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
+>  	int ret;
+>  
+> +	if (!device_wakeup_path(dev))
+> +		device_wakeup_disable(dev);
+> +
+>  	if (pm_runtime_suspended(dev))
+>  		pm_runtime_resume(dev);
+>  
+> @@ -443,6 +446,8 @@ static int __maybe_unused xhci_plat_resume(struct device *dev)
+>  	pm_runtime_set_active(dev);
+>  	pm_runtime_enable(dev);
+>  
+> +	device_wakeup_enable(dev);
+
+I think this also needs to be done conditionally, otherwise it would
+create a new wake source on every resume when wakeup is already
+enabled.
+
+Other than that this seems to do the trick and keeps the USB layer out of
+the dwc3 code.

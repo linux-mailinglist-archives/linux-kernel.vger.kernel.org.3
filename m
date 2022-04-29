@@ -2,130 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8698514A26
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 15:01:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AB7C514A28
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 15:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359699AbiD2NEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 09:04:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43322 "EHLO
+        id S1359665AbiD2NFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 09:05:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359695AbiD2NEa (ORCPT
+        with ESMTP id S1350240AbiD2NFD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 09:04:30 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DC4793B2;
-        Fri, 29 Apr 2022 06:01:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651237272; x=1682773272;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=k1CWm7qjA9y2fOTa8vpDb0S7DbYeiEIKA41/6A/74iI=;
-  b=tN/dYHZu7KqCECPrNkMWlyJZ6GgtedZ4/VHJZho5F2Tr2yBPDsDZyMSq
-   mdXp1mxKHz4poPAFMd34Yy/0iMU5sC33FkQX9zFQosqp92kdj5s+0xLij
-   B44h/ZIgZxYgdzNiwM/j72JDqVFdCdwfvxNX6Ch3lBZk0gG0yRtpQvAtz
-   k=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 29 Apr 2022 06:01:11 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 06:01:11 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 29 Apr 2022 06:01:11 -0700
-Received: from [10.50.11.55] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 29 Apr
- 2022 06:01:05 -0700
-Message-ID: <b8dd1e7e-9e04-b2ae-2640-8aaf529fd1c0@quicinc.com>
-Date:   Fri, 29 Apr 2022 18:30:58 +0530
+        Fri, 29 Apr 2022 09:05:03 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A2147397;
+        Fri, 29 Apr 2022 06:01:44 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KqXgR3zDbz4xL5;
+        Fri, 29 Apr 2022 23:01:39 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1651237299;
+        bh=vtp78OdYVuFW80iG+49AB0sF+gT7HB0RMQGuTJ7zQ2o=;
+        h=Date:From:To:Cc:Subject:From;
+        b=BFVPJdiP2FfCPf050BNOlbhUBdg4SVVmWYtnFwBuScUVgTfNRFgMT7R5SOtw1UH5/
+         heuW2zUrXJkj3qo6PR0oyH5/yTeovx9qa4cpQvhTxM7ScbDEmtX24e1dQ9rMr8sUiw
+         +RH2jcldR+vZJ1+k0qtDuarR42k4ZImvIda/jXceqGEYuXoPLLKDSFOJARWNS02hbc
+         wZts/f7KMytArvoTPcHiZ0vsa/GDNmOGc9O9pcpAQLGiay83ziqqLNt9PLwq7JSFAY
+         gJRorqof6lLgAwXtT1CEeK3XF4oGQa8zwHvGk5zArUUgZQDEoiEaefuWVWb1jF5AlT
+         HCtjKrbQKi5/Q==
+Date:   Fri, 29 Apr 2022 23:01:38 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Joerg Roedel <joro@8bytes.org>
+Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the iommu tree
+Message-ID: <20220429230138.6647faaf@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCHv12 8/9] serial: qcom_geni_serial: Disable MMIO tracing for
- geni serial
-Content-Language: en-US
-To:     Trilok Soni <quic_tsoni@quicinc.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-CC:     <arnd@arndb.de>, <catalin.marinas@arm.com>, <rostedt@goodmis.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <maz@kernel.org>, <quic_psodagud@quicinc.com>, <will@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-References: <cover.1651139070.git.quic_saipraka@quicinc.com>
- <3fef68a94e4947d58a199709929d30e0e2bf2e44.1651139070.git.quic_saipraka@quicinc.com>
- <Ympxa0ZY0VxZGEjA@kroah.com>
- <e11455d8-78c2-68e8-215e-a4e3587f3e4a@quicinc.com>
- <YmrFlce26p2uvtDZ@kroah.com>
- <a2d1bd9f-2bb4-bea9-f59a-08d91db5572a@quicinc.com>
-From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-In-Reply-To: <a2d1bd9f-2bb4-bea9-f59a-08d91db5572a@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/_zxKQbp=RjHGOJHu4kzsGv_";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/28/2022 10:30 PM, Trilok Soni wrote:
-> On 4/28/2022 9:49 AM, Greg KH wrote:
->> On Thu, Apr 28, 2022 at 09:31:43AM -0700, Trilok Soni wrote:
->>> On 4/28/2022 3:50 AM, Greg KH wrote:
->>>> On Thu, Apr 28, 2022 at 03:25:31PM +0530, Sai Prakash Ranjan wrote:
->>>>> Disable MMIO tracing for geni serial driver as it is a high
->>>>> frequency operation for serial driver with many register reads/
->>>>> writes and not very useful to log all MMIO traces and prevent
->>>>> excessive logging.
->>>>>
->>>>> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
->>>>> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
->>>>> ---
->>>>>    drivers/tty/serial/qcom_geni_serial.c | 8 +++++++-
->>>>>    1 file changed, 7 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
->>>>> index 1543a6028856..5b48e6c2bf3c 100644
->>>>> --- a/drivers/tty/serial/qcom_geni_serial.c
->>>>> +++ b/drivers/tty/serial/qcom_geni_serial.c
->>>>> @@ -1,5 +1,11 @@
->>>>>    // SPDX-License-Identifier: GPL-2.0
->>>>> -// Copyright (c) 2017-2018, The Linux foundation. All rights reserved.
->>>>> +/*
->>>>> + * Copyright (c) 2017-2018, The Linux Foundation. All rights reserved.
->>>>> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
->>>>> + */
->>>>
->>>> I strongly disagree that adding a single line here warrants a copyright
->>>> update.  If your lawyers will sign off on this change, I am willing to
->>>> reconsider.
->>>
->>> I am not a lawyer, we can skip adding QuIC copyright here since it is just
->>> one line change, but at the same time we can't add 2022 year in the existing
->>> copyright.
->>
->> That is correct, because you are not making a copyrightable change,
->> otherwise the single line addition would be ok.
->>
->> Talk to your lawyers about this :)
->>
->>> If that is fine, we can skip the copyright year update entirely.
->>
->> Please do.
->>
->
-> Sai, please go ahead and remove QuIC copyright line here.
->
->
+--Sig_/_zxKQbp=RjHGOJHu4kzsGv_
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Already done yesterday itself in the new version which is v13.
+Hi all,
 
-Thanks,
-Sai
+In commit
+
+  df2a0bccf804 ("iommu/amd: Do not call sleep while holding spinlock")
+
+Fixes tag
+
+  Fixes: dc6a709e5123 ("iommu/amd: Improve amd_iommu_v2_exit()")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: 9f968fc70d85 ("iommu/amd: Improve amd_iommu_v2_exit()")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/_zxKQbp=RjHGOJHu4kzsGv_
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJr4bIACgkQAVBC80lX
+0Gwrsgf9G8lcinLaN1g+yhaK0vgCxdPT7Lkg+o1Fs2zLsqvEzUmCuEYX4CRRl/Sw
+6NAX2PhFR0xiLlSewylSV5rwqrGlahXmTXIW8t6riON/jR9/dqt5aP65nFmlXJ5D
+dITE+epUp7w/Vn95sZZMotB5WFvYXC9yQgU9l46mPtlJswAf3gPpKJTY6XqdQIkS
+S10tT14wxoaf6qhZF9gK9IOsdNQprPDF75fhP2D6lXPw1i08Bl/mbp246FX9xVVx
+9s5xiN4Ihn8UuhQ0GCjgEckD5y6twMa7HG/haNHd1slQzrv+HVQPD6eZrF3+UH3A
+Qa9WKB98B23WAj5TFSl/W4Z97TVRVA==
+=Bo/J
+-----END PGP SIGNATURE-----
+
+--Sig_/_zxKQbp=RjHGOJHu4kzsGv_--

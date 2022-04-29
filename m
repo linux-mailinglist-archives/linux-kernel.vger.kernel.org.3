@@ -2,86 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D68E5155AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8DCD5155B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380815AbiD2UeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 16:34:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59584 "EHLO
+        id S1380771AbiD2UfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 16:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380771AbiD2UeQ (ORCPT
+        with ESMTP id S1380669AbiD2UfP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 16:34:16 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6480A5A15E;
-        Fri, 29 Apr 2022 13:30:57 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nfraprado)
-        with ESMTPSA id 8504F1F469DC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651264256;
-        bh=TGXOnKC566KySlgE7TthYsPemPWKYachLNySsPYvAsg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JGBsEe1eRAd8NEWxwWO63Bgl5dZPFLGJlFdaRgKMETqsbNVgwXwcRfRlEFgcJJCyS
-         ooSnwfpyncNz0b9V2AU76cO2jhtczgyap0FFpH/nIMS1NmP6xcx16YzEak2F/OUwYQ
-         PgUgwY8wePE7RHEdwIuyqlLyM1e640JeXNvHWhG+dTcBPE/ZMTrDJEsCCKdjxLrg+C
-         Si1Z4cK7N0emfsOSCGIMsZ9jcHJTj+FNk400VBay/6N+CnuPZ8D12I7/6w1S5HinvZ
-         on70teL+QK4YgcrORHVrjzo4PXuPOjhTwo+xhyHngAwqz/7xq/xP/T33A/GHQbXv96
-         IE6c3nISQweTA==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     Mark Brown <broonie@kernel.org>
+        Fri, 29 Apr 2022 16:35:15 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F343E644F5
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:31:54 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id dk23so17494873ejb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:31:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=cOTYvKnpssw+HjajD028HmP+wTShZ9IeCONkU/DnTDM=;
+        b=IS1Bwm1KfpiUP9DD8wNp7WoHCXusyqm+r96FFYBPQnjwMo4DHP7CiRZTs7jb3p5XCW
+         spWHOr7uLBLxmBGed7edoEFKUzDZw4lfa+zF/UssDIXgb5glOSFPpl0eRZgdk2tpJTjw
+         2dnQFVEV5XluFKgdMiXjg/WVa6dhmTbKzRETUVxk3qsNELPl4TPDZHepIIdG5lBbYYAq
+         OmUAb2CPekhK3R8YB9uIBwwCN8KjMK4pXvataQGiWRx8r3y6C58oJUvIBE9rgzMBG1/t
+         SfXe0quGxmGX8L9S4V6NIcVtP6hhLWksn8EjxYNmEkgQaYonwOn9HZ8uU+fi/RWarzkB
+         DZ1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=cOTYvKnpssw+HjajD028HmP+wTShZ9IeCONkU/DnTDM=;
+        b=1NH5HjAPJ+k8F6IZDvs6bew63c0U1HMrOX+SXTqSdo/dcbwhN7av2TNKsb34DGeZVN
+         GZSNQiUhg7CAh/ylnrGWv9XY86qzf7LQ0rCTPc7jK3zDYy3lBEdCLkb73WXTDuRN7Dtw
+         7ZX4OAN2kIKYqqI8fYu7VL54c8o7dzSnkso2wGFzJiHlp5SEmJgv7UNrCWfJ1RhL2wso
+         1xbQ84XuoSVDRB0zB02jtN+c1du7eiB+NRmSwKtV92BkTWfC7P8P98XX96Bvx9apYkDi
+         r8qSbe+WghJs5bCp+n4edPFggUt25FDx0C13WgQvO0r3HYwDHBe2m/1AIbP8/+2ArOpL
+         9PWg==
+X-Gm-Message-State: AOAM531I7cj2U5ROKRUXR0FuLHVkUpoJv1hNo+8rdsT8q6PEjVJw2lqT
+        7585YmITGDSkzfTIc1TRP5le6Uwlbd31NQ==
+X-Google-Smtp-Source: ABdhPJwiJe/sfIfNDfS8+1kj10ZZagdOYEQqXZdXUtpduVnOH4GD+F84f5RxC6lUMiPC7SCi359tyw==
+X-Received: by 2002:a17:907:7f26:b0:6f4:69c:196f with SMTP id qf38-20020a1709077f2600b006f4069c196fmr956890ejc.613.1651264313578;
+        Fri, 29 Apr 2022 13:31:53 -0700 (PDT)
+Received: from [192.168.0.176] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id i8-20020aa7c708000000b0042617ba63absm3299258edq.53.2022.04.29.13.31.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 13:31:53 -0700 (PDT)
+Message-ID: <4adf790c-5773-a78e-3c8e-2a510e3dbd1e@linaro.org>
+Date:   Fri, 29 Apr 2022 22:31:52 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] dt-bindings: pinctrl: mt8192: Add mediatek,pull-down-adv
+ property
+Content-Language: en-US
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Linus Walleij <linus.walleij@linaro.org>
 Cc:     kernel@collabora.com,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] ASoC: dt-bindings: rt5682: Add #sound-dai-cells
-Date:   Fri, 29 Apr 2022 16:30:39 -0400
-Message-Id: <20220429203039.2207848-4-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220429203039.2207848-1-nfraprado@collabora.com>
-References: <20220429203039.2207848-1-nfraprado@collabora.com>
-MIME-Version: 1.0
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sean Wang <sean.wang@mediatek.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+References: <20220429200637.2204937-1-nfraprado@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220429200637.2204937-1-nfraprado@collabora.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The rt5682 codec can be pointed to through a sound-dai property to be
-used as part of a machine sound driver. dtc expects #sound-dai-cells to
-be defined in the codec's node in those cases, so add it in the
-dt-binding and set it to 0.
+On 29/04/2022 22:06, Nícolas F. R. A. Prado wrote:
+> Add the mediatek,pull-down-adv property to the pinctrl-mt8192 dt-binding
+> to allow configuring pull-down resistors on the pins of MT8192. It is
+> the same as in mt8183-pinctrl.
+> 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> 
+> ---
+> 
+>  .../devicetree/bindings/pinctrl/pinctrl-mt8192.yaml   | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8192.yaml b/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8192.yaml
+> index c90a132fbc79..e462f49eae6f 100644
+> --- a/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8192.yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/pinctrl-mt8192.yaml
+> @@ -117,6 +117,17 @@ patternProperties:
+>              $ref: /schemas/types.yaml#/definitions/uint32
+>              enum: [0, 1, 2, 3]
+>  
+> +          mediatek,pull-down-adv:
+> +            description: |
+> +              Pull down settings for 2 pull resistors, R0 and R1. User can
+> +              configure those special pins. Valid arguments are described as below:
 
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
----
+Trailing ':' should be escaped, so '::'
 
- Documentation/devicetree/bindings/sound/rt5682.txt | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/sound/rt5682.txt b/Documentation/devicetree/bindings/sound/rt5682.txt
-index cd8c53d8497e..c5f2b8febcee 100644
---- a/Documentation/devicetree/bindings/sound/rt5682.txt
-+++ b/Documentation/devicetree/bindings/sound/rt5682.txt
-@@ -46,6 +46,8 @@ Optional properties:
- 
- - realtek,dmic-clk-driving-high : Set the high driving of the DMIC clock out.
- 
-+- #sound-dai-cells: Should be set to '<0>'.
-+
- Pins on the device (for linking into audio routes) for RT5682:
- 
-   * DMIC L1
--- 
-2.36.0
+> +              0: (R1, R0) = (0, 0) which means R1 disabled and R0 disabled.
+> +              1: (R1, R0) = (0, 1) which means R1 disabled and R0 enabled.
+> +              2: (R1, R0) = (1, 0) which means R1 enabled and R0 disabled.
+> +              3: (R1, R0) = (1, 1) which means R1 enabled and R0 enabled.
+> +            $ref: /schemas/types.yaml#/definitions/uint32
+> +            enum: [0, 1, 2, 3]
 
+It's okay, but for all these and other values (you have few such in the
+binding), you should maybe add header and defines. It's much more
+readable for humans...
+
+Is the property valid without bias-pull-down?
+
+Best regards,
+Krzysztof

@@ -2,99 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F52B5141D2
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 07:38:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC795141D8
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 07:41:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352790AbiD2Fll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 01:41:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58968 "EHLO
+        id S1354172AbiD2Fow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 01:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238283AbiD2Flh (ORCPT
+        with ESMTP id S1354163AbiD2Fop (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 01:41:37 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90904D247;
-        Thu, 28 Apr 2022 22:38:20 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id g11-20020a9d648b000000b00605e4278793so3537758otl.7;
-        Thu, 28 Apr 2022 22:38:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=XlUmO362806X4JBQXMzY9UYbekCUk7hEemiyL4iife8=;
-        b=TejRD1+JMro6/90xzcTh0/qeeD2QME1ak7NGOi/2zhikolSIkNJqo4Y0umvsyuNZAL
-         oLLscPcOs463dmYq2Juql/9JQSyGU/xj4Y0nRZvjsy00agrvfg8w1ZILGGeY+lZpCYIl
-         67SPiV0jSkZ0wEBlEng8qjnrtqLqIhZgFVg2Y48sL+9+VywMKXGXtC4etxZhhDu3fVcs
-         F/+sSfkZxRDVQsETdYf9svmEvlM1aeqjvhTgkYY9yLhEKYf0ztcU/So/SBn0SKkI7wjo
-         WHPsk7LgIZiPSEYCsWnJiNbNkVdxik+0AWzd8buL88T3LB6WrRbSdM8HKhnz3Ub86PQJ
-         ft0g==
+        Fri, 29 Apr 2022 01:44:45 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782F754BEE
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 22:41:28 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id x1-20020a056e020f0100b002c98fce9c13so3040956ilj.3
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 22:41:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=XlUmO362806X4JBQXMzY9UYbekCUk7hEemiyL4iife8=;
-        b=G8eMYiWK+6s3XO2epadpUoWjFWjdjoW7TElrsmo9xp/CSAoGJEvX/ByJV+dXdRkgGQ
-         ysdquqXgDbSFLlyshM3Gn5/JJ00Xurd74/1WChsKxmdCp7Kiasv8SAMrd8VqtNIr2ToY
-         BLzYvGcC2Hyh/fsPP0OEKwQ45/Y3q1BzSKkuqK2wxAE2LQqC0eMQWNZfRMZJca//Cogg
-         WeFYAIwOa+zCN2ilOakPqZZEJA+yseTyuXIxTpI9v/ZJXrslvjwKC8caTjLp/kexHMjj
-         jB2jd2vIguRoXo423Qv+zu7w4yygyeaEvWIDHr75nPAxowDPN9wENOxkKuxUch9HiNp9
-         XaOw==
-X-Gm-Message-State: AOAM531jgXLtDF5UaspgK1SlWOpNHTfcvykuRrREgIseg5k9SSX40nYW
-        6GMZr0Jgy1FYuo43ZBIiOlMteILJwTg=
-X-Google-Smtp-Source: ABdhPJy8QawfDhd80gr7+cpvv0WYD3gSFz/22dlhAjs30yip1ifF7oxyO8+2uW5lcOG8M/ypvGCC9A==
-X-Received: by 2002:a05:6830:314f:b0:605:84df:bb5d with SMTP id c15-20020a056830314f00b0060584dfbb5dmr12548315ots.346.1651210700253;
-        Thu, 28 Apr 2022 22:38:20 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o64-20020acad743000000b002ef3b249b9esm789432oig.58.2022.04.28.22.38.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 22:38:19 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <85bb3cde-2b62-c15a-46f6-251eb06daeb1@roeck-us.net>
-Date:   Thu, 28 Apr 2022 22:38:17 -0700
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=x3MTACHKJZ3L2DlqgxVgqLiRoxwCwaVIdsT6U6RxAqw=;
+        b=hWaXmT0U6KV037CzJZ1nWIrLvTxxazKfP4WEWHaGF7ofJkRZelp5LYuvLI+DCBM+Xr
+         /nvRXsW9LbeCTDhKTpSAIjVPXwGRZ/+Hod7yc+MgUQPY/7IGKVFvFWFSMm2ltjn3e0hp
+         j1Q4RvBDKONACgfPUAqCmqRg06pQTA1cx72CkcRY6wNXeowgf0nA/LI/S+RgEerR24a9
+         U7iDVPwMZwZuYU5s2fPHPODCM/nynU/fK2u3oN/2fHEyHmwMAD7YlL3yL9cI45Tiq2a1
+         a1Eh3Nv9Z5jqsyGuIe0QBq5/SKXyP1JkwBBNf1KzGipYPV0WdaMDC/urFraQrirdJBE0
+         KjLA==
+X-Gm-Message-State: AOAM533UojVpD0hwtI3PcTIJTzDLb6RpZdd4Gyp8qa+PNhv29rLzhC0S
+        tPMUVohoiJH2pp7rqY81X6cffDPB+3K5DgokbRMEiaeGngJo
+X-Google-Smtp-Source: ABdhPJxoqfI1Tq8QAcjTxAeDa4Kz8N2fm4VNksuraSBI4GnBO4AQcsyK8aYn4jGnceWg0lesom9HGtbbwxSINfmi9aRaBWdWpxju
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] hwmon: (pmbus) add missing definitions of pmbus registers
-Content-Language: en-US
-To:     wujek dev <dev_public@wujek.eu>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220428134634.1610241-1-dev_public@wujek.eu>
- <f8ba6a46-bbdb-b8ba-7b27-d43f2e05426d@roeck-us.net>
- <hGgSY5dLHFlYeXpEkcTTRThFR76Eevb391giqk_CiNorL3WfRpH44if4pfaOu1jMc2GuB0T51wfbHj0Aiawd28p6HvuWN9t1bzY2S_D1_fM=@wujek.eu>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <hGgSY5dLHFlYeXpEkcTTRThFR76Eevb391giqk_CiNorL3WfRpH44if4pfaOu1jMc2GuB0T51wfbHj0Aiawd28p6HvuWN9t1bzY2S_D1_fM=@wujek.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:4416:0:b0:657:b740:a016 with SMTP id
+ r22-20020a6b4416000000b00657b740a016mr4039618ioa.190.1651210887858; Thu, 28
+ Apr 2022 22:41:27 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 22:41:27 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006b8dad05ddc47e92@google.com>
+Subject: [syzbot] WARNING: suspicious RCU usage in mas_walk
+From:   syzbot <syzbot+2ee18845e89ae76342c5@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/28/22 18:04, wujek dev wrote:
-> 
->>
->>
->> On 4/28/22 06:46, Adam Wujek wrote:
->>
->>> Definitions are taken from the table 31 of the PMBUS specification
->>> revision 1.3.1, 13 March 2015.
->>
->>
->> Do you plan to do anything with those registers, or a subset of it ?
-> yes, some of PMBUS_MFR_SPECIFIC_*, but in a driver that will not be published in the near future.
-> 
+Hello,
 
-Adding defines just to add defines without using them only increases
-source code size and compile time. Let's not do that. We can add
-missing defines as they are needed.
+syzbot found the following issue on:
 
-Guenter
+HEAD commit:    bdc61aad77fa Add linux-next specific files for 20220428
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=15bb3dc2f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=87767e89da13a759
+dashboard link: https://syzkaller.appspot.com/bug?extid=2ee18845e89ae76342c5
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1118a5f6f00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=125bd212f00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2ee18845e89ae76342c5@syzkaller.appspotmail.com
+
+=============================
+WARNING: suspicious RCU usage
+5.18.0-rc4-next-20220428-syzkaller #0 Not tainted
+-----------------------------
+lib/maple_tree.c:844 suspicious rcu_dereference_check() usage!
+
+other info that might help us debug this:
+
+
+rcu_scheduler_active = 2, debug_locks = 1
+5 locks held by syz-executor842/4211:
+ #0: ffff88807f0ae460 (sb_writers#8){.+.+}-{0:0}, at: ksys_write+0x127/0x250 fs/read_write.c:644
+ #1: ffff88801df04488 (&of->mutex){+.+.}-{3:3}, at: kernfs_fop_write_iter+0x28c/0x610 fs/kernfs/file.c:282
+ #2: ffff8881453b9a00 (kn->active#106){.+.+}-{0:0}, at: kernfs_fop_write_iter+0x2b0/0x610 fs/kernfs/file.c:283
+ #3: ffffffff8bedc528 (ksm_thread_mutex){+.+.}-{3:3}, at: run_store+0xd1/0xa60 mm/ksm.c:2917
+ #4: ffff88801e5e8fd8 (&mm->mmap_lock#2){++++}-{3:3}, at: mmap_read_lock include/linux/mmap_lock.h:117 [inline]
+ #4: ffff88801e5e8fd8 (&mm->mmap_lock#2){++++}-{3:3}, at: unmerge_and_remove_all_rmap_items mm/ksm.c:989 [inline]
+ #4: ffff88801e5e8fd8 (&mm->mmap_lock#2){++++}-{3:3}, at: run_store+0x2a5/0xa60 mm/ksm.c:2923
+
+stack backtrace:
+CPU: 0 PID: 4211 Comm: syz-executor842 Not tainted 5.18.0-rc4-next-20220428-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ mas_root lib/maple_tree.c:844 [inline]
+ mas_start lib/maple_tree.c:1331 [inline]
+ mas_state_walk lib/maple_tree.c:3745 [inline]
+ mas_walk+0x45e/0x670 lib/maple_tree.c:4923
+ mas_find+0x442/0xc90 lib/maple_tree.c:5861
+ vma_find include/linux/mm.h:664 [inline]
+ vma_next include/linux/mm.h:673 [inline]
+ unmerge_and_remove_all_rmap_items mm/ksm.c:990 [inline]
+ run_store+0x2ed/0xa60 mm/ksm.c:2923
+ kobj_attr_store+0x50/0x80 lib/kobject.c:824
+ sysfs_kf_write+0x110/0x160 fs/sysfs/file.c:136
+ kernfs_fop_write_iter+0x3f8/0x610 fs/kernfs/file.c:291
+ call_write_iter include/linux/fs.h:2059 [inline]
+ new_sync_write+0x38a/0x560 fs/read_write.c:504
+ vfs_write+0x7c0/0xac0 fs/read_write.c:591
+ ksys_write+0x127/0x250 fs/read_write.c:644
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f6a91306e79
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffddeb8cde8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 00000000000f4240 RCX: 00007f6a91306e79
+RDX: 0000000000000002 RSI: 0000000020000000 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000001
+R10: 0000000020117000 R11: 0000000000000246 R12: 000000000000cf84
+R13: 00007ffddeb8cdfc R14: 00007ffddeb8ce10 R15: 00007ffddeb8ce00
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

@@ -2,68 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D51F513FE9
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 03:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2E37513FEE
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 03:03:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353635AbiD2BGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 21:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60026 "EHLO
+        id S1353660AbiD2BHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 21:07:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244954AbiD2BGD (ORCPT
+        with ESMTP id S1353637AbiD2BGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 21:06:03 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810B6B9F38;
-        Thu, 28 Apr 2022 18:02:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=7Kgksz1U+mpR5yolnT7/amlugtDRmACOMUcwglvKJUc=; b=qKdUTEd5nyy93U0dp1Dz1gWDVZ
-        gF+ddv0L6PzIaNwv4iRlOuv9idXs1gNYlZzsEYCl3Azlk9WGiwxoUDeysOdMcKgGw85BfX3YdAYcC
-        taV00TYA8wNY0fupmJwcH8YGrUiH1W+Zh6rK0oKVhKo6mpA8ar5Mx8zbPEBOZZ5RUheo=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nkF1j-000Oz9-FZ; Fri, 29 Apr 2022 03:02:31 +0200
-Date:   Fri, 29 Apr 2022 03:02:31 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Dylan Hung <dylan_hung@aspeedtech.com>,
-        David Wilder <dwilder@us.ibm.com>, openbmc@lists.ozlabs.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Wilder <wilder@us.ibm.com>
-Subject: Re: [PATCH net] net: ftgmac100: Disable hardware checksum on AST2600
-Message-ID: <Yms5JzcVMKDYpR5H@lunn.ch>
-References: <20220428082858.545176-1-joel@jms.id.au>
+        Thu, 28 Apr 2022 21:06:54 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40809BC847;
+        Thu, 28 Apr 2022 18:03:37 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KqDkp6DzMz4xLb;
+        Fri, 29 Apr 2022 11:03:30 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1651194212;
+        bh=xo1K2yhVNcgqOXprCRsSenw+oPXTxS/DnUeEiRmb6Rw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=i5aBr1flOKZzH+G5Q1/erhaYZaSb2KKccduJM5dJAkP00PFpPC5w3C684D3tduHOS
+         zmp5E8A4KAXZRqPonwiTtH63EU25+FZ34V1voTHJt0tY+bweUnY7JYT5NYL4iZAtqD
+         l95MA/dJJF74Q5TVFjXkYhVJ64LwUSe6jm1vWu8cZa6ZvEWDon7wihT6e1dNT+jQaQ
+         hxKKfoWeG1jMVTus8CeWl/2nUEAvvI5AgcAv8quyCvXOs1WbVv7lmUYx+27NF/kqNr
+         T8SgklxIDxssBG+Ym5EkGeB5tDf0k1xSmtWPIajP9QBt/8G542kVhS7M9WqwYJBAdb
+         CPNvccwanrFNQ==
+Date:   Fri, 29 Apr 2022 11:03:29 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>,
+        Dave Airlie <airlied@linux.ie>
+Cc:     DRI <dri-devel@lists.freedesktop.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Philip Yang <Philip.Yang@amd.com>
+Subject: linux-next: manual merge of the amdgpu tree with the drm tree
+Message-ID: <20220429110329.79f6b628@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220428082858.545176-1-joel@jms.id.au>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/_ZRu82WkLRPVC.nC+GhUmxt";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Fixes: 39bfab8844a0 ("net: ftgmac100: Add support for DT phy-handle property")
-> Reported-by: David Wilder <wilder@us.ibm.com>
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
-> ---
-> Net maintainers, if no one has a counter proposal I would like this
-> merged as a fix. Please give Dylan from Aspeed a chance to reply before
-> applying the patch.
+--Sig_/_ZRu82WkLRPVC.nC+GhUmxt
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-What has phy-handle got to do with this? You might want to add an
-explanation why you picked that as a Fixes: commit, if it is in fact
-correct.
+Hi all,
 
+Today's linux-next merge of the amdgpu tree got a conflict in:
 
-     Andrew
+  drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+
+between commit:
+
+  047a1b877ed4 ("dma-buf & drm/amdgpu: remove dma_resv workaround")
+
+from the drm tree and commit:
+
+  3da2c38231a4 ("drm/amdgpu: Free user pages if amdgpu_cs_parser_bos failed=
+")
+
+from the amdgpu tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+index 01853431249d,67bd506fa141..000000000000
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+@@@ -636,9 -642,26 +636,21 @@@ static int amdgpu_cs_parser_bos(struct=20
+  	}
+ =20
+  error_validate:
+ -	if (r) {
+ -		amdgpu_bo_list_for_each_entry(e, p->bo_list) {
+ -			dma_fence_chain_free(e->chain);
+ -			e->chain =3D NULL;
+ -		}
+ +	if (r)
+  		ttm_eu_backoff_reservation(&p->ticket, &p->validated);
+- out:
+ -	}
++=20
++ out_free_user_pages:
++ 	if (r) {
++ 		amdgpu_bo_list_for_each_userptr_entry(e, p->bo_list) {
++ 			struct amdgpu_bo *bo =3D ttm_to_amdgpu_bo(e->tv.bo);
++=20
++ 			if (!e->user_pages)
++ 				continue;
++ 			amdgpu_ttm_tt_get_user_pages_done(bo->tbo.ttm);
++ 			kvfree(e->user_pages);
++ 			e->user_pages =3D NULL;
++ 		}
++ 	}
+  	return r;
+  }
+ =20
+
+--Sig_/_ZRu82WkLRPVC.nC+GhUmxt
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJrOWEACgkQAVBC80lX
+0GyGKAf/ehT5fosMx9Vc4L1ZZG/fp3A3g1odV2zqD7lEc9m4qTzdzYK6klwEr3qa
+qljZB5lzWiFHcqELkbYLrIAreffkoVamMTyilcsZSYDynFmh06TQx5qCxkYobffQ
+Vjvl6Pqn4CqAjOJ7s9SlgR4cm5Bqv/PrgudjQLJFyTwxTsLt+Cc2I0h7ax1QxQvq
+a/0gLli9LgcFyTth5PfhvzSkN4irJHubZBQAcQ1qgla0St1el0qfHcUPxP1VxTTC
+mSag4rMy/Vji4ZFxGfVBn6OfQtghu7ev7T3oBD6DS1sAjupiVHh0/XDRhILKvI3m
+5KaSAH4XKKi1YLadEePyc1H6ycFa5Q==
+=+m8V
+-----END PGP SIGNATURE-----
+
+--Sig_/_ZRu82WkLRPVC.nC+GhUmxt--

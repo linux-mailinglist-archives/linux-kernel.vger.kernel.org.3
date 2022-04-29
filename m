@@ -2,260 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A7175140A8
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 04:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 399A95140AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 04:44:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235061AbiD2CYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 22:24:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36600 "EHLO
+        id S233462AbiD2CZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 22:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233485AbiD2CYm (ORCPT
+        with ESMTP id S235568AbiD2CZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 22:24:42 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279A0BC853
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 19:21:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651198886; x=1682734886;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=kyA7vWNpPOUxYFRqpG5Xos4pd68arB+IJNPtrpyyiIc=;
-  b=C8KkbGsSJvbOwSt+Ng5hyfPMof6xoopN0uOYrD6nr1wOOpxhbEkIIq+b
-   9C/adhaWkh+SsC09cYGojM6kCoD8ti4HIeCG0UcJx32YDy6Jf0uMsxG/w
-   w3m/4wKMngXdWvVd2V5TuUIm09Z2ajVVsE0XIRaMBJflxmQMwbJF2N0V6
-   s3oFUdvqZjC0UA91THQtKoo8qlCc3Aq/35g7YPNWeaBuf/iNQmyChhu//
-   SGi9hyWY6m9paD5hMF/MdX1xyAsAXTb8fuZg2gXnEUTnKwiZ14Ifujzz/
-   EuN25u5BwSz/qlEngr1VDUs7JkdnQAkf5zBwQfcF/t3TAgWkcBU5Hjc5J
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="265350313"
-X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="265350313"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 19:21:25 -0700
-X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="560037425"
-Received: from wangyuf1-mobl.ccr.corp.intel.com ([10.254.215.143])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 19:21:21 -0700
-Message-ID: <f6282d421ee66b56ae889d408ca5bbe843bd9494.camel@intel.com>
-Subject: Re: [PATCH v2 0/5] mm: demotion: Introduce new node state
- N_DEMOTION_TARGETS
-From:   "ying.huang@intel.com" <ying.huang@intel.com>
-To:     Alistair Popple <apopple@nvidia.com>, Wei Xu <weixugc@google.com>,
-        Yang Shi <shy828301@gmail.com>
-Cc:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Greg Thelen <gthelen@google.com>,
-        MichalHocko <mhocko@kernel.org>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Feng Tang <feng.tang@intel.com>
-Date:   Fri, 29 Apr 2022 10:21:14 +0800
-In-Reply-To: <7535568.9lEE7krE1S@nvdebian>
-References: <CAAPL-u_pSWD6U0yQ8Ws+_Yfb_3ZEmNXJsYcRJjAFBkyDk=nq8g@mail.gmail.com>
-         <CAAPL-u-sSg=p1n_Trm9TyrgdCCO1zZ-LbKM=tkp3M827gLv=CA@mail.gmail.com>
-         <CAHbLzkr=izetwUdMnXn+s=52TYK7rG7QwxiRLz8dfu3i-4sZ7A@mail.gmail.com>
-         <7535568.9lEE7krE1S@nvdebian>
+        Thu, 28 Apr 2022 22:25:19 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2764CBC853;
+        Thu, 28 Apr 2022 19:22:00 -0700 (PDT)
+X-UUID: 97576f88f8fc473a922b2c8ed50ffb67-20220429
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:63c1de2f-cb63-4657-87a9-8f1b2287063c,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:3e70e4c6-85ee-4ac1-ac05-bd3f1e72e732,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 97576f88f8fc473a922b2c8ed50ffb67-20220429
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 354367963; Fri, 29 Apr 2022 10:21:35 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 29 Apr 2022 10:21:34 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 29 Apr 2022 10:21:34 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 29 Apr 2022 10:21:34 +0800
+Message-ID: <d2331949d6ef40c9dbcf8094fe0a27c1204f2daf.camel@mediatek.com>
+Subject: Re: [PATCH v4, 1/1] drm/mediatek: add lut diff flag for new gamma
+ hardware support
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Yongqiang Niu <yongqiang.niu@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+CC:     Yongqiang Niu <yongqiang.niu@mediatek.corp-partner.google.com>,
+        <devicetree@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        David Airlie <airlied@linux.ie>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        "Dennis YC Hsieh" <dennis-yc.hsieh@mediatek.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Fri, 29 Apr 2022 10:21:34 +0800
+In-Reply-To: <20220428085829.15855-2-yongqiang.niu@mediatek.com>
+References: <20220428085829.15855-1-yongqiang.niu@mediatek.com>
+         <20220428085829.15855-2-yongqiang.niu@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-29 at 11:27 +1000, Alistair Popple wrote:
-> On Friday, 29 April 2022 3:14:29 AM AEST Yang Shi wrote:
-> > On Wed, Apr 27, 2022 at 9:11 PM Wei Xu <weixugc@google.com> wrote:
-> > > 
-> > > On Wed, Apr 27, 2022 at 5:56 PM ying.huang@intel.com
-> > > <ying.huang@intel.com> wrote:
-> > > > 
-> > > > On Wed, 2022-04-27 at 11:27 -0700, Wei Xu wrote:
-> > > > > On Tue, Apr 26, 2022 at 10:06 PM Aneesh Kumar K V
-> > > > > <aneesh.kumar@linux.ibm.com> wrote:
-> > > > > > 
-> > > > > > On 4/25/22 10:26 PM, Wei Xu wrote:
-> > > > > > > On Sat, Apr 23, 2022 at 8:02 PM ying.huang@intel.com
-> > > > > > > <ying.huang@intel.com> wrote:
-> > > > > > > > 
-> > > > > > 
-> > > > > > ....
-> > > > > > 
-> > > > > > > > 2. For machines with PMEM installed in only 1 of 2 sockets, for example,
-> > > > > > > > 
-> > > > > > > > Node 0 & 2 are cpu + dram nodes and node 1 are slow
-> > > > > > > > memory node near node 0,
-> > > > > > > > 
-> > > > > > > > available: 3 nodes (0-2)
-> > > > > > > > node 0 cpus: 0 1
-> > > > > > > > node 0 size: n MB
-> > > > > > > > node 0 free: n MB
-> > > > > > > > node 1 cpus:
-> > > > > > > > node 1 size: n MB
-> > > > > > > > node 1 free: n MB
-> > > > > > > > node 2 cpus: 2 3
-> > > > > > > > node 2 size: n MB
-> > > > > > > > node 2 free: n MB
-> > > > > > > > node distances:
-> > > > > > > > node   0   1   2
-> > > > > > > >    0:  10  40  20
-> > > > > > > >    1:  40  10  80
-> > > > > > > >    2:  20  80  10
-> > > > > > > > 
-> > > > > > > > We have 2 choices,
-> > > > > > > > 
-> > > > > > > > a)
-> > > > > > > > node    demotion targets
-> > > > > > > > 0       1
-> > > > > > > > 2       1
-> > > > > > > > 
-> > > > > > > > b)
-> > > > > > > > node    demotion targets
-> > > > > > > > 0       1
-> > > > > > > > 2       X
-> > > > > > > > 
-> > > > > > > > a) is good to take advantage of PMEM.  b) is good to reduce cross-socket
-> > > > > > > > traffic.  Both are OK as defualt configuration.  But some users may
-> > > > > > > > prefer the other one.  So we need a user space ABI to override the
-> > > > > > > > default configuration.
-> > > > > > > 
-> > > > > > > I think 2(a) should be the system-wide configuration and 2(b) can be
-> > > > > > > achieved with NUMA mempolicy (which needs to be added to demotion).
-> > > > > > > 
-> > > > > > > In general, we can view the demotion order in a way similar to
-> > > > > > > allocation fallback order (after all, if we don't demote or demotion
-> > > > > > > lags behind, the allocations will go to these demotion target nodes
-> > > > > > > according to the allocation fallback order anyway).  If we initialize
-> > > > > > > the demotion order in that way (i.e. every node can demote to any node
-> > > > > > > in the next tier, and the priority of the target nodes is sorted for
-> > > > > > > each source node), we don't need per-node demotion order override from
-> > > > > > > the userspace.  What we need is to specify what nodes should be in
-> > > > > > > each tier and support NUMA mempolicy in demotion.
-> > > > > > > 
-> > > > > > 
-> > > > > > I have been wondering how we would handle this. For ex: If an
-> > > > > > application has specified an MPOL_BIND policy and restricted the
-> > > > > > allocation to be from Node0 and Node1, should we demote pages allocated
-> > > > > > by that application
-> > > > > > to Node10? The other alternative for that demotion is swapping. So from
-> > > > > > the page point of view, we either demote to a slow memory or pageout to
-> > > > > > swap. But then if we demote we are also breaking the MPOL_BIND rule.
-> > > > > 
-> > > > > IMHO, the MPOL_BIND policy should be respected and demotion should be
-> > > > > skipped in such cases.  Such MPOL_BIND policies can be an important
-> > > > > tool for applications to override and control their memory placement
-> > > > > when transparent memory tiering is enabled.  If the application
-> > > > > doesn't want swapping, there are other ways to achieve that (e.g.
-> > > > > mlock, disabling swap globally, setting memcg parameters, etc).
-> > > > > 
-> > > > > 
-> > > > > > The above says we would need some kind of mem policy interaction, but
-> > > > > > what I am not sure about is how to find the memory policy in the
-> > > > > > demotion path.
-> > > > > 
-> > > > > This is indeed an important and challenging problem.  One possible
-> > > > > approach is to retrieve the allowed demotion nodemask from
-> > > > > page_referenced() similar to vm_flags.
-> > > > 
-> > > > This works for mempolicy in struct vm_area_struct, but not for that in
-> > > > struct task_struct.  Mutiple threads in a process may have different
-> > > > mempolicy.
-> > > 
-> > > From vm_area_struct, we can get to mm_struct and then to the owner
-> > > task_struct, which has the process mempolicy.
-> > > 
-> > > It is indeed a problem when a page is shared by different threads or
-> > > different processes that have different thread default mempolicy
-> > > values.
-> > 
-> > Sorry for chiming in late, this is a known issue when we were working
-> > on demotion. Yes, it is hard to handle the shared pages and multi
-> > threads since mempolicy is applied to each thread so each thread may
-> > have different mempolicy. And I don't think this case is rare. And not
-> > only mempolicy but also may cpuset settings cause the similar problem,
-> > different threads may have different cpuset settings for cgroupv1.
-> > 
-> > If this is really a problem for real life workloads, we may consider
-> > tackling it for exclusively owned pages first. Thanks to David's
-> > patches, now we have dedicated flags to tell exclusively owned pages.
-> 
-> One of the problems with demotion when I last looked is it does almost exactly
-> the opposite of what we want on systems like POWER9 where GPU memory is a
-> CPU-less memory node.
-> 
-> On those systems users tend to use MPOL_BIND or MPOL_PREFERRED to allocate
-> memory on the GPU node. Under memory pressure demotion should migrate GPU
-> allocations to the CPU node and finally other slow memory nodes or swap.
-> 
-> Currently though demotion considers the GPU node slow memory (because it is
-> CPU-less) so will demote CPU memory to GPU memory which is a limited resource.
-> And when trying to allocate GPU memory with MPOL_BIND/PREFERRED it will swap
-> everything to disk rather than demote to CPU memory (which would be preferred).
->
-> I'm still looking at this series but as I understand it it will help somewhat
-> because we could make GPU memory the top-tier so nothing gets demoted to it.
+Hi, Yongqiang:
 
-Yes.  If we have a way to put GPU memory in top-tier (tier 0) and
-CPU+DRAM in tier 1.  Your requirement can be satisfied.  One way is to
-override the auto-generated demotion order via some user space tool. 
-Another way is to change the GPU driver (I guess where the GPU memory is
-enumerated and onlined?) to change the tier of GPU memory node.
-
-> However I wouldn't want to see demotion skipped entirely when a memory policy
-> such as MPOL_BIND is specified. For example most memory on a GPU node will have
-> some kind of policy specified and IMHO it would be better to demote to another
-> node in the mempolicy nodemask rather than going straight to swap, particularly
-> as GPU memory capacity tends to be limited in comparison to CPU memory
-> capacity.
-> > 
-
-Can you use MPOL_PREFERRED?  Even if we enforce MPOL_BIND as much as
-possible, we will not stop demoting from GPU to DRAM with
-MPOL_PREFERRED.  And in addition to demotion, allocation fallbacking can
-be used too to avoid allocation latency caused by demotion.
-
-This is another example of a system with 3 tiers if PMEM is installed in
-this machine too.
-
-Best Regards,
-Huang, Ying
-
-> > > On the other hand, it can already support most interesting use cases
-> > > for demotion (e.g. selecting the demotion node, mbind to prevent
-> > > demotion) by respecting cpuset and vma mempolicies.
-> > > 
-> > > > Best Regards,
-> > > > Huang, Ying
-> > > > 
-> > > > > > 
-> > > > > > > Cross-socket demotion should not be too big a problem in practice
-> > > > > > > because we can optimize the code to do the demotion from the local CPU
-> > > > > > > node (i.e. local writes to the target node and remote read from the
-> > > > > > > source node).  The bigger issue is cross-socket memory access onto the
-> > > > > > > demoted pages from the applications, which is why NUMA mempolicy is
-> > > > > > > important here.
-> > > > > > > 
-> > > > > > > 
-> > > > > > -aneesh
-> > > > 
-> > > > 
-> > 
-> > 
+On Thu, 2022-04-28 at 16:58 +0800, Yongqiang Niu wrote:
+> From: Yongqiang Niu <yongqiang.niu@mediatek.corp-partner.google.com>
 > 
+> mt8183 gamma module usage is different with before soc,
+> gamma odd(index start from 0) lut value set to hardware
+> register should be
+> the difference of current lut value with last lut value.
 > 
-> 
+> for example, chrome os user space set lut
+> like this(only r chanel for example):
+> 2 4 6 8 10 12.
+> 1) mt8183 gamma driver should set the gamma lut to hardware
+> register like this:
+> 2 [2] 6 [2] 10 [2]
+> the value with [] is the difference value
+> 2)gamma hardware process display data with original lut
 > 
 
+Applied to mediatek-drm-next [1], thanks.
+
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/log/?h=mediatek-drm-next
+
+Regards,
+CK
+
+> Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_disp_aal.c   |  2 +-
+>  drivers/gpu/drm/mediatek/mtk_disp_drv.h   |  2 +-
+>  drivers/gpu/drm/mediatek/mtk_disp_gamma.c | 34 +++++++++++++++++++
+> ----
+>  3 files changed, 30 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_aal.c
+> b/drivers/gpu/drm/mediatek/mtk_disp_aal.c
+> index f46d4ab73d6a..0f9d7efb61d7 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_disp_aal.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_disp_aal.c
+> @@ -66,7 +66,7 @@ void mtk_aal_gamma_set(struct device *dev, struct
+> drm_crtc_state *state)
+>  	struct mtk_disp_aal *aal = dev_get_drvdata(dev);
+>  
+>  	if (aal->data && aal->data->has_gamma)
+> -		mtk_gamma_set_common(aal->regs, state);
+> +		mtk_gamma_set_common(aal->regs, state, false);
+>  }
+>  
+>  void mtk_aal_start(struct device *dev)
+> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+> b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+> index 86c3068894b1..3380651c6707 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+> +++ b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+> @@ -51,7 +51,7 @@ void mtk_gamma_config(struct device *dev, unsigned
+> int w,
+>  		      unsigned int h, unsigned int vrefresh,
+>  		      unsigned int bpc, struct cmdq_pkt *cmdq_pkt);
+>  void mtk_gamma_set(struct device *dev, struct drm_crtc_state
+> *state);
+> -void mtk_gamma_set_common(void __iomem *regs, struct drm_crtc_state
+> *state);
+> +void mtk_gamma_set_common(void __iomem *regs, struct drm_crtc_state
+> *state, bool lut_diff);
+>  void mtk_gamma_start(struct device *dev);
+>  void mtk_gamma_stop(struct device *dev);
+>  
+> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
+> b/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
+> index 3a5815ab4079..bbd558a036ec 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
+> @@ -27,6 +27,7 @@
+>  
+>  struct mtk_disp_gamma_data {
+>  	bool has_dither;
+> +	bool lut_diff;
+>  };
+>  
+>  /*
+> @@ -53,12 +54,13 @@ void mtk_gamma_clk_disable(struct device *dev)
+>  	clk_disable_unprepare(gamma->clk);
+>  }
+>  
+> -void mtk_gamma_set_common(void __iomem *regs, struct drm_crtc_state
+> *state)
+> +void mtk_gamma_set_common(void __iomem *regs, struct drm_crtc_state
+> *state, bool lut_diff)
+>  {
+>  	unsigned int i, reg;
+>  	struct drm_color_lut *lut;
+>  	void __iomem *lut_base;
+>  	u32 word;
+> +	u32 diff[3] = {0};
+>  
+>  	if (state->gamma_lut) {
+>  		reg = readl(regs + DISP_GAMMA_CFG);
+> @@ -67,9 +69,20 @@ void mtk_gamma_set_common(void __iomem *regs,
+> struct drm_crtc_state *state)
+>  		lut_base = regs + DISP_GAMMA_LUT;
+>  		lut = (struct drm_color_lut *)state->gamma_lut->data;
+>  		for (i = 0; i < MTK_LUT_SIZE; i++) {
+> -			word = (((lut[i].red >> 6) & LUT_10BIT_MASK) <<
+> 20) +
+> -				(((lut[i].green >> 6) & LUT_10BIT_MASK)
+> << 10) +
+> -				((lut[i].blue >> 6) & LUT_10BIT_MASK);
+> +
+> +			if (!lut_diff || (i % 2 == 0)) {
+> +				word = (((lut[i].red >> 6) &
+> LUT_10BIT_MASK) << 20) +
+> +					(((lut[i].green >> 6) &
+> LUT_10BIT_MASK) << 10) +
+> +					((lut[i].blue >> 6) &
+> LUT_10BIT_MASK);
+> +			} else {
+> +				diff[0] = (lut[i].red >> 6) - (lut[i -
+> 1].red >> 6);
+> +				diff[1] = (lut[i].green >> 6) - (lut[i
+> - 1].green >> 6);
+> +				diff[2] = (lut[i].blue >> 6) - (lut[i -
+> 1].blue >> 6);
+> +
+> +				word = ((diff[0] & LUT_10BIT_MASK) <<
+> 20) +
+> +					((diff[1] & LUT_10BIT_MASK) <<
+> 10) +
+> +					(diff[2] & LUT_10BIT_MASK);
+> +			}
+>  			writel(word, (lut_base + i * 4));
+>  		}
+>  	}
+> @@ -78,8 +91,12 @@ void mtk_gamma_set_common(void __iomem *regs,
+> struct drm_crtc_state *state)
+>  void mtk_gamma_set(struct device *dev, struct drm_crtc_state *state)
+>  {
+>  	struct mtk_disp_gamma *gamma = dev_get_drvdata(dev);
+> +	bool lut_diff = false;
+> +
+> +	if (gamma->data)
+> +		lut_diff = gamma->data->lut_diff;
+>  
+> -	mtk_gamma_set_common(gamma->regs, state);
+> +	mtk_gamma_set_common(gamma->regs, state, lut_diff);
+>  }
+>  
+>  void mtk_gamma_config(struct device *dev, unsigned int w,
+> @@ -176,10 +193,15 @@ static const struct mtk_disp_gamma_data
+> mt8173_gamma_driver_data = {
+>  	.has_dither = true,
+>  };
+>  
+> +static const struct mtk_disp_gamma_data mt8183_gamma_driver_data = {
+> +	.lut_diff = true,
+> +};
+> +
+>  static const struct of_device_id mtk_disp_gamma_driver_dt_match[] =
+> {
+>  	{ .compatible = "mediatek,mt8173-disp-gamma",
+>  	  .data = &mt8173_gamma_driver_data},
+> -	{ .compatible = "mediatek,mt8183-disp-gamma"},
+> +	{ .compatible = "mediatek,mt8183-disp-gamma",
+> +	  .data = &mt8183_gamma_driver_data},
+>  	{},
+>  };
+>  MODULE_DEVICE_TABLE(of, mtk_disp_gamma_driver_dt_match);
 

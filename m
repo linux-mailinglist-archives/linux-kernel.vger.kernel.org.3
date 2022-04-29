@@ -2,113 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E65514CC8
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1D35514CAB
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356954AbiD2O3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 10:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49960 "EHLO
+        id S233545AbiD2OZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 10:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377257AbiD2O3o (ORCPT
+        with ESMTP id S1377184AbiD2OZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 10:29:44 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FA5EA1471
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:26:19 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id cx11-20020a17090afd8b00b001d9fe5965b3so8727495pjb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:26:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=T+xkL3YWKNIwUvhcyT6Zc2yQzS0rBzFbHurjbmprYM8=;
-        b=laYz416cOyIijfEQ+pVXTypoycAPoNCaBjiFp2ErDhoCqHrvU9sC6Xq1SEKRHCT5vK
-         rchwEpxXSozP9Xnq07+2MlLlnCDZd3VqHfgrAwYi3GvcAOf/mcN/ae3HU0hC/UeTbfSW
-         oro3O4iW0oH0MkXAFc3reyccrgWCR8LbWKWu5FIB5uRP464LJRHDEX26SVXpwgM3sUTt
-         h3pwoOL3p/4eyF3dHBgxHbQhBGEylGN2GU4HfvD2gea+DcI3HvjuRVpEEbjvKruhbLFM
-         j1/nBj8+dvlmBs/UvP/YCL+26jOspr/4lvcICuGTh49aCmIfAVn1eSDAhGB+pD4td6PJ
-         05Rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=T+xkL3YWKNIwUvhcyT6Zc2yQzS0rBzFbHurjbmprYM8=;
-        b=WQaBUfBABQTJ6UoNyEFU4KbhV1zQmyuBCylaOe884sfnpoBYk6xyNLMCHNsSlD9n/N
-         l1kJl7m0BaMYwl17gXzTAfz6oywZuu14RJbjboPcUf9z6Ji9+JPTSJ8A0gCWMoq40Bn1
-         Ukox88wlTER1AkK+/4l3AKieFOrFLFFoonfhtYmXAPwurR4WyeKWC3QPR0jx2qSA5Bl/
-         rmRPiC21rimpcjz1lsqs2kh1xk30ByZ9B0C6C9J6ktglLJ8/4F/8QJAvwPuSUBdjX4W2
-         eM5Arb3sfRm9uXgXEPscF9RxFX6cO3PINhYjIdGOoTyMUNc4PdGBQHFU7EvPitz0dGTM
-         JP6A==
-X-Gm-Message-State: AOAM5324R7PCT5HWD35CCkEGRfAPKakqpTQ3OjThT8UpQrayoKr8LRHq
-        qpaCh/Wfu6um5mnzj2hozxKutA==
-X-Google-Smtp-Source: ABdhPJz3haJXofXKco6B7+t0Ls+9sd0gtckJfaYdpRJH2uZO9g060KFNm7+1zgYdOuEcI+B3n7xNHA==
-X-Received: by 2002:a17:902:f792:b0:153:1566:18 with SMTP id q18-20020a170902f79200b0015315660018mr38572615pln.115.1651242378746;
-        Fri, 29 Apr 2022 07:26:18 -0700 (PDT)
-Received: from always-x1.www.tendawifi.com ([139.177.225.247])
-        by smtp.gmail.com with ESMTPSA id a38-20020a056a001d2600b004fae885424dsm3494734pfx.72.2022.04.29.07.26.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 07:26:18 -0700 (PDT)
-From:   zhenwei pi <pizhenwei@bytedance.com>
-To:     akpm@linux-foundation.org, naoya.horiguchi@nec.com
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        zhenwei pi <pizhenwei@bytedance.com>,
-        Wu Fengguang <fengguang.wu@intel.com>
-Subject: [PATCH 4/4] mm/memofy-failure.c: add hwpoison_filter for soft offline
-Date:   Fri, 29 Apr 2022 22:22:06 +0800
-Message-Id: <20220429142206.294714-5-pizhenwei@bytedance.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220429142206.294714-1-pizhenwei@bytedance.com>
-References: <20220429142206.294714-1-pizhenwei@bytedance.com>
+        Fri, 29 Apr 2022 10:25:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A46D54EF67
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:22:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651242145;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=/0gbFtgdy7CDyJjdS+yqHgi+WNEK/LMUhGKYDfnnlqU=;
+        b=cj8K+tgr9tmYMTOI0v9iKEEp9v4+w4zjfOmlyidCTirOFoIOrO+gIsezdWSXQBJwDo+6jD
+        /SJPiMehS064XqpuduoCpWlhPSgZc65WbUv5W//lCcc7izzBEozGq26utC3jsKeLBMgiI0
+        sqZt7itKxKBEYG2N7byADkHi2zzMaT4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-220-k-rx8HEKNXqEiMX6FcziOQ-1; Fri, 29 Apr 2022 10:22:21 -0400
+X-MC-Unique: k-rx8HEKNXqEiMX6FcziOQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 712B2811E7A;
+        Fri, 29 Apr 2022 14:22:21 +0000 (UTC)
+Received: from asgard.redhat.com (unknown [10.36.110.2])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5B3B14639DE;
+        Fri, 29 Apr 2022 14:22:20 +0000 (UTC)
+Date:   Fri, 29 Apr 2022 16:22:18 +0200
+From:   Eugene Syromiatnikov <esyr@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] io_uring: check that data field is 0 in ringfd unregister
+Message-ID: <20220429142218.GA28696@asgard.redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hwpoison_filter is missing in the soft offline path, this leads an
-issue: after enabling the corrupt filter, the user process still has
-a chance to inject hwpoison fault by
-madvise(addr, len, MADV_SOFT_OFFLINE) at PFN which is expected to
-reject.
+Only allow data field to be 0 in struct io_uring_rsrc_update user
+arguments to allow for future possible usage.
 
-Cc: Wu Fengguang <fengguang.wu@intel.com>
-Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
+Fixes: e7a6c00dc77a ("io_uring: add support for registering ring file descriptors")
+Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
 ---
- mm/memory-failure.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ fs/io_uring.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index a6a27c8b800f..6564f5a34658 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -2313,7 +2313,9 @@ static void put_ref_page(struct page *page)
-  * @pfn: pfn to soft-offline
-  * @flags: flags. Same as memory_failure().
-  *
-- * Returns 0 on success, otherwise negated errno.
-+ * Returns 0 on success
-+ *         -EOPNOTSUPP for memory_filter() filtered the error event
-+ *         < 0 otherwise negated errno.
-  *
-  * Soft offline a page, by migration or invalidation,
-  * without killing anything. This is for the case when
-@@ -2350,6 +2352,11 @@ int soft_offline_page(unsigned long pfn, int flags)
- 		return -EIO;
- 	}
- 
-+	if (hwpoison_filter(page)) {
-+		put_ref_page(ref_page);
-+		return -EOPNOTSUPP;
-+	}
-+
- 	mutex_lock(&mf_mutex);
- 
- 	if (PageHWPoison(page)) {
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 7625b29..4e32338 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -10588,7 +10588,7 @@ static int io_ringfd_unregister(struct io_ring_ctx *ctx, void __user *__arg,
+ 			ret = -EFAULT;
+ 			break;
+ 		}
+-		if (reg.resv || reg.offset >= IO_RINGFD_REG_MAX) {
++		if (reg.resv || reg.data || reg.offset >= IO_RINGFD_REG_MAX) {
+ 			ret = -EINVAL;
+ 			break;
+ 		}
 -- 
-2.20.1
+2.1.4
 

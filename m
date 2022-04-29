@@ -2,110 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AECE8514C59
+	by mail.lfdr.de (Postfix) with ESMTP id 1B6DE514C57
 	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377170AbiD2OKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 10:10:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55810 "EHLO
+        id S1377102AbiD2OKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 10:10:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377045AbiD2OJh (ORCPT
+        with ESMTP id S1376910AbiD2OJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 10:09:37 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5047ECE12F;
-        Fri, 29 Apr 2022 07:02:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=kwZz8z1ErGu8KMfXFyk29Ho8CQRFEY51B59OF6or4Ek=; b=PV6iGrw6a2PVwUqtN4K8zn62B4
-        AVOvfuxpf+YqiDNw4wPls4rd7BZZRLk+DlIthCPmmpYzWeS6x1CxEGIJ+6ftYWBgJvBFfwGJOqCh5
-        xlyk58zJVRPZef1SLet0zp5ibM7QDVVnOlmapmbP9P5ItPWzgMAPliAvmIbKMRpx1ZzLU5PWVzzn/
-        sHvml72t32exF/AwwtKJVJzJexH4h9oxDHF0YV+DR3EbrkMYfXiYu6ewm7xFOm0g961CiqJr+h+xh
-        qH6hC6fDAmncBkbOEiIY7tl+ZJgFaXJC+Qr6IL6xzP0mvIw9YmD61TykJP9krK0bs+lwyGwpmSvki
-        syiNIcrw==;
-Received: from [179.113.53.197] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nkRCW-0007vi-1F; Fri, 29 Apr 2022 16:02:28 +0200
-Message-ID: <79472351-c6ce-a060-ef24-f64b6dce1637@igalia.com>
-Date:   Fri, 29 Apr 2022 11:01:59 -0300
+        Fri, 29 Apr 2022 10:09:34 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E67D17D3
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:02:29 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1nkRCT-0008Ln-N4; Fri, 29 Apr 2022 16:02:25 +0200
+Message-ID: <251751c2-3d7a-db91-adbe-7d6a7e71f7e5@pengutronix.de>
+Date:   Fri, 29 Apr 2022 16:02:22 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 09/30] coresight: cpu-debug: Replace mutex with
- mutex_trylock on panic notifier
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 05/37] char: impi, tpm: depend on HAS_IOPORT
 Content-Language: en-US
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
-        kexec@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, Leo Yan <leo.yan@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-10-gpiccoli@igalia.com>
- <3cafe4fd-8a0b-2633-44a3-2995abd6c38c@arm.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <3cafe4fd-8a0b-2633-44a3-2995abd6c38c@arm.com>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        Corey Minyard <minyard@acm.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        "moderated list:IPMI SUBSYSTEM" 
+        <openipmi-developer@lists.sourceforge.net>,
+        "open list:TPM DEVICE DRIVER" <linux-integrity@vger.kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
+ <20220429135108.2781579-9-schnelle@linux.ibm.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <20220429135108.2781579-9-schnelle@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/04/2022 05:11, Suzuki K Poulose wrote:
-> Hi Guilherme,
-> [...] 
-> How would you like to proceed with queuing this ? I am happy
-> either way. In case you plan to push this as part of this
-> series (I don't see any potential conflicts) :
+Hello Niklas,
+
+On 29.04.22 15:50, Niklas Schnelle wrote:
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. We thus need to add this dependency and ifdef
+> sections of code using inb()/outb() as alternative access methods.
 > 
-> Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-Thanks for your review Suzuki, much appreciated!
+[snip]
 
-About your question, I'm not sure yet - in case the core changes would
-take a while (like if community find them polemic, require many changes,
-etc) I might split this series in 2 parts, the fixes part vs the
-improvements per se. Either way, a V2 is going to happen for sure, and
-in that moment, I'll let you know what I think it's best.
+> diff --git a/drivers/char/tpm/tpm_infineon.c b/drivers/char/tpm/tpm_infineon.c
+> index 9c924a1440a9..2d2ae37153ba 100644
+> --- a/drivers/char/tpm/tpm_infineon.c
+> +++ b/drivers/char/tpm/tpm_infineon.c
+> @@ -51,34 +51,40 @@ static struct tpm_inf_dev tpm_dev;
+>  
+>  static inline void tpm_data_out(unsigned char data, unsigned char offset)
+>  {
+> +#ifdef CONFIG_HAS_IOPORT
+>  	if (tpm_dev.iotype == TPM_INF_IO_PORT)
+>  		outb(data, tpm_dev.data_regs + offset);
+>  	else
+> +#endif
 
-But either way, any choice you prefer is fine by me as well (like if you
-want to merge it now or postpone to get merged in the future), this is
-not an urgent fix I think =)
+This looks ugly. Can't you declare inb/outb anyway and skip the definition,
+so you can use IS_ENABLED() here instead?
+
+You can mark the declarations with __compiletime_error("some message"), so
+if an IS_ENABLED() reference is not removed at compile time, you get some
+readable error message instead of a link error.
+
 Cheers,
+Ahmad
+
+>  		writeb(data, tpm_dev.mem_base + tpm_dev.data_regs + offset);
+>  }
+>  
+>  static inline unsigned char tpm_data_in(unsigned char offset)
+>  {
+> +#ifdef CONFIG_HAS_IOPORT
+>  	if (tpm_dev.iotype == TPM_INF_IO_PORT)
+>  		return inb(tpm_dev.data_regs + offset);
+> -	else
+> -		return readb(tpm_dev.mem_base + tpm_dev.data_regs + offset);
+> +#endif
+> +	return readb(tpm_dev.mem_base + tpm_dev.data_regs + offset);
+>  }
+>  
+>  static inline void tpm_config_out(unsigned char data, unsigned char offset)
+>  {
+> +#ifdef CONFIG_HAS_IOPORT
+>  	if (tpm_dev.iotype == TPM_INF_IO_PORT)
+>  		outb(data, tpm_dev.config_port + offset);
+>  	else
+> +#endif
+>  		writeb(data, tpm_dev.mem_base + tpm_dev.index_off + offset);
+>  }
+>  
+>  static inline unsigned char tpm_config_in(unsigned char offset)
+>  {
+> +#ifdef CONFIG_HAS_IOPORT
+>  	if (tpm_dev.iotype == TPM_INF_IO_PORT)
+>  		return inb(tpm_dev.config_port + offset);
+> -	else
+> -		return readb(tpm_dev.mem_base + tpm_dev.index_off + offset);
+> +#endif
+> +	return readb(tpm_dev.mem_base + tpm_dev.index_off + offset);
+>  }
+>  
+>  /* TPM header definitions */
+> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> index dc56b976d816..1efb58dc1b41 100644
+> --- a/drivers/char/tpm/tpm_tis_core.c
+> +++ b/drivers/char/tpm/tpm_tis_core.c
+> @@ -879,11 +879,6 @@ static void tpm_tis_clkrun_enable(struct tpm_chip *chip, bool value)
+>  		clkrun_val &= ~LPC_CLKRUN_EN;
+>  		iowrite32(clkrun_val, data->ilb_base_addr + LPC_CNTRL_OFFSET);
+>  
+> -		/*
+> -		 * Write any random value on port 0x80 which is on LPC, to make
+> -		 * sure LPC clock is running before sending any TPM command.
+> -		 */
+> -		outb(0xCC, 0x80);
+>  	} else {
+>  		data->clkrun_enabled--;
+>  		if (data->clkrun_enabled)
+> @@ -894,13 +889,15 @@ static void tpm_tis_clkrun_enable(struct tpm_chip *chip, bool value)
+>  		/* Enable LPC CLKRUN# */
+>  		clkrun_val |= LPC_CLKRUN_EN;
+>  		iowrite32(clkrun_val, data->ilb_base_addr + LPC_CNTRL_OFFSET);
+> -
+> -		/*
+> -		 * Write any random value on port 0x80 which is on LPC, to make
+> -		 * sure LPC clock is running before sending any TPM command.
+> -		 */
+> -		outb(0xCC, 0x80);
+>  	}
+> +
+> +#ifdef CONFIG_HAS_IOPORT
+> +	/*
+> +	 * Write any random value on port 0x80 which is on LPC, to make
+> +	 * sure LPC clock is running before sending any TPM command.
+> +	 */
+> +	outb(0xCC, 0x80);
+> +#endif
+>  }
+>  
+>  static const struct tpm_class_ops tpm_tis = {
 
 
-Guilherme
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

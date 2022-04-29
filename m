@@ -2,66 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07A0E515277
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:41:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30237515275
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:41:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379760AbiD2Ro7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 13:44:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49644 "EHLO
+        id S1379747AbiD2Ros (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 13:44:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379753AbiD2Rov (ORCPT
+        with ESMTP id S1344462AbiD2Rom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 13:44:51 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6965BA27D9;
-        Fri, 29 Apr 2022 10:41:32 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id a14-20020a7bc1ce000000b00393fb52a386so6817658wmj.1;
-        Fri, 29 Apr 2022 10:41:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZbduflGai2BniQyEKChWvgw5Vbl22wyDBPYLOeD9fFE=;
-        b=bSYN+B3h2mAeBcH3seOMQdUjesImu5IKiQxaWNE41w9Ju3YhzkXQnQhmcJhGN5Hf6V
-         /gNkzLUOFK9RypYZA9N4rXeDdNDk4FD27/N2hepvIpMEh8JD0q8KorkElnFGPGq8P5eg
-         vj4azpAnhkloekBwwrZExm4ggXkxmYOv3mfY4LWNP0QQc8YcWd1PrGsF9B0/mY44PBN2
-         TpY9XaI9R8Nd8CrabcnLEZrZxBshWhODKsHNHbWRQqPtPX0Pcmv7f5T9eXEJ3Jk2f7dV
-         k8UTOx55qRFyb2ECcDiqvbomkf8UMPCU8UJMxOFa6Me58BbJIQOBPMGeajZfkIZ+8guA
-         SnqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZbduflGai2BniQyEKChWvgw5Vbl22wyDBPYLOeD9fFE=;
-        b=ueKVN23/cDM5OQy5UuJeZUhV70Avj0I7ffTORc26rqrjDEk97q78fHJfdM74T60uUD
-         oopKQ3MFQBaWH0ZnfZ45mh6hotW2KUjH/QJrJrHgtZNFnx2Q7a0hodGzd6x0GjKen+pV
-         bLg/R9GRIyV7HR2RYPQkuT0dQDErRj3KYyYuB5Qg4EDgpPFeCe9h3ixwje9gZdGufysG
-         Ofmz8uRvfxJf8g6nBlF0Rb35wXMvhCwCASfU0b7DFCNJhMqyzJqvdypsmlmObhESkJTZ
-         /zSjpyLLVtEjK5bwDRMMJPwa955utgCwMrB1bEkFeIikiRHSsnwYVgRnS6EdTLbE9Pyw
-         C4PA==
-X-Gm-Message-State: AOAM5328hJ4YWln4R+C2P52v6LXnMrjkqUjlP2RO0YI+9jVjynj3rmrf
-        ESvRZN78PMNduRhBJUvRh/M=
-X-Google-Smtp-Source: ABdhPJxKKYWRWQ5S5qJEUM3jnZxQocd2utbbzGJklRN0c6SAjPtGyPeIE/Q1l5iPcDmbp5WvkMqSUQ==
-X-Received: by 2002:a05:600c:348c:b0:392:990b:cf98 with SMTP id a12-20020a05600c348c00b00392990bcf98mr4225842wmq.194.1651254090842;
-        Fri, 29 Apr 2022 10:41:30 -0700 (PDT)
-Received: from xws.localdomain (pd9e5acba.dip0.t-ipconnect.de. [217.229.172.186])
-        by smtp.gmail.com with ESMTPSA id k28-20020a05600c1c9c00b0039424a07762sm1239921wms.35.2022.04.29.10.41.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 10:41:29 -0700 (PDT)
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ACPI: battery: Add "Not Charging" quirk for Microsoft Surface devices
-Date:   Fri, 29 Apr 2022 19:41:14 +0200
-Message-Id: <20220429174114.1277799-1-luzmaximilian@gmail.com>
-X-Mailer: git-send-email 2.36.0
+        Fri, 29 Apr 2022 13:44:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 597E8A27D9
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:41:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651254082;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=im4QOF5nYM34MhWui5A0Wn5VHnCk0xBtM/XyQoOETCQ=;
+        b=Ydo+4rMVrZyNL/E/34GrAD3p/uRxwjFBuekFs0hABF2E07i8zoOIG6HPQ3g5m55nGT205k
+        VEo3k2UWw8Xo175SUxDjbzypVrpRdUAl00VviGnnG5ZFZ+41QUEBkruuxpfXPLY9jiBbZb
+        MSNc7SFqQX81llqqRxEbwhr/QuIsrJc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-375-YVQXGINUNxqDtzn6LZDB3g-1; Fri, 29 Apr 2022 13:41:17 -0400
+X-MC-Unique: YVQXGINUNxqDtzn6LZDB3g-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8E58E811E76;
+        Fri, 29 Apr 2022 17:41:16 +0000 (UTC)
+Received: from [10.22.34.10] (unknown [10.22.34.10])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E768240D2828;
+        Fri, 29 Apr 2022 17:41:15 +0000 (UTC)
+Message-ID: <b86038fe-43f8-4e16-f57d-8283b7da0bb4@redhat.com>
+Date:   Fri, 29 Apr 2022 13:41:15 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/2] x86/tsc_sync: Add synchronization overhead to tsc
+ adjustment
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Feng Tang <feng.tang@intel.com>,
+        Bill Gray <bgray@redhat.com>, Jirka Hladky <jhladky@redhat.com>
+References: <20220314194630.1726542-1-longman@redhat.com>
+ <20220314194630.1726542-3-longman@redhat.com> <87czhymql2.ffs@tglx>
+ <d1a04785-4822-3a3f-5c37-81329a562364@redhat.com> <87levx8kou.ffs@tglx>
+ <4f02fe46-b253-2809-0af7-f2e9da091fe9@redhat.com> <87czh50xwf.ffs@tglx>
+ <68837b1a-f85b-e842-f8c0-1cad162856f4@redhat.com> <87h76ew3sb.ffs@tglx>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <87h76ew3sb.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,60 +72,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Microsoft Surface devices have a limiter that sets a fixed maximum
-charge capacity for the battery. When that maximum capacity has been
-reached, charging stops. In that case, _BST returns a battery state
-field with both "charging" and "discharging" bits cleared. The battery
-driver, however, returns "unknown" as status.
+On 4/27/22 18:38, Thomas Gleixner wrote:
+> On Tue, Apr 26 2022 at 11:36, Waiman Long wrote:
+>> On 4/25/22 15:24, Thomas Gleixner wrote:
+>>> Yes. It's clear that the initial sync overhead is due to the cache line
+>>> being remote, but I rather underestimate the compensation. Aside of that
+>>> it's not guaranteed that the cache line is actually remote on the first
+>>> access. It's by chance, but not by design.
+>> In check_tsc_warp(), the (unlikely(prev > now) check may only be
+>> triggered to record the possible wrap if last_tsc was previously written
+>> to by another cpu. That requires the transfer of lock cacheline from the
+>> remote cpu to local cpu as well. So sync overhead with remote cacheline
+>> is what really matters here. I had actually thought about just measuring
+>> local cacheline sync overhead so as to underestimate it and I am fine
+>> about doing it.
+> Fair enough, but what I meant is that when estimating the actual sync
+> overhead then there is no guarantee that the cache line is remote.
+>
+> The CPU which does that estimation might have been the last to lock,
+> there is no guarantee that the reference CPU locked last or wrote to the
+> cache line last.
+>
+>>> IOW, TSC runs with a constant frequency independent of the actual CPU
+>>> frequency, ergo the CPU frequency dependent execution time has an
+>>> influence on the resulting compensation value, no?
+>>>
+>>> On the machine I tested on, it's a factor of 3 between the minimal and
+>>> the maximal CPU frequency, which makes quite a difference, right?
+>> Yes, I understand that. The measurement of sync_overhead is for
+>> estimating the delay (in TSC cycles) that the locking overhead
+>> introduces. With 1000MHz frequency, the delay in TSC cycle will be
+>> double that of a cpu running at 2000MHz. So you need more compensation
+>> in this case. That is why I said that as long as clock frequency doesn't
+>> change in the check_tsc_wrap() loop and the sync_overhead measurement
+>> part of the code, the actual cpu frequency does not matter here.
+> I grant you that it does not matter for the loop under the assumption
+> that the loop runs at constant frequency, but is that a guarantee that
+> it does not matter later on?
+Yes, that is my point that frequency doesn't matter if frequency remain 
+the same. Of course, all bets are off if frequency really change.
+>
+> If you overcompensate by a factor of 3 because the upcoming CPU ran at
+> the lowest frequency, then it might become visible later when everything
+> runs at full speed.
+I don't think the overhead will be directly proportional to the cpu 
+frequency. A 3X increase in frequency will certainly cause the overhead 
+to be lowered, but it won't be 1/3. Maybe 1/2 at most.
+>
+>> However about we half the measure sync_overhead as compensation to avoid
+>> over-estimation, but probably increase the chance that we need a second
+>> adjustment of TSC wrap.
+> Half of what?
 
-This seems to be the same behavior as observed on the ThinkPads, so
-let's use the same quirk to handle that.
+What I mean is
 
-Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
----
+@@ -533,7 +551,7 @@ void check_tsc_sync_target(void)
+          * really depends on CPU, node distance and frequency. Add the
+          * estimated sync overhead to the adjustment value.
+          */
+-       cur->adjusted += cur_max_warp + sync_overhead;
++       cur->adjusted += cur_max_warp + sync_overhead/2;
 
-For what it's worth, I don't think the ACPI spec explicitly states that
-any of the status bits need to be set, or that there are only the
-"charging" and "discharging" states. As far as I can tell, ACPI only
-states:
+         pr_warn("TSC ADJUST compensate: CPU%u observed %lld warp 
+(overhead %lld>
+                 cpu, cur_max_warp, sync_overhead, cur->adjusted);
 
-    Notice that the Charging bit and the Discharging bit are mutually
-    exclusive and must not both be set at the same time. Even in
-    critical state, hardware should report the corresponding
-    charging/discharging state.
+>> With this patch applied, the measured overhead on the same CooperLake
+>> system on different reboot runs varies from 104 to 326.
+> Half of something which jumps around? Not convinced. :)
+>
+> Btw:
+>>> Yes, I will try that experiment and report back the results.
+> Could you please do that? I really like to see the data points.
 
-But that does not exclude the case that no bit is set. So, strictly
-going by spec, I don't think it's necessary to put all of this behind a
-quirk.
+I have applied your patch with some modification and below was the 
+relevant part of the boot up log on a Cooperlake system with this TSC 
+sync problem.
 
----
- drivers/acpi/battery.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+[    0.008858] smpboot: CPU 36 Converting physical 0 to logical die 2
+[    0.008858] Sync overhead: 230
+[    0.008858] Sync overhead: 547 A: 149597 M: 149596 F: 2500016
+[    0.008858] TSC ADJUST compensate: CPU36 observed 76342 warp 
+(overhead 230). Adjust: 76457
+[    0.008858] smpboot: CPU 54 Converting physical 0 to logical die 3
+[    0.008858] Sync overhead: 178
+[    0.008858] Sync overhead: 658 A: 177970 M: 177968 F: 2500028
+[    0.008858] TSC ADJUST compensate: CPU54 observed 76568 warp 
+(overhead 178). Adjust: 76657
 
-diff --git a/drivers/acpi/battery.c b/drivers/acpi/battery.c
-index dc208f5f5a1f..1c88504aae5b 100644
---- a/drivers/acpi/battery.c
-+++ b/drivers/acpi/battery.c
-@@ -1152,6 +1152,19 @@ static const struct dmi_system_id bat_dmi_table[] __initconst = {
- 			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad"),
- 		},
- 	},
-+	{
-+		/*
-+		 * Microsoft Surface devices have an optional "battery
-+		 * limiter". Due to this, there is a "Not Charging" state
-+		 * similar to the one on the Lenovo ThinkPads, described above.
-+		 */
-+		.callback = battery_quirk_not_charging,
-+		.ident = "Microsoft Surface",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Microsoft Corporation"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "Surface"),
-+		},
-+	},
- 	{
- 		/* Microsoft Surface Go 3 */
- 		.callback = battery_notification_delay_quirk,
--- 
-2.36.0
+BTW, CPUs 36 and 54 are the first CPU of socket 2 and 3 respectively. It 
+is always these CPUs that need TSC adjustment.
+
+I have no idea why the sync overhead actually increase in the subsequent 
+measurement as the frequency was set at 2.5GHz, I think.
+
+I tried to offline all the CPUs in a socket and then online the first 
+CPU as suggested. However, I was not able to cause the tsc_sync loop to run.
+
+BTW, without my patch the same system will boot up with the following log:
+
+[    0.008823] TSC ADJUST compensate: CPU36 observed 86036 warp. Adjust: 
+86036
+[    0.008823] TSC ADJUST compensate: CPU36 observed 122 warp. Adjust: 86158
+[    0.923620] Measured 2 cycles TSC warp between CPUs, turning off TSC 
+clock.
+[    0.923620] tsc: Marking TSC unstable due to check_tsc_sync_source failed
+
+How about we add the full sync_overhead at bootup stage, but then half 
+sync_overhead after boot in case the tsc_sync loop is run again for new 
+online CPUs? Or any other scheme that you think is appropriate.
+
+Cheers,
+Longman
 

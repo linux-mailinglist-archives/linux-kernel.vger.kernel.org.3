@@ -2,127 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B76AB5151B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:22:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E0E5151C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:24:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379667AbiD2RZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 13:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56666 "EHLO
+        id S1344082AbiD2R1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 13:27:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379661AbiD2RZP (ORCPT
+        with ESMTP id S235805AbiD2R1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 13:25:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5FB0CC8642
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:21:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651252907;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qfPh0kjKV7Wz4rw1eQJIM18yZvKQM4d4G44x6rYSMsU=;
-        b=Ak3wnRHLiHYnZVxdA3lHlaz7pKFMOD4jMLmbdXrVY2tgR9LUw2QidIx6lyNouLURV1TEss
-        Dnb0VqA5X8Sqt+q2hxH9GoP/ffxVT8C7sQkp/AxJhH8VFZlo3UHxgrjWpo4HFdrqobP9WY
-        kFrgd18gx+aPRjzhKh4dnxZYSZtbvKA=
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
- [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-83-dZZqh0KqMHmcIjaqKQ81kQ-1; Fri, 29 Apr 2022 13:21:46 -0400
-X-MC-Unique: dZZqh0KqMHmcIjaqKQ81kQ-1
-Received: by mail-pj1-f71.google.com with SMTP id gg5-20020a17090b0a0500b001d9852bd129so4339580pjb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:21:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qfPh0kjKV7Wz4rw1eQJIM18yZvKQM4d4G44x6rYSMsU=;
-        b=A5e3g6sb1TjjKIYbfrtQeeG0IlxkRqDnFf/64FtLtyvn8CTev+NtiOvfKnxbj06x4Y
-         qwgv9Nsz8Fzk0tagseUdSwcemfzFPqHHGtC9ePf57I9s7gPd9Kttc6G9xRsMJVGSWJml
-         Rx1uJMTjDSqU9NFwm/41f926uq9IlG6+GvthPi3UOrvJiCJiEiqgzTSQFNcTo38gZPUQ
-         ojaf9fDfdf/aoc0BVsn89mgkDiBoQVqwezaEX94eF2mPeA1jzWJZzV83ohncEZqKEZ/q
-         zR55BVOezF71522d4GynWmjgYKPYT+iTZCQ/8iDtvLWZmTAEZOdKp0o2TW8sJUbVB0De
-         pJBQ==
-X-Gm-Message-State: AOAM532aoFBAKpNc6hp+7sl2gxcOrb6AtQBDp+PeaM44aJ8utC56264D
-        w9/xVf7joq/54dSIi+59QjMpnNBWofE/wU2bfioW5PTamXpj+ufpO5PAM+xiOWMijueGIGaFmSZ
-        bJespMz5f9DRvQmZsvweZeQYtwo0dhRiDXinYuZNV
-X-Received: by 2002:a17:90a:8591:b0:1b9:da10:2127 with SMTP id m17-20020a17090a859100b001b9da102127mr5054432pjn.13.1651252905188;
-        Fri, 29 Apr 2022 10:21:45 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJybgqQTGFo3aPUV0q7YyahyM+1X9q79zPVfMkdYHvLOVGnT5fGnsEfPpCBwqLhpGPFvVxVgzJb2z2I0F5oFwfY=
-X-Received: by 2002:a17:90a:8591:b0:1b9:da10:2127 with SMTP id
- m17-20020a17090a859100b001b9da102127mr5054410pjn.13.1651252904923; Fri, 29
- Apr 2022 10:21:44 -0700 (PDT)
+        Fri, 29 Apr 2022 13:27:17 -0400
+Received: from mailout2.w2.samsung.com (mailout2.w2.samsung.com [211.189.100.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BBF053710;
+        Fri, 29 Apr 2022 10:23:58 -0700 (PDT)
+Received: from uscas1p2.samsung.com (unknown [182.198.245.207])
+        by mailout2.w2.samsung.com (KnoxPortal) with ESMTP id 20220429172356usoutp0242676b86c3c639e383c7b829b91b1a80~qbeNobwUC3254732547usoutp02I;
+        Fri, 29 Apr 2022 17:23:56 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w2.samsung.com 20220429172356usoutp0242676b86c3c639e383c7b829b91b1a80~qbeNobwUC3254732547usoutp02I
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1651253036;
+        bh=CV3ILaM36wPkqi/7uv6GbDScjcp+QLdybCrf3oHF4/8=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References:From;
+        b=OyDGWkA+q6Lv2j8SsWasu+qyRerfQq9/CjwF8DNivnz0FsplGCg8dr9FdDcXpWZlU
+         ZyjHK/jNzE6ptXgi6y6I4rdE23Q1MMN5oT54CBnpxkATfW8WExYjxDbkOhuWuLaOc1
+         R5qa5K4vStBOC/eXtm29IHyQTXfrGfb/7//15/IY=
+Received: from ussmges2new.samsung.com (u111.gpu85.samsung.co.kr
+        [203.254.195.111]) by uscas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220429172356uscas1p1802f8556352f80b43292a97d1692d426~qbeNXtUlU0334603346uscas1p1d;
+        Fri, 29 Apr 2022 17:23:56 +0000 (GMT)
+Received: from uscas1p2.samsung.com ( [182.198.245.207]) by
+        ussmges2new.samsung.com (USCPEMTA) with SMTP id 32.01.09642.C2F1C626; Fri,
+        29 Apr 2022 13:23:56 -0400 (EDT)
+Received: from ussmgxs2new.samsung.com (u91.gpu85.samsung.co.kr
+        [203.254.195.91]) by uscas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220429172356uscas1p240abbeaccf4d0771ef01c5ada56a19e3~qbeM3iOF-0529505295uscas1p2J;
+        Fri, 29 Apr 2022 17:23:56 +0000 (GMT)
+X-AuditID: cbfec36f-c15ff700000025aa-51-626c1f2c1d50
+Received: from SSI-EX3.ssi.samsung.com ( [105.128.2.145]) by
+        ussmgxs2new.samsung.com (USCPEXMTA) with SMTP id 27.63.09672.B2F1C626; Fri,
+        29 Apr 2022 13:23:55 -0400 (EDT)
+Received: from SSI-EX3.ssi.samsung.com (105.128.2.228) by
+        SSI-EX3.ssi.samsung.com (105.128.2.228) with Microsoft SMTP Server
+        (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+        15.1.2375.7; Fri, 29 Apr 2022 10:23:54 -0700
+Received: from SSI-EX3.ssi.samsung.com ([105.128.5.228]) by
+        SSI-EX3.ssi.samsung.com ([105.128.5.228]) with mapi id 15.01.2375.007; Fri,
+        29 Apr 2022 10:23:54 -0700
+From:   Adam Manzanares <a.manzanares@samsung.com>
+To:     Pankaj Raghav <p.raghav@samsung.com>
+CC:     "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "snitzer@kernel.org" <snitzer@kernel.org>,
+        "hch@lst.de" <hch@lst.de>, "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "naohiro.aota@wdc.com" <naohiro.aota@wdc.com>,
+        "sagi@grimberg.me" <sagi@grimberg.me>,
+        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>,
+        "dsterba@suse.com" <dsterba@suse.com>,
+        "johannes.thumshirn@wdc.com" <johannes.thumshirn@wdc.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+        "clm@fb.com" <clm@fb.com>,
+        "gost.dev@samsung.com" <gost.dev@samsung.com>,
+        "chao@kernel.org" <chao@kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "josef@toxicpanda.com" <josef@toxicpanda.com>,
+        "jonathan.derrick@linux.dev" <jonathan.derrick@linux.dev>,
+        "agk@redhat.com" <agk@redhat.com>,
+        "kbusch@kernel.org" <kbusch@kernel.org>,
+        "kch@nvidia.com" <kch@nvidia.com>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "jiangbo.365@bytedance.com" <jiangbo.365@bytedance.com>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "matias.bjorling@wdc.com" <matias.bjorling@wdc.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>
+Subject: Re: [PATCH 05/16] nvme: zns: Allow ZNS drives that have
+ non-power_of_2 zone size
+Thread-Topic: [PATCH 05/16] nvme: zns: Allow ZNS drives that have
+        non-power_of_2 zone size
+Thread-Index: AQHYWlBIk1palC1aiUOJGb6L5A1HwK0HnIUA
+Date:   Fri, 29 Apr 2022 17:23:54 +0000
+Message-ID: <20220429172354.GB174938@bgt-140510-bm01>
+In-Reply-To: <20220427160255.300418-6-p.raghav@samsung.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [105.128.2.176]
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <0AED4CE52B42814A9FAE9FC027D992A6@ssi.samsung.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20220407195908.633003-1-pgonda@google.com> <CAFNjLiXC0AdOw5f8Ovu47D==ex7F0=WN_Ocirymz4xL=mWvC5A@mail.gmail.com>
- <CAMkAt6r-Mc_YN-gVHuCpTj4E1EmcvyYpP9jhtHo5HRHnoNJAdA@mail.gmail.com>
- <CAMkAt6r+OMPWCbV_svUyGWa0qMzjj2UEG29G6P7jb6uH6yko2w@mail.gmail.com>
- <62e9ece1-5d71-f803-3f65-2755160cf1d1@redhat.com> <CAMkAt6q6YLBfo2RceduSXTafckEehawhD4K4hUEuB4ZNqe2kKg@mail.gmail.com>
- <4c0edc90-36a1-4f4c-1923-4b20e7bdbb4c@redhat.com> <CAMkAt6oL5qi7z-eh4z7z8WBhpc=Ow6WtcJA5bDi6-aGMnz135A@mail.gmail.com>
- <CAMkAt6rmDrZfN5DbNOTsKFV57PwEnK2zxgBTCbEPeE206+5v5w@mail.gmail.com>
- <0d282be4-d612-374d-84ba-067994321bab@redhat.com> <CAMkAt6ragq4OmnX+n628Yd5pn51qFv4qV20upGR6tTvyYw3U5A@mail.gmail.com>
- <8a2c5f8c-503c-b4f0-75e7-039533c9852d@redhat.com> <CAMkAt6qAW5zFyTAqX_Az2DT2J3KROPo4u-Ak1sC0J+UTUeFfXA@mail.gmail.com>
- <4afce434-ab25-66d6-76f4-3a987f64e88e@redhat.com> <CAMkAt6o8u9=H_kjr_xyRO05J=RDFUZRiTc_Bw-FFDKEUaiyp2Q@mail.gmail.com>
-In-Reply-To: <CAMkAt6o8u9=H_kjr_xyRO05J=RDFUZRiTc_Bw-FFDKEUaiyp2Q@mail.gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Date:   Fri, 29 Apr 2022 19:21:33 +0200
-Message-ID: <CABgObfa0ubOwNv2Vi9ziEjHXQMR_Sa6P-fwuXfPq76qy0N61kA@mail.gmail.com>
-Subject: Re: [PATCH v3] KVM: SEV: Mark nested locking of vcpu->lock
-To:     Peter Gonda <pgonda@google.com>
-Cc:     John Sperbeck <jsperbeck@google.com>,
-        kvm list <kvm@vger.kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-CFilter-Loop: Reflected
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SfUxTZxTGfe+9vS2V4qWivILZYiPGDIeAEN9MZYYZdydZZtTFOWewzisQ
+        vlxLlZFtwpQJFaVlIlpIgMqKIIzRGsYoX3ZRPhS7Wb7sKKwBtmlni3RMAamjvV3Cf7/znOc9
+        5znJy8OFHWQQLyktg5GkiVNEJJ9oujtjfHPT6ynHwqub16KG3rs4umkpJNGVqVkc3Svuw1BR
+        4VUumu8z4qjNXspBv7zIwVDNzTsYmmhQ4aigc4pAC/LRRe2cFUcvrRGoyDAI0OSACkNt5lD0
+        cPwGFz1Uv4ta23oIZGopI1G5ZpKLFN/M4GhYMQmQskvHQd/bHATqNgfvDKZN/XG0q7uOpJVn
+        7VzaONpI0KY+Ga2tzSfpyuxinNZVnaH1FU6M1j/KJumLZ+0k/VPuGId2tA+QdMOtAYJW6Bo5
+        tFP72l7/j/nbjzMpSacYyeaYo/xEZ0cHeTJPmGn86xWWDRx+cuDDg1QULD+n5bhZSNUA2Fwf
+        wXIuBkdf+MoBz+MZN8aycj2ATdUfygF/kZ8B+HLcQrCFBsCFHAfmdpFUOJzvasTdHEBthH/0
+        6zw6TsmXQ0txlJtXUodhi7mHYD2fwDxjDpflSKh8YPcwQYXAttL7wM0CKhr+quvy6D7UNtjZ
+        0+mZD6jV8HlvnXd+IDRPlGPsYf5QXdqKs7waulqsJMvr4Njzx1zWvwlW6KdJlmNgtfI375xQ
+        qKm04exef9hzbYJg366Bt28Mew6GVCMf2ooM3sYuOPvdde+CYLhg0WCs6TyAU4p2DlsoABx5
+        Out1bYOu/EGuAqxXLUmuWpJKtSSVakkq1ZJUFYBTCwJlUmlqAiONTGNOh0nFqVJZWkLYp+mp
+        WrD4x++5fk5vBkPmZ2EGgPGAAUAeLgoQ/KNPPCYUHBd/nsVI0uMlshRGagDBPEIUKNAk/SAW
+        UgniDCaZYU4ykv+7GM8nKBs7ku9fZ1hzpLL/In6BGJsUhx9cue9P9aPpkbnLm8Xvnfki85Lz
+        zq5Dxq1rL+deubBqbzcMWRYz6LexfcQS/FXXzgb74+ZXJfv/7YrmqvNqtzTFzvU6f5+PW1FQ
+        tX7+x/iS3lVYxvXobzWz04R1676ZHXtuJw9de7p96LDfnrxiq2C5LC5EWVQY8/bX8qNz99dZ
+        dyyz5p7wDfItjyJLbOonOZlRfwuSw+yuA6ovq/TDNuKj/fHqwfoC26kM4XnqtCUyQKwNkF16
+        cvAtOis20/SB6sFQbE2yZMv7xhPvrBB260yjCVeVDsvuuVtlWbk9fQma3Z9VNJiJ1mF+pCjU
+        0XRoQ5lJNC4ipIniiDdwiVT8H0iZu1FSBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SfUxTVxjGd+69vb10Q6+1yBmYmTVpJDIYdjpOnLrG/bGbzMV9GON0hlW5
+        ATIo2FrEuWwFBkHU0HaDaWVSEUsVsNK6OGwZteKgfFg+DWszGOPDARlQ0LmmiqPcLel/v+d9
+        n/d5zh+HwoUjvBgqQ3GMVSrkmWJSQGRoMF1C/IbMw0nf9iQjS8cvOKr7rYxEFfMBHHWWd2NI
+        X3aOj4LdHhw1z17goZ5/8jF0te4ehsYtBhydcc4T6Fnp8PLsm1EcPR3djPSuBwBNDBow1OyN
+        R31jZj7qq34XOZrdBOq/XUmiKtMEH2mLH+NoSDsBkK7NxkPXZ+YI1O6NlcUy/QPvMUvt9SSj
+        K5zlM57hRoLp71Yz1munSOaSphxnbDVfM3bjIsbYf9WQzNnCWZJpKhrhMXM/D5KM5eYgwWht
+        jTxm0frKB2sOCLanspkZuazy9Z2fCdIXW1rInBJhnufP55gGzK0qBRQF6S1wzLOrFAgoIV0H
+        oL7HQnLCvyymz/E4YQLQXF1ClIIIiqSTYLCtEQ+xiI6DkwM2LGTC6ZIX4eNADQgt1tIH4W2v
+        m+BMn8Ibnoc8jqVQd3+WH2KClsDmC10r/kh6K+y1tfG5tpbl6uLnKw0R9FvQ6XauMKDXwScd
+        9ViIcToaeserVhjSNKxxeHCOo+DU2BKP41fhyJMpPud/DRrtCyTHO2GtzvdfTjw0XZrBuUes
+        ge7z4wR3+zK8Yx4itAAawuoMYVGGsChDWJQhLMoIeNdAtFqlykrLU0kV7PFElTxLpVakJR7J
+        zrKC5T/YuXT34E/A5/UnugBGAReAFC4WRT6ypx8WRqbKT3zBKrNTlOpMVuUCsRQhjo6cOqBL
+        EdJp8mPs5yybwyr/32JURIwG++SdbQ5qj3Ra/3G0uz4orZc5G4qijM/evjJwZc9RUtKVtdGY
+        m2D66HhS9WiRSJLyZfDDk/slrdP915Mkf63vncw48sJWWtflo/7Ye2v13kczvt3Br6R5zD7g
+        x8t/7zuvu7ixcr521TDG+MH3MaJJscKtudje2posAumOs7IbTZd9MvOmHdr3tQHBfV+cMqH7
+        9Bm8trDgRKAkkP/U70yNKhPGqX+syH3z711rC6iF9SmHGnaYUzsocb7jbq3kh3UmfqDC+PCy
+        +w19J7oH8dhTM7Imi73SYJVu0C4Ub7GuLtjGPkgbasP2C9tv9R6dCLqYqu2OnOzkk6e/M042
+        vHRHTKjS5Zs34UqV/F9M6jft8gMAAA==
+X-CMS-MailID: 20220429172356uscas1p240abbeaccf4d0771ef01c5ada56a19e3
+CMS-TYPE: 301P
+X-CMS-RootMailID: 20220427160301eucas1p147d0dced70946e20dd2dd046b94b8224
+References: <20220427160255.300418-1-p.raghav@samsung.com>
+        <CGME20220427160301eucas1p147d0dced70946e20dd2dd046b94b8224@eucas1p1.samsung.com>
+        <20220427160255.300418-6-p.raghav@samsung.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 7:12 PM Peter Gonda <pgonda@google.com> wrote:
-> Sounds good. Instead of doing this prev_vcpu solution we could just
-> keep the 1st vcpu for source and target. I think this could work since
-> all the vcpu->mutex.dep_maps do not point to the same string.
+On Wed, Apr 27, 2022 at 06:02:44PM +0200, Pankaj Raghav wrote:
+> Remove the condition which disallows non-power_of_2 zone size ZNS drive
+> to be updated and use generic method to calculate number of zones
+> instead of relying on log and shift based calculation on zone size.
+>=20
+> The power_of_2 calculation has been replaced directly with generic
+> calculation without special handling. Both modified functions are not
+> used in hot paths, they are only used during initialization &
+> revalidation of the ZNS device.
+>=20
+> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
+> ---
+>  drivers/nvme/host/zns.c | 11 ++---------
+>  1 file changed, 2 insertions(+), 9 deletions(-)
+>=20
+> diff --git a/drivers/nvme/host/zns.c b/drivers/nvme/host/zns.c
+> index 9f81beb4df4e..2087de0768ee 100644
+> --- a/drivers/nvme/host/zns.c
+> +++ b/drivers/nvme/host/zns.c
+> @@ -101,13 +101,6 @@ int nvme_update_zone_info(struct nvme_ns *ns, unsign=
+ed lbaf)
+>  	}
+> =20
+>  	ns->zsze =3D nvme_lba_to_sect(ns, le64_to_cpu(id->lbafe[lbaf].zsze));
+> -	if (!is_power_of_2(ns->zsze)) {
+> -		dev_warn(ns->ctrl->device,
+> -			"invalid zone size:%llu for namespace:%u\n",
+> -			ns->zsze, ns->head->ns_id);
+> -		status =3D -ENODEV;
+> -		goto free_data;
+> -	}
+> =20
+>  	blk_queue_set_zoned(ns->disk, BLK_ZONED_HM);
+>  	blk_queue_flag_set(QUEUE_FLAG_ZONE_RESETALL, q);
+> @@ -129,7 +122,7 @@ static void *nvme_zns_alloc_report_buffer(struct nvme=
+_ns *ns,
+>  				   sizeof(struct nvme_zone_descriptor);
+> =20
+>  	nr_zones =3D min_t(unsigned int, nr_zones,
+> -			 get_capacity(ns->disk) >> ilog2(ns->zsze));
+> +			 div64_u64(get_capacity(ns->disk), ns->zsze));
+> =20
+>  	bufsize =3D sizeof(struct nvme_zone_report) +
+>  		nr_zones * sizeof(struct nvme_zone_descriptor);
+> @@ -197,7 +190,7 @@ int nvme_ns_report_zones(struct nvme_ns *ns, sector_t=
+ sector,
+>  	c.zmr.zrasf =3D NVME_ZRASF_ZONE_REPORT_ALL;
+>  	c.zmr.pr =3D NVME_REPORT_ZONE_PARTIAL;
+> =20
+> -	sector &=3D ~(ns->zsze - 1);
+> +	sector =3D rounddown(sector, ns->zsze);
+>  	while (zone_idx < nr_zones && sector < get_capacity(ns->disk)) {
+>  		memset(report, 0, buflen);
+> =20
+> --=20
+> 2.25.1
 >
-> Lock:
->          bool acquired = false;
->          kvm_for_each_vcpu(...) {
->                  if (mutex_lock_killable_nested(&vcpu->mutex, role)
->                      goto out_unlock;
->                 acquired = true;
->                  if (acquired)
->                       mutex_release(&vcpu->mutex, role)
->          }
 
-Almost:
 
-          bool first = true;
-          kvm_for_each_vcpu(...) {
-                  if (mutex_lock_killable_nested(&vcpu->mutex, role)
-                      goto out_unlock;
-                  if (first)
-                      ++role, first = false;
-                 else
-                      mutex_release(&vcpu->mutex, role);
-         }
+Looks good.
 
-and to unlock:
-
-          bool first = true;
-          kvm_for_each_vcpu(...) {
-                if (first)
-                      first = false;
-                else
-                      mutex_acquire(&vcpu->mutex, role);
-                mutex_unlock(&vcpu->mutex);
-                acquired = false;
-          }
-
-because you cannot use the first vCPU's role again when locking.
-
-Paolo
-
+Reviewed by: Adam Manzanares <a.manzanares@samsung.com>=

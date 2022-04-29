@@ -2,129 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8688E514061
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 03:55:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30EFD514064
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 03:55:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354076AbiD2B6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 21:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52524 "EHLO
+        id S1354091AbiD2B7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 21:59:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231922AbiD2B6S (ORCPT
+        with ESMTP id S231824AbiD2B7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 21:58:18 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB57BB0AE;
-        Thu, 28 Apr 2022 18:54:58 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id m6so4230336iob.4;
-        Thu, 28 Apr 2022 18:54:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=YNr4dv3JNnMf5I1DjV2JKVssdmjDHBNzpOU5voLiAd8=;
-        b=bcY/QvagGm6wnaiLh7HIpm1nJWUo0J8Kqi7JVPwT+GO7FzLIYnLE1hJw6pEk0+2QjV
-         nRgH/n2ha4GRwWYv7HPeegKvd7hmjZyNyvakANTKr6MaHAKhnHyqqvFXBhVgoVi3oV0x
-         res1FAtFZeEoHWekc5USVup5nCF3f4vICvBqeiI1s5NYtkbVciu4T+ZQD5QB9mS07l6M
-         be795bir8IC5jm3+Hix/ZynnWwSmODOQ90A5111DskfACowJFBU6HwZvKdNf53mhtBGf
-         ZQO5lrNRhWCdDyyUNtaLbag/YFYTLtoleHt1Y9yWvvLy909Us6mZ6xyB0nM7Iw9IiWQ8
-         TQuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=YNr4dv3JNnMf5I1DjV2JKVssdmjDHBNzpOU5voLiAd8=;
-        b=7p8AsfAVceQgzRqwTod56Po0bSkYNIFpx64eZBhQ/k+qfR+G53jvjrjJNvYC8IoRmk
-         gyOVbEC7NzUJZLC6L+j2I7/AExu5nhzTcEKUHZgg737Sk6LpTje0wW+PA5ebS5WHcDzQ
-         PZHBswHPk87SINF48b6fuM64iAdGWOUd4L7eadMGC/re0cj7rua0vJHM3EHet8cuAEJ3
-         Da8LrEcVFrIBD3khIDIKhcaO1N9mESCWCCGrWTtzmaq3oTmjWhSkXsHe66nefDMRQ5+5
-         8txnAXuuyDKMzbZZv7m9uxMJrUCtieyVP0cQ8CE0AJ/4oxg1zvSVLSER40ocJ/eHq7dX
-         9tOw==
-X-Gm-Message-State: AOAM5326yT/Oacy51HyKbDKPggu2MzlgWcdm2l8XYsE61zBYcR4NVbbW
-        XI2ryIEzHtbVAH9r/wQ8LLPFNM6ShxZVvEpSAXo=
-X-Google-Smtp-Source: ABdhPJxtaktnOnC6Jze7ekAknMust1zCbi4KjcY7JcVhMPZwKAzxl/2IgeH/EkSzRJoUAingHwsKsKx7qHhnv1wmfMo=
-X-Received: by 2002:a05:6602:2f12:b0:654:b304:b016 with SMTP id
- q18-20020a0566022f1200b00654b304b016mr14632824iow.60.1651197297569; Thu, 28
- Apr 2022 18:54:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <e05ec742-c3dc-df7c-c5d7-29358d0a7081@linux.intel.com>
- <20220424015757.21993-1-surong.pang@gmail.com> <YmfdN97xtmwSOo59@kroah.com> <CAEDbmAQmYQdMNY8sANnSuauBcsemrV1MFR3bB83JJ7cHNdWGmA@mail.gmail.com>
-In-Reply-To: <CAEDbmAQmYQdMNY8sANnSuauBcsemrV1MFR3bB83JJ7cHNdWGmA@mail.gmail.com>
-From:   surong pang <surong.pang@gmail.com>
-Date:   Fri, 29 Apr 2022 09:54:46 +0800
-Message-ID: <CAEDbmARx0EvvUo_d7w5-gtTvSp3YiTatsMZoBJVZc2O7-M+cWw@mail.gmail.com>
-Subject: Re: [PATCH V2] xhci-plat: Let usb phy shutdown later
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        mathias.nyman@intel.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Orson.Zhai@unisoc.com,
-        yunguo.wu@unisoc.com
+        Thu, 28 Apr 2022 21:59:04 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2499987237;
+        Thu, 28 Apr 2022 18:55:43 -0700 (PDT)
+X-UUID: b667f1e75fe6441e8a6a75c90429b40d-20220429
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:2c578ea6-e8b2-4057-adfa-4483c9a7fdc9,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:88121b2f-6199-437e-8ab4-9920b4bc5b76,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: b667f1e75fe6441e8a6a75c90429b40d-20220429
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 949969813; Fri, 29 Apr 2022 09:55:39 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 29 Apr 2022 09:55:37 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 29 Apr 2022 09:55:37 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 29 Apr 2022 09:55:37 +0800
+Message-ID: <9f601c458bd3401b216992e8dd72485a10f34597.camel@mediatek.com>
+Subject: Re: [PATCH v5 1/4] dt-bindings: display: mediatek: dsi: Convert
+ dsi_dtbinding to .yaml
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     <matthias.bgg@gmail.com>, <linux-arm-kernel@lists.infradead.org>,
+        <chunkuang.hu@kernel.org>, <jitao.shi@mediatek.com>,
+        <linux-kernel@vger.kernel.org>, <airlied@linux.ie>,
+        <krzysztof.kozlowski+dt@linaro.org>, <daniel@ffwll.ch>,
+        <xinlei.lee@mediatek.com>, <devicetree@vger.kernel.org>,
+        <p.zabel@pengutronix.de>, <linux-mediatek@lists.infradead.org>,
+        <robh+dt@kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <cellopoint.kai@gmail.com>
+Date:   Fri, 29 Apr 2022 09:55:37 +0800
+In-Reply-To: <1651177993.334386.220464.nullmailer@robh.at.kernel.org>
+References: <20220428133753.8348-1-rex-bc.chen@mediatek.com>
+         <20220428133753.8348-2-rex-bc.chen@mediatek.com>
+         <1651177993.334386.220464.nullmailer@robh.at.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Greg,
-Sorry for html email response.
-Yes, The subject should say "xhci-plat". And it didn't fix a specific commi=
-t id.
+On Thu, 2022-04-28 at 15:33 -0500, Rob Herring wrote:
+> On Thu, 28 Apr 2022 21:37:50 +0800, Rex-BC Chen wrote:
+> > From: Xinlei Lee <xinlei.lee@mediatek.com>
+> > 
+> > Convert mediatek,dsi.txt to mediatek,dsi.yaml format
+> > 
+> > Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >  .../display/mediatek/mediatek,dsi.txt         |  62 ---------
+> >  .../display/mediatek/mediatek,dsi.yaml        | 122
+> > ++++++++++++++++++
+> >  2 files changed, 122 insertions(+), 62 deletions(-)
+> >  delete mode 100644
+> > Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt
+> >  create mode 100644
+> > Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.yam
+> > l
+> > 
+> 
+> Running 'make dtbs_check' with the schema in this patch gives the
+> following warnings. Consider if they are expected or the schema is
+> incorrect. These may not be new warnings.
+> 
+> Note that it is not yet a requirement to have 0 warnings for
+> dtbs_check.
+> This will change in the future.
+> 
+> Full log is available here: 
+> https://urldefense.com/v3/__https://patchwork.ozlabs.org/patch/__;!!CTRNKA9wMg0ARbw!wKbRsUmeUS_4mtOwj1t30buVNEilHYYhsUmEd5MvZ7P9VyDXg6cikERof47mkwETQzFL$
+>  
+> 
+> 
+> dsi@1400c000: compatible: ['mediatek,mt7623-dsi', 'mediatek,mt2701-
+> dsi'] is too long
+> 	arch/arm/boot/dts/mt7623n-bananapi-bpi-r2.dtb
+> 	arch/arm/boot/dts/mt7623n-rfb-emmc.dtb
+> 
+> dsi@14014000: #address-cells:0:0: 2 was expected
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-burnet.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-cozmo.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-damu.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14-
+> sku2.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-
+> sku1.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-
+> sku6.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-
+> sku7.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-juniper-
+> sku16.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kappa.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kenzo.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-
+> sku0.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-
+> sku1.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu-sku22.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku16.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku272.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku288.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku32.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku0.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku176.dtb
+> 
+> dsi@14014000: 'port' is a required property
+> 	arch/arm64/boot/dts/mediatek/mt8183-evb.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-burnet.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-cozmo.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-damu.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14-
+> sku2.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-
+> sku1.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-
+> sku6.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-
+> sku7.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-juniper-
+> sku16.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kappa.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kenzo.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-
+> sku0.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-
+> sku1.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu-sku22.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku16.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku272.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku288.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku32.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku0.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku176.dtb
+> 
+> dsi@14014000: #size-cells:0:0: 2 was expected
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-burnet.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-cozmo.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-damu.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14-
+> sku2.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-
+> sku1.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-
+> sku6.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-
+> sku7.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-juniper-
+> sku16.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kappa.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kenzo.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-
+> sku0.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-
+> sku1.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu-sku22.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku16.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku272.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku288.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku32.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku0.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku176.dtb
+> 
+> dsi@1401b000: 'port' is a required property
+> 	arch/arm64/boot/dts/mediatek/mt8173-elm.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8173-elm-hana.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8173-elm-hana-rev7.dtb
+> 
 
-surong pang <surong.pang@gmail.com> =E4=BA=8E2022=E5=B9=B44=E6=9C=8828=E6=
-=97=A5=E5=91=A8=E5=9B=9B 14:26=E5=86=99=E9=81=93=EF=BC=9A
->
-> Dear Greg,
-> No,  It's just a patch to call usb_phy_shutdown later.
->
->
-> Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2022=E5=B9=B44=E6=9C=8826=
-=E6=97=A5=E5=91=A8=E4=BA=8C 19:53=E5=86=99=E9=81=93=EF=BC=9A
->>
->> On Sun, Apr 24, 2022 at 09:57:57AM +0800, Surong Pang wrote:
->> > From: Surong Pang <surong.pang@unisoc.com>
->> >
->> > Let usb phy shutdown later in xhci_plat_remove function.
->> > Some phy driver doesn't divide 3.0/2.0 very clear.
->> > If calls usb_phy_shutdown earlier than usb_remove_hcd(hcd),
->> > It will case 10s cmd timeout issue.
->> >
->> > Call usb phy shutdown later has better compatibility.
->> >
->> > Signed-off-by: Surong Pang <surong.pang@unisoc.com>
->>
->> The subject should say "xhci-plat", right?
->>
->> > ---
->> >  drivers/usb/host/xhci-plat.c | 2 +-
->> >  1 file changed, 1 insertion(+), 1 deletion(-)
->> >
->> > diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat=
-.c
->> > index 649ffd861b44..fe492ed99cb7 100644
->> > --- a/drivers/usb/host/xhci-plat.c
->> > +++ b/drivers/usb/host/xhci-plat.c
->> > @@ -390,13 +390,13 @@ static int xhci_plat_remove(struct platform_devi=
-ce *dev)
->> >
->> >       usb_remove_hcd(shared_hcd);
->> >       xhci->shared_hcd =3D NULL;
->> > -     usb_phy_shutdown(hcd->usb_phy);
->> >
->> >       usb_remove_hcd(hcd);
->> >       usb_put_hcd(shared_hcd);
->> >
->> >       clk_disable_unprepare(clk);
->> >       clk_disable_unprepare(reg_clk);
->> > +     usb_phy_shutdown(hcd->usb_phy);
->> >       usb_put_hcd(hcd);
->>
->> Does this fix a specific commit id?
->>
->> thanks,
->>
->> greg k-h
+Hello Rob,
+
+Thanks for your comments.
+The purpose of this series is not to fix dts for previous SoCs.
+Therefore, if there is a chance, we could send another series to fix
+them.
+
+Thanks.
+
+BRs,
+Rex
+

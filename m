@@ -2,65 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 353EB5150D3
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:28:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC835150CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379116AbiD2QbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 12:31:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49592 "EHLO
+        id S1379123AbiD2QbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 12:31:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379091AbiD2QbO (ORCPT
+        with ESMTP id S1379108AbiD2QbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 12:31:14 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99448D8933
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:27:55 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id e24so11442200wrc.9
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:27:55 -0700 (PDT)
+        Fri, 29 Apr 2022 12:31:16 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB512D95D5
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:27:57 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id n32-20020a05600c3ba000b00393ea7192faso5047696wms.2
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:27:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=mI7n1NLRE2SJ0nGq1GuXHkLC+FfGx13T6nrAvtwR/WM=;
-        b=PriGK0hSLnTS2cEJ+8PWs2vh9pUtjydmRrC3DSfgUHwogh0l2BHrOQYPMmQ9NnT00m
-         JWsLo/RVbQV8IqxodaIw3hgYW5ZWti1Iyqa/i2k+38+s1hIpfv4dHTWCgwwY++uHARYr
-         wbnoZIA3qYMz3YKu+3AAn7edSudw0xSwPsI3oBtMOQ/hiOzXZKORETz6HS7jqeX5AL8h
-         IrDJULRDRD3TvPypBfwUkFvk6flChvXpixC3Q+uPKp11/ELD2pHEMKDgdzuhwugb8Eht
-         qBPkK8ygajUnpMQa5Ia5mWMLsswnjWSEbGQtvOirttoKjsOcKZTTCQt35E12Ymfos9ds
-         w89g==
+        bh=MW4/SCqXJVlOKCfNX0kh20TWsOYEb0YYvKibQ3Hqw4A=;
+        b=sLcpEho4+NsJLgcRC8qZZScY/AbdEJ9oyDjgwMrPiPfyGi43JtgFgRmo/UdVd1Mvq7
+         uLcvPwop3kBoBSOcwZkfrNNYLg3S+Giv1ydkHijy0OfEY9fFz1cMpuDXBz8vlmG1Rqgd
+         pxpNHV1gEuaQoiRi4b7Rew8BPah7TJLqbh4I/81cjd4yhROk9T+90GnXYiSZW2JQTgtP
+         YDu5pDbPjEAldogDGyGB5P8jhIVQKKcPqGeIsdzCm0CLULCeuIC8MeZ0iYuL3RHcDGvl
+         iGdFJv1vv0dUGWXzOTkjgO5rthQ+KQ/1b/Jl/GoKdJ6ojo2wyP3/RiaI0p6EJ05ubA6S
+         S5bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=mI7n1NLRE2SJ0nGq1GuXHkLC+FfGx13T6nrAvtwR/WM=;
-        b=sMbq9iF7L9Uokj3/XleizFwHNAtA0rk93aYaW9/ebDLEdwYVrJxDVcok6ACvNEUAdU
-         rAJQxAcrI1N1Qb7+7W/cShREBKrIqRel2th5fq3OpUOi5RYLutqVhAtd66HKXhNwpsIH
-         iw9vc9GV9Z0eGkFRDfVJLSfX8WNJytw8C8lI5F75/LQekqIwmNQE13OGl1z9KBabVrJH
-         jMNCCs3x7YJ9YJOPzTzZ/F8XFDrF3WeIDsqO0BhurnhzyfHTvzsokHGtJr3+w/vG9ugy
-         EToJLcuPTZ1ZLPLHaLNWGsdwig/PQfa8nn8FK/HMSN54EC57hysQ5mjTPHRg3JS5OL0V
-         Tkxw==
-X-Gm-Message-State: AOAM5325JkqolWgPMjM4dgBlA1qqKodg2rUl7vcvn0OOl/SscW3DSkoY
-        YxI5pVrLMReJqx+Uviex5lhk/w==
-X-Google-Smtp-Source: ABdhPJwAW+PCsz1kk0HbPOVAVPEoNj30Gybb1JbMaNpx4iKlaVMW5ioc7YSOio+KjFoTaUnEKSJajQ==
-X-Received: by 2002:adf:ef01:0:b0:20a:8068:ca5e with SMTP id e1-20020adfef01000000b0020a8068ca5emr30867930wro.661.1651249674218;
-        Fri, 29 Apr 2022 09:27:54 -0700 (PDT)
+        bh=MW4/SCqXJVlOKCfNX0kh20TWsOYEb0YYvKibQ3Hqw4A=;
+        b=AEorP7yRKEfxmnQcKoVc+j/nZmXZY9dQKz+QyJ3LVWzmleshapSIjl9cG6wbjspPm6
+         pnNoybAOVzpxATl42jPrr8RoMvX0mGFP3o7yXuDcAQgYbxh/63+BybVaLmtIj7HLD8FC
+         y/PgRdSkIS6+DnBRoNlUAyieTJtR6MFVkk5aTjiv3ZZWDIOKfGldrW8G9HT05JL6Eu59
+         oxzqz82sQXy26d5Z3s+rHTN2sr3tuH2UJ4lVgjw27W3XKMKOXOCVwt8iJ8pyKcSCAnZA
+         CLOxNUMLE9s8/FBrYMbToi/WhIZj+1kJSK1fV6cYXCyA6K+CcPjdMm88wCiAwjHCGUxu
+         qK5Q==
+X-Gm-Message-State: AOAM531srGzrERdkLRrz337yBRIXbJKxBGMLNw9rqMEG1vs1d5nsy9xm
+        SsZMZ8l6ErUU7/1sCSeyea/pLg==
+X-Google-Smtp-Source: ABdhPJzuetYpkT6RQv2eNup8cZFEfLe03TK5FgNwDYL2xdl2WTx9LY4GgzjESxJ6RS482oVnU944bw==
+X-Received: by 2002:a1c:3587:0:b0:381:50ff:cbd with SMTP id c129-20020a1c3587000000b0038150ff0cbdmr3954921wma.140.1651249675926;
+        Fri, 29 Apr 2022 09:27:55 -0700 (PDT)
 Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id b5-20020adff905000000b0020a8781be70sm2781801wrr.12.2022.04.29.09.27.53
+        by smtp.gmail.com with ESMTPSA id b5-20020adff905000000b0020a8781be70sm2781801wrr.12.2022.04.29.09.27.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 09:27:53 -0700 (PDT)
+        Fri, 29 Apr 2022 09:27:55 -0700 (PDT)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+Cc:     linux-kernel@vger.kernel.org, Sven Peter <sven@svenpeter.dev>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 02/16] nvmem: brcm_nvram: find Device Tree nodes for NVMEM cells
-Date:   Fri, 29 Apr 2022 17:26:47 +0100
-Message-Id: <20220429162701.2222-3-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 03/16] MAINTAINERS: Add apple efuses nvmem files to ARM/APPLE MACHINE
+Date:   Fri, 29 Apr 2022 17:26:48 +0100
+Message-Id: <20220429162701.2222-4-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20220429162701.2222-1-srinivas.kandagatla@linaro.org>
 References: <20220429162701.2222-1-srinivas.kandagatla@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -71,38 +69,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+From: Sven Peter <sven@svenpeter.dev>
 
-DT binding for Broadcom's NVRAM supports specifying NVMEM cells as NVMEM
-device (provider) subnodes. Look for such subnodes when collecing NVMEM
-cells. This allows NVMEM consumers to use NVRAM variables.
-
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+Signed-off-by: Sven Peter <sven@svenpeter.dev>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- drivers/nvmem/brcm_nvram.c | 2 ++
+ MAINTAINERS | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/drivers/nvmem/brcm_nvram.c b/drivers/nvmem/brcm_nvram.c
-index 439f00b9eef6..450b927691c3 100644
---- a/drivers/nvmem/brcm_nvram.c
-+++ b/drivers/nvmem/brcm_nvram.c
-@@ -8,6 +8,7 @@
- #include <linux/module.h>
- #include <linux/nvmem-consumer.h>
- #include <linux/nvmem-provider.h>
-+#include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/slab.h>
- 
-@@ -72,6 +73,7 @@ static int brcm_nvram_add_cells(struct brcm_nvram *priv, uint8_t *data,
- 			return -ENOMEM;
- 		priv->cells[idx].offset = value - (char *)data;
- 		priv->cells[idx].bytes = strlen(value);
-+		priv->cells[idx].np = of_get_child_by_name(dev->of_node, priv->cells[idx].name);
- 	}
- 
- 	return 0;
+diff --git a/MAINTAINERS b/MAINTAINERS
+index fd768d43e048..1bf57fd937b5 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1837,6 +1837,7 @@ F:	Documentation/devicetree/bindings/clock/apple,nco.yaml
+ F:	Documentation/devicetree/bindings/i2c/apple,i2c.yaml
+ F:	Documentation/devicetree/bindings/interrupt-controller/apple,*
+ F:	Documentation/devicetree/bindings/mailbox/apple,mailbox.yaml
++F:	Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
+ F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
+ F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
+ F:	Documentation/devicetree/bindings/power/apple*
+@@ -1847,6 +1848,7 @@ F:	drivers/i2c/busses/i2c-pasemi-core.c
+ F:	drivers/i2c/busses/i2c-pasemi-platform.c
+ F:	drivers/irqchip/irq-apple-aic.c
+ F:	drivers/mailbox/apple-mailbox.c
++F:	drivers/nvmem/apple-efuses.c
+ F:	drivers/pinctrl/pinctrl-apple-gpio.c
+ F:	drivers/soc/apple/*
+ F:	drivers/watchdog/apple_wdt.c
 -- 
 2.21.0
 

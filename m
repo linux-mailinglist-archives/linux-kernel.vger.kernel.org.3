@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C0B351564E
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:01:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 548DA51564A
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:01:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381166AbiD2VD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 17:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36992 "EHLO
+        id S1381195AbiD2VEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 17:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381154AbiD2VDx (ORCPT
+        with ESMTP id S1381156AbiD2VDx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 29 Apr 2022 17:03:53 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C813D3AD4
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:00:32 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id p18-20020aa78612000000b0050d1c170018so4679021pfn.15
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:00:32 -0700 (PDT)
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77AE8D3AD7
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:00:33 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id k14-20020aa790ce000000b0050d3b201122so4672259pfk.20
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:00:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=LPVkLBPwEAjA8SToO1l83Vg1lu2tQY9qN9/CiKwVlGU=;
-        b=IsuclB30S32MomEEZnx7eKe3YnpywIDDJ3ugO+zUmBmA0U7FjNOrRXhxz8mEqiCI/4
-         Tvz5jcIVNNULVi9NPLdtTQzJbS4NAYQnN4+IRtqufEnNf+EfYLGD0lGWhGwFpwedrjxY
-         JjfxOH70aDEO18Jn7H4WZt3EV7hHpdrNhK6zCU2927NNekHZu7AgRNdLuivppHKPDzPY
-         8OX8/4WD6vHuhbsyGd+PUGXmeh7NZSG9coxaq7+8+lpMMN8EuMZud7fdzW90EgukBLlU
-         vU/w7Q0j4A0HYxsvEfW9Cc1qkMpolziiuUAV8PV6pxmcTici3d3wQ7DFOOUzywTX2EkU
-         Eqng==
+        bh=sYmSDs9vemF3/Z3s2wsijCq+GxxHmSayON1stTWk5n0=;
+        b=axe09GMhmDkuVVX0wJP6zD6p/9eeAdfzoaERIJvgaCYAJ/25lJeRvMtNtT8DshPc22
+         Ojo2DaWzd0GfyAeYzSjc9RkXYxXseXe7XlvEWLDTHiWs+Y0YQBzcsy8B2Wcc8gQ/3Qdd
+         7Y2gG4sCtcemlR0Z7Hyhsp9obwKZw2RWUJ2Bx2nB9eMSKnvfeM3xPvUV1z2r3i4py7Ti
+         1pAqbEinMDC9JRVd9C5W1p6DEDVnXKVBC+e1E9T5Dr2xwGSiF6dV7D9uRYWyWky6eceH
+         INIcv4oUHP8fv7aYlJsX/StGDfHmCRQ817gSS/hNaX4VRyj1Eg1dacIqLTXu8lGBgrPa
+         BiZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=LPVkLBPwEAjA8SToO1l83Vg1lu2tQY9qN9/CiKwVlGU=;
-        b=MpDleNVSqSPhJzvmWmQnL1hFXCu/CfXD8dMz6xuIcix387HsLtHttGOF9RtnJHpQMI
-         ccPuqm91S0D2HLZNJKeCB1o59OFnmIg/3OH/R9VOI/qEiwftZje5BYhUhjMBnHW+9/wV
-         M/inguRP7JFnzbpQOua2zu3BMf6s1jZhD4dRVNjuUKMjNEklUAgBFwTGLLQd8r9Cs5g2
-         fiG+aq02cq/BdIqDR9y5xO1esTcD5+3dx8KKbjyh2VSh3u7wpW7iEwAWzgYZNwa0OFQD
-         a34/ytBRalxCRr4fxc6e9EpFzJAKG7kErjt4H4fbbzNmJwe40uhGBJcPbCmQ+PekLqYH
-         GODg==
-X-Gm-Message-State: AOAM531cnWHOu2Ow8eI2c/YRmxUZvoOkVlcpNWmLLSCGtmKdh4UOus2G
-        IRNYD/hiQwJEmvSN2RuzgSklUwEI9ck=
-X-Google-Smtp-Source: ABdhPJwF72ZyuLedAAJsbXXnQhkqmpfiH1j4YWQDOOIF9AkF4nAk9MZU1II2RY3xDZCxYwYOWXB0pVgjTr4=
+        bh=sYmSDs9vemF3/Z3s2wsijCq+GxxHmSayON1stTWk5n0=;
+        b=hAw/blDP0FG6h4wCLBxrFGkmO2NktaqYqCh7cSJziN+u4AlkuB83eSIxK5SK+jV2Cf
+         dypO/LvQKm/C2ujWsJ63SwRDBL417PXA50/ejHCCBIM2eDQCT5fLmAUkoP65jO3sTbsD
+         DJn2v6vnyMecta/Jee8X003N0/z0l8Q+doxRs9CAvnp6i/Lge8Slq+nNdQd0IxODti6m
+         v9DAk7fSBMYPdT6uxmwzLs3dxQin6BuQ1+iABbfdvJC9PBzoDYUaKA+pmi6NfvR15XZJ
+         K5gUI70vPlILsiGy78cL/XAwkaZPcMJigUwrsoJ4nDkMH9S3yc5T/x+83n9WrV4khxbo
+         eztQ==
+X-Gm-Message-State: AOAM533dABILCh0J8NOfQQfPhYljwfNfnSg1uAljpOMKYYpbdQDe/t3c
+        v5mbnRDyw0Q4jlQKIIgQqR78sisgXOs=
+X-Google-Smtp-Source: ABdhPJzlW0WaPMyp/bOXIZS1s6MQhTk2krjEOUAtgwDxh+MZT2t41lytl+fXSJDNza7yoec7QJVyrwx/9iA=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a63:5917:0:b0:39c:c450:3143 with SMTP id
- n23-20020a635917000000b0039cc4503143mr861303pgb.531.1651266031469; Fri, 29
- Apr 2022 14:00:31 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:902:9f97:b0:15d:1b87:6164 with SMTP id
+ g23-20020a1709029f9700b0015d1b876164mr1107742plq.71.1651266032987; Fri, 29
+ Apr 2022 14:00:32 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 29 Apr 2022 21:00:18 +0000
+Date:   Fri, 29 Apr 2022 21:00:19 +0000
 In-Reply-To: <20220429210025.3293691-1-seanjc@google.com>
-Message-Id: <20220429210025.3293691-2-seanjc@google.com>
+Message-Id: <20220429210025.3293691-3-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220429210025.3293691-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [PATCH v3 1/8] Revert "KVM: Do not speculatively mark pfn cache valid
- to "fix" race"
+Subject: [PATCH v3 2/8] Revert "KVM: Fix race between mmu_notifier
+ invalidation and pfncache refresh"
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -73,47 +73,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 55111927df1cd140aa7b7ea3f33f524b87776381.
+This reverts commit c496097d2c0bdc229f82d72b4b1e55d64974c316.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- virt/kvm/pfncache.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ virt/kvm/kvm_main.c |  9 ------
+ virt/kvm/pfncache.c | 70 ++++++++++++++-------------------------------
+ 2 files changed, 21 insertions(+), 58 deletions(-)
 
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 0848430f36c6..dfb7dabdbc63 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -705,15 +705,6 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
+ 	kvm->mn_active_invalidate_count++;
+ 	spin_unlock(&kvm->mn_invalidate_lock);
+ 
+-	/*
+-	 * Invalidate pfn caches _before_ invalidating the secondary MMUs, i.e.
+-	 * before acquiring mmu_lock, to avoid holding mmu_lock while acquiring
+-	 * each cache's lock.  There are relatively few caches in existence at
+-	 * any given time, and the caches themselves can check for hva overlap,
+-	 * i.e. don't need to rely on memslot overlap checks for performance.
+-	 * Because this runs without holding mmu_lock, the pfn caches must use
+-	 * mn_active_invalidate_count (see above) instead of mmu_notifier_count.
+-	 */
+ 	gfn_to_pfn_cache_invalidate_start(kvm, range->start, range->end,
+ 					  hva_range.may_block);
+ 
 diff --git a/virt/kvm/pfncache.c b/virt/kvm/pfncache.c
-index 72eee096a7cd..71c84a43024c 100644
+index 71c84a43024c..dd84676615f1 100644
 --- a/virt/kvm/pfncache.c
 +++ b/virt/kvm/pfncache.c
-@@ -81,8 +81,6 @@ bool kvm_gfn_to_pfn_cache_check(struct kvm *kvm, struct gfn_to_pfn_cache *gpc,
+@@ -112,63 +112,29 @@ static void __release_gpc(struct kvm *kvm, kvm_pfn_t pfn, void *khva, gpa_t gpa)
+ 	}
+ }
+ 
+-static kvm_pfn_t hva_to_pfn_retry(struct kvm *kvm, struct gfn_to_pfn_cache *gpc)
++static kvm_pfn_t hva_to_pfn_retry(struct kvm *kvm, unsigned long uhva)
  {
- 	struct kvm_memslots *slots = kvm_memslots(kvm);
+-	bool first_attempt = true;
+ 	unsigned long mmu_seq;
+ 	kvm_pfn_t new_pfn;
++	int retry;
  
--	lockdep_assert_held_read(&gpc->lock);
+-	lockdep_assert_held_write(&gpc->lock);
 -
- 	if ((gpa & ~PAGE_MASK) + len > PAGE_SIZE)
- 		return false;
+-	for (;;) {
++	do {
+ 		mmu_seq = kvm->mmu_notifier_seq;
+ 		smp_rmb();
  
-@@ -228,6 +226,11 @@ int kvm_gfn_to_pfn_cache_refresh(struct kvm *kvm, struct gfn_to_pfn_cache *gpc,
+-		write_unlock_irq(&gpc->lock);
+-
+-		/* Opportunistically check for resched while the lock isn't held. */
+-		if (!first_attempt)
+-			cond_resched();
+-
+ 		/* We always request a writeable mapping */
+-		new_pfn = hva_to_pfn(gpc->uhva, false, NULL, true, NULL);
+-
+-		write_lock_irq(&gpc->lock);
+-
++		new_pfn = hva_to_pfn(uhva, false, NULL, true, NULL);
+ 		if (is_error_noslot_pfn(new_pfn))
+ 			break;
+ 
+-		first_attempt = false;
+-
+-		/*
+-		 * Wait for mn_active_invalidate_count, not mmu_notifier_count,
+-		 * to go away, as the invalidation in the mmu_notifier event
+-		 * occurs _before_ mmu_notifier_count is elevated.
+-		 *
+-		 * Note, mn_active_invalidate_count can change at any time as
+-		 * it's not protected by gpc->lock.  But, it is guaranteed to
+-		 * be elevated before the mmu_notifier acquires gpc->lock, and
+-		 * isn't dropped until after mmu_notifier_seq is updated.  So,
+-		 * this task may get a false positive of sorts, i.e. see an
+-		 * elevated count and wait even though it's technically safe to
+-		 * proceed (becase the mmu_notifier will invalidate the cache
+-		 * _after_ it's refreshed here), but the cache will never be
+-		 * refreshed with stale data, i.e. won't get false negatives.
+-		 */
+-		if (kvm->mn_active_invalidate_count)
+-			continue;
+-
+-		/*
+-		 * Ensure mn_active_invalidate_count is read before
+-		 * mmu_notifier_seq.  This pairs with the smp_wmb() in
+-		 * mmu_notifier_invalidate_range_end() to guarantee either the
+-		 * old (non-zero) value of mn_active_invalidate_count or the
+-		 * new (incremented) value of mmu_notifier_seq is observed.
+-		 */
+-		smp_rmb();
+-		if (kvm->mmu_notifier_seq == mmu_seq)
++		KVM_MMU_READ_LOCK(kvm);
++		retry = mmu_notifier_retry_hva(kvm, mmu_seq, uhva);
++		KVM_MMU_READ_UNLOCK(kvm);
++		if (!retry)
+ 			break;
+-	}
++
++		cond_resched();
++	} while (1);
+ 
+ 	return new_pfn;
+ }
+@@ -224,6 +190,7 @@ int kvm_gfn_to_pfn_cache_refresh(struct kvm *kvm, struct gfn_to_pfn_cache *gpc,
+ 	 * drop the lock and do the HVA to PFN lookup again.
+ 	 */
  	if (!old_valid || old_uhva != gpc->uhva) {
++		unsigned long uhva = gpc->uhva;
  		void *new_khva = NULL;
  
-+		/* Placeholders for "hva is valid but not yet mapped" */
-+		gpc->pfn = KVM_PFN_ERR_FAULT;
-+		gpc->khva = NULL;
-+		gpc->valid = true;
+ 		/* Placeholders for "hva is valid but not yet mapped" */
+@@ -231,10 +198,15 @@ int kvm_gfn_to_pfn_cache_refresh(struct kvm *kvm, struct gfn_to_pfn_cache *gpc,
+ 		gpc->khva = NULL;
+ 		gpc->valid = true;
+ 
+-		new_pfn = hva_to_pfn_retry(kvm, gpc);
++		write_unlock_irq(&gpc->lock);
 +
- 		new_pfn = hva_to_pfn_retry(kvm, gpc);
++		new_pfn = hva_to_pfn_retry(kvm, uhva);
  		if (is_error_noslot_pfn(new_pfn)) {
  			ret = -EFAULT;
-@@ -256,7 +259,7 @@ int kvm_gfn_to_pfn_cache_refresh(struct kvm *kvm, struct gfn_to_pfn_cache *gpc,
- 			gpc->pfn = KVM_PFN_ERR_FAULT;
- 			gpc->khva = NULL;
- 		} else {
--			gpc->valid = true;
-+			/* At this point, gpc->valid may already have been cleared */
- 			gpc->pfn = new_pfn;
- 			gpc->khva = new_khva;
+-		} else if (gpc->usage & KVM_HOST_USES_PFN) {
++			goto map_done;
++		}
++
++		if (gpc->usage & KVM_HOST_USES_PFN) {
+ 			if (new_pfn == old_pfn) {
+ 				new_khva = old_khva;
+ 				old_pfn = KVM_PFN_ERR_FAULT;
+@@ -250,10 +222,10 @@ int kvm_gfn_to_pfn_cache_refresh(struct kvm *kvm, struct gfn_to_pfn_cache *gpc,
+ 				new_khva += page_offset;
+ 			else
+ 				ret = -EFAULT;
+-		} else {
+-			/* Nothing more to do, the pfn is consumed only by the guest. */
  		}
+ 
++	map_done:
++		write_lock_irq(&gpc->lock);
+ 		if (ret) {
+ 			gpc->valid = false;
+ 			gpc->pfn = KVM_PFN_ERR_FAULT;
 -- 
 2.36.0.464.gb9c8b46e94-goog
 

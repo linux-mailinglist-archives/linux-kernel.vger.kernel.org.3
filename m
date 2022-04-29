@@ -2,79 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56BE1515025
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 926D3515029
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:02:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378736AbiD2QFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 12:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32826 "EHLO
+        id S1378739AbiD2QGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 12:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378726AbiD2QFS (ORCPT
+        with ESMTP id S1359029AbiD2QGD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 12:05:18 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135625EDFC
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:02:00 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id s137so6850848pgs.5
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:02:00 -0700 (PDT)
+        Fri, 29 Apr 2022 12:06:03 -0400
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8385B3D7;
+        Fri, 29 Apr 2022 09:02:43 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id iy15so5641729qvb.9;
+        Fri, 29 Apr 2022 09:02:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wxlbr9fWxkJ/PvUYSQaUCDuvsAWuZ1gUZ7NZOyO7NWI=;
-        b=ig/N09Lqy0/iC+IgF7BMHpLu6LgwF1YAzHzJnJnnp5iDh5f8/+v4Fu2cFHjnJPGRlQ
-         60kkoeOCzSEwVBbcK5+zQAzJkFQjM76r9d4r1uWBwF9SzmXOrBr6UKzBUxh7l3lSofml
-         gqDzahsTyp+h1fF3eKQrQoenH69ir3LQx06+vla+1ZQpfEjFRzSL9Pa1vxwsnsRwJ+Op
-         +wEFqWixsr4T2aGJRSKxP4w2xMDY/KOhs8j8UJNb+yywxsNhmU7oBn0NOxK3bsQSlNq8
-         IQfOf/QJZtlScjxI45WpOoOtTRAvU4qELVv6bkuO3JkkTW2Gzn7g6Po0nqxkXIstQ73Z
-         z5sg==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cYJZsvyOkea/9Q9eJc08SVbCYt0tvNcpUbqVcHGxyq4=;
+        b=jPeYnPbJRXQD0BX3W7jrdWUYJmD7N8mN6+/pC8+nlDf3j7JU8geIsPlI87igho4K1I
+         byuawC1unF1Z0oDe2W4t/5IPETGXvTeM2aq16clko+nH9SHevwesvXqYtP+0b33I5h/E
+         EBhRSIuyxAy3VKxC1elSJAPseZ2IfwKOYv88C8eOtWD4Jq0u8HxkUmT10yfwJNbEzqji
+         T4RlWfeSBVot08KfvT+eE4NwmiKr56Ya+6P38B693PvIx6nObZ/4rim4qAKCt+tlGEQ5
+         sHYyqbaZCa08RCNevQQ2OJLdHOScmSAJzBi9c8ICb+oNgxiVuzCOrY46cKB3LvMECDEF
+         rmFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wxlbr9fWxkJ/PvUYSQaUCDuvsAWuZ1gUZ7NZOyO7NWI=;
-        b=fI1VWykf6lfpq/LT5TuCyIwJXQjrD2KGEmqoEtxDVMsuHSzJVchH9aga9B3zKmpiiL
-         jTxlHdiRtU92mPJ/coPgSnfuawEHLvEQylv2VzlorooFS5qDU4yVWzLno1jO2VnAnCDo
-         gtrajl4uN5rt5CsA3+1eUzaoUFAqhLw5i/aFWmSXSu0yK4EJnGLG1jqVeYE0Ozw5yype
-         RChw9aJxPrIZoCo1DLB0GzUluHyrpvxH1pJUYK2riWAM7UNURYnJ3fNurZaMfspmRrhh
-         9LFewsXXL/RSLWNour/fEudSDmTLxe6rIwuZekWteMtC/OLcRGBEZx3sKzix4VF6tshV
-         n+RQ==
-X-Gm-Message-State: AOAM5311ViX2+6FHbc0AWUPQRM2B1UGzBRKQvhu+yLquYCM3ROznQfNe
-        wCKONGxgXvyWrSHEiU5xfZJ1Fg==
-X-Google-Smtp-Source: ABdhPJzgHIWIsLan2gxS4+e/SQEWi1cv4Ux9jTPqhzYQRjA03S3dOckbBSzhJExUWR+LLl8+nbMpJg==
-X-Received: by 2002:a63:4862:0:b0:385:fb1d:fc54 with SMTP id x34-20020a634862000000b00385fb1dfc54mr65383pgk.57.1651248119289;
-        Fri, 29 Apr 2022 09:01:59 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id z15-20020a056a001d8f00b004fda37855ddsm3193393pfw.168.2022.04.29.09.01.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 09:01:58 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 16:01:55 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>
-Subject: Re: [PATCH] KVM: x86/mmu: Do not create SPTEs for GFNs that exceed
- host.MAXPHYADDR
-Message-ID: <YmwL87h6klEC4UKV@google.com>
-References: <20220428233416.2446833-1-seanjc@google.com>
- <337332ca-835c-087c-c99b-92c35ea8dcd3@redhat.com>
- <Ymv1I5ixX1+k8Nst@google.com>
- <20e1e7b1-ece7-e9e7-9085-999f7a916ac2@redhat.com>
- <Ymv5TR76RNvFBQhz@google.com>
- <e5864cb4-cce8-bd32-04b0-ecb60c058d0b@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cYJZsvyOkea/9Q9eJc08SVbCYt0tvNcpUbqVcHGxyq4=;
+        b=Rxp+FmblwiDUTbMlYCcjeVreos6R8yk2dT+6kXBbJrupLoFNbX71WpwFcZkbinuUsc
+         PZzb0T85ZmEh26mADAIJlDTqrbuyQFQu6h5xSEq3pElC31+3agfRm4567Qt/wu7BujR7
+         jvOg2fR4hCyh+EpJE/5YljXt9sTulvhhXtGlmQYO2P0nAyfB4r3mPQgSJOAoGZILGvs0
+         LgTeD5h141efsuGRM7wrw+/Lpb9LTRvwjgABWDvEn9vJdgFAvvNj1D94cyJ8pUz+FmSr
+         8CyMkanxRfmyCTA8V91sYAiHPNrW/DpcvhwnT+9muKjyDg10gWF0P1KsIOYwqMSR8Dce
+         s6/g==
+X-Gm-Message-State: AOAM531A5z1V72hZoo9F7LvBvithioXT9TWLnDluZ6G2xp7Is0HzZT7f
+        ZDyl5M1yGu8QL64gfsbIEBPqzvPFfW4XOYFEpDQ=
+X-Google-Smtp-Source: ABdhPJzdWlVtYLa+B+4LyiD79fGPDUp75fRe3KQuWcZb2b8cU/HDhsxHqmB8kyhr4IxxVNrLEevlt1WPs9mwB1mPoIs=
+X-Received: by 2002:ad4:4f48:0:b0:458:12bb:1321 with SMTP id
+ eu8-20020ad44f48000000b0045812bb1321mr2313282qvb.50.1651248163056; Fri, 29
+ Apr 2022 09:02:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e5864cb4-cce8-bd32-04b0-ecb60c058d0b@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+References: <20220429114330.59026-1-robimarko@gmail.com> <20220429114330.59026-5-robimarko@gmail.com>
+ <CABb+yY3dPwT4ASdxHqRidRBEq19YHsp8RfAgO0tr_rZ+Dde2hA@mail.gmail.com>
+In-Reply-To: <CABb+yY3dPwT4ASdxHqRidRBEq19YHsp8RfAgO0tr_rZ+Dde2hA@mail.gmail.com>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Fri, 29 Apr 2022 18:02:32 +0200
+Message-ID: <CAOX2RU5umgktA1kWfKiuDAC-VAH0U-DrPhk8FqX-kpkQ9RTPpQ@mail.gmail.com>
+Subject: Re: [PATCH 5/6] dt-bindings: mailbox: set correct #clock-cells
+To:     Jassi Brar <jassisinghbrar@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,27 +75,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022, Paolo Bonzini wrote:
-> On 4/29/22 16:42, Sean Christopherson wrote:
-> > On Fri, Apr 29, 2022, Paolo Bonzini wrote:
-> > > On 4/29/22 16:24, Sean Christopherson wrote:
-> > > > I don't love the divergent memslot behavior, but it's technically correct, so I
-> > > > can't really argue.  Do we want to "officially" document the memslot behavior?
-> > > > 
-> > > 
-> > > I don't know what you mean by officially document,
-> > 
-> > Something in kvm/api.rst under KVM_SET_USER_MEMORY_REGION.
-> 
-> Not sure if the API documentation is the best place because userspace does
-> not know whether shadow paging is on (except indirectly through other
-> capabilities, perhaps)?
+On Fri, 29 Apr 2022 at 17:39, Jassi Brar <jassisinghbrar@gmail.com> wrote:
+>
+> On Fri, Apr 29, 2022 at 6:43 AM Robert Marko <robimarko@gmail.com> wrote:
+> >
+> > IPQ6018 and IPQ8074 require #clock-cells to be set to 1 as their APSS
+> > clock driver provides multiple clock outputs.
+> >
+> > So allow setting 1 as #clock-cells and check that its set to 1 for IPQ6018
+> > and IPQ8074, check others for 0 as its currently.
+> >
+> Please include qcom specific marker in the subject line.
+Yeah, I see that I forgot to include the actual binding name.
 
-Hrm, true, it's not like the userspace VMM can rewrite itself at runtime.
-
-> It could even be programmatic, such as returning 52 for CPUID[0x80000008].
-> A nested KVM on L1 would not be able to use the #PF(RSVD) trick to detect
-> MMIO faults.  That's not a big price to pay, however I'm not sure it's a
-> good idea in general...
-
-Agreed, messing with CPUID is likely to end in tears.
+Will fixup in v2.
+Regards,
+Robert
+>
+> thanks.

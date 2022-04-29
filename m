@@ -2,74 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C58245141F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 07:49:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2384B5141ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 07:49:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354244AbiD2FwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 01:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49382 "EHLO
+        id S1354238AbiD2FwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 01:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354219AbiD2FwH (ORCPT
+        with ESMTP id S1354218AbiD2FwH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 29 Apr 2022 01:52:07 -0400
-Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FAB1B18AB;
-        Thu, 28 Apr 2022 22:48:49 -0700 (PDT)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1nkJUf-00890j-CP; Fri, 29 Apr 2022 15:48:42 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 29 Apr 2022 13:48:41 +0800
-Date:   Fri, 29 Apr 2022 13:48:41 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Jacky Li <jackyli@google.com>
-Cc:     Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        John Allen <john.allen@amd.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Marc Orr <marcorr@google.com>, Alper Gun <alpergun@google.com>,
-        Peter Gonda <pgonda@google.com>, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] crypto: ccp - Fix the INIT_EX data file open failure
-Message-ID: <Ymt8OSqkna177KCB@gondor.apana.org.au>
-References: <20220414162325.1830014-1-jackyli@google.com>
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846B1B18B0
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 22:48:49 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id z126so5201676qkb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 22:48:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VRas45N/HJjKkopTpxGekJncxjNBlwm6mL3yMYGLlOo=;
+        b=bc+WNUXF3c5mK3q/tzF4v4JoBy26gajoLNbPDLWyfH0Lj6WYdJCxKSXW7DRkKEfxgf
+         eSEzGQdfD/gk0CK8kbNcBllob6euxIALNnI86XDvGYieK8qr6dgKhAr4DPTyuIki6NMd
+         s7c+4cyP9+Q0UgielsvHPBfJh9ZV40Cfgxmh1e0ER1mRiE0QdJwHJMD4rD/GH7huQooE
+         jhQu3o4gi7C6/IirN9RyFP1WgfX8UC1XCs2p8f+dEwDsdTn1WFODIQ4ZkA+O5mH7iFZh
+         znNNYvUVBQBlraSHDLPriOhQZGoLQ5WSWZctA46uRE02fbX20QJAD2G3X1XrEZguVEXo
+         vRdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VRas45N/HJjKkopTpxGekJncxjNBlwm6mL3yMYGLlOo=;
+        b=66bkVtd+Ls6zhR8CmqeXB3BHJbF7k38GGkkZV7BFWAKGOeOaapV6NpjumG3pl/voLR
+         0nyeklGssBzn27Yrcuwwwy5QxZp40SBgPDh/OMZVb7QGwC9ZP/owd8lK93DEDuCpkKx3
+         Vjf5D9ABuLxOpBZafBdKM+Blv9NR/haZDeQfKt+uiIq7FNlFy2I6g67E6Oz5D7zvYrCl
+         cxQnVhgWuBHCt87e5eB3PihnziRyHbBq2kBzteE+lKx5WGd+y5euC/cwQYGwvY0PMY93
+         sI2dEX8WNrOf5h/UOPd+eCTC68psUshlRV7TEiopgReDMiuk9Vt5jOJxmqL5B+/X0syX
+         reCA==
+X-Gm-Message-State: AOAM531OIUKsyvVJzc35QgiPS01dNthTrc7OPO9sNivwWm1YNA7lTYqK
+        GVKCOTkiyJuITbICDXegC84=
+X-Google-Smtp-Source: ABdhPJynkP2gD+cmS0OSm3ZZXXts2/yMMSLbyMogjKxpLWkfcaqVfWGHjqXfHnAWLyGQEmJ9Yc/AzQ==
+X-Received: by 2002:a05:620a:1981:b0:507:4a52:f310 with SMTP id bm1-20020a05620a198100b005074a52f310mr22121345qkb.611.1651211328690;
+        Thu, 28 Apr 2022 22:48:48 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id y18-20020ac85f52000000b002ed08a7dc8dsm1234094qta.13.2022.04.28.22.48.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 22:48:48 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     alexander.deucher@amd.com
+Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] drm/amdgpu: simplify the return expression of iceland_ih_hw_init
+Date:   Fri, 29 Apr 2022 05:48:41 +0000
+Message-Id: <20220429054841.3851915-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220414162325.1830014-1-jackyli@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 04:23:25PM +0000, Jacky Li wrote:
-> There are 2 common cases when INIT_EX data file might not be
-> opened successfully and fail the sev initialization:
-> 
-> 1. In user namespaces, normal user tasks (e.g. VMM) can change their
->    current->fs->root to point to arbitrary directories. While
->    init_ex_path is provided as a module param related to root file
->    system. Solution: use the root directory of init_task to avoid
->    accessing the wrong file.
-> 
-> 2. Normal user tasks (e.g. VMM) don't have the privilege to access
->    the INIT_EX data file. Solution: open the file as root and
->    restore permissions immediately.
-> 
-> Fixes: 3d725965f836 ("crypto: ccp - Add SEV_INIT_EX support")
-> Signed-off-by: Jacky Li <jackyli@google.com>
-> Reviewed-by: Peter Gonda <pgonda@google.com>
-> ---
-> Changelog since v1:
-> - Added Fixes tag and Reviewed-By tag.
-> 
->  drivers/crypto/ccp/sev-dev.c | 30 ++++++++++++++++++++++++++++--
->  1 file changed, 28 insertions(+), 2 deletions(-)
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-Patch applied.  Thanks.
+Simplify the return expression.
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+ drivers/gpu/drm/amd/amdgpu/iceland_ih.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/iceland_ih.c b/drivers/gpu/drm/amd/amdgpu/iceland_ih.c
+index ddfe4eaeea05..aecad530b10a 100644
+--- a/drivers/gpu/drm/amd/amdgpu/iceland_ih.c
++++ b/drivers/gpu/drm/amd/amdgpu/iceland_ih.c
+@@ -308,14 +308,9 @@ static int iceland_ih_sw_fini(void *handle)
+ 
+ static int iceland_ih_hw_init(void *handle)
+ {
+-	int r;
+ 	struct amdgpu_device *adev = (struct amdgpu_device *)handle;
+ 
+-	r = iceland_ih_irq_init(adev);
+-	if (r)
+-		return r;
+-
+-	return 0;
++	return iceland_ih_irq_init(adev);
+ }
+ 
+ static int iceland_ih_hw_fini(void *handle)
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+2.25.1
+
+

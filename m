@@ -2,75 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93954514653
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B36851465A
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:10:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357255AbiD2KNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 06:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43428 "EHLO
+        id S1357272AbiD2KNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 06:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357250AbiD2KN1 (ORCPT
+        with ESMTP id S1357252AbiD2KN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 06:13:27 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E1210CD
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 03:10:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=yhQeU9VIFEFkgSl23emOh2lTCYr2keWcApdqCY7h5yg=; b=u+73zBFLEP0IND+vnIO7v4WkC1
-        4wkHv5HLcdkgr4RJlmWg1sWR6c5eduuKRqhyoCp5dXwNFZeIlmx72MiBtXgkgHGDMIt3A2oarN3f4
-        +c2XZqZ500MsxEnpozEvuVUmWSGWXRz2idTH3MlNB/0ZUCB5OIrmWyB3aWD5KJA1F44wuqeglCNdg
-        xDTxD3SalzW1ijpvB7a4XMuVDyQr7lFFGxJpUz0wkjUGG0KK77HLEy7wqarJg0x/BcDl1G5JdHbAV
-        Vi+pxS+oq0oX0Ll3qTMH+6YixuMxl2VhQggnwf+dQOO0O0ixyaoAovHKNzxw8H4Z/ZQ04ZBHm28GP
-        08oJvJsg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nkNZd-00CIrZ-Ty; Fri, 29 Apr 2022 10:10:06 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C23C03002B1;
-        Fri, 29 Apr 2022 12:10:03 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id AD4F720295B05; Fri, 29 Apr 2022 12:10:03 +0200 (CEST)
-Date:   Fri, 29 Apr 2022 12:10:03 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86/mm: Simplify RESERVE_BRK()
-Message-ID: <Ymu5e24d3JRWJdHb@hirez.programming.kicks-ass.net>
-References: <0e001c79794c46d619714d122c262147ed83f658.1651176151.git.jpoimboe@redhat.com>
+        Fri, 29 Apr 2022 06:13:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499EF6335;
+        Fri, 29 Apr 2022 03:10:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F17C6230A;
+        Fri, 29 Apr 2022 10:10:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10EDBC385AD;
+        Fri, 29 Apr 2022 10:10:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651227010;
+        bh=/fZkfLjWpmIzhdcxrKUWxcmqUV1u1Y3FbmbQ8JbUy1Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OcZ3H86tp/Jk8BaNgocIT5hnynF3bb/7AyyykOP2bQIno2P9PAhMqBT8aY6HX1Xnp
+         7E3bNt9X93xBxz7L8xUKzAFo+K/H4BP4R1ksbf9Ybo947jWW2YnkbghthPWkp6BEq8
+         jieo7akxYIqUd6M2CjQoDFGgu1RCwZb88gR/WPB4=
+Date:   Fri, 29 Apr 2022 12:10:07 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Daniel Vetter <daniel@ffwll.ch>,
+        Luis Chamberlain <mcgrof@kernel.org>, mauro.chehab@intel.com,
+        Kai Vehmanen <kai.vehmanen@intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@intel.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        David Airlie <airlied@linux.ie>,
+        Dan Williams <dan.j.williams@intel.com>
+Subject: Re: [PATCH 1/2] module: add a function to add module references
+Message-ID: <Ymu5f8EjdC1Mawzt@kroah.com>
+References: <cover.1651212016.git.mchehab@kernel.org>
+ <a078eb2e46d00ec59c8a91ea0afa5190730c9e58.1651212016.git.mchehab@kernel.org>
+ <YmuZovuDaCYDDG4c@phenom.ffwll.local>
+ <20220429090757.1acb943a@sal.lan>
+ <YmuiKcHgl+nABvo/@kroah.com>
+ <20220429101503.4048db5b@sal.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0e001c79794c46d619714d122c262147ed83f658.1651176151.git.jpoimboe@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220429101503.4048db5b@sal.lan>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 01:04:25PM -0700, Josh Poimboeuf wrote:
-> RESERVE_BRK() reserves data in the .brk_reservation section.  The data
-> is initialized to zero, like BSS, so the macro specifies 'nobits' to
-> prevent the data from taking up space in the vmlinux binary.  The only
-> way to get the compiler to do that (without putting the variable in .bss
-> proper) is to use inline asm.
+On Fri, Apr 29, 2022 at 10:15:03AM +0100, Mauro Carvalho Chehab wrote:
+> HI Greg,
 > 
-> The macro also has a hack which encloses the inline asm in a discarded
-> function, which allows the size to be passed (global inline asm doesn't
-> allow inputs).
+> Em Fri, 29 Apr 2022 10:30:33 +0200
+> Greg KH <gregkh@linuxfoundation.org> escreveu:
 > 
-> Remove the need for the discarded function hack by just stringifying the
-> size rather than supplying it as an input to the inline asm.
+> > On Fri, Apr 29, 2022 at 09:07:57AM +0100, Mauro Carvalho Chehab wrote:
+> > > Hi Daniel,
+> > > 
+> > > Em Fri, 29 Apr 2022 09:54:10 +0200
+> > > Daniel Vetter <daniel@ffwll.ch> escreveu:
+> > >   
+> > > > On Fri, Apr 29, 2022 at 07:31:15AM +0100, Mauro Carvalho Chehab wrote:  
+> > > > > Sometimes, device drivers are bound using indirect references,
+> > > > > which is not visible when looking at /proc/modules or lsmod.
+> > > > > 
+> > > > > Add a function to allow setting up module references for such
+> > > > > cases.
+> > > > > 
+> > > > > Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+> > > > > Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>    
+> > > > 
+> > > > This sounds like duct tape at the wrong level. We should have a
+> > > > device_link connecting these devices, and maybe device_link internally
+> > > > needs to make sure the respective driver modules stay around for long
+> > > > enough too. But open-coding this all over the place into every driver that
+> > > > has some kind of cross-driver dependency sounds terrible.
+> > > > 
+> > > > Or maybe the bug is that the snd driver keeps accessing the hw/component
+> > > > side when that is just plain gone. Iirc there's still fundamental issues
+> > > > there on the sound side of things, which have been attempted to paper over
+> > > > by timeouts and stuff like that in the past instead of enforcing a hard
+> > > > link between the snd and i915 side.  
+> > > 
+> > > I agree with you that the device link between snd-hda and the DRM driver
+> > > should properly handle unbinding on both directions. This is something
+> > > that require further discussions with ALSA and DRM people, and we should
+> > > keep working on it.
+> > > 
+> > > Yet, the binding between those drivers do exist, but, despite other
+> > > similar inter-driver bindings being properly reported by lsmod, this one
+> > > is invisible for userspace.
+> > > 
+> > > What this series does is to make such binding visible. As simple as that.  
+> > 
+> > It also increases the reference count, and creates a user/kernel api
+> > with the symlinks, right?  Will the reference count increase prevent the
+> > modules from now being unloadable?
+> >
+> > This feels like a very "weak" link between modules that should not be
+> > needed if reference counting is implemented properly (so that things are
+> > cleaned up in the correct order.)
 > 
-> Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
+> The refcount increment exists even without this patch, as
+> hda_component_master_bind() at sound/hda/hdac_component.c uses 
+> try_module_get() when it creates the device link.
 
-Tested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Ok, then why shouldn't try_module_get() be creating this link instead of
+having to manually do it this way again?  You don't want to have to go
+around and add this call to all users of that function, right?
+
+thanks,
+
+greg k-h

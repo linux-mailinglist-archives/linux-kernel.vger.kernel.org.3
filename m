@@ -2,138 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9655155A4
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94CC05155AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380749AbiD2UdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 16:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54814 "EHLO
+        id S1380762AbiD2UeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 16:34:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380840AbiD2Uc4 (ORCPT
+        with ESMTP id S240574AbiD2UeK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 16:32:56 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512E5D76C8
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:29:35 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id b12so8098874plg.4
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:29:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=WbX1fT1P8676LYFVWwwEMd2ZHtmSK7UfBZ60pY9/zR8=;
-        b=GlmreAAAsU5cuVMz+TYYpnjCf8pfVWI9KZiaEKN7VrQ8rb9z9E8423HiuTnF/cMtpv
-         9hLaFaS+ZRjx9e/r8AW9M8iRNETHD3+mwfBGc4fgKhDtdAUuMdT9FetdA7Sx9LYMmzJ5
-         zrCy+KxtXIE4eaf48AJKDkjaRhI0ySANhDl6yfagfYCybcL1WDrdGLYIsDXf0LaNHvF6
-         m3UppbmTSVQSOSB+MhGCQtTdGA0uzbdNwXVtUfvgIX3rakktgqFOPH3rE415JsvwMDAc
-         H+ZsFr5fEWHXEZ69hNXKsiCItPf+IcHdHyAYFH8hZCG4V31nT/oE+kbiYcBRstU0XO9a
-         6rRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=WbX1fT1P8676LYFVWwwEMd2ZHtmSK7UfBZ60pY9/zR8=;
-        b=OyB5nTLmgsgclBw040vh1cNs7P/n3qsEPGwCNv5/UPZxaBd+Otv6RSLSjL9OeHSk/e
-         Yv6AEw40ZT0Gz8yZPcNVCG/qGFkWp8T+QlsxNfr/8HNU/4aN5orYavb70/NGr77AArpN
-         BBzNMYLi0QnoQQmlPnCYFs/SiWllZZ7I/JKEeBFdrI7DbQieFefV0IW4Q9BI345BEgdj
-         VmGjX31XfEheVmL1V1XpAQd7fPUnxTTiU1rYR+vwzkBQFFK8mQoh0ysmjuOR7tj6Untt
-         iLETSmKY/URT6GU9Ju/PWmdBgPXg+KAczvgfSknG7wh90pW7xukM9XTWkd5ZnU/Md0jU
-         PZ7A==
-X-Gm-Message-State: AOAM5328d2Cv3AOO86hjk+oMmmTkQ+aEWbyd/N9gJ3zfxM1RdKpJ8ebr
-        qiakRnM4rffbUDaMZtI4Irre/g==
-X-Google-Smtp-Source: ABdhPJxd50fZiQm16sYqW7TreYMIUDuc48GCGB75aI9JPVG/bmt8ro6PEuts+QQ/13pI3Rnk9xEuqA==
-X-Received: by 2002:a17:902:b208:b0:14f:14e8:1e49 with SMTP id t8-20020a170902b20800b0014f14e81e49mr824906plr.35.1651264174676;
-        Fri, 29 Apr 2022 13:29:34 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id h10-20020a170902f70a00b0015e8d4eb287sm16870plo.209.2022.04.29.13.29.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 13:29:34 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 20:29:30 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Jon Kohler <jon@nutanix.com>, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Balbir Singh <sblbir@amazon.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH v3] x86/speculation, KVM: only IBPB for
- switch_mm_always_ibpb on vCPU load
-Message-ID: <YmxKqpWFvdUv+GwJ@google.com>
-References: <20220422162103.32736-1-jon@nutanix.com>
- <YmwZYEGtJn3qs0j4@zn.tnic>
- <645E4ED5-F6EE-4F8F-A990-81F19ED82BFA@nutanix.com>
- <Ymw9UZDpXym2vXJs@zn.tnic>
+        Fri, 29 Apr 2022 16:34:10 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14AA64BFF6;
+        Fri, 29 Apr 2022 13:30:50 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id F0F751F469D0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1651264248;
+        bh=kAsfuPsvXs/HN4ujTEF3xFYlYjDqLSK6UGr16SYdfgE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SzxGQcTxE6k2qTzzReHyLAe7jlJlmUGpQNWY3a7V6pXaK2tuz1vZS/4RJOREQKhu+
+         vvIaaf9iFOYFCa51RkzPCWdRokKr27OFqStuzo7CCpSIGCLleJb3CGdUKnqoJMeNWH
+         7inbr2ODyd+mR2fHnmYrohMxSdY5Q4TX5mFOgOZsZakXkuwQjLq7chiwpa3XimSxRU
+         75RZ6J3mY0bnIY/RnYFT/getYOg+WDq2hTDd6i7MnJ0nV+g9xkZqc0oa98FQKQJ2H3
+         YW6t3q8FTaV520N6M3TwEEmoviL/E1fKeRGkZJ6dGJukNSy/1WIezg8llGzqGMn7Ks
+         9EKwLw8K1XAgw==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>, Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shane Chien <shane.chien@mediatek.com>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH 0/3] Add missing dt-binding properties for audio components on mt8192-asurada
+Date:   Fri, 29 Apr 2022 16:30:36 -0400
+Message-Id: <20220429203039.2207848-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Ymw9UZDpXym2vXJs@zn.tnic>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022, Borislav Petkov wrote:
-> On Fri, Apr 29, 2022 at 05:31:16PM +0000, Jon Kohler wrote:
-> > Selftests IIUC, but there may be other VMMs that do funny stuff. Said
-> > another way, I don’t think we actively restrict user space from doing
-> > this as far as I know.
-> 
-> "selftests", "there may be"?!
-> 
-> This doesn't sound like a real-life use case to me and we don't do
-> changes just because. Sorry.
-> 
-> > The paranoid aspect here is KVM is issuing an *additional* IBPB on
-> > top of what already happens in switch_mm(). 
-> 
-> Yeah, I know how that works.
-> 
-> > IMHO KVM side IBPB for most use cases isn’t really necessarily but 
-> > the general concept is that you want to protect vCPU from guest A
-> > from guest B, so you issue a prediction barrier on vCPU switch.
-> > 
-> > *however* that protection already happens in switch_mm(), because
-> > guest A and B are likely to use different mm_struct, so the only point
-> > of having this support in KVM seems to be to “kill it with fire” for 
-> > paranoid users who might be doing some tomfoolery that would 
-> > somehow bypass switch_mm() protection (such as somehow 
-> > sharing a struct).
-> 
-> Yeah, no, this all sounds like something highly hypothetical or there's
-> a use case of which you don't want to talk about publicly.
 
-What Jon is trying to do is eliminate IBPB that already exists in KVM.  The catch
-is that, in theory, someone not-Jon could be running multiple VMs in a single
-address space, e.g. VM-based containers.  So if we simply delete the IBPB, then
-we could theoretically and silently break a user.  That's why there's a bunch of
-hand-waving.
+These patches add properties that were missing on the dt-bindings of the
+audio components used by mt8192-asurada. Namely the i2s-share
+properties for the sound platform and the #sound-dai-cells on the
+rt1015p and rt5682 codecs when they're referenced by the machine sound
+node.
 
-> Either way, from what I'm reading I'm not in the least convinced that
-> this is needed.
 
-Can you clarify what "this" is?  Does "this" mean "this patch", or does it mean
-"this IBPB when switching vCPUs"?  Because if it means the latter, then I think
-you're in violent agreement; the IBPB when switching vCPUs is pointless and
-unnecessary.
+Nícolas F. R. A. Prado (3):
+  ASoC: dt-bindings: mediatek: mt8192: Add i2s-share properties
+  ASoC: dt-bindings: rt1015p: Add #sound-dai-cells
+  ASoC: dt-bindings: rt5682: Add #sound-dai-cells
+
+ Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml  | 5 +++++
+ Documentation/devicetree/bindings/sound/realtek,rt1015p.yaml | 3 +++
+ Documentation/devicetree/bindings/sound/rt5682.txt           | 2 ++
+ 3 files changed, 10 insertions(+)
+
+-- 
+2.36.0
+

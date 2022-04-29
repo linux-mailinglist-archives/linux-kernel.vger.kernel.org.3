@@ -2,52 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEF5C514176
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 06:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BBDB51417B
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 06:39:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237604AbiD2EjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 00:39:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41646 "EHLO
+        id S237398AbiD2EmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 00:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237489AbiD2Eip (ORCPT
+        with ESMTP id S230133AbiD2EmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 00:38:45 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1011A8FF9F;
-        Thu, 28 Apr 2022 21:35:22 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KqKRB5d1qz4x7Y;
-        Fri, 29 Apr 2022 14:35:18 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651206921;
-        bh=XRK02m0YRBnw3sdEEHgmBiUzgatUEgLw0RNhgGm0qK8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=GGSEqi0mxcSkyaTm6FXgqT3YNu/kXtQERZQmWud6nBUm1RnUW+UEp2OMPlDiXx5WV
-         oSFqgY2XH1+y9qFH+yFkGi+K9wOXtv2GMymZmNhn4Tv55BZrnXNPkeuy/7R176f+pR
-         ZsX8zWJHmOsAWjzoilSu5FAtdhlngX2XnmM490tuFYBabpXWnhHOHxaLreSOXUfGZ9
-         ycqxLmT13eJDIeSc5lqllPIvVKq7hSG6dawxklKql2Hrs7QgwZrJx4MPgk9xURrY3K
-         3ZLBuXvuVl03Y4DHXN34KFDqdzF2tDFG9Hf0Anww7w5uoeS6bmyRdzDKUB1LadbnVC
-         3iFZuQM642S9A==
-Date:   Fri, 29 Apr 2022 14:35:17 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Jose Cazarin <joseespiriki@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Peter Rosin <peda@axentia.se>
-Subject: linux-next: manual merge of the iio tree with the char-misc.current
- tree
-Message-ID: <20220429143517.75be9c04@canb.auug.org.au>
+        Fri, 29 Apr 2022 00:42:13 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7438BCB74
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 21:38:56 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id t4so3287962ilo.12
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 21:38:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=19w9K5HaCiHjRbqySOpO9kP4rZbUP06yF4CGml4ol5M=;
+        b=R4cw/wki/iFwm7iRhPkWHnMfaPMzatdA1JE/2rLEqscDUaO2QfDeIqhtdKP+gN810J
+         k62JP5taHuF/AO7Z6pblazkYdiNJEAOdt8DzJUone1x4aEdeAmmS5gt7oL2CUun4mJaj
+         xJkcG4G2pmga03RXtSOew01OlpATmK9VH/sm1okizbouCqWAYYvSt2nxKwm5wj2Ae2mo
+         MFlvITdX0Zh0L1tseUkF1BqDE9Hq4ER4CuXLDk/3YzkZOYgTEZTuDnAJupmEg8DvOqVC
+         zWlSrBKV7ME+wuo5wKE1odp102ihdkH0wZ9tpbd7GHlTeQMWlWHDrj0V8hdD9s5h7dYY
+         XhLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=19w9K5HaCiHjRbqySOpO9kP4rZbUP06yF4CGml4ol5M=;
+        b=0kt4913QzyT8YbVFcDmCYSDUYqZ+c60GKe3XjXMDO5kmXIiTZ4zvjNbUy2k88Xvdge
+         /0iit9l+8rLDPchIwomxWOfqhXEQn0g7JnxCHog5ER7+dK2UcQ7Ozhu4tDItyx72F2Ku
+         +1RfIkWqcWaC55HsJ9O69LYu//RDlET2elx6cmbht6527vVBCVn2jKiUfUp9XJsuv6x0
+         9tQRAvxv2m50oKMFPg8JoXY0vVqOw/R7RnnghuvLS8rXV1VAjh+WjR89nJJ1YUMVZQuP
+         p9H0WA3ESMl9l4JhQUvq08P8PtV614KsltlubumgNwhCN0GpcLLe+XjKM5TgAoIpm9nS
+         MG2A==
+X-Gm-Message-State: AOAM533GCmW+vcYBPPl0qSgmbG1J11J8sGzxNkS6Tvx2aRqZDV4fs/RX
+        wCfLqIU9EWKZaBZOz/gWaRugfA==
+X-Google-Smtp-Source: ABdhPJyxDMqYk49p1uy6rirkq94xw3yTmM/j/dWmpoo8+aVR3dDr9Ah9T6IdPQUYi1KONcGugXxSfw==
+X-Received: by 2002:a92:c24c:0:b0:2cd:8a7d:b606 with SMTP id k12-20020a92c24c000000b002cd8a7db606mr11123474ilo.64.1651207135640;
+        Thu, 28 Apr 2022 21:38:55 -0700 (PDT)
+Received: from google.com (194.225.68.34.bc.googleusercontent.com. [34.68.225.194])
+        by smtp.gmail.com with ESMTPSA id r7-20020a02c6c7000000b0032b3a781792sm281222jan.86.2022.04.28.21.38.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 21:38:54 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 04:38:50 +0000
+From:   Oliver Upton <oupton@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Peter Gonda <pgonda@google.com>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH for-5.18] KVM: fix bad user ABI for KVM_EXIT_SYSTEM_EVENT
+Message-ID: <Ymtr2mfyujoxLsDR@google.com>
+References: <20220422103013.34832-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/fzORYtNOOQ584lP8rCFAe3+";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220422103013.34832-1-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,83 +73,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/fzORYtNOOQ584lP8rCFAe3+
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Paolo,
 
-Hi all,
+On Fri, Apr 22, 2022 at 12:30:13PM +0200, Paolo Bonzini wrote:
+> When KVM_EXIT_SYSTEM_EVENT was introduced, it included a flags
+> member that at the time was unused.  Unfortunately this extensibility
+> mechanism has several issues:
+> 
+> - x86 is not writing the member, so it is not possible to use it
+>   on x86 except for new events
+> 
+> - the member is not aligned to 64 bits, so the definition of the
+>   uAPI struct is incorrect for 32-bit userspace.  This is a problem
+>   for RISC-V, which supports CONFIG_KVM_COMPAT.
+> 
+> Since padding has to be introduced, place a new field in there
+> that tells if the flags field is valid.  To allow further extensibility,
+> in fact, change flags to an array of 16 values, and store how many
+> of the values are valid.  The availability of the new ndata field
+> is tied to a system capability; all architectures are changed to
+> fill in the field.
+> 
+> For compatibility with userspace that was using the flags field,
+> a union overlaps flags with data[0].
+> 
+> Supersedes: <20220421180443.1465634-1-pbonzini@redhat.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Peter Gonda <pgonda@google.com>
+> Cc: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  Documentation/virt/kvm/api.rst | 24 +++++++++++++++++-------
+>  arch/arm64/kvm/psci.c          |  3 ++-
+>  arch/riscv/kvm/vcpu_sbi.c      |  3 ++-
+>  arch/x86/kvm/x86.c             |  2 ++
+>  include/uapi/linux/kvm.h       |  8 +++++++-
+>  virt/kvm/kvm_main.c            |  1 +
+>  6 files changed, 31 insertions(+), 10 deletions(-)
+> 
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index 85c7abc51af5..4a900cdbc62e 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -5986,16 +5986,16 @@ should put the acknowledged interrupt vector into the 'epr' field.
+>    #define KVM_SYSTEM_EVENT_RESET          2
+>    #define KVM_SYSTEM_EVENT_CRASH          3
+>  			__u32 type;
+> -			__u64 flags;
+> +                        __u32 ndata;
+> +                        __u64 data[16];
 
-Today's linux-next merge of the iio tree got a conflict in:
+This is out of sync with the union { flags; data; } now.
 
-  drivers/iio/dac/ti-dac5571.c
+IMO, we should put a giant disclaimer on all of this to *not* use the
+flags field and instead only use data. I imagine we wont want to persist
+the union forever as it is quite ugly, but necessary.
 
-between commit:
+[...]
 
-  a2a43fd9d84a ("iio: dac: dac5571: Fix chip id detection for OF devices")
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index 91a6fe4e02c0..f903ab0c8d7a 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -445,7 +445,11 @@ struct kvm_run {
+>  #define KVM_SYSTEM_EVENT_RESET          2
+>  #define KVM_SYSTEM_EVENT_CRASH          3
+>  			__u32 type;
+> -			__u64 flags;
+> +			__u32 ndata;
+> +			union {
+> +				__u64 flags;
+> +				__u64 data[16];
+> +			};
+>  		} system_event;
+>  		/* KVM_EXIT_S390_STSI */
+>  		struct {
+> @@ -1144,6 +1148,8 @@ struct kvm_ppc_resize_hpt {
+>  #define KVM_CAP_S390_MEM_OP_EXTENSION 211
+>  #define KVM_CAP_PMU_CAPABILITY 212
+>  #define KVM_CAP_DISABLE_QUIRKS2 213
+> +/* #define KVM_CAP_VM_TSC_CONTROL 214 */
 
-from the char-misc.current tree and commit:
+This sticks out a bit. Couldn't the VM TSC control patch just use a
+different number? It seems that there will be a conflict anyway, if only to
+delete this comment.
 
-  542fd5f1f657 ("iio: dac: ti-dac5571: add support for ti,dac121c081")
+How do we go about getting CAP numbers for features coming in from other
+architectures? An eager backport (such as the Android case that made us
+look at a union) would wind up using the wrong capability for a feature.
 
-from the iio tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/iio/dac/ti-dac5571.c
-index 0b775f943db3,96b86e2dcc6b..000000000000
---- a/drivers/iio/dac/ti-dac5571.c
-+++ b/drivers/iio/dac/ti-dac5571.c
-@@@ -393,15 -386,16 +394,16 @@@ static int dac5571_remove(struct i2c_cl
-  }
- =20
-  static const struct of_device_id dac5571_of_id[] =3D {
- -	{.compatible =3D "ti,dac5571"},
- -	{.compatible =3D "ti,dac6571"},
- -	{.compatible =3D "ti,dac7571"},
- -	{.compatible =3D "ti,dac5574"},
- -	{.compatible =3D "ti,dac6574"},
- -	{.compatible =3D "ti,dac7574"},
- -	{.compatible =3D "ti,dac5573"},
- -	{.compatible =3D "ti,dac6573"},
- -	{.compatible =3D "ti,dac7573"},
- -	{.compatible =3D "ti,dac121c081"},
- +	{.compatible =3D "ti,dac5571", .data =3D (void *)single_8bit},
- +	{.compatible =3D "ti,dac6571", .data =3D (void *)single_10bit},
- +	{.compatible =3D "ti,dac7571", .data =3D (void *)single_12bit},
- +	{.compatible =3D "ti,dac5574", .data =3D (void *)quad_8bit},
- +	{.compatible =3D "ti,dac6574", .data =3D (void *)quad_10bit},
- +	{.compatible =3D "ti,dac7574", .data =3D (void *)quad_12bit},
- +	{.compatible =3D "ti,dac5573", .data =3D (void *)quad_8bit},
- +	{.compatible =3D "ti,dac6573", .data =3D (void *)quad_10bit},
- +	{.compatible =3D "ti,dac7573", .data =3D (void *)quad_12bit},
-++	{.compatible =3D "ti,dac121c081", data =3D (void *)single_12bit},
-  	{}
-  };
-  MODULE_DEVICE_TABLE(of, dac5571_of_id);
-
---Sig_/fzORYtNOOQ584lP8rCFAe3+
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJrawUACgkQAVBC80lX
-0GxtLAf/SiElYfdPVHT3/ioU0KMYx5jZ2VvaBAUgYKJrowQRTkwmPXaFyOH/mNVF
-9qJA1iAgwxkDEWZL0IajmRqpCZe7HoHT0DnnVy+howmbgkWOYVJBuJflgiOJmz+t
-HYeA6FWJMmPN89aswf9XnJU//llcyokNq4oKIEyNbfF0Hd00qxLyrYLdkj6QRp6E
-VbxsfILRqwSexJPSVVBbjBMDkc+Z0TmkLDjf0yoJvcF/srO4ApDWeMog4Is13B7/
-qwBQByhvInfiK+xX8g1y05ywhSzxcNFB3URl8DglgJyr0h/QKokUY2z8dn+o/fK2
-ZS5WUqkN8nMg1GweZcuiGjzHeWahOQ==
-=CTu9
------END PGP SIGNATURE-----
-
---Sig_/fzORYtNOOQ584lP8rCFAe3+--
+--
+Thanks,
+Oliver

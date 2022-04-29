@@ -2,71 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73C9B5142A8
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 08:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F142F5142A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 08:52:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354779AbiD2Gyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 02:54:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51392 "EHLO
+        id S1354790AbiD2GzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 02:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238433AbiD2Gyt (ORCPT
+        with ESMTP id S1354772AbiD2GzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 02:54:49 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6068692B3;
-        Thu, 28 Apr 2022 23:51:30 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 08:51:27 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651215088;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uRzozrRh87VYBCwryVh04/6Hx6ex7vN/oS+Y/xaCbtM=;
-        b=UJRaGgxLoKh6czf9r26arXU5zga0sZvYvfio3kw23yWtgx6AAOmn0s5PV8tAseb67aaLNx
-        gmQj8UM6crplZ/by4HFA4Q6gcVd5qgzP8OlhDbCeuWAkMC4nFga6gCE2+nQ2I+1ePpv/O0
-        C3ePzbaJsZdN5ilbiAmMqXPrZ5nGn1tQDnJVa6ja4I2FjhOCuSeCZb1IJBna0QJu2FKo+6
-        wgQAvCUSoPTZzge2oiS0RaKsqNQU1kDBj0+s9iktNnG1ak2CqJi2ev0jzgxwMiqamm84kL
-        eGM0MwwpCikHxAKd3gFqIIhEytUg+8dv+rI5DiNk05Qd5HJRwXytLpKthnxqjA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651215088;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uRzozrRh87VYBCwryVh04/6Hx6ex7vN/oS+Y/xaCbtM=;
-        b=Doc3/tS5OTAZj5I8MKbL9nv6qfjEue89W4VnDuJRjzl2MjCJWbjUA9A91izB9MEpTs5rrK
-        +YTtP6N3tjAQDzCw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, outreachy@lists.linux.dev
-Subject: Re: [PATCH v4 0/4] Extend and reorganize Highmem's documentation
-Message-ID: <YmuK79YPRAi0fHhH@linutronix.de>
-References: <20220428212455.892-1-fmdefrancesco@gmail.com>
+        Fri, 29 Apr 2022 02:55:05 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1F756C1A
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 23:51:47 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id k23so13652967ejd.3
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 23:51:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=mDlkYW1jOvACOQZC2hs7NlPEH41hbIy3Cee6HSyQR1o=;
+        b=S0HLAOz7G2rA2yLeEvr2F3lrjjv2nPsprZHooIN2NIj88OOaU8taSdX9pKfLMuaXls
+         fG7DRxmtn1K6/L4Lec5G9xzPgd+JWZ3bq2tJocG6FDdWIsXeLa7yGRb7rsqVfFYe9OHq
+         gf6V9IM0lPCmra8Pn//gbNCyEGFaOVMnJ8Ut+LVJKup9ocmgqu92Idv2GOogtwh2C5Im
+         JAbbUW0ygqiSA7nLeLEtxP3TOjOKidni6gZ21GG6HkdPsZx7zNG7eCaFHwRTVmx82IS2
+         rZcQph3O8fdi4rQ/2hKoVIlRxSrz+4Zs/UyzVHqzQ/HW6RlsxSkxShDfRGnXGtBVWuxB
+         M+kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=mDlkYW1jOvACOQZC2hs7NlPEH41hbIy3Cee6HSyQR1o=;
+        b=g5aUDW+sS6Kp3IJUTEZ1XAAtnkq6u7ZcInRS/8mXbrpPeaZibfdtYbRTv0LkzfqrBp
+         olakoTixpK5+HoAULED2/NGNG76Kg/jgn6fWhj3cLuFWvPsP6HIQzWs2gqhKX0Y9HLG3
+         keny0WGZr9r4Hj1bs9LEcGPfUprM5iEb+iCOEA/nwzlxBb13Uuf8aXPMfVnEEr6/60Ee
+         7oGZdUlLbzzFQubX/LBVM88eBETOBKbf/XAmtlfIvYvis2nOzvOTkkBRaQ8hei/64Dg7
+         nBf2n0z10jTfyypz4Qpr1FaMNjvikW6JKctZGGGJTRb7ERIEr689a3H0v+Leurnpwmho
+         vAQg==
+X-Gm-Message-State: AOAM532kUVgPZqKVLsX4q+JdcfGcs6QmZBK2kdVedAxWm3dD/NCN87Cp
+        MXhcVozY4Y3FXJQKEGg1ClGMtw==
+X-Google-Smtp-Source: ABdhPJyKpoYsRgUvdWhjm6qmhIpd2ZkWDXaTdwpzyMQVoxXJm0Pmjoejr9XVBcOAFMWc6EkjcMA1tw==
+X-Received: by 2002:a17:907:c0c:b0:6f3:8667:9be4 with SMTP id ga12-20020a1709070c0c00b006f386679be4mr26384276ejc.325.1651215106368;
+        Thu, 28 Apr 2022 23:51:46 -0700 (PDT)
+Received: from [192.168.0.169] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id hz13-20020a1709072ced00b006f3ef214db2sm347293ejc.24.2022.04.28.23.51.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Apr 2022 23:51:45 -0700 (PDT)
+Message-ID: <e010e330-590a-780a-c9a2-0f90e5aa04b9@linaro.org>
+Date:   Fri, 29 Apr 2022 08:51:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220428212455.892-1-fmdefrancesco@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 1/3] dt-bindings: nvmem: mediatek: Convert efuse
+ binding to YAML
+Content-Language: en-US
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Lala Lin <lala.lin@mediatek.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Ryder Lee <ryder.lee@kernel.org>
+References: <20220428132520.2033-1-allen-kh.cheng@mediatek.com>
+ <20220428132520.2033-2-allen-kh.cheng@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220428132520.2033-2-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-28 23:24:51 [+0200], Fabio M. De Francesco wrote:
-> This series has the purpose to extend and reorganize Highmem's
-> documentation.
+On 28/04/2022 15:25, Allen-KH Cheng wrote:
+> Convert MediaTek eFuse devicetree binding to YAML.
+> 
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> ---
+>  .../devicetree/bindings/nvmem/mtk,efuse.yaml  | 57 +++++++++++++++++++
+>  .../devicetree/bindings/nvmem/mtk-efuse.txt   | 43 --------------
+>  2 files changed, 57 insertions(+), 43 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/nvmem/mtk,efuse.yaml
 
-Thanks.
+No, we discussed it already two times, so now third time? You are
+wasting my time. Please read all my replies again.
 
-Reviewed-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+NAK.
 
-Sebastian
+Best regards,
+Krzysztof

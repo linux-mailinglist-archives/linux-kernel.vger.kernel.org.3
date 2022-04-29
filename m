@@ -2,98 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD1FE514110
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 05:48:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F1AD5140ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 05:48:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235509AbiD2DOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 23:14:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42814 "EHLO
+        id S235468AbiD2DR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 23:17:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235312AbiD2DOU (ORCPT
+        with ESMTP id S235381AbiD2DR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 23:14:20 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FA05AEEC;
-        Thu, 28 Apr 2022 20:11:03 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id y21so7599985edo.2;
-        Thu, 28 Apr 2022 20:11:03 -0700 (PDT)
+        Thu, 28 Apr 2022 23:17:26 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F185DA3C
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 20:14:09 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id j8-20020a17090a060800b001cd4fb60dccso6151986pjj.2
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 20:14:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=5yWxeiyZ6vHx0drNR9JwHfUkwjBMQSY8QqadvukEfwo=;
-        b=jeQ3TCZ0/gj2lnmdW2fhqoGTawDk3i4GCN3vXTiT+0iSfV8yZdnI26cWcoSlq3kwnF
-         BL+gG4+ZMdbtd6Io7j6m8BiV/kcc9Z77ki8RmMBLTjyFBdQlvKUMTmaI9Yer7tMvLYh0
-         GFr2/N1T5l0RZBBeAzlDue8SnQHfyvYy4XTiIVrN34gt4cfqhV/nYPSzvjC9ROfEeUyM
-         ZWeNAoun0YBiSNoA1iv1wNtgzg5oJsQmEZF4OivfTBJ1x01blC2EEGx1C3PyUw0rr5EM
-         o8HHCk0LWsWR812DGo3HzkGl2U7hJ9kK+ELFCcefERK4xsZmO/EPOK2myQYyvEDoW3q3
-         BDHQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=nFM9yMNpdWIJW0IvtR+goiDwvDGtMAWhFOKZxeZSHwA=;
+        b=c32rCfH7b5z75QmEiLKZFmDVAg/fS6yJx2iim/NfkyF1zlafJ5o4BqNB6ZKNnTXAEW
+         6av+9/C1s3XBCkCUBXl9hAWiweI5l3ikErroLfdT+ZGqwMmxw6Ao5WNWxpWPdzCWrffq
+         4fsFlnRsNPIeFHAGoG7Xc1EnrnqqgY0ov1YrfIWK+5ulDEKmUnL5Xqnn7xZcwOts3Whs
+         ccO8n0K0z3ObS1jAcsokb91VWiakSP9xnmLv10JzjmhUIf94OA/uT/KVnJQPOrn0TJys
+         2G1OwIw852xujd5Z+ZQA0dSD+cwBXXGgkXSpenIvm70HQ5qXS9MGkDupA//KaahU9iyC
+         Yz5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=5yWxeiyZ6vHx0drNR9JwHfUkwjBMQSY8QqadvukEfwo=;
-        b=AX4l03wp9u3jzA3ZbGDf69ZT1+5z672vJN8AB1wgpo+TUnMNKaAUarL1XGvcLCfv7S
-         IQFm6Mck6d05DdVxl5aTsoPpunj0ekpqIciBL4Y9YfbbrXnSzh2ef9wP6ix8GgQX/e/t
-         9IQbc2aI4eBD+7zxV98EqPq2yq+wQ9awxRe4hvcl/ZDSOv7Z9XFMzLdga3l+MOMbX5ny
-         gQBg9XCSse3cMcOY29WA61UzT1Fx9zeHbiJvs6hzQKUzZZ0/eqFZv/IxRAiwjMnUVdnH
-         RoQanvB+5X81Gw3dvYBGfjOPOTCZQOvzs+eQTn+5lF4Umh1vxJRRsN1V6ntJJO31SrCg
-         v3mg==
-X-Gm-Message-State: AOAM5332OwCx0K3BKC0inFYA9AkDtY5SFgcsKbMvGTYYzEQ8gV/v3msf
-        5fMCel5KAebmRNTB+0ag3IlQ7g6TO9apHbQMgPS6x+AvSb0=
-X-Google-Smtp-Source: ABdhPJzH6EEzbaWRN8GzVwz7rn/mesI6PKlonYuijCERccP1Kmoyd7e/MHif4gpALhNeHBqFD2Hh5nt83WTDnSGhx8M=
-X-Received: by 2002:a50:954b:0:b0:41a:c9cb:8778 with SMTP id
- v11-20020a50954b000000b0041ac9cb8778mr39073565eda.165.1651201861778; Thu, 28
- Apr 2022 20:11:01 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=nFM9yMNpdWIJW0IvtR+goiDwvDGtMAWhFOKZxeZSHwA=;
+        b=HyAAp/O7yTPuIrYJ0FlPunIGQ7BuAwHOZ20DyPXVZp9doYr/UDx3WbrOxgGkIOaHU7
+         il9ks3MzoVpPNns1l0LsKF7g4IjL4lNuKakbMjEwbmrSTW/VlxYXZTQks7AbWNhMwYL3
+         tII0eSvHaTKBCJOjL/VzmdQNgXYdvsHxXCMkqwqYM1tMcRqBAxM77v6kTVY4UnmYLHKl
+         9Sllp3fupqsalENlB6xZ8LwfsUmz+/UPeNme4xpkSqR/ptGamLZQlItix5eNeA2uIUGN
+         q+H/ngD0ayGmWcc6GAHqlXeVWuRzEVqXbf0tS7CNJdTWCKYVgZ2X6iNqw5dD2oJBaYld
+         euAA==
+X-Gm-Message-State: AOAM532EaF+dFh85/vinF9aV3nfjGuFm3Jq5U5jPy9IUCO2FO6aL+yxM
+        YIN+PzwqSdH4fqfmq69FhRp7oA==
+X-Google-Smtp-Source: ABdhPJycVC0NmakoTo/scrNSHBhvw8+o8mldKZkBbeWXWQxLYxsYNWDSCi8TMrMD+bkVMyB9hvFYGA==
+X-Received: by 2002:a17:903:2043:b0:15b:f6ff:79ed with SMTP id q3-20020a170903204300b0015bf6ff79edmr35021392pla.15.1651202048496;
+        Thu, 28 Apr 2022 20:14:08 -0700 (PDT)
+Received: from localhost ([122.162.207.161])
+        by smtp.gmail.com with ESMTPSA id q93-20020a17090a4fe600b001d7e76f0470sm6526290pjh.0.2022.04.28.20.14.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 20:14:07 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 08:44:03 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        tony@atomide.com, jmkrzyszt@gmail.com, aaro.koskinen@iki.fi,
+        vireshk@kernel.org, shiraz.linux.kernel@gmail.com, nsekhar@ti.com,
+        brgl@bgdev.pl, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH 3/6] ARM: spear: remove include/mach/ subdirectory
+Message-ID: <20220429031403.tjeudnzc6jwztkbj@vireshk-i7>
+References: <20220428133210.990808-1-arnd@kernel.org>
+ <20220428133210.990808-4-arnd@kernel.org>
 MIME-Version: 1.0
-References: <20220426083259.526685-1-starzhangzsd@gmail.com>
- <alpine.DEB.2.21.2204270130210.9383@angie.orcam.me.uk> <CANubcdWwHXqC4gUztNseoConYHp+G4nUSYFaO-Te3jFVqT=1sw@mail.gmail.com>
- <alpine.DEB.2.21.2204271156190.9383@angie.orcam.me.uk> <CANubcdUPQJcJ=dryJGsnQLhjcTouLUARD-GwCd7UjurUm+-GXg@mail.gmail.com>
- <alpine.DEB.2.21.2204280951510.9383@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2204280951510.9383@angie.orcam.me.uk>
-From:   Stephen Zhang <starzhangzsd@gmail.com>
-Date:   Fri, 29 Apr 2022 11:10:25 +0800
-Message-ID: <CANubcdXSHpV8xOBidXksMt+kLQ=jgNer4uisKbV5z9zxHp8dMw@mail.gmail.com>
-Subject: Re: [PATCH] arch/mips/kernel/traps: add CONFIG_MIPS_FP_SUPPORT when
- using handle_fpe
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Joshua Kinard <kumba@gentoo.org>, liam.howlett@oracle.com,
-        ebiederm@xmission.com, dbueso@suse.de, alobakin@pm.me,
-        f.fainelli@gmail.com, zhangshida <zhangshida@kylinos.cn>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220428133210.990808-4-arnd@kernel.org>
+User-Agent: NeoMutt/20180716-391-311a52
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Maciej W. Rozycki <macro@orcam.me.uk> =E4=BA=8E2022=E5=B9=B44=E6=9C=8828=E6=
-=97=A5=E5=91=A8=E5=9B=9B 17:00=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Thu, 28 Apr 2022, Stephen Zhang wrote:
->  Thanks.
->
->  The bug is in arch/mips/include/asm/mach-ip27/cpu-feature-overrides.h,
-> which has:
->
-> #define cpu_has_fpu                     1
->
-> (and similarly arch/mips/include/asm/mach-ip30/cpu-feature-overrides.h).
-> This is not supported, as noted in arch/mips/include/asm/cpu-features.h:
->
-> /* Don't override `cpu_has_fpu' to 1 or the "nofpu" option won't work.  *=
-/
->
-> Perhaps we should explicitly undefine `cpu_has_fpu' if set to 1?
->
->   Maciej
+On 28-04-22, 15:31, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Two of the remaining four headers are never used, the other
+> two are only used inside of the platform code. Move them
+> next to the files that include them and remove the
+> Makefile trick that adds the include path.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/arm/mach-spear/Makefile                  |  2 -
+>  arch/arm/mach-spear/include/mach/irqs.h       | 35 ----------------
+>  arch/arm/mach-spear/include/mach/uncompress.h | 42 -------------------
+>  .../mach-spear/{include/mach => }/misc_regs.h |  4 +-
+>  arch/arm/mach-spear/pl080.c                   |  4 +-
+>  arch/arm/mach-spear/platsmp.c                 |  2 +-
+>  arch/arm/mach-spear/restart.c                 |  2 +-
+>  .../arm/mach-spear/{include/mach => }/spear.h |  0
+>  arch/arm/mach-spear/spear1310.c               |  2 +-
+>  arch/arm/mach-spear/spear13xx.c               |  2 +-
+>  arch/arm/mach-spear/spear300.c                |  2 +-
+>  arch/arm/mach-spear/spear310.c                |  2 +-
+>  arch/arm/mach-spear/spear320.c                |  2 +-
+>  arch/arm/mach-spear/spear3xx.c                |  4 +-
+>  arch/arm/mach-spear/spear6xx.c                |  4 +-
+>  15 files changed, 14 insertions(+), 95 deletions(-)
+>  delete mode 100644 arch/arm/mach-spear/include/mach/irqs.h
+>  delete mode 100644 arch/arm/mach-spear/include/mach/uncompress.h
+>  rename arch/arm/mach-spear/{include/mach => }/misc_regs.h (87%)
+>  rename arch/arm/mach-spear/{include/mach => }/spear.h (100%)
 
-Thanks for your detailed explanation and suggestion. I will make a v2 patch=
-.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+
+-- 
+viresh

@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9CE9514280
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 08:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18C4C514292
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 08:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354621AbiD2Gmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 02:42:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49492 "EHLO
+        id S1354692AbiD2GoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 02:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234036AbiD2Gml (ORCPT
+        with ESMTP id S1354579AbiD2Gnv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 02:42:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F0DBABA1
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 23:39:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4F8BB832F5
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 06:39:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB805C385A7;
-        Fri, 29 Apr 2022 06:39:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651214362;
-        bh=5c8F2sq+4CEvKl5AkGR/1+aWdhR+TKH8lu0tldZgVqE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=umbpuzVpvhhaRNlWnfx/nGJYtLvJUERYtcx/xz4Be93SbW1C3kWnYpEW+lhW+iv6V
-         KmvAVC68u57wvTshflOSqi0k2uAoXeLo+TkatozuB9r6soy9LzkFVMw31V38j1KTD7
-         SjDrO64gp1wEgUN3VJvBc23W3FmwT9Af4RmL5ohc=
-Date:   Fri, 29 Apr 2022 08:39:14 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Zhang Jianhua <chris.zjh@huawei.com>
-Cc:     jirislaby@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] vt: defkeymap.c_shipped remove unused variables
-Message-ID: <YmuIEoOnJqYLy3CE@kroah.com>
-References: <20220429014814.988829-1-chris.zjh@huawei.com>
+        Fri, 29 Apr 2022 02:43:51 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA1C1A822
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 23:40:33 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KqNBb2Y8Wz1JBpy;
+        Fri, 29 Apr 2022 14:39:35 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 29 Apr
+ 2022 14:40:31 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <akpm@linux-foundation.org>, <vitaly.wool@konsulko.com>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <linmiaohe@huawei.com>
+Subject: [PATCH 0/9] A few fixup patches for z3fold
+Date:   Fri, 29 Apr 2022 14:40:42 +0800
+Message-ID: <20220429064051.61552-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220429014814.988829-1-chris.zjh@huawei.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,43 +45,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 09:48:14AM +0800, Zhang Jianhua wrote:
-> The global variables 'funcbufptr' 'funcbufsize' and 'funcbufleft' have
-> been initialized but not used, they are redundant and remove them.
-> 
-> --------
+Hi everyone,
+This series contains a few fixup patches to fix sheduling while atomic,
+fix possible null pointer dereferencing, fix various race conditions and
+so on. More details can be found in the respective changelogs. Thanks!
 
-Why this extra "------" line?
+Miaohe Lin (9):
+  mm/z3fold: fix sheduling while atomic
+  mm/z3fold: fix possible null pointer dereferencing
+  mm/z3fold: remove buggy use of stale list for allocation
+  mm/z3fold: throw warning on failure of trylock_page in z3fold_alloc
+  revert "mm/z3fold.c: allow __GFP_HIGHMEM in z3fold_alloc"
+  mm/z3fold: put z3fold page back into unbuddied list when reclaim or
+    migration fails
+  mm/z3fold: always clear PAGE_CLAIMED under z3fold page lock
+  mm/z3fold: fix z3fold_reclaim_page races with z3fold_free
+  mm/z3fold: fix z3fold_page_migrate races with z3fold_map
 
-> 
-> Signed-off-by: Zhang Jianhua <chris.zjh@huawei.com>
-> ---
->  drivers/tty/vt/defkeymap.c_shipped | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/drivers/tty/vt/defkeymap.c_shipped b/drivers/tty/vt/defkeymap.c_shipped
-> index 094d95bf0005..80dee50bcb7a 100644
-> --- a/drivers/tty/vt/defkeymap.c_shipped
-> +++ b/drivers/tty/vt/defkeymap.c_shipped
-> @@ -185,10 +185,6 @@ char func_buf[] = {
->  	'\033', '[', 'P', 0, 
->  };
->  
-> -char *funcbufptr = func_buf;
-> -int funcbufsize = sizeof(func_buf);
-> -int funcbufleft = 0;          /* space left */
-> -
->  char *func_table[MAX_NR_FUNC] = {
->  	func_buf + 0,
->  	func_buf + 5,
-> -- 
-> 2.31.0
-> 
+ mm/z3fold.c | 97 ++++++++++++++++++++++-------------------------------
+ 1 file changed, 41 insertions(+), 56 deletions(-)
 
-Shouldn't you fix up the loadkeys tool instead?  As the top of this file
-says, it is auto-generated and is not something to be hand-edited at
-all.
+-- 
+2.23.0
 
-thanks,
-
-greg k-h

@@ -2,134 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69552515006
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 951C0515017
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378676AbiD2P7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 11:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38086 "EHLO
+        id S1378707AbiD2QC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 12:02:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378290AbiD2P7k (ORCPT
+        with ESMTP id S1378709AbiD2QCx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 11:59:40 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A4683B04
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:56:21 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id d5so11351977wrb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:56:21 -0700 (PDT)
+        Fri, 29 Apr 2022 12:02:53 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CFF08A9F2;
+        Fri, 29 Apr 2022 08:59:34 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id r13so16288027ejd.5;
+        Fri, 29 Apr 2022 08:59:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=5YkjOkdMrTLUHQuUqGIwhkj1JaETsfvX42SuSe3Gl3c=;
-        b=wGWFMuyL8G17A8QeN70Nd7L1AvMS/VUBX4pCfSaT7DmNIFF525gn/kuapKDIobv/Dw
-         j5jQw1mgI/weBA4GjjkmHsSNmyubi0AwZS96UxUtt4/pYYvcuhXq8HYdOlrdmoi8ifU/
-         Zhfpg56YtVKU3nfZHEUlCczPySy0sqoBjEWh1Lz2R2yUdcc5fz6qSgxp7nFGFxOmSNGB
-         9oDQyIHz6swPKY3c/7xKNREwugmsRAy0LXI1uWrmtfbm6Hw1NvK90TcDko2Le9kySWX8
-         fE2PAAPuwklQm9ZADLAAq2+vYB5g7vpSqL9GnDr2kLLHWzkkBB52gjfDSSBMwzDUqiuY
-         z3EA==
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=CFofsZTrxzYW8g6YUhhQeEdV8aFgV5toOyemA0wEyeo=;
+        b=C1T5dB6hi7U6pTSrjv6swEvw3cKJfbF/qLcR3RQWeut5cPamNKokJimmmheEgPlWme
+         YhLG1gvP8efrP/7tMPVKf+xVQs2czDC5zN4ZYJnxWoO1gHLoxBc8QWMR3lFI90LYQ8yH
+         fQCj28jDmiK1VuQCoK5EoOCANhe/WCHl9j8GHQV/A4Xl8Q1opeoAIcJbiaOVwynM3S4S
+         3HTFpaTxyYWvEWNW/3yr5295gY4zN2rUI3gy3tGCfV8Hbdsz77I4GBBpaCCvcwP51De0
+         3k7zBeevh1t01OZgNmiTI+2opiStvubt/3Fiq7sqdh/jChNPfSbUX90AXjuRQUNAbYax
+         edhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5YkjOkdMrTLUHQuUqGIwhkj1JaETsfvX42SuSe3Gl3c=;
-        b=Iz1/YYegdhkQwwzpr0l/+j+MI0njvEpI01wqfuEeUSMyBhvJtG94aAjLMhklRsZuiz
-         Lg15xVZWqZUt0tLVlqBczJBUjR8yiEfmhA2CTwLIxfIu0AUtv300JPJWcpQVY6ALEWVw
-         NyiKiGScAkunusVVkR1WKzogDrAPTCwPPQY29ql3SGjb5IcX3ERRmwlJqjd7t5ORkcHB
-         KTAFxwBxhI3hrjgfOL9reEvvT1mlz4rKfuLGpitqT11AgWoPr+R5Y7ToV+1RTiaKl8oG
-         aU1TG90PtmxFkRI0pUJj58QPp4c97jgKd0tj7+BAfdmGGpRsWQzPSVJ7tJSvItmikLHT
-         qNJw==
-X-Gm-Message-State: AOAM533SZUhJ/OS2RaMJp/YtmmOz/87/Z3eRSbE8VFXLsJLsoj/NPYNQ
-        E7xiamBo/kgZyLO9dp2UaI5SUw==
-X-Google-Smtp-Source: ABdhPJyg+nRz/2sRbQZ8PEJCtNIu7XO4S8NmiLPPoLyrEyCLFXywlMFZRqV1WgHniqt4fGttwAKXSw==
-X-Received: by 2002:a5d:6e0d:0:b0:207:a4d9:7950 with SMTP id h13-20020a5d6e0d000000b00207a4d97950mr30514142wrz.477.1651247779788;
-        Fri, 29 Apr 2022 08:56:19 -0700 (PDT)
-Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id e3-20020a05600c4e4300b00393e40b41d6sm7023968wmq.15.2022.04.29.08.56.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 08:56:19 -0700 (PDT)
-Message-ID: <7aa5d553-04ad-5198-153c-39a9375a6a12@linaro.org>
-Date:   Fri, 29 Apr 2022 16:56:18 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 0/9] nvmem: sfp: binding updates and additions
-Content-Language: en-US
-To:     Sean Anderson <sean.anderson@seco.com>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Cc:     Li Yang <leoyang.li@nxp.com>, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CFofsZTrxzYW8g6YUhhQeEdV8aFgV5toOyemA0wEyeo=;
+        b=dEUXNf17EgTIBi1aB8MhZzAGTPe5ZhaUIbHb/dvp2qIwFgahE+TckXDJminsjU/AzI
+         Xp+xicplSYy3vEjfo09tRZwNj9bDtqluxWhKDPvytaRdPLVl4ZSB1p5iENUXuBVCcdkb
+         Y+5DnpZ7Gt1QR4DmU9iPN1xPvcY/rIRqiMjKYFliv6F5QqHojgr7vtpcngHfWpMd4AFl
+         bx12kqSvBHEcqfE8mAkuvxG9NcGG/QpqOIyX9dn1VEIPGD4IrAPeBu+llu8kN4oubq34
+         FUcn32oMsCW1pIZhTZjwMJGcpppOMdCTguH+823xZHTIUseVS7+EY5ddjL1ePeOkS+x6
+         jHmQ==
+X-Gm-Message-State: AOAM530APwPK8XfxZuAxLp/bb9xh+nfe+cG3MyBAzvM8yVPRgJRMXHPb
+        1KfvwaLOFDMmTvB32/ORh0w=
+X-Google-Smtp-Source: ABdhPJxUyrv8UAISq1M4lIXdSzVcLopFibiDLcBRyirwaUmJsMXKf5WYWap0qDwxSikXnmaJhmpYpA==
+X-Received: by 2002:a17:906:7307:b0:6da:92db:c78f with SMTP id di7-20020a170906730700b006da92dbc78fmr36910751ejc.35.1651247972842;
+        Fri, 29 Apr 2022 08:59:32 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.gmail.com with ESMTPSA id ia5-20020a170907a06500b006f3ef214dffsm756699ejc.101.2022.04.29.08.59.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 08:59:32 -0700 (PDT)
+Message-ID: <626c0b64.1c69fb81.1b1e9.4fe6@mx.google.com>
+X-Google-Original-Message-ID: <YmwK0aa8u7lU6lct@Ansuel-xps.>
+Date:   Fri, 29 Apr 2022 17:57:05 +0200
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Walle <michael@walle.cc>, Andrew Lunn <andrew@lunn.ch>
-References: <20220428181703.2194171-1-sean.anderson@seco.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20220428181703.2194171-1-sean.anderson@seco.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Andy Gross <agross@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 3/3] dt-bindings: arm: msm: Convert kpss-gcc driver
+ Documentation to yaml
+References: <20220429121739.28584-1-ansuelsmth@gmail.com>
+ <20220429121739.28584-4-ansuelsmth@gmail.com>
+ <1651247596.124069.2344494.nullmailer@robh.at.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1651247596.124069.2344494.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Apr 29, 2022 at 10:53:16AM -0500, Rob Herring wrote:
+> On Fri, 29 Apr 2022 14:17:39 +0200, Ansuel Smith wrote:
+> > Convert kpss-gcc driver Documentation to yaml.
+> > 
+> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > ---
+> >  .../bindings/arm/msm/qcom,kpss-gcc.txt        | 44 -------------
+> >  .../bindings/arm/msm/qcom,kpss-gcc.yaml       | 63 +++++++++++++++++++
+> >  2 files changed, 63 insertions(+), 44 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
+> >  create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
+> > 
+> 
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml: properties: '#clock-cells' is a dependency of 'clock-output-names'
 
+Erm how to fix this? I can't do a 1:1 conversion if the source was
+wrong and also have no bot warning.
+Or I should just push an additional patch to fix this error after the
+conversion?
 
-On 28/04/2022 19:16, Sean Anderson wrote:
-> This adds several properties to the Layerscape Security Fuse Processor
-> (SFP) necessary for writing. Although the Linux driver does not use
-> these bindings, I plan to use them in U-Boot [1]. It also adds a new
-> compatibles for Trust Architecture (TA) 2.1 devices. In addition, it
-> also adds an SFP binding for all TA 2.1 and 3.0 devices.
+> 	from schema $id: http://devicetree.org/meta-schemas/clocks.yaml#
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml: ignoring, error in schema: properties
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.example.dtb: clock-controller@2011000: '#clock-cells' is a dependency of 'clock-output-names'
+> 	From schema: /usr/local/lib/python3.10/dist-packages/dtschema/schemas/clock/clock.yaml
+> Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.example.dtb:0:0: /example-0/clock-controller@2011000: failed to match any schema with compatible: ['qcom,kpss-gcc-ipq8064', 'qcom,kpss-gcc']
+> Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.example.dtb:0:0: /example-0/clock-controller@2011000: failed to match any schema with compatible: ['qcom,kpss-gcc-ipq8064', 'qcom,kpss-gcc']
 > 
-> I would like to get this series merged for 5.18. As noted in patch 2,
-> making the clock property mandatory is not an ABI break, but if this is
-> not applied then it would become an ABI break. The absolute minimum
-> patches to apply for this would be patches 2 and 5. The rest (including
-> the regmap changes) could be deferred if necessary.
+> doc reference errors (make refcheckdocs):
 > 
-> [1] https://lore.kernel.org/u-boot/7c8e206a-cd40-2a77-6282-7f4bead2b13a@seco.com/T/#m591f8425b6f096ab3d54e6f7bd258e41cfa4c43b
+> See https://patchwork.ozlabs.org/patch/
 > 
-> Changes in v3:
-> - Update commit message to note that this binding has not yet been
->    present in a relase, so it is OK to make otherwise breaking changes.
+> This check can fail if there are any dependencies. The base for a patch
+> series is generally the most recent rc1.
 > 
-> Changes in v2:
-> - Mention "regulator" in the description for ta-prog-sfp-supply
-> - Convert sfp driver to use regmap
-> - Fix various typos in commit messages
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
 > 
-> Sean Anderson (9):
->    dt-bindings: nvmem: sfp: Fix typo
->    dt-bindings: nvmem: sfp: Add clock properties
->    dt-bindings: nvmem: sfp: Add TA_PROG_SFP supply
->    dt-bindings: nvmem: sfp: Add compatible binding for TA 2.1 SFPs
->    arm64: dts: ls1028a: Update SFP binding to include clock
->    ARM: dts: layerscape: Add SFP binding for TA 2.1 devices
->    ARM: dts: Add SFP binding for TA 3.0 devices
->    nvmem: sfp: Use regmap
->    nvmem: sfp: Add support for TA 2.1 devices
+> pip3 install dtschema --upgrade
+> 
+> Please check and re-submit.
 > 
 
-I have applied all the patches except 5/9, 6/9, and 7/9 dts patches 
-which need to go via dts maintainer tree.
-
---srini
-
->   .../bindings/nvmem/fsl,layerscape-sfp.yaml    | 30 ++++++++++++++--
->   arch/arm/boot/dts/ls1021a.dtsi                |  7 ++++
->   .../arm64/boot/dts/freescale/fsl-ls1012a.dtsi |  8 +++++
->   .../arm64/boot/dts/freescale/fsl-ls1028a.dtsi |  5 ++-
->   .../arm64/boot/dts/freescale/fsl-ls1043a.dtsi |  8 +++++
->   .../arm64/boot/dts/freescale/fsl-ls1046a.dtsi |  8 +++++
->   .../arm64/boot/dts/freescale/fsl-ls1088a.dtsi |  8 +++++
->   .../arm64/boot/dts/freescale/fsl-ls208xa.dtsi |  8 +++++
->   .../arm64/boot/dts/freescale/fsl-lx2160a.dtsi |  8 +++++
->   drivers/nvmem/Kconfig                         |  1 +
->   drivers/nvmem/layerscape-sfp.c                | 36 ++++++++++++++-----
->   11 files changed, 115 insertions(+), 12 deletions(-)
-> 
+-- 
+	Ansuel

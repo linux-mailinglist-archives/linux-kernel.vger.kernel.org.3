@@ -2,128 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A8235154A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 21:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D164515484
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 21:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380357AbiD2TiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 15:38:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56750 "EHLO
+        id S1380259AbiD2Tdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 15:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238467AbiD2TiS (ORCPT
+        with ESMTP id S1357195AbiD2Tde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 15:38:18 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2BAD0824
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 12:34:59 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id e189so9541305oia.8
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 12:34:59 -0700 (PDT)
+        Fri, 29 Apr 2022 15:33:34 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529B613D03;
+        Fri, 29 Apr 2022 12:30:14 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id c15so11650350ljr.9;
+        Fri, 29 Apr 2022 12:30:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=E0Q3EZPBzEkcXpZcFDBM/8hh0PQ3g9tg+K9PcJx+iK8=;
-        b=j7Mu2qjwlrTIhzG1/SRWrea/G70nXiVi41rs9h824BDxboFT2bYoOlddcsk05eFR3S
-         riShkXFHtHqTtwVtScs1+WWrcvU4L8FTNKZBoRrV4kvxdbTkP877tUBxbeGUJFZFmDGf
-         7d2pu/cIMZUBtgibQB7fc9ptmJimpmjFtBhUM=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=EpAcbnx+U/L1NwXa16pvqhPXcqBubVwUeHlDIja2sKs=;
+        b=fVBaXJcaF9JmA9kT3gJGJ1d182xVAxExs/K2C2cpg9fOUq9K4LgvkN5/2cWKEV8XX1
+         vdk0G98yxS2sLJ8zWaB7rhdyyJXKLgvzNqBV6A8afXlXuOH91elyLLmUDaTqdKe4V69x
+         AAvZ50gl//UGXVXDm7KrqMLY7C8sZcSZWv2FS0leIXeR83qD9QrBN8p2fl+Pq8HASr1G
+         TKXvllgu1hI2pYC43JwELnhiq4v7YL5/ugckF8nanpl/WTJIHkmE7zH4QJz9h7FqOUVT
+         0Jz3z+e4DkBb7K3Koshx7MxQKB7Q04DFmhKx0W84Bksadz0n4fPxx9SVm6StU8NgbLlo
+         18pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=E0Q3EZPBzEkcXpZcFDBM/8hh0PQ3g9tg+K9PcJx+iK8=;
-        b=s9UaUPNX5e8neH3Q6IY803T0Nhd8EziR3n6Z7gR0upNQHwPQiYiJcsJRXIkbiA+3M4
-         61k0NPLqdY2skQUj+jq2qf6lUR5XhgJ+UcxpsP5Z+Y1ttvYcPo2S6uczDHYWErSZlz9g
-         8BFuhyM6+2CNbZvzcj/+QRFgsHW0JFm03r2AqIKtCjwtVPJwWkhH2g7gQdi8y+ioin3B
-         4rx8S9ptLE4Y9Yv3UhX7kZUd3HNkwH1bYuwM1AJYvgYKbGHDrEi4k8/h+h4VZLqtUNOt
-         YxeCMemJeNAXXmn4Pjp1LUaGmH6YaLViEcP1P9WTSmIDwdDRajDnBh4LmZ2UI7mTieYK
-         iydA==
-X-Gm-Message-State: AOAM531e56Zy51Ii0bEJQ24XEhuM73JaDTW+4DMNvT3ATMIbA+vKL4z7
-        m/1RZP8Hxk7ozmUryqdmHH1UomjzIW/DwMN9kdfb3oOM2yw=
-X-Google-Smtp-Source: ABdhPJybWFdvd26gPp93ZZnFPwxpgGugVjji5kYbw3wxJ0sB3egmlQ0aK36Ny0i3uauBxbTztZtUxyMYb/Knjvif090=
-X-Received: by 2002:a05:6808:1296:b0:325:8fb:68f3 with SMTP id
- a22-20020a056808129600b0032508fb68f3mr437845oiw.193.1651260897935; Fri, 29
- Apr 2022 12:34:57 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Sat, 30 Apr 2022 04:34:57 +0900
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=EpAcbnx+U/L1NwXa16pvqhPXcqBubVwUeHlDIja2sKs=;
+        b=YWQMMlhm+0W5xptY+8dn4YRDAhByKq9NNVHmlyPkCq+u7EXiYpMOKFYEXe5TZDPfDU
+         eUMwTSyOtHmO/b0CYvKRiqtB2fA8c3L8R3D9HOosOBQMyI4HDF/QsTZ5s8JZfyHF1vTx
+         9/CTZUlsPs/zCsSw2vTPlsiZElWEl+awl3H/A+zmbE4vrtP+flpwoL5b2YMyiG1Co7JV
+         yEG8HlDI4N0pc4Em/PMfBvQT8x2+6+VsVxnZP9DcLqyv2Lvcnxu1o+ox+XsPLUmpjpeu
+         vGJdkXdUL/tQ7KDSAO2NIEAwU1RvSmeltOAenwdMYkAYCUJGxy4Bs4qoZ+1yBXsfwRRN
+         JXJg==
+X-Gm-Message-State: AOAM533USA4eG1AgtFaw+rBqJuEFEXmjN+teG8FKBlqJ9+lm+EQjKIr8
+        tpGBLjIeP6fR2ybgroJzqm4=
+X-Google-Smtp-Source: ABdhPJyG5g1UMJHbAE7oQdPUIBwsTGD8b2GZt4x0YMEODqQnagM+tQa4NgqWxwqwNFjLTVjBd5ZQlA==
+X-Received: by 2002:a2e:8502:0:b0:24f:1036:b405 with SMTP id j2-20020a2e8502000000b0024f1036b405mr465514lji.220.1651260612572;
+        Fri, 29 Apr 2022 12:30:12 -0700 (PDT)
+Received: from [10.0.0.42] (91-159-150-230.elisa-laajakaista.fi. [91.159.150.230])
+        by smtp.gmail.com with ESMTPSA id d3-20020ac24c83000000b0047255d2115dsm5721lfl.140.2022.04.29.12.30.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 12:30:12 -0700 (PDT)
+Message-ID: <7e47c5fa-4cff-b12f-20ce-2e62b62ec538@gmail.com>
+Date:   Fri, 29 Apr 2022 22:36:53 +0300
 MIME-Version: 1.0
-In-Reply-To: <eb2dd599-f38a-57b2-694e-d91aaadda2b5@kernel.org>
-References: <20220427203026.828183-1-swboyd@chromium.org> <20220427203026.828183-2-swboyd@chromium.org>
- <CAD=FV=Vtnj+8FYdBSvsud9fGEbo7N1HSjXA3rH3f8FMJsuVR1A@mail.gmail.com> <eb2dd599-f38a-57b2-694e-d91aaadda2b5@kernel.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Sat, 30 Apr 2022 04:34:57 +0900
-Message-ID: <CAE-0n52M0yfwMnuO9HTCCuv2pU3oWkGuyxOS4x7_gVN5QFFGMw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: google,cros-ec-keyb: Introduce switches
- only compatible
-To:     Doug Anderson <dianders@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        "Joseph S. Barrera III" <joebar@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 22/41] ARM: omap1: move plat/dma.c to mach/omap-dma.c
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>, linux-omap@vger.kernel.org,
+        tony@atomide.com, aaro.koskinen@iki.fi, jmkrzyszt@gmail.com
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Paul Walmsley <paul@pwsan.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Mark Brown <broonie@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-serial@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org
+References: <20220419133723.1394715-1-arnd@kernel.org>
+ <20220419133723.1394715-23-arnd@kernel.org>
+From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
+In-Reply-To: <20220419133723.1394715-23-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Krzysztof Kozlowski (2022-04-29 09:35:58)
-> On 29/04/2022 18:31, Doug Anderson wrote:
-> >>    - $ref: "/schemas/input/matrix-keymap.yaml#"
-> >>
-> >>  properties:
-> >>    compatible:
-> >> -    const: google,cros-ec-keyb
-> >> +    oneOf:
-> >> +      - items:
-> >> +          - const: google,cros-ec-keyb-switches
-> >> +          - const: google,cros-ec-keyb
-> >> +      - items:
-> >> +          - const: google,cros-ec-keyb
-> >
-> > nit: if I come back and read this binding later I'm not sure it would
-> > be obvious which compatible I should pick. Can we give any description
-> > here that indicates that the first choice is for devices that _only_
-> > have buttons and switches (the google,cros-ec-keyb is just for
-> > backward compatibility) and the second choice is for devices that have
-> > a physical keyboard and _also_ possibly some buttons/switches?
 
-Sounds fair. I have to figure out how to add a description to the
-choices. I guess a comment is the approach?
 
-> >
-> > I could also imagine people in the future being confused about whether
-> > it's allowed to specify matrix properties even for devices that don't
-> > have a matrix keyboard. It might be worth noting that it's allowed (to
-> > support old drivers that might still be matching against the
-> > google,cros-ec-keyb compatible) but not required.
->
-> +1
+On 4/19/22 16:37, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Most of the interface functions in plat/dma.c are only used from the
+> USB driver, which is practically OMAP1 specific, except for compile
+> testing.
+> 
+> The omap_get_plat_info(), omap_request_dma() and omap_free_dma()
+> functions are never called on omap2 because of runtime checks.
 
-Sure. I'll work that into the description for the first one with two
-compatibles.
+Reviewed-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
 
->
-> >
-> >
-> >>    google,needs-ghost-filter:
-> >>      description:
-> >> @@ -50,7 +56,7 @@ examples:
-> >>    - |
-> >>      #include <dt-bindings/input/input.h>
-> >>      cros-ec-keyb {
-> >> -        compatible = "google,cros-ec-keyb";
-> >> +        compatible = "google,cros-ec-keyb-switches", "google,cros-ec-keyb";
-> >
-> > Feels like we should create a second example?
->
-> +1 as well, because it really would confuse what's the difference
-> between them.
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/arm/mach-omap1/Makefile                        | 2 +-
+>  arch/arm/{plat-omap/dma.c => mach-omap1/omap-dma.c} | 0
+>  arch/arm/plat-omap/Makefile                         | 2 +-
+>  3 files changed, 2 insertions(+), 2 deletions(-)
+>  rename arch/arm/{plat-omap/dma.c => mach-omap1/omap-dma.c} (100%)
+> 
+> diff --git a/arch/arm/mach-omap1/Makefile b/arch/arm/mach-omap1/Makefile
+> index 450bbf552b57..0615cb0ba580 100644
+> --- a/arch/arm/mach-omap1/Makefile
+> +++ b/arch/arm/mach-omap1/Makefile
+> @@ -5,7 +5,7 @@
+>  
+>  # Common support
+>  obj-y := io.o id.o sram-init.o sram.o time.o irq.o mux.o flash.o \
+> -	 serial.o devices.o dma.o fb.o
+> +	 serial.o devices.o dma.o omap-dma.o fb.o
+>  obj-y += clock.o clock_data.o opp_data.o reset.o pm_bus.o timer.o
+>  
+>  ifneq ($(CONFIG_SND_SOC_OMAP_MCBSP),)
+> diff --git a/arch/arm/plat-omap/dma.c b/arch/arm/mach-omap1/omap-dma.c
+> similarity index 100%
+> rename from arch/arm/plat-omap/dma.c
+> rename to arch/arm/mach-omap1/omap-dma.c
+> diff --git a/arch/arm/plat-omap/Makefile b/arch/arm/plat-omap/Makefile
+> index 68ccec9de106..5d55295a14ee 100644
+> --- a/arch/arm/plat-omap/Makefile
+> +++ b/arch/arm/plat-omap/Makefile
+> @@ -6,4 +6,4 @@
+>  ccflags-$(CONFIG_ARCH_MULTIPLATFORM) := -I$(srctree)/arch/arm/plat-omap/include
+>  
+>  # Common support
+> -obj-y := sram.o dma.o
+> +obj-y := sram.o
 
-Ok.
+-- 
+Péter

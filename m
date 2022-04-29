@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F37515064
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 826A451505B
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378877AbiD2QKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 12:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45070 "EHLO
+        id S1378882AbiD2QKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 12:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378818AbiD2QJm (ORCPT
+        with ESMTP id S1378836AbiD2QJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 12:09:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A731FA6E24
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:06:23 -0700 (PDT)
+        Fri, 29 Apr 2022 12:09:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009DCA66C4
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:06:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 88FD9622B4
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 16:06:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7E04C385A4;
-        Fri, 29 Apr 2022 16:06:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90BC1622B3
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 16:06:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9292CC385AF;
+        Fri, 29 Apr 2022 16:06:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651248383;
-        bh=UiOUnirJF3MSoLl+83kD68mLG2ETBQfUjmFNgrkOyS0=;
+        s=k20201202; t=1651248384;
+        bh=sIJXJH2OsUzbfrsqqPxpgdbesc2kTA2xxcs6VJcOqzg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZNguhYF/YQzTN4g/KZmySdsW+LAML/ITFMa1efNXZD8VCCrM9tFh3pf8O1cUa2toC
-         7iSOdGD5VbVh5aJn6q617Q4uYOFvQDIV2t2FhQ3BHXxPpg9em0rIl7IErPke57ZAtS
-         CPDeMpkJ+eFFxwsBVS3KeAxeNlN0Zw/0+FXrhiBojfMBYYrBowIuhV+oB1FYuPg1TZ
-         QV+RyRyuw1ZARstzCcoDwIRGrQZhG8Hm8HLuTPsMLVcpZmc3wW08DQUrsIPWxV0za0
-         bn4sk/SLZJ+f7mBoH8RjddKgk4qEvfEi5nwtg+Ilog+EkoFEODqERE5B92lgCA12IN
-         a1Q/iWm/V/3Ag==
+        b=l+taiSDwqrJlK/ARQLYuP4sLTWza+1BlTmXp9MYF2rttBBqG/sIWtUQF9wyKOt0E8
+         +Mpq1IT7kT+4OH1LA2tr1NDiuxPxMOWLaHt9NcS0+SMVmkPGRr22e4KRWK27l4qJ8T
+         6OGWhsZSPyRbAB/GVMk4xAZ+Lx88Xiv0JQx87QFU2DDwk2fuKTtaE70EoNlpDMYbyj
+         uSyL8ImYK1K7oqRQwQVoNb0Tih6oyQjUDIii31N1qW89KPzVZ8cDAKxqE5yj2l489w
+         UlzJf930e1JHGZ3ZcgSGW+tT6lVBynuA9aVr9A63ZfrV4PhlA/VtKVRY3XXAHQfmAc
+         fWPX1rk+RAaXg==
 From:   sj@kernel.org
 To:     akpm@linux-foundation.org
 Cc:     linux-damon@amazon.com, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: [PATCH 13/14] mm/damon/reclaim: support online inputs update
-Date:   Fri, 29 Apr 2022 16:06:05 +0000
-Message-Id: <20220429160606.127307-14-sj@kernel.org>
+Subject: [PATCH 14/14] Docs/admin-guide/mm/damon/reclaim: document 'commit_inputs' parameter
+Date:   Fri, 29 Apr 2022 16:06:06 +0000
+Message-Id: <20220429160606.127307-15-sj@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220429160606.127307-1-sj@kernel.org>
 References: <20220429160606.127307-1-sj@kernel.org>
@@ -55,169 +55,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: SeongJae Park <sj@kernel.org>
 
-DAMON_RECLAIM reads the user input parameters only when it starts.  To
-allow more efficient online tuning, this commit implements a new input
-parameter called 'commit_inputs'.  Writing true to the parameter makes
-DAMON_RECLAIM reads the input parameters again.
+This commit documents the new DAMON_RECLAIM parameter, 'commit_inputs'
+in its usage document.
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- mm/damon/reclaim.c | 95 ++++++++++++++++++++++++++++++----------------
- 1 file changed, 62 insertions(+), 33 deletions(-)
+ Documentation/admin-guide/mm/damon/reclaim.rst | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/mm/damon/reclaim.c b/mm/damon/reclaim.c
-index 75cfd96a6060..f37c5d4b27fa 100644
---- a/mm/damon/reclaim.c
-+++ b/mm/damon/reclaim.c
-@@ -29,6 +29,18 @@
-  */
- static bool enabled __read_mostly;
+diff --git a/Documentation/admin-guide/mm/damon/reclaim.rst b/Documentation/admin-guide/mm/damon/reclaim.rst
+index 0af51a9705b1..46306f1f34b1 100644
+--- a/Documentation/admin-guide/mm/damon/reclaim.rst
++++ b/Documentation/admin-guide/mm/damon/reclaim.rst
+@@ -66,6 +66,17 @@ Setting it as ``N`` disables DAMON_RECLAIM.  Note that DAMON_RECLAIM could do
+ no real monitoring and reclamation due to the watermarks-based activation
+ condition.  Refer to below descriptions for the watermarks parameter for this.
  
-+/*
-+ * Make DAMON_RECLAIM reads the input parameters again, except ``enabled``.
-+ *
-+ * Input parameters that updated while DAMON_RECLAIM is running are not applied
-+ * by default.  Once this parameter is set as ``Y``, DAMON_RECLAIM reads values
-+ * of parametrs except ``enabled`` again.  Once the re-reading is done, this
-+ * parameter is set as ``N``.  If invalid parameters are found while the
-+ * re-reading, DAMON_RECLAIM will be disabled.
-+ */
-+static bool commit_inputs __read_mostly;
-+module_param(commit_inputs, bool, 0600);
++commit_inputs
++-------------
 +
- /*
-  * Time threshold for cold memory regions identification in microseconds.
-  *
-@@ -289,57 +301,56 @@ static struct damos *damon_reclaim_new_scheme(void)
- 	return scheme;
- }
- 
--static int damon_reclaim_turn(bool on)
-+static int damon_reclaim_apply_parameters(void)
- {
--	struct damon_region *region;
- 	struct damos *scheme;
--	int err;
--
--	if (!on) {
--		err = damon_stop(&ctx, 1);
--		if (!err)
--			kdamond_pid = -1;
--		return err;
--	}
-+	struct damon_addr_range addr_range;
-+	int err = 0;
- 
- 	err = damon_set_attrs(ctx, sample_interval, aggr_interval, 0,
- 			min_nr_regions, max_nr_regions);
- 	if (err)
- 		return err;
- 
-+	/* Will be freed by next 'damon_set_schemes()' below */
-+	scheme = damon_reclaim_new_scheme();
-+	if (!scheme)
-+		return -ENOMEM;
-+	err = damon_set_schemes(ctx, &scheme, 1);
-+	if (err)
-+		return err;
++Make DAMON_RECLAIM reads the input parameters again, except ``enabled``.
 +
- 	if (monitor_region_start > monitor_region_end)
- 		return -EINVAL;
- 	if (!monitor_region_start && !monitor_region_end &&
- 			!get_monitoring_region(&monitor_region_start,
- 				&monitor_region_end))
- 		return -EINVAL;
--	/* DAMON will free this on its own when finish monitoring */
--	region = damon_new_region(monitor_region_start, monitor_region_end);
--	if (!region)
--		return -ENOMEM;
--	damon_add_region(region, target);
-+	addr_range.start = monitor_region_start;
-+	addr_range.end = monitor_region_end;
-+	return damon_set_regions(target, &addr_range, 1);
-+}
- 
--	/* Will be freed by 'damon_set_schemes()' below */
--	scheme = damon_reclaim_new_scheme();
--	if (!scheme) {
--		err = -ENOMEM;
--		goto free_region_out;
-+static int damon_reclaim_turn(bool on)
-+{
-+	int err;
++Input parameters that updated while DAMON_RECLAIM is running are not applied
++by default.  Once this parameter is set as ``Y``, DAMON_RECLAIM reads values
++of parametrs except ``enabled`` again.  Once the re-reading is done, this
++parameter is set as ``N``.  If invalid parameters are found while the
++re-reading, DAMON_RECLAIM will be disabled.
 +
-+	if (!on) {
-+		err = damon_stop(&ctx, 1);
-+		if (!err)
-+			kdamond_pid = -1;
-+		return err;
- 	}
--	err = damon_set_schemes(ctx, &scheme, 1);
-+
-+	err = damon_reclaim_apply_parameters();
- 	if (err)
--		goto free_scheme_out;
-+		return err;
+ min_age
+ -------
  
- 	err = damon_start(&ctx, 1, true);
--	if (!err) {
--		kdamond_pid = ctx->kdamond->pid;
--		return 0;
--	}
--
--free_scheme_out:
--	damon_destroy_scheme(scheme);
--free_region_out:
--	damon_destroy_region(region, target);
--	return err;
-+	if (err)
-+		return err;
-+	kdamond_pid = ctx->kdamond->pid;
-+	return 0;
- }
- 
- #define ENABLE_CHECK_INTERVAL_MS	1000
-@@ -389,6 +400,7 @@ MODULE_PARM_DESC(enabled,
- static int damon_reclaim_after_aggregation(struct damon_ctx *c)
- {
- 	struct damos *s;
-+	int err = 0;
- 
- 	/* update the stats parameter */
- 	damon_for_each_scheme(s, c) {
-@@ -398,7 +410,23 @@ static int damon_reclaim_after_aggregation(struct damon_ctx *c)
- 		bytes_reclaimed_regions = s->stat.sz_applied;
- 		nr_quota_exceeds = s->stat.qt_exceeds;
- 	}
--	return 0;
-+
-+	if (commit_inputs) {
-+		err = damon_reclaim_apply_parameters();
-+		commit_inputs = false;
-+	}
-+	return err;
-+}
-+
-+static int damon_reclaim_after_wmarks_check(struct damon_ctx *c)
-+{
-+	int err = 0;
-+
-+	if (commit_inputs) {
-+		err = damon_reclaim_apply_parameters();
-+		commit_inputs = false;
-+	}
-+	return err;
- }
- 
- static int __init damon_reclaim_init(void)
-@@ -410,6 +438,7 @@ static int __init damon_reclaim_init(void)
- 	if (damon_select_ops(ctx, DAMON_OPS_PADDR))
- 		return -EINVAL;
- 
-+	ctx->callback.after_wmarks_check = damon_reclaim_after_wmarks_check;
- 	ctx->callback.after_aggregation = damon_reclaim_after_aggregation;
- 
- 	target = damon_new_target();
 -- 
 2.25.1
 

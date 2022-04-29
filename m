@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE24A513FF2
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 03:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6864513FFB
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 03:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353707AbiD2BHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 21:07:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
+        id S1353719AbiD2BHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 21:07:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353680AbiD2BHf (ORCPT
+        with ESMTP id S1353690AbiD2BHh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 21:07:35 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62EF7BC865
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 18:04:19 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id l72-20020a63914b000000b003c1ac4355f5so641pge.4
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 18:04:19 -0700 (PDT)
+        Thu, 28 Apr 2022 21:07:37 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654D2BC86E
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 18:04:21 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id w24-20020a170902a71800b0015d00267d74so3488456plq.6
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 18:04:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
-        bh=/1wb0EUJMAOVjEcNcUn77zKNCe+7w/+d1xa9d1eIEYw=;
-        b=sjl1W+oS3wTgYKVlkQFCV2ylujEI4H1j269rgfGJ12THGn5+Rvk4vLClgn0o7czy4s
-         j01ESF7enfH8zDQBtCV+mxjNVBkkm+rLKvUHMXNm9oJyGUk3H2RZu3HiFCx5EFp28ohW
-         0GPYxySnIUaTAcFsEi50p2wnwAF9EDayimNf0f+O0R1gtwiBZSMlKo7rGI09N93tZ/ww
-         bz77QOUjQQF2JCU5rLECAdd3GK4qGHZsdTzhLJc0jO0qi8nDrrvwGXul5qHfPzKD8uLK
-         +A1OKQqF5JBS6WrOyqqFvpzN9EeyGxRpls3oqRbg2MbE1l1ENz8RD7XOVds3FVF0wb2T
-         O0XA==
+        h=reply-to:date:in-reply-to:message-id:mime-version:references
+         :subject:from:to:cc;
+        bh=/F7u5jcoDKD988Ymfw3LyvU9T0g0ALLsxhHqY4ZHDtk=;
+        b=PbjvjOQF/BvQXETJcl+J7q8EaS4zuBddtEwwwpADTGWDhKMoSUKzNtyQns4VfpF016
+         w5uRA5JSQOtRPKhde8ZxgVY1UT3rkSzjqWtBv2+82cJEATdFrg1zl2bXy7pRf4AabgpK
+         LykpdMmgqaic4KNDFJ2T0SbEYJzjOPJ17+6SK6DKwGopSb4IqCfoRVZFA72uaeTLfSzC
+         YOVfHktLQxg3gJ1HQuVWrtELRPHJ14SGodXFiLJf14tS1QyHBKbjjigaEhd5rM/F5j+i
+         1bRFT86TBUQJW95uyRjwrcOokp4aWOgTM7csqSJjROtLNyc9tygZ0bD6lE/CPzJ3T7hZ
+         5/zQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
-         :from:to:cc;
-        bh=/1wb0EUJMAOVjEcNcUn77zKNCe+7w/+d1xa9d1eIEYw=;
-        b=s2HfPq7wW6uHyEQTozO69cNK8ADxphL/bMSo3f1OrNk04qRpATS5X5Skq22gB9kCgb
-         DT0hRFfP+TRm7LkJkUUq2jKleHbYvy0mQr2IOtFyLslaFSGieP2I+Wvk3rje51lRtTeD
-         VW96vbI5IMDYRVtSt5Dj60GCd5Ad+skNZ7r3tkwoeMb18yH1PdUiBbqVVWL1KdqbMxG9
-         wuNw19qSGiuokLUIuvwlX6x+jN1UhMVspqHO1Np7irJhBVmsjLxZYKfV/v1/hTcvgYEg
-         PwCQ2TOWnlU8Jj1KTo6U+xPAaVkuq+NM+nY0ixSlJ99mvS9FUSU7/s/rrw0dj81MOO4z
-         fobA==
-X-Gm-Message-State: AOAM533Ozv4YWbBxx9wQBeTkFy0tjAtx+lCzV3shNdXgjIhL74eW9+QH
-        iZJgFEq7m60wtR+IT8y8gCDv5zoop74=
-X-Google-Smtp-Source: ABdhPJwbWXQVHFF1qK8TuOCj10tHHD5fJztnTGKmSRlsECbDASEEZkNbM4JFFFCD6hU3qDT7mQgxB3wI198=
+        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
+         :mime-version:references:subject:from:to:cc;
+        bh=/F7u5jcoDKD988Ymfw3LyvU9T0g0ALLsxhHqY4ZHDtk=;
+        b=BprBk1xbNsPSb8aGob13pFKYFRdU5FoEb1YbB3PP4ReF2WiU5x6/XUVNy3G1At+DUO
+         hGmDpm1jY1t3jTtFJXtkaHOE8ilPYBtwO7pjY1PIMOWI/K0U9b8kIZ625M33V9Wqq860
+         1BTOgDLyPj/xpx1ezW8t+86/7JFAtfHCxSW6ttXP38EdMhBF9JC6hT0OcQM1NSk7sN/S
+         Px2qKueCgFuDczTWOrqb1RktCHS99wjiKKC0xKJrPwkAygBLqkhWA8gk6/NfSHoSXZOr
+         AlGSgXrZgu/XOqTI61F89ozCZrUKqZ6tuzX8aHNq1/YmSPaPXmaU9aY8vwenXlRIrGHr
+         lf+g==
+X-Gm-Message-State: AOAM532UxeVdWI0pU57aiPqOh39AJI9Ag1NgGtMjCe6i8QiX6wimHa83
+        +bk9HQUu5qvsneTZj6xNWHqX/mUwDho=
+X-Google-Smtp-Source: ABdhPJxf2rEbyEyrxjUedAKmd5l36jeK0WkS8NlEIIFXxaQo+b7d6qLdeIoJsxzvBwS6qb8RA9UJol53CME=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:2391:b0:50a:3ea9:e84d with SMTP id
- f17-20020a056a00239100b0050a3ea9e84dmr37688617pfc.21.1651194258843; Thu, 28
- Apr 2022 18:04:18 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:e510:b0:1d9:ee23:9fa1 with SMTP id
+ t16-20020a17090ae51000b001d9ee239fa1mr184049pjy.0.1651194260328; Thu, 28 Apr
+ 2022 18:04:20 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 29 Apr 2022 01:04:06 +0000
-Message-Id: <20220429010416.2788472-1-seanjc@google.com>
+Date:   Fri, 29 Apr 2022 01:04:07 +0000
+In-Reply-To: <20220429010416.2788472-1-seanjc@google.com>
+Message-Id: <20220429010416.2788472-2-seanjc@google.com>
 Mime-Version: 1.0
+References: <20220429010416.2788472-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [PATCH 00/10] KVM: Clean up 'struct page' / pfn helpers
+Subject: [PATCH 01/10] KVM: Do not zero initialize 'pfn' in hva_to_pfn()
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -70,40 +73,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clean up KVM's struct page / pfn helpers to reduce the number of
-pfn_to_page() and page_to_pfn() conversions.  E.g. kvm_release_pfn_dirty()
-makes 6 (if I counted right) calls to pfn_to_page() when releasing a dirty
-pfn that backed by a vanilla struct page.  That is easily trimmed down to
-a single call.
+Drop the unnecessary initialization of the local 'pfn' variable in
+hva_to_pfn().  First and foremost, '0' is not an invalid pfn, it's a
+perfectly valid pfn on most architectures.  I.e. if hva_to_pfn() were to
+return an "uninitializd" pfn, it would actually be interpeted as a legal
+pfn by most callers.
 
-And perhaps more importantly, rename and refactor kvm_is_reserved_pfn() to
-try and better reflect what it actually queries, which at this point is
-effectively whether or not the pfn is backed by a refcounted page.
+Second, hva_to_pfn() can't return an uninitialized pfn as hva_to_pfn()
+explicitly sets pfn to an error value (or returns an error value directly)
+if a helper returns failure, and all helpers set the pfn on success.
 
-Sean Christopherson (10):
-  KVM: Do not zero initialize 'pfn' in hva_to_pfn()
-  KVM: Drop bogus "pfn != 0" guard from kvm_release_pfn()
-  KVM: Don't set Accessed/Dirty bits for ZERO_PAGE
-  KVM: Avoid pfn_to_page() and vice versa when releasing pages
-  KVM: nVMX: Use kvm_vcpu_map() to get/pin vmcs12's APIC-access page
-  KVM: Don't WARN if kvm_pfn_to_page() encounters a "reserved" pfn
-  KVM: Remove kvm_vcpu_gfn_to_page() and kvm_vcpu_gpa_to_page()
-  KVM: Take a 'struct page', not a pfn in kvm_is_zone_device_page()
-  KVM: Rename/refactor kvm_is_reserved_pfn() to
-    kvm_pfn_to_refcounted_page()
-  KVM: x86/mmu: Shove refcounted page dependency into
-    host_pfn_mapping_level()
+Note, the zeroing of 'pfn' was introduced by commit 2fc843117d64 ("KVM:
+reorganize hva_to_pfn"), and was unnecessary and misguided paranoia even
+then.
 
- arch/x86/kvm/mmu/mmu.c     |  26 +++++--
- arch/x86/kvm/mmu/tdp_mmu.c |   3 +-
- arch/x86/kvm/vmx/nested.c  |  39 ++++-------
- arch/x86/kvm/vmx/vmx.h     |   2 +-
- include/linux/kvm_host.h   |  12 +---
- virt/kvm/kvm_main.c        | 140 +++++++++++++++++++++++++------------
- 6 files changed, 131 insertions(+), 91 deletions(-)
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ virt/kvm/kvm_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-base-commit: 2a39d8b39bffdaf1a4223d0d22f07baee154c8f3
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 0848430f36c6..04ed4334473c 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -2567,7 +2567,7 @@ kvm_pfn_t hva_to_pfn(unsigned long addr, bool atomic, bool *async,
+ 		     bool write_fault, bool *writable)
+ {
+ 	struct vm_area_struct *vma;
+-	kvm_pfn_t pfn = 0;
++	kvm_pfn_t pfn;
+ 	int npages, r;
+ 
+ 	/* we can do it either atomically or asynchronously, not both */
 -- 
 2.36.0.464.gb9c8b46e94-goog
 

@@ -2,147 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F6E51479A
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F18D51479C
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:53:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358400AbiD2Kyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 06:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50844 "EHLO
+        id S239166AbiD2K5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 06:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238752AbiD2Kxn (ORCPT
+        with ESMTP id S239024AbiD2K44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 06:53:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8467211A0B
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 03:50:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651229424;
+        Fri, 29 Apr 2022 06:56:56 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7A8579AA;
+        Fri, 29 Apr 2022 03:53:38 -0700 (PDT)
+Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3F48C1EC0453;
+        Fri, 29 Apr 2022 12:53:33 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1651229613;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UJJtQxv1WQFSKERn7SwPf179LKVZ2H2eHmmNQIPl4mc=;
-        b=HhzrN00caam06dOaN9UJTUpg2niHPpyKOef7u3yh0MrjtNqN4aGgNoBNdPIP01ET24h9sw
-        PHwXI+2+7sRE1VO/mlrH30m51L59VKJsbBG8rh3ljacSglfkR38Gts1Xsaz9uw+/42PwsM
-        izAFKdwfYtgmVZk0eblPuVyrYy1epPA=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-584-ZJ0y4X2WNmmmgcWDekob4Q-1; Fri, 29 Apr 2022 06:50:23 -0400
-X-MC-Unique: ZJ0y4X2WNmmmgcWDekob4Q-1
-Received: by mail-wr1-f72.google.com with SMTP id u26-20020adfb21a000000b0020ac48a9aa4so2928780wra.5
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 03:50:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UJJtQxv1WQFSKERn7SwPf179LKVZ2H2eHmmNQIPl4mc=;
-        b=y8071gqx/s0mR1UBnhJ8ODdcMu7M9IN/pGMgPt1F1KtmInLY0tSzHE1qfY7/38isYU
-         DLHhkwNiY59QxnwG5rDmo3HWWRZuHTK40QPdI44mVcs7gtVQIOK1qMuR+c14ycU9wQmN
-         9tS794rFRsoHJGtHOxr8qQ+U2HxvaV6xMgAPikC+MzsWhwr8trmLNZaJQ427/OULH1B7
-         R9PCIIUf2d3oIMbzocUNlsx1YP+JWikwi8ttJXW0hykUnu5Wqau5/NUOq4egOr20uZB7
-         T4fWixP1ixRnS7/Vk06MgOSCz7IMQ6AQzyeSqUm0ukoiGGYoUIgEn6XOcBdMBTLi3vpt
-         EaWQ==
-X-Gm-Message-State: AOAM5327Ov7G6R+Wvr1g7gu2n0B7f9I+ZeBnHjcTVfoBisVJNHOsvVNS
-        IbgOG4J/a2mBl8H02vXmxbVaYUtqhiYFcjqcenSJ3yYkruGQ2ZBgj0nw2+rzQVoGBdiz+ux+hX1
-        Me+DAKF01kGcR90G0RyKWFCw2
-X-Received: by 2002:a05:6000:108e:b0:20a:d9a9:ad31 with SMTP id y14-20020a056000108e00b0020ad9a9ad31mr20866791wrw.331.1651229421998;
-        Fri, 29 Apr 2022 03:50:21 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxkqNVsWWkg3kncGIxxxi5dpKG8+ouBhLBj9X3lIkscb9aTewE6sU4DUEzKMvU1g4f9U0sb6w==
-X-Received: by 2002:a05:6000:108e:b0:20a:d9a9:ad31 with SMTP id y14-20020a056000108e00b0020ad9a9ad31mr20866760wrw.331.1651229421574;
-        Fri, 29 Apr 2022 03:50:21 -0700 (PDT)
-Received: from [192.168.1.129] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id p125-20020a1c2983000000b0038e6c62f527sm2703007wmp.14.2022.04.29.03.50.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 03:50:21 -0700 (PDT)
-Message-ID: <8671b156-af04-c728-d7bb-1019badbd13a@redhat.com>
-Date:   Fri, 29 Apr 2022 12:50:20 +0200
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=CLBqjruz6nJNNoK+VEKQerL5OsRHm91OkA4ph7LgujU=;
+        b=oBhT0oDPQYoYhiq3M57NHR0kwDtbkzESqpviQ6APK17N8rFapqRG6H81FABgqsajB/8ox2
+        GRf4rKs7ZFj/oNjq2sjGDOJh1REdBXtekFAUxNixxIG18p65MA0Z67tsCvyzGJslJ8ZgZg
+        HltjJpVIS2I8CthlPc6405WOuqTXOiY=
+Date:   Fri, 29 Apr 2022 12:53:30 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv5 05/12] efi/x86: Implement support for unaccepted memory
+Message-ID: <YmvDqgcyKOgLYNrT@zn.tnic>
+References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
+ <20220425033934.68551-6-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [RFC PATCH v4 02/11] drm/fb-helper: Set FBINFO_MISC_FIRMWARE flag
- for DRIVER_FIRMWARE fb
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org
-Cc:     David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20220429084253.1085911-1-javierm@redhat.com>
- <20220429084253.1085911-3-javierm@redhat.com>
- <7ce2f8e1-9cf2-4d89-99c2-b4280e4758ba@suse.de>
- <476d57e5-69dd-94b5-779f-230e091ae62f@redhat.com>
- <82dc11b4-d8da-e9e9-8181-5695fbd806de@suse.de>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <82dc11b4-d8da-e9e9-8181-5695fbd806de@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220425033934.68551-6-kirill.shutemov@linux.intel.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        TRACKER_ID autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/29/22 12:20, Thomas Zimmermann wrote:
-> Hi Javier
+On Mon, Apr 25, 2022 at 06:39:27AM +0300, Kirill A. Shutemov wrote:
+> diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
+> index 5401985901f5..f9b88174209e 100644
+> --- a/drivers/firmware/efi/libstub/x86-stub.c
+> +++ b/drivers/firmware/efi/libstub/x86-stub.c
+> @@ -15,6 +15,7 @@
+>  #include <asm/setup.h>
+>  #include <asm/desc.h>
+>  #include <asm/boot.h>
+> +#include <asm/unaccepted_memory.h>
+>  
+>  #include "efistub.h"
+>  
+> @@ -504,6 +505,17 @@ setup_e820(struct boot_params *params, struct setup_data *e820ext, u32 e820ext_s
+>  			e820_type = E820_TYPE_PMEM;
+>  			break;
+>  
+> +		case EFI_UNACCEPTED_MEMORY:
+> +			if (!IS_ENABLED(CONFIG_UNACCEPTED_MEMORY)) {
+> +				efi_warn_once("The system has unaccepted memory,"
+> +					     " but kernel does not support it\n");
+> +				efi_warn_once("Consider enabling UNACCEPTED_MEMORY\n");
 
-[snip]
+CONFIG_UNACCEPTED_MEMORY
 
->>   
->>> We can do this with DRIVER_FIRMWARE. Alternatively, I'd suggest to we
->>> could also used the existing final parameter of
->>> drm_fbdev_generic_setup() to pass a flag that designates a firmware device.
->>>
->>
->> By existing final parameter you mean @preferred_bpp ? That doesn't seem
->> correct. I also like that by using DRIVER_FIRMWARE it is completely data
->> driven and transparent to the DRM driver.
-> 
-> DRIVER_FIRMWARE is an indirection and only used here. (Just like 
-> FBINFO_MISC_FIRMWARE is a bad interface for marking framebuffers that 
-> can be unplugged.) If a driver supports hot-unplugging, it should simply 
-> register itself with aperture helpers, regardless of whether it's a 
-> firmware framebuffer or not.
->
+> +				continue;
+> +			}
+> +			e820_type = E820_TYPE_RAM;
+> +			process_unaccepted_memory(params, d->phys_addr,
+> +					d->phys_addr + PAGE_SIZE * d->num_pages);
 
-That's fair, and if in practice will only be used by one driver (simpledrm)
-then that would also allow us to drop patches 1 and 2 from this series.
+Align arguments on the opening brace.
 
-IOW, we wouldn't really need a DRIVER_FIRMWARE capability flag.
- 
-> Of preferred_bpp, we really only use the lowest byte. All other bits are 
-> up for grabbing.  The argument is a workaround for handling 
-> mode_config.prefered_depth correctly.
->
+> +			break;
+>  		default:
+>  			continue;
+>  		}
+> @@ -568,6 +580,59 @@ static efi_status_t alloc_e820ext(u32 nr_desc, struct setup_data **e820ext,
+>  	return status;
+>  }
+>  
+> +static efi_status_t allocate_unaccepted_memory(struct boot_params *params,
+> +					       __u32 nr_desc,
+> +					       struct efi_boot_memmap *map)
+> +{
+> +	unsigned long *mem = NULL;
+> +	u64 size, max_addr = 0;
+> +	efi_status_t status;
+> +	bool found = false;
+> +	int i;
+> +
+> +	/* Check if there's any unaccepted memory and find the max address */
+> +	for (i = 0; i < nr_desc; i++) {
+> +		efi_memory_desc_t *d;
+> +
+> +		d = efi_early_memdesc_ptr(*map->map, *map->desc_size, i);
+> +		if (d->type == EFI_UNACCEPTED_MEMORY)
+> +			found = true;
+> +		if (d->phys_addr + d->num_pages * PAGE_SIZE > max_addr)
+> +			max_addr = d->phys_addr + d->num_pages * PAGE_SIZE;
+> +	}
+> +
+> +	if (!found) {
+> +		params->unaccepted_memory = 0;
+> +		return EFI_SUCCESS;
+> +	}
+> +
+> +	/*
+> +	 * If unaccepted memory is present allocate a bitmap to track what
+> +	 * memory has to be accepted before access.
+> +	 *
+> +	 * One bit in the bitmap represents 2MiB in the address space:
+> +	 * A 4k bitmap can track 64GiB of physical address space.
+> +	 *
+> +	 * In the worst case scenario -- a huge hole in the middle of the
+> +	 * address space -- It needs 256MiB to handle 4PiB of the address
+> +	 * space.
+> +	 *
+> +	 * TODO: handle situation if params->unaccepted_memory has already set.
 
-Yeah, but I didn't want to abuse that argument or package data in an int.
+"... is already set."
 
- 
-> Eventually, preferred_depth should be replaced by something like 
-> 'preferred_format', which will hold the driver's preferred format in 
-> 4CC.  We won't need preferred_bpp then. So we could turn preferred_bpp 
-> into a flags argument.
->
+And when is that TODO taken care of? Later patch or patchset?
 
-That's a good point, maybe we could start from there and do this cleanup
-as a preparatory change of this series ? Then the patches would only be
-1) renaming preferred_bpp (that would be unused at this point) to flags
-and 2) make simpledrm to set FBDEV_FIRMWARE flag or something like that.
-
-Another option is to add a third flags param to drm_fbdev_generic_setup()
-and make all drivers to set 0 besides simpledrm. That way marking the fb
-as FBINFO_MISC_FIRMWARE won't be blocked by the preferred_depth cleanup.
+Thx.
 
 -- 
-Best regards,
+Regards/Gruss,
+    Boris.
 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+https://people.kernel.org/tglx/notes-about-netiquette

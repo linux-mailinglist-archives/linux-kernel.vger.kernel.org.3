@@ -2,134 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61F4751404A
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 03:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10EF651404D
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 03:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353982AbiD2Bka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 21:40:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39314 "EHLO
+        id S1353988AbiD2Bmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 21:42:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353975AbiD2Bk2 (ORCPT
+        with ESMTP id S235461AbiD2Bmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 21:40:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 28D8E3DDE8
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 18:37:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651196230;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hW9cFab8Ik/mglyLVYP+gASmTZotsBUclSU51ABUpQ0=;
-        b=PT1/6tBaT/o32VIi1g8iaVkaKucAm3rCeTlqkC5GkXez/sO5SDvdhQ/Qs2oOziaAj2gihY
-        foYoBePPXh/ve29MePd3gmLLJ7wdrH5OYX68ahYBGQwadnExTWXC3dw8s1d+7sfl5SJOXK
-        J6JOy/zRYuvqsTbUrre49Vr9c65t/4U=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-445-S-8xkbv3NMarFwKnTyZeZQ-1; Thu, 28 Apr 2022 21:37:09 -0400
-X-MC-Unique: S-8xkbv3NMarFwKnTyZeZQ-1
-Received: by mail-qk1-f199.google.com with SMTP id j12-20020ae9c20c000000b0069e8ac6b244so4415254qkg.1
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 18:37:08 -0700 (PDT)
+        Thu, 28 Apr 2022 21:42:38 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E19CBF330
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 18:39:21 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id t13so5384989pgn.8
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 18:39:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-transfer-encoding:content-language;
+        bh=rhA4aZUdRaNgOqnDVV3QzhoT8n++/dGWzUM62LHJQpE=;
+        b=YpVVxkFOvaBfZTwyNXGDo+Gr0q/zc/izFhnZ0kSp0xp8DXzHB1Vhz7HEg5yEGk9Lup
+         YqVJ4Jji5VQN5ToQuduIiSWpyfgRp6q35jcBRVqCZY3MH2VDrToKXurUtMP4CYo+4RYp
+         tClatmIUqEuTphALX0jOQfN2TYYniHEJgKhchMNvxSVy/i8/gaRrMRVsXsm2pKmFYLWm
+         fEUru6dQJKSiDwjpDi2qICmSJQVmhUptUFoTMpv7QIYHzgiIGIiOJESnm0N2ZmWP3Q7U
+         x9ZXWGbJYbb/xEYE+LAaSN88EKwKXGtQ94UV5TszGa4g/ZGZzb1+wInB5Ik/W5FmGjqS
+         rluQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hW9cFab8Ik/mglyLVYP+gASmTZotsBUclSU51ABUpQ0=;
-        b=VoaTrcnzloxtnNXviiLzGvH1Vuv8rsfGN6iOaM+driRgCymbdORRWpMLlRtT4rkgF6
-         isiHYmWFuKNrPtCe0mrpmKyjpCYJXwufGYZmUwcpKr+uroaXb0aCS0XB7QpAq90CUqo6
-         ZPeDUssbPVT7zA/Cz77RW9s/s3lSTHtrFy5+PAHgFRiJugK/de0tgftjLm3fyIHfpXr2
-         MAvF0MCwEpZsGaR8zyMTxQH2BabK9t9t1BWgQ6h3ZGWeFzdZyNh9aqoFs5XcQfqMB2Jh
-         bifMisbPQJerC/8M7vqWpBosP5dnsil7g+bJiJXiUa+gIXZ9mD/PZJykZK3QvlYyP+IT
-         Wm8A==
-X-Gm-Message-State: AOAM532uREhOmLApLfZjlMkE7oxNqbt4fUn7+XeIwi7W93960GmnNQ2B
-        nFw+OaFGQUYCKaeDShKvfH/P8TGr6zYRS3prURBsznQ3S7gQ5068U0jBv+/1j3+IkiruzojrT7q
-        Q/m2Bz48mdh4cPAZsVVmaVpqd
-X-Received: by 2002:a05:6214:624:b0:441:42c0:7d41 with SMTP id a4-20020a056214062400b0044142c07d41mr26191361qvx.34.1651196228512;
-        Thu, 28 Apr 2022 18:37:08 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx7Yse6CBMrZfO14BHLXIwt9qxnIOlpImmfux0DWolt48lQgK4qbFnBjFh9ckK3IYFw+duTYg==
-X-Received: by 2002:a05:6214:624:b0:441:42c0:7d41 with SMTP id a4-20020a056214062400b0044142c07d41mr26191349qvx.34.1651196228306;
-        Thu, 28 Apr 2022 18:37:08 -0700 (PDT)
-Received: from treble ([2600:1700:6e32:6c00::d])
-        by smtp.gmail.com with ESMTPSA id n8-20020ac85a08000000b002f1fc230725sm921519qta.31.2022.04.28.18.37.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 18:37:07 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 18:37:04 -0700
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     joao@overdrivepizza.com
-Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        peterz@infradead.org, andrew.cooper3@citrix.com,
-        keescook@chromium.org, samitolvanen@google.com,
-        mark.rutland@arm.com, hjl.tools@gmail.com,
-        alyssa.milburn@linux.intel.com, ndesaulniers@google.com,
-        gabriel.gomes@linux.intel.com, rick.p.edgecombe@intel.com
-Subject: Re: [RFC PATCH 01/11] x86: kernel FineIBT
-Message-ID: <20220429013704.4n4lmadpstdioe7a@treble>
-References: <20220420004241.2093-1-joao@overdrivepizza.com>
- <20220420004241.2093-2-joao@overdrivepizza.com>
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=rhA4aZUdRaNgOqnDVV3QzhoT8n++/dGWzUM62LHJQpE=;
+        b=bGTExf0sIgFU1oi5PJmtIW68TbIItrTlE1k8CGrxq7ynSVOi1JrLxoKkz3kaj9kQoo
+         1IvG+ND4fQmOYEG2FMsuVCVG3X8UmX66cLYIdghe16iQPRHXHDRZjEKIFOsLxTo3CVqE
+         lJCyViC7K/ea35H4nQGIBycYiKC6h1iTtURGYXa8wjHlYSV4fxNUPt3Kvzw19LwoNcGx
+         KgK+Y62rtoGJD6t0NmdWPHngMQmc1IyLt0hJROn6F70/FcY1J5Lq4hJOrJUdU7YP1Yat
+         C4tognJz6dDDVmsvDxYoQlbhnmNx0icFiLCje18nlxAYpIvaHIv0JQIA3QcX0I//j+8A
+         rpJA==
+X-Gm-Message-State: AOAM531jQfmHkGQMRsp38Jktma+0yOLLeIH5B9crpQoMFnW7NehBK/Hy
+        5Fx02rX/9FMow1iL0pRKEzNPdQ==
+X-Google-Smtp-Source: ABdhPJyfoFDrOX4ugPpi20iiVdqc3EOn/QLxfQF3709bk7teLh0JelkDjqJXiA+CEkYSux7mQuRHXw==
+X-Received: by 2002:a63:d145:0:b0:3c1:4ba0:d890 with SMTP id c5-20020a63d145000000b003c14ba0d890mr8385077pgj.607.1651196361096;
+        Thu, 28 Apr 2022 18:39:21 -0700 (PDT)
+Received: from [10.52.0.6] ([94.177.118.121])
+        by smtp.gmail.com with ESMTPSA id k17-20020a628e11000000b0050d8d373331sm1021922pfe.214.2022.04.28.18.39.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Apr 2022 18:39:20 -0700 (PDT)
+Subject: Re: [PATCH v2] iommu/sva: Fix PASID use-after-free issue
+To:     Fenghua Yu <fenghua.yu@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        Zhangfei Gao <zhangfei.gao@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>, x86 <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        iommu@lists.linux-foundation.org
+References: <20220428180041.806809-1-fenghua.yu@intel.com>
+From:   Zhangfei Gao <zhangfei.gao@linaro.org>
+Message-ID: <8f50c673-fe92-3c42-993d-43e65fc7235c@linaro.org>
+Date:   Fri, 29 Apr 2022 09:39:09 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220420004241.2093-2-joao@overdrivepizza.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220428180041.806809-1-fenghua.yu@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 05:42:31PM -0700, joao@overdrivepizza.com wrote:
-> +void __noendbr __fineibt_handler(void){
-> +	unsigned i;
-> +	unsigned long flags;
-> +	bool skip;
-> +	void * ret;
-> +	void * caller;
-> +
-> +	DO_ALL_PUSHS;
 
-So this function isn't C ABI compliant, right? e.g. the compiler just
-calls the handler without regard for preserving registers?
 
-If this function is going to be implemented in C, it should probably
-have an asm thunk wrapper which can properly save/restore the registers
-before calling into the C version.
+On 2022/4/29 上午2:00, Fenghua Yu wrote:
+> The PASID is being freed too early.  It needs to stay around until after
+> device drivers that might be using it have had a chance to clear it out
+> of the hardware.
+>
+> As a reminder:
+>
+> mmget() /mmput()  refcount the mm's address space
+> mmgrab()/mmdrop() refcount the mm itself
+>
+> The PASID is currently tied to the life of the mm's address space and
+> freed in __mmput().  This makes logical sense because the PASID can't be
+> used once the address space is gone.
+>
+> But, this misses an important point: even after the address space is
+> gone, the PASID will still be programmed into a device.  Device drivers
+> might, for instance, still need to flush operations that are outstanding
+> and need to use that PASID.  They do this at file->release() time.
+>
+> Device drivers call the IOMMU driver to hold a reference on the mm itself
+> and drop it at file->release() time.  But, the IOMMU driver holds a
+> reference on the mm itself, not the address space.  The address space
+> (and the PASID) is long gone by the time the driver tries to clean up.
+> This is effectively a use-after-free bug on the PASID.
+>
+> To fix this, move the PASID free operation from __mmput() to __mmdrop().
+> This ensures that the IOMMU driver's existing mmgrab() keeps the PASID
+> allocated until it drops its mm reference.
+>
+> Fixes: 701fac40384f ("iommu/sva: Assign a PASID to mm on PASID allocation and free it on mm exit")
+>
+> Reported-by: Zhangfei Gao <zhangfei.gao@foxmail.com>
+> Tested-by: Zhangfei Gao <zhangfei.gao@foxmail.com>
 
-Even better, if the compiler did an invalid op (UD2?), which I think you
-mentioned elsewhere, instead of calling the handler directly, and there
-were a way for the trap code to properly detect it as a FineIBT
-violation, we could get rid of the pushes/pops, plus the uaccess objtool
-warning from patch 7, plus I'm guessing a bunch of noinstr validation
-warnings.
+Tested-by: Zhangfei Gao <zhangfei.gao@linaro.org>
 
-> +
-> +	spin_lock_irqsave(&fineibt_lock, flags);
-> +	skip = false;
-> +
-> +	asm("\t movq 0x90(%%rsp),%0" : "=r"(ret));
-> +	asm("\t movq 0x98(%%rsp),%0" : "=r"(caller));
+Use the formal email, thanks
 
-This is making some questionable assumptions about the stack layout.
-
-I assume this function is still in the prototype stage ;-)
-
-> +	if(!skip) {
-> +		printk("FineIBT violation: %px:%px:%u\n", ret, caller,
-> +				vlts_next);
-> +	}
-> +	DO_ALL_POPS;
-> +}
-
-Right now this handler just does a printk if it hasn't already for this
-caller/callee combo, and then resumes control.  Which is fine for
-debugging, but it really needs to behave similarly to an IBT violation,
-by panicking unless "ibt=warn" on the cmdline.
-
-Not sure what would happen for "ibt=off"?  Maybe apply_ibt_endbr() could
-NOP out all the FineIBT stuff.
-
--- 
-Josh
+> Suggested-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> Suggested-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
+> ---
+>
+> v2:
+> - Dave Hansen rewrites the change log.
+> - Add Tested-by: Zhangfei Gao <zhangfei.gao@foxmail.com>
+> - Add Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+>
+> The original patch was posted and discussed in:
+> https://lore.kernel.org/lkml/YmdzFFx7fN586jcf@fyu1.sc.intel.com/
+>
+>   kernel/fork.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/fork.c b/kernel/fork.c
+> index 9796897560ab..35a3beff140b 100644
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
+> @@ -792,6 +792,7 @@ void __mmdrop(struct mm_struct *mm)
+>   	mmu_notifier_subscriptions_destroy(mm);
+>   	check_mm(mm);
+>   	put_user_ns(mm->user_ns);
+> +	mm_pasid_drop(mm);
+>   	free_mm(mm);
+>   }
+>   EXPORT_SYMBOL_GPL(__mmdrop);
+> @@ -1190,7 +1191,6 @@ static inline void __mmput(struct mm_struct *mm)
+>   	}
+>   	if (mm->binfmt)
+>   		module_put(mm->binfmt->module);
+> -	mm_pasid_drop(mm);
+>   	mmdrop(mm);
+>   }
+>   
 

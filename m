@@ -2,83 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD32514A37
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 15:06:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39A4E514A39
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 15:06:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233368AbiD2NJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 09:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50402 "EHLO
+        id S233087AbiD2NJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 09:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359679AbiD2NIu (ORCPT
+        with ESMTP id S1359750AbiD2NJM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 09:08:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F4D10EA
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 06:05:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8F25B833F7
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:05:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DED5C385A4;
-        Fri, 29 Apr 2022 13:05:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651237528;
-        bh=1Ze5xcZmIt0iaugrJOOHAsDQ1jS8pGbPcfOZEJjBSXA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ue1y8pzmI86FlPEl4Hxcw8XH40ZuLTdYNNjiMZwE1Lr9igH/pVJhrKEg5JWTBA30D
-         byRO8WgFWlyOF5ErrRvySIwBmCy2l/D9dMHSSFYOib1JeUnY0pE5dguNYZe2Pac/lG
-         BKJ+arvAFkb3WSxXk2voqzQ9kRltV6Nbiz3aKTivfU3/AnzCJGW8B8cfT3RWIYRE3/
-         4FE/iv0hfx1g4rDc/fLY5FhK7EyvacsmjEflhDnApVZHswoKUQXXVOBmlr2ZIRQZ63
-         wxfJIikQ7lHNg4/BB8CmO6y4c0cqhlPNLLEnB1T3J/gEwGNedyCAERzNRRcG/EYq3w
-         6fwWOIQecjTQA==
-Received: by pali.im (Postfix)
-        id F2463CAF; Fri, 29 Apr 2022 15:05:24 +0200 (CEST)
-Date:   Fri, 29 Apr 2022 15:05:24 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] irqchip/armada-370-xp: Do not touch Performance
- Counter Overflow on A375, A38x, A39x
-Message-ID: <20220429130524.vs6mlzvotvaortbw@pali>
-References: <20220425113706.29310-1-pali@kernel.org>
- <YmvYrFUfIUvfjrmY@lunn.ch>
+        Fri, 29 Apr 2022 09:09:12 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4326A2124B
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 06:05:49 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2f83983782fso84513007b3.6
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 06:05:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=h+Ch5FrsaH2wGj7krM14MGWI0na4ZGCNNKlBF0nMo54=;
+        b=iULbLhZoU9Pl0qb1QjcJhvwJGcVVeHrTQCEoZyv5zz3YOIvDfPv4rAbRJVo+kEOwKM
+         lNwcDXkrPrJabcmN0qQZ+woNEJsU5gOYCkUE9VUW14CMZPLpoGQsrG5qJV2XfoRG0/2p
+         bOM9n96H7FvFGYx1dERd4vrBvH7L1NoYQyTFOHJ1x+cPCeTT6KJ6RD36ivLFGfoKcuyr
+         ER0andT2ZySXczvvaWlMWrBLqHzVOqkqLX3dnCPb+hL/Nfrlv+GnFcZ0sjuKXRDIJMZY
+         gU0g1UJkfiUAxPSZGUUEqsJOjxKwhIl0ZYDQTGDe62XVZFkilPXU2mExyc170VAvGbmp
+         Df7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=h+Ch5FrsaH2wGj7krM14MGWI0na4ZGCNNKlBF0nMo54=;
+        b=Ot4+4u+hDBn3sCpdRiqH8xUKu43KN7zvL3KBHyFVha9oiN5v7JwyWXZNAiSnIcv5Ti
+         TCQ+IbK+M8UbwzpfAy/fWeuJ4khZy4AJ6g9V4Nvb41OIiafUQDICje/bIAubQKWnnRfy
+         Op8F5mss7dqR9fgcFyoNcHZKaqOW3p3l6ydWA5uR9HTvUxGlCFmEVucAXZnj9xHzedj0
+         SH2szOv/GwTY0pn1bx2sKjfm+Iv9ssxSQ3DBnR7Wg5NsOG4kErnLOJs4WTPrrEeiSg15
+         azkhoc6waFaj0iOMCHEftEJ8T8KVSz99A8CgFnIWkBXP79qsVA1CC+Drn6H9R0TIW59J
+         gRaQ==
+X-Gm-Message-State: AOAM5311s9zFSA2gHjifZn8hWm7dA+JzFeun7KaiX612ZXsGLCh8s43N
+        NU3dNQbvPb/Qov7DsHJ1moGtY3VPg6lDKDlc60LxXO0=
+X-Google-Smtp-Source: ABdhPJwhtwpU8LT9AahrofrKtL9DhX8YkmTeR4qVA2q0IBXfsK38afZHMnxzahiHpRCcR2V8Po7rHdQfccaLpNAKoTo=
+X-Received: by 2002:a0d:e64e:0:b0:2f4:ddb9:b108 with SMTP id
+ p75-20020a0de64e000000b002f4ddb9b108mr36140248ywe.245.1651237548529; Fri, 29
+ Apr 2022 06:05:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YmvYrFUfIUvfjrmY@lunn.ch>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220429084225.298213-1-rsalvaterra@gmail.com> <91d8eb87-adf0-da62-0c7b-dbf94442f535@gmail.com>
+In-Reply-To: <91d8eb87-adf0-da62-0c7b-dbf94442f535@gmail.com>
+From:   Rui Salvaterra <rsalvaterra@gmail.com>
+Date:   Fri, 29 Apr 2022 14:05:37 +0100
+Message-ID: <CALjTZvYdvGrfjTWaP=LjX0UGJPJVxuF9RtgbneDwu7KCnSdtJg@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: mt7622: specify the number of DMA requests
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        ryder.lee@mediatek.com, daniel@makrotopia.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Friday 29 April 2022 14:23:08 Andrew Lunn wrote:
-> On Mon, Apr 25, 2022 at 01:37:05PM +0200, Pali Rohár wrote:
-> > Register ARMADA_370_XP_INT_FABRIC_MASK_OFFS is Armada 370 and XP specific
-> > and on new Armada platforms it has different meaning. It does not configure
-> > Performance Counter Overflow interrupt masking. So do not touch this
-> > register on non-A370/XP platforms (A375, A38x and A39x).
-> 
-> Hi Pali
-> 
-> Do the Armada 375, 38x and 39x have an over flow interrupt? I assume
-> not.
+Hi, Matthias,
 
-Hello! According to documentation there is something named performance
-counter interrupt, but it is in different register... and this register
-is not per-cpu.
+On Fri, 29 Apr 2022 at 12:57, Matthias Brugger <matthias.bgg@gmail.com> wrote:
+>
+> Applied, thanks!
 
-> Does this need a fixes tag? Should it be back ported in stable?
+Would this and the cache topology patch qualify as stable material?
+Intuitively, I'd say yes, but I'm not really sure.
 
-git blame show that this functionality appeared in commit 28da06dfd9e4
-("irqchip: armada-370-xp: Enable the PMU interrupts").
+Thanks,
+Rui

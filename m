@@ -2,54 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 760C1514214
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 07:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD5BF514218
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 07:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354306AbiD2F7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 01:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37518 "EHLO
+        id S1354332AbiD2GCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 02:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354268AbiD2F7e (ORCPT
+        with ESMTP id S238152AbiD2GB6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 01:59:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB1C6FF74;
-        Thu, 28 Apr 2022 22:56:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 178B1619C2;
-        Fri, 29 Apr 2022 05:56:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52B93C385A7;
-        Fri, 29 Apr 2022 05:56:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651211776;
-        bh=nLjslqL2g1+g19MOZADoeMFdBpRmEuS3yhHh7jqJpRA=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=CKQ9PF0Y2rMzZJRREYPMTyKqXwQF2vzm2f8B45S2oy4RGxpgyTcsxy2k90ESeifGo
-         ow+9cs1KugaXRQ5iy/ckEAWl9Ko+Qpp2r0JUt9lZHArHAbj4fNOsOVuDQ3kQiCUWFy
-         e/UNXMdhInX3hi1BuKlp104bkk5BfV6Y2ZYiypFnLsfZq0kTyTwa1nnmQte+ecShoZ
-         7GF+9Bo69OGcs/wFqPI43H81R3iV5dDuQON1ZGy0gDLR67VmA55p0NWWn1fxfOOM0C
-         3f241OCOCUfV3kJWtckx0vE55LKhkwBY473c7TxTePE/ehjkNsFLtHnSJMayts0Hu6
-         fMPwS/c9rGd4A==
-Content-Type: text/plain; charset="utf-8"
+        Fri, 29 Apr 2022 02:01:58 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2984D6FF74;
+        Thu, 28 Apr 2022 22:58:40 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23T5wZTg052873;
+        Fri, 29 Apr 2022 00:58:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1651211915;
+        bh=7ub+1jFKXKC1WMcZ3JRJEud9/CWYRZVayyMkec2wbXo=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=IJtbuOBwcsyZ326bj2xk/+6YZ9+tL33antxuEEC0gYWLkgxONT4dxCYpZSFwYZ5AM
+         fXiOSzum1nemXAsfPHJF+MO9bChKjPVExRYqOypp5OGk7gX+F2cTsBU74GBc9SH5Pc
+         aVN05ZWetVt8XiclPJggwz3CUkPixopvj8w5pgXo=
+Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23T5wZA0108388
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 29 Apr 2022 00:58:35 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 29
+ Apr 2022 00:58:34 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 29 Apr 2022 00:58:35 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23T5wXd6068304;
+        Fri, 29 Apr 2022 00:58:34 -0500
+Date:   Fri, 29 Apr 2022 11:28:33 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Ian Abbott <abbotti@mev.co.uk>
+CC:     <linux-spi@vger.kernel.org>, Mark Brown <broonie@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] spi: cadence-quadspi: fix Direct Access Mode disable for
+ SoCFPGA
+Message-ID: <20220429055833.ahgioqdjwgshpylk@ti.com>
+References: <20220427153446.10113-1-abbotti@mev.co.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH -next] rtw89: remove unneeded semicolon
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20220427003142.107916-1-yang.lee@linux.alibaba.com>
-References: <20220427003142.107916-1-yang.lee@linux.alibaba.com>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        pkshih@realtek.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <165121177069.27390.3387634506276557316.kvalo@kernel.org>
-Date:   Fri, 29 Apr 2022 05:56:14 +0000 (UTC)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220427153446.10113-1-abbotti@mev.co.uk>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,22 +64,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yang Li <yang.lee@linux.alibaba.com> wrote:
-
-> Eliminate the following coccicheck warning:
-> ./drivers/net/wireless/realtek/rtw89/rtw8852c.c:2556:2-3: Unneeded
-> semicolon
+On 27/04/22 04:34PM, Ian Abbott wrote:
+> The Cadence QSPI compatible string required for the SoCFPGA platform
+> changed from the default "cdns,qspi-nor" to "intel,socfpga-qspi" with
+> the introduction of an additional quirk in
+> commit 98d948eb8331 ("spi: cadence-quadspi: fix write completion support").
+> However, that change did not preserve the previously used
+> quirk for this platform.  Reinstate the `CQSPI_DISABLE_DAC_MODE` quirk
+> for the SoCFPGA platform.
 > 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> Acked-by: Ping-Ke Shih <pkshih@realtek.com>
+> Fixes: 98d948eb8331 ("spi: cadence-quadspi: fix write completion support")
+> Cc: Dinh Nguyen <dinguyen@kernel.org>
+> Signed-off-by: Ian Abbott <abbotti@mev.co.uk>
 
-Patch applied to wireless-next.git, thanks.
+Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
 
-11dc130b4ee0 rtw89: remove unneeded semicolon
+> ---
+>  drivers/spi/spi-cadence-quadspi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+> index 41922a5ea1f4..30307392c75a 100644
+> --- a/drivers/spi/spi-cadence-quadspi.c
+> +++ b/drivers/spi/spi-cadence-quadspi.c
+> @@ -1781,7 +1781,7 @@ static const struct cqspi_driver_platdata intel_lgm_qspi = {
+>  };
+>  
+>  static const struct cqspi_driver_platdata socfpga_qspi = {
+> -	.quirks = CQSPI_NO_SUPPORT_WR_COMPLETION,
+> +	.quirks = CQSPI_DISABLE_DAC_MODE | CQSPI_NO_SUPPORT_WR_COMPLETION,
+>  };
+>  
+>  static const struct cqspi_driver_platdata versal_ospi = {
+> -- 
+> 2.35.1
+> 
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220427003142.107916-1-yang.lee@linux.alibaba.com/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

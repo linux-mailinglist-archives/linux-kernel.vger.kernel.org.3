@@ -2,199 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EA7E514FDC
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:47:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1298F514FDE
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:47:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378639AbiD2Put (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 11:50:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41630 "EHLO
+        id S1378644AbiD2Puz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 11:50:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350887AbiD2Pup (ORCPT
+        with ESMTP id S232880AbiD2Puq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 11:50:45 -0400
-Received: from na01-obe.outbound.protection.outlook.com (mail-cusazon11020016.outbound.protection.outlook.com [52.101.61.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E824332EC8;
+        Fri, 29 Apr 2022 11:50:46 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2605633883
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:47:28 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id z5-20020a17090a468500b001d2bc2743c4so7679075pjf.0
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:47:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iCUK1LSV6JY2TxjqIMT13v0Q2njg8arsbOECVMPDTe8=;
+        b=UU82lj+UDf3qE2hjsMeMpKWFqqpXknjI+WYABj/bid9QZ/GbKsy82cu9h/dFkn/rvL
+         idTcJ7d8LDH5pGhKpfk8LbO487lCUHd1bMIOf+mt1qnk+5P0U/Wfpd+Sr4a67SnKTnmY
+         NT/IxSoUNkB8PdYv42YFHUHr3q/IbWVWhlwVWYBBhBH39uCtpPuZLCTxJrJ0idnMK3FV
+         AN8AMUmWZTSXhM8AHjmx7I4CbuhMNV0H3SM/N+XgLPvB0Q9JnLFwJIsxOGfTHdJFIzbY
+         y4+4yf7rYeT9jOi9UyuJXLrCYLzYvZ9HbQmWAzN+ZEkjCJreccTHnwwFX4a6b21jpOe7
+         HG2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iCUK1LSV6JY2TxjqIMT13v0Q2njg8arsbOECVMPDTe8=;
+        b=VsSU1ouIX3t2FrfkARi2EB9aryahMt4hme06dwJ3rmeYiU19ohitJ/3zZGoWGP1LfV
+         AlbXDWmqJ9a3UsWT5SVoyjDZTzB8Ot6pLzNiVlyJVxrMdzKkkkFt+SHGPw0WPi16Cbbq
+         /1K5trgED1TBlqpQaTCDIk8u/kmKhfS5bz8HL5OBIX6vsFncfbWlgC5Nky46yGdkeWqt
+         3mzYz3VIouzQPO7J1ovVA1mldhLu2NtM5rKr/bLwK4jR213JSae4KIskfCufRoQWAsSL
+         wVoEHs8OZ59znrWIL58PSIgT/rVzon3Veq7ABGHWnOwd4XuVOJvPrQY2eSj5KKuGLIPc
+         EJIQ==
+X-Gm-Message-State: AOAM530BeJhDy0Jz7+QXVMZb1KMVjiZxbCj3kcR7qH7hwSW1FNJ9fK9U
+        /8WicYDtQMl6xV4qTnP13jPiGA==
+X-Google-Smtp-Source: ABdhPJySzMqDgCWEhR8/Z3PgM+ZbPAcAgWTYdET9X7J7eBJiw4ujFZg7aoJDE8vi0ylFucOhVZ/ltQ==
+X-Received: by 2002:a17:902:8a95:b0:156:a40a:71e5 with SMTP id p21-20020a1709028a9500b00156a40a71e5mr37552plo.144.1651247247467;
+        Fri, 29 Apr 2022 08:47:27 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id g15-20020aa7818f000000b00505ce2e4640sm3414578pfi.100.2022.04.29.08.47.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 29 Apr 2022 08:47:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YYxxyRXcaRGcEDvwtk2P8xZ2hFE6pU2rddRtLVWRHpQ0bAiOJnH0VUSxRCYnor3r65aXHihmVPpv7qasafO76Tc3/J2jR0xCrX4fICeagbMWVfoRZCHSVRBEFAazJM3AZv1wWL/7qOP8BTSAlkvgkT+fNeL67T+Y3VMshp6cV/8kOwTZJWpOIoz4GfnTH+0lBxU7uANDNWhOU0yPOVTv8MRkdJU3JhV9WHAkGMEjo6ma67zWbpM4luY7cYEodrvB6uqf69CrFM4A/miKehwFaIwhfvuA5R9IznkRVRwbml2+yFwCnEsrKn0s0yzNGmWtGzDpqttZvDwRIuWIfskDsQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1sWm4f6thTdwF861VwrFqS8WlzWzHEKu8A3rwoBqOBo=;
- b=CL0hi190ieHFoVfIygmjtZ3H9EzKBXGeX1oHEnpywdFNnTvD5Xtsw+zs8cLsA1IFER401/2EuT66fqTTzCgn0GnxME0sEGDlQhHqiBWXsNLbMxFgipXIXoc1pWEf9vQdBzjH4bH/4K8hJ+9sqZcW6PbOla/ozi815gIzp4GF+sO2+Vq7C1VDfD0BQLdbu1DWoyVdb08l8vbQdeaxocHBCSqtjRmoVZPoMLhc+PuKCFLqr0taHBoVUpoQpriMeJ04gWFhsWbkx4ymhBlKopc51vn22kwhEWHchunafCmbL/NYf804PY502s3gxIVurL3K2Xgm2+RhE0/BpUSt4nr9eg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1sWm4f6thTdwF861VwrFqS8WlzWzHEKu8A3rwoBqOBo=;
- b=fSyYN9p1BJ8aqcfmc/nrLS20hlFEpDOENQ5Cc5OZl9cftuCwzjnHGcaOyIUITp3Gc73/dPjjpDWErSjwN59NGb2xSarlwZ561J9rC+6TiZ1zEs3RiuO9b9u7ZEeMe4cLyaKF1S3cgJOnlQfWuH7zjLGdXGRYUxrTaUjrB8slYRs=
-Received: from BYAPR21MB1270.namprd21.prod.outlook.com (2603:10b6:a03:105::15)
- by BYAPR21MB1653.namprd21.prod.outlook.com (2603:10b6:a02:ca::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.6; Fri, 29 Apr
- 2022 15:47:24 +0000
-Received: from BYAPR21MB1270.namprd21.prod.outlook.com
- ([fe80::2823:3bd7:8a28:4203]) by BYAPR21MB1270.namprd21.prod.outlook.com
- ([fe80::2823:3bd7:8a28:4203%7]) with mapi id 15.20.5227.004; Fri, 29 Apr 2022
- 15:47:18 +0000
-From:   Dexuan Cui <decui@microsoft.com>
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-CC:     "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        Jake Oshins <jakeo@microsoft.com>
-Subject: RE: [PATCH] PCI: hv: Do not set PCI_COMMAND_MEMORY to reduce VM boot
- time
-Thread-Topic: [PATCH] PCI: hv: Do not set PCI_COMMAND_MEMORY to reduce VM boot
- time
-Thread-Index: AQHYW7IFvcsiN9FVXkqw5/CaiO9kaa0HB8Sg
-Date:   Fri, 29 Apr 2022 15:47:17 +0000
-Message-ID: <BYAPR21MB1270E9923364F065D70086E1BFFC9@BYAPR21MB1270.namprd21.prod.outlook.com>
-References: <20220419220007.26550-1-decui@microsoft.com>
- <Ymu6tYItgM6dtNdd@lpieralisi>
-In-Reply-To: <Ymu6tYItgM6dtNdd@lpieralisi>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=289e2a47-9c55-4efc-ae08-3c054917ecb2;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-04-29T15:41:23Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 91b0096f-b442-4f6e-bbb7-08da29f78a38
-x-ms-traffictypediagnostic: BYAPR21MB1653:EE_
-x-microsoft-antispam-prvs: <BYAPR21MB1653E1CC58627211719F0B15BFFC9@BYAPR21MB1653.namprd21.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: kIWNWryZlBdMDKTnAwa592V7whHETto9RTI4Shzh23mh904hoPEsncgA/TSscAE8053T0dbaxAJAQZazn+UsLLjjaOHUYbBiVVjNLIMs5vYrSYqDKA9E2A6pCKVkR2gRBkSnKmbX6xzxi04qVWFAJRWbtPvSqoN0KEtHMOYTY2b1yCLGpHgMFvoVUGTeG4UwBRD9NtuZFY7umSbGVON/GiAP6oTF8u3VJXUjxKY3OA44qk9/Kkl/aMWXA9H566r+VVlyqv9qfIe/HDNX5bf4waXAuxpY6JbvJdWqLo9cl3YAh9RyXuWISd9mGV3EOY9KTwjpxO17Vr4GTaYa1cBThq12sugdzBI3q7OyqdXdSJ815HAM1TLIdsqSlfUy8d2VExlChs6fT/r8Y3Nv5uvn3sXMuPI0WAU+H1mBgOj+Q6blGO+1/uI/hIkSiPHPmLAg5Ptr1QPciq5Eg3yyiY1TtYvY0NUOAdUmATdZjCBy+9IfZkWaznfLVBaPvOB5ekwJyFDRzfaQ7D9377fjheDLSjRPLDesaEU1GAD9aepm70XviT4GJTQWvQUI3CFqKeTzKK8j30b7sw4uFaFLmUMYt+a/KgyxorKFmojYTMvU/C7itkVw+tE+rIW83Fqv55GXyRQ4okN613Beg5lra0fyXxR6+QHijhc/XquAcSD/kmVSuHiyzOSz9B5DcjsYWQ+Jy7krh/JcTPKu7VWnJWTsWemeKJ0J8k7JwdOFOZ3EFs+BcMlmRCVe+uyXHeMuDC3v
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1270.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(451199009)(83380400001)(86362001)(122000001)(76116006)(4326008)(66946007)(5660300002)(38100700002)(71200400001)(8936002)(52536014)(8990500004)(55016003)(38070700005)(107886003)(186003)(54906003)(66556008)(8676002)(66476007)(64756008)(66446008)(33656002)(2906002)(9686003)(7696005)(26005)(6506007)(508600001)(316002)(53546011)(6916009)(10290500003)(82950400001)(82960400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?BY0keluQnXIPP/XfrYAOQ8lx3zJaNCqZohejENJu74Y9tiWcHRTRMzul6O9U?=
- =?us-ascii?Q?zWehOqIICqv8q9obKL1fQVK3tsNDlbN7MCbEDG9zJHqW5NYhIK/Fy1FTTkA8?=
- =?us-ascii?Q?usuSfo3ZInkK3RNEYwTlJ1zulbFt9w3dcU1tCau3b0Wj11wkp+nAKXSq3qKs?=
- =?us-ascii?Q?Is74d3vfNidavhlEyXqJGZhCyQcPBh5xRkZJAV0b0aD4WfyZM9HarH3NISSw?=
- =?us-ascii?Q?vOhfk5GgvHiuUh5u+TFzPfndy9AbRm4G/g1mbHoWrkUtWtvxDGSCxjNXnAWc?=
- =?us-ascii?Q?S12paamHY73T5DzAadhQW1PHI0Rfw1fUpJQl5eM+hvBjBg/AcH4G/VXytF/5?=
- =?us-ascii?Q?QH8LrUWqkKVoD74NbYs3ch7uz5VQH+g4ARJNPhlmM2xDYluFwDc86UqXiu8R?=
- =?us-ascii?Q?2qLCJ9RxEOGd52h+fbh0tO4JbcVv23UrnSBsJYCqrvDdJAjzG9A+TduqAYK9?=
- =?us-ascii?Q?RWkgCWZkCWaNuNMGByhZDZFEK3iIDqelmXepIVEEVWlVH/GPKe2G7E9Q3RmZ?=
- =?us-ascii?Q?feqIbL3SKmFQeJb1K5FdzsaC8i86nBu/PxqkZ0LZ1zK0Q9vK8c6Ke+hn2gzM?=
- =?us-ascii?Q?NLsa9/dNG4UDgrmHyDzUFmiLwIXfeCP7maaqiybciaj/BkKrj8g2D42ewGPu?=
- =?us-ascii?Q?eRx3hMOWxBZ3WWkUMWTVXKDCvtlcCD/KYetwg4HmA8Y+glTw1XW0gaw1S2ZT?=
- =?us-ascii?Q?TDoY1mkCPspy9KsRHbuK19oHTsjUMKzb7vWIqxdfcVjSUflwZbOl4imb76qB?=
- =?us-ascii?Q?kZTbRCrKALDriQhd/f0qqrdjq2hpTFYkxkddQdRYDJMYfFzlmHO4JDH/aK+3?=
- =?us-ascii?Q?Rvmpk/KnReGYRUkv/Zg/Ia2NXk5PewsM1UzJDa3QV0YyJXyCJgLuf8pgWV8Q?=
- =?us-ascii?Q?/z/R0XIx2xZ59Rg4uMqvFenopNWZndqSr5artSj8nW3M16H8SxQX7UzPJwk4?=
- =?us-ascii?Q?VCeQimaeGtRuhx451Jt2sYYL5QzBGJBhBIg/pK2SzY/nrzmjwOCkShKjX+gL?=
- =?us-ascii?Q?V8uyamVraljx1h/gASNVW5fHBDHhaWDJ/NWvvn5len/h6apM9/4CdbGZuApC?=
- =?us-ascii?Q?E8ikzsnVr6ZZdPMetSN+El+Cy5Lrh0MD8ToC5c6pY+j3dyA67AYxbwnEvMB/?=
- =?us-ascii?Q?QpUDPbkZNXXr03zAxUeTmYR2czR8F8VsAiBAXhpDYF6ReFk77Iv+YaUI/tby?=
- =?us-ascii?Q?TVGLa7WBOEDDUCi44QvjA4yzR0GiqWpxvmK1g+CXAx/0VqghsW9VfosGZ3Jn?=
- =?us-ascii?Q?ME1o43VtKTVCO8WEbA2BRFyQwha1cBXCuCSA/qb8r0g4nRZX5jSmiGUTYpxX?=
- =?us-ascii?Q?i1r8lDXcv+B6bSQtKQkLbKZFH3vi2P4/UVoGaoNw/fSaSAd5mpafsXhXhHVa?=
- =?us-ascii?Q?oJPri325bozyBexu8i6G0+N2BhzpC9M8+44Kun8hzm7ikBPBk2XbbV17iteJ?=
- =?us-ascii?Q?5L8nEpcYUS+LKC20++tkVVentkciKikF62v62Zg9hwpUDUDNFOpJuWvDzCTL?=
- =?us-ascii?Q?boG9DMvDMZqS1QWjgvDDVgL9iLeZfCBVrr/KTTI+YqzALDr+fdKt5L3AGaEv?=
- =?us-ascii?Q?j7ewTO7Ruh99bABbR/zKprCJmITv6xtnMnl73uIkWkkoqbBaCIYAVNSkpimQ?=
- =?us-ascii?Q?HW+egCllsNqEe++TdE59Mo7gTwl/NElV9RAhbzSv0R+2fNXz8xyo+BlrL8bc?=
- =?us-ascii?Q?Genk1TbQln6zupjvhbTt95qRJUv5ZctMnrutnVcwtfyhsM38aMa/4YM0MXC2?=
- =?us-ascii?Q?+kiQ5YvwEw=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Date:   Fri, 29 Apr 2022 15:47:23 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Mingwei Zhang <mizhang@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: x86/mmu: fix potential races when walking host page
+ table
+Message-ID: <YmwIi3bXr/1yhYV/@google.com>
+References: <20220429031757.2042406-1-mizhang@google.com>
+ <4b0936bf-fd3e-950a-81af-fd393475553f@redhat.com>
+ <Ymv3vwBEgCH0CMPH@google.com>
+ <67222fe0-7bf0-ec7a-0791-a4d48391a15e@redhat.com>
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1270.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 91b0096f-b442-4f6e-bbb7-08da29f78a38
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Apr 2022 15:47:17.8531
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: uCpxE6omcYLT33FYer8WrW9cfJTfCUQfTyQt9WHAcecqOSv19Gb4fQFcUUDNo3fJgJg7Dllllo0RY2xpyxs16g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR21MB1653
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <67222fe0-7bf0-ec7a-0791-a4d48391a15e@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> Sent: Friday, April 29, 2022 3:15 AM
-> To: Dexuan Cui <decui@microsoft.com>
-> Cc: wei.liu@kernel.org; KY Srinivasan <kys@microsoft.com>; Haiyang Zhang
-> <haiyangz@microsoft.com>; Stephen Hemminger <sthemmin@microsoft.com>;
-> bhelgaas@google.com; linux-hyperv@vger.kernel.org;
-> linux-pci@vger.kernel.org; linux-kernel@vger.kernel.org; Michael Kelley (=
-LINUX)
-> <mikelley@microsoft.com>; robh@kernel.org; kw@linux.com; Jake Oshins
-> <jakeo@microsoft.com>
-> Subject: Re: [PATCH] PCI: hv: Do not set PCI_COMMAND_MEMORY to reduce
-> VM boot time
->=20
-> On Tue, Apr 19, 2022 at 03:00:07PM -0700, Dexuan Cui wrote:
-> > A VM on Azure can have 14 GPUs, and each GPU may have a huge MMIO
-> BAR,
-> > e.g. 128 GB. Currently the boot time of such a VM can be 4+ minutes, an=
-d
-> > most of the time is used by the host to unmap/map the vBAR from/to pBAR
-> > when the VM clears and sets the PCI_COMMAND_MEMORY bit: each
-> unmap/map
-> > operation for a 128GB BAR needs about 1.8 seconds, and the pci-hyperv
-> > driver and the Linux PCI subsystem flip the PCI_COMMAND_MEMORY bit
-> > eight times (see pci_setup_device() -> pci_read_bases() and
-> > pci_std_update_resource()), increasing the boot time by 1.8 * 8 =3D 14.=
-4
-> > seconds per GPU, i.e. 14.4 * 14 =3D 201.6 seconds in total.
-> >
-> > Fix the slowness by not turning on the PCI_COMMAND_MEMORY in
-> pci-hyperv.c,
-> > so the bit stays in the off state before the PCI device driver calls
-> > pci_enable_device(): when the bit is off, pci_read_bases() and
-> > pci_std_update_resource() don't cause Hyper-V to unmap/map the vBARs.
-> > With this change, the boot time of such a VM is reduced by
-> > 1.8 * (8-1) * 14 =3D 176.4 seconds.
->=20
-> I believe you need to clarify this commit message. It took me a while
-> to understand what you are really doing.
->=20
-> What this patch is doing is bootstrapping PCI devices with command
-> memory clear because there is no need to have it set (?) in the first
-> place and because, if it is set, the PCI core layer needs to toggle it
-> on and off in order to eg size BAR regions, which causes the slow down
-> you are reporting.
->=20
-> I assume, given the above, that there is strictly no need to have
-> devices with command memory set at kernel startup handover and if
-> there was it would not be set in the PCI Hyper-V host controller
-> driver (because that's what you are _removing_).
->=20
-> I think this should not be merged as a fix and I'd be careful
-> about possible regressions before sending it to stable kernels,
-> if you wish to do so.
->=20
-> It is fine by me to go via the Hyper-V tree even though I don't
-> see why that's better, unless you want to send it as a fix and
-> I think you should not.
->=20
-> You can add my tag but the commit log should be rewritten and
-> you should add a Link: to the discussion thread.
->=20
-> Acked-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+On Fri, Apr 29, 2022, Paolo Bonzini wrote:
+> On 4/29/22 16:35, Sean Christopherson wrote:
+> > On Fri, Apr 29, 2022, Paolo Bonzini wrote:
+> > > > +out:
+> > > > +	local_irq_restore(flags);
+> > > > +	return level;
+> > > > +}
+> > > > +EXPORT_SYMBOL_GPL(kvm_lookup_address_level_in_mm);
+> > > 
+> > > Exporting is not needed.
+> > > 
+> > > Thanks for writing the walk code though.  I'll adapt it and integrate the
+> > > patch.
+> > 
+> > But why are we fixing this only in KVM?  I liked the idea of stealing perf's
+> > implementation because it was a seemlingly perfect fit and wouldn't introduce
+> > new code (ignoring wrappers, etc...).
+> > 
+> > We _know_ that at least one subsystem is misusing lookup_address_in_pgd() and
+> > given that its wrappers are exported, I highly doubt KVM is the only offender.
+> > It really feels like we're passing the buck here by burying the fix in KVM.
+> 
+> There are two ways to do it:
+> 
+> * having a generic function in mm/.  The main issue there is the lack of a
+> PG_LEVEL_{P4D,PUD,PMD,PTE} enum at the mm/ level.  We could use (ctz(x) -
+> 12) / 9 to go from size to level, but it's ugly and there could be
+> architectures with heterogeneous page table sizes.
+> 
+> * having a generic function in arch/x86/.  In this case KVM seems to be the
+> odd one that doesn't need the PTE.  For example vc_slow_virt_to_phys needs
+> the PTE, and needs the size rather than the "level" per se.
+> 
+> So for now I punted, while keeping open the door for moving code from
+> arch/x86/kvm/ to mm/ if anyone else (even other KVM ports) need the same
+> logic.
 
-Thanks, Lorenzo! I'll post v2 with the commit message revised.
-It's ok to me to have this patch go through the hyperv-next branch
-rather than hyperv-fixes.
+Ugh.  I was going to say that KVM is the only in-tree user that's subtly broken,
+but then I saw vc_slow_virt_to_phys()...  So there's at least one other use case
+for walking user addresses and being able to tolerate a not-present mapping.
+
+There are no other users of lookup_address_in_mm(), and other than SEV-ES's
+dastardly use of lookup_address_in_pgd(), pgd can only ever come from init_mm or
+efi_mm, i.e. can't work with user address anyways.
+
+If we go the KVM-only route, can send the below revert along with it?  The least
+we can do is not give others an easy way to screw up.
+
+Until I saw the #VC crud, I was hoping we could also explicitly prevent using
+lookup_address_in_pgd() with user addresses.  If/when #VC is fixed, we can/should
+add this:
+
+@@ -592,6 +592,15 @@ pte_t *lookup_address_in_pgd(pgd_t *pgd, unsigned long address,
+
+ 	*level = PG_LEVEL_NONE;
+
++	/*
++	 * The below walk does not guard against user page tables being torn
++	 * down, attempting to walk a user address is dangerous and likely to
++	 * explode sooner or later.  This helper is intended only for use with
++	 * kernel-only mm_structs, e.g. init_mm and efi_mm.
++	 */
++	if (WARN_ON_ONCE(address < TASK_SIZE_MAX))
++		return NULL;
++
+
+
+From: Sean Christopherson <seanjc@google.com>
+Date: Fri, 29 Apr 2022 07:57:53 -0700
+Subject: [PATCH] Revert "x86/mm: Introduce lookup_address_in_mm()"
+
+Drop lookup_address_in_mm() now that KVM is providing it's own variant
+of lookup_address_in_pgd() that is safe for use with user addresses, e.g.
+guards against page tables being torn down.  A variant that provides a
+non-init mm is inherently dangerous and flawed, as the only reason to use
+an mm other than init_mm is to walk a userspace mapping, and
+lookup_address_in_pgd() does not play nice with userspace mappings, e.g.
+doesn't disable IRQs to block TLB shootdowns and doesn't use READ_ONCE()
+to ensure an upper level entry isn't converted to a huge page between
+checking the PAGE_SIZE bit and grabbing the address of the next level
+down.
+
+This reverts commit 13c72c060f1ba6f4eddd7b1c4f52a8aded43d6d9.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/include/asm/pgtable_types.h |  4 ----
+ arch/x86/mm/pat/set_memory.c         | 11 -----------
+ 2 files changed, 15 deletions(-)
+
+diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
+index 40497a9020c6..407084d9fd99 100644
+--- a/arch/x86/include/asm/pgtable_types.h
++++ b/arch/x86/include/asm/pgtable_types.h
+@@ -559,10 +559,6 @@ static inline void update_page_count(int level, unsigned long pages) { }
+ extern pte_t *lookup_address(unsigned long address, unsigned int *level);
+ extern pte_t *lookup_address_in_pgd(pgd_t *pgd, unsigned long address,
+ 				    unsigned int *level);
+-
+-struct mm_struct;
+-extern pte_t *lookup_address_in_mm(struct mm_struct *mm, unsigned long address,
+-				   unsigned int *level);
+ extern pmd_t *lookup_pmd_address(unsigned long address);
+ extern phys_addr_t slow_virt_to_phys(void *__address);
+ extern int __init kernel_map_pages_in_pgd(pgd_t *pgd, u64 pfn,
+diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+index abf5ed76e4b7..0656db33574d 100644
+--- a/arch/x86/mm/pat/set_memory.c
++++ b/arch/x86/mm/pat/set_memory.c
+@@ -638,17 +638,6 @@ pte_t *lookup_address(unsigned long address, unsigned int *level)
+ }
+ EXPORT_SYMBOL_GPL(lookup_address);
+
+-/*
+- * Lookup the page table entry for a virtual address in a given mm. Return a
+- * pointer to the entry and the level of the mapping.
+- */
+-pte_t *lookup_address_in_mm(struct mm_struct *mm, unsigned long address,
+-			    unsigned int *level)
+-{
+-	return lookup_address_in_pgd(pgd_offset(mm, address), address, level);
+-}
+-EXPORT_SYMBOL_GPL(lookup_address_in_mm);
+-
+ static pte_t *_lookup_address_cpa(struct cpa_data *cpa, unsigned long address,
+ 				  unsigned int *level)
+ {
+
+base-commit: 6f363ed2fa4c24c400acc29b659c96e4dc7930e8
+--
+
+
+

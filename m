@@ -2,300 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E32D6514842
+	by mail.lfdr.de (Postfix) with ESMTP id 5392B514840
 	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 13:34:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358528AbiD2LiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 07:38:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42700 "EHLO
+        id S1358507AbiD2LiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 07:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358492AbiD2LiE (ORCPT
+        with ESMTP id S1358492AbiD2LiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 07:38:04 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131A756C2D;
-        Fri, 29 Apr 2022 04:34:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651232086; x=1682768086;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+cVgl0hg4+FfEa3fwzkyzeeufuAMXREixA82G/CSzOQ=;
-  b=l6mSaaVQl4kixASiS5B71nUyWmSnAIrrqF3nUeiHj5+3h7K5urvOSgV3
-   wLRkS9P7PxhqyyU8T06JA2JQVZXf2bWt1v1mpDF6zZ1AILIglFjPMyrVT
-   7n7vq/u/pR9sf6aLndkxMFJ2m8KGFnFVXrnI89q9i7BSo4EhxlbKQJijo
-   Pe2anHbpUO94CWpnF0BNA1LNhax+5S8Dy1SqQQVJZnls/KXQSXUA3ABeq
-   v0ZTk2INvzEdfBaTrTc64j2tHkfEwm9ZEMEYK0TlQ1Y3Y2jr9ngf9OvdF
-   iyezDYuDDgYx8lYI8oaBQ4fciim0WlefTHcDE7w5nwfg7DQH/InhhrXfT
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="291789356"
-X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
-   d="scan'208";a="291789356"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 04:34:45 -0700
-X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
-   d="scan'208";a="582077415"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.58.231])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 04:34:36 -0700
-Message-ID: <e82c7ab0-605e-8795-58dd-dc182f80c6b3@intel.com>
-Date:   Fri, 29 Apr 2022 14:34:31 +0300
+        Fri, 29 Apr 2022 07:38:02 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2084.outbound.protection.outlook.com [40.107.243.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A3056C2D
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 04:34:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Bz+I43X87H/gNSxjxEtIghFIhk1hkK67oCvd5N1zr9mgQuMIY0J8XvqbQcMGvv7Cx8B0tSIdIC9HFogNGqzBj69Pdi/cwkEWDFrJ6pkulowYKicfr2nAUZ+OKMjhv+T9U1rP60wFLWfZBrjyHcoWAayVTm5Gv2oIwuWpTVfJTGL4xYJSAxhAa1o9pCG3Ymc+jZTJQ7HhGlyMIFH2uH5DdAs+gwhGAzbLEFRnmyRRPOuH1W9gNgHyBUJVBduPcqKAPYPoDpDx+4wxWUsWFfXqVUj0orkOPiuliLvgryFUnmLLU/UdTYO6OAt8JG+l3/LKSlLbstP7V8oCm8bWPjqb+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=a6IGux4P5Fa0CQnEfWmljPFeyRY/9+V7R77H36UR5zE=;
+ b=ofEXb80ZQwAmRr779OnyDbfTWx3O5VpvfM74DnL1zkxf5mB4hEeEq1yarb24qgrW0IFvu0jV2DVLMQwK2wFAg7m+tnJxWG1xpEc8wo0qsRxMXrxMdWNq18hFdEQeDEssqJKWpdu4hQ7Wqmdr1VzmSWvQUwE3lvBz9fikMSp2TMv4SPD/TWX8PP/tJWRMHsJg5hCqMz/w0t94bQBjscr4l7lqeYlAmMswvYBLim6lc5UHvT1sSQDzDc1oXh7yJQtn4b6yAHi+sJv40ipq2VIljFHLIe0iEAL5GxYrlpGCHfH97nkVC5evsS2JwmsAMiDuwaYEiJjpXzg1DnK89jm7gg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=a6IGux4P5Fa0CQnEfWmljPFeyRY/9+V7R77H36UR5zE=;
+ b=EruSZGYwu1R9Kp5OP7O4b+KzQbQ8LZJx/jl3kAiPSK6qga/ByzbmsO5gwQokWLmOL1r9ULfUlZb+6yNIvaGp/5SXmiv2jHjCR0aHpw8tZ/8odxwr1bzXvRgGNRjtyI/sD6JliwrpHI8gKEcCHy0v9g/p9cLKcKASaDlH9DnpOCo=
+Received: from DS7PR03CA0057.namprd03.prod.outlook.com (2603:10b6:5:3b5::32)
+ by SN4PR0201MB3582.namprd02.prod.outlook.com (2603:10b6:803:47::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.20; Fri, 29 Apr
+ 2022 11:34:41 +0000
+Received: from DM3NAM02FT037.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:5:3b5:cafe::c7) by DS7PR03CA0057.outlook.office365.com
+ (2603:10b6:5:3b5::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14 via Frontend
+ Transport; Fri, 29 Apr 2022 11:34:41 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT037.mail.protection.outlook.com (10.13.4.166) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5206.12 via Frontend Transport; Fri, 29 Apr 2022 11:34:41 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Fri, 29 Apr 2022 04:34:36 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Fri, 29 Apr 2022 04:34:36 -0700
+Envelope-to: linux-kernel@vger.kernel.org,
+ gregkh@linuxfoundation.org,
+ corbet@lwn.net,
+ linux-arm-kernel@lists.infradead.org,
+ arnd@arndb.de
+Received: from [10.254.241.50] (port=51646)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <michal.simek@xilinx.com>)
+        id 1nkOtQ-0002kI-1S; Fri, 29 Apr 2022 04:34:36 -0700
+Message-ID: <bdf10e9f-37e3-ee1d-481b-9285fa133a9e@xilinx.com>
+Date:   Fri, 29 Apr 2022 13:34:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.8.1
-Subject: Re: [PATCH v3 4/5] perf evlist: Respect all_cpus when setting
- user_requested_cpus
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] firmware: xilinx: add support for sd/usb/gem config
 Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>
-Cc:     Stephane Eranian <eranian@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        German Gomez <german.gomez@arm.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Alexander Antonov <alexander.antonov@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-References: <20220408035616.1356953-1-irogers@google.com>
- <20220408035616.1356953-5-irogers@google.com>
- <c9205f19-52bf-43fe-b1ab-b599d5e2cc7a@intel.com>
- <CAP-5=fVNuQDW+yge897RjaWfE3cfQTD4ufFws6PS2k99Qe05Uw@mail.gmail.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <CAP-5=fVNuQDW+yge897RjaWfE3cfQTD4ufFws6PS2k99Qe05Uw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+To:     Ronak Jain <ronak.jain@xilinx.com>, <michal.simek@xilinx.com>,
+        <linux-kernel@vger.kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <corbet@lwn.net>,
+        <linux-arm-kernel@lists.infradead.org>, <arnd@arndb.de>,
+        <lakshmi.sai.krishna.potthuri@xilinx.com>, <radheys@xilinx.com>,
+        <agodhasa@xilinx.com>
+References: <1651227402-17658-1-git-send-email-ronak.jain@xilinx.com>
+From:   Michal Simek <michal.simek@xilinx.com>
+In-Reply-To: <1651227402-17658-1-git-send-email-ronak.jain@xilinx.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: fa06f7b3-3cb9-4a6b-bffd-08da29d44029
+X-MS-TrafficTypeDiagnostic: SN4PR0201MB3582:EE_
+X-Microsoft-Antispam-PRVS: <SN4PR0201MB358255E376132EC0EE7F3EFFC6FC9@SN4PR0201MB3582.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: A5T8ntMeO9m7YLTLUB/RqEKBM+D+qqGXBMNG/aOe6swu7f2cX9S9MZIcjpssvZqyHhd+lI854HAER1/IP/NCQOM+PM3V/VkJaoU3DoeYRKcoxFlkXK9PcMk0w4EzNkfxqS/7xYA/OY3ZAASGkeAxEB89oN2KCsOyiLgWhdUki+TB96eJt0PgU+jSC3jLFsfKHeIZFywBVuulXbxdCHI6yxMZINBYBm/3XF4crLuWjsXU54Ej8zm/EM5TiVz1FRB7tQspLe7ANFx/mGkg591Pmdudi2KDum9yGuGBAKG1yD3vsPMh9WU7wrvbS76qe4tetJXV+dFh9N8F8DB2l73F1j5jxYf7KDgVgrL3IHZlbdtyoQgHjgon+EAFV1RYtL3u/ET7W6dnbhIri+bNn0Jf6+EC3T8r8SFSwUFvrn+Iw3eBrdsTLubD6xvMcpA+XkE6fBiG6GbM4AsX90b/SDlpY0IcAX5XjI+OSm6N7MPvH82BsaxkSpQXK6a+s9k59DamUhykODnz7VVw4cMBwyXBy8ZRgEMK4/kvgSnQn3EgBxJhJxb50+A0h0SRmeif95VRes6uVIGisDPPM5ACtG1myKT+h11ZmE9/SuxJRrNhTCS0+zr+C2f6Qh1/EHuJZmfYcZfaelVapMLZj9wcqL0dPhHNKg5jJVjhcLnVMroT7DM9X/409N2S5fwPaD7OdG2SKA6ed3BRET1gUjzUNbCOUEkOSoTYE16kDLl/pHdlCBQ=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(336012)(186003)(82310400005)(47076005)(356005)(44832011)(7636003)(426003)(316002)(107886003)(5660300002)(6666004)(8936002)(53546011)(2616005)(26005)(9786002)(31696002)(70586007)(70206006)(4744005)(4326008)(8676002)(36860700001)(508600001)(31686004)(2906002)(110136005)(36756003)(54906003)(83380400001)(40460700003)(50156003)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2022 11:34:41.1380
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fa06f7b3-3cb9-4a6b-bffd-08da29d44029
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT037.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR0201MB3582
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/04/22 23:49, Ian Rogers wrote:
-> On Thu, Apr 28, 2022 at 1:16 PM Adrian Hunter <adrian.hunter@intel.com <mailto:adrian.hunter@intel.com>> wrote:
-> 
->     On 8/04/22 06:56, Ian Rogers wrote:
->     > If all_cpus is calculated it represents the merge/union of all
->     > evsel cpu maps. By default user_requested_cpus is computed to be
->     > the online CPUs. For uncore events, it is often the case currently
->     > that all_cpus is a subset of user_requested_cpus. Metrics printed
->     > without aggregation and with metric-only, in print_no_aggr_metric,
->     > iterate over user_requested_cpus assuming every CPU has a metric to
->     > print. For each CPU the prefix is printed, but then if the
->     > evsel's cpus doesn't contain anything you get an empty line like
->     > the following on a 2 socket 36 core SkylakeX:
->     >
->     > ```
->     > $ perf stat -A -M DRAM_BW_Use -a --metric-only -I 1000
->     >      1.000453137 CPU0                       0.00
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137 CPU18                      0.00
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      1.000453137
->     >      2.003717143 CPU0                       0.00
->     > ...
->     > ```
->     >
->     > While it is possible to be lazier in printing the prefix and
->     > trailing newline, having user_requested_cpus not be a subset of
->     > all_cpus is preferential so that wasted work isn't done elsewhere
->     > user_requested_cpus is used. The change modifies user_requested_cpus
->     > to be the intersection of user specified CPUs, or default all online
->     > CPUs, with the CPUs computed through the merge of all evsel cpu maps.
->     >
->     > New behavior:
->     > ```
->     > $ perf stat -A -M DRAM_BW_Use -a --metric-only -I 1000
->     >      1.001086325 CPU0                       0.00
->     >      1.001086325 CPU18                      0.00
->     >      2.003671291 CPU0                       0.00
->     >      2.003671291 CPU18                      0.00
->     > ...
->     > ```
->     >
->     > Signed-off-by: Ian Rogers <irogers@google.com <mailto:irogers@google.com>>
->     > ---
->     >  tools/perf/util/evlist.c | 7 +++++++
->     >  1 file changed, 7 insertions(+)
->     >
->     > diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
->     > index 52ea004ba01e..196d57b905a0 100644
->     > --- a/tools/perf/util/evlist.c
->     > +++ b/tools/perf/util/evlist.c
->     > @@ -1036,6 +1036,13 @@ int evlist__create_maps(struct evlist *evlist, struct target *target)
->     >       if (!cpus)
->     >               goto out_delete_threads;
->     > 
->     > +     if (evlist->core.all_cpus) {
->     > +             struct perf_cpu_map *tmp;
->     > +
->     > +             tmp = perf_cpu_map__intersect(cpus, evlist->core.all_cpus);
-> 
->     Isn't an uncore PMU represented as being on CPU0 actually
->     collecting data that can be due to any CPU.
-> 
-> 
-> This is correct but the counter is only opened on CPU0 as the all_cpus cpu_map will only contain CPU0. Trying to dump the counter for say CPU1 will fail as there is no counter there. This is why the metric-only output isn't displaying anything above.
-
-That's not what happens for me:
-
-$ perf stat -A -M DRAM_BW_Use -a --metric-only -I 1000 -- sleep 1
-#           time CPU              DRAM_BW_Use 
-     1.001114691 CPU0                       0.00 
-     1.001114691 
-     1.001114691 
-     1.001114691 
-     1.001114691 
-     1.001114691 
-     1.001114691 
-     1.001114691 
-     1.001114691 
-     1.001114691 
-     1.001114691 
-     1.001114691 
-     1.001114691 
-     1.001114691 
-     1.001114691 
-     1.001114691 
-     1.001114691 
-     1.001114691 
-     1.001114691 
-     1.001114691 
-     1.001114691 
-     1.001114691 
-     1.001114691 
-     1.001114691 
-     1.001114691 
-     1.001114691 
-     1.001114691 
-     1.001114691 
-     1.002265387 CPU0                       0.00 
-     1.002265387 
-     1.002265387 
-     1.002265387 
-     1.002265387 
-     1.002265387 
-     1.002265387 
-     1.002265387 
-     1.002265387 
-     1.002265387 
-     1.002265387 
-     1.002265387 
-     1.002265387 
-     1.002265387 
-     1.002265387 
-     1.002265387 
-     1.002265387 
-     1.002265387 
-     1.002265387 
-     1.002265387 
-     1.002265387 
-     1.002265387 
-     1.002265387 
-     1.002265387 
-     1.002265387 
-     1.002265387 
-     1.002265387 
-     1.002265387 
-
-perf stat -A -M DRAM_BW_Use -a --metric-only -I 1000 -C 1 -- sleep 1
-#           time CPU              DRAM_BW_Use 
-     1.001100827 CPU1                       0.00 
-     1.002128527 CPU1                       0.00 
 
 
->  
+On 4/29/22 12:16, Ronak Jain wrote:
+> Add new APIs in firmware to configure SD/GEM/USB registers. Internally
+> it calls PM IOCTL for below SD/GEM/USB register configuration:
+> - SD/EMMC select
+> - SD slot type
+> - SD base clock
+> - SD 8 bit support
+> - GEM SGMII Mode
+> - SD fixed config
+> - GEM fixed config
+> - USB fixed config
 > 
->     Or for an uncore PMU represented as being on CPU0-CPU4 on a
->     4 core 8 hyperthread processor, actually 1 PMU per core.
-> 
-> 
-> In this case I believe the CPU map will be CPU0, CPU2, CPU4, CPU6. To get the core counter for hyperthreads on CPU0 and CPU1 you read on CPU0, there is no counter on CPU1 and trying to read it will fail as the counters are indexed by a cpu map index into the all_cpus . Not long ago I cleaned up the cpu_map code as there was quite a bit of confusion over cpus and indexes which were both of type int.
->  
-> 
->     So I am not sure intersection makes sense.
-> 
->     Also it is not obvious what happens with hybrid CPUs or
->     per thread recording.
-> 
-> 
-> The majority of code is using all_cpus, and so is unchanged by this change.
+> Signed-off-by: Ronak Jain <ronak.jain@xilinx.com>
 
-I am not sure what you mean.  Every tool uses this code.  It affects everything when using PMUs with their own cpus.
+I think it was said that you shouldn't send interface changes without any user.
+It means every function you add should be also used.
 
- Code that is affected, when it say needs to use counters, needs to check that the user CPU was valid in all_cpus, and use the all_cpus index. The metric-only output could be fixed in the same way, ie don't display lines when the user_requested_cpu isn't in all_cpus. I prefered to solve the problem this way as it is inefficient  to be processing cpus where there can be no corresponding counters, etc. We may be setting something like affinity unnecessarily - although that doesn't currently happen as that code iterates over all_cpus. I also think it is confusing from its name when the variable all_cpus is for a cpu_map that contains fewer cpus than user_requested_cpus - albeit that was worse when user_requested_cpus was called just cpus.
-> 
-> It could be hybrid or intel-pt have different assumptions on these cpu_maps. I don't have access to a hybrid test system. For intel-pt it'd be great if there were a perf test. Given that most code is using all_cpus and was cleaned up as part of the cpu_map work, I believe the change to be correct.
-
-Mainly what happens if you try to intersect all_cpus with dummy cpus?
-
-> 
-> Thanks,
-> Ian
-> 
-> 
->     > +             perf_cpu_map__put(cpus);
->     > +             cpus = tmp;
->     > +     }
->     >       evlist->core.has_user_cpus = !!target->cpu_list && !target->hybrid;
->     > 
->     >       perf_evlist__set_maps(&evlist->core, cpus, threads);
-> 
-
+Thanks,
+Michal

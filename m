@@ -2,66 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9C5F515911
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 01:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B24AD51591E
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 01:44:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381892AbiD2XfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 19:35:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57560 "EHLO
+        id S1380419AbiD2XrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 19:47:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381857AbiD2Xew (ORCPT
+        with ESMTP id S239891AbiD2XrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 19:34:52 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE96DB498
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 16:31:17 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id a11so8117053pff.1
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 16:31:17 -0700 (PDT)
+        Fri, 29 Apr 2022 19:47:15 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B30DB0D9
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 16:43:55 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id x52so6556771pfu.11
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 16:43:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=kWF9sCGDLZUK2sgoEIyeIZNot5TI6mJu4iu2/5YFEbs=;
-        b=I4ZrQ02qj5Y2kq+RsM7F/x4rltUPs85PI2jsCeDO07YWMOe6ICw4kN17iLW+muuqND
-         2bWJtIApxcoKrH7Rg0IB1waVaa3UXApFafxIED0m+uPDHTF/qJAhg5tYHoAsW/JXVomS
-         IxQh1fKEWGgxxaxu1B9nw7vg8ahhN4fv107mQ=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wiS8qEoWRaz1WJHgDpdYQzj9UXTuORSLeUZZBuLbpAQ=;
+        b=QfV9qZQSy7zKpLgp3XKRuVVGQgXKgCEdZT8M6YLWLWuzskyledgrDoNbnEeL6+vdAy
+         J1x4CD4N/XKato7QqwqelKbTKiWvYbwUH3sZuY4jCfH6bKi9uUj8MsW6jOFLQXVjURAX
+         OatmJuCqt75DW8gtrxh6zZLgi05jRW6xz/fmM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=kWF9sCGDLZUK2sgoEIyeIZNot5TI6mJu4iu2/5YFEbs=;
-        b=U03E6CTIDk5R02hOR+rlXLaAW3jPgVcqBZ7mSrsPcDIkfb5F9AgHT1xU9NhjVQGiFP
-         hmi8SnBOabnVBiBlokBpXM8Zf6u81BCwhrElttF3zoOkhNW+wfOnwzESb0U7lBWEJ7t7
-         OHVfkvHAmAos3n4GvmArATpfq3f3S7o0enH7wLyk2sykhsChr3nBha51N35uc3MphMs4
-         AJFk+WDer4cnlW+9SSOjrzH2NmzH6i9PZYaib1qwKGSmJFoIxNGzSe6AxWrJdPygmzdU
-         p1EPfwDSw4cQLKSrTM4x2Ypf85RxR1Aw03dfFaBiTnUDtB/4lpzzOL4TyJ77k3Y6pjsZ
-         9uUw==
-X-Gm-Message-State: AOAM532q3RjHhU38mCf3PlfbmWC1hGeQ2qB1CbKV6GeZk/0X7amNct9E
-        GQlVH94MZqWBFrjNZ6TC+Vlb0g==
-X-Google-Smtp-Source: ABdhPJxVK4eELgvKjci8XyIkVF5wrZqTYg/voZE1BMP5wikFWF4v/Rp0TQ1AOSdMffDPdkjReT+NiA==
-X-Received: by 2002:a05:6a00:24ce:b0:50d:c14b:b655 with SMTP id d14-20020a056a0024ce00b0050dc14bb655mr1240258pfv.57.1651275076720;
-        Fri, 29 Apr 2022 16:31:16 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:202:201:5172:14b3:3687:1fb0])
-        by smtp.gmail.com with ESMTPSA id i24-20020aa78b58000000b0050dc762818esm223037pfd.104.2022.04.29.16.31.15
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wiS8qEoWRaz1WJHgDpdYQzj9UXTuORSLeUZZBuLbpAQ=;
+        b=lLdm5FetkXNRpJR6HiwX3C5T8PFgz2gxWUXXIkYt6yjXRFVXQ3f1DEPEZAGLpiWjMY
+         RIKSE24XNAwsE3T6pa9K5PDUmD8IIgzPUv/5j/+D824SxMWm6apiadUqjpjmpkqXHqnn
+         5EpNgsUmltZ/3Rn6famE+GLgS8n9Up04vqWV3hVfODWIhz8C/9/2X4Wwj9taS7gSyNHe
+         gFRX7IT77WHhWT7UNMpfF3W7m8ZUGZxf7fsV93Fw4IISZMS5A3ecpgTwHhUnDX6ee/fR
+         locdAticewiJ9bDWMykiwmIexlRrrBFaOchxrAGXmVmdqrFZhVesrwQZDit5JuN7hVey
+         icWw==
+X-Gm-Message-State: AOAM530+cZLfavUMbTmNiuAU9dw8SfGiuxk3+wMp7ftWWNcwCmq2wB/z
+        i5BLka/BxxlyrTCh4QcuJOo8cA==
+X-Google-Smtp-Source: ABdhPJyGwn4LqJY11HpxsF3RCIIDl8jF0wjSNEEMrwJ5U7v246J/p3J5Kt/Ft8+Hq1Ze7VFy0q1q0g==
+X-Received: by 2002:a05:6a00:190f:b0:50d:8b82:cb90 with SMTP id y15-20020a056a00190f00b0050d8b82cb90mr1532752pfi.65.1651275835135;
+        Fri, 29 Apr 2022 16:43:55 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:408:3697:902b:59f1])
+        by smtp.gmail.com with ESMTPSA id r1-20020a1709028bc100b0015e8d4eb26dsm152563plo.183.2022.04.29.16.43.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 16:31:16 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        chrome-platform@lists.linux.dev,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
+        Fri, 29 Apr 2022 16:43:54 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Cc:     swboyd@chromium.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        freedreno@lists.freedesktop.org,
+        Saravana Kannan <saravanak@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-arm-msm@vger.kernel.org,
         Douglas Anderson <dianders@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        "Joseph S. Barrera III" <joebar@chromium.org>
-Subject: [PATCH v2 2/2] Input: cros-ec-keyb - skip keyboard registration for switches compatible
-Date:   Fri, 29 Apr 2022 16:31:12 -0700
-Message-Id: <20220429233112.2851665-3-swboyd@chromium.org>
+        Daniel Scally <djrscally@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] device property: Fix recent breakage of fwnode_get_next_parent_dev()
+Date:   Fri, 29 Apr 2022 16:43:47 -0700
+Message-Id: <20220429164325.1.I2a3b980ea051e59140227999f0f0ca16f1125768@changeid>
 X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-In-Reply-To: <20220429233112.2851665-1-swboyd@chromium.org>
-References: <20220429233112.2851665-1-swboyd@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -73,71 +75,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In commit 4352e23a7ff2 ("Input: cros-ec-keyb - only register keyboard if
-rows/columns exist") we skipped registration of the keyboard if the
-row/columns property didn't exist, but that has a slight problem for
-existing DTBs. The DTBs have the rows/columns properties, so removing
-the properties to indicate only switches exist makes this keyboard
-driver fail to probe, resulting in broken power and volume buttons. Ease
-the migration of existing DTBs by skipping keyboard registration if the
-google,cros-ec-keyb-switches compatible exists.
+Due to a subtle typo, instead of commit 87ffea09470d ("device
+property: Introduce fwnode_for_each_parent_node()") being a no-op
+change, it ended up causing the display on my sc7180-trogdor-lazor
+device from coming up unless I added "fw_devlink=off" to my kernel
+command line. Fix the typo.
 
-The end result is that new DTBs can either choose to remove the matrix
-keymap properties or leave them in place and add this new compatible
-indicating the matrix keyboard properties should be ignored. Existing
-DTBs will continue to work, but they will keep registering the keyboard
-that does nothing. To fix that problem we can add this extra compatible
-to existing DTBs and the keyboard will stop being registered. Finally,
-if google,cros-ec-keyb is missing then this driver won't even attempt to
-register the matrix keyboard.
-
-Cc: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: <devicetree@vger.kernel.org>
-Cc: Benson Leung <bleung@chromium.org>
-Cc: Guenter Roeck <groeck@chromium.org>
-Cc: Douglas Anderson <dianders@chromium.org>
-Cc: Hsin-Yi Wang <hsinyi@chromium.org>
-Cc: "Joseph S. Barrera III" <joebar@chromium.org>
-Fixes: 4352e23a7ff2 ("Input: cros-ec-keyb - only register keyboard if rows/columns exist")
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+Fixes: 87ffea09470d ("device property: Introduce fwnode_for_each_parent_node()")
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
- drivers/input/keyboard/cros_ec_keyb.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/input/keyboard/cros_ec_keyb.c b/drivers/input/keyboard/cros_ec_keyb.c
-index eef909e52e23..1bbe2987bf52 100644
---- a/drivers/input/keyboard/cros_ec_keyb.c
-+++ b/drivers/input/keyboard/cros_ec_keyb.c
-@@ -536,6 +536,12 @@ static int cros_ec_keyb_register_matrix(struct cros_ec_keyb *ckdev)
- 	u32 *physmap;
- 	u32 key_pos;
- 	unsigned int row, col, scancode, n_physmap;
-+	bool register_keyboard;
-+
-+	/* Skip matrix registration if no keyboard */
-+	register_keyboard = device_get_match_data(dev);
-+	if (!register_keyboard)
-+		return 0;
+ drivers/base/property.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/base/property.c b/drivers/base/property.c
+index 36401cfe432c..52e85dcb20b5 100644
+--- a/drivers/base/property.c
++++ b/drivers/base/property.c
+@@ -600,7 +600,7 @@ struct device *fwnode_get_next_parent_dev(struct fwnode_handle *fwnode)
+ 	struct device *dev;
  
- 	/*
- 	 * No rows and columns? There isn't a matrix but maybe there are
-@@ -718,8 +724,13 @@ static int cros_ec_keyb_remove(struct platform_device *pdev)
- 
- #ifdef CONFIG_OF
- static const struct of_device_id cros_ec_keyb_of_match[] = {
--	{ .compatible = "google,cros-ec-keyb" },
--	{},
-+	{
-+		/* Must be first */
-+		.compatible = "google,cros-ec-keyb",
-+		.data = (void *)true
-+	},
-+	{ .compatible = "google,cros-ec-keyb-switches" },
-+	{}
- };
- MODULE_DEVICE_TABLE(of, cros_ec_keyb_of_match);
- #endif
+ 	fwnode_for_each_parent_node(fwnode, parent) {
+-		dev = get_dev_from_fwnode(fwnode);
++		dev = get_dev_from_fwnode(parent);
+ 		if (dev) {
+ 			fwnode_handle_put(parent);
+ 			return dev;
 -- 
-https://chromeos.dev
+2.36.0.464.gb9c8b46e94-goog
 

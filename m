@@ -2,133 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 669DB51456F
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 11:29:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94640514571
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 11:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356599AbiD2Jcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 05:32:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57600 "EHLO
+        id S1356613AbiD2Jc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 05:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355149AbiD2Jc1 (ORCPT
+        with ESMTP id S1356605AbiD2Jcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 05:32:27 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52AFCC614B
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 02:29:10 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id z21so6113727pgj.1
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 02:29:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=w4FjUf2amMnNtUM3V1WSRpaIR/soCAC2c85qDmCjOYc=;
-        b=K9CnZU+/0z9xMzif3fRMoJjXJkuNq60CeRCRh5VLytY8yubdi+yIuv9aOsW3irFnFK
-         D28P474QuFLWnSyWnni4h4y8V6RBhIkSKhB90CZ6BPN9WNJcdLmDs7a2YFeDs1rzXuBP
-         8UAE9YTkek0MIqooOekEHuPW+QtULxUAD52NZO7Bs4wp5rRNjnK+bJrTgqV6Ylbe+k29
-         8uAKdmscOwhXM1f+1vN+W+gL0drUieSfVqbX9Xgh3sR7EQiR8VAXfqfe/7Pmbft8zRr8
-         1uHHRxNeqNygwy/mIkmgzmGvewkrVf2z+yyBskQeEFEn2UBFkAHCpS0xXFrWKz//h2Y1
-         D1Og==
+        Fri, 29 Apr 2022 05:32:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2849DC44EA
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 02:29:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651224575;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QgB5yaRKGIdlayUhadpAeJYzfWS9JALUqL7mNuN6Qd8=;
+        b=CAhtVp3zNbd5IpGLIyzp6OKgW4wohBslgsOsmBvRCbG4E7i4DJgbW+Ic0ZxQJE5qIsury/
+        SMhLkUCeOKyRYigQUNPOjrZSfc9UWaPVxvSqaimLLvYr/HP2R/NO5wst3WUIwpcFsdtBRe
+        pp7Vw6RyiRtzgRAy3Ks8ikK2sagjcNs=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-466-MSGFfOsyNr2xevOI8XMcfA-1; Fri, 29 Apr 2022 05:29:33 -0400
+X-MC-Unique: MSGFfOsyNr2xevOI8XMcfA-1
+Received: by mail-wm1-f72.google.com with SMTP id t184-20020a1c46c1000000b00394209f54f1so331109wma.4
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 02:29:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=w4FjUf2amMnNtUM3V1WSRpaIR/soCAC2c85qDmCjOYc=;
-        b=6j4NlTelSy+Y0Dmt9okly1TZGhttxpFSQ8ErujXO5W1pl6aEea/01mJDcIfZVfk56c
-         5lg3tkrC1Z1YpnxY0tNyCOKfYL+0bhVKqPgIrEJj25/qX0FtOZ3ArR5XaHYk5QSsl0Vg
-         nDY87DHZbHxPwdgOz36WCNwTQ/wU6gPHTecrzseIshJm/+FA/eTBSG8flAwENiq/OMyF
-         XNQUXRiavPl1vmXywMfFxu0K6r96vRIHo8AybVgQNoIptt6gFCxXSEKf0rhXA4EXECks
-         1rmXl+IcfFUghTDReVWvct/MlgEHsIq21vLuLjywcnsey7JlTFLJPTI1bRggFvVxj+KO
-         6mSg==
-X-Gm-Message-State: AOAM531mVuMlJYXzWqZxBea3y1aAu8tSBuEBUSMZ4FLStYSvUexexzKE
-        NO8Jg+Z/Ovw1riPbzUvzo7Ozww==
-X-Google-Smtp-Source: ABdhPJw6HNqq1pkJWNK3hVs7G1xGbJlSodfksqf+r/oPYZLoq5I18X82UBuTNvWz71NQQyjUIxIU9w==
-X-Received: by 2002:a65:4c0c:0:b0:3c1:5bb1:6701 with SMTP id u12-20020a654c0c000000b003c15bb16701mr8682654pgq.136.1651224549581;
-        Fri, 29 Apr 2022 02:29:09 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s ([204.124.180.65])
-        by smtp.gmail.com with ESMTPSA id i127-20020a62c185000000b0050d4869918csm2345460pfg.216.2022.04.29.02.29.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 02:29:09 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 17:28:59 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     Andi Kleen <ak@linux.intel.com>, Ali Saidi <alisaidi@amazon.com>,
-        Nick.Forrington@arm.com, acme@kernel.org,
-        alexander.shishkin@linux.intel.com, andrew.kilroy@arm.com,
-        benh@kernel.crashing.org, german.gomez@arm.com,
-        james.clark@arm.com, john.garry@huawei.com, jolsa@kernel.org,
-        kjain@linux.ibm.com, lihuafei1@huawei.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
-        mathieu.poirier@linaro.org, mingo@redhat.com, namhyung@kernel.org,
-        peterz@infradead.org, will@kernel.org
-Subject: Re: [PATCH v5 2/5] perf: Add SNOOP_PEER flag to perf mem data struct
-Message-ID: <20220429092859.GA645492@leoy-ThinkPad-X240s>
-References: <c17dedde-6ba8-db9b-4827-32477f039764@linux.intel.com>
- <20220422212249.22463-1-alisaidi@amazon.com>
- <20220423063805.GA559531@leoy-ThinkPad-X240s>
- <8e09af67-a416-4ead-b406-6c8b998de344@linux.intel.com>
- <20220424114302.GB978927@leoy-ThinkPad-X240s>
- <b4aaf1ed-124d-1339-3e99-a120f6cc4d28@linux.intel.com>
- <20220427161908.GE562576@leoy-ThinkPad-X240s>
- <9923422f-2dd3-9951-5814-ab3972e67758@linux.intel.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=QgB5yaRKGIdlayUhadpAeJYzfWS9JALUqL7mNuN6Qd8=;
+        b=YyK44WS5ckvzIWHqmmk28a8Upc9+N9XYHMhUOxKDP+8EVGbEuLLEpENTiHKzm5A/z5
+         JgHcvJzlWDxHwPt2NBoupj6G5tWjxSVTSJGLwrHEGO8oTI45FfaDi9EdwgS8amZbERfh
+         EI0gBOfBOXhBXhE3m8qe1SFIIVaoSuZbUN7jn8oWpzFiF+LTyQSPvSYNdRYxHuTf3DY5
+         yltkS5xuRKo2enouY6dcQIiqpgcnc2qfolQGbLguflxUSUwXX6ZleLnTgdM+0Dlo1oww
+         hO1JYt99uVGfkQz3zPCbheCGKwlzRFAJMpQS1zM6Jc8MrsBcs0pUkN883g1m3tY57c4T
+         k32g==
+X-Gm-Message-State: AOAM533BdkuMJwPRYtecNoqgi6MhaiOAlZCT9YqlSVi07cg7sI9Lc2nI
+        jgE+qKANAH5Pt0fh5bbKbhLjPdho10kApEsx0qTUcsdTYFuVUu0+djV4m1sltEoiPXv8evh5hca
+        hGRttio3Maz4aawZxWrK28xLA
+X-Received: by 2002:a05:600c:1e1d:b0:394:2183:e75c with SMTP id ay29-20020a05600c1e1d00b003942183e75cmr1449447wmb.203.1651224572507;
+        Fri, 29 Apr 2022 02:29:32 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwkEWzgTJZjaYtD3yVNYsqURSYJbIbWoBwBM9HWJh9gbQs/M7ikohXN+kV9+WxpKCCTka/Prw==
+X-Received: by 2002:a05:600c:1e1d:b0:394:2183:e75c with SMTP id ay29-20020a05600c1e1d00b003942183e75cmr1449435wmb.203.1651224572300;
+        Fri, 29 Apr 2022 02:29:32 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c707:fe00:bbeb:98e6:617a:dea1? (p200300cbc707fe00bbeb98e6617adea1.dip0.t-ipconnect.de. [2003:cb:c707:fe00:bbeb:98e6:617a:dea1])
+        by smtp.gmail.com with ESMTPSA id q14-20020a1cf30e000000b0038986a18ec8sm2140400wmq.46.2022.04.29.02.29.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 02:29:31 -0700 (PDT)
+Message-ID: <95216c6f-0614-cadc-d256-92a172d8b8cd@redhat.com>
+Date:   Fri, 29 Apr 2022 11:29:30 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9923422f-2dd3-9951-5814-ab3972e67758@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v4] mm: Using for_each_online_node and node_online instead
+ of open coding
+Content-Language: en-US
+To:     Peng Liu <liupeng256@huawei.com>, mike.kravetz@oracle.com,
+        akpm@linux-foundation.org, yaozhenguo1@gmail.com,
+        baolin.wang@linux.alibaba.com, songmuchun@bytedance.com,
+        liuyuntao10@huawei.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, wangkefeng.wang@huawei.com,
+        dave@stgolabs.net, wangborong@cdjrlc.com,
+        linux-ia64@vger.kernel.org, adobriyan@gmail.com
+References: <20220413032915.251254-4-liupeng256@huawei.com>
+ <20220429030218.644635-1-liupeng256@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220429030218.644635-1-liupeng256@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 03:29:31PM -0400, Liang, Kan wrote:
-
-[...]
-
-> > It's a bit difficult for me to make decision is because now SNOOPX_FWD
-> > is not used in the file util/mem-events.c, so I am not very sure if
-> > SNOOPX_FWD has the consistent usage across different arches.
+On 29.04.22 05:02, Peng Liu wrote:
+> Use more generic functions to deal with issues related to online
+> nodes. The changes will make the code simplified.
 > 
-> No, it's used in the file util/mem-events.c
-> See perf_mem__snp_scnprintf().
+> Signed-off-by: Peng Liu <liupeng256@huawei.com>
+> Suggested-by: Davidlohr Bueso <dave@stgolabs.net>
+> Suggested-by: Andrew Morton <akpm@linux-foundation.org>
+> ---
 
-Right.  Actually I mean FWD flag is not for statistics.
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-> > On the other hand, I sent a patch for 'peer' flag statistics [1], you
-> > could review it and it only stats for L2 and L3 cache level for local
-> > node.
-> 
-> If it's for the local node, why don't you use the hop level which is
-> introduced recently by Power? The below seems a good fit.
-> 
-> PERF_MEM_LVLNUM_ANY_CACHE | PERF_MEM_HOPS_0?
-> 
-> /* hop level */
-> #define PERF_MEM_HOPS_0		0x01 /* remote core, same node */
-> #define PERF_MEM_HOPS_1		0x02 /* remote node, same socket */
-> #define PERF_MEM_HOPS_2		0x03 /* remote socket, same board */
-> #define PERF_MEM_HOPS_3		0x04 /* remote board */
-> /* 5-7 available */
-> #define PERF_MEM_HOPS_SHIFT	43
 
-Thanks for reminding.  I have considered HOPS flags during the
-discussion with Ali for the flags, you could see PERF_MEM_HOPS_0 is for
-"remote core, same node", this could introduce confusion for Arm
-Neoverse CPUs.  Another thinking is how we consume the flags in perf c2c
-tool, perf c2c tool uses snoop flag to find out the costly cache
-conherency operations, if we use PERF_MEM_HOPS_0 that means we need to
-extend perf c2c tool to support two kinds of flags: snoop flag and hop
-flag, so it would introduce complexity for perf c2c code.
-
-If we step back to review current flags, we can see different arches
-have different memory model (and implementations), it is a bit painful
-when we try to unify the flags.  So at current stage, I prefer to use
-PEER flag for Arm arches, essentially it's not too bad that now we
-introduce one bit, and later we may consider to consolidate memory
-flags in more general way.
-
+-- 
 Thanks,
-Leo
+
+David / dhildenb
+

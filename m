@@ -2,108 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA44C514AF3
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 15:44:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3696514B07
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 15:47:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376257AbiD2NsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 09:48:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56154 "EHLO
+        id S1376397AbiD2Nuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 09:50:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbiD2NsG (ORCPT
+        with ESMTP id S1352209AbiD2Nuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 09:48:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ACB09CC505
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 06:44:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651239886;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UDj5WuEkt2jbvnjpEjTkCXpcFNBSD6t6DGzm1raGCao=;
-        b=ScmS9EBVuLmK1vS8rYKhK6p/kSQu/JZgN8rZCinSaG762nk+3dd6QEhjvYM0dM5R7rgIIT
-        KSVTLX4eqT73sMarEscBWNbWOvKW0JbJ6bw5UeU26Sky2tWFxZoq3oVz/wtdHQQLXvDHz5
-        2eMgSAho74nLBwpaKI7xH0j1k0x/oic=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-249-XZvc0YF1PkGd5Pjh6j2R5g-1; Fri, 29 Apr 2022 09:44:45 -0400
-X-MC-Unique: XZvc0YF1PkGd5Pjh6j2R5g-1
-Received: by mail-ed1-f69.google.com with SMTP id c23-20020a50d657000000b00425d5162a0dso4547422edj.16
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 06:44:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UDj5WuEkt2jbvnjpEjTkCXpcFNBSD6t6DGzm1raGCao=;
-        b=PjNxOz7mz5Pv56vmOtjnR5x1vx3BSNbb4AAKJmAO45rYU7LUBhH6p8jYNubGVWoqNn
-         A7sowRjycFnlUbipTrl8wlUpN0l3zclfeXRubNKTDeGsy0RzAPJkCzHBzkqb/iAK16FG
-         VuhjbQg80L3gx8guKiXn+oR/8WEhKGbqEBBD9zsKkdH4UEZepCIX1gmXZu8OZxPIrqV+
-         ZEj5mwZ6lm+XePEdf4TfcYW0QgP9RPgdqRsEk0yVty7ONk28eYaE9rRD36HpVYiMQjYf
-         3gsJxKmwlp7LvEfKqGhEhn+V6MkPkF2GkEbDBR/akdBPde0fSdBZg45DAN5hKL28Syx6
-         3Xog==
-X-Gm-Message-State: AOAM532wctFODdgRY/bjc8A3SQgaqtmPBbpxFjRVaeRyh3VMTXm0CsA8
-        VamtxI++8eF6ujJy9Noh3pr1rf5k+eax6bPgzyv12zYINDQ6ehl/1can2LGbnSOTQh/FrY5hPs9
-        aUjBJDVH5UtO1+9lg/DUsQnm8
-X-Received: by 2002:a17:907:2bde:b0:6f3:8e91:3a60 with SMTP id gv30-20020a1709072bde00b006f38e913a60mr25351073ejc.434.1651239884320;
-        Fri, 29 Apr 2022 06:44:44 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwUW/EpO7oevKVE1vHoaxwIgCgKphIKNbFx7+URDUEXgds63INrXzLAMgs5yfMhCApWQxOrug==
-X-Received: by 2002:a17:907:2bde:b0:6f3:8e91:3a60 with SMTP id gv30-20020a1709072bde00b006f38e913a60mr25351062ejc.434.1651239884143;
-        Fri, 29 Apr 2022 06:44:44 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
-        by smtp.googlemail.com with ESMTPSA id og13-20020a1709071dcd00b006f3ef214e3fsm657851ejc.165.2022.04.29.06.44.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 06:44:43 -0700 (PDT)
-Message-ID: <b63a373a-be17-33ca-11f6-2dd36162844b@redhat.com>
-Date:   Fri, 29 Apr 2022 15:44:42 +0200
+        Fri, 29 Apr 2022 09:50:50 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85220CB031;
+        Fri, 29 Apr 2022 06:47:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=C2OEpCl3NbPTnDM8xzX2S4IX9JfHaO7AlvKh6b2mc6o=; b=pqe8NQsff608mhiYOzk5PDnm3n
+        SqpJEt2cMOf7fKd9x6EBmHDeHOX5PyCqZaiQd+rsoiJqYRJfq3hy0YC1K+f5G6E1EYGyBkHkky/4o
+        A4sr1jLh/ZiZsTRb8VvM35RQhf4WjzvO8x5RrxtfBf8C8C5PVdUgz7Ik51+zFewe+U63oi8LhMtjA
+        jsMfNQ3e75qfSDrR+BCOQg4pDZsV5C5nFo1cAeFeQ7vSqL72QRCGkkh8ptmyZp43zUawgc2bKvA+V
+        5dpGhl6WFgQXUob6WnQm5VHnfuqrvgLJ/w/gTZOEZRu0JtLeyWnhBKRg4Xfo6FA1ZDb4qCsQBNlya
+        WoHGALzQ==;
+Received: from [179.113.53.197] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nkQxe-0007JF-GW; Fri, 29 Apr 2022 15:47:06 +0200
+Message-ID: <832eecc5-9569-1d95-6ab8-f029b660dfcb@igalia.com>
+Date:   Fri, 29 Apr 2022 10:46:35 -0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
-Subject: Re: [PATCH v3] KVM: SEV: Mark nested locking of vcpu->lock
+Subject: Re: [PATCH 17/30] tracing: Improve panic/die notifiers
 Content-Language: en-US
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Peter Gonda <pgonda@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220407195908.633003-1-pgonda@google.com>
- <CAFNjLiXC0AdOw5f8Ovu47D==ex7F0=WN_Ocirymz4xL=mWvC5A@mail.gmail.com>
- <CAMkAt6r-Mc_YN-gVHuCpTj4E1EmcvyYpP9jhtHo5HRHnoNJAdA@mail.gmail.com>
- <CAMkAt6r+OMPWCbV_svUyGWa0qMzjj2UEG29G6P7jb6uH6yko2w@mail.gmail.com>
- <62e9ece1-5d71-f803-3f65-2755160cf1d1@redhat.com>
- <CAMkAt6q6YLBfo2RceduSXTafckEehawhD4K4hUEuB4ZNqe2kKg@mail.gmail.com>
- <4c0edc90-36a1-4f4c-1923-4b20e7bdbb4c@redhat.com>
- <CAMkAt6oL5qi7z-eh4z7z8WBhpc=Ow6WtcJA5bDi6-aGMnz135A@mail.gmail.com>
- <CAMkAt6rmDrZfN5DbNOTsKFV57PwEnK2zxgBTCbEPeE206+5v5w@mail.gmail.com>
- <20220429010312.4013-1-hdanton@sina.com>
- <20220429114012.4127-1-hdanton@sina.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220429114012.4127-1-hdanton@sina.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, senozhatsky@chromium.org,
+        stern@rowland.harvard.edu, tglx@linutronix.de, vgoyal@redhat.com,
+        vkuznets@redhat.com, will@kernel.org
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-18-gpiccoli@igalia.com>
+ <b8771b37-01f5-f50b-dbb3-9db4ee26e67e@gmail.com>
+ <20220429092351.10bca4dd@gandalf.local.home>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20220429092351.10bca4dd@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/29/22 13:40, Hillf Danton wrote:
-> To avoid acquiring more than one mutexes at the same time, add a completion
-> in paralle to the mutex in question and ask mutex locker for non-migration
-> purpose to take a nap on completion instead of mutex.
+On 29/04/2022 10:23, Steven Rostedt wrote:
+> On Fri, 29 Apr 2022 12:22:44 +0300
+> Sergei Shtylyov <sergei.shtylyov@gmail.com> wrote:
+> 
+>>> +	switch (ev) {
+>>> +	case DIE_OOPS:
+>>> +		do_dump = 1;
+>>> +		break;
+>>> +	case PANIC_NOTIFIER:
+>>> +		do_dump = 1;
+>>> +		break;  
+>>
+>>    Why not:
+>>
+>> 	case DIE_OOPS:
+>> 	case PANIC_NOTIFIER:
+>> 		do_dump = 1;
+>> 		break;
+> 
+> Agreed.
+> 
+> Other than that.
+> 
+> Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> 
+> -- Steve
 
-Acquiring more than one mutex at a time is perfectly fine.  It also 
-cannot get into philosophers-problem-like deadlocks because 1) it's got 
-a well-defined iteration order 2) it's protected by sev_lock_two_vms.
+Thanks Sergei and Steven, good idea! I thought about the switch change
+you propose, but I confess I got a bit confused by the "fallthrough"
+keyword - do I need to use it?
 
-Just, lockdep that has to be convinced that it is fine.  I don't shy 
-away from complex locking schemes if they're necessary, but here it 
-absolutely isn't.
+About the s/int/bool, for sure! Not sure why I didn't use bool at
+first...heheh
 
-Paolo
+Cheers,
 
+
+Guilherme

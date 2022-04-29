@@ -2,58 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFFE95158E2
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 01:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CFA95158E4
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 01:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380878AbiD2XTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 19:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50374 "EHLO
+        id S1381728AbiD2XT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 19:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbiD2XTr (ORCPT
+        with ESMTP id S1355216AbiD2XTt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 19:19:47 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70048AAB6E
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 16:16:27 -0700 (PDT)
+        Fri, 29 Apr 2022 19:19:49 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021B9ABF64
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 16:16:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651274187; x=1682810187;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xWrXkKzBxHzI98Sn3SC8uAd/QSmRGGEC5NdLnY/Ai4s=;
-  b=TYAoSmpxzKfzHOXnQbAo/LHsp0AZSrV1CaOQohsoabN9qDspYZf8qI9E
-   PTWJ6T1BNJv50iE1R/THCp0UNMcSKJHkQT4Z3yuPQglB099Dks5jsH3HB
-   UexmLnyoSmOOhyFdAvrOmTX/CXgxZOnNTNu7z/B1SS0Eh2Dr/6zV0/vXc
-   XFLcCfkWCUBqyjYQhBmrXY/WmlxFoveigczdU+JiE+SyJIh/7PpOyFB/o
-   hvPxfG8DO5gBY23XZHZZXoTwIh7jXfL6OagVXP+wtbRysQx7RE1m0e36R
-   P2eyGpROQKWlcezdeVsGnf0kDs3bvdzNj2wnLSaNHkm/aw70QVYdxZ/TA
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="329744912"
+  t=1651274188; x=1682810188;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sHpYr19nxBH5UfvW1LQhyFMHjbMcdeIKQbNSYUgapl8=;
+  b=BKOWt8kT7IxEr/As66vbrNeH5CN4cW4nut0B42igFq3cpLwzfLJgQdux
+   0IMqYdoH9J09odPIzf38cngGAeBjwicikTom3EDto+cnJ7zcwfQnlk4I8
+   DP6tIyL3l723P/TX3tGbUb2qYKYJ2FF6GAWmBikC/O98WyHha98426wGg
+   hhIqoWCmxhkm5Cj9RhRYud/8iewmkNJC9NAZYAzSCBdlBYrEFT9un+PPV
+   BRRplX2lD90tJBSBHJrYGsoZaBBKAYYZxgyZlTyUI9LYhD9LE1kXq/aR4
+   zUAR1ulKWd5rBUP5uC1BxHajl8g92qIIzTOC2YlqCMeNWx3lxwH6dCawF
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="327296849"
 X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
-   d="scan'208";a="329744912"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 16:16:26 -0700
+   d="scan'208";a="327296849"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 16:16:28 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
-   d="scan'208";a="685610590"
+   d="scan'208";a="630275595"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 29 Apr 2022 16:16:25 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 29 Apr 2022 16:16:26 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nkZqa-0006fr-N1;
-        Fri, 29 Apr 2022 23:16:24 +0000
-Date:   Sat, 30 Apr 2022 07:15:31 +0800
+        id 1nkZqb-0006g5-Hi;
+        Fri, 29 Apr 2022 23:16:25 +0000
+Date:   Sat, 30 Apr 2022 07:15:33 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mark:arm64/ftrace/per-callsite-ops 4/6]
- include/acpi/actypes.h:525:42: warning: 'strncpy' specified bound 4 equals
- destination size
-Message-ID: <202204300707.nx8b88Lb-lkp@intel.com>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>, catalin.marinas@arm.com,
+        will@kernel.org, akpm@linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, linux-mm@kvack.org, hch@infradead.org,
+        arnd@arndb.de, Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: Re: [PATCH v2 4/5] arm64: mm: Convert to GENERIC_IOREMAP
+Message-ID: <202204300706.lSqtHOzz-lkp@intel.com>
+References: <20220429103225.75121-5-wangkefeng.wang@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20220429103225.75121-5-wangkefeng.wang@huawei.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,65 +65,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/ftrace/per-callsite-ops
-head:   2aaba224d039a36f7eca5ad68c77686d3546e4fa
-commit: be98798b102a3e28fa0832c9c0473f42e14abe8b [4/6] HACK: arm64: ftrace: align pre-function literal pool
-config: ia64-gensparse_defconfig (https://download.01.org/0day-ci/archive/20220430/202204300707.nx8b88Lb-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
+Hi Kefeng,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on arm64/for-next/core]
+[also build test WARNING on hnaz-mm/master arnd-asm-generic/master v5.18-rc4 next-20220429]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kefeng-Wang/arm64-Cleanup-ioremap-and-support-ioremap_prot/20220429-182215
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+config: arm64-randconfig-s032-20220429 (https://download.01.org/0day-ci/archive/20220430/202204300706.lSqtHOzz-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.3.0
+reproduce:
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=be98798b102a3e28fa0832c9c0473f42e14abe8b
-        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
-        git fetch --no-tags mark arm64/ftrace/per-callsite-ops
-        git checkout be98798b102a3e28fa0832c9c0473f42e14abe8b
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/77442d1fe8ed26b996b2b7d4464443a63097c434
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Kefeng-Wang/arm64-Cleanup-ioremap-and-support-ioremap_prot/20220429-182215
+        git checkout 77442d1fe8ed26b996b2b7d4464443a63097c434
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/acpi/acpica/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/mm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
 
-   In file included from include/acpi/acpi.h:24,
-                    from drivers/acpi/acpica/tbfind.c:10:
-   drivers/acpi/acpica/tbfind.c: In function 'acpi_tb_find_table':
->> include/acpi/actypes.h:525:42: warning: 'strncpy' specified bound 4 equals destination size [-Wstringop-truncation]
-     525 | #define ACPI_COPY_NAMESEG(dest,src)     (strncpy (ACPI_CAST_PTR (char, (dest)), ACPI_CAST_PTR (char, (src)), ACPI_NAMESEG_SIZE))
-         |                                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/acpi/acpica/tbfind.c:59:9: note: in expansion of macro 'ACPI_COPY_NAMESEG'
-      59 |         ACPI_COPY_NAMESEG(header.signature, signature);
-         |         ^~~~~~~~~~~~~~~~~
---
-   In file included from include/acpi/acpi.h:24,
-                    from drivers/acpi/acpica/utstring.c:8:
-   drivers/acpi/acpica/utstring.c: In function 'acpi_ut_repair_name':
->> include/acpi/actypes.h:525:42: warning: 'strncpy' specified bound 4 equals destination size [-Wstringop-truncation]
-     525 | #define ACPI_COPY_NAMESEG(dest,src)     (strncpy (ACPI_CAST_PTR (char, (dest)), ACPI_CAST_PTR (char, (src)), ACPI_NAMESEG_SIZE))
-         |                                         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/acpi/acpica/utstring.c:148:9: note: in expansion of macro 'ACPI_COPY_NAMESEG'
-     148 |         ACPI_COPY_NAMESEG(&original_name, name);
-         |         ^~~~~~~~~~~~~~~~~
+sparse warnings: (new ones prefixed by >>)
+>> arch/arm64/mm/ioremap.c:14:31: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/arm64/mm/ioremap.c:14:31: sparse:     expected void [noderef] __iomem *
+   arch/arm64/mm/ioremap.c:14:31: sparse:     got void *
+   arch/arm64/mm/ioremap.c:18:31: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   arch/arm64/mm/ioremap.c:18:31: sparse:     expected void [noderef] __iomem *
+   arch/arm64/mm/ioremap.c:18:31: sparse:     got void *
+   arch/arm64/mm/ioremap.c:29:32: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const *x @@     got void [noderef] __iomem *addr @@
+   arch/arm64/mm/ioremap.c:29:32: sparse:     expected void const *x
+   arch/arm64/mm/ioremap.c:29:32: sparse:     got void [noderef] __iomem *addr
 
+vim +14 arch/arm64/mm/ioremap.c
 
-vim +/strncpy +525 include/acpi/actypes.h
-
-ff60027174cf94b Bob Moore 2012-10-31  519  
-50df4d8b0f6e197 Bob Moore 2008-12-31  520  #ifndef ACPI_MISALIGNMENT_NOT_SUPPORTED
-5599fb69355d7a5 Bob Moore 2019-04-08  521  #define ACPI_COMPARE_NAMESEG(a,b)       (*ACPI_CAST_PTR (u32, (a)) == *ACPI_CAST_PTR (u32, (b)))
-a3ce7a8e0dd9baa Bob Moore 2019-04-08  522  #define ACPI_COPY_NAMESEG(dest,src)     (*ACPI_CAST_PTR (u32, (dest)) = *ACPI_CAST_PTR (u32, (src)))
-50df4d8b0f6e197 Bob Moore 2008-12-31  523  #else
-3278675567dfb90 Bob Moore 2019-04-08  524  #define ACPI_COMPARE_NAMESEG(a,b)       (!strncmp (ACPI_CAST_PTR (char, (a)), ACPI_CAST_PTR (char, (b)), ACPI_NAMESEG_SIZE))
-3278675567dfb90 Bob Moore 2019-04-08 @525  #define ACPI_COPY_NAMESEG(dest,src)     (strncpy (ACPI_CAST_PTR (char, (dest)), ACPI_CAST_PTR (char, (src)), ACPI_NAMESEG_SIZE))
-50df4d8b0f6e197 Bob Moore 2008-12-31  526  #endif
-50df4d8b0f6e197 Bob Moore 2008-12-31  527  
-
-:::::: The code at line 525 was first introduced by commit
-:::::: 3278675567dfb901d831d46849c386a4f932905e ACPICA: Rename nameseg length macro/define for clarity
-
-:::::: TO: Bob Moore <robert.moore@intel.com>
-:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+     6	
+     7	void __iomem *arch_ioremap(phys_addr_t phys_addr, size_t size, unsigned long prot)
+     8	{
+     9		unsigned long last_addr = phys_addr + size - 1;
+    10		int ret = -EINVAL;
+    11	
+    12		/* Don't allow outside PHYS_MASK */
+    13		if (last_addr & ~PHYS_MASK)
+  > 14			return ERR_PTR(ret);
+    15	
+    16		/* Don't allow RAM to be mapped. */
+    17		if (WARN_ON(pfn_is_map_memory(__phys_to_pfn(phys_addr))))
+    18			return ERR_PTR(ret);
+    19	
+    20		return NULL;
+    21	}
+    22	
 
 -- 
 0-DAY CI Kernel Test Service

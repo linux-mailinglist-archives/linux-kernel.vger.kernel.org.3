@@ -2,51 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C7FE514F4A
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:26:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48D26514F4E
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:26:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378367AbiD2P3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 11:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34560 "EHLO
+        id S1378403AbiD2P3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 11:29:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378364AbiD2P2v (ORCPT
+        with ESMTP id S1378376AbiD2P3d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 11:28:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E84D66F8E
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:25:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2F7C620C4
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 15:25:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9C66C385A4;
-        Fri, 29 Apr 2022 15:25:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651245931;
-        bh=6oCuAEcvZ0yhbJwQ7jyHi2u+TfSAibN9CRI9KgdDZLg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HbA/91b/bixgBip8JXKmzzDVLtkGjXEeFZExM97aJe2n0MyxDGJp8DRcwHKbIT2z/
-         pyBIOFx+ZGHKEN132CICnveJa17nDMzxTxXanrTTU0vNUdePdl2lQAOlN1GxmLB/tT
-         hEJfYfQDdw0/Nav+7bdKPzj0Z2TP/1DijHRTYWB8=
-Date:   Fri, 29 Apr 2022 17:25:26 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>
-Cc:     Forest Bond <forest@alittletooquiet.net>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] staging: vt6655: Replace VNSvInPortD with ioread32
-Message-ID: <YmwDZi3mmWRHzKAT@kroah.com>
-References: <cover.1651036713.git.philipp.g.hortmann@gmail.com>
- <7a5f7f98379fb2af2741f613f5ddda53e5d4813e.1651036713.git.philipp.g.hortmann@gmail.com>
- <Ymjaxby2vDJYz6KA@kroah.com>
- <b3d6b773-4ca1-a72e-933b-455c5d2b91c9@gmail.com>
+        Fri, 29 Apr 2022 11:29:33 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CCBDD3DBE
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:26:14 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id c15so10930961ljr.9
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:26:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=LrmmKe5b4hTQ7hstNyuHdgEBymJxMaRBtx0nOtAIsEw=;
+        b=tubXyS2je3oB+R7Z7tN1/0tR3vck+ASnINl4mbT7F2/+HBqXIMwR+z8V3aV4NpJYtl
+         Mue1BxYKdUQWd7wSTRpMdeUI3hdipXdW7yphjYLvCTf3fLhcsYfwaJkXSS0hhCmbxlCO
+         xi3FmkALilkXMsGuYgk2/7JQ9kGmQUxoYMWhDS4E9qGa83mcE7uC1YZxarAzSeVihFYL
+         hJO8LP7d8iyJCicX8NsazoKZFm9JETxiaVzjY0M8kZJ0HHmdLCfvS8EZ78zafo1xOEy+
+         Y3BcUvPUfaM5b9GwmIT5mRUQBeYnodzXkfu/Rg5tY1FXP+mj9Gb4YmEDF1mh75K1CxLh
+         Obcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LrmmKe5b4hTQ7hstNyuHdgEBymJxMaRBtx0nOtAIsEw=;
+        b=LkLqh/4mdmGnK+zVyp4DRMOsEHA14cLGMXlwVSyIotokE0r5m5f01ZpwNzobgSc+s6
+         DMlCPATo59ZYDGqrZ9/qTN3SbW6HkXwvMqq1pvMJ5VJaGe9jOMzMVgdL4wSS4bt4LT0l
+         p1v1siMT/Z2rxqMkDCDrEqYdI7nc9djnzLSwEGKK8CZTmfcMUrp4qV3PyebunGRPCRIB
+         qfoF2/vgT+/Xh9L4rQOzQOSndcUIgC9XYal8BjEeyZPK8zZoHZ8aF5xz5n5YW3OtI534
+         bmpkhd8e7waVqwQmQhO3itfetV6NR+nGGlWkpQZpiW9xqY7DfqGzJ53O6oeGQPvxMVyl
+         AnRg==
+X-Gm-Message-State: AOAM531FIZAhs4BrmswIMcDL45KyB6uyTIRUh6/JB7G6WEc6fPX/4L1V
+        Iawl8XAp1U090OxRsrAXWlkh8g==
+X-Google-Smtp-Source: ABdhPJyNLIEjI2k19H9ZTxnuPcn5H5HKicI97tGeUTo+1P93wIyIeyUbCtz/hpxYMSNW0keC3yTNvA==
+X-Received: by 2002:a2e:5c45:0:b0:24d:ae47:7a34 with SMTP id q66-20020a2e5c45000000b0024dae477a34mr24759897ljb.419.1651245972885;
+        Fri, 29 Apr 2022 08:26:12 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id 5-20020ac24d45000000b0047210300c96sm261425lfp.137.2022.04.29.08.26.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 08:26:12 -0700 (PDT)
+Message-ID: <15783bcf-af13-efb2-1945-e2f49b3278bc@linaro.org>
+Date:   Fri, 29 Apr 2022 18:26:11 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b3d6b773-4ca1-a72e-933b-455c5d2b91c9@gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v1 2/9] clk: Introduce CLK_ASSUME_ENABLED_WHEN_UNUSED
+Content-Language: en-GB
+To:     Robert Foss <robert.foss@linaro.org>, bjorn.andersson@linaro.org,
+        agross@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        robh+dt@kernel.org, krzk+dt@kernel.org, jonathan@marek.ca,
+        tdas@codeaurora.org, anischal@codeaurora.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Vinod Koul <vkoul@kernel.org>
+References: <20220429151247.388837-1-robert.foss@linaro.org>
+ <20220429151247.388837-2-robert.foss@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220429151247.388837-2-robert.foss@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,98 +78,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 05:18:28PM +0200, Philipp Hortmann wrote:
-> On 4/27/22 07:55, Greg Kroah-Hartman wrote:
-> > > MACvRegBitsOn(iobase, MAC_REG_TFTCTL, TFTCTL_TSFCNTRRD);
-> > >   	for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
-> > > @@ -753,8 +754,9 @@ bool CARDbGetCurrentTSF(struct vnt_private *priv, u64 *pqwCurrTSF)
-> > >   	}
-> > >   	if (ww == W_MAX_TIMEOUT)
-> > >   		return false;
-> > > -	VNSvInPortD(iobase + MAC_REG_TSFCNTR, (u32 *)pqwCurrTSF);
-> > > -	VNSvInPortD(iobase + MAC_REG_TSFCNTR + 4, (u32 *)pqwCurrTSF + 1);
-> > > +	low = ioread32(iobase + MAC_REG_TSFCNTR);
-> > > +	high = ioread32(iobase + MAC_REG_TSFCNTR + 4);
-> > > +	*pqwCurrTSF = low + ((u64)high << 32);
-> > Are you_sure_  this is doing the same thing?
-> > 
+On 29/04/2022 18:12, Robert Foss wrote:
+> From: Bjorn Andersson <bjorn.andersson@linaro.org>
 > 
-> To compare I used the following code:
-> VNSvInPortD(iobase + MAC_REG_TSFCNTR, (u32 *)pqwCurrTSF);
-> VNSvInPortD(iobase + MAC_REG_TSFCNTR + 4, (u32 *)pqwCurrTSF + 1);
-> dev_info(&priv->pcid->dev, "CARDbGetCurrentTSF *pqwCurrTSF: %llx",
-> *pqwCurrTSF);
-> low = ioread32(iobase + MAC_REG_TSFCNTR);
-> high = ioread32(iobase + MAC_REG_TSFCNTR + 4);
-> dev_info(&priv->pcid->dev, "CARDbGetCurrentTSF low/high: %llx", low +
-> ((u64)high << 32));
+> Some clock implementations doesn't provide means of implementing
+> is_enabled(), but still requires to be explicitly disabled when found
+> unused as part of clk_disable_unused().
 > 
-> Output:
-> vt6655 0000:01:05.0: CARDbGetCurrentTSF *pqwCurrTSF: 1155ba
-> vt6655 0000:01:05.0: CARDbGetCurrentTSF low/high:    1155ba
-> vt6655 0000:01:05.0: CARDbGetCurrentTSF *pqwCurrTSF: 35d7cbd7c
-> vt6655 0000:01:05.0: CARDbGetCurrentTSF low/high:    35d7cbd7c
-> vt6655 0000:01:05.0: CARDbGetCurrentTSF *pqwCurrTSF: 35d7cbd8a
-> vt6655 0000:01:05.0: CARDbGetCurrentTSF low/high:    35d7cbd8a
+> One such set of clocks are Qualcomm's display RCGs. These can be enabled
+> and disabled automatically by the hardware, so it's not possible to
+> reliably query their configuration. Further more, these clocks need to
+> be disabled when unused, to allow them to be "parked" onto a safe
+> parent. Failure to disable the RCG results in the hardware locking up as
+> clk_disable_unused() traverses up the tree and turns off its source
+> clocks.
 > 
-> So no different results for numbers larger than 32 Bit.
+> Add a new flag, CLK_ASSUME_ENABLED_BOOT, which clock drivers can use to
+> signal that these clocks should be disabled even if they don't implement
+> the is_enabled() ops.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Reviewed-by: Vinod Koul <vkoul@kernel.org>
 
-And for a big endian system?  Do you get the same result?
+I think this patch received mixed review previously. I strip it away for 
+now.
 
-> The pqwCurrTSF is a microsecond counter running in the WLAN Router:
-> At a later Measurement I got the following values:
-> 269 seconds later: 0x3 6d89 fd91 -> 269.30 seconds
-> 15 minutes later: 0x3 6d89 fd91 -> 15.54 minutes
-> 8:38 hours later: 0xa 9787 ad91 -> 8.62 hours
+> ---
+>   drivers/clk/clk.c            | 2 +-
+>   include/linux/clk-provider.h | 2 ++
+>   2 files changed, 3 insertions(+), 1 deletion(-)
 > 
-> So both methods work on a AMD64 processor.
-> 
-> > Adding 1 to a u64 pointer increments it by a full u64.  So I guess the
-> > cast to u32 * moves it only by a u32?  Hopefully?  That's messy.
-> 
-> That is the reason why I wanted to change this.
-> 
-> > Why not keep the current mess and do:
-> > 	pqwCurrTSF = ioread32(iobase + MAC_REG_TSFCNTR);
-> > 	((u32 *)pqwCurTSF + 1) = ioread32(iobase + MAC_REG_TSFCNTR + 4);
-> > Or does that not compile?
-> 
-> drivers/staging/vt6655/card.c:760:13: warning: assignment to ‘u64 *’ {aka
-> ‘long long unsigned int *’} from ‘unsigned int’ makes pointer from integer
-> without a cast [-Wint-conversion]
->   760 |  pqwCurrTSF = ioread32(iobase + MAC_REG_TSFCNTR);
->       |             ^
-> drivers/staging/vt6655/card.c:761:26: error: lvalue required as left operand
-> of assignment
->   761 |  ((u32 *)pqwCurrTSF + 1) = ioread32(iobase + MAC_REG_TSFCNTR + 4);
->       |                          ^
-> 
-> This compiles:
-> 	*(u32 *)pqwCurrTSF = ioread32(iobase + MAC_REG_TSFCNTR);
-> 	*((u32 *)pqwCurrTSF + 1) = ioread32(iobase + MAC_REG_TSFCNTR + 4);
+> diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+> index ed119182aa1b..9789ec137219 100644
+> --- a/drivers/clk/clk.c
+> +++ b/drivers/clk/clk.c
+> @@ -1284,7 +1284,7 @@ static void __init clk_disable_unused_subtree(struct clk_core *core)
+>   	 * sequence.  call .disable_unused if available, otherwise fall
+>   	 * back to .disable
+>   	 */
+> -	if (clk_core_is_enabled(core)) {
+> +	if (clk_core_is_enabled(core) || core->flags & CLK_ASSUME_ENABLED_WHEN_UNUSED) {
+>   		trace_clk_disable(core);
+>   		if (core->ops->disable_unused)
+>   			core->ops->disable_unused(core->hw);
+> diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
+> index c10dc4c659e2..9038022ffebd 100644
+> --- a/include/linux/clk-provider.h
+> +++ b/include/linux/clk-provider.h
+> @@ -32,6 +32,8 @@
+>   #define CLK_OPS_PARENT_ENABLE	BIT(12)
+>   /* duty cycle call may be forwarded to the parent clock */
+>   #define CLK_DUTY_CYCLE_PARENT	BIT(13)
+> +/* assume clock is enabled if found unused in late init */
+> +#define CLK_ASSUME_ENABLED_WHEN_UNUSED	BIT(14)
+>   
+>   struct clk;
+>   struct clk_hw;
 
-Heh, I just guessed :)
 
-> Log:
-> vt6655 0000:01:05.0: CARDbGetCurrentTSF *pqwCurrTSF: 178f41d90
-> vt6655 0000:01:05.0: CARDbGetCurrentTSF with ioread: 178f41d90
-> 
-> Ick, how about:
-> > 	u32 *temp = (u32 *)pqwCurTSF;
-> > 
-> > 	temp = ioread32(iobase + MAC_REG_TSFCNTR);
-> > 	temp++;
-> > 	temp = ioread32(iobase + MAC_REG_TSFCNTR + 4);
-> 
-> This is working:
-> 	u32 *temp = (u32 *)pqwCurrTSF;
-> 
-> 	*temp = ioread32(iobase + MAC_REG_TSFCNTR);
-> 	temp++;
-> 	*temp = ioread32(iobase + MAC_REG_TSFCNTR + 4);
-
-Nice!
-
-thanks for testing,
-
-greg k-h
+-- 
+With best wishes
+Dmitry

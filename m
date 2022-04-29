@@ -2,198 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 441825156CF
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F425156E9
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:31:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238188AbiD2VeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 17:34:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47302 "EHLO
+        id S238300AbiD2VeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 17:34:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238076AbiD2VeA (ORCPT
+        with ESMTP id S237435AbiD2VeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 17:34:00 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34B84756E;
-        Fri, 29 Apr 2022 14:30:40 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TL0Xqj020003;
-        Fri, 29 Apr 2022 21:30:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=ojD+afCuSHRuR6G/2yGcUe3nIWhNGhLu7OHGLQvK4DE=;
- b=FJmJ1jbxaGw/8k+uTKVqlDa2jFiWXt7zNiuYvBasmXTQk6GQQZPx9ADIYLgtLnBmKzuj
- dsVSTwXdlhuq+YWgcM+/8x5FyLmXhHXmcwstwsnRkg1M9z6K6yQQR09XRdFO+vCW+taA
- g0gQc1lmJQxmGPOeJh/vCsi6e/NUo6IgKzUt0OW00S4wAKEqG4JKSQKuOONALJ8GxOHL
- UoGvsi805h2DDGhD1KtPIfYlaVVLRSnDPkN/kBa9UGK99TCHPP9LkSq1TroDkoB0KiOv
- Xyz04GzWphFT5Hmll51gGhTNygMJCWk5c4jgWbiVteEdpQ13B1RJxmPzDDRubyx6ZEJI NQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqqtp2w1b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 21:30:18 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23TL2mq8028038;
-        Fri, 29 Apr 2022 21:30:17 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqqtp2vyq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 21:30:17 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TLJZ9k008476;
-        Fri, 29 Apr 2022 21:30:15 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma02fra.de.ibm.com with ESMTP id 3fpuygbknk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 21:30:15 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TLUDI946858638
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 29 Apr 2022 21:30:13 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E80664C040;
-        Fri, 29 Apr 2022 21:30:12 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0F4524C044;
-        Fri, 29 Apr 2022 21:30:11 +0000 (GMT)
-Received: from sig-9-65-75-248.ibm.com (unknown [9.65.75.248])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 29 Apr 2022 21:30:10 +0000 (GMT)
-Message-ID: <7d7fa18d396439d98e26890f647fffdc9e7d8b20.camel@linux.ibm.com>
-Subject: Re: [PATCH v2] Carry forward IMA measurement log on kexec on x86_64
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Jonathan McDowell <noodles@fb.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Date:   Fri, 29 Apr 2022 17:30:10 -0400
-In-Reply-To: <YmgjXZphkmDKgaOA@noodles-fedora-PC23Y6EG>
-References: <YmgjXZphkmDKgaOA@noodles-fedora-PC23Y6EG>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: wSqEkRR4PEQUw2OtGFjUdCJNO5qAyjTA
-X-Proofpoint-GUID: wYfoVQ2G-mAoHaZxBIe0LznPvYrG7-Jg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-29_09,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- adultscore=0 impostorscore=0 malwarescore=0 suspectscore=0 phishscore=0
- priorityscore=1501 spamscore=0 clxscore=1015 mlxlogscore=999
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204290113
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 29 Apr 2022 17:34:13 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2123.outbound.protection.outlook.com [40.107.237.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFB4369DF;
+        Fri, 29 Apr 2022 14:30:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QS7IxyS0nKmZDOCYU+D2iUnYJEneznhOJmRQoSW1lxS90H9VnAh6m7yd9IoxErp70BbpT233RuLk6+vcsen0dUcV3YlCdqHL8BditxQWMGk2mXAv9n7zYufA7Xng1G3emAggkPSFAnIuhfMqQSlTJSA0q955po4t2Bprsg+rrurrG83qnWCaxNDfPhCHRDPCoCMDiW9nVtUdzg/KS0eTz/lCS4/K1dXqq4WtYAjuI3MQnSvkVGnxG6FxK6ATCIZ7OKk4H3BRPI+9FC5SJCHNRHdUQXF6/V/lGOeRElGEY86lnxqQF93tJACiSBsJ09IYGX4YmHycGbpb7YY1vstlGA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ygE+0/9jFGvkToLKUjXmTPQ0HxfSIKAOMb8VEQrV3QQ=;
+ b=AoO720u72vWcqbtHpTCapIhU09/QLVg9SHRR1MZlYyBJhVbPJ/2AD4qWK1tZPOsTU9yPSMYLGqfC7vg/MILJDolP5S55lQrmSIyjkXQgTuZMKPxuME+q8pBlkXGsr01zkcx+z3pgBNQ1+U3FDpM91/Cxe4fxNzLUDi6haKrJPZb0CsN9QHuW+aDSTpT0yILw1XfNix9Cr8jx2Eq9wsmDYbV0yzL1gtGA26MfVGtpNN4545DaPjUijOrkt+/rTWUkyo/uO0fuNoWujh0IxEKi/BbkU8S+O/B0Jld2mIQhQSXzUy756HfErR3JYBIcx4Lhlzc4A0+kzHQNVL5FyIKXxQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ygE+0/9jFGvkToLKUjXmTPQ0HxfSIKAOMb8VEQrV3QQ=;
+ b=uMej7AfcRR5DyeFBAX3GccY5/oGZr109ptf/LbHPaLn3rf8TkxATwO/PERUU3oj+34kR7EK6zc5tTVnzdaB1sx3JUmDrp91rm72LU1afrMc5WtuDEZxTcEHkL3S9h8rPmWKFcLD7nFi/PLSASXDmAE/yLcuALmFlYWyF+qVnVKs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by CY4PR10MB1957.namprd10.prod.outlook.com
+ (2603:10b6:903:127::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Fri, 29 Apr
+ 2022 21:30:49 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::4581:787c:1a7a:873e]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::4581:787c:1a7a:873e%3]) with mapi id 15.20.5186.026; Fri, 29 Apr 2022
+ 21:30:48 +0000
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Cc:     aolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: [PATCH v1 net-next 0/1] net: ethernet: ocelot: remove num_stats initializer requirement
+Date:   Fri, 29 Apr 2022 14:30:35 -0700
+Message-Id: <20220429213036.3482333-1-colin.foster@in-advantage.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR13CA0200.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c3::25) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1f6c852c-9a99-4df3-d16a-08da2a2786a2
+X-MS-TrafficTypeDiagnostic: CY4PR10MB1957:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR10MB1957D6C4CA9E1F4AA5963FD3A4FC9@CY4PR10MB1957.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: efUS3NSR6K30b9MyY7R1FtpDJaBPNAPuOp/D+CYomMAspQkYfNVPXo/QDbE0pF0DViHgrkl2DaH+opEAsWiEEP36gVpT38yEEqlAOQSmNGcba4KGUQuHyR++TtKh6YkzBS77QfyEDrzvSpm8Vz5lGpMWFKQP8Pk7GB7qTU/9d1GzIC3zsTJSDlLpcI1kjUwOIoMQy82np6/ijtT8qld5IAueJbKdbW93i/GYRbCQVzyX5tvIBEqT+qrZTBVWX8EsmrP4aUn3MU70bPfC4H3JdUSEVZUJ8b8aTjiMsihR1KtHSqjlV25qDkC7J73SDrcDtBHzyyj2B/RC8yuhYxWHr8r5RJ2sp9Xwif1RvftPgK3gINlxPXCZTy/NKes90Ih+rTMWp/TLNV3q84Y9G5EDrrNmdq8LuClfUe/FAuFD4ikAFc5RBKIYavM02KZouftH4U+KkjI9b27Ncr5dNuMbUpQxfUotyWJzrSQgB/e/V+0VixrvW31h9/WswvuNSv1beC8BKRqV5LEfBLLK4Psml5TuNGORrA+iPXmkmIhxCwUS4gEbyzR25AfwFQ+1Ce2i2wJMLc2CpYGOs7eHcdycUKkwPTvW+fcjJ4fYB5XkVTVKQdhXRmLFo6uZm0bzmaZyiuYRd05HF9ffzM2YeJVcmuiCL9vRv69bDJiA51xgQzOWXu/DOeeYLwskSoFTgH2ANiNfrnF6NTiI3TygQbhTxQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(376002)(39830400003)(396003)(136003)(346002)(86362001)(6486002)(54906003)(2616005)(1076003)(186003)(508600001)(8936002)(36756003)(44832011)(2906002)(7416002)(83380400001)(66946007)(8676002)(5660300002)(4326008)(66556008)(66476007)(26005)(6512007)(6506007)(6666004)(316002)(52116002)(38100700002)(38350700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nv9jI9vySsNzIxFaeNFALPwr0KUOMktG2xBO+QZHu+NoBs71V4uuP3Jr70Pt?=
+ =?us-ascii?Q?Hk4GxojzasjibkiH5VL5EfPkO+E3mgsTqrLNWQp7tk9WU8YXzv1KI0SOr488?=
+ =?us-ascii?Q?dknNpvhl934mqRfJ3Opeu2y2GEMyJabtnzLA6n2pfH5uc0PgXzn37tOWVC1L?=
+ =?us-ascii?Q?EpI9EPKNsiizK+7WbFDcsr6UaMx+qLODYlkFMl58rAr9HzjghI6oL8t+P7SG?=
+ =?us-ascii?Q?5igwtixEPeYdmP+CwqtgiqaWB7iQs/bx+wlLMlM4oWw9hwu7ytDNakX/hCHd?=
+ =?us-ascii?Q?lXPsy0GF1E3Jwg41vXeg/FZVPwxXb4K7JS7XNvoZDPPhQmT7hTgi5L1veZao?=
+ =?us-ascii?Q?1Y7DX5Y7Rb3ddtstKg+47LZUp4SqjFs1ANIFCst6Hs4xgWzbD4lxH4TPPyeG?=
+ =?us-ascii?Q?u4ekV/8OilTU1PRrFpzz5lemWSN2e78A8ied4ew+JdPu82Vu4k+V+3NoY8Z5?=
+ =?us-ascii?Q?a2oLtljjkKqaxBr6JvcyhRhYj9urIpTuu1YwFEU+7c1LtNBe/LeyVzj6o07k?=
+ =?us-ascii?Q?6LGrq4LIrlFENd0REQ6vMj5gbo1MjK6qr6jPXAGlUcVXJ+Wxb38PLNeElUPl?=
+ =?us-ascii?Q?PCPmUm/BTB3QAEH0Gq53En9j5xu8VkM7zwldYzHygI8HkjwdusjW7YxKEKC+?=
+ =?us-ascii?Q?o0ZknJcxC9AS2Z7Oi89P08UDV/BbCiFhruVmiFr0kB5e9nv3Our5lsjUissk?=
+ =?us-ascii?Q?zH3jBYpExyHT1SK8IcY0Y7cxodVYgurHYmDXfPmz7o+35emY61piT7wckAfj?=
+ =?us-ascii?Q?p8q6XI0TRHkuoBSJNCAeKKVXaJP3YbTuIsD+K48namufPFGlukOoQ/pJwnvw?=
+ =?us-ascii?Q?Bpmshnv1JKc85MAVW0OP/9Mj0ABUeBlpgU/MNr1JmDrbJlO4rDKQ5IeXGIFa?=
+ =?us-ascii?Q?K+ZPFFE7Fm8OWtkSh9cauq9LAHnYWKZZqHjVf9SFaGIpvplhxGIG/iS9k3fI?=
+ =?us-ascii?Q?MKmoIJ7FKyiMBRrLT5WYNqyGbuyPSJZ4iDN2o1UWxH2+uj5gxzZOIoHirw8t?=
+ =?us-ascii?Q?1YuqFxzRjBASKUyAzYZ+ee9SNDo+yAbIakewx64KPFuzJpSav4oHQJ+7Al3V?=
+ =?us-ascii?Q?LbuoBEXtZDi9QpfjHKGyQaO4T0hwdIOWtmJ7Hn610rtc3L7kTo5LnE2JwAAL?=
+ =?us-ascii?Q?5Z19NlTOggR++BSpGWxH+0Y0t6JFMNDArk7C28MMrYWMqkzjPplWbiYq5C0j?=
+ =?us-ascii?Q?RR2dP73Oi2WPjIMo0BBtFsdsn4SIpR850KhUAWjZqiDpd8vBZ/77WZ11ruwu?=
+ =?us-ascii?Q?XnrdhLVtTjGqereE/3vS4wrZUQwHi7HScJ3jC/woDWnX2pQDnl6tefj6cN7Z?=
+ =?us-ascii?Q?XjKRVw+fsJdDNBXXgRutesioYGP5+sKaT/NzOgHTduazXyCoZPn/Jkw+OUW6?=
+ =?us-ascii?Q?M1A5wq9Gpg+sfAKUGP9xEWY9duDjlfdZr6581xqHlhBP8FkoulLoXvBw2ic1?=
+ =?us-ascii?Q?OQc9iHZeVRHp6V+KBLdeabainhCFbnV4Hbo78+0Kd8+oZ3JY3wO1FIE/eeV4?=
+ =?us-ascii?Q?OX0yk7JyynMghqNU/CMl1YaSQvr6CphAG19FRfaqZk3HmCMFO7PBQUU4+cLG?=
+ =?us-ascii?Q?FanUPakuBfgukuQcc9kEF2a+dwHD7IZV0PBQYvHwUo+RM4kFYu1ZW38X+0Fu?=
+ =?us-ascii?Q?+LIxIroofgak/TbcHBeqIdwiMjL3w+Yl2TZ5y0st9NBZsZfe2mv9a5ptJUwt?=
+ =?us-ascii?Q?KQp6w8JnZqIPifFCtWbh2y6R+SBdkcIlchdnawwFXNIkzjbmnALxdltE4VxI?=
+ =?us-ascii?Q?9WAdOIX8uupI/jYOGkE/omfVHWJBAYvXvwWQg5HF9hb4P8LO5pDP?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1f6c852c-9a99-4df3-d16a-08da2a2786a2
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2022 21:30:48.1942
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: c553Msb5p38c5DIayaYTXKodQmH/MYuCV0jlTkMgsQTojBWGLsoJKM5pAKfFRTS5U08AVRX7al9ppLRA8uCQJczGOuetY2G1wk0i0n3fadk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR10MB1957
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-> index 13753136f03f..419c50cfe6b9 100644
-> --- a/security/integrity/ima/ima_kexec.c
-> +++ b/security/integrity/ima/ima_kexec.c
-> @@ -10,6 +10,7 @@
->  #include <linux/seq_file.h>
->  #include <linux/vmalloc.h>
->  #include <linux/kexec.h>
-> +#include <linux/memblock.h>
->  #include <linux/of.h>
->  #include <linux/ima.h>
->  #include "ima.h"
-> @@ -134,10 +135,66 @@ void ima_add_kexec_buffer(struct kimage *image)
->  }
->  #endif /* IMA_KEXEC */
->  
-> +#ifndef CONFIG_OF
-> +static phys_addr_t ima_early_kexec_buffer_phys;
-> +static size_t ima_early_kexec_buffer_size;
-> +
-> +void __init ima_set_kexec_buffer(phys_addr_t phys_addr, size_t size)
-> +{
-> +	if (size == 0)
-> +		return;
-> +
-> +	ima_early_kexec_buffer_phys = phys_addr;
-> +	ima_early_kexec_buffer_size = size;
-> +}
-> +
-> +int __init ima_free_kexec_buffer(void)
-> +{
-> +	int rc;
-> +
-> +	if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
-> +		return -ENOTSUPP;
-> +
-> +	if (ima_early_kexec_buffer_size == 0)
-> +		return -ENOENT;
-> +
-> +	rc = memblock_phys_free(ima_early_kexec_buffer_phys,
-> +				ima_early_kexec_buffer_size);
-> +	if (rc)
-> +		return rc;
-> +
-> +	ima_early_kexec_buffer_phys = 0;
-> +	ima_early_kexec_buffer_size = 0;
-> +
-> +	return 0;
-> +}
-> +
-> +int __init ima_get_kexec_buffer(void **addr, size_t *size)
-> +{
-> +	if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
-> +		return -ENOTSUPP;
-> +
-> +	if (ima_early_kexec_buffer_size == 0)
-> +		return -ENOENT;
-> +
-> +	*addr = __va(ima_early_kexec_buffer_phys);
-> +	*size = ima_early_kexec_buffer_size;
-> +
-> +	return 0;
-> +}
-> +
+The ocelot_stats_layout structure array is common with other chips,
+specifically the VSC7512. It can only be controlled externally (SPI,
+PCIe...)
 
-Originally both ima_get_kexec_buffer() and ima_free_kexec_buffer() were
-architecture specific.  Refer to commit 467d27824920 ("powerpc: ima:
-get the kexec buffer passed by the previous kernel").  Is there any
-need for defining them here behind an "#ifndef CONFIG_OF"?
+During the VSC7512 / Felix driver development, it was noticed that
+this array can be shared with the Ocelot driver. As with other arrays
+shared between the VSC7514 and VSC7512, it makes sense to define them in
+drivers/net/ethernet/mscc/vsc7514_regs.c, while declaring them in
+include/soc/mscc/vsc7514_regs.h
 
-> +#else
-> +
-> +void __init ima_set_kexec_buffer(phys_addr_t phys_addr, size_t size)
-> +{
-> +	pr_warn("CONFIG_OF enabled, ignoring call to set buffer details.\n");
-> +}
-> +#endif /* CONFIG_OF */
-> +
+The thing that makes the stats_layout unique is that it is not accessed
+indirectly by way of a shared enumeration index, but instead is looped
+over. As such, the num_stats parameter has been used as the loop bounds.
 
-Only when "HAVE_IMA_KEXEC" is defined is this file included.  Why is
-this warning needed?
+Since the array size isn't necessarily fixed-length, the size has to be
+determined. This was done locally in the C file with ARRAY_SIZE, but
+that isn't possible if the array is declared via:
+extern const struct ocelot_stat_layout ocelot_stats_layout[];
 
-thanks,
+Instead, determine the size by the elemenets of the structure itself.
+This way stats can be added / removed as needed (though they rarely
+should) without the requirement of dragging a size variable around.
 
-Mimi
+I don't have felix / seville / vsc7514 hardware to test, so I'd
+appreciate if someone could give it a test. I've verified functionality
+on my in-development kernel, but wouldn't mind feedback from the
+existing users who have had the misfortune of having to find my mistakes
+when it was too late.
 
->  /*
->   * Restore the measurement list from the previous kernel.
->   */
-> -void ima_load_kexec_buffer(void)
-> +void __init ima_load_kexec_buffer(void)
->  {
->  	void *kexec_buffer = NULL;
->  	size_t kexec_buffer_size = 0;
+Colin Foster (1):
+  net: ethernet: ocelot: remove the need for num_stats initializer
 
+ drivers/net/dsa/ocelot/felix.c             |  1 -
+ drivers/net/dsa/ocelot/felix.h             |  1 -
+ drivers/net/dsa/ocelot/felix_vsc9959.c     |  2 +-
+ drivers/net/dsa/ocelot/seville_vsc9953.c   |  2 +-
+ drivers/net/ethernet/mscc/ocelot.c         |  5 +++++
+ drivers/net/ethernet/mscc/ocelot_vsc7514.c |  2 +-
+ include/soc/mscc/ocelot.h                  | 10 ++++++++++
+ 7 files changed, 18 insertions(+), 5 deletions(-)
+
+-- 
+2.25.1
 

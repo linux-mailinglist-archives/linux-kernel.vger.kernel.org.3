@@ -2,149 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5AF0514E76
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C8E9514E7F
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378035AbiD2O6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 10:58:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
+        id S1378044AbiD2O62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 10:58:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378009AbiD2O6G (ORCPT
+        with ESMTP id S1378028AbiD2O6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 10:58:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C167BE9F2;
-        Fri, 29 Apr 2022 07:54:48 -0700 (PDT)
+        Fri, 29 Apr 2022 10:58:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BD3A5EAF;
+        Fri, 29 Apr 2022 07:55:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 267C8B835DD;
-        Fri, 29 Apr 2022 14:54:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C4F5C385A4;
-        Fri, 29 Apr 2022 14:54:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45598B835DC;
+        Fri, 29 Apr 2022 14:55:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A847C385A7;
+        Fri, 29 Apr 2022 14:55:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651244085;
-        bh=hrsovH+LFFku1FXppgR3a5Fig56Iz/nETCoLPh/sA/8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GujnCsDyMGYSxhrbrnfHBbgpLaxpVw/hFIqzVYZrB30YCJQeJM1PYc7i9NfEOup82
-         j2kFnB0FUF/2nw+6yM2dMkOvf1fdO1q4No97pdrKzFCyH7rngr1m+Jsw6bkazCjvJT
-         0nhM+mCHHCFwD7cx7bxM/BuH/aZig7R2v5Kb+UetPtbI22pajNvG5PvKmuRWRs83ou
-         Jt/xLsMv7eriHRQGnmpHkAdP7bUQN1CpeTZrx7o7TxRtOxSzMqMQTpBcicbkNqiCkk
-         pxeQpugNfoDnfiIn56auMdZPR//8ucBuFlZ3t/4fuEH6AB4FABPR3i3ugzEl2eDiRi
-         olX4NjQn4AckA==
-Date:   Fri, 29 Apr 2022 23:54:40 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCHv4 bpf-next 3/5] fprobe: Resolve symbols with
- ftrace_lookup_symbols
-Message-Id: <20220429235440.58aa5045a507e79230a7ac86@kernel.org>
-In-Reply-To: <20220428201207.954552-4-jolsa@kernel.org>
-References: <20220428201207.954552-1-jolsa@kernel.org>
-        <20220428201207.954552-4-jolsa@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        s=k20201202; t=1651244103;
+        bh=StvpXoSDdgUWBmP2aTfHIXRYUBtGjxZb/ppRSI+ZPlQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QvmrisA4D/9rSSggUM531BwjHs35gIyMgQEEdTwY6+gknhM1qZsdOXYLVRGVX7lHd
+         xYiSut7dxWJ7R/5vyi5XdzyVd3NLTD8WmXb5vyQdYTrIcYR9xRfGDxVLnmxRJWcuzh
+         VLM0sdX/g4k589vV1oZk1Y3KHURj9MGQb7Cgm3FdyMqAnyFCGgadxuZgt5ZutQMSR/
+         KdIH5LPKJKqCNb4FjaBAnBpze3tsianbVG91B1Fp1VazEnpR60y0EAPpFZWV0y10ki
+         0YN/9GBznrzn/mm0T2Dem5uiixEFi3Wwas+jMRxmaUdOm0ErJm4xz62nvEf6FLwVZ8
+         ui9qBVuCr22Sg==
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH V2] rtla/Makefile: Properly handle dependencies
+Date:   Fri, 29 Apr 2022 16:54:58 +0200
+Message-Id: <3f1fac776c37e4b67c876a94e5a0e45ed022ff3d.1651238057.git.bristot@kernel.org>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Apr 2022 22:12:05 +0200
-Jiri Olsa <jolsa@kernel.org> wrote:
+Linus had a problem compiling RTLA, saying:
 
-> Using ftrace_lookup_symbols to speed up symbols lookup
-> in register_fprobe_syms API.
-> 
-> This requires syms array to be alphabetically sorted.
+"[...] I wish the tracing tools would do a bit more package
+checking and helpful error messages too, rather than just
+fail with:
 
-This line is no more needed because get_ftrace_locations sorts the syms.
-Except for that, this looks good to me.
+    fatal error: tracefs.h: No such file or directory"
 
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+Which is indeed not a helpful message. Update the Makefile, adding
+proper checks for the dependencies, with useful information about
+how to resolve possible problems.
 
-Thanks!
+For example, the previous error is now reported as:
 
-> 
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  kernel/trace/fprobe.c | 32 ++++++++++++--------------------
->  1 file changed, 12 insertions(+), 20 deletions(-)
-> 
-> diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
-> index 89d9f994ebb0..aac63ca9c3d1 100644
-> --- a/kernel/trace/fprobe.c
-> +++ b/kernel/trace/fprobe.c
-> @@ -85,39 +85,31 @@ static void fprobe_exit_handler(struct rethook_node *rh, void *data,
->  }
->  NOKPROBE_SYMBOL(fprobe_exit_handler);
->  
-> +static int symbols_cmp(const void *a, const void *b)
-> +{
-> +	const char **str_a = (const char **) a;
-> +	const char **str_b = (const char **) b;
-> +
-> +	return strcmp(*str_a, *str_b);
-> +}
-> +
->  /* Convert ftrace location address from symbols */
->  static unsigned long *get_ftrace_locations(const char **syms, int num)
->  {
-> -	unsigned long addr, size;
->  	unsigned long *addrs;
-> -	int i;
->  
->  	/* Convert symbols to symbol address */
->  	addrs = kcalloc(num, sizeof(*addrs), GFP_KERNEL);
->  	if (!addrs)
->  		return ERR_PTR(-ENOMEM);
->  
-> -	for (i = 0; i < num; i++) {
-> -		addr = kallsyms_lookup_name(syms[i]);
-> -		if (!addr)	/* Maybe wrong symbol */
-> -			goto error;
-> -
-> -		/* Convert symbol address to ftrace location. */
-> -		if (!kallsyms_lookup_size_offset(addr, &size, NULL) || !size)
-> -			goto error;
-> +	/* ftrace_lookup_symbols expects sorted symbols */
-> +	sort(syms, num, sizeof(*syms), symbols_cmp, NULL);
->  
-> -		addr = ftrace_location_range(addr, addr + size - 1);
-> -		if (!addr) /* No dynamic ftrace there. */
-> -			goto error;
-> +	if (!ftrace_lookup_symbols(syms, num, addrs))
-> +		return addrs;
->  
-> -		addrs[i] = addr;
-> -	}
-> -
-> -	return addrs;
-> -
-> -error:
->  	kfree(addrs);
-> -
->  	return ERR_PTR(-ENOENT);
->  }
->  
-> -- 
-> 2.35.1
-> 
+    $ make
+    ********************************************
+    ** NOTICE: libtracefs version 1.3 or higher not found
+    **
+    ** Consider installing the latest libtracefs from your
+    ** distribution, e.g., 'dnf install libtracefs' on Fedora,
+    ** or from source:
+    **
+    **  https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/
+    **
+    ********************************************
 
+These messages are inspired by the ones used on trace-cmd, as suggested
+by Stevel Rostedt.
 
+Link: https://lore.kernel.org/r/CAHk-=whxmA86E=csNv76DuxX_wYsg8mW15oUs3XTabu2Yc80yw@mail.gmail.com/
+
+Changes from V1:
+ - Moved the rst2man check to the install phase (when it is used).
+ - Removed the procps-ng lib check [1] as it is being removed.
+
+[1] a0f9f8c1030c66305c9b921057c3d483064d5529.1651220820.git.bristot@kernel.org
+
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+---
+ Documentation/tools/rtla/Makefile | 14 ++++++++++++-
+ tools/tracing/rtla/Makefile       | 35 +++++++++++++++++++++++++++++++
+ 2 files changed, 48 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/tools/rtla/Makefile b/Documentation/tools/rtla/Makefile
+index 9f2b84af1a6c..093af6d7a0e9 100644
+--- a/Documentation/tools/rtla/Makefile
++++ b/Documentation/tools/rtla/Makefile
+@@ -17,9 +17,21 @@ DOC_MAN1	= $(addprefix $(OUTPUT),$(_DOC_MAN1))
+ RST2MAN_DEP	:= $(shell command -v rst2man 2>/dev/null)
+ RST2MAN_OPTS	+= --verbose
+ 
++TEST_RST2MAN = $(shell sh -c "rst2man --version > /dev/null 2>&1 || echo n")
++
+ $(OUTPUT)%.1: %.rst
+ ifndef RST2MAN_DEP
+-	$(error "rst2man not found, but required to generate man pages")
++	$(info ********************************************)
++	$(info ** NOTICE: rst2man not found)
++	$(info **)
++	$(info ** Consider installing the latest rst2man from your)
++	$(info ** distribution, e.g., 'dnf install python3-docutils' on Fedora,)
++	$(info ** or from source:)
++	$(info **)
++	$(info **  https://docutils.sourceforge.io/docs/dev/repository.html )
++	$(info **)
++	$(info ********************************************)
++	$(error NOTICE: rst2man required to generate man pages)
+ endif
+ 	rst2man $(RST2MAN_OPTS) $< > $@
+ 
+diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
+index 523f0a8c38c2..3822f4ea5f49 100644
+--- a/tools/tracing/rtla/Makefile
++++ b/tools/tracing/rtla/Makefile
+@@ -58,6 +58,41 @@ else
+ DOCSRC	=	$(SRCTREE)/../../../Documentation/tools/rtla/
+ endif
+ 
++LIBTRACEEVENT_MIN_VERSION = 1.5
++LIBTRACEFS_MIN_VERSION = 1.3
++
++TEST_LIBTRACEEVENT = $(shell sh -c "$(PKG_CONFIG) --atleast-version $(LIBTRACEEVENT_MIN_VERSION) libtraceevent > /dev/null 2>&1 || echo n")
++ifeq ("$(TEST_LIBTRACEEVENT)", "n")
++.PHONY: warning_traceevent
++warning_traceevent:
++	@echo "********************************************"
++	@echo "** NOTICE: libtraceevent version $(LIBTRACEEVENT_MIN_VERSION) or higher not found"
++	@echo "**"
++	@echo "** Consider installing the latest libtraceevent from your"
++	@echo "** distribution, e.g., 'dnf install libtraceevent' on Fedora,"
++	@echo "** or from source:"
++	@echo "**"
++	@echo "**  https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/ "
++	@echo "**"
++	@echo "********************************************"
++endif
++
++TEST_LIBTRACEFS = $(shell sh -c "$(PKG_CONFIG) --atleast-version $(LIBTRACEFS_MIN_VERSION) libtracefs > /dev/null 2>&1 || echo n")
++ifeq ("$(TEST_LIBTRACEFS)", "n")
++.PHONY: warning_tracefs
++warning_tracefs:
++	@echo "********************************************"
++	@echo "** NOTICE: libtracefs version $(LIBTRACEFS_MIN_VERSION) or higher not found"
++	@echo "**"
++	@echo "** Consider installing the latest libtracefs from your"
++	@echo "** distribution, e.g., 'dnf install libtracefs' on Fedora,"
++	@echo "** or from source:"
++	@echo "**"
++	@echo "**  https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/ "
++	@echo "**"
++	@echo "********************************************"
++endif
++
+ .PHONY:	all
+ all:	rtla
+ 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+2.32.0
+

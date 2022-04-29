@@ -2,41 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18292514965
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:31:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 437B3514963
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359192AbiD2Meq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 08:34:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51530 "EHLO
+        id S1359200AbiD2MfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 08:35:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359295AbiD2Mej (ORCPT
+        with ESMTP id S1359142AbiD2MfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 08:34:39 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB0EDC90E7
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 05:31:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5DEC91063;
-        Fri, 29 Apr 2022 05:31:19 -0700 (PDT)
-Received: from e127744.arm.com (unknown [10.57.46.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 04ECA3F73B;
-        Fri, 29 Apr 2022 05:31:16 -0700 (PDT)
-From:   German Gomez <german.gomez@arm.com>
-To:     coresight@lists.linaro.org, mathieu.poirier@linaro.org,
-        suzuki.poulose@arm.com
-Cc:     james.clark@arm.com, leo.yan@linaro.org, mike.leach@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        German Gomez <german.gomez@arm.com>
-Subject: [PATCH 2/2] coresight: etm4x: docs: Add documentation for 'ts_source' sysfs interface
-Date:   Fri, 29 Apr 2022 13:31:00 +0100
-Message-Id: <20220429123100.268059-3-german.gomez@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220429123100.268059-1-german.gomez@arm.com>
-References: <20220429123100.268059-1-german.gomez@arm.com>
+        Fri, 29 Apr 2022 08:35:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FCDAC8BCB;
+        Fri, 29 Apr 2022 05:31:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ECBE0B83512;
+        Fri, 29 Apr 2022 12:31:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50100C385A7;
+        Fri, 29 Apr 2022 12:31:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651235501;
+        bh=exjKm3VFVKzVcumY92xZaKOxxHTCyDMi2gjz1DFJ8rI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=fEVj3LnRk4lpWxmpWy999am5gzNGlO8qKegbzHsH+//u6y0djwIHdkjluyMUX9JrV
+         HF3X49/Mag5U/1atxeTQgCYNO1zkGoIw/Ws+76Mk/narioQwQktdkDV2IF8WGnTbOE
+         QUjuL+GF43eLDcUDF/SId3MOE8J8kmIiuB9rRjl5ufQbrDUygLkCoC6qJLDM2mtSvX
+         BikcctCmr3NSJC5C1B0JFtDBuqDqjWHU2UYYED1aAabNk4PfsQWPQJsqO5vlbK74Lq
+         kCQsoFBB0pKKFmhVaKTSRUEgnb2s3ZiIdfr1iglryq/Wq+RJmZVpOesY22KL7EUEpB
+         GJhTiJFurpD+g==
+From:   matthias.bgg@kernel.org
+To:     mturquette@baylibre.com, sboyd@kernel.org
+Cc:     allen-kh.cheng@mediatek.com, weiyi.lu@mediatek.com,
+        chun-jie.chen@mediatek.com, linux-kernel@vger.kernel.org,
+        ikjn@chromium.org, miles.chen@mediatek.com, robh+dt@kernel.org,
+        linux-mediatek@lists.infradead.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        angelogioacchino.delregno@collabora.com,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        devicetree@vger.kernel.org
+Subject: [PATCH v2 0/2] Delete MT8192 msdc gate (was "clk: mediatek: Delete MT8192 msdc gate")
+Date:   Fri, 29 Apr 2022 14:31:30 +0200
+Message-Id: <20220429123133.28869-1-matthias.bgg@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,56 +59,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sync sysfs documentation pages to include the new ts_source (timestamp
-source) interface.
+From: Matthias Brugger <matthias.bgg@gmail.com>
 
-Signed-off-by: German Gomez <german.gomez@arm.com>
----
- .../ABI/testing/sysfs-bus-coresight-devices-etm4x  |  8 ++++++++
- .../trace/coresight/coresight-etm4x-reference.rst  | 14 ++++++++++++++
- 2 files changed, 22 insertions(+)
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-etm4x b/Documentation/ABI/testing/sysfs-bus-coresight-devices-etm4x
-index 8e53a32f81505..19ac9d6d2f504 100644
---- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-etm4x
-+++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-etm4x
-@@ -516,3 +516,11 @@ Contact:	Mathieu Poirier <mathieu.poirier@linaro.org>
- Description:	(Read) Returns the number of special conditional P1 right-hand keys
- 		that the trace unit can use (0x194).  The value is taken
- 		directly from the HW.
-+
-+What:		/sys/bus/coresight/devices/etm<N>/ts_source
-+Date:		April 2022
-+KernelVersion:	5.18
-+Contact:	Mathieu Poirier <mathieu.poirier@linaro.org>
-+Description:	(Read) When FEAT_TRF is implemented, value of TRFCR_ELx.TS used for
-+		trace session. Otherwise -1 indicates an unknown time source. Check
-+		trcidr0.tssize to see if a global timestamp is available.
-diff --git a/Documentation/trace/coresight/coresight-etm4x-reference.rst b/Documentation/trace/coresight/coresight-etm4x-reference.rst
-index d25dfe86af9bf..f016c7c29429b 100644
---- a/Documentation/trace/coresight/coresight-etm4x-reference.rst
-+++ b/Documentation/trace/coresight/coresight-etm4x-reference.rst
-@@ -71,6 +71,20 @@ the ‘TRC’ prefix.
- 
- ----
- 
-+:File:            ``ts_source`` (ro)
-+:Trace Registers: None.
-+:Notes:
-+    When FEAT_TRF is implemented, value of TRFCR_ELx.TS used for trace session. Otherwise -1
-+    indicates an unknown time source. Check trcidr0.tssize to see if a global timestamp is
-+    available.
-+
-+:Example:
-+    ``$> cat ts_source``
-+
-+    ``$> 1``
-+
-+----
-+
- :File:            ``addr_idx`` (rw)
- :Trace Registers: None.
- :Notes:
+The mt8192-msdc clock is only a single clock gate. This gate is accessed
+from the mmc driver directly. With
+4a1d1379ebf6 ("arm64: dts: mt8192: Add mmc device nodes")
+the only consumer of this binding was deleted. Delete the binding
+decription and the clock driver bound to it.
+
+Changes in v2:
+- Delete compatible in binding descprition as well
+- add Reviewed-by tag
+
+Matthias Brugger (2):
+  dt-bindings: ARM: Mediatek: Remove msdc binding of MT8192 clock
+  clk: mediatek: Delete MT8192 msdc gate
+
+ .../arm/mediatek/mediatek,mt8192-clock.yaml   |  8 -------
+ drivers/clk/mediatek/clk-mt8192-msdc.c        | 21 -------------------
+ 2 files changed, 29 deletions(-)
+
 -- 
-2.25.1
+2.34.1
 

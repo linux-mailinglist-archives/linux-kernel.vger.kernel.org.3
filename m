@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4586C5155BE
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53D075155BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380824AbiD2UjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 16:39:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46128 "EHLO
+        id S1380835AbiD2UjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 16:39:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234906AbiD2UjU (ORCPT
+        with ESMTP id S234906AbiD2UjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 16:39:20 -0400
+        Fri, 29 Apr 2022 16:39:22 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D1D8230E;
-        Fri, 29 Apr 2022 13:36:01 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 20:35:58 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A0382329;
+        Fri, 29 Apr 2022 13:36:02 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 20:35:59 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651264560;
+        s=2020; t=1651264561;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=K37SKVATOrDEGjpCoOVGz3lZnJ9xwueFxnQ9P6IsH5Y=;
-        b=4A2s2/HoWsO123jM4qHEFMbopSCvs2NgBqCKTmKEwZSx29r843vx5WLqtFIWPgv7ld7wtv
-        Kr7mFjm5zkHjkme4fTHf4drISHk23/9qFu8QzAYdYggZFDTj53qvHi3OumoSG2epiKLIYd
-        twJ90s1kjAIHsMK9UUJ9Blh+9y6K2Jz77U9ItiDp9FSQVaL6V8w/KQuLh+uLlrtmLXqU5j
-        UXM6K+jg05QcG7Er914+m4eHVwp/7YYE5+WJ3AMzGR8ReDrn3qNMWkBf/aaO4BvyRV37DR
-        CYAyyGvCJylSn+VsR/7yfg0q0xVsSCKrI8GoWuuj2iyEAVxbLAUS+uaAsZlzsA==
+        bh=1Cbku9NUF1Vu1YvGy4wUhcGVy/PMIvcsWErJu7LXr14=;
+        b=spNC7TmAuuXL/HbG2R33fk5Wzu8JqvzQWuFUQS1uJ5aR2HL7e/nu9oDpvRI9gdVGR4HJJW
+        vFhUCfq95KxsQTQEEOJXXbrqEgbddooHFBrkacJUZHLyKbzsEqaFtI9uknF1s1G0hdECeI
+        UfdzqXsPHJFPHAEBFBxngVYCsCKBgMXFbzRi5oStf8Jg10xTT8ZGWkmxulB1xzwn+Rm1+1
+        iSHQ5JzGr5CRPG36OzkiyOaMMWNIMvBs7agpLujyyWkP41j/OEcIrOxEjkIF9x0bRJ1JpY
+        uZ9wKI7jySgh2FYlTOKZGwcl1qpvSBU3Fp4cY/aAAapZa3Bmr+bzWQ9iw81vCQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651264560;
+        s=2020e; t=1651264561;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=K37SKVATOrDEGjpCoOVGz3lZnJ9xwueFxnQ9P6IsH5Y=;
-        b=qZTwTZDY2N1NsgRO+NZYQXn96nSu3SXjjvsY1JaxJQ2bmMd2fZzLkanQhEMTuXpPyroYU+
-        IJth+slwK9zY0vCw==
+        bh=1Cbku9NUF1Vu1YvGy4wUhcGVy/PMIvcsWErJu7LXr14=;
+        b=1n+x4EigEIn2btzbwhlcINiw9HZCGDnT/4XNwYKqb6Zaj7ySSTWXf/VO4lxxtOuB3z3fma
+        8zYPb1bhHAIxN3Dg==
 From:   "tip-bot2 for Dietmar Eggemann" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/fair: Remove cfs_rq_tg_path()
+Subject: [tip: sched/core] sched/fair: Remove sched_trace_*() helper functions
 Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Qais Yousef <qais.yousef@arm.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220428144338.479094-3-qais.yousef@arm.com>
-References: <20220428144338.479094-3-qais.yousef@arm.com>
+In-Reply-To: <20220428144338.479094-2-qais.yousef@arm.com>
+References: <20220428144338.479094-2-qais.yousef@arm.com>
 MIME-Version: 1.0
-Message-ID: <165126455892.4207.1028425150501881014.tip-bot2@tip-bot2>
+Message-ID: <165126455989.4207.2688453900664238005.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,66 +67,170 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     97956dd278d3af1b5657026b992b54cf2e1b50b9
-Gitweb:        https://git.kernel.org/tip/97956dd278d3af1b5657026b992b54cf2e1b50b9
+Commit-ID:     50e7b416d2ab10b9771bd00a4d85df90ad2e4b37
+Gitweb:        https://git.kernel.org/tip/50e7b416d2ab10b9771bd00a4d85df90ad2e4b37
 Author:        Dietmar Eggemann <dietmar.eggemann@arm.com>
-AuthorDate:    Thu, 28 Apr 2022 15:43:38 +01:00
+AuthorDate:    Thu, 28 Apr 2022 15:43:37 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Fri, 29 Apr 2022 11:06:29 +02:00
 
-sched/fair: Remove cfs_rq_tg_path()
+sched/fair: Remove sched_trace_*() helper functions
 
-cfs_rq_tg_path() is used by a tracepoint-to traceevent (tp-2-te)
-converter to format the path of a taskgroup or autogroup respectively.
-It doesn't have any in-kernel users after the removal of the
-sched_trace_cfs_rq_path() helper function.
+We no longer need them as we can use DWARF debug info or BTF + pahole to
+re-generate the required structs to compile against them for a given
+kernel.
 
-cfs_rq_tg_path() can be coded in a tp-2-te converter.
+This moves the burden of maintaining these helper functions to the
+module.
 
-Remove it from kernel/sched/fair.c.
+	https://github.com/qais-yousef/sched_tp
 
+Note that pahole v1.15 is required at least for using DWARF. And for BTF
+v1.23 which is not yet released will be required. There's alignment
+problem that will lead to crashes in earlier versions when used with
+BTF.
+
+We should have enough infrastructure to make these helper functions now
+obsolete, so remove them.
+
+[Rewrote commit message to reflect the new alternative]
 Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
 Signed-off-by: Qais Yousef <qais.yousef@arm.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220428144338.479094-3-qais.yousef@arm.com
+Link: https://lore.kernel.org/r/20220428144338.479094-2-qais.yousef@arm.com
 ---
- kernel/sched/fair.c | 19 -------------------
- 1 file changed, 19 deletions(-)
+ include/linux/sched.h | 14 +------
+ kernel/sched/fair.c   | 98 +------------------------------------------
+ 2 files changed, 112 deletions(-)
 
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 67f06f7..fc74ea2 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -2378,20 +2378,6 @@ static inline void rseq_syscall(struct pt_regs *regs)
+ 
+ #endif
+ 
+-const struct sched_avg *sched_trace_cfs_rq_avg(struct cfs_rq *cfs_rq);
+-char *sched_trace_cfs_rq_path(struct cfs_rq *cfs_rq, char *str, int len);
+-int sched_trace_cfs_rq_cpu(struct cfs_rq *cfs_rq);
+-
+-const struct sched_avg *sched_trace_rq_avg_rt(struct rq *rq);
+-const struct sched_avg *sched_trace_rq_avg_dl(struct rq *rq);
+-const struct sched_avg *sched_trace_rq_avg_irq(struct rq *rq);
+-
+-int sched_trace_rq_cpu(struct rq *rq);
+-int sched_trace_rq_cpu_capacity(struct rq *rq);
+-int sched_trace_rq_nr_running(struct rq *rq);
+-
+-const struct cpumask *sched_trace_rd_span(struct root_domain *rd);
+-
+ #ifdef CONFIG_SCHED_CORE
+ extern void sched_core_free(struct task_struct *tsk);
+ extern void sched_core_fork(struct task_struct *p);
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 19803e1..6ca054b 100644
+index 7d38728..19803e1 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -313,19 +313,6 @@ const struct sched_class fair_sched_class;
- #define for_each_sched_entity(se) \
- 		for (; se; se = se->parent)
+@@ -11839,101 +11839,3 @@ __init void init_sched_fair_class(void)
+ #endif /* SMP */
  
--static inline void cfs_rq_tg_path(struct cfs_rq *cfs_rq, char *path, int len)
+ }
+-
+-/*
+- * Helper functions to facilitate extracting info from tracepoints.
+- */
+-
+-const struct sched_avg *sched_trace_cfs_rq_avg(struct cfs_rq *cfs_rq)
 -{
--	if (!path)
--		return;
--
--	if (cfs_rq && task_group_is_autogroup(cfs_rq->tg))
--		autogroup_path(cfs_rq->tg, path, len);
--	else if (cfs_rq && cfs_rq->tg->css.cgroup)
--		cgroup_path(cfs_rq->tg->css.cgroup, path, len);
--	else
--		strlcpy(path, "(null)", len);
+-#ifdef CONFIG_SMP
+-	return cfs_rq ? &cfs_rq->avg : NULL;
+-#else
+-	return NULL;
+-#endif
 -}
+-EXPORT_SYMBOL_GPL(sched_trace_cfs_rq_avg);
 -
- static inline bool list_add_leaf_cfs_rq(struct cfs_rq *cfs_rq)
- {
- 	struct rq *rq = rq_of(cfs_rq);
-@@ -493,12 +480,6 @@ static int se_is_idle(struct sched_entity *se)
- #define for_each_sched_entity(se) \
- 		for (; se; se = NULL)
- 
--static inline void cfs_rq_tg_path(struct cfs_rq *cfs_rq, char *path, int len)
+-char *sched_trace_cfs_rq_path(struct cfs_rq *cfs_rq, char *str, int len)
 -{
--	if (path)
--		strlcpy(path, "(null)", len);
--}
+-	if (!cfs_rq) {
+-		if (str)
+-			strlcpy(str, "(null)", len);
+-		else
+-			return NULL;
+-	}
 -
- static inline bool list_add_leaf_cfs_rq(struct cfs_rq *cfs_rq)
- {
- 	return true;
+-	cfs_rq_tg_path(cfs_rq, str, len);
+-	return str;
+-}
+-EXPORT_SYMBOL_GPL(sched_trace_cfs_rq_path);
+-
+-int sched_trace_cfs_rq_cpu(struct cfs_rq *cfs_rq)
+-{
+-	return cfs_rq ? cpu_of(rq_of(cfs_rq)) : -1;
+-}
+-EXPORT_SYMBOL_GPL(sched_trace_cfs_rq_cpu);
+-
+-const struct sched_avg *sched_trace_rq_avg_rt(struct rq *rq)
+-{
+-#ifdef CONFIG_SMP
+-	return rq ? &rq->avg_rt : NULL;
+-#else
+-	return NULL;
+-#endif
+-}
+-EXPORT_SYMBOL_GPL(sched_trace_rq_avg_rt);
+-
+-const struct sched_avg *sched_trace_rq_avg_dl(struct rq *rq)
+-{
+-#ifdef CONFIG_SMP
+-	return rq ? &rq->avg_dl : NULL;
+-#else
+-	return NULL;
+-#endif
+-}
+-EXPORT_SYMBOL_GPL(sched_trace_rq_avg_dl);
+-
+-const struct sched_avg *sched_trace_rq_avg_irq(struct rq *rq)
+-{
+-#if defined(CONFIG_SMP) && defined(CONFIG_HAVE_SCHED_AVG_IRQ)
+-	return rq ? &rq->avg_irq : NULL;
+-#else
+-	return NULL;
+-#endif
+-}
+-EXPORT_SYMBOL_GPL(sched_trace_rq_avg_irq);
+-
+-int sched_trace_rq_cpu(struct rq *rq)
+-{
+-	return rq ? cpu_of(rq) : -1;
+-}
+-EXPORT_SYMBOL_GPL(sched_trace_rq_cpu);
+-
+-int sched_trace_rq_cpu_capacity(struct rq *rq)
+-{
+-	return rq ?
+-#ifdef CONFIG_SMP
+-		rq->cpu_capacity
+-#else
+-		SCHED_CAPACITY_SCALE
+-#endif
+-		: -1;
+-}
+-EXPORT_SYMBOL_GPL(sched_trace_rq_cpu_capacity);
+-
+-const struct cpumask *sched_trace_rd_span(struct root_domain *rd)
+-{
+-#ifdef CONFIG_SMP
+-	return rd ? rd->span : NULL;
+-#else
+-	return NULL;
+-#endif
+-}
+-EXPORT_SYMBOL_GPL(sched_trace_rd_span);
+-
+-int sched_trace_rq_nr_running(struct rq *rq)
+-{
+-        return rq ? rq->nr_running : -1;
+-}
+-EXPORT_SYMBOL_GPL(sched_trace_rq_nr_running);

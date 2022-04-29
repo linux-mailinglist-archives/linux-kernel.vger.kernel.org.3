@@ -2,157 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4205140CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 05:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F51C5140CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 05:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234553AbiD2DBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 23:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39744 "EHLO
+        id S234810AbiD2DCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 23:02:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230299AbiD2DBI (ORCPT
+        with ESMTP id S230299AbiD2DCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 23:01:08 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0829BBB099
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 19:57:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651201072; x=1682737072;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iwmaNv8Mz1sl8eYpdeW1vmgH0LaPk2vCD5QTVC0RnHY=;
-  b=h5WRhlN8l8huo9mdvWsYPJ5K2Bi7B4GCzzMTQJqU/P/Rl8qhPefvOrpj
-   UcHrYqlQW4Hh/AeqrXp4Qt0iR9/wSDOmmQlL7NE7gq8F5ajsoB6sF4eyP
-   b/nPS1wU8IZEKBVwNUPosx2QkNiDdMbu3QSWC10N5GOPPr1cMPWCPdLOf
-   lEyHlmV4+rgcn1dQxXBsWXjBls7Ualj2o65e+8ou9prOW4sNk7e43C9CU
-   9fG5KgfoFQKPM3TMcU5wC7wQYReq2PA+03ub8NYgWmz67ZXI1gkEoysxD
-   tX9De60WO5jMOMiBdWWfTi3iTDBPhJTuTh52oKeroKNtSRqjHIXZ/0p/o
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="247064830"
-X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="247064830"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 19:57:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="731830511"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 28 Apr 2022 19:57:49 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nkGpJ-0005v1-4K;
-        Fri, 29 Apr 2022 02:57:49 +0000
-Date:   Fri, 29 Apr 2022 10:57:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [peterz-queue:sched/wip.freezer 3/7]
- include/linux/sched/jobctl.h:23:2: error: stray '#' in program
-Message-ID: <202204291009.ntJSd5uS-lkp@intel.com>
+        Thu, 28 Apr 2022 23:02:14 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BAFABB099
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 19:58:58 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id y14so5810329pfe.10
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 19:58:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZMdJPf2szG7jWooabNPVXM6MEeYUwbGrZLNSWclN2LA=;
+        b=moQBxhRZe4qA2k9riOgBJbbxEm04nXLW9FwhVY6asFHo5bHPxjsj4g3UVwhe4d5oJl
+         mCj0Tjr3CS3rqYsyRbADS4U8M4YlL+8DQntWM02XwcbUo+UmOmnnDGEO5W++BzX/MW7t
+         kYoL7RniuWg2Sc7o9N7pfCL4g76RanUxJ8wb0gmICKuhkquZovxFfiY2LvHlh/XQUdme
+         uHNiDokx9eHJ3vvBoV0THW4QAXJwSugTxXEnPYy8VejJq3kpBTdevVkVNJMjwIlBZlNO
+         Os9wzijKksm3nDiQQWvZjgdwrAD1031w3xAbpmSHkOyo3p+y+0c5WbaucfwCHFuJPOkO
+         a9iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZMdJPf2szG7jWooabNPVXM6MEeYUwbGrZLNSWclN2LA=;
+        b=2TEzNcZIIprax867lV8Fxbd+wRRQ+4z2hnwAueih923cloPvtKu/D9AfAk/D3ZQsBn
+         4g2QXB0jfrRUEY0cLBRcljgs+KYC8noOz3RvqzcTmPmX0et2wmPsvtWA7JzPO8GZEJ1L
+         artDeqScOsL/WgT+7DQ6M1qcS2tKqj6mzxWNjIJnBES2+MLYzKXnM7AjnKtha2VVeyeK
+         Ki0kuzm3izNa+qV7TGG7QJtoxZWV9o+ddj/lbhTHibwX+yI1mzhSEv4wRsBPtVQl0ZDP
+         nut1rEx+9hfPib/oAeJenik3cZXMyZDoe05A1YsiwRlZ8Ok9eJhprHg0SHGY5BxmrbRH
+         aygw==
+X-Gm-Message-State: AOAM530RoLH5dxYktJdF2gMgBw14jFGwUmrgpL5DTo/GTbXmdfleiZ28
+        9APr+585l+c8yuKR4kfIgtvkgBJTRjAA5wljFbUvzw==
+X-Google-Smtp-Source: ABdhPJynfpp1FDMlID1Fi4CPNT0GJC+7mQt3UP2y/xh9g5J1blG2Zc4OVE3BqXTw5cjIzN9QJPg/gf2nNT4eB78vzmc=
+X-Received: by 2002:a63:1117:0:b0:399:2df0:7fb9 with SMTP id
+ g23-20020a631117000000b003992df07fb9mr31449685pgl.40.1651201137593; Thu, 28
+ Apr 2022 19:58:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1649219184.git.kai.huang@intel.com> <522e37eb-68fc-35db-44d5-479d0088e43f@intel.com>
+ <CAPcyv4g5E_TOow=3pFJXyFr=KLV9pTSnDthgz6TuXvru4xDzaQ@mail.gmail.com> <de9b8f4cef5da03226158492988956099199aa60.camel@intel.com>
+In-Reply-To: <de9b8f4cef5da03226158492988956099199aa60.camel@intel.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Thu, 28 Apr 2022 19:58:46 -0700
+Message-ID: <CAPcyv4iGsXkHAVgf+JZ4Pah_fkCZ=VvUmj7s3C6Rkejtdw_sgQ@mail.gmail.com>
+Subject: Re: [PATCH v3 00/21] TDX host kernel support
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/wip.freezer
-head:   a1b437cfec0d2b0060cf85538c2379c74fb63ad5
-commit: 4cb4f3dc01c45f8a1621f13b55705ba4a6844081 [3/7] sched,signal,ptrace: Rework TASK_TRACED, TASK_STOPPED state
-config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220429/202204291009.ntJSd5uS-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=4cb4f3dc01c45f8a1621f13b55705ba4a6844081
-        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
-        git fetch --no-tags peterz-queue sched/wip.freezer
-        git checkout 4cb4f3dc01c45f8a1621f13b55705ba4a6844081
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 prepare
+On Wed, Apr 27, 2022 at 6:21 PM Kai Huang <kai.huang@intel.com> wrote:
+>
+> On Wed, 2022-04-27 at 18:01 -0700, Dan Williams wrote:
+> > On Tue, Apr 26, 2022 at 1:10 PM Dave Hansen <dave.hansen@intel.com> wrote:
+> > [..]
+> > > > 3. Memory hotplug
+> > > >
+> > > > The first generation of TDX architecturally doesn't support memory
+> > > > hotplug.  And the first generation of TDX-capable platforms don't support
+> > > > physical memory hotplug.  Since it physically cannot happen, this series
+> > > > doesn't add any check in ACPI memory hotplug code path to disable it.
+> > > >
+> > > > A special case of memory hotplug is adding NVDIMM as system RAM using
+> >
+> > Saw "NVDIMM" mentioned while browsing this, so stopped to make a comment...
+> >
+> > > > kmem driver.  However the first generation of TDX-capable platforms
+> > > > cannot enable TDX and NVDIMM simultaneously, so in practice this cannot
+> > > > happen either.
+> > >
+> > > What prevents this code from today's code being run on tomorrow's
+> > > platforms and breaking these assumptions?
+> >
+> > The assumption is already broken today with NVDIMM-N. The lack of
+> > DDR-T support on TDX enabled platforms has zero effect on DDR-based
+> > persistent memory solutions. In other words, please describe the
+> > actual software and hardware conflicts at play here, and do not make
+> > the mistake of assuming that "no DDR-T support on TDX platforms" ==
+> > "no NVDIMM support".
+>
+> Sorry I got this information from planning team or execution team I guess. I was
+> told NVDIMM and TDX cannot "co-exist" on the first generation of TDX capable
+> machine.  "co-exist" means they cannot be turned on simultaneously on the same
+> platform.  I am also not aware NVDIMM-N, nor the difference between DDR based
+> and DDR-T based persistent memory.  Could you give some more background here so
+> I can take a look?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+My rough understanding is that TDX makes use of metadata communicated
+"on the wire" for DDR, but that infrastructure is not there for DDR-T.
+However, there are plenty of DDR based NVDIMMs that use super-caps /
+batteries and flash to save contents. I believe the concern for TDX is
+that the kernel needs to know not use TDX accepted PMEM as PMEM
+because the contents saved by the DIMM's onboard energy source are
+unreadable outside of a TD.
 
-All errors (new ones prefixed by >>):
+Here is one of the links that comes up in a search for NVDIMM-N.
 
-   In file included from include/linux/sched/signal.h:8,
-                    from include/linux/rcuwait.h:6,
-                    from include/linux/percpu-rwsem.h:7,
-                    from include/linux/fs.h:33,
-                    from include/linux/cgroup.h:17,
-                    from include/linux/memcontrol.h:13,
-                    from include/linux/swap.h:9,
-                    from include/linux/suspend.h:5,
-                    from arch/x86/kernel/asm-offsets.c:13:
->> include/linux/sched/jobctl.h:23:2: error: stray '#' in program
-      23 | q#define JOBCTL_STOPPED_BIT     25      /* do_signal_stop() */
-         |  ^
-   include/linux/sched/jobctl.h:23:1: error: unknown type name 'q'
-      23 | q#define JOBCTL_STOPPED_BIT     25      /* do_signal_stop() */
-         | ^
->> include/linux/sched/jobctl.h:23:10: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'JOBCTL_STOPPED_BIT'
-      23 | q#define JOBCTL_STOPPED_BIT     25      /* do_signal_stop() */
-         |          ^~~~~~~~~~~~~~~~~~
-   include/linux/sched/signal.h: In function 'kernel_signal_stop':
->> include/linux/sched/jobctl.h:35:41: error: 'JOBCTL_STOPPED_BIT' undeclared (first use in this function); did you mean 'JOBCTL_STOPPED'?
-      35 | #define JOBCTL_STOPPED          (1UL << JOBCTL_STOPPED_BIT)
-         |                                         ^~~~~~~~~~~~~~~~~~
-   include/linux/sched/signal.h:298:36: note: in expansion of macro 'JOBCTL_STOPPED'
-     298 |                 current->jobctl |= JOBCTL_STOPPED;
-         |                                    ^~~~~~~~~~~~~~
-   include/linux/sched/jobctl.h:35:41: note: each undeclared identifier is reported only once for each function it appears in
-      35 | #define JOBCTL_STOPPED          (1UL << JOBCTL_STOPPED_BIT)
-         |                                         ^~~~~~~~~~~~~~~~~~
-   include/linux/sched/signal.h:298:36: note: in expansion of macro 'JOBCTL_STOPPED'
-     298 |                 current->jobctl |= JOBCTL_STOPPED;
-         |                                    ^~~~~~~~~~~~~~
-   include/linux/sched/signal.h: In function 'signal_wake_up':
->> include/linux/sched/jobctl.h:35:41: error: 'JOBCTL_STOPPED_BIT' undeclared (first use in this function); did you mean 'JOBCTL_STOPPED'?
-      35 | #define JOBCTL_STOPPED          (1UL << JOBCTL_STOPPED_BIT)
-         |                                         ^~~~~~~~~~~~~~~~~~
-   include/linux/sched/signal.h:444:32: note: in expansion of macro 'JOBCTL_STOPPED'
-     444 |                 t->jobctl &= ~(JOBCTL_STOPPED | JOBCTL_TRACED);
-         |                                ^~~~~~~~~~~~~~
-   make[2]: *** [scripts/Makefile.build:120: arch/x86/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1194: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+https://www.snia.org/educational-library/what-you-can-do-nvdimm-n-and-nvdimm-p-2019
 
+>
+> >
+> > > > Another case is admin can use 'memmap' kernel command line to create
+> > > > legacy PMEMs and use them as TD guest memory, or theoretically, can use
+> > > > kmem driver to add them as system RAM.  To avoid having to change memory
+> > > > hotplug code to prevent this from happening, this series always include
+> > > > legacy PMEMs when constructing TDMRs so they are also TDX memory.
+> >
+> > I am not sure what you are trying to say here?
+>
+> We want to always make sure the memory managed by page allocator is TDX memory.
 
-vim +23 include/linux/sched/jobctl.h
+That only seems possible if the kernel is given a TDX capable physical
+address map at the beginning of time.
 
-    13	
-    14	#define JOBCTL_STOP_DEQUEUED_BIT 16	/* stop signal dequeued */
-    15	#define JOBCTL_STOP_PENDING_BIT	17	/* task should stop for group stop */
-    16	#define JOBCTL_STOP_CONSUME_BIT	18	/* consume group stop count */
-    17	#define JOBCTL_TRAP_STOP_BIT	19	/* trap for STOP */
-    18	#define JOBCTL_TRAP_NOTIFY_BIT	20	/* trap for NOTIFY */
-    19	#define JOBCTL_TRAPPING_BIT	21	/* switching to TRACED */
-    20	#define JOBCTL_LISTENING_BIT	22	/* ptracer is listening for events */
-    21	#define JOBCTL_TRAP_FREEZE_BIT	23	/* trap for cgroup freezer */
-    22	#define JOBCTL_DELAY_WAKEKILL_BIT	24	/* delay killable wakeups */
-  > 23	q#define JOBCTL_STOPPED_BIT	25	/* do_signal_stop() */
-    24	#define JOBCTL_TRACED_BIT	26	/* ptrace_stop() */
-    25	
-    26	#define JOBCTL_STOP_DEQUEUED	(1UL << JOBCTL_STOP_DEQUEUED_BIT)
-    27	#define JOBCTL_STOP_PENDING	(1UL << JOBCTL_STOP_PENDING_BIT)
-    28	#define JOBCTL_STOP_CONSUME	(1UL << JOBCTL_STOP_CONSUME_BIT)
-    29	#define JOBCTL_TRAP_STOP	(1UL << JOBCTL_TRAP_STOP_BIT)
-    30	#define JOBCTL_TRAP_NOTIFY	(1UL << JOBCTL_TRAP_NOTIFY_BIT)
-    31	#define JOBCTL_TRAPPING		(1UL << JOBCTL_TRAPPING_BIT)
-    32	#define JOBCTL_LISTENING	(1UL << JOBCTL_LISTENING_BIT)
-    33	#define JOBCTL_TRAP_FREEZE	(1UL << JOBCTL_TRAP_FREEZE_BIT)
-    34	#define JOBCTL_DELAY_WAKEKILL	(1UL << JOBCTL_DELAY_WAKEKILL_BIT)
-  > 35	#define JOBCTL_STOPPED		(1UL << JOBCTL_STOPPED_BIT)
-    36	#define JOBCTL_TRACED		(1UL << JOBCTL_TRACED_BIT)
-    37	
+> So if the legacy PMEMs are unconditionally configured as TDX memory, then we
+> don't need to prevent them from being added as system memory via kmem driver.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I think that is too narrow of a focus.
+
+Does a memory map exist for the physical address ranges that are TDX
+capable? Please don't say EFI_MEMORY_CPU_CRYPTO, as that single bit is
+ambiguous beyond the point of utility across the industry's entire
+range of confidential computing memory capabilities.
+
+One strawman would be an ACPI table with contents like:
+
+struct acpi_protected_memory {
+   struct range range;
+   uuid_t platform_mem_crypto_capability;
+};
+
+With some way to map those uuids to a set of platform vendor specific
+constraints and specifications. Some would be shared across
+confidential computing vendors, some might be unique. Otherwise, I do
+not see how you enforce the expectation of "all memory in the page
+allocator is TDX capable". The other alternative is that *none* of the
+memory in the page allocator is TDX capable and a special memory
+allocation device is used to map memory for TDs. In either case a map
+of all possible TDX memory is needed and the discussion above seems
+like an incomplete / "hopeful" proposal about the memory dax_kmem, or
+other sources, might online. See the CXL CEDT CFWMS (CXL Fixed Memory
+Window Structure) as an example of an ACPI table that sets the
+kernel's expectations about how a physical address range might be
+used.
+
+https://www.computeexpresslink.org/spec-landing
+
+>
+> >
+> > > > 4. CPU hotplug
+> > > >
+> > > > The first generation of TDX architecturally doesn't support ACPI CPU
+> > > > hotplug.  All logical cpus are enabled by BIOS in MADT table.  Also, the
+> > > > first generation of TDX-capable platforms don't support ACPI CPU hotplug
+> > > > either.  Since this physically cannot happen, this series doesn't add any
+> > > > check in ACPI CPU hotplug code path to disable it.
+> >
+> > What are the actual challenges posed to TDX with respect to CPU hotplug?
+>
+> During the TDX module initialization, there is a step to call SEAMCALL on all
+> logical cpus to initialize per-cpu TDX staff.  TDX doesn't support initializing
+> the new hot-added CPUs after the initialization.  There are MCHECK/BIOS changes
+> to enforce this check too I guess but I don't know details about this.
+
+Is there an ACPI table that indicates CPU-x passed the check? Or since
+the BIOS is invoked in the CPU-online path, is it trusted to suppress
+those events for CPUs outside of the mcheck domain?
+
+> > > > Also, only TDX module initialization requires all BIOS-enabled cpus are
+> >
+> > Please define "BIOS-enabled" cpus. There is no "BIOS-enabled" line in
+> > /proc/cpuinfo for example.
+>
+> It means the CPUs with "enable" bit set in the MADT table.
+
+That just indicates to the present CPUs and then a hot add event
+changes the state of now present CPUs to enabled. Per above is the
+BIOS responsible for rejecting those new CPUs, or is the kernel?

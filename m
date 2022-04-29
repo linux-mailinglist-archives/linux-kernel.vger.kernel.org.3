@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A2FC515066
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:07:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F0E251505C
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378876AbiD2QKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 12:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45012 "EHLO
+        id S1378895AbiD2QKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 12:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378838AbiD2QJl (ORCPT
+        with ESMTP id S1378837AbiD2QJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 29 Apr 2022 12:09:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3E5B0D2A
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC494B42CE
         for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:06:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B1CC622BB
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 16:06:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F372AC385A4;
-        Fri, 29 Apr 2022 16:06:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 48967622BD
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 16:06:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A53B2C385B5;
+        Fri, 29 Apr 2022 16:06:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651248381;
-        bh=pERtiBDbvFtqilzCGI/nn4ljoMv39JzOAcDfxJCU3w8=;
+        s=k20201202; t=1651248382;
+        bh=Cv+X7Zdka2XOX7Mgz9T3y/uOxQEoK1knJUHHmSETKsc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iNgdfdoFP/uoQGtI3Dp0VeJmSHjob35uUkEmHqbCcIk1kF/MzRn/EGg4zR3pjDUd6
-         kp2NiMyEJbLeXZyi3vLfNJ7vXnRMAhYmlsDtJLv3sxJL22vjgTEFixaeuYyFy3xp0u
-         zIUzjSi+HewyS2GIkY/Djyn55PHiqhR00W4XuJpWakrqnnvDOhaknWs2qrKAe+SbX2
-         jLnjtt2mv59dcW5oRPXgYlx6o9lGIeuYMnG6tcZouaBPu0dvpcU6g5+QpWviOSHjSB
-         M9J49ZzhFSzrVSZKNl2wlAnpCyO0DelojKpqhz7Hcsn7Q/McwwfO7ggPfu4mx/J1rY
-         sIFBps8xLgpLA==
+        b=OeUWgT8Bebj61lLMzYOybudEYAPP416ZFwi2by3/sqdXehXM8B3PR+EgS0ElzydKm
+         ltvsnJ+sVutojuyVzT2lT3qRrSdu6Pt61+ittcHfkCIMc5hzw7H5r4ncXI6r6QSZ8b
+         d7Zi9aRrAQVXX6VMPvLejfhjtRGtYNt9zU/wDOOtHmiK9EDzFf/rBPSWOZMKQJnpA3
+         SBvNrVDZ3aXHO4G/dxIRuR2k1VNpkSgd5PQ33DenBsUpt4K+eRk2kgvEExNzArueRt
+         LE3TK3L5g39O2wCMnmxZfagNnaCWA57qO24mahionexdjEIiIfZlcCuUKEnqfPh9g7
+         R9s6LEdO6JOTA==
 From:   sj@kernel.org
 To:     akpm@linux-foundation.org
 Cc:     linux-damon@amazon.com, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: [PATCH 10/14] mm/damon/sysfs: update schemes stat in the kdamond context
-Date:   Fri, 29 Apr 2022 16:06:02 +0000
-Message-Id: <20220429160606.127307-11-sj@kernel.org>
+Subject: [PATCH 11/14] mm/damon/sysfs: support online inputs update
+Date:   Fri, 29 Apr 2022 16:06:03 +0000
+Message-Id: <20220429160606.127307-12-sj@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220429160606.127307-1-sj@kernel.org>
 References: <20220429160606.127307-1-sj@kernel.org>
@@ -55,250 +55,184 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: SeongJae Park <sj@kernel.org>
 
-Only '->kdamond' and '->kdamond_stop' are protected by 'kdamond_lock' of
-'struct damon_ctx'.  All other DAMON context internal data items are
-recommended to be accessed in DAMON callbacks, or under some additional
-synchronizations.  But, DAMON sysfs is accessing the schemes stat under
-'kdamond_lock'.
+Currently, DAMON sysfs interface doesn't provide a way for adjusting
+DAMON input parameters while it is turned on.  Therefore, users who want
+to reconfigure DAMON need to stop DAMON and restart.  This means all the
+monitoring results that accumulated so far, which could be useful,
+should be flushed.  This would be inefficient for many cases.
 
-It makes no big issue as the read values are not used anywhere inside
-kernel, but would better to be fixed.  This commit moves the reads to
-DAMON callback context, as supposed to be used for the purpose.
+For an example, let's suppose a sysadmin was running a DAMON-based
+Operation Scheme to find memory regions not accessed for more than 5
+mins and page out the regions.  If it turns out the 5 mins threshold was
+too long and therefore the sysadmin wants to reduce it to 4 mins, the
+sysadmin should turn off DAMON, restart it, and wait for at least 4 more
+minutes so that DAMON can find the cold memory regions, even though
+DAMON was knowing there are regions that not accessed for 4 mins at the
+time of shutdown.
+
+This commit makes DAMON sysfs interface to support online DAMON input
+parameters updates by adding a new input keyword for the 'state' DAMON
+sysfs file, 'commit'.  Writing the keyword to the 'state' file while the
+corresponding kdamond is running makes the kdamond to read the sysfs
+file values again and update the DAMON context.
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- mm/damon/sysfs.c | 161 +++++++++++++++++++++++++++++++++++++++--------
- 1 file changed, 135 insertions(+), 26 deletions(-)
+ mm/damon/sysfs.c | 99 +++++++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 90 insertions(+), 9 deletions(-)
 
 diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
-index 460af481189a..864a215ff809 100644
+index 864a215ff809..23030611ae7d 100644
 --- a/mm/damon/sysfs.c
 +++ b/mm/damon/sysfs.c
-@@ -2079,6 +2079,25 @@ static const char * const damon_sysfs_cmd_strs[] = {
+@@ -2061,6 +2061,8 @@ enum damon_sysfs_cmd {
+ 	DAMON_SYSFS_CMD_ON,
+ 	/* @DAMON_SYSFS_CMD_OFF: Turn the kdamond off. */
+ 	DAMON_SYSFS_CMD_OFF,
++	/* @DAMON_SYSFS_CMD_COMMIT: Update kdamond inputs. */
++	DAMON_SYSFS_CMD_COMMIT,
+ 	/*
+ 	 * @DAMON_SYSFS_CMD_UPDATE_SCHEMES_STATS: Update scheme stats sysfs
+ 	 * files.
+@@ -2076,6 +2078,7 @@ enum damon_sysfs_cmd {
+ static const char * const damon_sysfs_cmd_strs[] = {
+ 	"on",
+ 	"off",
++	"commit",
  	"update_schemes_stats",
  };
  
-+/*
-+ * struct damon_sysfs_cmd_request - A request to the DAMON callback.
-+ * @cmd:	The command that needs to be handled by the callback.
-+ * @kdamond:	The kobject wrapper that associated to the kdamond thread.
-+ *
-+ * This structure represents a sysfs command request that need to access some
-+ * DAMON context-internal data.  Because DAMON context-internal data can be
-+ * safely accessed from DAMON callbacks without additional synchronization, the
-+ * request will be handled by the DAMON callback.  None-``NULL`` @kdamond means
-+ * the request is valid.
-+ */
-+struct damon_sysfs_cmd_request {
-+	enum damon_sysfs_cmd cmd;
-+	struct damon_sysfs_kdamond *kdamond;
-+};
-+
-+/* Current DAMON callback request.  Protected by damon_sysfs_lock. */
-+static struct damon_sysfs_cmd_request damon_sysfs_cmd_request;
-+
- static ssize_t state_show(struct kobject *kobj, struct kobj_attribute *attr,
- 		char *buf)
- {
-@@ -2257,6 +2276,70 @@ static void damon_sysfs_before_terminate(struct damon_ctx *ctx)
- 	mutex_unlock(&ctx->kdamond_lock);
+@@ -2194,6 +2197,39 @@ static int damon_sysfs_add_target(struct damon_sysfs_target *sys_target,
+ 	return err;
  }
  
 +/*
-+ * damon_sysfs_upd_schemes_stats() - Update schemes stats sysfs files.
-+ * @kdamond:	The kobject wrapper that associated to the kdamond thread.
++ * Search a target in a context that corresponds to the sysfs target input.
 + *
-+ * This function reads the schemes stats of specific kdamond and update the
-+ * related values for sysfs files.  This function should be called from DAMON
-+ * callbacks while holding ``damon_syfs_lock``, to safely access the DAMON
-+ * contexts-internal data and DAMON sysfs variables.
++ * Return: pointer to the target if found, NULL if not found, or negative
++ * error code if the search failed.
 + */
-+static int damon_sysfs_upd_schemes_stats(struct damon_sysfs_kdamond *kdamond)
++static struct damon_target *damon_sysfs_existing_target(
++		struct damon_sysfs_target *sys_target, struct damon_ctx *ctx)
 +{
-+	struct damon_ctx *ctx = kdamond->damon_ctx;
-+	struct damon_sysfs_schemes *sysfs_schemes;
-+	struct damos *scheme;
-+	int schemes_idx = 0;
++	struct pid *pid;
++	struct damon_target *t;
 +
-+	if (!ctx)
-+		return -EINVAL;
-+	sysfs_schemes = kdamond->contexts->contexts_arr[0]->schemes;
-+	damon_for_each_scheme(scheme, ctx) {
-+		struct damon_sysfs_stats *sysfs_stats;
-+
-+		sysfs_stats = sysfs_schemes->schemes_arr[schemes_idx++]->stats;
-+		sysfs_stats->nr_tried = scheme->stat.nr_tried;
-+		sysfs_stats->sz_tried = scheme->stat.sz_tried;
-+		sysfs_stats->nr_applied = scheme->stat.nr_applied;
-+		sysfs_stats->sz_applied = scheme->stat.sz_applied;
-+		sysfs_stats->qt_exceeds = scheme->stat.qt_exceeds;
++	if (ctx->ops.id == DAMON_OPS_PADDR) {
++		/* Up to only one target for paddr could exist */
++		damon_for_each_target(t, ctx)
++			return t;
++		return NULL;
 +	}
-+	return 0;
++
++	/* ops.id should be DAMON_OPS_VADDR or DAMON_OPS_FVADDR */
++	pid = find_get_pid(sys_target->pid);
++	if (!pid)
++		return ERR_PTR(-EINVAL);
++	damon_for_each_target(t, ctx) {
++		if (t->pid == pid) {
++			put_pid(pid);
++			return t;
++		}
++	}
++	put_pid(pid);
++	return NULL;
++}
++
+ static int damon_sysfs_set_targets(struct damon_ctx *ctx,
+ 		struct damon_sysfs_targets *sysfs_targets)
+ {
+@@ -2204,8 +2240,15 @@ static int damon_sysfs_set_targets(struct damon_ctx *ctx,
+ 		return -EINVAL;
+ 
+ 	for (i = 0; i < sysfs_targets->nr; i++) {
+-		err = damon_sysfs_add_target(
+-				sysfs_targets->targets_arr[i], ctx);
++		struct damon_sysfs_target *st = sysfs_targets->targets_arr[i];
++		struct damon_target *t = damon_sysfs_existing_target(st, ctx);
++
++		if (IS_ERR(t))
++			return PTR_ERR(t);
++		if (!t)
++			err = damon_sysfs_add_target(st, ctx);
++		else
++			err = damon_sysfs_set_regions(t, st->regions);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -2308,6 +2351,48 @@ static int damon_sysfs_upd_schemes_stats(struct damon_sysfs_kdamond *kdamond)
+ 	return 0;
+ }
+ 
++static inline bool damon_sysfs_kdamond_running(
++		struct damon_sysfs_kdamond *kdamond)
++{
++	return kdamond->damon_ctx &&
++		damon_sysfs_ctx_running(kdamond->damon_ctx);
 +}
 +
 +/*
-+ * damon_sysfs_cmd_request_callback() - DAMON callback for handling requests.
-+ * @c:	The DAMON context of the callback.
++ * damon_sysfs_commit_input() - Commit user inputs to a running kdamond.
++ * @kdamond:	The kobject wrapper for the associated kdamond.
 + *
-+ * This function is periodically called back from the kdamond thread for @c.
-+ * Then, it checks if there is a waiting DAMON sysfs request and handles it.
++ * If the sysfs input is wrong, the kdamond will be terminated.
 + */
-+static int damon_sysfs_cmd_request_callback(struct damon_ctx *c)
++static int damon_sysfs_commit_input(struct damon_sysfs_kdamond *kdamond)
 +{
-+	struct damon_sysfs_kdamond *kdamond;
++	struct damon_ctx *ctx = kdamond->damon_ctx;
++	struct damon_sysfs_context *sys_ctx;
 +	int err = 0;
 +
-+	/* avoid deadlock due to concurrent state_store('off') */
-+	if (!mutex_trylock(&damon_sysfs_lock))
-+		return 0;
-+	kdamond = damon_sysfs_cmd_request.kdamond;
-+	if (!kdamond || kdamond->damon_ctx != c)
-+		goto out;
-+	switch (damon_sysfs_cmd_request.cmd) {
-+	case DAMON_SYSFS_CMD_UPDATE_SCHEMES_STATS:
-+		err = damon_sysfs_upd_schemes_stats(kdamond);
-+		break;
-+	default:
-+		break;
-+	}
-+	/* Mark the request as invalid now. */
-+	damon_sysfs_cmd_request.kdamond = NULL;
-+out:
-+	mutex_unlock(&damon_sysfs_lock);
++	if (!damon_sysfs_kdamond_running(kdamond))
++		return -EINVAL;
++	/* TODO: Support multiple contexts per kdamond */
++	if (kdamond->contexts->nr != 1)
++		return -EINVAL;
++
++	sys_ctx = kdamond->contexts->contexts_arr[0];
++
++	err = damon_select_ops(ctx, sys_ctx->ops_id);
++	if (err)
++		return err;
++	err = damon_sysfs_set_attrs(ctx, sys_ctx->attrs);
++	if (err)
++		return err;
++	err = damon_sysfs_set_targets(ctx, sys_ctx->targets);
++	if (err)
++		return err;
++	err = damon_sysfs_set_schemes(ctx, sys_ctx->schemes);
++	if (err)
++		return err;
 +	return err;
 +}
 +
- static struct damon_ctx *damon_sysfs_build_ctx(
- 		struct damon_sysfs_context *sys_ctx)
- {
-@@ -2279,6 +2362,8 @@ static struct damon_ctx *damon_sysfs_build_ctx(
- 	if (err)
- 		goto out;
- 
-+	ctx->callback.after_wmarks_check = damon_sysfs_cmd_request_callback;
-+	ctx->callback.after_aggregation = damon_sysfs_cmd_request_callback;
- 	ctx->callback.before_terminate = damon_sysfs_before_terminate;
- 	return ctx;
- 
-@@ -2295,6 +2380,8 @@ static int damon_sysfs_turn_damon_on(struct damon_sysfs_kdamond *kdamond)
- 	if (kdamond->damon_ctx &&
- 			damon_sysfs_ctx_running(kdamond->damon_ctx))
- 		return -EBUSY;
-+	if (damon_sysfs_cmd_request.kdamond == kdamond)
-+		return -EBUSY;
- 	/* TODO: support multiple contexts per kdamond */
- 	if (kdamond->contexts->nr != 1)
- 		return -EINVAL;
-@@ -2327,29 +2414,11 @@ static int damon_sysfs_turn_damon_off(struct damon_sysfs_kdamond *kdamond)
- 	 */
- }
- 
--static int damon_sysfs_update_schemes_stats(struct damon_sysfs_kdamond *kdamond)
-+static inline bool damon_sysfs_kdamond_running(
-+		struct damon_sysfs_kdamond *kdamond)
- {
--	struct damon_ctx *ctx = kdamond->damon_ctx;
--	struct damos *scheme;
--	int schemes_idx = 0;
--
--	if (!ctx)
--		return -EINVAL;
--	mutex_lock(&ctx->kdamond_lock);
--	damon_for_each_scheme(scheme, ctx) {
--		struct damon_sysfs_schemes *sysfs_schemes;
--		struct damon_sysfs_stats *sysfs_stats;
--
--		sysfs_schemes = kdamond->contexts->contexts_arr[0]->schemes;
--		sysfs_stats = sysfs_schemes->schemes_arr[schemes_idx++]->stats;
--		sysfs_stats->nr_tried = scheme->stat.nr_tried;
--		sysfs_stats->sz_tried = scheme->stat.sz_tried;
--		sysfs_stats->nr_applied = scheme->stat.nr_applied;
--		sysfs_stats->sz_applied = scheme->stat.sz_applied;
--		sysfs_stats->qt_exceeds = scheme->stat.qt_exceeds;
--	}
--	mutex_unlock(&ctx->kdamond_lock);
--	return 0;
-+	return kdamond->damon_ctx &&
-+		damon_sysfs_ctx_running(kdamond->damon_ctx);
- }
- 
  /*
-@@ -2357,24 +2426,58 @@ static int damon_sysfs_update_schemes_stats(struct damon_sysfs_kdamond *kdamond)
-  * @cmd:	The command to handle.
-  * @kdamond:	The kobject wrapper for the associated kdamond.
-  *
-- * This function handles a DAMON sysfs command for a kdamond.
-+ * This function handles a DAMON sysfs command for a kdamond.  For commands
-+ * that need to access running DAMON context-internal data, it requests
-+ * handling of the command to the DAMON callback
-+ * (@damon_sysfs_cmd_request_callback()) and wait until it is properly handled,
-+ * or the context is completed.
-  *
-  * Return: 0 on success, negative error code otherwise.
-  */
- static int damon_sysfs_handle_cmd(enum damon_sysfs_cmd cmd,
- 		struct damon_sysfs_kdamond *kdamond)
- {
-+	bool need_wait = true;
-+
-+	/* Handle commands that doesn't access DAMON context-internal data */
- 	switch (cmd) {
- 	case DAMON_SYSFS_CMD_ON:
- 		return damon_sysfs_turn_damon_on(kdamond);
- 	case DAMON_SYSFS_CMD_OFF:
- 		return damon_sysfs_turn_damon_off(kdamond);
--	case DAMON_SYSFS_CMD_UPDATE_SCHEMES_STATS:
--		return damon_sysfs_update_schemes_stats(kdamond);
+  * damon_sysfs_cmd_request_callback() - DAMON callback for handling requests.
+  * @c:	The DAMON context of the callback.
+@@ -2330,6 +2415,9 @@ static int damon_sysfs_cmd_request_callback(struct damon_ctx *c)
+ 	case DAMON_SYSFS_CMD_UPDATE_SCHEMES_STATS:
+ 		err = damon_sysfs_upd_schemes_stats(kdamond);
+ 		break;
++	case DAMON_SYSFS_CMD_COMMIT:
++		err = damon_sysfs_commit_input(kdamond);
++		break;
  	default:
  		break;
  	}
--	return -EINVAL;
-+
-+	/* Pass the command to DAMON callback for safe DAMON context access */
-+	if (damon_sysfs_cmd_request.kdamond)
-+		return -EBUSY;
-+	if (!damon_sysfs_kdamond_running(kdamond))
-+		return -EINVAL;
-+	damon_sysfs_cmd_request.cmd = cmd;
-+	damon_sysfs_cmd_request.kdamond = kdamond;
-+
-+	/*
-+	 * wait until damon_sysfs_cmd_request_callback() handles the request
-+	 * from kdamond context
-+	 */
-+	mutex_unlock(&damon_sysfs_lock);
-+	while (need_wait) {
-+		schedule_timeout_idle(msecs_to_jiffies(100));
-+		if (!mutex_trylock(&damon_sysfs_lock))
-+			continue;
-+		if (!damon_sysfs_cmd_request.kdamond) {
-+			/* damon_sysfs_cmd_request_callback() handled */
-+			need_wait = false;
-+		} else if (!damon_sysfs_kdamond_running(kdamond)) {
-+			/* kdamond has already finished */
-+			need_wait = false;
-+			damon_sysfs_cmd_request.kdamond = NULL;
-+		}
-+		mutex_unlock(&damon_sysfs_lock);
-+	}
-+	mutex_lock(&damon_sysfs_lock);
-+	return 0;
+@@ -2414,13 +2502,6 @@ static int damon_sysfs_turn_damon_off(struct damon_sysfs_kdamond *kdamond)
+ 	 */
  }
  
- static ssize_t state_store(struct kobject *kobj, struct kobj_attribute *attr,
-@@ -2511,6 +2614,12 @@ static int damon_sysfs_kdamonds_add_dirs(struct damon_sysfs_kdamonds *kdamonds,
- 	if (damon_sysfs_nr_running_ctxs(kdamonds->kdamonds_arr, kdamonds->nr))
- 		return -EBUSY;
- 
-+	for (i = 0; i < kdamonds->nr; i++) {
-+		if (damon_sysfs_cmd_request.kdamond ==
-+				kdamonds->kdamonds_arr[i])
-+			return -EBUSY;
-+	}
-+
- 	damon_sysfs_kdamonds_rm_dirs(kdamonds);
- 	if (!nr_kdamonds)
- 		return 0;
+-static inline bool damon_sysfs_kdamond_running(
+-		struct damon_sysfs_kdamond *kdamond)
+-{
+-	return kdamond->damon_ctx &&
+-		damon_sysfs_ctx_running(kdamond->damon_ctx);
+-}
+-
+ /*
+  * damon_sysfs_handle_cmd() - Handle a command for a specific kdamond.
+  * @cmd:	The command to handle.
 -- 
 2.25.1
 

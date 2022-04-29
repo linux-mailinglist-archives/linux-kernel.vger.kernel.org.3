@@ -2,99 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A359F5156ED
+	by mail.lfdr.de (Postfix) with ESMTP id 5ACD25156EC
 	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238371AbiD2Vec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 17:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49418 "EHLO
+        id S238518AbiD2Vf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 17:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238391AbiD2Ve3 (ORCPT
+        with ESMTP id S232254AbiD2VfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 17:34:29 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B069F39C
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:31:05 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id k12so16171354lfr.9
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:31:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eOI+Zfm4eyoCedo75kZCVCaJekQRoZtv4NjCgnrCB2c=;
-        b=XqScRIXHpkmGAFnWt/K1cKg+6Y34bYX9zMQ8jRY0h8tVE8q1Ytvj7q1A2WMwoIdhqa
-         UUpCJJ28rM/yN2cDt6EGCxK5Q/UbPaWiU4XpiXAlrpCb9igynrPX2LE1g1hWkfF5N7ST
-         6/2yqWXmiKNa4jA9y+L8Xe6hA3tpZPWcLunSY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eOI+Zfm4eyoCedo75kZCVCaJekQRoZtv4NjCgnrCB2c=;
-        b=J8jYoj0eRNtZ0EPgKNjfqvNGGMhwhOtx3gHKSg4qqP3LGr4ZYU7pSBFOXk1zwIRpm9
-         VI1CAUOkOraZUUcFrHBZ8619GXcYLHYR0TLO7N1rfUonK5C+iE3QbO7relJjq8Eo80QZ
-         KBY9PhQHX4YDK+ha3WwL94bxSFLyzxGgxnnoGVtBkzJPu4PqLqx2UZ3XMkunOGWumr0z
-         rqr0TB1ojeoRvnQdNIIRSh92aKSUHYfvCQ539BySW0+xQMPL7i8twLlX5xiZFf+LT8NK
-         pkMP1a/W2pUOCDuLh9jdcSeL5PrM5E3tQwsMEQTXOnLzRwPqFIvh0J5ILXAzfn0fwkZg
-         VaOg==
-X-Gm-Message-State: AOAM530UmcR1auXikNX4LQjcBgOD1ow7Sqe2VbTRYzs3C7pvF+/qpN+e
-        tJQqKGeIfBtiPpJ7tpXYRuh9YUM2rtpmDk9M
-X-Google-Smtp-Source: ABdhPJwAhxhuac4L0i7elRHQj/28peZ1EEz/P70zxbHW/Xr1W+zNx80pzVQR+LCT8VXAhcXD792oCw==
-X-Received: by 2002:a05:6512:118d:b0:472:22a2:4a12 with SMTP id g13-20020a056512118d00b0047222a24a12mr839093lfr.391.1651267863436;
-        Fri, 29 Apr 2022 14:31:03 -0700 (PDT)
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com. [209.85.167.45])
-        by smtp.gmail.com with ESMTPSA id p3-20020a19f003000000b0047255d211b7sm28561lfc.230.2022.04.29.14.31.02
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 14:31:02 -0700 (PDT)
-Received: by mail-lf1-f45.google.com with SMTP id t25so16188922lfg.7
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:31:02 -0700 (PDT)
-X-Received: by 2002:a05:6512:3c93:b0:44b:4ba:c334 with SMTP id
- h19-20020a0565123c9300b0044b04bac334mr888549lfv.27.1651267861837; Fri, 29 Apr
- 2022 14:31:01 -0700 (PDT)
+        Fri, 29 Apr 2022 17:35:25 -0400
+Received: from mailgw.felk.cvut.cz (mailgw.felk.cvut.cz [147.32.82.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A93CD31A;
+        Fri, 29 Apr 2022 14:32:04 -0700 (PDT)
+Received: from mailgw.felk.cvut.cz (localhost.localdomain [127.0.0.1])
+        by mailgw.felk.cvut.cz (Proxmox) with ESMTP id C194830B2973;
+        Fri, 29 Apr 2022 23:31:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        cmp.felk.cvut.cz; h=cc:cc:content-transfer-encoding:content-type
+        :content-type:date:from:from:in-reply-to:message-id:mime-version
+        :references:reply-to:subject:subject:to:to; s=felkmail; bh=8E2Pp
+        TS7n9xW37sbOCeIa2pfel4R8e9bbsE/XDKa1ac=; b=ATYNItrSv5swcys+qHwYw
+        uBBkhjSC8WJzE8jBRqNPntvy1YAaqnfaN6nWEYyfhwiNyHRJbVvz9GI06RwiOEC7
+        evg5CzzWCXfNrizYv2CrMIcnJRgB7igDADqFqnXjhcaSUnBR2How+bGYOdyZKhyg
+        HpWp/etxJ/um6qXP6NfZ2y0ECBFy/RydBRHY89SQvCbs2MxOjMNr4f3aw4ThSgPD
+        J6fgW4hPM40Qkbh3QDNDLT58BCprpMzl4ViZjRYiqY1uGTRot1sW6FH9QrBHDblq
+        k4y0VboDk0DmrU1AeApHQEhMz3sGvIkLcaxSANRdbhHNa3V/6ylXkjPegGqFrkr7
+        Q==
+Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
+        by mailgw.felk.cvut.cz (Proxmox) with ESMTPS id 01C7030B2942;
+        Fri, 29 Apr 2022 23:31:31 +0200 (CEST)
+Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
+        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 23TLVUGH005586;
+        Fri, 29 Apr 2022 23:31:30 +0200
+Received: (from pisa@localhost)
+        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 23TLVTna005582;
+        Fri, 29 Apr 2022 23:31:29 +0200
+X-Authentication-Warning: haar.felk.cvut.cz: pisa set sender to pisa@cmp.felk.cvut.cz using -f
+From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
+To:     "Marc Kleine-Budde" <mkl@pengutronix.de>
+Subject: Re: [PATCH v1 0/4] can: ctucanfd: clenup acoording to the actual rules and documentation linking
+Date:   Fri, 29 Apr 2022 23:31:28 +0200
+User-Agent: KMail/1.9.10
+Cc:     linux-can@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Marin Jerabek <martin.jerabek01@gmail.com>,
+        Ondrej Ille <ondrej.ille@gmail.com>,
+        Jiri Novak <jnovak@fel.cvut.cz>,
+        Jaroslav Beran <jara.beran@gmail.com>,
+        Petr Porazil <porazil@pikron.com>, Pavel Machek <pavel@ucw.cz>,
+        Carsten Emde <c.emde@osadl.org>,
+        Drew Fustini <pdp7pdp7@gmail.com>,
+        Matej Vasilevski <matej.vasilevski@gmail.com>,
+        Andrew Dennison <andrew.dennison@motec.com.au>
+References: <cover.1650816929.git.pisa@cmp.felk.cvut.cz> <20220428072239.kfgtu2bfcud6tetc@pengutronix.de>
+In-Reply-To: <20220428072239.kfgtu2bfcud6tetc@pengutronix.de>
+X-KMail-QuotePrefix: > 
 MIME-Version: 1.0
-References: <20220429091301.GR2731@worktop.programming.kicks-ass.net>
- <CAJhGHyBUzURTBBnkO5c5xRC+c9+KFvLXw06h5uQ7gODeiSR-QA@mail.gmail.com> <YmxU2JoswWMYm4nl@hirez.programming.kicks-ass.net>
-In-Reply-To: <YmxU2JoswWMYm4nl@hirez.programming.kicks-ass.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 29 Apr 2022 14:30:45 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wg1p87BAj3ebiugG9Q5YaKNUDpEWmjLKam69Ak3g__Aug@mail.gmail.com>
-Message-ID: <CAHk-=wg1p87BAj3ebiugG9Q5YaKNUDpEWmjLKam69Ak3g__Aug@mail.gmail.com>
-Subject: Re: [PATCH v3] x86,entry: Use PUSH_AND_CLEAR_REGS for compat
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Lai Jiangshan <jiangshanlai@gmail.com>, X86 ML <x86@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: Text/Plain;
+  charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Message-Id: <202204292331.28980.pisa@cmp.felk.cvut.cz>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 2:13 PM Peter Zijlstra <peterz@infradead.org> wrote:
+Hello Marc,
+
+On Thursday 28 of April 2022 09:22:39 Marc Kleine-Budde wrote:
+> > Jiapeng Chong (2):
+> >   can: ctucanfd: Remove unnecessary print function dev_err()
+> >   can: ctucanfd: Remove unused including <linux/version.h>
 >
-> (Linus, can I add your SoB to the thing?)
+> I had these already applied.
+>
+> > Pavel Pisa (2):
+> >   can: ctucanfd: remove PCI module debug parameters and core debug
+> >     statements.
+> >   docs: networking: device drivers: can: add ctucanfd and its author
+> >     e-mail update
+>
+> Split into separate patches and applied.
 
-If you teste this with some actual old int80 compat syscalls, then absolutely:
+Excuse me for late reply and thanks much for split to preferred
+form. Matej Vasilevski has tested updated linux-can-next testing
+on Xilinx Zynq 7000 based MZ_APO board and used it with his
+patches to do proceed next round of testing of Jan Charvat's NuttX
+TWAI (CAN) driver on ESP32C3. We plan that CTU CAN FD timestamping
+will be send for RFC/discussion soon.
 
-   Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+I would like to thank to Andrew Dennison who implemented, tested
+and shares integration with LiteX and RISC-V
 
-> +       pushq   %rdi                    /* pt_regs->di */
->         pushq   %rsi                    /* pt_regs->si */
->         xorl    %esi, %esi              /* nospec   si */
+  https://github.com/litex-hub/linux-on-litex-vexriscv
 
-It would probably make sense to add a comment about why %rdi isn't
-cleared when pushed, like all the other registers are.
+He uses development version of the CTU CAN FD IP core with configurable
+number of Tx buffers (2 to 8) for which will be required
+automatic setup logic in the driver.
 
-Even if that comment is just "%rdi will be overwritten as arg0 of the
-call to C, so no need to clear it".
+I need to discuss with Ondrej Ille actual state and his plans.
+But basically ntxbufs in the ctucan_probe_common() has to be assigned
+from TXTB_INFO TXT_BUFFER_COUNT field. For older core version
+the TXT_BUFFER_COUNT field bits should be equal to zero so when
+value is zero, the original version with fixed 4 buffers will
+be recognized. When value is configurable then for (uncommon) number
+of buffers which is not power of two, there will be likely
+a problem with way how buffers queue is implemented
 
-Maybe as part of the PUSH_AND_CLEAR_REGS changes?
+  txtb_id = priv->txb_head % priv->ntxbufs;
+  ...
+  priv->txb_head++;
+  ...
+  priv->txb_tail++;
 
-            Linus
+When I have provided example for this type of queue many years
+ago I have probably shown example with power of 2 masking,
+but modulo by arbitrary number does not work with sequence
+overflow. Which means to add there two "if"s unfortunately
+
+  if (++priv->txb_tail == 2 * priv->ntxbufs)
+      priv->txb_tail = 0;
+
+We need 2 * priv->ntxbufs range to distinguish empty and full queue...
+But modulo is not nice either so I probably come with some other
+solution in a longer term. In the long term, I want to implement
+virtual queues to allow multiqueue to use dynamic Tx priority
+of up to 8 the buffers...
+
+Best wishes,
+
+                Pavel Pisa
+    phone:      +420 603531357
+    e-mail:     pisa@cmp.felk.cvut.cz
+    Department of Control Engineering FEE CVUT
+    Karlovo namesti 13, 121 35, Prague 2
+    university: http://control.fel.cvut.cz/
+    personal:   http://cmp.felk.cvut.cz/~pisa
+    projects:   https://www.openhub.net/accounts/ppisa
+    CAN related:http://canbus.pages.fel.cvut.cz/
+    Open Technologies Research Education and Exchange Services
+    https://gitlab.fel.cvut.cz/otrees/org/-/wikis/home
+

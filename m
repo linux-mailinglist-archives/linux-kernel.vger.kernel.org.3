@@ -2,55 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D7F514F8D
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:33:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5D78514F65
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:27:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378525AbiD2Pgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 11:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57508 "EHLO
+        id S1378449AbiD2Pau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 11:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378487AbiD2Pgf (ORCPT
+        with ESMTP id S1356247AbiD2Pa1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 11:36:35 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F1D89330;
-        Fri, 29 Apr 2022 08:33:15 -0700 (PDT)
-Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Kqbz04KbGz67fK4;
-        Fri, 29 Apr 2022 23:30:20 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 29 Apr 2022 17:33:12 +0200
-Received: from localhost (10.122.247.231) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 29 Apr
- 2022 16:33:12 +0100
-Date:   Fri, 29 Apr 2022 16:33:11 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     <ira.weiny@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        "Vishal Verma" <vishal.l.verma@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH V7 04/10] cxl/pci: Create auxiliary devices for each DOE
- mailbox
-Message-ID: <20220429163311.000060c1@huawei.com>
-In-Reply-To: <20220330235920.2800929-5-ira.weiny@intel.com>
-References: <20220330235920.2800929-1-ira.weiny@intel.com>
-        <20220330235920.2800929-5-ira.weiny@intel.com>
-Organization: Huawei Technologies R&D (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; x86_64-w64-mingw32)
+        Fri, 29 Apr 2022 11:30:27 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B255D4C92;
+        Fri, 29 Apr 2022 08:27:09 -0700 (PDT)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TEmwoR019342;
+        Fri, 29 Apr 2022 11:26:41 -0400
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3fprv535t1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Apr 2022 11:26:41 -0400
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 23TFQdYA024080
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 29 Apr 2022 11:26:39 -0400
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Fri, 29 Apr
+ 2022 11:26:38 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Fri, 29 Apr 2022 11:26:38 -0400
+Received: from localhost.localdomain ([10.48.65.12])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 23TFQEce028122;
+        Fri, 29 Apr 2022 11:26:20 -0400
+From:   <alexandru.tachici@analog.com>
+To:     <andrew@lunn.ch>
+CC:     <o.rempel@pengutronix.de>, <alexandru.tachici@analog.com>,
+        <davem@davemloft.net>, <devicetree@vger.kernel.org>,
+        <hkallweit1@gmail.com>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux@armlinux.org.uk>,
+        <netdev@vger.kernel.org>, <robh+dt@kernel.org>
+Subject: [PATCH v7 0/7] net: phy: adin1100: Add initial support for ADIN1100 industrial PHY
+Date:   Fri, 29 Apr 2022 18:34:30 +0300
+Message-ID: <20220429153437.80087-1-alexandru.tachici@analog.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.122.247.231]
-X-ClientProxiedBy: lhreml727-chm.china.huawei.com (10.201.108.78) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: 7aHfmSGKdAuEkqB2SsDASE8KW8oxkQQm
+X-Proofpoint-ORIG-GUID: 7aHfmSGKdAuEkqB2SsDASE8KW8oxkQQm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-29_07,2022-04-28_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 lowpriorityscore=0 spamscore=0 impostorscore=0 adultscore=0
+ mlxlogscore=763 mlxscore=0 bulkscore=0 suspectscore=0 clxscore=1015
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204290083
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,292 +68,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Mar 2022 16:59:14 -0700
-ira.weiny@intel.com wrote:
+From: Alexandru Tachici <alexandru.tachici@analog.com>
 
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> CXL kernel drivers optionally need to access DOE mailbox capabilities.
-> Access to mailboxes for things such as CDAT, SPDM, and IDE are needed by
-> the kernel while other access is designed towards user space usage.  An
-> example of this is for CXL Compliance Testing (see CXL 2.0 14.16.4
-> Compliance Mode DOE) which offers a mechanism to set different test
-> modes for a device.
-> 
-> There is no anticipated need for the kernel to share an individual
-> mailbox with user space.  Thus developing an interface to marshal access
-> between the kernel and user space for a single mailbox is unnecessary
-> overhead.  However, having the kernel relinquish some mailboxes to be
-> controlled by user space is a reasonable compromise to share access to
-> the device.
-> 
-> The auxiliary bus provides an elegant solution for this.  Each DOE
-> capability is given its own auxiliary device.  This device is controlled
-> by a kernel driver by default which restricts access to the mailbox.
-> Unbinding the driver from a single auxiliary device (DOE mailbox
-> capability) frees the mailbox for user space access.  This architecture
-> also allows a clear picture on which mailboxes are kernel controlled vs
-> not.
-> 
-> Iterate each DOE mailbox capability and create auxiliary bus devices.
-> Follow on patches will define a driver for the newly created devices.
-> 
-> sysfs shows the devices.
-> 
-> $ ls -l /sys/bus/auxiliary/devices/
-> total 0
-> lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.0 -> ../../../devices/pci0000:bf/0000:bf:00.0/0000:c0:00.0/cxl_pci.doe.0
-> lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.1 -> ../../../devices/pci0000:bf/0000:bf:01.0/0000:c1:00.0/cxl_pci.doe.1
-> lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.2 -> ../../../devices/pci0000:35/0000:35:00.0/0000:36:00.0/cxl_pci.doe.2
-> lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.3 -> ../../../devices/pci0000:35/0000:35:01.0/0000:37:00.0/cxl_pci.doe.3
-> lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.4 -> ../../../devices/pci0000:35/0000:35:00.0/0000:36:00.0/cxl_pci.doe.4
-> lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.5 -> ../../../devices/pci0000:bf/0000:bf:00.0/0000:c0:00.0/cxl_pci.doe.5
-> lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.6 -> ../../../devices/pci0000:35/0000:35:01.0/0000:37:00.0/cxl_pci.doe.6
-> lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.7 -> ../../../devices/pci0000:bf/0000:bf:01.0/0000:c1:00.0/cxl_pci.doe.7
-> 
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-Hi Ira,
+The ADIN1100 is a low power single port 10BASE-T1L transceiver designed for
+industrial Ethernet applications and is compliant with the IEEE 802.3cg
+Ethernet standard for long reach 10 Mb/s Single Pair Ethernet.
 
-Noticed something else about the number of irq vectors requested.
+The ADIN1100 uses Auto-Negotiation capability in accordance
+with IEEE 802.3 Clause 98, providing a mechanism for
+exchanging information between PHYs to allow link partners to
+agree to a common mode of operation.
 
-Thanks,
+The concluded operating mode is the transmit amplitude mode and
+master/slave preference common across the two devices.
 
-Jonathan
+Both device and LP advertise their ability and request for
+increased transmit at:
+- BASE-T1 autonegotiation advertisement register [47:32]\
+Clause 45.2.7.21 of Standard 802.3
+- BIT(13) - 10BASE-T1L High Level Transmit Operating Mode Ability
+- BIT(12) - 10BASE-T1L High Level Transmit Operating Mode Request
 
-> 
-> ---
-> Changes from V6:
-> 	Move all the auxiliary device stuff to the CXL layer
-> 
-> Changes from V5:
-> 	Split the CXL specific stuff off from the PCI DOE create
-> 	auxiliary device code.
-> ---
->  drivers/cxl/Kconfig  |   1 +
->  drivers/cxl/cxlpci.h |  21 +++++++
->  drivers/cxl/pci.c    | 135 +++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 157 insertions(+)
-> 
-> diff --git a/drivers/cxl/Kconfig b/drivers/cxl/Kconfig
-> index 054dc78d6f7d..77fff6f6b0fb 100644
-> --- a/drivers/cxl/Kconfig
-> +++ b/drivers/cxl/Kconfig
-> @@ -16,6 +16,7 @@ if CXL_BUS
->  config CXL_PCI
->  	tristate "PCI manageability"
->  	default CXL_BUS
-> +	select AUXILIARY_BUS
->  	help
->  	  The CXL specification defines a "CXL memory device" sub-class in the
->  	  PCI "memory controller" base class of devices. Device's identified by
-> diff --git a/drivers/cxl/cxlpci.h b/drivers/cxl/cxlpci.h
-> index 329e7ea3f36a..2ad8715173ce 100644
-> --- a/drivers/cxl/cxlpci.h
-> +++ b/drivers/cxl/cxlpci.h
-> @@ -2,6 +2,7 @@
->  /* Copyright(c) 2020 Intel Corporation. All rights reserved. */
->  #ifndef __CXL_PCI_H__
->  #define __CXL_PCI_H__
-> +#include <linux/auxiliary_bus.h>
->  #include <linux/pci.h>
->  #include "cxl.h"
->  
-> @@ -72,4 +73,24 @@ static inline resource_size_t cxl_regmap_to_base(struct pci_dev *pdev,
->  }
->  
->  int devm_cxl_port_enumerate_dports(struct cxl_port *port);
-> +
-> +/**
-> + * struct cxl_doe_dev - CXL DOE auxiliary bus device
-> + *
-> + * @adev: Auxiliary bus device
-> + * @pdev: PCI device this belongs to
-> + * @cap_offset: Capability offset
-> + * @use_irq: Set if IRQs are to be used with this mailbox
-> + *
-> + * This represents a single DOE mailbox device.  CXL devices should create this
-> + * device and register it on the Auxiliary bus for the CXL DOE driver to drive.
-> + */
-> +struct cxl_doe_dev {
-> +	struct auxiliary_device adev;
-> +	struct pci_dev *pdev;
-> +	int cap_offset;
-> +	bool use_irq;
-> +};
-> +#define DOE_DEV_NAME "doe"
-> +
->  #endif /* __CXL_PCI_H__ */
-> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-> index 8a7267d116b7..6249f2a30026 100644
-> --- a/drivers/cxl/pci.c
-> +++ b/drivers/cxl/pci.c
-> @@ -8,6 +8,7 @@
->  #include <linux/mutex.h>
->  #include <linux/list.h>
->  #include <linux/pci.h>
-> +#include <linux/pci-doe.h>
->  #include <linux/io.h>
->  #include "cxlmem.h"
->  #include "cxlpci.h"
-> @@ -545,6 +546,136 @@ static int cxl_dvsec_ranges(struct cxl_dev_state *cxlds)
->  	return 0;
->  }
->  
-> +static void cxl_pci_free_irq_vectors(void *data)
-> +{
-> +	pci_free_irq_vectors(data);
-> +}
-> +
-> +static DEFINE_IDA(pci_doe_adev_ida);
-> +
-> +static void cxl_pci_doe_dev_release(struct device *dev)
-> +{
-> +	struct auxiliary_device *adev = container_of(dev,
-> +						struct auxiliary_device,
-> +						dev);
-> +	struct cxl_doe_dev *doe_dev = container_of(adev, struct cxl_doe_dev,
-> +						   adev);
-> +
-> +	ida_free(&pci_doe_adev_ida, adev->id);
-> +	kfree(doe_dev);
-> +}
-> +
-> +static void cxl_pci_doe_destroy_device(void *ad)
-> +{
-> +	auxiliary_device_delete(ad);
-> +	auxiliary_device_uninit(ad);
-> +}
-> +
-> +/**
-> + * cxl_pci_create_doe_devices - Create auxiliary bus DOE devices for all DOE
-> + *				mailboxes found
-> + *
-> + * @pci_dev: The PCI device to scan for DOE mailboxes
-> + *
-> + * There is no coresponding destroy of these devices.  This function associates
-> + * the DOE auxiliary devices created with the pci_dev passed in.  That
-> + * association is device managed (devm_*) such that the DOE auxiliary device
-> + * lifetime is always less than or equal to the lifetime of the pci_dev.
-> + *
-> + * RETURNS: 0 on success -ERRNO on failure.
-> + */
-> +int cxl_pci_create_doe_devices(struct pci_dev *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	bool use_irq = true;
-> +	int irqs = 0;
-> +	u16 off = 0;
-> +	int rc;
-> +
-> +	pci_doe_for_each_off(pdev, off)
-> +		irqs++;
+For 2.4 Vpp (high level transmit) operation, both devices need
+to have the High Level Transmit Operating Mode Ability bit set,
+and only one of them needs to have the High Level Transmit
+Operating Mode Request bit set. Otherwise 1.0 Vpp transmit level
+will be used.
 
-I don't think this is sufficient.  I think we need something similar
-to that done to calculate the necessary vectors in
-portdrv_core.c / pcie_message_numbers()
-https://elixir.bootlin.com/linux/latest/source/drivers/pci/pcie/portdrv_core.c#L45
+Settings for eth1:
+	Supported ports: [ TP	 MII ]
+	Supported link modes:   10baseT1L/Full
+	Supported pause frame use: Symmetric Receive-only
+	Supports auto-negotiation: Yes
+	Supported FEC modes: Not reported
+	Advertised link modes:  10baseT1L/Full
+	Advertised pause frame use: No
+	Advertised auto-negotiation: Yes
+	Advertised FEC modes: Not reported
+	Link partner advertised link modes:  10baseT1L/Full
+	Link partner advertised pause frame use: No
+	Link partner advertised auto-negotiation: Yes
+	Link partner advertised FEC modes: Not reported
+	Speed: 10Mb/s
+	Duplex: Full
+	Auto-negotiation: on
+	master-slave cfg: preferred slave
+	master-slave status: slave
+	Port: Twisted Pair
+	PHYAD: 0
+	Transceiver: external
+	MDI-X: Unknown
+	Link detected: yes
+	SQI: 7/7
 
-That is we need to ensure that vectors are requested such that we can always
-cover the vector for the DOE interrupt. To get that we need to read
-the capability register and then set irqs to one larger than that.
+1. Add basic support for ADIN1100.
 
-Jonathan
+Alexandru Ardelean (1):
+  net: phy: adin1100: Add initial support for ADIN1100 industrial PHY
 
+1. Added 10baset-T1L link modes.
 
-> +	pci_info(pdev, "Found %d DOE mailbox's\n", irqs);
-> +
-> +	/*
-> +	 * Allocate enough vectors for the DOE's
-> +	 */
-> +	rc = pci_alloc_irq_vectors(pdev, irqs, irqs, PCI_IRQ_MSI |
-> +						     PCI_IRQ_MSIX);
-> +	if (rc != irqs) {
-> +		pci_err(pdev,
-> +			"Not enough interrupts for all the DOEs; use polling\n");
-> +		use_irq = false;
-> +		/* Some got allocated; clean them up */
-> +		if (rc > 0)
-> +			cxl_pci_free_irq_vectors(pdev);
-> +	} else {
-> +		/*
-> +		 * Enabling bus mastering is require for MSI/MSIx.  It could be
-> +		 * done later within the DOE initialization, but as it
-> +		 * potentially has other impacts keep it here when setting up
-> +		 * the IRQ's.
-> +		 */
-> +		pci_set_master(pdev);
-> +		rc = devm_add_action_or_reset(dev,
-> +					      cxl_pci_free_irq_vectors,
-> +					      pdev);
-> +		if (rc)
-> +			return rc;
-> +	}
-> +
-> +	pci_doe_for_each_off(pdev, off) {
-> +		struct auxiliary_device *adev;
-> +		struct cxl_doe_dev *new_dev;
-> +		int id;
-> +
-> +		new_dev = kzalloc(sizeof(*new_dev), GFP_KERNEL);
-> +		if (!new_dev)
-> +			return -ENOMEM;
-> +
-> +		new_dev->pdev = pdev;
-> +		new_dev->cap_offset = off;
-> +		new_dev->use_irq = use_irq;
-> +
-> +		/* Set up struct auxiliary_device */
-> +		adev = &new_dev->adev;
-> +		id = ida_alloc(&pci_doe_adev_ida, GFP_KERNEL);
-> +		if (id < 0) {
-> +			kfree(new_dev);
-> +			return -ENOMEM;
-> +		}
-> +
-> +		adev->id = id;
-> +		adev->name = DOE_DEV_NAME;
-> +		adev->dev.release = cxl_pci_doe_dev_release;
-> +		adev->dev.parent = dev;
-> +
-> +		if (auxiliary_device_init(adev)) {
-> +			cxl_pci_doe_dev_release(&adev->dev);
-> +			return -EIO;
-> +		}
-> +
-> +		if (auxiliary_device_add(adev)) {
-> +			auxiliary_device_uninit(adev);
-> +			return -EIO;
-> +		}
-> +
-> +		rc = devm_add_action_or_reset(dev, cxl_pci_doe_destroy_device,
-> +					      adev);
-> +		if (rc)
-> +			return rc;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int cxl_setup_doe_devices(struct cxl_dev_state *cxlds)
-> +{
-> +	struct device *dev = cxlds->dev;
-> +	struct pci_dev *pdev = to_pci_dev(dev);
-> +
-> +	return cxl_pci_create_doe_devices(pdev);
-> +}
-> +
->  static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  {
->  	struct cxl_register_map map;
-> @@ -611,6 +742,10 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  	if (rc)
->  		return rc;
->  
-> +	rc = cxl_setup_doe_devices(cxlds);
-> +	if (rc)
-> +		return rc;
-> +
->  	rc = cxl_dvsec_ranges(cxlds);
->  	if (rc)
->  		dev_warn(&pdev->dev,
+2. Added 10-BasetT1L registers.
+
+3. Added Base-T1 auto-negotiation registers. For Base-T1 these
+registers decide master/slave status and TX voltage of the
+device and link partner.
+
+4. Added 10BASE-T1L support in phy-c45.c. Now genphy functions will call
+Base-T1 functions where registers don't match, like the auto-negotiation ones.
+
+5. Convert MSE to SQI using a predefined table and allow user access
+through ethtool.
+
+6. DT bindings for the 2.4 Vpp transmit mode.
+
+Alexandru Ardelean (1):
+  net: phy: adin1100: Add initial support for ADIN1100 industrial PHY
+
+Alexandru Tachici (6):
+  ethtool: Add 10base-T1L link mode entry
+  net: phy: Add 10-BaseT1L registers
+  net: phy: Add BaseT1 auto-negotiation registers
+  net: phy: Add 10BASE-T1L support in phy-c45
+  net: phy: adin1100: Add SQI support
+  dt-bindings: net: phy: Add 10-baseT1L 2.4 Vpp
+
+Changelog V6 -> V7:
+	- added kdoc for pma_extable in struct phy_device
+	- updated drivers/net/phy/phylink.c::phylink_caps_to_linkmodes()
+
+ .../devicetree/bindings/net/ethernet-phy.yaml |   9 +
+ drivers/net/phy/Kconfig                       |   7 +
+ drivers/net/phy/Makefile                      |   1 +
+ drivers/net/phy/adin1100.c                    | 292 ++++++++++++++++++
+ drivers/net/phy/phy-c45.c                     | 257 ++++++++++++++-
+ drivers/net/phy/phy-core.c                    |   3 +-
+ drivers/net/phy/phy_device.c                  |   4 +-
+ drivers/net/phy/phylink.c                     |   4 +-
+ include/linux/mdio.h                          |  70 +++++
+ include/linux/phy.h                           |   5 +-
+ include/uapi/linux/ethtool.h                  |   1 +
+ include/uapi/linux/mdio.h                     |  75 +++++
+ net/ethtool/common.c                          |   3 +
+ 13 files changed, 722 insertions(+), 9 deletions(-)
+ create mode 100644 drivers/net/phy/adin1100.c
+
+-- 
+2.25.1
 

@@ -2,149 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7C1E514817
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 13:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD19A51481F
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 13:28:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358358AbiD2LaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 07:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55536 "EHLO
+        id S1358548AbiD2LbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 07:31:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358313AbiD2L3w (ORCPT
+        with ESMTP id S1358465AbiD2Lap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 07:29:52 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCD649264;
-        Fri, 29 Apr 2022 04:26:33 -0700 (PDT)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23T8HK4Q025933;
-        Fri, 29 Apr 2022 11:26:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=dhabbGXhdWEZKSomL5GlgkEUR4yGtHLfzEtnFb5cnto=;
- b=F8WSIGckqIpKWXuXajNlRkPHnuKuPZ1luIfIIvjle/sZn896LPRQOjv4A5Qpjj4Nubwg
- 42JdS9201qvxDMyAHHCszVkWm0oYiE8Ty8R2a+uIT6WfjVZa7I1L66i9Mfe0Bz2ZxyK0
- SGoyFF5L1fXMkO5YJoTnFcThfzPJ/ZcB9R+YoFftWDZR+Lmw8uc6uL/KIp3GOrD+eas+
- xh7otjOiB6Jq3hDCzmG2OLCdX9LeFQOU5+wr3pLbFmmDEClp2zOxgsnHeoR7Wl3omEI8
- mIgdT1WkizbREGdTgNgGsvQvd5+GnPJoqwHc0/KnAjGd1Hqt48xExobJNesdq74Oxwdz fQ== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqtqvtn2q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 11:26:31 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TBCmPA016335;
-        Fri, 29 Apr 2022 11:26:29 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04ams.nl.ibm.com with ESMTP id 3fm9391055-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 11:26:29 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TBQQQZ42139918
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 29 Apr 2022 11:26:26 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1452D11C050;
-        Fri, 29 Apr 2022 11:26:26 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3E5A511C04A;
-        Fri, 29 Apr 2022 11:26:25 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.65.70.88])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 29 Apr 2022 11:26:25 +0000 (GMT)
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     Mimi Zohar <zohar@linux.ibm.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v8 7/7] fsverity: update the documentation
-Date:   Fri, 29 Apr 2022 07:26:01 -0400
-Message-Id: <20220429112601.1421947-8-zohar@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220429112601.1421947-1-zohar@linux.ibm.com>
-References: <20220429112601.1421947-1-zohar@linux.ibm.com>
+        Fri, 29 Apr 2022 07:30:45 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934B1B6D25;
+        Fri, 29 Apr 2022 04:26:55 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23TBQh44063972;
+        Fri, 29 Apr 2022 06:26:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1651231603;
+        bh=x+5lRF/olGHJ4+jtLpCvlbL4hvGBh7bUN3rx1gpPEg4=;
+        h=From:To:CC:Subject:Date;
+        b=xPEg7Zqdcotl/hNuyVD6PeHRo5ujD9Yvn+0Ypb92hovO6+2U3/+9acOxfQOUZ76V5
+         BEcOo9vY78JnJ4a31T37WHKMOUt8/7m0/XpxP6OtBh19j8aGKAV7/10flGjYA7MQVe
+         PIuVwA3LSq1vskcHeV+vK3ZYRlqw3pIDPyC/sbWg=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23TBQhME110293
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 29 Apr 2022 06:26:43 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 29
+ Apr 2022 06:26:43 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 29 Apr 2022 06:26:43 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23TBQgYv077647;
+        Fri, 29 Apr 2022 06:26:42 -0500
+From:   Rahul T R <r-ravikumar@ti.com>
+To:     <nm@ti.com>
+CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <tomi.valkeinen@ideasonboard.com>,
+        <laurent.pinchart@ideasonboard.com>, <kishon@ti.com>,
+        <a-bhatia1@ti.com>, <r-ravikumar@ti.com>
+Subject: [PATCH v5 0/2] DSS: Add support for DisplayPort
+Date:   Fri, 29 Apr 2022 16:56:37 +0530
+Message-ID: <20220429112639.13004-1-r-ravikumar@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: TIcGhbkW5n5o72ztsMLT7cyPTxVcp1fl
-X-Proofpoint-ORIG-GUID: TIcGhbkW5n5o72ztsMLT7cyPTxVcp1fl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-29_06,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 spamscore=0 clxscore=1015 mlxscore=0 suspectscore=0
- mlxlogscore=755 phishscore=0 malwarescore=0 adultscore=0 impostorscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204290064
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update the fsverity documentation related to IMA signature support.
+The following series of patches enables DisplayPort on
+j721e-evm
 
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
----
- Documentation/filesystems/fsverity.rst | 35 +++++++++++++++++---------
- 1 file changed, 23 insertions(+), 12 deletions(-)
+v2:
+   - use phandle with a parameter to refer clocks insted of
+     sub nodes in serdes_wiz node
+   - move phy link node to board DTS file
 
-diff --git a/Documentation/filesystems/fsverity.rst b/Documentation/filesystems/fsverity.rst
-index 8cc536d08f51..b7d42fd65e9d 100644
---- a/Documentation/filesystems/fsverity.rst
-+++ b/Documentation/filesystems/fsverity.rst
-@@ -70,12 +70,23 @@ must live on a read-write filesystem because they are independently
- updated and potentially user-installed, so dm-verity cannot be used.
- 
- The base fs-verity feature is a hashing mechanism only; actually
--authenticating the files is up to userspace.  However, to meet some
--users' needs, fs-verity optionally supports a simple signature
--verification mechanism where users can configure the kernel to require
--that all fs-verity files be signed by a key loaded into a keyring; see
--`Built-in signature verification`_.  Support for fs-verity file hashes
--in IMA (Integrity Measurement Architecture) policies is also planned.
-+authenticating the files may be done by:
-+
-+* Userspace-only
-+
-+* Builtin signature verification + userspace policy
-+
-+  fs-verity optionally supports a simple signature verification
-+  mechanism where users can configure the kernel to require that
-+  all fs-verity files be signed by a key loaded into a keyring;
-+  see `Built-in signature verification`_.
-+
-+* Integrity Measurement Architecture (IMA)
-+
-+  IMA supports including fs-verity file digests and signatures in the
-+  IMA measurement list and verifying fs-verity based file signatures
-+  stored as security.ima xattrs, based on policy.
-+
- 
- User API
- ========
-@@ -653,12 +664,12 @@ weren't already directly answered in other parts of this document.
-     hashed and what to do with those hashes, such as log them,
-     authenticate them, or add them to a measurement list.
- 
--    IMA is planned to support the fs-verity hashing mechanism as an
--    alternative to doing full file hashes, for people who want the
--    performance and security benefits of the Merkle tree based hash.
--    But it doesn't make sense to force all uses of fs-verity to be
--    through IMA.  As a standalone filesystem feature, fs-verity
--    already meets many users' needs, and it's testable like other
-+    IMA supports the fs-verity hashing mechanism as an alternative
-+    to full file hashes, for those who want the performance and
-+    security benefits of the Merkle tree based hash.  However, it
-+    doesn't make sense to force all uses of fs-verity to be through
-+    IMA.  fs-verity already meets many users' needs even as a
-+    standalone filesystem feature, and it's testable like other
-     filesystem features e.g. with xfstests.
- 
- :Q: Isn't fs-verity useless because the attacker can just modify the
+v3:
+   - Fix the regulator node name as per the DT spec
+   - Use Macro for GPIO type
+
+v4:
+   - Move adding of phy link nodes from 2/2 to 1/2, to fix dtbs checks warnings
+   - Add leading zeros to align reg property addresses and sizes
+   - Add empty ports for mhdp node in dtsi file to fix dtbs checks warnings
+
+v5:
+   - Fix a typo in regulator name
+
+boot logs:
+   https://gist.githubusercontent.com/ravi-rahul/1bdbc3f77ab381e486c8394650c2e85d/raw/2327c9894c3236950a00f4511ae668ac4399b71e/j7_DP_upstream.log
+
+kernel patch verify report:
+   https://gist.githubusercontent.com/ravi-rahul/a982fef3fae03ec0dbdd5cb475a4cb25/raw/9ef482f96fa351cff7980e4340e9bcb8471ec3ab/report-kernel-patch-verify.txt
+
+Tomi Valkeinen (2):
+  arm64: dts: ti: k3-j721e-*: add DP & DP PHY
+  arm64: dts: ti: k3-j721e-common-proc-board: add DP to j7 evm
+
+ .../dts/ti/k3-j721e-common-proc-board.dts     | 77 ++++++++++++++++++-
+ arch/arm64/boot/dts/ti/k3-j721e-main.dtsi     | 75 +++++++++++++++++-
+ arch/arm64/boot/dts/ti/k3-j721e-sk.dts        | 16 ++++
+ 3 files changed, 162 insertions(+), 6 deletions(-)
+
 -- 
-2.27.0
+2.17.1
 

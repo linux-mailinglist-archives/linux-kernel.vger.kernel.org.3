@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E01C15150D2
+	by mail.lfdr.de (Postfix) with ESMTP id 4E1285150CF
 	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379082AbiD2QbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 12:31:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49564 "EHLO
+        id S1379107AbiD2QbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 12:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350887AbiD2QbL (ORCPT
+        with ESMTP id S1379075AbiD2QbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 12:31:11 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF30D8933
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:27:53 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id l16-20020a05600c1d1000b00394011013e8so3881752wms.1
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:27:53 -0700 (PDT)
+        Fri, 29 Apr 2022 12:31:13 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593B3D8920
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:27:54 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id p189so4911059wmp.3
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:27:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wzbjTt7bbaGoTgd9BBuYVRvUmfXJe3pDmlsm2tqGi2c=;
-        b=htlKlFrXq5VjQhL6nAA032ZZ1G8zLlLaKOnZMmvZsO8cjX3KfpvA++e4oWPgWAY+pU
-         MlmjKU5TgwwJZoR4tzVvvI2UqiepBvdJZbIXzklIA5LxTyBhkyiM6u5j+50evEA/meqN
-         LPs8Ss7SvqeiP7PeuuX7KfeDMLVl2+KXUfjy4UB+Ak8RTdvm8slWbawu4uRIRDNCZAJ8
-         0ln6cE5VrPa/Hkdm//sdikOVsztAuD4/VekePIKkw1X5Z0rK/uBBmH1NjSBRhCFToypo
-         BQJrM6/HIkGKXf00FScUWUND5CMvRH3jFnbK0UqiSffjra+XEX2MwqZy56Q/MLm9ubX9
-         rxYA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=e6ar+XxU37QB2aFpX4f2hjgRwMYzw0bu5owiNbvSfoc=;
+        b=KlZ2rvfkJgWC93f3WJwVGdP8EGPjxUTY3rfCaXPI2f5fgeAfcAwEIpyqZrDrWZMlch
+         N8xBUihznzsPwrQMKQuxJpxzWRuhJgsfAZcpPk6m17lX1fMtrcyn1sV+YpEPY3Wt6k48
+         SPPsD5t7bibF974GFTzffC2YBWwJvXpXBkx8jWoTLURwu1exc84aQ6k2UwKULTv/Xmhz
+         fb9EfybB408F2mL59umYxMG1DaDjSqNGaG892YUgtZbsW6A5Wfl/aRzhDkfYk8UsX0ro
+         cNHM59yMuehH+vopkCdR5MCxGHzjtEzOHB927Q2/Dk0Mb6AA7i+LDYKWKiP9Sqxdhln+
+         PdjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wzbjTt7bbaGoTgd9BBuYVRvUmfXJe3pDmlsm2tqGi2c=;
-        b=ml9nk1/LDNdjHdPfdplomAVnHObA02we6Bzkrtwa8LP7c66Wkw+JzzSWhjOTJNkYAF
-         AR3qWidlHSK6I0EQIyVsqkwB4Mndh5NuBdYPrJFGszr5GtvL3EJ/lMFCe9CRyVOhdfzA
-         JfnyI9G3PgMcZtxipL6Ak7xB/qMHIJ10sT15U0pXbmpx0Q5gqoOT5c9OBJgjqLLNtslB
-         g93EFV126L3nZGbPZNMnT9fQlHzIizeefSaEjNU4hUmRXzg7A9mxWM4UDZod63AnyQ8y
-         WQZFlbJqS9phzqohyfWyqE14FSPlhC5VybFf1lDU6Vv/BeVrGfbSqUuUrQstt0o8+Zjr
-         iIwg==
-X-Gm-Message-State: AOAM531LQyT6R9JJdc3fRWGYNgdGNxb0Zs8fVJbms8qEgEiiQwmUkwog
-        TFMhlpydPcuDoneI00i2fNzO1Q==
-X-Google-Smtp-Source: ABdhPJxXy1NKJdfdibqvqIfsIZUkzIHVr3DZelgDIH9x57u0E5vDWMetV3zGMfajKykECPLEy85nTg==
-X-Received: by 2002:a05:600c:1d0b:b0:394:1e75:1fef with SMTP id l11-20020a05600c1d0b00b003941e751fefmr4033054wms.5.1651249671871;
-        Fri, 29 Apr 2022 09:27:51 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=e6ar+XxU37QB2aFpX4f2hjgRwMYzw0bu5owiNbvSfoc=;
+        b=JNv9SKIObov4KptnX4OCWI7rDzpA9dvJeopXIzxv79yMNHIAdsA3IuSgDVa6MtNgiw
+         EWSVbdNCgmOq37vH9j+2CpYUw+u7XFqiRdRFK+xf43U2Hxfq+mhJiTlRJijt1mGnp2wK
+         9JUR9oWaTBX8u0VryJKUDZzO1oQInb4UaSYjPNCkfGbhrTLjtPDnguTmDLZHTEknZU9y
+         ZimGidf9c6tj/QBvuXBp6WBfXZ3k/1sc/+lvWyKfOYGuRVWSDX+NfgR3Pln2fUF+q4ug
+         WW+lqUbgnf9b8qj2GGZOb4wQFwLuypw6/IG6UF05Z6Kp0LX4sLTWtaTReERoaAsg+PdS
+         eJjA==
+X-Gm-Message-State: AOAM5320p9TB5BSIrDmGk3/8ukGlwlQsZ3VGI8yI9xh9ipNhBAqElg14
+        PWREqOuzyKQdK8n1ZAKAx/F5HiKedMczDw==
+X-Google-Smtp-Source: ABdhPJy7eQToIh7d1Hc/x5CBhIG49kN0j6I6FeIPDCf6qa2Te2M3IjWb58SXgLbKYYDaNW4IzIW+wA==
+X-Received: by 2002:a1c:7416:0:b0:38e:b8b7:e271 with SMTP id p22-20020a1c7416000000b0038eb8b7e271mr3869552wmc.7.1651249672960;
+        Fri, 29 Apr 2022 09:27:52 -0700 (PDT)
 Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id b5-20020adff905000000b0020a8781be70sm2781801wrr.12.2022.04.29.09.27.50
+        by smtp.gmail.com with ESMTPSA id b5-20020adff905000000b0020a8781be70sm2781801wrr.12.2022.04.29.09.27.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 09:27:51 -0700 (PDT)
+        Fri, 29 Apr 2022 09:27:52 -0700 (PDT)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 00/16] nvmem: patches (set 1) for 5.19
-Date:   Fri, 29 Apr 2022 17:26:45 +0100
-Message-Id: <20220429162701.2222-1-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 01/16] nvmem: core: support passing DT node in cell info
+Date:   Fri, 29 Apr 2022 17:26:46 +0100
+Message-Id: <20220429162701.2222-2-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20220429162701.2222-1-srinivas.kandagatla@linaro.org>
+References: <20220429162701.2222-1-srinivas.kandagatla@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -68,67 +71,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+From: Rafał Miłecki <rafal@milecki.pl>
 
-Here are some nvmem patches for 5.19 which includes
+Some hardware may have NVMEM cells described in Device Tree using
+individual nodes. Let drivers pass such nodes to the NVMEM subsystem so
+they can be later used by NVMEM consumers.
 
-- new nvmem provider for Apple efuses.
-- support for regmap and TA 2.1 devices in sfp provider
-- add device tree node support in nvmem cell info
-- brcm_nvram provider to parse cells from dt.
-- few minor clean ups in qfprom, bcm-ocotp and sunplus-ocotp
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+---
+ drivers/nvmem/core.c           | 1 +
+ include/linux/nvmem-consumer.h | 1 +
+ 2 files changed, 2 insertions(+)
 
-Can you please queue them up for 5.19.
-
-thanks for you help,
-srini
-
-Dan Carpenter (1):
-  nvmem: brcm_nvram: check for allocation failure
-
-Krzysztof Kozlowski (3):
-  nvmem: bcm-ocotp: mark ACPI device ID table as maybe unused
-  nvmem: sunplus-ocotp: drop useless probe confirmation
-  nvmem: sunplus-ocotp: staticize sp_otp_v0
-
-Minghao Chi (1):
-  nvmem: qfprom: using pm_runtime_resume_and_get instead of
-    pm_runtime_get_sync
-
-Rafał Miłecki (2):
-  nvmem: core: support passing DT node in cell info
-  nvmem: brcm_nvram: find Device Tree nodes for NVMEM cells
-
-Sean Anderson (6):
-  dt-bindings: nvmem: sfp: Fix typo
-  dt-bindings: nvmem: sfp: Add clock properties
-  dt-bindings: nvmem: sfp: Add TA_PROG_SFP supply
-  dt-bindings: nvmem: sfp: Add compatible binding for TA 2.1 SFPs
-  nvmem: sfp: Use regmap
-  nvmem: sfp: Add support for TA 2.1 devices
-
-Sven Peter (3):
-  MAINTAINERS: Add apple efuses nvmem files to ARM/APPLE MACHINE
-  dt-bindings: nvmem: Add apple,efuses
-  nvmem: Add Apple eFuse driver
-
- .../bindings/nvmem/apple,efuses.yaml          | 50 ++++++++++++
- .../bindings/nvmem/fsl,layerscape-sfp.yaml    | 30 ++++++-
- MAINTAINERS                                   |  2 +
- drivers/nvmem/Kconfig                         | 13 +++
- drivers/nvmem/Makefile                        |  2 +
- drivers/nvmem/apple-efuses.c                  | 80 +++++++++++++++++++
- drivers/nvmem/bcm-ocotp.c                     |  2 +-
- drivers/nvmem/brcm_nvram.c                    |  4 +
- drivers/nvmem/core.c                          |  1 +
- drivers/nvmem/layerscape-sfp.c                | 36 +++++++--
- drivers/nvmem/qfprom.c                        |  3 +-
- drivers/nvmem/sunplus-ocotp.c                 |  4 +-
- include/linux/nvmem-consumer.h                |  1 +
- 13 files changed, 211 insertions(+), 17 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
- create mode 100644 drivers/nvmem/apple-efuses.c
-
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index f58d9bc7aa08..1e3c754efd0d 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -467,6 +467,7 @@ static int nvmem_cell_info_to_nvmem_cell_entry_nodup(struct nvmem_device *nvmem,
+ 
+ 	cell->bit_offset = info->bit_offset;
+ 	cell->nbits = info->nbits;
++	cell->np = info->np;
+ 
+ 	if (cell->nbits)
+ 		cell->bytes = DIV_ROUND_UP(cell->nbits + cell->bit_offset,
+diff --git a/include/linux/nvmem-consumer.h b/include/linux/nvmem-consumer.h
+index c0c0cefc3b92..980f9c9ac0bc 100644
+--- a/include/linux/nvmem-consumer.h
++++ b/include/linux/nvmem-consumer.h
+@@ -25,6 +25,7 @@ struct nvmem_cell_info {
+ 	unsigned int		bytes;
+ 	unsigned int		bit_offset;
+ 	unsigned int		nbits;
++	struct device_node	*np;
+ };
+ 
+ /**
 -- 
 2.21.0
 

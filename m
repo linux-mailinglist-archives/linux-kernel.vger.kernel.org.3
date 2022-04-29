@@ -2,143 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E8CA514640
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:08:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1155D514642
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349329AbiD2KKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 06:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36944 "EHLO
+        id S1357062AbiD2KLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 06:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356949AbiD2KKn (ORCPT
+        with ESMTP id S1356800AbiD2KLQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 06:10:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E2C20C6647
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 03:07:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651226844;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fpr0txJA455XWxPJoeYia7uJlW7TBpvXJ9nc6LJTAiI=;
-        b=TyKC0vsWEU0HoPc3iZ+VmxgAfjNRYUMFw9mWDlU6oICqRyu6mzWNv459q2UnrbkYaimPUi
-        IfuU8VgAAoU108XX1hTQn0wdKZAasZaSPtqM5MUP5Cgf/cs90GbTrz/MoYWX+gRkI+qw1l
-        sLRgJq9pBXS62a3UOuHj/D3pGgDVuA4=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-582-hnt8IMnoO76_BBVLsjDihg-1; Fri, 29 Apr 2022 06:07:20 -0400
-X-MC-Unique: hnt8IMnoO76_BBVLsjDihg-1
-Received: by mail-wm1-f72.google.com with SMTP id n186-20020a1c27c3000000b00392ae974ca1so2791628wmn.0
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 03:07:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=fpr0txJA455XWxPJoeYia7uJlW7TBpvXJ9nc6LJTAiI=;
-        b=OKQkh1TSoQOJ5dIUHihoSpuuQhYPYhFP2JeBdzTL1mXhq34lwj3HS5yNNp2Na2cPob
-         +IwtjogMiuxzdT0hlvRs/kpekDFP4dPBpaUXu8QQXEBzXvOamrnc09iqAiOYffRWNSGE
-         /N3huSjOi9+YTrRDgfT4KZKK4oFcg/RGj6WRt9BXkRXJHkQR/8GDZ2Ht4m80L2yyIeaE
-         V+3VE8ii3NkKFsZQdYiaHHEBqvf5po9Fm9iC6Shsiu2qRBaKWAK4kRq7CdSnEu3Df6jE
-         qjsyi3v5KIbuyKhBeaXlLDZ8rUJsF+WgyqxjWvnp1sqe3eAcuMPFGHB3wSKxaeiGzyqG
-         0n+A==
-X-Gm-Message-State: AOAM532vTFhzQVjBFCJ5qiGpVnM7Uw/RkMcJkQRSoVMw/lAPQ6hxpd0M
-        WI4bNtC5b6UCNqEfQ3fxkG6PVCiHoYNbFAryYW8qDoRHzS1UFQlXiE3CXOlyE3c/4vVplbXnWUR
-        ABb+zqF35EDFo0xXAXyH3V6cj
-X-Received: by 2002:a5d:53c1:0:b0:20a:db5d:2590 with SMTP id a1-20020a5d53c1000000b0020adb5d2590mr19565967wrw.411.1651226839163;
-        Fri, 29 Apr 2022 03:07:19 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw/ncLi8P4tmLVekHMk9A2dzXZx8miO5UnaC9FxNq2yFv1PruoWKbaEGVCiHLmNtNf3I6G0lg==
-X-Received: by 2002:a5d:53c1:0:b0:20a:db5d:2590 with SMTP id a1-20020a5d53c1000000b0020adb5d2590mr19565948wrw.411.1651226838856;
-        Fri, 29 Apr 2022 03:07:18 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:fe00:bbeb:98e6:617a:dea1? (p200300cbc707fe00bbeb98e6617adea1.dip0.t-ipconnect.de. [2003:cb:c707:fe00:bbeb:98e6:617a:dea1])
-        by smtp.gmail.com with ESMTPSA id o21-20020adfa115000000b0020adea2767csm2109058wro.83.2022.04.29.03.07.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 03:07:18 -0700 (PDT)
-Message-ID: <525298ad-5e6a-2f8d-366d-4dcb7eebd093@redhat.com>
-Date:   Fri, 29 Apr 2022 12:07:17 +0200
+        Fri, 29 Apr 2022 06:11:16 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D7CC44CD;
+        Fri, 29 Apr 2022 03:07:58 -0700 (PDT)
+X-UUID: 045731cb2f5c49ca9f4965c85acaa12a-20220429
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:be8b9c79-132d-48e6-a122-55eb691152c0,OB:0,LO
+        B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:8
+X-CID-META: VersionHash:faefae9,CLOUDID:043ef6c6-85ee-4ac1-ac05-bd3f1e72e732,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 045731cb2f5c49ca9f4965c85acaa12a-20220429
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <jiaxin.yu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 592507732; Fri, 29 Apr 2022 18:07:54 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 29 Apr 2022 18:07:53 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 29 Apr 2022 18:07:53 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 29 Apr 2022 18:07:52 +0800
+Message-ID: <99c329534a462b39d9b39ba04851318e7823e54c.camel@mediatek.com>
+Subject: Re: [v4 13/18] ASoC: mediatek: mt8186: add platform driver
+From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     <robh+dt@kernel.org>, <angelogioacchino.delregno@collabora.com>,
+        <aaronyu@google.com>, <matthias.bgg@gmail.com>,
+        <trevor.wu@mediatek.com>, <tzungbi@google.com>,
+        <julianbraha@gmail.com>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Fri, 29 Apr 2022 18:07:52 +0800
+In-Reply-To: <YmqCORqp6nYuQJZf@sirena.org.uk>
+References: <20220428093355.16172-1-jiaxin.yu@mediatek.com>
+         <20220428093355.16172-14-jiaxin.yu@mediatek.com>
+         <YmqCORqp6nYuQJZf@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Content-Language: en-US
-To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org,
-        mike.kravetz@oracle.com, naoya.horiguchi@nec.com
-Cc:     ying.huang@intel.com, hch@lst.de, dhowells@redhat.com,
-        cl@linux.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220425132723.34824-1-linmiaohe@huawei.com>
- <20220425132723.34824-3-linmiaohe@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v2 2/4] mm/migration: remove unneeded lock page and
- PageMovable check
-In-Reply-To: <20220425132723.34824-3-linmiaohe@huawei.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.04.22 15:27, Miaohe Lin wrote:
-> When non-lru movable page was freed from under us, __ClearPageMovable must
-> have been done. Even if it's not done, ClearPageIsolated here won't hurt
-> as page will be freed anyway. So we can thus remove unneeded lock page and
-> PageMovable check here.
+On Thu, 2022-04-28 at 13:02 +0100, Mark Brown wrote:
+> On Thu, Apr 28, 2022 at 05:33:50PM +0800, Jiaxin Yu wrote:
+> > Add mt8186 platform and affiliated driver.
+> > 
+> > Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
+> > ---
+> >  sound/soc/mediatek/Kconfig                    |   44 +
+> >  sound/soc/mediatek/Makefile                   |    1 +
+> >  sound/soc/mediatek/mt8186/Makefile            |   22 +
+> >  sound/soc/mediatek/mt8186/mt8186-afe-common.h |  235 ++
+> >  .../soc/mediatek/mt8186/mt8186-afe-control.c  |  261 ++
+> >  sound/soc/mediatek/mt8186/mt8186-afe-pcm.c    | 3005
+> > +++++++++++++++++
+> >  .../mediatek/mt8186/mt8186-interconnection.h  |   69 +
+> >  .../soc/mediatek/mt8186/mt8186-misc-control.c |  294 ++
+> >  .../mediatek/mt8186/mt8186-mt6366-common.c    |   59 +
+> >  .../mediatek/mt8186/mt8186-mt6366-common.h    |   17 +
+> >  sound/soc/mediatek/mt8186/mt8186-reg.h        | 2913
+> > ++++++++++++++++
+> >  11 files changed, 6920 insertions(+)
 > 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> ---
->  mm/migrate.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
+> This looks mostly good though it is enormous so I might've missed
+> some
+> things.  The patch series is already very large but it might still be
+> worth splitting this up a bit more, perhaps split the code and data
+> tables/register definitions into separate patches?
 > 
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index b779646665fe..0fc4651b3e39 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -1093,12 +1093,8 @@ static int unmap_and_move(new_page_t get_new_page,
->  		/* page was freed from under us. So we are done. */
->  		ClearPageActive(page);
->  		ClearPageUnevictable(page);
-> -		if (unlikely(__PageMovable(page))) {
-> -			lock_page(page);
-> -			if (!PageMovable(page))
-> -				ClearPageIsolated(page);
-> -			unlock_page(page);
-> -		}
-> +		if (unlikely(__PageMovable(page)))
-> +			ClearPageIsolated(page);
->  		goto out;
->  	}
+Yes, agree with you.
 
-Hm, that code+change raises a couple of questions.
+I will spit them into three patches:
 
-We're doing here the same as in putback_movable_pages(). So I guess the
-difference here is that the caller did release the reference while the
-page was isolated, while we don't assume the same in
-putback_movable_pages().
+PATCH 1: 
+  - mt8186-reg.h
+  - mt8186-interconnection.h
+  - mt8186-misc-control.c
 
+PATCH 2:
+  - mt8186-mt6366-common.c
+  - mt8186-mt6366-common.h
 
-Shouldn't whoever owned the page have cleared that? IOW, is it even
-valid that we see a movable or isolated page here (WARN/BUG?)?
+PATCH 3:
+  - sound/soc/mediatek/Kconfig 
+  - sound/soc/mediatek/Makefile
+  - sound/soc/mediatek/mt8186/Makefile
+  - sound/soc/mediatek/mt8186/mt8186-afe-common.h
+  - .../soc/mediatek/mt8186/mt8186-afe-control.c
+  - sound/soc/mediatek/mt8186/mt8186-afe-pcm.c
 
-At least for balloon compaction, I remember that __PageMovable() is
-properly cleared before freeing it via balloon_page_delete().
+> A few relatively minor issues with the controls.
+> 
+> > +/* this order must match reg bit amp_div_ch1/2 */
+> > +static const char * const mt8186_sgen_amp_str[] = {
+> > +	"1/128", "1/64", "1/32", "1/16", "1/8", "1/4", "1/2", "1" };
+> > +static const char * const mt8186_sgen_mute_str[] = {
+> > +	"Off", "On"
+> > +};
+> 
+> On/off controls should be normal Switch controls not enums so
+> userspace
+> can display things sensibly.
+> 
+> > +static int mt8186_sgen_set(struct snd_kcontrol *kcontrol,
+> > +			   struct snd_ctl_elem_value *ucontrol)
+> > +{
+> > +	struct snd_soc_component *cmpnt =
+> > snd_soc_kcontrol_component(kcontrol);
+> > +	struct mtk_base_afe *afe =
+> > snd_soc_component_get_drvdata(cmpnt);
+> > +	struct mt8186_afe_private *afe_priv = afe->platform_priv;
+> > +	struct soc_enum *e = (struct soc_enum *)kcontrol-
+> > >private_value;
+> > +	int mode;
+> > +	int mode_idx;
+> > +
+> > +	if (ucontrol->value.enumerated.item[0] >= e->items)
+> > +		return -EINVAL;
+> 
+> ...
+> 
+> > +				   0x3f << INNER_LOOP_BACK_MODE_SFT);
+> > +	}
+> > +
+> > +	afe_priv->sgen_mode = mode;
+> > +
+> > +	return 0;
+> > +}
+> 
+> This should return 1 if the value is different from the previous
+> value
+> so event generation works, please run mixer-test against a system
+> using
+> the driver to help spot issues like this.  The same issue applies to
+> at
+> least some of the other custom controls.
+> 
+Got it.
 
+> > +static int mt8186_sgen_mute_set(struct snd_kcontrol *kcontrol,
+> > +				struct snd_ctl_elem_value *ucontrol)
+> > +{
+> > +	struct snd_soc_component *cmpnt =
+> > snd_soc_kcontrol_component(kcontrol);
+> > +	struct mtk_base_afe *afe =
+> > snd_soc_component_get_drvdata(cmpnt);
+> > +	struct soc_enum *e = (struct soc_enum *)kcontrol-
+> > >private_value;
+> > +	int mute;
+> > +
+> > +	if (ucontrol->value.enumerated.item[0] >= e->items)
+> > +		return -EINVAL;
+> > +
+> > +	mute = ucontrol->value.integer.value[0];
+> > +
+> > +	dev_dbg(afe->dev, "%s(), kcontrol name %s, mute %d\n",
+> > +		__func__, kcontrol->id.name, mute);
+> > +
+> > +	if (strcmp(kcontrol->id.name, SGEN_MUTE_CH1_KCONTROL_NAME) ==
+> > 0) {
+> > +		regmap_update_bits(afe->regmap, AFE_SINEGEN_CON0,
+> > +				   MUTE_SW_CH1_MASK_SFT,
+> > +				   mute << MUTE_SW_CH1_SFT);
+> > +	} else {
+> > +		regmap_update_bits(afe->regmap, AFE_SINEGEN_CON0,
+> > +				   MUTE_SW_CH2_MASK_SFT,
+> > +				   mute << MUTE_SW_CH2_SFT);
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> 
+> I can't tell why some of these are done with custom code rather than
+> using a normal SOC_SINGLE()?
 
-Also, I am not sure how reliable that page count check is here: if we'd
-have another speculative reference to the page, we might see
-"page_count(page) > 1" and not take that path, although the previous
-owner released the last reference.
+Yes, it's better to use SOC_SINGLE. I will fix them in next version.
 
-
--- 
 Thanks,
-
-David / dhildenb
+Jiaxin.yu
 

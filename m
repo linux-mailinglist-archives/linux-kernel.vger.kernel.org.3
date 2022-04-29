@@ -2,842 +2,497 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8998C513F85
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 02:28:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 211F1513FCD
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 02:52:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352575AbiD2Abu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 20:31:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56936 "EHLO
+        id S1353142AbiD2AzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 20:55:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237176AbiD2Abs (ORCPT
+        with ESMTP id S237318AbiD2AzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 20:31:48 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE67B89A6
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 17:28:30 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id v59so11858853ybi.12
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 17:28:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9ICHE4YVmMxDEwnIKZ75c63DFS1ERzMwYHqAgAYiSNI=;
-        b=FDVhw8pM/z0rNbidBdUuVJwYUELyOORKaWH0gCKjGVq5qqbJZDXCjqa/jtUDZfNYmd
-         ZY7rhgyF3fhHOa3cgw2CZsgoSZUNDySKKIN1VfTHSPhg8LyuydL2PgbpAyMwbW5m8WGt
-         NSGIb7vVXfvk/wbOWesDG4az2vkmmN/4f2hzP5j45waTjgDNdob4FYCAsIJl9fRW+uWk
-         DpIXQrFnMwm/ih4uFZ7d4b6/+cZ16KAu6GZOxX0DhxFFqxHP8N8R9VwnCO8aY6eONh78
-         9hrwqTHcaA7co9KT7DgW5hHd6+7thDxTL+CTZpLW1fpNWVeAlWIWcm/g3YbeODGoeSbi
-         9DCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9ICHE4YVmMxDEwnIKZ75c63DFS1ERzMwYHqAgAYiSNI=;
-        b=pXSTyrCrX02XrQ+VUtn1mikxWKxDlz4e3o+dqRKKAffN+AUAhiC/EMonLVCAjKcP8B
-         tWKOpJw3xF4lByxWebbp5zGpmAaiRjdDP/5PqOlJV0WQY0RheFk4sQbWEh8J5tSZeJmK
-         nPlD1UuaBjIq+ygCx6853Xf9vgSi77zaFoHWmURKCLuJvpGP8WHZGKBgmSypM4f0gBzs
-         zpIaja2rmmQig1ZIYNr+W/kQG1R5n0LrYVzZKZQhv3VxVzp2woruVE7pTT7pPR8ZXuow
-         0y8OVmpbbSzpUVjR1dSWJAZVVlIrY9j4IExAb1geuYgWX5zXk3rIKE6t+XU/dKvMIdpQ
-         bJzw==
-X-Gm-Message-State: AOAM530lwLeYb6NRA18xGPqKMpHM7in8GRz5Rx0gmcFK98eviEJ/vCso
-        Tr3uS2/o5J+Ncr21TUBUIMamgGMgFjGQzPNaTU0ufA==
-X-Google-Smtp-Source: ABdhPJzf03nX+DBnOc3dqokWOxgwwgyaL2QvT4JiNAKyXAJhHAC0MKwvi1wLp2rAEC0/Tu7HIK1kH7ROmYmuS6Ku4rk=
-X-Received: by 2002:a25:3b8f:0:b0:644:afb4:57a6 with SMTP id
- i137-20020a253b8f000000b00644afb457a6mr33255886yba.40.1651192109561; Thu, 28
- Apr 2022 17:28:29 -0700 (PDT)
+        Thu, 28 Apr 2022 20:55:22 -0400
+X-Greylist: delayed 1343 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 28 Apr 2022 17:52:05 PDT
+Received: from skyrocket.fabmicro.ru (skyrocket.fabmicro.ru [217.116.57.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D400887B0
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 17:52:05 -0700 (PDT)
+Received: from mail.fabmicro.ru (skyrocket.fabmicro.ru [217.116.57.130])
+        by skyrocket.fabmicro.ru (8.14.9/8.14.9) with ESMTP id 23T0SfdW045826;
+        Fri, 29 Apr 2022 00:28:41 GMT
+        (envelope-from rz@fabmicro.ru)
 MIME-Version: 1.0
-References: <cover.1646422845.git.isaku.yamahata@intel.com> <7a5246c54427952728bd702bd7f2c6963eefa712.1646422845.git.isaku.yamahata@intel.com>
-In-Reply-To: <7a5246c54427952728bd702bd7f2c6963eefa712.1646422845.git.isaku.yamahata@intel.com>
-From:   Sagi Shahar <sagis@google.com>
-Date:   Thu, 28 Apr 2022 17:28:18 -0700
-Message-ID: <CAAhR5DE4-Z6JYLHbWyEyraqqWCx5bD+gZADAnisDmSJ4bkgV8g@mail.gmail.com>
-Subject: Re: [RFC PATCH v5 048/104] KVM: x86/tdp_mmu: Support TDX private
- mapping for TDP MMU
-To:     "Yamahata, Isaku" <isaku.yamahata@intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Fri, 29 Apr 2022 05:28:41 +0500
+From:   Ruslan Zalata <rz@fabmicro.ru>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v2] hwmon: (sun4i-lradc) Add driver for LRADC found on
+ Allwinner A13/A20 SoC
+In-Reply-To: <f79a8edf-36d4-02af-da8f-32b4e491bd47@roeck-us.net>
+References: <20220428210906.29527-1-rz@fabmicro.ru>
+ <f79a8edf-36d4-02af-da8f-32b4e491bd47@roeck-us.net>
+User-Agent: Roundcube Webmail/1.4.3
+Message-ID: <e0b57c7587dded38a92411994f353b3d@fabmicro.ru>
+X-Sender: rz@fabmicro.ru
+Organization: Fabmicro, LLC.
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- is not  .
+Thank you Guenter for your valuable time.
 
-On Fri, Mar 4, 2022 at 12:14 PM <isaku.yamahata@intel.com> wrote:
->
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
->
-> Use private EPT to mirror Secure EPT, and On the change of the private EPT
-> entry, invoke kvm_x86_ops hook in __handle_changed_spte() to propagate the
-> change to Secure EPT.
->
-> On EPT violation, determine which EPT to use, private or shared, based on
-> faulted GPA.  When allocating an EPT page, record it (private or shared) in
-> the page role.  The private is passed down to the function as an argument
-> as necessary.  When the private EPT entry is changed, call the hook.
->
-> When zapping EPT, the EPT entry is frozen with the special EPT value that
-> clears the present bit. After the TLB shootdown, the entry is set to the
-> eventual value.  On populating the EPT entry, atomically set the entry.
->
-> For TDX, TDX SEAMCALL to update Secure EPT in addition to direct access to
-> the private EPT entry.  For the zapping case, freeing the EPT entry
-> works. It can call TDX SEAMCALL in addition to TLB shootdown.  For
-> populating the private EPT entry, there can be a race condition without
-> further protection
->
->   vcpu 1: populating 2M private EPT entry
->   vcpu 2: populating 4K private EPT entry
->   vcpu 2: TDX SEAMCALL to update 4K secure EPT => error
->   vcpu 1: TDX SEAMCALL to update 4M secure EPT
->
-> To avoid the race, the frozen EPT entry is utilized.  Instead of atomic
-> update of the private EPT entry, freeze the entry, call the hook that
-> invokes TDX SEAMCALL, set the entry to the final value (unfreeze).
->
-> Support 4K page only at this stage.  2M page support can be done in future
-> patches.
->
-> Co-developed-by: Kai Huang <kai.huang@intel.com>
-> Signed-off-by: Kai Huang <kai.huang@intel.com>
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->  arch/x86/include/asm/kvm-x86-ops.h |   2 +
->  arch/x86/include/asm/kvm_host.h    |   8 +
->  arch/x86/kvm/mmu/mmu.c             |  31 +++-
->  arch/x86/kvm/mmu/tdp_iter.h        |   2 +-
->  arch/x86/kvm/mmu/tdp_mmu.c         | 226 +++++++++++++++++++++++------
->  arch/x86/kvm/mmu/tdp_mmu.h         |  13 +-
->  virt/kvm/kvm_main.c                |   1 +
->  7 files changed, 232 insertions(+), 51 deletions(-)
->
-> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-> index ef48dcc98cfc..7e27b73d839f 100644
-> --- a/arch/x86/include/asm/kvm-x86-ops.h
-> +++ b/arch/x86/include/asm/kvm-x86-ops.h
-> @@ -91,6 +91,8 @@ KVM_X86_OP(set_tss_addr)
->  KVM_X86_OP(set_identity_map_addr)
->  KVM_X86_OP(get_mt_mask)
->  KVM_X86_OP(load_mmu_pgd)
-> +KVM_X86_OP(free_private_sp)
-> +KVM_X86_OP(handle_changed_private_spte)
->  KVM_X86_OP_NULL(has_wbinvd_exit)
->  KVM_X86_OP(get_l2_tsc_offset)
->  KVM_X86_OP(get_l2_tsc_multiplier)
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 0c8cc7d73371..8406f8b5ab74 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -433,6 +433,7 @@ struct kvm_mmu {
->                          struct kvm_mmu_page *sp);
->         void (*invlpg)(struct kvm_vcpu *vcpu, gva_t gva, hpa_t root_hpa);
->         hpa_t root_hpa;
-> +       hpa_t private_root_hpa;
->         gpa_t root_pgd;
->         union kvm_mmu_role mmu_role;
->         u8 root_level;
-> @@ -1433,6 +1434,13 @@ struct kvm_x86_ops {
->         void (*load_mmu_pgd)(struct kvm_vcpu *vcpu, hpa_t root_hpa,
->                              int root_level);
->
-> +       int (*free_private_sp)(struct kvm *kvm, gfn_t gfn, enum pg_level level,
-> +                              void *private_sp);
-> +       void (*handle_changed_private_spte)(
-> +               struct kvm *kvm, gfn_t gfn, enum pg_level level,
-> +               kvm_pfn_t old_pfn, bool was_present, bool was_leaf,
-> +               kvm_pfn_t new_pfn, bool is_present, bool is_leaf, void *sept_page);
-> +
->         bool (*has_wbinvd_exit)(void);
->
->         u64 (*get_l2_tsc_offset)(struct kvm_vcpu *vcpu);
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 8def8b97978f..0ec9548ff4dd 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -3422,6 +3422,7 @@ static int mmu_alloc_direct_roots(struct kvm_vcpu *vcpu)
->  {
->         struct kvm_mmu *mmu = vcpu->arch.mmu;
->         u8 shadow_root_level = mmu->shadow_root_level;
-> +       gfn_t gfn_stolen = kvm_gfn_stolen_mask(vcpu->kvm);
->         hpa_t root;
->         unsigned i;
->         int r;
-> @@ -3432,7 +3433,11 @@ static int mmu_alloc_direct_roots(struct kvm_vcpu *vcpu)
->                 goto out_unlock;
->
->         if (is_tdp_mmu_enabled(vcpu->kvm)) {
-> -               root = kvm_tdp_mmu_get_vcpu_root_hpa(vcpu);
-> +               if (gfn_stolen && !VALID_PAGE(mmu->private_root_hpa)) {
-> +                       root = kvm_tdp_mmu_get_vcpu_root_hpa(vcpu, true);
-> +                       mmu->private_root_hpa = root;
-> +               }
-> +               root = kvm_tdp_mmu_get_vcpu_root_hpa(vcpu, false);
->                 mmu->root_hpa = root;
->         } else if (shadow_root_level >= PT64_ROOT_4LEVEL) {
->                 root = mmu_alloc_root(vcpu, 0, 0, shadow_root_level, true);
-> @@ -5596,6 +5601,7 @@ static int __kvm_mmu_create(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu)
->         int i;
->
->         mmu->root_hpa = INVALID_PAGE;
-> +       mmu->private_root_hpa = INVALID_PAGE;
->         mmu->root_pgd = 0;
->         for (i = 0; i < KVM_MMU_NUM_PREV_ROOTS; i++)
->                 mmu->prev_roots[i] = KVM_MMU_ROOT_INFO_INVALID;
-> @@ -5772,6 +5778,10 @@ static void kvm_mmu_zap_all_fast(struct kvm *kvm)
->
->         write_unlock(&kvm->mmu_lock);
->
-> +       /*
-> +        * For now private root is never invalidate during VM is running,
-> +        * so this can only happen for shared roots.
-> +        */
->         if (is_tdp_mmu_enabled(kvm)) {
->                 read_lock(&kvm->mmu_lock);
->                 kvm_tdp_mmu_zap_invalidated_roots(kvm);
-> @@ -5871,7 +5881,8 @@ void kvm_zap_gfn_range(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_end)
->         if (is_tdp_mmu_enabled(kvm)) {
->                 for (i = 0; i < KVM_ADDRESS_SPACE_NUM; i++)
->                         flush = kvm_tdp_mmu_zap_gfn_range(kvm, i, gfn_start,
-> -                                                         gfn_end, flush);
-> +                                                         gfn_end, flush,
-> +                                                         false);
->         }
->
->         if (flush)
-> @@ -5904,6 +5915,11 @@ void kvm_mmu_slot_remove_write_access(struct kvm *kvm,
->                 write_unlock(&kvm->mmu_lock);
->         }
->
-> +       /*
-> +        * For now this can only happen for non-TD VM, because TD private
-> +        * mapping doesn't support write protection.  kvm_tdp_mmu_wrprot_slot()
-> +        * will give a WARN() if it hits for TD.
-> +        */
->         if (is_tdp_mmu_enabled(kvm)) {
->                 read_lock(&kvm->mmu_lock);
->                 flush |= kvm_tdp_mmu_wrprot_slot(kvm, memslot, start_level);
-> @@ -5952,6 +5968,9 @@ static bool kvm_mmu_zap_collapsible_spte(struct kvm *kvm,
->                 sp = sptep_to_sp(sptep);
->                 pfn = spte_to_pfn(*sptep);
->
-> +               /* Private page dirty logging is not supported. */
-> +               KVM_BUG_ON(is_private_spte(sptep), kvm);
-> +
->                 /*
->                  * We cannot do huge page mapping for indirect shadow pages,
->                  * which are found on the last rmap (level = 1) when not using
-> @@ -5992,6 +6011,11 @@ void kvm_mmu_zap_collapsible_sptes(struct kvm *kvm,
->                 write_unlock(&kvm->mmu_lock);
->         }
->
-> +       /*
-> +        * This should only be reachable in case of log-dirty, wihch TD private
-> +        * mapping doesn't support so far.  kvm_tdp_mmu_zap_collapsible_sptes()
-> +        * internally gives a WARN() when it hits.
-> +        */
->         if (is_tdp_mmu_enabled(kvm)) {
->                 read_lock(&kvm->mmu_lock);
->                 kvm_tdp_mmu_zap_collapsible_sptes(kvm, slot);
-> @@ -6266,6 +6290,9 @@ int kvm_mmu_module_init(void)
->  void kvm_mmu_destroy(struct kvm_vcpu *vcpu)
->  {
->         kvm_mmu_unload(vcpu);
-> +       if (is_tdp_mmu_enabled(vcpu->kvm))
-> +               mmu_free_root_page(vcpu->kvm, &vcpu->arch.mmu->private_root_hpa,
-> +                               NULL);
->         free_mmu_pages(&vcpu->arch.root_mmu);
->         free_mmu_pages(&vcpu->arch.guest_mmu);
->         mmu_free_memory_caches(vcpu);
-> diff --git a/arch/x86/kvm/mmu/tdp_iter.h b/arch/x86/kvm/mmu/tdp_iter.h
-> index e19cabbcb65c..ad22d5b691c5 100644
-> --- a/arch/x86/kvm/mmu/tdp_iter.h
-> +++ b/arch/x86/kvm/mmu/tdp_iter.h
-> @@ -28,7 +28,7 @@ struct tdp_iter {
->         tdp_ptep_t pt_path[PT64_ROOT_MAX_LEVEL];
->         /* A pointer to the current SPTE */
->         tdp_ptep_t sptep;
-> -       /* The lowest GFN mapped by the current SPTE */
-> +       /* The lowest GFN (stolen bits included) mapped by the current SPTE */
->         gfn_t gfn;
->         /* The level of the root page given to the iterator */
->         int root_level;
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index a68f3a22836b..acba2590b51e 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -53,6 +53,11 @@ void kvm_mmu_uninit_tdp_mmu(struct kvm *kvm)
->         rcu_barrier();
->  }
->
-> +static gfn_t tdp_iter_gfn_unalias(struct kvm *kvm, struct tdp_iter *iter)
-> +{
-> +       return kvm_gfn_unalias(kvm, iter->gfn);
-> +}
-> +
->  static bool zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
->                           gfn_t start, gfn_t end, bool can_yield, bool flush,
->                           bool shared);
-> @@ -175,10 +180,13 @@ static union kvm_mmu_page_role page_role_for_level(struct kvm_vcpu *vcpu,
->  }
->
->  static struct kvm_mmu_page *alloc_tdp_mmu_page(struct kvm_vcpu *vcpu, gfn_t gfn,
-> -                                              int level)
-> +                                              int level, bool private)
->  {
->         struct kvm_mmu_page *sp;
->
-> +       WARN_ON(level != vcpu->arch.mmu->shadow_root_level &&
-> +               kvm_is_private_gfn(vcpu->kvm, gfn) != private);
-> +       WARN_ON(level == vcpu->arch.mmu->shadow_root_level && gfn != 0);
->         sp = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_page_header_cache);
->         sp->spt = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_shadow_page_cache);
->         set_page_private(virt_to_page(sp->spt), (unsigned long)sp);
-> @@ -186,14 +194,19 @@ static struct kvm_mmu_page *alloc_tdp_mmu_page(struct kvm_vcpu *vcpu, gfn_t gfn,
->         sp->role.word = page_role_for_level(vcpu, level).word;
->         sp->gfn = gfn;
->         sp->tdp_mmu_page = true;
-> -       kvm_mmu_init_private_sp(sp);
-> +
-> +       if (private)
-> +               kvm_mmu_alloc_private_sp(vcpu, sp);
-> +       else
-> +               kvm_mmu_init_private_sp(sp);
->
->         trace_kvm_mmu_get_page(sp, true);
->
->         return sp;
->  }
->
-> -hpa_t kvm_tdp_mmu_get_vcpu_root_hpa(struct kvm_vcpu *vcpu)
-> +static struct kvm_mmu_page *kvm_tdp_mmu_get_vcpu_root(struct kvm_vcpu *vcpu,
-> +                                                     bool private)
->  {
->         union kvm_mmu_page_role role;
->         struct kvm *kvm = vcpu->kvm;
-> @@ -206,11 +219,13 @@ hpa_t kvm_tdp_mmu_get_vcpu_root_hpa(struct kvm_vcpu *vcpu)
->         /* Check for an existing root before allocating a new one. */
->         for_each_tdp_mmu_root(kvm, root, kvm_mmu_role_as_id(role)) {
->                 if (root->role.word == role.word &&
-> +                   is_private_sp(root) == private &&
->                     kvm_tdp_mmu_get_root(kvm, root))
->                         goto out;
->         }
->
-> -       root = alloc_tdp_mmu_page(vcpu, 0, vcpu->arch.mmu->shadow_root_level);
-> +       root = alloc_tdp_mmu_page(vcpu, 0, vcpu->arch.mmu->shadow_root_level,
-> +                       private);
->         refcount_set(&root->tdp_mmu_root_count, 1);
->
->         spin_lock(&kvm->arch.tdp_mmu_pages_lock);
-> @@ -218,12 +233,17 @@ hpa_t kvm_tdp_mmu_get_vcpu_root_hpa(struct kvm_vcpu *vcpu)
->         spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
->
->  out:
-> -       return __pa(root->spt);
-> +       return root;
-> +}
-> +
-> +hpa_t kvm_tdp_mmu_get_vcpu_root_hpa(struct kvm_vcpu *vcpu, bool private)
-> +{
-> +       return __pa(kvm_tdp_mmu_get_vcpu_root(vcpu, private)->spt);
->  }
->
->  static void handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
-> -                               u64 old_spte, u64 new_spte, int level,
-> -                               bool shared);
-> +                               bool private_spte, u64 old_spte,
-> +                               u64 new_spte, int level, bool shared);
->
->  static void handle_changed_spte_acc_track(u64 old_spte, u64 new_spte, int level)
->  {
-> @@ -321,6 +341,7 @@ static void handle_removed_tdp_mmu_page(struct kvm *kvm, tdp_ptep_t pt,
->         int level = sp->role.level;
->         gfn_t base_gfn = sp->gfn;
->         int i;
-> +       bool private_sp = is_private_sp(sp);
->
->         trace_kvm_mmu_prepare_zap_page(sp);
->
-> @@ -370,7 +391,7 @@ static void handle_removed_tdp_mmu_page(struct kvm *kvm, tdp_ptep_t pt,
->                          */
->                         WRITE_ONCE(*sptep, SHADOW_REMOVED_SPTE);
->                 }
-> -               handle_changed_spte(kvm, kvm_mmu_page_as_id(sp), gfn,
-> +               handle_changed_spte(kvm, kvm_mmu_page_as_id(sp), gfn, private_sp,
->                                     old_child_spte, SHADOW_REMOVED_SPTE, level,
->                                     shared);
->         }
-> @@ -378,6 +399,17 @@ static void handle_removed_tdp_mmu_page(struct kvm *kvm, tdp_ptep_t pt,
->         kvm_flush_remote_tlbs_with_address(kvm, base_gfn,
->                                            KVM_PAGES_PER_HPAGE(level + 1));
->
-> +       if (private_sp &&
-> +               WARN_ON(static_call(kvm_x86_free_private_sp)(
-> +                               kvm, sp->gfn, sp->role.level,
-> +                               kvm_mmu_private_sp(sp)))) {
-> +               /*
-> +                * Failed to unlink Secure EPT page and there is nothing to do
-> +                * further.  Intentionally leak the page to prevent the kernel
-> +                * from accessing the encrypted page.
-> +                */
-> +               kvm_mmu_init_private_sp(sp);
-> +       }
->         call_rcu(&sp->rcu_head, tdp_mmu_free_sp_rcu_callback);
->  }
->
-> @@ -386,6 +418,7 @@ static void handle_removed_tdp_mmu_page(struct kvm *kvm, tdp_ptep_t pt,
->   * @kvm: kvm instance
->   * @as_id: the address space of the paging structure the SPTE was a part of
->   * @gfn: the base GFN that was mapped by the SPTE
-> + * @private_spte: the SPTE is private or not
->   * @old_spte: The value of the SPTE before the change
->   * @new_spte: The value of the SPTE after the change
->   * @level: the level of the PT the SPTE is part of in the paging structure
-> @@ -397,14 +430,16 @@ static void handle_removed_tdp_mmu_page(struct kvm *kvm, tdp_ptep_t pt,
->   * This function must be called for all TDP SPTE modifications.
->   */
->  static void __handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
-> -                                 u64 old_spte, u64 new_spte, int level,
-> -                                 bool shared)
-> +                                 bool private_spte, u64 old_spte,
-> +                                 u64 new_spte, int level, bool shared)
->  {
->         bool was_present = is_shadow_present_pte(old_spte);
->         bool is_present = is_shadow_present_pte(new_spte);
->         bool was_leaf = was_present && is_last_spte(old_spte, level);
->         bool is_leaf = is_present && is_last_spte(new_spte, level);
-> -       bool pfn_changed = spte_to_pfn(old_spte) != spte_to_pfn(new_spte);
-> +       kvm_pfn_t old_pfn = spte_to_pfn(old_spte);
-> +       kvm_pfn_t new_pfn = spte_to_pfn(new_spte);
-> +       bool pfn_changed = old_pfn != new_pfn;
->
->         WARN_ON(level > PT64_ROOT_MAX_LEVEL);
->         WARN_ON(level < PG_LEVEL_4K);
-> @@ -468,23 +503,49 @@ static void __handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
->
->         if (was_leaf && is_dirty_spte(old_spte) &&
->             (!is_present || !is_dirty_spte(new_spte) || pfn_changed))
-> -               kvm_set_pfn_dirty(spte_to_pfn(old_spte));
-> +               kvm_set_pfn_dirty(old_pfn);
-> +
-> +       /*
-> +        * Special handling for the private mapping.  We are either
-> +        * setting up new mapping at middle level page table, or leaf,
-> +        * or tearing down existing mapping.
-> +        */
-> +       if (private_spte) {
-> +               void *sept_page = NULL;
-> +
-> +               if (is_present && !is_leaf) {
-> +                       struct kvm_mmu_page *sp = to_shadow_page(pfn_to_hpa(new_pfn));
-> +
-> +                       sept_page = kvm_mmu_private_sp(sp);
-> +                       WARN_ON(!sept_page);
-> +                       WARN_ON(sp->role.level + 1 != level);
-> +                       WARN_ON(sp->gfn != gfn);
-> +               }
-> +
-> +               static_call(kvm_x86_handle_changed_private_spte)(
-> +                       kvm, gfn, level,
-> +                       old_pfn, was_present, was_leaf,
-> +                       new_pfn, is_present, is_leaf, sept_page);
-> +       }
->
->         /*
->          * Recursively handle child PTs if the change removed a subtree from
->          * the paging structure.
->          */
-> -       if (was_present && !was_leaf && (pfn_changed || !is_present))
-> +       if (was_present && !was_leaf && (pfn_changed || !is_present)) {
-> +               WARN_ON(private_spte !=
-> +                       is_private_spte(spte_to_child_pt(old_spte, level)));
->                 handle_removed_tdp_mmu_page(kvm,
->                                 spte_to_child_pt(old_spte, level), shared);
-> +       }
->  }
->
->  static void handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
-> -                               u64 old_spte, u64 new_spte, int level,
-> -                               bool shared)
-> +                               bool private_spte, u64 old_spte, u64 new_spte,
-> +                               int level, bool shared)
->  {
-> -       __handle_changed_spte(kvm, as_id, gfn, old_spte, new_spte, level,
-> -                             shared);
-> +       __handle_changed_spte(kvm, as_id, gfn, private_spte,
-> +                       old_spte, new_spte, level, shared);
->         handle_changed_spte_acc_track(old_spte, new_spte, level);
->         handle_changed_spte_dirty_log(kvm, as_id, gfn, old_spte,
->                                       new_spte, level);
-> @@ -505,6 +566,10 @@ static inline bool tdp_mmu_set_spte_atomic(struct kvm *kvm,
->                                            struct tdp_iter *iter,
->                                            u64 new_spte)
->  {
-> +       bool freeze_spte = is_private_spte(iter->sptep) &&
-> +               !is_removed_spte(new_spte);
-> +       u64 tmp_spte = freeze_spte ? SHADOW_REMOVED_SPTE : new_spte;
-> +
->         WARN_ON_ONCE(iter->yielded);
->
->         lockdep_assert_held_read(&kvm->mmu_lock);
-> @@ -521,13 +586,16 @@ static inline bool tdp_mmu_set_spte_atomic(struct kvm *kvm,
->          * does not hold the mmu_lock.
->          */
->         if (cmpxchg64(rcu_dereference(iter->sptep), iter->old_spte,
-> -                     new_spte) != iter->old_spte)
-> +                     tmp_spte) != iter->old_spte)
->                 return false;
->
-> -       __handle_changed_spte(kvm, iter->as_id, iter->gfn, iter->old_spte,
-> -                             new_spte, iter->level, true);
-> +       __handle_changed_spte(kvm, iter->as_id, iter->gfn, is_private_spte(iter->sptep),
-> +                             iter->old_spte, new_spte, iter->level, true);
->         handle_changed_spte_acc_track(iter->old_spte, new_spte, iter->level);
->
-> +       if (freeze_spte)
-> +               WRITE_ONCE(*rcu_dereference(iter->sptep), new_spte);
-> +
->         return true;
->  }
->
-> @@ -603,8 +671,8 @@ static inline void __tdp_mmu_set_spte(struct kvm *kvm, struct tdp_iter *iter,
->
->         WRITE_ONCE(*rcu_dereference(iter->sptep), new_spte);
->
-> -       __handle_changed_spte(kvm, iter->as_id, iter->gfn, iter->old_spte,
-> -                             new_spte, iter->level, false);
-> +       __handle_changed_spte(kvm, iter->as_id, iter->gfn, is_private_spte(iter->sptep),
-> +                             iter->old_spte, new_spte, iter->level, false);
->         if (record_acc_track)
->                 handle_changed_spte_acc_track(iter->old_spte, new_spte,
->                                               iter->level);
-> @@ -644,9 +712,10 @@ static inline void tdp_mmu_set_spte_no_dirty_log(struct kvm *kvm,
->                         continue;                                       \
->                 else
->
-> -#define tdp_mmu_for_each_pte(_iter, _mmu, _start, _end)                \
-> -       for_each_tdp_pte(_iter, __va(_mmu->root_hpa),           \
-> -                        _mmu->shadow_root_level, _start, _end)
-> +#define tdp_mmu_for_each_pte(_iter, _mmu, _private, _start, _end)              \
-> +       for_each_tdp_pte(_iter,                                                 \
-> +               __va((_private) ? _mmu->private_root_hpa : _mmu->root_hpa),     \
-> +               _mmu->shadow_root_level, _start, _end)
->
->  /*
->   * Yield if the MMU lock is contended or this thread needs to return control
-> @@ -731,6 +800,18 @@ static bool zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
->          */
->         end = min(end, max_gfn_host);
->
-> +       /*
-> +        * Extend [start, end) to include GFN shared bit when TDX is enabled,
-> +        * and for shared mapping range.
-> +        */
-> +       if (is_private_sp(root)) {
-> +               start = kvm_gfn_private(kvm, start);
-> +               end = kvm_gfn_private(kvm, end);
-> +       } else {
-> +               start = kvm_gfn_shared(kvm, start);
-> +               end = kvm_gfn_shared(kvm, end);
-> +       }
-> +
->         kvm_lockdep_assert_mmu_lock_held(kvm, shared);
->
->         rcu_read_lock();
-> @@ -783,13 +864,18 @@ static bool zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
->   * MMU lock.
->   */
->  bool __kvm_tdp_mmu_zap_gfn_range(struct kvm *kvm, int as_id, gfn_t start,
-> -                                gfn_t end, bool can_yield, bool flush)
-> +                                gfn_t end, bool can_yield, bool flush,
-> +                                bool zap_private)
->  {
->         struct kvm_mmu_page *root;
->
-> -       for_each_tdp_mmu_root_yield_safe(kvm, root, as_id, false)
-> +       for_each_tdp_mmu_root_yield_safe(kvm, root, as_id, false) {
-> +               /* Skip private page table if not requested */
-> +               if (!zap_private && is_private_sp(root))
-> +                       continue;
->                 flush = zap_gfn_range(kvm, root, start, end, can_yield, flush,
->                                       false);
-> +       }
->
->         return flush;
->  }
-> @@ -800,7 +886,7 @@ void kvm_tdp_mmu_zap_all(struct kvm *kvm)
->         int i;
->
->         for (i = 0; i < KVM_ADDRESS_SPACE_NUM; i++)
-> -               flush = kvm_tdp_mmu_zap_gfn_range(kvm, i, 0, -1ull, flush);
-> +               flush = kvm_tdp_mmu_zap_gfn_range(kvm, i, 0, -1ull, flush, true);
->
->         if (flush)
->                 kvm_flush_remote_tlbs(kvm);
-> @@ -851,6 +937,13 @@ void kvm_tdp_mmu_zap_invalidated_roots(struct kvm *kvm)
->         while (root) {
->                 next_root = next_invalidated_root(kvm, root);
->
-> +               /*
-> +                * Private table is only torn down when VM is destroyed.
-> +                * It is a bug to zap private table here.
-> +                */
-> +               if (WARN_ON(is_private_sp(root)))
-> +                       goto out;
-> +
->                 rcu_read_unlock();
->
->                 flush = zap_gfn_range(kvm, root, 0, -1ull, true, flush, true);
-> @@ -865,7 +958,7 @@ void kvm_tdp_mmu_zap_invalidated_roots(struct kvm *kvm)
->
->                 rcu_read_lock();
->         }
-> -
-> +out:
->         rcu_read_unlock();
->
->         if (flush)
-> @@ -897,9 +990,16 @@ void kvm_tdp_mmu_invalidate_all_roots(struct kvm *kvm)
->         struct kvm_mmu_page *root;
->
->         lockdep_assert_held_write(&kvm->mmu_lock);
-> -       list_for_each_entry(root, &kvm->arch.tdp_mmu_roots, link)
-> +       list_for_each_entry(root, &kvm->arch.tdp_mmu_roots, link) {
-> +               /*
-> +                * Skip private root since private page table
-> +                * is only torn down when VM is destroyed.
-> +                */
-> +               if (is_private_sp(root))
-> +                       continue;
->                 if (refcount_inc_not_zero(&root->tdp_mmu_root_count))
->                         root->role.invalid = true;
-> +       }
->  }
->
->  /*
-> @@ -914,14 +1014,23 @@ static int tdp_mmu_map_handle_target_level(struct kvm_vcpu *vcpu,
->         u64 new_spte;
->         int ret = RET_PF_FIXED;
->         bool wrprot = false;
-> +       unsigned long pte_access = ACC_ALL;
->
->         WARN_ON(sp->role.level != fault->goal_level);
-> +
-> +       /* TDX shared GPAs are no executable, enforce this for the SDV. */
-> +       if (!kvm_is_private_gfn(vcpu->kvm, iter->gfn))
-> +               pte_access &= ~ACC_EXEC_MASK;
-> +
->         if (unlikely(!fault->slot))
-> -               new_spte = make_mmio_spte(vcpu, iter->gfn, ACC_ALL);
-> +               new_spte = make_mmio_spte(vcpu,
-> +                               tdp_iter_gfn_unalias(vcpu->kvm, iter),
-> +                               pte_access);
->         else
-> -               wrprot = make_spte(vcpu, sp, fault->slot, ACC_ALL, iter->gfn,
-> -                                        fault->pfn, iter->old_spte, fault->prefetch, true,
-> -                                        fault->map_writable, &new_spte);
-> +               wrprot = make_spte(vcpu, sp, fault->slot, pte_access,
-> +                               tdp_iter_gfn_unalias(vcpu->kvm, iter),
-> +                               fault->pfn, iter->old_spte, fault->prefetch,
-> +                               true, fault->map_writable, &new_spte);
->
->         if (new_spte == iter->old_spte)
->                 ret = RET_PF_SPURIOUS;
-> @@ -959,7 +1068,8 @@ static int tdp_mmu_map_handle_target_level(struct kvm_vcpu *vcpu,
->  }
->
->  static bool tdp_mmu_populate_nonleaf(
-> -       struct kvm_vcpu *vcpu, struct tdp_iter *iter, bool account_nx)
-> +       struct kvm_vcpu *vcpu, struct tdp_iter *iter, bool is_private,
-> +       bool account_nx)
->  {
->         struct kvm_mmu_page *sp;
->         u64 *child_pt;
-> @@ -968,7 +1078,7 @@ static bool tdp_mmu_populate_nonleaf(
->         WARN_ON(is_shadow_present_pte(iter->old_spte));
->         WARN_ON(is_removed_spte(iter->old_spte));
->
-> -       sp = alloc_tdp_mmu_page(vcpu, iter->gfn, iter->level - 1);
-> +       sp = alloc_tdp_mmu_page(vcpu, iter->gfn, iter->level - 1, is_private);
->         child_pt = sp->spt;
->
->         new_spte = make_nonleaf_spte(child_pt, !shadow_accessed_mask);
-> @@ -991,6 +1101,8 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->  {
->         struct kvm_mmu *mmu = vcpu->arch.mmu;
->         struct tdp_iter iter;
-> +       gfn_t raw_gfn;
-> +       bool is_private;
->         int ret;
->
->         kvm_mmu_hugepage_adjust(vcpu, fault);
-> @@ -999,7 +1111,17 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->
->         rcu_read_lock();
->
-> -       tdp_mmu_for_each_pte(iter, mmu, fault->gfn, fault->gfn + 1) {
-> +       raw_gfn = gpa_to_gfn(fault->addr);
-> +       is_private = kvm_is_private_gfn(vcpu->kvm, raw_gfn);
-> +
-> +       if (is_error_noslot_pfn(fault->pfn) || kvm_is_reserved_pfn(fault->pfn)) {
-> +               if (is_private) {
-> +                       rcu_read_unlock();
-> +                       return -EFAULT;
-> +               }
-> +       }
-> +
-> +       tdp_mmu_for_each_pte(iter, mmu, is_private, raw_gfn, raw_gfn + 1) {
->                 if (fault->nx_huge_page_workaround_enabled)
->                         disallowed_hugepage_adjust(fault, iter.old_spte, iter.level);
->
-> @@ -1015,6 +1137,12 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->                     is_large_pte(iter.old_spte)) {
->                         if (!tdp_mmu_zap_spte_atomic(vcpu->kvm, &iter))
->                                 break;
-> +                       /*
-> +                        * TODO: large page support.
-> +                        * Doesn't support large page for TDX now
-> +                        */
-> +                       WARN_ON(is_private_spte(&iter.old_spte));
+I have added update_interval option (it's in ms units, right?) and fixed 
+all other issues you pointed to. Will test it on real hardware and send 
+third version of the patch for review.
 
-The above line is causing a null ptr dereferencing when running the
-KVM unit tests.
-It should be is_private_spte(iter.sptep) instead of
-is_private_spte(&iter.old_spte)
-While old_spte holds a snapshot of the value pointed to by sptep,
-&old_spte is not equivalent to sptep.
+Regarding IRQ. Alternatively the driver would need to sit and poll 
+conversion ready bit in a loop which might cause a much worse load on 
+system, is not it ? Anyway, the real problem with this piece of hardware 
+is that there's no "conversion ready bit" provided, the only way to know 
+data ready status is to receive an interrupt.
 
->
-> +
->
->
->                         /*
->                          * The iter must explicitly re-read the spte here
-> @@ -1037,7 +1165,8 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->
->                         account_nx = fault->huge_page_disallowed &&
->                                 fault->req_level >= iter.level;
-> -                       if (!tdp_mmu_populate_nonleaf(vcpu, &iter, account_nx))
-> +                       if (!tdp_mmu_populate_nonleaf(
-> +                                       vcpu, &iter, is_private, account_nx))
->                                 break;
->                 }
->         }
-> @@ -1058,9 +1187,12 @@ bool kvm_tdp_mmu_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range,
->  {
->         struct kvm_mmu_page *root;
->
-> -       for_each_tdp_mmu_root_yield_safe(kvm, root, range->slot->as_id, false)
-> +       for_each_tdp_mmu_root_yield_safe(kvm, root, range->slot->as_id, false) {
-> +               if (is_private_sp(root))
-> +                       continue;
->                 flush = zap_gfn_range(kvm, root, range->start, range->end,
-> -                                     range->may_block, flush, false);
-> +                               range->may_block, flush, false);
-> +       }
->
->         return flush;
->  }
-> @@ -1513,10 +1645,14 @@ int kvm_tdp_mmu_get_walk(struct kvm_vcpu *vcpu, u64 addr, u64 *sptes,
->         struct kvm_mmu *mmu = vcpu->arch.mmu;
->         gfn_t gfn = addr >> PAGE_SHIFT;
->         int leaf = -1;
-> +       bool is_private = kvm_is_private_gfn(vcpu->kvm, gfn);
->
->         *root_level = vcpu->arch.mmu->shadow_root_level;
->
-> -       tdp_mmu_for_each_pte(iter, mmu, gfn, gfn + 1) {
-> +       if (WARN_ON(is_private))
-> +               return leaf;
-> +
-> +       tdp_mmu_for_each_pte(iter, mmu, false, gfn, gfn + 1) {
->                 leaf = iter.level;
->                 sptes[leaf] = iter.old_spte;
->         }
-> @@ -1542,12 +1678,16 @@ u64 *kvm_tdp_mmu_fast_pf_get_last_sptep(struct kvm_vcpu *vcpu, u64 addr,
->         struct kvm_mmu *mmu = vcpu->arch.mmu;
->         gfn_t gfn = addr >> PAGE_SHIFT;
->         tdp_ptep_t sptep = NULL;
-> +       bool is_private = kvm_is_private_gfn(vcpu->kvm, gfn);
->
-> -       tdp_mmu_for_each_pte(iter, mmu, gfn, gfn + 1) {
-> +       if (is_private)
-> +               goto out;
-> +
-> +       tdp_mmu_for_each_pte(iter, mmu, false, gfn, gfn + 1) {
->                 *spte = iter.old_spte;
->                 sptep = iter.sptep;
->         }
-> -
-> +out:
->         /*
->          * Perform the rcu_dereference to get the raw spte pointer value since
->          * we are passing it up to fast_page_fault, which is shared with the
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.h b/arch/x86/kvm/mmu/tdp_mmu.h
-> index 3899004a5d91..7c62f694a465 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.h
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.h
-> @@ -5,7 +5,7 @@
->
->  #include <linux/kvm_host.h>
->
-> -hpa_t kvm_tdp_mmu_get_vcpu_root_hpa(struct kvm_vcpu *vcpu);
-> +hpa_t kvm_tdp_mmu_get_vcpu_root_hpa(struct kvm_vcpu *vcpu, bool private);
->
->  __must_check static inline bool kvm_tdp_mmu_get_root(struct kvm *kvm,
->                                                      struct kvm_mmu_page *root)
-> @@ -20,11 +20,14 @@ void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root,
->                           bool shared);
->
->  bool __kvm_tdp_mmu_zap_gfn_range(struct kvm *kvm, int as_id, gfn_t start,
-> -                                gfn_t end, bool can_yield, bool flush);
-> +                                gfn_t end, bool can_yield, bool flush,
-> +                                bool zap_private);
->  static inline bool kvm_tdp_mmu_zap_gfn_range(struct kvm *kvm, int as_id,
-> -                                            gfn_t start, gfn_t end, bool flush)
-> +                                            gfn_t start, gfn_t end, bool flush,
-> +                                            bool zap_private)
->  {
-> -       return __kvm_tdp_mmu_zap_gfn_range(kvm, as_id, start, end, true, flush);
-> +       return __kvm_tdp_mmu_zap_gfn_range(kvm, as_id, start, end, true, flush,
-> +                       zap_private);
->  }
->  static inline bool kvm_tdp_mmu_zap_sp(struct kvm *kvm, struct kvm_mmu_page *sp)
->  {
-> @@ -41,7 +44,7 @@ static inline bool kvm_tdp_mmu_zap_sp(struct kvm *kvm, struct kvm_mmu_page *sp)
->          */
->         lockdep_assert_held_write(&kvm->mmu_lock);
->         return __kvm_tdp_mmu_zap_gfn_range(kvm, kvm_mmu_page_as_id(sp),
-> -                                          sp->gfn, end, false, false);
-> +                                          sp->gfn, end, false, false, false);
->  }
->
->  void kvm_tdp_mmu_zap_all(struct kvm *kvm);
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index ae3bf553f215..d4e117f5b5b9 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -190,6 +190,7 @@ bool kvm_is_reserved_pfn(kvm_pfn_t pfn)
->
->         return true;
->  }
-> +EXPORT_SYMBOL_GPL(kvm_is_reserved_pfn);
->
->  /*
->   * Switches to specified vcpu, until a matching vcpu_put()
-> --
-> 2.25.1
->
+I think it still needs a semaphore/seqlock to synchronize conversions 
+and reads. I.e. two consequent reads should not return same old value. 
+Although it's not an issue in my case, but could be a problem for 
+others.
 
-Sagi
+---
+Regards,
+Ruslan.
+
+Fabmicro, LLC.
+
+On 2022-04-29 02:30, Guenter Roeck wrote:
+> On 4/28/22 14:09, Ruslan Zalata wrote:
+>> Some Allwinner SoCs like A13, A20 or T2 are equipped with two-channel
+>> low rate (6 bit) ADC that is often used for extra keys. There's a 
+>> driver
+>> for that already implementing standard input device, but it has these
+>> limitations: 1) it cannot be used for general ADC data equisition, and
+> 
+> acquisition
+> 
+>> 2) it uses only one LRADC channel of two available.
+>> 
+>> This driver provides basic hwmon interface to both channels of LRADC 
+>> on
+>> such Allwinner SoCs.
+>> 
+>> Signed-off-by: Ruslan Zalata <rz@fabmicro.ru>
+> 
+> Ok, next phase of review.
+> 
+> 
+>> ---
+>>   MAINTAINERS                       |   6 +
+>>   drivers/hwmon/Kconfig             |  13 ++
+>>   drivers/hwmon/Makefile            |   1 +
+>>   drivers/hwmon/sun4i-lradc-hwmon.c | 280 
+>> ++++++++++++++++++++++++++++++
+> 
+> Needs documentation in Documentation/hwmon/sun4i-lradc-hwmon.rst,
+> and don't forget to add it to Documentation/hwmon/index.rst.
+> 
+>>   4 files changed, 300 insertions(+)
+>>   create mode 100644 drivers/hwmon/sun4i-lradc-hwmon.c
+>> 
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 5e8c2f61176..d9c71e94133 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -18861,6 +18861,12 @@ S:	Maintained
+>>   
+>> F:	Documentation/devicetree/bindings/input/allwinner,sun4i-a10-lradc-keys.yaml
+>>   F:	drivers/input/keyboard/sun4i-lradc-keys.c
+>>   +SUN4I LOW RES ADC HWMON DRIVER
+>> +M:	Ruslan Zalata <rz@fabmicro.ru>
+>> +L:	linux-hwmon@vger.kernel.org
+>> +S:	Maintained
+>> +F:	drivers/hwmon/sun4i-lradc-hwmon.c
+>> +
+>>   SUNDANCE NETWORK DRIVER
+>>   M:	Denis Kirjanov <kda@linux-powerpc.org>
+>>   L:	netdev@vger.kernel.org
+>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+>> index 68a8a27ab3b..86776488a81 100644
+>> --- a/drivers/hwmon/Kconfig
+>> +++ b/drivers/hwmon/Kconfig
+>> @@ -1691,6 +1691,19 @@ config SENSORS_SIS5595
+>>   	  This driver can also be built as a module. If so, the module
+>>   	  will be called sis5595.
+>>   +config SENSORS_SUN4I_LRADC
+>> +	tristate "Allwinner A13/A20 LRADC hwmon"
+>> +	depends on ARCH_SUNXI && !KEYBOARD_SUN4I_LRADC
+>> +	help
+>> +	  Say y here to support the LRADC found in Allwinner A13/A20 SoCs.
+>> +	  Both channels are supported.
+>> +
+>> +	  This driver can also be built as module. If so, the module
+>> +	  will be called sun4i-lradc-hwmon.
+>> +
+>> +	  This option is not compatible with KEYBOARD_SUN4I_LRADC, one
+> 
+> only one of these
+> 
+>> +	  of these must be used at a time.
+>> +
+>>   config SENSORS_SY7636A
+>>   	tristate "Silergy SY7636A"
+>>   	help
+>> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+>> index 8a03289e2aa..3e5dc902acf 100644
+>> --- a/drivers/hwmon/Makefile
+>> +++ b/drivers/hwmon/Makefile
+>> @@ -187,6 +187,7 @@ obj-$(CONFIG_SENSORS_SMSC47M1)	+= smsc47m1.o
+>>   obj-$(CONFIG_SENSORS_SMSC47M192)+= smsc47m192.o
+>>   obj-$(CONFIG_SENSORS_SPARX5)	+= sparx5-temp.o
+>>   obj-$(CONFIG_SENSORS_STTS751)	+= stts751.o
+>> +obj-$(CONFIG_SENSORS_SUN4I_LRADC) += sun4i-lradc-hwmon.o
+>>   obj-$(CONFIG_SENSORS_SY7636A)	+= sy7636a-hwmon.o
+>>   obj-$(CONFIG_SENSORS_AMC6821)	+= amc6821.o
+>>   obj-$(CONFIG_SENSORS_TC74)	+= tc74.o
+>> diff --git a/drivers/hwmon/sun4i-lradc-hwmon.c 
+>> b/drivers/hwmon/sun4i-lradc-hwmon.c
+>> new file mode 100644
+>> index 00000000000..8d5268b037b
+>> --- /dev/null
+>> +++ b/drivers/hwmon/sun4i-lradc-hwmon.c
+>> @@ -0,0 +1,280 @@
+>> +// SPDX-License-Identifier: GPL-2.0-or-later
+>> +/*
+>> + * Allwinner sun4i (A13/A20) LRADC hwmon driver
+>> + *
+>> + * Copyright (C) 2022 Fabmicro, LLC., Tyumen, Russia.
+>> + * Copyright (C) 2022 Ruslan Zalata <rz@fabmicro.ru>
+>> + */
+>> +
+>> +#include <linux/err.h>
+>> +#include <linux/init.h>
+>> +#include <linux/input.h>
+>> +#include <linux/interrupt.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of_platform.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/slab.h>
+>> +#include <linux/hwmon.h>
+>> +#include <linux/hwmon-sysfs.h>
+> 
+> Should not be needed.
+> 
+>> +
+>> +#define LRADC_CTRL	0x00
+>> +#define LRADC_INTC	0x04
+>> +#define LRADC_INTS	0x08
+>> +#define LRADC_DATA0	0x0c
+>> +#define LRADC_DATA1	0x10
+>> +
+>> +/* LRADC_CTRL bits */
+>> +#define FIRST_CONVERT_DLY(x)	((x) << 24) /* 8 bits */
+>> +#define CHAN_SELECT(x)		((x) << 22) /* 2 bits */
+>> +#define CONTINUE_TIME_SEL(x)	((x) << 16) /* 4 bits */
+>> +#define KEY_MODE_SEL(x)		((x) << 12) /* 2 bits */
+>> +#define LEVELA_B_CNT(x)		((x) << 8)  /* 4 bits */
+>> +#define HOLD_KEY_EN(x)		((x) << 7)
+>> +#define HOLD_EN(x)		((x) << 6)
+>> +#define LEVELB_VOL(x)		((x) << 4)  /* 2 bits */
+>> +#define SAMPLE_RATE(x)		((x) << 2)  /* 2 bits */
+>> +#define ENABLE(x)		((x) << 0)
+>> +
+>> +/* LRADC_INTC and LRADC_INTS bits */
+>> +#define CHAN1_KEYUP_IRQ		BIT(12)
+>> +#define CHAN1_ALRDY_HOLD_IRQ	BIT(11)
+>> +#define CHAN1_HOLD_IRQ		BIT(10)
+>> +#define CHAN1_KEYDOWN_IRQ	BIT(9)
+>> +#define CHAN1_DATA_IRQ		BIT(8)
+>> +#define CHAN0_KEYUP_IRQ		BIT(4)
+>> +#define CHAN0_ALRDY_HOLD_IRQ	BIT(3)
+>> +#define CHAN0_HOLD_IRQ		BIT(2)
+>> +#define CHAN0_KEYDOWN_IRQ	BIT(1)
+>> +#define CHAN0_DATA_IRQ		BIT(0)
+>> +
+>> +struct lradc_variant {
+>> +	u32 bits;
+>> +	u32 resolution;
+>> +	u32 vref;
+>> +};
+>> +
+>> +struct sun4i_lradc_data {
+>> +	struct device *dev;
+>> +	void __iomem *base;
+>> +	const struct lradc_variant *variant;
+>> +	struct mutex update_lock; /* atomic read and data updates */
+>> +	u32 in[2];
+>> +};
+>> +
+>> +struct lradc_variant variant_sun4i_a10_lradc = {
+>> +	.bits = 0x3f,
+>> +	.resolution = 63,
+>> +	.vref = 2000000, /* Vref = 2.0V from SoC datasheet */
+>> +};
+>> +
+>> +static int sun4i_lradc_read(struct device *dev, enum 
+>> hwmon_sensor_types type,
+>> +			    u32 attr, int channel, long *val)
+>> +{
+>> +	struct sun4i_lradc_data *lradc = dev_get_drvdata(dev);
+>> +	int in;
+>> +
+>> +	if (IS_ERR(lradc))
+>> +		return PTR_ERR(lradc);
+> 
+> That won't happen. Unnecessary check.
+> 
+>> +
+>> +	mutex_lock(&lradc->update_lock);
+>> +	in = lradc->in[channel];
+> 
+> 
+> Pointless. Just use
+> 
+>> +	mutex_unlock(&lradc->update_lock);
+>> +
+>> +	switch (attr) {
+>> +	case hwmon_in_input:
+>> +		*val = in;
+> 
+> 		*val = lradc->in[channel];
+> 
+> here. The operation is atomic.
+> 
+>> +		break;
+>> +
+>> +	default:
+>> +		return -EOPNOTSUPP;
+>> +	}
+>> +	return 0;
+>> +}
+>> +
+>> +umode_t sun4i_lradc_is_visible(const void *data, enum 
+>> hwmon_sensor_types type,
+>> +			       u32 attr, int channel)
+>> +{
+>> +	return 0444;
+>> +}
+>> +
+>> +static const u32 sun4i_lradc_chip_config[] = {
+>> +	HWMON_I_INPUT,
+> 
+> This is wrong. Chip wide attributes are named HWMON_C_XXX.
+> This generated a reset_history attribute which isn't really
+> supported or handled. Chip attributes should only be specified
+> if actually used. Drop this.
+> 
+>> +	0
+>> +};
+>> +
+>> +static const struct hwmon_channel_info sun4i_lradc_chip = {
+>> +	.type = hwmon_chip,
+>> +	.config = sun4i_lradc_chip_config,
+>> +};
+>> +
+>> +static const u32 sun4i_lradc_input_config[] = {
+>> +	HWMON_I_INPUT,
+>> +	HWMON_I_INPUT,
+>> +	0
+>> +};
+>> +
+>> +static const struct hwmon_channel_info sun4i_lradc_input = {
+>> +	.type = hwmon_in,
+>> +	.config = sun4i_lradc_input_config,
+>> +};
+>> + > +static const struct hwmon_channel_info *sun4i_lradc_info[] = {
+>> +	&sun4i_lradc_chip,
+>> +	&sun4i_lradc_input,
+>> +	NULL
+>> +};
+>> +
+> Use the HWMON_CHANNEL_INFO macro instead.
+> 
+>> +static const struct hwmon_ops sun4i_lradc_hwmon_ops = {
+>> +	.is_visible = sun4i_lradc_is_visible,
+>> +	.read = sun4i_lradc_read,
+>> +};
+>> +
+>> +static const struct hwmon_chip_info sun4i_lradc_chip_info = {
+>> +	.ops = &sun4i_lradc_hwmon_ops,
+>> +	.info = sun4i_lradc_info,
+>> +};
+>> +
+>> +static irqreturn_t sun4i_lradc_irq(int irq, void *dev_id)
+>> +{
+>> +	struct sun4i_lradc_data *lradc = dev_id;
+>> +	u32 ints = readl(lradc->base + LRADC_INTS);
+>> +
+>> +	mutex_lock(&lradc->update_lock);
+>> +
+>> +	if (ints & CHAN0_DATA_IRQ)
+>> +		lradc->in[0] = (readl(lradc->base + LRADC_DATA0) & 
+>> lradc->variant->bits) *
+>> +			lradc->variant->vref / lradc->variant->resolution / 1000; /* to mV 
+>> */
+>> +
+>> +	if (ints & CHAN1_DATA_IRQ)
+>> +		lradc->in[1] = (readl(lradc->base + LRADC_DATA1) & 
+>> lradc->variant->bits) *
+>> +			lradc->variant->vref / lradc->variant->resolution / 1000; /* to mV 
+>> */
+>> +
+>> +	mutex_unlock(&lradc->update_lock);
+>> +
+>> +	writel(ints, lradc->base + LRADC_INTS);
+>> +
+>> +	return IRQ_HANDLED;
+>> +}
+>> +
+> 
+> You don't explain why the interrupt handler is needed. It is 
+> undesirable
+> to do this for hwnon devices because it results in extra load on the 
+> system.
+> The ADC should be read only when needed and not continuously. If that 
+> is not
+> possible for some reason it needs to be explained in detail.
+> 
+>> +static int sun4i_lradc_start(struct sun4i_lradc_data *lradc)
+>> +{
+>> +	writel(FIRST_CONVERT_DLY(2) | CHAN_SELECT(3) | LEVELA_B_CNT(1) |
+>> +		HOLD_EN(1) | KEY_MODE_SEL(2) | SAMPLE_RATE(3) | ENABLE(1),
+>> +		lradc->base + LRADC_CTRL);
+>> +
+> 
+> If the update rate is configurable, it might make sense to support
+> the update_interval attribute.
+> 
+>> +	writel(CHAN0_DATA_IRQ | CHAN1_DATA_IRQ, lradc->base + LRADC_INTC);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void sun4i_lradc_stop(void *data)
+>> +{
+>> +	struct sun4i_lradc_data *lradc = (struct sun4i_lradc_data *)data;
+>> +
+>> +	writel(FIRST_CONVERT_DLY(2) | LEVELA_B_CNT(1) | HOLD_EN(1) |
+>> +		SAMPLE_RATE(2), lradc->base + LRADC_CTRL);
+>> +	writel(0, lradc->base + LRADC_INTC);
+>> +}
+>> +
+>> +static int sun4i_lradc_probe(struct platform_device *pdev)
+>> +{
+>> +	struct sun4i_lradc_data *lradc;
+>> +	struct device *dev = &pdev->dev;
+>> +	struct device *hwmon_dev;
+>> +	struct resource *res;
+>> +	int hwmon_irq, error;
+>> +
+>> +	lradc = devm_kzalloc(dev, sizeof(struct sun4i_lradc_data), 
+>> GFP_KERNEL);
+>> +	if (!lradc)
+>> +		return -ENOMEM;
+>> +
+>> +	dev_set_drvdata(dev, lradc);
+>> +
+>> +	lradc->variant = of_device_get_match_data(&pdev->dev);
+>> +	if (!lradc->variant)
+>> +		return -EINVAL;
+>> +
+>> +	lradc->dev = dev;
+>> +
+> 
+> I don't immediately see where this is used.
+> 
+>> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>> +	if (IS_ERR(res))
+>> +		return PTR_ERR(res);
+>> +
+>> +	lradc->base = devm_ioremap_resource(dev, res);
+>> +	if (IS_ERR(lradc->base))
+>> +		return PTR_ERR(lradc->base);
+>> +
+>> +	hwmon_irq = platform_get_irq(pdev, 0);
+>> +	if (hwmon_irq < 0)
+>> +		return hwmon_irq;
+>> +
+>> +	error = devm_request_irq(dev, hwmon_irq, sun4i_lradc_irq, 0, 
+>> "sun4i-lradc-hwmon", lradc);
+>> +	if (error) {
+>> +		dev_err(dev, "sun4i-lradc-hwmon IRQ failed err=%d\n", error);
+>> +		return error;
+>> +	}
+>> +
+>> +	hwmon_dev = devm_hwmon_device_register_with_info(dev, "lradc-hwmon", 
+>> lradc,
+>> +							 &sun4i_lradc_chip_info, NULL);
+>> +
+>> +	if (IS_ERR(hwmon_dev)) {
+>> +		error = PTR_ERR(hwmon_dev);
+>> +		return error;
+>> +	}
+>> +
+>> +	error = devm_add_action_or_reset(dev, sun4i_lradc_stop, lradc);
+>> +	if (error)
+>> +		return error;
+>> +
+>> +	error = sun4i_lradc_start(lradc);
+>> +
+>> +	return error;
+>> +}
+>> +
+>> +#ifdef CONFIG_PM
+>> +static int sun4i_lradc_resume(struct device *dev)
+>> +{
+>> +	struct sun4i_lradc_data *lradc = dev_get_drvdata(dev);
+>> +
+>> +	return sun4i_lradc_start(lradc);
+>> +}
+>> +
+>> +static int sun4i_lradc_suspend(struct device *dev)
+>> +{
+>> +	struct sun4i_lradc_data *lradc = dev_get_drvdata(dev);
+>> +
+>> +	sun4i_lradc_stop(lradc);
+>> +	return 0;
+>> +}
+>> +
+>> +#define SUN4I_LRADC_DEV_PM_OPS	(&sun4i_lradc_dev_pm_ops)
+>> +#else
+>> +#define SUN4I_LRADC_DEV_PM_OPS	NULL
+>> +#endif /* CONFIG_PM */
+>> +
+>> +static const struct dev_pm_ops sun4i_lradc_dev_pm_ops = {
+>> +	.suspend = sun4i_lradc_suspend,
+>> +	.resume = sun4i_lradc_resume,
+>> +};
+>> +
+>> +static const struct of_device_id sun4i_lradc_of_match[] = {
+>> +	{ .compatible = "allwinner,sun4i-a10-lradc-keys", .data = 
+>> &variant_sun4i_a10_lradc},
+>> +	{ /* sentinel */ }
+>> +};
+>> +MODULE_DEVICE_TABLE(of, sun4i_lradc_of_match);
+>> +
+>> +static struct platform_driver sun4i_lradc_driver = {
+>> +	.driver = {
+>> +		.name	= "sun4i-lradc-hwmon",
+>> +		.of_match_table = of_match_ptr(sun4i_lradc_of_match),
+>> +		.pm = SUN4I_LRADC_DEV_PM_OPS,
+>> +	},
+>> +	.probe	= sun4i_lradc_probe,
+>> +};
+>> +
+>> +module_platform_driver(sun4i_lradc_driver);
+>> +
+>> +MODULE_DESCRIPTION("Allwinner A13/A20 LRADC hwmon driver");
+>> +MODULE_AUTHOR("Ruslan Zalata <rz@fabmicro.ru>");
+>> +MODULE_LICENSE("GPL");
+>> +No empty line at end, please

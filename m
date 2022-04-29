@@ -2,102 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2509E515068
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:07:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38F1051506E
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:10:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378851AbiD2QK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 12:10:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46580 "EHLO
+        id S1359820AbiD2QMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 12:12:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378952AbiD2QKn (ORCPT
+        with ESMTP id S1344906AbiD2QMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 12:10:43 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48EA5D5EB5;
-        Fri, 29 Apr 2022 09:07:22 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id l18so16299566ejc.7;
-        Fri, 29 Apr 2022 09:07:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umich.edu; s=google-2016-06-03;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FBDYChJz4muZwramvZwvxYrD6iAdG1yVc/7dYwu9fgc=;
-        b=r7+eZg0H9QFpXTQzII642l9ABEDD4XPFhrjVTg1nboFCf2Uov7cDoEKyd3TC1fXhMo
-         eJRYldvbFCWvJrxk468UHNFK8agEq8yfc98844gIGx7e5Gfd0Bg2qa0ulAiSb0H5B3To
-         IvW/20n3c78OALFQNuyPHmWOLvRuvOjamS2ppGK0mpH2fVc6csFDza7qq6yNVzZJYTWi
-         7hhzj7LYCk/X3IxdzUWc1P8+vY2wYZy3oNeQ+ArhcU0M1geRzEp9MRQXWgEpJzT60IFP
-         E7+TpOWQ3R20uizxjMhVhE0NQuOXqfXnP0hOBgG1YS4L40Y+Yy7vHlft/ybI1yIb1Iue
-         b2bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FBDYChJz4muZwramvZwvxYrD6iAdG1yVc/7dYwu9fgc=;
-        b=3LfKSmCvAejPnYeg5Ovun/6ID+WZIqv5B6kJYkkLql27qod3dNcmuVv5gKOuGYrJJ2
-         /4JZv4b6jlB+Ol+qzVmkKtg+g7Z9rPtGVY5pFD4O+YgarCH+glbjq5+vLfpNC2hgdwO+
-         3VLaw3G2ReaV0o1S1AAgfkfhbHpPu1ssdflyQNldSHLKW+xdxwmPbSL4rtwhH1On7b/S
-         ZR+JliBADFRw/FxsnF0F9ySrmahD195s3rU71bldscym2pTFLcNiOX5dnEIe7Sdd183M
-         hQ9VQw/VOxGbhM9myKiO6ttlcVqB0PooaA1cmkrcvDrTWm+IGDOagpFkpi3ADNgg6GsJ
-         BzYA==
-X-Gm-Message-State: AOAM533izQIADeNwMfZgqMueCkYIHZljDzvkp/kspzGCa0L2RxEN1WO7
-        eGTN7cqRXq0ojjDvH2JWQOTDHxkhs6AkW5UyjWk=
-X-Google-Smtp-Source: ABdhPJxGUVnyOQ/YbEGPBLSpK1sE/ajSWypseQaQF9vQONhV3matHSP1Gc0bxZmDX1TACi57vnjyHN3ik3SGnr90+eU=
-X-Received: by 2002:a17:907:1b26:b0:6ef:eaca:d2d8 with SMTP id
- mp38-20020a1709071b2600b006efeacad2d8mr43204ejc.604.1651248440734; Fri, 29
- Apr 2022 09:07:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1649075034.git.leonro@nvidia.com>
-In-Reply-To: <cover.1649075034.git.leonro@nvidia.com>
-From:   Olga Kornievskaia <aglo@umich.edu>
-Date:   Fri, 29 Apr 2022 12:07:09 -0400
-Message-ID: <CAN-5tyGeGya5dW9h1uvBd6uKW-AgY1q8-UkR1kpi9Z2k6PY7jw@mail.gmail.com>
-Subject: Re: [PATCH rdma-next 0/2] Add gratuitous ARP support to RDMA-CM
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        Mark Zhang <markzhang@nvidia.com>,
-        Patrisious Haddad <phaddad@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Fri, 29 Apr 2022 12:12:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B24A6E28;
+        Fri, 29 Apr 2022 09:08:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D95ABB83645;
+        Fri, 29 Apr 2022 16:08:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 905C0C385A4;
+        Fri, 29 Apr 2022 16:08:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651248534;
+        bh=EzjHOli1jhhHNwga1qc/k/xK7Y/AYNU28aEQDIa5QaA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WD6LVZDS+PChJZPpxZt4lxvZKHt46bpDDdU3f5ImADZTPlKAU67CHJ28g47jR+6YG
+         UVOnsXDTcVhyvW6wGDGDPYnXXM/ocYV4YFttgeWdvedJW8NP2O7pGohtZuPL1B3Csk
+         2az11Wn/XzNn/4W/90ReA1YD+6xi7iT7UILw/iG5KB6e7lPLwECOlBLzG5+YtdR+LD
+         xdy2CKoTRWuIzjvV/FPNBANzS2Jvzq1bfPOiRbXypFKAc5dHznHTexbZ5jbXM9Lzwk
+         4HCi4GOYBwgIAjltYZ8VY1139Q1nKO+HeWYheDLNG9tCssBS3iS98ec2falSGw033n
+         BMKYoKrqmYXJw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nkTAq-007z4M-3P; Fri, 29 Apr 2022 17:08:52 +0100
+Date:   Fri, 29 Apr 2022 17:08:51 +0100
+Message-ID: <87sfpv98j0.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Thomas Pfaff <tpfaff@pcs.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        <linux-kernel@vger.kernel.org>, <linux-rt-users@vger.kernel.org>,
+        Hillf Danton <hdanton@sina.com>
+Subject: Re: [PATCH v2] irq/core: synchronize irq_thread startup
+In-Reply-To: <1e3f96b7-9294-1534-e83b-efe3602f876f@pcs.com>
+References: <1e3f96b7-9294-1534-e83b-efe3602f876f@pcs.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: tpfaff@pcs.com, tglx@linutronix.de, linux-kernel@vger.kernel.org, linux-rt-users@vger.kernel.org, hdanton@sina.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Leon,
+Hi Thomas,
 
-Are these the 2 patches that are supposed to fix: [Bug 214523] New:
-RDMA Mellanox RoCE drivers are unresponsive to ARP updates during a
-reconnect?
+Thanks for this, a few comments below.
 
-I could be wrong but I don't think they made it into the 5.18 pull, correct?
+On Fri, 29 Apr 2022 12:52:48 +0100,
+Thomas Pfaff <tpfaff@pcs.com> wrote:
+> 
+> From: Thomas Pfaff <tpfaff@pcs.com>
+> 
+> While running
+> "while /bin/true; do setserial /dev/ttyS0 uart none;
+> setserial /dev/ttyS0 uart 16550A; done"
+> on a kernel with threaded irqs, setserial is hung after some calls.
+> 
+> setserial opens the device, this will install an irq handler if the uart is
+> not none, followed by TIOCGSERIAL and TIOCSSERIAL ioctls.
+> Then the device is closed. On close, synchronize_irq() is called by
+> serial_core.
+> 
+> If the close comes too fast, the irq_thread does not really start,
+> it is terminated immediately without going into irq_thread().
+> But an interrupt might already been handled by
+> irq_default_primary_handler(), going to __irq_wake_thread() and
+> incrementing threads_active.
+> If this happens, synchronize_irq() will hang forever, because the
+> irq_thread is already dead, and threads_active will never be decremented.
+> 
+> The fix is to make sure that the irq_thread is really started
+> during __setup_irq().
+> 
+> Signed-off-by: Thomas Pfaff <tpfaff@pcs.com>
+> ---
+> v1-v2:
+>   - use already existing resources
+> diff --git a/kernel/irq/internals.h b/kernel/irq/internals.h
+> index 99cbdf55a8bd..dca57bed0d96 100644
+> --- a/kernel/irq/internals.h
+> +++ b/kernel/irq/internals.h
+> @@ -29,12 +29,14 @@ extern struct irqaction chained_action;
+>   * IRQTF_WARNED    - warning "IRQ_WAKE_THREAD w/o thread_fn" has been printed
+>   * IRQTF_AFFINITY  - irq thread is requested to adjust affinity
+>   * IRQTF_FORCED_THREAD  - irq action is force threaded
+> + * IRQTF_UP        - signals that irq thread is ready
 
-Thank you.
+nit: Why not call the flag IRQTF_READY then? I find it slightly more
+readable than 'UP'.
 
-On Mon, Apr 4, 2022 at 8:36 AM Leon Romanovsky <leon@kernel.org> wrote:
->
-> From: Leon Romanovsky <leonro@nvidia.com>
->
-> In this series, Patrisious adds gratuitous ARP support to RDMA-CM, in
-> order to speed up migration failover from one node to another.
->
-> Thanks
->
-> Patrisious Haddad (2):
->   RDMA/core: Add an rb_tree that stores cm_ids sorted by ifindex and
->     remote IP
->   RDMA/core: Add a netevent notifier to cma
->
->  drivers/infiniband/core/cma.c      | 260 +++++++++++++++++++++++++++--
->  drivers/infiniband/core/cma_priv.h |   1 +
->  2 files changed, 249 insertions(+), 12 deletions(-)
->
-> --
-> 2.35.1
->
+>   */
+>  enum {
+>  	IRQTF_RUNTHREAD,
+>  	IRQTF_WARNED,
+>  	IRQTF_AFFINITY,
+>  	IRQTF_FORCED_THREAD,
+> +	IRQTF_UP,
+>  };
+>  
+>  /*
+> diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
+> index f1d5a94c6c9f..7efa24629694 100644
+> --- a/kernel/irq/manage.c
+> +++ b/kernel/irq/manage.c
+> @@ -1263,6 +1263,30 @@ static void irq_wake_secondary(struct irq_desc *desc, struct irqaction *action)
+>  	raw_spin_unlock_irq(&desc->lock);
+>  }
+>  
+> +/*
+> + * Internal function to notify that irq_thread is ready
+> + */
+> +static void irq_thread_is_up(struct irq_desc *desc,
+> +		struct irqaction *action)
+
+nit again: the name of this function makes it look like a predicate.
+The rest of the IRQ core uses the 'set' word to... set a bit.
+Something like irq_thread_set_ready() would have my preference.
+
+> +{
+> +	set_bit(IRQTF_UP, &action->thread_flags);
+> +	wake_up(&desc->wait_for_threads);
+> +}
+> +
+> +/*
+> + * Internal function to wake up irq_thread
+> + * and wait until it is really up
+> + */
+> +static void wait_for_irq_thread_startup(struct irq_desc *desc,
+> +		struct irqaction *action)
+
+and this would be wait_for_irq_thread_ready().
+
+> +{
+> +	if (action && action->thread) {
+> +		wake_up_process(action->thread);
+> +		wait_event(desc->wait_for_threads,
+> +			test_bit(IRQTF_UP, &action->thread_flags));
+> +	}
+> +}
+> +
+>  /*
+>   * Interrupt handler thread
+>   */
+> @@ -1287,6 +1311,8 @@ static int irq_thread(void *data)
+>  
+>  	irq_thread_check_affinity(desc, action);
+>  
+> +	irq_thread_is_up (desc, action);
+
+nit: extra space after the function.
+
+> +
+>  	while (!irq_wait_for_interrupt(action)) {
+>  		irqreturn_t action_ret;
+>  
+> @@ -1522,6 +1548,8 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
+>  		}
+>  	}
+>  
+> +	init_waitqueue_head(&desc->wait_for_threads);
+> +
+
+I'm trying to convince myself that this one is safe.
+
+It was so far only done when registering the first handler of a
+threaded interrupt, while it is now done on every call to
+__setup_irq().  However, this is now done outside of the protection of
+any of the locks, meaning that a concurrent __setup_irq() for a shared
+interrupt can now barge in and corrupt the wait queue.
+
+So I don't think this is right. You may be able to hoist the
+request_lock up, but I haven't checked what could break, if anything.
+
+>  	/*
+>  	 * Create a handler thread when a thread function is supplied
+>  	 * and the interrupt does not nest into another interrupt
+> @@ -1698,8 +1726,6 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
+>  	}
+>  
+>  	if (!shared) {
+> -		init_waitqueue_head(&desc->wait_for_threads);
+> -
+>  		/* Setup the type (level, edge polarity) if configured: */
+>  		if (new->flags & IRQF_TRIGGER_MASK) {
+>  			ret = __irq_set_trigger(desc,
+> @@ -1795,14 +1821,8 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
+>  
+>  	irq_setup_timings(desc, new);
+>  
+> -	/*
+> -	 * Strictly no need to wake it up, but hung_task complains
+> -	 * when no hard interrupt wakes the thread up.
+> -	 */
+> -	if (new->thread)
+> -		wake_up_process(new->thread);
+> -	if (new->secondary)
+> -		wake_up_process(new->secondary->thread);
+> +	wait_for_irq_thread_startup(desc, new);
+> +	wait_for_irq_thread_startup(desc, new->secondary);
+>  
+>  	register_irq_proc(irq, desc);
+>  	new->dir = NULL;
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

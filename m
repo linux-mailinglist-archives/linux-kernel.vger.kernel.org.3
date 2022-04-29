@@ -2,59 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB483514885
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 13:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6187A514889
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 13:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358626AbiD2Lv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 07:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44310 "EHLO
+        id S1358249AbiD2Lxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 07:53:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234872AbiD2Lvr (ORCPT
+        with ESMTP id S242846AbiD2Lxd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 07:51:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9113CB3C4E;
-        Fri, 29 Apr 2022 04:48:29 -0700 (PDT)
+        Fri, 29 Apr 2022 07:53:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16BB25595;
+        Fri, 29 Apr 2022 04:50:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F1ACC6205A;
-        Fri, 29 Apr 2022 11:48:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAA04C385A7;
-        Fri, 29 Apr 2022 11:48:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651232908;
-        bh=YddyMcIeDoK+LuBTa75Hcxrbfg+0jvhLvhQUUF3oiXk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NoSuL4mUKRW3vjvgLoOSLrHHuHPs9iWONsh0DB7gz6COPoBNQxLQsqvZFw3xCawYQ
-         S7+EvGUCR+2BTC4Y/44Ebm0+Y/MIkrAeKZb2XERxSklMhXpBaTwrHpoCCFTsFcINqx
-         E5oNi6tMB+H+3iNaAbBvk1W3rPG+jcVpRobzis9/ah2tMJOn9RwIxZU+vLEs/DRZQ/
-         Z+nLXuGRiMS/GCZwv7Ve+sYKlc1GN+FaJUyAWb3MGDzdr/EmwWsXSC6T7akZsi/yAF
-         moohsoQ+vRtsPSw+UIuPTy6yI+blc1vAAZ1ewZG/iiCeTL4mY5S9LjSNMuZmo14y7g
-         6qKqFtFtvK1zw==
-Date:   Fri, 29 Apr 2022 12:48:22 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Markuss Broks <markuss.broks@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        lee.jones@linaro.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v6 2/5] dt-bindings: regulator: Add bindings for Silicon
- Mitus SM5703 regulators
-Message-ID: <YmvQhpO8dg6VLHNP@sirena.org.uk>
-References: <20220429113927.5145-1-markuss.broks@gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F014F62002;
+        Fri, 29 Apr 2022 11:50:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAB19C385A4;
+        Fri, 29 Apr 2022 11:50:10 +0000 (UTC)
+Message-ID: <6b2ff63b-7fa6-935b-002a-3ecd46273877@xs4all.nl>
+Date:   Fri, 29 Apr 2022 13:50:09 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="P/bFAWC8P9UAkdFW"
-Content-Disposition: inline
-In-Reply-To: <20220429113927.5145-1-markuss.broks@gmail.com>
-X-Cookie: Are you still an ALCOHOLIC?
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH V0 1/1] media: v4l2-core: Enable reserved field of
+ v4l2_event
+Content-Language: en-US
+To:     Naina Vaskenly <quic_nvaskenl@quicinc.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        lijian <lijian@yulong.com>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Kumar Anshuman <quic_anshuk@quicinc.com>
+References: <cover.1651223992.git.quic_nvaskenl@quicinc.com>
+ <a24b19a835430064a0677e04d746f72ae7987a3c.1651223992.git.quic_nvaskenl@quicinc.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <a24b19a835430064a0677e04d746f72ae7987a3c.1651223992.git.quic_nvaskenl@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,38 +50,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---P/bFAWC8P9UAkdFW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Apr 29, 2022 at 02:39:25PM +0300, Markuss Broks wrote:
-> This patch adds device-tree bindings for regulators on Silicon Mitus
-> SM5703 MFD.
->=20
-> Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
+On 29/04/2022 13:45, Naina Vaskenly wrote:
+> 'reserved' member of struct v4l2_event is currently not enabled.
+> This field can be used to transfer data, if >64 bytes of data
+> has to be sent. Hence, added this change to copy the reserved field in
+> __v4l2_event_queue_fh.
+> 
+> Signed-off-by: Naina Vaskenly <quic_nvaskenl@quicinc.com>
 > ---
->  .../siliconmitus,sm5703-regulator.yaml        | 49 +++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/siliconmi=
-tus,sm5703-regulator.yaml
+>  drivers/media/v4l2-core/v4l2-event.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/v4l2-core/v4l2-event.c b/drivers/media/v4l2-core/v4l2-event.c
+> index c5ce9f1..3d741cb 100644
+> --- a/drivers/media/v4l2-core/v4l2-event.c
+> +++ b/drivers/media/v4l2-core/v4l2-event.c
+> @@ -137,8 +137,10 @@ static void __v4l2_event_queue_fh(struct v4l2_fh *fh,
+>  	/* Take one and fill it. */
+>  	kev = sev->events + sev_pos(sev, sev->in_use);
+>  	kev->event.type = ev->type;
+> -	if (copy_payload)
+> +	if (copy_payload) {
+>  		kev->event.u = ev->u;
+> +		memcpy(kev->event.reserved, ev->reserved, sizeof(ev->reserved));
+> +	}
+>  	kev->event.id = ev->id;
+>  	kev->ts = ts;
+>  	kev->event.sequence = fh->sequence;
 
-As Rob said please send an incremental patch with any fixes needed.
+What's the point of this? It's a reserved field, it must be 0. If you want to use
+it for something else, then make a proposal to repurpose some of the reserved
+fields.
 
---P/bFAWC8P9UAkdFW
-Content-Type: application/pgp-signature; name="signature.asc"
+This looks like you are trying to copy reserved data for some driver-specific hack.
 
------BEGIN PGP SIGNATURE-----
+That's not going to be accepted.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJr0IUACgkQJNaLcl1U
-h9AUswf6A3rRGKMwACJ831L5cTTs7vDmqfEXSrxM2+OTm3mlUVuue0ybuhAv8QY7
-CZk8K+H9OGHsNDzBBefGZmJE0BWnZstr23eyFkWsTJwmdOmyuzSMws3U/+7QsIP/
-DowZnycQuQzr9PSDJm1JFu8a2zc4Kp+lVDT7Xl8fk5dhkI/LTnIuho9A0vuSf8yy
-DF73wcpw++SWeSMwnoJ+vulRJ3draNgaQexnYnrxwSuqbr6gESzfPsxwNiA9KT4M
-5+y2F9PFeh5WGnliYlWnbmNWUm0ICwyWqs4G2BzJtaBIe2NGh9SPnORX5gYW51YH
-Q/BG6cU+6GMKPmFthHMBHlkwuZheJg==
-=P477
------END PGP SIGNATURE-----
+For the record:
 
---P/bFAWC8P9UAkdFW--
+Nacked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+
+Regards,
+
+	Hans

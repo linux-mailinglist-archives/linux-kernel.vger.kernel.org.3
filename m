@@ -2,105 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 927D151542E
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 21:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84724515430
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 21:05:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380204AbiD2TFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 15:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52408 "EHLO
+        id S1380213AbiD2TIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 15:08:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355618AbiD2TFU (ORCPT
+        with ESMTP id S1355618AbiD2TIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 15:05:20 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8333F40E5E;
-        Fri, 29 Apr 2022 12:01:59 -0700 (PDT)
+        Fri, 29 Apr 2022 15:08:13 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C56DD5EA9;
+        Fri, 29 Apr 2022 12:04:54 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id k14so7220855pga.0;
+        Fri, 29 Apr 2022 12:04:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651258919; x=1682794919;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=JxXH6qZNpKStuvxqb0XVzzN+BiIbkVYJf0lQRQMSs0s=;
-  b=dIkI8vffiQk0ijycrtrzCu08LwSUXgA/oL+Vmwn4A9BCswHE9qPC//Er
-   rqYGwuiG89t2MfTuXJxex2pxZD8ASfjq0kfPv4chrHydhO1XTFq0ADvup
-   DwIUGrvJYC8SB2YNXFLLPWndj0x970b1jXywF2gzclFFT+1SNh+avvSVI
-   I=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 29 Apr 2022 12:01:59 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 12:01:59 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 29 Apr 2022 12:01:58 -0700
-Received: from [10.110.49.150] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 29 Apr
- 2022 12:01:57 -0700
-Message-ID: <d7baf8d8-5643-fb90-8a14-f25a24317516@quicinc.com>
-Date:   Fri, 29 Apr 2022 12:01:56 -0700
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QqxV8SgMeflDFmUbpjCjuBhww/TZdT/CeB66xbgfc7I=;
+        b=Ojqvo3+w49gK8bzrBn89rOirlJzB4XuOAzcvQE5X6EsnGCJjqU3roOlPbgOvRw89hv
+         spfJSNlSX+v3RKSjOrgXqUE8XqXiTkoHjSVzzp7TcLEfCwl8RrUdUyVMsQC5/2JaLUVg
+         80UtWArbAdFZS3n/C7UwVwFj8RPhbTDrmVO16NUytVd8CaaW1ZHVRxF7rOEGocS/Etsp
+         wOsgzcevrzU52oBLgIkvMkg29X6agXinxkypUn78dT9yaquMGpglyJwAUMUZomiCNbWM
+         RU4hC6PRL3kSRwYLpIqw8kyTkU2Do3X1NucJm5mdURivK2KqXjP2CJj/37KC4Nviqkf3
+         zdIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QqxV8SgMeflDFmUbpjCjuBhww/TZdT/CeB66xbgfc7I=;
+        b=aiOojHVStCYoJT+XY2JpTOfop3Q2oFCziOrUgZGSUp2xxhN20Heu5ydZjttojNwmg8
+         sCyxC5FrTkVVKYOfcIQYUfTNpGkAfxSFC+GE833OzP5309lnPyBowIgHd8MvZp8QMJbp
+         QlRuZEom9FVbTqTgxBJpkRGCQ0X0jU7YED7ng0GKsoIylhGMv3tH9BuBGNqJog/wyHOf
+         u7IF56l07KEyWsIqpkvhtdiqZQN4ieS1tPnjiC1Zmp336XjaNOWepbw3QbfkabOogH+W
+         QLyaOwDpVRkJQV8mgxejtPAL/+qzYn55FH8/S44vdvWKM+SwTiGCgtbGF1vOaUT4KHNu
+         TTjg==
+X-Gm-Message-State: AOAM532sntNBmdXeQEuH19hCpOCi52YgasfxyHV3GQFVPYAAboSgkcl5
+        S2JgZeAhZtY4GZVyDMS+13bnOWMfvX/PMODJ8AI=
+X-Google-Smtp-Source: ABdhPJyXzQ9yOioq4oKJTYFlGewE09wdvTMBKSEK4Sf1gAiuTyvytPFlYMMoLxH4EC6sRAL0ke9HTmrgHXPJTI0trn8=
+X-Received: by 2002:a63:90ca:0:b0:3aa:fff3:6f76 with SMTP id
+ a193-20020a6390ca000000b003aafff36f76mr631072pge.206.1651259093865; Fri, 29
+ Apr 2022 12:04:53 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH RESEND] xhci: Use xhci_get_virt_ep() to validate ep_index
-Content-Language: en-US
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        <peter.chen@kernel.org>, <balbi@kernel.org>,
-        <stern@rowland.harvard.edu>, <chunfeng.yun@mediatek.com>,
-        <gregkh@linuxfoundation.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
-References: <1651172688-21439-1-git-send-email-quic_mrana@quicinc.com>
- <71347c81-3887-d80e-707b-c0f1018b1a50@linux.intel.com>
- <06d5e94f-1c3b-9ab1-b4ff-79007026585a@linux.intel.com>
-From:   Mayank Rana <quic_mrana@quicinc.com>
-In-Reply-To: <06d5e94f-1c3b-9ab1-b4ff-79007026585a@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <165119280115.15698.2629172320052218921.stgit@noble.brown> <165119301488.15698.9457662928942765453.stgit@noble.brown>
+In-Reply-To: <165119301488.15698.9457662928942765453.stgit@noble.brown>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Fri, 29 Apr 2022 12:04:41 -0700
+Message-ID: <CAHbLzko+9nBem8GnxQJ8RQu7bizQMMmS1TNqbRXcgkjUs+JuMw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] MM: handle THP in swap_*page_fs()
+To:     NeilBrown <neilb@suse.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Christoph Hellwig <hch@lst.de>,
+        Miaohe Lin <linmiaohe@huawei.com>, linux-nfs@vger.kernel.org,
+        Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/29/2022 3:13 AM, Mathias Nyman wrote:
-> On 29.4.2022 12.49, Mathias Nyman wrote:
->> On 28.4.2022 22.04, Mayank Rana wrote:
->>> ring_doorbell_for_active_rings() API is being called from
->>> multiple context. This specific API tries to get virt_dev
->>> based endpoint using passed slot_id and ep_index. Some caller
->>> API is having check against slot_id and ep_index using
->>> xhci_get_virt_ep() API whereas xhci_handle_cmd_config_ep() API
->>> only check ep_index against -1 value but not upper bound i.e.
->>> EP_CTX_PER_DEV. Hence use xhci_get_virt_ep() API to get virt_dev
->>> based endpoint which checks both slot_id and ep_index to get
->>> valid endpoint.
->> ep_index upper bound is known to be in range as EP_CTX_PER_DEV is 31,
->> and ep_index = fls(u32 value)  - 1 - 1;
->>
->> We can change to use xhci_get_virt_ep(), but this would be more useful
->> earlier in xhci_handle_cmd_config_ep() where we touch the ep before
->> calling ring_doorbell_for_active_rings()
->>
-> After a second look I would appreciate if you could clean up
-> ep_index checking in xhci_handle_cmd_config_ep()
+On Thu, Apr 28, 2022 at 5:44 PM NeilBrown <neilb@suse.de> wrote:
 >
-> It currenty does some horrible typecasting.
-> ep_index is an unsigned int, so the fls() -1 operation might wrap it around.
-> Checking this was solved by typecasting a -1 to an unsigned int.
+> Pages passed to swap_readpage()/swap_writepage() are not necessarily all
+> the same size - there may be transparent-huge-pages involves.
 >
-> if (ep_index != (unsigned int) -1)
+> The BIO paths of swap_*page() handle this correctly, but the SWP_FS_OPS
+> path does not.
 >
-> Thanks
-> Mathias
+> So we need to use thp_size() to find the size, not just assume
+> PAGE_SIZE, and we need to track the total length of the request, not
+> just assume it is "page * PAGE_SIZE".
 
-Thanks Mathias for review and suggestion here.
-let me try to clean up xhci_handle_cmd_config_ep() API based ep_index 
-usage.
+Swap-over-nfs doesn't support THP swap IIUC. So SWP_FS_OPS should not
+see THP at all. But I agree to remove the assumption about page size
+in this path.
 
+>
+> Reported-by: Miaohe Lin <linmiaohe@huawei.com>
+> Signed-off-by: NeilBrown <neilb@suse.de>
+> ---
+>  mm/page_io.c |   23 +++++++++++++----------
+>  1 file changed, 13 insertions(+), 10 deletions(-)
+>
+> diff --git a/mm/page_io.c b/mm/page_io.c
+> index c132511f521c..d636a3531cad 100644
+> --- a/mm/page_io.c
+> +++ b/mm/page_io.c
+> @@ -239,6 +239,7 @@ struct swap_iocb {
+>         struct kiocb            iocb;
+>         struct bio_vec          bvec[SWAP_CLUSTER_MAX];
+>         int                     pages;
+> +       int                     len;
+>  };
+>  static mempool_t *sio_pool;
+>
+> @@ -261,7 +262,7 @@ static void sio_write_complete(struct kiocb *iocb, long ret)
+>         struct page *page = sio->bvec[0].bv_page;
+>         int p;
+>
+> -       if (ret != PAGE_SIZE * sio->pages) {
+> +       if (ret != sio->len) {
+>                 /*
+>                  * In the case of swap-over-nfs, this can be a
+>                  * temporary failure if the system has limited
+> @@ -301,7 +302,7 @@ static int swap_writepage_fs(struct page *page, struct writeback_control *wbc)
+>                 sio = *wbc->swap_plug;
+>         if (sio) {
+>                 if (sio->iocb.ki_filp != swap_file ||
+> -                   sio->iocb.ki_pos + sio->pages * PAGE_SIZE != pos) {
+> +                   sio->iocb.ki_pos + sio->len != pos) {
+>                         swap_write_unplug(sio);
+>                         sio = NULL;
+>                 }
+> @@ -312,10 +313,12 @@ static int swap_writepage_fs(struct page *page, struct writeback_control *wbc)
+>                 sio->iocb.ki_complete = sio_write_complete;
+>                 sio->iocb.ki_pos = pos;
+>                 sio->pages = 0;
+> +               sio->len = 0;
+>         }
+>         sio->bvec[sio->pages].bv_page = page;
+> -       sio->bvec[sio->pages].bv_len = PAGE_SIZE;
+> +       sio->bvec[sio->pages].bv_len = thp_size(page);
+>         sio->bvec[sio->pages].bv_offset = 0;
+> +       sio->len += thp_size(page);
+>         sio->pages += 1;
+>         if (sio->pages == ARRAY_SIZE(sio->bvec) || !wbc->swap_plug) {
+>                 swap_write_unplug(sio);
+> @@ -371,8 +374,7 @@ void swap_write_unplug(struct swap_iocb *sio)
+>         struct address_space *mapping = sio->iocb.ki_filp->f_mapping;
+>         int ret;
+>
+> -       iov_iter_bvec(&from, WRITE, sio->bvec, sio->pages,
+> -                     PAGE_SIZE * sio->pages);
+> +       iov_iter_bvec(&from, WRITE, sio->bvec, sio->pages, sio->len);
+>         ret = mapping->a_ops->swap_rw(&sio->iocb, &from);
+>         if (ret != -EIOCBQUEUED)
+>                 sio_write_complete(&sio->iocb, ret);
+> @@ -383,7 +385,7 @@ static void sio_read_complete(struct kiocb *iocb, long ret)
+>         struct swap_iocb *sio = container_of(iocb, struct swap_iocb, iocb);
+>         int p;
+>
+> -       if (ret == PAGE_SIZE * sio->pages) {
+> +       if (ret == sio->len) {
+>                 for (p = 0; p < sio->pages; p++) {
+>                         struct page *page = sio->bvec[p].bv_page;
+>
+> @@ -415,7 +417,7 @@ static void swap_readpage_fs(struct page *page,
+>                 sio = *plug;
+>         if (sio) {
+>                 if (sio->iocb.ki_filp != sis->swap_file ||
+> -                   sio->iocb.ki_pos + sio->pages * PAGE_SIZE != pos) {
+> +                   sio->iocb.ki_pos + sio->len != pos) {
+>                         swap_read_unplug(sio);
+>                         sio = NULL;
+>                 }
+> @@ -426,10 +428,12 @@ static void swap_readpage_fs(struct page *page,
+>                 sio->iocb.ki_pos = pos;
+>                 sio->iocb.ki_complete = sio_read_complete;
+>                 sio->pages = 0;
+> +               sio->len = 0;
+>         }
+>         sio->bvec[sio->pages].bv_page = page;
+> -       sio->bvec[sio->pages].bv_len = PAGE_SIZE;
+> +       sio->bvec[sio->pages].bv_len = thp_size(page);
+>         sio->bvec[sio->pages].bv_offset = 0;
+> +       sio->len += thp_size(page);
+>         sio->pages += 1;
+>         if (sio->pages == ARRAY_SIZE(sio->bvec) || !plug) {
+>                 swap_read_unplug(sio);
+> @@ -521,8 +525,7 @@ void __swap_read_unplug(struct swap_iocb *sio)
+>         struct address_space *mapping = sio->iocb.ki_filp->f_mapping;
+>         int ret;
+>
+> -       iov_iter_bvec(&from, READ, sio->bvec, sio->pages,
+> -                     PAGE_SIZE * sio->pages);
+> +       iov_iter_bvec(&from, READ, sio->bvec, sio->pages, sio->len);
+>         ret = mapping->a_ops->swap_rw(&sio->iocb, &from);
+>         if (ret != -EIOCBQUEUED)
+>                 sio_read_complete(&sio->iocb, ret);
+>
+>
+>

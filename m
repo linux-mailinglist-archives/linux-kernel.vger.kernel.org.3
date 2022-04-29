@@ -2,125 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE85A5157DB
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 00:06:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 185AF5157F6
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 00:09:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239687AbiD2WJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 18:09:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39302 "EHLO
+        id S1381294AbiD2WMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 18:12:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358343AbiD2WI4 (ORCPT
+        with ESMTP id S1359048AbiD2WMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 18:08:56 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF35B82D1E
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 15:05:35 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id w187so16791270ybe.2
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 15:05:35 -0700 (PDT)
+        Fri, 29 Apr 2022 18:12:08 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94B0DBD3A
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 15:08:47 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id cx11-20020a17090afd8b00b001d9fe5965b3so9728309pjb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 15:08:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GAXmCRc3lSOVYcNpy8O/6UhikW8W0LY8j/c9X7o57N8=;
-        b=RwIlF7TtzMr9ei1gzjHEl+WsjKakPNiUJPxtsgL+xc/vfErFq25Bw2KBkF47qccKq1
-         lTGAgrmK2WASE4V8K9ZeW/mmDa90vzKIVXGTrrGjOiis10w/zGKjH3NSMttZkGR0DsEY
-         CiKQHhKqMX4fa+FHrgvbC+YJrAjiULjAlydSoQnaRqvq/2dKRcMyRygxrJ1OyjYmYCHF
-         A7ZclJQtIUf/xjn3Gkfhm/bO6HtHRCRfLc4IfG3yNwQiz4606aJ37B+r2E9kOKin+s0u
-         vtBW+RTfulW6LmArTh5URV7MeTjhjT4XpfAugIZwf0c6S1xO7ZrgqUuI2+DH1Z5Pijb1
-         guIg==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=D54R3v8qrC79ryl/mhxkEgeY06O/JiHOgAyPmualCaw=;
+        b=eEFNo4YjRj1yxsE6ddjKrurDLQUQWzfvaBRiV+FKS0XAHv1dHnzd6VgWUO3DxFENIn
+         ecot4bJzHoc87F5MyD2wn1W7rBOmLRYJ4rs8dKMLzHoW+ofuNmuSjmeE5Ea6oXudQeWJ
+         h3d33+9Rj8SH0Y/3a7HK2ZkPHJfwyDsUsHdju+SLgwxvO2tqZp0fA5MOT13IhEZrRhkF
+         KR8uUFULbq5HirjjKiAiZD86ns3nJwjJFYmi9L9J6KOkSZxyRNHzLs8bUhzqQENpgSHY
+         bJxI3ilUxtiRMRbmlwQ+k2dUGISAlvD1o/gkWitVHlBf42fzMx8yExdr/4dTYUlLSlu2
+         Sveg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GAXmCRc3lSOVYcNpy8O/6UhikW8W0LY8j/c9X7o57N8=;
-        b=j/pW6yPW35yUO9ZIcjSa5DHDdVWqKVaQO3wrRTrRzgONeGph5LPd0nyEZuivu5y1+5
-         +DoO0apEPgF30YKIshkGGFnIxYm+ysjxpeaWqPL9MsV/MSnshbojWKBtC9zj0IdwZWN6
-         R/dljkFwPjxzeHN4K78D3dRd5D9n6je6P+JFBtne63OEHOc5slBC84MAnn+vNJEu2BKe
-         hLrN7CRGnGbdPsoclqvWAvVt1XjFGTqLLKRk6c7hGzt/vRF3o+PVmx1MyJzncch17eVT
-         SkBTlIsB/eNAe9B4pdsbj3ArLEp3WLywNSgIgmhw6hO3tr6npRLs6GoYvjw7XXK+7LXh
-         6l9g==
-X-Gm-Message-State: AOAM530nbD8DdD/K5vlyYFptmEskNg2G2TzCo91pjMiXfX8UYon8Jihp
-        wDNFs0wnl/xg0wpfjwaBAp7O2IJ3CV1RcdUJRWBLyg==
-X-Google-Smtp-Source: ABdhPJx8W/f0rIOxwSLCAUKHFdwYsYsmP6YReafF6bxvy28/9zbpMt+wREZ2Hk6CzroVnhUZa8a5ZIZGRCePs7y/hVc=
-X-Received: by 2002:a25:ea48:0:b0:644:e2e5:309 with SMTP id
- o8-20020a25ea48000000b00644e2e50309mr1559161ybe.407.1651269934754; Fri, 29
- Apr 2022 15:05:34 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=D54R3v8qrC79ryl/mhxkEgeY06O/JiHOgAyPmualCaw=;
+        b=nwuQVmCBXhofOyCBOSmzsL3KmHR8bWGsYMFafihBrlFSNpMzBxNtTEUSGIAyXQkJDF
+         q1IGXgniNgQ9Tv6gsuHyB30t37rMrLJJCzEFS9xCr0dQ9gCKSb4Atu9ySA5dAmXap6Wj
+         haEhJq80eiESJ1dw8ux9+BChxkKRhuxS046x4MwJkkjTwDw6CqI9y3lnX2iWlQAWOJOB
+         KsqyykD5/VaoNjF6pyQLtzCqyQ366guY5W6n6FIcrMFnWxJ6ilYYKOW7hrAXMihwK0bE
+         IM17sLyCmvcl09wFw3FkTOqSTnajLv4mlrgohWWRFMDXWPGP9hRV48IXyPn5KmdxWfYU
+         Xm3A==
+X-Gm-Message-State: AOAM532tGx/qX6gaNQpc7DQXK0qUYuBmFEmqv/JaiHQydUgQfmKgJEmU
+        ngFuWIp2QgMwc2acfKiu9I/zMA==
+X-Google-Smtp-Source: ABdhPJyBs4Fl1lrLv4rmB0L8SjqTRG5Dp5kXtgSplWDdGL3d2LOejNweZTiyOnlEK34kOyXaLAKF8g==
+X-Received: by 2002:a17:90a:e7c7:b0:1d9:6a37:9f5e with SMTP id kb7-20020a17090ae7c700b001d96a379f5emr1227113pjb.156.1651270127280;
+        Fri, 29 Apr 2022 15:08:47 -0700 (PDT)
+Received: from localhost.localdomain ([223.233.64.97])
+        by smtp.gmail.com with ESMTPSA id n21-20020aa78a55000000b0050dc76281c2sm170020pfa.156.2022.04.29.15.08.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 15:08:47 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-mmc@vger.kernel.org
+Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        agross@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, bjorn.andersson@linaro.org,
+        ulf.hansson@linaro.org, robh@kernel.org
+Subject: [PATCH 0/4] mmc: sdhci-msm: Convert dt-binding to yaml & add support for sm8150
+Date:   Sat, 30 Apr 2022 03:38:29 +0530
+Message-Id: <20220429220833.873672-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <CAHmME9r_DbZWe4FsfebHSSf_iPctSe5S-w9bU3o8BN43raeURg@mail.gmail.com>
- <20151116203709.GA27178@oracle.com> <CAHmME9pNCqbcoqbOnx6p8poehAntyyy1jQhy=0_HjkJ8nvMQdw@mail.gmail.com>
- <1447712932.22599.77.camel@edumazet-glaptop2.roam.corp.google.com>
- <CAHmME9oTU7HwP5=qo=aFWe0YXv5EPGoREpF2k-QY7qTmkDeXEA@mail.gmail.com>
- <YmszSXueTxYOC41G@zx2c4.com> <04f72c85-557f-d67c-c751-85be65cb015a@gmail.com>
- <YmxTo2hVwcwhdvjO@zx2c4.com> <d9854c74-c209-9ea5-6c76-8390e867521b@gmail.com> <CAHmME9qXC-4OPc5xRbC6CQJcpzb96EXzNWAist5A8momYxvVUA@mail.gmail.com>
-In-Reply-To: <CAHmME9qXC-4OPc5xRbC6CQJcpzb96EXzNWAist5A8momYxvVUA@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 29 Apr 2022 15:05:23 -0700
-Message-ID: <CANn89iLyNoCRrp6YYdy6kGhM7X2JQ9J4-LfEJCBvhYAv4N+FPA@mail.gmail.com>
-Subject: Re: Routing loops & TTL tracking with tunnel devices
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Eric Dumazet <eric.dumazet@gmail.com>,
-        Netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hannes Frederic Sowa <hannes@stressinduktion.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 2:54 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> Hi Eric,
->
-> On Fri, Apr 29, 2022 at 11:14 PM Eric Dumazet <eric.dumazet@gmail.com> wrote:
-> >
-> >
-> > On 4/29/22 14:07, Jason A. Donenfeld wrote:
-> >
-> > Hi Eric,
-> >
-> > On Fri, Apr 29, 2022 at 01:54:27PM -0700, Eric Dumazet wrote:
-> >
-> > Anyway, it'd be nice if there were a free u8 somewhere in sk_buff that I
-> > could use for tracking times through the stack. Other kernels have this
-> > but afaict Linux still does not. I looked into trying to overload some
-> > existing fields -- tstamp/skb_mstamp_ns or queue_mapping -- which I was
-> > thinking might be totally unused on TX?
-> >
-> > if skbs are stored in some internal wireguard queue, can not you use
-> > skb->cb[],
-> >
-> > like many other layers do ?
-> >
-> > This isn't for some internal wireguard queue. The packets get sent out
-> > of udp_tunnel_xmit_skb(), so they leave wireguard's queues.
-> >
-> >
-> > OK, where is the queue then ?
-> >
-> > dev_xmit_recursion() is supposed to catch long chains of virtual devices.
->
-> This is the long-chain-of-virtual-devices case indeed. But
-> dev_xmit_recursion() does not help here, since that's just a per-cpu
-> increment, assuming that the packet actually gets xmit'd in its
-> ndo_start_xmit function. But in reality, wireguard queues up the
-> packet, encrypts it in some worker later, and eventually transmits it
-> with udp_tunnel_xmit_skb(). All the while ndo_start_xmit() has long
-> returned. So no help from dev_xmit_recursion().
->
+This patchset converts the Qualcomm 'sdhci-msm' device-tree binding
+to yaml format and also adds support for sm8150 Qualcomm Soc.
 
-I assume you add encap headers to the skb ?
+This patchset is dependent on the qcom dts fixes sent via a separate
+patchset (see [1]), to make sure that the 'make dtbs_check' and
+'make dt_binding_check' work well and Rob's bot is happy as well.
 
-You could check if the wireguard header is there already, or if the
-amount of headers is crazy.
+[1]. https://lore.kernel.org/linux-arm-msm/20220429214420.854335-1-bhupesh.sharma@linaro.org/
 
-net/core/flow_dissector.c might help.
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Rob Herring <robh@kernel.org>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-You also can take a look at CONFIG_SKB_EXTENSIONS infrastructure.
+Bhupesh Sharma (4):
+  dt-bindings: mmc/sdhci-msm: Convert bindings to yaml
+  mmc: host/sdhci-msm: Add SoC specific compatibles
+  dt-bindings: mmc: sdhci-msm: Add compatible string for sm8150
+  mmc: host/sdhci-msm: Add compatible string check for sm8150
+
+ .../devicetree/bindings/mmc/sdhci-msm.txt     | 123 -----------
+ .../devicetree/bindings/mmc/sdhci-msm.yaml    | 193 ++++++++++++++++++
+ drivers/mmc/host/sdhci-msm.c                  |  24 +++
+ 3 files changed, 217 insertions(+), 123 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/mmc/sdhci-msm.txt
+ create mode 100644 Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
+
+-- 
+2.35.1
+

@@ -2,85 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0085F514574
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 11:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C4D51456C
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 11:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356616AbiD2Jf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 05:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38090 "EHLO
+        id S1356583AbiD2JcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 05:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230112AbiD2JfZ (ORCPT
+        with ESMTP id S239126AbiD2JcW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 05:35:25 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0663AC44EA
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 02:32:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651224728; x=1682760728;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kppcoXj5y75CTMRtENkNzbnrf3SLXeufYjqq0hRy8oc=;
-  b=oC1Otlufe9xig8xuMIUgFGUBJ+D/HBC0iwIw0IuMoEBGa8Ufe82s9vv8
-   f8k/EiRZqt5dA74ejmFeO1Jgv7XGbo1D5s+gRbQAyPXtsS5vAxYC8EuaM
-   yqaZLo0G1KyjB1ULWLsbrxc3jnc4DHRugrITWJscVV/xSA4CQa5P4V5oI
-   26X8VWTsL/smbUqrElTK22OW9gF9mf79C5iIbtP7uSOOzmJb3NubtzJyS
-   8tly4OW2cQCw0KJQbs54iQUPe0aWfp5g6/KQOjJ6wfs69uywzOSyi2hgz
-   CXM4IyO1RN9eVlAo4G05EFr3uDyja4OGNl1deY7gqh9jJJP5KO5XTfXFg
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="246505689"
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="246505689"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 02:32:07 -0700
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="662267242"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 02:32:04 -0700
-Received: by lahna (sSMTP sendmail emulation); Fri, 29 Apr 2022 12:28:42 +0300
-Date:   Fri, 29 Apr 2022 12:28:42 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Won Chung <wonchung@google.com>
-Cc:     "Winkler, Tomas" <tomas.winkler@intel.com>,
-        "Usyskin, Alexander" <alexander.usyskin@intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        "Ceraolo Spurio, Daniele" <daniele.ceraolospurio@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/2] thunderbolt: Link USB4 ports to their USB Type-C
- connectors
-Message-ID: <Ymuvyujl+bwemc/I@lahna>
-References: <20220418175932.1809770-1-wonchung@google.com>
- <Yl/l7gjRXj41a93q@lahna>
- <CAOvb9yidpOZ4jCjme+u1a4fPTRnLmxUHSTO3yHPPuYtDbe1V0g@mail.gmail.com>
- <YmDy/xEsyktRS6D+@lahna>
- <MW3PR11MB46517BE51D4DCBC02B463C0EEDF99@MW3PR11MB4651.namprd11.prod.outlook.com>
- <CAOvb9yhToxfT7cVzDX9cQhbRj0r2DXyuLJer64J8XSRJuUPcEg@mail.gmail.com>
- <CAOvb9yhPuNOM-HEb+fCfJPZ9kyxYZ9orT6u7BH_iiTU4XPWChg@mail.gmail.com>
+        Fri, 29 Apr 2022 05:32:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04158C3EB6
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 02:29:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651224544;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kC+rdIYX7c86XP7hqAoeoKmiKMXkQmQ2uMl1ygcYcWc=;
+        b=Ai0B7We9zkhH9IzQ2Bq/fiYUb7/4DaUyRK2n/8hRNsBpoE3mIIigbvTrrlDaRM5TcEc6ja
+        jw2pYvCtqAuuYQIuBxOK33OvBN6KojXANT1jxpayaaKfH/f/xlmnkhimXQGFMyui9Pbu9z
+        eYFnkSJAJA/SiivHGpuSlmCCCuAS8WU=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-303-FPE4ewEfMUed03OBQ5Shaw-1; Fri, 29 Apr 2022 05:28:54 -0400
+X-MC-Unique: FPE4ewEfMUed03OBQ5Shaw-1
+Received: by mail-wm1-f71.google.com with SMTP id t2-20020a7bc3c2000000b003528fe59cb9so2262932wmj.5
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 02:28:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=kC+rdIYX7c86XP7hqAoeoKmiKMXkQmQ2uMl1ygcYcWc=;
+        b=FujUfwPJnoDp4frsv5gMoa48pqIvL9CLa1zS35NPnetdwsT0D488Rh83sEVDs7YyYU
+         oOxuScQt0+mX0bu/yd8MRrYG72vL2JbpAxbp2QQe7CEaAOye8nc+wBgkiME8mMem7VOi
+         rPOm7VYafs4WcsbgEbBEzuotPeUydopyizvvKKzWjHGRryHj1AKKf1C5wSYbRGhRLawq
+         SnL1nBYjQgn5uwW3Zgj6vWuiW+oREzKoaAOeLQPz0vR4y2qC4s+buzyhX9IKCtStTdP5
+         8ltcz6/Dk/iFU/RVikz2jmqW2Plkj4RcYkpry12piNRC/clGAo5dT4pjZhB+agJsEMkO
+         M9Yw==
+X-Gm-Message-State: AOAM532yFDPFZlOBfFlE7heTp9MzHsIUahzkEE+kXPqlNA8wAxoHK8wC
+        h3bHtmmQSf02jVvLc7pMLpXlyv4MOwOtXnLGtGsB+kwMQckzufTck5aGxEJA9xyORtyZ0QKG39S
+        ZjiuClLylrMIMJj5+Qty2Uysp
+X-Received: by 2002:adf:e7c1:0:b0:20a:b724:cedd with SMTP id e1-20020adfe7c1000000b0020ab724ceddmr30695048wrn.409.1651224533813;
+        Fri, 29 Apr 2022 02:28:53 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyfSVLq6mn3NtyCS59FHRJIwazRa2JwPUJpPbEwBXPToDHs98ejC2T4phMaRy9QqV+8eeKFYg==
+X-Received: by 2002:adf:e7c1:0:b0:20a:b724:cedd with SMTP id e1-20020adfe7c1000000b0020ab724ceddmr30695035wrn.409.1651224533583;
+        Fri, 29 Apr 2022 02:28:53 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c707:fe00:bbeb:98e6:617a:dea1? (p200300cbc707fe00bbeb98e6617adea1.dip0.t-ipconnect.de. [2003:cb:c707:fe00:bbeb:98e6:617a:dea1])
+        by smtp.gmail.com with ESMTPSA id g25-20020adfa599000000b0020aeb9e5bdfsm2054937wrc.43.2022.04.29.02.28.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 02:28:53 -0700 (PDT)
+Message-ID: <d2ab442f-99a3-fb09-00f4-8c5897cf1ccf@redhat.com>
+Date:   Fri, 29 Apr 2022 11:28:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOvb9yhPuNOM-HEb+fCfJPZ9kyxYZ9orT6u7BH_iiTU4XPWChg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v3 4/4] hugetlb: Clean up hugetlb_cma_reserve
+Content-Language: en-US
+To:     Peng Liu <liupeng256@huawei.com>, mike.kravetz@oracle.com,
+        akpm@linux-foundation.org, yaozhenguo1@gmail.com,
+        baolin.wang@linux.alibaba.com, songmuchun@bytedance.com,
+        liuyuntao10@huawei.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220413032915.251254-1-liupeng256@huawei.com>
+ <20220413032915.251254-5-liupeng256@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220413032915.251254-5-liupeng256@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Fri, Apr 29, 2022 at 03:34:56AM +0900, Won Chung wrote:
-> Hi Mika,
+On 13.04.22 05:29, Peng Liu wrote:
+> Use more generic functions to deal with issues related to online
+> nodes. The changes will make the code simplified.
 > 
-> Tomas has given an ack on the first patch on MEI:
-> https://lore.kernel.org/all/0136fcb26ca8433899593208af4351c9@intel.com/
+> Signed-off-by: Peng Liu <liupeng256@huawei.com>
+> ---
+>  mm/hugetlb.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> Should I resend the patch with an additional "Acked-by" tag?
-> Or could that be added as the patch is merged into the thunderbolt tree?
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 2e4d8d9fb7c6..4c529774cc08 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -6953,7 +6953,7 @@ void __init hugetlb_cma_reserve(int order)
+>  		if (hugetlb_cma_size_in_node[nid] == 0)
+>  			continue;
+>  
+> -		if (!node_state(nid, N_ONLINE)) {
+> +		if (!node_online(nid)) {
+>  			pr_warn("hugetlb_cma: invalid node %d specified\n", nid);
+>  			hugetlb_cma_size -= hugetlb_cma_size_in_node[nid];
+>  			hugetlb_cma_size_in_node[nid] = 0;
+> @@ -6992,7 +6992,7 @@ void __init hugetlb_cma_reserve(int order)
+>  	}
+>  
+>  	reserved = 0;
+> -	for_each_node_state(nid, N_ONLINE) {
+> +	for_each_online_node(nid) {
+>  		int res;
+>  		char name[CMA_MAX_NAME];
+>  
 
-Both applied to thunderbolt.git/next, thanks!
+Reviewed-by: David Hildenbrand <david@redhat.com>
+
+-- 
+Thanks,
+
+David / dhildenb
+

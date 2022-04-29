@@ -2,138 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D7D9514CB8
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EC67514CBC
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377227AbiD2O2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 10:28:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44608 "EHLO
+        id S1377240AbiD2O2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 10:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350249AbiD2O17 (ORCPT
+        with ESMTP id S1377232AbiD2O2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 10:27:59 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD25F91363
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:24:40 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id t11-20020a17090ad50b00b001d95bf21996so10655049pju.2
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:24:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7tC/JKOk9L0c4P3431GOxph3zjvk5J8dJFmkqVAnJxc=;
-        b=F0+Y3mMT0AqdA2ZfjnbeDVfDmZPiiSQXRHQCLASaN7eLfv15TfF0iLNRdE6IOoeC/g
-         6GkXEEBq0PSKDjB2LJstij0jmH99SMZXxtjVbtiDjgY2vdjLCU+EE5SoMc5FV4TR9tG5
-         ehRV+g9B5kQNJtwCJEoRKDuSMT/SV+oYmWMEAUsVtFJnPTYB5/qUX4MBdp8WlNfn0fyB
-         3ld1a7DlYAa61TIpVQunTEelniygDy9n7MOGhFEb2bhWuoZunIZEfAgiXofhJWVX062S
-         EB3po2+BTr4QWUV/PcCKFE/2uDBMP2pS/prgXU/+a7qr9JylszfvPmOveqX8gGS0sCOs
-         qOzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7tC/JKOk9L0c4P3431GOxph3zjvk5J8dJFmkqVAnJxc=;
-        b=sH3b0EJNW1aoHrPSuUMeDG0WfzXKGPo0J61LawmjcF3o0i9+v90ebcP3UU3V5yEP+v
-         GGc1GvadKRRPtmWNbsRW5WWgc1qTb75H88mNv1aK71lsKaKoFhG7N30x48CplsWdPfA7
-         BbnbjgeeQGixBwQxH/H4Bvwx60baQJXkmOKXZ0UiIgUJPkeaiUjQ1bS76n5NnZtATQ5H
-         vMIciW2t/qnwGZiZFacFROIYAKe+A4v8Fmwzs9AXsnbTHhUe8CW45v4adtKgPQFL76S0
-         sb5pu4ulOH8OEQw/LcVTZUZssafqjMd6TwoBzWfUGjvihvOjYU/sOO/4HOytw6BFe3in
-         bVWA==
-X-Gm-Message-State: AOAM532u81h+ejfu3jzNyNgzNa4w9KfPIp57JkLHkm09czxZHBYHmRQX
-        Ca/+Bsoex6R3kH9DScZJtwN0Yg==
-X-Google-Smtp-Source: ABdhPJwedY/+Y+SN/KDf33mBRLNyBEObEHex1x/IqkMk86Yt4Fukf5wpBrFB7Bnr5BKAbNwLSzjrUA==
-X-Received: by 2002:a17:902:e748:b0:15c:e3b9:bba3 with SMTP id p8-20020a170902e74800b0015ce3b9bba3mr33249235plf.139.1651242279947;
-        Fri, 29 Apr 2022 07:24:39 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id g17-20020a625211000000b005056a6313a7sm3168604pfb.87.2022.04.29.07.24.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 07:24:38 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 14:24:35 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>
-Subject: Re: [PATCH] KVM: x86/mmu: Do not create SPTEs for GFNs that exceed
- host.MAXPHYADDR
-Message-ID: <Ymv1I5ixX1+k8Nst@google.com>
-References: <20220428233416.2446833-1-seanjc@google.com>
- <337332ca-835c-087c-c99b-92c35ea8dcd3@redhat.com>
+        Fri, 29 Apr 2022 10:28:13 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2C691358;
+        Fri, 29 Apr 2022 07:24:52 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 35C48320095B;
+        Fri, 29 Apr 2022 10:24:49 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Fri, 29 Apr 2022 10:24:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1651242288; x=
+        1651328688; bh=9gHDquF0620vXHuRAV44zNwRhlnBP4+qdCr0yPXAJ9I=; b=n
+        LC6L+MU4X/bYEQWo4BVTRJ6/ZbEcaEztOHaTGyaxWec0KCbu+a9pjwHMfy1H2ZlR
+        5X1yCgpvFcOkvp1nMsfMurAKFqJLVGCE16uB8igyuXKdR7Vb9indKY7DFy63n1zb
+        iS4kS5AF19lauLTxRcA9+Ba7DH6GHI0sMZHuoUz53+NG/h3AouGUiQODd452ghBy
+        URtgJ4UVVunROTok3XPBwf4c34573DqU6qKDjcPTlpfyZ7cBdJUubgn1Pp0u1qtz
+        9z/9PN2wq7jqqEZ0hHnfs/NQhG4foQGhZer4eccUaW7IvFfUc2yQSorXwGp3zeTK
+        1+62XMHr5+tV4c48Dgrmg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1651242288; x=1651328688; bh=9gHDquF0620vX
+        HuRAV44zNwRhlnBP4+qdCr0yPXAJ9I=; b=Wz45439R4Skb7JbyeAKK10ppTC98L
+        1JIHd1MP+Wg3YYww1M5ZrHa7IqpLA9gegNq9bzde2GJRumt4LvdsEdwxgfL635GR
+        fzHk3eiyAyYq85UINAV060EFAV+hGXd43lh4h6noL2Ug8PPMoAdO7LXukJyxHVSn
+        VpiYc8dUFJjx12QdV4gN/ZLqqdvm/z9keDXFMka7al7hyzmhChhS/EHU8b/GZuw4
+        tNWXJsvfFTiGNvm22cyOR5rx+jqPk4p82/nBSJFvpgRhpdiQuUkC9k4UOLdN9zOm
+        NBR73EhdtWwy4KgAM/I75ty1JOjzEqWwDED/OFVPygtRTDGgdhptzKPZw==
+X-ME-Sender: <xms:L_VrYhAp8gxamH4PB3f6zruFuTY70tCyy5Z7JlhQpv0XtRoUvdLMDA>
+    <xme:L_VrYvj3tRaVS5QDtmrlAljbdJZlCOHEmPqqSOIczP5WKaVuyTogokAs-IC2iy6GN
+    aencRuYevp5LZD1hOU>
+X-ME-Received: <xmr:L_VrYsm8Q8iDYl96jlqYWrHIa8da0bhHKmBbwb71o3wTyrQyPsZzLJXlZV_lC8_rrxHh-EpFMxg8YeeoMFTNe9ly_qEEeXcpj7z8Dc8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudelgdejgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtugfgjgesthhqredttddtjeenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpefftddtueefgfffgedtjeffveduvdduhfdugeejgeekteeugfefhfehkedu
+    hfdvhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:L_VrYrxjo7wlwYaVknZ1r7G4ZU1U8pA3c1dHFrC2gZ-TYcMdole-tg>
+    <xmx:L_VrYmQjwFKxunRF_HNzckPPIvO4Z4TyXZt7loE4EhGfjv63Puqdqw>
+    <xmx:L_VrYuaFsbRH6gin6nVzDNFdYB_jt5YePKYnNDM24NLrIQcE2fk61Q>
+    <xmx:MPVrYrJWxpx_J8fTghDsP0SI1nZsOsqT7J6c0Sm24puDEHVrY2_Xzg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 29 Apr 2022 10:24:47 -0400 (EDT)
+Date:   Fri, 29 Apr 2022 16:24:46 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v4 43/45] media: sun6i-csi: Detect the availability of
+ the ISP
+Message-ID: <20220429142446.vzhmbay6hq7p4tpi@houat>
+References: <20220415152811.636419-1-paul.kocialkowski@bootlin.com>
+ <20220415152811.636419-44-paul.kocialkowski@bootlin.com>
+ <2029179.KlZ2vcFHjT@jernej-laptop>
+ <YmpIjPe8pw+yvGyL@aptenodytes>
+ <20220428081130.6deusqgnrsgqdp3e@houat>
+ <Ymp98LBQySvpz8/j@aptenodytes>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <337332ca-835c-087c-c99b-92c35ea8dcd3@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <Ymp98LBQySvpz8/j@aptenodytes>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022, Paolo Bonzini wrote:
-> On 4/29/22 01:34, Sean Christopherson wrote:
-> 
-> > +static inline gfn_t kvm_mmu_max_gfn_host(void)
-> > +{
-> > +	/*
-> > +	 * Disallow SPTEs (via memslots or cached MMIO) whose gfn would exceed
-> > +	 * host.MAXPHYADDR.  Assuming KVM is running on bare metal, guest
-> > +	 * accesses beyond host.MAXPHYADDR will hit a #PF(RSVD) and never hit
-> > +	 * an EPT Violation/Misconfig / #NPF, and so KVM will never install a
-> > +	 * SPTE for such addresses.  That doesn't hold true if KVM is running
-> > +	 * as a VM itself, e.g. if the MAXPHYADDR KVM sees is less than
-> > +	 * hardware's real MAXPHYADDR, but since KVM can't honor such behavior
-> > +	 * on bare metal, disallow it entirely to simplify e.g. the TDP MMU.
-> > +	 */
-> > +	return (1ULL << (shadow_phys_bits - PAGE_SHIFT)) - 1;
-> 
-> The host.MAXPHYADDR however does not matter if EPT/NPT is not in use, because
-> the shadow paging fault path can accept any gfn.
+On Thu, Apr 28, 2022 at 01:43:44PM +0200, Paul Kocialkowski wrote:
+> Hi Maxime,
+>=20
+> On Thu 28 Apr 22, 10:11, Maxime Ripard wrote:
+> > On Thu, Apr 28, 2022 at 09:55:56AM +0200, Paul Kocialkowski wrote:
+> > > Hi Jernej,
+> > >=20
+> > > Thanks a lot for all your reviews!
+> > >=20
+> > > On Wed 27 Apr 22, 22:07, Jernej =C5=A0krabec wrote:
+> > > > Dne petek, 15. april 2022 ob 17:28:09 CEST je Paul Kocialkowski nap=
+isal(a):
+> > > > > Add a helper to detect whether the ISP is available and connected
+> > > > > and store the indication in a driver-wide variable.
+> > > > >=20
+> > > > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > > > > ---
+> > > > >  .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 33 +++++++++++++=
+++++++
+> > > > >  .../platform/sunxi/sun6i-csi/sun6i_csi.h      |  3 ++
+> > > > >  2 files changed, 36 insertions(+)
+> > > > >=20
+> > > > > diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> > > > > b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c index
+> > > > > a88deb8ba1e7..f185cbd113c7 100644
+> > > > > --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> > > > > +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> > > > > @@ -25,6 +25,35 @@
+> > > > >  #include "sun6i_csi_capture.h"
+> > > > >  #include "sun6i_csi_reg.h"
+> > > > >=20
+> > > > > +/* ISP */
+> > > > > +
+> > > > > +static bool sun6i_csi_isp_detect(struct sun6i_csi_device *csi_de=
+v)
+> > > > > +{
+> > > > > +	struct device *dev =3D csi_dev->dev;
+> > > > > +	struct fwnode_handle *handle =3D NULL;
+> > > > > +
+> > > > > +	/* ISP is not available if disabled in kernel config. */
+> > > > > +	if (!IS_ENABLED(CONFIG_VIDEO_SUN6I_ISP))
+> > > >=20
+> > > > Where is this symbol defined?
+> > >=20
+> > > That is defined through Kconfig's auto-generated header, from the ass=
+ociated
+> > > option for the ISP driver. It is defined in the ISP support series so=
+ this
+> > > will effectively always be false for now.
+> >=20
+> > Can the ISP be compiled as a module, but the CSI driver built-in?
+>=20
+> I think so yes, I don't see any reason why not.
+>=20
+> > If so,
+> > that would create a dependency from the kernel image to a module, which
+> > won't compile.
+>=20
+> I think this would introduce a run-time dependency (sun6i-csi needing sun=
+6i-isp
+> in order to register) but I don't understand why it wouldn't compile thou=
+gh.
+> Could you ellaborate a bit?
 
-... 
+Never mind, that was a brainfart, I was somehow thinking you wer calling
+a function there.
 
-> diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
-> index e6cae6f22683..dba275d323a7 100644
-> --- a/arch/x86/kvm/mmu.h
-> +++ b/arch/x86/kvm/mmu.h
-> @@ -65,6 +65,30 @@ static __always_inline u64 rsvd_bits(int s, int e)
->  	return ((2ULL << (e - s)) - 1) << s;
->  }
-> +/*
-> + * The number of non-reserved physical address bits irrespective of features
-> + * that repurpose legal bits, e.g. MKTME.
-> + */
-> +extern u8 __read_mostly shadow_phys_bits;
-> +
-> +static inline gfn_t kvm_mmu_max_gfn(void)
-> +{
-> +	/*
-> +	 * Note that this uses the host MAXPHYADDR, not the guest's.
-> +	 * EPT/NPT cannot support GPAs that would exceed host.MAXPHYADDR;
-> +	 * assuming KVM is running on bare metal, guest accesses beyond
-> +	 * host.MAXPHYADDR will hit a #PF(RSVD) and never cause a vmexit
-> +	 * (either EPT Violation/Misconfig or #NPF), and so KVM will never
-> +	 * install a SPTE for such addresses.  If KVM is running as a VM
-> +	 * itself, on the other hand, it might see a MAXPHYADDR that is less
-> +	 * than hardware's real MAXPHYADDR.  Using the host MAXPHYADDR
-> +	 * disallows such SPTEs entirely and simplifies the TDP MMU.
-> +	 */
-> +	int max_gpa_bits = likely(tdp_enabled) ? shadow_phys_bits : 52;
-
-I don't love the divergent memslot behavior, but it's technically correct, so I
-can't really argue.  Do we want to "officially" document the memslot behavior?
-
-> +
-> +	return (1ULL << (max_gpa_bits - PAGE_SHIFT)) - 1;
-> +}
-> +
->  void kvm_mmu_set_mmio_spte_mask(u64 mmio_value, u64 mmio_mask, u64 access_mask);
->  void kvm_mmu_set_ept_masks(bool has_ad_bits, bool has_exec_only);
+Maxime

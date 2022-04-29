@@ -2,168 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3E735151B6
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:22:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E96515190
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379202AbiD2RZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 13:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54534 "EHLO
+        id S235915AbiD2RY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 13:24:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379547AbiD2RYv (ORCPT
+        with ESMTP id S235457AbiD2RY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 13:24:51 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A2E57160;
-        Fri, 29 Apr 2022 10:21:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1651252851;
-        bh=jFeo/rlMoN3F0JvMc3759b06/L1UffYivvp83FqyW6o=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=B7xslFnJ51XNV2ADIknZnclvBN0gfTSbt4TcwaSv6Ps3K+/Dr4hBlmEskFceY0gA5
-         pkV1tifXQaZge56H52Mk/d8OIJng3txyPTfXLb7nIih4fsU/1nMB5fQMevpOWUmbK0
-         TUhRci4P0rZi/jKgsQoEs8eid301qNizICHYK8sY=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([37.201.215.103]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MUXtY-1nKByF2qyO-00QPKS; Fri, 29
- Apr 2022 19:20:51 +0200
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     linux-clk@vger.kernel.org, openbmc@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v2 7/7] ARM: dts: wpcm450: Switch clocks to clock controller
-Date:   Fri, 29 Apr 2022 19:20:30 +0200
-Message-Id: <20220429172030.398011-8-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220429172030.398011-1-j.neuschaefer@gmx.net>
-References: <20220429172030.398011-1-j.neuschaefer@gmx.net>
+        Fri, 29 Apr 2022 13:24:26 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404AB4C790;
+        Fri, 29 Apr 2022 10:21:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651252867; x=1682788867;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LDN4LTmiRFBu3yewHsXaqx2iqRnXy9xm2ypIZ36Kb28=;
+  b=PhSXqXUVilFIPk6P1a2eWhFgUAfrSPYAfwn3AyoVvOPhBL7Dbc4NJjYv
+   lgmprFH0G0HhoNonzQiYyCycAagq1ERkd5SMLmNbkJEhPhwktRdWZlJnZ
+   hYzrSNi/+w5JaKlCaMMqjhuCQ8SIX35sfz9bqwWNvnM22XxfP7/6XYQ/N
+   63LGENw2Uf+Re8J//I+xNX0kpt4daMiEWPu5HVd8vwvS56nDped55q6Gp
+   /iN194BfS+qVCIrK1e0UTqJFRkhLvIPbbXzipGzCmnSta1tqJB+9j88oR
+   kwTUZa7q3O+5Bba+dcYAw4eeXx10PmXwQvNtIYdZqDD46Xnrp/a0fjXu3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="266869745"
+X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
+   d="scan'208";a="266869745"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 10:20:55 -0700
+X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
+   d="scan'208";a="651838350"
+Received: from nadelgad-mobl.amr.corp.intel.com (HELO localhost) ([10.212.108.243])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 10:20:54 -0700
+Date:   Fri, 29 Apr 2022 10:20:54 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH V8 04/10] cxl/pci: Create auxiliary devices for each DOE
+ mailbox
+Message-ID: <YmwedkzLrsOmsQt/@iweiny-desk3>
+References: <20220414203237.2198665-1-ira.weiny@intel.com>
+ <20220414203237.2198665-5-ira.weiny@intel.com>
+ <20220429165502.00000d01@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:CapGnF66PbIaJCrYydROSSzdBD4+jGIG259czWWFShncx/7mfO5
- n7LWPKDdswQhfnHBzXYt8/fCGYBOs/TNhEn25Fwffb80q+MwOOZ/NEiURk+UPXwY48HALAb
- FbieQhHcsWYBrn+zRmzCSCsAlAiOK8G3pN4hGDYJzh4lauaSbA0mrj4YIkwuAW/mxJDP71A
- WtSOAngqDLdX/T5fi7Z+Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:op7guGsTdCo=:wC4SD8Y6g9Umj7VnspIayf
- M+K6RolgpoBePq+LQFfem4hZ/4qtppk6wZv/b5ufzOtFf7pn5u7aptkk68boj8jPa3xOSKeCm
- gvipfpEuKYq6jwsFS5l3nUNpNTle18GMbLDwHoOBahGxOmNyZrl1pPQY5sl1IVs0W2F1iKeTR
- J74wtKyQBw9WsURuXNCp6j9F8MktBcPOo6HSVGT8H9HNV4Ti4fp53S6OzQS2la/BqcZWwPi7s
- wxm//FqpVJutc+WperY1CO5EBT9pMzH08efPnCua8Ek6xBeUKHtnAlxlxlLGDofQcJ95YEmRQ
- xA//2YdM7BrZXFuRtGcdGVn9QDRrVBMyOaT3bX6HwvjR9sEc4Z/IOWhfgPWk5hldVXknze4Vk
- uX9cBpXZMZkwBpg+1RqNzjyLrPUG1e1l1MAl/BUWM1sKkIu775SQJtBF8xgpBoHyl0sySYrqb
- WH8a1koFNspArjEaKdsgNa867z1EsE8FeV1ec2l4fTr18MdA/vC1eeab1Ib30aLklltfp76Cv
- xP7pcO7oPQZI/FWhPoFiFonH1RGGBNXuUqSQkwR8AKZN0aPpc/LoYUOUXnUXMgVdOrGXL9Y32
- z9R/fMTs0xz0hrXAoR12Y6uBZ4XGBS2eqdb3AuMNcadYYNHLWhPeXq8omoaZe1/kniBnF88Tn
- Mk6AZ31Wx2wrI5OCfEnJ2DxnIuz8w7QSUea1K/xzn2xj0B+Ef4fU9aj9jwFSJ4bEX3UGCWXhz
- qb3BTZJ1ELYrxLj5ocIlmWSxEnorHWa6iBGSsRFu4hv7wGTJFojL+iOvxrhhQlRX052pW7cuu
- Gk9lTUcxyeOvMHPGnnta/R8yeasFpp395WVdzy4c4GxowDOmNdkH79Od/BiXM/x1DxUtHjJFB
- lcVIQayLDqnFmRNEoYJ/8y7J2K4M9QJ+Tb/4W4RcHfO4qjaNWwy7gDGwQbV0PQfGR7pgL1/mY
- QcBCw+n+yE56UXHSAdTIDM3Uwh2Agsn7aNZJ7+LP4KSIk09Nmxas2hUkDrNP2j1zJgEo9NJA4
- yRJSkKhI/E9xl/lQQXPs+bEwm96qYbA5l6hDaoB9oFjin3r6pMCPubmsgXG9upCPTcKDBfxJ1
- xKJR09p/xyGTsc=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220429165502.00000d01@huawei.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This change is incompatible with older kernels because it requires the
-clock controller driver, but I think that's acceptable because WPCM450
-support is generally still in an early phase.
+On Fri, Apr 29, 2022 at 04:55:02PM +0100, Jonathan Cameron wrote:
+> On Thu, 14 Apr 2022 13:32:31 -0700
+> ira.weiny@intel.com wrote:
+> 
+> > From: Ira Weiny <ira.weiny@intel.com>
+> > 
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
+[snip]
 
-v2:
-- no changes
-=2D--
- arch/arm/boot/dts/nuvoton-wpcm450.dtsi | 20 +++++++++-----------
- 1 file changed, 9 insertions(+), 11 deletions(-)
+> > +
+> > +/**
+> > + * cxl_pci_create_doe_devices - Create auxiliary bus DOE devices for all DOE
+> > + *				mailboxes found
+> > + *
+> > + * @pci_dev: The PCI device to scan for DOE mailboxes
+> > + *
+> > + * There is no coresponding destroy of these devices.  This function associates
+> > + * the DOE auxiliary devices created with the pci_dev passed in.  That
+> > + * association is device managed (devm_*) such that the DOE auxiliary device
+> > + * lifetime is always less than or equal to the lifetime of the pci_dev.
+> > + *
+> > + * RETURNS: 0 on success -ERRNO on failure.
+> > + */
+> > +static int cxl_pci_create_doe_devices(struct pci_dev *pdev)
+> > +{
+> > +	struct device *dev = &pdev->dev;
+> > +	bool use_irq = true;
+> > +	int irqs = 0;
+> > +	u16 off = 0;
+> > +	int rc;
+> > +
+> > +	pci_doe_for_each_off(pdev, off)
+> > +		irqs++;
+> I believe this is insufficient because there may be other irqs in use
+> on the device.
 
-diff --git a/arch/arm/boot/dts/nuvoton-wpcm450.dtsi b/arch/arm/boot/dts/nu=
-voton-wpcm450.dtsi
-index 62d70fda7b520..f868bd7db009a 100644
-=2D-- a/arch/arm/boot/dts/nuvoton-wpcm450.dtsi
-+++ b/arch/arm/boot/dts/nuvoton-wpcm450.dtsi
-@@ -2,6 +2,7 @@
- // Copyright 2021 Jonathan Neusch=C3=A4fer
+I did not think that was true for any current CXL device.  From what I could
+tell all CXL devices would be covered by this simple calculation.  I left it to
+the reader to determine if a new CXL device came along which needed other irq's
+to lift this somewhere to cover those allocations.  I probably should have made
+some comment.  Sorry.
 
- #include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/clock/nuvoton,wpcm450-clk.h>
+> In a similar fashion to that done in pcie/portdrv_core.c
+> I think we need to instead find the maximum msi/msix vector number
+> by reading the config space.
 
- / {
- 	compatible =3D "nuvoton,wpcm450";
-@@ -32,13 +33,6 @@ cpu@0 {
- 		};
- 	};
+I was not aware I could do that...
 
--	clk24m: clock-24mhz {
--		/* 24 MHz dummy clock */
--		compatible =3D "fixed-clock";
--		clock-frequency =3D <24000000>;
--		#clock-cells =3D <0>;
--	};
--
- 	refclk: clock-48mhz {
- 		/* 48 MHz reference oscillator */
- 		compatible =3D "fixed-clock";
-@@ -73,7 +67,7 @@ serial0: serial@b8000000 {
- 			reg =3D <0xb8000000 0x20>;
- 			reg-shift =3D <2>;
- 			interrupts =3D <7 IRQ_TYPE_LEVEL_HIGH>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&clk WPCM450_CLK_UART0>;
- 			pinctrl-names =3D "default";
- 			pinctrl-0 =3D <&bsp_pins>;
- 			status =3D "disabled";
-@@ -84,7 +78,7 @@ serial1: serial@b8000100 {
- 			reg =3D <0xb8000100 0x20>;
- 			reg-shift =3D <2>;
- 			interrupts =3D <8 IRQ_TYPE_LEVEL_HIGH>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&clk WPCM450_CLK_UART1>;
- 			status =3D "disabled";
- 		};
+> Then we request one more vector
+> than that max value to ensure the vector we need has been requested.
 
-@@ -92,14 +86,18 @@ timer0: timer@b8001000 {
- 			compatible =3D "nuvoton,wpcm450-timer";
- 			interrupts =3D <12 IRQ_TYPE_LEVEL_HIGH>;
- 			reg =3D <0xb8001000 0x1c>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&clk WPCM450_CLK_TIMER0>,
-+				 <&clk WPCM450_CLK_TIMER1>,
-+				 <&clk WPCM450_CLK_TIMER2>,
-+				 <&clk WPCM450_CLK_TIMER3>,
-+				 <&clk WPCM450_CLK_TIMER4>;
- 		};
+Yea at some point I figured this would be lifted out of here as part of a
+larger 'allocate all the vectors for the device' function.
 
- 		watchdog0: watchdog@b800101c {
- 			compatible =3D "nuvoton,wpcm450-wdt";
- 			interrupts =3D <1 IRQ_TYPE_LEVEL_HIGH>;
- 			reg =3D <0xb800101c 0x4>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&clk WPCM450_CLK_WDT>;
- 		};
+But for now this is the only place that needs irqs so I punted.  I can lift
+this into something like
 
- 		aic: interrupt-controller@b8002000 {
-=2D-
-2.35.1
+cxl_pci_alloc_irq_vectors(...) and then pass use_irq here.
 
+But to move this series forward I would propose that
+cxl_pci_alloc_irq_vectors() do what I'm doing here for now.
+
+Ira
+
+> 
+> Jonathan
+> 
+> > +	pci_info(pdev, "Found %d DOE mailbox's\n", irqs);
+> > +
+> > +	/*
+> > +	 * Allocate enough vectors for the DOE's
+> > +	 */
+> > +	rc = pci_alloc_irq_vectors(pdev, irqs, irqs, PCI_IRQ_MSI |
+> > +						     PCI_IRQ_MSIX);
+> > +	if (rc != irqs) {
+> > +		pci_err(pdev,
+> > +			"Not enough interrupts for all the DOEs; use polling\n");
+> > +		use_irq = false;
+> > +		/* Some got allocated; clean them up */
+> > +		if (rc > 0)
+> > +			cxl_pci_free_irq_vectors(pdev);
+> > +	} else {
+> > +		/*
+> > +		 * Enabling bus mastering is require for MSI/MSIx.  It could be
+> > +		 * done later within the DOE initialization, but as it
+> > +		 * potentially has other impacts keep it here when setting up
+> > +		 * the IRQ's.
+> > +		 */
+> > +		pci_set_master(pdev);
+> > +		rc = devm_add_action_or_reset(dev,
+> > +					      cxl_pci_free_irq_vectors,
+> > +					      pdev);
+> > +		if (rc)
+> > +			return rc;
+> > +	}
+> > +
+> > +	pci_doe_for_each_off(pdev, off) {
+> > +		struct auxiliary_device *adev;
+> > +		struct cxl_doe_dev *new_dev;
+> > +		int id;
+> > +
+> > +		new_dev = kzalloc(sizeof(*new_dev), GFP_KERNEL);
+> > +		if (!new_dev)
+> > +			return -ENOMEM;
+> > +
+> > +		new_dev->pdev = pdev;
+> > +		new_dev->cap_offset = off;
+> > +		new_dev->use_irq = use_irq;
+> > +
+> > +		/* Set up struct auxiliary_device */
+> > +		adev = &new_dev->adev;
+> > +		id = ida_alloc(&pci_doe_adev_ida, GFP_KERNEL);
+> > +		if (id < 0) {
+> > +			kfree(new_dev);
+> > +			return -ENOMEM;
+> > +		}
+> > +
+> > +		adev->id = id;
+> > +		adev->name = DOE_DEV_NAME;
+> > +		adev->dev.release = cxl_pci_doe_dev_release;
+> > +		adev->dev.parent = dev;
+> > +
+> > +		if (auxiliary_device_init(adev)) {
+> > +			cxl_pci_doe_dev_release(&adev->dev);
+> > +			return -EIO;
+> > +		}
+> > +
+> > +		if (auxiliary_device_add(adev)) {
+> > +			auxiliary_device_uninit(adev);
+> > +			return -EIO;
+> > +		}
+> > +
+> > +		rc = devm_add_action_or_reset(dev, cxl_pci_doe_destroy_device,
+> > +					      adev);
+> > +		if (rc)
+> > +			return rc;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >  static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+> >  {
+> >  	struct cxl_register_map map;
+> > @@ -630,6 +753,10 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+> >  	if (rc)
+> >  		return rc;
+> >  
+> > +	rc = cxl_pci_create_doe_devices(pdev);
+> > +	if (rc)
+> > +		return rc;
+> > +
+> >  	cxl_dvsec_ranges(cxlds);
+> >  
+> >  	cxlmd = devm_cxl_add_memdev(cxlds);
+> 

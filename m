@@ -2,138 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 805F551526D
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:39:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2050751526E
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379725AbiD2RnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 13:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43702 "EHLO
+        id S1379733AbiD2RnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 13:43:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379210AbiD2RnB (ORCPT
+        with ESMTP id S1379210AbiD2RnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 13:43:01 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B55728997
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:39:42 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TGw0cJ011947;
-        Fri, 29 Apr 2022 17:39:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : mime-version : message-id :
- content-type : content-transfer-encoding; s=pp1;
- bh=YoHa0fLQEkgm+3Igrqs1u82fd0eKrL3cNPKS8q/AGcs=;
- b=bh6pzVLD+JALzZUxG9/IYtCYv8tb0e7wZUDHzxVGH637nt81PrchE5i2K3rY6nqvuNE3
- vxfMkDFLMqdtShueEkai+pgunIfMy+c6T3QBRJB3hjmQ/xC0kzYtXu7NiHU3Rrk+ObKb
- Z1CoxBLs0LxC/mVa4dQVos5kCs3S8WAI4+fVBIjWLMvomjbtHWvUnVC1cEmd/Vhjllxk
- 50Tv3C/tVS5ayUgm2iTM+DiKYpmMftBTCrbkDKbVdokiYn7MfxsvnELk+DF9CyWGbFhI
- cvAy5SE/Evzpd15aVS0eNLFjqhqEpYPrtHxKlTdphWUYgryupNAkhtElIMm/3nvYCLXi iw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqt9efudn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 17:39:26 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23THVGSR002413;
-        Fri, 29 Apr 2022 17:39:26 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqt9efucs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 17:39:26 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23THbqX0031260;
-        Fri, 29 Apr 2022 17:39:23 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma05fra.de.ibm.com with ESMTP id 3fm938ygfe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 17:39:23 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23THdLdl48365836
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 29 Apr 2022 17:39:21 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4078511C04C;
-        Fri, 29 Apr 2022 17:39:21 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C675B11C04A;
-        Fri, 29 Apr 2022 17:39:20 +0000 (GMT)
-Received: from localhost (unknown [9.43.18.217])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 29 Apr 2022 17:39:20 +0000 (GMT)
-Date:   Fri, 29 Apr 2022 23:09:19 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH v2 2/2] ftrace: recordmcount: Handle sections with no
- non-weak symbols
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        llvm@lists.linux.dev, Michael Ellerman <mpe@ellerman.id.au>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-References: <cover.1651166001.git.naveen.n.rao@linux.vnet.ibm.com>
-        <126aca34935cf1c7168e17970c706e36577094e7.1651166001.git.naveen.n.rao@linux.vnet.ibm.com>
-        <20220428184212.18fbf438@gandalf.local.home>
-In-Reply-To: <20220428184212.18fbf438@gandalf.local.home>
-MIME-Version: 1.0
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1651252324.js9790ngjg.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: XjwigIEeW3HSn-VRBEuRqpTuXxv62pyz
-X-Proofpoint-ORIG-GUID: ed5zTfg3vACJAC1QySK7bIsb5o0AfjqR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-29_08,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- mlxscore=0 suspectscore=0 priorityscore=1501 spamscore=0 mlxlogscore=783
- adultscore=0 lowpriorityscore=0 impostorscore=0 clxscore=1015 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204290088
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 29 Apr 2022 13:43:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E211D0831
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:39:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B5979623E9
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 17:39:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 170D0C385A7;
+        Fri, 29 Apr 2022 17:39:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651253994;
+        bh=HC9TdVLo9keVPG6iukg9qEk+kO7QXIdsNKSS4mzp4X8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UGI7S8FNgdtcOXLEqKlU1tl5scm27Cx1qHZBOAOHmyGD+yaUU9lZjMPT70K4xzebr
+         /Dhy05YI0+gGeWUjvdZk3AaGGAp9EY75hmiBqCBpwjZAGGg1W3EQULqCV2oSPoU22M
+         K9MpWGNmFq67Oy2qofL2bZQ+pZyfUg0URG+d3bCW1eiq4QfQyYWwrEngS0YnxCmen7
+         uZv9JUwwUhUSLEcq7g0wrCZPUvzSHjMjj3PD8JLhJHNRQwFd5SdWwj6eQrGc9Vt9jJ
+         bP/M6kHI51qwfPO1xpMxRDmx2HmG+XrnKbkGh+maNzJpmty0yF5fidNtV0FFnjuptr
+         fMTM5eHhFjoIA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nkUat-00809D-JJ; Fri, 29 Apr 2022 18:39:51 +0100
+Date:   Fri, 29 Apr 2022 18:39:51 +0100
+Message-ID: <87pmkz94bc.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Daniel Thompson <daniel.thompson@linaro.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] irqchip/exiu: Fix acknowledgment of edge triggered interrupts
+In-Reply-To: <20220429165314.2343705-1-daniel.thompson@linaro.org>
+References: <20220429165314.2343705-1-daniel.thompson@linaro.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: daniel.thompson@linaro.org, tglx@linutronix.de, catalin.marinas@arm.com, will@kernel.org, ardb@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Steven Rostedt wrote:
-> On Thu, 28 Apr 2022 22:49:52 +0530
-> "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
->=20
->> But, with ppc64 elf abi v1 which only supports the old -pg flag, mcount
->> location can differ between the weak and non-weak variants of a
->> function. In such scenarios, one of the two mcount entries will be
->> invalid. Such architectures need to validate mcount locations by
->> ensuring that the instruction(s) at those locations are as expected. On
->> powerpc, this can be a simple check to ensure that the instruction is a
->> 'bl'. This check can be further tightened as necessary.
->=20
-> I was thinking about this more, and I was thinking that we could create
-> another section; Perhaps __mcount_loc_weak. And place these in that
-> section. That way, we could check if these symbols to see if there's
-> already a symbol for it, and if there is, then drop it.
+On Fri, 29 Apr 2022 17:53:14 +0100,
+Daniel Thompson <daniel.thompson@linaro.org> wrote:
+> 
+> Currently the EXIU uses the fasteoi interrupt flow that is configured by
+> it's parent (irq-gic-v3.c). With this flow the only chance to clear the
+> interrupt request happens during .irq_eoi() and (obviously) this happens
+> after the interrupt handler has run. EXIU requires edge triggered
+> interrupts to be acked prior to interrupt handling. Without this we
+> risk incorrect interrupt dismissal when a new interrupt is delivered
+> after the handler reads and acknowledges the peripheral but before the
+> irq_eoi() takes place.
+> 
+> Fix this by clearing the interrupt request from .irq_ack() if we are
+> configured for edge triggered interrupts. This requires adopting the
+> fasteoi-ack flow instead of the fasteoi to ensure the ack gets called.
+> 
+> These changes have been tested using the power button on a
+> Developerbox/SC2A11 combined with some hackery in gpio-keys so I can
+> play with the different trigger mode (and an mdelay(500) so I can
+> can check what happens on a double click in both modes.
+> 
+> Fixes: 706cffc1b912 ("irqchip/exiu: Add support for Socionext Synquacer EXIU controller")
+> Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
+> ---
+> 
+> Notes:
+>     Changes in v2:
+>     
+>      * Switch to dynamic selection of handle_fasteoi_irq and
+>        handle_fasteoi_ack_irq and reintroduce exiu_irq_eoi() since we need
+>        that for level triggered interrupts (Ard B).
+>      * Above changes mean we are no longer using sun6i NMI code as a
+>        template to tidy up the description accordingly.
+> 
+>  arch/arm64/Kconfig.platforms   |  1 +
+>  drivers/irqchip/irq-sni-exiu.c | 33 +++++++++++++++++++++++++++++----
+>  2 files changed, 30 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+> index 30b123cde02c..aaeaf57c8222 100644
+> --- a/arch/arm64/Kconfig.platforms
+> +++ b/arch/arm64/Kconfig.platforms
+> @@ -253,6 +253,7 @@ config ARCH_INTEL_SOCFPGA
+> 
+>  config ARCH_SYNQUACER
+>  	bool "Socionext SynQuacer SoC Family"
+> +	select IRQ_FASTEOI_HIERARCHY_HANDLERS
+> 
+>  config ARCH_TEGRA
+>  	bool "NVIDIA Tegra SoC Family"
+> diff --git a/drivers/irqchip/irq-sni-exiu.c b/drivers/irqchip/irq-sni-exiu.c
+> index abd011fcecf4..651a82dead01 100644
+> --- a/drivers/irqchip/irq-sni-exiu.c
+> +++ b/drivers/irqchip/irq-sni-exiu.c
+> @@ -37,11 +37,20 @@ struct exiu_irq_data {
+>  	u32		spi_base;
+>  };
+> 
+> -static void exiu_irq_eoi(struct irq_data *d)
+> +static void exiu_irq_ack(struct irq_data *d)
+>  {
+>  	struct exiu_irq_data *data = irq_data_get_irq_chip_data(d);
+> 
+>  	writel(BIT(d->hwirq), data->base + EIREQCLR);
+> +}
+> +
+> +static void exiu_irq_eoi(struct irq_data *d)
+> +{
+> +	struct exiu_irq_data *data = irq_data_get_irq_chip_data(d);
+> +	u32 edge_triggered = readl_relaxed(data->base + EIEDG);
 
-If I'm understanding your suggestion right:
-- we now create a new section in each object file: __mcount_loc_weak,=20
-  and capture such relocations using weak symbols there.
-- we then ask the linker to put these separately between, say,=20
-  __start_mcount_loc_weak and __stop_mcount_loc_weak
-- on ftrace init, we go through entries in this range, but discard those=20
-  that belong to functions that also have an entry between=20
-  __start_mcount_loc and __stop_mcount loc.
+I expect this to be pretty expensive. Why not directly check the state
+flags with irqd_is_level_type()?
 
-The primary issue I see here is that the mcount locations within the new=20
-weak section will end up being offsets from a different function in=20
-vmlinux, since the linker does not create a symbol for the weak=20
-functions that were over-ridden.
+> +
+> +	if (!(edge_triggered & BIT(d->hwirq)))
+> +		writel(BIT(d->hwirq), data->base + EIREQCLR);
 
-As an example, in the issue described in this patch set, if powerpc=20
-starts over-riding kexec_arch_apply_relocations(), then the current weak=20
-implementation in kexec_file.o gets carried over to the final vmlinux,=20
-but the instructions will instead appear under the previous function in=20
-kexec_file.o: crash_prepare_elf64_headers(). This function may or may=20
-not be traced to begin with, so we won't be able to figure out if this=20
-is valid or not.
+Is this write even needed for a level interrupt? Or does the register
+always behave as a latch irrespective of the trigger?
 
+>  	irq_chip_eoi_parent(d);
+>  }
+> 
+> @@ -91,10 +100,13 @@ static int exiu_irq_set_type(struct irq_data *d, unsigned int type)
+>  	writel_relaxed(val, data->base + EILVL);
+> 
+>  	val = readl_relaxed(data->base + EIEDG);
+> -	if (type == IRQ_TYPE_LEVEL_LOW || type == IRQ_TYPE_LEVEL_HIGH)
+> +	if (type == IRQ_TYPE_LEVEL_LOW || type == IRQ_TYPE_LEVEL_HIGH) {
+>  		val &= ~BIT(d->hwirq);
+> -	else
+> +		irq_set_handler_locked(d, handle_fasteoi_irq);
+> +	} else {
+>  		val |= BIT(d->hwirq);
+> +		irq_set_handler_locked(d, handle_fasteoi_ack_irq);
+> +	}
+>  	writel_relaxed(val, data->base + EIEDG);
+>
+>  	writel_relaxed(BIT(d->hwirq), data->base + EIREQCLR);
+> @@ -104,6 +116,7 @@ static int exiu_irq_set_type(struct irq_data *d, unsigned int type)
+> 
+>  static struct irq_chip exiu_irq_chip = {
+>  	.name			= "EXIU",
+> +	.irq_ack		= exiu_irq_ack,
+>  	.irq_eoi		= exiu_irq_eoi,
+>  	.irq_enable		= exiu_irq_enable,
+>  	.irq_mask		= exiu_irq_mask,
+> @@ -148,6 +161,8 @@ static int exiu_domain_alloc(struct irq_domain *dom, unsigned int virq,
+>  	struct irq_fwspec parent_fwspec;
+>  	struct exiu_irq_data *info = dom->host_data;
+>  	irq_hw_number_t hwirq;
+> +	int i, ret;
+> +	u32 edge_triggered;
+> 
+>  	parent_fwspec = *fwspec;
+>  	if (is_of_node(dom->parent->fwnode)) {
+> @@ -165,7 +180,17 @@ static int exiu_domain_alloc(struct irq_domain *dom, unsigned int virq,
+>  	irq_domain_set_hwirq_and_chip(dom, virq, hwirq, &exiu_irq_chip, info);
+> 
+>  	parent_fwspec.fwnode = dom->parent->fwnode;
+> -	return irq_domain_alloc_irqs_parent(dom, virq, nr_irqs, &parent_fwspec);
+> +	ret = irq_domain_alloc_irqs_parent(dom, virq, nr_irqs, &parent_fwspec);
+> +	if (ret)
+> +		return ret;
+> +
+> +	edge_triggered = readl_relaxed(info->base + EIEDG);
+> +	for (i = 0; i < nr_irqs; i++)
+> +		irq_set_handler(virq + i, edge_triggered & BIT(i) ?
+> +						  handle_fasteoi_ack_irq :
+> +							handle_fasteoi_irq);
+> +
+> +	return 0;
 
-- Naveen
+Why do you need this at allocation time? I would have expected the
+trigger configuration to be enough.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

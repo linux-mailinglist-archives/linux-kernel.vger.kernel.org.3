@@ -2,137 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4D2515030
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:03:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9552515032
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:03:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378759AbiD2QGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 12:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38606 "EHLO
+        id S1378764AbiD2QGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 12:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378450AbiD2QGf (ORCPT
+        with ESMTP id S1378762AbiD2QGm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 12:06:35 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD4769CF1
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:03:16 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2f83983782fso90040917b3.6
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:03:16 -0700 (PDT)
+        Fri, 29 Apr 2022 12:06:42 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9095E72E0F;
+        Fri, 29 Apr 2022 09:03:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=weVUNOweEKuBnOgbTT5sRsubKFtsUKuKJQ1Z2ZMEyQk=;
-        b=ktuMVBY3hzkXH24i9FvxhrVi5t/aZModgQunaWbvlAtnM53jhHuWMasNMZzQL5NU2v
-         IDW2KYoOMpVcSbret2ZelAh1luFQmP+z0q1h6YAt9090HrsVp+boZ/It7uTrSZ1AxOgr
-         fiAPxFp1uAWXbByuRmEGlIChZrg+R3g48Thg51O4qqE5akQ6tjZ3Jnav0cnBCvz9Amhm
-         WjzjSwc/chzd50zhhaQx7JDxy/W3Q1cxDoZseHtub6LFR0M+HrU1hNP18hHh6W6R9Awq
-         U4CLPUqtIJx4PzdOZ9Z3fvZbM0ZpJ/i4JJl4EiXanuD0+J6MAY2QLD1RR9yHvuJFk8xl
-         h+xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=weVUNOweEKuBnOgbTT5sRsubKFtsUKuKJQ1Z2ZMEyQk=;
-        b=PvIxcbBYkzqiIm3DmR0nHCTu/5fwDbj3uY3shPYabHdzRMvbPVZsWjGbSyCpQbU9oq
-         prw6bas4+YFebBO2/BONclFsDnBET+LzRmijuRhcqKzXd9XebxbhRT43XilrNfB1pMHi
-         mHEPX8uq33rVMSgjjuXoVmT5KSLHkALGry9wTdc+JnM0llNBpMp1s0p/zRmEWLwJRFd/
-         0gmTJeZjrHZzMh0+oiBZ5E1qYadpaNiXVJuUb7IxO/t0hlEMxU4H+plMAES3TPlawk5v
-         16Rg+eLfpFpbx1NxUkr2X20MMl3Af3Dh4snuBZ01dxEpQ1C/vzGsRnDD07B5jQz2YxC9
-         Qy7Q==
-X-Gm-Message-State: AOAM532KVMTJYCgMv1LI3/bzrhgcdPRTyWmPVb7cEYMSirQbIPYsQVZC
-        HHDaUeVxPhTumDAbM511PUKK5dYFwe9994HADFtJgw==
-X-Google-Smtp-Source: ABdhPJzk62ofT4JmF5QwOrBYsJ9viJWc9NtUrS4CcwDplIfqkHLFEiAGrAWs6uyCLeRCdBNGfPhopEY3GE0WTk+bBv0=
-X-Received: by 2002:a81:4c11:0:b0:2d1:1925:cd70 with SMTP id
- z17-20020a814c11000000b002d11925cd70mr38033089ywa.101.1651248194446; Fri, 29
- Apr 2022 09:03:14 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651248204; x=1682784204;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sSK/o9FhKlUdMjW2NdP5Bg7dQkRtO4bEr5mQPkXPNXs=;
+  b=tP5uiMhaIEVwDhNNk++kQsCk2nBi9S34OJdiD03ws7NkRWf4Znij5z/u
+   W3EhPQXpcoybhPU/fBorMt33oYchbgJJpicbuc0SuTN53fqTJ1gPa+Qep
+   nOys+pnbPvmBquqxxpVrtYdc81gkakqZ3wZm1+CLrBSuguCn8NAT4T7cy
+   4=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 29 Apr 2022 09:03:24 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 09:03:23 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 29 Apr 2022 09:03:22 -0700
+Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 29 Apr
+ 2022 09:03:19 -0700
+Date:   Fri, 29 Apr 2022 12:03:17 -0400
+From:   Qian Cai <quic_qiancai@quicinc.com>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+CC:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        <lkft-triage@lists.linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>, "Zi Yan" <ziy@nvidia.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David Hildenbrand" <david@redhat.com>,
+        Eric Ren <renzhengeek@gmail.com>,
+        "kernel test robot" <lkp@intel.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        "Mike Rapoport" <rppt@linux.ibm.com>,
+        Minchan Kim <minchan@kernel.org>,
+        "Oscar Salvador" <osalvador@suse.de>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Chen Wandun <chenwandun@huawei.com>, NeilBrown <neilb@suse.de>,
+        <joao.m.martins@oracle.com>, <mawupeng1@huawei.com>,
+        Wei Yang <richard.weiyang@gmail.com>,
+        Song Liu <song@kernel.org>
+Subject: Re: [next] mm: libhugetlbfs: WARNING: at mm/page_alloc.c:5368
+ __alloc_pages
+Message-ID: <20220429160317.GA71@qian>
+References: <CA+G9fYveMF-NU-rvrsbaora2g2QWxrkF7AWViuDrJyN9mNScJg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220429121739.28584-1-ansuelsmth@gmail.com> <20220429121739.28584-4-ansuelsmth@gmail.com>
- <1651247596.124069.2344494.nullmailer@robh.at.kernel.org> <626c0b64.1c69fb81.1b1e9.4fe6@mx.google.com>
-In-Reply-To: <626c0b64.1c69fb81.1b1e9.4fe6@mx.google.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Fri, 29 Apr 2022 19:03:03 +0300
-Message-ID: <CAA8EJpr4Qsiop5_6Ad1dT-i-xc4RkOot9UedDtp6ViEYpc46DA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] dt-bindings: arm: msm: Convert kpss-gcc driver
- Documentation to yaml
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYveMF-NU-rvrsbaora2g2QWxrkF7AWViuDrJyN9mNScJg@mail.gmail.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 29 Apr 2022 at 18:59, Ansuel Smith <ansuelsmth@gmail.com> wrote:
->
-> On Fri, Apr 29, 2022 at 10:53:16AM -0500, Rob Herring wrote:
-> > On Fri, 29 Apr 2022 14:17:39 +0200, Ansuel Smith wrote:
-> > > Convert kpss-gcc driver Documentation to yaml.
-> > >
-> > > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > > ---
-> > >  .../bindings/arm/msm/qcom,kpss-gcc.txt        | 44 -------------
-> > >  .../bindings/arm/msm/qcom,kpss-gcc.yaml       | 63 +++++++++++++++++++
-> > >  2 files changed, 63 insertions(+), 44 deletions(-)
-> > >  delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
-> > >  create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
-> > >
-> >
-> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> >
-> > yamllint warnings/errors:
-> >
-> > dtschema/dtc warnings/errors:
-> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml: properties: '#clock-cells' is a dependency of 'clock-output-names'
->
-> Erm how to fix this? I can't do a 1:1 conversion if the source was
-> wrong and also have no bot warning.
-> Or I should just push an additional patch to fix this error after the
-> conversion?
+On Fri, Apr 29, 2022 at 04:50:25PM +0530, Naresh Kamboju wrote:
+> Following kernel warning notices on Linux next-20220427 till date next-20220429
+> on qemu_arm64 and arm64 devices.
+> 
+> While testing libhugetlbfs test suite and ltp mm and hugetlb.
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> Test log:
+> ----------
+> truncate_above_4GB (2M: 64): PASS
+> brk_near_huge (2M: 64): brk_near_huge: malloc.c:2401: sysmalloc:
+> Assertion `(old_top == initial_top (av) && old_size == 0) ||
+> ((unsigned long) (old_size) >= MINSIZE && prev_inuse (old_top) &&
+> ((unsigned long) old_end & (pagesize - 1)) == 0)' failed.
+> [   15.685019] audit: type=1701 audit(1651222753.772:25):
+> auid=4294967295 uid=0 gid=0 ses=4294967295 pid=454
+> comm=\"brk_near_huge\"
+> exe=\"/usr/lib/libhugetlbfs/tests/obj64/brk_near_huge\" sig=6 res=1
+> [   15.685629] ------------[ cut here ]------------
+> [   15.685631] WARNING: CPU: 2 PID: 454 at mm/page_alloc.c:5368
 
-You can fix obvious simple mistakes and describe your chains in the
-commit message.
+Naresh, I am having difficult to reproduce this reliablely. If you have
+spare cycles, do you mind reverting those to see if you can still
+reproduce? I can't seems to find other recent commits more suspicious
+than that series.
 
->
-> >       from schema $id: http://devicetree.org/meta-schemas/clocks.yaml#
-> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml: ignoring, error in schema: properties
-> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.example.dtb: clock-controller@2011000: '#clock-cells' is a dependency of 'clock-output-names'
-> >       From schema: /usr/local/lib/python3.10/dist-packages/dtschema/schemas/clock/clock.yaml
-> > Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.example.dtb:0:0: /example-0/clock-controller@2011000: failed to match any schema with compatible: ['qcom,kpss-gcc-ipq8064', 'qcom,kpss-gcc']
-> > Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.example.dtb:0:0: /example-0/clock-controller@2011000: failed to match any schema with compatible: ['qcom,kpss-gcc-ipq8064', 'qcom,kpss-gcc']
-> >
-> > doc reference errors (make refcheckdocs):
-> >
-> > See https://patchwork.ozlabs.org/patch/
-> >
-> > This check can fail if there are any dependencies. The base for a patch
-> > series is generally the most recent rc1.
-> >
-> > If you already ran 'make dt_binding_check' and didn't see the above
-> > error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> > date:
-> >
-> > pip3 install dtschema --upgrade
-> >
-> > Please check and re-submit.
-> >
->
-> --
->         Ansuel
+37e73e3b0a9d drivers: virtio_mem: use pageblock size as the minimum virtio_mem size.
+d2b9cd2acb2b mm: cma: use pageblock_order as the single alignment
+7f125582227e mm: page_isolation: enable arbitrary range page isolation.
+fb009b307b21 mm: make alloc_contig_range work at pageblock granularity
+7c7e18d510f4 mm: page_isolation: check specified range for unmovable pages
+6a242a94b883 mm: page_isolation: move has_unmovable_pages() to mm/page_isolation.c
 
-
-
--- 
-With best wishes
-Dmitry
+$ git revert --no-edit e389355485b7..37e73e3b0a9d

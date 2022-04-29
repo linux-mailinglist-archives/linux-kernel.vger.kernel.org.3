@@ -2,107 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C9E751405D
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 03:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBD08514059
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 03:43:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354065AbiD2Byz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 21:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46588 "EHLO
+        id S1354045AbiD2BpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 21:45:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231922AbiD2Byy (ORCPT
+        with ESMTP id S231922AbiD2BpC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 21:54:54 -0400
-Received: from nksmu.kylinos.cn (mailgw.kylinos.cn [123.150.8.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108CA78FDD
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 18:51:34 -0700 (PDT)
-X-UUID: 2ab20950c02e4493b64e1d83814cadc0-20220429
-X-UUID: 2ab20950c02e4493b64e1d83814cadc0-20220429
-Received: from cs2c.com.cn [(172.17.111.24)] by nksmu.kylinos.cn
-        (envelope-from <pengfuyuan@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 54080229; Fri, 29 Apr 2022 09:49:55 +0800
-X-ns-mid: postfix-626B449E-3508122180
-Received: from localhost.localdomain (unknown [172.20.4.120])
-        by cs2c.com.cn (NSMail) with ESMTPA id 20BCC3848647;
-        Fri, 29 Apr 2022 01:51:26 +0000 (UTC)
-From:   pengfuyuan <pengfuyuan@kylinos.cn>
-To:     Alex Deucher <alexander.deucher@amd.com>
-Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        pengfuyuan <pengfuyuan@kylinos.cn>
-Subject: [PATCH] gpu/drm/radeon: Fix spelling typo in comments
-Date:   Fri, 29 Apr 2022 09:51:14 +0800
-Message-Id: <20220429015114.29795-1-pengfuyuan@kylinos.cn>
+        Thu, 28 Apr 2022 21:45:02 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075FD60074;
+        Thu, 28 Apr 2022 18:41:46 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KqFYq13l9zfb2d;
+        Fri, 29 Apr 2022 09:40:47 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 29 Apr 2022 09:41:43 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 29 Apr
+ 2022 09:41:43 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <grygorii.strashko@ti.com>, <davem@davemloft.net>,
+        <kuba@kernel.org>
+Subject: [PATCH v2] net: cpsw: add missing of_node_put() in cpsw_probe_dt()
+Date:   Fri, 29 Apr 2022 09:53:37 +0800
+Message-ID: <20220429015337.934328-1-yangyingliang@huawei.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix spelling typo in comments.
+'tmp_node' need be put before returning from cpsw_probe_dt(),
+so add missing of_node_put() in error path.
 
-Signed-off-by: pengfuyuan <pengfuyuan@kylinos.cn>
+Fixes: ed3525eda4c4 ("net: ethernet: ti: introduce cpsw switchdev based driver part 1 - dual-emac")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- drivers/gpu/drm/radeon/atombios.h | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+v2:
+   add of_node_put() at label 'err_node_put'.
+---
+ drivers/net/ethernet/ti/cpsw_new.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/radeon/atombios.h b/drivers/gpu/drm/radeon/atombios.h
-index bd5dc09e860f..da35a970fcc0 100644
---- a/drivers/gpu/drm/radeon/atombios.h
-+++ b/drivers/gpu/drm/radeon/atombios.h
-@@ -3599,7 +3599,7 @@ typedef struct  _ATOM_LCD_RTS_RECORD
-   UCHAR     ucRTSValue;
- }ATOM_LCD_RTS_RECORD;
+diff --git a/drivers/net/ethernet/ti/cpsw_new.c b/drivers/net/ethernet/ti/cpsw_new.c
+index bd4b1528cf99..79e850fe4621 100644
+--- a/drivers/net/ethernet/ti/cpsw_new.c
++++ b/drivers/net/ethernet/ti/cpsw_new.c
+@@ -1246,8 +1246,10 @@ static int cpsw_probe_dt(struct cpsw_common *cpsw)
+ 	data->slave_data = devm_kcalloc(dev, CPSW_SLAVE_PORTS_NUM,
+ 					sizeof(struct cpsw_slave_data),
+ 					GFP_KERNEL);
+-	if (!data->slave_data)
++	if (!data->slave_data) {
++		of_node_put(tmp_node);
+ 		return -ENOMEM;
++	}
  
--//!! If the record below exits, it shoud always be the first record for easy use in command table!!! 
-+//!! If the record below exists, it should always be the first record for easy use in command table!!!
- // The record below is only used when LVDS_Info is present. From ATOM_LVDS_INFO_V12, use ucLCDPanel_SpecialHandlingCap instead.
- typedef struct  _ATOM_LCD_MODE_CONTROL_CAP
- {
-@@ -3823,7 +3823,7 @@ typedef struct _ATOM_DPCD_INFO
- // Note1: This table is filled by SetBiosReservationStartInFB in CoreCommSubs.asm
- //        at running time.   
- // note2: From RV770, the memory is more than 32bit addressable, so we will change 
--//        ucTableFormatRevision=1,ucTableContentRevision=4, the strcuture remains 
-+//        ucTableFormatRevision=1,ucTableContentRevision=4, the structure remains
- //        exactly same as 1.1 and 1.2 (1.3 is never in use), but ulStartAddrUsedByFirmware 
- //        (in offset to start of memory address) is KB aligned instead of byte aligend.
- /***********************************************************************************/	
-@@ -3858,7 +3858,7 @@ typedef struct _ATOM_VRAM_USAGE_BY_FIRMWARE
-   ATOM_FIRMWARE_VRAM_RESERVE_INFO	asFirmwareVramReserveInfo[ATOM_MAX_FIRMWARE_VRAM_USAGE_INFO];
- }ATOM_VRAM_USAGE_BY_FIRMWARE;
+ 	/* Populate all the child nodes here...
+ 	 */
+@@ -1341,6 +1343,7 @@ static int cpsw_probe_dt(struct cpsw_common *cpsw)
  
--// change verion to 1.5, when allow driver to allocate the vram area for command table access. 
-+// change version to 1.5, when allow driver to allocate the vram area for command table access.
- typedef struct _ATOM_FIRMWARE_VRAM_RESERVE_INFO_V1_5
- {
-   ULONG   ulStartAddrUsedByFirmware;
-@@ -5973,7 +5973,7 @@ typedef struct _ATOM_ASIC_INTERNAL_SS_INFO_V3
- #define CLEAR_ATOM_S7_DOS_8BIT_DAC_EN         ((ATOM_DOS_MODE_INFO_DEF << 8 )|ATOM_S7_DOS_8BIT_DAC_EN_SHIFT | ATOM_FLAG_CLEAR )
+ err_node_put:
+ 	of_node_put(port_np);
++	of_node_put(tmp_node);
+ 	return ret;
+ }
  
- /****************************************************************************/	
--//Portion II: Definitinos only used in Driver
-+//Portion II: Definitions only used in Driver
- /****************************************************************************/
- 
- // Macros used by driver
-@@ -7162,7 +7162,7 @@ typedef struct _DP_ENCODER_SERVICE_PARAMETERS
- 
- // ucAction
- #define ATOM_DP_ACTION_GET_SINK_TYPE							0x01
--/* obselete */
-+/* obsolete */
- #define ATOM_DP_ACTION_TRAINING_START							0x02
- #define ATOM_DP_ACTION_TRAINING_COMPLETE					0x03
- #define ATOM_DP_ACTION_TRAINING_PATTERN_SEL				0x04
 -- 
 2.25.1
 

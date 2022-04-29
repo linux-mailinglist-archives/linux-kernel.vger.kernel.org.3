@@ -2,95 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1253A5144C5
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 10:48:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9130B5144D3
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 10:50:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356127AbiD2Iur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 04:50:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33156 "EHLO
+        id S1355952AbiD2Ivf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 04:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356054AbiD2Ium (ORCPT
+        with ESMTP id S234027AbiD2Ivd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 04:50:42 -0400
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D225AEF1;
-        Fri, 29 Apr 2022 01:47:24 -0700 (PDT)
-Received: by mail-qt1-f173.google.com with SMTP id o11so5205606qtp.13;
-        Fri, 29 Apr 2022 01:47:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6sgYQJjr5iy1crCmQpq1/lmSUnF0hBfImD2gP+L9eDc=;
-        b=4uY4ppyIdKDbDxNN7tTtmt8AlTB7kdlncJ6qQAuh1e5AcfDP/xKWMsqerhmKZ4bpZ9
-         bjecum1pd5/QDGx42nbrymXH+3evwtgIXODUv1yB9t1eIwbJ1tzG7CrInF6g++Cgd2p7
-         BBHGrE3bwm0uznLUhlWreJ4s4zIOLAioj5n6yuWNJBOALhApzfQgW2+XaARn+eD0rIR5
-         cpPksRXB67S3yw0Zf+fomBXu7+Izr3b9Hr8naQKD+gdmdiDX2lzyEedxl8vM78363YX4
-         gxqtL6GFoxeZt1RXv5FzMR+qU07Q7q0j9KjcqvDrjNrkoWV4vf9PrtcvnNvm4yoLg1QJ
-         P8hw==
-X-Gm-Message-State: AOAM532NJQZru6jGiEq8jP8qiOg3UsrmtNp8rV5bFi3xpXgI8RqwLnt3
-        EcJaOlBqx8yjEDJE80zTfqvhzjyKG+Jzg3fS
-X-Google-Smtp-Source: ABdhPJxsCBXW4jKd3h6bCRDYJ1tHvRExlFkV205y9J+SRhreYu+eDwv4UR+mhu53Nud44hJ9h8j8ZA==
-X-Received: by 2002:ac8:4e86:0:b0:2f3:6a2f:ef75 with SMTP id 6-20020ac84e86000000b002f36a2fef75mr16651069qtp.588.1651222043093;
-        Fri, 29 Apr 2022 01:47:23 -0700 (PDT)
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
-        by smtp.gmail.com with ESMTPSA id x24-20020ac87318000000b002f1fc5fcaedsm1303607qto.68.2022.04.29.01.47.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 01:47:22 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id f38so13339465ybi.3;
-        Fri, 29 Apr 2022 01:47:21 -0700 (PDT)
-X-Received: by 2002:a5b:984:0:b0:63f:8c38:676c with SMTP id
- c4-20020a5b0984000000b0063f8c38676cmr35590406ybq.393.1651222041398; Fri, 29
- Apr 2022 01:47:21 -0700 (PDT)
+        Fri, 29 Apr 2022 04:51:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6E466227;
+        Fri, 29 Apr 2022 01:48:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EBA17B83394;
+        Fri, 29 Apr 2022 08:48:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BA73C385A4;
+        Fri, 29 Apr 2022 08:48:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651222093;
+        bh=87vkewPttramOVIcEGiZZilW3jikdo1ermvWTGQSA6M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1vEEyHcCS+swJ3HoxwS3PVJUumwAb+J5cjF6PWRPqDacMvpJ0YvQD3R9XzzK9qE+M
+         PO9owsPO+QUbjZ8s34lXo+FAnvFSVGpeXaqNQRKoiOLfXFo76UG9bhNFJWyZQ2uO9a
+         Tn0y08l6TJ4/F+P/8BcZuIJZs1We5x/iX7JTOljM=
+Date:   Fri, 29 Apr 2022 10:48:10 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sebastian Ene <sebastianene@google.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        maz@kernel.org, will@kernel.org, qperret@google.com,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v4 2/2] misc: Add a mechanism to detect stalls on guest
+ vCPUs
+Message-ID: <YmumSgiTrQUWoXsb@kroah.com>
+References: <20220429083030.3241640-1-sebastianene@google.com>
+ <20220429083030.3241640-3-sebastianene@google.com>
 MIME-Version: 1.0
-References: <20220428093355.16172-1-jiaxin.yu@mediatek.com>
-In-Reply-To: <20220428093355.16172-1-jiaxin.yu@mediatek.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 29 Apr 2022 10:47:10 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWYJofetMwkAH4d8UzKZH77hxwRhXrMhaECOs1suQV2PA@mail.gmail.com>
-Message-ID: <CAMuHMdWYJofetMwkAH4d8UzKZH77hxwRhXrMhaECOs1suQV2PA@mail.gmail.com>
-Subject: Re: [v4 00/18] ASoC: mediatek: Add support for MT8186 SoC
-To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, aaronyu@google.com,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Trevor Wu <trevor.wu@mediatek.com>,
-        Tzung-Bi Shih <tzungbi@google.com>,
-        Julian Braha <julianbraha@gmail.com>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-mediatek@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220429083030.3241640-3-sebastianene@google.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jiaxin,
+On Fri, Apr 29, 2022 at 08:30:33AM +0000, Sebastian Ene wrote:
+> This driver creates per-cpu hrtimers which are required to do the
+> periodic 'pet' operation. On a conventional watchdog-core driver, the
+> userspace is responsible for delivering the 'pet' events by writing to
+> the particular /dev/watchdogN node. In this case we require a strong
+> thread affinity to be able to account for lost time on a per vCPU.
+> 
+> This part of the driver is the 'frontend' which is reponsible for
+> delivering the periodic 'pet' events, configuring the virtual peripheral
+> and listening for cpu hotplug events. The other part of the driver
+> handles the peripheral emulation and this part accounts for lost time by
+> looking at the /proc/{}/task/{}/stat entries and is located here:
+> https://chromium-review.googlesource.com/c/chromiumos/platform/crosvm/+/3548817
+> 
+> Signed-off-by: Sebastian Ene <sebastianene@google.com>
+> ---
+>  drivers/misc/Kconfig       |  12 +++
+>  drivers/misc/Makefile      |   1 +
+>  drivers/misc/vm-watchdog.c | 206 +++++++++++++++++++++++++++++++++++++
+>  3 files changed, 219 insertions(+)
+>  create mode 100644 drivers/misc/vm-watchdog.c
+> 
+> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+> index 2b9572a6d114..26c3a99e269c 100644
+> --- a/drivers/misc/Kconfig
+> +++ b/drivers/misc/Kconfig
+> @@ -493,6 +493,18 @@ config OPEN_DICE
+>  
+>  	  If unsure, say N.
+>  
+> +config VM_WATCHDOG
+> +	tristate "Virtual Machine Watchdog"
+> +	select LOCKUP_DETECTOR
+> +	help
+> +	  Detect CPU locks on the virtual machine. This driver relies on the
+> +	  hrtimers which are CPU-binded to do the 'pet' operation. When a vCPU
+> +	  has to do a 'pet', it exits the guest through MMIO write and the
+> +	  backend driver takes into account the lost ticks for this particular
+> +	  CPU.
+> +	  To compile this driver as a module, choose M here: the
+> +	  module will be called vm-wdt.
 
-Gmail tends to mark your patches as spam.
-Can you please make sure to use "PATCH" in the subject line, e.g.
-"[PATCH v4 00/18] ASoC: mediatek: Add support for MT8186 SoC"?
+You forgot to name the module properly here based on the Makefile change
+you made.
 
-Thanks!
+And again, as this is called a "watchdog", it seems crazy that it is not
+in drivers/watchdog/
 
-Gr{oetje,eeting}s,
+{sigh}
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+greg k-h

@@ -2,80 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 903145140C0
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 05:07:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB3685140CD
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 05:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234944AbiD2DGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 23:06:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52798 "EHLO
+        id S235003AbiD2DHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 23:07:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234847AbiD2DGt (ORCPT
+        with ESMTP id S234948AbiD2DHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 23:06:49 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0154BB099
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 20:03:31 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id v10so5495024pgl.11
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 20:03:31 -0700 (PDT)
+        Thu, 28 Apr 2022 23:07:47 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF94BF330
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 20:04:30 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d11so161636plg.10
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 20:04:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KwG0dBZAtUlJq4flAZ0bcC8rm0sfzvBpurp6isyuVBA=;
-        b=TnrvclRCXJuSLVLTamfGkcqixDJgV3F2Tp4XJK7Z1XxhiP+jQP1AB1xT8k3aDDGkI2
-         W08WTwz+Kc5JsncQtMRJnVGrhyZAZQD8os1T6+G5rJ0ik362CejOYoO5N9sQ/n+j5YWP
-         nxiuBoquNJbxMRT1iO+u2etLWDmxe43oTpMytBo9lq1fvjvLdaQ512jthQXYG8Oj/3rK
-         +uwbTkxx60XnW++MoENfsnpp8h6fYcV6jqN2ZoAHzl3w3OIKv02Djgfs32S1+l8C0fpE
-         iDMOqMUZXybAgnSG8ik+b6XIlpUJkdvE+PLfoPw0hQhv8H0PnZq0YFrQc7aUOQS1y0kG
-         miUA==
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5VVgFc+AWvo5UdP8jPH8kMYu27hfTPHx7TcE08ruWnQ=;
+        b=IR/xKb+GabRkSbkhHaocsMPuhj4+DswB7PeaFqXyL5ZCswzf+2jRMoChLc7LEI6GoG
+         pWpKwQrOX3hFPBUwyDnlNrEbg4iGQ1/BRI22Yj6Ow/FLmxaasrJK5GHJ9mOYCBB8VX7p
+         vOhomVSn/Jb9cvvd3HyWrCIRQDpD2CVgCnIjhGXjhbazcInjTmXGM0Em/R0Lp+kAsF+1
+         XnnFuduYAprfX1W2w09E2RkF9QA8/VG3WSAUI3pCasm2GnuCJqWwQgFzifBD56dL/f4e
+         YZP++qNEiK7Wc9Y7tYIAYrfNr+S0n/ZhxX+ZT5daJZ/dFaFSBhn/MYis8k8LQufVqY96
+         POPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KwG0dBZAtUlJq4flAZ0bcC8rm0sfzvBpurp6isyuVBA=;
-        b=wf7pDgwtYGFHKNcE4O2D6Vw/DmT1hc6SlRQpZoSyivznkMumOxCrf8XA9Rq5BTD2g5
-         9msP5lSYwpRhz/oPafSBxt8y2kN3l7LDczTFlAqDE5BXRYZJ3Rw6Kq/tDl2R602d7BCW
-         ortYyCjkep4OOzmNdm2GyhGt+nx7RqzO/piOzLro+SJ++fGY+s03scm1JSguzDBQCJX6
-         mT4baizMq7Ywn0Y8uKFxB0UXBIINDVO5tG5EliJFx4ooFdFy2Gdzh5VGl730iBg0IUxB
-         9UajOTzPxqSjSY8Qy8FDA71mNUX8/MaIBrr3W1ZFUe0cMprRSa+oR15q+JkN9rvftskY
-         yXFw==
-X-Gm-Message-State: AOAM533IyGh4vGcxmZevri6R/iN3LIeOYipTKdsuft0NJ/nf8xMpgSoP
-        GDJLL0F2SYERBcInOPowfzhykQVsgMw=
-X-Google-Smtp-Source: ABdhPJyAz8st7YtkDR71dQ1qCyeF6Uw6tFchg6fIQC3YjvC/7Shtyawb8tu0nMu0b9EWESccQXfMcQ==
-X-Received: by 2002:a63:83c6:0:b0:3ab:5027:374b with SMTP id h189-20020a6383c6000000b003ab5027374bmr19044037pge.284.1651201410961;
-        Thu, 28 Apr 2022 20:03:30 -0700 (PDT)
-Received: from [192.168.50.247] ([103.84.139.165])
-        by smtp.gmail.com with ESMTPSA id b4-20020a63d804000000b003c14af50604sm4292847pgh.28.2022.04.28.20.03.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 20:03:30 -0700 (PDT)
-Message-ID: <37a48008-0700-7c60-30d6-ac2f4152114c@gmail.com>
-Date:   Fri, 29 Apr 2022 11:03:26 +0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5VVgFc+AWvo5UdP8jPH8kMYu27hfTPHx7TcE08ruWnQ=;
+        b=fgKnTwELy8Q3Jt8X/UzEu4c+BbAhlbfiyKPEPaXE50SSEEJ+X60Npd1+8X3kBM4clK
+         DVMv2lRQicIFRChcsMSiFGyFmEep+C423DFNf/ZTsZEHXXShe3FIULQ+Gx0RvvLK07ah
+         TmVax6kx3dt31r8i9x8dfTtcI5CJGQP5gcF0KJHDLtezgiNHg6vwRI8wXRQGxvvRaVsc
+         0iLMXa4jodMmsQuQeUaWmmgPKPu4y+Jda7lKkrUTXyYBs/479nZq4orh5VpdaSDSEQ3j
+         2tNlR9+6KS50QQCi7WvyPjYiSQX0BodcF5Ut++VddDeuRKQzyxoM2a7dmLGTTWE7JF/x
+         efpg==
+X-Gm-Message-State: AOAM533IHGM9imlyBDwAKglqeHEtvkt7dDGiBKROkEqvGDvUqo03lU2P
+        2qpdHiEWTfB36C+l7wAUKac4ZCVHq28amxOvdrKyRA==
+X-Google-Smtp-Source: ABdhPJzlzgG4+md3WPt7mPqg66q3zRmdw58tFxmZdy9Oa/PGMQN0pBnrwycAdpTKW4vv20P5zf/JoPGGGTJNqlAMYHk=
+X-Received: by 2002:a17:902:7296:b0:14b:4bc6:e81 with SMTP id
+ d22-20020a170902729600b0014b4bc60e81mr36466562pll.132.1651201470117; Thu, 28
+ Apr 2022 20:04:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] gpu: drm: remove redundant dma_fence_put() when
- drm_sched_job_add_dependency() fails
-Content-Language: en-US
-To:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>, yuq825@gmail.com,
-        airlied@linux.ie, daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220425083645.25922-1-hbh25y@gmail.com>
- <b7d8956e-5ac6-8200-d8b1-4ce828f04665@amd.com>
- <79b198d0-eff2-d658-4b5e-9084a834fc93@gmail.com>
- <e26e6ef8-6665-0b9d-804f-cf107f1788d4@amd.com>
- <88dd5d67-7dd5-2f58-5254-adaa941deb0f@gmail.com>
- <65b6cc23-1a77-7df0-5768-f81cd03b6514@amd.com>
- <d0790635-4b2e-cd58-0a51-36427800b39c@gmail.com>
- <9b91e06c-50fd-b567-7d2b-a2597d01c4dc@amd.com>
-From:   Hangyu Hua <hbh25y@gmail.com>
-In-Reply-To: <9b91e06c-50fd-b567-7d2b-a2597d01c4dc@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <cover.1649219184.git.kai.huang@intel.com> <522e37eb-68fc-35db-44d5-479d0088e43f@intel.com>
+ <ecf718abf864bbb2366209f00d4315ada090aedc.camel@intel.com>
+ <de24ac7e-349c-e49a-70bb-31b9bc867b10@intel.com> <9b388f54f13b34fe684ef77603fc878952e48f87.camel@intel.com>
+ <d98ca73b-2d2d-757d-e937-acc83cfedfb0@intel.com> <c90a10763969077826f42be6f492e3a3e062326b.camel@intel.com>
+ <fc1ca04d94ad45e79c0297719d5ef50a7c33c352.camel@intel.com>
+In-Reply-To: <fc1ca04d94ad45e79c0297719d5ef50a7c33c352.camel@intel.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Thu, 28 Apr 2022 20:04:19 -0700
+Message-ID: <CAPcyv4gEwjnNE9cWb_KLZ6C7-UxKdUMZKFPF+LAJ4L1SjByisw@mail.gmail.com>
+Subject: Re: [PATCH v3 00/21] TDX host kernel support
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,360 +82,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/28 23:27, Andrey Grodzovsky wrote:
-> 
-> On 2022-04-28 04:56, Hangyu Hua wrote:
->> On 2022/4/27 22:43, Andrey Grodzovsky wrote:
->>>
->>> On 2022-04-26 22:31, Hangyu Hua wrote:
->>>> On 2022/4/26 22:55, Andrey Grodzovsky wrote:
->>>>>
->>>>> On 2022-04-25 22:54, Hangyu Hua wrote:
->>>>>> On 2022/4/25 23:42, Andrey Grodzovsky wrote:
->>>>>>> On 2022-04-25 04:36, Hangyu Hua wrote:
->>>>>>>
->>>>>>>> When drm_sched_job_add_dependency() fails, dma_fence_put() will 
->>>>>>>> be called
->>>>>>>> internally. Calling it again after 
->>>>>>>> drm_sched_job_add_dependency() finishes
->>>>>>>> may result in a dangling pointer.
->>>>>>>>
->>>>>>>> Fix this by removing redundant dma_fence_put().
->>>>>>>>
->>>>>>>> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
->>>>>>>> ---
->>>>>>>>   drivers/gpu/drm/lima/lima_gem.c        | 1 -
->>>>>>>>   drivers/gpu/drm/scheduler/sched_main.c | 1 -
->>>>>>>>   2 files changed, 2 deletions(-)
->>>>>>>>
->>>>>>>> diff --git a/drivers/gpu/drm/lima/lima_gem.c 
->>>>>>>> b/drivers/gpu/drm/lima/lima_gem.c
->>>>>>>> index 55bb1ec3c4f7..99c8e7f6bb1c 100644
->>>>>>>> --- a/drivers/gpu/drm/lima/lima_gem.c
->>>>>>>> +++ b/drivers/gpu/drm/lima/lima_gem.c
->>>>>>>> @@ -291,7 +291,6 @@ static int lima_gem_add_deps(struct drm_file 
->>>>>>>> *file, struct lima_submit *submit)
->>>>>>>>           err = 
->>>>>>>> drm_sched_job_add_dependency(&submit->task->base, fence);
->>>>>>>>           if (err) {
->>>>>>>> -            dma_fence_put(fence);
->>>>>>>>               return err;
->>>>>>>
->>>>>>>
->>>>>>> Makes sense here
->>>>>>>
->>>>>>>
->>>>>>>>           }
->>>>>>>>       }
->>>>>>>> diff --git a/drivers/gpu/drm/scheduler/sched_main.c 
->>>>>>>> b/drivers/gpu/drm/scheduler/sched_main.c
->>>>>>>> index b81fceb0b8a2..ebab9eca37a8 100644
->>>>>>>> --- a/drivers/gpu/drm/scheduler/sched_main.c
->>>>>>>> +++ b/drivers/gpu/drm/scheduler/sched_main.c
->>>>>>>> @@ -708,7 +708,6 @@ int 
->>>>>>>> drm_sched_job_add_implicit_dependencies(struct drm_sched_job *job,
->>>>>>>>           dma_fence_get(fence);
->>>>>>>>           ret = drm_sched_job_add_dependency(job, fence);
->>>>>>>>           if (ret) {
->>>>>>>> -            dma_fence_put(fence);
->>>>>>>
->>>>>>>
->>>>>>>
->>>>>>> Not sure about this one since if you look at the relevant commits -
->>>>>>> 'drm/scheduler: fix drm_sched_job_add_implicit_dependencies' and
->>>>>>> 'drm/scheduler: fix drm_sched_job_add_implicit_dependencies harder'
->>>>>>> You will see that the dma_fence_put here balances the extra 
->>>>>>> dma_fence_get
->>>>>>> above
->>>>>>>
->>>>>>> Andrey
->>>>>>>
->>>>>>
->>>>>> I don't think so. I checked the call chain and found no additional 
->>>>>> dma_fence_get(). But dma_fence_get() needs to be called before 
->>>>>> drm_sched_job_add_dependency() to keep the counter balanced. 
->>>>>
->>>>>
->>>>> I don't say there is an additional get, I just say that 
->>>>> drm_sched_job_add_dependency doesn't grab an extra reference to the 
->>>>> fences it stores so this needs to be done outside and for that
->>>>> drm_sched_job_add_implicit_dependencies->dma_fence_get is called 
->>>>> and, if this addition fails you just call dma_fence_put to keep the 
->>>>> counter balanced.
->>>>>
->>>>
->>>> drm_sched_job_add_implicit_dependencies() will call 
->>>> drm_sched_job_add_dependency(). And drm_sched_job_add_dependency() 
->>>> already call dma_fence_put() when it fails. Calling dma_fence_put() 
->>>> twice doesn't make sense.
->>>>
->>>> dma_fence_get() is in [2]. But dma_fence_put() will be called in [1] 
->>>> and [3] when xa_alloc() fails.
->>>
->>>
->>> The way I see it, [2] and [3] are mat matching *get* and *put* 
->>> respectively. [1] *put* is against the original 
->>> dma_fence_init->kref_init of the fence which always set the refcount 
->>> at 1.
->>> Also in support of this see commit 'drm/scheduler: fix 
->>> drm_sched_job_add_implicit_dependencies harder' - it says there 
->>> "drm_sched_job_add_dependency() could drop the last ref"  - this last 
->>> ref is the original refcount set by dma_fence_init->kref
->>>
->>> Andrey
->>
->>
->> You can see that drm_sched_job_add_dependency() has three return paths 
->> they are [4], [5] and [1]. [4] and [5] will return 0. [1] will return 
->> error.
->>
->> There will be three weird problems if you're right:
->>
->> 1. [5] path will triger a refcount leak beacause ret is 0 in *if*[6]. 
-> 
-> 
-> Terminology confusion issue - [5] is a 'put' so it cannot cause a leak 
-> by definition, extra unbalanced 'get' will cause a leak because memory 
-> is never released, extra put will just probably cause a warning in 
-> kref_put or maybe double free.
-> 
-> 
->> Otherwise [2] and [5] are matching *get* and *put* in here.
-> 
-> 
-> Exactly, they are matching - so until this point all good and no 'leak' 
-> then, no ?
-> 
-
-In fact, i just want to prove that [2] and [3] are not a matching pair 
-when the path go [4] or [5]. It's less likely when the path is [1]. But 
-it doesn't matter, please see my explanation below.
-
-> 
->>
->> 2. [4] path need a additional dma_fence_get() to adds the fence as a 
->> job dependency. fence is from obj->resv. Taking msm as an example 
->> obj->resv is from etnaviv_ioctl_gem_submit()->submit_lookup_objects(). 
->> It is not possible that an object has *refcount == 1* but is 
->> referenced in two places. So dma_fence_get() called in [2] is for [4]. 
->> By the way, [3] don't execute in this case.
-> 
-> 
-> Still don't see the problem - [2] is the additional dma_fence_get() you 
-> need here (just as you say above).
-> 
-> 
->>
->> 3. This one is a doubt. You can see in "[PATCH] drm/scheduler: fix 
->> drm_sched_job_add_implicit_dependencies harder". 
->> drm_sched_job_add_dependency() could drop the last ref, so we need to do
->> the dma_fence_get() first. But the last ref still will drop in [3] if 
->> drm_sched_job_add_dependency() go path [1]. And there is only a 
->> *return* between [1] and [3]. Is this necessary? I think Rob Clark 
->> wants to avoid the last ref being dropped in 
->> drm_sched_job_add_implicit_dependencies() because fence is still used 
->> by obj->resv.
-> 
-> 
-> In the scenario above - if we go thorough path [1] refcount before [1] 
-> starts is 2 - one from original kref_init and one from [2] and so it's 
-> balanced against 2 puts (one from [1] and one from [3]) so I still don't 
-> see a problem.
+On Thu, Apr 28, 2022 at 6:40 PM Kai Huang <kai.huang@intel.com> wrote:
 >
+> On Thu, 2022-04-28 at 12:58 +1200, Kai Huang wrote:
+> > On Wed, 2022-04-27 at 17:50 -0700, Dave Hansen wrote:
+> > > On 4/27/22 17:37, Kai Huang wrote:
+> > > > On Wed, 2022-04-27 at 14:59 -0700, Dave Hansen wrote:
+> > > > > In 5 years, if someone takes this code and runs it on Intel hardware
+> > > > > with memory hotplug, CPU hotplug, NVDIMMs *AND* TDX support, what happens?
+> > > >
+> > > > I thought we could document this in the documentation saying that this code can
+> > > > only work on TDX machines that don't have above capabilities (SPR for now).  We
+> > > > can change the code and the documentation  when we add the support of those
+> > > > features in the future, and update the documentation.
+> > > >
+> > > > If 5 years later someone takes this code, he/she should take a look at the
+> > > > documentation and figure out that he/she should choose a newer kernel if the
+> > > > machine support those features.
+> > > >
+> > > > I'll think about design solutions if above doesn't look good for you.
+> > >
+> > > No, it doesn't look good to me.
+> > >
+> > > You can't just say:
+> > >
+> > >     /*
+> > >      * This code will eat puppies if used on systems with hotplug.
+> > >      */
+> > >
+> > > and merrily await the puppy bloodbath.
+> > >
+> > > If it's not compatible, then you have to *MAKE* it not compatible in a
+> > > safe, controlled way.
+> > >
+> > > > > You can't just ignore the problems because they're not present on one
+> > > > > version of the hardware.
+> > >
+> > > Please, please read this again ^^
+> >
+> > OK.  I'll think about solutions and come back later.
+> > >
+>
+> Hi Dave,
+>
+> I think we have two approaches to handle memory hotplug interaction with the TDX
+> module initialization.
+>
+> The first approach is simple.  We just block memory from being added as system
+> RAM managed by page allocator when the platform supports TDX [1]. It seems we
+> can add some arch-specific-check to __add_memory_resource() and reject the new
+> memory resource if platform supports TDX.  __add_memory_resource() is called by
+> both __add_memory() and add_memory_driver_managed() so it prevents from adding
+> NVDIMM as system RAM and normal ACPI memory hotplug [2].
 
-We can't directly drop the last refcount and release fence in 
-drm_sched_job_add_implicit_dependencies. fence is from obj->resv. Taking 
-msm as an example obj->resv is from 
-msm_ioctl_gem_submit()->submit_lookup_objects().
+What if the memory being added *is* TDX capable? What if someone
+wanted to manage a memory range as soft-reserved and move it back and
+forth from the core-mm to device access. That should be perfectly
+acceptable as long as the memory is TDX capable.
 
-static int submit_lookup_objects(struct msm_gem_submit *submit,
-		struct drm_msm_gem_submit *args, struct drm_file *file)
-{
-	...
-	for (i = 0; i < args->nr_bos; i++) {
-		struct drm_gem_object *obj;
+> The second approach is relatively more complicated.  Instead of directly
+> rejecting the new memory resource in __add_memory_resource(), we check whether
+> the memory resource can be added based on CMR and the TDX module initialization
+> status.   This is feasible as with the latest public P-SEAMLDR spec, we can get
+> CMR from P-SEAMLDR SEAMCALL[3].  So we can detect P-SEAMLDR and get CMR info
+> during kernel boots.  And in __add_memory_resource() we do below check:
+>
+>         tdx_init_disable();     /*similar to cpu_hotplug_disable() */
+>         if (tdx_module_initialized())
+>                 // reject memory hotplug
+>         else if (new_memory_resource NOT in CMRs)
+>                 // reject memory hotplug
+>         else
+>                 allow memory hotplug
+>         tdx_init_enable();      /*similar to cpu_hotplug_enable() */
+>
+> tdx_init_disable() temporarily disables TDX module initialization by trying to
+> grab the mutex.  If the TDX module initialization is already on going, then it
+> waits until it completes.
+>
+> This should work better for future platforms, but would requires non-trivial
+> more code as we need to add VMXON/VMXOFF support to the core-kernel to detect
+> CMR using  SEAMCALL.  A side advantage is with VMXON in core-kernel we can
+> shutdown the TDX module in kexec().
+>
+> But for this series I think the second approach is overkill and we can choose to
+> use the first simple approach?
 
-		/* normally use drm_gem_object_lookup(), but for bulk lookup
-		 * all under single table_lock just hit object_idr directly:
-		 */
-		obj = idr_find(&file->object_idr, submit->bos[i].handle);		<---- we 
-find obj in here by a user controllable handle
-		if (!obj) {
-			DRM_ERROR("invalid handle %u at index %u\n", submit->bos[i].handle, i);
-			ret = -EINVAL;
-			goto out_unlock;
-		}
-
-		drm_gem_object_get(obj);
-
-		submit->bos[i].obj = to_msm_bo(obj);	<---- we store it
-	}
-	...
-}
-
-Taking msm as an example, the patch to call 
-drm_sched_job_add_implicit_dependencies() is 
-msm_ioctl_gem_submit()->submit_fence_sync().
-
-static int submit_fence_sync(struct msm_gem_submit *submit, bool 
-no_implicit)
-{
-	int i, ret = 0;
-
-	for (i = 0; i < submit->nr_bos; i++) {
-		struct drm_gem_object *obj = &submit->bos[i].obj->base;	<---- get the obj
-	...
-		ret = drm_sched_job_add_implicit_dependencies(&submit->base,
-							      obj,
-							      write);
-		if (ret)
-			break;
-	}
-
-	return ret;
-}
-
-If fence is released in drm_sched_job_add_implicit_dependencies(), a 
-dangling pointer will be in obj->resv.
-
-specific scenario:
-recount = 1 init, obj->resv->fence_excl = fence
-recount = 1 before drm_sched_job_add_implicit_dependencies
-recount = 2 in [2]
-recount = 1 in [1]
-recount = 0 in [3] <--- fence release. But fence still in obj->resv
-
-Thanks,
-Hangyu
-
-> I suggest that you give a specific scenario  from fence ref-count 
-> perspective that your patch fixes. I might be wrong but unless you give 
-> a specific case where the 'put' in [3] is redundant I just can't see it.
-> 
-> Andrey >
-> 
->>
->>
->> int drm_sched_job_add_dependency(struct drm_sched_job *job,
->>                                  struct dma_fence *fence)
->> {
->>         ...
->>         xa_for_each(&job->dependencies, index, entry) {
->>                 if (entry->context != fence->context)
->>                         continue;
->>
->>                 if (dma_fence_is_later(fence, entry)) {
->>                         dma_fence_put(entry);
->>                         xa_store(&job->dependencies, index, fence, 
->> GFP_KERNEL);    <---- [4]
->>                 } else {
->>                         dma_fence_put(fence);    <---- [5]
->>                 }
->>                 return 0;
->>         }
->>
->>         ret = xa_alloc(&job->dependencies, &id, fence, xa_limit_32b, 
->> GFP_KERNEL);
->>         if (ret != 0)
->>                 dma_fence_put(fence);   <---- [1]
->>
->>         return ret;
->> }
->>
->>
->> int drm_sched_job_add_implicit_dependencies(struct drm_sched_job *job,
->>                                             struct drm_gem_object *obj,
->>                                             bool write)
->> {
->>         struct dma_resv_iter cursor;
->>         struct dma_fence *fence;
->>         int ret;
->>
->>         dma_resv_for_each_fence(&cursor, obj->resv, write, fence) {
->>                 /* Make sure to grab an additional ref on the added 
->> fence */
->>                 dma_fence_get(fence);   <---- [2]
->>                 ret = drm_sched_job_add_dependency(job, fence);
->>                 if (ret) {      <---- [6]
->>                         dma_fence_put(fence);   <---- [3]
->>
->>                         return ret;
->>                 }
->>         }
->>         return 0;
->> }
->>
->> Thanks,
->> hangyu
->>
->>>
->>>>
->>>>
->>>> int drm_sched_job_add_dependency(struct drm_sched_job *job,
->>>>                  struct dma_fence *fence)
->>>> {
->>>>     ...
->>>>     ret = xa_alloc(&job->dependencies, &id, fence, xa_limit_32b, 
->>>> GFP_KERNEL);
->>>>     if (ret != 0)
->>>>         dma_fence_put(fence);    <--- [1]
->>>>
->>>>     return ret;
->>>> }
->>>> EXPORT_SYMBOL(drm_sched_job_add_dependency);
->>>>
->>>>
->>>> int drm_sched_job_add_implicit_dependencies(struct drm_sched_job *job,
->>>>                         struct drm_gem_object *obj,
->>>>                         bool write)
->>>> {
->>>>     struct dma_resv_iter cursor;
->>>>     struct dma_fence *fence;
->>>>     int ret;
->>>>
->>>>     dma_resv_for_each_fence(&cursor, obj->resv, write, fence) {
->>>>         /* Make sure to grab an additional ref on the added fence */
->>>>         dma_fence_get(fence);    <--- [2]
->>>>         ret = drm_sched_job_add_dependency(job, fence);
->>>>         if (ret) {
->>>>             dma_fence_put(fence);    <--- [3]
->>>>             return ret;
->>>>         }
->>>>     }
->>>>     return 0;
->>>> }
->>>>
->>>>
->>>>>
->>>>>> On the other hand, dma_fence_get() and dma_fence_put() are 
->>>>>> meaningless here if threre is an extra dma_fence_get() beacause 
->>>>>> counter will not decrease to 0 during drm_sched_job_add_dependency().
->>>>>>
->>>>>> I check the call chain as follows:
->>>>>>
->>>>>> msm_ioctl_gem_submit()
->>>>>> -> submit_fence_sync()
->>>>>> -> drm_sched_job_add_implicit_dependencies()
->>>>>
->>>>>
->>>>> Can you maybe trace or print one such example of problematic 
->>>>> refcount that you are trying to fix ? I still don't see where is 
->>>>> the problem.
->>>>>
->>>>> Andrey
->>>>>
->>>>
->>>> I also wish I could. System logs can make this easy. But i don't 
->>>> have a corresponding GPU physical device. 
->>>> drm_sched_job_add_implicit_dependencies is only used in a few devices.
->>>>
->>>> Thanks.
->>>>>
->>>>>>
->>>>>> Thanks,
->>>>>> Hangyu
->>>>>>
->>>>>>>
->>>>>>>>               return ret;
->>>>>>>>           }
->>>>>>>>       }
+This still sounds like it is trying to solve symptoms and not the root
+problem. Why must the core-mm never have non-TDX memory when VMs are
+fine to operate with either core-mm pages or memory from other sources
+like hugetlbfs and device-dax?

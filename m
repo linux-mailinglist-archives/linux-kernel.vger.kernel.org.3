@@ -2,135 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30CE4514935
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D83A514938
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:24:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359114AbiD2M1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 08:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56786 "EHLO
+        id S1359107AbiD2M1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 08:27:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359109AbiD2M1U (ORCPT
+        with ESMTP id S1359060AbiD2M1s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 08:27:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 75808C8BFE
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 05:23:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651235038;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Iq/HGTUEuDIYvjQxG6tT1C9QioXwhYqdZIKb2HytgqY=;
-        b=CpGSxQjB3BlFo58IbznHBT8vcwAaz1eATGhVhM/s/EbD8EgQk6R0beJo+DQMnNBQKkgrog
-        EGnxHV0PIFLwN3Jw1OYKkWhobFR549LxYTTAZTBB1bVZKePI/RIErkCpYWBgJA0K22pohC
-        J9b706LgBBwMdscXEPr38L/PzunmmmI=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-392-8R4og1O2OD28WWaKXIhyPg-1; Fri, 29 Apr 2022 08:23:57 -0400
-X-MC-Unique: 8R4og1O2OD28WWaKXIhyPg-1
-Received: by mail-qt1-f200.google.com with SMTP id b11-20020ac85bcb000000b002f398ecec5fso398704qtb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 05:23:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=Iq/HGTUEuDIYvjQxG6tT1C9QioXwhYqdZIKb2HytgqY=;
-        b=rRo0ei/E7Z7kbyQVVrao7O+8XXkw+HZtzICPXalMn7JDoyxy9IQIlTUmOSFW3JXbsv
-         FHLebZ248zlwQ8zJYGMHuq/C9AR6IQMlz1Crydw/niIAakslRs96qEf47IwbLinpr9Kp
-         Dmv6txJeYf9GfC6MbcXSfvSQZjuA7Ws91uPYjSmFkOINbMnl5xRutzx4u52zpnpTkgLh
-         2GbBaONHcK5g4MfKbMFLDdjJvr2r1kHrcNrVMEol1TEl3Zv0piIN7+Gyt78X1zn4yWoW
-         O4cwsN3I1OCnvPhyqalOOwlSBndJjEXXKc97UtJpofrG6SraKy0WhiDB9DeDqlVFnqsZ
-         UNhQ==
-X-Gm-Message-State: AOAM533p9TeW8o34Sdf7wuQh4jyVq8bEzWJ9MNeehDX/53EcBml1tewO
-        8dm1XSBhwLfi93W+Y38ImqLgna4QVsO5EprKa/wgE4qTP5trXGVTgzYtRJKDcLOFRqnX/1baUC2
-        n7xvn4UvXtZ9oFafsPHc69CQl
-X-Received: by 2002:a37:ba04:0:b0:69f:840c:b627 with SMTP id k4-20020a37ba04000000b0069f840cb627mr9937308qkf.285.1651235036849;
-        Fri, 29 Apr 2022 05:23:56 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyLIVdcXV1WqPzHlKJQANOcMOIrySvK7nYoaSfktcl+h9wZ9APF5knDfmrgNGkIJnQhWjWzag==
-X-Received: by 2002:a37:ba04:0:b0:69f:840c:b627 with SMTP id k4-20020a37ba04000000b0069f840cb627mr9937301qkf.285.1651235036659;
-        Fri, 29 Apr 2022 05:23:56 -0700 (PDT)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id o14-20020a05622a138e00b002f335c3dbf2sm1473751qtk.37.2022.04.29.05.23.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 05:23:56 -0700 (PDT)
-Subject: Re: [PATCH v3] uio: dfl: add HSSI subsystem feature id
-To:     Tianfei Zhang <tianfei.zhang@intel.com>, hao.wu@intel.com,
-        mdf@kernel.org, yilun.xu@intel.com, linux-fpga@vger.kernel.org,
-        gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>
-References: <20220429005726.607804-1-tianfei.zhang@intel.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <b3f0bc47-70ea-2da5-2891-3b01550c6da6@redhat.com>
-Date:   Fri, 29 Apr 2022 05:23:53 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Fri, 29 Apr 2022 08:27:48 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D473EC8BDE;
+        Fri, 29 Apr 2022 05:24:29 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:6624:6d8d:f790:d5c]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nkPff-00068a-O0; Fri, 29 Apr 2022 14:24:27 +0200
+Message-ID: <81b865bb-be46-cdf7-a49b-fd029de439fb@leemhuis.info>
+Date:   Fri, 29 Apr 2022 14:24:27 +0200
 MIME-Version: 1.0
-In-Reply-To: <20220429005726.607804-1-tianfei.zhang@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
 Content-Language: en-US
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: [Regression] Resume process hangs for 5-6 seconds starting sometime
+ in 5.16
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1651235069;14287da5;
+X-HE-SMSGID: 1nkPff-00068a-O0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, this is your Linux kernel regression tracker.
 
-On 4/28/22 5:57 PM, Tianfei Zhang wrote:
-> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->
-> Add the Device Feature List (DFL) feature id for the
-> High Speed Serial Interface (HSSI) Subsystem to the
-> table of ids supported by the uio_dfl driver.
->
-> The HSSI Subsystem is a configurable set of IP blocks
-> to be used as part of a Ethernet or PCS/FEC/PMA pipeline.
-> Like the Ethernet group used by the N3000 card, the HSSI
-> Subsystem does not fully implement a network device from
-> a Linux netdev perspective and is controlled and monitored
-> from user space software via the uio interface.
+Bart, I noticed a regression report in bugzilla.kernel.org that afaics
+nobody acted upon since it was reported about a week ago, that's why I
+decided to forward it to the lists and all people that seemed to be
+relevant here. It's caused by a commit of yours. To quote from
+https://bugzilla.kernel.org/show_bug.cgi?id=215880 :
 
-Generally you should include the url for the dfl definitions.
+> Previously reported on the Gentoo bug tracker: https://bugs.gentoo.org/837500
+> 
+> Basic issue: 
+> 
+> Starting sometime in 5.16, my GUI freezes up during resume for 5-6 seconds: the screen is frozen, and it seems key presses and mouse movements are not registered. If I suspend from a tty, the 'loginctl suspend' command takes about 5-6 seconds to finish after resuming, however here my key presses are registered. 
+> 
+> It seems like the first thing it does on resume is to suspend the device, as if the system powered off too quickly or something.
+> 
+> I used git bisect to identify the commit where the problem begins: 
+> 
+> ========
+> commit a19a93e4c6a98c9c0f2f5a6db76846f10d7d1f85
+> Author: Bart Van Assche <bvanassche@acm.org>
+> Date:   Wed Oct 6 14:54:51 2021 -0700
+> 
+>     scsi: core: pm: Rely on the device driver core for async power management
+>     
+>     Instead of implementing asynchronous resume support in the SCSI core, rely
+>     on the device driver core for resuming SCSI devices asynchronously.
+>     Instead of only supporting asynchronous resumes, also support asynchronous
+>     suspends.
+>     
+>     Link: https://lore.kernel.org/r/20211006215453.3318929-2-bvanassche@acm.org
+>     Cc: Alan Stern <stern@rowland.harvard.edu>
+>     Cc: Dan Williams <dan.j.williams@intel.com>
+>     Cc: Hannes Reinecke <hare@suse.com>
+>     Cc: Adrian Hunter <adrian.hunter@intel.com>
+>     Cc: Martin Kepplinger <martin.kepplinger@puri.sm>
+>     Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+>     Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+> 
+>  drivers/scsi/hosts.c      |  1 +
+>  drivers/scsi/scsi.c       |  8 --------
+>  drivers/scsi/scsi_pm.c    | 44 ++------------------------------------------
+>  drivers/scsi/scsi_priv.h  |  4 +---
+>  drivers/scsi/scsi_scan.c  | 17 +++++++++++++++++
+>  drivers/scsi/scsi_sysfs.c |  1 +
+>  drivers/scsi/sd.c         |  1 -
+>  7 files changed, 22 insertions(+), 54 deletions(-)
+> ========
+> 
+> For git bisect I followed the instructions provided on the gentoo wiki: https://wiki.gentoo.org/wiki/Kernel_git-bisect, which uses the linux-stable repository.
+> 
+> Here is a sample dmesg output when I do not experience the bug ('good') and when I do ('bad'). Nothing to me seems obviously wrong. You do see some 'extra' lines in the 'bad' case at the end, but these lines also appear in the 'good' case later on; they don't have enough time to appear in the 'good' case when the system resumes quickly as normal. There are xHCI errors related to USB buses, but they appear in both cases.
+> 
+> Good: https://dpaste.org/S90gh
+> Bad:  https://dpaste.org/9KQ6C
+> 
+> Hardware info:
+> AMD Ryzen 3600
+> AMD Radeon RX580 
+> AMD Radeon 270X (usually bound to vfio-pci, otherwise amdgpu)
+> ASUS Strix ROG B450-F (latest BIOS)
+> Seasonic Prime GX-750 (brand new)
+> I also have an M.2 NVME drive (boot), a SATA SSD, and one HDD.
+> 
+> 
+> I'm happy to try any troubleshooting steps.
 
-Can you add it here to the commit log ?
+Could somebody take a look into this? Or was this discussed somewhere
+else already? Or even fixed?
 
-Otherwise fine.
+Anyway, to get this tracked:
 
-Reviewed-by: Tom Rix <trix@redhat.com>
+#regzbot introduced: a19a93e4c6a98c9c0f2f5a6db76846f10d7d1f
+#regzbot from: ericspero@icloud.com <ericspero@icloud.com>
+#regzbot title: scsi: pm: Resume process hangs for 5-6 seconds starting
+sometime in 5.16
+#regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215880
 
->
-> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
-> ---
-> v3: change the name of this feature id to HSSI_SUBSYS and rewrite
->      the git message.
-> v2: add HSSI introduction and the git repo of Feature ID table.
-> ---
->   drivers/uio/uio_dfl.c | 2 ++
->   1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/uio/uio_dfl.c b/drivers/uio/uio_dfl.c
-> index 89c0fc7b0cbc..8f39cc8bb034 100644
-> --- a/drivers/uio/uio_dfl.c
-> +++ b/drivers/uio/uio_dfl.c
-> @@ -45,9 +45,11 @@ static int uio_dfl_probe(struct dfl_device *ddev)
->   }
->   
->   #define FME_FEATURE_ID_ETH_GROUP	0x10
-> +#define FME_FEATURE_ID_HSSI_SUBSYS	0x15
->   
->   static const struct dfl_device_id uio_dfl_ids[] = {
->   	{ FME_ID, FME_FEATURE_ID_ETH_GROUP },
-> +	{ FME_ID, FME_FEATURE_ID_HSSI_SUBSYS },
->   	{ }
->   };
->   MODULE_DEVICE_TABLE(dfl, uio_dfl_ids);
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
+
+-- 
+Additional information about regzbot:
+
+If you want to know more about regzbot, check out its web-interface, the
+getting start guide, and the references documentation:
+
+https://linux-regtracking.leemhuis.info/regzbot/
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
+
+The last two documents will explain how you can interact with regzbot
+yourself if your want to.
+
+Hint for reporters: when reporting a regression it's in your interest to
+CC the regression list and tell regzbot about the issue, as that ensures
+the regression makes it onto the radar of the Linux kernel's regression
+tracker -- that's in your interest, as it ensures your report won't fall
+through the cracks unnoticed.
+
+Hint for developers: you normally don't need to care about regzbot once
+it's involved. Fix the issue as you normally would, just remember to
+include 'Link:' tag in the patch descriptions pointing to all reports
+about the issue. This has been expected from developers even before
+regzbot showed up for reasons explained in
+'Documentation/process/submitting-patches.rst' and
+'Documentation/process/5.Posting.rst'.

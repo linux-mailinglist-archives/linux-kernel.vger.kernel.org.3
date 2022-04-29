@@ -2,66 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA07F514F74
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90412514F75
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343928AbiD2PcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 11:32:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42400 "EHLO
+        id S1378453AbiD2Pc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 11:32:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378507AbiD2PcJ (ORCPT
+        with ESMTP id S1378506AbiD2PcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 29 Apr 2022 11:32:09 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38502D4C87
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:28:36 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id x12so6785653pgj.7
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:28:36 -0700 (PDT)
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CD1D4C92
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:28:37 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id q185so10934887ljb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:28:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=e37KpWOvnJl8DV6RpvFm8R8ciIf9e11j1e98qdA+nR0=;
-        b=CQH14jLE8Ms+j8J1oP8clFORtMf0mx0Gh4b+0HDNYIdpNqAe7n8P3wKFp+gPmBt4C2
-         XGh14y7IZWaD/d1rfA5DQcS1OJMA/A89Ahx765rBST+rLzMPQKxuGe47JP9qORF7tHsu
-         0vLmqZAjh4Z4o4FaPUwFm3n74p6oo5io3GYhFz8FjY1dsOISjYDkrBzh72QbOfO3q3+R
-         tnq81POYf+Q1TKbz/w6ZQ3lVKILKwFfBsLJPMqOrTbYtPEgJ87ITuyvw3V0UMTCBPojD
-         gLqEgErM/FJraX1LagRCx1d20ZNyakv3/QZlO8Z+a1+Gbat/3H6QYtbAtIzAokzNNuL7
-         EHIw==
+        d=gmail.com; s=20210112;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=bhq9Edgd4TreDu6ZZX1wON0xSU1SZwVBqK/SEM+ml3E=;
+        b=B3xMcLPAdNIn9uq2hakHPIlS8jvWBspKPqlkNh7vmKOaxKyaL3MczjXBPc9hVIXgb1
+         SlB7eFrdt9btBjddlOdddK+/PmXIeU3GNfb8PNgtu+RtZWanbwMO8BJlHjIEMhfmyu/T
+         Yz9yA4QKZjJ0yuLILO6MXxuVhhMZC27HA09vKdW5kBBW03uApgo+MylQXsOBwVr/Av/O
+         WCZXKN5nHBdMVFcX7SWG+NB5ndonYXbRPW1G1aTeJNvNvL24WQsXVfK0szPmNTtarEjx
+         5cQ5QxyNDKEDTiWR9DzKsYLtudCV/5shn5aipbTP45CTmfARLAAmoL6iXuGUHzwn8TS+
+         6WeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=e37KpWOvnJl8DV6RpvFm8R8ciIf9e11j1e98qdA+nR0=;
-        b=0yt7aR/BdevW9ktRYbEzSLLw8NZQyK9/gpOMONtiof9IzAFs87IA1APLTcflqs8VVX
-         OUoLYueg8ffh3pO34UtsEse/TrmY+Jk3tvgqF4P/vEzeEAbzmJ2i6xst0kJSpPW3AeJD
-         Re7XFjjGWjXyx1+zjiP2lcPFYMnrIUHVFBny4S4cbFW+gwGX0IyEmWj/+y1FFURo7eIs
-         QgwhL0yQ0ymECmQ/UBT6SdNZwUPBTqtZvUZdDsYdbJIs2cEy7v1EPcJEH2skb17JrOEY
-         vE34oV7c3ke3/iwS+ImCbKK48IamAEkNiNxEUiT6xXPYImcRxkR04tjH76eOf+ofXlTX
-         +lrg==
-X-Gm-Message-State: AOAM531ZeH73Z1YQz/dm3ZuxZXoLDqH3Fp6JgXOqbaOPu33z30h7gy+0
-        6TTXADwtHyPELDY/MlCcct7+OQ==
-X-Google-Smtp-Source: ABdhPJzo5Fg9L/6IHNj66qUgf0n1g8y00zwYhwFSYEOwGBZ58KZH+MxD4trY5ygLoSvgdmUYu2btMg==
-X-Received: by 2002:a63:e513:0:b0:3ab:a3fb:f100 with SMTP id r19-20020a63e513000000b003aba3fbf100mr13900099pgh.70.1651246115507;
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=bhq9Edgd4TreDu6ZZX1wON0xSU1SZwVBqK/SEM+ml3E=;
+        b=ggw/l3tY61pixK57IRerO9WNUdZKla0omAGFRI9ya/evvC8+MCp2jFqv9WPO0b69MS
+         xfFO1fKaIDtdMC5s1xliiUHY5XGM5TwBNVDRmRmfsKkEbyEnsdd8GA0Ntg1xJWxeIxUL
+         uZPHesZrmYcWtf4qwiBfzihpT7ezuR3/M+65eQy4QU7RBHAP2hECdTdwpWLWgEwNCKS/
+         21w16YamtNxUbRBvZHQPWn2y0XKAii7WAF7T/zWjyLovXfS2lDtgNyRDqmXPO9jBr4H1
+         qp6IxWK3EgdJILhDfERCIdmK3PlP0YGWZxAC88nFGIVz0zvsMP9W2/kKFsTUkaFAfkV7
+         SeXw==
+X-Gm-Message-State: AOAM533JReMz6IuHXbfL1mszlvG+01e280bwppb1BAxzKV4pJ5Fe5Wsn
+        pr8ofPl4zqF78V8bI780wMA=
+X-Google-Smtp-Source: ABdhPJwohhuXeqggDcgYROZEOtgIKa51kUFPDtQnKaRDo5KPeapt3KOaEM3V1qCKDEH1jMSMEdtQUA==
+X-Received: by 2002:a2e:87cb:0:b0:24f:81c:8940 with SMTP id v11-20020a2e87cb000000b0024f081c8940mr20554318ljj.423.1651246116210;
+        Fri, 29 Apr 2022 08:28:36 -0700 (PDT)
+Received: from [192.168.1.7] ([212.22.223.21])
+        by smtp.gmail.com with ESMTPSA id a17-20020a05651c211100b0024f3d1daeffsm296467ljq.135.2022.04.29.08.28.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Fri, 29 Apr 2022 08:28:35 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id m1-20020a637d41000000b003c14af5063esm6628648pgn.86.2022.04.29.08.28.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 08:28:34 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 08:28:34 -0700 (PDT)
-X-Google-Original-Date: Fri, 29 Apr 2022 08:12:57 PDT (-0700)
-Subject:     Re: [PATCH] RISC-V-fixes: relocate DTB if it's outside memory region
-In-Reply-To: <mhng-9aafbd90-eb33-4f43-afa3-b9f9338c2a70@palmer-ri-x1c9>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     mick@ics.forth.gr
-Message-ID: <mhng-6c123e84-9530-46f6-a5ec-6b908bb92f95@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
+Subject: Re: [PATCH v2 08/19] xen/shbuf: switch xen-front-pgdir-shbuf to use
+ INVALID_GRANT_REF
+From:   Oleksandr <olekstysh@gmail.com>
+To:     Juergen Gross <jgross@suse.com>,
+        xen-devel <xen-devel@lists.xenproject.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>
+References: <20220428082743.16593-1-jgross@suse.com>
+ <20220428082743.16593-9-jgross@suse.com>
+ <CAPD2p-nisRgMOzy+w2jx5ULfZTyv4MqtG0wkV9jNn3wNg415sQ@mail.gmail.com>
+Message-ID: <b05fe983-8f9e-da3d-1bf0-e121ba969ae3@gmail.com>
+Date:   Fri, 29 Apr 2022 18:28:34 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <CAPD2p-nisRgMOzy+w2jx5ULfZTyv4MqtG0wkV9jNn3wNg415sQ@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Language: en-US
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,74 +79,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Apr 2022 14:48:14 PDT (-0700), Palmer Dabbelt wrote:
-> On Mon, 25 Apr 2022 23:11:23 PDT (-0700), mick@ics.forth.gr wrote:
->> Hello Palmer,
->>
->> Any updates on this ?
+
+Hello Juergen
+
+
+On 28.04.22 21:03, Oleksandr Tyshchenko wrote:
 >
-> Sorry about that, it's on fixes.
+>
+> On Thu, Apr 28, 2022 at 11:28 AM Juergen Gross <jgross@suse.com 
+> <mailto:jgross@suse.com>> wrote:
+>
+> Hello Juergen
+>
+> [sorry for the possible format issue]
+>
+>     Instead of using a private macro for an invalid grant reference use
+>     the common one.
+>
+>     Signed-off-by: Juergen Gross <jgross@suse.com
+>     <mailto:jgross@suse.com>>
+>     ---
+>      drivers/xen/xen-front-pgdir-shbuf.c | 17 ++++-------------
+>      1 file changed, 4 insertions(+), 13 deletions(-)
+>
+>     diff --git a/drivers/xen/xen-front-pgdir-shbuf.c
+>     b/drivers/xen/xen-front-pgdir-shbuf.c
+>     index a959dee21134..fa2921d4fbfc 100644
+>     --- a/drivers/xen/xen-front-pgdir-shbuf.c
+>     +++ b/drivers/xen/xen-front-pgdir-shbuf.c
+>     @@ -21,15 +21,6 @@
+>
+>      #include <xen/xen-front-pgdir-shbuf.h>
+>
+>     -#ifndef GRANT_INVALID_REF
+>     -/*
+>     - * FIXME: usage of grant reference 0 as invalid grant reference:
+>     - * grant reference 0 is valid, but never exposed to a PV driver,
+>     - * because of the fact it is already in use/reserved by the PV
+>     console.
+>     - */
+>     -#define GRANT_INVALID_REF      0
+>     -#endif
+>     -
+>      /**
+>       * This structure represents the structure of a shared page
+>       * that contains grant references to the pages of the shared
+>     @@ -83,7 +74,7 @@ grant_ref_t
+>      xen_front_pgdir_shbuf_get_dir_start(struct xen_front_pgdir_shbuf
+>     *buf)
+>      {
+>             if (!buf->grefs)
+>     -               return GRANT_INVALID_REF;
+>     +               return INVALID_GRANT_REF;
+>
+>             return buf->grefs[0];
+>      }
+>     @@ -142,7 +133,7 @@ void xen_front_pgdir_shbuf_free(struct
+>     xen_front_pgdir_shbuf *buf)
+>                     int i;
+>
+>                     for (i = 0; i < buf->num_grefs; i++)
+>     -                       if (buf->grefs[i] != GRANT_INVALID_REF)
+>     +                       if (buf->grefs[i] != INVALID_GRANT_REF)
+>     gnttab_end_foreign_access(buf->grefs[i], 0UL);
+>             }
+>             kfree(buf->grefs);
+>     @@ -355,7 +346,7 @@ static void backend_fill_page_dir(struct
+>     xen_front_pgdir_shbuf *buf)
+>             }
+>             /* Last page must say there is no more pages. */
+>             page_dir = (struct xen_page_directory *)ptr;
+>     -       page_dir->gref_dir_next_page = GRANT_INVALID_REF;
+>     +       page_dir->gref_dir_next_page = INVALID_GRANT_REF;
+>      }
+>
+>      /**
+>     @@ -384,7 +375,7 @@ static void guest_fill_page_dir(struct
+>     xen_front_pgdir_shbuf *buf)
+>
+>                     if (grefs_left <= XEN_NUM_GREFS_PER_PAGE) {
+>                             to_copy = grefs_left;
+>     -                       page_dir->gref_dir_next_page =
+>     GRANT_INVALID_REF;
+>     +                       page_dir->gref_dir_next_page =
+>     INVALID_GRANT_REF;
+>
+>
+> I faced an issue with testing PV Sound with the current series.
+>
+> root@salvator-x-h3-4x2g-xt-domu:~# aplay /media/MoodyLoop.wav
+> Playing WAVE '/media/MoodyLoop.wav' : Signed 16 bit Little Endian, 
+> Rate 44100 Hz, Stereo
+> (XEN) common/grant_table.c:1053:d1v2 Bad ref 0xffffffff for d6
+>
+> Here we have an interesting situation. PV Sound frontend uses this 
+> xen-front-pgdir-shbuf framework. Technically, this patch changes 
+> page_dir->gref_dir_next_page (reference to the next page describing 
+> page directory) from 0 to 0xffffffff here.
+> #define INVALID_GRANT_REF  ((grant_ref_t)-1)
+>
+> But according to the protocol (sndif.h), "0" means that there are no 
+> more pages in the list and the user space backend expects only that 
+> value. So receiving 0xffffffff it assumes there are pages in the list 
+> and trying to process...
+> https://elixir.bootlin.com/linux/v5.18-rc4/source/include/xen/interface/io/sndif.h#L650
+>
+>
+> I think, the same is relevant to backend_fill_page_dir() as well.
 
-Not sure if I just wasn't paying attention yesterday or if I'm grumpier 
-this morning, but that "RISC-V-fixes: " prefix is just a bit too odd -- 
-I know we've got a split between "RISC-V" and "riscv" so maybe it 
-doesn't matter, but even that is kind of ugly.
 
-I re-wrote it, but I'm going to let it round trip through linux-next so 
-I'll send it up next time.
+In addition to what I said yesterday:
 
-Sorry, I know this happened twice recently but I'll try not to make a 
-habit of it.
+PV Display also uses this xen-front-pgdir-shbuf framework. It's protocol 
+(displif.h) also mentions the same as sndif.h if the context of 
+gref_dir_next_page:
+
+  * gref_dir_next_page - grant_ref_t, reference to the next page describing
+  *   page directory. Must be 0 if there are no more pages in the list.
+
+
+With that local change both PV devices work in my environment.
+
+diff --git a/drivers/xen/xen-front-pgdir-shbuf.c 
+b/drivers/xen/xen-front-pgdir-shbuf.c
+index fa2921d..ad4a88e 100644
+--- a/drivers/xen/xen-front-pgdir-shbuf.c
++++ b/drivers/xen/xen-front-pgdir-shbuf.c
+@@ -346,7 +346,7 @@ static void backend_fill_page_dir(struct 
+xen_front_pgdir_shbuf *buf)
+         }
+         /* Last page must say there is no more pages. */
+         page_dir = (struct xen_page_directory *)ptr;
+-       page_dir->gref_dir_next_page = INVALID_GRANT_REF;
++       page_dir->gref_dir_next_page = 0;
+  }
+
+  /**
+@@ -375,7 +375,7 @@ static void guest_fill_page_dir(struct 
+xen_front_pgdir_shbuf *buf)
+
+                 if (grefs_left <= XEN_NUM_GREFS_PER_PAGE) {
+                         to_copy = grefs_left;
+-                       page_dir->gref_dir_next_page = INVALID_GRANT_REF;
++                       page_dir->gref_dir_next_page = 0;
+                 } else {
+                         to_copy = XEN_NUM_GREFS_PER_PAGE;
+                         page_dir->gref_dir_next_page = buf->grefs[i + 1];
+(END)
+
+
 
 >
->>
->> Regards,
->> Nick
->>
->> On 3/22/22 15:28, Nick Kossifidis wrote:
->>> In case the DTB provided by the bootloader/BootROM is before the kernel
->>> image or outside /memory, we won't be able to access it through the
->>> linear mapping, and get a segfault on setup_arch(). Currently OpenSBI
->>> relocates DTB but that's not always the case (e.g. if FW_JUMP_FDT_ADDR
->>> is not specified), and it's also not the most portable approach since
->>> the default FW_JUMP_FDT_ADDR of the generic platform relocates the DTB
->>> at a specific offset that may not be available. To avoid this situation
->>> copy DTB so that it's visible through the linear mapping.
->>>
->>> Signed-off-by: Nick Kossifidis <mick@ics.forth.gr>
->>> ---
->>>   arch/riscv/mm/init.c | 21 +++++++++++++++++++--
->>>   1 file changed, 19 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
->>> index 0d588032d..697a9aed4 100644
->>> --- a/arch/riscv/mm/init.c
->>> +++ b/arch/riscv/mm/init.c
->>> @@ -206,8 +206,25 @@ static void __init setup_bootmem(void)
->>>   	 * early_init_fdt_reserve_self() since __pa() does
->>>   	 * not work for DTB pointers that are fixmap addresses
->>>   	 */
->>> -	if (!IS_ENABLED(CONFIG_BUILTIN_DTB))
->>> -		memblock_reserve(dtb_early_pa, fdt_totalsize(dtb_early_va));
->>> +	if (!IS_ENABLED(CONFIG_BUILTIN_DTB)) {
->>> +		/*
->>> +		 * In case the DTB is not located in a memory region we won't
->>> +		 * be able to locate it later on via the linear mapping and
->>> +		 * get a segfault when accessing it via __va(dtb_early_pa).
->>> +		 * To avoid this situation copy DTB to a memory region.
->>> +		 * Note that memblock_phys_alloc will also reserve DTB region.
->>> +		 */
->>> +		if (!memblock_is_memory(dtb_early_pa)) {
->>> +			size_t fdt_size = fdt_totalsize(dtb_early_va);
->>> +			phys_addr_t new_dtb_early_pa = memblock_phys_alloc(fdt_size, PAGE_SIZE);
->>> +			void *new_dtb_early_va = early_memremap(new_dtb_early_pa, fdt_size);
->>> +
->>> +			memcpy(new_dtb_early_va, dtb_early_va, fdt_size);
->>> +			early_memunmap(new_dtb_early_va, fdt_size);
->>> +			_dtb_early_pa = new_dtb_early_pa;
->>> +		} else
->>> +			memblock_reserve(dtb_early_pa, fdt_totalsize(dtb_early_va));
->>> +	}
->>>
->>>   	early_init_fdt_scan_reserved_mem();
->>>   	dma_contiguous_reserve(dma32_phys_limit);
+>                     } else {
+>                             to_copy = XEN_NUM_GREFS_PER_PAGE;
+>                             page_dir->gref_dir_next_page =
+>     buf->grefs[i + 1];
+>     -- 
+>     2.34.1
+>
+>
+>
+>
+> -- 
+> Regards,
+>
+> Oleksandr Tyshchenko
+
+-- 
+Regards,
+
+Oleksandr Tyshchenko
+

@@ -2,109 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A56E515022
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:01:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56BE1515025
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:02:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378723AbiD2QE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 12:04:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59366 "EHLO
+        id S1378736AbiD2QFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 12:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353800AbiD2QE4 (ORCPT
+        with ESMTP id S1378726AbiD2QFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 12:04:56 -0400
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794965521F;
-        Fri, 29 Apr 2022 09:01:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
-        MIME-Version:Date:Message-ID:content-disposition;
-        bh=esLsTjeFbAhjqEsGKQ/uoZ2kISCKtGjxsP23AmIceA8=; b=f+/sRa+D999SGzSah6vs1/IzWF
-        3nHHgiLgnFgqNa07JhCg7ofLXX9BJmNxqTqqPfXAwaO+bH2k4FvR7p5KTn1jxcHN5ZSBXZxnXJldW
-        Jezy3ymIxYt33vN9hm9o88qDjRmzoNo4zBQS4q/HGqwzIX8HougCQ8CSMpcNo6t2CuiKqgDKlQOfu
-        h6vU4NRae1w9EBWuXZvW0HBjeMU3M2M2Sqd9Tb+CnhXyparigF5ai5bfyXDgnqyh5MKpNwQ/HzUHM
-        yCpeyIwJWsRpJw/Yoqtfo24I7tfNWYLfcbrZfSg4Z9CwuQWkpcyGBerPNl14OxaV3EB903SU330ap
-        /XRzOeFw==;
-Received: from guinness.priv.deltatee.com ([172.16.1.162])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1nkT3h-001soD-GU; Fri, 29 Apr 2022 10:01:30 -0600
-Message-ID: <bc98075a-034c-d1fe-485f-2b7af85df91b@deltatee.com>
-Date:   Fri, 29 Apr 2022 10:01:27 -0600
+        Fri, 29 Apr 2022 12:05:18 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135625EDFC
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:02:00 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id s137so6850848pgs.5
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:02:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wxlbr9fWxkJ/PvUYSQaUCDuvsAWuZ1gUZ7NZOyO7NWI=;
+        b=ig/N09Lqy0/iC+IgF7BMHpLu6LgwF1YAzHzJnJnnp5iDh5f8/+v4Fu2cFHjnJPGRlQ
+         60kkoeOCzSEwVBbcK5+zQAzJkFQjM76r9d4r1uWBwF9SzmXOrBr6UKzBUxh7l3lSofml
+         gqDzahsTyp+h1fF3eKQrQoenH69ir3LQx06+vla+1ZQpfEjFRzSL9Pa1vxwsnsRwJ+Op
+         +wEFqWixsr4T2aGJRSKxP4w2xMDY/KOhs8j8UJNb+yywxsNhmU7oBn0NOxK3bsQSlNq8
+         IQfOf/QJZtlScjxI45WpOoOtTRAvU4qELVv6bkuO3JkkTW2Gzn7g6Po0nqxkXIstQ73Z
+         z5sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wxlbr9fWxkJ/PvUYSQaUCDuvsAWuZ1gUZ7NZOyO7NWI=;
+        b=fI1VWykf6lfpq/LT5TuCyIwJXQjrD2KGEmqoEtxDVMsuHSzJVchH9aga9B3zKmpiiL
+         jTxlHdiRtU92mPJ/coPgSnfuawEHLvEQylv2VzlorooFS5qDU4yVWzLno1jO2VnAnCDo
+         gtrajl4uN5rt5CsA3+1eUzaoUFAqhLw5i/aFWmSXSu0yK4EJnGLG1jqVeYE0Ozw5yype
+         RChw9aJxPrIZoCo1DLB0GzUluHyrpvxH1pJUYK2riWAM7UNURYnJ3fNurZaMfspmRrhh
+         9LFewsXXL/RSLWNour/fEudSDmTLxe6rIwuZekWteMtC/OLcRGBEZx3sKzix4VF6tshV
+         n+RQ==
+X-Gm-Message-State: AOAM5311ViX2+6FHbc0AWUPQRM2B1UGzBRKQvhu+yLquYCM3ROznQfNe
+        wCKONGxgXvyWrSHEiU5xfZJ1Fg==
+X-Google-Smtp-Source: ABdhPJzgHIWIsLan2gxS4+e/SQEWi1cv4Ux9jTPqhzYQRjA03S3dOckbBSzhJExUWR+LLl8+nbMpJg==
+X-Received: by 2002:a63:4862:0:b0:385:fb1d:fc54 with SMTP id x34-20020a634862000000b00385fb1dfc54mr65383pgk.57.1651248119289;
+        Fri, 29 Apr 2022 09:01:59 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id z15-20020a056a001d8f00b004fda37855ddsm3193393pfw.168.2022.04.29.09.01.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 09:01:58 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 16:01:55 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
+        Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>
+Subject: Re: [PATCH] KVM: x86/mmu: Do not create SPTEs for GFNs that exceed
+ host.MAXPHYADDR
+Message-ID: <YmwL87h6klEC4UKV@google.com>
+References: <20220428233416.2446833-1-seanjc@google.com>
+ <337332ca-835c-087c-c99b-92c35ea8dcd3@redhat.com>
+ <Ymv1I5ixX1+k8Nst@google.com>
+ <20e1e7b1-ece7-e9e7-9085-999f7a916ac2@redhat.com>
+ <Ymv5TR76RNvFBQhz@google.com>
+ <e5864cb4-cce8-bd32-04b0-ecb60c058d0b@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-CA
-To:     Guoqing Jiang <guoqing.jiang@linux.dev>, Xiao Ni <xni@redhat.com>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        linux-raid <linux-raid@vger.kernel.org>,
-        Song Liu <song@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Stephen Bates <sbates@raithlin.com>,
-        Martin Oliveira <Martin.Oliveira@eideticom.com>,
-        David Sloan <David.Sloan@eideticom.com>
-References: <20220420195425.34911-1-logang@deltatee.com>
- <CALTww28fwNpm0O_jc7-2Xr0JSX9i6F1kgoUQ8m_k6ZgPa1XxXw@mail.gmail.com>
- <c14c0103-9cbd-7d0f-486b-344dd33725ab@deltatee.com>
- <4094aed9-d22d-d14f-07a7-5abe599beeab@linux.dev>
- <8d8fbf24-51b5-a076-b7ad-fcbb7d5c275e@deltatee.com>
- <CALTww28SuvhzCL6p4L9y9ZH5Mmgss-tTm_QzbEo60hZOXAUS0A@mail.gmail.com>
- <4f0b44aa-77a4-9896-b780-eb52241954ae@deltatee.com>
- <cba5f13e-0481-9dc9-36a4-ed29bf34220f@linux.dev>
-From:   Logan Gunthorpe <logang@deltatee.com>
-In-Reply-To: <cba5f13e-0481-9dc9-36a4-ed29bf34220f@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 172.16.1.162
-X-SA-Exim-Rcpt-To: guoqing.jiang@linux.dev, xni@redhat.com, linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org, song@kernel.org, hch@infradead.org, sbates@raithlin.com, Martin.Oliveira@eideticom.com, David.Sloan@eideticom.com
-X-SA-Exim-Mail-From: logang@deltatee.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e5864cb4-cce8-bd32-04b0-ecb60c058d0b@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v2 00/12] Improve Raid5 Lock Contention
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Apr 29, 2022, Paolo Bonzini wrote:
+> On 4/29/22 16:42, Sean Christopherson wrote:
+> > On Fri, Apr 29, 2022, Paolo Bonzini wrote:
+> > > On 4/29/22 16:24, Sean Christopherson wrote:
+> > > > I don't love the divergent memslot behavior, but it's technically correct, so I
+> > > > can't really argue.  Do we want to "officially" document the memslot behavior?
+> > > > 
+> > > 
+> > > I don't know what you mean by officially document,
+> > 
+> > Something in kvm/api.rst under KVM_SET_USER_MEMORY_REGION.
+> 
+> Not sure if the API documentation is the best place because userspace does
+> not know whether shadow paging is on (except indirectly through other
+> capabilities, perhaps)?
 
+Hrm, true, it's not like the userspace VMM can rewrite itself at runtime.
 
-On 2022-04-28 18:49, Guoqing Jiang wrote:
-> I can't agree with you anymore. I would say some patches were submitted
-> without run enough tests, then after one by one kernel release, the thing
-> becomes worse.
+> It could even be programmatic, such as returning 52 for CPUID[0x80000008].
+> A nested KVM on L1 would not be able to use the #PF(RSVD) trick to detect
+> MMIO faults.  That's not a big price to pay, however I'm not sure it's a
+> good idea in general...
 
-I'm not sure where we disagree here. I certainly don't want to introduce
-regressions myself. I haven't submitted v3 yet because I've become less
-certain that there are no regressions in it. The point of my last email
-was try to explain that I am taking testing seriously.
-
-> This is also the reason that I recommend run mdadm tests since md raid
-> is a complex subsystem, perhaps a simple change could cause regression.
-> And considering there are really limited developers and reviewers in the
-> community, the chance to cause regression get bigger.
-
-While I'd certainly like to run mdadm tests, they appear to be very
-broken to me. Too broken for me to fix all of it -- I don't have time
-for fixing that many issues. Seems I'm not the only one to run into this
-problem recently:
-
-https://lore.kernel.org/linux-raid/20220111130635.00001478@linux.intel.com/T/#t
-
-And it's a shame nobody could even bother to remove the unsupported 0.9
-metadata tests from the repo as a result of this conversation.
-
-> If I may, is it possible to submit your tests to mdadm as well? So we can
-> have one common place to contain enough tests.
-
-I'd certainly consider that if I could run the test suite. Though one
-hitch is that I've found I need to run my tests repeatedly, for hours,
-before hitting some rare bugs. Running the tests only once is much
-easier to pass. It's hard to fully test things like this with so many
-rare retry paths in a simple regression test.
-
-Logan
+Agreed, messing with CPUID is likely to end in tears.

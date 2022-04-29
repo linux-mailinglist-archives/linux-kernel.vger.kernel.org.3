@@ -2,118 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2C57514E67
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:53:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A70514E73
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377969AbiD2O44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 10:56:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
+        id S1378001AbiD2O5t convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 29 Apr 2022 10:57:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352746AbiD2O4y (ORCPT
+        with ESMTP id S1377984AbiD2O5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 10:56:54 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 895A9BCB64
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:53:35 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id n14so14458114lfu.13
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:53:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=ieX4ERtpLD9xXlnppJiXnBM5MolbjWhutaLWoLmtuWI=;
-        b=WJasDlX+L7lTDi5DRlU/Iore/2d+AmazQHpymgaYf5mJzUIoye3IFFkLJAvwLqSY4X
-         YMpcGw9iVNUQUc5I2Pb2d0hcYhjJ+1Uu8gxuVBehkJKOImZwR5rp0bJvdYwuWUAsP2JB
-         lOa5a8Hkl5croJBMPERWm8+LGDIL588sdVkMELH5PQ9nZyIZLr0SGJGk2a0bKTVeG64+
-         2sLbtxRJp+9YBzOndjhgj0bZI9u5ma4lZO58ltKUR2Xxb7eWsmiHG8RrrpsO9B9oZ7OT
-         riTIR2WQujE/PXMZX5xg6rVVD5QSKYKXGl8NjROU6MjKf5rk/KJxHq0SZAMZS8GGCHV6
-         Ftgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ieX4ERtpLD9xXlnppJiXnBM5MolbjWhutaLWoLmtuWI=;
-        b=JJ5kVzkPIZvKfUOnw3ICYWYCXp3wsN9TD01ncJo0O/1/s77x32NOGfcT9LMBuo3kPE
-         IAII3um7cTTvdWkEPA16PGUq6VpdFv+cGlrZ4JOBHWHjB5krtglj3JuWJYzUbhvQa173
-         nmQfaFNuTU1nDCq3y7Kykaot6v5TA5CTVoH9AO7TC03q6sGVx6COaI2zuwvPRmoSomGO
-         VAgqg0sTcc/xtSwS0ALCW3YIMPe7y2VhdK/w8Q80yDQDZcP1tTmQx8qilQz4Bm4Mi5KK
-         epqzTC8WsDHF8Tj++97dOdOiBMtDSRaOIaCGVsDMoMs0MaW/AAn7Cv/sSQDpkVMlC06W
-         zXNw==
-X-Gm-Message-State: AOAM530TSxWzvr18VEccIOpfv5S2g0g+HkjyxTBmnoeI6UxyBToU+m/l
-        8mZv9hD6h7l2w3EnNnfnBPuYag==
-X-Google-Smtp-Source: ABdhPJzSI2kOIfH8vfPEQ4hDiW6Y4SzEOOnLZqvrg4nFXU0ts2KCEezMrgV4P/DO5KsC3zUS5mFBNQ==
-X-Received: by 2002:a05:6512:3c8a:b0:472:2513:db16 with SMTP id h10-20020a0565123c8a00b004722513db16mr10659036lfv.497.1651244013521;
-        Fri, 29 Apr 2022 07:53:33 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id bd6-20020a05651c168600b0024f3d1daeb5sm283625ljb.61.2022.04.29.07.53.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 07:53:33 -0700 (PDT)
-Message-ID: <b7de49e0-c0cf-5062-8426-dcb54272d350@linaro.org>
-Date:   Fri, 29 Apr 2022 17:53:32 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 3/4] clk: qcom: clk-krait: add hw_parent check for
- div2_round_rate
-Content-Language: en-GB
-To:     Ansuel Smith <ansuelsmth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sricharan R <sricharan@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220429120108.9396-1-ansuelsmth@gmail.com>
- <20220429120108.9396-4-ansuelsmth@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220429120108.9396-4-ansuelsmth@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 29 Apr 2022 10:57:47 -0400
+X-Greylist: delayed 242 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 29 Apr 2022 07:54:27 PDT
+Received: from mail.holtmann.org (coyote.holtmann.net [212.227.132.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CAB0DBE9C1;
+        Fri, 29 Apr 2022 07:54:27 -0700 (PDT)
+Received: from smtpclient.apple (p5b3d2ea3.dip0.t-ipconnect.de [91.61.46.163])
+        by mail.holtmann.org (Postfix) with ESMTPSA id B4274CED22;
+        Fri, 29 Apr 2022 16:54:26 +0200 (CEST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: Re: [PATCH v1 3/3] Bluetooth: hci_qca: WAR to handle WCN6750 HW issue
+From:   Marcel Holtmann <marcel@holtmann.org>
+In-Reply-To: <1651228073-1999-4-git-send-email-quic_bgodavar@quicinc.com>
+Date:   Fri, 29 Apr 2022 16:54:25 +0200
+Cc:     Andy Gross <agross@kernel.org>, robh+dt@kernel.org,
+        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hedberg <johan.hedberg@gmail.com>, mka@chromium.org,
+        linux-bluetooth@vger.kernel.org, quic_hemantg@quicinc.com,
+        quic_saluvala@quicinc.com, quic_rjliao@quicinc.com,
+        mcchou@chromium.org
+Content-Transfer-Encoding: 8BIT
+Message-Id: <0D3D8346-0F64-4CAF-8BED-940F189A3E97@holtmann.org>
+References: <1651228073-1999-1-git-send-email-quic_bgodavar@quicinc.com>
+ <1651228073-1999-4-git-send-email-quic_bgodavar@quicinc.com>
+To:     Balakrishna Godavarthi <quic_bgodavar@quicinc.com>
+X-Mailer: Apple Mail (2.3696.80.82.1.1)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/04/2022 15:01, Ansuel Smith wrote:
-> Check if hw_parent is present before calculating the round_rate to
-> prevent kernel panic. On error -EINVAL is reported.
+Hi Balakrishna,
+
+> The patch is workaround for hardware issue on WCN6750.
+> On WCN6750 sometimes observed AON power source takes 100ms
+> time to fully discharge voltage during OFF. As WCN6750 is
+> combo chip for WLAN and BT. If any of the tech area ON is
+> triggered during discharge phase, it fails to turn ON.
+> To overcome this hardware issue, During BT ON, driver check
+> for WLAN_EN pin status. If it high, it will pull BT_EN to high
+> immediately else it will wait for 100ms assuming WLAN was just
+> powered OFF and then BT_EN will be pulled to high.
 > 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-
-I see that other clock drivers do not perform this check. Which path 
-leads to this oops?
-
+> Fixes: d8f97da1b92d2 ("Bluetooth: hci_qca: Add support for QTI Bluetooth chip wcn6750")
+> Reviewed-by: Miao-chen Chou <mcchou@chromium.org>
+> Signed-off-by: Sai Teja Aluvala <quic_saluvala@quicinc.com>
+> Signed-off-by: Balakrishna Godavarthi <quic_bgodavar@quicinc.com>
 > ---
->   drivers/clk/qcom/clk-krait.c | 7 ++++++-
->   1 file changed, 6 insertions(+), 1 deletion(-)
+> drivers/bluetooth/hci_qca.c | 30 ++++++++++++++++++++++++------
+> 1 file changed, 24 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/clk/qcom/clk-krait.c b/drivers/clk/qcom/clk-krait.c
-> index 90046428693c..6c367ad6506a 100644
-> --- a/drivers/clk/qcom/clk-krait.c
-> +++ b/drivers/clk/qcom/clk-krait.c
-> @@ -84,7 +84,12 @@ EXPORT_SYMBOL_GPL(krait_mux_clk_ops);
->   static long krait_div2_round_rate(struct clk_hw *hw, unsigned long rate,
->   				  unsigned long *parent_rate)
->   {
-> -	*parent_rate = clk_hw_round_rate(clk_hw_get_parent(hw), rate * 2);
-> +	struct clk_hw *hw_parent = clk_hw_get_parent(hw);
-> +
-> +	if (!hw_parent)
-> +		return -EINVAL;
-> +
-> +	*parent_rate = clk_hw_round_rate(hw_parent, rate * 2);
->   	return DIV_ROUND_UP(*parent_rate, 2);
->   }
->   
+> diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
+> index eab34e2..c3862d1 100644
+> --- a/drivers/bluetooth/hci_qca.c
+> +++ b/drivers/bluetooth/hci_qca.c
+> @@ -219,6 +219,7 @@ struct qca_serdev {
+> 	struct hci_uart	 serdev_hu;
+> 	struct gpio_desc *bt_en;
+> 	struct gpio_desc *sw_ctrl;
+> +	struct gpio_desc *wlan_en;
+> 	struct clk	 *susclk;
+> 	enum qca_btsoc_type btsoc_type;
+> 	struct qca_power *bt_power;
 
+I am really against these intermixing of Bluetooth and WiFi details. There is work ongoing to do some sequence power procedure. Maybe that is something you should look into. This is a mess.
 
--- 
-With best wishes
-Dmitry
+And again, we are still hacking around hci_qca.c instead of writing a clean serdev only driver for this hardware. I have the feeling that nobody listens to review comments these days. It is just hacking patches together to get hardware enabled somehow and then disappear.
+
+Regards
+
+Marcel
+

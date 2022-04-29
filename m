@@ -2,348 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B458514697
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A40E5146B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357472AbiD2KXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 06:23:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38784 "EHLO
+        id S1357401AbiD2KZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 06:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357388AbiD2KWe (ORCPT
+        with ESMTP id S1357420AbiD2KXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 06:22:34 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3153BC6EC4;
-        Fri, 29 Apr 2022 03:19:16 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id s14so6745026plk.8;
-        Fri, 29 Apr 2022 03:19:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=B3NCzom8hJlx0zEy79Sz4qhJxcFl7hPctwsRA5jCJVg=;
-        b=n5e2gCVMetK60EV0yAY1ZD2lqkuRIIdUATIgR3jexzzkaMC8uaAWT9rNxFUAdvCLbH
-         vVZ9m9DA9XA5BSYrmH3+/xL2rYNAqdrF7ij4qDlpioRQO92Vgf+pCqUUoOYcCG+OFAFe
-         gLlcOVSONcpXDQiy68mGWbJkbJ8NHcMMR7ThVXFUncaJgdAPS+ztw0aNBSN7r/p+/GO+
-         fQYAHjthDn1s6T9Qee7aR9YX13QKL6LrL0jvPvQbuBV/ad8BaN0ev0Uru72L4ZVrM5zp
-         gtzvQQ8KAacKFsk2fR0omTbWb8f7AWXNHyRiGcvMKq9xcWEXF/YyZRFyxfqYWZogCwYl
-         xBXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=B3NCzom8hJlx0zEy79Sz4qhJxcFl7hPctwsRA5jCJVg=;
-        b=ZlcNf0NsRTWQTyRiuhrceCT5Wre/3il+nDB/BKpcQDcVli3Nqj7sAWVBWOOPJ2ia/t
-         AoYgVH0LvDy9CB/R0J2yzpdDbfbwAv2BMBrGqkHJMj2NfOvrz1s1bGlJSq81dOzLhlxf
-         GnvVFk0/Fp5yJf2rIO0bN/zV6KRBPyhRyW36O7bVievQ1y3BYREr5bjvGG4GCC+KxWWv
-         gOMPF5U+tjYJS+jsc8bZfpM6kSI0kQ7E8G3fH/2TiJRNykWGNsTmAV+BTOQNdJwHuK4E
-         9CLDUDQRbsmAiayZMR6bVKK1IZr/8t3iZXeIxa71CvIIr6FqtTlXfulf7FTc3F+OSN4X
-         Etxg==
-X-Gm-Message-State: AOAM533gWUJfdFcAl1qhcIGnpPep0GVP/rRhN18V0i1J6HFXINP+MzU/
-        zIewtbBkui0gAwfcY95aPWGqWYyhaQc=
-X-Google-Smtp-Source: ABdhPJyRVy4Th8+Q8iCMIdMzGLmF4M6s5YI9UwjImZYV5uDo9pI0HszSp7nM2ZUuUPrSn3m3XiDrXA==
-X-Received: by 2002:a17:90a:c402:b0:1d9:a003:3f8a with SMTP id i2-20020a17090ac40200b001d9a0033f8amr3065685pjt.18.1651227555375;
-        Fri, 29 Apr 2022 03:19:15 -0700 (PDT)
-Received: from HOWEYXU-MB0.tencent.com ([106.53.33.166])
-        by smtp.gmail.com with ESMTPSA id k17-20020a628e11000000b0050d8d373331sm2600016pfe.214.2022.04.29.03.19.13
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 29 Apr 2022 03:19:15 -0700 (PDT)
-From:   Hao Xu <haoxu.linux@gmail.com>
-To:     io-uring@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 9/9] io_uring: add register fixed worker interface
-Date:   Fri, 29 Apr 2022 18:18:58 +0800
-Message-Id: <20220429101858.90282-10-haoxu.linux@gmail.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220429101858.90282-1-haoxu.linux@gmail.com>
-References: <20220429101858.90282-1-haoxu.linux@gmail.com>
+        Fri, 29 Apr 2022 06:23:39 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82ADB2FFCD
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 03:20:13 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3F834210F3;
+        Fri, 29 Apr 2022 10:20:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1651227612; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zeylsrOmZMQuOB0uTIqsZXkrZHaf0IuYQAdi9ntjrcw=;
+        b=JvMvOWZ1gK1UlG+HljbtsB3gCsptkVUsSoK0ewAJn+ZG+5tRvwexq99BJoyE1J5Bm1zShi
+        vzTFgOQN1hXTrxISYaTOyXGn4FJGzpycj0fh6vhH6hwZgZMrwa3SpGM7jf8wUwFlHDxjPn
+        zYfBCC93lg+nV7T57ovacWJ+hkCJEuM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1651227612;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zeylsrOmZMQuOB0uTIqsZXkrZHaf0IuYQAdi9ntjrcw=;
+        b=znZOPtmmvPwiWYEij1KNexOok/dzSfQCnit8eGle2Klub1KfRnquaMRhpOlPK00pSSvdcr
+        FtiXKYr9DTttwRDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1D09A13AE0;
+        Fri, 29 Apr 2022 10:20:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id bBElBty7a2I6HQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Fri, 29 Apr 2022 10:20:12 +0000
+Message-ID: <82dc11b4-d8da-e9e9-8181-5695fbd806de@suse.de>
+Date:   Fri, 29 Apr 2022 12:20:11 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [RFC PATCH v4 02/11] drm/fb-helper: Set FBINFO_MISC_FIRMWARE flag
+ for DRIVER_FIRMWARE fb
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20220429084253.1085911-1-javierm@redhat.com>
+ <20220429084253.1085911-3-javierm@redhat.com>
+ <7ce2f8e1-9cf2-4d89-99c2-b4280e4758ba@suse.de>
+ <476d57e5-69dd-94b5-779f-230e091ae62f@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <476d57e5-69dd-94b5-779f-230e091ae62f@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------SXDCMRwBqqpO7jtXdI3GD3WU"
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hao Xu <howeyxu@tencent.com>
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------SXDCMRwBqqpO7jtXdI3GD3WU
+Content-Type: multipart/mixed; boundary="------------gKJ30Z0BL3eTmHZCzGyAn803";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ linux-kernel@vger.kernel.org
+Cc: David Airlie <airlied@linux.ie>, Daniel Vetter <daniel.vetter@ffwll.ch>,
+ dri-devel@lists.freedesktop.org,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Message-ID: <82dc11b4-d8da-e9e9-8181-5695fbd806de@suse.de>
+Subject: Re: [RFC PATCH v4 02/11] drm/fb-helper: Set FBINFO_MISC_FIRMWARE flag
+ for DRIVER_FIRMWARE fb
+References: <20220429084253.1085911-1-javierm@redhat.com>
+ <20220429084253.1085911-3-javierm@redhat.com>
+ <7ce2f8e1-9cf2-4d89-99c2-b4280e4758ba@suse.de>
+ <476d57e5-69dd-94b5-779f-230e091ae62f@redhat.com>
+In-Reply-To: <476d57e5-69dd-94b5-779f-230e091ae62f@redhat.com>
 
-Add an io_uring_register() interface to register fixed workers and
-indicate its work capacity.
-The argument is an array of two elements each is
-    struct {
-    	__s32 nr_workers;
-    	__s32 max_works;
-    }
-(nr_workers, max_works)                        meaning
+--------------gKJ30Z0BL3eTmHZCzGyAn803
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-nr_workers or max_works <  -1                  invalid
-nr_workers or max_works == -1           get the old value back
-nr_workers or max_works >=  0        get the old value and set to the
-                                     new value
+SGkgSmF2aWVyDQoNCkFtIDI5LjA0LjIyIHVtIDExOjIzIHNjaHJpZWIgSmF2aWVyIE1hcnRp
+bmV6IENhbmlsbGFzOg0KPiBIZWxsbyBUaG9tYXMsDQo+IA0KPiBPbiA0LzI5LzIyIDExOjE0
+LCBUaG9tYXMgWmltbWVybWFubiB3cm90ZToNCj4+IEhpDQo+Pg0KPj4gQW0gMjkuMDQuMjIg
+dW0gMTA6NDIgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2FuaWxsYXM6DQo+Pj4gVGhlIERS
+SVZFUl9GSVJNV0FSRSBmbGFnIGRlbm90ZXMgdGhhdCBhIERSTSBkcml2ZXIgdXNlcyBhIGZy
+YW1lYnVmZmVyDQo+Pj4gdGhhdCB3YXMgaW5pdGlhbGl6ZWQgYW5kIHByb3ZpZGVkIGJ5IHRo
+ZSBzeXN0ZW0gZmlybXdhcmUgZm9yIHNjYW5vdXQuDQo+Pj4NCj4+PiBJbmRpY2F0ZSB0byB0
+aGUgZmJkZXYgc3Vic3lzdGVtIHRoYXQgdGhlIHJlZ2lzdGVyZWQgZnJhbWVidWZmZXIgaXMg
+YQ0KPj4+IEZCSU5GT19NSVNDX0ZJUk1XQVJFLCBzbyB0aGF0IGl0IGNhbiBoYW5kbGUgYWNj
+b3JkaW5nbHkuIEZvciBleGFtcGxlLA0KPj4+IHdvbGQgaG90LXVucGx1ZyB0aGUgYXNzb2Np
+YXRlZCBkZXZpY2UgaWYgYXNrZWQgdG8gcmVtb3ZlIGNvbmZsaWN0aW5nDQo+Pj4gZnJhbWVi
+dWZmZXJzLg0KPj4+DQo+Pj4gU3VnZ2VzdGVkLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8dHpp
+bW1lcm1hbm5Ac3VzZS5kZT4NCj4+PiBTaWduZWQtb2ZmLWJ5OiBKYXZpZXIgTWFydGluZXog
+Q2FuaWxsYXMgPGphdmllcm1AcmVkaGF0LmNvbT4NCj4+PiAtLS0NCj4+Pg0KPj4+IChubyBj
+aGFuZ2VzIHNpbmNlIHYxKQ0KPj4+DQo+Pj4gICAgZHJpdmVycy9ncHUvZHJtL2RybV9mYl9o
+ZWxwZXIuYyB8IDQgKysrKw0KPj4+ICAgIDEgZmlsZSBjaGFuZ2VkLCA0IGluc2VydGlvbnMo
+KykNCj4+Pg0KPj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vZHJtX2ZiX2hlbHBl
+ci5jIGIvZHJpdmVycy9ncHUvZHJtL2RybV9mYl9oZWxwZXIuYw0KPj4+IGluZGV4IGQyNjVh
+NzMzMTNjOS4uNzZkZDExODg4NjIxIDEwMDY0NA0KPj4+IC0tLSBhL2RyaXZlcnMvZ3B1L2Ry
+bS9kcm1fZmJfaGVscGVyLmMNCj4+PiArKysgYi9kcml2ZXJzL2dwdS9kcm0vZHJtX2ZiX2hl
+bHBlci5jDQo+Pj4gQEAgLTE4OTEsNiArMTg5MSwxMCBAQCBfX2RybV9mYl9oZWxwZXJfaW5p
+dGlhbF9jb25maWdfYW5kX3VubG9jayhzdHJ1Y3QgZHJtX2ZiX2hlbHBlciAqZmJfaGVscGVy
+LA0KPj4+ICAgIAkJLyogZG9uJ3QgbGVhayBhbnkgcGh5c2ljYWwgYWRkcmVzc2VzIHRvIHVz
+ZXJzcGFjZSAqLw0KPj4+ICAgIAkJaW5mby0+ZmxhZ3MgfD0gRkJJTkZPX0hJREVfU01FTV9T
+VEFSVDsNCj4+PiAgICANCj4+PiArCS8qIEluZGljYXRlIHRoYXQgdGhlIGZyYW1lYnVmZmVy
+IGlzIHByb3ZpZGVkIGJ5IHRoZSBmaXJtd2FyZSAqLw0KPj4+ICsJaWYgKGRybV9jb3JlX2No
+ZWNrX2ZlYXR1cmUoZGV2LCBEUklWRVJfRklSTVdBUkUpKQ0KPj4+ICsJCWluZm8tPmZsYWdz
+IHw9IEZCSU5GT19NSVNDX0ZJUk1XQVJFOw0KPj4+ICsNCj4+DQo+PiBQYXRjaGVzIDEgdG8g
+MyBzaG91bGQgYmUgc3F1YXNoZWQgaW50byBvbmUgYmVmb3JlIGxhbmRpbmcuDQo+Pg0KPiAN
+Cj4gSSBhY3R1YWxseSBjb25zaWRlcmVkIHRoaXMgYnV0IHRoZW4gZGVjaWRlZCB0byBnbyB3
+aXRoIHRoZSBlYWNoIGNoYW5nZQ0KPiBnb2VzIGludG8gaXRzIG93biBwYXRjaCBhcHByb2Fj
+aC4gQnV0IEknbGwgc3F1YXNoIGl0IGluIG5leHQgcmV2aXNpb25zLg0KPiAgIA0KPj4gV2Ug
+Y2FuIGRvIHRoaXMgd2l0aCBEUklWRVJfRklSTVdBUkUuIEFsdGVybmF0aXZlbHksIEknZCBz
+dWdnZXN0IHRvIHdlDQo+PiBjb3VsZCBhbHNvIHVzZWQgdGhlIGV4aXN0aW5nIGZpbmFsIHBh
+cmFtZXRlciBvZg0KPj4gZHJtX2ZiZGV2X2dlbmVyaWNfc2V0dXAoKSB0byBwYXNzIGEgZmxh
+ZyB0aGF0IGRlc2lnbmF0ZXMgYSBmaXJtd2FyZSBkZXZpY2UuDQo+Pg0KPiANCj4gQnkgZXhp
+c3RpbmcgZmluYWwgcGFyYW1ldGVyIHlvdSBtZWFuIEBwcmVmZXJyZWRfYnBwID8gVGhhdCBk
+b2Vzbid0IHNlZW0NCj4gY29ycmVjdC4gSSBhbHNvIGxpa2UgdGhhdCBieSB1c2luZyBEUklW
+RVJfRklSTVdBUkUgaXQgaXMgY29tcGxldGVseSBkYXRhDQo+IGRyaXZlbiBhbmQgdHJhbnNw
+YXJlbnQgdG8gdGhlIERSTSBkcml2ZXIuDQoNCkRSSVZFUl9GSVJNV0FSRSBpcyBhbiBpbmRp
+cmVjdGlvbiBhbmQgb25seSB1c2VkIGhlcmUuIChKdXN0IGxpa2UgDQpGQklORk9fTUlTQ19G
+SVJNV0FSRSBpcyBhIGJhZCBpbnRlcmZhY2UgZm9yIG1hcmtpbmcgZnJhbWVidWZmZXJzIHRo
+YXQgDQpjYW4gYmUgdW5wbHVnZ2VkLikgSWYgYSBkcml2ZXIgc3VwcG9ydHMgaG90LXVucGx1
+Z2dpbmcsIGl0IHNob3VsZCBzaW1wbHkgDQpyZWdpc3RlciBpdHNlbGYgd2l0aCBhcGVydHVy
+ZSBoZWxwZXJzLCByZWdhcmRsZXNzIG9mIHdoZXRoZXIgaXQncyBhIA0KZmlybXdhcmUgZnJh
+bWVidWZmZXIgb3Igbm90Lg0KDQpPZiBwcmVmZXJyZWRfYnBwLCB3ZSByZWFsbHkgb25seSB1
+c2UgdGhlIGxvd2VzdCBieXRlLiBBbGwgb3RoZXIgYml0cyBhcmUgDQp1cCBmb3IgZ3JhYmJp
+bmcuICBUaGUgYXJndW1lbnQgaXMgYSB3b3JrYXJvdW5kIGZvciBoYW5kbGluZyANCm1vZGVf
+Y29uZmlnLnByZWZlcmVkX2RlcHRoIGNvcnJlY3RseS4NCg0KRXZlbnR1YWxseSwgcHJlZmVy
+cmVkX2RlcHRoIHNob3VsZCBiZSByZXBsYWNlZCBieSBzb21ldGhpbmcgbGlrZSANCidwcmVm
+ZXJyZWRfZm9ybWF0Jywgd2hpY2ggd2lsbCBob2xkIHRoZSBkcml2ZXIncyBwcmVmZXJyZWQg
+Zm9ybWF0IGluIA0KNENDLiAgV2Ugd29uJ3QgbmVlZCBwcmVmZXJyZWRfYnBwIHRoZW4uIFNv
+IHdlIGNvdWxkIHR1cm4gcHJlZmVycmVkX2JwcCANCmludG8gYSBmbGFncyBhcmd1bWVudC4N
+Cg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiANCj4gT3IgZG8geW91IGVudmlzaW9uIGEg
+Y2FzZSB3aGVyZSBhIGRyaXZlciB3b3VsZCBiZSBEUklWRVJfRklSTVdBUkUgYnV0IHdlDQo+
+IHdvdWxkbid0IHdhbnQgdGhlIGVtdWxhdGVkIGZiZGV2IHRvIGFsc28gYmUgRkJJTkZPX01J
+U0NfRklSTVdBUkUgPw0KPiANCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3Mg
+RHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJI
+DQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDks
+IEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
-Signed-off-by: Hao Xu <howeyxu@tencent.com>
----
- fs/io-wq.c                    | 101 ++++++++++++++++++++++++++++++++++
- fs/io-wq.h                    |   3 +
- fs/io_uring.c                 |  71 ++++++++++++++++++++++++
- include/uapi/linux/io_uring.h |  11 ++++
- 4 files changed, 186 insertions(+)
+--------------gKJ30Z0BL3eTmHZCzGyAn803--
 
-diff --git a/fs/io-wq.c b/fs/io-wq.c
-index df2d480395e8..c1e87b29c960 100644
---- a/fs/io-wq.c
-+++ b/fs/io-wq.c
-@@ -1671,6 +1671,107 @@ int io_wq_max_workers(struct io_wq *wq, int *new_count)
- 	return 0;
- }
- 
-+/*
-+ * Set max number of fixed workers and the capacity of private work list,
-+ * returns old value. If new_count is -1, then just return the old value.
-+ */
-+int io_wq_fixed_workers(struct io_wq *wq,
-+			struct io_uring_fixed_worker_arg *new_count)
-+{
-+	struct io_uring_fixed_worker_arg prev[IO_WQ_ACCT_NR];
-+	bool first_node = true;
-+	int i, node;
-+	bool readonly[2] = {
-+		(new_count[0].nr_workers == -1 && new_count[0].max_works == -1),
-+		(new_count[1].nr_workers == -1 && new_count[1].max_works == -1),
-+	};
-+
-+	BUILD_BUG_ON((int) IO_WQ_ACCT_BOUND   != (int) IO_WQ_BOUND);
-+	BUILD_BUG_ON((int) IO_WQ_ACCT_UNBOUND != (int) IO_WQ_UNBOUND);
-+	BUILD_BUG_ON((int) IO_WQ_ACCT_NR      != 2);
-+
-+	for (i = 0; i < IO_WQ_ACCT_NR; i++) {
-+		if (new_count[i].nr_workers > task_rlimit(current, RLIMIT_NPROC))
-+			new_count[i].nr_workers =
-+				task_rlimit(current, RLIMIT_NPROC);
-+	}
-+
-+	rcu_read_lock();
-+	for_each_node(node) {
-+		int j;
-+		struct io_wqe *wqe = wq->wqes[node];
-+
-+		for (i = 0; i < IO_WQ_ACCT_NR; i++) {
-+			struct io_wqe_acct *acct = &wqe->fixed_acct[i];
-+			int *nr_fixed, *max_works;
-+			struct io_worker **fixed_workers;
-+			int nr = new_count[i].nr_workers;
-+
-+			raw_spin_lock(&acct->lock);
-+			nr_fixed = &acct->nr_fixed;
-+			max_works = &acct->max_works;
-+			fixed_workers = acct->fixed_workers;
-+			if (first_node) {
-+				prev[i].nr_workers = *nr_fixed;
-+				prev[i].max_works = *max_works;
-+			}
-+			if (readonly[i]) {
-+				raw_spin_unlock(&acct->lock);
-+				continue;
-+			}
-+			if (*nr_fixed == nr || nr == -1) {
-+				*max_works = new_count[i].max_works;
-+				raw_spin_unlock(&acct->lock);
-+				continue;
-+			}
-+			for (j = 0; j < *nr_fixed; j++) {
-+				struct io_worker *worker = fixed_workers[j];
-+
-+				if (!worker)
-+					continue;
-+				worker->flags |= IO_WORKER_F_EXIT;
-+				/*
-+				 * Mark index to -1 to avoid false deletion
-+				 * in io_fixed_worker_exit()
-+				 */
-+				worker->index = -1;
-+				/*
-+				 * Once a worker is in fixed_workers array
-+				 * it is definitely there before we release
-+				 * the acct->lock below. That's why we don't
-+				 * need to increment the worker->ref here.
-+				 */
-+				wake_up_process(worker->task);
-+			}
-+			kfree(fixed_workers);
-+			acct->fixed_workers = NULL;
-+			*nr_fixed = 0;
-+			*max_works = new_count[i].max_works;
-+			acct->fixed_workers = kzalloc_node(
-+						sizeof(*fixed_workers) * nr,
-+						GFP_KERNEL, wqe->node);
-+			if (!acct->fixed_workers) {
-+				raw_spin_unlock(&acct->lock);
-+				return -ENOMEM;
-+			}
-+			raw_spin_unlock(&acct->lock);
-+			for (j = 0; j < nr; j++)
-+				io_wqe_create_worker(wqe, acct);
-+
-+			acct->fixed_worker_registered = !!nr;
-+		}
-+		first_node = false;
-+	}
-+	rcu_read_unlock();
-+
-+	for (i = 0; i < IO_WQ_ACCT_NR; i++) {
-+		new_count[i].nr_workers = prev[i].nr_workers;
-+		new_count[i].max_works = prev[i].max_works;
-+	}
-+
-+	return 0;
-+}
-+
- static __init int io_wq_init(void)
- {
- 	int ret;
-diff --git a/fs/io-wq.h b/fs/io-wq.h
-index ef3ce577e6b7..bf90488b0283 100644
---- a/fs/io-wq.h
-+++ b/fs/io-wq.h
-@@ -2,6 +2,7 @@
- #define INTERNAL_IO_WQ_H
- 
- #include <linux/refcount.h>
-+#include <uapi/linux/io_uring.h>
- 
- struct io_wq;
- 
-@@ -202,6 +203,8 @@ void io_wq_hash_work(struct io_wq_work *work, void *val);
- 
- int io_wq_cpu_affinity(struct io_wq *wq, cpumask_var_t mask);
- int io_wq_max_workers(struct io_wq *wq, int *new_count);
-+int io_wq_fixed_workers(struct io_wq *wq,
-+			struct io_uring_fixed_worker_arg *new_count);
- 
- static inline bool io_wq_is_hashed(struct io_wq_work *work)
- {
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 1e7466079af7..c0c7c1fd94fd 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -11806,6 +11806,71 @@ static __cold int io_register_iowq_max_workers(struct io_ring_ctx *ctx,
- 	return ret;
- }
- 
-+static __cold int io_register_iowq_fixed_workers(struct io_ring_ctx *ctx,
-+						 void __user *arg)
-+	__must_hold(&ctx->uring_lock)
-+{
-+	struct io_uring_task *tctx = NULL;
-+	struct io_sq_data *sqd = NULL;
-+	struct io_uring_fixed_worker_arg new_count[2];
-+	int i, ret;
-+
-+	if (copy_from_user(new_count, arg, sizeof(new_count)))
-+		return -EFAULT;
-+	for (i = 0; i < ARRAY_SIZE(new_count); i++) {
-+		int nr_workers = new_count[i].nr_workers;
-+		int max_works = new_count[i].max_works;
-+
-+		if (nr_workers < -1 || max_works < -1)
-+			return -EINVAL;
-+	}
-+
-+	if (ctx->flags & IORING_SETUP_SQPOLL) {
-+		sqd = ctx->sq_data;
-+		if (sqd) {
-+			/*
-+			 * Observe the correct sqd->lock -> ctx->uring_lock
-+			 * ordering. Fine to drop uring_lock here, we hold
-+			 * a ref to the ctx.
-+			 */
-+			refcount_inc(&sqd->refs);
-+			mutex_unlock(&ctx->uring_lock);
-+			mutex_lock(&sqd->lock);
-+			mutex_lock(&ctx->uring_lock);
-+			if (sqd->thread)
-+				tctx = sqd->thread->io_uring;
-+		}
-+	} else {
-+		tctx = current->io_uring;
-+	}
-+
-+	if (tctx && tctx->io_wq) {
-+		ret = io_wq_fixed_workers(tctx->io_wq, new_count);
-+		if (ret)
-+			goto err;
-+	} else {
-+		memset(new_count, -1, sizeof(new_count));
-+	}
-+
-+	if (sqd) {
-+		mutex_unlock(&sqd->lock);
-+		io_put_sq_data(sqd);
-+	}
-+
-+	if (copy_to_user(arg, new_count, sizeof(new_count)))
-+		return -EFAULT;
-+
-+	/* that's it for SQPOLL, only the SQPOLL task creates requests */
-+	if (sqd)
-+		return 0;
-+
-+err:
-+	if (sqd) {
-+		mutex_unlock(&sqd->lock);
-+		io_put_sq_data(sqd);
-+	}
-+	return ret;
-+}
- static int __io_uring_register(struct io_ring_ctx *ctx, unsigned opcode,
- 			       void __user *arg, unsigned nr_args)
- 	__releases(ctx->uring_lock)
-@@ -11934,6 +11999,12 @@ static int __io_uring_register(struct io_ring_ctx *ctx, unsigned opcode,
- 	case IORING_UNREGISTER_RING_FDS:
- 		ret = io_ringfd_unregister(ctx, arg, nr_args);
- 		break;
-+	case IORING_REGISTER_IOWQ_FIXED_WORKERS:
-+		ret = -EINVAL;
-+		if (!arg || nr_args != 2)
-+			break;
-+		ret = io_register_iowq_fixed_workers(ctx, arg);
-+		break;
- 	default:
- 		ret = -EINVAL;
- 		break;
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index fad63564678a..f0ec9523ab42 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -360,6 +360,12 @@ enum {
- 	IORING_REGISTER_RING_FDS		= 20,
- 	IORING_UNREGISTER_RING_FDS		= 21,
- 
-+	/* set number of fixed workers and number
-+	 * of works in a private work list which
-+	 * belongs to a fixed worker
-+	 */
-+	IORING_REGISTER_IOWQ_FIXED_WORKERS	= 22,
-+
- 	/* this goes last */
- 	IORING_REGISTER_LAST
- };
-@@ -457,4 +463,9 @@ struct io_uring_getevents_arg {
- 	__u64	ts;
- };
- 
-+struct io_uring_fixed_worker_arg {
-+	__s32	nr_workers;
-+	__s32	max_works;
-+};
-+
- #endif
--- 
-2.36.0
+--------------SXDCMRwBqqpO7jtXdI3GD3WU
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJru9sFAwAAAAAACgkQlh/E3EQov+AW
+xw/+PmJ9LsMuoH+9GUcEHArQCkX7beYKYgXVo3lCd/OGSbxMCJKnjNskOUFPGu4k6U8CyB9DORKd
+SSB/DR3/Ys8m6MsNqsykOIHKBr60vCEGEhax3CoSTB5ZLtJ8gox5iSewdG3pJ9CXVT5q7f0zJA25
+0Fvwd+RQN8f/cQ+pQrg0bqCntG6Ik3XLlOCPE9qayu4Ctc0cJgZi5tIOR/G2FOG3U0cqtHcoAoGz
+6UgcBaYdzw6uB0yLuqFd4HGVHibSldJFwMeelfWT2qyISEgbF57bbdZqKIM4KO2fVsoLC/sFLZ9d
+hxZugLvm6GCxEzng6cAV9u5rxpFLmn3hQ4vNvwia6jkwsRA85HmFDCzYdSJ/WpWEeg7zZWwTeg8E
+A4DdFTjxQYwOo4AMaWULjh4Q2Nuytqk65Hz8sy/KvtMcahMyM74mRlu8A2IFGkE7nslM09qyHDGC
+nXVumYGgP2kGidIz8sdqQGHnbq/OgJiEM1S3krt+Dkr/1NnKgRitF+WoNwj4sXrdWE5bTw8z/kEI
+Zf3yZzaX3HXtx1v1zQkGEivt4vQYRR1HtV8QUgln3dhhUlrCT/IoTIF0/lRcrBT88jEN7rr5Qn0P
+u693j3lvR4BEAfVxtyojCkz8xUVKlXtDWQAKeNO4l8yV1u48/R36Rvr+GB7mR8chMcFnpLW0qRU6
+5W8=
+=UOB1
+-----END PGP SIGNATURE-----
+
+--------------SXDCMRwBqqpO7jtXdI3GD3WU--

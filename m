@@ -2,113 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D4D7514FE3
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D197514FEA
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352019AbiD2PwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 11:52:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46066 "EHLO
+        id S1377702AbiD2Pz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 11:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232880AbiD2PwI (ORCPT
+        with ESMTP id S232880AbiD2PzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 11:52:08 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB84B0D2A
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:48:50 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 12F691F892;
-        Fri, 29 Apr 2022 15:48:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1651247329; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VNBiKREvGzFP27guLk4+UBkX+h08uP+X6xTBrt5hHho=;
-        b=drQJxVTKvo1AybnSo2/MzD7LTkaFv9GRGXpGYyqOBRbs5EAF2ux1/GRcTK7qz29bn2iJoA
-        WNCGyJapNln5qZErW8Hli7gUXnsEqum3UET0k3VfleSn5eNynUQnDmSNZ21/LWPPfNU0sv
-        CB6h2NGGgEdITpuJD9nRvtRD7KrcG6Q=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1651247329;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VNBiKREvGzFP27guLk4+UBkX+h08uP+X6xTBrt5hHho=;
-        b=UM/5Pxeh1Iq/PtXprQH7UyAF1c2SBIAehygBwBjrEgVx8t3OWyaMilGzC3u1zwg3ofS52Z
-        ePYIRr92zq0SzFBw==
-Received: from kunlun.suse.cz (unknown [10.100.128.76])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 8905D2C141;
-        Fri, 29 Apr 2022 15:48:48 +0000 (UTC)
-Date:   Fri, 29 Apr 2022 17:48:47 +0200
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     nvdimm@lists.linux.dev
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>, Zou Wei <zou_wei@huawei.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] testing: nvdimm: iomap: make __nfit_test_ioremap a macro
-Message-ID: <20220429154847.GN163591@kunlun.suse.cz>
-References: <20220429134039.18252-1-msuchanek@suse.de>
+        Fri, 29 Apr 2022 11:55:23 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73F1674C0
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:52:02 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id g16so5521809lja.3
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:52:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OizdqLk0k8QMs1TRuRMo3qpTsCyU7LjlsmMSoOiqvXk=;
+        b=C1CdlLOyBVKSuvcDCJi04jQ9cDv2DCq/9LzcvSW8ZdFn/u87peE8WaMOl5ddFxt8L8
+         HR8M9qpK8qocmYfPBoSQxDehTKHrHphs0hfrpt+TbJNOjpQoVe0E11WJ8KNdgzoJVT0K
+         yTW0xhTf+0dCsuVhiT8qG6JSYSpkq2kOKXz4w4BSwdO1lyE28aWwplB0VWgL9xYACGzv
+         a6nee4mMztAiur45wq+SKxeQbkMs97tO2FI4v0G+A8wtUAu0gkPwQbdvL21+7LED+e04
+         AxyHDaboZM39wLBeG+27qKJ0WLUtkoNAg3Dlv1JgnC0hJxeOE1/o8L+XkV15JTmMK9pL
+         IcaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OizdqLk0k8QMs1TRuRMo3qpTsCyU7LjlsmMSoOiqvXk=;
+        b=4bCWrJqHS/e99w4F+oya5P0LXghZ2CVf5rw6gcbdku0uOnJpPOberHpE3iAOfMCzZa
+         FG+GM2KMrgCHYaaUy2JbFQ1cpJZXqeC4J0lhv0rqNOwPwvj3ni/n3eLHNqftAPuyPBWw
+         T9J70cQOa6SjUEMGgYSOi2Rrl9QYkOi6EfaXph3zMYV7RnfRY0erbotqhY5MOv2HyoJo
+         kQdnoa/DVSQcAMir16llYGL9LtdLrP71c/GNy5rniZo5kLt+LuDm6GehWn/JUDSNR62U
+         4EA9bbmloKzaYuoNQr2xI3eqvYGrvcCE0ZD1/JF5mt40SdKu8sX0DkDQ8knJcGsdULte
+         lfdQ==
+X-Gm-Message-State: AOAM531mRykaCUXamNkohKbQs4FWu++nL1eR9bTkf9H1Z7taiCFbRsAC
+        XhtqG3JSdtIoR3jJqX2Na2Phg4ebCG5OB/PY3Qu93g==
+X-Google-Smtp-Source: ABdhPJx29wqDAwEp8Y2yRPTpOUG8lGhwBqmjZeupJHNgtGob5BjndU0KZ8b0HGRPE8G9/v0AgulGcOfaxhvwTtfUnrM=
+X-Received: by 2002:a2e:a5cb:0:b0:24f:233b:d90e with SMTP id
+ n11-20020a2ea5cb000000b0024f233bd90emr11835285ljp.83.1651247520931; Fri, 29
+ Apr 2022 08:52:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220429134039.18252-1-msuchanek@suse.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220407195908.633003-1-pgonda@google.com> <CAFNjLiXC0AdOw5f8Ovu47D==ex7F0=WN_Ocirymz4xL=mWvC5A@mail.gmail.com>
+ <CAMkAt6r-Mc_YN-gVHuCpTj4E1EmcvyYpP9jhtHo5HRHnoNJAdA@mail.gmail.com>
+ <CAMkAt6r+OMPWCbV_svUyGWa0qMzjj2UEG29G6P7jb6uH6yko2w@mail.gmail.com>
+ <62e9ece1-5d71-f803-3f65-2755160cf1d1@redhat.com> <CAMkAt6q6YLBfo2RceduSXTafckEehawhD4K4hUEuB4ZNqe2kKg@mail.gmail.com>
+ <4c0edc90-36a1-4f4c-1923-4b20e7bdbb4c@redhat.com> <CAMkAt6oL5qi7z-eh4z7z8WBhpc=Ow6WtcJA5bDi6-aGMnz135A@mail.gmail.com>
+ <CAMkAt6rmDrZfN5DbNOTsKFV57PwEnK2zxgBTCbEPeE206+5v5w@mail.gmail.com>
+ <0d282be4-d612-374d-84ba-067994321bab@redhat.com> <CAMkAt6ragq4OmnX+n628Yd5pn51qFv4qV20upGR6tTvyYw3U5A@mail.gmail.com>
+ <8a2c5f8c-503c-b4f0-75e7-039533c9852d@redhat.com>
+In-Reply-To: <8a2c5f8c-503c-b4f0-75e7-039533c9852d@redhat.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Fri, 29 Apr 2022 09:51:49 -0600
+Message-ID: <CAMkAt6qAW5zFyTAqX_Az2DT2J3KROPo4u-Ak1sC0J+UTUeFfXA@mail.gmail.com>
+Subject: Re: [PATCH v3] KVM: SEV: Mark nested locking of vcpu->lock
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     John Sperbeck <jsperbeck@google.com>,
+        kvm list <kvm@vger.kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 03:40:39PM +0200, Michal Suchanek wrote:
-> The ioremap passed as argument to __nfit_test_ioremap can be a macro so
-> it cannot be passed as function argument. Make __nfit_test_ioremap into
-> a macro so that ioremap can be passed as untyped macro argument.
+On Fri, Apr 29, 2022 at 9:38 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> On 4/29/22 17:35, Peter Gonda wrote:
+> > On Thu, Apr 28, 2022 at 5:59 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
+> >>
+> >> On 4/28/22 23:28, Peter Gonda wrote:
+> >>>
+> >>> So when actually trying this out I noticed that we are releasing the
+> >>> current vcpu iterator but really we haven't actually taken that lock
+> >>> yet. So we'd need to maintain a prev_* pointer and release that one.
+> >>
+> >> Not entirely true because all vcpu->mutex.dep_maps will be for the same
+> >> lock.  The dep_map is essentially a fancy string, in this case
+> >> "&vcpu->mutex".
+> >>
+> >> See the definition of mutex_init:
+> >>
+> >> #define mutex_init(mutex)                                              \
+> >> do {                                                                   \
+> >>           static struct lock_class_key __key;                            \
+> >>                                                                          \
+> >>           __mutex_init((mutex), #mutex, &__key);                         \
+> >> } while (0)
+> >>
+> >> and the dep_map field is initialized with
+> >>
+> >>           lockdep_init_map_wait(&lock->dep_map, name, key, 0, LD_WAIT_SLEEP);
+> >>
+> >> (i.e. all vcpu->mutexes share the same name and key because they have a
+> >> single mutex_init-ialization site).  Lockdep is as crude in theory as it
+> >> is effective in practice!
+> >>
+> >>>
+> >>>            bool acquired = false;
+> >>>            kvm_for_each_vcpu(...) {
+> >>>                    if (!acquired) {
+> >>>                       if (mutex_lock_killable_nested(&vcpu->mutex, role)
+> >>>                           goto out_unlock;
+> >>>                       acquired = true;
+> >>>                    } else {
+> >>>                       if (mutex_lock_killable(&vcpu->mutex, role)
+> >>>                           goto out_unlock;
+> >>
+> >> This will cause a lockdep splat because it uses subclass 0.  All the
+> >> *_nested functions is allow you to specify a subclass other than zero.
+> >
+> > OK got it. I now have this to lock:
+> >
+> >           kvm_for_each_vcpu (i, vcpu, kvm) {
+> >                    if (prev_vcpu != NULL) {
+> >                            mutex_release(&prev_vcpu->mutex.dep_map, _THIS_IP_);
+> >                            prev_vcpu = NULL;
+> >                    }
+> >
+> >                    if (mutex_lock_killable_nested(&vcpu->mutex, role))
+> >                            goto out_unlock;
+> >                    prev_vcpu = vcpu;
+> >            }
+> >
+> > But I've noticed the unlocking is in the wrong order since we are
+> > using kvm_for_each_vcpu() I think we need a kvm_for_each_vcpu_rev() or
+> > something. Which maybe a bit for work:
+> > https://elixir.bootlin.com/linux/latest/source/lib/xarray.c#L1119.
+>
+> No, you don't need any of this.  You can rely on there being only one
+> depmap, otherwise you wouldn't need the mock releases and acquires at
+> all.  Also the unlocking order does not matter for deadlocks, only the
+> locking order does.  You're overdoing it. :)
 
-Fixes: 6bc756193ff6 ("tools/testing/nvdimm: libnvdimm unit test infrastructure")
+Hmm I'm slightly confused here then. If I take your original suggestion of:
 
-The fallback_fn was passed around to start with, and ioremap was already
-a define when this was merged.
+        bool acquired = false;
+        kvm_for_each_vcpu(...) {
+                if (acquired)
+                        mutex_release(&vcpu->mutex.dep_map,
+_THIS_IP_);  <-- Warning here
+                if (mutex_lock_killable_nested(&vcpu->mutex, role)
+                        goto out_unlock;
+                acquired = true;
 
-> Signed-off-by: Michal Suchanek <msuchanek@suse.de>
-> ---
->  tools/testing/nvdimm/test/iomap.c | 18 ++++++++----------
->  1 file changed, 8 insertions(+), 10 deletions(-)
-> 
-> diff --git a/tools/testing/nvdimm/test/iomap.c b/tools/testing/nvdimm/test/iomap.c
-> index b752ce47ead3..ea956082e6a4 100644
-> --- a/tools/testing/nvdimm/test/iomap.c
-> +++ b/tools/testing/nvdimm/test/iomap.c
-> @@ -62,16 +62,14 @@ struct nfit_test_resource *get_nfit_res(resource_size_t resource)
->  }
->  EXPORT_SYMBOL(get_nfit_res);
->  
-> -static void __iomem *__nfit_test_ioremap(resource_size_t offset, unsigned long size,
-> -		void __iomem *(*fallback_fn)(resource_size_t, unsigned long))
-> -{
-> -	struct nfit_test_resource *nfit_res = get_nfit_res(offset);
-> -
-> -	if (nfit_res)
-> -		return (void __iomem *) nfit_res->buf + offset
-> -			- nfit_res->res.start;
-> -	return fallback_fn(offset, size);
-> -}
-> +#define __nfit_test_ioremap(offset, size, fallback_fn) ({		\
-> +	struct nfit_test_resource *nfit_res = get_nfit_res(offset);	\
-> +	nfit_res ?							\
-> +		(void __iomem *) nfit_res->buf + (offset)		\
-> +			- nfit_res->res.start				\
-> +	:								\
-> +		fallback_fn((offset), (size)) ;				\
-> +})
->  
->  void __iomem *__wrap_devm_ioremap(struct device *dev,
->  		resource_size_t offset, unsigned long size)
-> -- 
-> 2.34.1
-> 
+"""
+[ 2810.088982] =====================================
+[ 2810.093687] WARNING: bad unlock balance detected!
+[ 2810.098388] 5.17.0-dbg-DEV #5 Tainted: G           O
+[ 2810.103788] -------------------------------------
+[ 2810.108490] sev_migrate_tes/107600 is trying to release lock
+(&vcpu->mutex) at:
+[ 2810.115798] [<ffffffffb7cd3592>] sev_lock_vcpus_for_migration+0xe2/0x1e0
+[ 2810.122497] but there are no more locks to release!
+[ 2810.127376]
+               other info that might help us debug this:
+[ 2810.133911] 3 locks held by sev_migrate_tes/107600:
+[ 2810.138791]  #0: ffffa6cbf31ca3b8 (&kvm->lock){+.+.}-{3:3}, at:
+sev_vm_move_enc_context_from+0x96/0x690
+[ 2810.148178]  #1: ffffa6cbf28523b8 (&kvm->lock/1){+.+.}-{3:3}, at:
+sev_vm_move_enc_context_from+0xae/0x690
+[ 2810.157738]  #2: ffff9220683b01f8 (&vcpu->mutex){+.+.}-{3:3}, at:
+sev_lock_vcpus_for_migration+0x89/0x1e0
+"""
+
+This makes sense to me given we are actually trying to release lock we
+haven't locked yet. So thats why I thought we'd need to work with a
+prev_vcpu pointer. So the behavior I've observed is slightly different
+than I'd expect from your statement "(i.e. all vcpu->mutexes share the
+same name and key because they have a
+single mutex_init-ialization site)."
+
+Ack about the unlocking order, that makes things easier.
+
+>
+> Paolo
+>

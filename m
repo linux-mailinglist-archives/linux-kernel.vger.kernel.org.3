@@ -2,160 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F21F651424F
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 08:28:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96E34514255
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 08:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354530AbiD2Ga7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 02:30:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36158 "EHLO
+        id S1354482AbiD2GeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 02:34:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbiD2Ga6 (ORCPT
+        with ESMTP id S1349962AbiD2GeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 02:30:58 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83CA63503
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 23:27:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651213661; x=1682749661;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=SuKUMbuCFeOAQ3RN6lPTsfmXavMFIzZF1jAdEMe+Jcw=;
-  b=D0rpZx68KQUnfxFbjFo1z2Gk+ZimrlW2tPnDB0cvJ4r+Sh1nA7q/SDMB
-   pcUoZXLlHVQSahZrAHcG2fYXe1CGnXcWGLZzZUlrw52xmTrVKHPOkPoY4
-   PuyaDYAjdVVqUCGfvZd3n3PvGSgvBx83qa5oO3UMdKWJQ0OpWgjC0/+fo
-   TrMoyvB7LnBoNpK+SKecgDilyZj+lxbCPLzvFVcgT1dZlkuYGh5uWSHSx
-   50Ww/HFZVrdTUzYaTkZml3jtNjLi300zzb9pDn7J+BeLQEjA1Ize7HCV6
-   uom2HJ/hgqQIbdmH9JWD36Ll6HVzlzwf47RjSg65JzE7whkioxaNqlV+q
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="247105412"
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="247105412"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 23:27:41 -0700
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="581921103"
-Received: from lye4-mobl.ccr.corp.intel.com (HELO [10.249.170.95]) ([10.249.170.95])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 23:27:36 -0700
-Message-ID: <47d16a5f-23de-fb84-6958-5329ef08fb25@linux.intel.com>
-Date:   Fri, 29 Apr 2022 14:27:33 +0800
+        Fri, 29 Apr 2022 02:34:06 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEC86AA42
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 23:30:49 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id k27so7924400edk.4
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 23:30:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=s1clNq5BQBXHMi5yLCKb4UG59pVLMf7WbijCi7/Lbvw=;
+        b=yiP2cQfA0EiqXcNCGaC4mEFsX+LYRnv6XmBjLC4bLupo8UKkiWETvAQDXdAACSvQCG
+         wW6o/4Y4rB4ldjI+cVQ/c03GAIXcEhma+QdncoqL36X9hRq9OkZrucsJDqjhV4wQBnE2
+         A2YWxzIhvFf+5Xq9Er/zkQOq9i/2rXIvVIYRgdk/aCYSzjtrvGruMIN5T+an4gJ9ZBsX
+         dsE+ITqfuyQZXyh9YNSjVUs3HfAeTmV2f4FkKj0DE5t7TqMMqc1+TrZZbT2ylPXKSyI+
+         pp728qnS8TqjH2uTealBlfJ7ifY4Y0h+awWOMtda+tKh8gcAWG7hrqzYBQ4MFpuG9Nf9
+         N4LA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=s1clNq5BQBXHMi5yLCKb4UG59pVLMf7WbijCi7/Lbvw=;
+        b=jQ3tlm0nrzsi+ST9oGppHZBsPt4Ra3JUZzyMFAkZfobSvc1tbjJ5gxkRLBIKuVpv6E
+         JB5k4UhMkF1R5f64F+PojeQQpdLqkJJNDeTNy+KR9rkZHk6UmzPZniHfIjPPBzoOQHKg
+         +pAacPY4G51b7sJ9EpMfclnatnL33vD/oN1hbmlV1vaMCyL494bhBo5dSLpB3DpW2Eaf
+         IuVgvqw9Bi26DVTpO81JEMp5m6MySXA0wl0SLTMXakKtRiARiWhq0NdWf1yb6YetH6VN
+         82IunQExvzF9Bga4ZlZ4YSVo+iD9xbogAzgq9HNRFby1Y2uefK1ZQtZKSjqqjFeBdeKd
+         4MJQ==
+X-Gm-Message-State: AOAM533+m79yfZvNxX94yygGpyLOmxByXdeKgMvkIQ8eghH99vOFU8kB
+        1BhVtq/oHQT0rwSa6g5fePc9Cg==
+X-Google-Smtp-Source: ABdhPJwHYf5LFrUI7xpoXcKT1RsbdRXWzWdeo7uxehHkpBBNBDrNMi1obwlZXtwPu3uRYLRM6IjsLw==
+X-Received: by 2002:a50:e696:0:b0:419:998d:5feb with SMTP id z22-20020a50e696000000b00419998d5febmr40180413edm.122.1651213847683;
+        Thu, 28 Apr 2022 23:30:47 -0700 (PDT)
+Received: from [192.168.0.168] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id co8-20020a0564020c0800b0042617ba63c6sm2562278edb.80.2022.04.28.23.30.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Apr 2022 23:30:47 -0700 (PDT)
+Message-ID: <df1e8dd6-5d26-f3de-b9f5-643a73390517@linaro.org>
+Date:   Fri, 29 Apr 2022 08:30:46 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v4 03/12] iommu: Add attach/detach_dev_pasid domain ops
+Subject: Re: [PATCH 1/2] dt-bindings: google,cros-ec-keyb: Introduce switches
+ only compatible
 Content-Language: en-US
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
-Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-References: <20220421052121.3464100-1-baolu.lu@linux.intel.com>
- <20220421052121.3464100-4-baolu.lu@linux.intel.com> <YmqqaXtqev9FUJo7@myrica>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <YmqqaXtqev9FUJo7@myrica>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        "Joseph S. Barrera III" <joebar@chromium.org>
+References: <20220427203026.828183-1-swboyd@chromium.org>
+ <20220427203026.828183-2-swboyd@chromium.org>
+ <9248da4f-ca04-82f0-2840-a20797c25d2a@linaro.org>
+ <CAE-0n52Y=3EEZ6qguNx=hM44BahbH3cuq7x6Bbe5HELKkkvrUw@mail.gmail.com>
+ <29cc62aa-2995-ea96-0e7e-242f9ddaa87e@linaro.org>
+ <CAE-0n50ORzU52KpSPUNeEke-16uWo+Vn8WVhcdtdCc6WJiji6A@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAE-0n50ORzU52KpSPUNeEke-16uWo+Vn8WVhcdtdCc6WJiji6A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/28 22:53, Jean-Philippe Brucker wrote:
-> On Thu, Apr 21, 2022 at 01:21:12PM +0800, Lu Baolu wrote:
->> Attaching an IOMMU domain to a PASID of a device is a generic operation
->> for modern IOMMU drivers which support PASID-granular DMA address
->> translation. Currently visible usage scenarios include (but not limited):
+On 28/04/2022 18:01, Stephen Boyd wrote:
 >>
->>   - SVA (Shared Virtual Address)
->>   - kernel DMA with PASID
->>   - hardware-assist mediated device
+>>> Given that none of the properties are
+>>> required for google,cros-ec-keyb it didn't seem necessary to make having
+>>> the google,cros-ec-keyb-switches compatible deny the existence of the
+>>> matrix-keymap properties.
 >>
->> This adds a pair of common domain ops for this purpose and adds helpers
->> to attach/detach a domain to/from a {device, PASID}. Some buses, like
->> PCI, route packets without considering the PASID value. Thus a DMA target
->> address with PASID might be treated as P2P if the address falls into the
->> MMIO BAR of other devices in the group. To make things simple, these
->> interfaces only apply to devices belonging to the singleton groups, and
->> the singleton is immutable in fabric i.e. not affected by hotplug.
+>> Maybe I misunderstood the commit msg. Are the
+>> "google,cros-ec-keyb-switches" devices coming with matrix keyboard or
+>> not? I mean physically.
 >>
->> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> [...]
->> +/*
->> + * Use standard PCI bus topology, isolation features, and DMA
->> + * alias quirks to check the immutable singleton attribute. If
->> + * the device came from DT, assume it is static and then
->> + * singleton can know from the device count in the group.
->> + */
->> +static bool device_group_immutable_singleton(struct device *dev)
->> +{
->> +	struct iommu_group *group = iommu_group_get(dev);
->> +	int count;
->> +
->> +	if (!group)
->> +		return false;
->> +
->> +	mutex_lock(&group->mutex);
->> +	count = iommu_group_device_count(group);
->> +	mutex_unlock(&group->mutex);
->> +	iommu_group_put(group);
->> +
->> +	if (count != 1)
->> +		return false;
->> +
->> +	if (dev_is_pci(dev)) {
->> +		struct pci_dev *pdev = to_pci_dev(dev);
->> +
->> +		/*
->> +		 * The device could be considered to be fully isolated if
->> +		 * all devices on the path from the device to the host-PCI
->> +		 * bridge are protected from peer-to-peer DMA by ACS.
->> +		 */
->> +		if (!pci_acs_path_enabled(pdev, NULL, REQ_ACS_FLAGS))
->> +			return false;
->> +
->> +		/* Filter out devices which has any alias device. */
->> +		if (pci_for_each_dma_alias(pdev, has_pci_alias, pdev))
->> +			return false;
 > 
-> Aren't aliases already added to the group by pci_device_group()?  If so
-> it's part of the count check above
-
-You are right. pci_device_group() has already covered pci aliases.
-
+> The answer is "sometimes, physically". Sometimes there are switches like
+> volume buttons and power buttons and also a matrix keyboard (convertible
+> and clamshells). Other times there are volume buttons and power buttons
+> and no matrix keyboard (detachable). This device node represents both
+> the keyboard and the switches.
 > 
->> +
->> +		return true;
->> +	}
->> +
->> +	/*
->> +	 * If the device came from DT, assume it is static and then
->> +	 * singleton can know from the device count in the group.
->> +	 */
->> +	return is_of_node(dev_fwnode(dev));
-> 
-> I don't think DT is relevant here because a platform device enumerated
-> through ACPI will also have its own group. It should be safe to stick to
-> what the IOMMU drivers declare with their device_group() callback. Except
-> for PCI those groups should be immutable so we can return true here.
+> Unfortunately the EC firmware on older Chromebooks that don't have a
+> matrix keyboard still report that they have some number of columns and
+> rows. I was hoping to make this fully dynamic by querying the EC but
+> that isn't possible.
 
-Fair enough. My code is too restrict. The group singleton is immutable
-as long as the fabric is static or ACS (or similar) technology is
-implemented. Currently we only need to care about PCI as far as I can
-see.
+OK, then it's indeed slightly different case. Let's skip my comment.
 
-> Thanks,
-> Jean
-> 
 
 Best regards,
-baolu
+Krzysztof

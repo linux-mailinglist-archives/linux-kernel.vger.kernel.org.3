@@ -2,85 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B6EA514DB7
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6688514DBE
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377766AbiD2Oot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 10:44:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33430 "EHLO
+        id S1377842AbiD2OpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 10:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378077AbiD2OoY (ORCPT
+        with ESMTP id S1378157AbiD2Oo2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 10:44:24 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2881D496A8
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:40:08 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id b5so4107248ile.0
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:40:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=c7/rTrXWfT9qI0T+ZC8VZTvuLtN6jGScG/El1dcOs4U=;
-        b=2+DUz1PUat7L5aT5Nt0Xr1HZYzE3RRY47+qmLTM5XNp+B2R2nHGUF1oLgstwwAV5Hf
-         LzVCmcfiBjYQ0dzuNwhhHhqoxCon2Izie2AKkXkVtl0dAwOmeqVW0sJ4fPBeU5kWdRka
-         usEncyFBET/crDoiU0zG8ZlbImSz9oP2zaOwmcuTztwA1lCgDGAXe37lF5bz4nf49ueL
-         Fm/Wfl6WGJZXwOkjrYqKZuvSX8rkd5OkRLAKeEYSz+eo0NHc8WqpeGmHsWVYaX5AfjIA
-         SOHXsP0JUd+c8dbEoxX6umeejbBxUbnTDxvigpW9rGmoi4atUJf8t3ktzbGs0cCDHscW
-         +JJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=c7/rTrXWfT9qI0T+ZC8VZTvuLtN6jGScG/El1dcOs4U=;
-        b=UKmKmBIEAijrAmcR3s7uepaoJyATiT+fPW01ZUp2pOu5ji6+gNfQY+lTEgYJ407fCI
-         TyOPliVUo/sFh4k3YL1sGoo8OeuXkVSK1dkh1TsDMN62faidY+d417eEjPp8zn0P5ET0
-         23zJENs1BP4NqtvXKabga2u1c8HKVK5KnlJC46LpQsPXHjeBQDgug/4+IuAT/cxymZqr
-         8sBXuuTq8jOgubriJ/MIbxwg6BNBNcZbUiMyHkjokJCzgWJLHO4039wn8fse9URR+Yix
-         D9zHL3e+36Ep8nJpi5dqakPWPoP80n1zEGosGvIS5yE7AUO0udSoGZwmwQOKwjAz0yQz
-         YmEg==
-X-Gm-Message-State: AOAM531bnwlVLf9HKvRQbYhKgmxLnlbvs6aVz9bEZABj3lWOOR+VGXx7
-        QRl+3ejVN2P7KV1r1AUC9qCXjw==
-X-Google-Smtp-Source: ABdhPJz8KUTHUGi/Jbg3iuSMPI5uAMcIELrjGnIOHfrHWTAJ3wUhOfXNQwmGDCtFKsrZsDTlmR4ZlQ==
-X-Received: by 2002:a05:6e02:b2b:b0:2cd:a289:15f9 with SMTP id e11-20020a056e020b2b00b002cda28915f9mr10058227ilu.36.1651243207272;
-        Fri, 29 Apr 2022 07:40:07 -0700 (PDT)
-Received: from [127.0.1.1] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id t13-20020a02ccad000000b0032b3a7817afsm617994jap.115.2022.04.29.07.40.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 07:40:06 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     esyr@redhat.com, asml.silence@gmail.com
-Cc:     linux-kernel@vger.kernel.org, io-uring@vger.kernel.org
-In-Reply-To: <20220429142218.GA28696@asgard.redhat.com>
-References: <20220429142218.GA28696@asgard.redhat.com>
-Subject: Re: [PATCH] io_uring: check that data field is 0 in ringfd unregister
-Message-Id: <165124320648.74951.15737346713763033828.b4-ty@kernel.dk>
-Date:   Fri, 29 Apr 2022 08:40:06 -0600
+        Fri, 29 Apr 2022 10:44:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52395AEDE;
+        Fri, 29 Apr 2022 07:41:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B04D861A09;
+        Fri, 29 Apr 2022 14:41:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FBDCC385A7;
+        Fri, 29 Apr 2022 14:40:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651243260;
+        bh=zbW9iUV/RG0Ob9qAu90IBbElC2QsUzjzzLanYd3CW2M=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=sAWtZ+/ks6cyJgabSY5Jq8dYVXgNO022Tjz9BAzzocHhoo6lSN9DatoyKFxMY0CFy
+         940ZJUR6IM7zhrgsB8KjzwMTs0alKb5kHwA3/67r6bnt0Ceon93VN1dWKlQYUR4DTy
+         g7s5V47TBPbcnngPaF4bXMvoDkfI1ulc0j18spu16qR8hSnDGDlXUx1AcC1USmufNB
+         Tt/avoZjV2BmF9va7ZTWfHLXOLaif7cr0vu32M9ufiwFSwzr8NoLkBRL+NwIlPts4R
+         kSLxblpGiruzhzI3KwcMz98lGkqpsjvSUnbTTDlW3WqQq1eJXgAGPnr4J3A8Oeh7sC
+         F2zLO+tojc9Rw==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Jouni Malinen <j@w1.fi>,
+        linux-wireless@vger.kernel.org (open list:NETWORKING DRIVERS (WIRELESS)),
+        netdev@vger.kernel.org (open list:NETWORKING DRIVERS)
+Subject: Re: [RFC v2 38/39] wireless: add HAS_IOPORT dependencies
+References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
+        <20220429135108.2781579-70-schnelle@linux.ibm.com>
+Date:   Fri, 29 Apr 2022 17:40:53 +0300
+In-Reply-To: <20220429135108.2781579-70-schnelle@linux.ibm.com> (Niklas
+        Schnelle's message of "Fri, 29 Apr 2022 15:51:07 +0200")
+Message-ID: <87zgk4c5qi.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 29 Apr 2022 16:22:18 +0200, Eugene Syromiatnikov wrote:
-> Only allow data field to be 0 in struct io_uring_rsrc_update user
-> arguments to allow for future possible usage.
-> 
-> 
+Niklas Schnelle <schnelle@linux.ibm.com> writes:
 
-Applied, thanks!
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. We thus need to add HAS_IOPORT as dependency for
+> those drivers using them.
+>
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-[1/1] io_uring: check that data field is 0 in ringfd unregister
-      commit: 303cc749c8659d5f1ccf97973591313ec0bdacd3
+I assume this will go via some other tree than wireless-next:
 
-Best regards,
+Acked-by: Kalle Valo <kvalo@kernel.org>
+
 -- 
-Jens Axboe
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

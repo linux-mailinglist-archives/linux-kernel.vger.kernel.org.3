@@ -2,97 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 839105148F9
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:15:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACD7F514917
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:20:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358974AbiD2MSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 08:18:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52194 "EHLO
+        id S1359028AbiD2MXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 08:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238748AbiD2MSa (ORCPT
+        with ESMTP id S236207AbiD2MXd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 08:18:30 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBD2205D3;
-        Fri, 29 Apr 2022 05:15:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-        In-Reply-To:References; bh=nJbZKj7+pWCDUFlNUm1wgYBm08byh6iVe5oLUsV2N0I=; b=5S
-        j/EYV/8pbsLLSu8n1/uFFbh2LWnTM81hBfk5ByckrGFEz/Rzm0HXbq8JtQJgO5q8+P9NvMdC1CJYr
-        pRPj16atkhl+PJjTdufp6ZRrDM4Le5t3OVL/LfORBPTg8OyraEq2jc4EYMRjWXLyKwzmhkOZxajJq
-        SdpcKlQ30SYXps4=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nkPWS-000TZv-69; Fri, 29 Apr 2022 14:14:56 +0200
-Date:   Fri, 29 Apr 2022 14:14:56 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     "jay.xu@rock-chips.com" <jay.xu@rock-chips.com>
-Cc:     kuba <kuba@kernel.org>, davem <davem@davemloft.net>,
-        joabreu <joabreu@synopsys.com>,
-        "alexandre.torgue" <alexandre.torgue@st.com>,
-        "peppe.cavallaro" <peppe.cavallaro@st.com>,
-        netdev <netdev@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Device Tree <devicetree@vger.kernel.org>
-Subject: Re: Re: [PATCH V2] ethernet: stmmac: support driver work for DTs
- without child queue node
-Message-ID: <YmvWwIgE71iwZhgp@lunn.ch>
-References: <20220428010927.526310-1-jay.xu@rock-chips.com>
- <20220429004605.1010751-1-jay.xu@rock-chips.com>
- <Yms3ynT8RGmldAkm@lunn.ch>
- <2022042909545741446644@rock-chips.com>
+        Fri, 29 Apr 2022 08:23:33 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619301581C;
+        Fri, 29 Apr 2022 05:20:15 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id m20so15068357ejj.10;
+        Fri, 29 Apr 2022 05:20:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l7dL/+VZLaVUt5wUNxW4Ik+wlho9LkARjWYWndO/Mro=;
+        b=PY/65KPfyC8yRsWjvXlITjG7mJeESXMzEUiATZTp88CKL6xH4FPzUig3zy0Ooi+Iza
+         sffwJUrhwqDBIogUAMj979EMMaMa1nDWLKgaN9t/zzAxdcJ6AEd8FS0iTZZGlsFnwR/p
+         e3d1Si1roOHer+nKrUog2XMLP5JA0Pa5CKTrJlqfPOJ0K5y5eMdVPkhaxSN4pEVlPCY3
+         tj9IBYoFw6LWAgfY/5HJ03EmfXflyS4SPQHMo5NakqekM0MoJbhe0Z7K5aSa2g/cCtRd
+         KC6283ZRvtn8HO9YRm6ZAzfm0pD4kei7EOzvpjzGbWDEF7xX+pn5oqmVTD+poSdcpC8F
+         qNQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l7dL/+VZLaVUt5wUNxW4Ik+wlho9LkARjWYWndO/Mro=;
+        b=rv+YvHkdfVsBCCFXwyB/0oabHn1uxiFrBm1ZT1RMBkCFXcua9T1Dp/T+8RwdPB8sp6
+         uDX06aaObQ+o3idjF68xF6DTKfw5WX/KHP119KAWtyNvtjLNu9ahBvbBo+wlI85okh3h
+         aAkwvZ84WQoTyVdGSZhYtj4OmZbCgyuO9ajQFBFuRXW0o81JGbIomNIHasSwC/AFIoEe
+         k8dMMy2MvQK3ibo6CJ40gR9RHtIi0bW9tCpFMl1lSiCoQvNPSvI14uQ8rxRW98hM+M47
+         WEPrTp8tvhG89Prp/3vl42+TaYavEvlzyLmzfP7/og3D43pYHZVgztn5fjE9X7Q3o86J
+         z3Lg==
+X-Gm-Message-State: AOAM533MKM+gKzgM3rhniJfjPxsQtKhsSk1KVGENyx72jtXS/GkoHBxG
+        J/hBZYXwF5gWFcXN9DIabdJfWSoYeBA=
+X-Google-Smtp-Source: ABdhPJxGrtVVGu869LXVrVu8bVEy2calmisJ4Jv4hPwq7maHZolNdLun7MI5qvCzu80eyQoOfW2/dg==
+X-Received: by 2002:a17:907:94ca:b0:6da:e637:fa42 with SMTP id dn10-20020a17090794ca00b006dae637fa42mr36277625ejc.347.1651234813770;
+        Fri, 29 Apr 2022 05:20:13 -0700 (PDT)
+Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.googlemail.com with ESMTPSA id rb48-20020a170907693000b006f3ef214e10sm602694ejc.118.2022.04.29.05.20.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 05:20:13 -0700 (PDT)
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ansuel Smith <ansuelsmth@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: [PATCH 0/3] Krait Documentation conversion
+Date:   Fri, 29 Apr 2022 14:17:36 +0200
+Message-Id: <20220429121739.28584-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2022042909545741446644@rock-chips.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding device tree list.
+This series convert the krait-cc and the kpps-acc/gcc Documentation to
+yaml.
 
-This is mostly a device tree issue, so the device tree Maintainers
-should be part of the discussion.
+This series comes form a split of a bigger series that got too big and
+now hard to review.
 
-> >On Fri, Apr 29, 2022 at 08:46:05AM +0800, Jianqun Xu wrote:
-> >> The driver use the value of property 'snps,rx-queues-to-use' to loop
-> >> same numbers child nodes as queues, such as:
-> >>
-> >>     gmac {
-> >>         rx-queues-config {
-> >>             snps,rx-queues-to-use = <1>;
-> >>             queue0 {
-> >>                 // nothing need here.
-> >>     };
-> >> };
-> >>     };
-> >>
-> >> Since a patch for dtc from rockchip will delete all node without any
-> >> properties or child node, the queue0 node will be deleted, that caused
-> >> the driver fail to probe:
-> >
-> >Is this the in tree dtc? Do you have a commit hash for it? That should
-> >probably be used as a Fixes: tag. Or that change to dtc needs
-> >reverting because it breaks stuff.
-> > 
-> The patch is a hack patch for some products and have not in tree dtc, I said that to
-> explain a possible case how things happed, it's only a case of no child queue node.
+While they are still more or less wrong and doesn't really reflect real
+driver implementation, they are converted to prepare for a fixup later
+when dts and driver are finally fixed. For now make a 1:1 conversion.
 
-So this has nothing to do with the kernel dtc, or the upstream
-dtc. This is only a 'vendor crap' dtc which has been hacked?
+Ansuel Smith (3):
+  dt-bindings: clock: Convert qcom,krait-cc to yaml
+  dt-bindings: arm: msm: Convert kpss-acc driver Documentation to yaml
+  dt-bindings: arm: msm: Convert kpss-gcc driver Documentation to yaml
 
-Why should mainline care? Is there anything in the DT standard which
-says the compiler can optimise out empty properties?
+ .../bindings/arm/msm/qcom,kpss-acc.txt        | 49 ----------
+ .../bindings/arm/msm/qcom,kpss-acc.yaml       | 94 +++++++++++++++++++
+ .../bindings/arm/msm/qcom,kpss-gcc.txt        | 44 ---------
+ .../bindings/arm/msm/qcom,kpss-gcc.yaml       | 63 +++++++++++++
+ .../bindings/clock/qcom,krait-cc.txt          | 34 -------
+ .../bindings/clock/qcom,krait-cc.yaml         | 59 ++++++++++++
+ 6 files changed, 216 insertions(+), 127 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.txt
+ create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
+ create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/clock/qcom,krait-cc.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,krait-cc.yaml
 
-     Andrew
+-- 
+2.34.1
+

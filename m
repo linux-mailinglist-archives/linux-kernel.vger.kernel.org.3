@@ -2,103 +2,336 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9ADC5149E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:49:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D5635149E7
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:50:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359527AbiD2MxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 08:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46596 "EHLO
+        id S1359536AbiD2MyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 08:54:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357892AbiD2MxI (ORCPT
+        with ESMTP id S1359506AbiD2Mxt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 08:53:08 -0400
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E68C9B75;
-        Fri, 29 Apr 2022 05:49:50 -0700 (PDT)
-Received: by mail-qt1-f178.google.com with SMTP id p4so5014054qtq.12;
-        Fri, 29 Apr 2022 05:49:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4tqelAYwf2EnKhlkfmEW1Nniwpv4OsNQ/+Rpd0YuVJE=;
-        b=QA7qD+Sc/Tn/d3TJwe1Y9P3uS55IzPjQOcT8Fr0DaXmY4HJo81BJ8nXOy4kwVFuBX3
-         5GN5rKOGwOe37evzd4inH5bE6IlkyUPe51/axUolyIZrsQrpV29B70KjIulL+dU+Vwgc
-         48iUWzVemWqRaa9Ha922A+7+LuJdHVUihYmzWlxXbgAqyOJCSJuOMMf9IUdG62bKJsuT
-         ng8DFgKCRBoC7qawat1GD4PYoj7BodFMWeO8pzO/nDOt0osN8j4tqRuqA/40I/bbv2If
-         lh17mHtixCY3Vr2qfV1mhPGHFDS+Q3/Oav0P7HqdP+8uR+/d4SoL7Pr9g2gXlXaRmV34
-         3YOA==
-X-Gm-Message-State: AOAM532w1wWr65QdXejVXS6EihZySKvgy//IpYDUNuLB1lYOVuTMIqeP
-        2GB8VazRQiHWMQDZElpyI1QEqP4UWd7NFnmP
-X-Google-Smtp-Source: ABdhPJzu1L3CKUQeA5EfpZv7o3ouJ05aOw/9erx+/iJuJw2JRbWwcuXwpozlkTeQoow8/m8lTJ2Htw==
-X-Received: by 2002:ac8:5a81:0:b0:2f1:f20d:173a with SMTP id c1-20020ac85a81000000b002f1f20d173amr26622184qtc.686.1651236588942;
-        Fri, 29 Apr 2022 05:49:48 -0700 (PDT)
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
-        by smtp.gmail.com with ESMTPSA id s16-20020ac85cd0000000b002e1ed82f1e5sm1834042qta.75.2022.04.29.05.49.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 05:49:48 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2f83983782fso84025897b3.6;
-        Fri, 29 Apr 2022 05:49:47 -0700 (PDT)
-X-Received: by 2002:a81:e10d:0:b0:2f7:bb2a:6529 with SMTP id
- w13-20020a81e10d000000b002f7bb2a6529mr34597687ywh.62.1651236586925; Fri, 29
- Apr 2022 05:49:46 -0700 (PDT)
+        Fri, 29 Apr 2022 08:53:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8801C13E02;
+        Fri, 29 Apr 2022 05:50:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CDB262219;
+        Fri, 29 Apr 2022 12:50:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96C79C385A7;
+        Fri, 29 Apr 2022 12:50:26 +0000 (UTC)
+Message-ID: <aff5572e-d391-7a96-e760-01e5813963ba@xs4all.nl>
+Date:   Fri, 29 Apr 2022 14:50:25 +0200
 MIME-Version: 1.0
-References: <20220428093355.16172-1-jiaxin.yu@mediatek.com>
- <CAMuHMdWYJofetMwkAH4d8UzKZH77hxwRhXrMhaECOs1suQV2PA@mail.gmail.com> <b90426905a486ab720b9d67f00ed869285acd768.camel@mediatek.com>
-In-Reply-To: <b90426905a486ab720b9d67f00ed869285acd768.camel@mediatek.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 29 Apr 2022 14:49:35 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVA-JJqPB9fiUZSeXZR+fa58V5t2OQjaN1-JvGR+K_H4Q@mail.gmail.com>
-Message-ID: <CAMuHMdVA-JJqPB9fiUZSeXZR+fa58V5t2OQjaN1-JvGR+K_H4Q@mail.gmail.com>
-Subject: Re: [v4 00/18] ASoC: mediatek: Add support for MT8186 SoC
-To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, aaronyu@google.com,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Trevor Wu <trevor.wu@mediatek.com>,
-        Tzung-Bi Shih <tzungbi@google.com>,
-        Julian Braha <julianbraha@gmail.com>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-mediatek@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v9 08/13] media: atmel: atmel-isc: change format
+ propagation to subdev into only verification
+Content-Language: en-US
+To:     Jacopo Mondi <jacopo@jmondi.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Eugen.Hristev@microchip.com, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Claudiu.Beznea@microchip.com,
+        robh+dt@kernel.org, Nicolas.Ferre@microchip.com
+References: <b6630c65-0720-3633-d5ed-aadf4716f206@microchip.com>
+ <dabbff36-a10c-0a8a-94e8-ce7c2d896403@xs4all.nl>
+ <20220429095848.ec4xnul6tin6n7sf@uno.localdomain>
+ <Ymu4ywjEvX5HbE/W@pendragon.ideasonboard.com>
+ <a10a255c-e3b7-4c5f-2a7e-9474e0526a61@xs4all.nl>
+ <Ymu7/VWrvT0bZfeP@pendragon.ideasonboard.com>
+ <50b07246-39ed-2e5d-05ff-b8b482cb2bcb@xs4all.nl>
+ <YmvTxKUbQoxchG2D@pendragon.ideasonboard.com>
+ <540a488a-5e3e-6031-b358-a02448b4d52a@xs4all.nl>
+ <YmvZ2wdJ8RZxdemO@pendragon.ideasonboard.com>
+ <20220429123859.bu7anjhtk4i2ukns@uno.localdomain>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20220429123859.bu7anjhtk4i2ukns@uno.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jiaxin,
+On 29/04/2022 14:38, Jacopo Mondi wrote:
+> Hi
+> 
+> On Fri, Apr 29, 2022 at 03:28:11PM +0300, Laurent Pinchart wrote:
+>> On Fri, Apr 29, 2022 at 02:23:45PM +0200, Hans Verkuil wrote:
+>>> On 29/04/2022 14:02, Laurent Pinchart wrote:
+>>>> On Fri, Apr 29, 2022 at 01:17:27PM +0200, Hans Verkuil wrote:
+>>>>> On 29/04/2022 12:20, Laurent Pinchart wrote:
+>>>>>> On Fri, Apr 29, 2022 at 12:13:46PM +0200, Hans Verkuil wrote:
+>>>>>>> On 29/04/2022 12:07, Laurent Pinchart wrote:
+>>>>>>>> On Fri, Apr 29, 2022 at 11:58:48AM +0200, Jacopo Mondi wrote:
+>>>>>>>>> On Fri, Apr 29, 2022 at 10:43:09AM +0200, Hans Verkuil wrote:
+>>>>>>>>>> On 29/04/2022 10:28, Eugen.Hristev@microchip.com wrote:
+>>>>>>>>>>> On 4/29/22 11:17 AM, Hans Verkuil wrote:
+>>>>>>>>>>>> On 10/03/2022 10:51, Eugen Hristev wrote:
+>>>>>>>>>>>>> As a top MC video driver, the atmel-isc should not propagate the format to the
+>>>>>>>>>>>>> subdevice, it should rather check at start_streaming() time if the subdev is properly
+>>>>>>>>>>>>> configured with a compatible format.
+>>>>>>>>>>>>> Removed the whole format finding logic, and reworked the format verification
+>>>>>>>>>>>>> at start_streaming time, such that the ISC will return an error if the subdevice
+>>>>>>>>>>>>> is not properly configured. To achieve this, media_pipeline_start
+>>>>>>>>>>>>> is called and a link_validate callback is created to check the formats.
+>>>>>>>>>>>>> With this being done, the module parameter 'sensor_preferred' makes no sense
+>>>>>>>>>>>>> anymore. The ISC should not decide which format the sensor is using. The
+>>>>>>>>>>>>> ISC should only cope with the situation and inform userspace if the streaming
+>>>>>>>>>>>>> is possible in the current configuration.
+>>>>>>>>>>>>> The redesign of the format propagation has also risen the question of the
+>>>>>>>>>>>>> enumfmt callback. If enumfmt is called with an mbus_code, the enumfmt handler
+>>>>>>>>>>>>> should only return the formats that are supported for this mbus_code.
+>>>>>>>>>>>>> Otherwise, the enumfmt will report all the formats that the ISC could output.
+>>>>>>>>>>>>> With this rework, the dynamic list of user formats is removed. It makes no
+>>>>>>>>>>>>> more sense to identify at complete time which formats the sensor could emit,
+>>>>>>>>>>>>> and add those into a separate dynamic list.
+>>>>>>>>>>>>> The ISC will start with a simple preconfigured default format, and at
+>>>>>>>>>>>>> link validate time, decide whether it can use the format that is configured
+>>>>>>>>>>>>> on the sink or not.
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+>>>>>>>>>>>>> Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+>>>>>>>>>>>>> ---
+>>>>>>>>>>>>> Changes in v9:
+>>>>>>>>>>>>> - isc_link_validate now static
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> Changes in v7:
+>>>>>>>>>>>>> - minor typos as suggested by Jacopo
+>>>>>>>>>>>>> - small changes, reduce some indentation, modified an index, as suggested by
+>>>>>>>>>>>>> Jacopo
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> Changes in v6:
+>>>>>>>>>>>>> - reworked a bit enum_fmt as suggested by Jacopo
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> Changes in v5:
+>>>>>>>>>>>>> - removed user_formats dynamic list as it is now pointless
+>>>>>>>>>>>>> - greatly simplified the enum_fmt function
+>>>>>>>>>>>>> - removed some init code that was useless now
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> Changes in v4:
+>>>>>>>>>>>>> - moved validation code into link_validate and used media_pipeline_start
+>>>>>>>>>>>>> - merged this patch with the enum_fmt patch which was previously in v3 of
+>>>>>>>>>>>>> the series
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> Changes in v3:
+>>>>>>>>>>>>> - clamp to maximum resolution once the frame size from the subdev is found
+>>>>>>>>>>>>>   drivers/media/platform/atmel/atmel-isc-base.c | 412 ++++++++----------
+>>>>>>>>>>>>>   .../media/platform/atmel/atmel-isc-scaler.c   |   5 +
+>>>>>>>>>>>>>   drivers/media/platform/atmel/atmel-isc.h      |  13 +-
+>>>>>>>>>>>>>   .../media/platform/atmel/atmel-sama5d2-isc.c  |  20 +
+>>>>>>>>>>>>>   .../media/platform/atmel/atmel-sama7g5-isc.c  |  20 +
+>>>>>>>>>>>>>   5 files changed, 236 insertions(+), 234 deletions(-)
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
+>>>>>>>>>>>>> index ee1dda6707a0..fe2c0af58060 100644
+>>>>>>>>>>>>> --- a/drivers/media/platform/atmel/atmel-isc-base.c
+>>>>>>>>>>>>> +++ b/drivers/media/platform/atmel/atmel-isc-base.c
+>>>>>>>>>>>>> @@ -36,11 +36,6 @@ static unsigned int debug;
+>>>>>>>>>>>>>   module_param(debug, int, 0644);
+>>>>>>>>>>>>>   MODULE_PARM_DESC(debug, "debug level (0-2)");
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> -static unsigned int sensor_preferred = 1;
+>>>>>>>>>>>>> -module_param(sensor_preferred, uint, 0644);
+>>>>>>>>>>>>> -MODULE_PARM_DESC(sensor_preferred,
+>>>>>>>>>>>>> -              "Sensor is preferred to output the specified format (1-on 0-off), default 1");
+>>>>>>>>>>>>> -
+>>>>>>>>>>>>>   #define ISC_IS_FORMAT_RAW(mbus_code) \
+>>>>>>>>>>>>>        (((mbus_code) & 0xf000) == 0x3000)
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> @@ -337,6 +332,10 @@ static int isc_start_streaming(struct vb2_queue *vq, unsigned int count)
+>>>>>>>>>>>>>        unsigned long flags;
+>>>>>>>>>>>>>        int ret;
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> +     ret = media_pipeline_start(&isc->video_dev.entity, &isc->mpipe);
+>>>>>>>>>>>>
+>>>>>>>>>>>> The pipeline validation is done in start_streaming, but I don't think that
+>>>>>>>>>>>> is the best place: if STREAMON is called before buffers are queued, then
+>>>>>>>>>>>> an invalid pipeline isn't discovered until enough buffers are queued to
+>>>>>>>>>>>> kick off start_streaming.
+>>>>>>>>>>>>
+>>>>>>>>>>>> Drivers like vsp1, omap3isp and the samsung drivers all do this in streamon().
+>>>>>>>>>>>>
+>>>>>>>>>>>> I think that is the correct time to do this.
+>>>>>>>>>>>
+>>>>>>>>>>> Hello Hans,
+>>>>>>>>>>>
+>>>>>>>>>>> Initially (v2, v3) I had this in streamon(). The problem that I faced at
+>>>>>>>>>>> that time was that streamoff was never called, so I could not call
+>>>>>>>>>>> media_pipeline_stop(). Then Jacopo told me to move it to start_streaming
+>>>>>>>>>>> (see change log for v4) , and I did not face any more problems.
+>>>>>>>>>
+>>>>>>>>> Yes indeed, seems I suggested to use media_pipeline_handler in a
+>>>>>>>>> comment on your v3
+>>>>>>>>>
+>>>>>>>>> "at s_stream time your top driver calls media_pipeline_start()"
+>>>>>>>>>
+>>>>>>>>> sorry about that, I should have looked around a bit more carefully and
+>>>>>>>>> notice most drivers do so at vb2 streamon
+>>>>>>>>>
+>>>>>>>>> However I don't see media_pipeline_start being called at all in v3 of
+>>>>>>>>> the patch
+>>>>>>>>>
+>>>>>>>>>> It's a mess. Looking at some drivers I see that omap3isp calls media_pipeline_stop
+>>>>>>>>>> in streamoff (so will have the same problem as you described if VIDIOC_STREAMOFF
+>>>>>>>>>> isn't called), exynos4-is does the same, but it also checks the streaming state in
+>>>>>>>>>> the release() fop callback, so that would fix this problem. And vimc does this
+>>>>>>>>>> in stop_streaming.
+>>>>>>>>>>
+>>>>>>>>>> I'm in favor of fixing this in vb2, that framework knows exactly when this needs
+>>>>>>>>>> to be called.
+>>>>>>>>>
+>>>>>>>>> Are you suggesting to have vb2 to call media_pipeline_start() or is it
+>>>>>>>>> more complex than this ?
+>>>>>>>>
+>>>>>>>> I think Hans meant adding a .validate() operation to vb2.
+>>>>>>>>
+>>>>>>>> vb2 is already quite complex, I don't think adding more features is a
+>>>>>>>> good idea. I'd rather have vb2 focus on buffer management only
+>>>>>>>> (.start_streaming() and .stop_streaming() shouldn't have been in there
+>>>>>>>> in my opinion), and handle validation in the .streamon() handler. I'd
+>>>>>>>> expect most drivers that deal with media pipelines to do more work in
+>>>>>>>> .streamon() anyway.
+>>>>>>>
+>>>>>>> I disagree with that :-)
+>>>>>>>
+>>>>>>> It's vb2 that keeps track of the streaming state and when what actions
+>>>>>>> need to be taken. Drivers really shouldn't need to care about the ioctls
+>>>>>>> themselves, and just implement the relevant vb2 callbacks. Relying on
+>>>>>>> drivers to handle any of the streaming ioctls is asking for problems,
+>>>>>>> as this shows: most drivers implement this wrong today.
+>>>>>>>
+>>>>>>> The vb2 framework knows when e.g. the pipeline needs to be started or
+>>>>>>> stopped, and can do this at the best time, without drivers needing to
+>>>>>>> keep track of when streamon/off/release is called. Keep that logic in
+>>>>>>> vb2.
+>>>>>>
+>>>>>> Pipeline management and buffer management are two different issues.
+>>>>>> Don't forget about devices that have multiple video nodes, part of the
+>>>>>> same pipeline (possibly a combination of output and capture nodes, or
+>>>>>> all of the same type). Forcing drivers to go through vb2 operations to
+>>>>>> handle the pipeline will be messy, will result in more bloat in vb2, and
+>>>>>> make the result more bug-prone and harder to maintain.
+>>>>>>
+>>>>>> If pipeline management is too complex, let's simplify it, new helpers
+>>>>>> can make sense, but not through vb2.
+>>>>>
+>>>>> But it is vb2 that knows when streaming starts and stops.
+>>>>
+>>>> That's right, but pipeline start (which includes validation and resource
+>>>> reservation) needs to be performed synchronously with VIDIOC_STREAMON.
+>>>> The streaming state managed by vb2 is not relevant,
+>>>> media_pipeline_start() must not be delayed the same way
+>>>> .start_streaming() is.
+>>>
+>>> It will be the first thing that vb2_streamon calls. This has nothing to do
+>>> with start_streaming: that's called when sufficient number of buffers are
+>>> queued up to be able to start the DMA. This proposed prepare_streaming op
+>>> will be called when VIDIOC_STREAMON is called.
+>>
+>> Then it doesn't need vb2's knowledge of the stream state :-)
+>>
+>>>>> The driver just
+>>>>> needs to be informed (e.g. prepare_streaming and unprepare_streaming ops).
+>>>>>
+>>>>> vb2 deals with buffer management and it keeps track of the streaming state
+>>>>> and makes the streaming state transitions. That *is* an integral part of
+>>>>> vb2. What is missing at the moment are callbacks done at streamon time and
+>>>>> when the streaming stops (streamoff, or close() when is_streaming is true).
+>>>>>
+>>>>> If you want to implement stream validation in a driver, then there are a
+>>>>> lot of things you need to do:
+>>>>>
+>>>>> - override streamon, make sure you call vb2_queue_is_busy(), validate the
+>>>>>   pipeline, then call vb2_streamon, if that fails, remember to stop the
+>>>>>   pipeline.
+>>>>>
+>>>>> - override streamoff, make sure you call vb2_queue_is_busy(), stop the
+>>>>>   pipeline and call vb2_streamoff.
+>>>>>
+>>>>> - in the release() function when the fh is closed, you have to check
+>>>>>   vb2_is_streaming(), check that you are the owner of the queue, and if true,
+>>>>>   stop the pipeline.
+>>>>
+>>>> I'm not opposed to helper functions to implement that, they can bundle
+>>>> vb2 calls and pipeline management.
+>>>>
+>>>>> By moving this to vb2 ops all you need to implement are the prepare and
+>>>>> unprepare ops.
+>>>>>
+>>>>> Esp. the release() implementation is tricky. I'm pretty sure that
+>>>>> drivers/media/platform/samsung/exynos4-is/fimc-lite.c is wrong, since it
+>>>>> should only call media_pipeline_stop() for the owner of the queue. Instead
+>>>>> it calls it for the last user of the queue.
+>>>>>
+>>>>> I see that fimc_lite_streamoff() is wrong too: you can safely call
+>>>>> VIDIOC_STREAMOFF twice: the second streamoff just returns 0 without
+>>>>> doing anything. Instead media_pipeline_stop is called without testing if
+>>>>> the queue is streaming.
+>>>>>
+>>>>> And yes, this is in part because V4L2 has quite some history and certainly
+>>>>> API choice were made in the past that we wouldn't make today. But vb2
+>>>>> shields you from that, and behaves much more like a proper state machine.
+>>>>>
+>>>>> I know you prefer to give a lot more control to driver developers, but
+>>>>> in my experience very few developers can do things like this right. And
+>>>>> it is really hard as a reviewer to check if all the corner cases are handled
+>>>>> correctly in a driver. If vb2 is used, then I know things are called at the
+>>>>> right time, and that makes my life as reviewer so much easier.
+>>>>
+>>>> It's not just about giving more control to drivers, it's about
+>>>> organizing the software layers in a way that keeps them maintainable,
+>>>> with layered abstractions and not midlayers.
+>>>>
+>>>> We are extensively reworking the media pipeline management as part of
+>>>> the stream series, and there will be more work on top of that that will
+>>>> make even more fundamental changes. I would like to at least postpone
+>>>> any work on vb2 until then, to be able to evaluate the impact.
+>>>
+>>> I'll make an RFC patch for vb2 so you have a better idea of what it does.
+>>
+>> As long as we don't merge it before I get the chance to send the media
+>> pipeline management rework, I'm all for RFCs :-)
+>>
+> 
+> To unblock Eugen is it fine if he moves media_pipeline_start() at
+> streamon() time for now ? It will require overriding
+> v4l2_ioctl.vidioc_streamon which might be a bit of additional work
+> (but probably easier to replace once a proper solution lands)
+> 
+> Otherwise, should the series go in as it is now ?
 
-On Fri, Apr 29, 2022 at 11:32 AM Jiaxin Yu <jiaxin.yu@mediatek.com> wrote:
-> On Fri, 2022-04-29 at 10:47 +0200, Geert Uytterhoeven wrote:
-> > Gmail tends to mark your patches as spam.
-> > Can you please make sure to use "PATCH" in the subject line, e.g.
-> > "[PATCH v4 00/18] ASoC: mediatek: Add support for MT8186 SoC"?
+I had a comment about patch 6, so I want a new series anyway. All the
+patches with just fixes (everything but 4 and 8) can go in once I have
+them.
 
-> Sorry for this mistake, I usually use "git format-patch --subject-
-> prefix "v4" --cover-letter -x" to generate a series of patches.
-> So it automatically removes "PATCH". I will correct the cmd to "git
-> format-patch --subject-prefix "PATCH v4" --cover-letter -x".
+I think - all things considered - it is currently best to start and stop the
+pipeline in start/stop_streaming: that at least avoids all the complications
+with streamon/off/close() that is really hard to get right without (IMHO)
+my proposed vb2 changes.
 
-You can just use e.g. "-v4" instead of the --subject-prefix option.
+With that I will accept the series.
 
-Gr{oetje,eeting}s,
+Regards,
 
-                        Geert
+	Hans
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> Thanks
+>   j
+> 
+>>>>> There may still be a few drivers that really need to do this manually, and
+>>>>> that's OK, but a driver like the atmel-isc doesn't need that at all.
+>>
+>> --
+>> Regards,
+>>
+>> Laurent Pinchart
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

@@ -2,75 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90412514F75
+	by mail.lfdr.de (Postfix) with ESMTP id DA4B4514F76
 	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378453AbiD2Pc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 11:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42402 "EHLO
+        id S1378466AbiD2Pc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 11:32:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378506AbiD2PcJ (ORCPT
+        with ESMTP id S1378505AbiD2PcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 29 Apr 2022 11:32:09 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CD1D4C92
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:28:37 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id q185so10934887ljb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:28:37 -0700 (PDT)
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD0ED4C9B;
+        Fri, 29 Apr 2022 08:28:38 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id a1so9495912edt.3;
+        Fri, 29 Apr 2022 08:28:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=bhq9Edgd4TreDu6ZZX1wON0xSU1SZwVBqK/SEM+ml3E=;
-        b=B3xMcLPAdNIn9uq2hakHPIlS8jvWBspKPqlkNh7vmKOaxKyaL3MczjXBPc9hVIXgb1
-         SlB7eFrdt9btBjddlOdddK+/PmXIeU3GNfb8PNgtu+RtZWanbwMO8BJlHjIEMhfmyu/T
-         Yz9yA4QKZjJ0yuLILO6MXxuVhhMZC27HA09vKdW5kBBW03uApgo+MylQXsOBwVr/Av/O
-         WCZXKN5nHBdMVFcX7SWG+NB5ndonYXbRPW1G1aTeJNvNvL24WQsXVfK0szPmNTtarEjx
-         5cQ5QxyNDKEDTiWR9DzKsYLtudCV/5shn5aipbTP45CTmfARLAAmoL6iXuGUHzwn8TS+
-         6WeA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=uQV4T/D00CJ/ygzy9sj7P/AoFBwXwhKdzgdcMmOX8Rs=;
+        b=HK6WZvw87L2O6eO4hpnri/TbkekIUuPquNkJEEJEcnJrYjYHyc5VQvUSr80v8RCJOr
+         365W7Y0B4vVvAJoj3fOVXCofI2R9mbv4kpQs6HVu0zTfZr/+2Lzoh4cdnuEKs+qRJg6Z
+         lpCVzU/GCsJRdOyfYd4LOukvGBRywOQgPKndBLCOJ+UrnJ/rw3AoHPUlkhXZCmi3Va4V
+         UO8AiQqizbkuRPUBdrzoNmlQKrCuA1Oy34y1ngpd5/MjhTct3Eqw8qfK5eVGeocqLUmv
+         WUjjZtT8DvDIVrawPP8l+W26QkVJzyBtBkrYk1U9fhy+GejP5g1EBDnMLnwyQENG2F4G
+         dWeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=bhq9Edgd4TreDu6ZZX1wON0xSU1SZwVBqK/SEM+ml3E=;
-        b=ggw/l3tY61pixK57IRerO9WNUdZKla0omAGFRI9ya/evvC8+MCp2jFqv9WPO0b69MS
-         xfFO1fKaIDtdMC5s1xliiUHY5XGM5TwBNVDRmRmfsKkEbyEnsdd8GA0Ntg1xJWxeIxUL
-         uZPHesZrmYcWtf4qwiBfzihpT7ezuR3/M+65eQy4QU7RBHAP2hECdTdwpWLWgEwNCKS/
-         21w16YamtNxUbRBvZHQPWn2y0XKAii7WAF7T/zWjyLovXfS2lDtgNyRDqmXPO9jBr4H1
-         qp6IxWK3EgdJILhDfERCIdmK3PlP0YGWZxAC88nFGIVz0zvsMP9W2/kKFsTUkaFAfkV7
-         SeXw==
-X-Gm-Message-State: AOAM533JReMz6IuHXbfL1mszlvG+01e280bwppb1BAxzKV4pJ5Fe5Wsn
-        pr8ofPl4zqF78V8bI780wMA=
-X-Google-Smtp-Source: ABdhPJwohhuXeqggDcgYROZEOtgIKa51kUFPDtQnKaRDo5KPeapt3KOaEM3V1qCKDEH1jMSMEdtQUA==
-X-Received: by 2002:a2e:87cb:0:b0:24f:81c:8940 with SMTP id v11-20020a2e87cb000000b0024f081c8940mr20554318ljj.423.1651246116210;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=uQV4T/D00CJ/ygzy9sj7P/AoFBwXwhKdzgdcMmOX8Rs=;
+        b=RMv4simdYYLc8nNTYtmxanX8439XlTbDeGqdPDDr3JFVJptjkxnBKOa2CVfdw5O94G
+         vV9YllVU9Me73BXGv6sKLHAz28a8bUa9qkioBiWs41OrpSs7m6kofX6Sj0cuhbQ2bEMs
+         vk2SQrSs1OYcqEoOlLkcUMVdzMnG7s3o1F0vpOPabZBnRNzMhQuw2/lJVrtb8Sp9LHRN
+         dBT0NGXpS715lTLVywYHYFa6SWrxHgstDYZKFGe60/Ka8Tk0c0OBFACitNTW06yFpeDT
+         kEFQ2kUr4uOIjbUjw+2hyDK6XviOvXWSIDTImhHJFY7EYGwfjduWhT+Ct8fiW4WSUvIF
+         Nijw==
+X-Gm-Message-State: AOAM532ra1sC6D4D4BZQ7d8BGq+7yOrw25KOhTPhN8enbGYIvo0+xohp
+        qlSDkVyhpwd8SqQaKGt0/kU=
+X-Google-Smtp-Source: ABdhPJzAa9xFpERdrvjYh23on+WS7Qi0ovrUCS3EkiR6XULJ/lZhvMKLOJYvPu9iXKvt01ZXIA8eUg==
+X-Received: by 2002:a05:6402:e:b0:423:d5ff:8fce with SMTP id d14-20020a056402000e00b00423d5ff8fcemr41453209edu.407.1651246117121;
+        Fri, 29 Apr 2022 08:28:37 -0700 (PDT)
+Received: from archbook.localnet (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
+        by smtp.gmail.com with ESMTPSA id e13-20020a170906844d00b006f3ef214dc3sm737910ejy.41.2022.04.29.08.28.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 29 Apr 2022 08:28:36 -0700 (PDT)
-Received: from [192.168.1.7] ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id a17-20020a05651c211100b0024f3d1daeffsm296467ljq.135.2022.04.29.08.28.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 08:28:35 -0700 (PDT)
-Subject: Re: [PATCH v2 08/19] xen/shbuf: switch xen-front-pgdir-shbuf to use
- INVALID_GRANT_REF
-From:   Oleksandr <olekstysh@gmail.com>
-To:     Juergen Gross <jgross@suse.com>,
-        xen-devel <xen-devel@lists.xenproject.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>
-References: <20220428082743.16593-1-jgross@suse.com>
- <20220428082743.16593-9-jgross@suse.com>
- <CAPD2p-nisRgMOzy+w2jx5ULfZTyv4MqtG0wkV9jNn3wNg415sQ@mail.gmail.com>
-Message-ID: <b05fe983-8f9e-da3d-1bf0-e121ba969ae3@gmail.com>
-Date:   Fri, 29 Apr 2022 18:28:34 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Liang Chen <cl@rock-chips.com>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Kever Yang <kever.yang@rock-chips.com>
+Subject: Re: [PATCH 0/3] Enable JPEG Encoder on RK3566/RK3568
+Date:   Fri, 29 Apr 2022 17:28:35 +0200
+Message-ID: <2438841.KJ31GcehEG@archbook>
+In-Reply-To: <198ce3981ad15844627581f9519cab67ed2a81c1.camel@ndufresne.ca>
+References: <20220427224438.335327-1-frattaroli.nicolas@gmail.com> <198ce3981ad15844627581f9519cab67ed2a81c1.camel@ndufresne.ca>
 MIME-Version: 1.0
-In-Reply-To: <CAPD2p-nisRgMOzy+w2jx5ULfZTyv4MqtG0wkV9jNn3wNg415sQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,174 +82,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Freitag, 29. April 2022 16:46:01 CEST Nicolas Dufresne wrote:
+> Le jeudi 28 avril 2022 =E0 00:44 +0200, Nicolas Frattaroli a =E9crit :
+> > Hello,
+> >=20
+> > the following series adds support for and enables the hardware JPEG
+> > encoder on the RK3566 and RK3568 line of SoCs by Rockchip.
+> >=20
+> > The JPEG encoder is its own little Hantro instance with seemingly just
+> > the encode functionality.
+>=20
+> I'm a little suspicious about this statement. I believe the Hantro combo =
+is
+> identical to RK3399 and that you are confusing with Rockchip JPEG encoder=
+ here.
+> Here's the source of my suspicion:
+>=20
+> https://github.com/JeffyCN/rockchip_mirrors/blob/mpp/osal/mpp_soc.cpp#L637
+>=20
+> As this get burnt into DT, we really need to get this right. Perhaps we n=
+eed to
+> run the reference software to verify ? Ping me if you need help with that.
 
-Hello Juergen
+I believe there's three separate questions here:
 
+A) is this a Hantro instance with more than just JPEG encoding?
+B) is this the same as the other[1] Hantro instance, just with a bigger
+   offset for the encoder?
+C) if A is true and B is false, does this also have decoders?
 
-On 28.04.22 21:03, Oleksandr Tyshchenko wrote:
->
->
-> On Thu, Apr 28, 2022 at 11:28 AM Juergen Gross <jgross@suse.com 
-> <mailto:jgross@suse.com>> wrote:
->
-> Hello Juergen
->
-> [sorry for the possible format issue]
->
->     Instead of using a private macro for an invalid grant reference use
->     the common one.
->
->     Signed-off-by: Juergen Gross <jgross@suse.com
->     <mailto:jgross@suse.com>>
->     ---
->      drivers/xen/xen-front-pgdir-shbuf.c | 17 ++++-------------
->      1 file changed, 4 insertions(+), 13 deletions(-)
->
->     diff --git a/drivers/xen/xen-front-pgdir-shbuf.c
->     b/drivers/xen/xen-front-pgdir-shbuf.c
->     index a959dee21134..fa2921d4fbfc 100644
->     --- a/drivers/xen/xen-front-pgdir-shbuf.c
->     +++ b/drivers/xen/xen-front-pgdir-shbuf.c
->     @@ -21,15 +21,6 @@
->
->      #include <xen/xen-front-pgdir-shbuf.h>
->
->     -#ifndef GRANT_INVALID_REF
->     -/*
->     - * FIXME: usage of grant reference 0 as invalid grant reference:
->     - * grant reference 0 is valid, but never exposed to a PV driver,
->     - * because of the fact it is already in use/reserved by the PV
->     console.
->     - */
->     -#define GRANT_INVALID_REF      0
->     -#endif
->     -
->      /**
->       * This structure represents the structure of a shared page
->       * that contains grant references to the pages of the shared
->     @@ -83,7 +74,7 @@ grant_ref_t
->      xen_front_pgdir_shbuf_get_dir_start(struct xen_front_pgdir_shbuf
->     *buf)
->      {
->             if (!buf->grefs)
->     -               return GRANT_INVALID_REF;
->     +               return INVALID_GRANT_REF;
->
->             return buf->grefs[0];
->      }
->     @@ -142,7 +133,7 @@ void xen_front_pgdir_shbuf_free(struct
->     xen_front_pgdir_shbuf *buf)
->                     int i;
->
->                     for (i = 0; i < buf->num_grefs; i++)
->     -                       if (buf->grefs[i] != GRANT_INVALID_REF)
->     +                       if (buf->grefs[i] != INVALID_GRANT_REF)
->     gnttab_end_foreign_access(buf->grefs[i], 0UL);
->             }
->             kfree(buf->grefs);
->     @@ -355,7 +346,7 @@ static void backend_fill_page_dir(struct
->     xen_front_pgdir_shbuf *buf)
->             }
->             /* Last page must say there is no more pages. */
->             page_dir = (struct xen_page_directory *)ptr;
->     -       page_dir->gref_dir_next_page = GRANT_INVALID_REF;
->     +       page_dir->gref_dir_next_page = INVALID_GRANT_REF;
->      }
->
->      /**
->     @@ -384,7 +375,7 @@ static void guest_fill_page_dir(struct
->     xen_front_pgdir_shbuf *buf)
->
->                     if (grefs_left <= XEN_NUM_GREFS_PER_PAGE) {
->                             to_copy = grefs_left;
->     -                       page_dir->gref_dir_next_page =
->     GRANT_INVALID_REF;
->     +                       page_dir->gref_dir_next_page =
->     INVALID_GRANT_REF;
->
->
-> I faced an issue with testing PV Sound with the current series.
->
-> root@salvator-x-h3-4x2g-xt-domu:~# aplay /media/MoodyLoop.wav
-> Playing WAVE '/media/MoodyLoop.wav' : Signed 16 bit Little Endian, 
-> Rate 44100 Hz, Stereo
-> (XEN) common/grant_table.c:1053:d1v2 Bad ref 0xffffffff for d6
->
-> Here we have an interesting situation. PV Sound frontend uses this 
-> xen-front-pgdir-shbuf framework. Technically, this patch changes 
-> page_dir->gref_dir_next_page (reference to the next page describing 
-> page directory) from 0 to 0xffffffff here.
-> #define INVALID_GRANT_REF  ((grant_ref_t)-1)
->
-> But according to the protocol (sndif.h), "0" means that there are no 
-> more pages in the list and the user space backend expects only that 
-> value. So receiving 0xffffffff it assumes there are pages in the list 
-> and trying to process...
-> https://elixir.bootlin.com/linux/v5.18-rc4/source/include/xen/interface/io/sndif.h#L650
->
->
-> I think, the same is relevant to backend_fill_page_dir() as well.
+I think I can only answer B). I do not think fdee0000 is the same hardware
+instance as fdea0400. They are in different power domains (yes, this one
+being in the RGA PD is correct according to downstream code, TRM and my
+own testing). They also have their own MMU each.
 
+Your findings point towards A) being true. I'd love to be able to just
+throw a mainline VP8 or H.264 driver at it to check, but that sadly does
+not exist yet. Upon checking the TRM again, it seems it documents
+registers for H.264 as well.
 
-In addition to what I said yesterday:
+However I can do this to answer C), and I will once I get the time.
+It would be somewhat surprising if there was a hidden third H.264
+decoder on this chip.
 
-PV Display also uses this xen-front-pgdir-shbuf framework. It's protocol 
-(displif.h) also mentions the same as sndif.h if the context of 
-gref_dir_next_page:
+I'll also CC Kever Yang from rockchip, maybe he can shine some light on
+this.
 
-  * gref_dir_next_page - grant_ref_t, reference to the next page describing
-  *   page directory. Must be 0 if there are no more pages in the list.
-
-
-With that local change both PV devices work in my environment.
-
-diff --git a/drivers/xen/xen-front-pgdir-shbuf.c 
-b/drivers/xen/xen-front-pgdir-shbuf.c
-index fa2921d..ad4a88e 100644
---- a/drivers/xen/xen-front-pgdir-shbuf.c
-+++ b/drivers/xen/xen-front-pgdir-shbuf.c
-@@ -346,7 +346,7 @@ static void backend_fill_page_dir(struct 
-xen_front_pgdir_shbuf *buf)
-         }
-         /* Last page must say there is no more pages. */
-         page_dir = (struct xen_page_directory *)ptr;
--       page_dir->gref_dir_next_page = INVALID_GRANT_REF;
-+       page_dir->gref_dir_next_page = 0;
-  }
-
-  /**
-@@ -375,7 +375,7 @@ static void guest_fill_page_dir(struct 
-xen_front_pgdir_shbuf *buf)
-
-                 if (grefs_left <= XEN_NUM_GREFS_PER_PAGE) {
-                         to_copy = grefs_left;
--                       page_dir->gref_dir_next_page = INVALID_GRANT_REF;
-+                       page_dir->gref_dir_next_page = 0;
-                 } else {
-                         to_copy = XEN_NUM_GREFS_PER_PAGE;
-                         page_dir->gref_dir_next_page = buf->grefs[i + 1];
-(END)
-
-
-
->
->                     } else {
->                             to_copy = XEN_NUM_GREFS_PER_PAGE;
->                             page_dir->gref_dir_next_page =
->     buf->grefs[i + 1];
->     -- 
->     2.34.1
->
->
->
->
-> -- 
-> Regards,
->
-> Oleksandr Tyshchenko
-
--- 
 Regards,
+Nicolas Frattaroli
 
-Oleksandr Tyshchenko
+[1]: https://patchwork.kernel.org/project/linux-rockchip/patch/202202142129=
+55.1178947-2-piotr.oniszczuk@gmail.com/
+
+>=20
+> >=20
+> > The first patch modifies the bindings with a new compatible, and adds
+> > the ability to just have a vepu interrupt without a vdpu interrupt.
+> >=20
+> > The second patch makes the actual driver changes to support this varian=
+t.
+> >=20
+> > The third and final patch makes the necessary device tree changes for
+> > the rk356x device tree file to add both the node for the encoder and
+> > its MMU.
+> >=20
+> > The series has been tested on a PINE64 Quartz64 Model A with an RK3566
+> > SoC using GStreamer.
+> >=20
+> > Regards,
+> > Nicolas Frattaroli
+> >=20
+> > Nicolas Frattaroli (3):
+> >   dt-bindings: media: rockchip-vpu: Add RK3568 JPEG compatible
+> >   media: hantro: Add support for RK356x JPEG encoder
+> >   arm64: dts: rockchip: Add JPEG encoder node to rk356x
+> >=20
+> >  .../bindings/media/rockchip-vpu.yaml          |  2 +
+> >  arch/arm64/boot/dts/rockchip/rk356x.dtsi      | 21 +++++++
+> >  drivers/staging/media/hantro/hantro_drv.c     |  1 +
+> >  drivers/staging/media/hantro/hantro_hw.h      |  1 +
+> >  .../staging/media/hantro/rockchip_vpu_hw.c    | 62 +++++++++++++++++++
+> >  5 files changed, 87 insertions(+)
+> >=20
+>=20
+>=20
+
+
+
 

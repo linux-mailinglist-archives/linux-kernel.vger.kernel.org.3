@@ -2,50 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2959D51483E
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 13:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D49B351483D
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 13:34:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358451AbiD2LhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 07:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42042 "EHLO
+        id S1358480AbiD2Lhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 07:37:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350409AbiD2LhU (ORCPT
+        with ESMTP id S1358479AbiD2Lh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 07:37:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCFF256748
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 04:34:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8F536B83405
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:34:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CB1DC385A4;
-        Fri, 29 Apr 2022 11:33:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651232039;
-        bh=ZVDBkHAHQ++GPV+WzTprfM5+WXb+YMUsY27sgqX+kfg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=aizf64sbkPgnP2BH5d6SJTa3GtUTMUZ2rOyLcV3A094TJAm9mK09EOJ349dJmIz96
-         oIdMFg6NBKlnnY58USTe8DemLpOT270ujWWQ6R3EjE0KK7fEit05qYUc48+jdtDcs0
-         65VHaaCvWZF54AUwwrTvbj66HCo1/DESpg62BkZqymUhuEuXb6L0cmgVQQa8CqChDl
-         8WdtjHSUl6OihLk0mK7NtwapmCZNcmLxL3IYoh/RVuORoVfyhV9tV8l6wRQaMnYGfb
-         XXI/YtO+tbXHZ2eB8HbDIYnoPA7cgLgVn6SIL7GwjLS5HoDiOB0KBBBco0eDLT0TpD
-         ie9/4ZR1tri6w==
-Date:   Fri, 29 Apr 2022 12:33:54 +0100
-From:   Will Deacon <will@kernel.org>
-To:     torvalds@linux-foundation.org
-Cc:     catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com,
-        luis.machado@arm.com
-Subject: [GIT PULL] arm64 fix for -rc5
-Message-ID: <20220429113353.GA16032@willie-the-truck>
+        Fri, 29 Apr 2022 07:37:28 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A22B6449;
+        Fri, 29 Apr 2022 04:34:10 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:6624:6d8d:f790:d5c]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nkOsy-0003f1-Uz; Fri, 29 Apr 2022 13:34:09 +0200
+Message-ID: <34691c94-ca34-89a2-a846-5416d44da9f3@leemhuis.info>
+Date:   Fri, 29 Apr 2022 13:34:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: Bug 215744 - input from the accelerometer disappeared, regression
+ on amd_sfh on kernel 5.17 #forregzbot
+Content-Language: en-US
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Cc:     linux-input@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <048ef583-4a8f-96b0-68a3-45ab9ec8d6df@leemhuis.info>
+In-Reply-To: <048ef583-4a8f-96b0-68a3-45ab9ec8d6df@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1651232050;89eee364;
+X-HE-SMSGID: 1nkOsy-0003f1-Uz
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,43 +44,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+TWIMC: this mail is primarily send for documentation purposes and for
+regzbot, my Linux kernel regression tracking bot. These mails usually
+contain '#forregzbot' in the subject, to make them easy to spot and filter.
 
-Please pull this fix to the MTE ELF ABI for a but that was added during
-the most recent merge window as part of the coredump support. The issue
-is that the value assigned to the new PT_ARM_MEMTAG_MTE segment type has
-already been allocated to PT_AARCH64_UNWIND by the ELF ABI, so we've
-bumped the value and changed the name of the identifier to be better
-aligned with the existing one.
+#regzbot invalid: bios bug and reporter seems to be satisfied by
+resolving this with a bios update
 
-Cheers,
-
-Will
-
---->8
-
-The following changes since commit 23bc8f69f0eceecbb87c3801d2e48827d2dca92b:
-
-  arm64: mm: fix p?d_leaf() (2022-04-22 11:28:36 +0100)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git tags/arm64-fixes
-
-for you to fetch changes up to c35fe2a68f29a0bda15ae994154cacaae5f69791:
-
-  elf: Fix the arm64 MTE ELF segment name and value (2022-04-28 11:37:06 +0100)
-
-----------------------------------------------------------------
-arm64 fix for -rc5
-
-- Rename and reallocate the PT_ARM_MEMTAG_MTE ELF segment type
-
-----------------------------------------------------------------
-Catalin Marinas (1):
-      elf: Fix the arm64 MTE ELF segment name and value
-
- Documentation/arm64/memory-tagging-extension.rst | 4 ++--
- arch/arm64/kernel/elfcore.c                      | 2 +-
- include/uapi/linux/elf.h                         | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+On 01.04.22 10:06, Thorsten Leemhuis wrote:
+> Hi, this is your Linux kernel regression tracker.
+> 
+> I noticed a regression report in bugzilla.kernel.org that afaics nobody
+> acted upon since it was reported about a week ago, that's why I decided
+> to forward it to the lists and all people that seemed to be relevant
+> here. It looks to me like this is something for Basavaraj, as it seems
+> to be caused by	b300667b33b2 ("HID: amd_sfh: Disable the interrupt for
+> all command"). But I'm not totally sure, I only looked briefly into the
+> details. Or was this discussed somewhere else already? Or even fixed?
+> 
+> To quote from https://bugzilla.kernel.org/show_bug.cgi?id=215744 :
+> 
+>>  Marco 2022-03-25 15:22:19 UTC
+>>
+>> After updating to 5.17, the input from the accelerometer disappeared, completely. No devices available from IIO tree. First bad commit causing it is https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/hid/amd-sfh-hid/amd_sfh_pcie.c?id=b300667b33b2b5a2c8e5f8f22826befb3d7f4f2b. Reverting this and the the other two on top fixed this. Tried to not revert only the above mentioned commit, but it's still not working.
+>>
+>> Marco.
+> 
+> Anyway, to get this tracked:
+> 
+> #regzbot introduced: b300667b33b2b5a2c8e5f8f22826befb3d7f4
+> #regzbot from: Marco <rodomar705@protonmail.com>
+> #regzbot title: input: hid: input from the accelerometer disappeared due
+> to changes to amd_sfh
+> #regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215744
+> 
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> 
+> P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+> reports on my table. I can only look briefly into most of them and lack
+> knowledge about most of the areas they concern. I thus unfortunately
+> will sometimes get things wrong or miss something important. I hope
+> that's not the case here; if you think it is, don't hesitate to tell me
+> in a public reply, it's in everyone's interest to set the public record
+> straight.
+> 

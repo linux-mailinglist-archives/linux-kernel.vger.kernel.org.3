@@ -2,95 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E36A6514313
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 09:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4C1851432E
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 09:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355041AbiD2HT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 03:19:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42296 "EHLO
+        id S1346771AbiD2HYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 03:24:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350592AbiD2HTz (ORCPT
+        with ESMTP id S238464AbiD2HYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 03:19:55 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98AB92A268;
-        Fri, 29 Apr 2022 00:16:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1651216598; x=1682752598;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Jnp7VUJ3Kt3yfs883mG6J/QgdChRVfQlhme5tpgD6Xo=;
-  b=FBGjmByuOqTGpnIc3UFAMzcjKw/3JbNs9EefHUQXDdzus2DR1W70+unw
-   UL/UQrD71vRbqh1nR/wsTpL9UPW1tNW+XiERXcAwlKi1OdQkCNwr+E5oq
-   AWoFCWCIjPfLBMXbZzFgc+xaWasJ2pM3pKPv9pYXOUPZuNW09XMO5LjwM
-   Inr3AmurSOUnClIsIZS+SfjmYM/Wbsmu96r5oFhinMjTq7S5r710p0wMW
-   ZAc/csLiYry4fVl/RAdgi15vY1z2d45HOq7FTDJxLJxMmK42iAgZJk7Ki
-   GSBfFV6d41iBU7b7Dk2yDTVAUm1GhMetVcky24pZPCiCH/TsjfWrg9w6C
-   A==;
+        Fri, 29 Apr 2022 03:24:20 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A863F36322
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 00:21:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651216862; x=1682752862;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jnx+Ro52qkbZweZcqPZpLGmaJi6VRUu8Ggk/PtUr1es=;
+  b=Ra8xssRI3NCfwEHsVWsVDF/MEVSzmrcstJrfMSejLC/o7N2mcTcEeafv
+   QyzSk559xYfe/ZxoDufgWe4uKX4COO5cs8gWJbj6d1DkRCxuMioyuByK6
+   rYybzqwz6V838u+zVEWZTlz4uL0PEgwGYljxFQIKmrgWObaUH0UwVa3fT
+   njY/WzltGawfVpfsK/GqKc32R3k+3rzcpBKW9eXpDwN0Uv2Gfv6tPf6US
+   zrYPkh42fXHdOjyUIYVrbZYc3hla0TaWEDFfwmggoEHzhEHVmQXKvWwib
+   gAf1D+kyTcIpAs9YVy23crLSGXAHpqXU9OIWiprxIWu5Wz5zKYPGy0aiV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="266376780"
 X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="157258539"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Apr 2022 00:16:37 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 29 Apr 2022 00:16:37 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Fri, 29 Apr 2022 00:16:36 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <richardcochran@gmail.com>, <davem@davemloft.net>, <arnd@arndb.de>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH net-next] net: lan966x: Fix compilation error
-Date:   Fri, 29 Apr 2022 09:19:53 +0200
-Message-ID: <20220429071953.4079517-1-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.33.0
+   d="scan'208";a="266376780"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 00:21:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="706430857"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 29 Apr 2022 00:21:00 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nkKvz-00066W-Cb;
+        Fri, 29 Apr 2022 07:20:59 +0000
+Date:   Fri, 29 Apr 2022 15:20:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alison Schofield <alison.schofield@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: [cxl:pending 21/34] WARNING: modpost: vmlinux.o(.data+0x211170):
+ Section mismatch in reference from the variable ocores_algorithm to the
+ function .init.text:set_reset_devices()
+Message-ID: <202204291528.JcxVNDff-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Starting from the blamed commit, the lan966x build fails with the
-following compilation error:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git pending
+head:   e6829d1bd3c4b58296ee9e412f7ed4d6cb390192
+commit: 26f89535a5bb17915a2e1062c3999a2ee797c7b0 [21/34] cxl/mbox: Use type __u32 for mailbox payload sizes
+config: riscv-buildonly-randconfig-r003-20220428 (https://download.01.org/0day-ci/archive/20220429/202204291528.JcxVNDff-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c59473aacce38cd7dd77eebceaf3c98c5707ab3b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/commit/?id=26f89535a5bb17915a2e1062c3999a2ee797c7b0
+        git remote add cxl https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git
+        git fetch --no-tags cxl pending
+        git checkout 26f89535a5bb17915a2e1062c3999a2ee797c7b0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-drivers/net/ethernet/microchip/lan966x/lan966x_ptp.c:342:9: error: implicit declaration of function ‘ptp_find_pin_unlocked’ [-Werror=implicit-function-declaration]
-  342 |   pin = ptp_find_pin_unlocked(phc->clock, PTP_PF_EXTTS, 0);
-
-The issue is that there is no stub function for ptp_find_pin_unlocked
-in case CONFIG_PTP_1588_CLOCK is not selected. Therefore add one.
-
+If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
-Fixes: f3d8e0a9c28ba0 ("net: lan966x: Add support for PTP_PF_EXTTS")
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- include/linux/ptp_clock_kernel.h | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/include/linux/ptp_clock_kernel.h b/include/linux/ptp_clock_kernel.h
-index 554454cb8693..e8cc8b6bbf50 100644
---- a/include/linux/ptp_clock_kernel.h
-+++ b/include/linux/ptp_clock_kernel.h
-@@ -321,6 +321,10 @@ static inline int ptp_clock_index(struct ptp_clock *ptp)
- static inline int ptp_find_pin(struct ptp_clock *ptp,
- 			       enum ptp_pin_function func, unsigned int chan)
- { return -1; }
-+static inline int ptp_find_pin_unlocked(struct ptp_clock *ptp,
-+					enum ptp_pin_function func,
-+					unsigned int chan)
-+{ return -1; }
- static inline int ptp_schedule_worker(struct ptp_clock *ptp,
- 				      unsigned long delay)
- { return -EOPNOTSUPP; }
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
+
+>> WARNING: modpost: vmlinux.o(.data+0x211170): Section mismatch in reference from the variable ocores_algorithm to the function .init.text:set_reset_devices()
+The variable ocores_algorithm references
+the function __init set_reset_devices()
+If the reference is valid then annotate the
+variable with or __refdata (see linux/init.h) or name the variable:
+
+
+Note: the below error/warnings can be found in parent commit:
+<< WARNING: modpost: vmlinux.o(.data+0x20a7cc): Section mismatch in reference from the variable rk805_pwrkey_driver to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x20d8b8): Section mismatch in reference from the variable tegra_rtc_driver to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x2950a8): Section mismatch in reference from the variable wm5100_mixer_texts to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x2950b8): Section mismatch in reference from the variable wm5100_mixer_texts to the variable .init.text:.LBB1_1
+<< WARNING: modpost: vmlinux.o(.data+0x2950d0): Section mismatch in reference from the variable wm5100_mixer_texts to the function .exit.text:versatile_pci_driver_exit()
+<< WARNING: modpost: vmlinux.o(.data+0x2950d4): Section mismatch in reference from the variable wm5100_mixer_texts to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.data+0x2950d8): Section mismatch in reference from the variable wm5100_mixer_texts to the variable .exit.text:.LBB2_1
+<< WARNING: modpost: vmlinux.o(.data+0x2b6658): Section mismatch in reference from the variable t9015_dai to the function .exit.text:test_ww_mutex_exit()
+<< WARNING: modpost: vmlinux.o(.data+0x2bfb20): Section mismatch in reference from the variable sprd_mcdt_driver to the function .init.text:set_reset_devices()
+<< WARNING: modpost: vmlinux.o(.data+0x2bfb88): Section mismatch in reference from the variable stm32_sai_sub_driver to the function .init.text:set_reset_devices()
+
 -- 
-2.33.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

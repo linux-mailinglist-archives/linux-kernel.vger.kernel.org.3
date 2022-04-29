@@ -2,73 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4022A514DB5
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:41:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13024514DB6
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377670AbiD2Ooj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 10:44:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59496 "EHLO
+        id S1377723AbiD2Oon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 10:44:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377828AbiD2OoB (ORCPT
+        with ESMTP id S1377951AbiD2OoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 10:44:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E92D17CF;
-        Fri, 29 Apr 2022 07:39:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E0E7360EA4;
-        Fri, 29 Apr 2022 14:39:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2501C385A4;
-        Fri, 29 Apr 2022 14:39:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651243143;
-        bh=WzdLqQWKXHDCAMZ0mTym8io9uxbMsfKZRJCJBhCUrlQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1ywYonBW2Cbj3xbSCIi0AswGOSPc6jF+cA/afLEbiu5MbVTpkE/elnsnvu9s6Rhi5
-         7uM48VftdpM71XQmxytwx/IEtmgJ0M5HLnx/fq/SyCHjDOIPPFzE8X/qS8xGfrvZLx
-         bd7c6J6ZF7/jUwpQaXahIP54a1IOaSnB/fyX/ai0=
-Date:   Fri, 29 Apr 2022 16:39:00 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>, Rich Felker <dalias@libc.org>,
-        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: Re: [PATCH v3] sh: avoid using IRQ0 on SH3/4
-Message-ID: <Ymv4hO9ls7XZGlki@kroah.com>
-References: <2584ba18-9653-9310-efc1-8b3b3e221eea@omp.ru>
- <11021433-66c0-3c56-42bd-207a5ae8d267@physik.fu-berlin.de>
+        Fri, 29 Apr 2022 10:44:14 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAD8D3443;
+        Fri, 29 Apr 2022 07:39:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651243179; x=1682779179;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=K5arLAYfSYDkrBf/hz/XwShI81HHiEcz3kuzcBSRsJU=;
+  b=YUo1ZqkZfGucNv9LjOvupNtfciF5vQPqk6Kkg0pkkRl82eekQ9q6Isvm
+   AUcL7DxFzzRiUn/OkHve0NKu+DVyy7uedsQVVYFvA9MIBsH0oEfl8Q+Rl
+   630JVG2WlUlPklSjUOeLa7zjR/+h6THb3NwgKVfh+XEVZ3mi19z7ZpDoI
+   2sNoteX7jJbD8Fdt72Zn7d26MmsSJfCNExKhfunSZBQDt5wlFI5lxUXmF
+   EBjdejrEGWkuw0umSTnEC9yALxSVt/oGbzN/63TbbK/ohS/reoair+Se3
+   AIUqfdyqOjokfUw0ob0t7S02tkcsUPk8NSRXD6Y+qjLS0X8jMkcL8zBed
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="266478752"
+X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
+   d="scan'208";a="266478752"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 07:39:38 -0700
+X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
+   d="scan'208";a="582156648"
+Received: from jinggu-mobl1.amr.corp.intel.com (HELO [10.212.30.227]) ([10.212.30.227])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 07:39:37 -0700
+Message-ID: <92af7b22-fa8a-5d42-ae15-8526abfd2622@intel.com>
+Date:   Fri, 29 Apr 2022 07:39:52 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <11021433-66c0-3c56-42bd-207a5ae8d267@physik.fu-berlin.de>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 00/21] TDX host kernel support
+Content-Language: en-US
+To:     Dan Williams <dan.j.williams@intel.com>,
+        Kai Huang <kai.huang@intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>
+References: <cover.1649219184.git.kai.huang@intel.com>
+ <522e37eb-68fc-35db-44d5-479d0088e43f@intel.com>
+ <CAPcyv4g5E_TOow=3pFJXyFr=KLV9pTSnDthgz6TuXvru4xDzaQ@mail.gmail.com>
+ <de9b8f4cef5da03226158492988956099199aa60.camel@intel.com>
+ <CAPcyv4iGsXkHAVgf+JZ4Pah_fkCZ=VvUmj7s3C6Rkejtdw_sgQ@mail.gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <CAPcyv4iGsXkHAVgf+JZ4Pah_fkCZ=VvUmj7s3C6Rkejtdw_sgQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 04:24:04PM +0200, John Paul Adrian Glaubitz wrote:
-> Hi Sergey!
-> 
-> On 4/27/22 20:46, Sergey Shtylyov wrote:
-> > Using IRQ0 by the platform devices is going to be disallowed soon (see [1])
-> > and even now, when IRQ0 is about to be returned by platfrom_get_irq(), you
-> > see a big warning.  The code supporting SH3/4 SoCs maps the IRQ #s starting
-> > at 0 -- modify that code to start the IRQ #s from 16 instead.
-> > 
-> > The patch should mostly affect the AP-SH4A-3A/AP-SH4AD-0A boards as they
-> > indeed use IRQ0 for the SMSC911x compatible Ethernet chip...
-> 
-> Maybe try getting it landed through Andrew Morton's tree?
+On 4/28/22 19:58, Dan Williams wrote:
+> That only seems possible if the kernel is given a TDX capable physical
+> address map at the beginning of time.
 
-I can take it if needed, why does sh patches go through Andrew's tree?
-Is there no sh maintainer tree anymore?
+TDX actually brings along its own memory map.  The "EAS"[1]. has a lot
+of info on it, if you know where to find it.  Here's the relevant chunk:
 
-thanks,
+CMR - Convertible Memory Range -
+	A range of physical memory configured by BIOS and verified by
+	MCHECK. MCHECK verificatio n is intended to help ensure that a
+	CMR may be used to hold TDX memory pages encrypted with a
+	private HKID.
 
-greg k-h
+So, the BIOS has the platform knowledge to enumerate this range.  It
+stashes the information off somewhere that the TDX module can find it.
+Then, during OS boot, the OS makes a SEAMCALL (TDH.SYS.CONFIG) to the
+TDX module and gets the list of CMRs.
+
+The OS then has to reconcile this CMR "memory map" against the regular
+old BIOS-provided memory map, tossing out any memory regions which are
+RAM, but not covered by a CMR, or disabling TDX entirely.
+
+Fun, eh?
+
+I'm still grappling with how this series handles the policy of what
+memory to throw away when.
+
+1.
+https://www.intel.com/content/dam/develop/external/us/en/documents/intel-tdx-module-1eas.pdf

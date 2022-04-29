@@ -2,93 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F04F5147CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 13:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECAB45147E8
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 13:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358128AbiD2LRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 07:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
+        id S1358242AbiD2LUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 07:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358116AbiD2LRM (ORCPT
+        with ESMTP id S1358224AbiD2LUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 07:17:12 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD0889309;
-        Fri, 29 Apr 2022 04:13:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=wngx08weWCsGmrxDEzleetcbBBNl+025DlLgISUAOGs=; b=dQr3UDV5puAox9JOzqPeNILDHr
-        Bmblwr9zthFLj9d5KYh+qi+eAMMaSAz3qdpNvMnFy/n9c1UrWiTYOIQpgWZnuQSfk+bQNmEv+LfKs
-        mDBfH/QS5ylxcpTTIPr1sLCwyLVh8MyQLOF+g/0UZfwY/oEuXKx2LStP3PQCFCWAolzhTHqOvdHoE
-        6KUiE0kGwciGYsyDy2YSHwgnLRQpFU2HjsRF9ToeyJmCuP3yVTXCPikU8w1Mkk1udmkJY3WELYn1k
-        3Az12L1ZiM4tN8HyPfIh5uZ5KmNcSKNVtY5+XAHMmlhGzJImw/gt7pjxTJXYQaLdVtZVeuVeTUupP
-        QcXgwJvQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nkOZB-00CLRn-FC; Fri, 29 Apr 2022 11:13:41 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A24593002B1;
-        Fri, 29 Apr 2022 13:13:40 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8369520295B05; Fri, 29 Apr 2022 13:13:40 +0200 (CEST)
-Date:   Fri, 29 Apr 2022 13:13:40 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arch@vger.kernel.org, jthierry@redhat.com,
-        catalin.marinas@arm.com, will@kernel.org, masahiroy@kernel.org,
-        jpoimboe@redhat.com, ycote@redhat.com, herbert@gondor.apana.org.au,
-        mark.rutland@arm.com, davem@davemloft.net, ardb@kernel.org,
-        maz@kernel.org, tglx@linutronix.de, luc.vanoostenryck@gmail.com
-Subject: Re: [RFC PATCH v4 25/37] arm64: bpf: Skip validation of
- ___bpf_prog_run
-Message-ID: <YmvIZG5Ke6vElb/e@hirez.programming.kicks-ass.net>
-References: <20220429094355.122389-1-chenzhongjin@huawei.com>
- <20220429094355.122389-26-chenzhongjin@huawei.com>
+        Fri, 29 Apr 2022 07:20:17 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2548684EF7;
+        Fri, 29 Apr 2022 04:16:59 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id v4so10083802ljd.10;
+        Fri, 29 Apr 2022 04:16:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Hz0RNsEKTjmIo/p11tTiNf/OsbPRAe1Ze+MjYBl3gM4=;
+        b=FZQ+KjW/5JEg3drJp9CadA8zjFDEiVIbyqwZQe3yIx8qIF3Uo2m/BFr1gKw7EyFLDR
+         fTxiVISIAX5vMrNi0nJJCzstwqNGNoPmkaFqqqOcZqlrLO1MFkRUdYj3kew2F4d8fqv/
+         OnnwogvnSafElrMVD4RfNmGd2fRGTwAytWyo+4vBicG9RzPL9uqSrQAKKiCbAXzidBI5
+         rvdUQCev8SVTmEYmkvoqGdctmE1cnUKVJHezX3dfm9U98yNVZski+xcBgG2LA0VN9lP1
+         KrfztUi/6YhsJT3pLwyF7xT5mHTIb9/AlGgQaHKeCGM+J3+LLzD24F/qBE8hdGUk9B4R
+         F+7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Hz0RNsEKTjmIo/p11tTiNf/OsbPRAe1Ze+MjYBl3gM4=;
+        b=X1fCMPnhGVHsiOlgUhuc6XOnv6zSwDV1U7cIuyemP3PVcflc5S7tPovJC9TYjajbLU
+         wp+ZxrbpKS0CqBhuc2PJ+tpppXVUOS6UJsVkNGPrR3jJuGWNWsy19wgt8vgu/G0kRV8T
+         HMhw+mZD8FDXTt4XX0pAvDF4RULBwR/ARROxWwFocx0WBH2dtB0W39lfftytUsBR915G
+         vlDu22AJ51VQNWNW9auRJtUubJdYNgJuu/NwJIDYs/Wg6C1F5EyXWgP1OndJgl1RUYJd
+         q0ocgXIY8FASPKzncP0CV7xPlD9bTnF8bOUVRsSEkguUpljk1lSHnDptf5hyURm9U8m9
+         s0vw==
+X-Gm-Message-State: AOAM5304lV0nUpg/dgyKxEXD9ApALYOSR85rk5xt+j9gEuQRrylZ3i6P
+        Gqp+LvzihFao5V7Dkp3mvNRmEZX46TJaBeaubO8=
+X-Google-Smtp-Source: ABdhPJze0ExX3Xn5JBoNWskIr377b/kqzk6Orn04yfBcLyzUw+sKzIlmFLqgoOuZ6ug+nvQJn0d38dvvwtqf/KWQDig=
+X-Received: by 2002:a05:651c:1603:b0:248:e00:aeba with SMTP id
+ f3-20020a05651c160300b002480e00aebamr24953814ljq.456.1651231017381; Fri, 29
+ Apr 2022 04:16:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220429094355.122389-26-chenzhongjin@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <CWLP265MB3217B3A355529E36F6468A43E0FC9@CWLP265MB3217.GBRP265.PROD.OUTLOOK.COM>
+In-Reply-To: <CWLP265MB3217B3A355529E36F6468A43E0FC9@CWLP265MB3217.GBRP265.PROD.OUTLOOK.COM>
+From:   Julian Calaby <julian.calaby@gmail.com>
+Date:   Fri, 29 Apr 2022 21:16:45 +1000
+Message-ID: <CAGRGNgXJfHc4UOvz5QGDPpUsCLau+0caAsCzFDBnc3EHHgf1xw@mail.gmail.com>
+Subject: Re: [PATCH] Fix le16_to_cpu warning for beacon_interval
+To:     Srinivasan Raju <srini.raju@purelifi.com>
+Cc:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "open list:NETWORKING DRIVERS (WIRELESS)" 
+        <linux-wireless@vger.kernel.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 05:43:43PM +0800, Chen Zhongjin wrote:
-> There is a jump table encoded in ___bpf_prog_run and objtool-arm64
-> can't deal with it now. Skip validate it for arm64.
+Hi Srinivasan,
 
-But, but, but, an earlier patch did -fno-jump-tables!
-
-> 
-> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+On Fri, Apr 29, 2022 at 8:49 PM Srinivasan Raju <srini.raju@purelifi.com> wrote:
+>
+> Fixed the following warning
+> drivers/net/wireless/purelifi/plfxlc/chip.c:36:31: sparse: expected unsigned short [usertype] beacon_interval
+> drivers/net/wireless/purelifi/plfxlc/chip.c:36:31: sparse: got restricted __le16 [usertype]
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Srinivasan Raju <srini.raju@purelifi.com>
 > ---
->  kernel/bpf/core.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 13e9dbeeedf3..d702f1d83176 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -2022,6 +2022,9 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
->  		BUG_ON(1);
->  		return 0;
->  }
-> +#ifdef CONFIG_ARM64
-> +STACK_FRAME_NON_STANDARD(___bpf_prog_run);
-> +#endif
->  
->  #define PROG_NAME(stack_size) __bpf_prog_run##stack_size
->  #define DEFINE_BPF_PROG_RUN(stack_size) \
-> -- 
-> 2.17.1
-> 
+>  drivers/net/wireless/purelifi/plfxlc/chip.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/net/wireless/purelifi/plfxlc/chip.c b/drivers/net/wireless/purelifi/plfxlc/chip.c
+> index a5ec10b66ed5..5d952ca07195 100644
+> --- a/drivers/net/wireless/purelifi/plfxlc/chip.c
+> +++ b/drivers/net/wireless/purelifi/plfxlc/chip.c
+> @@ -30,10 +30,10 @@ int plfxlc_set_beacon_interval(struct plfxlc_chip *chip, u16 interval,
+>  {
+>         if (!interval ||
+>             (chip->beacon_set &&
+> -            le16_to_cpu(chip->beacon_interval) == interval))
+> +            chip->beacon_interval) == interval)
+
+Shouldn't that first ")" go at the end of the line?
+
+Thanks,
+
+-- 
+Julian Calaby
+
+Email: julian.calaby@gmail.com
+Profile: http://www.google.com/profiles/julian.calaby/

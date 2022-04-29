@@ -2,168 +2,336 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C4F5514426
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 10:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4361E51442D
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 10:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355508AbiD2I1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 04:27:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46400 "EHLO
+        id S1355671AbiD2I3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 04:29:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355391AbiD2I1m (ORCPT
+        with ESMTP id S1355411AbiD2I3F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 04:27:42 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F9FC12E2
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 01:24:25 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id b24so8191440edu.10
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 01:24:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MSHFrxJseu+2aYKFMzIZcdb0pTPamF/GM8qyPG4laMc=;
-        b=o6bZJOkhepDUdYJuXatWdXH4hEC30djRKhajFO4TAGzOyUhhuLBwXGB9zf0legSUOI
-         fB4RCZGnaC5RPKIWUlJdLFlIKMSX/HgelBjF4O7R0i0eSxA344OnxOY7aCmFa8P/cXvP
-         Xc1D4GwabPI71zWDlaa3nSX0RHkcljV6vZ82w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MSHFrxJseu+2aYKFMzIZcdb0pTPamF/GM8qyPG4laMc=;
-        b=AtU+U2+s6/626eslMTkZFn/IF7mHhw+cpTm0uTlhK1l/s9NHCC9bs4IUJDw9RvgE4y
-         iKMbwRuVXWTqWFOHhsgkzRklhTD+ErwmuBMR9snuXVsE4hKJytlwqCqguYaqzhySbUMw
-         ULEPmghU+5J/I5wCK96h7vRb61wvIM2DOvOo4wnTwTH4/HRe/0flRWjBGT+rmtT4vFPY
-         D+dN/Mvv8nu6dnPk70zK99Ltm5AqpPazYJ2tujYMnv++KP+YBhdmxZzVFTdltDsIsvFm
-         SmB/aRr5mWPO6QSWqHYIKVU1keb6vJSs/6/Y+/0CexDKhqgKwF7YyYigGJd4speROz+b
-         /uAg==
-X-Gm-Message-State: AOAM530MLsxOogQqJ1Yp49Z6bRgaWLN6U1RJlXA35pvwPK1RGB1P9BP2
-        x75/1AjPPnj4V+ZIeHUKG4tc77UkiIDLk5rhSRFNhQ==
-X-Google-Smtp-Source: ABdhPJyIYUy77NsMEjP76/WvK8Lc+VGEiVUCUbxI/7U5MkvdeTwv5TKDnwUvI5JOBZEw22+cyLpLyc3xmDDQCgGemfU=
-X-Received: by 2002:a05:6402:1941:b0:413:2822:9c8 with SMTP id
- f1-20020a056402194100b00413282209c8mr39822301edz.13.1651220663866; Fri, 29
- Apr 2022 01:24:23 -0700 (PDT)
+        Fri, 29 Apr 2022 04:29:05 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A5646545;
+        Fri, 29 Apr 2022 01:25:46 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KqQWz3MkczfbC6;
+        Fri, 29 Apr 2022 16:24:47 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 29 Apr 2022 16:25:44 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 29 Apr 2022 16:25:42 +0800
+Subject: Re: [PATCH v22 5/9] arm64: kdump: Reimplement crashkernel=X
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+To:     Baoquan He <bhe@redhat.com>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        <kexec@lists.infradead.org>, Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        "John Donnelly" <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+References: <20220414115720.1887-1-thunder.leizhen@huawei.com>
+ <20220414115720.1887-6-thunder.leizhen@huawei.com> <YmgzxsrrMlCDYsWp@arm.com>
+ <ee8daaa9-3258-e7e8-e5c4-c51dc9841580@huawei.com> <Ymk34NsIFqUgfk3b@arm.com>
+ <ae7211ad-e2ac-f5b1-5aa0-701802132e73@huawei.com> <YmlphvZVMsGfFksp@arm.com>
+ <YmoMvV1wzHT5V1aw@MiWiFi-R3L-srv> <YmoPhvkXQFZQOcIO@MiWiFi-R3L-srv>
+ <3fc41a94-4247-40f3-14e7-f11e3001ec33@huawei.com>
+ <YmtaiJhwIgP6m2Sk@MiWiFi-R3L-srv>
+ <a9c736a0-f2b3-5b8a-94d9-80742ccd2700@huawei.com>
+Message-ID: <23e2dcf4-4e9a-5298-d5d8-8761b0bbbe21@huawei.com>
+Date:   Fri, 29 Apr 2022 16:25:37 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-References: <20220420231230.58499-1-bjorn.andersson@linaro.org>
- <20220420231230.58499-2-bjorn.andersson@linaro.org> <CAMty3ZAw7DUSnBePC05qC8Gn6ESKiu+FHw4a-HPPc05VX1hqhg@mail.gmail.com>
- <20220421082358.ivpmtak3ednvddrc@houat> <YmEdAVwZuA7Wo1Ch@aptenodytes>
- <YmelPCcWCCjALtRU@aptenodytes> <CAMty3ZBwguzvC8A9xA5c0enfoFRGS=4wWCzpfakTUXrsRS9GyA@mail.gmail.com>
- <20220427143410.bectqumq62qmlv5x@houat> <CAMty3ZDk-M3hW97_GY4-z=f+cKs1Sg4Jbq5L7L4zHgXURhFuZA@mail.gmail.com>
- <YmsSdmOEpSz4okt2@pendragon.ideasonboard.com>
-In-Reply-To: <YmsSdmOEpSz4okt2@pendragon.ideasonboard.com>
-From:   Jagan Teki <jagan@amarulasolutions.com>
-Date:   Fri, 29 Apr 2022 13:54:12 +0530
-Message-ID: <CAMty3ZAGxhFtxNcYHJafJxSZ5xMuyumw4gWi1v=ZDVfgvF-7pQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] Revert "drm: of: Lookup if child node has panel or bridge"
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Maxime Ripard <maxime@cerno.tech>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Rob Clark <robdclark@gmail.com>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robert Foss <robert.foss@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <a9c736a0-f2b3-5b8a-94d9-80742ccd2700@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
-
-On Fri, Apr 29, 2022 at 3:47 AM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Jagan,
->
-> On Thu, Apr 28, 2022 at 02:09:42PM +0530, Jagan Teki wrote:
-> > On Wed, Apr 27, 2022 at 8:04 PM Maxime Ripard wrote:
-> > > On Tue, Apr 26, 2022 at 01:40:31PM +0530, Jagan Teki wrote:
-> > > > On Tue, Apr 26, 2022 at 1:24 PM Paul Kocialkowski wrote:
-> > > > > On Thu 21 Apr 22, 10:59, Paul Kocialkowski wrote:
-> > > > > > On Thu 21 Apr 22, 10:23, Maxime Ripard wrote:
-> > > > > > > On Thu, Apr 21, 2022 at 01:15:54PM +0530, Jagan Teki wrote:
-> > > > > > > > + Linus
-> > > > > > > > + Marek
-> > > > > > > > + Laurent
-> > > > > > > > + Robert
-> > > > > > > >
-> > > > > > > > On Thu, Apr 21, 2022 at 4:40 AM Bjorn Andersson wrote:
-> > > > > > > > >
-> > > > > > > > > Commit '80253168dbfd ("drm: of: Lookup if child node has panel or
-> > > > > > > > > bridge")' attempted to simplify the case of expressing a simple panel
-> > > > > > > > > under a DSI controller, by assuming that the first non-graph child node
-> > > > > > > > > was a panel or bridge.
-> > > > > > > > >
-> > > > > > > > > Unfortunately for non-trivial cases the first child node might not be a
-> > > > > > > > > panel or bridge.  Examples of this can be a aux-bus in the case of
-> > > > > > > > > DisplayPort, or an opp-table represented before the panel node.
-> > > > > > > > >
-> > > > > > > > > In these cases the reverted commit prevents the caller from ever finding
-> > > > > > > > > a reference to the panel.
-> > > > > > > > >
-> > > > > > > > > This reverts commit '80253168dbfd ("drm: of: Lookup if child node has
-> > > > > > > > > panel or bridge")', in favor of using an explicit graph reference to the
-> > > > > > > > > panel in the trivial case as well.
-> > > > > > > >
-> > > > > > > > This eventually breaks many child-based devm_drm_of_get_bridge
-> > > > > > > > switched drivers.  Do you have any suggestions on how to proceed to
-> > > > > > > > succeed in those use cases as well?
-> > > > > > >
-> > > > > > > I guess we could create a new helper for those, like
-> > > > > > > devm_drm_of_get_bridge_with_panel, or something.
-> > > > > >
-> > > > > > Oh wow I feel stupid for not thinking about that.
-> > > > > >
-> > > > > > Yeah I agree that it seems like the best option.
-> > > > >
-> > > > > Should I prepare a patch with such a new helper?
-> > > > >
-> > > > > The idea would be to keep drm_of_find_panel_or_bridge only for the of graph
-> > > > > case and add one for the child node case, maybe:
-> > > > > drm_of_find_child_panel_or_bridge.
-> > > > >
-> > > > > I really don't have a clear idea of which driver would need to be switched
-> > > > > over though. Could someone (Jagan?) let me know where it would be needed?
-> > > >
-> > > > sun6i_mipi_dsi
-> > >
-> > > It doesn't look like sun6i_mipi_dsi is using devm_drm_of_get_bridge at all?
-> >
-> > Correct, patch for this on the mailing list.
->
-> I've lost track of how we're solving the fallout of this for v5.18. I
-> have received a report that the original commit (80253168dbfd) also
-> broke the rcar-du driver. Could you please provide a git branch (based
-> on drm-fixes or drm-misc-fixes) with any patch that you plan to get
-> merged in v5.18, to let me test them locally ?
-
-The affected patches for 80253168dbfd revert are
-
-711c7adc4687
-3730bc6147b0 and 3d7039e1e649
-
-Both these are not present drm-misc-fixes but there in linux-next.
-I've sent a patch for 711c7adc4687
-https://patchwork.kernel.org/project/dri-devel/patch/20220428094808.782938-1-jagan@amarulasolutions.com/
-
-This is my repo on top of linux-next
-https://github.com/openedev/kernel/tree/linux-next/drm-misc
-
-As I have seen before rcar-du ("155358310f013") is OF-graph and it
-doesn't affect the child node lookup was introduced in
-("80253168dbfd")
-
-Let me know if you have any further information.
 
 
-Jagan.
+On 2022/4/29 16:02, Leizhen (ThunderTown) wrote:
+> 
+> 
+> On 2022/4/29 11:24, Baoquan He wrote:
+>> On 04/28/22 at 05:33pm, Leizhen (ThunderTown) wrote:
+>>>
+>>>
+>>> On 2022/4/28 11:52, Baoquan He wrote:
+>>>> On 04/28/22 at 11:40am, Baoquan He wrote:
+>>>>> Hi Catalin, Zhen Lei,
+>>>>>
+>>>>> On 04/27/22 at 05:04pm, Catalin Marinas wrote:
+>>>>>> On Wed, Apr 27, 2022 at 09:49:20PM +0800, Leizhen (ThunderTown) wrote:
+>>>>>>> On 2022/4/27 20:32, Catalin Marinas wrote:
+>>>>>>>> I think one could always pass a default command line like:
+>>>>>>>>
+>>>>>>>> 	crashkernel=1G,high crashkernel=128M,low
+>>>>>>>>
+>>>>>>>> without much knowledge of the SoC memory layout.
+>>>>>>>
+>>>>>>> Yes, that's what the end result is. The user specify crashkernel=128M,low
+>>>>>>> and the implementation ensure the 128M low memory is allocated from DMA zone.
+>>>>>>> We use arm64_dma_phys_limit as the upper limit for crash low memory.
+>>>>>>>
+>>>>>>> +#define CRASH_ADDR_LOW_MAX             arm64_dma_phys_limit
+>>>>>>> +       unsigned long long crash_max = CRASH_ADDR_LOW_MAX;
+>>>>>>> +       crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
+>>>>>>>                                                crash_base, crash_max);
+>>>>>>>
+>>>>>>>> Another option is to only introduce crashkernel=Y,low and, when that is
+>>>>>>>> passed, crashkernel=Y can go above arm64_dma_phys_limit. We won't need a
+>>>>>>>> 'high' option at all:
+>>>>>>>>
+>>>>>>>> 	crashkernel=1G				- all within ZONE_DMA
+>>>>>>>> 	crashkernel=1G crashkernel=128M,low	- 128M in ZONE_DMA
+>>>>>>>> 						  1G above ZONE_DMA
+>>>>>>>>
+>>>>>>>> If ZONE_DMA is not present or it extends to the whole RAM, we can ignore
+>>>>>>>> the 'low' option.
+>>>>>>>
+>>>>>>> I think although the code is hard to make generic, the interface is better to
+>>>>>>> be relatively uniform. A user might have to maintain both x86 and arm64, and
+>>>>>>> so on. It's not a good thing that the difference is too big.
+>>>>>>
+>>>>>> There will be some difference as the 4G limit doesn't always hold for
+>>>>>> arm64 (though it's true in most cases). Anyway, we can probably simplify
+>>>>>> things a bit while following the documented behaviour:
+>>>>>>
+>>>>>> 	crashkernel=Y		- current behaviour within ZONE_DMA
+>>>>>> 	crashkernel=Y,high	- allocate from above ZONE_DMA
+>>>>>> 	crashkernel=Y,low	- allocate within ZONE_DMA
+>>>>>>
+>>>>>> There is no fallback from crashkernel=Y.
+>>>>>>
+>>>>>> The question is whether we still want a default low allocation if
+>>>>>> crashkernel=Y,low is missing but 'high' is present. If we add this, I
+>>>>>> think we'd be consistent with kernel-parameters.txt for the 'low'
+>>>>>> description. A default 'low' is probably not that bad but I'm tempted to
+>>>>>> always mandate both 'high' and 'low'.
+>>>>>
+>>>>> Sorry to interrupt. Seems the ,high ,low and fallback are main concerns
+>>>>> about this version. And I have the same concerns about them which comes
+>>>>> from below points:
+>>>>> 1) we may need to take best effort to keep ,high, ,low behaviour
+>>>>> consistent on all ARCHes. Otherwise user/admin may be confused when they
+>>>>> deploy/configure kdump on different machines of different ARCHes in the
+>>>>> same LAB. I think we should try to avoid the confusion.
+>>>
+>>> Yes, but for someone who is configuring crashkernel= for the first time, he
+>>> needs to read doc to understand how to configure it. The doc can show the
+>>> recommended default value of 'low' size.
+>>>
+>>> After commit 94fb93341822 ("x86/crash: Allocate enough low memory when crashkernel=high"),
+>>> the default 'low' size doesn't make much sense anymore. The default size of swiotlb_size()
+>>> is 64M, far less than 256M. And if user specify "swiotlb=", he can also adjust crashkernel=Y,low.
+>>>
+>>>
+>>> +                * -swiotlb size: user-specified with swiotlb= or default.
+>>> -               low_size = swiotlb_size_or_default() + (8UL<<20);
+>>> +               low_size = max(swiotlb_size_or_default() + (8UL<<20), 256UL<<20);
+>>>
+>>> That means all ARCHs can explicit configure crashkernel=256M,low, instead of
+>>> omitting it. This may be another way to avoid confusion. It's not hard for
+>>> programmer-turned-user/admin. However, this requires us to forgo backward
+>>> compatibility with the default size of 'low'.
+>>
+>> We can make ,high and ,low simpler at first as they are alternative. If
+>> possible, we can also simplify the ,high ,low implementation on x86_64
+>> if it truly brings better archievement on arm64.
+> 
+> OK, I plan to remove optimization, fallback and default low size, to follow the
+> suggestion of Catalin first. But there's one minor point of contention.
+> 
+> 1)    Both "crashkernel=X,high" and "crashkernel=X,low" must be present.
+> 2)    Both "crashkernel=X,high" and "crashkernel=X,low" are present.
+>    or
+>       Allow "crashkernel=X,high" to be present alone. Unlike x86, the default low size is zero.
+> 
+> I prefer 2), how about you?
+> 
+>>
+>>>
+>>>
+>>>>> 2) Fallback behaviour is important to our distros. The reason is we will
+>>>>> provide default value with crashkernel=xxxM along kernel of distros. In
+>>>>> this case, we hope the reservation will succeed by all means. The ,high
+>>>>> and ,low is an option if customer likes to take with expertise.
+>>>
+>>> OK, I got it.
+>>>
+>>>>>
+>>>>> After going through arm64 memory init code, I got below summary about
+>>>>> arm64_dma_phys_limit which is the first zone's upper limit. I think we
+>>>>> can make use of it to facilitate to simplify code.
+>>>>> ================================================================================
+>>>>>                         DMA                      DMA32                    NORMAL
+>>>>> 1)Raspberry Pi4         0~1G                     3G~4G                    (above 4G)
+>>>>> 2)Normal machine        0~4G                     0                        (above 4G)
+>>>>> 3)Special machine       (above 4G)~MAX
+>>>>> 4)No DMA|DMA32                                                            (above 4G)~MAX
+>>>
+>>> arm64_memblock_init()
+>>> 	reserve_crashkernel()        ---------------   0a30c53573b0 ("arm64: mm: Move reserve_crashkernel() into mem_init()")
+>> We don't need different code for this place of reservation as you are
+>> doing in this patchset, since arm64_dma_phys_limit is initialized as 
+>> below. In fact, in arm64_memblock_init(), we have made memblock ready,
+>> we can initialize arm64_dma_phys_limit as memblock_end_of_DRAM(). And if
+>> memblock_start_of_DRAM() is bigger than 4G, we possibly can call
+>> reserve_crashkernel() here too.
+> 
+> Yes. Maybe all the devices in this environment are 64-bit. One way I know of allowing
+> 32-bit devices to access high memory without SMMU is: Set a fixed value for the upper
+> 32 bits. In this case, the DMA zone should be [phys_start, phys_start + 4G).
+
+I just read the message of commit 791ab8b2e3 ("arm64: Ignore any DMA offsets in the max_zone_phys() calculation")
+
+    Currently, the kernel assumes that if RAM starts above 32-bit (or
+    zone_bits), there is still a ZONE_DMA/DMA32 at the bottom of the RAM and
+    such constrained devices have a hardwired DMA offset. In practice, we
+    haven't noticed any such hardware so let's assume that we can expand
+    ZONE_DMA32 to the available memory if no RAM below 4GB. Similarly,
+    ZONE_DMA is expanded to the 4GB limit if no RAM addressable by
+    zone_bits.
+
+So your suggestion is feasible.
+
+> 
+>>
+>> phys_addr_t __ro_after_init arm64_dma_phys_limit = PHYS_MASK + 1;
+>>
+>>> paging_init()                                       |
+>>> 	map_mem()                                   |
+>>> unflatten_device_tree or ACPI                       |  ----  //Raspberry Pi4 get dma zone base on dtb or ACPI
+>>> bootmem_init();                                     |      |
+>>> 	zone_sizes_init()                           |      |
+>>> 		of_dma_get_max_cpu_address          |  ----|
+>>> 		//Update arm64_dma_phys_limit       |  ----|
+>>> 	reserve_crashkernel()        <--------------  //Because we need arm64_dma_phys_limit to be updated above
+>>> request_standard_resources()
+>>
+>> Yeah, because arm64_dma_phys_limit is decided late in the 1) and 2) case
+>> as I summarized, we need defer reserve_crashkernel() to bootmem_init(). But 
+>> arm64_dma_phys_limit could be 1G or 4G, that's why your optimization
+>> about BLOCKING may not be right since you assume the 4G boundary, while
+>> forgetting Raspberry Pi4 on which 1G is the boundary of low memory and
+> 
+> No, no, my optimization for Raspberry Pi4 is fine. I do page mapping for memory
+> under 4G and block mapping for memory above 4G. But still try to reserve crash
+> low memory from DMA zone. So when 1G is the boundary, it's just not fully optimized,
+> the memory 1-4G are mapped as page.
+> 
+>> high memory. So separating out BLOCKING optimization can let us focus on
+>> the crashkernel,high support.
+>>
+>>>
+>>>>>
+>>>>> -------------------------------------------
+>>>>>                       arm64_dma_phys_limit
+>>>>> 1)Raspberry Pi4         1G                     
+>>>>> 2)Normal machine        4G                     
+>>>>> 3)Special machine       MAX
+>>>>> 4)No DMA|DMA32          MAX
+>>>>>
+>>>>> Note: 3)Special machine means the machine's starting physical address is above 4G.
+>>>>> WHile 4)No DMA|DMA32 means kernel w/o CONFIG_ZONE_DMA|DMA32, and has
+>>>>> IOMMU hardware supporting.
+>>>>> ===================================================================================
+>>>>>
+>>>>> I made a draft patch based on this patchset, please feel free to check and
+>>>>> see if it's OK, or anything missing or wrongly understood. I removed
+>>>>> reserve_crashkernel_high() and only keep reserve_crashkernel() and
+>>>>> reserve_crashkernel_low() as the v21 did.
+>>>>
+>>>> Sorry, forgot attaching the draft patch.
+>>>>
+>>>> By the way, we can also have a simple version with basic ,high, ,low
+>>>> support, no fallback. We can add fallback and other optimization later.
+>>>> This can be plan B.
+>>>
+>>> Yes, That's what Catalin suggested also.
+>>>
+>>> Hi, Baoquan He:
+>>>   Without optimization, the whole Patch 3-4 and 6-7 can be dropped.
+>>>
+>>> Process after abstraction:
+>>> 	if (!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32)) {
+>>> 		reserve_crashkernel()
+>>> 		//block mapping
+>>> 	} else {
+>>> 		//page mapping
+>>> 		reserve_crashkernel()
+>>> 	}
+>>>
+>>> ------------ Simplified real-world process ---------
+>> Yeah, this looks clearer. I would like to see a version with them.
+>>
+>>> arm64_memblock_init()
+>>         Before reserve_crashkernel(), we can update arm64_dma_phys_limit
+>> as memblock_end_of_DRAM() if CONFIG_ZONE_DMA|DMA32 is not enabled or
+>> memblock_start_of_DRAM() is bigger than 4G.
+>>         Then we go with:
+>>         if (!arm64_dma_phys_limit)
+>> 		reserve_crashkernel();
+>>
+>> Just personal opinion, please check if it's appropriate to handle case
+>> 3) which has physical starting memory above 4G here. 
+> 
+> OK, I'll write it down and consider it in the future optimization.
+> 
+>>
+>>> 	if (!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32))
+>>> 		reserve_crashkernel()
+>>            
+>>> paging_init()
+>>> 	map_mem()
+>>> 		if (!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32))
+>>> 			//block mapping
+>>> 		else
+>>> 			//page mapping
+>>> unflatten_device_tree or ACPI
+>>> bootmem_init();
+>>> 	zone_sizes_init()
+>>> 		of_dma_get_max_cpu_address
+>>> 		//Update arm64_dma_phys_limit
+>>> 	if (IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32))
+>>> 		reserve_crashkernel()
+>>
+>> The rest sounds good with optimization code split out.
+>>
+>> .
+>>
+> 
+
+-- 
+Regards,
+  Zhen Lei

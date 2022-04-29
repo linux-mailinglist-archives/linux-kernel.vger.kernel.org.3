@@ -2,68 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2E7751513E
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:01:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39C6A515141
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:03:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379372AbiD2REu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 13:04:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47550 "EHLO
+        id S1379386AbiD2RGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 13:06:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379377AbiD2REj (ORCPT
+        with ESMTP id S1378535AbiD2RGW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 13:04:39 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60045DE40
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:01:20 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id r83so6977628pgr.2
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:01:20 -0700 (PDT)
+        Fri, 29 Apr 2022 13:06:22 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD9E7563C;
+        Fri, 29 Apr 2022 10:03:04 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id k25-20020a056830169900b00605f215e55dso2171680otr.13;
+        Fri, 29 Apr 2022 10:03:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/8ErL6BnP6C5QttTgTp9GzvHjxiM+QiRr/nJIg3XkE4=;
-        b=3AXQ4KydmCXy9v5o5uLNP2D/LCb/Ti8kCwfBEaowrO4CHjOHcBLJiSgxmff9vsVC4z
-         JlcLFy9Q+NoAIywws86MIMutchNRuBep6qA1WTb4RwBRDaSFXmjdCjq91bvubvcwG0Ce
-         cvwphaU2ZtLFVTFLTIfCnYog58BmQjfewwTvFjYOlLaSB/dL1bclqzFTBCXDUQyKDDMf
-         X1KhgmYv2L/ubL6KWcPsrMG3tB6LJnhykVjcn10JmXpcyc42PD/5so77YW8P2A1KVLvJ
-         5UWtO6zZ33qxX/P6k2H/M9anJpUw+p77IO/Bb0p8FjTlSCjupknbQI4SnObzRkJObz5u
-         GL+g==
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=cP3k5kUuoWg5JR2OnDd92i4XFuEk9RrNw2XTYs8+nHQ=;
+        b=J4UGuTtuXijrsWLpCIDKsVNcOlRwtCJB+Dge/RcmmqI3XLLu3oqSHHWB81RXtKxWbB
+         dcpdUVaQC8StWrr75rhw0N67W8IfmJhPl82AtQcM1Jy8rX7TOH7SeECOu8SPi0j2oSJC
+         lR/xnUZTW2ylPgn1Oae7xp4RGYamBuRHNvUNXM9rppG6rYva78Z/qha3rac5G/2qsRET
+         BVhO3O+6Lmnaq79GWLwLyroVm33bfNv4/u4EZeZ6PNoEgSK1eiK2KoH6AJXq4ABAgQt9
+         Scd8DnwZtGT4sNFK/pSRiyYE8OUqgxanKI92+Wz6fsT+OYDaWiMMLaedwooMeQJov58K
+         d1Sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/8ErL6BnP6C5QttTgTp9GzvHjxiM+QiRr/nJIg3XkE4=;
-        b=5VMUTf9818COGCF/TAEaRv2jSHXTytxOYQ8hqf267FAelr/XbEJhOFxoUilMEFHPgA
-         +8ZSFab1E4D0vm8Imm5Y/NM9FDToYu35Ow3fssv4Lz3EY9wrYF643lIw3QqMjGw95vDQ
-         XIjw2HDSXiRr1BIFzfvLThacoPeC7vHkwsYbctOT4OxKFjiIIk68Ym6ZXZwQvRNc9FZm
-         /RQj8yKi8Ojx2iPS/BibRQOvxqleorRccm7VaL2/cU3JqO3Go8mjv9EYOi5Q3dar/jsV
-         jSMYrVvPdEBC7CHEOynZuhVTZ3RgybNHtXuHjFXcH6BypY+zrbLfXieO30AfCTEbfRRm
-         vwGw==
-X-Gm-Message-State: AOAM532GaCaAGjhS5jUXShhcaM/D1HE9l9byeukp23WVVwqYXyZgwiZS
-        afcnwbA9njtDsp0rqeWpzoxhss1RXAVbpWcgS5b4uPd0ew4=
-X-Google-Smtp-Source: ABdhPJxK8MRKlKZjWavG8oR7gJ2mH52BBFfoWkuWHlQn2wWEpwlN0+7vspKLie2AvBeVUI9fwsOsI3VK+xLthfSE+qc=
-X-Received: by 2002:a65:6e0e:0:b0:399:26d7:a224 with SMTP id
- bd14-20020a656e0e000000b0039926d7a224mr256012pgb.437.1651251680182; Fri, 29
- Apr 2022 10:01:20 -0700 (PDT)
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=cP3k5kUuoWg5JR2OnDd92i4XFuEk9RrNw2XTYs8+nHQ=;
+        b=lQyVhm3AfT7Z8Bw10zIu4QXAbJU9ooxw7yp9Ng8kezixDpnmLlseSOvLRIiitL/XOP
+         gD7yyrZr7EVu9RP+0KGA1vNSoKQ5W+xMA2LvxFSB/Ud1I1vJjbJd1iY5srTIz2P+e7pZ
+         n6ixNy0QB3nf+gHNAzMwcUOVVRv1CF3P33dV+RhKt7IiH3SXbpZiZEF1GvKhO3agTfG3
+         2CrIuCzHnLK2cwzdQOg7MGYkmzscuekJbGxltrhEaVI1dMuwN2Pa9FhdhZa3VcD69nyj
+         ukLTtbAro29eZU9Z+tNIPdFPJpjATj8RPXjJdmOGFPkCfVyH7bFRoyg+kySvGWdVoYE/
+         KSKg==
+X-Gm-Message-State: AOAM530feSzX2fWzZJ6NssArwDksAkTKq713U0/OEz7NtF9PJRswVbKg
+        sZvBoBc5o4X45Aaoh9g5slE=
+X-Google-Smtp-Source: ABdhPJzewteeoRai5yOxCPAaxMcsmX2oilokDlj7mjkEf3C0syrfnE0N29DHjdHjC/EZcdezN6J83Q==
+X-Received: by 2002:a05:6830:1081:b0:605:e78a:ea4d with SMTP id y1-20020a056830108100b00605e78aea4dmr99480oto.315.1651251783432;
+        Fri, 29 Apr 2022 10:03:03 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j72-20020a9d17ce000000b005e6b89f9f54sm1285246otj.32.2022.04.29.10.03.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 10:03:02 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <dbbe0db1-9a0d-4f14-f8e9-81fae4422d31@roeck-us.net>
+Date:   Fri, 29 Apr 2022 10:02:24 -0700
 MIME-Version: 1.0
-References: <20220414203237.2198665-1-ira.weiny@intel.com> <20220414203237.2198665-5-ira.weiny@intel.com>
- <20220427181942.00003492@Huawei.com> <YmsCfHf/HMuqBkTk@iweiny-server> <20220429173843.00006dcd@Huawei.com>
-In-Reply-To: <20220429173843.00006dcd@Huawei.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Fri, 29 Apr 2022 10:01:09 -0700
-Message-ID: <CAPcyv4huH2TPnVEzMmsKR=EGXv5A-4wd38M2nzRa-tkxeECV_Q@mail.gmail.com>
-Subject: Re: [PATCH V8 04/10] cxl/pci: Create auxiliary devices for each DOE mailbox
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     "Weiny, Ira" <ira.weiny@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-cxl@vger.kernel.org, Linux PCI <linux-pci@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v4 2/2] misc: Add a mechanism to detect stalls on guest
+ vCPUs
+Content-Language: en-US
+To:     Sebastian Ene <sebastianene@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
+        qperret@google.com, will@kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+References: <20220429083030.3241640-1-sebastianene@google.com>
+ <20220429083030.3241640-3-sebastianene@google.com>
+ <YmunAm8ooJkNCx5D@kroah.com> <YmuvQvuPF/mn5S4C@google.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <YmuvQvuPF/mn5S4C@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,117 +85,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 9:39 AM Jonathan Cameron
-<Jonathan.Cameron@huawei.com> wrote:
->
-> On Thu, 28 Apr 2022 14:09:38 -0700
-> ira.weiny@intel.com wrote:
->
-> > On Wed, Apr 27, 2022 at 06:19:42PM +0100, Jonathan Cameron wrote:
-> > > On Thu, 14 Apr 2022 13:32:31 -0700
-> > > ira.weiny@intel.com wrote:
-> > >
-> > > > From: Ira Weiny <ira.weiny@intel.com>
-> > > >
-> > > > CXL kernel drivers optionally need to access DOE mailbox capabilities.
-> > > > Access to mailboxes for things such as CDAT, SPDM, and IDE are needed by
-> > > > the kernel while other access is designed towards user space usage.  An
-> > > > example of this is for CXL Compliance Testing (see CXL 2.0 14.16.4
-> > > > Compliance Mode DOE) which offers a mechanism to set different test
-> > > > modes for a device.
-> > > >
-> > > > There is no anticipated need for the kernel to share an individual
-> > > > mailbox with user space.  Thus developing an interface to marshal access
-> > > > between the kernel and user space for a single mailbox is unnecessary
-> > > > overhead.  However, having the kernel relinquish some mailboxes to be
-> > > > controlled by user space is a reasonable compromise to share access to
-> > > > the device.
-> > > >
-> > > > The auxiliary bus provides an elegant solution for this.  Each DOE
-> > > > capability is given its own auxiliary device.  This device is controlled
-> > > > by a kernel driver by default which restricts access to the mailbox.
-> > > > Unbinding the driver from a single auxiliary device (DOE mailbox
-> > > > capability) frees the mailbox for user space access.  This architecture
-> > > > also allows a clear picture on which mailboxes are kernel controlled vs
-> > > > not.
-> > > >
-> > > > Iterate each DOE mailbox capability and create auxiliary bus devices.
-> > > > Follow on patches will define a driver for the newly created devices.
-> > > >
-> > > > sysfs shows the devices.
-> > > >
-> > > > $ ls -l /sys/bus/auxiliary/devices/
-> > > > total 0
-> > > > lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.0 -> ../../../devices/pci0000:bf/0000:bf:00.0/0000:c0:00.0/cxl_pci.doe.0
-> > > > lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.1 -> ../../../devices/pci0000:bf/0000:bf:01.0/0000:c1:00.0/cxl_pci.doe.1
-> > > > lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.2 -> ../../../devices/pci0000:35/0000:35:00.0/0000:36:00.0/cxl_pci.doe.2
-> > > > lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.3 -> ../../../devices/pci0000:35/0000:35:01.0/0000:37:00.0/cxl_pci.doe.3
-> > > > lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.4 -> ../../../devices/pci0000:35/0000:35:00.0/0000:36:00.0/cxl_pci.doe.4
-> > > > lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.5 -> ../../../devices/pci0000:bf/0000:bf:00.0/0000:c0:00.0/cxl_pci.doe.5
-> > > > lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.6 -> ../../../devices/pci0000:35/0000:35:01.0/0000:37:00.0/cxl_pci.doe.6
-> > > > lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.7 -> ../../../devices/pci0000:bf/0000:bf:01.0/0000:c1:00.0/cxl_pci.doe.7
-> > > >
-> > > > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> > >
-> > > I'm not 100% happy with effectively having one solution for CXL
-> > > and probably a different one for DOEs on switch ports
-> > > (which I just hacked into a port service driver to convince
-> > > myself there was at least one plausible way of doing that) but if
-> > > this effectively separates the two discussions then I guess I can
-> > > live with it for now ;)
-> >
-> > I took some time this morning to mull this over and talk to Dan...
-> >
-> > :-(
-> >
-> > Truthfully the aux driver does very little except provide a way for admins to
-> > trigger the driver to stop/start accessing the Mailbox.
-> >
-> > I suppose a simple sysfs interface could be done to do the same?
-> >
-> > I'll let Dan weigh in here.
->
-> I wonder if best short term option is to not provide a means of
-> removing it at all (separate from the PCI driver that is).
-> Then we can take our time to decide on the interface if we ever
-> get much demand for one.
->
-> >
-> > >
-> > > Once this is merged we can start the discussion about how to
-> > > handle switch ports with DOEs both for CDAT and SPDM.
-> >
-> > I'm ok with that too.  However, I was thinking that this was not a user ABI.
-> > But it really is.  If user space starts writing script to unbind drivers and
-> > then we drop the aux driver support it will break them...
-> >
-> > >
-> > > I'll send out an RFC that is so hideous it will get people to
-> > > suggestion how to do it better!
-> >
-> > I think I'd like to see that.
->
-> Fair enough. It may muddy the waters a bit :( I'll send an RFC
-> next week.  I've not looked at how the CXL region code etc would
-> actually get to the latency / bandwidth info from the driver yet
-> it just goes as far as reading a CDAT length. I also want to actually
-> hook up some decent switch CDAT emulation in the QEMU code
-> (right now it's giving the same default table as for a type 3 device).
->
-> I just hope we don't bikeshed around the RFC in a fashion that slows
-> this series moving forwards.
+On 4/29/22 02:26, Sebastian Ene wrote:
+> On Fri, Apr 29, 2022 at 10:51:14AM +0200, Greg Kroah-Hartman wrote:
+>> On Fri, Apr 29, 2022 at 08:30:33AM +0000, Sebastian Ene wrote:
+>>> This driver creates per-cpu hrtimers which are required to do the
+>>> periodic 'pet' operation. On a conventional watchdog-core driver, the
+>>> userspace is responsible for delivering the 'pet' events by writing to
+>>> the particular /dev/watchdogN node. In this case we require a strong
+>>> thread affinity to be able to account for lost time on a per vCPU.
+>>>
+>>> This part of the driver is the 'frontend' which is reponsible for
+>>> delivering the periodic 'pet' events, configuring the virtual peripheral
+>>> and listening for cpu hotplug events. The other part of the driver
+>>> handles the peripheral emulation and this part accounts for lost time by
+>>> looking at the /proc/{}/task/{}/stat entries and is located here:
+>>> https://chromium-review.googlesource.com/c/chromiumos/platform/crosvm/+/3548817
+>>>
+>>> Signed-off-by: Sebastian Ene <sebastianene@google.com>
+>>> ---
+>>>   drivers/misc/Kconfig       |  12 +++
+>>>   drivers/misc/Makefile      |   1 +
+>>>   drivers/misc/vm-watchdog.c | 206 +++++++++++++++++++++++++++++++++++++
+>>>   3 files changed, 219 insertions(+)
+>>>   create mode 100644 drivers/misc/vm-watchdog.c
+>>>
+>>> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+>>> index 2b9572a6d114..26c3a99e269c 100644
+>>> --- a/drivers/misc/Kconfig
+>>> +++ b/drivers/misc/Kconfig
+>>> @@ -493,6 +493,18 @@ config OPEN_DICE
+>>>   
+>>>   	  If unsure, say N.
+>>>   
+>>> +config VM_WATCHDOG
+>>> +	tristate "Virtual Machine Watchdog"
+>>> +	select LOCKUP_DETECTOR
+>>> +	help
+>>> +	  Detect CPU locks on the virtual machine. This driver relies on the
+>>> +	  hrtimers which are CPU-binded to do the 'pet' operation. When a vCPU
+>>> +	  has to do a 'pet', it exits the guest through MMIO write and the
+>>> +	  backend driver takes into account the lost ticks for this particular
+>>> +	  CPU.
+> 
+> Hi,
+> 
+>>
+>> There's nothing to keep this tied to a virtual machine at all, right?
+>> You are just relying on some iomem address to be updated, so it should
+>> be a "generic_iomem_watchdog" driver as there's nothing specific to vms
+>> at all from what I can tell.
+>>
+>> thanks,
+>>
+>> greg k-h
+> 
+> That's right although I might think of using the term "generic lockup detector"
 
-I think we have time in the sense that the worst that happens is that
-tooling picks the wrong CFMWS to dynamically create a region and the
-performance ends up being sub-optimal. That's tolerable to work around
-in userspace in the near term. I want to get some wider confidence in
-the DOE ABI with respect to the known protocols and what to do about
-the vendor-specific protocols that may conflict and will be driven
-from userspace issued config-cycles. That likely means that no DOE ABI
-is the best ABI to start which means not moving forward with
-aux-devices so scripts do not become attached to something that is not
-fully committed to being carried forward.
+Agreed, that would be a much better name.
 
-I still want to refresh the request_config_region() support for at
-least having the kernel warn on userspace conflicting configuration
-writes to config areas claimed by a driver.
+Guenter
+
+
+> instead of watchdog. The only reason why I would keep "virtual machine"
+> word in, is that there is no actual hardware for this.
+> 
+> Thanks,
+> Seb
+

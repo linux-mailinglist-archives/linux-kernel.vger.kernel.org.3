@@ -2,68 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C1DA514174
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 06:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEF5C514176
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 06:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237376AbiD2Ehg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 00:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39352 "EHLO
+        id S237604AbiD2EjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 00:39:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiD2Ehf (ORCPT
+        with ESMTP id S237489AbiD2Eip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 00:37:35 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247CA8A9FD;
-        Thu, 28 Apr 2022 21:34:17 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id cx11-20020a17090afd8b00b001d9fe5965b3so7583477pjb.3;
-        Thu, 28 Apr 2022 21:34:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=evyUHOqOn3TXKm02pc1sLqPIBDCTJ+500dIEM+PwO1Q=;
-        b=Xbr0A4/YrpGb8LHdyrQj7Uvb273qfk6dEk+N6FmUaLsp9XdYkONWGAZxnE53NyrrG2
-         TjTRbMuxublHgZAmC/DK4+MTdVRbaGOO5SSvAt8jNuxEfBE189aLZT8Z4K+STordTbN0
-         KdP6DaFtYLoOJKmEyV0yvkfMozHG7hmtZERXkriUcDPGAaAc/MtnJaajcb8yM8LXe3AI
-         FLv8ewTJ/zdfqf2SDfN91k3qeGs7EgUT66+TnsqhOx1kH0zFIzRDd8ezVOA/nzAHNOP3
-         RXSCbhi6QM86Xkei0TbKBRwzBAerdyXK7/TMmAhMZ3agjlL0y8f+arA7arBD9jwSvopS
-         4h2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=evyUHOqOn3TXKm02pc1sLqPIBDCTJ+500dIEM+PwO1Q=;
-        b=eYijC940CsO2LBTle9UEInmjlhPUcq3KoPfMQOhaphSITuCAdA1CnL5UTig5s5PedH
-         bUC993ws1nXkIM4WvzYH52K3K8lL209b07/G6DSXlOqRkQHeYdC5sLDNQBjoS1T2J0Qj
-         xMPjvaOJVB/EsO87/ZqmG9VKrQ3dc15OzBNCWJur+UTEerrZiJBR+bSFKHeIzxS6i7kj
-         RzfhQijegoAUlInCtjt2L2213I/C5r2jCdXbU5uOHcXzQsZ63wmVk4fYd444hlM1sxy9
-         xuPCbkvBMIKNExHhbhiLD4iRrvEA9nS5Pbejunu5wQEiSCH8j+Bkvs2sYtFVN1CUWIpr
-         qpXw==
-X-Gm-Message-State: AOAM5308evTJ10Kcij/m2DO1l8Dxl3u4PTGoyocGi01x+wmohsfINFWW
-        Qf5RUiT5HZDFAegXhwgOx2dFnRHiFjhHsWYreVg=
-X-Google-Smtp-Source: ABdhPJz+N6SLkD7HusZ2PQAqngkmUnrQp6p3IGUSpB0v/dVKrkW6Qn4I/U1uv89fGoPc1oW58LodLZVIyMg4jqJ1AM8=
-X-Received: by 2002:a17:90b:4d86:b0:1da:3cba:bd56 with SMTP id
- oj6-20020a17090b4d8600b001da3cbabd56mr1871622pjb.116.1651206856476; Thu, 28
- Apr 2022 21:34:16 -0700 (PDT)
+        Fri, 29 Apr 2022 00:38:45 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1011A8FF9F;
+        Thu, 28 Apr 2022 21:35:22 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KqKRB5d1qz4x7Y;
+        Fri, 29 Apr 2022 14:35:18 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1651206921;
+        bh=XRK02m0YRBnw3sdEEHgmBiUzgatUEgLw0RNhgGm0qK8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=GGSEqi0mxcSkyaTm6FXgqT3YNu/kXtQERZQmWud6nBUm1RnUW+UEp2OMPlDiXx5WV
+         oSFqgY2XH1+y9qFH+yFkGi+K9wOXtv2GMymZmNhn4Tv55BZrnXNPkeuy/7R176f+pR
+         ZsX8zWJHmOsAWjzoilSu5FAtdhlngX2XnmM490tuFYBabpXWnhHOHxaLreSOXUfGZ9
+         ycqxLmT13eJDIeSc5lqllPIvVKq7hSG6dawxklKql2Hrs7QgwZrJx4MPgk9xURrY3K
+         3ZLBuXvuVl03Y4DHXN34KFDqdzF2tDFG9Hf0Anww7w5uoeS6bmyRdzDKUB1LadbnVC
+         3iFZuQM642S9A==
+Date:   Fri, 29 Apr 2022 14:35:17 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Jose Cazarin <joseespiriki@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Peter Rosin <peda@axentia.se>
+Subject: linux-next: manual merge of the iio tree with the char-misc.current
+ tree
+Message-ID: <20220429143517.75be9c04@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20220322115148.3870-1-dharamhans87@gmail.com> <20220322115148.3870-2-dharamhans87@gmail.com>
- <CAJfpegtunCe5hV1b9cKJgPk44B2SQgtK3RG5r2is8V5VrMYeNg@mail.gmail.com>
- <CACUYsyGmab57_efkXRXD8XvO6Stn4JbJM8+NfBHNKQ+FLcA7nA@mail.gmail.com>
- <CAJfpegt5qWE4UepoDj9QBuT--ysT6+7E-6ZQvNeZ+bODRHHCvg@mail.gmail.com> <CACUYsyFrP5UDOJKCLOr+PeHjnh9RV=wWOBRFN31-Fr-gi1d2WA@mail.gmail.com>
-In-Reply-To: <CACUYsyFrP5UDOJKCLOr+PeHjnh9RV=wWOBRFN31-Fr-gi1d2WA@mail.gmail.com>
-From:   Dharmendra Hans <dharamhans87@gmail.com>
-Date:   Fri, 29 Apr 2022 10:04:04 +0530
-Message-ID: <CACUYsyGuHEM8U6qsqEE_=mUcAgAFzCYuCLcCtiBf1CGirLE95Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] FUSE: Implement atomic lookup + open
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     linux-fsdevel@vger.kernel.org,
-        fuse-devel <fuse-devel@lists.sourceforge.net>,
-        linux-kernel@vger.kernel.org, Dharmendra Singh <dsingh@ddn.com>,
-        Bernd Schubert <bschubert@ddn.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: multipart/signed; boundary="Sig_/fzORYtNOOQ584lP8rCFAe3+";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,76 +55,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 4:13 PM Dharmendra Hans <dharamhans87@gmail.com> wrote:
->
-> On Mon, Apr 25, 2022 at 1:08 PM Miklos Szeredi <miklos@szeredi.hu> wrote:
-> >
-> > On Mon, 25 Apr 2022 at 07:26, Dharmendra Hans <dharamhans87@gmail.com> wrote:
-> > >
-> > > On Fri, Apr 22, 2022 at 8:59 PM Miklos Szeredi <miklos@szeredi.hu> wrote:
-> > > >
-> > > > On Tue, 22 Mar 2022 at 12:52, Dharmendra Singh <dharamhans87@gmail.com> wrote:
-> > > > >
-> > > > > From: Dharmendra Singh <dsingh@ddn.com>
-> > > > >
-> > > > > There are couple of places in FUSE where we do agressive
-> > > > > lookup.
-> > > > > 1) When we go for creating a file (O_CREAT), we do lookup
-> > > > > for non-existent file. It is very much likely that file
-> > > > > does not exists yet as O_CREAT is passed to open(). This
-> > > > > lookup can be avoided and can be performed  as part of
-> > > > > open call into libfuse.
-> > > > >
-> > > > > 2) When there is normal open for file/dir (dentry is
-> > > > > new/negative). In this case since we are anyway going to open
-> > > > > the file/dir with USER space, avoid this separate lookup call
-> > > > > into libfuse and combine it with open.
-> > > > >
-> > > > > This lookup + open in single call to libfuse and finally to
-> > > > > USER space has been named as atomic open. It is expected
-> > > > > that USER space open the file and fills in the attributes
-> > > > > which are then used to make inode stand/revalidate in the
-> > > > > kernel cache.
-> > > > >
-> > > > > Signed-off-by: Dharmendra Singh <dsingh@ddn.com>
-> > > > > ---
-> > > > > v2 patch includes:
-> > > > > - disabled o-create atomicity when the user space file system
-> > > > >   does not have an atomic_open implemented. In principle lookups
-> > > > >   for O_CREATE also could be optimized out, but there is a risk
-> > > > >   to break existing fuse file systems. Those file system might
-> > > > >   not expect open O_CREATE calls for exiting files, as these calls
-> > > > >   had been so far avoided as lookup was done first.
-> > > >
-> > > > So we enabling atomic lookup+create only if FUSE_DO_ATOMIC_OPEN is
-> > > > set.  This logic is a bit confusing as CREATE is unrelated to
-> > > > ATOMIC_OPEN.   It would be cleaner to have a separate flag for atomic
-> > > > lookup+create.  And in fact FUSE_DO_ATOMIC_OPEN could be dropped and
-> > > > the usual logic of setting fc->no_atomic_open if ENOSYS is returned
-> > > > could be used instead.
-> > >
-> > > I am aware that ATOMIC_OPEN is not directly related to CREATE. But
-> > > This is more of feature enabling by using the flag. If we do not
-> > > FUSE_DO_ATOMIC_OPEN, CREATE calls would not know that it need to
-> > > optimize lookup calls otherwise as we know only from open call that
-> > > atomic open is implemented.
-> >
-> > Right.  So because the atomic lookup+crteate would need a new flag to
-> > return whether the file was created or not, this is probably better
-> > implemented as a completely new request type (FUSE_ATOMIC_CREATE?)
-> >
-> > No new INIT flags needed at all, since we can use the ENOSYS mechanism
-> > to determine whether the filesystem has atomic open/create ops or not.
->
-> Yes, it sounds good to have a separate request type for CREATE. I
-> would separate out the patch into two for create and open.  Will omit
-> INIT flags. Also, I would change libfuse code accordingly.
+--Sig_/fzORYtNOOQ584lP8rCFAe3+
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Actually when writing the code, I observe that not having INIT flags
-works fine for atomic create but it does not work well for atomic
-open case considering specially 3rd  patch which optimises
-d_revalidate() lookups.
-(https://lore.kernel.org/linux-fsdevel/20220322115148.3870-3-dharamhans87@gmail.com/,
- we did not receive any comments on it so far).
-So it looks like we need INIT flags in atomic open case at least
-considering that 3rd patch would go in as well.
+Hi all,
+
+Today's linux-next merge of the iio tree got a conflict in:
+
+  drivers/iio/dac/ti-dac5571.c
+
+between commit:
+
+  a2a43fd9d84a ("iio: dac: dac5571: Fix chip id detection for OF devices")
+
+from the char-misc.current tree and commit:
+
+  542fd5f1f657 ("iio: dac: ti-dac5571: add support for ti,dac121c081")
+
+from the iio tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/iio/dac/ti-dac5571.c
+index 0b775f943db3,96b86e2dcc6b..000000000000
+--- a/drivers/iio/dac/ti-dac5571.c
++++ b/drivers/iio/dac/ti-dac5571.c
+@@@ -393,15 -386,16 +394,16 @@@ static int dac5571_remove(struct i2c_cl
+  }
+ =20
+  static const struct of_device_id dac5571_of_id[] =3D {
+ -	{.compatible =3D "ti,dac5571"},
+ -	{.compatible =3D "ti,dac6571"},
+ -	{.compatible =3D "ti,dac7571"},
+ -	{.compatible =3D "ti,dac5574"},
+ -	{.compatible =3D "ti,dac6574"},
+ -	{.compatible =3D "ti,dac7574"},
+ -	{.compatible =3D "ti,dac5573"},
+ -	{.compatible =3D "ti,dac6573"},
+ -	{.compatible =3D "ti,dac7573"},
+ -	{.compatible =3D "ti,dac121c081"},
+ +	{.compatible =3D "ti,dac5571", .data =3D (void *)single_8bit},
+ +	{.compatible =3D "ti,dac6571", .data =3D (void *)single_10bit},
+ +	{.compatible =3D "ti,dac7571", .data =3D (void *)single_12bit},
+ +	{.compatible =3D "ti,dac5574", .data =3D (void *)quad_8bit},
+ +	{.compatible =3D "ti,dac6574", .data =3D (void *)quad_10bit},
+ +	{.compatible =3D "ti,dac7574", .data =3D (void *)quad_12bit},
+ +	{.compatible =3D "ti,dac5573", .data =3D (void *)quad_8bit},
+ +	{.compatible =3D "ti,dac6573", .data =3D (void *)quad_10bit},
+ +	{.compatible =3D "ti,dac7573", .data =3D (void *)quad_12bit},
+++	{.compatible =3D "ti,dac121c081", data =3D (void *)single_12bit},
+  	{}
+  };
+  MODULE_DEVICE_TABLE(of, dac5571_of_id);
+
+--Sig_/fzORYtNOOQ584lP8rCFAe3+
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJrawUACgkQAVBC80lX
+0GxtLAf/SiElYfdPVHT3/ioU0KMYx5jZ2VvaBAUgYKJrowQRTkwmPXaFyOH/mNVF
+9qJA1iAgwxkDEWZL0IajmRqpCZe7HoHT0DnnVy+howmbgkWOYVJBuJflgiOJmz+t
+HYeA6FWJMmPN89aswf9XnJU//llcyokNq4oKIEyNbfF0Hd00qxLyrYLdkj6QRp6E
+VbxsfILRqwSexJPSVVBbjBMDkc+Z0TmkLDjf0yoJvcF/srO4ApDWeMog4Is13B7/
+qwBQByhvInfiK+xX8g1y05ywhSzxcNFB3URl8DglgJyr0h/QKokUY2z8dn+o/fK2
+ZS5WUqkN8nMg1GweZcuiGjzHeWahOQ==
+=CTu9
+-----END PGP SIGNATURE-----
+
+--Sig_/fzORYtNOOQ584lP8rCFAe3+--

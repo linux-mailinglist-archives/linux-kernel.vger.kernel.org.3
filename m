@@ -2,119 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 668F5515526
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:06:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 253A451552A
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:06:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380549AbiD2UI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 16:08:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
+        id S1379374AbiD2UJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 16:09:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379474AbiD2UIu (ORCPT
+        with ESMTP id S239462AbiD2UJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 16:08:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 639226A034
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:05:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651262728;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Xh8dSPuYVd16pGU1eOSrw4RK/14MRTLIpBGTzg2s4yA=;
-        b=Fg3AElSdPM/VIiWvP9qm46LTdqU06KEAtSxlY1D3NR4nmlXzsix0Xj8F1/Ryxzi4gdAFZc
-        YtCZkLLFxWoVYyQdpsaQa8G92HJP8a4PL6G8ed5sfJmL/yE5U4IlCaXwbfLoDIxoPp045e
-        riIAd1dcALiuRskqbn/DsQD1DAas/SA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-463-esZLPebUMWGXCyP_e6a1-g-1; Fri, 29 Apr 2022 16:05:24 -0400
-X-MC-Unique: esZLPebUMWGXCyP_e6a1-g-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 032C7281182B;
-        Fri, 29 Apr 2022 20:05:24 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.213])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BB3BCC28100;
-        Fri, 29 Apr 2022 20:05:22 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH net] rxrpc: Enable IPv6 checksums on transport socket
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     Marc Dionne <marc.dionne@auristor.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Vadim Fedorenko <vfedorenko@novek.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-afs@lists.infradead.org, dhowells@redhat.com,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 29 Apr 2022 21:05:16 +0100
-Message-ID: <165126271697.1384698.4579591150130001289.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.4
+        Fri, 29 Apr 2022 16:09:52 -0400
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 180AF245;
+        Fri, 29 Apr 2022 13:06:33 -0700 (PDT)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-e922e68b0fso9218566fac.1;
+        Fri, 29 Apr 2022 13:06:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2lI/TWi2tf2Q7JmUZ2/HVxcNVVbUFx/NU2eKJt3txIU=;
+        b=Ms43z8z1ptc2WmXRI/aZtHh8tek1jkQL5QriMuvGcm9905iCogsZBu8O5GYnsjdNYa
+         oKtkTgPmEfOEnHq51Pt9HOhC7/ih6gn32E4xnFh/t9eOCWum5XvRgFbHYWS3zbDCogw4
+         dY6CEVr6/i24NqS6kiJb2GY7tXJ0ReTS1feWNW21D+v5aKBitsG6yxJv94+aeqKawp1k
+         RktDMpA1Iqi9XEYfcsMyAadRa94j4dfxpFyLEFD+iaf37ojghb22e1O6VaVryaNRGkA4
+         u0q67/k+CvESOxMreg4w8udXR/hII2lpdsaQ0gXdzptGbfFtybW0VspmIoNZm/Ekxs1m
+         ZlCg==
+X-Gm-Message-State: AOAM531d/V6/8mr94XM2/dXcYbo1HXqPjsd/7oichfRGLCrb+txDnWcA
+        qV5pv+Zx7wh3THAoOGsDXA==
+X-Google-Smtp-Source: ABdhPJylIgWmSsuu4I/a3zDRexm1IDuitX9f8YLbudWq18PfZJulvaKEhEYxJPJKLMbOHCK/46tOnA==
+X-Received: by 2002:a05:6870:61d4:b0:df:b74:8de5 with SMTP id b20-20020a05687061d400b000df0b748de5mr467807oah.37.1651262792205;
+        Fri, 29 Apr 2022 13:06:32 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id o22-20020a9d7656000000b0060603221258sm65246otl.40.2022.04.29.13.06.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 13:06:31 -0700 (PDT)
+Received: (nullmailer pid 2776081 invoked by uid 1000);
+        Fri, 29 Apr 2022 20:06:30 -0000
+Date:   Fri, 29 Apr 2022 15:06:30 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
+Cc:     matthias.bgg@gmail.com, linux-arm-kernel@lists.infradead.org,
+        chunkuang.hu@kernel.org, jitao.shi@mediatek.com,
+        linux-kernel@vger.kernel.org, airlied@linux.ie,
+        krzysztof.kozlowski+dt@linaro.org, daniel@ffwll.ch,
+        xinlei.lee@mediatek.com, devicetree@vger.kernel.org,
+        p.zabel@pengutronix.de, linux-mediatek@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, cellopoint.kai@gmail.com
+Subject: Re: [PATCH v5 1/4] dt-bindings: display: mediatek: dsi: Convert
+ dsi_dtbinding to .yaml
+Message-ID: <YmxFRuBWmPaCyw0I@robh.at.kernel.org>
+References: <20220428133753.8348-1-rex-bc.chen@mediatek.com>
+ <20220428133753.8348-2-rex-bc.chen@mediatek.com>
+ <1651177993.334386.220464.nullmailer@robh.at.kernel.org>
+ <9f601c458bd3401b216992e8dd72485a10f34597.camel@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9f601c458bd3401b216992e8dd72485a10f34597.camel@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AF_RXRPC doesn't currently enable IPv6 UDP Tx checksums on the transport
-socket it opens and the checksums in the packets it generates end up 0.
+On Fri, Apr 29, 2022 at 09:55:37AM +0800, Rex-BC Chen wrote:
+> On Thu, 2022-04-28 at 15:33 -0500, Rob Herring wrote:
+> > On Thu, 28 Apr 2022 21:37:50 +0800, Rex-BC Chen wrote:
+> > > From: Xinlei Lee <xinlei.lee@mediatek.com>
+> > > 
+> > > Convert mediatek,dsi.txt to mediatek,dsi.yaml format
+> > > 
+> > > Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> > > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> > > ---
+> > >  .../display/mediatek/mediatek,dsi.txt         |  62 ---------
+> > >  .../display/mediatek/mediatek,dsi.yaml        | 122
+> > > ++++++++++++++++++
+> > >  2 files changed, 122 insertions(+), 62 deletions(-)
+> > >  delete mode 100644
+> > > Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt
+> > >  create mode 100644
+> > > Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.yam
+> > > l
+> > > 
+> > 
+> > Running 'make dtbs_check' with the schema in this patch gives the
+> > following warnings. Consider if they are expected or the schema is
+> > incorrect. These may not be new warnings.
+> > 
+> > Note that it is not yet a requirement to have 0 warnings for
+> > dtbs_check.
+> > This will change in the future.
+> > 
+> > Full log is available here: 
+> > https://urldefense.com/v3/__https://patchwork.ozlabs.org/patch/__;!!CTRNKA9wMg0ARbw!wKbRsUmeUS_4mtOwj1t30buVNEilHYYhsUmEd5MvZ7P9VyDXg6cikERof47mkwETQzFL$
+> >  
+> > 
+> > 
+> > dsi@1400c000: compatible: ['mediatek,mt7623-dsi', 'mediatek,mt2701-
+> > dsi'] is too long
+> > 	arch/arm/boot/dts/mt7623n-bananapi-bpi-r2.dtb
+> > 	arch/arm/boot/dts/mt7623n-rfb-emmc.dtb
+> > 
+> > dsi@14014000: #address-cells:0:0: 2 was expected
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-burnet.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-cozmo.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-damu.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14-
+> > sku2.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-
+> > sku1.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-
+> > sku6.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-
+> > sku7.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-juniper-
+> > sku16.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kappa.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kenzo.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-
+> > sku0.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-
+> > sku1.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu-sku22.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku16.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku272.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku288.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku32.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku0.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku176.dtb
+> > 
+> > dsi@14014000: 'port' is a required property
+> > 	arch/arm64/boot/dts/mediatek/mt8183-evb.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-burnet.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-cozmo.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-damu.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14-
+> > sku2.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-
+> > sku1.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-
+> > sku6.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-
+> > sku7.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-juniper-
+> > sku16.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kappa.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kenzo.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-
+> > sku0.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-
+> > sku1.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu-sku22.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku16.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku272.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku288.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku32.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku0.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku176.dtb
+> > 
+> > dsi@14014000: #size-cells:0:0: 2 was expected
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-burnet.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-cozmo.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-damu.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14-
+> > sku2.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-
+> > sku1.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-
+> > sku6.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-
+> > sku7.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-juniper-
+> > sku16.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kappa.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kenzo.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-
+> > sku0.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-
+> > sku1.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu-sku22.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku16.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku272.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku288.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku32.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku0.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku176.dtb
+> > 
+> > dsi@1401b000: 'port' is a required property
+> > 	arch/arm64/boot/dts/mediatek/mt8173-elm.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8173-elm-hana.dtb
+> > 	arch/arm64/boot/dts/mediatek/mt8173-elm-hana-rev7.dtb
+> > 
+> 
+> Hello Rob,
+> 
+> Thanks for your comments.
+> The purpose of this series is not to fix dts for previous SoCs.
+> Therefore, if there is a chance, we could send another series to fix
+> them.
 
-It probably should also enable IPv6 UDP Rx checksums and IPv4 UDP
-checksums.  The latter only seem to be applied if the socket family is
-AF_INET and don't seem to apply if it's AF_INET6.  IPv4 packets from an
-IPv6 socket seem to have checksums anyway.
+Conversions often find that the actual dts files vary a bit more than 
+the binding doc said. You should look at the warnings and decide if they 
+should be fixed or the schema relaxed. It's a judgement call. I have no 
+idea if you did that already or not, so I send this out on conversions. 
+The check runs automatically, but sending it I review briefly.
 
-What seems to have happened is that the inet_inv_convert_csum() call didn't
-get converted to the appropriate udp_port_cfg parameters - and
-udp_sock_create() disables checksums unless explicitly told not too.
-
-Fix this by enabling the three udp_port_cfg checksum options.
-
-Fixes: 1a9b86c9fd95 ("rxrpc: use udp tunnel APIs instead of open code in rxrpc_open_socket")
-Reported-by: Marc Dionne <marc.dionne@auristor.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-Reviewed-by: Xin Long <lucien.xin@gmail.com>
-Reviewed-by: Marc Dionne <marc.dionne@auristor.com>
-cc: Vadim Fedorenko <vfedorenko@novek.ru>
-cc: David S. Miller <davem@davemloft.net>
-cc: linux-afs@lists.infradead.org
----
-
- net/rxrpc/local_object.c |    3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/net/rxrpc/local_object.c b/net/rxrpc/local_object.c
-index a4111408ffd0..6a1611b0e303 100644
---- a/net/rxrpc/local_object.c
-+++ b/net/rxrpc/local_object.c
-@@ -117,6 +117,7 @@ static int rxrpc_open_socket(struct rxrpc_local *local, struct net *net)
- 	       local, srx->transport_type, srx->transport.family);
- 
- 	udp_conf.family = srx->transport.family;
-+	udp_conf.use_udp_checksums = true;
- 	if (udp_conf.family == AF_INET) {
- 		udp_conf.local_ip = srx->transport.sin.sin_addr;
- 		udp_conf.local_udp_port = srx->transport.sin.sin_port;
-@@ -124,6 +125,8 @@ static int rxrpc_open_socket(struct rxrpc_local *local, struct net *net)
- 	} else {
- 		udp_conf.local_ip6 = srx->transport.sin6.sin6_addr;
- 		udp_conf.local_udp_port = srx->transport.sin6.sin6_port;
-+		udp_conf.use_udp6_tx_checksums = true;
-+		udp_conf.use_udp6_rx_checksums = true;
- #endif
- 	}
- 	ret = udp_sock_create(net, &udp_conf, &local->socket);
-
-
+Rob

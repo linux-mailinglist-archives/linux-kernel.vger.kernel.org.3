@@ -2,126 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6AB513F6D
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 02:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 389FD513F70
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 02:12:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353529AbiD2AOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 20:14:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46998 "EHLO
+        id S1353533AbiD2APW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 20:15:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353514AbiD2AOj (ORCPT
+        with ESMTP id S1353514AbiD2APT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 20:14:39 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED2C13FA9;
-        Thu, 28 Apr 2022 17:11:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651191083; x=1682727083;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=smpyNqmyFSCJvZZ+sLu7SHod4hKNPqpKqnKcw6fAVnU=;
-  b=VstMflPxdtVSFMPHTJQrqKKyYfU+B8aSlBN2H/TMFzDkHnSbvIG5HeMb
-   m2arUuAwRnHDtUVlGIAlKBDgVgr69aRng7j5dAhS/qeQcuR2u5sz7hl5o
-   RWVvA4widXtHW+qN+CmygCI+sFntwTVDJ2w21MW+iZxJWMTlliY5eDqmH
-   w+qKJ6m34Naj8a37yvRXR+3VEneS3YZPc/2NvKyAfn5QlQztkSYS0vc8G
-   mWnGsS/QJmqQ/Im18fpOzGMKxd+BmOGaAOSo0HFu4TIXhq9TvXODOWMCl
-   r5hzUifoKWyWcjdRRyfomk17CQXVgCDGsDVHzUuC2KlqOl6pgjORkou6j
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="265320843"
-X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="265320843"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 17:11:22 -0700
-X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="629811840"
-Received: from gshechtm-mobl.ger.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.60.191])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 17:11:19 -0700
-Message-ID: <af6fccf2f6f8d83593f0eedd003c7cd07f89274d.camel@intel.com>
-Subject: Re: [PATCH v3 04/21] x86/virt/tdx: Add skeleton for detecting and
- initializing TDX on demand
-From:   Kai Huang <kai.huang@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-Date:   Fri, 29 Apr 2022 12:11:17 +1200
-In-Reply-To: <0aa81fd0-a491-847d-9fc6-4b853f2cf7b4@intel.com>
-References: <cover.1649219184.git.kai.huang@intel.com>
-         <32dcf4c7acc95244a391458d79cd6907125c5c29.1649219184.git.kai.huang@intel.com>
-         <ac482f2b-d2d1-0643-faa4-1b36340268c5@intel.com>
-         <22e3adf42b8ea2cae3aabc26f762acb983133fea.camel@intel.com>
-         <c833aff2-b459-a1d7-431f-bce5c5f29182@intel.com>
-         <37efe2074eba47c51bf5c1a2369a05ddf9082885.camel@intel.com>
-         <3731a852-71b8-b081-2426-3b0a650e174c@intel.com>
-         <edcae7ab1e6a074255a6624e8e0536bd77f84eed.camel@intel.com>
-         <0aa81fd0-a491-847d-9fc6-4b853f2cf7b4@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Thu, 28 Apr 2022 20:15:19 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316BC38BF2
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 17:12:03 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id p6so5694040pjm.1
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 17:12:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iuNk9MwvCvbcUppmRdVoXyJvLMt+O/9GswTClaDk/QM=;
+        b=nWfkeFVVLQdjCRdfHRtk0H3wnlkeTaDVtdQC75mQJ/tOw2zRRrQwrl/sJAIpipBuPh
+         byJp4Evcvz6giHI0Cfq9iLl4hj6N/Dcvll8yOLY2ObcC1IqMgNOrHsr3NmVj1uyZ0SMV
+         qyxCkuv6bajjM3ZxmMMvm4WlG1VuhqXLNbWOY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iuNk9MwvCvbcUppmRdVoXyJvLMt+O/9GswTClaDk/QM=;
+        b=etB8sVtdMLaZ+vmJf86F18paVVOfbVTFnCM/E0J6zkuzoCUEhscNwCX+z1KBc/N6mF
+         fkd1Noip+0zjgUUB7dUTZeEO80qbw6wRvyZVE/xZ9lxt7twYmFOUwRI3bLI6k5Gwo4Vu
+         ZPF3zjB8BYRMleQByiF3sOQj/VXo6GWltyb0T6mNTZ4crMt1qhSakqO5RaHCbm72eWR9
+         5ar2v01tVfwQQaj+LL0a/ZsYEpARq2pOKSWkWUUCUb48LzLcHIWRuyb9Om/50WQGpKhL
+         JwI+rzYGAiauYz7jyMP3Qcpj1L+pwiDWZdRJrrc61wd7YhctElU+keFkC/c2GRml0cuF
+         9lKg==
+X-Gm-Message-State: AOAM531TRSN/+0PhpmEMMyy/1aYWr46FUdIUl6Kzv/BKCHmvzZzYbpB8
+        p8jOKKywsZ+HqpPgHFrPKOmYrQ==
+X-Google-Smtp-Source: ABdhPJzcIuW/yBWAQUiE+LCgHZN1NHWgqzTsexx1tr6RbE8PgNgW0Cskvr5D7aO0nCb9SiDzr4B2gA==
+X-Received: by 2002:a17:902:c408:b0:15d:1234:3434 with SMTP id k8-20020a170902c40800b0015d12343434mr23711839plk.67.1651191122732;
+        Thu, 28 Apr 2022 17:12:02 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:7d14:5f45:9377:9b6a])
+        by smtp.gmail.com with UTF8SMTPSA id q10-20020a056a00088a00b004f7ceff389esm944209pfj.152.2022.04.28.17.12.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Apr 2022 17:12:02 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 17:12:00 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org,
+        "Joseph S. Barrera III" <joebar@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>
+Subject: Re: [PATCH v2 2/3] arm64: dts: qcom: sc7180-trogdor: Simplify
+ spi0/spi6 labeling
+Message-ID: <YmstUBkqAdWvMnm7@google.com>
+References: <20220427020339.360855-1-swboyd@chromium.org>
+ <20220427020339.360855-3-swboyd@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220427020339.360855-3-swboyd@chromium.org>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-04-28 at 16:53 -0700, Dave Hansen wrote:
-> On 4/28/22 16:44, Kai Huang wrote:
-> > > Just like the SME test, it doesn't even need to be precise.  It just
-> > > needs to be 100% accurate in that it is *ALWAYS* set for any system that
-> > > might have dirtied cache aliases.
-> > > 
-> > > I'm not sure why you are so fixated on SEAMRR specifically for this.
-> > I see.  I think I can simply use MTRR.SEAMRR bit check.  If CPU supports SEAMRR,
-> > then basically it supports MKTME.
-> > 
-> > Is this look good for you?
+On Tue, Apr 26, 2022 at 07:03:38PM -0700, Stephen Boyd wrote:
+> We had to do this spi0/spi6 flip-flop on trogdor-r0 because the spi
+> buses got swizzled between r0 and r1. The swizzle stopped after r1, but
+> we kept this around to support either hardware possibility and to keep
+> trogdor-r0 working.
 > 
-> Sure, fine, as long as it comes with a coherent description that
-> explains why the check is good enough.
+> trogdor-r0 isn't supported upstream, so this swizzle is not doing
+> anything besides making a pattern that others tryt  to copy for the EC and
+> H1 nodes. Let's remove it and simplify the dts files.
 > 
-> > > > "During initializing the TDX module, one step requires some SEAMCALL must be
-> > > > done on all logical cpus enabled by BIOS, otherwise a later step will fail. 
-> > > > Disable CPU hotplug during the initialization process to prevent any CPU going
-> > > > offline during initializing the TDX module.  Note it is caller's responsibility
-> > > > to guarantee all BIOS-enabled CPUs are in cpu_present_mask and all present CPUs
-> > > > are online."
-> > > But, what if a CPU went offline just before this lock was taken?  What
-> > > if the caller make sure all present CPUs are online, makes the call,
-> > > then a CPU is taken offline.  The lock wouldn't do any good.
-> > > 
-> > > What purpose does the lock serve?
-> > I thought cpus_read_lock() can prevent any CPU from going offline, no?
-> 
-> It doesn't prevent squat before the lock is taken, though.
+> Cc: "Joseph S. Barrera III" <joebar@chromium.org>
+> Cc: Douglas Anderson <dianders@chromium.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 
-This is true.  So I think w/o taking the lock is also fine, as the TDX module
-initialization is a state machine.  If any cpu goes offline during logical-cpu
-level initialization and TDH.SYS.LP.INIT isn't done on that cpu, then later the
-TDH.SYS.CONFIG will fail.  Similarly, if any cpu going offline causes
-TDH.SYS.KEY.CONFIG is not done for any package, then TDH.SYS.TDMR.INIT will
-fail.
-
-A problem (I realized it exists in current implementation too) is shutting down
-the TDX module, which requires calling TDH.SYS.LP.SHUTDOWN on all BIOS-enabled
-cpus.  Kernel can do this SEAMCALL at most for all present cpus.  However when
-any cpu is offline, this SEAMCALL won't be called on it, and it seems we need to
-add new CPU hotplug callback to call this SEAMCALL when the cpu is online again.
-
-Any suggestion?  Thanks!
-
-
--- 
-Thanks,
--Kai
-
-
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>

@@ -2,108 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0663E5144E0
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 10:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBCD95144E8
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 10:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356169AbiD2I4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 04:56:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58876 "EHLO
+        id S1356076AbiD2I7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 04:59:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236950AbiD2I4a (ORCPT
+        with ESMTP id S236950AbiD2I7x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 04:56:30 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CE86CC44EC
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 01:53:11 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9ED421063;
-        Fri, 29 Apr 2022 01:53:11 -0700 (PDT)
-Received: from wubuntu (unknown [10.57.75.64])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 74E753F73B;
-        Fri, 29 Apr 2022 01:53:10 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 09:53:08 +0100
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Phil Auld <pauld@redhat.com>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Fri, 29 Apr 2022 04:59:53 -0400
+Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id B772286E13
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 01:56:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fudan.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+        Message-Id:MIME-Version:Content-Transfer-Encoding; bh=amePFdXDy6
+        eKXcLqyO+aJjWEC77R1KGfpX+ipQ86EH0=; b=qBo1feLTejqDETkmTn2w/8cBe1
+        0+0nMtNrgMmP84QHlG16UoWRSS5eQawwHI96CxFzxYp5XSQEd+KYvf67IZGu7DeZ
+        RNCnTL2hvTA/SZUY7IfOAKUwDdY8j1Wqw6tAn5yFDcs4u96t2YKAZnvIcyV/622J
+        3C8h7cBLVicVrJ11E=
+Received: from localhost.localdomain (unknown [10.102.183.96])
+        by app1 (Coremail) with SMTP id XAUFCgAXHnYhqGtibix3EQ--.46279S4;
+        Fri, 29 Apr 2022 16:56:05 +0800 (CST)
+From:   Xin Xiong <xiongx18@fudan.edu.cn>
+To:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthew Dawson <matthew@mjdsystems.ca>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] sched/fair: Remove cfs_rq_tg_path()
-Message-ID: <20220429085308.sxj2w6i3n2btbpyh@wubuntu>
-References: <20220428144338.479094-1-qais.yousef@arm.com>
- <20220428144338.479094-3-qais.yousef@arm.com>
+Cc:     yuanxzhang@fudan.edu.cn, Xin Xiong <xiongx18@fudan.edu.cn>,
+        Xin Tan <tanxin.ctf@gmail.com>
+Subject: [PATCH] drm/radeon: fix reference count leak in cik_sdma_ib_test()
+Date:   Fri, 29 Apr 2022 16:53:32 +0800
+Message-Id: <20220429085331.2515-1-xiongx18@fudan.edu.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220428144338.479094-3-qais.yousef@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: XAUFCgAXHnYhqGtibix3EQ--.46279S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7Cw47JFykXFyrAr4fGrWkXrb_yoW8Cr47pr
+        WS9r9Fyr92yw42gw47ta9rWFyYkw18Ja1xWr4DC398Cw45Zw1vqF13ZryvqryUJrykZryS
+        vF1kWw48Z3W8AF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9C14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26rxl
+        6s0DM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
+        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAG
+        YxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCFx2
+        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
+        6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
+        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
+        s7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI
+        0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUQZ23UUUUU=
+X-CM-SenderInfo: arytiiqsuqiimz6i3vldqovvfxof0/1tbiAhALEFKp2mkXjwAAsZ
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+CC lkml
+The issue takes place in several error handling paths in
+cik_sdma_ib_test(). For example, when radeon_fence_wait_timeout()
+returns a value no greater than zero, the function simply returns an
+error code, forgetting to decrease the reference count of the object
+"ib", which is incremented by radeon_ib_get() earlier. This may
+result in memory leaks.
 
-On 04/28/22 15:43, Qais Yousef wrote:
-> From: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> 
-> cfs_rq_tg_path() is used by a tracepoint-to traceevent (tp-2-te)
-> converter to format the path of a taskgroup or autogroup respectively.
-> It doesn't have any in-kernel users after the removal of the
-> sched_trace_cfs_rq_path() helper function.
-> 
-> cfs_rq_tg_path() can be coded in a tp-2-te converter.
-> 
-> Remove it from kernel/sched/fair.c.
-> 
-> Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> Signed-off-by: Qais Yousef <qais.yousef@arm.com>
-> ---
->  kernel/sched/fair.c | 19 -------------------
->  1 file changed, 19 deletions(-)
-> 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index ff1177a4a286..7487737c1275 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -313,19 +313,6 @@ const struct sched_class fair_sched_class;
->  #define for_each_sched_entity(se) \
->  		for (; se; se = se->parent)
->  
-> -static inline void cfs_rq_tg_path(struct cfs_rq *cfs_rq, char *path, int len)
-> -{
-> -	if (!path)
-> -		return;
-> -
-> -	if (cfs_rq && task_group_is_autogroup(cfs_rq->tg))
-> -		autogroup_path(cfs_rq->tg, path, len);
-> -	else if (cfs_rq && cfs_rq->tg->css.cgroup)
-> -		cgroup_path(cfs_rq->tg->css.cgroup, path, len);
-> -	else
-> -		strlcpy(path, "(null)", len);
-> -}
-> -
->  static inline bool list_add_leaf_cfs_rq(struct cfs_rq *cfs_rq)
->  {
->  	struct rq *rq = rq_of(cfs_rq);
-> @@ -493,12 +480,6 @@ static int se_is_idle(struct sched_entity *se)
->  #define for_each_sched_entity(se) \
->  		for (; se; se = NULL)
->  
-> -static inline void cfs_rq_tg_path(struct cfs_rq *cfs_rq, char *path, int len)
-> -{
-> -	if (path)
-> -		strlcpy(path, "(null)", len);
-> -}
-> -
->  static inline bool list_add_leaf_cfs_rq(struct cfs_rq *cfs_rq)
->  {
->  	return true;
-> -- 
-> 2.25.1
-> 
+Fix it by decrementing the reference count of "ib" in those paths.
+
+Fixes: 04db4caf5c83 ("drm/radeon: Avoid double gpu reset by adding a timeout on IB ring tests.")
+Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
+Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
+---
+ drivers/gpu/drm/radeon/cik_sdma.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/gpu/drm/radeon/cik_sdma.c b/drivers/gpu/drm/radeon/cik_sdma.c
+index 919b14845c3c..d0e7323cdd42 100644
+--- a/drivers/gpu/drm/radeon/cik_sdma.c
++++ b/drivers/gpu/drm/radeon/cik_sdma.c
+@@ -732,18 +732,18 @@ int cik_sdma_ib_test(struct radeon_device *rdev, struct radeon_ring *ring)
+ 
+ 	r = radeon_ib_schedule(rdev, &ib, NULL, false);
+ 	if (r) {
+-		radeon_ib_free(rdev, &ib);
+ 		DRM_ERROR("radeon: failed to schedule ib (%d).\n", r);
+-		return r;
++		goto out;
+ 	}
+ 	r = radeon_fence_wait_timeout(ib.fence, false, usecs_to_jiffies(
+ 		RADEON_USEC_IB_TEST_TIMEOUT));
+ 	if (r < 0) {
+ 		DRM_ERROR("radeon: fence wait failed (%d).\n", r);
+-		return r;
++		goto out;
+ 	} else if (r == 0) {
+ 		DRM_ERROR("radeon: fence wait timed out.\n");
+-		return -ETIMEDOUT;
++		r = -ETIMEDOUT;
++		goto out;
+ 	}
+ 	r = 0;
+ 	for (i = 0; i < rdev->usec_timeout; i++) {
+@@ -758,6 +758,7 @@ int cik_sdma_ib_test(struct radeon_device *rdev, struct radeon_ring *ring)
+ 		DRM_ERROR("radeon: ib test failed (0x%08X)\n", tmp);
+ 		r = -EINVAL;
+ 	}
++out:
+ 	radeon_ib_free(rdev, &ib);
+ 	return r;
+ }
+-- 
+2.25.1
+

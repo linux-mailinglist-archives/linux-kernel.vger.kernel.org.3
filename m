@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FC465155D2
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81AEB5155D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381040AbiD2Ul1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 16:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53266 "EHLO
+        id S1380889AbiD2Ulb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 16:41:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380938AbiD2UlA (ORCPT
+        with ESMTP id S1380996AbiD2UlB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 16:41:00 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB6DC8667
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:37:24 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2d7eaa730d9so84822987b3.13
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:37:24 -0700 (PDT)
+        Fri, 29 Apr 2022 16:41:01 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C38C8BC7
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:37:26 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2eb7d137101so84824967b3.12
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:37:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=mgYY2lX+6A5TnPtbA+mhyQDA8k1F/8PITaCzkIIr+as=;
-        b=YjpbUMEKsiPqXO7j5QaX9CEnteTNYermxAVj8vpBYNcU/DKnyhIaC+KAxIbQ0HMh50
-         jZAmuGlryAzqWQgF7v18N9rzJ/FqqonqTEqQ/8zVqDbxRTv0LgoCJ6IGvArsgIrIU3Fc
-         FuGRQz95g0YZ+nDn4YVpaZcNM/vIYbltZH6wh1xpHvNFyaOb+eq8KSDdMHNkV7zxuTUE
-         jgEidlDR+yMW3OdmVRrZA4F/WUddh9IvCWCnqoGIW5ErpQkQ2PDPToXqhYoIN4XlOqhF
-         nNy8Gp5x2LZn9OUz9m9EXN06xvPvfyCapJ6Il8ctGUGTDqd3GoZZddD4mn/UC3XWHeII
-         RLZQ==
+        bh=wn6Fk0jdzmyKcWzAtklzhzbugkNpgCzrIA6neEfx0hw=;
+        b=B0ipEFgTHkrk1DW294MGsIOmwMvWMTi7yFa5IvHBScPSSCIQ12inv8qFk9kMkQ+cWo
+         Q10QSGBYwQsJ+1mP+2NJRTJ2NZGdpgNoGUiUQ44g1Cr5ZqLcK7SplW9ejQ+/9J/oKRmF
+         Gc2BAu/DPl7VA2HzLqre22OeoNpvhHeWjiGMJA4K4ERKRcpd1RZMx8A7GDrxViAyVHpo
+         /YbXW0Z+LLwNCzoEK+5FjnolHrsOyMim+pFQeE4KyVUM+oU54jxhjmnYfSZFGTzKELSY
+         6uw4QPhNnYwzhdxwvFQ5Yu+rG31zgQ2jWlMVVo+VQskxCMWz5snM1X1IrOKP68SgBaO2
+         uqYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=mgYY2lX+6A5TnPtbA+mhyQDA8k1F/8PITaCzkIIr+as=;
-        b=EH5yEH9n/CvBl3gT8+MzyqCpdSvmIE63SsjxG7xsl8CwOgRb4Tzt+aPKz8/KmNm9v7
-         vYa9f08Dsa9vbNcTK7QqPdiQdSiXL+7KK1A7f8nlWSGazADDQ7oPqZyjNyn3aVXkhOwA
-         fXE2O63ibddJIWnY2UBpmUo+p7qBbNl0+4g1mblJ27NJ5c2NkSJEJUmuN0TqwsaDbnIb
-         vuGZstpdJJn4BtnJG7dln9IYVfatswtA3Dl+uwykAeUKPlzgfN13BnbWSbS/mFnE53+2
-         IQ9jbpW0j1DAf4F1YFrIkFTUhjwIrYfT2Qp7MHxIGs6SdJhI41YQb4eLL50Oa3oq5eJe
-         ULYw==
-X-Gm-Message-State: AOAM530AtY55OQIR6Uj7pVkNGpLNfv6xUi6K9FV9xY10gqQqNoNS4fru
-        Mr9TfqObWeZhyqFek1Aq/r8zuP5nmCKhlI7bwsyalKe1EjoaHuQO/Csh3ogGGhWkRY87Mh5fNQo
-        uqn17EdRFGoV7k8NW2IzfYQ331syKLKg6mZyA5lxmAINMz2hvDDRw1YDO6Ch7tOGM0d7OOJwlOn
-        8/cM11vD1JJw==
-X-Google-Smtp-Source: ABdhPJyambFdCnuhmSj7yilVaN1wZnPPJvyC6XgV07kwK6srYdBE5TrGTkmK5Jt3LNHtm046MZq4+WTcrii2u9VORI0=
+        bh=wn6Fk0jdzmyKcWzAtklzhzbugkNpgCzrIA6neEfx0hw=;
+        b=Dq7MLZaXG/2YhYnUWa7CJGMwcnKGE5GK+MUldCSTPHz47F/hSIisiSILtsrs+GQV91
+         kwrg8kBegPqJMR8zYQk7tJcGCOgNmA9XPOxaDQ9M95s232UmD8iG8t6DGczDfOH0rXJA
+         x2p0YEcF9ILvMz5bTOFwaz1U4XMy0IQB7ZUnoCd0DR45Ptpa2rhgBHaTTMR7iZ0iVSPU
+         aWgq+LsWSxD7c7ofUmJLYt6S1m7kXi1cGT2jsGebkaUkKeHov2hCh1bgef7peC5ZgEdG
+         iYWM0OaaKx6/oRYotQtyaFLV9k4Wz3k6ZjDaYIqjzq3ZZJd/WHnBeYh+2+jcV4bcd7/X
+         Futw==
+X-Gm-Message-State: AOAM533nTW7t+S8XVzzBu8nwBfR2yVIRzbl5uVeSiJBb/MLnBalbrHZ9
+        +X+n9JZCUXO2iimfkQaw3690d3SSeMH8G6obhLp9nxbQaLUd9LYVIcTmloh/d1yOXLhEf76f3bW
+        FAJyQ09chc+wK4GLtzlOhUQ+ceCT1InTnMcZVvYH4EQ2PS0H8QCjYo23qAmfKj/JkWFaPr8rouF
+        /USJf2De4Tqg==
+X-Google-Smtp-Source: ABdhPJzIdF+dDHh9hmX3ACfTDHmp2X8oeUP0bceeU1/QL1FSMLv4TzO0/t9MouMPiSEZ/YrjXh5v45gGaX2itQXlRUg=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:351:bea9:f158:1021])
- (user=samitolvanen job=sendgmr) by 2002:a25:6157:0:b0:645:8d0e:f782 with SMTP
- id v84-20020a256157000000b006458d0ef782mr1403212ybb.36.1651264643566; Fri, 29
- Apr 2022 13:37:23 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 13:36:38 -0700
+ (user=samitolvanen job=sendgmr) by 2002:a25:7008:0:b0:648:6d04:f4ab with SMTP
+ id l8-20020a257008000000b006486d04f4abmr1288105ybc.127.1651264645781; Fri, 29
+ Apr 2022 13:37:25 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 13:36:39 -0700
 In-Reply-To: <20220429203644.2868448-1-samitolvanen@google.com>
-Message-Id: <20220429203644.2868448-16-samitolvanen@google.com>
+Message-Id: <20220429203644.2868448-17-samitolvanen@google.com>
 Mime-Version: 1.0
 References: <20220429203644.2868448-1-samitolvanen@google.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3560; h=from:subject;
- bh=bFdr8KmKdxGKWmbD2cJi1nCiQhugbXkWJr6xn+4w/Vg=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBibExXTqTrMCKvJUQRO1SvugummwkQzb2swGsRRMku
- BRKSFeaJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYmxMVwAKCRBMtfaEi7xW7pzWC/
- 9n2bx+onwgeKynQ327/gYKyBj78JXPpfWB3IzaBiLs329WOK7TdsBUtqcjEop94O5lG3vUcXzch3sP
- RPbgoCCB4IVfV0NIpcBczH7oUNdurADR5O5bYK5KKFqphm81E7KU4PYHv5HLtfauMByN4QqVaOiuKj
- nb4s0SqLCSNGJ8NHnLtsdfz1ESGEY3UQ9Hf94PEgnLxMtxbVQnq4bSi3ArQDlpl2QFPcA3/U/ou/ir
- 3ye/0/3VNdUfN6wx9MhGZRyUWfNrfsJCVH6LtgXxLk+sKB1dR7r2sJqxQLn0IXlpaGxI2oFll0L3W4
- 9h0AFZpcu+A6kKeGZhi5v7qoeGrn6rv+iz76lwz2ARGx3q9Fqmfxl8sHSfrHkZUk6tl9dDbDglqQ76
- xWXwKlr62HVRv+4b0BefusoLDrdAFe4dl5+a0RR9NPa3RGsJBN0qGPaC+ZEqob2tNLJYOl103mi8Nq
- 1z6e8gI84Cpj0HOxsEVgnM2XFp/xJq+9FZzznLF8NVshQ=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10066; h=from:subject;
+ bh=5Ub68Ba6efUThwF+cCSBq2rK+XTwq+L6mbSroJ2k1gE=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBibExX80UREFSoz+uKGJsMYz1mV8KXavHjkutESBeW
+ An4NZkSJAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYmxMVwAKCRBMtfaEi7xW7lD+DA
+ CQoFQ7kl9gHyGLqmu+nwdDyP/PSkHFFRg3CiJvlC0ZRJ2zLoG5Nzrh/KnIA2TmZQz+sHZTegYwvudJ
+ n8i1eZ8VZyWzjuZhZPu/myYCfotxkoUI3gl53m2MOcD0uQYmhDgdubyUDJO9TdtCjwElVp1XY8oMOh
+ 708PBYVRyPioCZ2nwpzUuQ5IhA+bgW16TblTFxij9BF4gxD8PFKfiBEkkasHhKCbHDcGopUVVyVgQK
+ 1XqsebLMxBO0UnFaqkvO6MMfbFw+xYbM/h8Yg0y5Q5JTLhdTr+XSj8ZDlryGNJO6xxJr0Q6poc0yMS
+ AxYKHb4dsc7u84x/sSBolnBK7bjMSlYRfsMKvI9pnltVYatPZ4diR0DkgbuoIpeRQr6yNT65OyPmP3
+ XHDtXL9jv33JBEavuzC9/Gwa8slGA9SwU/jmu1jf/fiWnTL/kWQEQOtXFSKhgu1hVkkk2/RfUvtxWw
+ ppG6f/2balDMELLoCNfwzhU7imNi9CsYIwxKYQEOtU/Iw=
 X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [RFC PATCH 15/21] static_call: Use cfi_unchecked
+Subject: [RFC PATCH 16/21] objtool: Add support for CONFIG_CFI_CLANG
 From:   Sami Tolvanen <samitolvanen@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Kees Cook <keescook@chromium.org>,
@@ -93,100 +93,318 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With CONFIG_HAVE_STATIC_CALL, static calls are patched into direct
-calls. Disable indirect call CFI checking for the call sites with the
-cfi_unchecked macro.
+With -fsanitize=kcfi, the compiler injects a type identifier before
+each function. Teach objtool to recognize the identifier.
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 ---
- include/linux/static_call.h             |  6 ++++--
- include/linux/static_call_types.h       |  9 ++++++---
- tools/include/linux/static_call_types.h | 13 ++++++++-----
- 3 files changed, 18 insertions(+), 10 deletions(-)
+ scripts/Makefile.build                    |   3 +-
+ scripts/link-vmlinux.sh                   |   3 +
+ tools/objtool/arch/x86/include/arch/elf.h |   2 +
+ tools/objtool/builtin-check.c             |   3 +-
+ tools/objtool/check.c                     | 128 ++++++++++++++++++++--
+ tools/objtool/elf.c                       |  13 +++
+ tools/objtool/include/objtool/arch.h      |   1 +
+ tools/objtool/include/objtool/builtin.h   |   2 +-
+ tools/objtool/include/objtool/elf.h       |   2 +
+ 9 files changed, 145 insertions(+), 12 deletions(-)
 
-diff --git a/include/linux/static_call.h b/include/linux/static_call.h
-index 7f1219fb98cf..f666c841b718 100644
---- a/include/linux/static_call.h
-+++ b/include/linux/static_call.h
-@@ -204,7 +204,8 @@ extern long __static_call_return0(void);
- 	};								\
- 	ARCH_DEFINE_STATIC_CALL_RET0_TRAMP(name)
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index 9717e6f6fb31..c850ac420b60 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -235,7 +235,8 @@ objtool_args =								\
+ 	$(if $(CONFIG_RETPOLINE), --retpoline)				\
+ 	$(if $(CONFIG_X86_SMAP), --uaccess)				\
+ 	$(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)		\
+-	$(if $(CONFIG_SLS), --sls)
++	$(if $(CONFIG_SLS), --sls)					\
++	$(if $(CONFIG_CFI_CLANG), --kcfi)
  
--#define static_call_cond(name, args...)	(void)__static_call(name)(args)
-+#define static_call_cond(name, args...)					\
-+	(void)cfi_unchecked(__static_call(name)(args))
+ cmd_objtool = $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $@)
+ cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$@: $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
+diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+index 20f44504a644..d171f8507db2 100755
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -152,6 +152,9 @@ objtool_link()
+ 		if is_enabled CONFIG_SLS; then
+ 			objtoolopt="${objtoolopt} --sls"
+ 		fi
++		if is_enabled CONFIG_CFI_CLANG; then
++			objtoolopt="${objtoolopt} --kcfi"
++		fi
+ 		info OBJTOOL ${1}
+ 		tools/objtool/objtool ${objtoolcmd} ${objtoolopt} ${1}
+ 	fi
+diff --git a/tools/objtool/arch/x86/include/arch/elf.h b/tools/objtool/arch/x86/include/arch/elf.h
+index 69cc4264b28a..8833d989eec7 100644
+--- a/tools/objtool/arch/x86/include/arch/elf.h
++++ b/tools/objtool/arch/x86/include/arch/elf.h
+@@ -3,4 +3,6 @@
  
- #define EXPORT_STATIC_CALL(name)					\
- 	EXPORT_SYMBOL(STATIC_CALL_KEY(name));				\
-@@ -246,7 +247,8 @@ static inline int static_call_init(void) { return 0; }
- 	};								\
- 	ARCH_DEFINE_STATIC_CALL_RET0_TRAMP(name)
+ #define R_NONE R_X86_64_NONE
  
--#define static_call_cond(name, args...)	(void)__static_call(name)(args)
-+#define static_call_cond(name, args...)					\
-+	(void)cfi_unchecked(__static_call(name)(args))
++#define KCFI_TYPEID_LEN	6
++
+ #endif /* _OBJTOOL_ARCH_ELF */
+diff --git a/tools/objtool/builtin-check.c b/tools/objtool/builtin-check.c
+index fc6975ab8b06..8a662dcc21be 100644
+--- a/tools/objtool/builtin-check.c
++++ b/tools/objtool/builtin-check.c
+@@ -21,7 +21,7 @@
  
- static inline
- void __static_call_update(struct static_call_key *key, void *tramp, void *func)
-diff --git a/include/linux/static_call_types.h b/include/linux/static_call_types.h
-index 7e1ce240a2cd..faebc1412c86 100644
---- a/include/linux/static_call_types.h
-+++ b/include/linux/static_call_types.h
-@@ -81,13 +81,16 @@ struct static_call_key {
+ bool no_fp, no_unreachable, retpoline, module, backtrace, uaccess, stats,
+      lto, vmlinux, mcount, noinstr, backup, sls, dryrun,
+-     ibt;
++     ibt, kcfi;
  
- #ifdef MODULE
- #define __STATIC_CALL_MOD_ADDRESSABLE(name)
--#define static_call_mod(name, args...)	__raw_static_call(name)(args)
-+#define static_call_mod(name, args...) \
-+	cfi_unchecked(__raw_static_call(name)(args))
- #else
- #define __STATIC_CALL_MOD_ADDRESSABLE(name) __STATIC_CALL_ADDRESSABLE(name)
--#define static_call_mod(name, args...)	__static_call(name)(args)
-+#define static_call_mod(name, args...) \
-+	cfi_unchecked(__static_call(name)(args))
- #endif
- 
--#define static_call(name, args...)	__static_call(name)(args)
-+#define static_call(name, args...) \
-+	cfi_unchecked(__static_call(name)(args))
- 
- #else
- 
-diff --git a/tools/include/linux/static_call_types.h b/tools/include/linux/static_call_types.h
-index 5a00b8b2cf9f..faebc1412c86 100644
---- a/tools/include/linux/static_call_types.h
-+++ b/tools/include/linux/static_call_types.h
-@@ -81,13 +81,16 @@ struct static_call_key {
- 
- #ifdef MODULE
- #define __STATIC_CALL_MOD_ADDRESSABLE(name)
--#define static_call_mod(name)	__raw_static_call(name)
-+#define static_call_mod(name, args...) \
-+	cfi_unchecked(__raw_static_call(name)(args))
- #else
- #define __STATIC_CALL_MOD_ADDRESSABLE(name) __STATIC_CALL_ADDRESSABLE(name)
--#define static_call_mod(name)	__static_call(name)
-+#define static_call_mod(name, args...) \
-+	cfi_unchecked(__static_call(name)(args))
- #endif
- 
--#define static_call(name)	__static_call(name)
-+#define static_call(name, args...) \
-+	cfi_unchecked(__static_call(name)(args))
- 
- #else
- 
-@@ -95,8 +98,8 @@ struct static_call_key {
- 	void *func;
+ static const char * const check_usage[] = {
+ 	"objtool check [<options>] file.o",
+@@ -49,6 +49,7 @@ const struct option check_options[] = {
+ 	OPT_BOOLEAN('S', "sls", &sls, "validate straight-line-speculation"),
+ 	OPT_BOOLEAN(0, "dry-run", &dryrun, "don't write the modifications"),
+ 	OPT_BOOLEAN(0, "ibt", &ibt, "validate ENDBR placement"),
++	OPT_BOOLEAN('k', "kcfi", &kcfi, "detect control-flow integrity type identifiers"),
+ 	OPT_END(),
  };
  
--#define static_call(name)						\
--	((typeof(STATIC_CALL_TRAMP(name))*)(STATIC_CALL_KEY(name).func))
-+#define static_call(name, args...)					\
-+	((typeof(STATIC_CALL_TRAMP(name))*)(STATIC_CALL_KEY(name).func))(args)
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index bd0c2c828940..e6bee2f2996a 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -27,6 +27,12 @@ struct alternative {
+ 	bool skip_orig;
+ };
  
- #endif /* CONFIG_HAVE_STATIC_CALL */
++struct kcfi_type {
++	struct section *sec;
++	unsigned long offset;
++	struct hlist_node hash;
++};
++
+ static unsigned long nr_cfi, nr_cfi_reused, nr_cfi_cache;
  
+ static struct cfi_init_state initial_func_cfi;
+@@ -143,6 +149,99 @@ static bool is_sibling_call(struct instruction *insn)
+ 	return (is_static_jump(insn) && insn->call_dest);
+ }
+ 
++static int kcfi_bits;
++static struct hlist_head *kcfi_hash;
++
++static void *kcfi_alloc_hash(unsigned long size)
++{
++	kcfi_bits = max(10, ilog2(size));
++	kcfi_hash = mmap(NULL, sizeof(struct hlist_head) << kcfi_bits,
++			PROT_READ|PROT_WRITE,
++			MAP_PRIVATE|MAP_ANON, -1, 0);
++	if (kcfi_hash == (void *)-1L) {
++		WARN("mmap fail kcfi_hash");
++		kcfi_hash = NULL;
++	}  else if (stats) {
++		printf("kcfi_bits: %d\n", kcfi_bits);
++	}
++
++	return kcfi_hash;
++}
++
++static void add_kcfi_type(struct kcfi_type *type)
++{
++	hlist_add_head(&type->hash,
++		&kcfi_hash[hash_min(
++			sec_offset_hash(type->sec, type->offset),
++			kcfi_bits)]);
++}
++
++static bool add_kcfi_types(struct section *sec)
++{
++	struct reloc *reloc;
++
++	list_for_each_entry(reloc, &sec->reloc_list, list) {
++		struct kcfi_type *type;
++
++		if (reloc->sym->type != STT_SECTION) {
++			WARN("unexpected relocation symbol type in %s", sec->name);
++			return false;
++		}
++
++		type = malloc(sizeof(*type));
++		if (!type) {
++			perror("malloc");
++			return false;
++		}
++
++		type->sec = reloc->sym->sec;
++		type->offset = reloc->addend;
++
++		add_kcfi_type(type);
++	}
++
++	return true;
++}
++
++static int read_kcfi_types(struct objtool_file *file)
++{
++	if (!kcfi)
++		return 0;
++
++	if (!kcfi_alloc_hash(file->elf->text_size / 16))
++		return -1;
++
++	if (!for_each_section_by_name(file->elf, ".rela.kcfi_types", add_kcfi_types))
++		return -1;
++
++	return 0;
++}
++
++static bool is_kcfi_typeid(struct elf *elf, struct instruction *insn)
++{
++	struct hlist_head *head;
++	struct kcfi_type *type;
++	struct reloc *reloc;
++
++	if (!kcfi)
++		return false;
++
++	/* Compiler-generated annotation in .kcfi_types. */
++	head = &kcfi_hash[hash_min(sec_offset_hash(insn->sec, insn->offset), kcfi_bits)];
++
++	hlist_for_each_entry(type, head, hash)
++		if (type->sec == insn->sec && type->offset == insn->offset)
++			return true;
++
++	/* Manual annotation (in assembly code). */
++	reloc = find_reloc_by_dest(elf, insn->sec, insn->offset);
++
++	if (reloc && !strncmp(reloc->sym->name, "__kcfi_typeid_", 14))
++		return true;
++
++	return false;
++}
++
+ /*
+  * This checks to see if the given function is a "noreturn" function.
+  *
+@@ -388,13 +487,18 @@ static int decode_instructions(struct objtool_file *file)
+ 			insn->sec = sec;
+ 			insn->offset = offset;
+ 
+-			ret = arch_decode_instruction(file, sec, offset,
+-						      sec->sh.sh_size - offset,
+-						      &insn->len, &insn->type,
+-						      &insn->immediate,
+-						      &insn->stack_ops);
+-			if (ret)
+-				goto err;
++			if (is_kcfi_typeid(file->elf, insn)) {
++				insn->type = INSN_KCFI_TYPEID;
++				insn->len = KCFI_TYPEID_LEN;
++			} else {
++				ret = arch_decode_instruction(file, sec, offset,
++							      sec->sh.sh_size - offset,
++							      &insn->len, &insn->type,
++							      &insn->immediate,
++							      &insn->stack_ops);
++				if (ret)
++					goto err;
++			}
+ 
+ 			/*
+ 			 * By default, "ud2" is a dead end unless otherwise
+@@ -420,7 +524,8 @@ static int decode_instructions(struct objtool_file *file)
+ 			}
+ 
+ 			sym_for_each_insn(file, func, insn) {
+-				insn->func = func;
++				if (insn->type != INSN_KCFI_TYPEID)
++					insn->func = func;
+ 				if (insn->type == INSN_ENDBR && list_empty(&insn->call_node)) {
+ 					if (insn->offset == insn->func->offset) {
+ 						list_add_tail(&insn->call_node, &file->endbr_list);
+@@ -2219,6 +2324,10 @@ static int decode_sections(struct objtool_file *file)
+ 	if (ret)
+ 		return ret;
+ 
++	ret = read_kcfi_types(file);
++	if (ret)
++		return ret;
++
+ 	ret = decode_instructions(file);
+ 	if (ret)
+ 		return ret;
+@@ -3595,7 +3704,8 @@ static bool ignore_unreachable_insn(struct objtool_file *file, struct instructio
+ 	int i;
+ 	struct instruction *prev_insn;
+ 
+-	if (insn->ignore || insn->type == INSN_NOP || insn->type == INSN_TRAP)
++	if (insn->ignore || insn->type == INSN_NOP || insn->type == INSN_TRAP ||
++			insn->type == INSN_KCFI_TYPEID)
+ 		return true;
+ 
+ 	/*
+diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+index d7b99a737496..c4e277d41fd2 100644
+--- a/tools/objtool/elf.c
++++ b/tools/objtool/elf.c
+@@ -120,6 +120,19 @@ struct section *find_section_by_name(const struct elf *elf, const char *name)
+ 	return NULL;
+ }
+ 
++bool for_each_section_by_name(const struct elf *elf, const char *name,
++			      bool (*callback)(struct section *))
++{
++	struct section *sec;
++
++	elf_hash_for_each_possible(section_name, sec, name_hash, str_hash(name)) {
++		if (!strcmp(sec->name, name) && !callback(sec))
++			return false;
++	}
++
++	return true;
++}
++
+ static struct section *find_section_by_index(struct elf *elf,
+ 					     unsigned int idx)
+ {
+diff --git a/tools/objtool/include/objtool/arch.h b/tools/objtool/include/objtool/arch.h
+index 9b19cc304195..3db5951e7aa9 100644
+--- a/tools/objtool/include/objtool/arch.h
++++ b/tools/objtool/include/objtool/arch.h
+@@ -28,6 +28,7 @@ enum insn_type {
+ 	INSN_CLD,
+ 	INSN_TRAP,
+ 	INSN_ENDBR,
++	INSN_KCFI_TYPEID,
+ 	INSN_OTHER,
+ };
+ 
+diff --git a/tools/objtool/include/objtool/builtin.h b/tools/objtool/include/objtool/builtin.h
+index c39dbfaef6dc..68409070bca5 100644
+--- a/tools/objtool/include/objtool/builtin.h
++++ b/tools/objtool/include/objtool/builtin.h
+@@ -10,7 +10,7 @@
+ extern const struct option check_options[];
+ extern bool no_fp, no_unreachable, retpoline, module, backtrace, uaccess, stats,
+ 	    lto, vmlinux, mcount, noinstr, backup, sls, dryrun,
+-	    ibt;
++	    ibt, kcfi;
+ 
+ extern int cmd_parse_options(int argc, const char **argv, const char * const usage[]);
+ 
+diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
+index 22ba7e2b816e..7fd3462ce32a 100644
+--- a/tools/objtool/include/objtool/elf.h
++++ b/tools/objtool/include/objtool/elf.h
+@@ -148,6 +148,8 @@ int elf_write(struct elf *elf);
+ void elf_close(struct elf *elf);
+ 
+ struct section *find_section_by_name(const struct elf *elf, const char *name);
++bool for_each_section_by_name(const struct elf *elf, const char *name,
++			      bool (*callback)(struct section *));
+ struct symbol *find_func_by_offset(struct section *sec, unsigned long offset);
+ struct symbol *find_symbol_by_offset(struct section *sec, unsigned long offset);
+ struct symbol *find_symbol_by_name(const struct elf *elf, const char *name);
 -- 
 2.36.0.464.gb9c8b46e94-goog
 

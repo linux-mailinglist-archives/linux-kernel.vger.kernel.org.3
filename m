@@ -2,180 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73AA851489B
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 13:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 373AF51489F
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 13:53:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356404AbiD2L4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 07:56:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54054 "EHLO
+        id S1358764AbiD2L4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 07:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239331AbiD2L42 (ORCPT
+        with ESMTP id S1358734AbiD2L4b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 07:56:28 -0400
-Received: from mail.pcs.gmbh (mail.pcs.gmbh [89.27.162.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09390C6ECD;
-        Fri, 29 Apr 2022 04:53:08 -0700 (PDT)
-Received: from mail.csna.de (mail.csna.de [89.27.162.50])
-        by mail.pcs.gmbh with ESMTPA
-        ; Fri, 29 Apr 2022 13:52:48 +0200
-Received: from EXCHANGE2019.pcs.ditec.de (mail.pcs.com [89.27.162.5])
-        by mail.csna.de with ESMTPA
-        ; Fri, 29 Apr 2022 13:52:48 +0200
-Received: from EXCHANGE2019.pcs.ditec.de (192.168.8.214) by
- EXCHANGE2019.pcs.ditec.de (192.168.8.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 29 Apr 2022 13:52:48 +0200
-Received: from lxtpfaff.pcs.ditec.de (192.168.9.96) by
- EXCHANGE2019.pcs.ditec.de (192.168.8.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22
- via Frontend Transport; Fri, 29 Apr 2022 13:52:48 +0200
-Date:   Fri, 29 Apr 2022 13:52:48 +0200
-From:   Thomas Pfaff <tpfaff@pcs.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-CC:     <linux-kernel@vger.kernel.org>, <linux-rt-users@vger.kernel.org>,
-        Hillf Danton <hdanton@sina.com>, Marc Zyngier <maz@kernel.org>
-Subject: [PATCH v2] irq/core: synchronize irq_thread startup
-Message-ID: <1e3f96b7-9294-1534-e83b-efe3602f876f@pcs.com>
+        Fri, 29 Apr 2022 07:56:31 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7898C6ED3;
+        Fri, 29 Apr 2022 04:53:11 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id y6so3476763qke.10;
+        Fri, 29 Apr 2022 04:53:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=gGeL3vqvV+tsZXortm1bChbjn2BI/sUzqWi2Z5G5epg=;
+        b=gHuIH+ICOFoIXkjGy7RKBQ2zwMf/vZuR/lkb7AySl9mTPbJVzIBHpa29CnhPA9ff/a
+         if0iKwPV1lO7dw2PcKXUalir6wvcEcnmlgALlwkKyCkyV2KZLqMxshNVSJXBg19NSEvR
+         58ZJ/4Wh+sky5VvR02xO4X6ptkonHKtR5yCP95AgD0V9VLLVN/w2RPTInDfEhFIPrjt4
+         m/Im26teWUlAM9ZrH0swzoRQnXPpaj9sdrPTvvg//xuIesfW/fQYAlylw5nUJdBi9vdB
+         +Eb0UgFeBnbQBfvyUIrLg9GRnqMN5x1yMX+LroCfYTRBAalNfckFiBWxi57jVnM3lrDB
+         M4Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=gGeL3vqvV+tsZXortm1bChbjn2BI/sUzqWi2Z5G5epg=;
+        b=D2CMy4wBHd/eVAdsfoRofJ4UK64X95tmQqy5woXu1dLl/kLf/VSe7Mu77apUM8wBf8
+         hAyT4PLHK060uA+gvBiKSQKJf7WU9JmjmsXu9ubMyefzlw7eHARA0RhpmaiQhizI8C2H
+         9npQTU4EtTsq0Y+SU7+YBqcM3tLiNvdo8zTc/KqxtMfx4KhwqXim+YGph1PPzcV6DRsU
+         34/VUNiBHRZuqDqiEL5kQfhb5aAqbrPV452oAlOt1u5i5G2/SFCnIFl8PpVoZsSjyrrM
+         X0t6Qwp7oLIlvZfcHbpEwRUUCYTax2EKNQI4m+2MsrL0oY4sP7YYionAb8FR6etV+2eY
+         30UA==
+X-Gm-Message-State: AOAM531zMUMJwBWT0SlbGjA5lulVr0deCiedsRsnDwESorajisQD4Kuf
+        b+fMNW9VzJxpXFZd2Gl70TI=
+X-Google-Smtp-Source: ABdhPJw/jdE9yOwN6ajIW50uiF7ojyla0JcoEwOGAtnxxCReSGQD6/sAc4TCfGtIR586QfdVldxkbg==
+X-Received: by 2002:a05:620a:4689:b0:69e:a3c7:4cfa with SMTP id bq9-20020a05620a468900b0069ea3c74cfamr22637948qkb.591.1651233190865;
+        Fri, 29 Apr 2022 04:53:10 -0700 (PDT)
+Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
+        by smtp.gmail.com with ESMTPSA id 123-20020a370c81000000b0069fa408fdb7sm1382505qkm.24.2022.04.29.04.53.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 04:53:10 -0700 (PDT)
+From:   Peter Geis <pgwipeout@gmail.com>
+To:     linux-rockchip@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 3/7] dt-bindings: arm: rockchip: Add Firefly Station M2
+Date:   Fri, 29 Apr 2022 07:52:48 -0400
+Message-Id: <20220429115252.2360496-4-pgwipeout@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220429115252.2360496-1-pgwipeout@gmail.com>
+References: <20220429115252.2360496-1-pgwipeout@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-X-KSE-ServerInfo: EXCHANGE2019.pcs.ditec.de, 9
-X-KSE-AntiSpam-Interceptor-Info: white sender email list
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 29.04.2022 09:07:00
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Pfaff <tpfaff@pcs.com>
+The Station M2 is a compact single board computer based on the rk3566
+SoC. It outputs on uart2 for debug and console purposes.
 
-While running
-"while /bin/true; do setserial /dev/ttyS0 uart none;
-setserial /dev/ttyS0 uart 16550A; done"
-on a kernel with threaded irqs, setserial is hung after some calls.
-
-setserial opens the device, this will install an irq handler if the uart is
-not none, followed by TIOCGSERIAL and TIOCSSERIAL ioctls.
-Then the device is closed. On close, synchronize_irq() is called by
-serial_core.
-
-If the close comes too fast, the irq_thread does not really start,
-it is terminated immediately without going into irq_thread().
-But an interrupt might already been handled by
-irq_default_primary_handler(), going to __irq_wake_thread() and
-incrementing threads_active.
-If this happens, synchronize_irq() will hang forever, because the
-irq_thread is already dead, and threads_active will never be decremented.
-
-The fix is to make sure that the irq_thread is really started
-during __setup_irq().
-
-Signed-off-by: Thomas Pfaff <tpfaff@pcs.com>
+Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
-v1-v2:
-  - use already existing resources
-diff --git a/kernel/irq/internals.h b/kernel/irq/internals.h
-index 99cbdf55a8bd..dca57bed0d96 100644
---- a/kernel/irq/internals.h
-+++ b/kernel/irq/internals.h
-@@ -29,12 +29,14 @@ extern struct irqaction chained_action;
-  * IRQTF_WARNED    - warning "IRQ_WAKE_THREAD w/o thread_fn" has been printed
-  * IRQTF_AFFINITY  - irq thread is requested to adjust affinity
-  * IRQTF_FORCED_THREAD  - irq action is force threaded
-+ * IRQTF_UP        - signals that irq thread is ready
-  */
- enum {
- 	IRQTF_RUNTHREAD,
- 	IRQTF_WARNED,
- 	IRQTF_AFFINITY,
- 	IRQTF_FORCED_THREAD,
-+	IRQTF_UP,
- };
- 
- /*
-diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
-index f1d5a94c6c9f..7efa24629694 100644
---- a/kernel/irq/manage.c
-+++ b/kernel/irq/manage.c
-@@ -1263,6 +1263,30 @@ static void irq_wake_secondary(struct irq_desc *desc, struct irqaction *action)
- 	raw_spin_unlock_irq(&desc->lock);
- }
- 
-+/*
-+ * Internal function to notify that irq_thread is ready
-+ */
-+static void irq_thread_is_up(struct irq_desc *desc,
-+		struct irqaction *action)
-+{
-+	set_bit(IRQTF_UP, &action->thread_flags);
-+	wake_up(&desc->wait_for_threads);
-+}
-+
-+/*
-+ * Internal function to wake up irq_thread
-+ * and wait until it is really up
-+ */
-+static void wait_for_irq_thread_startup(struct irq_desc *desc,
-+		struct irqaction *action)
-+{
-+	if (action && action->thread) {
-+		wake_up_process(action->thread);
-+		wait_event(desc->wait_for_threads,
-+			test_bit(IRQTF_UP, &action->thread_flags));
-+	}
-+}
-+
- /*
-  * Interrupt handler thread
-  */
-@@ -1287,6 +1311,8 @@ static int irq_thread(void *data)
- 
- 	irq_thread_check_affinity(desc, action);
- 
-+	irq_thread_is_up (desc, action);
-+
- 	while (!irq_wait_for_interrupt(action)) {
- 		irqreturn_t action_ret;
- 
-@@ -1522,6 +1548,8 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
- 		}
- 	}
- 
-+	init_waitqueue_head(&desc->wait_for_threads);
-+
- 	/*
- 	 * Create a handler thread when a thread function is supplied
- 	 * and the interrupt does not nest into another interrupt
-@@ -1698,8 +1726,6 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
- 	}
- 
- 	if (!shared) {
--		init_waitqueue_head(&desc->wait_for_threads);
--
- 		/* Setup the type (level, edge polarity) if configured: */
- 		if (new->flags & IRQF_TRIGGER_MASK) {
- 			ret = __irq_set_trigger(desc,
-@@ -1795,14 +1821,8 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
- 
- 	irq_setup_timings(desc, new);
- 
--	/*
--	 * Strictly no need to wake it up, but hung_task complains
--	 * when no hard interrupt wakes the thread up.
--	 */
--	if (new->thread)
--		wake_up_process(new->thread);
--	if (new->secondary)
--		wake_up_process(new->secondary->thread);
-+	wait_for_irq_thread_startup(desc, new);
-+	wait_for_irq_thread_startup(desc, new->secondary);
- 
- 	register_irq_proc(irq, desc);
- 	new->dir = NULL;
+ Documentation/devicetree/bindings/arm/rockchip.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
 
+diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
+index b85a8e6c5e75..288d044d48bc 100644
+--- a/Documentation/devicetree/bindings/arm/rockchip.yaml
++++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
+@@ -133,6 +133,11 @@ properties:
+               - firefly,roc-rk3399-pc-plus
+           - const: rockchip,rk3399
+ 
++      - description: Firefly Station M2
++        items:
++          - const: firefly,rk3566-roc-pc
++          - const: rockchip,rk3566
++
+       - description: FriendlyElec NanoPi R2S
+         items:
+           - const: friendlyarm,nanopi-r2s
+-- 
+2.25.1
 

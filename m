@@ -2,116 +2,428 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C01B515102
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:39:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE60515115
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:43:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379243AbiD2Qmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 12:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44652 "EHLO
+        id S1379260AbiD2Qq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 12:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379206AbiD2Qmg (ORCPT
+        with ESMTP id S230208AbiD2Qq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 12:42:36 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10940DAA00
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:39:18 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id cq17-20020a17090af99100b001dc0386cd8fso2381045pjb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:39:18 -0700 (PDT)
+        Fri, 29 Apr 2022 12:46:26 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266476AA6E;
+        Fri, 29 Apr 2022 09:43:07 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id p6so7593785pjm.1;
+        Fri, 29 Apr 2022 09:43:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=aT1mMx7G7UxfsIaMTAsj5UtIFy8ZPOjU7jyV9ILj7K0=;
-        b=Z9JwwbjfKXF+J5lRLrITd3m71iTUDtPhiRqJyxIN4SSBsRMbJ1M/RCYtoTx4ZTipV+
-         hkI9oDNZdbxwiDPi3OjvRbgQaimuNj43mqRPdHhXDksBTbL1G2PMU4XW3sIPl+jKWwGl
-         tS/b1sZpWxYlu9T5yR4Bjz02WQ2U5tOpc4+BagKq0pX83j2bmsUGpxJJtlClU64DoAEY
-         tOIjaQEsWwQpUiMN73iPhckFf4qcyU0r9ypKPRGKXlet/DYiWwsDjTm/K5GY25xR91Wb
-         fFCn+nA8ZbLCz309uqJKKHsiD5ZIJdyOlGjntl94WRpNZF0gmXpiHAHwm7lyWWn5D5wr
-         selw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Qa2sNF9UVsyenIFG9k1mMvPa48cGU1jWUY2xTbU/3nA=;
+        b=FeNO2ZuS04djKaLsxq/ccp5hGY6CoX7D8qNqiA07bsdCCCbPUOTruq8/RCkkWKdeDE
+         ozjGNXaAb2Akw03MG/yp9lR0ewYzFP9sfzRMC2QnHaaeyzWZW1Cdgo/RFcftGManYJwe
+         +EwWMFuxV/j0a5WuaqY6IEsPhdkHA6+bY9onnbC9iA+lVbpuLKL9STIR6nagBFdqjDj9
+         t1SRFkflD9avBbZF4WGFVrkw16Axe7uEtdZldjEniHVCNPo6dgeFsOeVuwytZlf+zJPg
+         FLr28BgDio7M3AgMhbHB510KsPR7t/X3YHv21+hwuhu1ujIIpiaT9CLbvGTrzJA3E4Kt
+         9lPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=aT1mMx7G7UxfsIaMTAsj5UtIFy8ZPOjU7jyV9ILj7K0=;
-        b=zZhkBnYlKKA4tsbMIvEvwVzOMyPp/CM4eCVnmVuhoJ10amRWYgraVq3I2W9o5cxxDd
-         VP5vJON8phE91/mfQau0KET4UtZALrDSSZOayCubIjIzNSIzPhNnvv48yMU03PJJe9Cu
-         Xm+1ILriMTv7Wwk1+kLL0+BT3x7PQqn1KZqtWXoEAlIDPc5qJDDbf/xPVDH1vRKHOVwX
-         JGQfL4+Y+Oigw8P5U0uJ46WCCTe/wDZf97BFl0PzX/JNWYlEiOJ6a5ttoR6tNOO0D2Dt
-         aL2M+nnHHjcgxnI3Ic7k4CEatvh2EgkR22OwDRRjq3TDWlG/Ej4R1w4Nh73j815C2q71
-         +Q5Q==
-X-Gm-Message-State: AOAM5316noSWcBS4PmdBGl6XgqxbRYH6gO/ewYnLAr6pERJTLm5NJ525
-        pofCbCwylhUt5hyCXzOdZg9BFhIdxpKw+vU2vWE=
-X-Google-Smtp-Source: ABdhPJyQBJfDIpqbDEF8XJMKLbiGNJ+OiovlON2byeWTXY2QcFzu3qFOYV2IgDL133I3otx9gv6yT7z8F4lIj010BrE=
-X-Received: by 2002:a17:90a:784b:b0:1db:dfe6:5d54 with SMTP id
- y11-20020a17090a784b00b001dbdfe65d54mr10247pjl.112.1651250357513; Fri, 29 Apr
- 2022 09:39:17 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Qa2sNF9UVsyenIFG9k1mMvPa48cGU1jWUY2xTbU/3nA=;
+        b=0gMRHVz/DfjqtSGZzieUF/op7eq8HhcLhf5S13dJjfnoOR5l2Q8YaTJ6lW5jpMZifi
+         aEgLvzEmaM5/tnCRDU0LrQV0grtjYTMX2dxVNaWbdwUnuuqaCNLh/h30e3EVtoNzB3GR
+         7TpvzCCq3rClSwxiesLNNrdGh4WmyYmfed+VWvPltXEmrKj1Eh/C6sxcxYQS95vVAl9K
+         QPaQQC5mPoRbBtTFTQl6seSsSyRjhKjxyG1Syhjd4pIAdLHVLUVmaQragMEJ//FEtz7v
+         oordnsMWf2fscEe8A9Hq7ahu07TwpVQL0n7kfRbR9ZyFKu3l033lN+8P/l41p/DOa8Ho
+         flYA==
+X-Gm-Message-State: AOAM533RBKfIN4O0OYwZMVd5CyxKqr84pVVcF96fiKMU6XJfD0IMGk7S
+        GeQYFVDoC5qTLS+UtxY8efXmI9NGCCs=
+X-Google-Smtp-Source: ABdhPJyxu+zk7mM9kUqVXuS5CwlY0+A9ms13R+hjY6LvqU3KUMwLWAYq2S1T9OicDMYsnKWwr1/PhQ==
+X-Received: by 2002:a17:90b:3e82:b0:1c7:2920:7c54 with SMTP id rj2-20020a17090b3e8200b001c729207c54mr4956401pjb.2.1651250586354;
+        Fri, 29 Apr 2022 09:43:06 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id i62-20020a639d41000000b003c14af50627sm6391333pgd.63.2022.04.29.09.43.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 09:43:05 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH net] net: dsa: b53: convert to phylink_pcs
+Date:   Fri, 29 Apr 2022 09:43:03 -0700
+Message-Id: <20220429164303.712695-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:a17:90b:4ace:0:0:0:0 with HTTP; Fri, 29 Apr 2022 09:39:17
- -0700 (PDT)
-Reply-To: rgicompanyltd1@gmail.com
-From:   RGI COMPANY LTD <nurulparskin@gmail.com>
-Date:   Sat, 30 Apr 2022 00:39:17 +0800
-Message-ID: <CAJAahvnPqY-P6HZh0kOVMXPjxcc3aSBsQOxJ5CA+moB8winvuw@mail.gmail.com>
-Subject: Greetings
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM,UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:102f listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [nurulparskin[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [rgicompanyltd1[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.4 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+
+Convert B53 to use phylink_pcs for the serdes rather than hooking it
+into the MAC-layer callbacks.
+
+Fixes: 81c1681cbb9f ("net: dsa: b53: mark as non-legacy")
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+---
+ drivers/net/dsa/b53/b53_common.c | 36 +++-------------
+ drivers/net/dsa/b53/b53_priv.h   | 24 ++++++-----
+ drivers/net/dsa/b53/b53_serdes.c | 74 ++++++++++++++++++++++----------
+ drivers/net/dsa/b53/b53_serdes.h |  9 ++--
+ drivers/net/dsa/b53/b53_srab.c   |  4 +-
+ 5 files changed, 75 insertions(+), 72 deletions(-)
+
+diff --git a/drivers/net/dsa/b53/b53_common.c b/drivers/net/dsa/b53/b53_common.c
+index 77501f9c5915..fbb32aa49b24 100644
+--- a/drivers/net/dsa/b53/b53_common.c
++++ b/drivers/net/dsa/b53/b53_common.c
+@@ -1354,46 +1354,25 @@ static void b53_phylink_get_caps(struct dsa_switch *ds, int port,
+ 	config->legacy_pre_march2020 = false;
+ }
+ 
+-int b53_phylink_mac_link_state(struct dsa_switch *ds, int port,
+-			       struct phylink_link_state *state)
++static struct phylink_pcs *b53_phylink_mac_select_pcs(struct dsa_switch *ds,
++						      int port,
++						      phy_interface_t interface)
+ {
+ 	struct b53_device *dev = ds->priv;
+-	int ret = -EOPNOTSUPP;
+ 
+-	if ((phy_interface_mode_is_8023z(state->interface) ||
+-	     state->interface == PHY_INTERFACE_MODE_SGMII) &&
+-	     dev->ops->serdes_link_state)
+-		ret = dev->ops->serdes_link_state(dev, port, state);
++	if (!dev->ops->phylink_mac_select_pcs)
++		return NULL;
+ 
+-	return ret;
++	return dev->ops->phylink_mac_select_pcs(dev, port, interface);
+ }
+-EXPORT_SYMBOL(b53_phylink_mac_link_state);
+ 
+ void b53_phylink_mac_config(struct dsa_switch *ds, int port,
+ 			    unsigned int mode,
+ 			    const struct phylink_link_state *state)
+ {
+-	struct b53_device *dev = ds->priv;
+-
+-	if (mode == MLO_AN_PHY || mode == MLO_AN_FIXED)
+-		return;
+-
+-	if ((phy_interface_mode_is_8023z(state->interface) ||
+-	     state->interface == PHY_INTERFACE_MODE_SGMII) &&
+-	     dev->ops->serdes_config)
+-		dev->ops->serdes_config(dev, port, mode, state);
+ }
+ EXPORT_SYMBOL(b53_phylink_mac_config);
+ 
+-void b53_phylink_mac_an_restart(struct dsa_switch *ds, int port)
+-{
+-	struct b53_device *dev = ds->priv;
+-
+-	if (dev->ops->serdes_an_restart)
+-		dev->ops->serdes_an_restart(dev, port);
+-}
+-EXPORT_SYMBOL(b53_phylink_mac_an_restart);
+-
+ void b53_phylink_mac_link_down(struct dsa_switch *ds, int port,
+ 			       unsigned int mode,
+ 			       phy_interface_t interface)
+@@ -2269,9 +2248,8 @@ static const struct dsa_switch_ops b53_switch_ops = {
+ 	.phy_write		= b53_phy_write16,
+ 	.adjust_link		= b53_adjust_link,
+ 	.phylink_get_caps	= b53_phylink_get_caps,
+-	.phylink_mac_link_state	= b53_phylink_mac_link_state,
++	.phylink_mac_select_pcs	= b53_phylink_mac_select_pcs,
+ 	.phylink_mac_config	= b53_phylink_mac_config,
+-	.phylink_mac_an_restart	= b53_phylink_mac_an_restart,
+ 	.phylink_mac_link_down	= b53_phylink_mac_link_down,
+ 	.phylink_mac_link_up	= b53_phylink_mac_link_up,
+ 	.port_enable		= b53_enable_port,
+diff --git a/drivers/net/dsa/b53/b53_priv.h b/drivers/net/dsa/b53/b53_priv.h
+index 3085b6cc7d40..795cbffd5c2b 100644
+--- a/drivers/net/dsa/b53/b53_priv.h
++++ b/drivers/net/dsa/b53/b53_priv.h
+@@ -21,7 +21,7 @@
+ 
+ #include <linux/kernel.h>
+ #include <linux/mutex.h>
+-#include <linux/phy.h>
++#include <linux/phylink.h>
+ #include <linux/etherdevice.h>
+ #include <net/dsa.h>
+ 
+@@ -29,7 +29,6 @@
+ 
+ struct b53_device;
+ struct net_device;
+-struct phylink_link_state;
+ 
+ struct b53_io_ops {
+ 	int (*read8)(struct b53_device *dev, u8 page, u8 reg, u8 *value);
+@@ -48,13 +47,10 @@ struct b53_io_ops {
+ 	void (*irq_disable)(struct b53_device *dev, int port);
+ 	void (*phylink_get_caps)(struct b53_device *dev, int port,
+ 				 struct phylink_config *config);
++	struct phylink_pcs *(*phylink_mac_select_pcs)(struct b53_device *dev,
++						      int port,
++						      phy_interface_t interface);
+ 	u8 (*serdes_map_lane)(struct b53_device *dev, int port);
+-	int (*serdes_link_state)(struct b53_device *dev, int port,
+-				 struct phylink_link_state *state);
+-	void (*serdes_config)(struct b53_device *dev, int port,
+-			      unsigned int mode,
+-			      const struct phylink_link_state *state);
+-	void (*serdes_an_restart)(struct b53_device *dev, int port);
+ 	void (*serdes_link_set)(struct b53_device *dev, int port,
+ 				unsigned int mode, phy_interface_t interface,
+ 				bool link_up);
+@@ -85,8 +81,15 @@ enum {
+ 	BCM7278_DEVICE_ID = 0x7278,
+ };
+ 
++struct b53_pcs {
++	struct phylink_pcs pcs;
++	struct b53_device *dev;
++	u8 lane;
++};
++
+ #define B53_N_PORTS	9
+ #define B53_N_PORTS_25	6
++#define B53_N_PCS	2
+ 
+ struct b53_port {
+ 	u16		vlan_ctl_mask;
+@@ -143,6 +146,8 @@ struct b53_device {
+ 	bool vlan_enabled;
+ 	unsigned int num_ports;
+ 	struct b53_port *ports;
++
++	struct b53_pcs pcs[B53_N_PCS];
+ };
+ 
+ #define b53_for_each_port(dev, i) \
+@@ -336,12 +341,9 @@ int b53_br_flags(struct dsa_switch *ds, int port,
+ 		 struct netlink_ext_ack *extack);
+ int b53_setup_devlink_resources(struct dsa_switch *ds);
+ void b53_port_event(struct dsa_switch *ds, int port);
+-int b53_phylink_mac_link_state(struct dsa_switch *ds, int port,
+-			       struct phylink_link_state *state);
+ void b53_phylink_mac_config(struct dsa_switch *ds, int port,
+ 			    unsigned int mode,
+ 			    const struct phylink_link_state *state);
+-void b53_phylink_mac_an_restart(struct dsa_switch *ds, int port);
+ void b53_phylink_mac_link_down(struct dsa_switch *ds, int port,
+ 			       unsigned int mode,
+ 			       phy_interface_t interface);
+diff --git a/drivers/net/dsa/b53/b53_serdes.c b/drivers/net/dsa/b53/b53_serdes.c
+index 555e5b372321..0690210770ff 100644
+--- a/drivers/net/dsa/b53/b53_serdes.c
++++ b/drivers/net/dsa/b53/b53_serdes.c
+@@ -17,6 +17,11 @@
+ #include "b53_serdes.h"
+ #include "b53_regs.h"
+ 
++static inline struct b53_pcs *pcs_to_b53_pcs(struct phylink_pcs *pcs)
++{
++	return container_of(pcs, struct b53_pcs, pcs);
++}
++
+ static void b53_serdes_write_blk(struct b53_device *dev, u8 offset, u16 block,
+ 				 u16 value)
+ {
+@@ -60,51 +65,47 @@ static u16 b53_serdes_read(struct b53_device *dev, u8 lane,
+ 	return b53_serdes_read_blk(dev, offset, block);
+ }
+ 
+-void b53_serdes_config(struct b53_device *dev, int port, unsigned int mode,
+-		       const struct phylink_link_state *state)
++static int b53_serdes_config(struct phylink_pcs *pcs, unsigned int mode,
++			     phy_interface_t interface,
++			     const unsigned long *advertising,
++			     bool permit_pause_to_mac)
+ {
+-	u8 lane = b53_serdes_map_lane(dev, port);
++	struct b53_device *dev = pcs_to_b53_pcs(pcs)->dev;
++	u8 lane = pcs_to_b53_pcs(pcs)->lane;
+ 	u16 reg;
+ 
+-	if (lane == B53_INVALID_LANE)
+-		return;
+-
+ 	reg = b53_serdes_read(dev, lane, B53_SERDES_DIGITAL_CONTROL(1),
+ 			      SERDES_DIGITAL_BLK);
+-	if (state->interface == PHY_INTERFACE_MODE_1000BASEX)
++	if (interface == PHY_INTERFACE_MODE_1000BASEX)
+ 		reg |= FIBER_MODE_1000X;
+ 	else
+ 		reg &= ~FIBER_MODE_1000X;
+ 	b53_serdes_write(dev, lane, B53_SERDES_DIGITAL_CONTROL(1),
+ 			 SERDES_DIGITAL_BLK, reg);
++
++	return 0;
+ }
+-EXPORT_SYMBOL(b53_serdes_config);
+ 
+-void b53_serdes_an_restart(struct b53_device *dev, int port)
++static void b53_serdes_an_restart(struct phylink_pcs *pcs)
+ {
+-	u8 lane = b53_serdes_map_lane(dev, port);
++	struct b53_device *dev = pcs_to_b53_pcs(pcs)->dev;
++	u8 lane = pcs_to_b53_pcs(pcs)->lane;
+ 	u16 reg;
+ 
+-	if (lane == B53_INVALID_LANE)
+-		return;
+-
+ 	reg = b53_serdes_read(dev, lane, B53_SERDES_MII_REG(MII_BMCR),
+ 			      SERDES_MII_BLK);
+ 	reg |= BMCR_ANRESTART;
+ 	b53_serdes_write(dev, lane, B53_SERDES_MII_REG(MII_BMCR),
+ 			 SERDES_MII_BLK, reg);
+ }
+-EXPORT_SYMBOL(b53_serdes_an_restart);
+ 
+-int b53_serdes_link_state(struct b53_device *dev, int port,
+-			  struct phylink_link_state *state)
++static void b53_serdes_get_state(struct phylink_pcs *pcs,
++				  struct phylink_link_state *state)
+ {
+-	u8 lane = b53_serdes_map_lane(dev, port);
++	struct b53_device *dev = pcs_to_b53_pcs(pcs)->dev;
++	u8 lane = pcs_to_b53_pcs(pcs)->lane;
+ 	u16 dig, bmsr;
+ 
+-	if (lane == B53_INVALID_LANE)
+-		return 1;
+-
+ 	dig = b53_serdes_read(dev, lane, B53_SERDES_DIGITAL_STATUS,
+ 			      SERDES_DIGITAL_BLK);
+ 	bmsr = b53_serdes_read(dev, lane, B53_SERDES_MII_REG(MII_BMSR),
+@@ -133,10 +134,7 @@ int b53_serdes_link_state(struct b53_device *dev, int port,
+ 		state->pause |= MLO_PAUSE_RX;
+ 	if (dig & PAUSE_RESOLUTION_TX_SIDE)
+ 		state->pause |= MLO_PAUSE_TX;
+-
+-	return 0;
+ }
+-EXPORT_SYMBOL(b53_serdes_link_state);
+ 
+ void b53_serdes_link_set(struct b53_device *dev, int port, unsigned int mode,
+ 			 phy_interface_t interface, bool link_up)
+@@ -158,6 +156,12 @@ void b53_serdes_link_set(struct b53_device *dev, int port, unsigned int mode,
+ }
+ EXPORT_SYMBOL(b53_serdes_link_set);
+ 
++static const struct phylink_pcs_ops b53_pcs_ops = {
++	.pcs_get_state = b53_serdes_get_state,
++	.pcs_config = b53_serdes_config,
++	.pcs_an_restart = b53_serdes_an_restart,
++};
++
+ void b53_serdes_phylink_get_caps(struct b53_device *dev, int port,
+ 				 struct phylink_config *config)
+ {
+@@ -187,9 +191,28 @@ void b53_serdes_phylink_get_caps(struct b53_device *dev, int port,
+ }
+ EXPORT_SYMBOL(b53_serdes_phylink_get_caps);
+ 
++struct phylink_pcs *b53_serdes_phylink_mac_select_pcs(struct b53_device *dev,
++						      int port,
++						      phy_interface_t interface)
++{
++	u8 lane = b53_serdes_map_lane(dev, port);
++
++	if (lane == B53_INVALID_LANE || lane >= B53_N_PCS ||
++	    !dev->pcs[lane].dev)
++		return NULL;
++
++	if (!phy_interface_mode_is_8023z(interface) &&
++	    interface != PHY_INTERFACE_MODE_SGMII)
++		return NULL;
++
++	return &dev->pcs[lane].pcs;
++}
++EXPORT_SYMBOL(b53_serdes_phylink_mac_select_pcs);
++
+ int b53_serdes_init(struct b53_device *dev, int port)
+ {
+ 	u8 lane = b53_serdes_map_lane(dev, port);
++	struct b53_pcs *pcs;
+ 	u16 id0, msb, lsb;
+ 
+ 	if (lane == B53_INVALID_LANE)
+@@ -212,6 +235,11 @@ int b53_serdes_init(struct b53_device *dev, int port)
+ 		 (id0 >> SERDES_ID0_REV_NUM_SHIFT) & SERDES_ID0_REV_NUM_MASK,
+ 		 (u32)msb << 16 | lsb);
+ 
++	pcs = &dev->pcs[lane];
++	pcs->dev = dev;
++	pcs->lane = lane;
++	pcs->pcs.ops = &b53_pcs_ops;
++
+ 	return 0;
+ }
+ EXPORT_SYMBOL(b53_serdes_init);
+diff --git a/drivers/net/dsa/b53/b53_serdes.h b/drivers/net/dsa/b53/b53_serdes.h
+index f47d5caa7557..ef81f5da5f81 100644
+--- a/drivers/net/dsa/b53/b53_serdes.h
++++ b/drivers/net/dsa/b53/b53_serdes.h
+@@ -107,14 +107,11 @@ static inline u8 b53_serdes_map_lane(struct b53_device *dev, int port)
+ 	return dev->ops->serdes_map_lane(dev, port);
+ }
+ 
+-int b53_serdes_get_link(struct b53_device *dev, int port);
+-int b53_serdes_link_state(struct b53_device *dev, int port,
+-			  struct phylink_link_state *state);
+-void b53_serdes_config(struct b53_device *dev, int port, unsigned int mode,
+-		       const struct phylink_link_state *state);
+-void b53_serdes_an_restart(struct b53_device *dev, int port);
+ void b53_serdes_link_set(struct b53_device *dev, int port, unsigned int mode,
+ 			 phy_interface_t interface, bool link_up);
++struct phylink_pcs *b53_serdes_phylink_mac_select_pcs(struct b53_device *dev,
++						      int port,
++						      phy_interface_t interface);
+ void b53_serdes_phylink_get_caps(struct b53_device *dev, int port,
+ 				 struct phylink_config *config);
+ #if IS_ENABLED(CONFIG_B53_SERDES)
+diff --git a/drivers/net/dsa/b53/b53_srab.c b/drivers/net/dsa/b53/b53_srab.c
+index c51b716657db..da0b889880f6 100644
+--- a/drivers/net/dsa/b53/b53_srab.c
++++ b/drivers/net/dsa/b53/b53_srab.c
+@@ -491,10 +491,8 @@ static const struct b53_io_ops b53_srab_ops = {
+ 	.irq_disable = b53_srab_irq_disable,
+ 	.phylink_get_caps = b53_srab_phylink_get_caps,
+ #if IS_ENABLED(CONFIG_B53_SERDES)
++	.phylink_mac_select_pcs = b53_serdes_phylink_mac_select_pcs,
+ 	.serdes_map_lane = b53_srab_serdes_map_lane,
+-	.serdes_link_state = b53_serdes_link_state,
+-	.serdes_config = b53_serdes_config,
+-	.serdes_an_restart = b53_serdes_an_restart,
+ 	.serdes_link_set = b53_serdes_link_set,
+ #endif
+ };
 -- 
-From: RGI Company Ltd
-Address, Netherlands
-Call:+3197005033311
-29/4/2022
+2.25.1
 
-Attention:
-
-RGI Genealogical Investigators specializes in probate research to locate
-missing funds, inherited funds around the world. We can also help you find
-wills, obtain copies of certificates.
-
-Recently a woman from the Rothschild family, one of the famous families in
-Europe contacted our company that we should contact a business minded
-person who is capable of investing her funds in a lucrative business.
-
-Our service fee is 2% of the funds and we will be paid after you receive
-the funds. The funds transfer process should take just a matter of days as
-we have the mechanism and expertise to get this done quickly. Please if you
-find this letter offensive ignore it and accept our apologies
-
-Warmest Regards,
-
-Dr. J.T Woods, CEO
-RGI Genealogical

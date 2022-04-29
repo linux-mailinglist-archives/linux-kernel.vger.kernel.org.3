@@ -2,54 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E70755148D7
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD08B5148DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358870AbiD2MKv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 29 Apr 2022 08:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33228 "EHLO
+        id S1358902AbiD2MK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 08:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236678AbiD2MKr (ORCPT
+        with ESMTP id S1347487AbiD2MKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 08:10:47 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042FEA27C1
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 05:07:28 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nkPP0-0002Ha-DR; Fri, 29 Apr 2022 14:07:14 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nkPOx-005wMO-Hq; Fri, 29 Apr 2022 14:07:10 +0200
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nkPOv-00073P-27; Fri, 29 Apr 2022 14:07:09 +0200
-Message-ID: <6776293c80bf3f48d7a72a3c9f73e93abee2b369.camel@pengutronix.de>
-Subject: Re: [PATCH v4 1/2] usb: host: ehci-sunplus: Add driver for ehci in
- Sunplus SP7021
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Vincent Shih <vincent.sunplus@gmail.com>,
-        gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        davem@davemloft.net, vladimir.oltean@nxp.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, wells.lu@sunplus.com
-Date:   Fri, 29 Apr 2022 14:07:08 +0200
-In-Reply-To: <1651220876-26705-2-git-send-email-vincent.sunplus@gmail.com>
-References: <1651220876-26705-1-git-send-email-vincent.sunplus@gmail.com>
-         <1651220876-26705-2-git-send-email-vincent.sunplus@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        Fri, 29 Apr 2022 08:10:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 037A0A1472;
+        Fri, 29 Apr 2022 05:07:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A7BAEB8346E;
+        Fri, 29 Apr 2022 12:07:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDCBFC385AD;
+        Fri, 29 Apr 2022 12:07:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651234046;
+        bh=VeZZK3nq0xqQBNb7qp0qAkJQnROZryyX5wpt1xcREVU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hvPXKUpqvoPhSromFOwczy83Hk/E46GrEsHnY/pQT/pRRP7M4nu6WiYLiQQuIsClo
+         84qCLfg1PPd6yp5ZFWCzlB6F3B2/9OrCDFLTrqtrPIBG7TKnUxkQL20bTNNA1/IURE
+         7w3eySy9Vn7u5Ub1xUfm9eiUEPcny7kmctL3bf0g=
+Date:   Fri, 29 Apr 2022 14:07:23 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Joe Fradley <joefradley@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kunit: Taint kernel if any tests run
+Message-ID: <YmvU+/RUhOcL+B1p@kroah.com>
+References: <20220429043913.626647-1-davidgow@google.com>
+ <YmuPFGrkzQYACgK0@kroah.com>
+ <87tuacrv7t.fsf@intel.com>
+ <YmvO3RoY1JqrR1pu@kroah.com>
+ <87o80krtou.fsf@intel.com>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87o80krtou.fsf@intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,78 +67,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vincent,
+On Fri, Apr 29, 2022 at 02:54:25PM +0300, Jani Nikula wrote:
+> On Fri, 29 Apr 2022, Greg KH <gregkh@linuxfoundation.org> wrote:
+> > On Fri, Apr 29, 2022 at 02:21:26PM +0300, Jani Nikula wrote:
+> >> On Fri, 29 Apr 2022, Greg KH <gregkh@linuxfoundation.org> wrote:
+> >> > On Fri, Apr 29, 2022 at 12:39:14PM +0800, David Gow wrote:
+> >> >> KUnit tests are not supposed to run on production systems: they may do
+> >> >> deliberately illegal things to trigger errors, and have security
+> >> >> implications (assertions will often deliberately leak kernel addresses).
+> >> >> 
+> >> >> Add a new taint type, TAINT_KUNIT to signal that a KUnit test has been
+> >> >> run. This will be printed as 'N' (for kuNit, as K, U and T were already
+> >> >> taken).
+> >> >> 
+> >> >> This should discourage people from running KUnit tests on production
+> >> >> systems, and to make it easier to tell if tests have been run
+> >> >> accidentally (by loading the wrong configuration, etc.)
+> >> >> 
+> >> >> Signed-off-by: David Gow <davidgow@google.com>
+> >> >> ---
+> >> >> 
+> >> >> This is something I'd been thinking about for a while, and it came up
+> >> >> again, so I'm finally giving it a go.
+> >> >> 
+> >> >> Two notes:
+> >> >> - I decided to add a new type of taint, as none of the existing ones
+> >> >>   really seemed to fit. We could live with considering KUnit tests as
+> >> >>   TAINT_WARN or TAINT_CRAP or something otherwise, but neither are quite
+> >> >>   right.
+> >> >> - The taint_flags table gives a couple of checkpatch.pl errors around
+> >> >>   bracket placement. I've kept the new entry consistent with what's
+> >> >>   there rather than reformatting the whole table, but be prepared for
+> >> >>   complaints about spaces.
+> >> >> 
+> >> >> Thoughts?
+> >> >> -- David
+> >> >> 
+> >> >> ---
+> >> >>  Documentation/admin-guide/tainted-kernels.rst | 1 +
+> >> >>  include/linux/panic.h                         | 3 ++-
+> >> >>  kernel/panic.c                                | 1 +
+> >> >>  lib/kunit/test.c                              | 4 ++++
+> >> >>  4 files changed, 8 insertions(+), 1 deletion(-)
+> >> >> 
+> >> >> diff --git a/Documentation/admin-guide/tainted-kernels.rst b/Documentation/admin-guide/tainted-kernels.rst
+> >> >> index ceeed7b0798d..8f18fc4659d4 100644
+> >> >> --- a/Documentation/admin-guide/tainted-kernels.rst
+> >> >> +++ b/Documentation/admin-guide/tainted-kernels.rst
+> >> >> @@ -100,6 +100,7 @@ Bit  Log  Number  Reason that got the kernel tainted
+> >> >>   15  _/K   32768  kernel has been live patched
+> >> >>   16  _/X   65536  auxiliary taint, defined for and used by distros
+> >> >>   17  _/T  131072  kernel was built with the struct randomization plugin
+> >> >> + 18  _/N  262144  a KUnit test has been run
+> >> >>  ===  ===  ======  ========================================================
+> >> >>  
+> >> >>  Note: The character ``_`` is representing a blank in this table to make reading
+> >> >> diff --git a/include/linux/panic.h b/include/linux/panic.h
+> >> >> index f5844908a089..1d316c26bf27 100644
+> >> >> --- a/include/linux/panic.h
+> >> >> +++ b/include/linux/panic.h
+> >> >> @@ -74,7 +74,8 @@ static inline void set_arch_panic_timeout(int timeout, int arch_default_timeout)
+> >> >>  #define TAINT_LIVEPATCH			15
+> >> >>  #define TAINT_AUX			16
+> >> >>  #define TAINT_RANDSTRUCT		17
+> >> >> -#define TAINT_FLAGS_COUNT		18
+> >> >> +#define TAINT_KUNIT			18
+> >> >> +#define TAINT_FLAGS_COUNT		19
+> >> >>  #define TAINT_FLAGS_MAX			((1UL << TAINT_FLAGS_COUNT) - 1)
+> >> >>  
+> >> >>  struct taint_flag {
+> >> >> diff --git a/kernel/panic.c b/kernel/panic.c
+> >> >> index eb4dfb932c85..b24ca63ed738 100644
+> >> >> --- a/kernel/panic.c
+> >> >> +++ b/kernel/panic.c
+> >> >> @@ -404,6 +404,7 @@ const struct taint_flag taint_flags[TAINT_FLAGS_COUNT] = {
+> >> >>  	[ TAINT_LIVEPATCH ]		= { 'K', ' ', true },
+> >> >>  	[ TAINT_AUX ]			= { 'X', ' ', true },
+> >> >>  	[ TAINT_RANDSTRUCT ]		= { 'T', ' ', true },
+> >> >> +	[ TAINT_KUNIT ]			= { 'N', ' ', false },
+> >> >
+> >> > As kunit tests can be in modules, shouldn't this be "true" here?
+> >> >
+> >> > Overall, I like it, makes sense to me.  The "N" will take some getting
+> >> > used to, and I have no idea why "T" was for "struct randomization", that
+> >> > would have allowed you to use "T" instead.  Oh well.
+> >> 
+> >> Would you consider a patch adding more self-explanatory taint flag
+> >> strings to the output?
+> >
+> > Where would those strings go?  In the oops report?  Or somewhere else?
+> 
+> I was thinking the oops report. Basically most times I look at an oops
+> with taint, I need to double check what the flags mean. There are soon
+> 19 of them, you need to look at a lot of oops to remember them all.
 
-On Fr, 2022-04-29 at 16:27 +0800, Vincent Shih wrote:
-[...]
-> +static int sp_ehci_platform_power_on(struct platform_device *pdev)
-> +{
-> +	struct usb_hcd *hcd = platform_get_drvdata(pdev);
-> +	struct sp_ehci_priv *sp_priv = hcd_to_sp_ehci_priv(hcd);
-> +	int ret;
-> +
-> +	ret = clk_prepare_enable(sp_priv->ehci_clk);
-> +	if (ret)
-> +		goto err_ehci_clk;
+I agree, it isn't easy to remember.
 
-This should be:
+> Currently we also print ' ' (or 'G' in case of non-properietary module)
+> for every unset taint flag. If we stopped doing that we wouldn't even
+> need that much more horizontal space for the strings, unless several
+> flags were set. (I assume people who do remember all the flags by heart
+> would still want to keep them too.)
 
-		return ret;
+I recommend keeping the current layout, but maybe adding a new line that
+gives the "key" for what the current taint flags mean?
 
-> +
-> +	ret = reset_control_deassert(sp_priv->ehci_rstc);
-> +	if (ret)
-> +		goto err_ehci_reset;
+For example, the oops report here:
+	https://lore.kernel.org/r/20220413033425.GM16799@magnolia
+Has the lines:
+	kernel BUG at mm/filemap.c:1653!
+	invalid opcode: 0000 [#1] PREEMPT SMP
+	CPU: 0 PID: 1349866 Comm: 0:116 Tainted: G        W         5.18.0-rc2-djwx #rc2 19cc48221d47ada6c8e5859639b6a0946c9a3777
+	Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS ?-20171121_152543-x86-ol7-builder-01.us.oracle.com-4.el7.1 04/01/2014
+	Workqueue: xfs-conv/sda4 xfs_end_io [xfs]
+	RIP: 0010:folio_end_writeback+0x79/0x80
 
-And this should be:
+Perhaps we add another line right before or after "Hardware name:" that
+lists the flags that are set at the moment and what they mean:
 
-		goto err_ehci_clk;
+	Taint flags: [G]=PROPRIETARY_MODULE, [W]=WARN
 
-> +
-> +	ret = phy_init(sp_priv->phy);
-> +	if (ret)
-> +		goto err_ehci_reset;
-> +
-> +	ret = phy_power_on(sp_priv->phy);
-> +	if (ret)
-> +		goto err_phy_exit;
-> +
-> +	return 0;
-> +
-> +err_phy_exit:
-> +	phy_exit(sp_priv->phy);
-> +err_ehci_reset:
-> +	reset_control_assert(sp_priv->ehci_rstc);
-> +err_ehci_clk:
-> +	clk_disable_unprepare(sp_priv->ehci_clk);
-> +
-> +	return ret;
-> +}
-> +
-> +static void sp_ehci_platform_power_off(struct platform_device *pdev)
-> +{
-> +	struct usb_hcd *hcd = platform_get_drvdata(pdev);
-> +	struct sp_ehci_priv *sp_priv = hcd_to_sp_ehci_priv(hcd);
-> +
-> +	phy_power_off(sp_priv->phy);
-> +	phy_exit(sp_priv->phy);
-> +
-> +	reset_control_assert(sp_priv->ehci_rstc);
-> +	clk_disable_unprepare(sp_priv->ehci_clk);
-> +}
-> +
-> +static struct usb_ehci_pdata usb_ehci_pdata = {
-> +	.has_tt = 1,
-> +	.has_synopsys_hc_bug = 1,
-> +	.big_endian_desc = 1,
-> +	.big_endian_mmio = 1,
-> +	.power_on = sp_ehci_platform_power_on,
-> +	.power_suspend = sp_ehci_platform_power_off,
-> +	.power_off = sp_ehci_platform_power_off,
-> +
+Or something like that (format was a first guess only).
 
-Superfluous whitespace.
+Anyway, might be helpful?
 
+thanks,
 
-regards
-Philipp
+greg k-h

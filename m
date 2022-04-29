@@ -2,107 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACC89515821
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 00:12:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B0A8515814
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 00:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239704AbiD2WPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 18:15:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58788 "EHLO
+        id S1381340AbiD2WNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 18:13:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381399AbiD2WO2 (ORCPT
+        with ESMTP id S1381343AbiD2WNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 18:14:28 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D4BDCAA0
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 15:11:08 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id b19so12390101wrh.11
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 15:11:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=57engup4j45HnL7iURERsQ9bmMAMFdlq2bnMX7taFcM=;
-        b=KMXgwq1kT4vpGqXVn6WjiTOVMNVqDXTTrwGtMvopzf8LUXavFlq16ADBbLzVjTTiOO
-         S80A+O5TSD/4favz/l325p0RuFQVv388Nn8goDchum0+CM+q8+vDd0ydLYOGTcOnulCo
-         UqHeyoL5HxMVRhdgv2gtKGhuYrRmWHfYIdD7Ea2xMkVT7W+KVhhqKXoMs+oR5BWlG2EG
-         pSsZUlRg2Qzrm2CTV2yilbR5Cs+mRB3xBAPGsTaLFJLZu7c0m0H7awkLPrTBX0PK6jtP
-         2WOmrgZlB5b5qwiTJp//3iHNTLH5BFfgJkF8rYeTkKDR89Rhul6gvCZlAj7oBGh2QpHx
-         PIKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=57engup4j45HnL7iURERsQ9bmMAMFdlq2bnMX7taFcM=;
-        b=4otHIoYQwf8uA9KA+6M0/PEt7XrP2omcMyn4bogougsnOpB5tpIQoBoA6pWhDjgMtS
-         x6S0D2/gkRxnsrcc3zVMR8nqhEzLL71ggSQSJ0+FDywGsqGmg7ndjmm1n4K7kPH3VpbX
-         WEj6qSzDU+C0kgetWJoMhMdqkkvCI14AUj1qKlVOtYqebDL23Us7vgCOCss25X/eCRlv
-         WfFoHNKyioQP2TcwoQRNSDGEjoFuDu0MY+TMv4V85bb4OSH2T9ChetIlS7Rr7M02iDSv
-         PkUoIxFXT8uPC9TIYXiRSSDNiOtNP1oWxJgWngVAlMmZy0Ar3CKlQ+vNy/gK+CWf2+S7
-         7x1g==
-X-Gm-Message-State: AOAM533VgQGLti8Cf5EwuSMWgL9yNLgt6T+MAKhP7GN0SMbrarPRp/lV
-        vi0ykdoPM2DaR73OguxMKcXAfQ==
-X-Google-Smtp-Source: ABdhPJxxf4Y9z8bowzImAap497E8RuioUTq7E3SZ8AirFC/uZaKYONIF7e4s3jdC60OW704ZIVQ7TQ==
-X-Received: by 2002:a05:6000:1a4f:b0:20a:ccdd:c70e with SMTP id t15-20020a0560001a4f00b0020accddc70emr850284wry.444.1651270266909;
-        Fri, 29 Apr 2022 15:11:06 -0700 (PDT)
-Received: from localhost.localdomain (cpc78119-cwma10-2-0-cust590.7-3.cable.virginm.net. [81.96.50.79])
-        by smtp.gmail.com with ESMTPSA id q7-20020a1cf307000000b003942a244ebfsm291985wmq.4.2022.04.29.15.11.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 15:11:06 -0700 (PDT)
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-To:     caleb.connolly@linaro.org, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Cc:     Jami Kettunen <jami.kettunen@somainline.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-Subject: [PATCH v14 10/10] arm64: dts: qcom: msm8998-oneplus-common: enable RRADC
-Date:   Fri, 29 Apr 2022 23:09:05 +0100
-Message-Id: <20220429220904.137297-11-caleb.connolly@linaro.org>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220429220904.137297-1-caleb.connolly@linaro.org>
-References: <20220429220904.137297-1-caleb.connolly@linaro.org>
+        Fri, 29 Apr 2022 18:13:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 886FFDCA8F;
+        Fri, 29 Apr 2022 15:09:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3F35FB835F2;
+        Fri, 29 Apr 2022 22:09:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3167C385AC;
+        Fri, 29 Apr 2022 22:09:41 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Np5EIlKu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1651270179;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9LGudt1GqIizPRQM26b+ZO41MI7PmbOHcHWAXyLKn2Q=;
+        b=Np5EIlKucthtGOQfk/DOo4Cq9hKhpGTd3j1zQX5uvwGvLfee0AVTrCAIAJwUmWi6MbJuED
+        lK8OB5G0C7/6Kd1kNOO4XtjMyMqsOmq1JxG7vh91pARZGkQjm0hDn3SFKienPToBJcjR9B
+        phScaQwnd4E9Fg7qotsSRPkWvtX+zIk=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4b85d804 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 29 Apr 2022 22:09:39 +0000 (UTC)
+Received: by mail-yb1-f172.google.com with SMTP id j2so16867837ybu.0;
+        Fri, 29 Apr 2022 15:09:39 -0700 (PDT)
+X-Gm-Message-State: AOAM5328dOz+H1YcC3Dbt5wORGST3amTs8TISZu9u00muzdnT1ihjW/2
+        h2/8dWNrE8ndzEirXUHnXYXWyuiOd7S9cvWvp4s=
+X-Google-Smtp-Source: ABdhPJz3h2nmtdbgmN72dArKaKcdRLlq6+2o1vOXFNkVcyUdfH7HuG/G/dyU/R2fh5iK8eECTVeoY/JFOu9e8wtZpsY=
+X-Received: by 2002:a25:b706:0:b0:649:12a0:b18e with SMTP id
+ t6-20020a25b706000000b0064912a0b18emr1505746ybj.271.1651270178399; Fri, 29
+ Apr 2022 15:09:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <CAHmME9r_DbZWe4FsfebHSSf_iPctSe5S-w9bU3o8BN43raeURg@mail.gmail.com>
+ <20151116203709.GA27178@oracle.com> <CAHmME9pNCqbcoqbOnx6p8poehAntyyy1jQhy=0_HjkJ8nvMQdw@mail.gmail.com>
+ <1447712932.22599.77.camel@edumazet-glaptop2.roam.corp.google.com>
+ <CAHmME9oTU7HwP5=qo=aFWe0YXv5EPGoREpF2k-QY7qTmkDeXEA@mail.gmail.com>
+ <YmszSXueTxYOC41G@zx2c4.com> <04f72c85-557f-d67c-c751-85be65cb015a@gmail.com>
+ <YmxTo2hVwcwhdvjO@zx2c4.com> <d9854c74-c209-9ea5-6c76-8390e867521b@gmail.com>
+ <CAHmME9qXC-4OPc5xRbC6CQJcpzb96EXzNWAist5A8momYxvVUA@mail.gmail.com> <CANn89iLyNoCRrp6YYdy6kGhM7X2JQ9J4-LfEJCBvhYAv4N+FPA@mail.gmail.com>
+In-Reply-To: <CANn89iLyNoCRrp6YYdy6kGhM7X2JQ9J4-LfEJCBvhYAv4N+FPA@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Sat, 30 Apr 2022 00:09:27 +0200
+X-Gmail-Original-Message-ID: <CAHmME9rt_fGfgQSL12Q8CnNdh0Fc-8Z9CBEM9iSNjGCQ_En6Ow@mail.gmail.com>
+Message-ID: <CAHmME9rt_fGfgQSL12Q8CnNdh0Fc-8Z9CBEM9iSNjGCQ_En6Ow@mail.gmail.com>
+Subject: Re: Routing loops & TTL tracking with tunnel devices
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Eric Dumazet <eric.dumazet@gmail.com>,
+        Netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hannes Frederic Sowa <hannes@stressinduktion.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jami Kettunen <jami.kettunen@somainline.org>
+Hi Eric,
 
-Enable the Round Robin ADC for the OnePlus 5/5T.
+On Sat, Apr 30, 2022 at 12:05 AM Eric Dumazet <edumazet@google.com> wrote:
+> I assume you add encap headers to the skb ?
 
-Signed-off-by: Jami Kettunen <jami.kettunen@somainline.org>
----
- arch/arm64/boot/dts/qcom/msm8998-oneplus-common.dtsi | 4 ++++
- 1 file changed, 4 insertions(+)
+Yes; it's encapsulated in UDP, and under that some short header.
+However, everything under that is encrypted. So,
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8998-oneplus-common.dtsi b/arch/arm64/boot/dts/qcom/msm8998-oneplus-common.dtsi
-index 9823d48a91b1..d9fff1beaf03 100644
---- a/arch/arm64/boot/dts/qcom/msm8998-oneplus-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8998-oneplus-common.dtsi
-@@ -257,6 +257,10 @@ pinconf {
- 	};
- };
- 
-+&pmi8998_rradc {
-+	status = "okay";
-+};
-+
- &qusb2phy {
- 	status = "okay";
- 
--- 
-2.36.0
+> You could check if the wireguard header is there already, or if the
+> amount of headers is crazy.
 
+so it's not quite possible to peer down further to see.
+
+> You also can take a look at CONFIG_SKB_EXTENSIONS infrastructure.
+
+Blech, this involves some kind of per-packet allocation, right? I was
+hoping there might be some 6 or 7 or 8 bit field in sk_buff that's not
+used anywhere on the TX path that maybe I could overload for this
+purpose...
+
+Jason

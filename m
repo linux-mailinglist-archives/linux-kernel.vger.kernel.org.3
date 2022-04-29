@@ -2,79 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77575514069
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 03:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF99C514073
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 04:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354108AbiD2CA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 22:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33472 "EHLO
+        id S1354123AbiD2CBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 22:01:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231824AbiD2CAZ (ORCPT
+        with ESMTP id S1350360AbiD2CBK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 22:00:25 -0400
-Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337E9BF524
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 18:57:07 -0700 (PDT)
-X-QQ-mid: bizesmtp62t1651197407tc0g5311
-Received: from localhost.localdomain ( [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 29 Apr 2022 09:56:41 +0800 (CST)
-X-QQ-SSF: 01400000000000E0M000000A0000000
-X-QQ-FEAT: RUa2qNdlQy9gFLfsF33WW446EZUtx6dfowP/F7KcjhQyvOoiWiQcE9hUBCHLR
-        UUYdI/rq8v4KImt3IGVHMav3cWM0Obywaj/NMo+3zg+4SwnZDaAiD9oCKAkGfK5Vz5UK9fC
-        Naf6gMWSjsA+hNHccfugoAO2CN/RIJY9RShv0GGZ62CGXUlKqOG5RTHObLgKhDv6NLZb8uX
-        lJTtnsvxR8hJpzuBKfIkej/cFQ7MuaKYO/lUQfNCGBUBHCjXA1r1UUh9Xp+wsVjPvWhQJMN
-        lIY20AMiC0IymSGJRZzDMLa0OJOUev9IzNuyOTx75L/wDL3Nexc0ih7IgpkPGQJPGQpo1bD
-        vnBD7xq3dAQuEmwuLcBvZpZd/0tLg==
-X-QQ-GoodBg: 1
-From:   Meng Tang <tangmeng@uniontech.com>
-To:     krzysztof.kozlowski@linaro.org, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Meng Tang <tangmeng@uniontech.com>
-Subject: [PATCH] NFC: Add error mapping for Directed Advertising DISCOVERY_TEAR_DOWN
-Date:   Fri, 29 Apr 2022 09:56:40 +0800
-Message-Id: <20220429015640.32537-1-tangmeng@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Thu, 28 Apr 2022 22:01:10 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B92BF526;
+        Thu, 28 Apr 2022 18:57:54 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4D1D11F891;
+        Fri, 29 Apr 2022 01:57:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1651197473; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=f6SWF/nGzhsjwq5ARATRVet+UBJFK9TgWKy2UT2xPXM=;
+        b=U8L2w6H02ZPq7rqO5DJ0G2KO0ozM0gXG5jxSla0+RuSUHKTcGzpozSVMnFSJD5xmhDq8ad
+        2uyZ3apVsDcOxO6E8thPaHk3V8U3QwE2H7it2GRgun7Ft+q1sS0Y6dAuRBjTiqB4BbldL0
+        UKa0F/nGDA/bdxrLQvJ4wZUVWx6f5OA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1651197473;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=f6SWF/nGzhsjwq5ARATRVet+UBJFK9TgWKy2UT2xPXM=;
+        b=y33957Ckvud8SaVQpfdx8Oo831Ez0W23CrChHWBUdp0Vg6adczUx3ofOTzcWn8qyMebGIp
+        ebijTSE+d4Ipx8Bg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 35C8813446;
+        Fri, 29 Apr 2022 01:57:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id x6U6OR5Ga2JHXgAAMHmgww
+        (envelope-from <neilb@suse.de>); Fri, 29 Apr 2022 01:57:50 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign3
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Andrew Morton" <akpm@linux-foundation.org>
+Cc:     "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        "Christoph Hellwig" <hch@lst.de>,
+        "Miaohe Lin" <linmiaohe@huawei.com>, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] MM: handle THP in swap_*page_fs()
+In-reply-to: <20220428182132.883a082ad8918fd5f8073130@linux-foundation.org>
+References: <165119280115.15698.2629172320052218921.stgit@noble.brown>,
+ <165119301488.15698.9457662928942765453.stgit@noble.brown>,
+ <20220428182132.883a082ad8918fd5f8073130@linux-foundation.org>
+Date:   Fri, 29 Apr 2022 11:57:45 +1000
+Message-id: <165119746546.1648.12856939779038565632@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a DISCOVERY_TEAR_DOWN occurs. Since the operation is analogous
-to conventional connection creation map this to the usual ENOLINK
-error.
+On Fri, 29 Apr 2022, Andrew Morton wrote:
+> On Fri, 29 Apr 2022 10:43:34 +1000 NeilBrown <neilb@suse.de> wrote:
+> 
+> > Pages passed to swap_readpage()/swap_writepage() are not necessarily all
+> > the same size - there may be transparent-huge-pages involves.
+> > 
+> > The BIO paths of swap_*page() handle this correctly, but the SWP_FS_OPS
+> > path does not.
+> > 
+> > So we need to use thp_size() to find the size, not just assume
+> > PAGE_SIZE, and we need to track the total length of the request, not
+> > just assume it is "page * PAGE_SIZE".
+> 
+> Cool.  I added this in the series after
+> mm-submit-multipage-write-for-swp_fs_ops-swap-space.patch.  I could
+> later squash it into that patch if you think that's more logical.
 
-Signed-off-by: Meng Tang <tangmeng@uniontech.com>
----
- net/nfc/nci/lib.c | 3 +++
- 1 file changed, 3 insertions(+)
+I think it best to keep it separate, though that position is good.
+If we were to squash, some would need to go into the "submit multipage
+reads" patch, and some in "submit multipage writes".  IF you wanted to
+do that I wouldn't object but I don't think it is needed.
 
-diff --git a/net/nfc/nci/lib.c b/net/nfc/nci/lib.c
-index 473323f8067b..873854c5d180 100644
---- a/net/nfc/nci/lib.c
-+++ b/net/nfc/nci/lib.c
-@@ -57,6 +57,9 @@ int nci_to_errno(__u8 code)
- 	case NCI_STATUS_NFCEE_INTERFACE_ACTIVATION_FAILED:
- 		return -ECONNREFUSED;
- 
-+	case  NCI_STATUS_DISCOVERY_TEAR_DOWN:
-+		return -ENOLINK;
-+
- 	case NCI_STATUS_RF_TRANSMISSION_ERROR:
- 	case NCI_STATUS_NFCEE_TRANSMISSION_ERROR:
- 		return -ECOMM;
--- 
-2.20.1
-
-
-
+Thanks,
+NeilBrown

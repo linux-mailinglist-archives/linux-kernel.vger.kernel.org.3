@@ -2,106 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C155149A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:39:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B68A51498C
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359424AbiD2Mmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 08:42:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53330 "EHLO
+        id S1359290AbiD2Ml7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 08:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359431AbiD2MmX (ORCPT
+        with ESMTP id S230170AbiD2Ml5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 08:42:23 -0400
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812F8C9B77
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 05:38:50 -0700 (PDT)
-Received: by mail-oo1-xc2a.google.com with SMTP id c19-20020a4a3813000000b0035ea4a3b97eso1079069ooa.12
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 05:38:50 -0700 (PDT)
+        Fri, 29 Apr 2022 08:41:57 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0FAAFAD0;
+        Fri, 29 Apr 2022 05:38:39 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id r8so5206604qvx.10;
+        Fri, 29 Apr 2022 05:38:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=usp.br; s=usp-google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Hv1PCf+XzDO3hkXoIiVts/K8+qjbqCrBljwvRZWyJFs=;
-        b=BR070dtAgCfrI7G/Ipt+6yT2fuGmT1ftvPiR812mjsWIhGYXC5eOytF+eH/vWWk14L
-         gKrMvm0AiNNOKRqGuI3nQoYgDOTGqDWIuu4+nR92hZ5DMpbWovxnTEi4A99adcIYozD6
-         u3B0fQyc/S1z1G7r24nnzhd7T5tXhbDI8xEgd4Ek+e9w5hAv82ru5v0ImZT9YVPkBEP8
-         Ijmp6UNQwKOcsNvcBS7DG/3qu3L1q/3dbb8rvV/eKS6Tb86mOxCDdowiFIKjnLhzWZX1
-         QWO8Wq6IWERCperKVegssFJ4JB4N7UlC8ktEP/RIiDk4Vt29gP2ZCUbowhKxyi3eX/p4
-         8fjw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=u+dxdp5rrl14/eORvrLB8L3RavPWDRGDtxwA0AijHS0=;
+        b=EANN7oTOPbgNT6aPWLJ3jidqnFmPU/PO2+Gua9a0sPGBRzbptwMDRo0wKSgRLbHsK9
+         gkuuic9aitbXcvRhkO6zzQyqTQzBgSnE9LTCMRanDZq/RJqYJ18NEKqx811n/xtqX0GX
+         2KIS12D8Ln39n+JKaXCBlNXnP6u5G26GU6QJs6trZtWoJOov+siVqD/PdRxEopdJUQdt
+         RUPJtzwhVVpImWLB8Vgcg6M3mStk1mu/dY5rBv9gJDYGGrYK91iRZpun21OoeY2uvRTV
+         DP7nAZf4fI4JOYSm9kLGa85vnjWGFLy4zg9xTLY2Z/wBvRum7myBWlXAb5e9NcEgIWXj
+         hCeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Hv1PCf+XzDO3hkXoIiVts/K8+qjbqCrBljwvRZWyJFs=;
-        b=NtEQY967GOuU8QUB6JO/pFCeALgOyfG2OZoxAn+G/80vTiFs2yBNOw22KvFlj3SJdQ
-         VKpqJoYy3Q20bEmxFpDHAAtdYJWiDkHCS7YBZCpRl7p6+4BP2ijnUnCCaU2zxcUQdBt6
-         WsrNluj1UMD/TJFydmq5NeBKr35GFUgM/vzFg02/FS7nh/x4i3J/+R1uncbiDCnEzesk
-         nE+hIT/AdDuA4mDrX37q+wooUBZGMdBjw/iR0keE2t+MmT6ncwj7au4RUgUnULnY+DBh
-         1Rowp2MQ616gKOSLOEGYugl4y6oex65lYlZfCxYPZbgW7M0ieKveWZ2mztvMeLiqTuqx
-         Ov+w==
-X-Gm-Message-State: AOAM531h/w7fbnqbETpatiZi5JdnxsW8+Nek5+Vj86NhxOoyM0jXHpMA
-        LOloGUBE/1BG5m3xO3lppng+Yg==
-X-Google-Smtp-Source: ABdhPJylvYNJ7ENkrIf452qlc0xbGCPtKL3CAi+0CPZL+kKiJVoTr8IkphGljZN4d8qxJTQws5YgyQ==
-X-Received: by 2002:a4a:e2ca:0:b0:35e:b623:8799 with SMTP id l10-20020a4ae2ca000000b0035eb6238799mr1211599oot.68.1651235929759;
-        Fri, 29 Apr 2022 05:38:49 -0700 (PDT)
-Received: from fedora.sc.usp.br (gwsc.sc.usp.br. [143.107.225.16])
-        by smtp.gmail.com with ESMTPSA id e12-20020a4ae0cc000000b0035eb4e5a6d9sm705158oot.47.2022.04.29.05.38.45
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=u+dxdp5rrl14/eORvrLB8L3RavPWDRGDtxwA0AijHS0=;
+        b=Gd2x4eHlt0287Qmjs4dT0fZWId466Ee0YnXnbN3y+Jih8V4g1aY4ZOJ4mN6brXTt7u
+         EGI9iVbkL5g58CsoaQfpcmmymnOuaCnY5+ygchxE07DHz4T4yD1HlNqEkVvH1X8WlyXv
+         j4Yf9BidpSlFZ7q3C7NaueKUS0I3PdXqRq6vNwtUN0LZiX06YbJhC4mw9FFo3IwhpVya
+         PvBTOLRo6E2Y10C4BuomHn4XAQXODOJYMHD/eRV7ujHZa11E6LB4HHBdkufyVMCfJHtS
+         2Qc+VXDAkw+b2C2kfFPdJL+uk5qGLidSJNo+GFLfpT6Tiguh3pA1MS4D2ezxsm+X581/
+         VzRQ==
+X-Gm-Message-State: AOAM533JkNR3ZBUfU1Msb3sdhuLS7Nk8PKIRxYK4gcTqi2mr85GagbvF
+        Q9dUahP2TeEHH/GlQkVgiBE=
+X-Google-Smtp-Source: ABdhPJwD6ARY0Qg7OhPhaRZ2aJoyeHoWzMfqlNR6k0S7Sh2YZmG5qHY1oEVs8qx99m23l9ocRQp3PQ==
+X-Received: by 2002:a0c:d6ce:0:b0:443:f22e:6dd with SMTP id l14-20020a0cd6ce000000b00443f22e06ddmr28013580qvi.111.1651235918751;
+        Fri, 29 Apr 2022 05:38:38 -0700 (PDT)
+Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
+        by smtp.gmail.com with ESMTPSA id v126-20020a37dc84000000b0069f9c375519sm1431644qki.46.2022.04.29.05.38.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 05:38:49 -0700 (PDT)
-From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>
-Subject: [PATCH 2/2] dt-bindings: media: s5c73m3: Fix reset-gpio descriptor
-Date:   Fri, 29 Apr 2022 09:37:40 -0300
-Message-Id: <20220429123740.147703-3-maira.canal@usp.br>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220429123740.147703-1-maira.canal@usp.br>
-References: <20220429123740.147703-1-maira.canal@usp.br>
+        Fri, 29 Apr 2022 05:38:38 -0700 (PDT)
+From:   Peter Geis <pgwipeout@gmail.com>
+To:     linux-rockchip@lists.infradead.org,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     heiko@sntech.de, Peter Geis <pgwipeout@gmail.com>,
+        Marc Zyngier <maz@kernel.org>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v9 0/5] Enable rk356x PCIe controller
+Date:   Fri, 29 Apr 2022 08:38:26 -0400
+Message-Id: <20220429123832.2376381-1-pgwipeout@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The reset-gpios is described as xshutdown-gpios on the required
-properties, as it is on the driver. Despite that, the device tree
-example set the property 'reset-gpios' instead of the property
-'xshutdown-gpios'.
+This series enables the DesignWare based PCIe controller on the rk356x
+series of chips. We drop the fallback to the core driver due to 
+compatibility issues. We reset the PCIe controller at driver probe to
+prevent issues in the future when firmware / kexec leaves the controller
+in an unknown state. We add support for legacy interrupts for cards that
+lack MSI support (which is partially broken currently). We then add the
+device tree nodes to enable PCIe on the Quartz64 Model A.
 
-Therefore, this patch updates the example to match the property specified
-on the driver.
+Patch 1 drops the snps,dw,pcie fallback from the dt-binding
+Patch 2 resets the PCIe controller to prevent configuration bugs
+Patch 3 adds legacy interrupt support to the driver
+Patch 4 adds the device tree binding to the rk356x.dtsi
+Patch 5 enables the PCIe controller on the Quartz64-A
 
-Signed-off-by: Maíra Canal <maira.canal@usp.br>
----
- Documentation/devicetree/bindings/media/samsung-s5c73m3.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changelog:
+v9:
+- move reset_control_assert out of rockchip_pcie_resource_get
+- fix various formatting mistakes
+- fix a checkpatch warning
 
-diff --git a/Documentation/devicetree/bindings/media/samsung-s5c73m3.txt b/Documentation/devicetree/bindings/media/samsung-s5c73m3.txt
-index 21f31fdf5543..f0ea9adad442 100644
---- a/Documentation/devicetree/bindings/media/samsung-s5c73m3.txt
-+++ b/Documentation/devicetree/bindings/media/samsung-s5c73m3.txt
-@@ -76,7 +76,7 @@ i2c@138a000000 {
- 		clock-frequency = <24000000>;
- 		clocks = <&clk 0>;
- 		clock-names = "cis_extclk";
--		reset-gpios = <&gpf1 3 1>;
-+		xshutdown-gpios = <&gpf1 3 1>;
- 		standby-gpios = <&gpm0 1 1>;
- 		port {
- 			s5c73m3_ep: endpoint {
+v8:
+- add core reset patch
+- simplify IRQ enable/disable functions
+- drop spinlock
+- only enable/disable IRQ requested
+- only pass the IRQ register bits used to irq functions
+
+v7:
+- drop assigned-clocks
+
+v6:
+- fix a ranges issue
+- point to GIC instead of ITS
+
+v5:
+- fix incorrect series (apologies for the v4 spam)
+
+v4:
+- drop the ITS modification, poor compatibility is better than
+  completely broken
+
+v3:
+- drop select node from dt-binding
+- convert to for_each_set_bit
+- convert to generic_handle_domain_irq
+- drop unncessary dev_err
+- reorder irq_chip items
+- change to level_irq
+- install the handler after initializing the domain
+
+v2:
+- Define PCIE_CLIENT_INTR_STATUS_LEGACY
+- Fix PCIE_LEGACY_INT_ENABLE to only enable the RC interrupts
+- Add legacy interrupt enable/disable support
+
+
+Peter Geis (5):
+  dt-bindings: PCI: Remove fallback from Rockchip DesignWare binding
+  PCI: rockchip-dwc: Reset core at driver probe
+  PCI: rockchip-dwc: Add legacy interrupt support
+  arm64: dts: rockchip: Add rk3568 PCIe2x1 controller
+  arm64: dts: rockchip: Enable PCIe controller on quartz64-a
+
+ .../bindings/pci/rockchip-dw-pcie.yaml        |  12 +-
+ .../boot/dts/rockchip/rk3566-quartz64-a.dts   |  34 +++++
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi      |  52 ++++++++
+ drivers/pci/controller/dwc/pcie-dw-rockchip.c | 119 +++++++++++++++---
+ 4 files changed, 191 insertions(+), 26 deletions(-)
+
 -- 
-2.35.1
+2.25.1
 

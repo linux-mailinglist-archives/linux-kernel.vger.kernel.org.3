@@ -2,217 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30EFD514064
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 03:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81E5951406C
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 03:57:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354091AbiD2B7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 21:59:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55738 "EHLO
+        id S1354098AbiD2CAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 22:00:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231824AbiD2B7E (ORCPT
+        with ESMTP id S231824AbiD2CAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 21:59:04 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2499987237;
-        Thu, 28 Apr 2022 18:55:43 -0700 (PDT)
-X-UUID: b667f1e75fe6441e8a6a75c90429b40d-20220429
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:2c578ea6-e8b2-4057-adfa-4483c9a7fdc9,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:faefae9,CLOUDID:88121b2f-6199-437e-8ab4-9920b4bc5b76,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: b667f1e75fe6441e8a6a75c90429b40d-20220429
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 949969813; Fri, 29 Apr 2022 09:55:39 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 29 Apr 2022 09:55:37 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 29 Apr 2022 09:55:37 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 29 Apr 2022 09:55:37 +0800
-Message-ID: <9f601c458bd3401b216992e8dd72485a10f34597.camel@mediatek.com>
-Subject: Re: [PATCH v5 1/4] dt-bindings: display: mediatek: dsi: Convert
- dsi_dtbinding to .yaml
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     <matthias.bgg@gmail.com>, <linux-arm-kernel@lists.infradead.org>,
-        <chunkuang.hu@kernel.org>, <jitao.shi@mediatek.com>,
-        <linux-kernel@vger.kernel.org>, <airlied@linux.ie>,
-        <krzysztof.kozlowski+dt@linaro.org>, <daniel@ffwll.ch>,
-        <xinlei.lee@mediatek.com>, <devicetree@vger.kernel.org>,
-        <p.zabel@pengutronix.de>, <linux-mediatek@lists.infradead.org>,
-        <robh+dt@kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <cellopoint.kai@gmail.com>
-Date:   Fri, 29 Apr 2022 09:55:37 +0800
-In-Reply-To: <1651177993.334386.220464.nullmailer@robh.at.kernel.org>
-References: <20220428133753.8348-1-rex-bc.chen@mediatek.com>
-         <20220428133753.8348-2-rex-bc.chen@mediatek.com>
-         <1651177993.334386.220464.nullmailer@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 28 Apr 2022 22:00:08 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54BE08723F;
+        Thu, 28 Apr 2022 18:56:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651197411; x=1682733411;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CPEvDJ3ytBpYATJRkPLi382z+ezVo1awVW8z44TiQNE=;
+  b=SlqPVfjXvnihFrxSnATIn6wus84NmFGNq3FDJRtBjZI1GD60kSfY/sWE
+   ju5iuj2wvFQssqh8mG8y2NQU958Gq2gOkfPDooz4jusXe4cVNPLWdT29m
+   qcz7N78qJv6dxrO3H2LK9CBfTYPNVO7o2nAOVPDqjdlJgU6dwl9gCX7zb
+   h7h7MF0iDtsmfkowlMXSgJCHfrvr6mtVnb0yVnszcBW8aNmO45M/towgj
+   CeHU8SpkMPWFpccZ7SpWsGem1ETVVTgUi7hzPwZ48MsXxYQkVC22Dr3yv
+   brFANqYtbmFuDflmFuCNoqk5+40KW23IaF/z56o9zZO0d4fC6wZHBYwgU
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="266652286"
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="266652286"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 18:56:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
+   d="scan'208";a="565900073"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 28 Apr 2022 18:56:46 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nkFsD-0005rp-RA;
+        Fri, 29 Apr 2022 01:56:45 +0000
+Date:   Fri, 29 Apr 2022 09:56:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     kbuild-all@lists.01.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@lists.collabora.co.uk,
+        Elaine Zhang <zhangqing@rock-chips.com>, kernel@collabora.com,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: Re: [PATCHv1 03/19] clk: rockchip: add pll type for RK3588
+Message-ID: <202204290947.GtdwE4Zq-lkp@intel.com>
+References: <20220422170920.401914-4-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220422170920.401914-4-sebastian.reichel@collabora.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-04-28 at 15:33 -0500, Rob Herring wrote:
-> On Thu, 28 Apr 2022 21:37:50 +0800, Rex-BC Chen wrote:
-> > From: Xinlei Lee <xinlei.lee@mediatek.com>
-> > 
-> > Convert mediatek,dsi.txt to mediatek,dsi.yaml format
-> > 
-> > Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> > ---
-> >  .../display/mediatek/mediatek,dsi.txt         |  62 ---------
-> >  .../display/mediatek/mediatek,dsi.yaml        | 122
-> > ++++++++++++++++++
-> >  2 files changed, 122 insertions(+), 62 deletions(-)
-> >  delete mode 100644
-> > Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.txt
-> >  create mode 100644
-> > Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.yam
-> > l
-> > 
-> 
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
-> 
-> Note that it is not yet a requirement to have 0 warnings for
-> dtbs_check.
-> This will change in the future.
-> 
-> Full log is available here: 
-> https://urldefense.com/v3/__https://patchwork.ozlabs.org/patch/__;!!CTRNKA9wMg0ARbw!wKbRsUmeUS_4mtOwj1t30buVNEilHYYhsUmEd5MvZ7P9VyDXg6cikERof47mkwETQzFL$
->  
-> 
-> 
-> dsi@1400c000: compatible: ['mediatek,mt7623-dsi', 'mediatek,mt2701-
-> dsi'] is too long
-> 	arch/arm/boot/dts/mt7623n-bananapi-bpi-r2.dtb
-> 	arch/arm/boot/dts/mt7623n-rfb-emmc.dtb
-> 
-> dsi@14014000: #address-cells:0:0: 2 was expected
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-burnet.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-cozmo.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-damu.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14-
-> sku2.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-
-> sku1.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-
-> sku6.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-
-> sku7.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-juniper-
-> sku16.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kappa.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kenzo.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-
-> sku0.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-
-> sku1.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu-sku22.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku16.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku272.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku288.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku32.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku0.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku176.dtb
-> 
-> dsi@14014000: 'port' is a required property
-> 	arch/arm64/boot/dts/mediatek/mt8183-evb.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-burnet.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-cozmo.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-damu.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14-
-> sku2.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-
-> sku1.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-
-> sku6.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-
-> sku7.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-juniper-
-> sku16.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kappa.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kenzo.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-
-> sku0.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-
-> sku1.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu-sku22.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku16.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku272.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku288.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku32.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku0.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku176.dtb
-> 
-> dsi@14014000: #size-cells:0:0: 2 was expected
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-burnet.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-cozmo.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-damu.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14-
-> sku2.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-
-> sku1.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-
-> sku6.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-
-> sku7.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-juniper-
-> sku16.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kappa.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kenzo.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-
-> sku0.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-
-> sku1.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu-sku22.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku16.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku272.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku288.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku32.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku0.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku176.dtb
-> 
-> dsi@1401b000: 'port' is a required property
-> 	arch/arm64/boot/dts/mediatek/mt8173-elm.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8173-elm-hana.dtb
-> 	arch/arm64/boot/dts/mediatek/mt8173-elm-hana-rev7.dtb
-> 
+Hi Sebastian,
 
-Hello Rob,
+Thank you for the patch! Perhaps something to improve:
 
-Thanks for your comments.
-The purpose of this series is not to fix dts for previous SoCs.
-Therefore, if there is a chance, we could send another series to fix
-them.
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on linusw-pinctrl/devel linus/master v5.18-rc4 next-20220428]
+[cannot apply to rockchip/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Thanks.
+url:    https://github.com/intel-lab-lkp/linux/commits/Sebastian-Reichel/Basic-RK3588-Support/20220423-013425
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: arm64-defconfig (https://download.01.org/0day-ci/archive/20220429/202204290947.GtdwE4Zq-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/28c7fd4a10867094894809b60b86688817f70744
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Sebastian-Reichel/Basic-RK3588-Support/20220423-013425
+        git checkout 28c7fd4a10867094894809b60b86688817f70744
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/clk/rockchip/ drivers/media/platform/qcom/venus/
 
-BRs,
-Rex
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
+All warnings (new ones prefixed by >>):
+
+>> drivers/clk/rockchip/clk-pll.c:916: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * PLL used in RK3588
+
+
+vim +916 drivers/clk/rockchip/clk-pll.c
+
+   914	
+   915	/**
+ > 916	 * PLL used in RK3588
+   917	 */
+   918	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

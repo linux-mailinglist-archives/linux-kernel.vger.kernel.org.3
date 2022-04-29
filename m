@@ -2,105 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53552514C5F
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:07:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1668F514C61
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377101AbiD2OK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 10:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56042 "EHLO
+        id S239066AbiD2OKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 10:10:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377081AbiD2OKZ (ORCPT
+        with ESMTP id S1376823AbiD2OK2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 10:10:25 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A10988A7CF
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:05:16 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 58F541F892;
-        Fri, 29 Apr 2022 14:05:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1651241115; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Fri, 29 Apr 2022 10:10:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE5E48CCD3
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:05:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651241157;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=J9TwSQbH6wqCBuThjrzdtxN2LipJZ90ZPvowEWzdp+g=;
-        b=L2e1yaoYyEVDYzHX0UrQ3YFliIwmEyhjL5+/bnJJUo1VCQ29dnAPTuZyp2gP7iqwJu8qoy
-        ZkRPsXqD8ERWszn7TBVHUh2ejwzSVD0k26xC78zxTgg524wF9z6y+UwLS7P8qrH4EvxGco
-        VOZGlycfuhzYXCb4uHEkJ4b4j8eX1K4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1651241115;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=J9TwSQbH6wqCBuThjrzdtxN2LipJZ90ZPvowEWzdp+g=;
-        b=MyAYPB2YFXeOxlUJ9UumhIPtf7PoNkqoqfscD1y9rpG736YCz7DQMYtVSr2KmU9mTUGTJn
-        qbIuVb77XWNgj9Dw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0B62113AE0;
-        Fri, 29 Apr 2022 14:05:15 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id nhQiApvwa2IBDQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 29 Apr 2022 14:05:15 +0000
-Message-ID: <bbb97e3c-e597-dd6e-e213-55bc1779d901@suse.cz>
-Date:   Fri, 29 Apr 2022 16:05:14 +0200
+        bh=xKDdsM4MIWkc8vNQb6ubKyY0KGO/jrEC70jcj8M7HbU=;
+        b=hr9XfIQggxXRuC+NyhlFjiXLz8kEPpVCV2M3e2P/oQkdfdO1FH8vCLgygvz/rX/zJYtzWF
+        8M/a9KzzUhghnzMTmQIDh+Um3oqmNkkR0j5H4gVvfdWUV1q9/u0anGXHt2N3WPQSg1X9Sp
+        UZGemGjbGrGmPpSxAsjxPCjEPVMDpCE=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-86-tUeShRsZMbiGDiEL3RcGsg-1; Fri, 29 Apr 2022 10:05:55 -0400
+X-MC-Unique: tUeShRsZMbiGDiEL3RcGsg-1
+Received: by mail-ej1-f70.google.com with SMTP id hs26-20020a1709073e9a00b006f3b957ebb4so4587099ejc.7
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:05:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xKDdsM4MIWkc8vNQb6ubKyY0KGO/jrEC70jcj8M7HbU=;
+        b=OFgWNqL5VdCYBtiCblTJEpeCjahDISKn7lyj+1Zuy9fb4qifqcepvRPowD0MAELffo
+         UFrXuX2yPnehoYSHMo85LFJncJs8LeObn9axdUaLdgDGp5lbAIuAOHeBLJUJXz24mQ5Q
+         FcAYl7nQwWqo5wSs10Wy73yhP+jkpnFpyafcIHM1FN7ylGJPBIsweM/FMMwmoQSTn9we
+         FFmLETytg4KYHZ3Ttx+fpaeKSIEyRGD/RtJuH1YLwNyjr3AdaF+SAUSukwoZC9e7+V87
+         gE6vTPVZqPPj6YTAJL/GIvIBQzdXrlePnRF7JeGSM5LyqPfSaKy8FaNp0vR7BimJYRL0
+         ypGg==
+X-Gm-Message-State: AOAM5315LsjRfsXAXX8jZcuqbZxZyvGW45yiMw2PkdDLoh4yL3ucD6na
+        MQB7pJxnNCnmQmrTToJSyeUxed9K4eQbABQzNPu2KDEtpSVNkbJF1WE+Hno9xYcizYcCCr+OpvO
+        mCCDT3m3MOaavT+kFvLty0iNz
+X-Received: by 2002:aa7:c58e:0:b0:425:b5e3:6c51 with SMTP id g14-20020aa7c58e000000b00425b5e36c51mr1321403edq.99.1651241154215;
+        Fri, 29 Apr 2022 07:05:54 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxVA32tC1Jm5pRpOfD7vJcD40YR0MhY1LIRWmSQXXpuV+3PjRXFG7z+RLgbuUJ5MVEEPQKoBQ==
+X-Received: by 2002:aa7:c58e:0:b0:425:b5e3:6c51 with SMTP id g14-20020aa7c58e000000b00425b5e36c51mr1321389edq.99.1651241154023;
+        Fri, 29 Apr 2022 07:05:54 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
+        by smtp.googlemail.com with ESMTPSA id qs24-20020a170906459800b006f3ef214e1bsm689383ejc.129.2022.04.29.07.05.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 07:05:53 -0700 (PDT)
+Message-ID: <bbf38496-658a-d6ca-b76c-d3642609b8fb@redhat.com>
+Date:   Fri, 29 Apr 2022 16:05:52 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
+ Thunderbird/91.8.0
+Subject: Re: [PATCH for-5.18] KVM: fix bad user ABI for KVM_EXIT_SYSTEM_EVENT
 Content-Language: en-US
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     Marco Elver <elver@google.com>,
-        Matthew WilCox <willy@infradead.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220414085727.643099-1-42.hyeyoo@gmail.com>
- <20220414085727.643099-15-42.hyeyoo@gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v2 14/23] mm/slab_common: print cache name in tracepoints
-In-Reply-To: <20220414085727.643099-15-42.hyeyoo@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Peter Gonda <pgonda@google.com>
+References: <20220422103013.34832-1-pbonzini@redhat.com>
+ <YmvwK0MeKpsQkZN4@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YmvwK0MeKpsQkZN4@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/14/22 10:57, Hyeonggon Yoo wrote:
-> Print cache name in tracepoints. If there is no corresponding cache
-> (kmalloc in SLOB or kmalloc_large_node), use KMALLOC_{,LARGE_}NAME
-> macro.
+On 4/29/22 16:03, Sean Christopherson wrote:
+> On Fri, Apr 22, 2022, Paolo Bonzini wrote:
+>> For compatibility with userspace that was using the flags field,
+>> a union overlaps flags with data[0].
 > 
-> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> I think "compatibility" is slightly misleading, e.g. the offset of the field is
+> changing for 32-bit userspace.
 
-Regarding tracepoints, I'm not sure it's a good idea to unify kmalloc and
-kmem_cache_alloc. I think the common use case is to trace kmalloc as there
-are many different callers, and then I'm not interested in kmem_cache_alloc
-callers much.
+Well, the only such userspace AFAIK is crosvm on ARM and there's no 
+compat ABI for ARM.  But yeah, your wording below sounds good.
 
-What I would suggest instead is:
-- drop the _node versions, add node to normal versions
-- drop the kmem_alloc EVENT_CLASS, as kmalloc is different enough from
-kmem_cache_alloc (see next points), define separately as TRACE_EVENT().
-- printing cache_name makes sense to add for kmem_cache_alloc (also allows
-filtering events) but not for kmalloc.
-- kmem_cache_alloc with name can then drop the bytes_req, bytes_alloc as
-they are fixed for given name (and can be read from slabinfo).
+>    To avoid breaking compilation of userspace that was using the flags
+>    field, provide a userspace-only union to overlap flags with data[0].
+> 
+>> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+>> index 91a6fe4e02c0..f903ab0c8d7a 100644
+>> --- a/include/uapi/linux/kvm.h
+>> +++ b/include/uapi/linux/kvm.h
+>> @@ -445,7 +445,11 @@ struct kvm_run {
+>>   #define KVM_SYSTEM_EVENT_RESET          2
+>>   #define KVM_SYSTEM_EVENT_CRASH          3
+>>   			__u32 type;
+>> -			__u64 flags;
+>> +			__u32 ndata;
+>> +			union {
+>> +				__u64 flags;
+> 
+> As alluded to above, what about wrapping flags in
+> 
+> #ifndef __KERNEL__
+> 				__u64 flags;
+> #endif
+> 
+> so that KVM doesn't try to use flags?
 
-Not using a common tracepoint will prevent some later unifications/cleanup
-(patch 21?), but hopefully not too much?
+Interesting idea.  I'll apply it and push the patch.
+
+Thanks for the review!
+
+Paolo
+
+>> +				__u64 data[16];
+>> +			};
+>>   		} system_event;
+>>   		/* KVM_EXIT_S390_STSI */
+>>   		struct {
+> 
+

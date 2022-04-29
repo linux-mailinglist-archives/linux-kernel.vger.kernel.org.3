@@ -2,112 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06B68514A56
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 15:19:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 404C9514A4E
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 15:11:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359719AbiD2NWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 09:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55534 "EHLO
+        id S1359710AbiD2NOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 09:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232435AbiD2NWw (ORCPT
+        with ESMTP id S232435AbiD2NOb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 09:22:52 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D3DC6171
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 06:19:34 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TCuIVt020228;
-        Fri, 29 Apr 2022 13:18:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=V+p+Rv02lhh/C2xv4y7/cGXeK48jdJRLmPLIIxFAHpU=;
- b=jLBxar1BgpbwMGKF+qnRuRU2TsgYueLtAKvpjrEgbI79w5Osu+Dh9rW0Q+QUVsPlKdFY
- s3qCe9bckSV6Hfm0hlr6LbwuTze8Sp3811jTcn92fC4UHzklhSsn/PcgeCMt87f5MXJ5
- /MDrFVyMrG/CXx1qvNV0U6nu2Z2aMB6Vopt25HFf/umlBraodxZ4Aojvlxe+29hD1ezF
- 0/RcyivDd29OKpl9RIVmuwDNOyfC7eeqQ1mRg3rXzk8RHgNFU9RIk34LwhGpYcl9ZmZ1
- cbIRf9A20V7IfAwzrpNRZuwwa9ar9ROlm1QfuEEH+Ded4LlgBuczD/hGkptEY1V3oFs+ 2Q== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqt9ebdgg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 13:18:12 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TD32Kk032223;
-        Fri, 29 Apr 2022 13:10:19 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03ams.nl.ibm.com with ESMTP id 3fm9391648-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 13:10:18 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TDAGoe38339056
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 29 Apr 2022 13:10:16 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B8FBF11C050;
-        Fri, 29 Apr 2022 13:10:16 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7AC6511C04C;
-        Fri, 29 Apr 2022 13:10:16 +0000 (GMT)
-Received: from osiris (unknown [9.145.7.47])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Fri, 29 Apr 2022 13:10:16 +0000 (GMT)
-Date:   Fri, 29 Apr 2022 15:10:15 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Fri, 29 Apr 2022 09:14:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C69E918E1C
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 06:11:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651237871;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aQ+nnU9b+AK9j8XZkLHMkU6d8KFt4vZ+1q0g2FKJ16w=;
+        b=d1Xnqn3qAvgIgwo/AjkCVbbg38lXpglOzDB0N6R/GM8awmG+pNqTJ3BzQvSjAl2CXUfOWy
+        29d+0uOlRsah8sn0EughQMK1nODOf19CPKgrTwtlycJzpdbmdFk4mjra7n9XGv6akh3iro
+        AKRXUtEHaEIhHhOK68ka32GQJkgneoM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-169-vtfQNIQqO66r_fu8YkYLGQ-1; Fri, 29 Apr 2022 09:11:06 -0400
+X-MC-Unique: vtfQNIQqO66r_fu8YkYLGQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 369B485A5A8;
+        Fri, 29 Apr 2022 13:11:05 +0000 (UTC)
+Received: from fedora (unknown [10.22.16.76])
+        by smtp.corp.redhat.com (Postfix) with SMTP id F0C7E43F704;
+        Fri, 29 Apr 2022 13:10:59 +0000 (UTC)
+Date:   Fri, 29 Apr 2022 10:10:58 -0300
+From:   Wander Lairson Costa <wander@redhat.com>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mapletree-vs-khugepaged
-Message-ID: <Ymvjt7GEXE306WyE@osiris>
-References: <20220428172040.GA3623323@roeck-us.net>
- <YmvVkKXJWBoGqWFx@osiris>
- <20220429130146.kxhxmi5jquzw56wy@revolver>
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv5 06/12] x86/boot/compressed: Handle unaccepted memory
+Message-ID: <Ymvj4ssnzrf74tHl@fedora>
+References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
+ <20220425033934.68551-7-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220429130146.kxhxmi5jquzw56wy@revolver>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: gaadsF3wQCXqGi2vnCghirqtbgXDkRpR
-X-Proofpoint-ORIG-GUID: gaadsF3wQCXqGi2vnCghirqtbgXDkRpR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-29_06,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- mlxscore=0 suspectscore=0 priorityscore=1501 spamscore=0 mlxlogscore=895
- adultscore=0 lowpriorityscore=0 impostorscore=0 clxscore=1015 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204290076
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220425033934.68551-7-kirill.shutemov@linux.intel.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 01:01:53PM +0000, Liam Howlett wrote:
-> * Heiko Carstens <hca@linux.ibm.com> [220429 08:10]:
-> > On Thu, Apr 28, 2022 at 10:20:40AM -0700, Guenter Roeck wrote:
-> > > On Wed, Apr 27, 2022 at 03:10:45PM -0700, Andrew Morton wrote:
-> > > > Fix mapletree for patch series "Make khugepaged collapse readonly FS THP
-> > > > more consistent", v3.
-> > > > 
-> > > > Cc: Liam R. Howlett <Liam.Howlett@oracle.com>
-> > > > Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-> > > 
-> > > This patch causes all my sparc64 boot tests to fail. Bisect and crash logs
-> > > attached.
-> > > 
-> > > Guenter
-...
-> > 
-> > FWIW, same on s390 - linux-next is completely broken. Note: I didn't
-> > bisect, but given that the call trace, and even the failing address
-> > match, I'm quite confident it is the same reason.
+On Mon, Apr 25, 2022 at 06:39:28AM +0300, Kirill A. Shutemov wrote:
+> The firmware will pre-accept the memory used to run the stub. But, the
+> stub is responsible for accepting the memory into which it decompresses
+> the main kernel. Accept memory just before decompression starts.
 > 
-> This is worth a lot to me.  Thanks for the report and the testing.
+> The stub is also responsible for choosing a physical address in which to
+> place the decompressed kernel image. The KASLR mechanism will randomize
+> this physical address. Since the unaccepted memory region is relatively
+> small, KASLR would be quite ineffective if it only used the pre-accepted
+> area (EFI_CONVENTIONAL_MEMORY). Ensure that KASLR randomizes among the
+> entire physical address space by also including EFI_UNACCEPTED_MEMOR
 
-Not sure if it is of any relevance, and you are probably aware if it
-anyway, but both sparc64 and s390 are big endian; and there was no
-report from little endian architectures yet.
+nit: s/EFI_UNACCEPTED_MEMOR/EFI_UNACCEPTED_MEMORY./
+
+[snip]
+

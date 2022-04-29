@@ -2,79 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39A4E514A39
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 15:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC25514A3C
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 15:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233087AbiD2NJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 09:09:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51396 "EHLO
+        id S232417AbiD2NLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 09:11:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359750AbiD2NJM (ORCPT
+        with ESMTP id S230424AbiD2NLR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 09:09:12 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4326A2124B
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 06:05:49 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2f83983782fso84513007b3.6
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 06:05:49 -0700 (PDT)
+        Fri, 29 Apr 2022 09:11:17 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537445FBF;
+        Fri, 29 Apr 2022 06:07:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=h+Ch5FrsaH2wGj7krM14MGWI0na4ZGCNNKlBF0nMo54=;
-        b=iULbLhZoU9Pl0qb1QjcJhvwJGcVVeHrTQCEoZyv5zz3YOIvDfPv4rAbRJVo+kEOwKM
-         lNwcDXkrPrJabcmN0qQZ+woNEJsU5gOYCkUE9VUW14CMZPLpoGQsrG5qJV2XfoRG0/2p
-         bOM9n96H7FvFGYx1dERd4vrBvH7L1NoYQyTFOHJ1x+cPCeTT6KJ6RD36ivLFGfoKcuyr
-         ER0andT2ZySXczvvaWlMWrBLqHzVOqkqLX3dnCPb+hL/Nfrlv+GnFcZ0sjuKXRDIJMZY
-         gU0g1UJkfiUAxPSZGUUEqsJOjxKwhIl0ZYDQTGDe62XVZFkilPXU2mExyc170VAvGbmp
-         Df7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=h+Ch5FrsaH2wGj7krM14MGWI0na4ZGCNNKlBF0nMo54=;
-        b=Ot4+4u+hDBn3sCpdRiqH8xUKu43KN7zvL3KBHyFVha9oiN5v7JwyWXZNAiSnIcv5Ti
-         TCQ+IbK+M8UbwzpfAy/fWeuJ4khZy4AJ6g9V4Nvb41OIiafUQDICje/bIAubQKWnnRfy
-         Op8F5mss7dqR9fgcFyoNcHZKaqOW3p3l6ydWA5uR9HTvUxGlCFmEVucAXZnj9xHzedj0
-         SH2szOv/GwTY0pn1bx2sKjfm+Iv9ssxSQ3DBnR7Wg5NsOG4kErnLOJs4WTPrrEeiSg15
-         azkhoc6waFaj0iOMCHEftEJ8T8KVSz99A8CgFnIWkBXP79qsVA1CC+Drn6H9R0TIW59J
-         gRaQ==
-X-Gm-Message-State: AOAM5311s9zFSA2gHjifZn8hWm7dA+JzFeun7KaiX612ZXsGLCh8s43N
-        NU3dNQbvPb/Qov7DsHJ1moGtY3VPg6lDKDlc60LxXO0=
-X-Google-Smtp-Source: ABdhPJwhtwpU8LT9AahrofrKtL9DhX8YkmTeR4qVA2q0IBXfsK38afZHMnxzahiHpRCcR2V8Po7rHdQfccaLpNAKoTo=
-X-Received: by 2002:a0d:e64e:0:b0:2f4:ddb9:b108 with SMTP id
- p75-20020a0de64e000000b002f4ddb9b108mr36140248ywe.245.1651237548529; Fri, 29
- Apr 2022 06:05:48 -0700 (PDT)
+  d=axis.com; q=dns/txt; s=axis-central1; t=1651237678;
+  x=1682773678;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=uJsOw0YEEsJ2CEhKf3f5//UtbKJYw9da+eeqF/N/AZ0=;
+  b=PX4KQlsZU5WvXDJ+45EUT/CBieEFSNyzdaJYbpS4QCDDC/lEZxWyF+Zc
+   +G39Ycy6B7zyX9pwA/oRmTgGoIPaUZFUynBxJHKJvvKvLgL4VyaUCAVpn
+   J0fm8yL+vPdN6Img9DT01IL0CZDh6IfotyWQF7GPl5r0AZoRvzbUd80PB
+   PFhx4em/B5Z2MXsBCTyjd1DXcGICM65zNQZl6YHhb+iPthzV0r12TTSD2
+   KdOYlNj6XVluZmLC8Bxlh9Iv5LHXhtp9gVRQ+crDsLHcZOQbfSRNYQJBk
+   +OsPPf98LYzbh1fy7JB3OL4V7csy/MYEAVgqJB35G5PiV3Zf0KYMoqYbG
+   Q==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     <wsa@kernel.org>
+CC:     <kernel@axis.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 0/1] i2c: Allow disabling auto detection via devicetree
+Date:   Fri, 29 Apr 2022 15:07:48 +0200
+Message-ID: <20220429130749.3032462-1-vincent.whitchurch@axis.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220429084225.298213-1-rsalvaterra@gmail.com> <91d8eb87-adf0-da62-0c7b-dbf94442f535@gmail.com>
-In-Reply-To: <91d8eb87-adf0-da62-0c7b-dbf94442f535@gmail.com>
-From:   Rui Salvaterra <rsalvaterra@gmail.com>
-Date:   Fri, 29 Apr 2022 14:05:37 +0100
-Message-ID: <CALjTZvYdvGrfjTWaP=LjX0UGJPJVxuF9RtgbneDwu7KCnSdtJg@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: mt7622: specify the number of DMA requests
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        ryder.lee@mediatek.com, daniel@makrotopia.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Matthias,
+v3:
+- Drop bindings patch since it has been merged in dt-schema:
+  https://github.com/devicetree-org/dt-schema/commit/ba55f96c6d8d
+- Reword commit message of i2c patch to indicate that the property is
+  documented in dt-schema.
 
-On Fri, 29 Apr 2022 at 12:57, Matthias Brugger <matthias.bgg@gmail.com> wrote:
->
-> Applied, thanks!
+v2:
+- Change subject prefix of bindings patch
+- Reword description of property in bindings patch
 
-Would this and the cache topology patch qualify as stable material?
-Intuitively, I'd say yes, but I'm not really sure.
+When a driver with a ->detect callback (such as lm75) is loaded, the i2c core
+performs I2C transactions on the bus to all the addresses listed in that
+driver's address_list.  This kind of probing wastes time and as
+Documentation/i2c/instantiating-devices.rst says, this method is not
+recommended and it is instead advised to list all devices in the devicetree.
 
-Thanks,
-Rui
+However, even if all the devices are listed in the devicetree, there is
+currently no way to prevent the core from attempting auto detection short of
+patching controller drivers to not pass the I2C_CLASS* bits in adap->class.
+The latter is not always possible since generic drivers like i2c-gpio set these
+bits.
+
+To avoid this unnecessary probing and reduce boot time, this series adds
+support in the I2C core to allow this feature to be disabled.
+
+Cc: linux-i2c@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Vincent Whitchurch (1):
+  i2c: core: support no-detect property
+
+ drivers/i2c/i2c-core-base.c | 8 +++++++-
+ include/linux/i2c.h         | 1 +
+ 2 files changed, 8 insertions(+), 1 deletion(-)
+
+-- 
+2.34.1
+

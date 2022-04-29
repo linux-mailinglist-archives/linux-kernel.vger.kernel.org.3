@@ -2,135 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28B5E5154BA
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 21:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D90415154D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 21:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236460AbiD2Tl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 15:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42364 "EHLO
+        id S1380390AbiD2ToD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 15:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236042AbiD2Tlz (ORCPT
+        with ESMTP id S1380409AbiD2Tn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 15:41:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E375CE114
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 12:38:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651261115;
+        Fri, 29 Apr 2022 15:43:56 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD3625EBB;
+        Fri, 29 Apr 2022 12:40:35 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651261233;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=RRnqrZ5q9hLwmm3bRLQsIsvIf5Pjk0qeqlvtwwtHCyY=;
-        b=HXpfas1CkoxN2BEZTWtdRRET/ICqc2iJ8RfNJSEtQrZb2eHMxkBcDY9H4Uly3PIRN8lYda
-        tgSGvVf/xZjA0m7204gblox7wXDmFRWRnx1DfJWtbWbIDIfgy7vsQdMFn+x7r25LvwKITn
-        mrQs3MfrOZhMtlirPPa/0m0jXgz2UUU=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-617-HmS45UzKPQeuxBz4JS698Q-1; Fri, 29 Apr 2022 15:38:34 -0400
-X-MC-Unique: HmS45UzKPQeuxBz4JS698Q-1
-Received: by mail-qt1-f199.google.com with SMTP id n4-20020ac85b44000000b002f3940d55eeso1944052qtw.19
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 12:38:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:organization:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=RRnqrZ5q9hLwmm3bRLQsIsvIf5Pjk0qeqlvtwwtHCyY=;
-        b=WYD7Fmu0fECiwpXpFKMTCC3LSeVR3ftLDLR4pEJxRFYKn2VtOhswOxH//zC+kIXgir
-         6DvMRzLM2AR+gHwgOUG4700FMDMeG/3sS1iFlshvSJk5sD7ZwKiOaN+4hhoA7IF5hcfn
-         5DMWYeaUN+LG08Npf31ZbwA2ox03tD0QrNXgXgaot+v+3TzZoy8PGYvPouUwWniYf52p
-         zCOaos33kVmkv1MCSm0IXwpD4SFSsqPVVjGxQw0xIOIgiaQTcVWMFDuO5gb2gN36Tvqb
-         7Si3hHyN3WcKJxqFrZOCwhzMh2zm8uQPxdvCRQax31dKi3KghOkjVwsCCiul/Y1Z2z6V
-         k70A==
-X-Gm-Message-State: AOAM531j6GwSZKAQ8lfl9sCUSc+g5vNj05qLKPsv7vNIvESTD0jOi7K8
-        Lfen3mFPUn4/s9SiIemTSXNiUIX85fwm5Vq0cRqd7AWXjDsOCpnjtRDg9DXfGGggCNZKb+QQXh9
-        HZInKyJAab+vUXOKZK192g0xZ
-X-Received: by 2002:a05:620a:4591:b0:69f:6dfe:fd0e with SMTP id bp17-20020a05620a459100b0069f6dfefd0emr533996qkb.724.1651261113282;
-        Fri, 29 Apr 2022 12:38:33 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyzvpTuihk+7r9mupR+7j1In7Ensxviuu8Omgt416FUHuMAFpt/XdDBc0YeMc2lCqNb9b70ag==
-X-Received: by 2002:a05:620a:4591:b0:69f:6dfe:fd0e with SMTP id bp17-20020a05620a459100b0069f6dfefd0emr533983qkb.724.1651261113089;
-        Fri, 29 Apr 2022 12:38:33 -0700 (PDT)
-Received: from [192.168.8.138] (static-71-184-137-158.bstnma.ftas.verizon.net. [71.184.137.158])
-        by smtp.gmail.com with ESMTPSA id k16-20020ac84790000000b002f39b99f6c1sm53375qtq.91.2022.04.29.12.38.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 12:38:32 -0700 (PDT)
-Message-ID: <baf0a304698c7136c95c3fbb13c90529a51b9e06.camel@redhat.com>
-Subject: Re: [PATCH] drm/nouveau: simplify the return expression of
- nouveau_debugfs_init()
-From:   Lyude Paul <lyude@redhat.com>
-To:     cgel.zte@gmail.com, bskeggs@redhat.com
-Cc:     kherbst@redhat.com, dri-devel@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Date:   Fri, 29 Apr 2022 15:38:31 -0400
-In-Reply-To: <20220429090309.3853003-1-chi.minghao@zte.com.cn>
-References: <20220429090309.3853003-1-chi.minghao@zte.com.cn>
-Organization: Red Hat Inc.
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        bh=G90v80vwxgYebC2KpfsavbID4TjF7nvhmIxKehMfUYQ=;
+        b=pZPNUNH38ZyrulW1gVyK7RQHeNmUxDGxyKgocGuGA19UkVDw77lNYg5EFi5BwOeT7yETco
+        NHonRRs0NIfW1kh5aDjhpTxWrIMx4AY1us7hehofLPLMe8YzWT/vm+qXNP1frMm0vKEf9J
+        HJqztNhv0R65XwUzK5gzW2SZBFkErw6J/T+pX4SFSHswSIIkaw58lDe2Gv84rDnJDbfgJs
+        av7E0MHU9UfZa44TGzDjD1gXQKExFbwGQgW/oYUWT3LmPHgt5iHkKmiRZqBS7mozdSPbyD
+        aSGHodTcutREinGB0y8eVSGWQwUBrvf+x60WIPHXr5P6e7B+AO2y9tEsUFYRMg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651261233;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=G90v80vwxgYebC2KpfsavbID4TjF7nvhmIxKehMfUYQ=;
+        b=Dco0825afeNJzSw4/gXGisLWZg8ApVZ3M34zsr6XMae0tshtLBu71pGg4BXyHcfj75GOAZ
+        KTZTrUdUTEoRe1CQ==
+To:     Marc Zyngier <maz@kernel.org>, Thomas Pfaff <tpfaff@pcs.com>
+Cc:     linux-kernel@vger.kernel.org, linux-rt-users@vger.kernel.org,
+        Hillf Danton <hdanton@sina.com>
+Subject: Re: [PATCH v2] irq/core: synchronize irq_thread startup
+In-Reply-To: <87sfpv98j0.wl-maz@kernel.org>
+References: <1e3f96b7-9294-1534-e83b-efe3602f876f@pcs.com>
+ <87sfpv98j0.wl-maz@kernel.org>
+Date:   Fri, 29 Apr 2022 21:40:32 +0200
+Message-ID: <87fslvoez3.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Lyude Paul <lyude@redhat.com>
+On Fri, Apr 29 2022 at 17:08, Marc Zyngier wrote:
+> On Fri, 29 Apr 2022 12:52:48 +0100,
+> Thomas Pfaff <tpfaff@pcs.com> wrote:
 
-Will push to drm-misc-next in a bit
+ > +static void wait_for_irq_thread_startup(struct irq_desc *desc,
+ > +		struct irqaction *action)
 
-(Kind of impressed that a bot managed to catch this, considering the route
-from here to the code capable of returning < 0 or 0 was definitely not
-obvious)
+ and this would be wait_for_irq_thread_ready().
 
-On Fri, 2022-04-29 at 09:03 +0000, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
-> 
-> Simplify the return expression.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> ---
->  drivers/gpu/drm/nouveau/nouveau_debugfs.c | 8 +-------
->  1 file changed, 1 insertion(+), 7 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/nouveau/nouveau_debugfs.c
-> b/drivers/gpu/drm/nouveau/nouveau_debugfs.c
-> index 1cbe01048b93..76b621f99916 100644
-> --- a/drivers/gpu/drm/nouveau/nouveau_debugfs.c
-> +++ b/drivers/gpu/drm/nouveau/nouveau_debugfs.c
-> @@ -255,19 +255,13 @@ nouveau_drm_debugfs_init(struct drm_minor *minor)
->  int
->  nouveau_debugfs_init(struct nouveau_drm *drm)
->  {
-> -       int ret;
-> -
->         drm->debugfs = kzalloc(sizeof(*drm->debugfs), GFP_KERNEL);
->         if (!drm->debugfs)
->                 return -ENOMEM;
->  
-> -       ret = nvif_object_ctor(&drm->client.device.object, "debugfsCtrl", 0,
-> +       return nvif_object_ctor(&drm->client.device.object, "debugfsCtrl",
-> 0,
->                                NVIF_CLASS_CONTROL, NULL, 0,
->                                &drm->debugfs->ctrl);
-> -       if (ret)
-> -               return ret;
-> -
-> -       return 0;
->  }
->  
->  void
+which is sill a misnomer as this actually wakes and waits.
 
--- 
-Cheers,
- Lyude Paul (she/her)
- Software Engineer at Red Hat
+>> @@ -1522,6 +1548,8 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
+>>  		}
+>>  	}
+>>  
+>> +	init_waitqueue_head(&desc->wait_for_threads);
+>> +
+>
+> I'm trying to convince myself that this one is safe.
+>
+> It was so far only done when registering the first handler of a
+> threaded interrupt, while it is now done on every call to
+> __setup_irq().  However, this is now done outside of the protection of
+> any of the locks, meaning that a concurrent __setup_irq() for a shared
+> interrupt can now barge in and corrupt the wait queue.
+>
+> So I don't think this is right. You may be able to hoist the
+> request_lock up, but I haven't checked what could break, if anything.
 
+It can't be moved here, but I can see why Thomas wants to move it. With
+a spurious wakeup of the irq thread (should not happen), the thread
+would try to invoke wake_up() on a non initialize wait queue head.
+
+Something like this should do the trick.
+
+diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
+index 939d21cd55c3..0099b87dd853 100644
+--- a/kernel/irq/irqdesc.c
++++ b/kernel/irq/irqdesc.c
+@@ -407,6 +407,7 @@ static struct irq_desc *alloc_desc(int irq, int node, unsigned int flags,
+ 	lockdep_set_class(&desc->lock, &irq_desc_lock_class);
+ 	mutex_init(&desc->request_mutex);
+ 	init_rcu_head(&desc->rcu);
++	init_waitqueue_head(&desc->wait_for_threads);
+ 
+ 	desc_set_defaults(irq, desc, node, affinity, owner);
+ 	irqd_set(&desc->irq_data, flags);
+@@ -575,6 +576,7 @@ int __init early_irq_init(void)
+ 		raw_spin_lock_init(&desc[i].lock);
+ 		lockdep_set_class(&desc[i].lock, &irq_desc_lock_class);
+ 		mutex_init(&desc[i].request_mutex);
++		init_waitqueue_head(&desc[i].wait_for_threads);
+ 		desc_set_defaults(i, &desc[i], node, NULL, NULL);
+ 	}
+ 	return arch_early_irq_init();
+diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
+index c03f71d5ec10..6a0942f4d068 100644
+--- a/kernel/irq/manage.c
++++ b/kernel/irq/manage.c
+@@ -1683,8 +1683,6 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
+ 	}
+ 
+ 	if (!shared) {
+-		init_waitqueue_head(&desc->wait_for_threads);
+-
+ 		/* Setup the type (level, edge polarity) if configured: */
+ 		if (new->flags & IRQF_TRIGGER_MASK) {
+ 			ret = __irq_set_trigger(desc,
+
+Thanks,
+
+        tglx

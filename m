@@ -2,127 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B36851465A
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8354851465E
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:12:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357272AbiD2KNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 06:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43590 "EHLO
+        id S1357265AbiD2KOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 06:14:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357252AbiD2KN3 (ORCPT
+        with ESMTP id S1347972AbiD2KOW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 06:13:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499EF6335;
-        Fri, 29 Apr 2022 03:10:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F17C6230A;
-        Fri, 29 Apr 2022 10:10:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10EDBC385AD;
-        Fri, 29 Apr 2022 10:10:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651227010;
-        bh=/fZkfLjWpmIzhdcxrKUWxcmqUV1u1Y3FbmbQ8JbUy1Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OcZ3H86tp/Jk8BaNgocIT5hnynF3bb/7AyyykOP2bQIno2P9PAhMqBT8aY6HX1Xnp
-         7E3bNt9X93xBxz7L8xUKzAFo+K/H4BP4R1ksbf9Ybo947jWW2YnkbghthPWkp6BEq8
-         jieo7akxYIqUd6M2CjQoDFGgu1RCwZb88gR/WPB4=
-Date:   Fri, 29 Apr 2022 12:10:07 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Luis Chamberlain <mcgrof@kernel.org>, mauro.chehab@intel.com,
-        Kai Vehmanen <kai.vehmanen@intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@intel.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        David Airlie <airlied@linux.ie>,
-        Dan Williams <dan.j.williams@intel.com>
-Subject: Re: [PATCH 1/2] module: add a function to add module references
-Message-ID: <Ymu5f8EjdC1Mawzt@kroah.com>
-References: <cover.1651212016.git.mchehab@kernel.org>
- <a078eb2e46d00ec59c8a91ea0afa5190730c9e58.1651212016.git.mchehab@kernel.org>
- <YmuZovuDaCYDDG4c@phenom.ffwll.local>
- <20220429090757.1acb943a@sal.lan>
- <YmuiKcHgl+nABvo/@kroah.com>
- <20220429101503.4048db5b@sal.lan>
+        Fri, 29 Apr 2022 06:14:22 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9E5522C6;
+        Fri, 29 Apr 2022 03:11:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651227064; x=1682763064;
+  h=from:to:cc:references:subject:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=5F+CvvFbQQEgAbWmyaDZMgf2egBra8v2iQ+XBITVM2E=;
+  b=EGFlpe+0tjosVJ0qSFA+jbBfN5eS9lrQkR7XHEDJJlKGWeAdkQpSvDhc
+   Rho0/sMHiP7pHJ5khFMM9W+Gawm1HHpVF6we58bXtFLJnFgQMPgHWQzoC
+   Gyd7ZmwTroZPsVMaIORCzEdEh6X6i0WGQa9j6c7/WnynK01aq3JD6ihUa
+   Cv57iCN+U6EH9A+QHf7nWGSmksgO6/ALw15u2Tkkk5qF6mF4sdbWlVKci
+   sOx8zDYFKRcGoBgNGEVR+OsxCbecZbwaoOOqvS5zaO7+EPYWbTuxeUo6x
+   cshmU2FHzipnryE7C7qijLuHGLImKL/Z3zZO58R2InriMgcAhVKA7WBdv
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="291768859"
+X-IronPort-AV: E=Sophos;i="5.91,298,1647327600"; 
+   d="scan'208";a="291768859"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 03:11:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,298,1647327600"; 
+   d="scan'208";a="880680647"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga005.fm.intel.com with ESMTP; 29 Apr 2022 03:11:02 -0700
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     Mayank Rana <quic_mrana@quicinc.com>, peter.chen@kernel.org,
+        balbi@kernel.org, stern@rowland.harvard.edu,
+        chunfeng.yun@mediatek.com, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <1651172688-21439-1-git-send-email-quic_mrana@quicinc.com>
+ <71347c81-3887-d80e-707b-c0f1018b1a50@linux.intel.com>
+Subject: Re: [PATCH RESEND] xhci: Use xhci_get_virt_ep() to validate ep_index
+Message-ID: <06d5e94f-1c3b-9ab1-b4ff-79007026585a@linux.intel.com>
+Date:   Fri, 29 Apr 2022 13:13:01 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220429101503.4048db5b@sal.lan>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <71347c81-3887-d80e-707b-c0f1018b1a50@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 10:15:03AM +0100, Mauro Carvalho Chehab wrote:
-> HI Greg,
+On 29.4.2022 12.49, Mathias Nyman wrote:
+> On 28.4.2022 22.04, Mayank Rana wrote:
+>> ring_doorbell_for_active_rings() API is being called from
+>> multiple context. This specific API tries to get virt_dev
+>> based endpoint using passed slot_id and ep_index. Some caller
+>> API is having check against slot_id and ep_index using
+>> xhci_get_virt_ep() API whereas xhci_handle_cmd_config_ep() API
+>> only check ep_index against -1 value but not upper bound i.e.
+>> EP_CTX_PER_DEV. Hence use xhci_get_virt_ep() API to get virt_dev
+>> based endpoint which checks both slot_id and ep_index to get
+>> valid endpoint.
 > 
-> Em Fri, 29 Apr 2022 10:30:33 +0200
-> Greg KH <gregkh@linuxfoundation.org> escreveu:
+> ep_index upper bound is known to be in range as EP_CTX_PER_DEV is 31,
+> and ep_index = fls(u32 value)  - 1 - 1; 
 > 
-> > On Fri, Apr 29, 2022 at 09:07:57AM +0100, Mauro Carvalho Chehab wrote:
-> > > Hi Daniel,
-> > > 
-> > > Em Fri, 29 Apr 2022 09:54:10 +0200
-> > > Daniel Vetter <daniel@ffwll.ch> escreveu:
-> > >   
-> > > > On Fri, Apr 29, 2022 at 07:31:15AM +0100, Mauro Carvalho Chehab wrote:  
-> > > > > Sometimes, device drivers are bound using indirect references,
-> > > > > which is not visible when looking at /proc/modules or lsmod.
-> > > > > 
-> > > > > Add a function to allow setting up module references for such
-> > > > > cases.
-> > > > > 
-> > > > > Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-> > > > > Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>    
-> > > > 
-> > > > This sounds like duct tape at the wrong level. We should have a
-> > > > device_link connecting these devices, and maybe device_link internally
-> > > > needs to make sure the respective driver modules stay around for long
-> > > > enough too. But open-coding this all over the place into every driver that
-> > > > has some kind of cross-driver dependency sounds terrible.
-> > > > 
-> > > > Or maybe the bug is that the snd driver keeps accessing the hw/component
-> > > > side when that is just plain gone. Iirc there's still fundamental issues
-> > > > there on the sound side of things, which have been attempted to paper over
-> > > > by timeouts and stuff like that in the past instead of enforcing a hard
-> > > > link between the snd and i915 side.  
-> > > 
-> > > I agree with you that the device link between snd-hda and the DRM driver
-> > > should properly handle unbinding on both directions. This is something
-> > > that require further discussions with ALSA and DRM people, and we should
-> > > keep working on it.
-> > > 
-> > > Yet, the binding between those drivers do exist, but, despite other
-> > > similar inter-driver bindings being properly reported by lsmod, this one
-> > > is invisible for userspace.
-> > > 
-> > > What this series does is to make such binding visible. As simple as that.  
-> > 
-> > It also increases the reference count, and creates a user/kernel api
-> > with the symlinks, right?  Will the reference count increase prevent the
-> > modules from now being unloadable?
-> >
-> > This feels like a very "weak" link between modules that should not be
-> > needed if reference counting is implemented properly (so that things are
-> > cleaned up in the correct order.)
+> We can change to use xhci_get_virt_ep(), but this would be more useful
+> earlier in xhci_handle_cmd_config_ep() where we touch the ep before
+> calling ring_doorbell_for_active_rings()
 > 
-> The refcount increment exists even without this patch, as
-> hda_component_master_bind() at sound/hda/hdac_component.c uses 
-> try_module_get() when it creates the device link.
 
-Ok, then why shouldn't try_module_get() be creating this link instead of
-having to manually do it this way again?  You don't want to have to go
-around and add this call to all users of that function, right?
+After a second look I would appreciate if you could clean up
+ep_index checking in xhci_handle_cmd_config_ep()
 
-thanks,
+It currenty does some horrible typecasting.
+ep_index is an unsigned int, so the fls() -1 operation might wrap it around.
+Checking this was solved by typecasting a -1 to an unsigned int.
 
-greg k-h
+if (ep_index != (unsigned int) -1)
+
+Thanks
+Mathias
+
+

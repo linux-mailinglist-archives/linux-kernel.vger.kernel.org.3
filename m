@@ -2,102 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2521A515519
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:03:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 668F5515526
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380505AbiD2UGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 16:06:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43370 "EHLO
+        id S1380549AbiD2UI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 16:08:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359680AbiD2UGl (ORCPT
+        with ESMTP id S1379474AbiD2UIu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 16:06:41 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246BA5E15A
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:03:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651262603; x=1682798603;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0ymsGuVGiQkzKv0D0VHC2+g9zkH/MqaGyM3EvyGSejs=;
-  b=nClMmWJua2TSBDs08TihtWi+DcjnqluHdOuZsntOp5BbIFDPQ2L+mUxw
-   YyqFh9ttNK8nzf02VLAZYHEAZuqLfGKZj+aYmyeJPpC+hOx6Moi2l/X4i
-   8Ow/CurUYOqAKd/9kbOQhyXNiBGeCRyIEGPvh+ZF0dpD8w7e9ekfi1F37
-   K1MGoSyL+NWol55xgwdsqL098a57Q+ZeX3vmMJcBcDWE9WLHX8JSlcfTr
-   FPy9IFuiAktWIINEYM3KRZOMpaWsIc9xY5IvJxjOUhmQD47E5MKBQPHhB
-   y27fJ9TvQ/QvfwvN8924XXr/c/P2vI6734KBAC5GywqKTvEzGkGfNEIj7
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="266919560"
-X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
-   d="scan'208";a="266919560"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 13:03:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
-   d="scan'208";a="534666456"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 29 Apr 2022 13:03:21 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nkWpk-0006al-UP;
-        Fri, 29 Apr 2022 20:03:20 +0000
-Date:   Sat, 30 Apr 2022 04:02:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mark:arm64/ftrace/per-callsite-ops 4/6] kernel/exit.c:1815:
- multiple definition of `abort';
- arch/arc/kernel/traps.o:arch/arc/kernel/traps.c:158: first defined here
-Message-ID: <202204300335.TrNu3DnY-lkp@intel.com>
+        Fri, 29 Apr 2022 16:08:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 639226A034
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:05:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651262728;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Xh8dSPuYVd16pGU1eOSrw4RK/14MRTLIpBGTzg2s4yA=;
+        b=Fg3AElSdPM/VIiWvP9qm46LTdqU06KEAtSxlY1D3NR4nmlXzsix0Xj8F1/Ryxzi4gdAFZc
+        YtCZkLLFxWoVYyQdpsaQa8G92HJP8a4PL6G8ed5sfJmL/yE5U4IlCaXwbfLoDIxoPp045e
+        riIAd1dcALiuRskqbn/DsQD1DAas/SA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-463-esZLPebUMWGXCyP_e6a1-g-1; Fri, 29 Apr 2022 16:05:24 -0400
+X-MC-Unique: esZLPebUMWGXCyP_e6a1-g-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 032C7281182B;
+        Fri, 29 Apr 2022 20:05:24 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.213])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BB3BCC28100;
+        Fri, 29 Apr 2022 20:05:22 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH net] rxrpc: Enable IPv6 checksums on transport socket
+From:   David Howells <dhowells@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     Marc Dionne <marc.dionne@auristor.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Vadim Fedorenko <vfedorenko@novek.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-afs@lists.infradead.org, dhowells@redhat.com,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 29 Apr 2022 21:05:16 +0100
+Message-ID: <165126271697.1384698.4579591150130001289.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/ftrace/per-callsite-ops
-head:   2aaba224d039a36f7eca5ad68c77686d3546e4fa
-commit: be98798b102a3e28fa0832c9c0473f42e14abe8b [4/6] HACK: arm64: ftrace: align pre-function literal pool
-config: arc-randconfig-r043-20220428 (https://download.01.org/0day-ci/archive/20220430/202204300335.TrNu3DnY-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=be98798b102a3e28fa0832c9c0473f42e14abe8b
-        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
-        git fetch --no-tags mark arm64/ftrace/per-callsite-ops
-        git checkout be98798b102a3e28fa0832c9c0473f42e14abe8b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
+AF_RXRPC doesn't currently enable IPv6 UDP Tx checksums on the transport
+socket it opens and the checksums in the packets it generates end up 0.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+It probably should also enable IPv6 UDP Rx checksums and IPv4 UDP
+checksums.  The latter only seem to be applied if the socket family is
+AF_INET and don't seem to apply if it's AF_INET6.  IPv4 packets from an
+IPv6 socket seem to have checksums anyway.
 
-All errors (new ones prefixed by >>):
+What seems to have happened is that the inet_inv_convert_csum() call didn't
+get converted to the appropriate udp_port_cfg parameters - and
+udp_sock_create() disables checksums unless explicitly told not too.
 
-   arceb-elf-ld: kernel/exit.o: in function `abort':
->> kernel/exit.c:1815: multiple definition of `abort'; arch/arc/kernel/traps.o:arch/arc/kernel/traps.c:158: first defined here
+Fix this by enabling the three udp_port_cfg checksum options.
+
+Fixes: 1a9b86c9fd95 ("rxrpc: use udp tunnel APIs instead of open code in rxrpc_open_socket")
+Reported-by: Marc Dionne <marc.dionne@auristor.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+Reviewed-by: Xin Long <lucien.xin@gmail.com>
+Reviewed-by: Marc Dionne <marc.dionne@auristor.com>
+cc: Vadim Fedorenko <vfedorenko@novek.ru>
+cc: David S. Miller <davem@davemloft.net>
+cc: linux-afs@lists.infradead.org
+---
+
+ net/rxrpc/local_object.c |    3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/net/rxrpc/local_object.c b/net/rxrpc/local_object.c
+index a4111408ffd0..6a1611b0e303 100644
+--- a/net/rxrpc/local_object.c
++++ b/net/rxrpc/local_object.c
+@@ -117,6 +117,7 @@ static int rxrpc_open_socket(struct rxrpc_local *local, struct net *net)
+ 	       local, srx->transport_type, srx->transport.family);
+ 
+ 	udp_conf.family = srx->transport.family;
++	udp_conf.use_udp_checksums = true;
+ 	if (udp_conf.family == AF_INET) {
+ 		udp_conf.local_ip = srx->transport.sin.sin_addr;
+ 		udp_conf.local_udp_port = srx->transport.sin.sin_port;
+@@ -124,6 +125,8 @@ static int rxrpc_open_socket(struct rxrpc_local *local, struct net *net)
+ 	} else {
+ 		udp_conf.local_ip6 = srx->transport.sin6.sin6_addr;
+ 		udp_conf.local_udp_port = srx->transport.sin6.sin6_port;
++		udp_conf.use_udp6_tx_checksums = true;
++		udp_conf.use_udp6_rx_checksums = true;
+ #endif
+ 	}
+ 	ret = udp_sock_create(net, &udp_conf, &local->socket);
 
 
-vim +1815 kernel/exit.c
-
-38fd525a4c61e7e Eric W. Biederman 2020-07-01  1813  
-be98798b102a3e2 Mark Rutland      2022-04-29  1814  void __aligned(8) abort(void)
-7c2c11b208be09c Sudip Mukherjee   2017-12-14 @1815  {
-
-:::::: The code at line 1815 was first introduced by commit
-:::::: 7c2c11b208be09c156573fc0076b7b3646e05219 arch: define weak abort()
-
-:::::: TO: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

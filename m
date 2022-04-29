@@ -2,100 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3149C5149F6
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:53:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B18A2514A11
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:57:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359594AbiD2Mzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 08:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56174 "EHLO
+        id S1359615AbiD2NAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 09:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359582AbiD2Mzp (ORCPT
+        with ESMTP id S1344014AbiD2NAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 08:55:45 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88DE7CAB95;
-        Fri, 29 Apr 2022 05:52:25 -0700 (PDT)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TCGbI6030219;
-        Fri, 29 Apr 2022 12:52:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : to : cc : references : from : subject : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=Ta1fyNf2U9jHeIRottQ/e61hn8ynFzXkSkb2SGz6/B0=;
- b=RyGh37gAnjuCCJYq3xyCOOUpKY9gP9mR89UyBS+bguTbFTI819tPxrwlmM4VUIJOYFw2
- cmR9FNJ0vvFJ9Z6GiOKFFPZaU0yFiz9XC4OxqFsVMss1Svjs3L0vLquW7ctOu7EQJApS
- 5D+6MVtLen/zX+GbGQsvn19LPK3zzQzbMLdJEmfWUdVcZC0ikitvD9VQ9OZlaS0mR9Kp
- VKrGNx6GywA6hzcaYLmwXx7mkgaaV9OglcTrJGsKX5Q8yjLqPmuptcfgVOCqlRM2aqwE
- 8Z+vPABnvxqo+OfU+iKz1cxIycirSVy+baS+8hSv1y6zqgwVkTES/ik0VjDt9iMYV3qg Ww== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqtvxkk63-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 12:52:20 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TCl5nm017236;
-        Fri, 29 Apr 2022 12:52:18 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03ams.nl.ibm.com with ESMTP id 3fm93915dn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 12:52:18 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TCqFuj42860830
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 29 Apr 2022 12:52:15 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 265B1AE051;
-        Fri, 29 Apr 2022 12:52:15 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C0B1DAE045;
-        Fri, 29 Apr 2022 12:52:14 +0000 (GMT)
-Received: from [9.145.33.84] (unknown [9.145.33.84])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 29 Apr 2022 12:52:14 +0000 (GMT)
-Message-ID: <c1e91fc0-3d0e-979b-358b-01237a677b0a@linux.ibm.com>
-Date:   Fri, 29 Apr 2022 14:52:14 +0200
+        Fri, 29 Apr 2022 09:00:33 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AEC93614F;
+        Fri, 29 Apr 2022 05:57:15 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id t6so10703334wra.4;
+        Fri, 29 Apr 2022 05:57:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ePG6wKCbyk/Ae1arQi0XeTIwAd5LTspuTNbaM+4UP34=;
+        b=UhDeT+7OtGdUNKYaRyYzF4YBjNiqiG5cYbp0NWSnSrluhsGjG6xPIOa/eMOslCx/VC
+         t5MHMquFHD0iip2929xPOiKtfcZ7f7Kqyne/BGIHZtW0+1IXEEnNWPhHLQuKrUfZm56I
+         9MWvhTeIbw3HTkCcUtk4saxKmzHFZqX3ZCB+WWrtNtRnHsgon3MF5RqJ9xvGQws7/0mS
+         b+KAA0MqsPPuKd+MsdTJD2DsZatnp/1g7cxsoG0dVaw4lhJmg2PfwCrWeXpcHA3xyvHa
+         1U/RSSLyuPWacNUUqAFTW/EiOcufG4eM4aUy+7Ho0cBqUS68URBRmHKyevMB67igwyIh
+         HVWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ePG6wKCbyk/Ae1arQi0XeTIwAd5LTspuTNbaM+4UP34=;
+        b=cUxDGHO4/+GDTEfKCUQMnCWb9G8CGudVIPPvyNCXWoSj9DCy71E1Qhy6/oPDtnd8VR
+         QFv4Lqcl9OssSSPmJy/+ZsK/H5Wpyi3L3VLg60bSKDfpmr+tpNCUbWgNC0qi4zzBt0ul
+         RMYmR3CH9o8mYWQX7vDr6bFhU6FaevVXF/05kgCqldwxXdoOBL2oN/oGgLv86I1VJlCE
+         0HPOSzXbL3ji9AtzDBO3E/jCmEz1yVzV0cY0/4wdEDmAdPVPqTOKa+gYeWJP64CV1I2k
+         Bu0JqoDk610ohfv8gOJJduSRd25CrXwa6ZePeMPR0PvGQJhx9MSssl1USi1wsSU8Dw/q
+         qzSg==
+X-Gm-Message-State: AOAM533Ao4mzp0dUJc/ksf9XVKhSxVx6sIhYrE+X9wuq2rfyVPr60jln
+        0/ku+6k0emV/Mi7ljQoJISo=
+X-Google-Smtp-Source: ABdhPJx9iOmaDdFy/exNMf07wrNEg2EtThd5KGiPKJ773aQXEiQRCBTb7PUS/mCPw+1r7dSeJNOlxg==
+X-Received: by 2002:adf:ec92:0:b0:20a:d261:2cf2 with SMTP id z18-20020adfec92000000b0020ad2612cf2mr25223015wrn.296.1651237034054;
+        Fri, 29 Apr 2022 05:57:14 -0700 (PDT)
+Received: from [192.168.0.43] (static-35-180-85-188.ipcom.comunitel.net. [188.85.180.35])
+        by smtp.gmail.com with ESMTPSA id h9-20020a05600c350900b00393f01c8f00sm6986212wmq.47.2022.04.29.05.57.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 05:57:13 -0700 (PDT)
+Message-ID: <cf9b425e-84ff-af12-72a7-4056b8cbf90d@gmail.com>
+Date:   Fri, 29 Apr 2022 14:57:12 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4] dt-bindings: dsp: mediatek: add mt8195 dsp document
 Content-Language: en-US
-To:     Haowen Bai <baihaowen@meizu.com>, svens@linux.ibm.com
-Cc:     agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        gor@linux.ibm.com, hca@linux.ibm.com, hoeppner@linux.ibm.com,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-References: <yt9dilr539wq.fsf@linux.ibm.com>
- <1650348310-18553-1-git-send-email-baihaowen@meizu.com>
-From:   Stefan Haberland <sth@linux.ibm.com>
-Subject: Re: [PATCH V2] s390/dasd: Use kzalloc instead of kmalloc/memset
-In-Reply-To: <1650348310-18553-1-git-send-email-baihaowen@meizu.com>
+To:     YC Hung <yc.hung@mediatek.com>, Rob Herring <robh@kernel.org>,
+        broonie@kernel.org
+Cc:     robh+dt@kernel.org, daniel.baluta@nxp.com, trevor.wu@mediatek.com,
+        tiwai@suse.com, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, cezary.rojewski@intel.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        allen-kh.cheng@mediatek.com
+References: <20220106064847.15588-1-yc.hung@mediatek.com>
+ <Yd4yNkeGlzdULNlv@robh.at.kernel.org>
+ <68895a40-559b-13ce-d433-f9b32c648323@gmail.com>
+ <9965188904de2e89bc5390fa6c71d9fb243f9d12.camel@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <9965188904de2e89bc5390fa6c71d9fb243f9d12.camel@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: QnLeZxH7AmxS8Dv7Tbn-DWKMe5Vj0fJj
-X-Proofpoint-GUID: QnLeZxH7AmxS8Dv7Tbn-DWKMe5Vj0fJj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-29_06,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- lowpriorityscore=0 priorityscore=1501 spamscore=0 suspectscore=0
- clxscore=1011 mlxscore=0 impostorscore=0 mlxlogscore=620 adultscore=0
- phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204290072
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 19.04.22 um 08:05 schrieb Haowen Bai:
-> Use kzalloc rather than duplicating its implementation, which
-> makes code simple and easy to understand.
->
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
-> ---
-> V1->V2: also remove the isglobal assigment above, so the whole else block
-> could go away
+Hi,
 
-thanks, applied!
+On 29/04/2022 07:59, YC Hung wrote:
+> Hi Mattias/Rob,
+> 
+> Sorry I miss this mail.
+> Could you please help to check this patch? Thanks.
+> 
 
+Rob gave his reviewed-by. I just saw that the driver maintainer is Mark, so I 
+expect him to take the patch through his tree. Didn't realized this beforehand.
+
+Regards,
+Matthias
+
+> On Fri, 2022-01-14 at 13:56 +0100, Matthias Brugger wrote:
+>>
+>> On 12/01/2022 02:43, Rob Herring wrote:
+>>> On Thu, 06 Jan 2022 14:48:48 +0800, YC Hung wrote:
+>>>> From: "YC Hung" <yc.hung@mediatek.com>
+>>>>
+>>>> This patch adds mt8195 dsp document. The dsp is used for Sound
+>>>> Open
+>>>> Firmware driver node. It includes registers,  clocks, memory
+>>>> regions,
+>>>> and mailbox for dsp.
+>>>>
+>>>> Signed-off-by: yc.hung <yc.hung@mediatek.com>
+>>>> ---
+>>>> Changes since v3:
+>>>>     Fix patch v3 error : v3 only provide difference between v3 and
+>>>> v2.
+>>>>
+>>>> Changes since v2:
+>>>>     Remove useless watchdog interrupt.
+>>>>     Add commit message more detail description.
+>>>>
+>>>> Changes since v1:
+>>>>     Rename yaml file name as mediatek,mt8195-dsp.yaml
+>>>>     Refine descriptions for mailbox, memory-region and drop unused
+>>>> labels
+>>>>     in examples.
+>>>> ---
+>>>>    .../bindings/dsp/mediatek,mt8195-dsp.yaml     | 105
+>>>> ++++++++++++++++++
+>>>>    1 file changed, 105 insertions(+)
+>>>>    create mode 100644
+>>>> Documentation/devicetree/bindings/dsp/mediatek,mt8195-dsp.yaml
+>>>>
+>>>
+>>> Reviewed-by: Rob Herring <robh@kernel.org>
+>>>
+>>
+>> Rob, it seems we don't have a maintainer for this bindings. Shall I
+>> as MediaTek
+>> SoC maintainer take them through my branch?
+>>
+>> Regards,
+>> Matthias
+> 

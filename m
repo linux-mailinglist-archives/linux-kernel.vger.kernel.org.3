@@ -2,106 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94640514571
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 11:29:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4907514572
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 11:30:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356613AbiD2Jc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 05:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57994 "EHLO
+        id S1356605AbiD2JdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 05:33:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356605AbiD2Jcx (ORCPT
+        with ESMTP id S230112AbiD2JdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 05:32:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2849DC44EA
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 02:29:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651224575;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QgB5yaRKGIdlayUhadpAeJYzfWS9JALUqL7mNuN6Qd8=;
-        b=CAhtVp3zNbd5IpGLIyzp6OKgW4wohBslgsOsmBvRCbG4E7i4DJgbW+Ic0ZxQJE5qIsury/
-        SMhLkUCeOKyRYigQUNPOjrZSfc9UWaPVxvSqaimLLvYr/HP2R/NO5wst3WUIwpcFsdtBRe
-        pp7Vw6RyiRtzgRAy3Ks8ikK2sagjcNs=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-466-MSGFfOsyNr2xevOI8XMcfA-1; Fri, 29 Apr 2022 05:29:33 -0400
-X-MC-Unique: MSGFfOsyNr2xevOI8XMcfA-1
-Received: by mail-wm1-f72.google.com with SMTP id t184-20020a1c46c1000000b00394209f54f1so331109wma.4
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 02:29:33 -0700 (PDT)
+        Fri, 29 Apr 2022 05:33:09 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0652C614D
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 02:29:51 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id o12-20020a1c4d0c000000b00393fbe2973dso5758453wmh.2
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 02:29:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=1MyhhFYEeSD9zQYISI8s6nLa2ASKBW+XmNaefebTQPo=;
+        b=sXxuGfSQ741ibtQ3ydnNwxo0fHiRQd1OA2QI43r3BEf3F+YHfOEqdRF5oXKN3x9p0q
+         A0ymYbfTfsAYNLsv5qxofQbGQBu1/A1bEcZx/FCVNT6RdNewvI2nTZObcKfVKupNhwaN
+         wy/SeA5NhmBlqmzaTNklAfsCb3ZQTizF2sFWMKBIFBjyWe043g5aZ+Q21Ypxwm/0FK67
+         lB/0/qCM4NUdeTxzM3RTcSa863TZAXG8N/p2WulSC9H5YqDOalbQgYrsQTGJhevBuT2R
+         z/wkweDDlBe8QM3rNrBmiERCl6/d2kczn20RfnwYxegwES0Z3T2kg7a5JvkrqlrSN7DZ
+         96mA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:organization:in-reply-to
+         :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=QgB5yaRKGIdlayUhadpAeJYzfWS9JALUqL7mNuN6Qd8=;
-        b=YyK44WS5ckvzIWHqmmk28a8Upc9+N9XYHMhUOxKDP+8EVGbEuLLEpENTiHKzm5A/z5
-         JgHcvJzlWDxHwPt2NBoupj6G5tWjxSVTSJGLwrHEGO8oTI45FfaDi9EdwgS8amZbERfh
-         EI0gBOfBOXhBXhE3m8qe1SFIIVaoSuZbUN7jn8oWpzFiF+LTyQSPvSYNdRYxHuTf3DY5
-         yltkS5xuRKo2enouY6dcQIiqpgcnc2qfolQGbLguflxUSUwXX6ZleLnTgdM+0Dlo1oww
-         hO1JYt99uVGfkQz3zPCbheCGKwlzRFAJMpQS1zM6Jc8MrsBcs0pUkN883g1m3tY57c4T
-         k32g==
-X-Gm-Message-State: AOAM533BdkuMJwPRYtecNoqgi6MhaiOAlZCT9YqlSVi07cg7sI9Lc2nI
-        jgE+qKANAH5Pt0fh5bbKbhLjPdho10kApEsx0qTUcsdTYFuVUu0+djV4m1sltEoiPXv8evh5hca
-        hGRttio3Maz4aawZxWrK28xLA
-X-Received: by 2002:a05:600c:1e1d:b0:394:2183:e75c with SMTP id ay29-20020a05600c1e1d00b003942183e75cmr1449447wmb.203.1651224572507;
-        Fri, 29 Apr 2022 02:29:32 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwkEWzgTJZjaYtD3yVNYsqURSYJbIbWoBwBM9HWJh9gbQs/M7ikohXN+kV9+WxpKCCTka/Prw==
-X-Received: by 2002:a05:600c:1e1d:b0:394:2183:e75c with SMTP id ay29-20020a05600c1e1d00b003942183e75cmr1449435wmb.203.1651224572300;
-        Fri, 29 Apr 2022 02:29:32 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:fe00:bbeb:98e6:617a:dea1? (p200300cbc707fe00bbeb98e6617adea1.dip0.t-ipconnect.de. [2003:cb:c707:fe00:bbeb:98e6:617a:dea1])
-        by smtp.gmail.com with ESMTPSA id q14-20020a1cf30e000000b0038986a18ec8sm2140400wmq.46.2022.04.29.02.29.31
+        bh=1MyhhFYEeSD9zQYISI8s6nLa2ASKBW+XmNaefebTQPo=;
+        b=4I1I2pQ6RP6ovLTjwtkUCv9A1QllyQ6PgW/hq3oiQU/5+z6qUwvxD7LTYmizgy48mR
+         rMY+xiXKqJcZy6Gk+4sleM2t9oTwcBzDWRC7IbJp61NC1VBamoabND7l5IiBGCuQRQb5
+         Cu78gzNe8XoRxZ6Xg2m7XxNngDDRAYD26BpwYiNfhHD6FA+K900/y8B2Dr5KxENcdjJk
+         S+p80H+7O6tLLCn3vhHYL44HB30/Kwrz5Q33knyU+9kHzbCvst3nTAh8OeD9TNk+43U4
+         eD6r8fjyVVxOZDhe0rQ3+oIPn7cZEGEv32EPgbK/YPMEfpVxTMktrGaq3gVQkmGMYNnX
+         kX7A==
+X-Gm-Message-State: AOAM530LghkenMaBAjHA/ycsm84QhPSDDBBQJ8nZDqf/CK/cgwKuAEOH
+        qv7Dk4DsydSZgvBCP0HGPXyndw==
+X-Google-Smtp-Source: ABdhPJyxo9b2ExqDywUnZThZApFldqKWs8JKR72wzfkINEHl+taZ1reZ0AEqcqfefic7cfSyZAZTdw==
+X-Received: by 2002:a05:600c:4146:b0:38e:bd41:39a2 with SMTP id h6-20020a05600c414600b0038ebd4139a2mr2319219wmm.18.1651224590451;
+        Fri, 29 Apr 2022 02:29:50 -0700 (PDT)
+Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id a18-20020adffb92000000b00207a257d47asm1977016wrr.95.2022.04.29.02.29.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 02:29:31 -0700 (PDT)
-Message-ID: <95216c6f-0614-cadc-d256-92a172d8b8cd@redhat.com>
-Date:   Fri, 29 Apr 2022 11:29:30 +0200
+        Fri, 29 Apr 2022 02:29:49 -0700 (PDT)
+Message-ID: <a04e9d8e-33e4-a8a3-e4be-e4c098fe4b07@linaro.org>
+Date:   Fri, 29 Apr 2022 10:29:48 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v4] mm: Using for_each_online_node and node_online instead
- of open coding
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/3] nvmem: bcm-ocotp: mark ACPI device ID table as maybe
+ unused
 Content-Language: en-US
-To:     Peng Liu <liupeng256@huawei.com>, mike.kravetz@oracle.com,
-        akpm@linux-foundation.org, yaozhenguo1@gmail.com,
-        baolin.wang@linux.alibaba.com, songmuchun@bytedance.com,
-        liuyuntao10@huawei.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, wangkefeng.wang@huawei.com,
-        dave@stgolabs.net, wangborong@cdjrlc.com,
-        linux-ia64@vger.kernel.org, adobriyan@gmail.com
-References: <20220413032915.251254-4-liupeng256@huawei.com>
- <20220429030218.644635-1-liupeng256@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220429030218.644635-1-liupeng256@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Vincent Shih <vincent.sunplus@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+References: <20220321110326.44652-1-krzk@kernel.org>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20220321110326.44652-1-krzk@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29.04.22 05:02, Peng Liu wrote:
-> Use more generic functions to deal with issues related to online
-> nodes. The changes will make the code simplified.
+
+
+On 21/03/2022 11:03, Krzysztof Kozlowski wrote:
+> "bcm_otpc_acpi_ids" is used with ACPI_PTR, so a build with !CONFIG_ACPI
+> has a warning:
 > 
-> Signed-off-by: Peng Liu <liupeng256@huawei.com>
-> Suggested-by: Davidlohr Bueso <dave@stgolabs.net>
-> Suggested-by: Andrew Morton <akpm@linux-foundation.org>
+>    drivers/nvmem/bcm-ocotp.c:247:36: error:
+>      ‘bcm_otpc_acpi_ids’ defined but not used [-Werror=unused-const-variable=]
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+
+
+Applied all thanks,
+--srini
 > ---
-
-Reviewed-by: David Hildenbrand <david@redhat.com>
-
-
--- 
-Thanks,
-
-David / dhildenb
-
+>   drivers/nvmem/bcm-ocotp.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/nvmem/bcm-ocotp.c b/drivers/nvmem/bcm-ocotp.c
+> index a8097511582a..dfea96c52463 100644
+> --- a/drivers/nvmem/bcm-ocotp.c
+> +++ b/drivers/nvmem/bcm-ocotp.c
+> @@ -244,7 +244,7 @@ static const struct of_device_id bcm_otpc_dt_ids[] = {
+>   };
+>   MODULE_DEVICE_TABLE(of, bcm_otpc_dt_ids);
+>   
+> -static const struct acpi_device_id bcm_otpc_acpi_ids[] = {
+> +static const struct acpi_device_id bcm_otpc_acpi_ids[] __maybe_unused = {
+>   	{ .id = "BRCM0700", .driver_data = (kernel_ulong_t)&otp_map },
+>   	{ .id = "BRCM0701", .driver_data = (kernel_ulong_t)&otp_map_v2 },
+>   	{ /* sentinel */ }

@@ -2,80 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9A4C5152EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:48:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B93AA5152F6
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:48:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379796AbiD2Rvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 13:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33908 "EHLO
+        id S1379803AbiD2RwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 13:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376940AbiD2Rvg (ORCPT
+        with ESMTP id S1379808AbiD2Rv6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 13:51:36 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16AD99398A
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:48:18 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id iq10so7753722pjb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:48:18 -0700 (PDT)
+        Fri, 29 Apr 2022 13:51:58 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E046AD3D90;
+        Fri, 29 Apr 2022 10:48:38 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id m11so9239827oib.11;
+        Fri, 29 Apr 2022 10:48:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=37m6AzyYfkWStvf9aJw8Jy6UEa2JtWYvi+mVWOmJgUs=;
-        b=CY7TQ3+aM1g21qm98sbu+VQVCl+OjwURQv8jUnuInDt0Z9NAiPnAI0hrukouhWApU0
-         MbPZidJeo8qd5VXc6GFDYxYegOTPyhMCEPL+rH0Ft9Pesb4Vz46Sv1LogiN+wfuj+IUN
-         w/5cjOPiPfoOk2GL+4YQvbBvvwtU+C52KJh/NdofO1bTC/H+F+Pomhfs8Nwv0nwGTPAs
-         n0UWga4gSGPBbV0N+zG7g4gY1mdqJgYxyy2MCI+IlYCpASJFGE9/tWhhiu27VInerF5Y
-         xYpzxCnZgsxP8PXGiozY6STFSZjXbdszLDjlHHSV2r47RTXjtZA19PHwTJ6i3pyTWmwi
-         Hu9Q==
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=m5t7cdt/CWgC/r7ZaFwRZ/Pe0JhVgK8SGggmxnAqq8E=;
+        b=OnQlHi3ErSMC6qSiLPAQK9tsaNNmGUsK/yx8P84vl8ZH25FjCToTTPCP6xYzUtp823
+         nQu8zFOChn7TRclx0bhUluxvWGG31ISy3vYfQGsDQqCS3EjmUrqIVRNyq2psGtG3IDpi
+         1W6Ytq3a5RYAKQBAidu7fUxQYTQpt+5vW3SEkCPANbWWQlmsLBqc9x1cEkbQPaLnW01H
+         /gSIWuD7kQ5j7LODOU/HAxL6B5EQxZzhqJDbdqVUp7cmUle2rokPIwVHwnAzyzTxiKGl
+         riWnsbp5SbzhiGJgU3qP8CBvVkoxV+4fTE0nup4rFZ2hllcAmSpZXHHWttMly/Jd1ESk
+         NA5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=37m6AzyYfkWStvf9aJw8Jy6UEa2JtWYvi+mVWOmJgUs=;
-        b=tUCfnYLRBeBkjsG+z8xhoeY4Bv07UxYudf7BoZaWZxw1nBdtV2VzSszL8DCGcWh0+q
-         I4NNDCiLD6biAOBfTkgE4BgGm1TR5bqEZbxJz6g16uERiRiqrz/g1U7hrjFOIWL8MyjX
-         Zn+Lx/76zw1qPD4l/DBzx1OJJ+drBVfkMnW9MqkDAp9bGNsrZ75kwo/7CDM+HiKy18KI
-         lNBNt4Wkqpo0K0Fj4ybzfGXNglHmDyxRj4lw8rpo+2sqTD/MMfNtNSEMY2KlNtNblz6x
-         b+Vi/HAxgGKo9sJu9VJWdX8ZM65gfBhJQhnBRtv7dDM9tXI2Cx91BT72gnhIbYUz1AoV
-         UOiw==
-X-Gm-Message-State: AOAM533bdExlH6GQybC5gbnT0/fqt4C0byCScu7pHjIUFJDUvKlF2rpt
-        HnIjeaHpfGNv8lok98twd0UZl9d8O8Ml179fAAYLiw==
-X-Google-Smtp-Source: ABdhPJzTBafb0KnPGjixKxzRN6So46mwnVHpVEuktSyjE2C0ju5wNupcx+O2sCAkCUTE8W8bCvfXLn4L1THnTHmDKi0=
-X-Received: by 2002:a17:90b:1e0f:b0:1d9:dba5:482c with SMTP id
- pg15-20020a17090b1e0f00b001d9dba5482cmr286745pjb.220.1651254497576; Fri, 29
- Apr 2022 10:48:17 -0700 (PDT)
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=m5t7cdt/CWgC/r7ZaFwRZ/Pe0JhVgK8SGggmxnAqq8E=;
+        b=udmPLQBOZ0l0YxVOjotvF9nbHe5bj0fFvHlEfo190PuI0Y0u0HSbhBqy8Y3WAFVMmc
+         zU5QqximbdIUopnrej6PQSFEKvupe3fZIgRz1pEjegLnyrqguPoTaoLy0aHChaBFTAcG
+         fWmDV93KiodLGEeM8Ysk7+FcvAI1YRUMlNR6wGFUYT9Kq+4tkLd1TR2eA6gaxXW/XBNN
+         MV3d0//EYER7AzemZWUeWestg/pOil66ViLoX5lrp8b4pyUHswsIGssCQ//TJtPre7mV
+         GR/ELhsXBJAKuWXCY5QELuHRDRmdrbvg4yZCS0uFjZt7XkIq1AuE6pmqkT0SxcDdiu87
+         aVEg==
+X-Gm-Message-State: AOAM533rAFbWNzed8JHj2loMEujnerVvJuj9A2OvVCDkgNcIXgwhoCAZ
+        pzqfnobXL0AntLf1UXJXTXk=
+X-Google-Smtp-Source: ABdhPJxkF8A90UBe5FIUXgDpVBp8codcF4hzbNyKrz59fIRSWDCgfC0jKHUvcyNxHQ5kW9qHkRB58A==
+X-Received: by 2002:a05:6808:11ca:b0:2d4:6861:2a9e with SMTP id p10-20020a05680811ca00b002d468612a9emr282421oiv.114.1651254518245;
+        Fri, 29 Apr 2022 10:48:38 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b7-20020a9d5d07000000b00605e7b6b19dsm1261051oti.39.2022.04.29.10.48.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 10:48:37 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <6f1b27fa-96d1-4be7-ac6a-762610314f2a@roeck-us.net>
+Date:   Fri, 29 Apr 2022 10:48:33 -0700
 MIME-Version: 1.0
-References: <cover.1649219184.git.kai.huang@intel.com> <522e37eb-68fc-35db-44d5-479d0088e43f@intel.com>
- <CAPcyv4g5E_TOow=3pFJXyFr=KLV9pTSnDthgz6TuXvru4xDzaQ@mail.gmail.com>
- <de9b8f4cef5da03226158492988956099199aa60.camel@intel.com>
- <CAPcyv4iGsXkHAVgf+JZ4Pah_fkCZ=VvUmj7s3C6Rkejtdw_sgQ@mail.gmail.com>
- <92af7b22-fa8a-5d42-ae15-8526abfd2622@intel.com> <CAPcyv4iG977DErCfYTqhVzuZqjtqFHK3smnaOpO3p+EbxfvXcQ@mail.gmail.com>
- <4a5143cc-3102-5e30-08b4-c07e44f1a2fc@intel.com>
-In-Reply-To: <4a5143cc-3102-5e30-08b4-c07e44f1a2fc@intel.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Fri, 29 Apr 2022 10:48:06 -0700
-Message-ID: <CAPcyv4i6X6ODNbOnT7+NEzpicLS4m9bNDybZLvN3gqXFTTf=mg@mail.gmail.com>
-Subject: Re: [PATCH v3 00/21] TDX host kernel support
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Kai Huang <kai.huang@intel.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+References: <20220419163810.2118169-1-arnd@kernel.org>
+ <20220422170530.GA2338209@roeck-us.net>
+ <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
+ <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net>
+ <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
+ <20220422234150.GA3442771@roeck-us.net>
+ <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
+ <3b4046ed-fd75-13ea-fac3-06469172806c@roeck-us.net>
+ <CAK8P3a1LzEG1vo+5nMrnL3TOMcbSKJ3u=StcfY8dajV2raUBjA@mail.gmail.com>
+ <3df135a2-17f5-d6c6-b4a8-e1a60e254297@roeck-us.net>
+ <CAK8P3a2EHMQPN4ny9sXXuReFG0jN0hyRV7h9v_AR_0pqpOU41w@mail.gmail.com>
+ <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,61 +118,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 10:18 AM Dave Hansen <dave.hansen@intel.com> wrote:
->
-> On 4/29/22 08:18, Dan Williams wrote:
-> > Yes, I want to challenge the idea that all core-mm memory must be TDX
-> > capable. Instead, this feels more like something that wants a
-> > hugetlbfs / dax-device like capability to ask the kernel to gather /
-> > set-aside the enumerated TDX memory out of all the general purpose
-> > memory it knows about and then VMs use that ABI to get access to
-> > convertible memory. Trying to ensure that all page allocator memory is
-> > TDX capable feels too restrictive with all the different ways pfns can
-> > get into the allocator.
->
-> The KVM users are the problem here.  They use a variety of ABIs to get
-> memory and then hand it to KVM.  KVM basically just consumes the
-> physical addresses from the page tables.
->
-> Also, there's no _practical_ problem here today.  I can't actually think
-> of a case where any memory that ends up in the allocator on today's TDX
-> systems is not TDX capable.
->
-> Tomorrow's systems are going to be the problem.  They'll (presumably)
-> have a mix of CXL devices that will have varying capabilities.  Some
-> will surely lack the metadata storage for checksums and TD-owner bits.
-> TDX use will be *safe* on those systems: if you take this code and run
-> it on one tomorrow's systems, it will notice the TDX-incompatible memory
-> and will disable TDX.
->
-> The only way around this that I can see is to introduce ABI today that
-> anticipates the needs of the future systems.  We could require that all
-> the KVM memory be "validated" before handing it to TDX.  Maybe a new
-> syscall that says: "make sure this mapping works for TDX".  It could be
-> new sysfs ABI which specifies which NUMA nodes contain TDX-capable memory.
+On 4/28/22 06:44, Arnd Bergmann wrote:
+> On Sun, Apr 24, 2022 at 8:48 PM Arnd Bergmann <arnd@kernel.org> wrote:
+>> On Sun, Apr 24, 2022 at 5:28 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>>> On 4/24/22 01:52, Arnd Bergmann wrote:
+>>>> On Sun, Apr 24, 2022 at 4:09 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>>>> into the defconfig file, otherwise the multiplatform target defaults to
+>>>> an ARMv7 instead of ARMv5 build. For an OMAP15xx as in the SX1,
+>>>> you also need to enable CONFIG_ARCH_MULTI_V4T.
+>>>>
+>>>> This is slightly unfortunate, but I don't see any way to avoid it, and the
+>>>> modified defconfig will still work fine with older kernel trees.
+>>>>
+>>>
+>>> Yes, that works. I changed it in my configuration.
+>>
+>> Ok, great!. I managed to boot the z2 machine with PCMCIA support
+>> and it gets around the issue with my patch, correctly detecting the
+>> CF card.
+> 
+> Hi Guenter,
+> 
+> I have now sent out a fix that I'm happy with, and applied it to the
+> pxa-multiplatform-5.18 branch of the soc tree as well as the
+> combined arm/multiplatform tree.
+> 
+> I have not merged this new version into the for-next branch
+> since I would like to see if there are any other regressions first.
+> 
+> Can you run your boot tests on the arm/multiplatform branch
+> and let me know if that fixes everything you found? If that
+> takes a lot of manual steps on your side, I'd just wait for the
+> build bots and merge it after all there are no new compile-time
+> issues.
+> 
 
-Yes, node-id seems the only reasonable handle that can be used, and it
-does not seem too onerous for a KVM user to have to set a node policy
-preferring all the TDX / confidential-computing capable nodes.
+I tried the pxa-multiplatform-5.18 branch. Its failures match
+those in v5.18-rc1.
 
-> But, neither of those really help with, say, a device-DAX mapping of
-> TDX-*IN*capable memory handed to KVM.  The "new syscall" would just
-> throw up its hands and leave users with the same result: TDX can't be
-> used.  The new sysfs ABI for NUMA nodes wouldn't clearly apply to
-> device-DAX because they don't respect the NUMA policy ABI.
+Should I try soc/arm/multiplatform as well ?
 
-They do have "target_node" attributes to associate node specific
-metadata, and could certainly express target_node capabilities in its
-own ABI. Then it's just a matter of making pfn_to_nid() do the right
-thing so KVM kernel side can validate the capabilities of all inbound
-pfns.
-
-> I'm open to ideas here.  If there's a viable ABI we can introduce to
-> train TDX users today that will work tomorrow too, I'm all for it.
-
-In general, expressing NUMA node perf and node capabilities is
-something Linux needs to get better at. HMAT data for example still
-exists as sideband information ignored by numactl, but it feels
-inevitable that perf and capability details become more of a first
-class citizen for applications that have these mem-allocation-policy
-constraints in the presence of disparate memory types.
+Guenter

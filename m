@@ -2,117 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D59D751525F
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 805F551526D
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:39:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379722AbiD2RjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 13:39:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37426 "EHLO
+        id S1379725AbiD2RnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 13:43:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234026AbiD2RjN (ORCPT
+        with ESMTP id S1379210AbiD2RnB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 13:39:13 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4CF9BC07
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:35:53 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id s27so11364034ljd.2
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:35:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=mmd4qjxvG29M6kC9w1keSuqoCPTvZCriqLVPrV/8mEU=;
-        b=LFvrwou245TpTYriqjTNad0o4zj5Ew3VYU4QHzMDyfn7knjDwJM6PWdeYrEBQACdWT
-         OryKA6S1W3enB018VvPCdQZWShbkr8zRCtyNnNOdSU1alowmmK/ngywcFA6SkqiSRauo
-         AT0S3Iv3z7gEoFhL3bWBMcu1z9R9uAMwB2L+D2W7v9dZxPHUpZcoMgIbN/ocs58b0DQI
-         Jy20Y2hgtNmVHHxLI7t065jIUZ0i7SrrGrPTSRqdu/e+C+CObYOUlkZdRGaMSO8dOOTh
-         g52nGzgC2fzqHfNPMtI7T/Dp2zfwTxCTdWpgDMG6y6yPN7MpBHvWmgfmPqVSSkV26OCH
-         3IXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=mmd4qjxvG29M6kC9w1keSuqoCPTvZCriqLVPrV/8mEU=;
-        b=BkkuNzG0NMgB8kAMr3GVOV4v0uHOFktnTldlxzxQEZh+IbjemloCc0aelMMGc0sXNO
-         a3nf6irbOac2QkgsNmWF+rACYTUfPFPIN1dvhqwsy3f+fY7+I0MBQguMFMyNssP9pK+7
-         liesHuw5IXtBID5zJnJ08RD3UYLPPtxBjBAliIILuvCs5aLx4X7uMaIdi8NufaIwtVcI
-         +f8o5tTCaqW74BqAY5R9oj9gLk/b4BkPlD2ktKz07V3xYY9pR00WmZU51ux+XDEWv89T
-         9/ulmOmt6qYSFjBtMJQskdRomAlVSw+ccljeKy3D2eoUp0CWtxYfq+I0mnbVwqOQ48eQ
-         8JUg==
-X-Gm-Message-State: AOAM532qGG9VmzWJzJ+mfPidTn0NP8+f12ctKj8A/3zxRYUFZdfJDU69
-        NXbyLNF8QjwLaoa3fUPdXivbCLSvLwbX6csXzviRN5hR/o8=
-X-Google-Smtp-Source: ABdhPJxuF9QVs8dYdQLeFTiJrIKVmBO+hnhPmqbLW6D+CwbG0fkkvRYxFMZy0JjDAee24XCt1FRuCOoDsyHIFyXH+B8=
-X-Received: by 2002:a05:651c:b8c:b0:24f:139e:ddde with SMTP id
- bg12-20020a05651c0b8c00b0024f139edddemr199669ljb.62.1651253752295; Fri, 29
- Apr 2022 10:35:52 -0700 (PDT)
+        Fri, 29 Apr 2022 13:43:01 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B55728997
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:39:42 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TGw0cJ011947;
+        Fri, 29 Apr 2022 17:39:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : mime-version : message-id :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=YoHa0fLQEkgm+3Igrqs1u82fd0eKrL3cNPKS8q/AGcs=;
+ b=bh6pzVLD+JALzZUxG9/IYtCYv8tb0e7wZUDHzxVGH637nt81PrchE5i2K3rY6nqvuNE3
+ vxfMkDFLMqdtShueEkai+pgunIfMy+c6T3QBRJB3hjmQ/xC0kzYtXu7NiHU3Rrk+ObKb
+ Z1CoxBLs0LxC/mVa4dQVos5kCs3S8WAI4+fVBIjWLMvomjbtHWvUnVC1cEmd/Vhjllxk
+ 50Tv3C/tVS5ayUgm2iTM+DiKYpmMftBTCrbkDKbVdokiYn7MfxsvnELk+DF9CyWGbFhI
+ cvAy5SE/Evzpd15aVS0eNLFjqhqEpYPrtHxKlTdphWUYgryupNAkhtElIMm/3nvYCLXi iw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqt9efudn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Apr 2022 17:39:26 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23THVGSR002413;
+        Fri, 29 Apr 2022 17:39:26 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqt9efucs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Apr 2022 17:39:26 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23THbqX0031260;
+        Fri, 29 Apr 2022 17:39:23 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma05fra.de.ibm.com with ESMTP id 3fm938ygfe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Apr 2022 17:39:23 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23THdLdl48365836
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 29 Apr 2022 17:39:21 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4078511C04C;
+        Fri, 29 Apr 2022 17:39:21 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C675B11C04A;
+        Fri, 29 Apr 2022 17:39:20 +0000 (GMT)
+Received: from localhost (unknown [9.43.18.217])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 29 Apr 2022 17:39:20 +0000 (GMT)
+Date:   Fri, 29 Apr 2022 23:09:19 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [PATCH v2 2/2] ftrace: recordmcount: Handle sections with no
+ non-weak symbols
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        llvm@lists.linux.dev, Michael Ellerman <mpe@ellerman.id.au>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+References: <cover.1651166001.git.naveen.n.rao@linux.vnet.ibm.com>
+        <126aca34935cf1c7168e17970c706e36577094e7.1651166001.git.naveen.n.rao@linux.vnet.ibm.com>
+        <20220428184212.18fbf438@gandalf.local.home>
+In-Reply-To: <20220428184212.18fbf438@gandalf.local.home>
 MIME-Version: 1.0
-Received: by 2002:aa6:c113:0:b0:1b9:b4ce:3858 with HTTP; Fri, 29 Apr 2022
- 10:35:50 -0700 (PDT)
-Reply-To: gb528796@gmail.com
-From:   george brown <moordavis0003@gmail.com>
-Date:   Fri, 29 Apr 2022 19:35:50 +0200
-Message-ID: <CAH26tOHTjSON=j69_PQgNON=SOMtoXLf=bmo-mKMtkh5PKZ4Vg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1651252324.js9790ngjg.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,REPTO_419_FRAUD_GM,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:229 listed in]
-        [list.dnswl.org]
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        *  3.0 REPTO_419_FRAUD_GM Reply-To is known advance fee fraud
-        *      collector mailbox
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [moordavis0003[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [moordavis0003[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [gb528796[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: XjwigIEeW3HSn-VRBEuRqpTuXxv62pyz
+X-Proofpoint-ORIG-GUID: ed5zTfg3vACJAC1QySK7bIsb5o0AfjqR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-29_08,2022-04-28_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ mlxscore=0 suspectscore=0 priorityscore=1501 spamscore=0 mlxlogscore=783
+ adultscore=0 lowpriorityscore=0 impostorscore=0 clxscore=1015 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204290088
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ahoj
+Steven Rostedt wrote:
+> On Thu, 28 Apr 2022 22:49:52 +0530
+> "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
+>=20
+>> But, with ppc64 elf abi v1 which only supports the old -pg flag, mcount
+>> location can differ between the weak and non-weak variants of a
+>> function. In such scenarios, one of the two mcount entries will be
+>> invalid. Such architectures need to validate mcount locations by
+>> ensuring that the instruction(s) at those locations are as expected. On
+>> powerpc, this can be a simple check to ensure that the instruction is a
+>> 'bl'. This check can be further tightened as necessary.
+>=20
+> I was thinking about this more, and I was thinking that we could create
+> another section; Perhaps __mcount_loc_weak. And place these in that
+> section. That way, we could check if these symbols to see if there's
+> already a symbol for it, and if there is, then drop it.
 
-Jmenuji se George Brown, povol=C3=A1n=C3=ADm jsem pr=C3=A1vn=C3=ADk. Chci v=
-=C3=A1m nab=C3=ADdnout
-nejbli=C5=BE=C5=A1=C3=AD p=C5=99=C3=ADbuzn=C3=BD m=C3=A9ho klienta. Zd=C4=
-=9Bd=C3=ADte =C4=8D=C3=A1stku (8,5 milionu $)
-dolar=C5=AF, kter=C3=A9 m=C5=AFj klient nechal v bance p=C5=99ed svou smrt=
-=C3=AD.
+If I'm understanding your suggestion right:
+- we now create a new section in each object file: __mcount_loc_weak,=20
+  and capture such relocations using weak symbols there.
+- we then ask the linker to put these separately between, say,=20
+  __start_mcount_loc_weak and __stop_mcount_loc_weak
+- on ftrace init, we go through entries in this range, but discard those=20
+  that belong to functions that also have an entry between=20
+  __start_mcount_loc and __stop_mcount loc.
 
-M=C5=AFj klient je ob=C4=8Dan va=C5=A1=C3=AD zem=C4=9B, kter=C3=BD zem=C5=
-=99el p=C5=99i autonehod=C4=9B se svou =C5=BEenou
-a jedin=C3=BD syn. Budu m=C3=ADt n=C3=A1rok na 50 % z celkov=C3=A9ho fondu,=
- zat=C3=ADmco 50 % ano
-b=C3=BDt pro tebe.
-Pro v=C3=ADce informac=C3=AD pros=C3=ADm kontaktujte m=C5=AFj soukrom=C3=BD=
- e-mail zde:gb528796@gmail.com
+The primary issue I see here is that the mcount locations within the new=20
+weak section will end up being offsets from a different function in=20
+vmlinux, since the linker does not create a symbol for the weak=20
+functions that were over-ridden.
 
-P=C5=99edem d=C4=9Bkuji,
-pane George Brown,
+As an example, in the issue described in this patch set, if powerpc=20
+starts over-riding kexec_arch_apply_relocations(), then the current weak=20
+implementation in kexec_file.o gets carried over to the final vmlinux,=20
+but the instructions will instead appear under the previous function in=20
+kexec_file.o: crash_prepare_elf64_headers(). This function may or may=20
+not be traced to begin with, so we won't be able to figure out if this=20
+is valid or not.
+
+
+- Naveen

@@ -2,117 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63E2751537C
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6683051538E
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379937AbiD2SXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 14:23:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60668 "EHLO
+        id S1379979AbiD2SYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 14:24:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbiD2SXC (ORCPT
+        with ESMTP id S237037AbiD2SXx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 14:23:02 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4E3D0A96
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:19:43 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id m14-20020a17090a34ce00b001d5fe250e23so7975367pjf.3
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:19:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wBht/QJpKirnQLRjfU3qpuPFg9KVLlBJOHxobySJY84=;
-        b=r7pzjeEkU56Xb/PrhsyeDT3rj09eyhkVOOf0c9svwGplQYdNJteW3ugc9U+C8hivVT
-         3Mrr0tnEK/GrhuqlPEIeeQs3+x1u8NuGrbxafMRv4MHcs6KPq8HlXZAedK+JwJ1cvL5S
-         V1mtlsbCRaz1aGXyrKHvizHqdvZTw4DHpcXI2A5x+PftjUVXFrczZzXU/MGYemogzsk3
-         vz37LiqE8poSl+Wp+M/APmNHWeRuSE/tTYhpsjnq2P9cUumI3ezmDpne8lCw77Yc1Au0
-         mxgaVRaoMfyIZHLISRiDb2E0MIAP43ZmJy/rD9V7X2XmW9swkIWlKd67VwVeY+9GwgK7
-         lNXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wBht/QJpKirnQLRjfU3qpuPFg9KVLlBJOHxobySJY84=;
-        b=CLAo/1QjLqf2ziWM/fKH4vCEpj/zW5SPJXLeh8jdF5V6eDLf3atTBsJzkU5lfDCp+M
-         SSZd+DQNRHddvvHtX8xuCBNOjxnvht5DEUajj/UhUWUvV+yVqTpwj/E2OgDvd7y4OLp6
-         AQhNrXCR+Kw5Zo189gHL6NTgVLrsggDBhaE7+5HUURuCI6iIoh+NRFNM9sZrAFDmoXgS
-         UmJ30dsgupKf8BKr6rF3M2H63uCDRQerrFsVm6wlnS4s3+crwj2i9lg7dFQJAYxkhg9/
-         /7y0PTdScuMU0IN03dS4QQirtvSFsklFGkEr4Rh2aLWfwdf9/5ekyHhpWP0lK2G6OfWD
-         x9lg==
-X-Gm-Message-State: AOAM530qTJ5YhTj2kzORVudMuqyJrhPYD5PAx8wJGKmZY30Cc9wtWWeE
-        Aomp5Kgi20yzOESdK+YHO/Jwz6Fn2zKYjQ==
-X-Google-Smtp-Source: ABdhPJzIbOlJ2QDNab19z2WyabpDVNPH1SwLU2cRelG7TFhZ87ku6YiqDSuoNAqPH7kzRGC4ljGIlw==
-X-Received: by 2002:a17:903:1109:b0:15e:7c4b:5045 with SMTP id n9-20020a170903110900b0015e7c4b5045mr641211plh.3.1651256382703;
-        Fri, 29 Apr 2022 11:19:42 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id u19-20020a63b553000000b003c14af50616sm6518855pgo.46.2022.04.29.11.19.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 11:19:41 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 18:19:38 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-Subject: Re: [PATCH v3 13/21] x86/virt/tdx: Allocate and set up PAMTs for
- TDMRs
-Message-ID: <YmwsOo4TCq1/5hgd@google.com>
-References: <cover.1649219184.git.kai.huang@intel.com>
- <ffc2eefdd212a31278978e8bfccd571355db69b0.1649219184.git.kai.huang@intel.com>
- <c9b17e50-e665-3fc6-be8c-5bb16afa784e@intel.com>
- <3664ab2a8e0b0fcbb4b048b5c3aa5a6e85f9618a.camel@intel.com>
- <5984b61f-6a4a-c12a-944d-f4a78bdefc3d@intel.com>
- <Ymv2h1GYCMQ9ZQvJ@google.com>
- <c875fc4a-c3c0-dab1-c7cb-525b0bff5ae3@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c875fc4a-c3c0-dab1-c7cb-525b0bff5ae3@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 29 Apr 2022 14:23:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A298933366;
+        Fri, 29 Apr 2022 11:20:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C95D6244C;
+        Fri, 29 Apr 2022 18:20:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C6C7C385A7;
+        Fri, 29 Apr 2022 18:20:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651256432;
+        bh=7UlwWJyNgO5O8HAPQY4CevoguxGtN71USDYsxCC4Y1I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=u0+tCCPLMcAPDoyXRHMoixV/Z0LeuwRRZuVV6YJqDPXCMAyu6bp1HqrLhdZjG9Cyh
+         QYJFW5R7kiAcrSezRCwm7ENodSCUhCJjtpqzm8cd/HFpkS4sMGegRRQASH5n2SihkJ
+         71HJ1xTMFivjTVqgd4DPNTs7LM6lfZnZ8DzEzNE0oyYqPlKCdTvIv23u3eGTMBYaOt
+         2wiCePOny8nv8PLW7e+Nz32vtmsDfQhUnorB1/3LgjVu9HRSU6K6LoPIEjrMtXRAwq
+         gSkSxWg9xur9RU7CW+BnHL/qWaY7Tt1AlSEuqbaVhcTiKCDIrzlj5v67mhP4+8Bla0
+         PK6vOCY0vQL6g==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nkVED-0080Zl-Vn; Fri, 29 Apr 2022 19:20:30 +0100
+Date:   Fri, 29 Apr 2022 19:20:29 +0100
+Message-ID: <87mtg392fm.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Russell King <linux@armlinux.org.uk>
+Subject: Re: [PATCH 02/30] ARM: kexec: Disable IRQs/FIQs also on crash CPUs shutdown path
+In-Reply-To: <20220427224924.592546-3-gpiccoli@igalia.com>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+        <20220427224924.592546-3-gpiccoli@igalia.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: gpiccoli@igalia.com, akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com, kexec@lists.infradead.org, linux-kernel@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org, linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org, linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org, linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org, sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org, x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com, fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de, corbe
+ t@lwn.net, d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com, dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org, mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com, jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org, luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com, paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org, senozhatsky@chromium.org, stern@rowland.harvard.edu, tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com, will@kernel.org, linux@armlinux.org.uk
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022, Dave Hansen wrote:
-> On 4/29/22 07:30, Sean Christopherson wrote:
-> > On Fri, Apr 29, 2022, Dave Hansen wrote:
-> ...
-> >> A *good* way (although not foolproof) is to launch a TDX VM early
-> >> in boot before memory gets fragmented or consumed.  You might even
-> >> want to recommend this in the documentation.
-> > 
-> > What about providing a kernel param to tell the kernel to do the
-> > allocation during boot?
+On Wed, 27 Apr 2022 23:48:56 +0100,
+"Guilherme G. Piccoli" <gpiccoli@igalia.com> wrote:
 > 
-> I think that's where we'll end up eventually.  But, I also want to defer
-> that discussion until after we have something merged.
+> Currently the regular CPU shutdown path for ARM disables IRQs/FIQs
+> in the secondary CPUs - smp_send_stop() calls ipi_cpu_stop(), which
+> is responsible for that. This makes sense, since we're turning off
+> such CPUs, putting them in an endless busy-wait loop.
 > 
-> Right now, allocating the PAMTs precisely requires running the TDX
-> module.  Running the TDX module requires VMXON.  VMXON is only done by
-> KVM.  KVM isn't necessarily there during boot.  So, it's hard to do
-> precisely today without a bunch of mucking with VMX.
+> Problem is that there is an alternative path for disabling CPUs,
+> in the form of function crash_smp_send_stop(), used for kexec/panic
+> paths. This functions relies in a SMP call that also triggers a
+> busy-wait loop [at machine_crash_nonpanic_core()], but *without*
+> disabling interrupts. This might lead to odd scenarios, like early
+> interrupts in the boot of kexec'd kernel or even interrupts in
+> other CPUs while the main one still works in the panic path and
+> assumes all secondary CPUs are (really!) off.
+> 
+> This patch mimics the ipi_cpu_stop() interrupt disable mechanism
+> in the crash CPU shutdown path, hence disabling IRQs/FIQs in all
+> secondary CPUs in the kexec/panic path as well.
+> 
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Russell King <linux@armlinux.org.uk>
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> ---
+>  arch/arm/kernel/machine_kexec.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/arch/arm/kernel/machine_kexec.c b/arch/arm/kernel/machine_kexec.c
+> index f567032a09c0..ef788ee00519 100644
+> --- a/arch/arm/kernel/machine_kexec.c
+> +++ b/arch/arm/kernel/machine_kexec.c
+> @@ -86,6 +86,9 @@ void machine_crash_nonpanic_core(void *unused)
+>  	set_cpu_online(smp_processor_id(), false);
+>  	atomic_dec(&waiting_for_crash_ipi);
+>  
+> +	local_fiq_disable();
+> +	local_irq_disable();
+> +
 
-Meh, it's hard only if we ignore the fact that the PAMT entry size isn't going
-to change for a given TDX module, and is extremely unlikely to change in general.
+My expectations would be that, since we're getting here using an IPI,
+interrupts are already masked. So what reenabled them the first place?
 
-Odds are good the kernel can hardcode a sane default and Just Work.  Or provide
-the assumed size of a PAMT entry via module param.  If the size ends up being
-wrong, log an error, free the reserved memory, and move on with TDX setup with
-the correct size.
+Thanks,
 
-> You can arm-wrestle the distro folks who hate adding command-line tweaks
-> when the time comes. ;)
+	M.
 
-Sure, you just find me the person that's going to run TDX guests with an
-off-the-shelf distro kernel :-D
+-- 
+Without deviation from the norm, progress is not possible.

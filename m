@@ -2,165 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50B48514A7F
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 15:27:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 248B8514A83
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 15:29:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359789AbiD2Nau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 09:30:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51240 "EHLO
+        id S1359793AbiD2NcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 09:32:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236761AbiD2Nap (ORCPT
+        with ESMTP id S1347736AbiD2NcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 09:30:45 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2087.outbound.protection.outlook.com [40.107.243.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E002C13B;
-        Fri, 29 Apr 2022 06:27:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YOR8zz4Eb5tDLjlZJzseCVBvTOc17iRxNUJTPR/O8pQXXyRQjgp/2CscD8iwBukcegCECejR6ngqVs91TGZa51YQ9qz83lw7fI/dsZt9yvge/5eF697kms1fiRn0Djv7c/efVFa7o8li2fOASugZoJqGDwmG2/utAYKCHv+80XPv+30tlr1VggVKtDgKjg6TzZE2OLa708o8zFms7ZQ04oorLUdEfaPBglq+LPT7rETmMo/35KvbQ/784SOblHEXMx7N1H2Opm9ZUMK0sOdhwDeOadOvr3jc4rQLfiCgLjUEMjK627eJxpMGTnW+PtaLUA9K5hs+jodxv6M70XQgWA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=C/pGZHU2F8TMXdVGUb8SYBSXXiUBifYCO0oV/ar0aao=;
- b=C1G4lv1GKfqxXa+fPV6jgKbyqUGIV5m1vwauG38q0sgGNmzZf+Gq19IJmOnG33l8qtaRBauhwGbcPWrFJseQ7/aaiuLM/rve1TqovPAsekPZ8npJAzJqUA3R766cq0vmWa6TVpshKrlF4I0ADS/qLu2aRD0JDlsMuGWLoCagRVudzSPpQO+P/Zp2ZvJsestD5h6bL7F1GLBCB38hOoor9I2+C7XqCgNZiw/K7JX/tkGxlyWsR+ZatWesg2XjZ0vv68QmIRNHRJiUks1OA3THdVH63kT8UttLxCPpyv9NhUK9Ne9YUQxYn6IPQkVWNO9isXq2JzbLw1eVF8dMirloWw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
+        Fri, 29 Apr 2022 09:32:21 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479125F25E
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 06:29:02 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 129so4662779wmz.0
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 06:29:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C/pGZHU2F8TMXdVGUb8SYBSXXiUBifYCO0oV/ar0aao=;
- b=bedlu/oVi9sfyUbh8A6VqRe6Bf+AYRPN3xLhwloquFS5ZWKzm+mGmx31mWVSAi12hgq8vZkNBK2o7SA/+rTn8HvSEGUIGTjViEf+uA9taUdDo9e9DNsgd9gqyanEKhNms4fN1xegPUU4enGxCoyoWzUH4UhjOGcZ+iw4Tc9HTNk=
-Received: from SN7PR04CA0082.namprd04.prod.outlook.com (2603:10b6:806:121::27)
- by SA2PR02MB7577.namprd02.prod.outlook.com (2603:10b6:806:134::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Fri, 29 Apr
- 2022 13:27:25 +0000
-Received: from SN1NAM02FT0041.eop-nam02.prod.protection.outlook.com
- (2603:10b6:806:121:cafe::91) by SN7PR04CA0082.outlook.office365.com
- (2603:10b6:806:121::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.12 via Frontend
- Transport; Fri, 29 Apr 2022 13:27:25 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT0041.mail.protection.outlook.com (10.97.5.44) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5206.12 via Frontend Transport; Fri, 29 Apr 2022 13:27:25 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Fri, 29 Apr 2022 06:27:25 -0700
-Received: from smtp.xilinx.com (172.19.127.95) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Fri, 29 Apr 2022 06:27:25 -0700
-Envelope-to: linux-pci@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org,
- lorenzo.pieralisi@arm.com,
- bhelgaas@google.com,
- robh@kernel.org
-Received: from [10.254.241.50] (port=32836)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1nkQea-0009hq-Qb; Fri, 29 Apr 2022 06:27:25 -0700
-Message-ID: <fc268228-8188-953b-6990-d694cd499386@xilinx.com>
-Date:   Fri, 29 Apr 2022 15:27:22 +0200
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hdhnC9KgjzpQicPMmM1itFR8vpColEKHihALIruZkf8=;
+        b=GSzeLj+IHSje4PUAdDJbBJiRe96Ag5litMTL0xlQKN792dfSYzI2RePAFS2gMGJOwA
+         NgZiHuoq7CiGZnth2hO0v5zjf9f975okTu2c4ZvjrdbP4AsQWNHI6qwFx0cz5HAMy1T+
+         RtZSzWyqxF9WzJZP3uGIM3Kz2kYiMBsofEQ0v/4vRyA2hXsS39niR2jcpN933x3AllIy
+         YXaxqH66SnojV+0z6ncHPcgOiIH3yjI6M0MLgiKt6IpaQZU++wl0odjQxIEG3OTNGCXk
+         zmMM7L5BFSos6pCDPUecKoTF5/e3cfRiEYhnSuuNPMaeJsiLwN4DIO/3THzmmO+IFJs5
+         f+iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hdhnC9KgjzpQicPMmM1itFR8vpColEKHihALIruZkf8=;
+        b=g0WAqIL/V9xvj+SQDeTIG0jY83xMiPY/dWzvqvSKw869PL2MV9HCBi1i/BMMPJDzDW
+         NNrNRxzSDSv3H/lEqwVFnex2U0ifyXWvFC4iBjzGakYFr9kOlyv9xp010C6y0vBFyI7V
+         2gbHoy8Zy8AtfkUjE4l3qgqgKgCrkJjjc2K7cgs1QhKF2ZnUurgAjwPzGc7821HpR5Yf
+         C4TwMZUXs87OURU9IlsEZEuZoB/udNZsZW5nhpuXgfuAtQAiA0oG2bniDJPKDm5c4OMG
+         m4PAbPds5g6x8v619tQvCoTXH+ePQjXSksDYIzeEWOxb66k31JthqSU8OVgnb3+mppxa
+         Zgbg==
+X-Gm-Message-State: AOAM5338V630W87lcUHhyrirpF6FpbZLhAgWQlnfbyFCSncgQwSiXZmV
+        mrHfM66HAhTiBuzI/jVaUgk/wA==
+X-Google-Smtp-Source: ABdhPJyWVfhE4AEUc4/m4QHAwPxIU/qsK3YPAFde2Mg/w4pyfmSoq68X4WgNlBg/6VQ5b5AxowXBXg==
+X-Received: by 2002:a05:600c:a42:b0:393:d831:bf05 with SMTP id c2-20020a05600c0a4200b00393d831bf05mr3175966wmq.187.1651238940616;
+        Fri, 29 Apr 2022 06:29:00 -0700 (PDT)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id m4-20020a7bcb84000000b00389efb7a5b4sm6544777wmi.17.2022.04.29.06.28.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 06:28:59 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 14:28:58 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] irqchip/exiu: Fix acknowledgment of edge triggered
+ interrupts
+Message-ID: <20220429132858.gaqhjrxblciacvki@maple.lan>
+References: <20220427142647.1736658-1-daniel.thompson@linaro.org>
+ <CAMj1kXEYO_HRwZ=Wz5aTWN8XZctemVv2op4B2=DbFEozuxTNVw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] dt-bindings: PCI: xilinx-cpm: Change reg property order
-Content-Language: en-US
-To:     Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>,
-        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-CC:     <lorenzo.pieralisi@arm.com>, <bhelgaas@google.com>,
-        <robh@kernel.org>
-References: <20220429130221.32113-1-bharat.kumar.gogada@xilinx.com>
-From:   Michal Simek <michal.simek@xilinx.com>
-In-Reply-To: <20220429130221.32113-1-bharat.kumar.gogada@xilinx.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5e30cd6a-2f36-43f8-df5d-08da29e4000c
-X-MS-TrafficTypeDiagnostic: SA2PR02MB7577:EE_
-X-Microsoft-Antispam-PRVS: <SA2PR02MB75778C7C5A957876A04172F4C6FC9@SA2PR02MB7577.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0IBuWWhQf0q/nQBhexJkikoQe0lbs0bbAsjaItaK8eopeKF6daka6QAHwU3O6ukaFzZAEANwSExOEd9jpFwkdbvpUFxsK7sJiFiSlx2V9L4HsIqPrG8fhqPFruiljKES327VGxlV6g469sf7USxcK+qSoK/pTJUayjpx2uEjvyDMbCaCkU5o4RB/rvfMCdToI+rGWPxd3tSF62IuRdG81zVDmBOn6aU6ayW+uvZL64WWzX+YFt3uDWMuYhdS8+YosuvSy5YxZz12F/KEylmhg2N3CuPzSlgVjFXJq0MRdefdtupjNdGoTSsCIZ/d+2wt6u+XtkrpNBJswvTF+fLia303IapcmTJ920Vzy49pfCI98/OKelys1KFKdTFrwmG/Sef35fECb9z2M+kB4hADa6PaqUGBaMTjEZgvRXbmGqkS+A+E8XPO9Wsdbm3ar54M2/R7KtHfbcn2HQp2iy1XHvbBPfcoqD3RyHYwCgJNhuabXVDqtKfAOJaWw7hNtuvhlf5dnn8W7pVArL2j538KqB46s0smudLJuQyFgyi57N8wdm74ceBhqRq3dJ3ecF0GGZNCChCoOmrOm1cgh3b25U80GCxV1eU8XyW5U+cLqZ5u13sRpfeJJDljfdz9cUqdKomCGxjdXriqgWhqnNURSQ+9zsEk+ahC+A6ZAfRTePi6l6Rnrd4UiwZgZ6pD7NCu0NgMXFsTJ66vOMVihB2KxZXKjFA7y3MptK2N71Iqvqk=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(508600001)(47076005)(426003)(336012)(7636003)(44832011)(8936002)(356005)(83380400001)(5660300002)(2906002)(9786002)(36756003)(110136005)(54906003)(26005)(316002)(40460700003)(82310400005)(36860700001)(31686004)(31696002)(8676002)(4326008)(2616005)(53546011)(186003)(70206006)(70586007)(6666004)(50156003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2022 13:27:25.5691
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5e30cd6a-2f36-43f8-df5d-08da29e4000c
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0041.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR02MB7577
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXEYO_HRwZ=Wz5aTWN8XZctemVv2op4B2=DbFEozuxTNVw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/29/22 15:02, Bharat Kumar Gogada wrote:
-> Describe cpm reg property before cfg reg property to align with
-> node name.
+On Wed, Apr 27, 2022 at 05:29:33PM +0200, Ard Biesheuvel wrote:
+> On Wed, 27 Apr 2022 at 16:27, Daniel Thompson
+> <daniel.thompson@linaro.org> wrote:
+> >
+> > Currently the EXIU uses the fasteoi interrupt flow that is configured by
+> > it's parent (irq-gic-v3.c). With this flow the only chance to clear the
+> > interrupt request happens during .irq_eoi() and (obviously) this happens
+> > after the interrupt handler has run. EXIU requires edge triggered
+> > interrupts to be acked prior to interrupt handling. Without this we
+> > risk incorrect interrupt dismissal when a new interrupt is delivered
+> > after the handler reads and acknowledges the peripheral but before the
+> > irq_eoi() takes place.
+> >
+> > Fix this by clearing the interrupt request from .irq_ack() instead. This
+> > requires switching to the fasteoi-ack flow instead of the fasteoi flow.
+> > This approach is inspired by the nmi code found in irq-sun6i-r.c .
+> >
 > 
-> Signed-off-by: Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>
-> ---
->   .../devicetree/bindings/pci/xilinx-versal-cpm.yaml     | 10 +++++-----
->   1 file changed, 5 insertions(+), 5 deletions(-)
+> How are level triggered EXIU interrupts affected by this change?
+
+Functionally they should not be affected simply because the controller
+does not care when (or even if) software writes to IREQCLR... and
+testing on SC2A11/Developerbox with a hacked gpio-keys driver does
+back this up.
+
+Since the controller doesn't really care either way I originally
+decided to change the flow globally. We could perhaps optimize things
+slightly by switching to the fasteoi flow for level triggered
+interrupts... they would then be cheaper than they are today (because
+we could avoid the spurious ack entirely).
+
+
+> > Note: It *is* intentional not to call irq_chip_ack_parent() from
+> >       exiu_irq_ack(). Parents that implement the fasteoi-ack flow don't
+> >       want us to do that (and we'd crash if we tried).
+> >
+> > This problem was discovered through code review rather then reproducing
+> > missed interrupts in a real platform. Nevertheless the change has been
+> > tested for regression on a Developerbox/SC2A11 using the power button
+> > (which is edge triggered and is the only thing connected to the EXIU on
+> > this platform).
 > 
-> diff --git a/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml b/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
-> index 32f4641085bc..cca395317a4c 100644
-> --- a/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
-> +++ b/Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml
-> @@ -18,13 +18,13 @@ properties:
->   
->     reg:
->       items:
-> -      - description: Configuration space region and bridge registers.
->         - description: CPM system level control and status registers.
-> +      - description: Configuration space region and bridge registers.
->   
->     reg-names:
->       items:
-> -      - const: cfg
->         - const: cpm_slcr
-> +      - const: cfg
->   
->     interrupts:
->       maxItems: 1
-> @@ -86,9 +86,9 @@ examples:
->                          ranges = <0x02000000 0x0 0xe0000000 0x0 0xe0000000 0x0 0x10000000>,
->                                   <0x43000000 0x80 0x00000000 0x80 0x00000000 0x0 0x80000000>;
->                          msi-map = <0x0 &its_gic 0x0 0x10000>;
-> -                       reg = <0x6 0x00000000 0x0 0x10000000>,
-> -                             <0x0 0xfca10000 0x0 0x1000>;
-> -                       reg-names = "cfg", "cpm_slcr";
-> +                       reg = <0x0 0xfca10000 0x0 0x1000>,
-> +                             <0x6 0x00000000 0x0 0x10000000>;
-> +                       reg-names = "cpm_slcr", "cfg";
->                          pcie_intc_0: interrupt-controller {
->                                  #address-cells = <0>;
->                                  #interrupt-cells = <1>;
+> This is not entirely true. The PHY interrupt is also wired to the
+> EXIU, but this never worked reliably, so we don't expose this in the
+> DT or ACPI tables.
+> I wonder if this change would help, but I don't remember exactly what
+> the problem was.
 
-Acked-by: Michal Simek <michal.simek@amd.com>
+Fair point. Although I'm afraid that, in the short term, I will have to
+take the simple approach to fixing this: s/connected/enabled by default/
 
-Thanks,
-Michal
+
+Daniel.
+
+
+> > Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
+> > ---
+> >  arch/arm64/Kconfig.platforms   |  1 +
+> >  drivers/irqchip/irq-sni-exiu.c | 16 ++++++++++++----
+> >  2 files changed, 13 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+> > index 30b123cde02c..aaeaf57c8222 100644
+> > --- a/arch/arm64/Kconfig.platforms
+> > +++ b/arch/arm64/Kconfig.platforms
+> > @@ -253,6 +253,7 @@ config ARCH_INTEL_SOCFPGA
+> >
+> >  config ARCH_SYNQUACER
+> >         bool "Socionext SynQuacer SoC Family"
+> > +       select IRQ_FASTEOI_HIERARCHY_HANDLERS
+> >
+> >  config ARCH_TEGRA
+> >         bool "NVIDIA Tegra SoC Family"
+> > diff --git a/drivers/irqchip/irq-sni-exiu.c b/drivers/irqchip/irq-sni-exiu.c
+> > index abd011fcecf4..1cc2ec272ebd 100644
+> > --- a/drivers/irqchip/irq-sni-exiu.c
+> > +++ b/drivers/irqchip/irq-sni-exiu.c
+> > @@ -37,12 +37,11 @@ struct exiu_irq_data {
+> >         u32             spi_base;
+> >  };
+> >
+> > -static void exiu_irq_eoi(struct irq_data *d)
+> > +static void exiu_irq_ack(struct irq_data *d)
+> >  {
+> >         struct exiu_irq_data *data = irq_data_get_irq_chip_data(d);
+> >
+> >         writel(BIT(d->hwirq), data->base + EIREQCLR);
+> > -       irq_chip_eoi_parent(d);
+> >  }
+> >
+> >  static void exiu_irq_mask(struct irq_data *d)
+> > @@ -104,7 +103,8 @@ static int exiu_irq_set_type(struct irq_data *d, unsigned int type)
+> >
+> >  static struct irq_chip exiu_irq_chip = {
+> >         .name                   = "EXIU",
+> > -       .irq_eoi                = exiu_irq_eoi,
+> > +       .irq_ack                = exiu_irq_ack,
+> > +       .irq_eoi                = irq_chip_eoi_parent,
+> >         .irq_enable             = exiu_irq_enable,
+> >         .irq_mask               = exiu_irq_mask,
+> >         .irq_unmask             = exiu_irq_unmask,
+> > @@ -148,6 +148,7 @@ static int exiu_domain_alloc(struct irq_domain *dom, unsigned int virq,
+> >         struct irq_fwspec parent_fwspec;
+> >         struct exiu_irq_data *info = dom->host_data;
+> >         irq_hw_number_t hwirq;
+> > +       int i, ret;
+> >
+> >         parent_fwspec = *fwspec;
+> >         if (is_of_node(dom->parent->fwnode)) {
+> > @@ -165,7 +166,14 @@ static int exiu_domain_alloc(struct irq_domain *dom, unsigned int virq,
+> >         irq_domain_set_hwirq_and_chip(dom, virq, hwirq, &exiu_irq_chip, info);
+> >
+> >         parent_fwspec.fwnode = dom->parent->fwnode;
+> > -       return irq_domain_alloc_irqs_parent(dom, virq, nr_irqs, &parent_fwspec);
+> > +       ret = irq_domain_alloc_irqs_parent(dom, virq, nr_irqs, &parent_fwspec);
+> > +       if (ret)
+> > +               return ret;
+> > +
+> > +       for (i = 0; i < nr_irqs; i++)
+> > +               irq_set_handler(virq+i, handle_fasteoi_ack_irq);
+> > +
+> > +       return 0;
+> >  }
+> >
+> >  static const struct irq_domain_ops exiu_domain_ops = {
+> >
+> > base-commit: b2d229d4ddb17db541098b83524d901257e93845
+> > --
+> > 2.35.1
+> >

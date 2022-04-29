@@ -2,194 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31813514042
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 03:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8548F514044
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 03:36:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353942AbiD2Bfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 21:35:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57642 "EHLO
+        id S1353951AbiD2BjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 21:39:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351487AbiD2Bfm (ORCPT
+        with ESMTP id S234027AbiD2BjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 21:35:42 -0400
-Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73602BABB5;
-        Thu, 28 Apr 2022 18:32:25 -0700 (PDT)
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 23T1W9ZG016045;
-        Fri, 29 Apr 2022 10:32:09 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 23T1W9ZG016045
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1651195930;
-        bh=Ujughm6WBYcOCP3I53TOnar0oX2NKjlKDBd45MpNh04=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=10c3SuQy/Ub2pRoZYFp43HKwkLXn1CLCpuzFvYYJ1j21ADWYhTYXQkrfPsBwSNpTF
-         iJiiapVdwOc7otybUAdqjpn0CKzLMWIrwxS18RqLFv7QXS5stgswcY88C95nD0BmQa
-         VPQZ4O7rQR4GGVWilVhI1eKt4Uc6IWOd00+ahKrrd0K0WvU7NLZlpyiKG23a3PQKrL
-         ejefKEEQIn5ZnvoAc+dJEXTvcRsjq5C+jKDLPLu0imnu1G5OZ/3myTfIEmIFrUUkb5
-         PcS3vudQpz41uhOdpTplX4gJK7VlbhtDJgw0PthkHbcoEy6Uejb5/X5AvTAl/U1+R3
-         Zm93CE04u5RYA==
-X-Nifty-SrcIP: [209.85.215.178]
-Received: by mail-pg1-f178.google.com with SMTP id k14so5419206pga.0;
-        Thu, 28 Apr 2022 18:32:09 -0700 (PDT)
-X-Gm-Message-State: AOAM531qsBCn7fhbMfLoiFNGFxcVDlW+iR18IIa1zHIgTtSNmeg69ahH
-        zB3yLEftM2F6OB12AoMipE256BGvQxqV3j+GRWg=
-X-Google-Smtp-Source: ABdhPJyWSxXsaQZA47SLxRqiIrVQj/xNc4xbL+oG7kW7OztbN7o+0qZy8I9k7qzl3YqxE++UsE3TiMzb9rdJGGEU13g=
-X-Received: by 2002:a05:6a02:182:b0:374:5a57:cbf9 with SMTP id
- bj2-20020a056a02018200b003745a57cbf9mr29679060pgb.616.1651195929017; Thu, 28
- Apr 2022 18:32:09 -0700 (PDT)
+        Thu, 28 Apr 2022 21:39:11 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794C9286CD;
+        Thu, 28 Apr 2022 18:35:54 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id f14so4800175qtq.1;
+        Thu, 28 Apr 2022 18:35:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ilw3aGv9Sgk1Mrf42CfMBYio0brON0wfqjs2FvsTn5A=;
+        b=hc4MzDypJLz0fQuTeRPHPO0wVmSfZFP2kv4Nb4g77/gbVk38gQaUTUSTYDJBiNqcOq
+         XAF6s8MjQZK7GMG2tApOYlMz2XiHaGT6WSdaVMxy8a8NlzdFMufvC5bmFaeVH5o8VugB
+         7a3Lj1YkckAVXcZKvgHR27HLApC631nuW9wyU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ilw3aGv9Sgk1Mrf42CfMBYio0brON0wfqjs2FvsTn5A=;
+        b=eUeLR1oK8QHuwVzcOpQfxuqUFsRjkAO/YDdjrMrmbNZN+WEfFHu+/mkqym78f2cVBU
+         zEeG1VV+0od1zH2hSM3AdRQAGA0GMuNzpms/gLF6Jem7P4s0Zd5Gldpy6fOFyrvF+sED
+         L4lwDT2UFbtLYQpnT6kUYV3BbLOvARZYII50oL4PAbMGAh6xj9lEKRRGVSs8bpBOQspb
+         zyGwEq7fJqv+MKIE2MvHT02n9PB972IdqmycRsd8cMfvK16vEQNjxo5T0oimr5HqlDoa
+         kYNfnI0ciplWiHEnTp2TDV/Sb7gMitb9cAjQZP/0DTAnPfkWkrwO7WNr+RbrU1kMdhUq
+         QmUA==
+X-Gm-Message-State: AOAM530BFRo3ldTNDPvMZD6wVHgy81O7zz47K70HHn8X6A2vLk1eCPl1
+        WRgafrPjh8yt0cv8w7TtiWTVvDN344s5lx2kbgLYy7Id
+X-Google-Smtp-Source: ABdhPJxEHKDPELY9+OtUNhNNa2CM1I9/hqDSmeDbIFwxGnpwoqaIQ9gDWUojvja9Nn0exFx3iPezziPP2uNOOx+HTws=
+X-Received: by 2002:a05:622a:58f:b0:2f2:58:578a with SMTP id
+ c15-20020a05622a058f00b002f20058578amr25197132qtb.180.1651196153533; Thu, 28
+ Apr 2022 18:35:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220424190811.1678416-1-masahiroy@kernel.org>
- <20220424190811.1678416-25-masahiroy@kernel.org> <CAKwvOdkJJnJt_jj_1n6QP31UoTqcS5aVUYAExdR8wY61EmRDFQ@mail.gmail.com>
-In-Reply-To: <CAKwvOdkJJnJt_jj_1n6QP31UoTqcS5aVUYAExdR8wY61EmRDFQ@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 29 Apr 2022 10:31:05 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASKctw8a7_OYuBnP16CrMKg=3PD4=GL4zJCYi6WZP1mpA@mail.gmail.com>
-Message-ID: <CAK7LNASKctw8a7_OYuBnP16CrMKg=3PD4=GL4zJCYi6WZP1mpA@mail.gmail.com>
-Subject: Re: [PATCH 24/27] modpost: generate linker script to collect symbol versions
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+References: <20220428082858.545176-1-joel@jms.id.au> <Yms5JzcVMKDYpR5H@lunn.ch>
+In-Reply-To: <Yms5JzcVMKDYpR5H@lunn.ch>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Fri, 29 Apr 2022 01:35:43 +0000
+Message-ID: <CACPK8Xeq8MLmRmYW=qo7+FDRG_bwaSTMQtrHhPCwGJ8-ZeFp=A@mail.gmail.com>
+Subject: Re: [PATCH net] net: ftgmac100: Disable hardware checksum on AST2600
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Dylan Hung <dylan_hung@aspeedtech.com>,
+        David Wilder <dwilder@us.ibm.com>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Networking <netdev@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+        David Wilder <wilder@us.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 6:49 AM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+On Fri, 29 Apr 2022 at 01:02, Andrew Lunn <andrew@lunn.ch> wrote:
 >
-> On Sun, Apr 24, 2022 at 12:10 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > Merge version CRCs per vmlinux or per module.
-> >
-> > These linker scripts will be fed to the final link stage.
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > Fixes: 39bfab8844a0 ("net: ftgmac100: Add support for DT phy-handle property")
+> > Reported-by: David Wilder <wilder@us.ibm.com>
+> > Signed-off-by: Joel Stanley <joel@jms.id.au>
 > > ---
-> >
-> >  .gitignore            |  1 +
-> >  Makefile              |  1 +
-> >  scripts/mod/modpost.c | 27 +++++++++++++++++++++++++++
-> >  3 files changed, 29 insertions(+)
-> >
-> > diff --git a/.gitignore b/.gitignore
-> > index 265959544978..f9dad6b917e6 100644
-> > --- a/.gitignore
-> > +++ b/.gitignore
-> > @@ -42,6 +42,7 @@
-> >  *.so.dbg
-> >  *.su
-> >  *.symtypes
-> > +*.symver.lds
-> >  *.symversions
-> >  *.tab.[ch]
-> >  *.tar
-> > diff --git a/Makefile b/Makefile
-> > index 235d68fa1470..0779db3d1c0c 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -1859,6 +1859,7 @@ clean: $(clean-dirs)
-> >                 -o -name '*.c.[012]*.*' \
-> >                 -o -name '*.ll' \
-> >                 -o -name '*.gcno' \
-> > +               -o -name '*.symver.lds' \
-> >                 -o -name '*.*.symversions' \) -type f -print | xargs rm -f
-> >
-> >  # Generate tags for editors
-> > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> > index 43ab4f000ae3..ef779ada04c6 100644
-> > --- a/scripts/mod/modpost.c
-> > +++ b/scripts/mod/modpost.c
-> > @@ -2577,6 +2577,30 @@ static void write_dump(const char *fname)
-> >         free(buf.p);
-> >  }
-> >
-> > +static void write_symversions_lds(struct module *mod)
-> > +{
-> > +       struct buffer buf = { };
-> > +       struct symbol *sym;
-> > +       char lds_file[PATH_MAX];
-> > +       int ret;
-> > +
-> > +       ret = snprintf(lds_file, sizeof(lds_file), "%s.symver.lds", mod->name);
-> > +       if (ret >= sizeof(lds_file)) {
-> > +               error("%s: too long path was truncated\n", lds_file);
-> > +               return;
+> > Net maintainers, if no one has a counter proposal I would like this
+> > merged as a fix. Please give Dylan from Aspeed a chance to reply before
+> > applying the patch.
 >
-> If this exceptional case occurs, we should probably halt or return an
-> error code to main?
+> What has phy-handle got to do with this? You might want to add an
+> explanation why you picked that as a Fixes: commit, if it is in fact
+> correct.
 
-
-
-Could you see the comments at the bottom of
-scripts/mod/modpost.h  ?
-
-
-error() functions sets 'error_occurred' variable,
-so main() function will exist with 1 at the end.
-
-
-If we bail out at the very first error, users would
-compile the kernel again and again
-to fix errors one by one.
-
-modpost continues running as far as possible
-to display as many errors as possible.
-
-Compilers usually do similar things.
-
-
-
-
-
-
-
-
-> > +       }
-> > +
-> > +       list_for_each_entry(sym, &mod->exported_symbols, list) {
-> > +               if (!sym->crc_valid)
-> > +                       continue;
-> > +
-> > +               buf_printf(&buf, "__crc_%s = 0x%08x;\n", sym->name, sym->crc);
-> > +       }
-> > +
-> > +       write_if_changed(&buf, lds_file);
-> > +       free(buf.p);
-> > +}
-> > +
-> >  static void write_namespace_deps_files(const char *fname)
-> >  {
-> >         struct module *mod;
-> > @@ -2673,6 +2697,9 @@ int main(int argc, char **argv)
-> >                 char fname[PATH_MAX];
-> >                 int ret;
-> >
-> > +               if (modversions && !mod->from_dump)
-> > +                       write_symversions_lds(mod);
-> > +
-> >                 if (mod->is_vmlinux || mod->from_dump)
-> >                         continue;
-> >
-> > --
-> > 2.32.0
-> >
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+If you have a look at that commit, you can see that was where ast2600
+support was added to the driver.

@@ -2,205 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A112D5141E0
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 07:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DD855141E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 07:46:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354203AbiD2Fsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 01:48:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40902 "EHLO
+        id S1354206AbiD2FtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 01:49:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354162AbiD2Fs2 (ORCPT
+        with ESMTP id S1351480AbiD2FtW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 01:48:28 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEED83FBD9;
-        Thu, 28 Apr 2022 22:45:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651211109; x=1682747109;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=zvnfBG7BKg/DyeMcD9WDj5UDxwVxbi2ih2bn8ZMBFwc=;
-  b=imcmbKB/86pP2+taGtwBZGdtKtYXVSkify1cx5sRFL6cxHj1PS98joc0
-   9l+MqRSrJcp9hQbnLfiy7FQQfN7rVMKaz7CohvzqObhS54WK2b3V0jFc4
-   zyR3YwG/Fpm63phGLs++lvukovSdjh0Xf605CBkqkg3xsf5y6VXcMQJlB
-   cL9htnNdVL+EjXIKpLFJEwYhcgAgpYjr4XdTlMuK5AXwpseYEi+tervRy
-   TeGVZQfVIZxvggVb5dICKE9jy7Pwtdn64+FNzF5MQHGF0Is0exGXjRP2R
-   aEguVhydzqKa2mvKE/z4KqV5TKNXnXdtLz2Okoa26aYWQ7BJkRoSdnin+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="266065800"
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="266065800"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 22:45:09 -0700
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="560126685"
-Received: from yangweij-mobl.ccr.corp.intel.com (HELO [10.249.171.134]) ([10.249.171.134])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 22:45:06 -0700
-Message-ID: <cc1089a8-cbb6-4148-2721-9beb694591b7@intel.com>
-Date:   Fri, 29 Apr 2022 13:45:02 +0800
+        Fri, 29 Apr 2022 01:49:22 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CAC98E1B0
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 22:46:05 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id c1so5154508qkf.13
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 22:46:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bLTftZOmNCEKWdg/w/LKAiVP4XXhL/YylRxacAEvnUM=;
+        b=HZDi7YrcD7xdcirUzbKmgfCUwU2mAUIMxLK6Pfl/vXm8dXaCa6oXJJnM94XedJsXJW
+         d7tXeECGF66fkQaVC/8ZnRRdU00yEtUsPABlMNqn9lEgozeeUnTlVm53XHdvZD/Z0tyo
+         ZGO/03ZVgKDyEXakICg1glfHPx/pZPDhLUtQSg7B3OEbyJqdpK9h9+exyaL8gWziyIvf
+         GOalhUhOrt//j+HanjgDq8+wqT6/KBQZ6Fv+ab2y3KyX/HkpjJge/xXFpggkY5EGxt6J
+         nWjex5cU9dc2gOvfd06sbax7dIxjwAO7lyDxCC+4upHoch9N9YGnIgOw6jOMP9crBA1+
+         dsRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bLTftZOmNCEKWdg/w/LKAiVP4XXhL/YylRxacAEvnUM=;
+        b=GdW/rlntWXkM5MUbaPIa2aCOKUPQELIpET7/cQw0EhKXwv0zmeCk6T/kV5UnEniFhD
+         5INr3aqAZABGELaQcHFh0V3Iwpe6GOuanKB6Bc0ymwP6Y6/k9snPNvCp3oNFqLCyDH8B
+         yiavfUACzVzlQx7uD+fbs1uLrpUk4IOFlGi/qH755NcQobO3Rh09FB4xvs0Ox8F2uu9h
+         lQhgHMzIFkJHEdvWY0LkSkArpOIi/39t+77OBqaXx2CqDv6FfeZNLfXWw/KpnGX5XMn5
+         NfK45fH4gLuLBkcy+gETt3nOfCqbF7CPKDdx526KHO7A/F120haoYjQIqNpniQxupPWh
+         u97Q==
+X-Gm-Message-State: AOAM530D/Cn4tU27Jw4frzYiFRLZsgMyKba9UFHytW6z3K+VpoTtanAi
+        QQBNnAah2klkdhi0hrH33flSbGqlSms=
+X-Google-Smtp-Source: ABdhPJzXfwoRnrSfH1iu4KqIReOFh1KQsHnmjpSDX7rs/uIg/dywVen246u6DCBlSv5WGou7UcrNog==
+X-Received: by 2002:a37:a90e:0:b0:69f:9b8f:86b4 with SMTP id s14-20020a37a90e000000b0069f9b8f86b4mr5555492qke.513.1651211164465;
+        Thu, 28 Apr 2022 22:46:04 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id f10-20020a05622a104a00b002f35726ccd8sm1188876qte.86.2022.04.28.22.46.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 22:46:03 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     richard@nod.at
+Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] UBIFS: simplify the return expression of run_gc()
+Date:   Fri, 29 Apr 2022 05:45:56 +0000
+Message-Id: <20220429054556.3851784-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v10 08/16] KVM: x86/pmu: Refactor code to support guest
- Arch LBR
-Content-Language: en-US
-To:     "Liang, Kan" <kan.liang@linux.intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "like.xu.linux@gmail.com" <like.xu.linux@gmail.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "Wang, Wei W" <wei.w.wang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220422075509.353942-1-weijiang.yang@intel.com>
- <20220422075509.353942-9-weijiang.yang@intel.com>
- <4ad3bbff-8577-8e84-6ed9-b6f90e018224@linux.intel.com>
-From:   "Yang, Weijiang" <weijiang.yang@intel.com>
-In-Reply-To: <4ad3bbff-8577-8e84-6ed9-b6f90e018224@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-On 4/28/2022 10:18 PM, Liang, Kan wrote:
->
-> On 4/22/2022 3:55 AM, Yang Weijiang wrote:
->> Take account of Arch LBR when do sanity checks before program
->> vPMU for guest. Pass through Arch LBR recording MSRs to guest
->> to gain better performance. Note, Arch LBR and Legacy LBR support
->> are mutually exclusive, i.e., they're not both available on one
->> platform.
->>
->> Co-developed-by: Like Xu <like.xu@linux.intel.com>
->> Signed-off-by: Like Xu <like.xu@linux.intel.com>
->> Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
->> ---
->>    arch/x86/kvm/vmx/pmu_intel.c | 37 +++++++++++++++++++++++++++++-------
->>    arch/x86/kvm/vmx/vmx.c       |  3 +++
->>    2 files changed, 33 insertions(+), 7 deletions(-)
->>
->> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
->> index 7dc8a5783df7..cb28888e9f4f 100644
->> --- a/arch/x86/kvm/vmx/pmu_intel.c
->> +++ b/arch/x86/kvm/vmx/pmu_intel.c
->> @@ -170,12 +170,16 @@ static inline struct kvm_pmc *get_fw_gp_pmc(struct kvm_pmu *pmu, u32 msr)
->>    
->>    bool intel_pmu_lbr_is_compatible(struct kvm_vcpu *vcpu)
->>    {
->> +	if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR))
->> +		return guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR);
->> +
->>    	/*
->>    	 * As a first step, a guest could only enable LBR feature if its
->>    	 * cpu model is the same as the host because the LBR registers
->>    	 * would be pass-through to the guest and they're model specific.
->>    	 */
->> -	return boot_cpu_data.x86_model == guest_cpuid_model(vcpu);
->> +	return !boot_cpu_has(X86_FEATURE_ARCH_LBR) &&
->> +		boot_cpu_data.x86_model == guest_cpuid_model(vcpu);
->>    }
->>    
->>    bool intel_pmu_lbr_is_enabled(struct kvm_vcpu *vcpu)
->> @@ -193,12 +197,19 @@ static bool intel_pmu_is_valid_lbr_msr(struct kvm_vcpu *vcpu, u32 index)
-> I think we should move MSR_ARCH_LBR_DEPTH and MSR_ARCH_LBR_CTL to this
-> function as well, since they are LBR related MSRs.
-Makes sense, will change it in next version.
->
->>    	if (!intel_pmu_lbr_is_enabled(vcpu))
->>    		return ret;
->>    
->> -	ret = (index == MSR_LBR_SELECT) || (index == MSR_LBR_TOS) ||
->> -		(index >= records->from && index < records->from + records->nr) ||
->> -		(index >= records->to && index < records->to + records->nr);
->> +	if (!guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR))
->> +		ret = (index == MSR_LBR_SELECT) || (index == MSR_LBR_TOS);
->> +
->> +	if (!ret) {
->> +		ret = (index >= records->from &&
->> +		       index < records->from + records->nr) ||
->> +		      (index >= records->to &&
->> +		       index < records->to + records->nr);
->> +	}
->>    
->>    	if (!ret && records->info)
->> -		ret = (index >= records->info && index < records->info + records->nr);
->> +		ret = (index >= records->info &&
->> +		       index < records->info + records->nr);
-> Please use "{}" since you split it to two lines.
-OK.
->
-> Thanks,
-> Kan
->>    
->>    	return ret;
->>    }
->> @@ -747,6 +758,9 @@ static void vmx_update_intercept_for_lbr_msrs(struct kvm_vcpu *vcpu, bool set)
->>    			vmx_set_intercept_for_msr(vcpu, lbr->info + i, MSR_TYPE_RW, set);
->>    	}
->>    
->> +	if (guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR))
->> +		return;
->> +
->>    	vmx_set_intercept_for_msr(vcpu, MSR_LBR_SELECT, MSR_TYPE_RW, set);
->>    	vmx_set_intercept_for_msr(vcpu, MSR_LBR_TOS, MSR_TYPE_RW, set);
->>    }
->> @@ -787,10 +801,13 @@ void vmx_passthrough_lbr_msrs(struct kvm_vcpu *vcpu)
->>    {
->>    	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
->>    	struct lbr_desc *lbr_desc = vcpu_to_lbr_desc(vcpu);
->> +	bool lbr_enable = guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR) ?
->> +		(vmcs_read64(GUEST_IA32_LBR_CTL) & ARCH_LBR_CTL_LBREN) :
->> +		(vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR);
->>    
->>    	if (!lbr_desc->event) {
->>    		vmx_disable_lbr_msrs_passthrough(vcpu);
->> -		if (vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR)
->> +		if (lbr_enable)
->>    			goto warn;
->>    		if (test_bit(INTEL_PMC_IDX_FIXED_VLBR, pmu->pmc_in_use))
->>    			goto warn;
->> @@ -807,13 +824,19 @@ void vmx_passthrough_lbr_msrs(struct kvm_vcpu *vcpu)
->>    	return;
->>    
->>    warn:
->> +	if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR))
->> +		wrmsrl(MSR_ARCH_LBR_DEPTH, lbr_desc->records.nr);
->>    	pr_warn_ratelimited("kvm: vcpu-%d: fail to passthrough LBR.\n",
->>    		vcpu->vcpu_id);
->>    }
->>    
->>    static void intel_pmu_cleanup(struct kvm_vcpu *vcpu)
->>    {
->> -	if (!(vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR))
->> +	bool lbr_enable = guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR) ?
->> +		(vmcs_read64(GUEST_IA32_LBR_CTL) & ARCH_LBR_CTL_LBREN) :
->> +		(vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_LBR);
->> +
->> +	if (!lbr_enable)
->>    		intel_pmu_release_guest_lbr_event(vcpu);
->>    }
->>    
->> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
->> index 73961fcfb62d..a1816c6597f5 100644
->> --- a/arch/x86/kvm/vmx/vmx.c
->> +++ b/arch/x86/kvm/vmx/vmx.c
->> @@ -573,6 +573,9 @@ static bool is_valid_passthrough_msr(u32 msr)
->>    	case MSR_LBR_NHM_TO ... MSR_LBR_NHM_TO + 31:
->>    	case MSR_LBR_CORE_FROM ... MSR_LBR_CORE_FROM + 8:
->>    	case MSR_LBR_CORE_TO ... MSR_LBR_CORE_TO + 8:
->> +	case MSR_ARCH_LBR_FROM_0 ... MSR_ARCH_LBR_FROM_0 + 31:
->> +	case MSR_ARCH_LBR_TO_0 ... MSR_ARCH_LBR_TO_0 + 31:
->> +	case MSR_ARCH_LBR_INFO_0 ... MSR_ARCH_LBR_INFO_0 + 31:
->>    		/* LBR MSRs. These are handled in vmx_update_intercept_for_lbr_msrs() */
->>    		return true;
->>    	}
+Simplify the return expression.
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+ fs/ubifs/budget.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/fs/ubifs/budget.c b/fs/ubifs/budget.c
+index c0b84e960b20..e8b9b756f0ac 100644
+--- a/fs/ubifs/budget.c
++++ b/fs/ubifs/budget.c
+@@ -65,7 +65,7 @@ static void shrink_liability(struct ubifs_info *c, int nr_to_write)
+  */
+ static int run_gc(struct ubifs_info *c)
+ {
+-	int err, lnum;
++	int lnum;
+ 
+ 	/* Make some free space by garbage-collecting dirty space */
+ 	down_read(&c->commit_sem);
+@@ -76,10 +76,7 @@ static int run_gc(struct ubifs_info *c)
+ 
+ 	/* GC freed one LEB, return it to lprops */
+ 	dbg_budg("GC freed LEB %d", lnum);
+-	err = ubifs_return_leb(c, lnum);
+-	if (err)
+-		return err;
+-	return 0;
++	return ubifs_return_leb(c, lnum);
+ }
+ 
+ /**
+-- 
+2.25.1
+
+

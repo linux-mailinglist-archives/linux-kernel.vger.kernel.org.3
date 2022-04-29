@@ -2,188 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6CC513FAE
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 02:44:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00081513FBC
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 02:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352891AbiD2AsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 20:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36982 "EHLO
+        id S1353120AbiD2Asr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 20:48:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237629AbiD2AsC (ORCPT
+        with ESMTP id S1353142AbiD2Aso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 20:48:02 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3350FBB902;
-        Thu, 28 Apr 2022 17:44:46 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Thu, 28 Apr 2022 20:48:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 82D6A8879D
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 17:45:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651193125;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=dTvROQQ49sVjYocOeNNYIv0FPtF4+TnxaG7UpbtPvKI=;
+        b=EcTjT064BlXb+HVMxnvi2zV6oQWmIs2n5lcvS9ToigdfDmFSap3Geef7eOEhiBeAgFWm2P
+        iqmjqLlEQQ8vqmxRlE860YrcstRidKUHBYsskKXInOgk4EfPy58aVhLFXWSkQofzO/KKfI
+        9ktCXFsaJZgBxWxLkuP1hfDIZ3N+YJ4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-410-tfhRk1WJMIivilljplxVuQ-1; Thu, 28 Apr 2022 20:45:22 -0400
+X-MC-Unique: tfhRk1WJMIivilljplxVuQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id BCA8121872;
-        Fri, 29 Apr 2022 00:44:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1651193084; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JrU/wsC8sdfT/R0JtZvwzkc1EUgEvszFC5tR6hfJPHE=;
-        b=HcAEspUL3B+9CGfESTkkWyVHLwjkJyuXcPrNSc2itnNpsG4afpKgD2fceNteEvGeIDzDkF
-        vam2Q7ZjD4Gu5lf4cLuh8wj+2UI/XuhK0NK7Izl6oYOI2DyEklQM6ZBCinCG9RVEBqv6mY
-        w/P+5PydmAsMkqnfWIlJG5nPcjgdwrc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1651193084;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JrU/wsC8sdfT/R0JtZvwzkc1EUgEvszFC5tR6hfJPHE=;
-        b=pAN5MwCEnPu7JYa0cLy1RgMWnMu44JE2gGqZNmMinRWucAubigJnhLMMABEnAgm3z3Cafp
-        P+EvQ9EmCJq+XnAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A593513491;
-        Fri, 29 Apr 2022 00:44:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ljwOGfo0a2IrSgAAMHmgww
-        (envelope-from <neilb@suse.de>); Fri, 29 Apr 2022 00:44:42 +0000
-Subject: [PATCH 1/2] MM: handle THP in swap_*page_fs()
-From:   NeilBrown <neilb@suse.de>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Christoph Hellwig <hch@lst.de>,
-        Miaohe Lin <linmiaohe@huawei.com>, linux-nfs@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Date:   Fri, 29 Apr 2022 10:43:34 +1000
-Message-ID: <165119301488.15698.9457662928942765453.stgit@noble.brown>
-In-Reply-To: <165119280115.15698.2629172320052218921.stgit@noble.brown>
-References: <165119280115.15698.2629172320052218921.stgit@noble.brown>
-User-Agent: StGit/1.5
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7D7DE185A7A4;
+        Fri, 29 Apr 2022 00:45:21 +0000 (UTC)
+Received: from madcap2.tricolour.com (ovpn-0-8.rdu2.redhat.com [10.22.0.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B78A19E8F;
+        Fri, 29 Apr 2022 00:44:54 +0000 (UTC)
+From:   Richard Guy Briggs <rgb@redhat.com>
+To:     Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Richard Guy Briggs <rgb@redhat.com>, Jan Kara <jack@suse.cz>
+Subject: [PATCH v2 0/3] fanotify: Allow user space to pass back additional audit info
+Date:   Thu, 28 Apr 2022 20:44:33 -0400
+Message-Id: <cover.1651174324.git.rgb@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pages passed to swap_readpage()/swap_writepage() are not necessarily all
-the same size - there may be transparent-huge-pages involves.
+The Fanotify API can be used for access control by requesting permission
+event notification. The user space tooling that uses it may have a
+complicated policy that inherently contains additional context for the
+decision. If this information were available in the audit trail, policy
+writers can close the loop on debugging policy. Also, if this additional
+information were available, it would enable the creation of tools that
+can suggest changes to the policy similar to how audit2allow can help
+refine labeled security.
 
-The BIO paths of swap_*page() handle this correctly, but the SWP_FS_OPS
-path does not.
+This patch defines 2 additional fields within the response structure
+returned from user space on a permission event. The first field is 16
+bits for the context type. The context type will describe what the
+meaning is of the second field. The audit system will separate the
+pieces and log them individually.
 
-So we need to use thp_size() to find the size, not just assume
-PAGE_SIZE, and we need to track the total length of the request, not
-just assume it is "page * PAGE_SIZE".
+The audit function was updated to log the additional information in the
+AUDIT_FANOTIFY record. The following is an example of the new record
+format:
 
-Reported-by: Miaohe Lin <linmiaohe@huawei.com>
-Signed-off-by: NeilBrown <neilb@suse.de>
----
- mm/page_io.c |   23 +++++++++++++----------
- 1 file changed, 13 insertions(+), 10 deletions(-)
+type=FANOTIFY msg=audit(1600385147.372:590): resp=2 fan_type=1 fan_ctx=17
 
-diff --git a/mm/page_io.c b/mm/page_io.c
-index c132511f521c..d636a3531cad 100644
---- a/mm/page_io.c
-+++ b/mm/page_io.c
-@@ -239,6 +239,7 @@ struct swap_iocb {
- 	struct kiocb		iocb;
- 	struct bio_vec		bvec[SWAP_CLUSTER_MAX];
- 	int			pages;
-+	int			len;
- };
- static mempool_t *sio_pool;
- 
-@@ -261,7 +262,7 @@ static void sio_write_complete(struct kiocb *iocb, long ret)
- 	struct page *page = sio->bvec[0].bv_page;
- 	int p;
- 
--	if (ret != PAGE_SIZE * sio->pages) {
-+	if (ret != sio->len) {
- 		/*
- 		 * In the case of swap-over-nfs, this can be a
- 		 * temporary failure if the system has limited
-@@ -301,7 +302,7 @@ static int swap_writepage_fs(struct page *page, struct writeback_control *wbc)
- 		sio = *wbc->swap_plug;
- 	if (sio) {
- 		if (sio->iocb.ki_filp != swap_file ||
--		    sio->iocb.ki_pos + sio->pages * PAGE_SIZE != pos) {
-+		    sio->iocb.ki_pos + sio->len != pos) {
- 			swap_write_unplug(sio);
- 			sio = NULL;
- 		}
-@@ -312,10 +313,12 @@ static int swap_writepage_fs(struct page *page, struct writeback_control *wbc)
- 		sio->iocb.ki_complete = sio_write_complete;
- 		sio->iocb.ki_pos = pos;
- 		sio->pages = 0;
-+		sio->len = 0;
- 	}
- 	sio->bvec[sio->pages].bv_page = page;
--	sio->bvec[sio->pages].bv_len = PAGE_SIZE;
-+	sio->bvec[sio->pages].bv_len = thp_size(page);
- 	sio->bvec[sio->pages].bv_offset = 0;
-+	sio->len += thp_size(page);
- 	sio->pages += 1;
- 	if (sio->pages == ARRAY_SIZE(sio->bvec) || !wbc->swap_plug) {
- 		swap_write_unplug(sio);
-@@ -371,8 +374,7 @@ void swap_write_unplug(struct swap_iocb *sio)
- 	struct address_space *mapping = sio->iocb.ki_filp->f_mapping;
- 	int ret;
- 
--	iov_iter_bvec(&from, WRITE, sio->bvec, sio->pages,
--		      PAGE_SIZE * sio->pages);
-+	iov_iter_bvec(&from, WRITE, sio->bvec, sio->pages, sio->len);
- 	ret = mapping->a_ops->swap_rw(&sio->iocb, &from);
- 	if (ret != -EIOCBQUEUED)
- 		sio_write_complete(&sio->iocb, ret);
-@@ -383,7 +385,7 @@ static void sio_read_complete(struct kiocb *iocb, long ret)
- 	struct swap_iocb *sio = container_of(iocb, struct swap_iocb, iocb);
- 	int p;
- 
--	if (ret == PAGE_SIZE * sio->pages) {
-+	if (ret == sio->len) {
- 		for (p = 0; p < sio->pages; p++) {
- 			struct page *page = sio->bvec[p].bv_page;
- 
-@@ -415,7 +417,7 @@ static void swap_readpage_fs(struct page *page,
- 		sio = *plug;
- 	if (sio) {
- 		if (sio->iocb.ki_filp != sis->swap_file ||
--		    sio->iocb.ki_pos + sio->pages * PAGE_SIZE != pos) {
-+		    sio->iocb.ki_pos + sio->len != pos) {
- 			swap_read_unplug(sio);
- 			sio = NULL;
- 		}
-@@ -426,10 +428,12 @@ static void swap_readpage_fs(struct page *page,
- 		sio->iocb.ki_pos = pos;
- 		sio->iocb.ki_complete = sio_read_complete;
- 		sio->pages = 0;
-+		sio->len = 0;
- 	}
- 	sio->bvec[sio->pages].bv_page = page;
--	sio->bvec[sio->pages].bv_len = PAGE_SIZE;
-+	sio->bvec[sio->pages].bv_len = thp_size(page);
- 	sio->bvec[sio->pages].bv_offset = 0;
-+	sio->len += thp_size(page);
- 	sio->pages += 1;
- 	if (sio->pages == ARRAY_SIZE(sio->bvec) || !plug) {
- 		swap_read_unplug(sio);
-@@ -521,8 +525,7 @@ void __swap_read_unplug(struct swap_iocb *sio)
- 	struct address_space *mapping = sio->iocb.ki_filp->f_mapping;
- 	int ret;
- 
--	iov_iter_bvec(&from, READ, sio->bvec, sio->pages,
--		      PAGE_SIZE * sio->pages);
-+	iov_iter_bvec(&from, READ, sio->bvec, sio->pages, sio->len);
- 	ret = mapping->a_ops->swap_rw(&sio->iocb, &from);
- 	if (ret != -EIOCBQUEUED)
- 		sio_read_complete(&sio->iocb, ret);
+changelog:
+v1:
+- first version by Steve Grubb <sgrubb@redhat.com>
+Link: https://lore.kernel.org/r/2042449.irdbgypaU6@x2
 
+v2:
+- enhancements suggested by Jan Kara <jack@suse.cz>
+- 1/3 change %d to %u in pr_debug
+- 2/3 change response from __u32 to __u16
+- mod struct fanotify_response and fanotify_perm_event add extra_info_type, extra_info_buf
+- extra_info_buf size max FANOTIFY_MAX_RESPONSE_EXTRA_LEN, add struct fanotify_response_audit_rule
+- extend debug statements
+- remove unneeded macros
+- [internal] change interface to finish_permission_event() and process_access_response()
+- 3/3 update format of extra information
+- [internal] change interface to audit_fanotify()
+- change ctx_type= to fan_type=
+Link: https://lore.kernel.org/r/cover.1651174324.git.rgb@redhat.com
+
+Richard Guy Briggs (3):
+  fanotify: Ensure consistent variable type for response
+  fanotify: define struct members to hold response decision context
+  fanotify: Allow audit to use the full permission event response
+
+ fs/notify/fanotify/fanotify.c      |  5 ++-
+ fs/notify/fanotify/fanotify.h      |  4 +-
+ fs/notify/fanotify/fanotify_user.c | 59 ++++++++++++++++++++----------
+ include/linux/audit.h              |  8 ++--
+ include/linux/fanotify.h           |  3 ++
+ include/uapi/linux/fanotify.h      | 27 +++++++++++++-
+ kernel/auditsc.c                   | 18 +++++++--
+ 7 files changed, 94 insertions(+), 30 deletions(-)
+
+-- 
+2.27.0
 

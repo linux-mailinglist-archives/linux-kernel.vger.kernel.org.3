@@ -2,164 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F18D51479C
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9846A5147A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239166AbiD2K5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 06:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33120 "EHLO
+        id S239157AbiD2K7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 06:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239024AbiD2K44 (ORCPT
+        with ESMTP id S1358074AbiD2K7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 06:56:56 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7A8579AA;
-        Fri, 29 Apr 2022 03:53:38 -0700 (PDT)
-Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3F48C1EC0453;
-        Fri, 29 Apr 2022 12:53:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1651229613;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=CLBqjruz6nJNNoK+VEKQerL5OsRHm91OkA4ph7LgujU=;
-        b=oBhT0oDPQYoYhiq3M57NHR0kwDtbkzESqpviQ6APK17N8rFapqRG6H81FABgqsajB/8ox2
-        GRf4rKs7ZFj/oNjq2sjGDOJh1REdBXtekFAUxNixxIG18p65MA0Z67tsCvyzGJslJ8ZgZg
-        HltjJpVIS2I8CthlPc6405WOuqTXOiY=
-Date:   Fri, 29 Apr 2022 12:53:30 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv5 05/12] efi/x86: Implement support for unaccepted memory
-Message-ID: <YmvDqgcyKOgLYNrT@zn.tnic>
-References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
- <20220425033934.68551-6-kirill.shutemov@linux.intel.com>
+        Fri, 29 Apr 2022 06:59:13 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18F3EA76DD;
+        Fri, 29 Apr 2022 03:55:54 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 97E2792009C; Fri, 29 Apr 2022 12:55:53 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 8B80892009B;
+        Fri, 29 Apr 2022 11:55:53 +0100 (BST)
+Date:   Fri, 29 Apr 2022 11:55:53 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Fix CP0 counter erratum detection for R4k CPUs
+In-Reply-To: <20220429100128.GB11365@alpha.franken.de>
+Message-ID: <alpine.DEB.2.21.2204291119040.9383@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2204240214430.9383@angie.orcam.me.uk> <20220429100128.GB11365@alpha.franken.de>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220425033934.68551-6-kirill.shutemov@linux.intel.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        TRACKER_ID autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 06:39:27AM +0300, Kirill A. Shutemov wrote:
-> diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
-> index 5401985901f5..f9b88174209e 100644
-> --- a/drivers/firmware/efi/libstub/x86-stub.c
-> +++ b/drivers/firmware/efi/libstub/x86-stub.c
-> @@ -15,6 +15,7 @@
->  #include <asm/setup.h>
->  #include <asm/desc.h>
->  #include <asm/boot.h>
-> +#include <asm/unaccepted_memory.h>
->  
->  #include "efistub.h"
->  
-> @@ -504,6 +505,17 @@ setup_e820(struct boot_params *params, struct setup_data *e820ext, u32 e820ext_s
->  			e820_type = E820_TYPE_PMEM;
->  			break;
->  
-> +		case EFI_UNACCEPTED_MEMORY:
-> +			if (!IS_ENABLED(CONFIG_UNACCEPTED_MEMORY)) {
-> +				efi_warn_once("The system has unaccepted memory,"
-> +					     " but kernel does not support it\n");
-> +				efi_warn_once("Consider enabling UNACCEPTED_MEMORY\n");
+On Fri, 29 Apr 2022, Thomas Bogendoerfer wrote:
 
-CONFIG_UNACCEPTED_MEMORY
+> > Fix the discrepancy between the two places we check for the CP0 counter 
+> > erratum in along with the incorrect comparison of the R4400 revision 
+> > number against 0x30 which matches none and consistently consider all 
+> > R4000 and R4400 processors affected, as documented in processor errata 
+> > publications[1][2][3], following the mapping between CP0 PRId register 
+> > values and processor models:
+> > 
+> >   PRId   |  Processor Model
+> > ---------+--------------------
+> > 00000422 | R4000 Revision 2.2
+> > 00000430 | R4000 Revision 3.0
+> > 00000440 | R4400 Revision 1.0
+> > 00000450 | R4400 Revision 2.0
+> > 00000460 | R4400 Revision 3.0
+> 
+> interesting, where is this documented ? And it's quite funny that so far
+> everybody messed up revision printing for R4400 CPUs. 
 
-> +				continue;
-> +			}
-> +			e820_type = E820_TYPE_RAM;
-> +			process_unaccepted_memory(params, d->phys_addr,
-> +					d->phys_addr + PAGE_SIZE * d->num_pages);
+ That's just observation combined with past discussions with Ralf.
 
-Align arguments on the opening brace.
+ Basically the PRId implementation number is 0x04 for both the R4000 and 
+the R4400 (the only difference between the two CPUs is the addition of the 
+write-back buffer in the latter one, making it weakly ordered).  And then 
+the PRId revision number matches exactly the documented CPU revision for 
+the R4000, while for the R4400 you need to subtract 3 from the PRId 
+revision number to get the documented CPU revision (i.e. what would be 
+R4000 Revision 4.0 actually became R4400 Revision 1.0).
 
-> +			break;
->  		default:
->  			continue;
->  		}
-> @@ -568,6 +580,59 @@ static efi_status_t alloc_e820ext(u32 nr_desc, struct setup_data **e820ext,
->  	return status;
->  }
->  
-> +static efi_status_t allocate_unaccepted_memory(struct boot_params *params,
-> +					       __u32 nr_desc,
-> +					       struct efi_boot_memmap *map)
-> +{
-> +	unsigned long *mem = NULL;
-> +	u64 size, max_addr = 0;
-> +	efi_status_t status;
-> +	bool found = false;
-> +	int i;
-> +
-> +	/* Check if there's any unaccepted memory and find the max address */
-> +	for (i = 0; i < nr_desc; i++) {
-> +		efi_memory_desc_t *d;
-> +
-> +		d = efi_early_memdesc_ptr(*map->map, *map->desc_size, i);
-> +		if (d->type == EFI_UNACCEPTED_MEMORY)
-> +			found = true;
-> +		if (d->phys_addr + d->num_pages * PAGE_SIZE > max_addr)
-> +			max_addr = d->phys_addr + d->num_pages * PAGE_SIZE;
-> +	}
-> +
-> +	if (!found) {
-> +		params->unaccepted_memory = 0;
-> +		return EFI_SUCCESS;
-> +	}
-> +
-> +	/*
-> +	 * If unaccepted memory is present allocate a bitmap to track what
-> +	 * memory has to be accepted before access.
-> +	 *
-> +	 * One bit in the bitmap represents 2MiB in the address space:
-> +	 * A 4k bitmap can track 64GiB of physical address space.
-> +	 *
-> +	 * In the worst case scenario -- a huge hole in the middle of the
-> +	 * address space -- It needs 256MiB to handle 4PiB of the address
-> +	 * space.
-> +	 *
-> +	 * TODO: handle situation if params->unaccepted_memory has already set.
+ At this time no old MIPSer from the SGI days may be around to confirm or 
+contradict this observation.  Documentation explicitly says[1]:
 
-"... is already set."
+"The revision number can distinguish some chip revisions, however there is 
+no guarantee that changes to the chip will necessarily be reflected in the 
+PRId register, or that changes to the revision number necessarily reflect 
+real chip changes.  For this reason, these values are not listed and 
+software should not rely on the revision number in the PRId register to 
+characterize the chip."
 
-And when is that TODO taken care of? Later patch or patchset?
+but surely the author didn't have errata workarounds in mind plus all CPU 
+revisions have already been manufactured so the mapping has been fixed.
 
-Thx.
+> >  Conversely a system can do without a high-precision clock source, in
+> > which case jiffies will be used.  Of course such a system will suffer if 
+> > used for precision timekeeping, but such is the price for broken hardware.  
+> > Don't SNI systems have any alternative timer available, not even the 
+> > venerable 8254?
+> 
+> all SNI systems have a i8254 in their EISA/PCI chipsets. But they aren't
+> that nice for clock events as their interupts are connected via an i8259
+> addresses via ISA PIO. 
 
--- 
-Regards/Gruss,
-    Boris.
+ Interrupts are used for clock events, so you don't need one here.  For 
+clock sources you just read the counter.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+ That said reading from the 8254 is messy too and you may need a spinlock 
+(you need to write the Counter Latch or Read-Back command to the control 
+register and then issue consecutive two reads to the requested timer's 
+data register[2]).  Which is I guess why support for it has been removed 
+from x86 code.  For non-SMP it might be good enough.
+
+> >  With the considerations above in mind, please apply.
+> 
+> will do later.
+
+ Great, thanks!
+
+References:
+
+[1] Joe Heinrich: "MIPS R4000 Microprocessor User's Manual", Second
+    Edition, MIPS Technologies, Inc., April 1, 1994, Chapter 4 "Memory 
+    Management", p.90
+
+[2] "8254 Programmable Interval Timer", Intel Corporation, Order Number: 
+    231164-005, September 1993, Section "Read Operations", pp.7-9
+
+  Maciej

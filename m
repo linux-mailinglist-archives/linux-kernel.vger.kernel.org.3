@@ -2,62 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC105515127
+	by mail.lfdr.de (Postfix) with ESMTP id A2718515126
 	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:51:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379326AbiD2QyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 12:54:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45384 "EHLO
+        id S1379322AbiD2QyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 12:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378896AbiD2QyQ (ORCPT
+        with ESMTP id S1379313AbiD2QyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 12:54:16 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24421D64CA
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:50:58 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id x18so11588669wrc.0
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:50:58 -0700 (PDT)
+        Fri, 29 Apr 2022 12:54:17 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CC9D5548
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:50:59 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id q23so11550895wra.1
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:50:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=vYT8fSjJDS96ejvL4hWH6OGbqvNo7Bl75pPdJ8Clt8Q=;
-        b=X1PPNDQKAG13Y3seC/DVsjwFByyQB7u1UHAUbk5/FTjrwIoP1zNGI4z3qlUypkLfaU
-         qTBWLZUDMpgXLfpDd/Yw/xGYOJTjLEFUKF02xhRouYewSy9P2V3+qWQ4XuWS8lGQsiVU
-         wdlJIYpMfGaVGmxJ2qnWUKcmsCyPJF7S0ejDhGHcAlNGPtqmX72f8imGj3EqKmRQiLgW
-         l7xQ0UquRMUrXGc1+1OLiTEsaG5tLcD9M9Jn/yMgPz2DEAGZ/WCfu++1tsYkMxiCgorX
-         P7Qi93v84Idr13gj+W6zKMBIXa3VY5ZLwkx81o/MHBQwhU+KY5RbMpPmiCh3mnZEiN9X
-         9yIg==
+        bh=wNYpWGO+GrpCk66Nh5RWJKF3WobSkmY4PbioKCEWPFY=;
+        b=TJ1U/wRoz5C/CERNp5RQJqGMOkIBsbtoy4QIiJZD2TedW6yrrMFq5+yg0MzV2ILoio
+         HQj2dVF5V4fP2t/zzQ87bHb2qgi5uSu0zJnKVcQGK1tL7neXv3WTRUNrBo9IOp1pLFM+
+         Bv7TvBXEScmzPJ+y+WcIsefaUU7u8HjjvSlASAbmlC5EnBw/AmMB+06rMDXmSI/9RDgN
+         gTjYrnx4Ek/xcub5GQh6Dx3YKLZpOKOCuftfqTmSuOWUIfTEEkMNgKSLCtZ6xboAQIWP
+         h8JgV+Na8iaYc1azsxTv9V/5xIRR8TSqQG2VqqxHX7e9gUahJLBFWIXnb77/kSzD+q0d
+         mKeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vYT8fSjJDS96ejvL4hWH6OGbqvNo7Bl75pPdJ8Clt8Q=;
-        b=h7Gtjl8e62VEyAPKZeWb0t1Vmtl8peEnReq4/Pa3VQzL5X4pcEyiqBMOyYMGGqjUtR
-         jS7giuqlqhgn2k8Nyu3//70PKAB3lZG/WRo8M6Wep6dI+Jq6QRXxsVOb4R4iqQevo0/7
-         +5jsvZ4dslRM1OqiMjBlGw930Lyom1PGPHE+EyHyjo3owh/eNByvB4PYfJLfRcwMNHMv
-         5Nw0LRTEEXuGubALrMCyq3DF5h6qy2uFRADybQgCXGbW903kUd0lYhnP6tjTxmkwX8WE
-         +cYVpE0nMNwSGdg+GfNxG2nF/KxfKHFFewZeW9T8NhiVESOCGgPeJgR2jsOPGcp48aq2
-         asUw==
-X-Gm-Message-State: AOAM531ZKmh5mXELWUAaOjuQjiUpCVD0J2kUmAR3oFU3N2KVDamXe9dJ
-        IXeetfh1xtlshFrx4sA2/xQE+g==
-X-Google-Smtp-Source: ABdhPJz3pqxYJ5tRD8WGESzkY5/aW838FxKil4yNzZaIMEz86KyXJEhnEGNWmPDurK9rfUrT7Yr/6g==
-X-Received: by 2002:a5d:6d50:0:b0:207:c10e:911 with SMTP id k16-20020a5d6d50000000b00207c10e0911mr15640wri.137.1651251056768;
-        Fri, 29 Apr 2022 09:50:56 -0700 (PDT)
+        bh=wNYpWGO+GrpCk66Nh5RWJKF3WobSkmY4PbioKCEWPFY=;
+        b=d78b6jK4aZHsN2HnDNCbGedgkMw7SP6Az9Q9TCKQRN7qje9A0XVeLvKft8Ve4FRvKp
+         uNkpDt60a9sJ4nDeWe5VS0mqLTDPdysuzXmiA5YGhA6gw9LDU/TuH6U75vYLJuFyh1V5
+         G9JDcDNsOewin5WU/OLH6p4mBLC90C42BXmaWMesc+5MOJGsdhV+6ZJsDHfFn7EyarnV
+         PEo4VIJWXV3Jmppl3vAfJ77VZz4uZ8Y8PA99Iw/bZ7kDB5CYZ8sSB8O+Rpqap60T9J5y
+         bNUw8ayBLkJX+U+jB52xxC8kaeVhACN0B4TK3fl7zNXNdEksqkyjG1vkN9qWbcpdeMCJ
+         iitw==
+X-Gm-Message-State: AOAM533EbcMzIeiFEfeN9Y9sWDAHyeOths7+uw+Ly4pBlsxAz+ky8iLD
+        62SHD1Oeou1zk7YWEuitfCrXew==
+X-Google-Smtp-Source: ABdhPJyA2Xzxv8Rqt/58gTOx6WD7hg0+F2bIQJ7mcE9Oz09xpNKZO/6zcFKPvEQrky04uStjetkCIg==
+X-Received: by 2002:a05:6000:1685:b0:20a:ea43:9f93 with SMTP id y5-20020a056000168500b0020aea439f93mr45210wrd.160.1651251057818;
+        Fri, 29 Apr 2022 09:50:57 -0700 (PDT)
 Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id a16-20020a056000051000b00207b5d9f51fsm2848941wrf.41.2022.04.29.09.50.55
+        by smtp.gmail.com with ESMTPSA id a16-20020a056000051000b00207b5d9f51fsm2848941wrf.41.2022.04.29.09.50.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 09:50:56 -0700 (PDT)
+        Fri, 29 Apr 2022 09:50:57 -0700 (PDT)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Steev Klimaszewski <steev@kali.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+Cc:     linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 1/2] slimbus: qcom-ngd-ctrl: Use platform_get_irq() to get the interrupt
-Date:   Fri, 29 Apr 2022 17:50:50 +0100
-Message-Id: <20220429165051.6187-2-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 2/2] slimbus: qcom: Remove unnecessary print function dev_err()
+Date:   Fri, 29 Apr 2022 17:50:51 +0100
+Message-Id: <20220429165051.6187-3-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20220429165051.6187-1-srinivas.kandagatla@linaro.org>
 References: <20220429165051.6187-1-srinivas.kandagatla@linaro.org>
@@ -72,47 +70,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: Yang Li <yang.lee@linux.alibaba.com>
 
-platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-allocation of IRQ resources in DT core code, this causes an issue
-when using hierarchical interrupt domains using "interrupts" property
-in the node as this bypasses the hierarchical setup and messes up the
-irq chaining.
+The print function dev_err() is redundant because
+platform_get_irq_byname() already prints an error.
 
-In preparation for removal of static setup of IRQ resource from DT core
-code use platform_get_irq().
+Eliminate the follow coccicheck warning:
+./drivers/slimbus/qcom-ctrl.c:514:2-9: line 514 is redundant because
+platform_get_irq() already prints an error
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Tested-By: Steev Klimaszewski <steev@kali.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- drivers/slimbus/qcom-ngd-ctrl.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ drivers/slimbus/qcom-ctrl.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/slimbus/qcom-ngd-ctrl.c b/drivers/slimbus/qcom-ngd-ctrl.c
-index 7040293c2ee8..0f29a08b4c09 100644
---- a/drivers/slimbus/qcom-ngd-ctrl.c
-+++ b/drivers/slimbus/qcom-ngd-ctrl.c
-@@ -1526,13 +1526,11 @@ static int qcom_slim_ngd_ctrl_probe(struct platform_device *pdev)
- 	if (IS_ERR(ctrl->base))
- 		return PTR_ERR(ctrl->base);
+diff --git a/drivers/slimbus/qcom-ctrl.c b/drivers/slimbus/qcom-ctrl.c
+index ec58091fc948..c0c4f895d76e 100644
+--- a/drivers/slimbus/qcom-ctrl.c
++++ b/drivers/slimbus/qcom-ctrl.c
+@@ -510,10 +510,8 @@ static int qcom_slim_probe(struct platform_device *pdev)
+ 	}
  
--	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
--	if (!res) {
--		dev_err(&pdev->dev, "no slimbus IRQ resource\n");
--		return -ENODEV;
+ 	ctrl->irq = platform_get_irq(pdev, 0);
+-	if (ctrl->irq < 0) {
+-		dev_err(&pdev->dev, "no slimbus IRQ\n");
++	if (ctrl->irq < 0)
+ 		return ctrl->irq;
 -	}
-+	ret = platform_get_irq(pdev, 0);
-+	if (ret < 0)
-+		return ret;
  
--	ret = devm_request_irq(dev, res->start, qcom_slim_ngd_interrupt,
-+	ret = devm_request_irq(dev, ret, qcom_slim_ngd_interrupt,
- 			       IRQF_TRIGGER_HIGH, "slim-ngd", ctrl);
- 	if (ret) {
- 		dev_err(&pdev->dev, "request IRQ failed\n");
+ 	sctrl = &ctrl->ctrl;
+ 	sctrl->dev = &pdev->dev;
 -- 
 2.21.0
 

@@ -2,110 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2CB151497C
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC05351499D
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359338AbiD2Mjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 08:39:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47640 "EHLO
+        id S1345035AbiD2MmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 08:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230412AbiD2Mjg (ORCPT
+        with ESMTP id S1359327AbiD2MmD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 08:39:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2CE0C4DF53
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 05:36:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651235777;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tmPALbAB2aFHap4uYCwyzn1Tmk9I3K+tWth9ftQrgaY=;
-        b=EY3M1kSm4wT8l9wufLyrDwpugLXaS+8TFkeYQGMadx5wQlAobt9kl4yRDwhZtUGVT5xoqQ
-        StXpUWrwILt9zjv79Soyv54DqK1oITYWHwotNYihZfPRlZzIoUhUEIZGqoNLR7JQBYNMuz
-        OLxHNl8G54VG8/yd740H//3wsbn4uTU=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-127-MgTbb_XDPoeB0lwdPMMXzA-1; Fri, 29 Apr 2022 08:36:15 -0400
-X-MC-Unique: MgTbb_XDPoeB0lwdPMMXzA-1
-Received: by mail-qk1-f199.google.com with SMTP id c8-20020a05620a268800b0069c0f1b3206so5145472qkp.18
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 05:36:15 -0700 (PDT)
+        Fri, 29 Apr 2022 08:42:03 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D00C9B44
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 05:38:41 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id y14-20020a9d460e000000b00605ee347da1so2500262ote.8
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 05:38:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=usp.br; s=usp-google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GyLq/VeXsUx7i3jX6gXpo6bXbVNITIFiiUrEDtEMY+w=;
+        b=yBhyfloaiTY1IVTbeQadAid7OQA5iFJYxuwJ71nUqzOYUX6rTgNjU2a+VJl7EAC4NV
+         49q0sAscKw1XpWdXFzHfWb84cR0Ta1bpYLPKdUxB1oPiJLubSviIRSe+nBBVAHmfumX/
+         r4eklVMjUTL8YQrl88ehVnE9Hzt+1EjwY7eRA0ZAeDp3BOWRzipo/Wkbe6YBYKkpaYGc
+         A2WIBmU8owUzbma6An2NEDIq+8tGv+9V5sVaEdIfGBwaZf/sX5Qq2BjVI/FGoJxmXQvh
+         fVhe2yQeGhn01V4Qi3rbya6Eg3SR2ZfPalj1i7GKbH4QqrwO/rjAX5cclDfUMAOmxosM
+         k6zQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tmPALbAB2aFHap4uYCwyzn1Tmk9I3K+tWth9ftQrgaY=;
-        b=KLxKB/YW0sCGhyn1r0lynWsa0vJg08nPQKE3ZRcATtrQR/IO9qC2/DCYEunvcfZAL6
-         hPD6sPO2Vp1WKLX6dLUActEBjagEv13Fkx8KzeDhFZDWZ9XwqQ72vjLe2+PP616KHHq/
-         2rzu9Q7LSi27nIAZo1JmHz40tRwASkUPXKWhshMTrRkcMtHAhfCJFHQLtqwYsp/3M0Ak
-         ldvwAtkjWBZSKDdF2BDNnY+OTnNQ8oo5QpnLAacAviPE/jCFW1mnUJ8XQSnahm/Jo808
-         AiA2KY7EsD8PrHaaWcw1mtC+Gik+St7AmecYPAiNMl1KgVXnK7WXtxmX8/oOCkow70c5
-         t+rg==
-X-Gm-Message-State: AOAM532yjrI+gHGSsKmclu3ptd0NvGzwI7Pr6J4EoOAe/5rYnl2qiJ10
-        T0WwJhBKeg+ZCMbQj91QpjWZhmINw8frg/OEYyfWxwkjaBMMnStm7iLxoqHdldyiXjV528s2xDl
-        6rI2b76PRrsomMamdA1FSLI9P
-X-Received: by 2002:ae9:c30d:0:b0:69e:bd20:40cc with SMTP id n13-20020ae9c30d000000b0069ebd2040ccmr22855199qkg.10.1651235775352;
-        Fri, 29 Apr 2022 05:36:15 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzR/e2gvH8C2pX3ZYsnNabO4ZISvCIsY0TiWhX1g+iYQGQTh69cKbIxck8xvTa6d132FN2MyQ==
-X-Received: by 2002:ae9:c30d:0:b0:69e:bd20:40cc with SMTP id n13-20020ae9c30d000000b0069ebd2040ccmr22855187qkg.10.1651235775101;
-        Fri, 29 Apr 2022 05:36:15 -0700 (PDT)
-Received: from halaneylaptop (068-184-200-203.res.spectrum.com. [68.184.200.203])
-        by smtp.gmail.com with ESMTPSA id h75-20020a379e4e000000b0069db8210ffbsm1383072qke.12.2022.04.29.05.36.14
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GyLq/VeXsUx7i3jX6gXpo6bXbVNITIFiiUrEDtEMY+w=;
+        b=0VTRainqwJhw6onvqXxQzr+LhjKnsqiHfmFSCffD+w3YVosRzAs6pmAs+yp4RIdZ+a
+         2yHNhJuhLvulE+zr3aNgJiwn1voji4wLlV2gLW994NkV5o8tCyfcmLq6wEIkFj7mV7fH
+         AWnsgiVWFUOHzYGs2qRlGN7HZw4A7ouwF5sSRCX8cyD2CE0uPwy7uN+8TWMZ4Y7tFu/g
+         vUUEX1E+ZmWMH3Y8y82bo+y65aB8wWGgC3ZzkS0DSQiyUM+SwaNvIx/XHO8GfY9mpgbP
+         o+pnn0OGX9L3fAq4w06vGjUtWUUpPZ+TN6+GjzJu0oDjdZnt9eW1LTEPtyKjrHVzTc+f
+         2nnQ==
+X-Gm-Message-State: AOAM530jyVrrQiSwDCKVgtStQOiHnG3Qq7StGaTXixN5Egp8N3ELDq5n
+        jsEfgc+BR7uBT/rhipn71o2fPw==
+X-Google-Smtp-Source: ABdhPJxPDW83R2yw7JMq1jxLLs7fVovH8A1+UGFMXP2aSOvwrrTatEspXjIK4tKZeaULwGrtm7ZbSQ==
+X-Received: by 2002:a05:6830:89:b0:605:642d:bd4f with SMTP id a9-20020a056830008900b00605642dbd4fmr13679037oto.235.1651235921194;
+        Fri, 29 Apr 2022 05:38:41 -0700 (PDT)
+Received: from fedora.sc.usp.br (gwsc.sc.usp.br. [143.107.225.16])
+        by smtp.gmail.com with ESMTPSA id e12-20020a4ae0cc000000b0035eb4e5a6d9sm705158oot.47.2022.04.29.05.38.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 05:36:14 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 07:36:12 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pci@vger.kernel.org, mani@kernel.org,
-        lorenzo.pieralisi@arm.com
-Subject: Re: [PATCH] PCI: qcom-ep: check return value after calling
- platform_get_resource_byname()
-Message-ID: <20220429123612.sugqipgfmyy2xc6s@halaneylaptop>
-References: <20220429080740.1294797-1-yangyingliang@huawei.com>
+        Fri, 29 Apr 2022 05:38:40 -0700 (PDT)
+From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>
+Subject: [PATCH 0/2] media: s5c73m3: Update gpio interface and documentation
+Date:   Fri, 29 Apr 2022 09:37:38 -0300
+Message-Id: <20220429123740.147703-1-maira.canal@usp.br>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220429080740.1294797-1-yangyingliang@huawei.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 04:07:40PM +0800, Yang Yingliang wrote:
-> If platform_get_resource_byname() fails, 'mmio_res' will be set to null pointer,
-> it will cause null-ptr-deref when it used in qcom_pcie_perst_deassert(), so we
-> need check the return value.
-> 
-> Fixes: f55fee56a631 ("PCI: qcom-ep: Add Qualcomm PCIe Endpoint controller driver")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
->  drivers/pci/controller/dwc/pcie-qcom-ep.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-qcom-ep.c b/drivers/pci/controller/dwc/pcie-qcom-ep.c
-> index 6ce8eddf3a37..becb0c2ff870 100644
-> --- a/drivers/pci/controller/dwc/pcie-qcom-ep.c
-> +++ b/drivers/pci/controller/dwc/pcie-qcom-ep.c
-> @@ -416,6 +416,10 @@ static int qcom_pcie_ep_get_io_resources(struct platform_device *pdev,
->  
->  	pcie_ep->mmio_res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
->  							 "mmio");
-> +	if (!pcie_ep->mmio_res) {
-> +		dev_err(dev, "Failed to get mmio resource\n");
-> +		return -EINVAL;
-> +	}
->  
->  	syscon = of_parse_phandle(dev->of_node, "qcom,perst-regs", 0);
->  	if (!syscon) {
-> -- 
-> 2.25.1
-> 
+As suggested by Andrzej, all s5c73m3 specific gpio code is completely removed
+and replaced by the gpiod framework. Moreover, the documentation is updated by
+fixing the misplaced gpio property.
 
-Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
+Maíra Canal (2):
+  media: s5c73m3: Replace legacy gpio interface for gpiod
+  dt-bindings: media: s5c73m3: Fix reset-gpio descriptor
+
+ .../bindings/media/samsung-s5c73m3.txt        |  2 +-
+ drivers/media/i2c/s5c73m3/s5c73m3-core.c      | 95 ++++++++-----------
+ drivers/media/i2c/s5c73m3/s5c73m3.h           |  9 +-
+ include/media/i2c/s5c73m3.h                   | 15 +--
+ 4 files changed, 45 insertions(+), 76 deletions(-)
+
+-- 
+2.35.1
 

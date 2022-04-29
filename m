@@ -2,82 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9386514269
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 08:34:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A44F51426A
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 08:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354564AbiD2GhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 02:37:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59334 "EHLO
+        id S1354574AbiD2GiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 02:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232281AbiD2GhM (ORCPT
+        with ESMTP id S232281AbiD2GiL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 02:37:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF75078FFE;
-        Thu, 28 Apr 2022 23:33:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B13661D10;
-        Fri, 29 Apr 2022 06:33:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A915C385A7;
-        Fri, 29 Apr 2022 06:33:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651214034;
-        bh=tycC/zOW2yFKpGweWIJOd97KwA/m8/yHfO9vb8YCToA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xMIDLE6yeaSE2dObG25RQPxnHLRGbVhID/pg8WnMawdleHGthYO8nHNFQBWslDnGe
-         4GcxSLTYU1tuIvzZwqm8B69eFbfIIP1xkKh8FRn1/7tlzz37LyC0sG30dAcXla/YKK
-         dlUf99JrkhmWIZSKkFpxzBkBx2eW4+aUTZJx5a04=
-Date:   Fri, 29 Apr 2022 08:33:46 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     =?iso-8859-1?Q?Thi=E9baud?= Weksteen <tweek@google.com>
-Cc:     John Stultz <jstultz@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Qian Cai <quic_qiancai@quicinc.com>,
-        Jeffrey Vander Stoep <jeffv@google.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Alistair Delva <adelva@google.com>,
-        Adam Shih <adamshih@google.com>,
-        SElinux list <selinux@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] firmware_loader: use kernel credentials when reading
- firmware
-Message-ID: <YmuGyhWHnFie7koT@kroah.com>
-References: <20220428061707.768468-1-tweek@google.com>
- <YmpQOSf0bdOcIZSU@kroah.com>
- <CA+zpnLcV40ciweXMr+W+qT0xGgKAsUq47x26JGYaiOiQYcshfg@mail.gmail.com>
+        Fri, 29 Apr 2022 02:38:11 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CBAB9F1D;
+        Thu, 28 Apr 2022 23:34:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651214094; x=1682750094;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=SQHceauWJWDbx4dQ4RD3nCy2YCKzrHcJFy/6dkhMb30=;
+  b=LcK2nc6QWTARU2GEhIUARYfxaRV6pjD/gTIbCmYiUiYVP7xyq/QBlcva
+   mDuDzcMAFDUcgwPJTG9eo20Qyxx51IYDw4OyMd/9EKlBCBE8YwxwEox4L
+   fgvFDtOW0zc3ky5K0Ji+0UBbpzzW0prjUYod8dmgakxH47O2ZYWJGnA/H
+   mR7VtLlsdBk22gUevU2aL4hh4RzRXP1mQ6yd7XcLheh51y+xn33qJ1dTT
+   ktptgbGA92IWyjbS+BCyR8pHIKuL8iUMPbtEFqXTXYS3iebOJGt3zCuvo
+   shj8FZxxp3ZHQfZEZelfCMlG26/NB50ztgdmyTZ47t3cHMDUy/0c+MVQi
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="266365708"
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="266365708"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 23:34:53 -0700
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="560147609"
+Received: from yangweij-mobl.ccr.corp.intel.com (HELO [10.249.171.134]) ([10.249.171.134])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 23:34:49 -0700
+Message-ID: <2cc9d183-0bb5-9d4b-f284-9bbb1b4c21be@intel.com>
+Date:   Fri, 29 Apr 2022 14:34:45 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+zpnLcV40ciweXMr+W+qT0xGgKAsUq47x26JGYaiOiQYcshfg@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v10 15/16] KVM: x86: Add Arch LBR data MSR access
+ interface
+Content-Language: en-US
+To:     "Liang, Kan" <kan.liang@linux.intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "like.xu.linux@gmail.com" <like.xu.linux@gmail.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "Wang, Wei W" <wei.w.wang@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220422075509.353942-1-weijiang.yang@intel.com>
+ <20220422075509.353942-16-weijiang.yang@intel.com>
+ <6f2107fd-4475-86c7-e410-fe02c37b0f4d@linux.intel.com>
+From:   "Yang, Weijiang" <weijiang.yang@intel.com>
+In-Reply-To: <6f2107fd-4475-86c7-e410-fe02c37b0f4d@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 02:54:24PM +1000, Thiébaud Weksteen wrote:
-> > As stated before, should this go to stable kernels?  If so, how far
-> > back?
-> 
-> Yes, it should go to stable kernels. It should apply cleanly on 5.10.
-> Ideally, up to 4.19 but it will require a fixup. I can send a
-> backported patch for 5.4 and 4.19 branches once it lands in the main
-> tree.
 
-Great, can you resend it with a cc: stable tag added to it?
+On 4/28/2022 11:05 PM, Liang, Kan wrote:
+>
+> On 4/22/2022 3:55 AM, Yang Weijiang wrote:
+>> Arch LBR MSRs are xsave-supported, but they're operated as "independent"
+>> xsave feature by PMU code, i.e., during thread/process context switch,
+>> the MSRs are saved/restored with PMU specific code instead of generic
+>> kernel fpu XSAVES/XRSTORS operation.
+> During thread/process context switch, Linux perf still uses the
+> XSAVES/XRSTORS operation to save/restore the LBR MSRs.
 
-> > And you forgot to cc: John?
-> 
-> Done
+I meant Arch LBR MSRs are switched with perf_event_task_sched_out()/
 
-On the patch itself?  Or just this email?
+perf_event_task_sched_in() instead of save_fpregs_to_fpstate()/ 
+restore_fpregs_from_fpstate().
 
-confused,
+sorry for the confusion, will modify it a bit.
 
-greg k-h
+>
+> Linux perf only manipulates these MSRs only when the xsave feature is
+> not supported.
+Exactly.
+>
+> Thanks,
+> Kan
+>
+>> When vcpu guest/host fpu state swap
+>> happens, Arch LBR MSRs won't be touched so access them directly.
+>>
+>> Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
+>> ---
+>>    arch/x86/kvm/vmx/pmu_intel.c | 10 ++++++++++
+>>    1 file changed, 10 insertions(+)
+>>
+>> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+>> index 79eecbffa07b..5f81644c4612 100644
+>> --- a/arch/x86/kvm/vmx/pmu_intel.c
+>> +++ b/arch/x86/kvm/vmx/pmu_intel.c
+>> @@ -431,6 +431,11 @@ static int intel_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>>    	case MSR_ARCH_LBR_CTL:
+>>    		msr_info->data = vmcs_read64(GUEST_IA32_LBR_CTL);
+>>    		return 0;
+>> +	case MSR_ARCH_LBR_FROM_0 ... MSR_ARCH_LBR_FROM_0 + 31:
+>> +	case MSR_ARCH_LBR_TO_0 ... MSR_ARCH_LBR_TO_0 + 31:
+>> +	case MSR_ARCH_LBR_INFO_0 ... MSR_ARCH_LBR_INFO_0 + 31:
+>> +		rdmsrl(msr_info->index, msr_info->data);
+>> +		return 0;
+>>    	default:
+>>    		if ((pmc = get_gp_pmc(pmu, msr, MSR_IA32_PERFCTR0)) ||
+>>    		    (pmc = get_gp_pmc(pmu, msr, MSR_IA32_PMC0))) {
+>> @@ -512,6 +517,11 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>>    		    (data & ARCH_LBR_CTL_LBREN))
+>>    			intel_pmu_create_guest_lbr_event(vcpu);
+>>    		return 0;
+>> +	case MSR_ARCH_LBR_FROM_0 ... MSR_ARCH_LBR_FROM_0 + 31:
+>> +	case MSR_ARCH_LBR_TO_0 ... MSR_ARCH_LBR_TO_0 + 31:
+>> +	case MSR_ARCH_LBR_INFO_0 ... MSR_ARCH_LBR_INFO_0 + 31:
+>> +		wrmsrl(msr_info->index, msr_info->data);
+>> +		return 0;
+>>    	default:
+>>    		if ((pmc = get_gp_pmc(pmu, msr, MSR_IA32_PERFCTR0)) ||
+>>    		    (pmc = get_gp_pmc(pmu, msr, MSR_IA32_PMC0))) {

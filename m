@@ -2,229 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66761515393
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEAA051538F
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379799AbiD2SY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 14:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39104 "EHLO
+        id S1379984AbiD2SYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 14:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236995AbiD2SYy (ORCPT
+        with ESMTP id S1379971AbiD2SYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 14:24:54 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC7C51E52
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:21:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651256495; x=1682792495;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ruTQkiuiIWww3FG4Asoi5D5mE4TCsmeMFfdM3HiY15I=;
-  b=bMnHqWVTXIGlVaIHjRFUDMmW+ZPr7/ds3SI1rAYRr11UrQ73qDe5NmnS
-   CRFk58MyM1IN8PiNXQVldYNuUlH2x1wcOrjitCyegmVY7k+dZqKu7mWmT
-   8Y0FE+3KaCttlKrBorZowkHnLIQmsNOHbqz9jXYRXp9BmEe5eRezgy7RK
-   vtNGBw26vGlM+8zu5MGJpKVEwCLH9fKPfyRMOn25/7fUxHMdcJua5iqR9
-   wiIlbcep8qTV7I52IIsZ+SC93doYeAY6/Nq3UL0DrmMxBOeMexIkwJi5d
-   SztiYZx8e6/V/kE818ZN33dzqe4aOcczjLxjDWiFOgiWq6wX45AuGjZLR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="353167246"
-X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
-   d="scan'208";a="353167246"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 11:21:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
-   d="scan'208";a="732213521"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 29 Apr 2022 11:21:20 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nkVF1-0006YF-B0;
-        Fri, 29 Apr 2022 18:21:19 +0000
-Date:   Sat, 30 Apr 2022 02:20:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vasanthakumar Thiagarajan <quic_vthiagar@quicinc.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Kalle Valo <quic_kvalo@quicinc.com>,
-        Bhagavathi Perumal S <quic_bperumal@quicinc.com>,
-        Karthikeyan Periyasamy <quic_periyasa@quicinc.com>,
-        Pradeep Kumar Chitrapu <quic_pradeepc@quicinc.com>,
-        P Praneesh <quic_ppranees@quicinc.com>,
-        Ramya Gnanasekar <quic_rgnanase@quicinc.com>,
-        Sriram R <quic_srirrama@quicinc.com>
-Subject: [ammarfaizi2-block:kvalo/ath/ath12k-bringup 29/38]
- drivers/net/wireless/ath/ath12k/hal_rx.c:404:25: warning: cast to pointer
- from integer of different size
-Message-ID: <202204300256.UMWIbtD0-lkp@intel.com>
+        Fri, 29 Apr 2022 14:24:05 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9D0C3E03
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:20:46 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id q76so4057523pgq.10
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:20:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=hS0LaDQWfYwQHEyOl3VF+fDGCEpxszaqGhp5xQzuyk4=;
+        b=HUWtr6EkStVFk+wq8ZEAJuivguyjLcB8QuphUUr2Y5yf9GwJsBGWcmd+W8dHrH4KDz
+         qdchjP79VYAa7/0UrYqjYx24yHbA9V+UY7L7WVViiIF3MfVxL7otyMNqN1ezrS7+4B5g
+         m+A0Pa8bBaVQx664k/B8x5eMrw4uMp6sAKRsIDZRtqCxtH7sI99QBN9X5HogzhEL1jfg
+         qLpEvApe2fmIHsEJ81HxgHeHg9lyb0/fHmXf5fs8BrFCKuCwxBfmdxlLtO+K1FSPaU+Q
+         mQ9xBQ60TFurpFp2ruGreXVyH2NsvTLtPEAonTmyJvAD8SVpEEv0UahEIbir2jZcMWq8
+         cSIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=hS0LaDQWfYwQHEyOl3VF+fDGCEpxszaqGhp5xQzuyk4=;
+        b=f6VA/0nAd8wVEJKE15XLaoLIfaxWDdiyxE89EOj6Ui4DGPyDFZoY6JZu2c3ktpLlos
+         n3k96u/1rLsHETLVs2hc9Qg/G8RJm2QpCfRqyaGRJ9piB0k2tmsaAAvsWfv9FKzsb/r/
+         CXe9bBYHzmpPOQXeAh6M+ol/JUY7SsEWehJkdxZJF8OkCjSuYdJOjz8E4UkEHaEaKcbv
+         bZIHLLNDd97aDT1PZb5xwElwJtqiHI7MMvYVKfiVbgqjJWWEWzKDD3wadppc+1zD8T0w
+         cxSC5YyF6cz8kjys5srYg7Oanu6fSJGlbV/xMRB65mXzxjh5uBVq1CJScnDz41B+aELw
+         pepg==
+X-Gm-Message-State: AOAM532twDTo8tfTahy2KAINe52rAdznjbopnn1OwvKznwqSCFcZG6s8
+        +l1x+mqJdyVhh2vTj2GKe1fnBgoOLRU7eigVvT8=
+X-Google-Smtp-Source: ABdhPJzar2Bb8LyTbdAakX3P3vb5EJiGpYx0O/NkkBJ8hNTdfO78XQ+Wxtahq7xj0D5x3mxFCQJfOw7i/oOK8dBJrKc=
+X-Received: by 2002:a63:4464:0:b0:3a3:d8fb:6ddd with SMTP id
+ t36-20020a634464000000b003a3d8fb6dddmr465753pgk.355.1651256445886; Fri, 29
+ Apr 2022 11:20:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a17:90b:1d87:0:0:0:0 with HTTP; Fri, 29 Apr 2022 11:20:45
+ -0700 (PDT)
+Reply-To: ugwumuruu@gmail.com
+From:   Ugwu Umuru <ugwurugwu@gmail.com>
+Date:   Fri, 29 Apr 2022 18:20:45 +0000
+Message-ID: <CAAQmaaSMFmYY4kKGjZubceuZuEY80=LHx5DMCocV-miKH_B2sw@mail.gmail.com>
+Subject: Good day
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:536 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5039]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ugwurugwu[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vasanthakumar,
-
-FYI, the error/warning still remains.
-
-tree:   https://github.com/ammarfaizi2/linux-block kvalo/ath/ath12k-bringup
-head:   910edb5ff5fbe5ad5460c750c7a62e92c4eb0aa5
-commit: f40abb4788a2a3868606a29d99583421e0874350 [29/38] ath12k: New driver for Qualcomm 11be hw family
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220430/202204300256.UMWIbtD0-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/f40abb4788a2a3868606a29d99583421e0874350
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block kvalo/ath/ath12k-bringup
-        git checkout f40abb4788a2a3868606a29d99583421e0874350
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/net/wireless/ath/ath12k/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/net/wireless/ath/ath12k/hal_rx.c: In function 'ath12k_hal_wbm_desc_parse_err':
->> drivers/net/wireless/ath/ath12k/hal_rx.c:404:25: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-     404 |                         (struct ath12k_rx_desc_info *)((u64)wbm_cc_desc->buf_va_hi << 32 |
-         |                         ^
---
-   drivers/net/wireless/ath/ath12k/dp_tx.c: In function 'ath12k_dp_tx_completion_handler':
->> drivers/net/wireless/ath/ath12k/dp_tx.c:605:35: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-     605 |                         tx_desc = (struct ath12k_tx_desc_info *)
-         |                                   ^
-   In file included from include/linux/bitops.h:6,
-                    from include/linux/kernel.h:13,
-                    from include/linux/interrupt.h:6,
-                    from drivers/net/wireless/ath/ath12k/core.h:11,
-                    from drivers/net/wireless/ath/ath12k/dp_tx.c:7:
-   drivers/net/wireless/ath/ath12k/dp_tx.c: In function 'ath12k_dp_tx_htt_h2t_vdev_stats_ol_req':
-   include/linux/bits.h:35:29: warning: left shift count >= width of type [-Wshift-count-overflow]
-      35 |         (((~UL(0)) - (UL(1) << (l)) + 1) & \
-         |                             ^~
-   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
-      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-         |                                      ^~~~~~~~~
-   drivers/net/wireless/ath/ath12k/dp.h:1921:49: note: in expansion of macro 'GENMASK'
-    1921 | #define HTT_H2T_VDEV_TXRX_HI_BITMASK            GENMASK(63, 32)
-         |                                                 ^~~~~~~
-   drivers/net/wireless/ath/ath12k/dp_tx.c:1074:37: note: in expansion of macro 'HTT_H2T_VDEV_TXRX_HI_BITMASK'
-    1074 |                                     HTT_H2T_VDEV_TXRX_HI_BITMASK) >> 32);
-         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/bits.h:36:18: warning: right shift count is negative [-Wshift-count-negative]
-      36 |          (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
-         |                  ^~
-   include/linux/bits.h:38:38: note: in expansion of macro '__GENMASK'
-      38 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-         |                                      ^~~~~~~~~
-   drivers/net/wireless/ath/ath12k/dp.h:1921:49: note: in expansion of macro 'GENMASK'
-    1921 | #define HTT_H2T_VDEV_TXRX_HI_BITMASK            GENMASK(63, 32)
-         |                                                 ^~~~~~~
-   drivers/net/wireless/ath/ath12k/dp_tx.c:1074:37: note: in expansion of macro 'HTT_H2T_VDEV_TXRX_HI_BITMASK'
-    1074 |                                     HTT_H2T_VDEV_TXRX_HI_BITMASK) >> 32);
-         |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
---
-   drivers/net/wireless/ath/ath12k/dp_rx.c: In function 'ath12k_dp_process_rx':
->> drivers/net/wireless/ath/ath12k/dp_rx.c:2739:29: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-    2739 |                 desc_info = (struct ath12k_rx_desc_info *)((u64)desc.buf_va_hi << 32 |
-         |                             ^
-   drivers/net/wireless/ath/ath12k/dp_rx.c: In function 'ath12k_dp_process_rx_err_buf':
-   drivers/net/wireless/ath/ath12k/dp_rx.c:3413:21: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-    3413 |         desc_info = (struct ath12k_rx_desc_info *)((u64)desc.buf_va_hi << 32 |
-         |                     ^
-
-
-vim +404 drivers/net/wireless/ath/ath12k/hal_rx.c
-
-   352	
-   353	int ath12k_hal_wbm_desc_parse_err(struct ath12k_base *ab, void *desc,
-   354					  struct hal_rx_wbm_rel_info *rel_info)
-   355	{
-   356		struct hal_wbm_release_ring *wbm_desc = desc;
-   357		struct hal_wbm_release_ring_cc_rx *wbm_cc_desc = desc;
-   358		enum hal_wbm_rel_desc_type type;
-   359		enum hal_wbm_rel_src_module rel_src;
-   360		bool hw_cc_done;
-   361	
-   362		type = FIELD_GET(HAL_WBM_RELEASE_INFO0_DESC_TYPE,
-   363				 wbm_desc->info0);
-   364		/* We expect only WBM_REL buffer type */
-   365		if (type != HAL_WBM_REL_DESC_TYPE_REL_MSDU) {
-   366			WARN_ON(1);
-   367			return -EINVAL;
-   368		}
-   369	
-   370		rel_src = FIELD_GET(HAL_WBM_RELEASE_INFO0_REL_SRC_MODULE,
-   371				    wbm_desc->info0);
-   372		if (rel_src != HAL_WBM_REL_SRC_MODULE_RXDMA &&
-   373		    rel_src != HAL_WBM_REL_SRC_MODULE_REO)
-   374			return -EINVAL;
-   375	
-   376		/* The format of wbm rel ring desc changes based on the
-   377		 * hw cookie conversion status
-   378		 */
-   379		hw_cc_done = FIELD_GET(HAL_WBM_RELEASE_RX_INFO0_CC_STATUS,
-   380				       wbm_desc->info0);
-   381	
-   382		if (!hw_cc_done) {
-   383			if (FIELD_GET(BUFFER_ADDR_INFO1_RET_BUF_MGR,
-   384				      wbm_desc->buf_addr_info.info1) != HAL_RX_BUF_RBM_SW3_BM) {
-   385				ab->soc_stats.invalid_rbm++;
-   386				return -EINVAL;
-   387			}
-   388	
-   389			rel_info->cookie = FIELD_GET(BUFFER_ADDR_INFO1_SW_COOKIE,
-   390						     wbm_desc->buf_addr_info.info1);
-   391	
-   392			rel_info->rx_desc = NULL;
-   393		} else {
-   394			if (FIELD_GET(HAL_WBM_RELEASE_RX_CC_INFO0_RBM,
-   395				      wbm_cc_desc->info0) != HAL_RX_BUF_RBM_SW3_BM) {
-   396				ab->soc_stats.invalid_rbm++;
-   397				return -EINVAL;
-   398			}
-   399	
-   400			rel_info->cookie = FIELD_GET(HAL_WBM_RELEASE_RX_CC_INFO1_COOKIE,
-   401						     wbm_cc_desc->info1);
-   402	
-   403			rel_info->rx_desc =
- > 404				(struct ath12k_rx_desc_info *)((u64)wbm_cc_desc->buf_va_hi << 32 |
-   405					wbm_cc_desc->buf_va_lo);
-   406		}
-   407	
-   408		rel_info->err_rel_src = rel_src;
-   409		rel_info->hw_cc_done = hw_cc_done;
-   410	
-   411		if (rel_info->err_rel_src == HAL_WBM_REL_SRC_MODULE_REO) {
-   412			rel_info->push_reason =
-   413				FIELD_GET(HAL_WBM_RELEASE_INFO0_REO_PUSH_REASON,
-   414					  wbm_desc->info0);
-   415			rel_info->err_code =
-   416				FIELD_GET(HAL_WBM_RELEASE_INFO0_REO_ERROR_CODE,
-   417					  wbm_desc->info0);
-   418		} else {
-   419			rel_info->push_reason =
-   420				FIELD_GET(HAL_WBM_RELEASE_INFO0_RXDMA_PUSH_REASON,
-   421					  wbm_desc->info0);
-   422			rel_info->err_code =
-   423				FIELD_GET(HAL_WBM_RELEASE_INFO0_RXDMA_ERROR_CODE,
-   424					  wbm_desc->info0);
-   425		}
-   426	
-   427		return 0;
-   428	}
-   429	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Hello,
+How are you coping in this period of global uncertainties (WAR & COVID-19)?
+Hope it's well with you. I have been contacting you for quite some
+time now without any response. Could you please confirm if this still
+remains your email address. I am an International Consultant. There is
+this important investment prospect by a German national which I will
+like to share with you. I an therefore awaiting your feedback.
+Thanks.
+Ugwu Umuru

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30F0D514901
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:18:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A3D0514903
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:18:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358981AbiD2MVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 08:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38926 "EHLO
+        id S1358998AbiD2MWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 08:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238748AbiD2MVx (ORCPT
+        with ESMTP id S238748AbiD2MV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 08:21:53 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8BDEAAE3C
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 05:18:33 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id u7so6964094plg.13
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 05:18:33 -0700 (PDT)
+        Fri, 29 Apr 2022 08:21:57 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29991B3C75
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 05:18:39 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id s137so6389971pgs.5
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 05:18:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3RkULuqhhhX3uuLQ5CElh2Ii/L2usT9wtqwuaXqStls=;
-        b=6dgC+bHSAeFJrC8KYg2z7/2H3/R6h6zeIP2/TJM/lbA1VYy7SbJIMRyIrieRowIaQv
-         kJ1SOEdSzpZW5RWIfKHc50pJY+MknWf6wyZ9mBDTSwdQHraDZEU1pDlp0hOXMDHzylgF
-         ifJ3CIfECLSdzzd+Hs1I8D9emPRAiSTJWuOdPodBLLugKQxYi5DQ2J5LWb0UXB3GKT35
-         VjwlylSkcqgoLK/lJASS0z3jk/BKMsGyUtgguRSoE/UUVpx+Q6mT8cdv95iEao6gZnq5
-         eaE7vV4dtDupThy77SS0zIM29gLGBKU0oYc7ymGlICVJ/7p6SROAx9I4jN05YRtw2b5Q
-         sVgA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Sb7cKusP7HmwEMFLljkRCnuPfmcRLCQDQWff8XX78N4=;
+        b=ujf++oGTRkcmvgbJDzD35LqcmXlDmxx9MV7JBsCDJlobs2RrJt7Oin3Tp6YJWZSb4v
+         9pD3a81OGs+Rvr9bhGzIguAqbwWgBnZtv6XULJJozikDR56kziPLN1jhnHZTf/HusSzV
+         w63qNhi0UKdgf6Q9Fq+cz+V4qw1+H3gfd1FB5CgYLwAD7FKIg+U2A3PKdV62na10dGaP
+         uHFViPBg8CIa2xG7vAItmaI0KXTl/Td/1o3ipN73lzlFryjc/F+CyUtsT9v0X6W/1RuW
+         a9MOjWqpYGACasXXh7MNQMe9KERCZSJqchBd9Dvm3EvJmQbv8dV4Tg9o5hNkY+lx9T2W
+         j4pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3RkULuqhhhX3uuLQ5CElh2Ii/L2usT9wtqwuaXqStls=;
-        b=LqZJhoCYQBXAwN7g6F2V6++bk35dHbUYZlXXLSUlSldhlH0CdozIsse4BpD/PfjDbC
-         djIOXsR9D2ByD/kLMLs8cVPfCTRaR65GDhhrAY1XznM6Ec1v7n5qN+0JUKQ2FNZvM0hm
-         Lfkanm7Jb2+THe3+7d0JMIoD8POi2CPB4PM7I3e3ZYzHAWdrsT/JdZDpLiIsBZ7Ds1Wb
-         2HeYZostwCOt2Hy09muQcTIXFVzSOraxctHMIzvdBI6HWGj9M5v/MpQLh5Hwjh6H8an7
-         hmbLzrQ/4KzisKX/YtKL7OpyxOUVmQXh6tabcCOezedXaBC2Ashh84Zo9MC4d2fM/nkm
-         vx6Q==
-X-Gm-Message-State: AOAM531qLo2BvVrPRlZLCcFP09LZnx8D10p/Ok7IrBXKL0YhlWmR5mFC
-        bFC7UM0fz+jFeioDBn1z73mlpg==
-X-Google-Smtp-Source: ABdhPJxtE+CaijPiIC9LAoGrQDqYJS3f51fjNp6Dgr2elQX0PSrsGMqnZLLhoG9YQBepjs7VbKUriQ==
-X-Received: by 2002:a17:902:7d83:b0:158:c7e9:1ff3 with SMTP id a3-20020a1709027d8300b00158c7e91ff3mr38794664plm.55.1651234713265;
-        Fri, 29 Apr 2022 05:18:33 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Sb7cKusP7HmwEMFLljkRCnuPfmcRLCQDQWff8XX78N4=;
+        b=04nGiA+4o4uFBppZ9G/9weE+ZvaJDkgMmMBiiEqGX+fODmFQX02iwiwFFWacm7m5iK
+         JlnlThA+F+puUE6BpoVqpSa2QfgqC2mI8261JHL4s/+eH+XojfQCbHVBuLf2tBXKD89r
+         mNZhuxch4Isz50CaaoObW7s2UCBPHrN5MGMmSR0hlO8Bdgs94BKfPV1/wHN0oSDt1jpL
+         TBV6cGymkTJ9szGE6BO9v7PXvoyW6L2WVSmUY1DBS5726KAPkLnSJK8LLjiVO4rOPpm7
+         1D56MF4LPijRGbCYPfcU/H+5G90WOtfKfYWaykA3pn9Mzw6L62ZndPjMDRPwOXYxHq7c
+         h4kA==
+X-Gm-Message-State: AOAM532h+aoyt0n0rULoJMTfrgpb2LpsbJ+MyW9FlcE3tPaWTFA5s7s8
+        fBtJ/wUdqDhmoqCLg4KdMKN+Fg==
+X-Google-Smtp-Source: ABdhPJyV4XCJ1uaJg+Pde1nxM1j4YKLXpIc83hyQsnEeiM1URERFxVgDV1/VvFaifwpneZ3ujEuceg==
+X-Received: by 2002:a63:d145:0:b0:3c1:4ba0:d890 with SMTP id c5-20020a63d145000000b003c14ba0d890mr10020401pgj.607.1651234718613;
+        Fri, 29 Apr 2022 05:18:38 -0700 (PDT)
 Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.239])
-        by smtp.gmail.com with ESMTPSA id k11-20020a056a00168b00b004f7e1555538sm3101421pfc.190.2022.04.29.05.18.28
+        by smtp.gmail.com with ESMTPSA id k11-20020a056a00168b00b004f7e1555538sm3101421pfc.190.2022.04.29.05.18.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 05:18:32 -0700 (PDT)
+        Fri, 29 Apr 2022 05:18:38 -0700 (PDT)
 From:   Muchun Song <songmuchun@bytedance.com>
 To:     corbet@lwn.net, mike.kravetz@oracle.com, akpm@linux-foundation.org,
         mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
@@ -55,10 +55,12 @@ To:     corbet@lwn.net, mike.kravetz@oracle.com, akpm@linux-foundation.org,
 Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, duanxiongchun@bytedance.com, smuchun@gmail.com,
         Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH v9 0/4] add hugetlb_optimize_vmemmap sysctl
-Date:   Fri, 29 Apr 2022 20:18:12 +0800
-Message-Id: <20220429121816.37541-1-songmuchun@bytedance.com>
+Subject: [PATCH v9 1/4] mm: hugetlb_vmemmap: disable hugetlb_optimize_vmemmap when struct page crosses page boundaries
+Date:   Fri, 29 Apr 2022 20:18:13 +0800
+Message-Id: <20220429121816.37541-2-songmuchun@bytedance.com>
 X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+In-Reply-To: <20220429121816.37541-1-songmuchun@bytedance.com>
+References: <20220429121816.37541-1-songmuchun@bytedance.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,65 +72,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series is based on next-20220428.
+If the size of "struct page" is not the power of two but with the feature
+of minimizing overhead of struct page associated with each HugeTLB is
+enabled, then the vmemmap pages of HugeTLB will be corrupted after
+remapping (panic is about to happen in theory).  But this only exists when
+!CONFIG_MEMCG && !CONFIG_SLUB on x86_64.  However, it is not a conventional
+configuration nowadays.  So it is not a real word issue, just the result
+of a code review.
 
-This series amis to add hugetlb_optimize_vmemmap sysctl to enable or disable
-the feature of optimizing vmemmap pages associated with HugeTLB pages.
+But we cannot prevent anyone from configuring that combined configure.
+This hugetlb_optimize_vmemmap should be disable in this case to fix this
+issue.
 
-v9:
-  - Go back to v3 since checking the size of struct page at config time is
-    very complex.
+Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+---
+ mm/hugetlb_vmemmap.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-v8:
-  - Fix compilation (scripts/selinux/mdp/mdp.c) error when
-    CONFIG_SECURITY_SELINUX is selected.
-
-v7:
-  - Fix circular dependency issue reported by kernel test robot.
-  - Introduce CONFIG_HUGETLB_PAGE_HAS_OPTIMIZE_VMEMMAP instead of
-    STRUCT_PAGE_SIZE_IS_POWER_OF_2.
-  - Add more comments into vm.rst to explain hugetlb_optimize_vmemmap (Andrew).
-  - Drop the patch "sysctl: allow to set extra1 to SYSCTL_ONE".
-  - Add a new patch "use kstrtobool for hugetlb_vmemmap param parsing".
-  - Reuse static_key's refcount to count the number of HugeTLB pages with
-    vmemmap pages optimized to simplify the lock scheme.
-
-v6:
-  - Remove "make syncconfig" from Kbuild.
-
-v5:
-  - Fix not working properly if one is workig off of a very clean build
-    reported by Luis Chamberlain.
-  - Add Suggested-by for Luis Chamberlain.
-
-v4:
-  - Introduce STRUCT_PAGE_SIZE_IS_POWER_OF_2 inspired by Luis.
-
-v3:
-  - Add pr_warn_once() (Mike).
-  - Handle the transition from enabling to disabling (Luis)
-
-v2:
-  - Fix compilation when !CONFIG_MHP_MEMMAP_ON_MEMORY reported by kernel
-    test robot <lkp@intel.com>.
-  - Move sysctl code from kernel/sysctl.c to mm/hugetlb_vmemmap.c.
-
-Muchun Song (4):
-  mm: hugetlb_vmemmap: disable hugetlb_optimize_vmemmap when struct page
-    crosses page boundaries
-  mm: memory_hotplug: override memmap_on_memory when
-    hugetlb_free_vmemmap=on
-  mm: hugetlb_vmemmap: use kstrtobool for hugetlb_vmemmap param parsing
-  mm: hugetlb_vmemmap: add hugetlb_optimize_vmemmap sysctl
-
- Documentation/admin-guide/kernel-parameters.txt |   6 +-
- Documentation/admin-guide/sysctl/vm.rst         |  30 +++++++
- include/linux/memory_hotplug.h                  |   9 ++
- mm/hugetlb_vmemmap.c                            | 104 ++++++++++++++++++++----
- mm/hugetlb_vmemmap.h                            |   4 +-
- mm/memory_hotplug.c                             |  27 ++++--
- 6 files changed, 155 insertions(+), 25 deletions(-)
-
+diff --git a/mm/hugetlb_vmemmap.c b/mm/hugetlb_vmemmap.c
+index 29554c6ef2ae..6254bb2d4ae5 100644
+--- a/mm/hugetlb_vmemmap.c
++++ b/mm/hugetlb_vmemmap.c
+@@ -28,12 +28,6 @@ EXPORT_SYMBOL(hugetlb_optimize_vmemmap_key);
+ 
+ static int __init hugetlb_vmemmap_early_param(char *buf)
+ {
+-	/* We cannot optimize if a "struct page" crosses page boundaries. */
+-	if (!is_power_of_2(sizeof(struct page))) {
+-		pr_warn("cannot free vmemmap pages because \"struct page\" crosses page boundaries\n");
+-		return 0;
+-	}
+-
+ 	if (!buf)
+ 		return -EINVAL;
+ 
+@@ -119,6 +113,12 @@ void __init hugetlb_vmemmap_init(struct hstate *h)
+ 	if (!hugetlb_optimize_vmemmap_enabled())
+ 		return;
+ 
++	if (!is_power_of_2(sizeof(struct page))) {
++		pr_warn_once("cannot optimize vmemmap pages because \"struct page\" crosses page boundaries\n");
++		static_branch_disable(&hugetlb_optimize_vmemmap_key);
++		return;
++	}
++
+ 	vmemmap_pages = (nr_pages * sizeof(struct page)) >> PAGE_SHIFT;
+ 	/*
+ 	 * The head page is not to be freed to buddy allocator, the other tail
 -- 
 2.11.0
 

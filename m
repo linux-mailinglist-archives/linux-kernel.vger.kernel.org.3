@@ -2,91 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 726CB5150AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:21:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 503FF5150B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379006AbiD2QYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 12:24:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36086 "EHLO
+        id S1379020AbiD2QZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 12:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233809AbiD2QYu (ORCPT
+        with ESMTP id S233809AbiD2QZp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 12:24:50 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57ABED116A
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:21:32 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id y3so16346494ejo.12
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:21:32 -0700 (PDT)
+        Fri, 29 Apr 2022 12:25:45 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0857D115C;
+        Fri, 29 Apr 2022 09:22:24 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id y14so7316209pfe.10;
+        Fri, 29 Apr 2022 09:22:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/i96WVpRgOiedaJPGvdPTgpbnsmRjq9OCgYpWZ3z/Tg=;
-        b=EpTcT0njbF1gKIlcMS6t8ZZuyXjeSUeO22i8GJW9dw3H99A25xCRV4aPVEz6ann8Gj
-         nKDuvRRsMR/hbBPXxXrbNsULZ8FMSZ0bGnIA/dQB6VYpzFqcGqWKr7UZjVEZiO5UXsQI
-         aeZXdoH+DGhJVPfrqpxRktng8xk2SJx9FnGOE=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XSTCE5w7yy68SjWNVsRpb2HvHJSUSz9+mARNoZLyTIk=;
+        b=kb2lbNEfSrq3tTDDVvzTWGuOQynzrkRx0M4SsbyOx4vGhPukRPzOQmeEFEFRCBPtbw
+         jRYUOA6gkBxvJNJ0wdMYEi5KeLjUqEnY+kQDjTuNOoCeoFb2LTzU3hjUCWAuHaJnUAM5
+         +laHoLS39VrFcVzE3X4qkG6KT2X+hfQeXkY+SRRCXPW3F+neYlQcg+I5XQvVeA6mk6pw
+         kO8bIMQetGLUL7VWVnUcN9H7woupG1O3SXRVZbLbidv+l3gQFmrkPgfFD5h0SxUdHznz
+         5s2n0G31vU0UO7Nz5ZIwE0selfJuLDPfEbkjZ8EBjpISm1DhvyyU9yCy+EFGIT1lzKjU
+         JOkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/i96WVpRgOiedaJPGvdPTgpbnsmRjq9OCgYpWZ3z/Tg=;
-        b=P+0w3EJxbzK9x1KoXl/vdk8rwhkZCyHtwTDNgpaCYUVDpLyma6E1OrWjoysHgYBBtL
-         69KnvMe6eK76A/jMjE0NuI/3IiqmXqultDfzneB0/1OUSFHpWDtZXDq+0GkRNrTKUvcZ
-         6YCjxXaug8wneDCTv+16A54RR6RVCRjHFkkoDSbkPq+9CrUGYSRKprvslhTOoI23BhnH
-         fTJsjt49D/+1F39n3WeWc3tcoZ3hTuKvsCOY+7recitNfwc4c3Pd6up84+KGuqjBTz+k
-         TaOpbtSmf6eIJbj6o1URSInYohSRZpyH+mpgeOVDHZ8IEEGwTChLx00hRNRGFrqZzYRK
-         10Zw==
-X-Gm-Message-State: AOAM532VdZIZa9nsxhj4cC7ibwFV58By0PV+Ssxx8qwaAULb1JZ5QuU4
-        ws6MyymJe9V5QTpqcnujY5gnGZmJJHUVZPqz
-X-Google-Smtp-Source: ABdhPJw1dDtIRHLhaVJZZxpLUu4KIwCHphPBnfpqtgtTrsYtdYcDgprBBMc/tujwqEG9ZeXuNprhFw==
-X-Received: by 2002:a17:907:6095:b0:6e7:cc3f:c33d with SMTP id ht21-20020a170907609500b006e7cc3fc33dmr104629ejc.570.1651249290676;
-        Fri, 29 Apr 2022 09:21:30 -0700 (PDT)
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
-        by smtp.gmail.com with ESMTPSA id dq10-20020a170907734a00b006f3ef214deasm778766ejc.80.2022.04.29.09.21.29
-        for <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XSTCE5w7yy68SjWNVsRpb2HvHJSUSz9+mARNoZLyTIk=;
+        b=LGF9v2QSurzm8Jatf7sQ+vACC2Cs9TDPWocM7arxah0uCHDZrMFp7OLFeK+RYL+5Gf
+         /IWJiOR4bWFo4rDaDHxgWEWNI7x+cljVVIqXQ1gMj3d4cMbQPY6FJh1AVqbNkeCJVoaW
+         Z+AbioHl5U3SB8mbAX2yf78/ShUVAyr8n1QDn62WtPOWxEmv0jhBt8JPjHZvK7HUjpUo
+         LQy4VevgDqtX+KPZOZdMh8XNEVdGaiA+RHsL2wdWPPs2txQmjvDpVsDqQdUKRZqwHOUI
+         MJE7FDdMu0lpd71vW4t/SNNL6ROy2toSqoEburH1VU8IwZqC2U3mmEXNlJjYiLYH35It
+         JpbQ==
+X-Gm-Message-State: AOAM531Bh0untWg5anysTvkhYkGTJdZsMNEDdhfFPJmaeQSNld9jyGK9
+        OkXzwDZZQRdCBN1PdCICjbc=
+X-Google-Smtp-Source: ABdhPJx294dO5ebgBnVWibhDdFXl85WArQeiLA5m9XKR2VzCmbwy/SZgK9FpWiGMTr2Eiub3lTVJDw==
+X-Received: by 2002:aa7:96c2:0:b0:50d:90da:f8f with SMTP id h2-20020aa796c2000000b0050d90da0f8fmr199495pfq.52.1651249344360;
+        Fri, 29 Apr 2022 09:22:24 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id y9-20020a17090a1f4900b001cd498dc153sm14109289pjy.3.2022.04.29.09.22.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 09:21:30 -0700 (PDT)
-Received: by mail-wr1-f49.google.com with SMTP id c11so1609063wrn.8
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:21:29 -0700 (PDT)
-X-Received: by 2002:adf:f50d:0:b0:20a:e096:ef with SMTP id q13-20020adff50d000000b0020ae09600efmr17962780wro.679.1651249289469;
- Fri, 29 Apr 2022 09:21:29 -0700 (PDT)
+        Fri, 29 Apr 2022 09:22:23 -0700 (PDT)
+Message-ID: <baec3c8d-72f1-b1b5-f472-ee73be1047d6@gmail.com>
+Date:   Fri, 29 Apr 2022 09:22:21 -0700
 MIME-Version: 1.0
-References: <20220429055145.3852271-1-chi.minghao@zte.com.cn>
-In-Reply-To: <20220429055145.3852271-1-chi.minghao@zte.com.cn>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 29 Apr 2022 09:21:17 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Vo+1O=m_-Wf5z6fxcXAtRabQu3u7tc3pt8Q645b1n1VA@mail.gmail.com>
-Message-ID: <CAD=FV=Vo+1O=m_-Wf5z6fxcXAtRabQu3u7tc3pt8Q645b1n1VA@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge: simplify the return expression of ps8640_bridge_host_attach
-To:     jing yangyang <cgel.zte@gmail.com>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [net-next v2 02/12] net: dsa: add Renesas RZ/N1 switch tag driver
+Content-Language: en-US
+To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?Q?Miqu=c3=a8l_Raynal?= <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
+References: <20220429143505.88208-1-clement.leger@bootlin.com>
+ <20220429143505.88208-3-clement.leger@bootlin.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220429143505.88208-3-clement.leger@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Thu, Apr 28, 2022 at 10:51 PM <cgel.zte@gmail.com> wrote:
->
-> From: Minghao Chi <chi.minghao@zte.com.cn>
->
-> Simplify the return expression.
->
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+On 4/29/22 07:34, Clément Léger wrote:
+> The switch that is present on the Renesas RZ/N1 SoC uses a specific
+> VLAN value followed by 6 bytes which contains forwarding configuration.
+> 
+> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
 > ---
->  drivers/gpu/drm/bridge/parade-ps8640.c | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+[snip]
+
+> +struct a5psw_tag {
+> +	__be16 ctrl_tag;
+> +	__be16 ctrl_data;
+> +	__be16 ctrl_data2_hi;
+> +	__be16 ctrl_data2_lo;
+> +} __packed;
+
+The structure should already be naturally aligned.
+
+> +
+> +static struct sk_buff *a5psw_tag_xmit(struct sk_buff *skb, struct net_device *dev)
+> +{
+> +	struct dsa_port *dp = dsa_slave_to_port(dev);
+> +	struct a5psw_tag *ptag;
+> +	u32 data2_val;
+> +
+> +	BUILD_BUG_ON(sizeof(*ptag) != A5PSW_TAG_LEN);
+> +
+> +	/* The Ethernet switch we are interfaced with needs packets to be at
+> +	 * least 64 bytes (including FCS) otherwise they will be discarded when
+> +	 * they enter the switch port logic. When tagging is enabled, we need
+> +	 * to make sure that packets are at least 68 bytes (including FCS and
+> +	 * tag).
+
+Did you mean 70 bytes since your tag is 6, and not 4 bytes?
+-- 
+Florian

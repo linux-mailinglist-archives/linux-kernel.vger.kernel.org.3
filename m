@@ -2,261 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7667D515881
+	by mail.lfdr.de (Postfix) with ESMTP id 2CFC8515880
 	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 00:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381562AbiD2WjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 18:39:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52940 "EHLO
+        id S244398AbiD2Wj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 18:39:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244398AbiD2WjP (ORCPT
+        with ESMTP id S1381527AbiD2WjV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 18:39:15 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746B3986C8;
-        Fri, 29 Apr 2022 15:35:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=KYNDBRYGzikXjzeP27ZJ4t/kgY9V1S1pNOCPI8BnGe8=; b=JT0K6BBCWKsaQymCLnJQaj/kvq
-        7Y1QKfar8fCW1mBanEmBmavL+D5scKDYAiv+Of/1HRFoX5MBCl5YZC28TmWOdUUkF79M5XuV0xuXA
-        v1gbxygEk8ExNgZKIAJmst62yXS49qdhdclQ0HpxXcHSkInmueEoQ8sxt8GK1dgkp3lrFANactIr6
-        owme4UXa4bPRXwJl27nOJHEpmMOv8h6kOal3gO6YkUDEDSWCgod9VcuYizHGTaTCXAhQFrHVOF1Fo
-        gyvc6I1Xl1Nz4QEoDGGy6DcOx8hQdBZ3SL8vuhOA2s2+e+h8l4Dvo0+AMgZTV5lbKle4rwJcb9Bd/
-        P9qftm1A==;
-Received: from [179.113.53.197] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nkZD8-0003TG-7D; Sat, 30 Apr 2022 00:35:38 +0200
-Message-ID: <2787b476-6366-1c83-db80-0393da417497@igalia.com>
-Date:   Fri, 29 Apr 2022 19:35:09 -0300
+        Fri, 29 Apr 2022 18:39:21 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19FF9E9FA
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 15:36:00 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id f2so10935058ioh.7
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 15:36:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sargun.me; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EDOuoYXHoGxnieFk2fEYP66QuIIs/XWtzyfs+ZhcFc4=;
+        b=CvSq3TWRkP3Z6I0+KB0q45I2oKvcw/b8urISPbGr6JOGYOg7a3um3HHgB3pSxSnkeE
+         48PZUOTUOAn/9euGdTcuH6F2HsVqdcNZ0ZHOIMfdQxXCfExTyafmXHnbIExGubddRgKO
+         YpcG6fWGsv0z7PjmVUU1nAw6znrPs6lZj0XtI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EDOuoYXHoGxnieFk2fEYP66QuIIs/XWtzyfs+ZhcFc4=;
+        b=kDfXOKrxFbP6HMEDPJ0QpJoABD6vQ0ZYKGjIFF49b47S40EQLIKqq7qKh9AgLK8mmo
+         Gw0ieqsugGnwxkl9u0U73ylaHI1eDNbwUi90pHE46Dfk8JB1XwovFwyaBNK11iD0MRLM
+         2OzQFzmD6TrBBLwAnQ4duYTXlmEsPuPaqZD5Alnd8uY5AivYwmZEX2nsxn1n0dKSm00K
+         9V8xQI6wVb9dofncmMZb513Ot70eSXZTVM5bBUQcd1UlAYGL7H30rNFxgTRbyGyX1/sX
+         pji3ZgpGljMMjnAuUkkxI4qUUdEI27LNBq2PneUnaBuIZp/9j3cr9vdKjNvLsxvGfqto
+         YDYw==
+X-Gm-Message-State: AOAM533PyW2S2UWZP3F6x47J8/TO7cUiJWc30Z2vRDHEN4Vz7IsrIxSz
+        f7OonTvY5DT1GbP7R+VZO0veSg==
+X-Google-Smtp-Source: ABdhPJy5GyIF1Eh2kLWivr69QRYveuZFPcWiQsBaGZzUR83emo25OkEeL6dOiy2VdORxmlgc8jlA+Q==
+X-Received: by 2002:a05:6638:3795:b0:32a:f753:fd92 with SMTP id w21-20020a056638379500b0032af753fd92mr606719jal.102.1651271759591;
+        Fri, 29 Apr 2022 15:35:59 -0700 (PDT)
+Received: from ircssh-3.c.rugged-nimbus-611.internal (80.60.198.104.bc.googleusercontent.com. [104.198.60.80])
+        by smtp.gmail.com with ESMTPSA id 5-20020a921805000000b002cde6e35306sm826030ily.80.2022.04.29.15.35.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 15:35:58 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 22:35:57 +0000
+From:   Sargun Dhillon <sargun@sargun.me>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Containers <containers@lists.linux-foundation.org>,
+        Rodrigo Campos <rodrigo@kinvolk.io>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Giuseppe Scrivano <gscrivan@redhat.com>,
+        Will Drewry <wad@chromium.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Alban Crequy <alban@kinvolk.io>,
+        Tycho Andersen <tycho@tycho.pizza>
+Subject: Re: [PATCH v3 2/2] selftests/seccomp: Add test for wait killable
+ notifier
+Message-ID: <20220429223557.GB1267404@ircssh-3.c.rugged-nimbus-611.internal>
+References: <20220429023113.74993-1-sargun@sargun.me>
+ <20220429023113.74993-3-sargun@sargun.me>
+ <202204291053.E04A367@keescook>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 16/30] drivers/hv/vmbus, video/hyperv_fb: Untangle and
- refactor Hyper-V panic notifiers
-Content-Language: en-US
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "bhe@redhat.com" <bhe@redhat.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bcm-kernel-feedback-list@broadcom.com" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "openipmi-developer@lists.sourceforge.net" 
-        <openipmi-developer@lists.sourceforge.net>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
-        "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
-        "halves@canonical.com" <halves@canonical.com>,
-        "fabiomirmar@gmail.com" <fabiomirmar@gmail.com>,
-        "alejandro.j.jimenez@oracle.com" <alejandro.j.jimenez@oracle.com>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "d.hatayama@jp.fujitsu.com" <d.hatayama@jp.fujitsu.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "dyoung@redhat.com" <dyoung@redhat.com>,
-        "feng.tang@intel.com" <feng.tang@intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "hidehiro.kawai.ez@hitachi.com" <hidehiro.kawai.ez@hitachi.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "john.ogness@linutronix.de" <john.ogness@linutronix.de>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "vgoyal@redhat.com" <vgoyal@redhat.com>,
-        vkuznets <vkuznets@redhat.com>,
-        "will@kernel.org" <will@kernel.org>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-17-gpiccoli@igalia.com>
- <PH0PR21MB30250C9246FFF36AFB1DFDECD7FC9@PH0PR21MB3025.namprd21.prod.outlook.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <PH0PR21MB30250C9246FFF36AFB1DFDECD7FC9@PH0PR21MB3025.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202204291053.E04A367@keescook>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael, first of all thanks for the great review, much appreciated.
-Some comments inline below:
-
-On 29/04/2022 14:16, Michael Kelley (LINUX) wrote:
-> [...]
->> hypervisor I/O completion), so we postpone that to run late. But more
->> relevant: this *same* vmbus unloading happens in the crash_shutdown()
->> handler, so if kdump is set, we can safely skip this panic notifier and
->> defer such clean-up to the kexec crash handler.
+On Fri, Apr 29, 2022 at 11:19:33AM -0700, Kees Cook wrote:
+> On Thu, Apr 28, 2022 at 07:31:13PM -0700, Sargun Dhillon wrote:
+> > +
+> > +	ASSERT_EQ(socketpair(PF_LOCAL, SOCK_SEQPACKET, 0, sk_pair), 0);
+> > +
+> > +	listener = user_notif_syscall(__NR_getppid,
+> > +				      SECCOMP_FILTER_FLAG_NEW_LISTENER |
+> > +				      SECCOMP_FILTER_FLAG_WAIT_KILLABLE_RECV);
+> > +	ASSERT_GE(listener, 0);
+> > +
+> > +	pid = fork();
+> > +	ASSERT_GE(pid, 0);
+> > +
+> > +	if (pid == 0) {
+> > +		close(sk_pair[0]);
+> > +		handled = sk_pair[1];
+> > +
+> > +		/* Setup the sigaction without SA_RESTART */
+> > +		if (sigaction(SIGUSR1, &new_action, NULL)) {
+> > +			perror("sigaction");
+> > +			exit(1);
+> > +		}
+> > +
+> > +		/* Make sure that the syscall is completed (no EINTR) */
+> > +		ret = syscall(__NR_getppid);
+> > +		exit(ret != USER_NOTIF_MAGIC);
+> > +	}
+> > +
+> > +	while (get_proc_syscall(pid) != __NR_getppid &&
+> > +	       get_proc_stat(pid) != 'S')
+> > +		nanosleep(&delay, NULL);
+> > +
+> > +	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_RECV, &req), 0);
+> > +	/* Kill the process to make sure it enters the wait_killable state */
+> > +	EXPECT_EQ(kill(pid, SIGUSR1), 0);
+> > +
+> > +	/* TASK_KILLABLE is considered D (Disk Sleep) state */
+> > +	while (get_proc_stat(pid) != 'D')
+> > +		nanosleep(&delay, NULL);
 > 
-> While the last sentence is true for Hyper-V on x86/x64, it's not true for
-> Hyper-V on ARM64.  x86/x64 has the 'machine_ops' data structure
-> with the ability to provide a custom crash_shutdown() function, which
-> Hyper-V does in the form of hv_machine_crash_shutdown().  But ARM64
-> has no mechanism to provide such a custom function that will eventually
-> do the needed vmbus_initiate_unload() before running kdump.
+> Should a NOWAIT waitpid() happen in this loop to make sure this doesn't
+> spin forever?
 > 
-> I'm not immediately sure what the best solution is for ARM64.  At this
-> point, I'm just pointing out the problem and will think about the tradeoffs
-> for various possible solutions.  Please do the same yourself. :-)
+> i.e. running these tests on a kernel that doesn't have the support
+> shouldn't hang -- yes it'll time out eventually but that's annoying. ;)
 > 
+Wouldn't this bail already because user_notif_syscall would assert out
+since the kernel would reject the unknown flag?
 
-Oh, you're totally right! I just assumed ARM64 would the the same, my
-bad. Just to propose some alternatives, so you/others can also discuss
-here and we can reach a consensus about the trade-offs:
+I might make this a little helper function, something like:
+static void wait_for_state(struct __test_metadata *_metadata, pid_t pid, char wait_for) {
+	/* 100 ms */
+	struct timespec delay = { .tv_nsec = 100000000 };
+	int status;
 
-(a) We could forget about this change, and always do the clean-up here,
-not relying in machine_crash_shutdown().
-Pro: really simple, behaves the same as it is doing currently.
-Con: less elegant/concise, doesn't allow arm64 customization.
+	while (get_proc_stat(pid) != wait_for) {
+		ASSERT_EQ(waitpid(pid, &status, WNOHANG), 0) {
+			if (WIFEXITED(status))
+				TH_LOG("Process %d exited with error code %d", pid, WEXITSTATUS(status));
+			else if (WIFSIGNALED(status))
+				TH_LOG("Process %d exited due to signal %d", pid, WTERMSIG(status));
+			else
+				TH_LOG("Process %d exited due to unknown reason", pid);
+		}
+		nanosleep(&delay, NULL);
+	}
+}
+	
+}
 
-(b) Add a way to allow ARM64 customization of shutdown crash handler.
-Pro: matches x86, more customizable, improves arm64 arch code.
-Con: A tad more complex.
-
-Also, a question that came-up: if ARM64 has no way of calling special
-crash shutdown handler, how can you execute hv_stimer_cleanup() and
-hv_synic_disable_regs() there? Or are they not required in ARM64?
-
-
->>
->> (c) There is also a Hyper-V framebuffer panic notifier, which relies in
->> doing a vmbus operation that demands a valid connection. So, we must
->> order this notifier with the panic notifier from vmbus_drv.c, in order to
->> guarantee that the framebuffer code executes before the vmbus connection
->> is unloaded.
+> > +
+> > +	resp.id = req.id;
+> > +	resp.val = USER_NOTIF_MAGIC;
+> > +	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_SEND, &resp), 0);
+> > +
+> > +	/*
+> > +	 * Make sure that the signal handler does get called once we're back in
+> > +	 * userspace.
+> > +	 */
+> > +	EXPECT_EQ(read(sk_pair[0], &c, 1), 1);
+> > +	EXPECT_EQ(waitpid(pid, &status, 0), pid);
+> > +	EXPECT_EQ(true, WIFEXITED(status));
+> > +	EXPECT_EQ(0, WEXITSTATUS(status));
+> > +}
+> > +
+> > +TEST(user_notification_wait_killable_fatal)
+> > +{
+> > +	struct seccomp_notif req = {};
+> > +	int listener, status;
+> > +	pid_t pid;
+> > +	long ret;
+> > +	/* 100 ms */
+> > +	struct timespec delay = { .tv_nsec = 100000000 };
+> > +
+> > +	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
+> > +	ASSERT_EQ(0, ret) {
+> > +		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
+> > +	}
+> > +
+> > +	listener = user_notif_syscall(__NR_getppid,
+> > +				      SECCOMP_FILTER_FLAG_NEW_LISTENER |
+> > +				      SECCOMP_FILTER_FLAG_WAIT_KILLABLE_RECV);
+> > +	ASSERT_GE(listener, 0);
+> > +
+> > +	pid = fork();
+> > +	ASSERT_GE(pid, 0);
+> > +
+> > +	if (pid == 0) {
+> > +		/* This should never complete */
+> > +		syscall(__NR_getppid);
+> > +		exit(1);
+> > +	}
+> > +
+> > +	while (get_proc_stat(pid) != 'S')
+> > +		nanosleep(&delay, NULL);
+> > +
+> > +	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_RECV, &req), 0);
+> > +	/* Kill the process with a fatal signal */
+> > +	EXPECT_EQ(kill(pid, SIGTERM), 0);
+> > +
+> > +	EXPECT_EQ(waitpid(pid, &status, 0), pid);
+> > +	EXPECT_EQ(true, WIFSIGNALED(status));
+> > +	EXPECT_EQ(SIGTERM, WTERMSIG(status));
+> > +}
 > 
-> Patch 21 of this set puts the Hyper-V FB panic notifier on the pre_reboot
-> notifier list, which means it won't execute before the VMbus connection
-> unload in the case of kdump.   This notifier is making sure that Hyper-V
-> is notified about the last updates made to the frame buffer before the
-> panic, so maybe it needs to be put on the hypervisor notifier list.  It
-> sends a message to Hyper-V over its existing VMbus channel, but it
-> does not wait for a reply.  It does, however, obtain a spin lock on the
-> ring buffer used to communicate with Hyper-V.   Unless someone has
-> a better suggestion, I'm inclined to take the risk of blocking on that
-> spin lock.
+> Should there be a test validating the inverse of this, as in _without_
+> SECCOMP_FILTER_FLAG_WAIT_KILLABLE_RECV, how should the above tests
+> behave?
+Don't we roughly get that from the user_notification_kill_in_middle
+and user_notification_signal?
 
-The logic behind that was: when kdump is set, we'd skip the vmbus
-disconnect on notifiers, deferring that to crash_shutdown(), logic this
-one refuted in the above discussion on ARM64 (one more Pro argument to
-the idea of refactoring aarch64 code to allow a custom crash shutdown
-handler heh). But you're right, for the default level 2, we skip the
-pre_reboot notifiers on kdump, effectively skipping this notifier.
-
-Some ideas of what we can do here:
-
-I) we could change the framebuffer notifier to rely on trylocks, instead
-of risking a lockup scenario, and with that, we can execute it before
-the vmbus disconnect in the hypervisor list;
-
-II) we ignore the hypervisor notifier in case of kdump _by default_, and
-if the users don't want that, they can always set the panic notifier
-level to 4 and run all notifiers prior to kdump; would that be terrible
-you think? Kdump users might don't care about the framebuffer...
-
-III) we go with approach (b) above and refactor arm64 code to allow the
-custom crash handler on kdump time, then [with point (I) above] the
-logic proposed in this series is still valid - seems more and more the
-most correct/complete solution.
-
-In any case, I guess we should avoid workarounds if possible and do the
-things the best way we can, to encompass all (or almost all) the
-possible scenarios and don't force things on users (like enforcing panic
-notifier level 4 for Hyper-V or something like this...)
-
-More feedback from you / Hyper-V folks is pretty welcome about this.
-
+Although, I might cleanup the user_notification_signal test to disable
+SA_RESTART like these tests.
 
 > 
->> [...]
-> The "Fixes:" tags imply that these changes should be backported to older
-> longterm kernel versions, which I don't think is the case.  There is a
-> dependency on Patch 14 of your series where PANIC_NOTIFIER is
-> introduced.
+> Otherwise, looks good! Yay tests!
 > 
-
-Oh, this was more related with archeology of the kernel. When I'm
-investigating stuff, I really want to understand why code was added and
-that usually require some time git blaming stuff, so having that pronto
-in the commit message is a bonus.
-
-But of course we don't need to use the Fixes tag for that, easy to only
-mention it in the text. A secondary benefit by using this tag is to
-indicate this is a _real fix_ to some code, and not an improvement, but
-as you say, I agree we shouldn't backport it to previous releases having
-or not the Fixes tag (AFAIK it's not mandatory to backport stuff with
-Fixes tag).
-
-
->> [...]
->> + * intrincated is the relation of this notifier with Hyper-V framebuffer
-> 
-> s/intrincated/intricate/
-
-Thanks, fixed in V2!
-
-
->
->> [...]
->> +static int hv_panic_vmbus_unload(struct notifier_block *nb, unsigned long val,
->>  			      void *args)
->> +{
->> +	if (!kexec_crash_loaded())
-> 
-> I'm not clear on the purpose of this condition.  I think it means
-> we will skip the vmbus_initiate_unload() if a panic occurs in the
-> kdump kernel.  Is there a reason a panic in the kdump kernel
-> should be treated differently?  Or am I misunderstanding?
-
-This is really related with the point discussed in the top of this
-response - I assumed both ARM64/x86_64 would behave the same and
-disconnect the vmbus through the custom crash handler when kdump is set,
-so worth skipping it here in the notifier. But that's not true for ARM64
-as you pointed, so this guard against kexec is really part of the
-decision/discussion on what to do with ARM64 heh
-
-Cheers!
+> -- 
+> Kees Cook

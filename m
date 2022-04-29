@@ -2,46 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81120513FC2
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 02:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2611513FC5
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 02:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347836AbiD2Atk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 20:49:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42340 "EHLO
+        id S1353572AbiD2Atg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 20:49:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353180AbiD2Ata (ORCPT
+        with ESMTP id S1353571AbiD2At3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 20:49:30 -0400
-Received: from mail-m121145.qiye.163.com (mail-m121145.qiye.163.com [115.236.121.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 660C4888D3;
+        Thu, 28 Apr 2022 20:49:29 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6612EBB90B
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 17:46:12 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d15so5804335plh.2
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 17:46:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EagzqCWHhn+9dJ9MscFTqU/lwiWeVVOzta6evzEb65E=;
+        b=O2Tw5b/hhSM7sUPjKZfilkafwE0fUd90Qg+9mXCE0z95XVG7P9ldKCaRrJuE48TNa6
+         uiYD2bucdUQ9ixgkz3GWzV+OOptKqGg1oxo4ez3bDMzBJw879qwDr5IevJ9fmgsSkMnR
+         X1O85tFU8VXMcEvzUwLWI6XC/HRHSP8K73rwHxfkLHGffb+HFPfXZe20smWbdgI3e4s9
+         3oUT5JvXNpO8e4IMGrhzYq+DycpRNqos3zrBxQvA6i8hL9Y9fyukUCJ1TzaynpFD51/7
+         4tgJUwxrKOY9HfsFSraMuECV8rUNDmie4DCd5gLwZqkNUHVNRrQ5WZW/6HsTnp2J95L8
+         cQrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EagzqCWHhn+9dJ9MscFTqU/lwiWeVVOzta6evzEb65E=;
+        b=4oyK3EuGPUilAVFbPDllJXTCafun5d/gZVZHZ6LtzOziuq9G2XMXz+4IkY3RllhMlj
+         fzulByAYyMlozR02kTA8pH2Td93y9Vur64QOZZlwXoXuqSVFkXM9Xaz4c7G09l08JUQ/
+         gpPlmFeoK3y8mudUWayVrNfQgcAJATjbkRi65Dj9Wm4m+c/E2WPa/Bte0KKi4TsjdDiU
+         8jWr3k9zVuPXhtpOMY3J4JtaapzzKnQtYAC3aq7Ix+Poud8hMYpJYQ0A8LH7hHL4qFDE
+         QxPGC1Ia/1ctmYQPrGg3ml5FjdRmSe2oKhCnnzd12e5yhLn+hi9QTxJSDnXOE6g6r9y0
+         +zZg==
+X-Gm-Message-State: AOAM532jguHfjjN7b1jmd8jCOtV8ZjRna8gmAcoWqFPFOYBuSdmLQ33H
+        WceqVIx0W43iGEokqXfpp4EsRQ==
+X-Google-Smtp-Source: ABdhPJyWe5FGjQ9v+/trRLwUkRBNkzA5jk+4leC8OEvgYgH3lqH/mqVluuuAs5ELoXD898wWwvv9qw==
+X-Received: by 2002:a17:902:e808:b0:15c:ed0d:f11c with SMTP id u8-20020a170902e80800b0015ced0df11cmr29016694plg.1.1651193172304;
         Thu, 28 Apr 2022 17:46:12 -0700 (PDT)
-Received: from localhost.localdomain (unknown [58.22.7.114])
-        by mail-m121145.qiye.163.com (Hmail) with ESMTPA id 74245800280;
-        Fri, 29 Apr 2022 08:46:09 +0800 (CST)
-From:   Jianqun Xu <jay.xu@rock-chips.com>
-To:     kuba@kernel.org, davem@davemloft.net, joabreu@synopsys.com,
-        alexandre.torgue@st.com, peppe.cavallaro@st.com
-Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        Jianqun Xu <jay.xu@rock-chips.com>
-Subject: [PATCH V2] ethernet: stmmac: support driver work for DTs without child queue node
-Date:   Fri, 29 Apr 2022 08:46:05 +0800
-Message-Id: <20220429004605.1010751-1-jay.xu@rock-chips.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220428010927.526310-1-jay.xu@rock-chips.com>
-References: <20220428010927.526310-1-jay.xu@rock-chips.com>
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id 35-20020a631063000000b003c14af50602sm3974267pgq.26.2022.04.28.17.46.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 17:46:11 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 00:46:08 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sagi Shahar <sagis@google.com>
+Cc:     "Yamahata, Isaku" <isaku.yamahata@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Connor Kuehl <ckuehl@redhat.com>
+Subject: Re: [RFC PATCH v5 048/104] KVM: x86/tdp_mmu: Support TDX private
+ mapping for TDP MMU
+Message-ID: <Yms1UPapk9jVGHrf@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <7a5246c54427952728bd702bd7f2c6963eefa712.1646422845.git.isaku.yamahata@intel.com>
+ <CAAhR5DE4-Z6JYLHbWyEyraqqWCx5bD+gZADAnisDmSJ4bkgV8g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
-        kWDxoPAgseWUFZKDYvK1lXWShZQUlKS0tKN1dZLVlBSVdZDwkaFQgSH1lBWRlDH0NWS0tMTU1PHx
-        hDQx5NVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWU9LSFVKSktISkNVS1kG
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MRg6GRw5ED02EBEfIxgJN0of
-        TjoKCwhVSlVKTU5KSkJISkxLSk5CVTMWGhIXVREaAlUDDjsJFBgQVhgTEgsIVRgUFkVZV1kSC1lB
-        WU5DVUlJVUxVSkpPWVdZCAFZQUlCSE83Bg++
-X-HM-Tid: 0a8072c84756b03akuuu74245800280
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAhR5DE4-Z6JYLHbWyEyraqqWCx5bD+gZADAnisDmSJ4bkgV8g@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,48 +78,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver use the value of property 'snps,rx-queues-to-use' to loop
-same numbers child nodes as queues, such as:
+On Thu, Apr 28, 2022, Sagi Shahar wrote:
+> > @@ -468,23 +503,49 @@ static void __handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
+> >
+> >         if (was_leaf && is_dirty_spte(old_spte) &&
+> >             (!is_present || !is_dirty_spte(new_spte) || pfn_changed))
+> > -               kvm_set_pfn_dirty(spte_to_pfn(old_spte));
+> > +               kvm_set_pfn_dirty(old_pfn);
+> > +
+> > +       /*
+> > +        * Special handling for the private mapping.  We are either
+> > +        * setting up new mapping at middle level page table, or leaf,
+> > +        * or tearing down existing mapping.
+> > +        */
+> > +       if (private_spte) {
+> > +               void *sept_page = NULL;
+> > +
+> > +               if (is_present && !is_leaf) {
+> > +                       struct kvm_mmu_page *sp = to_shadow_page(pfn_to_hpa(new_pfn));
+> > +
+> > +                       sept_page = kvm_mmu_private_sp(sp);
+> > +                       WARN_ON(!sept_page);
+> > +                       WARN_ON(sp->role.level + 1 != level);
+> > +                       WARN_ON(sp->gfn != gfn);
+> > +               }
+> > +
+> > +               static_call(kvm_x86_handle_changed_private_spte)(
+> > +                       kvm, gfn, level,
+> > +                       old_pfn, was_present, was_leaf,
+> > +                       new_pfn, is_present, is_leaf, sept_page);
+> > +       }
+> >
+> >         /*
+> >          * Recursively handle child PTs if the change removed a subtree from
+> >          * the paging structure.
+> >          */
+> > -       if (was_present && !was_leaf && (pfn_changed || !is_present))
+> > +       if (was_present && !was_leaf && (pfn_changed || !is_present)) {
+> > +               WARN_ON(private_spte !=
+> > +                       is_private_spte(spte_to_child_pt(old_spte, level)));
 
-    gmac {
-        rx-queues-config {
-            snps,rx-queues-to-use = <1>;
-            queue0 {
-                // nothing need here.
-	    };
-	};
-    };
+This sanity check is pointless.  The private flag comes from the parent shadow
+page role, and that's not changing.
 
-Since a patch for dtc from rockchip will delete all node without any
-properties or child node, the queue0 node will be deleted, that caused
-the driver fail to probe:
+> > @@ -1015,6 +1137,12 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+> >                     is_large_pte(iter.old_spte)) {
+> >                         if (!tdp_mmu_zap_spte_atomic(vcpu->kvm, &iter))
+> >                                 break;
+> > +                       /*
+> > +                        * TODO: large page support.
+> > +                        * Doesn't support large page for TDX now
+> > +                        */
+> > +                       WARN_ON(is_private_spte(&iter.old_spte));
+> 
+> The above line is causing a null ptr dereferencing when running the
+> KVM unit tests.
+> It should be is_private_spte(iter.sptep) instead of
+> is_private_spte(&iter.old_spte)
+> While old_spte holds a snapshot of the value pointed to by sptep,
+> &old_spte is not equivalent to sptep.
 
-    rk_gmac-dwmac: probe of ffa80000.ethernet failed with error -22
+Bug aside, the name is really, really bad.  All of the existing helpers with an
+"is_blah_spte()" name take an SPTE value, not a pointer to an SPTE.
 
-This patch try to support driver work well for DTs without setting for
-the child queue nodes and then have none child queue nodes.
+is_private_sptep() is the obvious choice.  That makes me a bit nervous too, and
+I don't love having to go back to the parent to query private vs shared.
 
-Signed-off-by: Jianqun Xu <jay.xu@rock-chips.com>
----
-v2:
- - change subject and update commit comment, sugguested by Kicinski
-
- drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-index 2d8c095f3856..4f01a41c485c 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-@@ -279,7 +279,7 @@ static int stmmac_mtl_setup(struct platform_device *pdev,
- 
- 		queue++;
- 	}
--	if (queue != plat->tx_queues_to_use) {
-+	if (queue != plat->tx_queues_to_use && of_get_child_count(tx_node)) {
- 		ret = -EINVAL;
- 		dev_err(&pdev->dev, "Not all TX queues were configured\n");
- 		goto out;
--- 
-2.25.1
-
+That said, I think it's worth waiting to see the next version of this series before
+going behind the bikeshed, I suspect many/most of the calls will go away, i.e. we
+might find a better option presents itself.

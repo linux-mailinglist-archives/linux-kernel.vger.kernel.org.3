@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94CC05155AF
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A023E5155AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:31:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380762AbiD2UeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 16:34:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59124 "EHLO
+        id S1380780AbiD2UeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 16:34:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240574AbiD2UeK (ORCPT
+        with ESMTP id S1380751AbiD2UeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 16:34:10 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14AA64BFF6;
-        Fri, 29 Apr 2022 13:30:50 -0700 (PDT)
+        Fri, 29 Apr 2022 16:34:13 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4592343EE6;
+        Fri, 29 Apr 2022 13:30:53 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: nfraprado)
-        with ESMTPSA id F0F751F469D0
+        with ESMTPSA id 13ED91F469D9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651264248;
-        bh=kAsfuPsvXs/HN4ujTEF3xFYlYjDqLSK6UGr16SYdfgE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=SzxGQcTxE6k2qTzzReHyLAe7jlJlmUGpQNWY3a7V6pXaK2tuz1vZS/4RJOREQKhu+
-         vvIaaf9iFOYFCa51RkzPCWdRokKr27OFqStuzo7CCpSIGCLleJb3CGdUKnqoJMeNWH
-         7inbr2ODyd+mR2fHnmYrohMxSdY5Q4TX5mFOgOZsZakXkuwQjLq7chiwpa3XimSxRU
-         75RZ6J3mY0bnIY/RnYFT/getYOg+WDq2hTDd6i7MnJ0nV+g9xkZqc0oa98FQKQJ2H3
-         YW6t3q8FTaV520N6M3TwEEmoviL/E1fKeRGkZJ6dGJukNSy/1WIezg8llGzqGMn7Ks
-         9EKwLw8K1XAgw==
+        s=mail; t=1651264251;
+        bh=iA81JYnLAQQ56KXiWfdUYhI2+oyfPVXJFjeDzQn33UQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=IEXLTWvqDvhD8CXoQFsb1+gzKNMCACdb8rlEhLrPyFd5Ezy+kLRcmFRgNDdCBsuKN
+         F24McZ6t0CsiSnp6455dCY4H1vu7lXGmcYxl5ke4thYo5fhgXDCtnWhmwohSXFFCEj
+         HR3NsmGWzRONXwoUFTxpZ98PUXsHAO6evwLPcOIAtkBXwsmkitIWiu1guxTspIsf2W
+         I1oW750Zw+95Up0iRS8Enhwhs6IwLCwc7gx+FF85yE0Y6AuXegjBGms3Z/+t5khTEL
+         tMxYkikxZsfLJf6KdIeL8LLyPo6mozWksZutDOsDDeMHPdcQdcmlNv0c3MRm5bX/y6
+         35CkcCaxg8KMw==
 From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
         <nfraprado@collabora.com>
 To:     Mark Brown <broonie@kernel.org>
@@ -41,14 +41,15 @@ Cc:     kernel@collabora.com,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Shane Chien <shane.chien@mediatek.com>,
-        Tzung-Bi Shih <tzungbi@google.com>,
         alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH 0/3] Add missing dt-binding properties for audio components on mt8192-asurada
-Date:   Fri, 29 Apr 2022 16:30:36 -0400
-Message-Id: <20220429203039.2207848-1-nfraprado@collabora.com>
+Subject: [PATCH 1/3] ASoC: dt-bindings: mediatek: mt8192: Add i2s-share properties
+Date:   Fri, 29 Apr 2022 16:30:37 -0400
+Message-Id: <20220429203039.2207848-2-nfraprado@collabora.com>
 X-Mailer: git-send-email 2.36.0
+In-Reply-To: <20220429203039.2207848-1-nfraprado@collabora.com>
+References: <20220429203039.2207848-1-nfraprado@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -61,24 +62,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The Mediatek AFE PCM controller for MT8192 allows sharing of an I2S bus
+between two busses. Add a pattern for these properties in the
+dt-binding.
 
-These patches add properties that were missing on the dt-bindings of the
-audio components used by mt8192-asurada. Namely the i2s-share
-properties for the sound platform and the #sound-dai-cells on the
-rt1015p and rt5682 codecs when they're referenced by the machine sound
-node.
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
+---
 
-Nícolas F. R. A. Prado (3):
-  ASoC: dt-bindings: mediatek: mt8192: Add i2s-share properties
-  ASoC: dt-bindings: rt1015p: Add #sound-dai-cells
-  ASoC: dt-bindings: rt5682: Add #sound-dai-cells
+ Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
 
- Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml  | 5 +++++
- Documentation/devicetree/bindings/sound/realtek,rt1015p.yaml | 3 +++
- Documentation/devicetree/bindings/sound/rt5682.txt           | 2 ++
- 3 files changed, 10 insertions(+)
-
+diff --git a/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml b/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
+index 7a25bc9b8060..5b03c8dbf318 100644
+--- a/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
++++ b/Documentation/devicetree/bindings/sound/mt8192-afe-pcm.yaml
+@@ -54,6 +54,11 @@ properties:
+       - const: aud_infra_clk
+       - const: aud_infra_26m_clk
+ 
++patternProperties:
++  "^i2s[0-35-9]-share$":
++    description: Name of the I2S bus that is shared with this bus
++    pattern: "^I2S[0-35-9]$"
++
+ required:
+   - compatible
+   - interrupts
 -- 
 2.36.0
 

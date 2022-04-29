@@ -2,61 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A027B515145
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F96515144
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:03:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379389AbiD2RHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 13:07:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57290 "EHLO
+        id S1379393AbiD2RGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 13:06:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347686AbiD2RHI (ORCPT
+        with ESMTP id S1379389AbiD2RGk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 13:07:08 -0400
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE49CE136
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:03:49 -0700 (PDT)
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 23TH3RUn022680
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 02:03:28 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 23TH3RUn022680
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1651251808;
-        bh=2vpSHisjjsnf9NfbpwTfPLzqRn0BtksbaOiDQMdZIhY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=vIZKmixvU3vr2L5AM0NRMs6Js+aaHTAUpjPmRsHYlD5bN0Z5suE+z4fPNRck9lLwY
-         9OhL5IeMww9wXpimeozNQUifnf7B/A48CioSTRkFjOEZx4x+GUggqd/6KHorFx04oO
-         r8J4y+qlitJaoI+gNbzG9DHCAxHri4RjZv8EGE3uywnsygVFleDHHyDUP+qmD8a7bz
-         peFt01GltVqHLatiy9e82YOwbvsL1ooF0mnioAfyxzXQCcI9juATsu0Wl4hfRxLmON
-         52rIlHEKuwQvNHp7HQC1mBOwHKCX1UfUM2iVHTlpL682CKfVJtbUPn92rSq3JehAlD
-         plDZDEbrLlf5g==
-X-Nifty-SrcIP: [209.85.216.46]
-Received: by mail-pj1-f46.google.com with SMTP id fv2so7618955pjb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:03:28 -0700 (PDT)
-X-Gm-Message-State: AOAM531gWQiM2ImmhljskT9t/eG2GFvc9zQE1OY7cKIE2EKaKyjn2qn8
-        niiTpy6tKtA54PqAhrKl1sOLB+jdpnyuUTToVLM=
-X-Google-Smtp-Source: ABdhPJxTFHxNrrT5TqeOkyMPJTn0AidkGCpkTxYwuoLHQHkodF0cp0Iagk/I7OqOD0n4qehCHvFWugf2l3faxbK2OGU=
-X-Received: by 2002:a17:902:f54e:b0:15e:6c3f:5b5 with SMTP id
- h14-20020a170902f54e00b0015e6c3f05b5mr342925plf.99.1651251807401; Fri, 29 Apr
- 2022 10:03:27 -0700 (PDT)
+        Fri, 29 Apr 2022 13:06:40 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A44B0A7D
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:03:21 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id cq17-20020a17090af99100b001dc0386cd8fso2430267pjb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:03:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=RkN7JUMz0DAtONAVPRmRHnP64HBiaCnPPuSBpGqI0Eo=;
+        b=APvmC5k2WUKy0VF/8OFRKt3sJeb7n0edWipqz/MuxQSpQdH6U840xRClQNgeSB0/HP
+         CorEabT7uAif+i25odVZeixSMo+CrYTYX0OCnVriOtMIrhAOjQNKxMuoqgWXTAZgMl2P
+         nSOmNzDXu54i8slffbv/+iAa3TqxxKOgSzJCyGmNjc48RJVfqclQY74gl/+qZEQWQaRL
+         G5fGahViQBcY78yDKgrE3WecQcf8RitMoYp1YinysH+SnU/xWu61GQYEH15+arqh/kUj
+         FWhXZjI9jmGQM1gJbsagSphVpJWn67RBBedRQD6AunGL/AormBN2S16j4yeB+1GMnWCZ
+         r4tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=RkN7JUMz0DAtONAVPRmRHnP64HBiaCnPPuSBpGqI0Eo=;
+        b=Sh8tEA9QOFU+5dfK95qJvFaWpSS4n5zIowEK79k6Y9Di254j2lYJD6tC5AuXzLEuvd
+         eUWhu7CvQ3bMArFhlKXPypqUnSXPWVuUg2xG0cwnVfxflgF/K/XOQNqGakHP5kX7GXJX
+         eesRKi1VHpSapiilyf8upA6trsMGZPKswdJtfGVd+Ch1JfyuAbXuE5F/6SHO+eLzGLdC
+         dVSj8b9w+fnHyIDWUbuTNnC4yXJvqxwBrefpbeXwLNZUo89gzo7B006s3te4fPCZOXPY
+         9ICqCIMsfP2OpNRmqHLzUJldZK2k6GBqVi8U4NE7Ix9HY4/eyBtMcBS4J0GC1NU06416
+         iaCg==
+X-Gm-Message-State: AOAM531bCYrO24YQ9KiRHYI8W3wIV/gOZW8jMFJRCziEbK+Ze4ggg+d1
+        WU99Wix65ThDsUsxxgOvDHyKMA==
+X-Google-Smtp-Source: ABdhPJxa3u/ecjwn+3JjLKK6oRMJ5TZ6P/zhBeChiNrcd61l1FaXIYCxObf1ewlGxrCmBH+ZJBZv7Q==
+X-Received: by 2002:a17:90a:ab81:b0:1ca:8a76:cdda with SMTP id n1-20020a17090aab8100b001ca8a76cddamr5005883pjq.26.1651251801115;
+        Fri, 29 Apr 2022 10:03:21 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id l5-20020a63ea45000000b003c1b2bea056sm2061378pgk.84.2022.04.29.10.03.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 10:03:20 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 17:03:17 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        mlevitsk@redhat.com, stable@vger.kernel.org
+Subject: Re: [PATCH 1/3] KVM: x86: make vendor code check for all nested
+ events
+Message-ID: <YmwaVY5vERO43CRI@google.com>
+References: <20220427173758.517087-1-pbonzini@redhat.com>
+ <20220427173758.517087-2-pbonzini@redhat.com>
 MIME-Version: 1.0
-References: <20220422151725.1336997-1-mailhol.vincent@wanadoo.fr>
-In-Reply-To: <20220422151725.1336997-1-mailhol.vincent@wanadoo.fr>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 30 Apr 2022 02:02:24 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARL+_amg-6RN9W+P9n8KuWqobpWrvo6gXxRphxj+=OU7Q@mail.gmail.com>
-Message-ID: <CAK7LNARL+_amg-6RN9W+P9n8KuWqobpWrvo6gXxRphxj+=OU7Q@mail.gmail.com>
-Subject: Re: [PATCH] checksyscalls: ignore -Wunused-macros
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220427173758.517087-2-pbonzini@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,56 +75,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 23, 2022 at 12:18 AM Vincent Mailhol
-<mailhol.vincent@wanadoo.fr> wrote:
->
-> The macros defined in this file are for testing only and are purposely
-> not used. When compiled with W=2, both gcc and clang yield some
-> -Wunused-macros warnings. Ignore them.
->
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+On Wed, Apr 27, 2022, Paolo Bonzini wrote:
+> Right now, the VMX preemption timer is special cased via the
+> hv_timer_pending, but the purpose of the callback can be easily
+> extended to observing any event that can occur only in non-root
+> mode.  Interrupts, NMIs etc. are already handled properly by
+> the *_interrupt_allowed callbacks, so what is missing is only
+> MTF.  Check it in the newly-renamed callback, so that
+> kvm_vcpu_running's call to kvm_check_nested_events
+> becomes redundant.
+> 
+> Cc: stable@vger.kernel.org
+> Reported-by: Maxim Levitsky <mlevitsk@redhat.com>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 > ---
-
-Applied to linux-kbuild (only the second hunk)
-Thanks.
-
-The current check is not nice,
-but this does not hurt.
-
-
-
->  scripts/checksyscalls.sh | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/scripts/checksyscalls.sh b/scripts/checksyscalls.sh
-> index 9dbab13329fa..cde15f22ec98 100755
-> --- a/scripts/checksyscalls.sh
-> +++ b/scripts/checksyscalls.sh
-> @@ -255,6 +255,7 @@ cat << EOF
->  /* 64-bit ports never needed these, and new 32-bit ports can use statx */
->  #define __IGNORE_fstat64
->  #define __IGNORE_fstatat64
-> +
->  EOF
+>  arch/x86/include/asm/kvm_host.h | 2 +-
+>  arch/x86/kvm/vmx/nested.c       | 7 ++++++-
+>  arch/x86/kvm/x86.c              | 8 ++++----
+>  3 files changed, 11 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 4ff36610af6a..e2e4f60159e9 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1504,7 +1504,7 @@ struct kvm_x86_ops {
+>  struct kvm_x86_nested_ops {
+>  	void (*leave_nested)(struct kvm_vcpu *vcpu);
+>  	int (*check_events)(struct kvm_vcpu *vcpu);
+> -	bool (*hv_timer_pending)(struct kvm_vcpu *vcpu);
+> +	bool (*has_events)(struct kvm_vcpu *vcpu);
+>  	void (*triple_fault)(struct kvm_vcpu *vcpu);
+>  	int (*get_state)(struct kvm_vcpu *vcpu,
+>  			 struct kvm_nested_state __user *user_kvm_nested_state,
+> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+> index 856c87563883..54672025c3a1 100644
+> --- a/arch/x86/kvm/vmx/nested.c
+> +++ b/arch/x86/kvm/vmx/nested.c
+> @@ -3857,6 +3857,11 @@ static bool nested_vmx_preemption_timer_pending(struct kvm_vcpu *vcpu)
+>  	       to_vmx(vcpu)->nested.preemption_timer_expired;
 >  }
+>  
+> +static bool vmx_has_nested_events(struct kvm_vcpu *vcpu)
+> +{
+> +	return nested_vmx_preemption_timer_pending(vcpu) || vmx->nested.mtf_pending;
 
-Noise.
-I dropped it.
+This doesn't even compile...
 
-
-
->
-> @@ -268,4 +269,4 @@ syscall_list() {
->  }
->
->  (ignore_list && syscall_list $(dirname $0)/../arch/x86/entry/syscalls/syscall_32.tbl) | \
-> -$* -Wno-error -E -x c - > /dev/null
-> +$* -Wno-error -Wno-unused-macros -E -x c - > /dev/null
-> --
-> 2.35.1
->
-
-
--- 
-Best Regards
-Masahiro Yamada
+arch/x86/kvm/vmx/nested.c: In function ‘vmx_has_nested_events’:
+arch/x86/kvm/vmx/nested.c:3862:61: error: ‘vmx’ undeclared (first use in this function)
+ 3862 |         return nested_vmx_preemption_timer_pending(vcpu) || vmx->nested.mtf_pending;
+      |                                                             ^~~
+arch/x86/kvm/vmx/nested.c:3862:61: note: each undeclared identifier is reported only once for each function it appears in
+  CC [M]  arch/x86/kvm/svm/svm_onhyperv.o
+arch/x86/kvm/vmx/nested.c:3863:1: error: control reaches end of non-void function [-Werror=return-type]
+ 3863 | }
+      | ^
+cc1: all warnings being treated as errors
+  LD [M]  arch/x86/kvm/kvm.o

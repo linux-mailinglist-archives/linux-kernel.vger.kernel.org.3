@@ -2,298 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9104F5140EE
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 05:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EDF8514105
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 05:48:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236077AbiD2DYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 23:24:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38400 "EHLO
+        id S235962AbiD2D2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 23:28:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235676AbiD2DYS (ORCPT
+        with ESMTP id S235868AbiD2D2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 23:24:18 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6D389CC3;
-        Thu, 28 Apr 2022 20:21:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651202460; x=1682738460;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=Ntv4MlFWlw++r1XNowxfCpcex0tbaoL92o8ktxH/k1s=;
-  b=iF19R2Zun7qHKnJhUYHL53YcfmUIsik+KQ+biN6dM+EL1K+UIEQAHKK6
-   CsWyMpDByJbe50eE7+pWWQvpQLe2SrRyy8cnafjy7MZ1yLFXMGpxyHwMH
-   64QZHzUiu4Mf45dWve1vUGKx+opFcl1IpZdid92MBakkwVxzy/nB/TC9u
-   /1Sxby8VrVXyim5f9SX/FA3CvodvteQFL30KelgRBLsQ7pOPJGkAjoAYp
-   6U00TV9xBbMjfHnPPwq0kweQdU2MXWu8QAfr1LFiZUyPrmBWsOJMhdkC+
-   vJMwTyX49tfRelI8wPMwS7lEgRBaoCyDbgbmW7yl4nOZWvQOQIUVjwYYC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="246429892"
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="246429892"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 20:20:56 -0700
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="560065566"
-Received: from yangweij-mobl.ccr.corp.intel.com (HELO [10.249.171.134]) ([10.249.171.134])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 20:20:50 -0700
-Message-ID: <63068c6c-ae60-078b-0a9e-70f1dfd8362c@intel.com>
-Date:   Fri, 29 Apr 2022 11:20:37 +0800
+        Thu, 28 Apr 2022 23:28:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D7BB28E3A
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 20:25:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651202713;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ke+2dJcsQMIpkdR8+c+AhY3692zN3fcX2I1duuJx5Gs=;
+        b=jFWEku+B4xQyAyDfw1/6kpXnYaztHWUG4zRdBDtgQj8f8Vmb8Dfkje0JEjHnoSv3KJ+gyj
+        Tsu7a1l3gjU9CQvJK053PD2Dh5uYr2pcZfOij+eywRHZTKRJahqz8kJGho+XQId6JQfPJd
+        +Ki4h6uX2Bvvs78vvePLb6V2k02JCWM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-67-E-iJdaU5MKWRS9GQ2KHS3Q-1; Thu, 28 Apr 2022 23:25:02 -0400
+X-MC-Unique: E-iJdaU5MKWRS9GQ2KHS3Q-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C0F3C185A7B2;
+        Fri, 29 Apr 2022 03:25:01 +0000 (UTC)
+Received: from localhost (ovpn-12-205.pek2.redhat.com [10.72.12.205])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B0001463EC5;
+        Fri, 29 Apr 2022 03:24:59 +0000 (UTC)
+Date:   Fri, 29 Apr 2022 11:24:56 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org, Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        John Donnelly <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+Subject: Re: [PATCH v22 5/9] arm64: kdump: Reimplement crashkernel=X
+Message-ID: <YmtaiJhwIgP6m2Sk@MiWiFi-R3L-srv>
+References: <20220414115720.1887-1-thunder.leizhen@huawei.com>
+ <20220414115720.1887-6-thunder.leizhen@huawei.com>
+ <YmgzxsrrMlCDYsWp@arm.com>
+ <ee8daaa9-3258-e7e8-e5c4-c51dc9841580@huawei.com>
+ <Ymk34NsIFqUgfk3b@arm.com>
+ <ae7211ad-e2ac-f5b1-5aa0-701802132e73@huawei.com>
+ <YmlphvZVMsGfFksp@arm.com>
+ <YmoMvV1wzHT5V1aw@MiWiFi-R3L-srv>
+ <YmoPhvkXQFZQOcIO@MiWiFi-R3L-srv>
+ <3fc41a94-4247-40f3-14e7-f11e3001ec33@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v10 07/16] KVM: vmx/pmu: Emulate MSR_ARCH_LBR_CTL for
- guest Arch LBR
-Content-Language: en-US
-To:     "Liang, Kan" <kan.liang@linux.intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "like.xu.linux@gmail.com" <like.xu.linux@gmail.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "Wang, Wei W" <wei.w.wang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220422075509.353942-1-weijiang.yang@intel.com>
- <20220422075509.353942-8-weijiang.yang@intel.com>
- <bc3b3f6c-8d68-ffc1-cb6e-604d84797da1@linux.intel.com>
-From:   "Yang, Weijiang" <weijiang.yang@intel.com>
-In-Reply-To: <bc3b3f6c-8d68-ffc1-cb6e-604d84797da1@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3fc41a94-4247-40f3-14e7-f11e3001ec33@huawei.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 04/28/22 at 05:33pm, Leizhen (ThunderTown) wrote:
+> 
+> 
+> On 2022/4/28 11:52, Baoquan He wrote:
+> > On 04/28/22 at 11:40am, Baoquan He wrote:
+> >> Hi Catalin, Zhen Lei,
+> >>
+> >> On 04/27/22 at 05:04pm, Catalin Marinas wrote:
+> >>> On Wed, Apr 27, 2022 at 09:49:20PM +0800, Leizhen (ThunderTown) wrote:
+> >>>> On 2022/4/27 20:32, Catalin Marinas wrote:
+> >>>>> I think one could always pass a default command line like:
+> >>>>>
+> >>>>> 	crashkernel=1G,high crashkernel=128M,low
+> >>>>>
+> >>>>> without much knowledge of the SoC memory layout.
+> >>>>
+> >>>> Yes, that's what the end result is. The user specify crashkernel=128M,low
+> >>>> and the implementation ensure the 128M low memory is allocated from DMA zone.
+> >>>> We use arm64_dma_phys_limit as the upper limit for crash low memory.
+> >>>>
+> >>>> +#define CRASH_ADDR_LOW_MAX             arm64_dma_phys_limit
+> >>>> +       unsigned long long crash_max = CRASH_ADDR_LOW_MAX;
+> >>>> +       crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
+> >>>>                                                crash_base, crash_max);
+> >>>>
+> >>>>> Another option is to only introduce crashkernel=Y,low and, when that is
+> >>>>> passed, crashkernel=Y can go above arm64_dma_phys_limit. We won't need a
+> >>>>> 'high' option at all:
+> >>>>>
+> >>>>> 	crashkernel=1G				- all within ZONE_DMA
+> >>>>> 	crashkernel=1G crashkernel=128M,low	- 128M in ZONE_DMA
+> >>>>> 						  1G above ZONE_DMA
+> >>>>>
+> >>>>> If ZONE_DMA is not present or it extends to the whole RAM, we can ignore
+> >>>>> the 'low' option.
+> >>>>
+> >>>> I think although the code is hard to make generic, the interface is better to
+> >>>> be relatively uniform. A user might have to maintain both x86 and arm64, and
+> >>>> so on. It's not a good thing that the difference is too big.
+> >>>
+> >>> There will be some difference as the 4G limit doesn't always hold for
+> >>> arm64 (though it's true in most cases). Anyway, we can probably simplify
+> >>> things a bit while following the documented behaviour:
+> >>>
+> >>> 	crashkernel=Y		- current behaviour within ZONE_DMA
+> >>> 	crashkernel=Y,high	- allocate from above ZONE_DMA
+> >>> 	crashkernel=Y,low	- allocate within ZONE_DMA
+> >>>
+> >>> There is no fallback from crashkernel=Y.
+> >>>
+> >>> The question is whether we still want a default low allocation if
+> >>> crashkernel=Y,low is missing but 'high' is present. If we add this, I
+> >>> think we'd be consistent with kernel-parameters.txt for the 'low'
+> >>> description. A default 'low' is probably not that bad but I'm tempted to
+> >>> always mandate both 'high' and 'low'.
+> >>
+> >> Sorry to interrupt. Seems the ,high ,low and fallback are main concerns
+> >> about this version. And I have the same concerns about them which comes
+> >> from below points:
+> >> 1) we may need to take best effort to keep ,high, ,low behaviour
+> >> consistent on all ARCHes. Otherwise user/admin may be confused when they
+> >> deploy/configure kdump on different machines of different ARCHes in the
+> >> same LAB. I think we should try to avoid the confusion.
+> 
+> Yes, but for someone who is configuring crashkernel= for the first time, he
+> needs to read doc to understand how to configure it. The doc can show the
+> recommended default value of 'low' size.
+> 
+> After commit 94fb93341822 ("x86/crash: Allocate enough low memory when crashkernel=high"),
+> the default 'low' size doesn't make much sense anymore. The default size of swiotlb_size()
+> is 64M, far less than 256M. And if user specify "swiotlb=", he can also adjust crashkernel=Y,low.
+> 
+> 
+> +                * -swiotlb size: user-specified with swiotlb= or default.
+> -               low_size = swiotlb_size_or_default() + (8UL<<20);
+> +               low_size = max(swiotlb_size_or_default() + (8UL<<20), 256UL<<20);
+> 
+> That means all ARCHs can explicit configure crashkernel=256M,low, instead of
+> omitting it. This may be another way to avoid confusion. It's not hard for
+> programmer-turned-user/admin. However, this requires us to forgo backward
+> compatibility with the default size of 'low'.
 
-On 4/28/2022 10:16 PM, Liang, Kan wrote:
->
-> On 4/22/2022 3:55 AM, Yang Weijiang wrote:
->> From: Like Xu <like.xu@linux.intel.com>
->>
->> Arch LBR is enabled by setting MSR_ARCH_LBR_CTL.LBREn to 1. A new guest
->> state field named "Guest IA32_LBR_CTL" is added to enhance guest LBR usage.
->> When guest Arch LBR is enabled, a guest LBR event will be created like the
->> model-specific LBR does. Clear guest LBR enable bit on host PMI handling so
->> guest can see expected config.
->>
->> On processors that support Arch LBR, MSR_IA32_DEBUGCTLMSR[bit 0] has no
->> meaning. It can be written to 0 or 1, but reads will always return 0.
->> Like IA32_DEBUGCTL, IA32_ARCH_LBR_CTL msr is also preserved on INIT.
->>
->> Regardless of the Arch LBR or legacy LBR, when the LBR_EN bit 0 of the
->> corresponding control MSR is set to 1, LBR recording will be enabled.
->>
->> Signed-off-by: Like Xu <like.xu@linux.intel.com>
->> Co-developed-by: Yang Weijiang <weijiang.yang@intel.com>
->> Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
->> ---
->>    arch/x86/events/intel/lbr.c      |  2 --
->>    arch/x86/include/asm/msr-index.h |  1 +
->>    arch/x86/include/asm/vmx.h       |  2 ++
->>    arch/x86/kvm/vmx/pmu_intel.c     | 58 +++++++++++++++++++++++++++++---
->>    arch/x86/kvm/vmx/vmx.c           | 12 +++++++
->>    5 files changed, 68 insertions(+), 7 deletions(-)
->>
->> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
->> index 4529ce448b2e..4fe6c3b50fc3 100644
->> --- a/arch/x86/events/intel/lbr.c
->> +++ b/arch/x86/events/intel/lbr.c
->> @@ -160,8 +160,6 @@ enum {
->>    	 ARCH_LBR_RETURN		|\
->>    	 ARCH_LBR_OTHER_BRANCH)
->>    
->> -#define ARCH_LBR_CTL_MASK			0x7f000e
->> -
->>    static void intel_pmu_lbr_filter(struct cpu_hw_events *cpuc);
->>    
->>    static __always_inline bool is_lbr_call_stack_bit_set(u64 config)
->> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
->> index 0eb90d21049e..60e0ab108dc0 100644
->> --- a/arch/x86/include/asm/msr-index.h
->> +++ b/arch/x86/include/asm/msr-index.h
->> @@ -169,6 +169,7 @@
->>    #define LBR_INFO_BR_TYPE		(0xfull << LBR_INFO_BR_TYPE_OFFSET)
->>    
->>    #define MSR_ARCH_LBR_CTL		0x000014ce
->> +#define ARCH_LBR_CTL_MASK		0x7f000e
->>    #define ARCH_LBR_CTL_LBREN		BIT(0)
->>    #define ARCH_LBR_CTL_CPL_OFFSET		1
->>    #define ARCH_LBR_CTL_CPL		(0x3ull << ARCH_LBR_CTL_CPL_OFFSET)
->> diff --git a/arch/x86/include/asm/vmx.h b/arch/x86/include/asm/vmx.h
->> index 0ffaa3156a4e..ea3be961cc8e 100644
->> --- a/arch/x86/include/asm/vmx.h
->> +++ b/arch/x86/include/asm/vmx.h
->> @@ -245,6 +245,8 @@ enum vmcs_field {
->>    	GUEST_BNDCFGS_HIGH              = 0x00002813,
->>    	GUEST_IA32_RTIT_CTL		= 0x00002814,
->>    	GUEST_IA32_RTIT_CTL_HIGH	= 0x00002815,
->> +	GUEST_IA32_LBR_CTL		= 0x00002816,
->> +	GUEST_IA32_LBR_CTL_HIGH		= 0x00002817,
->>    	HOST_IA32_PAT			= 0x00002c00,
->>    	HOST_IA32_PAT_HIGH		= 0x00002c01,
->>    	HOST_IA32_EFER			= 0x00002c02,
->> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
->> index c8e6c1e1e00c..7dc8a5783df7 100644
->> --- a/arch/x86/kvm/vmx/pmu_intel.c
->> +++ b/arch/x86/kvm/vmx/pmu_intel.c
->> @@ -19,6 +19,7 @@
->>    #include "pmu.h"
->>    
->>    #define MSR_PMC_FULL_WIDTH_BIT      (MSR_IA32_PMC0 - MSR_IA32_PERFCTR0)
->> +#define KVM_ARCH_LBR_CTL_MASK  (ARCH_LBR_CTL_MASK | ARCH_LBR_CTL_LBREN)
->>    
->>    static struct kvm_event_hw_type_mapping intel_arch_events[] = {
->>    	[0] = { 0x3c, 0x00, PERF_COUNT_HW_CPU_CYCLES },
->> @@ -215,6 +216,7 @@ static bool intel_is_valid_msr(struct kvm_vcpu *vcpu, u32 msr)
->>    		ret = pmu->version > 1;
->>    		break;
->>    	case MSR_ARCH_LBR_DEPTH:
->> +	case MSR_ARCH_LBR_CTL:
->>    		if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR))
->>    			ret = guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR);
->>    		break;
->> @@ -361,6 +363,35 @@ static bool arch_lbr_depth_is_valid(struct kvm_vcpu *vcpu, u64 depth)
->>    	return (depth == pmu->kvm_arch_lbr_depth);
->>    }
->>    
->> +#define ARCH_LBR_CTL_BRN_MASK   GENMASK_ULL(22, 16)
->> +
->> +static bool arch_lbr_ctl_is_valid(struct kvm_vcpu *vcpu, u64 ctl)
->> +{
->> +	struct kvm_cpuid_entry2 *entry;
->> +
->> +	if (!kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR))
->> +		return false;
->> +
->> +	if (ctl & ~KVM_ARCH_LBR_CTL_MASK)
->> +		goto warn;
->> +
->> +	entry = kvm_find_cpuid_entry(vcpu, 0x1c, 0);
->> +	if (!entry)
->> +		return false;
->> +
->> +	if (!(entry->ebx & BIT(0)) && (ctl & ARCH_LBR_CTL_CPL))
->> +		return false;
->> +	if (!(entry->ebx & BIT(2)) && (ctl & ARCH_LBR_CTL_STACK))
->> +		return false;
->> +	if (!(entry->ebx & BIT(1)) && (ctl & ARCH_LBR_CTL_BRN_MASK))
-> Why KVM wants to define this mask by itself? Cannot we use the
-> ARCH_LBR_CTL_FILTER?
+We can make ,high and ,low simpler at first as they are alternative. If
+possible, we can also simplify the ,high ,low implementation on x86_64
+if it truly brings better archievement on arm64.
 
-Thanks Ken for review!
+> 
+> 
+> >> 2) Fallback behaviour is important to our distros. The reason is we will
+> >> provide default value with crashkernel=xxxM along kernel of distros. In
+> >> this case, we hope the reservation will succeed by all means. The ,high
+> >> and ,low is an option if customer likes to take with expertise.
+> 
+> OK, I got it.
+> 
+> >>
+> >> After going through arm64 memory init code, I got below summary about
+> >> arm64_dma_phys_limit which is the first zone's upper limit. I think we
+> >> can make use of it to facilitate to simplify code.
+> >> ================================================================================
+> >>                         DMA                      DMA32                    NORMAL
+> >> 1)Raspberry Pi4         0~1G                     3G~4G                    (above 4G)
+> >> 2)Normal machine        0~4G                     0                        (above 4G)
+> >> 3)Special machine       (above 4G)~MAX
+> >> 4)No DMA|DMA32                                                            (above 4G)~MAX
+> 
+> arm64_memblock_init()
+> 	reserve_crashkernel()        ---------------   0a30c53573b0 ("arm64: mm: Move reserve_crashkernel() into mem_init()")
+We don't need different code for this place of reservation as you are
+doing in this patchset, since arm64_dma_phys_limit is initialized as 
+below. In fact, in arm64_memblock_init(), we have made memblock ready,
+we can initialize arm64_dma_phys_limit as memblock_end_of_DRAM(). And if
+memblock_start_of_DRAM() is bigger than 4G, we possibly can call
+reserve_crashkernel() here too.
 
-Sounds like the ISE has been updated, per section "CPUID for Ach LBRs":
+phys_addr_t __ro_after_init arm64_dma_phys_limit = PHYS_MASK + 1;
 
-EBX 1 Branch Filtering Supported If set, the processor supports setting 
-IA32_LBR_CTL[22:16] to non-zero value.
+> paging_init()                                       |
+> 	map_mem()                                   |
+> unflatten_device_tree or ACPI                       |  ----  //Raspberry Pi4 get dma zone base on dtb or ACPI
+> bootmem_init();                                     |      |
+> 	zone_sizes_init()                           |      |
+> 		of_dma_get_max_cpu_address          |  ----|
+> 		//Update arm64_dma_phys_limit       |  ----|
+> 	reserve_crashkernel()        <--------------  //Because we need arm64_dma_phys_limit to be updated above
+> request_standard_resources()
 
-but the FILTER definition looks like:
+Yeah, because arm64_dma_phys_limit is decided late in the 1) and 2) case
+as I summarized, we need defer reserve_crashkernel() to bootmem_init(). But 
+arm64_dma_phys_limit could be 1G or 4G, that's why your optimization
+about BLOCKING may not be right since you assume the 4G boundary, while
+forgetting Raspberry Pi4 on which 1G is the boundary of low memory and
+high memory. So separating out BLOCKING optimization can let us focus on
+the crashkernel,high support.
 
-#define ARCH_LBR_CTL_FILTER_OFFSET      16
+> 
+> >>
+> >> -------------------------------------------
+> >>                       arm64_dma_phys_limit
+> >> 1)Raspberry Pi4         1G                     
+> >> 2)Normal machine        4G                     
+> >> 3)Special machine       MAX
+> >> 4)No DMA|DMA32          MAX
+> >>
+> >> Note: 3)Special machine means the machine's starting physical address is above 4G.
+> >> WHile 4)No DMA|DMA32 means kernel w/o CONFIG_ZONE_DMA|DMA32, and has
+> >> IOMMU hardware supporting.
+> >> ===================================================================================
+> >>
+> >> I made a draft patch based on this patchset, please feel free to check and
+> >> see if it's OK, or anything missing or wrongly understood. I removed
+> >> reserve_crashkernel_high() and only keep reserve_crashkernel() and
+> >> reserve_crashkernel_low() as the v21 did.
+> > 
+> > Sorry, forgot attaching the draft patch.
+> > 
+> > By the way, we can also have a simple version with basic ,high, ,low
+> > support, no fallback. We can add fallback and other optimization later.
+> > This can be plan B.
+> 
+> Yes, That's what Catalin suggested also.
+> 
+> Hi, Baoquan He:
+>   Without optimization, the whole Patch 3-4 and 6-7 can be dropped.
+> 
+> Process after abstraction:
+> 	if (!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32)) {
+> 		reserve_crashkernel()
+> 		//block mapping
+> 	} else {
+> 		//page mapping
+> 		reserve_crashkernel()
+> 	}
+> 
+> ------------ Simplified real-world process ---------
+Yeah, this looks clearer. I would like to see a version with them.
 
-#define ARCH_LBR_CTL_FILTER             (0x7full << 
-ARCH_LBR_CTL_FILTER_OFFSET)
+> arm64_memblock_init()
+        Before reserve_crashkernel(), we can update arm64_dma_phys_limit
+as memblock_end_of_DRAM() if CONFIG_ZONE_DMA|DMA32 is not enabled or
+memblock_start_of_DRAM() is bigger than 4G.
+        Then we go with:
+        if (!arm64_dma_phys_limit)
+		reserve_crashkernel();
 
-Maybe I need to update the FILTER and re-use it.
+Just personal opinion, please check if it's appropriate to handle case
+3) which has physical starting memory above 4G here. 
 
->
-> Thanks,
-> Kan
->
->> +		return false;
->> +	return true;
->> +warn:
->> +	pr_warn_ratelimited("kvm: vcpu-%d: invalid arch lbr ctl.\n",
->> +			    vcpu->vcpu_id);
->> +	return false;
->> +}
->> +
->>    static int intel_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->>    {
->>    	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
->> @@ -384,6 +415,9 @@ static int intel_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->>    	case MSR_ARCH_LBR_DEPTH:
->>    		msr_info->data = lbr_desc->records.nr;
->>    		return 0;
->> +	case MSR_ARCH_LBR_CTL:
->> +		msr_info->data = vmcs_read64(GUEST_IA32_LBR_CTL);
->> +		return 0;
->>    	default:
->>    		if ((pmc = get_gp_pmc(pmu, msr, MSR_IA32_PERFCTR0)) ||
->>    		    (pmc = get_gp_pmc(pmu, msr, MSR_IA32_PMC0))) {
->> @@ -455,6 +489,16 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->>    		 */
->>    		wrmsrl(MSR_ARCH_LBR_DEPTH, lbr_desc->records.nr);
->>    		return 0;
->> +	case MSR_ARCH_LBR_CTL:
->> +		if (!arch_lbr_ctl_is_valid(vcpu, data))
->> +			break;
->> +
->> +		vmcs_write64(GUEST_IA32_LBR_CTL, data);
->> +
->> +		if (intel_pmu_lbr_is_enabled(vcpu) && !lbr_desc->event &&
->> +		    (data & ARCH_LBR_CTL_LBREN))
->> +			intel_pmu_create_guest_lbr_event(vcpu);
->> +		return 0;
->>    	default:
->>    		if ((pmc = get_gp_pmc(pmu, msr, MSR_IA32_PERFCTR0)) ||
->>    		    (pmc = get_gp_pmc(pmu, msr, MSR_IA32_PMC0))) {
->> @@ -668,12 +712,16 @@ static void intel_pmu_reset(struct kvm_vcpu *vcpu)
->>     */
->>    static void intel_pmu_legacy_freezing_lbrs_on_pmi(struct kvm_vcpu *vcpu)
->>    {
->> -	u64 data = vmcs_read64(GUEST_IA32_DEBUGCTL);
->> +	u32 lbr_ctl_field = GUEST_IA32_DEBUGCTL;
->>    
->> -	if (data & DEBUGCTLMSR_FREEZE_LBRS_ON_PMI) {
->> -		data &= ~DEBUGCTLMSR_LBR;
->> -		vmcs_write64(GUEST_IA32_DEBUGCTL, data);
->> -	}
->> +	if (!(vmcs_read64(GUEST_IA32_DEBUGCTL) & DEBUGCTLMSR_FREEZE_LBRS_ON_PMI))
->> +		return;
->> +
->> +	if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR) &&
->> +	    guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR))
->> +		lbr_ctl_field = GUEST_IA32_LBR_CTL;
->> +
->> +	vmcs_write64(lbr_ctl_field, vmcs_read64(lbr_ctl_field) & ~0x1ULL);
->>    }
->>    
->>    static void intel_pmu_deliver_pmi(struct kvm_vcpu *vcpu)
->> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
->> index 04d170c4b61e..73961fcfb62d 100644
->> --- a/arch/x86/kvm/vmx/vmx.c
->> +++ b/arch/x86/kvm/vmx/vmx.c
->> @@ -2022,6 +2022,13 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->>    						VM_EXIT_SAVE_DEBUG_CONTROLS)
->>    			get_vmcs12(vcpu)->guest_ia32_debugctl = data;
->>    
->> +		/*
->> +		 * For Arch LBR, IA32_DEBUGCTL[bit 0] has no meaning.
->> +		 * It can be written to 0 or 1, but reads will always return 0.
->> +		 */
->> +		if (guest_cpuid_has(vcpu, X86_FEATURE_ARCH_LBR))
->> +			data &= ~DEBUGCTLMSR_LBR;
->> +
->>    		vmcs_write64(GUEST_IA32_DEBUGCTL, data);
->>    		if (intel_pmu_lbr_is_enabled(vcpu) && !to_vmx(vcpu)->lbr_desc.event &&
->>    		    (data & DEBUGCTLMSR_LBR))
->> @@ -4548,6 +4555,11 @@ static void vmx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
->>    	kvm_make_request(KVM_REQ_APIC_PAGE_RELOAD, vcpu);
->>    
->>    	vpid_sync_context(vmx->vpid);
->> +
->> +	if (!init_event) {
->> +		if (static_cpu_has(X86_FEATURE_ARCH_LBR))
->> +			vmcs_write64(GUEST_IA32_LBR_CTL, 0);
->> +	}
->>    }
->>    
->>    static void vmx_enable_irq_window(struct kvm_vcpu *vcpu)
+> 	if (!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32))
+> 		reserve_crashkernel()
+           
+> paging_init()
+> 	map_mem()
+> 		if (!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32))
+> 			//block mapping
+> 		else
+> 			//page mapping
+> unflatten_device_tree or ACPI
+> bootmem_init();
+> 	zone_sizes_init()
+> 		of_dma_get_max_cpu_address
+> 		//Update arm64_dma_phys_limit
+> 	if (IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32))
+> 		reserve_crashkernel()
+
+The rest sounds good with optimization code split out.
+

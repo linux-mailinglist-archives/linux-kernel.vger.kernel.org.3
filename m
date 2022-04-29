@@ -2,204 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E55FA5155D4
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E48BB5155EA
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 22:40:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381078AbiD2Ulx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 16:41:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53312 "EHLO
+        id S1380995AbiD2UnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 16:43:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380988AbiD2UlJ (ORCPT
+        with ESMTP id S1381104AbiD2UnC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 16:41:09 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334B48302E
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:37:39 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2f83cc145edso84229907b3.11
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 13:37:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc:content-transfer-encoding;
-        bh=CBFSOSCWmXZdYTn8wlTZ3Rj5NSKYEySXgB9hFZpDWcQ=;
-        b=ZMe9V/MSuwf8udmciH8lqoba83OKO8v0g4K1vzIlxr2talii7K7Ys0ordrrMAHe+pp
-         DaqLObTTros84C3FoilHwVOlv/STu0KhGjugyeK349pAgMRnv4wFfKGXK66cTNEK/E/2
-         9CS4D6qXyibLUANPFQftw9xg5fy6QMtOA2/GCKenixGS3WyJxUkAAE2Fomn5XE4N6+Fu
-         MH4isN9/BTjRcs0gsnSNZkRVTC/M1BBUGL5BQ+8ljr9lJua+F/PodDy+y3v9FvpxQypS
-         cIBtMTLJxrS2yefnyXe+cpHCAo5gcyjEL1MfDZsZasLEWiGX5qs2r02D/2wLWwBVNFNQ
-         E5nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc:content-transfer-encoding;
-        bh=CBFSOSCWmXZdYTn8wlTZ3Rj5NSKYEySXgB9hFZpDWcQ=;
-        b=qTbOcLwTplclexPcQwXJwfDXtwXuCMNyyfrNu0AEYajtL05XR/3baDmySB/BWRm/Tn
-         gfhhE4GWD7An0SdYA6qbvpzcmhKDMZUis8TTsF/vP4UBqhnmhiuFmFN55Ya65surdPDr
-         Z9QKRmCAZzdkgil3yxGNma8xClMohNXnqdRIa4ulRmn3tUlfk2Z3+0fDz/W2jI2fq+OD
-         fJu/ZHiOeTfstHBfStFFE/4MZW6T33gcqfYB4s6xRIj9OptP4Tps+aW8cJIwrmd4yCe4
-         Zan6qqCs+H9rlSXkB7sN9EGL8M1jje99WRxGYx3M01M+LZT3So5BDYrvqFTcFzYHl3A+
-         AQNA==
-X-Gm-Message-State: AOAM532MaqcNN/0d77N5AS8OGp5uQin8bjdjxyUJ4wqmYXnOhE6DIGLA
-        eoXpyl1JnCWekZHvUeumzGMYmKux2OgzJ6Hc6jCOMtOpRzUx6wzqQMVTI/duYB7iG9ZxHbhDeyH
-        0mVZCuSN4MoP5hoomIKJRyWIx7d+rOaR6WHdQQ0yuzk6kOUWHvDqjIhImS7exPzowtl/dlshoV0
-        Fcp2F4eBPAEg==
-X-Google-Smtp-Source: ABdhPJz3PRZnRDaYveY8PEOrWLh5TwRRZFIgz/hxn66OLDYa/VrKRiT3aho8JsA1WKfUtkL1urGOjyBFCiYVRzF+Yvc=
-X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:351:bea9:f158:1021])
- (user=samitolvanen job=sendgmr) by 2002:a25:e0d3:0:b0:645:77c9:4e31 with SMTP
- id x202-20020a25e0d3000000b0064577c94e31mr1243653ybg.97.1651264657838; Fri,
- 29 Apr 2022 13:37:37 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 13:36:44 -0700
-In-Reply-To: <20220429203644.2868448-1-samitolvanen@google.com>
-Message-Id: <20220429203644.2868448-22-samitolvanen@google.com>
-Mime-Version: 1.0
-References: <20220429203644.2868448-1-samitolvanen@google.com>
-X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3169; h=from:subject;
- bh=uFL18k3KC4iCKF4AXgGD1Mq4jj5gai1wigbzvC9PP/o=; b=owEB7QES/pANAwAKAUy19oSLvFbuAcsmYgBibExY2LifXNevk1TsxQ0IeoobF4r0E0uMXfS+2IhA
- yLd8T56JAbMEAAEKAB0WIQQ1zPtjsoPW0663g5RMtfaEi7xW7gUCYmxMWAAKCRBMtfaEi7xW7ou7DA
- CVtuVd3sKEK3z2ChoeiIcGcU8iukBN8OM/HXmzh3pZq6yVg67wrrJiJ5oCCKPR2sRaYP0t6MSn772K
- l5U4p82O/prDh9AK0kKeyaSy4kvxVMyegTBCTiWzEC3tN48aXVcmI3dMp98RL7LGQzu9v4CLIEVaAa
- ZyLplEa810jUrIxOZER6sZfDmqUN7V/0ZKKzwsynPVXj76wvte6NCWe3NJ/ZxHTKwz2evdYtezNBOs
- w5UmruzJ3X4BM+NXqEmVZVfauFH9okVc4aHyl3C0tSJ4hQddWslVlW6jiD7FczG0DVtfhYaktcY3yZ
- 335Ly2E9sGHsooiWLotHkG2PgPaJ+Jhfa2cw8T3990e55MXFQKaNXNTCRXA+Qq5C7qXBuPFrmbgIz1
- isZNNgIYvj+7LUjbO4NBInJYbyLkQMpgNLLqoZq/7hfv1xoJcIZg4CS+1iAmr+3dOxn1GAj/d/7CTi
- jKj9QZzAlA88rYhDAQ3LbORG2j6VAUCtSo+oWCun3pPF8=
-X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [RFC PATCH 21/21] x86: Add support for CONFIG_CFI_CLANG
-From:   Sami Tolvanen <samitolvanen@google.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-hardening@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
-        Sami Tolvanen <samitolvanen@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Fri, 29 Apr 2022 16:43:02 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 871DD83021;
+        Fri, 29 Apr 2022 13:39:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=9LhFYA+MjEc96AcZxxeEKFjkU9Lk82GaxnYYVWnVk68=; b=XwGE93aX+1E0t3pByj3j/O+5Ga
+        K3u/NbvWUIPTGWXFFUF5/S8bghnnop1aApPsPGKNCX+XA1bvvH3EQ0PcLpFJhLHgKjy3gTmHDpRZx
+        xpeiw9TV1dPXB2YSqRvo3agu2ikjDsTWOdpgS/WgDbAttd/ff7K6VJQNlrO38xJTdLOWq3LaiPpb7
+        BCxPsp9BBfFRjEJDD6TJuu/Y8uUcnXFJiNLt6QIOyD0DFBtRwQdBNCscMgnx+i0qVThLJVg3KcgFz
+        9afxev7tVqQLuY2Z0izXtjt9I1wawTaSR9Ugp7AvNWX4ugYt89qxijRM6XzCj5d2MXRHOn6SprLRr
+        LWTDMVqw==;
+Received: from [179.113.53.197] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nkXNs-000CEn-5h; Fri, 29 Apr 2022 22:38:36 +0200
+Message-ID: <50178dfb-8e94-f35f-09c3-22fe197550ef@igalia.com>
+Date:   Fri, 29 Apr 2022 17:38:08 -0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 24/30] panic: Refactor the panic path
+Content-Language: en-US
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "bhe@redhat.com" <bhe@redhat.com>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bcm-kernel-feedback-list@broadcom.com" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "openipmi-developer@lists.sourceforge.net" 
+        <openipmi-developer@lists.sourceforge.net>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
+        "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
+        "halves@canonical.com" <halves@canonical.com>,
+        "fabiomirmar@gmail.com" <fabiomirmar@gmail.com>,
+        "alejandro.j.jimenez@oracle.com" <alejandro.j.jimenez@oracle.com>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "d.hatayama@jp.fujitsu.com" <d.hatayama@jp.fujitsu.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "dyoung@redhat.com" <dyoung@redhat.com>,
+        "feng.tang@intel.com" <feng.tang@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "hidehiro.kawai.ez@hitachi.com" <hidehiro.kawai.ez@hitachi.com>,
+        "jgross@suse.com" <jgross@suse.com>,
+        "john.ogness@linutronix.de" <john.ogness@linutronix.de>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "vgoyal@redhat.com" <vgoyal@redhat.com>,
+        vkuznets <vkuznets@redhat.com>,
+        "will@kernel.org" <will@kernel.org>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-25-gpiccoli@igalia.com>
+ <PH0PR21MB30252C55EB4F97F3D78021BDD7FC9@PH0PR21MB3025.namprd21.prod.outlook.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <PH0PR21MB30252C55EB4F97F3D78021BDD7FC9@PH0PR21MB3025.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add CONFIG_CFI_CLANG error handling and allow the config to be selected
-on x86_64.
+On 29/04/2022 14:53, Michael Kelley (LINUX) wrote:
+> From: Guilherme G. Piccoli <gpiccoli@igalia.com> Sent: Wednesday, April 27, 2022 3:49 PM
+>> [...]
+>> +	panic_notifiers_level=
+>> +			[KNL] Set the panic notifiers execution order.
+>> +			Format: <unsigned int>
+>> +			We currently have 4 lists of panic notifiers; based
+>> +			on the functionality and risk (for panic success) the
+>> +			callbacks are added in a given list. The lists are:
+>> +			- hypervisor/FW notification list (low risk);
+>> +			- informational list (low/medium risk);
+>> +			- pre_reboot list (higher risk);
+>> +			- post_reboot list (only run late in panic and after
+>> +			kdump, not configurable for now).
+>> +			This parameter defines the ordering of the first 3
+>> +			lists with regards to kdump; the levels determine
+>> +			which set of notifiers execute before kdump. The
+>> +			accepted levels are:
+>> +			0: kdump is the first thing to run, NO list is
+>> +			executed before kdump.
+>> +			1: only the hypervisor list is executed before kdump.
+>> +			2 (default level): the hypervisor list and (*if*
+>> +			there's any kmsg_dumper defined) the informational
+>> +			list are executed before kdump.
+>> +			3: both the hypervisor and the informational lists
+>> +			(always) execute before kdump.
+> 
+> I'm not clear on why level 2 exists.  What is the scenario where
+> execution of the info list before kdump should be conditional on the
+> existence of a kmsg_dumper?   Maybe the scenario is described
+> somewhere in the patch set and I just missed it.
+> 
 
-Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
----
- arch/x86/Kconfig               |  1 +
- arch/x86/include/asm/linkage.h |  7 ++++++
- arch/x86/kernel/traps.c        | 39 +++++++++++++++++++++++++++++++++-
- 3 files changed, 46 insertions(+), 1 deletion(-)
+Hi Michael, thanks for your review/consideration. So, this idea started
+kind of some time ago. It all started with a need of exposing more
+information on kernel log *before* kdump and *before* pstore -
+specifically, we're talking about panic_print. But this cause some
+reactions, Baoquan was very concerned with that [0]. Soon after, I've
+proposed a panic notifiers filter (orthogonal) approach, to which Petr
+suggested instead doing a major refactor [1] - it finally is alive in
+the form of this series.
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index b0142e01002e..01db5c5c4dde 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -108,6 +108,7 @@ config X86
- 	select ARCH_SUPPORTS_PAGE_TABLE_CHECK	if X86_64
- 	select ARCH_SUPPORTS_NUMA_BALANCING	if X86_64
- 	select ARCH_SUPPORTS_KMAP_LOCAL_FORCE_MAP	if NR_CPUS <=3D 4096
-+	select ARCH_SUPPORTS_CFI_CLANG		if X86_64
- 	select ARCH_SUPPORTS_LTO_CLANG
- 	select ARCH_SUPPORTS_LTO_CLANG_THIN
- 	select ARCH_USE_BUILTIN_BSWAP
-diff --git a/arch/x86/include/asm/linkage.h b/arch/x86/include/asm/linkage.=
-h
-index 85865f1645bd..d20acf5ebae3 100644
---- a/arch/x86/include/asm/linkage.h
-+++ b/arch/x86/include/asm/linkage.h
-@@ -25,6 +25,13 @@
- #define RET	ret
- #endif
-=20
-+#ifdef CONFIG_CFI_CLANG
-+#define __CFI_TYPE(name)			\
-+	.fill 10, 1, 0x90 ASM_NL		\
-+	.4byte __kcfi_typeid_##name ASM_NL	\
-+	.fill 2, 1, 0xcc
-+#endif
-+
- #else /* __ASSEMBLY__ */
-=20
- #ifdef CONFIG_SLS
-diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-index 1563fb995005..b9e46e6ed83b 100644
---- a/arch/x86/kernel/traps.c
-+++ b/arch/x86/kernel/traps.c
-@@ -40,6 +40,7 @@
- #include <linux/hardirq.h>
- #include <linux/atomic.h>
- #include <linux/ioasid.h>
-+#include <linux/cfi.h>
-=20
- #include <asm/stacktrace.h>
- #include <asm/processor.h>
-@@ -295,6 +296,41 @@ static inline void handle_invalid_op(struct pt_regs *r=
-egs)
- 		      ILL_ILLOPN, error_get_trap_addr(regs));
- }
-=20
-+#ifdef CONFIG_CFI_CLANG
-+void *arch_get_cfi_target(unsigned long addr, struct pt_regs *regs)
-+{
-+	char buffer[MAX_INSN_SIZE];
-+	int offset;
-+	struct insn insn;
-+	unsigned long *target;
-+
-+	/*
-+	 * The expected CFI check instruction sequence:
-+	 * =C2=A0 cmpl=C2=A0 =C2=A0 <id>, -6(%reg)	; 7 bytes
-+	 *   je      .Ltmp1		; 2 bytes
-+	 *   ud2			; <- addr
-+	 *   .Ltmp1:
-+	 *
-+	 * Therefore, the target address is in a register that we can
-+	 * decode from the cmpl instruction.
-+	 */
-+	if (copy_from_kernel_nofault(buffer, (void *)addr - 9, MAX_INSN_SIZE))
-+		return NULL;
-+	if (insn_decode(&insn, buffer, MAX_INSN_SIZE, INSN_MODE_64))
-+		return NULL;
-+	if (insn.opcode.value !=3D 0x81)
-+		return NULL;
-+
-+	offset =3D insn_get_modrm_rm_off(&insn, regs);
-+	if (offset < 0)
-+		return NULL;
-+
-+	target =3D (void *)regs + offset;
-+
-+	return (void *)*target;
-+}
-+#endif
-+
- static noinstr bool handle_bug(struct pt_regs *regs)
- {
- 	bool handled =3D false;
-@@ -312,7 +348,8 @@ static noinstr bool handle_bug(struct pt_regs *regs)
- 	 */
- 	if (regs->flags & X86_EFLAGS_IF)
- 		raw_local_irq_enable();
--	if (report_bug(regs->ip, regs) =3D=3D BUG_TRAP_TYPE_WARN) {
-+	if (report_bug(regs->ip, regs) =3D=3D BUG_TRAP_TYPE_WARN ||
-+	    report_cfi(regs->ip, regs) =3D=3D BUG_TRAP_TYPE_WARN) {
- 		regs->ip +=3D LEN_UD2;
- 		handled =3D true;
- 	}
---=20
-2.36.0.464.gb9c8b46e94-goog
+The theory behind the level 2 is to allow a scenario of kdump with the
+minimum amount of notifiers - what is the point in printing more
+information if the user doesn't care, since it's going to kdump? Now, if
+there is a kmsg dumper, it means that there is likely some interest in
+collecting information, and that might as well be required before the
+potential kdump (which is my case, hence the proposal on [0]).
 
+Instead of forcing one of the two behaviors (level 1 or level 3), we
+have a middle-term/compromise: if there's interest in collecting such
+data (in the form of a kmsg dumper), we then execute the informational
+notifiers before kdump. If not, why to increase (even slightly) the risk
+for kdump?
+
+I'm OK in removing the level 2 if people prefer, but I don't feel it's a
+burden, quite opposite - seems a good way to accommodate the somewhat
+antagonistic ideas (jump to kdump ASAP vs collecting more info in the
+panicked kernel log).
+
+[0] https://lore.kernel.org/lkml/20220126052246.GC2086@MiWiFi-R3L-srv/
+
+[1] https://lore.kernel.org/lkml/YfPxvzSzDLjO5ldp@alley/
+
+
+>[...]
+>> +	 * Based on the level configured (smaller than 4), we clear the
+>> +	 * proper bits in "panic_notifiers_bits". Notice that this bitfield
+>> +	 * is initialized with all notifiers set.
+>> +	 */
+>> +	switch (panic_notifiers_level) {
+>> +	case 3:
+>> +		clear_bit(PN_PRE_REBOOT_BIT, &panic_notifiers_bits);
+>> +		break;
+>> +	case 2:
+>> +		clear_bit(PN_PRE_REBOOT_BIT, &panic_notifiers_bits);
+>> +
+>> +		if (!kmsg_has_dumpers())
+>> +			clear_bit(PN_INFO_BIT, &panic_notifiers_bits);
+>> +		break;
+>> +	case 1:
+>> +		clear_bit(PN_PRE_REBOOT_BIT, &panic_notifiers_bits);
+>> +		clear_bit(PN_INFO_BIT, &panic_notifiers_bits);
+>> +		break;
+>> +	case 0:
+>> +		clear_bit(PN_PRE_REBOOT_BIT, &panic_notifiers_bits);
+>> +		clear_bit(PN_INFO_BIT, &panic_notifiers_bits);
+>> +		clear_bit(PN_HYPERVISOR_BIT, &panic_notifiers_bits);
+>> +		break;
+>> +	}
+> 
+> I think the above switch statement could be done as follows:
+> 
+> if (panic_notifiers_level <= 3)
+> 	clear_bit(PN_PRE_REBOOT_BIT, &panic_notifiers_bits);
+> if (panic_notifiers_level <= 2)
+> 	if (!kmsg_has_dumpers())
+> 		clear_bit(PN_INFO_BIT, &panic_notifiers_bits);
+> if (panic_notifiers_level <=1)
+> 	clear_bit(PN_INFO_BIT, &panic_notifiers_bits);
+> if (panic_notifiers_level == 0)
+> 	clear_bit(PN_HYPERVISOR_BIT, &panic_notifiers_bits);
+> 
+> That's about half the lines of code.  It's somewhat a matter of style,
+> so treat this as just a suggestion to consider.  I just end up looking
+> for a better solution when I see the same line of code repeated
+> 3 or 4 times!
+> 
+
+It's a good idea - I liked your code. The switch seems more
+natural/explicit for me, even duplicating some lines, but in case more
+people prefer your way, I can definitely change the code - thanks for
+the suggestion.
+Cheers,
+
+
+Guilherme

@@ -2,103 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CB9D514D5B
+	by mail.lfdr.de (Postfix) with ESMTP id E52D0514D5C
 	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:37:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377498AbiD2Oiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 10:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54238 "EHLO
+        id S1377535AbiD2Ojt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 10:39:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346935AbiD2Oir (ORCPT
+        with ESMTP id S1377679AbiD2Oj0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 10:38:47 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC08C37A0F;
-        Fri, 29 Apr 2022 07:35:24 -0700 (PDT)
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TDrq4H021532;
-        Fri, 29 Apr 2022 14:34:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=ketWtwQc6p860ZjQPz+m0Q+Zt6j8WdLrGyqUM+8QIm4=;
- b=lciRZAEGdFTx8gBXpAZVZpFHOqM+qGJ9qqeosLkV1rXbv+3Ljfw4jsuxCBBsFXv0v7iq
- HBIrvT8/of5cOUBiYsNLQdNGzSsbUlGo7/d0s/EIydPyvBLD4hz7uuFF8d/ORFKJqcnd
- p7E8So6eRQtUrfd6bZsNF6y3gECsW0x/v+sEeyX5R8Sv7pFIeyq5IlDT5ysXlGQFkZRh
- F3mq/Zr17uTAv00d29481QqW5Cbf1Kk2KSwL67W6kxCzoXoHv0cpMaU3vGrD1WvDBHg9
- sNEWYTu8NQeDN/stQ29xatn+vqcjcBZfOF9ocJLQ+bVB4qVHl8M0mg8AUvxdBWjCW0Ef xA== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqs3nqrk0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 14:34:45 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TEKsgc008128;
-        Fri, 29 Apr 2022 14:34:42 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3fm93919ew-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 14:34:42 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TEYedt40567086
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 29 Apr 2022 14:34:40 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2C6E2A404D;
-        Fri, 29 Apr 2022 14:34:40 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6AF21A4055;
-        Fri, 29 Apr 2022 14:34:39 +0000 (GMT)
-Received: from sig-9-145-61-57.uk.ibm.com (unknown [9.145.61.57])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 29 Apr 2022 14:34:39 +0000 (GMT)
-Message-ID: <8273126cf59b734ef50f753e868457a3b0e24968.camel@linux.ibm.com>
-Subject: Re: [PATCH 23/37] pnp: add HAS_IOPORT dependencies
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        "open list:PNP SUPPORT" <linux-acpi@vger.kernel.org>
-Date:   Fri, 29 Apr 2022 16:34:39 +0200
-In-Reply-To: <20220429135108.2781579-41-schnelle@linux.ibm.com>
-References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
-         <20220429135108.2781579-41-schnelle@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Fri, 29 Apr 2022 10:39:26 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AEBC27B33;
+        Fri, 29 Apr 2022 07:36:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ZdZBPtTkXvskvklO0DqGHW3vJ6Arb57ZyicMdsmwPPs=; b=Id0YxwZLmWV943xSSctc382COx
+        slYd+Mbgd8mluBGRTtubiqJcFH7Jw+KCfrIBUuJ6IBjkEi3jycQJ/GZIWCNzfYdJZGxOzIKlAq9i5
+        NGU7dMo+j6aXXuC9zPnllvKUmp4j7d1NBQPsBNjzH1goO9ZNvF9j+05V5SxGqrz8IpFC/ke6Hqou9
+        ZUhvlX5vvgSwWpU57PqA3cf0RcC09NkmKHiXH92FbdJDx27V/PJs6cBfrjjyUhrMtQCOhvF+z0Tsu
+        zF1ocWG4HwYZ0G6pmdbbbK4PGRnRNWBCGP+4DKIndhzsOY9kfvz7NjpBrTKt1RM1gSIvJ0Gc9QwYA
+        dmc3mStA==;
+Received: from [179.113.53.197] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nkRiK-0009WD-3O; Fri, 29 Apr 2022 16:35:20 +0200
+Message-ID: <4a7d9670-92f8-3e12-a619-aaa64adca093@igalia.com>
+Date:   Fri, 29 Apr 2022 11:34:51 -0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 12/30] parisc: Replace regular spinlock with spin_trylock
+ on panic path
+Content-Language: en-US
+To:     Helge Deller <deller@gmx.de>, akpm@linux-foundation.org,
+        bhe@redhat.com, pmladek@suse.com, kexec@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-13-gpiccoli@igalia.com>
+ <6a7c924a-54a9-c5ea-8a9d-3ea92987b436@gmx.de>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <6a7c924a-54a9-c5ea-8a9d-3ea92987b436@gmx.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: JuFoR-u5GMZ1xr80tq6I9RJtj6Ugbgce
-X-Proofpoint-ORIG-GUID: JuFoR-u5GMZ1xr80tq6I9RJtj6Ugbgce
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-29_07,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=489
- suspectscore=0 lowpriorityscore=0 spamscore=0 phishscore=0 adultscore=0
- priorityscore=1501 clxscore=1015 mlxscore=0 malwarescore=0 impostorscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204290080
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-29 at 15:50 +0200, Niklas Schnelle wrote:
-> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> not being declared. We thus need to depend on HAS_IOPORT even when
-> compile testing only.
+On 28/04/2022 13:55, Helge Deller wrote:
+> [...]
+> You may add:
+> Acked-by: Helge Deller <deller@gmx.de> # parisc
 > 
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> ---
+> Helge
 
-Sorry everyone. I sent this as PATCH in error while preparing to sent
-the same series as RFC. Since e-mail has no remote delete and I lack a
-time machine let's just all pretend you only got the RFC.
+Thanks Helge, added!
+Cheers,
 
+
+Guilherme
+
+> 
+> 
+>> ---
+>>  arch/parisc/include/asm/pdc.h |  1 +
+>>  arch/parisc/kernel/firmware.c | 27 +++++++++++++++++++++++----
+>>  drivers/parisc/power.c        | 17 ++++++++++-------
+>>  3 files changed, 34 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/arch/parisc/include/asm/pdc.h b/arch/parisc/include/asm/pdc.h
+>> index b643092d4b98..7a106008e258 100644
+>> --- a/arch/parisc/include/asm/pdc.h
+>> +++ b/arch/parisc/include/asm/pdc.h
+>> @@ -83,6 +83,7 @@ int pdc_do_firm_test_reset(unsigned long ftc_bitmap);
+>>  int pdc_do_reset(void);
+>>  int pdc_soft_power_info(unsigned long *power_reg);
+>>  int pdc_soft_power_button(int sw_control);
+>> +int pdc_soft_power_button_panic(int sw_control);
+>>  void pdc_io_reset(void);
+>>  void pdc_io_reset_devices(void);
+>>  int pdc_iodc_getc(void);
+>> diff --git a/arch/parisc/kernel/firmware.c b/arch/parisc/kernel/firmware.c
+>> index 6a7e315bcc2e..0e2f70b592f4 100644
+>> --- a/arch/parisc/kernel/firmware.c
+>> +++ b/arch/parisc/kernel/firmware.c
+>> @@ -1232,15 +1232,18 @@ int __init pdc_soft_power_info(unsigned long *power_reg)
+>>  }
+>>
+>>  /*
+>> - * pdc_soft_power_button - Control the soft power button behaviour
+>> - * @sw_control: 0 for hardware control, 1 for software control
+>> + * pdc_soft_power_button{_panic} - Control the soft power button behaviour
+>> + * @sw_control: 0 for hardware control, 1 for software control
+>>   *
+>>   *
+>>   * This PDC function places the soft power button under software or
+>>   * hardware control.
+>> - * Under software control the OS may control to when to allow to shut
+>> - * down the system. Under hardware control pressing the power button
+>> + * Under software control the OS may control to when to allow to shut
+>> + * down the system. Under hardware control pressing the power button
+>>   * powers off the system immediately.
+>> + *
+>> + * The _panic version relies in spin_trylock to prevent deadlock
+>> + * on panic path.
+>>   */
+>>  int pdc_soft_power_button(int sw_control)
+>>  {
+>> @@ -1254,6 +1257,22 @@ int pdc_soft_power_button(int sw_control)
+>>  	return retval;
+>>  }
+>>
+>> +int pdc_soft_power_button_panic(int sw_control)
+>> +{
+>> +	int retval;
+>> +	unsigned long flags;
+>> +
+>> +	if (!spin_trylock_irqsave(&pdc_lock, flags)) {
+>> +		pr_emerg("Couldn't enable soft power button\n");
+>> +		return -EBUSY; /* ignored by the panic notifier */
+>> +	}
+>> +
+>> +	retval = mem_pdc_call(PDC_SOFT_POWER, PDC_SOFT_POWER_ENABLE, __pa(pdc_result), sw_control);
+>> +	spin_unlock_irqrestore(&pdc_lock, flags);
+>> +
+>> +	return retval;
+>> +}
+>> +
+>>  /*
+>>   * pdc_io_reset - Hack to avoid overlapping range registers of Bridges devices.
+>>   * Primarily a problem on T600 (which parisc-linux doesn't support) but
+>> diff --git a/drivers/parisc/power.c b/drivers/parisc/power.c
+>> index 456776bd8ee6..8512884de2cf 100644
+>> --- a/drivers/parisc/power.c
+>> +++ b/drivers/parisc/power.c
+>> @@ -37,7 +37,6 @@
+>>  #include <linux/module.h>
+>>  #include <linux/init.h>
+>>  #include <linux/kernel.h>
+>> -#include <linux/notifier.h>
+>>  #include <linux/panic_notifier.h>
+>>  #include <linux/reboot.h>
+>>  #include <linux/sched/signal.h>
+>> @@ -175,16 +174,21 @@ static void powerfail_interrupt(int code, void *x)
+>>
+>>
+>>
+>> -/* parisc_panic_event() is called by the panic handler.
+>> - * As soon as a panic occurs, our tasklets above will not be
+>> - * executed any longer. This function then re-enables the
+>> - * soft-power switch and allows the user to switch off the system
+>> +/*
+>> + * parisc_panic_event() is called by the panic handler.
+>> + *
+>> + * As soon as a panic occurs, our tasklets above will not
+>> + * be executed any longer. This function then re-enables
+>> + * the soft-power switch and allows the user to switch off
+>> + * the system. We rely in pdc_soft_power_button_panic()
+>> + * since this version spin_trylocks (instead of regular
+>> + * spinlock), preventing deadlocks on panic path.
+>>   */
+>>  static int parisc_panic_event(struct notifier_block *this,
+>>  		unsigned long event, void *ptr)
+>>  {
+>>  	/* re-enable the soft-power switch */
+>> -	pdc_soft_power_button(0);
+>> +	pdc_soft_power_button_panic(0);
+>>  	return NOTIFY_DONE;
+>>  }
+>>
+>> @@ -193,7 +197,6 @@ static struct notifier_block parisc_panic_block = {
+>>  	.priority	= INT_MAX,
+>>  };
+>>
+>> -
+>>  static int __init power_init(void)
+>>  {
+>>  	unsigned long ret;
+> 

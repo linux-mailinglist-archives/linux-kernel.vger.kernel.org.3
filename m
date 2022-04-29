@@ -2,133 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 265E45156F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:32:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7974C5156FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238405AbiD2VfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 17:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52962 "EHLO
+        id S237960AbiD2Vme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 17:42:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232254AbiD2VfS (ORCPT
+        with ESMTP id S232254AbiD2Vmc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 17:35:18 -0400
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02359CEE24;
-        Fri, 29 Apr 2022 14:31:59 -0700 (PDT)
-Received: by mail-oi1-f174.google.com with SMTP id r8so9849932oib.5;
-        Fri, 29 Apr 2022 14:31:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ipYeQfWFLcPKZ7mKRzp5aFzO9fJGsAJq6rg91kdXPzA=;
-        b=xlKrTCaUsbxgnOF6DptXQmqOp4N/svT47lFFGdgjszc/2ZrIvVpvtpQRXAcuuymZxQ
-         cFwxe9JQFq9QpqOwVUQeeR6K9brRjjX0iMLD5G/89zjMDxIzYxsyakPE+QU7sutMbKzY
-         EFUbHqcfbQIrE3BUAHL6MWSH+poZYmwfevu8KVekQaycBz3ic7/dg4T7DG2XH8heCiyi
-         Qttvfbhb5p3C+FSCVeEf9eskW8n4lvs3xY1/HJF9U6ggXYy+XU9vc5RE/dH5PTKgruZc
-         MeccxcoW/elegprdZVxIllhSedHmfzHrX/lPSsqMlictVfimHqZiJkcA0foPUc6R0CdK
-         w0Ug==
-X-Gm-Message-State: AOAM5306Wu8sa4IUMnOv3Cw+OeN0M4vdi3aNBj8fdvFfNPQze2DscCKR
-        Lf6Jl9OrbmaKytik97hlFasPxA3Wiw==
-X-Google-Smtp-Source: ABdhPJya/0Vf9slHqEQZMdiq4bLMSDj4AKWTrwZobUGM5btcbpe/2eQzGgdRlYsVWAAKTcIpHtNWWQ==
-X-Received: by 2002:a05:6808:219f:b0:322:9505:396d with SMTP id be31-20020a056808219f00b003229505396dmr2494199oib.141.1651267918288;
-        Fri, 29 Apr 2022 14:31:58 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q8-20020a0568080ec800b00325cda1ffa3sm150320oiv.34.2022.04.29.14.31.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 14:31:57 -0700 (PDT)
-Received: (nullmailer pid 2917268 invoked by uid 1000);
-        Fri, 29 Apr 2022 21:31:57 -0000
-Date:   Fri, 29 Apr 2022 16:31:57 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 3/3] dt-bindings: arm: msm: Convert kpss-gcc driver
- Documentation to yaml
-Message-ID: <YmxZTf7w40xv/Jvs@robh.at.kernel.org>
-References: <20220429121739.28584-1-ansuelsmth@gmail.com>
- <20220429121739.28584-4-ansuelsmth@gmail.com>
- <1651247596.124069.2344494.nullmailer@robh.at.kernel.org>
- <626c0b64.1c69fb81.1b1e9.4fe6@mx.google.com>
- <5127b3b5-ad27-fd06-42b7-fdf96d0a10ea@linaro.org>
- <626c4ee8.1c69fb81.74b06.15c4@mx.google.com>
+        Fri, 29 Apr 2022 17:42:32 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4AFABF6F;
+        Fri, 29 Apr 2022 14:39:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=zaZR6AionffdB1xNnJGX+2SLzxIRGHxmDTzkdAsF8Lw=; b=f2se15ohqCxFdZ9Cbwp90MFGzT
+        jTOap9gxEPPT4aTyNt5E3ZHiiiT+V3lzyiVXivZvxSS+ElUToKTRjGns0j7W5gu+rUZwjHaY5hGeN
+        otkXyAwqu6HD3avUoXVIxjGs+UlKUlBOe/StJroDKFugT/kZL7npThsCdsHpDWufEk+wh4fOOIDQw
+        l7OyKb0Jm89RaQG7TSk5bTRs2tlRpACA1IvBqK2eiZLAu6g1+MyYc/cQwPm5SUuYLGV0bPXJdES3s
+        lnyV4bPi3phdA0er49wiR1R3K1IMQcdtRi5k8Pou9s9nypOSId//IHiPuzLjmzkdZNlZyJjIhfVzV
+        toxHByUQ==;
+Received: from [179.113.53.197] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nkYK9-0001bD-CM; Fri, 29 Apr 2022 23:38:49 +0200
+Message-ID: <71d829c4-b280-7d6e-647d-79a1baf9408b@igalia.com>
+Date:   Fri, 29 Apr 2022 18:38:19 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <626c4ee8.1c69fb81.74b06.15c4@mx.google.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 02/30] ARM: kexec: Disable IRQs/FIQs also on crash CPUs
+ shutdown path
+Content-Language: en-US
+To:     Marc Zyngier <maz@kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        hidehiro.kawai.ez@hitachi.com, jgross@suse.com,
+        john.ogness@linutronix.de, keescook@chromium.org, luto@kernel.org,
+        mhiramat@kernel.org, mingo@redhat.com, paulmck@kernel.org,
+        peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Russell King <linux@armlinux.org.uk>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-3-gpiccoli@igalia.com> <87mtg392fm.wl-maz@kernel.org>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <87mtg392fm.wl-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 10:45:09PM +0200, Ansuel Smith wrote:
-> On Fri, Apr 29, 2022 at 10:43:21PM +0200, Krzysztof Kozlowski wrote:
-> > On 29/04/2022 17:57, Ansuel Smith wrote:
-> > > On Fri, Apr 29, 2022 at 10:53:16AM -0500, Rob Herring wrote:
-> > >> On Fri, 29 Apr 2022 14:17:39 +0200, Ansuel Smith wrote:
-> > >>> Convert kpss-gcc driver Documentation to yaml.
-> > >>>
-> > >>> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > >>> ---
-> > >>>  .../bindings/arm/msm/qcom,kpss-gcc.txt        | 44 -------------
-> > >>>  .../bindings/arm/msm/qcom,kpss-gcc.yaml       | 63 +++++++++++++++++++
-> > >>>  2 files changed, 63 insertions(+), 44 deletions(-)
-> > >>>  delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
-> > >>>  create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
-> > >>>
-> > >>
-> > >> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> > >> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> > >>
-> > >> yamllint warnings/errors:
-> > >>
-> > >> dtschema/dtc warnings/errors:
-> > >> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml: properties: '#clock-cells' is a dependency of 'clock-output-names'
-> > > 
-> > 
-> > The patches were previously sent (even as v6) and somehow the history,
-> > changelog and references disappeared...
-> > 
-> 
-> Mhh with split how this should be handled? Putting the relevant changes
-> in the cover letter?
-> 
-> > > Erm how to fix this? I can't do a 1:1 conversion if the source was
-> > > wrong and also have no bot warning.
-> > > Or I should just push an additional patch to fix this error after the
-> > > conversion?
-> > 
-> > Didn't we agree that original bindings were not in good shape? Yet the
-> > questions raised with your v6 remain actually not answered, till the bot
-> > complains.
-> > 
-> > Please do not send the bindings which do not pass dt_binding_check.
-> > 
-> > Best regards,
-> > Krzysztof
-> 
-> In v6 the last mail were with the idea of sending separate series with
-> minimal changes and it was mention that it was a good idea to send only
-> conversion and then send the changes with the conversion series.
-> 
-> Finally got the message. I should NEVER send patch with warning from
-> dt_binding_check.
+Thanks Marc and Michael for the review/discussion.
 
-It's like sending code changes that don't compile...
+On 29/04/2022 15:20, Marc Zyngier wrote:
+> [...]
 
-But I wouldn't say NEVER. If you have a warning that you think is wrong 
-or don't know how to fix, then send it and say that in the patch.
+> My expectations would be that, since we're getting here using an IPI,
+> interrupts are already masked. So what reenabled them the first place?
+> 
+> Thanks,
+> 
+> 	M.
+> 
 
-Rob
+Marc, I did some investigation in the code (and tried/failed in the ARM
+documentation as well heh), but this is still not 100% clear for me.
+
+You're saying IPI calls disable IRQs/FIQs by default in the the target
+CPUs? Where does it happen? I'm a bit confused if this a processor
+mechanism, or it's in code.
+
+Looking the smp_send_stop() in arch/arm/, it does IPI the CPUs, with the
+flag IPI_CPU_STOP, eventually calling ipi_cpu_stop(), and the latter
+does disable IRQ/FIQ in code - that's where I stole my code from.
+
+But crash_smp_send_stop() is different, it seems to IPI the other CPUs
+with the flag IPI_CALL_FUNC, which leads to calling
+generic_smp_call_function_interrupt() - does it disable interrupts/FIQs
+as well? I couldn't find it.
+
+Appreciate your clarifications about that, thanks again.
+Cheers,
+
+
+Guilherme

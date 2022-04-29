@@ -2,237 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F0E251505C
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:07:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0EB451506D
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:08:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378895AbiD2QKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 12:10:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45014 "EHLO
+        id S1352837AbiD2QLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 12:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378837AbiD2QJl (ORCPT
+        with ESMTP id S230171AbiD2QLq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 12:09:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC494B42CE
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:06:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48967622BD
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 16:06:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A53B2C385B5;
-        Fri, 29 Apr 2022 16:06:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651248382;
-        bh=Cv+X7Zdka2XOX7Mgz9T3y/uOxQEoK1knJUHHmSETKsc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OeUWgT8Bebj61lLMzYOybudEYAPP416ZFwi2by3/sqdXehXM8B3PR+EgS0ElzydKm
-         ltvsnJ+sVutojuyVzT2lT3qRrSdu6Pt61+ittcHfkCIMc5hzw7H5r4ncXI6r6QSZ8b
-         d7Zi9aRrAQVXX6VMPvLejfhjtRGtYNt9zU/wDOOtHmiK9EDzFf/rBPSWOZMKQJnpA3
-         SBvNrVDZ3aXHO4G/dxIRuR2k1VNpkSgd5PQ33DenBsUpt4K+eRk2kgvEExNzArueRt
-         LE3TK3L5g39O2wCMnmxZfagNnaCWA57qO24mahionexdjEIiIfZlcCuUKEnqfPh9g7
-         R9s6LEdO6JOTA==
-From:   sj@kernel.org
-To:     akpm@linux-foundation.org
-Cc:     linux-damon@amazon.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: [PATCH 11/14] mm/damon/sysfs: support online inputs update
-Date:   Fri, 29 Apr 2022 16:06:03 +0000
-Message-Id: <20220429160606.127307-12-sj@kernel.org>
+        Fri, 29 Apr 2022 12:11:46 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2053.outbound.protection.outlook.com [40.107.93.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2BE0A6E28
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:08:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UNZrO6bqFCiucpL0E5c78U6op1Tzfg9e1bxAzptlbY6DzVroGg6Of+wNblmoKcUz65kZJq/3zYrEEpUpbVO29P1Ng8fbyAvyUdmBWxxoqLLmbRQqv+PaKcY4krmoT3SRkcvS88OCR2Sc2Az6qydTh/XVKUnF2zqFkY4a4LPpR5J2BL3eeoipTpX88UrSJNK+aaqkoVMRiku1bGae52pIQC6R6OkRuVQMbeFM8yWPYGRL4miL1Eyg/M8pvF4jcAc7w9py068uSnZ5E4XVvEVjHkAq8glqWcZGgDemCyv0RbOoECJRK+IACmaNpWVP89HqpeIYeAkw9upGPvUQvrSwxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=d4ygTPRmci2v/w1AtB0mhV/taxLH80A6nMjjug/S914=;
+ b=jElCPRhEQT4DW93P9a+yXaOf03+iVb7f5C50geYu8Ocmf3AjoEMhvGKwEl3azdVWh6t0qGFDjBxv8Mbi374TQ/bAf5KFj7+jQFKZAGS0OqqttVDkMuWBi1xbD8e2TK42fikb27uKbLMnpCSaSbtIDzEjHdmKg3oFjS+yGAxkiq4dmKrWyMKmEWJ5pM3d0XEw40ZWNuUA0BP+3zfHh5ywYglvBUXdpLHu7yJfHvDjhN8gpVFitYyfAK9gIQGrUzWQ0XLPpu9xso+dXJe2AlXPt21jKevhG+Z33gfWAp4nHQFvIAlHAr2I7DdTbDO+/1DQ0X2DVSwaTdKDdADFVJGmgg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linux.ie smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=d4ygTPRmci2v/w1AtB0mhV/taxLH80A6nMjjug/S914=;
+ b=LpYid9OtRs6RfalW6UOTGPYVkG2u3hlILSk2jNixgRCY6YBcktoSFVUbLdgc3J4cw/YfiqZbenkOT04PX0KOMrKe5DygWDtmavbx3whkYajjSoBKKtG/G17mEU92i6yPnGWCHdQFHUoM6ELcZ7RPnMjWmPuGEC1nN4XW3OPlcG8=
+Received: from DM6PR02CA0163.namprd02.prod.outlook.com (2603:10b6:5:332::30)
+ by MN2PR12MB3167.namprd12.prod.outlook.com (2603:10b6:208:a9::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.13; Fri, 29 Apr
+ 2022 16:08:24 +0000
+Received: from DM6NAM11FT051.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:332:cafe::75) by DM6PR02CA0163.outlook.office365.com
+ (2603:10b6:5:332::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.12 via Frontend
+ Transport; Fri, 29 Apr 2022 16:08:24 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT051.mail.protection.outlook.com (10.13.172.243) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5206.12 via Frontend Transport; Fri, 29 Apr 2022 16:08:24 +0000
+Received: from doryam3r2rack03-34.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 29 Apr 2022 11:08:23 -0500
+From:   Richard Gong <richard.gong@amd.com>
+To:     <alexander.deucher@amd.com>, <christian.koenig@amd.com>,
+        <xinhui.pan@amd.com>, <airlied@linux.ie>, <daniel@ffwll.ch>
+CC:     <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>, <mario.limonciello@amd.com>,
+        <richard.gong@amd.com>, kernel test robot <lkp@intel.com>
+Subject: [PATCHv5] drm/amdgpu: vi: disable ASPM on Intel Alder Lake based systems
+Date:   Fri, 29 Apr 2022 11:06:04 -0500
+Message-ID: <20220429160604.2608782-1-richard.gong@amd.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220429160606.127307-1-sj@kernel.org>
-References: <20220429160606.127307-1-sj@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 637091c2-d76d-4f28-542d-08da29fa7d0d
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3167:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB316778B8BE830E93774BFE5C95FC9@MN2PR12MB3167.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: y6pvU9Vv9NB9FRwGcLbxKxCoGcYnGLJ8qPhEvVLoTzmtBUBPMTNhmG/9ZuYPWZTiSlLR0KOv8OscSzTZrGf5lASOYqR0ycEW83I8VbrUq1uSGGs5FalI9IaTRo2/HxvErjdHKuEshfUzNmo76o4oE3SHyxRq2stuOqNK71lRO+WopIu5CmhqbOzyLGDzJfAb8C9tKDIGYYCXr6Wf3yfx5NxTYifJ0osTReD4jnBLJptIJCt3gHCvS+qvxWaNwx9+eb6llWUUbLgGUtY4m2nItBNt62IA2pp/LmSeDylHeFuUyYRgA4EKkL7h07U9WSwAgSThm63BSYoLc1O3XUbjeL19mGKOrKo7iHyRhD4oTe0DGdPxU6rNXzTYNdHYkWeEIeW/HZY2aWn3MAgJLY/4b1yTt7nsXX49Ywx6cprhVP89SLLOUQX1UslgrmAK9yKBpMCqionr87S6F9AocvCvIu98bNHoSzOshBQoryIQOXbXKJn7uCBUXkRfv6roxYV4yD18t1NVF6UhOQiB+DmisBQD5kzlD58pYP80wjhHy6gdpYDo4adLUQjKuWLQJvVlu8Gqq4MAwLcc6qWcdqy0qbBu1ztD26Ta3PdgNJSzWcoc1ORP6hqXZ8wRDpmPdS9W92Nya9kjN3N+y531dvbkl44gXN6HtzuswfVGcLBZ+jY8Q8exp6VIO2Ql8i5h9AD5U3LWMxpognnt2OhuBYd4wg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(86362001)(47076005)(966005)(82310400005)(508600001)(40460700003)(2616005)(336012)(426003)(26005)(1076003)(356005)(81166007)(6666004)(36860700001)(70206006)(7696005)(44832011)(316002)(2906002)(16526019)(186003)(36756003)(5660300002)(8936002)(70586007)(110136005)(54906003)(83380400001)(4326008)(8676002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2022 16:08:24.1841
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 637091c2-d76d-4f28-542d-08da29fa7d0d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT051.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3167
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: SeongJae Park <sj@kernel.org>
+Active State Power Management (ASPM) feature is enabled since kernel 5.14.
+There are some AMD Volcanic Islands (VI) GFX cards, such as the WX3200 and
+RX640, that do not work with ASPM-enabled Intel Alder Lake based systems.
+Using these GFX cards as video/display output, Intel Alder Lake based
+systems will freeze after suspend/resume.
 
-Currently, DAMON sysfs interface doesn't provide a way for adjusting
-DAMON input parameters while it is turned on.  Therefore, users who want
-to reconfigure DAMON need to stop DAMON and restart.  This means all the
-monitoring results that accumulated so far, which could be useful,
-should be flushed.  This would be inefficient for many cases.
+The issue was originally reported on one system (Dell Precision 3660 with
+BIOS version 0.14.81), but was later confirmed to affect at least 4
+pre-production Alder Lake based systems.
 
-For an example, let's suppose a sysadmin was running a DAMON-based
-Operation Scheme to find memory regions not accessed for more than 5
-mins and page out the regions.  If it turns out the 5 mins threshold was
-too long and therefore the sysadmin wants to reduce it to 4 mins, the
-sysadmin should turn off DAMON, restart it, and wait for at least 4 more
-minutes so that DAMON can find the cold memory regions, even though
-DAMON was knowing there are regions that not accessed for 4 mins at the
-time of shutdown.
+Add an extra check to disable ASPM on Intel Alder Lake based systems with
+the problematic AMD Volcanic Islands GFX cards.
 
-This commit makes DAMON sysfs interface to support online DAMON input
-parameters updates by adding a new input keyword for the 'state' DAMON
-sysfs file, 'commit'.  Writing the keyword to the 'state' file while the
-corresponding kdamond is running makes the kdamond to read the sysfs
-file values again and update the DAMON context.
-
-Signed-off-by: SeongJae Park <sj@kernel.org>
+Fixes: 0064b0ce85bb ("drm/amd/pm: enable ASPM by default")
+Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1885
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Richard Gong <richard.gong@amd.com>
 ---
- mm/damon/sysfs.c | 99 +++++++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 90 insertions(+), 9 deletions(-)
+v5: added vi to commit header and updated commit message
+    rolled back guard with the preprocessor as did in v2 to correct build
+    error on non-x86 systems
+v4: s/CONFIG_X86_64/CONFIG_X86
+    enhanced check logic
+v3: s/intel_core_aspm_chk/aspm_support_quirk_check
+    correct build error with W=1 option
+v2: correct commit description
+    move the check from chip family to problematic platform
+---
+ drivers/gpu/drm/amd/amdgpu/vi.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
-index 864a215ff809..23030611ae7d 100644
---- a/mm/damon/sysfs.c
-+++ b/mm/damon/sysfs.c
-@@ -2061,6 +2061,8 @@ enum damon_sysfs_cmd {
- 	DAMON_SYSFS_CMD_ON,
- 	/* @DAMON_SYSFS_CMD_OFF: Turn the kdamond off. */
- 	DAMON_SYSFS_CMD_OFF,
-+	/* @DAMON_SYSFS_CMD_COMMIT: Update kdamond inputs. */
-+	DAMON_SYSFS_CMD_COMMIT,
- 	/*
- 	 * @DAMON_SYSFS_CMD_UPDATE_SCHEMES_STATS: Update scheme stats sysfs
- 	 * files.
-@@ -2076,6 +2078,7 @@ enum damon_sysfs_cmd {
- static const char * const damon_sysfs_cmd_strs[] = {
- 	"on",
- 	"off",
-+	"commit",
- 	"update_schemes_stats",
- };
+diff --git a/drivers/gpu/drm/amd/amdgpu/vi.c b/drivers/gpu/drm/amd/amdgpu/vi.c
+index 039b90cdc3bc..45f0188c4273 100644
+--- a/drivers/gpu/drm/amd/amdgpu/vi.c
++++ b/drivers/gpu/drm/amd/amdgpu/vi.c
+@@ -81,6 +81,10 @@
+ #include "mxgpu_vi.h"
+ #include "amdgpu_dm.h"
  
-@@ -2194,6 +2197,39 @@ static int damon_sysfs_add_target(struct damon_sysfs_target *sys_target,
- 	return err;
++#if IS_ENABLED(CONFIG_X86)
++#include <asm/intel-family.h>
++#endif
++
+ #define ixPCIE_LC_L1_PM_SUBSTATE	0x100100C6
+ #define PCIE_LC_L1_PM_SUBSTATE__LC_L1_SUBSTATES_OVERRIDE_EN_MASK	0x00000001L
+ #define PCIE_LC_L1_PM_SUBSTATE__LC_PCI_PM_L1_2_OVERRIDE_MASK	0x00000002L
+@@ -1134,13 +1138,24 @@ static void vi_enable_aspm(struct amdgpu_device *adev)
+ 		WREG32_PCIE(ixPCIE_LC_CNTL, data);
  }
  
-+/*
-+ * Search a target in a context that corresponds to the sysfs target input.
-+ *
-+ * Return: pointer to the target if found, NULL if not found, or negative
-+ * error code if the search failed.
-+ */
-+static struct damon_target *damon_sysfs_existing_target(
-+		struct damon_sysfs_target *sys_target, struct damon_ctx *ctx)
++static bool aspm_support_quirk_check(void)
 +{
-+	struct pid *pid;
-+	struct damon_target *t;
++#if IS_ENABLED(CONFIG_X86)
++	struct cpuinfo_x86 *c = &cpu_data(0);
 +
-+	if (ctx->ops.id == DAMON_OPS_PADDR) {
-+		/* Up to only one target for paddr could exist */
-+		damon_for_each_target(t, ctx)
-+			return t;
-+		return NULL;
-+	}
-+
-+	/* ops.id should be DAMON_OPS_VADDR or DAMON_OPS_FVADDR */
-+	pid = find_get_pid(sys_target->pid);
-+	if (!pid)
-+		return ERR_PTR(-EINVAL);
-+	damon_for_each_target(t, ctx) {
-+		if (t->pid == pid) {
-+			put_pid(pid);
-+			return t;
-+		}
-+	}
-+	put_pid(pid);
-+	return NULL;
++	return !(c->x86 == 6 && c->x86_model == INTEL_FAM6_ALDERLAKE);
++#else
++	return true;
++#endif
 +}
 +
- static int damon_sysfs_set_targets(struct damon_ctx *ctx,
- 		struct damon_sysfs_targets *sysfs_targets)
+ static void vi_program_aspm(struct amdgpu_device *adev)
  {
-@@ -2204,8 +2240,15 @@ static int damon_sysfs_set_targets(struct damon_ctx *ctx,
- 		return -EINVAL;
+ 	u32 data, data1, orig;
+ 	bool bL1SS = false;
+ 	bool bClkReqSupport = true;
  
- 	for (i = 0; i < sysfs_targets->nr; i++) {
--		err = damon_sysfs_add_target(
--				sysfs_targets->targets_arr[i], ctx);
-+		struct damon_sysfs_target *st = sysfs_targets->targets_arr[i];
-+		struct damon_target *t = damon_sysfs_existing_target(st, ctx);
-+
-+		if (IS_ERR(t))
-+			return PTR_ERR(t);
-+		if (!t)
-+			err = damon_sysfs_add_target(st, ctx);
-+		else
-+			err = damon_sysfs_set_regions(t, st->regions);
- 		if (err)
- 			return err;
- 	}
-@@ -2308,6 +2351,48 @@ static int damon_sysfs_upd_schemes_stats(struct damon_sysfs_kdamond *kdamond)
- 	return 0;
- }
+-	if (!amdgpu_device_should_use_aspm(adev))
++	if (!amdgpu_device_should_use_aspm(adev) || !aspm_support_quirk_check())
+ 		return;
  
-+static inline bool damon_sysfs_kdamond_running(
-+		struct damon_sysfs_kdamond *kdamond)
-+{
-+	return kdamond->damon_ctx &&
-+		damon_sysfs_ctx_running(kdamond->damon_ctx);
-+}
-+
-+/*
-+ * damon_sysfs_commit_input() - Commit user inputs to a running kdamond.
-+ * @kdamond:	The kobject wrapper for the associated kdamond.
-+ *
-+ * If the sysfs input is wrong, the kdamond will be terminated.
-+ */
-+static int damon_sysfs_commit_input(struct damon_sysfs_kdamond *kdamond)
-+{
-+	struct damon_ctx *ctx = kdamond->damon_ctx;
-+	struct damon_sysfs_context *sys_ctx;
-+	int err = 0;
-+
-+	if (!damon_sysfs_kdamond_running(kdamond))
-+		return -EINVAL;
-+	/* TODO: Support multiple contexts per kdamond */
-+	if (kdamond->contexts->nr != 1)
-+		return -EINVAL;
-+
-+	sys_ctx = kdamond->contexts->contexts_arr[0];
-+
-+	err = damon_select_ops(ctx, sys_ctx->ops_id);
-+	if (err)
-+		return err;
-+	err = damon_sysfs_set_attrs(ctx, sys_ctx->attrs);
-+	if (err)
-+		return err;
-+	err = damon_sysfs_set_targets(ctx, sys_ctx->targets);
-+	if (err)
-+		return err;
-+	err = damon_sysfs_set_schemes(ctx, sys_ctx->schemes);
-+	if (err)
-+		return err;
-+	return err;
-+}
-+
- /*
-  * damon_sysfs_cmd_request_callback() - DAMON callback for handling requests.
-  * @c:	The DAMON context of the callback.
-@@ -2330,6 +2415,9 @@ static int damon_sysfs_cmd_request_callback(struct damon_ctx *c)
- 	case DAMON_SYSFS_CMD_UPDATE_SCHEMES_STATS:
- 		err = damon_sysfs_upd_schemes_stats(kdamond);
- 		break;
-+	case DAMON_SYSFS_CMD_COMMIT:
-+		err = damon_sysfs_commit_input(kdamond);
-+		break;
- 	default:
- 		break;
- 	}
-@@ -2414,13 +2502,6 @@ static int damon_sysfs_turn_damon_off(struct damon_sysfs_kdamond *kdamond)
- 	 */
- }
- 
--static inline bool damon_sysfs_kdamond_running(
--		struct damon_sysfs_kdamond *kdamond)
--{
--	return kdamond->damon_ctx &&
--		damon_sysfs_ctx_running(kdamond->damon_ctx);
--}
--
- /*
-  * damon_sysfs_handle_cmd() - Handle a command for a specific kdamond.
-  * @cmd:	The command to handle.
+ 	if (adev->flags & AMD_IS_APU ||
 -- 
 2.25.1
 

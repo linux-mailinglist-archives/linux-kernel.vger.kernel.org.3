@@ -2,336 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D2395145FF
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 11:54:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A5951460E
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 11:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357024AbiD2Jzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 05:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35304 "EHLO
+        id S1356944AbiD2J4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 05:56:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356785AbiD2Jzh (ORCPT
+        with ESMTP id S1357058AbiD2J4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 05:55:37 -0400
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AAFA10FC;
-        Fri, 29 Apr 2022 02:52:19 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 20B98DF653;
-        Fri, 29 Apr 2022 02:52:19 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id hbKJT36Pj-0Y; Fri, 29 Apr 2022 02:52:18 -0700 (PDT)
-Message-ID: <7ecd4575c4702217141ebde059887b5938abdcff.camel@puri.sm>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1651225938; bh=ZgGix2F2Sn/TSNDXA4kdVYqPvzE5HeGdUQPm0srQjRc=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=lkc2wxs1yiQjlRGWDAOCU8T7k3ETCu1/ZF84rGQNvv739mlgV18RTRfXudyPgu91m
-         I7qw6Z+WX9eObPAHMT7JHvRkfgIQf3bzIfBEcQW8DbGH0EXj7NuKULQMungs1FLsI/
-         ptN+p/PCpyfZZkA7sI3YQrc1DK73FLO/rAu2fSyLdPO41Qto2DQKDu5+hF4QMvuphe
-         pg1nGM0EreuFCyJ0LeD1YujQPD8UQG1ZTHjsHH85htu+UrJ+iJS4knhTjTvlmIwVvW
-         JlZt9jjW5AMGbF/mJ0Shhgxq+TV6Dqr3A8ijqDiQRD00LeO3jMfVZY2DJCe9QkPbSS
-         d8xsVdNXi80UQ==
-Subject: Re: [PATCH V4 07/11] arm64: dts: imx8mq: Enable both G1 and G2
- VPU's with vpu-blk-ctrl
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     Lucas Stach <l.stach@pengutronix.de>,
-        Adam Ford <aford173@gmail.com>, linux-media@vger.kernel.org
-Cc:     aford@beaconembedded.com, cphealy@gmail.com,
-        kernel test robot <lkp@intel.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Date:   Fri, 29 Apr 2022 11:52:10 +0200
-In-Reply-To: <17c5ef22479cfea3f43dce1885f6613f1bef8064.camel@pengutronix.de>
-References: <20220125171129.472775-1-aford173@gmail.com>
-         <20220125171129.472775-8-aford173@gmail.com>
-         <d6c5c5663f8ae904d409240063295cf516e17dd1.camel@puri.sm>
-         <4b958892ba788a0e9e73a9135c305aacbe33294d.camel@pengutronix.de>
-         <c11a58ecc5da2e206fc2b942980223a04a103f19.camel@puri.sm>
-         <17c5ef22479cfea3f43dce1885f6613f1bef8064.camel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Fri, 29 Apr 2022 05:56:03 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBAF45062;
+        Fri, 29 Apr 2022 02:52:42 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2f863469afbso55637277b3.0;
+        Fri, 29 Apr 2022 02:52:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OIDuzCIPKhTa9WY+h3XLdVNOHnsiOuMLiCYEzErRMNU=;
+        b=ID64eCQwM5vG2Ac3xYtFh5ylbucRhYDcdWMdQtnYcbSoca2Kv5LQaNs4dhfYd7gsTi
+         I9RgSfDQNmSjxaGjEiJUrm7OigW1fMzDoL1MeL7TK0Lc/ByVQX1PnNqae29kDm/2HtgG
+         SGn8O0wQETElJgTPj1moORJITZa+E40sM4fwhQRA8eKgJXmTvM/N2LBRB19R+fZrfMlx
+         QA1xYQx7E801SAPpNAs166TM6cjgCbiMbNpJjA2mm8b0+JXlKT26bwwlnqK1wW2i1QjC
+         3tGltyNiA8k8Fi3WsH0f1NQEeMyW3ae9CgSVMnGJSNgGJDwRyEBObTMvbvzLkuuTlkzQ
+         jnsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OIDuzCIPKhTa9WY+h3XLdVNOHnsiOuMLiCYEzErRMNU=;
+        b=ZhQW3XzcXPdSnxH9ZCUUMp6xPDjvGmhYc/n3VqbDRorNe/SWI0lvCU9vEmipjP/Vo0
+         XP4drr77kTAWVkziHwCQtDmgHMdfnPDVtkzUIMVtOI5wqb+1h2t8rrdz5hFmz8JC8hMV
+         8nryiOFbjgjcodk8fPAG3PgdvF08XNIDOBlR+/2EAQ3n0kO1SgMp5VncejgdsRWcWIXu
+         ETNxPO///3G/ZMW8KgfTFqSgWXlDAUcuPmMECQB9SzqK/afJwPGTh1BCrsEoSgGdEPXi
+         W7TwZq2zHz2KZ7XoJ67UFK751pK/wYGXm6+L8et+tiagYNOoRTnsmntl1YbxtHQQOiqS
+         Z6ZA==
+X-Gm-Message-State: AOAM531OjwEwH9iwWdP+1M8IVtFA0zhmFWqFd/H9VJyRojdonT2j/YRo
+        dQNRXtJnV5il2Z1TkTghL1Fkx9+gOaDx4AJnN4E=
+X-Google-Smtp-Source: ABdhPJw6QDqsmb6SP5ISfSVJaL429Eg6VZhorGzDWNf91BuvqCxVcwLOXdlIZQiFaYVqTmMs2Yyjq4kpuZ0HO/I/6ek=
+X-Received: by 2002:a0d:dd16:0:b0:2f4:dc1e:e0d8 with SMTP id
+ g22-20020a0ddd16000000b002f4dc1ee0d8mr37713832ywe.413.1651225961324; Fri, 29
+ Apr 2022 02:52:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220421221159.31729-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220421221159.31729-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdVrcT5iHUZUiCYmD12sS4F66BETBih36G7BzLTLuoQ9eQ@mail.gmail.com>
+ <CA+V-a8sLeQZOX-cTipWotphHFcmY4jUY3errhpBkpr7Q0s4BEQ@mail.gmail.com> <CAMuHMdVARiVpch12HOMy8WR5pMnvVK-Mys8ZRnNK2u+y+qozJg@mail.gmail.com>
+In-Reply-To: <CAMuHMdVARiVpch12HOMy8WR5pMnvVK-Mys8ZRnNK2u+y+qozJg@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Fri, 29 Apr 2022 10:52:15 +0100
+Message-ID: <CA+V-a8sWPAQBJ4ynTXgDfgsdcN9ZAVK8MuzbbkaX8EcRW-rB0Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: interrupt-controller: Add Renesas RZ/G2L
+ Interrupt Controller
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Dienstag, dem 26.04.2022 um 12:43 +0200 schrieb Lucas Stach:
-> Am Dienstag, dem 26.04.2022 um 09:38 +0200 schrieb Martin Kepplinger:
-> > Am Montag, dem 25.04.2022 um 17:34 +0200 schrieb Lucas Stach:
-> > > Hi Martin,
-> > > 
-> > > Am Montag, dem 25.04.2022 um 17:22 +0200 schrieb Martin
-> > > Kepplinger:
-> > > > Am Dienstag, dem 25.01.2022 um 11:11 -0600 schrieb Adam Ford:
-> > > > > With the Hantro G1 and G2 now setup to run independently,
-> > > > > update
-> > > > > the device tree to allow both to operate.  This requires the
-> > > > > vpu-blk-ctrl node to be configured.  Since vpu-blk-ctrl needs
-> > > > > certain clock enabled to handle the gating of the G1 and G2
-> > > > > fuses, the clock-parents and clock-rates for the various
-> > > > > VPU's
-> > > > > to be moved into the pgc_vpu because they cannot get re-
-> > > > > parented
-> > > > > once enabled, and the pgc_vpu is the highest in the chain.
-> > > > > 
-> > > > > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > > > Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-> > > > > 
-> > > > > diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> > > > > b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> > > > > index 2df2510d0118..549b2440f55d 100644
-> > > > > --- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> > > > > +++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> > > > > @@ -737,7 +737,21 @@ pgc_gpu: power-domain@5 {
-> > > > >                                         pgc_vpu: power-
-> > > > > domain@6 {
-> > > > >                                                 #power-
-> > > > > domain-
-> > > > > cells =
-> > > > > <0>;
-> > > > >                                                 reg =
-> > > > > <IMX8M_POWER_DOMAIN_VPU>;
-> > > > > -                                               clocks =
-> > > > > <&clk
-> > > > > IMX8MQ_CLK_VPU_DEC_ROOT>;
-> > > > > +                                               clocks =
-> > > > > <&clk
-> > > > > IMX8MQ_CLK_VPU_DEC_ROOT>,
-> > > > > +                                                       
-> > > > > <&clk
-> > > > > IMX8MQ_CLK_VPU_G1_ROOT>,
-> > > > > +                                                       
-> > > > > <&clk
-> > > > > IMX8MQ_CLK_VPU_G2_ROOT>;
-> > > > > +                                               assigned-
-> > > > > clocks =
-> > > > > <&clk IMX8MQ_CLK_VPU_G1>,
-> > > > > +                                                            
-> > > > >     
-> > > > > <&clk IMX8MQ_CLK_VPU_G2>,
-> > > > > +                                                            
-> > > > >     
-> > > > > <&clk IMX8MQ_CLK_VPU_BUS>,
-> > > > > +                                                            
-> > > > >     
-> > > > > <&clk IMX8MQ_VPU_PLL_BYPASS>;
-> > > > > +                                               assigned-
-> > > > > clock-
-> > > > > parents = <&clk IMX8MQ_VPU_PLL_OUT>,
-> > > > > +                                                            
-> > > > >     
-> > > > >     
-> > > > >     <&clk IMX8MQ_VPU_PLL_OUT>,
-> > > > > +                                                            
-> > > > >     
-> > > > >     
-> > > > >     <&clk IMX8MQ_SYS1_PLL_800M>,
-> > > > > +                                                            
-> > > > >     
-> > > > >     
-> > > > >     <&clk IMX8MQ_VPU_PLL>;
-> > > > > +                                               assigned-
-> > > > > clock-
-> > > > > rates
-> > > > > = <600000000>,
-> > > > > +                                                            
-> > > > >     
-> > > > >     
-> > > > >   <600000000>,
-> > > > > +                                                            
-> > > > >     
-> > > > >     
-> > > > >   <800000000>,
-> > > > > +                                                            
-> > > > >     
-> > > > >     
-> > > > >   <0>;
-> > > > >                                         };
-> > > > >  
-> > > > >                                         pgc_disp:
-> > > > > power-domain@7
-> > > > > {
-> > > > > @@ -1457,30 +1471,31 @@ usb3_phy1: usb-phy@382f0040 {
-> > > > >                         status = "disabled";
-> > > > >                 };
-> > > > >  
-> > > > > -               vpu: video-codec@38300000 {
-> > > > > -                       compatible = "nxp,imx8mq-vpu";
-> > > > > -                       reg = <0x38300000 0x10000>,
-> > > > > -                             <0x38310000 0x10000>,
-> > > > > -                             <0x38320000 0x10000>;
-> > > > > -                       reg-names = "g1", "g2", "ctrl";
-> > > > > -                       interrupts = <GIC_SPI 7
-> > > > > IRQ_TYPE_LEVEL_HIGH>,
-> > > > > -                                    <GIC_SPI 8
-> > > > > IRQ_TYPE_LEVEL_HIGH>;
-> > > > > -                       interrupt-names = "g1", "g2";
-> > > > > +               vpu_g1: video-codec@38300000 {
-> > > > > +                       compatible = "nxp,imx8mq-vpu-g1";
-> > > > > +                       reg = <0x38300000 0x10000>;
-> > > > > +                       interrupts = <GIC_SPI 7
-> > > > > IRQ_TYPE_LEVEL_HIGH>;
-> > > > > +                       clocks = <&clk
-> > > > > IMX8MQ_CLK_VPU_G1_ROOT>;
-> > > > > +                       power-domains = <&vpu_blk_ctrl
-> > > > > IMX8MQ_VPUBLK_PD_G1>;
-> > > > > +               };
-> > > > > +
-> > > > > +               vpu_g2: video-codec@38310000 {
-> > > > > +                       compatible = "nxp,imx8mq-vpu-g2";
-> > > > > +                       reg = <0x38310000 0x10000>;
-> > > > > +                       interrupts = <GIC_SPI 8
-> > > > > IRQ_TYPE_LEVEL_HIGH>;
-> > > > > +                       clocks = <&clk
-> > > > > IMX8MQ_CLK_VPU_G2_ROOT>;
-> > > > > +                       power-domains = <&vpu_blk_ctrl
-> > > > > IMX8MQ_VPUBLK_PD_G2>;
-> > > > > +               };
-> > > > > +
-> > > > > +               vpu_blk_ctrl: blk-ctrl@38320000 {
-> > > > > +                       compatible = "fsl,imx8mq-vpu-blk-
-> > > > > ctrl";
-> > > > > +                       reg = <0x38320000 0x100>;
-> > > > > +                       power-domains = <&pgc_vpu>,
-> > > > > <&pgc_vpu>,
-> > > > > <&pgc_vpu>;
-> > > > > +                       power-domain-names = "bus", "g1",
-> > > > > "g2";
-> > > > >                         clocks = <&clk
-> > > > > IMX8MQ_CLK_VPU_G1_ROOT>,
-> > > > > -                                <&clk
-> > > > > IMX8MQ_CLK_VPU_G2_ROOT>,
-> > > > > -                                <&clk
-> > > > > IMX8MQ_CLK_VPU_DEC_ROOT>;
-> > > > > -                       clock-names = "g1", "g2", "bus";
-> > > > > -                       assigned-clocks = <&clk
-> > > > > IMX8MQ_CLK_VPU_G1>,
-> > > > > -                                         <&clk
-> > > > > IMX8MQ_CLK_VPU_G2>,
-> > > > > -                                         <&clk
-> > > > > IMX8MQ_CLK_VPU_BUS>,
-> > > > > -                                         <&clk
-> > > > > IMX8MQ_VPU_PLL_BYPASS>;
-> > > > > -                       assigned-clock-parents = <&clk
-> > > > > IMX8MQ_VPU_PLL_OUT>,
-> > > > > -                                                <&clk
-> > > > > IMX8MQ_VPU_PLL_OUT>,
-> > > > > -                                                <&clk
-> > > > > IMX8MQ_SYS1_PLL_800M>,
-> > > > > -                                                <&clk
-> > > > > IMX8MQ_VPU_PLL>;
-> > > > > -                       assigned-clock-rates = <600000000>,
-> > > > > <600000000>,
-> > > > > -                                              <800000000>,
-> > > > > <0>;
-> > > > > -                       power-domains = <&pgc_vpu>;
-> > > > > +                                <&clk
-> > > > > IMX8MQ_CLK_VPU_G2_ROOT>;
-> > > > > +                       clock-names = "g1", "g2";
-> > > > > +                       #power-domain-cells = <1>;
-> > > > >                 };
-> > > > >  
-> > > > >                 pcie0: pcie@33800000 {
-> > > > 
-> > > > With this update, when testing suspend to ram on imx8mq, I get:
-> > > > 
-> > > > buck4: failed to disable: -ETIMEDOUT
-> > > > 
-> > > > where buck4 is power-supply of pgc_vpu. And thus the transition
-> > > > to
-> > > > suspend (and resuming) fails.
-> > > > 
-> > > > Have you tested system suspend after the imx8m-blk-ctrl update
-> > > > on
-> > > > imx8mq?
-> > > 
-> > > I haven't tested system suspend, don't know if anyone else did.
-> > > However
-> > > I guess that this is just uncovering a preexisting issue in the
-> > > system
-> > > suspend sequencing, which you would also hit if the video
-> > > decoders
-> > > were
-> > > active at system suspend time.
-> > > 
-> > > My guess is that the regulator disable fails, due to the power
-> > > domains
-> > > being disabled quite late in the suspend sequence, where i2c
-> > > communication with the PMIC is no longer possible due to i2c
-> > > being
-> > > suspended already or something like that. Maybe you can dig in a
-> > > bit
-> > > on
-> > > the actual sequence on your system and we can see how we can
-> > > rework
-> > > things to suspend the power domains at a time where communication
-> > > with
-> > > the PMIC is still possible?
-> > 
-> > What exactly would you like to see? Here's all gpcv2 regulators
-> > disabling on suspend. (gpu (domain 5) is disabled by runtime pm
-> > often):
-> > 
-> > [   47.138700] imx-pgc imx-pgc-domain.5: disabling regulator
-> > [   47.298071] Freezing user space processes ... (elapsed 0.008
-> > seconds) done.
-> > [   47.313432] OOM killer disabled.
-> > [   47.316670] Freezing remaining freezable tasks ... (elapsed
-> > 2.221
-> > seconds) done.
-> > [   49.672052] imx8m-blk-ctrl 38320000.blk-ctrl:
-> > imx8m_blk_ctrl_suspend
-> > start
-> > [   49.704417] imx-pgc imx-pgc-domain.0: disabling regulator
-> > [   49.711114] imx-pgc imx-pgc-domain.6: disabling regulator
-> > [   49.819064] buck4: failed to disable: -ETIMEDOUT
-> > 
-> > The stack looks pretty much the same for all of them, from
-> > pm_suspend()
-> > over genpd_suspend_noiry().
-> 
-> So the GPU domain is already suspended before the system suspend,
-> probably due to short runtime PM timeouts.
-> 
-> Can you please check at which point the i2c subsystem is suspended? I
-> think we are already past that point when running the PM domain
-> suspend
-> from a _noirq callback. I'll take a look on how we can properly
-> change
-> this ordering.
+Hi Geert,
 
-hi Lucas, when I just add the same system suspend hook you added to
-gpcv2 (pm_runtime_get()), I get the same timeout:
+On Fri, Apr 29, 2022 at 9:44 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Prabhakar,
+>
+> On Fri, Apr 29, 2022 at 10:38 AM Lad, Prabhakar
+> <prabhakar.csengg@gmail.com> wrote:
+> > On Thu, Apr 28, 2022 at 10:32 AM Geert Uytterhoeven
+> > > On Fri, Apr 22, 2022 at 12:12 AM Lad Prabhakar
+> > > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> > > > Add DT bindings for the Renesas RZ/G2L Interrupt Controller.
+> > > >
+> > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > >
+> > > Thanks for your patch!
+> > >
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
+> > > > @@ -0,0 +1,131 @@
+> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id: http://devicetree.org/schemas/interrupt-controller/renesas,rzg2l-irqc.yaml#
+> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > +
+> > > > +title: Renesas RZ/G2L (and alike SoC's) Interrupt Controller (IA55)
+> > > > +
+> > > > +maintainers:
+> > > > +  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > > +  - Geert Uytterhoeven <geert+renesas@glider.be>
+> > > > +
+> > > > +description: |
+> > > > +  IA55 performs various interrupt controls including synchronization for the external
+> > > > +  interrupts of NMI, IRQ, and GPIOINT and the interrupts of the built-in peripheral
+> > > > +  interrupts output by each IP. And it notifies the interrupt to the GIC
+> > > > +    - IRQ sense select for 8 external interrupts, mapped to 8 GIC SPI interrupts
+> > > > +    - GPIO pins used as external interrupt input pins, mapped to 32 GIC SPI interrupts
+> > > > +    - NMI edge select (NMI is not treated as NMI exception and supports fall edge and
+> > > > +      stand-up edge detection interrupts)
+> > > > +
+> > > > +allOf:
+> > > > +  - $ref: /schemas/interrupt-controller.yaml#
+> > > > +
+> > > > +properties:
+> > > > +  compatible:
+> > > > +    items:
+> > > > +      - enum:
+> > > > +          - renesas,r9a07g044-irqc    # RZ/G2L
+> > > > +      - const: renesas,rzg2l-irqc
+> > > > +
+> > > > +  '#interrupt-cells':
+> > > > +    const: 2
+> > >
+> > > What is the meaning of the cells? IRQ number + flags, I assume?
+> > IRQ number and the type.
+> >
+> > > How are the numbers mapped, do you need a DT bindings header?
+> > No, just plain numbers are used (driver handles the validation of the
+> > interrupt numbering), for example like below,
+> >
+> > &eth0 {
+> >    ...
+> >    status = "okay";
+> >
+> >    phy0: ethernet-phy@7 {
+> >      compatible = "ethernet-phy-id0022.1640",
+> >                            "ethernet-phy-ieee802.3-c22";
+> >      reg = <7>;
+> >      interrupt-parent = <&irqc>;
+> >      interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
+>
+> OK, so the number must be an external interrupt number (0..7).
+>
+Yep that's right.
 
-[  366.100154] Freezing remaining freezable tasks ... (elapsed 2.863
-seconds) done.
-[  369.228387] imx-i2c 30a50000.i2c: pm_runtime get.
-[  369.234204] imx-i2c 30a40000.i2c: pm_runtime get.
-[  369.239834] imx-i2c 30a30000.i2c: pm_runtime get.
-[  369.247417] imx-i2c 30a20000.i2c: pm_runtime get.
-[  369.277838] imx-pgc imx-pgc-domain.0: disable regulator now
-[  369.284758] imx-pgc imx-pgc-domain.6: disable regulator now
-[  369.394954] buck4: failed to disable: -ETIMEDOUT
+> >     ...
+> >   };
+> > };
+> >
+> > And for the GPIO:
+> >
+> > key-1 {
+> >       gpios = <&pinctrl RZG2L_GPIO(43, 0) GPIO_ACTIVE_HIGH>;
+> >       linux,code = <KEY_1>;
+> >       linux,input-type = <EV_KEY>;
+> >       wakeup-source;
+> >       label = "SW1";
+> > };
+>
+> OK, so in this case the interrupt number is obtained implicitly, and
+> no interrupts property is used.
+>
+Indeed.
 
-do you have an idea?
+> > > Perhaps it would make sense to increase to 3 cells, so you can use
+> > > one cell for the type (cfr. e.g. GIC_SPI), and the second for the
+> > > plain index within the type?
+> > >
+> > Could you please elaborate on this. Are you referring to the type here
+> > as the type to be set up in the GIC?
+>
+> Please ignore, you don't need the type, as it's always an external
+> interrupt number, right?
+>
+Yep that's right.
 
-                              martin
+Cheers,
+Prabhakar
 
-
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds

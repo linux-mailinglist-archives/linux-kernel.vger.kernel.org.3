@@ -2,165 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11DA7515050
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B616515058
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378817AbiD2QIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 12:08:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40240 "EHLO
+        id S1378806AbiD2QJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 12:09:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378793AbiD2QIK (ORCPT
+        with ESMTP id S1378476AbiD2QJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 12:08:10 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F7F8A9F2;
-        Fri, 29 Apr 2022 09:04:51 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id r8so8971447oib.5;
-        Fri, 29 Apr 2022 09:04:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MQcZ21ZXrJjtfh7JWVyd82OFreqrUf57vyzG9uXB95s=;
-        b=NQuHjq75yTcETqoe5MFxchlZ/6p7R23s4Uh/eK6M8cjCLKjgK4aZLK94enM9k42z9z
-         9olN5ZP+vAQmeXTs3TpSIt0NzvMdqABegG4qz96TEt/HS/xzZxrOdtT3s38HXa8rxQCC
-         //y1nGWR49pl0bI4BXJikvhyEOuRN9x7yyhQG6wmlGrFanhXAWznrpMOX2TZU06+jYUn
-         nIWU94QXvKkXMgCPv2tcj5gD6bKy2psqRCjrFUOKa8Bl/tDHLN4JOX0rshY1mFgS6Dj8
-         yb9QNW2JBzYk707yzx4X/QadG8x7UesXEXLRQ21ibqXwVr/gFDYqh338pCxNErks0fTt
-         i5PQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MQcZ21ZXrJjtfh7JWVyd82OFreqrUf57vyzG9uXB95s=;
-        b=ImG0b922h0BGihPj///MaVbRZvAolGPsyuh2B8Q3a9yKpb4uQOCum5BFgkmNgdF++e
-         j/8RfsytsruzhkBVSgtDQoXZLtBpmZ6IuA18UWvbLV+caztIRM2pdrKZM3L0BYU0miJl
-         7/ARfkWnnwsrin8gW1LKtit4R3YTMJSDlf9ZRmPkbNHeH2Zoh71BAYSLu/HllkL7qpdB
-         s2FuJmY/kpbvxvph34sx6dlXvlrzpWpB5kQofP568xXtSx09Bg6O5233/Yj36Hb5Qb3n
-         WJE40RcziDeQooRhlMxyXK6qo0K1pcjErY48WCV7AUL5jr43OxtABN6gAU2YcEbr2T9T
-         cm0g==
-X-Gm-Message-State: AOAM530kXIbtar/LUIG6hVjRN4hJVSVRepFgn9+MQiVSIVh2UW+0wiMp
-        6IRC56tgdGIC4Uy1pbkodofFB/LwWlLjwe1lBKs=
-X-Google-Smtp-Source: ABdhPJysHLlZfOKGv6xFakU0zwsYHpphdLaC+QwvkTPAsD1DKrMZHBdjgWt7xXjXQ23jsIbpf+qT2AhQ4uRAgVD8DGA=
-X-Received: by 2002:a05:6808:1202:b0:2f9:c7b4:fd56 with SMTP id
- a2-20020a056808120200b002f9c7b4fd56mr15139oil.55.1651248290317; Fri, 29 Apr
- 2022 09:04:50 -0700 (PDT)
+        Fri, 29 Apr 2022 12:09:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB0AA27D9
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:06:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DAB3622B1
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 16:06:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86FFEC385A4;
+        Fri, 29 Apr 2022 16:06:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651248375;
+        bh=kX9wsxrQF5lo48sgREIAhlQjmVHS6gEUXUOxmfhc2II=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YTO3+Oe23DUpJby3UQFt6WQjolYvkbKIlw89mqrhDDdaCVv4nwL6QFV3oWJRed/8s
+         9EEDmRuXfUL172NyzyO1UdvIHu/6yktJrRYik3aUFb09BKWT0+8XypBwx6NZOILOEP
+         OHf55HbePzWVybtM/jiQKMZQBUiAkM4/oXmKGnfFf0lzAfA7YNYkcbOEl6ZSxEayJ2
+         29GKZkA5/KccwgKjg26flvFuBN5+0ApmWsaOSCsIvRtbfZRIcjjNAP+ElbXLsJwggr
+         eRWMjgXul/LAbJeREhtZlZobSG3YpcILygXUwak783ccmhyIDr0i9rFBVHF5Cr3+eb
+         tnUywfvPBOpYw==
+From:   sj@kernel.org
+To:     akpm@linux-foundation.org
+Cc:     linux-damon@amazon.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
+Subject: [PATCH 00/14] mm/damon: Support online tuning
+Date:   Fri, 29 Apr 2022 16:05:52 +0000
+Message-Id: <20220429160606.127307-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220427224924.592546-1-gpiccoli@igalia.com> <20220427224924.592546-22-gpiccoli@igalia.com>
-In-Reply-To: <20220427224924.592546-22-gpiccoli@igalia.com>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Fri, 29 Apr 2022 09:04:39 -0700
-Message-ID: <CAMo8BfKzA+oy-Qun9-aO3xCr4Jy_rfdjYqMX=W9xONCSX8O51Q@mail.gmail.com>
-Subject: Re: [PATCH 21/30] panic: Introduce the panic pre-reboot notifier list
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, bhe@redhat.com,
-        Petr Mladek <pmladek@suse.com>, kexec@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
-        linuxppc-dev@lists.ozlabs.org,
-        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org,
-        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, netdev <netdev@vger.kernel.org>,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        "open list:SPARC + UltraSPAR..." <sparclinux@vger.kernel.org>,
-        xen-devel@lists.xenproject.org,
-        "maintainer:X86 ARCHITECTURE..." <x86@kernel.org>,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Jonathan Corbet <corbet@lwn.net>, d.hatayama@jp.fujitsu.com,
-        Dave Hansen <dave.hansen@linux.intel.com>, dyoung@redhat.com,
-        feng.tang@intel.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Lutomirski <luto@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, paulmck@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        stern@rowland.harvard.edu, Thomas Gleixner <tglx@linutronix.de>,
-        vgoyal@redhat.com, vkuznets@redhat.com,
-        Will Deacon <will@kernel.org>, Alex Elder <elder@kernel.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Chris Zankel <chris@zankel.net>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Corey Minyard <minyard@acm.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        James Morse <james.morse@arm.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
-        Richard Henderson <rth@twiddle.net>,
-        Richard Weinberger <richard@nod.at>,
-        Robert Richter <rric@kernel.org>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, Wei Liu <wei.liu@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 3:55 PM Guilherme G. Piccoli
-<gpiccoli@igalia.com> wrote:
->
-> This patch renames the panic_notifier_list to panic_pre_reboot_list;
-> the idea is that a subsequent patch will refactor the panic path
-> in order to better split the notifiers, running some of them very
-> early, some of them not so early [but still before kmsg_dump()] and
-> finally, the rest should execute late, after kdump. The latter ones
-> are now in the panic pre-reboot list - the name comes from the idea
-> that these notifiers execute before panic() attempts rebooting the
-> machine (if that option is set).
->
-> We also took the opportunity to clean-up useless header inclusions,
-> improve some notifier block declarations (e.g. in ibmasm/heartbeat.c)
-> and more important, change some priorities - we hereby set 2 notifiers
-> to run late in the list [iss_panic_event() and the IPMI panic_event()]
-> due to the risks they offer (may not return, for example).
-> Proper documentation is going to be provided in a subsequent patch,
-> that effectively refactors the panic path.
+From: SeongJae Park <sj@kernel.org>
 
-[...]
+Effects of DAMON and DAMON-based Operation Schemes highly depends on the
+configurations.  Wrong configurations could even result in unexpected
+efficiency degradations.  For finding a best configuration, repeating
+incremental configuration changes and results measurements, in other
+words, online tuning, could be helpful.
 
->  arch/xtensa/platforms/iss/setup.c     |  4 ++--For xtensa:
+Nevertheless, DAMON kernel API supports only restrictive online tuning.
+Worse yet, the sysfs-based DAMON user interface doesn't support online
+tuning at all.  DAMON_RECLAIM also doesn't support online tuning.
 
-For xtensa:
-Acked-by: Max Filippov <jcmvbkbc@gmail.com>
+This patchset makes the DAMON kernel API, DAMON sysfs interface, and
+DAMON_RECLAIM supports online tuning.
+
+Sequence of patches
+-------------------
+
+First two patches enhance DAMON online tuning for kernel API users.
+Specifically, patch 1 let kernel API users to be able to do DAMON online
+tuning without a restriction, and patch 2 makes error handling easier.
+
+Following seven patches (patches 3-9) refactor code for better
+readability and easier reuse of code fragments that will be useful for
+online tuning support.
+
+Patch 10 introduces DAMON callback based user request handling structure
+for DAMON sysfs interface, and patch 11 enables DAMON online tuning via
+DAMON sysfs interface.  Documentation patch (patch 12) for usage of it
+follows.
+
+Patch 13 enables online tuning of DAMON_RECLAIM and finally patch 14
+documents the DAMON_RECLAIM online tuning usage.
+
+SeongJae Park (14):
+  mm/damon/core: add a new callback for watermarks checks
+  mm/damon/core: finish kdamond as soon as any callback returns an error
+  mm/damon/vaddr: generalize damon_va_apply_three_regions()
+  mm/damon/vaddr: move 'damon_set_regions()' to core
+  mm/damon/vaddr: remove damon_va_apply_three_regions()
+  mm/damon/sysfs: prohibit multiple physical address space monitoring
+    targets
+  mm/damon/sysfs: move targets setup code to a separated function
+  mm/damon/sysfs: reuse damon_set_regions() for regions setting
+  mm/damon/sysfs: use enum for 'state' input handling
+  mm/damon/sysfs: update schemes stat in the kdamond context
+  mm/damon/sysfs: support online inputs update
+  Docs/{ABI,admin-guide}/damon: Update for 'state' sysfs file input
+    keyword, 'commit'
+  mm/damon/reclaim: support online inputs update
+  Docs/admin-guide/mm/damon/reclaim: document 'commit_inputs' parameter
+
+ .../ABI/testing/sysfs-kernel-mm-damon         |   7 +-
+ .../admin-guide/mm/damon/reclaim.rst          |  11 +
+ Documentation/admin-guide/mm/damon/usage.rst  |   9 +-
+ include/linux/damon.h                         |   9 +
+ mm/damon/core.c                               |  89 +++-
+ mm/damon/reclaim.c                            |  95 +++--
+ mm/damon/sysfs.c                              | 382 +++++++++++++++---
+ mm/damon/vaddr-test.h                         |   6 +-
+ mm/damon/vaddr.c                              |  73 +---
+ 9 files changed, 500 insertions(+), 181 deletions(-)
 
 -- 
-Thanks.
--- Max
+2.25.1
+

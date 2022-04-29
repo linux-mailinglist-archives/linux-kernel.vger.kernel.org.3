@@ -2,99 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE0F9514D3D
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:35:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FC00514D65
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377492AbiD2Oi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 10:38:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52546 "EHLO
+        id S1377727AbiD2Ok3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 10:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350640AbiD2OiW (ORCPT
+        with ESMTP id S1377552AbiD2OkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 10:38:22 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D566237D4;
-        Fri, 29 Apr 2022 07:35:03 -0700 (PDT)
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TE1ble023952;
-        Fri, 29 Apr 2022 14:34:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=+Pd3boeYYOqUdToIy6lpJJ2YBcwWkKSMUxL2UvbDusM=;
- b=jNrHUS/pBYDQPbFWUWAghjJm+dqdxE5F5A4zbP+Ari9Btc9h+Tfvx/rGcpkhOi2f/pWV
- /IFBe4uILurpXkAx34h949EDBk5HzRtz3tdCl/AVIEhAN6e18Q8CnpXXPuBGdbinMtWs
- 3gHaJvouoz8fizD+aTcexiA1zswhFuAVYZOPj9ea2vLkgeT16Znmtr7rIgoYH0SKSTq7
- 1Y/fBlX0T3ta9FQMm9X5o8OUaL3kr3i7d6DizQGz1+0+mpWVlszvk+TpsVz3atEjK7ZQ
- SvpgqNk3qw1Hh7r5St2alP1bSZ1evkAOVcbSuHHwWXgRLkC5Npbh38dVEX3pdnctZxwY 1g== 
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqsyj6aqr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 14:34:58 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TEJrxj028887;
-        Fri, 29 Apr 2022 14:34:57 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03fra.de.ibm.com with ESMTP id 3fm938yc4y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 14:34:57 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TELk1B47317424
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 29 Apr 2022 14:21:46 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CDAFC5204F;
-        Fri, 29 Apr 2022 14:34:54 +0000 (GMT)
-Received: from sig-9-145-61-57.uk.ibm.com (unknown [9.145.61.57])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 549235204E;
-        Fri, 29 Apr 2022 14:34:54 +0000 (GMT)
-Message-ID: <928ea2335e2838919ccbf69ed5a0242ce0358259.camel@linux.ibm.com>
-Subject: Re: [PATCH 24/37] power: add HAS_IOPORT dependencies
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        "open list:SYSTEM RESET/SHUTDOWN DRIVERS" <linux-pm@vger.kernel.org>
-Date:   Fri, 29 Apr 2022 16:34:53 +0200
-In-Reply-To: <20220429135108.2781579-43-schnelle@linux.ibm.com>
-References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
-         <20220429135108.2781579-43-schnelle@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: iOfkkkzev1-foE0aZqz_2GmmdC5GTPXH
-X-Proofpoint-ORIG-GUID: iOfkkkzev1-foE0aZqz_2GmmdC5GTPXH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-29_07,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 spamscore=0 impostorscore=0 mlxscore=0 malwarescore=0
- mlxlogscore=410 suspectscore=0 phishscore=0 adultscore=0 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204290080
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 29 Apr 2022 10:40:23 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04672E6A3;
+        Fri, 29 Apr 2022 07:36:32 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 340BB40014;
+        Fri, 29 Apr 2022 14:36:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1651242991;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qd07jAlJK0X44yitg7a8fD9rpKx9BwtFEFGsfhVdf/w=;
+        b=K2tXe5QuZHzf+LlNCxY+MZ68z3KVoZbzp1sZCGtSj36Bi0xSdaO7WFxX1ukqhO3JGqN15M
+        gtoiifiONnlqT9qOCwg2iyCVTepnSE9OehefJ2aMyYLgYlidS2Nl3gj7NG52ZqyF1ZCuKM
+        +Z4Ir10BrC+aPNWOZlNqFd6Nw6fllxOwIz42wan8Ej4T0U437lgbWykx4Cz8tUr++lKgZP
+        9ejRj/DfO1jRwgEfpa0a/ImBOtwSGoUoRADXtE/TjdfuBumlOFkXFTt8J8j6loH3j/BS0Q
+        M5KAefoq6h7LCVRr0RCvXGm1v1wtZTNM+/vgF2BmLwL3EUtx8W1OwLMwJs3Qfw==
+From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?q?Miqu=C3=A8l=20Raynal?= <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
+Subject: [net-next v2 01/12] net: dsa: add support for ethtool get_rmon_stats()
+Date:   Fri, 29 Apr 2022 16:34:54 +0200
+Message-Id: <20220429143505.88208-2-clement.leger@bootlin.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220429143505.88208-1-clement.leger@bootlin.com>
+References: <20220429143505.88208-1-clement.leger@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-29 at 15:50 +0200, Niklas Schnelle wrote:
-> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> not being declared. We thus need to add HAS_IOPORT as dependency for
-> those drivers using them.
-> 
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> ---
+Add support to allow dsa drivers to specify the .get_rmon_stats()
+operation.
 
-Sorry everyone. I sent this as PATCH in error while preparing to sent
-the same series as RFC. Since e-mail has no remote delete and I lack a
-time machine let's just all pretend you only got the RFC.
+Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+---
+ include/net/dsa.h |  3 +++
+ net/dsa/slave.c   | 13 +++++++++++++
+ 2 files changed, 16 insertions(+)
+
+diff --git a/include/net/dsa.h b/include/net/dsa.h
+index 934958fda962..d9da32aacbf1 100644
+--- a/include/net/dsa.h
++++ b/include/net/dsa.h
+@@ -873,6 +873,9 @@ struct dsa_switch_ops {
+ 				     struct ethtool_eth_mac_stats *mac_stats);
+ 	void	(*get_eth_ctrl_stats)(struct dsa_switch *ds, int port,
+ 				      struct ethtool_eth_ctrl_stats *ctrl_stats);
++	void	(*get_rmon_stats)(struct dsa_switch *ds, int port,
++				  struct ethtool_rmon_stats *rmon_stats,
++				  const struct ethtool_rmon_hist_range **ranges);
+ 	void	(*get_stats64)(struct dsa_switch *ds, int port,
+ 				   struct rtnl_link_stats64 *s);
+ 	void	(*self_test)(struct dsa_switch *ds, int port,
+diff --git a/net/dsa/slave.c b/net/dsa/slave.c
+index 5ee0aced9410..27c8d28fd9d8 100644
+--- a/net/dsa/slave.c
++++ b/net/dsa/slave.c
+@@ -1026,6 +1026,18 @@ dsa_slave_get_eth_ctrl_stats(struct net_device *dev,
+ 		ds->ops->get_eth_ctrl_stats(ds, dp->index, ctrl_stats);
+ }
+ 
++static void
++dsa_slave_get_rmon_stats(struct net_device *dev,
++			 struct ethtool_rmon_stats *rmon_stats,
++			 const struct ethtool_rmon_hist_range **ranges)
++{
++	struct dsa_port *dp = dsa_slave_to_port(dev);
++	struct dsa_switch *ds = dp->ds;
++
++	if (ds->ops->get_rmon_stats)
++		ds->ops->get_rmon_stats(ds, dp->index, rmon_stats, ranges);
++}
++
+ static void dsa_slave_net_selftest(struct net_device *ndev,
+ 				   struct ethtool_test *etest, u64 *buf)
+ {
+@@ -2105,6 +2117,7 @@ static const struct ethtool_ops dsa_slave_ethtool_ops = {
+ 	.get_eth_phy_stats	= dsa_slave_get_eth_phy_stats,
+ 	.get_eth_mac_stats	= dsa_slave_get_eth_mac_stats,
+ 	.get_eth_ctrl_stats	= dsa_slave_get_eth_ctrl_stats,
++	.get_rmon_stats		= dsa_slave_get_rmon_stats,
+ 	.set_wol		= dsa_slave_set_wol,
+ 	.get_wol		= dsa_slave_get_wol,
+ 	.set_eee		= dsa_slave_set_eee,
+-- 
+2.34.1
 

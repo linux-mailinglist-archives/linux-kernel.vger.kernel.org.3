@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65BE3514AAB
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 15:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25DAD514AB3
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 15:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376301AbiD2NlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 09:41:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55582 "EHLO
+        id S1376318AbiD2NlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 09:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359863AbiD2Nkw (ORCPT
+        with ESMTP id S1376289AbiD2Nk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 09:40:52 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37403CB027
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 06:37:32 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id g8so4536190pfh.5
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 06:37:32 -0700 (PDT)
+        Fri, 29 Apr 2022 09:40:57 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2593FCC50A
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 06:37:38 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id x52so5378492pfu.11
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 06:37:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=23JDuOeXS3qapCnfe9+MGlUBuO57K6IKT3rd6Zq9kR4=;
-        b=MHSRX303E6gAt323/IxcNAaiiuJtGUdH5cveE5vIqfJsvePabyp0uPeIkm0nDQ8x+z
-         mCEeA/j/KM/zmasCI3NTuE8qHxZdXOOfIfcn8do+VN9VYhVXhI+g+9WAniNW4BEPE+Hr
-         J9OlM7BM2PT4gmQ+NP52DmvU2IhXT/3tZBir8W+BpSrREGb9XJc337kADy/ZkI4Obkb1
-         fYgKvKZsYGfcnMZSjdbXdUQsBbzcAXrLxtXnir6+P37YT8MteDij0NXzVlxDMbO/OmKK
-         fvdicx7MXbzcUO6F6lxiLRamPoU1KEA+G/pfvWZB5UwwmBvNGsfLlRTWzI28/+l7upAy
-         HoeQ==
+        bh=rYeLNg+oS2y3akdD0dEeA3yQLeG8PhzEVgB+CG0F5x8=;
+        b=r0oSktHd6lJh1xiGDkOseB1CwEKbnU5ADwHmNxjoz0rF9tVkTla0cHmYCIjX9kad48
+         HXeS+/YDOH1RsqM0QaLq3bkmUHA4i6Jbi5iXnJXClUtQW4MWr3dTM217XBF44U478R6b
+         Shvq73K4KVjlhzE/n7vZ2+kDth8ZTt+DfZSh4jXPMr/dgaiOTUv7UitxA5wBpQeUxLT3
+         /SrfjXz8WTr03+JamLKfd/O6NmDHtxE1rvUHfP30jXpZwF3OrnSi1H2YikZmmdZh3Lk1
+         XhF0EkwMAPk7F1PJU3e9O2p9K6frj/vvPrSN47R2YW4XK31joU4z9lay8VQ6QPegDiSH
+         W1uA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=23JDuOeXS3qapCnfe9+MGlUBuO57K6IKT3rd6Zq9kR4=;
-        b=AaEMXa2wLiEsY/4gzMXF4Z4vPj5cLwvakJr8O/o7o1gT2hOZ/yIkP4M6mUE+gNGoSH
-         +TkucfOFFLUaLWwcguLrv+KfziWtUHNMmcD96533LVfB/lBSOy1fM3SAA78Qgc8QlYRV
-         4qhRTRVShbVeUKXlLE1sOTK3GpofytoKwjaL8Hx2YrrPXQi3FDMlR6v611SbRSc02Aro
-         cGrMHJr7NaZKRSSTk7GJ6pih9eLowmh08TioAfyp0OWaRlkZDC4ji4bcgl3bRjayAct8
-         Svrh/05/rMb3dBV+0pFj4fa1eYIEWS/sJadizWeEjX0Oev8O97nu+ZUNhBnKlZT9r0ve
-         6woA==
-X-Gm-Message-State: AOAM531yh283cNShRQnrxI2KKjHw6pZcFzcaRH4vm2/PGIc4xXgs/hhs
-        i927YWAY0wnbu7iFsv4Fbw7B4w==
-X-Google-Smtp-Source: ABdhPJzyfarjjWMZT/Urjo6R6jR7MFp2VAkxiYz4i0cDzXZXP0EBlBsAWmKDRDq8ix5Fv+EZW5xpSg==
-X-Received: by 2002:a63:5847:0:b0:399:3452:ffe4 with SMTP id i7-20020a635847000000b003993452ffe4mr32556539pgm.406.1651239451972;
-        Fri, 29 Apr 2022 06:37:31 -0700 (PDT)
+        bh=rYeLNg+oS2y3akdD0dEeA3yQLeG8PhzEVgB+CG0F5x8=;
+        b=hgdvW5c2TeSOaVPY7bmI7j95U+Psaqvetcc4CvsYUjyiK6WgeE53d+LkL4X9SmoT3s
+         vwzoghAfr8NmAuGt44xNE2yb9XaW6Me+agXkAZBMBcxu2yGORqrrjAPoXZ1RtHBsuXfY
+         PvVUtLdH/krooZCpJvkU+RfbY9dy4v0HUrPsjhOOGUwjP02Tcdp3qoJGKkpf+rlDKURT
+         bU8dDLYFWQPg4SI44hsvgdjkmM68BcSGSL1KlV1wPibG90rrYAbTWebyDnO2H/luhBs3
+         eEhnh2wkpA25oC5tQvpxP3aEh9+cdcdBcb/Ss2zoY8ONzM1sVpr01yArk2gPe4v3Jl5q
+         mRXA==
+X-Gm-Message-State: AOAM531/72bkwWOan136MUJpktCe7pT1OUEzlR6fbm1a4DszFk5EcPGW
+        EqpfuoEERYsZsNfYsapKaFrrKA==
+X-Google-Smtp-Source: ABdhPJwqz/7MfX5i1uHVza5qIKuW50STzQue9UefcrOGDN8WPmjUeneAZB8Gavo9bb4peYnwNe/Qfg==
+X-Received: by 2002:a05:6a00:238f:b0:4f7:78b1:2f6b with SMTP id f15-20020a056a00238f00b004f778b12f6bmr40178261pfc.17.1651239457603;
+        Fri, 29 Apr 2022 06:37:37 -0700 (PDT)
 Received: from localhost.localdomain ([139.177.225.240])
-        by smtp.gmail.com with ESMTPSA id m8-20020a17090a414800b001d81a30c437sm10681977pjg.50.2022.04.29.06.37.26
+        by smtp.gmail.com with ESMTPSA id m8-20020a17090a414800b001d81a30c437sm10681977pjg.50.2022.04.29.06.37.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 06:37:31 -0700 (PDT)
+        Fri, 29 Apr 2022 06:37:37 -0700 (PDT)
 From:   Qi Zheng <zhengqi.arch@bytedance.com>
 To:     akpm@linux-foundation.org, tglx@linutronix.de,
         kirill.shutemov@linux.intel.com, mika.penttila@nextfour.com,
@@ -56,9 +56,9 @@ To:     akpm@linux-foundation.org, tglx@linutronix.de,
 Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, songmuchun@bytedance.com,
         zhouchengming@bytedance.com, Qi Zheng <zhengqi.arch@bytedance.com>
-Subject: [RFC PATCH 13/18] mm: add try_to_free_user_pte() helper
-Date:   Fri, 29 Apr 2022 21:35:47 +0800
-Message-Id: <20220429133552.33768-14-zhengqi.arch@bytedance.com>
+Subject: [RFC PATCH 14/18] mm: use try_to_free_user_pte() in MADV_DONTNEED case
+Date:   Fri, 29 Apr 2022 21:35:48 +0800
+Message-Id: <20220429133552.33768-15-zhengqi.arch@bytedance.com>
 X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 In-Reply-To: <20220429133552.33768-1-zhengqi.arch@bytedance.com>
 References: <20220429133552.33768-1-zhengqi.arch@bytedance.com>
@@ -73,165 +73,204 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Normally, the percpu_ref of the user PTE page table page is in
-percpu mode. This patch add try_to_free_user_pte() to switch
-the percpu_ref to atomic mode and check if it is 0. If the
-percpu_ref is 0, which means that no one is using the user PTE
-page table page, then we can safely reclaim it.
+Immediately after a successful MADV_DONTNEED operation, the
+physical page is unmapped from the PTE page table entry. This
+is a good time to call try_to_free_user_pte() to try to free
+the PTE page table page.
 
 Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
 ---
- include/linux/pte_ref.h |  7 +++
- mm/pte_ref.c            | 99 ++++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 104 insertions(+), 2 deletions(-)
+ mm/internal.h |  3 ++-
+ mm/memory.c   | 43 +++++++++++++++++++++++++++++--------------
+ mm/oom_kill.c |  3 ++-
+ 3 files changed, 33 insertions(+), 16 deletions(-)
 
-diff --git a/include/linux/pte_ref.h b/include/linux/pte_ref.h
-index bfe620038699..379c3b45a6ab 100644
---- a/include/linux/pte_ref.h
-+++ b/include/linux/pte_ref.h
-@@ -16,6 +16,8 @@ void free_user_pte(struct mm_struct *mm, pmd_t *pmd, unsigned long addr);
- bool pte_tryget(struct mm_struct *mm, pmd_t *pmd, unsigned long addr);
- void __pte_put(pgtable_t page);
- void pte_put(pte_t *ptep);
-+void try_to_free_user_pte(struct mm_struct *mm, pmd_t *pmd, unsigned long addr,
-+			  bool switch_back);
+diff --git a/mm/internal.h b/mm/internal.h
+index cf16280ce132..f93a9170d2e3 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -77,7 +77,8 @@ struct zap_details;
+ void unmap_page_range(struct mmu_gather *tlb,
+ 			     struct vm_area_struct *vma,
+ 			     unsigned long addr, unsigned long end,
+-			     struct zap_details *details);
++			     struct zap_details *details,
++			     bool free_pte);
  
- #else /* !CONFIG_FREE_USER_PTE */
- 
-@@ -47,6 +49,11 @@ static inline void pte_put(pte_t *ptep)
+ void page_cache_ra_order(struct readahead_control *, struct file_ra_state *,
+ 		unsigned int order);
+diff --git a/mm/memory.c b/mm/memory.c
+index aa2bac561d5e..75a0e16a095a 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -1339,7 +1339,8 @@ static inline bool should_zap_page(struct zap_details *details, struct page *pag
+ static unsigned long zap_pte_range(struct mmu_gather *tlb,
+ 				struct vm_area_struct *vma, pmd_t *pmd,
+ 				unsigned long addr, unsigned long end,
+-				struct zap_details *details)
++				struct zap_details *details,
++				bool free_pte)
  {
+ 	struct mm_struct *mm = tlb->mm;
+ 	int force_flush = 0;
+@@ -1348,6 +1349,7 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
+ 	pte_t *start_pte;
+ 	pte_t *pte;
+ 	swp_entry_t entry;
++	unsigned long start = addr;
+ 
+ 	tlb_change_page_size(tlb, PAGE_SIZE);
+ again:
+@@ -1455,13 +1457,17 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
+ 		goto again;
+ 	}
+ 
++	if (free_pte)
++		try_to_free_user_pte(mm, pmd, start, true);
++
+ 	return addr;
  }
  
-+static inline void try_to_free_user_pte(struct mm_struct *mm, pmd_t *pmd,
-+					unsigned long addr, bool switch_back)
-+{
-+}
-+
- #endif /* CONFIG_FREE_USER_PTE */
+ static inline unsigned long zap_pmd_range(struct mmu_gather *tlb,
+ 				struct vm_area_struct *vma, pud_t *pud,
+ 				unsigned long addr, unsigned long end,
+-				struct zap_details *details)
++				struct zap_details *details,
++				bool free_pte)
+ {
+ 	pmd_t *pmd;
+ 	unsigned long next;
+@@ -1496,7 +1502,8 @@ static inline unsigned long zap_pmd_range(struct mmu_gather *tlb,
+ 		 */
+ 		if (pmd_none_or_trans_huge_or_clear_bad(pmd))
+ 			goto next;
+-		next = zap_pte_range(tlb, vma, pmd, addr, next, details);
++		next = zap_pte_range(tlb, vma, pmd, addr, next, details,
++				     free_pte);
+ next:
+ 		cond_resched();
+ 	} while (pmd++, addr = next, addr != end);
+@@ -1507,7 +1514,8 @@ static inline unsigned long zap_pmd_range(struct mmu_gather *tlb,
+ static inline unsigned long zap_pud_range(struct mmu_gather *tlb,
+ 				struct vm_area_struct *vma, p4d_t *p4d,
+ 				unsigned long addr, unsigned long end,
+-				struct zap_details *details)
++				struct zap_details *details,
++				bool free_pte)
+ {
+ 	pud_t *pud;
+ 	unsigned long next;
+@@ -1525,7 +1533,8 @@ static inline unsigned long zap_pud_range(struct mmu_gather *tlb,
+ 		}
+ 		if (pud_none_or_clear_bad(pud))
+ 			continue;
+-		next = zap_pmd_range(tlb, vma, pud, addr, next, details);
++		next = zap_pmd_range(tlb, vma, pud, addr, next, details,
++				     free_pte);
+ next:
+ 		cond_resched();
+ 	} while (pud++, addr = next, addr != end);
+@@ -1536,7 +1545,8 @@ static inline unsigned long zap_pud_range(struct mmu_gather *tlb,
+ static inline unsigned long zap_p4d_range(struct mmu_gather *tlb,
+ 				struct vm_area_struct *vma, pgd_t *pgd,
+ 				unsigned long addr, unsigned long end,
+-				struct zap_details *details)
++				struct zap_details *details,
++				bool free_pte)
+ {
+ 	p4d_t *p4d;
+ 	unsigned long next;
+@@ -1546,7 +1556,8 @@ static inline unsigned long zap_p4d_range(struct mmu_gather *tlb,
+ 		next = p4d_addr_end(addr, end);
+ 		if (p4d_none_or_clear_bad(p4d))
+ 			continue;
+-		next = zap_pud_range(tlb, vma, p4d, addr, next, details);
++		next = zap_pud_range(tlb, vma, p4d, addr, next, details,
++				     free_pte);
+ 	} while (p4d++, addr = next, addr != end);
  
- #endif /* _LINUX_PTE_REF_H */
-diff --git a/mm/pte_ref.c b/mm/pte_ref.c
-index 5b382445561e..bf9629272c71 100644
---- a/mm/pte_ref.c
-+++ b/mm/pte_ref.c
-@@ -8,6 +8,9 @@
- #include <linux/pte_ref.h>
- #include <linux/percpu-refcount.h>
- #include <linux/slab.h>
-+#include <linux/hugetlb.h>
-+#include <asm/tlbflush.h>
-+#include <asm/pgalloc.h>
- 
- #ifdef CONFIG_FREE_USER_PTE
- 
-@@ -44,8 +47,6 @@ void pte_ref_free(pgtable_t pte)
- 	kfree(ref);
+ 	return addr;
+@@ -1555,7 +1566,8 @@ static inline unsigned long zap_p4d_range(struct mmu_gather *tlb,
+ void unmap_page_range(struct mmu_gather *tlb,
+ 			     struct vm_area_struct *vma,
+ 			     unsigned long addr, unsigned long end,
+-			     struct zap_details *details)
++			     struct zap_details *details,
++			     bool free_pte)
+ {
+ 	pgd_t *pgd;
+ 	unsigned long next;
+@@ -1567,7 +1579,8 @@ void unmap_page_range(struct mmu_gather *tlb,
+ 		next = pgd_addr_end(addr, end);
+ 		if (pgd_none_or_clear_bad(pgd))
+ 			continue;
+-		next = zap_p4d_range(tlb, vma, pgd, addr, next, details);
++		next = zap_p4d_range(tlb, vma, pgd, addr, next, details,
++				     free_pte);
+ 	} while (pgd++, addr = next, addr != end);
+ 	tlb_end_vma(tlb, vma);
+ }
+@@ -1576,7 +1589,8 @@ void unmap_page_range(struct mmu_gather *tlb,
+ static void unmap_single_vma(struct mmu_gather *tlb,
+ 		struct vm_area_struct *vma, unsigned long start_addr,
+ 		unsigned long end_addr,
+-		struct zap_details *details)
++		struct zap_details *details,
++		bool free_pte)
+ {
+ 	unsigned long start = max(vma->vm_start, start_addr);
+ 	unsigned long end;
+@@ -1612,7 +1626,8 @@ static void unmap_single_vma(struct mmu_gather *tlb,
+ 				i_mmap_unlock_write(vma->vm_file->f_mapping);
+ 			}
+ 		} else
+-			unmap_page_range(tlb, vma, start, end, details);
++			unmap_page_range(tlb, vma, start, end, details,
++					 free_pte);
+ 	}
  }
  
--void free_user_pte(struct mm_struct *mm, pmd_t *pmd, unsigned long addr) {}
--
- /*
-  * pte_tryget - try to get the pte_ref of the user PTE page table page
-  * @mm: pointer the target address space
-@@ -102,4 +103,98 @@ void pte_put(pte_t *ptep)
+@@ -1644,7 +1659,7 @@ void unmap_vmas(struct mmu_gather *tlb,
+ 				start_addr, end_addr);
+ 	mmu_notifier_invalidate_range_start(&range);
+ 	for ( ; vma && vma->vm_start < end_addr; vma = vma->vm_next)
+-		unmap_single_vma(tlb, vma, start_addr, end_addr, NULL);
++		unmap_single_vma(tlb, vma, start_addr, end_addr, NULL, false);
+ 	mmu_notifier_invalidate_range_end(&range);
  }
- EXPORT_SYMBOL(pte_put);
  
-+#ifdef CONFIG_DEBUG_VM
-+void pte_free_debug(pmd_t pmd)
-+{
-+	pte_t *ptep = (pte_t *)pmd_page_vaddr(pmd);
-+	int i = 0;
-+
-+	for (i = 0; i < PTRS_PER_PTE; i++)
-+		BUG_ON(!pte_none(*ptep++));
-+}
-+#else
-+static inline void pte_free_debug(pmd_t pmd)
-+{
-+}
-+#endif
-+
-+static inline void pte_free_rcu(struct rcu_head *rcu)
-+{
-+	struct page *page = container_of(rcu, struct page, rcu_head);
-+
-+	pgtable_pte_page_dtor(page);
-+	__free_page(page);
-+}
-+
-+/*
-+ * free_user_pte - free the user PTE page table page
-+ * @mm: pointer the target address space
-+ * @pmd: pointer to a PMD
-+ * @addr: start address of the tlb range to be flushed
-+ *
-+ * Context: The pmd range has been unmapped and TLB purged. And the user PTE
-+ *	    page table page will be freed by rcu handler.
-+ */
-+void free_user_pte(struct mm_struct *mm, pmd_t *pmd, unsigned long addr)
-+{
-+	struct vm_area_struct vma = TLB_FLUSH_VMA(mm, 0);
-+	spinlock_t *ptl;
-+	pmd_t pmdval;
-+
-+	ptl = pmd_lock(mm, pmd);
-+	pmdval = *pmd;
-+	if (pmd_none(pmdval) || pmd_leaf(pmdval)) {
-+		spin_unlock(ptl);
-+		return;
-+	}
-+	pmd_clear(pmd);
-+	flush_tlb_range(&vma, addr, addr + PMD_SIZE);
-+	spin_unlock(ptl);
-+
-+	pte_free_debug(pmdval);
-+	mm_dec_nr_ptes(mm);
-+	call_rcu(&pmd_pgtable(pmdval)->rcu_head, pte_free_rcu);
-+}
-+
-+/*
-+ * try_to_free_user_pte - try to free the user PTE page table page
-+ * @mm: pointer the target address space
-+ * @pmd: pointer to a PMD
-+ * @addr: virtual address associated with pmd
-+ * @switch_back: indicates if switching back to percpu mode is required
-+ */
-+void try_to_free_user_pte(struct mm_struct *mm, pmd_t *pmd, unsigned long addr,
-+			  bool switch_back)
-+{
-+	pgtable_t pte;
-+
-+	if (&init_mm == mm)
-+		return;
-+
-+	if (!pte_tryget(mm, pmd, addr))
-+		return;
-+	pte = pmd_pgtable(*pmd);
-+	percpu_ref_switch_to_atomic_sync(pte->pte_ref);
-+	rcu_read_lock();
-+	/*
-+	 * Here we can safely put the pte_ref because we already hold the rcu
-+	 * lock, which guarantees that the user PTE page table page will not
-+	 * be released.
-+	 */
-+	__pte_put(pte);
-+	if (percpu_ref_is_zero(pte->pte_ref)) {
-+		rcu_read_unlock();
-+		free_user_pte(mm, pmd, addr & PMD_MASK);
-+		return;
-+	}
-+	rcu_read_unlock();
-+
-+	if (switch_back) {
-+		if (pte_tryget(mm, pmd, addr)) {
-+			percpu_ref_switch_to_percpu(pte->pte_ref);
-+			__pte_put(pte);
-+		}
-+	}
-+}
-+
- #endif /* CONFIG_FREE_USER_PTE */
+@@ -1669,7 +1684,7 @@ void zap_page_range(struct vm_area_struct *vma, unsigned long start,
+ 	update_hiwater_rss(vma->vm_mm);
+ 	mmu_notifier_invalidate_range_start(&range);
+ 	for ( ; vma && vma->vm_start < range.end; vma = vma->vm_next)
+-		unmap_single_vma(&tlb, vma, start, range.end, NULL);
++		unmap_single_vma(&tlb, vma, start, range.end, NULL, true);
+ 	mmu_notifier_invalidate_range_end(&range);
+ 	tlb_finish_mmu(&tlb);
+ }
+@@ -1695,7 +1710,7 @@ static void zap_page_range_single(struct vm_area_struct *vma, unsigned long addr
+ 	tlb_gather_mmu(&tlb, vma->vm_mm);
+ 	update_hiwater_rss(vma->vm_mm);
+ 	mmu_notifier_invalidate_range_start(&range);
+-	unmap_single_vma(&tlb, vma, address, range.end, details);
++	unmap_single_vma(&tlb, vma, address, range.end, details, true);
+ 	mmu_notifier_invalidate_range_end(&range);
+ 	tlb_finish_mmu(&tlb);
+ }
+diff --git a/mm/oom_kill.c b/mm/oom_kill.c
+index 7ec38194f8e1..c4c25a7add7b 100644
+--- a/mm/oom_kill.c
++++ b/mm/oom_kill.c
+@@ -549,7 +549,8 @@ bool __oom_reap_task_mm(struct mm_struct *mm)
+ 				ret = false;
+ 				continue;
+ 			}
+-			unmap_page_range(&tlb, vma, range.start, range.end, NULL);
++			unmap_page_range(&tlb, vma, range.start, range.end,
++					 NULL, false);
+ 			mmu_notifier_invalidate_range_end(&range);
+ 			tlb_finish_mmu(&tlb);
+ 		}
 -- 
 2.20.1
 

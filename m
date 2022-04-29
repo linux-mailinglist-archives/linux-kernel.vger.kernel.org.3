@@ -2,155 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA3A51563F
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:00:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE22451564C
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:01:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381144AbiD2VDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 17:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35388 "EHLO
+        id S1381152AbiD2VDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 17:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381016AbiD2VDW (ORCPT
+        with ESMTP id S1381016AbiD2VDu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 17:03:22 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B4610A4
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:00:02 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id l7so17636361ejn.2
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:00:02 -0700 (PDT)
+        Fri, 29 Apr 2022 17:03:50 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49BCECC516
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:00:30 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id l6-20020a170903120600b0014f43ba55f3so4707522plh.11
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:00:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=Do/g5QMdAtl98rHVTq2xIqPEJqkCyA4fP1f+ylw/eqk=;
-        b=EF6qOKputMgD0IZFycvxJwN+R4VZEbRXVebLIEcsMZoOpexnwLPc6bFOBOsbsFnRgb
-         cIMiPnPsgRdOdIMvXZyjMN2wzCfdB/+FXSTglwrd+o/2JjREmt8ccVx1euJ/DuV3wDqI
-         Q9OgZtdp8WNM0sQ/N0rdVYxODxuDLFYLND7xXUJWGpzAmOBfBDrvFDs+xEnj5qv2LTfx
-         K7+EVPJMaW4odSGIHM2MvLE/UJaxmmmP24eNXGcncLnRqXUloagIiOfC1/hZ1G0lkLHI
-         56UfRmsgVpaEouYR5HnXiD9eXjkHxlW9+JpUeVrmZuu0vVlV8bMuefHKfc0yMVoK90k8
-         ez2g==
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=S9Hhyn59IO86GpZlBshBCG2lnuskDfIzKfShTwaqKtk=;
+        b=FmL1KdBJ1eNXy/M2dSfbP2ckDvEiCeSGy69zaHXh6nqGyY87xj7jM0NGPD/NkKEwAL
+         OeDhUZ1o9FKtm2SIxNnkCg6yBmu5TT+i71Irl+W6YOLxERFf9C+i1Pn678XfmJKcGAEB
+         HIi7eqoekSUU9i06+W9VVlziNgErLs2PUw2DWrnC1VdNgQB0BrRAS5ZelwOw4DbV5C5k
+         9PyIetUD068p7YwRFLuj64iwNAzKZSiJmS5upsLgANiyjdxPBmlz0cfzDo0Jwl1baHd9
+         2TcjVkRmgdeqS/wW0XztDYXkr0Vd/BKtZQ4zHrK5HIQH28U+0s33ysJW3mzZYMCWtTyN
+         tf/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Do/g5QMdAtl98rHVTq2xIqPEJqkCyA4fP1f+ylw/eqk=;
-        b=yBgJSnqw7CC6yzyklQuNDuM6yBCuEaB5PRQVdZVFxHL2ubYYIf4RcCoaZlzDIixFrn
-         3qmTWNKg4J16fanTS88m+7jUuCOIA9/J8L879Aax6KFtmmNy/gc/Lei+3mVrCazjfw91
-         AZOJ+Ckwg1MoHZSgB67g+hrbD0hpLPpRVFjwnt2Nnlp2wkoIdvsg7ojZ8hcL2MZ+O2r5
-         19WgL/wEfl7aP+AoHURndGD9Ul5uAVROnD04rQmhjyYI+xWCL9zFB7rjj7alqcy7mRIV
-         KJZ9u+HMdVjZVs4mMQukCa5s2ZAMgLv/8Ebog9zuGMXM4PJii2aJGGRRx/x2KKBtxXz2
-         UsuQ==
-X-Gm-Message-State: AOAM531R11tHi0ocUUrwg3ksCaCMSbbxvoN3GB9DcO/1netE/QfjXvGr
-        IHlFEH4GzE/YOykBp4tzrLyyL5G0ElbfFQ==
-X-Google-Smtp-Source: ABdhPJzqlq8UgeGohOe1HyyN6u6LL1soeNHr0EDPcvh5R7//tAd0Dwc+MEBmd5tt/SS296qmwEat7Q==
-X-Received: by 2002:a17:907:960a:b0:6f4:91d:3652 with SMTP id gb10-20020a170907960a00b006f4091d3652mr1138680ejc.44.1651266001357;
-        Fri, 29 Apr 2022 14:00:01 -0700 (PDT)
-Received: from [192.168.0.176] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id jz28-20020a17090775fc00b006f3ef214e40sm973973ejc.166.2022.04.29.14.00.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 14:00:00 -0700 (PDT)
-Message-ID: <47202648-bd65-cbba-8674-aed7eb0c46d2@linaro.org>
-Date:   Fri, 29 Apr 2022 23:00:00 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 2/2] dt-bindings: phy: Add bindings doc for Sunplus
- USB2 PHY driver
-Content-Language: en-US
-To:     Vincent Shih <vincent.sunplus@gmail.com>, kishon@ti.com,
-        vkoul@kernel.org, p.zabel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        wells.lu@sunplus.com
-References: <1651215656-19024-1-git-send-email-vincent.sunplus@gmail.com>
- <1651215656-19024-3-git-send-email-vincent.sunplus@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1651215656-19024-3-git-send-email-vincent.sunplus@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=S9Hhyn59IO86GpZlBshBCG2lnuskDfIzKfShTwaqKtk=;
+        b=h0E7fetZtQ8N/He+nV8vYvECFXfnaBTx2Uz+LXKvDoxGUqBhACFt6RhX04kBTGrQWN
+         9VY+xBXCMbq5fsGgRtHoD2Yh138cLEOWmn15zwrVypyBIjMTZQtYq6IDOtzHxBdXqdye
+         ILxu85nOLyn7/VAJPcEuUKx+XhM5RCkKqEziMEkg3Czf+aTJmIq4CD26BL2F7HA3eFTs
+         +ScmPC1sN3z6dAz1l5eN5ydPL7kaDekQLPxtgqYiuJgbBXZrmzIEOIRME4AD3HExXcCw
+         bBTZjlsb0U1SrAVxNkuN/6MxzGjLjl+qyHhVjTwJXcRVJ8FTo/UOUIQE1wWZi/tpuSLY
+         bZEw==
+X-Gm-Message-State: AOAM533+eX9u41BO8PALt5jaH4legpVtA5QiVlqA4A3ZuH9Vj+F1k5J9
+        ligjkOxdyRT2mqAJ6sMI1knJSjDdvCo=
+X-Google-Smtp-Source: ABdhPJx7AaspHwOPgM5B9rhklbLy1+NmQDZ93Etm/y100tXAtQtRSiiF0FnG4bH4qF0cdvLRCr1B7sR12ck=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a17:902:850b:b0:158:27a2:66eb with SMTP id
+ bj11-20020a170902850b00b0015827a266ebmr1209520plb.5.1651266029771; Fri, 29
+ Apr 2022 14:00:29 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Fri, 29 Apr 2022 21:00:17 +0000
+Message-Id: <20220429210025.3293691-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
+Subject: [PATCH v3 0/8] KVM: Fix mmu_notifier vs. pfncache vs. pfncache races
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Mingwei Zhang <mizhang@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/04/2022 09:00, Vincent Shih wrote:
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/sunplus,sp7021-usb2-phy.yaml
-> @@ -0,0 +1,73 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (C) Sunplus Co., Ltd. 2021
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/phy/sunplus,sp7021-usb2-phy.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Sunplus SP7021 USB 2.0 PHY Controller Device Tree bindings
+Fix races between mmu_notifier invalidation and pfncache refresh, and
+within the pfncache itself.
 
-Drop Device Tree bindings
+The first two patches are reverts of the patches sitting in kvm/queue,
+trying to separate and fix the races independently is nigh impossible.
+I assume/hope they can be ignored and the original patches dropped.
 
-> +
-> +maintainers:
-> +  - Vincent Shih <vincent.sunplus@gmail.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: sunplus,sp7021-usb2-phy
-> +
-> +  reg:
-> +    items:
-> +      - description: UPHY register region
-> +      - description: MOON4 register region
-> +
-> +  reg-names:
-> +    items:
-> +      - const: phy
-> +      - const: moon4
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  "#phy-cells":
-> +    const: 0
-> +
-> +  nvmem-cell-names:
-> +    description: names corresponding to the nvmem cells of disconnect voltage
-> +    const: disc_vol
-> +
-> +  nvmem-cells:
-> +    description: nvmem cell address of disconnect voltage
-> +    maxItems: 1
-> +
-> +  sunplus,disc-vol-addr-off:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: the otp address offset of disconnect voltage
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - reg-names
-> +  - clocks
-> +  - resets
-> +  - "#phy-cells"
-> +  - nvmem-cell-names
-> +  - nvmem-cells
-> +  - sunplus,disc-vol-addr-off
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    sp_uphy0: uphy@9c004a80 {
+I've proven all the races, though I was never able to trigger an actual
+error in the race with the mmu_notifier, just a WARN I added on the
+hva=>pfn translation being invalid/not-present when accessing memory
+via the khva.  Hitting the race also required a series of handoffs in the
+kernel between the two tasks, i.e. I can't provide any upstream-worthy
+test :-(
 
-Generic node name, so either phy or usb-phy.
+v3:
+  - Split the refresh serialization to a separate patch.
+  - Use a mutex to serialize refrehses. [Lai Jiangshan]
+  - Add back Cc to stable@ (omitted in v2 because I was less confident
+    that backporting the mess would be a good idea].
+
+v2:
+  - https://lore.kernel.org/all/20220427014004.1992589-1-seanjc@google.com
+  - Map the pfn=>khva outside of gpc->lock. [Maxim]
+  - Fix a page leak.
+  - Fix more races.
+
+v1:
+  https://lore.kernel.org/all/20220420004859.3298837-1-seanjc@google.com
+
+Sean Christopherson (8):
+  Revert "KVM: Do not speculatively mark pfn cache valid to "fix" race"
+  Revert "KVM: Fix race between mmu_notifier invalidation and pfncache
+    refresh"
+  KVM: Drop unused @gpa param from gfn=>pfn cache's __release_gpc()
+    helper
+  KVM: Put the extra pfn reference when reusing a pfn in the gpc cache
+  KVM: Do not incorporate page offset into gfn=>pfn cache user address
+  KVM: Fully serialize gfn=>pfn cache refresh via mutex
+  KVM: Fix multiple races in gfn=>pfn cache refresh
+  KVM: Do not pin pages tracked by gfn=>pfn caches
+
+ include/linux/kvm_types.h |   2 +
+ virt/kvm/pfncache.c       | 180 +++++++++++++++++++++++---------------
+ 2 files changed, 113 insertions(+), 69 deletions(-)
 
 
-Best regards,
-Krzysztof
+base-commit: 2a39d8b39bffdaf1a4223d0d22f07baee154c8f3
+-- 
+2.36.0.464.gb9c8b46e94-goog
+

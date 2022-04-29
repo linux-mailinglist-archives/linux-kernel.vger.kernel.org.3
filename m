@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 229C951472A
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 851DC5146F9
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:44:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357674AbiD2KpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 06:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56198 "EHLO
+        id S1357649AbiD2KpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 06:45:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357559AbiD2Koy (ORCPT
+        with ESMTP id S1357561AbiD2Ko4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 06:44:54 -0400
+        Fri, 29 Apr 2022 06:44:56 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264876F9EA;
-        Fri, 29 Apr 2022 03:41:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8908C12FF;
+        Fri, 29 Apr 2022 03:41:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1651228896; x=1682764896;
+  t=1651228899; x=1682764899;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=aKR3tJNHcnSUKAVT7Q3BQcuQSowY0bVH8z3w3WzyYKU=;
-  b=EAc05mOEb+F8GbKP9HAdheio/KqOSyhvps97bz3UVvDcEyOKzpp5WVJL
-   PmBc18E5AJSGa+KP/JczxHLR9IoOAP6gSTn7KR6mvrdIrifwKg7R3Uk/2
-   ze1JgoIwl2fHnUHFRgOFwA3HbwBkzKB39PpxrXjphARUyyIJCsu3nycpF
-   XL2Ga6uNCkGOzzSmmSA7mXtxbKxedhbNuefmUGTYit4YXNqm3hqXQ9QDW
-   xo65Yxxcz/2Ol0ALcigdbUhaMMT4YqzzCBvvjDh6gr7+B4TYT0iDeAykx
-   0AK0+u1XNXcj6KXwBysm4ByqknDIKsRPXIxPiGXa8VQ1WvweCPldQp7w2
-   g==;
+  bh=pXFB7NHcDCItTBt2mpH7jbaa68A7uQ0UnpA7fbg8+bw=;
+  b=0by1ELDgDQXxFVsxOYUbLaYUQ/bBXUAaUvyOaysysnen4u5yDHiUEpig
+   D6NGUPFmurhgrBhY3qtzki7b3RhlIsAgVULmFRIB0bL+0/jB02DkfGbbr
+   0xikhgGcH1ApU7XJ8KbouwdxZiqKSSeNRI+Q8q2n9gkmLrDpi5dxMOepb
+   p0+ICvvtyfEXiKUyWMZ8YFocbB2lsZJUDAlxtdiJdx5S57ZmxnTuGj+Bw
+   Jn2cpC+THYexoj6S8iukBah3X2yptSDFyecSLuXJMy3mv5RszQ94e4GGq
+   7hLBecf6AniJOd8wiKTQT31sJwCMgqqmJYRrYpQrnWNhXWlOky5mVNIha
+   A==;
 X-IronPort-AV: E=Sophos;i="5.91,298,1647327600"; 
-   d="scan'208";a="154297285"
+   d="scan'208";a="154297294"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Apr 2022 03:41:35 -0700
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Apr 2022 03:41:38 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 29 Apr 2022 03:41:35 -0700
+ 15.1.2375.17; Fri, 29 Apr 2022 03:41:38 -0700
 Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
  (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Fri, 29 Apr 2022 03:41:32 -0700
+ Transport; Fri, 29 Apr 2022 03:41:35 -0700
 From:   Conor Dooley <conor.dooley@microchip.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -51,9 +51,9 @@ CC:     Paul Walmsley <paul.walmsley@sifive.com>,
         Cyril Jean <Cyril.Jean@microchip.com>,
         <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, "Arnd Bergmann" <arnd@arndb.de>
-Subject: [PATCH v1 3/8] riscv: dts: microchip: remove soc vendor from filenames
-Date:   Fri, 29 Apr 2022 11:40:36 +0100
-Message-ID: <20220429104040.197161-4-conor.dooley@microchip.com>
+Subject: [PATCH v1 4/8] dt-bindings: riscv: microchip: document icicle reference design
+Date:   Fri, 29 Apr 2022 11:40:37 +0100
+Message-ID: <20220429104040.197161-5-conor.dooley@microchip.com>
 X-Mailer: git-send-email 2.35.2
 In-Reply-To: <20220429104040.197161-1-conor.dooley@microchip.com>
 References: <20220429104040.197161-1-conor.dooley@microchip.com>
@@ -69,67 +69,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Having the SoC vendor both as the directory and in the filename adds
-little. Remove microchip from the filenames so that the files will
-resemble the other directories in riscv (and arm64). The new names
-follow a soc-board.dts & soc{,-fabric}.dtsi pattern.
+Add a compatible for the icicle kit's reference design. This represents
+the FPGA fabric's contents & is versioned to denote which release of the
+reference design it applies to.
 
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- arch/riscv/boot/dts/microchip/Makefile                          | 2 +-
- .../microchip/{microchip-mpfs-fabric.dtsi => mpfs-fabric.dtsi}  | 0
- .../{microchip-mpfs-icicle-kit.dts => mpfs-icicle-kit.dts}      | 2 +-
- .../riscv/boot/dts/microchip/{microchip-mpfs.dtsi => mpfs.dtsi} | 2 +-
- 4 files changed, 3 insertions(+), 3 deletions(-)
- rename arch/riscv/boot/dts/microchip/{microchip-mpfs-fabric.dtsi => mpfs-fabric.dtsi} (100%)
- rename arch/riscv/boot/dts/microchip/{microchip-mpfs-icicle-kit.dts => mpfs-icicle-kit.dts} (98%)
- rename arch/riscv/boot/dts/microchip/{microchip-mpfs.dtsi => mpfs.dtsi} (99%)
+ .../devicetree/bindings/riscv/microchip.yaml          | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/arch/riscv/boot/dts/microchip/Makefile b/arch/riscv/boot/dts/microchip/Makefile
-index 855c1502d912..af3a5059b350 100644
---- a/arch/riscv/boot/dts/microchip/Makefile
-+++ b/arch/riscv/boot/dts/microchip/Makefile
-@@ -1,3 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0
--dtb-$(CONFIG_SOC_MICROCHIP_POLARFIRE) += microchip-mpfs-icicle-kit.dtb
-+dtb-$(CONFIG_SOC_MICROCHIP_POLARFIRE) += mpfs-icicle-kit.dtb
- obj-$(CONFIG_BUILTIN_DTB) += $(addsuffix .o, $(dtb-y))
-diff --git a/arch/riscv/boot/dts/microchip/microchip-mpfs-fabric.dtsi b/arch/riscv/boot/dts/microchip/mpfs-fabric.dtsi
-similarity index 100%
-rename from arch/riscv/boot/dts/microchip/microchip-mpfs-fabric.dtsi
-rename to arch/riscv/boot/dts/microchip/mpfs-fabric.dtsi
-diff --git a/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts b/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts
-similarity index 98%
-rename from arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts
-rename to arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts
-index c71d6aa6137a..84b0015dfd47 100644
---- a/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts
-+++ b/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts
-@@ -3,7 +3,7 @@
+diff --git a/Documentation/devicetree/bindings/riscv/microchip.yaml b/Documentation/devicetree/bindings/riscv/microchip.yaml
+index 3f981e897126..c9d8fcc7a69e 100644
+--- a/Documentation/devicetree/bindings/riscv/microchip.yaml
++++ b/Documentation/devicetree/bindings/riscv/microchip.yaml
+@@ -17,10 +17,13 @@ properties:
+   $nodename:
+     const: '/'
+   compatible:
+-    items:
+-      - enum:
+-          - microchip,mpfs-icicle-kit
+-      - const: microchip,mpfs
++    oneOf:
++      - items:
++          - enum:
++              - microchip,mpfs-icicle-kit
++          - const: microchip,mpfs
++      - items:
++          - const: microchip,mpfs-icicle-reference-rtlv2203
  
- /dts-v1/;
+ additionalProperties: true
  
--#include "microchip-mpfs.dtsi"
-+#include "mpfs.dtsi"
- 
- /* Clock frequency (in Hz) of the rtcclk */
- #define RTCCLK_FREQ		1000000
-diff --git a/arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi b/arch/riscv/boot/dts/microchip/mpfs.dtsi
-similarity index 99%
-rename from arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi
-rename to arch/riscv/boot/dts/microchip/mpfs.dtsi
-index bf21a2edd180..cc3386068c2d 100644
---- a/arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi
-+++ b/arch/riscv/boot/dts/microchip/mpfs.dtsi
-@@ -3,7 +3,7 @@
- 
- /dts-v1/;
- #include "dt-bindings/clock/microchip,mpfs-clock.h"
--#include "microchip-mpfs-fabric.dtsi"
-+#include "mpfs-fabric.dtsi"
- 
- / {
- 	#address-cells = <2>;
 -- 
 2.35.2
 

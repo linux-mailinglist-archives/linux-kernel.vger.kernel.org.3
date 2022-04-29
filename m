@@ -2,91 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF8B5149CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F39885149EA
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359487AbiD2MvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 08:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
+        id S1359549AbiD2MyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 08:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237696AbiD2MvQ (ORCPT
+        with ESMTP id S1344968AbiD2MyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 08:51:16 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70BC3C9B77
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 05:47:58 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id h12so7029069plf.12
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 05:47:58 -0700 (PDT)
+        Fri, 29 Apr 2022 08:54:23 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15C8B3695;
+        Fri, 29 Apr 2022 05:51:04 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id r13so15258826ejd.5;
+        Fri, 29 Apr 2022 05:51:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=LqkX6XBeIW8TsZdpLdtzQP+p29rZ0uf9pRgwD7D0pIM=;
-        b=mpzLDLmTVzRoHeGa90/5vPbjvJXWXjW3wYCr4FQCoM4lTyqQ2gpD4xho2hxFKlU1iz
-         jbu8guu6c20Ip9M7TGYljqL+OWrKyDTDvZxz38Xt4FbzybJHcLW9WcSgiNtVr3lt6eNd
-         Jd0R2tH+pMK3iWVAD0uIoNWUbxmeJdLxJN7beHE7+qgfNikXnFvknzEt04u4l5yw41yz
-         syhEx6JVjTlimyLM2r645sxW20vr5uedumqSGiaNHF+eeoUpg1kmzpUER0m8YyXWMGZy
-         K5wGtH6nlgRx6JOVBUDtD9jFX6Syy+DjP1Qo8fC6fCY/aU0uoa4zXyX7Tav8CFrRhXXp
-         YCxg==
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rDzxu9MW9GN24hu7QhGn/9ENmvqmJvE90rNpUC/IGqQ=;
+        b=AHk9xNI2GrdZ+pjC2XWPm9pf9PeG3cO+US4+NvK09Z0Mymct2lnm7lYFdCTJ5pIzGf
+         bOKbRk9rkzPKYQPeA8Mj52SWaVEKwyqNLYpfYVJKTAjPN91ISLakjoNqMopYtv06N1bz
+         fGHT+9S4otZtcVxBalgYU4ohFChLt0FEvMeADyRqkhwZsduABGMwCzmnXDfbVRU1ZR3U
+         TQODJXQxdb9CF19dSELha6IdD6EBm4f15/Th5FXudHtqXslEAnwI4RpoJ0OaPJVekWs0
+         8tGU3y+hgc1EbGnotEV9yev2xV6g9kIsXrLlYakNsVR+NA7HT0mIizbNjTI3AKtzo6Di
+         +ydA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=LqkX6XBeIW8TsZdpLdtzQP+p29rZ0uf9pRgwD7D0pIM=;
-        b=ImyxUxrIuboGywh+ga/ZRR3SYpsdz9U5JyrYE2k7RXfWcWMpSduD1qJo2nDgmU9JiE
-         SCcLW6sRvj6FVkZQkLKDlye/Pvul2wl4TlfOetqPNV6Znt+noCzR+58Ycp1l+il9Fn8r
-         6dG4NRS3KB2V/WS6xTS5X6y6lj4SiaZ9VAQRPvjVmUcOFLYjfavGWa3cq/txcOJkMVe8
-         lQ2M2zjye1ikdsWpShjVdjuEUeeCkglttowHL+Z8a30ejl9KeLCsomnskBaDyxoeH5Ew
-         uO1hsgtsF27xJZrEMnlmP8qgLLOMaWatkEXvpZJwYVcvrO+oJ+diESRoYB55R13BTX/Y
-         x5Tg==
-X-Gm-Message-State: AOAM53387kskigRdUMOZF7JiNCXJhPd+X2UpErmUsteiuXUZEVc8r+7G
-        g8LZQj0pFVv9cMCbSl7cjAF31g==
-X-Google-Smtp-Source: ABdhPJzU+qblFR9OFGJ1fY/MfM/OOEVItbbvb3U7IR5ZJe6SfP7SbtD3DpAdOk++ANiUU8TEidxjqQ==
-X-Received: by 2002:a17:902:ecd2:b0:15b:618a:2a8f with SMTP id a18-20020a170902ecd200b0015b618a2a8fmr38429433plh.140.1651236477929;
-        Fri, 29 Apr 2022 05:47:57 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id u19-20020a63b553000000b003c14af50616sm5885047pgo.46.2022.04.29.05.47.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 05:47:57 -0700 (PDT)
-Message-ID: <8f8d07c1-9276-df86-f1dc-3d272d4ab91d@kernel.dk>
-Date:   Fri, 29 Apr 2022 06:47:55 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v1] io_uring: Fix memory leak if file setup fails.
-Content-Language: en-US
-To:     Noah Goldstein <goldstein.w.n@gmail.com>
-Cc:     asml.silence@gmail.com, io-uring@vger.kernel.org,
+        bh=rDzxu9MW9GN24hu7QhGn/9ENmvqmJvE90rNpUC/IGqQ=;
+        b=7kvhDfjD5RX47Ixb3GY3TwBBObJXsI3nh2B4bPfNvke1WpiHVguSqmYcAegU1wNC6M
+         Nkas7ZXhP5hnfG77nQzVkBm6PMAShiTQPkgGRJzF3BUBf2dCcoi8K/F9jPDsxuMyXekU
+         GxwiBvHc4jK6KE8unqjV51I/mqedKfiJFj7GNjeNtTzdLrCMn1ctVc8srvNVfSnD16+d
+         KP0p6lM4ulbRyMjII6re12ZUTO90VswNwRIgKuust1ciVqI5In4pUuZOptW6DDOOXTVt
+         3cw9ArFc9rU9uw/dsfeRQyJsXwsR+hSY+c9eTExuUk3aCsngVzMFQbhPS9T0ZWaIrowe
+         Kr6Q==
+X-Gm-Message-State: AOAM531Ua8UGOGblQ+NaPNtKbd15YPERYpGXYvEwApss7MeKCooJ6GUU
+        AMWaq2XUhGLrHTuIEbqHBuk=
+X-Google-Smtp-Source: ABdhPJw8abQdctpop9AbAHRH+V0cqVAgRfZ2umYQQQl43FRc1mTpnZEldM/qz76veB92TvRxDzeurA==
+X-Received: by 2002:a17:906:5641:b0:6da:8691:3fcc with SMTP id v1-20020a170906564100b006da86913fccmr34926623ejr.50.1651236663092;
+        Fri, 29 Apr 2022 05:51:03 -0700 (PDT)
+Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.googlemail.com with ESMTPSA id hf27-20020a1709072c5b00b006f3ef214e33sm615347ejc.153.2022.04.29.05.51.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 05:51:02 -0700 (PDT)
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Ansuel Smith <ansuelsmth@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220429004244.3557063-1-goldstein.w.n@gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220429004244.3557063-1-goldstein.w.n@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Subject: [RESEND PATCH v3 0/2] Add nvmem support for dynamic partitions
+Date:   Fri, 29 Apr 2022 14:48:23 +0200
+Message-Id: <20220429124825.21477-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/28/22 6:42 PM, Noah Goldstein wrote:
-> If `get_unused_fd_flags` files fails (either in setting up `ctx` as
-> `tctx->last` or `get_unused_fd_flags`) `ctx` will never be freed.
+This very small series comes to fix the very annyoing problem of
+partitions declared by parser at runtime NOT supporting nvmem cells
+definition.
 
-There's a comment there telling you why, the fput will end up
-releasing it just like it would when an application closes it.
+The current implementation is very generic. The idea is to provide an of
+node if defined for everyone and not strictly limit this to nvmem stuff.
+But still the actual change is done only for nvmem-cells mtd. (just to
+make sure) This can totally change by removing the compatible check.
 
-> I very well may be missing something (or there may be a double
-> free if the failure is after `get_unused_fd_flags`) but looks
-> to me to be a memory leak.
+The idea here is that a user can still use these dynamic parsers
+instead of declaring a fixed-partition and also declare how nvmem-cells
+are defined for the partition.
+This live with the assumption that dynamic partition have always the
+same name and they are known. (this is the case for smem-part partition
+that would require a bootloader reflash to change and for parsers like
+cmdlinepart where the name is always the same.)
+With this assumption, it's easy to fix this problem. Just introduce a
+new partition node that will declare just these special partition.
+Mtdcore then will check if these special declaration are present and
+connect the dynamic partition with the OF node present in the dts. Nvmem
+will automagically fin the OF node and cells will be works based on the
+data provided by the parser.
 
-Have you tried synthetically reproducing the two failures you're
-thinking of and tracing cleanup?
+The initial idea was to create a special nvmem driver with a special
+compatible where a user would declare the mtd partition name and this
+driver would search it and register the nvmem cells but that became
+difficult really fast, mtd notifier system is problematic for this kind
+of stuff. So here is the better implementation. A variant of this is
+already tested on openwrt where we have devices that use cmdlinepart.
+(that current variant have defined in the dts the exact copy of
+cmdlinepart in the fixed-partition scheme and we patched the cmdlinepart
+parser to scan this fixed-partition node (that is ignored as cmdlinepart
+have priority) and connect the dynamic partition with the dts node)
+
+I provided an example of this in the documentation commit.
+In short it's needed to add to the partitions where the compatible parser
+is declared, a partition with just the label declared (instead of the reg).
+Then declare some nvmem-cells and it will all work at runtime.
+Mtdcore will check if a node with the same label is present and assign an
+OF node to the MTD.
+
+I currently tested this on my device that have smem-part and the
+gmac driver use nvmem to get the mac-address. This works correctly and
+the same address is provided.
+
+v3:
+- Fix warning from bot (function not declared as static)
+- Updated code to support also node name
+- Made partition label optional
+v2:
+- Simplify this. Drop dynamic-partition
+- Fix problem with parser with ko
+- Do not pollude mtd_get_of_node
+- Fix problem with Documentation
+
+Ansuel Smith (2):
+  dt-bindings: mtd: partitions: Document new partition-dynamic nodes
+  mtd: core: introduce of support for dynamic partitions
+
+ .../mtd/partitions/partition-dynamic.yaml     | 56 +++++++++++++++++++
+ .../mtd/partitions/qcom,smem-part.yaml        |  4 ++
+ drivers/mtd/mtdcore.c                         | 56 +++++++++++++++++++
+ 3 files changed, 116 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mtd/partitions/partition-dynamic.yaml
 
 -- 
-Jens Axboe
+2.34.1
 

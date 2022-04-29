@@ -2,107 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F00755156BF
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:23:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C12B25156C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237826AbiD2V0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 17:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58260 "EHLO
+        id S236993AbiD2Van (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 17:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236993AbiD2V0K (ORCPT
+        with ESMTP id S232449AbiD2Vai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 17:26:10 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A4D53B54
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:22:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=fq0OOJPCMavBT+EhrhU7rTo/wq7ZnPOHuT6uKwhzCBs=; b=WssMZGSrGMbWgJ5GxspxEKISec
-        dpJIGdZzLUxusmk2snNNTSBjuVQOfCcmfm4lfzLodCCq0Rt16xnANmtw7lV5v12x/iiQUNYJee69H
-        6FU9hFFPmoom004Q3RqWOBxRTMl9dVUlmqyemnnVZaBJR3OkfOpEOKYFHo/8/ER0U3ff9zsLxa6WF
-        dalzKtPvYELQnsQDqvksOCp3WkqOkK5e30NngL4kdiaYMISpNPCcPi2fJoWbjLPBwXhENQc0V8Nym
-        ZTOg68g+ommUgIyHii98aKO5g9YsPwxFuKFCDTPZd+5sX3NwLQKScHExbChmcHyKqo+tvv0HqRwN2
-        omLRSXwg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nkY4S-00CoKv-3Q; Fri, 29 Apr 2022 21:22:36 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AF188300385;
-        Fri, 29 Apr 2022 23:22:35 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 966A220295B20; Fri, 29 Apr 2022 23:22:35 +0200 (CEST)
-Date:   Fri, 29 Apr 2022 23:22:35 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] objtool: Fix STACK_FRAME_NON_STANDARD reloc type
-Message-ID: <YmxXG3Teg0gJ5PVh@hirez.programming.kicks-ass.net>
-References: <20220429092024.GT2731@worktop.programming.kicks-ass.net>
- <20220429201325.d5kifdezdru2i3lp@treble>
+        Fri, 29 Apr 2022 17:30:38 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A6C9F398;
+        Fri, 29 Apr 2022 14:27:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651267639; x=1682803639;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=iBDXurEoX+VAKyel977MnypOTEgCCqkREVmIpcHL3L8=;
+  b=Yqjq1jjpBpBJCHOStlm51fzUd2zor/2geNZLJXdtcmg2gcX7F0Wig7MK
+   c3V856oua/NY4tWhvndXL6ffYZhPOmHOSp2moKSSBzk+ZkjUSmA0vSU1g
+   WSdlFLD3LeLOQGBtbVRudwkrnR1gYKGpAwK/voPC+Yqq90vl/BsrGtj5+
+   8S8+M+U1Yw6LT1ajORiUAec6J+bLVAmYbWBvtRvJWA1tJgX/tt8+P9Rp7
+   Ee8Ud40jG8U71abrhs1QIrH/lu/fU8sDOPrCwITiGLVfeZ5DH91wK9XS3
+   2gj1tvzlOZP865CmtYzITIJsWtnrGBjX2XxPcakiolBelox7iLCn6SywV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="247333950"
+X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
+   d="scan'208";a="247333950"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 14:27:00 -0700
+X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
+   d="scan'208";a="582407851"
+Received: from jinggu-mobl1.amr.corp.intel.com (HELO [10.212.30.227]) ([10.212.30.227])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 14:26:59 -0700
+Message-ID: <915ed339-f5e6-c31f-ffe1-a80402ce78dd@intel.com>
+Date:   Fri, 29 Apr 2022 14:27:16 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220429201325.d5kifdezdru2i3lp@treble>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 00/21] TDX host kernel support
+Content-Language: en-US
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Kai Huang <kai.huang@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>
+References: <cover.1649219184.git.kai.huang@intel.com>
+ <522e37eb-68fc-35db-44d5-479d0088e43f@intel.com>
+ <CAPcyv4g5E_TOow=3pFJXyFr=KLV9pTSnDthgz6TuXvru4xDzaQ@mail.gmail.com>
+ <de9b8f4cef5da03226158492988956099199aa60.camel@intel.com>
+ <CAPcyv4iGsXkHAVgf+JZ4Pah_fkCZ=VvUmj7s3C6Rkejtdw_sgQ@mail.gmail.com>
+ <92af7b22-fa8a-5d42-ae15-8526abfd2622@intel.com>
+ <CAPcyv4iG977DErCfYTqhVzuZqjtqFHK3smnaOpO3p+EbxfvXcQ@mail.gmail.com>
+ <4a5143cc-3102-5e30-08b4-c07e44f1a2fc@intel.com>
+ <CAPcyv4i6X6ODNbOnT7+NEzpicLS4m9bNDybZLvN3gqXFTTf=mg@mail.gmail.com>
+ <4d0c7316-3564-ef27-1113-042019d583dc@intel.com>
+ <CAPcyv4gYw3k4YMEV1E26fMx-GNCNCb+zJDERfhieCrROWv_Jxg@mail.gmail.com>
+ <73ed1e55-7e7c-2995-b411-8e26b711cc22@intel.com>
+ <CAPcyv4gzEvMA4F5ncuhVenRDuz7Tq6aCSJR=z7wVqNGOYGS5Kw@mail.gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <CAPcyv4gzEvMA4F5ncuhVenRDuz7Tq6aCSJR=z7wVqNGOYGS5Kw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 01:13:25PM -0700, Josh Poimboeuf wrote:
-> Can use _ASM_PTR here, and objtool.h needs synced to tools.
+On 4/29/22 14:20, Dan Williams wrote:
+> Is there something already like this today for people that, for
+> example, attempt to use PCI BAR mappings as memory? Or does KVM simply
+> allow for garbage-in garbage-out?
 
-Here goes..
+I'm just guessing, but I _assume_ those garbage PCI BAR mappings are how
+KVM does device passthrough.
 
----
-Subject: objtool: Fix STACK_FRAME_NON_STANDARD reloc type
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Tue Apr 26 17:08:53 CEST 2022
-
-STACK_FRAME_NON_STANDARD results in inconsistent relocation types
-depending on .c or .S usage:
-
-  Relocation section '.rela.discard.func_stack_frame_non_standard' at offset 0x3c01090 contains 5 entries:
-  Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-  0000000000000000  00020c2200000002 R_X86_64_PC32          0000000000047b40 do_suspend_lowlevel + 0
-  0000000000000008  0002461e00000001 R_X86_64_64            00000000000480a0 machine_real_restart + 0
-  0000000000000010  0000001400000001 R_X86_64_64            0000000000000000 .rodata + b3d4
-  0000000000000018  0002444600000002 R_X86_64_PC32          00000000000678a0 __efi64_thunk + 0
-  0000000000000020  0002659d00000001 R_X86_64_64            0000000000113160 __crash_kexec + 0
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- include/linux/objtool.h       |    2 +-
- tools/include/linux/objtool.h |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
---- a/include/linux/objtool.h
-+++ b/include/linux/objtool.h
-@@ -137,7 +137,7 @@ struct unwind_hint {
- 
- .macro STACK_FRAME_NON_STANDARD func:req
- 	.pushsection .discard.func_stack_frame_non_standard, "aw"
--		.long \func - .
-+	_ASM_PTR \func
- 	.popsection
- .endm
- 
---- a/tools/include/linux/objtool.h
-+++ b/tools/include/linux/objtool.h
-@@ -137,7 +137,7 @@ struct unwind_hint {
- 
- .macro STACK_FRAME_NON_STANDARD func:req
- 	.pushsection .discard.func_stack_frame_non_standard, "aw"
--		.long \func - .
-+	_ASM_PTR \func
- 	.popsection
- .endm
- 
+I know that some KVM users even use mem= to chop down the kernel-owned
+'struct page'-backed memory, then have a kind of /dev/mem driver to let
+the memory get mapped back into userspace.  KVM is happy to pass through
+those mappings.

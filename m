@@ -2,108 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1001151579D
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 00:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAD20515793
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 00:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377970AbiD2WDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 18:03:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50456 "EHLO
+        id S1381103AbiD2WDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 18:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378803AbiD2WDl (ORCPT
+        with ESMTP id S1379096AbiD2WDu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 18:03:41 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D1411B7AC;
-        Fri, 29 Apr 2022 15:00:14 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id c11so2567088wrn.8;
-        Fri, 29 Apr 2022 15:00:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3YvJQ8AnVTjfxXBmIcp4SKnbUwO/iQ1O2/sNT7auhlc=;
-        b=Mt/mI0/OBXBeNhi9sXshjI8jxnT5wdIT8DJ3pLbrSH5vmO4Cd5tRHisCYP9Szu+M+e
-         1i0MOQGIeOEWLLM3DbI++ffIRdM44r//1bhYJnM6WYFAHuH3hMxgSCZorYLY4YIrIBxz
-         yvbIRpUHCuKQUB09fySYM8xYFW9V6VOqhuQcuIN6uTngS6JELu22Q2qtRXnVoKAf0kHg
-         hBThL82Tc+5LAJLkfrQVwIEPTlxUkGrbzDzmTFjMCJwy4Y37aDoiJg0ZKRVbjeKb1ZnO
-         f/niq1HPBVrZPWO5rTcaDsnvzYy6UkSn5Umu4KvCn+aKuwQF4uk90AUGy+Hh2abxlefT
-         B8Qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3YvJQ8AnVTjfxXBmIcp4SKnbUwO/iQ1O2/sNT7auhlc=;
-        b=7LCpfwuhKHGB/0R3Xmjmv5j3quDCJRIDKEZlqNYhJ0be1j5fKQcT1ftgmq7RtBV3LK
-         CuEf3bPK6r26peOFdJL43U0gjhlbLOIAPYVjeKkobPxioEbaKP/DtmvINZoG/yivTfvN
-         9Xq7SSEpv/L1Co5kPoshRvyvF1eWgyv9mWhopWdRr/fRTf7hQt1t6/1NZBCSegJ+UF2g
-         Vpk/nWVbuBLsrwcsG7BRIQMc6WxrW2nezDruoocdBWQ11+vLmuJInBkXDcoYmbRPXG4h
-         hcGP7al3egGdK+c8rL7/sBOIZ1ER8x/Cpb63A5wjhaCqjjDrKoyirQdJP+OGbNhL/ytP
-         1NdQ==
-X-Gm-Message-State: AOAM530FMywxX5K+jffGtbrc76UgiVxXH7Ibmx1CF3pAbdN5ZBv4bz3I
-        yZjukaq+fQM7h1kmMakmd0osIqzrQkdNpJTXPSk=
-X-Google-Smtp-Source: ABdhPJzfbZNuQ24oj/IbRhwz5VVFSzob3RDgay6MXgeZTuyPfwNUqu7QRyHY+WjpuSo4eoDsyxQebCkk3u3qwldIH24=
-X-Received: by 2002:a05:6000:18c5:b0:207:ac0d:f32 with SMTP id
- w5-20020a05600018c500b00207ac0d0f32mr789629wrq.574.1651269612858; Fri, 29 Apr
- 2022 15:00:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220429215324.3729441-1-dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220429215324.3729441-1-dmitry.baryshkov@linaro.org>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Fri, 29 Apr 2022 15:00:02 -0700
-Message-ID: <CAF6AEGu+Ve1i_WHwcyXkGZKnv0aOiQNW7NCv=ToDpoorsn=TgA@mail.gmail.com>
-Subject: Re: [PATCH v2] MAINTAINERS: Add Dmitry as MSM DRM driver co-maintainer
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 29 Apr 2022 18:03:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74B013FBA;
+        Fri, 29 Apr 2022 15:00:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AED0962275;
+        Fri, 29 Apr 2022 22:00:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDC10C385A7;
+        Fri, 29 Apr 2022 22:00:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651269624;
+        bh=yNgvZ1w6j0wn0gJjn3Jaaz8UA8LJOCaxNlCblYsp6Fs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Ey/m78Y6tu0GBqTH6NyWHzaC7vgRNJhEY6Vw+hMPcj4Fiq4wF8lLbYXSJID6UbS61
+         3qfdckpr3iC4r/Day5Vxaq6phJAcWANrxyoTmiYG1UpeUOvuCECA8JWjDSUmjQNVeX
+         //qNOhJwNmYbbQLZRcm0DHusz0JaLv/dWrmLzW2Wgv1yO4UhSlC4XbHTgdaXFO+dOB
+         K8/k23uG5cTkWPZKYDhSGFzjNLXWZHlHJLxc5WmfxL+dYPfyClhuAsqZafdYrm47Su
+         hkvrUQWMqSJRPNSqY6gnHqelGJDkuHvsu0DZZC5HFsjW59Ot7eIOwvaowmb9LaKSuE
+         kes/J6RG3f/Hw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nkYez-0082vp-Lb; Fri, 29 Apr 2022 23:00:21 +0100
+Date:   Fri, 29 Apr 2022 23:00:21 +0100
+Message-ID: <87ilqr8s96.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        hidehiro.kawai.ez@hitachi.com, jgross@suse.com,
+        john.ogness@linutronix.de, keescook@chromium.org, luto@kernel.org,
+        mhiramat@kernel.org, mingo@redhat.com, paulmck@kernel.org,
+        peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org
+Subject: Re: [PATCH 02/30] ARM: kexec: Disable IRQs/FIQs also on crash CPUs shutdown path
+In-Reply-To: <Ymxcaqy6DwhoQrZT@shell.armlinux.org.uk>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+        <20220427224924.592546-3-gpiccoli@igalia.com>
+        <87mtg392fm.wl-maz@kernel.org>
+        <71d829c4-b280-7d6e-647d-79a1baf9408b@igalia.com>
+        <Ymxcaqy6DwhoQrZT@shell.armlinux.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: linux@armlinux.org.uk, gpiccoli@igalia.com, mikelley@microsoft.com, akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com, kexec@lists.infradead.org, linux-kernel@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com, linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org, linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org, linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org, sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org, x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com, fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com, arnd@arndb.de, 
+ bp@alien8.de, corbet@lwn.net, d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com, dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org, hidehiro.kawai.ez@hitachi.com, jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org, luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com, paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org, senozhatsky@chromium.org, stern@rowland.harvard.edu, tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com, will@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 2:53 PM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> For the past several releases I have been assisting Rob by writing,
-> collecting, testing and integrating patches for non-GPU and non-core
-> parts of MSM DRM driver, while Rob is more interested in improving the
-> GPU-related part. Let's note this in the MAINTAINERS file.
->
-> While we are at it, per Rob's suggestion let's also promote Abhinav
-> Kumar to M: (as he is actively working on the driver) and switch Sean
-> Paul to R: (since he isn't doing much on msm these days).
->
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+On Fri, 29 Apr 2022 22:45:14 +0100,
+"Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
+> 
+> On Fri, Apr 29, 2022 at 06:38:19PM -0300, Guilherme G. Piccoli wrote:
+> > Thanks Marc and Michael for the review/discussion.
+> > 
+> > On 29/04/2022 15:20, Marc Zyngier wrote:
+> > > [...]
+> > 
+> > > My expectations would be that, since we're getting here using an IPI,
+> > > interrupts are already masked. So what reenabled them the first place?
+> > > 
+> > > Thanks,
+> > > 
+> > > 	M.
+> > > 
+> > 
+> > Marc, I did some investigation in the code (and tried/failed in the ARM
+> > documentation as well heh), but this is still not 100% clear for me.
+> > 
+> > You're saying IPI calls disable IRQs/FIQs by default in the the target
+> > CPUs? Where does it happen? I'm a bit confused if this a processor
+> > mechanism, or it's in code.
+> 
+> When we taken an IRQ, IRQs will be masked, FIQs will not. IPIs are
+> themselves interrupts, so IRQs will be masked while the IPI is being
+> processed. Therefore, there should be no need to re-disable the
+> already disabled interrupts.
+> 
+> > But crash_smp_send_stop() is different, it seems to IPI the other CPUs
+> > with the flag IPI_CALL_FUNC, which leads to calling
+> > generic_smp_call_function_interrupt() - does it disable interrupts/FIQs
+> > as well? I couldn't find it.
+> 
+> It's buried in the architecture behaviour. When the CPU takes an
+> interrupt and jumps to the interrupt vector in the vectors page, it is
+> architecturally defined that interrupts will be disabled. If they
+> weren't architecturally disabled at this point, then as soon as the
+> first instruction is processed (at the interrupt vector, likely a
+> branch) the CPU would immediately take another jump to the interrupt
+> vector, and this process would continue indefinitely, making interrupt
+> handling utterly useless.
+> 
+> So, you won't find an explicit instruction in the code path from the
+> vectors to the IPI handler that disables interrupts - because it's
+> written into the architecture that this is what must happen.
+> 
+> IRQs are a lower priority than FIQs, so FIQs remain unmasked.
 
-Acked-by: Rob Clark <robdclark@gmail.com>
+Ah, you're of course right. That's one of the huge differences between
+AArch32 and AArch64, where the former has per target mode masking
+rules, and the later masks everything on entry...
 
-> ---
->  MAINTAINERS | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 61d9f114c37f..782934f318d4 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -6254,8 +6254,9 @@ F:        drivers/gpu/drm/tiny/panel-mipi-dbi.c
->
->  DRM DRIVER FOR MSM ADRENO GPU
->  M:     Rob Clark <robdclark@gmail.com>
-> -M:     Sean Paul <sean@poorly.run>
-> -R:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-> +M:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-> +M:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> +R:     Sean Paul <sean@poorly.run>
->  L:     linux-arm-msm@vger.kernel.org
->  L:     dri-devel@lists.freedesktop.org
->  L:     freedreno@lists.freedesktop.org
-> --
-> 2.35.1
->
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

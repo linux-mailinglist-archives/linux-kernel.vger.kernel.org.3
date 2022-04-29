@@ -2,60 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F46F515165
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6EE515167
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379368AbiD2RP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 13:15:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54678 "EHLO
+        id S1379447AbiD2RQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 13:16:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244469AbiD2RP5 (ORCPT
+        with ESMTP id S1379435AbiD2RQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 13:15:57 -0400
-Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE103914B;
-        Fri, 29 Apr 2022 10:12:38 -0700 (PDT)
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 23THCCOg002537;
-        Sat, 30 Apr 2022 02:12:12 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 23THCCOg002537
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1651252333;
-        bh=67OrUMxmi8c2orxD4qJYEnt8eFDU607uv+w+xWvgsbI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=G1+Igqp3LdvVUYVkvD2XWWDkrazVuKwzj3MokRMF2sVuQ77Ti/SyEQE1Sdp4g5rWn
-         pxpdmVave9hNUfHkqAKR1RKablgomr+gn4TrX015VXi/mFi4K8JnSrmXWgGACIhv8h
-         bDCAv+d2Xl0r8aQTe2qGO9gYIBed0rVhHNc3R3ZHvvKYVPfazLh4Ki7FOxhows097j
-         r1cZZM+Y6sLBJ8ylHcX/+U0uSyvt4lohO7FicSPQ9T5Tuxo9ja2ByDO9lVLEt7cyJg
-         wKb2YcVawqveGYXSH/QIt9Dz3Mav2rkrMKljpeAn50pVL1XSWV2r9uy6p6AQnCV1v8
-         8LHZzQ5PybV7w==
-X-Nifty-SrcIP: [209.85.216.46]
-Received: by mail-pj1-f46.google.com with SMTP id iq10so7676981pjb.0;
-        Fri, 29 Apr 2022 10:12:12 -0700 (PDT)
-X-Gm-Message-State: AOAM532cetTCDVZDYT9VFdtI2/Hs6t9rGKyxSbNTeVOivFAwXLm6nvZr
-        RaS+e9QdcgqLsr6jN74HBYNKFKYHAm3mdESvhyo=
-X-Google-Smtp-Source: ABdhPJwdwySlw6cb0FmE+czfzMkfz3BUnPYoAYs+/L1RcfNAhr9w0+UCL8KJjpANjNYpdjIV8RVG9lwGeugMqUdWCdE=
-X-Received: by 2002:a17:90a:e7d1:b0:1da:30d0:9327 with SMTP id
- kb17-20020a17090ae7d100b001da30d09327mr160696pjb.144.1651252331727; Fri, 29
- Apr 2022 10:12:11 -0700 (PDT)
+        Fri, 29 Apr 2022 13:16:09 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2D1532F0
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:12:50 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id 17so11289620lji.1
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:12:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/dhlPgQ9KVUBw4oSLwyQU5Spph3PG9xofANcDFrXo7E=;
+        b=RoLY63DFknlPSUqnhr2f6i4XvnblXUfEvWc48Qfp47ytOxUYDfq5x6v8xwa0da9phh
+         lVJw8ZhSf1guh83THMDW91u57kU8MiNVUsKbCrLsKi2tM/+FCLYD9t2keBNidVSJq3+4
+         387quv6oqOKeYzv4bWrGPnMxohnfxaQUsEUgh3R1pGB94pmxr8JLb+0xZyuLXiG3RI4O
+         z/5Y3yDZl91fkqmFymD1km9dlgUE+6yrGUPmsqHlrYR0pIUjKPQ5ybZvUYS+rGeVr+Xa
+         fL+YKJ/ZnMVQQ0pt9pr2Z2cnxjdguNWtHhaJVmhNLmD3rx3DeyrC9blAVTCT+V9xtggH
+         J2rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/dhlPgQ9KVUBw4oSLwyQU5Spph3PG9xofANcDFrXo7E=;
+        b=mXASd+nIi6U4hr6eLv71ZpF1AWK5Ulw5BAgasuUi9B5vXyNdwzNxQzMDfSEZw5NvBS
+         ztz19gCpueL1k6h8itBY5Y4gPNwZDLEH/qznAc56zM7veKmHm9HLsRI+q6asDHJLcI+H
+         edrNQxxRb6WkeeZZX8nvRPHrHS5H2pfm93I1Z4KWxODu9zOikBN/DIMHdATHj8l1IFEM
+         3FGh9+y1iwRqsR6vxHv0nr+ZVZqpFU/NaEgMolXpX6wy5H66/GOmos3fWg/utqfYhY55
+         QFSZOxH3NB/k30HnPWlsKtiLpMSpJmWgdoQPKS69ekr7wiTvutnMik/ZQhghlsSkaaYr
+         qcsg==
+X-Gm-Message-State: AOAM530Fc7S6nk3pE66iAlKD0CEfCLHZtB8biXQBWGMNoZUIDJVIxev6
+        rIDYQmoQ+ff6qkmwR1muDRWHLZlPZXRd/kaURLbLpA==
+X-Google-Smtp-Source: ABdhPJxlaAuYZRfV/PHxi4dIOaX1rm6o8uyQRd6aulf9ZN+fwununUyQpbU/3yFq8sQ0jyi4r63E8ckPT8q7dPVlFrg=
+X-Received: by 2002:a2e:3c0e:0:b0:24f:25ff:659f with SMTP id
+ j14-20020a2e3c0e000000b0024f25ff659fmr140994lja.426.1651252368836; Fri, 29
+ Apr 2022 10:12:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220426155229.436681-1-mailhol.vincent@wanadoo.fr>
-In-Reply-To: <20220426155229.436681-1-mailhol.vincent@wanadoo.fr>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 30 Apr 2022 02:11:08 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAST1uRCLaNwfSLbO-sEy9MdjB54i2EkA6NOw=etNi8oBQ@mail.gmail.com>
-Message-ID: <CAK7LNAST1uRCLaNwfSLbO-sEy9MdjB54i2EkA6NOw=etNi8oBQ@mail.gmail.com>
-Subject: Re: [RFC PATCH] kbuild: call checksyscalls.sh and check-atomics.sh
- only if prerequisites change
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
+References: <20220407195908.633003-1-pgonda@google.com> <CAFNjLiXC0AdOw5f8Ovu47D==ex7F0=WN_Ocirymz4xL=mWvC5A@mail.gmail.com>
+ <CAMkAt6r-Mc_YN-gVHuCpTj4E1EmcvyYpP9jhtHo5HRHnoNJAdA@mail.gmail.com>
+ <CAMkAt6r+OMPWCbV_svUyGWa0qMzjj2UEG29G6P7jb6uH6yko2w@mail.gmail.com>
+ <62e9ece1-5d71-f803-3f65-2755160cf1d1@redhat.com> <CAMkAt6q6YLBfo2RceduSXTafckEehawhD4K4hUEuB4ZNqe2kKg@mail.gmail.com>
+ <4c0edc90-36a1-4f4c-1923-4b20e7bdbb4c@redhat.com> <CAMkAt6oL5qi7z-eh4z7z8WBhpc=Ow6WtcJA5bDi6-aGMnz135A@mail.gmail.com>
+ <CAMkAt6rmDrZfN5DbNOTsKFV57PwEnK2zxgBTCbEPeE206+5v5w@mail.gmail.com>
+ <0d282be4-d612-374d-84ba-067994321bab@redhat.com> <CAMkAt6ragq4OmnX+n628Yd5pn51qFv4qV20upGR6tTvyYw3U5A@mail.gmail.com>
+ <8a2c5f8c-503c-b4f0-75e7-039533c9852d@redhat.com> <CAMkAt6qAW5zFyTAqX_Az2DT2J3KROPo4u-Ak1sC0J+UTUeFfXA@mail.gmail.com>
+ <4afce434-ab25-66d6-76f4-3a987f64e88e@redhat.com>
+In-Reply-To: <4afce434-ab25-66d6-76f4-3a987f64e88e@redhat.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Fri, 29 Apr 2022 11:12:36 -0600
+Message-ID: <CAMkAt6o8u9=H_kjr_xyRO05J=RDFUZRiTc_Bw-FFDKEUaiyp2Q@mail.gmail.com>
+Subject: Re: [PATCH v3] KVM: SEV: Mark nested locking of vcpu->lock
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     John Sperbeck <jsperbeck@google.com>,
+        kvm list <kvm@vger.kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,128 +78,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 12:52 AM Vincent Mailhol
-<mailhol.vincent@wanadoo.fr> wrote:
+On Fri, Apr 29, 2022 at 9:59 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
 >
-> Currently, checksyscalls.sh and check-atomics.sh are executed
-> unconditionally. Most developers will not modify the files being
-> checked by those scripts and thus do not need to execute these again
-> for each iterative make. Change Kbuild target so that those two
-> scripts get executed only if the prerequisite are modified.
+> On 4/29/22 17:51, Peter Gonda wrote:
+> >> No, you don't need any of this.  You can rely on there being only one
+> >> depmap, otherwise you wouldn't need the mock releases and acquires at
+> >> all.  Also the unlocking order does not matter for deadlocks, only the
+> >> locking order does.  You're overdoing it. :)
+> >
+> > Hmm I'm slightly confused here then. If I take your original suggestion of:
+> >
+> >          bool acquired = false;
+> >          kvm_for_each_vcpu(...) {
+> >                  if (acquired)
+> >                          mutex_release(&vcpu->mutex.dep_map,
+> > _THIS_IP_);  <-- Warning here
+> >                  if (mutex_lock_killable_nested(&vcpu->mutex, role)
+> >                          goto out_unlock;
+> >                  acquired = true;
+> >
+> > """
+> > [ 2810.088982] =====================================
+> > [ 2810.093687] WARNING: bad unlock balance detected!
+> > [ 2810.098388] 5.17.0-dbg-DEV #5 Tainted: G           O
+> > [ 2810.103788] -------------------------------------
 >
-> In order to implement this we:
+> Ah even if the contents of the dep_map are the same for all locks, it
+> also uses the *pointer* to the dep_map to track (class, subclass) ->
+> pointer and checks for a match.
 >
->   1. use the if_change macro instead of cmd. c.f. [1]
->
->   2. create two dot files: scripts/.checksyscalls and
->   scripts/atomic/.check-atomics to keep track of whether the script
->   were already executed or not. Otherwise, the prerequisite would
->   always be considered as newer than the target (c.f. output "due to
->   target missing" of make V=2).
->
->   3. modify the CLEAN_FILES target of the root Makefile to removed the
->   two temporary dot files created in 2.
->
-> We also added an additional dependency to include/linux/atomic/* for
-> check-atomics.sh to make sure that the script gets executed again if
-> the header are modified. check-atomics.sh already has a dependency
-> toward include/generated/asm-offsets.h and so no additional
-> dependencies were added.
->
-> [1] https://www.kernel.org/doc/html/latest/kbuild/makefiles.html#command-change-detection
->
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> ---
-> Sending this as RFC because I am not an expert of Kbuild. The use of
-> the dot files was my best shot at tackling this issue. Maybe there is
-> a smarter way which I just missed?
->
-> If I receive no comments for the next two weeks, I will resend this
-> patch without the RFC tag.
-> ---
->  Kbuild   | 14 ++++++++------
->  Makefile |  3 ++-
->  2 files changed, 10 insertions(+), 7 deletions(-)
->
-> diff --git a/Kbuild b/Kbuild
-> index fa441b98c9f6..d579f4971aa3 100644
-> --- a/Kbuild
-> +++ b/Kbuild
-> @@ -39,21 +39,23 @@ $(offsets-file): arch/$(SRCARCH)/kernel/asm-offsets.s FORCE
->  #####
->  # Check for missing system calls
->
-> -always-y += missing-syscalls
-> +always-y += scripts/.missing-syscalls
->
->  quiet_cmd_syscalls = CALL    $<
->        cmd_syscalls = $(CONFIG_SHELL) $< $(CC) $(c_flags) $(missing_syscalls_flags)
->
-> -missing-syscalls: scripts/checksyscalls.sh $(offsets-file) FORCE
-> -       $(call cmd,syscalls)
-> +scripts/.missing-syscalls: scripts/checksyscalls.sh $(offsets-file) FORCE
-> +       $(call if_changed,syscalls)
-> +       @touch $@
+> So yeah, prev_cpu is needed.  The unlock ordering OTOH is irrelevant so
+> you don't need to visit the xarray backwards.
 
-I am not sure about this hunk.
+Sounds good. Instead of doing this prev_vcpu solution we could just
+keep the 1st vcpu for source and target. I think this could work since
+all the vcpu->mutex.dep_maps do not point to the same string.
 
-Avoiding the needless preprocess is good.
-But, it is better to display a warning somewhere (maybe 'all' target)
-until the required syscall is implemented.
+Lock:
+         bool acquired = false;
+         kvm_for_each_vcpu(...) {
+                 if (mutex_lock_killable_nested(&vcpu->mutex, role)
+                     goto out_unlock;
+                acquired = true;
+                 if (acquired)
+                      mutex_release(&vcpu->mutex, role)
+         }
 
-Also, you need to check the timestamp of syscall_32.tbl.
-When it is updated (i.e. when a new syscall is added),
-this check must be re-run.
+Unlock
 
+         bool acquired = true;
+         kvm_for_each_vcpu(...) {
+               if (!acquired)
+                     mutex_acquire(&vcpu->mutex, role)
+               mutex_unlock(&vcpu->mutex);
+               acquired = false;
+         }
 
->  #####
->  # Check atomic headers are up-to-date
+So when locking we release all but the first dep_maps. Then when
+unlocking we acquire all but the first dep_maps. Thoughts?
+
 >
-> -always-y += old-atomics
-> +always-y += scripts/atomic/.old-atomics
+> Paolo
 >
->  quiet_cmd_atomics = CALL    $<
->        cmd_atomics = $(CONFIG_SHELL) $<
->
-> -old-atomics: scripts/atomic/check-atomics.sh FORCE
-> -       $(call cmd,atomics)
-> +scripts/atomic/.old-atomics: scripts/atomic/check-atomics.sh $(wildcard include/linux/atomic/*) FORCE
-> +       $(call if_changed,atomics)
-> +       @touch $@
-
-
-Presumably, this is wrong.
-If the header is manually edited, Kbuild must stop the build.
-
-This change just lets it keep going, and
-what is worse, the warning is completely silenced
-second time.
-
-
-
-
-
-
-
-> diff --git a/Makefile b/Makefile
-> index fa5112a0ec1b..b18af9d4248a 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1483,7 +1483,8 @@ endif # CONFIG_MODULES
->  # Directories & files removed with 'make clean'
->  CLEAN_FILES += include/ksym vmlinux.symvers modules-only.symvers \
->                modules.builtin modules.builtin.modinfo modules.nsdeps \
-> -              compile_commands.json .thinlto-cache
-> +              compile_commands.json .thinlto-cache \
-> +              scripts/.missing-syscalls scripts/atomic/.old-atomics
->
->  # Directories & files removed with 'make mrproper'
->  MRPROPER_FILES += include/config include/generated          \
-> --
-> 2.35.1
->
-
-
--- 
-Best Regards
-Masahiro Yamada

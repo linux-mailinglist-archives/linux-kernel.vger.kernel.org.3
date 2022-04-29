@@ -2,87 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37BB651535A
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CBDC51535C
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379897AbiD2SK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 14:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55576 "EHLO
+        id S1379913AbiD2SKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 14:10:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238781AbiD2SKY (ORCPT
+        with ESMTP id S1379890AbiD2SKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 14:10:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACA53702C;
-        Fri, 29 Apr 2022 11:07:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 86D9F623F0;
-        Fri, 29 Apr 2022 18:07:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D73F9C385A7;
-        Fri, 29 Apr 2022 18:07:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651255624;
-        bh=mSFkB56paLoka0dzPl0EgpohsYsePcrkc8zGl0Dz5lU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=oGGPTPmX3b9+3Nx2vkcsRwNHW05mR8ZorE8p/TBGgUgsbgT2ChH4edob15SdvasFZ
-         rtMW7EE6lJLzwATAaU7CKw2qRWFfVKOcxc7syqaicv8wZbe7CqqkG1ajDALW0Db30Z
-         iQ4hIIIAhzQOeNnBC44xGAo21VQ5MKVvq+j8lp00yT5NeNdg1UCTIdDGvZ7kF/A2H2
-         ULP8YixKjFcWOHYkaPT7/pqOlzHmYXPyTYZu09YScJTTOwCEtGEGHeJnKNFn12S8FQ
-         c8l7FZQgZhSyMmWOSwpL31jh/k71rDJNVK1wU0/XceMoMGRfa+v6AmGkzumoZ8EYEG
-         QEIkxSj4A6+Mw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nkV1C-0080Ry-KV; Fri, 29 Apr 2022 19:07:02 +0100
-Date:   Fri, 29 Apr 2022 19:07:02 +0100
-Message-ID: <87o80j9321.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     linux-rockchip@lists.infradead.org,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Heiko Stuebner <heiko@sntech.de>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Fri, 29 Apr 2022 14:10:34 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698E031539
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:07:11 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id p12so15420342lfs.5
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:07:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=2Bod++nC0Kk+aQssi3umh6aHjPXr2Qr5aaJpsWFhO1I=;
+        b=GXQX2nKZwVNheR4CvTVkfcyO6lHX51/Xa8Z3jo9Rs+MwSdf6Ja6EizxFGdQ5akg63G
+         1XXwO5x34IveFMiIjnaMD9MRrfMwMALEKJamNTYMJYNnLayjMcmUot1IzOcySEwN7Ays
+         C4M3QABL5Xvd6h7CRVxGzkaSRLjWgFFt9Psnr0AuqA/A83Lav0T4GrxnLdbC+u9lsDWf
+         Xp5kQVhSXloD4OG5usw9qu8JQrJvOJn0wsCPgSxJsQkmWqFRUSx261TtS3OZflHr2vQW
+         sFTlklvrhzlBkP5YqeKFFF0NSwZWRxDz9/gH4Qr7iGKE5haIG2FgokKaQVVNw2OlHMJX
+         tqDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=2Bod++nC0Kk+aQssi3umh6aHjPXr2Qr5aaJpsWFhO1I=;
+        b=k+tr8zaIDIvvTVa4qIK9BBRGP6aMXbA7sH+MM1mac/DCcHgM9GeTYufnVw/sqLWdFt
+         oSPPUwvc2eDQlm1YFpOQOJLoxCDlMOuQEUp/0o+M/jRWaFkYMd136+mH1jnztW2bK6Bo
+         L8B1ECclukS8huKLnPnuhQp+8Ep4k0fUyNxoBHqMDSiMvtfiLP+Cb4QMBek5IflkhaWs
+         90+zOjRQjOcTL3ERSmzhWFN8H1eJkY94QqW3XjHx0FpDnxjvRzTT3guFc7k2nxHgyMlq
+         bF21iKz0xX4yhOGRqU2PzrvaxjJNSHS3A8u5Jr6ISnl12H9ebPhlmJ79jKVI3m7Bd/tQ
+         L+Iw==
+X-Gm-Message-State: AOAM531C0Tn5JrjxQ6wIc/0A/wiXqp8kydRWACD44M6fpyDthuxj0mpa
+        BwaaCI/3NUFvYDdRGpokiys=
+X-Google-Smtp-Source: ABdhPJwxdZIYiQZIv5z+o6u5Pjt2obFs9wpBIYt6fLDmJl64mXj5FdMnWGjm935gx8cthCrX5x5YQg==
+X-Received: by 2002:a19:ca06:0:b0:472:3b31:1ade with SMTP id a6-20020a19ca06000000b004723b311ademr314003lfg.162.1651255629583;
+        Fri, 29 Apr 2022 11:07:09 -0700 (PDT)
+Received: from [192.168.1.7] ([212.22.223.21])
+        by smtp.gmail.com with ESMTPSA id r16-20020a2eb890000000b0024f3d1daf00sm332318ljp.136.2022.04.29.11.07.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 11:07:09 -0700 (PDT)
+Subject: Re: [PATCH v2 18/19] xen/sndfront: use xenbus_setup_ring() and
+ xenbus_teardown_ring()
+To:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 3/5] PCI: rockchip-dwc: Add legacy interrupt support
-In-Reply-To: <20220429123832.2376381-4-pgwipeout@gmail.com>
-References: <20220429123832.2376381-1-pgwipeout@gmail.com>
-        <20220429123832.2376381-4-pgwipeout@gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: pgwipeout@gmail.com, linux-rockchip@lists.infradead.org, lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com, bhelgaas@google.com, heiko@sntech.de, linux-pci@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Cc:     Oleksandr Andrushchenko <oleksandr_andrushchenko@epam.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org
+References: <20220428082743.16593-1-jgross@suse.com>
+ <20220428082743.16593-19-jgross@suse.com>
+From:   Oleksandr <olekstysh@gmail.com>
+Message-ID: <91b8b63c-46f0-326e-4092-5bb6c8f681db@gmail.com>
+Date:   Fri, 29 Apr 2022 21:07:08 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <20220428082743.16593-19-jgross@suse.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 29 Apr 2022 13:38:29 +0100,
-Peter Geis <pgwipeout@gmail.com> wrote:
-> 
-> The legacy interrupts on the rk356x PCIe controller are handled by a
-> single muxed interrupt. Add IRQ domain support to the pcie-dw-rockchip
-> driver to support the virtual domain.
-> 
-> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
 
-Reviewed-by: Marc Zyngier <maz@kernel.org>
+On 28.04.22 11:27, Juergen Gross wrote:
 
-	M.
+Hello Juergen, all
+
+> Simplify sndfront's ring creation and removal via xenbus_setup_ring()
+> and xenbus_teardown_ring().
+>
+> Signed-off-by: Juergen Gross <jgross@suse.com>
+
+I am not familiar with SOUND bits of this driver, but a little bit
+familiar with Xen bits this patch only touches and I have environment to
+test.
+
+Xen specific changes looks good to me. Also I didn't see any issues when 
+testing virtulized sound driver with current series except one I have 
+already pointed out in PATCH v2 08/19.
+
+
+root@salvator-x-h3-4x2g-xt-domu:~# dmesg | grep vsnd
+[    0.432181] Initialising Xen vsnd frontend driver
+
+
+root@salvator-x-h3-4x2g-xt-domu:~# aplay -l
+**** List of PLAYBACK Hardware Devices ****
+card 0: vsnd [], device 0: dev1 [Virtual card PCM]
+   Subdevices: 1/1
+   Subdevice #0: subdevice #0
+
+root@generic-armv8-xt-dom0:~# xenstore-ls -f | grep vsnd
+/local/domain/1/backend/vsnd = ""
+/local/domain/1/backend/vsnd/6 = ""
+/local/domain/1/backend/vsnd/6/0 = ""
+/local/domain/1/backend/vsnd/6/0/frontend = "/local/domain/6/device/vsnd/0"
+/local/domain/1/backend/vsnd/6/0/frontend-id = "6"
+/local/domain/1/backend/vsnd/6/0/online = "1"
+/local/domain/1/backend/vsnd/6/0/state = "4"
+/local/domain/6/device/vsnd = ""
+/local/domain/6/device/vsnd/0 = ""
+/local/domain/6/device/vsnd/0/backend = "/local/domain/1/backend/vsnd/6/0"
+/local/domain/6/device/vsnd/0/backend-id = "1"
+/local/domain/6/device/vsnd/0/state = "4"
+/local/domain/6/device/vsnd/0/long-name = "Virtual sound card"
+/local/domain/6/device/vsnd/0/short-name = "VCard"
+/local/domain/6/device/vsnd/0/sample-rates = 
+"8000,11025,16000,22050,32000,44100,48000"
+/local/domain/6/device/vsnd/0/sample-formats = "s16_le"
+/local/domain/6/device/vsnd/0/buffer-size = "65536"
+/local/domain/6/device/vsnd/0/0 = ""
+/local/domain/6/device/vsnd/0/0/name = "dev1"
+/local/domain/6/device/vsnd/0/0/0 = ""
+/local/domain/6/device/vsnd/0/0/0/unique-id = "pulse"
+/local/domain/6/device/vsnd/0/0/0/type = "p"
+/local/domain/6/device/vsnd/0/0/0/ring-ref = "2070"
+/local/domain/6/device/vsnd/0/0/0/event-channel = "18"
+/local/domain/6/device/vsnd/0/0/0/evt-ring-ref = "2071"
+/local/domain/6/device/vsnd/0/0/0/evt-event-channel = "19"
+/libxl/6/device/vsnd = ""
+/libxl/6/device/vsnd/0 = ""
+/libxl/6/device/vsnd/0/frontend = "/local/domain/6/device/vsnd/0"
+/libxl/6/device/vsnd/0/backend = "/local/domain/1/backend/vsnd/6/0"
+/libxl/6/device/vsnd/0/frontend-id = "6"
+/libxl/6/device/vsnd/0/online = "1"
+/libxl/6/device/vsnd/0/state = "1"
+
+
+> ---
+>   sound/xen/xen_snd_front_evtchnl.c | 44 +++++++------------------------
+>   1 file changed, 10 insertions(+), 34 deletions(-)
+>
+> diff --git a/sound/xen/xen_snd_front_evtchnl.c b/sound/xen/xen_snd_front_evtchnl.c
+> index 3e21369c8216..26d1b3987887 100644
+> --- a/sound/xen/xen_snd_front_evtchnl.c
+> +++ b/sound/xen/xen_snd_front_evtchnl.c
+> @@ -143,12 +143,12 @@ void xen_snd_front_evtchnl_flush(struct xen_snd_front_evtchnl *channel)
+>   static void evtchnl_free(struct xen_snd_front_info *front_info,
+>   			 struct xen_snd_front_evtchnl *channel)
+>   {
+> -	unsigned long page = 0;
+> +	void *page = NULL;
+>   
+>   	if (channel->type == EVTCHNL_TYPE_REQ)
+> -		page = (unsigned long)channel->u.req.ring.sring;
+> +		page = channel->u.req.ring.sring;
+>   	else if (channel->type == EVTCHNL_TYPE_EVT)
+> -		page = (unsigned long)channel->u.evt.page;
+> +		page = channel->u.evt.page;
+>   
+>   	if (!page)
+>   		return;
+> @@ -167,10 +167,7 @@ static void evtchnl_free(struct xen_snd_front_info *front_info,
+>   		xenbus_free_evtchn(front_info->xb_dev, channel->port);
+>   
+>   	/* End access and free the page. */
+> -	if (channel->gref != INVALID_GRANT_REF)
+> -		gnttab_end_foreign_access(channel->gref, page);
+> -	else
+> -		free_page(page);
+> +	xenbus_teardown_ring(&page, 1, &channel->gref);
+>   
+>   	memset(channel, 0, sizeof(*channel));
+>   }
+> @@ -196,8 +193,7 @@ static int evtchnl_alloc(struct xen_snd_front_info *front_info, int index,
+>   			 enum xen_snd_front_evtchnl_type type)
+>   {
+>   	struct xenbus_device *xb_dev = front_info->xb_dev;
+> -	unsigned long page;
+> -	grant_ref_t gref;
+> +	void *page;
+>   	irq_handler_t handler;
+>   	char *handler_name = NULL;
+>   	int ret;
+> @@ -207,12 +203,9 @@ static int evtchnl_alloc(struct xen_snd_front_info *front_info, int index,
+>   	channel->index = index;
+>   	channel->front_info = front_info;
+>   	channel->state = EVTCHNL_STATE_DISCONNECTED;
+> -	channel->gref = INVALID_GRANT_REF;
+> -	page = get_zeroed_page(GFP_KERNEL);
+> -	if (!page) {
+> -		ret = -ENOMEM;
+> +	ret = xenbus_setup_ring(xb_dev, GFP_KERNEL, &page, 1, &channel->gref);
+> +	if (ret)
+>   		goto fail;
+> -	}
+>   
+>   	handler_name = kasprintf(GFP_KERNEL, "%s-%s", XENSND_DRIVER_NAME,
+>   				 type == EVTCHNL_TYPE_REQ ?
+> @@ -226,33 +219,18 @@ static int evtchnl_alloc(struct xen_snd_front_info *front_info, int index,
+>   	mutex_init(&channel->ring_io_lock);
+>   
+>   	if (type == EVTCHNL_TYPE_REQ) {
+> -		struct xen_sndif_sring *sring = (struct xen_sndif_sring *)page;
+> +		struct xen_sndif_sring *sring = page;
+>   
+>   		init_completion(&channel->u.req.completion);
+>   		mutex_init(&channel->u.req.req_io_lock);
+> -		SHARED_RING_INIT(sring);
+> -		FRONT_RING_INIT(&channel->u.req.ring, sring, XEN_PAGE_SIZE);
+> -
+> -		ret = xenbus_grant_ring(xb_dev, sring, 1, &gref);
+> -		if (ret < 0) {
+> -			channel->u.req.ring.sring = NULL;
+> -			goto fail;
+> -		}
+> +		XEN_FRONT_RING_INIT(&channel->u.req.ring, sring, XEN_PAGE_SIZE);
+>   
+>   		handler = evtchnl_interrupt_req;
+>   	} else {
+> -		ret = gnttab_grant_foreign_access(xb_dev->otherend_id,
+> -						  virt_to_gfn((void *)page), 0);
+> -		if (ret < 0)
+> -			goto fail;
+> -
+> -		channel->u.evt.page = (struct xensnd_event_page *)page;
+> -		gref = ret;
+> +		channel->u.evt.page = page;
+>   		handler = evtchnl_interrupt_evt;
+>   	}
+>   
+> -	channel->gref = gref;
+> -
+>   	ret = xenbus_alloc_evtchn(xb_dev, &channel->port);
+>   	if (ret < 0)
+>   		goto fail;
+> @@ -279,8 +257,6 @@ static int evtchnl_alloc(struct xen_snd_front_info *front_info, int index,
+>   	return 0;
+>   
+>   fail:
+> -	if (page)
+> -		free_page(page);
+>   	kfree(handler_name);
+>   	dev_err(&xb_dev->dev, "Failed to allocate ring: %d\n", ret);
+>   	return ret;
 
 -- 
-Without deviation from the norm, progress is not possible.
+Regards,
+
+Oleksandr Tyshchenko
+

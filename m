@@ -2,138 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89C205154B7
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 21:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8235154A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 21:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238978AbiD2Tjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 15:39:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58084 "EHLO
+        id S1380357AbiD2TiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 15:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380368AbiD2Tip (ORCPT
+        with ESMTP id S238467AbiD2TiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 15:38:45 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7E1403FE;
-        Fri, 29 Apr 2022 12:35:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=lwmIjCyQy1cvf/HfruQUsqg2HO2zLsQJj36FVBjRlMY=; b=FMeK+qaOrNt+CW3KPA3fG+Sm88
-        9dOTCLRIKwFZQHJ+4m/FuvGgtzWqdtsbg7jNNtnRqzh6mH5yhN/kcNgqlSXGFzr+Is403C8lKfeIe
-        GFE0d2xZtQSLJr4I8RU79yspLu2jmEMkBcLB9rf7ILb4vrthTaqCp6aHTQGFnReVgkS13mVrLfnHx
-        HX+CWHd9YGmcd+hSxhVaiC1N67Jxo0tAWbskOVNhQbgFNnliiB3BK9xH4rhhSehlShKQIEHmaxjCC
-        oWiRKIIVo1UNa1pRoT5oqrZz7cmRkXzPYEYIQdMbmHXt76jbfgPiC/AOizH1U1QXiwvnp20pJNRvp
-        Fw18KdiA==;
-Received: from [179.113.53.197] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nkWOO-000AEq-R6; Fri, 29 Apr 2022 21:35:05 +0200
-Message-ID: <5af45ed0-7b0a-5664-a9d3-c53ea001a35e@igalia.com>
-Date:   Fri, 29 Apr 2022 16:34:23 -0300
+        Fri, 29 Apr 2022 15:38:18 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2BAD0824
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 12:34:59 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id e189so9541305oia.8
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 12:34:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=E0Q3EZPBzEkcXpZcFDBM/8hh0PQ3g9tg+K9PcJx+iK8=;
+        b=j7Mu2qjwlrTIhzG1/SRWrea/G70nXiVi41rs9h824BDxboFT2bYoOlddcsk05eFR3S
+         riShkXFHtHqTtwVtScs1+WWrcvU4L8FTNKZBoRrV4kvxdbTkP877tUBxbeGUJFZFmDGf
+         7d2pu/cIMZUBtgibQB7fc9ptmJimpmjFtBhUM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=E0Q3EZPBzEkcXpZcFDBM/8hh0PQ3g9tg+K9PcJx+iK8=;
+        b=s9UaUPNX5e8neH3Q6IY803T0Nhd8EziR3n6Z7gR0upNQHwPQiYiJcsJRXIkbiA+3M4
+         61k0NPLqdY2skQUj+jq2qf6lUR5XhgJ+UcxpsP5Z+Y1ttvYcPo2S6uczDHYWErSZlz9g
+         8BFuhyM6+2CNbZvzcj/+QRFgsHW0JFm03r2AqIKtCjwtVPJwWkhH2g7gQdi8y+ioin3B
+         4rx8S9ptLE4Y9Yv3UhX7kZUd3HNkwH1bYuwM1AJYvgYKbGHDrEi4k8/h+h4VZLqtUNOt
+         YxeCMemJeNAXXmn4Pjp1LUaGmH6YaLViEcP1P9WTSmIDwdDRajDnBh4LmZ2UI7mTieYK
+         iydA==
+X-Gm-Message-State: AOAM531e56Zy51Ii0bEJQ24XEhuM73JaDTW+4DMNvT3ATMIbA+vKL4z7
+        m/1RZP8Hxk7ozmUryqdmHH1UomjzIW/DwMN9kdfb3oOM2yw=
+X-Google-Smtp-Source: ABdhPJybWFdvd26gPp93ZZnFPwxpgGugVjji5kYbw3wxJ0sB3egmlQ0aK36Ny0i3uauBxbTztZtUxyMYb/Knjvif090=
+X-Received: by 2002:a05:6808:1296:b0:325:8fb:68f3 with SMTP id
+ a22-20020a056808129600b0032508fb68f3mr437845oiw.193.1651260897935; Fri, 29
+ Apr 2022 12:34:57 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Sat, 30 Apr 2022 04:34:57 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 21/30] panic: Introduce the panic pre-reboot notifier list
-Content-Language: en-US
-To:     Max Filippov <jcmvbkbc@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, bhe@redhat.com,
-        Petr Mladek <pmladek@suse.com>, kexec@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org,
-        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
-        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
-        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, netdev <netdev@vger.kernel.org>,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        "open list:SPARC + UltraSPAR..." <sparclinux@vger.kernel.org>,
-        xen-devel@lists.xenproject.org,
-        "maintainer:X86 ARCHITECTURE..." <x86@kernel.org>,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Jonathan Corbet <corbet@lwn.net>, d.hatayama@jp.fujitsu.com,
-        Dave Hansen <dave.hansen@linux.intel.com>, dyoung@redhat.com,
-        feng.tang@intel.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Lutomirski <luto@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, paulmck@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        stern@rowland.harvard.edu, Thomas Gleixner <tglx@linutronix.de>,
-        vgoyal@redhat.com, vkuznets@redhat.com,
-        Will Deacon <will@kernel.org>, Alex Elder <elder@kernel.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Chris Zankel <chris@zankel.net>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Corey Minyard <minyard@acm.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        James Morse <james.morse@arm.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
-        Richard Henderson <rth@twiddle.net>,
-        Richard Weinberger <richard@nod.at>,
-        Robert Richter <rric@kernel.org>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, Wei Liu <wei.liu@kernel.org>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-22-gpiccoli@igalia.com>
- <CAMo8BfKzA+oy-Qun9-aO3xCr4Jy_rfdjYqMX=W9xONCSX8O51Q@mail.gmail.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <CAMo8BfKzA+oy-Qun9-aO3xCr4Jy_rfdjYqMX=W9xONCSX8O51Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <eb2dd599-f38a-57b2-694e-d91aaadda2b5@kernel.org>
+References: <20220427203026.828183-1-swboyd@chromium.org> <20220427203026.828183-2-swboyd@chromium.org>
+ <CAD=FV=Vtnj+8FYdBSvsud9fGEbo7N1HSjXA3rH3f8FMJsuVR1A@mail.gmail.com> <eb2dd599-f38a-57b2-694e-d91aaadda2b5@kernel.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Sat, 30 Apr 2022 04:34:57 +0900
+Message-ID: <CAE-0n52M0yfwMnuO9HTCCuv2pU3oWkGuyxOS4x7_gVN5QFFGMw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: google,cros-ec-keyb: Introduce switches
+ only compatible
+To:     Doug Anderson <dianders@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        "Joseph S. Barrera III" <joebar@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/04/2022 13:04, Max Filippov wrote:
-> [...]
->>  arch/xtensa/platforms/iss/setup.c     |  4 ++--For xtensa:
-> 
-> For xtensa:
-> Acked-by: Max Filippov <jcmvbkbc@gmail.com>
-> 
+Quoting Krzysztof Kozlowski (2022-04-29 09:35:58)
+> On 29/04/2022 18:31, Doug Anderson wrote:
+> >>    - $ref: "/schemas/input/matrix-keymap.yaml#"
+> >>
+> >>  properties:
+> >>    compatible:
+> >> -    const: google,cros-ec-keyb
+> >> +    oneOf:
+> >> +      - items:
+> >> +          - const: google,cros-ec-keyb-switches
+> >> +          - const: google,cros-ec-keyb
+> >> +      - items:
+> >> +          - const: google,cros-ec-keyb
+> >
+> > nit: if I come back and read this binding later I'm not sure it would
+> > be obvious which compatible I should pick. Can we give any description
+> > here that indicates that the first choice is for devices that _only_
+> > have buttons and switches (the google,cros-ec-keyb is just for
+> > backward compatibility) and the second choice is for devices that have
+> > a physical keyboard and _also_ possibly some buttons/switches?
 
-Perfect, thanks Max!
-Cheers,
+Sounds fair. I have to figure out how to add a description to the
+choices. I guess a comment is the approach?
 
+> >
+> > I could also imagine people in the future being confused about whether
+> > it's allowed to specify matrix properties even for devices that don't
+> > have a matrix keyboard. It might be worth noting that it's allowed (to
+> > support old drivers that might still be matching against the
+> > google,cros-ec-keyb compatible) but not required.
+>
+> +1
 
-Guilherme
+Sure. I'll work that into the description for the first one with two
+compatibles.
+
+>
+> >
+> >
+> >>    google,needs-ghost-filter:
+> >>      description:
+> >> @@ -50,7 +56,7 @@ examples:
+> >>    - |
+> >>      #include <dt-bindings/input/input.h>
+> >>      cros-ec-keyb {
+> >> -        compatible = "google,cros-ec-keyb";
+> >> +        compatible = "google,cros-ec-keyb-switches", "google,cros-ec-keyb";
+> >
+> > Feels like we should create a second example?
+>
+> +1 as well, because it really would confuse what's the difference
+> between them.
+
+Ok.

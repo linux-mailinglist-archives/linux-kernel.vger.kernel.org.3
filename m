@@ -2,122 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CD0F5153B5
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68AB45153C4
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:32:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379899AbiD2Seq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 14:34:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41466 "EHLO
+        id S1380042AbiD2SgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 14:36:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238511AbiD2Sel (ORCPT
+        with ESMTP id S237744AbiD2SgD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 14:34:41 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BCBF45ADD
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:31:22 -0700 (PDT)
+        Fri, 29 Apr 2022 14:36:03 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA18D4C90;
+        Fri, 29 Apr 2022 11:32:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651257082; x=1682793082;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=22k+uDUKRz+4AKVJv51f6r8phWje2KTHsjePCuxnph4=;
-  b=jIm/EJPOLGCvxWhYwrhVZXRUK9kw7PtNoYBb/O6WgiAPGQauF2NsEQ0D
-   6pk66UkIt91u+s85BSwTY7vxZs2US5n6Lb/Pqph/fcmQi5nIBnvKqI0hX
-   TzpwjU0r5d+93I/MIHUUsLxA6+kqNko3AdYF2HG3rD+oni7vYRauRzwSY
-   ++UhgQV73PJaaKW5B1G3nq0yTf2v7tCTCsOwgYGHrss8CC6Kh3cBOmSOO
-   cdhWac31R9KUx7hsJGKjoz9Vcuf9Y3Dr0c1ipXIfHSZO5kNiInZ5iPzCi
-   k17K3UIhaquyluGasUj7LbKYtmcaDd7EGS0+e/sOtuaoNuvRoAPbBEL5E
+  t=1651257164; x=1682793164;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=zftMOiKfzA2N0SvkmILBHm7NmobiVBrkq7/3clP0XAg=;
+  b=iFkFV6bQaGu5XPbuMLNm3Fi30Bao33Vi82qTPmXCeCI3QV45o0j/3gJP
+   iSV4U8rFE+vQNHeJ0VcNRJ68Lu6j1mj/ODJN8EYdt3y1PELd3E1QXEFGj
+   J0oRMsddQrj2i+zVArwEnBML3qpXbpihIXHkkzIZ59gpCoL0JlWxb/su3
+   NcmSeap1IvNPnLHi9WN3q+Hhe2ue9c2GYttTj0/qcNLkdGlmBm98nRzvT
+   RBPFPjX8QvGwRW15/ej1wBwnmWekexR28FsOxDaJYNi/oRNESbmDLPF2m
+   bh54kzlO6i0c0WtrMm6VWTkI6vicC85r7vKQhT3HMWl+venwA6znq6tKs
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="247295940"
+X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="265582909"
 X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
-   d="scan'208";a="247295940"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 11:31:22 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="265582909"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 11:32:44 -0700
 X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
-   d="scan'208";a="542747392"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 29 Apr 2022 11:31:20 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nkVOh-0006Yd-Ik;
-        Fri, 29 Apr 2022 18:31:19 +0000
-Date:   Sat, 30 Apr 2022 02:30:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Fuad Tabba <tabba@google.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>
-Subject: arch/arm64/kvm/hyp/nvhe/switch.c:196: warning: expecting prototype
- for Handler for protected floating(). Prototype was for
- kvm_handle_pvm_fpsimd() instead
-Message-ID: <202204300241.xkeys5UL-lkp@intel.com>
+   d="scan'208";a="582322111"
+Received: from jinggu-mobl1.amr.corp.intel.com (HELO [10.212.30.227]) ([10.212.30.227])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 11:32:43 -0700
+Message-ID: <7359e83b-9056-11a1-30ca-d13e9b953c95@intel.com>
+Date:   Fri, 29 Apr 2022 11:32:59 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 13/21] x86/virt/tdx: Allocate and set up PAMTs for
+ TDMRs
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+References: <cover.1649219184.git.kai.huang@intel.com>
+ <ffc2eefdd212a31278978e8bfccd571355db69b0.1649219184.git.kai.huang@intel.com>
+ <c9b17e50-e665-3fc6-be8c-5bb16afa784e@intel.com>
+ <3664ab2a8e0b0fcbb4b048b5c3aa5a6e85f9618a.camel@intel.com>
+ <5984b61f-6a4a-c12a-944d-f4a78bdefc3d@intel.com>
+ <Ymv2h1GYCMQ9ZQvJ@google.com>
+ <c875fc4a-c3c0-dab1-c7cb-525b0bff5ae3@intel.com>
+ <YmwsOo4TCq1/5hgd@google.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <YmwsOo4TCq1/5hgd@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   38d741cb70b30741c0e802cbed7bd9cf4fd15fa4
-commit: 1423afcb411780c7a6a68f801fdcfb6920ad6f06 KVM: arm64: Trap access to pVM restricted features
-date:   7 months ago
-config: arm64-defconfig (https://download.01.org/0day-ci/archive/20220430/202204300241.xkeys5UL-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1423afcb411780c7a6a68f801fdcfb6920ad6f06
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 1423afcb411780c7a6a68f801fdcfb6920ad6f06
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+On 4/29/22 11:19, Sean Christopherson wrote:
+> On Fri, Apr 29, 2022, Dave Hansen wrote:
+>> On 4/29/22 07:30, Sean Christopherson wrote:
+>>> On Fri, Apr 29, 2022, Dave Hansen wrote:
+>> ...
+>>>> A *good* way (although not foolproof) is to launch a TDX VM early
+>>>> in boot before memory gets fragmented or consumed.  You might even
+>>>> want to recommend this in the documentation.
+>>>
+>>> What about providing a kernel param to tell the kernel to do the
+>>> allocation during boot?
+>>
+>> I think that's where we'll end up eventually.  But, I also want to defer
+>> that discussion until after we have something merged.
+>>
+>> Right now, allocating the PAMTs precisely requires running the TDX
+>> module.  Running the TDX module requires VMXON.  VMXON is only done by
+>> KVM.  KVM isn't necessarily there during boot.  So, it's hard to do
+>> precisely today without a bunch of mucking with VMX.
+> 
+> Meh, it's hard only if we ignore the fact that the PAMT entry size isn't going
+> to change for a given TDX module, and is extremely unlikely to change in general.
+> 
+> Odds are good the kernel can hardcode a sane default and Just Work.  Or provide
+> the assumed size of a PAMT entry via module param.  If the size ends up being
+> wrong, log an error, free the reserved memory, and move on with TDX setup with
+> the correct size.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Sure.  The boot param could be:
 
-All warnings (new ones prefixed by >>):
+	tdx_reserve_whatever=auto
 
-   arch/arm64/kvm/hyp/nvhe/switch.c:126: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Disable host events, enable guest events
-   arch/arm64/kvm/hyp/nvhe/switch.c:146: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Disable guest events, enable host events
-   arch/arm64/kvm/hyp/nvhe/switch.c:164: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Handler for protected VM restricted exceptions.
-   arch/arm64/kvm/hyp/nvhe/switch.c:176: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Handler for protected VM MSR, MRS or System instruction execution in AArch64.
-   arch/arm64/kvm/hyp/nvhe/switch.c:196: warning: Function parameter or member 'vcpu' not described in 'kvm_handle_pvm_fpsimd'
-   arch/arm64/kvm/hyp/nvhe/switch.c:196: warning: Function parameter or member 'exit_code' not described in 'kvm_handle_pvm_fpsimd'
->> arch/arm64/kvm/hyp/nvhe/switch.c:196: warning: expecting prototype for Handler for protected floating(). Prototype was for kvm_handle_pvm_fpsimd() instead
+and then it can be overridden if necessary.  I just don't want to have
+kernel binaries that are only good as paperweights if Intel decides it
+needs another byte of metadata.
 
+>> You can arm-wrestle the distro folks who hate adding command-line tweaks
+>> when the time comes. ;)
+> 
+> Sure, you just find me the person that's going to run TDX guests with an
+> off-the-shelf distro kernel :-D
 
-vim +196 arch/arm64/kvm/hyp/nvhe/switch.c
+Well, everyone gets their kernel from upstream eventually and everyone
+watches upstream.
 
-   188	
-   189	/**
-   190	 * Handler for protected floating-point and Advanced SIMD accesses.
-   191	 *
-   192	 * Returns true if the hypervisor has handled the exit, and control should go
-   193	 * back to the guest, or false if it hasn't.
-   194	 */
-   195	static bool kvm_handle_pvm_fpsimd(struct kvm_vcpu *vcpu, u64 *exit_code)
- > 196	{
-   197		/* Linux guests assume support for floating-point and Advanced SIMD. */
-   198		BUILD_BUG_ON(!FIELD_GET(ARM64_FEATURE_MASK(ID_AA64PFR0_FP),
-   199					PVM_ID_AA64PFR0_ALLOW));
-   200		BUILD_BUG_ON(!FIELD_GET(ARM64_FEATURE_MASK(ID_AA64PFR0_ASIMD),
-   201					PVM_ID_AA64PFR0_ALLOW));
-   202	
-   203		return kvm_hyp_handle_fpsimd(vcpu, exit_code);
-   204	}
-   205	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+But, in all seriousness, do you really expect TDX to remain solely in
+the non-distro-kernel crowd forever?  I expect that the fancy cloud
+providers (with custom kernels) who care the most to deploy TDX fist.
+But, things will trickle down to the distro crowd over time.

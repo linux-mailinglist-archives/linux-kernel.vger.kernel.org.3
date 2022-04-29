@@ -2,107 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00AE7514111
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 05:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D5955140F4
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 05:48:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235698AbiD2DVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 23:21:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59562 "EHLO
+        id S235711AbiD2DVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 23:21:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235606AbiD2DU5 (ORCPT
+        with ESMTP id S235815AbiD2DVL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 23:20:57 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF97506E7;
-        Thu, 28 Apr 2022 20:17:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651202259; x=1682738259;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=snCnGHa9hZi4XdlwTsNqqPFzYYo2+PjCPbRZGcUX4/g=;
-  b=jNKEh/O/E+a/fYEtnccvV2YYcDfJXOr5qNC/sbc0NrMczow9aXln1xJJ
-   JjVLEQgHcVs33WvDnZQmB+AdohkVksksZr1Nu7g3qS0qKSrrbnLPSIbV+
-   6nS+7vp26iD7ChpDvMipzZnDOLIGC2u6fSFoLtC63ts3brw3HoL1FdQOY
-   gniVZC/vrjAOXqed8/Azq7ve9sn2KuT4JuG3djlPKUQIoARfmFKk2tQi2
-   F1lZFYKS79rCwTfHJYYbvWVDJa8OHmtbmx50oFSEyOQtec6B6uBOOrG1c
-   aVyHpnkNV30cL77xaLGriOHgdXl7pTTCMrakG2hl19eQ4zdMBwS7UVgH9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="352943152"
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="352943152"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 20:17:39 -0700
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="581822452"
-Received: from xingzhen-mobl.ccr.corp.intel.com (HELO [10.249.170.167]) ([10.249.170.167])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 20:17:35 -0700
-Message-ID: <4ff0ca7c-8f41-374a-9862-3cb30c7d8d66@linux.intel.com>
-Date:   Fri, 29 Apr 2022 11:17:33 +0800
+        Thu, 28 Apr 2022 23:21:11 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7BC55490
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 20:17:54 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KqHcY2FL8zCs4Y;
+        Fri, 29 Apr 2022 11:13:17 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 29 Apr 2022 11:17:48 +0800
+Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
+ (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 29 Apr
+ 2022 11:17:48 +0800
+Message-ID: <3e4bdf67-bd11-e839-7852-36e91f54b4df@huawei.com>
+Date:   Fri, 29 Apr 2022 11:17:45 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 2/2] perf vendor events intel: Add cpuid for
- sapphirerapids
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4] ARM: module: Add all unwind tables when load module
 Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Jin Yao <yao.jin@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220428202912.1056444-1-irogers@google.com>
- <20220428202912.1056444-2-irogers@google.com>
-From:   Xing Zhengjun <zhengjun.xing@linux.intel.com>
-In-Reply-To: <20220428202912.1056444-2-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+To:     Linus Walleij <linus.walleij@linaro.org>
+CC:     <linux@armlinux.org.uk>, <alexander.sverdlin@nokia.com>,
+        <ardb@kernel.org>, <nico@fluxnic.net>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220401131534.241205-1-chenzhongjin@huawei.com>
+ <CACRpkdbxDyasZxNeJXa9-AniTbgrzsuoLcu9CBJmzOLDg3hy5w@mail.gmail.com>
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+In-Reply-To: <CACRpkdbxDyasZxNeJXa9-AniTbgrzsuoLcu9CBJmzOLDg3hy5w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.108.67]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Added,
+9204/1 	module: Add all unwind tables when load module
 
+Thanks!
+Chen
 
-On 4/29/2022 4:29 AM, Ian Rogers wrote:
-> Fixes compile time warnings:
+On 2022/4/29 6:45, Linus Walleij wrote:
+> On Fri, Apr 1, 2022 at 3:16 PM Chen Zhongjin <chenzhongjin@huawei.com> wrote:
 > 
-> pmu-events/pmu-events.c:27238:31: error: ‘pme_sapphirerapids’ defined but not used [-Werror=unused-const-variable=]
-> 27238 | static const struct pmu_event pme_sapphirerapids[] = {
->        |                               ^~~~~~~~~~~~~~~~~~
+>> For EABI stack unwinding, when loading .ko module
+>> the EXIDX sections will be added to a unwind_table list.
+>>
+>> However not all EXIDX sections are added because EXIDX
+>> sections are searched by hardcoded section names.
+>>
+>> For functions in other sections such as .ref.text
+>> or .kprobes.text, gcc generates seprated EXIDX sections
+>> (such as .ARM.exidx.ref.text or .ARM.exidx.kprobes.text).
+>>
+>> These extra EXIDX sections are not loaded, so when unwinding
+>> functions in these sections, we will failed with:
+>>
+>>         unwind: Index not found xxx
+>>
+>> To fix that, I refactor the code for searching and adding
+>> EXIDX sections:
+>>
+>> - Check section type to search EXIDX tables (0x70000001)
+>> instead of strcmp() the hardcoded names. Then find the
+>> corresponding text sections by their section names.
+>>
+>> - Add a unwind_table list in module->arch to save their own
+>> unwind_table instead of the fixed-lenth array.
+>>
+>> - Save .ARM.exidx.init.text section ptr, because it should
+>> be cleaned after module init.
+>>
+>> Now all EXIDX sections of .ko can be added correctly.
+>>
+>> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 > 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->   tools/perf/pmu-events/arch/x86/mapfile.csv | 1 +
->   1 file changed, 1 insertion(+)
+> This looks reasonable to me:
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
 > 
-> diff --git a/tools/perf/pmu-events/arch/x86/mapfile.csv b/tools/perf/pmu-events/arch/x86/mapfile.csv
-> index 963a76fec277..4b47ac1b806d 100644
-> --- a/tools/perf/pmu-events/arch/x86/mapfile.csv
-> +++ b/tools/perf/pmu-events/arch/x86/mapfile.csv
-> @@ -41,6 +41,7 @@ GenuineIntel-6-A7,v1,icelake,core
->   GenuineIntel-6-6A,v1,icelakex,core
->   GenuineIntel-6-6C,v1,icelakex,core
->   GenuineIntel-6-86,v1,tremontx,core
-> +GenuineIntel-6-8F,v1,sapphirerapids,core
+> If no one else comments I would say you should put this
+> into Russell's patch tracker for consideration.
+> 
+> Yours,
+> Linus Walleij
+> .
 
-In 
-https://lore.kernel.org/all/20220413210503.3256922-3-irogers@google.com/, it 
-has already added the cpuid for sapphirerapids
-
->   GenuineIntel-6-96,v1,elkhartlake,core
->   GenuineIntel-6-97,v1,alderlake,core
->   GenuineIntel-6-9A,v1,alderlake,core
-
--- 
-Zhengjun Xing

@@ -2,82 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E02F851455F
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 11:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B86E9514563
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 11:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356426AbiD2J2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 05:28:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49810 "EHLO
+        id S1356531AbiD2J3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 05:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230478AbiD2J2u (ORCPT
+        with ESMTP id S230478AbiD2J3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 05:28:50 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54E735DE7
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 02:25:31 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id p10so12939665lfa.12
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 02:25:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kinvolk.io; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sUji6zAVtiYht4ILYbhZgwXQV0O6JLl6Q1rD9uPp5Sk=;
-        b=X3lnaky/QbfAU3IyuTPhqc8KR1dht4Y9ZOo6Tixi8OkKpmSmitL1o0OmtsgX6C1SFS
-         7Xdy+09tGZQj/Eh22wlS7x2rV8pcopImHN4YHN6UuBn+P0CcobPlXlGxTPy8cOFcSqAT
-         hetc0HZ+fufOiNy+kxW7uE6/ZvF8GVF7U53SE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sUji6zAVtiYht4ILYbhZgwXQV0O6JLl6Q1rD9uPp5Sk=;
-        b=RhFB24x66Pe9mb9BTUf7mlryWKaGNvV5SgPn7z5Fk/F9+XddKg5Pkd8aeMwwGc+uRJ
-         XQ7N+4PXTt3NTUSBzU1Qgu7PhEWk3ZtfNxsGxiNv9EMKry+eqkCtzs2+BjA5DdgF6Uzd
-         xq464M0GrKAlZjwC/SVJou0gTRlvPYSLGNJov2oijIZD/TuBgTupw7f7Y/NCKAK4M0QD
-         wZfq17UdPwRyMlZ4K5vZ+L3MondMr18DC6jMaT+OpsbacawMfz2a4YjkxqO2JEaJ1f7k
-         fgMIaFji1r6+e9A2QChEQPeKsr1VqddIae0XUCQHOf7TpE6A3hxNZ38NqXmTviQOn1/u
-         5Ndw==
-X-Gm-Message-State: AOAM530hD1nCwUjUED3WcmyZ5sbg7xChnNnPnyvyFkBzFT/qKeqElFlk
-        Z07wh7iSin3SV2yb0B4KNfpubex8gvp+HqFiKqFOwA==
-X-Google-Smtp-Source: ABdhPJyoLLeggzt3nTV5Z7Czv7Cr5OuuWB4eGk0wEY/IGrckouhusS1+o3AWNB2ETRcDShRE//6+ZWTxyKfmDlejppo=
-X-Received: by 2002:a05:6512:22d4:b0:472:3fb9:cf0c with SMTP id
- g20-20020a05651222d400b004723fb9cf0cmr3542855lfu.308.1651224330023; Fri, 29
- Apr 2022 02:25:30 -0700 (PDT)
+        Fri, 29 Apr 2022 05:29:40 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247AA35DE7;
+        Fri, 29 Apr 2022 02:26:23 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B4C9921870;
+        Fri, 29 Apr 2022 09:26:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1651224381; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=U29ZMPPzFK4uUEyUYePHiz2qlt3Ri7SCZ7aNiH026UY=;
+        b=IGPyVwbIILUdzwZFwC6tg5ufsIZXP5ClacMvrcvkQiCZaeUgVRAYMM/AoNO9PpHjD/AEcL
+        fOWpgPD83vJ1gjAAlqWmAdKmqOLaAsi5QlzP+Y1N3FfIUGIGGIZFJNt++GwMtNRmpzL3Rs
+        N46aQwwVuCxWp71FRvxzu2n0+VXMq3Q=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7D51713446;
+        Fri, 29 Apr 2022 09:26:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 903IHT2va2LwAgAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Fri, 29 Apr 2022 09:26:21 +0000
+Date:   Fri, 29 Apr 2022 11:26:20 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     David Vernet <void@manifault.com>
+Cc:     akpm@linux-foundation.org, tj@kernel.org, roman.gushchin@linux.dev,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, hannes@cmpxchg.org, mhocko@kernel.org,
+        shakeelb@google.com, kernel-team@fb.com,
+        Richard Palethorpe <rpalethorpe@suse.com>
+Subject: Re: [PATCH v2 2/5] cgroup: Account for memory_recursiveprot in
+ test_memcg_low()
+Message-ID: <20220429092620.GA23621@blackbody.suse.cz>
+References: <20220423155619.3669555-1-void@manifault.com>
+ <20220423155619.3669555-3-void@manifault.com>
+ <20220427140928.GD9823@blackbody.suse.cz>
+ <20220429010333.5rt2jwpiumnbuapf@dev0025.ash9.facebook.com>
 MIME-Version: 1.0
-References: <20220429023113.74993-1-sargun@sargun.me>
-In-Reply-To: <20220429023113.74993-1-sargun@sargun.me>
-From:   Rodrigo Campos <rodrigo@kinvolk.io>
-Date:   Fri, 29 Apr 2022 11:24:54 +0200
-Message-ID: <CACaBj2Z7BpLMYYEbqB8=gyQqbJdevLrRMbDcDzRAtP=Tn+4Ftg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] Handle seccomp notification preemption
-To:     Sargun Dhillon <sargun@sargun.me>
-Cc:     Kees Cook <keescook@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Will Drewry <wad@chromium.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Alban Crequy <alban@kinvolk.io>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220429010333.5rt2jwpiumnbuapf@dev0025.ash9.facebook.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 4:32 AM Sargun Dhillon <sargun@sargun.me> wrote:
->
-> This patchset addresses a race condition we've dealt with recently with
-> seccomp. Specifically programs interrupting syscalls while they're in
+On Thu, Apr 28, 2022 at 06:03:33PM -0700, David Vernet <void@manifault.com> wrote:
+> but my interpretation of the rest of that discussion with Roman is
+> that we haven't yet decided whether we don't want to propagate
+> memory.low events from children cgroups with memory.low == 0. Or at
+> the very least, some more justification was requested on why not
+> counting such events was prudent.
 
-I think you sent it to the wrong containers ml. It should be
-containers@lists.linux.dev, right?
+I'm not a fan of that original proposal of mine anymore (to be more
+precise, of _only_ that patch, there's still the RFCness reason 1) to
+consider).
+As I shared with the last reply there, there's a problem in the behavior
+which shouldn't be masked by filtering some events.
 
-If the next time you can cc me to rodrigo@sdfg.com.ar instead, it will be great.
+> Would you be ok with merging this patch so that the cgroup selftests can
+> pass again based on the current behavior of the kernel, and we can then
+> revert the changes to test_memcg_low() later on if and when we decide that
+> we don't want to propagate memory.low events for memory.low == 0 children?
 
+I still think that the behavior when there's no protection left for the
+memory.low == 0 child, there should be no memory.low events (not just
+uncounted but not happening) and test should not accept this (even
+though it's the current behavior).
 
-Best,
-Rodrigo
+What might improve the test space would be to have two configs like
+
+Original one (simplified here)
+	parent		memory.low=50M	memory.current=100M
+	` child1	memory.low=50M	memory.current=50M
+	` child2	memory.low=0M	memory.current=50M
+
+New one (checks events due to recursive protection)
+	parent		memory.low=50M	memory.current=100M
+	` child1	memory.low=40M	memory.current=50M
+	` child2	memory.low=0M	memory.current=50M
+
+The second config assigns recursive protection to child2 and should
+therefore cause memory.low events in child2 (with memory_recursiveprot
+enabled of course).
+
+Or alternative new one (checks events due to recursive protection)
+	parent		memory.low=50M	memory.current=100M
+	` child1	memory.low=0M	memory.current=50M
+	` child2	memory.low=0M	memory.current=50M
+
+HTH,
+Michal

@@ -2,219 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D12B515342
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:03:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC69515350
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:05:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379870AbiD2SGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 14:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45256 "EHLO
+        id S1379904AbiD2SJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 14:09:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379866AbiD2SGj (ORCPT
+        with ESMTP id S1379882AbiD2SIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 14:06:39 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F995D4C4D
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:03:19 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id h8so10520911iov.12
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:03:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+UEKgXrrD0bBkveYKV1BzyuG02j+m4QM4Vug4t1K1Lc=;
-        b=QTAhsROB7PeybDtVIea7NpCcw6Y2SGXrxVNMO7ueaeqMjkvhygrvrO0CB92dH9jYHv
-         /1nCwI6Csg2CaPABJV27UPGb+RZGethrwyW6l9S/0RC4pDBGuwKfa+1q7I/+z5H21Z+w
-         +7l5ZduiDLL6NLD8GFd41Tsa7yF5dg6x6s+q3kbxi4YNf3F7vWX1I2KU7vW2wJ2z/HrJ
-         TdeOd6pFhgxZGYn+oda5ArqSaiiM9auNh6u6kBlG8er/5Dn7LqYesgqm6k8RG1rG2swV
-         jLFb9vwGPv4PNejd+S6r4d5/N9/J7CVn5pzUglxFfDhAg7y/B0z64DikIAot0VeJMD+r
-         oaRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+UEKgXrrD0bBkveYKV1BzyuG02j+m4QM4Vug4t1K1Lc=;
-        b=088KfxnmexoKybaMgmNHz7A0C12vA8vFT8k1raEf0G5X4V1kQEwuJ5k6pweNEfuf1+
-         PWTcLKKBno9b6CskswJD+Bbv09U0o7juXiSmWWoQUOpP749BqEqzXjkNRxyKu+AzJsPN
-         jE0BuNbo2yKFNoLHtiHV1eapC29dVysgQzZgOMjSAgGBUNSPI14eglSFwzX7nsWUmEP6
-         mVx0FPGJBsSH4PMMB5iJtqY9EeSTob0+peDxh2Y2JAUmkOaHpgfVhRsydE0jYROxxAQU
-         ZJgiVKb1PqSD8poI0XFcjgswHYqUHWLE0JTM9DtbSK0Jix81U5WCNXBqvqe6PZhAWmG9
-         wR7Q==
-X-Gm-Message-State: AOAM530Dt9GLbgMk1fAaJg+LBLq7lb1GduuOE3z9quW9TE+A9dYQfKuJ
-        Z4PiZwx9LpgKt/HMLg+WxOFBTjH9ed0qxxFl86fSmeFBsbE=
-X-Google-Smtp-Source: ABdhPJxlXzGicn38bpRJBvIzpXXTfNsqk06DDdDi/Q9CDMeryZztyna/X6hAAJIMQXteAb0adbuW7DcpXj+kgmwV6hg=
-X-Received: by 2002:a02:7a06:0:b0:32b:1b83:649a with SMTP id
- a6-20020a027a06000000b0032b1b83649amr229323jac.29.1651255398079; Fri, 29 Apr
- 2022 11:03:18 -0700 (PDT)
+        Fri, 29 Apr 2022 14:08:55 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC102DD61;
+        Fri, 29 Apr 2022 11:05:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=CfgJSltNTETfm69VgWZeJ1xxMOJuVJJeVDaV1//hOM4=; b=slyIgXmeUq77MnrSUr5lBtJx9z
+        m86cp15BT6gKICc3jCqWbY2B0tpa99u5bAed7DYYXL/rMf6XHJRMLSIrTGUcJCHpVtGl/+APLcmrh
+        RXQpa9HZXWVydxhVU95+hp+ZiaA0uHFZXPx5zEc5qg8trUY5PT1GKrapnos8zeTpFOAoQJEAx9vvn
+        efpqnWK3jhpJIbXy7DD12LOMiGnr6GupNgQCAiVUmjcrI2J6NMnifvEjcuVQUbIlOFxyQL8HlLyj5
+        ydadfwYuZkTNnyuPFseli5ffoVSkxD0MS5bvuilrJblEdywU2jKWaFEjPPnVXRJf3ScYrp3fr3KhT
+        ij4JQKSA==;
+Received: from [179.113.53.197] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nkUzF-0006RF-Du; Fri, 29 Apr 2022 20:05:01 +0200
+Message-ID: <0147d038-571b-0802-c210-ccd4d52cd5dd@igalia.com>
+Date:   Fri, 29 Apr 2022 15:04:22 -0300
 MIME-Version: 1.0
-References: <20220412224348.1038613-1-tansuresh@google.com>
- <20220412224348.1038613-2-tansuresh@google.com> <CAJZ5v0ivNq3aYCEcxPYMosLJCAyWiAnucwOCmRBzkM=sbyPWgQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0ivNq3aYCEcxPYMosLJCAyWiAnucwOCmRBzkM=sbyPWgQ@mail.gmail.com>
-From:   Tanjore Suresh <tansuresh@google.com>
-Date:   Fri, 29 Apr 2022 11:03:07 -0700
-Message-ID: <CALVARr6v5hcY0Vcf1izPUX-tXNJyyNXBMANbKX4CW9wfRf-pYQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] driver core: Support asynchronous driver shutdown
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-nvme <linux-nvme@lists.infradead.org>,
-        Linux PCI <linux-pci@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
+Content-Language: en-US
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "bhe@redhat.com" <bhe@redhat.com>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bcm-kernel-feedback-list@broadcom.com" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "openipmi-developer@lists.sourceforge.net" 
+        <openipmi-developer@lists.sourceforge.net>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
+        "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
+        "halves@canonical.com" <halves@canonical.com>,
+        "fabiomirmar@gmail.com" <fabiomirmar@gmail.com>,
+        "alejandro.j.jimenez@oracle.com" <alejandro.j.jimenez@oracle.com>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "d.hatayama@jp.fujitsu.com" <d.hatayama@jp.fujitsu.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "dyoung@redhat.com" <dyoung@redhat.com>,
+        "feng.tang@intel.com" <feng.tang@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "hidehiro.kawai.ez@hitachi.com" <hidehiro.kawai.ez@hitachi.com>,
+        "jgross@suse.com" <jgross@suse.com>,
+        "john.ogness@linutronix.de" <john.ogness@linutronix.de>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "vgoyal@redhat.com" <vgoyal@redhat.com>,
+        vkuznets <vkuznets@redhat.com>,
+        "will@kernel.org" <will@kernel.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        David Gow <davidgow@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dexuan Cui <decui@microsoft.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Evan Green <evgreen@chromium.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Julius Werner <jwerner@chromium.org>,
+        Justin Chen <justinpopo6@gmail.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
+        Scott Branden <scott.branden@broadcom.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        zhenwei pi <pizhenwei@bytedance.com>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-20-gpiccoli@igalia.com>
+ <PH0PR21MB30256260CCF4CAB713BBB11ED7FC9@PH0PR21MB3025.namprd21.prod.outlook.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <PH0PR21MB30256260CCF4CAB713BBB11ED7FC9@PH0PR21MB3025.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rafael,
+On 29/04/2022 14:30, Michael Kelley (LINUX) wrote:
+> From: Guilherme G. Piccoli <gpiccoli@igalia.com> Sent: Wednesday, April 27, 2022 3:49 PM
+>> [...]
+>>
+>> @@ -2843,7 +2843,7 @@ static void __exit vmbus_exit(void)
+>>  	if (ms_hyperv.misc_features & HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE) {
+>>  		kmsg_dump_unregister(&hv_kmsg_dumper);
+>>  		unregister_die_notifier(&hyperv_die_report_block);
+>> -		atomic_notifier_chain_unregister(&panic_notifier_list,
+>> +		atomic_notifier_chain_unregister(&panic_hypervisor_list,
+>>  						&hyperv_panic_report_block);
+>>  	}
+>>
+> 
+> Using the hypervisor_list here produces a bit of a mismatch.  In many cases
+> this notifier will do nothing, and will defer to the kmsg_dump() mechanism
+> to notify the hypervisor about the panic.   Running the kmsg_dump()
+> mechanism is linked to the info_list, so I'm thinking the Hyper-V panic report
+> notifier should be on the info_list as well.  That way the reporting behavior
+> is triggered at the same point in the panic path regardless of which
+> reporting mechanism is used.
+> 
 
-That is a good observation, however, many of the use cases in data
-centers (deployment of devices in data centers) do not exploit device
-power management. Therefore, I'm not sure that is the right way to
-design this.
+Hi Michael, thanks for your feedback! I agree that your idea could work,
+but...there is one downside: imagine the kmsg_dump() approach is not set
+in some Hyper-V guest, then we would rely in the regular notification
+mechanism [hv_die_panic_notify_crash()], right?
+But...you want then to run this notifier in the informational list,
+which...won't execute *by default* before kdump if no kmsg_dump() is
+set. So, this logic is convoluted when you mix it with the default level
+concept + kdump.
 
-Also if you look into device_shutdown (drivers/base/core.c) generic
-kernel routine does not exploit the shutdown method suggested by you
-instead use the generic shutdown methods defined in bus, class,
-drivers structures. Therefore, adopting to expand on those generic
-shutdown interfaces is the incremental choice to not confuse driver
-developers.
+May I suggest something? If possible, take a run with this patch set +
+DEBUG_NOTIFIER=y, in *both* cases (with and without the kmsg_dump()
+set). I did that and they run almost at the same time...I've checked the
+notifiers called, it's like almost nothing runs in-between.
 
-Hope this clarifies why this extension is proposed when compared to
-overloading a generic shutdown entry point with device power
-management requirements.
+I feel the panic notification mechanism does really fit with a
+hypervisor list, it's a good match with the nature of the list, which
+aims at informing the panic notification to the hypervisor/FW.
+Of course we can modify it if you prefer...but please take into account
+the kdump case and how it complicates the logic.
 
-Thanks
-sureshtk
+Let me know your considerations, in case you can experiment with the
+patch set as-is.
+Cheers,
 
 
-
-On Fri, Apr 15, 2022 at 7:42 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Wed, Apr 13, 2022 at 12:44 AM Tanjore Suresh <tansuresh@google.com> wrote:
-> >
-> > This changes the bus driver interface with additional entry points
-> > to enable devices to implement asynchronous shutdown. The existing
-> > synchronous interface to shutdown is unmodified and retained for
-> > backward compatibility.
-> >
-> > This changes the common device shutdown code to enable devices to
-> > participate in asynchronous shutdown implementation.
-> >
-> > Signed-off-by: Tanjore Suresh <tansuresh@google.com>
->
-> Is there any specific reason why you didn't follow the design of, say,
-> dpm_suspend(), where the "async" devices only need to have a flag set
-> and the driver is not required to implement any new callbacks?
->
-> IMO having different driver interfaces for asynchronous suspend and
-> shutdown would be quite confusing for driver developers, wouldn't it?
->
-> > ---
-> >  drivers/base/core.c        | 38 +++++++++++++++++++++++++++++++++++++-
-> >  include/linux/device/bus.h | 12 ++++++++++++
-> >  2 files changed, 49 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/base/core.c b/drivers/base/core.c
-> > index 3d6430eb0c6a..ba267ae70a22 100644
-> > --- a/drivers/base/core.c
-> > +++ b/drivers/base/core.c
-> > @@ -4479,6 +4479,7 @@ EXPORT_SYMBOL_GPL(device_change_owner);
-> >  void device_shutdown(void)
-> >  {
-> >         struct device *dev, *parent;
-> > +       LIST_HEAD(async_shutdown_list);
-> >
-> >         wait_for_device_probe();
-> >         device_block_probing();
-> > @@ -4523,7 +4524,13 @@ void device_shutdown(void)
-> >                                 dev_info(dev, "shutdown_pre\n");
-> >                         dev->class->shutdown_pre(dev);
-> >                 }
-> > -               if (dev->bus && dev->bus->shutdown) {
-> > +               if (dev->bus && dev->bus->async_shutdown_start) {
-> > +                       if (initcall_debug)
-> > +                               dev_info(dev, "async_shutdown_start\n");
-> > +                       dev->bus->async_shutdown_start(dev);
-> > +                       list_add_tail(&dev->kobj.entry,
-> > +                               &async_shutdown_list);
-> > +               } else if (dev->bus && dev->bus->shutdown) {
-> >                         if (initcall_debug)
-> >                                 dev_info(dev, "shutdown\n");
-> >                         dev->bus->shutdown(dev);
-> > @@ -4543,6 +4550,35 @@ void device_shutdown(void)
-> >                 spin_lock(&devices_kset->list_lock);
-> >         }
-> >         spin_unlock(&devices_kset->list_lock);
-> > +
-> > +       /*
-> > +        * Second pass spin for only devices, that have configured
-> > +        * Asynchronous shutdown.
-> > +        */
-> > +       while (!list_empty(&async_shutdown_list)) {
-> > +               dev = list_entry(async_shutdown_list.next, struct device,
-> > +                               kobj.entry);
-> > +               parent = get_device(dev->parent);
-> > +               get_device(dev);
-> > +               /*
-> > +                * Make sure the device is off the  list
-> > +                */
-> > +               list_del_init(&dev->kobj.entry);
-> > +               if (parent)
-> > +                       device_lock(parent);
-> > +               device_lock(dev);
-> > +               if (dev->bus && dev->bus->async_shutdown_end) {
-> > +                       if (initcall_debug)
-> > +                               dev_info(dev,
-> > +                               "async_shutdown_end called\n");
-> > +                       dev->bus->async_shutdown_end(dev);
-> > +               }
-> > +               device_unlock(dev);
-> > +               if (parent)
-> > +                       device_unlock(parent);
-> > +               put_device(dev);
-> > +               put_device(parent);
-> > +       }
-> >  }
-> >
-> >  /*
-> > diff --git a/include/linux/device/bus.h b/include/linux/device/bus.h
-> > index a039ab809753..f582c9d21515 100644
-> > --- a/include/linux/device/bus.h
-> > +++ b/include/linux/device/bus.h
-> > @@ -49,6 +49,16 @@ struct fwnode_handle;
-> >   *             will never get called until they do.
-> >   * @remove:    Called when a device removed from this bus.
-> >   * @shutdown:  Called at shut-down time to quiesce the device.
-> > + * @async_shutdown_start:      Called at the shutdown-time to start
-> > + *                             the shutdown process on the device.
-> > + *                             This entry point will be called only
-> > + *                             when the bus driver has indicated it would
-> > + *                             like to participate in asynchronous shutdown
-> > + *                             completion.
-> > + * @async_shutdown_end:        Called at shutdown-time  to complete the shutdown
-> > + *                     process of the device. This entry point will be called
-> > + *                     only when the bus drive has indicated it would like to
-> > + *                     participate in the asynchronous shutdown completion.
-> >   *
-> >   * @online:    Called to put the device back online (after offlining it).
-> >   * @offline:   Called to put the device offline for hot-removal. May fail.
-> > @@ -93,6 +103,8 @@ struct bus_type {
-> >         void (*sync_state)(struct device *dev);
-> >         void (*remove)(struct device *dev);
-> >         void (*shutdown)(struct device *dev);
-> > +       void (*async_shutdown_start)(struct device *dev);
-> > +       void (*async_shutdown_end)(struct device *dev);
-> >
-> >         int (*online)(struct device *dev);
-> >         int (*offline)(struct device *dev);
-> > --
-> > 2.36.0.rc0.470.gd361397f0d-goog
-> >
+Guilherme

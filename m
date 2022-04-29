@@ -2,92 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE3B515840
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 00:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E75B515843
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 00:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381450AbiD2WSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 18:18:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
+        id S1381453AbiD2WTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 18:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381298AbiD2WR5 (ORCPT
+        with ESMTP id S1381492AbiD2WTS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 18:17:57 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA45DCAAC
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 15:14:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=3IoXqscm/GDB8ayCU86uJUqG77jsTrHm9nyAZKLbLS0=; b=cB+HOg4h9IRvZr98l3wNejVaiK
-        KHKK/QWiK7mse+v/+129F07PiliiE3gS5MVOXw1MLNWwhLuqnAFlrqGLee2M5UGQIeBZk8xRZsEG2
-        +wvCB9A2YnclGFgLlwVZFIPoq1zMem+6oU2Y0nqy9zYGRiOkzm4BTpITh5WJJjpsQ3IUMCrp4NAtj
-        3PYlmbIcaXeC58NtBIJfmHZgjl/5W9tEfdl3qOE81gHL8W2SkG+htIEL7+4Cqc4Ut8FlEyAc1drlt
-        uO8ybuOfqaS45vUhcdFVqufOYTp+kp2Cw8Y4TAYuScoEkpUxEeDxm1eE9h1QZq0xiCqPG+sHAhSGt
-        TMzkwWpg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nkYsf-00Cr4i-F3; Fri, 29 Apr 2022 22:14:29 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id EC01B3003AA;
-        Sat, 30 Apr 2022 00:14:28 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D049820295B05; Sat, 30 Apr 2022 00:14:28 +0200 (CEST)
-Date:   Sat, 30 Apr 2022 00:14:28 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Lai Jiangshan <jiangshanlai@gmail.com>, X86 ML <x86@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] x86,entry: Use PUSH_AND_CLEAR_REGS for compat
-Message-ID: <YmxjRIh4SiTiqQKD@hirez.programming.kicks-ass.net>
-References: <20220429091301.GR2731@worktop.programming.kicks-ass.net>
- <CAJhGHyBUzURTBBnkO5c5xRC+c9+KFvLXw06h5uQ7gODeiSR-QA@mail.gmail.com>
- <YmxU2JoswWMYm4nl@hirez.programming.kicks-ass.net>
- <CAHk-=wg1p87BAj3ebiugG9Q5YaKNUDpEWmjLKam69Ak3g__Aug@mail.gmail.com>
+        Fri, 29 Apr 2022 18:19:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B4A368FA0;
+        Fri, 29 Apr 2022 15:15:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9A3F62355;
+        Fri, 29 Apr 2022 22:15:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A648C385AC;
+        Fri, 29 Apr 2022 22:15:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651270558;
+        bh=PArqcJGPkJwNruydywviLBXVfr/YQIfs2761D/HPRuE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=nVkaOJJTMrOYrLVOwFXWDWrAxvUA2aquDFXUgHVaEvooXXh+UegFL2E+PP/hCFa0v
+         w+MTLELYr3lskMIS5ZAkmqaJM7zbHCbuE+zqjvgOzFoHVRmuIP2I8X9RH8OlAD+TZf
+         jP3nl4EG0/IZcNS3qgEh03XdeP300pO5KJouYxt0sDnk43eOlBzPZqdTPwh9EiYTeV
+         mXpV4f6Asjy8h2R+p5SowrbH+1f0GmRQF3+Y9OSdaex2/rvuus3YLX3mFOzB3YFASx
+         zNCu+0rjML4jy8+f3+duZLRI+EIUSbVIZOpAAOKhIDVJYcpDhLARCH5x/kCvLEpj2a
+         WS4c63DC1AK5A==
+Received: by mail-pf1-f175.google.com with SMTP id x52so6444471pfu.11;
+        Fri, 29 Apr 2022 15:15:58 -0700 (PDT)
+X-Gm-Message-State: AOAM531mgL1xU5VAylo51mUP2CKsvPJEU7k2mkBxy70DazUQAlK3GSRI
+        wtDnTEYvgJy5iCXthg3S26QN164m1LJ+tXN/cw==
+X-Google-Smtp-Source: ABdhPJwV02WC1KU96rU/7M3sh4lss8FYg7LqnrRZjvHSRlnuQ27S5TVNl1tIUrzo5qPB1SCWijNnSL3UqiQYhtuF6Jo=
+X-Received: by 2002:a63:500a:0:b0:3c1:afc5:1213 with SMTP id
+ e10-20020a63500a000000b003c1afc51213mr1097713pgb.148.1651270557853; Fri, 29
+ Apr 2022 15:15:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wg1p87BAj3ebiugG9Q5YaKNUDpEWmjLKam69Ak3g__Aug@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220426193253.663582-1-dfustini@baylibre.com>
+ <20220426193253.663582-2-dfustini@baylibre.com> <YmxjQCckMnE8de6s@robh.at.kernel.org>
+In-Reply-To: <YmxjQCckMnE8de6s@robh.at.kernel.org>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 29 Apr 2022 17:15:45 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJOGg6aB5nLYbcK41SQKN9TWkQYkfSKAx9eONFdBvpqWQ@mail.gmail.com>
+Message-ID: <CAL_JsqJOGg6aB5nLYbcK41SQKN9TWkQYkfSKAx9eONFdBvpqWQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: wkup-m3-ipc: Add ti,scale-data-fw property
+To:     Drew Fustini <dfustini@baylibre.com>
+Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Dave Gerlach <d-gerlach@ti.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Nishanth Menon <nm@ti.com>, Tony Lindgren <tony@atomide.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        devicetree@vger.kernel.org, Keerthy <j-keerthy@ti.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 02:30:45PM -0700, Linus Torvalds wrote:
-> On Fri, Apr 29, 2022 at 2:13 PM Peter Zijlstra <peterz@infradead.org> wrote:
+On Fri, Apr 29, 2022 at 5:14 PM Rob Herring <robh@kernel.org> wrote:
+>
+> On Tue, 26 Apr 2022 12:32:52 -0700, Drew Fustini wrote:
+> > From: Dave Gerlach <d-gerlach@ti.com>
 > >
-> > (Linus, can I add your SoB to the thing?)
-> 
-> If you teste this with some actual old int80 compat syscalls, then absolutely:
+> > Add documentation for ti,scale-data-fw property to enable I2C PMIC
+> > voltage scaling during deep sleep. The property contains the name of a
+> > binary file for the CM3 firmware to load.
+> >
+> > Based on previous work by Russ Dill.
+> >
+> > Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
+> > Signed-off-by: Keerthy <j-keerthy@ti.com>
+> > [dfustini: split from driver patch and convert to json-schema]
+> > Signed-off-by: Drew Fustini <dfustini@baylibre.com>
+> > ---
+> > Changes from v1:
+> > - change 'ti,scale-data-fw' to 'firmware-name'
+> > - add 'firmware-name' property to the examples
+> >
+> >  .../devicetree/bindings/soc/ti/wkup-m3-ipc.yaml      | 12 ++++++++++++
+> >  1 file changed, 12 insertions(+)
+> >
+>
+> Applied, thanks!
 
-I ran tools/testing/selftests/x86/*_32 on it. That definitely tickles
-the int80 path. Also, without the off-by-one fixed that gives some
-generous helpings of segfault.
+Err, picked v3 instead.
 
->    Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-
-Thanks!
-
-> > +       pushq   %rdi                    /* pt_regs->di */
-> >         pushq   %rsi                    /* pt_regs->si */
-> >         xorl    %esi, %esi              /* nospec   si */
-> 
-> It would probably make sense to add a comment about why %rdi isn't
-> cleared when pushed, like all the other registers are.
-> 
-> Even if that comment is just "%rdi will be overwritten as arg0 of the
-> call to C, so no need to clear it".
-> 
-> Maybe as part of the PUSH_AND_CLEAR_REGS changes?
-
-I'll stick the comment on.
+Rob

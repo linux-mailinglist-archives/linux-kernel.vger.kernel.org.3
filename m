@@ -2,85 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8412E515399
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DECC65153B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379847AbiD2SaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 14:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55930 "EHLO
+        id S1380000AbiD2Scx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 14:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235142AbiD2SaS (ORCPT
+        with ESMTP id S1379995AbiD2Scu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 14:30:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDC788782
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:27:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B78FBB8377D
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 18:26:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C942C385A7;
-        Fri, 29 Apr 2022 18:26:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1651256817;
-        bh=RetPHIqaTp39CFL88pHBGGEDarcJQ2Fw9C5KuuxsGZE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=a5mrkyafMpZCzsr3+1He2CqAYDQxmPqFU2s27wkSHVrvE+3VBzS3cL0G5jp7M1PNh
-         lQujhpv4M7Og3qtDQPyaSHFLSuU+JnydshMsOryDGWpuilTduPXoOkyHZtHwE2Uvcb
-         tRH5YkmPlGwNBZ6BiYUGB/7oBolOIqjyYtXzCkM8=
-Date:   Fri, 29 Apr 2022 11:26:55 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>,
+        Fri, 29 Apr 2022 14:32:50 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AE2D3AEC
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:29:29 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id r13so16989395ejd.5
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:29:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=1Zn4UF57t4pnfMwkACd31jjeal5RhpHnkwFarZTu/dQ=;
+        b=Yju2gP3H7feQ0jeMIY/hZkOEOoSoa00CEibfna6oVQzF9/eQ5+ytMAsdLe5WX7mHeQ
+         J61qzVV7hJgD2E7DTMm799fD1ExZWC92O5Z5MQJ3Izz75VW5dcvN/q6CSgHUbws9RglY
+         83cEuaWdBuKpqQTXIrafNSDyCsuv2Ew28D74WXz/Ik2eST10Un3FzGmvqMC8O+fYL4PC
+         8JQYD4vG/i4KtH8ZMZH0GPFGUg6Nz8RKmYkXLtDfxBXypISaZi6+WTwWX/9LGj3oj9Ql
+         L8++NV0TVRjT6Iqj0aHMEIgQOGyyJP0xnB5R1z3nGhE9kAKq1TuJQ1gQ5SW7rPZfWhCn
+         o50w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1Zn4UF57t4pnfMwkACd31jjeal5RhpHnkwFarZTu/dQ=;
+        b=lIA0xq9et5qyc0kxO2IhatFSgi3sNqsnCdtt5he94ii0z+DfZfk1xxHIw2NHvhdIJQ
+         6Kb9XB9L42RAqjyJmQmQms/GssEKgyyDqVQBHZqRwQCOm9CE0H9mSf+3tFs5yW895wjM
+         XkEBoFWOK8vfQnihfrm1gK1pNmgSd5FaKoDdSeo5bK2JmUmWMnTuz+1m87CA7XhJEStR
+         umoEipKgPfnyh+k53P71vTfv1jagBEc72T0WsR07KEyDhRVcJzFBH7rzCjXrvbfgi0WD
+         KkwkVJmh5JmYNZYtvuF0aRIqcrq2erlxMo9651raVmKtwp8mReAA7A1dg/8PvGOrQM69
+         j/Eg==
+X-Gm-Message-State: AOAM532ex9NIAwZ9QxxtrTmVkBDaZ9rfYu7oiih3lQ/SHwdzFUjumpJg
+        SCvMNQpB38Mdy0ysQM3cnMNklQ==
+X-Google-Smtp-Source: ABdhPJxnnexTfm1ciFrnHmiTZVvUaiD85uL4/xEhS6m4C1gFLe/tyvaZCnOhPWZFKjyEpqAej5KZuQ==
+X-Received: by 2002:a17:907:2cc6:b0:6f0:2de3:9446 with SMTP id hg6-20020a1709072cc600b006f02de39446mr581569ejc.690.1651256968301;
+        Fri, 29 Apr 2022 11:29:28 -0700 (PDT)
+Received: from [192.168.0.175] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id h14-20020a1709070b0e00b006f3ef214db9sm858906ejl.31.2022.04.29.11.29.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 11:29:27 -0700 (PDT)
+Message-ID: <cbf9aad1-cbdb-8886-f979-a793b070e2a1@linaro.org>
+Date:   Fri, 29 Apr 2022 20:29:25 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v7 12/12] rpmsg: Fix kfree() of static memory on setting
+ driver_override
+Content-Language: en-US
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Stuart Yoder <stuyoder@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
-Subject: Re: [PATCH v4 12/17] mm: remember exclusively mapped anonymous
- pages with PG_anon_exclusive
-Message-Id: <20220429112655.6b44dae1a93a9aa93adb0bcf@linux-foundation.org>
-In-Reply-To: <20220428083441.37290-13-david@redhat.com>
-References: <20220428083441.37290-1-david@redhat.com>
-        <20220428083441.37290-13-david@redhat.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+References: <20220419113435.246203-1-krzysztof.kozlowski@linaro.org>
+ <20220419113435.246203-13-krzysztof.kozlowski@linaro.org>
+ <CGME20220429122942eucas1p1820d0cd17a871d4953bac2b3de1dcdd9@eucas1p1.samsung.com>
+ <870885de-33f3-e0ba-4d56-71c3c993ac87@samsung.com>
+ <75b94ccd-b739-2164-bc4a-20025356cc34@linaro.org>
+ <6e21f7d3-49d0-eda7-7a89-0f8ac69596a4@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <6e21f7d3-49d0-eda7-7a89-0f8ac69596a4@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Apr 2022 10:34:36 +0200 David Hildenbrand <david@redhat.com> wrote:
+On 29/04/2022 16:51, Marek Szyprowski wrote:
+> On 29.04.2022 16:16, Krzysztof Kozlowski wrote:
+>> On 29/04/2022 14:29, Marek Szyprowski wrote:
+>>> On 19.04.2022 13:34, Krzysztof Kozlowski wrote:
+>>>> The driver_override field from platform driver should not be initialized
+>>>> from static memory (string literal) because the core later kfree() it,
+>>>> for example when driver_override is set via sysfs.
+>>>>
+>>>> Use dedicated helper to set driver_override properly.
+>>>>
+>>>> Fixes: 950a7388f02b ("rpmsg: Turn name service into a stand alone driver")
+>>>> Fixes: c0cdc19f84a4 ("rpmsg: Driver for user space endpoint interface")
+>>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>>> This patch landed recently in linux-next as commit 42cd402b8fd4 ("rpmsg:
+>>> Fix kfree() of static memory on setting driver_override"). In my tests I
+>>> found that it triggers the following issue during boot of the
+>>> DragonBoard410c SBC (arch/arm64/boot/dts/qcom/apq8016-sbc.dtb):
+>>>
+>>> ------------[ cut here ]------------
+>>> DEBUG_LOCKS_WARN_ON(lock->magic != lock)
+>>> WARNING: CPU: 1 PID: 8 at kernel/locking/mutex.c:582
+>>> __mutex_lock+0x1ec/0x430
+>>> Modules linked in:
+>>> CPU: 1 PID: 8 Comm: kworker/u8:0 Not tainted 5.18.0-rc4-next-20220429 #11815
+>>> Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+>>> Workqueue: events_unbound deferred_probe_work_func
+>>> pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>>> pc : __mutex_lock+0x1ec/0x430
+>>> lr : __mutex_lock+0x1ec/0x430
+>>> ..
+>>> Call trace:
+>>>    __mutex_lock+0x1ec/0x430
+>>>    mutex_lock_nested+0x38/0x64
+>>>    driver_set_override+0x124/0x150
+>>>    qcom_smd_register_edge+0x2a8/0x4ec
+>>>    qcom_smd_probe+0x54/0x80
+>>>    platform_probe+0x68/0xe0
+>>>    really_probe.part.0+0x9c/0x29c
+>>>    __driver_probe_device+0x98/0x144
+>>>    driver_probe_device+0xac/0x14c
+>>>    __device_attach_driver+0xb8/0x120
+>>>    bus_for_each_drv+0x78/0xd0
+>>>    __device_attach+0xd8/0x180
+>>>    device_initial_probe+0x14/0x20
+>>>    bus_probe_device+0x9c/0xa4
+>>>    deferred_probe_work_func+0x88/0xc4
+>>>    process_one_work+0x288/0x6bc
+>>>    worker_thread+0x248/0x450
+>>>    kthread+0x118/0x11c
+>>>    ret_from_fork+0x10/0x20
+>>> irq event stamp: 3599
+>>> hardirqs last  enabled at (3599): [<ffff80000919053c>]
+>>> _raw_spin_unlock_irqrestore+0x98/0x9c
+>>> hardirqs last disabled at (3598): [<ffff800009190ba4>]
+>>> _raw_spin_lock_irqsave+0xc0/0xcc
+>>> softirqs last  enabled at (3554): [<ffff800008010470>] _stext+0x470/0x5e8
+>>> softirqs last disabled at (3549): [<ffff8000080a4514>]
+>>> __irq_exit_rcu+0x180/0x1ac
+>>> ---[ end trace 0000000000000000 ]---
+>>>
+>>> I don't see any direct relation between the $subject and the above log,
+>>> but reverting the $subject on top of linux next-20220429 hides/fixes it.
+>>> Maybe there is a kind of memory trashing somewhere there and your change
+>>> only revealed it?
+>> Thanks for the report. I think the error path of my patch is wrong - I
+>> should not kfree(rpdev->driver_override) from the rpmsg code. That's the
+>> only thing I see now...
+>>
+>> Could you test following patch and tell if it helps?
+>> https://pastebin.ubuntu.com/p/rp3q9Z5fXj/
+> 
+> This doesn't help, the issue is still reported.
 
-> Let's mark exclusively mapped anonymous pages with PG_anon_exclusive as
-> exclusive, and use that information to make GUP pins reliable and stay
-> consistent with the page mapped into the page table even if the
-> page table entry gets write-protected.
+I think I screwed this part of code. The new helper uses device_lock()
+(the mutexes you see in backtrace) but in rpmsg it is called before
+device_register() which initializes the device.
 
-No reviewers on this one?
+I don't have a device using qcom-smd rpmsg, so it's a bit tricky to
+reproduce.
 
-
+Best regards,
+Krzysztof

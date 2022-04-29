@@ -2,115 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B022515744
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A2A2515758
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239371AbiD2Vuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 17:50:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41508 "EHLO
+        id S239436AbiD2VwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 17:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238812AbiD2Vua (ORCPT
+        with ESMTP id S238812AbiD2VwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 17:50:30 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4AF66224;
-        Fri, 29 Apr 2022 14:47:10 -0700 (PDT)
-Received: from mail-yb1-f172.google.com ([209.85.219.172]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1Mna0x-1oAIQr2BZF-00jYkX; Fri, 29 Apr 2022 23:47:08 +0200
-Received: by mail-yb1-f172.google.com with SMTP id j2so16794830ybu.0;
-        Fri, 29 Apr 2022 14:47:07 -0700 (PDT)
-X-Gm-Message-State: AOAM530xFvgaS6E7YleebaxYuHKbztMb8/4ph6JAKkapt9mvY51Aq0Ot
-        ghcHJQm/ZtGSH1zgWh+MyICM7xk9gzphi+BehZs=
-X-Google-Smtp-Source: ABdhPJwtcBUeQCwBE/wHCTNSMt9GmZKG8b0zElf3XSRBB+ltEsvmy5fENkUQ3EnsgyBJ9WDIgobY6XmBd5vZorZaAUk=
-X-Received: by 2002:a25:d3c2:0:b0:645:74df:f43d with SMTP id
- e185-20020a25d3c2000000b0064574dff43dmr1535991ybf.394.1651268826333; Fri, 29
- Apr 2022 14:47:06 -0700 (PDT)
+        Fri, 29 Apr 2022 17:52:16 -0400
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403B7DB2D3;
+        Fri, 29 Apr 2022 14:48:57 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:49628)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nkYTv-007O8s-O2; Fri, 29 Apr 2022 15:48:55 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:36464 helo=localhost.localdomain)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nkYTt-007RIp-EJ; Fri, 29 Apr 2022 15:48:55 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     rjw@rjwysocki.net, Oleg Nesterov <oleg@redhat.com>,
+        mingo@kernel.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        bigeasy@linutronix.de, Will Deacon <will@kernel.org>,
+        tj@kernel.org, linux-pm@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Date:   Fri, 29 Apr 2022 16:48:26 -0500
+Message-Id: <20220429214837.386518-1-ebiederm@xmission.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
+References: <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-References: <20220419163810.2118169-1-arnd@kernel.org> <20220422170530.GA2338209@roeck-us.net>
- <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
- <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net> <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
- <20220422234150.GA3442771@roeck-us.net> <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
- <3b4046ed-fd75-13ea-fac3-06469172806c@roeck-us.net> <CAK8P3a1LzEG1vo+5nMrnL3TOMcbSKJ3u=StcfY8dajV2raUBjA@mail.gmail.com>
- <3df135a2-17f5-d6c6-b4a8-e1a60e254297@roeck-us.net> <CAK8P3a2EHMQPN4ny9sXXuReFG0jN0hyRV7h9v_AR_0pqpOU41w@mail.gmail.com>
- <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
- <6f1b27fa-96d1-4be7-ac6a-762610314f2a@roeck-us.net> <8d6d453a-e6fc-439b-2f34-e60c22fc9e98@roeck-us.net>
-In-Reply-To: <8d6d453a-e6fc-439b-2f34-e60c22fc9e98@roeck-us.net>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 29 Apr 2022 23:46:50 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2Ekvis1YcrJZtuga+XQdbeTC98PkOszCpS2DiZri7VMQ@mail.gmail.com>
-Message-ID: <CAK8P3a2Ekvis1YcrJZtuga+XQdbeTC98PkOszCpS2DiZri7VMQ@mail.gmail.com>
-Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:aUt4162Q8o+llL/MljFLEZxLfqetFKE837pmri7fn06Ux+pHE2E
- HUT40C4ROecFrWGMuh7FZHUctHZLox8PPsZXleJUgvy9mYBXJ8pKhdYxSRIruSY/aMB/RDF
- U1BEI7N5/2VG8u6N+C3m4+nlZOlEtD7a52T70wiK6/at/danyT6j0f35GJC0igmu+zlPp3o
- hPSAJrfl8wT08SeKcbKDw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:B6AOKPVl318=:2wVX5LiQoMRiBhVxLqNc5a
- 6bfir268MD5gQH7DLEuFEsI6WBBc1Y0Ecs6EnhuRsx1K24LuPMh07aYEIpKkcwNAAZfYMwflw
- pGzfeN1TqZ/DZE0Y6jB9FtL7K+04AeCNHTMZ//8xkL4V0xYBxZAP9BTVlcnEyvTsUYwS2Btg4
- vlnJGv66VRl18T+sqQf7xxVhibK8Wq70YGqiM+Po4/0hQXeq8MB/INm4yKnqmNUInDxTfWLHT
- +mmUB0ji5qRvID6/tQH6xrbVdNsZo18KfNLKu/B1CiwzBdT/gKJkj4pXgPVXoMq36ig2Ctu3M
- adeEof/gPY3eELgS/LtY8Tbwxt40i+enALDiuH+GuPG8sIJGRQ0u8jm4WbQbxpqtQReV/BoN/
- /0RaUvbG5bCVJ2ZEbQ75GA30AyoYlAIl5/wde1yMLwwVxBXeLmxlq3y/5eFktLuUskS6GspAY
- H1p4xOJbdwpqwlZHG7GYDtZtFwFoQe2yR7IlaVupWMwQ5kJ/5ARJKy1MGSNGWNv9ynnIW+16q
- 3r268R/MBM52lW3YHXF62SBnvoquSaaU0AJxZ9zbLVABj6pPn6KV9tk5Ri1US3zrFLmBPLvvv
- Pd2lciRs/sx2sA+uA6qqK5g0AxTGPfqYDnIHsA76v0M12oIDEVwlBMOnEAJdPKnF+gy/ZbI0Y
- CtrOeY8EtfkkI4G1vJ1cBEfVKh2jeGqkGpPNTOEJVIAhIn/1s31hjRkhpC7US2ZEOj5g=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-XM-SPF: eid=1nkYTt-007RIp-EJ;;;mid=<20220429214837.386518-1-ebiederm@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX18QHwhDIVhRddYvW2NsQFv/0UjlGxd6VNQ=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=2 Fuz2=38 
+X-Spam-Combo: ***;linux-kernel@vger.kernel.org
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1635 ms - load_scoreonly_sql: 0.06 (0.0%),
+        signal_user_changed: 11 (0.7%), b_tie_ro: 10 (0.6%), parse: 1.15
+        (0.1%), extract_message_metadata: 13 (0.8%), get_uri_detail_list: 2.5
+        (0.2%), tests_pri_-1000: 14 (0.9%), tests_pri_-950: 1.38 (0.1%),
+        tests_pri_-900: 1.16 (0.1%), tests_pri_-90: 168 (10.2%), check_bayes:
+        166 (10.1%), b_tokenize: 13 (0.8%), b_tok_get_all: 9 (0.5%),
+        b_comp_prob: 2.8 (0.2%), b_tok_touch_all: 138 (8.4%), b_finish: 1.03
+        (0.1%), tests_pri_0: 1398 (85.5%), check_dkim_signature: 0.71 (0.0%),
+        check_dkim_adsp: 3.0 (0.2%), poll_dns_idle: 1.03 (0.1%), tests_pri_10:
+        3.6 (0.2%), tests_pri_500: 20 (1.2%), rewrite_mail: 0.00 (0.0%)
+Subject: [PATCH v2 01/12] signal: Rename send_signal send_signal_locked
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 10:23 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> On 4/29/22 10:48, Guenter Roeck wrote:
-> >
-> > I tried the pxa-multiplatform-5.18 branch. Its failures match
-> > those in v5.18-rc1.
-> >
->
-> Uuh, wait, the build wasn't complete. There are still some
-> failures. I'll report later.
+Rename send_signal send_signal_locked and make to make
+it usable outside of signal.c.
 
-Sorry about the breakage, I got a few more reports about minor build errors
-and warnings, the newly uploaded branches should address all of the ones
-I got reports for.
+Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+---
+ include/linux/signal.h |  2 ++
+ kernel/signal.c        | 24 ++++++++++++------------
+ 2 files changed, 14 insertions(+), 12 deletions(-)
 
-        Arnd
+diff --git a/include/linux/signal.h b/include/linux/signal.h
+index a6db6f2ae113..55605bdf5ce9 100644
+--- a/include/linux/signal.h
++++ b/include/linux/signal.h
+@@ -283,6 +283,8 @@ extern int do_send_sig_info(int sig, struct kernel_siginfo *info,
+ extern int group_send_sig_info(int sig, struct kernel_siginfo *info,
+ 			       struct task_struct *p, enum pid_type type);
+ extern int __group_send_sig_info(int, struct kernel_siginfo *, struct task_struct *);
++extern int send_signal_locked(int sig, struct kernel_siginfo *info,
++			      struct task_struct *p, enum pid_type type);
+ extern int sigprocmask(int, sigset_t *, sigset_t *);
+ extern void set_current_blocked(sigset_t *);
+ extern void __set_current_blocked(const sigset_t *);
+diff --git a/kernel/signal.c b/kernel/signal.c
+index 30cd1ca43bcd..b0403197b0ad 100644
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -1071,8 +1071,8 @@ static inline bool legacy_queue(struct sigpending *signals, int sig)
+ 	return (sig < SIGRTMIN) && sigismember(&signals->signal, sig);
+ }
+ 
+-static int __send_signal(int sig, struct kernel_siginfo *info, struct task_struct *t,
+-			enum pid_type type, bool force)
++static int __send_signal_locked(int sig, struct kernel_siginfo *info,
++				struct task_struct *t, enum pid_type type, bool force)
+ {
+ 	struct sigpending *pending;
+ 	struct sigqueue *q;
+@@ -1212,8 +1212,8 @@ static inline bool has_si_pid_and_uid(struct kernel_siginfo *info)
+ 	return ret;
+ }
+ 
+-static int send_signal(int sig, struct kernel_siginfo *info, struct task_struct *t,
+-			enum pid_type type)
++int send_signal_locked(int sig, struct kernel_siginfo *info,
++		       struct task_struct *t, enum pid_type type)
+ {
+ 	/* Should SIGKILL or SIGSTOP be received by a pid namespace init? */
+ 	bool force = false;
+@@ -1245,7 +1245,7 @@ static int send_signal(int sig, struct kernel_siginfo *info, struct task_struct
+ 			force = true;
+ 		}
+ 	}
+-	return __send_signal(sig, info, t, type, force);
++	return __send_signal_locked(sig, info, t, type, force);
+ }
+ 
+ static void print_fatal_signal(int signr)
+@@ -1284,7 +1284,7 @@ __setup("print-fatal-signals=", setup_print_fatal_signals);
+ int
+ __group_send_sig_info(int sig, struct kernel_siginfo *info, struct task_struct *p)
+ {
+-	return send_signal(sig, info, p, PIDTYPE_TGID);
++	return send_signal_locked(sig, info, p, PIDTYPE_TGID);
+ }
+ 
+ int do_send_sig_info(int sig, struct kernel_siginfo *info, struct task_struct *p,
+@@ -1294,7 +1294,7 @@ int do_send_sig_info(int sig, struct kernel_siginfo *info, struct task_struct *p
+ 	int ret = -ESRCH;
+ 
+ 	if (lock_task_sighand(p, &flags)) {
+-		ret = send_signal(sig, info, p, type);
++		ret = send_signal_locked(sig, info, p, type);
+ 		unlock_task_sighand(p, &flags);
+ 	}
+ 
+@@ -1347,7 +1347,7 @@ force_sig_info_to_task(struct kernel_siginfo *info, struct task_struct *t,
+ 	if (action->sa.sa_handler == SIG_DFL &&
+ 	    (!t->ptrace || (handler == HANDLER_EXIT)))
+ 		t->signal->flags &= ~SIGNAL_UNKILLABLE;
+-	ret = send_signal(sig, info, t, PIDTYPE_PID);
++	ret = send_signal_locked(sig, info, t, PIDTYPE_PID);
+ 	spin_unlock_irqrestore(&t->sighand->siglock, flags);
+ 
+ 	return ret;
+@@ -1567,7 +1567,7 @@ int kill_pid_usb_asyncio(int sig, int errno, sigval_t addr,
+ 
+ 	if (sig) {
+ 		if (lock_task_sighand(p, &flags)) {
+-			ret = __send_signal(sig, &info, p, PIDTYPE_TGID, false);
++			ret = __send_signal_locked(sig, &info, p, PIDTYPE_TGID, false);
+ 			unlock_task_sighand(p, &flags);
+ 		} else
+ 			ret = -ESRCH;
+@@ -2103,7 +2103,7 @@ bool do_notify_parent(struct task_struct *tsk, int sig)
+ 	 * parent's namespaces.
+ 	 */
+ 	if (valid_signal(sig) && sig)
+-		__send_signal(sig, &info, tsk->parent, PIDTYPE_TGID, false);
++		__send_signal_locked(sig, &info, tsk->parent, PIDTYPE_TGID, false);
+ 	__wake_up_parent(tsk, tsk->parent);
+ 	spin_unlock_irqrestore(&psig->siglock, flags);
+ 
+@@ -2601,7 +2601,7 @@ static int ptrace_signal(int signr, kernel_siginfo_t *info, enum pid_type type)
+ 	/* If the (new) signal is now blocked, requeue it.  */
+ 	if (sigismember(&current->blocked, signr) ||
+ 	    fatal_signal_pending(current)) {
+-		send_signal(signr, info, current, type);
++		send_signal_locked(signr, info, current, type);
+ 		signr = 0;
+ 	}
+ 
+@@ -4793,7 +4793,7 @@ void kdb_send_sig(struct task_struct *t, int sig)
+ 			   "the deadlock.\n");
+ 		return;
+ 	}
+-	ret = send_signal(sig, SEND_SIG_PRIV, t, PIDTYPE_PID);
++	ret = send_signal_locked(sig, SEND_SIG_PRIV, t, PIDTYPE_PID);
+ 	spin_unlock(&t->sighand->siglock);
+ 	if (ret)
+ 		kdb_printf("Fail to deliver Signal %d to process %d.\n",
+-- 
+2.35.3
+

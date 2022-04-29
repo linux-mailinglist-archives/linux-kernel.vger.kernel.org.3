@@ -2,82 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E34514255
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 08:31:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D5151425A
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 08:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354482AbiD2GeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 02:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46202 "EHLO
+        id S1354537AbiD2Gev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 02:34:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349962AbiD2GeG (ORCPT
+        with ESMTP id S1347374AbiD2Gep (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 02:34:06 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEC86AA42
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 23:30:49 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id k27so7924400edk.4
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 23:30:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=s1clNq5BQBXHMi5yLCKb4UG59pVLMf7WbijCi7/Lbvw=;
-        b=yiP2cQfA0EiqXcNCGaC4mEFsX+LYRnv6XmBjLC4bLupo8UKkiWETvAQDXdAACSvQCG
-         wW6o/4Y4rB4ldjI+cVQ/c03GAIXcEhma+QdncoqL36X9hRq9OkZrucsJDqjhV4wQBnE2
-         A2YWxzIhvFf+5Xq9Er/zkQOq9i/2rXIvVIYRgdk/aCYSzjtrvGruMIN5T+an4gJ9ZBsX
-         dsE+ITqfuyQZXyh9YNSjVUs3HfAeTmV2f4FkKj0DE5t7TqMMqc1+TrZZbT2ylPXKSyI+
-         pp728qnS8TqjH2uTealBlfJ7ifY4Y0h+awWOMtda+tKh8gcAWG7hrqzYBQ4MFpuG9Nf9
-         N4LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=s1clNq5BQBXHMi5yLCKb4UG59pVLMf7WbijCi7/Lbvw=;
-        b=jQ3tlm0nrzsi+ST9oGppHZBsPt4Ra3JUZzyMFAkZfobSvc1tbjJ5gxkRLBIKuVpv6E
-         JB5k4UhMkF1R5f64F+PojeQQpdLqkJJNDeTNy+KR9rkZHk6UmzPZniHfIjPPBzoOQHKg
-         +pAacPY4G51b7sJ9EpMfclnatnL33vD/oN1hbmlV1vaMCyL494bhBo5dSLpB3DpW2Eaf
-         IuVgvqw9Bi26DVTpO81JEMp5m6MySXA0wl0SLTMXakKtRiARiWhq0NdWf1yb6YetH6VN
-         82IunQExvzF9Bga4ZlZ4YSVo+iD9xbogAzgq9HNRFby1Y2uefK1ZQtZKSjqqjFeBdeKd
-         4MJQ==
-X-Gm-Message-State: AOAM533+m79yfZvNxX94yygGpyLOmxByXdeKgMvkIQ8eghH99vOFU8kB
-        1BhVtq/oHQT0rwSa6g5fePc9Cg==
-X-Google-Smtp-Source: ABdhPJwHYf5LFrUI7xpoXcKT1RsbdRXWzWdeo7uxehHkpBBNBDrNMi1obwlZXtwPu3uRYLRM6IjsLw==
-X-Received: by 2002:a50:e696:0:b0:419:998d:5feb with SMTP id z22-20020a50e696000000b00419998d5febmr40180413edm.122.1651213847683;
-        Thu, 28 Apr 2022 23:30:47 -0700 (PDT)
-Received: from [192.168.0.168] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id co8-20020a0564020c0800b0042617ba63c6sm2562278edb.80.2022.04.28.23.30.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 23:30:47 -0700 (PDT)
-Message-ID: <df1e8dd6-5d26-f3de-b9f5-643a73390517@linaro.org>
-Date:   Fri, 29 Apr 2022 08:30:46 +0200
+        Fri, 29 Apr 2022 02:34:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A1887563B;
+        Thu, 28 Apr 2022 23:31:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A9E17619C0;
+        Fri, 29 Apr 2022 06:31:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AFB0C385AC;
+        Fri, 29 Apr 2022 06:31:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651213887;
+        bh=1qTI2+ULn9S33eUs/y9vp+7qFR3kaOf7jmVnCV4QTU0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=oKda16HSltrM1J2Qv8n2yHzXm+KWDkgn6vpCbU3CbfalB9DsnP+Ip45pcRoJ4vYG2
+         TXInGSja1792BOhv1g7WnGV5fnSbmrIlAMZ5QrXdOG0mmq2AzZB8r/oZTBXI46gMyO
+         ILOot9hhasVU6Q0QhI3SUfoPAighV0XqYAhmPmOY/3ybC83GjCeb+DuTVpH6G1LTFW
+         RAqC1CzHD5jD0vKp3aOFknDlb0mPlA1z7qAL1GRfGzPn7zVyFkPSvZJnKBjQxDlylc
+         gqrmEugOKSe3ZkXOgWUUTx4NvJC+/H2fDLgdHk2RrMji1NnRlfe3qRrpwhJCCULhPY
+         nu3UR42ITLJPA==
+Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1nkK9z-001Qmf-Ly; Fri, 29 Apr 2022 07:31:23 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     mauro.chehab@intel.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Kai Vehmanen <kai.vehmanen@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>
+Subject: [PATCH 0/2] Let userspace know when snd-hda-intel needs i915
+Date:   Fri, 29 Apr 2022 07:31:14 +0100
+Message-Id: <cover.1651212016.git.mchehab@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/2] dt-bindings: google,cros-ec-keyb: Introduce switches
- only compatible
-Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        "Joseph S. Barrera III" <joebar@chromium.org>
-References: <20220427203026.828183-1-swboyd@chromium.org>
- <20220427203026.828183-2-swboyd@chromium.org>
- <9248da4f-ca04-82f0-2840-a20797c25d2a@linaro.org>
- <CAE-0n52Y=3EEZ6qguNx=hM44BahbH3cuq7x6Bbe5HELKkkvrUw@mail.gmail.com>
- <29cc62aa-2995-ea96-0e7e-242f9ddaa87e@linaro.org>
- <CAE-0n50ORzU52KpSPUNeEke-16uWo+Vn8WVhcdtdCc6WJiji6A@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAE-0n50ORzU52KpSPUNeEke-16uWo+Vn8WVhcdtdCc6WJiji6A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,31 +62,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/04/2022 18:01, Stephen Boyd wrote:
->>
->>> Given that none of the properties are
->>> required for google,cros-ec-keyb it didn't seem necessary to make having
->>> the google,cros-ec-keyb-switches compatible deny the existence of the
->>> matrix-keymap properties.
->>
->> Maybe I misunderstood the commit msg. Are the
->> "google,cros-ec-keyb-switches" devices coming with matrix keyboard or
->> not? I mean physically.
->>
-> 
-> The answer is "sometimes, physically". Sometimes there are switches like
-> volume buttons and power buttons and also a matrix keyboard (convertible
-> and clamshells). Other times there are volume buttons and power buttons
-> and no matrix keyboard (detachable). This device node represents both
-> the keyboard and the switches.
-> 
-> Unfortunately the EC firmware on older Chromebooks that don't have a
-> matrix keyboard still report that they have some number of columns and
-> rows. I was hoping to make this fully dynamic by querying the EC but
-> that isn't possible.
+Currently, kernel/module annotates module dependencies when
+request_symbol is used, but it doesn't cover more complex inter-driver
+dependencies that are subsystem and/or driver-specific.
 
-OK, then it's indeed slightly different case. Let's skip my comment.
+In the case of hdmi sound, depending on the CPU/GPU, sometimes the
+snd_hda_driver can talk directly with the hardware, but sometimes, it
+uses the i915 driver. When the snd_hda_driver uses i915, it should
+first be unbind/rmmod, as otherwise trying to unbind/rmmod the i915
+driver cause driver issues, as as reported by CI tools with different
+GPU models:
+
+	https://intel-gfx-ci.01.org/tree/drm-tip/IGT_6415/fi-tgl-1115g4/igt@core_hotunplug@unbind-rebind.html
+	https://intel-gfx-ci.01.org/tree/drm-tip/CI_DRM_11495/bat-adlm-1/igt@i915_module_load@reload.html
+
+In the past, just a few CPUs were doing such bindings, but this issue now
+applies to all "modern" Intel CPUs  that have onboard graphics, as well as
+to the  newer discrete GPUs.
+
+With the discrete GPU case, the HDA controller is physically separate and
+requires i915 to power on the hardware for all hardware  access. In this
+case, the issue is hit basicly 100% of the time.
+
+With on-board graphics, i915 driver is needed only when the display
+codec is accessed. If i915 is unbind during runtime suspend, while
+snd-hda-intel is still bound, nothing bad happens, but unbinding i915
+on other situations may also cause issues.
+
+So, add support at kernel/modules to allow snd-hda drivers to properly
+annotate when a dependency on a DRM driver dependencies exists,
+and add a call to such new function at the snd-hda driver when it
+successfully binds into the DRM driver.
+
+This would allow userspace tools to check and properly remove the
+audio driver before trying to remove or unbind the GPU driver.
+
+It should be noticed that this series conveys the hidden module
+dependencies. Other changes are needed in order to allow
+removing or unbinding the i915 driver while keeping the snd-hda-intel
+driver loaded/bound. With that regards, there are some discussions on
+how to improve this at alsa-devel a while  back:
+
+https://mailman.alsa-project.org/pipermail/alsa-devel/2021-September/190099.html
+
+So, future improvements on both in i915 and the audio drivers could be made.
+E.g. with  discrete GPUs, it's the only codec of the card, so it seems feasible
+to detach the ALSA card if i915 is bound (using infra made for VGA
+switcheroo), but,  until these improvements are done and land in
+upstream, audio drivers needs to be unbound if i915 driver goes unbind.
+
+Yet, even if such fixes got merged, this series is still needed, as it makes
+such dependencies more explicit and easier to debug.
+
+PS.: This series was generated against next-20220428.
+
+Luis/Takashi/Daniel/David,
+
+If OK for you, I would prefer to have such patches applied via the drm-tip
+tree once reviewed, in order to make easier to use them by some patches
+I'm preparing to improve the CI tests that use i915 unbind logic.
+
+Mauro Carvalho Chehab (2):
+  module: add a function to add module references
+  ALSA: hda - identify when audio is provided by a video driver
+
+ include/linux/module.h     |  7 +++++++
+ kernel/module/main.c       | 31 +++++++++++++++++++++++++++++++
+ sound/hda/hdac_component.c |  8 ++++++++
+ 3 files changed, 46 insertions(+)
+
+-- 
+2.35.1
 
 
-Best regards,
-Krzysztof

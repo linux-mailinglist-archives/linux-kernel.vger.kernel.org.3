@@ -2,121 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3696514B07
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 15:47:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC3A514AFA
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 15:46:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376397AbiD2Nuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 09:50:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37456 "EHLO
+        id S1376354AbiD2NuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 09:50:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352209AbiD2Nuu (ORCPT
+        with ESMTP id S1352209AbiD2NuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 09:50:50 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85220CB031;
-        Fri, 29 Apr 2022 06:47:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=C2OEpCl3NbPTnDM8xzX2S4IX9JfHaO7AlvKh6b2mc6o=; b=pqe8NQsff608mhiYOzk5PDnm3n
-        SqpJEt2cMOf7fKd9x6EBmHDeHOX5PyCqZaiQd+rsoiJqYRJfq3hy0YC1K+f5G6E1EYGyBkHkky/4o
-        A4sr1jLh/ZiZsTRb8VvM35RQhf4WjzvO8x5RrxtfBf8C8C5PVdUgz7Ik51+zFewe+U63oi8LhMtjA
-        jsMfNQ3e75qfSDrR+BCOQg4pDZsV5C5nFo1cAeFeQ7vSqL72QRCGkkh8ptmyZp43zUawgc2bKvA+V
-        5dpGhl6WFgQXUob6WnQm5VHnfuqrvgLJ/w/gTZOEZRu0JtLeyWnhBKRg4Xfo6FA1ZDb4qCsQBNlya
-        WoHGALzQ==;
-Received: from [179.113.53.197] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nkQxe-0007JF-GW; Fri, 29 Apr 2022 15:47:06 +0200
-Message-ID: <832eecc5-9569-1d95-6ab8-f029b660dfcb@igalia.com>
-Date:   Fri, 29 Apr 2022 10:46:35 -0300
+        Fri, 29 Apr 2022 09:50:09 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87C4CABB6;
+        Fri, 29 Apr 2022 06:46:51 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id v12so10841430wrv.10;
+        Fri, 29 Apr 2022 06:46:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=9pEwUBKjRBpllrJk5qaKlRO87d8MdZtCNEWbpI2fUcw=;
+        b=RHg27f73kpzQwZCijceWAxtRf7NJ/MfOEliQkAcG6IKKEG3bJ2iJ72vuKT23LtPKgp
+         W39omxgefKec1a3gWl7NItN8E1BWvGvrXckVmWHfOkBmoRUseHw0Xb43g2I7Pbg08vmg
+         JIc0JqeBoIFIRU8LKe/iWJW4iZA4YcCXFUZ+uESPmBjFEnagrO6ArqnGbiGmsdsoCRxq
+         o/GRbaoEsQpxaDbUUkUIazJwUAFGTa+JqTLseu/IKoy1hDA7qdHqMyKWoPY+HAvxtn6a
+         o4ZrmUK+ojeSa68029GNCGe8HU0iqoIJyqAJM44zYf1xGbMk9ETtlQw9d2oArBB6bhFf
+         6I6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=9pEwUBKjRBpllrJk5qaKlRO87d8MdZtCNEWbpI2fUcw=;
+        b=P/+vByy3WV5GN+/tp5pZ4M1sITDazIOhhcPUFtS7v6XR2hwy4AxbVz08nnFR4BsQ7j
+         4ZWJIbSW2F0gJ/A2HLZXuR5WJfl8bGtt1zKSVQFAixFF418fxGjg+BqcRSYKb75nBHEI
+         t3+i179NXhdNqb0t9sEak7UMrP/NewDsoJA15C4k2S+XzqWjy8lQcaTsnnucYIhBLtzd
+         qSCs2eNvlRDeDefzbqly51F9waK7eHdp1Y1nzbwKjSyT+egw5zqvWr0wuiwZ/LXwdJii
+         ggyLsF8HSnZ0ukyxrZTOCZJeThz3ILd9KRXSJdw7IfZj8iev80G5QPefzvvpoa4gam3i
+         65gw==
+X-Gm-Message-State: AOAM533a+J7YQ+c/zCGNt97bOHuTTRmn0CMQNHnmL0haOXvBy0Z7lcCu
+        mpBXPU6wbqCb3yamT2CTZWE=
+X-Google-Smtp-Source: ABdhPJxa6pGhZpFL51hmMw5AI1Jzp/w/JJRYmnitE4sEb0pj0428bQOYutQJOfW3tIM0R+gCvJn32A==
+X-Received: by 2002:a05:6000:1f03:b0:20c:4d9e:7400 with SMTP id bv3-20020a0560001f0300b0020c4d9e7400mr1133227wrb.257.1651240010362;
+        Fri, 29 Apr 2022 06:46:50 -0700 (PDT)
+Received: from leap.localnet (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
+        by smtp.gmail.com with ESMTPSA id n2-20020a1ca402000000b003942429cd1esm853641wme.10.2022.04.29.06.46.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 06:46:49 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tsuchiya Yuto <kitakar@gmail.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Martiros Shakhzadyan <vrzh@vrzh.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>,
+        outreachy@lists.linux.dev
+Subject: Re: [PATCH] staging: media: atomisp: Use kmap_local_page() in hmm_store()
+Date:   Fri, 29 Apr 2022 15:46:47 +0200
+Message-ID: <3664993.kQq0lBPeGt@leap>
+In-Reply-To: <2181693.iZASKD2KPV@leap>
+References: <20220413225531.9425-1-fmdefrancesco@gmail.com> <2181693.iZASKD2KPV@leap>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 17/30] tracing: Improve panic/die notifiers
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Cc:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, senozhatsky@chromium.org,
-        stern@rowland.harvard.edu, tglx@linutronix.de, vgoyal@redhat.com,
-        vkuznets@redhat.com, will@kernel.org
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-18-gpiccoli@igalia.com>
- <b8771b37-01f5-f50b-dbb3-9db4ee26e67e@gmail.com>
- <20220429092351.10bca4dd@gandalf.local.home>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <20220429092351.10bca4dd@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/04/2022 10:23, Steven Rostedt wrote:
-> On Fri, 29 Apr 2022 12:22:44 +0300
-> Sergei Shtylyov <sergei.shtylyov@gmail.com> wrote:
-> 
->>> +	switch (ev) {
->>> +	case DIE_OOPS:
->>> +		do_dump = 1;
->>> +		break;
->>> +	case PANIC_NOTIFIER:
->>> +		do_dump = 1;
->>> +		break;  
->>
->>    Why not:
->>
->> 	case DIE_OOPS:
->> 	case PANIC_NOTIFIER:
->> 		do_dump = 1;
->> 		break;
-> 
-> Agreed.
-> 
-> Other than that.
-> 
-> Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> 
-> -- Steve
+On luned=C3=AC 25 aprile 2022 20:29:03 CEST Fabio M. De Francesco wrote:
+> On gioved=C3=AC 14 aprile 2022 00:55:31 CEST Fabio M. De Francesco wrote:
+> > The use of kmap() is being deprecated in favor of kmap_local_page()
+> > where it is feasible. The same is true for kmap_atomic().
+> >=20
+> > In file pci/hmm/hmm.c, function hmm_store() test if we are in atomic
+> > context and, if so, it calls kmap_atomic(), if not, it calls kmap().
+> >=20
+> > First of all, in_atomic() shouldn't be used in drivers. This macro
+> > cannot always detect atomic context; in particular, it cannot know
+> > about held spinlocks in non-preemptible kernels.
+> >=20
+> > Notwithstanding what it is said above, this code doesn't need to care
+> > whether or not it is executing in atomic context. It can simply use
+> > kmap_local_page() / kunmap_local() that can instead do the mapping /
+> > unmapping regardless of the context.
+> >=20
+> > With kmap_local_page(), the mapping is per thread, CPU local and not
+> > globally visible. Therefore, hmm_store()() is a function where the use
+> > of kmap_local_page() in place of both kmap() and kmap_atomic() is
+> > correctly suited.
+> >=20
+> > Convert the calls of kmap() / kunmap() and kmap_atomic() /
+> > kunmap_atomic() to kmap_local_page() / kunmap_local() and drop the
+> > unnecessary tests which test if the code is in atomic context.
+> >=20
+> > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> > ---
+> >  drivers/staging/media/atomisp/pci/hmm/hmm.c | 14 ++------------
+> >  1 file changed, 2 insertions(+), 12 deletions(-)
+>=20
+> Hi Mauro,
+>=20
+> I'm writing for just a gentle ping for this and two other staging/
+atomisp/=20
+> patches that still seem to be waiting to be applied.
+>=20
+> In the meantime I would like to remind you that Hans de Goede has=20
+> successfully tested this patch and the other two on both the front and=20
+back=20
+> cams of a chuwi hi8 tablet.
 
-Thanks Sergei and Steven, good idea! I thought about the switch change
-you propose, but I confess I got a bit confused by the "fallthrough"
-keyword - do I need to use it?
+Hi Mauro,
 
-About the s/int/bool, for sure! Not sure why I didn't use bool at
-first...heheh
+In my previous message I forgot to remind you that two of these three=20
+patches have also been reviewed by Ira Weiny (Intel).
 
-Cheers,
+I'd like to ask you again if there is still something left which prevents=20
+these three patches from being accepted. The first of the three patches was=
+=20
+submitted on April 9, 2022.
+
+=46or you convenience here are the links to the patches, the "Reviewed-by:"=
+=20
+and "Tested-by:" tags:
+
+[PATCH] staging: media: atomisp: Use kmap_local_page() in hmm_store()
+https://lore.kernel.org/lkml/20220413225531.9425-1-fmdefrancesco@gmail.com/
+https://lore.kernel.org/lkml/Yli+R7iLZKqO8kVP@iweiny-desk3/
+https://lore.kernel.org/lkml/2d096f20-dbaa-1d49-96e9-a7ae6c19f7fe@redhat.co=
+m/
+
+[PATCH] staging: media: atomisp: Use kmap_local_page() in hmm_set()
+https://lore.kernel.org/lkml/20220413212210.18494-1-fmdefrancesco@gmail.com/
+https://lore.kernel.org/lkml/YldNhErgt53RqYp7@iweiny-desk3/
+https://lore.kernel.org/lkml/0b04ad1a-e442-1728-ef2c-bab386a4c64c@redhat.co=
+m/
+
+[PATCH] staging: media: atomisp: Convert kmap() to kmap_local_page()
+https://lore.kernel.org/lkml/20220408223129.3844-1-fmdefrancesco@gmail.com/
+https://lore.kernel.org/lkml/b0aed731-b56f-4378-b50e-fc0cbccbdb84@redhat.co=
+m/
+
+Thanks,
+
+=46abio M. De Francesco
+
+P.S.: Do you want me to resend them all and add the above-mentioned tags?
 
 
-Guilherme
+

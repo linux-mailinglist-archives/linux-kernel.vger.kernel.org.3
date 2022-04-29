@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A585140BF
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 05:07:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A91B45140C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 05:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235181AbiD2DIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 23:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
+        id S235255AbiD2DIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 23:08:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235077AbiD2DIc (ORCPT
+        with ESMTP id S235031AbiD2DId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 23:08:32 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2087.outbound.protection.outlook.com [40.107.93.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2621C84EFB;
-        Thu, 28 Apr 2022 20:05:14 -0700 (PDT)
+        Thu, 28 Apr 2022 23:08:33 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2045.outbound.protection.outlook.com [40.107.220.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D4485655;
+        Thu, 28 Apr 2022 20:05:15 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NjEw5oqWgzjzzLcneUTed7nXKWPAqIqhUrBxBv2lK1Y9wgKFWVJP1aog5ifCQOLhmfhoROCZhmKtpq9lSu2rGFhS58LgJKVgbJAk966L982oQ3WPovNDKqsKvQXo1M4nX3eagXxFR5jp0GEJBLG7OaGErpAQfEvzUIXe84Koy2ZQR1TkUyiwtKYZrfkDdd/pKmogbiSAR19qZIBCOAtTlT2q3DFy/0g6MgHk/bgOf0yDAiasTBCvjMy5wOtD/7qyqhBuZhi7e8ht+/afKxg0y2pRKr0LtOUsQicQYyDOA0qMkjs8UHL2QPSHFM8MwFwCgl57pCQ9myy5oHocLjRqIg==
+ b=MdW+HMKtYqHNXEtsOn3tLb2rCG4Z+lI0gqHg9u5NZc/CzBHH6g+LtC0bVD/kXnAAo1TnRmO2NDyLkXbultnWtn0KaRZ9P2dZmsXFBmw36nGR3eDpNK7smIIFyequ8IbbyapV18zIhxjlchLwxFCC783xkiQWgTEUqljYqyfNOiv61N5XcXfchvPRrKeC15sQDjpcRV9HKlcADpRw5Dbuzv2EOYz3xedbbrcA7Lup+QGlWjD1oifhMjJ+3H2F19BxyDFW6+yPnt3R4kHbCmOnBC+ON8Swz1OOBJA+JDfJOSbjRGF7MDyc0rbPYphkOmgYb1kksNMgGCQ66hMP5q9ZJg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=F4I+H016npTBsnXz8iKlWPLUzRJ0uy3/KKLwhz1lI8Y=;
- b=QJ3BXPvhxoPiQ3bLVTuD5L2UoEkDZvI1EtbAhRjpJENClPbiI6uKZQ5kRJRUCmhiOSWRT6ccyxcUTRVp9yq5GSsvNKKmwl/m8tkgGCHSCSHyMKTQiwdnNDvHuMtHdlNALkl4Xe27KL61u5gcctE3CUnQVakjJG+jZU/QjN1dXAp+mOvw9+iuvfTq705xZa8HXFT41Gvy15uW0aRVLu6MUB4j07Kzor/MVSpvbZ3PEbieSMiv+lwT8jrMTj4YopTgyNzaanfDZi5HF0cExUy3CaECNOYg4dlcvuYac7ebTR0dS+/eAYE9h1RgoglbsKg3fE6oQIcJDKDjGHaqkfx1zA==
+ bh=x79hoz/UFpABXRhK/fZdE/qSKoEbChoC3QRITuGeMMw=;
+ b=ny7Yemi2rkX4+Uj6gFarJVhAqvG5PFs19zZ1xr0sS7/gaUwiwH9Ghxch9K1t0FWtD+gOqoh24KSAvIThg96SB81XuC30rifvFzE4wcpImxPSPRekBoBhdHNiGj1ffkrxWVnZbxU+xv4TJoI+TkQYPMKzTIKJD/kKxGflTrIM63K7fbfYsifiK56ikhxOY/IMr3Wc7XanO7U0V1joN78gdTUCIlTjxAatIKYOzAyJdsxYG14C6cyAc+6J8oe+BH3VF59hetUsAjgaC4IIn+KBy2h+9PqFODFOXSlmHIcuYfbG8ELwffERadagBPUn+Ee0CHpKd2hgJ0jM7SNNT7QTVw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=redhat.com smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=F4I+H016npTBsnXz8iKlWPLUzRJ0uy3/KKLwhz1lI8Y=;
- b=V4HkTo8lV02hQvcYMSGElfCCVuVqYFjXwO/7ol7dlEvibd9oQLT81uJRN7wT+XWWP5hmYnXWSF6eUnfDGFnsUI2jvVrjFMvAwvuKdjyxYlxl63awujqpuihzgUMJnaritGnV+0Y6cmfhfceXocUDMbHa1l5QwiKc7dPjIC4v6g4=
-Received: from BN9PR03CA0561.namprd03.prod.outlook.com (2603:10b6:408:138::26)
- by DM6PR12MB2636.namprd12.prod.outlook.com (2603:10b6:5:4a::21) with
+ bh=x79hoz/UFpABXRhK/fZdE/qSKoEbChoC3QRITuGeMMw=;
+ b=GEXCCAClWmeTPCSc5h5YN3o+8UhMHJTcZBgLCP5UBx+gJeWniHgHZ83QFNPNy5wzdXvHGaMmmvMCNni4n+KZv5ufKUL8aEfIaNFZx63MSSdRZM5nr6g7j0jmxZFKRUS+gib41+GLzbgf+gmDXUgbsnV5kCdnjoWz/FF3EmMnfCg=
+Received: from BN8PR12CA0029.namprd12.prod.outlook.com (2603:10b6:408:60::42)
+ by SJ1PR12MB6098.namprd12.prod.outlook.com (2603:10b6:a03:45f::11) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.12; Fri, 29 Apr
- 2022 03:05:12 +0000
-Received: from BN8NAM11FT068.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:138:cafe::8d) by BN9PR03CA0561.outlook.office365.com
- (2603:10b6:408:138::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.13 via Frontend
- Transport; Fri, 29 Apr 2022 03:05:12 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.13; Fri, 29 Apr
+ 2022 03:05:13 +0000
+Received: from BN8NAM11FT008.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:60:cafe::92) by BN8PR12CA0029.outlook.office365.com
+ (2603:10b6:408:60::42) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15 via Frontend
+ Transport; Fri, 29 Apr 2022 03:05:13 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,13 +47,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT068.mail.protection.outlook.com (10.13.177.69) with Microsoft SMTP
+ BN8NAM11FT008.mail.protection.outlook.com (10.13.177.95) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5206.12 via Frontend Transport; Fri, 29 Apr 2022 03:05:12 +0000
+ 15.20.5206.12 via Frontend Transport; Fri, 29 Apr 2022 03:05:13 +0000
 Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 28 Apr
- 2022 22:05:10 -0500
+ 2022 22:05:11 -0500
 From:   Mario Limonciello <mario.limonciello@amd.com>
 To:     Hans de Goede <hdegoede@redhat.com>,
         Mark Pearson <markpearson@lenovo.com>
@@ -65,9 +65,9 @@ CC:     Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
         <platform-driver-x86@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>,
         Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH 1/2] platform/x86: thinkpad_acpi: Convert btusb DMI list to quirks
-Date:   Thu, 28 Apr 2022 22:05:00 -0500
-Message-ID: <20220429030501.1909-2-mario.limonciello@amd.com>
+Subject: [PATCH 2/2] platform/x86: thinkpad_acpi: Add a s2idle resume quirk for a number of laptops
+Date:   Thu, 28 Apr 2022 22:05:01 -0500
+Message-ID: <20220429030501.1909-3-mario.limonciello@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220429030501.1909-1-mario.limonciello@amd.com>
 References: <20220429030501.1909-1-mario.limonciello@amd.com>
@@ -79,24 +79,24 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2f74d939-5b12-4d6b-1320-08da298d13ae
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2636:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB2636DE134E3028093379467DE2FC9@DM6PR12MB2636.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 9da0ddac-cbf9-4370-da61-08da298d146a
+X-MS-TrafficTypeDiagnostic: SJ1PR12MB6098:EE_
+X-Microsoft-Antispam-PRVS: <SJ1PR12MB6098F1653A1B0702DF655279E2FC9@SJ1PR12MB6098.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jlYh3dh6RO6FiyWnBaVQA0bHqCBZnL7KEpBXz9PkcYw0cNh+uIDG2wxV6rrdiRcNt6qmhAgMT+42NxRHhKVjqnsIW/I+sn2mAo62DLiLAFuiiKahnhTkpu12TMSUfjHhPNAoBJmmMHkplf/lWqc7UmlZa9Q/H+sPyNKgf8pVjC5RIqpy/B9GMO5XTU6qKhc486m3g068SJcM0gSORKnnLcJ1h6V8kzspwksT4f05lpgaEgdDC5UF/hbKXrzISmtyaBydO6HKHso8aj8ufEKOC5GZTri1ZIPU8HB9x/GIwZJ8gDZyjdK9KItbWrGrskyX4zChKea5V/M8L7ud+fq1kLp2dCsoox3thGkBh5wE7FaTJdwnjd/z3aAXzgA/cn3iuZdo36qjdsMLgfrPVygu4DsXjAQa5XYdaKZs0A8MEeXmzUVFDn+jIowKJyduK7RVY4Ht43pzMqnL7zelgEwBZPW2ZtLjnOe0GgC6IyUjaU0a0f/2/6W/gbJAx5xhyJVMZEzBSLTr1VUXr7eZL4G1FX6orQlgshCz5A+VbYc9LRjqoz5xyXB9WK5cDGyx0tfB6eaQWOP2sKgd6danBry/42/qbXdtcs+DfkJUicMYtIW29PIJZNLsXPmSu1zHjT90R1BZCUuwlAStQo6TPpUuidne6ianuXNCFEq64r+eBGn8XsIarOU94C40LCND3ALUf4aId+JIGNJX/4hZAG2eHg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(16526019)(186003)(7696005)(70206006)(2906002)(36756003)(70586007)(44832011)(83380400001)(5660300002)(316002)(36860700001)(4326008)(8676002)(8936002)(110136005)(54906003)(336012)(426003)(2616005)(86362001)(40460700003)(82310400005)(47076005)(508600001)(81166007)(356005)(6666004)(1076003)(26005)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 5j60/9k44JpmDJYWRFOljjTaqiXuqCWPREg+bV4d7QBLYS+A7VxLJIFBBGw93G8Sk0IBegRsBE+wLTCEa5O1sOLdUCOuCj98rL2fzc7IRfYyNP5zJf4Hsd7AGptzv14Nts+lwtrv9DU4TT1OBlJLJhS3rLOin9g3Rj36sssGZ7nO3WyJNxej86EStxfsjS3vOPzhJgyQohK0HoAsYERlqhbNqkrC6uxsI+wlEA8zsTBUkUfhbagrzybYqR6wXxqj4iXg2R/uqvFNLRfaVcJp9HdVn5ZsFnE6+MBhQBuhYk2BsbUS8aVRtL3fH3tR6UmbBS2DOKBIE/uCRSMrgN2rrSZEsGsHXyJzcdPNcvZB2oW3KvUxX5Qu0Rp5J4JNIzM8bsX2Tx9VLz59aDgCikXJS33Kdmsp6fVE00ZnJ+AjD/RGL+DQZ/nbvnqGF95xewPVpRAhmXH/16KZ8WX3AB6KwybppgTfhymBw75KOuO/H/FR34avAYLd0ifb7Q73abky45Wb/0MMzzpQn61mRmvKjPKxvajATZZ6Nj1YHJES8mHhAgCjfh/ESPRJ/r/L2j0tJtE1mvSmKlSsIltD7NgBW7JRYnRthM4MrdrnhsUeqZhQnkc97JPfukeOQ/q/zh5+3/YAxPCO18dWW223K8WDMF1yJKXSQyC4j4ugU4221n4itMuntry9aIqvv/iB8NtM1L4Sk4SK52UJL+fXTTDaLA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(70206006)(83380400001)(508600001)(186003)(4326008)(16526019)(36860700001)(2616005)(40460700003)(8676002)(70586007)(82310400005)(7696005)(966005)(86362001)(336012)(426003)(47076005)(44832011)(5660300002)(316002)(36756003)(6666004)(81166007)(26005)(1076003)(54906003)(356005)(110136005)(8936002)(2906002)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2022 03:05:12.2868
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2022 03:05:13.5239
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2f74d939-5b12-4d6b-1320-08da298d13ae
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9da0ddac-cbf9-4370-da61-08da298d146a
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT068.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT008.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2636
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6098
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -107,128 +107,205 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DMI matching in thinkpad_acpi happens local to a function meaning
-quirks can only match that function.
+Lenovo laptops that contain NVME SSDs across a variety of generations have
+trouble resuming from suspend to idle when the IOMMU translation layer is
+active for the NVME storage device.
 
-Future changes to thinkpad_acpi may need to quirk other code, so
-change this to use a quirk infrastructure.
+This generally manifests as a large resume delay or page faults. These
+delays and page faults occur as a result of a Lenovo BIOS specific SMI
+that runs during the D3->D0 transition on NVME devices.
 
+This SMI occurs because of a flag that is set during resume by Lenovo
+firmware:
+
+```
+OperationRegion (PM80, SystemMemory, 0xFED80380, 0x10)
+Field (PM80, AnyAcc, NoLock, Preserve)
+{
+	SI3R,   1
+}
+
+Method (_ON, 0, NotSerialized)  // _ON_: Power On
+{
+	TPST (0x60D0)
+	If ((DAS3 == 0x00))
+	{
+		If (SI3R)
+		{
+			TPST (0x60E0)
+			M020 (NBRI, 0x00, 0x00, 0x04, (NCMD | 0x06))
+			M020 (NBRI, 0x00, 0x00, 0x10, NBAR)
+			APMC = HDSI /* \HDSI */
+			SLPS = 0x01
+			SI3R = 0x00
+			TPST (0x60E1)
+		}
+		D0NV = 0x01
+	}
+}
+```
+
+Create a quirk that will run early in the resume process to prevent this
+SMI from running. As any of these machines are fixed, they can be peeled
+back from this quirk or narrowed down to individual firmware versions.
+
+Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1910
+Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1689
 Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
- drivers/platform/x86/thinkpad_acpi.c | 28 +++++++++++++++++++++++++---
- 1 file changed, 25 insertions(+), 3 deletions(-)
+ drivers/platform/x86/thinkpad_acpi.c | 108 ++++++++++++++++++++++++++-
+ 1 file changed, 107 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/thinkpad_acpi.c
-index c568fae56db2..f49f59130c3c 100644
+index f49f59130c3c..9161f356fcdd 100644
 --- a/drivers/platform/x86/thinkpad_acpi.c
 +++ b/drivers/platform/x86/thinkpad_acpi.c
-@@ -309,6 +309,15 @@ struct ibm_init_struct {
- 	struct ibm_struct *data;
+@@ -312,12 +312,17 @@ struct ibm_init_struct {
+ /* DMI Quirks */
+ struct quirk_entry {
+ 	bool btusb_bug;
++	u32 s2idle_bug_mmio;
  };
  
-+/* DMI Quirks */
-+struct quirk_entry {
-+	bool btusb_bug;
-+};
-+
-+struct quirk_entry quirk_btusb_bug = {
-+	.btusb_bug = true,
+ struct quirk_entry quirk_btusb_bug = {
+ 	.btusb_bug = true,
+ };
+ 
++struct quirk_entry quirk_s2idle_bug = {
++	.s2idle_bug_mmio = 0xfed80380,
 +};
 +
  static struct {
  	u32 bluetooth:1;
  	u32 hotkey:1;
-@@ -338,6 +347,7 @@ static struct {
- 	u32 hotkey_poll_active:1;
- 	u32 has_adaptive_kbd:1;
- 	u32 kbd_lang:1;
-+	struct quirk_entry *quirks;
- } tp_features;
- 
- static struct {
-@@ -4359,9 +4369,10 @@ static void bluetooth_exit(void)
- 	bluetooth_shutdown();
- }
- 
--static const struct dmi_system_id bt_fwbug_list[] __initconst = {
-+static const struct dmi_system_id fwbug_list[] __initconst = {
- 	{
- 		.ident = "ThinkPad E485",
-+		.driver_data = &quirk_btusb_bug,
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
- 			DMI_MATCH(DMI_BOARD_NAME, "20KU"),
-@@ -4369,6 +4380,7 @@ static const struct dmi_system_id bt_fwbug_list[] __initconst = {
- 	},
- 	{
- 		.ident = "ThinkPad E585",
-+		.driver_data = &quirk_btusb_bug,
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
- 			DMI_MATCH(DMI_BOARD_NAME, "20KV"),
-@@ -4376,13 +4388,16 @@ static const struct dmi_system_id bt_fwbug_list[] __initconst = {
- 	},
- 	{
- 		.ident = "ThinkPad A285 - 20MW",
-+		.driver_data = &quirk_btusb_bug,
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
- 			DMI_MATCH(DMI_BOARD_NAME, "20MW"),
- 		},
-+
- 	},
- 	{
- 		.ident = "ThinkPad A285 - 20MX",
-+		.driver_data = &quirk_btusb_bug,
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
- 			DMI_MATCH(DMI_BOARD_NAME, "20MX"),
-@@ -4390,6 +4405,7 @@ static const struct dmi_system_id bt_fwbug_list[] __initconst = {
- 	},
- 	{
- 		.ident = "ThinkPad A485 - 20MU",
-+		.driver_data = &quirk_btusb_bug,
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
- 			DMI_MATCH(DMI_BOARD_NAME, "20MU"),
-@@ -4397,6 +4413,7 @@ static const struct dmi_system_id bt_fwbug_list[] __initconst = {
- 	},
- 	{
- 		.ident = "ThinkPad A485 - 20MV",
-+		.driver_data = &quirk_btusb_bug,
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+@@ -4419,9 +4424,101 @@ static const struct dmi_system_id fwbug_list[] __initconst = {
  			DMI_MATCH(DMI_BOARD_NAME, "20MV"),
-@@ -4419,7 +4436,8 @@ static int __init have_bt_fwbug(void)
- 	 * Some AMD based ThinkPads have a firmware bug that calling
- 	 * "GBDC" will cause bluetooth on Intel wireless cards blocked
- 	 */
--	if (dmi_check_system(bt_fwbug_list) && pci_dev_present(fwbug_cards_ids)) {
-+	if (tp_features.quirks && tp_features.quirks->btusb_bug &&
-+	    pci_dev_present(fwbug_cards_ids)) {
- 		vdbg_printk(TPACPI_DBG_INIT | TPACPI_DBG_RFKILL,
- 			FW_BUG "disable bluetooth subdriver for Intel cards\n");
- 		return 1;
-@@ -11496,6 +11514,7 @@ static void thinkpad_acpi_module_exit(void)
+ 		},
+ 	},
++	{
++		.ident = "L14 Gen2 AMD",
++		.driver_data = &quirk_s2idle_bug,
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "LENOVO"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "20X5"),
++		}
++	},
++	{
++		.ident = "T14s Gen2 AMD",
++		.driver_data = &quirk_s2idle_bug,
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "LENOVO"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "20XF"),
++		}
++	},
++	{
++		.ident = "X13 Gen2 AMD",
++		.driver_data = &quirk_s2idle_bug,
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "LENOVO"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "20XH"),
++		}
++	},
++	{
++		.ident = "T14 Gen2 AMD",
++		.driver_data = &quirk_s2idle_bug,
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "LENOVO"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "20XK"),
++		}
++	},
++	{
++		.ident = "T14 Gen1 AMD",
++		.driver_data = &quirk_s2idle_bug,
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "LENOVO"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "20UD"),
++		}
++	},
++	{
++		.ident = "P14s Gen1 AMD",
++		.driver_data = &quirk_s2idle_bug,
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "LENOVO"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "20Y1"),
++		}
++	},
++	{
++		.ident = "P14s Gen2 AMD",
++		.driver_data = &quirk_s2idle_bug,
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "LENOVO"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "21A0"),
++		}
++	},
+ 	{}
+ };
  
- static int __init thinkpad_acpi_module_init(void)
- {
-+	const struct dmi_system_id *dmi_id;
- 	int ret, i;
++/*
++ * Lenovo laptops from a variety of generations run a SMI handler during the D3->D0
++ * transition that occurs specifically when exiting suspend to idle which can cause
++ * large delays during resume when the IOMMU translation layer is enabled (the default
++ * behavior) for NVME devices:
++ *
++ * To avoid this firmware problem, skip the SMI handler on these machines before the
++ * D0 transition occurs.
++ */
++static void thinkpad_acpi_amd_s2idle_restore(void)
++{
++	struct resource *res;
++	void __iomem *addr;
++	u8 val;
++
++	res = request_mem_region_muxed(tp_features.quirks->s2idle_bug_mmio, 1,
++					"thinkpad_acpi_pm80");
++	if (!res)
++		return;
++
++	addr = ioremap(tp_features.quirks->s2idle_bug_mmio, 1);
++	if (!addr)
++		goto cleanup_resource;
++
++	val = ioread8(addr);
++	iowrite8(val & ~BIT(0), addr);
++
++	iounmap(addr);
++cleanup_resource:
++	release_resource(res);
++}
++
++static struct acpi_s2idle_dev_ops thinkpad_acpi_s2idle_dev_ops = {
++	.restore = thinkpad_acpi_amd_s2idle_restore,
++};
++
+ static const struct pci_device_id fwbug_cards_ids[] __initconst = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x24F3) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x24FD) },
+@@ -11473,6 +11570,8 @@ static void thinkpad_acpi_module_exit(void)
  
- 	tpacpi_lifecycle = TPACPI_LIFE_INIT;
-@@ -11623,7 +11642,10 @@ static int __init thinkpad_acpi_module_init(void)
- 		tp_features.input_device_registered = 1;
+ 	tpacpi_lifecycle = TPACPI_LIFE_EXITING;
+ 
++	if (tp_features.quirks && tp_features.quirks->s2idle_bug_mmio)
++		acpi_unregister_lps0_dev(&thinkpad_acpi_s2idle_dev_ops);
+ 	if (tpacpi_hwmon)
+ 		hwmon_device_unregister(tpacpi_hwmon);
+ 	if (tp_features.sensors_pdrv_registered)
+@@ -11643,8 +11742,15 @@ static int __init thinkpad_acpi_module_init(void)
  	}
  
--	return 0;
-+	dmi_id = dmi_first_match(fwbug_list);
-+	if (dmi_id)
-+		tp_features.quirks = dmi_id->driver_data;
-+	return ret;
+ 	dmi_id = dmi_first_match(fwbug_list);
+-	if (dmi_id)
++	if (dmi_id) {
+ 		tp_features.quirks = dmi_id->driver_data;
++		if (tp_features.quirks->s2idle_bug_mmio) {
++			if (!acpi_register_lps0_dev(&thinkpad_acpi_s2idle_dev_ops))
++				pr_info("Using s2idle quirk to avoid %s platform firmware bug\n",
++					dmi_id->ident ? dmi_id->ident : "");
++		}
++	}
++
+ 	return ret;
  }
  
- MODULE_ALIAS(TPACPI_DRVR_SHORTNAME);
 -- 
 2.34.1
 

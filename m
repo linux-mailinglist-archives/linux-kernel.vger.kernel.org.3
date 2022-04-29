@@ -2,125 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0622A51576C
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:53:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D75751576F
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:54:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350262AbiD2V4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 17:56:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35074 "EHLO
+        id S1351530AbiD2V4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 17:56:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239101AbiD2V4p (ORCPT
+        with ESMTP id S1349622AbiD2V4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 17:56:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 23AF526549
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:53:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651269204;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5dL+o3dgd3I+9BIcoV5xXMdVohBoY9zXkOYhggaRAJs=;
-        b=fTGaOxxVzwzQn1oaVSac0DSm8r6vD4QoXDw2J6xK09drB/RS7bbXe9oURjuFrVa/weFxq3
-        VubQNy7HFekJi5lkU1MxpMz1azr/uozKhgit05piMgGfjwQ6mqwJsWFQmGeS2i8F+bmO7Q
-        5LTZ+l+mdcISHxwZnidIOzKAJe++OKc=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-38-6UD6hjP8MB6UuOJKIP2_cg-1; Fri, 29 Apr 2022 17:53:22 -0400
-X-MC-Unique: 6UD6hjP8MB6UuOJKIP2_cg-1
-Received: by mail-qv1-f69.google.com with SMTP id u19-20020ad449b3000000b004523cc11b95so6898908qvx.7
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:53:22 -0700 (PDT)
+        Fri, 29 Apr 2022 17:56:47 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A75C83B19
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:53:28 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id q14so11975226ljc.12
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:53:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mx96GF5mK2X2Q9SZlgJmIqotjYYuzoJNpzCjKgQvXXc=;
+        b=zQM1rexPb+PuCeQE3rGh8yDNn0rfbjhAYBLT/pCtmSftZ+l8negFH45+12uqdbCIq7
+         f34QunA7P3tbi4Aj6F5SfdH+TkMNhRqgq8CdqyqgPFwl9hqHQZ7aDS74hCPXut+oQ+i3
+         45IP3qxP5JBqEWQYkrdBjSgiB4DST48lDrtg5Th3IAc+pXs4CkrqjruPfX6ITKBkjQxa
+         2ER8y2fZR3jsN/0pP7bw6uMwKxUrMSLPWZPM7xcYczbEw5DmzN/0fPvwkoGqX3Ce1qpK
+         gwUO8OpBVBBZADCHddKhbknM5suUAADtHI4x/Jt6039iFbzxsJgAZwsJonAX9maOEcbq
+         uvKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5dL+o3dgd3I+9BIcoV5xXMdVohBoY9zXkOYhggaRAJs=;
-        b=IGppgO9XI0Bpt2DztsC37Ii/3TM54wcyS4ruzTY2c91Cgaxo/+UHIQB4rAC6t8AH+P
-         POZdDbqueRUmaP9JVRll8G2Ii5goBMzc4nblwrUN3nVQdIXf3pLkVoDeGUt2X447PoLH
-         /eIQZtbirqTWSWengr4u3FdT9e4Tjtmo2tWXppPuQ1FQKmlABIo4DxhQyQnAJ+K22rqD
-         BFBW9OUJQpdigFPQ25NEdikjuKhHPSXq2nLRR+xyUG75+IGM1jbaSDKc/AoLRI1r+/72
-         mzxu6wBl8udNmCmTyWCqEYyiP2KKjMhZUbONOFMXS/czxyn+J6nDRrO+FE3cFMZG+3LH
-         joyA==
-X-Gm-Message-State: AOAM53124XiseRSdEGXkq8qzs1XvuegcRFdu8G0Z9dyPatXW8aO4ab0s
-        xAHP+ZEegrxI2/S2KcbeqjFpFm+enXzEWa4AGlxacKtkdLyv+ocjqpq0SxD3afUg39dioYyHKv2
-        nqCma9Vdx4gZjRSeTPMQRlwCO
-X-Received: by 2002:ad4:5c4a:0:b0:456:4edb:3c04 with SMTP id a10-20020ad45c4a000000b004564edb3c04mr1102257qva.26.1651269202321;
-        Fri, 29 Apr 2022 14:53:22 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxs1mKAj2S/GRwUA5T8JwTzq2WNqyq+Z79pYJA3JIatEtin5n5zKAoSze1+UBoGV2za9ShDXg==
-X-Received: by 2002:ad4:5c4a:0:b0:456:4edb:3c04 with SMTP id a10-20020ad45c4a000000b004564edb3c04mr1102244qva.26.1651269202123;
-        Fri, 29 Apr 2022 14:53:22 -0700 (PDT)
-Received: from treble ([2600:1700:6e32:6c00::15])
-        by smtp.gmail.com with ESMTPSA id b6-20020ac844c6000000b002f39b99f6c3sm252481qto.93.2022.04.29.14.53.20
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mx96GF5mK2X2Q9SZlgJmIqotjYYuzoJNpzCjKgQvXXc=;
+        b=ZyrpW6LUOh54oh72PeXvk8Zr5nNyjobXnxxzIGDpOq2PCrkWIadx2lllNcPAmrMMIx
+         Z0I4cWMs14ooC+yCPZfGtf2dxlaFRk1ar1yo9jgWY2uyrkuiRhEdLL6qlHtZ0cz4lx7O
+         g4116sfZ49uWjJcwNXyPpDuRD6YChb6+CuL9Wx/um+k1sbp7ph/uDGsy31lfhry4XBKS
+         YSsahDFBz0qm3A0DylkKd1D01P7y57QAP4HJwFTGbguT36mETfvFOuLg0RjxYIJaGpuS
+         9sLyJx+MkLtnqHkkdLPIS3FvyZ91I4EyIvCu4A584T1hX720PAUyCixLcFkir/CQaHkS
+         VUJQ==
+X-Gm-Message-State: AOAM531ovA8K4TyhNcb1Pm1Pec95naKkKunh93Gk9XuieaAG1gphkqp2
+        kEXbSl9cCDmum9xkwpq2q7iT2SH7xq6KLQ==
+X-Google-Smtp-Source: ABdhPJxTCMaDPQsKPWv6eVS+a/KAs7Y2FdPT/TsKt8CoWZ8/JPGV9PwjBnt3nTK4XNlR4U+ne07m7Q==
+X-Received: by 2002:a2e:b8c3:0:b0:24f:3395:16e8 with SMTP id s3-20020a2eb8c3000000b0024f339516e8mr801971ljp.378.1651269206070;
+        Fri, 29 Apr 2022 14:53:26 -0700 (PDT)
+Received: from eriador.lan ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id 11-20020ac2568b000000b0047255d21182sm32637lfr.177.2022.04.29.14.53.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 14:53:21 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 14:53:19 -0700
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] objtool: Fix STACK_FRAME_NON_STANDARD reloc type
-Message-ID: <20220429215319.m5tasgmu4t3yrx77@treble>
-References: <20220429092024.GT2731@worktop.programming.kicks-ass.net>
- <20220429201325.d5kifdezdru2i3lp@treble>
- <YmxXG3Teg0gJ5PVh@hirez.programming.kicks-ass.net>
+        Fri, 29 Apr 2022 14:53:25 -0700 (PDT)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Rob Clark <robdclark@gmail.com>, freedreno@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org
+Subject: [PATCH v2] MAINTAINERS: Add Dmitry as MSM DRM driver co-maintainer
+Date:   Sat, 30 Apr 2022 00:53:24 +0300
+Message-Id: <20220429215324.3729441-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YmxXG3Teg0gJ5PVh@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 11:22:35PM +0200, Peter Zijlstra wrote:
-> On Fri, Apr 29, 2022 at 01:13:25PM -0700, Josh Poimboeuf wrote:
-> > Can use _ASM_PTR here, and objtool.h needs synced to tools.
-> 
-> Here goes..
-> 
-> ---
-> Subject: objtool: Fix STACK_FRAME_NON_STANDARD reloc type
-> From: Peter Zijlstra <peterz@infradead.org>
-> Date: Tue Apr 26 17:08:53 CEST 2022
-> 
-> STACK_FRAME_NON_STANDARD results in inconsistent relocation types
-> depending on .c or .S usage:
-> 
->   Relocation section '.rela.discard.func_stack_frame_non_standard' at offset 0x3c01090 contains 5 entries:
->   Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
->   0000000000000000  00020c2200000002 R_X86_64_PC32          0000000000047b40 do_suspend_lowlevel + 0
->   0000000000000008  0002461e00000001 R_X86_64_64            00000000000480a0 machine_real_restart + 0
->   0000000000000010  0000001400000001 R_X86_64_64            0000000000000000 .rodata + b3d4
->   0000000000000018  0002444600000002 R_X86_64_PC32          00000000000678a0 __efi64_thunk + 0
->   0000000000000020  0002659d00000001 R_X86_64_64            0000000000113160 __crash_kexec + 0
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  include/linux/objtool.h       |    2 +-
->  tools/include/linux/objtool.h |    2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> --- a/include/linux/objtool.h
-> +++ b/include/linux/objtool.h
-> @@ -137,7 +137,7 @@ struct unwind_hint {
->  
->  .macro STACK_FRAME_NON_STANDARD func:req
->  	.pushsection .discard.func_stack_frame_non_standard, "aw"
-> -		.long \func - .
-> +	_ASM_PTR \func
->  	.popsection
->  .endm
+For the past several releases I have been assisting Rob by writing,
+collecting, testing and integrating patches for non-GPU and non-core
+parts of MSM DRM driver, while Rob is more interested in improving the
+GPU-related part. Let's note this in the MAINTAINERS file.
 
-This file needs to include <asm/asm.h>, otherwise you get:
+While we are at it, per Rob's suggestion let's also promote Abhinav
+Kumar to M: (as he is actively working on the driver) and switch Sean
+Paul to R: (since he isn't doing much on msm these days).
 
-arch/x86/kernel/acpi/wakeup_64.S: Assembler messages:
-arch/x86/kernel/acpi/wakeup_64.S:132: Error: no such instruction: `_asm_ptr do_suspend_lowlevel'
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+---
+ MAINTAINERS | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 61d9f114c37f..782934f318d4 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6254,8 +6254,9 @@ F:	drivers/gpu/drm/tiny/panel-mipi-dbi.c
+ 
+ DRM DRIVER FOR MSM ADRENO GPU
+ M:	Rob Clark <robdclark@gmail.com>
+-M:	Sean Paul <sean@poorly.run>
+-R:	Abhinav Kumar <quic_abhinavk@quicinc.com>
++M:	Abhinav Kumar <quic_abhinavk@quicinc.com>
++M:	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
++R:	Sean Paul <sean@poorly.run>
+ L:	linux-arm-msm@vger.kernel.org
+ L:	dri-devel@lists.freedesktop.org
+ L:	freedreno@lists.freedesktop.org
 -- 
-Josh
+2.35.1
 

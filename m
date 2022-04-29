@@ -2,131 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50045515220
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB025515223
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:29:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379744AbiD2Rcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 13:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49948 "EHLO
+        id S1347008AbiD2RdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 13:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379628AbiD2RcU (ORCPT
+        with ESMTP id S1379357AbiD2Rcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 13:32:20 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F948DB0C6
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:28:06 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id y32so15243632lfa.6
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:28:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=k5wgbbVMzxT1FGv3ToNsrykCep98GtsONmeu7ExUc9Q=;
-        b=Ooof03YYaerjHpgKdNiPWsEY0/0Dof5Tz3f/l3NM3t82c5E1iKlZq6AVPXH7KVYIH6
-         X0iW4bDtykLWpRUA0aFTl1zoZb6D1zksUCsNeGK4PbYeN/hSAip981Pdq3GvY9cWpIGa
-         S7jr4Ia7I0MCL9snxMeGlLXf1oWzHPFugitt9t0znydt9cx3QNGRLv9Qta8Qx0RsBORv
-         O31pV3mithTb0WNiKc5dnD+lkhpglvtgjGLf6WzYWqepdwo3zG87nGVUMSbep/g7KU43
-         ltQNnCH9OiGTffgBabg9qYb+C2TTPZbJLX0uq5IGHF+ZO1sRlGKjXmOr/QZUOY59VTjp
-         A3hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=k5wgbbVMzxT1FGv3ToNsrykCep98GtsONmeu7ExUc9Q=;
-        b=iOTGCVZlpZeHj0ebrphRY9MwhQRKK+fsZHiK5Q+2Evg3kk4bIj15EeGkHWB3dUEMMR
-         om27kGedYGBHE0PD9+E5QxYdwuYji2TuEr6v7WmaQt3ZdQg4FrqzdMO5qeo+rJmk8fgr
-         /n+7SISLtpJCp1W5tUMeFp2CGl5j0MUTfu43cMu6FGcoVzY/M53FBaqlgsCJOBNVRlGi
-         bATw5tH3w3JakM6sWcJFQIpPmpvXIkHWvNlxBoLVeU59k5EBRJjW7tdf01WbKXQvyG+z
-         3vAvff+NICUOHQeclb82zffZJRKDJglEx/D7qcVxOMSR5ttMi8YA2LTzCsi3QHd5a1uW
-         rAAw==
-X-Gm-Message-State: AOAM531R1AV0UYCGX/YeE37iSgaakKPbKYIbO6KQPYmeTUI2aNNXd8vs
-        /TeXzBeP8A/LXUaHxNQEK+dC2pQDHT8ArzKzTPfJsA==
-X-Google-Smtp-Source: ABdhPJwg3BtzWCk4ed0t1y77RW806RTg1nSgy4v/2th+J0/fN7ePNIb4Qp0MNC4cFS2diG3oqDYHS6+0sdvk4Sihi0E=
-X-Received: by 2002:a05:6512:2627:b0:44a:f55c:ded9 with SMTP id
- bt39-20020a056512262700b0044af55cded9mr184036lfb.373.1651253283698; Fri, 29
- Apr 2022 10:28:03 -0700 (PDT)
+        Fri, 29 Apr 2022 13:32:54 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC701DB2E9;
+        Fri, 29 Apr 2022 10:29:20 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:3d::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 710DD37A;
+        Fri, 29 Apr 2022 17:29:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 710DD37A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1651253360; bh=w39UN1ykg1ooCxdjBDrKaihPs4YfzGqKEKjdMBJfh1s=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=mylkgZ0nMBITZO4cE2d39uL+LgiomfKSG9I2W3RyA1sSnk2//94ogjSI6H5uYoFnM
+         olLfgcXFt6u44uRAxxZ1TUnt/h/ATm0e6hXoKOFtEn4ova2Hs2EsiUvNYCmf0czU99
+         eek1EHsk0sjskGjT5dwW925pt3oNYsgPGpbFZYtDbUXSXNHxh481toCTc5eildsoSn
+         uqHhfTtrCVqoVLpiwVU5r/9zOFjMUzpYAWei4VRCFwgtBW59hLVFvfRgiWHSIY6CAp
+         VfAdVeyLoLbFH6gdPg3w9QdrjkpW0kex81HTSaT7WNz2tuwRVVGfoYk1qZrgPOHni1
+         X1y+YycGPhHjQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Shenghong Han <hanshenghong2019@email.szu.edu.cn>,
+        akpm@linux-foundation.org
+Cc:     akiyks@gmail.com, baihaowen@meizu.com, seakeel@gmail.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shenghong Han <hanshenghong2019@email.szu.edu.cn>,
+        Yixuan Cao <caoyixuan2019@email.szu.edu.cn>,
+        Yinan Zhang <zhangyinan2019@email.szu.edu.cn>,
+        Chongxi Zhao <zhaochongxi2019@email.szu.edu.cn>,
+        Jiajian Ye <yejiajian2018@email.szu.edu.cn>,
+        Yuhong Feng <yuhongf@szu.edu.cn>
+Subject: Re: [PATCH] Documentation/vm/page_owner.rst: Fix syntax error and
+ Describe details using table
+In-Reply-To: <20220429171844.9673-1-hanshenghong2019@email.szu.edu.cn>
+References: <20220429171844.9673-1-hanshenghong2019@email.szu.edu.cn>
+Date:   Fri, 29 Apr 2022 11:29:19 -0600
+Message-ID: <87wnf73ij4.fsf@meer.lwn.net>
 MIME-Version: 1.0
-References: <20220407195908.633003-1-pgonda@google.com> <CAFNjLiXC0AdOw5f8Ovu47D==ex7F0=WN_Ocirymz4xL=mWvC5A@mail.gmail.com>
- <CAMkAt6r-Mc_YN-gVHuCpTj4E1EmcvyYpP9jhtHo5HRHnoNJAdA@mail.gmail.com>
- <CAMkAt6r+OMPWCbV_svUyGWa0qMzjj2UEG29G6P7jb6uH6yko2w@mail.gmail.com>
- <62e9ece1-5d71-f803-3f65-2755160cf1d1@redhat.com> <CAMkAt6q6YLBfo2RceduSXTafckEehawhD4K4hUEuB4ZNqe2kKg@mail.gmail.com>
- <4c0edc90-36a1-4f4c-1923-4b20e7bdbb4c@redhat.com> <CAMkAt6oL5qi7z-eh4z7z8WBhpc=Ow6WtcJA5bDi6-aGMnz135A@mail.gmail.com>
- <CAMkAt6rmDrZfN5DbNOTsKFV57PwEnK2zxgBTCbEPeE206+5v5w@mail.gmail.com>
- <0d282be4-d612-374d-84ba-067994321bab@redhat.com> <CAMkAt6ragq4OmnX+n628Yd5pn51qFv4qV20upGR6tTvyYw3U5A@mail.gmail.com>
- <8a2c5f8c-503c-b4f0-75e7-039533c9852d@redhat.com> <CAMkAt6qAW5zFyTAqX_Az2DT2J3KROPo4u-Ak1sC0J+UTUeFfXA@mail.gmail.com>
- <4afce434-ab25-66d6-76f4-3a987f64e88e@redhat.com> <CAMkAt6o8u9=H_kjr_xyRO05J=RDFUZRiTc_Bw-FFDKEUaiyp2Q@mail.gmail.com>
- <CABgObfa0ubOwNv2Vi9ziEjHXQMR_Sa6P-fwuXfPq76qy0N61kA@mail.gmail.com>
-In-Reply-To: <CABgObfa0ubOwNv2Vi9ziEjHXQMR_Sa6P-fwuXfPq76qy0N61kA@mail.gmail.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Fri, 29 Apr 2022 11:27:51 -0600
-Message-ID: <CAMkAt6pcg_Eg49nN5hS=wbeVWtPV1N_12G9Lvfgoq_bS_tUYog@mail.gmail.com>
-Subject: Re: [PATCH v3] KVM: SEV: Mark nested locking of vcpu->lock
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     John Sperbeck <jsperbeck@google.com>,
-        kvm list <kvm@vger.kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 11:21 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> On Fri, Apr 29, 2022 at 7:12 PM Peter Gonda <pgonda@google.com> wrote:
-> > Sounds good. Instead of doing this prev_vcpu solution we could just
-> > keep the 1st vcpu for source and target. I think this could work since
-> > all the vcpu->mutex.dep_maps do not point to the same string.
-> >
-> > Lock:
-> >          bool acquired = false;
-> >          kvm_for_each_vcpu(...) {
-> >                  if (mutex_lock_killable_nested(&vcpu->mutex, role)
-> >                      goto out_unlock;
-> >                 acquired = true;
-> >                  if (acquired)
-> >                       mutex_release(&vcpu->mutex, role)
-> >          }
->
-> Almost:
->
->           bool first = true;
->           kvm_for_each_vcpu(...) {
->                   if (mutex_lock_killable_nested(&vcpu->mutex, role)
->                       goto out_unlock;
->                   if (first)
->                       ++role, first = false;
->                  else
->                       mutex_release(&vcpu->mutex, role);
->          }
->
-> and to unlock:
->
->           bool first = true;
->           kvm_for_each_vcpu(...) {
->                 if (first)
->                       first = false;
->                 else
->                       mutex_acquire(&vcpu->mutex, role);
->                 mutex_unlock(&vcpu->mutex);
->                 acquired = false;
->           }
->
-> because you cannot use the first vCPU's role again when locking.
+Shenghong Han <hanshenghong2019@email.szu.edu.cn> writes:
 
-Ah yes I missed that. I would suggest `role = SEV_NR_MIGRATION_ROLES`
-or something else instead of role++ to avoid leaking this
-implementation detail outside of the function signature / enum.
-
-
+> Some syntax errors exist in "page_owner.rst". Thanks to Akira Yokosawa and
+> Haowen Bai for tips to help improve the documentation.
 >
-> Paolo
+> We try to fix them. Hope that the Documentation is showed as we expect.
+
+You *have* built the docs and know that they render as expected, right? 
+
+> Signed-off-by: Shenghong Han <hanshenghong2019@email.szu.edu.cn>
+> Fixes: edc93abbcc6d ("tools/vm/page_owner_sort.c: support sorting blocks by multiple keys")
 >
+> Co-developed-by: Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
+> Co-developed-by: Yinan Zhang <zhangyinan2019@email.szu.edu.cn>
+> Co-developed-by: Chongxi Zhao <zhaochongxi2019@email.szu.edu.cn>
+> Co-developed-by: Jiajian Ye <yejiajian2018@email.szu.edu.cn>
+> Co-developed-by: Yuhong Feng <yuhongf@szu.edu.cn>
+
+As I mentioned the last time I saw a version of this work, if it really
+took this many people to develop this one patch, then we need signoff
+lines from all of them.
+
+> ---
+> Hello Andrew,
+>
+> In Commit 57f2b54a9379 ("Documentation/vm/page_owner.rst: update the
+> documentation") and Commit edc93abbcc6d ("tools/vm/page_owner_sort.c:
+> support sorting blocks by multiple keys"), some incorrect syntax
+> are used, which laeds to "build warning after merge of the mm tree".
+> Apologize for that!
+>
+> This issue is trying to fix it.
+>
+> Best,
+>
+> 	Shenghong Han
+> ---
+> ---
+>  Documentation/vm/page_owner.rst | 67 ++++++++++++++++++++++-----------
+>  1 file changed, 44 insertions(+), 23 deletions(-)
+>
+> diff --git a/Documentation/vm/page_owner.rst b/Documentation/vm/page_owner.rst
+> index 25622c715..f900ab99d 100644
+> --- a/Documentation/vm/page_owner.rst
+> +++ b/Documentation/vm/page_owner.rst
+> @@ -171,26 +171,47 @@ Usage
+>  
+>  STANDARD FORMAT SPECIFIERS
+>  ==========================
+> -::
+> -
+> -For --sort option:
+> -
+
+So the simplest fix, of course, would be to just put some leading white
+space before the "For" lines.  Then the literal block would be
+syntactically correct.
+
+> -	KEY		LONG		DESCRIPTION
+> -	p		pid		process ID
+> -	tg		tgid		thread group ID
+> -	n		name		task command name
+> -	st		stacktrace	stack trace of the page allocation
+> -	T		txt		full text of block
+> -	ft		free_ts		timestamp of the page when it was released
+> -	at		alloc_ts	timestamp of the page when it was allocated
+> -        ator            allocator       memory allocator for pages
+> -
+> -For --curl option:
+> -
+> -	KEY		LONG		DESCRIPTION
+> -	p		pid		process ID
+> -	tg		tgid		thread group ID
+> -	n		name		task command name
+> -	f		free		whether the page has been released or not
+> -	st		stacktrace	stack trace of the page allocation
+> -        ator            allocator       memory allocator for pages
+> +
+> +1) `Table 1`_ for the ``--sort`` option.
+> +
+> +.. table:: Table 1
+> +   :name: Table 1
+
+This seems like rather more markup than is really needed?  What is the
+point of these tags?
+
+> +   +--------+--------------+----------------------------------------------+
+> +   | KEY    | LONG         | DESCRIPTION                                  |
+> +   +========+==============+==============================================+
+> +   | p      | pid          | process ID                                   |
+> +   +--------+--------------+----------------------------------------------+
+
+...and this seems over the top.  I saw a version of this that used the
+simpler format:
+
+> +	====		==========	===========
+> 	KEY		LONG		DESCRIPTION
+> +	====		==========	===========
+> 	p		pid		process ID
+
+That's just as easy to read and much easier to maintain, is there a
+reason you moved away from it?
+
+Thanks,
+
+jon

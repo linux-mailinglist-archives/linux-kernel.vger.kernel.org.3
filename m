@@ -2,112 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D5365141E9
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 07:48:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BA7B5141F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 07:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354213AbiD2FvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 01:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
+        id S1354228AbiD2FwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 01:52:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344864AbiD2FvQ (ORCPT
+        with ESMTP id S1344864AbiD2FwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 01:51:16 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FA9B18A5;
-        Thu, 28 Apr 2022 22:47:59 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id kd11so4720588qvb.2;
-        Thu, 28 Apr 2022 22:47:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dmvctIow+IO8H7sfWVaNo+LfAgPKgXEAs61yE8oSiDQ=;
-        b=oWiP1HCeTyemawgY2i30abE82xuGfAhqLYQ4az+d0RtVLrsc1W7y1QyPjWaHLwJNqQ
-         v5cN/pTLQDNQO5acKAGmD1z2ODP3qmycMQLZ5D9JNR7gMrkfrGRuQ8hrjv7HIobEx++B
-         Hxqv+O+18Bf1gmt8Y262IYlcex1TU7dElzqAlLPr+o57Rpgy35WLiShRzSPommRWRdsy
-         OL2yD7pyRm0Dl3wMgkfvT3jrGH+LpEOb6zfnL0x8UHw8WPKo1Z4mMY7lBAvMNWqraoYy
-         Eck7aVOyDPlrVnNMNNRGRSzvRyaxJ95QvJduLeLtXefZykn8XfJjjTSuLOOT73isEZUM
-         DzRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=dmvctIow+IO8H7sfWVaNo+LfAgPKgXEAs61yE8oSiDQ=;
-        b=r/rg9F/tKxNjTseVl9QY0I///6jsVfadRTZvzK2vTrvhQbZiD41US7F33suun+A2xa
-         qESzxYI6FFKa15TGTkO5+7jIWcj49jDalkHVqenuuVtrS6m1cthyL5MbSccUBn74Jfwd
-         sHNpokJimdWQyI9bscY0ouQa5XlNP8zrTxxAjf+mwJTgNtwrHtsMxDNw5+1D/fARgqHb
-         6L8ApiMAFYl9bk+cAZENUy6MMlfW+t82U2SVhsP08Nfi1JYWE+crXehRzr4OD7SdduHw
-         TTSEjNKL6Sx8JgviPc1Hf0qq8GUUlR520HTXGG8wdY0exZseYVeKNMGca1wzontxZFDb
-         8Y1w==
-X-Gm-Message-State: AOAM533DABnFYTB5E5ykVYcDXsKOj0CWW3ZdhWsOf53XPsItpsF/B24R
-        gI9AyDv+FTGs3jn6lvNXXgcHFCPsY6I=
-X-Google-Smtp-Source: ABdhPJywgs83ZsnO6SkmFFnrihPXpXj6JdK9JpVZwtn37Q80rvE/ZAmW9KtZfoLczSxU8F+4hfgL0g==
-X-Received: by 2002:ad4:444a:0:b0:456:52bc:41cb with SMTP id l10-20020ad4444a000000b0045652bc41cbmr8229203qvt.54.1651211278445;
-        Thu, 28 Apr 2022 22:47:58 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id o20-20020a05620a0d5400b0069c71a71ed3sm925303qkl.33.2022.04.28.22.47.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 22:47:58 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     deller@gmx.de
-Cc:     linux-omap@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] omapfb: simplify the return expression of dsi_init_pll_data()
-Date:   Fri, 29 Apr 2022 05:47:51 +0000
-Message-Id: <20220429054751.3851851-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Fri, 29 Apr 2022 01:52:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F415B18A7
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 22:48:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD5B0B831C0
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 05:48:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C68F9C385A4;
+        Fri, 29 Apr 2022 05:48:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651211324;
+        bh=Tp7mTVYH5uoGc7j1fbM0+/1kb8iDMC+MhnSOZBu/DhI=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=Y/eZnUagjyS4EnMcMEB+rP3jCgBiM2JxClAoTs25gOJNtaWM2J2ecCN1BmGCvyfP1
+         Zdwafi2btGRfH2DO9tf8ObERmithgVnAVMpzeDnPqXdhjI1IBjFSbX5gFxhuuQ9ngH
+         Bv8RTiyqvqIF1/0d1fqGvQOzgqddgi/EvhObu6LcNHaJ85WyD6nbhJJzh2mFlKM/zt
+         6hKotk5NtYYn/vQ1o7i9MkxfKPo7H1pya0cNQgQyNfWv5YJPU/uGP3rI0S7PYpiYKv
+         o6CjcX7NfGZ1E36L7MXtmwS8yyB9VDOcx+yhBgrik4grIgtqn/VD06/CkkTLQ+utg8
+         xKUuHw1FGQJcw==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Zong-Zhe Yang <kevin_yang@realtek.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Ping-Ke Shih <pkshih@realtek.com>
+Subject: Re: [ammarfaizi2-block:kvalo/ath/pending 7/57] drivers/net/wireless/realtek/rtw89/ser.c:319:2: warning: unannotated fall-through between switch labels
+References: <202204290113.w78dhtXk-lkp@intel.com>
+Date:   Fri, 29 Apr 2022 08:48:40 +0300
+In-Reply-To: <202204290113.w78dhtXk-lkp@intel.com> (kernel test robot's
+        message of "Fri, 29 Apr 2022 01:47:27 +0800")
+Message-ID: <87fslwfnif.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+kernel test robot <lkp@intel.com> writes:
 
-Simplify the return expression.
+> Hi Zong-Zhe,
+>
+> FYI, the error/warning still remains.
+>
+> tree:   https://github.com/ammarfaizi2/linux-block kvalo/ath/pending
+> head:   5c6cf64b40b98e4d4247fda11e4b4c859a24585d
+> commit: 14f9f4790048f684c2b151c899895feae0b5731a [7/57] rtw89: ser: control hci interrupts on/off by state
+> config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220429/202204290113.w78dhtXk-lkp@intel.com/config)
+> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c59473aacce38cd7dd77eebceaf3c98c5707ab3b)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm64 cross compiling tool for clang build
+>         # apt-get install binutils-aarch64-linux-gnu
+>         # https://github.com/ammarfaizi2/linux-block/commit/14f9f4790048f684c2b151c899895feae0b5731a
+>         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+>         git fetch --no-tags ammarfaizi2-block kvalo/ath/pending
+>         git checkout 14f9f4790048f684c2b151c899895feae0b5731a
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/misc/lkdtm/ drivers/net/wireless/realtek/rtw89/
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+>>> drivers/net/wireless/realtek/rtw89/ser.c:319:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+>            default:
+>            ^
+>    drivers/net/wireless/realtek/rtw89/ser.c:319:2: note: insert 'break;' to avoid fall-through
+>            default:
+>            ^
+>            break; 
+>    1 warning generated.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
- drivers/video/fbdev/omap2/omapfb/dss/hdmi_pll.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+This commit should fix it:
 
-diff --git a/drivers/video/fbdev/omap2/omapfb/dss/hdmi_pll.c b/drivers/video/fbdev/omap2/omapfb/dss/hdmi_pll.c
-index c5f89129dcdd..531b36d2232b 100644
---- a/drivers/video/fbdev/omap2/omapfb/dss/hdmi_pll.c
-+++ b/drivers/video/fbdev/omap2/omapfb/dss/hdmi_pll.c
-@@ -173,7 +173,6 @@ static int dsi_init_pll_data(struct platform_device *pdev, struct hdmi_pll_data
- {
- 	struct dss_pll *pll = &hpll->pll;
- 	struct clk *clk;
--	int r;
- 
- 	clk = devm_clk_get(&pdev->dev, "sys_clk");
- 	if (IS_ERR(clk)) {
-@@ -203,12 +202,7 @@ static int dsi_init_pll_data(struct platform_device *pdev, struct hdmi_pll_data
- 	}
- 
- 	pll->ops = &dsi_pll_ops;
--
--	r = dss_pll_register(pll);
--	if (r)
--		return r;
--
--	return 0;
-+	return dss_pll_register(pll);
- }
- 
- int hdmi_pll_init(struct platform_device *pdev, struct hdmi_pll_data *pll,
+https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git/commit/?id=5ddfffd6da9b94e5f6397843ad1a54d6a211f652
+
 -- 
-2.25.1
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

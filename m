@@ -2,193 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED0275154DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 21:51:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31E005154DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 21:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380412AbiD2Txu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 15:53:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45592 "EHLO
+        id S1380414AbiD2Tzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 15:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239376AbiD2Txp (ORCPT
+        with ESMTP id S239376AbiD2Tzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 15:53:45 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2064.outbound.protection.outlook.com [40.107.244.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC2563E1;
-        Fri, 29 Apr 2022 12:50:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Lyn4CQhLGMz2tbDpmxqntWocx9k/CZNdAmaZnwBjYFv9LWotEAF6+osSap5d64B5/CCrOyq3B9WRb7qhTXYsTdAP95oVJyjLJHKbsdGBPhwt6PyA/wuHCxbp4Kgj1ylr4f65tgSO83miVJIfjiCBXrtE4Xwhl1GPv2jZ0vOsUd7q8rmfY/kn4oIkQv4JOk5AEA6HZniecziYtzA9yeK/mR6wXxn0kemoaXd5j3QFkiStfZeP8zFJtRZ6scdDkJ4qW13XZUVkCO216Ur7eY3DyTnwf/5+2cqrBBicNXWAYeiIvrH7xCbpJU2DCSP37QEEBEGHHHP7Uqp6STYdklXp9Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tZA6lvmCDi75ZvjyVeG49wjQho+pu1dXW2kirs38MG8=;
- b=gnHXMCzolMeigo9GSqJTLRmcIjwex9mRSnqjtOIxpaw8bQo/cxgOTvbG6MqpaSIdnG6jD/AKRfrBqCHJCv44tJl/SJLpDvVX71k60yA3zNcHkjoA7oKxJ+5FLabfRP4e6QZVNz7JsP7YylM6xQT0tDX/rPq53/E64Qb+m4d7Okt2XzH7KqLhyHROhfQCmAU2weOJd/lLFZ8I6zt3f2ruNeRSH1SRavX1D8hxl5FpQzoAdc7HYy75Qz7bk5aU11NSOnAHRmQJ5uaFj9inobo60mPi3/T7AY5NJdRDUuaiPt26WCbV6TJ2uQXYv7bKSBzOg3Hc3xctuZ3NlJ0FxV5L3g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=davemloft.net smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tZA6lvmCDi75ZvjyVeG49wjQho+pu1dXW2kirs38MG8=;
- b=oov9HxsF/0B87tVLwg6g+/a1vj2nVo2pjcp59/oE6aD44GvwyiQwj+mCT/ZyjMeUX/pVUZCHTGGQ+LJesP1GUeWPiryyq1vN9a8WgsMg73APjBPaNeJQojZPT7yuvUh70cSOpzadcqgoay5hIKkaUSA48BUZtdNg6//BHu+8DHY=
-Received: from DM6PR07CA0112.namprd07.prod.outlook.com (2603:10b6:5:330::27)
- by BN7PR02MB4225.namprd02.prod.outlook.com (2603:10b6:406:f8::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Fri, 29 Apr
- 2022 19:50:22 +0000
-Received: from DM3NAM02FT037.eop-nam02.prod.protection.outlook.com
- (2603:10b6:5:330:cafe::ff) by DM6PR07CA0112.outlook.office365.com
- (2603:10b6:5:330::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.14 via Frontend
- Transport; Fri, 29 Apr 2022 19:50:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- DM3NAM02FT037.mail.protection.outlook.com (10.13.4.166) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5206.12 via Frontend Transport; Fri, 29 Apr 2022 19:50:20 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Fri, 29 Apr 2022 12:50:04 -0700
-Received: from smtp.xilinx.com (172.19.127.95) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Fri, 29 Apr 2022 12:50:04 -0700
-Envelope-to: git@xilinx.com,
- davem@davemloft.net,
- kuba@kernel.org,
- andrew@lunn.ch,
- pabeni@redhat.com,
- linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org
-Received: from [172.23.64.6] (port=52258 helo=xhdvnc106.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <radhey.shyam.pandey@xilinx.com>)
-        id 1nkWcu-000DCy-3z; Fri, 29 Apr 2022 12:50:04 -0700
-Received: by xhdvnc106.xilinx.com (Postfix, from userid 13245)
-        id 3349A6052A; Sat, 30 Apr 2022 01:19:37 +0530 (IST)
-From:   Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <michal.simek@xilinx.com>, <andrew@lunn.ch>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <git@xilinx.com>, Shravya Kumbham <shravya.kumbham@xilinx.com>,
-        "Radhey Shyam Pandey" <radhey.shyam.pandey@xilinx.com>
-Subject: [PATCH net v2 2/2] net: emaclite: Add error handling for of_address_to_resource()
-Date:   Sat, 30 Apr 2022 01:19:30 +0530
-Message-ID: <1651261770-6025-3-git-send-email-radhey.shyam.pandey@xilinx.com>
-X-Mailer: git-send-email 2.1.1
-In-Reply-To: <1651261770-6025-1-git-send-email-radhey.shyam.pandey@xilinx.com>
-References: <1651261770-6025-1-git-send-email-radhey.shyam.pandey@xilinx.com>
+        Fri, 29 Apr 2022 15:55:41 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC07A28E2C
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 12:52:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651261942; x=1682797942;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GARhOmNBd1ME0CHLOJNqer0adibXv0bWTEQcGPSkh6s=;
+  b=QnV1iObSw5fuDPJZqFbbH7AljkXvfHWQ/l0Fm1splVuzEpQoMdzatMyT
+   aMF0UAgCviX8YZwrZzMKUjrSUr9Z3Bz+ie73knpS8IXp8Zl+IqUYBhYGM
+   rddA7C8Opa3XgWWReQdjL1ZDcQXDb0hf7LvYgX7aiO4/9YlVij6nxHejJ
+   cgOy1q98AfmFZVx89ayZ1QRZb9oEfVil9XaC962a+RSG+0YrcqCWLKRvb
+   PTmbrNtxGwK9XvBcLFqRFDT1QwBM8PrW9lUgVZppnXwV8bznvqzkMIprO
+   s5CLoWBDCL0JFFNn8GtINlerP2nqZMWZGLIwfSEIfbTdFq6u9OGxDiZA7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="246673132"
+X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
+   d="scan'208";a="246673132"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 12:52:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
+   d="scan'208";a="534660010"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 29 Apr 2022 12:52:21 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nkWf6-0006ad-Rp;
+        Fri, 29 Apr 2022 19:52:20 +0000
+Date:   Sat, 30 Apr 2022 03:52:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ioannis Angelakopoulos <iangelak@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [rhvgoyal:ioannis-fanotify 10/18] fs/fuse/inode.c:1246:24: warning:
+ extra tokens at end of #ifdef directive
+Message-ID: <202204300354.BZkrhejM-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c6d0bb0d-42f4-487b-dd2a-08da2a197e28
-X-MS-TrafficTypeDiagnostic: BN7PR02MB4225:EE_
-X-Microsoft-Antispam-PRVS: <BN7PR02MB42257D0FAE78CA0391284E4FC7FC9@BN7PR02MB4225.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oNVuN0jA00uq2d7OkYttrePuAz1CkSShJaEo6qEKsVDS59MFVDMGTBayKxXybHJTNDiYUjrsNJ1K3rhun3LHBDIYvE05bTFMF0+TNNKN76HBmQwtvqidsZqfucmdnCgtkk/dqo9xLhehMgpVXJsMDBY3Fxl++lnUDoEuRAeJKID1//s/yxqqTQpfC50TERqTyItctfJRfUq2gdBEEMyPSD5jMvI31R+Lxa9rueDpv1H4qmdzoBIJxCVDwypR9krocEOW8y2daAKprBGOIuAycUOSIu1PKmtH589oT9igWm2mJx8uBhTi6xPn957JnI+PLZ8mA7Y3XnJ/rCT4AhBRcolLb08tB7fQqzN7lrkLfX29vzc0cWx7OK110NGZUtkySXRCtbDxfQhAOy16qoj0yAiEbW2yPFdrja95Tw6kD17GmMNp7gjLyTv1z8j08/J0IymvK5XMS20dVe8j2AG7CYSA6IhNKU98lqtJ+UFO7QyS/0Jd7LHYJddWZVYp5MIiwebq9vbrCxmPZbB+mHhA9WB7tdBIDsgY5GgJq17FjruX/VlzEvk99HXMP/65Zkuazwba9f64fF1MmLXscln527vRpkazdVQfTIqlP6oCJtPREhGHZbLagGDJX1W7wPbKL7rQAgGiTvAFxaikIRqaH8T8CtzogPO8MVgQ97NJz8hU4jqD1F38EFc12LKyb1rl0m6uWbSmBAKsbCBKP71djQ==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(42186006)(6266002)(26005)(110136005)(5660300002)(8936002)(7636003)(54906003)(40460700003)(316002)(70206006)(4326008)(356005)(508600001)(8676002)(6666004)(70586007)(82310400005)(186003)(47076005)(426003)(336012)(36756003)(2616005)(83380400001)(107886003)(36860700001)(2906002)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2022 19:50:20.4565
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c6d0bb0d-42f4-487b-dd2a-08da2a197e28
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT037.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR02MB4225
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shravya Kumbham <shravya.kumbham@xilinx.com>
+tree:   https://github.com/rhvgoyal/linux ioannis-fanotify
+head:   10887e7003a6a801e521d59daff76f0c035f061f
+commit: c76a3b348db49e81d723d06f9cdf37bc3a7d51e8 [10/18] FUSE: Add the remote fsnotify support capability to FUSE
+config: x86_64-randconfig-a015 (https://download.01.org/0day-ci/archive/20220430/202204300354.BZkrhejM-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/rhvgoyal/linux/commit/c76a3b348db49e81d723d06f9cdf37bc3a7d51e8
+        git remote add rhvgoyal https://github.com/rhvgoyal/linux
+        git fetch --no-tags rhvgoyal ioannis-fanotify
+        git checkout c76a3b348db49e81d723d06f9cdf37bc3a7d51e8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/fuse/
 
-check the return value of of_address_to_resource() and also add
-missing of_node_put() for np and npp nodes.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Fixes: e0a3bc65448c ("net: emaclite: Support multiple phys connected to one MDIO bus")
-Addresses-Coverity: Event check_return value.
-Signed-off-by: Shravya Kumbham <shravya.kumbham@xilinx.com>
-Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
----
-Changes for v2:
-Move ret further down to align with RXT as suggested by Andrew.
-Add Fixes tag.
----
- drivers/net/ethernet/xilinx/xilinx_emaclite.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+All warnings (new ones prefixed by >>):
 
-diff --git a/drivers/net/ethernet/xilinx/xilinx_emaclite.c b/drivers/net/ethernet/xilinx/xilinx_emaclite.c
-index f9cf86e26936..016a9c4f2c6c 100644
---- a/drivers/net/ethernet/xilinx/xilinx_emaclite.c
-+++ b/drivers/net/ethernet/xilinx/xilinx_emaclite.c
-@@ -803,10 +803,10 @@ static int xemaclite_mdio_write(struct mii_bus *bus, int phy_id, int reg,
- static int xemaclite_mdio_setup(struct net_local *lp, struct device *dev)
- {
- 	struct mii_bus *bus;
--	int rc;
- 	struct resource res;
- 	struct device_node *np = of_get_parent(lp->phy_node);
- 	struct device_node *npp;
-+	int rc, ret;
- 
- 	/* Don't register the MDIO bus if the phy_node or its parent node
- 	 * can't be found.
-@@ -816,8 +816,14 @@ static int xemaclite_mdio_setup(struct net_local *lp, struct device *dev)
- 		return -ENODEV;
- 	}
- 	npp = of_get_parent(np);
--
--	of_address_to_resource(npp, 0, &res);
-+	ret = of_address_to_resource(npp, 0, &res);
-+	of_node_put(npp);
-+	if (ret) {
-+		dev_err(dev, "%s resource error!\n",
-+			dev->of_node->full_name);
-+		of_node_put(np);
-+		return ret;
-+	}
- 	if (lp->ndev->mem_start != res.start) {
- 		struct phy_device *phydev;
- 
-@@ -827,6 +833,7 @@ static int xemaclite_mdio_setup(struct net_local *lp, struct device *dev)
- 				 "MDIO of the phy is not registered yet\n");
- 		else
- 			put_device(&phydev->mdio.dev);
-+		of_node_put(np);
- 		return 0;
- 	}
- 
-@@ -839,6 +846,7 @@ static int xemaclite_mdio_setup(struct net_local *lp, struct device *dev)
- 	bus = mdiobus_alloc();
- 	if (!bus) {
- 		dev_err(dev, "Failed to allocate mdiobus\n");
-+		of_node_put(np);
- 		return -ENOMEM;
- 	}
- 
-@@ -851,6 +859,7 @@ static int xemaclite_mdio_setup(struct net_local *lp, struct device *dev)
- 	bus->parent = dev;
- 
- 	rc = of_mdiobus_register(bus, np);
-+	of_node_put(np);
- 	if (rc) {
- 		dev_err(dev, "Failed to register mdio bus.\n");
- 		goto err_register;
+   fs/fuse/inode.c: In function 'fuse_send_init':
+>> fs/fuse/inode.c:1246:24: warning: extra tokens at end of #ifdef directive
+    1246 | #ifdef CONFIG_FANOTIFY ||  CONFIG_INOTIFY_USER
+         |                        ^~
+
+
+vim +1246 fs/fuse/inode.c
+
+  1217	
+  1218	void fuse_send_init(struct fuse_mount *fm)
+  1219	{
+  1220		struct fuse_init_args *ia;
+  1221		u64 flags;
+  1222	
+  1223		ia = kzalloc(sizeof(*ia), GFP_KERNEL | __GFP_NOFAIL);
+  1224	
+  1225		ia->in.major = FUSE_KERNEL_VERSION;
+  1226		ia->in.minor = FUSE_KERNEL_MINOR_VERSION;
+  1227		ia->in.max_readahead = fm->sb->s_bdi->ra_pages * PAGE_SIZE;
+  1228		flags =
+  1229			FUSE_ASYNC_READ | FUSE_POSIX_LOCKS | FUSE_ATOMIC_O_TRUNC |
+  1230			FUSE_EXPORT_SUPPORT | FUSE_BIG_WRITES | FUSE_DONT_MASK |
+  1231			FUSE_SPLICE_WRITE | FUSE_SPLICE_MOVE | FUSE_SPLICE_READ |
+  1232			FUSE_FLOCK_LOCKS | FUSE_HAS_IOCTL_DIR | FUSE_AUTO_INVAL_DATA |
+  1233			FUSE_DO_READDIRPLUS | FUSE_READDIRPLUS_AUTO | FUSE_ASYNC_DIO |
+  1234			FUSE_WRITEBACK_CACHE | FUSE_NO_OPEN_SUPPORT |
+  1235			FUSE_PARALLEL_DIROPS | FUSE_HANDLE_KILLPRIV | FUSE_POSIX_ACL |
+  1236			FUSE_ABORT_ERROR | FUSE_MAX_PAGES | FUSE_CACHE_SYMLINKS |
+  1237			FUSE_NO_OPENDIR_SUPPORT | FUSE_EXPLICIT_INVAL_DATA |
+  1238			FUSE_HANDLE_KILLPRIV_V2 | FUSE_SETXATTR_EXT | FUSE_INIT_EXT |
+  1239			FUSE_SECURITY_CTX;
+  1240	#ifdef CONFIG_FUSE_DAX
+  1241		if (fm->fc->dax)
+  1242			flags |= FUSE_MAP_ALIGNMENT;
+  1243		if (fuse_is_inode_dax_mode(fm->fc->dax_mode))
+  1244			flags |= FUSE_HAS_INODE_DAX;
+  1245	#endif
+> 1246	#ifdef CONFIG_FANOTIFY ||  CONFIG_INOTIFY_USER
+  1247		flags |= FUSE_HAVE_FSNOTIFY;
+  1248	#endif
+  1249		if (fm->fc->auto_submounts)
+  1250			flags |= FUSE_SUBMOUNTS;
+  1251	
+  1252		ia->in.flags = flags;
+  1253		ia->in.flags2 = flags >> 32;
+  1254	
+  1255		ia->args.opcode = FUSE_INIT;
+  1256		ia->args.in_numargs = 1;
+  1257		ia->args.in_args[0].size = sizeof(ia->in);
+  1258		ia->args.in_args[0].value = &ia->in;
+  1259		ia->args.out_numargs = 1;
+  1260		/* Variable length argument used for backward compatibility
+  1261		   with interface version < 7.5.  Rest of init_out is zeroed
+  1262		   by do_get_request(), so a short reply is not a problem */
+  1263		ia->args.out_argvar = true;
+  1264		ia->args.out_args[0].size = sizeof(ia->out);
+  1265		ia->args.out_args[0].value = &ia->out;
+  1266		ia->args.force = true;
+  1267		ia->args.nocreds = true;
+  1268		ia->args.end = process_init_reply;
+  1269	
+  1270		if (fuse_simple_background(fm, &ia->args, GFP_KERNEL) != 0)
+  1271			process_init_reply(fm, &ia->args, -ENOTCONN);
+  1272	}
+  1273	EXPORT_SYMBOL_GPL(fuse_send_init);
+  1274	
+
 -- 
-2.7.4
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

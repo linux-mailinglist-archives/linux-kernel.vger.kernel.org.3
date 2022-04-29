@@ -2,75 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8616A514880
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 13:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2EE514884
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 13:48:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355311AbiD2LtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 07:49:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
+        id S1350699AbiD2Lvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 07:51:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343581AbiD2LtN (ORCPT
+        with ESMTP id S235786AbiD2Lvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 07:49:13 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057E162DF
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 04:45:55 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id s30so13987309ybi.8
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 04:45:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=NHJAqhwPXVgAB8bEwImwTbvvWr4gJ0gDlgorBDbdgHs=;
-        b=SVMfF83v311IaOIZZIA2fhgHQGdVLyA7wa35WKE7cbrUay9cJlOOIIvedSERRe7BAB
-         7qoQXITorvj6Eoy6wRapcNP+dfnI5BQNnm0lcXEob2YfW5XzbcsX8qAzHNPq4yr8tfM3
-         VvZ9QjFOgw8y9NglSzmdpazJZPDjDiMWNuFSWYpkSwWNxXuA6m9F3jBJpDfuGU1pvfuh
-         OsUjeJEd45FkHQa8jIGgnEgSq+RRcptie7ovyLz2XX1EwIrkjORWTQlYPdMMI4KDFpEr
-         xfT+vdFdX8pqk4pkK1FDt0Ph8M3c2cDSo+3gOQVnzeBMEB0yfBWTVtcT5kyD3lmmq1XB
-         Jsrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=NHJAqhwPXVgAB8bEwImwTbvvWr4gJ0gDlgorBDbdgHs=;
-        b=HmijcifiHGaaH+/KebYRtUGUzyhCS0mWPxuBSjjhqIYq0O8t1OHblLi9QQReETRhtY
-         Im2HxtxymwOdrxMz9HhKAt9oNCdY4EDS+y/yUU1HYS92oklyzPigtotXTY6k4nIx4Ca4
-         dkkfJCPYb7X0NVLsRHZhSN9LpdkFQezBTiLpKGEYNlVr2aF3FAeKFHDN0hhK7561ynKE
-         q9l/719cdCJRRMpsYXgkQiumdBjf6U+3eRzEH+pyXLAAWLKkz38WQZkfyNk4En/Peela
-         Deg/zzUJ4UzOBTvCGd1s+oe3xMOCJ3f7m13crMCDT0QiEFCJj6sPHDsvePnPLG1Vwg2M
-         bcOA==
-X-Gm-Message-State: AOAM530gm22d0eTYN3Xqry39FZH4UILsa1o7rf3IfbG73O/Nt/dYfYsD
-        nhJwWBgbEZ62Yl37mVnwWTApk4lZGwi3cjTDFXY=
-X-Google-Smtp-Source: ABdhPJyObx4s8cIEvwWwy3MKnbthHo/ZjAQ2+fWwuxXRlfj2rv0OTSBPV5L+/3VVxhPjTgZQi+0zB2VQyhddDfq7W0s=
-X-Received: by 2002:a25:df8a:0:b0:647:4954:83e8 with SMTP id
- w132-20020a25df8a000000b00647495483e8mr27281608ybg.526.1651232754281; Fri, 29
- Apr 2022 04:45:54 -0700 (PDT)
+        Fri, 29 Apr 2022 07:51:47 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2072.outbound.protection.outlook.com [40.107.22.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94027B3C52;
+        Fri, 29 Apr 2022 04:48:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hv6ubDbSWrbIF9/mgRhRmz4fxIptP5Tk0D5jVf4TuJHhCju06DTErTgfG/lM7m6Cv7PgXjidR5LLsUr3HJ/VY09eFDw3/2ClsOPLEKPN+0yzIwPeBjlJBdZk/LzHbY0G9qspYWxpnVrDCa60gcnrT7M/Uek9xaE4G91fZAdm+ycoaLWNahOtLeX1xmlAPxtNYcStjpzYoNh0V/Da/qjJYRmtFGD0gWYChQumlj5syp0pcCOrkUnPgsa6DhgUy1Mj4aqasPB/4uGXxxUFma6CwO6bZOClGrj79FWeccgru0ZloB63HvUpA6OXxF4WPSbt0HoJpyqxzmG7HkPTAdhLMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/w7ZynustWfBfi/E/z7BvhmuDhsvcl+0kNnHtnvlhbw=;
+ b=iqWCoIPVdJhr3L+GazJAtxwCWwRFqtZJFUMJCkgBhPLYECn5WNzESHKRYcde930nCvlxLAcpAFtHNHqZ7/dpU3hiRkAx8dCUJ+0NIxHQD5npH2o9upbDSMAbhtIWDRydkUcId2E7VsmpOnXAXcT8o6q4zekhwJTzUjDbei75u3bwn1jLSm5mkFNU0CWEVO20y0X62KmbDKhVWLFBQRhcPYLF7YC94TWryX2jEtg4zpR0wQDRLpkyexWYMts7EhtqJagt+HCSg16andzfdeUUSTWOFIY/ikRXEHwyxRgjcF7YeiLSDVPViQY2I6+aECquWYl+MZ2RAdfnp6fAVqf2lw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/w7ZynustWfBfi/E/z7BvhmuDhsvcl+0kNnHtnvlhbw=;
+ b=DbtUfNbFrFHwJZtnBe/RVf1gS8fS8+dEdb+MZV9YD1j2t+srJHklmGbk/DwZpJUbUNL7ZySxajau0/7nV89/KbYJesCKFzu5WMwZ6IcyOECH8MODE+fSkv8z/Ykca6P7sSuRlXh3y6byZXFDt1T6y+LEqnkbnV4zAqezJP5WcnQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU0PR04MB9563.eurprd04.prod.outlook.com (2603:10a6:10:314::7)
+ by VE1PR04MB7358.eurprd04.prod.outlook.com (2603:10a6:800:1a5::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.14; Fri, 29 Apr
+ 2022 11:48:27 +0000
+Received: from DU0PR04MB9563.eurprd04.prod.outlook.com
+ ([fe80::9457:1995:964b:e94d]) by DU0PR04MB9563.eurprd04.prod.outlook.com
+ ([fe80::9457:1995:964b:e94d%8]) with mapi id 15.20.5164.025; Fri, 29 Apr 2022
+ 11:48:27 +0000
+From:   meenakshi.aggarwal@nxp.com
+To:     Horia Geanta <horia.geanta@nxp.com>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Gaurav Jain <gaurav.jain@nxp.com>,
+        Varun Sethi <V.Sethi@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com, Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>
+Subject: [PATCH v5 0/1] crypto: caam/rng: Add support for PRNG 
+Date:   Fri, 29 Apr 2022 13:48:07 +0200
+Message-Id: <20220429114808.147108-1-meenakshi.aggarwal@nxp.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220429084527.2069402-1-meenakshi.aggarwal@nxp.com>
+References: <20220429084527.2069402-1-meenakshi.aggarwal@nxp.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: AM8P191CA0015.EURP191.PROD.OUTLOOK.COM
+ (2603:10a6:20b:21a::20) To DU0PR04MB9563.eurprd04.prod.outlook.com
+ (2603:10a6:10:314::7)
 MIME-Version: 1.0
-References: <20220421141055.316239-1-jiangshanlai@gmail.com>
- <20220421141055.316239-7-jiangshanlai@gmail.com> <Ymu2XC7k8Xj/vMjG@zn.tnic>
-In-Reply-To: <Ymu2XC7k8Xj/vMjG@zn.tnic>
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-Date:   Fri, 29 Apr 2022 19:45:43 +0800
-Message-ID: <CAJhGHyBHPDD=hD-78rQDCj2VfQT21m8JzD-m9DazsUa8VpBVcQ@mail.gmail.com>
-Subject: Re: [PATCH V6 6/8] x86/entry: Convert SWAPGS to swapgs and remove the
- definition of SWAPGS
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     =?UTF-8?Q?J=C3=BCrgen_Gross?= <jgross@suse.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, X86 ML <x86@kernel.org>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 02d4a3a7-ca61-4b71-a8e5-08da29d62c2b
+X-MS-TrafficTypeDiagnostic: VE1PR04MB7358:EE_
+X-Microsoft-Antispam-PRVS: <VE1PR04MB73582515BB2147E3CC8A7AF98EFC9@VE1PR04MB7358.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: i7m4/pVwE5inZktt6bysaY5sCcJsZRqeV2qDFiS7bR2RTI4HNmEVkbIInNKE51/fWkqdwaIWFzxO1S4Ki2vjpzorseFv8cMCzaeW4uFr3Kkddo7ROyurHIZrlxDyJe3QfUneRu1VglppSn4m4g6CoG0HvO1I+2WC+Ox96/lC47Z/GpYxde5ADl9FCkiFCMM6W08WMuC9/WhlJhUeZKBSXUxuErjxC9vV2+mcHsfg5og1I9k9e5100tiujE6y8ls8ZPwFB7cPhh2AheXsYBW/cH9BKq4ISwY9A2HFnLjnO38rv2cgstkOq9I01H/hw75+pSBcV5I3Xyzx6rrU4De1VSP57FkPPrZ3X7PppM9uiVwjSs1qM0+IuechcO4Tg3skC7jR519mQCjSSysu1dpAe6WnPGSJzuJicmeD/EQDYlaDvnhrJhc9ZcsLD6LWj9eOE/Jp8ROHnmTxBnvFAJA83TLusb+GXYB3EiWlp0SA6F/XJRPfGq5cB0SZKy5QuP7YHgY1YyirgFqhxQrlfSL+xuy9RisyXn+oOSlEnmfEy3jbv8LLq/atlZDTELQUQwbMD1/WG6ExroRtFH6kvbWOgFlPkRmfNWuFyXa506SNvSP4IVXgRKv6rAo4EAiB2U1T0YZXZ9wvEcDq3TSVc488FSeSS0KyTPuiyXeYogDOmo/kez8G8Kfb01HbhZbVXRahiCZj8kUirOyhsrKUYykd8Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9563.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6506007)(86362001)(110136005)(2616005)(83380400001)(508600001)(186003)(1076003)(316002)(66946007)(8676002)(4326008)(6486002)(2906002)(66556008)(6666004)(66476007)(38350700002)(38100700002)(36756003)(4743002)(52116002)(9686003)(26005)(6512007)(8936002)(5660300002)(4744005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?R5pBDlyb1sjWNP9z19UX3gnvAcV/jR4OOK8RqeNTxQpqo+kBQIo/+33rVnqU?=
+ =?us-ascii?Q?vNyIGqoIE56wMm8LYMT33qr71dOfMECSIYYOAZbN/154PZDtx+yYqIwAqizH?=
+ =?us-ascii?Q?4d4RFpBbzh9S0qRObHhlHC/qVHM3hKI9LDs7x4/jy8RiGLqCxt4JoK+rd9Es?=
+ =?us-ascii?Q?YlhLhjhzoSBfgLS1wkuViBHl15IEoNoOGikLSkwzgfCdp0Lh30Vn1+zSk8gT?=
+ =?us-ascii?Q?pndttejhA1vftU/Kthz5J066NQPhKotk1BGBm5QMf1QgNx5tF23a6zyzk5Bq?=
+ =?us-ascii?Q?N18qgqkLd/SDkVk82IAN5reh9D8qrJO9IKIxbEXq1+okb3qcO8dqLVB8A4bp?=
+ =?us-ascii?Q?NGv4vay3VsruYbXf4awdBkYo1Exbqk8AQZWvUwlxRve02gbu1/eAuwb0anhW?=
+ =?us-ascii?Q?qZmnCxZWWGX/O8n3vYxPJlE2aFRBJWO25iG+7KFz0THNl4QNmMVWJcg480b7?=
+ =?us-ascii?Q?DJbvqezsDfj5Eh0oRHL2/g+yie/HHqXqBg7F5nqQARxUO4JNCe1/jKMNKdAI?=
+ =?us-ascii?Q?ItmbOgQw8ZZTYrE6q2FN/L4ALb9COGok15x+S0bJQC6zGsmF/yPthnrTvj62?=
+ =?us-ascii?Q?fVLro3Dq6Pgy5OXXSvkvy1pIHvhMu3RH+2FGlkcwLcmtqUta36vt4ufeVJ5R?=
+ =?us-ascii?Q?PQ+GxWZOKQW5HQs/NE6zHAz0KkI0I48gts75TvqeLmh8BTRpKYxV80C8xyTy?=
+ =?us-ascii?Q?1VR+0zTPO/cVu4au7eEBw5NGecTub7QriTfxBoLu+nxRsQ3P0T5FEaM4r9Wo?=
+ =?us-ascii?Q?J2ddV2KLOlT41tCmMV74uZdWnIigLblQ9EZl4c2rnvc/D0VEuep1N9TTRzKX?=
+ =?us-ascii?Q?w5uKVcanxZDt56pESmQxy1oVoUS48nfqYx180NMej6HirKrC5ao+uBv4w2RC?=
+ =?us-ascii?Q?d1ukhGGbLCrdShpCFb3NWijRgYFFM3yv87E9fMxyUZ0yLsEcFmdumGs+AhDI?=
+ =?us-ascii?Q?gLXb/JjuRoa02xo8rgqvRPlTxKw6wdetlEvPf+BEBDTTh7xJCwAU++ZNX3/l?=
+ =?us-ascii?Q?zq8FP5lq7VdgdL0XBR+nk3FkNrCmaLXp8DEshDh+DOqjuS9xfi0viGD8Tjpg?=
+ =?us-ascii?Q?djoDx+vPcg6+Ibm4p9m4vfZwXyZ9GZDpcSRYDYpcY+050cEd7DiRDYq5yZmn?=
+ =?us-ascii?Q?sfXokqvWtfSbLgklAJUw6UvR6fS+4wBp6KVTcPFz2OBD9I3UmD0G4aZXn4T8?=
+ =?us-ascii?Q?my1OTf2ItOA+jmYM1FD8Wh0lzsgdaPeoLJLg6gpoxUu5wIJi7JhpgnX2rzbw?=
+ =?us-ascii?Q?MFvV+bGB9oCr6I0DHLO9KzvsPastI/UDihm0qy3HD60BeFCaMTJNkpgnhNjw?=
+ =?us-ascii?Q?nD79RSb+KMAdxpXaV0rkjDUo10Mk6fyO45FhCCJSfvLgEYRal425H4nq99dK?=
+ =?us-ascii?Q?0J+2MzsnqNJw4LcF9GDr9el3RkrSLiauCmEVfeNxhCPNS2EXrX77ivMFgWyl?=
+ =?us-ascii?Q?V0PXrCyHhG/GI4pNbEID8nlnFzfwTb4xpr1hLdUMOLwv3CIwS6QPc55Z8nEq?=
+ =?us-ascii?Q?5KbeKBPu+MH8TI/eXFAq86nZDj3xDSQBsvgRbzzcR3VpNzPshh0yGFBviG+d?=
+ =?us-ascii?Q?kUUkW+oyUnhVKlgXG+EiDCuyd0bzaW3jbKTRT6rSEls+A6DJSq4R2rOUtlJN?=
+ =?us-ascii?Q?avboOD2tXxibOFkBMZ/6BwCT193N0uKKWmX8gE/6q4ehPyY/V0FJaeFImwtC?=
+ =?us-ascii?Q?txWdjB1Jb2tpJsklosE6eceeFG2Y4SY8MNAMX5iYnyLqp3GS7OsEtFkI4QAA?=
+ =?us-ascii?Q?yuccadP0e0cLFZmKR7Y94J3hhPUXpyo=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 02d4a3a7-ca61-4b71-a8e5-08da29d62c2b
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9563.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2022 11:48:26.9813
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LlJPvjs8dQ3Ay4mZulkxI/U4xOHY+Br1fB9lD/LZFDxWKevJyKRA5o8B8BZgorOWX54QGRmri8fSUxG1167oV8ibx9dG6GwXNv/Uew9FrMo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7358
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,73 +122,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 5:56 PM Borislav Petkov <bp@alien8.de> wrote:
->
-> On Thu, Apr 21, 2022 at 10:10:53PM +0800, Lai Jiangshan wrote:
-> > diff --git a/arch/x86/entry/entry_64_compat.S b/arch/x86/entry/entry_64=
-_compat.S
-> > index 4fdb007cddbd..c5aeb0819707 100644
-> > --- a/arch/x86/entry/entry_64_compat.S
-> > +++ b/arch/x86/entry/entry_64_compat.S
-> > @@ -50,7 +50,7 @@ SYM_CODE_START(entry_SYSENTER_compat)
-> >       UNWIND_HINT_EMPTY
-> >       ENDBR
-> >       /* Interrupts are off on entry. */
-> > -     SWAPGS
-> > +     swapgs
-> >
-> >       pushq   %rax
-> >       SWITCH_TO_KERNEL_CR3 scratch_reg=3D%rax
->
-> I'm not sure about this: why can't XENPV do a 32-bit syscall through the =
-vdso?
->
-> Also, looking at this, J=C3=BCrgen, it looks kinda spaghetti to me:
->
-> entry_SYSENTER_compat
->
-> ...
->
->         /* XEN PV guests always use IRET path */
->         ALTERNATIVE "testl %eax, %eax; jz swapgs_restore_regs_and_return_=
-to_usermode", \
->                     "jmp swapgs_restore_regs_and_return_to_usermode", X86=
-_FEATURE_XENPV
->
->
-> then at that swapgs_restore_regs_and_return_to_usermode label:
->
-> #ifdef CONFIG_XEN_PV
->         ALTERNATIVE "", "jmp xenpv_restore_regs_and_return_to_usermode", =
-X86_FEATURE_XENPV
-> #endif
->
->
-> Can we simply jump directly to xenpv_restore_regs_and_return_to_usermode
-> from entry_SYSENTER_compat or is that CONFIG_DEBUG_ENTRY chunk there
-> needed?
+From: Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>
 
-Hello
+changes in v5:
+	- incorporated review comments
 
-Adding ALTERNATIVE in swapgs_restore_regs_and_return_to_usermode()
-results a simpler patch which is better served as a bug fix:
+Meenakshi Aggarwal (1):
+  crypto: caam/rng: Add support for PRNG
 
-https://lore.kernel.org/lkml/163861832551.11128.1645285137833652414.tip-bot=
-2@tip-bot2/
-
-which is also your suggestion:
-
-https://lore.kernel.org/lkml/YYD9ohN2Zcy4EdMb@zn.tnic/
+ drivers/crypto/caam/Kconfig    |   8 ++
+ drivers/crypto/caam/Makefile   |   1 +
+ drivers/crypto/caam/caamprng.c | 235 +++++++++++++++++++++++++++++++++
+ drivers/crypto/caam/intern.h   |  15 +++
+ drivers/crypto/caam/jr.c       |   3 +-
+ 5 files changed, 261 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/crypto/caam/caamprng.c
 
 
+base-commit: 38d741cb70b30741c0e802cbed7bd9cf4fd15fa4
+-- 
+2.25.1
 
-While the original patch has sprinkled all those ALTERNATIVE calls
-everywhere:
-
-https://lore.kernel.org/lkml/20211026141420.17138-5-jiangshanlai@gmail.com/
-
-And this original version has a SYM_L_WEAK placeholder
-which is objected to by some people.
-
-Thanks
-Lai

@@ -2,73 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DE1E515853
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 00:22:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE830515855
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 00:23:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239779AbiD2WZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 18:25:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55702 "EHLO
+        id S1381426AbiD2W1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 18:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239749AbiD2WZr (ORCPT
+        with ESMTP id S236352AbiD2W1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 18:25:47 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B8BDC9B9;
-        Fri, 29 Apr 2022 15:22:28 -0700 (PDT)
-Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DE3C11EC050F;
-        Sat, 30 Apr 2022 00:22:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1651270943;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=I4U8glVnuq6Udv8BBw4C461Q7LSCRVtHUAvx084Xn4E=;
-        b=N/Gn0YPjt0yops3V1ZK6EXBLZDGlHVVpH3hnjqubvDWNhrdln4Y6d6fhyXPtbCVCilEp4g
-        REKBUYhDYMOOfNf5ltdfSAHSmAwLyNbG/i9JyqOqELTJpn4zt0vnrHrI43AhD3ixHqxLm8
-        X7pDC+UiwUvzwgm3Ri+Pd8twL2I9Ij4=
-Date:   Sat, 30 Apr 2022 00:22:20 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Jon Kohler <jon@nutanix.com>, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Balbir Singh <sblbir@amazon.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH v3] x86/speculation, KVM: only IBPB for
- switch_mm_always_ibpb on vCPU load
-Message-ID: <YmxlHBsxcIy8uYaB@zn.tnic>
-References: <20220422162103.32736-1-jon@nutanix.com>
- <YmwZYEGtJn3qs0j4@zn.tnic>
- <645E4ED5-F6EE-4F8F-A990-81F19ED82BFA@nutanix.com>
- <Ymw9UZDpXym2vXJs@zn.tnic>
- <YmxKqpWFvdUv+GwJ@google.com>
- <YmxRnwSUBIkOIjLA@zn.tnic>
- <Ymxf2Jnmz5y4CHFN@google.com>
+        Fri, 29 Apr 2022 18:27:04 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576FFDC9B9
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 15:23:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=iOIJ1Kr+mtstrHF5VkGvwL6t99fgCHEkIg1mM2125l4=; b=hI
+        Qmahk/3EuTVhlkQAshosyxgUq1CeOh1x684yCnU5NNyKy+l9SlL4Pmpc4sfKlWaj+4+3bx3LPSwdn
+        VuCBOGvCOXryUJgVYy1KMJeC+zvGvQX0HbemDKesSNArm1AEA7ODXDL06Z7kIa4MOQES5hHv8gMGF
+        sA+IHsYa8VA1WGI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nkZ1S-000YOK-PN; Sat, 30 Apr 2022 00:23:34 +0200
+Date:   Sat, 30 Apr 2022 00:23:34 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] irqchip/armada-370-xp: Do not touch Performance
+ Counter Overflow on A375, A38x, A39x
+Message-ID: <YmxlZncjVnym4kfc@lunn.ch>
+References: <20220425113706.29310-1-pali@kernel.org>
+ <YmvYrFUfIUvfjrmY@lunn.ch>
+ <20220429130524.vs6mlzvotvaortbw@pali>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Ymxf2Jnmz5y4CHFN@google.com>
+In-Reply-To: <20220429130524.vs6mlzvotvaortbw@pali>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,56 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 09:59:52PM +0000, Sean Christopherson wrote:
-> Correct, but KVM also doesn't do IBPB on VM-Exit (or VM-Entry),
+On Fri, Apr 29, 2022 at 03:05:24PM +0200, Pali Rohár wrote:
+> On Friday 29 April 2022 14:23:08 Andrew Lunn wrote:
+> > On Mon, Apr 25, 2022 at 01:37:05PM +0200, Pali Rohár wrote:
+> > > Register ARMADA_370_XP_INT_FABRIC_MASK_OFFS is Armada 370 and XP specific
+> > > and on new Armada platforms it has different meaning. It does not configure
+> > > Performance Counter Overflow interrupt masking. So do not touch this
+> > > register on non-A370/XP platforms (A375, A38x and A39x).
+> > 
+> > Hi Pali
+> > 
+> > Do the Armada 375, 38x and 39x have an over flow interrupt? I assume
+> > not.
+> 
+> Hello! According to documentation there is something named performance
+> counter interrupt, but it is in different register... and this register
+> is not per-cpu.
 
-Why doesn't it do that? Not needed?
+O.K, not something which can be quickly added. 
 
-> nor does KVM do IBPB before exiting to userspace.
+> > Does this need a fixes tag? Should it be back ported in stable?
+> 
+> git blame show that this functionality appeared in commit 28da06dfd9e4
+> ("irqchip: armada-370-xp: Enable the PMU interrupts").
 
-Same question.
+It is more a question of:
 
-> The IBPB we want to whack is issued only when KVM is switching vCPUs.
+ o It must fix a real bug that bothers people (not a, “This could be a
+   problem…” type thing).
 
-Then please document it properly as I've already requested.
+From https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
 
-> Except that _none_ of that documentation explains why the hell KVM
-> does IBPB when switching betwen vCPUs.
+Have you seen bad things happen because of this?
 
-Probably because the folks involved in those patches weren't the hell
-mainly virt people. Although I see a bunch of virt people on CC on that
-patch.
-
->   : But stepping back, why does KVM do its own IBPB in the first place?  The goal is
->   : to prevent one vCPU from attacking the next vCPU run on the same pCPU.  But unless
->   : userspace is running multiple VMs in the same process/mm_struct, switching vCPUs,
->   : i.e. switching tasks, will also switch mm_structs and thus do IPBP via cond_mitigation.
->   :
->   : If userspace runs multiple VMs in the same process,
-
-This keeps popping up. Who does that? Can I get a real-life example to
-such VM-based containers or what the hell that is, pls?
-
-> enables cond_ipbp, _and_ sets
->   : TIF_SPEC_IB, then it's being stupid and isn't getting full protection in any case,
->   : e.g. if userspace is handling an exit-to-userspace condition for two vCPUs from
->   : different VMs, then the kernel could switch between those two vCPUs' tasks without
->   : bouncing through KVM and thus without doing KVM's IBPB.
->   :
->   : I can kinda see doing this for always_ibpb, e.g. if userspace is unaware of spectre
->   : and is naively running multiple VMs in the same process.
-
-So this needs a clearer definition: what protection are we even talking
-about when the address spaces of processes are shared? My naïve
-thinking would be: none. They're sharing address space - branch pred.
-poisoning between the two is the least of their worries.
-
-So to cut to the chase: it sounds to me like you don't want to do IBPB
-at all on vCPU switch. And the process switch case is taken care of by
-switch_mm().
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+     Andrew

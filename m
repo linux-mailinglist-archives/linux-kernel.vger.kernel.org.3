@@ -2,100 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27D7F51500F
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD314515011
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:59:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378359AbiD2QCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 12:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48362 "EHLO
+        id S1378691AbiD2QCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 12:02:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235747AbiD2QCM (ORCPT
+        with ESMTP id S235747AbiD2QCV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 12:02:12 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0969284EDC;
-        Fri, 29 Apr 2022 08:58:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=uMcTfwKPVn7eKm6yUNY2CfJ2VmHi8B0YTZjYC/sPVmw=; b=LPlSmYEQoLqlRHI8hfnwT7EGX3
-        001Q4O8BKAqsP3kTy53hFA3QyJu7pP6CobiL21epvgyyJllnkRzhK2tKQ8Psnf0EaCAelVrk6E9R5
-        th04OYA5yrNpf3WvwxxJMbbCvUVsVq5a11ah+AomU6JHNsxpdy+LSDH140Uw6/mZOJ79+wVWHPYp0
-        l2EmMB5G4BXUtHjDUJtMYcqRq/kkamD2nt7WzYgnoxxGLUHQJ8Bdz31KbKB5SIWHKD6XXC5tHjm09
-        F+y+c5YGaGvA2UZFPHmBrd6ya4NmYWvoRrT31OFwesslvtZf//yt1TxLDK4ZX8o/1ERY0Kaozsm6w
-        h1KhoJhA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58444)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nkT19-0004EG-Aa; Fri, 29 Apr 2022 16:58:51 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nkT15-00024G-JO; Fri, 29 Apr 2022 16:58:47 +0100
-Date:   Fri, 29 Apr 2022 16:58:47 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
-Cc:     andrew@lunn.ch, netdev@vger.kernel.org, olteanv@gmail.com,
-        robh+dt@kernel.org, UNGLinuxDriver@microchip.com,
-        woojung.huh@microchip.com, hkallweit1@gmail.com,
-        davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        devicetree@vger.kernel.org, pabeni@redhat.com
-Subject: Re: [RFC PATCH v11 net-next 06/10] net: dsa: microchip: add support
- for phylink management
-Message-ID: <YmwLNz1xeTED7xM/@shell.armlinux.org.uk>
-References: <20220325165341.791013-1-prasanna.vengateshan@microchip.com>
- <20220325165341.791013-7-prasanna.vengateshan@microchip.com>
+        Fri, 29 Apr 2022 12:02:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F1F8684EE3
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:59:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651247942;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LxsX4QTfntQs6C7Yv2fWXMkZHy++Bj4rZ1fvoMUwGU8=;
+        b=GDZXAObdXzzohceVMgnAXlScmFX4wCwhieYUxYpRvNkpGhWnwRBbBYYCR1G79fKZbbfGl9
+        ScI3XpnTAoB4RVn2gsHkDPDuMve1ytoiDt857Si1mR9Ihl0DZICQKMUXEZi8vWS99HpLkC
+        X/+vhk/xMkcGIP1FB0gQwikkTZWVqzw=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-552-GptI5G-AMRmVMSStt-rFKw-1; Fri, 29 Apr 2022 11:59:00 -0400
+X-MC-Unique: GptI5G-AMRmVMSStt-rFKw-1
+Received: by mail-ed1-f69.google.com with SMTP id b24-20020a50e798000000b0041631767675so4760095edn.23
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:59:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LxsX4QTfntQs6C7Yv2fWXMkZHy++Bj4rZ1fvoMUwGU8=;
+        b=KWRSGkw78J1eXVhG9ARy8SLOnQXH1dVtnIRjVG7UeIWS+1vBiMQd9cLqXakqBT2fdJ
+         /ncXWF1C6WIm6PnSQf5WLg1gVNFIh+p3oQ9+UgSsAazxt7fM0JQS+qTNNRua9kBl21H0
+         yBtqCUWofrgyN8mgYyVWmcokf5cbeOie6hYH6ftr1b1GfE8NsMTrDYNRVXUKCLTMy3Q+
+         Lgwk3Kpf1vDg4YvK8SWOhVS9MyaoET0z6Buh1ktsWFxHakPyKkCYzqHDDdArBJxogRYm
+         NtPAFm+X3OKH2mSO8QVmevadt8xCtykDazDDx8bH/FyoSdUY7JcXWQGPZgAN96FFfyIZ
+         mmPw==
+X-Gm-Message-State: AOAM531BKw3mBckXurI5iBwZ3PJYQJgivijrtDFqLjjYa9i6sqy0qSsf
+        6XVMF+t3fZkN+SeJ3SGnmEAIgRrevfxlQRWFTRXFadFeYq9Fc/72FsN292tTHIptgt5OBLBITTa
+        BywCtBXENzqMwSswCVNwQSwpg
+X-Received: by 2002:a05:6402:5207:b0:426:1f0:b22 with SMTP id s7-20020a056402520700b0042601f00b22mr17790313edd.186.1651247939302;
+        Fri, 29 Apr 2022 08:58:59 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz9rfe2BvOZTLBxZyXAtLi09aJqjNbWyrLDxfj+FFkLsfpQGzZb0LJod/amJ9dE9xKbjLvuoQ==
+X-Received: by 2002:a05:6402:5207:b0:426:1f0:b22 with SMTP id s7-20020a056402520700b0042601f00b22mr17790296edd.186.1651247939050;
+        Fri, 29 Apr 2022 08:58:59 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
+        by smtp.googlemail.com with ESMTPSA id l21-20020a056402345500b0042617ba6393sm3053394edc.29.2022.04.29.08.58.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 08:58:58 -0700 (PDT)
+Message-ID: <4afce434-ab25-66d6-76f4-3a987f64e88e@redhat.com>
+Date:   Fri, 29 Apr 2022 17:58:57 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220325165341.791013-7-prasanna.vengateshan@microchip.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3] KVM: SEV: Mark nested locking of vcpu->lock
+Content-Language: en-US
+To:     Peter Gonda <pgonda@google.com>
+Cc:     John Sperbeck <jsperbeck@google.com>,
+        kvm list <kvm@vger.kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220407195908.633003-1-pgonda@google.com>
+ <CAFNjLiXC0AdOw5f8Ovu47D==ex7F0=WN_Ocirymz4xL=mWvC5A@mail.gmail.com>
+ <CAMkAt6r-Mc_YN-gVHuCpTj4E1EmcvyYpP9jhtHo5HRHnoNJAdA@mail.gmail.com>
+ <CAMkAt6r+OMPWCbV_svUyGWa0qMzjj2UEG29G6P7jb6uH6yko2w@mail.gmail.com>
+ <62e9ece1-5d71-f803-3f65-2755160cf1d1@redhat.com>
+ <CAMkAt6q6YLBfo2RceduSXTafckEehawhD4K4hUEuB4ZNqe2kKg@mail.gmail.com>
+ <4c0edc90-36a1-4f4c-1923-4b20e7bdbb4c@redhat.com>
+ <CAMkAt6oL5qi7z-eh4z7z8WBhpc=Ow6WtcJA5bDi6-aGMnz135A@mail.gmail.com>
+ <CAMkAt6rmDrZfN5DbNOTsKFV57PwEnK2zxgBTCbEPeE206+5v5w@mail.gmail.com>
+ <0d282be4-d612-374d-84ba-067994321bab@redhat.com>
+ <CAMkAt6ragq4OmnX+n628Yd5pn51qFv4qV20upGR6tTvyYw3U5A@mail.gmail.com>
+ <8a2c5f8c-503c-b4f0-75e7-039533c9852d@redhat.com>
+ <CAMkAt6qAW5zFyTAqX_Az2DT2J3KROPo4u-Ak1sC0J+UTUeFfXA@mail.gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <CAMkAt6qAW5zFyTAqX_Az2DT2J3KROPo4u-Ak1sC0J+UTUeFfXA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 10:23:37PM +0530, Prasanna Vengateshan wrote:
-> +static void lan937x_apply_rgmii_delay(struct ksz_device *dev, int port,
-> +				      phy_interface_t interface, u8 val)
-> +{
-> +	struct ksz_port *p = &dev->ports[port];
-> +
-> +	/* Clear Ingress & Egress internal delay enabled bits */
-> +	val &= ~(PORT_RGMII_ID_EG_ENABLE | PORT_RGMII_ID_IG_ENABLE);
-> +
-> +	/* if the delay is 0, do not enable DLL */
-> +	if (p->rgmii_tx_val) {
-> +		lan937x_update_rgmii_tx_rx_delay(dev, port, true);
-> +		dev_info(dev->dev, "Applied rgmii tx delay for the port %d\n",
-> +			 port);
-> +		val |= PORT_RGMII_ID_EG_ENABLE;
-> +	}
-> +
-> +	/* if the delay is 0, do not enable DLL */
-> +	if (p->rgmii_rx_val) {
-> +		lan937x_update_rgmii_tx_rx_delay(dev, port, false);
-> +		dev_info(dev->dev, "Applied rgmii rx delay for the port %d\n",
-> +			 port);
-> +		val |= PORT_RGMII_ID_IG_ENABLE;
-> +	}
-> +
-> +	/* Enable RGMII internal delays */
-> +	lan937x_pwrite8(dev, port, REG_PORT_XMII_CTRL_1, val);
+On 4/29/22 17:51, Peter Gonda wrote:
+>> No, you don't need any of this.  You can rely on there being only one
+>> depmap, otherwise you wouldn't need the mock releases and acquires at
+>> all.  Also the unlocking order does not matter for deadlocks, only the
+>> locking order does.  You're overdoing it. :)
+> 
+> Hmm I'm slightly confused here then. If I take your original suggestion of:
+> 
+>          bool acquired = false;
+>          kvm_for_each_vcpu(...) {
+>                  if (acquired)
+>                          mutex_release(&vcpu->mutex.dep_map,
+> _THIS_IP_);  <-- Warning here
+>                  if (mutex_lock_killable_nested(&vcpu->mutex, role)
+>                          goto out_unlock;
+>                  acquired = true;
+> 
+> """
+> [ 2810.088982] =====================================
+> [ 2810.093687] WARNING: bad unlock balance detected!
+> [ 2810.098388] 5.17.0-dbg-DEV #5 Tainted: G           O
+> [ 2810.103788] -------------------------------------
 
-"interface" doesn't appear to be used in this function, do you need to
-pass it?
+Ah even if the contents of the dep_map are the same for all locks, it 
+also uses the *pointer* to the dep_map to track (class, subclass) -> 
+pointer and checks for a match.
 
-Other than that, the patch looks good, thanks.
+So yeah, prev_cpu is needed.  The unlock ordering OTOH is irrelevant so 
+you don't need to visit the xarray backwards.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Paolo
+

@@ -2,155 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 344395158E3
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 01:16:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1ACF5158E8
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 01:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381719AbiD2XTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 19:19:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50524 "EHLO
+        id S1381699AbiD2XYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 19:24:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357449AbiD2XTt (ORCPT
+        with ESMTP id S237969AbiD2XYg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 19:19:49 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6BF6ABF5D
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 16:16:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651274189; x=1682810189;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SkoKmM0MKCxM4R400j5vwKOc0q/BGdAfbOI57vblFHY=;
-  b=fzpYnK0hf5xs+ZebanX5zQx4M5hnbL2xnaJvwip+wyGPEoX8zAN46sWk
-   zYVujAM3e4ZjnBPsPvJQeqh1a20aEQuvQ7luLs2VkTe6P7txQThAMG9YT
-   GEL8B2rRiNpdXdQVC0ISPF9iOmYlBa/+QhLI4UpDXAFVqgGjQ7C6FIpuv
-   L/ZAwV4+KRwBbvAgrdlBP0maQKe8jHBT5/LYoyzy2t+ZdAQQZMtV4/1gm
-   AU7XMemCvhugJxCRpsHCnyKhMMMugy+/b0wEAkiG9sXj7t61UxyBtpkqP
-   J+uVM4XTDui3h61kLtqctxWSbLxkjs8BXajJSQC/CV1fU5pHrCjSpKq90
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="266340812"
-X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
-   d="scan'208";a="266340812"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 16:16:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
-   d="scan'208";a="662580069"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 29 Apr 2022 16:16:26 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nkZqb-0006g0-EW;
-        Fri, 29 Apr 2022 23:16:25 +0000
-Date:   Sat, 30 Apr 2022 07:15:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [hnaz-mm:master 280/410] lib/maple_tree.c:4207:20: warning: stack
- frame size (1088) exceeds limit (1024) in 'mas_wr_modify'
-Message-ID: <202204300731.xnlH7nv1-lkp@intel.com>
+        Fri, 29 Apr 2022 19:24:36 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E554B2442
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 16:21:17 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1nkZuw-0002MG-FN; Sat, 30 Apr 2022 01:20:54 +0200
+Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1nkZup-0004od-7p; Sat, 30 Apr 2022 01:20:47 +0200
+Date:   Sat, 30 Apr 2022 01:20:47 +0200
+From:   Michael Grzeschik <mgr@pengutronix.de>
+To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+Cc:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Liang Chen <cl@rock-chips.com>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Kever Yang <kever.yang@rock-chips.com>
+Subject: Re: [PATCH 0/3] Enable JPEG Encoder on RK3566/RK3568
+Message-ID: <20220429232047.GG7671@pengutronix.de>
+References: <20220427224438.335327-1-frattaroli.nicolas@gmail.com>
+ <198ce3981ad15844627581f9519cab67ed2a81c1.camel@ndufresne.ca>
+ <2438841.KJ31GcehEG@archbook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="9Iq5ULCa7nGtWwZS"
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <2438841.KJ31GcehEG@archbook>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 00:27:06 up 30 days, 10:56, 58 users,  load average: 0.04, 0.10,
+ 0.09
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/hnaz/linux-mm master
-head:   bf4803abaa3e9d2fa207c0675a2d2abf0fd44f66
-commit: c11c433e3be4e5bef47f0a62a72064e18708e952 [280/410] Maple Tree: add new data structure
-config: arm-moxart_defconfig (https://download.01.org/0day-ci/archive/20220430/202204300731.xnlH7nv1-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 400775649969b9baf3bc2a510266e7912bb16ae9)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/hnaz/linux-mm/commit/c11c433e3be4e5bef47f0a62a72064e18708e952
-        git remote add hnaz-mm https://github.com/hnaz/linux-mm
-        git fetch --no-tags hnaz-mm master
-        git checkout c11c433e3be4e5bef47f0a62a72064e18708e952
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+--9Iq5ULCa7nGtWwZS
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-All warnings (new ones prefixed by >>):
+Hi,
 
-   lib/maple_tree.c:324:20: warning: unused function 'mte_set_full' [-Wunused-function]
-   static inline void mte_set_full(const struct maple_enode *node)
-                      ^
-   lib/maple_tree.c:329:20: warning: unused function 'mte_clear_full' [-Wunused-function]
-   static inline void mte_clear_full(const struct maple_enode *node)
-                      ^
->> lib/maple_tree.c:4207:20: warning: stack frame size (1088) exceeds limit (1024) in 'mas_wr_modify' [-Wframe-larger-than]
-   static inline void mas_wr_modify(struct ma_wr_state *wr_mas)
-                      ^
-   3 warnings generated.
+On Fri, Apr 29, 2022 at 05:28:35PM +0200, Nicolas Frattaroli wrote:
+>On Freitag, 29. April 2022 16:46:01 CEST Nicolas Dufresne wrote:
+>> Le jeudi 28 avril 2022 =E0 00:44 +0200, Nicolas Frattaroli a =E9crit :
+>> > the following series adds support for and enables the hardware JPEG
+>> > encoder on the RK3566 and RK3568 line of SoCs by Rockchip.
+>> >
+>> > The JPEG encoder is its own little Hantro instance with seemingly just
+>> > the encode functionality.
+>>
+>> I'm a little suspicious about this statement. I believe the Hantro combo=
+ is
+>> identical to RK3399 and that you are confusing with Rockchip JPEG encode=
+r here.
+>> Here's the source of my suspicion:
+>>
+>> https://github.com/JeffyCN/rockchip_mirrors/blob/mpp/osal/mpp_soc.cpp#L6=
+37
+>>
+>> As this get burnt into DT, we really need to get this right. Perhaps we =
+need to
+>> run the reference software to verify ? Ping me if you need help with tha=
+t.
+>
+>I believe there's three separate questions here:
+>
+>A) is this a Hantro instance with more than just JPEG encoding?
+>B) is this the same as the other[1] Hantro instance, just with a bigger
+>   offset for the encoder?
+>C) if A is true and B is false, does this also have decoders?
+>
+>I think I can only answer B). I do not think fdee0000 is the same hardware
+>instance as fdea0400. They are in different power domains (yes, this one
+>being in the RGA PD is correct according to downstream code, TRM and my
+>own testing). They also have their own MMU each.
+
+>Your findings point towards A) being true. I'd love to be able to just
+>throw a mainline VP8 or H.264 driver at it to check, but that sadly does
+>not exist yet.
+
+Not Mainline, but for the the RK3399 Encoder there is some initial work
+available made by bootlin.
+
+https://github.com/bootlin/linux bootlin/hantro/h264-encoding-v5.11
+
+They also implemented some initial userspace tool to test this.
+
+https://github.com/bootlin/v4l2-hantro-h264-encoder
+
+If you have some time on your hands, it would be great if we could test
+this on the RK3568 with the VEPU121 core.
+
+>Upon checking the TRM again, it seems it documents registers for H.264 as =
+well.
+
+I would like to describe the whole sitation a little bit more in detail.
+
+In the Datasheet of the RK3568 there are several decoder and encoder
+entities documented. This encoder instance is called VEPU121 in the
+TRM.
+
+RK3568:
+-------
+
+Look into "Chapter 10 Multi-format Video Encoder and Decoder" (Page 463)
+of RK3568 TRM Part2.
+
+https://dl.radxa.com/rock3/docs/hw/datasheet/Rockchip%20RK3568%20TRM%20Part=
+2%20V1.1-20210301.pdf
+
+We also find some mentionioning of JPEG encoding in the RK3399
+datasheet.
+
+RK3399:
+-------
+
+Look into "Chapter 5 Multi-format Video Decoder And Encoder" (Page 297)
+of RK3399 TRM Part 3.
+
+http://www.netbsd.org/~mrg/rk3399/Rockchip%20RK3399TRM%20V1.1%20Part3%20201=
+60728.pdf
+
+* Supports encoding of the following standards:
+  * H.264: up to HP level 4.1
+  * JPEG: Baseline (DCT sequential)
+
+Which probably refers to the core that is also available on the RK3399.
 
 
-vim +/mas_wr_modify +4207 lib/maple_tree.c
+Comparing the register layout of VEPU121 of the RK3568 with the
+encoder part in RK3399 we find nearly the same register description.
 
-  4206	
-> 4207	static inline void mas_wr_modify(struct ma_wr_state *wr_mas)
-  4208	{
-  4209		unsigned char node_slots;
-  4210		unsigned char node_size;
-  4211		struct ma_state *mas = wr_mas->mas;
-  4212		struct maple_big_node b_node;
-  4213	
-  4214		/* Direct replacement */
-  4215		if (wr_mas->r_min == mas->index && wr_mas->r_max == mas->last) {
-  4216			rcu_assign_pointer(wr_mas->slots[mas->offset], wr_mas->entry);
-  4217			if (!!wr_mas->entry ^ !!wr_mas->content)
-  4218				mas_update_gap(mas);
-  4219			return;
-  4220		}
-  4221	
-  4222		/* Attempt to append */
-  4223		node_slots = mt_slots[wr_mas->type];
-  4224		node_size = wr_mas->node_end - wr_mas->offset_end + mas->offset + 2;
-  4225		if (mas->max == ULONG_MAX)
-  4226			node_size++;
-  4227	
-  4228		/* slot and node store will not fit, go to the slow path */
-  4229		if (unlikely(node_size >= node_slots))
-  4230			goto slow_path;
-  4231	
-  4232		if (wr_mas->entry && (wr_mas->node_end < node_slots - 1) &&
-  4233		    (mas->offset == wr_mas->node_end) && mas_wr_append(wr_mas)) {
-  4234				if (!wr_mas->content || !wr_mas->entry)
-  4235					mas_update_gap(mas);
-  4236				return;
-  4237		}
-  4238	
-  4239		if ((wr_mas->offset_end - mas->offset <= 1) && mas_wr_slot_store(wr_mas))
-  4240			return;
-  4241		else if (mas_wr_node_store(wr_mas))
-  4242			return;
-  4243	
-  4244		if (mas_is_err(mas))
-  4245			return;
-  4246	
-  4247	slow_path:
-  4248		memset(&b_node, 0, sizeof(struct maple_big_node));
-  4249		mas_store_b_node(wr_mas, &b_node, wr_mas->offset_end);
-  4250		trace_ma_write(__func__, mas, 0, wr_mas->entry);
-  4251		mas_commit_b_node(wr_mas, &b_node, wr_mas->node_end);
-  4252	}
-  4253	
+10.5.21 VEPU121 Detail Registers Description (Page 704 of RK3568 TRM Part2)
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+vs.
+
+5.5.4 VEPU Registers Summary (Page 443 of RK3399 TRM Part3)
+
+However this is just the documentation, this could mean nothing to
+the real world. Getting the core tested with the bootlin stack
+or getting feedback from Kever would probably tell the whole story.
+
+>However I can do this to answer C), and I will once I get the time.
+>It would be somewhat surprising if there was a hidden third H.264
+>decoder on this chip.
+
+The corresponding decoder world on the RK3568 is also very unclear.
+
+It supports RKVDEC (referd as VDPU346 in the TRM), that is probably also
+supported by the mainline code you can find in drivers/staging/media/rkvdec=
+/.
+
+Then there is VDPU121 which seems to be just the same G1 as in RK3399,
+regarding to these patches:
+
+https://lore.kernel.org/all/20220213195316.4149106-3-piotr.oniszczuk@gmail.=
+com/T/
+
+The last Core you probably refer to is called VDPU720 JPEG Decoder
+located at 0xFDED0000. I also really don't know where to put this in
+at the moment.
+
+>I'll also CC Kever Yang from rockchip, maybe he can shine some light on
+>this.
+
+Since the RK3568 seems to get more and more of attention at the moment
+I would like to ask if somebody is planning to write support the RKVENC
+in mainline. That is the VEPU540 core refered to in the RK3568 TRM.
+
+I would start with that in the next weeks, taking the bootlin H1 support
+as an reference to handle the request_api for the encoder part. Which is
+currently completely untouched in mainline AFAIK.
+
+Regards,
+Michael
+
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--9Iq5ULCa7nGtWwZS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmJscsoACgkQC+njFXoe
+LGSbiRAAwCISPC4Va5HEdBHABLuRteCTtHhDhkuYj8/IMqOrN8S8vIYEpo+TRY2+
+hkt0QkY06mgDwmcUhiw3plaMGnAMMgvZMSQwS4YTS5LelpsbugQS3gSaznQq7cc5
+zvznuZlNFfY85Kz7HrPrtWiCHbZOyRNb3IH42uwFB0c4dqAr58C/eA1bMuoxj4jN
+xxQ8e2lU8h8BpvNSvy1GwkojITWK4S3U4t52ZnfeQCXImy332kIWBcXmPC+8JSnT
+SgU2t2F94E0v5l5HSbm+FGqugn/ALt3PWF+PFin4Ux5KSUnLiYWhOp28HC8wMIiw
+3LCWjqknc3PUL6MKw2/7PqIlXB0uPVgpR9my+aXn3dpHoFRLkM4rQ+FxvjnRzW1H
+CRhgvoUukFDQsYwT5UndJhEMHPBnG+4n+6aE7AqI2HKjPdnSoXaEqpz1Qij1Jgb4
+BQ0S9R5oa1WZk7GMA/9WCgIevOtn4bGFGCTZQPAWAqubVZQ9SvBEuTjPsDQX0F6l
+Dt03o+hUzL3yYFJZjhWUBcf9rs4dG4oKwdPbqz72IPzfb/xxc9iZLR12cqzgwwci
+lYdH/5VVDrTFbjCnLrMahw+EHN3OXqtP97fjTgfHkyAyzw5ksjnTqzJ6QFdVO4BI
+Nth/At4dnJeCPAWrEiOFd6XY1q06YHxgOBvnzE8KIURGBHeUdFU=
+=OhKV
+-----END PGP SIGNATURE-----
+
+--9Iq5ULCa7nGtWwZS--

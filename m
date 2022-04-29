@@ -2,95 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71640514A58
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 15:19:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F8A514A59
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 15:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359727AbiD2NXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 09:23:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
+        id S1359739AbiD2NXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 09:23:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359723AbiD2NXF (ORCPT
+        with ESMTP id S1359731AbiD2NXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 09:23:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17E22C74A2
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 06:19:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651238387;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uC80K2JcwhpHl9wyzV7n0RzilJpR226HPF0HUL7DEq0=;
-        b=Z+jTZaMJUSbNB+jxnEd3lOQNAsq1YUk7LsIDJ7E1BwffpzFREFCF8JXWUEuAw3STQ5A6VJ
-        pd+ls28CZNX2MrkVu7q0J2ZEZOaPzimxm4gGYTYy+VbyHxcf3PwGVpIKjkZ/EHksTsiEo6
-        idNivjVh1cK8M6lSqLWUzQ8aK3OycX8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-634-vk82ltftOA6cWk439Qv-Jg-1; Fri, 29 Apr 2022 09:19:40 -0400
-X-MC-Unique: vk82ltftOA6cWk439Qv-Jg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 29 Apr 2022 09:23:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02F8C8485;
+        Fri, 29 Apr 2022 06:19:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8BC2F8002B2;
-        Fri, 29 Apr 2022 13:19:39 +0000 (UTC)
-Received: from fedora (unknown [10.22.16.76])
-        by smtp.corp.redhat.com (Postfix) with SMTP id BF50B2166B4D;
-        Fri, 29 Apr 2022 13:19:13 +0000 (UTC)
-Date:   Fri, 29 Apr 2022 10:19:12 -0300
-From:   Wander Lairson Costa <wander@redhat.com>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: Re: [PATCHv5 07/12] x86/mm: Reserve unaccepted memory bitmap
-Message-ID: <Ymvl0N7umDfcjfMb@fedora>
-References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
- <20220425033934.68551-8-kirill.shutemov@linux.intel.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2093862287;
+        Fri, 29 Apr 2022 13:19:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABB19C385AC;
+        Fri, 29 Apr 2022 13:19:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651238389;
+        bh=19u80WrRYBrn0euhR5t2IahZXsXYVRXAnPVdCH6q/OA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uzp9dNrw1fq7kaRwzsuipBWIEcIQrGCJXYGUQ+EJvcUn1wqUYdAMvlbx+LuUGhAKn
+         8xd69n0H8JX0CPgb6WjcW1q7XAfUofjuWy9WQ+fQO4NnJ5mRBJAAknOmVRLDPzOHCS
+         OS+7RFvMnFVE+xOeV77jBorf1wah47euXafGH6skPCZhCuZrgiFz/g+Lbv5N9ZTIMu
+         b5T8hbIzNmL26tDus1GewZO5h9kWYbB+tHrfcBxxkKFQIM3IS7wJgdMb+XHDJ/Xvn2
+         3jABx64hHlDYm6X8MbIoOTloGjf005gkwoSMRILhEkLYoCmCClXJdky2dowXC2lUUk
+         AT0KiiAs5SSzg==
+Date:   Fri, 29 Apr 2022 14:19:43 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     YC Hung <yc.hung@mediatek.com>, Rob Herring <robh@kernel.org>,
+        robh+dt@kernel.org, daniel.baluta@nxp.com, trevor.wu@mediatek.com,
+        tiwai@suse.com, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, cezary.rojewski@intel.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        allen-kh.cheng@mediatek.com
+Subject: Re: [PATCH v4] dt-bindings: dsp: mediatek: add mt8195 dsp document
+Message-ID: <Ymvl7x9NTJor/vfx@sirena.org.uk>
+References: <20220106064847.15588-1-yc.hung@mediatek.com>
+ <Yd4yNkeGlzdULNlv@robh.at.kernel.org>
+ <68895a40-559b-13ce-d433-f9b32c648323@gmail.com>
+ <9965188904de2e89bc5390fa6c71d9fb243f9d12.camel@mediatek.com>
+ <cf9b425e-84ff-af12-72a7-4056b8cbf90d@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qbtHrth/VF0HNcN8"
 Content-Disposition: inline
-In-Reply-To: <20220425033934.68551-8-kirill.shutemov@linux.intel.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <cf9b425e-84ff-af12-72a7-4056b8cbf90d@gmail.com>
+X-Cookie: Are you still an ALCOHOLIC?
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 06:39:29AM +0300, Kirill A. Shutemov wrote:
-> A given page of memory can only be accepted once. The kernel has a need
-> to accept memory both in the early decompression stage and during normal
-> runtime.
-> 
-> A bitmap used to communicate the acceptance state of each page between the
 
-nit: s/bitmap used/bitmap is used/
+--qbtHrth/VF0HNcN8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-[snip]
+On Fri, Apr 29, 2022 at 02:57:12PM +0200, Matthias Brugger wrote:
+> On 29/04/2022 07:59, YC Hung wrote:
 
+> > Sorry I miss this mail.
+> > Could you please help to check this patch? Thanks.
+
+> Rob gave his reviewed-by. I just saw that the driver maintainer is Mark, so
+> I expect him to take the patch through his tree. Didn't realized this
+> beforehand.
+
+TBH I'd missed this since there was nothing in the subject line that
+drew my attention to it.  Seen it now though.
+
+Please submit patches using subject lines reflecting the style for the
+subsystem, this makes it easier for people to identify relevant patches.
+Look at what existing commits in the area you're changing are doing and
+make sure your subject lines visually resemble what they're doing.
+There's no need to resubmit to fix this alone.
+
+--qbtHrth/VF0HNcN8
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJr5e4ACgkQJNaLcl1U
+h9B6jQf/dW9MqjjZQdTkinE+KFUJIRcK4SQ+e5QvdyqXMZ17f40lR3vhJ4Xo1NME
+uNZx34lYDN8jy1PAvJa8HlyqyL0nVzOuxN7qjRuMr/uBlg/qhLEYFUcaxZXXc/wR
+aGaaF3csCsN0+n/CMwkWP/my21AyyzhXfu8ygvhEVqhdJhetwOtYNfOB/aIHOId7
+oszASoq1Jvbpvz7CRKq/Vqqk8O9ASXDpvSERh6iWSkWH4ShJMteoAipC4MndSgSI
+rc0LLIZ2+wq+MAdE5KoqccPfGnx2UsJ9+6MzcYc7SbpRx/LirYjr5THGGkLWS/m3
+kqvXdGrUS8RZNjj07qJ/cqGj8a/mOw==
+=Hfdr
+-----END PGP SIGNATURE-----
+
+--qbtHrth/VF0HNcN8--

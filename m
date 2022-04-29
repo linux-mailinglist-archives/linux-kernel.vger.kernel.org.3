@@ -2,93 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6D651585E
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 00:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8BD5515861
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 00:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381475AbiD2WbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 18:31:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36458 "EHLO
+        id S1381487AbiD2WcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 18:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236352AbiD2WbS (ORCPT
+        with ESMTP id S239151AbiD2Wbz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 18:31:18 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E8B19C0D;
-        Fri, 29 Apr 2022 15:27:59 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id e2so12454171wrh.7;
-        Fri, 29 Apr 2022 15:27:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nsjE3QKtAVvW/MLkRyN5l4C+aBmSf+4Dv2yksVjLqPM=;
-        b=f4Tt7kEGc9oP5m2Fns+kJtkTT/bAx1yczE7r1AZ1nVDCBGeFiYtJ7lFp/qFYY/gX1I
-         8vJajc0dG72959sfzk72deF7U40qztm+P4b8ayidfbh/p2vlus3l065rm1UoYwO9DeJ6
-         Z3IHnzq5yVqtZdmnhpMMSKdQcidiZ+LBMnBTINQQHJjYvJ3gWjDZBRO5ufs4MKF33gSw
-         PugmfDq2fyy4Di3sRU8BTQF8PLFCT/hyY8Bg6tNQSUDry++R/wjxzgP+1WWHsz1zs1fm
-         cRkoo5eV4gjixZ10FWijgTNJ1fMawQRBKHhwF5L0qGMCZP+Rgpxr1Irdx95WkqrrxvyU
-         hHnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nsjE3QKtAVvW/MLkRyN5l4C+aBmSf+4Dv2yksVjLqPM=;
-        b=GC19a1tIE/irHcjvd/gp2JQ0v5DWahzoPJ7tdyJI8Xer+W3Piw5c2sYx3hNdHDDjFJ
-         VDIh/jwT+tZKOUwAiivypcn+EZelJgNOqvKGAiibz+JfmcxIGJzhjTnxCGyH8heO/uis
-         R82mI6FAHa6g41ckwy6KigwucxTvmTfeQmPWb1hG9OR/QWzzhOHgtncQGKXK2Z5KxZq7
-         nvmRQP4nDa24Nzs+lI2dIfGTG9WQOxwiwuHMXEIneSlBvA+dDmVr2LUI2S7Bv9R4042X
-         x3Op/HSupJAUxBSExb/OW1oJf6dTwC7Go01i5/e1W6e03ZSEi93z+68PKqmW4KYabYTu
-         YA1w==
-X-Gm-Message-State: AOAM5308zQFvKJM6OSogAHnY+Zt8nYLiWxp99xnDvlRdJpQqbDEJ9NLv
-        RlSVRJ6y/nG3IihBRtmavRZIXKD6nfw=
-X-Google-Smtp-Source: ABdhPJwgbv+IlMyD1djSsO4A7o0801rhCx/tsHbjsMHvPjoxrrhpmacEwGXWYVqssSHZ+cZxMpD++Q==
-X-Received: by 2002:adf:ec03:0:b0:20a:d0b5:a06f with SMTP id x3-20020adfec03000000b0020ad0b5a06fmr855296wrn.669.1651271277758;
-        Fri, 29 Apr 2022 15:27:57 -0700 (PDT)
-Received: from localhost.localdomain ([141.72.243.13])
-        by smtp.gmail.com with ESMTPSA id o29-20020adfa11d000000b0020c5253d8efsm356167wro.59.2022.04.29.15.27.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 15:27:57 -0700 (PDT)
-From:   Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
-To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
-        hverkuil-cisco@xs4all.nl, laurent.pinchart@ideasonboard.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
-Subject: [PATCH] media: i2c: ov5645: Remove unneeded of_match_ptr macro
-Date:   Sat, 30 Apr 2022 00:27:54 +0200
-Message-Id: <20220429222754.11333-1-mosescb.dev@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Fri, 29 Apr 2022 18:31:55 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63490289A7;
+        Fri, 29 Apr 2022 15:28:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=R5m8qcj/TBlfc3wYbiF2A/onmhBLqu9GlFpGk0U50/I=; b=ofMLjzi/nSpalldb3o1frzjtCJ
+        yvxQNRyC6D3rUUxwtj3fBk0gLI5zxBz3cxT2Zu+u8KeYWcRPULol6yWkCbeRGvgy9ufd1yts1L8Ox
+        +sMMkuZ0aZAJOSPxvTFZ72BRx3EXOj2IbaWecIwapUPEMVatcaTUeIMkRFm5dHgYau8qWIuT88KzE
+        osrv6AD/HA/BH097sOtGCJhlqhiqOjkuhbsWEZJLIQIfpw0pIwCypCAXfHIMqkL9glD2iqG1G/EKk
+        2VddDaqXzYGc1d4npTbzv5PByMllsAA8Juflw2cT0vqQyHkHeEzQITi84Tb8IEbnb38CnYX5mq6A+
+        dn2aAW5Q==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nkZ5i-00CrZH-FP; Fri, 29 Apr 2022 22:27:58 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B55D33002B1;
+        Sat, 30 Apr 2022 00:27:55 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 741F120295B05; Sat, 30 Apr 2022 00:27:55 +0200 (CEST)
+Date:   Sat, 30 Apr 2022 00:27:55 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
+        Oleg Nesterov <oleg@redhat.com>, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
+Subject: Re: [PATCH v2 07/12] ptrace: Don't change __state
+Message-ID: <Ymxma2vRP+FjEkgq@hirez.programming.kicks-ass.net>
+References: <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
+ <20220429214837.386518-7-ebiederm@xmission.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220429214837.386518-7-ebiederm@xmission.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_match_ptr isn't required as CONFIG_OF is already a dependency in Kconfig
+On Fri, Apr 29, 2022 at 04:48:32PM -0500, Eric W. Biederman wrote:
+> Stop playing with tsk->__state to remove TASK_WAKEKILL while a ptrace
+> command is executing.
+> 
+> Instead TASK_WAKEKILL from the definition of TASK_TRACED, and
+> implemention a new jobctl flag TASK_PTRACE_FROZEN.  This new This new
+> flag is set in jobctl_freeze_task and cleared when ptrace_stop is
+> awoken or in jobctl_unfreeze_task (when ptrace_stop remains asleep).
+> 
+> In singal_wake_up add __TASK_TRACED to state along with TASK_WAKEKILL
+> when it is indicated a fatal signal is pending.  Skip adding
+> __TASK_TRACED when TASK_PTRACE_FROZEN is not set.  This has the same
+> effect as changing TASK_TRACED to __TASK_TRACED as all of the wake_ups
+> that use TASK_KILLABLE go through signal_wake_up.
+> 
+> Don't set TASK_TRACED if fatal_signal_pending so that the code
+> continues not to sleep if there was a pending fatal signal before
+> ptrace_stop is called.  With TASK_WAKEKILL no longer present in
+> TASK_TRACED signal_pending_state will no longer prevent ptrace_stop
+> from sleeping if there is a pending fatal signal.
+> 
+> Previously the __state value of __TASK_TRACED was changed to
+> TASK_RUNNING when woken up or back to TASK_TRACED when the code was
+> left in ptrace_stop.  Now when woken up ptrace_stop now clears
+> JOBCTL_PTRACE_FROZEN and when left sleeping ptrace_unfreezed_traced
+> clears JOBCTL_PTRACE_FROZEN.
+> 
+> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+> ---
+>  include/linux/sched.h        |  2 +-
+>  include/linux/sched/jobctl.h |  2 ++
+>  include/linux/sched/signal.h |  8 +++++++-
+>  kernel/ptrace.c              | 21 ++++++++-------------
+>  kernel/signal.c              |  9 +++------
+>  5 files changed, 21 insertions(+), 21 deletions(-)
 
-Signed-off-by: Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
----
- drivers/media/i2c/ov5645.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Please fold this hunk:
 
-diff --git a/drivers/media/i2c/ov5645.c b/drivers/media/i2c/ov5645.c
-index 368fa21e675e..ea73c060514d 100644
---- a/drivers/media/i2c/ov5645.c
-+++ b/drivers/media/i2c/ov5645.c
-@@ -1283,7 +1283,7 @@ MODULE_DEVICE_TABLE(of, ov5645_of_match);
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -6310,10 +6310,7 @@ static void __sched notrace __schedule(u
  
- static struct i2c_driver ov5645_i2c_driver = {
- 	.driver = {
--		.of_match_table = of_match_ptr(ov5645_of_match),
-+		.of_match_table = ov5645_of_match,
- 		.name  = "ov5645",
- 	},
- 	.probe_new = ov5645_probe,
--- 
-2.30.2
+ 	/*
+ 	 * We must load prev->state once (task_struct::state is volatile), such
+-	 * that:
+-	 *
+-	 *  - we form a control dependency vs deactivate_task() below.
+-	 *  - ptrace_{,un}freeze_traced() can change ->state underneath us.
++	 * that we form a control dependency vs deactivate_task() below.
+ 	 */
+ 	prev_state = READ_ONCE(prev->__state);
+ 	if (!(sched_mode & SM_MASK_PREEMPT) && prev_state) {
 

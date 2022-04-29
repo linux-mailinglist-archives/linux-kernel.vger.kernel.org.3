@@ -2,134 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A44F51426A
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 08:34:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E76951426C
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 08:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354574AbiD2GiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 02:38:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33144 "EHLO
+        id S1354578AbiD2GjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 02:39:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232281AbiD2GiL (ORCPT
+        with ESMTP id S232281AbiD2Gi7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 02:38:11 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CBAB9F1D;
-        Thu, 28 Apr 2022 23:34:54 -0700 (PDT)
+        Fri, 29 Apr 2022 02:38:59 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A2A81199
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 23:35:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651214094; x=1682750094;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=SQHceauWJWDbx4dQ4RD3nCy2YCKzrHcJFy/6dkhMb30=;
-  b=LcK2nc6QWTARU2GEhIUARYfxaRV6pjD/gTIbCmYiUiYVP7xyq/QBlcva
-   mDuDzcMAFDUcgwPJTG9eo20Qyxx51IYDw4OyMd/9EKlBCBE8YwxwEox4L
-   fgvFDtOW0zc3ky5K0Ji+0UBbpzzW0prjUYod8dmgakxH47O2ZYWJGnA/H
-   mR7VtLlsdBk22gUevU2aL4hh4RzRXP1mQ6yd7XcLheh51y+xn33qJ1dTT
-   ktptgbGA92IWyjbS+BCyR8pHIKuL8iUMPbtEFqXTXYS3iebOJGt3zCuvo
-   shj8FZxxp3ZHQfZEZelfCMlG26/NB50ztgdmyTZ47t3cHMDUy/0c+MVQi
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="266365708"
+  t=1651214142; x=1682750142;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=73uaYpqAPQn+8U/LuREycvqXt3Sws/vKsehS795EZBw=;
+  b=i6sr6lWcYEJH+55IyX+dFV5fWFsBuhSNF2bcnbhQNivfYnnqYQSyNwxf
+   jsvOYRug62qq/YL31uQddm55oFv+ERVHsNIzEHO7Ost9KeFC4l0coeJiB
+   TY5HBrGda5IeHwewcVOZvo8K9x5R272yGZ8thK4xCoR8IPB67OLrcJiJP
+   zKaN9yLOI/yXroGrXFrvFUNJgOH4JDfUXJtT3Rat6hAm9m4B0wWH+3S2c
+   gv+PnYbMfarw1jTuLxl3Rhxk8WW+8MhlbMTEDtjxEfjz7yIM9vWVfUmTK
+   AsirKV1fqsoFcbFU3o1YFsQ3zUbP51Uv28Ev34U1chY7SPNoV1rKwkv1y
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="248479529"
 X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="266365708"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 23:34:53 -0700
+   d="scan'208";a="248479529"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 23:35:42 -0700
 X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="560147609"
-Received: from yangweij-mobl.ccr.corp.intel.com (HELO [10.249.171.134]) ([10.249.171.134])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 23:34:49 -0700
-Message-ID: <2cc9d183-0bb5-9d4b-f284-9bbb1b4c21be@intel.com>
-Date:   Fri, 29 Apr 2022 14:34:45 +0800
+   d="scan'208";a="581924572"
+Received: from lye4-mobl.ccr.corp.intel.com (HELO [10.249.170.95]) ([10.249.170.95])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 23:35:39 -0700
+Message-ID: <d8682159-508b-501b-3642-54c8155a356d@linux.intel.com>
+Date:   Fri, 29 Apr 2022 14:35:36 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v10 15/16] KVM: x86: Add Arch LBR data MSR access
- interface
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4 11/12] iommu: Per-domain I/O page fault handling
 Content-Language: en-US
-To:     "Liang, Kan" <kan.liang@linux.intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "like.xu.linux@gmail.com" <like.xu.linux@gmail.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "Wang, Wei W" <wei.w.wang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220422075509.353942-1-weijiang.yang@intel.com>
- <20220422075509.353942-16-weijiang.yang@intel.com>
- <6f2107fd-4475-86c7-e410-fe02c37b0f4d@linux.intel.com>
-From:   "Yang, Weijiang" <weijiang.yang@intel.com>
-In-Reply-To: <6f2107fd-4475-86c7-e410-fe02c37b0f4d@linux.intel.com>
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+References: <20220421052121.3464100-1-baolu.lu@linux.intel.com>
+ <20220421052121.3464100-12-baolu.lu@linux.intel.com>
+ <YmqrTGcHotvhhaT2@myrica>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <YmqrTGcHotvhhaT2@myrica>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/4/28 22:57, Jean-Philippe Brucker wrote:
+> On Thu, Apr 21, 2022 at 01:21:20PM +0800, Lu Baolu wrote:
+>>   static void iopf_handle_group(struct work_struct *work)
+>>   {
+>>   	struct iopf_group *group;
+>> @@ -134,12 +78,23 @@ static void iopf_handle_group(struct work_struct *work)
+>>   	group = container_of(work, struct iopf_group, work);
+>>   
+>>   	list_for_each_entry_safe(iopf, next, &group->faults, list) {
+>> +		struct iommu_domain *domain;
+>> +
+>> +		domain = iommu_get_domain_for_dev_pasid_async(group->dev,
+>> +				iopf->fault.prm.pasid);
+> Reading the PCIe spec again (v6.0 10.4.1.1 PASID Usage), all faults within
+> the group have the same PASID so we could move the domain fetch out of the
+> loop. It does deviate from the old behavior, though, so we could change
+> it later.
 
-On 4/28/2022 11:05 PM, Liang, Kan wrote:
->
-> On 4/22/2022 3:55 AM, Yang Weijiang wrote:
->> Arch LBR MSRs are xsave-supported, but they're operated as "independent"
->> xsave feature by PMU code, i.e., during thread/process context switch,
->> the MSRs are saved/restored with PMU specific code instead of generic
->> kernel fpu XSAVES/XRSTORS operation.
-> During thread/process context switch, Linux perf still uses the
-> XSAVES/XRSTORS operation to save/restore the LBR MSRs.
+Perhaps we can add a pasid member in the struct iopf_group and do a
+sanity check when a new iopf is added to the group? Here, we just fetch
+the domain with group->pasid.
 
-I meant Arch LBR MSRs are switched with perf_event_task_sched_out()/
-
-perf_event_task_sched_in() instead of save_fpregs_to_fpstate()/ 
-restore_fpregs_from_fpstate().
-
-sorry for the confusion, will modify it a bit.
-
->
-> Linux perf only manipulates these MSRs only when the xsave feature is
-> not supported.
-Exactly.
->
-> Thanks,
-> Kan
->
->> When vcpu guest/host fpu state swap
->> happens, Arch LBR MSRs won't be touched so access them directly.
->>
->> Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
->> ---
->>    arch/x86/kvm/vmx/pmu_intel.c | 10 ++++++++++
->>    1 file changed, 10 insertions(+)
->>
->> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
->> index 79eecbffa07b..5f81644c4612 100644
->> --- a/arch/x86/kvm/vmx/pmu_intel.c
->> +++ b/arch/x86/kvm/vmx/pmu_intel.c
->> @@ -431,6 +431,11 @@ static int intel_pmu_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->>    	case MSR_ARCH_LBR_CTL:
->>    		msr_info->data = vmcs_read64(GUEST_IA32_LBR_CTL);
->>    		return 0;
->> +	case MSR_ARCH_LBR_FROM_0 ... MSR_ARCH_LBR_FROM_0 + 31:
->> +	case MSR_ARCH_LBR_TO_0 ... MSR_ARCH_LBR_TO_0 + 31:
->> +	case MSR_ARCH_LBR_INFO_0 ... MSR_ARCH_LBR_INFO_0 + 31:
->> +		rdmsrl(msr_info->index, msr_info->data);
->> +		return 0;
->>    	default:
->>    		if ((pmc = get_gp_pmc(pmu, msr, MSR_IA32_PERFCTR0)) ||
->>    		    (pmc = get_gp_pmc(pmu, msr, MSR_IA32_PMC0))) {
->> @@ -512,6 +517,11 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->>    		    (data & ARCH_LBR_CTL_LBREN))
->>    			intel_pmu_create_guest_lbr_event(vcpu);
->>    		return 0;
->> +	case MSR_ARCH_LBR_FROM_0 ... MSR_ARCH_LBR_FROM_0 + 31:
->> +	case MSR_ARCH_LBR_TO_0 ... MSR_ARCH_LBR_TO_0 + 31:
->> +	case MSR_ARCH_LBR_INFO_0 ... MSR_ARCH_LBR_INFO_0 + 31:
->> +		wrmsrl(msr_info->index, msr_info->data);
->> +		return 0;
->>    	default:
->>    		if ((pmc = get_gp_pmc(pmu, msr, MSR_IA32_PERFCTR0)) ||
->>    		    (pmc = get_gp_pmc(pmu, msr, MSR_IA32_PMC0))) {
+Best regards,
+baolu

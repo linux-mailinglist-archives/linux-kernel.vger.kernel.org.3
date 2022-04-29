@@ -2,153 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ACD25156EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 265E45156F0
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:32:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238518AbiD2Vf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 17:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53406 "EHLO
+        id S238405AbiD2VfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 17:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232254AbiD2VfZ (ORCPT
+        with ESMTP id S232254AbiD2VfS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 17:35:25 -0400
-Received: from mailgw.felk.cvut.cz (mailgw.felk.cvut.cz [147.32.82.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A93CD31A;
-        Fri, 29 Apr 2022 14:32:04 -0700 (PDT)
-Received: from mailgw.felk.cvut.cz (localhost.localdomain [127.0.0.1])
-        by mailgw.felk.cvut.cz (Proxmox) with ESMTP id C194830B2973;
-        Fri, 29 Apr 2022 23:31:31 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        cmp.felk.cvut.cz; h=cc:cc:content-transfer-encoding:content-type
-        :content-type:date:from:from:in-reply-to:message-id:mime-version
-        :references:reply-to:subject:subject:to:to; s=felkmail; bh=8E2Pp
-        TS7n9xW37sbOCeIa2pfel4R8e9bbsE/XDKa1ac=; b=ATYNItrSv5swcys+qHwYw
-        uBBkhjSC8WJzE8jBRqNPntvy1YAaqnfaN6nWEYyfhwiNyHRJbVvz9GI06RwiOEC7
-        evg5CzzWCXfNrizYv2CrMIcnJRgB7igDADqFqnXjhcaSUnBR2How+bGYOdyZKhyg
-        HpWp/etxJ/um6qXP6NfZ2y0ECBFy/RydBRHY89SQvCbs2MxOjMNr4f3aw4ThSgPD
-        J6fgW4hPM40Qkbh3QDNDLT58BCprpMzl4ViZjRYiqY1uGTRot1sW6FH9QrBHDblq
-        k4y0VboDk0DmrU1AeApHQEhMz3sGvIkLcaxSANRdbhHNa3V/6ylXkjPegGqFrkr7
-        Q==
-Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
-        by mailgw.felk.cvut.cz (Proxmox) with ESMTPS id 01C7030B2942;
-        Fri, 29 Apr 2022 23:31:31 +0200 (CEST)
-Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
-        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 23TLVUGH005586;
-        Fri, 29 Apr 2022 23:31:30 +0200
-Received: (from pisa@localhost)
-        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 23TLVTna005582;
-        Fri, 29 Apr 2022 23:31:29 +0200
-X-Authentication-Warning: haar.felk.cvut.cz: pisa set sender to pisa@cmp.felk.cvut.cz using -f
-From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
-To:     "Marc Kleine-Budde" <mkl@pengutronix.de>
-Subject: Re: [PATCH v1 0/4] can: ctucanfd: clenup acoording to the actual rules and documentation linking
-Date:   Fri, 29 Apr 2022 23:31:28 +0200
-User-Agent: KMail/1.9.10
-Cc:     linux-can@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Marin Jerabek <martin.jerabek01@gmail.com>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        Jiri Novak <jnovak@fel.cvut.cz>,
-        Jaroslav Beran <jara.beran@gmail.com>,
-        Petr Porazil <porazil@pikron.com>, Pavel Machek <pavel@ucw.cz>,
-        Carsten Emde <c.emde@osadl.org>,
-        Drew Fustini <pdp7pdp7@gmail.com>,
-        Matej Vasilevski <matej.vasilevski@gmail.com>,
-        Andrew Dennison <andrew.dennison@motec.com.au>
-References: <cover.1650816929.git.pisa@cmp.felk.cvut.cz> <20220428072239.kfgtu2bfcud6tetc@pengutronix.de>
-In-Reply-To: <20220428072239.kfgtu2bfcud6tetc@pengutronix.de>
-X-KMail-QuotePrefix: > 
+        Fri, 29 Apr 2022 17:35:18 -0400
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02359CEE24;
+        Fri, 29 Apr 2022 14:31:59 -0700 (PDT)
+Received: by mail-oi1-f174.google.com with SMTP id r8so9849932oib.5;
+        Fri, 29 Apr 2022 14:31:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ipYeQfWFLcPKZ7mKRzp5aFzO9fJGsAJq6rg91kdXPzA=;
+        b=xlKrTCaUsbxgnOF6DptXQmqOp4N/svT47lFFGdgjszc/2ZrIvVpvtpQRXAcuuymZxQ
+         cFwxe9JQFq9QpqOwVUQeeR6K9brRjjX0iMLD5G/89zjMDxIzYxsyakPE+QU7sutMbKzY
+         EFUbHqcfbQIrE3BUAHL6MWSH+poZYmwfevu8KVekQaycBz3ic7/dg4T7DG2XH8heCiyi
+         Qttvfbhb5p3C+FSCVeEf9eskW8n4lvs3xY1/HJF9U6ggXYy+XU9vc5RE/dH5PTKgruZc
+         MeccxcoW/elegprdZVxIllhSedHmfzHrX/lPSsqMlictVfimHqZiJkcA0foPUc6R0CdK
+         w0Ug==
+X-Gm-Message-State: AOAM5306Wu8sa4IUMnOv3Cw+OeN0M4vdi3aNBj8fdvFfNPQze2DscCKR
+        Lf6Jl9OrbmaKytik97hlFasPxA3Wiw==
+X-Google-Smtp-Source: ABdhPJya/0Vf9slHqEQZMdiq4bLMSDj4AKWTrwZobUGM5btcbpe/2eQzGgdRlYsVWAAKTcIpHtNWWQ==
+X-Received: by 2002:a05:6808:219f:b0:322:9505:396d with SMTP id be31-20020a056808219f00b003229505396dmr2494199oib.141.1651267918288;
+        Fri, 29 Apr 2022 14:31:58 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id q8-20020a0568080ec800b00325cda1ffa3sm150320oiv.34.2022.04.29.14.31.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 14:31:57 -0700 (PDT)
+Received: (nullmailer pid 2917268 invoked by uid 1000);
+        Fri, 29 Apr 2022 21:31:57 -0000
+Date:   Fri, 29 Apr 2022 16:31:57 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 3/3] dt-bindings: arm: msm: Convert kpss-gcc driver
+ Documentation to yaml
+Message-ID: <YmxZTf7w40xv/Jvs@robh.at.kernel.org>
+References: <20220429121739.28584-1-ansuelsmth@gmail.com>
+ <20220429121739.28584-4-ansuelsmth@gmail.com>
+ <1651247596.124069.2344494.nullmailer@robh.at.kernel.org>
+ <626c0b64.1c69fb81.1b1e9.4fe6@mx.google.com>
+ <5127b3b5-ad27-fd06-42b7-fdf96d0a10ea@linaro.org>
+ <626c4ee8.1c69fb81.74b06.15c4@mx.google.com>
 MIME-Version: 1.0
-Content-Type: Text/Plain;
-  charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Message-Id: <202204292331.28980.pisa@cmp.felk.cvut.cz>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <626c4ee8.1c69fb81.74b06.15c4@mx.google.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Marc,
+On Fri, Apr 29, 2022 at 10:45:09PM +0200, Ansuel Smith wrote:
+> On Fri, Apr 29, 2022 at 10:43:21PM +0200, Krzysztof Kozlowski wrote:
+> > On 29/04/2022 17:57, Ansuel Smith wrote:
+> > > On Fri, Apr 29, 2022 at 10:53:16AM -0500, Rob Herring wrote:
+> > >> On Fri, 29 Apr 2022 14:17:39 +0200, Ansuel Smith wrote:
+> > >>> Convert kpss-gcc driver Documentation to yaml.
+> > >>>
+> > >>> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > >>> ---
+> > >>>  .../bindings/arm/msm/qcom,kpss-gcc.txt        | 44 -------------
+> > >>>  .../bindings/arm/msm/qcom,kpss-gcc.yaml       | 63 +++++++++++++++++++
+> > >>>  2 files changed, 63 insertions(+), 44 deletions(-)
+> > >>>  delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
+> > >>>  create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
+> > >>>
+> > >>
+> > >> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> > >> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> > >>
+> > >> yamllint warnings/errors:
+> > >>
+> > >> dtschema/dtc warnings/errors:
+> > >> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml: properties: '#clock-cells' is a dependency of 'clock-output-names'
+> > > 
+> > 
+> > The patches were previously sent (even as v6) and somehow the history,
+> > changelog and references disappeared...
+> > 
+> 
+> Mhh with split how this should be handled? Putting the relevant changes
+> in the cover letter?
+> 
+> > > Erm how to fix this? I can't do a 1:1 conversion if the source was
+> > > wrong and also have no bot warning.
+> > > Or I should just push an additional patch to fix this error after the
+> > > conversion?
+> > 
+> > Didn't we agree that original bindings were not in good shape? Yet the
+> > questions raised with your v6 remain actually not answered, till the bot
+> > complains.
+> > 
+> > Please do not send the bindings which do not pass dt_binding_check.
+> > 
+> > Best regards,
+> > Krzysztof
+> 
+> In v6 the last mail were with the idea of sending separate series with
+> minimal changes and it was mention that it was a good idea to send only
+> conversion and then send the changes with the conversion series.
+> 
+> Finally got the message. I should NEVER send patch with warning from
+> dt_binding_check.
 
-On Thursday 28 of April 2022 09:22:39 Marc Kleine-Budde wrote:
-> > Jiapeng Chong (2):
-> >   can: ctucanfd: Remove unnecessary print function dev_err()
-> >   can: ctucanfd: Remove unused including <linux/version.h>
->
-> I had these already applied.
->
-> > Pavel Pisa (2):
-> >   can: ctucanfd: remove PCI module debug parameters and core debug
-> >     statements.
-> >   docs: networking: device drivers: can: add ctucanfd and its author
-> >     e-mail update
->
-> Split into separate patches and applied.
+It's like sending code changes that don't compile...
 
-Excuse me for late reply and thanks much for split to preferred
-form. Matej Vasilevski has tested updated linux-can-next testing
-on Xilinx Zynq 7000 based MZ_APO board and used it with his
-patches to do proceed next round of testing of Jan Charvat's NuttX
-TWAI (CAN) driver on ESP32C3. We plan that CTU CAN FD timestamping
-will be send for RFC/discussion soon.
+But I wouldn't say NEVER. If you have a warning that you think is wrong 
+or don't know how to fix, then send it and say that in the patch.
 
-I would like to thank to Andrew Dennison who implemented, tested
-and shares integration with LiteX and RISC-V
-
-  https://github.com/litex-hub/linux-on-litex-vexriscv
-
-He uses development version of the CTU CAN FD IP core with configurable
-number of Tx buffers (2 to 8) for which will be required
-automatic setup logic in the driver.
-
-I need to discuss with Ondrej Ille actual state and his plans.
-But basically ntxbufs in the ctucan_probe_common() has to be assigned
-from TXTB_INFO TXT_BUFFER_COUNT field. For older core version
-the TXT_BUFFER_COUNT field bits should be equal to zero so when
-value is zero, the original version with fixed 4 buffers will
-be recognized. When value is configurable then for (uncommon) number
-of buffers which is not power of two, there will be likely
-a problem with way how buffers queue is implemented
-
-  txtb_id = priv->txb_head % priv->ntxbufs;
-  ...
-  priv->txb_head++;
-  ...
-  priv->txb_tail++;
-
-When I have provided example for this type of queue many years
-ago I have probably shown example with power of 2 masking,
-but modulo by arbitrary number does not work with sequence
-overflow. Which means to add there two "if"s unfortunately
-
-  if (++priv->txb_tail == 2 * priv->ntxbufs)
-      priv->txb_tail = 0;
-
-We need 2 * priv->ntxbufs range to distinguish empty and full queue...
-But modulo is not nice either so I probably come with some other
-solution in a longer term. In the long term, I want to implement
-virtual queues to allow multiqueue to use dynamic Tx priority
-of up to 8 the buffers...
-
-Best wishes,
-
-                Pavel Pisa
-    phone:      +420 603531357
-    e-mail:     pisa@cmp.felk.cvut.cz
-    Department of Control Engineering FEE CVUT
-    Karlovo namesti 13, 121 35, Prague 2
-    university: http://control.fel.cvut.cz/
-    personal:   http://cmp.felk.cvut.cz/~pisa
-    projects:   https://www.openhub.net/accounts/ppisa
-    CAN related:http://canbus.pages.fel.cvut.cz/
-    Open Technologies Research Education and Exchange Services
-    https://gitlab.fel.cvut.cz/otrees/org/-/wikis/home
-
+Rob

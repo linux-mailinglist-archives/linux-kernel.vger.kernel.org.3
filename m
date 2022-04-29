@@ -2,96 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEAA051538F
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02EBE515390
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379984AbiD2SYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 14:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35352 "EHLO
+        id S1379989AbiD2SYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 14:24:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379971AbiD2SYF (ORCPT
+        with ESMTP id S1379953AbiD2SYG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 14:24:05 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9D0C3E03
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:20:46 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id q76so4057523pgq.10
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:20:46 -0700 (PDT)
+        Fri, 29 Apr 2022 14:24:06 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F274E51E52
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:20:47 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id y38so7584786pfa.6
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:20:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=hS0LaDQWfYwQHEyOl3VF+fDGCEpxszaqGhp5xQzuyk4=;
-        b=HUWtr6EkStVFk+wq8ZEAJuivguyjLcB8QuphUUr2Y5yf9GwJsBGWcmd+W8dHrH4KDz
-         qdchjP79VYAa7/0UrYqjYx24yHbA9V+UY7L7WVViiIF3MfVxL7otyMNqN1ezrS7+4B5g
-         m+A0Pa8bBaVQx664k/B8x5eMrw4uMp6sAKRsIDZRtqCxtH7sI99QBN9X5HogzhEL1jfg
-         qLpEvApe2fmIHsEJ81HxgHeHg9lyb0/fHmXf5fs8BrFCKuCwxBfmdxlLtO+K1FSPaU+Q
-         mQ9xBQ60TFurpFp2ruGreXVyH2NsvTLtPEAonTmyJvAD8SVpEEv0UahEIbir2jZcMWq8
-         cSIw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Wslry1R5bdUpJUavzlBpF5vlXqV0PAn4Lq3cXrzKpPY=;
+        b=FmCks5NcpzpThewGRhqXd390ERLh+Ej3sl/zL7F2La/EKtFEj+O6ipQDuzfWBjJVvc
+         UQ7134+lqi2v0KtVDCKkohCbeHBwcHpqPyDxFGpwyxmI9EjUiv7ScFctGMSzUOYkvQBN
+         7ZfBmB/5I6eX3og6wAC1PklxmvEEI13+UhJzY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=hS0LaDQWfYwQHEyOl3VF+fDGCEpxszaqGhp5xQzuyk4=;
-        b=f6VA/0nAd8wVEJKE15XLaoLIfaxWDdiyxE89EOj6Ui4DGPyDFZoY6JZu2c3ktpLlos
-         n3k96u/1rLsHETLVs2hc9Qg/G8RJm2QpCfRqyaGRJ9piB0k2tmsaAAvsWfv9FKzsb/r/
-         CXe9bBYHzmpPOQXeAh6M+ol/JUY7SsEWehJkdxZJF8OkCjSuYdJOjz8E4UkEHaEaKcbv
-         bZIHLLNDd97aDT1PZb5xwElwJtqiHI7MMvYVKfiVbgqjJWWEWzKDD3wadppc+1zD8T0w
-         cxSC5YyF6cz8kjys5srYg7Oanu6fSJGlbV/xMRB65mXzxjh5uBVq1CJScnDz41B+aELw
-         pepg==
-X-Gm-Message-State: AOAM532twDTo8tfTahy2KAINe52rAdznjbopnn1OwvKznwqSCFcZG6s8
-        +l1x+mqJdyVhh2vTj2GKe1fnBgoOLRU7eigVvT8=
-X-Google-Smtp-Source: ABdhPJzar2Bb8LyTbdAakX3P3vb5EJiGpYx0O/NkkBJ8hNTdfO78XQ+Wxtahq7xj0D5x3mxFCQJfOw7i/oOK8dBJrKc=
-X-Received: by 2002:a63:4464:0:b0:3a3:d8fb:6ddd with SMTP id
- t36-20020a634464000000b003a3d8fb6dddmr465753pgk.355.1651256445886; Fri, 29
- Apr 2022 11:20:45 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Wslry1R5bdUpJUavzlBpF5vlXqV0PAn4Lq3cXrzKpPY=;
+        b=ajN0kqTwjn4e8y9VNsW0bt6gCHB0H6Ag6OmDv1DDMGcsjVGnI7xa21Dcuq6AQrwE6+
+         zWzC32lyqBOaPNNVm10oQb67q9JUygILjc8Mo7ZHfA7XxUpO9ffebXViK79CIm40Bc7I
+         2K3OtVxFItVYLbnDDrCpb2MK0EMnHneZ1Kf1UyPFW3mvg76pVnoTngzWE/fXOXnSVQN3
+         jrh0fMXVhqrpZj8A92TmPr1RuZzbh+n9PbyI/h0EhS8SmmggMVhbMdYU7ehG9vXJME5D
+         I4/lJUlTMfhPfrgiGxB/C48af7q+GCjrN645KIRZPQoVvyvAVJUdbP7Y0WDLM4UCJD7K
+         PjFQ==
+X-Gm-Message-State: AOAM5308y1yR9u2ib4Ox3FG9sMX2cEy0a769HU/vJwLfR8vq7ceof4bO
+        LvmjOTwqCVf/j1lc2GEfE5tHhA==
+X-Google-Smtp-Source: ABdhPJx4rNrDd2yoQUGY47nYl8Nqg+8LDGgJFTSrthoyKbJguRDIjFWd5ndLhqs6MjPCWKyjHh5CRA==
+X-Received: by 2002:a65:62d0:0:b0:381:d38:c7b0 with SMTP id m16-20020a6562d0000000b003810d38c7b0mr519075pgv.186.1651256447529;
+        Fri, 29 Apr 2022 11:20:47 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 1-20020a17090a1a0100b001dbe11be891sm6170057pjk.44.2022.04.29.11.20.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 11:20:47 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 11:20:46 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Sargun Dhillon <sargun@sargun.me>
+Cc:     Rodrigo Campos <rodrigo@kinvolk.io>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Containers <containers@lists.linux-foundation.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Giuseppe Scrivano <gscrivan@redhat.com>,
+        Will Drewry <wad@chromium.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Alban Crequy <alban@kinvolk.io>
+Subject: Re: [PATCH v3 1/2] seccomp: Add wait_killable semantic to seccomp
+ user notifier
+Message-ID: <202204291120.428EB85@keescook>
+References: <20220429023113.74993-1-sargun@sargun.me>
+ <20220429023113.74993-2-sargun@sargun.me>
+ <CACaBj2bW8XkENHoLNXEprQ_d8=_aLT_XQdjCZtSOiPJis8G_pQ@mail.gmail.com>
+ <20220429171437.GA1267404@ircssh-3.c.rugged-nimbus-611.internal>
 MIME-Version: 1.0
-Received: by 2002:a17:90b:1d87:0:0:0:0 with HTTP; Fri, 29 Apr 2022 11:20:45
- -0700 (PDT)
-Reply-To: ugwumuruu@gmail.com
-From:   Ugwu Umuru <ugwurugwu@gmail.com>
-Date:   Fri, 29 Apr 2022 18:20:45 +0000
-Message-ID: <CAAQmaaSMFmYY4kKGjZubceuZuEY80=LHx5DMCocV-miKH_B2sw@mail.gmail.com>
-Subject: Good day
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:536 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5039]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [ugwurugwu[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220429171437.GA1267404@ircssh-3.c.rugged-nimbus-611.internal>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-How are you coping in this period of global uncertainties (WAR & COVID-19)?
-Hope it's well with you. I have been contacting you for quite some
-time now without any response. Could you please confirm if this still
-remains your email address. I am an International Consultant. There is
-this important investment prospect by a German national which I will
-like to share with you. I an therefore awaiting your feedback.
-Thanks.
-Ugwu Umuru
+On Fri, Apr 29, 2022 at 05:14:37PM +0000, Sargun Dhillon wrote:
+> On Fri, Apr 29, 2022 at 11:42:15AM +0200, Rodrigo Campos wrote:
+> > On Fri, Apr 29, 2022 at 4:32 AM Sargun Dhillon <sargun@sargun.me> wrote:
+> > > the concept is searchable. If the notifying process is signaled prior
+> > > to the notification being received by the userspace agent, it will
+> > > be handled as normal.
+> > 
+> > Why is that? Why not always handle in the same way (if wait killable
+> > is set, wait like that)
+> > 
+> 
+> The goal is to avoid two things:
+> 1. Unncessary work - Often times, we see workloads that implement techniques
+>    like hedging (Also known as request racing[1]). In fact, RFC3484
+>    (destination address selection) gets implemented where the DNS library
+>    will connect to many backend addresses and whichever one comes back first
+>    "wins".
+> 2. Side effects - We don't want a situation where a syscall is in progress
+>    that is non-trivial to rollback (mount), and from user space's perspective
+>    this syscall never completed.
+> 
+> Blocking before the syscall even starts is excessive. When we looked at this
+> we found that with runtimes like Golang, they can get into a bad situation
+> if they have many (1000s) of threads that are in the middle of a syscall
+> because all of them need to elide prior to GC. In this case the runtime
+> prioritizes the liveness of GC vs. the syscalls.
+> 
+> That being said, there may be some syscalls in a filter that need the suggested 
+> behaviour. I can imagine introducing a new flag
+> (say SECCOMP_FILTER_FLAG_WAIT_KILLABLE) that applies to all states.
+> Alternatively, in one implementation, I put the behaviour in the data
+> field of the return from the BPF filter.
+
+I'd add something like the above to the commit log, just to have it
+around.
+
+-- 
+Kees Cook

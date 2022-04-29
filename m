@@ -2,69 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BB65514F0E
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89EF8514F10
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:18:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378261AbiD2PV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 11:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49452 "EHLO
+        id S1378267AbiD2PVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 11:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377845AbiD2PV0 (ORCPT
+        with ESMTP id S1377866AbiD2PVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 11:21:26 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1EF60A95
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:18:07 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-d39f741ba0so8415041fac.13
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:18:07 -0700 (PDT)
+        Fri, 29 Apr 2022 11:21:50 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B72D4C97
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:18:31 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id e23so9426314eda.11
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:18:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IVKH9E+l7o2XudEOKH10/8Spo2yzScp0hzyP8QBi7BE=;
-        b=JY7Q/ILOzg3ysXd9geh9fS9vWGHMd+NT6LqqxD1FH1YKig/AUTIyAJgQzgJTWp2YYt
-         RUnLugHV/CY4y/L8n2vZx8Wlr0brkPm8eFpaH3bG4UENdLUFJ7emmoVdsKqn3NwxUhGi
-         Gvee27j8FwozjSEXGPfuojiDp9cqm+gX1ieMrhvVgFok7Ci9b1V8whVmpEVV/nTdpWvA
-         zh6gXX8ofsP64q3KH1uBLTpSzNxdY0DR/Sm+sTuDgATwZ3XSUuudDzgJjNECS+fA6IZi
-         D+vVqyD6ZrNG5qbjdarPLWJ1KEJdtZssTLD8860ohjmFmM1joSCSMRx5mecsxpw2dnXs
-         3f+Q==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=L79R3XQb+oKIBDk5QLBANm8jHmQJdwsv7/GUkSR/Ukc=;
+        b=T/U+K1XPO96WhjUEjO2ZLIKqq6qaepXAj+Le6156YlAJW/ifIOnb9lTvlIllFjEOdk
+         ld4KvQVcGoDXhFH5pxmyBrPLLVS7oX95lB5AiuidrJDLiNk77H8X+oRsuOoxUf1dnaHH
+         +37rbtz5HVmuNqi2Ku8urOyh4h13LuvFR+x5FMss7UinZOZi5REbjNlkssOo2OIh7mU/
+         Ej5TQRjjIOOUArL1Aoe2RSl6VkgmB7OesmWlLETlqIKLL6L0IQgI6f+LWIEnN2OV50Eq
+         OAeo40EXdw+2uYCs6Ewtn0rTVpD94+M425jg8UZsPP4mDlKZKfm1FulKgS6tK7O7CThX
+         +Uzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IVKH9E+l7o2XudEOKH10/8Spo2yzScp0hzyP8QBi7BE=;
-        b=B0jb9a0GPMGGiftKvEbPu5iC4AmNUk4K8whH2wYrJAYOQWnsB4VFs0y/Uqf15El+zs
-         LvgCrGpsVFJ9OZA7lM+F3QnF8+WuvxPCm4SS7MNgaT/nVfT56pIWigHjM4kSgyFd21ZE
-         lGoBRju/VrDxwQZtH9OL3C3mgIZGng08zuvZnMc297eJ8ld0pqkBQ16juv2s0TyJPacw
-         n1hNcjXdpUn2pFsOwEWe0owKf70m6z9NWHiokTW77vvhtasU3E0LdPBdXMirW/BDR9Se
-         hnyu75EsaN68qJ8VOzzAlXOhf1xD/vgKJG72zjzGUehPCm5FJSMOHUH6TaEkEK/sgfOL
-         uFcg==
-X-Gm-Message-State: AOAM532SRKOs1muK1INEqLNbw65pweEgcjenuvP/O5WZfhuS7eCdD70D
-        a3W9Fu40irQ36df3ROhTJrqJ4ht5JIyKlD2IAmI=
-X-Google-Smtp-Source: ABdhPJxwBcfHMKT9AQjsJUPy7CWDdzvL4iBKjdwzdC6eu1LFYOZLa5zoFvTyB5EGbAMeY7Dy1Dd01LOpWKrIn+rUYFk=
-X-Received: by 2002:a05:6870:311d:b0:de:9b6c:362b with SMTP id
- v29-20020a056870311d00b000de9b6c362bmr1483544oaa.200.1651245487284; Fri, 29
- Apr 2022 08:18:07 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=L79R3XQb+oKIBDk5QLBANm8jHmQJdwsv7/GUkSR/Ukc=;
+        b=vmdMBX5a1aawfYjbgq4QD0HdUAx7ED6MKlRCtDbEkolm8+AEUI03UwfYUu1RdeOUyI
+         TUGPo9yqqkBJC/V1V5SgKuLnUES+osKG00n7SQDzPWIM5BKK0rP4XK+cYw6QcIS29fdz
+         0NvLc0Vg709U8TApKRYoJN3uO8eepOGGxwSy03BrTXXomieeCaF52GX8tg0A5DNg+WI9
+         LK0Obmy2SDIqDPa8r7r+pG8rAapxE3eU4sbHp9Dpj5gTmSAFSlv6fmCxtTdWBSXNw5OE
+         rj2A+5/LmNI45QP7FENnmXktO6VAs2p9GJGurGbtaAEN248aSTDkKwHF3u2A/Kn9kLKM
+         QFnw==
+X-Gm-Message-State: AOAM532aNggX3MVp/V1Ve7Bx0hPlOhitatA0NwhjDTnMEfYwTPOMyNoQ
+        MhfD581QSt4JB5581g+axek=
+X-Google-Smtp-Source: ABdhPJy09sOXJ3F1bVAlPC+pNd5wtB3fBDT2vPPbBZVhhTO9lbw8Iz6+g872TvqG0WDb9Ir3J8I6zw==
+X-Received: by 2002:a05:6402:d5:b0:41d:6518:86e4 with SMTP id i21-20020a05640200d500b0041d651886e4mr41847942edu.322.1651245510037;
+        Fri, 29 Apr 2022 08:18:30 -0700 (PDT)
+Received: from ?IPV6:2003:c7:8f1b:f037:b0af:cce5:5488:7b95? (p200300c78f1bf037b0afcce554887b95.dip0.t-ipconnect.de. [2003:c7:8f1b:f037:b0af:cce5:5488:7b95])
+        by smtp.gmail.com with ESMTPSA id g7-20020aa7d1c7000000b0042617ba63b1sm3093989edp.59.2022.04.29.08.18.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 08:18:29 -0700 (PDT)
+Message-ID: <b3d6b773-4ca1-a72e-933b-455c5d2b91c9@gmail.com>
+Date:   Fri, 29 Apr 2022 17:18:28 +0200
 MIME-Version: 1.0
-References: <20220429055037.3852147-1-chi.minghao@zte.com.cn>
-In-Reply-To: <20220429055037.3852147-1-chi.minghao@zte.com.cn>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 29 Apr 2022 11:17:56 -0400
-Message-ID: <CADnq5_OJ7dvj8kh6AjQ6cSBMEqAbfDo5Gj7rFV+fpf+=RoXkzA@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdgpu: simplify the return expression of navi10_ih_hw_init()
-To:     CGEL <cgel.zte@gmail.com>
-Cc:     "Deucher, Alexander" <alexander.deucher@amd.com>,
-        Dave Airlie <airlied@linux.ie>, Zeal Robot <zealci@zte.com.cn>,
-        xinhui pan <Xinhui.Pan@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 3/3] staging: vt6655: Replace VNSvInPortD with ioread32
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Forest Bond <forest@alittletooquiet.net>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <cover.1651036713.git.philipp.g.hortmann@gmail.com>
+ <7a5f7f98379fb2af2741f613f5ddda53e5d4813e.1651036713.git.philipp.g.hortmann@gmail.com>
+ <Ymjaxby2vDJYz6KA@kroah.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <Ymjaxby2vDJYz6KA@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,41 +76,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+On 4/27/22 07:55, Greg Kroah-Hartman wrote:
+>> MACvRegBitsOn(iobase, MAC_REG_TFTCTL, TFTCTL_TSFCNTRRD);
+>>   	for (ww = 0; ww < W_MAX_TIMEOUT; ww++) {
+>> @@ -753,8 +754,9 @@ bool CARDbGetCurrentTSF(struct vnt_private *priv, u64 *pqwCurrTSF)
+>>   	}
+>>   	if (ww == W_MAX_TIMEOUT)
+>>   		return false;
+>> -	VNSvInPortD(iobase + MAC_REG_TSFCNTR, (u32 *)pqwCurrTSF);
+>> -	VNSvInPortD(iobase + MAC_REG_TSFCNTR + 4, (u32 *)pqwCurrTSF + 1);
+>> +	low = ioread32(iobase + MAC_REG_TSFCNTR);
+>> +	high = ioread32(iobase + MAC_REG_TSFCNTR + 4);
+>> +	*pqwCurrTSF = low + ((u64)high << 32);
+> Are you_sure_  this is doing the same thing?
+> 
 
-On Fri, Apr 29, 2022 at 1:50 AM <cgel.zte@gmail.com> wrote:
+To compare I used the following code:
+VNSvInPortD(iobase + MAC_REG_TSFCNTR, (u32 *)pqwCurrTSF);
+VNSvInPortD(iobase + MAC_REG_TSFCNTR + 4, (u32 *)pqwCurrTSF + 1);
+dev_info(&priv->pcid->dev, "CARDbGetCurrentTSF *pqwCurrTSF: %llx", 
+*pqwCurrTSF);
+low = ioread32(iobase + MAC_REG_TSFCNTR);
+high = ioread32(iobase + MAC_REG_TSFCNTR + 4);
+dev_info(&priv->pcid->dev, "CARDbGetCurrentTSF low/high: %llx", low + 
+((u64)high << 32));
+
+Output:
+vt6655 0000:01:05.0: CARDbGetCurrentTSF *pqwCurrTSF: 1155ba
+vt6655 0000:01:05.0: CARDbGetCurrentTSF low/high:    1155ba
+vt6655 0000:01:05.0: CARDbGetCurrentTSF *pqwCurrTSF: 35d7cbd7c
+vt6655 0000:01:05.0: CARDbGetCurrentTSF low/high:    35d7cbd7c
+vt6655 0000:01:05.0: CARDbGetCurrentTSF *pqwCurrTSF: 35d7cbd8a
+vt6655 0000:01:05.0: CARDbGetCurrentTSF low/high:    35d7cbd8a
+
+So no different results for numbers larger than 32 Bit.
+
+The pqwCurrTSF is a microsecond counter running in the WLAN Router:
+At a later Measurement I got the following values:
+269 seconds later: 0x3 6d89 fd91 -> 269.30 seconds
+15 minutes later: 0x3 6d89 fd91 -> 15.54 minutes
+8:38 hours later: 0xa 9787 ad91 -> 8.62 hours
+
+So both methods work on a AMD64 processor.
+
+> Adding 1 to a u64 pointer increments it by a full u64.  So I guess the
+> cast to u32 * moves it only by a u32?  Hopefully?  That's messy.
+
+That is the reason why I wanted to change this.
+
+> Why not keep the current mess and do:
+> 	pqwCurrTSF = ioread32(iobase + MAC_REG_TSFCNTR);
+> 	((u32 *)pqwCurTSF + 1) = ioread32(iobase + MAC_REG_TSFCNTR + 4);
+> Or does that not compile?  
+
+drivers/staging/vt6655/card.c:760:13: warning: assignment to ‘u64 *’ 
+{aka ‘long long unsigned int *’} from ‘unsigned int’ makes pointer from 
+integer without a cast [-Wint-conversion]
+   760 |  pqwCurrTSF = ioread32(iobase + MAC_REG_TSFCNTR);
+       |             ^
+drivers/staging/vt6655/card.c:761:26: error: lvalue required as left 
+operand of assignment
+   761 |  ((u32 *)pqwCurrTSF + 1) = ioread32(iobase + MAC_REG_TSFCNTR + 4);
+       |                          ^
+
+This compiles:
+	*(u32 *)pqwCurrTSF = ioread32(iobase + MAC_REG_TSFCNTR);
+	*((u32 *)pqwCurrTSF + 1) = ioread32(iobase + MAC_REG_TSFCNTR + 4);
+
+Log:
+vt6655 0000:01:05.0: CARDbGetCurrentTSF *pqwCurrTSF: 178f41d90
+vt6655 0000:01:05.0: CARDbGetCurrentTSF with ioread: 178f41d90
+
+Ick, how about:
+> 	u32 *temp = (u32 *)pqwCurTSF;
+> 
+> 	temp = ioread32(iobase + MAC_REG_TSFCNTR);
+> 	temp++;
+> 	temp = ioread32(iobase + MAC_REG_TSFCNTR + 4);
+
+This is working:
+	u32 *temp = (u32 *)pqwCurrTSF;
+
+	*temp = ioread32(iobase + MAC_REG_TSFCNTR);
+	temp++;
+	*temp = ioread32(iobase + MAC_REG_TSFCNTR + 4);
+
+> As that duplicates the current code a bit better.
+> 
+> I don't know, it's like polishing dirt, in the end, it's still dirt...
+> 
+> How about looking at the caller of this to see what it expects to do
+> with this information?  Unwind the mess from there?
 >
-> From: Minghao Chi <chi.minghao@zte.com.cn>
->
-> Simplify the return expression.
->
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> ---
->  drivers/gpu/drm/amd/amdgpu/navi10_ih.c | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/navi10_ih.c b/drivers/gpu/drm/amd/amdgpu/navi10_ih.c
-> index 97201ab0965e..4b5396d3e60f 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/navi10_ih.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/navi10_ih.c
-> @@ -593,14 +593,9 @@ static int navi10_ih_sw_fini(void *handle)
->
->  static int navi10_ih_hw_init(void *handle)
->  {
-> -       int r;
->         struct amdgpu_device *adev = (struct amdgpu_device *)handle;
->
-> -       r = navi10_ih_irq_init(adev);
-> -       if (r)
-> -               return r;
-> -
-> -       return 0;
-> +       return navi10_ih_irq_init(adev);
->  }
->
->  static int navi10_ih_hw_fini(void *handle)
-> --
-> 2.25.1
->
->
+
+I will propose something for that.
+
+> thanks,
+> 
+> greg k-h
+
+Thanks
+
+Bye Philipp

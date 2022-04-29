@@ -2,69 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79F87514C9E
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A439B514CA8
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:22:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377179AbiD2OX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 10:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59742 "EHLO
+        id S1376961AbiD2OZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 10:25:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355718AbiD2OXZ (ORCPT
+        with ESMTP id S233545AbiD2OZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 10:23:25 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6C72BCF;
-        Fri, 29 Apr 2022 07:20:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651242007; x=1682778007;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/bGhVKHoEh7eHUDyaw5m0yQ3oS5lWEnkoQ/GQvJerek=;
-  b=c9ITCokXFmq+Z7NsDa4qGXrnaYFJUNENfuVWSnu02Jz0jUGrAfCwCpYV
-   xIrPgShsbJIaATPpKxMkxXkBglePDJyFCHT3sSRpSzwMrEWau0SGBS4Ha
-   J0yg9LXf4468CC2PT3YA0cruM7tBgVmyyUJBujwiBVbbHQEAobIWC5VhN
-   7697wGuM1eAeW2lySAtkfoQVw9h+puGkoPXiiYkRue/GAd6FNjYEFVW7E
-   fHguXUiH2ucqFhZeiiDZ718k4fw2jSlYKE4Q/3p20V1KpjkrZg2qaG2xy
-   ya/n2VUXy0srFexolBZIpOwqhq5P33j17YEQn4UynEVd3ch2YK/jxYwdr
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="329600105"
-X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
-   d="scan'208";a="329600105"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 07:20:06 -0700
-X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
-   d="scan'208";a="582148551"
-Received: from jinggu-mobl1.amr.corp.intel.com (HELO [10.212.30.227]) ([10.212.30.227])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 07:20:05 -0700
-Message-ID: <5984b61f-6a4a-c12a-944d-f4a78bdefc3d@intel.com>
-Date:   Fri, 29 Apr 2022 07:20:21 -0700
+        Fri, 29 Apr 2022 10:25:13 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7391240E4A;
+        Fri, 29 Apr 2022 07:21:52 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id l11-20020a17090a49cb00b001d923a9ca99so7428542pjm.1;
+        Fri, 29 Apr 2022 07:21:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=J3vXFpPXGlLbZdZy5pIJRdszv6m+Ytkgy7iGJnPeizo=;
+        b=TQxvpMhO2gZBh9jvK4EdPSiB3vxSViIvh9NZkvPW8Snkh4inY8C7lXWYMMdHjwRqZm
+         pKovHkAW66ey2KmI9e3JGy+dUx4K9hOEIJOqpV7FbxExEDonVh+aj/+0KOFk3AyeFa5Q
+         jy6Mn3IUKGlXEJ7xGpdi4aqdSOaiYKiF7BwEuu1oXvAqKjNY7hz7bAjBYhOQYI7tdpmD
+         CAO7u96taMws9h/M+uhPXBwlP8yF6DogPiBMaFZ81FOAkjAW9IaXtKcGEdUoBNuGhHAq
+         iWhgg+kbCPwYxYW45/Od2H1BMdDE2WdSrcnqpOJKIl+eBU8ysotyvd2VYE5vVguGnFEr
+         zyBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=J3vXFpPXGlLbZdZy5pIJRdszv6m+Ytkgy7iGJnPeizo=;
+        b=gzkDN7NovK4pibxjXztVJUmuSco5Av46EzmI3C/bSwrcwgGJqfxtBhHKzSqNkxBYCG
+         3ljJHl33q7qe1qOl8OWzI+DxW2sjc5dvNJ7bVSiIqtyMHDmhPgpVQpP++yYAiWjV+6nd
+         NUbgGlpK3FkvN+2NwKGlkCULuOEndIT5iIPpqUtTtYBeqBMMTMBkAxaYXZy3qAFgl7tD
+         XNbrsCe94/SABvZhO7VblWq0fkib9wQXhNN7JZewOjtGkF0+zMtmr9oqGuRUmLHpVDVl
+         JsXzgR73FcOCgIbyNh6jQQxUiNqaHBVVQUoHWylfEHpXyPBpr6e7WUtOX970fE+aGFD3
+         lxnA==
+X-Gm-Message-State: AOAM531+JLIpFykJ4GOkHlvVevSkFUyIbrGhhbwPqp3o1XeeM+klGHIj
+        GHYr7Y5N7tOEn0sDDYsZvJA=
+X-Google-Smtp-Source: ABdhPJzGZCwD0bnPbSsijlE3SmIzGkLeVQ7WwrR35HkYHR9AkP80QN7Q8MJBF2+0bWm+AbVZLqYWQw==
+X-Received: by 2002:a17:902:f68e:b0:15c:4367:d1a0 with SMTP id l14-20020a170902f68e00b0015c4367d1a0mr35786022plg.164.1651242111710;
+        Fri, 29 Apr 2022 07:21:51 -0700 (PDT)
+Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:37:e92b:c72c:d971:a866])
+        by smtp.gmail.com with ESMTPSA id d16-20020a056a00245000b004f7728a4346sm3544650pfj.79.2022.04.29.07.21.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 07:21:51 -0700 (PDT)
+From:   Tianyu Lan <ltykernel@gmail.com>
+To:     hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        michael.h.kelley@microsoft.com, kys@microsoft.com
+Cc:     Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        vkuznets@redhat.com, brijesh.singh@amd.com, konrad.wilk@oracle.com,
+        hch@lst.de, wei.liu@kernel.org, parri.andrea@gmail.com,
+        thomas.lendacky@amd.com, linux-hyperv@vger.kernel.org,
+        andi.kleen@intel.com, kirill.shutemov@intel.com
+Subject: [RFC PATCH] swiotlb: Add Child IO TLB mem support
+Date:   Fri, 29 Apr 2022 10:21:47 -0400
+Message-Id: <20220429142147.1725184-1-ltykernel@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <e7b644f0-6c90-fe99-792d-75c38505dc54@arm.com>
+References: <e7b644f0-6c90-fe99-792d-75c38505dc54@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 13/21] x86/virt/tdx: Allocate and set up PAMTs for
- TDMRs
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-References: <cover.1649219184.git.kai.huang@intel.com>
- <ffc2eefdd212a31278978e8bfccd571355db69b0.1649219184.git.kai.huang@intel.com>
- <c9b17e50-e665-3fc6-be8c-5bb16afa784e@intel.com>
- <3664ab2a8e0b0fcbb4b048b5c3aa5a6e85f9618a.camel@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <3664ab2a8e0b0fcbb4b048b5c3aa5a6e85f9618a.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,110 +75,207 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/29/22 00:46, Kai Huang wrote:
-> On Thu, 2022-04-28 at 10:12 -0700, Dave Hansen wrote:
->> This is also a good place to note the downsides of using
->> alloc_contig_pages().
-> 
-> For instance:
-> 
-> 	The allocation may fail when memory usage is under pressure.
+From: Tianyu Lan <Tianyu.Lan@microsoft.com>
 
-It's not really memory pressure, though.  The larger the allocation, the
-more likely it is to fail.  The more likely it is that the kernel can't
-free the memory or that if you need 1GB of contiguous memory that
-999.996MB gets freed, but there is one stubborn page left.
+Traditionally swiotlb was not performance critical because it was only
+used for slow devices. But in some setups, like TDX/SEV confidential
+guests, all IO has to go through swiotlb. Currently swiotlb only has a
+single lock. Under high IO load with multiple CPUs this can lead to
+significant lock contention on the swiotlb lock.
 
-alloc_contig_pages() can and will fail.  The only mitigation which is
-guaranteed to avoid this is doing the allocation at boot.  But, you're
-not doing that to avoid wasting memory on every TDX system that doesn't
-use TDX.
+This patch adds child IO TLB mem support to resolve spinlock overhead
+among device's queues. Each device may allocate IO tlb mem and setup
+child IO TLB mem according to queue number. Swiotlb code allocates
+bounce buffer among child IO tlb mem iterately.
 
-A *good* way (although not foolproof) is to launch a TDX VM early in
-boot before memory gets fragmented or consumed.  You might even want to
-recommend this in the documentation.
+Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
+---
+ include/linux/swiotlb.h |  7 +++
+ kernel/dma/swiotlb.c    | 96 ++++++++++++++++++++++++++++++++++++-----
+ 2 files changed, 93 insertions(+), 10 deletions(-)
 
->>> +/*
->>> + * Locate the NUMA node containing the start of the given TDMR's first
->>> + * RAM entry.  The given TDMR may also cover memory in other NUMA nodes.
->>> + */
->>
->> Please add a sentence or two on the implications here of what this means
->> when it happens.  Also, the joining of e820 regions seems like it might
->> span NUMA nodes.  What prevents that code from just creating one large
->> e820 area that leads to one large TDMR and horrible NUMA affinity for
->> these structures?
-> 
-> How about adding:
-> 
-> 	When TDMR is created, it stops spanning at NUAM boundary.
+diff --git a/include/linux/swiotlb.h b/include/linux/swiotlb.h
+index 7ed35dd3de6e..4a3f6a7b4b7e 100644
+--- a/include/linux/swiotlb.h
++++ b/include/linux/swiotlb.h
+@@ -89,6 +89,9 @@ extern enum swiotlb_force swiotlb_force;
+  * @late_alloc:	%true if allocated using the page allocator
+  * @force_bounce: %true if swiotlb bouncing is forced
+  * @for_alloc:  %true if the pool is used for memory allocation
++ * @child_nslot:The number of IO TLB slot in the child IO TLB mem.
++ * @num_child:  The child io tlb mem number in the pool.
++ * @child_start:The child index to start searching in the next round.
+  */
+ struct io_tlb_mem {
+ 	phys_addr_t start;
+@@ -102,6 +105,10 @@ struct io_tlb_mem {
+ 	bool late_alloc;
+ 	bool force_bounce;
+ 	bool for_alloc;
++	unsigned int num_child;
++	unsigned int child_nslot;
++	unsigned int child_start;
++	struct io_tlb_mem *child;
+ 	struct io_tlb_slot {
+ 		phys_addr_t orig_addr;
+ 		size_t alloc_size;
+diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
+index e2ef0864eb1e..382fa2288645 100644
+--- a/kernel/dma/swiotlb.c
++++ b/kernel/dma/swiotlb.c
+@@ -207,6 +207,25 @@ static void swiotlb_init_io_tlb_mem(struct io_tlb_mem *mem, phys_addr_t start,
+ 		mem->force_bounce = true;
+ 
+ 	spin_lock_init(&mem->lock);
++
++	if (mem->num_child) {
++		mem->child_nslot = nslabs / mem->num_child;
++		mem->child_start = 0;
++
++		/*
++		 * Initialize child IO TLB mem, divide IO TLB pool
++		 * into child number. Reuse parent mem->slot in the
++		 * child mem->slot.  
++		 */
++		for (i = 0; i < mem->num_child; i++) {
++			mem->num_child = 0;
++			mem->child[i].slots = mem->slots + i * mem->child_nslot;
++			swiotlb_init_io_tlb_mem(&mem->child[i],
++				start + ((i * mem->child_nslot) << IO_TLB_SHIFT),
++				mem->child_nslot, late_alloc);
++		}
++	}
++
+ 	for (i = 0; i < mem->nslabs; i++) {
+ 		mem->slots[i].list = IO_TLB_SEGSIZE - io_tlb_offset(i);
+ 		mem->slots[i].orig_addr = INVALID_PHYS_ADDR;
+@@ -336,16 +355,18 @@ int swiotlb_init_late(size_t size, gfp_t gfp_mask,
+ 
+ 	mem->slots = (void *)__get_free_pages(GFP_KERNEL | __GFP_ZERO,
+ 		get_order(array_size(sizeof(*mem->slots), nslabs)));
+-	if (!mem->slots) {
+-		free_pages((unsigned long)vstart, order);
+-		return -ENOMEM;
+-	}
++	if (!mem->slots)
++		goto error_slots;
+ 
+ 	set_memory_decrypted((unsigned long)vstart, bytes >> PAGE_SHIFT);
+ 	swiotlb_init_io_tlb_mem(mem, virt_to_phys(vstart), nslabs, true);
+ 
+ 	swiotlb_print_info();
+ 	return 0;
++
++error_slots:
++	free_pages((unsigned long)vstart, order);
++	return -ENOMEM;
+ }
+ 
+ void __init swiotlb_exit(void)
+@@ -483,10 +504,11 @@ static unsigned int wrap_index(struct io_tlb_mem *mem, unsigned int index)
+  * Find a suitable number of IO TLB entries size that will fit this request and
+  * allocate a buffer from that IO TLB pool.
+  */
+-static int swiotlb_find_slots(struct device *dev, phys_addr_t orig_addr,
+-			      size_t alloc_size, unsigned int alloc_align_mask)
++static int swiotlb_do_find_slots(struct io_tlb_mem *mem,
++				 struct device *dev, phys_addr_t orig_addr,
++				 size_t alloc_size,
++				 unsigned int alloc_align_mask)
+ {
+-	struct io_tlb_mem *mem = dev->dma_io_tlb_mem;
+ 	unsigned long boundary_mask = dma_get_seg_boundary(dev);
+ 	dma_addr_t tbl_dma_addr =
+ 		phys_to_dma_unencrypted(dev, mem->start) & boundary_mask;
+@@ -565,6 +587,46 @@ static int swiotlb_find_slots(struct device *dev, phys_addr_t orig_addr,
+ 	return index;
+ }
+ 
++static int swiotlb_find_slots(struct device *dev, phys_addr_t orig_addr,
++			      size_t alloc_size, unsigned int alloc_align_mask)
++{
++	struct io_tlb_mem *mem = dev->dma_io_tlb_mem;
++	struct io_tlb_mem *child_mem = mem;
++	int start = 0, i = 0, index;
++
++	if (mem->num_child) {
++		i = start = mem->child_start;
++		mem->child_start = (mem->child_start + 1) % mem->num_child;
++		child_mem = mem->child;
++	}
++
++	do {
++		index = swiotlb_do_find_slots(child_mem + i, dev, orig_addr,
++					      alloc_size, alloc_align_mask);
++		if (index >= 0)
++			return i * mem->child_nslot + index;
++		if (++i >= mem->num_child)
++			i = 0;
++	} while (i != start);
++
++	return -1;
++}
++
++static unsigned long mem_used(struct io_tlb_mem *mem)
++{
++	int i;
++	unsigned long used = 0;
++
++	if (mem->num_child) {
++		for (i = 0; i < mem->num_child; i++)
++			used += mem->child[i].used;
++	} else {
++		used = mem->used;
++	}
++
++	return used;
++}
++
+ phys_addr_t swiotlb_tbl_map_single(struct device *dev, phys_addr_t orig_addr,
+ 		size_t mapping_size, size_t alloc_size,
+ 		unsigned int alloc_align_mask, enum dma_data_direction dir,
+@@ -594,7 +656,7 @@ phys_addr_t swiotlb_tbl_map_single(struct device *dev, phys_addr_t orig_addr,
+ 		if (!(attrs & DMA_ATTR_NO_WARN))
+ 			dev_warn_ratelimited(dev,
+ 	"swiotlb buffer is full (sz: %zd bytes), total %lu (slots), used %lu (slots)\n",
+-				 alloc_size, mem->nslabs, mem->used);
++				     alloc_size, mem->nslabs, mem_used(mem));
+ 		return (phys_addr_t)DMA_MAPPING_ERROR;
+ 	}
+ 
+@@ -617,9 +679,9 @@ phys_addr_t swiotlb_tbl_map_single(struct device *dev, phys_addr_t orig_addr,
+ 	return tlb_addr;
+ }
+ 
+-static void swiotlb_release_slots(struct device *dev, phys_addr_t tlb_addr)
++static void swiotlb_do_release_slots(struct io_tlb_mem *mem,
++				     struct device *dev, phys_addr_t tlb_addr)
+ {
+-	struct io_tlb_mem *mem = dev->dma_io_tlb_mem;
+ 	unsigned long flags;
+ 	unsigned int offset = swiotlb_align_offset(dev, tlb_addr);
+ 	int index = (tlb_addr - offset - mem->start) >> IO_TLB_SHIFT;
+@@ -660,6 +722,20 @@ static void swiotlb_release_slots(struct device *dev, phys_addr_t tlb_addr)
+ 	spin_unlock_irqrestore(&mem->lock, flags);
+ }
+ 
++static void swiotlb_release_slots(struct device *dev, phys_addr_t tlb_addr)
++{
++	struct io_tlb_mem *mem = dev->dma_io_tlb_mem;
++	int index, offset;
++
++	if (mem->num_child) {
++		offset = swiotlb_align_offset(dev, tlb_addr);	
++		index = (tlb_addr - offset - mem->start) >> IO_TLB_SHIFT;
++		mem = &mem->child[index / mem->child_nslot];
++	}
++
++	swiotlb_do_release_slots(mem, dev, tlb_addr);
++}
++
+ /*
+  * tlb_addr is the physical address of the bounce buffer to unmap.
+  */
+-- 
+2.25.1
 
-I actually don't know what that means at all.  I was thinking of
-something like this.
-
-/*
- * Pick a NUMA node on which to allocate this TDMR's metadata.
- *
- * This is imprecise since TDMRs are 1GB aligned and NUMA nodes might
- * not be.  If the TDMR covers more than one node, just use the _first_
- * one.  This can lead to small areas of off-node metadata for some
- * memory.
- */
-
->>> +static int tdmr_get_nid(struct tdmr_info *tdmr)
->>> +{
->>> +	u64 start, end;
->>> +	int i;
->>> +
->>> +	/* Find the first RAM entry covered by the TDMR */
-
-There's something else missing in here.  Why not just do:
-
-	return phys_to_target_node(TDMR_START(tdmr));
-
-This would explain it:
-
-	/*
-	 * The beginning of the TDMR might not point to RAM.
-	 * Find its first RAM address which which its node can
-	 * be found.
-	 */
-
->>> +	e820_for_each_mem(i, start, end)
->>> +		if (end > TDMR_START(tdmr))
->>> +			break;
->>
->> Brackets around the big loop, please.
-> 
-> OK.
-> 
->>
->>> +	/*
->>> +	 * One TDMR must cover at least one (or partial) RAM entry,
->>> +	 * otherwise it is kernel bug.  WARN_ON() in this case.
->>> +	 */
->>> +	if (WARN_ON_ONCE((start >= end) || start >= TDMR_END(tdmr)))
->>> +		return 0;
-
-This really means "no RAM found for this TDMR", right?  Can we say that,
-please.
-
-
->>> +	/*
->>> +	 * Allocate one chunk of physically contiguous memory for all
->>> +	 * PAMTs.  This helps minimize the PAMT's use of reserved areas
->>> +	 * in overlapped TDMRs.
->>> +	 */
->>
->> Ahh, this explains it.  Considering that tdmr_get_pamt_sz() is really
->> just two lines of code, I'd probably just the helper and open-code it
->> here.  Then you only have one place to comment on it.
-> 
-> It has a loop and internally calls __tdmr_get_pamt_sz().  It looks doesn't fit
-> if we open-code it here.
-> 
-> How about move this comment to tdmr_get_pamt_sz()?
-
-I thought about that.  But tdmr_get_pamt_sz() isn't itself doing any
-allocation so it doesn't make a whole lot of logical sense.  This is a
-place where a helper _can_ be removed.  Remove it, please.

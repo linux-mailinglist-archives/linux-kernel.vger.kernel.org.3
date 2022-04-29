@@ -2,79 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64FBD514CF9
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF4CB514D15
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377373AbiD2OeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 10:34:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35836 "EHLO
+        id S1377152AbiD2Oee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 10:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377389AbiD2Odz (ORCPT
+        with ESMTP id S1377467AbiD2Oe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 10:33:55 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94DD3F7A
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:30:36 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id j8so7278560pll.11
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:30:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=OnYazrMvgjAnK39Hwy/HWHAyF1qxYkIiwXZn1EY9XSk=;
-        b=UMUIQSPWcLSx8MA2om6Gv5iUt7MrgelgAhKlFugl76vVYAQGPwqRKwwHcfQ+b5VK73
-         HiN0r1ku46T2ATBuu0T8FBelYeZbpLetOcbZl/WeU2tOeEgbHe45Y0Zs/Lhgni8cqSzY
-         iHhY4v8CMUD9lTZ+zxhMlBDZowBCbw+6kbimf1H98jOyhE8jmBz/3SC0UQONAnjZqkWZ
-         IrRjBjnktRSJO2hc3rcC159T7nLvNfTmz8JWq4t79pvRFFlf9DQtYW0TsFu5LKYScifI
-         05fGmZYs3Y+i2TS1skz/WaOR6iLZOgUVzWkvm9XN/YZ8SP2m2ZLltJu8oJyIu+bGkxyx
-         TrKw==
+        Fri, 29 Apr 2022 10:34:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B18997E589
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:30:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651242657;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=otC9DXNrumV9ADnWdC4KITC7tB4toV2wezmUxcguZqs=;
+        b=iIpTW8c+IrAmZiLgvhgvLC3mb29eFN1q7VSexrN6z5BH/3BiGnkOeAYf8D35LH0Zbi8W+l
+        nC4JGVvXvrduiS2aX7QcspMZlMjRwXvDJHutD71KIl5iZGLLDI3ClaRVqavfBB7XuVzdC9
+        7TWOLS4nBwkaKsc5i8zOHD4Xza0xqEI=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-57-Q5Cu1JIQPj6TVWVVj8lgDw-1; Fri, 29 Apr 2022 10:30:54 -0400
+X-MC-Unique: Q5Cu1JIQPj6TVWVVj8lgDw-1
+Received: by mail-ed1-f70.google.com with SMTP id w8-20020a50d788000000b00418e6810364so4581120edi.13
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 07:30:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OnYazrMvgjAnK39Hwy/HWHAyF1qxYkIiwXZn1EY9XSk=;
-        b=3JQgdyeQpiWU5kZzN1ebTbqdce1tNpIwUCuc+FYTxE+VeMP4zXyo6qt/Q1J4Wr8S28
-         Qfpt5fYteQx0U5Ry2bBq1ZDr2qxSI0EOFHGKd5Cj8qxifnPl9U9uNEV9fvNJHsHdpdAi
-         tH6LoqicZ8r38kHjAtVsn3CE0LNf+2tmO7fbZl1I69Cw/uRZMX3iMkG73MQyrqccGJKu
-         oY7UwFj+8LUJ2mTvhoNU6KvcwywbaPVwayXFN1SzwZVuCJBtdYILN4UM4MDvW4gvPpdT
-         FN+qy6E9OFW7t0ePv74jnlXk3jRNkTYZWbM48Zwb+PKroL7ZPnzMHOJEKiOKA4LTIfv4
-         Cqqw==
-X-Gm-Message-State: AOAM532+dMRgS8vgksKI6mbkGfVcTGs2o0EJ6oVrUAd70MQRbRJ5h6Tk
-        B5S880qSVb4NiCq6AAsFn+L3qg==
-X-Google-Smtp-Source: ABdhPJxx/6q4M5pQVLbiOxgKSk5/1UctrLuzMw5GpFLW1mpeAjQfc3C8juCbrpDJZpT7k1eEH3K+kA==
-X-Received: by 2002:a17:90a:d082:b0:1ca:be58:c692 with SMTP id k2-20020a17090ad08200b001cabe58c692mr4274403pju.238.1651242635899;
-        Fri, 29 Apr 2022 07:30:35 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id z21-20020a631915000000b003c14af5062dsm5628933pgl.69.2022.04.29.07.30.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 07:30:35 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 14:30:31 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-Subject: Re: [PATCH v3 13/21] x86/virt/tdx: Allocate and set up PAMTs for
- TDMRs
-Message-ID: <Ymv2h1GYCMQ9ZQvJ@google.com>
-References: <cover.1649219184.git.kai.huang@intel.com>
- <ffc2eefdd212a31278978e8bfccd571355db69b0.1649219184.git.kai.huang@intel.com>
- <c9b17e50-e665-3fc6-be8c-5bb16afa784e@intel.com>
- <3664ab2a8e0b0fcbb4b048b5c3aa5a6e85f9618a.camel@intel.com>
- <5984b61f-6a4a-c12a-944d-f4a78bdefc3d@intel.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=otC9DXNrumV9ADnWdC4KITC7tB4toV2wezmUxcguZqs=;
+        b=leH2VgFjf5vMpwrm303R2d1UXJgVibJyTNtrezwZKlXxcGpDhKQkiCc/H+InwR80gs
+         C/loOz5sDorU/E/I9obUIZ6lZCmXo76nsNPLedgjGKdN9LzCCMiuv6jNrrGUXHNp13U1
+         OC2mjQJigxbfp1XMWcnCBahV+noXb2fzBp1usd4nF2rHm4zVQX/izGeKwBYMhyE4Du32
+         i0ax+MDva8XtxygrWIO0W5Eh2KUTyvtw5stDVQ3kY7PyXug6YxornL8bymBA+IpfjRqZ
+         LmuNkE3pxzSWi/x5DajKTsbG/d8wmDtD+J+PCMbTaK3l9YIbAUX0QOei7NMgLYvNDFa1
+         XLJA==
+X-Gm-Message-State: AOAM531YW8N2mX3662yOSKsR5fX+D/rzwKBNwoE7ye5hTRH4SqrVvacC
+        jH5NmxO10NM8W8iJPuUMJDMdnCTHpatzyDIazu5kb/njflXDE/yvhMVQEPAayUjVw6M6c4yvecJ
+        d7wAwIUNJ5JfRqIasNWnuc1tr
+X-Received: by 2002:a17:907:d22:b0:6f4:7bb:d53e with SMTP id gn34-20020a1709070d2200b006f407bbd53emr1081146ejc.251.1651242653361;
+        Fri, 29 Apr 2022 07:30:53 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxm48FH0VCEF+U8tQQMoFCKag5I+XS0/Sr4pcNWpDjj1rw/mFVrxKOCL2YGjUjrZbOhl4tPOA==
+X-Received: by 2002:a17:907:d22:b0:6f4:7bb:d53e with SMTP id gn34-20020a1709070d2200b006f407bbd53emr1081133ejc.251.1651242653161;
+        Fri, 29 Apr 2022 07:30:53 -0700 (PDT)
+Received: from [192.168.0.205] (host-95-246-22-34.retail.telecomitalia.it. [95.246.22.34])
+        by smtp.gmail.com with ESMTPSA id rb48-20020a170907693000b006f3ef214e10sm707940ejc.118.2022.04.29.07.30.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 07:30:52 -0700 (PDT)
+Message-ID: <e5931289-fd8c-c4d9-5ec3-c2c9edb1d2c6@redhat.com>
+Date:   Fri, 29 Apr 2022 16:30:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5984b61f-6a4a-c12a-944d-f4a78bdefc3d@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3 2/2] sched/deadline: Remove superfluous rq clock update
+ in push_dl_task()
+Content-Language: en-US
+To:     Hao Jia <jiahao.os@bytedance.com>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de
+Cc:     linux-kernel@vger.kernel.org
+References: <20220427080014.18483-1-jiahao.os@bytedance.com>
+ <20220427080014.18483-3-jiahao.os@bytedance.com>
+From:   Daniel Bristot de Oliveira <bristot@redhat.com>
+In-Reply-To: <20220427080014.18483-3-jiahao.os@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,33 +85,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022, Dave Hansen wrote:
-> On 4/29/22 00:46, Kai Huang wrote:
-> > On Thu, 2022-04-28 at 10:12 -0700, Dave Hansen wrote:
-> >> This is also a good place to note the downsides of using
-> >> alloc_contig_pages().
-> > 
-> > For instance:
-> > 
-> > 	The allocation may fail when memory usage is under pressure.
+On 4/27/22 10:00, Hao Jia wrote:
+> The change to call update_rq_clock() before activate_task()
+> commit 840d719604b0 ("sched/deadline: Update rq_clock of later_rq
+> when pushing a task") is no longer needed since commit f4904815f97a
+> ("sched/deadline: Fix double accounting of rq/running bw in push & pull")
+> removed the add_running_bw() before the activate_task().
 > 
-> It's not really memory pressure, though.  The larger the allocation, the
-> more likely it is to fail.  The more likely it is that the kernel can't
-> free the memory or that if you need 1GB of contiguous memory that
-> 999.996MB gets freed, but there is one stubborn page left.
+> So we remove some comments that are no longer needed and update
+> rq clock in activate_task().
 > 
-> alloc_contig_pages() can and will fail.  The only mitigation which is
-> guaranteed to avoid this is doing the allocation at boot.  But, you're
-> not doing that to avoid wasting memory on every TDX system that doesn't
-> use TDX.
-> 
-> A *good* way (although not foolproof) is to launch a TDX VM early in
-> boot before memory gets fragmented or consumed.  You might even want to
-> recommend this in the documentation.
+> Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
+> Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
 
-What about providing a kernel param to tell the kernel to do the allocation during
-boot?  Or maybe a sysfs knob to reserve/free the memory, a la nr_overcommit_hugepages?
+Reviewed-by: Daniel Bristot de Oliveira <bristot@redhat.com>
 
-I suspect that most/all deployments that actually want to use TDX would much prefer
-to eat the overhead if TDX VMs are never scheduled on the host, as opposed to having
-to deal with a host in a TDX pool not actually being able to run TDX VMs.
+-- Daniel
+

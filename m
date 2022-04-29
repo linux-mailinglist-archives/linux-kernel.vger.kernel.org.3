@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E977514710
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC3CC51470B
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357709AbiD2Kp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 06:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57426 "EHLO
+        id S1357724AbiD2Kpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 06:45:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357662AbiD2KpF (ORCPT
+        with ESMTP id S1357650AbiD2KpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 06:45:05 -0400
+        Fri, 29 Apr 2022 06:45:06 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E227C6EEE;
-        Fri, 29 Apr 2022 03:41:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F66DC74A0;
+        Fri, 29 Apr 2022 03:41:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1651228904; x=1682764904;
+  t=1651228909; x=1682764909;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=yQ9QYB2JjFXnMYslA5NperKokygkNZy0pzOs2BM201E=;
-  b=X02XlPlA5FCJoKGNVJOhCr58uNih96SMTDhXir9hi+0guSpq4MEh5eiJ
-   bYisYvETpO2vfAZvd8AxwTw2JDzwnk1pYxGB72Y5ZmyNdhSqelVy7+L/T
-   uVqX5njEATuW7052xR433RKcGTnn5FirOPe1dNFmaAhyYRbvfQV6rHVjn
-   +QGgSJ/1LtIJPS5N7IvDcJCa6+ubytJCskr4ISEniYuXVEZEP5ytx0ggy
-   RsosKxIDkA2c8BlcXssjOxpebr0h+KLgJx0il5/d7H7uJCKPoA1xHxq4Z
-   OKM6vk1BAvTGNi70ZH9O4ozlh5cmT4TXK+CUnshsCSUpTFQNEr0CJ2AlR
-   Q==;
+  bh=2K4Cj/6H3P1EYlVHdrvWMRjc7qbuEecaire9pzMT7ws=;
+  b=sTSsVMottt1PInuvl1U8n0oyt8lf8RjGV44VCgl+NUExwNeBQyYBD+4U
+   P6nfSoInyzS5+idHLi7kxhyvJkSvM0+CK/OW5hLmndnLdXslJ9NiGaEtU
+   y3QD+AeRhnClzyApMzcDBYd+oQjVyFOPJjD0mj7MOtA55afQDB3ZdhVz6
+   79KX2Gqtob4GCGsE7Tjxk4ResWiuZ7Rw4ThJDSzJ5VDoOhGSCZ1PKTa+R
+   LX2zYECMeBWf5xQxetBGFOTJggBakPG69fv+5LTcpzzx0Hl0DhfTbNTmu
+   wekV3+rNQzX3zZ9fNlsw2/p+GCP+NkWXQ6yhGwqT+kThxMa2JIhRNpZi2
+   A==;
 X-IronPort-AV: E=Sophos;i="5.91,298,1647327600"; 
-   d="scan'208";a="171406907"
+   d="scan'208";a="161799776"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Apr 2022 03:41:43 -0700
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Apr 2022 03:41:48 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Fri, 29 Apr 2022 03:41:43 -0700
+ 15.1.2375.17; Fri, 29 Apr 2022 03:41:46 -0700
 Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
  (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Fri, 29 Apr 2022 03:41:41 -0700
+ Transport; Fri, 29 Apr 2022 03:41:44 -0700
 From:   Conor Dooley <conor.dooley@microchip.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -51,9 +51,9 @@ CC:     Paul Walmsley <paul.walmsley@sifive.com>,
         Cyril Jean <Cyril.Jean@microchip.com>,
         <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, "Arnd Bergmann" <arnd@arndb.de>
-Subject: [PATCH v1 6/8] dt-bindings: vendor-prefixes: add Sundance DSP
-Date:   Fri, 29 Apr 2022 11:40:39 +0100
-Message-ID: <20220429104040.197161-7-conor.dooley@microchip.com>
+Subject: [PATCH v1 7/8] dt-bindings: riscv: microchip: add polarberry compatible string
+Date:   Fri, 29 Apr 2022 11:40:40 +0100
+Message-ID: <20220429104040.197161-8-conor.dooley@microchip.com>
 X-Mailer: git-send-email 2.35.2
 In-Reply-To: <20220429104040.197161-1-conor.dooley@microchip.com>
 References: <20220429104040.197161-1-conor.dooley@microchip.com>
@@ -69,27 +69,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sundance DSP Inc. (https://www.sundancedsp.com/) is a supplier of
-high-performance DSP and FPGA processor boards and I/O modules.
+Add a binding for the Sundance Polarberry board.
 
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ Documentation/devicetree/bindings/riscv/microchip.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 01430973ecec..1d47a38c2a2e 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -1197,6 +1197,8 @@ patternProperties:
-     description: Summit microelectronics
-   "^sunchip,.*":
-     description: Shenzhen Sunchip Technology Co., Ltd
-+  "^sundance,.*":
-+    description: Sundance DSP Inc.
-   "^sunplus,.*":
-     description: Sunplus Technology Co., Ltd.
-   "^SUNW,.*":
+diff --git a/Documentation/devicetree/bindings/riscv/microchip.yaml b/Documentation/devicetree/bindings/riscv/microchip.yaml
+index c9d8fcc7a69e..7f9296991a56 100644
+--- a/Documentation/devicetree/bindings/riscv/microchip.yaml
++++ b/Documentation/devicetree/bindings/riscv/microchip.yaml
+@@ -21,6 +21,7 @@ properties:
+       - items:
+           - enum:
+               - microchip,mpfs-icicle-kit
++              - sundance,polarberry
+           - const: microchip,mpfs
+       - items:
+           - const: microchip,mpfs-icicle-reference-rtlv2203
 -- 
 2.35.2
 

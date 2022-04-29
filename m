@@ -2,174 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFCA75158F1
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 01:24:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 215515158FD
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 01:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381655AbiD2X07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 19:26:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42478 "EHLO
+        id S1381747AbiD2XdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 19:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381502AbiD2X06 (ORCPT
+        with ESMTP id S1381795AbiD2Xc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 19:26:58 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C84BD3ADF
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 16:23:37 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id l6so2008445pls.10
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 16:23:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=TgWk1OrzhJm8KIPseeZpTJ3sK4pPkWoy9iKngLNbReg=;
-        b=gpny65B3540owtoHo6pIiVHUycEUlDOB9gpLH8hucOPahQYLUb/tjUSt6eH0w3zTqk
-         EG6ZvoDr0DuYxBlWpMKXqUCzDu7Tj/q6vSjqpGMrFnkxt02eWpTH7OjwvjjF0yED5qhs
-         NcQz529vZ7+jXOzTypJDfOVxRAGtPZA74vu2MXSvcM5PoJ4DaHOBJogsftOMPAFFZBWI
-         axrUt2P9uuneNICvmmJFg30PZiBDDrA3VpXeKzaThLwIC5KcxQPzbvzSZYryHn4e8bf5
-         ODv0fgSDSA8AraCPnjSA7BRDBYgy3eV1Uu9CpUZl2OJMxvhlqAzJuzjmZDnWRnizePdz
-         CwjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=TgWk1OrzhJm8KIPseeZpTJ3sK4pPkWoy9iKngLNbReg=;
-        b=NRSWwMLfrCpxDNCboAbRnmpgT8/iP5ta9BCWmugSx1mRGTdJxycSo0UCzOfDWQPKJO
-         w3DFOJVmGno66a9/TFm85PzWpBWAtMqpq9NcekdK0mvXke5s/0UOyijQBCez86op8tif
-         /lSN/tZpX44vVfhs02ss0uVyqb9wfflq6eRuBY3xtQnsSX8BvgFkufb7jEC/OJ4K5MbA
-         IwTKjcibF1uGvubCUp/67RCTcsdVRZ+XsSypHki/LM38TCNpYE2LJbTL+60/Epr322Gt
-         wskcTcsZ0zlbg43pBfPuRN3KsVCIX9aN6YT3CPu6Ltu1XlR3qo9QVxtpUcRf071Ueik/
-         95OQ==
-X-Gm-Message-State: AOAM532Eo3vtVPD3LYFE+M00Mg9Fxnz5neKT6kzZ1rnNBoYe2vqBDpNU
-        vqZkvBRNo3nSszUukpcnzg/2zdg+W+EfZQ==
-X-Google-Smtp-Source: ABdhPJz/n9yRO2rPhWkXnmDIx9sJW11Bkd/kppGz2Ol+fVzRbbysIxReW+qaosFI12Kp+4M5dPylfw==
-X-Received: by 2002:a17:902:6ac9:b0:156:a6ae:8806 with SMTP id i9-20020a1709026ac900b00156a6ae8806mr1323364plt.148.1651274616370;
-        Fri, 29 Apr 2022 16:23:36 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id 64-20020a17090a0fc600b001cd4989fedesm15192657pjz.42.2022.04.29.16.23.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 16:23:35 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 23:23:32 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Jon Kohler <jon@nutanix.com>, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Balbir Singh <sblbir@amazon.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH v3] x86/speculation, KVM: only IBPB for
- switch_mm_always_ibpb on vCPU load
-Message-ID: <YmxzdAbzJkvjXSAU@google.com>
-References: <20220422162103.32736-1-jon@nutanix.com>
- <YmwZYEGtJn3qs0j4@zn.tnic>
- <645E4ED5-F6EE-4F8F-A990-81F19ED82BFA@nutanix.com>
- <Ymw9UZDpXym2vXJs@zn.tnic>
- <YmxKqpWFvdUv+GwJ@google.com>
- <YmxRnwSUBIkOIjLA@zn.tnic>
- <Ymxf2Jnmz5y4CHFN@google.com>
- <YmxlHBsxcIy8uYaB@zn.tnic>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YmxlHBsxcIy8uYaB@zn.tnic>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 29 Apr 2022 19:32:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44595CD64A;
+        Fri, 29 Apr 2022 16:29:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 01396B828F1;
+        Fri, 29 Apr 2022 23:29:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B76C4C385A7;
+        Fri, 29 Apr 2022 23:29:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651274977;
+        bh=kZrs/xiAEckX+b0ic9RlGktgTrirB1chaLCHBLfQVEU=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=PF6C0k2AyIDq/f7Vlj67fHL0ychlUlAZzUl24SoNmdpMhrsuwIudm6ngma0FPt04s
+         VFW5aObZKNnlPYEzWlHR82lF5OeLVCQQf4n8lXR3WY9WjLwnUI7C9wtrtD2Ps2Py/N
+         LQ/MeOG76qt0qaeKWGYeI6dhw3mxBrLT16nj+N4R7t/JzLUm0DkH6dWHCibHVm6i1m
+         TtctMYQR4nzkeYXV52UeBG3s2QLKyx5YGx3uKM5iheZIFHTilUqB8awPvQOGeWeu/r
+         CmYPTbeqx77/MoTiaVSeohhVYFEK0l143TxFTVnvh2T93Qu2BhO1Efc7Slbe+h5Jp0
+         eY8po4Jpg2hFA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A15CBF0383D;
+        Fri, 29 Apr 2022 23:29:37 +0000 (UTC)
+Subject: Re: [GIT PULL] Ceph fixes for 5.18-rc5
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220429162632.29934-1-idryomov@gmail.com>
+References: <20220429162632.29934-1-idryomov@gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220429162632.29934-1-idryomov@gmail.com>
+X-PR-Tracked-Remote: https://github.com/ceph/ceph-client.git tags/ceph-for-5.18-rc5
+X-PR-Tracked-Commit-Id: 7acae6183cf37c48b8da48bbbdb78820fb3913f3
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: bd383b8e32f6aab08c9485b1fe86e2e932b1df69
+Message-Id: <165127497765.20495.16396468291637508679.pr-tracker-bot@kernel.org>
+Date:   Fri, 29 Apr 2022 23:29:37 +0000
+To:     Ilya Dryomov <idryomov@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 30, 2022, Borislav Petkov wrote:
-> On Fri, Apr 29, 2022 at 09:59:52PM +0000, Sean Christopherson wrote:
-> > Correct, but KVM also doesn't do IBPB on VM-Exit (or VM-Entry),
-> 
-> Why doesn't it do that? Not needed?
+The pull request you sent on Fri, 29 Apr 2022 18:26:32 +0200:
 
-The host kernel is protected via RETPOLINE and by flushing the RSB immediately
-after VM-Exit.
+> https://github.com/ceph/ceph-client.git tags/ceph-for-5.18-rc5
 
-> > nor does KVM do IBPB before exiting to userspace.
-> 
-> Same question.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/bd383b8e32f6aab08c9485b1fe86e2e932b1df69
 
-I don't know definitively.  My guess is that IBPB is far too costly to do on every
-exit, and so the onus was put on userspace to recompile with RETPOLINE.  What I
-don't know is why it wasn't implemented as an opt-out feature.
+Thank you!
 
-> > The IBPB we want to whack is issued only when KVM is switching vCPUs.
-> 
-> Then please document it properly as I've already requested.
-
-I'll write up the bits I have my head wrapped around.
-
-> > Except that _none_ of that documentation explains why the hell KVM
-> > does IBPB when switching betwen vCPUs.
-> 
-> Probably because the folks involved in those patches weren't the hell
-> mainly virt people. Although I see a bunch of virt people on CC on that
-> patch.
-> 
-> >   : But stepping back, why does KVM do its own IBPB in the first place?  The goal is
-> >   : to prevent one vCPU from attacking the next vCPU run on the same pCPU.  But unless
-> >   : userspace is running multiple VMs in the same process/mm_struct, switching vCPUs,
-> >   : i.e. switching tasks, will also switch mm_structs and thus do IPBP via cond_mitigation.
-> >   :
-> >   : If userspace runs multiple VMs in the same process,
-> 
-> This keeps popping up. Who does that? Can I get a real-life example to
-> such VM-based containers or what the hell that is, pls?
-
-I don't know of any actual examples.  But, it's trivially easy to create multiple
-VMs in a single process, and so proving the negative that no one runs multiple VMs
-in a single address space is essentially impossible.
-
-The container thing is just one scenario I can think of where userspace might
-actually benefit from sharing an address space, e.g. it would allow backing the
-image for large number of VMs with a single set of read-only VMAs.
-
-> > enables cond_ipbp, _and_ sets
-> >   : TIF_SPEC_IB, then it's being stupid and isn't getting full protection in any case,
-> >   : e.g. if userspace is handling an exit-to-userspace condition for two vCPUs from
-> >   : different VMs, then the kernel could switch between those two vCPUs' tasks without
-> >   : bouncing through KVM and thus without doing KVM's IBPB.
-> >   :
-> >   : I can kinda see doing this for always_ibpb, e.g. if userspace is unaware of spectre
-> >   : and is naively running multiple VMs in the same process.
-> 
-> So this needs a clearer definition: what protection are we even talking
-> about when the address spaces of processes are shared? My naïve
-> thinking would be: none. They're sharing address space - branch pred.
-> poisoning between the two is the least of their worries.
-
-I truly have no idea, which is part of the reason I brought it up in the first
-place.  I'd have happily just whacked KVM's IBPB entirely, but it seemed prudent
-to preserve the existing behavior if someone went out of their way to enable
-switch_mm_always_ibpb.
-
-> So to cut to the chase: it sounds to me like you don't want to do IBPB
-> at all on vCPU switch.
-
-Yes, or do it iff switch_mm_always_ibpb is enabled to maintain "compability".
-
-> And the process switch case is taken care of by switch_mm().
-
-Yep.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

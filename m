@@ -2,123 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC2C4514B0C
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 15:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B0A514C25
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:00:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237638AbiD2NyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 09:54:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47750 "EHLO
+        id S1376746AbiD2ODO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 10:03:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376432AbiD2NyH (ORCPT
+        with ESMTP id S1376970AbiD2OBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 09:54:07 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC5F4F447
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 06:50:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651240248; x=1682776248;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=I1IC3ER1bbr2Gmvx8B3VxE2I1iNqvQIOt1Apf8a8gjM=;
-  b=Q+R2uzwBMxC0zni3P1Ice41Jm3MswIW3NLiAtrj/h/bVxDLffWHKH37x
-   /GmWZyDwiXwgHieorh/pXGRqkllXqP2i+C2CfzLONwL2o3dkQu1WNoMRW
-   rR6Cv9gniF1wnz4LA7rz+2hRx9dyWhc5CjhjAjZM25t0iAwC+cXAfYkaq
-   qtywpsJ1HHl3HHUTQ9GJe4/H1ZbDGlCAyCGw4+f5QGt5Nxwqmln7ERifS
-   6I/4ld0N6b7aYp6xhXoWY3f8F8SgmdLlSb9nKspf7Op6ZtpP2rQk+dd7A
-   vOcZV3ntnMyFq5tHmhBihNBjeWFgx1O4s03QsCstOG9cQNGPTwkB7sBGr
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="254034670"
-X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
-   d="scan'208";a="254034670"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 06:50:48 -0700
-X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
-   d="scan'208";a="560349710"
-Received: from fyu1.sc.intel.com ([172.25.103.126])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 06:50:47 -0700
-Date:   Fri, 29 Apr 2022 06:51:17 -0700
-From:   Fenghua Yu <fenghua.yu@intel.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>, robin.murphy@arm.com,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86 <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        iommu <iommu@lists.linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>, zhangfei.gao@linaro.org,
-        Thomas Gleixner <tglx@linutronix.de>, will@kernel.org
-Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
- allocation and free it on mm exit
-Message-ID: <YmvtVRlwVJjStXc0@fyu1.sc.intel.com>
-References: <Yman5hLomw9/c+bi@myrica>
- <76ec6342-0d7c-7c7b-c132-2892e4048fa1@intel.com>
- <YmavoKkVu+hd+x0M@myrica>
- <22b659c7-e972-7a56-2bd7-8df3b4820d4e@intel.com>
- <YmbO/l5IwfBCHrl8@myrica>
- <8c044e49-74bb-df56-8a60-663013c0910e@intel.com>
- <YmgiQZZyFxsJ+9um@myrica>
- <63582490-a794-fd11-0380-44b27cc660b7@intel.com>
- <YmpSv48aPIbVXqGi@myrica>
- <044595e6-e5d0-26c2-af8e-fc9d06906179@linux.intel.com>
+        Fri, 29 Apr 2022 10:01:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A212AD0ABC
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 06:53:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651240330;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z7yAdUCrz3+5dYbONp1SEfIacy2JTP0wdG6m3C5H/Qc=;
+        b=Z5bD2VyfeSdS/rKqNmATSrryDf0H8L5J/FoZjRmgLS0HEzzDHGqnqgTia89Q2cQ3yG3r/a
+        wGb74lDE9UjpmTLj7mZ6/cT2g0qRAzsQAy2Q5z0U5MiUfnQIW41oLDcAWTGLqQZVcl5nYD
+        x1IT7PUy0BswGvTWFesVOmq+NqDKAAg=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-479-J-nLEa4uMom2c614QcyQew-1; Fri, 29 Apr 2022 09:52:08 -0400
+X-MC-Unique: J-nLEa4uMom2c614QcyQew-1
+Received: by mail-ed1-f70.google.com with SMTP id cn27-20020a0564020cbb00b0041b5b91adb5so4555029edb.15
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 06:52:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Z7yAdUCrz3+5dYbONp1SEfIacy2JTP0wdG6m3C5H/Qc=;
+        b=bnoZuVDsidmok10x1+yIOaFtiUt5DtfBGzsrxIrkU/7T93h7IaKvQXns/qcvEPz3+w
+         W2NcBaVKe4plyNKrAQL6xNvGCofI2WZQ2WRTway8zZzpRoCbVqQtNOqXcrRidH/1tfGr
+         wkDW9IZKDkATa1RFqjdYrytW8TFJpYszDqqQ1c3uI4hfUDVVYLd6LxPVX+zm8G2r7W/L
+         RPNk3zrYIzWzbs7yFGT9EN9WHoLukSPhQN8+uudmAx7w2g28RHA3UmIuZokxVyuQ19h6
+         AbUjk98vV1SL1x3sPI5UzjAdRoCjH0OY1qalvdJAJRLmvjHl1NJaBGYxpDG1X8opCQTS
+         rWKQ==
+X-Gm-Message-State: AOAM533dlE74bV2QzseTrbgfFVlvG3c2rALPddk0alxL/KO52WKVu9kA
+        j00gBz+XYt+p4MNmhOXswolPOmy/cBj8bQjaaB8j1oU9WE7alq4XZzfxpI7sNlYTLS74lQH5MG8
+        9AnLZdBXfwCAqt6P5GlEN8CKn
+X-Received: by 2002:a17:907:7ea9:b0:6f3:de9c:c6fb with SMTP id qb41-20020a1709077ea900b006f3de9cc6fbmr7793992ejc.304.1651240327299;
+        Fri, 29 Apr 2022 06:52:07 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwSXo0F7Exss/lylDpZAOA7UHVmHWcGdVTMhJKtTRR6xOlptpLZ9t9BCMS9mrHY58kigon4hg==
+X-Received: by 2002:a17:907:7ea9:b0:6f3:de9c:c6fb with SMTP id qb41-20020a1709077ea900b006f3de9cc6fbmr7793983ejc.304.1651240327113;
+        Fri, 29 Apr 2022 06:52:07 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
+        by smtp.googlemail.com with ESMTPSA id p9-20020a056402074900b0042617ba639dsm2979367edy.39.2022.04.29.06.52.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 06:52:06 -0700 (PDT)
+Message-ID: <ed92111b-3b80-0cde-1821-0a491dee2dcf@redhat.com>
+Date:   Fri, 29 Apr 2022 15:52:02 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <044595e6-e5d0-26c2-af8e-fc9d06906179@linux.intel.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH for-5.18] KVM: fix bad user ABI for KVM_EXIT_SYSTEM_EVENT
+Content-Language: en-US
+To:     Oliver Upton <oupton@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Peter Gonda <pgonda@google.com>,
+        Sean Christopherson <seanjc@google.com>
+References: <20220422103013.34832-1-pbonzini@redhat.com>
+ <Ymtr2mfyujoxLsDR@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Ymtr2mfyujoxLsDR@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Baolu,
+On 4/29/22 06:38, Oliver Upton wrote:
+>> +                        __u64 data[16];
+> This is out of sync with the union { flags; data; } now.
 
-On Fri, Apr 29, 2022 at 03:53:57PM +0800, Baolu Lu wrote:
-> On 2022/4/28 16:39, Jean-Philippe Brucker wrote:
-> > > The address space is what the OOM killer is after.  That gets refcounted
-> > > with mmget()/mmput()/mm->mm_users.  The OOM killer is satiated by the
-> > > page freeing done in __mmput()->exit_mmap().
-> > > 
-> > > Also, all the VMAs should be gone after exit_mmap().  So, even if
-> > > vma->vm_file was holding a reference to a device driver, that reference
-> > > should be gone by the time __mmdrop() is actually freeing the PASID.
-> > 
-> > I agree with all that. The concern was about tearing down the PASID in the
-> > IOMMU and device from the release() MMU notifier, which would happen in
-> > exit_mmap(). But doing the teardown at or before __mmdrop() is fine. And
-> > since the IOMMU drivers need to hold mm->mm_count anyway between bind()
-> > and unbind(), I think Fenghua's fix works.
+Yes, that's intentional.  The flags member is mentioned below:
+
++Previous versions of Linux defined a `flags` member in this struct.  The
++field is now aliased to `data[0]`.  Userspace can assume that it is only
++written if ndata is greater than 0.
+
+but I don't want projects to believe it is different in any way from
+`data[0]`.  In particular, `flags` should also be considered valid only
+if the cap is present (unless crosvm wants ARM to be grandfathered in).
+
+> IMO, we should put a giant disclaimer on all of this to*not*  use the
+> flags field and instead only use data. I imagine we wont want to persist
+> the union forever as it is quite ugly, but necessary.
+
+
+>> +/* #define KVM_CAP_VM_TSC_CONTROL 214 */
 > 
-> But I didn't find mmgrab()/mmdrop() get called in both arm and intel
-> IOMMU drivers.
-> 
-> $ git grep mmgrab drivers/iommu/
-> [no output]
-> 
-> Do we need to add these in a separated fix patch, or I missed anything
-> here?
+> This sticks out a bit. Couldn't the VM TSC control patch just use a
+> different number? It seems that there will be a conflict anyway, if only to
+> delete this comment.
 
-On both ARM and X86, sva_bind() calls mmu_notifier_register()->mmgrab() and
-sva_unbind() calls mmu_notifier_unregister()/mmu_notifier_put()->mmdrop().
+I don't want to change cap numbers once things have landed in
+kvm/next, because that's when userspace projects pick them.
 
-So mm->mm_count are already counted in existing ARM and X86 binding and
-unbinding. The fix patch just frees the PASID in __mmdrop() after
-no more mm->mm_count.
+Paolo
 
-There is no need to add extra  mmgrab() and mmdrop() pair.
-
-Thanks.
-
--Fenghua
-
- 

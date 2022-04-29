@@ -2,117 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E47CF5140A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 04:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7035140A2
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 04:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbiD2C1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 22:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40588 "EHLO
+        id S232154AbiD2Cdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 22:33:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234648AbiD2C0a (ORCPT
+        with ESMTP id S229958AbiD2Cda (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 22:26:30 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 66DC3BC86E
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 19:23:13 -0700 (PDT)
-Received: from [10.180.13.185] (unknown [10.180.13.185])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxGtkMTGtilpcCAA--.12016S3;
-        Fri, 29 Apr 2022 10:23:08 +0800 (CST)
-Subject: Re: [PATCH] mm/swapops: make is_pmd_migration_entry more strict
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        linux-kernel@vger.kernel.org
-References: <1651131333-6386-1-git-send-email-zhanghongchen@loongson.cn>
- <YmrfynZf7bU0Uoys@xz-m1.local>
-From:   Hongchen Zhang <zhanghongchen@loongson.cn>
-Message-ID: <752b59ff-3283-2360-5f16-d75d04c25a8b@loongson.cn>
-Date:   Fri, 29 Apr 2022 10:23:08 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Thu, 28 Apr 2022 22:33:30 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFDB6B07;
+        Thu, 28 Apr 2022 19:30:05 -0700 (PDT)
+X-UUID: 310b0de09e8246c584ee23d3c5cc53a5-20220429
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:4b8a3d3d-174a-45b8-8fd1-f7a649cd2e99,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-INFO: VERSION:1.1.4,REQID:4b8a3d3d-174a-45b8-8fd1-f7a649cd2e99,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:45
+X-CID-META: VersionHash:faefae9,CLOUDID:27c0e4c6-85ee-4ac1-ac05-bd3f1e72e732,C
+        OID:IGNORED,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil,QS:0
+        ,BEC:nil
+X-UUID: 310b0de09e8246c584ee23d3c5cc53a5-20220429
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 762556238; Fri, 29 Apr 2022 10:30:00 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 29 Apr 2022 10:29:59 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 29 Apr 2022 10:29:59 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 29 Apr 2022 10:29:59 +0800
+Message-ID: <077603e4eb613bf4ee2f2639e9af6962cbe2b269.camel@mediatek.com>
+Subject: Re: [PATCH v5 4/4] drm/mediatek: Add MT8186 DSI compatible for
+ mtk_drm_drv.c
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
+        <ck.hu@mediatek.com>
+CC:     <airlied@linux.ie>, <daniel@ffwll.ch>, <matthias.bgg@gmail.com>,
+        <jitao.shi@mediatek.com>, <xinlei.lee@mediatek.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Fri, 29 Apr 2022 10:29:59 +0800
+In-Reply-To: <20220428133753.8348-5-rex-bc.chen@mediatek.com>
+References: <20220428133753.8348-1-rex-bc.chen@mediatek.com>
+         <20220428133753.8348-5-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-In-Reply-To: <YmrfynZf7bU0Uoys@xz-m1.local>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9AxGtkMTGtilpcCAA--.12016S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Aw4xCr13tF1rZrW3Xr48Xrb_yoW8ArW5pa
-        95CFs5Ca1xtr18GFykX3y8tFy5Z3y5Wr42qrW8ury0yF9xtrn2qw1vqry2grykAr48CFWU
-        ua13ta45Ca4DZFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUv2b7Iv0xC_Zr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
-        vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
-        Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVW8JV
-        WxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG
-        8wCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r12
-        6r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa
-        7IU86VbDUUUUU==
-X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/29 上午2:41, Peter Xu wrote:
-> On Thu, Apr 28, 2022 at 03:35:33PM +0800, Hongchen Zhang wrote:
->> a pmd migration entry should first be a swap pmd,so
->> use is_swap_pmd(pmd) instead of !pmd_present(pmd).
->>
->> On the other hand, some architecture (MIPS for example)
->> may misjudge a pmd_none entry as a pmd migration entry.
->>
->> Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
+On Thu, 2022-04-28 at 21:37 +0800, Rex-BC Chen wrote:
+> The compatible "mediatek,mt8186-dsi" is used by MT8186 DSI, so
+> add it to mtk_ddp_comp_dt_ids in mtk_drm_drv.c.
 > 
-> The change looks reasonable,
+> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_drm_drv.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> Acked-by: Peter Xu <peterx@redhat.com>
-> 
-> Two more pure questions..
-> 
->    (1) is there a real issue to be fixed with it?  Asked because I see most
->        calls to is_pmd_migration_entry() should already make sure it's not
->        none, and,
-> 
->    (2) why it matters with MIPS?  Firstly this function is not used in arch
->        specific code, and iiuc thp migration is not enabled at all for mips.
-> 
-> Thanks,
-> 
->> ---
->>   include/linux/swapops.h | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/include/linux/swapops.h b/include/linux/swapops.h
->> index d356ab4..1d16569 100644
->> --- a/include/linux/swapops.h
->> +++ b/include/linux/swapops.h
->> @@ -304,7 +304,7 @@ static inline pmd_t swp_entry_to_pmd(swp_entry_t entry)
->>   
->>   static inline int is_pmd_migration_entry(pmd_t pmd)
->>   {
->> -	return !pmd_present(pmd) && is_migration_entry(pmd_to_swp_entry(pmd));
->> +	return is_swap_pmd(pmd) && is_migration_entry(pmd_to_swp_entry(pmd));
->>   }
->>   #else
->>   static inline void set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
->> -- 
->> 1.8.3.1
->>
-> 
-Hello Peter,
-   (1) the pmd passed to __split_huge_pmd_locked may be a none pmd,so it 
-may be wrongly treated as a pmd migration entry.
-   (2) we are preparing to support thp migration on MIPS.
+> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> index 6abe6bcacbdc..0104283767ad 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
+> @@ -544,6 +544,8 @@ static const struct of_device_id
+> mtk_ddp_comp_dt_ids[] = {
+>  	  .data = (void *)MTK_DSI },
+>  	{ .compatible = "mediatek,mt8183-dsi",
+>  	  .data = (void *)MTK_DSI },
+> +	{ .compatible = "mediatek,mt8186-dsi",
+> +	  .data = (void *)MTK_DSI },
+>  	{ }
+>  };
+>  
 
-Thanks.
+Hello CK,
+
+Sorry that I forget to mention this series is based on your branch
+"mediatek-drm-next"
+
+BRs,
+Rex
 

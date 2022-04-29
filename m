@@ -2,263 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88EB251544A
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 21:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B8AE515469
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 21:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380237AbiD2TVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 15:21:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37410 "EHLO
+        id S238694AbiD2T3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 15:29:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237522AbiD2TVA (ORCPT
+        with ESMTP id S234368AbiD2T3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 15:21:00 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A1041FAD;
-        Fri, 29 Apr 2022 12:17:40 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id x33so15747634lfu.1;
-        Fri, 29 Apr 2022 12:17:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=XcJewk131Nd463Vs+g3KY8Ye0plJDqJlnu99DciXENY=;
-        b=Ao2DTWWgNWhqlZ5g4JZt6z6nIIV3nwRQDJjtKCvXqMM8brGdFiOnzbuG6DE6HD9Q3R
-         shmLGN6pJINTqvRGZnSTBbLCvUvUSCu+GogJKA5IzH4AYL/DmJzETpzz6lRrlfbgBWI0
-         9JWz3rtqLWQnRDzYg1VXv3ZC67dZqiqL+wMh75I+/Jgg5MiL65p5246FtnBi5RaS5TaJ
-         sp+KGmysK11HzTw3dNTD/PCzqtCO6XgltKvqdQq0JKnIT2BvSOo4uYyj0cHNE5CUxlN8
-         7qbQKWw+1Us9xaaDm+yiCqT8AGc8rzCkMIgXzttzdmMmHxvPIoeFe4e6iAdNgbqWGST7
-         qDyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=XcJewk131Nd463Vs+g3KY8Ye0plJDqJlnu99DciXENY=;
-        b=i70jc/5lIg2Xmq1avdMDNLKp5DBNyq5fBXKQwh6r/Y9Z5IO/GOO2oUio08feap3c7F
-         FfjpTZB7MxioUppFS9YTim0Rn3QaS1/tbVTViDN2o6fmsujEGzZwC2YFrHAp+QraLKMk
-         MtAQYhfzVAKX78TEsc1hGBvkSOLeFICjkVyQLWyCSCUZo30KsW/e8L52bp2n+N6NFniJ
-         u6N6Rr0C74k7S6RzGdT1iTmD0dmb/SV4YCI4vu4SY6F36q8bvfe/dMwjvwtUnxk9qbkx
-         dRhxYcj8u6n51wpj2VHNy00CSbKbE2Tp2d8Y46AWmBJql6yhyy1Kdd1iXCzWq33ykOSH
-         gZSQ==
-X-Gm-Message-State: AOAM532/7fyVeozQPwEC/1k5V14bBY1kLQBBl2LSd3NLmx2+ausuAVZW
-        tbT9DJqTbRdMJZGiqm8OwBw=
-X-Google-Smtp-Source: ABdhPJx5mQ7kmdRwb7GYfpJwo6MNK5CFZ8EHsuzhivBmvovVjmxexQacSX4WEvZ23WKGMMkDpd1bxw==
-X-Received: by 2002:a05:6512:1109:b0:472:25d9:d262 with SMTP id l9-20020a056512110900b0047225d9d262mr538829lfg.128.1651259858641;
-        Fri, 29 Apr 2022 12:17:38 -0700 (PDT)
-Received: from [10.0.0.42] (91-159-150-230.elisa-laajakaista.fi. [91.159.150.230])
-        by smtp.gmail.com with ESMTPSA id s3-20020ac25fe3000000b0047255d2111esm3178lfg.77.2022.04.29.12.17.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 12:17:38 -0700 (PDT)
-Message-ID: <a9e1b5ce-861f-021b-b41f-62e5298c11e5@gmail.com>
-Date:   Fri, 29 Apr 2022 22:24:19 +0300
+        Fri, 29 Apr 2022 15:29:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 325BF8164A
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 12:25:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651260357;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=f98T4BJHfJan6nA7b2NKA9Mwn0L7MATFzgHNudByTF0=;
+        b=i51/qOANEsvU70Wr1A5ryCzOfT/75lQUkiew42TBOhEpmNmTLKzCRIQUn0Aca7fq6rehP+
+        kJLqAb7+5Y6zaCNKN3s9Rk4CX6AofjzpxaHIEqz6FcD7wr8TDLb2HoEbcG1oTc0msQ+4fv
+        017LYkv7XPhfJqodkmZtwyEt566Kilw=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-483-XS1Nj7v1OguIBsNbGBb46w-1; Fri, 29 Apr 2022 15:25:53 -0400
+X-MC-Unique: XS1Nj7v1OguIBsNbGBb46w-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 516593834C02;
+        Fri, 29 Apr 2022 19:25:53 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 34E7BC15D70;
+        Fri, 29 Apr 2022 19:25:53 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>
+Subject: [PATCH] KVM: x86: work around QEMU issue with synthetic CPUID leaves
+Date:   Fri, 29 Apr 2022 15:25:53 -0400
+Message-Id: <20220429192553.932611-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>, linux-omap@vger.kernel.org,
-        tony@atomide.com, aaro.koskinen@iki.fi, jmkrzyszt@gmail.com
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Paul Walmsley <paul@pwsan.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Mark Brown <broonie@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-serial@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org
-References: <20220419133723.1394715-1-arnd@kernel.org>
- <20220419133723.1394715-20-arnd@kernel.org>
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
-Subject: Re: [PATCH 19/41] ARM: omap: dma: make usb support optional
-In-Reply-To: <20220419133723.1394715-20-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Synthesizing AMD leaves up to 0x80000021 caused problems with QEMU,
+which assumes the *host* CPUID[0x80000000].EAX is higher or equal
+to what KVM_GET_SUPPORTED_CPUID reports.
 
+This causes QEMU to issue bogus host CPUIDs when preparing the input
+to KVM_SET_CPUID2.  It can even get into an infinite loop, which is
+only terminated by an abort():
 
-On 4/19/22 16:37, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Most of the plat-omap/dma.c code is specific to the USB
-> driver.
+   cpuid_data is full, no space for cpuid(eax:0x8000001d,ecx:0x3e)
 
-The reason is simple: the omap_udc is the only driver which has not been
-ported to DMAengine.
-I had a patch if I recall to convert it, but I don't have a way to test
-it and the omap_udc sets some funky bits for DMA which we can not figure
-out on how to handle.
+To work around this, only synthesize those leaves if 0x8000001d exists
+on the host.  The synthetic 0x80000021 leaf is mostly useful on Zen2,
+which satisfies the condition.
 
-> Hide that code when it is not in use, to make it
-> clearer which parts are actually still required.
+Fixes: f144c49e8c39 ("KVM: x86: synthesize CPUID leaf 0x80000021h if useful")
+Reported-by: Maxim Levitsky <mlevitsk@redhat.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+---
+ arch/x86/kvm/cpuid.c | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
 
-Reviewed-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
-
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  arch/arm/plat-omap/dma.c       | 45 +++++++++++++++++-----------------
->  drivers/usb/gadget/udc/Kconfig |  2 +-
->  include/linux/omap-dma.h       |  5 +++-
->  3 files changed, 27 insertions(+), 25 deletions(-)
-> 
-> diff --git a/arch/arm/plat-omap/dma.c b/arch/arm/plat-omap/dma.c
-> index 700ba9b600e7..b7757864d0aa 100644
-> --- a/arch/arm/plat-omap/dma.c
-> +++ b/arch/arm/plat-omap/dma.c
-> @@ -66,7 +66,6 @@ enum { DMA_CHAIN_STARTED, DMA_CHAIN_NOTSTARTED };
->  
->  static struct omap_system_dma_plat_info *p;
->  static struct omap_dma_dev_attr *d;
-> -static void omap_clear_dma(int lch);
->  static int enable_1510_mode;
->  static u32 errata;
->  
-> @@ -90,19 +89,16 @@ static int omap_dma_reserve_channels;
->  static DEFINE_SPINLOCK(dma_chan_lock);
->  static struct omap_dma_lch *dma_chan;
->  
-> -static inline void disable_lnk(int lch);
-> -static void omap_disable_channel_irq(int lch);
-> -static inline void omap_enable_channel_irq(int lch);
-> -
-> -#ifdef CONFIG_ARCH_OMAP15XX
-> -/* Returns 1 if the DMA module is in OMAP1510-compatible mode, 0 otherwise */
-> -static int omap_dma_in_1510_mode(void)
-> +static inline void omap_disable_channel_irq(int lch)
->  {
-> -	return enable_1510_mode;
-> +	/* disable channel interrupts */
-> +	p->dma_write(0, CICR, lch);
-> +	/* Clear CSR */
-> +	if (dma_omap1())
-> +		p->dma_read(CSR, lch);
-> +	else
-> +		p->dma_write(OMAP2_DMA_CSR_CLEAR_MASK, CSR, lch);
->  }
-> -#else
-> -#define omap_dma_in_1510_mode()		0
-> -#endif
->  
->  #ifdef CONFIG_ARCH_OMAP1
->  static inline void set_gdma_dev(int req, int dev)
-> @@ -169,6 +165,17 @@ void omap_set_dma_priority(int lch, int dst_port, int priority)
->  #endif
->  EXPORT_SYMBOL(omap_set_dma_priority);
->  
-> +#if IS_ENABLED(CONFIG_USB_OMAP)
-> +#ifdef CONFIG_ARCH_OMAP15XX
-> +/* Returns 1 if the DMA module is in OMAP1510-compatible mode, 0 otherwise */
-> +static int omap_dma_in_1510_mode(void)
-> +{
-> +	return enable_1510_mode;
-> +}
-> +#else
-> +#define omap_dma_in_1510_mode()		0
-> +#endif
-> +
->  void omap_set_dma_transfer_params(int lch, int data_type, int elem_count,
->  				  int frame_count, int sync_mode,
->  				  int dma_trigger, int src_or_dst_synch)
-> @@ -418,17 +425,6 @@ static inline void omap_enable_channel_irq(int lch)
->  	p->dma_write(dma_chan[lch].enabled_irqs, CICR, lch);
->  }
->  
-> -static inline void omap_disable_channel_irq(int lch)
-> -{
-> -	/* disable channel interrupts */
-> -	p->dma_write(0, CICR, lch);
-> -	/* Clear CSR */
-> -	if (dma_omap1())
-> -		p->dma_read(CSR, lch);
-> -	else
-> -		p->dma_write(OMAP2_DMA_CSR_CLEAR_MASK, CSR, lch);
-> -}
-> -
->  void omap_disable_dma_irq(int lch, u16 bits)
->  {
->  	dma_chan[lch].enabled_irqs &= ~bits;
-> @@ -473,6 +469,7 @@ static inline void disable_lnk(int lch)
->  	p->dma_write(l, CLNK_CTRL, lch);
->  	dma_chan[lch].flags &= ~OMAP_DMA_ACTIVE;
->  }
-> +#endif
->  
->  int omap_request_dma(int dev_id, const char *dev_name,
->  		     void (*callback)(int lch, u16 ch_status, void *data),
-> @@ -572,6 +569,7 @@ static void omap_clear_dma(int lch)
->  	local_irq_restore(flags);
->  }
->  
-> +#if IS_ENABLED(CONFIG_USB_OMAP)
->  void omap_start_dma(int lch)
->  {
->  	u32 l;
-> @@ -792,6 +790,7 @@ int omap_get_dma_active_status(int lch)
->  	return (p->dma_read(CCR, lch) & OMAP_DMA_CCR_EN) != 0;
->  }
->  EXPORT_SYMBOL(omap_get_dma_active_status);
-> +#endif
->  
->  int omap_dma_running(void)
->  {
-> diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
-> index cee934dce4f0..69394dc1cdfb 100644
-> --- a/drivers/usb/gadget/udc/Kconfig
-> +++ b/drivers/usb/gadget/udc/Kconfig
-> @@ -128,7 +128,7 @@ config USB_GR_UDC
->  
->  config USB_OMAP
->  	tristate "OMAP USB Device Controller"
-> -	depends on ARCH_OMAP1 || (ARCH_OMAP && COMPILE_TEST)
-> +	depends on ARCH_OMAP1
->  	depends on ISP1301_OMAP || !(MACH_OMAP_H2 || MACH_OMAP_H3)
->  	help
->  	   Many Texas Instruments OMAP processors have flexible full
-> diff --git a/include/linux/omap-dma.h b/include/linux/omap-dma.h
-> index 5e228428fda1..07fa58ae9902 100644
-> --- a/include/linux/omap-dma.h
-> +++ b/include/linux/omap-dma.h
-> @@ -299,8 +299,9 @@ extern void omap_set_dma_priority(int lch, int dst_port, int priority);
->  extern int omap_request_dma(int dev_id, const char *dev_name,
->  			void (*callback)(int lch, u16 ch_status, void *data),
->  			void *data, int *dma_ch);
-> -extern void omap_disable_dma_irq(int ch, u16 irq_bits);
->  extern void omap_free_dma(int ch);
-> +#if IS_ENABLED(CONFIG_USB_OMAP)
-> +extern void omap_disable_dma_irq(int ch, u16 irq_bits);
->  extern void omap_start_dma(int lch);
->  extern void omap_stop_dma(int lch);
->  extern void omap_set_dma_transfer_params(int lch, int data_type,
-> @@ -326,6 +327,8 @@ extern void omap_set_dma_dest_burst_mode(int lch,
->  extern dma_addr_t omap_get_dma_src_pos(int lch);
->  extern dma_addr_t omap_get_dma_dst_pos(int lch);
->  extern int omap_get_dma_active_status(int lch);
-> +#endif
-> +
->  extern int omap_dma_running(void);
->  
->  #if IS_ENABLED(CONFIG_FB_OMAP)
-
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index b24ca7f4ed7c..598334ed5fbc 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -1085,12 +1085,21 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
+ 	case 0x80000000:
+ 		entry->eax = min(entry->eax, 0x80000021);
+ 		/*
+-		 * Serializing LFENCE is reported in a multitude of ways,
+-		 * and NullSegClearsBase is not reported in CPUID on Zen2;
+-		 * help userspace by providing the CPUID leaf ourselves.
++		 * Serializing LFENCE is reported in a multitude of ways, and
++		 * NullSegClearsBase is not reported in CPUID on Zen2; help
++		 * userspace by providing the CPUID leaf ourselves.
++		 *
++		 * However, only do it if the host has CPUID leaf 0x8000001d.
++		 * QEMU thinks that it can query the host blindly for that
++		 * CPUID leaf if KVM reports that it supports 0x8000001d or
++		 * above.  The processor merrily returns values from the
++		 * highest Intel leaf which QEMU tries to use as the guest's
++		 * 0x8000001d.  Even worse, this can result in an infinite
++		 * loop if said highest leaf has no subleaves indexed by ECX.
+ 		 */
+-		if (static_cpu_has(X86_FEATURE_LFENCE_RDTSC)
+-		    || !static_cpu_has_bug(X86_BUG_NULL_SEG))
++		if (entry->eax >= 0x8000001d &&
++		    (static_cpu_has(X86_FEATURE_LFENCE_RDTSC)
++		     || !static_cpu_has_bug(X86_BUG_NULL_SEG)))
+ 			entry->eax = max(entry->eax, 0x80000021);
+ 		break;
+ 	case 0x80000001:
 -- 
-Péter
+2.31.1
+

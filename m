@@ -2,52 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2E37513FEE
+	by mail.lfdr.de (Postfix) with ESMTP id 79C82513FED
 	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 03:03:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353660AbiD2BHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 21:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33880 "EHLO
+        id S1353646AbiD2BG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 21:06:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353637AbiD2BGy (ORCPT
+        with ESMTP id S232925AbiD2BGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 28 Apr 2022 21:06:54 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40809BC847;
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4303ABC865;
+        Thu, 28 Apr 2022 18:03:38 -0700 (PDT)
+Received: by mail-qv1-f41.google.com with SMTP id kd11so4428454qvb.2;
+        Thu, 28 Apr 2022 18:03:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=5W/PHVbvpSagVt8G3Hj3eW0IY7pmUgdHHakH22/epB8=;
+        b=uIDzWEM6Nnw4tRtYVaj7+heGUYGsMg00iKD2Z3GOBWEh+0lHPjGFWED/wohlT/2kPb
+         nWqdhj6Xjg8ikvXsIZny51dcPBj46OQuid2jqC5BQopaTSHMcnFckRLSoXwIvODs7gmU
+         375YQicFz8s0Rodu72rtnZmCow+JAuSvpA668IIXiA6VuH4okicEMQ7HeTaerZJwxE+n
+         WQHw7EPrwuN8XSYEH2tc9zx2xuOiXQqWUBtcssM8o3bt+McYgM10vMEtciN83DbdyKt5
+         zflEalNBeueIlnVuBBVByHB1T/7+iTJNY9sRYih1yGexU1Ygl9e7jzE3WFRuuB4I4Fq1
+         Ld/Q==
+X-Gm-Message-State: AOAM5312Py8KpCr3ZjpzPV1KfGbvh+SBbnfYvpAgszbY0hVWoIScRtsW
+        JTHujaQcMZQKhQVo5RyMG+4=
+X-Google-Smtp-Source: ABdhPJycaAU4Fqd8i5oSVNbuNnJ/LKsV/SNu6Bwc8rsaXssptvFPXU9aCZhBc7ty0EIfRzyIKyvx3g==
+X-Received: by 2002:a05:6214:f6d:b0:446:4c8b:b57d with SMTP id iy13-20020a0562140f6d00b004464c8bb57dmr26267591qvb.104.1651194217338;
         Thu, 28 Apr 2022 18:03:37 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KqDkp6DzMz4xLb;
-        Fri, 29 Apr 2022 11:03:30 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651194212;
-        bh=xo1K2yhVNcgqOXprCRsSenw+oPXTxS/DnUeEiRmb6Rw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=i5aBr1flOKZzH+G5Q1/erhaYZaSb2KKccduJM5dJAkP00PFpPC5w3C684D3tduHOS
-         zmp5E8A4KAXZRqPonwiTtH63EU25+FZ34V1voTHJt0tY+bweUnY7JYT5NYL4iZAtqD
-         l95MA/dJJF74Q5TVFjXkYhVJ64LwUSe6jm1vWu8cZa6ZvEWDon7wihT6e1dNT+jQaQ
-         hxKKfoWeG1jMVTus8CeWl/2nUEAvvI5AgcAv8quyCvXOs1WbVv7lmUYx+27NF/kqNr
-         T8SgklxIDxssBG+Ym5EkGeB5tDf0k1xSmtWPIajP9QBt/8G542kVhS7M9WqwYJBAdb
-         CPNvccwanrFNQ==
-Date:   Fri, 29 Apr 2022 11:03:29 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>,
-        Dave Airlie <airlied@linux.ie>
-Cc:     DRI <dri-devel@lists.freedesktop.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Philip Yang <Philip.Yang@amd.com>
-Subject: linux-next: manual merge of the amdgpu tree with the drm tree
-Message-ID: <20220429110329.79f6b628@canb.auug.org.au>
+Received: from dev0025.ash9.facebook.com (fwdproxy-ash-016.fbsv.net. [2a03:2880:20ff:10::face:b00c])
+        by smtp.gmail.com with ESMTPSA id i19-20020a05620a249300b0069f805534d3sm814533qkn.89.2022.04.28.18.03.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 18:03:37 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 18:03:33 -0700
+From:   David Vernet <void@manifault.com>
+To:     Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+Cc:     akpm@linux-foundation.org, tj@kernel.org, roman.gushchin@linux.dev,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, hannes@cmpxchg.org, mhocko@kernel.org,
+        shakeelb@google.com, kernel-team@fb.com,
+        Richard Palethorpe <rpalethorpe@suse.com>
+Subject: Re: [PATCH v2 2/5] cgroup: Account for memory_recursiveprot in
+ test_memcg_low()
+Message-ID: <20220429010333.5rt2jwpiumnbuapf@dev0025.ash9.facebook.com>
+References: <20220423155619.3669555-1-void@manifault.com>
+ <20220423155619.3669555-3-void@manifault.com>
+ <20220427140928.GD9823@blackbody.suse.cz>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_ZRu82WkLRPVC.nC+GhUmxt";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220427140928.GD9823@blackbody.suse.cz>
+User-Agent: NeoMutt/20211029
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,86 +68,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/_ZRu82WkLRPVC.nC+GhUmxt
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Michal,
 
-Hi all,
+On Wed, Apr 27, 2022 at 04:09:28PM +0200, Michal Koutný wrote:
+> Hello David.
+> 
+> On Sat, Apr 23, 2022 at 08:56:19AM -0700, David Vernet <void@manifault.com> wrote:
+> > This unfortunately broke the memcg tests, which asserts that a sibling
+> > that experienced reclaim but had a memory.low value of 0, would not
+> > observe any memory.low events. This patch updates test_memcg_low() to
+> > account for the new behavior introduced by memory_recursiveprot.
+> 
+> I think the test is correct, there should be no (not even recursive)
+> protection in this particular case (when the remaining siblings consume
+> all of parental protection).
+> 
+> This should be fixed in the kernel (see also [1], no updates from me yet
+> :-/)
+> 
+> Michal
+> 
+> [1] https://lore.kernel.org/lkml/20220322182248.29121-1-mkoutny@suse.com/
+> 
 
-Today's linux-next merge of the amdgpu tree got a conflict in:
+I see, thanks for sharing that context. I think I see your point about the
+implementation of the reclaim mechanism potentially overcounting, but my
+interpretation of the rest of that discussion with Roman is that we haven't
+yet decided whether we don't want to propagate memory.low events from
+children cgroups with memory.low == 0. Or at the very least, some more
+justification was requested on why not counting such events was prudent.
 
-  drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+Would you be ok with merging this patch so that the cgroup selftests can
+pass again based on the current behavior of the kernel, and we can then
+revert the changes to test_memcg_low() later on if and when we decide that
+we don't want to propagate memory.low events for memory.low == 0 children?
 
-between commit:
-
-  047a1b877ed4 ("dma-buf & drm/amdgpu: remove dma_resv workaround")
-
-from the drm tree and commit:
-
-  3da2c38231a4 ("drm/amdgpu: Free user pages if amdgpu_cs_parser_bos failed=
-")
-
-from the amdgpu tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-index 01853431249d,67bd506fa141..000000000000
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-@@@ -636,9 -642,26 +636,21 @@@ static int amdgpu_cs_parser_bos(struct=20
-  	}
- =20
-  error_validate:
- -	if (r) {
- -		amdgpu_bo_list_for_each_entry(e, p->bo_list) {
- -			dma_fence_chain_free(e->chain);
- -			e->chain =3D NULL;
- -		}
- +	if (r)
-  		ttm_eu_backoff_reservation(&p->ticket, &p->validated);
-- out:
- -	}
-+=20
-+ out_free_user_pages:
-+ 	if (r) {
-+ 		amdgpu_bo_list_for_each_userptr_entry(e, p->bo_list) {
-+ 			struct amdgpu_bo *bo =3D ttm_to_amdgpu_bo(e->tv.bo);
-+=20
-+ 			if (!e->user_pages)
-+ 				continue;
-+ 			amdgpu_ttm_tt_get_user_pages_done(bo->tbo.ttm);
-+ 			kvfree(e->user_pages);
-+ 			e->user_pages =3D NULL;
-+ 		}
-+ 	}
-  	return r;
-  }
- =20
-
---Sig_/_ZRu82WkLRPVC.nC+GhUmxt
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJrOWEACgkQAVBC80lX
-0GyGKAf/ehT5fosMx9Vc4L1ZZG/fp3A3g1odV2zqD7lEc9m4qTzdzYK6klwEr3qa
-qljZB5lzWiFHcqELkbYLrIAreffkoVamMTyilcsZSYDynFmh06TQx5qCxkYobffQ
-Vjvl6Pqn4CqAjOJ7s9SlgR4cm5Bqv/PrgudjQLJFyTwxTsLt+Cc2I0h7ax1QxQvq
-a/0gLli9LgcFyTth5PfhvzSkN4irJHubZBQAcQ1qgla0St1el0qfHcUPxP1VxTTC
-mSag4rMy/Vji4ZFxGfVBn6OfQtghu7ev7T3oBD6DS1sAjupiVHh0/XDRhILKvI3m
-5KaSAH4XKKi1YLadEePyc1H6ycFa5Q==
-=+m8V
------END PGP SIGNATURE-----
-
---Sig_/_ZRu82WkLRPVC.nC+GhUmxt--
+Thanks,
+David

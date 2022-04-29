@@ -2,190 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D197514FEA
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A27514FF8
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:53:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377702AbiD2Pz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 11:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53352 "EHLO
+        id S1378652AbiD2P4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 11:56:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232880AbiD2PzX (ORCPT
+        with ESMTP id S232880AbiD2P4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 11:55:23 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73F1674C0
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:52:02 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id g16so5521809lja.3
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:52:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OizdqLk0k8QMs1TRuRMo3qpTsCyU7LjlsmMSoOiqvXk=;
-        b=C1CdlLOyBVKSuvcDCJi04jQ9cDv2DCq/9LzcvSW8ZdFn/u87peE8WaMOl5ddFxt8L8
-         HR8M9qpK8qocmYfPBoSQxDehTKHrHphs0hfrpt+TbJNOjpQoVe0E11WJ8KNdgzoJVT0K
-         yTW0xhTf+0dCsuVhiT8qG6JSYSpkq2kOKXz4w4BSwdO1lyE28aWwplB0VWgL9xYACGzv
-         a6nee4mMztAiur45wq+SKxeQbkMs97tO2FI4v0G+A8wtUAu0gkPwQbdvL21+7LED+e04
-         AxyHDaboZM39wLBeG+27qKJ0WLUtkoNAg3Dlv1JgnC0hJxeOE1/o8L+XkV15JTmMK9pL
-         IcaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OizdqLk0k8QMs1TRuRMo3qpTsCyU7LjlsmMSoOiqvXk=;
-        b=4bCWrJqHS/e99w4F+oya5P0LXghZ2CVf5rw6gcbdku0uOnJpPOberHpE3iAOfMCzZa
-         FG+GM2KMrgCHYaaUy2JbFQ1cpJZXqeC4J0lhv0rqNOwPwvj3ni/n3eLHNqftAPuyPBWw
-         T9J70cQOa6SjUEMGgYSOi2Rrl9QYkOi6EfaXph3zMYV7RnfRY0erbotqhY5MOv2HyoJo
-         kQdnoa/DVSQcAMir16llYGL9LtdLrP71c/GNy5rniZo5kLt+LuDm6GehWn/JUDSNR62U
-         4EA9bbmloKzaYuoNQr2xI3eqvYGrvcCE0ZD1/JF5mt40SdKu8sX0DkDQ8knJcGsdULte
-         lfdQ==
-X-Gm-Message-State: AOAM531mRykaCUXamNkohKbQs4FWu++nL1eR9bTkf9H1Z7taiCFbRsAC
-        XhtqG3JSdtIoR3jJqX2Na2Phg4ebCG5OB/PY3Qu93g==
-X-Google-Smtp-Source: ABdhPJx29wqDAwEp8Y2yRPTpOUG8lGhwBqmjZeupJHNgtGob5BjndU0KZ8b0HGRPE8G9/v0AgulGcOfaxhvwTtfUnrM=
-X-Received: by 2002:a2e:a5cb:0:b0:24f:233b:d90e with SMTP id
- n11-20020a2ea5cb000000b0024f233bd90emr11835285ljp.83.1651247520931; Fri, 29
- Apr 2022 08:52:00 -0700 (PDT)
+        Fri, 29 Apr 2022 11:56:40 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D13CE10F;
+        Fri, 29 Apr 2022 08:53:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651247601; x=1682783601;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=v3xHt04zUoM51m57wES9OEH4SBADCPxc9G7xtsUo2b0=;
+  b=SjLJi9WGQa+2fBsBQZ+iP6CnjRh4AsWjaLMZALplkkpKvmrmplw1/O9v
+   Y1FMeVs3wz2RklkEz0ddL0ALrnkQrVT34AABBeeDOMvMKzA/X1tcj4UAk
+   Y5P84xf2VajX2YnbJAyxhJ5L1Vh8wxN+oUxrEaFk9MUcylnPAxafnRx+z
+   4/9VlCqvyVQvdLkq8aGX9dtRY9gWCVdiqIjxjnidIImuJypIPaUdoILiO
+   mQXfJU+jpv2dI/mfX0Ce66Ltd3GknkEiKzrSka+XQgXwnh8ZJYK6xq3NI
+   0w3gLQChbC8A55L+N1kJW2weq6vZ40nKaQWTRwWCeM6xfjjUthNcj/2qz
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="329623786"
+X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
+   d="scan'208";a="329623786"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 08:52:21 -0700
+X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
+   d="scan'208";a="706606733"
+Received: from vpareek-mobl1.amr.corp.intel.com (HELO ldmartin-desk2) ([10.209.103.56])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 08:52:20 -0700
+Date:   Fri, 29 Apr 2022 08:52:20 -0700
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Kai Vehmanen <kai.vehmanen@intel.com>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
+        Luis Chamberlain <mcgrof@kernel.org>, mauro.chehab@intel.com,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-modules@vger.kernel.org,
+        Pierre-Louis Bossart <pierre-louis.bossart@intel.com>
+Subject: Re: [Intel-gfx] [PATCH 1/2] module: add a function to add module
+ references
+Message-ID: <20220429155220.6k63lt5knhertj3g@ldmartin-desk2>
+X-Patchwork-Hint: comment
+References: <cover.1651212016.git.mchehab@kernel.org>
+ <a078eb2e46d00ec59c8a91ea0afa5190730c9e58.1651212016.git.mchehab@kernel.org>
+ <YmuZovuDaCYDDG4c@phenom.ffwll.local>
+ <20220429090757.1acb943a@sal.lan>
+ <YmuiKcHgl+nABvo/@kroah.com>
+ <20220429101503.4048db5b@sal.lan>
+ <Ymu5f8EjdC1Mawzt@kroah.com>
+ <20220429112351.0e044950@sal.lan>
 MIME-Version: 1.0
-References: <20220407195908.633003-1-pgonda@google.com> <CAFNjLiXC0AdOw5f8Ovu47D==ex7F0=WN_Ocirymz4xL=mWvC5A@mail.gmail.com>
- <CAMkAt6r-Mc_YN-gVHuCpTj4E1EmcvyYpP9jhtHo5HRHnoNJAdA@mail.gmail.com>
- <CAMkAt6r+OMPWCbV_svUyGWa0qMzjj2UEG29G6P7jb6uH6yko2w@mail.gmail.com>
- <62e9ece1-5d71-f803-3f65-2755160cf1d1@redhat.com> <CAMkAt6q6YLBfo2RceduSXTafckEehawhD4K4hUEuB4ZNqe2kKg@mail.gmail.com>
- <4c0edc90-36a1-4f4c-1923-4b20e7bdbb4c@redhat.com> <CAMkAt6oL5qi7z-eh4z7z8WBhpc=Ow6WtcJA5bDi6-aGMnz135A@mail.gmail.com>
- <CAMkAt6rmDrZfN5DbNOTsKFV57PwEnK2zxgBTCbEPeE206+5v5w@mail.gmail.com>
- <0d282be4-d612-374d-84ba-067994321bab@redhat.com> <CAMkAt6ragq4OmnX+n628Yd5pn51qFv4qV20upGR6tTvyYw3U5A@mail.gmail.com>
- <8a2c5f8c-503c-b4f0-75e7-039533c9852d@redhat.com>
-In-Reply-To: <8a2c5f8c-503c-b4f0-75e7-039533c9852d@redhat.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Fri, 29 Apr 2022 09:51:49 -0600
-Message-ID: <CAMkAt6qAW5zFyTAqX_Az2DT2J3KROPo4u-Ak1sC0J+UTUeFfXA@mail.gmail.com>
-Subject: Re: [PATCH v3] KVM: SEV: Mark nested locking of vcpu->lock
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     John Sperbeck <jsperbeck@google.com>,
-        kvm list <kvm@vger.kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220429112351.0e044950@sal.lan>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 9:38 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+On Fri, Apr 29, 2022 at 11:23:51AM +0100, Mauro Carvalho Chehab wrote:
+>Em Fri, 29 Apr 2022 12:10:07 +0200
+>Greg KH <gregkh@linuxfoundation.org> escreveu:
 >
-> On 4/29/22 17:35, Peter Gonda wrote:
-> > On Thu, Apr 28, 2022 at 5:59 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
-> >>
-> >> On 4/28/22 23:28, Peter Gonda wrote:
-> >>>
-> >>> So when actually trying this out I noticed that we are releasing the
-> >>> current vcpu iterator but really we haven't actually taken that lock
-> >>> yet. So we'd need to maintain a prev_* pointer and release that one.
-> >>
-> >> Not entirely true because all vcpu->mutex.dep_maps will be for the same
-> >> lock.  The dep_map is essentially a fancy string, in this case
-> >> "&vcpu->mutex".
-> >>
-> >> See the definition of mutex_init:
-> >>
-> >> #define mutex_init(mutex)                                              \
-> >> do {                                                                   \
-> >>           static struct lock_class_key __key;                            \
-> >>                                                                          \
-> >>           __mutex_init((mutex), #mutex, &__key);                         \
-> >> } while (0)
-> >>
-> >> and the dep_map field is initialized with
-> >>
-> >>           lockdep_init_map_wait(&lock->dep_map, name, key, 0, LD_WAIT_SLEEP);
-> >>
-> >> (i.e. all vcpu->mutexes share the same name and key because they have a
-> >> single mutex_init-ialization site).  Lockdep is as crude in theory as it
-> >> is effective in practice!
-> >>
-> >>>
-> >>>            bool acquired = false;
-> >>>            kvm_for_each_vcpu(...) {
-> >>>                    if (!acquired) {
-> >>>                       if (mutex_lock_killable_nested(&vcpu->mutex, role)
-> >>>                           goto out_unlock;
-> >>>                       acquired = true;
-> >>>                    } else {
-> >>>                       if (mutex_lock_killable(&vcpu->mutex, role)
-> >>>                           goto out_unlock;
-> >>
-> >> This will cause a lockdep splat because it uses subclass 0.  All the
-> >> *_nested functions is allow you to specify a subclass other than zero.
-> >
-> > OK got it. I now have this to lock:
-> >
-> >           kvm_for_each_vcpu (i, vcpu, kvm) {
-> >                    if (prev_vcpu != NULL) {
-> >                            mutex_release(&prev_vcpu->mutex.dep_map, _THIS_IP_);
-> >                            prev_vcpu = NULL;
-> >                    }
-> >
-> >                    if (mutex_lock_killable_nested(&vcpu->mutex, role))
-> >                            goto out_unlock;
-> >                    prev_vcpu = vcpu;
-> >            }
-> >
-> > But I've noticed the unlocking is in the wrong order since we are
-> > using kvm_for_each_vcpu() I think we need a kvm_for_each_vcpu_rev() or
-> > something. Which maybe a bit for work:
-> > https://elixir.bootlin.com/linux/latest/source/lib/xarray.c#L1119.
+>> On Fri, Apr 29, 2022 at 10:15:03AM +0100, Mauro Carvalho Chehab wrote:
+>> > HI Greg,
+>> >
+>> > Em Fri, 29 Apr 2022 10:30:33 +0200
+>> > Greg KH <gregkh@linuxfoundation.org> escreveu:
+>> >
+>> > > On Fri, Apr 29, 2022 at 09:07:57AM +0100, Mauro Carvalho Chehab wrote:
+>> > > > Hi Daniel,
+>> > > >
+>> > > > Em Fri, 29 Apr 2022 09:54:10 +0200
+>> > > > Daniel Vetter <daniel@ffwll.ch> escreveu:
+>> > > >
+>> > > > > On Fri, Apr 29, 2022 at 07:31:15AM +0100, Mauro Carvalho Chehab wrote:
+>> > > > > > Sometimes, device drivers are bound using indirect references,
+>> > > > > > which is not visible when looking at /proc/modules or lsmod.
+>> > > > > >
+>> > > > > > Add a function to allow setting up module references for such
+>> > > > > > cases.
+>> > > > > >
+>> > > > > > Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+>> > > > > > Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+>> > > > >
+>> > > > > This sounds like duct tape at the wrong level. We should have a
+>> > > > > device_link connecting these devices, and maybe device_link internally
+>> > > > > needs to make sure the respective driver modules stay around for long
+>> > > > > enough too. But open-coding this all over the place into every driver that
+>> > > > > has some kind of cross-driver dependency sounds terrible.
+>> > > > >
+>> > > > > Or maybe the bug is that the snd driver keeps accessing the hw/component
+>> > > > > side when that is just plain gone. Iirc there's still fundamental issues
+>> > > > > there on the sound side of things, which have been attempted to paper over
+>> > > > > by timeouts and stuff like that in the past instead of enforcing a hard
+>> > > > > link between the snd and i915 side.
+>> > > >
+>> > > > I agree with you that the device link between snd-hda and the DRM driver
+>> > > > should properly handle unbinding on both directions. This is something
+>> > > > that require further discussions with ALSA and DRM people, and we should
+>> > > > keep working on it.
+>> > > >
+>> > > > Yet, the binding between those drivers do exist, but, despite other
+>> > > > similar inter-driver bindings being properly reported by lsmod, this one
+>> > > > is invisible for userspace.
+>> > > >
+>> > > > What this series does is to make such binding visible. As simple as that.
+>> > >
+>> > > It also increases the reference count, and creates a user/kernel api
+>> > > with the symlinks, right?  Will the reference count increase prevent the
+>> > > modules from now being unloadable?
+>> > >
+>> > > This feels like a very "weak" link between modules that should not be
+>> > > needed if reference counting is implemented properly (so that things are
+>> > > cleaned up in the correct order.)
+>> >
+>> > The refcount increment exists even without this patch, as
+>> > hda_component_master_bind() at sound/hda/hdac_component.c uses
+>> > try_module_get() when it creates the device link.
+>>
+>> Ok, then why shouldn't try_module_get() be creating this link instead of
+>> having to manually do it this way again?  You don't want to have to go
+>> around and add this call to all users of that function, right?
 >
-> No, you don't need any of this.  You can rely on there being only one
-> depmap, otherwise you wouldn't need the mock releases and acquires at
-> all.  Also the unlocking order does not matter for deadlocks, only the
-> locking order does.  You're overdoing it. :)
+>Works for me, but this is not a too trivial change, as the new
+>try_module_get() function will require two parameters, instead of one:
+>
+>	- the module to be referenced;
+>	- the module which will reference it.
+>
+>On trivial cases, one will be THIS_MODULE, but, in the specific case
+>of snd_hda, the binding is done via an ancillary routine under
+>snd_hda_core, but the actual binding happens at snd_hda_intel.
+>
+>Ok, we could add a __try_module_get() (or whatever other name that
+>would properly express what it does) with two parameters, and then
+>define try_module_get() as:
+>
+>	#define try_module_get(mod) __try_module_get(mod, THIS_MODULE)
 
-Hmm I'm slightly confused here then. If I take your original suggestion of:
+agree that this should be done at this level rather than open coding it
+at every driver. Main improvement being fixed here regardless of the
+snd-hda-intel issue is to properly annotate what is holding a module.
 
-        bool acquired = false;
-        kvm_for_each_vcpu(...) {
-                if (acquired)
-                        mutex_release(&vcpu->mutex.dep_map,
-_THIS_IP_);  <-- Warning here
-                if (mutex_lock_killable_nested(&vcpu->mutex, role)
-                        goto out_unlock;
-                acquired = true;
+Right now we have 1) symbol module dependencies; 2) kernel references;
+3) userspace references. With (2) and (3) being unknown to the user from
+lsmod pov. Handling this any time try_module_get() is called would make
+(2) visible to lsmod.
 
-"""
-[ 2810.088982] =====================================
-[ 2810.093687] WARNING: bad unlock balance detected!
-[ 2810.098388] 5.17.0-dbg-DEV #5 Tainted: G           O
-[ 2810.103788] -------------------------------------
-[ 2810.108490] sev_migrate_tes/107600 is trying to release lock
-(&vcpu->mutex) at:
-[ 2810.115798] [<ffffffffb7cd3592>] sev_lock_vcpus_for_migration+0xe2/0x1e0
-[ 2810.122497] but there are no more locks to release!
-[ 2810.127376]
-               other info that might help us debug this:
-[ 2810.133911] 3 locks held by sev_migrate_tes/107600:
-[ 2810.138791]  #0: ffffa6cbf31ca3b8 (&kvm->lock){+.+.}-{3:3}, at:
-sev_vm_move_enc_context_from+0x96/0x690
-[ 2810.148178]  #1: ffffa6cbf28523b8 (&kvm->lock/1){+.+.}-{3:3}, at:
-sev_vm_move_enc_context_from+0xae/0x690
-[ 2810.157738]  #2: ffff9220683b01f8 (&vcpu->mutex){+.+.}-{3:3}, at:
-sev_lock_vcpus_for_migration+0x89/0x1e0
-"""
+Paired with fixes to the (unreleased) kmod 30[1], this allows `modprobe
+-r --remove-holders <module>` to also try removing the holders before
+removing the module itself.
 
-This makes sense to me given we are actually trying to release lock we
-haven't locked yet. So thats why I thought we'd need to work with a
-prev_vcpu pointer. So the behavior I've observed is slightly different
-than I'd expect from your statement "(i.e. all vcpu->mutexes share the
-same name and key because they have a
-single mutex_init-ialization site)."
+thanks
+Lucas De Marchi
 
-Ack about the unlocking order, that makes things easier.
+[1] https://lore.kernel.org/linux-modules/20220329090912.geymr6xk7taq4rtq@ldmartin-desk2.jf.intel.com/T/#t
+
 
 >
-> Paolo
+>Would that work for you?
 >
+>Regards,
+>Mauro

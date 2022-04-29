@@ -2,111 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92293514224
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 08:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74119514225
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 08:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354371AbiD2GGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 02:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50858 "EHLO
+        id S1354386AbiD2GHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 02:07:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345038AbiD2GGi (ORCPT
+        with ESMTP id S1345038AbiD2GHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 02:06:38 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A52B82D8
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 23:03:22 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id i19so13421022eja.11
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 23:03:21 -0700 (PDT)
+        Fri, 29 Apr 2022 02:07:19 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42922B899A;
+        Thu, 28 Apr 2022 23:04:02 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id y63so7584622oia.7;
+        Thu, 28 Apr 2022 23:04:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=2UVF1UzLTvXwjMuXjHk4vSsZBF8/xezWpjHU9KjaHyI=;
-        b=r4vPB+6VJeu8RIvrpfY3kIQQQjSlQs/o0234SVjt6pPhaCqx793Kmv1nmXZui80rWZ
-         Hg9w6CPZYYvkm0wlSZGRc9VZpOJYZU9CPuHml5XVyH3bP0giIoyYv+B0pEqYYnR7hrhP
-         Hb3YvlURM4kmTr6LCPbYSbVV16PG7a4ZuLsw39Rh81MV9rEOYlTrHK9yDMzg+CNO8hRX
-         XW992Ey9bFAZmHMC0+dgHuqAz4AVk9LLHU/BjBTf5/dIEF8ERi48fUEfVA26rfjRuA4R
-         D/vDS+5uy/V5qGtCC84SzqifWrFWDdDLSeApuMBzpu5Lr6Oyf1cwHzL8MI0kV17sg7Oc
-         eTsA==
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language
+         :from:to:cc:references:subject:in-reply-to:content-transfer-encoding;
+        bh=X/KcFNZhAHoZ1H6Tr4WvcjaMczJznMSErZBotqKY3jk=;
+        b=PxhNjBOw2ylbQzoWSUcKoIuVMYGb/l6sxtEDteNu6AO+5YMtyA256PNa3JlRIRzM+L
+         ijSIySGeJpUHMeXZTKHsagxc/ujgW+UfOit8Xhfp0WtlPe/tGMEsbntzX149xTm+Ewic
+         njMJr3IjP6E8YT38D97JampAL4qtJ7h7T36pulJNSiy9qSxN10NFsKStjF3H/oHT33QK
+         E/RoWon0gJ6V5OC1x6Ukk7545Tn3PzgVRsSC7Q/gedvTBhSbDewSG9jdr+f6ndDW4HAG
+         8O6LZm2d5LwL7k1kwdzVrSVIt7fWf+QpJ2iyi0OeYDSc9rT25u5SSLRKE1O3FEguyZ02
+         zqJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:from:to:cc:references:subject:in-reply-to
          :content-transfer-encoding;
-        bh=2UVF1UzLTvXwjMuXjHk4vSsZBF8/xezWpjHU9KjaHyI=;
-        b=mBsk1sa3Xijr48FkwExa7cBx2gr8IO+PVGlc4+LCjBrzDsPuND8XPGj/5AmJfUGYOg
-         nLbdo7cKqkZZV3Rv7VA2Eukb0YEqdhRjdi8UxwBsNwsYBKln252kEW0TWmwBrba5jW8k
-         aoj1jPJMwyIiSVl2bjK1ax3cS6ARR+ti87UTUkdAC1dOeNvHFYCaTB5t0JI0yD3RgzqV
-         D1UQYKMN5w4Cq0yAgOSncM2AEPbuEUmDAjATp+CAED5ao/1erKnL3oVfKSfVdXSBwiff
-         lCNvew50qCqq90GOQ+0bvf9x9FNCKK5Xpiapp0YCtztIZhMrSRDLrc0tkbwgKCd9lQFg
-         i4tg==
-X-Gm-Message-State: AOAM532+Pa6V6jdTr+fbEfqoHoXTB2XWTQM0Z9cpQiCeCuGlw/CLbuaK
-        0AF5zk/zDk53/2c49BvPaU8klw==
-X-Google-Smtp-Source: ABdhPJzibkdFBoDF+cIhDOCqeeWmKmks/LjPu/SUPeRXPpTGCICXJ32FXdpt2PTlJmb2ApJRyQ4AYQ==
-X-Received: by 2002:a17:906:9c82:b0:6e1:1d6c:914c with SMTP id fj2-20020a1709069c8200b006e11d6c914cmr33826027ejc.769.1651212200588;
-        Thu, 28 Apr 2022 23:03:20 -0700 (PDT)
-Received: from [192.168.0.167] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id ra48-20020a17090769b000b006f3ef214e69sm318162ejc.207.2022.04.28.23.03.19
+        bh=X/KcFNZhAHoZ1H6Tr4WvcjaMczJznMSErZBotqKY3jk=;
+        b=WrvkiuecLdZ8EAiE82+QKzFX3Fzt/7H3LgeaHLWQTGV4mVVuTMIKP1bKV+MmvTL4e6
+         ZB+VWQaN60aq6zL0zL822cGU+tPvCVfIorrbYtKqyl8xr+K0aGhxtXXS3eWrJWoP12ah
+         lTHeXgpff1HjQWiq2xnQwa1K+tnEUAeHdonCQSm2Ja75ppOaC60salvw6h5lizMZSeJa
+         VE6PUWeWBsg2MF6ZyZSEG3R7fiH2G48thdziZya7kgd9uDOzj0EaMPVbGhTToUTu/GGh
+         2Ts5b/hqJq3eJv9ZTGeHl25BdjuE339eePvTKR8KKqm2lZi/IxzVT0ImrvX7XOrZn+kG
+         CD0A==
+X-Gm-Message-State: AOAM530k+Mrff2+b1tU+VfMVzmI7Jb6NerRmPgqa0snCdVAHxZ85Q8WU
+        vt3mA64hvJ19iaOgC+qhyzo=
+X-Google-Smtp-Source: ABdhPJwnRWg5pq2rb86Qc8RTFC94blcskTiFA5sttrDQRIupMO1KOk3leXNWAUY1RnkOtxc0Psq7lQ==
+X-Received: by 2002:a05:6808:1912:b0:325:74c4:35e3 with SMTP id bf18-20020a056808191200b0032574c435e3mr788022oib.61.1651212241626;
+        Thu, 28 Apr 2022 23:04:01 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a8-20020a4ad5c8000000b0035eb4e5a6c6sm429034oot.28.2022.04.28.23.03.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 23:03:20 -0700 (PDT)
-Message-ID: <064f5758-a3ae-d116-fe72-9f52b4cbea78@linaro.org>
-Date:   Fri, 29 Apr 2022 08:03:19 +0200
+        Thu, 28 Apr 2022 23:04:00 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <59e91f45-7263-eb41-4b47-db217af54910@roeck-us.net>
+Date:   Thu, 28 Apr 2022 23:03:58 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v2 2/2] pinctrl: nuvoton: Fix irq_of_parse_and_map()
- return value
 Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20220423094142.33013-1-krzysztof.kozlowski@linaro.org>
- <20220423094142.33013-2-krzysztof.kozlowski@linaro.org>
- <CACRpkdY8LJ5xMW0eDsL-ycrqV8io2zXJrT6RfZj=KxaE9rvcvA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CACRpkdY8LJ5xMW0eDsL-ycrqV8io2zXJrT6RfZj=KxaE9rvcvA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Ruslan Zalata <rz@fabmicro.ru>
+Cc:     Jean Delvare <jdelvare@suse.com>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+References: <20220428210906.29527-1-rz@fabmicro.ru>
+ <f79a8edf-36d4-02af-da8f-32b4e491bd47@roeck-us.net>
+ <e0b57c7587dded38a92411994f353b3d@fabmicro.ru>
+ <e4d1a6c8-1afd-671e-76bf-b5bde9dc282f@roeck-us.net>
+Subject: Re: [PATCH v2] hwmon: (sun4i-lradc) Add driver for LRADC found on
+ Allwinner A13/A20 SoC
+In-Reply-To: <e4d1a6c8-1afd-671e-76bf-b5bde9dc282f@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/04/2022 00:52, Linus Walleij wrote:
-> On Sat, Apr 23, 2022 at 11:41 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
-> 
->> The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
+On 4/28/22 22:32, Guenter Roeck wrote:
+> On 4/28/22 17:28, Ruslan Zalata wrote:
+>> Thank you Guenter for your valuable time.
 >>
->> Fixes: 3b588e43ee5c ("pinctrl: nuvoton: add NPCM7xx pinctrl and GPIO driver")
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Changes since v1:
->> 1. Correct the return value passed further.
+>> I have added update_interval option (it's in ms units, right?) and fixed all other issues you pointed to. Will test it on real hardware and send third version of the patch for review.
+>>
+>> Regarding IRQ. Alternatively the driver would need to sit and poll conversion ready bit in a loop which might cause a much worse load on system, is not it ? Anyway, the real problem with this piece of hardware is that there's no "conversion ready bit" provided, the only way to know data ready status is to receive an interrupt.
+>>
 > 
-> This doesn't apply to my tree neither for fixes or devel, can you rebase it?
-> I'd like to queue it on devel for non-urgent fixes.
+> Not necessarily. The data does not have to be "current", after all,
+> if the hardware is able to continuously convert. If not, the question
+> is how long a conversion takes. If it doesn't take too long, it would
+> be better to initiate a conversion and then wait for the completion.
+> 
+>> I think it still needs a semaphore/seqlock to synchronize conversions and reads. I.e. two consequent reads should not return same old value. Although it's not an issue in my case, but could be a problem for others.
+>>
+> Why ? That happens for almost all hwmon devices. They will all report
+> the most recent conversion value. Some of them can take seconds
+> to complete a new conversion, so the reported value is always "old"
+> for a given defition of old (ie any time smaller than a conversion
+> interval).
+> 
+> Sigh. Looks like I'll have to dig up the documentation and read about
+> the ADC myself.
+> 
 
-Sure, I will rebase. The issue was because of Andy's commit
-https://lore.kernel.org/all/20220401103604.8705-9-andriy.shevchenko@linux.intel.com/
-which was in next but not in your tree.
+I did, for both A13 and A20. The ADC supports continuous mode. That
+means it can be configured accordingly, and reading the ADC value
+just returns the most recent conversion value. There is absolutely
+no need to keep reading the conversion values using interrupts.
 
-Including such development branches in next, bypassing maintainer, makes
-it difficult for everyone else to develop patches... :(
+Also,
 
++struct lradc_variant {
++	u32 bits;
++	u32 resolution;
++	u32 vref;
++};
 
-Best regards,
-Krzysztof
+is unnecessary because the values are the same for both supported chips.
+That means that defines can and should be used. Yes, I can see that
+A83T uses a different voltage, but even that doesn't need a structure -
+the voltage can be set in struct sun4i_lradc_data if/when needed,
+and the resolution and number of bits is still the same.
+
+Guenter

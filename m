@@ -2,106 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA2165146BD
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:25:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 287385146C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 12:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357409AbiD2K3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 06:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53334 "EHLO
+        id S1357487AbiD2K3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 06:29:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357491AbiD2K2y (ORCPT
+        with ESMTP id S1357526AbiD2K3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 06:28:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41DD67CDC2;
-        Fri, 29 Apr 2022 03:25:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E8096232F;
-        Fri, 29 Apr 2022 10:25:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2957EC385A7;
-        Fri, 29 Apr 2022 10:25:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651227935;
-        bh=lFv2+KTy80l38T+vxHkOOXgzZmC20F3Ggy02KRG1xZA=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=I1E4KZy6bocb0zySf5owQNUNuGUWoLWCS7HHDq07r1JqPWzq6kqCi+rIvVIGuPJKd
-         Rgl/R6unBydMcvT3yVf9C+tHl2STveqKad3yLNuJU3sUjv9po6hVfvO36BW6HY1n5i
-         u38osDlxr22x9mN2JKVLJ4eQCC316/y+cNEoUquYyTtRQ7sl/7IbdNr32YHB13HI+M
-         cQwsWqiBbxWkpKnF/xf/nliURjJOlCfz47u9SCdr/B3Kmcv8lrdYYm3xuM7mCQl0IC
-         6qiyE4nT/QZeYwN5xLushVnl1spK2MRn12F78t4U690JrgUPi/1gSZDnvQGaImvIh6
-         xgx4nKSsAvHgg==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Srinivasan Raju <srini.raju@purelifi.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        "edumazet\@google.com" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "pabeni\@redhat.com" <pabeni@redhat.com>,
-        "open list\:NETWORKING DRIVERS \(WIRELESS\)" 
-        <linux-wireless@vger.kernel.org>,
-        "open list\:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] Fix le16_to_cpu warning for beacon_interval
-References: <CWLP265MB3217B3A355529E36F6468A43E0FC9@CWLP265MB3217.GBRP265.PROD.OUTLOOK.COM>
-Date:   Fri, 29 Apr 2022 13:25:30 +0300
-In-Reply-To: <CWLP265MB3217B3A355529E36F6468A43E0FC9@CWLP265MB3217.GBRP265.PROD.OUTLOOK.COM>
-        (Srinivasan Raju's message of "Fri, 29 Apr 2022 10:20:11 +0000")
-Message-ID: <878rrodw4l.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Fri, 29 Apr 2022 06:29:00 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EE3888FF
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 03:25:41 -0700 (PDT)
+Received: from [192.168.1.111] (91-156-85-209.elisa-laajakaista.fi [91.156.85.209])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 18996488;
+        Fri, 29 Apr 2022 12:25:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1651227940;
+        bh=1Xnk+9h8L/Uh9EPmBELuWhe3TE/MnwgMo8Cl0drwiSs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aN2FBRRqYbFGc2+KSsTRrmeegGxNSY6OtHnE6t6d5GSlEZYG84YDtzr22IlCAmmWt
+         yjOttGB+euSvxEWzJywGe8SdPRxW7SNSYwgRcdGGBBGdQHs4OGxVFPIjoleUcCG7Fm
+         gE9DKVsV+yE5XUzN3ecwHI8REqIrX4KHK+9ISxNI=
+Message-ID: <3deffccf-1708-60bf-2b63-7a77305ec7e6@ideasonboard.com>
+Date:   Fri, 29 Apr 2022 13:25:37 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] omapdss: HDMI: simplify the return expression of
+ hdmi_init_pll_data()
+Content-Language: en-US
+To:     cgel.zte@gmail.com
+Cc:     airlied@linux.ie, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20220429090135.3852817-1-chi.minghao@zte.com.cn>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <20220429090135.3852817-1-chi.minghao@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Srinivasan Raju <srini.raju@purelifi.com> writes:
-
-> Fixed the following warning
-> drivers/net/wireless/purelifi/plfxlc/chip.c:36:31: sparse: expected unsigned short [usertype] beacon_interval
-> drivers/net/wireless/purelifi/plfxlc/chip.c:36:31: sparse: got restricted __le16 [usertype]
-
-The preferred style is this:
-
-Fix the following sparse warnings:
-
-drivers/net/wireless/purelifi/plfxlc/chip.c:36:31: sparse: expected unsigned short [usertype] beacon_interval
-drivers/net/wireless/purelifi/plfxlc/chip.c:36:31: sparse: got restricted __le16 [usertype]
-
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Srinivasan Raju <srini.raju@purelifi.com>
+On 29/04/2022 12:01, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
+> 
+> Simplify the return expression.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 > ---
->  drivers/net/wireless/purelifi/plfxlc/chip.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>   drivers/gpu/drm/omapdrm/dss/hdmi_pll.c | 7 +------
+>   1 file changed, 1 insertion(+), 6 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/omapdrm/dss/hdmi_pll.c b/drivers/gpu/drm/omapdrm/dss/hdmi_pll.c
+> index eea719243eaf..10c6b3e492d3 100644
+> --- a/drivers/gpu/drm/omapdrm/dss/hdmi_pll.c
+> +++ b/drivers/gpu/drm/omapdrm/dss/hdmi_pll.c
+> @@ -131,7 +131,6 @@ static int hdmi_init_pll_data(struct dss_device *dss,
+>   {
+>   	struct dss_pll *pll = &hpll->pll;
+>   	struct clk *clk;
+> -	int r;
+>   
+>   	clk = devm_clk_get(&pdev->dev, "sys_clk");
+>   	if (IS_ERR(clk)) {
+> @@ -151,11 +150,7 @@ static int hdmi_init_pll_data(struct dss_device *dss,
+>   
+>   	pll->ops = &hdmi_pll_ops;
+>   
+> -	r = dss_pll_register(dss, pll);
+> -	if (r)
+> -		return r;
+> -
+> -	return 0;
+> +	return dss_pll_register(dss, pll);
+>   }
 
-The subject should be:
+This is a rather pointless change, and I personally like the current 
+style better.
 
-[PATCH] plfxlc: fix le16_to_cpu warning for beacon_interval
-
-> diff --git a/drivers/net/wireless/purelifi/plfxlc/chip.c b/drivers/net/wireless/purelifi/plfxlc/chip.c
-> index a5ec10b66ed5..5d952ca07195 100644
-> --- a/drivers/net/wireless/purelifi/plfxlc/chip.c
-> +++ b/drivers/net/wireless/purelifi/plfxlc/chip.c
-> @@ -30,10 +30,10 @@ int plfxlc_set_beacon_interval(struct plfxlc_chip *chip, u16 interval,
->  {
->         if (!interval ||
->             (chip->beacon_set && 
-> -            le16_to_cpu(chip->beacon_interval) == interval))
-> +            chip->beacon_interval) == interval)
->                 return 0;
-
-I think there's no need to use three lines anymore, two lines should be
-enough:
-
-       if (!interval ||
-           (chip->beacon_set && chip->beacon_interval == interval))
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+  Tomi

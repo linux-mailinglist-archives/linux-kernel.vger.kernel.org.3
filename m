@@ -2,53 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA72F515187
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:19:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 195E751518B
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 19:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379491AbiD2RXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 13:23:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47872 "EHLO
+        id S1379500AbiD2RXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 13:23:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353856AbiD2RXL (ORCPT
+        with ESMTP id S1379493AbiD2RXc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 13:23:11 -0400
-Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D44E89084
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:19:47 -0700 (PDT)
-X-QQ-mid: bizesmtp69t1651252771tiwj7d2n
-Received: from localhost.localdomain ( [218.17.207.33])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 30 Apr 2022 01:19:23 +0800 (CST)
-X-QQ-SSF: 01400000002000B0D000000A0000000
-X-QQ-FEAT: Nw/vDu2WDVBe46xp/lQfK5H1wHZk/IA0LX2WgfIshjKPF0PveIsObBibNE8X2
-        klVO32IWTv60mUMmy4uPCqmcCpcArTjVULRzw0wpsOfMei4KI8xw1ZAHBjo5oEqABVzsmt1
-        gPf1YvnnyCUgAFD6kXsCZZi8cJL2oWtQpXDrJa5hCGFnIjs+9o9qbdvNulGZE6rN9jozrgL
-        m6+T0sULk5UICG0g8tdWtdcW8cPTH6+5aVjnAaqCNAkQSaHml6thMgMW+0bcMn5VCTzVPix
-        Ff3ht8sndMWH3OXmb71lDehZYF0ibmPFRGo4PuFGcumyvTHiraiiAtOsdwHV6UbWvYP5bPG
-        lHrBmzLRB6HphIiCSfKX6Tq2642QA==
-X-QQ-GoodBg: 2
-From:   Shenghong Han <hanshenghong2019@email.szu.edu.cn>
-To:     akpm@linux-foundation.org
-Cc:     corbet@lwn.net, akiyks@gmail.com, baihaowen@meizu.com,
-        seakeel@gmail.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shenghong Han <hanshenghong2019@email.szu.edu.cn>,
-        Yixuan Cao <caoyixuan2019@email.szu.edu.cn>,
-        Yinan Zhang <zhangyinan2019@email.szu.edu.cn>,
-        Chongxi Zhao <zhaochongxi2019@email.szu.edu.cn>,
-        Jiajian Ye <yejiajian2018@email.szu.edu.cn>,
-        Yuhong Feng <yuhongf@szu.edu.cn>
-Subject: [PATCH] Documentation/vm/page_owner.rst: Fix syntax error and Describe details using table
-Date:   Sat, 30 Apr 2022 01:18:44 +0800
-Message-Id: <20220429171844.9673-1-hanshenghong2019@email.szu.edu.cn>
-X-Mailer: git-send-email 2.30.1
+        Fri, 29 Apr 2022 13:23:32 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F121B792
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:20:12 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id n18so7693515plg.5
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 10:20:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=a4Vg7xj5Oz0RqrtTAOpFC6SZhiV9hbA9Db0FqNGKSfo=;
+        b=QmvdEjpZzZTCrJbvbO7i8sq/xCzMCL9QUUJqkc+omAQmFZG84ChfZ3Bk7gg/5STixL
+         HDeG41+zs5VsWneYJYBGd1S91tGhNW0zpCYgrQ8rofqec67OiSzDLf/zVkzAZuDuzZGp
+         RRbsQG6e07m9WqKyIsGgKMqJa95ZzVpTb58KWzCaeyZ9+JdQ7xWUpZiGhrhdIaf9QCmO
+         Eb0beCY/wWk5pJxSh0bi5nZwM4ikJR4FGECjiJ46c538dvRSFdyjEjLHbiONRXMe6ZEc
+         BZTDbDoVhLKix9b7MPIdB7Xusqy07FE2Qa9QhNGeNS2psqqC9yQuHuVDUcci1ldKNAb6
+         FJTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=a4Vg7xj5Oz0RqrtTAOpFC6SZhiV9hbA9Db0FqNGKSfo=;
+        b=rvyV6as+ujiDAhtOia+e9gl0Kg6EEIzcRl6oQ945ZCXda/yBUlS/Lk5mPTBApCDmYZ
+         SA+qCMcEcPm8Uwr7e/TsUcdpMTT8t0djRWzA/uVhQggGEbbhjD+n9I2PEVBEZG+FCncN
+         cK5zVrjJbhOzR6iXhO8+KFrHusSJ4IVZcAm06YfBjXDWd65OasNlavD4DffZGhIerepx
+         M4PkAhtLEGfXn1jNzs+juWHgepKYANxfUn01/+14SRwTwYax8npjowmLVP3vlT6ypcFx
+         QsEExmq9qL+Qh/wkuk7DK71D+J5bRodTgZm97WzzXdn9aqAPpVyorve1wLxR0Dkh6r48
+         HR/w==
+X-Gm-Message-State: AOAM532qbWMZ4CVB811BXwjr0Ff5CZ1Hl2Z6Gnldz/V3e9oxF6ZiwuNZ
+        0wy20NHuVmv1+M5aBgbPGmrP
+X-Google-Smtp-Source: ABdhPJzedkPH2Wi/LHIEUZcCNdwZ3tG0YmgzAVROnWHQlXBE07AAFx5rSIvrUkOuZgEqpfq/+lMp8g==
+X-Received: by 2002:a17:902:d484:b0:15e:7aa9:babc with SMTP id c4-20020a170902d48400b0015e7aa9babcmr458383plg.38.1651252812325;
+        Fri, 29 Apr 2022 10:20:12 -0700 (PDT)
+Received: from thinkpad ([59.92.96.47])
+        by smtp.gmail.com with ESMTPSA id nm5-20020a17090b19c500b001cb978f906esm10849999pjb.0.2022.04.29.10.20.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 10:20:11 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 22:50:04 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 25/25] PCI: dwc: Add DW eDMA engine support
+Message-ID: <20220429172004.GA12006@thinkpad>
+References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
+ <20220324014836.19149-26-Sergey.Semin@baikalelectronics.ru>
+ <20220328141521.GA17663@thinkpad>
+ <20220419205403.hdtp67mwoyrl6b6q@mobilestation>
+ <20220423144055.GR374560@thinkpad>
+ <20220428140501.6geybgwvkevqaz7e@mobilestation.baikal.int>
+ <20220428170929.GC81644@thinkpad>
+ <20220429161348.zfjogvb3uxs3fxzp@mobilestation.baikal.int>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:email.szu.edu.cn:qybgforeign:qybgforeign4
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220429161348.zfjogvb3uxs3fxzp@mobilestation.baikal.int>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,115 +88,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some syntax errors exist in "page_owner.rst". Thanks to Akira Yokosawa and
-Haowen Bai for tips to help improve the documentation.
+On Fri, Apr 29, 2022 at 07:13:48PM +0300, Serge Semin wrote:
+> On Thu, Apr 28, 2022 at 10:39:29PM +0530, Manivannan Sadhasivam wrote:
+> > On Thu, Apr 28, 2022 at 05:05:23PM +0300, Serge Semin wrote:
+> > 
+> > [...]
+> > 
+> > > > If iATU has unroll enabled then I think we can assume that edma will also be
+> > > > the same. So I was wondering if we could just depend on iatu_unroll_enabled
+> > > > here.
+> > > 
+> > > I thought about that, but then I decided it was easier to just define
+> > > a new flag. Anyway according to the hw manuals indeed the unroll
+> > > mapping is enabled either for both iATU and eDMA modules or for none
+> > > of them just because they are mapped over a single space. It's
+> > > determined by the internal VHL parameter CC_UNROLL_ENABLE.
+> > > On the second thought I agree with you then. I'll convert the
+> > > iatu_unroll_enabled flag into a more generic 'reg_unroll' and make
+> > > sure it's used for both modules.
+> > > 
+> > 
+> > Sounds good!
+> > 
+> > > > 
+> > > > > > 
+> > > > > > > +	if (pci->edma_unroll_enabled && pci->iatu_unroll_enabled) {
+> > > > > > > +		pci->edma.mf = EDMA_MF_EDMA_UNROLL;
+> > > > > > > +		if (pci->atu_base != pci->dbi_base + DEFAULT_DBI_ATU_OFFSET)
+> > > > > > > +			pci->edma.reg_base = pci->atu_base + PCIE_DMA_UNROLL_BASE;
+> > > > > > > +		else
+> > > > > > > +			pci->edma.reg_base = pci->dbi_base + DEFAULT_DBI_DMA_OFFSET;
+> > > > > > 
+> > > > > 
+> > > > > > This assumption won't work on all platforms. Atleast on our platform, the
+> > > > > > offsets vary. So I'd suggest to try getting the reg_base from DT first and use
+> > > > > > these offsets as a fallback as we do for iATU.
+> > > > > 
+> > > > > I don't know how the eDMA offset can vary at least concerning the
+> > > > > normal DW PCIe setup. In any case the DW eDMA controller CSRs are
+> > > > > mapped in the same way as the iATU space: CS2=1 CDM=1. They are either
+> > > > > created as an unrolled region mapped into the particular MMIO space
+> > > > > (as a separate MMIO space or as a part of the DBI space), or
+> > > > > accessible over the PL viewports (as a part of the Port Logic CSRs).
+> > > > > Nothing else is described in the hardware manuals. Based on that I
+> > > > > don't see a reason to add one more reg space binding.
+> > > > > 
+> > > > 
+> > > 
+> > > > This is not true. Vendors can customize the iATU location inside DBI region
+> > > > for unroll too. That's one of the reason why dw_pcie_iatu_detect() works on
+> > > > qcom platforms as it tries to get iatu address from DT first and then falls
+> > > > back to the default offset if not found.
+> > > > 
+> > > > So please define an additional DT region for edma.
+> > > 
+> > > It's obvious that iATU location can vary. I never said it didn't. We
+> > > are talking about eDMA here. In accordance with what the DW PCIe hw
+> > > manuals say eDMA always resides the same space as the iATU. The space
+> > > is enabled by setting the CS2=1 and CDM=1 wires in case of the Native
+> > > Controller DBI access. In this case eDMA is defined with the 0x80000
+> > > offset over the iATU base address while the iATU base can be placed at
+> > > whatever region platform engineer needs.
+> > > 
+> > > Alternatively the AXI Bridge-based DBI access can be enabled thus
+> > > having the DBI+iATU+eDMA mapped over the same MMIO space with
+> > > respective offsets 0x0;0x300000;0x380000. This case is handled in the
+> > > branch of the conditional statement above if it's found that iATU base
+> > > is having the default offset with respect to the DBI base address
+> > > (pci->atu_base == pci->dbi_base + DEFAULT_DBI_ATU_OFFSET).
+> > > 
+> > > To sum up seeing I couldn't find the eDMA region defined in the qcom
+> > > bindings and judging by what you say doesn't really contradict to what
+> > > is done in my code, I guess there must be some misunderstanding either in
+> > > what you see in the code above or what I understand from what you say.
+> > > So please be more specific what offsets and whether they are really
+> > > different from what I use in the code above.
+> > > 
+> > 
+> > You won't see any edma register offset because no one bothered to define it
+> > since it was not used until now. But the memory region should've been
+> > documented...
+> > 
+> 
+> > Anyway, here is the offset for the Qcom SoC I'm currently working on:
+> > 
+> > DBI  - 0x0
+> > iATU - 0x1000
+> > eDMA - 0x2000
+> 
+> Finally we've got to something. Earlier you said:
+> 
+> > > > This is not true. Vendors can customize the iATU location inside DBI region
+> > > > for unroll too.
+> 
+> Actually it is if we are talking about the standard Syopsys DW PCIe
+> IP-CoreConsultant methods, which don't imply any eDMA base address
+> customization parameter. Thus there must be some address translation
+> performed at some layer before the address reaches the DW PCIe DBI
+> interface. So it's platform-specific. That happens in your case too.
+> 
 
-We try to fix them. Hope that the Documentation is showed as we expect.
+Seems like it.
 
-Signed-off-by: Shenghong Han <hanshenghong2019@email.szu.edu.cn>
-Fixes: edc93abbcc6d ("tools/vm/page_owner_sort.c: support sorting blocks by multiple keys")
+> > > > That's one of the reason why dw_pcie_iatu_detect() works on
+> > > > qcom platforms as it tries to get iatu address from DT first and then falls
+> > > > back to the default offset if not found.
+> > 
+> > As you can see, these offsets doesn't really fit in both the cases you shared
+> > above.
+> 
+> Seeing the iATU address bits layout can be changed the next
+> reg-space calculation code shall work for all the discussed cases:
+> 
+> if (!unroll) {
+> 	pci->edma.reg_base = pci->dbi_base + PCIE_DMA_VIEWPORT_BASE;
+> } else if (!pci->edma.reg_base) {
+> 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "dma");
+> 	if (res) {
+> 		pci->edma.reg_base = devm_ioremap_resource(dev, res);
+> 		if (IS_ERR(pci->edma.reg_base))
+> 			return PTR_ERR(pci->edma.reg_base);
 
-Co-developed-by: Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
-Co-developed-by: Yinan Zhang <zhangyinan2019@email.szu.edu.cn>
-Co-developed-by: Chongxi Zhao <zhaochongxi2019@email.szu.edu.cn>
-Co-developed-by: Jiajian Ye <yejiajian2018@email.szu.edu.cn>
-Co-developed-by: Yuhong Feng <yuhongf@szu.edu.cn>
----
-Hello Andrew,
+This should work for me. Thanks for the work!
 
-In Commit 57f2b54a9379 ("Documentation/vm/page_owner.rst: update the
-documentation") and Commit edc93abbcc6d ("tools/vm/page_owner_sort.c:
-support sorting blocks by multiple keys"), some incorrect syntax
-are used, which laeds to "build warning after merge of the mm tree".
-Apologize for that!
+Regards,
+Mani
 
-This issue is trying to fix it.
-
-Best,
-
-	Shenghong Han
----
----
- Documentation/vm/page_owner.rst | 67 ++++++++++++++++++++++-----------
- 1 file changed, 44 insertions(+), 23 deletions(-)
-
-diff --git a/Documentation/vm/page_owner.rst b/Documentation/vm/page_owner.rst
-index 25622c715..f900ab99d 100644
---- a/Documentation/vm/page_owner.rst
-+++ b/Documentation/vm/page_owner.rst
-@@ -171,26 +171,47 @@ Usage
- 
- STANDARD FORMAT SPECIFIERS
- ==========================
--::
--
--For --sort option:
--
--	KEY		LONG		DESCRIPTION
--	p		pid		process ID
--	tg		tgid		thread group ID
--	n		name		task command name
--	st		stacktrace	stack trace of the page allocation
--	T		txt		full text of block
--	ft		free_ts		timestamp of the page when it was released
--	at		alloc_ts	timestamp of the page when it was allocated
--        ator            allocator       memory allocator for pages
--
--For --curl option:
--
--	KEY		LONG		DESCRIPTION
--	p		pid		process ID
--	tg		tgid		thread group ID
--	n		name		task command name
--	f		free		whether the page has been released or not
--	st		stacktrace	stack trace of the page allocation
--        ator            allocator       memory allocator for pages
-+
-+1) `Table 1`_ for the ``--sort`` option.
-+
-+.. table:: Table 1
-+   :name: Table 1
-+
-+   +--------+--------------+----------------------------------------------+
-+   | KEY    | LONG         | DESCRIPTION                                  |
-+   +========+==============+==============================================+
-+   | p      | pid          | process ID                                   |
-+   +--------+--------------+----------------------------------------------+
-+   | tg     | tgid         | thread group ID                              |
-+   +--------+--------------+----------------------------------------------+
-+   | n      | name         | task command name                            |
-+   +--------+--------------+----------------------------------------------+
-+   | st     | stacktrace   | stack trace of the page allocation           |
-+   +--------+--------------+----------------------------------------------+
-+   | T      | txt          | full text of block                           |
-+   +--------+--------------+----------------------------------------------+
-+   | ft     | free_ts      | timestamp of the page when it was released   |
-+   +--------+--------------+----------------------------------------------+
-+   | at     | alloc_ts     | timestamp of the page when it was allocated  |
-+   +--------+--------------+----------------------------------------------+
-+   | ator   | allocator    | memory allocator for pages                   |
-+   +--------+--------------+----------------------------------------------+
-+
-+2) `Table 2`_ for the ``--cull`` option.
-+
-+.. table:: Table 2
-+   :name: Table 2
-+
-+   +--------+--------------+----------------------------------------------+
-+   | KEY    | LONG         | DESCRIPTION                                  |
-+   +========+==============+==============================================+
-+   | p      | pid          | process ID                                   |
-+   +--------+--------------+----------------------------------------------+
-+   | tg     | tgid         | thread group ID                              |
-+   +--------+--------------+----------------------------------------------+
-+   | n      | name         | task command name                            |
-+   +--------+--------------+----------------------------------------------+
-+   | st     | stacktrace   | stack trace of the page allocation           |
-+   +--------+--------------+----------------------------------------------+
-+   | ator   | allocator    | memory allocator for pages                   |
-+   +--------+--------------+----------------------------------------------+
--- 
-2.30.1
-
-
-
+> 	} else (pci->atu_size >= 2 * 0x80000) {
+> 		pci->edma.reg_base = pci->atu_base + 0x80000;
+> 	} else {
+> 		/* No standard eDMA CSRs mapping found. Just skip */
+> 		return 0;
+> 	}
+> } else {
+> 	/* pci->edma.reg_base can be specified by the platform code. This shall
+> 	 * be useful for the tegra194 or intel gw SoCs. The former
+> 	 * platform has the "atu_dma" resource declared which implies
+> 	 * having the joint iATU+eDMA CSR space, while the later has
+> 	 * specific iATU offset with respect to the DBI base address
+> 	 * (address is two bits shorter).
+> 	 */
+> }
+> 
+> -Sergey
+> 
+> > 
+> > I don't have the knowledge about the internal representation of the IP or what
+> > customization Qcom did apart from some high level information.
+> > 
+> > Hope this clarifies!
+> > 
+> > Thanks,
+> > Mani

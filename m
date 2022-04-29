@@ -2,64 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4215150F4
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E2CE5150FA
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:36:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235159AbiD2Qj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 12:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38660 "EHLO
+        id S1356101AbiD2QkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 12:40:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234707AbiD2Qj0 (ORCPT
+        with ESMTP id S235788AbiD2QkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 12:39:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 188778FFA4;
-        Fri, 29 Apr 2022 09:36:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D163DB83697;
-        Fri, 29 Apr 2022 16:36:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4B65C385A4;
-        Fri, 29 Apr 2022 16:36:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651250165;
-        bh=ipkf+ZH0ZPZLHN4KtiziSBzjvehaBnJOxAJA9ZluiQ0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Lrhoj4+VwPFjgaVnmorGXwTlx8a7yh9CgR4l3rolG7SL0HZPr076d24lzYgKeKjaC
-         NVzuDInFTAr0qvQEBN3Kt8UW2Zbr61FVdU6A+gjYG/fM2tzoJJmqMur6iVPGGH4jhY
-         zVl5Nstua0m+CTSMok0OEHbq7zHP61HAzz8JBHyGWpbOvo/C6xsgetf/oiasBCfku2
-         bWrdHx2zgPMAFGetnboIc54f1YFa+9GSOHP7575tDqpeUZ5l8FEGRfEuq/dNoFNT41
-         3boRKsTyWM6nZpdWvRNtP9jmB7v4IPCak1Ap9doU1/wrN2ZdhlGMA+fZKmKoMq9KKf
-         OXAsSCk+qTSWw==
-Message-ID: <eb2dd599-f38a-57b2-694e-d91aaadda2b5@kernel.org>
-Date:   Fri, 29 Apr 2022 18:35:58 +0200
+        Fri, 29 Apr 2022 12:40:08 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC9F60E1
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:36:50 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id z16so7368343pfh.3
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:36:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4AhDhjWUwI2Tn5CahkqmhzJNHD5HQcuQ3C3nm662LO4=;
+        b=ZdRUbmRvvcg9rqXLGiCVN4eDpXjZirOYZwfuSdri1DmaLsbHCUPYz6ditV4Zh+OsTJ
+         YGEOxkRyT2umQVM4d3EC5TRftA2vZA7CCMPb/dJuLWr2JJn/6IM+cZlnyLjA99ssGnTM
+         PF/XhOhPhl5uQon8mcIc4DGAXcNQzIy73bbr6hMdSIfkQa1E2Lz/oQae6x2f14hs0u/i
+         5kaM2F5OJjOoLpdPoM4Q26Q6YrbAbHoVLxDSPeoB5yIH7eg7e/b69sIA/8y+ArOZpsHM
+         8+K4/oMDpE19FdyJmwB9JXMDAXPHmVaqFqW57oXMQMYnZclzHNnVsXveR4xdcxBmubDB
+         8fNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4AhDhjWUwI2Tn5CahkqmhzJNHD5HQcuQ3C3nm662LO4=;
+        b=L4rtRVXYhGQMomnI43Kd2SarM07DhlNnfXVaYSRcC6eK11k0mBXuS3gOOR65QdzL0m
+         FFJYGdU0Nc9Lkh6MhB2tkC9u8CdwaaFaTRbBVcrCQqCKeRlB7kXF14e1MN1lOSwz4O/q
+         YzAuIgGKm62R9zoq/EcEfvgpMsQ2OlIHGP/i2reAM863R/N4M6QVWk6fojlhje8jkcrq
+         1Qe9XuxHl0GdRSjEuaXdwFWxPXHVeekqlRUzkcQBriA9iUKHX/miDMD8P0Lk6VKbUtsV
+         tCGn4DbztMuYr6SeBhMS6TD7kvmXQOOJA+J9oY3RWIKdNIZuw3+vxOe0xryaj4TQ47yZ
+         qiRw==
+X-Gm-Message-State: AOAM5318e4eRg3f0o9iVRjcW315gInqS/JKWQ278184id/QRBDQrlkrl
+        iJ7vy+sdKpP5N3aM6TBYDj0yUELRRmQWOEtlrGMFHw==
+X-Google-Smtp-Source: ABdhPJw+o86C+wUIMV8SACUxDWyPWaJYaJvHGulqCMpaWQRoUSS6ySuQi0M4o7t89bMyCN4zDSo+e5KI1gU6qCVR3Fo=
+X-Received: by 2002:a63:194b:0:b0:3ab:71e5:161 with SMTP id
+ 11-20020a63194b000000b003ab71e50161mr184626pgz.115.1651250209745; Fri, 29 Apr
+ 2022 09:36:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/2] dt-bindings: google,cros-ec-keyb: Introduce switches
- only compatible
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
+References: <20220429161347.7947-1-tharvey@gateworks.com> <CAOMZO5Do-Vy_s4m99uUTnL1sdJUhghjzZJKp4V-SG4rAK=kTzg@mail.gmail.com>
+In-Reply-To: <CAOMZO5Do-Vy_s4m99uUTnL1sdJUhghjzZJKp4V-SG4rAK=kTzg@mail.gmail.com>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Fri, 29 Apr 2022 09:36:38 -0700
+Message-ID: <CAJ+vNU0Lhgo1Hz_BtbEJb+JPbHj8UWtf5hm1uA0b=H5SeKi3Kg@mail.gmail.com>
+Subject: Re: [PATCH v2] arm64: dts: imx8mm-venice-gw7902: fix pcie bindings
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Shawn Guo <shawnguo@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        "Joseph S. Barrera III" <joebar@chromium.org>
-References: <20220427203026.828183-1-swboyd@chromium.org>
- <20220427203026.828183-2-swboyd@chromium.org>
- <CAD=FV=Vtnj+8FYdBSvsud9fGEbo7N1HSjXA3rH3f8FMJsuVR1A@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <CAD=FV=Vtnj+8FYdBSvsud9fGEbo7N1HSjXA3rH3f8FMJsuVR1A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        NXP Linux Team <linux-imx@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,49 +71,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/04/2022 18:31, Doug Anderson wrote:
->>    - $ref: "/schemas/input/matrix-keymap.yaml#"
->>
->>  properties:
->>    compatible:
->> -    const: google,cros-ec-keyb
->> +    oneOf:
->> +      - items:
->> +          - const: google,cros-ec-keyb-switches
->> +          - const: google,cros-ec-keyb
->> +      - items:
->> +          - const: google,cros-ec-keyb
-> 
-> nit: if I come back and read this binding later I'm not sure it would
-> be obvious which compatible I should pick. Can we give any description
-> here that indicates that the first choice is for devices that _only_
-> have buttons and switches (the google,cros-ec-keyb is just for
-> backward compatibility) and the second choice is for devices that have
-> a physical keyboard and _also_ possibly some buttons/switches?
-> 
-> I could also imagine people in the future being confused about whether
-> it's allowed to specify matrix properties even for devices that don't
-> have a matrix keyboard. It might be worth noting that it's allowed (to
-> support old drivers that might still be matching against the
-> google,cros-ec-keyb compatible) but not required.
+On Fri, Apr 29, 2022 at 9:18 AM Fabio Estevam <festevam@gmail.com> wrote:
+>
+> Hi Tim,
+>
+> On Fri, Apr 29, 2022 at 1:13 PM Tim Harvey <tharvey@gateworks.com> wrote:
+> >
+> > Update the pcie bindings to the correct dt bindings:
+> >  pcie_phy:
+> >   - use pcie0_refclk
+> >   - add required clock-names
+> >  pcie:
+> >   - remove pcie_phy clock as it comes from phy driver
+> >
+> > Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+>
+> It seems you missed the Fixes tag.
+>
+> Reviewed-by: Fabio Estevam <festevam@gmail.com>
 
-+1
+Fabio,
 
-> 
-> 
->>    google,needs-ghost-filter:
->>      description:
->> @@ -50,7 +56,7 @@ examples:
->>    - |
->>      #include <dt-bindings/input/input.h>
->>      cros-ec-keyb {
->> -        compatible = "google,cros-ec-keyb";
->> +        compatible = "google,cros-ec-keyb-switches", "google,cros-ec-keyb";
-> 
-> Feels like we should create a second example?
+it didn't really 'fix' anything but dt syntax. PCIe works without this patch.
 
-+1 as well, because it really would confuse what's the difference
-between them.
+Best Regards,
 
-Best regards,
-Krzysztof
+Tim

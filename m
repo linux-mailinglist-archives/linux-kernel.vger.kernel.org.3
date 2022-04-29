@@ -2,178 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4D0514180
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 06:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D902F514185
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 06:45:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237499AbiD2EnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 00:43:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49538 "EHLO
+        id S237649AbiD2Ese (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 00:48:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiD2EnX (ORCPT
+        with ESMTP id S230133AbiD2Esb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 00:43:23 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECBBE15FE2
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 21:40:03 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id b198-20020a6334cf000000b003ab23ccd0cbso3369691pga.14
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 21:40:03 -0700 (PDT)
+        Fri, 29 Apr 2022 00:48:31 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2082.outbound.protection.outlook.com [40.107.243.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84FC6436;
+        Thu, 28 Apr 2022 21:45:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bGr43tkdmFRhcSeTAbYAJkoJgPzqFA9KifhmRu0SzoludYKEVGWKTDJpzEvupvGoPZvhA5CjiclBcADZC9rHeN+rS4aTihdOylObsmTnSzcAnfj5A7Dp6xH81WqhFSs3SK1GL4KnDe6ofCBfKQX43xhA1nS6qZt1O7Mbn6MFdvL22MwJThTK6Cbvjf5oENw7xYGZwI4rWw5GR32W5Pxp8MOmwqNU9BYsa4VmgvgcljK+TxQlZ2+9gGoc4FFaTVpLB2x7D+CtUzAEXOOFS/hVdMtZPvZl9yrJIVzNQXy8SUpJKgTuAlCFIcDhvMgzG0Iqnr+xLBLOwVJCeU8ARvIapQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hBiblxFJyjMoDJnQA2qqvnY+y7IXZa10h4o7VJgnUAE=;
+ b=UJrncXLL+A3p+6ppNh/2JD7DpYJMFShXgHx7WgRZR4AsVoLmudcHFZ1O6ANsliKdoZ8SAFM11YHK7phePLkEtWVoyBbdmxXL4pOcfHFf6HpFbSoxJNyDsvTFYNMRmx5osX1WKAWmhNBw8He2KBPsYSKcZ/rq5Pinnq83Dbg5Mu/sCdXS57JtJZlfs2/agRQsX6kyopkLPv7rNVRS+MPey0AGX0myF1VXXvgywBM4l9gkIngViJAQRvBymp82iRsipH3GvUBK6/j/cCIt3oiGMtqcdvjbNW9GkU4hR+JjfOIF5jpdddqcbwX4tvzT+HGvYlPvvb73KlELrb5EP9N85Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
+ dkim=pass header.d=xilinx.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=7pAm/LDFHoDLOVuIZx6NOUlnYoOG6z2KtSbentQNohQ=;
-        b=lOJ6ndqujbkQ9y8YtiKLh1NmKtjsaaYLb7DNBKdzwM6kNdDJymwTB229+sHcII9IGm
-         ZgijMD9LB65oEfpnzDUuw7gMa1qtR6k7S2ZlegTaofUACUzwpv8vlppdU55LGRFu3xOo
-         DTTGaB92cV5r20Fkg0e2H9E3kthvAOiLTkz3TfcnrbdLxtSzKUl/QUaAPl9Nlyd9d+NP
-         hlFSo4WvNXsXYW96S52BZhtTswOFsceMy/Pzv0U02tJAyQ7NxtUhQdPT8MVsYrL7qi8C
-         lrvnil194+31LqgOEWw4WdQqbFQ3bkGTAw/oDIyQ1CcH4F+XIZe5J159ZKBObnviPkrs
-         Yh9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=7pAm/LDFHoDLOVuIZx6NOUlnYoOG6z2KtSbentQNohQ=;
-        b=4GWPS4XZc4IwGYU3VXTleeWlJCT1Nc/fgK2M1FVbuYffnsmFL+CdldaPDQlOtk/Jgd
-         nc28UP0vBfsbdnvdAlzRsP9T/SHSC00Zx8/V7fD/wE/zE/M2JdWya3c+J5+n39rvcpdH
-         C0hTwyceibqmE2qyyeD7HfFLFyRiYtmeV6SxVNoQcM3saRiztIiFueRGL+OKvKeWZdUb
-         Lq5PsDUTNK8Yi3esjPIrLcDLUKvcOQz6U4KlDVsDAlZ0KZ40xquchfmdRFPtvs19w/n2
-         b6lD89jKBPxR3rMHggIcYYgGjrLjbLKhIvulmCOcjZyLmeOsnzxAy6j5Lfr12MBRoGa4
-         VzsA==
-X-Gm-Message-State: AOAM532QzIxqzcIkOAI68McTr0yOcOJvWziwrd36gONxCnn8c6bU64j4
-        TrcAiLTHAzRxsYT2lDMMU4aNXliNz4yyRw==
-X-Google-Smtp-Source: ABdhPJymcIZSLhtD4Eu7q4Ap5bwpv/nVLCJ/HlABq4/5Ntta3fkMA3IydOm1P3Wx780QZrTfXCSsdCH/PLWsog==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a17:902:ce02:b0:151:a86d:dc2b with SMTP
- id k2-20020a170902ce0200b00151a86ddc2bmr37514527plg.57.1651207203378; Thu, 28
- Apr 2022 21:40:03 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 12:39:14 +0800
-Message-Id: <20220429043913.626647-1-davidgow@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [PATCH] kunit: Taint kernel if any tests run
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     David Gow <davidgow@google.com>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hBiblxFJyjMoDJnQA2qqvnY+y7IXZa10h4o7VJgnUAE=;
+ b=sw8EKL39kVruQD0Z/Xv2icyjepIpwMKnm5ajTCeNZXIHtv/x0SqijOZuiKJ6YCUvyOaPH4J02ycGA1E5y912Q1eo5YGUdVi8mXt8aLjdWL5dJtM3FOJe67iExDTf8ofy+yk4WIH/+iAFVwdjPyFh9qSrTKCYD5bvXTpyJevHXIA=
+Received: from SA1PR02MB8560.namprd02.prod.outlook.com (2603:10b6:806:1fb::24)
+ by DM5PR02MB3292.namprd02.prod.outlook.com (2603:10b6:4:64::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.20; Fri, 29 Apr
+ 2022 04:44:52 +0000
+Received: from SA1PR02MB8560.namprd02.prod.outlook.com
+ ([fe80::f8bc:753c:d997:24de]) by SA1PR02MB8560.namprd02.prod.outlook.com
+ ([fe80::f8bc:753c:d997:24de%3]) with mapi id 15.20.5186.025; Fri, 29 Apr 2022
+ 04:44:51 +0000
+From:   Radhey Shyam Pandey <radheys@xilinx.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        Michal Simek <michals@xilinx.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        git <git@xilinx.com>
+Subject: RE: [PATCH 0/2] emaclite: improve error handling and minor cleanup
+Thread-Topic: [PATCH 0/2] emaclite: improve error handling and minor cleanup
+Thread-Index: AQHYWxz39QEwEZHRlku830aUv51lha0GFOOAgAA7NGA=
+Date:   Fri, 29 Apr 2022 04:44:50 +0000
+Message-ID: <SA1PR02MB8560130205812054F354254CC7FC9@SA1PR02MB8560.namprd02.prod.outlook.com>
+References: <1651163278-12701-1-git-send-email-radhey.shyam.pandey@xilinx.com>
+ <Yms6a3GODF6Lmf4l@lunn.ch>
+In-Reply-To: <Yms6a3GODF6Lmf4l@lunn.ch>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=xilinx.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 07801808-29d5-4427-47d7-08da299aff42
+x-ms-traffictypediagnostic: DM5PR02MB3292:EE_
+x-ld-processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
+x-microsoft-antispam-prvs: <DM5PR02MB3292A0A138B694E010505587C7FC9@DM5PR02MB3292.namprd02.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: zQHfRPVsp3FLIyl8/iHLzbSC7xgct2I34xsHuVO0RfZtWGRE7Sj2BgcyY0wm7BFw5jHoU65U60T2RrNZxMBhIhvZL1Mnfly3KSO4zCg350RZLZB+PV0Nyhjh7DcDYCjvdRNOrHgLGv+YfrH4Sd/MpQIEd5WRBGVb0NmRt18L8s+z6lUoeUKORLQeNHGVP6Hldx/DnDd6D/xUygQUXjz7OXvvJLZMKQp7b7TBBJ0xFFv6G5VvL90c3J2heZ21q+X1fhXgfrWKrvq7uiknpYWGmFbxhJlk/AQsjj137ni8TQXuQ+s0zwL7yAgWuyBlopGeb3cO3Sm+i8wUZiM3NeE8o9WetkPD6ak4q/uE+NU2z8bYqYop7QWaDNMTX2REVKq+W4UWs7z97i7qxJ9sD8V4HgY8I0usVdDb8iAZp+S6uatQUkJcXWweEszYvAyA9++/2l6hor33zlq7dLtiqmijp7R28UQlGIEAz6r0yjMe1uhaCq67oEVkC5G1ksaFUAxEvQCmpzWoY8qJ/O4mYhm1S+84/8+yQy23E4hCuu6YqPoTHOrwOUP+F6g8/p/BcUewIEXpeOzdUiIVVDq/1/9Fe+cnoy5YVvBcEm4JU/FM6Gi0iP38RWW+TK/JKMmk9meePyEOix3A6VsIobGuh/LKwpMPP39zAIXKPUVpX3FjJwqszC9KqR2FZqHBuhfTNF+hlHYM/CO86hQl+zR86h6EEA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR02MB8560.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(9686003)(122000001)(8936002)(71200400001)(54906003)(316002)(6916009)(38070700005)(5660300002)(7696005)(38100700002)(508600001)(86362001)(6506007)(52536014)(53546011)(66476007)(66556008)(66446008)(64756008)(8676002)(4326008)(76116006)(66946007)(4744005)(107886003)(186003)(83380400001)(55016003)(33656002)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 2
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?b5W+eFjBOSNxm6agaGkRXnrGKTyRLlThwk5yeegSvYK1wcTz9I5TxlhJMddm?=
+ =?us-ascii?Q?Ps3QnYVs0p8PLHbJPUrNBDrmmU/adaCKA7HHPzNErFxiK813X1r8dqkj34Zi?=
+ =?us-ascii?Q?3jWHhtUj3Bd0Ojm4QBCcu/ujCwmED584LuBeXzNOPS9RCqRUJABpDk6zzdxs?=
+ =?us-ascii?Q?d2PMFDUXQWA3Y5TltUJXRrktLXFBVlMNuFIjrn7j6TRCqUQRC91WTupdt6wQ?=
+ =?us-ascii?Q?Mfi5Zs2MopHCn3jzwZWtaxyVwhczyB9RjONCWzXRP3afa66CfCXQnTuYIlHc?=
+ =?us-ascii?Q?ge1oe4/AnS0ELbhOu1AtG24IrgJdmV3Mjg9pOCyoBkF3xHpvD0/rCpPpcIv5?=
+ =?us-ascii?Q?uWlk4fYulyLR0CAPkzc93asj6IZW4n9s0ZpGTbz3RCL8QKCLRqyS/5zt17ql?=
+ =?us-ascii?Q?ysr0TFEsYBc3UeUwM16qitIxIsaBkvOeXg+mm7gbtKP6Ypg3CLwcyzg+m1ZV?=
+ =?us-ascii?Q?M04m3T4GuRDhBsH/jbXB4xKFouGzdrU0vcNaKUMvbOQVNHrRhT1ZDe9+JHw/?=
+ =?us-ascii?Q?vOj5ubFieDx1J66o4T3TQTkQxQ2NjdoDc7FT23tXq7asLDDAnICrw3MV6+es?=
+ =?us-ascii?Q?hZphCWYtdCWAQQWv7PTPzA0B7+ER2AjB1D2+rLDJwlP1go08oLTDSQ2QqGUd?=
+ =?us-ascii?Q?PzHvxo5qXlFKICSjoFwWQGeXmXLudL7AebjcaF5r/bNLl3rxbRTHjoZcBkX6?=
+ =?us-ascii?Q?g2AR94mjt3lccfgph4TfYPgwJUcxxBkp/ljzCtHWD0SH4VbsGLO6OhiHMoDe?=
+ =?us-ascii?Q?MPRIG7qnsQefyL/dZfjGRzCVC0M49DabNB+4CCpugE88/Dy6DDt8c0QgLSx0?=
+ =?us-ascii?Q?234m9/QXXCkCKaaEBLpYk4z+bd6vymekpjiURDY6688Jx2nk8lqwjm1g0TRo?=
+ =?us-ascii?Q?DvPGsBFLm1iU8a/WIVOArlDeKI9pDJvkYND1Xqfym9oQsECbN6uKUkn5tSrU?=
+ =?us-ascii?Q?fa30cPVdI5ZU+gZsMtEaL2LgpWoAPzz9oFAwmY95SSdeUDAUv8ObqVBGSQyO?=
+ =?us-ascii?Q?FZ6f4b/zzileS5ugh0sIBRfNfUPrK9ia35vhofDbg8o+KuHOU8pO/RUx+Rct?=
+ =?us-ascii?Q?rOMMiBNQoOD07KnnftHKh3TKd0Gs1FOrgBa07t9RqNNe8lXQiPG86jY/oAad?=
+ =?us-ascii?Q?zfsU4c9xnhcjo9x9dVY3coodL49o/a9uNA3plB/zVALJqn1HiwwKXy0aDDnP?=
+ =?us-ascii?Q?ea9O6MmTyUKfPWRGwuH920PDgCqVhcgAW2MyLaoNnXQwkxOcQkRNTwKwZmqi?=
+ =?us-ascii?Q?hl03UJ2x426rgx/6et5n56eNCouFemOCI48YycbLqnZseXhM1Gg/oVD9zGGc?=
+ =?us-ascii?Q?xkeW0XTfpHNK7bv0/kCofSGF7Sbofm3UTlDCcaY0DmuOUMle0wdApPh4hGax?=
+ =?us-ascii?Q?UBJuCbX1wv9uzzVTbCRHnq980DFAuR+Rc8pDPVF49HLmfDrw8AbSRw5WJa9l?=
+ =?us-ascii?Q?hy6ja2WuIohYQqfuy7w0t+Nb+HY6jxOJzgVoK5Qw0XEndqfZ7vuBmO0abY8f?=
+ =?us-ascii?Q?6vYM8SRZHgmz4gJ6YGlhJO+8VRabQhJVMnJg25LwXCjch+U6tMRSQDq1QqU7?=
+ =?us-ascii?Q?4DdZOnVmiBfPAhpyYfkmRKXAfyXz6nCVrjR195+CZAAm8NTDjwuBTb6o+BiT?=
+ =?us-ascii?Q?eCdkNPRhsH2y6zlVuF53HVQZDHmWDDpsQ4C+0U8Tejts/QO7mTxr0oC9Hlbc?=
+ =?us-ascii?Q?oY39Bn3UXQxq0jFRSbrpIymZJR1J+yh5DLhOINJ/KAdwW6Stt7Er25czWco7?=
+ =?us-ascii?Q?F0bCvNsX70C7o4iISgtmF4ePnt/wj1idykoU5VPJyXE7eEazE1zbAGA1J9Sn?=
+x-ms-exchange-antispam-messagedata-1: cf06bPi9jWluug==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR02MB8560.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 07801808-29d5-4427-47d7-08da299aff42
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Apr 2022 04:44:51.0426
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: iLilyAmrs8XlqOqzRxGk8EhWLinPvMdFCi8DFpOuZdUb9unzARLd+ZWdN8YFzvPbb0274J7yLqH9fJDcTNC6EQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR02MB3292
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KUnit tests are not supposed to run on production systems: they may do
-deliberately illegal things to trigger errors, and have security
-implications (assertions will often deliberately leak kernel addresses).
+> -----Original Message-----
+> From: Andrew Lunn <andrew@lunn.ch>
+> Sent: Friday, April 29, 2022 6:38 AM
+> To: Radhey Shyam Pandey <radheys@xilinx.com>
+> Cc: davem@davemloft.net; kuba@kernel.org; pabeni@redhat.com; Michal
+> Simek <michals@xilinx.com>; netdev@vger.kernel.org; linux-arm-
+> kernel@lists.infradead.org; linux-kernel@vger.kernel.org; git <git@xilinx=
+.com>
+> Subject: Re: [PATCH 0/2] emaclite: improve error handling and minor clean=
+up
+>=20
+> On Thu, Apr 28, 2022 at 09:57:56PM +0530, Radhey Shyam Pandey wrote:
+> > It patchset does error handling for of_address_to_resource() and also
+> > removes "Don't advertise 1000BASE-T" and auto negotiation.
+> >
+> > TREE: net-next
+>=20
+> Please read the netdev FAQ. It tells you how to specify the tree a patchs=
+et
+> should be applied to.
 
-Add a new taint type, TAINT_KUNIT to signal that a KUnit test has been
-run. This will be printed as 'N' (for kuNit, as K, U and T were already
-taken).
+Thanks. As one of a patch is a bug fix will target for net. Will update it =
+in v2.
 
-This should discourage people from running KUnit tests on production
-systems, and to make it easier to tell if tests have been run
-accidentally (by loading the wrong configuration, etc.)
-
-Signed-off-by: David Gow <davidgow@google.com>
----
-
-This is something I'd been thinking about for a while, and it came up
-again, so I'm finally giving it a go.
-
-Two notes:
-- I decided to add a new type of taint, as none of the existing ones
-  really seemed to fit. We could live with considering KUnit tests as
-  TAINT_WARN or TAINT_CRAP or something otherwise, but neither are quite
-  right.
-- The taint_flags table gives a couple of checkpatch.pl errors around
-  bracket placement. I've kept the new entry consistent with what's
-  there rather than reformatting the whole table, but be prepared for
-  complaints about spaces.
-
-Thoughts?
--- David
-
----
- Documentation/admin-guide/tainted-kernels.rst | 1 +
- include/linux/panic.h                         | 3 ++-
- kernel/panic.c                                | 1 +
- lib/kunit/test.c                              | 4 ++++
- 4 files changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/admin-guide/tainted-kernels.rst b/Documentation/admin-guide/tainted-kernels.rst
-index ceeed7b0798d..8f18fc4659d4 100644
---- a/Documentation/admin-guide/tainted-kernels.rst
-+++ b/Documentation/admin-guide/tainted-kernels.rst
-@@ -100,6 +100,7 @@ Bit  Log  Number  Reason that got the kernel tainted
-  15  _/K   32768  kernel has been live patched
-  16  _/X   65536  auxiliary taint, defined for and used by distros
-  17  _/T  131072  kernel was built with the struct randomization plugin
-+ 18  _/N  262144  a KUnit test has been run
- ===  ===  ======  ========================================================
- 
- Note: The character ``_`` is representing a blank in this table to make reading
-diff --git a/include/linux/panic.h b/include/linux/panic.h
-index f5844908a089..1d316c26bf27 100644
---- a/include/linux/panic.h
-+++ b/include/linux/panic.h
-@@ -74,7 +74,8 @@ static inline void set_arch_panic_timeout(int timeout, int arch_default_timeout)
- #define TAINT_LIVEPATCH			15
- #define TAINT_AUX			16
- #define TAINT_RANDSTRUCT		17
--#define TAINT_FLAGS_COUNT		18
-+#define TAINT_KUNIT			18
-+#define TAINT_FLAGS_COUNT		19
- #define TAINT_FLAGS_MAX			((1UL << TAINT_FLAGS_COUNT) - 1)
- 
- struct taint_flag {
-diff --git a/kernel/panic.c b/kernel/panic.c
-index eb4dfb932c85..b24ca63ed738 100644
---- a/kernel/panic.c
-+++ b/kernel/panic.c
-@@ -404,6 +404,7 @@ const struct taint_flag taint_flags[TAINT_FLAGS_COUNT] = {
- 	[ TAINT_LIVEPATCH ]		= { 'K', ' ', true },
- 	[ TAINT_AUX ]			= { 'X', ' ', true },
- 	[ TAINT_RANDSTRUCT ]		= { 'T', ' ', true },
-+	[ TAINT_KUNIT ]			= { 'N', ' ', false },
- };
- 
- /**
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 0f66c13d126e..ea8e9162445d 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -11,6 +11,7 @@
- #include <kunit/test-bug.h>
- #include <linux/kernel.h>
- #include <linux/moduleparam.h>
-+#include <linux/panic.h>
- #include <linux/sched/debug.h>
- #include <linux/sched.h>
- 
-@@ -498,6 +499,9 @@ int kunit_run_tests(struct kunit_suite *suite)
- 	struct kunit_result_stats suite_stats = { 0 };
- 	struct kunit_result_stats total_stats = { 0 };
- 
-+	/* Taint the kernel so we know we've run tests. */
-+	add_taint(TAINT_KUNIT, LOCKDEP_STILL_OK);
-+
- 	kunit_print_subtest_start(suite);
- 
- 	kunit_suite_for_each_test_case(suite, test_case) {
--- 
-2.36.0.464.gb9c8b46e94-goog
+>=20
+> 	 Andrew
+>=20
 

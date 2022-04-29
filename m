@@ -2,90 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25D3F514AF6
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 15:45:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2526E514AF2
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 15:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376349AbiD2NsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 09:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56790 "EHLO
+        id S1354938AbiD2NrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 09:47:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376334AbiD2NsP (ORCPT
+        with ESMTP id S231211AbiD2NrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 09:48:15 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3D5CC51D;
-        Fri, 29 Apr 2022 06:44:56 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TCc4io016956;
-        Fri, 29 Apr 2022 13:44:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : content-transfer-encoding : mime-version; s=pp1;
- bh=xH1H+dZpcnkoXjkucpaq6JJ/BxwCu2uILw7KNDy7aWQ=;
- b=nlTaipuvXrKUA+OAOSnyBIFwdEWiircPn9NmgYwKt/nl54rcT6+Re0sXMDEjl81v+lfw
- Cr2NEwYpBfsCJcpVbyvCbqf3Do525Fx4vz/hkv+ghyKytLcqSNzpxxdUSacuaBJMhmnI
- 9iLfIVugA5JFq5i12cP+kLYwfiBQ4s7UafXQzplBOgLqOHwIc9+/JNvxzB14B3BLEgZT
- KC3QtNZvwkEOCXSda4oogtT5xXjWGhrXZ6NOxOv3Qszep2tFtCPU8mfMfgKINzCKOChl
- Hn1DzWNnMyCDkit4IshqACYsoeVLB2zWSv+CASNh87cIKm+uqE85pU1hrq+lkWUAzL9D ag== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqqtnspm4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 13:44:36 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23TD4LbS032483;
-        Fri, 29 Apr 2022 13:44:35 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqqtnspkn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 13:44:35 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TDSeZh024602;
-        Fri, 29 Apr 2022 13:44:33 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma01fra.de.ibm.com with ESMTP id 3fm938ya4g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 13:44:33 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TDiVQO47251784
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 29 Apr 2022 13:44:31 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2DF26AE053;
-        Fri, 29 Apr 2022 13:44:31 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D188AAE045;
-        Fri, 29 Apr 2022 13:44:30 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 29 Apr 2022 13:44:30 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [RFC v2 00/39] Kconfig: Introduce HAS_IOPORT config option
-Date:   Fri, 29 Apr 2022 15:43:05 +0200
-Message-Id: <20220429134430.2607821-1-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.32.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: NLJ3a5TxLZAN4C-JQTC2Jqrv1a9rtw-_
-X-Proofpoint-GUID: -Vn1wGSaeQ2Fe2EKLTRlrGASTLYx_tRo
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 29 Apr 2022 09:47:15 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705E6CC503;
+        Fri, 29 Apr 2022 06:43:56 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id r11-20020a05600c35cb00b0039409c1111bso3832654wmq.3;
+        Fri, 29 Apr 2022 06:43:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9SlylRvL62c7qQ0d0U09m8gj6wRuIZ4uikE6ZzCgN4s=;
+        b=BwVtRPzCEpgLI6VmOgXz/NXKyEBrJx9Ro+lZVO+Mau+UOdV36jcm8vhmeyfNr9t+vg
+         mYG4zfYRgfBP0L0x9m5YVeCd/PNwiwYJUKALD1HkikZi1RGbr3BY1rR7AOwMpvYkCOqn
+         7DC75t3w+u83ocQ5qPFZpBqB7mGJppKkIy9qE3TiJc6MJN47fxBOipQk0mzOi5N9hPHx
+         azauKMptEneUJagpdAfGPVPzVL3egBRmEAUy+LywOUMZMezOFkqv2gd5O10gjJwUouKX
+         M7FHGEb4QkDJv/wdCWfyvw2+vhajUsnDV0i7srobR4NW2Z17+S9sHIqjtMRSk4Bjmebw
+         3W8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9SlylRvL62c7qQ0d0U09m8gj6wRuIZ4uikE6ZzCgN4s=;
+        b=7SzLM5xFzv5ZtG+8RED2UgUA9qnv+3IqZoCIi2N/cK+vKgih8+y4iQryrVbhoyvvqA
+         FtcrroZwZ5qC9kI7zDcTgtb57wZkXdZipEoa5SHWO/bnecElzYr3UsUScTg4hWMDOsvk
+         lger0bdHKVNNusPh8Jp7smU96Uolt8N4nDhOBuZHMotEwC7TIhhbjDUk0eX+VE7Wf/+Q
+         yQCh2Eo0Y0sHjotRufKP6Iq8RthQczrQFvR8TXl71tB1p+T3mu12CY1xFW6bSSwEbvB2
+         Xr88ZqxbA1ri3x+QDdw8NZ8bMzBU3cSdqeDkncPFKIq/+rwvUGw3DGLhEo3FhVWNtLCa
+         K0LA==
+X-Gm-Message-State: AOAM531OchFT8aUSyx3X17ieaDr4QWUi23UaL7YbJyygoJphkdq5PLfe
+        Sy3jHckJj1da3YeaAPD53ek=
+X-Google-Smtp-Source: ABdhPJzHeQO20kA01fexo3yVJoC+v4x5EY+4oshVaGSoBUk3P1V+LEh6mKJWcgW7mdwV0uo3Hk3P5Q==
+X-Received: by 2002:a05:600c:220e:b0:394:2695:ce9b with SMTP id z14-20020a05600c220e00b003942695ce9bmr193877wml.64.1651239835033;
+        Fri, 29 Apr 2022 06:43:55 -0700 (PDT)
+Received: from [192.168.0.43] (static-35-180-85-188.ipcom.comunitel.net. [188.85.180.35])
+        by smtp.gmail.com with ESMTPSA id j19-20020adfb313000000b0020aed8ece65sm2600793wrd.32.2022.04.29.06.43.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 06:43:54 -0700 (PDT)
+Message-ID: <36cddba0-ea3f-8993-7ffc-303a198043de@gmail.com>
+Date:   Fri, 29 Apr 2022 15:43:53 +0200
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-29_06,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- adultscore=0 impostorscore=0 malwarescore=0 suspectscore=0 phishscore=0
- priorityscore=1501 spamscore=0 clxscore=1011 mlxlogscore=999
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204290078
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/1] dt-bindings: rtc: mediatek: add mt6358 and mt6366
+ compatible
+Content-Language: en-US
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Yuchen Huang <yuchen.huang@mediatek.com>
+References: <20220428092726.25814-1-allen-kh.cheng@mediatek.com>
+ <20220428092726.25814-2-allen-kh.cheng@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220428092726.25814-2-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,205 +82,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Kernel Hackers,
 
-Some platforms such as s390 do not support PCI I/O spaces. On such platforms
-I/O space accessors like inb()/outb() are stubs that can never actually work.
-The way these stubs are implemented in asm-generic/io.h leads to compiler
-warnings because any use will cause a NULL pointer access. In a previous patch
-we tried handling this with a run-time warning on access. This approach however
-was rejected by Linus[0] with the argument that this really should be
-a compile-time check and, though a much more invasive change, we believe that
-is indeed the right approach.
 
-This patch series aims to do exactly that by introducing a HAS_IOPORT config
-option akin to the existing HAS_IOMEM. When this is unset inb()/outb() and
-friends may not be defined.
+On 28/04/2022 11:27, Allen-KH Cheng wrote:
+> Add mt6358 and mt6366 compatible in devicetree-binding document for
+> MediaTek PMIC based RTC. mt6358 and mt6366 use same compatible data
+> to store RTC_WRTGR address offset.
+> 
+> mt6358-rts should be used as fallback for mt6366-rtc.
+> 
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> Signed-off-by: Yuchen Huang <yuchen.huang@mediatek.com>
 
-This series builts heavily on an original patch for demonstating the concept by
-Arnd Bergmann[1] and is a stripped down version of a previous RFC[2]. The most
-important change being that we dropped the LEGACY_PCI config option in favor of
-using HAS_IOPORT regardless of whether the device is a legacy PCI device.
-As this is a significant change to the overall series I did not carry over
-previous R-bs.
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 
-This version is based on v5.18-rc4 and is also available on my kernel.org tree
-in the has_ioport branch with the PGP signed tag has_ioport_rfc_v2:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git
-
-Thanks,
-Niklas Schnelle
-
-Changes from RFC v1:
-- Completely dropped the LEGACY_PCI option and replaced its dependencies with
-  HAS_IOPORT as appropriate
-- In the usb subsystem patch I incorporated the feedback from v1 by Alan Stern:
-  - Used a local macro to nop in*()/out*() in the helpers
-  - Removed an unnecessary further restriction on CONFIG_USB_UHCI_HCD
-- Added a few more subsystems including wireless, ptp, and, mISDN that I had
-  previously missed due to a blanket !S390.
-- Removed blanket !S390 dependencies where they are added due to the I/O port
-  problem
-- In the sound system SND_OPL3_LIB needed to use "depends on" instead of
-  "select" because of its added HAS_IOPORT dependency
-- In the drm subsystem the bochs driver gets #ifdefs instead of a blanket
-  dependency because its MMIO capable device variant should work without
-  HAS_IOPORT.
-
-[0] https://lore.kernel.org/lkml/CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com/
-[1] https://lore.kernel.org/lkml/CAK8P3a0MNbx-iuzW_-=0ab6-TTZzwV-PT_6gAC1Gp5PgYyHcrA@mail.gmail.com/
-[2] https://yhbt.net/lore/all/20211227164317.4146918-1-schnelle@linux.ibm.com/
-
-Niklas Schnelle (39):
-  Kconfig: introduce HAS_IOPORT option and select it as necessary
-  ACPI: add dependency on HAS_IOPORT
-  ata: add HAS_IOPORT dependencies
-  char: impi, tpm: depend on HAS_IOPORT
-  comedi: add HAS_IOPORT dependencies
-  counter: add HAS_IOPORT dependencies
-  /dev/port: don't compile file operations without CONFIG_DEVPORT
-  drm: handle HAS_IOPORT dependencies
-  firmware: dmi-sysfs: handle HAS_IOPORT=n
-  gpio: add HAS_IOPORT dependencies
-  hwmon: add HAS_IOPORT dependencies
-  i2c: add HAS_IOPORT dependencies
-  iio: adc: Kconfig: add HAS_IOPORT dependencies
-  Input: add HAS_IOPORT dependencies
-  Input: gameport: add ISA and HAS_IOPORT dependencies
-  leds: add HAS_IOPORT dependencies
-  media: add HAS_IOPORT dependencies
-  misc: add HAS_IOPORT dependencies
-  mISDN: add HAS_IOPORT dependencies
-  mpt fusion: add HAS_IOPORT dependencies
-  net: add HAS_IOPORT dependencies
-  parport: PC style parport depends on HAS_IOPORT
-  PCI: make quirk using inw() depend on HAS_IOPORT
-  PCI/sysfs: make I/O resource depend on HAS_IOPORT
-  pcmcia: add HAS_IOPORT dependencies
-  platform: add HAS_IOPORT dependencies
-  pnp: add HAS_IOPORT dependencies
-  power: add HAS_IOPORT dependencies
-  rtc: add HAS_IOPORT dependencies
-  scsi: add HAS_IOPORT dependencies
-  sound: add HAS_IOPORT dependencies
-  speakup: add HAS_IOPORT dependency for SPEAKUP_SERIALIO
-  staging: add HAS_IOPORT dependencies
-  tty: serial: add HAS_IOPORT dependencies
-  usb: handle HAS_IOPORT dependencies
-  video: handle HAS_IOPORT dependencies
-  watchdog: add HAS_IOPORT dependencies
-  wireless: add HAS_IOPORT dependencies
-  asm-generic/io.h: drop inb() etc for HAS_IOPORT=n
-
- arch/alpha/Kconfig                           |   1 +
- arch/arm/Kconfig                             |   1 +
- arch/arm64/Kconfig                           |   1 +
- arch/ia64/Kconfig                            |   1 +
- arch/m68k/Kconfig                            |   1 +
- arch/microblaze/Kconfig                      |   1 +
- arch/mips/Kconfig                            |   1 +
- arch/parisc/Kconfig                          |   1 +
- arch/powerpc/Kconfig                         |   1 +
- arch/riscv/Kconfig                           |   1 +
- arch/sh/Kconfig                              |   1 +
- arch/sparc/Kconfig                           |   1 +
- arch/x86/Kconfig                             |   1 +
- drivers/accessibility/speakup/Kconfig        |   1 +
- drivers/acpi/Kconfig                         |   1 +
- drivers/ata/Kconfig                          |   1 +
- drivers/bus/Kconfig                          |   2 +-
- drivers/char/Kconfig                         |   3 +-
- drivers/char/ipmi/Makefile                   |  11 +-
- drivers/char/ipmi/ipmi_si_intf.c             |   3 +-
- drivers/char/ipmi/ipmi_si_pci.c              |   3 +
- drivers/char/mem.c                           |   6 +-
- drivers/char/tpm/Kconfig                     |   1 +
- drivers/char/tpm/tpm_infineon.c              |  14 +-
- drivers/char/tpm/tpm_tis_core.c              |  19 ++-
- drivers/comedi/Kconfig                       |  33 ++++-
- drivers/counter/Kconfig                      |   1 +
- drivers/firmware/dmi-sysfs.c                 |   4 +
- drivers/gpio/Kconfig                         |   2 +-
- drivers/gpu/drm/qxl/Kconfig                  |   1 +
- drivers/gpu/drm/tiny/bochs.c                 |  19 +++
- drivers/gpu/drm/tiny/cirrus.c                |   2 +
- drivers/hwmon/Kconfig                        |  21 ++-
- drivers/i2c/busses/Kconfig                   |  31 +++--
- drivers/iio/adc/Kconfig                      |   2 +-
- drivers/input/gameport/Kconfig               |   4 +-
- drivers/input/serio/Kconfig                  |   2 +
- drivers/input/touchscreen/Kconfig            |   1 +
- drivers/isdn/Kconfig                         |   1 -
- drivers/isdn/hardware/mISDN/Kconfig          |  12 +-
- drivers/leds/Kconfig                         |   2 +-
- drivers/media/pci/dm1105/Kconfig             |   2 +-
- drivers/media/radio/Kconfig                  |  14 +-
- drivers/media/rc/Kconfig                     |   6 +
- drivers/message/fusion/Kconfig               |   2 +-
- drivers/misc/altera-stapl/Makefile           |   3 +-
- drivers/misc/altera-stapl/altera.c           |   6 +-
- drivers/net/Kconfig                          |   2 +-
- drivers/net/arcnet/Kconfig                   |   2 +-
- drivers/net/can/cc770/Kconfig                |   1 +
- drivers/net/can/sja1000/Kconfig              |   1 +
- drivers/net/ethernet/8390/Kconfig            |   2 +-
- drivers/net/ethernet/amd/Kconfig             |   2 +-
- drivers/net/ethernet/intel/Kconfig           |   2 +-
- drivers/net/ethernet/sis/Kconfig             |   4 +-
- drivers/net/ethernet/ti/Kconfig              |   2 +-
- drivers/net/ethernet/via/Kconfig             |   1 +
- drivers/net/fddi/Kconfig                     |   2 +-
- drivers/net/hamradio/Kconfig                 |   6 +-
- drivers/net/wan/Kconfig                      |   2 +-
- drivers/net/wireless/atmel/Kconfig           |   2 +-
- drivers/net/wireless/intersil/hostap/Kconfig |   2 +-
- drivers/parport/Kconfig                      |   4 +-
- drivers/pci/pci-sysfs.c                      |  16 +++
- drivers/pci/quirks.c                         |   2 +
- drivers/pcmcia/Kconfig                       |   2 +-
- drivers/platform/chrome/Kconfig              |   1 +
- drivers/platform/chrome/wilco_ec/Kconfig     |   1 +
- drivers/pnp/isapnp/Kconfig                   |   2 +-
- drivers/power/reset/Kconfig                  |   1 +
- drivers/rtc/Kconfig                          |   4 +-
- drivers/scsi/Kconfig                         |  19 +--
- drivers/scsi/aic7xxx/Kconfig.aic79xx         |   2 +-
- drivers/scsi/aic7xxx/Kconfig.aic7xxx         |   2 +-
- drivers/scsi/aic94xx/Kconfig                 |   2 +-
- drivers/scsi/megaraid/Kconfig.megaraid       |   6 +-
- drivers/scsi/mvsas/Kconfig                   |   2 +-
- drivers/scsi/qla2xxx/Kconfig                 |   2 +-
- drivers/staging/sm750fb/Kconfig              |   2 +-
- drivers/staging/vt6655/Kconfig               |   2 +-
- drivers/tty/Kconfig                          |   2 +-
- drivers/tty/serial/8250/Kconfig              |   2 +-
- drivers/tty/serial/Kconfig                   |   2 +-
- drivers/usb/core/hcd-pci.c                   |   2 +
- drivers/usb/host/Kconfig                     |   4 +-
- drivers/usb/host/pci-quirks.c                | 128 ++++++++++---------
- drivers/usb/host/pci-quirks.h                |  31 +++--
- drivers/usb/host/uhci-hcd.c                  |   2 +-
- drivers/usb/host/uhci-hcd.h                  |  33 +++--
- drivers/video/fbdev/Kconfig                  |  25 ++--
- drivers/watchdog/Kconfig                     |   6 +-
- include/asm-generic/io.h                     |   5 +
- include/linux/gameport.h                     |   9 +-
- include/linux/parport.h                      |   2 +-
- include/video/vga.h                          |   8 ++
- lib/Kconfig                                  |   4 +
- lib/Kconfig.kgdb                             |   1 +
- net/ax25/Kconfig                             |   2 +-
- sound/drivers/Kconfig                        |   5 +
- sound/isa/Kconfig                            |  44 +++----
- sound/pci/Kconfig                            |  64 +++++++---
- 101 files changed, 489 insertions(+), 246 deletions(-)
-
-Cc: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
--- 
-2.32.0
-
+> ---
+>   Documentation/devicetree/bindings/rtc/rtc-mt6397.txt | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/rtc-mt6397.txt b/Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
+> index 55a0c8874c03..7212076a8f1b 100644
+> --- a/Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
+> +++ b/Documentation/devicetree/bindings/rtc/rtc-mt6397.txt
+> @@ -14,6 +14,8 @@ For MediaTek PMIC wrapper bus bindings, see:
+>   Required properties:
+>   - compatible: Should be one of follows
+>          "mediatek,mt6323-rtc": for MT6323 PMIC
+> +       "mediatek,mt6358-rtc": for MT6358 PMIC
+> +       "mediatek,mt6366-rtc", "mediatek,mt6358-rtc": for MT6366 PMIC
+>          "mediatek,mt6397-rtc": for MT6397 PMIC
+>   
+>   Example:

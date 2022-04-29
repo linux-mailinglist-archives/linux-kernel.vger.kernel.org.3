@@ -2,111 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 115AC515124
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:50:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1972E515125
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:51:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379304AbiD2Qxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 12:53:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43390 "EHLO
+        id S1379315AbiD2QyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 12:54:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379301AbiD2Qxn (ORCPT
+        with ESMTP id S1379309AbiD2QyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 12:53:43 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF5E101FE
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:50:24 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id t6so11551054wra.4
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:50:24 -0700 (PDT)
+        Fri, 29 Apr 2022 12:54:16 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DD5D95F4
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:50:57 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id w4so11505083wrg.12
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:50:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=hR+ipPq2gap4bXepi4EzWC/gfjexmZUBGu30czl6wWU=;
-        b=vaItMW+1gyLuD6nhgipRjoSdUBqBq1APnbecLpaCBuq9hU/b9Ir0ZoimHT8smyU7qh
-         wGrNrckEtlos5Fp6ugNuUsP0qrUwso3UoN5DODnpxSoylbN//uXifD8PThUirbJvmNKB
-         8Lxmn0pX3jb98je+cnJozRPkTvr19ia4C1N3CWcEiSHjPp6RcuOhpILSetKfW3krfT+b
-         s8BddRpIT6rWEIfSPhWjN9o9BRIIhIOm46mn37L31KBCqajlJlwRpjuifNwEIeVaL8/e
-         LMuhj/RHTMN3o3FmRI95pVr44xspL4GO3cq7q/XrXQWB6hzpFBOSaRkb12striwDmzMP
-         2I/Q==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=15i8wXg775LCpDsiDqm1caXT3KwnTX3p11E0a86Tbbs=;
+        b=EqxTxlbXOZF3OFaslSBd4lFokATVzlkSVOfMMsN7tnAp7T/PiB7crYl0Hfad0Fd5qv
+         U9BV3rZIdWXkmwuiAsVReEFbBvv7tcXNf205AEg1pQYe0QI07CzO/RYO4PphGYhivXVW
+         vBIEfczg4x3QxsGqgmtofdN2Vo9/3KfV8NEs7I06qJbjwd1VFxSwe/qZ9VStZlCu8xWG
+         KQbXUF2nfG/FrN9ZUaqbA3VO1QlCnzltyaECQ0ObU38cG5MMJRJ625U5cZgE8mu2cz5c
+         XeiPStGexJ0Rq+4HRrMk7TVV4fF96mzQ0DaE0PjmVBSsWQZiLVBa5AYUOb13fMT63ZES
+         q55g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=hR+ipPq2gap4bXepi4EzWC/gfjexmZUBGu30czl6wWU=;
-        b=uSz1/93X/g6E2ECcJLaoU/R7pqhAAfHANYffKKC+LFDimwTf4HHx8AY5trsoJrhwrH
-         NIKxFZt7wcowVG0jGVFTFunzMG2eUixDWYVdaTmRYYrqm9rHR9kcf5NGpiCTu2M3F6uU
-         X+csRVhX3aiQK0eV+h3FM9tgSvCo3gexQVeJn2svfj448nB/4p+lJIvmNmEsqz9VN0qy
-         QNihaMJ6bhMB0qK0Qk6AZvJ9m/Kd4wrVbO01iWj0yA6FXTY+AHuQqIdnblvZYgx+gYtZ
-         aKxdb95vc/mDK9CZNRZ+0hOy0Ivl9VPZrLF62hfLsRifEMdtOAns0X/65na2Mg5z1A5D
-         PeJg==
-X-Gm-Message-State: AOAM530guTtqWkjPbR8PpgngmktTDJYASbRPFL4zvbIVPuuRCEKQrdDX
-        E1qJhuAs6PIk2iG/bDZYbaml+g==
-X-Google-Smtp-Source: ABdhPJyIo9jrETp7GhL4hPuJ3ZBGxPtVsk20rwc3r57n+zFu7eQ798UJGZjnHlP7ppITNRBXF+eo5Q==
-X-Received: by 2002:a5d:4a84:0:b0:20c:47b6:61ee with SMTP id o4-20020a5d4a84000000b0020c47b661eemr51638wrq.68.1651251022697;
-        Fri, 29 Apr 2022 09:50:22 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=15i8wXg775LCpDsiDqm1caXT3KwnTX3p11E0a86Tbbs=;
+        b=HW/NQwjgtqDY/T9YBAOK96lWN8rVb1OyGaOn2g2QxjrDGu/EEKqL1pQEWtjGUh4wGG
+         dFZETFp21+64EwhP9MFiVBrxDeEAeAewYKEhAoMT6KRv1mr36EEKyiGarVu15Rd/mdF8
+         Rl436aVLKXo8SgqeyBDHQOjAJOaUUsZS7zmYk1otpls+IDph4p8SCLY6lI389zUX956l
+         RoK2XgUaOTgKFcSE3xcHm9HJ+y94FhcrSBy9eSqu1D/9WrJCUbfnMjUMFXYf0nPdWe8H
+         twgHiaAQSWsmqSyUxFc+dmIXCwYpDOIQUKHUkfvL9OFHOrr7AtVYKg+G5xo72OVUAaY6
+         whwQ==
+X-Gm-Message-State: AOAM531TaUNM+/QhzCBNKb+donwzyMEXMN9RvG0PT4RZzPRBYTGuraK+
+        gGl0p0rG/pb0tvmewlaOF9Vz+Q==
+X-Google-Smtp-Source: ABdhPJy3cmE08b8ZCZM2Tbg5grVaBtONLX91dBq6wDqfGROYuReQClwtm/6HsKgjeIz8DqX2xC+WIw==
+X-Received: by 2002:adf:f6c1:0:b0:20a:daf6:9bd3 with SMTP id y1-20020adff6c1000000b0020adaf69bd3mr5172wrp.425.1651251055758;
+        Fri, 29 Apr 2022 09:50:55 -0700 (PDT)
 Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id f1-20020a1c6a01000000b0038c9f6a3634sm6846906wmc.7.2022.04.29.09.50.21
+        by smtp.gmail.com with ESMTPSA id a16-20020a056000051000b00207b5d9f51fsm2848941wrf.41.2022.04.29.09.50.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 09:50:22 -0700 (PDT)
+        Fri, 29 Apr 2022 09:50:55 -0700 (PDT)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        stable@vger.kernel.org,
+Cc:     linux-kernel@vger.kernel.org,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 1/1] slimbus: qcom: Fix IRQ check in qcom_slim_probe
-Date:   Fri, 29 Apr 2022 17:49:17 +0100
-Message-Id: <20220429164917.5202-2-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 0/2] slimbus: patches for 5.19
+Date:   Fri, 29 Apr 2022 17:50:49 +0100
+Message-Id: <20220429165051.6187-1-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20220429164917.5202-1-srinivas.kandagatla@linaro.org>
-References: <20220429164917.5202-1-srinivas.kandagatla@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+Hi Greg,
 
-platform_get_irq() returns non-zero IRQ number on success,
-negative error number on failure.
-And the doc of platform_get_irq() provides a usage example:
+Here are some trivial SLIMbus patches for 5.19 which mostly includes
+cleanups around get_irq.
 
-    int irq = platform_get_irq(pdev, 0);
-    if (irq < 0)
-        return irq;
+Can you please queue them up for 5.19.
 
-Fix the check of return value to catch errors correctly.
+thanks for you help,
+srini
 
-Cc: stable@vger.kernel.org
-Fixes: ad7fcbc308b0 ("slimbus: qcom: Add Qualcomm Slimbus controller driver")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- drivers/slimbus/qcom-ctrl.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Lad Prabhakar (1):
+  slimbus: qcom-ngd-ctrl: Use platform_get_irq() to get the interrupt
 
-diff --git a/drivers/slimbus/qcom-ctrl.c b/drivers/slimbus/qcom-ctrl.c
-index f04b961b96cd..ec58091fc948 100644
---- a/drivers/slimbus/qcom-ctrl.c
-+++ b/drivers/slimbus/qcom-ctrl.c
-@@ -510,9 +510,9 @@ static int qcom_slim_probe(struct platform_device *pdev)
- 	}
- 
- 	ctrl->irq = platform_get_irq(pdev, 0);
--	if (!ctrl->irq) {
-+	if (ctrl->irq < 0) {
- 		dev_err(&pdev->dev, "no slimbus IRQ\n");
--		return -ENODEV;
-+		return ctrl->irq;
- 	}
- 
- 	sctrl = &ctrl->ctrl;
+Yang Li (1):
+  slimbus: qcom: Remove unnecessary print function dev_err()
+
+ drivers/slimbus/qcom-ctrl.c     |  4 +---
+ drivers/slimbus/qcom-ngd-ctrl.c | 10 ++++------
+ 2 files changed, 5 insertions(+), 9 deletions(-)
+
 -- 
 2.21.0
 

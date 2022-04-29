@@ -2,189 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DECC65153B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5993B5153B9
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380000AbiD2Scx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 14:32:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
+        id S1380037AbiD2SfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 14:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379995AbiD2Scu (ORCPT
+        with ESMTP id S1380024AbiD2SfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 14:32:50 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AE2D3AEC
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:29:29 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id r13so16989395ejd.5
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:29:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1Zn4UF57t4pnfMwkACd31jjeal5RhpHnkwFarZTu/dQ=;
-        b=Yju2gP3H7feQ0jeMIY/hZkOEOoSoa00CEibfna6oVQzF9/eQ5+ytMAsdLe5WX7mHeQ
-         J61qzVV7hJgD2E7DTMm799fD1ExZWC92O5Z5MQJ3Izz75VW5dcvN/q6CSgHUbws9RglY
-         83cEuaWdBuKpqQTXIrafNSDyCsuv2Ew28D74WXz/Ik2eST10Un3FzGmvqMC8O+fYL4PC
-         8JQYD4vG/i4KtH8ZMZH0GPFGUg6Nz8RKmYkXLtDfxBXypISaZi6+WTwWX/9LGj3oj9Ql
-         L8++NV0TVRjT6Iqj0aHMEIgQOGyyJP0xnB5R1z3nGhE9kAKq1TuJQ1gQ5SW7rPZfWhCn
-         o50w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1Zn4UF57t4pnfMwkACd31jjeal5RhpHnkwFarZTu/dQ=;
-        b=lIA0xq9et5qyc0kxO2IhatFSgi3sNqsnCdtt5he94ii0z+DfZfk1xxHIw2NHvhdIJQ
-         6Kb9XB9L42RAqjyJmQmQms/GssEKgyyDqVQBHZqRwQCOm9CE0H9mSf+3tFs5yW895wjM
-         XkEBoFWOK8vfQnihfrm1gK1pNmgSd5FaKoDdSeo5bK2JmUmWMnTuz+1m87CA7XhJEStR
-         umoEipKgPfnyh+k53P71vTfv1jagBEc72T0WsR07KEyDhRVcJzFBH7rzCjXrvbfgi0WD
-         KkwkVJmh5JmYNZYtvuF0aRIqcrq2erlxMo9651raVmKtwp8mReAA7A1dg/8PvGOrQM69
-         j/Eg==
-X-Gm-Message-State: AOAM532ex9NIAwZ9QxxtrTmVkBDaZ9rfYu7oiih3lQ/SHwdzFUjumpJg
-        SCvMNQpB38Mdy0ysQM3cnMNklQ==
-X-Google-Smtp-Source: ABdhPJxnnexTfm1ciFrnHmiTZVvUaiD85uL4/xEhS6m4C1gFLe/tyvaZCnOhPWZFKjyEpqAej5KZuQ==
-X-Received: by 2002:a17:907:2cc6:b0:6f0:2de3:9446 with SMTP id hg6-20020a1709072cc600b006f02de39446mr581569ejc.690.1651256968301;
-        Fri, 29 Apr 2022 11:29:28 -0700 (PDT)
-Received: from [192.168.0.175] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id h14-20020a1709070b0e00b006f3ef214db9sm858906ejl.31.2022.04.29.11.29.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 11:29:27 -0700 (PDT)
-Message-ID: <cbf9aad1-cbdb-8886-f979-a793b070e2a1@linaro.org>
-Date:   Fri, 29 Apr 2022 20:29:25 +0200
+        Fri, 29 Apr 2022 14:35:14 -0400
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C695C664C;
+        Fri, 29 Apr 2022 11:31:50 -0700 (PDT)
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 23TIVUoD026819;
+        Sat, 30 Apr 2022 03:31:30 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 23TIVUoD026819
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1651257090;
+        bh=jHfLjG5Ne1YIgVeYha0Y78HVPC4COImuukUBIAGiiHk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=z0GHFxi838FQYwQAEkLx3Vv0GL0YwypEVeLJFMv1sHoZhBKq6WxNLkigcL4jBthmN
+         inkUuIfl+2rv0fu/i7apxnOpsytEc33dmB0slG+G7v1BjFuPnszwl9t1ZgAo8fVlYk
+         5JgflA9DTQzLF7GKZYx0u2CW+AZe4b3Oboa4hfsGtdaWK/rK+PcDDFctXkejnCyicI
+         U1OuvU9WoRKmzqEUCfiqZhEC5JTuhAIj1T/7AwWpUKj6sGHAoefVzDDdHZPOgrDnmm
+         QvDurdCB76lbQ4+z6lZGrrZDIBA3BIcWO44ZgnlABWUmO5IlIlph1aR9sdQUmjuT7l
+         2NwmAU8koAboQ==
+X-Nifty-SrcIP: [209.85.214.179]
+Received: by mail-pl1-f179.google.com with SMTP id u9so7223091plf.6;
+        Fri, 29 Apr 2022 11:31:30 -0700 (PDT)
+X-Gm-Message-State: AOAM531p/10LHzziIzj9r/7uJTjbEIdr+M1Hi8zi1JzGMeQVix2d+ElS
+        NjgxO3OKlUzmJVm5zgnknQ9eKqnSsUPdOVT79oI=
+X-Google-Smtp-Source: ABdhPJw26k1JhuBLHXAf0Y8KVZv2aa+x79Gha6QDi8b0G3tNpF4WiFfLrSfCSywpziY3RmLYIwJfHQQnCJtIwHzWCkI=
+X-Received: by 2002:a17:902:9887:b0:151:6e1c:7082 with SMTP id
+ s7-20020a170902988700b001516e1c7082mr658922plp.162.1651257089650; Fri, 29 Apr
+ 2022 11:31:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v7 12/12] rpmsg: Fix kfree() of static memory on setting
- driver_override
-Content-Language: en-US
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Stuart Yoder <stuyoder@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-References: <20220419113435.246203-1-krzysztof.kozlowski@linaro.org>
- <20220419113435.246203-13-krzysztof.kozlowski@linaro.org>
- <CGME20220429122942eucas1p1820d0cd17a871d4953bac2b3de1dcdd9@eucas1p1.samsung.com>
- <870885de-33f3-e0ba-4d56-71c3c993ac87@samsung.com>
- <75b94ccd-b739-2164-bc4a-20025356cc34@linaro.org>
- <6e21f7d3-49d0-eda7-7a89-0f8ac69596a4@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <6e21f7d3-49d0-eda7-7a89-0f8ac69596a4@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220424190811.1678416-1-masahiroy@kernel.org>
+ <20220424190811.1678416-7-masahiroy@kernel.org> <CAKwvOdmDiD11Az02U1i8OtxL49V3SH1ORRj8C5jy6Btv3LFY_g@mail.gmail.com>
+ <CAKwvOdmeOYsBGSZrprdtoxcUmpy1oscnBfLUaSARPNKsH4Aeug@mail.gmail.com>
+In-Reply-To: <CAKwvOdmeOYsBGSZrprdtoxcUmpy1oscnBfLUaSARPNKsH4Aeug@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 30 Apr 2022 03:30:26 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQez0wm4keBfqwn82ynvpYETD4fo9wD6WceBj-65F6dqg@mail.gmail.com>
+Message-ID: <CAK7LNAQez0wm4keBfqwn82ynvpYETD4fo9wD6WceBj-65F6dqg@mail.gmail.com>
+Subject: Re: [PATCH 06/27] modpost: use bool type where appropriate
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/04/2022 16:51, Marek Szyprowski wrote:
-> On 29.04.2022 16:16, Krzysztof Kozlowski wrote:
->> On 29/04/2022 14:29, Marek Szyprowski wrote:
->>> On 19.04.2022 13:34, Krzysztof Kozlowski wrote:
->>>> The driver_override field from platform driver should not be initialized
->>>> from static memory (string literal) because the core later kfree() it,
->>>> for example when driver_override is set via sysfs.
->>>>
->>>> Use dedicated helper to set driver_override properly.
->>>>
->>>> Fixes: 950a7388f02b ("rpmsg: Turn name service into a stand alone driver")
->>>> Fixes: c0cdc19f84a4 ("rpmsg: Driver for user space endpoint interface")
->>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
->>> This patch landed recently in linux-next as commit 42cd402b8fd4 ("rpmsg:
->>> Fix kfree() of static memory on setting driver_override"). In my tests I
->>> found that it triggers the following issue during boot of the
->>> DragonBoard410c SBC (arch/arm64/boot/dts/qcom/apq8016-sbc.dtb):
->>>
->>> ------------[ cut here ]------------
->>> DEBUG_LOCKS_WARN_ON(lock->magic != lock)
->>> WARNING: CPU: 1 PID: 8 at kernel/locking/mutex.c:582
->>> __mutex_lock+0x1ec/0x430
->>> Modules linked in:
->>> CPU: 1 PID: 8 Comm: kworker/u8:0 Not tainted 5.18.0-rc4-next-20220429 #11815
->>> Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
->>> Workqueue: events_unbound deferred_probe_work_func
->>> pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->>> pc : __mutex_lock+0x1ec/0x430
->>> lr : __mutex_lock+0x1ec/0x430
->>> ..
->>> Call trace:
->>>    __mutex_lock+0x1ec/0x430
->>>    mutex_lock_nested+0x38/0x64
->>>    driver_set_override+0x124/0x150
->>>    qcom_smd_register_edge+0x2a8/0x4ec
->>>    qcom_smd_probe+0x54/0x80
->>>    platform_probe+0x68/0xe0
->>>    really_probe.part.0+0x9c/0x29c
->>>    __driver_probe_device+0x98/0x144
->>>    driver_probe_device+0xac/0x14c
->>>    __device_attach_driver+0xb8/0x120
->>>    bus_for_each_drv+0x78/0xd0
->>>    __device_attach+0xd8/0x180
->>>    device_initial_probe+0x14/0x20
->>>    bus_probe_device+0x9c/0xa4
->>>    deferred_probe_work_func+0x88/0xc4
->>>    process_one_work+0x288/0x6bc
->>>    worker_thread+0x248/0x450
->>>    kthread+0x118/0x11c
->>>    ret_from_fork+0x10/0x20
->>> irq event stamp: 3599
->>> hardirqs last  enabled at (3599): [<ffff80000919053c>]
->>> _raw_spin_unlock_irqrestore+0x98/0x9c
->>> hardirqs last disabled at (3598): [<ffff800009190ba4>]
->>> _raw_spin_lock_irqsave+0xc0/0xcc
->>> softirqs last  enabled at (3554): [<ffff800008010470>] _stext+0x470/0x5e8
->>> softirqs last disabled at (3549): [<ffff8000080a4514>]
->>> __irq_exit_rcu+0x180/0x1ac
->>> ---[ end trace 0000000000000000 ]---
->>>
->>> I don't see any direct relation between the $subject and the above log,
->>> but reverting the $subject on top of linux next-20220429 hides/fixes it.
->>> Maybe there is a kind of memory trashing somewhere there and your change
->>> only revealed it?
->> Thanks for the report. I think the error path of my patch is wrong - I
->> should not kfree(rpdev->driver_override) from the rpmsg code. That's the
->> only thing I see now...
->>
->> Could you test following patch and tell if it helps?
->> https://pastebin.ubuntu.com/p/rp3q9Z5fXj/
-> 
-> This doesn't help, the issue is still reported.
+On Tue, Apr 26, 2022 at 3:56 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Mon, Apr 25, 2022 at 11:34 AM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> >
+> > /On Sun, Apr 24, 2022 at 12:09 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> > >
+> > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > > ---
+> > >
+> > >  scripts/mod/modpost.c | 60 +++++++++++++++++++++----------------------
+> > >  scripts/mod/modpost.h | 10 ++++----
+> > >  2 files changed, 35 insertions(+), 35 deletions(-)
+> > >
+> > > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> > > index f9cbb6b6b7a5..52dd07a36379 100644
+> > > --- a/scripts/mod/modpost.c
+> > > +++ b/scripts/mod/modpost.c
+> > > @@ -203,10 +203,10 @@ struct symbol {
+> > >         struct symbol *next;
+> > >         struct module *module;
+> > >         unsigned int crc;
+> > > -       int crc_valid;
+> > > +       bool crc_valid;
+> > >         char *namespace;
+> > > -       unsigned int weak:1;
+> > > -       unsigned int is_static:1;  /* 1 if symbol is not global */
+> > > +       bool weak;
+> > > +       bool is_static;         /* true if symbol is not global */
+> > >         enum export  export;       /* Type of export */
+> > >         char name[];
+> > >  };
+>
+> This will change the sizeof(struct symbol).  I'm guessing we have lots
+> of symbols to process? If we have many live at once, perhaps it would
+> be better to keep these as bitfields, but additionally move them to
+> the end of the struct definition so as to save space?
 
-I think I screwed this part of code. The new helper uses device_lock()
-(the mutexes you see in backtrace) but in rpmsg it is called before
-device_register() which initializes the device.
 
-I don't have a device using qcom-smd rpmsg, so it's a bit tricky to
-reproduce.
+Not really.
+On 64 bit systems, sizeof(struct symbol) is still 40 bytes.
 
-Best regards,
-Krzysztof
+We may save some space by using bit fields and pahole analysis,
+but I do not think that is a big deal for userspace programs.
+
+I tend to prioritize code readability.
+
+
+
+-- 
+Best Regards
+Masahiro Yamada

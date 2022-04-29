@@ -2,95 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D97551487F
+	by mail.lfdr.de (Postfix) with ESMTP id 8616A514880
 	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 13:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355723AbiD2Ltb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 07:49:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40126 "EHLO
+        id S1355311AbiD2LtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 07:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358547AbiD2Lt2 (ORCPT
+        with ESMTP id S1343581AbiD2LtN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 07:49:28 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFF0B3C4E
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 04:46:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651232770; x=1682768770;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3IbAXj3Snp96wTIHJY4FRC89tWs6r31dabLj1bNt8ys=;
-  b=dZJGprgEsZOcALzuvR4lNS/hcaRDVBB0R4hofyUZyy0peR+qAelYU7gS
-   ZRUcKOWdvmR2N7XJ4XxZkOFYAMLD/sivjXEaGEp58Be1T620/AS4D+dJd
-   ERph0fh0WSXYZ6RYga8JE2nS+JbUFbzd0FUN+innnPwmkF7IrPoGIponm
-   38q03DZ9OB3SgShYjRpGwF0nEmyqOOZFZoJrC5M3ySKaIstTjZJqQjbIi
-   FNPL9UcdslFyK05TN2JEN3CfZnXuiAzjyaXIZsgBWsVMJdtEyiEhqRfIN
-   hfwwbfNsQYiNcamAUq+uK0fZCCW8TXoKCwK1faGZkv0LKhM6LUr9oc/Ah
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="327116496"
-X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
-   d="scan'208";a="327116496"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 04:46:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
-   d="scan'208";a="597292421"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 29 Apr 2022 04:46:08 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nkP4Z-0006I5-LW;
-        Fri, 29 Apr 2022 11:46:07 +0000
-Date:   Fri, 29 Apr 2022 19:45:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ben Widawsky <ben.widawsky@intel.com>
-Cc:     kbuild-all@lists.01.org,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: [cxl:preview 56/78] acpi.c:undefined reference to
- `devm_gen_pool_create'
-Message-ID: <202204291941.rnY1BEGs-lkp@intel.com>
+        Fri, 29 Apr 2022 07:49:13 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057E162DF
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 04:45:55 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id s30so13987309ybi.8
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 04:45:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=NHJAqhwPXVgAB8bEwImwTbvvWr4gJ0gDlgorBDbdgHs=;
+        b=SVMfF83v311IaOIZZIA2fhgHQGdVLyA7wa35WKE7cbrUay9cJlOOIIvedSERRe7BAB
+         7qoQXITorvj6Eoy6wRapcNP+dfnI5BQNnm0lcXEob2YfW5XzbcsX8qAzHNPq4yr8tfM3
+         VvZ9QjFOgw8y9NglSzmdpazJZPDjDiMWNuFSWYpkSwWNxXuA6m9F3jBJpDfuGU1pvfuh
+         OsUjeJEd45FkHQa8jIGgnEgSq+RRcptie7ovyLz2XX1EwIrkjORWTQlYPdMMI4KDFpEr
+         xfT+vdFdX8pqk4pkK1FDt0Ph8M3c2cDSo+3gOQVnzeBMEB0yfBWTVtcT5kyD3lmmq1XB
+         Jsrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=NHJAqhwPXVgAB8bEwImwTbvvWr4gJ0gDlgorBDbdgHs=;
+        b=HmijcifiHGaaH+/KebYRtUGUzyhCS0mWPxuBSjjhqIYq0O8t1OHblLi9QQReETRhtY
+         Im2HxtxymwOdrxMz9HhKAt9oNCdY4EDS+y/yUU1HYS92oklyzPigtotXTY6k4nIx4Ca4
+         dkkfJCPYb7X0NVLsRHZhSN9LpdkFQezBTiLpKGEYNlVr2aF3FAeKFHDN0hhK7561ynKE
+         q9l/719cdCJRRMpsYXgkQiumdBjf6U+3eRzEH+pyXLAAWLKkz38WQZkfyNk4En/Peela
+         Deg/zzUJ4UzOBTvCGd1s+oe3xMOCJ3f7m13crMCDT0QiEFCJj6sPHDsvePnPLG1Vwg2M
+         bcOA==
+X-Gm-Message-State: AOAM530gm22d0eTYN3Xqry39FZH4UILsa1o7rf3IfbG73O/Nt/dYfYsD
+        nhJwWBgbEZ62Yl37mVnwWTApk4lZGwi3cjTDFXY=
+X-Google-Smtp-Source: ABdhPJyObx4s8cIEvwWwy3MKnbthHo/ZjAQ2+fWwuxXRlfj2rv0OTSBPV5L+/3VVxhPjTgZQi+0zB2VQyhddDfq7W0s=
+X-Received: by 2002:a25:df8a:0:b0:647:4954:83e8 with SMTP id
+ w132-20020a25df8a000000b00647495483e8mr27281608ybg.526.1651232754281; Fri, 29
+ Apr 2022 04:45:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220421141055.316239-1-jiangshanlai@gmail.com>
+ <20220421141055.316239-7-jiangshanlai@gmail.com> <Ymu2XC7k8Xj/vMjG@zn.tnic>
+In-Reply-To: <Ymu2XC7k8Xj/vMjG@zn.tnic>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Fri, 29 Apr 2022 19:45:43 +0800
+Message-ID: <CAJhGHyBHPDD=hD-78rQDCj2VfQT21m8JzD-m9DazsUa8VpBVcQ@mail.gmail.com>
+Subject: Re: [PATCH V6 6/8] x86/entry: Convert SWAPGS to swapgs and remove the
+ definition of SWAPGS
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     =?UTF-8?Q?J=C3=BCrgen_Gross?= <jgross@suse.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, X86 ML <x86@kernel.org>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git preview
-head:   9b688fc651b9d2b633e8d959454670aba1c39162
-commit: 560e2708e4272ad7903fcd9696fca542c96301d5 [56/78] cxl/acpi: Handle address space allocation
-config: ia64-randconfig-c023-20220429 (https://download.01.org/0day-ci/archive/20220429/202204291941.rnY1BEGs-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/commit/?id=560e2708e4272ad7903fcd9696fca542c96301d5
-        git remote add cxl https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git
-        git fetch --no-tags cxl preview
-        git checkout 560e2708e4272ad7903fcd9696fca542c96301d5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash
+On Fri, Apr 29, 2022 at 5:56 PM Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Thu, Apr 21, 2022 at 10:10:53PM +0800, Lai Jiangshan wrote:
+> > diff --git a/arch/x86/entry/entry_64_compat.S b/arch/x86/entry/entry_64=
+_compat.S
+> > index 4fdb007cddbd..c5aeb0819707 100644
+> > --- a/arch/x86/entry/entry_64_compat.S
+> > +++ b/arch/x86/entry/entry_64_compat.S
+> > @@ -50,7 +50,7 @@ SYM_CODE_START(entry_SYSENTER_compat)
+> >       UNWIND_HINT_EMPTY
+> >       ENDBR
+> >       /* Interrupts are off on entry. */
+> > -     SWAPGS
+> > +     swapgs
+> >
+> >       pushq   %rax
+> >       SWITCH_TO_KERNEL_CR3 scratch_reg=3D%rax
+>
+> I'm not sure about this: why can't XENPV do a 32-bit syscall through the =
+vdso?
+>
+> Also, looking at this, J=C3=BCrgen, it looks kinda spaghetti to me:
+>
+> entry_SYSENTER_compat
+>
+> ...
+>
+>         /* XEN PV guests always use IRET path */
+>         ALTERNATIVE "testl %eax, %eax; jz swapgs_restore_regs_and_return_=
+to_usermode", \
+>                     "jmp swapgs_restore_regs_and_return_to_usermode", X86=
+_FEATURE_XENPV
+>
+>
+> then at that swapgs_restore_regs_and_return_to_usermode label:
+>
+> #ifdef CONFIG_XEN_PV
+>         ALTERNATIVE "", "jmp xenpv_restore_regs_and_return_to_usermode", =
+X86_FEATURE_XENPV
+> #endif
+>
+>
+> Can we simply jump directly to xenpv_restore_regs_and_return_to_usermode
+> from entry_SYSENTER_compat or is that CONFIG_DEBUG_ENTRY chunk there
+> needed?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Hello
 
-All errors (new ones prefixed by >>):
+Adding ALTERNATIVE in swapgs_restore_regs_and_return_to_usermode()
+results a simpler patch which is better served as a bug fix:
 
-   ia64-linux-ld: drivers/cxl/acpi.o: in function `cxl_parse_cfmws':
->> acpi.c:(.text+0xd82): undefined reference to `devm_gen_pool_create'
->> ia64-linux-ld: acpi.c:(.text+0xed2): undefined reference to `gen_pool_add_owner'
+https://lore.kernel.org/lkml/163861832551.11128.1645285137833652414.tip-bot=
+2@tip-bot2/
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+which is also your suggestion:
+
+https://lore.kernel.org/lkml/YYD9ohN2Zcy4EdMb@zn.tnic/
+
+
+
+While the original patch has sprinkled all those ALTERNATIVE calls
+everywhere:
+
+https://lore.kernel.org/lkml/20211026141420.17138-5-jiangshanlai@gmail.com/
+
+And this original version has a SYM_L_WEAK placeholder
+which is objected to by some people.
+
+Thanks
+Lai

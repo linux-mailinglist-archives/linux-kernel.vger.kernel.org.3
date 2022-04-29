@@ -2,98 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E2CE5150FA
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC7E25150FC
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:38:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356101AbiD2QkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 12:40:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41532 "EHLO
+        id S1378309AbiD2Qlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 12:41:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235788AbiD2QkI (ORCPT
+        with ESMTP id S235788AbiD2Qlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 12:40:08 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC9F60E1
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:36:50 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id z16so7368343pfh.3
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:36:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4AhDhjWUwI2Tn5CahkqmhzJNHD5HQcuQ3C3nm662LO4=;
-        b=ZdRUbmRvvcg9rqXLGiCVN4eDpXjZirOYZwfuSdri1DmaLsbHCUPYz6ditV4Zh+OsTJ
-         YGEOxkRyT2umQVM4d3EC5TRftA2vZA7CCMPb/dJuLWr2JJn/6IM+cZlnyLjA99ssGnTM
-         PF/XhOhPhl5uQon8mcIc4DGAXcNQzIy73bbr6hMdSIfkQa1E2Lz/oQae6x2f14hs0u/i
-         5kaM2F5OJjOoLpdPoM4Q26Q6YrbAbHoVLxDSPeoB5yIH7eg7e/b69sIA/8y+ArOZpsHM
-         8+K4/oMDpE19FdyJmwB9JXMDAXPHmVaqFqW57oXMQMYnZclzHNnVsXveR4xdcxBmubDB
-         8fNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4AhDhjWUwI2Tn5CahkqmhzJNHD5HQcuQ3C3nm662LO4=;
-        b=L4rtRVXYhGQMomnI43Kd2SarM07DhlNnfXVaYSRcC6eK11k0mBXuS3gOOR65QdzL0m
-         FFJYGdU0Nc9Lkh6MhB2tkC9u8CdwaaFaTRbBVcrCQqCKeRlB7kXF14e1MN1lOSwz4O/q
-         YzAuIgGKm62R9zoq/EcEfvgpMsQ2OlIHGP/i2reAM863R/N4M6QVWk6fojlhje8jkcrq
-         1Qe9XuxHl0GdRSjEuaXdwFWxPXHVeekqlRUzkcQBriA9iUKHX/miDMD8P0Lk6VKbUtsV
-         tCGn4DbztMuYr6SeBhMS6TD7kvmXQOOJA+J9oY3RWIKdNIZuw3+vxOe0xryaj4TQ47yZ
-         qiRw==
-X-Gm-Message-State: AOAM5318e4eRg3f0o9iVRjcW315gInqS/JKWQ278184id/QRBDQrlkrl
-        iJ7vy+sdKpP5N3aM6TBYDj0yUELRRmQWOEtlrGMFHw==
-X-Google-Smtp-Source: ABdhPJw+o86C+wUIMV8SACUxDWyPWaJYaJvHGulqCMpaWQRoUSS6ySuQi0M4o7t89bMyCN4zDSo+e5KI1gU6qCVR3Fo=
-X-Received: by 2002:a63:194b:0:b0:3ab:71e5:161 with SMTP id
- 11-20020a63194b000000b003ab71e50161mr184626pgz.115.1651250209745; Fri, 29 Apr
- 2022 09:36:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220429161347.7947-1-tharvey@gateworks.com> <CAOMZO5Do-Vy_s4m99uUTnL1sdJUhghjzZJKp4V-SG4rAK=kTzg@mail.gmail.com>
-In-Reply-To: <CAOMZO5Do-Vy_s4m99uUTnL1sdJUhghjzZJKp4V-SG4rAK=kTzg@mail.gmail.com>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Fri, 29 Apr 2022 09:36:38 -0700
-Message-ID: <CAJ+vNU0Lhgo1Hz_BtbEJb+JPbHj8UWtf5hm1uA0b=H5SeKi3Kg@mail.gmail.com>
-Subject: Re: [PATCH v2] arm64: dts: imx8mm-venice-gw7902: fix pcie bindings
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 29 Apr 2022 12:41:40 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB3AD95E0;
+        Fri, 29 Apr 2022 09:38:21 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id D37725C0244;
+        Fri, 29 Apr 2022 12:38:18 -0400 (EDT)
+Received: from imap47 ([10.202.2.97])
+  by compute2.internal (MEProxy); Fri, 29 Apr 2022 12:38:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1651250298; x=1651336698; bh=Oc
+        7MhINv23q9eUpEfoSWVHTHfWwn013FwuuQWldLfQY=; b=dmdfvvaA9cYuHuXsml
+        xQShfHDDkGH+wiVGWzgCEaU1ZOzPMFqkqTVHa2xgb/klLODkxfCJuTRbxbguziPK
+        I1brMhcXxEHkoYiEgEmq7NitzNXLenOdVbRohXYVLaW/J6ts+Z3FF/FueOSsbAJN
+        5SZOcyNt0OlOzs22JBO7ofo4Rm1ZytYtXZnbK1TIbwMIclG8D62gCGs8lAaUQGHJ
+        wS1lvufinBKSx4hBS9Gb1MRznbp4R/B9q66J44YWsq/R5s2oIDgnyN5rLAOinTuK
+        mjadG6V5wGx/iqNxjOVs9xQBWST7RgUKZuc4zYuTZwjELWTy5BPqPSNdhRS97wl8
+        C/1Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651250298; x=
+        1651336698; bh=Oc7MhINv23q9eUpEfoSWVHTHfWwn013FwuuQWldLfQY=; b=C
+        gw3yx0b3GqdlpT45mll9o8WuZFtArewOElVyTmfqR2tdWFfneCEFwoDAKFfD2DLp
+        45bMKg3u9oVUNWqa2SxgxWn4V5bTxPMsEKCxwUW0TWJsJwODhvn+5O6tl4PdYRhs
+        fCNvc1XzO8S5/uWcW9zHe0AWJwoHW1NxZz2mwwiLy0spqSmw0BePPnvsx1ogEJmO
+        za+/wv0lIl8GoWDybW+/I43UPeQhufvhwQIp+6WplrKCEDpavw0CIcjk/Zdtm0HF
+        4A4d5IYqY257rEs0kV9HarOva1JSbqQHTDrJ1CzgIxS0LDdHw2Nf3bjPEfSFgnC/
+        eedSOfC21ovd6pdEMFi7g==
+X-ME-Sender: <xms:ehRsYtq1muOuVSGdbRTEASbLz9t8lLhudqy85QLo8HOcpmqRNGkT1w>
+    <xme:ehRsYvplL-FjdYKJLDAK4jNEvZX_8O-0LunODa4E8bfTSscDGKUJT0-eVZXsIr5N6
+    uoM2K1fpi6p0FAMLtw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudelgddutddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfufhv
+    vghnucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrf
+    grthhtvghrnhepleevgfegffehvedtieevhfekheeftedtjeetudevieehveevieelgffh
+    ieevieeunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshhvvghnsehsvhgvnhhpvghtvghrrdguvghv
+X-ME-Proxy: <xmx:ehRsYqNfpTxAMfNsIMvo345vOmMF9M7yKLKkAzD9W2RFuqXi0L--8A>
+    <xmx:ehRsYo6WfS9Pn1IlQ5uoMHotAvCAx0LtFTCVvVSOavX1yrVrLDqMhg>
+    <xmx:ehRsYs5y6DjWv9cPLp6pkSW7nHUmuz27GHpr5unj3JUIrxSkTYxD7A>
+    <xmx:ehRsYsyGCInuaR8dQMSDVehskexfwPJTp0S7LeAASS2eJ34w8FIDiQ>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 2D8D5A6005F; Fri, 29 Apr 2022 12:38:18 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-591-gfe6c3a2700-fm-20220427.001-gfe6c3a27
+Mime-Version: 1.0
+Message-Id: <be7e0eb1-c423-455f-bd89-050d52996340@www.fastmail.com>
+In-Reply-To: <20220428142412.GA19708@lst.de>
+References: <20220426201539.12829-1-sven@svenpeter.dev>
+ <CAK8P3a1yJkegvgvzHemBd_dowvpyDmxtUnrpiHob8+hiNeO4sw@mail.gmail.com>
+ <0f6ea2c3-586d-4f5a-9cee-688cd73b96b3@www.fastmail.com>
+ <CAK8P3a3pPxpoOZ0hm9htBRyYc7L38F6egi-0=41tMtcLRGJ_jw@mail.gmail.com>
+ <20220428142412.GA19708@lst.de>
+Date:   Fri, 29 Apr 2022 18:37:58 +0200
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "hch@lst.de" <hch@lst.de>, "Arnd Bergmann" <arnd@arndb.de>
+Cc:     "Hector Martin" <marcan@marcan.st>,
+        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+        "Keith Busch" <kbusch@kernel.org>, "axboe@fb.com" <axboe@fb.com>,
+        "sagi@grimberg.me" <sagi@grimberg.me>,
+        "Marc Zyngier" <maz@kernel.org>, "Janne Grunau" <j@jannau.net>,
+        DTML <devicetree@vger.kernel.org>,
+        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        linux-nvme@lists.infradead.org
+Subject: Re: [PATCH v3 0/6] Apple M1 (Pro/Max) NVMe driver
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 9:18 AM Fabio Estevam <festevam@gmail.com> wrote:
+On Thu, Apr 28, 2022, at 16:24, hch@lst.de wrote:
+> On Wed, Apr 27, 2022 at 07:39:49PM +0200, Arnd Bergmann wrote:
+>> The usual trick is to have a branch with the shared patches and have
+>> that pulled into every other tree that needs these, but make sure you never
+>> rebase. In this case, you could have something like
+>> 
+>> a) rtkit driver in a shared branch (private only)
+>> b) thunderbolt driver based on branch a), merged through
+>>      thunderbolt/usb/pci tree (I don't know who is responsible here)
+>> c) sart driver based on branch a), merged through soc tree
+>> d) nvme driver based on branch c), merged through nvme tree
+>> 
+>> since the commit hashes are all identical, each patch only shows up in
+>> the git tree once, but you get a somewhat funny history.
 >
-> Hi Tim,
->
-> On Fri, Apr 29, 2022 at 1:13 PM Tim Harvey <tharvey@gateworks.com> wrote:
-> >
-> > Update the pcie bindings to the correct dt bindings:
-> >  pcie_phy:
-> >   - use pcie0_refclk
-> >   - add required clock-names
-> >  pcie:
-> >   - remove pcie_phy clock as it comes from phy driver
-> >
-> > Signed-off-by: Tim Harvey <tharvey@gateworks.com>
->
-> It seems you missed the Fixes tag.
->
-> Reviewed-by: Fabio Estevam <festevam@gmail.com>
+> Given that the nvme driver is just addition of new code I'm perfectly
+> fine with sending it through whatever tree is most convenient.
 
-Fabio,
+So If I understand all this correctly either
+	1) I send a pull request with rtkit+sart to Arnd/soc@ followed by
+	   a pull request with the same commits + the nvme driver to
+	   Christoph/nvme to make sure the commit hashes in both trees
+	   are the same. 
+or
+	2) I send a pull request with rtkit+sart+nvme to soc@ and we
+	   take the entire driver through there with Christoph's ack
+	   if Arnd is fine with carrying it as well.
 
-it didn't really 'fix' anything but dt syntax. PCIe works without this patch.
+In either case SMC (or thunderbolt if I finish in time) can also be based
+on the same rtkit commit and could go into 5.19 as well.
+I don't have any preference here (not that my opinion matters much
+for this decision anyway :-))
 
-Best Regards,
 
-Tim
+Sven

@@ -2,166 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C50514D66
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE0F9514D3D
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 16:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231469AbiD2Okh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 10:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33026 "EHLO
+        id S1377492AbiD2Oi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 10:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377068AbiD2OkX (ORCPT
+        with ESMTP id S1350640AbiD2OiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 10:40:23 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8FFC2D1F9;
-        Fri, 29 Apr 2022 07:36:30 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id DA02840003;
-        Fri, 29 Apr 2022 14:36:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1651242989;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=rdrIO5Cpy80shZiqedGYYSEkMZkAUMJXu/YOq1o1YN8=;
-        b=BQrNCH5P8SVjnV5mAgLW5iVKXlU28sGJBE40id3cUl9hEV2I/qYrca6W0DlSylnCDV/ea2
-        LJTis+p6aOmCPC2+hVN/8p/0srmKt+jLWdC/rDFhS1FoGNPlA2GE8tXtjNcEJO9HXwCCi/
-        EOk+n6TiUbas0suMsyjPZL8P4a1W9OkDyrdS6m0SVADD4IWg3dgWREf2Q6wszY8m63LPbO
-        z2TjVjKCTa+Z6yr5MJMnVm01BRYy9pvTdP0vu8cpShSzPhzQqkutleH/kZQzGSXuj/b3gW
-        wUc9l38QVS8sk2kCsc5LOQ+c/21C1torGs6hkIkmXva+4CSpTu/uqBZ5Ah2jew==
-From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?q?Miqu=C3=A8l=20Raynal?= <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
-Subject: [net-next v2 00/12] add support for Renesas RZ/N1 ethernet subsystem devices
+        Fri, 29 Apr 2022 10:38:22 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D566237D4;
+        Fri, 29 Apr 2022 07:35:03 -0700 (PDT)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TE1ble023952;
+        Fri, 29 Apr 2022 14:34:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=+Pd3boeYYOqUdToIy6lpJJ2YBcwWkKSMUxL2UvbDusM=;
+ b=jNrHUS/pBYDQPbFWUWAghjJm+dqdxE5F5A4zbP+Ari9Btc9h+Tfvx/rGcpkhOi2f/pWV
+ /IFBe4uILurpXkAx34h949EDBk5HzRtz3tdCl/AVIEhAN6e18Q8CnpXXPuBGdbinMtWs
+ 3gHaJvouoz8fizD+aTcexiA1zswhFuAVYZOPj9ea2vLkgeT16Znmtr7rIgoYH0SKSTq7
+ 1Y/fBlX0T3ta9FQMm9X5o8OUaL3kr3i7d6DizQGz1+0+mpWVlszvk+TpsVz3atEjK7ZQ
+ SvpgqNk3qw1Hh7r5St2alP1bSZ1evkAOVcbSuHHwWXgRLkC5Npbh38dVEX3pdnctZxwY 1g== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqsyj6aqr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Apr 2022 14:34:58 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TEJrxj028887;
+        Fri, 29 Apr 2022 14:34:57 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03fra.de.ibm.com with ESMTP id 3fm938yc4y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Apr 2022 14:34:57 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TELk1B47317424
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 29 Apr 2022 14:21:46 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CDAFC5204F;
+        Fri, 29 Apr 2022 14:34:54 +0000 (GMT)
+Received: from sig-9-145-61-57.uk.ibm.com (unknown [9.145.61.57])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 549235204E;
+        Fri, 29 Apr 2022 14:34:54 +0000 (GMT)
+Message-ID: <928ea2335e2838919ccbf69ed5a0242ce0358259.camel@linux.ibm.com>
+Subject: Re: [PATCH 24/37] power: add HAS_IOPORT dependencies
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        "open list:SYSTEM RESET/SHUTDOWN DRIVERS" <linux-pm@vger.kernel.org>
 Date:   Fri, 29 Apr 2022 16:34:53 +0200
-Message-Id: <20220429143505.88208-1-clement.leger@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220429135108.2781579-43-schnelle@linux.ibm.com>
+References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
+         <20220429135108.2781579-43-schnelle@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: iOfkkkzev1-foE0aZqz_2GmmdC5GTPXH
+X-Proofpoint-ORIG-GUID: iOfkkkzev1-foE0aZqz_2GmmdC5GTPXH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-29_07,2022-04-28_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 spamscore=0 impostorscore=0 mlxscore=0 malwarescore=0
+ mlxlogscore=410 suspectscore=0 phishscore=0 adultscore=0 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204290080
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Renesas RZ/N1 SoCs features an ethernet subsystem which contains
-(most notably) a switch, two GMACs, and a MII converter [1]. This
-series adds support for the switch and the MII converter.
+On Fri, 2022-04-29 at 15:50 +0200, Niklas Schnelle wrote:
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. We thus need to add HAS_IOPORT as dependency for
+> those drivers using them.
+> 
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> ---
 
-The MII converter present on this SoC has been represented as a PCS
-which sit between the MACs and the PHY. This PCS driver is probed from
-the device-tree since it requires to be configured. Indeed the MII
-converter also contains the registers that are handling the muxing of
-ports (Switch, MAC, HSR, RTOS, etc) internally to the SoC.
-
-The switch driver is based on DSA and exposes 4 ports + 1 CPU
-management port. It include basic bridging support as well as FDB and
-statistics support.
-
-Link: [1] https://www.renesas.com/us/en/document/mah/rzn1d-group-rzn1s-group-rzn1l-group-users-manual-r-engine-and-ethernet-peripherals
-
------
-
-Changes in V2:
-- PCS:
-  - Fix Reverse Christmas tree declaration
-  - Removed stray newline
-  - Add PCS remove function and disable clocks in them
-  - Fix miic_validate function to return correct values
-  - Split PCS CONV_MODE definition
-  - Reordered phylink_pcs_ops in definition order
-  - Remove interface setting in miic_link_up
-  - Remove useless checks for invalid interface/speed and error prints
-  - Replace phylink_pcs_to_miic_port macro by a static function
-  - Add comment in miic_probe about platform_set_drvdata
-- Bindings:
- - Fix wrong path for mdio.yaml $ref
- - Fix yamllint errors
-- Tag driver:
-  - Squashed commit that added tag value with tag driver
-  - Add BUILD_BUG_ON for tag size
-  - Split control_data2 in 2 16bits values
-- Switch:
-  - Use .phylink_get_caps instead of .phylink_validate and fill
-    supported_interface correctly
-  - Use fixed size (ETH_GSTRING_LEN) string for stats and use memcpy
-  - Remove stats access locking since RTNL lock is used in upper layers
-  - Check for non C45 addresses in mdio_read/write and return
-    -EOPNOTSUPP
-  - Add get_eth_mac_stats, get_eth_mac_ctrl_stat, get_rmon_stats
-  - Fix a few indentation problems
-  - Remove reset callback from MDIO bus operation
-  - Add phy/mac/rmon stats
-- Add get_rmon_stat to dsa_ops
-
-Clément Léger (12):
-  net: dsa: add support for ethtool get_rmon_stats()
-  net: dsa: add Renesas RZ/N1 switch tag driver
-  dt-bindings: net: pcs: add bindings for Renesas RZ/N1 MII converter
-  net: pcs: add Renesas MII converter driver
-  dt-bindings: net: dsa: add bindings for Renesas RZ/N1 Advanced 5 port
-    switch
-  net: dsa: rzn1-a5psw: add Renesas RZ/N1 advanced 5 port switch driver
-  net: dsa: rzn1-a5psw: add statistics support
-  net: dsa: rzn1-a5psw: add FDB support
-  ARM: dts: r9a06g032: describe MII converter
-  ARM: dts: r9a06g032: describe GMAC2
-  ARM: dts: r9a06g032: describe switch
-  MAINTAINERS: add Renesas RZ/N1 switch related driver entry
-
- .../bindings/net/dsa/renesas,rzn1-a5psw.yaml  |  132 +++
- .../bindings/net/pcs/renesas,rzn1-miic.yaml   |  157 +++
- MAINTAINERS                                   |   11 +
- arch/arm/boot/dts/r9a06g032.dtsi              |   63 +
- drivers/net/dsa/Kconfig                       |    9 +
- drivers/net/dsa/Makefile                      |    1 +
- drivers/net/dsa/rzn1_a5psw.c                  | 1055 +++++++++++++++++
- drivers/net/dsa/rzn1_a5psw.h                  |  259 ++++
- drivers/net/pcs/Kconfig                       |    7 +
- drivers/net/pcs/Makefile                      |    1 +
- drivers/net/pcs/pcs-rzn1-miic.c               |  508 ++++++++
- include/dt-bindings/net/pcs-rzn1-miic.h       |   33 +
- include/linux/pcs-rzn1-miic.h                 |   18 +
- include/net/dsa.h                             |    5 +
- net/dsa/Kconfig                               |    7 +
- net/dsa/Makefile                              |    1 +
- net/dsa/slave.c                               |   13 +
- net/dsa/tag_rzn1_a5psw.c                      |  114 ++
- 18 files changed, 2394 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/net/dsa/renesas,rzn1-a5psw.yaml
- create mode 100644 Documentation/devicetree/bindings/net/pcs/renesas,rzn1-miic.yaml
- create mode 100644 drivers/net/dsa/rzn1_a5psw.c
- create mode 100644 drivers/net/dsa/rzn1_a5psw.h
- create mode 100644 drivers/net/pcs/pcs-rzn1-miic.c
- create mode 100644 include/dt-bindings/net/pcs-rzn1-miic.h
- create mode 100644 include/linux/pcs-rzn1-miic.h
- create mode 100644 net/dsa/tag_rzn1_a5psw.c
-
--- 
-2.34.1
+Sorry everyone. I sent this as PATCH in error while preparing to sent
+the same series as RFC. Since e-mail has no remote delete and I lack a
+time machine let's just all pretend you only got the RFC.
 

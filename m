@@ -2,96 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E76951426C
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 08:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAB88514273
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 08:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354578AbiD2GjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 02:39:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35682 "EHLO
+        id S1354592AbiD2GlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 02:41:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232281AbiD2Gi7 (ORCPT
+        with ESMTP id S1354580AbiD2GlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 02:38:59 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A2A81199
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 23:35:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651214142; x=1682750142;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=73uaYpqAPQn+8U/LuREycvqXt3Sws/vKsehS795EZBw=;
-  b=i6sr6lWcYEJH+55IyX+dFV5fWFsBuhSNF2bcnbhQNivfYnnqYQSyNwxf
-   jsvOYRug62qq/YL31uQddm55oFv+ERVHsNIzEHO7Ost9KeFC4l0coeJiB
-   TY5HBrGda5IeHwewcVOZvo8K9x5R272yGZ8thK4xCoR8IPB67OLrcJiJP
-   zKaN9yLOI/yXroGrXFrvFUNJgOH4JDfUXJtT3Rat6hAm9m4B0wWH+3S2c
-   gv+PnYbMfarw1jTuLxl3Rhxk8WW+8MhlbMTEDtjxEfjz7yIM9vWVfUmTK
-   AsirKV1fqsoFcbFU3o1YFsQ3zUbP51Uv28Ev34U1chY7SPNoV1rKwkv1y
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="248479529"
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="248479529"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 23:35:42 -0700
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="581924572"
-Received: from lye4-mobl.ccr.corp.intel.com (HELO [10.249.170.95]) ([10.249.170.95])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 23:35:39 -0700
-Message-ID: <d8682159-508b-501b-3642-54c8155a356d@linux.intel.com>
-Date:   Fri, 29 Apr 2022 14:35:36 +0800
+        Fri, 29 Apr 2022 02:41:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A9144B9F34
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 23:37:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651214274;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ChtMPYjIydjIkCxEWfVnTdwnIsFyeKywjaIjoMKSQMA=;
+        b=EZJ2tMAHsPQHyw9fJ47vj46AsyY/ooo5U0KT8+hhHLtHVc/KwEH3RaiyLdG4TP0i7AU95+
+        sUFUixCdU+FWU3ZWXSzHX+Qz8TZrTKyvCUW4TiMnT9H7E/VmrB1N1sufvXjdYfKQc+Uuen
+        4YCYJTMnmqGUolMHv/jILktBlxBlU04=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-324-4MFba-kINFGyzLeVHgCkVw-1; Fri, 29 Apr 2022 02:37:51 -0400
+X-MC-Unique: 4MFba-kINFGyzLeVHgCkVw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AB1E2800186;
+        Fri, 29 Apr 2022 06:37:50 +0000 (UTC)
+Received: from thuth.com (unknown [10.39.192.118])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B508F14A5060;
+        Fri, 29 Apr 2022 06:37:47 +0000 (UTC)
+From:   Thomas Huth <thuth@redhat.com>
+To:     kvm@vger.kernel.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+Subject: [PATCH v3 0/4] KVM: s390: selftests: Provide TAP output in tests
+Date:   Fri, 29 Apr 2022 08:37:20 +0200
+Message-Id: <20220429063724.480919-1-thuth@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v4 11/12] iommu: Per-domain I/O page fault handling
-Content-Language: en-US
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
-Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-References: <20220421052121.3464100-1-baolu.lu@linux.intel.com>
- <20220421052121.3464100-12-baolu.lu@linux.intel.com>
- <YmqrTGcHotvhhaT2@myrica>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <YmqrTGcHotvhhaT2@myrica>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/28 22:57, Jean-Philippe Brucker wrote:
-> On Thu, Apr 21, 2022 at 01:21:20PM +0800, Lu Baolu wrote:
->>   static void iopf_handle_group(struct work_struct *work)
->>   {
->>   	struct iopf_group *group;
->> @@ -134,12 +78,23 @@ static void iopf_handle_group(struct work_struct *work)
->>   	group = container_of(work, struct iopf_group, work);
->>   
->>   	list_for_each_entry_safe(iopf, next, &group->faults, list) {
->> +		struct iommu_domain *domain;
->> +
->> +		domain = iommu_get_domain_for_dev_pasid_async(group->dev,
->> +				iopf->fault.prm.pasid);
-> Reading the PCIe spec again (v6.0 10.4.1.1 PASID Usage), all faults within
-> the group have the same PASID so we could move the domain fetch out of the
-> loop. It does deviate from the old behavior, though, so we could change
-> it later.
+This patch series is motivated by Shuah's suggestion here:
 
-Perhaps we can add a pasid member in the struct iopf_group and do a
-sanity check when a new iopf is added to the group? Here, we just fetch
-the domain with group->pasid.
+ https://lore.kernel.org/kvm/d576d8f7-980f-3bc6-87ad-5a6ae45609b8@linuxfoundation.org/
 
-Best regards,
-baolu
+Many s390x KVM selftests do not output any information about which
+tests have been run, so it's hard to say whether a test binary
+contains a certain sub-test or not. To improve this situation let's
+add some TAP output via the kselftest.h interface to these tests,
+so that it easier to understand what has been executed or not.
+
+v3:
+ - Added comments / fixed cosmetics according to Janosch's and
+   Janis' reviews of the v2 series
+ - Added Reviewed-by tags from the v2 series
+
+v2:
+ - Reworked the extension checking in the first patch
+ - Make sure to always print the TAP 13 header in the second patch
+ - Reworked the SKIP printing in the third patch
+
+Thomas Huth (4):
+  KVM: s390: selftests: Use TAP interface in the memop test
+  KVM: s390: selftests: Use TAP interface in the sync_regs test
+  KVM: s390: selftests: Use TAP interface in the tprot test
+  KVM: s390: selftests: Use TAP interface in the reset test
+
+ tools/testing/selftests/kvm/s390x/memop.c     | 90 +++++++++++++++----
+ tools/testing/selftests/kvm/s390x/resets.c    | 38 ++++++--
+ .../selftests/kvm/s390x/sync_regs_test.c      | 87 +++++++++++++-----
+ tools/testing/selftests/kvm/s390x/tprot.c     | 29 ++++--
+ 4 files changed, 193 insertions(+), 51 deletions(-)
+
+-- 
+2.27.0
+

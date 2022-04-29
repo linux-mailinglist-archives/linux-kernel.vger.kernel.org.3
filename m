@@ -2,70 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BBDB51417B
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 06:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB4D0514180
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 06:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237398AbiD2EmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 00:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47404 "EHLO
+        id S237499AbiD2EnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 00:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiD2EmN (ORCPT
+        with ESMTP id S230133AbiD2EnX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 00:42:13 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7438BCB74
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 21:38:56 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id t4so3287962ilo.12
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 21:38:56 -0700 (PDT)
+        Fri, 29 Apr 2022 00:43:23 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECBBE15FE2
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 21:40:03 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id b198-20020a6334cf000000b003ab23ccd0cbso3369691pga.14
+        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 21:40:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=19w9K5HaCiHjRbqySOpO9kP4rZbUP06yF4CGml4ol5M=;
-        b=R4cw/wki/iFwm7iRhPkWHnMfaPMzatdA1JE/2rLEqscDUaO2QfDeIqhtdKP+gN810J
-         k62JP5taHuF/AO7Z6pblazkYdiNJEAOdt8DzJUone1x4aEdeAmmS5gt7oL2CUun4mJaj
-         xJkcG4G2pmga03RXtSOew01OlpATmK9VH/sm1okizbouCqWAYYvSt2nxKwm5wj2Ae2mo
-         MFlvITdX0Zh0L1tseUkF1BqDE9Hq4ER4CuXLDk/3YzkZOYgTEZTuDnAJupmEg8DvOqVC
-         zWlSrBKV7ME+wuo5wKE1odp102ihdkH0wZ9tpbd7GHlTeQMWlWHDrj0V8hdD9s5h7dYY
-         XhLw==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=7pAm/LDFHoDLOVuIZx6NOUlnYoOG6z2KtSbentQNohQ=;
+        b=lOJ6ndqujbkQ9y8YtiKLh1NmKtjsaaYLb7DNBKdzwM6kNdDJymwTB229+sHcII9IGm
+         ZgijMD9LB65oEfpnzDUuw7gMa1qtR6k7S2ZlegTaofUACUzwpv8vlppdU55LGRFu3xOo
+         DTTGaB92cV5r20Fkg0e2H9E3kthvAOiLTkz3TfcnrbdLxtSzKUl/QUaAPl9Nlyd9d+NP
+         hlFSo4WvNXsXYW96S52BZhtTswOFsceMy/Pzv0U02tJAyQ7NxtUhQdPT8MVsYrL7qi8C
+         lrvnil194+31LqgOEWw4WdQqbFQ3bkGTAw/oDIyQ1CcH4F+XIZe5J159ZKBObnviPkrs
+         Yh9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=19w9K5HaCiHjRbqySOpO9kP4rZbUP06yF4CGml4ol5M=;
-        b=0kt4913QzyT8YbVFcDmCYSDUYqZ+c60GKe3XjXMDO5kmXIiTZ4zvjNbUy2k88Xvdge
-         /0iit9l+8rLDPchIwomxWOfqhXEQn0g7JnxCHog5ER7+dK2UcQ7Ozhu4tDItyx72F2Ku
-         +1RfIkWqcWaC55HsJ9O69LYu//RDlET2elx6cmbht6527vVBCVn2jKiUfUp9XJsuv6x0
-         9tQRAvxv2m50oKMFPg8JoXY0vVqOw/R7RnnghuvLS8rXV1VAjh+WjR89nJJ1YUMVZQuP
-         p9H0WA3ESMl9l4JhQUvq08P8PtV614KsltlubumgNwhCN0GpcLLe+XjKM5TgAoIpm9nS
-         MG2A==
-X-Gm-Message-State: AOAM533GCmW+vcYBPPl0qSgmbG1J11J8sGzxNkS6Tvx2aRqZDV4fs/RX
-        wCfLqIU9EWKZaBZOz/gWaRugfA==
-X-Google-Smtp-Source: ABdhPJyxDMqYk49p1uy6rirkq94xw3yTmM/j/dWmpoo8+aVR3dDr9Ah9T6IdPQUYi1KONcGugXxSfw==
-X-Received: by 2002:a92:c24c:0:b0:2cd:8a7d:b606 with SMTP id k12-20020a92c24c000000b002cd8a7db606mr11123474ilo.64.1651207135640;
-        Thu, 28 Apr 2022 21:38:55 -0700 (PDT)
-Received: from google.com (194.225.68.34.bc.googleusercontent.com. [34.68.225.194])
-        by smtp.gmail.com with ESMTPSA id r7-20020a02c6c7000000b0032b3a781792sm281222jan.86.2022.04.28.21.38.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 21:38:54 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 04:38:50 +0000
-From:   Oliver Upton <oupton@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Peter Gonda <pgonda@google.com>,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [PATCH for-5.18] KVM: fix bad user ABI for KVM_EXIT_SYSTEM_EVENT
-Message-ID: <Ymtr2mfyujoxLsDR@google.com>
-References: <20220422103013.34832-1-pbonzini@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422103013.34832-1-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=7pAm/LDFHoDLOVuIZx6NOUlnYoOG6z2KtSbentQNohQ=;
+        b=4GWPS4XZc4IwGYU3VXTleeWlJCT1Nc/fgK2M1FVbuYffnsmFL+CdldaPDQlOtk/Jgd
+         nc28UP0vBfsbdnvdAlzRsP9T/SHSC00Zx8/V7fD/wE/zE/M2JdWya3c+J5+n39rvcpdH
+         C0hTwyceibqmE2qyyeD7HfFLFyRiYtmeV6SxVNoQcM3saRiztIiFueRGL+OKvKeWZdUb
+         Lq5PsDUTNK8Yi3esjPIrLcDLUKvcOQz6U4KlDVsDAlZ0KZ40xquchfmdRFPtvs19w/n2
+         b6lD89jKBPxR3rMHggIcYYgGjrLjbLKhIvulmCOcjZyLmeOsnzxAy6j5Lfr12MBRoGa4
+         VzsA==
+X-Gm-Message-State: AOAM532QzIxqzcIkOAI68McTr0yOcOJvWziwrd36gONxCnn8c6bU64j4
+        TrcAiLTHAzRxsYT2lDMMU4aNXliNz4yyRw==
+X-Google-Smtp-Source: ABdhPJymcIZSLhtD4Eu7q4Ap5bwpv/nVLCJ/HlABq4/5Ntta3fkMA3IydOm1P3Wx780QZrTfXCSsdCH/PLWsog==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a17:902:ce02:b0:151:a86d:dc2b with SMTP
+ id k2-20020a170902ce0200b00151a86ddc2bmr37514527plg.57.1651207203378; Thu, 28
+ Apr 2022 21:40:03 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 12:39:14 +0800
+Message-Id: <20220429043913.626647-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
+Subject: [PATCH] kunit: Taint kernel if any tests run
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     David Gow <davidgow@google.com>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Joe Fradley <joefradley@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,96 +76,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paolo,
+KUnit tests are not supposed to run on production systems: they may do
+deliberately illegal things to trigger errors, and have security
+implications (assertions will often deliberately leak kernel addresses).
 
-On Fri, Apr 22, 2022 at 12:30:13PM +0200, Paolo Bonzini wrote:
-> When KVM_EXIT_SYSTEM_EVENT was introduced, it included a flags
-> member that at the time was unused.  Unfortunately this extensibility
-> mechanism has several issues:
-> 
-> - x86 is not writing the member, so it is not possible to use it
->   on x86 except for new events
-> 
-> - the member is not aligned to 64 bits, so the definition of the
->   uAPI struct is incorrect for 32-bit userspace.  This is a problem
->   for RISC-V, which supports CONFIG_KVM_COMPAT.
-> 
-> Since padding has to be introduced, place a new field in there
-> that tells if the flags field is valid.  To allow further extensibility,
-> in fact, change flags to an array of 16 values, and store how many
-> of the values are valid.  The availability of the new ndata field
-> is tied to a system capability; all architectures are changed to
-> fill in the field.
-> 
-> For compatibility with userspace that was using the flags field,
-> a union overlaps flags with data[0].
-> 
-> Supersedes: <20220421180443.1465634-1-pbonzini@redhat.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Peter Gonda <pgonda@google.com>
-> Cc: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  Documentation/virt/kvm/api.rst | 24 +++++++++++++++++-------
->  arch/arm64/kvm/psci.c          |  3 ++-
->  arch/riscv/kvm/vcpu_sbi.c      |  3 ++-
->  arch/x86/kvm/x86.c             |  2 ++
->  include/uapi/linux/kvm.h       |  8 +++++++-
->  virt/kvm/kvm_main.c            |  1 +
->  6 files changed, 31 insertions(+), 10 deletions(-)
-> 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index 85c7abc51af5..4a900cdbc62e 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -5986,16 +5986,16 @@ should put the acknowledged interrupt vector into the 'epr' field.
->    #define KVM_SYSTEM_EVENT_RESET          2
->    #define KVM_SYSTEM_EVENT_CRASH          3
->  			__u32 type;
-> -			__u64 flags;
-> +                        __u32 ndata;
-> +                        __u64 data[16];
+Add a new taint type, TAINT_KUNIT to signal that a KUnit test has been
+run. This will be printed as 'N' (for kuNit, as K, U and T were already
+taken).
 
-This is out of sync with the union { flags; data; } now.
+This should discourage people from running KUnit tests on production
+systems, and to make it easier to tell if tests have been run
+accidentally (by loading the wrong configuration, etc.)
 
-IMO, we should put a giant disclaimer on all of this to *not* use the
-flags field and instead only use data. I imagine we wont want to persist
-the union forever as it is quite ugly, but necessary.
+Signed-off-by: David Gow <davidgow@google.com>
+---
 
-[...]
+This is something I'd been thinking about for a while, and it came up
+again, so I'm finally giving it a go.
 
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index 91a6fe4e02c0..f903ab0c8d7a 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -445,7 +445,11 @@ struct kvm_run {
->  #define KVM_SYSTEM_EVENT_RESET          2
->  #define KVM_SYSTEM_EVENT_CRASH          3
->  			__u32 type;
-> -			__u64 flags;
-> +			__u32 ndata;
-> +			union {
-> +				__u64 flags;
-> +				__u64 data[16];
-> +			};
->  		} system_event;
->  		/* KVM_EXIT_S390_STSI */
->  		struct {
-> @@ -1144,6 +1148,8 @@ struct kvm_ppc_resize_hpt {
->  #define KVM_CAP_S390_MEM_OP_EXTENSION 211
->  #define KVM_CAP_PMU_CAPABILITY 212
->  #define KVM_CAP_DISABLE_QUIRKS2 213
-> +/* #define KVM_CAP_VM_TSC_CONTROL 214 */
+Two notes:
+- I decided to add a new type of taint, as none of the existing ones
+  really seemed to fit. We could live with considering KUnit tests as
+  TAINT_WARN or TAINT_CRAP or something otherwise, but neither are quite
+  right.
+- The taint_flags table gives a couple of checkpatch.pl errors around
+  bracket placement. I've kept the new entry consistent with what's
+  there rather than reformatting the whole table, but be prepared for
+  complaints about spaces.
 
-This sticks out a bit. Couldn't the VM TSC control patch just use a
-different number? It seems that there will be a conflict anyway, if only to
-delete this comment.
+Thoughts?
+-- David
 
-How do we go about getting CAP numbers for features coming in from other
-architectures? An eager backport (such as the Android case that made us
-look at a union) would wind up using the wrong capability for a feature.
+---
+ Documentation/admin-guide/tainted-kernels.rst | 1 +
+ include/linux/panic.h                         | 3 ++-
+ kernel/panic.c                                | 1 +
+ lib/kunit/test.c                              | 4 ++++
+ 4 files changed, 8 insertions(+), 1 deletion(-)
 
---
-Thanks,
-Oliver
+diff --git a/Documentation/admin-guide/tainted-kernels.rst b/Documentation/admin-guide/tainted-kernels.rst
+index ceeed7b0798d..8f18fc4659d4 100644
+--- a/Documentation/admin-guide/tainted-kernels.rst
++++ b/Documentation/admin-guide/tainted-kernels.rst
+@@ -100,6 +100,7 @@ Bit  Log  Number  Reason that got the kernel tainted
+  15  _/K   32768  kernel has been live patched
+  16  _/X   65536  auxiliary taint, defined for and used by distros
+  17  _/T  131072  kernel was built with the struct randomization plugin
++ 18  _/N  262144  a KUnit test has been run
+ ===  ===  ======  ========================================================
+ 
+ Note: The character ``_`` is representing a blank in this table to make reading
+diff --git a/include/linux/panic.h b/include/linux/panic.h
+index f5844908a089..1d316c26bf27 100644
+--- a/include/linux/panic.h
++++ b/include/linux/panic.h
+@@ -74,7 +74,8 @@ static inline void set_arch_panic_timeout(int timeout, int arch_default_timeout)
+ #define TAINT_LIVEPATCH			15
+ #define TAINT_AUX			16
+ #define TAINT_RANDSTRUCT		17
+-#define TAINT_FLAGS_COUNT		18
++#define TAINT_KUNIT			18
++#define TAINT_FLAGS_COUNT		19
+ #define TAINT_FLAGS_MAX			((1UL << TAINT_FLAGS_COUNT) - 1)
+ 
+ struct taint_flag {
+diff --git a/kernel/panic.c b/kernel/panic.c
+index eb4dfb932c85..b24ca63ed738 100644
+--- a/kernel/panic.c
++++ b/kernel/panic.c
+@@ -404,6 +404,7 @@ const struct taint_flag taint_flags[TAINT_FLAGS_COUNT] = {
+ 	[ TAINT_LIVEPATCH ]		= { 'K', ' ', true },
+ 	[ TAINT_AUX ]			= { 'X', ' ', true },
+ 	[ TAINT_RANDSTRUCT ]		= { 'T', ' ', true },
++	[ TAINT_KUNIT ]			= { 'N', ' ', false },
+ };
+ 
+ /**
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index 0f66c13d126e..ea8e9162445d 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -11,6 +11,7 @@
+ #include <kunit/test-bug.h>
+ #include <linux/kernel.h>
+ #include <linux/moduleparam.h>
++#include <linux/panic.h>
+ #include <linux/sched/debug.h>
+ #include <linux/sched.h>
+ 
+@@ -498,6 +499,9 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 	struct kunit_result_stats suite_stats = { 0 };
+ 	struct kunit_result_stats total_stats = { 0 };
+ 
++	/* Taint the kernel so we know we've run tests. */
++	add_taint(TAINT_KUNIT, LOCKDEP_STILL_OK);
++
+ 	kunit_print_subtest_start(suite);
+ 
+ 	kunit_suite_for_each_test_case(suite, test_case) {
+-- 
+2.36.0.464.gb9c8b46e94-goog
+

@@ -2,146 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 201DF5150B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:26:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B50C85150BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379055AbiD2Q3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 12:29:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
+        id S1379062AbiD2Q31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 12:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379048AbiD2Q3L (ORCPT
+        with ESMTP id S1379061AbiD2Q3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 12:29:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF14D4C4E;
-        Fri, 29 Apr 2022 09:25:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 345EBB83238;
-        Fri, 29 Apr 2022 16:25:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90F6CC385A4;
-        Fri, 29 Apr 2022 16:25:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651249548;
-        bh=BWS82VVFyGkq8byIrn9E10Tw1cwiTndaAE5gu1B1OmQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=CVIs8SdxCsEVj5dUFPoP75L/KJ26GD43iGVck/aZNGhK1aezz7ZZb06FSUfWiMU00
-         TXb+1854FvHtiQPJaNkNykibUp1cgY1oD2iObIkRxs2MoTYcJb63woOZPMZR+SDGcU
-         3HNVtaNPwoV85OfwP4/4RrLNA8cIYKZ8K7ZEC1wEKqUE7zEsAtpg+Sc7WIPoW36o3E
-         l4BqKcJyvXW/5tH7ZOLJG6rEOYNvav4eMgUMApp2OOvJvYo/J+DJZ4ArXiMOT84Bha
-         LcuibEvm3xCMlzVtrEPQulC95eJG+GMWrxVeoahXaCXso46F+NgWRtTC/XTK12qu/A
-         mlhrBbOUrkG0g==
-Date:   Fri, 29 Apr 2022 11:25:45 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Nathan Lynch <nathanl@linux.ibm.com>
-Cc:     Tyrel Datwyler <tyreld@linux.ibm.com>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        Mahesh Salgaonkar <mahesh@linux.ibm.com>,
-        linuxppc-dev <linuxppc-dev@ozlabs.org>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v6] PCI hotplug: rpaphp: Error out on busy status from
- get-sensor-state
-Message-ID: <20220429162545.GA79541@bhelgaas>
+        Fri, 29 Apr 2022 12:29:18 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EE4D5578
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:25:59 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 125-20020a1c1983000000b003941f354c62so1251431wmz.0
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:25:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=U7GwZfxNxCr20dXvniV2zLTxrd1PMEcbQZAO6v8SYLo=;
+        b=D7hRSRGysLF6b/+lZGfGwGJW36LZtjnuaVsdT5g70KMJgcqMMC+FEhfKVUsaq/1da7
+         IIbDQ1woP6gkqB9YFFVt2Z1ekn7gRvOn9m2dz899A2gF6FBaNoF1biSy4iaquXh+4IUI
+         xntEIqq+rBOCXSEXbyXmRDWy5DyPF+oOtEp/tojXXdC7ZGUPgtjmAO4F67MHFK+pFHeC
+         HyHxG3Xm7Kn0NTU2juRmrQhnIzj4auuTvurfUW7+ntOkSEzMWmLm6nRn/linRhkY58ae
+         ouvIrvB+0vzZ6/h+haYPYB9L3MeD9Z6QO4u+RuQmqgtb/2egseSjMnCQAh+JCe3q1Iez
+         W0FQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=U7GwZfxNxCr20dXvniV2zLTxrd1PMEcbQZAO6v8SYLo=;
+        b=hdZe0GjD6BL7w/Jk3SGXYakjFjePVcKZjSWOzv+z1m/IqXuWe/LDnp+orIFo0i4RdL
+         BZ3EH3nliAdDZyC9qB/L3Jg0rMwEx56l7pQSH+S5aRyy9062zH1u3Pqc4pNeaYvkZhzs
+         gPrzqClXRVYqF137FgyjFNUne8wPkq2a7gTL0+IiMYYB7F1cTNU2o5WU9dquOYof9NUO
+         kvHgMa4HlVu0XEQ3HPReuBNJkABMSWjIDHT78LGtjFbg1GVB4RvJd+ZOd3kNb0H8cYqi
+         Cm5IIZYLcihRDsfxMSUylxU2bvYGE2oT1ZObgKKD/Q+f+qjp0vwD1SVcWyklop1ANRwk
+         IfIA==
+X-Gm-Message-State: AOAM532kB2sa9DvYpl8Glm93IxiDytSou9IDB4KBJHFpEf6Q1s4SI4+7
+        2B3wtaV+6SH8fSCSos+5Ld/7tSv3aomczm3ziw9L4Q==
+X-Google-Smtp-Source: ABdhPJxhLzTgLf/Ks/AB0pes6BWh4ozeKIdS874CsMwC+xluHukgX/fubue2dWWqxRl4fMNT+Iw0yiN5ImWbON3APeU=
+X-Received: by 2002:a05:600c:4f93:b0:393:f08d:a048 with SMTP id
+ n19-20020a05600c4f9300b00393f08da048mr4023212wmq.158.1651249557596; Fri, 29
+ Apr 2022 09:25:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87k0b8q1px.fsf@linux.ibm.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220427184716.1949239-1-kaleshsingh@google.com>
+ <20220427184716.1949239-2-kaleshsingh@google.com> <YmveXly9117jbWKr@sirena.org.uk>
+In-Reply-To: <YmveXly9117jbWKr@sirena.org.uk>
+From:   Kalesh Singh <kaleshsingh@google.com>
+Date:   Fri, 29 Apr 2022 09:25:46 -0700
+Message-ID: <CAC_TJvfm0ndtQSPt-gqYmzA-Q51MY6Eu1Gk3MxvCm+VqgtvCOQ@mail.gmail.com>
+Subject: Re: [PATCH 1/4] KVM: arm64: Compile stacktrace.nvhe.o
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>, Will Deacon <will@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Fuad Tabba <tabba@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Keir Fraser <keirf@google.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
+        <linux-arm-kernel@lists.infradead.org>,
+        kvmarm <kvmarm@lists.cs.columbia.edu>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 05:31:38PM -0500, Nathan Lynch wrote:
-> Bjorn Helgaas <helgaas@kernel.org> writes:
-> > On Tue, Apr 26, 2022 at 11:07:39PM +0530, Mahesh Salgaonkar wrote:
-> >> +/*
-> >> + * RTAS call get-sensor-state(DR_ENTITY_SENSE) return values as per PAPR:
-> >> + *    -1: Hardware Error
-> >> + *    -2: RTAS_BUSY
-> >> + *    -3: Invalid sensor. RTAS Parameter Error.
-> >> + * -9000: Need DR entity to be powered up and unisolated before RTAS call
-> >> + * -9001: Need DR entity to be powered up, but not unisolated, before RTAS call
-> >> + * -9002: DR entity unusable
-> >> + *  990x: Extended delay - where x is a number in the range of 0-5
-> >> + */
-> >> +#define RTAS_HARDWARE_ERROR	(-1)
-> >> +#define RTAS_INVALID_SENSOR	(-3)
-> >> +#define SLOT_UNISOLATED		(-9000)
-> >> +#define SLOT_NOT_UNISOLATED	(-9001)
+On Fri, Apr 29, 2022 at 5:47 AM Mark Brown <broonie@kernel.org> wrote:
+>
+> On Wed, Apr 27, 2022 at 11:46:56AM -0700, Kalesh Singh wrote:
+>
+> > Recompile stack unwinding code for use with the nVHE hypervisor. This is
+> > a preparatory patch that will allow reusing most of the kernel unwinding
+> > logic in the nVHE hypervisor.
+>
+> This is substantially more than just the build change that the changelog
+> would seem to indicate...  it would I think be clearer to split this up
+> further with the code changes separated out and explained a bit more.
+> It's not just recompling the code for nVHE, there's also refactoring to
+> split out changes that don't apply in nVHE hypervisor like all the task
+> related code which is needed but not mentioned in the changlog at all.
+> Possibly a patch or two for the code motion then a separate patch for
+> the ifdefs and build changes?
 
-> >> +static int rtas_to_errno(int rtas_rc)
-> >> +{
-> >> +	int rc;
-> >> +
-> >> +	switch (rtas_rc) {
-> >> +	case RTAS_HARDWARE_ERROR:
-> >> +		rc = -EIO;
-> >> +		break;
-> >> +	case RTAS_INVALID_SENSOR:
-> >> +		rc = -EINVAL;
-> >> +		break;
-> >> +	case SLOT_UNISOLATED:
-> >> +	case SLOT_NOT_UNISOLATED:
-> >> +		rc = -EFAULT;
-> >> +		break;
-> >> +	case SLOT_NOT_USABLE:
-> >> +		rc = -ENODEV;
-> >> +		break;
-> >> +	case RTAS_BUSY:
-> >> +	case RTAS_EXTENDED_DELAY_MIN...RTAS_EXTENDED_DELAY_MAX:
-> >> +		rc = -EBUSY;
-> >> +		break;
-> >> +	default:
-> >> +		err("%s: unexpected RTAS error %d\n", __func__, rtas_rc);
-> >> +		rc = -ERANGE;
-> >> +		break;
-> >> +	}
-> >> +	return rc;
-> >
-> > This basically duplicates rtas_error_rc().  Why do we need two copies?
-> 
-> It treats RTAS_BUSY, RTAS_EXTENDED_DELAY_MIN...RTAS_EXTENDED_DELAY_MAX
-> differently, which is part of the point of this change.
+Hi Mark,
 
-I think it would reduce confusion overall to:
+Thank you for reviewing. I agree - will split this into more
+incremental patches in the next version.
 
-  - add RTAS_HARDWARE_ERROR, RTAS_INVALID_SENSOR to rtas.h
+Thanks,
+Kalesh
 
-  - rename and move SLOT_UNISOLATED, etc to rtas.h; they look
-    analogous to function-specific things like RTAS_SUSPEND_ABORTED
-
-  - change rtas_error_rc() to use the RTAS_HARDWARE_ERROR, etc
-    constants
-
-  - use the constants (SLOT_NOT_USABLE) instead of "9902" in the
-    commit log and code comments
-
-> Aside: rtas_error_rc() (from powerpc's rtas.c) is badly named. Its
-> conversions make sense for only a handful of RTAS calls. RTAS error
-> codes have function-specific interpretations.
-
-Maybe there's a case for factoring out the generic error codes and
-have rtas_to_errno() (which sounds like maybe it should be renamed as
-well) handle the function-specific part and fall back to the generic
-one otherwise:
-
-  int rtas_to_errno(int rtas_rc)
-  {
-    switch (rtas_rc) {
-    case SLOT_UNISOLATED:
-    case SLOT_NOT_UNISOLATED:
-      return -EINVAL;
-    case SLOT_NOT_USABLE:
-      return -ENODEV;
-    ...
-    default:
-      return rtas_error_rc(rtas_rc);
-    }
-  }
+>
+> I *think* the code is all fine but I'd need to go through it a few more
+> times to be sure I didn't miss anything.

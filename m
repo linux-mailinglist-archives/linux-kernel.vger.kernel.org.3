@@ -2,105 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4158C51503F
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3490515035
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378796AbiD2QIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 12:08:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40208 "EHLO
+        id S1378773AbiD2QHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 12:07:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378476AbiD2QII (ORCPT
+        with ESMTP id S1378763AbiD2QHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 12:08:08 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8519D84ED1;
-        Fri, 29 Apr 2022 09:04:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=QQI5zmi1djYWNz2i53I6KuQGatDa49BWqjEk2Pav1i4=; b=dYOwdCYz8mfW6uRaErWUoCqmdx
-        5T0+vzZBt6UK85jUK/bYBffPO6pHVBukVXgw40Mng8+hfEFyxsYupbDv17vw0eY73RVtJNUJhZeIk
-        wjL2oPNMg0UJQkop2tznLUBtpwTgs2tJTFrh96RXyi3iI9oJ7Xg0HjOO5wFLxxatzCt/a1kjKIm+q
-        GG90XSMTUteF9uAfx+0HJjQF0T7y90PJaZRFs3aM6M51tA02d53awi4I7n5GpC6cVQif5RrGFpU1r
-        QhiVEfyVqroi50IPYPzYRbjvCqabrqPiHclqX4UZkfFE4tLq7njetpvB7ea+qAjYTdFscbWw6lpa8
-        5AxSRVRQ==;
-Received: from [179.113.53.197] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nkT6a-0001BR-MS; Fri, 29 Apr 2022 18:04:28 +0200
-Message-ID: <7518924e-5bb4-e6e9-0e3e-3f5cb03bf946@igalia.com>
-Date:   Fri, 29 Apr 2022 13:04:01 -0300
+        Fri, 29 Apr 2022 12:07:44 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0E385655
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:04:25 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id s137so6855937pgs.5
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 09:04:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CNNorgah8ybYol7gjHDhFHcts5/oLyPdR4o5Dg4a4YY=;
+        b=iz0iLtf5Kgi2CEamDtU3O35n39GYZGMdBjauwSTHbzwKnjawPqftV1+DkTxu8l+fYP
+         t3qSRFrjLVUdYo0fXyr5RNryHNmSK+9EUoIIiyoRIa5/HelC4citWC2v1up652v7KFgz
+         5vVtIgQrwZAO3JA17Uhx16lKZOYVUwKFGXKlwz9h/HCRwreWzGDnMmXkMarfczh4tpWg
+         gwNzy8gHq9PJg4zsTl2I3oI4QnvAJadoE0Dz3iWgf7Dal7FjTiX5rj7kH6vnv8AQMDhg
+         eMExwp74qxVfbIwj+RnyQF2c7ftt9BpB/6tCTPcbqwyHiSir7yAqU3Yfa2sOfp/hYiLq
+         eMzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CNNorgah8ybYol7gjHDhFHcts5/oLyPdR4o5Dg4a4YY=;
+        b=H79VNSLFyz9CiRP5gAQNQB0Wl/Zb/8n8C+68E2XDyLAY1EIUgQ5x/ONO1n59g/LocA
+         dDFupqA+ER8RghR56gRh00p+eCdco2aWUtRxqpLx26uSzUxrbXBiMwZrTmH/FdC9sLcT
+         NwK1Dg0tqKOf5s7yV42Jqhu/HcpuZP0BJbt5bKiP3cxtWwDpdHLGNMixgoAd+xd3ij4d
+         ZOBDf0TRfsK6JdNbpw56+iKWJ/2RdU+fyDG+RxtBefVQWIol3BOMozOMLczFcTiR0R4R
+         q+8RZD3NL77X0UEXd+DXET6958DLwxeCQ9WfoqYVfiNnKiW9BAnZGcn5U/be0Swvl7Hf
+         dsuA==
+X-Gm-Message-State: AOAM5329gN3uPCy03qcHsZAfblSnELpqrx7Ok0Lzo/2vIKiF6qG5h39u
+        Lmt4RVJmnF01SHvb0JI5uwgMTwzC4yvT2DDKfd7h6A==
+X-Google-Smtp-Source: ABdhPJxsrjeODXrBp50VvsilExotJGBqxGmNr9R5vlCqNAXc0PJO2RfQxaGuXWFTfDX9NxLbE7pxdM/KFDsDWvkwkCA=
+X-Received: by 2002:a63:d43:0:b0:3c1:475e:8341 with SMTP id
+ 3-20020a630d43000000b003c1475e8341mr49887pgn.533.1651248265273; Fri, 29 Apr
+ 2022 09:04:25 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 24/30] panic: Refactor the panic path
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>, akpm@linux-foundation.org,
-        bhe@redhat.com, pmladek@suse.com, kexec@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-25-gpiccoli@igalia.com>
- <4fe85e9c-4e96-e9d5-9fd8-f062bafcda4f@infradead.org>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <4fe85e9c-4e96-e9d5-9fd8-f062bafcda4f@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220405200625.19359-1-tharvey@gateworks.com> <20220411013106.GD129381@dragon>
+ <CAJ+vNU0VVpDGDXivz=r8C4U8dYjA08SqnzPXwmtOv4ujvc3=Zg@mail.gmail.com> <20220418075718.GB391514@dragon>
+In-Reply-To: <20220418075718.GB391514@dragon>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Fri, 29 Apr 2022 09:04:13 -0700
+Message-ID: <CAJ+vNU12t_2Jr_D=YC-ZRJdJuZS2aPQ7EoT0QA8vctGhhLuHtQ@mail.gmail.com>
+Subject: Re: [PATCH] imx8mm-venice-gw7902: update pci refclk
+To:     Shawn Guo <shawnguo@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Device Tree Mailing List <devicetree@vger.kernel.org>,
+        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Richard Zhu <hongxing.zhu@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/04/2022 21:28, Randy Dunlap wrote:
-> 
-> 
-> On 4/27/22 15:49, Guilherme G. Piccoli wrote:
->> +	crash_kexec_post_notifiers
->> +			This was DEPRECATED - users should always prefer the
-> 
-> 			This is DEPRECATED - users should always prefer the
-> 
->> +			parameter "panic_notifiers_level" - check its entry
->> +			in this documentation for details on how it works.
->> +			Setting this parameter is exactly the same as setting
->> +			"panic_notifiers_level=4".
-> 
+On Mon, Apr 18, 2022 at 12:57 AM Shawn Guo <shawnguo@kernel.org> wrote:
+>
+> On Mon, Apr 11, 2022 at 12:44:23PM -0700, Tim Harvey wrote:
+> > On Sun, Apr 10, 2022 at 6:31 PM Shawn Guo <shawnguo@kernel.org> wrote:
+> > >
+> > > On Tue, Apr 05, 2022 at 01:06:25PM -0700, Tim Harvey wrote:
+> > > > Use the correct PCI clock bindings.
+> > >
+> > > Please improve the commit log to explain why clock "pcie_phy" can be
+> > > dropped.
+> > >
+> >
+> > Shawn,
+> >
+> > The original PCIe bindings for this board were wrong - they were from
+> > a version of the bindings that was not yet approved (my mistake) and
+> > I'm just trying to bring them up to date.
+> >
+> > That said, I looked at the latest fsl,imx6q-pcie.yaml dt-bindings [1]
+> > and see that there should be a min of 3 clocks called 'pcie',
+> > 'pcie_bus', and 'pcie_phy'. However I notice that all of the current
+> > imx8mm boards that enable PCI have clock-names of 'pcie', 'pcie_aux',
+> > and 'pcie_bus'. It seems like all the imx8mm boards having pcie have
+> > clock-names this way:
+> >
+> > arch/arm64/boot/dts/freescale/imx8mm-beacon-baseboard.dtsi
+> > arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
+> > arch/arm64/boot/dts/freescale/imx8mm-tqma8mqml-mba8mx.dts
+> > arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx.dtsi
+> > arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi
+> > arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi
+> > arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts
+> > arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts
+> > arch/arm64/boot/dts/freescale/imx8mm-venice-gw7903.dts
+> >
+> > Does the binding need to change or do the clock names need to change
+> > in the above?
+>
+> If the bindings is approved/correct, device tree should match bindings.
+>
 
-Thanks Randy, for your suggestion - but I confess I couldn't understand
-it properly. It's related to spaces/tabs, right? What you suggest me to
-change in this formatting? Just by looking the email I can't parse.
+Shawn,
 
-Cheers,
+I think the bindings are wrong.
 
+Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml has [1]:
 
-Guilherme
+  clocks:
+    minItems: 3
+    items:
+      - description: PCIe bridge clock.
+      - description: PCIe bus clock.
+      - description: PCIe PHY clock.
+      - description: Additional required clock entry for imx6sx-pcie,
+          imx8mq-pcie.
+
+  clock-names:
+    minItems: 3
+    items:
+      - const: pcie
+      - const: pcie_bus
+      - const: pcie_phy
+      - const: pcie_inbound_axi for imx6sx-pcie, pcie_aux for imx8mq-pcie
+
+This indicates the "pcie_phy" clock is required yet
+drivers/pci/controller/dwc/pci-imx6.c [2] doesn't require it if it has
+an abstract PHY driver which is the case for IMX8M (and that's why my
+patch drops it)
+
+Additionally I note that the 4th clock described in the bindings could
+use some clarification for imx8mm-pcie as for this "pcie_aux" is
+required.
+
+Best Regards,
+
+Tim
+[1] https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml
+[2] https://elixir.bootlin.com/linux/v5.18-rc4/source/drivers/pci/controller/dwc/pci-imx6.c#L1140

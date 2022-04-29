@@ -2,126 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E997F514612
+	by mail.lfdr.de (Postfix) with ESMTP id 497A6514610
 	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 11:54:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238930AbiD2J5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 05:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44136 "EHLO
+        id S1357113AbiD2J6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 05:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345976AbiD2J5b (ORCPT
+        with ESMTP id S1347684AbiD2J57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 05:57:31 -0400
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-eopbgr130057.outbound.protection.outlook.com [40.107.13.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664973F319;
-        Fri, 29 Apr 2022 02:54:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eUBJs1fPk9DKXhXv4zjqcC8XF++EoptxQWxcF7LlrKGoGAg4aYJ/YrV29u/z43a7zE4x/uWa9vkEMnCpYNDhCOD0Y3kc2eUBwTi9rC+lhootpKikLGj5Gf1Kg8C7oUQ+GowKyWzV55n7y36KVjv3BeTCeZPhim4dXqhRApuQdFMbOnHs3z9+X4hMaOfLxxntdr8aG8VYaCSeBkJ/ZRpYjo6w3tL6YRCvwRjOgcb01FRZDarKbrsqIL4EylNru8EvHQ9FSaThyNBt0hB88i2G2z44sOck38spaBsZzVhylj8h1op57z+LSgU5EchSPB55uw2Vz14livnL5MTG6w1y1Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jdL+SIRl+htSjUrr5RLD+4UtXCDCUCraxX0TKpNkNi8=;
- b=HaXz/QD90Nb8yMtlfMothZe7JTt15iRM3EuLtrKdc+mJrHVWj3LJp8RY+ceIPhYPbgy8qAv5rkaupFjncZ/cFCH26VMs0Pfq27oIQEoaBBUDobScfjhRaH+SHk8Sfi4o4N2pHEIw6iYg9cnRhdwIl1FJ8mTtlM6xf1l+ldNXKmAGynP0bKFEcnQc4i1f5oQwLaPAaqCFQj7pZ9wzFcPbex1Sszd52BFQm3xkEXJF6Br6V9wi6mx+JM8jzyxrDCxxuqWuzuChbw/74We9EiatT67dsRhwcCbAzH/RteDq9iPM1wlo/g1VfD6ujuwEdC+lbtXpdScygShEdOeMSRuhsQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jdL+SIRl+htSjUrr5RLD+4UtXCDCUCraxX0TKpNkNi8=;
- b=kgWvfAJWF09MpCdNh/R+V8U6MmbrKylfpah0DNMh4bAoONLDCWvlqTdq+Un/jAs8P9RvlwMMBroEDf2xg+JUGRFWpYo+1WQFJu8NrzK+OO83RIQqUqDEM6DDxXaN0mJuKw222bIZoCWV+WSi4dn7PR58LBuhRjurJGKv+IMOlow=
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by DB8PR04MB7019.eurprd04.prod.outlook.com (2603:10a6:10:12b::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.14; Fri, 29 Apr
- 2022 09:54:11 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::d94f:b885:c587:5cd4]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::d94f:b885:c587:5cd4%6]) with mapi id 15.20.5206.014; Fri, 29 Apr 2022
- 09:54:11 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Sasha Levin <sashal@kernel.org>, stable <stable@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH stable 0/3] SOF_TIMESTAMPING_OPT_ID backport to 4.14 and
- 4.19
-Thread-Topic: [PATCH stable 0/3] SOF_TIMESTAMPING_OPT_ID backport to 4.14 and
- 4.19
-Thread-Index: AQHYSey/rjYFxWFs6ECKeXXw010xTqzmJwaAgCCOMACAABUWAA==
-Date:   Fri, 29 Apr 2022 09:54:11 +0000
-Message-ID: <20220429095410.iewnssn3gookhi2y@skbuf>
-References: <20220406192956.3291614-1-vladimir.oltean@nxp.com>
- <20220408152929.4zd2mclusdpazclv@skbuf> <YmukEb1gyBKXIDUP@kroah.com>
-In-Reply-To: <YmukEb1gyBKXIDUP@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 23864f70-b1d3-4415-c325-08da29c6363f
-x-ms-traffictypediagnostic: DB8PR04MB7019:EE_
-x-microsoft-antispam-prvs: <DB8PR04MB701977CCFFD78738EF4247A2E0FC9@DB8PR04MB7019.eurprd04.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: OqOr1JubJGv2RxgCs3ilT29P0716Og7Dlsq2n6r2t6mPAQkqPTQ/Ns8rQ6v3atEAXWTeanvYgb2qjD81WZXsOIRdRwdDb7nZXoLTWMKuE6Y+T0L1WMaKzRwmNTNjSKah9jz7xommof+bDvU2+PL30XZq7kvU3uj4HhPMkxjLjLPpNjXcwUfw0Dg4xCeuMSzNNyRcwOOHaRyZHyka1Is+PlXbjFueHy6Rld5bFoqMW5qAP1BmdDAhc2O6dFiaFa2DDoYm6stotwaZG2FhPOezegsgL5Bksp/W52mS8FvQNzy3R+M6D7dfnMnREnNQCcLN8gv/Trh1elBRqWNkMJp1qbFioImDthc039P7PMdJ1lYidLwrV17ubtjb098/olYQlNh0tqjgkgdKsUdw7eDed+dmVjChi57sdlq9cXUoXGvCowpniMGVdZGDL0HOfRXtL4Wr0dazhf4YR+3vWjbnXvfsC/T1aU+w0RnBMJw7BSWbO5PECiSXWs7ixXtCPQ9g2Qf5+VmF8uLQ5WZ70QpmAMy15GykPzBn9JOXCKHg0EU9SZOexZE9+yLfWR88vLjizlVPUgLRaiFSSuJ7ZbvQVebINEMb4jXkK0GP56cDDleZmJjW9GT0Y0GMooP5KhW/lNs+0CRXGeFx2O+vzafFHKcQ7V1+QQc5Zze3t6bJgAuFWbGdHinnn7XEgl7zwTFYEik8zNw86tJB8Z52Q/o37NKtS3NmE4g5fJIWOmyTJ82QyVRYkICZGqKWXFn7LqHE9L3wnJ5usM6191euScZRdGMdCW6qUgTmu9lUh2+jzayihRqCMN98CFRyY3ZWRUPK/0XnM3Nmarcy795RVKf0Lg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(5660300002)(8936002)(1076003)(966005)(6486002)(2906002)(44832011)(122000001)(7416002)(508600001)(38070700005)(83380400001)(38100700002)(66946007)(66476007)(66556008)(4326008)(8676002)(33716001)(316002)(66446008)(91956017)(64756008)(76116006)(186003)(6506007)(54906003)(6916009)(71200400001)(9686003)(6512007)(26005)(86362001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?i0zU2zYpAb+/CWEvcLk0SxBKbvxlPLFuTehTmCHcQFszvsCFD3pW8jbGVide?=
- =?us-ascii?Q?5TxvaAbAQ7b7gO3RPstILsm6UdF3Yta8jlOcZQK6qCOQ0BQlR0CT/r6MeD6W?=
- =?us-ascii?Q?MMNjkvBNq/avHmszsT6Jh36vCO0cOwFiwbknextAf3SWXpMVlZ41hJNq+tIn?=
- =?us-ascii?Q?UKFpALN75IEVU1zgG3TGxW62HJjgv0j1qXSN0Je1BGCsvOBEHms5GHzbr0CY?=
- =?us-ascii?Q?GFU0+ksC6drLxZi8YcASuOwWjKBZLKIYTFBZfzjNfyDvWOJnj4KpJ/loKRES?=
- =?us-ascii?Q?Oc+73YmBMNxnT1REiQzpzGfqCB8msvIrrPS4d04sOBiARqucrS8IgDw5SaMI?=
- =?us-ascii?Q?sQw6G0/JmHOxWbmZrkx7XwRoOJo4DYRXSZYUMLfO+GdABGsFYJw6PCqEY4gm?=
- =?us-ascii?Q?AZXX1Fr8KUUCRZkYVdR0bMV2eVxsp7GWIaelrEvG7Vy2MeYZ94sHKAHA5tJI?=
- =?us-ascii?Q?Z89Xf6E6wQfOoYQqBmaoUaTucHcY/tD/pXEekphxNnZtdWtRmtiV8irOoyVt?=
- =?us-ascii?Q?syv02uHJFjStdyVsgyJaahmrbSiXOFyQEPUKqrIiM+jM7WvWYK5QJSHe0xJa?=
- =?us-ascii?Q?NciZa8BRfQuHbMGtxS/TcbkcSrTtoUhv4JcpIXMzo/jKCe4J8wk5YsXAvxYt?=
- =?us-ascii?Q?hDQj4uEcPD+SgBkX5PYyWRN+txpX4ZWlWw9ASr+S0AH50SKmQEseYo1oIeKt?=
- =?us-ascii?Q?RXGRohoaK7DxScvCGb6rcIgtCmW5I7a6dDKhC60y8KoTE3gjxLJc+vkpr+Hs?=
- =?us-ascii?Q?L9f48WMPDwBHL0DcwNxkYhWt4LQRgY6jXii234EtQ/E5Ydy7VnhsF4b9KrrQ?=
- =?us-ascii?Q?fUw1aVYE/UtkLACVrV+4dh6L1eF/NCPSz8SGGklmsUlCsQ/ggVO81IMqnRHm?=
- =?us-ascii?Q?YfCXjDrL7zNS/8UBklsqrEzAdjovgm79xK4qYseE7QrEmM6JvycRIhQDwoIG?=
- =?us-ascii?Q?/kKq5p9JbiFmtNkSRZ8QFjoJ7LCwVLl3q2+Y+YZ9W7sqdvC37kC6BXxPGQ7j?=
- =?us-ascii?Q?oqNcvkJcih6bNmXXp0caCdL+nTcI1cRNOXpE/0xXCKAEmkARYIoRd/pT7w2X?=
- =?us-ascii?Q?iLyLE7ZoSzDYrbYgHJMCF9Mn52kFT1Qn4hrU2wnX2kkcYEzyDyMWwymtYgO7?=
- =?us-ascii?Q?5XEnwc5KeRX0QOsqYZaTeY5yGwy8Yr7tAbbTui6DFlXss1bv0HPjH+yobt3M?=
- =?us-ascii?Q?3DsvZPJVKUYz0m1iEShmZZltvky8pCCQm0xVx58D6YQ+RDCO9l1OZfWdoVA9?=
- =?us-ascii?Q?d5lDqHR5dM954RrAWCicHHJCsYZ/pDwrOXWJnscFvo6P6VVSDS8D0penLqrM?=
- =?us-ascii?Q?VlYUoVbc+ZBCnXRIWVwYCfmKZ6Kfb9m18r3JsfTW3+vp9PXP0j8hcpF9Z/QM?=
- =?us-ascii?Q?hFa6d5KJA3W2QW9o0w201KX8drRs4gsBN9kXWjAO3TLVOib+FfolwbKXDUIi?=
- =?us-ascii?Q?rT7wOiIKo9cFCeQ7EaTgdZwJK5HXCPUakZKYxI4+49EBqMD+mZPTGYzFgDT1?=
- =?us-ascii?Q?E74EFoPwBZQMFEczyfOHx7iHyHjJJzmgMEO+6AYzT3iJ1WpegbcyLemKd24d?=
- =?us-ascii?Q?5LGgS2AAeDgek62qZG5dOOcld+jzPUUaklN43cxeHfvDdrSeMOBEHKDvRDcK?=
- =?us-ascii?Q?l77Mpv/EEnyf/OKOTlhpj7YMCOJQReiPRVCpKBRmKDG389vfGWejHTb66frd?=
- =?us-ascii?Q?x0sIttIOqMUyncSCTaG+RMzN1t6vB845EqRDUa2vD7ZYxV/bQqjkRMton+ya?=
- =?us-ascii?Q?zVVskKd8h7hDAeSJJS8slZdR5npLlpc=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <A4F3E22A53D39048A02E610E9F45D379@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Fri, 29 Apr 2022 05:57:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC9F869CF8
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 02:54:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651226080;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=taFIyfF8aQ8L/XDSdTbfsKUW0s/xVxGlxL7GYD+pc+4=;
+        b=hchFIvGbBSbiIGtFOkYRtZoo4yhegZvKRWUbUInHQmyH+qHyp5la8XCQ9HdIK/SX5bfH9e
+        IUg2VHAFGaanCZB95be4Pla2vg7FHD6QYBCLO6XeQNvJc3Rj3XrXH45QSGhOvEeZUGBvvo
+        re7N/tYeApclYBZiLjG/3NOJlJDW1wo=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-630-38f76S8wMWiqblgdFxz3Jw-1; Fri, 29 Apr 2022 05:54:39 -0400
+X-MC-Unique: 38f76S8wMWiqblgdFxz3Jw-1
+Received: by mail-wr1-f72.google.com with SMTP id l7-20020adfa387000000b0020acc61dbaeso2897691wrb.7
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 02:54:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=taFIyfF8aQ8L/XDSdTbfsKUW0s/xVxGlxL7GYD+pc+4=;
+        b=7YMQeof9FF76hjL5tVC+xb1mIPdpqB5bFK4VzpCM0Mavs2wR3QVFu3feP9Cln8uvBO
+         yfb++5+9maywEmoDQdWJpEEPJuNFgqOqnMqL7ec8tc0T54ezkIQiQ/xqy+hi7erw7Tnv
+         X1hNUXY+YKCFcDYs/QZfl6f0iIu/ePImCImpufwONcQ/NPYfk+Prl5EPNBd1MaOn6ZS+
+         +5ThKms5a/NkaBVL75sy0fs52DO6FkL/IOtb0/yAx8qI/47P3xBdLtGF5xFd5Cdv6C0i
+         wE727ApZ6rFpGcZHzvg8E5jFnNMpcweUKu1NUc4HnfIX2q6aZacZHu6gKl8R7sramBxV
+         /YjQ==
+X-Gm-Message-State: AOAM532ZxlrOr7aUA4fYru52sXXpZgKC8Ptz6KmLIxEHxbfsHj9pxAZ4
+        SDWXS2cK8iLKX3fsa7ZV2bbf9lxiFlIAsb8Mmn/TReQHWr20XD+9/7riARiqX9n5z4w02p04of3
+        WRCQSP7TtngC1SAZEJ0GXSeV4
+X-Received: by 2002:a05:600c:1e85:b0:391:ca59:76be with SMTP id be5-20020a05600c1e8500b00391ca5976bemr2386605wmb.184.1651226078098;
+        Fri, 29 Apr 2022 02:54:38 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxyuz74y5fMW0AcrjTHiajh/StenTy5kkz2aFzsCAM/mvBiSzOFfrIe3mpO9zSvUfJEwurviA==
+X-Received: by 2002:a05:600c:1e85:b0:391:ca59:76be with SMTP id be5-20020a05600c1e8500b00391ca5976bemr2386577wmb.184.1651226077822;
+        Fri, 29 Apr 2022 02:54:37 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c707:fe00:bbeb:98e6:617a:dea1? (p200300cbc707fe00bbeb98e6617adea1.dip0.t-ipconnect.de. [2003:cb:c707:fe00:bbeb:98e6:617a:dea1])
+        by smtp.gmail.com with ESMTPSA id bi7-20020a05600c3d8700b0038eb78569aasm5961159wmb.20.2022.04.29.02.54.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 02:54:37 -0700 (PDT)
+Message-ID: <eeda05fb-b0bb-3e1d-37e0-0021dd72e144@redhat.com>
+Date:   Fri, 29 Apr 2022 11:54:36 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 23864f70-b1d3-4415-c325-08da29c6363f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Apr 2022 09:54:11.6445
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 1zIFfmgL175oqLVcsWMyr+nCss4vPFhB1qpPELnD6f6mGMTIXYvxK3kNNsIBvIiRZz3x37/mOgHsBhNQ7+RTpw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7019
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v2 1/4] mm/migration: reduce the rcu lock duration
+Content-Language: en-US
+To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org,
+        mike.kravetz@oracle.com, naoya.horiguchi@nec.com
+Cc:     ying.huang@intel.com, hch@lst.de, dhowells@redhat.com,
+        cl@linux.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220425132723.34824-1-linmiaohe@huawei.com>
+ <20220425132723.34824-2-linmiaohe@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220425132723.34824-2-linmiaohe@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -129,40 +84,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 10:38:42AM +0200, Greg Kroah-Hartman wrote:
-> On Fri, Apr 08, 2022 at 03:29:30PM +0000, Vladimir Oltean wrote:
-> > Hello Greg, Sasha,
-> >=20
-> > On Wed, Apr 06, 2022 at 10:29:53PM +0300, Vladimir Oltean wrote:
-> > > As discussed with Willem here:
-> > > https://lore.kernel.org/netdev/CA+FuTSdQ57O6RWj_Lenmu_Vd3NEX9xMzMYkB0=
-C3rKMzGgcPc6A@mail.gmail.com/T/
-> > >=20
-> > > the kernel silently doesn't act upon the SOF_TIMESTAMPING_OPT_ID sock=
-et
-> > > option in several cases on older kernels, yet user space has no way t=
-o
-> > > find out about this, practically resulting in broken functionality.
-> > >=20
-> > > This patch set backports the support towards linux-4.14.y and linux-4=
-.19.y,
-> > > which fixes the issue described above by simply making the kernel act
-> > > upon SOF_TIMESTAMPING_OPT_ID as expected.
-> > >=20
-> > > Testing was done with the most recent (not the vintage-correct one)
-> > > kselftest script at:
-> > > tools/testing/selftests/networking/timestamping/txtimestamp.sh
-> > > with the message "OK. All tests passed".
-> >=20
-> > Could you please pick up these backports for "stable"? Thanks.
->=20
-> Do you not already see these in a released kernel?  If not, please
-> resubmit what is missing as I think they are all there...
+On 25.04.22 15:27, Miaohe Lin wrote:
+> rcu_read_lock is required by grabbing the task refcount but it's not
+> needed for ptrace_may_access. So we could release the rcu lock after
+> task refcount is successfully grabbed to reduce the rcu holding time.
+> 
+> Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> Cc: Huang Ying <ying.huang@intel.com>
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: Christoph Lameter <cl@linux.com>
+> ---
+>  mm/migrate.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index b2678279eb43..b779646665fe 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -1902,17 +1902,16 @@ static struct mm_struct *find_mm_struct(pid_t pid, nodemask_t *mem_nodes)
+>  		return ERR_PTR(-ESRCH);
+>  	}
+>  	get_task_struct(task);
+> +	rcu_read_unlock();
+>  
+>  	/*
+>  	 * Check if this process has the right to modify the specified
+>  	 * process. Use the regular "ptrace_may_access()" checks.
+>  	 */
+>  	if (!ptrace_may_access(task, PTRACE_MODE_READ_REALCREDS)) {
+> -		rcu_read_unlock();
+>  		mm = ERR_PTR(-EPERM);
+>  		goto out;
+>  	}
+> -	rcu_read_unlock();
+>  
+>  	mm = ERR_PTR(security_task_movememory(task));
+>  	if (IS_ERR(mm))
 
-They're there, thanks.
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=
-=3Dlinux-4.14.y&id=3Dadd668be8f5e53f4471a075edaa70a7cb85fd036
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=
-=3Dlinux-4.14.y&id=3Da96c57a72f477b42ab238fad3c2c1f8e8c091256
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=
-=3Dlinux-4.19.y&id=3Dcd7295d0bea3f56a3f024f1b22d50a0f3fc727f1=
+Similar pattern in:
+
+mm/mempolicy.c:kernel_migrate_pages()
+kernel/futex/syscalls.c:get_robust_list()
+kernel/nsproxy.c:validate_nsset()
+
+Exception:
+
+sched/core_sched.c:sched_core_share_pid()
+
+
+Should we unify -- i.e., adjust the remaining 3 as well?
+
+-- 
+Thanks,
+
+David / dhildenb
+

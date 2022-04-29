@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B907A5150E5
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97BEF5150E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 18:30:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235221AbiD2Qcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 12:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50292 "EHLO
+        id S1379270AbiD2Qcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 12:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379206AbiD2Qbv (ORCPT
+        with ESMTP id S1379183AbiD2Qb5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 12:31:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E90EDAA05;
-        Fri, 29 Apr 2022 09:28:24 -0700 (PDT)
+        Fri, 29 Apr 2022 12:31:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9F6DAA23;
+        Fri, 29 Apr 2022 09:28:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 05E0362338;
-        Fri, 29 Apr 2022 16:28:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0C48C385AF;
-        Fri, 29 Apr 2022 16:28:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61276B83698;
+        Fri, 29 Apr 2022 16:28:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0AE1C385B0;
+        Fri, 29 Apr 2022 16:28:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651249703;
-        bh=i2s8MXletVaqxsQHutApX0kGzV6e20Tl+T1LrZsiZdQ=;
+        s=k20201202; t=1651249705;
+        bh=vRyEqlNcMpIbrSgln4JDEa9oplTOWlImSzdZw5sUCBk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XFJez6aLSagPmG2NVQ5jtfNBfUi4S0LFeqMFKDv31dtv+nkVDvCVCcGdgAiDf0WZk
-         /B+k0/QsWPxQGcVyHXjYMuP1keP1r+z8gz7acwVc/vDGoBAzqI5AKdiXUmfjyFmgRg
-         ffLaJylc1o83tF5p0Cx9cOmDONbI0bT6djg6/rI0uNIY0umJ0knA5fAnhLtfB0DQqX
-         YeWf/WRBcGWSYoYHoGZGGV7oA+hqUmIMqWwrvKNL+9+CBs+XpaK5u43XSvVSKGmfRV
-         TISokVBNQSXe0ozvzfPrUgMxLEJ2qFiYMycPkr2I4DQM2Wwy44tPANJt+mIi1/+1XS
-         tyyXLqCjxXQGg==
+        b=baepLr4jpL37Oq2cFOG6UyXqVVjrYaexwbyvAgrVKjnp0LMroCSC4Gd70FbRBmCpz
+         9Phbu6WlzSEMBZLa/iHo+24WQ2iRhZg3gNf/VF3Jb/fSEwDZqJ9n4Zqu5N/PaodiYH
+         VGg+jfdRvf7sMXigEw6DdfRH8/OWzZQSLbevUo+3vstolTOY/zR75+tL8fJ4AQVwZo
+         97YiFcowDrRLiDijnz3pSHp6aabR96K2OBxlyg87L/qMTSBTiH2oj16FHzBxK/CqrL
+         9a650fK96J4iel+WS7AaGpwXUwwpxrGZAZN1aQ84L+XTnZCYNkm9LCfdGtMKk9hrw9
+         urKw54HJWd5KQ==
 From:   Daniel Bristot de Oliveira <bristot@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>,
         linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        John Kacur <jkacur@redhat.com>,
-        Daniel Bristot de Oliveria <bristot@redhat.com>
-Subject: [PATCH 2/4] rtla: Don't overwrite existing directory mode
-Date:   Fri, 29 Apr 2022 18:28:11 +0200
-Message-Id: <8c294a6961080a1970fd8b73f7bcf1e3984579e2.1651247710.git.bristot@kernel.org>
+        John Kacur <jkacur@redhat.com>
+Subject: [PATCH 3/4] rtla: Minor grammar fix for rtla README
+Date:   Fri, 29 Apr 2022 18:28:12 +0200
+Message-Id: <437f0accdde53713ab3cce46f3564be00487e031.1651247710.git.bristot@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <cover.1651247710.git.bristot@kernel.org>
 References: <cover.1651247710.git.bristot@kernel.org>
@@ -57,44 +56,48 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: John Kacur <jkacur@redhat.com>
 
-The mode on /usr/bin is often 555 these days,
-but make install on rtla overwrites this with 755
+- Change to "The rtla meta-tool includes"
+- Remove an unnecessary "But, "
+- Adjust the formatting of the paragraph resulting from the changes.
+- Simplify the wording for the libraries and tools.
 
-Fix this by preserving the current directory if it exists.
-
-Link: https://lore.kernel.org/r/20220402043939.6962-1-jkacur@redhat.com
+Link: https://lore.kernel.org/r/20220408161012.10544-1-jkacur@redhat.com/
 
 Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Daniel Bristot de Oliveria <bristot@redhat.com>
+Cc: Daniel Bristot de Oliveria <bristot@kernel.org>
 Fixes: 79ce8f43ac5a ("rtla: Real-Time Linux Analysis tool")
 Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 Signed-off-by: John Kacur <jkacur@redhat.com>
 Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 ---
- tools/tracing/rtla/Makefile | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/tracing/rtla/README.txt | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
-index 11fb417abb42..5a3226e436ef 100644
---- a/tools/tracing/rtla/Makefile
-+++ b/tools/tracing/rtla/Makefile
-@@ -23,6 +23,7 @@ $(call allow-override,LD_SO_CONF_PATH,/etc/ld.so.conf.d/)
- $(call allow-override,LDCONFIG,ldconfig)
+diff --git a/tools/tracing/rtla/README.txt b/tools/tracing/rtla/README.txt
+index 6c88446f7e74..0fbad2640b8c 100644
+--- a/tools/tracing/rtla/README.txt
++++ b/tools/tracing/rtla/README.txt
+@@ -1,15 +1,13 @@
+ RTLA: Real-Time Linux Analysis tools
  
- INSTALL	=	install
-+MKDIR	=	mkdir
- FOPTS	:=	-flto=auto -ffat-lto-objects -fexceptions -fstack-protector-strong \
- 		-fasynchronous-unwind-tables -fstack-clash-protection
- WOPTS	:= 	-Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -Wno-maybe-uninitialized
-@@ -68,7 +69,7 @@ static: $(OBJ)
+-The rtla is a meta-tool that includes a set of commands that
+-aims to analyze the real-time properties of Linux. But, instead of
+-testing Linux as a black box, rtla leverages kernel tracing
+-capabilities to provide precise information about the properties
+-and root causes of unexpected results.
++The rtla meta-tool includes a set of commands that aims to analyze
++the real-time properties of Linux. Instead of testing Linux as a black box,
++rtla leverages kernel tracing capabilities to provide precise information
++about the properties and root causes of unexpected results.
  
- .PHONY: install
- install: doc_install
--	$(INSTALL) -d -m 755 $(DESTDIR)$(BINDIR)
-+	$(MKDIR) -p $(DESTDIR)$(BINDIR)
- 	$(INSTALL) rtla -m 755 $(DESTDIR)$(BINDIR)
- 	$(STRIP) $(DESTDIR)$(BINDIR)/rtla
- 	@test ! -f $(DESTDIR)$(BINDIR)/osnoise || rm $(DESTDIR)$(BINDIR)/osnoise
+ Installing RTLA
+ 
+-RTLA depends on some libraries and tools. More precisely, it depends on the
+-following libraries:
++RTLA depends on the following libraries and tools:
+ 
+  - libtracefs
+  - libtraceevent
 -- 
 2.32.0
 

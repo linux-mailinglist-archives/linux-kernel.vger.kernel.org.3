@@ -2,96 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA557514A6D
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 15:24:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3037514A77
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 15:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359761AbiD2N1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 09:27:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41852 "EHLO
+        id S1359772AbiD2N1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 09:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232889AbiD2N1R (ORCPT
+        with ESMTP id S1359773AbiD2N1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 09:27:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4C5C8651;
-        Fri, 29 Apr 2022 06:23:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6171F62298;
-        Fri, 29 Apr 2022 13:23:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1EA1C385A4;
-        Fri, 29 Apr 2022 13:23:52 +0000 (UTC)
-Date:   Fri, 29 Apr 2022 09:23:51 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, senozhatsky@chromium.org,
-        stern@rowland.harvard.edu, tglx@linutronix.de, vgoyal@redhat.com,
-        vkuznets@redhat.com, will@kernel.org
-Subject: Re: [PATCH 17/30] tracing: Improve panic/die notifiers
-Message-ID: <20220429092351.10bca4dd@gandalf.local.home>
-In-Reply-To: <b8771b37-01f5-f50b-dbb3-9db4ee26e67e@gmail.com>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
-        <20220427224924.592546-18-gpiccoli@igalia.com>
-        <b8771b37-01f5-f50b-dbb3-9db4ee26e67e@gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 29 Apr 2022 09:27:35 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3796C8A87;
+        Fri, 29 Apr 2022 06:24:16 -0700 (PDT)
+Received: from fraeml743-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KqY4j5gxhz67NKJ;
+        Fri, 29 Apr 2022 21:20:05 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml743-chm.china.huawei.com (10.206.15.224) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 29 Apr 2022 15:24:14 +0200
+Received: from localhost (10.81.206.67) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 29 Apr
+ 2022 14:24:13 +0100
+Date:   Fri, 29 Apr 2022 14:24:12 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     Ruslan Zalata <rz@fabmicro.ru>, Jean Delvare <jdelvare@suse.com>,
+        "Chen-Yu Tsai" <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "Samuel Holland" <samuel@sholland.org>,
+        <linux-kernel@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-sunxi@lists.linux.dev>
+Subject: Re: [PATCH v2] hwmon: (sun4i-lradc) Add driver for LRADC found on
+ Allwinner A13/A20 SoC
+Message-ID: <20220429142412.00001e43@Huawei.com>
+In-Reply-To: <f79a8edf-36d4-02af-da8f-32b4e491bd47@roeck-us.net>
+References: <20220428210906.29527-1-rz@fabmicro.ru>
+        <f79a8edf-36d4-02af-da8f-32b4e491bd47@roeck-us.net>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.81.206.67]
+X-ClientProxiedBy: lhreml720-chm.china.huawei.com (10.201.108.71) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 29 Apr 2022 12:22:44 +0300
-Sergei Shtylyov <sergei.shtylyov@gmail.com> wrote:
+On Thu, 28 Apr 2022 14:30:06 -0700
+Guenter Roeck <linux@roeck-us.net> wrote:
 
-> > +	switch (ev) {
-> > +	case DIE_OOPS:
-> > +		do_dump = 1;
-> > +		break;
-> > +	case PANIC_NOTIFIER:
-> > +		do_dump = 1;
-> > +		break;  
+> On 4/28/22 14:09, Ruslan Zalata wrote:
+> > Some Allwinner SoCs like A13, A20 or T2 are equipped with two-channel
+> > low rate (6 bit) ADC that is often used for extra keys. There's a driver
+> > for that already implementing standard input device, but it has these
+> > limitations: 1) it cannot be used for general ADC data equisition, and  
 > 
->    Why not:
+> acquisition
 > 
-> 	case DIE_OOPS:
-> 	case PANIC_NOTIFIER:
-> 		do_dump = 1;
-> 		break;
+> > 2) it uses only one LRADC channel of two available.
+> > 
+> > This driver provides basic hwmon interface to both channels of LRADC on
+> > such Allwinner SoCs.
+> > 
+> > Signed-off-by: Ruslan Zalata <rz@fabmicro.ru>  
+> 
+> Ok, next phase of review.
+> 
 
-Agreed.
+One thing noticed whilst randomly glancing at this patch.
 
-Other than that.
 
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> > +#ifdef CONFIG_PM
+> > +static int sun4i_lradc_resume(struct device *dev)
+> > +{
+> > +	struct sun4i_lradc_data *lradc = dev_get_drvdata(dev);
+> > +
+> > +	return sun4i_lradc_start(lradc);
+> > +}
+> > +
+> > +static int sun4i_lradc_suspend(struct device *dev)
+> > +{
+> > +	struct sun4i_lradc_data *lradc = dev_get_drvdata(dev);
+> > +
+> > +	sun4i_lradc_stop(lradc);
+> > +	return 0;
+> > +}
+> > +
+> > +#define SUN4I_LRADC_DEV_PM_OPS	(&sun4i_lradc_dev_pm_ops)
+> > +#else
+> > +#define SUN4I_LRADC_DEV_PM_OPS	NULL
+> > +#endif /* CONFIG_PM */
+> > +
+> > +static const struct dev_pm_ops sun4i_lradc_dev_pm_ops = {
 
--- Steve
+We have much better infrastructure for this these days.
+
+Take a look at DEFINE_SIMPLE_DEV_PM_OPS()
+and pm_sleep_ptr()
+
+Those two in combination will let you get rid of all the ifdef stuff
+here by letting the compiler remove the unused code automatically.
+
+> > +	.suspend = sun4i_lradc_suspend,
+> > +	.resume = sun4i_lradc_resume,
+> > +};
+> > +
+> > +static const struct of_device_id sun4i_lradc_of_match[] = {
+> > +	{ .compatible = "allwinner,sun4i-a10-lradc-keys", .data = &variant_sun4i_a10_lradc},
+> > +	{ /* sentinel */ }
+> > +};
+> > +MODULE_DEVICE_TABLE(of, sun4i_lradc_of_match);
+> > +
+> > +static struct platform_driver sun4i_lradc_driver = {
+> > +	.driver = {
+> > +		.name	= "sun4i-lradc-hwmon",
+> > +		.of_match_table = of_match_ptr(sun4i_lradc_of_match),
+> > +		.pm = SUN4I_LRADC_DEV_PM_OPS,
+> > +	},
+> > +	.probe	= sun4i_lradc_probe,
+> > +};
+> > +
+> > +module_platform_driver(sun4i_lradc_driver);
+> > +
+> > +MODULE_DESCRIPTION("Allwinner A13/A20 LRADC hwmon driver");
+> > +MODULE_AUTHOR("Ruslan Zalata <rz@fabmicro.ru>");
+> > +MODULE_LICENSE("GPL");
+> > +No empty line at end, please  
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+

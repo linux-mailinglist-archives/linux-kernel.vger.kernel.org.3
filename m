@@ -2,211 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC0F5149DA
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:49:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9ADC5149E1
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:49:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359525AbiD2Mwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 08:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45824 "EHLO
+        id S1359527AbiD2MxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 08:53:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359484AbiD2Mwd (ORCPT
+        with ESMTP id S1357892AbiD2MxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 08:52:33 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A26CC9B7D;
-        Fri, 29 Apr 2022 05:49:15 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id i5so10632101wrc.13;
-        Fri, 29 Apr 2022 05:49:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=m2VDhVRQPjsV1IPycPT/Y4TlTx8jaZtNzcIfdQQLUOE=;
-        b=ecACeX4mEA86JpS0EXqxZYgqpdd/LkB5YAIuA0ZlDvIGigqsSq6u1HE5Fkm2nj/4no
-         XTvJc5g4hQCzMLN3bJsYak/3ygV7SkqvcmGozAMysaaQj34gblO9wOzUSGOqLyVMxCgq
-         5U8GqBywfsp3IGvSDFHF/01j/6tEwuIdmQR/hx1zigTs9Xk9q8h7f1m8Ziq8Z+TYc0zP
-         S0le5HBcSYQI/59t/usSCR632rbPOBsY3eu8+iu2xiVmpUE8dn/ZyGq6gbJIInUCVMG/
-         gyhZJu9P1d9wi011YgbJEn3rUvLoIGwLNbdNeGgF1SgvtfrM1Vu6ZsHHnmqlIFstgVBn
-         vBwQ==
+        Fri, 29 Apr 2022 08:53:08 -0400
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E68C9B75;
+        Fri, 29 Apr 2022 05:49:50 -0700 (PDT)
+Received: by mail-qt1-f178.google.com with SMTP id p4so5014054qtq.12;
+        Fri, 29 Apr 2022 05:49:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=m2VDhVRQPjsV1IPycPT/Y4TlTx8jaZtNzcIfdQQLUOE=;
-        b=nsqcxkqFXC5YMKK15B/Ja+dqa7TqzuGiBCvVONuCsgdqV/rEO8kAcrrFyC5VmtjZPh
-         wYrvbD81ToA8Ph2+J3dEBbv2Uyepd4DGSUg6ugB9FrVwceUP5M0M9eE64T0rnOBD9N+K
-         tpDSsG5Ion5cw0zHfgPjHvGoVQfpTCjivB8E6VKfpIN1gxQ0glTFEyT72Mh2ARCkzXgM
-         tEX1JpP1QTP23Ng7mja3PKq792wsVa44SMzwIbg0oOM5MnInn1x0viBZ4TA0UaOgj1f6
-         zGmE8yIfZ9kVomzgDM8ZkPnZ/wzYqbBouR3utt90Qq4KNETPjmhOkh8xirhhMYSkb5Ka
-         g/sQ==
-X-Gm-Message-State: AOAM531683PryuqnFzRRJqE0FG++i7RUjlZd2TamKzmsCug6IEdd6sU9
-        UJyZSuFCbEPW+E4yLw62Bm4=
-X-Google-Smtp-Source: ABdhPJzV6OVD5id6uhYczjlC98kidiEApQj0yn/ZFy0FzVSsvGmB79Qh41p54L7i5YkxXtjSF9eTgQ==
-X-Received: by 2002:a05:6000:1d81:b0:207:b7f8:24ee with SMTP id bk1-20020a0560001d8100b00207b7f824eemr30228367wrb.260.1651236553660;
-        Fri, 29 Apr 2022 05:49:13 -0700 (PDT)
-Received: from alaa-emad ([197.57.200.226])
-        by smtp.gmail.com with ESMTPSA id e25-20020adfa459000000b0020c4ebaf526sm443463wra.78.2022.04.29.05.49.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 05:49:13 -0700 (PDT)
-From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     outreachy@lists.linux.dev, roopa@nvidia.com, jdenham@redhat.com,
-        sbrivio@redhat.com, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
-        alexandre.belloni@bootlin.com, shshaikh@marvell.com,
-        manishc@marvell.com, razor@blackwall.org,
-        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, GR-Linux-NIC-Dev@marvell.com,
-        bridge@lists.linux-foundation.org,
-        eng.alaamohamedsoliman.am@gmail.com
-Subject: [PATCH net-next v5 2/2] net: vxlan: Add extack support to vxlan_fdb_delete
-Date:   Fri, 29 Apr 2022 14:49:07 +0200
-Message-Id: <7abd2d1abb8abd3080356b8e031b1b100b80f1ed.1651236082.git.eng.alaamohamedsoliman.am@gmail.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <cover.1651236081.git.eng.alaamohamedsoliman.am@gmail.com>
-References: <cover.1651236081.git.eng.alaamohamedsoliman.am@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4tqelAYwf2EnKhlkfmEW1Nniwpv4OsNQ/+Rpd0YuVJE=;
+        b=QA7qD+Sc/Tn/d3TJwe1Y9P3uS55IzPjQOcT8Fr0DaXmY4HJo81BJ8nXOy4kwVFuBX3
+         5GN5rKOGwOe37evzd4inH5bE6IlkyUPe51/axUolyIZrsQrpV29B70KjIulL+dU+Vwgc
+         48iUWzVemWqRaa9Ha922A+7+LuJdHVUihYmzWlxXbgAqyOJCSJuOMMf9IUdG62bKJsuT
+         ng8DFgKCRBoC7qawat1GD4PYoj7BodFMWeO8pzO/nDOt0osN8j4tqRuqA/40I/bbv2If
+         lh17mHtixCY3Vr2qfV1mhPGHFDS+Q3/Oav0P7HqdP+8uR+/d4SoL7Pr9g2gXlXaRmV34
+         3YOA==
+X-Gm-Message-State: AOAM532w1wWr65QdXejVXS6EihZySKvgy//IpYDUNuLB1lYOVuTMIqeP
+        2GB8VazRQiHWMQDZElpyI1QEqP4UWd7NFnmP
+X-Google-Smtp-Source: ABdhPJzu1L3CKUQeA5EfpZv7o3ouJ05aOw/9erx+/iJuJw2JRbWwcuXwpozlkTeQoow8/m8lTJ2Htw==
+X-Received: by 2002:ac8:5a81:0:b0:2f1:f20d:173a with SMTP id c1-20020ac85a81000000b002f1f20d173amr26622184qtc.686.1651236588942;
+        Fri, 29 Apr 2022 05:49:48 -0700 (PDT)
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
+        by smtp.gmail.com with ESMTPSA id s16-20020ac85cd0000000b002e1ed82f1e5sm1834042qta.75.2022.04.29.05.49.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 05:49:48 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2f83983782fso84025897b3.6;
+        Fri, 29 Apr 2022 05:49:47 -0700 (PDT)
+X-Received: by 2002:a81:e10d:0:b0:2f7:bb2a:6529 with SMTP id
+ w13-20020a81e10d000000b002f7bb2a6529mr34597687ywh.62.1651236586925; Fri, 29
+ Apr 2022 05:49:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220428093355.16172-1-jiaxin.yu@mediatek.com>
+ <CAMuHMdWYJofetMwkAH4d8UzKZH77hxwRhXrMhaECOs1suQV2PA@mail.gmail.com> <b90426905a486ab720b9d67f00ed869285acd768.camel@mediatek.com>
+In-Reply-To: <b90426905a486ab720b9d67f00ed869285acd768.camel@mediatek.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 29 Apr 2022 14:49:35 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVA-JJqPB9fiUZSeXZR+fa58V5t2OQjaN1-JvGR+K_H4Q@mail.gmail.com>
+Message-ID: <CAMuHMdVA-JJqPB9fiUZSeXZR+fa58V5t2OQjaN1-JvGR+K_H4Q@mail.gmail.com>
+Subject: Re: [v4 00/18] ASoC: mediatek: Add support for MT8186 SoC
+To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, aaronyu@google.com,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Trevor Wu <trevor.wu@mediatek.com>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        Julian Braha <julianbraha@gmail.com>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-mediatek@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds extack msg support to vxlan_fdb_delete and vxlan_fdb_parse.
-extack is used to propagate meaningful error msgs to the user of vxlan
-fdb netlink api
+Hi Jiaxin,
 
-Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
----
-changes in V2:
-        - fix spelling vxlan_fdb_delete
-        - add missing braces
-        - edit error message
----
-changes in V3:
-        fix errors reported by checkpatch.pl
----
-changes in V4:
-        - fix errors reported by checkpatch.pl
-        - edit commit message.
----
-changes in V5:
-	- edit commit message
----
- drivers/net/vxlan/vxlan_core.c | 38 ++++++++++++++++++++++++----------
- 1 file changed, 27 insertions(+), 11 deletions(-)
+On Fri, Apr 29, 2022 at 11:32 AM Jiaxin Yu <jiaxin.yu@mediatek.com> wrote:
+> On Fri, 2022-04-29 at 10:47 +0200, Geert Uytterhoeven wrote:
+> > Gmail tends to mark your patches as spam.
+> > Can you please make sure to use "PATCH" in the subject line, e.g.
+> > "[PATCH v4 00/18] ASoC: mediatek: Add support for MT8186 SoC"?
 
-diff --git a/drivers/net/vxlan/vxlan_core.c b/drivers/net/vxlan/vxlan_core.c
-index ad0f2150cfdb..429ce2168971 100644
---- a/drivers/net/vxlan/vxlan_core.c
-+++ b/drivers/net/vxlan/vxlan_core.c
-@@ -1129,19 +1129,25 @@ static void vxlan_fdb_dst_destroy(struct vxlan_dev *vxlan, struct vxlan_fdb *f,
+> Sorry for this mistake, I usually use "git format-patch --subject-
+> prefix "v4" --cover-letter -x" to generate a series of patches.
+> So it automatically removes "PATCH". I will correct the cmd to "git
+> format-patch --subject-prefix "PATCH v4" --cover-letter -x".
 
- static int vxlan_fdb_parse(struct nlattr *tb[], struct vxlan_dev *vxlan,
- 			   union vxlan_addr *ip, __be16 *port, __be32 *src_vni,
--			   __be32 *vni, u32 *ifindex, u32 *nhid)
-+			   __be32 *vni, u32 *ifindex, u32 *nhid,
-+			   struct netlink_ext_ack *extack)
- {
- 	struct net *net = dev_net(vxlan->dev);
- 	int err;
+You can just use e.g. "-v4" instead of the --subject-prefix option.
 
- 	if (tb[NDA_NH_ID] && (tb[NDA_DST] || tb[NDA_VNI] || tb[NDA_IFINDEX] ||
--	    tb[NDA_PORT]))
--		return -EINVAL;
-+	    tb[NDA_PORT])) {
-+			NL_SET_ERR_MSG(extack,
-+						  "DST, VNI, ifindex and port are mutually exclusive with NH_ID");
-+			return -EINVAL;
-+		}
+Gr{oetje,eeting}s,
 
- 	if (tb[NDA_DST]) {
- 		err = vxlan_nla_get_addr(ip, tb[NDA_DST]);
--		if (err)
-+		if (err) {
-+			NL_SET_ERR_MSG(extack, "Unsupported address family");
- 			return err;
-+		}
- 	} else {
- 		union vxlan_addr *remote = &vxlan->default_dst.remote_ip;
-
-@@ -1157,24 +1163,30 @@ static int vxlan_fdb_parse(struct nlattr *tb[], struct vxlan_dev *vxlan,
- 	}
-
- 	if (tb[NDA_PORT]) {
--		if (nla_len(tb[NDA_PORT]) != sizeof(__be16))
-+		if (nla_len(tb[NDA_PORT]) != sizeof(__be16)) {
-+			NL_SET_ERR_MSG(extack, "Invalid vxlan port");
- 			return -EINVAL;
-+		}
- 		*port = nla_get_be16(tb[NDA_PORT]);
- 	} else {
- 		*port = vxlan->cfg.dst_port;
- 	}
-
- 	if (tb[NDA_VNI]) {
--		if (nla_len(tb[NDA_VNI]) != sizeof(u32))
-+		if (nla_len(tb[NDA_VNI]) != sizeof(u32)) {
-+			NL_SET_ERR_MSG(extack, "Invalid vni");
- 			return -EINVAL;
-+		}
- 		*vni = cpu_to_be32(nla_get_u32(tb[NDA_VNI]));
- 	} else {
- 		*vni = vxlan->default_dst.remote_vni;
- 	}
-
- 	if (tb[NDA_SRC_VNI]) {
--		if (nla_len(tb[NDA_SRC_VNI]) != sizeof(u32))
-+		if (nla_len(tb[NDA_SRC_VNI]) != sizeof(u32)) {
-+			NL_SET_ERR_MSG(extack, "Invalid src vni");
- 			return -EINVAL;
-+		}
- 		*src_vni = cpu_to_be32(nla_get_u32(tb[NDA_SRC_VNI]));
- 	} else {
- 		*src_vni = vxlan->default_dst.remote_vni;
-@@ -1183,12 +1195,16 @@ static int vxlan_fdb_parse(struct nlattr *tb[], struct vxlan_dev *vxlan,
- 	if (tb[NDA_IFINDEX]) {
- 		struct net_device *tdev;
-
--		if (nla_len(tb[NDA_IFINDEX]) != sizeof(u32))
-+		if (nla_len(tb[NDA_IFINDEX]) != sizeof(u32)) {
-+			NL_SET_ERR_MSG(extack, "Invalid ifindex");
- 			return -EINVAL;
-+		}
- 		*ifindex = nla_get_u32(tb[NDA_IFINDEX]);
- 		tdev = __dev_get_by_index(net, *ifindex);
--		if (!tdev)
-+		if (!tdev) {
-+			NL_SET_ERR_MSG(extack, "Device not found");
- 			return -EADDRNOTAVAIL;
-+		}
- 	} else {
- 		*ifindex = 0;
- 	}
-@@ -1226,7 +1242,7 @@ static int vxlan_fdb_add(struct ndmsg *ndm, struct nlattr *tb[],
- 		return -EINVAL;
-
- 	err = vxlan_fdb_parse(tb, vxlan, &ip, &port, &src_vni, &vni, &ifindex,
--			      &nhid);
-+			      &nhid, extack);
- 	if (err)
- 		return err;
-
-@@ -1292,7 +1308,7 @@ static int vxlan_fdb_delete(struct ndmsg *ndm, struct nlattr *tb[],
- 	int err;
-
- 	err = vxlan_fdb_parse(tb, vxlan, &ip, &port, &src_vni, &vni, &ifindex,
--			      &nhid);
-+			      &nhid, extack);
- 	if (err)
- 		return err;
+                        Geert
 
 --
-2.36.0
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

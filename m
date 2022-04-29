@@ -2,135 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B37514078
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 04:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB1D51407B
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 04:05:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354129AbiD2CGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 28 Apr 2022 22:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48658 "EHLO
+        id S1354007AbiD2CIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 28 Apr 2022 22:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231903AbiD2CGF (ORCPT
+        with ESMTP id S231903AbiD2CIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 28 Apr 2022 22:06:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 186B3BAB98
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 19:02:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651197764;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Thu, 28 Apr 2022 22:08:41 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ABF1201A8;
+        Thu, 28 Apr 2022 19:05:24 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C762B210E6;
+        Fri, 29 Apr 2022 02:05:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1651197922; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Dvj9G0/4wUIqSyOJTfvrlWtHyKpXimLlrMN8i333+hY=;
-        b=RKG22wbD7Y11yaRV1jckzFWf0gqUNde7zf/9kaQVHXJVqkbn1UMsvvtNFUlkLNFO9L7FWW
-        PXlJax8SAAccDXE6Ef/b8pa+h1KtwdhqdjX9FZmnCitD5K6o+rskNVX6FXdm8YYwSelDCk
-        BOPSh3GC7t1pOajMGInhWVuDMFhjLYA=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-7-fqYgiyJmO_2ZLYBgnH3-IA-1; Thu, 28 Apr 2022 22:02:22 -0400
-X-MC-Unique: fqYgiyJmO_2ZLYBgnH3-IA-1
-Received: by mail-lf1-f70.google.com with SMTP id bt27-20020a056512261b00b004720e026d4dso2703336lfb.16
-        for <linux-kernel@vger.kernel.org>; Thu, 28 Apr 2022 19:02:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Dvj9G0/4wUIqSyOJTfvrlWtHyKpXimLlrMN8i333+hY=;
-        b=hRDtqSxiMjr0wg4Pt2NuAdNDXXpcIS73RrfZ5MM6DB5AYg63qdJOoNfhcbfyMQFmhy
-         zrNyuHA0GpqG+E/FLOrK0/T/15ehcgbtEgP/WUsymwaaSrAeT7/lZOuVLw0t9YI8+YyO
-         3VDnLZc2WURAaSvghv6u45GRYaD+f3Csdb34kOp2WUIWFwwCu6gpP5UHXAMW2bGihTcJ
-         R9wCoJbo/ngyhBKuX7Ky6fZNWZ0wRPjtIjZfkHMJs5gIVHfgQOpOgAb9veBlcEOHbLGF
-         VeLzXlU7Al+73qAQSdfFHiUaaVSbTa8e3y8Okdtp2hDmLTvfi1ggIhJ5giNWLrnidaBn
-         pdqA==
-X-Gm-Message-State: AOAM53076M0xXht/KFDW/v9vkfgZ42zd/Kon5ttHRBhG5oQGEaNMRBf7
-        CiVwjSx6TgbtaGG5VBtIxD5W2r5eRKanockP7ypfukRRLJ0xjk9HN71jEeDYpEKQO/lUQ9jrx7k
-        Y8fFtxWihOd+KKLlVX2evrAr6m7A+5IsokzhLQvyn
-X-Received: by 2002:a05:6512:1526:b0:471:44fa:c367 with SMTP id bq38-20020a056512152600b0047144fac367mr25928157lfb.376.1651197741184;
-        Thu, 28 Apr 2022 19:02:21 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxRwhr5Cr2fURlu5+J1sQU4pjDclODzlVYVdEfWUhon2IrguY2W6JlRc8rJ3htPCEJZ1xLuCNvxsMLxtCZHwxg=
-X-Received: by 2002:a05:6512:1526:b0:471:44fa:c367 with SMTP id
- bq38-20020a056512152600b0047144fac367mr25928142lfb.376.1651197740985; Thu, 28
- Apr 2022 19:02:20 -0700 (PDT)
+        bh=HQDXCYk6Wp2fThp27o+RRwGuMEj38RMRp7V9mIoaJbU=;
+        b=aH0xMKbGX3tLDkIE+w0DSWZemlHZ9Ki3i6uleeG6ICQBueIO9bdIr3YKMKa9kn/yTmkHcu
+        f7wNkMwm29wIPum703Iajuq7/r6zHPt3SKrYINfPlXbIoJjrBm49FbSbVhkvtoOdZs+9cM
+        m8sZG4+MyIUgnqQVJSzoWc9T6rP7/Go=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1651197922;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HQDXCYk6Wp2fThp27o+RRwGuMEj38RMRp7V9mIoaJbU=;
+        b=EaIeOX9kGfmK/fCfk5FcomE94id4ubWbX/l+kI52NaQyHKGfx2YYbVWwnfCGjxEPZFdCca
+        BQZK+xIJRQI0nPAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8635D13446;
+        Fri, 29 Apr 2022 02:05:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id rlZFEOBHa2JsYAAAMHmgww
+        (envelope-from <neilb@suse.de>); Fri, 29 Apr 2022 02:05:20 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-References: <ba0c3977-c471-3275-2327-c5910cdd506a@redhat.com>
- <20220425235134-mutt-send-email-mst@kernel.org> <20220425235415-mutt-send-email-mst@kernel.org>
- <87o80n7soq.fsf@redhat.com> <20220426124243-mutt-send-email-mst@kernel.org>
- <87ilqu7u6w.fsf@redhat.com> <20220428044315.3945e660.pasic@linux.ibm.com>
- <CACGkMEudDf=XXhV2tV+xZ586AnDyrQEotGAiSQZ4k1CTAWHZJQ@mail.gmail.com>
- <20220428012156-mutt-send-email-mst@kernel.org> <CACGkMEsd+WHp=LN0BnnDKfzv+nbS2hjgVC-tdemZWuPTc60HBQ@mail.gmail.com>
- <20220428015318-mutt-send-email-mst@kernel.org> <CACGkMEutdd=9c-2h5ijMkgUzEqNPtUCXAum7bm8W7a6m62i_Mg@mail.gmail.com>
- <87zgk5lkme.fsf@redhat.com>
-In-Reply-To: <87zgk5lkme.fsf@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Fri, 29 Apr 2022 10:02:09 +0800
-Message-ID: <CACGkMEtAXGdWKTSh90DH-=0YHhoSFxR43jwA8eROHqxUxdrVYQ@mail.gmail.com>
-Subject: Re: [PATCH V3 6/9] virtio-ccw: implement synchronize_cbs()
-To:     Cornelia Huck <cohuck@redhat.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        eperezma <eperezma@redhat.com>, Cindy Lu <lulu@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Marc Zyngier <maz@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Andrew Morton" <akpm@linux-foundation.org>
+Cc:     "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        "Christoph Hellwig" <hch@lst.de>,
+        "Miaohe Lin" <linmiaohe@huawei.com>, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] NFS: rename nfs_direct_IO and use as ->swap_rw
+In-reply-to: <20220428182353.d79ae288e1bb0cae5116d989@linux-foundation.org>
+References: <165119280115.15698.2629172320052218921.stgit@noble.brown>,
+ <165119301493.15698.7491285551903597618.stgit@noble.brown>,
+ <20220428182353.d79ae288e1bb0cae5116d989@linux-foundation.org>
+Date:   Fri, 29 Apr 2022 12:05:16 +1000
+Message-id: <165119791620.1648.7397114175780668923@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 3:42 PM Cornelia Huck <cohuck@redhat.com> wrote:
->
-> On Thu, Apr 28 2022, Jason Wang <jasowang@redhat.com> wrote:
->
-> > On Thu, Apr 28, 2022 at 1:55 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> >>
-> >> On Thu, Apr 28, 2022 at 01:51:59PM +0800, Jason Wang wrote:
-> >> > On Thu, Apr 28, 2022 at 1:24 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> >> > >
-> >> > > On Thu, Apr 28, 2022 at 11:04:41AM +0800, Jason Wang wrote:
-> >> > > > > But my guess is that rwlock + some testing for the legacy indicator case
-> >> > > > > just to double check if there is a heavy regression despite of our
-> >> > > > > expectations to see none should do the trick.
-> >> > > >
-> >> > > > I suggest this, rwlock (for not airq) seems better than spinlock, but
-> >> > > > at worst case it will cause cache line bouncing. But I wonder if it's
-> >> > > > noticeable (anyhow it has been used for airq).
-> >> > > >
-> >> > > > Thanks
-> >> > >
-> >> > > Which existing rwlock does airq use right now? Can we take it to sync?
-> >> >
-> >> > It's the rwlock in airq_info, it has already been used in this patch.
-> >> >
-> >> >                 write_lock(&info->lock);
-> >> >                 write_unlock(&info->lock);
-> >> >
-> >> > But the problem is, it looks to me there could be a case that airq is
-> >> > not used, (virtio_ccw_int_hander()). That's why the patch use a
-> >> > spinlock, it could be optimized with using a rwlock as well.
-> >> >
-> >> > Thanks
-> >>
-> >> Ah, right. So let's take that on the legacy path too and Halil promises
-> >> to test to make sure performance isn't impacted too badly?
-> >
-> > I think what you meant is using a dedicated rwlock instead of trying
-> > to reuse one of the airq_info locks.
-> >
-> > If this is true, it should be fine.
->
-> FWIW, that approach makes sense to me as well.
->
+On Fri, 29 Apr 2022, Andrew Morton wrote:
+> On Fri, 29 Apr 2022 10:43:34 +1000 NeilBrown <neilb@suse.de> wrote:
+> 
+> > The nfs_direct_IO() exists to support SWAP IO, but hasn't worked for a
+> > while.  We now need a ->swap_rw function which behaves slightly
+> > differently, returning zero for success rather than a byte count.
+> > 
+> > So modify nfs_direct_IO accordingly, rename it, and use it as the
+> > ->swap_rw function.
+> > 
+> 
+> This one I insertion sorted into the series after
+> mm-introduce-swap_rw-and-use-it-for-reads-from-swp_fs_ops-swap-space.patch.
+> I can later fold this patch into that one of you think that's a better
+> presentation?
+> 
 
-Good to know that. Let me post a new version.
+I'm happy for the patches to remain separate - though adjacent is good.
+If they were to be merged we'd need to fix up the commit message.
+At least delete:
 
-Thanks
+   Future patches will restore swap-over-NFS functionality.
 
+Thanks,
+NeilBrown

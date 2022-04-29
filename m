@@ -2,51 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 440A35148D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:05:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E70755148D7
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358904AbiD2MJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 08:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51666 "EHLO
+        id S1358870AbiD2MKv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 29 Apr 2022 08:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358868AbiD2MIm (ORCPT
+        with ESMTP id S236678AbiD2MKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 08:08:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 889E758E74;
-        Fri, 29 Apr 2022 05:05:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D616620DA;
-        Fri, 29 Apr 2022 12:05:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D720EC385A7;
-        Fri, 29 Apr 2022 12:04:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651233901;
-        bh=51WNgMraDb0YzEABPLR2yD9CPLnar7/70JTrdoVfD90=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kVOjnZP+KmrD+HEDG9rvTDfplbWvxHJ2xxGVUUA8Jgbh4X6vxHzXDUQtp7uuqdIjb
-         3K3wdZZKieOGgvMhKhu6j5qSEUMgH/yn4N/dLgjJCHyBmFVBUxH7v7HUWvx7XNCKnW
-         TGv0XNv5K1M6wb2pIFIqcNSpsCwzoEV7v3Pi1ii6C1jkjdTRmJ5twSPPSuC+qzBC+D
-         NJaaARCPgcP1mNMGbV9IDjfTOFqP0SCUPkbbQgndvY/IC4VOpJwBpl0zrLTKIY/yDo
-         VGavY2EiOfmkr4vaSP4+RK3dKRZBCPO4//VfVwvgDyWbK/7CKp7gGyDiR/Yi7j+l0n
-         SFFXTX8g8Y3VQ==
-Date:   Fri, 29 Apr 2022 14:04:56 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     syzbot <syzbot+2ee18845e89ae76342c5@syzkaller.appspotmail.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk,
-        Liam Howlett <liam.howlett@oracle.com>
-Subject: Re: [syzbot] WARNING: suspicious RCU usage in mas_walk
-Message-ID: <20220429120456.qcs7qbtv3o4hiiv6@wittgenstein>
-References: <0000000000006b8dad05ddc47e92@google.com>
+        Fri, 29 Apr 2022 08:10:47 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042FEA27C1
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 05:07:28 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1nkPP0-0002Ha-DR; Fri, 29 Apr 2022 14:07:14 +0200
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1nkPOx-005wMO-Hq; Fri, 29 Apr 2022 14:07:10 +0200
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1nkPOv-00073P-27; Fri, 29 Apr 2022 14:07:09 +0200
+Message-ID: <6776293c80bf3f48d7a72a3c9f73e93abee2b369.camel@pengutronix.de>
+Subject: Re: [PATCH v4 1/2] usb: host: ehci-sunplus: Add driver for ehci in
+ Sunplus SP7021
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Vincent Shih <vincent.sunplus@gmail.com>,
+        gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        davem@davemloft.net, vladimir.oltean@nxp.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, wells.lu@sunplus.com
+Date:   Fri, 29 Apr 2022 14:07:08 +0200
+In-Reply-To: <1651220876-26705-2-git-send-email-vincent.sunplus@gmail.com>
+References: <1651220876-26705-1-git-send-email-vincent.sunplus@gmail.com>
+         <1651220876-26705-2-git-send-email-vincent.sunplus@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <0000000000006b8dad05ddc47e92@google.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,90 +57,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 10:41:27PM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    bdc61aad77fa Add linux-next specific files for 20220428
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=15bb3dc2f00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=87767e89da13a759
-> dashboard link: https://syzkaller.appspot.com/bug?extid=2ee18845e89ae76342c5
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1118a5f6f00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=125bd212f00000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+2ee18845e89ae76342c5@syzkaller.appspotmail.com
-> 
-> =============================
-> WARNING: suspicious RCU usage
-> 5.18.0-rc4-next-20220428-syzkaller #0 Not tainted
-> -----------------------------
-> lib/maple_tree.c:844 suspicious rcu_dereference_check() usage!
+Hi Vincent,
 
-I _think_ for maple tree stuff you want to somehow ensure that
-Liam Howlett <liam.howlett@oracle.com>
-gets Cced.
+On Fr, 2022-04-29 at 16:27 +0800, Vincent Shih wrote:
+[...]
+> +static int sp_ehci_platform_power_on(struct platform_device *pdev)
+> +{
+> +	struct usb_hcd *hcd = platform_get_drvdata(pdev);
+> +	struct sp_ehci_priv *sp_priv = hcd_to_sp_ehci_priv(hcd);
+> +	int ret;
+> +
+> +	ret = clk_prepare_enable(sp_priv->ehci_clk);
+> +	if (ret)
+> +		goto err_ehci_clk;
 
-> 
-> other info that might help us debug this:
-> 
-> 
-> rcu_scheduler_active = 2, debug_locks = 1
-> 5 locks held by syz-executor842/4211:
->  #0: ffff88807f0ae460 (sb_writers#8){.+.+}-{0:0}, at: ksys_write+0x127/0x250 fs/read_write.c:644
->  #1: ffff88801df04488 (&of->mutex){+.+.}-{3:3}, at: kernfs_fop_write_iter+0x28c/0x610 fs/kernfs/file.c:282
->  #2: ffff8881453b9a00 (kn->active#106){.+.+}-{0:0}, at: kernfs_fop_write_iter+0x2b0/0x610 fs/kernfs/file.c:283
->  #3: ffffffff8bedc528 (ksm_thread_mutex){+.+.}-{3:3}, at: run_store+0xd1/0xa60 mm/ksm.c:2917
->  #4: ffff88801e5e8fd8 (&mm->mmap_lock#2){++++}-{3:3}, at: mmap_read_lock include/linux/mmap_lock.h:117 [inline]
->  #4: ffff88801e5e8fd8 (&mm->mmap_lock#2){++++}-{3:3}, at: unmerge_and_remove_all_rmap_items mm/ksm.c:989 [inline]
->  #4: ffff88801e5e8fd8 (&mm->mmap_lock#2){++++}-{3:3}, at: run_store+0x2a5/0xa60 mm/ksm.c:2923
-> 
-> stack backtrace:
-> CPU: 0 PID: 4211 Comm: syz-executor842 Not tainted 5.18.0-rc4-next-20220428-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
->  mas_root lib/maple_tree.c:844 [inline]
->  mas_start lib/maple_tree.c:1331 [inline]
->  mas_state_walk lib/maple_tree.c:3745 [inline]
->  mas_walk+0x45e/0x670 lib/maple_tree.c:4923
->  mas_find+0x442/0xc90 lib/maple_tree.c:5861
->  vma_find include/linux/mm.h:664 [inline]
->  vma_next include/linux/mm.h:673 [inline]
->  unmerge_and_remove_all_rmap_items mm/ksm.c:990 [inline]
->  run_store+0x2ed/0xa60 mm/ksm.c:2923
->  kobj_attr_store+0x50/0x80 lib/kobject.c:824
->  sysfs_kf_write+0x110/0x160 fs/sysfs/file.c:136
->  kernfs_fop_write_iter+0x3f8/0x610 fs/kernfs/file.c:291
->  call_write_iter include/linux/fs.h:2059 [inline]
->  new_sync_write+0x38a/0x560 fs/read_write.c:504
->  vfs_write+0x7c0/0xac0 fs/read_write.c:591
->  ksys_write+0x127/0x250 fs/read_write.c:644
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x7f6a91306e79
-> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007ffddeb8cde8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-> RAX: ffffffffffffffda RBX: 00000000000f4240 RCX: 00007f6a91306e79
-> RDX: 0000000000000002 RSI: 0000000020000000 RDI: 0000000000000003
-> RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000001
-> R10: 0000000020117000 R11: 0000000000000246 R12: 000000000000cf84
-> R13: 00007ffddeb8cdfc R14: 00007ffddeb8ce10 R15: 00007ffddeb8ce00
->  </TASK>
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this issue, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+This should be:
+
+		return ret;
+
+> +
+> +	ret = reset_control_deassert(sp_priv->ehci_rstc);
+> +	if (ret)
+> +		goto err_ehci_reset;
+
+And this should be:
+
+		goto err_ehci_clk;
+
+> +
+> +	ret = phy_init(sp_priv->phy);
+> +	if (ret)
+> +		goto err_ehci_reset;
+> +
+> +	ret = phy_power_on(sp_priv->phy);
+> +	if (ret)
+> +		goto err_phy_exit;
+> +
+> +	return 0;
+> +
+> +err_phy_exit:
+> +	phy_exit(sp_priv->phy);
+> +err_ehci_reset:
+> +	reset_control_assert(sp_priv->ehci_rstc);
+> +err_ehci_clk:
+> +	clk_disable_unprepare(sp_priv->ehci_clk);
+> +
+> +	return ret;
+> +}
+> +
+> +static void sp_ehci_platform_power_off(struct platform_device *pdev)
+> +{
+> +	struct usb_hcd *hcd = platform_get_drvdata(pdev);
+> +	struct sp_ehci_priv *sp_priv = hcd_to_sp_ehci_priv(hcd);
+> +
+> +	phy_power_off(sp_priv->phy);
+> +	phy_exit(sp_priv->phy);
+> +
+> +	reset_control_assert(sp_priv->ehci_rstc);
+> +	clk_disable_unprepare(sp_priv->ehci_clk);
+> +}
+> +
+> +static struct usb_ehci_pdata usb_ehci_pdata = {
+> +	.has_tt = 1,
+> +	.has_synopsys_hc_bug = 1,
+> +	.big_endian_desc = 1,
+> +	.big_endian_mmio = 1,
+> +	.power_on = sp_ehci_platform_power_on,
+> +	.power_suspend = sp_ehci_platform_power_off,
+> +	.power_off = sp_ehci_platform_power_off,
+> +
+
+Superfluous whitespace.
+
+
+regards
+Philipp

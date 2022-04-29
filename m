@@ -2,105 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 217975148B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 13:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D16C8514891
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 13:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358795AbiD2MAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 08:00:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36192 "EHLO
+        id S1358725AbiD2Lyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 07:54:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358762AbiD2MAm (ORCPT
+        with ESMTP id S1358676AbiD2Lyq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 08:00:42 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A40B4924C
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 04:57:24 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id i5so10448793wrc.13
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 04:57:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zhkPJZ5t7XS30nMpTj6bbXYcVhUfzJ6aKAQ3lOWd/GY=;
-        b=nGMih1E129wjT8YxcuJjbbIO6kan3qaZU3FoAzN+SXh1WnJJeUvOsIrThuW7kchSp/
-         P50XSKfkRWjPwm7BX0Lt/so0I6DiTARr9NRdByEHAScgigM6aAqLbziifarR9djETsd2
-         tYs5eCcPnlOuRNp1OdJ0nMXpAjPYtQ4t+Hu0Sq6hkZ+l1zp3SMdAlDN++L+RjM3bA9Mt
-         qPTUih40eH+pmIVllSKcW4UHSYIHWiaRIlkjKumRV3XA5Ix+0uV+mlI7bsfjIU4Ya4Ea
-         J9b4BUNHvCptkdkXmvzxQQ5TZBABXB86XRIEBkHiJ8Utye8FRgGui3zaIF23IPcZyT/M
-         oY7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zhkPJZ5t7XS30nMpTj6bbXYcVhUfzJ6aKAQ3lOWd/GY=;
-        b=JDpBHWxbhzEeLuEZSdTzbEg7ZAcYqDWFXSEsFJUhSQ6LlrjUoKQ2oSp5Z6JPEj9le/
-         7JLc+lMUnmTCDgyly5f5Vh/e3KNqACfwRusdMa8WwtKNKPVSY8A6x+cTYSTH0Syo02US
-         UotA8x/jnMAYQ9wN7XXXHrol1kYPXiA6uABoz8rOoe5vANAXlBFg7ZjXCbaNeu87v2yy
-         MqlOwkL6BY7sz2E7sC6Z8rXW/cGjDFQEK8I6R5+sv7qSRnyKLdRqlt/pSJ3xWvxLNUt9
-         zAkLvd0iTYkGTJW8ooHHjVBBAY/7LZd03qvi/5VXGAJesGC91uKZW/d/2KGWc4qEJCfV
-         Uhwg==
-X-Gm-Message-State: AOAM530PkIBVZElz+caLQnHZWp0d4dzQmxsO0C1NZa9xyh3ZElNNWNp0
-        tNMhpJgrVZ/pyx3W1o6JekU=
-X-Google-Smtp-Source: ABdhPJxXcg/TSEnSe3oYHf/l5nfkx/75A11A8wZ2bFw/fGOPv1y0qTM6UjmtOK5SSgG/4kvRt4DycQ==
-X-Received: by 2002:a05:6000:100c:b0:20a:c68a:e9a with SMTP id a12-20020a056000100c00b0020ac68a0e9amr30552315wrx.314.1651233442973;
-        Fri, 29 Apr 2022 04:57:22 -0700 (PDT)
-Received: from [192.168.0.43] (static-35-180-85-188.ipcom.comunitel.net. [188.85.180.35])
-        by smtp.gmail.com with ESMTPSA id l11-20020a05600c1d0b00b00393fbabdddfsm2518618wms.36.2022.04.29.04.57.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 04:57:21 -0700 (PDT)
-Message-ID: <91d8eb87-adf0-da62-0c7b-dbf94442f535@gmail.com>
-Date:   Fri, 29 Apr 2022 13:57:20 +0200
+        Fri, 29 Apr 2022 07:54:46 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6693AC6EC8;
+        Fri, 29 Apr 2022 04:51:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651233088; x=1682769088;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=vUGUX7Nvc/8LjzsG1/1jXvrhtbo00tkto7h2bu3JZ70=;
+  b=H4DSI1d+94Djdk3XQD/VbKAY2wwOazJtVUnjc6AqU7ayVl8Ihh5xw/hQ
+   djKsrR45uV5NYLqM33Lqa0aIQo6SNYPeAgAI9ZjrQvoXYpYuVCiBHSQve
+   7aN4RqDOzFQpzlfg15Y80nJD5RAirT2kb7D7tgzde/AJzy12LsfpUmi8B
+   GXXb8gy5+ZgLpdim8rHfj9a4tl7+NXpPfNVR2gcWB2ueSUu5ZRchO6SGp
+   fbg0vhNDGrnVtdfk98i5XzgdRafq8xdg5ZxlJ2k/BQkw9DdTtVqACvWOg
+   /NpcPba+nQREkDMy9QbXbcBR1iLaUb2nHhzl0z8gP/5o607bvMxAESrOG
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="329565488"
+X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
+   d="scan'208";a="329565488"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 04:51:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
+   d="scan'208";a="582085655"
+Received: from p12hl01tmin.png.intel.com ([10.158.65.175])
+  by orsmga008.jf.intel.com with ESMTP; 29 Apr 2022 04:51:21 -0700
+From:   Tan Tee Min <tee.min.tan@linux.intel.com>
+To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Wong Vee Khee <vee.khee.wong@linux.intel.com>,
+        Tan Tee Min <tee.min.tan@linux.intel.com>,
+        Ling Pei Lee <pei.lee.ling@intel.com>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Matthew Hagan <mnhagan88@gmail.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>
+Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
+        Song Yoong Siang <yoong.siang.song@intel.com>,
+        Ong@vger.kernel.org, Boon Leong <boon.leong.ong@intel.com>,
+        Tan Tee Min <tee.min.tan@intel.com>,
+        Looi Hong Aun <hong.aun.looi@intel.com>
+Subject: [PATCH net v2 1/1] net: stmmac: disable Split Header (SPH) for Intel platforms
+Date:   Fri, 29 Apr 2022 19:58:07 +0800
+Message-Id: <20220429115807.2198448-1-tee.min.tan@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] arm64: dts: mt7622: specify the number of DMA requests
-Content-Language: en-US
-To:     Rui Salvaterra <rsalvaterra@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     ryder.lee@mediatek.com, daniel@makrotopia.org
-References: <20220429084225.298213-1-rsalvaterra@gmail.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220429084225.298213-1-rsalvaterra@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Based on DesignWare Ethernet QoS datasheet, we are seeing the limitation
+of Split Header (SPH) feature is not supported for Ipv4 fragmented packet.
+This SPH limitation will cause ping failure when the packets size exceed
+the MTU size. For example, the issue happens once the basic ping packet
+size is larger than the configured MTU size and the data is lost inside
+the fragmented packet, replaced by zeros/corrupted values, and leads to
+ping fail.
 
+So, disable the Split Header for Intel platforms.
 
-On 29/04/2022 10:42, Rui Salvaterra wrote:
-> The MT7622 device tree never bothered to specify the number of virtual DMA
-> channels for the HSDMA controller, always falling back to the default value of
-> 3. Make this value explicit, in order to avoid the following dmesg notification:
-> 
-> mtk_hsdma 1b007000.dma-controller: Using 3 as missing dma-requests property
-> 
-> Signed-off-by: Rui Salvaterra <rsalvaterra@gmail.com>
+v2: Add fixes tag in commit message.
 
-Applied, thanks!
+Fixes: 67afd6d1cfdf("net: stmmac: Add Split Header support and enable it
+in XGMAC cores")
+Cc: <stable@vger.kernel.org> # 5.10.x
+Suggested-by: Ong, Boon Leong <boon.leong.ong@intel.com>
+Signed-off-by: Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>
+Signed-off-by: Wong Vee Khee <vee.khee.wong@linux.intel.com>
+Signed-off-by: Tan Tee Min <tee.min.tan@linux.intel.com>
+---
+ drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c | 1 +
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 2 +-
+ include/linux/stmmac.h                            | 1 +
+ 3 files changed, 3 insertions(+), 1 deletion(-)
 
-> ---
->   arch/arm64/boot/dts/mediatek/mt7622.dtsi | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt7622.dtsi b/arch/arm64/boot/dts/mediatek/mt7622.dtsi
-> index 3d6eaf6dd078..5551f004945b 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt7622.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt7622.dtsi
-> @@ -924,6 +924,7 @@ hsdma: dma-controller@1b007000 {
->   		clock-names = "hsdma";
->   		power-domains = <&scpsys MT7622_POWER_DOMAIN_ETHSYS>;
->   		#dma-cells = <1>;
-> +		dma-requests = <3>;
->   	};
->   
->   	eth: ethernet@1b100000 {
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
+index 63754a9c4ba7..0b0be0898ac5 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
+@@ -454,6 +454,7 @@ static int intel_mgbe_common_data(struct pci_dev *pdev,
+ 	plat->has_gmac4 = 1;
+ 	plat->force_sf_dma_mode = 0;
+ 	plat->tso_en = 1;
++	plat->sph_disable = 1;
+ 
+ 	/* Multiplying factor to the clk_eee_i clock time
+ 	 * period to make it closer to 100 ns. This value
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index 4a4b3651ab3e..2525a80353b7 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -7021,7 +7021,7 @@ int stmmac_dvr_probe(struct device *device,
+ 		dev_info(priv->device, "TSO feature enabled\n");
+ 	}
+ 
+-	if (priv->dma_cap.sphen) {
++	if (priv->dma_cap.sphen && !priv->plat->sph_disable) {
+ 		ndev->hw_features |= NETIF_F_GRO;
+ 		priv->sph_cap = true;
+ 		priv->sph = priv->sph_cap;
+diff --git a/include/linux/stmmac.h b/include/linux/stmmac.h
+index 24eea1b05ca2..29917850f079 100644
+--- a/include/linux/stmmac.h
++++ b/include/linux/stmmac.h
+@@ -270,5 +270,6 @@ struct plat_stmmacenet_data {
+ 	int msi_rx_base_vec;
+ 	int msi_tx_base_vec;
+ 	bool use_phy_wol;
++	bool sph_disable;
+ };
+ #endif
+-- 
+2.25.1
+

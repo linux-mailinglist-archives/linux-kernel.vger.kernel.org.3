@@ -2,92 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E59B5515669
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:11:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E30251566A
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:11:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231197AbiD2VMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 17:12:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53834 "EHLO
+        id S232274AbiD2VOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 17:14:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiD2VMf (ORCPT
+        with ESMTP id S229911AbiD2VOk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 17:12:35 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD6F939CD
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:09:16 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-e656032735so9389330fac.0
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:09:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4D+xRvYNiIgs2Ah74ZpUa+WjA9w36MIgQE3pxVahvKM=;
-        b=I0U590a/mwwuibMjsPb9PMeOt8KFsumofDvWPxBqbZws+PJlxpOLFQvnxjnnioM6Hr
-         q0WhZT3yc8S/UU6n5x+fKhjj2icaTt2hd5wTjhb906AzCslGAL0PFgyMZvLkcamx+dOO
-         FPApwKSwNBcyhqAcyylYLMnlH33TquJGzTue4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4D+xRvYNiIgs2Ah74ZpUa+WjA9w36MIgQE3pxVahvKM=;
-        b=ncqjHMLnvXkWW9zkWZyA44BLWCXkKJc21HyTwgdaSCRIFMqqLM6E/tEjLv2JX4DMPT
-         1NTrf0hb29YOYb/9c0OG15MLn/5mGkval1hFI/7n2ScPcUSa6u84TCymd6U5VeMSem0X
-         +SKzx37zJoeggE+jmvDX8G8oSHy7CK/njTi12aEac36hnK6o1X+TZ75iR/s8wPKYTUP/
-         VatYORpjQ9n7iETqAhfeN06FZPHfa4L2aw3RVOG6ldraEVVvV5Kc7F32a5OAahXawSMH
-         kdnpPyM0OVYk/wbPD07I0m3WPY/ppGfycAK5CEUdtAHWNGmAb2XcxOdDomPiR+1uZTYR
-         PMlg==
-X-Gm-Message-State: AOAM530LBAdghHzm4O3tAyiZbwko07wMWBjUi6uYrsu29GJETIEPVHyP
-        XqZHBzV5lJqIQq4AfAR4xSDMBg==
-X-Google-Smtp-Source: ABdhPJzwq8ab8yHXHRI0tXl9bC9FG5a3mvVy/LGd1Lo1NzBOtidvVtPffOYY0qYi9CdZdK2ApBb/uA==
-X-Received: by 2002:a05:6870:9596:b0:d6:d3ea:1d92 with SMTP id k22-20020a056870959600b000d6d3ea1d92mr584211oao.6.1651266555860;
-        Fri, 29 Apr 2022 14:09:15 -0700 (PDT)
-Received: from shuah-tx13.internal ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id m18-20020a4add12000000b0035eb4e5a6d3sm1186263oou.41.2022.04.29.14.09.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 14:09:15 -0700 (PDT)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     arnd@arndb.de, gregkh@linuxfoundation.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] misc: rtsx: set NULL intfdata when probe fails
-Date:   Fri, 29 Apr 2022 15:09:13 -0600
-Message-Id: <20220429210913.46804-1-skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.32.0
+        Fri, 29 Apr 2022 17:14:40 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B66CE665;
+        Fri, 29 Apr 2022 14:11:20 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id D8AF81F4699C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1651266679;
+        bh=vGQAjdZ3iJkV/fg/QPQxJzmeLpJuTQKMjR6O+7rTCyM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=h9q+nV9PaAmxttoiUWaF2CEscgxVP6cAHHnaATFnuPcanNTj3Z2GcgHF3L44AMOHZ
+         K7DbzQ90OjkguYL94vYwVnkNSnvAzKs9gHDH6wGQgypYBp6xzE8y7j315K1rdHKP/T
+         Ln/hG4pj/wD0Kv9ou2nQrIMiea2yK/iA2A4IHVZUyaayf4cLmrXoUI/VA8GYFjsQbe
+         fhduhwHgHI30Ugk6jkkCB3upZ396tTtl1YNaawyf/99d8qQYanIxQ/JtlV2YX9WTJF
+         tumohQfwV5gwO2qeQvlmnkR6rZQhdBFLlXQ/HXNVq6MTfnxyhhwn4rBjeRq26aaNjQ
+         qKl20RGld6Wrg==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org
+Subject: [PATCH 0/2] Mediatek SCP dt-binding tweaks
+Date:   Fri, 29 Apr 2022 17:11:08 -0400
+Message-Id: <20220429211111.2214119-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rtsx_usb_probe() doesn't call usb_set_intfdata() to null out the
-interface pointer when probe fails. This leaves a stale pointer.
-Noticed the missing usb_set_intfdata() while debugging an unrelated
-invalid DMA mapping problem.
 
-Fix it with a call to usb_set_intfdata(..., NULL).
+Two simple patches for the Mediatek SCP dt-binding. The first fixes the
+reg/reg-names property while the second adds a new optional
+memory-region property.
 
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
- drivers/misc/cardreader/rtsx_usb.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/misc/cardreader/rtsx_usb.c b/drivers/misc/cardreader/rtsx_usb.c
-index 59eda55d92a3..1ef9b61077c4 100644
---- a/drivers/misc/cardreader/rtsx_usb.c
-+++ b/drivers/misc/cardreader/rtsx_usb.c
-@@ -667,6 +667,7 @@ static int rtsx_usb_probe(struct usb_interface *intf,
- 	return 0;
- 
- out_init_fail:
-+	usb_set_intfdata(ucr->pusb_intf, NULL);
- 	usb_free_coherent(ucr->pusb_dev, IOBUF_SIZE, ucr->iobuf,
- 			ucr->iobuf_dma);
- 	return ret;
+Nícolas F. R. A. Prado (2):
+  dt-bindings: remoteproc: mediatek: Fix optional reg-names for mtk,scp
+  dt-bindings: remoteproc: mediatek: Add optional memory-region to
+    mtk,scp
+
+ .../devicetree/bindings/remoteproc/mtk,scp.yaml  | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
+
 -- 
-2.32.0
+2.36.0
 

@@ -2,108 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 803FB5149F4
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3149C5149F6
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 14:53:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359591AbiD2Mzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 08:55:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55934 "EHLO
+        id S1359594AbiD2Mzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 08:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359589AbiD2Mzf (ORCPT
+        with ESMTP id S1359582AbiD2Mzp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 08:55:35 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0465CAB99;
-        Fri, 29 Apr 2022 05:52:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651236737; x=1682772737;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UpTl+EI4OxATNhRZbN10QD6jlbsYNUk1LadQPcxzoLY=;
-  b=RXcr6uLjesZG//Qr/oLKTJBOa+JmA30eSCeeSs5FuYcSdypFBaQ7dMER
-   ABbarL1uT5FSA8PvI0B3wB1SwK7woS94OuRIJvK5vOEc01qegX8kPb+Vw
-   huBvnXIayXBpQZ12NP/zt+vLlrBH5oV61JIWEaD/6x3RwyDTqQ9L1XLP8
-   sWmfg0A7UBQQuiurwbPu+6U40cj+OPjCCOjtK148+vkKPyk7zdc3OJQOD
-   3fCzOyPhLAKOur/UmNNuGDDIcyZ08GpbaiWFNS2B5bds58EsoRiQUxNHg
-   nMafyHwVUV+h0gHFDH1ZoUv9xjcTqGfJKhJKYsBMeQB5qLUH6hXKNwSqv
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10331"; a="329577821"
-X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
-   d="scan'208";a="329577821"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 05:52:16 -0700
-X-IronPort-AV: E=Sophos;i="5.91,185,1647327600"; 
-   d="scan'208";a="542495249"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 05:52:12 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nkQ6T-009iHu-By;
-        Fri, 29 Apr 2022 15:52:09 +0300
-Date:   Fri, 29 Apr 2022 15:52:09 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
-Subject: Re: [PATCH v2 2/2] pinctrl: nuvoton: Fix irq_of_parse_and_map()
- return value
-Message-ID: <Ymvfeea1QXqSoq76@smile.fi.intel.com>
-References: <20220423094142.33013-1-krzysztof.kozlowski@linaro.org>
- <20220423094142.33013-2-krzysztof.kozlowski@linaro.org>
- <CACRpkdY8LJ5xMW0eDsL-ycrqV8io2zXJrT6RfZj=KxaE9rvcvA@mail.gmail.com>
- <064f5758-a3ae-d116-fe72-9f52b4cbea78@linaro.org>
+        Fri, 29 Apr 2022 08:55:45 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88DE7CAB95;
+        Fri, 29 Apr 2022 05:52:25 -0700 (PDT)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TCGbI6030219;
+        Fri, 29 Apr 2022 12:52:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : to : cc : references : from : subject : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Ta1fyNf2U9jHeIRottQ/e61hn8ynFzXkSkb2SGz6/B0=;
+ b=RyGh37gAnjuCCJYq3xyCOOUpKY9gP9mR89UyBS+bguTbFTI819tPxrwlmM4VUIJOYFw2
+ cmR9FNJ0vvFJ9Z6GiOKFFPZaU0yFiz9XC4OxqFsVMss1Svjs3L0vLquW7ctOu7EQJApS
+ 5D+6MVtLen/zX+GbGQsvn19LPK3zzQzbMLdJEmfWUdVcZC0ikitvD9VQ9OZlaS0mR9Kp
+ VKrGNx6GywA6hzcaYLmwXx7mkgaaV9OglcTrJGsKX5Q8yjLqPmuptcfgVOCqlRM2aqwE
+ 8Z+vPABnvxqo+OfU+iKz1cxIycirSVy+baS+8hSv1y6zqgwVkTES/ik0VjDt9iMYV3qg Ww== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqtvxkk63-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Apr 2022 12:52:20 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TCl5nm017236;
+        Fri, 29 Apr 2022 12:52:18 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03ams.nl.ibm.com with ESMTP id 3fm93915dn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Apr 2022 12:52:18 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TCqFuj42860830
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 29 Apr 2022 12:52:15 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 265B1AE051;
+        Fri, 29 Apr 2022 12:52:15 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C0B1DAE045;
+        Fri, 29 Apr 2022 12:52:14 +0000 (GMT)
+Received: from [9.145.33.84] (unknown [9.145.33.84])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 29 Apr 2022 12:52:14 +0000 (GMT)
+Message-ID: <c1e91fc0-3d0e-979b-358b-01237a677b0a@linux.ibm.com>
+Date:   Fri, 29 Apr 2022 14:52:14 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <064f5758-a3ae-d116-fe72-9f52b4cbea78@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Haowen Bai <baihaowen@meizu.com>, svens@linux.ibm.com
+Cc:     agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        gor@linux.ibm.com, hca@linux.ibm.com, hoeppner@linux.ibm.com,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+References: <yt9dilr539wq.fsf@linux.ibm.com>
+ <1650348310-18553-1-git-send-email-baihaowen@meizu.com>
+From:   Stefan Haberland <sth@linux.ibm.com>
+Subject: Re: [PATCH V2] s390/dasd: Use kzalloc instead of kmalloc/memset
+In-Reply-To: <1650348310-18553-1-git-send-email-baihaowen@meizu.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: QnLeZxH7AmxS8Dv7Tbn-DWKMe5Vj0fJj
+X-Proofpoint-GUID: QnLeZxH7AmxS8Dv7Tbn-DWKMe5Vj0fJj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-29_06,2022-04-28_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 priorityscore=1501 spamscore=0 suspectscore=0
+ clxscore=1011 mlxscore=0 impostorscore=0 mlxlogscore=620 adultscore=0
+ phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204290072
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 08:03:19AM +0200, Krzysztof Kozlowski wrote:
-> On 29/04/2022 00:52, Linus Walleij wrote:
-> > On Sat, Apr 23, 2022 at 11:41 AM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> > 
-> >> The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
-> >>
-> >> Fixes: 3b588e43ee5c ("pinctrl: nuvoton: add NPCM7xx pinctrl and GPIO driver")
-> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >> Changes since v1:
-> >> 1. Correct the return value passed further.
-> > 
-> > This doesn't apply to my tree neither for fixes or devel, can you rebase it?
-> > I'd like to queue it on devel for non-urgent fixes.
-> 
-> Sure, I will rebase. The issue was because of Andy's commit
-> https://lore.kernel.org/all/20220401103604.8705-9-andriy.shevchenko@linux.intel.com/
-> which was in next but not in your tree.
-> 
-> Including such development branches in next, bypassing maintainer, makes
-> it difficult for everyone else to develop patches... :(
+Am 19.04.22 um 08:05 schrieb Haowen Bai:
+> Use kzalloc rather than duplicating its implementation, which
+> makes code simple and easy to understand.
+>
+> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+> ---
+> V1->V2: also remove the isglobal assigment above, so the whole else block
+> could go away
 
-I'm about to send PR with my stuff to Linus and Bart, but I have difficulties
-right now with the signing tag. I hope I figure out sooner than later.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+thanks, applied!
 

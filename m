@@ -2,234 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 965105158A5
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 00:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95EC55158A6
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 00:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381604AbiD2WsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 18:48:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49262 "EHLO
+        id S1381611AbiD2Wss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 18:48:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235638AbiD2WsF (ORCPT
+        with ESMTP id S1381606AbiD2Wsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 18:48:05 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC57DCA91
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 15:44:45 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id q20so5360292wmq.1
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 15:44:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod-ie.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=XbMnSQcsXT3f9/YJ+N4A0JRY+Tt1xV3pSkcn35GFhZo=;
-        b=HIT000aEgzs+JS+CUs4j4egCfAGmU3smVafCauajxzPiTGbEe+SbmK75fM487GceKq
-         eld1/0Jl0x7WbmYjDTiCeOy6USvtBe1AosWfu979o5zkn8wKYm5BIlDMEsyDAvzxAAPM
-         rAVj15bC0N6OM2ZjMcRCxCR0VZYIihtXoFNnxbNYESnj+E6pnjeGuXEPZM+DKYn75lGN
-         PA5RpMzA3ReGWxkI4ZxpQuqdr1qQCPHZOdKj/x7dVbJo3bdm2c4XVj2xeGY4NUNQdWB7
-         jRmQNDaC8dDMI5Wh5wwpHgA+vRY/XC5/A9O/UvhwoUSi4tU+U4ClSliOd6rIU8GN6rLk
-         LCzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=XbMnSQcsXT3f9/YJ+N4A0JRY+Tt1xV3pSkcn35GFhZo=;
-        b=2CM21D5nOYRLxqsw9RA8Yxt+5aeQqAgUeaL9wkVo06o1Gs2eb6VBxgpBrpdc8fbcLQ
-         fs447FmGajVBnesdQnoo9WIPdLocoEApYwD7X2Ce6MxePPgdTIVEBUhm7YodEYo1p72G
-         mGCqtLZCU+Bzgle4ZLF47DEjNDUPR+IfVbVfDDKG7+7VglAAnIbWfTeEl7js4y4tJUPg
-         ggNP5Pcrh2kqukEkqdhx9YbpeinxiiZqDgYEnKilSMHX0VoIn8SPgpRRRb3MsvaRJQ9D
-         JNOH/3Sym5dUyx0I4llP4jXBdkZRhgkYLtdxnmmTQ3dWZu90IHmkDTU13Ro+fNeu/DyI
-         z8og==
-X-Gm-Message-State: AOAM531S3fOnsKnu/S87ElhJiRS93johq3U8pK3kiuPoQeINd1+Qu3gV
-        M7af3olC8SMFAHIz6yivq2/dCSSNUDlcKUMD
-X-Google-Smtp-Source: ABdhPJxuFHD0FM6rviCIM/LRtQOHwpiLUlWGEwe67Vlyhi6jzgclk++arbz2hSrEEhD9VnMnGNFTSA==
-X-Received: by 2002:a1c:29c3:0:b0:350:9797:b38f with SMTP id p186-20020a1c29c3000000b003509797b38fmr5194712wmp.22.1651272284521;
-        Fri, 29 Apr 2022 15:44:44 -0700 (PDT)
-Received: from [192.168.2.222] ([109.77.36.132])
-        by smtp.gmail.com with ESMTPSA id z1-20020a05600c220100b003942a244ed9sm347944wml.30.2022.04.29.15.44.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 15:44:43 -0700 (PDT)
-Message-ID: <aec239e1-e7e7-274a-fd2d-a6e3f896c865@conchuod.ie>
-Date:   Fri, 29 Apr 2022 23:44:42 +0100
+        Fri, 29 Apr 2022 18:48:45 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222F533883
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 15:45:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651272326; x=1682808326;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=h45R2rWnTKQnbs+ZcQAZolum42G1Y2PIHBnkk0SVkLw=;
+  b=XKxYxj1YnMopn4tDodO6xuvn2e4fxj+91DM/x/ZpnbWSJ5p91LVEixUj
+   cdoadWCRV/GoG4o7Ug69JVk56KOY23/4FjeGN/6Al6a90Ujst8cDKOfwK
+   uDCKISDVztbWcbNGdPKLivzhTHRFyrzws8qTF7GbEnTFl/M/nHmD5TKFS
+   CPHgV17d//F1EKREarQaZWYzeKS4+DyHdPh1cOQMlsV9v5Ej/yKtz8FyW
+   LIOLgxQvrcAhQbv+wT0B5F+ynDZRdtKOKwJ38PSuQn55+tNluMV7JAq41
+   rQedIt/BGxFQvOklJm+UZOMDZZFnF915lXo+rQILSAig21UHJzo+BQYPl
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="353221197"
+X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
+   d="scan'208";a="353221197"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 15:45:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
+   d="scan'208";a="651955956"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 29 Apr 2022 15:45:24 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nkZMZ-0006eZ-L4;
+        Fri, 29 Apr 2022 22:45:23 +0000
+Date:   Sat, 30 Apr 2022 06:44:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ioannis Angelakopoulos <iangelak@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [rhvgoyal:ioannis-fanotify 11/18] fs/fuse/dir.c:1904:21: error:
+ 'struct inode' has no member named 'i_fsnotify_mask'
+Message-ID: <202204300631.E5yUzmoT-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v1 8/8] riscv: dts: microchip: add the sundance polarberry
-Content-Language: en-US
-To:     Conor Dooley <conor.dooley@microchip.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Cyril Jean <Cyril.Jean@microchip.com>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
-References: <20220429104040.197161-1-conor.dooley@microchip.com>
- <20220429104040.197161-9-conor.dooley@microchip.com>
-From:   Conor Dooley <mail@conchuod.ie>
-In-Reply-To: <20220429104040.197161-9-conor.dooley@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/04/2022 11:40, Conor Dooley wrote:
-> Add a minimal device tree for the PolarFire SoC based Sundance
-> PolarBerry.
-> 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  arch/riscv/boot/dts/microchip/Makefile        |  1 +
->  .../dts/microchip/mpfs-polarberry-fabric.dtsi | 16 ++++
->  .../boot/dts/microchip/mpfs-polarberry.dts    | 95 +++++++++++++++++++
->  3 files changed, 112 insertions(+)
->  create mode 100644 arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi
->  create mode 100644 arch/riscv/boot/dts/microchip/mpfs-polarberry.dts
-> 
-> diff --git a/arch/riscv/boot/dts/microchip/Makefile b/arch/riscv/boot/dts/microchip/Makefile
-> index af3a5059b350..39aae7b04f1c 100644
-> --- a/arch/riscv/boot/dts/microchip/Makefile
-> +++ b/arch/riscv/boot/dts/microchip/Makefile
-> @@ -1,3 +1,4 @@
->  # SPDX-License-Identifier: GPL-2.0
->  dtb-$(CONFIG_SOC_MICROCHIP_POLARFIRE) += mpfs-icicle-kit.dtb
-> +dtb-$(CONFIG_SOC_MICROCHIP_POLARFIRE) += mpfs-polarberry.dtb
->  obj-$(CONFIG_BUILTIN_DTB) += $(addsuffix .o, $(dtb-y))
-> diff --git a/arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi b/arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi
-> new file mode 100644
-> index 000000000000..49380c428ec9
-> --- /dev/null
-> +++ b/arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi
-> @@ -0,0 +1,16 @@
-> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> +/* Copyright (c) 2020-2022 Microchip Technology Inc */
-> +
-> +/ {
-> +	fabric_clk3: fabric-clk3 {
-> +		compatible = "fixed-clock";
-> +		#clock-cells = <0>;
-> +		clock-frequency = <62500000>;
-> +	};
-> +
-> +	fabric_clk1: fabric-clk1 {
-> +		compatible = "fixed-clock";
-> +		#clock-cells = <0>;
-> +		clock-frequency = <125000000>;
-> +	};
-> +};
-> diff --git a/arch/riscv/boot/dts/microchip/mpfs-polarberry.dts b/arch/riscv/boot/dts/microchip/mpfs-polarberry.dts
-> new file mode 100644
-> index 000000000000..8c635f3358a5
-> --- /dev/null
-> +++ b/arch/riscv/boot/dts/microchip/mpfs-polarberry.dts
-> @@ -0,0 +1,95 @@
-> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-> +/* Copyright (c) 2020-2022 Microchip Technology Inc */
-> +
-> +/dts-v1/;
-> +
-> +#include "mpfs.dtsi"
-> +#include "mpfs-polarberry-fabric.dtsi"
-> +
-> +/* Clock frequency (in Hz) of the rtcclk */
-> +#define MTIMER_FREQ    1000000
-> +
-> +/ {
-> +	model = "Sundance PolarBerry";
-> +	compatible = "sundance,polarberry", "microchip,mpfs";
-> +
-> +	aliases {
-> +		 serial0 = &mmuart0;
-> +		 ethernet0 = &mac0;
+tree:   https://github.com/rhvgoyal/linux ioannis-fanotify
+head:   10887e7003a6a801e521d59daff76f0c035f061f
+commit: 834efb94978e62da824c5f4cde878fe592c2426d [11/18] FUSE, VFS: Add the fuse_fsnotify_update_mark inode operation
+config: arc-randconfig-r043-20220428 (https://download.01.org/0day-ci/archive/20220430/202204300631.E5yUzmoT-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/rhvgoyal/linux/commit/834efb94978e62da824c5f4cde878fe592c2426d
+        git remote add rhvgoyal https://github.com/rhvgoyal/linux
+        git fetch --no-tags rhvgoyal ioannis-fanotify
+        git checkout 834efb94978e62da824c5f4cde878fe592c2426d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash fs/fuse/
 
-Looks like I got this wrong and it should be mac1
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> +	};
-> +
-> +	chosen {
-> +		 stdout-path = "serial0:115200n8";
-> +	};
-> +
-> +	cpus {
-> +		 timebase-frequency = <MTIMER_FREQ>;
-> +	};
-> +
-> +	ddrc_cache_lo: memory@80000000 {
-> +		 device_type = "memory";
-> +		 reg = <0x0 0x80000000 0x0 0x2e000000>;
-> +		 status = "okay";
-> +	};
-> +
-> +	ddrc_cache_hi: memory@1000000000 {
-> +		 device_type = "memory";
-> +		 reg = <0x10 0x00000000 0x0 0xC0000000>;
-> +		 status = "okay";
-> +	};
-> +};
-> +
-> +&refclk {
-> +	clock-frequency = <125000000>;
-> +};
-> +
-> +&mmuart0 {
-> +	status = "okay";
-> +};
-> +
-> +&mmc {
-> +	status = "okay";
-> +	bus-width = <4>;
-> +	disable-wp;
-> +	cap-sd-highspeed;
-> +	cap-mmc-highspeed;
-> +	card-detect-delay = <200>;
-> +	mmc-ddr-1_8v;
-> +	mmc-hs200-1_8v;
-> +	sd-uhs-sdr12;
-> +	sd-uhs-sdr25;
-> +	sd-uhs-sdr50;
-> +	sd-uhs-sdr104;
-> +};
-> +
-> +&mac1 {
-> +	status = "okay";
-> +	phy-mode = "sgmii";
-> +	phy-handle = <&phy1>;
-> +	phy1: ethernet-phy@5 {
-> +		 reg = <5>;
-> +		 ti,fifo-depth = <0x01>;
+All errors (new ones prefixed by >>):
 
-Whitespace here needs fixing.
+   fs/fuse/dir.c: In function 'fuse_fsnotify_update_mark':
+>> fs/fuse/dir.c:1904:21: error: 'struct inode' has no member named 'i_fsnotify_mask'
+    1904 |         mask = inode->i_fsnotify_mask & ~(FS_IN_IGNORED | FS_UNMOUNT |
+         |                     ^~
+   fs/fuse/dir.c:1911:107: warning: left-hand operand of comma expression has no effect [-Wunused-value]
+    1911 |                                                                                                 FS_UNMOUNT, FS_IN_IGNORED,
+         |                                                                                                           ^
+   fs/fuse/dir.c:1911:122: warning: left-hand operand of comma expression has no effect [-Wunused-value]
+    1911 |                                                                                                 FS_UNMOUNT, FS_IN_IGNORED,
+         |                                                                                                                          ^
+   fs/fuse/dir.c:1916:16: error: implicit declaration of function 'fuse_fsnotify_send_request' [-Werror=implicit-function-declaration]
+    1916 |         return fuse_fsnotify_send_request(inode, mask);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
-> +	};
-> +	phy0: ethernet-phy@4 {
-> +		 reg = <4>;
-> +		 ti,fifo-depth = <0x01>;
-> +	};
-> +};
-> +
-> +&mac0 {
-> +	status = "okay";
-> +	phy-mode = "sgmii";
-> +	phy-handle = <&phy0>;
-> +};
-> +
-> +&rtc {
-> +	status = "okay";
-> +};
-> +
-> +&mbox {
-> +	status = "okay";
-> +};
-> +
-> +&syscontroller {
-> +	status = "okay";
-> +};
+
+vim +1904 fs/fuse/dir.c
+
+  1892	
+  1893	static int fuse_fsnotify_update_mark(struct inode *inode)
+  1894	{
+  1895		uint64_t mask;
+  1896		/*
+  1897		 * We have to remove the bits added to the mask before being attached
+  1898		 * or detached to the inode, since these bits are going to be
+  1899		 * added by the "remote" host kernel. If these bits were still enabled
+  1900		 * in the mask that was sent to the "remote" kernel then the watch would
+  1901		 * be rejected as an unsupported value. These bits are added by the
+  1902		 * fsnotify subsystem thus we use the corresponding fsnotify bits here.
+  1903		 */
+> 1904		mask = inode->i_fsnotify_mask & ~(FS_IN_IGNORED | FS_UNMOUNT |
+  1905										  FS_IN_ONESHOT | FS_EXCL_UNLINK);
+  1906	
+  1907		if (!inode)
+  1908			return -EINVAL;
+  1909	
+  1910		if (mask && !(mask & ALL_FSNOTIFY_EVENTS & ~(ALL_FSNOTIFY_DIRENT_EVENTS |
+  1911													FS_UNMOUNT, FS_IN_IGNORED,
+  1912													FS_ERROR)))
+  1913			return -EINVAL;
+  1914	
+  1915		/* Send the inode and the aggregated mask for the inode*/
+  1916		return fuse_fsnotify_send_request(inode, mask);
+  1917	}
+  1918	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

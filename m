@@ -2,103 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B000B515425
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB53C515429
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380175AbiD2S7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 14:59:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40414 "EHLO
+        id S1380189AbiD2TAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 15:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380172AbiD2S71 (ORCPT
+        with ESMTP id S1380172AbiD2TAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 14:59:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AE41F89CEE
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:56:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651258567;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oXEYOVGiEIaS8rjqVK/VtY7+96OZNTU9qHtWYBB2mls=;
-        b=Ymn1tw2dF9rNZDIS0zpMkGk/AmYoqpZqduOOlIwpIzCS1BJfc0uVUXJg3+8hF/SIivxCz5
-        XUm/JSVB/gpW2q3sz+Yk73VbpTKa6NVg/xaOI7rmNg6zGsgds0IicoXWZhroQQhYCdCqun
-        acIiF+As6YsvS02mGYL8BqNusECP+Oo=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-378-xt5N50nfOlWH07DiGnX_OA-1; Fri, 29 Apr 2022 14:56:06 -0400
-X-MC-Unique: xt5N50nfOlWH07DiGnX_OA-1
-Received: by mail-wm1-f70.google.com with SMTP id c62-20020a1c3541000000b0038ec265155fso6232798wma.6
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:56:06 -0700 (PDT)
+        Fri, 29 Apr 2022 15:00:17 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17ADB82C7
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:56:57 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id q12so7143705pgj.13
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:56:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HUb2AeTNJcZwD078seN9U1UAiMId+LQbZ7Ey7wYnH7M=;
+        b=lCZ+u1S+AFvX2KAPzeeyfNspgNzW2MhKZeU9/82UI2hA3U4Y4FzX7+SkEU6yi6zNjz
+         Mkdm5qWqL6gaskhqOO+vrjp1EBAP9sjnhovlkU9w32PSxUVIe3H3yn9tlxjDLUJDgQCv
+         L7b7Graze7N7RjiBC+Z44qj5QihUoKDeTs4phvkE0Tk9Wzhh59NVtm5sC9bt28DtsF6z
+         WG225h0HcSLmvgkkL3WCwXCMJ6YYpMwxnuo4uy1tXKLw8KiaFF2CDHkI2YqrpS4yA6T4
+         pLvkDvqeo6qYrMiwg+rwOSsI1kn3SCF94CUvINJThFOSwv2RbXGEmXYQbf2Nq6V9uPqR
+         YQJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=oXEYOVGiEIaS8rjqVK/VtY7+96OZNTU9qHtWYBB2mls=;
-        b=ZQQxBdv5d+LJZYIuYUQFsaPF++kKhBMmiZsJeNZxoQBx2D5j/w/mn8ekFsuaWBulzZ
-         L1LJ3gz2UDjYCs6HsvRUTZIUupmK/2zp/HGWTj365CoavQAK0K8hBoVZ7uqCTV3hHMsR
-         JKbJBEMOb0v/GCxoTxNJq6+f8ZkMTc8dpKJu037nLpA04hu0isiavh2aDfIQ3WDNDD4+
-         8MwHU7GI5CFeOLj6gEea7KoLylCIGM9woBStWn5ymWq4bGcPmX7G70yz7Lf1PAQU5JID
-         56dWURTLdo08JRIQlA69gzcnosZtyMeHBiD2QiIVPSbAP+lss9ywMEjRBm8us3sIi6Vp
-         kM2w==
-X-Gm-Message-State: AOAM530RpGQbUI6XwC0cjZ+mKjo7tiNYXcyYwFpWjniTlmgiSIxM4dw/
-        DTiaMcWYLfi/i97NKwNI1ezbpMNrICY83qLWbJ9AEvIouED0g4opRGiG7lJRT+G42KgRGF2Pz7F
-        8YUqa9qv96RxdmcH3B3Mbn1zQ
-X-Received: by 2002:a5d:47af:0:b0:20a:c95e:b236 with SMTP id 15-20020a5d47af000000b0020ac95eb236mr394589wrb.53.1651258565160;
-        Fri, 29 Apr 2022 11:56:05 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw6ZE3RROaOfJj+XJfJxSRg2A5j0PJ86gl1VDYbLGFPHLsd+sT4VA321qoca53c0lbL8rwW4A==
-X-Received: by 2002:a5d:47af:0:b0:20a:c95e:b236 with SMTP id 15-20020a5d47af000000b0020ac95eb236mr394561wrb.53.1651258564917;
-        Fri, 29 Apr 2022 11:56:04 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:fe00:bbeb:98e6:617a:dea1? (p200300cbc707fe00bbeb98e6617adea1.dip0.t-ipconnect.de. [2003:cb:c707:fe00:bbeb:98e6:617a:dea1])
-        by smtp.gmail.com with ESMTPSA id p125-20020a1c2983000000b0038e6c62f527sm3892909wmp.14.2022.04.29.11.56.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 11:56:04 -0700 (PDT)
-Message-ID: <9781c7e7-d84e-4911-396b-718514f76b1f@redhat.com>
-Date:   Fri, 29 Apr 2022 20:56:02 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HUb2AeTNJcZwD078seN9U1UAiMId+LQbZ7Ey7wYnH7M=;
+        b=8E0LsEqZoo0H5I7mHPvnrv2Tpz7DZYgGhiMaxkm6vSiRWYmDaCyurI3p6atbCWBeLH
+         5cSM+ASGb6zd7hoCfr5GOZmVSF5nBbQOy9I4UDyCN/+kMtoi4mZASWR29mleK56lLWJn
+         UhKEk9a1X/tFBxenXaSGYvxUIZXflPvuNlGkZ+E7mcubeQXxj4JxXiCA/7BUGqnYIERz
+         UOWLMP5GoR/8Rnd86iiX/t4sEAvGXFTFqA7FF4b49+ou5vH5+5Kg7H/FSRV9VZvbMrM8
+         YF9X0v5MXJMdzXEJWme+aqMY+ZML4Evgc1krfQV+faJpAAFw0D5Dz0BRjlZ17WXyNFD6
+         Ij6Q==
+X-Gm-Message-State: AOAM532X0UqFQVJ/fwsVtdiZUuHKHfdOFmj5B6RdBCYgXjFV1ULJZSK8
+        yivrIn3QjFQ721cp9EBspgUYmd3LFEqj6pzPt6oreg==
+X-Google-Smtp-Source: ABdhPJyAQ9fwnpAk2Ts6MauMQOVJu3OiitVnvRuUjeBbPPg4ife6hXfiwPfjwiEmGv5y/CBqMtaclPgDWCA1uvplV9o=
+X-Received: by 2002:a62:a105:0:b0:50d:c97b:3084 with SMTP id
+ b5-20020a62a105000000b0050dc97b3084mr177523pff.61.1651258617382; Fri, 29 Apr
+ 2022 11:56:57 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v4 12/17] mm: remember exclusively mapped anonymous pages
- with PG_anon_exclusive
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
-References: <20220428083441.37290-1-david@redhat.com>
- <20220428083441.37290-13-david@redhat.com>
- <20220429112655.6b44dae1a93a9aa93adb0bcf@linux-foundation.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220429112655.6b44dae1a93a9aa93adb0bcf@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20220429134039.18252-1-msuchanek@suse.de>
+In-Reply-To: <20220429134039.18252-1-msuchanek@suse.de>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Fri, 29 Apr 2022 11:56:46 -0700
+Message-ID: <CAPcyv4g7wBJvw-yNz58eGcLYSvsSHOGZsZV8Px=WRacQ5Ur2Og@mail.gmail.com>
+Subject: Re: [PATCH] testing: nvdimm: iomap: make __nfit_test_ioremap a macro
+To:     Michal Suchanek <msuchanek@suse.de>
+Cc:     Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>, Zou Wei <zou_wei@huawei.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -106,24 +69,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29.04.22 20:26, Andrew Morton wrote:
-> On Thu, 28 Apr 2022 10:34:36 +0200 David Hildenbrand <david@redhat.com> wrote:
-> 
->> Let's mark exclusively mapped anonymous pages with PG_anon_exclusive as
->> exclusive, and use that information to make GUP pins reliable and stay
->> consistent with the page mapped into the page table even if the
->> page table entry gets write-protected.
-> 
-> No reviewers on this one?
-> 
-> 
+On Fri, Apr 29, 2022 at 6:41 AM Michal Suchanek <msuchanek@suse.de> wrote:
+>
+> The ioremap passed as argument to __nfit_test_ioremap can be a macro so
+> it cannot be passed as function argument. Make __nfit_test_ioremap into
+> a macro so that ioremap can be passed as untyped macro argument.
+>
 
-Looks like I missed Vlastimils ACK on this one in his second reply:
+Looks reasonable to me and passes tests, applied.
 
-https://lkml.kernel.org/r/abc33620-b0dc-67e3-d3a9-2094475bf16e@suse.cz
-
--- 
-Thanks,
-
-David / dhildenb
-
+> Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> ---
+>  tools/testing/nvdimm/test/iomap.c | 18 ++++++++----------
+>  1 file changed, 8 insertions(+), 10 deletions(-)
+>
+> diff --git a/tools/testing/nvdimm/test/iomap.c b/tools/testing/nvdimm/test/iomap.c
+> index b752ce47ead3..ea956082e6a4 100644
+> --- a/tools/testing/nvdimm/test/iomap.c
+> +++ b/tools/testing/nvdimm/test/iomap.c
+> @@ -62,16 +62,14 @@ struct nfit_test_resource *get_nfit_res(resource_size_t resource)
+>  }
+>  EXPORT_SYMBOL(get_nfit_res);
+>
+> -static void __iomem *__nfit_test_ioremap(resource_size_t offset, unsigned long size,
+> -               void __iomem *(*fallback_fn)(resource_size_t, unsigned long))
+> -{
+> -       struct nfit_test_resource *nfit_res = get_nfit_res(offset);
+> -
+> -       if (nfit_res)
+> -               return (void __iomem *) nfit_res->buf + offset
+> -                       - nfit_res->res.start;
+> -       return fallback_fn(offset, size);
+> -}
+> +#define __nfit_test_ioremap(offset, size, fallback_fn) ({              \
+> +       struct nfit_test_resource *nfit_res = get_nfit_res(offset);     \
+> +       nfit_res ?                                                      \
+> +               (void __iomem *) nfit_res->buf + (offset)               \
+> +                       - nfit_res->res.start                           \
+> +       :                                                               \
+> +               fallback_fn((offset), (size)) ;                         \
+> +})
+>
+>  void __iomem *__wrap_devm_ioremap(struct device *dev,
+>                 resource_size_t offset, unsigned long size)
+> --
+> 2.34.1
+>

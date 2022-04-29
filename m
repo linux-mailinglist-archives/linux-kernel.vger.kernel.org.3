@@ -2,175 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D7605158A3
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 00:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 965105158A5
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 00:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377907AbiD2Wqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 18:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48530 "EHLO
+        id S1381604AbiD2WsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 18:48:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235638AbiD2Wqi (ORCPT
+        with ESMTP id S235638AbiD2WsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 18:46:38 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702A7DC9A4
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 15:43:19 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id y14so8029514pfe.10
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 15:43:19 -0700 (PDT)
+        Fri, 29 Apr 2022 18:48:05 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC57DCA91
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 15:44:45 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id q20so5360292wmq.1
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 15:44:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+OtZcub1RhFmibAlx0L9IR2e0KQSLJB6GLsOG4WarlA=;
-        b=Uh8VucIvyx7fYouDKn0NIeZi4Jd4jiRIuUr9bGcgaIn2h9rqghkqXHE/eAvcONH0ox
-         nD6H5cFq6x3oeWmtztkTDYdDiKtAoTfOUkVP6Nw6Vnjpe4w/Wa6NS/kSkfawO8rXWZnP
-         qGUflBSDTvC6WNZSvjsYgDbZmv7yE7Gqx3MA0=
+        d=conchuod-ie.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XbMnSQcsXT3f9/YJ+N4A0JRY+Tt1xV3pSkcn35GFhZo=;
+        b=HIT000aEgzs+JS+CUs4j4egCfAGmU3smVafCauajxzPiTGbEe+SbmK75fM487GceKq
+         eld1/0Jl0x7WbmYjDTiCeOy6USvtBe1AosWfu979o5zkn8wKYm5BIlDMEsyDAvzxAAPM
+         rAVj15bC0N6OM2ZjMcRCxCR0VZYIihtXoFNnxbNYESnj+E6pnjeGuXEPZM+DKYn75lGN
+         PA5RpMzA3ReGWxkI4ZxpQuqdr1qQCPHZOdKj/x7dVbJo3bdm2c4XVj2xeGY4NUNQdWB7
+         jRmQNDaC8dDMI5Wh5wwpHgA+vRY/XC5/A9O/UvhwoUSi4tU+U4ClSliOd6rIU8GN6rLk
+         LCzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+OtZcub1RhFmibAlx0L9IR2e0KQSLJB6GLsOG4WarlA=;
-        b=pUV9EPVQKnelCZBTiolJUYojfNe2TLokHIDFg/A2gMCxcEiUKzMqpNssP8PytN4AIo
-         cIABk/59/X2WZBaRXI76WfrgP6p5B+R74nqCKMxhJf+Xb0+adjNj2vDGaiQ1xDGRDeBi
-         +ZqEvO7JcJdEHSm1NoBDeKyO+SpDv/YoFMsg5oze3v8aVp5J2NfrglGWVLXHCeJ3w/bG
-         f0P4y8g5vmnQFZGIocd1Q3B9myXAwp74gjSPFjpC8LHtIhubRS7gzTNCRcBqlIlSVOpL
-         K1BCl0xc98Wc6gL1BlgcX5amJkAIdNI1npHPPNk90m9rArQmJIC6+xhT3XsvEqZh8wej
-         riiw==
-X-Gm-Message-State: AOAM531ZPOZArODvCMcd81BLoTKbNm0P3FBKuWQOnDE9tAya9DrIfkkK
-        WOz7BsaD3HutCvvXoO7ibr7MoQ==
-X-Google-Smtp-Source: ABdhPJw9E1JT53+jWSaSkIedGe+aUYLpkAcQAdaWHGIYm7RXbAaA7uKIjm2HVH09AwRNc9PeQFoybg==
-X-Received: by 2002:a63:1c2:0:b0:3aa:be7c:cfd9 with SMTP id 185-20020a6301c2000000b003aabe7ccfd9mr1097040pgb.521.1651272198924;
-        Fri, 29 Apr 2022 15:43:18 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id e16-20020a62aa10000000b0050dc7628151sm193479pff.43.2022.04.29.15.43.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 15:43:18 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 15:43:17 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Sargun Dhillon <sargun@sargun.me>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        Rodrigo Campos <rodrigo@kinvolk.io>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Will Drewry <wad@chromium.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Alban Crequy <alban@kinvolk.io>,
-        Tycho Andersen <tycho@tycho.pizza>
-Subject: Re: [PATCH v3 2/2] selftests/seccomp: Add test for wait killable
- notifier
-Message-ID: <202204291541.4438B18A@keescook>
-References: <20220429023113.74993-1-sargun@sargun.me>
- <20220429023113.74993-3-sargun@sargun.me>
- <202204291053.E04A367@keescook>
- <20220429223557.GB1267404@ircssh-3.c.rugged-nimbus-611.internal>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XbMnSQcsXT3f9/YJ+N4A0JRY+Tt1xV3pSkcn35GFhZo=;
+        b=2CM21D5nOYRLxqsw9RA8Yxt+5aeQqAgUeaL9wkVo06o1Gs2eb6VBxgpBrpdc8fbcLQ
+         fs447FmGajVBnesdQnoo9WIPdLocoEApYwD7X2Ce6MxePPgdTIVEBUhm7YodEYo1p72G
+         mGCqtLZCU+Bzgle4ZLF47DEjNDUPR+IfVbVfDDKG7+7VglAAnIbWfTeEl7js4y4tJUPg
+         ggNP5Pcrh2kqukEkqdhx9YbpeinxiiZqDgYEnKilSMHX0VoIn8SPgpRRRb3MsvaRJQ9D
+         JNOH/3Sym5dUyx0I4llP4jXBdkZRhgkYLtdxnmmTQ3dWZu90IHmkDTU13Ro+fNeu/DyI
+         z8og==
+X-Gm-Message-State: AOAM531S3fOnsKnu/S87ElhJiRS93johq3U8pK3kiuPoQeINd1+Qu3gV
+        M7af3olC8SMFAHIz6yivq2/dCSSNUDlcKUMD
+X-Google-Smtp-Source: ABdhPJxuFHD0FM6rviCIM/LRtQOHwpiLUlWGEwe67Vlyhi6jzgclk++arbz2hSrEEhD9VnMnGNFTSA==
+X-Received: by 2002:a1c:29c3:0:b0:350:9797:b38f with SMTP id p186-20020a1c29c3000000b003509797b38fmr5194712wmp.22.1651272284521;
+        Fri, 29 Apr 2022 15:44:44 -0700 (PDT)
+Received: from [192.168.2.222] ([109.77.36.132])
+        by smtp.gmail.com with ESMTPSA id z1-20020a05600c220100b003942a244ed9sm347944wml.30.2022.04.29.15.44.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 15:44:43 -0700 (PDT)
+Message-ID: <aec239e1-e7e7-274a-fd2d-a6e3f896c865@conchuod.ie>
+Date:   Fri, 29 Apr 2022 23:44:42 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220429223557.GB1267404@ircssh-3.c.rugged-nimbus-611.internal>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v1 8/8] riscv: dts: microchip: add the sundance polarberry
+Content-Language: en-US
+To:     Conor Dooley <conor.dooley@microchip.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Cyril Jean <Cyril.Jean@microchip.com>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
+References: <20220429104040.197161-1-conor.dooley@microchip.com>
+ <20220429104040.197161-9-conor.dooley@microchip.com>
+From:   Conor Dooley <mail@conchuod.ie>
+In-Reply-To: <20220429104040.197161-9-conor.dooley@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 10:35:57PM +0000, Sargun Dhillon wrote:
-> On Fri, Apr 29, 2022 at 11:19:33AM -0700, Kees Cook wrote:
-> > On Thu, Apr 28, 2022 at 07:31:13PM -0700, Sargun Dhillon wrote:
-> > > +
-> > > +	ASSERT_EQ(socketpair(PF_LOCAL, SOCK_SEQPACKET, 0, sk_pair), 0);
-> > > +
-> > > +	listener = user_notif_syscall(__NR_getppid,
-> > > +				      SECCOMP_FILTER_FLAG_NEW_LISTENER |
-> > > +				      SECCOMP_FILTER_FLAG_WAIT_KILLABLE_RECV);
-> > > +	ASSERT_GE(listener, 0);
-> > > +
-> > > +	pid = fork();
-> > > +	ASSERT_GE(pid, 0);
-> > > +
-> > > +	if (pid == 0) {
-> > > +		close(sk_pair[0]);
-> > > +		handled = sk_pair[1];
-> > > +
-> > > +		/* Setup the sigaction without SA_RESTART */
-> > > +		if (sigaction(SIGUSR1, &new_action, NULL)) {
-> > > +			perror("sigaction");
-> > > +			exit(1);
-> > > +		}
-> > > +
-> > > +		/* Make sure that the syscall is completed (no EINTR) */
-> > > +		ret = syscall(__NR_getppid);
-> > > +		exit(ret != USER_NOTIF_MAGIC);
-> > > +	}
-> > > +
-> > > +	while (get_proc_syscall(pid) != __NR_getppid &&
-> > > +	       get_proc_stat(pid) != 'S')
-> > > +		nanosleep(&delay, NULL);
-> > > +
-> > > +	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_RECV, &req), 0);
-> > > +	/* Kill the process to make sure it enters the wait_killable state */
-> > > +	EXPECT_EQ(kill(pid, SIGUSR1), 0);
-> > > +
-> > > +	/* TASK_KILLABLE is considered D (Disk Sleep) state */
-> > > +	while (get_proc_stat(pid) != 'D')
-> > > +		nanosleep(&delay, NULL);
-> > 
-> > Should a NOWAIT waitpid() happen in this loop to make sure this doesn't
-> > spin forever?
-> > 
-> > i.e. running these tests on a kernel that doesn't have the support
-> > shouldn't hang -- yes it'll time out eventually but that's annoying. ;)
-> > 
-> Wouldn't this bail already because user_notif_syscall would assert out
-> since the kernel would reject the unknown flag?
-
-Oh yeah, duh. :P
-
-> I might make this a little helper function, something like:
-> static void wait_for_state(struct __test_metadata *_metadata, pid_t pid, char wait_for) {
-> 	/* 100 ms */
-> 	struct timespec delay = { .tv_nsec = 100000000 };
-> 	int status;
+On 29/04/2022 11:40, Conor Dooley wrote:
+> Add a minimal device tree for the PolarFire SoC based Sundance
+> PolarBerry.
 > 
-> 	while (get_proc_stat(pid) != wait_for) {
-> 		ASSERT_EQ(waitpid(pid, &status, WNOHANG), 0) {
-> 			if (WIFEXITED(status))
-> 				TH_LOG("Process %d exited with error code %d", pid, WEXITSTATUS(status));
-> 			else if (WIFSIGNALED(status))
-> 				TH_LOG("Process %d exited due to signal %d", pid, WTERMSIG(status));
-> 			else
-> 				TH_LOG("Process %d exited due to unknown reason", pid);
-> 		}
-> 		nanosleep(&delay, NULL);
-> 	}
-> }
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  arch/riscv/boot/dts/microchip/Makefile        |  1 +
+>  .../dts/microchip/mpfs-polarberry-fabric.dtsi | 16 ++++
+>  .../boot/dts/microchip/mpfs-polarberry.dts    | 95 +++++++++++++++++++
+>  3 files changed, 112 insertions(+)
+>  create mode 100644 arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi
+>  create mode 100644 arch/riscv/boot/dts/microchip/mpfs-polarberry.dts
+> 
+> diff --git a/arch/riscv/boot/dts/microchip/Makefile b/arch/riscv/boot/dts/microchip/Makefile
+> index af3a5059b350..39aae7b04f1c 100644
+> --- a/arch/riscv/boot/dts/microchip/Makefile
+> +++ b/arch/riscv/boot/dts/microchip/Makefile
+> @@ -1,3 +1,4 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  dtb-$(CONFIG_SOC_MICROCHIP_POLARFIRE) += mpfs-icicle-kit.dtb
+> +dtb-$(CONFIG_SOC_MICROCHIP_POLARFIRE) += mpfs-polarberry.dtb
+>  obj-$(CONFIG_BUILTIN_DTB) += $(addsuffix .o, $(dtb-y))
+> diff --git a/arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi b/arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi
+> new file mode 100644
+> index 000000000000..49380c428ec9
+> --- /dev/null
+> +++ b/arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi
+> @@ -0,0 +1,16 @@
+> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +/* Copyright (c) 2020-2022 Microchip Technology Inc */
+> +
+> +/ {
+> +	fabric_clk3: fabric-clk3 {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +		clock-frequency = <62500000>;
+> +	};
+> +
+> +	fabric_clk1: fabric-clk1 {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +		clock-frequency = <125000000>;
+> +	};
+> +};
+> diff --git a/arch/riscv/boot/dts/microchip/mpfs-polarberry.dts b/arch/riscv/boot/dts/microchip/mpfs-polarberry.dts
+> new file mode 100644
+> index 000000000000..8c635f3358a5
+> --- /dev/null
+> +++ b/arch/riscv/boot/dts/microchip/mpfs-polarberry.dts
+> @@ -0,0 +1,95 @@
+> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +/* Copyright (c) 2020-2022 Microchip Technology Inc */
+> +
+> +/dts-v1/;
+> +
+> +#include "mpfs.dtsi"
+> +#include "mpfs-polarberry-fabric.dtsi"
+> +
+> +/* Clock frequency (in Hz) of the rtcclk */
+> +#define MTIMER_FREQ    1000000
+> +
+> +/ {
+> +	model = "Sundance PolarBerry";
+> +	compatible = "sundance,polarberry", "microchip,mpfs";
+> +
+> +	aliases {
+> +		 serial0 = &mmuart0;
+> +		 ethernet0 = &mac0;
 
-Yeah, though as you point out, that is likely overkill. :)
+Looks like I got this wrong and it should be mac1
 
-> > > +	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_RECV, &req), 0);
-> > > +	/* Kill the process with a fatal signal */
-> > > +	EXPECT_EQ(kill(pid, SIGTERM), 0);
-> > > +
-> > > +	EXPECT_EQ(waitpid(pid, &status, 0), pid);
-> > > +	EXPECT_EQ(true, WIFSIGNALED(status));
-> > > +	EXPECT_EQ(SIGTERM, WTERMSIG(status));
-> > > +}
-> > 
-> > Should there be a test validating the inverse of this, as in _without_
-> > SECCOMP_FILTER_FLAG_WAIT_KILLABLE_RECV, how should the above tests
-> > behave?
-> Don't we roughly get that from the user_notification_kill_in_middle
-> and user_notification_signal?
+> +	};
+> +
+> +	chosen {
+> +		 stdout-path = "serial0:115200n8";
+> +	};
+> +
+> +	cpus {
+> +		 timebase-frequency = <MTIMER_FREQ>;
+> +	};
+> +
+> +	ddrc_cache_lo: memory@80000000 {
+> +		 device_type = "memory";
+> +		 reg = <0x0 0x80000000 0x0 0x2e000000>;
+> +		 status = "okay";
+> +	};
+> +
+> +	ddrc_cache_hi: memory@1000000000 {
+> +		 device_type = "memory";
+> +		 reg = <0x10 0x00000000 0x0 0xC0000000>;
+> +		 status = "okay";
+> +	};
+> +};
+> +
+> +&refclk {
+> +	clock-frequency = <125000000>;
+> +};
+> +
+> +&mmuart0 {
+> +	status = "okay";
+> +};
+> +
+> +&mmc {
+> +	status = "okay";
+> +	bus-width = <4>;
+> +	disable-wp;
+> +	cap-sd-highspeed;
+> +	cap-mmc-highspeed;
+> +	card-detect-delay = <200>;
+> +	mmc-ddr-1_8v;
+> +	mmc-hs200-1_8v;
+> +	sd-uhs-sdr12;
+> +	sd-uhs-sdr25;
+> +	sd-uhs-sdr50;
+> +	sd-uhs-sdr104;
+> +};
+> +
+> +&mac1 {
+> +	status = "okay";
+> +	phy-mode = "sgmii";
+> +	phy-handle = <&phy1>;
+> +	phy1: ethernet-phy@5 {
+> +		 reg = <5>;
+> +		 ti,fifo-depth = <0x01>;
 
-Yeah, I guess that's true. Cool, cool.
+Whitespace here needs fixing.
 
-> Although, I might cleanup the user_notification_signal test to disable
-> SA_RESTART like these tests.
-
-Sounds good, though maybe that can be a separate patch?
-
--- 
-Kees Cook
+> +	};
+> +	phy0: ethernet-phy@4 {
+> +		 reg = <4>;
+> +		 ti,fifo-depth = <0x01>;
+> +	};
+> +};
+> +
+> +&mac0 {
+> +	status = "okay";
+> +	phy-mode = "sgmii";
+> +	phy-handle = <&phy0>;
+> +};
+> +
+> +&rtc {
+> +	status = "okay";
+> +};
+> +
+> +&mbox {
+> +	status = "okay";
+> +};
+> +
+> +&syscontroller {
+> +	status = "okay";
+> +};

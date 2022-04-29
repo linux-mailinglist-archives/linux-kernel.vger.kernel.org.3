@@ -2,88 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D01AC51487A
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 13:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E6051487E
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 13:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240194AbiD2Lrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 07:47:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34876 "EHLO
+        id S1344225AbiD2Lso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 07:48:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbiD2Lrm (ORCPT
+        with ESMTP id S240037AbiD2Lsk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 07:47:42 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F4CC7495
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 04:44:18 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id r9so6884081pjo.5
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 04:44:18 -0700 (PDT)
+        Fri, 29 Apr 2022 07:48:40 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F0BB36B0;
+        Fri, 29 Apr 2022 04:45:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=EkPpqVJFZwtWuFEh4cjXyyHHD2JdNkeuaKvQxOerGLs=;
-        b=UiTgjpBDLYNVb5S2HJ7JkqhnXTLajN0F89ea627idBHei/lCATFHimuuXRKJrI7VP1
-         hXd7YtHmJfxGyoIYThnjXVLHYbsWVstByJN/HBzblqHJmwTxONK1aH8TlhMIUEt+J9JL
-         Jvj2ubAeOBdbV9dq8oG8yygZ9JPthi8vSkNDCX94aI4sEhLujFDd+HRF55Ml0m06TdkX
-         I6Xj25mlJ0iyRn7ETPC/BZk4FHDDb2OOBnDcodFk6gi47HGtXFbrvtnl7TQeEoom11lr
-         HZAz2r2JE0eZk/RGC0m2KhI7rmMDlVncQ6eLOBDh+9jdIJ4jcDL3YARyrhK3+hqz12g4
-         Xu6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EkPpqVJFZwtWuFEh4cjXyyHHD2JdNkeuaKvQxOerGLs=;
-        b=Be7b4UczUdvPLRfF24H6M2Vu4gLgXlssMHJXH/JdGPUhtbqUf1zbge40sxL/im+vSc
-         Xmvq/Bx5/dUYKWUeqH1RL77VU2SRNekl3u7bkbKnXtu+dR0ZBeSIFKuSiH/tUX++xk4j
-         r0kfR2P3MOPg0dHAqZPiZHwlMOarqw4qHeel6BO6/9REtLQQsVoDYIEGvharKB2B6jIL
-         FyX/MJXVa9WkGcMgiLrMohuzoCUopmkWJj3frXNvAFoAAG1iQP6b71gQFSPSRkTgR06L
-         CwxX6O3n9IEcBrMH1BP0AEARtoybpuvoSIROLWUjmZU6w2ycMMX9w69a21sphD43Fq2A
-         rJ1A==
-X-Gm-Message-State: AOAM532vQ5KWzebTUzqn19V5ttWVhQ5H1gmxMTyg6PbdiV3MMbE2Zy0m
-        8S1uji17sdc1b7s8IFvPHFsqEQ==
-X-Google-Smtp-Source: ABdhPJzBsgHH4J5QAo+Gn1X23WEJ7Tm2fIjGmg7YoFqHNQUGWoo/feizs2yfyHBrgsdv6ewosE17vw==
-X-Received: by 2002:a17:902:e84b:b0:15c:fee2:aeb6 with SMTP id t11-20020a170902e84b00b0015cfee2aeb6mr27576901plg.128.1651232657669;
-        Fri, 29 Apr 2022 04:44:17 -0700 (PDT)
-Received: from localhost ([139.177.225.239])
-        by smtp.gmail.com with ESMTPSA id u14-20020a63470e000000b003c14af5061esm5653739pga.54.2022.04.29.04.44.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 04:44:17 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 19:44:14 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Peng Liu <liupeng256@huawei.com>
-Cc:     mike.kravetz@oracle.com, david@redhat.com,
-        akpm@linux-foundation.org, yaozhenguo1@gmail.com,
-        baolin.wang@linux.alibaba.com, liuyuntao10@huawei.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        wangkefeng.wang@huawei.com, dave@stgolabs.net,
-        wangborong@cdjrlc.com, linux-ia64@vger.kernel.org,
-        adobriyan@gmail.com
-Subject: Re: [PATCH v4] mm: Using for_each_online_node and node_online
- instead of open coding
-Message-ID: <YmvPjnjufx+XZxN3@FVFYT0MHHV2J.usts.net>
-References: <20220413032915.251254-4-liupeng256@huawei.com>
- <20220429030218.644635-1-liupeng256@huawei.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651232722; x=1682768722;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=rOn7ihLjZxMlGQmWbzVw3x2VHGTlH3YuYPK6W1CvuVs=;
+  b=p39I33VF0EeYAg3lOzQEUots0NRAqrP1BalfRGdT4zsY9izEls0v5phh
+   7EiuP9qsUCd0c+iiVGMUnPeudYXteiJsgxB2sg1Hb0Qy7j1GU7tG55jk2
+   RB+RFgDk2h+FBTw/iz1er4KhvLkQnZyEttoceplJ3roSg/cF/wOGOAtI+
+   Q=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 29 Apr 2022 04:45:22 -0700
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 04:45:22 -0700
+Received: from blr-ubuntu-242.ap.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 29 Apr 2022 04:45:19 -0700
+From:   Naina Vaskenly <quic_nvaskenl@quicinc.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        lijian <lijian@yulong.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Kumar Anshuman <quic_anshuk@quicinc.com>,
+        Naina Vaskenly <quic_nvaskenl@quicinc.com>
+Subject: [PATCH V0 0/1] media: v4l2-core: Enable reserved field of v4l2_event
+Date:   Fri, 29 Apr 2022 17:15:02 +0530
+Message-ID: <cover.1651223992.git.quic_nvaskenl@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220429030218.644635-1-liupeng256@huawei.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 03:02:18AM +0000, Peng Liu wrote:
-> Use more generic functions to deal with issues related to online
-> nodes. The changes will make the code simplified.
-> 
-> Signed-off-by: Peng Liu <liupeng256@huawei.com>
-> Suggested-by: Davidlohr Bueso <dave@stgolabs.net>
-> Suggested-by: Andrew Morton <akpm@linux-foundation.org>
+'reserved' member of struct v4l2_event is currently not enabled.
+This field can be used to transfer data, if >64 bytes of data
+has to be sent. Hence, added this change to copy the reserved field in
+__v4l2_event_queue_fh.
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Naina Vaskenly (1):
+  media: v4l2-core: Enable reserved field of v4l2_event
 
-Thanks.
+ drivers/media/v4l2-core/v4l2-event.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+-- 
+2.7.4
+

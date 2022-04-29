@@ -2,303 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CA1D51577E
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 23:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28FC651578E
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 00:00:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358677AbiD2WA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 18:00:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43252 "EHLO
+        id S1358767AbiD2WDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 18:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358529AbiD2WAY (ORCPT
+        with ESMTP id S242991AbiD2WDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 18:00:24 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E268DC58D
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:57:02 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220429215657euoutp01b52caa7fa2a0ce90194a6e18a54f0a1c~qfMlS_lhl0890308903euoutp01D
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 21:56:57 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220429215657euoutp01b52caa7fa2a0ce90194a6e18a54f0a1c~qfMlS_lhl0890308903euoutp01D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1651269417;
-        bh=7J8rtnDsMQWZWHd+b1WNNYuDDtLNUDrGaXcixOOSXis=;
-        h=Date:Subject:To:From:In-Reply-To:References:From;
-        b=I+v6+0XNi8bqSj73UnTHpZD65DZluW2ATk2JhuHg9VW2gGKLhSIVQzWzkXfIolTLr
-         WIVQLIBSCVWpJshN00tfMNL35+YCtAF/jkdH7riyeTURKdFAMWQravpbggBmPNciAe
-         mlKFxTrEmD6MnLZarQj5i25AyCFS8qXK4wK1NPR8=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220429215657eucas1p2d8101c18a677b9dccf203992ff286105~qfMk12rN81633416334eucas1p29;
-        Fri, 29 Apr 2022 21:56:57 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id F4.A2.09887.82F5C626; Fri, 29
-        Apr 2022 22:56:56 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220429215656eucas1p28b290e1a8b4eb96d78bdad84163b9b6b~qfMkN91sc1108311083eucas1p2g;
-        Fri, 29 Apr 2022 21:56:56 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220429215656eusmtrp10ab16ce363e33a04f529a0c42283f7c6~qfMkNPbul2137421374eusmtrp1p;
-        Fri, 29 Apr 2022 21:56:56 +0000 (GMT)
-X-AuditID: cbfec7f4-45bff7000000269f-5c-626c5f28ab35
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id AC.3F.09522.82F5C626; Fri, 29
-        Apr 2022 22:56:56 +0100 (BST)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220429215655eusmtip1e5918148f011778f859da0e025c4d11e~qfMjxxX-r1196411964eusmtip17;
-        Fri, 29 Apr 2022 21:56:55 +0000 (GMT)
-Message-ID: <ac28b69a-df20-ee17-a567-026096ed5498@samsung.com>
-Date:   Fri, 29 Apr 2022 23:56:56 +0200
+        Fri, 29 Apr 2022 18:03:16 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9D0DC58D
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:59:57 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id 7so3583724pga.12
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 14:59:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=ipQeVTmYrR7J31cQHX7IyApntWC5EPbZtm8uKJtALEY=;
+        b=DgAvPjdxcMUrOzD8ptWC1c0XZR7ZHvJ5Nc4WFiRa85U+fhOqQgc2yRsltnyvAq82zB
+         MaIufUM7McJ2+j7gb9byJX9iE0SsP4OU0GvSFKyuouCSRC0amigu9f0EuGktNdRuh6Zu
+         lBiPXAQukG3a33+LnJMx4oC+9aBmL8eaeLo1386+/cY1oxbiYWFgfdFa8SnURnLHUMJe
+         Fd3faWJ55STz4oXXabd5O4GSQZa67wwU2zWxycULZHBcnWDgnBYD9V6IxwmkPjZc2YN7
+         YTRhib8EB/vvVfkBWKk3zP257kArfbVm5MJLaGkb+To6bbteyWLXUm4fp3zWCGNaQnl1
+         cOog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ipQeVTmYrR7J31cQHX7IyApntWC5EPbZtm8uKJtALEY=;
+        b=oP9N/Y2FMTYBVRjvZGAmYLsKP4knRbjJgV485GNWy10R2fhym2XRGDAcYYeiQ/2oez
+         R2FcHEnoEbnNWLdqPtbbjmfLSkhYowh8L6duKMlYjHM+k+WTMIKXHtGzUkZOPGo+bste
+         UYS301ItnBYFn4T4hHp0nGNuaE3hKXJe/Blk6bPRE0vB6MWSO0aCHTeSgEubQz/gmizC
+         3UQ1o8SoeA9e5dMqC3f+hU3VUPvobaDnWqXEo6UGOL9FOuAqoHcHLCRLQZoUdsZ5DQxO
+         YAdWQePwmgJ4sdc0aSAFBOLinW5tFDotZdY5E5Oyi7TA4vvRtIK+jXRnCJDrGHIBLppF
+         Hb4g==
+X-Gm-Message-State: AOAM531sdc+T/GvOXfSUDUzUrPrkvx6eGef28fNvIqs4MK+Q3/hWxD3F
+        WKzMebddtJlUD/F6MCzGJa7bvQ==
+X-Google-Smtp-Source: ABdhPJwevh1jhaxMl24AY5CqZkKSgRMpzE7Lc2pGWccFn4KXxc4IIdCFMsxVOSgLKgI9K3xsxH3NUA==
+X-Received: by 2002:a65:6e88:0:b0:382:3851:50c8 with SMTP id bm8-20020a656e88000000b00382385150c8mr1062915pgb.270.1651269596278;
+        Fri, 29 Apr 2022 14:59:56 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id x7-20020a1709028ec700b0015e8d4eb205sm79283plo.79.2022.04.29.14.59.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 14:59:55 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 21:59:52 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Jon Kohler <jon@nutanix.com>, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Balbir Singh <sblbir@amazon.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH v3] x86/speculation, KVM: only IBPB for
+ switch_mm_always_ibpb on vCPU load
+Message-ID: <Ymxf2Jnmz5y4CHFN@google.com>
+References: <20220422162103.32736-1-jon@nutanix.com>
+ <YmwZYEGtJn3qs0j4@zn.tnic>
+ <645E4ED5-F6EE-4F8F-A990-81F19ED82BFA@nutanix.com>
+ <Ymw9UZDpXym2vXJs@zn.tnic>
+ <YmxKqpWFvdUv+GwJ@google.com>
+ <YmxRnwSUBIkOIjLA@zn.tnic>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
-        Gecko/20100101 Thunderbird/91.8.0
-Subject: Re: [PATCH 1/2] rpmsg: Fix calling device_lock() on non-initialized
- device
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20220429195946.1061725-2-krzysztof.kozlowski@linaro.org>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuphleLIzCtJLcpLzFFi42LZduzneV2N+Jwkg64FBhan979jsWhevJ7N
-        Yu/rrewWl3fNYbNoPq9ksXXPASYHNo871/aweeyfu4bd4/MmuQDmKC6blNSczLLUIn27BK6M
-        Syf+MBe0G1Qs3bKMsYHxqVoXIyeHhICJxLvHVxm7GLk4hARWMEqc7ljEBOF8YZR4+2Y1G0iV
-        kMBnRolth5hhOu5sn8YCUbScUaLx6Reojo+MEt33zoNV8QrYSUxZcoEFxGYRUJX4u+krVFxQ
-        4uTMJ2BxUYEkibn77oHFhQVCJTYuusAEYjMLiEvcejIfbKiIQDeTxOlV+8CK2AQMJbredoGd
-        xCngJrFu1mJmiAZ5ie1v5zCDNEgI7OGQWLdwISPErS4Sd9fuZoOwhSVeHd/CDmHLSJye3AN0
-        BQeQnS/xd4YxRLhC4trrNVBvWkvcOfeLDaSEWUBTYv0ufYiwo8TcWzOYITr5JG68FYS4gE9i
-        0rbpUGFeiY42IYhqNYlZx9fB7Tx44RLUcA+Jtt332SYwKs5CCpRZSJ6fheSvWQg3LGBkWcUo
-        nlpanJueWmyUl1quV5yYW1yal66XnJ+7iRGYYE7/O/5lB+PyVx/1DjEycTAeYpTgYFYS4f2y
-        OyNJiDclsbIqtSg/vqg0J7X4EKM0B4uSOG9y5oZEIYH0xJLU7NTUgtQimCwTB6dUA1NNQKXS
-        5/dPQqakHP8pmbrvzimT4+qXS/v51eeUsfqEzg1xf8jCK6jK8val7X/rbbN8Vf2z3W6+vpzY
-        cLhNTGVxx8kZVeoiEsqHN3DYPsgulKpp6Px/7EPG5wN5xct5Pc7oSzdaCPhHXtln6MJwLDM4
-        zt0l59Ta78KHU6zvCDt07HdVT3x6XTjlrtb0sHltf2N2yRn2vRZWOp7aIZjB9e+sZcIXlYwl
-        7X/vcx3/1pAQuOl2gpRxZAhrSdXmuqdCnBPyJS62L+wQP2OkpLZX9W/50WkXRJ/sX8zLP3X1
-        dn/jvtWTbkUxx7lWPqtxTEx/of+h/Hx9ZdgyqYi7b5792xvN2X3vXvFTxV0FH98zKbEUZyQa
-        ajEXFScCADwCXpqfAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprKIsWRmVeSWpSXmKPExsVy+t/xu7oa8TlJBp9+81uc3v+OxaJ58Xo2
-        i72vt7JbXN41h82i+bySxdY9B5gc2DzuXNvD5rF/7hp2j8+b5AKYo/RsivJLS1IVMvKLS2yV
-        og0tjPQMLS30jEws9QyNzWOtjEyV9O1sUlJzMstSi/TtEvQyLp34w1zQblCxdMsyxgbGp2pd
-        jJwcEgImEne2T2MBsYUEljJKnF7uABGXkTg5rYEVwhaW+HOti62LkQuo5j2jRPes3WAJXgE7
-        iSlLLoA1swioSvzd9JUZIi4ocXLmE7C4qECSxIttzxlBbGGBUImNiy4wgdjMAuISt57MZwIZ
-        KiLQyyRxcMkbqA1XGSWW7tsBVsUmYCjR9RZkNScHp4CbxLpZi5khus0kurZ2MULY8hLb385h
-        nsAoOAvJ8llIlsxC0jILScsCRpZVjCKppcW56bnFhnrFibnFpXnpesn5uZsYgfGz7djPzTsY
-        5736qHeIkYmD8RCjBAezkgjvl90ZSUK8KYmVValF+fFFpTmpxYcYTYEhMJFZSjQ5HxjBeSXx
-        hmYGpoYmZpYGppZmxkrivJ4FHYlCAumJJanZqakFqUUwfUwcnFINTBvXB2zSC/BYrWT4R/Xy
-        4+dcyZKnXZfeaLkqK6Y4+cIDn8OfWr/eeHJqb13sb5UgwZPtt7okQqWjBFY7rjqWV3PhgnxJ
-        ucWDFdOWT1asNCwO/Jm77cm1k/XTrUPjvSQ7f/zUe9jXGMzPO2NGzf5Gy/79kRJbJ4kf0978
-        5K5W2kfR9Xf7dp6SYCo9uIrbfzaPyFONLRFHuzbu2jsjUmie1c8Xk98X36v+kvdL5bj+7Ulb
-        pKbd3sFU/tdD0v552dXdB5ZJLdol+L/Xjb9gW5CBnDbrV3+tSayrnEq5XIP4v+ddDKtn+qtm
-        sPuuir2Gxdb2orOW3y8Ide7lMlvRk9fANvPilSWtXs1CVWrqIbIT9iuxFGckGmoxFxUnAgAd
-        HO30KAMAAA==
-X-CMS-MailID: 20220429215656eucas1p28b290e1a8b4eb96d78bdad84163b9b6b
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20220429195958eucas1p11ae281abca3e039a337cf46be15d8b86
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220429195958eucas1p11ae281abca3e039a337cf46be15d8b86
-References: <20220429195946.1061725-1-krzysztof.kozlowski@linaro.org>
-        <CGME20220429195958eucas1p11ae281abca3e039a337cf46be15d8b86@eucas1p1.samsung.com>
-        <20220429195946.1061725-2-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YmxRnwSUBIkOIjLA@zn.tnic>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29.04.2022 21:59, Krzysztof Kozlowski wrote:
-> driver_set_override() helper uses device_lock() so it should not be
-> called before rpmsg_register_device() (which calls device_register()).
-> Effect can be seen with CONFIG_DEBUG_MUTEXES:
->
->    DEBUG_LOCKS_WARN_ON(lock->magic != lock)
->    WARNING: CPU: 3 PID: 57 at kernel/locking/mutex.c:582 __mutex_lock+0x1ec/0x430
->    ...
->    Call trace:
->     __mutex_lock+0x1ec/0x430
->     mutex_lock_nested+0x44/0x50
->     driver_set_override+0x124/0x150
->     qcom_glink_native_probe+0x30c/0x3b0
->     glink_rpm_probe+0x274/0x350
->     platform_probe+0x6c/0xe0
->     really_probe+0x17c/0x3d0
->     __driver_probe_device+0x114/0x190
->     driver_probe_device+0x3c/0xf0
->     ...
->
-> Refactor the rpmsg_register_device() function to use two-step device
-> registering (initialization + add) and call driver_set_override() in
-> proper moment.
->
-> This moves the code around, so while at it also NULL-ify the
-> rpdev->driver_override in error path to be sure it won't be kfree()
-> second time.
->
-> Fixes: 42cd402b8fd4 ("rpmsg: Fix kfree() of static memory on setting driver_override")
-> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> ---
->
-> Commit SHA from linux-next - Greg's tree.
-> ---
->   drivers/rpmsg/rpmsg_core.c     | 33 ++++++++++++++++++++++++++++++---
->   drivers/rpmsg/rpmsg_internal.h | 14 +-------------
->   drivers/rpmsg/rpmsg_ns.c       | 14 +-------------
->   include/linux/rpmsg.h          |  8 ++++++++
->   4 files changed, 40 insertions(+), 29 deletions(-)
->
-> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
-> index 95fc283f6af7..4938fc4eff00 100644
-> --- a/drivers/rpmsg/rpmsg_core.c
-> +++ b/drivers/rpmsg/rpmsg_core.c
-> @@ -593,24 +593,51 @@ static struct bus_type rpmsg_bus = {
->   	.remove		= rpmsg_dev_remove,
->   };
->   
-> -int rpmsg_register_device(struct rpmsg_device *rpdev)
-> +/*
-> + * A helper for registering rpmsg device with driver override and name.
-> + * Drivers should not be using it, but instead rpmsg_register_device().
-> + */
-> +int rpmsg_register_device_override(struct rpmsg_device *rpdev,
-> +				   const char *driver_override)
->   {
->   	struct device *dev = &rpdev->dev;
->   	int ret;
->   
-> +	if (driver_override)
-> +		strcpy(rpdev->id.name, driver_override);
-> +
->   	dev_set_name(&rpdev->dev, "%s.%s.%d.%d", dev_name(dev->parent),
->   		     rpdev->id.name, rpdev->src, rpdev->dst);
->   
->   	rpdev->dev.bus = &rpmsg_bus;
->   
-> -	ret = device_register(&rpdev->dev);
-> +	device_initialize(dev);
-> +	if (driver_override) {
-> +		ret = driver_set_override(dev, &rpdev->driver_override,
-> +					  driver_override,
-> +					  strlen(driver_override));
-> +		if (ret) {
-> +			dev_err(dev, "device_set_override failed: %d\n", ret);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	ret = device_add(dev);
->   	if (ret) {
-> -		dev_err(dev, "device_register failed: %d\n", ret);
-> +		dev_err(dev, "device_add failed: %d\n", ret);
-> +		kfree(rpdev->driver_override);
-> +		rpdev->driver_override = NULL;
->   		put_device(&rpdev->dev);
->   	}
->   
->   	return ret;
->   }
-> +EXPORT_SYMBOL(rpmsg_register_device_override);
-> +
-> +int rpmsg_register_device(struct rpmsg_device *rpdev)
-> +{
-> +	return rpmsg_register_device_override(rpdev, NULL);
-> +}
->   EXPORT_SYMBOL(rpmsg_register_device);
->   
->   /*
-> diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
-> index 3e81642238d2..a22cd4abe7d1 100644
-> --- a/drivers/rpmsg/rpmsg_internal.h
-> +++ b/drivers/rpmsg/rpmsg_internal.h
-> @@ -94,19 +94,7 @@ int rpmsg_release_channel(struct rpmsg_device *rpdev,
->    */
->   static inline int rpmsg_ctrldev_register_device(struct rpmsg_device *rpdev)
->   {
-> -	int ret;
-> -
-> -	strcpy(rpdev->id.name, "rpmsg_ctrl");
-> -	ret = driver_set_override(&rpdev->dev, &rpdev->driver_override,
-> -				  rpdev->id.name, strlen(rpdev->id.name));
-> -	if (ret)
-> -		return ret;
-> -
-> -	ret = rpmsg_register_device(rpdev);
-> -	if (ret)
-> -		kfree(rpdev->driver_override);
-> -
-> -	return ret;
-> +	return rpmsg_register_device_override(rpdev, "rpmsg_ctrl");
->   }
->   
->   #endif
-> diff --git a/drivers/rpmsg/rpmsg_ns.c b/drivers/rpmsg/rpmsg_ns.c
-> index 8eb8f328237e..c70ad03ff2e9 100644
-> --- a/drivers/rpmsg/rpmsg_ns.c
-> +++ b/drivers/rpmsg/rpmsg_ns.c
-> @@ -20,22 +20,10 @@
->    */
->   int rpmsg_ns_register_device(struct rpmsg_device *rpdev)
->   {
-> -	int ret;
-> -
-> -	strcpy(rpdev->id.name, "rpmsg_ns");
-> -	ret = driver_set_override(&rpdev->dev, &rpdev->driver_override,
-> -				  rpdev->id.name, strlen(rpdev->id.name));
-> -	if (ret)
-> -		return ret;
-> -
->   	rpdev->src = RPMSG_NS_ADDR;
->   	rpdev->dst = RPMSG_NS_ADDR;
->   
-> -	ret = rpmsg_register_device(rpdev);
-> -	if (ret)
-> -		kfree(rpdev->driver_override);
-> -
-> -	return ret;
-> +	return rpmsg_register_device_override(rpdev, "rpmsg_ns");
->   }
->   EXPORT_SYMBOL(rpmsg_ns_register_device);
->   
-> diff --git a/include/linux/rpmsg.h b/include/linux/rpmsg.h
-> index 20c8cd1cde21..523c98b96cb4 100644
-> --- a/include/linux/rpmsg.h
-> +++ b/include/linux/rpmsg.h
-> @@ -165,6 +165,8 @@ static inline __rpmsg64 cpu_to_rpmsg64(struct rpmsg_device *rpdev, u64 val)
->   
->   #if IS_ENABLED(CONFIG_RPMSG)
->   
-> +int rpmsg_register_device_override(struct rpmsg_device *rpdev,
-> +				   const char *driver_override);
->   int rpmsg_register_device(struct rpmsg_device *rpdev);
->   int rpmsg_unregister_device(struct device *parent,
->   			    struct rpmsg_channel_info *chinfo);
-> @@ -192,6 +194,12 @@ ssize_t rpmsg_get_mtu(struct rpmsg_endpoint *ept);
->   
->   #else
->   
-> +static inline int rpmsg_register_device_override(struct rpmsg_device *rpdev,
-> +						 const char *driver_override)
-> +{
-> +	return -ENXIO;
-> +}
-> +
->   static inline int rpmsg_register_device(struct rpmsg_device *rpdev)
->   {
->   	return -ENXIO;
+On Fri, Apr 29, 2022, Borislav Petkov wrote:
+> On Fri, Apr 29, 2022 at 08:29:30PM +0000, Sean Christopherson wrote:
+> > That's why there's a bunch of hand-waving.
+> 
+> Well, I'm still not sure what this patch is trying to fix but both your
+> latest replies do sound clearer...
+> 
+> > Can you clarify what "this" is?  Does "this" mean "this patch", or does it mean
+> 
+> This patch.
+> 
+> > "this IBPB when switching vCPUs"?  Because if it means the latter, then I think
+> > you're in violent agreement; the IBPB when switching vCPUs is pointless and
+> > unnecessary.
+> 
+> Ok, let's concentrate on the bug first - whether a second IBPB - so to
+> speak - is needed. Doing some git archeology points to:
+> 
+>   15d45071523d ("KVM/x86: Add IBPB support")
+> 
+> which - and I'm surprised - goes to great lengths to explain what
+> those IBPB calls in KVM protect against. From that commit message, for
+> example:
+> 
+> "    * Mitigate attacks from guest/ring3->host/ring3.
+>       These would require a IBPB during context switch in host, or after
+>       VMEXIT."
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+Except that snippet changelog doesn't actually state what KVM does, it states what
+a hypervsior _could_ do to protect the host from the guest via IBPB.
 
+> so with my very limited virt understanding, when you vmexit, you don't
+> do switch_mm(), right?
+
+Correct, but KVM also doesn't do IBPB on VM-Exit (or VM-Entry), nor does KVM do
+IBPB before exiting to userspace.  The IBPB we want to whack is issued only when
+KVM is switching vCPUs.
+
+> If so, you need to do a barrier. Regardless of conditional IBPB or not
+> as you want to protect the host from a malicious guest.
+> 
+> In general, the whole mitigation strategies are enumerated in
+> 
+> Documentation/admin-guide/hw-vuln/spectre.rst
+> 
+> There's also a "3. VM mitigation" section.
+> 
+> And so on...
+> 
+> Bottomline is this: at the time, we went to great lengths to document
+> what the attacks are and how we are protecting against them.
+
+Except that _none_ of that documentation explains why the hell KVM does IBPB when
+switching betwen vCPUs.  The only item is this snippet from the changelog:
+
+    * Mitigate guests from being attacked by other guests.
+      - This is addressed by issing IBPB when we do a guest switch.
+
+And that's the one that I pointed out in v1 as being flawed/wrong, and how Jon
+ended up with this patch.
+
+  : But stepping back, why does KVM do its own IBPB in the first place?  The goal is
+  : to prevent one vCPU from attacking the next vCPU run on the same pCPU.  But unless
+  : userspace is running multiple VMs in the same process/mm_struct, switching vCPUs,
+  : i.e. switching tasks, will also switch mm_structs and thus do IPBP via cond_mitigation.
+  :
+  : If userspace runs multiple VMs in the same process, enables cond_ipbp, _and_ sets
+  : TIF_SPEC_IB, then it's being stupid and isn't getting full protection in any case,
+  : e.g. if userspace is handling an exit-to-userspace condition for two vCPUs from
+  : different VMs, then the kernel could switch between those two vCPUs' tasks without
+  : bouncing through KVM and thus without doing KVM's IBPB.
+  :
+  : I can kinda see doing this for always_ibpb, e.g. if userspace is unaware of spectre
+  : and is naively running multiple VMs in the same process.
+  :
+  : What am I missing?

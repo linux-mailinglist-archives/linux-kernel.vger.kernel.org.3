@@ -2,72 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C61B251416D
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 06:26:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C1DA514174
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 06:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237299AbiD2E3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 00:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55204 "EHLO
+        id S237376AbiD2Ehg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 00:37:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiD2E3v (ORCPT
+        with ESMTP id S230133AbiD2Ehf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 00:29:51 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732205044B;
-        Thu, 28 Apr 2022 21:26:33 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id v64-20020a1cac43000000b0038cfd1b3a6dso6339839wme.5;
-        Thu, 28 Apr 2022 21:26:33 -0700 (PDT)
+        Fri, 29 Apr 2022 00:37:35 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247CA8A9FD;
+        Thu, 28 Apr 2022 21:34:17 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id cx11-20020a17090afd8b00b001d9fe5965b3so7583477pjb.3;
+        Thu, 28 Apr 2022 21:34:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Qmzf5Rpe4BAYEcfLY1mu6024biZhz8XXL3oPqQFDltc=;
-        b=PjAh5/xGD32XZjaKZ5LBIsxhVSQPVuMOKUhwHS8hmQjFiCJMkA6rFenyhGDMPzv/0t
-         e6tx20JtZm2W6f60Q97OIA2p9Zs3qDnvNuVoWppviX0iqEv0OBsDFiBge4N8y9H1Bhfo
-         P3FemlqPN7Uyd00HSbym99eWdrMaeQ0813fczm7/t0FO1DI1NTct6eC3cCpCRqZJUxJZ
-         YVgZCZzQPgWtcmRqD0+tZ6LMnjFIJoHeFoucfQY616RCv52427qgI8zgqksc2V0RLdDG
-         jfME1RQRPPtusQu5Ti1J0HqxgHX5cv5KwvjQHphC8MemZ3h22vM3PNJAqJtpACK6hQQq
-         nGMg==
+         :cc;
+        bh=evyUHOqOn3TXKm02pc1sLqPIBDCTJ+500dIEM+PwO1Q=;
+        b=Xbr0A4/YrpGb8LHdyrQj7Uvb273qfk6dEk+N6FmUaLsp9XdYkONWGAZxnE53NyrrG2
+         TjTRbMuxublHgZAmC/DK4+MTdVRbaGOO5SSvAt8jNuxEfBE189aLZT8Z4K+STordTbN0
+         KdP6DaFtYLoOJKmEyV0yvkfMozHG7hmtZERXkriUcDPGAaAc/MtnJaajcb8yM8LXe3AI
+         FLv8ewTJ/zdfqf2SDfN91k3qeGs7EgUT66+TnsqhOx1kH0zFIzRDd8ezVOA/nzAHNOP3
+         RXSCbhi6QM86Xkei0TbKBRwzBAerdyXK7/TMmAhMZ3agjlL0y8f+arA7arBD9jwSvopS
+         4h2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Qmzf5Rpe4BAYEcfLY1mu6024biZhz8XXL3oPqQFDltc=;
-        b=Rcv2W6Pvqk1tUjNI0SSIt9fDIuuS7ZALq+9cs7nsPxnTN63vc4KVK3oOUQPYnupqx+
-         LYLa1vbCqiyrz06kPcU4oYqKk4JJ/wuIIwmb2Axclzjs7PB4vAuVJvMrl19+py3f6RP/
-         U0wxROc615ALX9aFX7aAABv3f0Maa0nlwJhNFbIvd+UcJyj5FHKW8KwwXs2vvAThB3Vc
-         ty0TOh3VZycH3GDieiv5cg9YCDsrjEnv6s0LrMKsuoKVUGHc6EHHw/GWygRR1Z0SH9jE
-         LCc4oXx19K2JT+GSkUJ+qtmaqmoVaSy6E7jEwxZh/EYDi4KogzW3gKy7yDE8hKkLpCmK
-         UjDg==
-X-Gm-Message-State: AOAM533eEMEN9senieD1qGUfUaK8XJc666Rb+F934QlYSSzrUvbbd+96
-        pkk7503QN4NkxYdCGnkbrlOnS+P43Nqq7QnKwdY=
-X-Google-Smtp-Source: ABdhPJxmlsLKQ0g/Bey9oPabETfJX65n2wu+SZgjNufxp/w3P+/FGsiyVHNlhVVK+0ytDEK37Fx6ERY1QV/679zMOac=
-X-Received: by 2002:a7b:c0cb:0:b0:38e:bac7:3c40 with SMTP id
- s11-20020a7bc0cb000000b0038ebac73c40mr1330883wmh.6.1651206391974; Thu, 28 Apr
- 2022 21:26:31 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=evyUHOqOn3TXKm02pc1sLqPIBDCTJ+500dIEM+PwO1Q=;
+        b=eYijC940CsO2LBTle9UEInmjlhPUcq3KoPfMQOhaphSITuCAdA1CnL5UTig5s5PedH
+         bUC993ws1nXkIM4WvzYH52K3K8lL209b07/G6DSXlOqRkQHeYdC5sLDNQBjoS1T2J0Qj
+         xMPjvaOJVB/EsO87/ZqmG9VKrQ3dc15OzBNCWJur+UTEerrZiJBR+bSFKHeIzxS6i7kj
+         RzfhQijegoAUlInCtjt2L2213I/C5r2jCdXbU5uOHcXzQsZ63wmVk4fYd444hlM1sxy9
+         xuPCbkvBMIKNExHhbhiLD4iRrvEA9nS5Pbejunu5wQEiSCH8j+Bkvs2sYtFVN1CUWIpr
+         qpXw==
+X-Gm-Message-State: AOAM5308evTJ10Kcij/m2DO1l8Dxl3u4PTGoyocGi01x+wmohsfINFWW
+        Qf5RUiT5HZDFAegXhwgOx2dFnRHiFjhHsWYreVg=
+X-Google-Smtp-Source: ABdhPJz+N6SLkD7HusZ2PQAqngkmUnrQp6p3IGUSpB0v/dVKrkW6Qn4I/U1uv89fGoPc1oW58LodLZVIyMg4jqJ1AM8=
+X-Received: by 2002:a17:90b:4d86:b0:1da:3cba:bd56 with SMTP id
+ oj6-20020a17090b4d8600b001da3cbabd56mr1871622pjb.116.1651206856476; Thu, 28
+ Apr 2022 21:34:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220419142458.884933-1-gengcixi@gmail.com> <20220424183443.2382ef9c@jic23-huawei>
-In-Reply-To: <20220424183443.2382ef9c@jic23-huawei>
-From:   Cixi Geng <gengcixi@gmail.com>
-Date:   Fri, 29 Apr 2022 12:25:55 +0800
-Message-ID: <CAF12kFuROw9OFPwk0JFDrAgyTycK2zBJsCAPzN2s0SbBDp9KxA@mail.gmail.com>
-Subject: Re: [PATCH V4 0/7] iio: adc: sc27xx: adjust structure and add PMIC's support
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        Orson Zhai <orsonzhai@gmail.com>,
-        "baolin.wang7@gmail.com" <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        =?UTF-8?B?5pyx546J5piOIChZdW1pbmcgWmh1LzExNDU3KQ==?= 
-        <yuming.zhu1@unisoc.com>, linux-iio@vger.kernel.org,
-        Devicetree List <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220322115148.3870-1-dharamhans87@gmail.com> <20220322115148.3870-2-dharamhans87@gmail.com>
+ <CAJfpegtunCe5hV1b9cKJgPk44B2SQgtK3RG5r2is8V5VrMYeNg@mail.gmail.com>
+ <CACUYsyGmab57_efkXRXD8XvO6Stn4JbJM8+NfBHNKQ+FLcA7nA@mail.gmail.com>
+ <CAJfpegt5qWE4UepoDj9QBuT--ysT6+7E-6ZQvNeZ+bODRHHCvg@mail.gmail.com> <CACUYsyFrP5UDOJKCLOr+PeHjnh9RV=wWOBRFN31-Fr-gi1d2WA@mail.gmail.com>
+In-Reply-To: <CACUYsyFrP5UDOJKCLOr+PeHjnh9RV=wWOBRFN31-Fr-gi1d2WA@mail.gmail.com>
+From:   Dharmendra Hans <dharamhans87@gmail.com>
+Date:   Fri, 29 Apr 2022 10:04:04 +0530
+Message-ID: <CACUYsyGuHEM8U6qsqEE_=mUcAgAFzCYuCLcCtiBf1CGirLE95Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] FUSE: Implement atomic lookup + open
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     linux-fsdevel@vger.kernel.org,
+        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org, Dharmendra Singh <dsingh@ddn.com>,
+        Bernd Schubert <bschubert@ddn.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,64 +71,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jonathan Cameron <jic23@kernel.org> =E4=BA=8E2022=E5=B9=B44=E6=9C=8825=E6=
-=97=A5=E5=91=A8=E4=B8=80 01:26=E5=86=99=E9=81=93=EF=BC=9A
+On Mon, Apr 25, 2022 at 4:13 PM Dharmendra Hans <dharamhans87@gmail.com> wrote:
 >
-> On Tue, 19 Apr 2022 22:24:51 +0800
-> Cixi Geng <gengcixi@gmail.com> wrote:
->
-> > From: Cixi Geng <cixi.geng1@unisoc.com>
+> On Mon, Apr 25, 2022 at 1:08 PM Miklos Szeredi <miklos@szeredi.hu> wrote:
 > >
-> > this patchset add a sc27xx_adc_variant_data structure
-> > and add sc272*,sc273* and ump9620 PMIC support.
->
-> Series applied with the minor tweaks I've called out in replies
-> to individual patches.
-Thank you very much,I am very appreciated for your patience and sugestion
->
-> Applied to the togreg branch of iio.git and pushed out as testing
-> for 0-day to see if it can find anything we missed.
->
-> Thanks,
->
-> Jonathan
->
+> > On Mon, 25 Apr 2022 at 07:26, Dharmendra Hans <dharamhans87@gmail.com> wrote:
+> > >
+> > > On Fri, Apr 22, 2022 at 8:59 PM Miklos Szeredi <miklos@szeredi.hu> wrote:
+> > > >
+> > > > On Tue, 22 Mar 2022 at 12:52, Dharmendra Singh <dharamhans87@gmail.com> wrote:
+> > > > >
+> > > > > From: Dharmendra Singh <dsingh@ddn.com>
+> > > > >
+> > > > > There are couple of places in FUSE where we do agressive
+> > > > > lookup.
+> > > > > 1) When we go for creating a file (O_CREAT), we do lookup
+> > > > > for non-existent file. It is very much likely that file
+> > > > > does not exists yet as O_CREAT is passed to open(). This
+> > > > > lookup can be avoided and can be performed  as part of
+> > > > > open call into libfuse.
+> > > > >
+> > > > > 2) When there is normal open for file/dir (dentry is
+> > > > > new/negative). In this case since we are anyway going to open
+> > > > > the file/dir with USER space, avoid this separate lookup call
+> > > > > into libfuse and combine it with open.
+> > > > >
+> > > > > This lookup + open in single call to libfuse and finally to
+> > > > > USER space has been named as atomic open. It is expected
+> > > > > that USER space open the file and fills in the attributes
+> > > > > which are then used to make inode stand/revalidate in the
+> > > > > kernel cache.
+> > > > >
+> > > > > Signed-off-by: Dharmendra Singh <dsingh@ddn.com>
+> > > > > ---
+> > > > > v2 patch includes:
+> > > > > - disabled o-create atomicity when the user space file system
+> > > > >   does not have an atomic_open implemented. In principle lookups
+> > > > >   for O_CREATE also could be optimized out, but there is a risk
+> > > > >   to break existing fuse file systems. Those file system might
+> > > > >   not expect open O_CREATE calls for exiting files, as these calls
+> > > > >   had been so far avoided as lookup was done first.
+> > > >
+> > > > So we enabling atomic lookup+create only if FUSE_DO_ATOMIC_OPEN is
+> > > > set.  This logic is a bit confusing as CREATE is unrelated to
+> > > > ATOMIC_OPEN.   It would be cleaner to have a separate flag for atomic
+> > > > lookup+create.  And in fact FUSE_DO_ATOMIC_OPEN could be dropped and
+> > > > the usual logic of setting fc->no_atomic_open if ENOSYS is returned
+> > > > could be used instead.
+> > >
+> > > I am aware that ATOMIC_OPEN is not directly related to CREATE. But
+> > > This is more of feature enabling by using the flag. If we do not
+> > > FUSE_DO_ATOMIC_OPEN, CREATE calls would not know that it need to
+> > > optimize lookup calls otherwise as we know only from open call that
+> > > atomic open is implemented.
 > >
-> > v2 changes:
-> >   fix dt_binding_check error
-> >   adjust some code-style issue
-> >   optimize the copy-paste functions
-> >   the smatch warnings found by lkp
-> >   and  ohter comments by v1 patches.
+> > Right.  So because the atomic lookup+crteate would need a new flag to
+> > return whether the file was created or not, this is probably better
+> > implemented as a completely new request type (FUSE_ATOMIC_CREATE?)
 > >
-> > v3 changes:
-> >   fix nvmem-cells Items value and add ump9620 dt sample
-> >   add the correct signature for each patch
-> >   fix the unused warning in 3/7, add explain for set the scales
-> >   remove duplicate code,add goto label in sc27xx_adc_read
-> >   pull out the refactor code into a single patch
-> >   delete the suspend and resume pm for ump9620
-> >
-> > v4 changes:
-> >   Add fix tag in the 2/7 patch.
-> >   Separate modification and refactoring 3/7(v3) to 2 pathes.
-> >   remove the pmic_type struct instead of a boot set_volref
-> >   to define the specific feathure.
-> >   use switch statement in all scale_init functions.
-> >   remove ump9620 pmic support in this patchset, submit separately
-> >   in the next patches.
-> >
-> > Cixi Geng (7):
-> >   dt-bindings:iio:adc: add sprd,ump9620-adc dt-binding
-> >   iio: adc: sc27xx: fix read big scale voltage not right
-> >   iio: adc: Fine tune the scale calibration values
-> >   iio: adc: sc27xx: structure adjustment and optimization
-> >   iio: adc: refactor some functions for support more PMiCs
-> >   iio: adc: sc27xx: add support for PMIC sc2720 and sc2721
-> >   iio: adc: sc27xx: add support for PMIC sc2730
-> >
-> >  .../bindings/iio/adc/sprd,sc2720-adc.yaml     |  59 ++-
-> >  drivers/iio/adc/sc27xx_adc.c                  | 473 ++++++++++++++++--
-> >  2 files changed, 491 insertions(+), 41 deletions(-)
-> >
+> > No new INIT flags needed at all, since we can use the ENOSYS mechanism
+> > to determine whether the filesystem has atomic open/create ops or not.
 >
+> Yes, it sounds good to have a separate request type for CREATE. I
+> would separate out the patch into two for create and open.  Will omit
+> INIT flags. Also, I would change libfuse code accordingly.
+
+Actually when writing the code, I observe that not having INIT flags
+works fine for atomic create but it does not work well for atomic
+open case considering specially 3rd  patch which optimises
+d_revalidate() lookups.
+(https://lore.kernel.org/linux-fsdevel/20220322115148.3870-3-dharamhans87@gmail.com/,
+ we did not receive any comments on it so far).
+So it looks like we need INIT flags in atomic open case at least
+considering that 3rd patch would go in as well.

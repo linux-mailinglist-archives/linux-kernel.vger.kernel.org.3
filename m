@@ -2,90 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE830515855
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 00:23:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAEDD515858
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 00:25:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381426AbiD2W1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 18:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
+        id S1381466AbiD2W2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 18:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236352AbiD2W1E (ORCPT
+        with ESMTP id S236352AbiD2W2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 18:27:04 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576FFDC9B9
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 15:23:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-        In-Reply-To:References; bh=iOIJ1Kr+mtstrHF5VkGvwL6t99fgCHEkIg1mM2125l4=; b=hI
-        Qmahk/3EuTVhlkQAshosyxgUq1CeOh1x684yCnU5NNyKy+l9SlL4Pmpc4sfKlWaj+4+3bx3LPSwdn
-        VuCBOGvCOXryUJgVYy1KMJeC+zvGvQX0HbemDKesSNArm1AEA7ODXDL06Z7kIa4MOQES5hHv8gMGF
-        sA+IHsYa8VA1WGI=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nkZ1S-000YOK-PN; Sat, 30 Apr 2022 00:23:34 +0200
-Date:   Sat, 30 Apr 2022 00:23:34 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] irqchip/armada-370-xp: Do not touch Performance
- Counter Overflow on A375, A38x, A39x
-Message-ID: <YmxlZncjVnym4kfc@lunn.ch>
-References: <20220425113706.29310-1-pali@kernel.org>
- <YmvYrFUfIUvfjrmY@lunn.ch>
- <20220429130524.vs6mlzvotvaortbw@pali>
+        Fri, 29 Apr 2022 18:28:15 -0400
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741ABDC9BE;
+        Fri, 29 Apr 2022 15:24:55 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-e68392d626so9493525fac.4;
+        Fri, 29 Apr 2022 15:24:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YCmqAAnVLNhsmckgTlfLUmtn3Y/KcNNFdVhyuvsnwxk=;
+        b=s1ov+1J53nOyTKj4Q2UHwaKxpaWN61gj/rzaCv1SRProg2Qo7Zh8ddFyFxTLGVCvLW
+         ajX0vl5WpmTz+lACxcrI8pGqv5KOovIrZG7xgTm9m6fTdjAMMf7SzhFTfVVTJN3myO+x
+         JPTewKgYFVmV5BTkH7qXFDQ+Sg7Kf3igJktaNUiR7MFlZNjhM5Oil4IUlsHxeWUYaYVf
+         KV4OYgTr/Ud6akBvnydTQgPccCL7ipptWR5V9Au/hie39jD6TLVMw/vFZyueetJ1nzVn
+         TcDHULzj55OmG1t4+WcbkyO0ad6CcgDdntZy4ZkyauptjLp9kJe9dtpeT5BN/sfopWlf
+         40FQ==
+X-Gm-Message-State: AOAM533Un+T1uAHTOoQup8+Fkrs5eqYSA4DB3nHOofmrWRtf+6InrngK
+        ofAo21gPYJsFAkzqrgGq/g==
+X-Google-Smtp-Source: ABdhPJzS0Uoy4UmKVrQb0X16U9pcJorx5GejXUvMVqyAWpQOS/LlOWe43Zwwmb3Hu2WJvgqltwr4+A==
+X-Received: by 2002:a05:6870:d354:b0:e2:6a0a:6c1c with SMTP id h20-20020a056870d35400b000e26a0a6c1cmr659459oag.255.1651271094779;
+        Fri, 29 Apr 2022 15:24:54 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w11-20020a4adecb000000b0035eb4e5a6cesm1276713oou.36.2022.04.29.15.24.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 15:24:54 -0700 (PDT)
+Received: (nullmailer pid 3008594 invoked by uid 1000);
+        Fri, 29 Apr 2022 22:24:53 -0000
+Date:   Fri, 29 Apr 2022 17:24:53 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Paolo Abeni <pabeni@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>, Rob Herring <robh+dt@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v1 1/3] dt-bindings: net: micrel: add
+ coma-mode-gpios property
+Message-ID: <YmxltUykqdguwPko@robh.at.kernel.org>
+References: <20220427214406.1348872-1-michael@walle.cc>
+ <20220427214406.1348872-2-michael@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220429130524.vs6mlzvotvaortbw@pali>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220427214406.1348872-2-michael@walle.cc>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 03:05:24PM +0200, Pali Rohár wrote:
-> On Friday 29 April 2022 14:23:08 Andrew Lunn wrote:
-> > On Mon, Apr 25, 2022 at 01:37:05PM +0200, Pali Rohár wrote:
-> > > Register ARMADA_370_XP_INT_FABRIC_MASK_OFFS is Armada 370 and XP specific
-> > > and on new Armada platforms it has different meaning. It does not configure
-> > > Performance Counter Overflow interrupt masking. So do not touch this
-> > > register on non-A370/XP platforms (A375, A38x and A39x).
-> > 
-> > Hi Pali
-> > 
-> > Do the Armada 375, 38x and 39x have an over flow interrupt? I assume
-> > not.
+On Wed, 27 Apr 2022 23:44:04 +0200, Michael Walle wrote:
+> The LAN8814 has a coma mode pin which is used to put the PHY into
+> isolate and power-down mode. Usually strapped to be asserted by default.
+> A GPIO is then used to take the PHY out of this mode.
 > 
-> Hello! According to documentation there is something named performance
-> counter interrupt, but it is in different register... and this register
-> is not per-cpu.
-
-O.K, not something which can be quickly added. 
-
-> > Does this need a fixes tag? Should it be back ported in stable?
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+>  Documentation/devicetree/bindings/net/micrel.txt | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 > 
-> git blame show that this functionality appeared in commit 28da06dfd9e4
-> ("irqchip: armada-370-xp: Enable the PMU interrupts").
 
-It is more a question of:
-
- o It must fix a real bug that bothers people (not a, “This could be a
-   problem…” type thing).
-
-From https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-
-Have you seen bad things happen because of this?
-
-     Andrew
+Acked-by: Rob Herring <robh@kernel.org>

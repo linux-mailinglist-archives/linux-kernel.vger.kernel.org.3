@@ -2,88 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B33B515357
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37BB651535A
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 20:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376873AbiD2SKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 14:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54596 "EHLO
+        id S1379897AbiD2SK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 14:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238781AbiD2SKK (ORCPT
+        with ESMTP id S238781AbiD2SKY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 14:10:10 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5EA3131539
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 11:06:51 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E18121063;
-        Fri, 29 Apr 2022 11:06:50 -0700 (PDT)
-Received: from [10.1.196.40] (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 872E03F73B;
-        Fri, 29 Apr 2022 11:06:49 -0700 (PDT)
-Message-ID: <1322706e-5905-433b-5bc5-ed44f881b510@arm.com>
-Date:   Fri, 29 Apr 2022 19:06:43 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 03/14] iommu: Move bus setup to IOMMU device
- registration
-Content-Language: en-GB
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>, joro@8bytes.org,
-        will@kernel.org
-Cc:     jean-philippe@linaro.org, zhang.lyra@gmail.com,
-        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
-        thierry.reding@gmail.com, linux-arm-kernel@lists.infradead.org,
-        gerald.schaefer@linux.ibm.com
-References: <cover.1650890638.git.robin.murphy@arm.com>
- <1faba5b5c094379df3d99b8fec924ab50ad75482.1650890638.git.robin.murphy@arm.com>
- <0e459e6e-f236-7a58-970a-a47677a23b44@linux.intel.com>
- <fa0d0663-5393-c533-105a-85bd2e9e0649@arm.com>
-In-Reply-To: <fa0d0663-5393-c533-105a-85bd2e9e0649@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 29 Apr 2022 14:10:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACA53702C;
+        Fri, 29 Apr 2022 11:07:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 86D9F623F0;
+        Fri, 29 Apr 2022 18:07:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D73F9C385A7;
+        Fri, 29 Apr 2022 18:07:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651255624;
+        bh=mSFkB56paLoka0dzPl0EgpohsYsePcrkc8zGl0Dz5lU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=oGGPTPmX3b9+3Nx2vkcsRwNHW05mR8ZorE8p/TBGgUgsbgT2ChH4edob15SdvasFZ
+         rtMW7EE6lJLzwATAaU7CKw2qRWFfVKOcxc7syqaicv8wZbe7CqqkG1ajDALW0Db30Z
+         iQ4hIIIAhzQOeNnBC44xGAo21VQ5MKVvq+j8lp00yT5NeNdg1UCTIdDGvZ7kF/A2H2
+         ULP8YixKjFcWOHYkaPT7/pqOlzHmYXPyTYZu09YScJTTOwCEtGEGHeJnKNFn12S8FQ
+         c8l7FZQgZhSyMmWOSwpL31jh/k71rDJNVK1wU0/XceMoMGRfa+v6AmGkzumoZ8EYEG
+         QEIkxSj4A6+Mw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nkV1C-0080Ry-KV; Fri, 29 Apr 2022 19:07:02 +0100
+Date:   Fri, 29 Apr 2022 19:07:02 +0100
+Message-ID: <87o80j9321.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     linux-rockchip@lists.infradead.org,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Heiko Stuebner <heiko@sntech.de>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 3/5] PCI: rockchip-dwc: Add legacy interrupt support
+In-Reply-To: <20220429123832.2376381-4-pgwipeout@gmail.com>
+References: <20220429123832.2376381-1-pgwipeout@gmail.com>
+        <20220429123832.2376381-4-pgwipeout@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: pgwipeout@gmail.com, linux-rockchip@lists.infradead.org, lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com, bhelgaas@google.com, heiko@sntech.de, linux-pci@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/04/2022 9:50 am, Robin Murphy wrote:
-> On 2022-04-29 07:57, Baolu Lu wrote:
->> Hi Robin,
->>
->> On 2022/4/28 21:18, Robin Murphy wrote:
->>> Move the bus setup to iommu_device_register(). This should allow
->>> bus_iommu_probe() to be correctly replayed for multiple IOMMU instances,
->>> and leaves bus_set_iommu() as a glorified no-op to be cleaned up next.
->>
->> I re-fetched the latest patches on
->>
->> https://gitlab.arm.com/linux-arm/linux-rm/-/commits/iommu/bus
->>
->> and rolled back the head to "iommu: Cleanup bus_set_iommu".
->>
->> The test machine still hangs during boot.
->>
->> I went through the code. It seems that the .probe_device for Intel IOMMU
->> driver can't handle the probe replay well. It always assumes that the
->> device has never been probed.
+On Fri, 29 Apr 2022 13:38:29 +0100,
+Peter Geis <pgwipeout@gmail.com> wrote:
 > 
-> Hmm, but probe_iommu_group() is supposed to prevent the 
-> __iommu_probe_device() call even happening if the device *has* already 
-> been probed before :/
+> The legacy interrupts on the rk356x PCIe controller are handled by a
+> single muxed interrupt. Add IRQ domain support to the pcie-dw-rockchip
+> driver to support the virtual domain.
 > 
-> I've still got an old Intel box spare in the office so I'll rig that up 
-> and see if I can see what might be going on here...
+> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
 
-OK, on a Xeon with two DMAR units, this seems to boot OK with or without 
-patch #1, so it doesn't seem to be a general problem with replaying in 
-iommu_device_register(), or with platform devices. Not sure where to go 
-from here... :/
+Reviewed-by: Marc Zyngier <maz@kernel.org>
 
-Cheers,
-Robin.
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

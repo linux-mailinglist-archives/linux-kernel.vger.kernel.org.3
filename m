@@ -2,75 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE93514ECA
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E1B7514EBE
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378115AbiD2PPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 11:15:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34860 "EHLO
+        id S1377722AbiD2POK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 11:14:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378132AbiD2PPJ (ORCPT
+        with ESMTP id S238261AbiD2POH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 11:15:09 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9FCD4462;
-        Fri, 29 Apr 2022 08:11:50 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id l7so16066738ejn.2;
-        Fri, 29 Apr 2022 08:11:50 -0700 (PDT)
+        Fri, 29 Apr 2022 11:14:07 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BC3D445B
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:10:49 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 17so10903870lji.1
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:10:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SAsWIU2W3p7Q0ZXwzZUArSy317phcc7hhmyzyg+rjOE=;
-        b=LmHXoutrrKYA3NkvsF48dfb6fC6YhTRK1ftbNp4Gzpzi14cOaEzW3e9qqS1aYaPg6x
-         seWl5AUFEMU133I7Bo7NfL3WDL7fHEgWifWGj9kUEOdNJBkZsrydw9KmcwPC8sJjfPDi
-         3blnJu3dmZQvjRAwKsupb5f3lKmeSRR2VsMyKQ70aVa5uEC084uOLB7hSSVbCovLldr1
-         Uu5gwB08c70O5Z96MvTQayLOYGOf2AAgHdQ2O4LPoT49Bw3RC6Ul9B6uiR1IQrfrlhAG
-         6FlG0yRd8MVlzkuC90iI6kk3pXf0kp/A+Ok7WKhnrMtEAjCrimqxv1V2bO7CIUQyx+9b
-         PZIA==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=pBiFdJVBK7XJGcpZMBcNpezNa6QIqErstaAn3kJpmDo=;
+        b=dZwSRZ2uUt8/WpZywemY6gH9zX1bSy62uuhUOu5pOWQT+dn18k2SDQQu6GJeCR1fmI
+         B9i/eUnvM463HnUn9gPQ4mIHvkU2iyDkHZb6gVT4C6czaSHmrvBGn8LgplqbU9XWyyGU
+         J4w9GZKmjIVcfqj51GhpnuXtNWhRwHVmfxq8rrhs2c+yKxtv/p5YTOUohXke7TESuHwl
+         ngFhgzPPHRJotN6GR9+KG4f0FM0F+tyMW9UsJtBUtKHgKcdM7uXUD7PlGvKOFStGFvkC
+         ZRhqVMfg6QSxwiqmYL54PQdkBEtWRtax0cv5wzeGjGXGRBFFqty9gQWjVObdZ5Jwma+l
+         W+wA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SAsWIU2W3p7Q0ZXwzZUArSy317phcc7hhmyzyg+rjOE=;
-        b=O4jGzsc6TMreRcNHx6W1Sdy5G3SmvYBmEbtgxHlWOX5XSR1A8EB/ap1j44BaWgVGIu
-         TLlRQpsq+3JVQOUErQP1wN+SogEW6NB+pN6VbVwSXuJxT2ZdMJAD6K7mu/BXP0lK+t2T
-         sb7cTwH/RwiPLmO9jgt/S+F6JnaTIydbKNbrFCQ0aeVzMcpFDkm2eJmto2v2uHD5Z4KU
-         C1sMNb/SFkbqrH/6zFvHpdM6Y83JzCnLCXlIDQn0pJ5zwIU5Lrwu5d1djq7bPhk4srX6
-         swa+8zuDsRELPoR0g23GehoRi/pNk5TYV3BLroW3AAu11mGcQWeBjl0iokuMYeOhlZHe
-         7GHg==
-X-Gm-Message-State: AOAM532RTg4WkYUFs1fVS+NuKFZytMMgWUQIZD0vBbYLjuwyFOm2m9Ga
-        qzTWTGZ3IATWlETNHUhVnMk=
-X-Google-Smtp-Source: ABdhPJwTJtflClacx/dV6nHIRCHf6sS/C3krPJR9QkVUVkmk10jnwAYw/sT7Gv6/SRP0OpjpC18FyQ==
-X-Received: by 2002:a17:907:3e8c:b0:6f4:7bb:d548 with SMTP id hs12-20020a1709073e8c00b006f407bbd548mr1254390ejc.695.1651245108994;
-        Fri, 29 Apr 2022 08:11:48 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.gmail.com with ESMTPSA id zd21-20020a17090698d500b006f3ef214e4csm720411ejb.178.2022.04.29.08.11.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 08:11:48 -0700 (PDT)
-Message-ID: <626c0034.1c69fb81.d55d4.4f09@mx.google.com>
-X-Google-Original-Message-ID: <Ymv/oshQ1tmxwSDR@Ansuel-xps.>
-Date:   Fri, 29 Apr 2022 17:09:22 +0200
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sricharan R <sricharan@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=pBiFdJVBK7XJGcpZMBcNpezNa6QIqErstaAn3kJpmDo=;
+        b=Hn+N2ZI3k0VYHgDPuHdOzJaxJWiLMZQWs/9TJ0EsQQFtcnI7/Jx/8HOu7RtTKdMrmD
+         rMi4+avhJ8NIk+7BW6aMXF2McJNPtPp8wNC6oU67pmfZY5sJFSI8YIyhkqw8dji3paGT
+         w9jqzdvAwjOHtml97Qa0EWOIgG8f+sFoXS6eBrC2cBbw6W2L6IeoB1bims2DSSuI/qCw
+         t/2djmx4LE4bM14sDS+hpiA8LFChT+eDlqIZy1flRzfUIlcXIGwPBIpZMpVgFxpHNaeq
+         Pjkeozv3MSeKzUoZGhV+bGGk1G73tC1AFj7t8obKBfx028HfnMvhIz9kVV1aF81YC1u1
+         fHgQ==
+X-Gm-Message-State: AOAM531wQqcJJ7HDdNMzQrLxam8WxMGoOP7JOJOHDRHxw6yLyypHRqG8
+        6xvXdh20SzXr5WswIl34l+BSGW9/lJM=
+X-Google-Smtp-Source: ABdhPJwIjn/TgfjiVJ+PFQMmSwVNO9odm3G/qZjzSdU0Ck0X7LMwl8OoTfIdYYrpdzx9s+oxgWnlKg==
+X-Received: by 2002:a2e:9e8e:0:b0:24a:d2d4:4509 with SMTP id f14-20020a2e9e8e000000b0024ad2d44509mr24544459ljk.69.1651245047368;
+        Fri, 29 Apr 2022 08:10:47 -0700 (PDT)
+Received: from [192.168.1.7] ([212.22.223.21])
+        by smtp.gmail.com with ESMTPSA id i14-20020a198c4e000000b0044a279d25d2sm258572lfj.244.2022.04.29.08.10.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 08:10:46 -0700 (PDT)
+Subject: Re: [PATCH v2 19/19] xen/xenbus: eliminate xenbus_grant_ring()
+To:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] clk: qcom: clk-krait: add apq/ipq8064 errata
- workaround
-References: <20220429120108.9396-1-ansuelsmth@gmail.com>
- <20220429120108.9396-5-ansuelsmth@gmail.com>
- <1f013429-8a5b-47c8-a146-41bb66af3f03@linaro.org>
+Cc:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>
+References: <20220428082743.16593-1-jgross@suse.com>
+ <20220428082743.16593-20-jgross@suse.com>
+From:   Oleksandr <olekstysh@gmail.com>
+Message-ID: <bf14e3e1-fc4d-1eee-1dfb-1ba3423f0b6f@gmail.com>
+Date:   Fri, 29 Apr 2022 18:10:45 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1f013429-8a5b-47c8-a146-41bb66af3f03@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+In-Reply-To: <20220428082743.16593-20-jgross@suse.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,95 +76,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 06:00:45PM +0300, Dmitry Baryshkov wrote:
-> On 29/04/2022 15:01, Ansuel Smith wrote:
-> > Add apq/ipq8064 errata workaround where the sec_src clock gating needs to
-> > be disabled during switching. To enable this set disable_sec_src_gating
-> > in the mux struct.
-> > 
-> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > ---
-> >   drivers/clk/qcom/clk-krait.c | 16 ++++++++++++++++
-> >   drivers/clk/qcom/clk-krait.h |  1 +
-> >   drivers/clk/qcom/krait-cc.c  |  1 +
-> >   3 files changed, 18 insertions(+)
-> > 
-> > diff --git a/drivers/clk/qcom/clk-krait.c b/drivers/clk/qcom/clk-krait.c
-> > index 6c367ad6506a..4a9b3296c45b 100644
-> > --- a/drivers/clk/qcom/clk-krait.c
-> > +++ b/drivers/clk/qcom/clk-krait.c
-> > @@ -18,13 +18,23 @@
-> >   static DEFINE_SPINLOCK(krait_clock_reg_lock);
-> >   #define LPL_SHIFT	8
-> > +#define SECCLKAGD	BIT(4)
-> > +
-> >   static void __krait_mux_set_sel(struct krait_mux_clk *mux, int sel)
-> >   {
-> >   	unsigned long flags;
-> >   	u32 regval;
-> >   	spin_lock_irqsave(&krait_clock_reg_lock, flags);
-> > +
-> >   	regval = krait_get_l2_indirect_reg(mux->offset);
-> > +
-> > +	/* apq/ipq8064 Errata: disable sec_src clock gating during switch. */
-> > +	if (mux->disable_sec_src_gating) {
-> > +		regval |= SECCLKAGD;
-> > +		krait_set_l2_indirect_reg(mux->offset, regval);
-> > +	}
-> > +
-> >   	regval &= ~(mux->mask << mux->shift);
-> >   	regval |= (sel & mux->mask) << mux->shift;
-> >   	if (mux->lpl) {
-> > @@ -33,6 +43,12 @@ static void __krait_mux_set_sel(struct krait_mux_clk *mux, int sel)
-> >   	}
-> >   	krait_set_l2_indirect_reg(mux->offset, regval);
-> > +	/* apq/ipq8064 Errata: re-enabled sec_src clock gating. */
-> > +	if (mux->disable_sec_src_gating) {
-> > +		regval &= ~SECCLKAGD;
-> > +		krait_set_l2_indirect_reg(mux->offset, regval);
-> > +	}
-> > +
-> >   	/* Wait for switch to complete. */
-> >   	mb();
-> >   	udelay(1);
-> > diff --git a/drivers/clk/qcom/clk-krait.h b/drivers/clk/qcom/clk-krait.h
-> > index 9120bd2f5297..f930538c539e 100644
-> > --- a/drivers/clk/qcom/clk-krait.h
-> > +++ b/drivers/clk/qcom/clk-krait.h
-> > @@ -15,6 +15,7 @@ struct krait_mux_clk {
-> >   	u8		safe_sel;
-> >   	u8		old_index;
-> >   	bool		reparent;
-> > +	bool		disable_sec_src_gating;
-> >   	struct clk_hw	hw;
-> >   	struct notifier_block   clk_nb;
-> > diff --git a/drivers/clk/qcom/krait-cc.c b/drivers/clk/qcom/krait-cc.c
-> > index 4d4b657d33c3..0f88bf41ec6e 100644
-> > --- a/drivers/clk/qcom/krait-cc.c
-> > +++ b/drivers/clk/qcom/krait-cc.c
-> > @@ -138,6 +138,7 @@ krait_add_sec_mux(struct device *dev, int id, const char *s,
-> >   	mux->parent_map = sec_mux_map;
-> >   	mux->hw.init = &init;
-> >   	mux->safe_sel = 0;
-> > +	mux->disable_sec_src_gating = true;
-> 
-> This has to be guarded with the of_compatible checks. Otherwise you'd apply
-> this errata to all Krait CPUs, not only apq/ipq8064.
-> 
-> At least this should be limited to krait-cc-v1 with the note that there is
-> no way to distinguish between platforms.
+
+On 28.04.22 11:27, Juergen Gross wrote:
+
+
+Hello Juergen
+
+
+> There is no external user of xenbus_grant_ring() left, so merge it into
+> the only caller xenbus_setup_ring().
 >
+> Signed-off-by: Juergen Gross <jgross@suse.com>
+> ---
+> V2:
+> - make error message more precise (Andrew Cooper)
+> ---
+>   drivers/xen/xenbus/xenbus_client.c | 65 +++++++++---------------------
+>   include/xen/xenbus.h               |  2 -
+>   2 files changed, 19 insertions(+), 48 deletions(-)
+>
+> diff --git a/drivers/xen/xenbus/xenbus_client.c b/drivers/xen/xenbus/xenbus_client.c
+> index 1a2e0d94ccd1..d6fdd2d209d3 100644
+> --- a/drivers/xen/xenbus/xenbus_client.c
+> +++ b/drivers/xen/xenbus/xenbus_client.c
+> @@ -363,50 +363,6 @@ static void xenbus_switch_fatal(struct xenbus_device *dev, int depth, int err,
+>   		__xenbus_switch_state(dev, XenbusStateClosing, 1);
+>   }
+>   
+> -/**
+> - * xenbus_grant_ring
+> - * @dev: xenbus device
+> - * @vaddr: starting virtual address of the ring
+> - * @nr_pages: number of pages to be granted
+> - * @grefs: grant reference array to be filled in
+> - *
+> - * Grant access to the given @vaddr to the peer of the given device.
+> - * Then fill in @grefs with grant references.  Return 0 on success, or
+> - * -errno on error.  On error, the device will switch to
+> - * XenbusStateClosing, and the error will be saved in the store.
+> - */
+> -int xenbus_grant_ring(struct xenbus_device *dev, void *vaddr,
+> -		      unsigned int nr_pages, grant_ref_t *grefs)
+> -{
+> -	int err;
+> -	unsigned int i;
+> -	grant_ref_t gref_head;
+> -
+> -	err = gnttab_alloc_grant_references(nr_pages, &gref_head);
+> -	if (err) {
+> -		xenbus_dev_fatal(dev, err, "granting access to ring page");
+> -		return err;
+> -	}
+> -
+> -	for (i = 0; i < nr_pages; i++) {
+> -		unsigned long gfn;
+> -
+> -		if (is_vmalloc_addr(vaddr))
+> -			gfn = pfn_to_gfn(vmalloc_to_pfn(vaddr));
+> -		else
+> -			gfn = virt_to_gfn(vaddr);
+> -
+> -		grefs[i] = gnttab_claim_grant_reference(&gref_head);
+> -		gnttab_grant_foreign_access_ref(grefs[i], dev->otherend_id,
+> -						gfn, 0);
+> -
+> -		vaddr = vaddr + XEN_PAGE_SIZE;
+> -	}
+> -
+> -	return 0;
+> -}
+> -EXPORT_SYMBOL_GPL(xenbus_grant_ring);
+> -
+>   /*
+>    * xenbus_setup_ring
+>    * @dev: xenbus device
+> @@ -424,6 +380,7 @@ int xenbus_setup_ring(struct xenbus_device *dev, gfp_t gfp, void **vaddr,
+>   		      unsigned int nr_pages, grant_ref_t *grefs)
+>   {
+>   	unsigned long ring_size = nr_pages * XEN_PAGE_SIZE;
+> +	grant_ref_t gref_head;
+>   	unsigned int i;
+>   	int ret;
+>   
+> @@ -433,9 +390,25 @@ int xenbus_setup_ring(struct xenbus_device *dev, gfp_t gfp, void **vaddr,
+>   		goto err;
+>   	}
+>   
+> -	ret = xenbus_grant_ring(dev, *vaddr, nr_pages, grefs);
+> -	if (ret)
+> +	ret = gnttab_alloc_grant_references(nr_pages, &gref_head);
+> +	if (ret) {
+> +		xenbus_dev_fatal(dev, ret, "granting access to %u ring pages",
+> +				 nr_pages);
+>   		goto err;
+> +	}
+> +
+> +	for (i = 0; i < nr_pages; i++) {
+> +		unsigned long gfn;
+> +
+> +		if (is_vmalloc_addr(*vaddr))
+> +			gfn = pfn_to_gfn(vmalloc_to_pfn(vaddr[i]));
+> +		else
+> +			gfn = virt_to_gfn(vaddr[i]);
+> +
+> +		grefs[i] = gnttab_claim_grant_reference(&gref_head);
 
-Mhh can't i check the machine compatible directly to limit this to
-apq/ipq8064?
+gnttab_claim_grant_reference() can return error if no free grant 
+reference remains.
 
-> >   	init.name = kasprintf(GFP_KERNEL, "krait%s_sec_mux", s);
-> >   	if (!init.name)
-> 
-> 
-> -- 
-> With best wishes
-> Dmitry
+I understand this patch only moves the code, but probably it would be 
+better to add a missing check here (and likely rollback already 
+processed grants if any?).
+
+
+
+> +		gnttab_grant_foreign_access_ref(grefs[i], dev->otherend_id,
+> +						gfn, 0);
+> +	}
+>   
+>   	return 0;
+>   
+> diff --git a/include/xen/xenbus.h b/include/xen/xenbus.h
+> index b533b4adc835..eaa932b99d8a 100644
+> --- a/include/xen/xenbus.h
+> +++ b/include/xen/xenbus.h
+> @@ -224,8 +224,6 @@ int xenbus_watch_pathfmt(struct xenbus_device *dev, struct xenbus_watch *watch,
+>   			 const char *pathfmt, ...);
+>   
+>   int xenbus_switch_state(struct xenbus_device *dev, enum xenbus_state new_state);
+> -int xenbus_grant_ring(struct xenbus_device *dev, void *vaddr,
+> -		      unsigned int nr_pages, grant_ref_t *grefs);
+>   int xenbus_setup_ring(struct xenbus_device *dev, gfp_t gfp, void **vaddr,
+>   		      unsigned int nr_pages, grant_ref_t *grefs);
+>   void xenbus_teardown_ring(void **vaddr, unsigned int nr_pages,
 
 -- 
-	Ansuel
+Regards,
+
+Oleksandr Tyshchenko
+

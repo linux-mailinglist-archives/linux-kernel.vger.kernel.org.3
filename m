@@ -2,96 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E7CE51549F
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 21:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CB905154A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 21:34:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380345AbiD2Tgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 15:36:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55470 "EHLO
+        id S1380350AbiD2Thg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 15:37:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380316AbiD2Tgm (ORCPT
+        with ESMTP id S1349536AbiD2The (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 15:36:42 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C2ED081E
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 12:33:22 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23THBoiH013291;
-        Fri, 29 Apr 2022 19:33:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : message-id : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=vDWU27AKQEo+oH1UUdtPi7S1oftQMcr2YMRcrvYvg6Y=;
- b=Ha+HeItJqD/hLvxIfUIm85LpIh46wsIxbzYkIoMiJxamVDtjZVGw0TVKrjMmYyREqPD5
- +sgAKWm32g2m3OxTx/OmNp77x96xojUEJwOzF2L/vAQDTkrzPd+PNhmYb+sM9B4ZtVn3
- E9SsCiyieZCx5Bz8YADOlP+jHc89QLxz8ZlaYilwLC7sjZuZIodoQSB+pZqbLvox7Qt4
- F1YuO8SJrj9y/Vp7ut4c5z+kx/+FcKYeLtZTtrZ381oRb/rdgt7cZc/dyGCilYu9jsmB
- dOgyjkYyHOMSAcHEXWn27maYbfgSxNv9zU0aRdhH7cj2k3WK9AVhJawO409x/wKtA/AW SA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fr27h871g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 19:33:08 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23TJDOQV028169;
-        Fri, 29 Apr 2022 19:33:08 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fr27h8715-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 19:33:08 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TJX0wP022750;
-        Fri, 29 Apr 2022 19:33:06 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3fm9391j12-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 19:33:06 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TJXCnj26476904
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 29 Apr 2022 19:33:12 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1021342045;
-        Fri, 29 Apr 2022 19:33:04 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9A2F642041;
-        Fri, 29 Apr 2022 19:33:03 +0000 (GMT)
-Received: from localhost (unknown [9.43.18.217])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 29 Apr 2022 19:33:03 +0000 (GMT)
-Date:   Sat, 30 Apr 2022 01:03:01 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH v2 2/2] ftrace: recordmcount: Handle sections with no
- non-weak symbols
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        llvm@lists.linux.dev, Michael Ellerman <mpe@ellerman.id.au>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-References: <cover.1651166001.git.naveen.n.rao@linux.vnet.ibm.com>
-        <126aca34935cf1c7168e17970c706e36577094e7.1651166001.git.naveen.n.rao@linux.vnet.ibm.com>
-        <20220428184212.18fbf438@gandalf.local.home>
-        <1651252324.js9790ngjg.naveen@linux.ibm.com>
-        <20220429135916.47c3e623@gandalf.local.home>
-In-Reply-To: <20220429135916.47c3e623@gandalf.local.home>
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1651257788.xtscezsfky.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 5IRCrmEecLVBqTwYK1etJSIMvr9ZJZ8s
-X-Proofpoint-GUID: c1YO3hElOo7wYmNNZFeFbyj3webXVoOo
+        Fri, 29 Apr 2022 15:37:34 -0400
+Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA04CFE7C;
+        Fri, 29 Apr 2022 12:34:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1651260856; x=1682796856;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=aJ4f9YFz8EJlufcK3UvFhXhEbqojV1irIgbDVHINZtk=;
+  b=puSYy1AWkAHwBpOzypSKEeC3qOoS8Bc9ThE714miSmkyd1MavPpO8eRX
+   io4Qg5pnhkuLtZ9btMAY/cUMv1vsiFidZXEAeLr0lGO4y3BVkgwM7kP7d
+   3Txq0LGESabYhbMbATVcYXQMve7D61N3ApRMxyhFJggI/jJPFUbAH2NEn
+   ngyzFZ3lLGZ3wan8qeOlS4X+Ze8dJSHpi4wPLRJ9Dovx4XXOfALEXcBZM
+   WdGGAdBoDeNmUzOv6DeQkw40eQBOuzPKnQySXXhxs5je9htCsUqA49dyc
+   ODpmQ4dtEQD0zD3IXhosu9D6iZfyl+YSTjSSWlb55tCTa2RX1XNhQJ+Wr
+   g==;
+X-IronPort-AV: E=Sophos;i="5.91,186,1647273600"; 
+   d="scan'208";a="200077850"
+Received: from mail-mw2nam12lp2049.outbound.protection.outlook.com (HELO NAM12-MW2-obe.outbound.protection.outlook.com) ([104.47.66.49])
+  by ob1.hgst.iphmx.com with ESMTP; 30 Apr 2022 03:34:15 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=l8Kd6yrcpcuCp95nS0gHk0myy90X3nMJZFreNUs6hV7eLSGbHsNg4AqM3SwzLvVGt4VQEBvik4xIeUJWbtiO8JrMlvcpx2nGvbWODaGuoZ1GDfThQz+hqjnQgWaabwDAKrbbPVlUFE1pzoLGtDIt4A0ymr0UZTJRMVK9OMbDl4GPHHJxXpIF3VGXxK+fqgwNMX63px6ylowLQPmnq4gIuqFTXcELfkTD6ZtvXWWqGAzHpXQHF+FwAsMxYXtSvf9YQbYR9TY6Or2BbxpxeXkp9H2ifuxx46XKq7n08aWMy95rFzOYF3GvVvdFLvV+lU7wv2+EPHsHxAWUTn+NOMIm6w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TeI3c+FblzQpzKWDuXvQlqEJbbk/G1nsESaaoAwsRnM=;
+ b=ns0Ik76AGCu/FDAmDQn1D0nToEC0/+tFVZ2wZ/+3eUUFynhSqID8v4tjryPLX3RXQ+lcFMHVneFGo6gK4hYh8PPjciHzgpGgWcpYkKexwhwosrg1+6MX8ZGgyZVRI6ZgExZ2ZsFYsdLu/tZyiK9aV/79wqcztOloj7oYlRxpuxhQmaB3VISQCK8sROTWydtu6q+6pP6JTwsLBF2qWoiizn5Kz7MXexGVz5T01bjyl0/fWuGkmfpXunuh9nE1egcLPfkVA90FrPfu5hxMksJA0Rh0ohKw11+EdTexnd1cwLU0lF7eqyMxRYG6j6blSz01QfardhWFi8WHBbg0wY2mbg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TeI3c+FblzQpzKWDuXvQlqEJbbk/G1nsESaaoAwsRnM=;
+ b=yhUND1REYxUB/1u3rOcnKNmoMLxpPsAr6o43vdNit2t1HTGIAylhhfrSoJ7fM9U91fcOvF2XP/P5Mybd4v3ZWRUyn+bkNRn5SKPp3nhdDLlcN2SloDPLdjSp9Y6J7ce1DmhBYvNeir0cdyviPeuXC4XVctl6mwgAWxYhf30DK9I=
+Received: from DM6PR04MB6575.namprd04.prod.outlook.com (2603:10b6:5:1b7::7) by
+ MWHPR04MB0238.namprd04.prod.outlook.com (2603:10b6:300:9::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5186.15; Fri, 29 Apr 2022 19:34:11 +0000
+Received: from DM6PR04MB6575.namprd04.prod.outlook.com
+ ([fe80::b049:a979:f614:a5a3]) by DM6PR04MB6575.namprd04.prod.outlook.com
+ ([fe80::b049:a979:f614:a5a3%3]) with mapi id 15.20.5206.013; Fri, 29 Apr 2022
+ 19:34:10 +0000
+From:   Avri Altman <Avri.Altman@wdc.com>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+CC:     "kernel@axis.com" <kernel@axis.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "tytso@mit.edu" <tytso@mit.edu>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] mmc: core: support zeroout using TRIM
+Thread-Topic: [PATCH] mmc: core: support zeroout using TRIM
+Thread-Index: AQHYW9zpo90Gc6qNZU+y8mD6XK0FLq0HR1bA
+Date:   Fri, 29 Apr 2022 19:34:10 +0000
+Message-ID: <DM6PR04MB657540F6BB9D02A5BA8A2AE6FCFC9@DM6PR04MB6575.namprd04.prod.outlook.com>
+References: <20220429152118.3617303-1-vincent.whitchurch@axis.com>
+In-Reply-To: <20220429152118.3617303-1-vincent.whitchurch@axis.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wdc.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9c802fc1-6c72-4941-bda7-08da2a173c1e
+x-ms-traffictypediagnostic: MWHPR04MB0238:EE_
+x-microsoft-antispam-prvs: <MWHPR04MB0238C60B3F655E956392FBD8FCFC9@MWHPR04MB0238.namprd04.prod.outlook.com>
+wdcipoutbound: EOP-TRUE
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0lnZvhfss5UOIhTXbF9XVd5Wdos7v4ZbmAV+yAE30SOq2bsqZdup3jlHRTN0DUQit3ZaLg+Ryrc54PjZtwSv4QCE0BNfFbqF2nJQZ+S0lfaGl7VbxezD5ZLvCIn3swQh7ClnG7v0PK8UZjMZUDuYkgNAcMVJnnnrzsvA0akoGBmVVdIWXjf6D+z3ve0wkFJG0KXIRlC4r7zfiNWwR68c6k5pMBIUFfN4vLAsmepFo17qj2ulZf3zAlWqRz4RRGYCxEPzBvIR3A1my9sg5TTjVoUgHYNEuqc2JNOlNPBlacokMmG7cMF6teEBs36DiHmrw4Bvk4KMzbFO8Zf8B0QgzlGF47zmOR3UCp4t/WrC6ESc4m9eYzXqlfk3vTgx6MpVFRGtWXdnIxdspnBaTgYijsw6GPUbUBf2o7QD+IfP/VRlpJ1knzfoDIiuC02G5WvOuPzXXd2XVfWIuqDRxxF1US/xMHSXiMSDWwjKpUGlv8+WVzym13M2px/UK3LGypCew3crYN7AMLf+CCx1D0FusWy61n+OtM85L+QnkaKrA/TGBPLZp4US2pQJYkuagFwhaoYqoXiuIcDRWwHWnk8ak8E+4gzcOmh0XbhwsidyhvcdgdGYL7yKbWmIXnXOze8hIsC6xjj/Cb0U3/fmFvTbiE0mcO+XBUeprwJzfAAZi5oNG9V0aFcXWVQAPilTZ7IehGf/AJb6/KZMeIeAZbi0+KJa8FGDvd5qRW+teSCX/AOkHp4wUXe0XQaa2ns9SFSu51Sj/dx1YX4cW2sdRJ0T8SZhwaJ74+z0FMTNgFeg1Fpvyttke+Syf8FZlFG1FZVgVKAjL98Uflq90l8zJ7uPCQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR04MB6575.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(9686003)(82960400001)(26005)(7696005)(55016003)(54906003)(83380400001)(6506007)(84970400001)(2906002)(38100700002)(38070700005)(66556008)(66476007)(64756008)(66446008)(110136005)(8676002)(4326008)(66946007)(966005)(76116006)(122000001)(71200400001)(5660300002)(316002)(52536014)(86362001)(8936002)(508600001)(33656002)(186003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?8+Sk0MYVF841ohxD/FoUGDUihEGHwt/coR0oGbJi/5HyfNha/QP1n16E0rH2?=
+ =?us-ascii?Q?wnhO+RiabaubGIjo3uUmw6gT/6K3g4RwS3OyOCWjxtzFteuVNWYvmSi4oxpI?=
+ =?us-ascii?Q?uw7m6TMlJaVd14twmA0zge/JK4UKnevQ2OPeu/AxE7v3mDxXI26iyHGhbteF?=
+ =?us-ascii?Q?h3sDa1h2vz+QPuE0TSakDvIq1AW7IScHFjCQi8DVIQzMA8Xm7QUQmMAzthDz?=
+ =?us-ascii?Q?tmJqKJ94b2slM8HRvEhCtg5TcsDUP22inUN24Dpz06p9fUtF1RSkSjfLM5IZ?=
+ =?us-ascii?Q?NHT8sTjSPss0rOlFpPVss9l8zpvuw7+nsszAR/4tSoCKiGANCNwEC7rgqIZH?=
+ =?us-ascii?Q?bVyVSgP+I/4Cxn7oVpN3SLuQSWaWJxGrcm3+3PxF9SGhO6INRCi/VpJgUGVR?=
+ =?us-ascii?Q?WBNFblqv9gc8UQVQFOg7wO4J4q6XorhP4EA3+eXrFERA5ZcqtKzuvmbw2e66?=
+ =?us-ascii?Q?MUMArENP8NYaIoQEWqE8VKH1tAINwBo6f7SO7kOGDNeO3WbpG8gDmyd4O/Lx?=
+ =?us-ascii?Q?n7B9bkR8eK5pBWPXeMwfIlb8EhltqbqXGx3dXfDWI4UbURhFvKWL1+kQ98cz?=
+ =?us-ascii?Q?//owiOTc2A3dl8oQODvEIbi8qCN29xwTGZJkhFLcwlAjPzFKnOH8dn4ZLb69?=
+ =?us-ascii?Q?eKoTzJuckbI9ex6cp3PNvqp7PED/Jl0KHksUxTw5TDhU1MOQGHepPROQ3914?=
+ =?us-ascii?Q?8WRdI1UvS/aW+u4SakY+iHdSzcHuzaXtcQGzMu2p7+zG25YUlkQWnRrdmevC?=
+ =?us-ascii?Q?uKIU3jfcw+XDPml/xmun0uAHqspCEhzy42rzXYqkLKlbfJmmOHSccltMInBo?=
+ =?us-ascii?Q?WAx58e8BrmXygshOh5OHXP4Rc4/BMutOUkFDod5VicMI3jwY9J1Jjpx3GeE+?=
+ =?us-ascii?Q?S/iuftu+JmWzXs2TZanhVBDCic6BR2n4FzhTzT6ax8s2eekEIxcQan5HGAF1?=
+ =?us-ascii?Q?C591aVP6xnJWAG4/LkYIx++4TpqGCezPDjjrxu8K9LcWki0H4/Ep+UdM9Ktp?=
+ =?us-ascii?Q?f5pyH7/LT7NrG5bDhkVSD/uKzqJWuQzOSXEJcQklPZiHBR54tg/RClyuzfDJ?=
+ =?us-ascii?Q?/pLm5uCXl80tznWErfmk9nNLh/DD2FynYtFoqRJ5Q4L9X9s6JYOnGWAyQVY3?=
+ =?us-ascii?Q?uTYecsJLpMC9awU0oOE190bACcba736bK8pv5quTXOQrSG+pH++fVWbk1dqi?=
+ =?us-ascii?Q?1RRve9qUo5jwFmIIUZKfaTXi4RXny41ht1EGLtIVNU8WEg/QogDzhP0cqZNB?=
+ =?us-ascii?Q?P6VXAt1MBbcV8HOnai+0GNGsCWFTQbURV3CUlW5pMfto+mU1DBIA2faUObf5?=
+ =?us-ascii?Q?2dRb1rWZFSeuz/OWa4uhQZwgxG2F/rp4csrUWniWkQyEj8T+93DC+pKpbdf3?=
+ =?us-ascii?Q?uqIgfZ1k9nkG51FAKiwxYD8YkD3V0znittuvBJ/Fj/95sj8VyjvI9oH2gz4a?=
+ =?us-ascii?Q?KCjUrLSA1/JkgpHQ0juGWu4FzF9iFZUdGG0wSb0OaFq21RQFWBvo4PxEjQRv?=
+ =?us-ascii?Q?zILNUqwZ+FUUpCbY+ia9FQ8WmxybkSOdX4pvkHUJuVk1j02PwKLrvgJIAY7/?=
+ =?us-ascii?Q?EJHJOee5edeCciHE57uTEuvRxdmwbX+l+yanCM9lgFiBQEZ6UzXB1cHK/Dub?=
+ =?us-ascii?Q?+5GwOeF9QCsCNeXECqF0fcSTQOAEU19LQUav7C1VxPT3XeaMpHUnZGFPGpzs?=
+ =?us-ascii?Q?uw+HpEcXsYQBzN4L47nZJhyF065Ys40jDMTzuicUR8YJ26S1b5zIKM5urhGt?=
+ =?us-ascii?Q?Wu/eCnpuxw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-29_09,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- clxscore=1015 adultscore=0 priorityscore=1501 mlxlogscore=299
- suspectscore=0 malwarescore=0 spamscore=0 phishscore=0 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204290103
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR04MB6575.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9c802fc1-6c72-4941-bda7-08da2a173c1e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Apr 2022 19:34:10.7452
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: neHgGG8lO1tnNbYZ8JHpB4xJvqIb7eTN/5G1Hi+sSJHgS7Pzq3H90C4UwVATRWn8ZfkrE1BS8bC1uLDoj8JqGw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR04MB0238
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,106 +140,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Steven Rostedt wrote:
-> On Fri, 29 Apr 2022 23:09:19 +0530
-> "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
+> If the device supports TRIM and indicates that it erases to zeros, we can=
+ use
+> it to support hardware offloading of REQ_OP_WRITE_ZEROES.
 >=20
->> If I'm understanding your suggestion right:
->> - we now create a new section in each object file: __mcount_loc_weak,=20
->>   and capture such relocations using weak symbols there.
->=20
-> Yes, but it would be putting the same information it puts into __mcount_l=
-oc
-> but also add it here too. That is, it will duplicate the data.
->=20
->> - we then ask the linker to put these separately between, say,=20
->>   __start_mcount_loc_weak and __stop_mcount_loc_weak
->=20
-> Yes, but it will also go in the location between __start_mcount_loc and
-> __stop_mcount_loc.
->=20
->> - on ftrace init, we go through entries in this range, but discard those=
-=20
->>   that belong to functions that also have an entry between=20
->>   __start_mcount_loc and __stop_mcount loc.
->=20
-> But we should be able to know if it was overridden or not, by seeing if
-> there's another function that was called. Or at least, we can validate th=
-em
-> to make sure that they are correct.
->=20
->>=20
->> The primary issue I see here is that the mcount locations within the new=
-=20
->> weak section will end up being offsets from a different function in=20
->> vmlinux, since the linker does not create a symbol for the weak=20
->> functions that were over-ridden.
->=20
-> The point of this section is to know which functions in __mcount_loc may
-> have been overridden, as they would be found in the __mcount_loc_weak
-> section. And then we can do something "special" to them.
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+I agree that zero out is indeed a privet case of trim, as indicated by ERAS=
+ED_MEM_CONT.
 
-I'm not sure I follow that. How are you intending to figure out which=20
-functions were overridden by looking at entries in the __mcount_loc_weak=20
-section?
-
-In the final vmlinux image, we only get offsets into .text for all=20
-mcount locations, but no symbol information. The only hint is the fact=20
-that a single kallsym symbol has multiple mcount locations within it.=20
-Even then, the symbol with duplicate mcount entries won't be the=20
-function that was overridden.
-
-We could do a kallsyms_lookup() on each entry and consult the=20
-__mcount_loc_weak section to identify duplicates, but that looks to be=20
-very expensive.
-
-Did you have a different approach in mind?
-
->=20
->>=20
->> As an example, in the issue described in this patch set, if powerpc=20
->> starts over-riding kexec_arch_apply_relocations(), then the current weak=
-=20
->> implementation in kexec_file.o gets carried over to the final vmlinux,=20
->> but the instructions will instead appear under the previous function in=
-=20
->> kexec_file.o: crash_prepare_elf64_headers(). This function may or may=20
->> not be traced to begin with, so we won't be able to figure out if this=20
->> is valid or not.
->=20
-> If it was overridden, then there would be two entries for function that
-> overrides the weak function in the __mcount_loc section, right? One for t=
-he
-> new function, and one that was overridden.
-
-In the final vmlinux, we will have two entries: one pointing at the=20
-correct function, while the other will point to some other function=20
-name. So, at least from kallsym perspective, duplicate mcount entries=20
-won't be for the function that was overridden, but some arbitrary=20
-function that came before the weak function in the object file.
-
-> Of course this could be more
-> complex if the new function had been marked notrace.
->=20
-> I was thinking of doing this just so that we know what functions are weak
-> and perhaps need extra processing.
->=20
-> Another issue with weak functions and ftrace just came up here:
->=20
->   https://lore.kernel.org/all/20220428095803.66c17c32@gandalf.local.home/
-
-I noticed this just yesterday:
-
-  # cat available_filter_functions | sort | uniq -d | wc -l
-  430
-
-I'm fairly certain that some of those are due to weak functions -- I=20
-just wasn't sure if all of those were.
-
-I suppose this will now also be a problem with ftrace_location(), given=20
-that it was recently changed to look at an entire function for mcount=20
-locations?
-
+Looks good to me.
 
 Thanks,
-Naveen
+Avri
+
+> ---
+>=20
+> Notes:
+>     https://lore.kernel.org/lkml/20160303182146.GG9772@thunk.org/ seems
+> to agree
+>     that BLKZEROOUT can use TRIM on eMMC.
+>=20
+>     BLKDISCARD uses DISCARD when available so it can't be used to send
+> TRIM.
+>=20
+>     If TRIM should not be used for BLKZEROOUT for some reason I guess the
+> only way
+>     is to use MMC_IOC_MULTI_CMD like in this commit in mmc-utils but
+> that's a
+>     rather low-level interface:
+>=20
+>      https://git.kernel.org/pub/scm/utils/mmc/mmc-
+> utils.git/commit/?id=3D43282e80e174cc73b09b81a4d17cb3a7b4dc5cfc
+>=20
+>  drivers/mmc/core/block.c | 26 ++++++++++++++++++++++----
+> drivers/mmc/core/queue.c |  2 ++
+>  2 files changed, 24 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c index
+> 506dc900f5c7..0398b205a285 100644
+> --- a/drivers/mmc/core/block.c
+> +++ b/drivers/mmc/core/block.c
+> @@ -126,6 +126,7 @@ struct mmc_blk_data {
+>  #define MMC_BLK_DISCARD                BIT(2)
+>  #define MMC_BLK_SECDISCARD     BIT(3)
+>  #define MMC_BLK_CQE_RECOVERY   BIT(4)
+> +#define MMC_BLK_TRIM           BIT(5)
+>=20
+>         /*
+>          * Only set in main mmc_blk_data associated @@ -1090,12 +1091,13
+> @@ static void mmc_blk_issue_drv_op(struct mmc_queue *mq, struct
+> request *req)
+>         blk_mq_end_request(req, ret ? BLK_STS_IOERR : BLK_STS_OK);  }
+>=20
+> -static void mmc_blk_issue_discard_rq(struct mmc_queue *mq, struct
+> request *req)
+> +static void mmc_blk_issue_erase_rq(struct mmc_queue *mq, struct
+> request *req,
+> +                                  int type, unsigned int erase_arg)
+>  {
+>         struct mmc_blk_data *md =3D mq->blkdata;
+>         struct mmc_card *card =3D md->queue.card;
+>         unsigned int from, nr;
+> -       int err =3D 0, type =3D MMC_BLK_DISCARD;
+> +       int err =3D 0;
+>         blk_status_t status =3D BLK_STS_OK;
+>=20
+>         if (!mmc_can_erase(card)) {
+> @@ -1111,13 +1113,13 @@ static void mmc_blk_issue_discard_rq(struct
+> mmc_queue *mq, struct request *req)
+>                 if (card->quirks & MMC_QUIRK_INAND_CMD38) {
+>                         err =3D mmc_switch(card, EXT_CSD_CMD_SET_NORMAL,
+>                                          INAND_CMD38_ARG_EXT_CSD,
+> -                                        card->erase_arg =3D=3D MMC_TRIM_=
+ARG ?
+> +                                        erase_arg =3D=3D MMC_TRIM_ARG ?
+>                                          INAND_CMD38_ARG_TRIM :
+>                                          INAND_CMD38_ARG_ERASE,
+>                                          card->ext_csd.generic_cmd6_time)=
+;
+>                 }
+>                 if (!err)
+> -                       err =3D mmc_erase(card, from, nr, card->erase_arg=
+);
+> +                       err =3D mmc_erase(card, from, nr, erase_arg);
+>         } while (err =3D=3D -EIO && !mmc_blk_reset(md, card->host, type))=
+;
+>         if (err)
+>                 status =3D BLK_STS_IOERR;
+> @@ -1127,6 +1129,19 @@ static void mmc_blk_issue_discard_rq(struct
+> mmc_queue *mq, struct request *req)
+>         blk_mq_end_request(req, status);  }
+>=20
+> +static void mmc_blk_issue_trim_rq(struct mmc_queue *mq, struct request
+> +*req) {
+> +       mmc_blk_issue_erase_rq(mq, req, MMC_BLK_TRIM, MMC_TRIM_ARG);
+> }
+> +
+> +static void mmc_blk_issue_discard_rq(struct mmc_queue *mq, struct
+> +request *req) {
+> +       struct mmc_blk_data *md =3D mq->blkdata;
+> +       struct mmc_card *card =3D md->queue.card;
+> +
+> +       mmc_blk_issue_erase_rq(mq, req, MMC_BLK_DISCARD,
+> +card->erase_arg); }
+> +
+>  static void mmc_blk_issue_secdiscard_rq(struct mmc_queue *mq,
+>                                        struct request *req)  { @@ -2327,6=
+ +2342,9 @@ enum
+> mmc_issued mmc_blk_mq_issue_rq(struct mmc_queue *mq, struct request
+> *req)
+>                 case REQ_OP_SECURE_ERASE:
+>                         mmc_blk_issue_secdiscard_rq(mq, req);
+>                         break;
+> +               case REQ_OP_WRITE_ZEROES:
+> +                       mmc_blk_issue_trim_rq(mq, req);
+> +                       break;
+>                 case REQ_OP_FLUSH:
+>                         mmc_blk_issue_flush(mq, req);
+>                         break;
+> diff --git a/drivers/mmc/core/queue.c b/drivers/mmc/core/queue.c index
+> c69b2d9df6f1..bbe2ea829ea7 100644
+> --- a/drivers/mmc/core/queue.c
+> +++ b/drivers/mmc/core/queue.c
+> @@ -191,6 +191,8 @@ static void mmc_queue_setup_discard(struct
+> request_queue *q,
+>                 q->limits.discard_granularity =3D SECTOR_SIZE;
+>         if (mmc_can_secure_erase_trim(card))
+>                 blk_queue_flag_set(QUEUE_FLAG_SECERASE, q);
+> +       if (mmc_can_trim(card) && card->erased_byte =3D=3D 0)
+> +               blk_queue_max_write_zeroes_sectors(q, max_discard);
+>  }
+>=20
+>  static unsigned short mmc_get_max_segments(struct mmc_host *host)
+> --
+> 2.34.1
+

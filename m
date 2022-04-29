@@ -2,164 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D4BA514F97
-	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:36:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CFF9514F9B
+	for <lists+linux-kernel@lfdr.de>; Fri, 29 Apr 2022 17:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378553AbiD2PjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 11:39:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33306 "EHLO
+        id S1378558AbiD2Pja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 11:39:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbiD2PjR (ORCPT
+        with ESMTP id S233043AbiD2Pj2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 11:39:17 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67020D5EB2
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:35:58 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id g16so5470243lja.3
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 08:35:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6s1nwoJRGgRDD+cc6eVnKDXhc5zKGyzdqBiCfjhgACw=;
-        b=QRe3ug7K1fccdkgWK9+JEOfzzP1wXoDKVm5M/ouWALA2QAkiM9sM5mQaCM+wK7D+v3
-         vosrmviy1SYp/52eVj7aSP8AN0D8VAU5Okvb4Ww8xgcqiXF9ZElmdP2YOFbhm7XV0qCz
-         OrPJDhWWzcWkt5ISnaWJp4UWFQSRujN2mYmOd3ptUuFcjqk7kK0xf02f8kQk/8GxjGYv
-         R8dlQH1h9WQLZqOX7d7Vbo/s7c+YzOvhAVSm7esn70hVYOYtl6QPHQW/lR70eu6ztjZD
-         pKiaKcokFfvJ242z+zynG0IN4GowpMyhRJWo/gnYQwpL2wc3PwtK2z0FlehP2gRrMqKr
-         MO6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6s1nwoJRGgRDD+cc6eVnKDXhc5zKGyzdqBiCfjhgACw=;
-        b=yJ5d8VqcF8WhW119OyCjicY30QRqgCaR/3yqdFoeCB+baaVZKE1fGyq+8xDovldFvc
-         qz/Eldb1YBG86KdJlq1t/YZx/YcGiMguE4jXEnTxzAEKQWQlM4gap2+7kA+NFcvgDrx1
-         sposYfFdrMUprIHa4x8EfU2QvGfvBHB+8gtQxUsBMz/fDpP4SitYtnFv3vJ1uNRYDk6X
-         R5J0WceYybhkiktLerS4dn7DTmA7QT35GelzN3gM3BCU6uEyxX1882oh0ktsOUUwCTmN
-         TTchiMDUeb6fsJEK0BGJGUBhc46fmCmNZbi9CQ9r+yFaO+QXsNpkvOOU6D4Y5nc4jOb8
-         3x8A==
-X-Gm-Message-State: AOAM5305IoGliWwCErAZVsZEG9YVn1Li3moqTYizjvqcaj8CiVnCRLak
-        50JlPOR3BDExWbE3imr0FQLuUSLd/zmtmxVP4rQDjw==
-X-Google-Smtp-Source: ABdhPJyN+azZ/dxOkvmmY0WVIZMlkjaocYqwrPftbufCjEDjpdvoZ1xb9ffcGeGw5Jbxb8q7SMK3CoZJfVIG0FB5O0U=
-X-Received: by 2002:a05:651c:1508:b0:24f:2fa6:89a4 with SMTP id
- e8-20020a05651c150800b0024f2fa689a4mr6252956ljf.132.1651246556519; Fri, 29
- Apr 2022 08:35:56 -0700 (PDT)
+        Fri, 29 Apr 2022 11:39:28 -0400
+Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CECED5EB3;
+        Fri, 29 Apr 2022 08:36:09 -0700 (PDT)
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 10EB5101D81; Fri, 29 Apr 2022 16:36:05 +0100 (BST)
+Date:   Fri, 29 Apr 2022 16:36:05 +0100
+From:   Sean Young <sean@mess.org>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "open list:MEDIA INPUT INFRASTRUCTURE (V4L/DVB)" 
+        <linux-media@vger.kernel.org>
+Subject: Re: [RFC v2 17/39] media: add HAS_IOPORT dependencies
+Message-ID: <YmwF5TLJy2ZiU25a@gofer.mess.org>
+References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
+ <20220429135108.2781579-30-schnelle@linux.ibm.com>
 MIME-Version: 1.0
-References: <20220407195908.633003-1-pgonda@google.com> <CAFNjLiXC0AdOw5f8Ovu47D==ex7F0=WN_Ocirymz4xL=mWvC5A@mail.gmail.com>
- <CAMkAt6r-Mc_YN-gVHuCpTj4E1EmcvyYpP9jhtHo5HRHnoNJAdA@mail.gmail.com>
- <CAMkAt6r+OMPWCbV_svUyGWa0qMzjj2UEG29G6P7jb6uH6yko2w@mail.gmail.com>
- <62e9ece1-5d71-f803-3f65-2755160cf1d1@redhat.com> <CAMkAt6q6YLBfo2RceduSXTafckEehawhD4K4hUEuB4ZNqe2kKg@mail.gmail.com>
- <4c0edc90-36a1-4f4c-1923-4b20e7bdbb4c@redhat.com> <CAMkAt6oL5qi7z-eh4z7z8WBhpc=Ow6WtcJA5bDi6-aGMnz135A@mail.gmail.com>
- <CAMkAt6rmDrZfN5DbNOTsKFV57PwEnK2zxgBTCbEPeE206+5v5w@mail.gmail.com> <0d282be4-d612-374d-84ba-067994321bab@redhat.com>
-In-Reply-To: <0d282be4-d612-374d-84ba-067994321bab@redhat.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Fri, 29 Apr 2022 09:35:45 -0600
-Message-ID: <CAMkAt6ragq4OmnX+n628Yd5pn51qFv4qV20upGR6tTvyYw3U5A@mail.gmail.com>
-Subject: Re: [PATCH v3] KVM: SEV: Mark nested locking of vcpu->lock
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     John Sperbeck <jsperbeck@google.com>,
-        kvm list <kvm@vger.kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220429135108.2781579-30-schnelle@linux.ibm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 5:59 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> On 4/28/22 23:28, Peter Gonda wrote:
-> >
-> > So when actually trying this out I noticed that we are releasing the
-> > current vcpu iterator but really we haven't actually taken that lock
-> > yet. So we'd need to maintain a prev_* pointer and release that one.
->
-> Not entirely true because all vcpu->mutex.dep_maps will be for the same
-> lock.  The dep_map is essentially a fancy string, in this case
-> "&vcpu->mutex".
->
-> See the definition of mutex_init:
->
-> #define mutex_init(mutex)                                              \
-> do {                                                                   \
->          static struct lock_class_key __key;                            \
->                                                                         \
->          __mutex_init((mutex), #mutex, &__key);                         \
-> } while (0)
->
-> and the dep_map field is initialized with
->
->          lockdep_init_map_wait(&lock->dep_map, name, key, 0, LD_WAIT_SLEEP);
->
-> (i.e. all vcpu->mutexes share the same name and key because they have a
-> single mutex_init-ialization site).  Lockdep is as crude in theory as it
-> is effective in practice!
->
-> >
-> >           bool acquired = false;
-> >           kvm_for_each_vcpu(...) {
-> >                   if (!acquired) {
-> >                      if (mutex_lock_killable_nested(&vcpu->mutex, role)
-> >                          goto out_unlock;
-> >                      acquired = true;
-> >                   } else {
-> >                      if (mutex_lock_killable(&vcpu->mutex, role)
-> >                          goto out_unlock;
->
-> This will cause a lockdep splat because it uses subclass 0.  All the
-> *_nested functions is allow you to specify a subclass other than zero.
+On Fri, Apr 29, 2022 at 03:50:27PM +0200, Niklas Schnelle wrote:
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. We thus need to add HAS_IOPORT as dependency for
+> those drivers using them.
+> 
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> ---
+>  drivers/media/pci/dm1105/Kconfig |  2 +-
+>  drivers/media/radio/Kconfig      | 14 +++++++++++++-
+>  drivers/media/rc/Kconfig         |  6 ++++++
 
-OK got it. I now have this to lock:
+For drivers/media/rc/Kconfig:
 
-         kvm_for_each_vcpu (i, vcpu, kvm) {
-                  if (prev_vcpu != NULL) {
-                          mutex_release(&prev_vcpu->mutex.dep_map, _THIS_IP_);
-                          prev_vcpu = NULL;
-                  }
+Reviewed-by: Sean Young <sean@mess.org>
 
-                  if (mutex_lock_killable_nested(&vcpu->mutex, role))
-                          goto out_unlock;
-                  prev_vcpu = vcpu;
-          }
+Sean
 
-But I've noticed the unlocking is in the wrong order since we are
-using kvm_for_each_vcpu() I think we need a kvm_for_each_vcpu_rev() or
-something. Which maybe a bit for work:
-https://elixir.bootlin.com/linux/latest/source/lib/xarray.c#L1119.
-Then I think we could something like this to unlock:
-
-         bool acquired = true;
-          kvm_for_each_vcpu_rev(i, vcpu, kvm) {
-                  if (!acquired) {
-                          mutex_acquire(&vcpu->mutex.dep_map, 0, role,
-_THIS_IP_);
-                  }
-                  mutex_unlock(&vcpu->mutex);
-                  acquired = false;
-          }
->
-> Paolo
->
-> >                   }
-> >           }
-> >
-> > To unlock:
-> >
-> >           kvm_for_each_vcpu(...) {
-> >              mutex_unlock(&vcpu->mutex);
-> >           }
-> >
-> > This way instead of mocking and releasing the lock_dep we just lock
-> > the fist vcpu with mutex_lock_killable_nested(). I think this
-> > maintains the property you suggested of "coalesces all the mutexes for
-> > a vm in a single subclass".  Thoughts?
->
+>  3 files changed, 20 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/media/pci/dm1105/Kconfig b/drivers/media/pci/dm1105/Kconfig
+> index e0e3af67c99c..4498c37f4990 100644
+> --- a/drivers/media/pci/dm1105/Kconfig
+> +++ b/drivers/media/pci/dm1105/Kconfig
+> @@ -1,7 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  config DVB_DM1105
+>  	tristate "SDMC DM1105 based PCI cards"
+> -	depends on DVB_CORE && PCI && I2C && I2C_ALGOBIT
+> +	depends on DVB_CORE && PCI && I2C && I2C_ALGOBIT && HAS_IOPORT
+>  	select DVB_PLL if MEDIA_SUBDRV_AUTOSELECT
+>  	select DVB_STV0299 if MEDIA_SUBDRV_AUTOSELECT
+>  	select DVB_STV0288 if MEDIA_SUBDRV_AUTOSELECT
+> diff --git a/drivers/media/radio/Kconfig b/drivers/media/radio/Kconfig
+> index cca03bd2cc42..e15d50d9161f 100644
+> --- a/drivers/media/radio/Kconfig
+> +++ b/drivers/media/radio/Kconfig
+> @@ -15,7 +15,7 @@ if RADIO_ADAPTERS
+>  
+>  config RADIO_MAXIRADIO
+>  	tristate "Guillemot MAXI Radio FM 2000 radio"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+>  	select RADIO_TEA575X
+>  	help
+>  	  Choose Y here if you have this radio card.  This card may also be
+> @@ -232,6 +232,7 @@ source "drivers/media/radio/wl128x/Kconfig"
+>  menuconfig V4L_RADIO_ISA_DRIVERS
+>  	bool "ISA radio devices"
+>  	depends on ISA || COMPILE_TEST
+> +	depends on HAS_IOPORT
+>  	help
+>  	  Say Y here to enable support for these ISA drivers.
+>  
+> @@ -240,6 +241,7 @@ if V4L_RADIO_ISA_DRIVERS
+>  config RADIO_AZTECH
+>  	tristate "Aztech/Packard Bell Radio"
+>  	depends on ISA || COMPILE_TEST
+> +	depends on HAS_IOPORT
+>  	select RADIO_ISA
+>  	help
+>  	  Choose Y here if you have one of these FM radio cards, and then fill
+> @@ -260,6 +262,7 @@ config RADIO_AZTECH_PORT
+>  config RADIO_CADET
+>  	tristate "ADS Cadet AM/FM Tuner"
+>  	depends on ISA || COMPILE_TEST
+> +	depends on HAS_IOPORT
+>  	help
+>  	  Choose Y here if you have one of these AM/FM radio cards, and then
+>  	  fill in the port address below.
+> @@ -270,6 +273,7 @@ config RADIO_CADET
+>  config RADIO_GEMTEK
+>  	tristate "GemTek Radio card (or compatible) support"
+>  	depends on ISA || COMPILE_TEST
+> +	depends on HAS_IOPORT
+>  	select RADIO_ISA
+>  	help
+>  	  Choose Y here if you have this FM radio card, and then fill in the
+> @@ -309,6 +313,7 @@ config RADIO_GEMTEK_PROBE
+>  
+>  config RADIO_ISA
+>  	depends on ISA || COMPILE_TEST
+> +	depends on HAS_IOPORT
+>  	tristate
+>  
+>  config RADIO_MIROPCM20
+> @@ -329,6 +334,7 @@ config RADIO_MIROPCM20
+>  config RADIO_RTRACK
+>  	tristate "AIMSlab RadioTrack (aka RadioReveal) support"
+>  	depends on ISA || COMPILE_TEST
+> +	depends on HAS_IOPORT
+>  	select RADIO_ISA
+>  	help
+>  	  Choose Y here if you have one of these FM radio cards, and then fill
+> @@ -383,6 +389,7 @@ config RADIO_RTRACK_PORT
+>  config RADIO_SF16FMI
+>  	tristate "SF16-FMI/SF16-FMP/SF16-FMD Radio"
+>  	depends on ISA || COMPILE_TEST
+> +	depends on HAS_IOPORT
+>  	help
+>  	  Choose Y here if you have one of these FM radio cards.
+>  
+> @@ -392,6 +399,7 @@ config RADIO_SF16FMI
+>  config RADIO_SF16FMR2
+>  	tristate "SF16-FMR2/SF16-FMD2 Radio"
+>  	depends on ISA || COMPILE_TEST
+> +	depends on HAS_IOPORT
+>  	select RADIO_TEA575X
+>  	help
+>  	  Choose Y here if you have one of these FM radio cards.
+> @@ -402,6 +410,7 @@ config RADIO_SF16FMR2
+>  config RADIO_TERRATEC
+>  	tristate "TerraTec ActiveRadio ISA Standalone"
+>  	depends on ISA || COMPILE_TEST
+> +	depends on HAS_IOPORT
+>  	select RADIO_ISA
+>  	help
+>  	  Choose Y here if you have this FM radio card.
+> @@ -416,6 +425,7 @@ config RADIO_TERRATEC
+>  config RADIO_TRUST
+>  	tristate "Trust FM radio card"
+>  	depends on ISA || COMPILE_TEST
+> +	depends on HAS_IOPORT
+>  	select RADIO_ISA
+>  	help
+>  	  This is a driver for the Trust FM radio cards. Say Y if you have
+> @@ -439,6 +449,7 @@ config RADIO_TRUST_PORT
+>  config RADIO_TYPHOON
+>  	tristate "Typhoon Radio (a.k.a. EcoRadio)"
+>  	depends on ISA || COMPILE_TEST
+> +	depends on HAS_IOPORT
+>  	select RADIO_ISA
+>  	help
+>  	  Choose Y here if you have one of these FM radio cards, and then fill
+> @@ -473,6 +484,7 @@ config RADIO_TYPHOON_PORT
+>  config RADIO_ZOLTRIX
+>  	tristate "Zoltrix Radio"
+>  	depends on ISA || COMPILE_TEST
+> +	depends on HAS_IOPORT
+>  	select RADIO_ISA
+>  	help
+>  	  Choose Y here if you have one of these FM radio cards, and then fill
+> diff --git a/drivers/media/rc/Kconfig b/drivers/media/rc/Kconfig
+> index f560fc38895f..96528e6532fd 100644
+> --- a/drivers/media/rc/Kconfig
+> +++ b/drivers/media/rc/Kconfig
+> @@ -148,6 +148,7 @@ if RC_DEVICES
+>  config IR_ENE
+>  	tristate "ENE eHome Receiver/Transceiver (pnp id: ENE0100/ENE02xxx)"
+>  	depends on PNP || COMPILE_TEST
+> +	depends on HAS_IOPORT
+>  	help
+>  	   Say Y here to enable support for integrated infrared receiver
+>  	   /transceiver made by ENE.
+> @@ -161,6 +162,7 @@ config IR_ENE
+>  config IR_FINTEK
+>  	tristate "Fintek Consumer Infrared Transceiver"
+>  	depends on PNP || COMPILE_TEST
+> +	depends on HAS_IOPORT
+>  	help
+>  	   Say Y here to enable support for integrated infrared receiver
+>  	   /transceiver made by Fintek. This chip is found on assorted
+> @@ -249,6 +251,7 @@ config IR_IMON_RAW
+>  config IR_ITE_CIR
+>  	tristate "ITE Tech Inc. IT8712/IT8512 Consumer Infrared Transceiver"
+>  	depends on PNP || COMPILE_TEST
+> +	depends on HAS_IOPORT
+>  	help
+>  	   Say Y here to enable support for integrated infrared receivers
+>  	   /transceivers made by ITE Tech Inc. These are found in
+> @@ -301,6 +304,7 @@ config IR_MTK
+>  config IR_NUVOTON
+>  	tristate "Nuvoton w836x7hg Consumer Infrared Transceiver"
+>  	depends on PNP || COMPILE_TEST
+> +	depends on HAS_IOPORT
+>  	help
+>  	   Say Y here to enable support for integrated infrared receiver
+>  	   /transceiver made by Nuvoton (formerly Winbond). This chip is
+> @@ -345,6 +349,7 @@ config IR_RX51
+>  
+>  config IR_SERIAL
+>  	tristate "Homebrew Serial Port Receiver"
+> +	depends on HAS_IOPORT
+>  	help
+>  	   Say Y if you want to use Homebrew Serial Port Receivers and
+>  	   Transceivers.
+> @@ -412,6 +417,7 @@ config IR_TTUSBIR
+>  config IR_WINBOND_CIR
+>  	tristate "Winbond IR remote control"
+>  	depends on (X86 && PNP) || COMPILE_TEST
+> +	depends on HAS_IOPORT
+>  	select NEW_LEDS
+>  	select LEDS_CLASS
+>  	select BITREVERSE
+> -- 
+> 2.32.0

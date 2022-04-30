@@ -2,133 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86F0F515A89
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 06:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4027515A8A
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 07:01:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241016AbiD3FAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 01:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51556 "EHLO
+        id S241068AbiD3FE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 01:04:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236287AbiD3FAP (ORCPT
+        with ESMTP id S236287AbiD3FEy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 01:00:15 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E87E6E8EB
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 21:56:53 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2d11b6259adso92537147b3.19
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 21:56:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=DKgH5cjjK4usjIdjrkXMltC0FNDrRtfHL9AXvv6j/Qs=;
-        b=Lbhhlco/tmGczl3XfLfvlkgxDvzoju6ZGBj0oRPyAxmLbuJhYcDlIZEckNNBehnqd2
-         cFlA3tUgZ8iRtasILmYqalElrqOmbmkqShcF9bk4FeT27YYabeLr9oYh15TotsJdDEf7
-         QAQnaR+R5fJkDaE3bVmrBiYmea5h0OlLk7x4GGoF8S3WP/QPtKptxKgUk1v83MdZ0Ptb
-         3axFTskyQR+dPTgkZZrW3lDdPH6nbfdXLYjyC38VGOYw9jJT4cevGVONyvLvZr8ZoAFx
-         WHQIkcSH2gnKSgyu9hUGYdWHKXM1igdPyce6OfG6VfokYJd4l9L6BRoHDosV7tRP8VZw
-         K7OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=DKgH5cjjK4usjIdjrkXMltC0FNDrRtfHL9AXvv6j/Qs=;
-        b=Bs0K2u98JUwTNhnwxBmndjYMCkm3C38XgraMRpBBrunM8EgLNRXkXMBYcSLIJSwblY
-         V/kXZ+2RNTnW0i2TXun3ifx+aTolvxKU7I0VUv69p1XAXhmENZKqsSJj0rZAlhQLgxnB
-         OjDszbEQC03GSj4pR7qOWNFip6WTLo02XFz7PxtVm9hDrD4OOTOuOEPUBWSi1Zt2wptV
-         7nAj2vqrJFLwPPlr603Hm9C343bycNh/V3ENbx38Dhv6XpG3nXefrU4bFhpmtfwNfHkn
-         oypVYXpndx9gqlL5YKBuoWsEO6qizf03lMrYAdHdVXKaIhRRAiBco1hxwPCnMINcHCkU
-         wCHA==
-X-Gm-Message-State: AOAM531d5eptNf95HTSca4DpQwTltyVQ+PQVMlqV5IYLF4FyMXm7qYl/
-        AJXVYC8gxBwHlqJJf8gHD/b7/g3aE4VGnQ==
-X-Google-Smtp-Source: ABdhPJzZClgG5VyBJlv5G0UOiXZsHM2AX2a3AXQBeRDnbwqv+Eoh0GnypsxkWIA2vP40Z4XRX9t8F1zLtSmd9w==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a05:6902:389:b0:633:31c1:d0f7 with SMTP
- id f9-20020a056902038900b0063331c1d0f7mr2417332ybs.543.1651294612515; Fri, 29
- Apr 2022 21:56:52 -0700 (PDT)
-Date:   Sat, 30 Apr 2022 12:56:40 +0800
-Message-Id: <20220430045639.839186-1-davidgow@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [PATCH] kunit: tool: Add list of all valid test configs on UML
-From:   David Gow <davidgow@google.com>
-To:     Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 30 Apr 2022 01:04:54 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF4012A9A
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 22:01:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=UN4x7iH4NKXkteoWIh3EUxDFhL5V4nUDAqGTxkHP6DM=; b=KR8l/WAr9lBc5OBVsczVxMqTZl
+        gvcPHgjQ70H81QG8/xWxtjwDT0OaksyA7HF1GxQSxddUnU1ExA/LAcuB1vjdlaN9WRWwbZy0irhom
+        b+F/edUU5pBSHWcE7s3O2b0ENOUIvvsmxPvw8UddvBsxFBT2RrVLWGzQAWEmngUE/YdqbzrT33WBc
+        3mX7IO8twjOIrUAfQrmjfJaOCSKLxyeUyfwFEiMBqTBmnMjQiG8Enh8hTdC/jTkoA3pRBkINSF+kz
+        P8SnjKUlpMVqpZl97eq3gZI6JKWfKbfj/Oc5q3IJh4SXcg1WzCQN9NV0jJ87Evc45068WMf+jGyk9
+        /Ppu/P5w==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nkfES-00DdP7-Cx; Sat, 30 Apr 2022 05:01:24 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Fuad Tabba <tabba@google.com>, Marc Zyngier <maz@kernel.org>,
+        David Brazdil <dbrazdil@google.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu
+Subject: [PATCH] KVM: arm64: nvhe: eliminate kernel-doc warnings
+Date:   Fri, 29 Apr 2022 22:01:23 -0700
+Message-Id: <20220430050123.2844-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's often desirable (particularly in test automation) to run as many
-tests as possible. This config enables all the tests which work as
-builtins under UML at present, increasing the total tests run from 156
-to 342 (not counting 36 'skipped' tests).
+Don't use begin-kernel-doc notation (/**) for comments that are not in
+kernel-doc format.
 
-They can be run with:
-./tools/testing/kunit/kunit.py run
---kunitconfig=./tools/testing/kunit/configs/all_tests_uml.config
+This prevents these kernel-doc warnings:
 
-This acts as an in-between point between the KUNIT_ALL_TESTS config
-(which enables only tests whose dependencies are already enabled), and
-the kunit_tool --alltests option, which tries to use allyesconfig,
-taking a very long time to build and breaking very often.
+arch/arm64/kvm/hyp/nvhe/switch.c:126: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+ * Disable host events, enable guest events
+arch/arm64/kvm/hyp/nvhe/switch.c:146: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+ * Disable guest events, enable host events
+arch/arm64/kvm/hyp/nvhe/switch.c:164: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+ * Handler for protected VM restricted exceptions.
+arch/arm64/kvm/hyp/nvhe/switch.c:176: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+ * Handler for protected VM MSR, MRS or System instruction execution in AArch64.
+arch/arm64/kvm/hyp/nvhe/switch.c:196: warning: Function parameter or member 'vcpu' not described in 'kvm_handle_pvm_fpsimd'
+arch/arm64/kvm/hyp/nvhe/switch.c:196: warning: Function parameter or member 'exit_code' not described in 'kvm_handle_pvm_fpsimd'
+arch/arm64/kvm/hyp/nvhe/switch.c:196: warning: expecting prototype for Handler for protected floating(). Prototype was for kvm_handle_pvm_fpsimd() instead
 
-Signed-off-by: David Gow <davidgow@google.com>
+Fixes: 09cf57eba304 ("KVM: arm64: Split hyp/switch.c to VHE/nVHE")
+Fixes: 1423afcb4117 ("KVM: arm64: Trap access to pVM restricted features")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Fuad Tabba <tabba@google.com>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: David Brazdil <dbrazdil@google.com>
+Cc: James Morse <james.morse@arm.com>
+Cc: Alexandru Elisei <alexandru.elisei@arm.com>
+Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: kvmarm@lists.cs.columbia.edu
 ---
- .../kunit/configs/all_tests_uml.config        | 37 +++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 tools/testing/kunit/configs/all_tests_uml.config
+ arch/arm64/kvm/hyp/nvhe/switch.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/kunit/configs/all_tests_uml.config b/tools/testing/kunit/configs/all_tests_uml.config
-new file mode 100644
-index 000000000000..bdee36bef4a3
---- /dev/null
-+++ b/tools/testing/kunit/configs/all_tests_uml.config
-@@ -0,0 +1,37 @@
-+# This config enables as many tests as possible under UML.
-+# It is intended for use in continuous integration systems and similar for
-+# automated testing of as much as possible.
-+# The config is manually maintained, though it uses KUNIT_ALL_TESTS=y to enable
-+# any tests whose dependencies are already satisfied. Please feel free to add
-+# more options if they any new tests.
-+
-+CONFIG_KUNIT=y
-+CONFIG_KUNIT_EXAMPLE_TEST=y
-+CONFIG_KUNIT_ALL_TESTS=y
-+
-+CONFIG_IIO=y
-+
-+CONFIG_EXT4_FS=y
-+
-+CONFIG_MSDOS_FS=y
-+CONFIG_VFAT_FS=y
-+
-+CONFIG_VIRTIO_UML=y
-+CONFIG_UML_PCI_OVER_VIRTIO=y
-+CONFIG_PCI=y
-+CONFIG_USB4=y
-+
-+CONFIG_NET=y
-+CONFIG_MCTP=y
-+
-+CONFIG_INET=y
-+CONFIG_MPTCP=y
-+
-+CONFIG_DAMON=y
-+CONFIG_DAMON_VADDR=y
-+CONFIG_DAMON_PADDR=y
-+CONFIG_DEBUG_FS=y
-+CONFIG_DAMON_DBGFS=y
-+
-+CONFIG_SECURITY=y
-+CONFIG_SECURITY_APPARMOR=y
--- 
-2.36.0.464.gb9c8b46e94-goog
-
+--- a/arch/arm64/kvm/hyp/nvhe/switch.c
++++ b/arch/arm64/kvm/hyp/nvhe/switch.c
+@@ -150,7 +150,7 @@ static void __hyp_vgic_restore_state(str
+ 	}
+ }
+ 
+-/**
++/*
+  * Disable host events, enable guest events
+  */
+ static bool __pmu_switch_to_guest(struct kvm_cpu_context *host_ctxt)
+@@ -170,7 +170,7 @@ static bool __pmu_switch_to_guest(struct
+ 	return (pmu->events_host || pmu->events_guest);
+ }
+ 
+-/**
++/*
+  * Disable guest events, enable host events
+  */
+ static void __pmu_switch_to_host(struct kvm_cpu_context *host_ctxt)
+@@ -188,7 +188,7 @@ static void __pmu_switch_to_host(struct
+ 		write_sysreg(pmu->events_host, pmcntenset_el0);
+ }
+ 
+-/**
++/*
+  * Handler for protected VM MSR, MRS or System instruction execution in AArch64.
+  *
+  * Returns true if the hypervisor has handled the exit, and control should go
+@@ -205,7 +205,7 @@ static bool kvm_handle_pvm_sys64(struct
+ 		kvm_handle_pvm_sysreg(vcpu, exit_code));
+ }
+ 
+-/**
++/*
+  * Handler for protected floating-point and Advanced SIMD accesses.
+  *
+  * Returns true if the hypervisor has handled the exit, and control should go

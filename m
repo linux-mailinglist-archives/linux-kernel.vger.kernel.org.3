@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8CA1515AC8
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 08:24:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B06EB515ACB
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 08:24:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382176AbiD3G1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 02:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58750 "EHLO
+        id S1382197AbiD3G1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 02:27:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241361AbiD3G05 (ORCPT
+        with ESMTP id S1351560AbiD3G1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 02:26:57 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B15CFE43
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 23:23:36 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 7-20020a250c07000000b0064137917a4eso9166337ybm.12
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 23:23:36 -0700 (PDT)
+        Sat, 30 Apr 2022 02:27:00 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00B8DCFE41
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 23:23:38 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 7-20020a250c07000000b0064137917a4eso9166365ybm.12
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 23:23:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=qM0CcLJJrKpW2Wkspbw9oc4+0PMtIaoOGCh2yb1+c8Y=;
-        b=VBOkfSXM46pJ80dgupLJN/D1Z7T4yXWGOJ+DI1vGk++6kp1gHBu561dvEsfHpL5o2f
-         7wiKW8+aiHaP+tw9Vc/BpMDSEtzCsCQUrc/SFTRggF4GHyZ2stzGv2Pe1hJpYg0uGJSn
-         tB7jYNqDPL+x7qRlKddqqk3hZnQU9/O59T9eBocCbDUDIYsscz5b8RlIPoVS6gKUoYOo
-         LsRcFKjlm22Tqo1jSDyrWsEevSiiOYcAgJZ6mcKSuF+1e1SOe+iTlqhDMTYDc8F4R659
-         hIPKUlZNRDKRI5ijUWBupwo5z/zVsb7qjGmsgfxL5E+IPP2XJgt2W3sxeAdrF5oueksY
-         024w==
+        bh=QbAjsSCqSFDRCvHRrmziRST5Dc++EK/823h/RlAIK5g=;
+        b=Rpq1AfeufiJjUWDBocUZh5TWrWdBIcyIGdUOys38n1LCXddAZUD8/lMYA2uJRYehiv
+         DJdYXSKB0Hjp0LHw9ULlY+OmkhssK/42gfA+pTnH6aD1X9Ut0J6A1CpwvqsLNiZUKztC
+         NhPKS9v4ShPG2UBHIp8gp35xL9Nxz1PyCzOIOViTHGblDrrLt7QcExXLDPH4rV61CgiG
+         CjmKNPwrEg+ZXczN6euaoH4tweUxuwjVdDFqbjruJo1ciq9x1Hd9kK2ZAMoWKoqI933l
+         8jWtvxs93NlAFlzrxmz3QO4j2WyXZHhVH+2Rt7II1m6DbaIchOfRMjYbqaQwN3aKQ+Ye
+         GpdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=qM0CcLJJrKpW2Wkspbw9oc4+0PMtIaoOGCh2yb1+c8Y=;
-        b=xLMooxB/2QJlxEG+keQ6gbUDgoVipTzV1/CGyovcwMBWWyFWTeyw1hvvhyvYazFatN
-         sMH5wz6uu9QFOFKBMJMCGllxAOEfqr9G8hIA/HaNOncpvJFwSAS4JWpMZCbmD+turt5d
-         r3EDFPZwtvCKlZPWGlEds9BkvSfWnQL0yK7IKl2gdTQsTQ6phgt7Z4HwnU59azgC7soP
-         oYhoDAq30ZnN8IncEoaeyjdwHokT7A0DFuLA+kFSPTJBvCWIYfiB41ro7tRlEJHoR7UX
-         HEI4pCIAxO05hEg9UnEwl7Uqf4cXsrhx6/zQnG0sECrKT4Oi3+J14qCyVLCHqvmwHMkM
-         Vgcg==
-X-Gm-Message-State: AOAM5311LBVHmyl0KGnqWCtfG3m8AorEGq14tdkv4fWp97bFCMEwpQ5k
-        My9U6e/4JFxagd/X3JkCptLkwuiKTHSZ
-X-Google-Smtp-Source: ABdhPJyJgzcdDR0Vabh1YpL71QKZ80jgYwvO35Fkq3RG6FcWK2FDtt70eli+OZlIVxeHRUcVSfpDNWMn1I1n
+        bh=QbAjsSCqSFDRCvHRrmziRST5Dc++EK/823h/RlAIK5g=;
+        b=4lBkN6JKhL4Raq2S+wsP7H+apiZOjgwnLm6wqhMS8qGtqCxaaILjnqNV1TywWnRsoI
+         IwP/oI7WM4b0pdjGfsgUtEmDs7B2Up7/mZD2+2QglZj4rNFTqCAbrV8GTya9+eUwYobg
+         Kq5wiVdC0rugj8cfrJ03ztkhhVVTh/iKkWbVsZn2018Xia0lldKFFHO4orpnP+rMm9a5
+         4t+MY1dhHq2PVDaY2dgWF/RHfgiL0kWnEcDIfb/x1Hmtc3ZIBVue8oWsZNoAk6a9u36D
+         GUmkBkCd6X8rT0SAxq4cNO/a+sLINkr0R7mZd6P+qgqy5x1fzcieg1iWDhfSSLhP8JJG
+         6eMg==
+X-Gm-Message-State: AOAM532GeFryKyamm4w2Hhe1/U2bjaJyYmkcesDD0aMR00YORkplm62U
+        OuGRXyCLdaGcZZnB4p+uhxCvU6UgAsz4
+X-Google-Smtp-Source: ABdhPJwWdCK9HhHKXU+Zq1v3vI46L5oK3Vj6FtMCyKhUPVl+Q23X1BMEt6F/666jhslBJLRWT0lcaV/p492J
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:2481:caab:4fd5:232b])
- (user=irogers job=sendgmr) by 2002:a81:7b05:0:b0:2f4:e45a:b06e with SMTP id
- w5-20020a817b05000000b002f4e45ab06emr2725986ywc.458.1651299816033; Fri, 29
- Apr 2022 23:23:36 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 23:23:20 -0700
+ (user=irogers job=sendgmr) by 2002:a25:6788:0:b0:648:d8c0:2ed4 with SMTP id
+ b130-20020a256788000000b00648d8c02ed4mr2483910ybc.577.1651299818209; Fri, 29
+ Apr 2022 23:23:38 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 23:23:21 -0700
 In-Reply-To: <20220430062324.1565215-1-irogers@google.com>
-Message-Id: <20220430062324.1565215-3-irogers@google.com>
+Message-Id: <20220430062324.1565215-4-irogers@google.com>
 Mime-Version: 1.0
 References: <20220430062324.1565215-1-irogers@google.com>
 X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [PATCH v4 2/6] perf evlist: Clear all_cpus before propagating
+Subject: [PATCH v4 3/6] perf stat: Avoid printing cpus with no counters
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -96,33 +96,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-all_cpus is merged into during propagation. Initially all_cpus is set
-from PMU sysfs. perf_evlist__set_maps will recompute it and change
-evsel->cpus to user_requested_cpus if they are given. If all_cpus isn't
-cleared then the union of the user_requested_cpus and PMU sysfs values
-is set to all_cpus, whereas just user_requested_cpus is necessary. To
-avoid this make all_cpus empty prior to propagation.
+perf_evlist's user_requested_cpus can contain CPUs not present in any
+evsel's cpus, for example uncore counters. Avoid printing the prefix and
+trailing \n until the first valid counter is encountered.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/lib/perf/evlist.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/perf/util/stat-display.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/tools/lib/perf/evlist.c b/tools/lib/perf/evlist.c
-index a09315538a30..974b4585f93e 100644
---- a/tools/lib/perf/evlist.c
-+++ b/tools/lib/perf/evlist.c
-@@ -59,6 +59,10 @@ static void perf_evlist__propagate_maps(struct perf_evlist *evlist)
- {
- 	struct perf_evsel *evsel;
+diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
+index d9629a83aa78..13f705737367 100644
+--- a/tools/perf/util/stat-display.c
++++ b/tools/perf/util/stat-display.c
+@@ -948,8 +948,6 @@ static void print_no_aggr_metric(struct perf_stat_config *config,
+ 		struct evsel *counter;
+ 		bool first = true;
  
-+	/* Recomputing all_cpus, so start with a blank slate. */
-+	perf_cpu_map__put(evlist->all_cpus);
-+	evlist->all_cpus = NULL;
-+
- 	perf_evlist__for_each_evsel(evlist, evsel)
- 		__perf_evlist__propagate_maps(evlist, evsel);
+-		if (prefix)
+-			fputs(prefix, config->output);
+ 		evlist__for_each_entry(evlist, counter) {
+ 			u64 ena, run, val;
+ 			double uval;
+@@ -961,6 +959,8 @@ static void print_no_aggr_metric(struct perf_stat_config *config,
+ 
+ 			id = aggr_cpu_id__cpu(cpu, /*data=*/NULL);
+ 			if (first) {
++				if (prefix)
++					fputs(prefix, config->output);
+ 				aggr_printout(config, counter, id, 0);
+ 				first = false;
+ 			}
+@@ -972,7 +972,8 @@ static void print_no_aggr_metric(struct perf_stat_config *config,
+ 			printout(config, id, 0, counter, uval, prefix,
+ 				 run, ena, 1.0, &rt_stat);
+ 		}
+-		fputc('\n', config->output);
++		if (!first)
++			fputc('\n', config->output);
+ 	}
  }
+ 
 -- 
 2.36.0.464.gb9c8b46e94-goog
 

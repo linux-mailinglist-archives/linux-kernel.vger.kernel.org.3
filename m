@@ -2,79 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA044515DCF
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 15:44:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5161515DD6
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 15:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349716AbiD3Nrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 09:47:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48390 "EHLO
+        id S1359502AbiD3Nvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 09:51:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238513AbiD3Nro (ORCPT
+        with ESMTP id S234594AbiD3Nvj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 09:47:44 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFE851E64
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 06:44:22 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id c23so9364652plo.0
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 06:44:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=BqIxANSCe4nfeVe4AU8f2BtOt2NenfWECIlvX3a7SYk=;
-        b=AUcE1lZuPjKn80PACgAPEZP0kBiSrF5iKrv862zPCaJgDhkvtPfzOvzAdYmjIrP+Px
-         1VZe2FbcwldJya2Caq+H8pXa3UurJZ8g06pppmVj/XLcRmfPcMJobGSRHmH/3xQqXBYl
-         OCAlsM97tr5XcNn13Gn/Qzexj5oWSl0+aeFvmtn6tIlsTpYjfuMqXVHz8T3bzQjVVvYq
-         O9j924xjCSNOS0xAPOX05WCkoQ7TBtXF5y4mMdWFa/iNhmogDE/V/0IwxhbHpjB+nUkZ
-         SFzCCTa4OCEKgtx9lxCFSer20QsWPrM/6apEYpePLDHTTLHssTLwlkvvFde/+TPN1mgG
-         yyZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=BqIxANSCe4nfeVe4AU8f2BtOt2NenfWECIlvX3a7SYk=;
-        b=M9yLPN9Ks0vsWTuEDx5If5OG+tjw6g7ZKg0Cbp03LUiFhXhGRkZt0tqTt0OTyPap/l
-         PwVV7zHM34xShAeP3XP7JaTgtqESZ3x3jIHs8ifrzLU9+hVHETNqIasQYOhJvPlyg6n6
-         sRPDYfB5yZgmdmnYphFmduGwcM4gsHB6wj4wMDBM0hVLXPNP/nd7T3GFX1ATYPapEzBY
-         zl97N3vPgY/2Ac/7DJs8HnLRQb2Pg75XHobn6bzIRu5C69rp0J9H6xB1bn1uPu5s6T9l
-         WMyGPee9C2CPbnl/ZM+PbHB/IzUpDh8R3HipRsuwOLWGqKub1tLpFBxMe1lG6Y98As4D
-         WA3Q==
-X-Gm-Message-State: AOAM532bnutltmIK21sOck1vqU3y1bHA1/n48D+VFprA10tnwUc4Tsy2
-        dvCjdrIGiJ6CR9LVz+9Uw50=
-X-Google-Smtp-Source: ABdhPJxH0grf9vbL0PX3vT9Q0wxOja7HcFLXgAV7X/ifDrk9gSCn0eg3KLVkBMX6ocMTuiir6gM2qQ==
-X-Received: by 2002:a17:90a:9ea:b0:1dc:1c48:eda with SMTP id 97-20020a17090a09ea00b001dc1c480edamr5480231pjo.38.1651326262206;
-        Sat, 30 Apr 2022 06:44:22 -0700 (PDT)
-Received: from ip-172-31-27-201.ap-northeast-1.compute.internal (ec2-18-183-95-104.ap-northeast-1.compute.amazonaws.com. [18.183.95.104])
-        by smtp.gmail.com with ESMTPSA id h3-20020a62b403000000b0050dc7628181sm1585485pfn.91.2022.04.30.06.44.19
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 30 Apr 2022 06:44:21 -0700 (PDT)
-Date:   Sat, 30 Apr 2022 13:44:16 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [RFC PATCH 0/3] Prototype for direct map awareness in page
- allocator
-Message-ID: <20220430134415.GA25819@ip-172-31-27-201.ap-northeast-1.compute.internal>
-References: <20220127085608.306306-1-rppt@kernel.org>
- <YmezWeMZSRNRfXyG@hyeyoo>
- <YmgOFa3FUUpiANMq@kernel.org>
-MIME-Version: 1.0
+        Sat, 30 Apr 2022 09:51:39 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2128.outbound.protection.outlook.com [40.107.113.128])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF6166CBC;
+        Sat, 30 Apr 2022 06:48:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WPtH588ARqhvA8o2TkarAYyNEAjqMG2LcWiZAKfc3tYqS3xCN/62N1sm9q7D1sptsxWLGAKy4v8hoAKZBetRtpSNrXriJLu0S8veOJ2ZFifn9hXUhN9a0fpoXjZ94pm5c3RVvrGUJORW5V4WstXt4PhFiryd8UtTvmVzvWtYa3wFRTJdgiXGIngUgXt+Hcth51WrxfRyhe4JaltqKm3AjE9dxoW1gfJI83IhVs3xAglpD7LLcZiAfsVBEldDLaWSnm0OBZlA/aJBfyTDoVFaWObB90AbjbsmkddVn4SgjhDfptu8UB9POEctYLEWOpttPDw3MLfPwSKGcGXIfDBArg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=M+gKlK7myVKHZqyCWusQle6tdHd9gd6nwgEnmnydETQ=;
+ b=nY/N6+Be/WflNql5UrioUkKf9h9lHZY2zd5oHKgLZDCeowo4pXYSQ9o1YMv89FbXAiUNndbZsvoGesL0qXfuMeZ0/diRsxTl4nehmNZkMkrDdRdfoIOOVH25Aw5+xTWrk2tFbHHxgP0tFsT5km6UvoLNK4V2L+o/DZrFa225HN1T9g8fDBWwmGQcwvGZdvyTO/V+1t0xFvRqdgys+RKw0SwDfJJxI1m+JA6MzofemhzU/A5TZmbS8YmD2c/VafC5MZllYLdrhkMnqwRnM6dpZ1Mryz5zsvUoc3BQnFF1veCq6v2iad9nEVAdzKSDB+6Ows89OUAF/sbOY0/MBZW16w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=zenithal.me; dmarc=pass action=none header.from=zenithal.me;
+ dkim=pass header.d=zenithal.me; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zenithal.me;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=M+gKlK7myVKHZqyCWusQle6tdHd9gd6nwgEnmnydETQ=;
+ b=G3qgDSmEblQgtvpDbcOFIV7y5eclXC4HIdzuU2oYPjFOGcLggcmg22tv8Hwh1KEaDhv1sRzGkU/4vTAqMpUpeFtagkHr1WhGLgvlLJSU+qFUlYhkYULQgjXRemtCgEmM80uWeYmRBrsadCAB8VpEuBWwS/1YGcuhLkSjqc9RwMk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=zenithal.me;
+Received: from TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:c0::6) by
+ TYCP286MB1706.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:187::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5206.13; Sat, 30 Apr 2022 13:48:11 +0000
+Received: from TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::bd99:5c83:e2dc:a8f7]) by TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::bd99:5c83:e2dc:a8f7%6]) with mapi id 15.20.5206.012; Sat, 30 Apr 2022
+ 13:48:10 +0000
+Date:   Sat, 30 Apr 2022 21:48:02 +0800
+From:   "Hongren (Zenithal) Zheng" <i@zenithal.me>
+To:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <anup@brainfault.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>, linux-mm@kvack.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        linux-man@vger.kernel.org, Jiatai He <jiatai2021@iscas.ac.cn>
+Subject: [PATCH 0/3] RISC-V: Add Bitmanip/Scalar Crypto HWCAP
+Message-ID: <Ym0+Erz5DEnB78vu@Sun>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YmgOFa3FUUpiANMq@kernel.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Operating-System: Linux Sun 5.15.26
+X-Mailer: Mutt 2.2.1 (2022-02-19)
+X-ClientProxiedBy: SJ0PR05CA0208.namprd05.prod.outlook.com
+ (2603:10b6:a03:330::33) To TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:c0::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 853486b2-3137-4a52-36e2-08da2ab01077
+X-MS-TrafficTypeDiagnostic: TYCP286MB1706:EE_
+X-Microsoft-Antispam-PRVS: <TYCP286MB1706816689531A38448334A2BCFF9@TYCP286MB1706.JPNP286.PROD.OUTLOOK.COM>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: G+eJOJ/Mj/awsD9vY2W5x1MDQdI91DefWCy2qd3jfPcYjVff1difs36b1kHDbW1vRObiEj4URKC4HXLpEJWNKp4M/DHiEZ71lLWfGB3DhaMZtBJ85roZxCwx3ivfvvqamIBho04k2t2DcY6CvXE4+YLEsStnhfRBrQkYySnNatP+R2T8tk5ZRXbgd6TvkWYcVIwLWiTjtRGoh/xKtF6NqKzinnYTnkiRdq0yc9SjDxMZOC37Pw1m5RBPvApUPIVxARS0XOCyDIOaAxaGztDYR4/W/FgQdfrKejiEzs2wjdZg1CydYYEY8xW799FFTSmLIbXxZ+S0Uq52E3jB+W+pZuZU2M3+LZqB8W7t9XDQ1qHUylHPgGPyCq+MBvyaut8pwPL1lBooeB1KqNCZ1hY3KpHU84xtfSiQGCaciqgLEysAeOYYPdG21EqJHhCTxKW6fF7aY/dRBqGWqahVWtssHGbLm0vDKTLoLuuMPuu9qeguC2PVMVONCzWhy7DERUQmcfStp3OBLvo1M9IXmBNXA2Azc0RzUUTbLzXddpeTORlrtPr9v+VQfjU3fjAIHn1AQOhfKuTdTxTsmClYpsGVhtb99ppEfq40xDtEWNYll/IZZ2RRdq1+KFQ79GB7TrLARqhs6ajgpcP3HhHl6ifcCMe4ZaEGHk95kzCDcV8uSFBOgmLzU7DRwAXkgOMe4KomHUu+r6eOfdhWnMK+wppUHqYuYWWL6LsAX8KNyfgjqDoXsa5S3F70PX5GySkZGBzFBW4IqpB4Jifzh+t181zVXzHZUc2hHyTYQrVCdsTU4CI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(376002)(346002)(396003)(136003)(39830400003)(6506007)(83380400001)(86362001)(966005)(6666004)(52116002)(6486002)(38100700002)(508600001)(6512007)(9686003)(186003)(8936002)(2906002)(316002)(786003)(33716001)(7416002)(66946007)(54906003)(66476007)(66556008)(110136005)(5660300002)(8676002)(4326008)(49092004)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fB7sDSH+cjlQIyzSiYme9UR9dMrVtO4h67CQgqbDsY/PvX5WvhU8I+x08nZP?=
+ =?us-ascii?Q?OmbiaRtR9M6zFVNJRj8n6M8jN4YJ1IsLhUrqT/ioFQEkQlZwls5MnIS+82GT?=
+ =?us-ascii?Q?b7RMZFXpUHaAKtG/UUMiRDT90G8evzneo7GptHK0+aSXPk3DSyB2m4We+JKj?=
+ =?us-ascii?Q?PWMBJOH1z5B/bCgCAEPPrv9fYiqVIwnwEDpTmM02keGYg1ccbuQ+3cwk09Nu?=
+ =?us-ascii?Q?J9oTxlyhO1okRWo7AtO5sa5hO2UkrTxgrvrXn5xk+8A3R/xg6SzWqxUfvibg?=
+ =?us-ascii?Q?a8NhgXR4WPux/2QAntFinkoc8uEu91p+8xjar2mrYW+1sl10bAYtf7lbHJyC?=
+ =?us-ascii?Q?YhC0uYekijDwglC0tqD7eqBxTgeNQdQ/EJt3oI3fAaHTWNE8Vp5Alcu5tgoU?=
+ =?us-ascii?Q?yzyshBQcMuVfbRKI93crVqPX+2vPdZ54Zq1u+oTSeWnR+i8VH8nFrjAsOuYk?=
+ =?us-ascii?Q?rf+hbV0rsnyb61Ap/RZC30HfnRJ7IXjQBSY7uKwlAed8piPP6Ly2FMKjiE1F?=
+ =?us-ascii?Q?gX/nc7tqQZPDCc7yJKP2B5g23PCCZtCUsEXBr/Ggm/Jvs+Q3U2l9lM3PEfDZ?=
+ =?us-ascii?Q?Zi16fDIsIDItva+boLdrrBPj71W+XI+/WTqsiEW1O3iEGSt/BLuQUIlE7dud?=
+ =?us-ascii?Q?CS1aXWdtw3R5AnQzK7pL3KYzkA1xpzHpdsg5OyNWKop26gXbTiGD/ufg5wJ8?=
+ =?us-ascii?Q?0NHjvfHHfxtKCzaGfp5RE6DU+gRGnHdUYur1aus0rfWs9HcslviAyKfY4/iW?=
+ =?us-ascii?Q?+hEJ+ExndBoIrCg4oaUP2dwUk3o9pQVhUrPcSiGxsR0jdS/Bcmw2D4qU952O?=
+ =?us-ascii?Q?Mf6UiGKrCE6z0rWKWKec8GF86t6Wp18dZ8X5Ag2TkfwzRBnWgDCPbYUtAkbo?=
+ =?us-ascii?Q?LEDmO72PLBBtx9h6lfKfnizamx9rcYrN6mcWJPHVYTAlpGual2tR3C17UMD7?=
+ =?us-ascii?Q?RPdHQ8G92GDhQmZ7k7fWOiTaho65BMw+DuFabj0aZr109450rxthEjtNWVBf?=
+ =?us-ascii?Q?gCdHwfN2QcG2wBQvRpCIIoLSchYe8JmP0GJNCkiIHKt998JEBoUrdGYGHfFx?=
+ =?us-ascii?Q?3QDDEFz1gi5KkxTVTUQsvTHfdmNgAa3SYgdvnUSh4HYwMNHt0a4o+Nar7XWn?=
+ =?us-ascii?Q?0G3uJJ9GCXbpW2G+rsm47Btz+Vfl/7a4Kg07ptYQ6lF8+xZtwvNjRlYdj6sK?=
+ =?us-ascii?Q?fyIeYEndh1EBesCsEYbcUkvSlcFzs420cnpNOhfnpKFQXR0JWqbWb/jJnHrp?=
+ =?us-ascii?Q?POz/ScjJ5cZcXCKrH3IPyWHzaOBYyllKhjwoq40v6ly9kRedlWPSyAoiUQYe?=
+ =?us-ascii?Q?T+LpCkgYbxDCPwyrERPW/GPKCOBjOyhmWNj+H9aTbzkzSYOp8Yh0V61Yx/Tf?=
+ =?us-ascii?Q?XJ54j1dL92P7LPtjrOKkb03gMM4orTuT201nIKHqfGGDuI0rW+ZSyKRjF7Yp?=
+ =?us-ascii?Q?sITx3HXSDya5ekQBPSN4932YeaszaeX1W9E2AVRnylh7I7CCtgeTlCXW13e9?=
+ =?us-ascii?Q?7nyNQB8zlc8058Ig3OYhA10UZZt3Jx09E6b7npGNfQ3i3I1/TR6KmwLXuyMD?=
+ =?us-ascii?Q?1IA4Dsw6+Se7c1NwTBole+EAIpr8JuZlZsBSAHGllyt/VR63rwk9QXuzvqbD?=
+ =?us-ascii?Q?cYkxwcyljqg6nuj2MIny+QImLVM2KBqfMSK4cIi5foR+Ank0dF7jb8kFeEKR?=
+ =?us-ascii?Q?fVVrCkeh63oO2clOF5mgOjZ8OE2VFfNJeqxmhIk9XptcF6H9e0yNhT6aoPue?=
+ =?us-ascii?Q?hLEbhQZUZQ=3D=3D?=
+X-OriginatorOrg: zenithal.me
+X-MS-Exchange-CrossTenant-Network-Message-Id: 853486b2-3137-4a52-36e2-08da2ab01077
+X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Apr 2022 13:48:10.8955
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 436d481c-43b1-4418-8d7f-84c1e4887cf0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: x3uNWMGI8dHouC7NVlLOmpQsuontxGVcNQcluuIsdfjWDXXRIavnaidhB0HVT1HK
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCP286MB1706
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,93 +124,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 06:21:57PM +0300, Mike Rapoport wrote:
-> Hello Hyeonggon,
-> 
-> On Tue, Apr 26, 2022 at 05:54:49PM +0900, Hyeonggon Yoo wrote:
-> > On Thu, Jan 27, 2022 at 10:56:05AM +0200, Mike Rapoport wrote:
-> > > From: Mike Rapoport <rppt@linux.ibm.com>
-> > > 
-> > > Hi,
-> > > 
-> > > This is a second attempt to make page allocator aware of the direct map
-> > > layout and allow grouping of the pages that must be mapped at PTE level in
-> > > the direct map.
-> > >
-> > 
-> > Hello mike, It may be a silly question...
-> > 
-> > Looking at implementation of set_memory*(), they only split
-> > PMD/PUD-sized entries. But why not _merge_ them when all entries
-> > have same permissions after changing permission of an entry?
-> > 
-> > I think grouping __GFP_UNMAPPED allocations would help reducing
-> > direct map fragmentation, but IMHO merging split entries seems better
-> > to be done in those helpers than in page allocator.
->
-> Maybe, I didn't got as far as to try merging split entries in the direct
-> map.  IIRC, Kirill sent a patch for collapsing huge pages in the direct map
-> some time ago, but there still was something that had to initiate the
-> collapse.
+This patchset proposes a currently viable and forward
+compatible way to expose the bitmanip/scalar crypto
+capability of the platform to the userspace.
 
-But in this case buddy allocator's view of direct map is quite limited.
-It cannot merge 2M entries to 1G entry as it does not support
-big allocations. Also it cannot merge entries of pages freed in boot process
-as they weren't allocated from page allocator.
+Currently viable refers to the property that hardware
+platforms can easily modify the riscv,isa field in DT to
+tell the kernel it has the capability. Note that QEMU
+has already done so in its device tree.
 
-And it will become harder when pages in MIGRATE_UNMAPPED is borrowed
-from another migrate type....
+Forward compatible refers to the property that userspace
+can still detect the capability of the environment by
+using HWCAP regardless of how the mechanism changes
+below kernel in the future. I do know that it has not
+been settled how to discover a capability, but I think
+kernel has to offer some API after all, and HWCAP
+is the preferred way among other mechanisms for now.
 
-So it would be nice if we can efficiently merge mappings in
-change_page_attr_set(). this approach can handle cases above.
+More discussion on userspace discovering
+can be found on my PR to openssl
+https://github.com/openssl/openssl/pull/18197
 
-I think in this case grouping allocations and merging mappings
-should be done separately.
+Hongren (Zenithal) Zheng (3):
+  RISC-V: add Bitmanip/Scalar Crypto parsing from DT
+  RISC-V: uapi: add HWCAP for Bitmanip/Scalar Crypto
+  RISC-V: HWCAP: parse Bitmanip/Scalar Crypto HWCAP from DT
 
-> > For example:
-> > 	1) set_memory_ro() splits 1 RW PMD entry into 511 RW PTE
-> > 	entries and 1 RO PTE entry.
-> > 
-> > 	2) before freeing the pages, we call set_memory_rw() and we have
-> > 	512 RW PTE entries. Then we can merge it to 1 RW PMD entry.
-> 
-> For this we need to check permissions of all 512 pages to make sure we can
-> use a PMD entry to map them.
+ arch/riscv/include/asm/elf.h        |  2 +
+ arch/riscv/include/asm/hwcap.h      | 16 ++++++
+ arch/riscv/include/uapi/asm/hwcap.h | 22 ++++++++
+ arch/riscv/kernel/cpu.c             | 14 +++++
+ arch/riscv/kernel/cpufeature.c      | 79 +++++++++++++++++++++++++----
+ 5 files changed, 123 insertions(+), 10 deletions(-)
 
-Of course that may be slow. Maybe one way to optimize this is using some bits
-in struct page, something like: each bit of page->direct_map_split (unsigned long)
-is set when at least one entry in (PTRS_PER_PTE = 512)/(BITS_PER_LONG = 64) = 8 entries
-has special permissions.
+-- 
+2.35.1
 
-Then we just need to set the corresponding bit when splitting mappings and
-iterate 8 entries when changing permission back again. (and then unset the bit when 8 entries has
-usual permissions). we can decide to merge by checking if page->direct_map_split is zero.
-
-When scanning, 8 entries would fit into one cacheline.
-
-Any other ideas?
-
-> Not sure that doing the scan in each set_memory call won't cause an overall
-> slowdown.
-
-I think we can evaluate it by measuring boot time and bpf/module
-load/unload time.
-
-Is there any other workload that is directly affected
-by performance of set_memory*()?
-
-> > 	3) after 2) we can do same thing about PMD-sized entries
-> > 	and merge them into 1 PUD entry if 512 PMD entries have
-> > 	same permissions.
-> > [...]
-> > > Mike Rapoport (3):
-> > >   mm/page_alloc: introduce __GFP_UNMAPPED and MIGRATE_UNMAPPED
-> > >   mm/secretmem: use __GFP_UNMAPPED to allocate pages
-> > >   EXPERIMENTAL: x86/module: use __GFP_UNMAPPED in module_alloc
-> > -- 
-> > Thanks,
-> > Hyeonggon
-> 
-> -- 
-> Sincerely yours,
-> Mike.

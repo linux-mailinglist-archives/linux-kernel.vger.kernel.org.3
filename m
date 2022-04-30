@@ -2,152 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 838BF515A1A
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 05:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6A3E515A1E
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 05:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240591AbiD3DZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 23:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53758 "EHLO
+        id S1349226AbiD3D1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 23:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233705AbiD3DZS (ORCPT
+        with ESMTP id S233705AbiD3D07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 23:25:18 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14D49A990;
-        Fri, 29 Apr 2022 20:21:55 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R851e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=31;SR=0;TI=SMTPD_---0VBla4YD_1651288907;
-Received: from 30.32.86.96(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VBla4YD_1651288907)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sat, 30 Apr 2022 11:21:50 +0800
-Message-ID: <bcb4a3b0-4fcd-af3a-2a2c-fd662d9eaba9@linux.alibaba.com>
-Date:   Sat, 30 Apr 2022 11:22:33 +0800
+        Fri, 29 Apr 2022 23:26:59 -0400
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BF49A990
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 20:23:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1651289018;
+        bh=saZ1ICHbU9lFksbXg59gPJ7eQi7BrCLxeXMUCvy8Ls0=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=TRmoqBdyEIzD0PgS4pgitN9/buzLB7u2W2++KWlXr8u1+c14w1Ls9vzc1TTshrD13
+         wmzTNQFhOM8ONWki9QHj2TqFeHFm/OaD0k/YPRczt8P7ogJA3yPWZio09WWS7zE735
+         vSiZfWu5R1Of1xh/vyapgqxTM3bpFUOULAcCxyLI=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 202311289FB3;
+        Fri, 29 Apr 2022 23:23:38 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id whBwklBwMn_1; Fri, 29 Apr 2022 23:23:38 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1651289018;
+        bh=saZ1ICHbU9lFksbXg59gPJ7eQi7BrCLxeXMUCvy8Ls0=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=TRmoqBdyEIzD0PgS4pgitN9/buzLB7u2W2++KWlXr8u1+c14w1Ls9vzc1TTshrD13
+         wmzTNQFhOM8ONWki9QHj2TqFeHFm/OaD0k/YPRczt8P7ogJA3yPWZio09WWS7zE735
+         vSiZfWu5R1Of1xh/vyapgqxTM3bpFUOULAcCxyLI=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::3774])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 8C1EF1289FAF;
+        Fri, 29 Apr 2022 23:23:37 -0400 (EDT)
+Message-ID: <c0cce549e81dd3b773bc30bda30212d94ae0759e.camel@HansenPartnership.com>
+Subject: [GIT PULL] SCSI fixes for 5.18-rc4
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Fri, 29 Apr 2022 23:23:36 -0400
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 3/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when
- unmapping
-To:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Cc:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
-        catalin.marinas@arm.com, will@kernel.org,
-        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
-        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
-        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, arnd@arndb.de,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org
-References: <cover.1651216964.git.baolin.wang@linux.alibaba.com>
- <c91e04ebb792ef7b72966edea8bd6fa2dfa5bfa7.1651216964.git.baolin.wang@linux.alibaba.com>
- <20220429220214.4cfc5539@thinkpad>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20220429220214.4cfc5539@thinkpad>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-12.8 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+One fix for an endless error loop with the target driver affecting
+tapes.
 
+The patch is available here:
 
-On 4/30/2022 4:02 AM, Gerald Schaefer wrote:
-> On Fri, 29 Apr 2022 16:14:43 +0800
-> Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
-> 
->> On some architectures (like ARM64), it can support CONT-PTE/PMD size
->> hugetlb, which means it can support not only PMD/PUD size hugetlb:
->> 2M and 1G, but also CONT-PTE/PMD size: 64K and 32M if a 4K page
->> size specified.
->>
->> When unmapping a hugetlb page, we will get the relevant page table
->> entry by huge_pte_offset() only once to nuke it. This is correct
->> for PMD or PUD size hugetlb, since they always contain only one
->> pmd entry or pud entry in the page table.
->>
->> However this is incorrect for CONT-PTE and CONT-PMD size hugetlb,
->> since they can contain several continuous pte or pmd entry with
->> same page table attributes, so we will nuke only one pte or pmd
->> entry for this CONT-PTE/PMD size hugetlb page.
->>
->> And now we only use try_to_unmap() to unmap a poisoned hugetlb page,
->> which means now we will unmap only one pte entry for a CONT-PTE or
->> CONT-PMD size poisoned hugetlb page, and we can still access other
->> subpages of a CONT-PTE or CONT-PMD size poisoned hugetlb page,
->> which will cause serious issues possibly.
->>
->> So we should change to use huge_ptep_clear_flush() to nuke the
->> hugetlb page table to fix this issue, which already considered
->> CONT-PTE and CONT-PMD size hugetlb.
->>
->> Note we've already used set_huge_swap_pte_at() to set a poisoned
->> swap entry for a poisoned hugetlb page.
->>
->> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->> ---
->>   mm/rmap.c | 34 +++++++++++++++++-----------------
->>   1 file changed, 17 insertions(+), 17 deletions(-)
->>
->> diff --git a/mm/rmap.c b/mm/rmap.c
->> index 7cf2408..1e168d7 100644
->> --- a/mm/rmap.c
->> +++ b/mm/rmap.c
->> @@ -1564,28 +1564,28 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
->>   					break;
->>   				}
->>   			}
->> +			pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
-> 
-> Unlike in your patch 2/3, I do not see that this (huge) pteval would later
-> be used again with set_huge_pte_at() instead of set_pte_at(). Not sure if
-> this (huge) pteval could end up at a set_pte_at() later, but if yes, then
-> this would be broken on s390, and you'd need to use set_huge_pte_at()
-> instead of set_pte_at() like in your patch 2/3.
+git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
 
-IIUC, As I said in the commit message, we will only unmap a poisoned 
-hugetlb page by try_to_unmap(), and the poisoned hugetlb page will be 
-remapped with a poisoned entry by set_huge_swap_pte_at() in 
-try_to_unmap_one(). So I think no need change to use set_huge_pte_at() 
-instead of set_pte_at() for other cases, since the hugetlb page will not 
-hit other cases.
+The short changelog is:
 
-if (PageHWPoison(subpage) && !(flags & TTU_IGNORE_HWPOISON)) {
-	pteval = swp_entry_to_pte(make_hwpoison_entry(subpage));
-	if (folio_test_hugetlb(folio)) {
-		hugetlb_count_sub(folio_nr_pages(folio), mm);
-		set_huge_swap_pte_at(mm, address, pvmw.pte, pteval,
-				     vma_mmu_pagesize(vma));
-	} else {
-		dec_mm_counter(mm, mm_counter(&folio->page));
-		set_pte_at(mm, address, pvmw.pte, pteval);
-	}
+David Jeffery (1):
+      scsi: target: pscsi: Set SCF_TREAT_READ_AS_NORMAL flag only if there is valid data
 
-}
+And the diffstat:
 
-> 
-> Please note that huge_ptep_get functions do not return valid PTEs on s390,
-> and such PTEs must never be set directly with set_pte_at(), but only with
-> set_huge_pte_at().
-> 
-> Background is that, for hugetlb pages, we are of course not really dealing
-> with PTEs at this level, but rather PMDs or PUDs, depending on hugetlb size.
-> On s390, the layout is quite different for PTEs and PMDs / PUDs, and
-> unfortunately the hugetlb code is not properly reflecting this by using
-> PMD or PUD types, like the THP code does.
-> 
-> So, as work-around, on s390, the huge_ptep_xxx functions will return
-> only fake PTEs, which must be converted again to a proper PMD or PUD,
-> before writing them to the page table, which is what happens in
-> set_huge_pte_at(), but not in set_pte_at().
+ drivers/target/target_core_pscsi.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Thanks for your explanation. As I said as above, I think we've already 
-handled the hugetlb with set_huge_swap_pte_at() in try_to_unmap_one().
+With full diff below.
+
+James
+
+---
+
+diff --git a/drivers/target/target_core_pscsi.c b/drivers/target/target_core_pscsi.c
+index ff292b75e23f..60dafe4c581b 100644
+--- a/drivers/target/target_core_pscsi.c
++++ b/drivers/target/target_core_pscsi.c
+@@ -588,7 +588,7 @@ static void pscsi_destroy_device(struct se_device *dev)
+ }
+ 
+ static void pscsi_complete_cmd(struct se_cmd *cmd, u8 scsi_status,
+-			       unsigned char *req_sense)
++			       unsigned char *req_sense, int valid_data)
+ {
+ 	struct pscsi_dev_virt *pdv = PSCSI_DEV(cmd->se_dev);
+ 	struct scsi_device *sd = pdv->pdv_sd;
+@@ -681,7 +681,7 @@ static void pscsi_complete_cmd(struct se_cmd *cmd, u8 scsi_status,
+ 		 * back despite framework assumption that a
+ 		 * check condition means there is no data
+ 		 */
+-		if (sd->type == TYPE_TAPE &&
++		if (sd->type == TYPE_TAPE && valid_data &&
+ 		    cmd->data_direction == DMA_FROM_DEVICE) {
+ 			/*
+ 			 * is sense data valid, fixed format,
+@@ -1032,6 +1032,7 @@ static void pscsi_req_done(struct request *req, blk_status_t status)
+ 	struct se_cmd *cmd = req->end_io_data;
+ 	struct scsi_cmnd *scmd = blk_mq_rq_to_pdu(req);
+ 	enum sam_status scsi_status = scmd->result & 0xff;
++	int valid_data = cmd->data_length - scmd->resid_len;
+ 	u8 *cdb = cmd->priv;
+ 
+ 	if (scsi_status != SAM_STAT_GOOD) {
+@@ -1039,12 +1040,11 @@ static void pscsi_req_done(struct request *req, blk_status_t status)
+ 			" 0x%02x Result: 0x%08x\n", cmd, cdb[0], scmd->result);
+ 	}
+ 
+-	pscsi_complete_cmd(cmd, scsi_status, scmd->sense_buffer);
++	pscsi_complete_cmd(cmd, scsi_status, scmd->sense_buffer, valid_data);
+ 
+ 	switch (host_byte(scmd->result)) {
+ 	case DID_OK:
+-		target_complete_cmd_with_length(cmd, scsi_status,
+-			cmd->data_length - scmd->resid_len);
++		target_complete_cmd_with_length(cmd, scsi_status, valid_data);
+ 		break;
+ 	default:
+ 		pr_debug("PSCSI Host Byte exception at cmd: %p CDB:"
+

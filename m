@@ -2,170 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E34A0515F51
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 18:41:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 835E6515F57
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 18:48:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383172AbiD3Qoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 12:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53756 "EHLO
+        id S1383186AbiD3QwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 12:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383169AbiD3Qoc (ORCPT
+        with ESMTP id S1383169AbiD3QwH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 12:44:32 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2061A824
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 09:41:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651336870; x=1682872870;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uDxIPh1uye+uJJf7dVhmWzNhTsY/pRGws8jFAb9xpKs=;
-  b=ULNbtcPza8vQ6nDKIkb7HGnSgabznocGYWwXR82VRo6xU/hTXzvLQwqA
-   hZ/VbXVl9awFVvEiAQf+Ma6zgRYacqUYStfbL78DO+DeOOj81DUDoXwah
-   mAK/yQHDIDGK70Dc3CFwVuPIjxOPdZ4WZOBTvvnfCWSPxARPZznHd3QIi
-   e9aI3FQ+Ts9qKADjaUF9RRyjDZBsXfsPVAsIEIPdxJ2K+AnyMUl36cDji
-   PgNR2iLBHF+uYYl+e0P2+/ixiQAdKHYq5Mf/yRKZQdwjPMXQSNyX23+MY
-   Z/QjuONWMa0+TJ8EnAlSLXarrUdae6rTdPjMvoouvAzc05o9YKm12nfnl
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10333"; a="353329260"
-X-IronPort-AV: E=Sophos;i="5.91,188,1647327600"; 
-   d="scan'208";a="353329260"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2022 09:41:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,188,1647327600"; 
-   d="scan'208";a="515335433"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 30 Apr 2022 09:41:08 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nkq9b-0007Pb-JD;
-        Sat, 30 Apr 2022 16:41:07 +0000
-Date:   Sun, 1 May 2022 00:40:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dai Ngo <dai.ngo@oracle.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>
-Subject: [cel:nfsd-courteous-server 3/7] fs/nfsd/nfsd.h:180:59: error:
- expected ';' after return statement
-Message-ID: <202205010039.npL4Bn76-lkp@intel.com>
+        Sat, 30 Apr 2022 12:52:07 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2142D98F43;
+        Sat, 30 Apr 2022 09:48:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=dF1mmmBFDNP9HWUd+hs6Y1pIJYTO0dyqrecodlt1PlQ=; b=cPQi1qAZcGQGUaPBAA7ghyhZsu
+        Kcj5E+qhh+Ka31F5l28xtkVKVJQ3WGtzmP+mAt3Y6l3OkZav8CDmsVKs26eQRc6xgABrD2gBmgQdz
+        O/KxPtyROLauJBpg8XWEecq5bH+Q0Y6kq4adMNJrmbbRYSFsIZ3ilsdZK+dsnFTKkWv4=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nkqGq-000eX6-Uo; Sat, 30 Apr 2022 18:48:36 +0200
+Date:   Sat, 30 Apr 2022 18:48:36 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1] net: phy: fix motorcomm module automatic loading
+Message-ID: <Ym1oZCUdE2+PTyFZ@lunn.ch>
+References: <20220228233057.1140817-1-pgwipeout@gmail.com>
+ <Yh1lboz7VDiuYuZV@shell.armlinux.org.uk>
+ <CAMdYzYrNvUUMom4W4uD9yf9LtFK1h5Xw+9GYc54hB5+iqVmJtw@mail.gmail.com>
+ <CAMdYzYrFuMw4aj_9L698ZhL7Xqy8=NeXhy9HDz4ug-v3=f4fpw@mail.gmail.com>
+ <Ym1bWHNj0p6L9lY8@lunn.ch>
+ <CAMdYzYq41TndbJK-=ah31=vECisgRbPmtFYwOLQQ7yn4L=JVYw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAMdYzYq41TndbJK-=ah31=vECisgRbPmtFYwOLQQ7yn4L=JVYw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux nfsd-courteous-server
-head:   d5b28de053a07bebbf61359a4bbceeaef3b48962
-commit: 5e58ea722404baa3052c44d8e68129502b34f135 [3/7] NFSD: move create/destroy of laundry_wq to init_nfsd and exit_nfsd
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220501/202205010039.npL4Bn76-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 400775649969b9baf3bc2a510266e7912bb16ae9)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git/commit/?id=5e58ea722404baa3052c44d8e68129502b34f135
-        git remote add cel git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
-        git fetch --no-tags cel nfsd-courteous-server
-        git checkout 5e58ea722404baa3052c44d8e68129502b34f135
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/
+On Sat, Apr 30, 2022 at 12:31:27PM -0400, Peter Geis wrote:
+> On Sat, Apr 30, 2022 at 11:52 AM Andrew Lunn <andrew@lunn.ch> wrote:
+> >
+> > > Good Morning,
+> > >
+> > > After testing various configurations I found what is actually
+> > > happening here. When libphy is built in but the phy drivers are
+> > > modules and not available in the initrd, the generic phy driver binds
+> > > here. This allows the phy to come up but it is not functional.
+> >
+> > What MAC are you using?
+> 
+> Specifically Motorcomm, but I've discovered it can happen with any of
+> the phy drivers with the right kconfig.
+> 
+> >
+> > Why is you interface being brought up by the initramfs? Are you using
+> > NFS root from within the initramfs?
+> 
+> This was discovered with embedded programming. It's common to have a
+> small initramfs, or forgo an initramfs altogether.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Yes, i do that all the time. But then it is up to me to ensure i have
+all the code i need built into the kernel.
 
-All errors (new ones prefixed by >>):
+> Another cause is a
+> mismatch in kernel config where phylib is built in because of a
+> dependency, but the rest of the phy drivers are modular.
+> The key is:
+> - phylib is built in
+> - ethernet driver is built in
+> - the phy driver is a module
+> - modules aren't available at probe time (for any reason).
 
-   In file included from fs/nfsd/nfssvc.c:27:
->> fs/nfsd/nfsd.h:180:59: error: expected ';' after return statement
-   static inline int nfsd4_create_laundry_wq(void) { return 0 };
-                                                             ^
-                                                             ;
-   1 error generated.
---
-   In file included from fs/nfsd/export.c:21:
->> fs/nfsd/nfsd.h:180:59: error: expected ';' after return statement
-   static inline int nfsd4_create_laundry_wq(void) { return 0 };
-                                                             ^
-                                                             ;
-   fs/nfsd/export.c:979:17: warning: variable 'inode' set but not used [-Wunused-but-set-variable]
-           struct inode            *inode;
-                                    ^
-   1 warning and 1 error generated.
---
-   In file included from fs/nfsd/trace.c:4:
-   In file included from fs/nfsd/trace.h:442:
-   In file included from fs/nfsd/state.h:42:
->> fs/nfsd/nfsd.h:180:59: error: expected ';' after return statement
-   static inline int nfsd4_create_laundry_wq(void) { return 0 };
-                                                             ^
-                                                             ;
-   In file included from fs/nfsd/trace.c:4:
-   In file included from fs/nfsd/trace.h:1130:
-   include/trace/define_trace.h:95:10: fatal error: './trace.h' file not found
-   #include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/trace/define_trace.h:90:32: note: expanded from macro 'TRACE_INCLUDE'
-   # define TRACE_INCLUDE(system) __TRACE_INCLUDE(system)
-                                  ^~~~~~~~~~~~~~~~~~~~~~~
-   include/trace/define_trace.h:87:34: note: expanded from macro '__TRACE_INCLUDE'
-   # define __TRACE_INCLUDE(system) __stringify(TRACE_INCLUDE_PATH/system.h)
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/stringify.h:10:27: note: expanded from macro '__stringify'
-   #define __stringify(x...)       __stringify_1(x)
-                                   ^~~~~~~~~~~~~~~~
-   include/linux/stringify.h:9:29: note: expanded from macro '__stringify_1'
-   #define __stringify_1(x...)     #x
-                                   ^~
-   <scratch space>:45:1: note: expanded from here
-   "./trace.h"
-   ^~~~~~~~~~~
-   2 errors generated.
+This 'for any reason' is what i'm trying to get at. It is not the
+kernel which builds the initramsfs. It is not the kernels problem if
+the modules it needs are missing, it is my fault for not telling the
+intramfs tools to include the modules needed to actually boot the
+machine.
 
-
-vim +180 fs/nfsd/nfsd.h
-
-   150	
-   151	/* 
-   152	 * NFSv4 State
-   153	 */
-   154	#ifdef CONFIG_NFSD_V4
-   155	extern unsigned long max_delegations;
-   156	int nfsd4_init_slabs(void);
-   157	void nfsd4_free_slabs(void);
-   158	int nfs4_state_start(void);
-   159	int nfs4_state_start_net(struct net *net);
-   160	void nfs4_state_shutdown(void);
-   161	void nfs4_state_shutdown_net(struct net *net);
-   162	int nfs4_reset_recoverydir(char *recdir);
-   163	char * nfs4_recoverydir(void);
-   164	bool nfsd4_spo_must_allow(struct svc_rqst *rqstp);
-   165	int nfsd4_create_laundry_wq(void);
-   166	void nfsd4_destroy_laundry_wq(void);
-   167	#else
-   168	static inline int nfsd4_init_slabs(void) { return 0; }
-   169	static inline void nfsd4_free_slabs(void) { }
-   170	static inline int nfs4_state_start(void) { return 0; }
-   171	static inline int nfs4_state_start_net(struct net *net) { return 0; }
-   172	static inline void nfs4_state_shutdown(void) { }
-   173	static inline void nfs4_state_shutdown_net(struct net *net) { }
-   174	static inline int nfs4_reset_recoverydir(char *recdir) { return 0; }
-   175	static inline char * nfs4_recoverydir(void) {return NULL; }
-   176	static inline bool nfsd4_spo_must_allow(struct svc_rqst *rqstp)
-   177	{
-   178		return false;
-   179	}
- > 180	static inline int nfsd4_create_laundry_wq(void) { return 0 };
-   181	static inline void nfsd4_destroy_laundry_wq(void) {};
-   182	#endif
-   183	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+	 Andrew

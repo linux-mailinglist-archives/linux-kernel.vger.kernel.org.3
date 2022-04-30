@@ -2,1014 +2,1695 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4A9515C11
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 11:56:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7BEC515C14
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 11:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238069AbiD3KAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 06:00:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53908 "EHLO
+        id S239050AbiD3KAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 06:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231867AbiD3J77 (ORCPT
+        with ESMTP id S239020AbiD3KA2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 05:59:59 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBCDA11C27;
-        Sat, 30 Apr 2022 02:56:35 -0700 (PDT)
-Received: from mail-yb1-f174.google.com ([209.85.219.174]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1N2V8T-1nqkoQ1RR1-013y86; Sat, 30 Apr 2022 11:56:33 +0200
-Received: by mail-yb1-f174.google.com with SMTP id s30so18400527ybi.8;
-        Sat, 30 Apr 2022 02:56:32 -0700 (PDT)
-X-Gm-Message-State: AOAM530mupUyYazwhisAdovQrUsosQhRkdr5YEQ4xVC1vpBH23y6h/6a
-        HN7J2o5G3BZKKQriGYuyMOXsOilRTzsg/uweRlw=
-X-Google-Smtp-Source: ABdhPJyxJtKKvzWOhfP6Qcb3p2BFUpI7qJaXhrXWOII2IAve/BqvFFOMNLjW/ePE7nrzeKJ6qacDwGyOCX+gY1K7sJg=
-X-Received: by 2002:a25:31c2:0:b0:641:660f:230f with SMTP id
- x185-20020a2531c2000000b00641660f230fmr3042636ybx.472.1651312591728; Sat, 30
- Apr 2022 02:56:31 -0700 (PDT)
+        Sat, 30 Apr 2022 06:00:28 -0400
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [5.144.164.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175B922B20;
+        Sat, 30 Apr 2022 02:56:56 -0700 (PDT)
+Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 416F13F753;
+        Sat, 30 Apr 2022 11:56:54 +0200 (CEST)
+Date:   Sat, 30 Apr 2022 11:56:51 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Pavel Machek <pavel@ucw.cz>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Luca Weiss <luca@z3ntu.xyz>,
+        Doug Anderson <dianders@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v14 2/2] leds: Add driver for Qualcomm LPG
+Message-ID: <20220430095651.bdkjmjgkfmpuwdwj@SoMainline.org>
+References: <20220303214300.59468-1-bjorn.andersson@linaro.org>
+ <20220303214300.59468-2-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-References: <20220430090518.3127980-1-chenhuacai@loongson.cn> <20220430090518.3127980-21-chenhuacai@loongson.cn>
-In-Reply-To: <20220430090518.3127980-21-chenhuacai@loongson.cn>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sat, 30 Apr 2022 11:56:15 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2SPTLLrZtSz0LT0LqMpq4SKCScD4vLvr+DJn+u5W_CdA@mail.gmail.com>
-Message-ID: <CAK8P3a2SPTLLrZtSz0LT0LqMpq4SKCScD4vLvr+DJn+u5W_CdA@mail.gmail.com>
-Subject: Re: [PATCH V9 20/24] LoongArch: Add efistub booting support
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:NXR+JGqF9QSD35Z0XV1v8vLUQD8uTC679GAvp/gZMgjbJ3jL4Ze
- p2xuHVy2exhHTubdHijXN+ongcfJwkG5mHNIXNJ8+1M9mvDRh8ysZXJI9EKAo3cPoyv/UaP
- 8QMXP6gKbJpwXW7dsLlp3WhWDeF9+aeLPJGhIQ15jlrTqXwvNGDiv5b6Dud5373iVCnp5gu
- 40nGCRXIJhGnHFAu/90uw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:jxi0QShrFTU=:CBaqqXk4c0erfCgRly61TF
- mQjarOADoQZN7+EGP7Q7YkiUBmeaHfkg0+qlqo15TYDsn/QYscMAmcOed854FGHR5KJGu2v9F
- 8S733zGh2+BU8oIzs502iww9tqhvdmXPRR/vwRNzYEQIf4znyeY8s88lltTHVF9i0J6/DrW1/
- UJsD1SvpUkz3O4QciJd/GfNBwmA/v6qqAi1NpRpb6TiOlbks4Ny0rABOic7205Sp/sQzVhn8N
- M4lYQZgdNDTn7XO3hyrbSQpVuAaMAWj5AnywKnu/0hr+X4xEh8JLZM1MWPQw8AQ7azxWmjOwx
- c5lOBm2D8QxGyZkBEg4YulMciPcxW1mgBXqXRtXeCMxRCHgAalJLlUMmbrxo4VT9tMaDk5xWj
- EYdI6GWVNiX3FcsPOFqm8XIm2LX/D0Hsg9ZPd8qmlUJid6Y1Pc9lZwOUouoLslpkkg0r4ywcZ
- A8pAoU7ISkAjj1GFrRNqFjJW+Kc7fjNAOxNya63GJFlKRF6grCI3PY4Eewd3XT8hgVW2I8/8H
- YnkVQcraKzy+SpJOa74IpBSxv4qLGJ46srIZsH/MR21m16YtHuOQZ67JT32+WCf7Fp7hjcOAP
- IXyvy3Mves1+v6JgJ1S0bsTWjNgtnQ4/rWxMyZ7jiZkZnIbnYxczcPVVyftL6SMkoe0R5A4J6
- R1k9y5TZYG/t8Rqa9A9kh/OjXPi3PWOsVIiiYSqaTyq87LTxowFC8LjSM+wuBpLLufVdH1z6h
- uIFKtj1yHOT1zGaJTeJ+OVWHVELpAh1Xm/eOyFUwdP08/MMYAjNk31VBEUmF2OoSqx93ZourU
- S0FYIDBMbbkdKrbBdWVFZCghC3I5jcqzete0jnXXePcgrPKy3Kf7SqNizpQrmlW1gyecefI
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220303214300.59468-2-bjorn.andersson@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 30, 2022 at 11:05 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
->
-> This patch adds efistub booting support, which is the standard UEFI boot
-> protocol for us to use.
->
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-
-It's good to see that you completed this. Unfortunately you did not add Ard
-Biesheuvel to Cc, he is the one who needs to review this code. Adding him
-to Cc now, with the full patch quoted below for him (no more comments
-from me there).
-
-      Arnd
-
+On 2022-03-03 13:43:00, Bjorn Andersson wrote:
+> The Light Pulse Generator (LPG) is a PWM-block found in a wide range of
+> PMICs from Qualcomm. These PMICs typically comes with 1-8 LPG instances,
+> with their output being routed to various other components, such as
+> current sinks or GPIOs.
+> 
+> Each LPG instance can operate on fixed parameters or based on a shared
+> lookup-table, altering the duty cycle over time. This provides the means
+> for hardware assisted transitions of LED brightness.
+> 
+> A typical use case for the fixed parameter mode is to drive a PWM
+> backlight control signal, the driver therefor allows each LPG instance
+> to be exposed to the kernel either through the LED framework or the PWM
+> framework.
+> 
+> A typical use case for the LED configuration is to drive RGB LEDs in
+> smartphones etc, for which the driver supports multiple channels to be
+> ganged up to a MULTICOLOR LED. In this configuration the pattern
+> generators will be synchronized, to allow for multi-color patterns.
+> 
+> The idea of modelling this as a LED driver ontop of a PWM driver was
+> considered, but setting the properties related to patterns does not fit
+> in the PWM API. Similarly the idea of just duplicating the lower bits in
+> a PWM and LED driver separately was considered, but this would not allow
+> the PWM channels and LEDs to be configured on a per-board basis. The
+> driver implements the more complex LED interface, and provides a PWM
+> interface on the side of that, in the same driver.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 > ---
->  arch/loongarch/Kbuild                         |   3 +
->  arch/loongarch/Kconfig                        |   8 +
->  arch/loongarch/Makefile                       |  18 +-
->  arch/loongarch/boot/Makefile                  |  23 +
->  arch/loongarch/kernel/efi-header.S            | 100 +++++
->  arch/loongarch/kernel/head.S                  |  44 +-
->  arch/loongarch/kernel/image-vars.h            |  30 ++
->  arch/loongarch/kernel/vmlinux.lds.S           |  23 +-
->  drivers/firmware/efi/Kconfig                  |   4 +-
->  drivers/firmware/efi/libstub/Makefile         |  14 +-
->  drivers/firmware/efi/libstub/loongarch-stub.c | 425 ++++++++++++++++++
->  include/linux/pe.h                            |   1 +
->  12 files changed, 680 insertions(+), 13 deletions(-)
->  create mode 100644 arch/loongarch/boot/Makefile
->  create mode 100644 arch/loongarch/kernel/efi-header.S
->  create mode 100644 arch/loongarch/kernel/image-vars.h
->  create mode 100644 drivers/firmware/efi/libstub/loongarch-stub.c
->
-> diff --git a/arch/loongarch/Kbuild b/arch/loongarch/Kbuild
-> index 1ad35aabdd16..ab5373d0a24f 100644
-> --- a/arch/loongarch/Kbuild
-> +++ b/arch/loongarch/Kbuild
-> @@ -1,3 +1,6 @@
->  obj-y += kernel/
->  obj-y += mm/
->  obj-y += vdso/
-> +
-> +# for cleaning
-> +subdir- += boot
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index 44b763046893..55225ee5f868 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -265,6 +265,14 @@ config EFI
->           resultant kernel should continue to boot on existing non-EFI
->           platforms.
->
-> +config EFI_STUB
-> +       bool "EFI boot stub support"
-> +       default y
-> +       depends on EFI
-> +       help
-> +         This kernel feature allows the kernel to be loaded directly by
-> +         EFI firmware without the use of a bootloader.
-> +
->  config FORCE_MAX_ZONEORDER
->         int "Maximum zone order"
->         range 14 64 if PAGE_SIZE_64KB
-> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
-> index c4b3f53cd276..d88a792dafbe 100644
-> --- a/arch/loongarch/Makefile
-> +++ b/arch/loongarch/Makefile
-> @@ -3,6 +3,14 @@
->  # Author: Huacai Chen <chenhuacai@loongson.cn>
->  # Copyright (C) 2020-2022 Loongson Technology Corporation Limited
->
-> +boot   := arch/loongarch/boot
-> +
-> +ifndef CONFIG_EFI_STUB
-> +KBUILD_IMAGE   = $(boot)/vmlinux
-> +else
-> +KBUILD_IMAGE   = $(boot)/vmlinux.efi
-> +endif
-> +
->  #
->  # Select the object file format to substitute into the linker script.
->  #
-> @@ -30,8 +38,6 @@ ld-emul                       = $(64bit-emul)
->  cflags-y               += -mabi=lp64s
->  endif
->
-> -all-y                  := vmlinux
-> -
->  #
->  # GCC uses -G0 -mabicalls -fpic as default.  We don't want PIC in the kernel
->  # code since it only slows down the whole thing.  At some point we might make
-> @@ -75,6 +81,7 @@ endif
->  head-y := arch/loongarch/kernel/head.o
->
->  libs-y += arch/loongarch/lib/
-> +libs-$(CONFIG_EFI_STUB) += $(objtree)/drivers/firmware/efi/libstub/lib.a
->
->  ifeq ($(KBUILD_EXTMOD),)
->  prepare: vdso_prepare
-> @@ -86,12 +93,13 @@ PHONY += vdso_install
->  vdso_install:
->         $(Q)$(MAKE) $(build)=arch/loongarch/vdso $@
->
-> -all:   $(all-y)
-> +all:   $(KBUILD_IMAGE)
->
-> -CLEAN_FILES += vmlinux
-> +$(KBUILD_IMAGE): vmlinux
-> +       $(Q)$(MAKE) $(build)=$(boot) $(bootvars-y) $@
->
->  install:
-> -       $(Q)install -D -m 755 vmlinux $(INSTALL_PATH)/vmlinux-$(KERNELRELEASE)
-> +       $(Q)install -D -m 755 $(KBUILD_IMAGE) $(INSTALL_PATH)/vmlinux-$(KERNELRELEASE)
->         $(Q)install -D -m 644 .config $(INSTALL_PATH)/config-$(KERNELRELEASE)
->         $(Q)install -D -m 644 System.map $(INSTALL_PATH)/System.map-$(KERNELRELEASE)
->
-> diff --git a/arch/loongarch/boot/Makefile b/arch/loongarch/boot/Makefile
+> 
+> Changes since v13:
+> - Fixed mixed space/tab indentation in documentation
+> - Added 0 as to lpg_clk_rates[] to match the hardware state, to avoid + 1 in
+>   lpg_apply_freq() and - 1 in lpg_pwm_get_state()
+> - Don't divide with 0 if current clock is 0 in lpg_pwm_get_state(), just return
+>   period = duty = 0 in this case
+> - Renamed "clk" in struct lpg_channel to clk_sel
+> - Renamed "pre_div" in struct lpg_channel to pre_div_sel
+> 
+> Changes since v12:
+> - Initialize ret in lpg_pwm_apply()
+> 
+> Changes since v11:
+> - Extended commit message to cover decision to put pwm_chip in the LED driver
+> - Added Documentation, in particular for the hw_pattern format
+> - Added a lock to synchronize requests from LED and PWM frameworks
+> - Turned out that the 9bit selector differs per channel in some PMICs, so
+>   replaced bitmask in lpg_data with lookup based on QPNP SUBTYPE
+
+Thanks a lot for picking up this suggestion [1] going all the way back
+to v6!  Turns out indeed that `3 << 4` (= GENMASK(5, 4)) is simply yet
+another LPG subtype that we can cleanly query from the hardware :).  I
+wonder if we're ever going to run into hardware with multiple subtypes
+for different channels...
+
+[1]: https://lore.kernel.org/linux-arm-msm/881fb5a3-fb51-3967-63de-a09950839855@somainline.org/
+
+> - Fixed kerneldoc for the struct device pointer in struct lpg
+> - Rewrote conditional in lut_free() to make it easier to read
+> - Corrected and deduplicated max_period expression in lpg_calc_freq()
+> - Extended nom/dom to numerator/denominator in lpg_calc_freq()
+> - Replaced 1 << 9 with LPG_RESOLUTION in one more place in lpg_calc_freq()
+> - Use FIELD_PREP() in lpg_apply_freq() as masks was introduced for reading the
+>   same in get_state()
+> - Cleaned up the pattern format, to allow specifying both low and high pause
+>   with and without pingpong mode.
+> - Only update frequency and pwm_value if PWM channel is enabled in lpg_pwm_apply
+> - Make lpg_pwm_get_state() read the hardware state, in order to pick up e.g.
+>   bootloader backlight configuration
+> - Use devm_bitmap_zalloc() to allocate the lut_bitmap
+> - Use dev_err_probe() in lpg_probe()
+> - Extended Kconfig help text to mention module name and satisfy checkpatch
+> 
+>  Documentation/leds/leds-qcom-lpg.rst |   76 ++
+>  drivers/leds/Kconfig                 |    3 +
+>  drivers/leds/Makefile                |    3 +
+>  drivers/leds/rgb/Kconfig             |   18 +
+>  drivers/leds/rgb/Makefile            |    3 +
+>  drivers/leds/rgb/leds-qcom-lpg.c     | 1405 ++++++++++++++++++++++++++
+>  6 files changed, 1508 insertions(+)
+>  create mode 100644 Documentation/leds/leds-qcom-lpg.rst
+>  create mode 100644 drivers/leds/rgb/Kconfig
+>  create mode 100644 drivers/leds/rgb/Makefile
+>  create mode 100644 drivers/leds/rgb/leds-qcom-lpg.c
+> 
+> diff --git a/Documentation/leds/leds-qcom-lpg.rst b/Documentation/leds/leds-qcom-lpg.rst
 > new file mode 100644
-> index 000000000000..66f2293c34b2
+> index 000000000000..f12416f02dd8
 > --- /dev/null
-> +++ b/arch/loongarch/boot/Makefile
-> @@ -0,0 +1,23 @@
-> +#
-> +# arch/loongarch/boot/Makefile
-> +#
-> +# Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> +#
+> +++ b/Documentation/leds/leds-qcom-lpg.rst
+> @@ -0,0 +1,76 @@
+> +.. SPDX-License-Identifier: GPL-2.0
 > +
-> +drop-sections := .comment .note .options .note.gnu.build-id
-> +strip-flags   := $(addprefix --remove-section=,$(drop-sections)) -S
+> +==============================
+> +Kernel driver for Qualcomm LPG
+> +==============================
 > +
-> +targets := vmlinux
-> +quiet_cmd_strip = STRIP          $@
-> +      cmd_strip = $(STRIP) -s $@
+> +Description
+> +-----------
 > +
-> +$(obj)/vmlinux: vmlinux FORCE
-> +       $(call if_changed,copy)
-> +       $(call if_changed,strip)
+> +The Qualcomm LPG can be found in a variety of Qualcomm PMICs and consists of a
+> +number of PWM channels, a programmable pattern lookup table and a RGB LED
+> +current sink.
 > +
-> +targets += vmlinux.efi
-> +quiet_cmd_eficopy = OBJCOPY $@
-> +      cmd_eficopy = $(OBJCOPY) -O binary $(strip-flags) $< $@
+> +To facilitate the various use cases, the LPG channels can be exposed as
+> +individual LEDs, grouped together as RGB LEDs or otherwise be accessed as PWM
+> +channels. The output of each PWM channel is routed to other hardware
+> +blocks, such as the RGB current sink, GPIO pins etc.
 > +
-> +$(obj)/vmlinux.efi: $(obj)/vmlinux FORCE
-> +       $(call if_changed,eficopy)
-> diff --git a/arch/loongarch/kernel/efi-header.S b/arch/loongarch/kernel/efi-header.S
+> +The each PWM channel can operate with a period between 27us and 384 seconds and
+> +has a 9 bit resolution of the duty cycle.
+> +
+> +In order to provide support for status notifications with the CPU subsystem in
+> +deeper idle states the LPG provides pattern support. This consists of a shared
+> +lookup table of brightness values and per channel properties to select the
+> +range within the table to use, the rate and if the pattern should repeat.
+> +
+> +The pattern for a channel can be programmed using the "pattern" trigger, using
+> +the hw_pattern attribute.
+> +
+> +/sys/class/leds/<led>/hw_pattern
+> +--------------------------------
+> +
+> +Specify a hardware pattern for a Qualcomm LPG LED.
+> +
+> +The pattern is a series of brightness and hold-time pairs, with the hold-time
+> +expressed in milliseconds. The hold time is a property of the pattern and must
+> +therefor be identical for each element in the pattern (except for the pauses
+> +described below).
+> +
+> +Simple pattern::
+> +
+> +    "255 500 0 500"
+> +
+> +        ^
+> +        |
+> +    255 +----+    +----+
+> +        |    |    |    |      ...
+> +      0 |    +----+    +----
+> +        +---------------------->
+> +        0    5   10   15     time (100ms)
+> +
+> +The LPG supports specifying a longer hold-time for the first and last element
+> +in the pattern, the so called "low pause" and "high pause".
+> +
+> +Low-pause pattern::
+> +
+> +    "255 1000 0 500 255 500 0 500"
+> +
+> +        ^
+> +        |
+> +    255 +--------+    +----+    +----+    +--------+
+> +        |        |    |    |    |    |    |        |      ...
+> +      0 |        +----+    +----+    +----+        +----
+> +        +----------------------------->
+> +        0    5   10   15  20   25   time (100ms)
+> +
+> +Similarily, the last entry can be stretched by using a higher hold-time on the
+> +last entry.
+> +
+> +In order to save space in the shared lookup table the LPG supports "ping-pong"
+> +mode, in which case each run through the pattern is performed by first running
+> +the pattern forward, then backwards. This mode is automatically used by the
+> +driver when the given pattern is a palindrome. In this case the "high pause"
+> +denotes the wait time before the pattern is run in reverse and as such the
+> +specified hold-time of the middle item in the pattern is allowed to have a
+> +different hold-time.
+> diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
+> index 6090e647daee..a49979f41eee 100644
+> --- a/drivers/leds/Kconfig
+> +++ b/drivers/leds/Kconfig
+> @@ -869,6 +869,9 @@ source "drivers/leds/blink/Kconfig"
+>  comment "Flash and Torch LED drivers"
+>  source "drivers/leds/flash/Kconfig"
+>  
+> +comment "RGB LED drivers"
+> +source "drivers/leds/rgb/Kconfig"
+> +
+>  comment "LED Triggers"
+>  source "drivers/leds/trigger/Kconfig"
+>  
+> diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
+> index e58ecb36360f..4fd2f92cd198 100644
+> --- a/drivers/leds/Makefile
+> +++ b/drivers/leds/Makefile
+> @@ -99,6 +99,9 @@ obj-$(CONFIG_LEDS_USER)			+= uleds.o
+>  # Flash and Torch LED Drivers
+>  obj-$(CONFIG_LEDS_CLASS_FLASH)		+= flash/
+>  
+> +# RGB LED Drivers
+> +obj-$(CONFIG_LEDS_CLASS_MULTICOLOR)	+= rgb/
+> +
+>  # LED Triggers
+>  obj-$(CONFIG_LEDS_TRIGGERS)		+= trigger/
+>  
+> diff --git a/drivers/leds/rgb/Kconfig b/drivers/leds/rgb/Kconfig
 > new file mode 100644
-> index 000000000000..ceb44524944a
+> index 000000000000..5dd27ad80856
 > --- /dev/null
-> +++ b/arch/loongarch/kernel/efi-header.S
-> @@ -0,0 +1,100 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> + */
+> +++ b/drivers/leds/rgb/Kconfig
+> @@ -0,0 +1,18 @@
+> +# SPDX-License-Identifier: GPL-2.0
 > +
-> +#include <linux/pe.h>
-> +#include <linux/sizes.h>
+> +if LEDS_CLASS_MULTICOLOR
 > +
-> +       .macro  __EFI_PE_HEADER
-> +       .long   PE_MAGIC
-> +coff_header:
-> +       .short  IMAGE_FILE_MACHINE_LOONGARCH            /* Machine */
-> +       .short  section_count                           /* NumberOfSections */
-> +       .long   0                                       /* TimeDateStamp */
-> +       .long   0                                       /* PointerToSymbolTable */
-> +       .long   0                                       /* NumberOfSymbols */
-> +       .short  section_table - optional_header         /* SizeOfOptionalHeader */
-> +       .short  IMAGE_FILE_DEBUG_STRIPPED | \
-> +               IMAGE_FILE_EXECUTABLE_IMAGE | \
-> +               IMAGE_FILE_LINE_NUMS_STRIPPED           /* Characteristics */
+> +config LEDS_QCOM_LPG
+> +	tristate "LED support for Qualcomm LPG"
+> +	depends on OF
+> +	depends on SPMI
+> +	help
+> +	  This option enables support for the Light Pulse Generator found in a
+> +	  wide variety of Qualcomm PMICs. The LPG consists of a number of PWM
+> +	  channels and typically a shared pattern lookup table and a current
+> +	  sink, intended to drive RGB LEDs. Each channel can either be used as
+> +	  a LED, grouped to represent a RGB LED or exposed as PWM channels.
 > +
-> +optional_header:
-> +       .short  PE_OPT_MAGIC_PE32PLUS                   /* PE32+ format */
-> +       .byte   0x02                                    /* MajorLinkerVersion */
-> +       .byte   0x14                                    /* MinorLinkerVersion */
-> +       .long   __inittext_end - efi_header_end         /* SizeOfCode */
-> +       .long   _end - __initdata_begin                 /* SizeOfInitializedData */
-> +       .long   0                                       /* SizeOfUninitializedData */
-> +       .long   __efistub_efi_pe_entry - _head          /* AddressOfEntryPoint */
-> +       .long   efi_header_end - _head                  /* BaseOfCode */
+> +	  If compiled as a module, the module will be named leds-qcom-lpg.
 > +
-> +extra_header_fields:
-> +       .quad   0                                       /* ImageBase */
-> +       .long   PECOFF_SEGMENT_ALIGN                    /* SectionAlignment */
-> +       .long   PECOFF_FILE_ALIGN                       /* FileAlignment */
-> +       .short  0                                       /* MajorOperatingSystemVersion */
-> +       .short  0                                       /* MinorOperatingSystemVersion */
-> +       .short  0                                       /* MajorImageVersion */
-> +       .short  0                                       /* MinorImageVersion */
-> +       .short  0                                       /* MajorSubsystemVersion */
-> +       .short  0                                       /* MinorSubsystemVersion */
-> +       .long   0                                       /* Win32VersionValue */
-> +
-> +       .long   _end - _head                            /* SizeOfImage */
-> +
-> +       /* Everything before the kernel image is considered part of the header */
-> +       .long   efi_header_end - _head                  /* SizeOfHeaders */
-> +       .long   0                                       /* CheckSum */
-> +       .short  IMAGE_SUBSYSTEM_EFI_APPLICATION         /* Subsystem */
-> +       .short  0                                       /* DllCharacteristics */
-> +       .quad   0                                       /* SizeOfStackReserve */
-> +       .quad   0                                       /* SizeOfStackCommit */
-> +       .quad   0                                       /* SizeOfHeapReserve */
-> +       .quad   0                                       /* SizeOfHeapCommit */
-> +       .long   0                                       /* LoaderFlags */
-> +       .long   (section_table - .) / 8                 /* NumberOfRvaAndSizes */
-> +
-> +       .quad   0                                       /* ExportTable */
-> +       .quad   0                                       /* ImportTable */
-> +       .quad   0                                       /* ResourceTable */
-> +       .quad   0                                       /* ExceptionTable */
-> +       .quad   0                                       /* CertificationTable */
-> +       .quad   0                                       /* BaseRelocationTable */
-> +
-> +       /* Section table */
-> +section_table:
-> +       .ascii  ".text\0\0\0"
-> +       .long   __inittext_end - efi_header_end         /* VirtualSize */
-> +       .long   efi_header_end - _head                  /* VirtualAddress */
-> +       .long   __inittext_end - efi_header_end         /* SizeOfRawData */
-> +       .long   efi_header_end - _head                  /* PointerToRawData */
-> +
-> +       .long   0                                       /* PointerToRelocations */
-> +       .long   0                                       /* PointerToLineNumbers */
-> +       .short  0                                       /* NumberOfRelocations */
-> +       .short  0                                       /* NumberOfLineNumbers */
-> +       .long   IMAGE_SCN_CNT_CODE | \
-> +               IMAGE_SCN_MEM_READ | \
-> +               IMAGE_SCN_MEM_EXECUTE                   /* Characteristics */
-> +
-> +       .ascii  ".data\0\0\0"
-> +       .long   _end - __initdata_begin                 /* VirtualSize */
-> +       .long   __initdata_begin - _head                /* VirtualAddress */
-> +       .long   _edata - __initdata_begin               /* SizeOfRawData */
-> +       .long   __initdata_begin - _head                /* PointerToRawData */
-> +
-> +       .long   0                                       /* PointerToRelocations */
-> +       .long   0                                       /* PointerToLineNumbers */
-> +       .short  0                                       /* NumberOfRelocations */
-> +       .short  0                                       /* NumberOfLineNumbers */
-> +       .long   IMAGE_SCN_CNT_INITIALIZED_DATA | \
-> +               IMAGE_SCN_MEM_READ | \
-> +               IMAGE_SCN_MEM_WRITE                     /* Characteristics */
-> +
-> +       .org 0x20e
-> +       .word kernel_version - 512 -  _head
-> +
-> +       .set    section_count, (. - section_table) / 40
-> +efi_header_end:
-> +       .endm
-> diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
-> index b4a0b28da3e7..361b72e8bfc5 100644
-> --- a/arch/loongarch/kernel/head.S
-> +++ b/arch/loongarch/kernel/head.S
-> @@ -11,11 +11,53 @@
->  #include <asm/regdef.h>
->  #include <asm/loongarch.h>
->  #include <asm/stackframe.h>
-> +#include <generated/compile.h>
-> +#include <generated/utsrelease.h>
->
-> -SYM_ENTRY(_stext, SYM_L_GLOBAL, SYM_A_NONE)
-> +#ifdef CONFIG_EFI_STUB
-> +
-> +#include "efi-header.S"
-> +
-> +       __HEAD
-> +
-> +_head:
-> +       /* "MZ", MS-DOS header */
-> +       .word   MZ_MAGIC
-> +       .org    0x28
-> +       .ascii  "Loongson\0"
-> +       .org    0x3c
-> +       /* Offset to the PE header */
-> +       .long   pe_header - _head
-> +
-> +pe_header:
-> +       __EFI_PE_HEADER
-> +
-> +kernel_asize:
-> +       .long _end - _text
-> +
-> +kernel_fsize:
-> +       .long _edata - _text
-> +
-> +kernel_vaddr:
-> +       .quad VMLINUX_LOAD_ADDRESS
-> +
-> +kernel_offset:
-> +       .long kernel_offset - _text
-> +
-> +kernel_version:
-> +       .ascii  UTS_RELEASE " (" LINUX_COMPILE_BY "@" LINUX_COMPILE_HOST ") " UTS_VERSION "\0"
-> +
-> +SYM_L_GLOBAL(kernel_asize)
-> +SYM_L_GLOBAL(kernel_fsize)
-> +SYM_L_GLOBAL(kernel_vaddr)
-> +SYM_L_GLOBAL(kernel_offset)
-> +
-> +#endif
->
->         __REF
->
-> +SYM_ENTRY(_stext, SYM_L_GLOBAL, SYM_A_NONE)
-> +
->  SYM_CODE_START(kernel_entry)                   # kernel entry point
->
->         /* Config direct window and set PG */
-> diff --git a/arch/loongarch/kernel/image-vars.h b/arch/loongarch/kernel/image-vars.h
+> +endif # LEDS_CLASS_MULTICOLOR
+> diff --git a/drivers/leds/rgb/Makefile b/drivers/leds/rgb/Makefile
 > new file mode 100644
-> index 000000000000..0162402b6212
+> index 000000000000..83114f44c4ea
 > --- /dev/null
-> +++ b/arch/loongarch/kernel/image-vars.h
-> @@ -0,0 +1,30 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> + */
-> +#ifndef __LOONGARCH_KERNEL_IMAGE_VARS_H
-> +#define __LOONGARCH_KERNEL_IMAGE_VARS_H
+> +++ b/drivers/leds/rgb/Makefile
+> @@ -0,0 +1,3 @@
+> +# SPDX-License-Identifier: GPL-2.0
 > +
-> +#ifdef CONFIG_EFI_STUB
-> +
-> +__efistub_memcmp               = memcmp;
-> +__efistub_memcpy               = memcpy;
-> +__efistub_memmove              = memmove;
-> +__efistub_memset               = memset;
-> +__efistub_strcat               = strcat;
-> +__efistub_strcmp               = strcmp;
-> +__efistub_strlen               = strlen;
-> +__efistub_strncat              = strncat;
-> +__efistub_strnstr              = strnstr;
-> +__efistub_strnlen              = strnlen;
-> +__efistub_strpbrk              = strpbrk;
-> +__efistub_strsep               = strsep;
-> +__efistub_kernel_entry         = kernel_entry;
-> +__efistub_kernel_asize         = kernel_asize;
-> +__efistub_kernel_fsize         = kernel_fsize;
-> +__efistub_kernel_vaddr         = kernel_vaddr;
-> +__efistub_kernel_offset                = kernel_offset;
-> +
-> +#endif
-> +
-> +#endif /* __LOONGARCH_KERNEL_IMAGE_VARS_H */
-> diff --git a/arch/loongarch/kernel/vmlinux.lds.S b/arch/loongarch/kernel/vmlinux.lds.S
-> index 02abfaaa4892..7da4c4d7c50d 100644
-> --- a/arch/loongarch/kernel/vmlinux.lds.S
-> +++ b/arch/loongarch/kernel/vmlinux.lds.S
-> @@ -12,6 +12,14 @@
->  #define BSS_FIRST_SECTIONS *(.bss..swapper_pg_dir)
->
->  #include <asm-generic/vmlinux.lds.h>
-> +#include "image-vars.h"
-> +
-> +/*
-> + * Max avaliable Page Size is 64K, so we set SectionAlignment
-> + * field of EFI application to 64K.
-> + */
-> +PECOFF_FILE_ALIGN = 0x200;
-> +PECOFF_SEGMENT_ALIGN = 0x10000;
->
->  OUTPUT_ARCH(loongarch)
->  ENTRY(kernel_entry)
-> @@ -27,6 +35,9 @@ SECTIONS
->         . = VMLINUX_LOAD_ADDRESS;
->
->         _text = .;
-> +       HEAD_TEXT_SECTION
-> +
-> +       . = ALIGN(PECOFF_SEGMENT_ALIGN);
->         .text : {
->                 TEXT_TEXT
->                 SCHED_TEXT
-> @@ -38,11 +49,12 @@ SECTIONS
->                 *(.fixup)
->                 *(.gnu.warning)
->         } :text = 0
-> +       . = ALIGN(PECOFF_SEGMENT_ALIGN);
->         _etext = .;
->
->         EXCEPTION_TABLE(16)
->
-> -       . = ALIGN(PAGE_SIZE);
-> +       . = ALIGN(PECOFF_SEGMENT_ALIGN);
->         __init_begin = .;
->         __inittext_begin = .;
->
-> @@ -51,6 +63,7 @@ SECTIONS
->                 EXIT_TEXT
->         }
->
-> +       . = ALIGN(PECOFF_SEGMENT_ALIGN);
->         __inittext_end = .;
->
->         __initdata_begin = .;
-> @@ -60,6 +73,10 @@ SECTIONS
->                 EXIT_DATA
->         }
->
-> +       .init.bss : {
-> +               *(.init.bss)
-> +       }
-> +       . = ALIGN(PECOFF_SEGMENT_ALIGN);
->         __initdata_end = .;
->
->         __init_end = .;
-> @@ -71,11 +88,11 @@ SECTIONS
->         .sdata : {
->                 *(.sdata)
->         }
-> -
-> -       . = ALIGN(SZ_64K);
-> +       .edata_padding : { BYTE(0); . = ALIGN(PECOFF_FILE_ALIGN); }
->         _edata =  .;
->
->         BSS_SECTION(0, SZ_64K, 8)
-> +       . = ALIGN(PECOFF_SEGMENT_ALIGN);
->
->         _end = .;
->
-> diff --git a/drivers/firmware/efi/Kconfig b/drivers/firmware/efi/Kconfig
-> index 2c3dac5ecb36..ecb4e0b1295a 100644
-> --- a/drivers/firmware/efi/Kconfig
-> +++ b/drivers/firmware/efi/Kconfig
-> @@ -121,9 +121,9 @@ config EFI_ARMSTUB_DTB_LOADER
->
->  config EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER
->         bool "Enable the command line initrd loader" if !X86
-> -       depends on EFI_STUB && (EFI_GENERIC_STUB || X86)
-> -       default y if X86
->         depends on !RISCV
-> +       depends on EFI_STUB && (EFI_GENERIC_STUB || X86 || LOONGARCH)
-> +       default y if (X86 || LOONGARCH)
->         help
->           Select this config option to add support for the initrd= command
->           line parameter, allowing an initrd that resides on the same volume
-> diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
-> index d0537573501e..663e9d317299 100644
-> --- a/drivers/firmware/efi/libstub/Makefile
-> +++ b/drivers/firmware/efi/libstub/Makefile
-> @@ -26,6 +26,8 @@ cflags-$(CONFIG_ARM)          := $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
->                                    $(call cc-option,-mno-single-pic-base)
->  cflags-$(CONFIG_RISCV)         := $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
->                                    -fpic
-> +cflags-$(CONFIG_LOONGARCH)     := $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
-> +                                  -fpic
->
->  cflags-$(CONFIG_EFI_GENERIC_STUB) += -I$(srctree)/scripts/dtc/libfdt
->
-> @@ -55,7 +57,7 @@ KCOV_INSTRUMENT                       := n
->  lib-y                          := efi-stub-helper.o gop.o secureboot.o tpm.o \
->                                    file.o mem.o random.o randomalloc.o pci.o \
->                                    skip_spaces.o lib-cmdline.o lib-ctype.o \
-> -                                  alignedmem.o relocate.o vsprintf.o
-> +                                  alignedmem.o relocate.o string.o vsprintf.o
->
->  # include the stub's generic dependencies from lib/ when building for ARM/arm64
->  efi-deps-y := fdt_rw.c fdt_ro.c fdt_wip.c fdt.c fdt_empty_tree.c fdt_sw.c
-> @@ -63,13 +65,15 @@ efi-deps-y := fdt_rw.c fdt_ro.c fdt_wip.c fdt.c fdt_empty_tree.c fdt_sw.c
->  $(obj)/lib-%.o: $(srctree)/lib/%.c FORCE
->         $(call if_changed_rule,cc_o_c)
->
-> -lib-$(CONFIG_EFI_GENERIC_STUB) += efi-stub.o fdt.o string.o \
-> +lib-$(CONFIG_EFI_GENERIC_STUB) += efi-stub.o fdt.o \
->                                    $(patsubst %.c,lib-%.o,$(efi-deps-y))
->
->  lib-$(CONFIG_ARM)              += arm32-stub.o
->  lib-$(CONFIG_ARM64)            += arm64-stub.o
->  lib-$(CONFIG_X86)              += x86-stub.o
->  lib-$(CONFIG_RISCV)            += riscv-stub.o
-> +lib-$(CONFIG_LOONGARCH)                += loongarch-stub.o
-> +
->  CFLAGS_arm32-stub.o            := -DTEXT_OFFSET=$(TEXT_OFFSET)
->
->  # Even when -mbranch-protection=none is set, Clang will generate a
-> @@ -125,6 +129,12 @@ STUBCOPY_FLAGS-$(CONFIG_RISCV)     += --prefix-alloc-sections=.init \
->                                    --prefix-symbols=__efistub_
->  STUBCOPY_RELOC-$(CONFIG_RISCV) := R_RISCV_HI20
->
-> +# For LoongArch, keep all the symbols in .init section and make sure that no
-> +# absolute symbols references doesn't exist.
-> +STUBCOPY_FLAGS-$(CONFIG_LOONGARCH)     += --prefix-alloc-sections=.init \
-> +                                          --prefix-symbols=__efistub_
-> +STUBCOPY_RELOC-$(CONFIG_LOONGARCH)     := R_LARCH_MARK_LA
-> +
->  $(obj)/%.stub.o: $(obj)/%.o FORCE
->         $(call if_changed,stubcopy)
->
-> diff --git a/drivers/firmware/efi/libstub/loongarch-stub.c b/drivers/firmware/efi/libstub/loongarch-stub.c
+> +obj-$(CONFIG_LEDS_QCOM_LPG)	+= leds-qcom-lpg.o
+> diff --git a/drivers/leds/rgb/leds-qcom-lpg.c b/drivers/leds/rgb/leds-qcom-lpg.c
 > new file mode 100644
-> index 000000000000..399641a0b0cb
+> index 000000000000..17576f77c423
 > --- /dev/null
-> +++ b/drivers/firmware/efi/libstub/loongarch-stub.c
-> @@ -0,0 +1,425 @@
-> +// SPDX-License-Identifier: GPL-2.0
+> +++ b/drivers/leds/rgb/leds-qcom-lpg.c
+> @@ -0,0 +1,1405 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
 > +/*
-> + * Author: Yun Liu <liuyun@loongson.cn>
-> + *         Huacai Chen <chenhuacai@loongson.cn>
-> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> + * Copyright (c) 2017-2022 Linaro Ltd
+> + * Copyright (c) 2010-2012, The Linux Foundation. All rights reserved.
 > + */
+> +#include <linux/bits.h>
+> +#include <linux/bitfield.h>
+> +#include <linux/led-class-multicolor.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pwm.h>
+> +#include <linux/regmap.h>
+> +#include <linux/slab.h>
 > +
-> +#include <linux/efi.h>
-> +#include <linux/sort.h>
-> +#include <asm/efi.h>
-> +#include <asm/addrspace.h>
-> +#include <asm/boot_param.h>
-> +#include "efistub.h"
+> +#define LPG_SUBTYPE_REG		0x05
+> +#define  LPG_SUBTYPE_LPG	0x2
+> +#define  LPG_SUBTYPE_PWM	0xb
+> +#define  LPG_SUBTYPE_LPG_LITE	0x11
+> +#define LPG_PATTERN_CONFIG_REG	0x40
+> +#define LPG_SIZE_CLK_REG	0x41
+> +#define  PWM_CLK_SELECT_MASK	GENMASK(1, 0)
+> +#define LPG_PREDIV_CLK_REG	0x42
+> +#define  PWM_FREQ_PRE_DIV_MASK	GENMASK(6, 5)
+> +#define  PWM_FREQ_EXP_MASK	GENMASK(2, 0)
+> +#define PWM_TYPE_CONFIG_REG	0x43
+> +#define PWM_VALUE_REG		0x44
+> +#define PWM_ENABLE_CONTROL_REG	0x46
+> +#define PWM_SYNC_REG		0x47
+> +#define LPG_RAMP_DURATION_REG	0x50
+> +#define LPG_HI_PAUSE_REG	0x52
+> +#define LPG_LO_PAUSE_REG	0x54
+> +#define LPG_HI_IDX_REG		0x56
+> +#define LPG_LO_IDX_REG		0x57
+> +#define PWM_SEC_ACCESS_REG	0xd0
+> +#define PWM_DTEST_REG(x)	(0xe2 + (x) - 1)
 > +
-> +#define MAX_ARG_COUNT          128
-> +#define CMDLINE_MAX_SIZE       0x200
+> +#define TRI_LED_SRC_SEL		0x45
+> +#define TRI_LED_EN_CTL		0x46
+> +#define TRI_LED_ATC_CTL		0x47
 > +
-> +static int argc;
-> +static char **argv;
-> +const efi_system_table_t *efi_system_table;
-> +static efi_guid_t screen_info_guid = LINUX_EFI_LARCH_SCREEN_INFO_TABLE_GUID;
-> +static unsigned int map_entry[LOONGSON3_BOOT_MEM_MAP_MAX];
-> +static struct efi_mmap mmap_array[EFI_MAX_MEMORY_TYPE][LOONGSON3_BOOT_MEM_MAP_MAX];
+> +#define LPG_LUT_REG(x)		(0x40 + (x) * 2)
+> +#define RAMP_CONTROL_REG	0xc8
 > +
-> +struct exit_boot_struct {
-> +       struct boot_params *bp;
-> +       unsigned int *runtime_entry_count;
+> +#define LPG_RESOLUTION		512
+> +#define LPG_MAX_M		7
+> +
+> +struct lpg_channel;
+> +struct lpg_data;
+> +
+> +/**
+> + * struct lpg - LPG device context
+> + * @dev:	pointer to LPG device
+> + * @map:	regmap for register access
+> + * @lock:	used to synchronize LED and pwm callback requests
+> + * @pwm:	PWM-chip object, if operating in PWM mode
+> + * @data:	reference to version specific data
+> + * @lut_base:	base address of the LUT block (optional)
+> + * @lut_size:	number of entries in the LUT block
+> + * @lut_bitmap:	allocation bitmap for LUT entries
+> + * @triled_base: base address of the TRILED block (optional)
+> + * @triled_src:	power-source for the TRILED
+> + * @triled_has_atc_ctl:	true if there is TRI_LED_ATC_CTL register
+> + * @triled_has_src_sel:	true if there is TRI_LED_SRC_SEL register
+> + * @channels:	list of PWM channels
+> + * @num_channels: number of @channels
+> + */
+> +struct lpg {
+> +	struct device *dev;
+> +	struct regmap *map;
+> +
+> +	struct mutex lock;
+> +
+> +	struct pwm_chip pwm;
+> +
+> +	const struct lpg_data *data;
+> +
+> +	u32 lut_base;
+> +	u32 lut_size;
+> +	unsigned long *lut_bitmap;
+> +
+> +	u32 triled_base;
+> +	u32 triled_src;
+> +	bool triled_has_atc_ctl;
+> +	bool triled_has_src_sel;
+> +
+> +	struct lpg_channel *channels;
+> +	unsigned int num_channels;
 > +};
 > +
-> +typedef void (*kernel_entry_t)(int argc, char *argv[], struct boot_params *boot_p);
+> +/**
+> + * struct lpg_channel - per channel data
+> + * @lpg:	reference to parent lpg
+> + * @base:	base address of the PWM channel
+> + * @triled_mask: mask in TRILED to enable this channel
+> + * @lut_mask:	mask in LUT to start pattern generator for this channel
+> + * @subtype:	PMIC hardware block subtype
+> + * @in_use:	channel is exposed to LED framework
+> + * @color:	color of the LED attached to this channel
+> + * @dtest_line:	DTEST line for output, or 0 if disabled
+> + * @dtest_value: DTEST line configuration
+> + * @pwm_value:	duty (in microseconds) of the generated pulses, overridden by LUT
+> + * @enabled:	output enabled?
+> + * @period:	period (in nanoseconds) of the generated pulses
+> + * @clk_sel:	reference clock frequency selector
+> + * @pre_div_sel: divider selector of the reference clock
+> + * @pre_div_exp: exponential divider of the reference clock
+> + * @ramp_enabled: duty cycle is driven by iterating over lookup table
+> + * @ramp_ping_pong: reverse through pattern, rather than wrapping to start
+> + * @ramp_oneshot: perform only a single pass over the pattern
+> + * @ramp_reverse: iterate over pattern backwards
+> + * @ramp_tick_ms: length (in milliseconds) of one step in the pattern
+> + * @ramp_lo_pause_ms: pause (in milliseconds) before iterating over pattern
+> + * @ramp_hi_pause_ms: pause (in milliseconds) after iterating over pattern
+> + * @pattern_lo_idx: start index of associated pattern
+> + * @pattern_hi_idx: last index of associated pattern
+> + */
+> +struct lpg_channel {
+> +	struct lpg *lpg;
 > +
-> +extern int kernel_asize;
-> +extern int kernel_fsize;
-> +extern int kernel_offset;
-> +extern unsigned long kernel_vaddr;
-> +extern kernel_entry_t kernel_entry;
+> +	u32 base;
+> +	unsigned int triled_mask;
+> +	unsigned int lut_mask;
+> +	unsigned int subtype;
 > +
-> +unsigned char efi_crc8(char *buff, int size)
+> +	bool in_use;
+> +
+> +	int color;
+> +
+> +	u32 dtest_line;
+> +	u32 dtest_value;
+> +
+> +	u16 pwm_value;
+> +	bool enabled;
+> +
+> +	u64 period;
+> +	unsigned int clk_sel;
+> +	unsigned int pre_div_sel;
+> +	unsigned int pre_div_exp;
+> +
+> +	bool ramp_enabled;
+> +	bool ramp_ping_pong;
+> +	bool ramp_oneshot;
+> +	bool ramp_reverse;
+> +	unsigned short ramp_tick_ms;
+> +	unsigned long ramp_lo_pause_ms;
+> +	unsigned long ramp_hi_pause_ms;
+> +
+> +	unsigned int pattern_lo_idx;
+> +	unsigned int pattern_hi_idx;
+> +};
+> +
+> +/**
+> + * struct lpg_led - logical LED object
+> + * @lpg:		lpg context reference
+> + * @cdev:		LED class device
+> + * @mcdev:		Multicolor LED class device
+> + * @num_channels:	number of @channels
+> + * @channels:		list of channels associated with the LED
+> + */
+> +struct lpg_led {
+> +	struct lpg *lpg;
+> +
+> +	struct led_classdev cdev;
+> +	struct led_classdev_mc mcdev;
+> +
+> +	unsigned int num_channels;
+> +	struct lpg_channel *channels[];
+> +};
+> +
+> +/**
+> + * struct lpg_channel_data - per channel initialization data
+> + * @base:		base address for PWM channel registers
+> + * @triled_mask:	bitmask for controlling this channel in TRILED
+> + */
+> +struct lpg_channel_data {
+> +	unsigned int base;
+> +	u8 triled_mask;
+> +};
+> +
+> +/**
+> + * struct lpg_data - initialization data
+> + * @lut_base:		base address of LUT block
+> + * @lut_size:		number of entries in LUT
+> + * @triled_base:	base address of TRILED
+> + * @triled_has_atc_ctl:	true if there is TRI_LED_ATC_CTL register
+> + * @triled_has_src_sel:	true if there is TRI_LED_SRC_SEL register
+> + * @num_channels:	number of channels in LPG
+> + * @channels:		list of channel initialization data
+> + */
+> +struct lpg_data {
+> +	unsigned int lut_base;
+> +	unsigned int lut_size;
+> +	unsigned int triled_base;
+> +	bool triled_has_atc_ctl;
+> +	bool triled_has_src_sel;
+> +	int num_channels;
+> +	const struct lpg_channel_data *channels;
+> +};
+> +
+> +static int triled_set(struct lpg *lpg, unsigned int mask, unsigned int enable)
 > +{
-> +       int sum, cnt;
+> +	/* Skip if we don't have a triled block */
+> +	if (!lpg->triled_base)
+> +		return 0;
 > +
-> +       for (sum = 0, cnt = 0; cnt < size; cnt++)
-> +               sum = (char) (sum + *(buff + cnt));
-> +
-> +       return (char)(0x100 - sum);
+> +	return regmap_update_bits(lpg->map, lpg->triled_base + TRI_LED_EN_CTL,
+> +				  mask, enable);
 > +}
 > +
-> +struct screen_info *alloc_screen_info(void)
+> +static int lpg_lut_store(struct lpg *lpg, struct led_pattern *pattern,
+> +			 size_t len, unsigned int *lo_idx, unsigned int *hi_idx)
 > +{
-> +       efi_status_t status;
-> +       struct screen_info *si;
+> +	unsigned int idx;
+> +	u16 val;
+> +	int i;
 > +
-> +       status = efi_bs_call(allocate_pool,
-> +                       EFI_RUNTIME_SERVICES_DATA, sizeof(*si), (void **)&si);
-> +       if (status != EFI_SUCCESS)
-> +               return NULL;
+> +	idx = bitmap_find_next_zero_area(lpg->lut_bitmap, lpg->lut_size,
+> +					 0, len, 0);
+> +	if (idx >= lpg->lut_size)
+> +		return -ENOMEM;
 > +
-> +       status = efi_bs_call(install_configuration_table, &screen_info_guid, si);
-> +       if (status == EFI_SUCCESS)
-> +               return si;
+> +	for (i = 0; i < len; i++) {
+> +		val = pattern[i].brightness;
 > +
-> +       efi_bs_call(free_pool, si);
+> +		regmap_bulk_write(lpg->map, lpg->lut_base + LPG_LUT_REG(idx + i),
+> +				  &val, sizeof(val));
+> +	}
 > +
-> +       return NULL;
+> +	bitmap_set(lpg->lut_bitmap, idx, len);
+> +
+> +	*lo_idx = idx;
+> +	*hi_idx = idx + len - 1;
+> +
+> +	return 0;
 > +}
 > +
-> +static void setup_graphics(void)
+> +static void lpg_lut_free(struct lpg *lpg, unsigned int lo_idx, unsigned int hi_idx)
 > +{
-> +       unsigned long size;
-> +       efi_status_t status;
-> +       efi_guid_t gop_proto = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
-> +       void **gop_handle = NULL;
-> +       struct screen_info *si = NULL;
+> +	int len;
 > +
-> +       size = 0;
-> +       status = efi_bs_call(locate_handle, EFI_LOCATE_BY_PROTOCOL,
-> +                               &gop_proto, NULL, &size, gop_handle);
-> +       if (status == EFI_BUFFER_TOO_SMALL) {
-> +               si = alloc_screen_info();
-> +               efi_setup_gop(si, &gop_proto, size);
-> +       }
+> +	len = hi_idx - lo_idx + 1;
+> +	if (len == 1)
+> +		return;
+> +
+> +	bitmap_clear(lpg->lut_bitmap, lo_idx, len);
 > +}
 > +
-> +struct boot_params *bootparams_init(efi_system_table_t *sys_table)
+> +static int lpg_lut_sync(struct lpg *lpg, unsigned int mask)
 > +{
-> +       efi_status_t status;
-> +       struct boot_params *p;
-> +       unsigned char sig[8] = {'B', 'P', 'I', '0', '1', '0', '0', '2'};
-> +
-> +       status = efi_bs_call(allocate_pool, EFI_RUNTIME_SERVICES_DATA, SZ_64K, (void **)&p);
-> +       if (status != EFI_SUCCESS)
-> +               return NULL;
-> +
-> +       memset(p, 0, SZ_64K);
-> +       memcpy(&p->signature, sig, sizeof(long));
-> +
-> +       return p;
+> +	return regmap_write(lpg->map, lpg->lut_base + RAMP_CONTROL_REG, mask);
 > +}
 > +
-> +static unsigned long convert_priv_cmdline(char *cmdline_ptr,
-> +               unsigned long rd_addr, unsigned long rd_size)
+> +static const unsigned int lpg_clk_rates[] = {0, 1024, 32768, 19200000};
+> +static const unsigned int lpg_pre_divs[] = {1, 3, 5, 6};
+> +
+> +static int lpg_calc_freq(struct lpg_channel *chan, uint64_t period)
 > +{
-> +       unsigned int rdprev_size;
-> +       unsigned int cmdline_size;
-> +       efi_status_t status;
-> +       char *pstr, *substr;
-> +       char *initrd_ptr = NULL;
-> +       char convert_str[CMDLINE_MAX_SIZE];
-> +       static char cmdline_array[CMDLINE_MAX_SIZE];
+> +	unsigned int clk_sel, best_clk = 0;
+> +	unsigned int div, best_div = 0;
+> +	unsigned int m, best_m = 0;
+> +	unsigned int error;
+> +	unsigned int best_err = UINT_MAX;
+> +	u64 best_period = 0;
+> +	u64 max_period;
 > +
-> +       cmdline_size = strlen(cmdline_ptr);
-> +       snprintf(cmdline_array, CMDLINE_MAX_SIZE, "kernel ");
+> +	/*
+> +	 * The PWM period is determined by:
+> +	 *
+> +	 *          resolution * pre_div * 2^M
+> +	 * period = --------------------------
+> +	 *                   refclk
+> +	 *
+> +	 * With resolution fixed at 2^9 bits, pre_div = {1, 3, 5, 6} and
+> +	 * M = [0..7].
+> +	 *
+> +	 * This allows for periods between 27uS and 384s, as the PWM framework
+> +	 * wants a period of equal or lower length than requested, reject
+> +	 * anything below 27uS.
+> +	 */
+> +	if (period <= (u64)NSEC_PER_SEC * LPG_RESOLUTION / 19200000)
+> +		return -EINVAL;
 > +
-> +       initrd_ptr = strstr(cmdline_ptr, "initrd=");
-> +       if (!initrd_ptr) {
-> +               snprintf(cmdline_array, CMDLINE_MAX_SIZE, "kernel %s", cmdline_ptr);
-> +               goto completed;
-> +       }
-> +       snprintf(convert_str, CMDLINE_MAX_SIZE, " initrd=0x%lx,0x%lx", rd_addr, rd_size);
-> +       rdprev_size = cmdline_size - strlen(initrd_ptr);
-> +       strncat(cmdline_array, cmdline_ptr, rdprev_size);
+> +	/* Limit period to largest possible value, to avoid overflows */
+> +	max_period = (u64)NSEC_PER_SEC * LPG_RESOLUTION * 6 * (1 << LPG_MAX_M) / 1024;
+> +	if (period > max_period)
+> +		period = max_period;
 > +
-> +       cmdline_ptr = strnstr(initrd_ptr, " ", CMDLINE_MAX_SIZE);
-> +       strcat(cmdline_array, convert_str);
-> +       if (!cmdline_ptr)
-> +               goto completed;
+> +	/*
+> +	 * Search for the pre_div, refclk and M by solving the rewritten formula
+> +	 * for each refclk and pre_div value:
+> +	 *
+> +	 *                     period * refclk
+> +	 * M = log2 -------------------------------------
+> +	 *           NSEC_PER_SEC * pre_div * resolution
+> +	 */
+> +	for (clk_sel = 1; clk_sel < ARRAY_SIZE(lpg_clk_rates); clk_sel++) {
+> +		u64 numerator = period * lpg_clk_rates[clk_sel];
 > +
-> +       strcat(cmdline_array, cmdline_ptr);
+> +		for (div = 0; div < ARRAY_SIZE(lpg_pre_divs); div++) {
+> +			u64 denominator = (u64)NSEC_PER_SEC * lpg_pre_divs[div] * LPG_RESOLUTION;
+> +			u64 actual;
+> +			u64 ratio;
 > +
-> +completed:
-> +       status = efi_allocate_pages((MAX_ARG_COUNT + 1) * (sizeof(char *)),
-> +                                       (unsigned long *)&argv, ULONG_MAX);
-> +       if (status != EFI_SUCCESS) {
-> +               efi_err("Alloc argv mmap_array error\n");
-> +               return status;
-> +       }
+> +			if (numerator < denominator)
+> +				continue;
 > +
-> +       argc = 0;
-> +       pstr = cmdline_array;
+> +			ratio = div64_u64(numerator, denominator);
+> +			m = ilog2(ratio);
+> +			if (m > LPG_MAX_M)
+> +				m = LPG_MAX_M;
 > +
-> +       substr = strsep(&pstr, " \t");
-> +       while (substr != NULL) {
-> +               if (strlen(substr)) {
-> +                       argv[argc++] = substr;
-> +                       if (argc == MAX_ARG_COUNT) {
-> +                               efi_err("Argv mmap_array full!\n");
-> +                               break;
-> +                       }
-> +               }
-> +               substr = strsep(&pstr, " \t");
-> +       }
+> +			actual = DIV_ROUND_UP_ULL(denominator * (1 << m), lpg_clk_rates[clk_sel]);
 > +
-> +       return EFI_SUCCESS;
+> +			error = period - actual;
+> +			if (error < best_err) {
+> +				best_err = error;
+> +
+> +				best_div = div;
+> +				best_m = m;
+> +				best_clk = clk_sel;
+> +				best_period = actual;
+> +			}
+> +		}
+> +	}
+> +
+> +	chan->clk_sel = best_clk;
+> +	chan->pre_div_sel = best_div;
+> +	chan->pre_div_exp = best_m;
+> +	chan->period = best_period;
+> +
+> +	return 0;
 > +}
 > +
-> +unsigned int efi_memmap_sort(struct loongsonlist_mem_map *memmap,
-> +                       unsigned int index, unsigned int mem_type)
+> +static void lpg_calc_duty(struct lpg_channel *chan, uint64_t duty)
 > +{
-> +       unsigned int i, t;
-> +       unsigned long msize;
+> +	unsigned int max = LPG_RESOLUTION - 1;
+> +	unsigned int val;
 > +
-> +       for (i = 0; i < map_entry[mem_type]; i = t) {
-> +               msize = mmap_array[mem_type][i].mem_size;
-> +               for (t = i + 1; t < map_entry[mem_type]; t++) {
-> +                       if (mmap_array[mem_type][i].mem_start + msize <
-> +                                       mmap_array[mem_type][t].mem_start)
-> +                               break;
+> +	val = div64_u64(duty * lpg_clk_rates[chan->clk_sel],
+> +			(u64)NSEC_PER_SEC * lpg_pre_divs[chan->pre_div_sel] * (1 << chan->pre_div_exp));
 > +
-> +                       msize += mmap_array[mem_type][t].mem_size;
-> +               }
-> +               memmap->map[index].mem_type = mem_type;
-> +               memmap->map[index].mem_start = mmap_array[mem_type][i].mem_start;
-> +               memmap->map[index].mem_size = msize;
-> +               memmap->map[index].attribute = mmap_array[mem_type][i].attribute;
-> +               index++;
-> +       }
-> +
-> +       return index;
+> +	chan->pwm_value = min(val, max);
 > +}
 > +
-> +static efi_status_t mk_mmap(struct efi_boot_memmap *map, struct boot_params *p)
+> +static void lpg_apply_freq(struct lpg_channel *chan)
 > +{
-> +       char checksum;
-> +       unsigned int i;
-> +       unsigned int nr_desc;
-> +       unsigned int mem_type;
-> +       unsigned long count;
-> +       efi_memory_desc_t *mem_desc;
-> +       struct loongsonlist_mem_map *mhp = NULL;
+> +	unsigned long val;
+> +	struct lpg *lpg = chan->lpg;
 > +
-> +       memset(map_entry, 0, sizeof(map_entry));
-> +       memset(mmap_array, 0, sizeof(mmap_array));
+> +	if (!chan->enabled)
+> +		return;
 > +
-> +       if (!strncmp((char *)p, "BPI", 3)) {
-> +               p->flags |= BPI_FLAGS_UEFI_SUPPORTED;
-> +               p->systemtable = (efi_system_table_t *)efi_system_table;
-> +               p->extlist_offset = sizeof(*p) + sizeof(unsigned long);
-> +               mhp = (struct loongsonlist_mem_map *)((char *)p + p->extlist_offset);
+> +	val = chan->clk_sel;
 > +
-> +               memcpy(&mhp->header.signature, "MEM", sizeof(unsigned long));
-> +               mhp->header.length = sizeof(*mhp);
-> +               mhp->desc_version = *map->desc_ver;
-> +               mhp->map_count = 0;
-> +       }
-> +       if (!(*(map->map_size)) || !(*(map->desc_size)) || !mhp) {
-> +               efi_err("get memory info error\n");
-> +               return EFI_INVALID_PARAMETER;
-> +       }
-> +       nr_desc = *(map->map_size) / *(map->desc_size);
+> +	/* Specify 9bit resolution, based on the subtype of the channel */
+> +	switch (chan->subtype) {
+> +	case LPG_SUBTYPE_LPG:
+> +		val |= GENMASK(5, 4);
+> +		break;
+> +	case LPG_SUBTYPE_PWM:
+> +		val |= BIT(2);
+> +		break;
+> +	case LPG_SUBTYPE_LPG_LITE:
+> +	default:
+> +		val |= BIT(4);
+> +		break;
+> +	}
 > +
-> +       /*
-> +        * According to UEFI SPEC, mmap_buf is the accurate Memory Map
-> +        * mmap_array now we can fill platform specific memory structure.
-> +        */
-> +       for (i = 0; i < nr_desc; i++) {
-> +               mem_desc = (efi_memory_desc_t *)((void *)(*map->map) + (i * (*(map->desc_size))));
-> +               switch (mem_desc->type) {
-> +               case EFI_RESERVED_TYPE:
-> +               case EFI_RUNTIME_SERVICES_CODE:
-> +               case EFI_RUNTIME_SERVICES_DATA:
-> +               case EFI_MEMORY_MAPPED_IO:
-> +               case EFI_MEMORY_MAPPED_IO_PORT_SPACE:
-> +               case EFI_UNUSABLE_MEMORY:
-> +               case EFI_PAL_CODE:
-> +                       mem_type = ADDRESS_TYPE_RESERVED;
-> +                       break;
+> +	regmap_write(lpg->map, chan->base + LPG_SIZE_CLK_REG, val);
 > +
-> +               case EFI_ACPI_MEMORY_NVS:
-> +                       mem_type = ADDRESS_TYPE_NVS;
-> +                       break;
-> +
-> +               case EFI_ACPI_RECLAIM_MEMORY:
-> +                       mem_type = ADDRESS_TYPE_ACPI;
-> +                       break;
-> +
-> +               case EFI_LOADER_CODE:
-> +               case EFI_LOADER_DATA:
-> +               case EFI_PERSISTENT_MEMORY:
-> +               case EFI_BOOT_SERVICES_CODE:
-> +               case EFI_BOOT_SERVICES_DATA:
-> +               case EFI_CONVENTIONAL_MEMORY:
-> +                       mem_type = ADDRESS_TYPE_SYSRAM;
-> +                       break;
-> +
-> +               default:
-> +                       continue;
-> +               }
-> +
-> +               mmap_array[mem_type][map_entry[mem_type]].mem_type = mem_type;
-> +               mmap_array[mem_type][map_entry[mem_type]].mem_start =
-> +                                               mem_desc->phys_addr & TO_PHYS_MASK;
-> +               mmap_array[mem_type][map_entry[mem_type]].mem_size =
-> +                                               mem_desc->num_pages << EFI_PAGE_SHIFT;
-> +               mmap_array[mem_type][map_entry[mem_type]].attribute =
-> +                                               mem_desc->attribute;
-> +               map_entry[mem_type]++;
-> +       }
-> +
-> +       count = mhp->map_count;
-> +       /* Sort EFI memmap and add to BPI for kernel */
-> +       for (i = 0; i < LOONGSON3_BOOT_MEM_MAP_MAX; i++) {
-> +               if (!map_entry[i])
-> +                       continue;
-> +               count = efi_memmap_sort(mhp, count, i);
-> +       }
-> +
-> +       mhp->map_count = count;
-> +       mhp->header.checksum = 0;
-> +
-> +       checksum = efi_crc8((char *)mhp, mhp->header.length);
-> +       mhp->header.checksum = checksum;
-> +
-> +       return EFI_SUCCESS;
+> +	val = FIELD_PREP(PWM_FREQ_PRE_DIV_MASK, chan->pre_div_sel) |
+> +	      FIELD_PREP(PWM_FREQ_EXP_MASK, chan->pre_div_exp);
+> +	regmap_write(lpg->map, chan->base + LPG_PREDIV_CLK_REG, val);
 > +}
 > +
-> +static efi_status_t exit_boot_func(struct efi_boot_memmap *map, void *priv)
+> +#define LPG_ENABLE_GLITCH_REMOVAL	BIT(5)
+> +
+> +static void lpg_enable_glitch(struct lpg_channel *chan)
 > +{
-> +       efi_status_t status;
-> +       struct exit_boot_struct *p = priv;
+> +	struct lpg *lpg = chan->lpg;
 > +
-> +       status = mk_mmap(map, p->bp);
-> +       if (status != EFI_SUCCESS) {
-> +               efi_err("Make kernel memory map failed!\n");
-> +               return status;
-> +       }
-> +
-> +       return EFI_SUCCESS;
+> +	regmap_update_bits(lpg->map, chan->base + PWM_TYPE_CONFIG_REG,
+> +			   LPG_ENABLE_GLITCH_REMOVAL, 0);
 > +}
 > +
-> +static efi_status_t exit_boot_services(struct boot_params *boot_params, void *handle)
+> +static void lpg_disable_glitch(struct lpg_channel *chan)
 > +{
-> +       unsigned int desc_version;
-> +       unsigned int runtime_entry_count = 0;
-> +       unsigned long map_size, key, desc_size, buff_size;
-> +       efi_status_t status;
-> +       efi_memory_desc_t *mem_map;
-> +       struct efi_boot_memmap map;
-> +       struct exit_boot_struct priv;
+> +	struct lpg *lpg = chan->lpg;
 > +
-> +       map.map                 = &mem_map;
-> +       map.map_size            = &map_size;
-> +       map.desc_size           = &desc_size;
-> +       map.desc_ver            = &desc_version;
-> +       map.key_ptr             = &key;
-> +       map.buff_size           = &buff_size;
-> +       status = efi_get_memory_map(&map);
-> +       if (status != EFI_SUCCESS) {
-> +               efi_err("Unable to retrieve UEFI memory map.\n");
-> +               return status;
-> +       }
+> +	regmap_update_bits(lpg->map, chan->base + PWM_TYPE_CONFIG_REG,
+> +			   LPG_ENABLE_GLITCH_REMOVAL,
+> +			   LPG_ENABLE_GLITCH_REMOVAL);
+> +}
 > +
-> +       priv.bp = boot_params;
-> +       priv.runtime_entry_count = &runtime_entry_count;
+> +static void lpg_apply_pwm_value(struct lpg_channel *chan)
+> +{
+> +	struct lpg *lpg = chan->lpg;
+> +	u16 val = chan->pwm_value;
 > +
-> +       /* Might as well exit boot services now */
-> +       status = efi_exit_boot_services(handle, &map, &priv, exit_boot_func);
-> +       if (status != EFI_SUCCESS)
-> +               return status;
+> +	if (!chan->enabled)
+> +		return;
 > +
-> +       return EFI_SUCCESS;
+> +	regmap_bulk_write(lpg->map, chan->base + PWM_VALUE_REG, &val, sizeof(val));
+> +}
+> +
+> +#define LPG_PATTERN_CONFIG_LO_TO_HI	BIT(4)
+> +#define LPG_PATTERN_CONFIG_REPEAT	BIT(3)
+> +#define LPG_PATTERN_CONFIG_TOGGLE	BIT(2)
+> +#define LPG_PATTERN_CONFIG_PAUSE_HI	BIT(1)
+> +#define LPG_PATTERN_CONFIG_PAUSE_LO	BIT(0)
+> +
+> +static void lpg_apply_lut_control(struct lpg_channel *chan)
+> +{
+> +	struct lpg *lpg = chan->lpg;
+> +	unsigned int hi_pause;
+> +	unsigned int lo_pause;
+> +	unsigned int conf = 0;
+> +	unsigned int lo_idx = chan->pattern_lo_idx;
+> +	unsigned int hi_idx = chan->pattern_hi_idx;
+> +	u16 step = chan->ramp_tick_ms;
+> +
+> +	if (!chan->ramp_enabled || chan->pattern_lo_idx == chan->pattern_hi_idx)
+> +		return;
+> +
+> +	hi_pause = DIV_ROUND_UP(chan->ramp_hi_pause_ms, step);
+> +	lo_pause = DIV_ROUND_UP(chan->ramp_lo_pause_ms, step);
+> +
+> +	if (!chan->ramp_reverse)
+> +		conf |= LPG_PATTERN_CONFIG_LO_TO_HI;
+> +	if (!chan->ramp_oneshot)
+> +		conf |= LPG_PATTERN_CONFIG_REPEAT;
+> +	if (chan->ramp_ping_pong)
+> +		conf |= LPG_PATTERN_CONFIG_TOGGLE;
+> +	if (chan->ramp_hi_pause_ms)
+> +		conf |= LPG_PATTERN_CONFIG_PAUSE_HI;
+> +	if (chan->ramp_lo_pause_ms)
+> +		conf |= LPG_PATTERN_CONFIG_PAUSE_LO;
+> +
+> +	regmap_write(lpg->map, chan->base + LPG_PATTERN_CONFIG_REG, conf);
+> +	regmap_write(lpg->map, chan->base + LPG_HI_IDX_REG, hi_idx);
+> +	regmap_write(lpg->map, chan->base + LPG_LO_IDX_REG, lo_idx);
+> +
+> +	regmap_bulk_write(lpg->map, chan->base + LPG_RAMP_DURATION_REG, &step, sizeof(step));
+> +	regmap_write(lpg->map, chan->base + LPG_HI_PAUSE_REG, hi_pause);
+> +	regmap_write(lpg->map, chan->base + LPG_LO_PAUSE_REG, lo_pause);
+> +}
+> +
+> +#define LPG_ENABLE_CONTROL_OUTPUT		BIT(7)
+> +#define LPG_ENABLE_CONTROL_BUFFER_TRISTATE	BIT(5)
+> +#define LPG_ENABLE_CONTROL_SRC_PWM		BIT(2)
+> +#define LPG_ENABLE_CONTROL_RAMP_GEN		BIT(1)
+> +
+> +static void lpg_apply_control(struct lpg_channel *chan)
+> +{
+> +	unsigned int ctrl;
+> +	struct lpg *lpg = chan->lpg;
+> +
+> +	ctrl = LPG_ENABLE_CONTROL_BUFFER_TRISTATE;
+> +
+> +	if (chan->enabled)
+> +		ctrl |= LPG_ENABLE_CONTROL_OUTPUT;
+> +
+> +	if (chan->pattern_lo_idx != chan->pattern_hi_idx)
+> +		ctrl |= LPG_ENABLE_CONTROL_RAMP_GEN;
+> +	else
+> +		ctrl |= LPG_ENABLE_CONTROL_SRC_PWM;
+> +
+> +	regmap_write(lpg->map, chan->base + PWM_ENABLE_CONTROL_REG, ctrl);
+> +
+> +	/*
+> +	 * Due to LPG hardware bug, in the PWM mode, having enabled PWM,
+> +	 * We have to write PWM values one more time.
+> +	 */
+> +	if (chan->enabled)
+> +		lpg_apply_pwm_value(chan);
+> +}
+> +
+> +#define LPG_SYNC_PWM	BIT(0)
+> +
+> +static void lpg_apply_sync(struct lpg_channel *chan)
+> +{
+> +	struct lpg *lpg = chan->lpg;
+> +
+> +	regmap_write(lpg->map, chan->base + PWM_SYNC_REG, LPG_SYNC_PWM);
+> +}
+> +
+> +static int lpg_parse_dtest(struct lpg *lpg)
+> +{
+> +	struct lpg_channel *chan;
+> +	struct device_node *np = lpg->dev->of_node;
+> +	int count;
+> +	int ret;
+> +	int i;
+> +
+> +	count = of_property_count_u32_elems(np, "qcom,dtest");
+> +	if (count == -EINVAL) {
+> +		return 0;
+> +	} else if (count < 0) {
+> +		ret = count;
+> +		goto err_malformed;
+> +	} else if (count != lpg->data->num_channels * 2) {
+> +		dev_err(lpg->dev, "qcom,dtest needs to be %d items\n",
+> +			lpg->data->num_channels * 2);
+> +		return -EINVAL;
+> +	}
+> +
+> +	for (i = 0; i < lpg->data->num_channels; i++) {
+> +		chan = &lpg->channels[i];
+> +
+> +		ret = of_property_read_u32_index(np, "qcom,dtest", i * 2,
+> +						 &chan->dtest_line);
+> +		if (ret)
+> +			goto err_malformed;
+> +
+> +		ret = of_property_read_u32_index(np, "qcom,dtest", i * 2 + 1,
+> +						 &chan->dtest_value);
+> +		if (ret)
+> +			goto err_malformed;
+> +	}
+> +
+> +	return 0;
+> +
+> +err_malformed:
+> +	dev_err(lpg->dev, "malformed qcom,dtest\n");
+> +	return ret;
+> +}
+> +
+> +static void lpg_apply_dtest(struct lpg_channel *chan)
+> +{
+> +	struct lpg *lpg = chan->lpg;
+> +
+> +	if (!chan->dtest_line)
+> +		return;
+> +
+> +	regmap_write(lpg->map, chan->base + PWM_SEC_ACCESS_REG, 0xa5);
+> +	regmap_write(lpg->map, chan->base + PWM_DTEST_REG(chan->dtest_line),
+> +		     chan->dtest_value);
+> +}
+> +
+> +static void lpg_apply(struct lpg_channel *chan)
+> +{
+> +	lpg_disable_glitch(chan);
+> +	lpg_apply_freq(chan);
+> +	lpg_apply_pwm_value(chan);
+> +	lpg_apply_control(chan);
+> +	lpg_apply_sync(chan);
+> +	lpg_apply_lut_control(chan);
+> +	lpg_enable_glitch(chan);
+> +}
+> +
+> +static void lpg_brightness_set(struct lpg_led *led, struct led_classdev *cdev,
+> +			       struct mc_subled *subleds)
+> +{
+> +	enum led_brightness brightness;
+> +	struct lpg_channel *chan;
+> +	unsigned int triled_enabled = 0;
+> +	unsigned int triled_mask = 0;
+> +	unsigned int lut_mask = 0;
+> +	unsigned int duty;
+> +	struct lpg *lpg = led->lpg;
+> +	int i;
+> +
+> +	for (i = 0; i < led->num_channels; i++) {
+> +		chan = led->channels[i];
+> +		brightness = subleds[i].brightness;
+> +
+> +		if (brightness == LED_OFF) {
+> +			chan->enabled = false;
+> +			chan->ramp_enabled = false;
+> +		} else if (chan->pattern_lo_idx != chan->pattern_hi_idx) {
+> +			lpg_calc_freq(chan, NSEC_PER_MSEC);
+> +
+> +			chan->enabled = true;
+> +			chan->ramp_enabled = true;
+> +
+> +			lut_mask |= chan->lut_mask;
+> +			triled_enabled |= chan->triled_mask;
+> +		} else {
+> +			lpg_calc_freq(chan, NSEC_PER_MSEC);
+> +
+> +			duty = div_u64(brightness * chan->period, cdev->max_brightness);
+> +			lpg_calc_duty(chan, duty);
+> +			chan->enabled = true;
+> +			chan->ramp_enabled = false;
+> +
+> +			triled_enabled |= chan->triled_mask;
+> +		}
+> +
+> +		triled_mask |= chan->triled_mask;
+> +
+> +		lpg_apply(chan);
+> +	}
+> +
+> +	/* Toggle triled lines */
+> +	if (triled_mask)
+> +		triled_set(lpg, triled_mask, triled_enabled);
+> +
+> +	/* Trigger start of ramp generator(s) */
+> +	if (lut_mask)
+> +		lpg_lut_sync(lpg, lut_mask);
+> +}
+> +
+> +static void lpg_brightness_single_set(struct led_classdev *cdev,
+> +				      enum led_brightness value)
+> +{
+> +	struct lpg_led *led = container_of(cdev, struct lpg_led, cdev);
+> +	struct mc_subled info;
+> +
+> +	mutex_lock(&led->lpg->lock);
+> +
+> +	info.brightness = value;
+> +	lpg_brightness_set(led, cdev, &info);
+> +
+> +	mutex_unlock(&led->lpg->lock);
+> +}
+> +
+> +static void lpg_brightness_mc_set(struct led_classdev *cdev,
+> +				  enum led_brightness value)
+> +{
+> +	struct led_classdev_mc *mc = lcdev_to_mccdev(cdev);
+> +	struct lpg_led *led = container_of(mc, struct lpg_led, mcdev);
+> +
+> +	mutex_lock(&led->lpg->lock);
+> +
+> +	led_mc_calc_color_components(mc, value);
+> +	lpg_brightness_set(led, cdev, mc->subled_info);
+> +
+> +	mutex_unlock(&led->lpg->lock);
+> +}
+> +
+> +static int lpg_blink_set(struct lpg_led *led,
+> +			 unsigned long *delay_on, unsigned long *delay_off)
+> +{
+> +	struct lpg_channel *chan;
+> +	unsigned int period;
+> +	unsigned int triled_mask = 0;
+> +	struct lpg *lpg = led->lpg;
+> +	u64 duty;
+> +	int i;
+> +
+> +	if (!*delay_on && !*delay_off) {
+> +		*delay_on = 500;
+> +		*delay_off = 500;
+> +	}
+> +
+> +	duty = *delay_on * NSEC_PER_MSEC;
+> +	period = (*delay_on + *delay_off) * NSEC_PER_MSEC;
+> +
+> +	for (i = 0; i < led->num_channels; i++) {
+> +		chan = led->channels[i];
+> +
+> +		lpg_calc_freq(chan, period);
+> +		lpg_calc_duty(chan, duty);
+> +
+> +		chan->enabled = true;
+> +		chan->ramp_enabled = false;
+> +
+> +		triled_mask |= chan->triled_mask;
+> +
+> +		lpg_apply(chan);
+> +	}
+> +
+> +	/* Enable triled lines */
+> +	triled_set(lpg, triled_mask, triled_mask);
+> +
+> +	chan = led->channels[0];
+> +	duty = div_u64(chan->pwm_value * chan->period, LPG_RESOLUTION);
+> +	*delay_on = div_u64(duty, NSEC_PER_MSEC);
+> +	*delay_off = div_u64(chan->period - duty, NSEC_PER_MSEC);
+> +
+> +	return 0;
+> +}
+> +
+> +static int lpg_blink_single_set(struct led_classdev *cdev,
+> +				unsigned long *delay_on, unsigned long *delay_off)
+> +{
+> +	struct lpg_led *led = container_of(cdev, struct lpg_led, cdev);
+> +	int ret;
+> +
+> +	mutex_lock(&led->lpg->lock);
+> +
+> +	ret = lpg_blink_set(led, delay_on, delay_off);
+> +
+> +	mutex_unlock(&led->lpg->lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static int lpg_blink_mc_set(struct led_classdev *cdev,
+> +			    unsigned long *delay_on, unsigned long *delay_off)
+> +{
+> +	struct led_classdev_mc *mc = lcdev_to_mccdev(cdev);
+> +	struct lpg_led *led = container_of(mc, struct lpg_led, mcdev);
+> +	int ret;
+> +
+> +	mutex_lock(&led->lpg->lock);
+> +
+> +	ret = lpg_blink_set(led, delay_on, delay_off);
+> +
+> +	mutex_unlock(&led->lpg->lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static int lpg_pattern_set(struct lpg_led *led, struct led_pattern *pattern,
+> +			   u32 len, int repeat)
+> +{
+> +	struct lpg_channel *chan;
+> +	struct lpg *lpg = led->lpg;
+> +	unsigned int brightness_a;
+> +	unsigned int brightness_b;
+> +	unsigned int actual_len;
+> +	unsigned int hi_pause;
+> +	unsigned int lo_pause;
+> +	unsigned int delta_t;
+> +	unsigned int lo_idx;
+> +	unsigned int hi_idx;
+> +	unsigned int i;
+> +	bool ping_pong = true;
+> +	int ret;
+> +
+> +	/* Hardware only support oneshot or indefinite loops */
+> +	if (repeat != -1 && repeat != 1)
+> +		return -EINVAL;
+> +
+> +	/*
+> +	 * Specifying a pattern of length 1 causes the hardware to iterate
+> +	 * through the entire LUT, so prohibit this.
+> +	 */
+> +	if (len < 2)
+> +		return -EINVAL;
+> +
+> +	/*
+> +	 * The LPG plays patterns with at a fixed pace, a "low pause" can be
+> +	 * used to stretch the first delay of the pattern and a "high pause"
+> +	 * the last one.
+> +	 *
+> +	 * In order to save space the pattern can be played in "ping pong"
+> +	 * mode, in which the pattern is first played forward, then "high
+> +	 * pause" is applied, then the pattern is played backwards and finally
+> +	 * the "low pause" is applied.
+> +	 *
+> +	 * The middle elements of the pattern are used to determine delta_t and
+> +	 * the "low pause" and "high pause" multipliers are derrived from this.
+> +	 *
+> +	 * The first element in the pattern is used to determine "low pause".
+> +	 *
+> +	 * If the specified pattern is a palindrome the ping pong mode is
+> +	 * enabled. In this scenario the delta_t of the middle entry (i.e. the
+> +	 * last in the programmed pattern) determines the "high pause".
+> +	 */
+> +
+> +	/* Detect palindromes and use "ping pong" to reduce LUT usage */
+> +	for (i = 0; i < len / 2; i++) {
+> +		brightness_a = pattern[i].brightness;
+> +		brightness_b = pattern[len - i - 1].brightness;
+> +
+> +		if (brightness_a != brightness_b) {
+> +			ping_pong = false;
+> +			break;
+> +		}
+> +	}
+> +
+> +	/* The pattern length to be written to the LUT */
+> +	if (ping_pong)
+> +		actual_len = (len + 1) / 2;
+> +	else
+> +		actual_len = len;
+> +
+> +	/*
+> +	 * Validate that all delta_t in the pattern are the same, with the
+> +	 * exception of the middle element in case of ping_pong.
+> +	 */
+> +	delta_t = pattern[1].delta_t;
+> +	for (i = 2; i < len; i++) {
+> +		if (pattern[i].delta_t != delta_t) {
+> +			/*
+> +			 * Allow last entry in the full or shortened pattern to
+> +			 * specify hi pause. Reject other variations.
+> +			 */
+> +			if (i != actual_len - 1)
+> +				return -EINVAL;
+> +		}
+> +	}
+> +
+> +	/* LPG_RAMP_DURATION_REG is a 9bit */
+> +	if (delta_t >= BIT(9))
+> +		return -EINVAL;
+> +
+> +	/* Find "low pause" and "high pause" in the pattern */
+> +	lo_pause = pattern[0].delta_t;
+> +	hi_pause = pattern[actual_len - 1].delta_t;
+> +
+> +	mutex_lock(&lpg->lock);
+> +	ret = lpg_lut_store(lpg, pattern, actual_len, &lo_idx, &hi_idx);
+> +	if (ret < 0)
+> +		goto out_unlock;
+> +
+> +	for (i = 0; i < led->num_channels; i++) {
+> +		chan = led->channels[i];
+> +
+> +		chan->ramp_tick_ms = delta_t;
+> +		chan->ramp_ping_pong = ping_pong;
+> +		chan->ramp_oneshot = repeat != -1;
+> +
+> +		chan->ramp_lo_pause_ms = lo_pause;
+> +		chan->ramp_hi_pause_ms = hi_pause;
+> +
+> +		chan->pattern_lo_idx = lo_idx;
+> +		chan->pattern_hi_idx = hi_idx;
+> +	}
+> +
+> +out_unlock:
+> +	mutex_unlock(&lpg->lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static int lpg_pattern_single_set(struct led_classdev *cdev,
+> +				  struct led_pattern *pattern, u32 len,
+> +				  int repeat)
+> +{
+> +	struct lpg_led *led = container_of(cdev, struct lpg_led, cdev);
+> +	int ret;
+> +
+> +	ret = lpg_pattern_set(led, pattern, len, repeat);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	lpg_brightness_single_set(cdev, LED_FULL);
+> +
+> +	return 0;
+> +}
+> +
+> +static int lpg_pattern_mc_set(struct led_classdev *cdev,
+> +			      struct led_pattern *pattern, u32 len,
+> +			      int repeat)
+> +{
+> +	struct led_classdev_mc *mc = lcdev_to_mccdev(cdev);
+> +	struct lpg_led *led = container_of(mc, struct lpg_led, mcdev);
+> +	int ret;
+> +
+> +	ret = lpg_pattern_set(led, pattern, len, repeat);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	led_mc_calc_color_components(mc, LED_FULL);
+> +	lpg_brightness_set(led, cdev, mc->subled_info);
+> +
+> +	return 0;
+> +}
+> +
+> +static int lpg_pattern_clear(struct lpg_led *led)
+> +{
+> +	struct lpg_channel *chan;
+> +	struct lpg *lpg = led->lpg;
+> +	int i;
+> +
+> +	mutex_lock(&lpg->lock);
+> +
+> +	chan = led->channels[0];
+> +	lpg_lut_free(lpg, chan->pattern_lo_idx, chan->pattern_hi_idx);
+> +
+> +	for (i = 0; i < led->num_channels; i++) {
+> +		chan = led->channels[i];
+> +		chan->pattern_lo_idx = 0;
+> +		chan->pattern_hi_idx = 0;
+> +	}
+> +
+> +	mutex_unlock(&lpg->lock);
+> +
+> +	return 0;
+> +}
+> +
+> +static int lpg_pattern_single_clear(struct led_classdev *cdev)
+> +{
+> +	struct lpg_led *led = container_of(cdev, struct lpg_led, cdev);
+> +
+> +	return lpg_pattern_clear(led);
+> +}
+> +
+> +static int lpg_pattern_mc_clear(struct led_classdev *cdev)
+> +{
+> +	struct led_classdev_mc *mc = lcdev_to_mccdev(cdev);
+> +	struct lpg_led *led = container_of(mc, struct lpg_led, mcdev);
+> +
+> +	return lpg_pattern_clear(led);
+> +}
+> +
+> +static int lpg_pwm_request(struct pwm_chip *chip, struct pwm_device *pwm)
+> +{
+> +	struct lpg *lpg = container_of(chip, struct lpg, pwm);
+> +	struct lpg_channel *chan = &lpg->channels[pwm->hwpwm];
+> +
+> +	return chan->in_use ? -EBUSY : 0;
 > +}
 > +
 > +/*
-> + * EFI entry point for the LoongArch EFI stub.
+> + * Limitations:
+> + * - Updating both duty and period is not done atomically, so the output signal
+> + *   will momentarily be a mix of the settings.
+> + * - Changed parameters takes effect immediately.
+> + * - A disabled channel outputs a logical 0.
 > + */
-> +efi_status_t __efiapi efi_pe_entry(efi_handle_t handle, efi_system_table_t *sys_table)
+> +static int lpg_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+> +			 const struct pwm_state *state)
 > +{
-> +       unsigned int cmdline_size = 0;
-> +       unsigned long kernel_addr = 0;
-> +       unsigned long initrd_addr = 0;
-> +       unsigned long initrd_size = 0;
-> +       enum efi_secureboot_mode secure_boot;
-> +       char *cmdline_ptr = NULL;
-> +       struct boot_params *boot_p;
-> +       efi_status_t status;
-> +       efi_loaded_image_t *image;
-> +       efi_guid_t loaded_image_proto;
-> +       kernel_entry_t real_kernel_entry;
+> +	struct lpg *lpg = container_of(chip, struct lpg, pwm);
+> +	struct lpg_channel *chan = &lpg->channels[pwm->hwpwm];
+> +	int ret = 0;
 > +
-> +       /* Config Direct Mapping */
-> +       csr_writeq(CSR_DMW0_INIT, LOONGARCH_CSR_DMWIN0);
-> +       csr_writeq(CSR_DMW1_INIT, LOONGARCH_CSR_DMWIN1);
+> +	if (state->polarity != PWM_POLARITY_NORMAL)
+> +		return -EINVAL;
 > +
-> +       efi_system_table = sys_table;
-> +       loaded_image_proto = LOADED_IMAGE_PROTOCOL_GUID;
-> +       kernel_addr = (unsigned long)&kernel_offset - kernel_offset;
-> +       real_kernel_entry = (kernel_entry_t)
-> +               ((unsigned long)&kernel_entry - kernel_addr + kernel_vaddr);
+> +	mutex_lock(&lpg->lock);
 > +
-> +       /* Check if we were booted by the EFI firmware */
-> +       if (sys_table->hdr.signature != EFI_SYSTEM_TABLE_SIGNATURE)
-> +               goto fail;
+> +	if (state->enabled) {
+> +		ret = lpg_calc_freq(chan, state->period);
+> +		if (ret < 0)
+> +			goto out_unlock;
 > +
-> +       /*
-> +        * Get a handle to the loaded image protocol.  This is used to get
-> +        * information about the running image, such as size and the command
-> +        * line.
-> +        */
-> +       status = sys_table->boottime->handle_protocol(handle,
-> +                                       &loaded_image_proto, (void *)&image);
-> +       if (status != EFI_SUCCESS) {
-> +               efi_err("Failed to get loaded image protocol\n");
-> +               goto fail;
-> +       }
+> +		lpg_calc_duty(chan, state->duty_cycle);
+> +	}
+> +	chan->enabled = state->enabled;
 > +
-> +       /* Get the command line from EFI, using the LOADED_IMAGE protocol. */
-> +       cmdline_ptr = efi_convert_cmdline(image, &cmdline_size);
-> +       if (!cmdline_ptr) {
-> +               efi_err("Getting command line failed!\n");
-> +               goto fail_free_cmdline;
-> +       }
+> +	lpg_apply(chan);
 > +
-> +#ifdef CONFIG_CMDLINE_BOOL
-> +       if (cmdline_size == 0)
-> +               efi_parse_options(CONFIG_CMDLINE);
-> +#endif
-> +       if (!IS_ENABLED(CONFIG_CMDLINE_OVERRIDE) && cmdline_size > 0)
-> +               efi_parse_options(cmdline_ptr);
+> +	triled_set(lpg, chan->triled_mask, chan->enabled ? chan->triled_mask : 0);
 > +
-> +       efi_info("Booting Linux Kernel...\n");
+> +out_unlock:
+> +	mutex_unlock(&lpg->lock);
 > +
-> +       efi_relocate_kernel(&kernel_addr, kernel_fsize, kernel_asize,
-> +                           PHYSADDR(kernel_vaddr), SZ_2M, PHYSADDR(kernel_vaddr));
-> +
-> +       setup_graphics();
-> +       secure_boot = efi_get_secureboot();
-> +       efi_enable_reset_attack_mitigation();
-> +
-> +       status = efi_load_initrd(image, &initrd_addr, &initrd_size, SZ_4G, ULONG_MAX);
-> +       if (status != EFI_SUCCESS) {
-> +               efi_err("Failed get initrd addr!\n");
-> +               goto fail_free;
-> +       }
-> +
-> +       status = convert_priv_cmdline(cmdline_ptr, initrd_addr, initrd_size);
-> +       if (status != EFI_SUCCESS) {
-> +               efi_err("Covert cmdline failed!\n");
-> +               goto fail_free;
-> +       }
-> +
-> +       boot_p = bootparams_init(sys_table);
-> +       if (!boot_p) {
-> +               efi_err("Create BPI struct error!\n");
-> +               goto fail;
-> +       }
-> +
-> +       status = exit_boot_services(boot_p, handle);
-> +       if (status != EFI_SUCCESS) {
-> +               efi_err("exit_boot services failed!\n");
-> +               goto fail_free;
-> +       }
-> +
-> +       real_kernel_entry(argc, argv, boot_p);
-> +
-> +       return EFI_SUCCESS;
-> +
-> +fail_free:
-> +       efi_free(initrd_size, initrd_addr);
-> +
-> +fail_free_cmdline:
-> +       efi_free(cmdline_size, (unsigned long)cmdline_ptr);
-> +
-> +fail:
-> +       return status;
+> +	return ret;
 > +}
-> diff --git a/include/linux/pe.h b/include/linux/pe.h
-> index daf09ffffe38..f4bb0b6a416d 100644
-> --- a/include/linux/pe.h
-> +++ b/include/linux/pe.h
-> @@ -65,6 +65,7 @@
->  #define        IMAGE_FILE_MACHINE_SH5          0x01a8
->  #define        IMAGE_FILE_MACHINE_THUMB        0x01c2
->  #define        IMAGE_FILE_MACHINE_WCEMIPSV2    0x0169
-> +#define        IMAGE_FILE_MACHINE_LOONGARCH    0x6264
->
->  /* flags */
->  #define IMAGE_FILE_RELOCS_STRIPPED           0x0001
-> --
-> 2.27.0
->
+> +
+> +static void lpg_pwm_get_state(struct pwm_chip *chip, struct pwm_device *pwm,
+> +			      struct pwm_state *state)
+> +{
+> +	struct lpg *lpg = container_of(chip, struct lpg, pwm);
+> +	struct lpg_channel *chan = &lpg->channels[pwm->hwpwm];
+> +	unsigned int pre_div;
+> +	unsigned int refclk;
+> +	unsigned int val;
+> +	unsigned int m;
+> +	u16 pwm_value;
+> +	int ret;
+> +
+> +	ret = regmap_read(lpg->map, chan->base + LPG_SIZE_CLK_REG, &val);
+> +	if (ret)
+> +		return;
+> +
+> +	refclk = lpg_clk_rates[val & PWM_CLK_SELECT_MASK];
+> +	if (refclk) {
+> +		ret = regmap_read(lpg->map, chan->base + LPG_PREDIV_CLK_REG, &val);
+> +		if (ret)
+> +			return;
+> +
+> +		pre_div = lpg_pre_divs[FIELD_GET(PWM_FREQ_PRE_DIV_MASK, val)];
+> +		m = FIELD_GET(PWM_FREQ_EXP_MASK, val);
+> +
+> +		ret = regmap_bulk_read(lpg->map, chan->base + PWM_VALUE_REG, &pwm_value, sizeof(pwm_value));
+> +		if (ret)
+> +			return;
+> +
+> +		state->period = DIV_ROUND_UP_ULL((u64)NSEC_PER_SEC * LPG_RESOLUTION * pre_div * (1 << m), refclk);
+> +		state->duty_cycle = DIV_ROUND_UP_ULL((u64)NSEC_PER_SEC * pwm_value * pre_div * (1 << m), refclk);
+> +	} else {
+> +		state->period = 0;
+> +		state->duty_cycle = 0;
+> +	}
+> +
+> +	ret = regmap_read(lpg->map, chan->base + PWM_ENABLE_CONTROL_REG, &val);
+> +	if (ret)
+> +		return;
+> +
+> +	state->enabled = FIELD_GET(LPG_ENABLE_CONTROL_OUTPUT, val);
+> +	state->polarity = PWM_POLARITY_NORMAL;
+> +
+> +	if (state->duty_cycle > state->period)
+> +		state->duty_cycle = state->period;
+> +}
+> +
+> +static const struct pwm_ops lpg_pwm_ops = {
+> +	.request = lpg_pwm_request,
+> +	.apply = lpg_pwm_apply,
+> +	.get_state = lpg_pwm_get_state,
+> +	.owner = THIS_MODULE,
+> +};
+> +
+> +static int lpg_add_pwm(struct lpg *lpg)
+> +{
+> +	int ret;
+> +
+> +	lpg->pwm.base = -1;
+> +	lpg->pwm.dev = lpg->dev;
+> +	lpg->pwm.npwm = lpg->num_channels;
+> +	lpg->pwm.ops = &lpg_pwm_ops;
+> +
+> +	ret = pwmchip_add(&lpg->pwm);
+> +	if (ret)
+> +		dev_err(lpg->dev, "failed to add PWM chip: ret %d\n", ret);
+> +
+> +	return ret;
+> +}
+> +
+> +static int lpg_parse_channel(struct lpg *lpg, struct device_node *np,
+> +			     struct lpg_channel **channel)
+> +{
+> +	struct lpg_channel *chan;
+> +	u32 color = LED_COLOR_ID_GREEN;
+> +	u32 reg;
+> +	int ret;
+> +
+> +	ret = of_property_read_u32(np, "reg", &reg);
+> +	if (ret || !reg || reg > lpg->num_channels) {
+> +		dev_err(lpg->dev, "invalid \"reg\" of %pOFn\n", np);
+> +		return -EINVAL;
+> +	}
+> +
+> +	chan = &lpg->channels[reg - 1];
+> +	chan->in_use = true;
+> +
+> +	ret = of_property_read_u32(np, "color", &color);
+> +	if (ret < 0 && ret != -EINVAL) {
+> +		dev_err(lpg->dev, "failed to parse \"color\" of %pOF\n", np);
+> +		return ret;
+> +	}
+> +
+> +	chan->color = color;
+> +
+> +	*channel = chan;
+> +
+> +	return 0;
+> +}
+> +
+> +static int lpg_add_led(struct lpg *lpg, struct device_node *np)
+> +{
+> +	struct led_init_data init_data = {};
+> +	struct led_classdev *cdev;
+> +	struct device_node *child;
+> +	struct mc_subled *info;
+> +	struct lpg_led *led;
+> +	const char *state;
+> +	int num_channels;
+> +	u32 color = 0;
+> +	int ret;
+> +	int i;
+> +
+> +	ret = of_property_read_u32(np, "color", &color);
+> +	if (ret < 0 && ret != -EINVAL) {
+> +		dev_err(lpg->dev, "failed to parse \"color\" of %pOF\n", np);
+> +		return ret;
+> +	}
+> +
+> +	if (color == LED_COLOR_ID_RGB)
+> +		num_channels = of_get_available_child_count(np);
+> +	else
+> +		num_channels = 1;
+> +
+> +	led = devm_kzalloc(lpg->dev, struct_size(led, channels, num_channels), GFP_KERNEL);
+> +	if (!led)
+> +		return -ENOMEM;
+> +
+> +	led->lpg = lpg;
+> +	led->num_channels = num_channels;
+> +
+> +	if (color == LED_COLOR_ID_RGB) {
+> +		info = devm_kcalloc(lpg->dev, num_channels, sizeof(*info), GFP_KERNEL);
+> +		if (!info)
+> +			return -ENOMEM;
+> +		i = 0;
+> +		for_each_available_child_of_node(np, child) {
+> +			ret = lpg_parse_channel(lpg, child, &led->channels[i]);
+> +			if (ret < 0)
+> +				return ret;
+> +
+> +			info[i].color_index = led->channels[i]->color;
+> +			info[i].intensity = 0;
+> +			i++;
+> +		}
+> +
+> +		led->mcdev.subled_info = info;
+> +		led->mcdev.num_colors = num_channels;
+> +
+> +		cdev = &led->mcdev.led_cdev;
+> +		cdev->brightness_set = lpg_brightness_mc_set;
+> +		cdev->blink_set = lpg_blink_mc_set;
+> +
+> +		/* Register pattern accessors only if we have a LUT block */
+> +		if (lpg->lut_base) {
+> +			cdev->pattern_set = lpg_pattern_mc_set;
+> +			cdev->pattern_clear = lpg_pattern_mc_clear;
+> +		}
+> +	} else {
+> +		ret = lpg_parse_channel(lpg, np, &led->channels[0]);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		cdev = &led->cdev;
+> +		cdev->brightness_set = lpg_brightness_single_set;
+> +		cdev->blink_set = lpg_blink_single_set;
+> +
+> +		/* Register pattern accessors only if we have a LUT block */
+> +		if (lpg->lut_base) {
+> +			cdev->pattern_set = lpg_pattern_single_set;
+> +			cdev->pattern_clear = lpg_pattern_single_clear;
+> +		}
+> +	}
+> +
+> +	cdev->default_trigger = of_get_property(np, "linux,default-trigger", NULL);
+> +	cdev->max_brightness = LPG_RESOLUTION - 1;
+> +
+> +	if (!of_property_read_string(np, "default-state", &state) &&
+> +	    !strcmp(state, "on"))
+> +		cdev->brightness = cdev->max_brightness;
+> +	else
+> +		cdev->brightness = LED_OFF;
+> +
+> +	cdev->brightness_set(cdev, cdev->brightness);
+> +
+> +	init_data.fwnode = of_fwnode_handle(np);
+> +
+> +	if (color == LED_COLOR_ID_RGB)
+> +		ret = devm_led_classdev_multicolor_register_ext(lpg->dev, &led->mcdev, &init_data);
+> +	else
+> +		ret = devm_led_classdev_register_ext(lpg->dev, &led->cdev, &init_data);
+> +	if (ret)
+> +		dev_err(lpg->dev, "unable to register %s\n", cdev->name);
+> +
+> +	return ret;
+> +}
+> +
+> +static int lpg_init_channels(struct lpg *lpg)
+> +{
+> +	const struct lpg_data *data = lpg->data;
+> +	struct lpg_channel *chan;
+> +	int i;
+> +
+> +	lpg->num_channels = data->num_channels;
+> +	lpg->channels = devm_kcalloc(lpg->dev, data->num_channels,
+> +				     sizeof(struct lpg_channel), GFP_KERNEL);
+> +	if (!lpg->channels)
+> +		return -ENOMEM;
+> +
+> +	for (i = 0; i < data->num_channels; i++) {
+> +		chan = &lpg->channels[i];
+> +
+> +		chan->lpg = lpg;
+> +		chan->base = data->channels[i].base;
+> +		chan->triled_mask = data->channels[i].triled_mask;
+> +		chan->lut_mask = BIT(i);
+> +
+> +		regmap_read(lpg->map, chan->base + LPG_SUBTYPE_REG, &chan->subtype);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int lpg_init_triled(struct lpg *lpg)
+> +{
+> +	struct device_node *np = lpg->dev->of_node;
+> +	int ret;
+> +
+> +	/* Skip initialization if we don't have a triled block */
+> +	if (!lpg->data->triled_base)
+> +		return 0;
+> +
+> +	lpg->triled_base = lpg->data->triled_base;
+> +	lpg->triled_has_atc_ctl = lpg->data->triled_has_atc_ctl;
+> +	lpg->triled_has_src_sel = lpg->data->triled_has_src_sel;
+> +
+> +	if (lpg->triled_has_src_sel) {
+> +		ret = of_property_read_u32(np, "qcom,power-source", &lpg->triled_src);
+> +		if (ret || lpg->triled_src == 2 || lpg->triled_src > 3) {
+> +			dev_err(lpg->dev, "invalid power source\n");
+> +			return -EINVAL;
+> +		}
+> +	}
+> +
+> +	/* Disable automatic trickle charge LED */
+> +	if (lpg->triled_has_atc_ctl)
+> +		regmap_write(lpg->map, lpg->triled_base + TRI_LED_ATC_CTL, 0);
+> +
+> +	/* Configure power source */
+> +	if (lpg->triled_has_src_sel)
+> +		regmap_write(lpg->map, lpg->triled_base + TRI_LED_SRC_SEL, lpg->triled_src);
+> +
+> +	/* Default all outputs to off */
+> +	regmap_write(lpg->map, lpg->triled_base + TRI_LED_EN_CTL, 0);
+> +
+> +	return 0;
+> +}
+> +
+> +static int lpg_init_lut(struct lpg *lpg)
+> +{
+> +	const struct lpg_data *data = lpg->data;
+> +
+> +	if (!data->lut_base)
+> +		return 0;
+> +
+> +	lpg->lut_base = data->lut_base;
+> +	lpg->lut_size = data->lut_size;
+> +
+> +	lpg->lut_bitmap = devm_bitmap_zalloc(lpg->dev, lpg->lut_size, GFP_KERNEL);
+> +	if (!lpg->lut_bitmap)
+> +		return -ENOMEM;
+> +
+> +	return 0;
+> +}
+> +
+> +static int lpg_probe(struct platform_device *pdev)
+> +{
+> +	struct device_node *np;
+> +	struct lpg *lpg;
+> +	int ret;
+> +	int i;
+> +
+> +	lpg = devm_kzalloc(&pdev->dev, sizeof(*lpg), GFP_KERNEL);
+> +	if (!lpg)
+> +		return -ENOMEM;
+> +
+> +	lpg->data = of_device_get_match_data(&pdev->dev);
+> +	if (!lpg->data)
+> +		return -EINVAL;
+> +
+> +	platform_set_drvdata(pdev, lpg);
+> +
+> +	lpg->dev = &pdev->dev;
+> +	mutex_init(&lpg->lock);
+> +
+> +	lpg->map = dev_get_regmap(pdev->dev.parent, NULL);
+> +	if (!lpg->map)
+> +		return dev_err_probe(&pdev->dev, -ENXIO, "parent regmap unavailable\n");
+> +
+> +	ret = lpg_init_channels(lpg);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = lpg_parse_dtest(lpg);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = lpg_init_triled(lpg);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = lpg_init_lut(lpg);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	for_each_available_child_of_node(pdev->dev.of_node, np) {
+> +		ret = lpg_add_led(lpg, np);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	for (i = 0; i < lpg->num_channels; i++)
+> +		lpg_apply_dtest(&lpg->channels[i]);
+> +
+> +	return lpg_add_pwm(lpg);
+> +}
+> +
+> +static int lpg_remove(struct platform_device *pdev)
+> +{
+> +	struct lpg *lpg = platform_get_drvdata(pdev);
+> +
+> +	pwmchip_remove(&lpg->pwm);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct lpg_data pm8916_pwm_data = {
+> +	.num_channels = 1,
+> +	.channels = (const struct lpg_channel_data[]) {
+> +		{ .base = 0xbc00 },
+> +	},
+> +};
+> +
+> +static const struct lpg_data pm8941_lpg_data = {
+> +	.lut_base = 0xb000,
+> +	.lut_size = 64,
+> +
+> +	.triled_base = 0xd000,
+> +	.triled_has_atc_ctl = true,
+> +	.triled_has_src_sel = true,
+> +
+> +	.num_channels = 8,
+> +	.channels = (const struct lpg_channel_data[]) {
+> +		{ .base = 0xb100 },
+> +		{ .base = 0xb200 },
+> +		{ .base = 0xb300 },
+> +		{ .base = 0xb400 },
+> +		{ .base = 0xb500, .triled_mask = BIT(5) },
+> +		{ .base = 0xb600, .triled_mask = BIT(6) },
+> +		{ .base = 0xb700, .triled_mask = BIT(7) },
+> +		{ .base = 0xb800 },
+> +	},
+> +};
+> +
+> +static const struct lpg_data pm8994_lpg_data = {
+> +	.lut_base = 0xb000,
+> +	.lut_size = 64,
+> +
+> +	.num_channels = 6,
+> +	.channels = (const struct lpg_channel_data[]) {
+> +		{ .base = 0xb100 },
+> +		{ .base = 0xb200 },
+> +		{ .base = 0xb300 },
+> +		{ .base = 0xb400 },
+> +		{ .base = 0xb500 },
+> +		{ .base = 0xb600 },
+> +	},
+> +};
+> +
+> +static const struct lpg_data pmi8994_lpg_data = {
+> +	.lut_base = 0xb000,
+> +	.lut_size = 24,
+> +
+> +	.triled_base = 0xd000,
+> +	.triled_has_atc_ctl = true,
+> +	.triled_has_src_sel = true,
+> +
+> +	.num_channels = 4,
+> +	.channels = (const struct lpg_channel_data[]) {
+> +		{ .base = 0xb100, .triled_mask = BIT(5) },
+> +		{ .base = 0xb200, .triled_mask = BIT(6) },
+> +		{ .base = 0xb300, .triled_mask = BIT(7) },
+> +		{ .base = 0xb400 },
+> +	},
+> +};
+> +
+> +static const struct lpg_data pmi8998_lpg_data = {
+> +	.lut_base = 0xb000,
+> +	.lut_size = 49,
+> +
+> +	.triled_base = 0xd000,
+> +
+> +	.num_channels = 6,
+> +	.channels = (const struct lpg_channel_data[]) {
+> +		{ .base = 0xb100 },
+> +		{ .base = 0xb200 },
+> +		{ .base = 0xb300, .triled_mask = BIT(5) },
+> +		{ .base = 0xb400, .triled_mask = BIT(6) },
+> +		{ .base = 0xb500, .triled_mask = BIT(7) },
+> +		{ .base = 0xb600 },
+> +	},
+> +};
+> +
+> +static const struct lpg_data pm8150b_lpg_data = {
+> +	.lut_base = 0xb000,
+> +	.lut_size = 24,
+> +
+> +	.triled_base = 0xd000,
+> +
+> +	.num_channels = 2,
+> +	.channels = (const struct lpg_channel_data[]) {
+> +		{ .base = 0xb100, .triled_mask = BIT(7) },
+> +		{ .base = 0xb200, .triled_mask = BIT(6) },
+> +	},
+> +};
+> +
+> +static const struct lpg_data pm8150l_lpg_data = {
+> +	.lut_base = 0xb000,
+> +	.lut_size = 48,
+> +
+> +	.triled_base = 0xd000,
+> +
+> +	.num_channels = 5,
+> +	.channels = (const struct lpg_channel_data[]) {
+> +		{ .base = 0xb100, .triled_mask = BIT(7) },
+> +		{ .base = 0xb200, .triled_mask = BIT(6) },
+> +		{ .base = 0xb300, .triled_mask = BIT(5) },
+> +		{ .base = 0xbc00 },
+> +		{ .base = 0xbd00 },
+> +
+> +	},
+> +};
+> +
+> +static const struct of_device_id lpg_of_table[] = {
+> +	{ .compatible = "qcom,pm8150b-lpg", .data = &pm8150b_lpg_data },
+> +	{ .compatible = "qcom,pm8150l-lpg", .data = &pm8150l_lpg_data },
+> +	{ .compatible = "qcom,pm8916-pwm", .data = &pm8916_pwm_data },
+> +	{ .compatible = "qcom,pm8941-lpg", .data = &pm8941_lpg_data },
+> +	{ .compatible = "qcom,pm8994-lpg", .data = &pm8994_lpg_data },
+> +	{ .compatible = "qcom,pmi8994-lpg", .data = &pmi8994_lpg_data },
+> +	{ .compatible = "qcom,pmi8998-lpg", .data = &pmi8998_lpg_data },
+> +	{ .compatible = "qcom,pmc8180c-lpg", .data = &pm8150l_lpg_data },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, lpg_of_table);
+> +
+> +static struct platform_driver lpg_driver = {
+> +	.probe = lpg_probe,
+> +	.remove = lpg_remove,
+> +	.driver = {
+> +		.name = "qcom-spmi-lpg",
+> +		.of_match_table = lpg_of_table,
+> +	},
+> +};
+> +module_platform_driver(lpg_driver);
+> +
+> +MODULE_DESCRIPTION("Qualcomm LPG LED driver");
+> +MODULE_LICENSE("GPL v2");
+> -- 
+> 2.33.1
+> 

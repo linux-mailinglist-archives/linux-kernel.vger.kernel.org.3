@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4972C515B97
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 10:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD913515B98
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 10:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234786AbiD3I6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 04:58:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38420 "EHLO
+        id S235607AbiD3I7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 04:59:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbiD3I6B (ORCPT
+        with ESMTP id S229683AbiD3I7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 04:58:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8B32638
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 01:54:40 -0700 (PDT)
+        Sat, 30 Apr 2022 04:59:12 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995212F386
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 01:55:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 59E9A60A22
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 08:54:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33F4CC385A7;
-        Sat, 30 Apr 2022 08:54:36 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id DB35ECE1151
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 08:55:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF25BC385A7;
+        Sat, 30 Apr 2022 08:55:44 +0000 (UTC)
 From:   Huacai Chen <chenhuacai@loongson.cn>
 To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
         Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V11 01/10] irqchip: Adjust Kconfig for Loongson
-Date:   Sat, 30 Apr 2022 16:53:35 +0800
-Message-Id: <20220430085344.3127346-2-chenhuacai@loongson.cn>
+Subject: [PATCH V11 02/10] irqchip/loongson-pch-pic: Add ACPI init support
+Date:   Sat, 30 Apr 2022 16:53:36 +0800
+Message-Id: <20220430085344.3127346-3-chenhuacai@loongson.cn>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220430085344.3127346-1-chenhuacai@loongson.cn>
 References: <20220430085344.3127346-1-chenhuacai@loongson.cn>
@@ -46,59 +46,184 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 We are preparing to add new Loongson (based on LoongArch, not compatible
-with old MIPS-based Loongson) support. HTVEC will be shared by both old
-and new Loongson processors, so we adjust its description. HTPIC is only
-used by MIPS-based Loongson, so we add a MIPS dependency. PCH_PIC and
-PCH_MSI will have some arch-specific code, so we remove the COMPILE_TEST
-dependency to avoid build warnings.
+with old MIPS-based Loongson) support. LoongArch use ACPI other than DT
+as its boot protocol, so add ACPI init support.
+
+PCH-PIC/PCH-MSI stands for "Interrupt Controller" that described in
+Section 5 of "Loongson 7A1000 Bridge User Manual". For more information
+please refer Documentation/loongarch/irq-chip-model.rst.
 
 Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- drivers/irqchip/Kconfig | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/irqchip/irq-loongson-pch-pic.c | 108 ++++++++++++++++++-------
+ 1 file changed, 81 insertions(+), 27 deletions(-)
 
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index 15edb9a6fcae..39d6be2764a2 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -556,7 +556,7 @@ config LOONGSON_LIOINTC
+diff --git a/drivers/irqchip/irq-loongson-pch-pic.c b/drivers/irqchip/irq-loongson-pch-pic.c
+index a4eb8a2181c7..b0644d595789 100644
+--- a/drivers/irqchip/irq-loongson-pch-pic.c
++++ b/drivers/irqchip/irq-loongson-pch-pic.c
+@@ -33,13 +33,18 @@
+ #define PIC_REG_IDX(irq_id)	((irq_id) / PIC_COUNT_PER_REG)
+ #define PIC_REG_BIT(irq_id)	((irq_id) % PIC_COUNT_PER_REG)
  
- config LOONGSON_HTPIC
- 	bool "Loongson3 HyperTransport PIC Controller"
--	depends on MACH_LOONGSON64
-+	depends on (MACH_LOONGSON64 && MIPS)
- 	default y
- 	select IRQ_DOMAIN
- 	select GENERIC_IRQ_CHIP
-@@ -564,16 +564,16 @@ config LOONGSON_HTPIC
- 	  Support for the Loongson-3 HyperTransport PIC Controller.
++static int nr_pics;
++
+ struct pch_pic {
+ 	void __iomem		*base;
+ 	struct irq_domain	*pic_domain;
++	struct fwnode_handle	*domain_handle;
+ 	u32			ht_vec_base;
+ 	raw_spinlock_t		pic_lock;
+ };
  
- config LOONGSON_HTVEC
--	bool "Loongson3 HyperTransport Interrupt Vector Controller"
-+	bool "Loongson HyperTransport Interrupt Vector Controller"
- 	depends on MACH_LOONGSON64
- 	default MACH_LOONGSON64
- 	select IRQ_DOMAIN_HIERARCHY
- 	help
--	  Support for the Loongson3 HyperTransport Interrupt Vector Controller.
-+	  Support for the Loongson HyperTransport Interrupt Vector Controller.
++static struct pch_pic *pch_pic_priv[2];
++
+ static void pch_pic_bitset(struct pch_pic *priv, int offset, int bit)
+ {
+ 	u32 reg;
+@@ -180,7 +185,7 @@ static void pch_pic_reset(struct pch_pic *priv)
+ 	int i;
  
- config LOONGSON_PCH_PIC
- 	bool "Loongson PCH PIC Controller"
--	depends on MACH_LOONGSON64 || COMPILE_TEST
-+	depends on MACH_LOONGSON64
- 	default MACH_LOONGSON64
- 	select IRQ_DOMAIN_HIERARCHY
- 	select IRQ_FASTEOI_HIERARCHY_HANDLERS
-@@ -582,7 +582,7 @@ config LOONGSON_PCH_PIC
+ 	for (i = 0; i < PIC_COUNT; i++) {
+-		/* Write vectored ID */
++		/* Write vector ID */
+ 		writeb(priv->ht_vec_base + i, priv->base + PCH_INT_HTVEC(i));
+ 		/* Hardcode route to HT0 Lo */
+ 		writeb(1, priv->base + PCH_INT_ROUTE(i));
+@@ -198,50 +203,37 @@ static void pch_pic_reset(struct pch_pic *priv)
+ 	}
+ }
  
- config LOONGSON_PCH_MSI
- 	bool "Loongson PCH MSI Controller"
--	depends on MACH_LOONGSON64 || COMPILE_TEST
-+	depends on MACH_LOONGSON64
- 	depends on PCI
- 	default MACH_LOONGSON64
- 	select IRQ_DOMAIN_HIERARCHY
+-static int pch_pic_of_init(struct device_node *node,
+-				struct device_node *parent)
++static int pch_pic_init(phys_addr_t addr, unsigned long size, int vec_base,
++			struct irq_domain *parent_domain, struct fwnode_handle *domain_handle)
+ {
++	int vec_count;
+ 	struct pch_pic *priv;
+-	struct irq_domain *parent_domain;
+-	int err;
+ 
+ 	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+ 	if (!priv)
+ 		return -ENOMEM;
+ 
+ 	raw_spin_lock_init(&priv->pic_lock);
+-	priv->base = of_iomap(node, 0);
+-	if (!priv->base) {
+-		err = -ENOMEM;
++	priv->base = ioremap(addr, size);
++	if (!priv->base)
+ 		goto free_priv;
+-	}
+ 
+-	parent_domain = irq_find_host(parent);
+-	if (!parent_domain) {
+-		pr_err("Failed to find the parent domain\n");
+-		err = -ENXIO;
+-		goto iounmap_base;
+-	}
++	priv->domain_handle = domain_handle;
+ 
+-	if (of_property_read_u32(node, "loongson,pic-base-vec",
+-				&priv->ht_vec_base)) {
+-		pr_err("Failed to determine pic-base-vec\n");
+-		err = -EINVAL;
+-		goto iounmap_base;
+-	}
++	priv->ht_vec_base = vec_base;
++	vec_count = ((readq(priv->base) >> 48) & 0xff) + 1;
+ 
+ 	priv->pic_domain = irq_domain_create_hierarchy(parent_domain, 0,
+-						       PIC_COUNT,
+-						       of_node_to_fwnode(node),
+-						       &pch_pic_domain_ops,
+-						       priv);
++						vec_count, priv->domain_handle,
++						&pch_pic_domain_ops, priv);
++
+ 	if (!priv->pic_domain) {
+ 		pr_err("Failed to create IRQ domain\n");
+-		err = -ENOMEM;
+ 		goto iounmap_base;
+ 	}
+ 
+ 	pch_pic_reset(priv);
++	pch_pic_priv[nr_pics++] = priv;
+ 
+ 	return 0;
+ 
+@@ -250,7 +242,69 @@ static int pch_pic_of_init(struct device_node *node,
+ free_priv:
+ 	kfree(priv);
+ 
+-	return err;
++	return -EINVAL;
++}
++
++#ifdef CONFIG_OF
++
++static int pch_pic_of_init(struct device_node *node,
++				struct device_node *parent)
++{
++	int err, vec_base;
++	struct resource res;
++	struct irq_domain *parent_domain;
++
++	if (of_address_to_resource(node, 0, &res))
++		return -EINVAL;
++
++	parent_domain = irq_find_host(parent);
++	if (!parent_domain) {
++		pr_err("Failed to find the parent domain\n");
++		return -ENXIO;
++	}
++
++	if (of_property_read_u32(node, "loongson,pic-base-vec", &vec_base)) {
++		pr_err("Failed to determine pic-base-vec\n");
++		return -EINVAL;
++	}
++
++	err = pch_pic_init(res.start, resource_size(&res), vec_base,
++				parent_domain, of_node_to_fwnode(node));
++	if (err < 0)
++		return err;
++
++	return 0;
+ }
+ 
+ IRQCHIP_DECLARE(pch_pic, "loongson,pch-pic-1.0", pch_pic_of_init);
++
++#endif
++
++#ifdef CONFIG_ACPI
++
++struct irq_domain *pch_pic_acpi_init(struct irq_domain *parent,
++					struct acpi_madt_bio_pic *acpi_pchpic)
++{
++	int ret, vec_base;
++	struct fwnode_handle *domain_handle;
++
++	if (!acpi_pchpic)
++		return NULL;
++
++	vec_base = acpi_pchpic->gsi_base - GSI_MIN_PCH_IRQ;
++
++	domain_handle = irq_domain_alloc_fwnode((phys_addr_t *)acpi_pchpic);
++	if (!domain_handle) {
++		pr_err("Unable to allocate domain handle\n");
++		return NULL;
++	}
++
++	ret = pch_pic_init(acpi_pchpic->address, acpi_pchpic->size,
++				vec_base, parent, domain_handle);
++	if (ret < 0)
++		return NULL;
++
++	return irq_find_matching_fwnode(domain_handle, DOMAIN_BUS_ANY);
++}
++
++#endif
 -- 
 2.27.0
 

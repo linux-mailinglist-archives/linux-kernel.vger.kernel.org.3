@@ -2,64 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9D85160CD
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 00:37:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF6E5160D0
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 00:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232141AbiD3Wk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 18:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56544 "EHLO
+        id S233219AbiD3Wpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 18:45:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiD3Wky (ORCPT
+        with ESMTP id S229489AbiD3Wpf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 18:40:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB498A328;
-        Sat, 30 Apr 2022 15:37:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4837CB80B12;
-        Sat, 30 Apr 2022 22:37:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4BF4C385AF;
-        Sat, 30 Apr 2022 22:37:28 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="NDp4rIz1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1651358245;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=a+iDoApNmZrBzOkGGRMF45E5XlCq10GMqaSSRUq7xoY=;
-        b=NDp4rIz1aJ6W3pKPhtbH7uZHeUlBqacS/FwdHa/UcS3yB5axymjs5llq+Lctq92FVIqAdz
-        9+ug3PlUJCyLLNefwB7YVA14nmkgeZZU/FhqWDCf5dDcxW9PGQye4Dz7n0NFTeEnmVVGLu
-        gxkrFTjCVxAoTjennIuUe2NN7LOpg5Y=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 0dd4c7e5 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Sat, 30 Apr 2022 22:37:25 +0000 (UTC)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-2ec42eae76bso117314247b3.10;
-        Sat, 30 Apr 2022 15:37:24 -0700 (PDT)
-X-Gm-Message-State: AOAM5307DrX4Lzyng+QXeYonGVlA3uLCjuJPNpIAbapM0l6X3+4lzV6B
-        KlMFolPZwyIJmu5/Q+/oct7kIMBL3DbFD66UH6g=
-X-Google-Smtp-Source: ABdhPJxYU0UY9+GbGujV1hleABZ56tELHgGQKt7bK1UNe/8NSCWuVTYsay879Flpt7wuESIHe7mw7VD2paMNb7OwCIw=
-X-Received: by 2002:a81:86c7:0:b0:2f7:bc6a:964c with SMTP id
- w190-20020a8186c7000000b002f7bc6a964cmr5587305ywf.485.1651358244216; Sat, 30
- Apr 2022 15:37:24 -0700 (PDT)
+        Sat, 30 Apr 2022 18:45:35 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4141943EFD;
+        Sat, 30 Apr 2022 15:42:12 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id p6so9950842pjm.1;
+        Sat, 30 Apr 2022 15:42:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pJxFKc3A4Q9u6UxRnvbPf1GtP9CvKofvMElbwbfkYlU=;
+        b=hU9KYocbJP8ZgH5JGVJtzDFNO2/V3wwkem7+7q9zcyQgl2iEtRpVfuNHiVgNQvQrvY
+         k+2J6GniT4XopabxoTjeH42Ah1zM1y7fUCt1S4WV0gDdWqbvgEDtM6AIO1v4dDDi2aFd
+         +dMthd7vh2JvpwmVOI2ltPrMcEjiui9GuQSHBGL/OVz1GgVcYMJrlPWVirIP57yHvL/v
+         VViY6janCln0lpKwFgsaENdHmIzM1Yf7a3jIrfNNy91pYnQd8EKAwDb0rDBBIOfR2Tun
+         bwL4A2rXVHEwmFpLGjTEznP5u2wvG5+mb82hLJFlaO4Y5/DQVjCFWA87p9gcPT4GZFNq
+         B90g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pJxFKc3A4Q9u6UxRnvbPf1GtP9CvKofvMElbwbfkYlU=;
+        b=sj27csRyuu7hSUANuhNjhxEQoaVC3JlZvKhpCAis3TfcUFc1KZb89XHTXz7WpWOkoC
+         mOvJfmTbGnfjKaRYlmCowespfWe24SBVKeaFRMrb4pbvkvcpCu/UCu8zOfSsdB2sELex
+         x97QFCRycB/skZKy6fjp18yUDRUkBRbIJTKOncrbMprMRIuwC3GUKBpWJrgZa/levV7w
+         wI65FqO1TV6PmUDVb93dci2EVEynyJaQ0vL+ZeDC9hWI1Yo2BQ+SLFsW31GE3336/C1U
+         595zxex+8pyQhdgf+WtuHG3M276XAoxWWAwd7EQfmcJu/o9JX50v17AkgXspK27FueoA
+         sqNA==
+X-Gm-Message-State: AOAM532JTJUTBIIwJNMsE+M0F9AnQngDjep6VuAK0wWdqojkebKUDhxo
+        p9kO53WjZvfieVVDiu8X/XE=
+X-Google-Smtp-Source: ABdhPJxb9q9pIxCM+xqqQt0tHc+/wHxrUhjCJfX3mXD9c8/sSrw130lPFO1ZYm8656VSeK1FzKBPMg==
+X-Received: by 2002:a17:902:cecb:b0:15e:8ddd:c7b1 with SMTP id d11-20020a170902cecb00b0015e8dddc7b1mr4126145plg.105.1651358531738;
+        Sat, 30 Apr 2022 15:42:11 -0700 (PDT)
+Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
+        by smtp.gmail.com with ESMTPSA id l8-20020a17090270c800b0015e8d4eb1e9sm597974plt.51.2022.04.30.15.42.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 30 Apr 2022 15:42:10 -0700 (PDT)
+Date:   Sun, 1 May 2022 07:42:09 +0900
+From:   Stafford Horne <shorne@gmail.com>
+To:     Julia Lawall <Julia.Lawall@inria.fr>
+Cc:     Jonas Bonn <jonas@southpole.se>, kernel-janitors@vger.kernel.org,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        openrisc@lists.librecores.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] openrisc: fix typos in comments
+Message-ID: <Ym27QcSo/U6xSIQc@antec>
+References: <20220430191122.8667-8-Julia.Lawall@inria.fr>
 MIME-Version: 1.0
-References: <20220430122355.2718797-1-Jason@zx2c4.com> <20220430122433.2719029-1-Jason@zx2c4.com>
- <Ym2567zStHwlND35@antec>
-In-Reply-To: <Ym2567zStHwlND35@antec>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Sun, 1 May 2022 00:37:13 +0200
-X-Gmail-Original-Message-ID: <CAHmME9r-=ShRomP=Nrcz-GjP4kv4e9wKHvNdAMiRui7_FSbH-A@mail.gmail.com>
-Message-ID: <CAHmME9r-=ShRomP=Nrcz-GjP4kv4e9wKHvNdAMiRui7_FSbH-A@mail.gmail.com>
-Subject: Re: [PATCH v8 06/19] openrisc: start CPU timer early in boot
-To:     Stafford Horne <shorne@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        openrisc@lists.librecores.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220430191122.8667-8-Julia.Lawall@inria.fr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,73 +71,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 1, 2022 at 12:36 AM Stafford Horne <shorne@gmail.com> wrote:
->
-> On Sat, Apr 30, 2022 at 02:24:33PM +0200, Jason A. Donenfeld wrote:
-> > In order to measure the boot process, the timer should be switched on as
-> > early in boot as possible. This is necessary so that by the time the
-> > setup code reaches random_init(), get_cycles() (by way of
-> > random_get_entropy()) returns non-zero, indicating that it is actually
-> > capable of counting. So this commit enables the timer immediately upon
-> > booting up. As well, the commit define the get_cycles macro, like the
-> > previous patches in this series, so that generic code is aware that it's
-> > implemented by the platform, as is done on other archs.
-> >
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Jonas Bonn <jonas@southpole.se>
-> > Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
-> > Cc: Stafford Horne <shorne@gmail.com>
-> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > ---
-> > Changes v7->v8:
-> > - Rather than doing get_cycles()+1 to handle the early boot case,
-> >   actually start the timer early in boot. This has the huge advantage of
-> >   properly measuring the boot sequence timing, which could be a valuable
-> >   source of entropy.
-> >
-> >  arch/openrisc/include/asm/timex.h | 1 +
-> >  arch/openrisc/kernel/setup.c      | 7 +++++++
-> >  2 files changed, 8 insertions(+)
-> >
-> > diff --git a/arch/openrisc/include/asm/timex.h b/arch/openrisc/include/asm/timex.h
-> > index d52b4e536e3f..5487fa93dd9b 100644
-> > --- a/arch/openrisc/include/asm/timex.h
-> > +++ b/arch/openrisc/include/asm/timex.h
-> > @@ -23,6 +23,7 @@ static inline cycles_t get_cycles(void)
-> >  {
-> >       return mfspr(SPR_TTCR);
-> >  }
-> > +#define get_cycles get_cycles
-> >
-> >  /* This isn't really used any more */
-> >  #define CLOCK_TICK_RATE 1000
-> > diff --git a/arch/openrisc/kernel/setup.c b/arch/openrisc/kernel/setup.c
-> > index 0cd04d936a7a..1cb7c1770a17 100644
-> > --- a/arch/openrisc/kernel/setup.c
-> > +++ b/arch/openrisc/kernel/setup.c
-> > @@ -220,6 +220,13 @@ void __init setup_cpuinfo(void)
-> >
-> >  void __init or1k_early_setup(void *fdt)
-> >  {
-> > +     /* Start the TTCR as early as possible, so that the RNG can make use of
-> > +      * measurements of boot time from the earliest opportunity. Especially
-> > +      * important is that the TTCR does not return zero by the time we reach
-> > +      * rand_initialize().
-> > +      */
-> > +     mtspr(SPR_TTMR, SPR_TTMR_CR);
-> > +
-> >       if (fdt)
-> >               pr_info("FDT at %p\n", fdt);
-> >       else {
->
-> It looks like we cross paths on this one.
->
-> I can't think of anything better.  Also, I tested this on SMP systems and it
-> works fine.
->
-> Acked-by: Stafford Horne <shorne@gmail.com>
+On Sat, Apr 30, 2022 at 09:11:22PM +0200, Julia Lawall wrote:
+> Various spelling mistakes in comments.
+> Detected with the help of Coccinelle.
+> 
+> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+> 
+> ---
+>  arch/openrisc/mm/tlb.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/openrisc/mm/tlb.c b/arch/openrisc/mm/tlb.c
+> index 2b6feabf6381..e2f2a3c3bb22 100644
+> --- a/arch/openrisc/mm/tlb.c
+> +++ b/arch/openrisc/mm/tlb.c
+> @@ -128,7 +128,7 @@ void local_flush_tlb_mm(struct mm_struct *mm)
+>  
+>  	/* Was seeing bugs with the mm struct passed to us. Scrapped most of
+>  	   this function. */
+> -	/* Several architctures do this */
+> +	/* Several architectures do this */
+>  	local_flush_tlb_all();
+>  }
 
-Oh okay. Do you want me to go with this or with the assembly one?
+Thanks I have queued this for 5.19.
 
-Jason
+-Stafford

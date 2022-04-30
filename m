@@ -2,96 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C30B6515FE9
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 20:48:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6AFD515FEC
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 20:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244219AbiD3Sv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 14:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36316 "EHLO
+        id S244263AbiD3S6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 14:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242565AbiD3Svx (ORCPT
+        with ESMTP id S238070AbiD3S6M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 14:51:53 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF3365D16;
-        Sat, 30 Apr 2022 11:48:30 -0700 (PDT)
-Received: from mail-yw1-f181.google.com ([209.85.128.181]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MCbMx-1ncNwt2WNX-009jiN; Sat, 30 Apr 2022 20:48:28 +0200
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-2f16645872fso114804677b3.4;
-        Sat, 30 Apr 2022 11:48:28 -0700 (PDT)
-X-Gm-Message-State: AOAM531T5DuulTu1OgLm6O9hTfZZwe7AWw1dZF+hraCuYrm++rJhGfO0
-        B9aoN48xAyE+uXG7WndIoJkSua0X+4lemCj49DE=
-X-Google-Smtp-Source: ABdhPJw5Ufu73NQqjQznRHFKAzqDqei6NH3iC7AzVn9WUXDhjxTHyVlDQu80ZwapZtPjmhVQSPDsX50LuZep76uZYyA=
-X-Received: by 2002:a81:1dd1:0:b0:2ea:c38b:65a8 with SMTP id
- d200-20020a811dd1000000b002eac38b65a8mr4901410ywd.135.1651344507310; Sat, 30
- Apr 2022 11:48:27 -0700 (PDT)
+        Sat, 30 Apr 2022 14:58:12 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27BEA6AA69;
+        Sat, 30 Apr 2022 11:54:49 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id e2so14726119wrh.7;
+        Sat, 30 Apr 2022 11:54:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=D0+x/yJ2k7VejWfPmsLmIQrShDrcM1gbM8xZRgFTcbg=;
+        b=aXEUd1SGnNin82HWtus9mmAglNks5GWr7dtfe8+AcqM5IjIdAQYdrCeo+eH86n1tIf
+         oI4uOg6PsfW7B+qjsLC30V8S+gY2ratp7r8YDrd4Wu+ap1Nir/4J6alUhqAQ1g7yLa/T
+         HW5MA/WQou5+/iv/zoKVTMz1Vcu2RMGmC7xXeF6GV0eeTBUuCwldB6YFh9vlPHdKzYsR
+         AiHBlzO946p/cgqIdGyeYJmp+g51qiY+keTuBzIfNBfL0DXQVLohCBkWdKY7wIpqqzXd
+         1CPWY3fctXVmNmdgZ8KsqybkG/YbQf5a3Y6p7UWbyCWtdqlvTbZ+z4aQPJtvp3aKYLH3
+         fYjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=D0+x/yJ2k7VejWfPmsLmIQrShDrcM1gbM8xZRgFTcbg=;
+        b=GVBESohdpYZIo5y6AztDFZwbGABVmpMJUAbpmIvHQoyafZhRGJxDuWmWH0+WbTlcsv
+         SRyF53UoVdcnPusgA2jBUueDMLKU/kACNIaK6QIaVpzAKUHQEikxOvj0IsOTzUrRhsDC
+         CC1pkkQchm0Fz3pvyAgeh30tUNBjCPKcz0TPVljuC5BttTHlyIqV/JS5rOJH8aXzcDWM
+         5vvrZiYfYJFNNKtZq6ssBnGgQDClO5DE+rPcDnQcUnsbRoIQ4mAXv5NWIStll4b3KoN9
+         xJDDDbQlESywLiluzFMvLDDggeJGpsHm0pW7vuY6ExOVeBbt4p9ONBU4e2wuzoRMzr6Y
+         5rBg==
+X-Gm-Message-State: AOAM5339imKVkmbWzk2eTJmNRvJD6k0cnU+nUlP32ebTxndDWDEYO7rz
+        CGRp5WXGsGtEd5HCcmM53P0=
+X-Google-Smtp-Source: ABdhPJzmMTPzg9iref6Pzy9FQdMK5YeRUESQ094b8/PWZqrJqqRB9tOkzqUpdIGnyOkQoK8SaBh4WA==
+X-Received: by 2002:a05:6000:86:b0:20a:d7be:e09b with SMTP id m6-20020a056000008600b0020ad7bee09bmr3834720wrx.398.1651344887567;
+        Sat, 30 Apr 2022 11:54:47 -0700 (PDT)
+Received: from ?IPV6:2a06:a003:501a:a7ce:5405:3d01:56ff:a60d? ([2a06:a004:d009:c8fa:102c:912a:a6e3:41ea])
+        by smtp.gmail.com with ESMTPSA id n6-20020adf8b06000000b0020c5253d921sm2613117wra.109.2022.04.30.11.54.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 30 Apr 2022 11:54:47 -0700 (PDT)
+Message-ID: <ee5f293a-e59a-03d8-d9e4-ef35d33b5383@gmail.com>
+Date:   Sat, 30 Apr 2022 21:54:43 +0300
 MIME-Version: 1.0
-References: <FA654A0D-29B7-4B6B-B613-73598A92ADA8@goldelico.com>
- <YmkBAsa+fKlp/GcV@atomide.com> <CAK8P3a3N9WBWC_ECB0pSRHUCT4iz=tdT+Dt9Cyd5Wh3qEaVqqA@mail.gmail.com>
- <4CE23DC3-B3E5-45C1-91F3-B88E5444AE7C@goldelico.com> <CAK8P3a3EFfF0gr5kFkboRfJifrY-D+NgHFekBfSePWuY2c8PMA@mail.gmail.com>
- <11504A17-6B50-4D6C-A9E1-CA943C157C93@goldelico.com>
-In-Reply-To: <11504A17-6B50-4D6C-A9E1-CA943C157C93@goldelico.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sat, 30 Apr 2022 20:48:11 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2RN77ajZD4xRhKsqozPizneLcLYhm0rTE6qX25-4cJsw@mail.gmail.com>
-Message-ID: <CAK8P3a2RN77ajZD4xRhKsqozPizneLcLYhm0rTE6qX25-4cJsw@mail.gmail.com>
-Subject: Re: kernel panic with v5.18-rc1 on OpenPandora (only)
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Tony Lindgren <tony@atomide.com>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:zeN/PKquNR1GJDuLkOYaMOXotY8+6RjGYU412xuiz2+MNzw1Hem
- dTMCkr1XVHk899imNGbFmoE+Kxtq+u9JsCIVC3eTuMcD2htA8HgOTzDxC4ZhyAt6delkaEM
- tidDtInhAZPKxlXxZTlEM+XwxE1sQ7DtsoQVpcXxWBQT7Jgcc054FfEas9m+gr2e5hychOb
- nGbUCoDkByMPtQJIJUAuA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:jBpIgykTDMQ=:xqSzseJLUvs2x5r5I5gkDT
- U5zRsdViPWc3EJEttDDLZVhGuEhSHJbKID9ePjgdQ4mpVJRE4s12zqgU7u0d544b7gp4OO2le
- 8nP7VYBG3JkNYB18vHb0mcDNLPtWft4t2LVRn12JCvmn9cJop2KpeJGicjM2zjU/1utiU84uU
- h/7Kj5AG0Fmkc5Hct/MBRnYmKzaG4KKRtG5OmhR2UxWptUzyBIr/Yj4AURSXSTCjW6FIa3rNW
- cVMZqmHc71tK6eWLrPjQAK+qApdOfZ54hae/+pXKu1DusNj687FYswcvH00Lf1S+JxjYKw3xR
- JizLgJHmHaRavVeGClFUiqe2HJR1mGH+Od41V1N9h5IiFNjpV92KcfBCrOzWzACQWV52pJk6G
- dtxQTsq0Zf7cjOJ2ZhvbWziP3sJ/+D4i22BvNz4IRRdonDaFAyGCNW8DlK/oVGjIamMnIh7Ny
- pV0xY3OVf5hehxmmgGsrpIqT2qRhf37GypSj0pd6yOIOI55kzyI3kBRMaUvEBxNrh77R9o24h
- 4zhxY4cAUqPxYzhhLqFLCRELOM5+Jd45WE3Sm+x+J8YQl4Tq2QBtpN0illofKS3e/s0e3lLMM
- 95TPGlQ77OR8uyToOfW6usB+z2Frbi+bEyLMpaLoIViIMQOe8n/Z9d0VEsINAPi+Q+bKS9Du1
- Fohn3qQoSp7s/O+S6BjUQzYBGOT7rO8AKVHRozzAR+UUc1+PDYSETxx8kdan89A7nWfA=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: [PATCH v2 1/2] dt-bindings: mtd: partitions: Add binding for Sercomm
+ parser
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     NOGUCHI Hiroshi <drvlabo@gmail.com>, Karim <Karimdplay@gmail.com>,
+        M <x1@disroot.org>, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220406195557.1956-1-csharper2005@gmail.com>
+ <20220406195946.2019-1-csharper2005@gmail.com>
+ <8d0d8b27-35ff-3693-cf80-897b80c26b4e@linaro.org>
+ <57bebf2f-af4c-b2d9-10e5-19e5104946fb@gmail.com>
+ <29cfa017-bbaf-3aba-fe1d-06771957dbaa@linaro.org>
+ <1b391399-984b-7a63-3265-62ef09caec39@gmail.com>
+ <bd533827-b575-caad-c230-af060851b231@gmail.com>
+ <db70e53b-7484-43bf-e9c8-b6a2dce1fbb5@linaro.org>
+ <25da3f43-c46e-8108-2da9-0e4f2b7cc1a4@gmail.com>
+ <b279040a-a782-a2ca-2acb-2d8f07709081@linaro.org>
+ <1c19faf9-fc1c-9adf-d038-97b673a8f0be@gmail.com>
+ <a84df850-149e-9656-43fa-1f040368a9f1@linaro.org>
+ <0450d781-c506-c28e-a0e5-435bee16721f@gmail.com>
+ <2e51842a-d2c9-8953-13aa-02ad3abb3f14@linaro.org>
+From:   Mikhail Zhilkin <csharper2005@gmail.com>
+In-Reply-To: <2e51842a-d2c9-8953-13aa-02ad3abb3f14@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 30, 2022 at 7:18 PM H. Nikolaus Schaller <hns@goldelico.com> wrote:
-> > Am 30.04.2022 um 17:36 schrieb Arnd Bergmann <arnd@arndb.de>:
-> >
-> >
-> > I suppose this could be anywhere then. The backtrace seems to point
-> > to re-enabling interupts in do_work_pending, so something probably
-> > accessed DMA memory asynchronously.
+On 4/30/2022 5:35 PM, Krzysztof Kozlowski wrote:
+
+>> diff --git
+>> a/Documentation/devicetree/bindings/mtd/partitions/fixed-partitions.yaml
+>> b/Documentation/devicetree/bindings/mtd/partitions/fixed-partitions.yaml
+>> index ea4cace6a955..fa457d55559b 100644
+>> --- a/Documentation/devicetree/bindings/mtd/partitions/fixed-partitions.yaml
+>> +++ b/Documentation/devicetree/bindings/mtd/partitions/fixed-partitions.yaml
+>> @@ -17,9 +17,29 @@ description: |
+>>  maintainers:
+>>    - Rafał Miłecki <rafal@milecki.pl>
+>>  
+>> +select:
+>> +  properties:
+>> +    compatible:
+>> +      contains:
+>> +        enum:
+>> +          - fixed-partitions
+>> +
+>> +  required:
+>> +    - compatible
+> With your approach you do not need this entire select. I pointed out to
+> you if you wanted to take the syscon approach.
 >
-> Yes. I now (or still) sometimes see the same omap l3 irq issue when plugging in/out the USB/OTG
-> cable. Not with a kernel panic, but in the same driver omap_l3_smx.c.
-> This happens even if the wl1251 driver is removed.
+>> +
+>>  properties:
+>>    compatible:
+>> -    const: fixed-partitions
+>> +    anyOf:
+> oneOf
+>
+>> +      - items:
+>> +          - enum:
+>> +              - sercomm,sc-partitions
+>> +
+>> +          - const: fixed-partitions
+>> +
+>> +      - contains:
+>> +          const: fixed-partitions
+>> +        minItems: 1
+>> +        maxItems: 2
+> This is also not needed if you do no take the syscon approach.
 
-Is this also a regression, or did it happen before the vmap-stack
-change? If this only
-appeared now, then this points to another bug somewhere that you
-should find using
-CONFIG_DMA_API_DEBUG.
+I tried to take into account all of your comments:
 
-I think what is going on here is that your platform is able to detect
-the broken DMA
-because of the l3 interrupt handler telling the kernel about it, when
-on other platforms
-we would see either silent data corruption or a DMA that never reaches
-its target.
+diff --git
+a/Documentation/devicetree/bindings/mtd/partitions/fixed-partitions.yaml
+b/Documentation/devicetree/bindings/mtd/partitions/fixed-partitions.yaml
+index ea4cace6a955..45d6a3971514 100644
+--- a/Documentation/devicetree/bindings/mtd/partitions/fixed-partitions.yaml
++++ b/Documentation/devicetree/bindings/mtd/partitions/fixed-partitions.yaml
+@@ -19,7 +19,11 @@ maintainers:
+ 
+ properties:
+   compatible:
+-    const: fixed-partitions
++    oneOf:
++      - const: fixed-partitions
++      - items:
++          - const: sercomm,sc-partitions
++          - const: fixed-partitions
+ 
+   "#address-cells": true
+ 
+@@ -27,7 +31,20 @@ properties:
+ 
+ patternProperties:
+   "@[0-9a-f]+$":
+-    $ref: "partition.yaml#"
++    allOf:
++      - $ref: "partition.yaml#"
++      - if:
++          properties:
++            compatible:
++              contains:
++                const: sercomm,sc-partitions
++        then:
++          properties:
++            sercomm,scpart-id:
++              description: Partition id in Sercomm partition map. Parser
++                uses this id to get partition offset and size values from
++                dynamic partition map.
++              $ref: /schemas/types.yaml#/definitions/uint32
+ 
+ required:
+   - "#address-cells"
+@@ -52,6 +69,7 @@ examples:
+             reg = <0x0100000 0x200000>;
+         };
+     };
++
+   - |
+     partitions {
+         compatible = "fixed-partitions";
+@@ -64,6 +82,7 @@ examples:
+             reg = <0x00000000 0x1 0x00000000>;
+         };
+     };
++
+   - |
+     partitions {
+         compatible = "fixed-partitions";
+@@ -82,6 +101,7 @@ examples:
+             reg = <0x2 0x00000000 0x1 0x00000000>;
+         };
+     };
++
+   - |
+     partitions {
+         compatible = "fixed-partitions";
+@@ -119,3 +139,30 @@ examples:
+             };
+         };
+     };
++
++  - |
++    partitions {
++        compatible = "sercomm,sc-partitions", "fixed-partitions";
++        #address-cells = <1>;
++        #size-cells = <1>;
++
++        partition@0 {
++            label = "u-boot";
++            reg = <0x0 0x100000>;
++            sercomm,scpart-id = <0>;
++            read-only;
++        };
++
++        partition@100000 {
++            label = "dynamic partition map";
++            reg = <0x100000 0x100000>;
++            sercomm,scpart-id = <1>;
++        };
++
++        partition@200000 {
++            label = "Factory";
++            reg = <0x200000 0x100000>;
++            sercomm,scpart-id = <2>;
++            read-only;
++        };
++    };
+-- 
+2.25.1
 
-       Arnd
+
+>    "#address-cells": true
+>  
+> @@ -27,7 +47,18 @@ properties:
+>  
+>  patternProperties:
+>    "@[0-9a-f]+$":
+> -    $ref: "partition.yaml#"
+> +    allOf:
+> +      - $ref: "partition.yaml#"
+> +      - if:
+> +          properties:
+> +            compatible:
+> +              contains:
+> +                const: sercomm,sc-partitions
+> +        then:
+> +          properties:
+> +            sercomm,scpart-id:
+> +              description: Partition id in Sercomm partition map
+> +              $ref: /schemas/types.yaml#/definitions/uint32
+> I think we still did not clarify why do you need this ID which in all
+> your examples increments by one. The description basically is a copy of
+> property name, so it does not explain anything.
+
+I added more detailed description.
+
+>  
+>  required:
+>    - "#address-cells"
+> @@ -119,3 +150,29 @@ examples:
+>              };
+>          };
+>      };
+> Blank line.
+
+Fixed. And I added blank lines between already existing examples.
+
+>> +  - |
+>> +    partitions {
+>> +        compatible = "sercomm,sc-partitions", "fixed-partitions";
+>> +        #address-cells = <1>;
+>> +        #size-cells = <1>;
+>> +
+>> +        partition@0 {
+>> +            label = "u-boot";
+>> +            reg = <0x0 0x100000>;
+>> +            sercomm,scpart-id=<0>;
+> Missing spaces around =.
+
+Thanks. Fixed.
+
+> Best regards,
+> Krzysztof
+
+-- 
+Best regards,
+Mikhail
+

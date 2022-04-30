@@ -2,347 +2,427 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8355251605F
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 22:42:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71373516067
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 22:46:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239184AbiD3UpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 16:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44256 "EHLO
+        id S244254AbiD3UuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 16:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230343AbiD3UpT (ORCPT
+        with ESMTP id S230343AbiD3UuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 16:45:19 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08F536169
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 13:41:55 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id v4so14258087ljd.10
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 13:41:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=mUSdLXi9LIg5/Qa3e4zAwJ2C0Vg/GX+KZxMTonnsd88=;
-        b=c7P1YMFd7aHVbUvW6KEIU1oWlEZgM/pGbticKkP3s8KS1hFz1nwvnYpaOAv5JwgpOW
-         5xb37tgDjo3opDnxBmkqgvzyossCvzqayFCn4yrlyHCgJvlE/GqIMqApCKanBFYZf9do
-         aVWm9X8uSMQ/kwqsrrUjdWGL465UGiI/NLf2Q9xavs4k5S+LYcgMJUieBXo45QMzx2rz
-         TTnlZ3bTpm1GOaUKB/dNacExqcTlI0Q0qdy/UKuXAjsPi0n5vvYCLh9bPnq85P2m/PkY
-         10F9D5ceBWwNYvgEtWxsXi1/RBq+KQYBofs9GC4aofdZT/x6762zTAZIlyv3JCW0Tf9s
-         dhYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=mUSdLXi9LIg5/Qa3e4zAwJ2C0Vg/GX+KZxMTonnsd88=;
-        b=cguoJpKo4DLX1WlgMHgH7cjYm/goQUgPuSB+AwTxCSTW5Wq8iUG3ceZkPhZL3Kps8y
-         k8vjgw4q6scv1nHHuAaE7TMZ1wfm3zquf1aMLtHpWVTfTgXdL6nrz77LumyI8DwePrlE
-         fJtu4zHNp4sjAkaluysE5vq9MXUNtmUNa1WHNnxcL8oJ9FN7cGk9fmMh+AmDlxtbeSaY
-         Z/owlWmL8cfXz4ER7QfN8kU0h06IEg2xxUwcDQSr3koNcoxdnfR76F1KjIIX0R7Nbb3l
-         6IMw2Url/Z16tBHfzte5SEKsi7hvYNQVojzu4XK6aMfqMhM1xs8gpshA141NESc0m3n7
-         NuLg==
-X-Gm-Message-State: AOAM532CZJHPn6kotrChnbc2hJd48w6zvFY9BGpybMwviVUpfUxmzyK1
-        AkXskpadS+TvUmh8okS/PI2ahQ==
-X-Google-Smtp-Source: ABdhPJx0KkHQLZvDo2jscX0+WWjz1YG9Q8fhXuaUqjbLa1dqgWEEPknJBWWCNWRU+LhFOhSrtUufRA==
-X-Received: by 2002:a2e:9d19:0:b0:24b:4bd:3f68 with SMTP id t25-20020a2e9d19000000b0024b04bd3f68mr3428225lji.418.1651351314028;
-        Sat, 30 Apr 2022 13:41:54 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id d28-20020ac25edc000000b0047255d210dasm271474lfq.9.2022.04.30.13.41.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 30 Apr 2022 13:41:53 -0700 (PDT)
-Message-ID: <638bf3c9-3f62-dc7f-8ff1-961e5df28923@linaro.org>
-Date:   Sat, 30 Apr 2022 23:41:51 +0300
+        Sat, 30 Apr 2022 16:50:02 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8483352E76
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 13:46:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651351599; x=1682887599;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=fa/H2x0eMFoDNMbVHHL0qHDRJPi859UhFOjyLcc2Gfs=;
+  b=C/jHM7pezHjNrfsV3rajFX1j9d0UPnChtnOOP89yvNMPwX/hid/gqd2d
+   N0ytuFaauBfbyQksKgj2TitB/SSFH9TGfp+LHEqpHAlXJjWng0S5X9nwf
+   BkvAdPgUteQ/72tucHsMH4GH77W3d88mpHU8gx9Uz7Mhd+3d8AYIwbLiB
+   BHtNlvz8Kl8GBtfbLjnW0pIXyJMP639j4KPO6CzmPVhrR7h0PfNJ4zA2H
+   JXYdCXh/ejNoAxINJxXesv1s26nkmuvMraDkmuhZpnxKxvsjWRFg/4Z8O
+   lT74o1m91Mj069NOWCHBAW8FIBRrFoTdzgWGrjmeLAECMWsnG2xP2Qv6A
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10333"; a="254339249"
+X-IronPort-AV: E=Sophos;i="5.91,189,1647327600"; 
+   d="scan'208";a="254339249"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2022 13:46:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,189,1647327600"; 
+   d="scan'208";a="535101884"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 30 Apr 2022 13:46:37 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nktzB-0007eF-0X;
+        Sat, 30 Apr 2022 20:46:37 +0000
+Date:   Sun, 01 May 2022 04:45:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:for-next/kspp-checkpatch] BUILD SUCCESS
+ 73f1d07e5f8a1dec989a5ec964f5f2ce5b6f8825
+Message-ID: <626d9ff2.5r0Srpwfvecu+Wmi%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 2/3] drm/msm/disp: dpu1: Add MSM8996 support
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Kalyan Thota <quic_kalyant@quicinc.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20220430161529.605843-1-konrad.dybcio@somainline.org>
- <20220430161529.605843-2-konrad.dybcio@somainline.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220430161529.605843-2-konrad.dybcio@somainline.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/04/2022 19:15, Konrad Dybcio wrote:
-> Add support for MSM8996, which - fun fact - was the SoC that this driver
-> (or rather SDE, its downstream origin) was meant for and first tested on.
-> 
-> It has some hardware that differs from the modern SoCs, so not a lot of
-> current structs could have been reused. It's also seemingly the only SoC
-> supported by DPU that uses RGB pipes.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> ---
->   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    | 268 ++++++++++++++++++
->   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c       |   1 +
->   drivers/gpu/drm/msm/msm_drv.c                 |   1 +
->   3 files changed, 270 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> index 3ac425c0ad82..0a217b5172bd 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> @@ -16,6 +16,11 @@
->   	BIT(DPU_SSPP_CSC_10BIT) | BIT(DPU_SSPP_CDP) |\
->   	BIT(DPU_SSPP_TS_PREFILL) | BIT(DPU_SSPP_EXCL_RECT))
->   
-> +#define VIG_MSM8996_MASK \
-> +	(BIT(DPU_SSPP_SRC) | BIT(DPU_SSPP_QOS) |\
-> +	BIT(DPU_SSPP_CDP) | BIT(DPU_SSPP_TS_PREFILL) |\
-> +	BIT(DPU_SSPP_SCALER_QSEED3))
-> +
->   #define VIG_MSM8998_MASK \
->   	(VIG_MASK | BIT(DPU_SSPP_SCALER_QSEED3))
->   
-> @@ -30,6 +35,10 @@
->   
->   #define VIG_QCM2290_MASK (VIG_MASK | BIT(DPU_SSPP_QOS_8LVL))
->   
-> +#define DMA_MSM8996_MASK \
-> +	(BIT(DPU_SSPP_SRC) | BIT(DPU_SSPP_QOS) |\
-> +	BIT(DPU_SSPP_TS_PREFILL) | BIT(DPU_SSPP_CDP))
-> +
->   #define DMA_MSM8998_MASK \
->   	(BIT(DPU_SSPP_SRC) | BIT(DPU_SSPP_QOS) |\
->   	BIT(DPU_SSPP_TS_PREFILL) | BIT(DPU_SSPP_TS_PREFILL_REC1) |\
-> @@ -57,6 +66,9 @@
->   #define PINGPONG_SDM845_SPLIT_MASK \
->   	(PINGPONG_SDM845_MASK | BIT(DPU_PINGPONG_TE2))
->   
-> +#define RGB_MSM8996_MSK \
-> +	(VIG_MSM8996_MASK | BIT(DPU_SSPP_SCALER_RGB))
-> +
->   #define CTL_SC7280_MASK \
->   	(BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE) | BIT(DPU_CTL_VM_CFG))
->   
-> @@ -72,6 +84,14 @@
->   
->   #define INTF_SC7280_MASK INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN)
->   
-> +#define IRQ_MSM8996_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
-> +			 BIT(MDP_SSPP_TOP0_INTR2) | \
-> +			 BIT(MDP_SSPP_TOP0_HIST_INTR) | \
-> +			 BIT(MDP_INTF0_INTR) | \
-> +			 BIT(MDP_INTF1_INTR) | \
-> +			 BIT(MDP_INTF2_INTR) | \
-> +			 BIT(MDP_INTF3_INTR))
-> +
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git for-next/kspp-checkpatch
+branch HEAD: 73f1d07e5f8a1dec989a5ec964f5f2ce5b6f8825  checkpatch: add new alloc functions to alloc with multiplies check
 
-What about AD4 blocks? I think there were two AD4 blocks, so we might 
-use IRQ_SDM845_MASK instead (Note: we need to check whether sdm845 
-really supported INTF4 interrupts or not).
+elapsed time: 6585m
 
->   #define IRQ_SDM845_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
->   			 BIT(MDP_SSPP_TOP0_INTR2) | \
->   			 BIT(MDP_SSPP_TOP0_HIST_INTR) | \
-> @@ -207,6 +227,17 @@ static const uint32_t plane_formats_yuv[] = {
->    * DPU sub blocks config
->    *************************************************************/
->   /* DPU top level caps */
-> +static const struct dpu_caps msm8996_dpu_caps = {
-> +	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
-> +	.max_mixer_blendstages = 0x7,
-> +	.qseed_type = DPU_SSPP_SCALER_QSEED3,
-> +	.has_src_split = true,
-> +	.max_linewidth = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
-> +	.pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
-> +	.max_hdeci_exp = MAX_HORZ_DECIMATION,
-> +	.max_vdeci_exp = MAX_VERT_DECIMATION,
-> +};
-> +
->   static const struct dpu_caps msm8998_dpu_caps = {
->   	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
->   	.max_mixer_blendstages = 0x7,
-> @@ -328,6 +359,35 @@ static const struct dpu_caps sc7280_dpu_caps = {
->   	.pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
->   };
->   
-> +static const struct dpu_mdp_cfg msm8996_mdp[] = {
-> +	{
-> +	.name = "top_0", .id = MDP_TOP,
-> +	.base = 0x0, .len = 0x454,
-> +	.features = 0,
-> +	.highest_bank_bit = 0x2,
-> +	.clk_ctrls[DPU_CLK_CTRL_VIG0] = {
-> +			.reg_off = 0x2AC, .bit_off = 0},
+configs tested: 333
+configs skipped: 6
 
-Please convert to the lower case.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> +	.clk_ctrls[DPU_CLK_CTRL_VIG1] = {
-> +			.reg_off = 0x2B4, .bit_off = 0},
-> +	.clk_ctrls[DPU_CLK_CTRL_VIG2] = {
-> +			.reg_off = 0x2BC, .bit_off = 0},
-> +	.clk_ctrls[DPU_CLK_CTRL_VIG3] = {
-> +			.reg_off = 0x2C4, .bit_off = 0},
-> +	.clk_ctrls[DPU_CLK_CTRL_RGB0] = {
-> +			.reg_off = 0x2AC, .bit_off = 4},
-> +	.clk_ctrls[DPU_CLK_CTRL_RGB1] = {
-> +			.reg_off = 0x2B4, .bit_off = 4},
-> +	.clk_ctrls[DPU_CLK_CTRL_RGB2] = {
-> +			.reg_off = 0x2BC, .bit_off = 4},
-> +	.clk_ctrls[DPU_CLK_CTRL_RGB3] = {
-> +			.reg_off = 0x2C4, .bit_off = 4},
-> +	.clk_ctrls[DPU_CLK_CTRL_DMA0] = {
-> +			.reg_off = 0x2AC, .bit_off = 8},
-> +	.clk_ctrls[DPU_CLK_CTRL_DMA1] = {
-> +			.reg_off = 0x2B4, .bit_off = 8},
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+mips                 randconfig-c004-20220425
+i386                 randconfig-c001-20220425
+i386                          randconfig-c001
+mips                     decstation_defconfig
+m68k                            q40_defconfig
+arm                           corgi_defconfig
+sh                           se7724_defconfig
+parisc                generic-32bit_defconfig
+m68k                         amcore_defconfig
+arc                        nsim_700_defconfig
+sh                           se7206_defconfig
+ia64                          tiger_defconfig
+mips                         cobalt_defconfig
+powerpc                    amigaone_defconfig
+powerpc                       ppc64_defconfig
+um                               alldefconfig
+powerpc                      makalu_defconfig
+sh                        sh7785lcr_defconfig
+sh                               j2_defconfig
+arm                        cerfcube_defconfig
+sh                           se7751_defconfig
+arm                         assabet_defconfig
+mips                  decstation_64_defconfig
+arm                            zeus_defconfig
+s390                             allmodconfig
+sh                          rsk7264_defconfig
+mips                  maltasmvp_eva_defconfig
+mips                      maltasmvp_defconfig
+arm                         lubbock_defconfig
+m68k                                defconfig
+sh                          sdk7780_defconfig
+powerpc                     tqm8555_defconfig
+arc                        nsimosci_defconfig
+powerpc                      arches_defconfig
+powerpc                 linkstation_defconfig
+sh                     sh7710voipgw_defconfig
+sh                        edosk7705_defconfig
+arm                         lpc18xx_defconfig
+mips                           ip32_defconfig
+arm                          pxa910_defconfig
+powerpc                     ep8248e_defconfig
+s390                                defconfig
+mips                         tb0226_defconfig
+sh                        edosk7760_defconfig
+powerpc                 mpc834x_mds_defconfig
+powerpc                      ppc6xx_defconfig
+arm                       multi_v4t_defconfig
+arm                      jornada720_defconfig
+powerpc                    adder875_defconfig
+sh                           se7619_defconfig
+sh                   secureedge5410_defconfig
+sh                            shmin_defconfig
+sh                          r7780mp_defconfig
+sh                     magicpanelr2_defconfig
+nios2                               defconfig
+powerpc                     taishan_defconfig
+sparc                       sparc64_defconfig
+powerpc                        cell_defconfig
+parisc                generic-64bit_defconfig
+arm                         cm_x300_defconfig
+sh                             sh03_defconfig
+arm                       imx_v6_v7_defconfig
+ia64                      gensparse_defconfig
+m68k                            mac_defconfig
+ia64                         bigsur_defconfig
+m68k                          sun3x_defconfig
+arm                         nhk8815_defconfig
+i386                             alldefconfig
+arm                        clps711x_defconfig
+powerpc                     tqm8541_defconfig
+powerpc                       holly_defconfig
+mips                            gpr_defconfig
+arm                            lart_defconfig
+powerpc                         ps3_defconfig
+sh                          r7785rp_defconfig
+powerpc                 mpc8540_ads_defconfig
+alpha                               defconfig
+arm                             pxa_defconfig
+arm                        keystone_defconfig
+arm                         vf610m4_defconfig
+m68k                           sun3_defconfig
+powerpc                     mpc83xx_defconfig
+sh                      rts7751r2d1_defconfig
+m68k                       m5249evb_defconfig
+arm                          iop32x_defconfig
+xtensa                              defconfig
+sparc                               defconfig
+arm                        mini2440_defconfig
+sh                ecovec24-romimage_defconfig
+sh                         ap325rxa_defconfig
+mips                       bmips_be_defconfig
+m68k                        m5272c3_defconfig
+sh                             shx3_defconfig
+sh                           se7780_defconfig
+arc                     nsimosci_hs_defconfig
+xtensa                           alldefconfig
+arm                          gemini_defconfig
+sh                          kfr2r09_defconfig
+m68k                       bvme6000_defconfig
+sh                          landisk_defconfig
+arc                         haps_hs_defconfig
+m68k                       m5208evb_defconfig
+xtensa                  cadence_csp_defconfig
+parisc                              defconfig
+powerpc                     tqm8548_defconfig
+sh                         ecovec24_defconfig
+mips                      loongson3_defconfig
+parisc64                            defconfig
+powerpc                    sam440ep_defconfig
+xtensa                         virt_defconfig
+powerpc                      mgcoge_defconfig
+powerpc                   motionpro_defconfig
+m68k                       m5475evb_defconfig
+powerpc                 mpc837x_mds_defconfig
+arc                            hsdk_defconfig
+arm                            qcom_defconfig
+sh                   sh7724_generic_defconfig
+mips                     loongson1b_defconfig
+m68k                        m5307c3_defconfig
+arm                          simpad_defconfig
+nios2                            allyesconfig
+arm                      integrator_defconfig
+sh                          rsk7201_defconfig
+arm                        oxnas_v6_defconfig
+m68k                          multi_defconfig
+arm                        multi_v7_defconfig
+microblaze                          defconfig
+powerpc                     pq2fads_defconfig
+arm                           sunxi_defconfig
+ia64                             alldefconfig
+sh                          lboxre2_defconfig
+mips                       capcella_defconfig
+powerpc                 mpc837x_rdb_defconfig
+sh                           sh2007_defconfig
+powerpc                     asp8347_defconfig
+sparc64                          alldefconfig
+sh                           se7750_defconfig
+sh                  sh7785lcr_32bit_defconfig
+arm                       aspeed_g5_defconfig
+m68k                             alldefconfig
+arm                           h3600_defconfig
+sh                           se7721_defconfig
+powerpc                           allnoconfig
+powerpc                   currituck_defconfig
+powerpc                      cm5200_defconfig
+arm                           tegra_defconfig
+sh                            hp6xx_defconfig
+openrisc                 simple_smp_defconfig
+m68k                        mvme16x_defconfig
+mips                           jazz_defconfig
+powerpc                      chrp32_defconfig
+arm                      footbridge_defconfig
+powerpc                 mpc85xx_cds_defconfig
+sh                   rts7751r2dplus_defconfig
+h8300                       h8s-sim_defconfig
+arc                     haps_hs_smp_defconfig
+xtensa                  nommu_kc705_defconfig
+arc                                 defconfig
+mips                          rb532_defconfig
+powerpc                  storcenter_defconfig
+x86_64                           alldefconfig
+openrisc                    or1ksim_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220428
+x86_64               randconfig-c001-20220425
+arm                  randconfig-c002-20220425
+arm                  randconfig-c002-20220427
+arm                  randconfig-c002-20220429
+arm                  randconfig-c002-20220501
+arm                  randconfig-c002-20220426
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+csky                                defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+sh                               allmodconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a002
+x86_64                        randconfig-a004
+x86_64                        randconfig-a006
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+x86_64               randconfig-a015-20220425
+x86_64               randconfig-a014-20220425
+x86_64               randconfig-a011-20220425
+x86_64               randconfig-a013-20220425
+x86_64               randconfig-a012-20220425
+x86_64               randconfig-a016-20220425
+i386                 randconfig-a014-20220425
+i386                 randconfig-a012-20220425
+i386                 randconfig-a011-20220425
+i386                 randconfig-a015-20220425
+i386                 randconfig-a013-20220425
+i386                 randconfig-a016-20220425
+i386                          randconfig-a012
+i386                          randconfig-a016
+i386                          randconfig-a014
+arc                  randconfig-r043-20220425
+s390                 randconfig-r044-20220425
+riscv                randconfig-r042-20220425
+arc                  randconfig-r043-20220428
+arc                  randconfig-r043-20220429
+s390                 randconfig-r044-20220429
+riscv                randconfig-r042-20220429
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
+x86_64                           rhel-8.3-syz
 
-There were two cursor SSPPs, please add corresponding controls here
-
-> +	},
-> +};
-> +
->   static const struct dpu_mdp_cfg msm8998_mdp[] = {
->   	{
->   	.name = "top_0", .id = MDP_TOP,
-> @@ -513,6 +573,39 @@ static const struct dpu_mdp_cfg qcm2290_mdp[] = {
->   /*************************************************************
->    * CTL sub blocks config
->    *************************************************************/
-> +static const struct dpu_ctl_cfg msm8996_ctl[] = {
-> +	{
-> +	.name = "ctl_0", .id = CTL_0,
-> +	.base = 0x1000, .len = 0x64,
-> +	.features = 0,
-> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 9),
-> +	},
-> +	{
-> +	.name = "ctl_1", .id = CTL_1,
-> +	.base = 0x1200, .len = 0x64,
-> +	.features = 0,
-> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 10),
-> +	},
-> +	{
-> +	.name = "ctl_2", .id = CTL_2,
-> +	.base = 0x1400, .len = 0x64,
-> +	.features = 0,
-> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 11),
-> +	},
-> +	{
-> +	.name = "ctl_3", .id = CTL_3,
-> +	.base = 0x1600, .len = 0x64,
-> +	.features = 0,
-> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 12),
-> +	},
-> +	{
-> +	.name = "ctl_4", .id = CTL_4,
-> +	.base = 0x1800, .len = 0x64,
-> +	.features = 0,
-> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 13),
-> +	},
-> +};
-> +
->   static const struct dpu_ctl_cfg msm8998_ctl[] = {
->   	{
->   	.name = "ctl_0", .id = CTL_0,
-> @@ -708,6 +801,25 @@ static const struct dpu_ctl_cfg qcm2290_ctl[] = {
->   
->   /* SSPP common configuration */
->   
-> +#define _VIG_SBLK_8996(num, sdma_pri, qseed_ver) \
-> +	{ \
-> +	.maxdwnscale = MAX_DOWNSCALE_RATIO, \
-> +	.maxupscale = MAX_UPSCALE_RATIO, \
-> +	.smart_dma_priority = sdma_pri, \
-> +	.src_blk = {.name = STRCAT("sspp_src_", num), \
-> +		.id = DPU_SSPP_SRC, .base = 0x00, .len = 0x150,}, \
-> +	.scaler_blk = {.name = STRCAT("sspp_scaler", num), \
-> +		.id = qseed_ver, \
-> +		.base = 0x200, .len = 0xa0,}, \
-> +	.csc_blk = {.name = STRCAT("sspp_csc", num), \
-> +		.id = DPU_SSPP_CSC, \
-> +		.base = 0x320, .len = 0x100,}, \
-> +	.format_list = plane_formats_yuv, \
-> +	.num_formats = ARRAY_SIZE(plane_formats_yuv), \
-> +	.virt_format_list = plane_formats, \
-> +	.virt_num_formats = ARRAY_SIZE(plane_formats), \
-> +	}
-> +
->   #define _VIG_SBLK(num, sdma_pri, qseed_ver) \
->   	{ \
->   	.maxdwnscale = MAX_DOWNSCALE_RATIO, \
-> @@ -740,6 +852,15 @@ static const struct dpu_ctl_cfg qcm2290_ctl[] = {
->   	.virt_num_formats = ARRAY_SIZE(plane_formats), \
->   	}
->   
-> +static const struct dpu_sspp_sub_blks msm8996_vig_sblk_0 =
-> +				_VIG_SBLK_8996("0", 0, DPU_SSPP_SCALER_QSEED3);
-> +static const struct dpu_sspp_sub_blks msm8996_vig_sblk_1 =
-> +				_VIG_SBLK_8996("1", 0, DPU_SSPP_SCALER_QSEED3);
-> +static const struct dpu_sspp_sub_blks msm8996_vig_sblk_2 =
-> +				_VIG_SBLK_8996("2", 0, DPU_SSPP_SCALER_QSEED3);
-> +static const struct dpu_sspp_sub_blks msm8996_vig_sblk_3 =
-> +				_VIG_SBLK_8996("3", 0, DPU_SSPP_SCALER_QSEED3);
-> +
->   static const struct dpu_sspp_sub_blks msm8998_vig_sblk_0 =
->   				_VIG_SBLK("0", 0, DPU_SSPP_SCALER_QSEED3);
->   static const struct dpu_sspp_sub_blks msm8998_vig_sblk_1 =
-> @@ -775,6 +896,30 @@ static const struct dpu_sspp_sub_blks sdm845_dma_sblk_3 = _DMA_SBLK("11", 4);
->   	.clk_ctrl = _clkctrl \
->   	}
->   
-> +static const struct dpu_sspp_cfg msm8996_sspp[] = {
-> +	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, 0x150, VIG_MSM8996_MASK,
-> +		msm8996_vig_sblk_0, 0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
-> +	SSPP_BLK("sspp_1", SSPP_VIG1, 0x6000, 0x150, VIG_MSM8996_MASK,
-> +		msm8996_vig_sblk_1, 4,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG1),
-> +	SSPP_BLK("sspp_2", SSPP_VIG2, 0x8000, 0x150, VIG_MSM8996_MASK,
-> +		msm8996_vig_sblk_2, 8, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG2),
-> +	SSPP_BLK("sspp_3", SSPP_VIG3, 0xa000, 0x150, VIG_MSM8996_MASK,
-> +		msm8996_vig_sblk_3, 12,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG3),
-> +	/* TODO: RGB blocks */
-> +	SSPP_BLK("sspp_4", SSPP_RGB0, 0x14000, 0x150, RGB_MSM8996_MSK,
-> +		sdm845_dma_sblk_0, 1, SSPP_TYPE_RGB, DPU_CLK_CTRL_RGB0),
-> +	SSPP_BLK("sspp_5", SSPP_RGB1, 0x16000, 0x150, RGB_MSM8996_MSK,
-> +		sdm845_dma_sblk_1, 5, SSPP_TYPE_RGB, DPU_CLK_CTRL_RGB1),
-> +	SSPP_BLK("sspp_6", SSPP_RGB2, 0x18000, 0x150, RGB_MSM8996_MSK,
-> +		sdm845_dma_sblk_2, 9, SSPP_TYPE_RGB, DPU_CLK_CTRL_RGB2),
-> +	SSPP_BLK("sspp_7", SSPP_RGB3, 0x1a000, 0x150, RGB_MSM8996_MSK,
-> +		sdm845_dma_sblk_3, 13, SSPP_TYPE_RGB, DPU_CLK_CTRL_RGB3),
-> +	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000, 0x150, DMA_MSM8996_MASK,
-> +		sdm845_dma_sblk_0, 2, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
-> +	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000, 0x150, DMA_MSM8996_MASK,
-> +		sdm845_dma_sblk_1, 10, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA1),
-
-We must have cursor planes here. Otherwise there will be no hardware 
-cursor. On newer platforms we emulate them using DMA SSPPs. On msm8996 
-there were two special cursor planes (which supported just SRC, nothing 
-more). Let's have them here, unless there are issues with them.
-
-> +};
-> +
->   static const struct dpu_sspp_cfg msm8998_sspp[] = {
->   	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, 0x184, VIG_MSM8998_MASK,
->   		msm8998_vig_sblk_0, 0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
-
-[skipped the rest]
-
+clang tested configs:
+riscv                randconfig-c006-20220425
+mips                 randconfig-c004-20220425
+x86_64               randconfig-c007-20220425
+arm                  randconfig-c002-20220425
+i386                 randconfig-c001-20220425
+powerpc              randconfig-c003-20220425
+riscv                randconfig-c006-20220427
+mips                 randconfig-c004-20220427
+x86_64                        randconfig-c007
+i386                          randconfig-c001
+arm                  randconfig-c002-20220427
+powerpc              randconfig-c003-20220427
+riscv                randconfig-c006-20220428
+mips                 randconfig-c004-20220428
+arm                  randconfig-c002-20220428
+powerpc              randconfig-c003-20220428
+riscv                randconfig-c006-20220429
+mips                 randconfig-c004-20220429
+arm                  randconfig-c002-20220429
+powerpc              randconfig-c003-20220429
+mips                          ath79_defconfig
+arm                       spear13xx_defconfig
+mips                   sb1250_swarm_defconfig
+arm                         shannon_defconfig
+mips                     loongson2k_defconfig
+arm                        vexpress_defconfig
+arm                         palmz72_defconfig
+arm                       cns3420vb_defconfig
+arm                          pxa168_defconfig
+powerpc                    socrates_defconfig
+arm                            dove_defconfig
+powerpc                     tqm5200_defconfig
+powerpc                 mpc832x_rdb_defconfig
+mips                     cu1830-neo_defconfig
+powerpc                    mvme5100_defconfig
+powerpc                      ppc44x_defconfig
+arm                         s3c2410_defconfig
+arm                            mmp2_defconfig
+powerpc                      katmai_defconfig
+arm                      pxa255-idp_defconfig
+powerpc                 mpc8315_rdb_defconfig
+arm                       aspeed_g4_defconfig
+powerpc                      walnut_defconfig
+arm                              alldefconfig
+mips                            e55_defconfig
+arm                          moxart_defconfig
+mips                           mtx1_defconfig
+arm                         bcm2835_defconfig
+mips                          rm200_defconfig
+arm                       netwinder_defconfig
+mips                          ath25_defconfig
+mips                           ip22_defconfig
+powerpc                  mpc885_ads_defconfig
+mips                malta_qemu_32r6_defconfig
+powerpc                       ebony_defconfig
+arm                       imx_v4_v5_defconfig
+powerpc                          allyesconfig
+powerpc                     pseries_defconfig
+mips                       lemote2f_defconfig
+powerpc                     kmeter1_defconfig
+x86_64                           allyesconfig
+mips                           ip28_defconfig
+mips                      maltaaprp_defconfig
+powerpc                        fsp2_defconfig
+mips                      malta_kvm_defconfig
+mips                           ip27_defconfig
+mips                       rbtx49xx_defconfig
+powerpc                          allmodconfig
+powerpc                 mpc8560_ads_defconfig
+riscv                          rv32_defconfig
+mips                     cu1000-neo_defconfig
+arm                             mxs_defconfig
+mips                         tb0287_defconfig
+powerpc                 linkstation_defconfig
+mips                      bmips_stb_defconfig
+arm                       versatile_defconfig
+arm                     davinci_all_defconfig
+x86_64               randconfig-a002-20220425
+x86_64               randconfig-a004-20220425
+x86_64               randconfig-a003-20220425
+x86_64               randconfig-a001-20220425
+x86_64               randconfig-a005-20220425
+x86_64               randconfig-a006-20220425
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+i386                 randconfig-a006-20220425
+i386                 randconfig-a002-20220425
+i386                 randconfig-a005-20220425
+i386                 randconfig-a003-20220425
+i386                 randconfig-a001-20220425
+i386                 randconfig-a004-20220425
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+hexagon              randconfig-r041-20220428
+riscv                randconfig-r042-20220428
+hexagon              randconfig-r045-20220428
+hexagon              randconfig-r041-20220425
+hexagon              randconfig-r045-20220425
 
 -- 
-With best wishes
-Dmitry
+0-DAY CI Kernel Test Service
+https://01.org/lkp

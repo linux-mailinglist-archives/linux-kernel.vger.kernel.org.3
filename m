@@ -2,202 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC26D516092
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 22:54:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2842651609A
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 23:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245296AbiD3U6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 16:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43048 "EHLO
+        id S245338AbiD3VLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 17:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245134AbiD3U6M (ORCPT
+        with ESMTP id S233148AbiD3VLh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 16:58:12 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978A1532F3
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 13:54:48 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id bn33so14299425ljb.6
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 13:54:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=ASoi6SXJEgdX0v1CZG7BViYCx8LRpIxKBcrDWBw+eZc=;
-        b=k+cxk+OOpZiWbVyZY5zt5qC9Cqvm49Tu5Fj1LYPqapg3l5MqaTjMkU9eUhna5LEuds
-         /eO99QqEGIWhOYTwZHukC58mO74dIJthIJ7gbS0nN4+62xBL7drxJjZHrRIkvNHkpxAr
-         dXbtjS9PTWps91KK9NItnZapYFMXDmotdZ8qxoMPF9cb/dmlF0X2nlAQCtjrFbtv1iU7
-         9Hg1o1Ai/96Jw9O9vPaR1Tg8rUFP5HTvTftFewCSX9Eer2JSwSVcDU/LyREI744+Aybu
-         H7zlsvDotJcOVgqLaI2BmbOAazR9It++Xiq/IWF5ZGF7yNCdX3MbcJKU402vjxnjEAfV
-         7EPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=ASoi6SXJEgdX0v1CZG7BViYCx8LRpIxKBcrDWBw+eZc=;
-        b=DsvGMiCZCwfmEYcSZ4OrcI2QjC+BvJdkaI8ze10/Ml+4smbBxd58U2SKV9SwANxsdp
-         zt/rYG+UDU/UiyS8cSfnvcLcaaUcR55DcqEV/g3ZzbPMXeHPRnIJl/k6GWr5cBQwldiJ
-         Jfe7Um/cBabTDkk2/KSkopZoTeIFsVktdNT98TG9h2ONiOmXk6CGmkt57vRYrL0Ci6mg
-         PP29xb68DDKFuRHSXrItJ8aefCV3M+XkGFRWXpvRoFZYe1Jli6Esr4bzv1tlweF0RS/V
-         oQA6UyuSqXOoAFJ2kUiOW66drJi901Aw04ALNjTF+Xbe1FlOCjXp/SVAj169GsKsdjZ2
-         K/Jw==
-X-Gm-Message-State: AOAM5305rsGlvxbKvJBGWrCH2rgkDNvmcj4ETfA6UnBdF/hRrFKKK0GC
-        5ZUHMB9xL8+0/8nzsxHn7kTLqQ==
-X-Google-Smtp-Source: ABdhPJwZuL/Pku9i0MT3xIj+aDGj1nGfmYNXoIlZqWPWElWD3DaCRKyYA5HMVMPMH/kOvoMOwl18IA==
-X-Received: by 2002:a05:651c:1699:b0:24f:1529:38d0 with SMTP id bd25-20020a05651c169900b0024f152938d0mr3530975ljb.397.1651352086936;
-        Sat, 30 Apr 2022 13:54:46 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id y20-20020ac24214000000b0047255d21168sm271526lfh.151.2022.04.30.13.54.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 30 Apr 2022 13:54:46 -0700 (PDT)
-Message-ID: <384e2336-e6a3-28d6-4572-1534d418206b@linaro.org>
-Date:   Sat, 30 Apr 2022 23:54:45 +0300
+        Sat, 30 Apr 2022 17:11:37 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587A8644E2;
+        Sat, 30 Apr 2022 14:08:14 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651352891;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JYiEoXgZa+1xAFGzJ6pdbgZS9bMkYlHMr5G8hxuq7k0=;
+        b=X5/Hv1szmlnx+Kn4ZVFxkz6yfaMIt6UJ+l1gY8T/a9sG0fqV6nIwpUMxSmWEhoRWuWGkUf
+        pw6spnQlELZ2G7HacGwrDq7/RWAAix7kyb7bHlFcOzjSSClc0GssKym4B0ZdtbB4NUaN3w
+        0q4BDOIEz6gigZA0s6uqWtNw7Fg/O/O/BvM9Om6BsdyH5Ck7dctYYgArOt0Sp6r32/9X1W
+        GjPXgN99BYpZItZfVhUFqvXd5S8Wz0mB+k7reHJyIp6AxxSU5Y4pby8R+Lme/J7lgCpNVa
+        O6OJ9WgQFC10tOvqwbGyHuRELT8BxVaCvr9J4pvKTkoMimgdw2PUvOpkUQf0zw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651352891;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JYiEoXgZa+1xAFGzJ6pdbgZS9bMkYlHMr5G8hxuq7k0=;
+        b=P4+uquywNx3JFpUdyBVMRf/LWCCPvN3ivrNp3YBAvJLOvyGr87StS76UpIdomH9o8F0KTN
+        IaZ2p7Pc009IwgBA==
+To:     Marco Elver <elver@google.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Petr Mladek <pmladek@suse.com>
+Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, linux-mm <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [next] i386: kunit: ASSERTION FAILED at
+ mm/kfence/kfence_test.c:547
+In-Reply-To: <YmwPocGA9vRSvAEN@elver.google.com>
+References: <CA+G9fYu2kS0wR4WqMRsj2rePKV9XLgOU1PiXnMvpT+Z=c2ucHA@mail.gmail.com>
+ <YmwPocGA9vRSvAEN@elver.google.com>
+Date:   Sat, 30 Apr 2022 23:14:10 +0206
+Message-ID: <87fslup9dx.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/3] dt-bindings: display: msm: Add binding for MSM8996
- DPU
-Content-Language: en-GB
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220430161529.605843-1-konrad.dybcio@somainline.org>
- <7e066b7f-943a-6a5e-7383-a05794d207dc@linaro.org>
-In-Reply-To: <7e066b7f-943a-6a5e-7383-a05794d207dc@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/04/2022 22:33, Dmitry Baryshkov wrote:
-> On 30/04/2022 19:15, Konrad Dybcio wrote:
->> Add yaml binding for MSM8996 DPU.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
->> ---
->>   .../bindings/display/msm/dpu-msm8996.yaml     | 221 ++++++++++++++++++
->>   1 file changed, 221 insertions(+)
->>   create mode 100644 
->> Documentation/devicetree/bindings/display/msm/dpu-msm8996.yaml
->>
->> diff --git 
->> a/Documentation/devicetree/bindings/display/msm/dpu-msm8996.yaml 
->> b/Documentation/devicetree/bindings/display/msm/dpu-msm8996.yaml
->> new file mode 100644
->> index 000000000000..10b02423224d
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/display/msm/dpu-msm8996.yaml
->> @@ -0,0 +1,221 @@
->> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/display/msm/dpu-msm8996.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Qualcomm Display DPU dt properties for MSM8996 target
->> +
->> +maintainers:
->> +  - Konrad Dybcio <konrad.dybcio@somainline.org>
->> +
->> +description: |
->> +  Device tree bindings for MSM Mobile Display Subsystem (MDSS) that
->> +  encapsulates sub-blocks like DPU display controller, DSI 
->> interfaces, etc.
->> +  Device tree bindings of MDSS and DPU are mentioned for MSM8996 target.
->> +
->> +properties:
->> +  compatible:
->> +    items:
->> +      - const: qcom,msm8996-mdss
-> 
-> With the unified MDSS driver there is no need to describe a separate 
-> mdss bindings. Let's skip this part for now.
-> 
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  reg-names:
->> +    const: mdss
->> +
->> +  power-domains:
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    items:
->> +      - description: Display AHB clock
->> +      - description: Display core clock
->> +
->> +  clock-names:
->> +    items:
->> +      - const: iface
->> +      - const: core
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  interrupt-controller: true
->> +
->> +  "#address-cells": true
->> +
->> +  "#size-cells": true
->> +
->> +  "#interrupt-cells":
->> +    const: 1
->> +
->> +  iommus:
->> +    items:
->> +      - description: Phandle to mdp_smmu node with SID mask for 
->> Hard-Fail port0
->> +
->> +  ranges: true
->> +
->> +patternProperties:
->> +  "^display-controller@[0-9a-f]+$":
->> +    type: object
->> +    description: Node containing the properties of DPU.
->> +
->> +    properties:
->> +      compatible:
->> +        items:
->> +          - const: qcom,msm8996-dpu
-> 
-> Okay. So, this is the most interesting part. Unlike MSM8998, which is 
-> supported in the mdp5 driver, but was not used in the upstream DTS 
-> files, for the MSM8996 the MDP5 part is described, used and widely 
-> tested. And, unfortunately, the bindings use solely the generic 
-> "qcom,mdp5" compat.
-> 
-> I would suggest the following plan:
-> - Define a binding using both "qcom,msm8996-dpu" and "qcom,mdp5" 
-> strings. Make sure that it is fully backwards-compatible with older dts.
-> 
-> - Update msm8996.dtsi to follow new binding.
-> 
-> - Let's have a Kconfig flip switch selecting which driver to be used for 
-> 8996/8998.
+Hi Marco,
 
-Rob suggested a modparam here.
+On 2022-04-29, Marco Elver <elver@google.com> wrote:
+> And looking at your log [1], it shows that KFENCE is working just
+> fine, but the logic that is supposed to intercept the kernel log (via
+> tracepoint) to check that reports are being generated correctly seems
+> to be broken.
+>
+> And this is not only i386-specific, it's also broken on a x86-64
+> build.
+>
+> At first I thought maybe with the printk changes we'd now have to call
+> pr_flush(), but that doesn't work, so I'm missing something still:
+>
+>  | --- a/mm/kfence/kfence_test.c
+>  | +++ b/mm/kfence/kfence_test.c
+>  | @@ -73,11 +73,18 @@ static void probe_console(void *ignore, const char *buf, size_t len)
+>  |  }
+>  |  
+>  |  /* Check if a report related to the test exists. */
+>  | -static bool report_available(void)
+>  | +static bool __report_available(void)
+>  |  {
+>  |  	return READ_ONCE(observed.nlines) == ARRAY_SIZE(observed.lines);
+>  |  }
+>  |  
+>  | +/* Check if a report related to the test exists; may sleep. */
+>  | +static bool report_available(void)
+>  | +{
+>  | +	pr_flush(0, true);
+>  | +	return __report_available();
+>  | +}
+>  | +
 
+I am not familiar with how this works. Is the tracepoint getting set on
+call_console_drivers()? Or on call_console_driver()?
 
--- 
-With best wishes
-Dmitry
+If so, there are a couple problems with that. First off, the prototype
+for that function has changed. Second, that function is called when text
+is printed, but this is not when the text was created. With the
+kthreads, the printing can be significantly delayed.
+
+Since printk() is now lockless and console printing is delayed, it
+becomes a bit tricky to parse the records in the existing code using a
+tracepoint.
+
+I wonder if creating a NOP function for the kfence probe to attach to
+would be more appropriate. In printk_sprint() we get the text after
+space has been reserved, but before the text is committed to the
+ringbuffer. This is guaranteed to be called from within the printk()
+context.
+
+Here is an example of what I am thinking...
+
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -2227,6 +2227,10 @@ static u16 printk_sprint(char *text, u16 size, int facility,
+ 		}
+ 	}
+ 
++#ifdef CONFIG_KFENCE_KUNIT_TEST
++	printk_kfence_check(text, text_len);
++#endif
++
+ 	return text_len;
+ }
+ 
+The probe_console() could attach to a NOP function printk_kfence_check().
+
+John

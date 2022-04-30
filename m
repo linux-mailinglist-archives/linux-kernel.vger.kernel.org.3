@@ -2,102 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C88E0515DC1
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 15:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA044515DCF
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 15:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242038AbiD3NpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 09:45:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43700 "EHLO
+        id S1349716AbiD3Nrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 09:47:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231572AbiD3NpR (ORCPT
+        with ESMTP id S238513AbiD3Nro (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 09:45:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE983A5C0;
-        Sat, 30 Apr 2022 06:41:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A2B6860EB9;
-        Sat, 30 Apr 2022 13:41:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B8E6C385A7;
-        Sat, 30 Apr 2022 13:41:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651326114;
-        bh=tqVXu6g9oh/W80TNZwCI08nLQ3wJ9C50shdsYteF9Wk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cb3YOJLytublE7wGW2KxxKiBXvgND1jxCpgihm/fRJWShxCwNNy8GbV5pg0ZWUz1F
-         usDbmllk91NQ1SDqP+Wg+5aaj7u0qE4gneSvSFmgNoLl5bFdHv+GUAWfit0rS2BzJB
-         cTs9YnMu4x9ZowvhBvm3fZW58SWTG1P+bW7T4pEfkVTGpCLVwg8fdtvOykn4uYO8ej
-         PHnQFjFdRZ+FyellvBvwi+DrArmU5sQbIJc1weosrPL7HFDuV+SJ7qJbY6qLDZJxyl
-         gYWYpTSlcFbWKxXYdQjfSWXGLRIZHI1qOtfPll3BC1vzREj89ROC9AsbnHbB6hy1f6
-         y4Vlu/Tc2bP9A==
-Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1nknM6-001nsj-Ji; Sat, 30 Apr 2022 14:41:50 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        "David Airlie" <airlied@linux.ie>,
-        "Greg KH" <gregkh@linuxfoundation.org>,
-        "Jaroslav Kysela" <perex@perex.cz>,
-        "Kai Vehmanen" <kai.vehmanen@intel.com>,
-        "Lucas De Marchi" <lucas.demarchi@intel.com>,
-        "Pierre-Louis Bossart" <pierre-louis.bossart@intel.com>,
-        "Takashi Iwai" <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        mauro.chehab@linux.intel.com
-Subject: [PATCH v3 2/2] ALSA: hda - identify when audio is provided by a video driver
-Date:   Sat, 30 Apr 2022 14:41:48 +0100
-Message-Id: <6b5f1e2cec0137d5aab089a7e7497972ff5addb1.1651326000.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <cover.1651326000.git.mchehab@kernel.org>
-References: <cover.1651326000.git.mchehab@kernel.org>
+        Sat, 30 Apr 2022 09:47:44 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFE851E64
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 06:44:22 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id c23so9364652plo.0
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 06:44:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=BqIxANSCe4nfeVe4AU8f2BtOt2NenfWECIlvX3a7SYk=;
+        b=AUcE1lZuPjKn80PACgAPEZP0kBiSrF5iKrv862zPCaJgDhkvtPfzOvzAdYmjIrP+Px
+         1VZe2FbcwldJya2Caq+H8pXa3UurJZ8g06pppmVj/XLcRmfPcMJobGSRHmH/3xQqXBYl
+         OCAlsM97tr5XcNn13Gn/Qzexj5oWSl0+aeFvmtn6tIlsTpYjfuMqXVHz8T3bzQjVVvYq
+         O9j924xjCSNOS0xAPOX05WCkoQ7TBtXF5y4mMdWFa/iNhmogDE/V/0IwxhbHpjB+nUkZ
+         SFzCCTa4OCEKgtx9lxCFSer20QsWPrM/6apEYpePLDHTTLHssTLwlkvvFde/+TPN1mgG
+         yyZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=BqIxANSCe4nfeVe4AU8f2BtOt2NenfWECIlvX3a7SYk=;
+        b=M9yLPN9Ks0vsWTuEDx5If5OG+tjw6g7ZKg0Cbp03LUiFhXhGRkZt0tqTt0OTyPap/l
+         PwVV7zHM34xShAeP3XP7JaTgtqESZ3x3jIHs8ifrzLU9+hVHETNqIasQYOhJvPlyg6n6
+         sRPDYfB5yZgmdmnYphFmduGwcM4gsHB6wj4wMDBM0hVLXPNP/nd7T3GFX1ATYPapEzBY
+         zl97N3vPgY/2Ac/7DJs8HnLRQb2Pg75XHobn6bzIRu5C69rp0J9H6xB1bn1uPu5s6T9l
+         WMyGPee9C2CPbnl/ZM+PbHB/IzUpDh8R3HipRsuwOLWGqKub1tLpFBxMe1lG6Y98As4D
+         WA3Q==
+X-Gm-Message-State: AOAM532bnutltmIK21sOck1vqU3y1bHA1/n48D+VFprA10tnwUc4Tsy2
+        dvCjdrIGiJ6CR9LVz+9Uw50=
+X-Google-Smtp-Source: ABdhPJxH0grf9vbL0PX3vT9Q0wxOja7HcFLXgAV7X/ifDrk9gSCn0eg3KLVkBMX6ocMTuiir6gM2qQ==
+X-Received: by 2002:a17:90a:9ea:b0:1dc:1c48:eda with SMTP id 97-20020a17090a09ea00b001dc1c480edamr5480231pjo.38.1651326262206;
+        Sat, 30 Apr 2022 06:44:22 -0700 (PDT)
+Received: from ip-172-31-27-201.ap-northeast-1.compute.internal (ec2-18-183-95-104.ap-northeast-1.compute.amazonaws.com. [18.183.95.104])
+        by smtp.gmail.com with ESMTPSA id h3-20020a62b403000000b0050dc7628181sm1585485pfn.91.2022.04.30.06.44.19
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 30 Apr 2022 06:44:21 -0700 (PDT)
+Date:   Sat, 30 Apr 2022 13:44:16 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [RFC PATCH 0/3] Prototype for direct map awareness in page
+ allocator
+Message-ID: <20220430134415.GA25819@ip-172-31-27-201.ap-northeast-1.compute.internal>
+References: <20220127085608.306306-1-rppt@kernel.org>
+ <YmezWeMZSRNRfXyG@hyeyoo>
+ <YmgOFa3FUUpiANMq@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmgOFa3FUUpiANMq@kernel.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some devices, the hda driver needs to hook into a video driver,
-in order to be able to properly access the audio hardware and/or
-the power management function.
+On Tue, Apr 26, 2022 at 06:21:57PM +0300, Mike Rapoport wrote:
+> Hello Hyeonggon,
+> 
+> On Tue, Apr 26, 2022 at 05:54:49PM +0900, Hyeonggon Yoo wrote:
+> > On Thu, Jan 27, 2022 at 10:56:05AM +0200, Mike Rapoport wrote:
+> > > From: Mike Rapoport <rppt@linux.ibm.com>
+> > > 
+> > > Hi,
+> > > 
+> > > This is a second attempt to make page allocator aware of the direct map
+> > > layout and allow grouping of the pages that must be mapped at PTE level in
+> > > the direct map.
+> > >
+> > 
+> > Hello mike, It may be a silly question...
+> > 
+> > Looking at implementation of set_memory*(), they only split
+> > PMD/PUD-sized entries. But why not _merge_ them when all entries
+> > have same permissions after changing permission of an entry?
+> > 
+> > I think grouping __GFP_UNMAPPED allocations would help reducing
+> > direct map fragmentation, but IMHO merging split entries seems better
+> > to be done in those helpers than in page allocator.
+>
+> Maybe, I didn't got as far as to try merging split entries in the direct
+> map.  IIRC, Kirill sent a patch for collapsing huge pages in the direct map
+> some time ago, but there still was something that had to initiate the
+> collapse.
 
-That's the case of several snd_hda_intel devices that depends on
-i915 driver.
+But in this case buddy allocator's view of direct map is quite limited.
+It cannot merge 2M entries to 1G entry as it does not support
+big allocations. Also it cannot merge entries of pages freed in boot process
+as they weren't allocated from page allocator.
 
-Ensure that a proper reference between the snd-hda driver needing
-such binding is shown at /proc/modules, in order to allow userspace
-to know about such binding.
+And it will become harder when pages in MIGRATE_UNMAPPED is borrowed
+from another migrate type....
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
----
+So it would be nice if we can efficiently merge mappings in
+change_page_attr_set(). this approach can handle cases above.
 
-See [PATCH v3 0/2] at: https://lore.kernel.org/all/cover.1651326000.git.mchehab@kernel.org/
+I think in this case grouping allocations and merging mappings
+should be done separately.
 
- sound/hda/hdac_component.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> > For example:
+> > 	1) set_memory_ro() splits 1 RW PMD entry into 511 RW PTE
+> > 	entries and 1 RO PTE entry.
+> > 
+> > 	2) before freeing the pages, we call set_memory_rw() and we have
+> > 	512 RW PTE entries. Then we can merge it to 1 RW PMD entry.
+> 
+> For this we need to check permissions of all 512 pages to make sure we can
+> use a PMD entry to map them.
 
-diff --git a/sound/hda/hdac_component.c b/sound/hda/hdac_component.c
-index bb37e7e0bd79..30e130457272 100644
---- a/sound/hda/hdac_component.c
-+++ b/sound/hda/hdac_component.c
-@@ -199,7 +199,7 @@ static int hdac_component_master_bind(struct device *dev)
- 	}
- 
- 	/* pin the module to avoid dynamic unbinding, but only if given */
--	if (!try_module_get(acomp->ops->owner)) {
-+	if (!__try_module_get(acomp->ops->owner, dev->driver->owner)) {
- 		ret = -ENODEV;
- 		goto out_unbind;
- 	}
--- 
-2.35.1
+Of course that may be slow. Maybe one way to optimize this is using some bits
+in struct page, something like: each bit of page->direct_map_split (unsigned long)
+is set when at least one entry in (PTRS_PER_PTE = 512)/(BITS_PER_LONG = 64) = 8 entries
+has special permissions.
 
+Then we just need to set the corresponding bit when splitting mappings and
+iterate 8 entries when changing permission back again. (and then unset the bit when 8 entries has
+usual permissions). we can decide to merge by checking if page->direct_map_split is zero.
+
+When scanning, 8 entries would fit into one cacheline.
+
+Any other ideas?
+
+> Not sure that doing the scan in each set_memory call won't cause an overall
+> slowdown.
+
+I think we can evaluate it by measuring boot time and bpf/module
+load/unload time.
+
+Is there any other workload that is directly affected
+by performance of set_memory*()?
+
+> > 	3) after 2) we can do same thing about PMD-sized entries
+> > 	and merge them into 1 PUD entry if 512 PMD entries have
+> > 	same permissions.
+> > [...]
+> > > Mike Rapoport (3):
+> > >   mm/page_alloc: introduce __GFP_UNMAPPED and MIGRATE_UNMAPPED
+> > >   mm/secretmem: use __GFP_UNMAPPED to allocate pages
+> > >   EXPERIMENTAL: x86/module: use __GFP_UNMAPPED in module_alloc
+> > -- 
+> > Thanks,
+> > Hyeonggon
+> 
+> -- 
+> Sincerely yours,
+> Mike.

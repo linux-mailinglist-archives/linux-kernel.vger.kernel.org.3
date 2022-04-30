@@ -2,111 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 523C7515F5D
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 18:57:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13091515F6A
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 19:06:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238696AbiD3RAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 13:00:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40208 "EHLO
+        id S241573AbiD3RKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 13:10:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232692AbiD3RAq (ORCPT
+        with ESMTP id S232692AbiD3RJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 13:00:46 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AFB1E0CF;
-        Sat, 30 Apr 2022 09:57:20 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1nkqP3-0002Do-Ak; Sat, 30 Apr 2022 18:57:05 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     kernel test robot <lkp@intel.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Rob Herring <robh+dt@kernel.org>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, devicetree <devicetree@vger.kernel.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 5/7] arm64: dts: rockchip: add Pine64 Quartz64-B device tree
-Date:   Sat, 30 Apr 2022 18:57:04 +0200
-Message-ID: <7373923.EvYhyI6sBW@diego>
-In-Reply-To: <CAMdYzYoBgeTthb8-uycis+BPDmSC5OGVHz2doKYLeh3OY1m_vQ@mail.gmail.com>
-References: <20220429115252.2360496-6-pgwipeout@gmail.com> <202204300850.X97CRcO6-lkp@intel.com> <CAMdYzYoBgeTthb8-uycis+BPDmSC5OGVHz2doKYLeh3OY1m_vQ@mail.gmail.com>
+        Sat, 30 Apr 2022 13:09:59 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8CEDECF;
+        Sat, 30 Apr 2022 10:06:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651338397; x=1682874397;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kWaJbEDwTB5MYk/WU1kKvJdUXbSDM/QPtOn9y3uU9Gs=;
+  b=aSft8bCeXSOCZggP7kC0wXMbHZJFAjIwN+pYL9KVMVl3Iak2NVJTUMOx
+   po0mWfty4BIo4HxrMiK24e+u5eWSUmvrRrcVScGuFjjSQri2Fsg2kY0bP
+   hO3bes+r33jYgeWQbY9fZO8V3T9k1J22Q4CqAzoO2cYIK3HP4wbWXFQYb
+   ye+EBiGX/hwaQ1tiRPO0B1wkj5geF3HRsKWXSMOB7cNfPAcVqyAPYfR6g
+   lBedDTOX31Rdec2T/4uGDvY0ZY4x1j52GU7AWyBS9HDYX7NThjbxh4wft
+   QARbiRL9j4fXQ2GhSyJPnYe6kBkDuTHIQMMYPuLjKpi8kDhBnhocurhjN
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10333"; a="267066095"
+X-IronPort-AV: E=Sophos;i="5.91,188,1647327600"; 
+   d="scan'208";a="267066095"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2022 10:06:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,188,1647327600"; 
+   d="scan'208";a="732663760"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
+  by orsmga005.jf.intel.com with ESMTP; 30 Apr 2022 10:06:34 -0700
+Date:   Sun, 1 May 2022 00:58:47 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Tom Rix <trix@redhat.com>
+Cc:     Tianfei Zhang <tianfei.zhang@intel.com>, hao.wu@intel.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: Re: [PATCH v3] uio: dfl: add HSSI subsystem feature id
+Message-ID: <20220430165847.GD398931@yilunxu-OptiPlex-7050>
+References: <20220429005726.607804-1-tianfei.zhang@intel.com>
+ <b3f0bc47-70ea-2da5-2891-3b01550c6da6@redhat.com>
+ <20220430142452.GB398931@yilunxu-OptiPlex-7050>
+ <774dee52-7f68-9d50-4a61-feaedd99eb86@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <774dee52-7f68-9d50-4a61-feaedd99eb86@redhat.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Samstag, 30. April 2022, 16:46:31 CEST schrieb Peter Geis:
-> On Fri, Apr 29, 2022 at 8:17 PM kernel test robot <lkp@intel.com> wrote:
-> >
-> > Hi Peter,
-> >
-> > I love your patch! Yet something to improve:
-> >
-> > [auto build test ERROR on robh/for-next]
-> > [also build test ERROR on arm/for-next arm64/for-next/core clk/clk-next kvmarm/next shawnguo/for-next soc/for-next v5.18-rc4]
-> > [cannot apply to rockchip/for-next xilinx-xlnx/master keystone/next next-20220429]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch]
+On Sat, Apr 30, 2022 at 07:54:57AM -0700, Tom Rix wrote:
 > 
-> The three new device trees are dependent on my usb series which was
-> accepted through Heiko's tree.
-> I can drop the xhci dependency, but this will just happen again adding
-> it back in if it's done in this RC series.
+> On 4/30/22 7:24 AM, Xu Yilun wrote:
+> > On Fri, Apr 29, 2022 at 05:23:53AM -0700, Tom Rix wrote:
+> > > On 4/28/22 5:57 PM, Tianfei Zhang wrote:
+> > > > From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> > > > 
+> > > > Add the Device Feature List (DFL) feature id for the
+> > > > High Speed Serial Interface (HSSI) Subsystem to the
+> > > > table of ids supported by the uio_dfl driver.
+> > > > 
+> > > > The HSSI Subsystem is a configurable set of IP blocks
+> > > > to be used as part of a Ethernet or PCS/FEC/PMA pipeline.
+> > > > Like the Ethernet group used by the N3000 card, the HSSI
+> > > > Subsystem does not fully implement a network device from
+> > > > a Linux netdev perspective and is controlled and monitored
+> > > > from user space software via the uio interface.
+> > > Generally you should include the url for the dfl definitions.
+> > > 
+> > > Can you add it here to the commit log ?
+> > Do you refer to this url, https://github.com/OPAE/dfl-feature-id ?
+> 
+> Yes, exactly.
+> 
+> To someone not working the day-to-day working dfl they will have no clue
+> where the fids come from.
+> 
+> When a new one is added to the kernel, it should have a listing in
+> dfl-feature-id repo.
+> 
+> If it doesn't, there will be a future conflict.
 
-Of course dropping that part is not necessary :-)
-I.e. the dependency is in my tree and this stuff will go on top.
+I remember a recent patch records the url in Documentation/fpga/dfl.rst.
+Anyway I'm OK with or without the url in commit message.
 
-I'm just not sure if I should give Krzysztof more time for patch1.
-The binding of course looks great now already, I guess I'll let the
-Quartz-B sit some days more.
-
-
-Heiko
+Thanks,
+Yilun
 
 > 
-> >
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Geis/Add-support-for-several-new-rk3566-SBCs/20220429-195433
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-> > config: arm64-randconfig-r021-20220428 (https://download.01.org/0day-ci/archive/20220430/202204300850.X97CRcO6-lkp@intel.com/config)
-> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 400775649969b9baf3bc2a510266e7912bb16ae9)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install arm64 cross compiling tool for clang build
-> >         # apt-get install binutils-aarch64-linux-gnu
-> >         # https://github.com/intel-lab-lkp/linux/commit/d933bfeea016da20a99bce012bbf071f9d86e2bf
-> >         git remote add linux-review https://github.com/intel-lab-lkp/linux
-> >         git fetch --no-tags linux-review Peter-Geis/Add-support-for-several-new-rk3566-SBCs/20220429-195433
-> >         git checkout d933bfeea016da20a99bce012bbf071f9d86e2bf
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> > >> Error: arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts:601.1-16 Label or path usb_host0_xhci not found
-> > >> Error: arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts:605.1-16 Label or path usb_host1_xhci not found
-> >    FATAL ERROR: Syntax error parsing input tree
-> >
-> > --
-> > 0-DAY CI Kernel Test Service
-> > https://01.org/lkp
+> Tom
 > 
-
-
-
-
+> > 
+> > Hao has some comments about this at
+> > 
+> >    https://lore.kernel.org/all/DM6PR11MB38190E6EEF6DE3EB900290C585F39@DM6PR11MB3819.namprd11.prod.outlook.com/
+> > 
+> > > Otherwise fine.
+> > > 
+> > > Reviewed-by: Tom Rix <trix@redhat.com>
+> > > 
+> > > > Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> > > > Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
+> > This patch is now good to me.
+> > 
+> > Acked-by: Xu Yilun <yilun.xu@intel.com>
+> > 
+> > > > ---
+> > > > v3: change the name of this feature id to HSSI_SUBSYS and rewrite
+> > > >       the git message.
+> > > > v2: add HSSI introduction and the git repo of Feature ID table.
+> > > > ---
+> > > >    drivers/uio/uio_dfl.c | 2 ++
+> > > >    1 file changed, 2 insertions(+)
+> > > > 
+> > > > diff --git a/drivers/uio/uio_dfl.c b/drivers/uio/uio_dfl.c
+> > > > index 89c0fc7b0cbc..8f39cc8bb034 100644
+> > > > --- a/drivers/uio/uio_dfl.c
+> > > > +++ b/drivers/uio/uio_dfl.c
+> > > > @@ -45,9 +45,11 @@ static int uio_dfl_probe(struct dfl_device *ddev)
+> > > >    }
+> > > >    #define FME_FEATURE_ID_ETH_GROUP	0x10
+> > > > +#define FME_FEATURE_ID_HSSI_SUBSYS	0x15
+> > > >    static const struct dfl_device_id uio_dfl_ids[] = {
+> > > >    	{ FME_ID, FME_FEATURE_ID_ETH_GROUP },
+> > > > +	{ FME_ID, FME_FEATURE_ID_HSSI_SUBSYS },
+> > > >    	{ }
+> > > >    };
+> > > >    MODULE_DEVICE_TABLE(dfl, uio_dfl_ids);

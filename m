@@ -2,203 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7ECF516081
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 22:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC26D516092
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 22:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245348AbiD3Uyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 16:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35550 "EHLO
+        id S245296AbiD3U6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 16:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245242AbiD3Uyg (ORCPT
+        with ESMTP id S245134AbiD3U6M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 16:54:36 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C3F5371B;
-        Sat, 30 Apr 2022 13:51:12 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id b24so12654682edu.10;
-        Sat, 30 Apr 2022 13:51:12 -0700 (PDT)
+        Sat, 30 Apr 2022 16:58:12 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978A1532F3
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 13:54:48 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id bn33so14299425ljb.6
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 13:54:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=7ksfYzQBn7UrcwfXPR8oQDY9eW9oGago9RfblkVMga0=;
-        b=lbbeV85svKR/bRew4SlVcnU7nKENj7PIy5vr9kwC7wZyk9oAw4Cf5Qom1isdGy3HNN
-         /ExHhd318S12iwxEtUbgOARjqB0JZYGM2gx0U9ef/mkFbtAjitQk3koipNBKCh9hgTqD
-         t5WzLDarBpvId3J0h8ctSKY6jqYgXVaR8IpZEloFpNIzFRDFLlG9KtkpjwcMYkjggY2t
-         FPieRX/dsaudrRpHaTrJwBbXNLlWUsx9ljtji0/VV6vZDs15ExiamaEP7MM/UfJlLa3I
-         Y3isqioUi0RZBY9G56FRKoxJnQKH1Z9gINsKiTdueNyBvHKg+bvXaF+R1YGd7ntgwRPN
-         Gw3g==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=ASoi6SXJEgdX0v1CZG7BViYCx8LRpIxKBcrDWBw+eZc=;
+        b=k+cxk+OOpZiWbVyZY5zt5qC9Cqvm49Tu5Fj1LYPqapg3l5MqaTjMkU9eUhna5LEuds
+         /eO99QqEGIWhOYTwZHukC58mO74dIJthIJ7gbS0nN4+62xBL7drxJjZHrRIkvNHkpxAr
+         dXbtjS9PTWps91KK9NItnZapYFMXDmotdZ8qxoMPF9cb/dmlF0X2nlAQCtjrFbtv1iU7
+         9Hg1o1Ai/96Jw9O9vPaR1Tg8rUFP5HTvTftFewCSX9Eer2JSwSVcDU/LyREI744+Aybu
+         H7zlsvDotJcOVgqLaI2BmbOAazR9It++Xiq/IWF5ZGF7yNCdX3MbcJKU402vjxnjEAfV
+         7EPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7ksfYzQBn7UrcwfXPR8oQDY9eW9oGago9RfblkVMga0=;
-        b=UQ4/ZkS5NxwrUHa5Fj99zxcMJYsBQc7NaxFOQXgvXK77TsNrtmqqiY7dsUYBJiltSV
-         AFVHxs2wljtIJ4W4g0+YnLi5hN1RTMncsurKfwrzokh96jPgvIOrKSvhwTTG2HxnEWMq
-         9xGj2opY0m9VcbmMdurJxyBQMSRG3Hp16kRp/V6Gc0am+W98pUOXJw1yzcZhCS/ZYnTx
-         yhYph+tzOiOxucpMycTYMgvX1tuL5fyLUbRIEWueOI86A92hx8yAASxNAV1fOcSIE+hq
-         I/2EKnMyWDqqPrnlyk+3GDdN9berOMviXps73JljlyQXdAU413HLBJmLCXGKcfP8TG/G
-         kLyA==
-X-Gm-Message-State: AOAM5335Vv6LZC5mFqK00u24gf/5/jCn8X/UIX4HO8okKoASlyh2DzmS
-        uQyXHmGRbZZTmtKdxo483mtc40BPUEPnfw==
-X-Google-Smtp-Source: ABdhPJyK4z4U7e4b9q0BbzIwYcjagpOwUuAvrQ8PA11smPbHiuEIm63CGxBatjpbvYaT1pRfgL+0Dg==
-X-Received: by 2002:a05:6402:3488:b0:427:b4ec:991b with SMTP id v8-20020a056402348800b00427b4ec991bmr1157230edc.319.1651351871415;
-        Sat, 30 Apr 2022 13:51:11 -0700 (PDT)
-Received: from fedora.robimarko.hr (cpe-94-253-165-113.zg.cable.xnet.hr. [94.253.165.113])
-        by smtp.googlemail.com with ESMTPSA id p14-20020a056402154e00b0042617ba63a8sm4457852edx.50.2022.04.30.13.51.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Apr 2022 13:51:10 -0700 (PDT)
-From:   Robert Marko <robimarko@gmail.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org, amitk@kernel.org,
-        thara.gopinath@linaro.org, rafael@kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH 5/5] arm64: dts: ipq8074: add thermal nodes
-Date:   Sat, 30 Apr 2022 22:51:01 +0200
-Message-Id: <20220430205101.459782-5-robimarko@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220430205101.459782-1-robimarko@gmail.com>
-References: <20220430205101.459782-1-robimarko@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=ASoi6SXJEgdX0v1CZG7BViYCx8LRpIxKBcrDWBw+eZc=;
+        b=DsvGMiCZCwfmEYcSZ4OrcI2QjC+BvJdkaI8ze10/Ml+4smbBxd58U2SKV9SwANxsdp
+         zt/rYG+UDU/UiyS8cSfnvcLcaaUcR55DcqEV/g3ZzbPMXeHPRnIJl/k6GWr5cBQwldiJ
+         Jfe7Um/cBabTDkk2/KSkopZoTeIFsVktdNT98TG9h2ONiOmXk6CGmkt57vRYrL0Ci6mg
+         PP29xb68DDKFuRHSXrItJ8aefCV3M+XkGFRWXpvRoFZYe1Jli6Esr4bzv1tlweF0RS/V
+         oQA6UyuSqXOoAFJ2kUiOW66drJi901Aw04ALNjTF+Xbe1FlOCjXp/SVAj169GsKsdjZ2
+         K/Jw==
+X-Gm-Message-State: AOAM5305rsGlvxbKvJBGWrCH2rgkDNvmcj4ETfA6UnBdF/hRrFKKK0GC
+        5ZUHMB9xL8+0/8nzsxHn7kTLqQ==
+X-Google-Smtp-Source: ABdhPJwZuL/Pku9i0MT3xIj+aDGj1nGfmYNXoIlZqWPWElWD3DaCRKyYA5HMVMPMH/kOvoMOwl18IA==
+X-Received: by 2002:a05:651c:1699:b0:24f:1529:38d0 with SMTP id bd25-20020a05651c169900b0024f152938d0mr3530975ljb.397.1651352086936;
+        Sat, 30 Apr 2022 13:54:46 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id y20-20020ac24214000000b0047255d21168sm271526lfh.151.2022.04.30.13.54.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 30 Apr 2022 13:54:46 -0700 (PDT)
+Message-ID: <384e2336-e6a3-28d6-4572-1534d418206b@linaro.org>
+Date:   Sat, 30 Apr 2022 23:54:45 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 1/3] dt-bindings: display: msm: Add binding for MSM8996
+ DPU
+Content-Language: en-GB
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht
+Cc:     martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220430161529.605843-1-konrad.dybcio@somainline.org>
+ <7e066b7f-943a-6a5e-7383-a05794d207dc@linaro.org>
+In-Reply-To: <7e066b7f-943a-6a5e-7383-a05794d207dc@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IPQ8074 has a tsens v2.3.0 peripheral which monitors
-temperatures around the various subsystems on the
-die.
+On 30/04/2022 22:33, Dmitry Baryshkov wrote:
+> On 30/04/2022 19:15, Konrad Dybcio wrote:
+>> Add yaml binding for MSM8996 DPU.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>> ---
+>>   .../bindings/display/msm/dpu-msm8996.yaml     | 221 ++++++++++++++++++
+>>   1 file changed, 221 insertions(+)
+>>   create mode 100644 
+>> Documentation/devicetree/bindings/display/msm/dpu-msm8996.yaml
+>>
+>> diff --git 
+>> a/Documentation/devicetree/bindings/display/msm/dpu-msm8996.yaml 
+>> b/Documentation/devicetree/bindings/display/msm/dpu-msm8996.yaml
+>> new file mode 100644
+>> index 000000000000..10b02423224d
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/display/msm/dpu-msm8996.yaml
+>> @@ -0,0 +1,221 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/display/msm/dpu-msm8996.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Qualcomm Display DPU dt properties for MSM8996 target
+>> +
+>> +maintainers:
+>> +  - Konrad Dybcio <konrad.dybcio@somainline.org>
+>> +
+>> +description: |
+>> +  Device tree bindings for MSM Mobile Display Subsystem (MDSS) that
+>> +  encapsulates sub-blocks like DPU display controller, DSI 
+>> interfaces, etc.
+>> +  Device tree bindings of MDSS and DPU are mentioned for MSM8996 target.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    items:
+>> +      - const: qcom,msm8996-mdss
+> 
+> With the unified MDSS driver there is no need to describe a separate 
+> mdss bindings. Let's skip this part for now.
+> 
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  reg-names:
+>> +    const: mdss
+>> +
+>> +  power-domains:
+>> +    maxItems: 1
+>> +
+>> +  clocks:
+>> +    items:
+>> +      - description: Display AHB clock
+>> +      - description: Display core clock
+>> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: iface
+>> +      - const: core
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  interrupt-controller: true
+>> +
+>> +  "#address-cells": true
+>> +
+>> +  "#size-cells": true
+>> +
+>> +  "#interrupt-cells":
+>> +    const: 1
+>> +
+>> +  iommus:
+>> +    items:
+>> +      - description: Phandle to mdp_smmu node with SID mask for 
+>> Hard-Fail port0
+>> +
+>> +  ranges: true
+>> +
+>> +patternProperties:
+>> +  "^display-controller@[0-9a-f]+$":
+>> +    type: object
+>> +    description: Node containing the properties of DPU.
+>> +
+>> +    properties:
+>> +      compatible:
+>> +        items:
+>> +          - const: qcom,msm8996-dpu
+> 
+> Okay. So, this is the most interesting part. Unlike MSM8998, which is 
+> supported in the mdp5 driver, but was not used in the upstream DTS 
+> files, for the MSM8996 the MDP5 part is described, used and widely 
+> tested. And, unfortunately, the bindings use solely the generic 
+> "qcom,mdp5" compat.
+> 
+> I would suggest the following plan:
+> - Define a binding using both "qcom,msm8996-dpu" and "qcom,mdp5" 
+> strings. Make sure that it is fully backwards-compatible with older dts.
+> 
+> - Update msm8996.dtsi to follow new binding.
+> 
+> - Let's have a Kconfig flip switch selecting which driver to be used for 
+> 8996/8998.
 
-So lets add the tsens and thermal zone nodes, passive
-CPU cooling will come in later patches after CPU frequency
-scaling is supported.
+Rob suggested a modparam here.
 
-Signed-off-by: Robert Marko <robimarko@gmail.com>
----
- arch/arm64/boot/dts/qcom/ipq8074.dtsi | 96 +++++++++++++++++++++++++++
- 1 file changed, 96 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-index afbae86cf6d3..76e02490b968 100644
---- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-@@ -332,6 +332,16 @@ prng: rng@e3000 {
- 			status = "disabled";
- 		};
- 
-+		tsens: thermal-sensor@4a9000 {
-+			compatible = "qcom,ipq8074-tsens";
-+			reg = <0x4a9000 0x1000>, /* TM */
-+			      <0x4a8000 0x1000>; /* SROT */
-+			interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "combined";
-+			#qcom,sensors = <16>;
-+			#thermal-sensor-cells = <1>;
-+		};
-+
- 		cryptobam: dma-controller@704000 {
- 			compatible = "qcom,bam-v1.7.0";
- 			reg = <0x00704000 0x20000>;
-@@ -1092,4 +1102,90 @@ wifi: wifi@c0000000 {
- 			status = "disabled";
- 		};
- 	};
-+
-+	thermal-zones {
-+		nss-top-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 4>;
-+		};
-+
-+		nss0-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 5>;
-+		};
-+
-+		nss1-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 6>;
-+		};
-+
-+		wcss-phya0-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 7>;
-+		};
-+
-+		wcss-phya1-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 8>;
-+		};
-+
-+		cpu0_thermal: cpu0-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 9>;
-+		};
-+
-+		cpu1_thermal: cpu1-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 10>;
-+		};
-+
-+		cpu2_thermal: cpu2-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 11>;
-+		};
-+
-+		cpu3_thermal: cpu3-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 12>;
-+		};
-+
-+		cluster_thermal: cluster-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 13>;
-+		};
-+
-+		wcss-phyb0-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 14>;
-+		};
-+
-+		wcss-phyb1-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 15>;
-+		};
-+	};
- };
 -- 
-2.35.1
-
+With best wishes
+Dmitry

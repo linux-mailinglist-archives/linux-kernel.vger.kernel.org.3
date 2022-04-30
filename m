@@ -2,143 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A12B1515F01
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 18:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DF7F515EF2
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 18:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243218AbiD3QTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 12:19:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
+        id S242718AbiD3QMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 12:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243050AbiD3QTm (ORCPT
+        with ESMTP id S231685AbiD3QM3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 12:19:42 -0400
-X-Greylist: delayed 495 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 30 Apr 2022 09:16:19 PDT
-Received: from komekko.fuwafuwatime.moe (unknown [IPv6:2a01:4f9:6a:1712::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DFC34BB6;
-        Sat, 30 Apr 2022 09:16:19 -0700 (PDT)
-Received: from megumin.fuwafuwatime.moe (c-174-50-122-55.hsd1.ga.comcast.net [174.50.122.55])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Sat, 30 Apr 2022 12:12:29 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FDD85E140;
+        Sat, 30 Apr 2022 09:09:06 -0700 (PDT)
+Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by komekko.fuwafuwatime.moe (Postfix) with ESMTPSA id 87E981A7B66;
-        Sat, 30 Apr 2022 19:07:59 +0300 (EEST)
-Received: from localhost (bubbles.localdomain [192.168.1.101])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by megumin.fuwafuwatime.moe (Postfix) with ESMTPSA id 64665BB6B5B;
-        Sat, 30 Apr 2022 12:07:54 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=concord.sh; s=dkim;
-        t=1651334876;
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DE3691EC0445;
+        Sat, 30 Apr 2022 18:09:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1651334941;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=skqVWzMwophoEkJSS/d4zaggvs9O9ypBAst/OCvrWUI=;
-        b=lDrp0a+eCJopgMZ+28H/ix2OqjLXZk3TXlRvSA7ljsSXD9/gu8sFJHdKcyoEs7xdTFfwSH
-        nSiyknf+iWj6UuyRGNtR+0ew8GuX9EAkqwCgDy/F5kQqmzI852WHf6b4AF2ddtArV9e+YD
-        LRaj+Zf9lFzFU6hhEeYY9yRwhqfNPywMsiSKHhJCI1hA9Zbi5HjoUWvu/Em92UwVXKsFyn
-        9KU73ucJiekuZPlsqcnb60Q7EajBR6Jm9MFbCs/ZxRjmZ00kBr19mJB/ZMsuOSomuZSfva
-        OsNe0ws9BpRW+WjCoYG8sLxdQut407naJI4iSJV/XAJTf15VxvmU5c8FwumpPw==
-Date:   Sat, 30 Apr 2022 12:07:50 -0400
-From:   Kenton Groombridge <me@concord.sh>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        bh=3O6m7gsP+Q15sV5A9sj6v9CSQ9u8JCS/o5mGbHIZ3EY=;
+        b=C+/uh9ciNP7u3UTNMwVgALCRLpJA6vbWXsvn825GyZFBliE78epk76kGCChw3PpvEqGUvA
+        W33lTP/7kOzELZSt2zaubZpzu/l7bnOSxk44QUPozTTPcdnqw5vkd845EnXhwQCUBixVb4
+        KdGCNttpqX7qbiIuGdL16AVnCMpfue4=
+Date:   Sat, 30 Apr 2022 18:08:57 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Jon Kohler <jon@nutanix.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-hardening@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [RFC PATCH 00/21] KCFI support
-Message-ID: <20220430160750.ov7ddsq2vzibwrju@bubbles>
-Mail-Followup-To: Sami Tolvanen <samitolvanen@google.com>,
-        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-hardening@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-References: <20220429203644.2868448-1-samitolvanen@google.com>
+        Peter Zijlstra <peterz@infradead.org>,
+        Balbir Singh <sblbir@amazon.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH v3] x86/speculation, KVM: only IBPB for
+ switch_mm_always_ibpb on vCPU load
+Message-ID: <Ym1fGZIs6K7T6h3n@zn.tnic>
+References: <YmwZYEGtJn3qs0j4@zn.tnic>
+ <645E4ED5-F6EE-4F8F-A990-81F19ED82BFA@nutanix.com>
+ <Ymw9UZDpXym2vXJs@zn.tnic>
+ <YmxKqpWFvdUv+GwJ@google.com>
+ <YmxRnwSUBIkOIjLA@zn.tnic>
+ <Ymxf2Jnmz5y4CHFN@google.com>
+ <YmxlHBsxcIy8uYaB@zn.tnic>
+ <YmxzdAbzJkvjXSAU@google.com>
+ <Ym0GcKhPZxkcMCYp@zn.tnic>
+ <4E46337F-79CB-4ADA-B8C0-009E7500EDF8@nutanix.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zpbpn5imnhuprfsc"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220429203644.2868448-1-samitolvanen@google.com>
-Authentication-Results: ORIGINATING;
-        auth=pass smtp.auth=me@concord.sh smtp.mailfrom=me@concord.sh
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4E46337F-79CB-4ADA-B8C0-009E7500EDF8@nutanix.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Apr 30, 2022 at 02:50:35PM +0000, Jon Kohler wrote:
+> This is 100% a fair ask, I appreciate the diligence, as we’ve all been there
+> on the ‘other side’ of changes to complex areas and spend hours digging on
+> git history, LKML threads, SDM/APM, and other sources trying to derive
+> why the heck something is the way it is.
 
---zpbpn5imnhuprfsc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yap, that's basically proving my point and why I want stuff to be
+properly documented so that the question "why was it done this way" can
+always be answered satisfactorily.
 
-On 22/04/29 01:36PM, Sami Tolvanen wrote:
-> KCFI is a proposed forward-edge control-flow integrity scheme for
-> Clang, which is more suitable for kernel use than the existing CFI
-> scheme used by CONFIG_CFI_CLANG. KCFI doesn't require LTO, doesn't
-> alter function references to point to a jump table, and won't break
-> function address equality. The latest LLVM patches are here:
->=20
->   https://reviews.llvm.org/D119296
->   https://reviews.llvm.org/D124211
+> AFAIK, the KVM IBPB is avoided when switching in between vCPUs
+> belonging to the same vmcs/vmcb (i.e. the same guest), e.g. you could 
+> have one VM highly oversubscribed to the host and you wouldn’t see
+> either the KVM IBPB or the switch_mm IBPB. All good. 
+> 
+> Reference vmx_vcpu_load_vmcs() and svm_vcpu_load() and the 
+> conditionals prior to the barrier.
 
-Many thanks for continuing to work on this! As a user who has been
-following the evolution of this patch series for a while now, I have a
-couple of burning questions:
+So this is where something's still missing.
 
-1) The LLVM patch says that kCFI is not compatible with execute-only
-memory. Is there a plan ahead for kCFI if and when execute-only memory
-is implemented?
+> However, the pain ramps up when you have a bunch of separate guests,
+> especially with a small amount of vCPUs per guest, so the switching is more
+> likely to be in between completely separate guests.
 
-2) kCFI only checks indirect calls while Clang's traditional CFI has
-more schemes like bad cast checking and so on. Are there any major
-security tradeoffs as a result of this?
+If the guests are completely separate, then it should fall into the
+switch_mm() case.
 
-V/R
+Unless it has something to do with, as I looked at the SVM side of
+things, the VMCBs:
 
-Kenton Groombridge
+	if (sd->current_vmcb != svm->vmcb) {
 
---zpbpn5imnhuprfsc
-Content-Type: application/pgp-signature; name="signature.asc"
+So it is not only different guests but also within the same guest and
+when the VMCB of the vCPU is not the current one.
 
------BEGIN PGP SIGNATURE-----
+But then if VMCB of the vCPU is not the current, per-CPU VMCB, then that
+CPU ran another guest so in order for that other guest to attack the
+current guest, then its branch pred should be flushed.
 
-iQKTBAABCgB9FiEEP+u3AkfbrORB/inCFt7v5V9Ft54FAmJtXtFfFIAAAAAALgAo
-aXNzdWVyLWZwckBub3RhdGlvbnMub3BlbnBncC5maWZ0aGhvcnNlbWFuLm5ldDNG
-RUJCNzAyNDdEQkFDRTQ0MUZFMjlDMjE2REVFRkU1NUY0NUI3OUUACgkQFt7v5V9F
-t544Dg//ZWfCVPSPbS6jIItV88Z+1j0B2V2ovBXyACDNw9+gb0nK3wdofNteeb+v
-4/U/TIG66RKItrpzntuNJH6aaNvwXFnZX4Zoen+l9z/Y2bppPWk3j/FELtnPTopQ
-Sze0C34gdGZnnHyzQwTl8QVmRJsON+FN0PmZfCQp4+5NRjWJRF3aI3fGBBYPS9sd
-JkiG1k8/pQBRI5IcjYogXNshK/LPV/HpwUhkKdrG+f+Qbs+ItENMS3nO5c80yvd+
-dVSzRf+5pCQHAu6JmcUWTejYG13oI5VasRTruh4US3ITaHB1uIPX1Qkhkejl9RMJ
-hKhEbpKkEqZDBEU9eA5Zvjz2miSEnYBIBKdP8HloN4dhBAznKoiC9Q0hVMmR+kPD
-oXnGs6YqgIP2n6tp8nq50nL/sieaBetzjnVb7qwnUHcmEsfFBa7enprmuwVgi/5g
-sxgO7wup05JlE85rF5JOAXVcWC3zb8au+yMQknDx1p/hGvlMFWK+w0OqecK2dbos
-crliqCbiL+2iL98O1ocYt40HT0AV3uuw8kSbMwjcJJepNvpTzrjf2q90ydCvCoDa
-crAjD2xs16YHG7On/4P19fhh6Pirn/FlMYquKuOqInAU7qSDiu5vnqsXFn2UiuUc
-wDqcwxC0qupYuI+Gm8PAb/QIcEY177T5OHOcu+qMppIasNsnCcI=
-=jtla
------END PGP SIGNATURE-----
+But I'm likely missing a virt aspect here so I'd let Sean explain what
+the rules are...
 
---zpbpn5imnhuprfsc--
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

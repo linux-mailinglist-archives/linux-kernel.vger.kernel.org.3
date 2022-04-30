@@ -2,84 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC87515D2C
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 15:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F051515D36
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 15:04:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382598AbiD3NDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 09:03:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50020 "EHLO
+        id S1382604AbiD3NH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 09:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343716AbiD3NDg (ORCPT
+        with ESMTP id S232192AbiD3NHY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 09:03:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8866DFD9;
-        Sat, 30 Apr 2022 06:00:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8493F60C11;
-        Sat, 30 Apr 2022 13:00:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CDE34C385AE;
-        Sat, 30 Apr 2022 13:00:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651323611;
-        bh=Wx7soVe2GwQIKmpkckBFOuN9MRuARvTlfUmWFxAYLO8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=tjndL9h3TDMlAZeDo0bRnqteICKLnT/uBshK5w46ZidyyIyh2ME5PzdygYsWLn3HK
-         XZI+eFhMbuh0xF+YImbicnDW+2P4Wmzsc/lbvstkhRvoge6T72ha+9eWGJR+y8X+5f
-         wCZhrtygS7/afvoci+jz1oBdnIc9IlPd8cZTJ/w7BV2d9JyQhXXJiFASJlY+EKsVVa
-         LGfxzp5T/AdosXbN5mMJIEtFpWN7EadU9J+j8/u6yjiCYvaMMByt9Gatb6ZqNhmY1I
-         ApAWTwM+ZfV64RDlxEdUXPELzonT/dcOGLKvfbUO1dOS0BCdJZYRPIvJPbbT5P/XPQ
-         EeEZj2useH2wg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B46C9F03841;
-        Sat, 30 Apr 2022 13:00:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sat, 30 Apr 2022 09:07:24 -0400
+Received: from mxout3.routing.net (mxout3.routing.net [IPv6:2a03:2900:1:a::8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFDCC8071F;
+        Sat, 30 Apr 2022 06:04:01 -0700 (PDT)
+Received: from mxbox3.masterlogin.de (unknown [192.168.10.78])
+        by mxout3.routing.net (Postfix) with ESMTP id DA8BC6054A;
+        Sat, 30 Apr 2022 13:03:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+        s=20200217; t=1651323839;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=E/DjbKxcbIiIW9rYKpEMs3z/xZdjhL53L8stR7y8sO4=;
+        b=c/b2QyYwrIXU5MbbqgvfcAfL4FUW9cZZKO0WzmDYe7xspvdKnTqhl3uEd3tymKqcZ2zZ59
+        UG0RabZgG7IZYViF/AZ6N+MnHtUdzPBYfsByChAIUePYmEx8natLwxwu3IcmdSKWNz/JFn
+        //VNzhNLCclCBauqbsf/bSVec02HjAg=
+Received: from localhost.localdomain (fttx-pool-80.245.72.211.bambit.de [80.245.72.211])
+        by mxbox3.masterlogin.de (Postfix) with ESMTPSA id 5AC8B3600EF;
+        Sat, 30 Apr 2022 13:03:57 +0000 (UTC)
+From:   Frank Wunderlich <linux@fw-web.de>
+To:     linux-mediatek@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [RFC v2 0/4] Support mt7531 on BPI-R2 Pro
+Date:   Sat, 30 Apr 2022 15:03:43 +0200
+Message-Id: <20220430130347.15190-1-linux@fw-web.de>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net/funeth: simplify the return expression of
- fun_dl_info_get()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165132361173.2405.13440569285124454839.git-patchwork-notify@kernel.org>
-Date:   Sat, 30 Apr 2022 13:00:11 +0000
-References: <20220429090104.3852749-1-chi.minghao@zte.com.cn>
-In-Reply-To: <20220429090104.3852749-1-chi.minghao@zte.com.cn>
-To:     CGEL <cgel.zte@gmail.com>
-Cc:     dmichail@fungible.com, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        chi.minghao@zte.com.cn, zealci@zte.com.cn
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Mail-ID: b931c4e7-0a19-447e-82b1-0aeac9a6c684
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+From: Frank Wunderlich <frank-w@public-files.de>
 
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+This Series add Support for the mt7531 switch on Bananapi R2 Pro board.
 
-On Fri, 29 Apr 2022 09:01:04 +0000 you wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
-> 
-> Simplify the return expression.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> 
-> [...]
+This board uses port5 of the switch to conect to the gmac0 of the
+rk3568 SoC.
 
-Here is the summary with links:
-  - net/funeth: simplify the return expression of fun_dl_info_get()
-    https://git.kernel.org/netdev/net-next/c/ce7deda0d5cd
+Currently CPU-Port is hardcoded in the mt7530 driver to port 6.
 
-You are awesome, thank you!
+Compared to v1 the reset-Patch was dropped as it was not needed and
+CPU-Port-changes are completely rewriten based on suggestions/code from
+Vladimir Oltean (many thanks to this).
+In DTS Patch i only dropped the status-property that was not
+needed/ignored by driver.
+
+Due to the Changes i also made a regression Test on mt7623 bpi-r2 using
+mt7530 with cpu-port 6. Tests were done directly (ipv4 config on dsa user
+port) and with vlan-aware bridge including vlan that was tagged outgoing
+on dsa user port.
+
+Frank Wunderlich (4):
+  net: dsa: mt7530: rework mt7530_hw_vlan_{add,del}
+  net: dsa: mt7530: rework mt753[01]_setup
+  net: dsa: mt7530: get cpu-port via dp->cpu_dp instead of constant
+  arm64: dts: rockchip: Add mt7531 dsa node to BPI-R2-Pro board
+
+ .../boot/dts/rockchip/rk3568-bpi-r2-pro.dts   | 48 +++++++++++
+ drivers/net/dsa/mt7530.c                      | 81 ++++++++++++-------
+ drivers/net/dsa/mt7530.h                      |  1 -
+ 3 files changed, 100 insertions(+), 30 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.25.1
 

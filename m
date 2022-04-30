@@ -2,149 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9E64516050
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 22:19:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3CB1516055
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 22:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245031AbiD3UW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 16:22:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51404 "EHLO
+        id S245051AbiD3UZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 16:25:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237108AbiD3UW5 (ORCPT
+        with ESMTP id S243477AbiD3UZX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 16:22:57 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0754C8BF3F;
-        Sat, 30 Apr 2022 13:19:34 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id m20so21256129ejj.10;
-        Sat, 30 Apr 2022 13:19:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=POF+6d8762FMOUGJIUlV1M6qmWu0Pr8vnEd2cruJn/Q=;
-        b=GguguRy2ohBkyOzRgJXUL5P1WS54HQv7SPDnAuU7MEYfgc73wwidWcB5/eCDb/o6qN
-         RK12GmeHg9/VmD61o9af2NbQ9uApw9HDDRPRLLjnHlku63WdF6wo5YZ3+nS8sUEbaKzp
-         gwbn0LuvD7IrUoboyREiqHJxwTvSFuyqDWFxDM1AL3PILyrtXXKPOUANo9R48aPRwnfD
-         LBnNNTm1vKERAJTVJJSxc4w1M5l/pom72Bzfb13uLsz/FA667wgnnI3N5RtPhuf6NTnk
-         hsb7Mqfbonu6IQri7w05qGQFVDZxszD+9MgW7ANf4flb1fSFYbIEWB4IjQsoL4O65c7p
-         Ov/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=POF+6d8762FMOUGJIUlV1M6qmWu0Pr8vnEd2cruJn/Q=;
-        b=nb22NC2y2/9Oy51Mi82ydRQQZrnwC4dUnJfW54m2oM63XEmjKNKwCRoBZB/sdOpI3k
-         w3NAzu/7TaNQ51SeqZ0aZrSlu4OvhBOQDdllyaIH5rbBionNhRcX1Ae+al6Ts2sD+sk7
-         leCjc5qHaF6KAMMLj45X0f16nhQJa38wtMhLej81K01Ng+Ejjeq5lVTyqwhw/G5pYAaN
-         zJhrIBp1vnRfLqUhjMQczAJDVdsWnhiW9/0wP6Xw/Hnx48fG595fmH/kKjBoJnZDxADE
-         6MppX3cTcRUJU+8AgQJTvyyeAx/YAtlzi3nUdA+l+YgxZ6JwJPCvweklR8vbQwojZNyc
-         4X4Q==
-X-Gm-Message-State: AOAM5306mKZCUQ2GJJLsqJ/Or+BPQndiN7xpUfRhtSP6VAIuWx8uDm1N
-        KjyMSQCJjV9KKippLV47cQg=
-X-Google-Smtp-Source: ABdhPJzvyvxchjnijiU3tXHOtd78aybClSnMqXpfP33YYcQnledJ3xLrAykgTzMo+dqTSywxOtIW9g==
-X-Received: by 2002:a17:907:1b10:b0:6e4:bac5:f080 with SMTP id mp16-20020a1709071b1000b006e4bac5f080mr5052303ejc.24.1651349972319;
-        Sat, 30 Apr 2022 13:19:32 -0700 (PDT)
-Received: from ?IPV6:2a01:c22:6f21:fd00:3167:a16c:5aa:91c3? (dynamic-2a01-0c22-6f21-fd00-3167-a16c-05aa-91c3.c22.pool.telefonica.de. [2a01:c22:6f21:fd00:3167:a16c:5aa:91c3])
-        by smtp.googlemail.com with ESMTPSA id hg8-20020a1709072cc800b006f3ef214db1sm1904785ejc.23.2022.04.30.13.19.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 30 Apr 2022 13:19:31 -0700 (PDT)
-Message-ID: <f68dfd23-ae83-e4d9-cb08-51a097bac06b@gmail.com>
-Date:   Sat, 30 Apr 2022 22:19:25 +0200
+        Sat, 30 Apr 2022 16:25:23 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D152749C97;
+        Sat, 30 Apr 2022 13:22:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651350120; x=1682886120;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6jbPuSw3k3iSchP4UYOMtIzdN+2guCWB74XjbgdKQmk=;
+  b=U2xI56JngC392/wQAFogyJlvzOL28C8Eed83qS3J4ORg58rzewAJiJyi
+   +B5uyG5ZKh6tDOKPoLvgh7jDVaeGBPji4H/e/q77YtIFydvh9FKV+rEvV
+   b/PCAn6k8G3riBlL8p9+561S6uIlyz4X51vXj8BAZZEPXksbSD6Gi/fIx
+   SG75kGhbEk09o5e11ak7WnrmnKoYD7yYZeC2rcJ6128CPXyQn6nTmCyCk
+   uuAMICUh9oaT57RcF2Z8dSaRdhNXx68ncq8e2zRfgIxdwn50hvQPq8qnx
+   jqmvRYqpCQak/wMbkwYiLa0JLMSbhDyAfpizA36eB5YHRtwAdgIKsh69D
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10333"; a="327438660"
+X-IronPort-AV: E=Sophos;i="5.91,189,1647327600"; 
+   d="scan'208";a="327438660"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2022 13:22:00 -0700
+X-IronPort-AV: E=Sophos;i="5.91,189,1647327600"; 
+   d="scan'208";a="809591388"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2022 13:21:56 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 9F2D220423;
+        Sat, 30 Apr 2022 23:21:24 +0300 (EEST)
+Date:   Sat, 30 Apr 2022 23:21:24 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        swboyd@chromium.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        freedreno@lists.freedesktop.org,
+        Saravana Kannan <saravanak@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, Daniel Scally <djrscally@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] device property: Fix recent breakage of
+ fwnode_get_next_parent_dev()
+Message-ID: <Ym2aRE/CkLsuJYzM@paasikivi.fi.intel.com>
+References: <20220429164325.1.I2a3b980ea051e59140227999f0f0ca16f1125768@changeid>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To:     Peter Geis <pgwipeout@gmail.com>, Andrew Lunn <andrew@lunn.ch>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220228233057.1140817-1-pgwipeout@gmail.com>
- <Yh1lboz7VDiuYuZV@shell.armlinux.org.uk>
- <CAMdYzYrNvUUMom4W4uD9yf9LtFK1h5Xw+9GYc54hB5+iqVmJtw@mail.gmail.com>
- <CAMdYzYrFuMw4aj_9L698ZhL7Xqy8=NeXhy9HDz4ug-v3=f4fpw@mail.gmail.com>
- <Ym1bWHNj0p6L9lY8@lunn.ch>
- <CAMdYzYq41TndbJK-=ah31=vECisgRbPmtFYwOLQQ7yn4L=JVYw@mail.gmail.com>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH v1] net: phy: fix motorcomm module automatic loading
-In-Reply-To: <CAMdYzYq41TndbJK-=ah31=vECisgRbPmtFYwOLQQ7yn4L=JVYw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220429164325.1.I2a3b980ea051e59140227999f0f0ca16f1125768@changeid>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.04.2022 18:31, Peter Geis wrote:
-> On Sat, Apr 30, 2022 at 11:52 AM Andrew Lunn <andrew@lunn.ch> wrote:
->>
->>> Good Morning,
->>>
->>> After testing various configurations I found what is actually
->>> happening here. When libphy is built in but the phy drivers are
->>> modules and not available in the initrd, the generic phy driver binds
->>> here. This allows the phy to come up but it is not functional.
->>
->> What MAC are you using?
+On Fri, Apr 29, 2022 at 04:43:47PM -0700, Douglas Anderson wrote:
+> Due to a subtle typo, instead of commit 87ffea09470d ("device
+> property: Introduce fwnode_for_each_parent_node()") being a no-op
+> change, it ended up causing the display on my sc7180-trogdor-lazor
+> device from coming up unless I added "fw_devlink=off" to my kernel
+> command line. Fix the typo.
 > 
-> Specifically Motorcomm, but I've discovered it can happen with any of
-> the phy drivers with the right kconfig.
-> 
->>
->> Why is you interface being brought up by the initramfs? Are you using
->> NFS root from within the initramfs?
-> 
-> This was discovered with embedded programming. It's common to have a
-> small initramfs, or forgo an initramfs altogether. Another cause is a
-> mismatch in kernel config where phylib is built in because of a
-> dependency, but the rest of the phy drivers are modular.
-> The key is:
-> - phylib is built in
-> - ethernet driver is built in
-> - the phy driver is a module
-> - modules aren't available at probe time (for any reason).
-> 
-> In this case phylib assumes there is no driver, when the vast majority
-> of phys now have device specific drivers.It seems this is an unsafe
-> assumption as this means there is now an implicit dependency of the
-> device specific phy drivers and phylib. It just so happens to work
-> simply because both broadcom and realtek, some of the more common
-> phys, have explicit dependencies elsewhere that cause them to be built
-> in as well.
-> 
-Because you mention the realtek phy driver:
-Users reported similar issues like you if r8169 MAC driver is built-in
-(or r8169 module is in initramfs) but realtek phy driver is not.
-There's no direct code dependency between r8169 and realtek phy driver,
-therefore initramfs-creating tools sometimes missed to automatically
-include the phy driver in initramfs. To mitigate this r8169 has the following:
-MODULE_SOFTDEP("pre: realtek");
-This isn't strictly needed but some initramfs-creating tools consider
-such soft dependencies when checking what should be included in initramfs.
-If some other MAC is used with a Realtek PHY, then you may still see the
-described issue.
-As Andrew wrote: Eventually it's a userspace responsibility to ensure that
-all needed modules are included in initramfs.
+> Fixes: 87ffea09470d ("device property: Introduce fwnode_for_each_parent_node()")
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
 
->>>> What normally happens is that the kernel loads, maybe with the MAC
->> driver and phylib loading, as part of the initramfs. The other modules
->> in the initramfs allow the root filesystem to be found, mounted, and
->> pivoted into it. The MAC driver is then brought up by the initscripts,
->> which causes phylib to request the needed PHY driver modules, it loads
->> and all is good.
->>
->> If you are using NFS root, then the load of the PHY driver happens
->> earlier, inside the initramfs. If this is you situation, maybe the
->> correct fix is to teach the initramfs tools to include the PHY drivers
->> when NFS root is being used?
->>
->>      Andrew
+Good catch, thanks!
 
+Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+
+> ---
+> 
+>  drivers/base/property.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/base/property.c b/drivers/base/property.c
+> index 36401cfe432c..52e85dcb20b5 100644
+> --- a/drivers/base/property.c
+> +++ b/drivers/base/property.c
+> @@ -600,7 +600,7 @@ struct device *fwnode_get_next_parent_dev(struct fwnode_handle *fwnode)
+>  	struct device *dev;
+>  
+>  	fwnode_for_each_parent_node(fwnode, parent) {
+> -		dev = get_dev_from_fwnode(fwnode);
+> +		dev = get_dev_from_fwnode(parent);
+>  		if (dev) {
+>  			fwnode_handle_put(parent);
+>  			return dev;
+
+-- 
+Sakari Ailus

@@ -2,143 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E6AA515D40
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 15:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 277C9515D41
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 15:09:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240299AbiD3NLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 09:11:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48674 "EHLO
+        id S1359799AbiD3NMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 09:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235730AbiD3NLs (ORCPT
+        with ESMTP id S235730AbiD3NMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 09:11:48 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F168D8233A;
-        Sat, 30 Apr 2022 06:08:23 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d15so9294064plh.2;
-        Sat, 30 Apr 2022 06:08:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fVPoTVfoA8tVVI1E9eXJGEOkSXxyXZyAXt5cTczWhMQ=;
-        b=EEdn93Uq8zk/Vsh4AHDf2M5jAH70LosPoCi0M5MUt5LvTWAbjmBwLOhdvYIiwF0WIZ
-         CSdS4sXStWZucVBMRseVkdMhG+b5OXYKKnOOaB7A/XvuRXjarAgij7XcxFWVoLU4PXZ3
-         Ii4SevsyujHyLEUKSx2juTOGjKg87oeNm7v2zqLfxehsu1HszeVBqvh/Jv+9qerpwjSu
-         ah+GoZdF6LGCrU/0mueSI9sBhz0cPWvHyjsnW5lGYIqR9yPBH/5DlqSmtd3psk6rY6/E
-         jVFF29+earsX0xkzgNPFDtJ87b2QczD1Jk/isXEM5aZlakF0Hlt0FbppdAPYImcmEyAF
-         OJxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fVPoTVfoA8tVVI1E9eXJGEOkSXxyXZyAXt5cTczWhMQ=;
-        b=2oGqOxzTh7mx6wnxc/HfrSU+DldPqr51MS7pbR3PcGSJD7t1QOM1yBxxUFBUvbUxbC
-         BIlcUsoY7MKMJUo3z5r5C40UAyhDc36gpneYZ/bP6tN3JlLj9k+ZSwOrcimCoujWwbf/
-         jhxzCQQ/hGlYoPGIe9R7DGc08gZDDKNAWT2oAbwOy7kDyIoDyJjw0NggfLTagRkI2BK6
-         qcFHKUNvyedozt1hxCNhjRLeUMLKrIoAcrrXlLp0WYfSiDp8UXXdECrfqQxzPo/cwzO+
-         yXOLWZq6GdJx5qS/SrOr6MLjB2Z+VM6mKWwwo5aV5rv6mu3VDFJBVeej9T1OaT4Hqxbc
-         BlcQ==
-X-Gm-Message-State: AOAM531VTlTeXl+TQfAB6PQ5K0gDp07pXwSrsYx2Y9hUgI3jVqOM5l4s
-        1/wv0kCM67jOF2J1L+5uGbr3/XufqwxU2nlS
-X-Google-Smtp-Source: ABdhPJxZWYjTQ6c048DPd3h3iff6QNAe7B6Q2RXDRf2ojuLf0yEsNm/6NptTczoJk2uRjmjLPWEqdQ==
-X-Received: by 2002:a17:90a:d58b:b0:1cd:65dc:6a62 with SMTP id v11-20020a17090ad58b00b001cd65dc6a62mr8896280pju.89.1651324103501;
-        Sat, 30 Apr 2022 06:08:23 -0700 (PDT)
-Received: from localhost.localdomain ([223.212.58.71])
-        by smtp.gmail.com with ESMTPSA id r14-20020a63e50e000000b003c14af5060esm8296261pgh.38.2022.04.30.06.08.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Apr 2022 06:08:22 -0700 (PDT)
-From:   Yuntao Wang <ytcoode@gmail.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yuntao Wang <ytcoode@gmail.com>
-Subject: [PATCH bpf-next] bpf: Fix potential array overflow in bpf_trampoline_get_progs()
-Date:   Sat, 30 Apr 2022 21:08:03 +0800
-Message-Id: <20220430130803.210624-1-ytcoode@gmail.com>
-X-Mailer: git-send-email 2.36.0
+        Sat, 30 Apr 2022 09:12:16 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8778233A
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 06:08:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651324135; x=1682860135;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=v+FrIAWtw1nKPpwoZOsK89KN2KVuLHBlJX1dIjZsb+E=;
+  b=bgDd/bEd7kPbK/0CbCleB9oMGI4l66qMbdPhBoMz8SFlo9QQi/bv3st1
+   hInkFwoeaiSf0pTfB8tq9RMIIVYKS6kMJ4n20UGXxUMU0tOdE4H/mGTcV
+   gN65kYPXXBdFKbrr/x5XxCK4VJPVd1q+Hea+TJuCu797dI1XXRjpy0GF1
+   AqpClrJdKN7Hh90JI+qhuDWPI8JCEHZLGCFv/zuPAfAOaqKeEU62VCnKZ
+   tEvTnLIHkFNuteXL0YS75hyuSw7Of5TpWxggJym5FTxGhDztXFNSGL/WA
+   uMHVrMLfGk4vg6Ad4iA/ExaAtXGs8yE6BC6DvpplIL8XjAyiCUXGxwqT5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="266717746"
+X-IronPort-AV: E=Sophos;i="5.91,188,1647327600"; 
+   d="scan'208";a="266717746"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2022 06:08:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,188,1647327600"; 
+   d="scan'208";a="597815981"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 30 Apr 2022 06:08:52 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nkmqC-0007FL-0o;
+        Sat, 30 Apr 2022 13:08:52 +0000
+Date:   Sat, 30 Apr 2022 21:08:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guo Ren <guoren@linux.alibaba.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [ammarfaizi2-block:palmer/linux/riscv-compat 20/20]
+ arch/riscv/kernel/compat_signal.c:198:5: warning: no previous prototype for
+ function 'compat_setup_rt_frame'
+Message-ID: <202204302108.jfVPwbXj-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The cnt value in the 'cnt >= BPF_MAX_TRAMP_PROGS' check does not
-include BPF_TRAMP_MODIFY_RETURN bpf programs, so the number of
-the attached BPF_TRAMP_MODIFY_RETURN bpf programs in a trampoline
-can exceed BPF_MAX_TRAMP_PROGS.
+tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/riscv-compat
+head:   e2009fdf858d6fe01f0b24e35d8347fc8da3210f
+commit: e2009fdf858d6fe01f0b24e35d8347fc8da3210f [20/20] riscv: compat: Add COMPAT Kbuild skeletal support
+config: riscv-randconfig-r042-20220428 (https://download.01.org/0day-ci/archive/20220430/202204302108.jfVPwbXj-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 400775649969b9baf3bc2a510266e7912bb16ae9)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/e2009fdf858d6fe01f0b24e35d8347fc8da3210f
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block palmer/linux/riscv-compat
+        git checkout e2009fdf858d6fe01f0b24e35d8347fc8da3210f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
 
-When this happens, the assignment '*progs++ = aux->prog' in
-bpf_trampoline_get_progs() will cause progs array overflow as the
-progs field in the bpf_tramp_progs struct can only hold at most
-BPF_MAX_TRAMP_PROGS bpf programs.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Fixes: 88fd9e5352fe ("bpf: Refactor trampoline update code")
-Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
----
- kernel/bpf/trampoline.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+All warnings (new ones prefixed by >>):
 
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index ada97751ae1b..5d8bfb5ef239 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -411,7 +411,7 @@ int bpf_trampoline_link_prog(struct bpf_prog *prog, struct bpf_trampoline *tr)
- {
- 	enum bpf_tramp_prog_type kind;
- 	int err = 0;
--	int cnt;
-+	int cnt = 0, i;
- 
- 	kind = bpf_attach_type_to_tramp(prog);
- 	mutex_lock(&tr->mutex);
-@@ -422,7 +422,10 @@ int bpf_trampoline_link_prog(struct bpf_prog *prog, struct bpf_trampoline *tr)
- 		err = -EBUSY;
- 		goto out;
- 	}
--	cnt = tr->progs_cnt[BPF_TRAMP_FENTRY] + tr->progs_cnt[BPF_TRAMP_FEXIT];
-+
-+	for (i = 0; i < BPF_TRAMP_MAX; i++)
-+		cnt += tr->progs_cnt[i];
-+
- 	if (kind == BPF_TRAMP_REPLACE) {
- 		/* Cannot attach extension if fentry/fexit are in use. */
- 		if (cnt) {
-@@ -500,16 +503,19 @@ struct bpf_trampoline *bpf_trampoline_get(u64 key,
- 
- void bpf_trampoline_put(struct bpf_trampoline *tr)
- {
-+	int i;
-+
- 	if (!tr)
- 		return;
- 	mutex_lock(&trampoline_mutex);
- 	if (!refcount_dec_and_test(&tr->refcnt))
- 		goto out;
- 	WARN_ON_ONCE(mutex_is_locked(&tr->mutex));
--	if (WARN_ON_ONCE(!hlist_empty(&tr->progs_hlist[BPF_TRAMP_FENTRY])))
--		goto out;
--	if (WARN_ON_ONCE(!hlist_empty(&tr->progs_hlist[BPF_TRAMP_FEXIT])))
--		goto out;
-+
-+	for (i = 0; i < BPF_TRAMP_MAX; i++)
-+		if (WARN_ON_ONCE(!hlist_empty(&tr->progs_hlist[i])))
-+			goto out;
-+
- 	/* This code will be executed even when the last bpf_tramp_image
- 	 * is alive. All progs are detached from the trampoline and the
- 	 * trampoline image is patched with jmp into epilogue to skip
+>> arch/riscv/kernel/compat_signal.c:198:5: warning: no previous prototype for function 'compat_setup_rt_frame' [-Wmissing-prototypes]
+   int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
+       ^
+   arch/riscv/kernel/compat_signal.c:198:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
+   ^
+   static 
+   1 warning generated.
+
+
+vim +/compat_setup_rt_frame +198 arch/riscv/kernel/compat_signal.c
+
+44be29735fe706 Guo Ren 2022-04-05  197  
+44be29735fe706 Guo Ren 2022-04-05 @198  int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
+44be29735fe706 Guo Ren 2022-04-05  199  	struct pt_regs *regs)
+44be29735fe706 Guo Ren 2022-04-05  200  {
+44be29735fe706 Guo Ren 2022-04-05  201  	struct compat_rt_sigframe __user *frame;
+44be29735fe706 Guo Ren 2022-04-05  202  	long err = 0;
+44be29735fe706 Guo Ren 2022-04-05  203  
+44be29735fe706 Guo Ren 2022-04-05  204  	frame = compat_get_sigframe(ksig, regs, sizeof(*frame));
+44be29735fe706 Guo Ren 2022-04-05  205  	if (!access_ok(frame, sizeof(*frame)))
+44be29735fe706 Guo Ren 2022-04-05  206  		return -EFAULT;
+44be29735fe706 Guo Ren 2022-04-05  207  
+44be29735fe706 Guo Ren 2022-04-05  208  	err |= copy_siginfo_to_user32(&frame->info, &ksig->info);
+44be29735fe706 Guo Ren 2022-04-05  209  
+44be29735fe706 Guo Ren 2022-04-05  210  	/* Create the ucontext. */
+44be29735fe706 Guo Ren 2022-04-05  211  	err |= __put_user(0, &frame->uc.uc_flags);
+44be29735fe706 Guo Ren 2022-04-05  212  	err |= __put_user(NULL, &frame->uc.uc_link);
+44be29735fe706 Guo Ren 2022-04-05  213  	err |= __compat_save_altstack(&frame->uc.uc_stack, regs->sp);
+44be29735fe706 Guo Ren 2022-04-05  214  	err |= compat_setup_sigcontext(frame, regs);
+44be29735fe706 Guo Ren 2022-04-05  215  	err |= __copy_to_user(&frame->uc.uc_sigmask, set, sizeof(*set));
+44be29735fe706 Guo Ren 2022-04-05  216  	if (err)
+44be29735fe706 Guo Ren 2022-04-05  217  		return -EFAULT;
+44be29735fe706 Guo Ren 2022-04-05  218  
+44be29735fe706 Guo Ren 2022-04-05  219  	regs->ra = (unsigned long)COMPAT_VDSO_SYMBOL(
+44be29735fe706 Guo Ren 2022-04-05  220  			current->mm->context.vdso, rt_sigreturn);
+44be29735fe706 Guo Ren 2022-04-05  221  
+44be29735fe706 Guo Ren 2022-04-05  222  	/*
+44be29735fe706 Guo Ren 2022-04-05  223  	 * Set up registers for signal handler.
+44be29735fe706 Guo Ren 2022-04-05  224  	 * Registers that we don't modify keep the value they had from
+44be29735fe706 Guo Ren 2022-04-05  225  	 * user-space at the time we took the signal.
+44be29735fe706 Guo Ren 2022-04-05  226  	 * We always pass siginfo and mcontext, regardless of SA_SIGINFO,
+44be29735fe706 Guo Ren 2022-04-05  227  	 * since some things rely on this (e.g. glibc's debug/segfault.c).
+44be29735fe706 Guo Ren 2022-04-05  228  	 */
+44be29735fe706 Guo Ren 2022-04-05  229  	regs->epc = (unsigned long)ksig->ka.sa.sa_handler;
+44be29735fe706 Guo Ren 2022-04-05  230  	regs->sp = (unsigned long)frame;
+44be29735fe706 Guo Ren 2022-04-05  231  	regs->a0 = ksig->sig;                     /* a0: signal number */
+44be29735fe706 Guo Ren 2022-04-05  232  	regs->a1 = (unsigned long)(&frame->info); /* a1: siginfo pointer */
+44be29735fe706 Guo Ren 2022-04-05  233  	regs->a2 = (unsigned long)(&frame->uc);   /* a2: ucontext pointer */
+44be29735fe706 Guo Ren 2022-04-05  234  
+
+:::::: The code at line 198 was first introduced by commit
+:::::: 44be29735fe7065c7d32d1d2cc26b68487ac07b6 riscv: compat: signal: Add rt_frame implementation
+
+:::::: TO: Guo Ren <guoren@linux.alibaba.com>
+:::::: CC: Palmer Dabbelt <palmer@rivosinc.com>
+
 -- 
-2.36.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,89 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 508F0515E27
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 16:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81746515E2A
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 16:23:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237143AbiD3OZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 10:25:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52516 "EHLO
+        id S242385AbiD3O0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 10:26:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382836AbiD3OXg (ORCPT
+        with ESMTP id S235592AbiD3O0w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 10:23:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C736FBE37;
-        Sat, 30 Apr 2022 07:20:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DCD25B83086;
-        Sat, 30 Apr 2022 14:20:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9667CC385B6;
-        Sat, 30 Apr 2022 14:20:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651328411;
-        bh=0xoe/LxFqApX7ISnui86MdoEsq8Xn9EH9My+RuZq8mU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Ri5g3Y7WRhFxZNML504fDjptIJ13BeoEJRWSiy4PzofTm8mJR7Za5OONZAqgagQ8b
-         juoiV1qTuesG9+SDqto90ao1z+svN7rqi+q7/+v7sIsjOKBtXg/RTZ4cWNEth1od0F
-         5RRvTdv3rAQmgpq4g0HRzjmaSlrlxkXBfk8oUR3W1g/m1Z1zDK4tAwbtvk12wrEL9r
-         qlLXh/1HKNbhF7tYiUKdH/Fw7EWJ5co/cy9EVlezeFZaaqkHiyBb4/s9bp0UQPhJsS
-         0oIT76XGV4iiQRe6MbnTa9F+8J1+Wzk8BZ9QTZ4DbsPMYJOmHjeFCnRQY9UfJ8Fia+
-         3A34U3v+iGF0Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7C661E8DD85;
-        Sat, 30 Apr 2022 14:20:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sat, 30 Apr 2022 10:26:52 -0400
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDFD1814BE;
+        Sat, 30 Apr 2022 07:23:27 -0700 (PDT)
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 23UEMtVo003583;
+        Sat, 30 Apr 2022 23:22:56 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 23UEMtVo003583
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1651328576;
+        bh=Ckw4iP89ZovaYc0nDj+DdgU81G8QQAB4FPZP64CfHi8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=2fOAKv3v4aXLwI3K7CujtO63Lx7jb9H85a0K7DOmIUgtf9hxts56xnaDRbjuZ5cP1
+         gnetjkmhg2L/DA6DoMAX3oH4JtE8n/JcJe2NdXF3t5vme1xmaVyYu8TvFkeaSw1jZ1
+         059Jzbmhpkbmt2hMhMndstCNuqLa4+UeM48CNa6gT9RZQ12QJ4LBxd6UNI7jI2EDQ5
+         E0SN7fbXxnipf2ACDELprXW7KtilI+hgc2f6xXwtDTr0mDPE6da/N9mIewVSh0q4jv
+         rdbcet34Piz4dXKPCVY6F0Q6F49Afbe5o8Xt63ZE/Neix9ytXGz3zMfefSaDJJZAuN
+         /76ygZybz/CNQ==
+X-Nifty-SrcIP: [209.85.215.170]
+Received: by mail-pg1-f170.google.com with SMTP id 7so4684103pga.12;
+        Sat, 30 Apr 2022 07:22:55 -0700 (PDT)
+X-Gm-Message-State: AOAM531/GyVMi6OnddxeS9l4xA1INLaXNO0SGPckqPiDHBRYDcxv/eQk
+        Nozf3GOixZ/Eo8ZEOIXFofCQLYZ/JIIbsnDEiwc=
+X-Google-Smtp-Source: ABdhPJxyAxpOIViOlXQzQBzGNmvqAH9dhAcw/CgLvU6x7li3jTwrdarvZwsB3G8uSNrsC0h2vOY3agEdYMJ5+WVxQbs=
+X-Received: by 2002:a05:6a00:24cc:b0:50d:58bf:5104 with SMTP id
+ d12-20020a056a0024cc00b0050d58bf5104mr3917450pfv.36.1651328575184; Sat, 30
+ Apr 2022 07:22:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] ipv4: remove unnecessary type castings
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165132841150.7113.9262041805649538846.git-patchwork-notify@kernel.org>
-Date:   Sat, 30 Apr 2022 14:20:11 +0000
-References: <20220429021404.1648570-1-yuzhe@nfschina.com>
-In-Reply-To: <20220429021404.1648570-1-yuzhe@nfschina.com>
-To:     Yu Zhe <yuzhe@nfschina.com>
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        liqiong@nfschina.com, hukun@nfschina.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220424190811.1678416-1-masahiroy@kernel.org>
+ <20220424190811.1678416-8-masahiroy@kernel.org> <CAKwvOd=Q5WK1790WZP7fj=jY8b2+u-rEnF6XC3uObYwTtYp_eA@mail.gmail.com>
+In-Reply-To: <CAKwvOd=Q5WK1790WZP7fj=jY8b2+u-rEnF6XC3uObYwTtYp_eA@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 30 Apr 2022 23:21:51 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASbcadJqQqhNAOzDBVFNS-kgAACmSGJ69VkY+ew7MFaxg@mail.gmail.com>
+Message-ID: <CAK7LNASbcadJqQqhNAOzDBVFNS-kgAACmSGJ69VkY+ew7MFaxg@mail.gmail.com>
+Subject: Re: [PATCH 07/27] modpost: import include/linux/list.h
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Wed, Apr 27, 2022 at 1:30 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Sun, Apr 24, 2022 at 12:09 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > Import include/linux/list.h to use convenient list macros in modpost.
+> >
+> > I dropped kernel-space code such as {WRITE,READ}_ONCE etc. and unneeded
+> > macros.
+> >
+> > I also imported container_of() from include/linux/container_of.h and
+> > type definitions from include/linux/types.h.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+>
+> Ok then, just two small nits about two comments, which may have been
+> just copied over from the sources.
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+> > ---
+> >
+> >  scripts/mod/list.h | 336 +++++++++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 336 insertions(+)
+> >  create mode 100644 scripts/mod/list.h
+> >
+> > diff --git a/scripts/mod/list.h b/scripts/mod/list.h
+> > new file mode 100644
+> > index 000000000000..c87583a71714
+> > --- /dev/null
+> > +++ b/scripts/mod/list.h
+> > @@ -0,0 +1,336 @@
+>
+> <snip>
+>
+> > +/**
+> > + * list_for_each_entry -       iterate over list of given type
+>
+> ^ Excessive whitespace after the `-`
+>
+> > + * @pos:       the type * to use as a loop cursor.
+> > + * @head:      the head for your list.
+> > + * @member:    the name of the list_head within the struct.
+> > + */
+> > +#define list_for_each_entry(pos, head, member)                         \
+> > +       for (pos = list_first_entry(head, typeof(*pos), member);        \
+> > +            !list_entry_is_head(pos, head, member);                    \
+> > +            pos = list_next_entry(pos, member))
+> > +
+> > +/**
+> > + * list_for_each_entry_safe - iterate over list of given type safe against removal of list entry
+>
+> ^ This sounds like two sentences and looks like it's missing
+> punctuation separating them?
+>
+> "iterate over list of given type. Safe against removal of list entry"
 
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
 
-On Thu, 28 Apr 2022 19:14:04 -0700 you wrote:
-> remove unnecessary void* type castings.
-> 
-> Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
-> ---
->  net/ipv4/fib_frontend.c  | 4 ++--
->  net/ipv4/fib_rules.c     | 2 +-
->  net/ipv4/fib_trie.c      | 2 +-
->  net/ipv4/icmp.c          | 2 +-
->  net/ipv4/igmp.c          | 4 ++--
->  net/ipv4/inet_fragment.c | 2 +-
->  net/ipv4/ipmr.c          | 2 +-
->  net/ipv4/ping.c          | 2 +-
->  8 files changed, 10 insertions(+), 10 deletions(-)
+OK, I will fold your suggestions.
 
-Here is the summary with links:
-  - ipv4: remove unnecessary type castings
-    https://git.kernel.org/netdev/net-next/c/2e47eece158a
+If you have a chance to fix up include/linux/list.h in the same way,
+that would be appreciated.
 
-You are awesome, thank you!
+./scripts/checkpatch.pl  -f  include/linux/list.h
+
+might be useful to find out style issues.
+
+
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Best Regards
+Masahiro Yamada

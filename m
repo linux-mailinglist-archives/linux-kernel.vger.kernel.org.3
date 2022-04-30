@@ -2,79 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD0DF515E1A
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 16:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23683515E20
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 16:18:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382806AbiD3OUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 10:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44912 "EHLO
+        id S1382819AbiD3OVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 10:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382800AbiD3OUO (ORCPT
+        with ESMTP id S1382808AbiD3OVo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 10:20:14 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49A551E6B
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 07:16:51 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id c125so12341819iof.9
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 07:16:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PNUkiMcCvuqau25R+EENrrWPTYBEDVmpTh7ORFLGfdQ=;
-        b=V5ewJa5J23zM0KK4rrTVTkAiVJ/H28FHkYVWnfpJ3enYsHDRuCr7ybFix6+yPH6qtX
-         b1tYX8kPl1TKvrEWFpQpoLCjMNSJ2SOsqjy2LnZ7mK4S1faBrQxvDz4e8Z/tes+7IT5p
-         zr0etttNhsUpECK3hF+7Px6H6fEY+0SLcGLbUIjQjAmTgc9I7Ik6+QfP2eNH4OSjAOkk
-         CLbNEVsYYY2O6uNiVBxyu7YLtMpcgl/adK0QkIGi54g671vik+F80kUdVP7mXcrbMlDp
-         8R3lsQDBUO+tYdS4LND9ZHnhFlN4c+Cuiiq212y/NOV3VPaYtoicSvj6lt7jSdREqfH/
-         MIqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PNUkiMcCvuqau25R+EENrrWPTYBEDVmpTh7ORFLGfdQ=;
-        b=2AuvkALRfCqCNJ7701NFMIFBX99Q1+SliD3naAw4vON85co/meDNKZ6SLtxvzi581b
-         2lc3lcEEGHu8wbfgyFhODUzuFlC2FdpSs5+pgNXoMfZfV7hwOHsVXv+3OSnr4tamHnZL
-         tmNaI1nWlU85l7I53hq8+C5+wzHYkS9TobZCIhkKOE0Zd+YYtPt930f7YYGKRmF1YXN9
-         kZA8ZmF4mRqUWnrB5T1UhMyYC0/adD7kJi8pNoBQvruLbtlRQem8VQ8v94qBk0UxS+vq
-         B+vhD/Unomcs5b37Dj+itK2HMZuoCHoMntBg44y/9JfXEoX5C8Vqwp6mFJ3g0qodDWdp
-         AoYg==
-X-Gm-Message-State: AOAM530oUy2JdDUbytvjBx0D2BVG+7NsTfEY6X0Zj5heHqrQyqBynN/P
-        yfrBHSgk4SAjc5LR3WVwTJEwMg==
-X-Google-Smtp-Source: ABdhPJy2facdBmo8TiAJfeKbYsZTLzGRDMY35o+oE7ykZeUGdIqdkyQtBzx0u+yMiyryxC4hgqaoEw==
-X-Received: by 2002:a05:6602:482:b0:614:b990:28c9 with SMTP id y2-20020a056602048200b00614b99028c9mr1651794iov.6.1651328211000;
-        Sat, 30 Apr 2022 07:16:51 -0700 (PDT)
-Received: from google.com (194.225.68.34.bc.googleusercontent.com. [34.68.225.194])
-        by smtp.gmail.com with ESMTPSA id y89-20020a029562000000b0032b3a78174asm1459351jah.14.2022.04.30.07.16.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Apr 2022 07:16:50 -0700 (PDT)
-Date:   Sat, 30 Apr 2022 14:16:46 +0000
-From:   Oliver Upton <oupton@google.com>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
-        eauger@redhat.com, Jonathan.Cameron@huawei.com,
-        vkuznets@redhat.com, will@kernel.org, shannon.zhaosl@gmail.com,
-        james.morse@arm.com, mark.rutland@arm.com, maz@kernel.org,
-        pbonzini@redhat.com, shan.gavin@gmail.com
-Subject: Re: [PATCH v6 03/18] KVM: arm64: Add SDEI virtualization
- infrastructure
-Message-ID: <Ym1EztjkJIHrg4Qz@google.com>
-References: <20220403153911.12332-1-gshan@redhat.com>
- <20220403153911.12332-4-gshan@redhat.com>
- <YmMiyt/TDjJt0mdG@google.com>
- <36899ea9-e8bd-27b2-8dfb-75b76eab50d7@redhat.com>
- <YmRI7Bh7fWCYLUGT@google.com>
- <0e26da1a-00bb-3d63-a8bf-6cd3271b0a38@redhat.com>
- <Ymr45B+8xTlhi7vk@google.com>
- <96711526-c4f3-3b50-c015-beba8cc9fcc9@redhat.com>
+        Sat, 30 Apr 2022 10:21:44 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA44811BD;
+        Sat, 30 Apr 2022 07:18:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1651328265;
+        bh=RpZTpQKzzOTn3ZLA/Gs5VRQkp2uGMos0GOqltACh2Ns=;
+        h=X-UI-Sender-Class:Date:In-Reply-To:References:Subject:Reply-to:To:
+         CC:From;
+        b=dhlfNF1jBeDlco4SgSmA4nCwK1HgNjGr+6piBTy9qIRiFS33Iuzs22AkCnocq+SmT
+         MptW0h6/ri3N0UYhXdVzdYZ8Hpqp8tH2HcgqL5QmvmjjgP5R5fUrmgUiKVskW3Wthz
+         p6HZ3R1MJjh1lNgKkFssVrI9pTaLdwK9EvBns1/4=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from frank-s9 ([80.245.72.211]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MnJhO-1oAGqb0I9k-00jJBp; Sat, 30
+ Apr 2022 16:17:45 +0200
+Date:   Sat, 30 Apr 2022 16:17:35 +0200
+User-Agent: K-9 Mail for Android
+In-Reply-To: <3557249.iIbC2pHGDl@phil>
+References: <20220430130347.15190-1-linux@fw-web.de> <20220430130347.15190-5-linux@fw-web.de> <3557249.iIbC2pHGDl@phil>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <96711526-c4f3-3b50-c015-beba8cc9fcc9@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [RFC v2 4/4] arm64: dts: rockchip: Add mt7531 dsa node to BPI-R2-Pro board
+Reply-to: frank-w@public-files.de
+To:     linux-rockchip@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-mediatek@lists.infradead.org,
+        Frank Wunderlich <linux@fw-web.de>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+From:   Frank Wunderlich <frank-w@public-files.de>
+Message-ID: <40BC9D9E-3E30-4779-9131-E101CDE993BC@public-files.de>
+X-Provags-ID: V03:K1:ZlgyTVYfgWBO1Wy+cVSo2lW0VxJ02caKG+q8L7RxX6xFCXGwzKS
+ 9Udx4qBl3JfeZ447LxlY29/NnBY4gMmLSnSByEDXRWCScdrLF7Xpqq4av3NGuhFbRaMWYkK
+ PkHBk3TrnU78Afq0SL++aWQVkDjqc1ghvD4bSJKSzF9ao9N6UNNApaFP05dCg0HANSYgHZO
+ ye2WgAO7g1iw0nykgZxfA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:AgGhclNko/8=:aCrBet2od/8wC2RSNSK+oT
+ a5aRnnJfwRSgWlKkxzCYOVhXI/79O8rT1THVM0MnbzHJCLI4Fvh8OqgLQBFT8KGUMsDt8CCBF
+ /ZIuhrnsKwVevPZ+dOIZvsaZAt98lXRiMREzssZlZx1nPn+bBCpvM5CHll4nBR9xV6dsw19rR
+ SXVyg90NhXFOe2TaHGck4JIe2kLiAqWqMd9z9H5BmBozxYzi/yqwoZjOb1F4tfsUOHKd/Cp5a
+ vuxK04OjaSDcljtOhPHp8yJdUQ+a4X9IB9mGYju+X/SOtToT3sGOPzh1+lIDxO1PxB+ytorEc
+ r+M0C0+BY9huBsLtEmv/APjzY96z1nl+Rnr/GiuL65LTyVTxSr/LCNNyngEQ5WbX84PH89QSH
+ GXrbMz6poJ5w8ByUMq6Nohi3NhQL6UMV2ulKD2VBEZlF2Gzht2eU73/8nvBOx3m31YL/fRMWh
+ zlAEXxeDg50H/FzGYJ8/j+/Y8KYI85DNVDfa+hjSZBbc2kZ9wPEs0tm2m3HuSR2yIln5zbf97
+ xYbCnmcx7f4/ImNwuGKnP6rZYm/jitVu0BjGavWVDxzpjsdiBoEnMFnWLFbFCvWdtvDF/WKW6
+ O+DwrDISWIGQ/9LRY+RRCKCnqNQ+lOJO3Qi2p2PlblYBJR/IKfhBFQOrWWLHiKAXSIbc2Gy41
+ I8v+/4kJEGzo0S2HdK91aL9V51374tvnB6/md4i73yH48vbBJqjUSrl5t/jlg7ru8qtaU1zJF
+ UKkxHQzD2TI3ynd9iYzd1QaOR4QCy+3fm08Uq6mbcuRqYNNpU6oRTH1kXAbwOiWFcuu2dKbCb
+ Gkihb7baqLrmIoPm1hymk45EqW5vY8YHb5/h+NYgPL408xkD29786S9YtKR6DWdjiRj8borBO
+ yi9VwYvK/bCqBNF7dueG2BpVsQpphPcfyQwARyUgJehMnMlUdFDc7PuQLTLH7wChdMNy8VHX8
+ JIeFEFN+LRmk/nVjSM63E/eyvQ0+Rgqp8u6aBTZO5RleS7mdXk0isgrPFa/pR4K6uy5KSkKHU
+ Fd1cX0xpUxzNAn9BDCqcRcoxK0uNC+dNjmTJfUAHT5qXvVxnW9RGrWELoUPbS3l/QC59ubvVr
+ WK7GT44+uDZSpA=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,140 +88,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gavin,
+Am 30=2E April 2022 16:05:06 MESZ schrieb Heiko Stuebner <heiko@sntech=2Ede=
+>:
+>Am Samstag, 30=2E April 2022, 15:03:47 CEST schrieb Frank Wunderlich:
 
-On Sat, Apr 30, 2022 at 07:38:29PM +0800, Gavin Shan wrote:
-> Thank you for the comments and details. It should work by using bitmaps
-> to represent event's states. I will adopt your proposed structs in next
-> respin. However, there are more states needed. So I would adjust
-> "struct kvm_sdei_vcpu" like below in next respin.
-> 
->     struct kvm_sdei_vcpu {
->         unsigned long registered;    /* the event is registered or not                 */
->         unsigned long enabled;       /* the event is enabled or not                    */
->         unsigned long unregistering; /* the event is pending for unregistration        */
+>> --- a/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro=2Edts
+>> +++ b/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro=2Edts
+>> @@ -437,6 +437,54 @@ &i2c5 {
+>>  	status =3D "disabled";
+>>  };
+>> =20
 
-I'm not following why we need to keep track of the 'pending unregister'
-state directly. Is it not possible to infer from (active && !registered)?
-
->         unsigned long pending;       /* the event is pending for delivery and handling */
->         unsigned long active;        /* the event is currently being handled           */
-> 
->         :
->         <this part is just like what you suggested>
->     };
-> 
-> I rename @pending to @unregister. Besides, there are two states added:
-> 
->    @pending: Indicate there has one event has been injected. The next step
->              for the event is to deliver it for handling. For one particular
->              event, we allow one pending event in the maximum.
-
-Right, if an event retriggers when it is pending we still dispatch a
-single event to the guest. And since we're only doing normal priority
-events, it is entirely implementation defined which gets dispatched
-first.
-
->    @active:  Indicate the event is currently being handled. The information
->              stored in 'struct kvm_sdei_event_context' instance can be
->              correlated with the event.
-
-Does this need to be a bitmap though? We can't ever have more than one
-SDEI event active at a time since this is private to a vCPU.
-
-> Furthermore, it's fair enough to put the (vcpu) mask state into 'flags'
-> field of struct kvm_vcpu_arch :)
-
-I think you can get away with putting active in there too, I don't see
-why we need more than a single bit for this info.
-
-> > > > > > Do we need this if we disallow nesting events?
-> > > > > > 
-> > > > > 
-> > > > > Yes, we need this. "event == NULL" is used as indication of invalid
-> > > > > context. @event is the associated SDEI event when the context is
-> > > > > valid.
-> > > > 
-> > > > What if we use some other plumbing to indicate the state of the vCPU? MP
-> > > > state comes to mind, for example.
-> > > > 
-> > > 
-> > > Even the indication is done by another state, kvm_sdei_vcpu_context still
-> > > need to be linked (associated) with the event. After the vCPU context becomes
-> > > valid after the event is delivered, we still need to know the associated
-> > > event when some of hypercalls are triggered. SDEI_1_0_FN_SDEI_EVENT_COMPLETE
-> > > is one of the examples, we need to decrease struct kvm_sdei_event::event_count
-> > > for the hypercall.
-> > 
-> > Why do we need to keep track of how many times an event has been
-> > signaled? Nothing in SDEI seems to suggest that the number of event
-> > signals corresponds to the number of times the handler is invoked. In
-> > fact, the documentation on SDEI_EVENT_SIGNAL corroborates this:
-> > 
-> > """
-> > The event has edgetriggered semantics and the number of event signals
-> > may not correspond to the number of times the handler is invoked in the
-> > target PE.
-> > """
-> > 
-> > DEN0054C 5.1.16.1
-> > 
-> > So perhaps we queue at most 1 pending event for the guest.
-> > 
-> > I'd also like to see if anyone else has thoughts on the topic, as I'd
-> > hate for you to go back to the whiteboard again in the next spin.
-> > 
-> 
-> Agreed. In next respin, we will have one pending event at most. Error
-> can be returned if user attempts to inject event whose pending state
-> (struct kvm_sdei_vcpu::pending) has been set.
-
-I don't believe we can do that. The SDEI_EVENT_SIGNAL call should succeed,
-even if the event was already pending.
-
-> Indeed, the hardest part is to determine the data structures and
-> functions we need. Oliver, your valuable comments are helping to
-> bring this series to the right track. However, I do think it's
-> helpful if somebody else can confirm the outcomes from the previous
-> discussions. I'm not sure if Marc has time for a quick scan and provide
-> comments.
-> 
-> I would summarize the outcomes from our discussions, to help Marc
-> or others to confirm:
-
-Going to take a look at some of your later patches as well, just a heads
-up.
-
-> - Drop support for the shared event.
-> - Dropsupport for the critical event.
-> - The events in the implementations are all private and can be signaled
->   (raised) by software.
-> - Drop migration support for now, and we will consider it using
->   pseudo firmware registers. So add-on patches are expected to support
->   the migration in future.
-
-Migration will be supported in a future spin of this series, not a
-subsequent one right? :) I had just made the suggestion because there was
-a lot of renovations that we were discussing.
-
-> - Drop locking mechanism. All the functions are executed in vcpu context.
-
-Well, not entirely. Just need to make sure atomics are used to post
-events to another vCPU in the case of SDEI_EVENT_SIGNAL.
-
-set_bit() fits the bill here, as we've discussed.
-
-> - To use the data struct as you suggested. Besides, the vcpu's mask
->   state is put to struct kvm_arch_vcpu::flags.
->   enum kvm_sdei_event
->   struct kvm_sdei_event_handler
->   struct kvm_sdei_event_context
->   struct kvm_sdei_vcpu
-> 
-> Thanks,
-> Gavin
+>> +			port@5 {
+>> +				reg =3D <5>;
+>> +				label =3D "cpu";
+>> +				ethernet =3D <&gmac0>;
+>> +				phy-mode =3D "rgmii";
+>- phy-mode: String, the following values are acceptable for port
+>labeled
+>	"cpu":
+>	If compatible mediatek,mt7530 or mediatek,mt7621 is set,
+>	must be either "trgmii" or "rgmii"
+>	If compatible mediatek,mt7531 is set,
+>	must be either "sgmii", "1000base-x" or "2500base-x"
 >
+>So I guess the phy-mode needs to change?
 
---
-Thanks,
-Oliver
+This results from current (before my cpu-port patches) implementation in d=
+river where cpu-port is fixed to port 6=2E
+
+On Mt7530 port 6 supports rgmii and trgmii=2E On mt7531 port6 only support=
+s sgmii (which is basicly 2500base-x)=2E Afaik it does not support 1G=2E Po=
+rt 5 on mt7531 supports rgmii or sgmii (dual sgmii mode) but seems not refl=
+ected yet in txt=2E
+
+On thing more to change when converting txt to yaml=2E
+
+regards Frank

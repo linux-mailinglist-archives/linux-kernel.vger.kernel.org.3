@@ -2,70 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 987A7515A3B
+	by mail.lfdr.de (Postfix) with ESMTP id E1C0C515A3C
 	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 06:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240818AbiD3EEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 00:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42030 "EHLO
+        id S240747AbiD3EED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 00:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240665AbiD3ED5 (ORCPT
+        with ESMTP id S240664AbiD3ED5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 30 Apr 2022 00:03:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F2B6186D9
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 21:00:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651291223;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sKB6FlYNwY4+wlgwk3rv/2ltFqVWdp3lmtPGlyyyGGo=;
-        b=ETSEpC1Grbg5pv+cyJS2gGr2EuAsb+K4EJsx/8DzCLJCuwNqkThpERRqUH/5miiW/I0yDn
-        WsA7Ikn8+A8aGqnzzldBqkbe3epsP4d0b06AlhKAmm4i2Y83vYC0pwwgVxX/byPwVZhJW1
-        P6CPSOc+fDUG6lcg0MJNqLwECbz60Io=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-663-r9D6Y8RMNt2K4ubyC_VmbA-1; Sat, 30 Apr 2022 00:00:21 -0400
-X-MC-Unique: r9D6Y8RMNt2K4ubyC_VmbA-1
-Received: by mail-wr1-f72.google.com with SMTP id s14-20020adfa28e000000b0020ac7532f08so3702517wra.15
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 21:00:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sKB6FlYNwY4+wlgwk3rv/2ltFqVWdp3lmtPGlyyyGGo=;
-        b=rELpax+fIf/ZBMR6YcvcdDTrzPGPSWDZPXl2gWv3kX3+4nhaEq7CC7v3sZCjXqYj6l
-         vYudaiECgBaE2hiqh66QPXE322Zm1HRlN60RWcYc/+ZvK3hSQzNsCLi8xDWBtP/VROFI
-         HvduYU07xM7b3i9ZhSqghXm48mbU0/VjtCD9Y1syEo1F19eeHPKRwkQWEDcmISYFpV10
-         6c4VuulAHCQEzRf7dy8WJf69uVPwPWw4PZdVa6GXKX5c5ZrdEIJwkHsLI7+LBewUbiO+
-         lCzf83QJI1ZY4lg/BBNo8u5jqgAu8j2d2IRrjnTXqBL7KL7ZX4Ugs93ZGFKPntmfUxwQ
-         JMUw==
-X-Gm-Message-State: AOAM530766dBbVCQ9XYJwukh4Fu2IGSYcK8CQdvPUaTdoC+HKOhXd7Np
-        DSOoJAfOcFvK5DQZA03FvwOeh/WtUSu4DoxHBZ7QXzXweguEHA5RQ0RSl+T2dDlvlAWdwtliaEI
-        xuadd4ASRKKGapl4pgJQCrDxUd9UxD8pi0eKMnz6u
-X-Received: by 2002:adf:ee81:0:b0:206:1b32:d6f2 with SMTP id b1-20020adfee81000000b002061b32d6f2mr1559773wro.144.1651291219821;
-        Fri, 29 Apr 2022 21:00:19 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxyLeeVtNgwwU9RGNYZQkn5+DYkg+QFnnf5jW3HF7IgxWHGisBGg3RhxLrXZWdxkQaYbA/ce/QbaCUurXmPnwo=
-X-Received: by 2002:adf:ee81:0:b0:206:1b32:d6f2 with SMTP id
- b1-20020adfee81000000b002061b32d6f2mr1559762wro.144.1651291219592; Fri, 29
- Apr 2022 21:00:19 -0700 (PDT)
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3869618B1F
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 21:00:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651291235; x=1682827235;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PYRMwKZ7bWbe9G5Ghmd798FLgNzoEFpMpjbnkuG1rcA=;
+  b=T1u767vSs2GbAkexFmtcPpskrs0jaCcbqaN7mfGmBW0ALQtrbvkkBon+
+   rsEDGiO0Rtn+4vL7bCthDu+qHHiN07e9A+3PcoSYdKcEqvTyPutd1iDq2
+   0McoT+CcU6vf7m1zWwO1ymUKfy6lNo8UCj+gwKOVz18D5zQsfA8KZMYG7
+   Khb/gQ/NrPNnGy++fL46hGs2iAnbDuzrwu6Hgw5/bLejDMHomj1uR/To7
+   OtGe376c5b7FgfiV6uEgSmgibi0XTZyjtYQwsiLKCeW0C48iPnJMgXImJ
+   JsnADYiLbmWAJ+2wg1PxdY+NNsaHoi2Ssh6TmnFcL26KwoWoHC7ynXaeg
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="264415321"
+X-IronPort-AV: E=Sophos;i="5.91,187,1647327600"; 
+   d="scan'208";a="264415321"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 21:00:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,187,1647327600"; 
+   d="scan'208";a="686039233"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 29 Apr 2022 21:00:33 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nkeHY-0006r1-Iu;
+        Sat, 30 Apr 2022 04:00:32 +0000
+Date:   Sat, 30 Apr 2022 12:00:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:nvme-v3 4/6] drivers/soc/apple/sart.c:247:18: warning:
+ format '%llx' expects argument of type 'long long unsigned int', but
+ argument 3 has type 'phys_addr_t' {aka 'unsigned int'}
+Message-ID: <202204301124.xCHwrb3R-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220421234837.3629927-1-kent.overstreet@gmail.com>
-In-Reply-To: <20220421234837.3629927-1-kent.overstreet@gmail.com>
-From:   Dave Young <dyoung@redhat.com>
-Date:   Sat, 30 Apr 2022 12:00:08 +0800
-Message-ID: <CALu+AoSP8QASexVOsJqbiqNH-HcdcJHjBd-=t1EJZ7sPUVTK=w@mail.gmail.com>
-Subject: Re: [PATCH 0/4] Printbufs & shrinker OOM reporting
-To:     Kent Overstreet <kent.overstreet@gmail.com>
-Cc:     "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, roman.gushchin@linux.dev,
-        hannes@cmpxchg.org, kexec@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,67 +62,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kent,
-On Fri, 22 Apr 2022 at 07:56, Kent Overstreet <kent.overstreet@gmail.com> wrote:
->
-> Debugging OOMs has been one of my sources of frustration, so this patch series
-> is an attempt to do something about it.
->
-> The first patch in the series is something I've been slowly evolving in bcachefs
-> for years: simple heap allocated strings meant for appending to and building up
-> structured log/error messages. They make it easy and straightforward to write
-> pretty-printers for everything, which in turn makes good logging and error
-> messages something that just happens naturally.
->
-> We want it here because that means the reporting I'm adding to shrinkers can be
-> used by both OOM reporting, and for the sysfs (or is it debugfs now) interface
-> that Roman is adding.
->
+tree:   https://github.com/AsahiLinux/linux nvme-v3
+head:   ab2e9498dde5a82fa515c5278335de404de4df63
+commit: 18cb959d4f944bb410711eda2ff3b5d4eb872b7c [4/6] soc: apple: Add SART driver
+config: parisc-allmodconfig (https://download.01.org/0day-ci/archive/20220430/202204301124.xCHwrb3R-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/AsahiLinux/linux/commit/18cb959d4f944bb410711eda2ff3b5d4eb872b7c
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux nvme-v3
+        git checkout 18cb959d4f944bb410711eda2ff3b5d4eb872b7c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash drivers/net/netdevsim/ drivers/soc/apple/
 
-I added the kexec list in cc.  It seems like a nice enhancement to oom
-reporting.
-I suspect kdump tooling need changes to retrieve the kmsg log from
-vmcore, could you confirm it?  For example makedumpfile, crash, and
-kexec-tools (its vmcore-dmesg tool).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/device.h:15,
+                    from include/linux/soc/apple/sart.h:15,
+                    from drivers/soc/apple/sart.c:14:
+   drivers/soc/apple/sart.c: In function 'apple_sart_add_allowed_region':
+>> drivers/soc/apple/sart.c:247:18: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 3 has type 'phys_addr_t' {aka 'unsigned int'} [-Wformat=]
+     247 |                  "no free entries left to add [paddr: 0x%llx, size: 0x%zx]\n",
+         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:146:61: note: in expansion of macro 'dev_fmt'
+     146 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                             ^~~~~~~
+   drivers/soc/apple/sart.c:246:9: note: in expansion of macro 'dev_warn'
+     246 |         dev_warn(sart->dev,
+         |         ^~~~~~~~
+   drivers/soc/apple/sart.c:247:60: note: format string is defined here
+     247 |                  "no free entries left to add [paddr: 0x%llx, size: 0x%zx]\n",
+         |                                                         ~~~^
+         |                                                            |
+         |                                                            long long unsigned int
+         |                                                         %x
+   In file included from include/linux/device.h:15,
+                    from include/linux/soc/apple/sart.h:15,
+                    from drivers/soc/apple/sart.c:14:
+   drivers/soc/apple/sart.c: In function 'apple_sart_remove_allowed_region':
+   drivers/soc/apple/sart.c:283:29: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 3 has type 'phys_addr_t' {aka 'unsigned int'} [-Wformat=]
+     283 |         dev_warn(sart->dev, "entry [paddr: 0x%llx, size: 0x%zx] not found\n",
+         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:146:61: note: in expansion of macro 'dev_fmt'
+     146 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                             ^~~~~~~
+   drivers/soc/apple/sart.c:283:9: note: in expansion of macro 'dev_warn'
+     283 |         dev_warn(sart->dev, "entry [paddr: 0x%llx, size: 0x%zx] not found\n",
+         |         ^~~~~~~~
+   drivers/soc/apple/sart.c:283:49: note: format string is defined here
+     283 |         dev_warn(sart->dev, "entry [paddr: 0x%llx, size: 0x%zx] not found\n",
+         |                                              ~~~^
+         |                                                 |
+         |                                                 long long unsigned int
+         |                                              %x
 
 
-> This patch series also:
->  - adds OOM reporting on shrinkers, reporting on top 10 shrinkers (in sorted
->    order!)
->  - changes slab reporting to be always-on, also reporting top 10 slabs in sorted
->    order
->  - starts centralizing OOM reporting in mm/show_mem.c
->
-> The last patch in the series is only a demonstration of how to implement the
-> shrinker .to_text() method, since bcachefs isn't upstream yet.
->
-> Kent Overstreet (4):
->   lib/printbuf: New data structure for heap-allocated strings
->   mm: Add a .to_text() method for shrinkers
->   mm: Centralize & improve oom reporting in show_mem.c
->   bcachefs: shrinker.to_text() methods
->
->  fs/bcachefs/btree_cache.c     |  18 ++-
->  fs/bcachefs/btree_key_cache.c |  18 ++-
->  include/linux/printbuf.h      | 140 ++++++++++++++++++
->  include/linux/shrinker.h      |   5 +
->  lib/Makefile                  |   4 +-
->  lib/printbuf.c                | 271 ++++++++++++++++++++++++++++++++++
->  mm/Makefile                   |   2 +-
->  mm/oom_kill.c                 |  23 ---
->  {lib => mm}/show_mem.c        |  14 ++
->  mm/slab.h                     |   6 +-
->  mm/slab_common.c              |  53 ++++++-
->  mm/vmscan.c                   |  75 ++++++++++
->  12 files changed, 587 insertions(+), 42 deletions(-)
->  create mode 100644 include/linux/printbuf.h
->  create mode 100644 lib/printbuf.c
->  rename {lib => mm}/show_mem.c (78%)
->
-> --
-> 2.35.2
->
+vim +247 drivers/soc/apple/sart.c
 
-Thanks
-Dave
+   219	
+   220	int apple_sart_add_allowed_region(struct apple_sart *sart, phys_addr_t paddr,
+   221					  size_t size)
+   222	{
+   223		int i, ret;
+   224	
+   225		for (i = 0; i < APPLE_SART_MAX_ENTRIES; ++i) {
+   226			if (test_bit(i, &sart->protected_entries))
+   227				continue;
+   228			if (test_and_set_bit(i, &sart->used_entries))
+   229				continue;
+   230	
+   231			ret = sart_set_entry(sart, i, APPLE_SART_FLAGS_ALLOW, paddr,
+   232					     size);
+   233			if (ret) {
+   234				dev_dbg(sart->dev,
+   235					"unable to set entry %d to [%pa, 0x%zx]\n",
+   236					i, &paddr, size);
+   237				clear_bit(i, &sart->used_entries);
+   238				return ret;
+   239			}
+   240	
+   241			dev_dbg(sart->dev, "wrote [%pa, 0x%zx] to %d\n", &paddr, size,
+   242				i);
+   243			return 0;
+   244		}
+   245	
+   246		dev_warn(sart->dev,
+ > 247			 "no free entries left to add [paddr: 0x%llx, size: 0x%zx]\n",
+   248			 paddr, size);
+   249	
+   250		return -EBUSY;
+   251	}
+   252	EXPORT_SYMBOL(apple_sart_add_allowed_region);
+   253	
 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

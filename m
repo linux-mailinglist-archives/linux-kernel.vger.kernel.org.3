@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A7B5515EC7
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 17:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A2D8515ED0
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 17:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382946AbiD3PlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 11:41:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43800 "EHLO
+        id S1383004AbiD3Plp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 11:41:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232786AbiD3PlQ (ORCPT
+        with ESMTP id S242874AbiD3PlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 11:41:16 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A396CA0BD2
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 08:37:54 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id p8so9215843pfh.8
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 08:37:54 -0700 (PDT)
+        Sat, 30 Apr 2022 11:41:19 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0443BA0BC8
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 08:37:56 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id qe3-20020a17090b4f8300b001dc24e4da73so1284788pjb.1
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 08:37:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding:cc:from:to;
-        bh=sMDsvqsINC/1HzV0XVeIiP6qJbruGiMokRnjzI8Iijs=;
-        b=XwrBMV84AyVfrW6L5mcdJTABJJHR5Cc7I+uxzoBIZkBekPAupOfEZ/k+xOdbEKEife
-         EuQaMP+UWNSV75iAffC+dhjvPA1NaL2+4Vv99GAnx8rRzw+i1YjF/iXl/h5HIlGA1BJP
-         kJYDzMEeqLhKYrTdf84LxohlkUiVLM0+wsskIQ1ffeDS9wpyvOSTjwuvmTWf7zojGnh5
-         0gtpJ582CRTl1aBaRbQCKZoLO1qLrMnoMtwzFYd7gX9j2nxRyz4PTc/UBcirCJrUc/9M
-         8CzT7gASjopV5S44exy8VEtWKH/asaKYNKyStQHWara8f1zP/z+5LHZgqMC4RrdIfMr4
-         IKcA==
+        bh=z18FUB9s7KBEskqVTf7aP0q/WSmapl+AGV7tm/Rzx+w=;
+        b=FFgRoVbZwMv/agjgfBQeiD4RduxnvL5RXSepip5M3kO2MagsWbSqQqxN8cL5qUbeSF
+         BYxou0ljjXmk//t8pH9P0AP/HLxtAE0BLwIcoy+Ou0Lpi2MlCzGQ6f682gOG6CuxBpM2
+         nwCLJBaCh5RV2r+qT1H5KRlCTIZUXo7CJ4l12KZINBErQtyavfgirI9l4JGBZus3gpLe
+         R/LbIsa9B1VFw3791kqpL2EF7PWqMzHmRevq+xETQxk+DF6ipj782xSdFBUvyauIwqQ5
+         aCr8I9PL5iINM/w5oq+qM/NT//BBL45/kvYgK8Ddw1j+NpxzLAepCkGEW3FID5OiPVqO
+         qAwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding:cc:from:to;
-        bh=sMDsvqsINC/1HzV0XVeIiP6qJbruGiMokRnjzI8Iijs=;
-        b=aa+2lrcjAfOAPc9odtgd52p3xM0pVJ+d3kmEaEZcb2cymTkhEofiqnWTbr3wyyUlF8
-         05XPSB3Bsj0d9SOCKdHj/vDvjgjLv42MCmOxXBkLQtrsUcRKY//mRDcv86k79TTVZeKx
-         vLy4SV6zrpDQR/LlyjdYKUa7OnG5y4qURPvLiDKH/K9iR8i9pgeutVw7mTktyYAcj9GD
-         B5m+ljOlCMK9aN1JMztDGxwiDdnJn2ADF3W+RrT69ez88oUcpZk+d29cWbvbiVwuWNrE
-         krP1u4kBQSe4IK2x3QSOh0lFbRHF305oSm6/2zdRxq7QRK8wAAaDiyyhhY0Rij9Mm/Iw
-         JpCg==
-X-Gm-Message-State: AOAM5333qwzAiG7wDU/ZDRJpztPEEu5NMM641jTZ/GSgPa73ZmK4VYgl
-        GdveT5cVbSEoGQ3//e/Ftu5G0g==
-X-Google-Smtp-Source: ABdhPJxnHiq/z/AiUlN9BinSyVfPTpl48VBq4+Usu5YRZ0auqyHrkcbtSZj+xWHAH6hS6v1DaYkGEA==
-X-Received: by 2002:a63:38e:0:b0:3ab:ada6:a219 with SMTP id 136-20020a63038e000000b003abada6a219mr3560920pgd.140.1651333074093;
-        Sat, 30 Apr 2022 08:37:54 -0700 (PDT)
+        bh=z18FUB9s7KBEskqVTf7aP0q/WSmapl+AGV7tm/Rzx+w=;
+        b=fLWgyhOU2KYQkTFFPbDhQ/bsBotEZEjkh9haBe8dXpHF0qU/WRG60TWo43HmfcRrHF
+         cABLbZfLNeSXh0mLsdqIPC0454Up71P4leWJDy1GCjodbKeU9iHhPlLnZtJYVRa7d8a6
+         YVu43N+qdjfC4wqXIRMtTT0mXffK8UJ6cdiwNoTq0nA31X6bA3YeM2CRAzI+4qECeBK5
+         LTKcWFWSdKn8mL2wWCcQJNKmJuwMcMi2PqCnSkGyViL+3SgZyej8/rS0CpPq/LcOKALq
+         rrImCGLuJ/pgrCsV3yUBCRqUyWcJR4FjMmMay/+PGhrA8vwQuGJKv/eRVQ2PjNxpBv+O
+         fnBA==
+X-Gm-Message-State: AOAM533W9sXKg4j1V3J7RZUgLcN22UXfx8xmxlfaEbMHQ1D5/6ss42qt
+        JkZ+KWU/Rah7D1ii81qfmfKyeg==
+X-Google-Smtp-Source: ABdhPJzOcQtcQr8kDnX5vfoKXrEejVF7HXmixwlBQw/BjGtWP2W5ppTBL/zygWmxy79MN6V3JkKj7Q==
+X-Received: by 2002:a17:90b:688:b0:1d9:9ddd:1f71 with SMTP id m8-20020a17090b068800b001d99ddd1f71mr9480283pjz.207.1651333075503;
+        Sat, 30 Apr 2022 08:37:55 -0700 (PDT)
 Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id d3-20020a170902854300b0015e8d4eb26esm1626226plo.184.2022.04.30.08.37.53
+        by smtp.gmail.com with ESMTPSA id y14-20020a62b50e000000b0050dc7628165sm1669724pfe.63.2022.04.30.08.37.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Apr 2022 08:37:53 -0700 (PDT)
-Subject: [PATCH v4 1/7] asm-generic: ticket-lock: New generic ticket-based spinlock
-Date:   Sat, 30 Apr 2022 08:36:20 -0700
-Message-Id: <20220430153626.30660-2-palmer@rivosinc.com>
+        Sat, 30 Apr 2022 08:37:55 -0700 (PDT)
+Subject: [PATCH v4 2/7] asm-generic: qspinlock: Indicate the use of mixed-size atomics
+Date:   Sat, 30 Apr 2022 08:36:21 -0700
+Message-Id: <20220430153626.30660-3-palmer@rivosinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220430153626.30660-1-palmer@rivosinc.com>
 References: <20220430153626.30660-1-palmer@rivosinc.com>
@@ -82,150 +82,63 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Peter Zijlstra <peterz@infradead.org>
 
-This is a simple, fair spinlock.  Specifically it doesn't have all the
-subtle memory model dependencies that qspinlock has, which makes it more
-suitable for simple systems as it is more likely to be correct.  It is
-implemented entirely in terms of standard atomics and thus works fine
-without any arch-specific code.
+The qspinlock implementation depends on having well behaved mixed-size
+atomics.  This is true on the more widely-used platforms, but these
+requirements are somewhat subtle and may not be satisfied by all the
+platforms that qspinlock is used on.
 
-This replaces the existing asm-generic/spinlock.h, which just errored
-out on SMP systems.
+Document these requirements, so ports that use qspinlock can more easily
+determine if they meet these requirements.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Acked-by: Waiman Long <longman@redhat.com>
 Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 ---
- include/asm-generic/spinlock.h       | 94 +++++++++++++++++++++++++---
- include/asm-generic/spinlock_types.h | 17 +++++
- 2 files changed, 104 insertions(+), 7 deletions(-)
- create mode 100644 include/asm-generic/spinlock_types.h
+ include/asm-generic/qspinlock.h | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinlock.h
-index adaf6acab172..fdfebcb050f4 100644
---- a/include/asm-generic/spinlock.h
-+++ b/include/asm-generic/spinlock.h
-@@ -1,12 +1,92 @@
- /* SPDX-License-Identifier: GPL-2.0 */
--#ifndef __ASM_GENERIC_SPINLOCK_H
--#define __ASM_GENERIC_SPINLOCK_H
-+
+diff --git a/include/asm-generic/qspinlock.h b/include/asm-generic/qspinlock.h
+index d74b13825501..95be3f3c28b5 100644
+--- a/include/asm-generic/qspinlock.h
++++ b/include/asm-generic/qspinlock.h
+@@ -2,6 +2,37 @@
  /*
-- * You need to implement asm/spinlock.h for SMP support. The generic
-- * version does not handle SMP.
-+ * 'Generic' ticket-lock implementation.
+  * Queued spinlock
+  *
++ * A 'generic' spinlock implementation that is based on MCS locks. An
++ * architecture that's looking for a 'generic' spinlock, please first consider
++ * ticket-lock.h and only come looking here when you've considered all the
++ * constraints below and can show your hardware does actually perform better
++ * with qspinlock.
 + *
-+ * It relies on atomic_fetch_add() having well defined forward progress
-+ * guarantees under contention. If your architecture cannot provide this, stick
-+ * to a test-and-set lock.
 + *
-+ * It also relies on atomic_fetch_add() being safe vs smp_store_release() on a
-+ * sub-word of the value. This is generally true for anything LL/SC although
-+ * you'd be hard pressed to find anything useful in architecture specifications
-+ * about this. If your architecture cannot do this you might be better off with
-+ * a test-and-set.
++ * It relies on atomic_*_release()/atomic_*_acquire() to be RCsc (or no weaker
++ * than RCtso if you're power), where regular code only expects atomic_t to be
++ * RCpc.
 + *
-+ * It further assumes atomic_*_release() + atomic_*_acquire() is RCpc and hence
-+ * uses atomic_fetch_add() which is RCsc to create an RCsc hot path, along with
-+ * a full fence after the spin to upgrade the otherwise-RCpc
-+ * atomic_cond_read_acquire().
++ * It relies on a far greater (compared to asm-generic/spinlock.h) set of
++ * atomic operations to behave well together, please audit them carefully to
++ * ensure they all have forward progress. Many atomic operations may default to
++ * cmpxchg() loops which will not have good forward progress properties on
++ * LL/SC architectures.
 + *
-+ * The implementation uses smp_cond_load_acquire() to spin, so if the
-+ * architecture has WFE like instructions to sleep instead of poll for word
-+ * modifications be sure to implement that (see ARM64 for example).
++ * One notable example is atomic_fetch_or_acquire(), which x86 cannot (cheaply)
++ * do. Carefully read the patches that introduced
++ * queued_fetch_set_pending_acquire().
 + *
-  */
--#ifdef CONFIG_SMP
--#error need an architecture specific asm/spinlock.h
--#endif
-+
-+#ifndef __ASM_GENERIC_SPINLOCK_H
-+#define __ASM_GENERIC_SPINLOCK_H
-+
-+#include <linux/atomic.h>
-+#include <asm-generic/spinlock_types.h>
-+
-+static __always_inline void arch_spin_lock(arch_spinlock_t *lock)
-+{
-+	u32 val = atomic_fetch_add(1<<16, lock);
-+	u16 ticket = val >> 16;
-+
-+	if (ticket == (u16)val)
-+		return;
-+
-+	/*
-+	 * atomic_cond_read_acquire() is RCpc, but rather than defining a
-+	 * custom cond_read_rcsc() here we just emit a full fence.  We only
-+	 * need the prior reads before subsequent writes ordering from
-+	 * smb_mb(), but as atomic_cond_read_acquire() just emits reads and we
-+	 * have no outstanding writes due to the atomic_fetch_add() the extra
-+	 * orderings are free.
-+	 */
-+	atomic_cond_read_acquire(lock, ticket == (u16)VAL);
-+	smp_mb();
-+}
-+
-+static __always_inline bool arch_spin_trylock(arch_spinlock_t *lock)
-+{
-+	u32 old = atomic_read(lock);
-+
-+	if ((old >> 16) != (old & 0xffff))
-+		return false;
-+
-+	return atomic_try_cmpxchg(lock, &old, old + (1<<16)); /* SC, for RCsc */
-+}
-+
-+static __always_inline void arch_spin_unlock(arch_spinlock_t *lock)
-+{
-+	u16 *ptr = (u16 *)lock + IS_ENABLED(CONFIG_CPU_BIG_ENDIAN);
-+	u32 val = atomic_read(lock);
-+
-+	smp_store_release(ptr, (u16)val + 1);
-+}
-+
-+static __always_inline int arch_spin_is_locked(arch_spinlock_t *lock)
-+{
-+	u32 val = atomic_read(lock);
-+
-+	return ((val >> 16) != (val & 0xffff));
-+}
-+
-+static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
-+{
-+	u32 val = atomic_read(lock);
-+
-+	return (s16)((val >> 16) - (val & 0xffff)) > 1;
-+}
-+
-+static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
-+{
-+	return !arch_spin_is_locked(&lock);
-+}
-+
-+#include <asm/qrwlock.h>
- 
- #endif /* __ASM_GENERIC_SPINLOCK_H */
-diff --git a/include/asm-generic/spinlock_types.h b/include/asm-generic/spinlock_types.h
-new file mode 100644
-index 000000000000..8962bb730945
---- /dev/null
-+++ b/include/asm-generic/spinlock_types.h
-@@ -0,0 +1,17 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifndef __ASM_GENERIC_SPINLOCK_TYPES_H
-+#define __ASM_GENERIC_SPINLOCK_TYPES_H
-+
-+#include <linux/types.h>
-+typedef atomic_t arch_spinlock_t;
-+
-+/*
-+ * qrwlock_types depends on arch_spinlock_t, so we must typedef that before the
-+ * include.
-+ */
-+#include <asm/qrwlock_types.h>
-+
-+#define __ARCH_SPIN_LOCK_UNLOCKED	ATOMIC_INIT(0)
-+
-+#endif /* __ASM_GENERIC_SPINLOCK_TYPES_H */
++ * It also heavily relies on mixed size atomic operations, in specific it
++ * requires architectures to have xchg16; something which many LL/SC
++ * architectures need to implement as a 32bit and+or in order to satisfy the
++ * forward progress guarantees mentioned above.
++ *
++ * Further reading on mixed size atomics that might be relevant:
++ *
++ *   http://www.cl.cam.ac.uk/~pes20/popl17/mixed-size.pdf
++ *
++ *
+  * (C) Copyright 2013-2015 Hewlett-Packard Development Company, L.P.
+  * (C) Copyright 2015 Hewlett-Packard Enterprise Development LP
+  *
 -- 
 2.34.1
 

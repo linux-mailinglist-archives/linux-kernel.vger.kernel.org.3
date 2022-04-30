@@ -2,544 +2,304 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DFEB515AE8
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 09:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E057515AEC
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 09:12:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236406AbiD3HMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 03:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43904 "EHLO
+        id S1349670AbiD3HPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 03:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231345AbiD3HMQ (ORCPT
+        with ESMTP id S234667AbiD3HPp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 03:12:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F66A85976
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 00:08:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 759B560A51
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 07:08:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1EA1C385B8
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 07:08:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651302530;
-        bh=XfMH5BUu5dLhULtzuPTKCufWiIoJk4IfEwdZodYsz3g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nzRtVLT3TyLVHkc52o4yobgjtRyf3Z/Hm2Pf3LVTOrOrUhzd55Y+avT67ck0eb8P0
-         xXS4/X1yeJ7BsaAEWVi9z9cI4kY9jjEPLYi6/m5lIKcOcRB7d1WzMmy6UEt+WFNxN2
-         r3jg3XxT2praOfEVWlK+DlDEPco+I8WEwH72UxsfpIzIXx2MRXLuWarYs2UprhYzlp
-         NUCgVxn7DbnzJC2DykDlv/Km+yPbjebqCmKhdWhNtNZa5r0vHiK7s9DkteQDYVtvVL
-         m6Wb0KwjPhy61bfLBB7CRdkzVtOJiXM8mUH8BCVzD9sxpWeXTgj+twQhyhd0RnJ8xh
-         NFKZT2I8coV1w==
-Received: by mail-vs1-f49.google.com with SMTP id w124so9461839vsb.8
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 00:08:50 -0700 (PDT)
-X-Gm-Message-State: AOAM532uYmHNwWh6P8F+ssjZq7Ow1EhG94t7htGbm92WksA8luYJ7Cfv
-        9qwXA0kWClLqVrVT8wNs+Bpw4Xe0QjYFYjLsdK0=
-X-Google-Smtp-Source: ABdhPJyVWt5eKfW8ehNJNUCCsEf046KhyogdtBodECeMRLErqDlkSJJ7HlhOGvnUs/HYdBtyPZpTNb16sNmGKZfM7zA=
-X-Received: by 2002:a67:fc86:0:b0:32d:18ed:e71b with SMTP id
- x6-20020a67fc86000000b0032d18ede71bmr719351vsp.51.1651302529500; Sat, 30 Apr
- 2022 00:08:49 -0700 (PDT)
+        Sat, 30 Apr 2022 03:15:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 560232654C
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 00:12:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651302743;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GLSGd7eLffGH5E++bjQhKsXkDpYyiATw6DYp1xz5Rbc=;
+        b=aM9eOVRhdOAptj2joiufuDNitrgDgDEIsxlYsxcCvrzW2KI7b3KzWbaAslXCJZjYBBi+f+
+        /Cgedcukh7AhEYJLHH0/H4dbEjj7xdeQ28aYmySlGl5YRhc5xYhaLdzIf9o5irCPktqDmT
+        p88d0YdZ1PrINXjdA5ji9NiqClyjc8E=
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
+ [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-551-KHKn4zxAN72p07RmS8kTpA-1; Sat, 30 Apr 2022 03:12:21 -0400
+X-MC-Unique: KHKn4zxAN72p07RmS8kTpA-1
+Received: by mail-pf1-f200.google.com with SMTP id c202-20020a621cd3000000b0050dd228152aso267432pfc.11
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 00:12:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GLSGd7eLffGH5E++bjQhKsXkDpYyiATw6DYp1xz5Rbc=;
+        b=hZybbQxh23WNdTJFJz26smaYCclU6VBINz6jzt+2UAHyochXfBEdohKefglqsJJJis
+         7FnT1v8oZNK1rDvwyUr61dIA+mx87l4xV2wv6EjTkPU2qEO+U1cfknec8DPTOO8gEwry
+         OJDcNXSzSlHVd13FXyuODPXBLbOKqYwGgZCIcghkhx1QpVNtLCnnJ1Q0FsFVyX/NT688
+         gWLONJJbtCyBR/Nnj95eTYsV4ZWmdJLahyUyQY/l5WONOKaHjlyQh5Lbi2qVXEvZmBnn
+         PCs2Sj/IQqSv8ozzpEqUylciTF7cFfFLGexjqFvSkXI5gaJf6/TU4h67XjiSmc0mQj6H
+         3zlg==
+X-Gm-Message-State: AOAM533q5Y6DnWwRrashkZpbsMTPzlCyvklc/k/K0WETC0d8FkdxmKt5
+        oLsP0H2oJ/3LrnavwctUgjtcvHdXkkgFyMk9z2DuFf8K4Nd/B7Pue7wYN9oGbNj+j45ej3wFX8+
+        W41sa928ycOVPXxa80B9lAMHgWcXkLZ6+/WYEDY9t
+X-Received: by 2002:a17:90a:170c:b0:1dc:20c4:6354 with SMTP id z12-20020a17090a170c00b001dc20c46354mr2997362pjd.113.1651302740721;
+        Sat, 30 Apr 2022 00:12:20 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyoT1vQqCssn4aXcNHDNuFRvBetM3BXXg0UzN7CkO1M+kV++j0uE1TMl2cfAWLjb6D+SAyBoJIBsl6r0IAVRYU=
+X-Received: by 2002:a17:90a:170c:b0:1dc:20c4:6354 with SMTP id
+ z12-20020a17090a170c00b001dc20c46354mr2997335pjd.113.1651302740405; Sat, 30
+ Apr 2022 00:12:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220426015751.88582-1-lihuafei1@huawei.com> <20220426015751.88582-2-lihuafei1@huawei.com>
- <CAJF2gTRSBcxr3+f86PSiy706dkvxEWA+90JCA4658ZwVf7sB5w@mail.gmail.com>
- <CAJF2gTR+EgsgCOuRbEGwpjRcAmbdqOGw9KK6AuDnyHQy95v9mA@mail.gmail.com> <022b5310-0084-0327-721a-49ee8bcde346@huawei.com>
-In-Reply-To: <022b5310-0084-0327-721a-49ee8bcde346@huawei.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 30 Apr 2022 15:08:38 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRj1xhUz4f847zx7B1w1enUCKcVqoVF5EdpZN9govMX8w@mail.gmail.com>
-Message-ID: <CAJF2gTRj1xhUz4f847zx7B1w1enUCKcVqoVF5EdpZN9govMX8w@mail.gmail.com>
-Subject: Re: [PATCH 2/2] riscv: kprobe: Allow coexistence of ftrace and kprobe
-To:     Li Huafei <lihuafei1@huawei.com>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        David Miller <davem@davemloft.net>, jszhang@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>, liaochang1@huawei.com,
-        =?UTF-8?Q?Patrick_St=C3=A4hlin?= <me@packi.ch>,
-        Pekka Enberg <penberg@kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220421140740.459558-1-benjamin.tissoires@redhat.com>
+ <20220426040314.ez3cdpv2w45vbgkk@MBP-98dd607d3435.dhcp.thefacebook.com>
+ <CAO-hwJLziatB9n5Rut_EYRgfN94t2XX8Zx8B_Zmu2nucTw3k8g@mail.gmail.com> <CAADnVQKN==eb3ASQhrJBg4yC8BuRdMQyY-OdRbXhdyv2P8L0-A@mail.gmail.com>
+In-Reply-To: <CAADnVQKN==eb3ASQhrJBg4yC8BuRdMQyY-OdRbXhdyv2P8L0-A@mail.gmail.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Sat, 30 Apr 2022 09:12:09 +0200
+Message-ID: <CAO-hwJ+HV=jZUgH1LXcPuBFirMzx3OAdSy4zvyyYh7PQhnaduQ@mail.gmail.com>
+Subject: Re: [RFC bpf-next v4 0/7] Introduce eBPF support for HID devices (new attempt)
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 5:15 PM Li Huafei <lihuafei1@huawei.com> wrote:
+On Sat, Apr 30, 2022 at 5:01 AM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> Hi Guo Ren,
->
-> On 2022/4/26 16:16, Guo Ren wrote:
-> > On Tue, Apr 26, 2022 at 4:01 PM Guo Ren <guoren@kernel.org> wrote:
-> >> On Tue, Apr 26, 2022 at 9:59 AM Li Huafei <lihuafei1@huawei.com> wrote:
-> >>> When using ftrace and kprobe at the same time, it was found that one
-> >>> might cause the other to be unavailable. This can be reproduced by the
-> >>> following steps.
-> >>>
-> >>>    # cd /sys/kernel/debug/tracing/
-> >>>    # echo cmdline_proc_show > set_ftrace_filter
-> >>>    # echo function > current_tracer
-> >>>    # echo 'p cmdline_proc_show' > kprobe_events
-> >>>    # echo 'p cmdline_proc_show+4' >> kprobe_events
-> >>>    # ls events/kprobes/
-> >>>    enable                 p_cmdline_proc_show_0
-> >>>    filter                 p_cmdline_proc_show_4
-> >>>    # echo 1 > events/kprobes/p_cmdline_proc_show_4/enable
-> >>>    # echo 1 > events/kprobes/p_cmdline_proc_show_0/enable
-> >>>    [  129.830108] 00000000ebed457d: expected (ffdb0097 4f0080e7) but got (00100073 4f0080e7)
-> >>>    [  129.835990] ------------[ ftrace bug ]------------
-> >>>    [  129.839510] ftrace failed to modify
-> >>>    [  129.839536] [<ffffffff80258910>] cmdline_proc_show+0x0/0x46
-> >>>    [  129.845831]  actual:   23:3c:11:fe:73:00:10:00
-> >>>    [  129.849299] Updating ftrace call site to call a different ftrace function
-> >>>    [  129.853998] ftrace record flags: e0000002
-> >>>    [  129.856771]  (2) R
-> >>>    [  129.856771]  expected tramp: ffffffff80008e60
-> >>>    [  129.861688] ------------[ cut here ]------------
-> >>>    [  129.865092] WARNING: CPU: 0 PID: 14 at kernel/trace/ftrace.c:2085 ftrace_bug+0x21a/0x24c
-> >>>    [  129.870949] Modules linked in:
-> >>>    [  129.873301] CPU: 0 PID: 14 Comm: migration/0 Not tainted 5.18.0-rc3-00002-gd8bfcd250f58 #6
-> >>>    [  129.879217] Hardware name: riscv-virtio,qemu (DT)
-> >>>    [  129.882666] Stopper: multi_cpu_stop+0x0/0x168 <- stop_machine_cpuslocked+0xfa/0x12e
-> >>>    [  129.888430] epc : ftrace_bug+0x21a/0x24c
-> >>>    [  129.891254]  ra : ftrace_bug+0x21a/0x24c
-> >>>    [  129.894057] epc : ffffffff807c3bee ra : ffffffff807c3bee sp : ff20000000283c80
-> >>>    [  129.899144]  gp : ffffffff813a83b8 tp : ff60000080021600 t0 : ffffffff804155c0
-> >>>    [  129.904257]  t1 : 0720072007200720 t2 : 7420646574636570 s0 : ff20000000283cb0
-> >>>    [  129.909402]  s1 : ff6000007fe622a0 a0 : 0000000000000022 a1 : c0000000ffffefff
-> >>>    [  129.914472]  a2 : 0000000000000001 a3 : 0000000000000000 a4 : 341adec112294700
-> >>>    [  129.919487]  a5 : 341adec112294700 a6 : 0000000000000730 a7 : 0000000000000030
-> >>>    [  129.924595]  s2 : ffffffff80258910 s3 : ffffffffffffffea s4 : 0000000000000000
-> >>>    [  129.929776]  s5 : 0000000000000a35 s6 : ffffffff80d667c8 s7 : ff6000007fe04000
-> >>>    [  129.934892]  s8 : 0000000000000004 s9 : 0000000000000002 s10: 0000000000000001
-> >>>    [  129.939992]  s11: 0000000000000003 t3 : ff6000007ff20f00 t4 : ff6000007ff20f00
-> >>>    [  129.945134]  t5 : ff6000007ff20000 t6 : ff200000002839c8
-> >>>    [  129.948838] status: 0000000000000100 badaddr: 0000000000000000 cause: 0000000000000003
-> >>>    [  129.954580] [<ffffffff800bf110>] ftrace_replace_code+0xce/0xd0
-> >>>    [  129.958771] [<ffffffff800bf280>] ftrace_modify_all_code+0xb4/0x12c
-> >>>    [  129.964420] [<ffffffff800bf30a>] __ftrace_modify_code+0x12/0x1c
-> >>>    [  129.969163] [<ffffffff800b4ea4>] multi_cpu_stop+0x9a/0x168
-> >>>    [  129.973035] [<ffffffff800b4b1c>] cpu_stopper_thread+0xb4/0x15e
-> >>>    [  129.977205] [<ffffffff8003457a>] smpboot_thread_fn+0x106/0x1e4
-> >>>    [  129.981277] [<ffffffff80030ca6>] kthread+0xee/0x108
-> >>>    [  129.984763] [<ffffffff800039ba>] ret_from_exception+0x0/0xc
-> >>>    [  129.988809] ---[ end trace 0000000000000000 ]---
-> >>>    # cat trace
-> >>>    # tracer: function
-> >>>    #
-> >>>    # WARNING: FUNCTION TRACING IS CORRUPTED
-> >>>    #          MAY BE MISSING FUNCTION EVENTS
-> >>>    # entries-in-buffer/entries-written: 0/0   #P:4
-> >>>    #
-> >>>    #                                _-----=> irqs-off/BH-disabled
-> >>>    #                               / _----=> need-resched
-> >>>    #                              | / _---=> hardirq/softirq
-> >>>    #                              || / _--=> preempt-depth
-> >>>    #                              ||| / _-=> migrate-disable
-> >>>    #                              |||| /     delay
-> >>>    #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-> >>>    #              | |         |   |||||     |         |
-> >>>
-> >>> As you can see, the ftrace functionality is broken. This is because
-> >>> DYNAMIC_FTRACE uses 4 instructions to make the jump from the function
-> >>> entry to the ftrace trampoline.
-> >>>
-> >>> After 'echo function > current_tracer':
-> >>>
-> >>>    <cmdline_proc_show>:
-> >>>      0xffffffff80258910 <+0>:     sd      ra,-8(sp)
-> >>>      0xffffffff80258914 <+4>:     auipc   ra,0xffdb0
-> >>>      0xffffffff80258918 <+8>:     jalr    1264(ra) # 0xffffffff80008e04 <ftrace_caller>
-> >>>      0xffffffff8025891c <+12>:    ld      ra,-8(sp)
-> >>>
-> >>> After 'echo 1 > events/kprobes/p_cmdline_proc_show_4/enable':
-> >>>
-> >>>    <cmdline_proc_show>:
-> >>>      0xffffffff80258910 <+0>:     sd      ra,-8(sp)
-> >>>      0xffffffff80258914 <+4>:     ebreak
-> >>>      0xffffffff80258918 <+8>:     jalr    1264(ra)
-> >>>      0xffffffff8025891c <+12>:    ld      ra,-8(sp)
-> >>>
-> >>> This time the second instruction is replaced with a breakpoint
-> >>> instruction and the ftrace-related instructions are broken. Then, when
-> >>> enabling 'p_cmdline_proc_show_0', a regs ftrace handler is registered
-> >>> based on KPROBES_ON_FTRACE, ftrace_modify_call() changes 'ftrace_caller'
-> >>> to 'ftrace_regs_caller', and checks for ftrace-related instructions is
-> >>> modified or not. Here it has been modified, causing ftrace to report a
-> >>> warning and disable itself.
-> >>>
-> >>> In turn, the breakpoints inserted by kprobe may be overwritten by
-> >>> ftrace.
-> >>>
-> >>> The problem is that we think that only the first instruction address at
-> >>> the function entry is needed for ftrace, but it is actually the first 4.
-> >>> As Masami mentioned in [1], we can treat the first 4 instructions as a
-> >>> 16-byte virtual instruction, and we can probe func+0 based on
-> >>> KPROBES_ON_FTRACE, but not func+4, func+8 and func+12. This way, ftrace
-> >>> and kprobe do not bother each other and can coexist.
-> >>>
-> >>> After this patch:
-> >>>
-> >>>    # cd /sys/kernel/debug/tracing/
-> >>>    # echo cmdline_proc_show > set_ftrace_filter
-> >>>    # echo function > current_tracer
-> >>>    # echo 'p cmdline_proc_show' > kprobe_events
-> >>>    # echo 'p cmdline_proc_show' > kprobe_events
-> >>>    # echo 'p cmdline_proc_show+4' >> kprobe_events
-> >>>    sh: write error: Invalid or incomplete multibyte or wide character
-> >>>    # echo 'p cmdline_proc_show+8' >> kprobe_events
-> >>>    sh: write error: Invalid or incomplete multibyte or wide character
-> >>>    # echo 'p cmdline_proc_show+12' >> kprobe_events
-> >>>    sh: write error: Invalid or incomplete multibyte or wide character
-> >>>    # echo 'p cmdline_proc_show+16' >> kprobe_events
-> >>>    # ls events/kprobes/
-> >>>    enable                  p_cmdline_proc_show_0
-> >>>    filter                  p_cmdline_proc_show_16
-> >>>    # echo 1 > events/kprobes/enable
-> >>>    # cat ../kprobes/list
-> >>>    ffffffff80258b14  k  cmdline_proc_show+0x0    [FTRACE]
-> >>>    ffffffff80258b24  k  cmdline_proc_show+0x10
-> >>>    # cat /proc/cmdline
-> >>>    nokaslr rootwait root=/dev/vda rw
-> >>>    # cat trace
-> >>>    # tracer: function
-> >>>    #
-> >>>    # entries-in-buffer/entries-written: 3/3   #P:4
-> >>>    #
-> >>>    #                                _-----=> irqs-off/BH-disabled
-> >>>    #                               / _----=> need-resched
-> >>>    #                              | / _---=> hardirq/softirq
-> >>>    #                              || / _--=> preempt-depth
-> >>>    #                              ||| / _-=> migrate-disable
-> >>>    #                              |||| /     delay
-> >>>    #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-> >>>    #              | |         |   |||||     |         |
-> >>>                 cat-142     [000] ...2.   181.493233: p_cmdline_proc_show_0: (cmdline_proc_show+0x0/0x46)
-> >>>                 cat-142     [000] ...2.   181.494271: cmdline_proc_show <-seq_read_iter
-> >>>                 cat-142     [000] d....   181.494573: p_cmdline_proc_show_16: (cmdline_proc_show+0x10/0x46)
-> >>>
-> >>> [1] https://patchwork.kernel.org/project/linux-arm-kernel/patch/20191218140622.57bbaca5@xhacker.debian/
-> >>>
-> >>> Fixes: c22b0bcb1dd0 ("riscv: Add kprobes supported")
-> >>> Signed-off-by: Li Huafei <lihuafei1@huawei.com>
-> >>> ---
-> >>>   arch/riscv/kernel/probes/kprobes.c | 31 ++++++++++++++++++++++++++++++
-> >>>   kernel/kprobes.c                   |  2 +-
-> >>>   2 files changed, 32 insertions(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/probes/kprobes.c
-> >>> index e6e950b7cf32..ebe32eb6c349 100644
-> >>> --- a/arch/riscv/kernel/probes/kprobes.c
-> >>> +++ b/arch/riscv/kernel/probes/kprobes.c
-> >>> @@ -21,6 +21,37 @@ DEFINE_PER_CPU(struct kprobe_ctlblk, kprobe_ctlblk);
-> >>>   static void __kprobes
-> >>>   post_kprobe_handler(struct kprobe *, struct kprobe_ctlblk *, struct pt_regs *);
-> >>>
-> >>> +#ifdef CONFIG_DYNAMIC_FTRACE
-> >>> +kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr, unsigned long offset,
-> >>> +                                        bool *on_func_entry)
-> >>> +{
-> >>> +       unsigned long faddr = ftrace_location(addr);
-> >>> +
-> >>> +       /*
-> >>> +        * The first 4 instructions at the beginning of the ftraced function
-> >>> +        * are used as a jump to ftrace trampoline, which we can think of as
-> >>> +        * a 16-byte virtual instruction. This allows the function entry to be
-> >>> +        * probed with the help of KPROBES_ON_FTRACE and does not break ftrace
-> >>> +        * functionality.
-> >>> +        */
-> >>> +       if (faddr && offset <= 12) {
-> >>> +               /*
-> >>> +                * As mentioned above, we treat the first 4 instructions of
-> >>> +                * the ftraced function as a virtual instruction, so that we
-> >>> +                * can only probe func+0, not func+4, func+8 and func+12.
-> >>> +                */
-> >>> +               if (offset)
-> >>> +                       return ERR_PTR(-EILSEQ);
-> >> Nak, we should change API in the patch.
-> > Typo: we shouldn't change API in the patch.
->
->
-> You are right, can't change API in this patch.  If here let
-> func+offs(<16) be equivalent to func+0, then there will be:
->
->      # echo 'p cmdline_proc_show' > kprobe_events
->      # echo 'p cmdline_proc_show+4' >> kprobe_events
->      # echo 'p cmdline_proc_show+8' >> kprobe_events
->      # echo 'p cmdline_proc_show+12' >> kprobe_events
->      # ls events/kprobes/
->      enable                  p_cmdline_proc_show_0 p_cmdline_proc_show_4
->      filter                  p_cmdline_proc_show_12 p_cmdline_proc_show_8
->      # cat ../kprobes/list
->      ffffffff80258b08  k  cmdline_proc_show+0x0 [DISABLED][FTRACE]
->      ffffffff80258b08  k  cmdline_proc_show+0x0 [DISABLED][FTRACE]
->      ffffffff80258b08  k  cmdline_proc_show+0x0 [DISABLED][FTRACE]
->      ffffffff80258b08  k  cmdline_proc_show+0x0 [DISABLED][FTRACE]
->
-> While it may be a bit confusing for the user, it has no functional
-> impact and usually we only probe for func+0. Making func+offs(<16) equal
-> to func+0 seems acceptable.
->
->
+> On Tue, Apr 26, 2022 at 12:20 AM Benjamin Tissoires
+> <benjamin.tissoires@redhat.com> wrote:
 > >
-> >> Reference below:
-> >>
-> >> diff --git a/arch/riscv/include/asm/ftrace.h b/arch/riscv/include/asm/ftrace.h
-> >> index 04dad3380041..4fbab6b89be3 100644
-> >> --- a/arch/riscv/include/asm/ftrace.h
-> >> +++ b/arch/riscv/include/asm/ftrace.h
-> >> @@ -77,6 +77,32 @@ do {
-> >>                   \
-> >>    */
-> >>   #define MCOUNT_INSN_SIZE 8
-> >>
-> >> +/*
-> >> + * Put16 bytes at the front of function within patchable function entry
-> >> + * nops' area.
-> >> + *
-> >> + * 0: REG_S  ra, -SZREG(sp)
-> >> + * 1: auipc  ra, 0x?
-> >> + * 2: jalr   -?(ra)
-> >> + * 3: REG_L  ra, -SZREG(sp)
-> >> + *
-> >> + * So the opcodes is:
-> >> + * 0: 0xfe113c23 (sd)/0xfe112e23 (sw)
-> >> + * 1: 0x???????? -> auipc
-> >> + * 2: 0x???????? -> jalr
-> >> + * 3: 0xff813083 (ld)/0xffc12083 (lw)
-> >> + */
-> >> +#if __riscv_xlen == 64
-> >> +#define INSN0  0xfe113c23
-> >> +#define INSN3  0xff813083
-> >> +#elif __riscv_xlen == 32
-> >> +#define INSN0  0xfe112e23
-> >> +#define INSN3  0xffc12083
-> >> +#endif
-> >> +
-> >> +#define FUNC_ENTRY_SIZE        16
-> >> +#define FUNC_ENTRY_JMP 4
-> >> +
-> >>   #ifndef __ASSEMBLY__
-> >>   struct dyn_ftrace;
-> >>   int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec);
-> >> diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
-> >> index 4716f4cdc038..be51aa87134e 100644
-> >> --- a/arch/riscv/kernel/ftrace.c
-> >> +++ b/arch/riscv/kernel/ftrace.c
-> >> @@ -72,32 +72,6 @@ static int __ftrace_modify_call(unsigned long
-> >> hook_pos, unsigned long target,
-> >>          return 0;
-> >>   }
-> >>
-> >> -/*
-> >> - * Put 5 instructions with 16 bytes at the front of function within
-> >> - * patchable function entry nops' area.
-> >> - *
-> >> - * 0: REG_S  ra, -SZREG(sp)
-> >> - * 1: auipc  ra, 0x?
-> >> - * 2: jalr   -?(ra)
-> >> - * 3: REG_L  ra, -SZREG(sp)
-> >> - *
-> >> - * So the opcodes is:
-> >> - * 0: 0xfe113c23 (sd)/0xfe112e23 (sw)
-> >> - * 1: 0x???????? -> auipc
-> >> - * 2: 0x???????? -> jalr
-> >> - * 3: 0xff813083 (ld)/0xffc12083 (lw)
-> >> - */
-> >> -#if __riscv_xlen == 64
-> >> -#define INSN0  0xfe113c23
-> >> -#define INSN3  0xff813083
-> >> -#elif __riscv_xlen == 32
-> >> -#define INSN0  0xfe112e23
-> >> -#define INSN3  0xffc12083
-> >> -#endif
-> >> -
-> >> -#define FUNC_ENTRY_SIZE        16
-> >> -#define FUNC_ENTRY_JMP 4
-> >> -
-> >>   int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
-> >>   {
-> >>          unsigned int call[4] = {INSN0, 0, 0, INSN3};
-> >> @@ -124,7 +98,6 @@ int ftrace_make_nop(struct module *mod, struct
-> >> dyn_ftrace *rec,
-> >>          return 0;
-> >>   }
-> >>
-> >> -
-> >>   /*
-> >>    * This is called early on, and isn't wrapped by
-> >>    * ftrace_arch_code_modify_{prepare,post_process}() and therefor doesn't hold
-> >> diff --git a/arch/riscv/kernel/probes/kprobes.c
-> >> b/arch/riscv/kernel/probes/kprobes.c
-> >> index e6e950b7cf32..c16a819a81c1 100644
-> >> --- a/arch/riscv/kernel/probes/kprobes.c
-> >> +++ b/arch/riscv/kernel/probes/kprobes.c
-> >> @@ -21,6 +21,33 @@ DEFINE_PER_CPU(struct kprobe_ctlblk, kprobe_ctlblk);
-> >>   static void __kprobes
-> >>   post_kprobe_handler(struct kprobe *, struct kprobe_ctlblk *, struct pt_regs *);
-> >>
-> >> +#ifdef CONFIG_DYNAMIC_FTRACE
-> >> +kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr, unsigned
-> >> long offset,
-> >> +                                        bool *on_func_entry)
-> >> +{
-> >> +       /*
-> >> +        * The first 4 instructions at the beginning of the ftraced function
-> >> +        * are used as a jump to ftrace trampoline, which we can think of as
-> >> +        * a 16-byte virtual instruction. This allows the function entry to be
-> >> +        * probed with the help of KPROBES_ON_FTRACE and does not break ftrace
-> >> +        * functionality.
-> >> +        */
-> >> +       if (offset < FUNC_ENTRY_SIZE) {
-> >> +               /*
-> >> +                * As mentioned above, we treat the first 4 instructions of
-> >> +                * the ftraced function as a virtual instruction, so that we
-> >> +                * can only probe func+0, and func+4, func+8 and func+12
-> >> +                * would be changed to func+0.
-> >> +                */
-> >> +               *on_func_entry = true;
-> >> +               return (kprobe_opcode_t *)ftrace_location(addr);
-> >> +       } else {
-> >> +               *on_func_entry = false;
-> >> +               return (kprobe_opcode_t *)(addr + offset);
-> >> +       }
-> >> +}
-> > Another better implementation:
-> > +kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr, unsigned
-> > long offset,
-> > +                                        bool *on_func_entry)
-> > +{
-> > +       /*
-> > +        * The first 4 instructions at the beginning of the ftraced function
-> > +        * are used as a jump to ftrace trampoline, which we can think of as
-> > +        * a 16-byte virtual instruction. This allows the function entry to be
-> > +        * probed with the help of KPROBES_ON_FTRACE and does not break ftrace
-> > +        * functionality.
-> > +        */
-> > +       if (offset < FUNC_ENTRY_SIZE) {,
-> Thanks a lot for providing such a detailed implementation. Yes, it is
-> better to use these macro definitions. But I think we first need to use
-> ftrace_location(addr) to determine if the function can be traced. no
-> special handling here is needed for notrace functions.
->
-> +kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr, unsigned
-> long offset,
-> +                                        bool *on_func_entry)
-> +{
-> +       unsigned long faddr = ftrace_location(addr);
-Seems x86 & powerpc also need that check? I don't think
-ftrace_location is necessary, or the solution should be more common.
-
-
-> +
-> +       /*
-> +        * The first 4 instructions at the beginning of the ftraced function
-> +        * are used as a jump to ftrace trampoline, which we can think of as
-> +        * a 16-byte virtual instruction. This allows the function entry
-> to be
-> +        * probed with the help of KPROBES_ON_FTRACE and does not break
-> ftrace
-> +        * functionality.
-> +        */
-> +       if (faddr && offset < FUNC_ENTRY_SIZE) {
-> +               /*
-> +                * As mentioned above, we treat the first 4 instructions of
-> +                * the ftraced function as a virtual instruction, so that we
-> +                * can only probe func+0, and func+4, func+8 and func+12
-> would
-> +                * be changed to func+0.
-> +                */
-> +               *on_func_entry = true;
-> +               return (kprobe_opcode_t *)faddr;
-> +       } else {
-> +               *on_func_entry = !offset;
-> +               return (kprobe_opcode_t *)(addr + offset);
-> +       }
-> +}
->
-> Is this ok?
->
->
-> Thanks,
->
-> Huafei
->
->
-> > +               /*
-> > +                * As mentioned above, we treat the first 4 instructions of
-> > +                * the ftraced function as a virtual instruction, so that we
-> > +                * can only probe func+0, and func+4, func+8 and func+12
-> > +                * would be changed to func+0.
-> > +                */
-> > +               offset = 0;
-> > +       }
-> > +
-> > +       *on_func_entry = !offset;
-> > +       return (kprobe_opcode_t *)(addr + offset);
-> > +}
+> > On Tue, Apr 26, 2022 at 6:03 AM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > On Thu, Apr 21, 2022 at 04:07:33PM +0200, Benjamin Tissoires wrote:
+> > > > Hi,
+> > > >
+> > > > so after the reviews from v3, and some discussion with Alexei, I am
+> > > > back with a new version of HID-BPF.
+> > > >
+> > > > This version is not complete (thus the RFC), but I'd like to share
+> > > > it now to get initial feedback, in case I am too far from the actual
+> > > > goal.
+> > > >
+> > > > FTR, the goal is to provide some changes in the core verifier/btf so
+> > > > that we can plug in HID-BPF independently from BPF core. This way we can
+> > > > extend it without having to care about bpf-next.
+> > >
+> > > Overall looks great. imo much cleaner, simpler and more extensible
+> > > than the earlier versions.
+> > > The bpf core extensions are nicely contained and HID side can be
+> > > worked on in parallel.
 > >
-> >> +#endif
-> >> +
-> >>   static void __kprobes arch_prepare_ss_slot(struct kprobe *p)
-> >>   {
-> >>          unsigned long offset = GET_INSN_LENGTH(p->opcode);
-> >>
-> >>> +
-> >>> +               *on_func_entry = true;
-> >>> +               return (kprobe_opcode_t *)faddr;
-> >>> +       }
-> >>> +
-> >>> +       *on_func_entry = !offset;
-> >>> +       return (kprobe_opcode_t *)(addr + offset);
-> >>> +}
-> >>> +#endif
-> >>> +
-> >>>   static void __kprobes arch_prepare_ss_slot(struct kprobe *p)
-> >>>   {
-> >>>          unsigned long offset = GET_INSN_LENGTH(p->opcode);
-> >>> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-> >>> index dbe57df2e199..b41de7ce8bff 100644
-> >>> --- a/kernel/kprobes.c
-> >>> +++ b/kernel/kprobes.c
-> >>> @@ -1553,7 +1553,7 @@ _kprobe_addr(kprobe_opcode_t *addr, const char *symbol_name,
-> >>>           * at the start of the function.
-> >>>           */
-> >>>          addr = arch_adjust_kprobe_addr((unsigned long)addr, offset, on_func_entry);
-> >>> -       if (addr)
-> >>> +       if (IS_ERR(addr) || addr)
-> >> Nak, If you really want to change API, please send another patch and
-> >> add ftrace_location(addr) in x86 & powerpc, firstly.
-> >>
-> >>>                  return addr;
-> >>>
-> >>>   invalid:
-> >>> --
-> >>> 2.17.1
-> >>>
-> >>
-> >>
-> >> --
-> >> Best Regards
-> >>   Guo Ren
-> >>
-> >> ML: https://lore.kernel.org/linux-csky/
+> > \o/
 > >
+> > >
+> > > > The things I am not entirely sure are:
+> > > > - do we need only fentry/fexit/fmod_ret BPF program types or should
+> > > >   programs that modify the data stream use a different kind?
+> > >
+> > > Probably not. I'll reply in patch 2.
+> > >
+> > > > - patch 3/7 is probably not the correct approach (see comments in the
+> > > >   patch itself)
+> > > >
+> > > > We are missing quite a few bits here:
+> > > > - selftests for patches 1 to 4
+> > > > - add the ability to attach a program to a struct device, and run that
+> > > >   program only for that struct device
+> > >
+> > > yes. That is still to be figured out.
 > >
+> > I spent some time on that, and I don't think it makes a lot of sense
+> > to use the current trampoline approach if we want to keep on using
+> > fentry/fexit...
+> > - the trampoline is pretty nice, but it adds instructions before
+> > calling the actual function, meaning that adding a check on struct
+> > device will be quite hard to do ()we have no idea where the struct
+> > device is in the arguments) and will take more space on the trampoline
+> > itself
+> > - there is a limit on how many functions can be attached to a
+> > trampoline (38 IIRC), and we probably will explode that number quickly
+> > enough when we get more BPF programs to support HID devices.
+>
+> Ohh. This is an obsolete limitation.
+> 38 was the number since we used half page optimization
+> for bpf trampoline.
+> It's gone now. We can easily lift this max.
 
+Oh, interesting.
+I have been working this week with that limitation in place, and I
+just managed to get something working yesterday night. See below.
 
+>
+> > So my chain of thoughts from yesterday was the following (completely
+> > untested of course):
+> > - instead of writing a new BPF API that might move in the future while
+> > things are settling, I can actually simply load a tracer BPF program
+> > from HID that monitors the BPF programs that are attached to a given
+> > function
+> > - I can also add a new API (a kfunc likely) that "registers" a given
+> > BPF program (through its fd) to a given HID device
+> > - when a device sends data, it hits hid_bpf_device_event() which will
+> > have a default BPF program (loaded by the kernel) that dispatches the
+> > registered BPF programs based on the HID device.
+> >
+> > This would solve the 2 issues above IMO, except that the kfunc to
+> > register a HID BPF program will suddenly be not standard.
+>
+> Could you add more details to these ideas?
 
--- 
-Best Regards
- Guo Ren
+That's basically your last suggestion below.
 
-ML: https://lore.kernel.org/linux-csky/
+> I thought you wanted bpf prog writers to be independent of each other.
+> They would tell some framework HID device id/pcie id that they need
+> and the rest would be automatic.
+> Maybe we can achieve that by adding another layer before libbpf
+> that would accept (bpf_prog, hid_id) tuple and insert
+> if (hid->id != hid_id) return -E..;
+> as the first insn into bpf_prog before loading into the kernel.
+> All such progs will be kfunc-s attached to the same hook.
+> The kernel will execute them sequentially.
+> The framework will provide demux by auto-inserting this 'if'.
+
+That's an interesting approach. Much less convoluted than the one I
+have right now. The only downside I see is that every program will be
+called for every event, which might not be ideal (though the event
+stream from HID is way smaller than network).
+
+> This 'if (hid)' could be a part of sample code too.
+> We can simply ask prog writers to follow this style.
+
+Not a big fan of that...
+
+>
+> Another idea would be to do something like libxdp.
+> Attach a "dispatcher" bpf prog to the kfunc hook and use
+> some library to attach hid-specific progs as "freplace" kind of
+> programs. It's a more involved solution.
+
+freplace might not work for me because I want to attach more than one
+program to a given HID device. Not so sure BPF_PROG_TYPE_REPLACE will
+do something enough there.
+
+>
+> Another option is to use tail_calls.
+> If hid_id is a relatively small number. The "dispatcher" bpf prog
+> can do bpf_tail_call(prog_array, hid_id)
+> while hid specific progs insert itself into prog_array
+> instead of attaching to kfunc.
+
+This is roughly what I have now:
+
+- hid-core is not aware of BPF except for a few __weak
+ALLOW_ERROR_INJECTION hooks (dispatch_hid_bpf_device_event for
+example)
+- I have a separate hid-bpf module that attaches BPF traces to these
+hooks and calls a "dispatch" kfunc within hid-bpf
+- the dispatch function then do a succession of BPF calls to programs
+attached to it by using bpf_tail_call(prog_array, hid_id)
+
+- for the clients, they define one or more
+SEC("fmod_ret/hid_bpf_device_event"). That __weak hook is declared in
+the kernel by hid-bpf but is never called, it's just an API
+declaration
+- then clients call in a SEC("syscall")
+hid_bpf_attach_prog(ctx->prog_fd, ctx->hid_id, ctx->flags);
+- hid_bpf_attach_prog is a kfunc that takes a ref on the struct
+bpf_prog*, and stores that program in the correct struct bpf_map *for
+the given attached_btf_id (hid_bpf_device_event in our case)
+
+And that's about it.
+I still need to handle automatic release of the bpf prog when there is
+no userspace open fd on it unless it's pinned but I think this should
+be working fine.
+
+I also probably need to pin some SEC("syscall") (hid_bpf_attach_prog
+and hid_bpf_dettach_prog) so users don't have to write them down and
+can just use the ones provided by the kernel.
+
+The nice thing is that I can define my own API for the attach call
+without dealing with bpf core. I can thus add a priority flag that is
+relevant here because the data coming through the bpf program can be
+modified.
+
+The other thing is that now, I don't care which function we are in to
+decide if a RET_PTR_MEM is read only or not. I can deal with that by
+either playing with the flags or even replacing entirely the dispatch
+trace prog from userspace if I want to access the raw events.
+
+However, the downsides are:
+- I need to also define kfuncs for BPF_PROG_TYPE_SYSCALL (I don't
+think It'll be a big issue)
+- The only way I could store the bpf_prog into the map was to hack
+around the map ops, because the fd of the map in the skel is not
+available while doing a SEC("syscall") from a different process.
+
+Also, I wonder if we should not have some way to namespace kfuncs.
+Ideally, I would like to prevent the usage of those kfuncs outside of
+some helpers that I define in HID so I don't have to worry too much
+about other trace programs fuzzing and segfaulting the kernel.
+
+>
+> > >
+> > > > - when running through bpf_prog_test_run_opts, how can we ensure we are
+> > > >   talking to the correct device? (I have a feeling this is linked to the
+> > > >   previous point)
+> > > > - how can we reconnect the device when a report descriptor fixup BPF
+> > > >   program is loaded (would it make sense to allow some notifications on
+> > > >   when a BPF program is attached/detached to a device, and which
+> > > >   function have been traced?)
+> > >
+> > > Not sure I follow. What kind of notification do you have in mind?
+> > > To user space?
+> > >
+> >
+> > No, this is in-kernel notifications.
+> > What I want to do, is when I load a BPF program that changes the HID
+> > report descriptor, hid-core detects that and reconnects the attached
+> > device.
+> >
+> > But after a couple of days of thinking, and with the above approach
+> > where HID would preload a BPF program, I should be able to achieve
+> > that with the "register BPF through a HID kfunc call". When I see that
+> > we are attaching a HID report descriptor fixup to a given HID device,
+> > I can then reconnect the matching device.
+> >
+> > It would certainly be cleaner to have a general "notify me when a
+> > tracer is attached to this particular function", but we can hide that
+> > right now with a preloaded BPF program :)
+>
+> There are few lsm hooks in bpf core. It probably wwill be eird
+> for hid core to hook into them. We can add a few tracepoints
+> at attach functions if that helps.
+>
+
+With the above, I actually don't need those notifications. Users are
+calling my own "syscall" when attaching their BPF prog, and they are
+also not required to attach the program to the actual BPF trace
+(through BPF_PROG_ATTACH), so this request is now gone :)
+
+Cheers,
+Benjamin
+

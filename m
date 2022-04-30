@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE828515B9F
+	by mail.lfdr.de (Postfix) with ESMTP id 74B49515B9E
 	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 10:59:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345875AbiD3JCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 05:02:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46884 "EHLO
+        id S1358535AbiD3JCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 05:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238499AbiD3JC0 (ORCPT
+        with ESMTP id S241524AbiD3JCd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 05:02:26 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7631145520
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 01:59:05 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id p6so8986643plf.9
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 01:59:05 -0700 (PDT)
+        Sat, 30 Apr 2022 05:02:33 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4B223BDF
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 01:59:12 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id i1so2856845plg.7
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 01:59:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=BE4Csc8fXi/s0lbMqVsUyPJAxORmffFiXdUo2UP++Oo=;
-        b=MnacbXoZt/Hd/kTW4Msn6ugqNfcW5ni6x1f3AGWcIigtKKFDXkBcr2HktbTdflOsLS
-         p9eijDE+Xv8xoFC8R3GIJWsz68PFp3H23MiS44PzVV+Mvs4BZkTQEGDLS1jm583qbIqG
-         B6pmveFTT5w7FEeUVrxa3i1lC8hA233H0JmHC3TxwKBxRjtJ/FGFTcZBFac/27acnF7P
-         b/S4OGNqEe12+5Hy/NgbbEhTfEtm+SlOrENmyniyUvhxE9yN4kwBz1g+afi/09ZUP+rZ
-         OG9XJwHvP8eO8pGx/X7h42aTxTu7WHTtjaai+79Pz5XNkuaMtAzCLaZtLFalVGNKOdSI
-         ibCg==
+        bh=6LLr6p6UjMmtIcgHFGWIZLSTwHROwXgBfoPFVeHgl8Y=;
+        b=NGtCL/GhI4IsEMFFo2qIetG2ubiEimVIHu96aNVgnUYqhI/ErLjI9Vuja67ZXIoNlb
+         AqzEtM1kkGkWUMvefGrXQSZ4CrNPVr6o6w+fBfcn0pTi51F9SiJkpRCBxDAqLpvKAWn2
+         dXUjcC8hxWLqJELHo/sOVWdtI+1O4uISRFcOju4YPRYg9vwtT1xbEEPoIBRICpRa8PPb
+         j436UvCuI2jCcelRN06q0Sd9ylkw87e394KuA9S4q4ZAsjzkfIt3CDiN1ekyttoJnEHv
+         7lBb0JmbAcL3Jix0OrgC7mbe/hEB+RQWuIWWV6bEc9Rc8kqQsgtRw0uzLwcSFziWoNvM
+         ktaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=BE4Csc8fXi/s0lbMqVsUyPJAxORmffFiXdUo2UP++Oo=;
-        b=70xatX4AD4NyRIgp+aekSsXn/gZcbTbvhMcm4GzYI4tB7cJNELiLsyayU5sG3nJ3nd
-         BhbyP+jwrIo71DoenEQcaJHKFVcpA0C/fGzgykpnRYxVdEUtrQql4RXvTnacy4P0M2Wa
-         MPaRgL8efuucB1JNZ4QFzvfnzdp2uIxF4LjQcQzZZj4pxI94jzjNjtlghtU361pcaRc7
-         6DdIMvJDsEPIcw6iy6r0ARfBsDOFWOIr4R7oL+MeERvIQ2DCsvSfjtbAOb4tAClhnReL
-         nVuwdZq/m4wRTOZXXfGfMb9R7++qVpIklf4JN6dwYEwKye6EPG3lVFlLL0+Isci3Pagf
-         j6dQ==
-X-Gm-Message-State: AOAM531zsKQKzw/vIGLPwVtEU4gcFHDcAe21fmOJcbNhN4pKi2sBjkgh
-        YYwL0ST3H+GR9A1j6LYjRCGvlw==
-X-Google-Smtp-Source: ABdhPJxsXC1RlRdfODxnsIejCCKKSUjzH7/rPPFtGZdAkSMlBdGeANukAkB/y3pUkGRRUcmKCW61SA==
-X-Received: by 2002:a17:902:e94e:b0:154:3a4:c5e8 with SMTP id b14-20020a170902e94e00b0015403a4c5e8mr3163197pll.19.1651309144749;
-        Sat, 30 Apr 2022 01:59:04 -0700 (PDT)
+        bh=6LLr6p6UjMmtIcgHFGWIZLSTwHROwXgBfoPFVeHgl8Y=;
+        b=IbXyUNxGidf9pmN7c0ftrJys9XBLDR3D3dgSBmzOI1DnYeJ+fyEM01EV9jjfIaKq/P
+         iV+AJ7bwSntwZ/q7ruvtNKrbdcZSJtuA3d3pvAPHju1FUYtOWKZP+KwlFTucTMvOxfVR
+         XEzEHN/F3RDoJK12Fefahu69XoJjtt66mtuPGzVzjuCQEJalnTp/MjXm0hZWhZU2vfa6
+         Czvv1Cl8e7q1hgEvcUuyIk3XAnsG65+8MJ0GmOUM0lMu3BKJc/LRfFxDFh9hN7/VAWIC
+         bwKOkY+2+rb7JC95UlUks2GulcMiHbBhCZsqBULZLI4U2MnN8hUTAshYRjsmZN7YRqON
+         4V3w==
+X-Gm-Message-State: AOAM530nYdr4QIqFDQP8tF4JcjWwtJpm4xOs4pLczwlPoYK7bVKOeEFe
+        Zxvs9Xb+bdK0oqFUKD6GRE8RUw==
+X-Google-Smtp-Source: ABdhPJwoB7JuNbW29XhrENTgeRsnISzdGnOokl29c9fleTFo3NElipLz3hDGD+q2yDTasUGspc0BtA==
+X-Received: by 2002:a17:90b:3806:b0:1da:26fd:7add with SMTP id mq6-20020a17090b380600b001da26fd7addmr3335320pjb.228.1651309151790;
+        Sat, 30 Apr 2022 01:59:11 -0700 (PDT)
 Received: from localhost.localdomain ([240e:390:e65:5bb0:6169:3d99:b5ff:4a84])
-        by smtp.gmail.com with ESMTPSA id c14-20020a62e80e000000b0050dc76281desm1026782pfi.184.2022.04.30.01.59.01
+        by smtp.gmail.com with ESMTPSA id c14-20020a62e80e000000b0050dc76281desm1026782pfi.184.2022.04.30.01.59.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Apr 2022 01:59:04 -0700 (PDT)
+        Sat, 30 Apr 2022 01:59:11 -0700 (PDT)
 From:   Hao Jia <jiahao.os@bytedance.com>
 To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
         vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
         rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
         bristot@redhat.com
 Cc:     linux-kernel@vger.kernel.org, Hao Jia <jiahao.os@bytedance.com>
-Subject: [PATCH v4 1/2] sched/core: Avoid obvious double update_rq_clock warning
-Date:   Sat, 30 Apr 2022 16:58:42 +0800
-Message-Id: <20220430085843.62939-2-jiahao.os@bytedance.com>
+Subject: [PATCH v4 2/2] sched/deadline: Remove superfluous rq clock update in push_dl_task()
+Date:   Sat, 30 Apr 2022 16:58:43 +0800
+Message-Id: <20220430085843.62939-3-jiahao.os@bytedance.com>
 X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 In-Reply-To: <20220430085843.62939-1-jiahao.os@bytedance.com>
 References: <20220430085843.62939-1-jiahao.os@bytedance.com>
@@ -71,250 +71,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When we use raw_spin_rq_lock() to acquire the rq lock and have to
-update the rq clock while holding the lock, the kernel may issue
-a WARN_DOUBLE_CLOCK warning.
+The change to call update_rq_clock() before activate_task()
+commit 840d719604b0 ("sched/deadline: Update rq_clock of later_rq
+when pushing a task") is no longer needed since commit f4904815f97a
+("sched/deadline: Fix double accounting of rq/running bw in push & pull")
+removed the add_running_bw() before the activate_task().
 
-Since we directly use raw_spin_rq_lock() to acquire rq lock instead of
-rq_lock(), there is no corresponding change to rq->clock_update_flags.
-In particular, we have obtained the rq lock of other CPUs, the
-rq->clock_update_flags of this CPU may be RQCF_UPDATED at this time, and
-then calling update_rq_clock() will trigger the WARN_DOUBLE_CLOCK warning.
-
-So we need to clear RQCF_UPDATED of rq->clock_update_flags to avoid
-the WARN_DOUBLE_CLOCK warning.
-
-For the sched_rt_period_timer() and migrate_task_rq_dl() cases
-we simply replace raw_spin_rq_lock()/raw_spin_rq_unlock() with
-rq_lock()/rq_unlock().
-
-For the {pull,push}_{rt,dl}_task() cases, we add the
-double_rq_clock_clear_update() function to clear RQCF_UPDATED of
-rq->clock_update_flags, and call double_rq_clock_clear_update()
-before double_lock_balance()/double_rq_lock() returns to avoid the
-WARN_DOUBLE_CLOCK warning.
-
-Some call trace reports:
-Call Trace 1:
- <IRQ>
- sched_rt_period_timer+0x10f/0x3a0
- ? enqueue_top_rt_rq+0x110/0x110
- __hrtimer_run_queues+0x1a9/0x490
- hrtimer_interrupt+0x10b/0x240
- __sysvec_apic_timer_interrupt+0x8a/0x250
- sysvec_apic_timer_interrupt+0x9a/0xd0
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x12/0x20
-
-Call Trace 2:
- <TASK>
- activate_task+0x8b/0x110
- push_rt_task.part.108+0x241/0x2c0
- push_rt_tasks+0x15/0x30
- finish_task_switch+0xaa/0x2e0
- ? __switch_to+0x134/0x420
- __schedule+0x343/0x8e0
- ? hrtimer_start_range_ns+0x101/0x340
- schedule+0x4e/0xb0
- do_nanosleep+0x8e/0x160
- hrtimer_nanosleep+0x89/0x120
- ? hrtimer_init_sleeper+0x90/0x90
- __x64_sys_nanosleep+0x96/0xd0
- do_syscall_64+0x34/0x90
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Call Trace 3:
- <TASK>
- deactivate_task+0x93/0xe0
- pull_rt_task+0x33e/0x400
- balance_rt+0x7e/0x90
- __schedule+0x62f/0x8e0
- do_task_dead+0x3f/0x50
- do_exit+0x7b8/0xbb0
- do_group_exit+0x2d/0x90
- get_signal+0x9df/0x9e0
- ? preempt_count_add+0x56/0xa0
- ? __remove_hrtimer+0x35/0x70
- arch_do_signal_or_restart+0x36/0x720
- ? nanosleep_copyout+0x39/0x50
- ? do_nanosleep+0x131/0x160
- ? audit_filter_inodes+0xf5/0x120
- exit_to_user_mode_prepare+0x10f/0x1e0
- syscall_exit_to_user_mode+0x17/0x30
- do_syscall_64+0x40/0x90
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Call Trace 4:
- update_rq_clock+0x128/0x1a0
- migrate_task_rq_dl+0xec/0x310
- set_task_cpu+0x84/0x1e4
- try_to_wake_up+0x1d8/0x5c0
- wake_up_process+0x1c/0x30
- hrtimer_wakeup+0x24/0x3c
- __hrtimer_run_queues+0x114/0x270
- hrtimer_interrupt+0xe8/0x244
- arch_timer_handler_phys+0x30/0x50
- handle_percpu_devid_irq+0x88/0x140
- generic_handle_domain_irq+0x40/0x60
- gic_handle_irq+0x48/0xe0
- call_on_irq_stack+0x2c/0x60
- do_interrupt_handler+0x80/0x84
-
-Steps to reproduce:
-1. Enable CONFIG_SCHED_DEBUG when compiling the kernel
-2. echo 1 > /sys/kernel/debug/clear_warn_once
-   echo "WARN_DOUBLE_CLOCK" > /sys/kernel/debug/sched/features
-   echo "NO_RT_PUSH_IPI" > /sys/kernel/debug/sched/features
-3. Run some rt/dl tasks that periodically work and sleep, e.g.
-Create 2*n rt or dl (90% running) tasks via rt-app (on a system
-with n CPUs), and Dietmar Eggemann reports Call Trace 4 when running
-on PREEMPT_RT kernel.
+So we remove some comments that are no longer needed and update
+rq clock in activate_task().
 
 Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
 Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Reviewed-by: Daniel Bristot de Oliveira <bristot@redhat.com>
 ---
- kernel/sched/core.c     |  6 +++---
- kernel/sched/deadline.c |  5 +++--
- kernel/sched/rt.c       |  5 +++--
- kernel/sched/sched.h    | 28 ++++++++++++++++++++++++----
- 4 files changed, 33 insertions(+), 11 deletions(-)
+ kernel/sched/deadline.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 51efaabac3e4..84538271b4eb 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -610,10 +610,10 @@ void double_rq_lock(struct rq *rq1, struct rq *rq2)
- 		swap(rq1, rq2);
- 
- 	raw_spin_rq_lock(rq1);
--	if (__rq_lockp(rq1) == __rq_lockp(rq2))
--		return;
-+	if (__rq_lockp(rq1) != __rq_lockp(rq2))
-+		raw_spin_rq_lock_nested(rq2, SINGLE_DEPTH_NESTING);
- 
--	raw_spin_rq_lock_nested(rq2, SINGLE_DEPTH_NESTING);
-+	double_rq_clock_clear_update(rq1, rq2);
- }
- #endif
- 
 diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index fb4255ae0b2c..b61281d10458 100644
+index b61281d10458..877f55f3a60e 100644
 --- a/kernel/sched/deadline.c
 +++ b/kernel/sched/deadline.c
-@@ -1832,6 +1832,7 @@ select_task_rq_dl(struct task_struct *p, int cpu, int flags)
+@@ -2320,13 +2320,7 @@ static int push_dl_task(struct rq *rq)
  
- static void migrate_task_rq_dl(struct task_struct *p, int new_cpu __maybe_unused)
- {
-+	struct rq_flags rf;
- 	struct rq *rq;
- 
- 	if (READ_ONCE(p->__state) != TASK_WAKING)
-@@ -1843,7 +1844,7 @@ static void migrate_task_rq_dl(struct task_struct *p, int new_cpu __maybe_unused
- 	 * from try_to_wake_up(). Hence, p->pi_lock is locked, but
- 	 * rq->lock is not... So, lock it
- 	 */
--	raw_spin_rq_lock(rq);
-+	rq_lock(rq, &rf);
- 	if (p->dl.dl_non_contending) {
- 		update_rq_clock(rq);
- 		sub_running_bw(&p->dl, &rq->dl);
-@@ -1859,7 +1860,7 @@ static void migrate_task_rq_dl(struct task_struct *p, int new_cpu __maybe_unused
- 			put_task_struct(p);
- 	}
- 	sub_rq_bw(&p->dl, &rq->dl);
--	raw_spin_rq_unlock(rq);
-+	rq_unlock(rq, &rf);
- }
- 
- static void check_preempt_equal_dl(struct rq *rq, struct task_struct *p)
-diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index a32c46889af8..7891c0f0e1ff 100644
---- a/kernel/sched/rt.c
-+++ b/kernel/sched/rt.c
-@@ -871,6 +871,7 @@ static int do_sched_rt_period_timer(struct rt_bandwidth *rt_b, int overrun)
- 		int enqueue = 0;
- 		struct rt_rq *rt_rq = sched_rt_period_rt_rq(rt_b, i);
- 		struct rq *rq = rq_of_rt_rq(rt_rq);
-+		struct rq_flags rf;
- 		int skip;
- 
- 		/*
-@@ -885,7 +886,7 @@ static int do_sched_rt_period_timer(struct rt_bandwidth *rt_b, int overrun)
- 		if (skip)
- 			continue;
- 
--		raw_spin_rq_lock(rq);
-+		rq_lock(rq, &rf);
- 		update_rq_clock(rq);
- 
- 		if (rt_rq->rt_time) {
-@@ -923,7 +924,7 @@ static int do_sched_rt_period_timer(struct rt_bandwidth *rt_b, int overrun)
- 
- 		if (enqueue)
- 			sched_rt_rq_enqueue(rt_rq);
--		raw_spin_rq_unlock(rq);
-+		rq_unlock(rq, &rf);
- 	}
- 
- 	if (!throttled && (!rt_bandwidth_enabled() || rt_b->rt_runtime == RUNTIME_INF))
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 8dccb34eb190..2133aea22086 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -2478,6 +2478,24 @@ unsigned long arch_scale_freq_capacity(int cpu)
- }
- #endif
- 
-+#ifdef CONFIG_SCHED_DEBUG
-+/*
-+ * In double_lock_balance()/double_rq_lock(), we use raw_spin_rq_lock() to
-+ * acquire rq lock instead of rq_lock(). So at the end of these two functions
-+ * we need to call double_rq_clock_clear_update() to clear RQCF_UPDATED of
-+ * rq->clock_update_flags to avoid the WARN_DOUBLE_CLOCK warning.
-+ */
-+static inline void double_rq_clock_clear_update(struct rq *rq1, struct rq *rq2)
-+{
-+	rq1->clock_update_flags &= (RQCF_REQ_SKIP|RQCF_ACT_SKIP);
-+	/* rq1 == rq2 for !CONFIG_SMP, so just clear RQCF_UPDATED once. */
-+#ifdef CONFIG_SMP
-+	rq2->clock_update_flags &= (RQCF_REQ_SKIP|RQCF_ACT_SKIP);
-+#endif
-+}
-+#else
-+static inline void double_rq_clock_clear_update(struct rq *rq1, struct rq *rq2) {}
-+#endif
- 
- #ifdef CONFIG_SMP
- 
-@@ -2543,14 +2561,15 @@ static inline int _double_lock_balance(struct rq *this_rq, struct rq *busiest)
- 	__acquires(busiest->lock)
- 	__acquires(this_rq->lock)
- {
--	if (__rq_lockp(this_rq) == __rq_lockp(busiest))
--		return 0;
+ 	deactivate_task(rq, next_task, 0);
+ 	set_task_cpu(next_task, later_rq->cpu);
 -
--	if (likely(raw_spin_rq_trylock(busiest)))
-+	if (__rq_lockp(this_rq) == __rq_lockp(busiest) ||
-+	    likely(raw_spin_rq_trylock(busiest))) {
-+		double_rq_clock_clear_update(this_rq, busiest);
- 		return 0;
-+	}
+-	/*
+-	 * Update the later_rq clock here, because the clock is used
+-	 * by the cpufreq_update_util() inside __add_running_bw().
+-	 */
+-	update_rq_clock(later_rq);
+-	activate_task(later_rq, next_task, ENQUEUE_NOCLOCK);
++	activate_task(later_rq, next_task, 0);
+ 	ret = 1;
  
- 	if (rq_order_less(this_rq, busiest)) {
- 		raw_spin_rq_lock_nested(busiest, SINGLE_DEPTH_NESTING);
-+		double_rq_clock_clear_update(this_rq, busiest);
- 		return 0;
- 	}
- 
-@@ -2644,6 +2663,7 @@ static inline void double_rq_lock(struct rq *rq1, struct rq *rq2)
- 	BUG_ON(rq1 != rq2);
- 	raw_spin_rq_lock(rq1);
- 	__acquire(rq2->lock);	/* Fake it out ;) */
-+	double_rq_clock_clear_update(rq1, rq2);
- }
- 
- /*
+ 	resched_curr(later_rq);
 -- 
 2.32.0
 

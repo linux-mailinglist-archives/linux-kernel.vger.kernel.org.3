@@ -2,56 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 046A7515DC7
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 15:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A8A0515DC6
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 15:42:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242134AbiD3NpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 09:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
+        id S1349020AbiD3Np0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 09:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234800AbiD3NpR (ORCPT
+        with ESMTP id S241973AbiD3NpR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 30 Apr 2022 09:45:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04EBB3A18A;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7AB3A1BB;
         Sat, 30 Apr 2022 06:41:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D18E6091F;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB3DE60EC6;
         Sat, 30 Apr 2022 13:41:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05609C385AA;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EC8AC385AF;
         Sat, 30 Apr 2022 13:41:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1651326114;
-        bh=z1ShzoCSkbQb+bOpuaiBtOfCObZ5xV/5jCkA52fVM7U=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ZSoiPmfwpPthXwwLa+SgKEi3DzH2Y1E+GN8PH8yc8mRVbjar4q05Gt45Z5GnuOC9r
-         DTQR2PrUvyCR5hjBBVFXEkXT/24eZiI/31Qzl2M+9U+jdclLfZJ4cJOSqO/0zXB3fi
-         /JQQCltMWzh4hCzbuZ49YlcTU/AynOFfg0PGeINz91OtWxxI3MnYaomVQO8VumZTZI
-         JOj8/uyj+4pj+2nnTnlWrLoKjlTWhjC+PcukaXUpFLgVzNGNysenUz6lb4icrnpUMp
-         loucqMnkOtEc6nfxhIT7qckU12c5SF85dy/WmK2mbaQCzhDuwYIkXc9z9/FXiTII/Q
-         4GiqNWH0i7hZw==
+        bh=oRIo74EBIqUQt2BggP6GLMLLkw6dNMctIDHE7rupAZM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Ny+p08HjVrXxoTDUZsW9vWR6yDP5UI/lSctNfXWbp1Rhg+wveY5qplOs0xpXmNQ1A
+         w3rfevmi69mgOEg8ROfY2XM+HhncElbV8+tCkayjBgt+aTYby2w86hvVOpqxJZZARO
+         TWjBLOkOW9YZLxTLDEyIl9qwxDv3QqTqg7BJmIEkoIxGul2OD4r2bfsJCwbf2IgF1l
+         LI3TKJknogTfaGiwRZPXXQaNl+b8cfmcESGGL83Lip61CDAQ9Z2TV3/ofU4nWqmlda
+         yI/0gc/O2cG+ThIPEkRr6iBNi09adk5E55LdRxZDq6WzOIYlnwfQxZT7VlIkzp3rHy
+         PGgzxtBbGPo8Q==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1nknM6-001nsd-HX; Sat, 30 Apr 2022 14:41:50 +0100
+        id 1nknM6-001nsg-Is; Sat, 30 Apr 2022 14:41:50 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 To:     Luis Chamberlain <mcgrof@kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        mauro.chehab@linux.intel.com, Greg KH <gregkh@linuxfoundation.org>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Kai Vehmanen <kai.vehmanen@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        "David Airlie" <airlied@linux.ie>,
+        "Greg KH" <gregkh@linuxfoundation.org>,
+        "Jaroslav Kysela" <perex@perex.cz>,
+        "Kai Vehmanen" <kai.vehmanen@intel.com>,
+        "Lucas De Marchi" <lucas.demarchi@intel.com>,
+        "Pierre-Louis Bossart" <pierre-louis.bossart@intel.com>,
+        "Takashi Iwai" <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
         linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>
-Subject: [PATCH v3 0/2] Let userspace know when snd-hda-intel needs i915
-Date:   Sat, 30 Apr 2022 14:41:46 +0100
-Message-Id: <cover.1651326000.git.mchehab@kernel.org>
+        mauro.chehab@linux.intel.com,
+        Dan Williams <dan.j.williams@intel.com>
+Subject: [PATCH v3 1/2] module: update dependencies at try_module_get()
+Date:   Sat, 30 Apr 2022 14:41:47 +0100
+Message-Id: <a403bfabca4ce587ddd275f2a3c1dfc1d99bda86.1651326000.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <cover.1651326000.git.mchehab@kernel.org>
+References: <cover.1651326000.git.mchehab@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -63,80 +67,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, kernel/module annotates module dependencies when
-request_symbol is used, but it doesn't cover more complex inter-driver
-dependencies that are subsystem and/or driver-specific.
+Sometimes, device drivers are bound into each other via try_module_get(),
+making such references invisible when looking at /proc/modules or lsmod.
 
-In the case of hdmi sound, depending on the CPU/GPU, sometimes the
-snd_hda_driver can talk directly with the hardware, but sometimes, it
-uses the i915 driver. When the snd_hda_driver uses i915, it should
-first be unbind/rmmod, as otherwise trying to unbind/rmmod the i915
-driver cause driver issues, as as reported by CI tools with different
-GPU models:
+Add a function to allow setting up module references for such
+cases, and call it when try_module_get() is used.
 
-	https://intel-gfx-ci.01.org/tree/drm-tip/IGT_6415/fi-tgl-1115g4/igt@core_hotunplug@unbind-rebind.html
-	https://intel-gfx-ci.01.org/tree/drm-tip/CI_DRM_11495/bat-adlm-1/igt@i915_module_load@reload.html
-
-In the past, just a few CPUs were doing such bindings, but this issue now
-applies to all "modern" Intel CPUs  that have onboard graphics, as well as
-to the  newer discrete GPUs.
-
-With the discrete GPU case, the HDA controller is physically separate and
-requires i915 to power on the hardware for all hardware  access. In this
-case, the issue is hit basicly 100% of the time.
-
-With on-board graphics, i915 driver is needed only when the display
-codec is accessed. If i915 is unbind during runtime suspend, while
-snd-hda-intel is still bound, nothing bad happens, but unbinding i915
-on other situations may also cause issues.
-
-So, add support at kernel/modules to allow snd-hda drivers to properly
-annotate when a dependency on a DRM driver dependencies exists,
-and add a call to such new function at the snd-hda driver when it
-successfully binds into the DRM driver.
-
-This would allow userspace tools to check and properly remove the
-audio driver before trying to remove or unbind the GPU driver.
-
-It should be noticed that this series conveys the hidden module
-dependencies. Other changes are needed in order to allow
-removing or unbinding the i915 driver while keeping the snd-hda-intel
-driver loaded/bound. With that regards, there are some discussions on
-how to improve this at alsa-devel a while  back:
-
-https://mailman.alsa-project.org/pipermail/alsa-devel/2021-September/190099.html
-
-So, future improvements on both in i915 and the audio drivers could be made.
-E.g. with  discrete GPUs, it's the only codec of the card, so it seems feasible
-to detach the ALSA card if i915 is bound (using infra made for VGA
-switcheroo), but,  until these improvements are done and land in
-upstream, audio drivers needs to be unbound if i915 driver goes unbind.
-
-Yet, even if such fixes got merged, this series is still needed, as it makes
-such dependencies more explicit and easier to debug.
-
-PS.: This series was generated against next-20220428.
-
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
 
-v3: minor fixes:
- - fixed a checkpatch warning;
- - use a single line for the new function prototype.
+See [PATCH v3 0/2] at: https://lore.kernel.org/all/cover.1651326000.git.mchehab@kernel.org/
 
-v2: 
- - the dependencies are now handled directly at try_module_get().
+ include/linux/module.h |  4 +++-
+ kernel/module/main.c   | 33 +++++++++++++++++++++++++++++++--
+ 2 files changed, 34 insertions(+), 3 deletions(-)
 
-
-Mauro Carvalho Chehab (2):
-  module: update dependencies at try_module_get()
-  ALSA: hda - identify when audio is provided by a video driver
-
- include/linux/module.h     |  4 +++-
- kernel/module/main.c       | 33 +++++++++++++++++++++++++++++++--
- sound/hda/hdac_component.c |  2 +-
- 3 files changed, 35 insertions(+), 4 deletions(-)
-
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 46d4d5f2516e..836851baaad4 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -620,7 +620,9 @@ extern void __module_get(struct module *module);
+ 
+ /* This is the Right Way to get a module: if it fails, it's being removed,
+  * so pretend it's not there. */
+-extern bool try_module_get(struct module *module);
++extern bool __try_module_get(struct module *module, struct module *this);
++
++#define try_module_get(mod) __try_module_get(mod, THIS_MODULE)
+ 
+ extern void module_put(struct module *module);
+ 
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 05a42d8fcd7a..d63ebf52392b 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -631,6 +631,33 @@ static int ref_module(struct module *a, struct module *b)
+ 	return 0;
+ }
+ 
++static int ref_module_dependency(struct module *mod, struct module *this)
++{
++	int ret;
++
++	if (!this || !this->name)
++		return -EINVAL;
++
++	if (mod == this)
++		return 0;
++
++	mutex_lock(&module_mutex);
++
++	ret = ref_module(this, mod);
++
++#ifdef CONFIG_MODULE_UNLOAD
++	if (ret)
++		goto ret;
++
++	ret = sysfs_create_link(mod->holders_dir,
++				&this->mkobj.kobj, this->name);
++#endif
++
++ret:
++	mutex_unlock(&module_mutex);
++	return ret;
++}
++
+ /* Clear the unload stuff of the module. */
+ static void module_unload_free(struct module *mod)
+ {
+@@ -841,7 +868,7 @@ void __module_get(struct module *module)
+ }
+ EXPORT_SYMBOL(__module_get);
+ 
+-bool try_module_get(struct module *module)
++bool __try_module_get(struct module *module, struct module *this)
+ {
+ 	bool ret = true;
+ 
+@@ -856,9 +883,11 @@ bool try_module_get(struct module *module)
+ 
+ 		preempt_enable();
+ 	}
++	if (ret)
++		ref_module_dependency(module, this);
+ 	return ret;
+ }
+-EXPORT_SYMBOL(try_module_get);
++EXPORT_SYMBOL(__try_module_get);
+ 
+ void module_put(struct module *module)
+ {
 -- 
 2.35.1
-
 

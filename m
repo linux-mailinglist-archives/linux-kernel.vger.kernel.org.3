@@ -2,89 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 943E7515F03
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 18:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB90E515F06
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 18:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243138AbiD3QY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 12:24:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
+        id S243243AbiD3Q0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 12:26:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237163AbiD3QYY (ORCPT
+        with ESMTP id S237163AbiD3Q0w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 12:24:24 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E479737BDA
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 09:21:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651335661; x=1682871661;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rX2bI62ad3aLZ3scDHwLF6e59TPJNcoGTHYAURtpSe4=;
-  b=ZDo7wmhMDMYVYkx1dFrxYNWJcCDCVIptNMIruQDFbQnCP2RfOygaBllN
-   9OYLBe/e6zlAKUKlJMjZJgZUEAFZCR408yH8+tEG6wPccOzb/15swMHDJ
-   j38h/Oqx3JiTcd66/VKxEyaD3cC7BqkHo7OljV1V8yFPnmDH+pJXQ1Ows
-   YD8ViHzYAqAJBwrnLrzewdMECqK/OLiRkFsKyaMLwT8LNV6p+r/jlpazG
-   H8/6pro+LDDAC1rx5BU7ak8l+TjToogjM3yMGUfIg4X6ABNQpGcoym3xW
-   w9sUxKv///R/K5p96ArtSfI5Xco3B87fLl+Mp9vATW0bCzfZiens6a9w/
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10333"; a="265747555"
-X-IronPort-AV: E=Sophos;i="5.91,188,1647327600"; 
-   d="scan'208";a="265747555"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2022 09:21:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,188,1647327600"; 
-   d="scan'208";a="706996887"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 30 Apr 2022 09:21:00 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nkpq7-0007Ot-RO;
-        Sat, 30 Apr 2022 16:20:59 +0000
-Date:   Sun, 1 May 2022 00:20:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: {standard input}:26: Error: unrecognized opcode: `iccci'
-Message-ID: <202205010034.zgGUNYAE-lkp@intel.com>
+        Sat, 30 Apr 2022 12:26:52 -0400
+Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [5.144.164.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62CA5F8CE
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 09:23:30 -0700 (PDT)
+Received: from localhost.localdomain (abxh26.neoplus.adsl.tpnet.pl [83.9.1.26])
+        by m-r2.th.seeweb.it (Postfix) with ESMTPA id A908E3F722;
+        Sat, 30 Apr 2022 18:23:23 +0200 (CEST)
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+To:     ~postmarketos/upstreaming@lists.sr.ht
+Cc:     martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: qcom: msm8996-tone: Drop cont_splash_mem region
+Date:   Sat, 30 Apr 2022 18:23:19 +0200
+Message-Id: <20220430162319.607629-1-konrad.dybcio@somainline.org>
+X-Mailer: git-send-email 2.35.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   8013d1d3d2e33236dee13a133fba49ad55045e79
-commit: de39b19452e784de5f90ae899851ab29a29bb42c powerpc: Rewrite 4xx flush_cache_instruction() in C
-date:   1 year, 8 months ago
-config: powerpc-randconfig-r011-20220429 (https://download.01.org/0day-ci/archive/20220501/202205010034.zgGUNYAE-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=de39b19452e784de5f90ae899851ab29a29bb42c
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout de39b19452e784de5f90ae899851ab29a29bb42c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+Tone does not have a functioning bootloader framebuffer and Linux allocates
+the DRM framebuffer dynamically. Free up 36 MiB of precious RAM by removing
+this reservation.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+---
+ arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi | 5 -----
+ 1 file changed, 5 deletions(-)
 
-All errors (new ones prefixed by >>):
-
-   {standard input}: Assembler messages:
->> {standard input}:26: Error: unrecognized opcode: `iccci'
-
+diff --git a/arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi b/arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi
+index fe57c0c35c5e..ce434c11c059 100644
+--- a/arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi
+@@ -33,11 +33,6 @@ ramoops@a7f00000 {
+ 			ecc-size = <16>;
+ 		};
+ 
+-		cont_splash_mem: memory@83401000 {
+-			reg = <0 0x83401000 0 0x23ff000>;
+-			no-map;
+-		};
+-
+ 		zap_shader_region: gpu@90400000 {
+ 			compatible = "shared-dma-pool";
+ 			reg = <0x0 0x90400000 0x0 0x2000>;
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.2
+

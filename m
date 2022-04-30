@@ -2,93 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB766515CAA
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 14:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E165515CDC
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 14:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237570AbiD3MNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 08:13:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
+        id S239419AbiD3MZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 08:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232383AbiD3MNj (ORCPT
+        with ESMTP id S232836AbiD3MZm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 08:13:39 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C577659;
-        Sat, 30 Apr 2022 05:10:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 97B90CE02C7;
-        Sat, 30 Apr 2022 12:10:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9E2A6C385AE;
-        Sat, 30 Apr 2022 12:10:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651320612;
-        bh=lh6YsWWNzTF+K97GRW8ZIrWk45vWopwIEJRFY+ww1RE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Ll8X7x8Km5uESLL4dQBsbreGwaDFmcPQGz/eqWe6gStjgYt1jwA5HI8ssi6/h4SUx
-         1AsdOhgj6UHlqFDhyAnpMUb23Xu56rMqoACG6fD2zKKPZGMwCN0RjbvEa5kFwwzqWh
-         a/nASF7luILFeaY6cbbPE8O/CnXs/NvExPa3skHiViyX8Mv1HpiT0qq74jV8az8xP4
-         01+O7Jv3XH2jHLaBB6Rf5OMpWkQJJ3OcfFm/rV7RV46ZVkR2D7dbNE3yQ8ANrcEHmX
-         kenFGoPgk+zwjV+W+hNjl+naixZjWe1+v2jM+iNx17BXP4ssoU/Lx+6TbXSpBBvPzy
-         st+AIxiUkjX9A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7E9DBF03841;
-        Sat, 30 Apr 2022 12:10:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sat, 30 Apr 2022 08:25:42 -0400
+X-Greylist: delayed 527 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 30 Apr 2022 05:22:20 PDT
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8527B12E;
+        Sat, 30 Apr 2022 05:22:20 -0700 (PDT)
+Date:   Sat, 30 Apr 2022 14:13:27 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=t-8ch.de; s=mail;
+        t=1651320808; bh=DT5/86canTZHX2ROrTMFnYpWQTQ8t6bIymKCu+253LY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L9Y6GqstX49RWzFh+5HGKKco8NsZfj3SN4p+EcvonpQAphgOVz6FfS8Wt7CuGu/Hw
+         ilTs6ccH990Ei+1wC/g9xyowAMV7dRKAtDidxpQY0NnkTm/BMQVP5dLMnyogdx/rlt
+         4eCN3Ih0FvKWM7Luybm7G/GUbgFBYos2inKltwM8=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Mark Pearson <markpearson@lenovo.com>
+Cc:     Lyude Paul <lyude@redhat.com>,
+        ibm-acpi-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+        Mark Gross <markgross@kernel.org>
+Subject: Re: [External] [PATCH 1/2] platform/x86: thinkpad_acpi: Restore X1
+ Carbon 9th Gen dual fan quirk
+Message-ID: <9270b2da-0cca-422f-8bf8-4b1fb9aa363c@t-8ch.de>
+References: <20220429211418.4546-1-lyude@redhat.com>
+ <20220429211418.4546-2-lyude@redhat.com>
+ <d3461670-a905-4956-4f4d-d847adf4289b@lenovo.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/5] generic net and ipv6 minor optimisations
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165132061250.13332.11733885633402337969.git-patchwork-notify@kernel.org>
-Date:   Sat, 30 Apr 2022 12:10:12 +0000
-References: <cover.1651141755.git.asml.silence@gmail.com>
-In-Reply-To: <cover.1651141755.git.asml.silence@gmail.com>
-To:     Pavel Begunkov <asml.silence@gmail.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        dsahern@kernel.org, edumazet@google.com,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <d3461670-a905-4956-4f4d-d847adf4289b@lenovo.com>
+Jabber-ID: thomas@t-8ch.de
+X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
+X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi Mark,
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Thu, 28 Apr 2022 11:58:43 +0100 you wrote:
-> 1-3 inline simple functions that only reshuffle arguments possibly adding
-> extra zero args, and call another function. It was benchmarked before with
-> a bunch of extra patches, see for details
+On 2022-04-29 21:25-0400, Mark Pearson wrote:
+> Hi Lyude
 > 
-> https://lore.kernel.org/netdev/cover.1648981570.git.asml.silence@gmail.com/
+> On 4/29/22 17:14, Lyude Paul wrote:
+> > The new method of probing dual fan support introduced in:
+> > 
+> > bf779aaf56ea ("platform/x86: thinkpad_acpi: Add dual fan probe")
+> > 
+> > While this commit says this works on the X1 Carbon 9th Gen, it actually
+> > just results in hiding the second fan on my local machine. Additionally,
+> > I'm fairly sure this machine powers on quite often without either of the
+> > two fans spinning.
+> > 
+> > So let's fix this by adding back the dual fan quirk for the X1 Carbon 9th
+> > Gen.
+> > 
+> [..]
+>
+> I just double checked this on my X1C9 - and it's working correctly. 2nd
+> fan is detected correctly.
 > 
-> It may increase the binary size, but it's the right thing to do and at least
-> without modules it actually sheds some bytes for some standard-ish config.
+> I'd rather understand why it's not working on your setup then just
+> re-introduce the quirk.
 > 
-> [...]
+> What happens on your system when the
+>   res = fan2_get_speed(&speed);
+> is called? If that is failing it means your 2nd fan isn't responding and
+> that's not supposed to happen. Could you let me know if you get an error
+> code, if it happens every boot, etc
+> I assume when the function is called later it works successfully?
 
-Here is the summary with links:
-  - [net-next,1/5] net: inline sock_alloc_send_skb
-    https://git.kernel.org/netdev/net-next/c/de32bc6aad09
-  - [net-next,2/5] net: inline skb_zerocopy_iter_dgram
-    https://git.kernel.org/netdev/net-next/c/657dd5f97b2e
-  - [net-next,3/5] net: inline dev_queue_xmit()
-    https://git.kernel.org/netdev/net-next/c/c526fd8f9f4f
-  - [net-next,4/5] ipv6: help __ip6_finish_output() inlining
-    https://git.kernel.org/netdev/net-next/c/4b143ed7dde5
-  - [net-next,5/5] ipv6: refactor ip6_finish_output2()
-    https://git.kernel.org/netdev/net-next/c/58f71be58b87
+I have the same issue.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+To me it looks like this:
 
+Probing for the second fan calls fan2_get_speed(), this calls
+fan_select_fan2() which in turn checks that tp_features.second_fan is set.
+But at this point in the tp_features.second_fan can not yet be set because it
+is either set from quirks or *after* the probing.
 
+Maybe some of the matches for the quirk TPACPI_FAN_2FAN should also have
+matched this device?
+It doesn't do so on my device.
+
+> Also please confirm which BIOS and EC version you have.
+
+Linux: 5.17.5
+BIOS Revision: 1.51
+Firmware Revision: 1.32
+
+Thomas

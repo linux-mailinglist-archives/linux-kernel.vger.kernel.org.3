@@ -2,150 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E86B515AF8
+	by mail.lfdr.de (Postfix) with ESMTP id E0998515AFA
 	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 09:31:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382271AbiD3H2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 03:28:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54882 "EHLO
+        id S1382276AbiD3Hea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 03:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382259AbiD3H2H (ORCPT
+        with ESMTP id S1382259AbiD3He1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 03:28:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B44D784EE9
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 00:24:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651303485;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Cq/bV6RK8FDU8B3/J6PiOX4oHk2MVdSUsZvuBXDrwOw=;
-        b=Q8XpaOT9QsBC/R6rWy5qZsA/cX2B03/PCeW0zIkafROVXujic56jDWgfZoZQPWCgRzetfJ
-        zSfMa1Yn6lJwtrtQ6fL3NmhgEwFO/U/Ms1udY3GFrwk6QGvjrRLSr/0oQLTzGsy8s1nvOF
-        SgH5dKzHU9zFILKeSLJS6nVoazKHc8w=
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com
- [209.85.210.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-17-VGvSndeuMoKY1yc9MoL7TQ-1; Sat, 30 Apr 2022 03:24:44 -0400
-X-MC-Unique: VGvSndeuMoKY1yc9MoL7TQ-1
-Received: by mail-pf1-f198.google.com with SMTP id g5-20020a62e305000000b0050d2dba0c5dso5226418pfh.8
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 00:24:43 -0700 (PDT)
+        Sat, 30 Apr 2022 03:34:27 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA8FB18BD
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 00:31:04 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id dk23so19174793ejb.8
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 00:31:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mzDHkAqitatyTcPFJa1mY5lzI4udlQpvmGQagzLDym8=;
+        b=PTUaOeLLVeSdVKlPHwLajhFQ+RGXmvKDhBLR0FRjVljxZeHtCBrwZAxMLPJ7hO9czf
+         +pE5VMAFJvm7Dz5c/QiAHhG12O2ywytGcdD1ge45uWIq5F5DtgMWGkrN25Y0R6uhpP1Q
+         RcppfFCqGzmGF82Rm9UIRt78+yB0exo53B45YnnmPop/gNyQg6jtmJOpJvQUHIYFHGwO
+         KmCpmEK4GOzzKlknXQZzG9PCjKAqsCyJxA628WIpEeo0/vc6x5FIb8T1iNIRHCdIWCOo
+         1cBv8hI0ISBk3f8ez1PCehaKcw7Ji2rWvWH5pgrxuSd1bMFrAFwnvYeLvYFGnkLmHq98
+         Wn5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Cq/bV6RK8FDU8B3/J6PiOX4oHk2MVdSUsZvuBXDrwOw=;
-        b=UNrmdMN3OAWcakNdNrcrqzqr8/giVAOKvd/sNa+TH48P21SwSWSW+nFWv4VE5q9bpF
-         ZOKdFuRxqvlfByyiAVEAsPt36DYrqaHnduxI698Ofu87tyPdoPZiP6qcnwv8ILm7sbp5
-         Y3bAKGxZGq0b3rC4nTZonFPuiClI6i24nyFbo5pKsnH3y0aTIDAZQqdDkPUp5ptweUqs
-         GdckY1Ia5TMtzRTF5VX2tmykObGg3j5si6TrHc9wGl99j79Cs+d43gAVMuSWaZ7mQxlU
-         HvKGgE7Wg9icRCuOzJKxek9sp6hKoIsIToiRsVmLA1xbqStUHs2mGyFQufZ+jjTok53u
-         3nOg==
-X-Gm-Message-State: AOAM532uiIzDEEYn23gkYW1AvRQveabk4ffZ416ZgOWeMIQXyjFekG3q
-        1Na/hldi4Ve21TdlT9ce+B3y8vDrRbK0HfEAy4ta6bn37bwGDLYpo09F8tL5yIMANCfpsxxPn1L
-        A17RksD2haW12SEPFolXwAT8zatapQJqxfJqJkUwc
-X-Received: by 2002:a17:902:e012:b0:15d:53:61ff with SMTP id o18-20020a170902e01200b0015d005361ffmr2857432plo.73.1651303483089;
-        Sat, 30 Apr 2022 00:24:43 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxap4SoZ79RaRepH1X+iEfYwFKlJ6T98AKWhyrpoUO7M5FfKKLyJ9bgOK31Ee7KLiI2ncnoHj58lJVAGRIL1so=
-X-Received: by 2002:a17:902:e012:b0:15d:53:61ff with SMTP id
- o18-20020a170902e01200b0015d005361ffmr2857422plo.73.1651303482851; Sat, 30
- Apr 2022 00:24:42 -0700 (PDT)
+        bh=mzDHkAqitatyTcPFJa1mY5lzI4udlQpvmGQagzLDym8=;
+        b=GdGL2Re6xUI0TWg0QbfNtpqjNQaIy7BNYhCdHgimzxfTUMNGhEejkaKVJd7qEariK0
+         8zqfX/fmuAgnUmYhrflJ+ftoRMdPB213oZKY82RYNk7IcIhekCdLKeSDT1VrPXsnkaRB
+         i6l6wCpHwZOY5tIpo4WxGUUp/FxHc3c/yOfaabiAM/lB84Cm4tpXLkbaWNa3e78p/fJj
+         yaWhVrgmfEpvDbEGpIFxtUui8RhzGv6Jzw4MQJF/jXNI4DY67jZok4/uW7HaHgrZOjCL
+         FPtP/k5vItrjn/nG1hrrM1A2kp9hdYmNnGYTsACnpDt9QeRmhmvmsCVbkPiBTT/dEcb8
+         PviQ==
+X-Gm-Message-State: AOAM5318074fB1ApdTmVyneq2Wt3qfw7hDBqV+yyA4/Q4xVkg/QPXmKr
+        Kl0DI2GOHAlH9KFU+w4jE6VqOeUIkJL45QDz6EAjDg==
+X-Google-Smtp-Source: ABdhPJxLoY87J3Nwdm8bo89z/aU3TZjQtBGk1bUIDa/5ZNT9/wS66XZEEYzdJAYZvV55mk2pLmDCViVvi/DquisoBXg=
+X-Received: by 2002:a17:907:3f8e:b0:6f3:d07c:b25d with SMTP id
+ hr14-20020a1709073f8e00b006f3d07cb25dmr2836083ejc.59.1651303863134; Sat, 30
+ Apr 2022 00:31:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220421140740.459558-1-benjamin.tissoires@redhat.com>
- <20220421140740.459558-4-benjamin.tissoires@redhat.com> <20220426041147.gwnxhcjftl2kaz6g@MBP-98dd607d3435.dhcp.thefacebook.com>
- <CAO-hwJLWxtZcs-ynzAaF4hGf6zPF5wAni3Etzb1_XrvQpx2Jxw@mail.gmail.com> <CAADnVQL3U5Gz_spmdTsC6zOuR=XLEMppwn+=bkyOsSt0=7pP7Q@mail.gmail.com>
-In-Reply-To: <CAADnVQL3U5Gz_spmdTsC6zOuR=XLEMppwn+=bkyOsSt0=7pP7Q@mail.gmail.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Sat, 30 Apr 2022 09:24:31 +0200
-Message-ID: <CAO-hwJL8TQ2wkFYpR99S7zsujPrH2NC1Wp13EvkyzijkY6oY8A@mail.gmail.com>
-Subject: Re: [RFC bpf-next v4 3/7] error-inject: add new type that carries if
- the function is non sleepable
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>
+References: <20220429181259.622060-1-dlatypov@google.com>
+In-Reply-To: <20220429181259.622060-1-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Sat, 30 Apr 2022 03:30:51 -0400
+Message-ID: <CAFd5g46L1JZxvbV2ZS0-FPTB+je5=wDtZZvdiOLsFF=jJmXzPw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] kunit: rename print_subtest_{start,end} for
+ clarity (s/subtest/suite)
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 30, 2022 at 5:30 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Fri, Apr 29, 2022 at 2:13 PM Daniel Latypov <dlatypov@google.com> wrote:
 >
-> On Tue, Apr 26, 2022 at 12:52 AM Benjamin Tissoires
-> <benjamin.tissoires@redhat.com> wrote:
-> >
-> > On Tue, Apr 26, 2022 at 6:11 AM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Thu, Apr 21, 2022 at 04:07:36PM +0200, Benjamin Tissoires wrote:
-> > > > When using error-injection function through bpf to change the return
-> > > > code, we need to know if the function is sleepable or not.
-> > > >
-> > > > Currently the code assumes that all error-inject functions are sleepable,
-> > > > except for a few selected of them, hardcoded in kernel/bpf/verifier.c
-> > > >
-> > > > Add a new flag to error-inject so we can code that information where the
-> > > > function is declared.
-> > > >
-> > > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> > > >
-> > > > ---
-> > > >
-> > > > new in v4:
-> > > > - another approach would be to define a new kfunc_set, and register
-> > > >   it with btf. But in that case, what program type would we use?
-> > > >   BPF_PROG_TYPE_UNSPEC?
-> > > > - also note that maybe we should consider all of the functions
-> > > >   non-sleepable and only mark some as sleepable. IMO it makes more
-> > > >   sense to be more restrictive by default.
-> > >
-> > > I think the approach in this patch is fine.
-> > > We didn't have issues with check_non_sleepable_error_inject() so far,
-> > > so I wouldn't start refactoring it.
-> >
-> > OK... though I can't help but thinking that adding a new
-> > error-inject.h enum value is going to be bad, because it's an API
-> > change, and users might not expect NS_ERRNO.
+> These names sound more general than they are.
 >
-> Not sure about api concern. This is the kernel internal tag.
-> bpf progs are not aware of them. The functions can change
-> from sleepable to non-sleepable too.
-> allow_error_inject can be removed. And so on.
+> The _end() function increments a `static int kunit_suite_counter`, so it
+> can only safely be called on suites, aka top-level subtests.
+> It would need to have a separate counter for each level of subtest to be
+> generic enough.
 >
-> > OTOH, if we had a new kfunc_set, we keep the existing error-inject API
-> > in place with all the variants and we just teach the verifier that the
-> > function is non sleepable.
-> ...
-> > IIUC, the kfunc_set approach would solve that, no?
+> So rename it to make it clear it's only appropriate for suites.
 >
-> Makes sense. Let's figure out an extensible kfunc_set approach
-> that is not centralized in verifier.c
->
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> Reviewed-by: David Gow <davidgow@google.com>
 
-OK, I'll work on this in v5.
-
-But I need to rethink the whole sleepable/non-sleepable definitions
-for my use case, because I have now a clear separation between not
-sleepable context (in fentry/fexit/fmod_ret) and sleepable context (in
-SEC("syscall")), so maybe the whole thing is not really required.
-
-Cheers,
-Benjamin
-
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>

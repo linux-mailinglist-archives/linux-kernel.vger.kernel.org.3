@@ -2,313 +2,544 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5AE515AE7
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 09:04:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DFEB515AE8
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 09:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234477AbiD3HHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 03:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57398 "EHLO
+        id S236406AbiD3HMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 03:12:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231345AbiD3HHB (ORCPT
+        with ESMTP id S231345AbiD3HMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 03:07:01 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50D26620E
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 00:03:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651302220; x=1682838220;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5Kc8qZ8rIzn8zM2YLjvvX98UuDzTt6QppaT3rvHtvds=;
-  b=d4XOIZQ97iJKyjNuB5Ul/YtT+2p2Jl1oCsUPmLiuvhom+eoM4TYcOVWm
-   v0/+v5t4ywOKcu51CFOSQXU+33HlhHRiUCmgUWdc3Dosy9eAwV6T8xkr1
-   YJJZzk4TA+wv1t0bDikjcuBm3wwSbUtrfOqGZjm1fAqv1w28d6OBge8mU
-   15Km6oZDSZ3w9LY25AzRCfec4csSU5HAVtIZZG8tCYF8gD40bgQfAfxc5
-   NW2Cqu8/OmRO+8wwEVKEaTn7cKIQ0sfNfjbPnkO+XYI2x9fgLrspJ04bY
-   zUYgVgg0RwlyMemPiN72VHwudzXenIGGZVe5NXbctB6VSsqoUH0L30xaa
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="254246550"
-X-IronPort-AV: E=Sophos;i="5.91,187,1647327600"; 
-   d="scan'208";a="254246550"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2022 00:03:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,187,1647327600"; 
-   d="scan'208";a="515198512"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 30 Apr 2022 00:03:39 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nkh8k-0006yj-Hi;
-        Sat, 30 Apr 2022 07:03:38 +0000
-Date:   Sat, 30 Apr 2022 15:03:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ioannis Angelakopoulos <iangelak@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [rhvgoyal:ioannis-fanotify 13/18]
- fs/notify/fanotify/fanotify_user.c:1637 do_fanotify_mark() warn:
- inconsistent indenting
-Message-ID: <202204301433.yqsNAcRP-lkp@intel.com>
+        Sat, 30 Apr 2022 03:12:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F66A85976
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 00:08:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 759B560A51
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 07:08:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1EA1C385B8
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 07:08:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651302530;
+        bh=XfMH5BUu5dLhULtzuPTKCufWiIoJk4IfEwdZodYsz3g=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=nzRtVLT3TyLVHkc52o4yobgjtRyf3Z/Hm2Pf3LVTOrOrUhzd55Y+avT67ck0eb8P0
+         xXS4/X1yeJ7BsaAEWVi9z9cI4kY9jjEPLYi6/m5lIKcOcRB7d1WzMmy6UEt+WFNxN2
+         r3jg3XxT2praOfEVWlK+DlDEPco+I8WEwH72UxsfpIzIXx2MRXLuWarYs2UprhYzlp
+         NUCgVxn7DbnzJC2DykDlv/Km+yPbjebqCmKhdWhNtNZa5r0vHiK7s9DkteQDYVtvVL
+         m6Wb0KwjPhy61bfLBB7CRdkzVtOJiXM8mUH8BCVzD9sxpWeXTgj+twQhyhd0RnJ8xh
+         NFKZT2I8coV1w==
+Received: by mail-vs1-f49.google.com with SMTP id w124so9461839vsb.8
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 00:08:50 -0700 (PDT)
+X-Gm-Message-State: AOAM532uYmHNwWh6P8F+ssjZq7Ow1EhG94t7htGbm92WksA8luYJ7Cfv
+        9qwXA0kWClLqVrVT8wNs+Bpw4Xe0QjYFYjLsdK0=
+X-Google-Smtp-Source: ABdhPJyVWt5eKfW8ehNJNUCCsEf046KhyogdtBodECeMRLErqDlkSJJ7HlhOGvnUs/HYdBtyPZpTNb16sNmGKZfM7zA=
+X-Received: by 2002:a67:fc86:0:b0:32d:18ed:e71b with SMTP id
+ x6-20020a67fc86000000b0032d18ede71bmr719351vsp.51.1651302529500; Sat, 30 Apr
+ 2022 00:08:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220426015751.88582-1-lihuafei1@huawei.com> <20220426015751.88582-2-lihuafei1@huawei.com>
+ <CAJF2gTRSBcxr3+f86PSiy706dkvxEWA+90JCA4658ZwVf7sB5w@mail.gmail.com>
+ <CAJF2gTR+EgsgCOuRbEGwpjRcAmbdqOGw9KK6AuDnyHQy95v9mA@mail.gmail.com> <022b5310-0084-0327-721a-49ee8bcde346@huawei.com>
+In-Reply-To: <022b5310-0084-0327-721a-49ee8bcde346@huawei.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sat, 30 Apr 2022 15:08:38 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRj1xhUz4f847zx7B1w1enUCKcVqoVF5EdpZN9govMX8w@mail.gmail.com>
+Message-ID: <CAJF2gTRj1xhUz4f847zx7B1w1enUCKcVqoVF5EdpZN9govMX8w@mail.gmail.com>
+Subject: Re: [PATCH 2/2] riscv: kprobe: Allow coexistence of ftrace and kprobe
+To:     Li Huafei <lihuafei1@huawei.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        David Miller <davem@davemloft.net>, jszhang@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>, liaochang1@huawei.com,
+        =?UTF-8?Q?Patrick_St=C3=A4hlin?= <me@packi.ch>,
+        Pekka Enberg <penberg@kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/rhvgoyal/linux ioannis-fanotify
-head:   10887e7003a6a801e521d59daff76f0c035f061f
-commit: c8e47599d4489ca1c6a72c73882a36b3f5f23b47 [13/18] Fanotify, Inotify: Send remote request when adding a local watch
-config: nios2-randconfig-m031-20220428 (https://download.01.org/0day-ci/archive/20220430/202204301433.yqsNAcRP-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.3.0
+On Fri, Apr 29, 2022 at 5:15 PM Li Huafei <lihuafei1@huawei.com> wrote:
+>
+> Hi Guo Ren,
+>
+> On 2022/4/26 16:16, Guo Ren wrote:
+> > On Tue, Apr 26, 2022 at 4:01 PM Guo Ren <guoren@kernel.org> wrote:
+> >> On Tue, Apr 26, 2022 at 9:59 AM Li Huafei <lihuafei1@huawei.com> wrote:
+> >>> When using ftrace and kprobe at the same time, it was found that one
+> >>> might cause the other to be unavailable. This can be reproduced by the
+> >>> following steps.
+> >>>
+> >>>    # cd /sys/kernel/debug/tracing/
+> >>>    # echo cmdline_proc_show > set_ftrace_filter
+> >>>    # echo function > current_tracer
+> >>>    # echo 'p cmdline_proc_show' > kprobe_events
+> >>>    # echo 'p cmdline_proc_show+4' >> kprobe_events
+> >>>    # ls events/kprobes/
+> >>>    enable                 p_cmdline_proc_show_0
+> >>>    filter                 p_cmdline_proc_show_4
+> >>>    # echo 1 > events/kprobes/p_cmdline_proc_show_4/enable
+> >>>    # echo 1 > events/kprobes/p_cmdline_proc_show_0/enable
+> >>>    [  129.830108] 00000000ebed457d: expected (ffdb0097 4f0080e7) but got (00100073 4f0080e7)
+> >>>    [  129.835990] ------------[ ftrace bug ]------------
+> >>>    [  129.839510] ftrace failed to modify
+> >>>    [  129.839536] [<ffffffff80258910>] cmdline_proc_show+0x0/0x46
+> >>>    [  129.845831]  actual:   23:3c:11:fe:73:00:10:00
+> >>>    [  129.849299] Updating ftrace call site to call a different ftrace function
+> >>>    [  129.853998] ftrace record flags: e0000002
+> >>>    [  129.856771]  (2) R
+> >>>    [  129.856771]  expected tramp: ffffffff80008e60
+> >>>    [  129.861688] ------------[ cut here ]------------
+> >>>    [  129.865092] WARNING: CPU: 0 PID: 14 at kernel/trace/ftrace.c:2085 ftrace_bug+0x21a/0x24c
+> >>>    [  129.870949] Modules linked in:
+> >>>    [  129.873301] CPU: 0 PID: 14 Comm: migration/0 Not tainted 5.18.0-rc3-00002-gd8bfcd250f58 #6
+> >>>    [  129.879217] Hardware name: riscv-virtio,qemu (DT)
+> >>>    [  129.882666] Stopper: multi_cpu_stop+0x0/0x168 <- stop_machine_cpuslocked+0xfa/0x12e
+> >>>    [  129.888430] epc : ftrace_bug+0x21a/0x24c
+> >>>    [  129.891254]  ra : ftrace_bug+0x21a/0x24c
+> >>>    [  129.894057] epc : ffffffff807c3bee ra : ffffffff807c3bee sp : ff20000000283c80
+> >>>    [  129.899144]  gp : ffffffff813a83b8 tp : ff60000080021600 t0 : ffffffff804155c0
+> >>>    [  129.904257]  t1 : 0720072007200720 t2 : 7420646574636570 s0 : ff20000000283cb0
+> >>>    [  129.909402]  s1 : ff6000007fe622a0 a0 : 0000000000000022 a1 : c0000000ffffefff
+> >>>    [  129.914472]  a2 : 0000000000000001 a3 : 0000000000000000 a4 : 341adec112294700
+> >>>    [  129.919487]  a5 : 341adec112294700 a6 : 0000000000000730 a7 : 0000000000000030
+> >>>    [  129.924595]  s2 : ffffffff80258910 s3 : ffffffffffffffea s4 : 0000000000000000
+> >>>    [  129.929776]  s5 : 0000000000000a35 s6 : ffffffff80d667c8 s7 : ff6000007fe04000
+> >>>    [  129.934892]  s8 : 0000000000000004 s9 : 0000000000000002 s10: 0000000000000001
+> >>>    [  129.939992]  s11: 0000000000000003 t3 : ff6000007ff20f00 t4 : ff6000007ff20f00
+> >>>    [  129.945134]  t5 : ff6000007ff20000 t6 : ff200000002839c8
+> >>>    [  129.948838] status: 0000000000000100 badaddr: 0000000000000000 cause: 0000000000000003
+> >>>    [  129.954580] [<ffffffff800bf110>] ftrace_replace_code+0xce/0xd0
+> >>>    [  129.958771] [<ffffffff800bf280>] ftrace_modify_all_code+0xb4/0x12c
+> >>>    [  129.964420] [<ffffffff800bf30a>] __ftrace_modify_code+0x12/0x1c
+> >>>    [  129.969163] [<ffffffff800b4ea4>] multi_cpu_stop+0x9a/0x168
+> >>>    [  129.973035] [<ffffffff800b4b1c>] cpu_stopper_thread+0xb4/0x15e
+> >>>    [  129.977205] [<ffffffff8003457a>] smpboot_thread_fn+0x106/0x1e4
+> >>>    [  129.981277] [<ffffffff80030ca6>] kthread+0xee/0x108
+> >>>    [  129.984763] [<ffffffff800039ba>] ret_from_exception+0x0/0xc
+> >>>    [  129.988809] ---[ end trace 0000000000000000 ]---
+> >>>    # cat trace
+> >>>    # tracer: function
+> >>>    #
+> >>>    # WARNING: FUNCTION TRACING IS CORRUPTED
+> >>>    #          MAY BE MISSING FUNCTION EVENTS
+> >>>    # entries-in-buffer/entries-written: 0/0   #P:4
+> >>>    #
+> >>>    #                                _-----=> irqs-off/BH-disabled
+> >>>    #                               / _----=> need-resched
+> >>>    #                              | / _---=> hardirq/softirq
+> >>>    #                              || / _--=> preempt-depth
+> >>>    #                              ||| / _-=> migrate-disable
+> >>>    #                              |||| /     delay
+> >>>    #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+> >>>    #              | |         |   |||||     |         |
+> >>>
+> >>> As you can see, the ftrace functionality is broken. This is because
+> >>> DYNAMIC_FTRACE uses 4 instructions to make the jump from the function
+> >>> entry to the ftrace trampoline.
+> >>>
+> >>> After 'echo function > current_tracer':
+> >>>
+> >>>    <cmdline_proc_show>:
+> >>>      0xffffffff80258910 <+0>:     sd      ra,-8(sp)
+> >>>      0xffffffff80258914 <+4>:     auipc   ra,0xffdb0
+> >>>      0xffffffff80258918 <+8>:     jalr    1264(ra) # 0xffffffff80008e04 <ftrace_caller>
+> >>>      0xffffffff8025891c <+12>:    ld      ra,-8(sp)
+> >>>
+> >>> After 'echo 1 > events/kprobes/p_cmdline_proc_show_4/enable':
+> >>>
+> >>>    <cmdline_proc_show>:
+> >>>      0xffffffff80258910 <+0>:     sd      ra,-8(sp)
+> >>>      0xffffffff80258914 <+4>:     ebreak
+> >>>      0xffffffff80258918 <+8>:     jalr    1264(ra)
+> >>>      0xffffffff8025891c <+12>:    ld      ra,-8(sp)
+> >>>
+> >>> This time the second instruction is replaced with a breakpoint
+> >>> instruction and the ftrace-related instructions are broken. Then, when
+> >>> enabling 'p_cmdline_proc_show_0', a regs ftrace handler is registered
+> >>> based on KPROBES_ON_FTRACE, ftrace_modify_call() changes 'ftrace_caller'
+> >>> to 'ftrace_regs_caller', and checks for ftrace-related instructions is
+> >>> modified or not. Here it has been modified, causing ftrace to report a
+> >>> warning and disable itself.
+> >>>
+> >>> In turn, the breakpoints inserted by kprobe may be overwritten by
+> >>> ftrace.
+> >>>
+> >>> The problem is that we think that only the first instruction address at
+> >>> the function entry is needed for ftrace, but it is actually the first 4.
+> >>> As Masami mentioned in [1], we can treat the first 4 instructions as a
+> >>> 16-byte virtual instruction, and we can probe func+0 based on
+> >>> KPROBES_ON_FTRACE, but not func+4, func+8 and func+12. This way, ftrace
+> >>> and kprobe do not bother each other and can coexist.
+> >>>
+> >>> After this patch:
+> >>>
+> >>>    # cd /sys/kernel/debug/tracing/
+> >>>    # echo cmdline_proc_show > set_ftrace_filter
+> >>>    # echo function > current_tracer
+> >>>    # echo 'p cmdline_proc_show' > kprobe_events
+> >>>    # echo 'p cmdline_proc_show' > kprobe_events
+> >>>    # echo 'p cmdline_proc_show+4' >> kprobe_events
+> >>>    sh: write error: Invalid or incomplete multibyte or wide character
+> >>>    # echo 'p cmdline_proc_show+8' >> kprobe_events
+> >>>    sh: write error: Invalid or incomplete multibyte or wide character
+> >>>    # echo 'p cmdline_proc_show+12' >> kprobe_events
+> >>>    sh: write error: Invalid or incomplete multibyte or wide character
+> >>>    # echo 'p cmdline_proc_show+16' >> kprobe_events
+> >>>    # ls events/kprobes/
+> >>>    enable                  p_cmdline_proc_show_0
+> >>>    filter                  p_cmdline_proc_show_16
+> >>>    # echo 1 > events/kprobes/enable
+> >>>    # cat ../kprobes/list
+> >>>    ffffffff80258b14  k  cmdline_proc_show+0x0    [FTRACE]
+> >>>    ffffffff80258b24  k  cmdline_proc_show+0x10
+> >>>    # cat /proc/cmdline
+> >>>    nokaslr rootwait root=/dev/vda rw
+> >>>    # cat trace
+> >>>    # tracer: function
+> >>>    #
+> >>>    # entries-in-buffer/entries-written: 3/3   #P:4
+> >>>    #
+> >>>    #                                _-----=> irqs-off/BH-disabled
+> >>>    #                               / _----=> need-resched
+> >>>    #                              | / _---=> hardirq/softirq
+> >>>    #                              || / _--=> preempt-depth
+> >>>    #                              ||| / _-=> migrate-disable
+> >>>    #                              |||| /     delay
+> >>>    #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+> >>>    #              | |         |   |||||     |         |
+> >>>                 cat-142     [000] ...2.   181.493233: p_cmdline_proc_show_0: (cmdline_proc_show+0x0/0x46)
+> >>>                 cat-142     [000] ...2.   181.494271: cmdline_proc_show <-seq_read_iter
+> >>>                 cat-142     [000] d....   181.494573: p_cmdline_proc_show_16: (cmdline_proc_show+0x10/0x46)
+> >>>
+> >>> [1] https://patchwork.kernel.org/project/linux-arm-kernel/patch/20191218140622.57bbaca5@xhacker.debian/
+> >>>
+> >>> Fixes: c22b0bcb1dd0 ("riscv: Add kprobes supported")
+> >>> Signed-off-by: Li Huafei <lihuafei1@huawei.com>
+> >>> ---
+> >>>   arch/riscv/kernel/probes/kprobes.c | 31 ++++++++++++++++++++++++++++++
+> >>>   kernel/kprobes.c                   |  2 +-
+> >>>   2 files changed, 32 insertions(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/probes/kprobes.c
+> >>> index e6e950b7cf32..ebe32eb6c349 100644
+> >>> --- a/arch/riscv/kernel/probes/kprobes.c
+> >>> +++ b/arch/riscv/kernel/probes/kprobes.c
+> >>> @@ -21,6 +21,37 @@ DEFINE_PER_CPU(struct kprobe_ctlblk, kprobe_ctlblk);
+> >>>   static void __kprobes
+> >>>   post_kprobe_handler(struct kprobe *, struct kprobe_ctlblk *, struct pt_regs *);
+> >>>
+> >>> +#ifdef CONFIG_DYNAMIC_FTRACE
+> >>> +kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr, unsigned long offset,
+> >>> +                                        bool *on_func_entry)
+> >>> +{
+> >>> +       unsigned long faddr = ftrace_location(addr);
+> >>> +
+> >>> +       /*
+> >>> +        * The first 4 instructions at the beginning of the ftraced function
+> >>> +        * are used as a jump to ftrace trampoline, which we can think of as
+> >>> +        * a 16-byte virtual instruction. This allows the function entry to be
+> >>> +        * probed with the help of KPROBES_ON_FTRACE and does not break ftrace
+> >>> +        * functionality.
+> >>> +        */
+> >>> +       if (faddr && offset <= 12) {
+> >>> +               /*
+> >>> +                * As mentioned above, we treat the first 4 instructions of
+> >>> +                * the ftraced function as a virtual instruction, so that we
+> >>> +                * can only probe func+0, not func+4, func+8 and func+12.
+> >>> +                */
+> >>> +               if (offset)
+> >>> +                       return ERR_PTR(-EILSEQ);
+> >> Nak, we should change API in the patch.
+> > Typo: we shouldn't change API in the patch.
+>
+>
+> You are right, can't change API in this patch.  If here let
+> func+offs(<16) be equivalent to func+0, then there will be:
+>
+>      # echo 'p cmdline_proc_show' > kprobe_events
+>      # echo 'p cmdline_proc_show+4' >> kprobe_events
+>      # echo 'p cmdline_proc_show+8' >> kprobe_events
+>      # echo 'p cmdline_proc_show+12' >> kprobe_events
+>      # ls events/kprobes/
+>      enable                  p_cmdline_proc_show_0 p_cmdline_proc_show_4
+>      filter                  p_cmdline_proc_show_12 p_cmdline_proc_show_8
+>      # cat ../kprobes/list
+>      ffffffff80258b08  k  cmdline_proc_show+0x0 [DISABLED][FTRACE]
+>      ffffffff80258b08  k  cmdline_proc_show+0x0 [DISABLED][FTRACE]
+>      ffffffff80258b08  k  cmdline_proc_show+0x0 [DISABLED][FTRACE]
+>      ffffffff80258b08  k  cmdline_proc_show+0x0 [DISABLED][FTRACE]
+>
+> While it may be a bit confusing for the user, it has no functional
+> impact and usually we only probe for func+0. Making func+offs(<16) equal
+> to func+0 seems acceptable.
+>
+>
+> >
+> >> Reference below:
+> >>
+> >> diff --git a/arch/riscv/include/asm/ftrace.h b/arch/riscv/include/asm/ftrace.h
+> >> index 04dad3380041..4fbab6b89be3 100644
+> >> --- a/arch/riscv/include/asm/ftrace.h
+> >> +++ b/arch/riscv/include/asm/ftrace.h
+> >> @@ -77,6 +77,32 @@ do {
+> >>                   \
+> >>    */
+> >>   #define MCOUNT_INSN_SIZE 8
+> >>
+> >> +/*
+> >> + * Put16 bytes at the front of function within patchable function entry
+> >> + * nops' area.
+> >> + *
+> >> + * 0: REG_S  ra, -SZREG(sp)
+> >> + * 1: auipc  ra, 0x?
+> >> + * 2: jalr   -?(ra)
+> >> + * 3: REG_L  ra, -SZREG(sp)
+> >> + *
+> >> + * So the opcodes is:
+> >> + * 0: 0xfe113c23 (sd)/0xfe112e23 (sw)
+> >> + * 1: 0x???????? -> auipc
+> >> + * 2: 0x???????? -> jalr
+> >> + * 3: 0xff813083 (ld)/0xffc12083 (lw)
+> >> + */
+> >> +#if __riscv_xlen == 64
+> >> +#define INSN0  0xfe113c23
+> >> +#define INSN3  0xff813083
+> >> +#elif __riscv_xlen == 32
+> >> +#define INSN0  0xfe112e23
+> >> +#define INSN3  0xffc12083
+> >> +#endif
+> >> +
+> >> +#define FUNC_ENTRY_SIZE        16
+> >> +#define FUNC_ENTRY_JMP 4
+> >> +
+> >>   #ifndef __ASSEMBLY__
+> >>   struct dyn_ftrace;
+> >>   int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec);
+> >> diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
+> >> index 4716f4cdc038..be51aa87134e 100644
+> >> --- a/arch/riscv/kernel/ftrace.c
+> >> +++ b/arch/riscv/kernel/ftrace.c
+> >> @@ -72,32 +72,6 @@ static int __ftrace_modify_call(unsigned long
+> >> hook_pos, unsigned long target,
+> >>          return 0;
+> >>   }
+> >>
+> >> -/*
+> >> - * Put 5 instructions with 16 bytes at the front of function within
+> >> - * patchable function entry nops' area.
+> >> - *
+> >> - * 0: REG_S  ra, -SZREG(sp)
+> >> - * 1: auipc  ra, 0x?
+> >> - * 2: jalr   -?(ra)
+> >> - * 3: REG_L  ra, -SZREG(sp)
+> >> - *
+> >> - * So the opcodes is:
+> >> - * 0: 0xfe113c23 (sd)/0xfe112e23 (sw)
+> >> - * 1: 0x???????? -> auipc
+> >> - * 2: 0x???????? -> jalr
+> >> - * 3: 0xff813083 (ld)/0xffc12083 (lw)
+> >> - */
+> >> -#if __riscv_xlen == 64
+> >> -#define INSN0  0xfe113c23
+> >> -#define INSN3  0xff813083
+> >> -#elif __riscv_xlen == 32
+> >> -#define INSN0  0xfe112e23
+> >> -#define INSN3  0xffc12083
+> >> -#endif
+> >> -
+> >> -#define FUNC_ENTRY_SIZE        16
+> >> -#define FUNC_ENTRY_JMP 4
+> >> -
+> >>   int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
+> >>   {
+> >>          unsigned int call[4] = {INSN0, 0, 0, INSN3};
+> >> @@ -124,7 +98,6 @@ int ftrace_make_nop(struct module *mod, struct
+> >> dyn_ftrace *rec,
+> >>          return 0;
+> >>   }
+> >>
+> >> -
+> >>   /*
+> >>    * This is called early on, and isn't wrapped by
+> >>    * ftrace_arch_code_modify_{prepare,post_process}() and therefor doesn't hold
+> >> diff --git a/arch/riscv/kernel/probes/kprobes.c
+> >> b/arch/riscv/kernel/probes/kprobes.c
+> >> index e6e950b7cf32..c16a819a81c1 100644
+> >> --- a/arch/riscv/kernel/probes/kprobes.c
+> >> +++ b/arch/riscv/kernel/probes/kprobes.c
+> >> @@ -21,6 +21,33 @@ DEFINE_PER_CPU(struct kprobe_ctlblk, kprobe_ctlblk);
+> >>   static void __kprobes
+> >>   post_kprobe_handler(struct kprobe *, struct kprobe_ctlblk *, struct pt_regs *);
+> >>
+> >> +#ifdef CONFIG_DYNAMIC_FTRACE
+> >> +kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr, unsigned
+> >> long offset,
+> >> +                                        bool *on_func_entry)
+> >> +{
+> >> +       /*
+> >> +        * The first 4 instructions at the beginning of the ftraced function
+> >> +        * are used as a jump to ftrace trampoline, which we can think of as
+> >> +        * a 16-byte virtual instruction. This allows the function entry to be
+> >> +        * probed with the help of KPROBES_ON_FTRACE and does not break ftrace
+> >> +        * functionality.
+> >> +        */
+> >> +       if (offset < FUNC_ENTRY_SIZE) {
+> >> +               /*
+> >> +                * As mentioned above, we treat the first 4 instructions of
+> >> +                * the ftraced function as a virtual instruction, so that we
+> >> +                * can only probe func+0, and func+4, func+8 and func+12
+> >> +                * would be changed to func+0.
+> >> +                */
+> >> +               *on_func_entry = true;
+> >> +               return (kprobe_opcode_t *)ftrace_location(addr);
+> >> +       } else {
+> >> +               *on_func_entry = false;
+> >> +               return (kprobe_opcode_t *)(addr + offset);
+> >> +       }
+> >> +}
+> > Another better implementation:
+> > +kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr, unsigned
+> > long offset,
+> > +                                        bool *on_func_entry)
+> > +{
+> > +       /*
+> > +        * The first 4 instructions at the beginning of the ftraced function
+> > +        * are used as a jump to ftrace trampoline, which we can think of as
+> > +        * a 16-byte virtual instruction. This allows the function entry to be
+> > +        * probed with the help of KPROBES_ON_FTRACE and does not break ftrace
+> > +        * functionality.
+> > +        */
+> > +       if (offset < FUNC_ENTRY_SIZE) {,
+> Thanks a lot for providing such a detailed implementation. Yes, it is
+> better to use these macro definitions. But I think we first need to use
+> ftrace_location(addr) to determine if the function can be traced. no
+> special handling here is needed for notrace functions.
+>
+> +kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr, unsigned
+> long offset,
+> +                                        bool *on_func_entry)
+> +{
+> +       unsigned long faddr = ftrace_location(addr);
+Seems x86 & powerpc also need that check? I don't think
+ftrace_location is necessary, or the solution should be more common.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
 
-New smatch warnings:
-fs/notify/fanotify/fanotify_user.c:1637 do_fanotify_mark() warn: inconsistent indenting
-fs/notify/fanotify/fanotify_user.c:1693 do_fanotify_mark() warn: variable dereferenced before check 'inode' (see line 1667)
+> +
+> +       /*
+> +        * The first 4 instructions at the beginning of the ftraced function
+> +        * are used as a jump to ftrace trampoline, which we can think of as
+> +        * a 16-byte virtual instruction. This allows the function entry
+> to be
+> +        * probed with the help of KPROBES_ON_FTRACE and does not break
+> ftrace
+> +        * functionality.
+> +        */
+> +       if (faddr && offset < FUNC_ENTRY_SIZE) {
+> +               /*
+> +                * As mentioned above, we treat the first 4 instructions of
+> +                * the ftraced function as a virtual instruction, so that we
+> +                * can only probe func+0, and func+4, func+8 and func+12
+> would
+> +                * be changed to func+0.
+> +                */
+> +               *on_func_entry = true;
+> +               return (kprobe_opcode_t *)faddr;
+> +       } else {
+> +               *on_func_entry = !offset;
+> +               return (kprobe_opcode_t *)(addr + offset);
+> +       }
+> +}
+>
+> Is this ok?
+>
+>
+> Thanks,
+>
+> Huafei
+>
+>
+> > +               /*
+> > +                * As mentioned above, we treat the first 4 instructions of
+> > +                * the ftraced function as a virtual instruction, so that we
+> > +                * can only probe func+0, and func+4, func+8 and func+12
+> > +                * would be changed to func+0.
+> > +                */
+> > +               offset = 0;
+> > +       }
+> > +
+> > +       *on_func_entry = !offset;
+> > +       return (kprobe_opcode_t *)(addr + offset);
+> > +}
+> >
+> >> +#endif
+> >> +
+> >>   static void __kprobes arch_prepare_ss_slot(struct kprobe *p)
+> >>   {
+> >>          unsigned long offset = GET_INSN_LENGTH(p->opcode);
+> >>
+> >>> +
+> >>> +               *on_func_entry = true;
+> >>> +               return (kprobe_opcode_t *)faddr;
+> >>> +       }
+> >>> +
+> >>> +       *on_func_entry = !offset;
+> >>> +       return (kprobe_opcode_t *)(addr + offset);
+> >>> +}
+> >>> +#endif
+> >>> +
+> >>>   static void __kprobes arch_prepare_ss_slot(struct kprobe *p)
+> >>>   {
+> >>>          unsigned long offset = GET_INSN_LENGTH(p->opcode);
+> >>> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> >>> index dbe57df2e199..b41de7ce8bff 100644
+> >>> --- a/kernel/kprobes.c
+> >>> +++ b/kernel/kprobes.c
+> >>> @@ -1553,7 +1553,7 @@ _kprobe_addr(kprobe_opcode_t *addr, const char *symbol_name,
+> >>>           * at the start of the function.
+> >>>           */
+> >>>          addr = arch_adjust_kprobe_addr((unsigned long)addr, offset, on_func_entry);
+> >>> -       if (addr)
+> >>> +       if (IS_ERR(addr) || addr)
+> >> Nak, If you really want to change API, please send another patch and
+> >> add ftrace_location(addr) in x86 & powerpc, firstly.
+> >>
+> >>>                  return addr;
+> >>>
+> >>>   invalid:
+> >>> --
+> >>> 2.17.1
+> >>>
+> >>
+> >>
+> >> --
+> >> Best Regards
+> >>   Guo Ren
+> >>
+> >> ML: https://lore.kernel.org/linux-csky/
+> >
+> >
 
-Old smatch warnings:
-arch/nios2/include/asm/thread_info.h:62 current_thread_info() error: uninitialized symbol 'sp'.
-fs/notify/fanotify/fanotify_user.c:422 copy_fid_info_to_user() error: we previously assumed 'fh' could be null (see line 381)
-fs/notify/fanotify/fanotify_user.c:1686 do_fanotify_mark() error: we previously assumed 'mnt' could be null (see line 1667)
-fs/notify/fanotify/fanotify_user.c:1710 do_fanotify_mark() warn: variable dereferenced before check 'inode' (see line 1667)
 
-vim +1637 fs/notify/fanotify/fanotify_user.c
-
-  1501	
-  1502	static int do_fanotify_mark(int fanotify_fd, unsigned int flags, __u64 mask,
-  1503				    int dfd, const char  __user *pathname)
-  1504	{
-  1505		struct inode *inode = NULL;
-  1506		struct vfsmount *mnt = NULL;
-  1507		struct fsnotify_group *group;
-  1508		struct fd f;
-  1509		struct path path;
-  1510		__kernel_fsid_t __fsid, *fsid = NULL;
-  1511		u32 valid_mask = FANOTIFY_EVENTS | FANOTIFY_EVENT_FLAGS;
-  1512		unsigned int mark_type = flags & FANOTIFY_MARK_TYPE_BITS;
-  1513		bool ignored = flags & FAN_MARK_IGNORED_MASK;
-  1514		unsigned int obj_type, fid_mode;
-  1515		u32 umask = 0;
-  1516		int ret;
-  1517	
-  1518		pr_debug("%s: fanotify_fd=%d flags=%x dfd=%d pathname=%p mask=%llx\n",
-  1519			 __func__, fanotify_fd, flags, dfd, pathname, mask);
-  1520	
-  1521		/* we only use the lower 32 bits as of right now. */
-  1522		if (upper_32_bits(mask))
-  1523			return -EINVAL;
-  1524	
-  1525		if (flags & ~FANOTIFY_MARK_FLAGS)
-  1526			return -EINVAL;
-  1527	
-  1528		switch (mark_type) {
-  1529		case FAN_MARK_INODE:
-  1530			obj_type = FSNOTIFY_OBJ_TYPE_INODE;
-  1531			break;
-  1532		case FAN_MARK_MOUNT:
-  1533			obj_type = FSNOTIFY_OBJ_TYPE_VFSMOUNT;
-  1534			break;
-  1535		case FAN_MARK_FILESYSTEM:
-  1536			obj_type = FSNOTIFY_OBJ_TYPE_SB;
-  1537			break;
-  1538		default:
-  1539			return -EINVAL;
-  1540		}
-  1541	
-  1542		switch (flags & (FAN_MARK_ADD | FAN_MARK_REMOVE | FAN_MARK_FLUSH)) {
-  1543		case FAN_MARK_ADD:
-  1544		case FAN_MARK_REMOVE:
-  1545			if (!mask)
-  1546				return -EINVAL;
-  1547			break;
-  1548		case FAN_MARK_FLUSH:
-  1549			if (flags & ~(FANOTIFY_MARK_TYPE_BITS | FAN_MARK_FLUSH))
-  1550				return -EINVAL;
-  1551			break;
-  1552		default:
-  1553			return -EINVAL;
-  1554		}
-  1555	
-  1556		if (IS_ENABLED(CONFIG_FANOTIFY_ACCESS_PERMISSIONS))
-  1557			valid_mask |= FANOTIFY_PERM_EVENTS;
-  1558	
-  1559		if (mask & ~valid_mask)
-  1560			return -EINVAL;
-  1561	
-  1562		/* Event flags (ONDIR, ON_CHILD) are meaningless in ignored mask */
-  1563		if (ignored)
-  1564			mask &= ~FANOTIFY_EVENT_FLAGS;
-  1565	
-  1566		f = fdget(fanotify_fd);
-  1567		if (unlikely(!f.file))
-  1568			return -EBADF;
-  1569	
-  1570		/* verify that this is indeed an fanotify instance */
-  1571		ret = -EINVAL;
-  1572		if (unlikely(f.file->f_op != &fanotify_fops))
-  1573			goto fput_and_out;
-  1574		group = f.file->private_data;
-  1575	
-  1576		/*
-  1577		 * An unprivileged user is not allowed to setup mount nor filesystem
-  1578		 * marks.  This also includes setting up such marks by a group that
-  1579		 * was initialized by an unprivileged user.
-  1580		 */
-  1581		ret = -EPERM;
-  1582		if ((!capable(CAP_SYS_ADMIN) ||
-  1583		     FAN_GROUP_FLAG(group, FANOTIFY_UNPRIV)) &&
-  1584		    mark_type != FAN_MARK_INODE)
-  1585			goto fput_and_out;
-  1586	
-  1587		/*
-  1588		 * group->priority == FS_PRIO_0 == FAN_CLASS_NOTIF.  These are not
-  1589		 * allowed to set permissions events.
-  1590		 */
-  1591		ret = -EINVAL;
-  1592		if (mask & FANOTIFY_PERM_EVENTS &&
-  1593		    group->priority == FS_PRIO_0)
-  1594			goto fput_and_out;
-  1595	
-  1596		if (mask & FAN_FS_ERROR &&
-  1597		    mark_type != FAN_MARK_FILESYSTEM)
-  1598			goto fput_and_out;
-  1599	
-  1600		/*
-  1601		 * Events that do not carry enough information to report
-  1602		 * event->fd require a group that supports reporting fid.  Those
-  1603		 * events are not supported on a mount mark, because they do not
-  1604		 * carry enough information (i.e. path) to be filtered by mount
-  1605		 * point.
-  1606		 */
-  1607		fid_mode = FAN_GROUP_FLAG(group, FANOTIFY_FID_BITS);
-  1608		if (mask & ~(FANOTIFY_FD_EVENTS|FANOTIFY_EVENT_FLAGS) &&
-  1609		    (!fid_mode || mark_type == FAN_MARK_MOUNT))
-  1610			goto fput_and_out;
-  1611	
-  1612		/*
-  1613		 * FAN_RENAME uses special info type records to report the old and
-  1614		 * new parent+name.  Reporting only old and new parent id is less
-  1615		 * useful and was not implemented.
-  1616		 */
-  1617		if (mask & FAN_RENAME && !(fid_mode & FAN_REPORT_NAME))
-  1618			goto fput_and_out;
-  1619	
-  1620		if (flags & FAN_MARK_FLUSH) {
-  1621			ret = 0;
-  1622			if (mark_type == FAN_MARK_MOUNT)
-  1623				fsnotify_clear_vfsmount_marks_by_group(group);
-  1624			else if (mark_type == FAN_MARK_FILESYSTEM)
-  1625				fsnotify_clear_sb_marks_by_group(group);
-  1626			else
-  1627				fsnotify_clear_inode_marks_by_group(group);
-  1628			goto fput_and_out;
-  1629		}
-  1630	
-  1631		ret = fanotify_find_path(dfd, pathname, &path, flags,
-  1632				(mask & ALL_FSNOTIFY_EVENTS), obj_type);
-  1633		if (ret)
-  1634			goto fput_and_out;
-  1635	
-  1636		 /* We do not support fid_mode plus remote fsnotify */
-> 1637		 ret = -EPERM;
-  1638		 if (!fid_mode && mark_type == FAN_MARK_INODE &&
-  1639			 path.dentry->d_inode->i_op->fsnotify_update)
-  1640				 goto fput_and_out;
-  1641	
-  1642		if (flags & FAN_MARK_ADD) {
-  1643			ret = fanotify_events_supported(&path, mask);
-  1644			if (ret)
-  1645				goto path_put_and_out;
-  1646		}
-  1647	
-  1648		if (fid_mode) {
-  1649			ret = fanotify_test_fsid(path.dentry, &__fsid);
-  1650			if (ret)
-  1651				goto path_put_and_out;
-  1652	
-  1653			ret = fanotify_test_fid(path.dentry);
-  1654			if (ret)
-  1655				goto path_put_and_out;
-  1656	
-  1657			fsid = &__fsid;
-  1658		}
-  1659	
-  1660		/* inode held in place by reference to path; group by fget on fd */
-  1661		if (mark_type == FAN_MARK_INODE)
-  1662			inode = path.dentry->d_inode;
-  1663		else
-  1664			mnt = path.mnt;
-  1665	
-  1666		/* Mask out FAN_EVENT_ON_CHILD flag for sb/mount/non-dir marks */
-> 1667		if (mnt || !S_ISDIR(inode->i_mode)) {
-  1668			mask &= ~FAN_EVENT_ON_CHILD;
-  1669			umask = FAN_EVENT_ON_CHILD;
-  1670			/*
-  1671			 * If group needs to report parent fid, register for getting
-  1672			 * events with parent/name info for non-directory.
-  1673			 */
-  1674			if ((fid_mode & FAN_REPORT_DIR_FID) &&
-  1675			    (flags & FAN_MARK_ADD) && !ignored)
-  1676				mask |= FAN_EVENT_ON_CHILD;
-  1677		}
-  1678	
-  1679		/* create/update an inode mark */
-  1680		switch (flags & (FAN_MARK_ADD | FAN_MARK_REMOVE)) {
-  1681		case FAN_MARK_ADD:
-  1682			if (mark_type == FAN_MARK_MOUNT)
-  1683				ret = fanotify_add_vfsmount_mark(group, mnt, mask,
-  1684								 flags, fsid);
-  1685			else if (mark_type == FAN_MARK_FILESYSTEM)
-  1686				ret = fanotify_add_sb_mark(group, mnt->mnt_sb, mask,
-  1687							   flags, fsid);
-  1688			else {
-  1689				ret = fanotify_add_inode_mark(group, inode, mask,
-  1690							      flags, fsid);
-  1691				/* Only if the object is an inode send a request to FUSE server */
-  1692				if (ret == 0){
-> 1693					if (inode && inode->i_op->fsnotify_update)
-  1694						inode->i_op->fsnotify_update(inode);
-  1695				}
-  1696			}
-  1697			break;
-  1698		case FAN_MARK_REMOVE:
-  1699			if (mark_type == FAN_MARK_MOUNT)
-  1700				ret = fanotify_remove_vfsmount_mark(group, mnt, mask,
-  1701								    flags, umask);
-  1702			else if (mark_type == FAN_MARK_FILESYSTEM)
-  1703				ret = fanotify_remove_sb_mark(group, mnt->mnt_sb, mask,
-  1704							      flags, umask);
-  1705			else {
-  1706				ret = fanotify_remove_inode_mark(group, inode, mask,
-  1707								 flags, umask);
-  1708				/* Only if the object is an inode send a request to FUSE server */
-  1709				if (ret == 0){
-  1710					if (inode && inode->i_op->fsnotify_update)
-  1711						inode->i_op->fsnotify_update(inode);
-  1712				}
-  1713			}
-  1714			break;
-  1715		default:
-  1716			ret = -EINVAL;
-  1717		}
-  1718	
-  1719	path_put_and_out:
-  1720		path_put(&path);
-  1721	fput_and_out:
-  1722		fdput(f);
-  1723		return ret;
-  1724	}
-  1725	
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

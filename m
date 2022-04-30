@@ -2,150 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31D68515F7B
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 19:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 523C7515F5D
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 18:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243488AbiD3RQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 13:16:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43580 "EHLO
+        id S238696AbiD3RAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 13:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237240AbiD3RQT (ORCPT
+        with ESMTP id S232692AbiD3RAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 13:16:19 -0400
-Received: from h3cspam02-ex.h3c.com (smtp.h3c.com [221.12.31.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBCA84EDEC
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 10:12:55 -0700 (PDT)
-Received: from mail.maildlp.com ([172.25.15.154])
-        by h3cspam02-ex.h3c.com with ESMTP id 23UHCKSx084346;
-        Sun, 1 May 2022 01:12:20 +0800 (GMT-8)
-        (envelope-from zushuzhi@h3c.com)
-Received: from DAG2EX04-BASE.srv.huawei-3com.com (unknown [10.8.0.67])
-        by mail.maildlp.com (Postfix) with ESMTP id 215DA2221BC4;
-        Sun,  1 May 2022 01:14:32 +0800 (CST)
-Received: from localhost.localdomain (10.99.222.162) by
- DAG2EX04-BASE.srv.huawei-3com.com (10.8.0.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Sun, 1 May 2022 01:12:24 +0800
-From:   Shuzhi Zu <zushuzhi@h3c.com>
-To:     <brauner@kernel.org>, <oleg@redhat.com>
-CC:     <linux-kernel@vger.kernel.org>, Shuzhi Zu <zushuzhi@h3c.com>
-Subject: [PATCH] signal/ptrace: Fix the bug of ptrace attach and signal handling concurrency
-Date:   Sun, 1 May 2022 00:55:56 +0800
-Message-ID: <20220430165556.29739-1-zushuzhi@h3c.com>
-X-Mailer: git-send-email 2.17.1
+        Sat, 30 Apr 2022 13:00:46 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AFB1E0CF;
+        Sat, 30 Apr 2022 09:57:20 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1nkqP3-0002Do-Ak; Sat, 30 Apr 2022 18:57:05 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     kernel test robot <lkp@intel.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 5/7] arm64: dts: rockchip: add Pine64 Quartz64-B device tree
+Date:   Sat, 30 Apr 2022 18:57:04 +0200
+Message-ID: <7373923.EvYhyI6sBW@diego>
+In-Reply-To: <CAMdYzYoBgeTthb8-uycis+BPDmSC5OGVHz2doKYLeh3OY1m_vQ@mail.gmail.com>
+References: <20220429115252.2360496-6-pgwipeout@gmail.com> <202204300850.X97CRcO6-lkp@intel.com> <CAMdYzYoBgeTthb8-uycis+BPDmSC5OGVHz2doKYLeh3OY1m_vQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.99.222.162]
-X-ClientProxiedBy: BJSMTP01-EX.srv.huawei-3com.com (10.63.20.132) To
- DAG2EX04-BASE.srv.huawei-3com.com (10.8.0.67)
-X-DNSRBL: 
-X-MAIL: h3cspam02-ex.h3c.com 23UHCKSx084346
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When ptrace attach and signal handling are concurrent, it will cause the
-state of all threads of the traced process to become stopped and trace
-pid is 0.
+Am Samstag, 30. April 2022, 16:46:31 CEST schrieb Peter Geis:
+> On Fri, Apr 29, 2022 at 8:17 PM kernel test robot <lkp@intel.com> wrote:
+> >
+> > Hi Peter,
+> >
+> > I love your patch! Yet something to improve:
+> >
+> > [auto build test ERROR on robh/for-next]
+> > [also build test ERROR on arm/for-next arm64/for-next/core clk/clk-next kvmarm/next shawnguo/for-next soc/for-next v5.18-rc4]
+> > [cannot apply to rockchip/for-next xilinx-xlnx/master keystone/next next-20220429]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch]
+> 
+> The three new device trees are dependent on my usb series which was
+> accepted through Heiko's tree.
+> I can drop the xhci dependency, but this will just happen again adding
+> it back in if it's done in this RC series.
 
-The thread dequeues the signal from the queue and another thread traces
-the thread while the signal has not been handled or when non-real-time
-signals less than SIGSTOP and a SIGSTOP signal are in the signal pending
-queue at the same time, these two cases will cause all threads of the
-process to be stopped. Therefore, when ptrace_attach modifying the task
-ptrace value of the thread, it is necessary to lock. Except for synchronous
-signals, SIGSTOP signal should be handled before non-real-time signals.
+Of course dropping that part is not necessary :-)
+I.e. the dependency is in my tree and this stuff will go on top.
 
-Example: Thread A is the traced thread. Thread B is the tracer.
-1.Thread A dequeues the SIGCHLD signal, before it is handled, thread B
-executes ptrace attach A, and A's ptrace is assigned PT_PTRACED. Then the
-SIGCHLD signal processing will go to the ptrace_signal function。Thread A
-becomes traced. Thread B continues to execute ptrace_detach after the
-execution of waitpid returns. A thread ptrace value is set to 0 and
-it is woken up. Thread A continues to process the SIGSTOP signal, causing
-all threads of the process to be stopped.
-2. Thread A ptrace is assigned PT_PTRACED by ptrace attach, and both
-SIGPIPE and SIGSTOP signals exist in the pending queue of thread A.
-Because the value of SIGPIPE is less than SIGSTOP, SIGSPIPE is handled
-first, which will result in a timing similar to Example 1。
+I'm just not sure if I should give Krzysztof more time for patch1.
+The binding of course looks great now already, I guess I'll let the
+Quartz-B sit some days more.
 
-Example 1：
-    A                             B
-    get_signal
-    dequeue_signal (SIGCHLD）
-                                  ptrace_attach ( A->ptrace |= PT_PTRACED)
 
-    ptrace_signal
-    ->ptrace_stop(TASK_TRACED)
-                                  ptrace_attach ( Send SIGSTOP to A)
-                                  ptrace_waitpid( return 0)
-                                  ptrace_detach (A->ptrace=0, wakeup A)
-    dequeue_signal(SIGSTOP)
-    sig_kernel_stop(SIGSTOP)
-    do_signal_stop (TASK_STOPPED)
+Heiko
 
-then：
-A (other threads of the process received signal)
-get_signal-> do_signal_stop(0))->TASK_STOPPED
+> 
+> >
+> > url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Geis/Add-support-for-several-new-rk3566-SBCs/20220429-195433
+> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+> > config: arm64-randconfig-r021-20220428 (https://download.01.org/0day-ci/archive/20220430/202204300850.X97CRcO6-lkp@intel.com/config)
+> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 400775649969b9baf3bc2a510266e7912bb16ae9)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # install arm64 cross compiling tool for clang build
+> >         # apt-get install binutils-aarch64-linux-gnu
+> >         # https://github.com/intel-lab-lkp/linux/commit/d933bfeea016da20a99bce012bbf071f9d86e2bf
+> >         git remote add linux-review https://github.com/intel-lab-lkp/linux
+> >         git fetch --no-tags linux-review Peter-Geis/Add-support-for-several-new-rk3566-SBCs/20220429-195433
+> >         git checkout d933bfeea016da20a99bce012bbf071f9d86e2bf
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+> >
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> > All errors (new ones prefixed by >>):
+> >
+> > >> Error: arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts:601.1-16 Label or path usb_host0_xhci not found
+> > >> Error: arch/arm64/boot/dts/rockchip/rk3566-quartz64-b.dts:605.1-16 Label or path usb_host1_xhci not found
+> >    FATAL ERROR: Syntax error parsing input tree
+> >
+> > --
+> > 0-DAY CI Kernel Test Service
+> > https://01.org/lkp
+> 
 
-Example 2：
-    A                             B
-    send_sig(SIGPIPE, current, 0)
-                                  ptrace_attach ( A->ptrace |= PT_PTRACED)
-                                  ptrace_attach ( Send SIGSTOP to A)
-    get_signal
-    dequeue_signal (SIGPIPE)
-    ptrace_signal
-    ->ptrace_stop(TASK_TRACED)
 
-                                  ptrace_waitpid( return 0)
-                                  ptrace_detach (A->ptrace=0, wakeup A)
-    dequeue_signal(SIGSTOP)
-    sig_kernel_stop(SIGSTOP)
-    do_signal_stop (TASK_STOPPED)
 
-then：
-A (other threads of the process received signal)
-get_signal-> do_signal_stop(0))->TASK_STOPPED
-
-Signed-off-by: Shuzhi Zu <zushuzhi@h3c.com>
----
- kernel/ptrace.c | 2 ++
- kernel/signal.c | 2 ++
- 2 files changed, 4 insertions(+)
-
-diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-index ccc4b46..ab1dc8f 100644
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -447,7 +447,9 @@ static int ptrace_attach(struct task_struct *task, long request,
- 	if (task->ptrace)
- 		goto unlock_tasklist;
- 
-+	spin_lock(&task->sighand->siglock);
- 	task->ptrace = flags;
-+	spin_unlock(&task->sighand->siglock);
- 
- 	ptrace_link(task, current);
- 
-diff --git a/kernel/signal.c b/kernel/signal.c
-index 30cd1ca..522bc6e 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -220,6 +220,8 @@ int next_signal(struct sigpending *pending, sigset_t *mask)
- 	if (x) {
- 		if (x & SYNCHRONOUS_MASK)
- 			x &= SYNCHRONOUS_MASK;
-+		else if (x & sigmask(SIGSTOP))
-+			x &= sigmask(SIGSTOP);
- 		sig = ffz(~x) + 1;
- 		return sig;
- 	}
--- 
-1.8.3.1
 

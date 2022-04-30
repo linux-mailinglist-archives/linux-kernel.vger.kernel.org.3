@@ -2,39 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9AC51599A
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 03:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C76B51599C
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 03:29:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379126AbiD3B3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 21:29:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48302 "EHLO
+        id S1381975AbiD3BdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 21:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240105AbiD3B3b (ORCPT
+        with ESMTP id S238172AbiD3BdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 21:29:31 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id B838A7F209
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 18:26:11 -0700 (PDT)
-Received: (qmail 966577 invoked by uid 1000); 29 Apr 2022 21:26:11 -0400
-Date:   Fri, 29 Apr 2022 21:26:11 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Vincent Shih <vincent.sunplus@gmail.com>
-Cc:     gregkh@linuxfoundation.org, p.zabel@pengutronix.de,
-        davem@davemloft.net, vladimir.oltean@nxp.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, wells.lu@sunplus.com
-Subject: Re: [PATCH v4 1/2] usb: host: ehci-sunplus: Add driver for ehci in
- Sunplus SP7021
-Message-ID: <YmyQM3Yp31E1lfrn@rowland.harvard.edu>
-References: <1651220876-26705-1-git-send-email-vincent.sunplus@gmail.com>
- <1651220876-26705-2-git-send-email-vincent.sunplus@gmail.com>
+        Fri, 29 Apr 2022 21:33:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3247F20D;
+        Fri, 29 Apr 2022 18:29:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5C82CB83843;
+        Sat, 30 Apr 2022 01:29:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7506CC385A7;
+        Sat, 30 Apr 2022 01:29:42 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="SHh4hRgR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1651282179;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=19JFfsHR6Tp7LcmMWZO8uINflblFf+OX3ZdrXJdqqB8=;
+        b=SHh4hRgRP6EmLV+d8Xh1tNidnOnYrtcCnOmHoYFbdpuSemy3C8S1fPMV/ldzuGyhATS2wt
+        QX3TUz29I6uiMgr043x0w9kboiVIsCRg4ugDiT1Se1IbNG39pJskGd7b8tMTbSsIetB1ML
+        LgG5Mvoy+gMISDKnoQMhrH+LLo88UhI=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 8034c9c3 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Sat, 30 Apr 2022 01:29:39 +0000 (UTC)
+Date:   Sat, 30 Apr 2022 03:29:37 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Stafford Horne <shorne@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
+Subject: Re: [PATCH v7 11/17] openrisc: account for 0 starting value in
+ random_get_entropy()
+Message-ID: <YmyRATzJBQX+wnIP@zx2c4.com>
+References: <20220423212623.1957011-12-Jason@zx2c4.com>
+ <20220429001648.1671472-1-Jason@zx2c4.com>
+ <YmyOh/YbgGJ3DK79@antec>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1651220876-26705-2-git-send-email-vincent.sunplus@gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+In-Reply-To: <YmyOh/YbgGJ3DK79@antec>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,53 +59,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 04:27:55PM +0800, Vincent Shih wrote:
-> Add driver for ehci in Sunplus SP7021
+Hi Stafford,
+
+On Sat, Apr 30, 2022 at 10:19:03AM +0900, Stafford Horne wrote:
+> Hi Jason,
 > 
-> Signed-off-by: Vincent Shih <vincent.sunplus@gmail.com>
-> ---
+> On Fri, Apr 29, 2022 at 02:16:48AM +0200, Jason A. Donenfeld wrote:
+> > As a sanity check, this series makes sure that during early boot, the
+> > cycle counter isn't returning all zeros. However, OpenRISC's TTCR timer
+> > can be rather slow and starts out as zero during stages of early boot.
+> > We know it works, however. So just always add 1 to random_get_entropy()
+> > so that it doesn't trigger these checks.
+> 
+> Just one nit, you might want to qualify that this is related to simulators/qemu:
+>  * "However, in simulators OpenRISC's TTCR timer can be rather slow..."
 
-> diff --git a/drivers/usb/host/ehci-sunplus.c b/drivers/usb/host/ehci-sunplus.c
-> new file mode 100644
-> index 0000000..4d8e20d
-> --- /dev/null
-> +++ b/drivers/usb/host/ehci-sunplus.c
+Nice catch, will do.
 
-> +static struct usb_ehci_pdata usb_ehci_pdata = {
-> +	.has_tt = 1,
-> +	.has_synopsys_hc_bug = 1,
-> +	.big_endian_desc = 1,
-> +	.big_endian_mmio = 1,
-> +	.power_on = sp_ehci_platform_power_on,
-> +	.power_suspend = sp_ehci_platform_power_off,
-> +	.power_off = sp_ehci_platform_power_off,
-> +
-> +};
-> +
-> +static int ehci_sunplus_reset(struct usb_hcd *hcd)
-> +{
-> +	struct platform_device *pdev = to_platform_device(hcd->self.controller);
-> +	struct usb_ehci_pdata *pdata = pdev->dev.platform_data;
-> +	struct ehci_hcd *ehci = hcd_to_ehci(hcd);
-> +	int retval;
-> +
-> +	hcd->has_tt = pdata->has_tt;
-> +	ehci->has_synopsys_hc_bug = pdata->has_synopsys_hc_bug;
-> +	ehci->big_endian_desc = pdata->big_endian_desc;
-> +	ehci->big_endian_mmio = pdata->big_endian_mmio;
+Jason
 
-By the way, you don't need to add all this pdata stuff.  You can just 
-set hcd->has_tt, ehci->has_synopsys_hc_bug, ehci_big_endian_desc, and 
-ehci->big_endian_mmio directly, since you already know what their values 
-should be.
-
-It looks like you simply copied the code from the ehci-platform driver.  
-But that driver has to handle many different kinds of platform devices, 
-so it needs to be told about their individual differences, whereas your 
-driver only has to handle one kind.
-
-In fact, there's no obvious reason why you didn't just use the 
-ehci-platform driver instead of writing your own driver.  
-That's the sort of thing you need to explain the patch description.
-
-Alan Stern
+> 
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Jonas Bonn <jonas@southpole.se>
+> > Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
+> > Acked-by: Stafford Horne <shorne@gmail.com>
+> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> > ---
+> > Changes v6->v7:
+> > - Add 1 to cycle counter to account for functional but slow-to-begin
+> >   counter on QEMU.
+> > 
+> >  arch/openrisc/include/asm/timex.h | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/arch/openrisc/include/asm/timex.h b/arch/openrisc/include/asm/timex.h
+> > index d52b4e536e3f..a78a5807c927 100644
+> > --- a/arch/openrisc/include/asm/timex.h
+> > +++ b/arch/openrisc/include/asm/timex.h
+> > @@ -23,6 +23,9 @@ static inline cycles_t get_cycles(void)
+> >  {
+> >  	return mfspr(SPR_TTCR);
+> >  }
+> > +#define get_cycles get_cycles
+> > +
+> > +#define random_get_entropy() ((unsigned long)get_cycles() + 1)
+> >  
+> >  /* This isn't really used any more */
+> >  #define CLOCK_TICK_RATE 1000
+> 
+> Thanks,
+> 
+> -Stafford

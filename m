@@ -2,102 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53B9B516034
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 22:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E64516050
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 22:19:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244884AbiD3UI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 16:08:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41974 "EHLO
+        id S245031AbiD3UW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 16:22:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234918AbiD3UI0 (ORCPT
+        with ESMTP id S237108AbiD3UW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 16:08:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19B769CD2;
-        Sat, 30 Apr 2022 13:05:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 14356610A0;
-        Sat, 30 Apr 2022 20:05:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5679DC385AF;
-        Sat, 30 Apr 2022 20:05:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651349102;
-        bh=oUajYsbpmQfPjauhUlSGdVX7VzyspcKJr2s+l1nrudw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M1ulnpTymTZDZfj5yFVo7TIw+otQXaNKTaCTvt/2Qpklru/qcMAWqJWJBQx4xE4ks
-         ivQk/FSCZSJlSRAg+0nNHnr7FNR2/u3MK2+Ipk7I8eaSuR/9RVTFMhlUNS4Dx+TG1f
-         oVxpLNcz/El89G3Qrt0eqsMI99GHePjm9tcUK/QNlT1EEEnEs/lhoHd1rGo3wcZune
-         u77lrK6PY45iV+9gNEWBx49ZlGxWWIjYf1kSMGmDhnTs3qtYh81xzqGltbZ/Nx0mMc
-         aWWYV4ayq6cXjAz0PGn4sh9pKH+qsw2Sdz15vLEyPdpzJANkUxley1HlbZcQ8qKhJr
-         vUE7FC6f+m4Kg==
-Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1nktKr-001uvx-O0; Sat, 30 Apr 2022 21:04:57 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        "David Airlie" <airlied@linux.ie>,
-        "Greg KH" <gregkh@linuxfoundation.org>,
-        "Jaroslav Kysela" <perex@perex.cz>,
-        "Kai Vehmanen" <kai.vehmanen@intel.com>,
-        "Lucas De Marchi" <lucas.demarchi@intel.com>,
-        "Pierre-Louis Bossart" <pierre-louis.bossart@intel.com>,
-        "Takashi Iwai" <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        mauro.chehab@linux.intel.com
-Subject: [PATCH v5 2/2] ALSA: hda - identify when audio is provided by a video driver
-Date:   Sat, 30 Apr 2022 21:04:55 +0100
-Message-Id: <4a0f0e351941201d00b2cd8e2157d3b0181dc19e.1651348913.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <cover.1651348913.git.mchehab@kernel.org>
-References: <cover.1651348913.git.mchehab@kernel.org>
+        Sat, 30 Apr 2022 16:22:57 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0754C8BF3F;
+        Sat, 30 Apr 2022 13:19:34 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id m20so21256129ejj.10;
+        Sat, 30 Apr 2022 13:19:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=POF+6d8762FMOUGJIUlV1M6qmWu0Pr8vnEd2cruJn/Q=;
+        b=GguguRy2ohBkyOzRgJXUL5P1WS54HQv7SPDnAuU7MEYfgc73wwidWcB5/eCDb/o6qN
+         RK12GmeHg9/VmD61o9af2NbQ9uApw9HDDRPRLLjnHlku63WdF6wo5YZ3+nS8sUEbaKzp
+         gwbn0LuvD7IrUoboyREiqHJxwTvSFuyqDWFxDM1AL3PILyrtXXKPOUANo9R48aPRwnfD
+         LBnNNTm1vKERAJTVJJSxc4w1M5l/pom72Bzfb13uLsz/FA667wgnnI3N5RtPhuf6NTnk
+         hsb7Mqfbonu6IQri7w05qGQFVDZxszD+9MgW7ANf4flb1fSFYbIEWB4IjQsoL4O65c7p
+         Ov/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=POF+6d8762FMOUGJIUlV1M6qmWu0Pr8vnEd2cruJn/Q=;
+        b=nb22NC2y2/9Oy51Mi82ydRQQZrnwC4dUnJfW54m2oM63XEmjKNKwCRoBZB/sdOpI3k
+         w3NAzu/7TaNQ51SeqZ0aZrSlu4OvhBOQDdllyaIH5rbBionNhRcX1Ae+al6Ts2sD+sk7
+         leCjc5qHaF6KAMMLj45X0f16nhQJa38wtMhLej81K01Ng+Ejjeq5lVTyqwhw/G5pYAaN
+         zJhrIBp1vnRfLqUhjMQczAJDVdsWnhiW9/0wP6Xw/Hnx48fG595fmH/kKjBoJnZDxADE
+         6MppX3cTcRUJU+8AgQJTvyyeAx/YAtlzi3nUdA+l+YgxZ6JwJPCvweklR8vbQwojZNyc
+         4X4Q==
+X-Gm-Message-State: AOAM5306mKZCUQ2GJJLsqJ/Or+BPQndiN7xpUfRhtSP6VAIuWx8uDm1N
+        KjyMSQCJjV9KKippLV47cQg=
+X-Google-Smtp-Source: ABdhPJzvyvxchjnijiU3tXHOtd78aybClSnMqXpfP33YYcQnledJ3xLrAykgTzMo+dqTSywxOtIW9g==
+X-Received: by 2002:a17:907:1b10:b0:6e4:bac5:f080 with SMTP id mp16-20020a1709071b1000b006e4bac5f080mr5052303ejc.24.1651349972319;
+        Sat, 30 Apr 2022 13:19:32 -0700 (PDT)
+Received: from ?IPV6:2a01:c22:6f21:fd00:3167:a16c:5aa:91c3? (dynamic-2a01-0c22-6f21-fd00-3167-a16c-05aa-91c3.c22.pool.telefonica.de. [2a01:c22:6f21:fd00:3167:a16c:5aa:91c3])
+        by smtp.googlemail.com with ESMTPSA id hg8-20020a1709072cc800b006f3ef214db1sm1904785ejc.23.2022.04.30.13.19.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 30 Apr 2022 13:19:31 -0700 (PDT)
+Message-ID: <f68dfd23-ae83-e4d9-cb08-51a097bac06b@gmail.com>
+Date:   Sat, 30 Apr 2022 22:19:25 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Content-Language: en-US
+To:     Peter Geis <pgwipeout@gmail.com>, Andrew Lunn <andrew@lunn.ch>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220228233057.1140817-1-pgwipeout@gmail.com>
+ <Yh1lboz7VDiuYuZV@shell.armlinux.org.uk>
+ <CAMdYzYrNvUUMom4W4uD9yf9LtFK1h5Xw+9GYc54hB5+iqVmJtw@mail.gmail.com>
+ <CAMdYzYrFuMw4aj_9L698ZhL7Xqy8=NeXhy9HDz4ug-v3=f4fpw@mail.gmail.com>
+ <Ym1bWHNj0p6L9lY8@lunn.ch>
+ <CAMdYzYq41TndbJK-=ah31=vECisgRbPmtFYwOLQQ7yn4L=JVYw@mail.gmail.com>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: [PATCH v1] net: phy: fix motorcomm module automatic loading
+In-Reply-To: <CAMdYzYq41TndbJK-=ah31=vECisgRbPmtFYwOLQQ7yn4L=JVYw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some devices, the hda driver needs to hook into a video driver,
-in order to be able to properly access the audio hardware and/or
-the power management function.
+On 30.04.2022 18:31, Peter Geis wrote:
+> On Sat, Apr 30, 2022 at 11:52 AM Andrew Lunn <andrew@lunn.ch> wrote:
+>>
+>>> Good Morning,
+>>>
+>>> After testing various configurations I found what is actually
+>>> happening here. When libphy is built in but the phy drivers are
+>>> modules and not available in the initrd, the generic phy driver binds
+>>> here. This allows the phy to come up but it is not functional.
+>>
+>> What MAC are you using?
+> 
+> Specifically Motorcomm, but I've discovered it can happen with any of
+> the phy drivers with the right kconfig.
+> 
+>>
+>> Why is you interface being brought up by the initramfs? Are you using
+>> NFS root from within the initramfs?
+> 
+> This was discovered with embedded programming. It's common to have a
+> small initramfs, or forgo an initramfs altogether. Another cause is a
+> mismatch in kernel config where phylib is built in because of a
+> dependency, but the rest of the phy drivers are modular.
+> The key is:
+> - phylib is built in
+> - ethernet driver is built in
+> - the phy driver is a module
+> - modules aren't available at probe time (for any reason).
+> 
+> In this case phylib assumes there is no driver, when the vast majority
+> of phys now have device specific drivers.It seems this is an unsafe
+> assumption as this means there is now an implicit dependency of the
+> device specific phy drivers and phylib. It just so happens to work
+> simply because both broadcom and realtek, some of the more common
+> phys, have explicit dependencies elsewhere that cause them to be built
+> in as well.
+> 
+Because you mention the realtek phy driver:
+Users reported similar issues like you if r8169 MAC driver is built-in
+(or r8169 module is in initramfs) but realtek phy driver is not.
+There's no direct code dependency between r8169 and realtek phy driver,
+therefore initramfs-creating tools sometimes missed to automatically
+include the phy driver in initramfs. To mitigate this r8169 has the following:
+MODULE_SOFTDEP("pre: realtek");
+This isn't strictly needed but some initramfs-creating tools consider
+such soft dependencies when checking what should be included in initramfs.
+If some other MAC is used with a Realtek PHY, then you may still see the
+described issue.
+As Andrew wrote: Eventually it's a userspace responsibility to ensure that
+all needed modules are included in initramfs.
 
-That's the case of several snd_hda_intel devices that depends on
-i915 driver.
-
-Ensure that a proper reference between the snd-hda driver needing
-such binding is shown at /proc/modules, in order to allow userspace
-to know about such binding.
-
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
----
-
-See [PATCH v5 0/2] at: https://lore.kernel.org/all/cover.1651348913.git.mchehab@kernel.org/
-
- sound/hda/hdac_component.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/sound/hda/hdac_component.c b/sound/hda/hdac_component.c
-index bb37e7e0bd79..7789873ddf47 100644
---- a/sound/hda/hdac_component.c
-+++ b/sound/hda/hdac_component.c
-@@ -199,7 +199,7 @@ static int hdac_component_master_bind(struct device *dev)
- 	}
- 
- 	/* pin the module to avoid dynamic unbinding, but only if given */
--	if (!try_module_get(acomp->ops->owner)) {
-+	if (!try_module_get_owner(acomp->ops->owner, dev->driver->owner)) {
- 		ret = -ENODEV;
- 		goto out_unbind;
- 	}
--- 
-2.35.1
+>>>> What normally happens is that the kernel loads, maybe with the MAC
+>> driver and phylib loading, as part of the initramfs. The other modules
+>> in the initramfs allow the root filesystem to be found, mounted, and
+>> pivoted into it. The MAC driver is then brought up by the initscripts,
+>> which causes phylib to request the needed PHY driver modules, it loads
+>> and all is good.
+>>
+>> If you are using NFS root, then the load of the PHY driver happens
+>> earlier, inside the initramfs. If this is you situation, maybe the
+>> correct fix is to teach the initramfs tools to include the PHY drivers
+>> when NFS root is being used?
+>>
+>>      Andrew
 

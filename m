@@ -2,109 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C960515EEF
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 18:00:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F30D5515F65
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 19:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359063AbiD3QDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 12:03:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
+        id S243362AbiD3RGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 13:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237621AbiD3QD3 (ORCPT
+        with ESMTP id S232692AbiD3RF4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 12:03:29 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE96C1E0
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 09:00:04 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651334402;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qg1MCgJs2GcRC2WuVMspd/xJnQOLWy76IzXScV+vSNk=;
-        b=IqVNzG6jeHs2vRnqXL9KedXJ5Nneq6PU2Es22DQIRToeG6DxaGNtLE3alDyeUYg1NNXbOG
-        tZ5XcIkOHripIzsDCl40gvjVoeCYFnsv3kIVTij3HVhFSbNAgA/OHxPOKwZ7QiSfsMRYY/
-        AKhmpUiowRf81wz2OqN2Nn8wIhdctPHZNGBoxbkYoAwaA9/I/AluFXejieBz+3KlM4g/Z2
-        iKRS2FZRwUrkL3wils42n513HmsViL/r2SDCbL7F2dBAwdVytWoLh/B69hWiiNosVfG2Qh
-        qJJWhS3AfrCTqxEasuJKpNEnLt4tU06cLpUriIUxCouOwCQS9hu0CqIV3Q1SGA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651334402;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qg1MCgJs2GcRC2WuVMspd/xJnQOLWy76IzXScV+vSNk=;
-        b=lMdtoPUqqUTWycR9kLDoc1fYvtjsVvRXJ59N0pmRiF9K6BpLaSHO3eFzBjunfsjoOtlmtm
-        8nTsnQ0RomQDUrCQ==
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-amlogic@lists.infradead.org
-Subject: Re: [PATCH printk v5 1/1] printk: extend console_lock for
- per-console locking
-In-Reply-To: <51dfc4a0-f6cf-092f-109f-a04eeb240655@samsung.com>
-References: <20220421212250.565456-1-john.ogness@linutronix.de>
- <20220421212250.565456-15-john.ogness@linutronix.de>
- <878rrs6ft7.fsf@jogness.linutronix.de> <Ymfgis0EAw0Oxoa5@alley>
- <Ymfwk+X0CHq6ex3s@alley>
- <CGME20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c@eucas1p2.samsung.com>
- <2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com>
- <Ymjy3rHRenba7r7R@alley>
- <b6c1a8ac-c691-a84d-d3a1-f99984d32f06@samsung.com>
- <87fslyv6y3.fsf@jogness.linutronix.de>
- <51dfc4a0-f6cf-092f-109f-a04eeb240655@samsung.com>
-Date:   Sat, 30 Apr 2022 18:06:01 +0206
-Message-ID: <87k0b6blz2.fsf@jogness.linutronix.de>
+        Sat, 30 Apr 2022 13:05:56 -0400
+X-Greylist: delayed 3685 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 30 Apr 2022 10:02:33 PDT
+Received: from h3cspam02-ex.h3c.com (smtp.h3c.com [221.12.31.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22504377D8
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 10:02:32 -0700 (PDT)
+Received: from h3cspam02-ex.h3c.com (localhost [127.0.0.2] (may be forged))
+        by h3cspam02-ex.h3c.com with ESMTP id 23UG14QL026584
+        for <linux-kernel@vger.kernel.org>; Sun, 1 May 2022 00:01:04 +0800 (GMT-8)
+        (envelope-from zushuzhi@h3c.com)
+Received: from mail.maildlp.com ([172.25.15.154])
+        by h3cspam02-ex.h3c.com with ESMTP id 23UG0E4q025544;
+        Sun, 1 May 2022 00:00:14 +0800 (GMT-8)
+        (envelope-from zushuzhi@h3c.com)
+Received: from DAG2EX04-BASE.srv.huawei-3com.com (unknown [10.8.0.67])
+        by mail.maildlp.com (Postfix) with ESMTP id 9D8762221BC2;
+        Sun,  1 May 2022 00:02:25 +0800 (CST)
+Received: from localhost.localdomain (10.99.222.162) by
+ DAG2EX04-BASE.srv.huawei-3com.com (10.8.0.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Sun, 1 May 2022 00:00:17 +0800
+From:   Shuzhi Zu <zushuzhi@h3c.com>
+To:     <brauner@kernel.org>
+CC:     <oleg@redhat.com>, <linux-kernel@vger.kernel.org>,
+        Shuzhi Zu <zushuzhi@h3c.com>
+Subject: [PATCH] signal/ptrace: Fix the problem of ptrace attach and signal handling oncurrency
+Date:   Sat, 30 Apr 2022 23:43:57 +0800
+Message-ID: <20220430154357.48584-1-zushuzhi@h3c.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.99.222.162]
+X-ClientProxiedBy: BJSMTP01-EX.srv.huawei-3com.com (10.63.20.132) To
+ DAG2EX04-BASE.srv.huawei-3com.com (10.8.0.67)
+X-DNSRBL: 
+X-MAIL: h3cspam02-ex.h3c.com 23UG14QL026584
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-29, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
-> The same issue happens if I boot with init=/bin/bash
+When ptrace attach and signal handling are concurrent, it will cause the
+state of all threads of the traced process to become stopped and trace
+pid is 0.
 
-Very interesting. Since you are seeing all the output up until you try
-doing something, I guess receiving UART data is triggering the issue.
+The thread dequeues the signal from the queue and another thread traces
+the thread while the signal has not been handled or when non-real-time
+signals less than SIGSTOP and a SIGSTOP signal are in the signal pending
+queue at the same time, these two cases will cause all threads of the
+process to be stopped. Therefore, when ptrace_attach modifying the task
+ptrace value of the thread, it is necessary to lock. Except for synchronous
+signals, SIGSTOP signal should be handled before non-real-time signals.
 
-> I found something really interesting. When lockup happens, I'm still
-> able to log via ssh and trigger any magic sysrq action via
-> /proc/sysrq-trigger.
+Example: Thread A is the traced thread. Thread B is the tracer.
+1.Thread A dequeues the SIGCHLD signal, before it is handled, thread B
+executes ptrace attach A, and A's ptrace is assigned PT_PTRACED. Then the
+SIGCHLD signal processing will go to the ptrace_signal function。Thread A
+becomes traced. Thread B continues to execute ptrace_detach after the
+execution of waitpid returns. A thread ptrace value is set to 0 and
+it is woken up. Thread A continues to process the SIGSTOP signal, causing
+all threads of the process to be stopped.
+2. Thread A ptrace is assigned PT_PTRACED by ptrace attach, and both
+SIGPIPE and SIGSTOP signals exist in the pending queue of thread A.
+Because the value of SIGPIPE is less than SIGSTOP, SIGSPIPE is handled
+first, which will result in a timing similar to Example 1。
 
-If you boot the system and directly login via ssh (without sending any
-data via serial), can you trigger printk output on the UART? For
-example, with:
+Example 1：
+    A                             B
+    get_signal
+    dequeue_signal (SIGCHLD）
+                                  ptrace_attach ( A->ptrace |= PT_PTRACED)
 
-    echo hello > /dev/kmsg
+    ptrace_signal
+    ->ptrace_stop(TASK_TRACED)
+                                  ptrace_attach ( Send SIGSTOP to A)
+                                  ptrace_waitpid( return 0)
+                                  ptrace_detach (A->ptrace=0, wakeup A)
+    dequeue_signal(SIGSTOP)
+    sig_kernel_stop(SIGSTOP)
+    do_signal_stop (TASK_STOPPED)
 
-(You might need to increase your loglevel to see it.)
+then：
+A (other threads of the process received signal)
+get_signal-> do_signal_stop(0))->TASK_STOPPED
 
-> It turned out that the UART console is somehow blocked, but it
-> receives and buffers all the input. For example after issuing "echo
->  >/proc/sysrq-trigger" from the ssh console, the UART console has been 
-> updated and I see the magic sysrq banner and then all the commands I 
-> blindly typed in the UART console! However this doesn't unblock the
-> console.
+Example 2：
+    A                             B
+    send_sig(SIGPIPE, current, 0)
+                                  ptrace_attach ( A->ptrace |= PT_PTRACED)
+                                  ptrace_attach ( Send SIGSTOP to A)
+    get_signal
+    dequeue_signal (SIGPIPE)
+    ptrace_signal
+    ->ptrace_stop(TASK_TRACED)
 
-sysrq falls back to direct printing. This would imply that the kthread
-printer is somehow unable to print.
+                                  ptrace_waitpid( return 0)
+                                  ptrace_detach (A->ptrace=0, wakeup A)
+    dequeue_signal(SIGSTOP)
+    sig_kernel_stop(SIGSTOP)
+    do_signal_stop (TASK_STOPPED)
 
-> Here is the output of 't' magic sys request:
->
-> https://pastebin.com/fjbRuy4f
+then：
+A (other threads of the process received signal)
+get_signal-> do_signal_stop(0))->TASK_STOPPED
 
-It looks like the call trace for the printing kthread (pr/ttyAML0) is
-corrupt.
+Signed-off-by: Shuzhi Zu <zushuzhi@h3c.com>
+---
+ kernel/ptrace.c | 2 ++
+ kernel/signal.c | 2 ++
+ 2 files changed, 4 insertions(+)
 
-Could you post your kernel config?
+diff --git a/kernel/ptrace.c b/kernel/ptrace.c
+index ccc4b46..ab1dc8f 100644
+--- a/kernel/ptrace.c
++++ b/kernel/ptrace.c
+@@ -447,7 +447,9 @@ static int ptrace_attach(struct task_struct *task, long request,
+ 	if (task->ptrace)
+ 		goto unlock_tasklist;
+ 
++	spin_lock(&task->sighand->siglock);
+ 	task->ptrace = flags;
++	spin_unlock(&task->sighand->siglock);
+ 
+ 	ptrace_link(task, current);
+ 
+diff --git a/kernel/signal.c b/kernel/signal.c
+index 30cd1ca..522bc6e 100644
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -220,6 +220,8 @@ int next_signal(struct sigpending *pending, sigset_t *mask)
+ 	if (x) {
+ 		if (x & SYNCHRONOUS_MASK)
+ 			x &= SYNCHRONOUS_MASK;
++		else if (x & sigmask(SIGSTOP))
++			x &= sigmask(SIGSTOP);
+ 		sig = ffz(~x) + 1;
+ 		return sig;
+ 	}
+-- 
+1.8.3.1
 
-John

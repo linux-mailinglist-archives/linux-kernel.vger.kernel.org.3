@@ -2,102 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D96515E2B
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 16:23:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB4B515E37
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 16:32:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382830AbiD3O1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 10:27:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35394 "EHLO
+        id S1382843AbiD3OgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 10:36:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235592AbiD3O1D (ORCPT
+        with ESMTP id S239177AbiD3OgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 10:27:03 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264C881654
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 07:23:40 -0700 (PDT)
-Received: from mail-yw1-f177.google.com ([209.85.128.177]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MgNpJ-1oLXL30V4h-00hsqy for <linux-kernel@vger.kernel.org>; Sat, 30 Apr
- 2022 16:23:39 +0200
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-2f7bb893309so110884547b3.12;
-        Sat, 30 Apr 2022 07:23:37 -0700 (PDT)
-X-Gm-Message-State: AOAM5324iXek6PXKGCrhQb8oUh4lk2F9ZASTu6flbcdMTGLih7e9leVj
-        t+yA+FZTFHl1wtb8g7EAJhQm6+V5x9oRza8+bvQ=
-X-Google-Smtp-Source: ABdhPJyu1oLM1IRKTqR+eQdQ1rsYTJoLMnuBV/FFpB8y5vKEh5sII8e/hMlA25PDcp1w4A+thLzVKyWiU6hDO089+bw=
-X-Received: by 2002:a0d:d804:0:b0:2f4:e47d:1c2c with SMTP id
- a4-20020a0dd804000000b002f4e47d1c2cmr4143200ywe.320.1651328616903; Sat, 30
- Apr 2022 07:23:36 -0700 (PDT)
+        Sat, 30 Apr 2022 10:36:02 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B608017048;
+        Sat, 30 Apr 2022 07:32:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651329160; x=1682865160;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5n9k9ZqfREXkHj6Rcus3Ptw9qG95yOLcMZ9wKQUwq7c=;
+  b=WtRUDu2Slk69CMvPNKeE8RwazDAuFuU83mqVubpYtq6EwRoMsqc9byNk
+   BVwHGzigWr84TgEeKov9tin9VIrUu/q7LXBLMBjnu5PbtgflG3MDb/Cbj
+   nBcRrLA1+AFBM9h/6H2L7/3RJxpAbAZUIsRg+GIuOBDnKym3wlm79aLA5
+   1Q3g+k6biS2aRmGLPTSQtnTawrorR1udgzIgcwD5WmSjs89nkuo1FnzHs
+   Cmxrba9A6Tuy4nI2QlNlSlokUro+JGoQuB6+9XMUIuX4zjPSNIK9xEtOo
+   67LL+OA+uCTD6biKErIyoZO3KO4XQXOeo4O+1MFGyYG/0nyV/+5nrHPDO
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="265736052"
+X-IronPort-AV: E=Sophos;i="5.91,188,1647327600"; 
+   d="scan'208";a="265736052"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2022 07:32:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,188,1647327600"; 
+   d="scan'208";a="706978136"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
+  by fmsmga001.fm.intel.com with ESMTP; 30 Apr 2022 07:32:38 -0700
+Date:   Sat, 30 Apr 2022 22:24:52 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Tom Rix <trix@redhat.com>
+Cc:     Tianfei Zhang <tianfei.zhang@intel.com>, hao.wu@intel.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: Re: [PATCH v3] uio: dfl: add HSSI subsystem feature id
+Message-ID: <20220430142452.GB398931@yilunxu-OptiPlex-7050>
+References: <20220429005726.607804-1-tianfei.zhang@intel.com>
+ <b3f0bc47-70ea-2da5-2891-3b01550c6da6@redhat.com>
 MIME-Version: 1.0
-References: <20220419163810.2118169-1-arnd@kernel.org> <20220422170530.GA2338209@roeck-us.net>
- <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
- <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net> <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
- <20220422234150.GA3442771@roeck-us.net> <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
- <3b4046ed-fd75-13ea-fac3-06469172806c@roeck-us.net> <CAK8P3a1LzEG1vo+5nMrnL3TOMcbSKJ3u=StcfY8dajV2raUBjA@mail.gmail.com>
- <3df135a2-17f5-d6c6-b4a8-e1a60e254297@roeck-us.net> <CAK8P3a2EHMQPN4ny9sXXuReFG0jN0hyRV7h9v_AR_0pqpOU41w@mail.gmail.com>
- <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
- <6f1b27fa-96d1-4be7-ac6a-762610314f2a@roeck-us.net> <8d6d453a-e6fc-439b-2f34-e60c22fc9e98@roeck-us.net>
- <CAK8P3a2Ekvis1YcrJZtuga+XQdbeTC98PkOszCpS2DiZri7VMQ@mail.gmail.com>
- <149509dd-f43d-1b27-4395-81eab4ff3455@roeck-us.net> <CAK8P3a05vFdBnXXAMPVS82xX29+uinvWPcWxAgvj0TfoOk+1kg@mail.gmail.com>
- <b13783aa-9225-d52a-3800-c97ad772688b@roeck-us.net> <CAK8P3a3S5OjkKq_u5FpnwzYv+0+typya6Z4MzTez5ZH+do00xQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a3S5OjkKq_u5FpnwzYv+0+typya6Z4MzTez5ZH+do00xQ@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sat, 30 Apr 2022 16:23:20 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3jiqf_zpBsZyvAb5ZtkwDa7KkqExqDAdpY_pYqkr_NgQ@mail.gmail.com>
-Message-ID: <CAK8P3a3jiqf_zpBsZyvAb5ZtkwDa7KkqExqDAdpY_pYqkr_NgQ@mail.gmail.com>
-Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:EPpBWJl+cn8Di+o1oK+7ddvEEiOJ4OxlZ/sdoVz8zDp9acUAnHJ
- rfFA9HpBS+lINPGN5GCRYRown48Hbgi3a3/AupaGOsjMcNRg8UbhFHFUt5jvO/3wszQUwKX
- PAgM/3HfN9FV6AZ5zgihNKIoYx6p2wNix7lt/JfNMugpkcuPxzQ/YRnev25qJTskA1ASmbd
- Qzj5c358MP3NC1jQS0lhQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0RHmRk+LRsI=:4wQYOSm9T3h/wzNm5SB63d
- NeOCfOfj+tIiNbGuoLn5mSHAnH8RkH2S5uSP1D7+KyhLzI+KPmKM/ZTdVjMMAM3hEIMkWCabz
- s76gvuYH4Yx2Qjgx0jtMCFHXTN8ci+alLoXY1ygmLx6uF02/QIIL8KjqK+oOeRwmmSzOGlLQU
- xF/o1Sz5KExD+yCu5APeQOCtA740ns9THCqYUj0SVmOpilJkv1Bhvn6nvtV3l/V9aWhrNfnOE
- Ju1i5raPtk69C4B9Ud/D3thFJzHVAe6yxH7nYuL1TCi0wk4WCW6jIqXkPel1+gX9Ac9x/VyMq
- 6wGmsXwUJ6B1LekWNWYFjwtFN8vvRcWDnnUMxpGCAIz600xfcLdcPQ1heIvkbz6+3aj8Nq7SL
- U4mkPjOkSN2KMtvX2srB9dgkZGNUjdMrXiVM6q462gDu+/eYj98UsO9VE/n3w7dKihgnLxx3b
- tl5M9XNq79O8vXvOcQLAZSpjn6og47U4hX7ocJLh7hz38d2G7I2Evd7wbfwOMyc8ayJQmp8Mk
- wYm9CQfYgYAVrf5FX6azGxGA4VtVW9NsQxeTNo8TYR/OTO3vuDaqLQOTYZDIbVTNBPgqyQHdm
- 3EhkBkAXxUC5jFmQN9DJRgVydIK1RafURDaekCHEo2/27EczqHBbzyjCS1URm6TrSTl2WCJhu
- bVpbHD8iOI395rpj2yFur/cflE2T4NY2Hke3dvoQQreI4t/wnYIsg7RC7UCqnmYOeRGtea2i7
- E0LAxnuR1AUYguQIrtdjctzVKHihsJYkHCATwd/ef7M7BqHpaeAptOxvTD6TdFE/UUQ2FiOQC
- mOqS3iUNF23AYgoC7F++CwijdqhKm3aY9vRChu9wpUjqo8JRLQ=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b3f0bc47-70ea-2da5-2891-3b01550c6da6@redhat.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,44 +62,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 30, 2022 at 3:32 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Sat, Apr 30, 2022 at 2:41 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> > On 4/30/22 01:04, Arnd Bergmann wrote:
-> > > and concluded that it must have done this for a long time. In my own qemu
-> > > instance, I see a crash from iWMMXt, but that works fine on your machine.
-> > > OTOH, your failed instances all look like they either time out or
-> > > failed to find a
-> > > rootfs. I tried passing an MMC device as root, and that works here.
-> > >
-> >
-> > Booting from mmc works for me as well. Booting from pcmcia worked before,
-> > so I assume that there must be some regression.
->
-> Ok, got it, and managed to reproduce the hang now. My "ARM: pxa/sa1100: move
-> I/O space to PCI_IOBASE" patch managed to get it to the point of detecting
-> the pcmcia device instead of crashing, so I assumed it was enough when it
-> clearly was not. Before that patch, it still works, afterwards it hangs with
-> "pata_pcmcia: probe of 0.0 failed with error -12" as mentioned above. I'll
-> have another look.
+On Fri, Apr 29, 2022 at 05:23:53AM -0700, Tom Rix wrote:
+> 
+> On 4/28/22 5:57 PM, Tianfei Zhang wrote:
+> > From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> > 
+> > Add the Device Feature List (DFL) feature id for the
+> > High Speed Serial Interface (HSSI) Subsystem to the
+> > table of ids supported by the uio_dfl driver.
+> > 
+> > The HSSI Subsystem is a configurable set of IP blocks
+> > to be used as part of a Ethernet or PCS/FEC/PMA pipeline.
+> > Like the Ethernet group used by the N3000 card, the HSSI
+> > Subsystem does not fully implement a network device from
+> > a Linux netdev perspective and is controlled and monitored
+> > from user space software via the uio interface.
+> 
+> Generally you should include the url for the dfl definitions.
+> 
+> Can you add it here to the commit log ?
 
-Got it: as the PCMCIA bus on this machine is the only thing with an I/O space,
-I assigned it port number range 0-0x1000, with an io_offset of 0, but this
-was apparently unexpected and triggered this sanity check:
+Do you refer to this url, https://github.com/OPAE/dfl-feature-id ?
 
-static int static_find_io(struct pcmcia_socket *s, unsigned int attr,
-                        unsigned int *base, unsigned int num,
-                        unsigned int align, struct resource **parent)
-{
-      if (!s->io_offset)
-              return -EINVAL;
-      ...
-      return 0;
-}
+Hao has some comments about this at
 
-I moved the devices around now, giving zeus/viper I/O space an offset of
-zero, and moving PCMCIA to offset 0x10000 and 0x11000 for the two slots,
-which now works because the io_offset is nonzero. I've regenerated the
-branches again, and confirmed the for-next branch still boots from pcmcia.
+  https://lore.kernel.org/all/DM6PR11MB38190E6EEF6DE3EB900290C585F39@DM6PR11MB3819.namprd11.prod.outlook.com/
 
-        Arnd
+> 
+> Otherwise fine.
+> 
+> Reviewed-by: Tom Rix <trix@redhat.com>
+> 
+> > 
+> > Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> > Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
+
+This patch is now good to me.
+
+Acked-by: Xu Yilun <yilun.xu@intel.com>
+
+> > ---
+> > v3: change the name of this feature id to HSSI_SUBSYS and rewrite
+> >      the git message.
+> > v2: add HSSI introduction and the git repo of Feature ID table.
+> > ---
+> >   drivers/uio/uio_dfl.c | 2 ++
+> >   1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/drivers/uio/uio_dfl.c b/drivers/uio/uio_dfl.c
+> > index 89c0fc7b0cbc..8f39cc8bb034 100644
+> > --- a/drivers/uio/uio_dfl.c
+> > +++ b/drivers/uio/uio_dfl.c
+> > @@ -45,9 +45,11 @@ static int uio_dfl_probe(struct dfl_device *ddev)
+> >   }
+> >   #define FME_FEATURE_ID_ETH_GROUP	0x10
+> > +#define FME_FEATURE_ID_HSSI_SUBSYS	0x15
+> >   static const struct dfl_device_id uio_dfl_ids[] = {
+> >   	{ FME_ID, FME_FEATURE_ID_ETH_GROUP },
+> > +	{ FME_ID, FME_FEATURE_ID_HSSI_SUBSYS },
+> >   	{ }
+> >   };
+> >   MODULE_DEVICE_TABLE(dfl, uio_dfl_ids);

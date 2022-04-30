@@ -2,90 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58676515C0D
+	by mail.lfdr.de (Postfix) with ESMTP id A1AEB515C0E
 	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 11:51:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236541AbiD3JyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 05:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37242 "EHLO
+        id S239007AbiD3JyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 05:54:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382560AbiD3JyI (ORCPT
+        with ESMTP id S1382561AbiD3JyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 05:54:08 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553AB6E4F2;
-        Sat, 30 Apr 2022 02:50:44 -0700 (PDT)
-Received: from mail-yw1-f182.google.com ([209.85.128.182]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1Mlejs-1oBr5V1OLq-00iity; Sat, 30 Apr 2022 11:50:43 +0200
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-2f7d19cac0bso106999377b3.13;
-        Sat, 30 Apr 2022 02:50:42 -0700 (PDT)
-X-Gm-Message-State: AOAM5310njdym2Ubn1QhBjdz4Y15u+h1S5xjtXjBXxg6LFWF2fuefTun
-        U+HIRHAvO7znpNJ/k73y+5PCtOuYBGWaOp4hewQ=
-X-Google-Smtp-Source: ABdhPJyLj6FnAysaKzwwc3qOaMCFIiS1hfGGX23CKyKyqsDGd/LTntRnyBYwoZASkBTQ+TWIWhm1m1vJyXWHyLzn1Ts=
-X-Received: by 2002:a81:5594:0:b0:2f8:f39c:4cfc with SMTP id
- j142-20020a815594000000b002f8f39c4cfcmr193063ywb.495.1651312241898; Sat, 30
- Apr 2022 02:50:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220430090518.3127980-1-chenhuacai@loongson.cn> <20220430090518.3127980-17-chenhuacai@loongson.cn>
-In-Reply-To: <20220430090518.3127980-17-chenhuacai@loongson.cn>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sat, 30 Apr 2022 11:50:25 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a097Z_DKXbrLrCB7JZUB0J0duSmZRHSJkjRM5=rteit6g@mail.gmail.com>
-Message-ID: <CAK8P3a097Z_DKXbrLrCB7JZUB0J0duSmZRHSJkjRM5=rteit6g@mail.gmail.com>
-Subject: Re: [PATCH V9 16/24] LoongArch: Add misc common routines
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        Sat, 30 Apr 2022 05:54:13 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82AC92B246;
+        Sat, 30 Apr 2022 02:50:48 -0700 (PDT)
+Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 095A31EC008F;
+        Sat, 30 Apr 2022 11:50:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1651312243;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=kqZxY6yBPZveA61uE6RKmS9yZUetoL0bfmeRixrjLTg=;
+        b=evyaV+G6u6Ol/KjT0r7zj64vReQq2CBtl9mkv7SngqtV6mfGRbWaYUIMi0g88kd0U0b0z6
+        G0d5cN9NtOo2RMiqgkqIx5z20zx6ASjDyPGq107JCbB4l5wSzlfgIlsC7OJfgda8YMxJyh
+        3pko2MzBxWg+jOEUMm1edlGPzheHWNQ=
+Date:   Sat, 30 Apr 2022 11:50:40 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Jon Kohler <jon@nutanix.com>, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:slXdi58PVLIZW2dmjwWM278p/kxQ+K/efsGhvsMq4gY0bvwVsbH
- xqRj7E3Ubh1et4ARsArIDWwz5/FXdE+NK6gairW1NXWkygbyNRFO83KUDkhDxl6nD0cJPVR
- MNxpcmzdRVa8ZPLrgkZPPUCkgry9m6J+YSCrm8iMhAsRBNoRf4Snp6lO7XHlhVXBU7TlXxm
- VKlB5DfidnHVjYo+/qUKQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:upqXE5Dmhr0=:3dRES0OySqIuV5xuSLB4AQ
- Q/Yk2NkCtPDf/3l+AA7amKUSenGe09v1b2lv7gRF0e0JpOXCuORB/PAKpSLLbdZlhLaFg1MH+
- 8uvugMjeEqaFP58aTtTedT6Ta5JOZhX08n365WUhuqLu6rLY6cXB2zObR4oHp9tUJ3uHiTyJY
- gd26wAM4LMWiPZQp3YgOwl+r+x6pc+LmoRH2uPjAnEsNcNjNM/X45Rnmz+Wq6uktAWWgbQOmL
- 2CsOrDo8OuNKwwXX+dd+2S7wcMkB2iQTcaSA4XWkrTMlShEam/XN+7JRYfb/GxchvaxEKEXWU
- bo8ojNrWwiQlXaS1K6C5a5piHDdyF65kevPhdAhKjNF1c3zR1nmQMtLwtVD+8Up0dZ52QfuEj
- AM4QlfCysYFliYBEOHmKuQvaW/rfX+NSNZJfr0AcPnM8ROoA/e4zuJ0AXcn0AiXxjwErxv9qz
- SNdk0Wgoy/xzdHow8LW+3purMvcWdtvbrq7idJ1chvsU81b/xMUNDyj+2AZ1fgARYSIONl9t7
- IIup92kx0PL+aFKaWXvtQcyYnqSnvnQE06AtUgd4vXqNW2wveoxFXB+83g5BcDqu1ZLXGoWoL
- ZEW5iW0/oJkux1fn3e1F7/dK8PE4pH9iGXzEiCkJbTWugk48ODgaImyS9J9/tBWW2rOVwk8nK
- k4BnMq3cQTIX3gF8cbpzH2/rkOxizVb7uAZYd+r2UVwcgwfbnMkElyMZeY28HMAvCaGcNcXKi
- 8wEO6pLGBRNl0s4lUtbJ3TQNNzlNphs6QCkciP86XFkTdyge5GnJNkugkWJQ5Qj2n/YkFTlD+
- GDfA+uRbICeu63+24sv2m11vlSF5l0s+zecfrQ1X3roVQ439kg=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Balbir Singh <sblbir@amazon.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH v3] x86/speculation, KVM: only IBPB for
+ switch_mm_always_ibpb on vCPU load
+Message-ID: <Ym0GcKhPZxkcMCYp@zn.tnic>
+References: <20220422162103.32736-1-jon@nutanix.com>
+ <YmwZYEGtJn3qs0j4@zn.tnic>
+ <645E4ED5-F6EE-4F8F-A990-81F19ED82BFA@nutanix.com>
+ <Ymw9UZDpXym2vXJs@zn.tnic>
+ <YmxKqpWFvdUv+GwJ@google.com>
+ <YmxRnwSUBIkOIjLA@zn.tnic>
+ <Ymxf2Jnmz5y4CHFN@google.com>
+ <YmxlHBsxcIy8uYaB@zn.tnic>
+ <YmxzdAbzJkvjXSAU@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YmxzdAbzJkvjXSAU@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 30, 2022 at 11:05 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
+On Fri, Apr 29, 2022 at 11:23:32PM +0000, Sean Christopherson wrote:
+> The host kernel is protected via RETPOLINE and by flushing the RSB immediately
+> after VM-Exit.
 
-> +unsigned long __xchg_small(volatile void *ptr, unsigned long val, unsigned int size)
-> +{
-> +       u32 old32, mask, temp;
-> +       volatile u32 *ptr32;
-> +       unsigned int shift;
-> +
-> +       /* Check that ptr is naturally aligned */
+Ah, right.
 
-As discussed, please remove this function and all the references to it.
+> I don't know definitively.  My guess is that IBPB is far too costly to do on every
+> exit, and so the onus was put on userspace to recompile with RETPOLINE.  What I
+> don't know is why it wasn't implemented as an opt-out feature.
 
-      Arnd
+Or, we could add the same logic on the exit path as in cond_mitigation()
+and test for LAST_USER_MM_IBPB when the host has selected
+switch_mm_cond_ibpb and thus allows for certain guests to be
+protected...
+
+Although, that use case sounds kinda meh: AFAIU, the attack vector here
+would be, protecting the guest from a malicious kernel. I guess this
+might matter for encrypted guests tho.
+
+> I'll write up the bits I have my head wrapped around.
+
+That's nice, thanks!
+
+> I don't know of any actual examples.  But, it's trivially easy to create multiple
+> VMs in a single process, and so proving the negative that no one runs multiple VMs
+> in a single address space is essentially impossible.
+> 
+> The container thing is just one scenario I can think of where userspace might
+> actually benefit from sharing an address space, e.g. it would allow backing the
+> image for large number of VMs with a single set of read-only VMAs.
+
+Why I keep harping about this: so let's say we eventually add something
+and then months, years from now we cannot find out anymore why that
+thing was added. We will likely remove it or start wasting time figuring
+out why that thing was added in the first place.
+
+This very questioning keeps popping up almost on a daily basis during
+refactoring so I'd like for us to be better at documenting *why* we're
+doing a certain solution or function or whatever.
+
+And this is doubly important when it comes to the hw mitigations because
+if you look at the problem space and all the possible ifs and whens and
+but(t)s, your head will spin in no time.
+
+So I'm really sceptical when there's not even a single actual use case
+to a proposed change.
+
+So Jon said something about oversubscription and a lot of vCPU
+switching. That should be there in the docs as the use case and
+explaining why dropping IBPB during vCPU switches is redundant.
+
+> I truly have no idea, which is part of the reason I brought it up in the first
+> place.  I'd have happily just whacked KVM's IBPB entirely, but it seemed prudent
+> to preserve the existing behavior if someone went out of their way to enable
+> switch_mm_always_ibpb.
+
+So let me try to understand this use case: you have a guest and a bunch
+of vCPUs which belong to it. And that guest gets switched between those
+vCPUs and KVM does IBPB flushes between those vCPUs.
+
+So either I'm missing something - which is possible - but if not, that
+"protection" doesn't make any sense - it is all within the same guest!
+So that existing behavior was silly to begin with so we might just as
+well kill it.
+
+> Yes, or do it iff switch_mm_always_ibpb is enabled to maintain "compability".
+
+Yap, and I'm questioning the even smallest shred of reasoning for having
+that IBPB flush there *at* *all*.
+
+And here's the thing with documenting all that: we will document and
+say, IBPB between vCPU flushes is non-sensical. Then, when someone comes
+later and says, "but but, it makes sense because of X" and we hadn't
+thought about X at the time, we will change it and document it again and
+this way you'll have everything explicit there, how we arrived at the
+current situation and be able to always go, "ah, ok, that's why we did
+it."
+
+I hope I'm making some sense...
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,81 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E66C515EE9
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 17:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 614D1515EEB
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 17:53:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242993AbiD3P4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 11:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53320 "EHLO
+        id S1359711AbiD3P4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 11:56:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242970AbiD3P41 (ORCPT
+        with ESMTP id S1358945AbiD3P4j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 11:56:27 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1CA580C4;
-        Sat, 30 Apr 2022 08:53:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=lxRU4LE3pvOW3ivVzq+FV5/t6uMeAUpHsCxeSXoPW3M=; b=jXI2aVt7bjb5ddwZ6Y5/6fdyjI
-        QCFaK7Z7eTmsXS0W+gvekQj1zhc0LZx0Ufb6Iqm405H4GQNxo8lXVuwvXVaEJAAB4iA6n7QHj8wGn
-        3siWN5DD3CGDyxm00w0JElWRQpoPsKBkh3JkUivDHE6gRPknVFhPLlUjvh6Kpko6II4g=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nkpOy-000eIR-VZ; Sat, 30 Apr 2022 17:52:56 +0200
-Date:   Sat, 30 Apr 2022 17:52:56 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] net: phy: fix motorcomm module automatic loading
-Message-ID: <Ym1bWHNj0p6L9lY8@lunn.ch>
-References: <20220228233057.1140817-1-pgwipeout@gmail.com>
- <Yh1lboz7VDiuYuZV@shell.armlinux.org.uk>
- <CAMdYzYrNvUUMom4W4uD9yf9LtFK1h5Xw+9GYc54hB5+iqVmJtw@mail.gmail.com>
- <CAMdYzYrFuMw4aj_9L698ZhL7Xqy8=NeXhy9HDz4ug-v3=f4fpw@mail.gmail.com>
+        Sat, 30 Apr 2022 11:56:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A597C527ED;
+        Sat, 30 Apr 2022 08:53:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5799FB803F7;
+        Sat, 30 Apr 2022 15:53:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD042C385AA;
+        Sat, 30 Apr 2022 15:53:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651333989;
+        bh=h/T/UY34Ovs/LcnMrzIJ46hd3lr/K5vQaUAvXYDDAMo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=cozFTpUZLzmZyeyH8hEdGID1hhBBK/wyT+/gi+VTDkxT90ayYXB4nV5JDxhEuoefD
+         +59jywqqPBmITKPCyGHZ3c+8y9IqkBh4G15sJQza/SV1yco42s9r0XYy+wh138vb2X
+         ARL2FqA+CHSVZVX0Hw1ZMrS7Y6vnPoPxNYABIZSI=
+Date:   Sat, 30 Apr 2022 17:53:06 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Jiri Slaby <jslaby@suse.cz>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: [GIT PULL] TTY/Serial driver fixes for 5.18-rc5
+Message-ID: <Ym1bYgkmZYmrF6x5@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMdYzYrFuMw4aj_9L698ZhL7Xqy8=NeXhy9HDz4ug-v3=f4fpw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Good Morning,
-> 
-> After testing various configurations I found what is actually
-> happening here. When libphy is built in but the phy drivers are
-> modules and not available in the initrd, the generic phy driver binds
-> here. This allows the phy to come up but it is not functional.
+The following changes since commit ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e:
 
-What MAC are you using?
+  Linux 5.18-rc2 (2022-04-10 14:21:36 -1000)
 
-Why is you interface being brought up by the initramfs? Are you using
-NFS root from within the initramfs?
+are available in the Git repository at:
 
-What normally happens is that the kernel loads, maybe with the MAC
-driver and phylib loading, as part of the initramfs. The other modules
-in the initramfs allow the root filesystem to be found, mounted, and
-pivoted into it. The MAC driver is then brought up by the initscripts,
-which causes phylib to request the needed PHY driver modules, it loads
-and all is good.
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-5.18-rc5
 
-If you are using NFS root, then the load of the PHY driver happens
-earlier, inside the initramfs. If this is you situation, maybe the
-correct fix is to teach the initramfs tools to include the PHY drivers
-when NFS root is being used?
+for you to fetch changes up to 19317433057dc1f2ca9a975e4e6b547282c2a5ef:
 
-     Andrew
+  tty: n_gsm: fix sometimes uninitialized warning in gsm_dlci_modem_output() (2022-04-26 08:09:46 +0200)
+
+----------------------------------------------------------------
+TTY/Serial fixes for 5.18-rc5
+
+Here are some small serial driver fixes, and a larger number of GSM line
+discipline fixes for 5.18-rc5.
+
+These include:
+	- lots of tiny n_gsm fixes for issues to resolve a number of
+	  reported problems.  Seems that people are starting to actually
+	  use this code again.
+	- 8250 driver fixes for some devices
+	- imx serial driver fix
+	- amba-pl011 driver fix
+
+All of these have been in linux-next for a while with no reported
+issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Daniel Starke (21):
+      tty: n_gsm: fix missing mux reset on config change at responder
+      tty: n_gsm: fix restart handling via CLD command
+      tty: n_gsm: fix decoupled mux resource
+      tty: n_gsm: fix mux cleanup after unregister tty device
+      tty: n_gsm: fix wrong signal octet encoding in convergence layer type 2
+      tty: n_gsm: fix frame reception handling
+      tty: n_gsm: fix malformed counter for out of frame data
+      tty: n_gsm: fix insufficient txframe size
+      tty: n_gsm: fix wrong DLCI release order
+      tty: n_gsm: fix missing explicit ldisc flush
+      tty: n_gsm: fix wrong command retry handling
+      tty: n_gsm: fix wrong command frame length field encoding
+      tty: n_gsm: fix wrong signal octets encoding in MSC
+      tty: n_gsm: fix missing tty wakeup in convergence layer type 2
+      tty: n_gsm: fix reset fifo race condition
+      tty: n_gsm: fix incorrect UA handling
+      tty: n_gsm: fix missing update of modem controls after DLCI open
+      tty: n_gsm: fix broken virtual tty handling
+      tty: n_gsm: fix invalid use of MSC in advanced option
+      tty: n_gsm: fix software flow control handling
+      tty: n_gsm: fix sometimes uninitialized warning in gsm_dlci_modem_output()
+
+Hui Wang (1):
+      Revert "serial: sc16is7xx: Clear RS485 bits in the shutdown"
+
+Johan Hovold (1):
+      serial: imx: fix overrun interrupts in DMA mode
+
+Lino Sanfilippo (1):
+      serial: amba-pl011: do not time out prematurely when draining tx fifo
+
+Maciej W. Rozycki (2):
+      serial: 8250: Also set sticky MCR bits in console restoration
+      serial: 8250: Correct the clock for EndRun PTP/1588 PCIe device
+
+Tony Lindgren (1):
+      serial: 8250: Fix runtime PM for start_tx() for empty buffer
+
+ drivers/tty/n_gsm.c                 | 477 +++++++++++++++++++++---------------
+ drivers/tty/serial/8250/8250_pci.c  |   8 +-
+ drivers/tty/serial/8250/8250_port.c |   6 +-
+ drivers/tty/serial/amba-pl011.c     |   9 +-
+ drivers/tty/serial/imx.c            |   2 +-
+ drivers/tty/serial/sc16is7xx.c      |   6 +-
+ 6 files changed, 293 insertions(+), 215 deletions(-)

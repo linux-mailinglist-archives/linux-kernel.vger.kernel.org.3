@@ -2,115 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E34515C20
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 12:06:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA64515C26
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 12:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239966AbiD3KJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 06:09:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39800 "EHLO
+        id S1382568AbiD3KJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 06:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382556AbiD3KIm (ORCPT
+        with ESMTP id S1382575AbiD3KJd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 06:08:42 -0400
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82D15FFE;
-        Sat, 30 Apr 2022 03:05:19 -0700 (PDT)
-Received: by mail-vs1-xe32.google.com with SMTP id t85so9684120vst.4;
-        Sat, 30 Apr 2022 03:05:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jDlJEsYHsH5/u4hrMRhfUbsT0qjmPw77962C19d54XE=;
-        b=MOdZAyOylVEF9SHL6setlZ43OIx9F+W6/c/NrJKf7DW4FGIlMHhfB4tzN3SQZf11Z3
-         QQo6L95/ja4fa+5ds9gJXdSVto5O+awjhKs5JNu9cJLhZpThas37pc1ca2HnnWbqEJCb
-         WNkPGP5Okq7/BIj1ltz5ZIj9gLkOperYtSygRb4wIqLgzoxc66Y7/ZEqjxSmjgkAaQ+m
-         OQI8VNL5flG4E0GjNWyaCeKAwojjPfvjS2J9AeAm9dMA9mky9me3ivk4j4H57L3xuH+V
-         KBSJQSheDl/1GK6K9/MmxQ+AV8KwqGlvUTj4xXPt/rKg08Ce73gwj1qkvhF6HBUovwst
-         sdAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jDlJEsYHsH5/u4hrMRhfUbsT0qjmPw77962C19d54XE=;
-        b=COZMT6xdEzfS+y9NlTNrKIubUyuGL/gzItxALGkt3EjSgONqn5VLNdwsqx7/Xqn033
-         FdfuJZA3gKvivfDNJZlWBSSiDNeRXzQwPGxWiubGYzEk4NexVp2okd7FhYPf9LKz6oQs
-         NiMAPHL276U/AN5sEcgo280bTv2nQGQYP+8pNPkPqPXg+11HiD4d05wih/t15wK6hQU8
-         uAIhl5BUOHZtpr4oREn7it/MN9QG+AT3IMjH5yRzJkallYrqBKhRRyXZGbZqR355tGH5
-         xj86eLmbzLg5E3kFxFQJoNMgJ3ZVH6S/byi2hhSXpFtnYFHEC7LOZif92pSLJBzyl9q1
-         wRLA==
-X-Gm-Message-State: AOAM5301A3QU1fFJ1FAPdMMhk6wwvJDDiMJAyXntbzfGUrKeeqKgV2Om
-        tqB+MCIN0qNtlnBZDm80GTBR9HyN4xFQ6RjkY8E=
-X-Google-Smtp-Source: ABdhPJwmXkH2wMcWDejlFEFo295A9u0t4tWrF0aD1JhDKO4YeoP5fZQjceWB6sG7nt9k1EK5IAldqHoVV38AJo2pwHk=
-X-Received: by 2002:a67:ea4f:0:b0:328:1db4:d85c with SMTP id
- r15-20020a67ea4f000000b003281db4d85cmr963977vso.20.1651313118631; Sat, 30 Apr
- 2022 03:05:18 -0700 (PDT)
+        Sat, 30 Apr 2022 06:09:33 -0400
+Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [5.144.164.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619C02D1F6
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 03:06:08 -0700 (PDT)
+Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id C1EDB3F735;
+        Sat, 30 Apr 2022 12:06:06 +0200 (CEST)
+Date:   Sat, 30 Apr 2022 12:06:05 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Pavel Machek <pavel@ucw.cz>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v14 1/2] dt-bindings: leds: Add Qualcomm Light Pulse
+ Generator binding
+Message-ID: <20220430100605.vn4wf33mft3vdm5w@SoMainline.org>
+References: <20220303214300.59468-1-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-References: <20220430090518.3127980-1-chenhuacai@loongson.cn>
- <20220430090518.3127980-14-chenhuacai@loongson.cn> <CAK8P3a0A9dW4mwJ6JHDiJxizL7vWfr4r4c5KhbjtAY0sWbZJVA@mail.gmail.com>
-In-Reply-To: <CAK8P3a0A9dW4mwJ6JHDiJxizL7vWfr4r4c5KhbjtAY0sWbZJVA@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Sat, 30 Apr 2022 18:05:07 +0800
-Message-ID: <CAAhV-H4te_+AS69viO4eBz=abBUm5oQ6AfoY1Cb+nOCZyyeMdA@mail.gmail.com>
-Subject: Re: [PATCH V9 13/24] LoongArch: Add system call support
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220303214300.59468-1-bjorn.andersson@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Arnd,
+On 2022-03-03 13:42:59, Bjorn Andersson wrote:
+> This adds the binding document describing the three hardware blocks
+> related to the Light Pulse Generator found in a wide range of Qualcomm
+> PMICs.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-On Sat, Apr 30, 2022 at 5:45 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Sat, Apr 30, 2022 at 11:05 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> >
-> > This patch adds system call support and related uaccess.h for LoongArch.
-> >
-> > Q: Why keep __ARCH_WANT_NEW_STAT definition while there is statx:
-> > A: Until the latest glibc release (2.34), statx is only used for 32-bit
-> >    platforms, or 64-bit platforms with 32-bit timestamp. I.e., Most 64-
-> >    bit platforms still use newstat now.
-> >
-> > Q: Why keep _ARCH_WANT_SYS_CLONE definition while there is clone3:
-> > A: The latest glibc release (2.34) has some basic support for clone3 but
-> >    it isn't complete. E.g., pthread_create() and spawni() have converted
-> >    to use clone3 but fork() will still use clone. Moreover, some seccomp
-> >    related applications can still not work perfectly with clone3. E.g.,
-> >    Chromium sandbox cannot work at all and there is no solution for it,
-> >    which is more terrible than the fork() story [1].
-> >
-> > [1] https://chromium-review.googlesource.com/c/chromium/src/+/2936184
->
-> I still think these have to be removed. There is no mainline glibc or musl
-> port yet, and neither of them should actually be required. Please remove
-> them here, and modify your libc patches accordingly when you send those
-> upstream.
-If this is just a problem that can be resolved by upgrading
-glibc/musl, I will remove them. But the Chromium problem (or sandbox
-problem in general) seems to have no solution now.
+Apart the nits below:
 
-Huacai
->
->        Arnd
+Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
+> 
+> Changes since v13:
+> - None
+> 
+> Changes since v12:
+> - None
+> 
+>  .../bindings/leds/leds-qcom-lpg.yaml          | 173 ++++++++++++++++++
+>  1 file changed, 173 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml b/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
+> new file mode 100644
+> index 000000000000..336bd8e10efd
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
+> @@ -0,0 +1,173 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/leds/leds-qcom-lpg.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm Light Pulse Generator
+> +
+> +maintainers:
+> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
+> +
+> +description: >
+> +  The Qualcomm Light Pulse Generator consists of three different hardware blocks;
+> +  a ramp generator with lookup table, the light pulse generator and a three
+> +  channel current sink. These blocks are found in a wide range of Qualcomm PMICs.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,pm8150b-lpg
+> +      - qcom,pm8150l-lpg
+> +      - qcom,pm8916-pwm
+> +      - qcom,pm8941-lpg
+> +      - qcom,pm8994-lpg
+> +      - qcom,pmc8180c-lpg
+> +      - qcom,pmi8994-lpg
+> +      - qcom,pmi8998-lpg
+> +
+> +  "#pwm-cells":
+> +    const: 2
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+> +
+> +  qcom,power-source:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      power-source used to drive the output, as defined in the datasheet.
+> +      Should be specified if the TRILED block is present
+> +    enum: [0, 1, 3]
+> +
+> +  qcom,dtest:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> +    description: >
+> +      A list of integer pairs, where each pair represent the dtest line the
+> +      particular channel should be connected to and the flags denoting how the
+> +      value should be outputed, as defined in the datasheet. The number of
+
+Nit: I think outputed is with double-t, though just using "output" here
+should work as well.
+
+> +      pairs should be the same as the number of channels.
+> +    items:
+> +      items:
+> +        - description: dtest line to attach
+> +        - description: flags for the attachment
+> +
+> +  multi-led:
+
+As mentioned on IRC, doesn't this need an @[0-9a-f] designator, as
+specified in leds-class-multicolor.yaml and to match `#address-cells` on
+this level?  Same for the examples.
+
+> +    type: object
+> +    $ref: leds-class-multicolor.yaml#
+> +    properties:
+> +      "#address-cells":
+> +        const: 1
+> +
+> +      "#size-cells":
+> +        const: 0
+> +
+> +    patternProperties:
+> +      "^led@[0-9a-f]$":
+> +        type: object
+> +        $ref: common.yaml#
+
+I'm not familiar enough with DT bindings - doesn't this need the
+requirements for `reg` just like the identical patternProperties for
+led@ below?
+
+> +
+> +patternProperties:
+> +  "^led@[0-9a-f]$":
+> +    type: object
+> +    $ref: common.yaml#
+> +
+> +    properties:
+> +      reg: true
+> +
+> +    required:
+> +      - reg
+> +
+> +required:
+> +  - compatible
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/leds/common.h>
+> +
+> +    led-controller {
+> +      compatible = "qcom,pmi8994-lpg";
+> +
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      qcom,power-source = <1>;
+> +
+> +      qcom,dtest = <0 0>,
+> +                   <0 0>,
+> +                   <0 0>,
+> +                   <4 1>;
+> +
+> +      led@1 {
+> +        reg = <1>;
+> +        color = <LED_COLOR_ID_GREEN>;
+> +        function = LED_FUNCTION_INDICATOR;
+> +        function-enumerator = <1>;
+> +      };
+> +
+> +      led@2 {
+> +        reg = <2>;
+> +        color = <LED_COLOR_ID_GREEN>;
+> +        function = LED_FUNCTION_INDICATOR;
+> +        function-enumerator = <0>;
+> +        default-state = "on";
+> +      };
+> +
+> +      led@3 {
+> +        reg = <3>;
+> +        color = <LED_COLOR_ID_GREEN>;
+> +        function = LED_FUNCTION_INDICATOR;
+> +        function-enumerator = <2>;
+> +      };
+> +
+> +      led@4 {
+> +        reg = <4>;
+> +        color = <LED_COLOR_ID_GREEN>;
+> +        function = LED_FUNCTION_INDICATOR;
+> +        function-enumerator = <3>;
+> +      };
+> +    };
+> +  - |
+> +    #include <dt-bindings/leds/common.h>
+> +
+> +    led-controller {
+> +      compatible = "qcom,pmi8994-lpg";
+> +
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      qcom,power-source = <1>;
+> +
+> +      multi-led {
+> +        color = <LED_COLOR_ID_RGB>;
+> +        function = LED_FUNCTION_STATUS;
+> +
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        led@1 {
+> +          reg = <1>;
+> +          color = <LED_COLOR_ID_RED>;
+> +        };
+> +
+> +        led@2 {
+> +          reg = <2>;
+> +          color = <LED_COLOR_ID_GREEN>;
+> +        };
+> +
+> +        led@3 {
+> +          reg = <3>;
+> +          color = <LED_COLOR_ID_BLUE>;
+> +        };
+> +      };
+> +    };
+> +  - |
+> +    pwm-controller {
+> +      compatible = "qcom,pm8916-pwm";
+> +      #pwm-cells = <2>;
+> +    };
+> +...
+> -- 
+> 2.33.1
+> 

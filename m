@@ -2,156 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F30D5515F65
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 19:02:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A12B1515F01
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 18:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243362AbiD3RGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 13:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52120 "EHLO
+        id S243218AbiD3QTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 12:19:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232692AbiD3RF4 (ORCPT
+        with ESMTP id S243050AbiD3QTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 13:05:56 -0400
-X-Greylist: delayed 3685 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 30 Apr 2022 10:02:33 PDT
-Received: from h3cspam02-ex.h3c.com (smtp.h3c.com [221.12.31.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22504377D8
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 10:02:32 -0700 (PDT)
-Received: from h3cspam02-ex.h3c.com (localhost [127.0.0.2] (may be forged))
-        by h3cspam02-ex.h3c.com with ESMTP id 23UG14QL026584
-        for <linux-kernel@vger.kernel.org>; Sun, 1 May 2022 00:01:04 +0800 (GMT-8)
-        (envelope-from zushuzhi@h3c.com)
-Received: from mail.maildlp.com ([172.25.15.154])
-        by h3cspam02-ex.h3c.com with ESMTP id 23UG0E4q025544;
-        Sun, 1 May 2022 00:00:14 +0800 (GMT-8)
-        (envelope-from zushuzhi@h3c.com)
-Received: from DAG2EX04-BASE.srv.huawei-3com.com (unknown [10.8.0.67])
-        by mail.maildlp.com (Postfix) with ESMTP id 9D8762221BC2;
-        Sun,  1 May 2022 00:02:25 +0800 (CST)
-Received: from localhost.localdomain (10.99.222.162) by
- DAG2EX04-BASE.srv.huawei-3com.com (10.8.0.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Sun, 1 May 2022 00:00:17 +0800
-From:   Shuzhi Zu <zushuzhi@h3c.com>
-To:     <brauner@kernel.org>
-CC:     <oleg@redhat.com>, <linux-kernel@vger.kernel.org>,
-        Shuzhi Zu <zushuzhi@h3c.com>
-Subject: [PATCH] signal/ptrace: Fix the problem of ptrace attach and signal handling oncurrency
-Date:   Sat, 30 Apr 2022 23:43:57 +0800
-Message-ID: <20220430154357.48584-1-zushuzhi@h3c.com>
-X-Mailer: git-send-email 2.17.1
+        Sat, 30 Apr 2022 12:19:42 -0400
+X-Greylist: delayed 495 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 30 Apr 2022 09:16:19 PDT
+Received: from komekko.fuwafuwatime.moe (unknown [IPv6:2a01:4f9:6a:1712::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DFC34BB6;
+        Sat, 30 Apr 2022 09:16:19 -0700 (PDT)
+Received: from megumin.fuwafuwatime.moe (c-174-50-122-55.hsd1.ga.comcast.net [174.50.122.55])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by komekko.fuwafuwatime.moe (Postfix) with ESMTPSA id 87E981A7B66;
+        Sat, 30 Apr 2022 19:07:59 +0300 (EEST)
+Received: from localhost (bubbles.localdomain [192.168.1.101])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by megumin.fuwafuwatime.moe (Postfix) with ESMTPSA id 64665BB6B5B;
+        Sat, 30 Apr 2022 12:07:54 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=concord.sh; s=dkim;
+        t=1651334876;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=skqVWzMwophoEkJSS/d4zaggvs9O9ypBAst/OCvrWUI=;
+        b=lDrp0a+eCJopgMZ+28H/ix2OqjLXZk3TXlRvSA7ljsSXD9/gu8sFJHdKcyoEs7xdTFfwSH
+        nSiyknf+iWj6UuyRGNtR+0ew8GuX9EAkqwCgDy/F5kQqmzI852WHf6b4AF2ddtArV9e+YD
+        LRaj+Zf9lFzFU6hhEeYY9yRwhqfNPywMsiSKHhJCI1hA9Zbi5HjoUWvu/Em92UwVXKsFyn
+        9KU73ucJiekuZPlsqcnb60Q7EajBR6Jm9MFbCs/ZxRjmZ00kBr19mJB/ZMsuOSomuZSfva
+        OsNe0ws9BpRW+WjCoYG8sLxdQut407naJI4iSJV/XAJTf15VxvmU5c8FwumpPw==
+Date:   Sat, 30 Apr 2022 12:07:50 -0400
+From:   Kenton Groombridge <me@concord.sh>
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-hardening@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [RFC PATCH 00/21] KCFI support
+Message-ID: <20220430160750.ov7ddsq2vzibwrju@bubbles>
+Mail-Followup-To: Sami Tolvanen <samitolvanen@google.com>,
+        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-hardening@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+References: <20220429203644.2868448-1-samitolvanen@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.99.222.162]
-X-ClientProxiedBy: BJSMTP01-EX.srv.huawei-3com.com (10.63.20.132) To
- DAG2EX04-BASE.srv.huawei-3com.com (10.8.0.67)
-X-DNSRBL: 
-X-MAIL: h3cspam02-ex.h3c.com 23UG14QL026584
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zpbpn5imnhuprfsc"
+Content-Disposition: inline
+In-Reply-To: <20220429203644.2868448-1-samitolvanen@google.com>
+Authentication-Results: ORIGINATING;
+        auth=pass smtp.auth=me@concord.sh smtp.mailfrom=me@concord.sh
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When ptrace attach and signal handling are concurrent, it will cause the
-state of all threads of the traced process to become stopped and trace
-pid is 0.
 
-The thread dequeues the signal from the queue and another thread traces
-the thread while the signal has not been handled or when non-real-time
-signals less than SIGSTOP and a SIGSTOP signal are in the signal pending
-queue at the same time, these two cases will cause all threads of the
-process to be stopped. Therefore, when ptrace_attach modifying the task
-ptrace value of the thread, it is necessary to lock. Except for synchronous
-signals, SIGSTOP signal should be handled before non-real-time signals.
+--zpbpn5imnhuprfsc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Example: Thread A is the traced thread. Thread B is the tracer.
-1.Thread A dequeues the SIGCHLD signal, before it is handled, thread B
-executes ptrace attach A, and A's ptrace is assigned PT_PTRACED. Then the
-SIGCHLD signal processing will go to the ptrace_signal function。Thread A
-becomes traced. Thread B continues to execute ptrace_detach after the
-execution of waitpid returns. A thread ptrace value is set to 0 and
-it is woken up. Thread A continues to process the SIGSTOP signal, causing
-all threads of the process to be stopped.
-2. Thread A ptrace is assigned PT_PTRACED by ptrace attach, and both
-SIGPIPE and SIGSTOP signals exist in the pending queue of thread A.
-Because the value of SIGPIPE is less than SIGSTOP, SIGSPIPE is handled
-first, which will result in a timing similar to Example 1。
+On 22/04/29 01:36PM, Sami Tolvanen wrote:
+> KCFI is a proposed forward-edge control-flow integrity scheme for
+> Clang, which is more suitable for kernel use than the existing CFI
+> scheme used by CONFIG_CFI_CLANG. KCFI doesn't require LTO, doesn't
+> alter function references to point to a jump table, and won't break
+> function address equality. The latest LLVM patches are here:
+>=20
+>   https://reviews.llvm.org/D119296
+>   https://reviews.llvm.org/D124211
 
-Example 1：
-    A                             B
-    get_signal
-    dequeue_signal (SIGCHLD）
-                                  ptrace_attach ( A->ptrace |= PT_PTRACED)
+Many thanks for continuing to work on this! As a user who has been
+following the evolution of this patch series for a while now, I have a
+couple of burning questions:
 
-    ptrace_signal
-    ->ptrace_stop(TASK_TRACED)
-                                  ptrace_attach ( Send SIGSTOP to A)
-                                  ptrace_waitpid( return 0)
-                                  ptrace_detach (A->ptrace=0, wakeup A)
-    dequeue_signal(SIGSTOP)
-    sig_kernel_stop(SIGSTOP)
-    do_signal_stop (TASK_STOPPED)
+1) The LLVM patch says that kCFI is not compatible with execute-only
+memory. Is there a plan ahead for kCFI if and when execute-only memory
+is implemented?
 
-then：
-A (other threads of the process received signal)
-get_signal-> do_signal_stop(0))->TASK_STOPPED
+2) kCFI only checks indirect calls while Clang's traditional CFI has
+more schemes like bad cast checking and so on. Are there any major
+security tradeoffs as a result of this?
 
-Example 2：
-    A                             B
-    send_sig(SIGPIPE, current, 0)
-                                  ptrace_attach ( A->ptrace |= PT_PTRACED)
-                                  ptrace_attach ( Send SIGSTOP to A)
-    get_signal
-    dequeue_signal (SIGPIPE)
-    ptrace_signal
-    ->ptrace_stop(TASK_TRACED)
+V/R
 
-                                  ptrace_waitpid( return 0)
-                                  ptrace_detach (A->ptrace=0, wakeup A)
-    dequeue_signal(SIGSTOP)
-    sig_kernel_stop(SIGSTOP)
-    do_signal_stop (TASK_STOPPED)
+Kenton Groombridge
 
-then：
-A (other threads of the process received signal)
-get_signal-> do_signal_stop(0))->TASK_STOPPED
+--zpbpn5imnhuprfsc
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Signed-off-by: Shuzhi Zu <zushuzhi@h3c.com>
----
- kernel/ptrace.c | 2 ++
- kernel/signal.c | 2 ++
- 2 files changed, 4 insertions(+)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-index ccc4b46..ab1dc8f 100644
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -447,7 +447,9 @@ static int ptrace_attach(struct task_struct *task, long request,
- 	if (task->ptrace)
- 		goto unlock_tasklist;
- 
-+	spin_lock(&task->sighand->siglock);
- 	task->ptrace = flags;
-+	spin_unlock(&task->sighand->siglock);
- 
- 	ptrace_link(task, current);
- 
-diff --git a/kernel/signal.c b/kernel/signal.c
-index 30cd1ca..522bc6e 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -220,6 +220,8 @@ int next_signal(struct sigpending *pending, sigset_t *mask)
- 	if (x) {
- 		if (x & SYNCHRONOUS_MASK)
- 			x &= SYNCHRONOUS_MASK;
-+		else if (x & sigmask(SIGSTOP))
-+			x &= sigmask(SIGSTOP);
- 		sig = ffz(~x) + 1;
- 		return sig;
- 	}
--- 
-1.8.3.1
+iQKTBAABCgB9FiEEP+u3AkfbrORB/inCFt7v5V9Ft54FAmJtXtFfFIAAAAAALgAo
+aXNzdWVyLWZwckBub3RhdGlvbnMub3BlbnBncC5maWZ0aGhvcnNlbWFuLm5ldDNG
+RUJCNzAyNDdEQkFDRTQ0MUZFMjlDMjE2REVFRkU1NUY0NUI3OUUACgkQFt7v5V9F
+t544Dg//ZWfCVPSPbS6jIItV88Z+1j0B2V2ovBXyACDNw9+gb0nK3wdofNteeb+v
+4/U/TIG66RKItrpzntuNJH6aaNvwXFnZX4Zoen+l9z/Y2bppPWk3j/FELtnPTopQ
+Sze0C34gdGZnnHyzQwTl8QVmRJsON+FN0PmZfCQp4+5NRjWJRF3aI3fGBBYPS9sd
+JkiG1k8/pQBRI5IcjYogXNshK/LPV/HpwUhkKdrG+f+Qbs+ItENMS3nO5c80yvd+
+dVSzRf+5pCQHAu6JmcUWTejYG13oI5VasRTruh4US3ITaHB1uIPX1Qkhkejl9RMJ
+hKhEbpKkEqZDBEU9eA5Zvjz2miSEnYBIBKdP8HloN4dhBAznKoiC9Q0hVMmR+kPD
+oXnGs6YqgIP2n6tp8nq50nL/sieaBetzjnVb7qwnUHcmEsfFBa7enprmuwVgi/5g
+sxgO7wup05JlE85rF5JOAXVcWC3zb8au+yMQknDx1p/hGvlMFWK+w0OqecK2dbos
+crliqCbiL+2iL98O1ocYt40HT0AV3uuw8kSbMwjcJJepNvpTzrjf2q90ydCvCoDa
+crAjD2xs16YHG7On/4P19fhh6Pirn/FlMYquKuOqInAU7qSDiu5vnqsXFn2UiuUc
+wDqcwxC0qupYuI+Gm8PAb/QIcEY177T5OHOcu+qMppIasNsnCcI=
+=jtla
+-----END PGP SIGNATURE-----
 
+--zpbpn5imnhuprfsc--

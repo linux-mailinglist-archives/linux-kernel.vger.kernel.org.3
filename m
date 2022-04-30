@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 614D1515EEB
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 17:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 005BD515EEC
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 17:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359711AbiD3P4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 11:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53550 "EHLO
+        id S1382968AbiD3P5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 11:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358945AbiD3P4j (ORCPT
+        with ESMTP id S1383003AbiD3P46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 11:56:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A597C527ED;
-        Sat, 30 Apr 2022 08:53:11 -0700 (PDT)
+        Sat, 30 Apr 2022 11:56:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE2A6949F
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 08:53:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5799FB803F7;
-        Sat, 30 Apr 2022 15:53:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD042C385AA;
-        Sat, 30 Apr 2022 15:53:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AB8C2B800E2
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 15:53:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ED49C385AA;
+        Sat, 30 Apr 2022 15:53:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651333989;
-        bh=h/T/UY34Ovs/LcnMrzIJ46hd3lr/K5vQaUAvXYDDAMo=;
+        s=korg; t=1651334009;
+        bh=qbkGyalylzrpJ5ERJKkap+/1LWrx4g4LKwfa/l25gZY=;
         h=Date:From:To:Cc:Subject:From;
-        b=cozFTpUZLzmZyeyH8hEdGID1hhBBK/wyT+/gi+VTDkxT90ayYXB4nV5JDxhEuoefD
-         +59jywqqPBmITKPCyGHZ3c+8y9IqkBh4G15sJQza/SV1yco42s9r0XYy+wh138vb2X
-         ARL2FqA+CHSVZVX0Hw1ZMrS7Y6vnPoPxNYABIZSI=
-Date:   Sat, 30 Apr 2022 17:53:06 +0200
+        b=1Z1p+TBEh5R7JlZUBAEdfi4Z+Z9QlUh07jdVvvihP6WyAVzS0ELe4oVEdDGSH+hHG
+         gYO3cJXT83ytiBtrIZ4NJshFUN/prLXwEE9kZ6QyO/vGKr+BJ0RD+FSWNAKrHUUpO0
+         Ban5QHLgdGljwZKyyS5eBCWJHiB2DGv++j9tqbqI=
+Date:   Sat, 30 Apr 2022 17:53:26 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jiri Slaby <jslaby@suse.cz>,
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
         Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [GIT PULL] TTY/Serial driver fixes for 5.18-rc5
-Message-ID: <Ym1bYgkmZYmrF6x5@kroah.com>
+        Saravana Kannan <saravanak@google.com>
+Subject: [GIT PULL] Driver core fixes for 5.18-rc5
+Message-ID: <Ym1bduXu4c5Qt5LA@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -56,25 +56,20 @@ The following changes since commit ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-5.18-rc5
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git tags/driver-core-5.18-rc5
 
-for you to fetch changes up to 19317433057dc1f2ca9a975e4e6b547282c2a5ef:
+for you to fetch changes up to ad8d869343ae4a07a2038a4ca923f699308c8323:
 
-  tty: n_gsm: fix sometimes uninitialized warning in gsm_dlci_modem_output() (2022-04-26 08:09:46 +0200)
+  kernfs: fix NULL dereferencing in kernfs_remove (2022-04-27 19:32:07 +0200)
 
 ----------------------------------------------------------------
-TTY/Serial fixes for 5.18-rc5
+Driver core fixes for 5.18-rc5
 
-Here are some small serial driver fixes, and a larger number of GSM line
-discipline fixes for 5.18-rc5.
-
-These include:
-	- lots of tiny n_gsm fixes for issues to resolve a number of
-	  reported problems.  Seems that people are starting to actually
-	  use this code again.
-	- 8250 driver fixes for some devices
-	- imx serial driver fix
-	- amba-pl011 driver fix
+Here are some small driver core and kernfs fixes for some reported
+problems.  They include:
+	- kernfs regression that is causing oopses in 5.17 and newer
+	  releases
+	- topology sysfs fixes for a few small reported problems.
 
 All of these have been in linux-next for a while with no reported
 issues.
@@ -82,49 +77,22 @@ issues.
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 ----------------------------------------------------------------
-Daniel Starke (21):
-      tty: n_gsm: fix missing mux reset on config change at responder
-      tty: n_gsm: fix restart handling via CLD command
-      tty: n_gsm: fix decoupled mux resource
-      tty: n_gsm: fix mux cleanup after unregister tty device
-      tty: n_gsm: fix wrong signal octet encoding in convergence layer type 2
-      tty: n_gsm: fix frame reception handling
-      tty: n_gsm: fix malformed counter for out of frame data
-      tty: n_gsm: fix insufficient txframe size
-      tty: n_gsm: fix wrong DLCI release order
-      tty: n_gsm: fix missing explicit ldisc flush
-      tty: n_gsm: fix wrong command retry handling
-      tty: n_gsm: fix wrong command frame length field encoding
-      tty: n_gsm: fix wrong signal octets encoding in MSC
-      tty: n_gsm: fix missing tty wakeup in convergence layer type 2
-      tty: n_gsm: fix reset fifo race condition
-      tty: n_gsm: fix incorrect UA handling
-      tty: n_gsm: fix missing update of modem controls after DLCI open
-      tty: n_gsm: fix broken virtual tty handling
-      tty: n_gsm: fix invalid use of MSC in advanced option
-      tty: n_gsm: fix software flow control handling
-      tty: n_gsm: fix sometimes uninitialized warning in gsm_dlci_modem_output()
+Darren Hart (1):
+      topology: make core_mask include at least cluster_siblings
 
-Hui Wang (1):
-      Revert "serial: sc16is7xx: Clear RS485 bits in the shutdown"
+Greg Kroah-Hartman (1):
+      topology: Fix up build warning in topology_is_visible()
 
-Johan Hovold (1):
-      serial: imx: fix overrun interrupts in DMA mode
+Minchan Kim (1):
+      kernfs: fix NULL dereferencing in kernfs_remove
 
-Lino Sanfilippo (1):
-      serial: amba-pl011: do not time out prematurely when draining tx fifo
+Tony Luck (1):
+      topology/sysfs: Hide PPIN on systems that do not support it.
 
-Maciej W. Rozycki (2):
-      serial: 8250: Also set sticky MCR bits in console restoration
-      serial: 8250: Correct the clock for EndRun PTP/1588 PCIe device
+Wang Qing (1):
+      arch_topology: Do not set llc_sibling if llc_id is invalid
 
-Tony Lindgren (1):
-      serial: 8250: Fix runtime PM for start_tx() for empty buffer
-
- drivers/tty/n_gsm.c                 | 477 +++++++++++++++++++++---------------
- drivers/tty/serial/8250/8250_pci.c  |   8 +-
- drivers/tty/serial/8250/8250_port.c |   6 +-
- drivers/tty/serial/amba-pl011.c     |   9 +-
- drivers/tty/serial/imx.c            |   2 +-
- drivers/tty/serial/sc16is7xx.c      |   6 +-
- 6 files changed, 293 insertions(+), 215 deletions(-)
+ drivers/base/arch_topology.c | 11 ++++++++++-
+ drivers/base/topology.c      | 10 ++++++++++
+ fs/kernfs/dir.c              |  7 ++++++-
+ 3 files changed, 26 insertions(+), 2 deletions(-)

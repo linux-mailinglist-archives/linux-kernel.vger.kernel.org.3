@@ -2,130 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF7F515EF2
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 18:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAED8515EFC
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 18:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242718AbiD3QMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 12:12:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55974 "EHLO
+        id S243035AbiD3QTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 12:19:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231685AbiD3QM3 (ORCPT
+        with ESMTP id S243050AbiD3QTF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 12:12:29 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FDD85E140;
-        Sat, 30 Apr 2022 09:09:06 -0700 (PDT)
-Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DE3691EC0445;
-        Sat, 30 Apr 2022 18:09:00 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1651334941;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3O6m7gsP+Q15sV5A9sj6v9CSQ9u8JCS/o5mGbHIZ3EY=;
-        b=C+/uh9ciNP7u3UTNMwVgALCRLpJA6vbWXsvn825GyZFBliE78epk76kGCChw3PpvEqGUvA
-        W33lTP/7kOzELZSt2zaubZpzu/l7bnOSxk44QUPozTTPcdnqw5vkd845EnXhwQCUBixVb4
-        KdGCNttpqX7qbiIuGdL16AVnCMpfue4=
-Date:   Sat, 30 Apr 2022 18:08:57 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jon Kohler <jon@nutanix.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Balbir Singh <sblbir@amazon.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH v3] x86/speculation, KVM: only IBPB for
- switch_mm_always_ibpb on vCPU load
-Message-ID: <Ym1fGZIs6K7T6h3n@zn.tnic>
-References: <YmwZYEGtJn3qs0j4@zn.tnic>
- <645E4ED5-F6EE-4F8F-A990-81F19ED82BFA@nutanix.com>
- <Ymw9UZDpXym2vXJs@zn.tnic>
- <YmxKqpWFvdUv+GwJ@google.com>
- <YmxRnwSUBIkOIjLA@zn.tnic>
- <Ymxf2Jnmz5y4CHFN@google.com>
- <YmxlHBsxcIy8uYaB@zn.tnic>
- <YmxzdAbzJkvjXSAU@google.com>
- <Ym0GcKhPZxkcMCYp@zn.tnic>
- <4E46337F-79CB-4ADA-B8C0-009E7500EDF8@nutanix.com>
+        Sat, 30 Apr 2022 12:19:05 -0400
+Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [IPv6:2001:4b7a:2000:18::168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A5932EC7
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 09:15:43 -0700 (PDT)
+Received: from localhost.localdomain (abxh26.neoplus.adsl.tpnet.pl [83.9.1.26])
+        by m-r2.th.seeweb.it (Postfix) with ESMTPA id 918503F720;
+        Sat, 30 Apr 2022 18:15:39 +0200 (CEST)
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+To:     ~postmarketos/upstreaming@lists.sr.ht
+Cc:     martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] dt-bindings: display: msm: Add binding for MSM8996 DPU
+Date:   Sat, 30 Apr 2022 18:15:25 +0200
+Message-Id: <20220430161529.605843-1-konrad.dybcio@somainline.org>
+X-Mailer: git-send-email 2.35.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <4E46337F-79CB-4ADA-B8C0-009E7500EDF8@nutanix.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 30, 2022 at 02:50:35PM +0000, Jon Kohler wrote:
-> This is 100% a fair ask, I appreciate the diligence, as we’ve all been there
-> on the ‘other side’ of changes to complex areas and spend hours digging on
-> git history, LKML threads, SDM/APM, and other sources trying to derive
-> why the heck something is the way it is.
+Add yaml binding for MSM8996 DPU.
 
-Yap, that's basically proving my point and why I want stuff to be
-properly documented so that the question "why was it done this way" can
-always be answered satisfactorily.
+Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+---
+ .../bindings/display/msm/dpu-msm8996.yaml     | 221 ++++++++++++++++++
+ 1 file changed, 221 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/msm/dpu-msm8996.yaml
 
-> AFAIK, the KVM IBPB is avoided when switching in between vCPUs
-> belonging to the same vmcs/vmcb (i.e. the same guest), e.g. you could 
-> have one VM highly oversubscribed to the host and you wouldn’t see
-> either the KVM IBPB or the switch_mm IBPB. All good. 
-> 
-> Reference vmx_vcpu_load_vmcs() and svm_vcpu_load() and the 
-> conditionals prior to the barrier.
-
-So this is where something's still missing.
-
-> However, the pain ramps up when you have a bunch of separate guests,
-> especially with a small amount of vCPUs per guest, so the switching is more
-> likely to be in between completely separate guests.
-
-If the guests are completely separate, then it should fall into the
-switch_mm() case.
-
-Unless it has something to do with, as I looked at the SVM side of
-things, the VMCBs:
-
-	if (sd->current_vmcb != svm->vmcb) {
-
-So it is not only different guests but also within the same guest and
-when the VMCB of the vCPU is not the current one.
-
-But then if VMCB of the vCPU is not the current, per-CPU VMCB, then that
-CPU ran another guest so in order for that other guest to attack the
-current guest, then its branch pred should be flushed.
-
-But I'm likely missing a virt aspect here so I'd let Sean explain what
-the rules are...
-
-Thx.
-
+diff --git a/Documentation/devicetree/bindings/display/msm/dpu-msm8996.yaml b/Documentation/devicetree/bindings/display/msm/dpu-msm8996.yaml
+new file mode 100644
+index 000000000000..10b02423224d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/display/msm/dpu-msm8996.yaml
+@@ -0,0 +1,221 @@
++# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/display/msm/dpu-msm8996.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm Display DPU dt properties for MSM8996 target
++
++maintainers:
++  - Konrad Dybcio <konrad.dybcio@somainline.org>
++
++description: |
++  Device tree bindings for MSM Mobile Display Subsystem (MDSS) that
++  encapsulates sub-blocks like DPU display controller, DSI interfaces, etc.
++  Device tree bindings of MDSS and DPU are mentioned for MSM8996 target.
++
++properties:
++  compatible:
++    items:
++      - const: qcom,msm8996-mdss
++
++  reg:
++    maxItems: 1
++
++  reg-names:
++    const: mdss
++
++  power-domains:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: Display AHB clock
++      - description: Display core clock
++
++  clock-names:
++    items:
++      - const: iface
++      - const: core
++
++  interrupts:
++    maxItems: 1
++
++  interrupt-controller: true
++
++  "#address-cells": true
++
++  "#size-cells": true
++
++  "#interrupt-cells":
++    const: 1
++
++  iommus:
++    items:
++      - description: Phandle to mdp_smmu node with SID mask for Hard-Fail port0
++
++  ranges: true
++
++patternProperties:
++  "^display-controller@[0-9a-f]+$":
++    type: object
++    description: Node containing the properties of DPU.
++
++    properties:
++      compatible:
++        items:
++          - const: qcom,msm8996-dpu
++
++      reg:
++        items:
++          - description: Address offset and size for mdp register set
++          - description: Address offset and size for vbif register set
++          - description: Address offset and size for non-realtime vbif register set
++
++      reg-names:
++        items:
++          - const: mdp
++          - const: vbif
++          - const: vbif_nrt
++
++      clocks:
++        items:
++          - description: Display ahb clock
++          - description: Display axi clock
++          - description: Display core clock
++          - description: Display iommu clock
++          - description: Display vsync clock
++
++      clock-names:
++        items:
++          - const: iface
++          - const: bus
++          - const: core
++          - const: iommu
++          - const: vsync
++
++      interrupts:
++        maxItems: 1
++
++      power-domains:
++        maxItems: 1
++
++      operating-points-v2: true
++      ports:
++        $ref: /schemas/graph.yaml#/properties/ports
++        description: |
++          Contains the list of output ports from DPU device. These ports
++          connect to interfaces that are external to the DPU hardware,
++          such as DSI, DP etc. Each output port contains an endpoint that
++          describes how it is connected to an external interface.
++
++        properties:
++          port@0:
++            $ref: /schemas/graph.yaml#/properties/port
++            description: DPU_INTF3 (HDMI)
++
++          port@1:
++            $ref: /schemas/graph.yaml#/properties/port
++            description: DPU_INTF1 (DSI0)
++
++        required:
++          - port@0
++          - port@1
++
++    required:
++      - compatible
++      - reg
++      - reg-names
++      - clocks
++      - interrupts
++      - power-domains
++      - operating-points-v2
++      - ports
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - power-domains
++  - clocks
++  - interrupts
++  - interrupt-controller
++  - iommus
++  - ranges
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/qcom,mmcc-msm8996.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/power/qcom-rpmpd.h>
++
++    mdss: display-subsystem@900000 {
++        compatible = "qcom,msm8996-mdss";
++        reg = <0x00900000 0x1000>;
++        reg-names = "mdss";
++
++        power-domains = <&mmcc MDSS_GDSC>;
++
++        clocks = <&mmcc MDSS_AHB_CLK>, <&mmcc MDSS_MDP_CLK>;
++        clock-names = "iface", "core";
++
++        assigned-clocks = <&mmcc MDSS_MDP_CLK>;
++        assigned-clock-rates = <300000000>;
++
++        interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
++        interrupt-controller;
++        #interrupt-cells = <1>;
++
++        iommus = <&mdp_smmu 0>;
++
++        #address-cells = <1>;
++        #size-cells = <1>;
++        ranges;
++
++        display-controller@901000 {
++            compatible = "qcom,msm8996-dpu";
++            reg = <0x00901000 0x90000>,
++                  <0x009b0000 0x1040>,
++                  <0x009b8000 0x1040>;
++            reg-names = "mdp", "vbif", "vbif_nrt";
++
++            clocks = <&mmcc MDSS_AHB_CLK>,
++              <&mmcc MDSS_AXI_CLK>,
++              <&mmcc MDSS_MDP_CLK>,
++              <&mmcc SMMU_MDP_AXI_CLK>,
++              <&mmcc MDSS_VSYNC_CLK>;
++            clock-names = "iface", "bus", "core", "iommu", "vsync";
++
++            assigned-clocks = <&mmcc MDSS_MDP_CLK>,
++                  <&mmcc MDSS_VSYNC_CLK>;
++            assigned-clock-rates = <412500000>, <19200000>;
++
++            operating-points-v2 = <&mdp_opp_table>;
++            power-domains = <&rpmpd MSM8996_VDDMX>;
++
++            interrupt-parent = <&mdss>;
++            interrupts = <0 IRQ_TYPE_LEVEL_HIGH>;
++
++            ports {
++              #address-cells = <1>;
++              #size-cells = <0>;
++
++              port@0 {
++                reg = <0>;
++                dpu_intf3_out: endpoint {
++                  remote-endpoint = <&hdmi_in>;
++                };
++              };
++
++              port@1 {
++                reg = <1>;
++                dpu_intf1_out: endpoint {
++                  remote-endpoint = <&dsi0_in>;
++                };
++              };
++            };
++        };
++    };
++...
 -- 
-Regards/Gruss,
-    Boris.
+2.35.2
 
-https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,260 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F9E7515CB0
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 14:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD819515CB3
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 14:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241632AbiD3MQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 08:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32814 "EHLO
+        id S241699AbiD3MRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 08:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239527AbiD3MQ4 (ORCPT
+        with ESMTP id S230208AbiD3MRh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 08:16:56 -0400
-Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [IPv6:2001:4b7a:2000:18::168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75FCA66CAD;
-        Sat, 30 Apr 2022 05:13:32 -0700 (PDT)
-Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id DC5AD3F7B7;
-        Sat, 30 Apr 2022 14:13:29 +0200 (CEST)
-Date:   Sat, 30 Apr 2022 14:13:28 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Pavel Machek <pavel@ucw.cz>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v14 1/2] dt-bindings: leds: Add Qualcomm Light Pulse
- Generator binding
-Message-ID: <20220430121328.35cycpztigw3v7q3@SoMainline.org>
-References: <20220303214300.59468-1-bjorn.andersson@linaro.org>
+        Sat, 30 Apr 2022 08:17:37 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08EE5DA15;
+        Sat, 30 Apr 2022 05:14:15 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id g6so19982717ejw.1;
+        Sat, 30 Apr 2022 05:14:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/jfovHtyZZT8UGa+5lJb6NNtCHtSd4My+TA0EpMI4Fk=;
+        b=GuEpnbw6PUM0fvvsV8VKpTrflzI0jE2Ah706hdy5wqmqBfJdWPFvEZ5aZ7SzNLDGNG
+         bd/DqjsLcC8bxVwibuwthI0A92PxO2Q3NswE0wyKPuaXD4OK20kmvddIRkm9VnfIeZtS
+         qDogt5WIGokcrT/vTb6q6R4nttbH6538QObpmQK3jE8lYCMxS9SivsRZ3yUbzZJm3J1U
+         xlJDuQkZICmCHEIufP5pYnJ4L7GB3e7wB695yTfFGx15YQr9DepHyWnkK8b/ZA2Xr+Cp
+         LYqfZLOY7WT7v3iuYbnxGG2mnt78blhxAX9PMphHm3Do4EWurw9aA+qvljh3NmlY5brQ
+         9AhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/jfovHtyZZT8UGa+5lJb6NNtCHtSd4My+TA0EpMI4Fk=;
+        b=VHfeMLQTQZBxhS22I3c/DcopSaDJe3oZ1ajACIu89u3ByRVNwGCK1Rn5XOE6+MdJ6N
+         GdKbMLUigLfN5P1k9gd9709xh9s3+MDMidvV/zzXQw3iMuf+NX3bjKsFQ0y3JgUaTjal
+         Ten3zkdQcpsGc3Pqp+3MJoiV3cBhKyzFI+y66iAVPTzjyxVe2AJyPFXaRGcr5XKtOE60
+         dqfrEyvmUNhvJVHUBrlnKW6ZSaRst14xUojdHMQWEJp/Ehj9wgt12S41UIQcZakuSPWm
+         qr4QGfiBVwvSX62Zm3ylNQI57Jn3fzkWi+yp48rYgo9Vo2QCCm6SiQwupn2U53rbZnwp
+         5Wnw==
+X-Gm-Message-State: AOAM532oAoQ9mMQuYqan4KFGFQQ5bjN81vpxTLNR+WNlJxItRkhNHl8d
+        gqoy79Gj01MEI2D0jJqeA1U=
+X-Google-Smtp-Source: ABdhPJw8j5vmadM7g0XYE5gZ7bDUENaNxNYR8LVX/NXw/Qdo7m2M1oepu76le7mR00v5ONMC1rEAQw==
+X-Received: by 2002:a17:906:b006:b0:6f3:dcf0:6f6f with SMTP id v6-20020a170906b00600b006f3dcf06f6fmr3776553ejy.649.1651320854150;
+        Sat, 30 Apr 2022 05:14:14 -0700 (PDT)
+Received: from krava ([95.82.134.228])
+        by smtp.gmail.com with ESMTPSA id zp15-20020a17090684ef00b006f3ef214e4esm1539083ejb.180.2022.04.30.05.14.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 30 Apr 2022 05:14:13 -0700 (PDT)
+Date:   Sat, 30 Apr 2022 14:14:10 +0200
+From:   Jiri Olsa <olsajiri@gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCHv4 bpf-next 0/5] bpf: Speed up symbol resolving in kprobe
+ multi link
+Message-ID: <Ym0oEo4iwr4F2jMT@krava>
+References: <20220428201207.954552-1-jolsa@kernel.org>
+ <CAEf4BzYtXWvBWzmadhLGqwf8_e2sruK6999th6c=b=O0WLkHOA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220303214300.59468-1-bjorn.andersson@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <CAEf4BzYtXWvBWzmadhLGqwf8_e2sruK6999th6c=b=O0WLkHOA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-03-03 13:42:59, Bjorn Andersson wrote:
-> This adds the binding document describing the three hardware blocks
-> related to the Light Pulse Generator found in a wide range of Qualcomm
-> PMICs.
+On Fri, Apr 29, 2022 at 07:28:11AM -0700, Andrii Nakryiko wrote:
+> On Thu, Apr 28, 2022 at 1:12 PM Jiri Olsa <jolsa@kernel.org> wrote:
+> >
+> > hi,
+> > sending additional fix for symbol resolving in kprobe multi link
+> > requested by Alexei and Andrii [1].
+> >
+> > This speeds up bpftrace kprobe attachment, when using pure symbols
+> > (3344 symbols) to attach:
+> >
+> > Before:
+> >
+> >   # perf stat -r 5 -e cycles ./src/bpftrace -e 'kprobe:x* {  } i:ms:1 { exit(); }'
+> >   ...
+> >   6.5681 +- 0.0225 seconds time elapsed  ( +-  0.34% )
+> >
+> > After:
+> >
+> >   # perf stat -r 5 -e cycles ./src/bpftrace -e 'kprobe:x* {  } i:ms:1 { exit(); }'
+> >   ...
+> >   0.5661 +- 0.0275 seconds time elapsed  ( +-  4.85% )
+> >
+> > v4 changes:
+> >   - fix compile issue [kernel test robot]
+> >   - added acks [Andrii]
+> >
+> > v3 changes:
+> >   - renamed kallsyms_lookup_names to ftrace_lookup_symbols
+> >     and moved it to ftrace.c [Masami]
+> >   - added ack [Andrii]
+> >   - couple small test fixes [Andrii]
+> >
+> > v2 changes (first version [2]):
+> >   - removed the 2 seconds check [Alexei]
+> >   - moving/forcing symbols sorting out of kallsyms_lookup_names function [Alexei]
+> >   - skipping one array allocation and copy_from_user [Andrii]
+> >   - several small fixes [Masami,Andrii]
+> >   - build fix [kernel test robot]
+> >
+> > thanks,
+> > jirka
+> >
+> >
+> > [1] https://lore.kernel.org/bpf/CAEf4BzZtQaiUxQ-sm_hH2qKPRaqGHyOfEsW96DxtBHRaKLoL3Q@mail.gmail.com/
+> > [2] https://lore.kernel.org/bpf/20220407125224.310255-1-jolsa@kernel.org/
+> > ---
+> > Jiri Olsa (5):
+> >       kallsyms: Fully export kallsyms_on_each_symbol function
+> >       ftrace: Add ftrace_lookup_symbols function
+> >       fprobe: Resolve symbols with ftrace_lookup_symbols
+> >       bpf: Resolve symbols with ftrace_lookup_symbols for kprobe multi link
+> >       selftests/bpf: Add attach bench test
+> >
 > 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
+> Please check [0], it reports rcu_read_unlock() misuse
 > 
-> Changes since v13:
-> - None
-> 
-> Changes since v12:
-> - None
-> 
->  .../bindings/leds/leds-qcom-lpg.yaml          | 173 ++++++++++++++++++
->  1 file changed, 173 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml b/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
-> new file mode 100644
-> index 000000000000..336bd8e10efd
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
-> @@ -0,0 +1,173 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/leds/leds-qcom-lpg.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Light Pulse Generator
-> +
-> +maintainers:
-> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
-> +
-> +description: >
-> +  The Qualcomm Light Pulse Generator consists of three different hardware blocks;
-> +  a ramp generator with lookup table, the light pulse generator and a three
-> +  channel current sink. These blocks are found in a wide range of Qualcomm PMICs.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,pm8150b-lpg
-> +      - qcom,pm8150l-lpg
-> +      - qcom,pm8916-pwm
-> +      - qcom,pm8941-lpg
-> +      - qcom,pm8994-lpg
-> +      - qcom,pmc8180c-lpg
-> +      - qcom,pmi8994-lpg
-> +      - qcom,pmi8998-lpg
-> +
-> +  "#pwm-cells":
-> +    const: 2
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +  qcom,power-source:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      power-source used to drive the output, as defined in the datasheet.
-> +      Should be specified if the TRILED block is present
+>   [0] https://github.com/kernel-patches/bpf/runs/6223167405?check_suite_focus=true
 
-Upon closer inspection this is only true if the TRILED block also has a
-SRC register which appears to be optional.  Is it worth mentioning that
-here too?
+hm, first I though it might be related to the bench test
+attaching to 'bad' function, but the the warning showed
+before that
 
-- Marijn
+will try to reproduce  with the CI .config
 
-> +    enum: [0, 1, 3]
-> +
-> +  qcom,dtest:
-> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> +    description: >
-> +      A list of integer pairs, where each pair represent the dtest line the
-> +      particular channel should be connected to and the flags denoting how the
-> +      value should be outputed, as defined in the datasheet. The number of
-> +      pairs should be the same as the number of channels.
-> +    items:
-> +      items:
-> +        - description: dtest line to attach
-> +        - description: flags for the attachment
-> +
-> +  multi-led:
-> +    type: object
-> +    $ref: leds-class-multicolor.yaml#
-> +    properties:
-> +      "#address-cells":
-> +        const: 1
-> +
-> +      "#size-cells":
-> +        const: 0
-> +
-> +    patternProperties:
-> +      "^led@[0-9a-f]$":
-> +        type: object
-> +        $ref: common.yaml#
-> +
-> +patternProperties:
-> +  "^led@[0-9a-f]$":
-> +    type: object
-> +    $ref: common.yaml#
-> +
-> +    properties:
-> +      reg: true
-> +
-> +    required:
-> +      - reg
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/leds/common.h>
-> +
-> +    led-controller {
-> +      compatible = "qcom,pmi8994-lpg";
-> +
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      qcom,power-source = <1>;
-> +
-> +      qcom,dtest = <0 0>,
-> +                   <0 0>,
-> +                   <0 0>,
-> +                   <4 1>;
-> +
-> +      led@1 {
-> +        reg = <1>;
-> +        color = <LED_COLOR_ID_GREEN>;
-> +        function = LED_FUNCTION_INDICATOR;
-> +        function-enumerator = <1>;
-> +      };
-> +
-> +      led@2 {
-> +        reg = <2>;
-> +        color = <LED_COLOR_ID_GREEN>;
-> +        function = LED_FUNCTION_INDICATOR;
-> +        function-enumerator = <0>;
-> +        default-state = "on";
-> +      };
-> +
-> +      led@3 {
-> +        reg = <3>;
-> +        color = <LED_COLOR_ID_GREEN>;
-> +        function = LED_FUNCTION_INDICATOR;
-> +        function-enumerator = <2>;
-> +      };
-> +
-> +      led@4 {
-> +        reg = <4>;
-> +        color = <LED_COLOR_ID_GREEN>;
-> +        function = LED_FUNCTION_INDICATOR;
-> +        function-enumerator = <3>;
-> +      };
-> +    };
-> +  - |
-> +    #include <dt-bindings/leds/common.h>
-> +
-> +    led-controller {
-> +      compatible = "qcom,pmi8994-lpg";
-> +
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      qcom,power-source = <1>;
-> +
-> +      multi-led {
-> +        color = <LED_COLOR_ID_RGB>;
-> +        function = LED_FUNCTION_STATUS;
-> +
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        led@1 {
-> +          reg = <1>;
-> +          color = <LED_COLOR_ID_RED>;
-> +        };
-> +
-> +        led@2 {
-> +          reg = <2>;
-> +          color = <LED_COLOR_ID_GREEN>;
-> +        };
-> +
-> +        led@3 {
-> +          reg = <3>;
-> +          color = <LED_COLOR_ID_BLUE>;
-> +        };
-> +      };
-> +    };
-> +  - |
-> +    pwm-controller {
-> +      compatible = "qcom,pm8916-pwm";
-> +      #pwm-cells = <2>;
-> +    };
-> +...
-> -- 
-> 2.33.1
+jirka
+
+
 > 
+> >  include/linux/ftrace.h                                     |   6 ++++++
+> >  include/linux/kallsyms.h                                   |   7 ++++++-
+> >  kernel/kallsyms.c                                          |   3 +--
+> >  kernel/trace/bpf_trace.c                                   | 112 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++----------------------------------------------
+> >  kernel/trace/fprobe.c                                      |  32 ++++++++++++--------------------
+> >  kernel/trace/ftrace.c                                      |  62 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+> >  tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c | 133 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+> >  tools/testing/selftests/bpf/progs/kprobe_multi_empty.c     |  12 ++++++++++++
+> >  8 files changed, 298 insertions(+), 69 deletions(-)
+> >  create mode 100644 tools/testing/selftests/bpf/progs/kprobe_multi_empty.c

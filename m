@@ -2,97 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA13B515F9B
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 19:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71D00515F9C
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 19:33:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355570AbiD3Re7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 13:34:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55060 "EHLO
+        id S1359492AbiD3RgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 13:36:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243826AbiD3Re5 (ORCPT
+        with ESMTP id S243826AbiD3RgR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 13:34:57 -0400
-Received: from mail-oa1-x44.google.com (mail-oa1-x44.google.com [IPv6:2001:4860:4864:20::44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9502242EDE
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 10:31:34 -0700 (PDT)
-Received: by mail-oa1-x44.google.com with SMTP id 586e51a60fabf-d39f741ba0so10957069fac.13
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 10:31:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=rrdjG6c/2FeXm3rYw+FcEDfupq6ewXDDBRc/WzcU8PU=;
-        b=LDZCDlSwVsC74oU3hxuO//uhVsA03p5hEUSLrolsf/FQD95Hrwme4S3h7b6F+VCX+7
-         c2v4hpt7NTPXFdbzb6bmoix/QY3zftDHMbrhujk2yTrtlfF26PzNC57EcvlyPe1dQABI
-         UlH9lsWF7MRSBYqZzB5ISShdnA8xHaQHoY4ZAQDFumi+DYD1Bx6LL5wcQlb/OOfBT22f
-         amVItwJvKDcsUjBdo4bvgg2eqrCahV2DFkB8Wb8vEQZKdfGXqIv/PlF5N758Rt6gAn3e
-         hPaJbA9uQyzLtzfOKIXrKm/wqnZs9ZJgZ03qYSgn+v0n2NhjdzJXQbGdqyxgNTF2K32V
-         n1jw==
+        Sat, 30 Apr 2022 13:36:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 592303FD80
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 10:32:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651339974;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zBSkksDiD0TDmy/DS9njRj20qkfr7G9H5zq25pKi4QM=;
+        b=cQREgzcIzyDKUV2V4bA2afZ5TjB569BvMtCF96YfgxXY+H4CnVgPOKmittK2v0G/m0DlyG
+        cH2xxlKgpD7D4tRZ3KuDlXtdceDYp/aP96ydoo6pAcEasAcaUX0DL0oaiO3XHrNBy8Nrfl
+        oLeW+pyrGkWIoyzbvwqOhghmo89C41U=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-600-XSqKNEChPcSO7sVPkpZ8Qw-1; Sat, 30 Apr 2022 13:32:53 -0400
+X-MC-Unique: XSqKNEChPcSO7sVPkpZ8Qw-1
+Received: by mail-qt1-f198.google.com with SMTP id a24-20020ac81098000000b002e1e06a72aeso7822020qtj.6
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 10:32:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=rrdjG6c/2FeXm3rYw+FcEDfupq6ewXDDBRc/WzcU8PU=;
-        b=T62ECLuR+6316jvSt9lTjMd2j17neRG2bDpYrRnHLzM4PCkSCCDHmXNExFdwY9W8tu
-         y+EmxRBFFdHdssM1JRJeMIhEB8lqWp6XESCl9NLH03f8s8IOsV+s/qUC8Kr1nn+R+y4I
-         PvjhekKtsA3ntX/klksJ6SMzn4lzVbQ4upR5LuKqQ66tx7ytI3shr+FP+9BNNKk/jbZ7
-         wq9360Ggo7QX7qUx6rzS9bbwqsYPj1kr1LSn3xU0zTEbjiw5o/Kw5iOl6rfPfSZ2HJWl
-         9zwgTBTQQFG70b8i3TVDl78hVXrbWX3npDTI3aOf2dVdfN5ibPmUTsq2z+KRXJf7FC/Q
-         t38A==
-X-Gm-Message-State: AOAM531/pr5FFY4dyV02JrHbi3DJDKaXU9om8WWzETlMmLzfaFHIhFpr
-        7t9kiCq9dOpw9jymlHHvMaGthhybbtx2SGpuMNw=
-X-Google-Smtp-Source: ABdhPJwsPRxqXMSaQEyejwWjk5Jz6GkvLKlBh8pNuvsGmP/rQbRWkVgEffkmXqafoZgpX7xcc5AilMRLAvutf82i1NM=
-X-Received: by 2002:a05:6871:1d0:b0:da:b3f:3210 with SMTP id
- q16-20020a05687101d000b000da0b3f3210mr2025721oad.192.1651339893050; Sat, 30
- Apr 2022 10:31:33 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zBSkksDiD0TDmy/DS9njRj20qkfr7G9H5zq25pKi4QM=;
+        b=M/CJMPl71GQOSEw02yk/hxv0iPJtR1aMEAqdQiLgFkLGQSrcnEdfK0ntOilnaRvs+V
+         FFyHMmnxPaX2G9+O4RxezH0nzLAJKPeU6WHdXxdJUtZ3+rYMoaQ9DLJVSknAQm8HN4gg
+         7TnQlqhhVl6/tdCm2PwonOa2U3HBzEfM2sKLLs5Et/GYgJrkQp69DwRSmZ3UlYBh+fM2
+         yLhRYatHZ2jaR7yFp6d+UnPyCX7vOcfKRJOyomt81pWyJ2rvDWRmQYqzammgUhP91leF
+         qF5QproufnFlQ+f/zgQfVwzOJ9XdfCgmTsxdhyTRjW1yocSFXX8XvLOFtt4VIhMhtS9+
+         afGw==
+X-Gm-Message-State: AOAM53059n6aQQwC91o1YVOs07IrR9CAiKC2ABSRDbcUPja5emH4hLsU
+        BnAxBy11oXIrXkstlrELmwjM6WIG0EVYIq/+7wEWPBhFx3gUMbPsY7rnTBYgAONdGexjl9lYOU2
+        v4+Gej7i65ld/egAcTeFic/N0
+X-Received: by 2002:a05:622a:610a:b0:2f1:d998:319b with SMTP id hg10-20020a05622a610a00b002f1d998319bmr4256722qtb.478.1651339972329;
+        Sat, 30 Apr 2022 10:32:52 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy8ji7TIms/6lWItU8JkcGNfAWJFnSva0czFszOmvNFr8UkdmXZzxPp+O2FdkFTLXzGXfC6Vg==
+X-Received: by 2002:a05:622a:610a:b0:2f1:d998:319b with SMTP id hg10-20020a05622a610a00b002f1d998319bmr4256707qtb.478.1651339972104;
+        Sat, 30 Apr 2022 10:32:52 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id q73-20020a37a74c000000b0069f879fd52esm1477912qke.0.2022.04.30.10.32.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 30 Apr 2022 10:32:51 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     jpoimboe@redhat.com, peterz@infradead.org, mingo@kernel.org,
+        bp@suse.de
+Cc:     linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] objtool: rework error handling in objtool_create_backup
+Date:   Sat, 30 Apr 2022 13:32:40 -0400
+Message-Id: <20220430173240.3346735-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Sender: dd16978@gmail.com
-Received: by 2002:a4a:315a:0:0:0:0:0 with HTTP; Sat, 30 Apr 2022 10:31:32
- -0700 (PDT)
-From:   "Mr. Jimmy Moore" <jimmymoore265@gmail.com>
-Date:   Sat, 30 Apr 2022 18:31:32 +0100
-X-Google-Sender-Auth: ME-Fe7orV_tl_Oj974ZfRO2MWpE
-Message-ID: <CA+qKLfcEGm5s4sZ+6GtUUMghMnOieTOp8LM2zD4_ZcT5vNpJDg@mail.gmail.com>
-Subject: YOUR COVID-19 COMPENSATION
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,LOTTO_DEPT,MILLION_USD,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UNITED NATIONS COVID-19 OVERDUE COMPENSATION UNIT.
-REFERENCE PAYMENT CODE: 8525595
-BAILOUT AMOUNT:$10.5 MILLION USD
-ADDRESS: NEW YORK, NY 10017, UNITED STATES
+The cppcheck reports this issue
+[tools/objtool/objtool.c:65]: (error) Memory leak: name
 
-Dear award recipient, Covid-19 Compensation funds.
+This is a general problem.  When ojbtool_create_backup() fails anywhere it
+returns an error without freeing any of the buffers it allocates.  So
+rework the error handler to goto the appropriate free level when an error
+occurs.
 
-You are receiving this correspondence because we have finally reached
-a consensus with UN, IRS and IMF that your total fund worth $10.5
-Million Dollars of Covid-19 Compensation payment shall be delivered to
-your nominated mode of receipt, and you are expected to pay the sum of
-$12,000 for levies owed to authorities after receiving your funds.
+Fixes: 8ad15c690084 ("objtool: Add --backup")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ tools/objtool/objtool.c | 23 +++++++++++++++--------
+ 1 file changed, 15 insertions(+), 8 deletions(-)
 
-You have a grace period of 2 weeks to pay the $12,000 levy after you
-have receive your Covid-19 Compensation total sum of $10.5 Million. We
-shall proceed with the payment of your bailout grant only if you agree
-to the terms and conditions stated.
+diff --git a/tools/objtool/objtool.c b/tools/objtool/objtool.c
+index 512669ce064c..2fd10804e7a7 100644
+--- a/tools/objtool/objtool.c
++++ b/tools/objtool/objtool.c
+@@ -25,6 +25,7 @@ static bool objtool_create_backup(const char *_objname)
+ {
+ 	int len = strlen(_objname);
+ 	char *buf, *base, *name = malloc(len+6);
++	bool ret = false;
+ 	int s, d, l, t;
+ 
+ 	if (!name) {
+@@ -38,19 +39,19 @@ static bool objtool_create_backup(const char *_objname)
+ 	d = open(name, O_CREAT|O_WRONLY|O_TRUNC, 0644);
+ 	if (d < 0) {
+ 		perror("failed to create backup file");
+-		return false;
++		goto err1;
+ 	}
+ 
+ 	s = open(_objname, O_RDONLY);
+ 	if (s < 0) {
+ 		perror("failed to open orig file");
+-		return false;
++		goto err2;
+ 	}
+ 
+ 	buf = malloc(4096);
+ 	if (!buf) {
+ 		perror("failed backup data malloc");
+-		return false;
++		goto err3;
+ 	}
+ 
+ 	while ((l = read(s, buf, 4096)) > 0) {
+@@ -59,7 +60,7 @@ static bool objtool_create_backup(const char *_objname)
+ 			t = write(d, base, l);
+ 			if (t < 0) {
+ 				perror("failed backup write");
+-				return false;
++				goto err4;
+ 			}
+ 			base += t;
+ 			l -= t;
+@@ -68,15 +69,21 @@ static bool objtool_create_backup(const char *_objname)
+ 
+ 	if (l < 0) {
+ 		perror("failed backup read");
+-		return false;
++		goto err4;
+ 	}
+ 
+-	free(name);
++	ret = true;
++
++err4:
+ 	free(buf);
+-	close(d);
++err3:
+ 	close(s);
++err2:
++	close(d);
++err1:
++	free(name);
+ 
+-	return true;
++	return ret;
+ }
+ 
+ struct objtool_file *objtool_open_read(const char *_objname)
+-- 
+2.27.0
 
-Contact Dr. Mustafa Ali for more information by email at:(
-mustafaliali180@gmail.com ) Your consent in this regard would be
-highly appreciated.
-
-Best Regards,
-Mr. Jimmy Moore.
-Undersecretary General United Nations
-Office of Internal Oversight-UNIOS
-UN making the world a better place
-http://www.un.org/sg/

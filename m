@@ -2,73 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58D82515958
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 02:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 234E851595D
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 02:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381907AbiD3AiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 20:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43890 "EHLO
+        id S1381921AbiD3AlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 20:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235155AbiD3AiB (ORCPT
+        with ESMTP id S235155AbiD3AlO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 20:38:01 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADC4659F
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 17:34:41 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2f7c57ee6feso101170587b3.2
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 17:34:41 -0700 (PDT)
+        Fri, 29 Apr 2022 20:41:14 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2305222B2;
+        Fri, 29 Apr 2022 17:37:53 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id q8so9750636oif.13;
+        Fri, 29 Apr 2022 17:37:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xZdhfgXcYyzwQ2Qbee46+dN9XPUR+TwA/X5/pzXcNMQ=;
-        b=hgzCI1pU/Sf5CSopWVg8mrZsOmGMyK2uQJMYiDRakeWgP4rQDVr0OzsKoAEyGr7G7s
-         MU+79meZgzN6dY170248qXerXKjAawlPA19wuoLRK/EygBn9OHvDdRtX0lbr9w7DQoui
-         hfTr9X8yvB9ngRQbxXadIp1y44r+xsjCSF1xEHfnfinzDrgU+rI+X5yn/1DnXl7K1l0a
-         cZ5s/ZQ/AUftZhpQsp/2QzwGb/Bk9fRDN3JveXlfvHHOCThdPTL5/81aJZ99DxZLXxPV
-         DhCH/1bmQre/0VOtJ0nG1s0AfmL/NoD0LKEt+YbcvF+A1YyzK0AvQXPj8RrPnm6/XHM3
-         EXYw==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=SsTYFsW9i1zHPnNrYw8lfj7SDD5us1gW4k/mcBilZjs=;
+        b=NJDFUY0Mj5T1UVU3nWD9kknn52XSQL1mQkufyWb7q7fF3FrwaJbN5nEyLyy8X/Sko8
+         hKFUC+VCOU1hOlRm8oSVbK6+CP9xRBn2v4wrzHOv3qyOtsCxOAtYydnhKANE9mtPjVNs
+         0NYV4nEiEia/1g1n52UNVi32zvWZZ+xwUPV9yuHgRRlo/nrwT1QbzmS+JCzwAS1rKcXJ
+         J4w5/eeZiyJdjeu71Fqum9U7hgsVL6EeyGiUA8a67Ls7CsndpllF7gRnWfomee53cOIk
+         VfYJwl4zlCFB8PDTcRbXjQDa70UXlPWj2qCPftxccLb7Xt/WSRKkVqSyZp2ekHIK/wIm
+         eiCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xZdhfgXcYyzwQ2Qbee46+dN9XPUR+TwA/X5/pzXcNMQ=;
-        b=3388REfG4kIPBOCNRryHkbvYPL5S2W0SgorS4z8Lj2o2diXvaZX3DfkXrr5jcm8Xas
-         s8m121kt6dzMZ8lOhK1+xLq5S87XgV8kgvOVmNbhd6eAcijVltg07tUrhEwVLP4QgeN8
-         dRoFOoTmFUiGx56YU/t7BsyigqTWSwcO8FtELkVYbIf63SkDihtJHg9AiAIm+aqXIdIo
-         d/vPqBAWWbrgrW20mKL+gYwtaZYAbe3d80dFJje3tv8NjzDWWCNB8vMOPfFlEbwogj1Z
-         mVqbUqfJcVsieFMzsJPfDYXTLogYM7nW82k8maYpw9F1LIBDComqoDSVcX87dF2NSFXM
-         BvPg==
-X-Gm-Message-State: AOAM532pF/IcaXwa5rroAepHdhfUtiqmmkEuwFdTm98a8cVM+iEmsFVT
-        wVRn4e61zyfj0ku8LuXQJiE8rxJWRCxtlO+Eiw3Xzg==
-X-Google-Smtp-Source: ABdhPJwgD+XnOBNx8doAXxOKJPMj70f1B+iF247gtD9LkvbzcVOtpMrSGBmJinpKgpBS3LvBxStkWw7WXaDVdB1d6H0=
-X-Received: by 2002:a05:690c:293:b0:2f8:d994:b750 with SMTP id
- bf19-20020a05690c029300b002f8d994b750mr1878320ywb.459.1651278880449; Fri, 29
- Apr 2022 17:34:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220429164325.1.I2a3b980ea051e59140227999f0f0ca16f1125768@changeid>
-In-Reply-To: <20220429164325.1.I2a3b980ea051e59140227999f0f0ca16f1125768@changeid>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Fri, 29 Apr 2022 17:34:04 -0700
-Message-ID: <CAGETcx-i0giDksG7ARfT0E6gakdYuh6OO9g1Vmeu6S3PH1qGUQ@mail.gmail.com>
-Subject: Re: [PATCH] device property: Fix recent breakage of fwnode_get_next_parent_dev()
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        swboyd@chromium.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        freedreno@lists.freedesktop.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-arm-msm@vger.kernel.org, Daniel Scally <djrscally@gmail.com>,
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=SsTYFsW9i1zHPnNrYw8lfj7SDD5us1gW4k/mcBilZjs=;
+        b=Q7Nq4/XRXidZAcDcHxD0HiDriBRttZLH17aClQ4xkNd52X22BY/FXCumOQcQ0BpjM2
+         vHNZVZxcvcEHoXXUmAGL+Lt6LbpWgQS1/t0TzAHr8vSsr2VNNk5v8v/ifuc3n40G9IDV
+         s6KYGBx5Y4xdPNo8N3zN9CMoC7ta5QkrM3rHOEohAX2Iz0VjdB7KDyF2BsWV7ONsNGm2
+         JE1C0lCqTMZDWSnwTgd99AzeOYpSwSLHZ2XsrNTBICIPEjAauyqE0gGAGGzrCS4Vol4f
+         PHNoFA0KhRoS/ncXU/bTRkVcUZuz0NMcjWn3cM+zrYrJjlBJfMygXeL/yccHgJV54Gwq
+         eUyw==
+X-Gm-Message-State: AOAM5301BPZqDnlZc1UhLWrN4GQkEpW5VzVkiacaMQMvLSsRp08HVYEb
+        yitDDwy+eZyOG1i+G1Lm3KU=
+X-Google-Smtp-Source: ABdhPJxgeBPy5mQFpWx/O7B53dhbN0ypl4LfJ4Fw9t0SQxmhLJedMbi72uZgmMjdIZd+YPv/Dga3Pg==
+X-Received: by 2002:a05:6808:3a8:b0:325:b138:bd62 with SMTP id n8-20020a05680803a800b00325b138bd62mr2545223oie.270.1651279073366;
+        Fri, 29 Apr 2022 17:37:53 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 8-20020a056870124800b000e686d13888sm3810854oao.34.2022.04.29.17.37.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Apr 2022 17:37:52 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 29 Apr 2022 17:37:51 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        "open list:HARDWARE MONITORING" <linux-hwmon@vger.kernel.org>
+Subject: Re: [RFC v2 11/39] hwmon: add HAS_IOPORT dependencies
+Message-ID: <20220430003751.GA2446353@roeck-us.net>
+References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
+ <20220429135108.2781579-20-schnelle@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220429135108.2781579-20-schnelle@linux.ibm.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,41 +77,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 4:43 PM Douglas Anderson <dianders@chromium.org> wrote:
->
-> Due to a subtle typo, instead of commit 87ffea09470d ("device
-> property: Introduce fwnode_for_each_parent_node()") being a no-op
-> change, it ended up causing the display on my sc7180-trogdor-lazor
-> device from coming up unless I added "fw_devlink=off" to my kernel
-> command line. Fix the typo.
+On Fri, Apr 29, 2022 at 03:50:17PM +0200, Niklas Schnelle wrote:
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. We thus need to add HAS_IOPORT as dependency for
+> those drivers using them.
+> 
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-Thank you for the fix!
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-Reviewed-by: Saravana Kannan <saravanak@google.com>
+... assuming that the plan is to push those together. If not let me know.
 
--Saravana
-
->
-> Fixes: 87ffea09470d ("device property: Introduce fwnode_for_each_parent_node()")
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
->
->  drivers/base/property.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/base/property.c b/drivers/base/property.c
-> index 36401cfe432c..52e85dcb20b5 100644
-> --- a/drivers/base/property.c
-> +++ b/drivers/base/property.c
-> @@ -600,7 +600,7 @@ struct device *fwnode_get_next_parent_dev(struct fwnode_handle *fwnode)
->         struct device *dev;
->
->         fwnode_for_each_parent_node(fwnode, parent) {
-> -               dev = get_dev_from_fwnode(fwnode);
-> +               dev = get_dev_from_fwnode(parent);
->                 if (dev) {
->                         fwnode_handle_put(parent);
->                         return dev;
-> --
-> 2.36.0.464.gb9c8b46e94-goog
->
+Guenter

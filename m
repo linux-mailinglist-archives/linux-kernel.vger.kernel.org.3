@@ -2,78 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE3351596D
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 02:51:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC90515977
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 02:57:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381946AbiD3AxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 20:53:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39664 "EHLO
+        id S1381954AbiD3BAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 21:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240034AbiD3AxR (ORCPT
+        with ESMTP id S240051AbiD3BAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 20:53:17 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC4B8BF23
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 17:49:58 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2f7d7e3b5bfso101210717b3.5
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 17:49:58 -0700 (PDT)
+        Fri, 29 Apr 2022 21:00:43 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3819AE55;
+        Fri, 29 Apr 2022 17:57:23 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id qe3-20020a17090b4f8300b001dc24e4da73so400409pjb.1;
+        Fri, 29 Apr 2022 17:57:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=v9Y7U0wTKqKyrzCZ5VtAbMiTlejqirW8gTMxmJkTfiA=;
-        b=o904YtYKww9l65iOnpFttd2oN+roVVJk4YvsnVIJZjXPGnvk61QhExALxCRC4rOedS
-         GZ+fEIz4xNSI4vgwWDhEYwf63lfKesGr31yZNfmw+UXEX9XN/y2wAhsIjWCitplmO4ps
-         8JTE/bKIyu2Jm+PEDZiXmNfTMKnVsLhQOq62VLJ4/GgKGeiH6TciRzAU6SsdTfIYcJER
-         3BHGtLCXph4PQRO9JLg1+n+i6SRl5zEq6LVsT2vXCl1IbFZA5JBiHGbCTkleXv53Ljbs
-         eh5U/POqRL31KOiefyvGXo2puzoXdUfX+v/WX7nlyz/6NPUWqBhPoK3P/gCH2Cg0mxKY
-         c5Xg==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=mNyLvH43MfPDniIsq9lMkWz/KLzGO/YPNGTp4lBSC4c=;
+        b=Ikn2m/zUdMTBUneTvHpZGEvTEvEkBSKkAf7tfUvGabeK/E23MOq6UhUFbeQ3k9G2U7
+         UoA3O3+BGw2v7X/jbMz3hjxTrHYm7YBNQeels+KnyC35p0Qs1rjyVX7xSJrgfUAfgdJi
+         RW6tKIsKNbIVLx6j7+5qvyyr3zm99GWWoIiUIpeTclTXMxl/WxCVRCD72QCv1v1w9/IO
+         zNV2+tyQWMmPlVkRV0CgpfkmO3+umUR+DmkRyZwdXJC/cRF18wQ6OZl8GNJ7gz6LoqMr
+         abiSSbxYqVfIxshW6SMxw/iaZHq6j7zLP5JOhsAs+O2W5ySd18cCy6Q60dhzw1OcpLZ/
+         dC5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=v9Y7U0wTKqKyrzCZ5VtAbMiTlejqirW8gTMxmJkTfiA=;
-        b=JFi8HmMbA8I7FuwP/3mToEC6gDW9uDt5iNEDnsmtBVf8Lk2uzigXLjNOCfPY7qGXm1
-         DxRahuusDiT9LWaLXtiFrZ9+36AGyYBT5zDJM6v80bu9bJ5QIZqnlntn0qyOKJqgQtfS
-         EvW/afcWMtjqsKxFiI4IgrACa5hfzNc+C/8ql5vmGRUHy/1bHsTT8czRhj2IFGULOb2R
-         L7GPJVcjjE7xuXe+SQlbaJCMCFkypWZN8L+HnifYFY5ZyU+tpzUYjo81gR9zFIPRn44V
-         Ip+WoTq+aI23KlfQk87yBcAa4nimbfPSTv9lKI1RoVwkDvMT7y/3uonP0liIcYUUGaZg
-         Nw7g==
-X-Gm-Message-State: AOAM533CZendsbepuJbncZnUnNnsxGx4WoacQpD01FY7lC9/PMNmadVn
-        J56ZNbNEkS3akhuAAYmUpwDxVecSyf+d0A6ald/J5w==
-X-Google-Smtp-Source: ABdhPJwgM0DU8R1vt+rPUv9v3MVwX19+YnYIl4ZgilTxVCVrF9omxoBF3LL/7AkmrlziboUU9RSRxP5sBIMxP78CMas=
-X-Received: by 2002:a81:a93:0:b0:2f4:d65a:d44e with SMTP id
- 141-20020a810a93000000b002f4d65ad44emr1937122ywk.243.1651279796955; Fri, 29
- Apr 2022 17:49:56 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=mNyLvH43MfPDniIsq9lMkWz/KLzGO/YPNGTp4lBSC4c=;
+        b=ehQjd8pFdGh0JavSOMEECI9TJRY8H32yvgdBqJkjjGAycrelFcR1l/4610v7W5K+zy
+         9G+mNwBKm1yMsjed9sRZF3C5ftohm8U3rke/QSWk9sDntnnt86AuJ6KJ4CDgmKBs1xfl
+         qevjkJKPgf216EUq//hYpdEeA/GAmJ5VwjNvJnKwAc9c7SuYx9Tz6fCS4YYD3eWKyF1T
+         Py4gIRHLGcrk+f2UnpFcJQEWiy9pv2u07gTAdd+MiAWFdUpCqM+O4UVloBVHySkub1p9
+         gIGzXpZap7ywbW5svaTc28W7ejYyg0n9ylsURyLomRhQAeHJ8h6W94YCarZCXADBXZ6V
+         he0g==
+X-Gm-Message-State: AOAM530l1yJjtr4a+Om6jGfBX3K3RbtlwYZeEn5+iAQCMhVZUuOn6fY4
+        enF1HEhOKIkv8R8GfbHFBLg=
+X-Google-Smtp-Source: ABdhPJwE/7f5AnlFfXfh4dUCYmbF+dvvij3jKffdGgValII8eU6AVuSoxIGBoluNUioKER8t6HMOFg==
+X-Received: by 2002:a17:90a:9418:b0:1d8:91d1:4d74 with SMTP id r24-20020a17090a941800b001d891d14d74mr6779237pjo.62.1651280243475;
+        Fri, 29 Apr 2022 17:57:23 -0700 (PDT)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id o18-20020a170903301200b0015e8d4eb2ddsm204019pla.295.2022.04.29.17.57.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 17:57:22 -0700 (PDT)
+Message-ID: <83176583-f392-ed9c-a4a2-9d8f67c0fd19@gmail.com>
+Date:   Sat, 30 Apr 2022 09:57:19 +0900
 MIME-Version: 1.0
-References: <20220429203644.2868448-1-samitolvanen@google.com>
- <20220429203644.2868448-15-samitolvanen@google.com> <Ymxy/CU+tZhQ9UtN@hirez.programming.kicks-ass.net>
-In-Reply-To: <Ymxy/CU+tZhQ9UtN@hirez.programming.kicks-ass.net>
-From:   Sami Tolvanen <samitolvanen@google.com>
-Date:   Fri, 29 Apr 2022 17:49:21 -0700
-Message-ID: <CABCJKud8vC6RwQLs2YXnZMZaXGNYBEq+sNmOsgGjjAw4MfuZuw@mail.gmail.com>
-Subject: Re: [RFC PATCH 14/21] treewide: static_call: Pass call arguments to
- the macro
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>, X86 ML <x86@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-hardening@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] Documentation/vm/page_owner.rst: Fix syntax error and
+ Describe details using table
+Content-Language: en-US
+To:     Shenghong Han <hanshenghong2019@email.szu.edu.cn>, corbet@lwn.net
+Cc:     akpm@linux-foundation.org, baihaowen@meizu.com, seakeel@gmail.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        caoyixuan2019@email.szu.edu.cn, yejiajian2018@email.szu.edu.cn,
+        yuhongf@szu.edu.cn
+References: <20220429181926.10658-1-hanshenghong2019@email.szu.edu.cn>
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <20220429181926.10658-1-hanshenghong2019@email.szu.edu.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,14 +77,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 4:21 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> Can you explain why this is needed? I don't think there are any indirect
-> calls to get confused about. That is, if you have STATIC_CALL_INLINE
-> then the compiler should be emitting direct calls to the trampoline.
+Hi,
 
-Clang emits an indirect call for ({ &f; })(), which is optimized into
-a direct call when possible. Come to think of it, the recent
-InstCombine change to the compiler patch should solve this issue. Let
-me double check, I'd be more than happy to drop these two patches.
+On Sat, 30 Apr 2022 02:19:26 +0800,
+Shenghong Han wrote:
+> Subject: [PATCH] Documentation/vm/page_owner.rst: ...
+This is v2 of the patch, isn't it?  If so, it should be indicated
+in the prefix as "[PATCH v2]".
 
-Sami
+> Some syntax errors exist in "page_owner.rst". Thanks to Akira Yokosawa and
+> Haowen Bai for tips to help improve the documentation.> 
+> We try to fix them. Hope that the Documentation is showed as we expect.
+In changelog, describe technical facts.  Not what you think or hope.
+You need to do a respin with a better explanation at least.
+
+Hint: A fix without using tables would be the simplest.  Please look
+at the changes in the preceding section I made in commit 5603f9bdea68
+("docs: vm/page_owner: use literal blocks for param description").
+You are seeing the build error because a literal block ends at a next
+line which starts from column 1.
+
+I don't think Jon would dislike the simplest approach. :-)
+
+Of course, if you guys love tables so much, I don't mind.
+
+> 
+> Signed-off-by: Shenghong Han <hanshenghong2019@email.szu.edu.cn>
+> Fixes: edc93abbcc6d ("tools/vm/page_owner_sort.c: support sorting blocks by multiple keys")
+SHA-1 ID of a not-yet-merged commit will likely break later in
+the merge window.
+
+Good luck!
+
+        Thanks, Akira
+> 
+> ---
+> Thanks Jonathan's suggestion.
+> 
+> This fix is a simpler than before.
+> And yes, It has built in my machine.
+> 
+> Best,
+> 
+> 	Shenghong Han
+> ---
+> ---
+>  Documentation/vm/page_owner.rst | 15 ++++++++++-----
+>  1 file changed, 10 insertions(+), 5 deletions(-)
+> 
+> diff --git a/Documentation/vm/page_owner.rst b/Documentation/vm/page_owner.rst
+> index 25622c715..0ecb4a739 100644
+> --- a/Documentation/vm/page_owner.rst
+> +++ b/Documentation/vm/page_owner.rst
+[...]

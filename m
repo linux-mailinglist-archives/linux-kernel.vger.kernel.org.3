@@ -2,603 +2,1157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA3EA515B03
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 09:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 034CD515B08
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 09:36:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382299AbiD3Hgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 03:36:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52526 "EHLO
+        id S1382296AbiD3HjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 03:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382285AbiD3Hgq (ORCPT
+        with ESMTP id S233979AbiD3HjG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 03:36:46 -0400
-Received: from sonata.ens-lyon.org (sonata.ens-lyon.org [140.77.166.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A0BB18BD
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 00:33:24 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by sonata.ens-lyon.org (Postfix) with ESMTP id AF1B12015D;
-        Sat, 30 Apr 2022 09:33:22 +0200 (CEST)
-Received: from sonata.ens-lyon.org ([127.0.0.1])
-        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id UoH9IJPBxpXo; Sat, 30 Apr 2022 09:33:21 +0200 (CEST)
-Received: from begin (anantes-655-1-33-15.w83-195.abo.wanadoo.fr [83.195.225.15])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by sonata.ens-lyon.org (Postfix) with ESMTPSA id DC34C20155;
-        Sat, 30 Apr 2022 09:33:21 +0200 (CEST)
-Received: from samy by begin with local (Exim 4.95)
-        (envelope-from <samuel.thibault@ens-lyon.org>)
-        id 1nkhbV-006Rtz-Oj;
-        Sat, 30 Apr 2022 09:33:21 +0200
-Date:   Sat, 30 Apr 2022 09:33:21 +0200
-From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        speakup@linux-speakup.org
-Subject: [PATCHv2] speakup: Generate speakupmap.h automatically
-Message-ID: <20220430073321.6b4lvrrt7buzh7dp@begin>
-Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        speakup@linux-speakup.org
-References: <20220430003934.fkua7vwoz6heigrp@begin>
+        Sat, 30 Apr 2022 03:39:06 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A952E6BB
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 00:35:42 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id o69so7495970pjo.3
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 00:35:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FgnCni6ss6p1qgEk5UROj/PDECj91/7ybA6xyGBOHbk=;
+        b=Md3WXxrZBXk1dR4tkYWODeRQN5jAUCbzqTj7X3L5DMD7tp4DDW26Y0opbKUPdmOU5K
+         NmVsjxNC+lO5nMcyBQxrQ/ir9HN7jscyCrG0GzTqp6O6Du/Ysr8uTPh3rXGmcxwcUg7o
+         xBGtCvH7PPfwVYDnI2IMyxN4yEkEQJMdF3RsF9baL+rgKgeNiwrWI2G1jquvRjfRJuAN
+         rsP9FzzK7/+Na8LiZ5yxhoOrFdMTS7fnq0bMybFVkUZuk9TTGyqDHd21CSk04SslxbGq
+         L9Evus7qI5kTBxysMRA9JP9QDnDE6XWIT2BdrlacXjcWLv5MqNV7RcemzaGHr+Unrs73
+         THQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FgnCni6ss6p1qgEk5UROj/PDECj91/7ybA6xyGBOHbk=;
+        b=2hT1/QzxakUyNx0uyaCZjqMnDAFvytkNHCK8t8PVO9zblgYbm5C/ldjq0uoFVgG/yK
+         2R/jFCfD7C3Sd22dy0bq11YLgodgK4aM/xL+K9eSJyz4ohe/CKDCX0C55XOnkja5Dnf3
+         GF4acgJPn9P2nLHGlnAKWG+bTwujrob76vEP5SiAxSM0y0m15pFCAJSzlUlid6JUJkKM
+         knVYmx5mOmfdH9BwqCpYo0j4c3gCeF8EERtjIj+r8fWkR72O/UcL51eeFoFtPtdqEaH8
+         U/0G27hTGpMXqkcThubuoYH+qU9tXXjq/vv1xDLTbAWpysktfxfoO8fmhb96skvpap71
+         A2kA==
+X-Gm-Message-State: AOAM531XXWlIxUNCoy1nakxlkGjgDS2xkcJYwjipx7JuRG+zVe/Il+t/
+        x6x1oxwpE5rUbyJWR/qguDQkSw==
+X-Google-Smtp-Source: ABdhPJzf6FcfUIqQBaeHm8pzTVFpVkBDRwoVfJCVEiPX1rZY1fRox4EEtArfUlI/gorm8xEaz0ymAg==
+X-Received: by 2002:a17:903:246:b0:153:84fe:a9b0 with SMTP id j6-20020a170903024600b0015384fea9b0mr2931296plh.163.1651304141084;
+        Sat, 30 Apr 2022 00:35:41 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s ([134.195.101.46])
+        by smtp.gmail.com with ESMTPSA id p20-20020aa78614000000b0050dc762813esm862861pfn.24.2022.04.30.00.35.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 30 Apr 2022 00:35:40 -0700 (PDT)
+Date:   Sat, 30 Apr 2022 15:35:30 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Yicong Yang <yangyicong@hisilicon.com>
+Cc:     gregkh@linuxfoundation.org, helgaas@kernel.org,
+        alexander.shishkin@linux.intel.com, lorenzo.pieralisi@arm.com,
+        will@kernel.org, mark.rutland@arm.com, mathieu.poirier@linaro.org,
+        suzuki.poulose@arm.com, mike.leach@linaro.org,
+        jonathan.cameron@huawei.com, daniel.thompson@linaro.org,
+        joro@8bytes.org, john.garry@huawei.com,
+        shameerali.kolothum.thodi@huawei.com, robin.murphy@arm.com,
+        peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        coresight@lists.linaro.org, linux-pci@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, iommu@lists.linux-foundation.org,
+        zhangshaokun@hisilicon.com, liuqi115@huawei.com,
+        linuxarm@huawei.com, prime.zeng@huawei.com
+Subject: Re: [PATCH v7 5/7] perf tool: Add support for HiSilicon PCIe Tune
+ and Trace device driver
+Message-ID: <20220430073411.GA657977@leoy-ThinkPad-X240s>
+References: <20220407125841.3678-1-yangyicong@hisilicon.com>
+ <20220407125841.3678-6-yangyicong@hisilicon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220430003934.fkua7vwoz6heigrp@begin>
-User-Agent: NeoMutt/20170609 (1.8.3)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220407125841.3678-6-yangyicong@hisilicon.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-speakupmap.h was not actually intended to be source code, speakupmap.map
-is.
+On Thu, Apr 07, 2022 at 08:58:39PM +0800, Yicong Yang via iommu wrote:
+> From: Qi Liu <liuqi115@huawei.com>
+> 
+> 'perf record' and 'perf report --dump-raw-trace' supported in this
+> patch.
+> 
+> Example usage:
+> 
+> Output will contain raw PTT data and its textual representation, such
+> as:
+> 
+> 0 0 0x5810 [0x30]: PERF_RECORD_AUXTRACE size: 0x400000  offset: 0
+> ref: 0xa5d50c725  idx: 0  tid: -1  cpu: 0
+> .
+> . ... HISI PTT data: size 4194304 bytes
+> .  00000000: 00 00 00 00                                 Prefix
+> .  00000004: 08 20 00 60                                 Header DW0
+> .  00000008: ff 02 00 01                                 Header DW1
+> .  0000000c: 20 08 00 00                                 Header DW2
+> .  00000010: 10 e7 44 ab                                 Header DW3
+> .  00000014: 2a a8 1e 01                                 Time
+> .  00000020: 00 00 00 00                                 Prefix
+> .  00000024: 01 00 00 60                                 Header DW0
+> .  00000028: 0f 1e 00 01                                 Header DW1
+> .  0000002c: 04 00 00 00                                 Header DW2
+> .  00000030: 40 00 81 02                                 Header DW3
+> .  00000034: ee 02 00 00                                 Time
+> ....
+> 
+> Signed-off-by: Qi Liu <liuqi115@huawei.com>
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> ---
+>  tools/perf/arch/arm/util/auxtrace.c           |  76 +++++-
+>  tools/perf/arch/arm/util/pmu.c                |   3 +
+>  tools/perf/arch/arm64/util/Build              |   2 +-
+>  tools/perf/arch/arm64/util/hisi_ptt.c         | 195 ++++++++++++++++
+>  tools/perf/util/Build                         |   2 +
+>  tools/perf/util/auxtrace.c                    |   4 +
+>  tools/perf/util/auxtrace.h                    |   1 +
+>  tools/perf/util/hisi-ptt-decoder/Build        |   1 +
+>  .../hisi-ptt-decoder/hisi-ptt-pkt-decoder.c   | 170 ++++++++++++++
+>  .../hisi-ptt-decoder/hisi-ptt-pkt-decoder.h   |  28 +++
+>  tools/perf/util/hisi_ptt.c                    | 218 ++++++++++++++++++
+>  tools/perf/util/hisi_ptt.h                    |  28 +++
 
-This resurrects the makemapdata.c and genmap.c tools to generate
-speakupmap.h automatically from the input and speakup headers, and the
-speakupmap.map keyboard mapping source file.
+It's good to divide the big patch into smaller patches, e.g. one patch
+is to add PTT auxtrace (so mainly for perf record), and the second
+patch is to add PTT decoder for perf decoding.
 
-Signed-off-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
+>  12 files changed, 724 insertions(+), 4 deletions(-)
+>  create mode 100644 tools/perf/arch/arm64/util/hisi_ptt.c
+>  create mode 100644 tools/perf/util/hisi-ptt-decoder/Build
+>  create mode 100644 tools/perf/util/hisi-ptt-decoder/hisi-ptt-pkt-decoder.c
+>  create mode 100644 tools/perf/util/hisi-ptt-decoder/hisi-ptt-pkt-decoder.h
+>  create mode 100644 tools/perf/util/hisi_ptt.c
+>  create mode 100644 tools/perf/util/hisi_ptt.h
+> 
+> diff --git a/tools/perf/arch/arm/util/auxtrace.c b/tools/perf/arch/arm/util/auxtrace.c
+> index 5fc6a2a3dbc5..393f5757c039 100644
+> --- a/tools/perf/arch/arm/util/auxtrace.c
+> +++ b/tools/perf/arch/arm/util/auxtrace.c
+> @@ -4,9 +4,11 @@
+>   * Author: Mathieu Poirier <mathieu.poirier@linaro.org>
+>   */
+>  
+> +#include <dirent.h>
+>  #include <stdbool.h>
+>  #include <linux/coresight-pmu.h>
+>  #include <linux/zalloc.h>
+> +#include <api/fs/fs.h>
+>  
+>  #include "../../../util/auxtrace.h"
+>  #include "../../../util/debug.h"
+> @@ -14,6 +16,7 @@
+>  #include "../../../util/pmu.h"
+>  #include "cs-etm.h"
+>  #include "arm-spe.h"
+> +#include "hisi_ptt.h"
+>  
+>  static struct perf_pmu **find_all_arm_spe_pmus(int *nr_spes, int *err)
+>  {
+> @@ -50,6 +53,58 @@ static struct perf_pmu **find_all_arm_spe_pmus(int *nr_spes, int *err)
+>  	return arm_spe_pmus;
+>  }
+>  
+> +static struct perf_pmu **find_all_hisi_ptt_pmus(int *nr_ptts, int *err)
+> +{
+> +	const char *sysfs = sysfs__mountpoint();
+> +	struct perf_pmu **hisi_ptt_pmus = NULL;
+> +	struct dirent *dent;
+> +	char path[PATH_MAX];
+> +	DIR *dir = NULL;
+> +	int idx = 0;
+> +
+> +	snprintf(path, PATH_MAX, "%s" EVENT_SOURCE_DEVICE_PATH, sysfs);
+> +	dir = opendir(path);
+> +	if (!dir) {
+> +		pr_err("can't read directory '%s'\n", EVENT_SOURCE_DEVICE_PATH);
+> +		*err = -EINVAL;
+> +		goto out;
+> +	}
+> +
+> +	while ((dent = readdir(dir))) {
+> +		if (strstr(dent->d_name, HISI_PTT_PMU_NAME))
+> +			(*nr_ptts)++;
+> +	}
+> +
+> +	if (!(*nr_ptts))
+> +		goto out;
+> +
+> +	hisi_ptt_pmus = zalloc(sizeof(struct perf_pmu *) * (*nr_ptts));
+> +	if (!hisi_ptt_pmus) {
+> +		pr_err("hisi_ptt alloc failed\n");
+> +		*err = -ENOMEM;
+> +		goto out;
+> +	}
+> +
+> +	rewinddir(dir);
+> +	while ((dent = readdir(dir))) {
+> +		if (strstr(dent->d_name, HISI_PTT_PMU_NAME) && idx < (*nr_ptts)) {
+> +			hisi_ptt_pmus[idx] = perf_pmu__find(dent->d_name);
+> +			if (hisi_ptt_pmus[idx]) {
+> +				pr_debug2("%s %d: hisi_ptt_pmu %d type %d name %s\n",
+> +					__func__, __LINE__, idx,
+> +					hisi_ptt_pmus[idx]->type,
+> +					hisi_ptt_pmus[idx]->name);
+> +					idx++;
 
----
-difference with v1:
-- Add missing dependency between main.c and speakupmap.h
+Indentation for "idx++" is not right.
 
- drivers/accessibility/speakup/Makefile      |   28 ++++
- drivers/accessibility/speakup/genmap.c      |  162 ++++++++++++++++++++++++++++
- drivers/accessibility/speakup/makemapdata.c |  125 +++++++++++++++++++++
- drivers/accessibility/speakup/speakupmap.h  |   66 -----------
- drivers/accessibility/speakup/utils.c       |   92 +++++++++++++++
- drivers/accessibility/speakup/utils.h       |   33 +++++
- 6 files changed, 440 insertions(+), 66 deletions(-)
+> +			}
+> +
 
---- a/drivers/accessibility/speakup/Makefile
-+++ b/drivers/accessibility/speakup/Makefile
-@@ -30,3 +30,31 @@ speakup-y := \
- 	thread.o \
- 	varhandlers.o
- speakup-$(CONFIG_SPEAKUP_SERIALIO) += serialio.o
-+
-+
-+clean-files := mapdata.h speakupmap.h
-+
-+
-+# Generate mapdata.h from headers
-+hostprogs += makemapdata
-+makemapdata-objs := makemapdata.o utils.o
-+
-+quiet_cmd_mkmap = MKMAP   $@
-+      cmd_mkmap = $(obj)/makemapdata > $@
-+
-+$(obj)/mapdata.h: $(obj)/makemapdata
-+	$(call cmd,mkmap)
-+
-+
-+# Generate speakupmap.map from mapdata.h
-+hostprogs += genmap
-+genmap-objs := genmap.o utils.o
-+$(obj)/genmap.o: $(obj)/mapdata.h
-+
-+quiet_cmd_genmap = GENMAP  $@
-+      cmd_genmap = $(obj)/genmap $< > $@
-+
-+$(obj)/speakupmap.h: $(obj)/speakupmap.map $(obj)/genmap
-+	$(call cmd,genmap)
-+
-+$(obj)/main.o: $(obj)/speakupmap.h
---- /dev/null
-+++ b/drivers/accessibility/speakup/genmap.c
-@@ -0,0 +1,162 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/* genmap.c
-+ * originally written by: Kirk Reiser.
-+ *
-+ ** Copyright (C) 2002  Kirk Reiser.
-+ *  Copyright (C) 2003  David Borowski.
-+ */
-+
-+#include <stdlib.h>
-+#include <stdio.h>
-+#include <libgen.h>
-+#include <string.h>
-+#include <linux/version.h>
-+#include <ctype.h>
-+#include "utils.h"
-+
-+struct st_key_init {
-+	char *name;
-+	int value, shift;
-+};
-+
-+static unsigned char key_data[MAXKEYVAL][16], *kp;
-+
-+#include "mapdata.h"
-+
-+static const char delims[] = "\t\n ";
-+static char *cp;
-+static int map_ver = 119; /* an arbitrary number so speakup can check */
-+static int shift_table[17];
-+static int max_states = 1, flags;
-+/* flags reserved for later, maybe for individual console maps */
-+
-+static int get_shift_value(int state)
-+{
-+	int i;
-+
-+	for (i = 0; shift_table[i] != state; i++) {
-+		if (shift_table[i] == -1) {
-+			if (i >= 16)
-+				oops("too many shift states", NULL);
-+			shift_table[i] = state;
-+			max_states = i+1;
-+		break;
-+	}
-+	}
-+	return i;
-+}
-+
-+int
-+main(int argc, char *argv[])
-+{
-+	int value, shift_state, i, spk_val = 0, lock_val = 0;
-+	int max_key_used = 0, num_keys_used = 0;
-+	struct st_key *this;
-+	struct st_key_init *p_init;
-+	char buffer[256];
-+
-+	bzero(key_table, sizeof(key_table));
-+	bzero(key_data, sizeof(key_data));
-+
-+	shift_table[0] = 0;
-+	for (i = 1; i <= 16; i++)
-+		shift_table[i] = -1;
-+
-+	if (argc < 2) {
-+		fputs("usage: genmap filename\n", stderr);
-+		exit(1);
-+	}
-+
-+	for (p_init = init_key_data; p_init->name[0] != '.'; p_init++)
-+		add_key(p_init->name, p_init->value, p_init->shift);
-+
-+	open_input(".", argv[1]);
-+	while (fgets(buffer, sizeof(buffer), infile)) {
-+		lc++;
-+		value = shift_state = 0;
-+
-+		cp = strtok(buffer, delims);
-+		if (*cp == '#')
-+			continue;
-+
-+		while (cp) {
-+			if (*cp == '=')
-+				break;
-+			this = find_key(cp);
-+			if (this == NULL)
-+				oops("unknown key/modifier", cp);
-+			if (this->shift == is_shift) {
-+				if (value)
-+					oops("modifiers must come first", cp);
-+				shift_state += this->value;
-+			} else if (this->shift == is_input)
-+				value = this->value;
-+			else
-+				oops("bad modifier or key", cp);
-+			cp = strtok(0, delims);
-+		}
-+		if (!cp)
-+			oops("no = found", NULL);
-+
-+		cp = strtok(0, delims);
-+		if (!cp)
-+			oops("no speakup function after =", NULL);
-+
-+		this = find_key(cp);
-+		if (this == NULL || this->shift != is_spk)
-+			oops("invalid speakup function", cp);
-+
-+		i = get_shift_value(shift_state);
-+		if (key_data[value][i]) {
-+			while (--cp > buffer)
-+				if (!*cp)
-+					*cp = ' ';
-+			oops("two functions on same key combination", cp);
-+		}
-+		key_data[value][i] = (char)this->value;
-+		if (value > max_key_used)
-+			max_key_used = value;
-+	}
-+	fclose(infile);
-+
-+	this = find_key("spk_key");
-+	if (this)
-+		spk_val = this->value;
-+
-+	this = find_key("spk_lock");
-+	if (this)
-+		lock_val = this->value;
-+
-+	for (lc = 1; lc <= max_key_used; lc++) {
-+		kp = key_data[lc];
-+		if (!memcmp(key_data[0], kp, 16))
-+			continue;
-+		num_keys_used++;
-+		for (i = 0; i < max_states; i++) {
-+			if (kp[i] != spk_val && kp[i] != lock_val)
-+				continue;
-+			shift_state = shift_table[i];
-+			if (shift_state&16)
-+				continue;
-+			shift_state = get_shift_value(shift_state+16);
-+			kp[shift_state] = kp[i];
-+			/* fill in so we can process the key up, as spk bit will be set */
-+		}
-+	}
-+
-+	printf("\t%d, %d, %d,\n\t", map_ver, num_keys_used, max_states);
-+	for (i = 0; i < max_states; i++)
-+		printf("%d, ", shift_table[i]);
-+	printf("%d,", flags);
-+	for (lc = 1; lc <= max_key_used; lc++) {
-+		kp = key_data[lc];
-+		if (!memcmp(key_data[0], kp, 16))
-+			continue;
-+		printf("\n\t%d,", lc);
-+		for (i = 0; i < max_states; i++)
-+			printf(" %d,", (unsigned int)kp[i]);
-+	}
-+	printf("\n\t0, %d\n", map_ver);
-+
-+	exit(0);
-+}
---- /dev/null
-+++ b/drivers/accessibility/speakup/makemapdata.c
-@@ -0,0 +1,125 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/* makemapdata.c
-+ * originally written by: Kirk Reiser.
-+ *
-+ ** Copyright (C) 2002  Kirk Reiser.
-+ *  Copyright (C) 2003  David Borowski.
-+ */
-+
-+#include <stdlib.h>
-+#include <stdio.h>
-+#include <libgen.h>
-+#include <string.h>
-+#include <linux/version.h>
-+#include <ctype.h>
-+#include "utils.h"
-+
-+static char buffer[256];
-+
-+static int get_define(void)
-+{
-+	char *c;
-+
-+	while (fgets(buffer, sizeof(buffer)-1, infile)) {
-+		lc++;
-+		if (strncmp(buffer, "#define", 7))
-+			continue;
-+		c = buffer + 7;
-+		while (*c == ' ' || *c == '\t')
-+			c++;
-+		def_name = c;
-+		while (*c && *c != ' ' && *c != '\t' && *c != '\n')
-+			c++;
-+		if (!*c || *c == '\n')
-+			continue;
-+		*c++ = '\0';
-+		while (*c == ' ' || *c == '\t' || *c == '(')
-+			c++;
-+		def_val = c;
-+		while (*c && *c != '\n' && *c != ')')
-+			c++;
-+		*c++ = '\0';
-+		return 1;
-+	}
-+	fclose(infile);
-+	infile = 0;
-+	return 0;
-+}
-+
-+int
-+main(int argc, char *argv[])
-+{
-+	int value, i;
-+	struct st_key *this;
-+	const char *dir_name;
-+	char *cp;
-+
-+	dir_name = getenv("TOPDIR");
-+	if (!dir_name)
-+		dir_name = ".";
-+	bzero(key_table, sizeof(key_table));
-+	add_key("shift",	1, is_shift);
-+	add_key("altgr",	2, is_shift);
-+	add_key("ctrl",	4, is_shift);
-+	add_key("alt",	8, is_shift);
-+	add_key("spk", 16, is_shift);
-+	add_key("double", 32, is_shift);
-+
-+	open_input(dir_name, "include/linux/input.h");
-+	while (get_define()) {
-+		if (strncmp(def_name, "KEY_", 4))
-+			continue;
-+		value = atoi(def_val);
-+		if (value > 0 && value < MAXKEYVAL)
-+			add_key(def_name, value, is_input);
-+	}
-+
-+	open_input(dir_name, "include/uapi/linux/input-event-codes.h");
-+	while (get_define()) {
-+		if (strncmp(def_name, "KEY_", 4))
-+			continue;
-+		value = atoi(def_val);
-+		if (value > 0 && value < MAXKEYVAL)
-+			add_key(def_name, value, is_input);
-+	}
-+
-+	open_input(dir_name, "drivers/accessibility/speakup/spk_priv_keyinfo.h");
-+	while (get_define()) {
-+		if (strlen(def_val) > 5) {
-+			//if (def_val[0] == '(')
-+			//	def_val++;
-+			cp = strchr(def_val, '+');
-+			if (!cp)
-+				continue;
-+			if (cp[-1] == ' ')
-+				cp[-1] = '\0';
-+			*cp++ = '\0';
-+			this = find_key(def_val);
-+			while (*cp == ' ')
-+				cp++;
-+			if (!this || *cp < '0' || *cp > '9')
-+				continue;
-+			value = this->value+atoi(cp);
-+		} else if (!strncmp(def_val, "0x", 2))
-+			sscanf(def_val+2, "%x", &value);
-+		else if (*def_val >= '0' && *def_val <= '9')
-+			value = atoi(def_val);
-+		else
-+			continue;
-+		add_key(def_name, value, is_spk);
-+	}
-+
-+	printf("struct st_key_init init_key_data[] = {\n");
-+	for (i = 0; i < HASHSIZE; i++) {
-+		this = &key_table[i];
-+		if (!this->name)
-+			continue;
-+		do {
-+			printf("\t{ \"%s\", %d, %d, },\n", this->name, this->value, this->shift);
-+			this = this->next;
-+		} while (this);
-+	}
-+	printf("\t{ \".\", 0, 0 }\n};\n");
-+
-+	exit(0);
-+}
---- a/drivers/accessibility/speakup/speakupmap.h
-+++ /dev/null
-@@ -1,66 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--	119, 62, 6,
--	0, 16, 20, 17, 32, 48, 0,
--	2, 0, 78, 0, 0, 0, 0,
--	3, 0, 79, 0, 0, 0, 0,
--	4, 0, 76, 0, 0, 0, 0,
--	5, 0, 77, 0, 0, 0, 0,
--	6, 0, 74, 0, 0, 0, 0,
--	7, 0, 75, 0, 0, 0, 0,
--	9, 0, 5, 46, 0, 0, 0,
--	10, 0, 4, 0, 0, 0, 0,
--	11, 0, 0, 1, 0, 0, 0,
--	12, 0, 27, 0, 33, 0, 0,
--	19, 0, 47, 0, 0, 0, 0,
--	21, 0, 29, 17, 0, 0, 0,
--	22, 0, 15, 0, 0, 0, 0,
--	23, 0, 14, 0, 0, 0, 28,
--	24, 0, 16, 0, 0, 0, 0,
--	25, 0, 30, 18, 0, 0, 0,
--	28, 0, 3, 26, 0, 0, 0,
--	35, 0, 31, 0, 0, 0, 0,
--	36, 0, 12, 0, 0, 0, 0,
--	37, 0, 11, 0, 0, 0, 22,
--	38, 0, 13, 0, 0, 0, 0,
--	39, 0, 32, 7, 0, 0, 0,
--	40, 0, 23, 0, 0, 0, 0,
--	44, 0, 44, 0, 0, 0, 0,
--	49, 0, 24, 0, 0, 0, 0,
--	50, 0, 9, 19, 6, 0, 0,
--	51, 0, 8, 0, 0, 0, 36,
--	52, 0, 10, 20, 0, 0, 0,
--	53, 0, 25, 0, 0, 0, 0,
--	55, 46, 1, 0, 0, 0, 0,
--	58, 128, 128, 0, 0, 0, 0,
--	59, 0, 45, 0, 0, 0, 0,
--	60, 0, 40, 0, 0, 0, 0,
--	61, 0, 41, 0, 0, 0, 0,
--	62, 0, 42, 0, 0, 0, 0,
--	63, 0, 34, 0, 0, 0, 0,
--	64, 0, 35, 0, 0, 0, 0,
--	65, 0, 37, 0, 0, 0, 0,
--	66, 0, 38, 0, 0, 0, 0,
--	67, 0, 66, 0, 39, 0, 0,
--	68, 0, 67, 0, 0, 0, 0,
--	71, 15, 19, 0, 0, 0, 0,
--	72, 14, 29, 0, 0, 28, 0,
--	73, 16, 17, 0, 0, 0, 0,
--	74, 27, 33, 0, 0, 0, 0,
--	75, 12, 31, 0, 0, 0, 0,
--	76, 11, 21, 0, 0, 22, 0,
--	77, 13, 32, 0, 0, 0, 0,
--	78, 23, 43, 0, 0, 0, 0,
--	79, 9, 20, 0, 0, 0, 0,
--	80, 8, 30, 0, 0, 36, 0,
--	81, 10, 18, 0, 0, 0, 0,
--	82, 128, 128, 0, 0, 0, 0,
--	83, 24, 25, 0, 0, 0, 0,
--	87, 0, 68, 0, 0, 0, 0,
--	88, 0, 69, 0, 0, 0, 0,
--	96, 3, 26, 0, 0, 0, 0,
--	98, 4, 5, 0, 0, 0, 0,
--	99, 2, 0, 0, 0, 0, 0,
--	104, 0, 6, 0, 0, 0, 0,
--	109, 0, 7, 0, 0, 0, 0,
--	125, 128, 128, 0, 0, 0, 0,
--	0, 119
---- /dev/null
-+++ b/drivers/accessibility/speakup/utils.c
-@@ -0,0 +1,92 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/* utils.c
-+ * originally written by: Kirk Reiser.
-+ *
-+ ** Copyright (C) 2002  Kirk Reiser.
-+ *  Copyright (C) 2003  David Borowski.
-+ */
-+
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <ctype.h>
-+#include <string.h>
-+
-+#include "utils.h"
-+
-+struct st_key key_table[MAXKEYS];
-+struct st_key *extra_keys = key_table+HASHSIZE;
-+FILE *infile;
-+char *def_name, *def_val;
-+int lc;
-+
-+static char filename[256];
-+
-+void open_input(const char *dir_name, const char *name)
-+{
-+	snprintf(filename, sizeof(filename), "%s/%s", dir_name, name);
-+	infile = fopen(filename, "r");
-+	if (infile == 0) {
-+		fprintf(stderr, "can't open %s\n", filename);
-+		exit(1);
-+	}
-+	lc = 0;
-+}
-+
-+int
-+oops(const char *msg, const char *info)
-+{
-+	if (info == NULL)
-+		info = "";
-+	fprintf(stderr, "error: file %s line %d\n", filename, lc);
-+	fprintf(stderr, "%s %s\n", msg, info);
-+	exit(1);
-+}
-+
-+struct st_key *hash_name(char *name)
-+{
-+	u_char *pn = (u_char *)name;
-+	int hash = 0;
-+
-+	while (*pn) {
-+		hash = (hash * 17) & 0xfffffff;
-+		if (isupper(*pn))
-+			*pn = tolower(*pn);
-+		hash += (int)*pn;
-+		pn++;
-+	}
-+	hash %= HASHSIZE;
-+	return &key_table[hash];
-+}
-+
-+struct st_key *find_key(char *name)
-+{
-+	struct st_key *this = hash_name(name);
-+
-+	while (this) {
-+		if (this->name && !strcmp(name, this->name))
-+			return this;
-+		this = this->next;
-+	}
-+	return this;
-+}
-+
-+struct st_key *add_key(char *name, int value, int shift)
-+{
-+	struct st_key *this = hash_name(name);
-+
-+	if (extra_keys-key_table >= MAXKEYS)
-+		oops("out of key table space, enlarge MAXKEYS", NULL);
-+	if (this->name != NULL) {
-+		while (this->next) {
-+			if (!strcmp(name, this->name))
-+				oops("attempt to add duplicate key", name);
-+			this = this->next;
-+		}
-+		this->next = extra_keys++;
-+		this = this->next;
-+	}
-+	this->name = strdup(name);
-+	this->value = value;
-+	this->shift = shift;
-+	return this;
-+}
---- /dev/null
-+++ b/drivers/accessibility/speakup/utils.h
-@@ -0,0 +1,33 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
-+/* utils.h
-+ * originally written by: Kirk Reiser.
-+ *
-+ ** Copyright (C) 2002  Kirk Reiser.
-+ *  Copyright (C) 2003  David Borowski.
-+ */
-+
-+#include <stdio.h>
-+
-+#define MAXKEYS 512
-+#define MAXKEYVAL 160
-+#define HASHSIZE 101
-+#define is_shift -3
-+#define is_spk -2
-+#define is_input -1
-+
-+struct st_key {
-+	char *name;
-+	struct st_key *next;
-+	int value, shift;
-+};
-+
-+extern struct st_key key_table[MAXKEYS];
-+extern char *def_name, *def_val;
-+extern FILE *infile;
-+extern int lc;
-+
-+void open_input(const char *dirname, const char *name);
-+int oops(const char *msg, const char *info);
-+struct st_key *hash_name(char *name);
-+struct st_key *find_key(char *name);
-+struct st_key *add_key(char *name, int value, int shift);
+Redundant new line.
+
+> +		}
+> +	}
+> +
+> +out:
+> +	closedir(dir);
+> +	return hisi_ptt_pmus;
+> +}
+> +
+>  struct auxtrace_record
+>  *auxtrace_record__init(struct evlist *evlist, int *err)
+>  {
+> @@ -57,8 +112,12 @@ struct auxtrace_record
+>  	struct evsel *evsel;
+>  	bool found_etm = false;
+>  	struct perf_pmu *found_spe = NULL;
+> +	struct perf_pmu *found_ptt = NULL;
+>  	struct perf_pmu **arm_spe_pmus = NULL;
+> +	struct perf_pmu **hisi_ptt_pmus = NULL;
+> +
+>  	int nr_spes = 0;
+> +	int nr_ptts = 0;
+>  	int i = 0;
+>  
+>  	if (!evlist)
+> @@ -66,13 +125,14 @@ struct auxtrace_record
+>  
+>  	cs_etm_pmu = perf_pmu__find(CORESIGHT_ETM_PMU_NAME);
+>  	arm_spe_pmus = find_all_arm_spe_pmus(&nr_spes, err);
+> +	hisi_ptt_pmus = find_all_hisi_ptt_pmus(&nr_ptts, err);
+>  
+>  	evlist__for_each_entry(evlist, evsel) {
+>  		if (cs_etm_pmu &&
+>  		    evsel->core.attr.type == cs_etm_pmu->type)
+>  			found_etm = true;
+>  
+> -		if (!nr_spes || found_spe)
+> +		if ((!nr_spes || found_spe) && (!nr_ptts || found_ptt))
+>  			continue;
+>  
+>  		for (i = 0; i < nr_spes; i++) {
+> @@ -81,11 +141,18 @@ struct auxtrace_record
+>  				break;
+>  			}
+>  		}
+> +
+> +		for (i = 0; i < nr_ptts; i++) {
+> +			if (evsel->core.attr.type == hisi_ptt_pmus[i]->type) {
+> +				found_ptt = hisi_ptt_pmus[i];
+> +				break;
+> +			}
+> +		}
+>  	}
+
+For the loop of evlist__for_each_entry, it's good to refactor the
+event list iteration, we can refine code like below:
+
+static struct perf_pmu *find_pmu_for_event(struct perf_pmu **pmus,
+                                           int pmu_nr, struct evsel *evsel)
+{
+        int i;
+        struct perf_pmu *found = NULL;
+
+        if (!pmus)
+                return NULL;
+
+        for (i = 0; i < pmu_nr; i++) {
+                if (evsel->core.attr.type == pmus[i]->type) {
+                        found = pmus[i];
+                        break;
+                }
+        }
+
+        return found;
+}
+
+struct auxtrace_record
+*auxtrace_record__init(struct evlist *evlist, int *err)
+{
+    ...
+
+    evlist__for_each_entry(evlist, evsel) {
+            if (cs_etm_pmu && !found_etm)
+		    found_etm = find_pmu_for_event(&cs_etm_pmu, 1, evsel);
+
+            if (arm_spe_pmus && !found_spe)
+		    found_etm = find_pmu_for_event(arm_spe_pmus, nr_spe, evsel);
+
+            if (hisi_ptt_pmus && !found_ptt)
+		    found_ptt = find_pmu_for_event(hisi_ptt_pmus, nr_ptt, evsel);
+    }
+
+    ...
+
+Please use a separate patch for the refactoring, and then based on it
+you could add PTT PMU related finding code.
+
+}
+
+
+>  	free(arm_spe_pmus);
+
+Add:
+
+     free(hisi_ptt_pmus);
+
+to avoid memory leaking.
+
+>  
+> -	if (found_etm && found_spe) {
+> -		pr_err("Concurrent ARM Coresight ETM and SPE operation not currently supported\n");
+> +	if (found_etm && found_spe && found_ptt) {
+
+This logic is not right; actually we want the logic is:
+
+        int auxtrace_event_cnt = 0;
+        if (found_etm)
+                auxtrace_event_cnt++;
+        if (found_spe)
+                auxtrace_event_cnt++;
+        if (found_ptt)
+                auxtrace_event_cnt++;
+
+        if (auxtrace_event_cnt > 1) {
+                pr_err("Concurrent AUX trace operation isn't supported: found etm %d spe %d ptt %d\n",
+                       found_etm, found_spe, found_ptt);
+                *err = -EOPNOTSUPP;
+                return NULL;
+        }
+
+> +		pr_err("Concurrent ARM Coresight ETM ,SPE and HiSilicon PCIe Trace operation not currently supported\n");
+>  		*err = -EOPNOTSUPP;
+>  		return NULL;
+>  	}
+> @@ -96,6 +163,9 @@ struct auxtrace_record
+>  #if defined(__aarch64__)
+>  	if (found_spe)
+>  		return arm_spe_recording_init(err, found_spe);
+> +
+> +	if (found_ptt)
+> +		return hisi_ptt_recording_init(err, found_ptt);
+>  #endif
+>  
+>  	/*
+> diff --git a/tools/perf/arch/arm/util/pmu.c b/tools/perf/arch/arm/util/pmu.c
+> index b8b23b9dc598..89a3cedb4557 100644
+> --- a/tools/perf/arch/arm/util/pmu.c
+> +++ b/tools/perf/arch/arm/util/pmu.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/string.h>
+>  
+>  #include "arm-spe.h"
+> +#include "hisi_ptt.h"
+>  #include "../../../util/pmu.h"
+>  
+>  struct perf_event_attr
+> @@ -22,6 +23,8 @@ struct perf_event_attr
+>  #if defined(__aarch64__)
+>  	} else if (strstarts(pmu->name, ARM_SPE_PMU_NAME)) {
+>  		return arm_spe_pmu_default_config(pmu);
+> +	} else if (strstarts(pmu->name, HISI_PTT_PMU_NAME)) {
+> +		pmu->selectable = true;
+>  #endif
+>  	}
+>  
+> diff --git a/tools/perf/arch/arm64/util/Build b/tools/perf/arch/arm64/util/Build
+> index 9fcb4e68add9..8b7fd1dc9f37 100644
+> --- a/tools/perf/arch/arm64/util/Build
+> +++ b/tools/perf/arch/arm64/util/Build
+> @@ -11,4 +11,4 @@ perf-$(CONFIG_LIBDW_DWARF_UNWIND) += unwind-libdw.o
+>  perf-$(CONFIG_AUXTRACE) += ../../arm/util/pmu.o \
+>  			      ../../arm/util/auxtrace.o \
+>  			      ../../arm/util/cs-etm.o \
+> -			      arm-spe.o mem-events.o
+> +			      arm-spe.o mem-events.o hisi_ptt.o
+> diff --git a/tools/perf/arch/arm64/util/hisi_ptt.c b/tools/perf/arch/arm64/util/hisi_ptt.c
+> new file mode 100644
+> index 000000000000..de3a3523ffd5
+> --- /dev/null
+> +++ b/tools/perf/arch/arm64/util/hisi_ptt.c
+> @@ -0,0 +1,195 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * HiSilicon PCIe Trace and Tuning (PTT) support
+> + * Copyright (c) 2022 HiSilicon Technologies Co., Ltd.
+> + */
+> +
+> +#include <linux/kernel.h>
+> +#include <linux/types.h>
+> +#include <linux/bitops.h>
+> +#include <linux/log2.h>
+> +#include <linux/zalloc.h>
+> +#include <time.h>
+> +
+> +#include <internal/lib.h> // page_size
+> +#include "../../../util/auxtrace.h"
+> +#include "../../../util/cpumap.h"
+> +#include "../../../util/debug.h"
+> +#include "../../../util/event.h"
+> +#include "../../../util/evlist.h"
+> +#include "../../../util/evsel.h"
+> +#include "../../../util/hisi_ptt.h"
+> +#include "../../../util/pmu.h"
+> +#include "../../../util/record.h"
+> +#include "../../../util/session.h"
+> +#include "../../../util/tsc.h"
+> +
+> +#define DEFAULT_PAGE_SIZE 1024
+
+It's a bit confusion to define PAGE_SIZE as 1024.  Here can simply
+define:
+
+#define KiB(x) ((x) * 1024)
+
+> +#define KiB(x) ((x) * DEFAULT_PAGE_SIZE)
+> +#define MiB(x) ((x) * DEFAULT_PAGE_SIZE * DEFAULT_PAGE_SIZE)
+
+
+> +
+> +struct hisi_ptt_recording {
+> +	struct auxtrace_record	itr;
+> +	struct perf_pmu *hisi_ptt_pmu;
+> +	struct evlist *evlist;
+> +};
+> +
+> +static size_t
+> +hisi_ptt_info_priv_size(struct auxtrace_record *itr __maybe_unused,
+> +			struct evlist *evlist __maybe_unused)
+> +{
+> +	return HISI_PTT_AUXTRACE_PRIV_SIZE;
+> +}
+> +
+> +static int hisi_ptt_info_fill(struct auxtrace_record *itr,
+> +			      struct perf_session *session,
+> +			      struct perf_record_auxtrace_info *auxtrace_info,
+> +			      size_t priv_size)
+> +{
+> +	struct hisi_ptt_recording *pttr =
+> +			container_of(itr, struct hisi_ptt_recording, itr);
+> +	struct perf_pmu *hisi_ptt_pmu = pttr->hisi_ptt_pmu;
+> +
+> +	if (priv_size != HISI_PTT_AUXTRACE_PRIV_SIZE)
+> +		return -EINVAL;
+> +
+> +	if (!session->evlist->core.nr_mmaps)
+> +		return -EINVAL;
+> +
+> +	auxtrace_info->type = PERF_AUXTRACE_HISI_PTT;
+> +	auxtrace_info->priv[HISI_PTT_PMU_TYPE] = hisi_ptt_pmu->type;
+> +
+> +	return 0;
+> +}
+> +
+> +static int hisi_ptt_set_auxtrace_mmap_page(struct record_opts *opts)
+> +{
+> +	bool privileged = perf_event_paranoid_check(-1);
+> +
+> +	if (!opts->full_auxtrace)
+> +		return 0;
+> +
+> +	if (opts->full_auxtrace && !opts->auxtrace_mmap_pages) {
+> +		if (privileged) {
+> +			opts->auxtrace_mmap_pages = MiB(16) / page_size;
+> +		} else {
+> +			opts->auxtrace_mmap_pages = KiB(128) / page_size;
+> +			if (opts->mmap_pages == UINT_MAX)
+> +				opts->mmap_pages = KiB(256) / page_size;
+> +		}
+> +	}
+> +
+> +	/* Validate auxtrace_mmap_pages */
+> +	if (opts->auxtrace_mmap_pages) {
+> +		size_t sz = opts->auxtrace_mmap_pages * (size_t)page_size;
+> +		size_t min_sz = KiB(8);
+> +
+> +		if (sz < min_sz || !is_power_of_2(sz)) {
+> +			pr_err("Invalid mmap size for HISI PTT: must be at least %zuKiB and a power of 2\n",
+> +			       min_sz / DEFAULT_PAGE_SIZE);
+> +			return -EINVAL;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int hisi_ptt_recording_options(struct auxtrace_record *itr,
+> +				      struct evlist *evlist,
+> +				      struct record_opts *opts)
+> +{
+> +	struct hisi_ptt_recording *pttr =
+> +			container_of(itr, struct hisi_ptt_recording, itr);
+> +	struct perf_pmu *hisi_ptt_pmu = pttr->hisi_ptt_pmu;
+> +	struct perf_cpu_map *cpus = evlist->core.cpus;
+> +	struct evsel *evsel, *hisi_ptt_evsel = NULL;
+> +	struct evsel *tracking_evsel;
+> +	int err;
+> +
+> +	pttr->evlist = evlist;
+> +	evlist__for_each_entry(evlist, evsel) {
+> +		if (evsel->core.attr.type == hisi_ptt_pmu->type) {
+> +			if (hisi_ptt_evsel) {
+> +				pr_err("There may be only one " HISI_PTT_PMU_NAME "x event\n");
+> +				return -EINVAL;
+> +			}
+> +			evsel->core.attr.freq = 0;
+> +			evsel->core.attr.sample_period = 1;
+> +			hisi_ptt_evsel = evsel;
+> +			opts->full_auxtrace = true;
+> +		}
+> +	}
+> +
+> +	err = hisi_ptt_set_auxtrace_mmap_page(opts);
+> +	if (err)
+> +		return err;
+> +	/*
+> +	 * To obtain the auxtrace buffer file descriptor, the auxtrace event
+> +	 * must come first.
+> +	 */
+> +	evlist__to_front(evlist, hisi_ptt_evsel);
+> +
+> +	if (!perf_cpu_map__empty(cpus)) {
+> +		evsel__set_sample_bit(hisi_ptt_evsel, TIME);
+> +		evsel__set_sample_bit(hisi_ptt_evsel, CPU);
+
+It needs to set CPU bit in sample type for per-cpu mmaps.  IIUC, PTT
+is only used for system wide tracing?  If so, you don't need set CPU
+bit.
+
+To be honest, I am also confused set the sample bits.  Actually, there
+have two different sample types for AUX trace, one is here set the
+sample type for AUX event, and in PTT decoding code it needs to set
+sample type for synthesized samples.
+
+> +	}
+> +
+> +	/* Add dummy event to keep tracking */
+> +	err = parse_events(evlist, "dummy:u", NULL);
+> +	if (err)
+> +		return err;
+> +
+> +	tracking_evsel = evlist__last(evlist);
+> +	evlist__set_tracking_event(evlist, tracking_evsel);
+> +
+> +	tracking_evsel->core.attr.freq = 0;
+> +	tracking_evsel->core.attr.sample_period = 1;
+> +
+> +	if (!perf_cpu_map__empty(cpus))
+> +		evsel__set_sample_bit(tracking_evsel, TIME);
+> +
+> +	return 0;
+> +}
+> +
+> +static u64 hisi_ptt_reference(struct auxtrace_record *itr __maybe_unused)
+> +{
+> +	return rdtsc();
+> +}
+>
+> +
+> +static void hisi_ptt_recording_free(struct auxtrace_record *itr)
+> +{
+> +	struct hisi_ptt_recording *pttr =
+> +			container_of(itr, struct hisi_ptt_recording, itr);
+> +
+> +	free(pttr);
+> +}
+> +
+> +struct auxtrace_record *hisi_ptt_recording_init(int *err,
+> +						struct perf_pmu *hisi_ptt_pmu)
+> +{
+> +	struct hisi_ptt_recording *pttr;
+> +
+> +	if (!hisi_ptt_pmu) {
+> +		*err = -ENODEV;
+> +		return NULL;
+> +	}
+> +
+> +	pttr = zalloc(sizeof(struct hisi_ptt_recording));
+> +	if (!pttr) {
+> +		*err = -ENOMEM;
+> +		return NULL;
+> +	}
+> +
+> +	pttr->hisi_ptt_pmu = hisi_ptt_pmu;
+> +	pttr->itr.pmu = hisi_ptt_pmu;
+> +	pttr->itr.recording_options = hisi_ptt_recording_options;
+> +	pttr->itr.info_priv_size = hisi_ptt_info_priv_size;
+> +	pttr->itr.info_fill = hisi_ptt_info_fill;
+> +	pttr->itr.free = hisi_ptt_recording_free;
+> +	pttr->itr.reference = hisi_ptt_reference;
+> +	pttr->itr.read_finish = auxtrace_record__read_finish;
+> +	pttr->itr.alignment = 0;
+> +
+> +	*err = 0;
+> +	return &pttr->itr;
+> +}
+> diff --git a/tools/perf/util/Build b/tools/perf/util/Build
+> index 9a7209a99e16..95d2d76c52da 100644
+> --- a/tools/perf/util/Build
+> +++ b/tools/perf/util/Build
+> @@ -116,6 +116,8 @@ perf-$(CONFIG_AUXTRACE) += intel-pt.o
+>  perf-$(CONFIG_AUXTRACE) += intel-bts.o
+>  perf-$(CONFIG_AUXTRACE) += arm-spe.o
+>  perf-$(CONFIG_AUXTRACE) += arm-spe-decoder/
+> +perf-$(CONFIG_AUXTRACE) += hisi_ptt.o
+> +perf-$(CONFIG_AUXTRACE) += hisi-ptt-decoder/
+>  perf-$(CONFIG_AUXTRACE) += s390-cpumsf.o
+>  
+>  ifdef CONFIG_LIBOPENCSD
+> diff --git a/tools/perf/util/auxtrace.c b/tools/perf/util/auxtrace.c
+> index df1c5bbbaa0d..f4841ebaf314 100644
+> --- a/tools/perf/util/auxtrace.c
+> +++ b/tools/perf/util/auxtrace.c
+> @@ -51,6 +51,7 @@
+>  #include "intel-pt.h"
+>  #include "intel-bts.h"
+>  #include "arm-spe.h"
+> +#include "hisi_ptt.h"
+>  #include "s390-cpumsf.h"
+>  #include "util/mmap.h"
+>  
+> @@ -1281,6 +1282,9 @@ int perf_event__process_auxtrace_info(struct perf_session *session,
+>  	case PERF_AUXTRACE_S390_CPUMSF:
+>  		err = s390_cpumsf_process_auxtrace_info(event, session);
+>  		break;
+> +	case PERF_AUXTRACE_HISI_PTT:
+> +		err = hisi_ptt_process_auxtrace_info(event, session);
+> +		break;
+>  	case PERF_AUXTRACE_UNKNOWN:
+>  	default:
+>  		return -EINVAL;
+> diff --git a/tools/perf/util/auxtrace.h b/tools/perf/util/auxtrace.h
+> index dc38b6f57232..3858c5752ead 100644
+> --- a/tools/perf/util/auxtrace.h
+> +++ b/tools/perf/util/auxtrace.h
+> @@ -48,6 +48,7 @@ enum auxtrace_type {
+>  	PERF_AUXTRACE_CS_ETM,
+>  	PERF_AUXTRACE_ARM_SPE,
+>  	PERF_AUXTRACE_S390_CPUMSF,
+> +	PERF_AUXTRACE_HISI_PTT,
+>  };
+>  
+>  enum itrace_period_type {
+> diff --git a/tools/perf/util/hisi-ptt-decoder/Build b/tools/perf/util/hisi-ptt-decoder/Build
+> new file mode 100644
+> index 000000000000..db3db8b75033
+> --- /dev/null
+> +++ b/tools/perf/util/hisi-ptt-decoder/Build
+> @@ -0,0 +1 @@
+> +perf-$(CONFIG_AUXTRACE) += hisi-ptt-pkt-decoder.o
+> diff --git a/tools/perf/util/hisi-ptt-decoder/hisi-ptt-pkt-decoder.c b/tools/perf/util/hisi-ptt-decoder/hisi-ptt-pkt-decoder.c
+> new file mode 100644
+> index 000000000000..3fb7a6949209
+> --- /dev/null
+> +++ b/tools/perf/util/hisi-ptt-decoder/hisi-ptt-pkt-decoder.c
+> @@ -0,0 +1,170 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * HiSilicon PCIe Trace and Tuning (PTT) support
+> + * Copyright (c) 2022 HiSilicon Technologies Co., Ltd.
+> + */
+> +
+> +#include <stdlib.h>
+> +#include <stdio.h>
+> +#include <string.h>
+> +#include <endian.h>
+> +#include <byteswap.h>
+> +#include <linux/bitops.h>
+> +#include <stdarg.h>
+> +
+> +#include "../color.h"
+> +#include "hisi-ptt-pkt-decoder.h"
+> +
+> +/*
+> + * For 8DW format, the bit[31:11] of DW0 is always 0x1fffff, which can be
+> + * used to distinguish the data format.
+> + * 8DW format is like:
+> + *   bits [                 31:11                 ][       10:0       ]
+> + *        |---------------------------------------|-------------------|
+> + *    DW0 [                0x1fffff               ][ Reserved (0x7ff) ]
+> + *    DW1 [                       Prefix                              ]
+> + *    DW2 [                     Header DW0                            ]
+> + *    DW3 [                     Header DW1                            ]
+> + *    DW4 [                     Header DW2                            ]
+> + *    DW5 [                     Header DW3                            ]
+> + *    DW6 [                   Reserved (0x0)                          ]
+> + *    DW7 [                        Time                               ]
+> + *
+> + * 4DW format is like:
+> + *   bits [31:30] [ 29:25 ][24][23][22][21][    20:11   ][    10:0    ]
+> + *        |-----|---------|---|---|---|---|-------------|-------------|
+> + *    DW0 [ Fmt ][  Type  ][T9][T8][TH][SO][   Length   ][    Time    ]
+> + *    DW1 [                     Header DW1                            ]
+> + *    DW2 [                     Header DW2                            ]
+> + *    DW3 [                     Header DW3                            ]
+> + */
+> +
+> +enum hisi_ptt_8dw_pkt_field_type {
+> +	HISI_PTT_8DW_PREFIX,
+> +	HISI_PTT_8DW_HEAD0,
+> +	HISI_PTT_8DW_HEAD1,
+> +	HISI_PTT_8DW_HEAD2,
+> +	HISI_PTT_8DW_HEAD3,
+> +	HISI_PTT_8DW_TIME,
+> +	HISI_PTT_8DW_TYPE_MAX
+> +};
+> +
+> +enum hisi_ptt_4dw_pkt_field_type {
+> +	HISI_PTT_4DW_HEAD1,
+> +	HISI_PTT_4DW_HEAD2,
+> +	HISI_PTT_4DW_HEAD3,
+> +	HISI_PTT_4DW_TYPE_MAX
+> +};
+> +
+> +static const char * const hisi_ptt_8dw_pkt_field_name[] = {
+> +	[HISI_PTT_8DW_PREFIX]	= "Prefix",
+> +	[HISI_PTT_8DW_HEAD0]	= "Header DW0",
+> +	[HISI_PTT_8DW_HEAD1]	= "Header DW1",
+> +	[HISI_PTT_8DW_HEAD2]	= "Header DW2",
+> +	[HISI_PTT_8DW_HEAD3]	= "Header DW3",
+> +	[HISI_PTT_8DW_TIME]	= "Time",
+> +};
+> +
+> +static const char * const hisi_ptt_4dw_pkt_field_name[] = {
+> +	[HISI_PTT_4DW_HEAD1]	= "Header DW1",
+> +	[HISI_PTT_4DW_HEAD2]	= "Header DW2",
+> +	[HISI_PTT_4DW_HEAD3]	= "Header DW3",
+> +};
+> +
+> +/* offset of each member is determined by format of 8dw packet. */
+> +static uint32_t hisi_ptt_8dw_pkt_field_offset[] = {
+> +	[HISI_PTT_8DW_PREFIX]	= 4,
+> +	[HISI_PTT_8DW_HEAD0]	= 4,
+> +	[HISI_PTT_8DW_HEAD1]	= 4,
+> +	[HISI_PTT_8DW_HEAD2]	= 4,
+> +	[HISI_PTT_8DW_HEAD3]	= 4,
+> +	[HISI_PTT_8DW_TIME]	= 8,
+> +};
+
+You could define a structure hisi_ptt_8dw (just like hisi_ptt_4dw) so
+that can avoid to define this field offset structure.
+
+It's unusal to define data structure for offset, another way is to
+define macros for offset values.
+
+> +
+> +union hisi_ptt_4dw {
+> +	struct {
+> +		uint32_t format : 2;
+> +		uint32_t type : 5;
+> +		uint32_t t9 : 1;
+> +		uint32_t t8 : 1;
+> +		uint32_t th : 1;
+> +		uint32_t so : 1;
+> +		uint32_t len : 10;
+> +		uint32_t time : 11;
+> +	};
+> +	uint32_t value;
+> +};
+> +
+> +static void hisi_ptt_print_pkt(const unsigned char *buf, int *pos, const char *desc)
+> +{
+> +	const char *color = PERF_COLOR_BLUE;
+> +	int field_len = sizeof(uint32_t);
+> +	int i;
+> +
+> +	printf(".");
+> +	color_fprintf(stdout, color, "  %08x: ", *pos);
+> +	for (i = 0; i < field_len; i++)
+> +		color_fprintf(stdout, color, "%02x ", buf[i]);
+> +	for (i = 0; i < HISI_PTT_MAX_SPACE_LEN; i++)
+> +		color_fprintf(stdout, color, "   ");
+> +	color_fprintf(stdout, color, "  %s\n", desc);
+> +	*pos += field_len;
+> +}
+> +
+> +static int hisi_ptt_8dw_kpt_desc(const unsigned char *buf, int pos)
+> +{
+> +	int i;
+> +
+> +	for (i = HISI_PTT_8DW_PREFIX; i < HISI_PTT_8DW_TYPE_MAX; i++) {
+> +		buf += hisi_ptt_8dw_pkt_field_offset[i];
+> +		hisi_ptt_print_pkt(buf, &pos, hisi_ptt_8dw_pkt_field_name[i]);
+> +	}
+> +
+> +	return HISI_PTT_8DW_PKT_SIZE;
+> +}
+> +
+> +static void hisi_ptt_4dw_print_dw0(const unsigned char *buf, int *pos)
+> +{
+> +	const char *color = PERF_COLOR_BLUE;
+> +	int field_len = sizeof(uint32_t);
+> +	union hisi_ptt_4dw dw0;
+> +	int i;
+> +
+> +	dw0.value = *(uint32_t *)buf;
+> +	printf(".");
+> +	color_fprintf(stdout, color, "  %08x: ", *pos);
+> +	for (i = 0; i < field_len; i++)
+> +		color_fprintf(stdout, color, "%02x ", buf[i]);
+> +	for (i = 0; i < HISI_PTT_MAX_SPACE_LEN; i++)
+> +		color_fprintf(stdout, color, "   ");
+> +
+> +	color_fprintf(stdout, color,
+> +		      "  %s %x %s %x %s %x %s %x %s %x %s %x %s %x %s %x\n",
+> +		      "Format", dw0.format, "Type", dw0.type, "T9", dw0.t9,
+> +		      "T8", dw0.t8, "TH", dw0.th, "SO", dw0.so, "Length",
+> +		      dw0.len, "Time", dw0.time);
+> +
+> +	*pos += field_len;
+> +}
+> +
+> +static int hisi_ptt_4dw_kpt_desc(const unsigned char *buf, int pos)
+> +{
+> +	int i;
+> +
+> +	hisi_ptt_4dw_print_dw0(buf, &pos);
+> +
+> +	for (i = HISI_PTT_4DW_HEAD1; i < HISI_PTT_4DW_TYPE_MAX; i++) {
+> +		buf += sizeof(uint32_t);
+> +		hisi_ptt_print_pkt(buf, &pos, hisi_ptt_4dw_pkt_field_name[i]);
+> +	}
+> +
+> +	return HISI_PTT_4DW_PKT_SIZE;
+> +}
+> +
+> +int hisi_ptt_pkt_desc(const unsigned char *buf, int pos, enum hisi_ptt_pkt_type type)
+> +{
+> +	if (type == HISI_PTT_8DW_PKT)
+> +		return hisi_ptt_8dw_kpt_desc(buf, pos);
+> +
+> +	return hisi_ptt_4dw_kpt_desc(buf, pos);
+> +}
+> diff --git a/tools/perf/util/hisi-ptt-decoder/hisi-ptt-pkt-decoder.h b/tools/perf/util/hisi-ptt-decoder/hisi-ptt-pkt-decoder.h
+> new file mode 100644
+> index 000000000000..20c51f230cac
+> --- /dev/null
+> +++ b/tools/perf/util/hisi-ptt-decoder/hisi-ptt-pkt-decoder.h
+> @@ -0,0 +1,28 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * HiSilicon PCIe Trace and Tuning (PTT) support
+> + * Copyright (c) 2022 HiSilicon Technologies Co., Ltd.
+> + */
+> +
+> +#ifndef INCLUDE__HISI_PTT_PKT_DECODER_H__
+> +#define INCLUDE__HISI_PTT_PKT_DECODER_H__
+> +
+> +#include <stddef.h>
+> +#include <stdint.h>
+> +
+> +#define HISI_PTT_PKT_DESC_MAX		256
+> +#define HISI_PTT_NEED_MORE_BYTES	-1
+> +#define HISI_PTT_8DW_CHECK_MASK		GENMASK(31, 11)
+> +#define HISI_PTT_IS_8DW_PKT		GENMASK(31, 11)
+> +#define HISI_PTT_8DW_PKT_SIZE		32
+> +#define HISI_PTT_4DW_PKT_SIZE		16
+> +#define HISI_PTT_MAX_SPACE_LEN		10
+> +
+> +enum hisi_ptt_pkt_type {
+> +	HISI_PTT_4DW_PKT,
+> +	HISI_PTT_8DW_PKT,
+> +};
+> +
+> +int hisi_ptt_pkt_desc(const unsigned char *buf, int pos, enum hisi_ptt_pkt_type type);
+> +
+> +#endif
+> diff --git a/tools/perf/util/hisi_ptt.c b/tools/perf/util/hisi_ptt.c
+> new file mode 100644
+> index 000000000000..e2934214763c
+> --- /dev/null
+> +++ b/tools/perf/util/hisi_ptt.c
+> @@ -0,0 +1,218 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * HiSilicon PCIe Trace and Tuning (PTT) support
+> + * Copyright (c) 2022 HiSilicon Technologies Co., Ltd.
+> + */
+> +
+> +#include <byteswap.h>
+> +#include <endian.h>
+> +#include <errno.h>
+> +#include <inttypes.h>
+> +#include <linux/bitops.h>
+> +#include <linux/kernel.h>
+> +#include <linux/log2.h>
+> +#include <linux/types.h>
+> +#include <linux/zalloc.h>
+> +#include <stdlib.h>
+> +#include <unistd.h>
+> +
+> +#include "auxtrace.h"
+> +#include "color.h"
+> +#include "debug.h"
+> +#include "evlist.h"
+> +#include "evsel.h"
+> +#include "hisi_ptt.h"
+> +#include "hisi-ptt-decoder/hisi-ptt-pkt-decoder.h"
+> +#include "machine.h"
+> +#include "session.h"
+> +#include "symbol.h"
+> +#include "tool.h"
+> +#include "util/synthetic-events.h"
+> +
+> +struct hisi_ptt {
+> +	struct auxtrace auxtrace;
+> +	struct auxtrace_queues queues;
+> +	u32 auxtrace_type;
+> +	struct perf_session *session;
+> +	struct machine *machine;
+> +	u32 pmu_type;
+> +};
+> +
+> +struct hisi_ptt_queue {
+> +	struct hisi_ptt *ptt;
+> +	struct auxtrace_buffer *buffer;
+> +};
+> +
+> +static enum hisi_ptt_pkt_type hisi_ptt_check_packet_type(unsigned char *buf)
+> +{
+> +	uint32_t head = *(uint32_t *)buf;
+> +
+> +	if ((HISI_PTT_8DW_CHECK_MASK & head) == HISI_PTT_IS_8DW_PKT)
+> +		return HISI_PTT_8DW_PKT;
+> +
+> +	return HISI_PTT_4DW_PKT;
+> +}
+> +
+> +static void hisi_ptt_dump(struct hisi_ptt *ptt __maybe_unused,
+> +			  unsigned char *buf, size_t len)
+> +{
+> +	const char *color = PERF_COLOR_BLUE;
+> +	enum hisi_ptt_pkt_type type;
+> +	size_t pos = 0;
+> +	int pkt_len;
+> +
+> +	color_fprintf(stdout, color, ". ... HISI PTT data: size %zu bytes\n",
+> +		      len);
+> +
+> +	type = hisi_ptt_check_packet_type(buf);
+> +	while (len) {
+
+It's good to use condition "while (len > 0)".
+
+> +		pkt_len = hisi_ptt_pkt_desc(buf, pos, type);
+> +		if (!pkt_len)
+> +			color_fprintf(stdout, color, " Bad packet!\n");
+> +
+> +		pos += pkt_len;
+> +		buf += pkt_len;
+> +		len -= pkt_len;
+> +	}
+> +}
+> +
+> +static void hisi_ptt_dump_event(struct hisi_ptt *ptt, unsigned char *buf,
+> +				size_t len)
+> +{
+> +	printf(".\n");
+> +
+> +	hisi_ptt_dump(ptt, buf, len);
+> +}
+> +
+> +static int hisi_ptt_process_event(struct perf_session *session __maybe_unused,
+> +				  union perf_event *event __maybe_unused,
+> +				  struct perf_sample *sample __maybe_unused,
+> +				  struct perf_tool *tool __maybe_unused)
+> +{
+> +	return 0;
+> +}
+> +
+> +static int hisi_ptt_process_auxtrace_event(struct perf_session *session,
+> +					   union perf_event *event,
+> +					   struct perf_tool *tool __maybe_unused)
+> +{
+> +	struct hisi_ptt *ptt = container_of(session->auxtrace, struct hisi_ptt,
+> +					    auxtrace);
+> +	struct auxtrace_buffer *buffer;
+> +	off_t data_offset;
+> +	int fd = perf_data__fd(session->data);
+> +	int err;
+> +
+> +	if (perf_data__is_pipe(session->data)) {
+> +		data_offset = 0;
+> +	} else {
+> +		data_offset = lseek(fd, 0, SEEK_CUR);
+> +		if (data_offset == -1)
+> +			return -errno;
+> +	}
+> +
+> +	err = auxtrace_queues__add_event(&ptt->queues, session, event,
+> +					 data_offset, &buffer);
+> +	if (err)
+> +		return err;
+> +
+> +	if (dump_trace) {
+> +		if (auxtrace_buffer__get_data(buffer, fd)) {
+> +			hisi_ptt_dump_event(ptt, buffer->data, buffer->size);
+> +			auxtrace_buffer__put_data(buffer);
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int hisi_ptt_flush(struct perf_session *session __maybe_unused,
+> +			  struct perf_tool *tool __maybe_unused)
+> +{
+> +	return 0;
+> +}
+> +
+> +static void hisi_ptt_free_events(struct perf_session *session)
+> +{
+> +	struct hisi_ptt *ptt = container_of(session->auxtrace, struct hisi_ptt,
+> +					    auxtrace);
+> +	struct auxtrace_queues *queues = &ptt->queues;
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < queues->nr_queues; i++) {
+> +		free(queues->queue_array[i].priv);
+> +		queues->queue_array[i].priv = NULL;
+> +	}
+> +	auxtrace_queues__free(queues);
+> +}
+> +
+> +static void hisi_ptt_free(struct perf_session *session)
+> +{
+> +	struct hisi_ptt *ptt = container_of(session->auxtrace, struct hisi_ptt,
+> +					    auxtrace);
+> +
+> +	hisi_ptt_free_events(session);
+> +	session->auxtrace = NULL;
+> +	free(ptt);
+> +}
+> +
+> +static bool hisi_ptt_evsel_is_auxtrace(struct perf_session *session,
+> +				       struct evsel *evsel)
+> +{
+> +	struct hisi_ptt *ptt = container_of(session->auxtrace, struct hisi_ptt, auxtrace);
+> +
+> +	return evsel->core.attr.type == ptt->pmu_type;
+> +}
+> +
+> +static const char * const hisi_ptt_info_fmts[] = {
+> +	[HISI_PTT_PMU_TYPE]		= "  PMU Type           %" PRId64 "\n",
+> +};
+> +
+> +static void hisi_ptt_print_info(__u64 *arr)
+> +{
+> +	if (!dump_trace)
+> +		return;
+> +
+> +	fprintf(stdout, hisi_ptt_info_fmts[HISI_PTT_PMU_TYPE], arr[HISI_PTT_PMU_TYPE]);
+> +}
+> +
+> +int hisi_ptt_process_auxtrace_info(union perf_event *event,
+> +				   struct perf_session *session)
+> +{
+> +	struct perf_record_auxtrace_info *auxtrace_info = &event->auxtrace_info;
+> +	struct hisi_ptt *ptt;
+> +	int err;
+> +
+> +	if (auxtrace_info->header.size < HISI_PTT_AUXTRACE_PRIV_SIZE +
+> +				sizeof(struct perf_record_auxtrace_info))
+> +		return -EINVAL;
+> +
+> +	ptt = zalloc(sizeof(struct hisi_ptt));
+> +	if (!ptt)
+> +		return -ENOMEM;
+> +
+> +	err = auxtrace_queues__init(&ptt->queues);
+> +	if (err)
+> +		goto err_free;
+> +
+> +	ptt->session = session;
+> +	ptt->machine = &session->machines.host; /* No kvm support */
+> +	ptt->auxtrace_type = auxtrace_info->type;
+> +	ptt->pmu_type = auxtrace_info->priv[HISI_PTT_PMU_TYPE];
+> +
+> +	ptt->auxtrace.process_event = hisi_ptt_process_event;
+> +	ptt->auxtrace.process_auxtrace_event = hisi_ptt_process_auxtrace_event;
+> +	ptt->auxtrace.flush_events = hisi_ptt_flush;
+> +	ptt->auxtrace.free_events = hisi_ptt_free_events;
+> +	ptt->auxtrace.free = hisi_ptt_free;
+> +	ptt->auxtrace.evsel_is_auxtrace = hisi_ptt_evsel_is_auxtrace;
+> +	session->auxtrace = &ptt->auxtrace;
+> +
+> +	hisi_ptt_print_info(&auxtrace_info->priv[0]);
+> +
+> +	return 0;
+> +
+> +err_free:
+> +	free(ptt);
+> +	return err;
+> +}
+> diff --git a/tools/perf/util/hisi_ptt.h b/tools/perf/util/hisi_ptt.h
+> new file mode 100644
+> index 000000000000..c0b6cbde1221
+> --- /dev/null
+> +++ b/tools/perf/util/hisi_ptt.h
+> @@ -0,0 +1,28 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * HiSilicon PCIe Trace and Tuning (PTT) support
+> + * Copyright (c) 2022 HiSilicon Technologies Co., Ltd.
+> + */
+> +
+> +#ifndef INCLUDE__PERF_HISI_PTT_H__
+> +#define INCLUDE__PERF_HISI_PTT_H__
+> +
+> +#define HISI_PTT_PMU_NAME "hisi_ptt"
+> +enum {
+> +	HISI_PTT_PMU_TYPE,
+> +	HISI_PTT_PER_CPU_MMAPS,
+
+HISI_PTT_PER_CPU_MMAPS is not used, so can remove it.
+
+Thanks,
+Leo
+
+> +	HISI_PTT_AUXTRACE_PRIV_MAX,
+> +};
+> +
+> +#define HISI_PTT_AUXTRACE_PRIV_SIZE (HISI_PTT_AUXTRACE_PRIV_MAX * sizeof(u64))
+> +union perf_event;
+> +struct perf_session;
+> +struct perf_pmu;
+> +
+> +struct auxtrace_record *hisi_ptt_recording_init(int *err,
+> +						struct perf_pmu *hisi_ptt_pmu);
+> +
+> +int hisi_ptt_process_auxtrace_info(union perf_event *event,
+> +				   struct perf_session *session);
+> +
+> +#endif
+> -- 
+> 2.24.0
+> 
+> _______________________________________________
+> iommu mailing list
+> iommu@lists.linux-foundation.org
+> https://lists.linuxfoundation.org/mailman/listinfo/iommu

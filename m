@@ -2,107 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E165515CDC
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 14:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F9E7515CB0
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 14:13:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239419AbiD3MZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 08:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53216 "EHLO
+        id S241632AbiD3MQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 08:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232836AbiD3MZm (ORCPT
+        with ESMTP id S239527AbiD3MQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 08:25:42 -0400
-X-Greylist: delayed 527 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 30 Apr 2022 05:22:20 PDT
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8527B12E;
-        Sat, 30 Apr 2022 05:22:20 -0700 (PDT)
-Date:   Sat, 30 Apr 2022 14:13:27 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=t-8ch.de; s=mail;
-        t=1651320808; bh=DT5/86canTZHX2ROrTMFnYpWQTQ8t6bIymKCu+253LY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L9Y6GqstX49RWzFh+5HGKKco8NsZfj3SN4p+EcvonpQAphgOVz6FfS8Wt7CuGu/Hw
-         ilTs6ccH990Ei+1wC/g9xyowAMV7dRKAtDidxpQY0NnkTm/BMQVP5dLMnyogdx/rlt
-         4eCN3Ih0FvKWM7Luybm7G/GUbgFBYos2inKltwM8=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Mark Pearson <markpearson@lenovo.com>
-Cc:     Lyude Paul <lyude@redhat.com>,
-        ibm-acpi-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
-        Mark Gross <markgross@kernel.org>
-Subject: Re: [External] [PATCH 1/2] platform/x86: thinkpad_acpi: Restore X1
- Carbon 9th Gen dual fan quirk
-Message-ID: <9270b2da-0cca-422f-8bf8-4b1fb9aa363c@t-8ch.de>
-References: <20220429211418.4546-1-lyude@redhat.com>
- <20220429211418.4546-2-lyude@redhat.com>
- <d3461670-a905-4956-4f4d-d847adf4289b@lenovo.com>
+        Sat, 30 Apr 2022 08:16:56 -0400
+Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [IPv6:2001:4b7a:2000:18::168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75FCA66CAD;
+        Sat, 30 Apr 2022 05:13:32 -0700 (PDT)
+Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id DC5AD3F7B7;
+        Sat, 30 Apr 2022 14:13:29 +0200 (CEST)
+Date:   Sat, 30 Apr 2022 14:13:28 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Pavel Machek <pavel@ucw.cz>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v14 1/2] dt-bindings: leds: Add Qualcomm Light Pulse
+ Generator binding
+Message-ID: <20220430121328.35cycpztigw3v7q3@SoMainline.org>
+References: <20220303214300.59468-1-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d3461670-a905-4956-4f4d-d847adf4289b@lenovo.com>
-Jabber-ID: thomas@t-8ch.de
-X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
-X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220303214300.59468-1-bjorn.andersson@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
-
-On 2022-04-29 21:25-0400, Mark Pearson wrote:
-> Hi Lyude
+On 2022-03-03 13:42:59, Bjorn Andersson wrote:
+> This adds the binding document describing the three hardware blocks
+> related to the Light Pulse Generator found in a wide range of Qualcomm
+> PMICs.
 > 
-> On 4/29/22 17:14, Lyude Paul wrote:
-> > The new method of probing dual fan support introduced in:
-> > 
-> > bf779aaf56ea ("platform/x86: thinkpad_acpi: Add dual fan probe")
-> > 
-> > While this commit says this works on the X1 Carbon 9th Gen, it actually
-> > just results in hiding the second fan on my local machine. Additionally,
-> > I'm fairly sure this machine powers on quite often without either of the
-> > two fans spinning.
-> > 
-> > So let's fix this by adding back the dual fan quirk for the X1 Carbon 9th
-> > Gen.
-> > 
-> [..]
->
-> I just double checked this on my X1C9 - and it's working correctly. 2nd
-> fan is detected correctly.
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
 > 
-> I'd rather understand why it's not working on your setup then just
-> re-introduce the quirk.
+> Changes since v13:
+> - None
 > 
-> What happens on your system when the
->   res = fan2_get_speed(&speed);
-> is called? If that is failing it means your 2nd fan isn't responding and
-> that's not supposed to happen. Could you let me know if you get an error
-> code, if it happens every boot, etc
-> I assume when the function is called later it works successfully?
+> Changes since v12:
+> - None
+> 
+>  .../bindings/leds/leds-qcom-lpg.yaml          | 173 ++++++++++++++++++
+>  1 file changed, 173 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml b/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
+> new file mode 100644
+> index 000000000000..336bd8e10efd
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
+> @@ -0,0 +1,173 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/leds/leds-qcom-lpg.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm Light Pulse Generator
+> +
+> +maintainers:
+> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
+> +
+> +description: >
+> +  The Qualcomm Light Pulse Generator consists of three different hardware blocks;
+> +  a ramp generator with lookup table, the light pulse generator and a three
+> +  channel current sink. These blocks are found in a wide range of Qualcomm PMICs.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,pm8150b-lpg
+> +      - qcom,pm8150l-lpg
+> +      - qcom,pm8916-pwm
+> +      - qcom,pm8941-lpg
+> +      - qcom,pm8994-lpg
+> +      - qcom,pmc8180c-lpg
+> +      - qcom,pmi8994-lpg
+> +      - qcom,pmi8998-lpg
+> +
+> +  "#pwm-cells":
+> +    const: 2
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+> +
+> +  qcom,power-source:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      power-source used to drive the output, as defined in the datasheet.
+> +      Should be specified if the TRILED block is present
 
-I have the same issue.
+Upon closer inspection this is only true if the TRILED block also has a
+SRC register which appears to be optional.  Is it worth mentioning that
+here too?
 
-To me it looks like this:
+- Marijn
 
-Probing for the second fan calls fan2_get_speed(), this calls
-fan_select_fan2() which in turn checks that tp_features.second_fan is set.
-But at this point in the tp_features.second_fan can not yet be set because it
-is either set from quirks or *after* the probing.
-
-Maybe some of the matches for the quirk TPACPI_FAN_2FAN should also have
-matched this device?
-It doesn't do so on my device.
-
-> Also please confirm which BIOS and EC version you have.
-
-Linux: 5.17.5
-BIOS Revision: 1.51
-Firmware Revision: 1.32
-
-Thomas
+> +    enum: [0, 1, 3]
+> +
+> +  qcom,dtest:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> +    description: >
+> +      A list of integer pairs, where each pair represent the dtest line the
+> +      particular channel should be connected to and the flags denoting how the
+> +      value should be outputed, as defined in the datasheet. The number of
+> +      pairs should be the same as the number of channels.
+> +    items:
+> +      items:
+> +        - description: dtest line to attach
+> +        - description: flags for the attachment
+> +
+> +  multi-led:
+> +    type: object
+> +    $ref: leds-class-multicolor.yaml#
+> +    properties:
+> +      "#address-cells":
+> +        const: 1
+> +
+> +      "#size-cells":
+> +        const: 0
+> +
+> +    patternProperties:
+> +      "^led@[0-9a-f]$":
+> +        type: object
+> +        $ref: common.yaml#
+> +
+> +patternProperties:
+> +  "^led@[0-9a-f]$":
+> +    type: object
+> +    $ref: common.yaml#
+> +
+> +    properties:
+> +      reg: true
+> +
+> +    required:
+> +      - reg
+> +
+> +required:
+> +  - compatible
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/leds/common.h>
+> +
+> +    led-controller {
+> +      compatible = "qcom,pmi8994-lpg";
+> +
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      qcom,power-source = <1>;
+> +
+> +      qcom,dtest = <0 0>,
+> +                   <0 0>,
+> +                   <0 0>,
+> +                   <4 1>;
+> +
+> +      led@1 {
+> +        reg = <1>;
+> +        color = <LED_COLOR_ID_GREEN>;
+> +        function = LED_FUNCTION_INDICATOR;
+> +        function-enumerator = <1>;
+> +      };
+> +
+> +      led@2 {
+> +        reg = <2>;
+> +        color = <LED_COLOR_ID_GREEN>;
+> +        function = LED_FUNCTION_INDICATOR;
+> +        function-enumerator = <0>;
+> +        default-state = "on";
+> +      };
+> +
+> +      led@3 {
+> +        reg = <3>;
+> +        color = <LED_COLOR_ID_GREEN>;
+> +        function = LED_FUNCTION_INDICATOR;
+> +        function-enumerator = <2>;
+> +      };
+> +
+> +      led@4 {
+> +        reg = <4>;
+> +        color = <LED_COLOR_ID_GREEN>;
+> +        function = LED_FUNCTION_INDICATOR;
+> +        function-enumerator = <3>;
+> +      };
+> +    };
+> +  - |
+> +    #include <dt-bindings/leds/common.h>
+> +
+> +    led-controller {
+> +      compatible = "qcom,pmi8994-lpg";
+> +
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      qcom,power-source = <1>;
+> +
+> +      multi-led {
+> +        color = <LED_COLOR_ID_RGB>;
+> +        function = LED_FUNCTION_STATUS;
+> +
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        led@1 {
+> +          reg = <1>;
+> +          color = <LED_COLOR_ID_RED>;
+> +        };
+> +
+> +        led@2 {
+> +          reg = <2>;
+> +          color = <LED_COLOR_ID_GREEN>;
+> +        };
+> +
+> +        led@3 {
+> +          reg = <3>;
+> +          color = <LED_COLOR_ID_BLUE>;
+> +        };
+> +      };
+> +    };
+> +  - |
+> +    pwm-controller {
+> +      compatible = "qcom,pm8916-pwm";
+> +      #pwm-cells = <2>;
+> +    };
+> +...
+> -- 
+> 2.33.1
+> 

@@ -2,137 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2D6A515B31
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 09:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7152515B3F
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 10:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241414AbiD3IDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 04:03:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46194 "EHLO
+        id S1382348AbiD3IEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 04:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240257AbiD3IC7 (ORCPT
+        with ESMTP id S1350868AbiD3IEI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 04:02:59 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4D592304;
-        Sat, 30 Apr 2022 00:59:38 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id s14so8930399plk.8;
-        Sat, 30 Apr 2022 00:59:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=DJBq99qO9Tsa58nKQyvLM/DpS2b10vTbYH8zK8EmJoU=;
-        b=jrdM+BzsGglIBJVvzc2PsQYWbzSYjmVi2Z7UKzDjBGQJlaPqkuvRYoH3Tf9oJmuwFs
-         lF9bFR81JgcbSwsvJcuSOCdw9YOMnSw+SanfoEuAL4pouTC/dIFCV08EP2aZkbxVkgdV
-         RA9w04i91Nu41slYpq0OAnb06MamdSyNkPG10xvcn1NVZCcR6gHHb5pZK2KExpJOTD/p
-         XI1HBAUZE/HZezR97lVrjNltwRz4Sy0S56NdKhd9YlejxFRx3hV4SS6HehEfyvMZ7H6J
-         RFnhiFEkDL24b4+ymiKeeBrtUCkhl2PXCdlTLH/4yoQDl315LVU6JyLaa/Gl9kb0Zc9G
-         4NsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=DJBq99qO9Tsa58nKQyvLM/DpS2b10vTbYH8zK8EmJoU=;
-        b=0UGPPri+dgPOzTdRLW5BT6oDk5bjMqzSwhZHOtd/s7IG+HlzNKGdLVzGyg91173l1A
-         otXfR73r+FjL+dZaLeHhb/UIoost71lcLK9LmeEpr5sZ5zIEmDnbo0xLw9BgjLXuGh7a
-         D6Or6YDdaXLGdWfGveHv1Wi2lub+rVu6hHoyR5TtFbJEc3b803vK2XSL23VAdDsvbv/Z
-         z05Br2e7MrRi/pLqrhS0uOZlYzgR9Hnxe2JLe97SrcaeqTAVi999HXVmWNsmOCDOvoUV
-         L8Ur2N6SGFZNyWSJ1l9XYExjyAvf10hGqlVnS8d5zJrmBEqHR/aZf7B8njZez2+2pOgf
-         EiVw==
-X-Gm-Message-State: AOAM53095SbzQyBzrjZv/helkYT/SkkNUy/BUBg9DagbQGy5ZkukTpcw
-        czTu7ZNqkMw16D1YJaqe8WY=
-X-Google-Smtp-Source: ABdhPJyBlCluj+mzHILcI0ZGhLDL6AWyexTWYsFm7TkN0LmVdH1ZSq1OvYRiqS5FchtPpyrel1iMrw==
-X-Received: by 2002:a17:90b:1649:b0:1d2:bdc9:df2d with SMTP id il9-20020a17090b164900b001d2bdc9df2dmr8083646pjb.158.1651305578212;
-        Sat, 30 Apr 2022 00:59:38 -0700 (PDT)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id c2-20020a170902c2c200b0015e8d4eb2d9sm844062pla.291.2022.04.30.00.59.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 30 Apr 2022 00:59:37 -0700 (PDT)
-Message-ID: <7689b502-8c34-85b1-54e0-7a3b5e3c2bd1@gmail.com>
-Date:   Sat, 30 Apr 2022 16:59:33 +0900
+        Sat, 30 Apr 2022 04:04:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC7523BD6;
+        Sat, 30 Apr 2022 01:00:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DDE52B81CEB;
+        Sat, 30 Apr 2022 08:00:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 85970C385AA;
+        Sat, 30 Apr 2022 08:00:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651305641;
+        bh=pe08Mdjqla3FNT96mNNuQXP8ILn0+/mHR01kJNYaDic=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=kpvXG6gAXQ7u8p7VNWhLHi8OioRjTUEMNeyaytnu64Tlm3WDc+9G65aHyH17I6Diz
+         5jBIXhCOYaE9MWPbblLVP34glVbcEXDFadZeC1m/ozWT0DtLOuk2lY2OLQTqEZxjcv
+         UF1SUB7qrKBQNqJGV7DS+LErHbW5e24ev50IE4aqZ37tG1QD6bYzt2wRvMtP19xyET
+         kb+hm3gSIlqoDwVSbGXCbAfFHb5+Fm+WKfhA6RRKW2aw3Bc5cVLkCO390GaRHqO0JS
+         QYcBYGc+38fsaLliNEJEjp8cr1wYSjcYriu5X5/AHsphXMh14EX8ojqfJUpVrlLxY1
+         S/K+3C67aDB6Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5DB96E8DBDA;
+        Sat, 30 Apr 2022 08:00:41 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Tsugikazu Shibata <shibata@linuxfoundation.org>,
-        Kosuke Fujimoto <fujimotokosuke0@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Akira Yokosawa <akiyks@gmail.com>
-From:   Akira Yokosawa <akiyks@gmail.com>
-Subject: [PATCH] MAINTAINERS: Add entry for DOCUMENTATION/JAPANESE
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v3] net: SO_RCVMARK socket option for SO_MARK with
+ recvmsg()
+From:   patchwork-bot+bluetooth@kernel.org
+Message-Id: <165130564137.32506.12098247313333350008.git-patchwork-notify@kernel.org>
+Date:   Sat, 30 Apr 2022 08:00:41 +0000
+References: <20220427200259.2564-1-lnx.erin@gmail.com>
+In-Reply-To: <20220427200259.2564-1-lnx.erin@gmail.com>
+To:     Erin MacNeil <lnx.erin@gmail.com>
+Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, arnd@arndb.de, marcel@holtmann.org,
+        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        socketcan@hartkopp.net, mkl@pengutronix.de, robin@protonic.nl,
+        linux@rempel-privat.de, kernel@pengutronix.de,
+        alex.aring@gmail.com, stefan@datenfreihafen.org,
+        yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
+        jk@codeconstruct.com.au, matt@codeconstruct.com.au,
+        vyasevich@gmail.com, nhorman@tuxdriver.com,
+        marcelo.leitner@gmail.com, edumazet@google.com, lmb@cloudflare.com,
+        ptikhomirov@virtuozzo.com, m@lambda.lt, hmukos@yandex-team.ru,
+        sfr@canb.auug.org.au, weiwan@google.com, yangbo.lu@nxp.com,
+        fw@strlen.de, tglx@linutronix.de, rpalethorpe@suse.com,
+        willemb@google.com, liuhangbin@gmail.com, pablo@netfilter.org,
+        rsanger@wand.net.nz, yajun.deng@linux.dev,
+        jiapeng.chong@linux.alibaba.com, linux-alpha@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+        netdev@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to the lack of an entry for the Japanese translation of
-documentation, Kosuke Fujimoto needed to ask the status of
-its maintenance [1].
+Hello:
 
-Add an entry for DOCUMENTATION/JAPANESE as a sub-subsystem
-under the DOCUMENTATION subsystem to make it easier for
-another prospective contributor to know there is someone
-who takes care of Japanese translation.
+This patch was applied to bluetooth/bluetooth-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-As a first step, install myself as a designated reviewer.
-Hopefully, other interested members get accustomed to the
-kernel-dev workflow and would get ready to be
-(co-)maintainers/reviewers shortly.
+On Wed, 27 Apr 2022 16:02:37 -0400 you wrote:
+> Adding a new socket option, SO_RCVMARK, to indicate that SO_MARK
+> should be included in the ancillary data returned by recvmsg().
+> 
+> Renamed the sock_recv_ts_and_drops() function to sock_recv_cmsgs().
+> 
+> Signed-off-by: Erin MacNeil <lnx.erin@gmail.com>
+> 
+> [...]
 
-[1]: https://lore.kernel.org/r/172fa015-26df-c978-853d-3aba67c581cc@gmail.com/
+Here is the summary with links:
+  - [net-next,v3] net: SO_RCVMARK socket option for SO_MARK with recvmsg()
+    https://git.kernel.org/bluetooth/bluetooth-next/c/6fd1d51cfa25
 
-Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-Cc: Jonathan Corbet  <corbet@lwn.net>
-Cc: Tsugikazu Shibata <shibata@linuxfoundation.org>
-Cc: Kosuke Fujimoto <fujimotokosuke0@gmail.com>
----
-Hi Jon,
-
-So this took a little longer than I had originally expected.
-Shibata-san says he is not confident enough to be in MAINTAINERS
-at the moment, as he has just woken up from several-year
-"hibernation"
-
-I'm installing myself in the "R:" field.
-I don't think being in "M:" or "R:" matters much in practice,
-but I think I'd be better suited as a reviewer.
-
-If there exists such a rule that every entry in MAINTAINERS is
-required to have at least one member listed in the "M:" field,
-I'm OK with filling the role.  Thoughts?
-
-        Thanks, Akira
---
- MAINTAINERS | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fd768d43e048..c31ba28a6b58 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5987,6 +5987,12 @@ L:	linux-doc@vger.kernel.org
- S:	Maintained
- F:	Documentation/translations/it_IT
- 
-+DOCUMENTATION/JAPANESE
-+R:	Akira Yokosawa <akiyks@gmail.com>
-+L:	linux-doc@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/translations/ja_JP
-+
- DONGWOON DW9714 LENS VOICE COIL DRIVER
- M:	Sakari Ailus <sakari.ailus@linux.intel.com>
- L:	linux-media@vger.kernel.org
-
-base-commit: a477b94d657875c81775b7e5147fd2671ff25ce0
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

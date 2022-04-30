@@ -2,150 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A4FA515A24
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 05:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B50D515A28
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 05:30:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382139AbiD3Dab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 23:30:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40472 "EHLO
+        id S1382149AbiD3Dd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 23:33:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232757AbiD3DaV (ORCPT
+        with ESMTP id S232757AbiD3Ddy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 23:30:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753913D48C;
-        Fri, 29 Apr 2022 20:27:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC99A624D4;
-        Sat, 30 Apr 2022 03:26:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BF49C385AD;
-        Sat, 30 Apr 2022 03:26:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651289219;
-        bh=d3ZW5fNPK57eX66J9ylKtIPChK1LOQBQAo/4SDkWPvk=;
-        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-        b=RBq81V1B0zC1wsouKSpwHcYn/RAVKgyizDbYM3/yVAZUOp35whj2HgfAFJgUfrRA9
-         KcmTRSIvFGUMxmSSHn5dZn1Lh0QP007kCZMsrNrkwdrHFWeBXLNWy0F/kxSi+BY+7H
-         JXPxxOgtE03yzUinsNtfAI2wc2Srm4MgxKbRUGvuuMnZgTzyLLZaW1rY8vR152J6AB
-         oUzNcKul34iJI0xwW5mZaFonY4WO02G1vRI+WBpsOZH3nbr/HADkYgy+YFVQwedsRv
-         MPxItXG2YhmYjIefDA943fD4PdKLLxtHUdn4brKm5TuHufjUVBbO9eGhcp/OenTLZs
-         rMBDcenRcxfyw==
-Received: by mail-wm1-f47.google.com with SMTP id p189so5541698wmp.3;
-        Fri, 29 Apr 2022 20:26:59 -0700 (PDT)
-X-Gm-Message-State: AOAM531fJLJegFSxB1thi9tfS83Yr3hxGnNF9l1Ovb2p97dEHKeOpRnt
-        A+j5oR12HHJO3l/hNlRW6GnTVa3B2myBYMqBB64=
-X-Google-Smtp-Source: ABdhPJzEDelgZYI9HaASTigWNgH5drnhUAvbr85xTlM+Xv8ERFusnHEgo96dz4tPdMyNM7ga0jrYWBKiJe3/P395BX8=
-X-Received: by 2002:a05:600c:384f:b0:393:e79f:a146 with SMTP id
- s15-20020a05600c384f00b00393e79fa146mr5823746wmr.102.1651289217537; Fri, 29
- Apr 2022 20:26:57 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a5d:64e7:0:0:0:0:0 with HTTP; Fri, 29 Apr 2022 20:26:56
- -0700 (PDT)
-In-Reply-To: <CAKYAXd_9BT7je6-UHgDYCY-WD2maxYtam0_En8pgS_FiwRJP9Q@mail.gmail.com>
-References: <20220418173923.193173-1-tadeusz.struk@linaro.org> <CAKYAXd_9BT7je6-UHgDYCY-WD2maxYtam0_En8pgS_FiwRJP9Q@mail.gmail.com>
-From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Sat, 30 Apr 2022 12:26:56 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd8sQDJyftZ_N8bgCMcMCMraQ=6_8x+QZ5XprMN3P4x9gQ@mail.gmail.com>
-Message-ID: <CAKYAXd8sQDJyftZ_N8bgCMcMCMraQ=6_8x+QZ5XprMN3P4x9gQ@mail.gmail.com>
-Subject: Re: [PATCH] exfat: check if cluster num is valid
-To:     Tadeusz Struk <tadeusz.struk@linaro.org>
-Cc:     Sungjong Seo <sj1557.seo@samsung.com>,
-        linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
+        Fri, 29 Apr 2022 23:33:54 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8E418E11
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 20:30:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651289433; x=1682825433;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=puGyqWDS+EPwdusoSES6Hr1WDpzg/Gjhm6GMobKQAqg=;
+  b=GOigZ5tLKL/E1A13IN+UaKtjOxpAthwaBAKZzuPJrRwiUvOA8i9ZK/54
+   XH1tu8g7eJEhReSyOJcUOQXkBxnBv2jfYdvEp7iLw/QCw1sMqFWUafjxq
+   u/PCnQbp5onfj8RJxnt7ukJBAbBYtbA46onLuBhIdJmaRQaCEW33H8cgm
+   JR7N6PyvH8DEnbPV9QUl5MF5uezmLkKBcJx1zgd6040fQm0WhVqgsaifp
+   JZRv61Rlri9x2uj8f8vfsgf+DA9eIDeUixJvu7jsiVQk6tX11GRpnyWcW
+   xMgvDmAcfcROme4rQH0hGbtqe71yLfiWXt5D4VzYN6xq1eXF0YDSlh8Bl
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="247383311"
+X-IronPort-AV: E=Sophos;i="5.91,187,1647327600"; 
+   d="scan'208";a="247383311"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 20:30:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,187,1647327600"; 
+   d="scan'208";a="566408444"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 29 Apr 2022 20:30:32 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nkdoV-0006pn-Nn;
+        Sat, 30 Apr 2022 03:30:31 +0000
+Date:   Sat, 30 Apr 2022 11:29:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org,
-        syzbot+a4087e40b9c13aad7892@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: [drm-msm:msm-next-staging 29/32]
+ drivers/gpu/drm/msm/dsi/dsi_host.c:918:23: warning: variable 'reg_ctrl' set
+ but not used
+Message-ID: <202204301130.wdmJpCAP-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2022-04-22 14:54 GMT+09:00, Namjae Jeon <linkinjeon@kernel.org>:
-> 2022-04-19 2:39 GMT+09:00, Tadeusz Struk <tadeusz.struk@linaro.org>:
-> Hi Tadeusz,
->
->> Syzbot reported slab-out-of-bounds read in exfat_clear_bitmap.
->> This was triggered by reproducer calling truncate with size 0,
->> which causes the following trace:
->>
->> BUG: KASAN: slab-out-of-bounds in exfat_clear_bitmap+0x147/0x490
->> fs/exfat/balloc.c:174
->> Read of size 8 at addr ffff888115aa9508 by task syz-executor251/365
->>
->> Call Trace:
->>  __dump_stack lib/dump_stack.c:77 [inline]
->>  dump_stack_lvl+0x1e2/0x24b lib/dump_stack.c:118
->>  print_address_description+0x81/0x3c0 mm/kasan/report.c:233
->>  __kasan_report mm/kasan/report.c:419 [inline]
->>  kasan_report+0x1a4/0x1f0 mm/kasan/report.c:436
->>  __asan_report_load8_noabort+0x14/0x20 mm/kasan/report_generic.c:309
->>  exfat_clear_bitmap+0x147/0x490 fs/exfat/balloc.c:174
->>  exfat_free_cluster+0x25a/0x4a0 fs/exfat/fatent.c:181
->>  __exfat_truncate+0x99e/0xe00 fs/exfat/file.c:217
->>  exfat_truncate+0x11b/0x4f0 fs/exfat/file.c:243
->>  exfat_setattr+0xa03/0xd40 fs/exfat/file.c:339
->>  notify_change+0xb76/0xe10 fs/attr.c:336
->>  do_truncate+0x1ea/0x2d0 fs/open.c:65
-> Could you please share how to reproduce this ?
-Ping, If you apply this patch to your source, there is a problem. You
-need to add +1 to EXFAT_DATA_CLUSTER_COUNT(sbi).
-and please use is_valid_cluster() to check if cluster is valid instead of it.
+tree:   https://gitlab.freedesktop.org/drm/msm.git msm-next-staging
+head:   d2dc68276133362f021bc8d429433b5818826c81
+commit: 08802f515c3cfea80b48e198de52b4fcbbef27d3 [29/32] drm/msm/dsi: Add support for DSC configuration
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220430/202204301130.wdmJpCAP-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 400775649969b9baf3bc2a510266e7912bb16ae9)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        git remote add drm-msm https://gitlab.freedesktop.org/drm/msm.git
+        git fetch --no-tags drm-msm msm-next-staging
+        git checkout 08802f515c3cfea80b48e198de52b4fcbbef27d3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/msm/ drivers/iio/adc/
 
->
-> Thanks.
->>
->> Add checks to validate if cluster number is within valid range in
->> exfat_clear_bitmap() and exfat_set_bitmap()
->>
->> Cc: Namjae Jeon <linkinjeon@kernel.org>
->> Cc: Sungjong Seo <sj1557.seo@samsung.com>
->> Cc: linux-fsdevel@vger.kernel.org
->> Cc: stable@vger.kernel.org
->> Cc: linux-kernel@vger.kernel.org
->>
->> Link:
->> https://syzkaller.appspot.com/bug?id=50381fc73821ecae743b8cf24b4c9a04776f767c
->> Reported-by: syzbot+a4087e40b9c13aad7892@syzkaller.appspotmail.com
->> Fixes: 1e49a94cf707 ("exfat: add bitmap operations")
->> Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
->> ---
->>  fs/exfat/balloc.c | 6 ++++++
->>  1 file changed, 6 insertions(+)
->>
->> diff --git a/fs/exfat/balloc.c b/fs/exfat/balloc.c
->> index 03f142307174..4ed81f86f993 100644
->> --- a/fs/exfat/balloc.c
->> +++ b/fs/exfat/balloc.c
->> @@ -149,6 +149,9 @@ int exfat_set_bitmap(struct inode *inode, unsigned
->> int
->> clu, bool sync)
->>  	struct exfat_sb_info *sbi = EXFAT_SB(sb);
->>
->>  	WARN_ON(clu < EXFAT_FIRST_CLUSTER);
->> +	if (clu > EXFAT_DATA_CLUSTER_COUNT(sbi))
->> +		return -EINVAL;
->> +
->>  	ent_idx = CLUSTER_TO_BITMAP_ENT(clu);
->>  	i = BITMAP_OFFSET_SECTOR_INDEX(sb, ent_idx);
->>  	b = BITMAP_OFFSET_BIT_IN_SECTOR(sb, ent_idx);
->> @@ -167,6 +170,9 @@ void exfat_clear_bitmap(struct inode *inode, unsigned
->> int clu, bool sync)
->>  	struct exfat_mount_options *opts = &sbi->options;
->>
->>  	WARN_ON(clu < EXFAT_FIRST_CLUSTER);
->> +	if (clu > EXFAT_DATA_CLUSTER_COUNT(sbi))
->> +		return;
->> +
->>  	ent_idx = CLUSTER_TO_BITMAP_ENT(clu);
->>  	i = BITMAP_OFFSET_SECTOR_INDEX(sb, ent_idx);
->>  	b = BITMAP_OFFSET_BIT_IN_SECTOR(sb, ent_idx);
->> --
->> 2.35.1
->>
->>
->
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/msm/dsi/dsi_host.c:918:23: warning: variable 'reg_ctrl' set but not used [-Wunused-but-set-variable]
+           u32 reg, intf_width, reg_ctrl, reg_ctrl2;
+                                ^
+   1 warning generated.
+
+
+vim +/reg_ctrl +918 drivers/gpu/drm/msm/dsi/dsi_host.c
+
+   914	
+   915	static void dsi_update_dsc_timing(struct msm_dsi_host *msm_host, bool is_cmd_mode, u32 hdisplay)
+   916	{
+   917		struct msm_display_dsc_config *dsc = msm_host->dsc;
+ > 918		u32 reg, intf_width, reg_ctrl, reg_ctrl2;
+   919		u32 slice_per_intf, total_bytes_per_intf;
+   920		u32 pkt_per_line;
+   921		u32 bytes_in_slice;
+   922		u32 eol_byte_num;
+   923	
+   924		/* first calculate dsc parameters and then program
+   925		 * compress mode registers
+   926		 */
+   927		intf_width = hdisplay;
+   928		slice_per_intf = DIV_ROUND_UP(intf_width, dsc->drm->slice_width);
+   929	
+   930		/* If slice_per_pkt is greater than slice_per_intf
+   931		 * then default to 1. This can happen during partial
+   932		 * update.
+   933		 */
+   934		if (slice_per_intf > dsc->drm->slice_count)
+   935			dsc->drm->slice_count = 1;
+   936	
+   937		slice_per_intf = DIV_ROUND_UP(hdisplay, dsc->drm->slice_width);
+   938		bytes_in_slice = DIV_ROUND_UP(dsc->drm->slice_width * dsc->drm->bits_per_pixel, 8);
+   939	
+   940		dsc->drm->slice_chunk_size = bytes_in_slice;
+   941	
+   942		total_bytes_per_intf = bytes_in_slice * slice_per_intf;
+   943	
+   944		eol_byte_num = total_bytes_per_intf % 3;
+   945		pkt_per_line = slice_per_intf / dsc->drm->slice_count;
+   946	
+   947		if (is_cmd_mode) /* packet data type */
+   948			reg = DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM0_DATATYPE(MIPI_DSI_DCS_LONG_WRITE);
+   949		else
+   950			reg = DSI_VIDEO_COMPRESSION_MODE_CTRL_DATATYPE(MIPI_DSI_COMPRESSED_PIXEL_STREAM);
+   951	
+   952		/* DSI_VIDEO_COMPRESSION_MODE & DSI_COMMAND_COMPRESSION_MODE
+   953		 * registers have similar offsets, so for below common code use
+   954		 * DSI_VIDEO_COMPRESSION_MODE_XXXX for setting bits
+   955		 */
+   956		reg |= DSI_VIDEO_COMPRESSION_MODE_CTRL_PKT_PER_LINE(pkt_per_line >> 1);
+   957		reg |= DSI_VIDEO_COMPRESSION_MODE_CTRL_EOL_BYTE_NUM(eol_byte_num);
+   958		reg |= DSI_VIDEO_COMPRESSION_MODE_CTRL_EN;
+   959	
+   960		if (is_cmd_mode) {
+   961			reg_ctrl = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL);
+   962			reg_ctrl2 = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2);
+   963	
+   964			reg_ctrl |= reg;
+   965			reg_ctrl2 |= DSI_COMMAND_COMPRESSION_MODE_CTRL2_STREAM0_SLICE_WIDTH(bytes_in_slice);
+   966	
+   967			dsi_write(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL, reg);
+   968			dsi_write(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2, reg_ctrl2);
+   969		} else {
+   970			dsi_write(msm_host, REG_DSI_VIDEO_COMPRESSION_MODE_CTRL, reg);
+   971		}
+   972	}
+   973	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

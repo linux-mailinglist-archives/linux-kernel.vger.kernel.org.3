@@ -2,53 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C5C515AC7
+	by mail.lfdr.de (Postfix) with ESMTP id 7AED9515AC6
 	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 08:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235819AbiD3G0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 02:26:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58684 "EHLO
+        id S1356068AbiD3G1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 02:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiD3G0x (ORCPT
+        with ESMTP id S235069AbiD3G0z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 02:26:53 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17ADCCFBBF
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 23:23:32 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id d22-20020a25add6000000b00645d796034fso9173833ybe.2
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 23:23:32 -0700 (PDT)
+        Sat, 30 Apr 2022 02:26:55 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A1F67D2D
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 23:23:34 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2e642be1a51so92754327b3.21
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 23:23:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=ilFEwIrkZL4LC9Sgb4TefT5GSI3sDjL/JSRtfwvlYk8=;
-        b=XKxfKiZWKR26TghXaE9JP/9B5Y+sDfK8pIqWwQVnmRr6tCybeUfbhZjxRpo0ucJoo/
-         HTpIgSk64JCRj/FOflHY/fZXfzW6VC7cvQ2zlrJLdJlWGheLb9PgBsTqCzpB6JL1UG9j
-         vGRXPlYkNgQO84nOlc6SdulmwuBBYiL1lGrgt6Y0K4GvsTvEIMF6bUwMy1DSQ1VjSZrV
-         q6dc0BEbETWghfoSGWwNDCXUZCr+fC0Mswr9CRsnJZNJ8ENNnMsRGY/KifCHphJHTfJY
-         VfY1dZQOk620wlICkjZiha3wuTpC/d5dD+5+YUFXQmFc/0smlYICvBuJmuYb7X18BmCy
-         vCNA==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=tcObfq8Nd5uZdGvF9hEbsjXFIltRilEurI4N4H1VAUs=;
+        b=kZeIqQt8Ii5glk0K9RWxv0Y8+tU5rwCkZR338TAwJ+F4sK4BcmaamZUmfXk7dLwAzU
+         VcAu8hPA+YnbCzBEFGaVJDaO/7EIWXW6g7yMvzlH+7J7rD0paNgo8fIyCG+rSklun8RT
+         R1rwEcQ1YgSx8WpDsKQIo3fz2WpK++CLYWnER5hRDPdezR/tekx6jGwC8mCMRAVjEWL+
+         HHk1XZn/2UTN29Ove66JZ2zHyO356yYI9ODkydGoFcU2vXkDAUrMvLA5HxMCx4I7q6PZ
+         s4pEROX7VJeB0owJx6mYlLjmfjzG0wAxJ+rbedBvOek/OnQoWNkoFCJS4lt4j+/KFcbz
+         1c6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=ilFEwIrkZL4LC9Sgb4TefT5GSI3sDjL/JSRtfwvlYk8=;
-        b=lVkECVIrXc6kpQQrjNa5GTr5uOJYnlQQefASuf0niDnLIuu/I1Ftm5YjR1qzP0sbeW
-         Wt6u3lunTvez2U4JpUtWOzFhhQTBU+8RA5po1Ow3LI/QVUjUbPfHdyky62prrNVPhwNG
-         HYxfm/X0xqxcQZ4DLJD2rNw0gxfnnu3H1PnrPxU34gOJTimLU16irpD004o43WD4Y/rS
-         s46Dr90nThcT1w2TXd1n6zulNKYF/JNsSUyFL6vvuXpCkr1//2C8va1Sfkec3CMFLbSA
-         y5uGhzz6nRmdeHvB2X6J3z5whv2HqNKKJP/NEGY7jonLbG/wcYM53buWzzs01MzcpUnR
-         fHLw==
-X-Gm-Message-State: AOAM530cbwRN28/dQ1ZKnFChUL0hxpF+dqSqjh+q1HvlCvblQpErBiN8
-        gRHHMS6uqLp2/qT+kZY1dHByBnIEcW6p
-X-Google-Smtp-Source: ABdhPJxVabPnLRHKvnLALt55nPTm67ZCtR+e4Nldv4elgYdhSGX2Db3giMv00gcSHR4wcL9mKDMfLYiP6UHF
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=tcObfq8Nd5uZdGvF9hEbsjXFIltRilEurI4N4H1VAUs=;
+        b=QX7IPnxZQiLv4YWejt9M1bvHGxrcIBf62H+itU0t9ygfi/kODgwnSGfli1r9kJw8+r
+         3nqwDmuVYu7eA9Eu8olah+CJQDSGPTMuxB12Yr22OpLklo3YAKMs/d0qSDPWuYJp5iwv
+         49X/+7sXxwdOezyaNe4wTXhAht/f7jbJe+GO+iq9KlIf8UtnLr+g+diF/qSeRXll2HFj
+         WCXueKKETdd5C963J0ba3KEs3bn5lsKSH8y/6SRnAR5PMH+y0VYLETBUwFx9NO8J4tzf
+         KanuQzZVX6HvZ0oJnpIIB9CzTJ44qLLfheAj6dN1XJ6V/exCc9ifteRWdSoxlGqtF9Pj
+         4VJg==
+X-Gm-Message-State: AOAM533F0NcuUAGrFUEpIOvKrMl3EuBUkLTs7jOuip+eZRn2VGL9Jyqn
+        YV8jWTlxHo2k2FFDCJScFXW/I5zQVAkZ
+X-Google-Smtp-Source: ABdhPJw+0iChHXMR8nCWK4gTypeBNpwhtyGhs4uDyTQg6LJo/pg2i4nMt1vywPBcNaBMLokt8QHaLwaMHsEr
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:2481:caab:4fd5:232b])
- (user=irogers job=sendgmr) by 2002:a25:6a05:0:b0:648:f6c0:2c19 with SMTP id
- f5-20020a256a05000000b00648f6c02c19mr2504236ybc.55.1651299811215; Fri, 29 Apr
- 2022 23:23:31 -0700 (PDT)
-Date:   Fri, 29 Apr 2022 23:23:18 -0700
-Message-Id: <20220430062324.1565215-1-irogers@google.com>
+ (user=irogers job=sendgmr) by 2002:a25:d20f:0:b0:648:d034:8708 with SMTP id
+ j15-20020a25d20f000000b00648d0348708mr2480138ybg.509.1651299813728; Fri, 29
+ Apr 2022 23:23:33 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 23:23:19 -0700
+In-Reply-To: <20220430062324.1565215-1-irogers@google.com>
+Message-Id: <20220430062324.1565215-2-irogers@google.com>
 Mime-Version: 1.0
+References: <20220430062324.1565215-1-irogers@google.com>
 X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [PATCH v4 0/6] Make evlist CPUs more accurate
+Subject: [PATCH v4 1/6] perf cpumap: Switch to using perf_cpu_map API
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -92,39 +96,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Based on the thread:
-https://lore.kernel.org/linux-perf-users/CAP-5=fVMHzTfKdpWMXtbtx7t14u2f4WzNak+F0Q93cQ7CZfhbg@mail.gmail.com/
+Switch some raw accesses to the cpu map to using the library API. This
+can help with reference count checking.
 
-First patch is a cherry-pick to avoid a conflict of:
-https://lore.kernel.org/linux-perf-users/20220414014642.3308206-2-irogers@google.com/
-Second patch makes all_cpus more accurate when there are command line CPUs.
-The third patch fixes perf stat metric-only output for uncore metrics.
-The fourth patch makes cleans up merging of dummy CPU maps.
-The fifth and sixth patch try to make user_requested_cpus and all_cpus
-clearer with documentation and by renaming all_cpus.
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/builtin-record.c          | 13 ++++++------
+ tools/perf/util/bpf_counter_cgroup.c | 31 ++++++++++++++--------------
+ 2 files changed, 22 insertions(+), 22 deletions(-)
 
-The code no longer needs to add an intersect function and so the API
-is removed and the merged API left unchangaged.
-
-Ian Rogers (6):
-  perf cpumap: Switch to using perf_cpu_map API
-  perf evlist: Clear all_cpus before propagating
-  perf stat: Avoid printing cpus with no counters
-  perf cpumap: Handle dummy maps as empty in subset
-  perf evlist: Add to user_requested_cpus documentation
-  perf evlist: Rename all_cpus
-
- tools/lib/perf/cpumap.c                  |  4 +--
- tools/lib/perf/evlist.c                  | 14 ++++++----
- tools/lib/perf/include/internal/evlist.h |  5 ++--
- tools/perf/builtin-record.c              | 13 +++++----
- tools/perf/tests/cpumap.c                | 10 ++++++-
- tools/perf/util/bpf_counter_cgroup.c     | 35 ++++++++++++------------
- tools/perf/util/evlist.c                 |  6 ++--
- tools/perf/util/evlist.h                 |  4 +--
- tools/perf/util/stat-display.c           |  7 +++--
- 9 files changed, 56 insertions(+), 42 deletions(-)
-
+diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+index 069825c48d40..a5cf6a99d67f 100644
+--- a/tools/perf/builtin-record.c
++++ b/tools/perf/builtin-record.c
+@@ -1011,7 +1011,7 @@ static int record__thread_data_init_maps(struct record_thread *thread_data, stru
+ 
+ 	for (m = 0, tm = 0; m < nr_mmaps && tm < thread_data->nr_mmaps; m++) {
+ 		if (cpu_map__is_dummy(cpus) ||
+-		    test_bit(cpus->map[m].cpu, thread_data->mask->maps.bits)) {
++		    test_bit(perf_cpu_map__cpu(cpus, m).cpu, thread_data->mask->maps.bits)) {
+ 			if (thread_data->maps) {
+ 				thread_data->maps[tm] = &mmap[m];
+ 				pr_debug2("thread_data[%p]: cpu%d: maps[%d] -> mmap[%d]\n",
+@@ -3331,13 +3331,14 @@ struct option *record_options = __record_options;
+ 
+ static void record__mmap_cpu_mask_init(struct mmap_cpu_mask *mask, struct perf_cpu_map *cpus)
+ {
+-	int c;
++	struct perf_cpu cpu;
++	int idx;
+ 
+ 	if (cpu_map__is_dummy(cpus))
+ 		return;
+ 
+-	for (c = 0; c < cpus->nr; c++)
+-		set_bit(cpus->map[c].cpu, mask->bits);
++	perf_cpu_map__for_each_cpu(cpu, idx, cpus)
++		set_bit(cpu.cpu, mask->bits);
+ }
+ 
+ static int record__mmap_cpu_mask_init_spec(struct mmap_cpu_mask *mask, const char *mask_spec)
+@@ -3404,8 +3405,8 @@ static int record__init_thread_cpu_masks(struct record *rec, struct perf_cpu_map
+ 	pr_debug("nr_threads: %d\n", rec->nr_threads);
+ 
+ 	for (t = 0; t < rec->nr_threads; t++) {
+-		set_bit(cpus->map[t].cpu, rec->thread_masks[t].maps.bits);
+-		set_bit(cpus->map[t].cpu, rec->thread_masks[t].affinity.bits);
++		set_bit(perf_cpu_map__cpu(cpus, t).cpu, rec->thread_masks[t].maps.bits);
++		set_bit(perf_cpu_map__cpu(cpus, t).cpu, rec->thread_masks[t].affinity.bits);
+ 		if (verbose) {
+ 			pr_debug("thread_masks[%d]: ", t);
+ 			mmap_cpu_mask__scnprintf(&rec->thread_masks[t].maps, "maps");
+diff --git a/tools/perf/util/bpf_counter_cgroup.c b/tools/perf/util/bpf_counter_cgroup.c
+index ac60c08e8e2a..a4b676920da0 100644
+--- a/tools/perf/util/bpf_counter_cgroup.c
++++ b/tools/perf/util/bpf_counter_cgroup.c
+@@ -47,7 +47,7 @@ static int bperf_load_program(struct evlist *evlist)
+ 	struct evsel *evsel;
+ 	struct cgroup *cgrp, *leader_cgrp;
+ 	__u32 i, cpu;
+-	__u32 nr_cpus = evlist->core.all_cpus->nr;
++	__u32 nr_cpus = perf_cpu_map__nr(evlist->core.all_cpus);
+ 	int total_cpus = cpu__max_cpu().cpu;
+ 	int map_size, map_fd;
+ 	int prog_fd, err;
+@@ -125,7 +125,7 @@ static int bperf_load_program(struct evlist *evlist)
+ 			for (cpu = 0; cpu < nr_cpus; cpu++) {
+ 				int fd = FD(evsel, cpu);
+ 				__u32 idx = evsel->core.idx * total_cpus +
+-					evlist->core.all_cpus->map[cpu].cpu;
++					perf_cpu_map__cpu(evlist->core.all_cpus, cpu).cpu;
+ 
+ 				err = bpf_map_update_elem(map_fd, &idx, &fd,
+ 							  BPF_ANY);
+@@ -207,13 +207,13 @@ static int bperf_cgrp__install_pe(struct evsel *evsel __maybe_unused,
+  */
+ static int bperf_cgrp__sync_counters(struct evlist *evlist)
+ {
+-	int i, cpu;
+-	int nr_cpus = evlist->core.all_cpus->nr;
++	struct perf_cpu cpu;
++	int idx;
+ 	int prog_fd = bpf_program__fd(skel->progs.trigger_read);
+ 
+-	for (i = 0; i < nr_cpus; i++) {
+-		cpu = evlist->core.all_cpus->map[i].cpu;
+-		bperf_trigger_reading(prog_fd, cpu);
++	perf_cpu_map__for_each_cpu(cpu, idx, cpus) {
++		cpu = perf_cpu_map__cpu(evlist->core.all_cpus, i);
++		bperf_trigger_reading(prog_fd, cpu.cpu);
+ 	}
+ 
+ 	return 0;
+@@ -244,12 +244,10 @@ static int bperf_cgrp__disable(struct evsel *evsel)
+ static int bperf_cgrp__read(struct evsel *evsel)
+ {
+ 	struct evlist *evlist = evsel->evlist;
+-	int i, cpu, nr_cpus = evlist->core.all_cpus->nr;
+ 	int total_cpus = cpu__max_cpu().cpu;
+ 	struct perf_counts_values *counts;
+ 	struct bpf_perf_event_value *values;
+ 	int reading_map_fd, err = 0;
+-	__u32 idx;
+ 
+ 	if (evsel->core.idx)
+ 		return 0;
+@@ -263,7 +261,10 @@ static int bperf_cgrp__read(struct evsel *evsel)
+ 	reading_map_fd = bpf_map__fd(skel->maps.cgrp_readings);
+ 
+ 	evlist__for_each_entry(evlist, evsel) {
+-		idx = evsel->core.idx;
++		__u32 idx = evsel->core.idx;
++		int i;
++		struct perf_cpu_map cpu;
++
+ 		err = bpf_map_lookup_elem(reading_map_fd, &idx, values);
+ 		if (err) {
+ 			pr_err("bpf map lookup failed: idx=%u, event=%s, cgrp=%s\n",
+@@ -271,13 +272,11 @@ static int bperf_cgrp__read(struct evsel *evsel)
+ 			goto out;
+ 		}
+ 
+-		for (i = 0; i < nr_cpus; i++) {
+-			cpu = evlist->core.all_cpus->map[i].cpu;
+-
++		perf_cpu_map__for_each_cpu(cpu, i, evlist->core.all_cpu) {
+ 			counts = perf_counts(evsel->counts, i, 0);
+-			counts->val = values[cpu].counter;
+-			counts->ena = values[cpu].enabled;
+-			counts->run = values[cpu].running;
++			counts->val = values[cpu.cpu].counter;
++			counts->ena = values[cpu.cpu].enabled;
++			counts->run = values[cpu.cpu].running;
+ 		}
+ 	}
+ 
 -- 
 2.36.0.464.gb9c8b46e94-goog
 

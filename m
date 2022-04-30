@@ -2,92 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 671CB515ACA
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 08:24:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3C5C515AC7
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 08:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382224AbiD3G1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 02:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58814 "EHLO
+        id S235819AbiD3G0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 02:26:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239244AbiD3G1A (ORCPT
+        with ESMTP id S229770AbiD3G0x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 02:27:00 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243D4CFE4D
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 23:23:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651299820; x=1682835820;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7uashMg9ZzX8VmjSNIB7rQRnoiyqTWQEXZbjTb2v5Oo=;
-  b=a9G+HmtAf69i7HUn/yN9cVPsJ5/5ivpIzaCZsLqdntd6GfEuA2SSpNoS
-   LBEk/VjMpR3X8MVBxek2I1+xSOL/fGEwM9vwPFNswnh6D1fFVwOYCejjK
-   mcLMu2WqE+jJKy+562tMLBrbn+XGRIRd9aCc+Agq/f9+mYsbFivpEERQ1
-   IKq/JdEmtt6/fb+BUdK+Ht1rA1L3irvXrTR/mnwWbsLx8nbLJhk76dhmF
-   U0gEjjWXYhl0ppYNjhGb8KpOEID9JU66mMcQxBNQvbxaY90TIHIav1LUS
-   sFiuLB9Oj3NEnCAvYFgpe2QXvIBuZsq1LQxaQFz5TeHfIzVM0Ah4YWdvi
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="327347277"
-X-IronPort-AV: E=Sophos;i="5.91,187,1647327600"; 
-   d="scan'208";a="327347277"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 23:23:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,187,1647327600"; 
-   d="scan'208";a="882526339"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 29 Apr 2022 23:23:37 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nkgW1-0006wz-Ao;
-        Sat, 30 Apr 2022 06:23:37 +0000
-Date:   Sat, 30 Apr 2022 14:22:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guo Ren <guoren@linux.alibaba.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [ammarfaizi2-block:palmer/linux/riscv-compat 20/20]
- arch/riscv/kernel/compat_syscall_table.o:undefined reference to
- `compat_sys_fadvise64_64'
-Message-ID: <202204301415.3MDixdty-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 30 Apr 2022 02:26:53 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17ADCCFBBF
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 23:23:32 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id d22-20020a25add6000000b00645d796034fso9173833ybe.2
+        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 23:23:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=ilFEwIrkZL4LC9Sgb4TefT5GSI3sDjL/JSRtfwvlYk8=;
+        b=XKxfKiZWKR26TghXaE9JP/9B5Y+sDfK8pIqWwQVnmRr6tCybeUfbhZjxRpo0ucJoo/
+         HTpIgSk64JCRj/FOflHY/fZXfzW6VC7cvQ2zlrJLdJlWGheLb9PgBsTqCzpB6JL1UG9j
+         vGRXPlYkNgQO84nOlc6SdulmwuBBYiL1lGrgt6Y0K4GvsTvEIMF6bUwMy1DSQ1VjSZrV
+         q6dc0BEbETWghfoSGWwNDCXUZCr+fC0Mswr9CRsnJZNJ8ENNnMsRGY/KifCHphJHTfJY
+         VfY1dZQOk620wlICkjZiha3wuTpC/d5dD+5+YUFXQmFc/0smlYICvBuJmuYb7X18BmCy
+         vCNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=ilFEwIrkZL4LC9Sgb4TefT5GSI3sDjL/JSRtfwvlYk8=;
+        b=lVkECVIrXc6kpQQrjNa5GTr5uOJYnlQQefASuf0niDnLIuu/I1Ftm5YjR1qzP0sbeW
+         Wt6u3lunTvez2U4JpUtWOzFhhQTBU+8RA5po1Ow3LI/QVUjUbPfHdyky62prrNVPhwNG
+         HYxfm/X0xqxcQZ4DLJD2rNw0gxfnnu3H1PnrPxU34gOJTimLU16irpD004o43WD4Y/rS
+         s46Dr90nThcT1w2TXd1n6zulNKYF/JNsSUyFL6vvuXpCkr1//2C8va1Sfkec3CMFLbSA
+         y5uGhzz6nRmdeHvB2X6J3z5whv2HqNKKJP/NEGY7jonLbG/wcYM53buWzzs01MzcpUnR
+         fHLw==
+X-Gm-Message-State: AOAM530cbwRN28/dQ1ZKnFChUL0hxpF+dqSqjh+q1HvlCvblQpErBiN8
+        gRHHMS6uqLp2/qT+kZY1dHByBnIEcW6p
+X-Google-Smtp-Source: ABdhPJxVabPnLRHKvnLALt55nPTm67ZCtR+e4Nldv4elgYdhSGX2Db3giMv00gcSHR4wcL9mKDMfLYiP6UHF
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:2481:caab:4fd5:232b])
+ (user=irogers job=sendgmr) by 2002:a25:6a05:0:b0:648:f6c0:2c19 with SMTP id
+ f5-20020a256a05000000b00648f6c02c19mr2504236ybc.55.1651299811215; Fri, 29 Apr
+ 2022 23:23:31 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 23:23:18 -0700
+Message-Id: <20220430062324.1565215-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
+Subject: [PATCH v4 0/6] Make evlist CPUs more accurate
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        German Gomez <german.gomez@arm.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Alexander Antonov <alexander.antonov@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/riscv-compat
-head:   e2009fdf858d6fe01f0b24e35d8347fc8da3210f
-commit: e2009fdf858d6fe01f0b24e35d8347fc8da3210f [20/20] riscv: compat: Add COMPAT Kbuild skeletal support
-config: riscv-randconfig-r001-20220428 (https://download.01.org/0day-ci/archive/20220430/202204301415.3MDixdty-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/e2009fdf858d6fe01f0b24e35d8347fc8da3210f
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block palmer/linux/riscv-compat
-        git checkout e2009fdf858d6fe01f0b24e35d8347fc8da3210f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+Based on the thread:
+https://lore.kernel.org/linux-perf-users/CAP-5=fVMHzTfKdpWMXtbtx7t14u2f4WzNak+F0Q93cQ7CZfhbg@mail.gmail.com/
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+First patch is a cherry-pick to avoid a conflict of:
+https://lore.kernel.org/linux-perf-users/20220414014642.3308206-2-irogers@google.com/
+Second patch makes all_cpus more accurate when there are command line CPUs.
+The third patch fixes perf stat metric-only output for uncore metrics.
+The fourth patch makes cleans up merging of dummy CPU maps.
+The fifth and sixth patch try to make user_requested_cpus and all_cpus
+clearer with documentation and by renaming all_cpus.
 
-All errors (new ones prefixed by >>):
+The code no longer needs to add an intersect function and so the API
+is removed and the merged API left unchangaged.
 
-   riscv64-linux-ld: riscv64-linux-ld: DWARF error: could not find abbrev number 714588
->> arch/riscv/kernel/compat_syscall_table.o:(.rodata+0x6f8): undefined reference to `compat_sys_fadvise64_64'
+Ian Rogers (6):
+  perf cpumap: Switch to using perf_cpu_map API
+  perf evlist: Clear all_cpus before propagating
+  perf stat: Avoid printing cpus with no counters
+  perf cpumap: Handle dummy maps as empty in subset
+  perf evlist: Add to user_requested_cpus documentation
+  perf evlist: Rename all_cpus
+
+ tools/lib/perf/cpumap.c                  |  4 +--
+ tools/lib/perf/evlist.c                  | 14 ++++++----
+ tools/lib/perf/include/internal/evlist.h |  5 ++--
+ tools/perf/builtin-record.c              | 13 +++++----
+ tools/perf/tests/cpumap.c                | 10 ++++++-
+ tools/perf/util/bpf_counter_cgroup.c     | 35 ++++++++++++------------
+ tools/perf/util/evlist.c                 |  6 ++--
+ tools/perf/util/evlist.h                 |  4 +--
+ tools/perf/util/stat-display.c           |  7 +++--
+ 9 files changed, 56 insertions(+), 42 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.0.464.gb9c8b46e94-goog
+

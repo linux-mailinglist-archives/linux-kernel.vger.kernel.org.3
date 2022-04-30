@@ -2,100 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B311D515B12
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 09:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDC26515B14
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 09:48:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382325AbiD3Hvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 03:51:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50078 "EHLO
+        id S1382332AbiD3HwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 03:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233979AbiD3Hvj (ORCPT
+        with ESMTP id S1382327AbiD3HwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 03:51:39 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3B0BF47;
-        Sat, 30 Apr 2022 00:48:17 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 66B8E5C0118;
-        Sat, 30 Apr 2022 03:48:14 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Sat, 30 Apr 2022 03:48:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651304894; x=
-        1651391294; bh=ZFpADMpNUy2riU4+N7JTWxLSuEp4zLRopZiAue0Sesg=; b=F
-        5lrgzGcuMx9mm60H01rA02mgRiyjGEBznrdLP+7DEcGxzkKrEVmiGO6Rfkb9TbPd
-        RNkVkck9BWGiLhmhs/nysWJdbZ+phTZ+pgVKoJ8o9bz4EbKSQ4wyxi87nl5ndt8v
-        eTQLIqdUqV1YdG/esSlrFEup2B8uT678ZunOuzoOTq6SilK6IO7TegkeNTgsdYxL
-        LfW/33m2bHQS5Xvg/JHAsUQwj/xdfqSKcjTALUqiuEcJCz7mSv2VXN5GTcxnEOT6
-        cdzBpTzphV93/3VFkxvrLZYPU+GCnPAE3jkgT1IkiiOLn4XGUlhEMstusZKwXVlY
-        rR5Jyef7bofb8kS6GTmSA==
-X-ME-Sender: <xms:velsYlBw3Xt7nn5a_BDYeEKDz9DanKYo3V_BJGs3yvyd-YR9PSak-g>
-    <xme:velsYjjO5uFDCmt4bGUcgWqe4GhdgAGjCDEXZK_8UErxUR6TagYHh-fFfO72ff1lX
-    VPBgRAkSRXIDLBC1N0>
-X-ME-Received: <xmr:velsYgl2jC98YL9hNRTFGjC2RX4AwpyKvu1tLe5AmjvKBsnaX_qnimi5goHy9V69EMZUGuzhlQsYIUcDgMAO5SOVC_1lUuC1mYE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddtgdduvdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevufgjkfhfgggtsehmtderredttdejnecuhfhrohhmpefhihhnnhcu
-    vfhhrghinhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrg
-    htthgvrhhnpeelfeeklefggfetkedukeevfffgvdeuheetffekledtfeejteelieejteeh
-    geelieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hfthhhrghinheslhhinhhugidqmheikehkrdhorhhg
-X-ME-Proxy: <xmx:velsYvzDCVSwQqVHOs_snB2kZpuH-9-ri8QbNnzga4LwDvbVvzoJqQ>
-    <xmx:velsYqSe0P5ei0BuPcIzQZh1R7Hjor0p7SDqIbYPfONFON5SadOnvw>
-    <xmx:velsYiaAceUm1vNUAoi9uaPoaAhgloYAX2OpiAoIWGBN3rp0EGxwSA>
-    <xmx:vulsYtHyWD-AXIRk0WcCds9ejukXBUHsrL4c5ma87oi5UnsEdOrZtg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 30 Apr 2022 03:48:10 -0400 (EDT)
-Date:   Sat, 30 Apr 2022 17:48:06 +1000 (AEST)
-From:   Finn Thain <fthain@linux-m68k.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-cc:     Wan Jiabing <wanjiabing@vivo.com>,
-        James Smart <james.smart@broadcom.com>,
-        Ram Vegesna <ram.vegesna@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Daniel Wagner <dwagner@suse.de>, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cocci@inria.fr
-Subject: Re: [PATCH] scsi: elx: efct: remove unnecessary memset in efct_io
-In-Reply-To: <794191df-e745-c591-bf1d-37945f96e73a@wanadoo.fr>
-Message-ID: <eab847fe-8d17-1a38-b55e-e68a2f6a1829@linux-m68k.org>
-References: <20220318145230.1031-1-wanjiabing@vivo.com> <794191df-e745-c591-bf1d-37945f96e73a@wanadoo.fr>
+        Sat, 30 Apr 2022 03:52:03 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA14212ACE
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 00:48:42 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id g20so11365020edw.6
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 00:48:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mZrRXivk2wHB6aP0PlOgj0l6NkbmTRIad+kjRkIeDR4=;
+        b=okvLxUXU58ImUVPXvh6rNI6m4QzadLdDcLGXEGPUyv9KGiS2NPKYVe946bsjLYLXwv
+         YRFTyVmLfH/YWVpfSLJK4i5y+WFUwqBvXi763VpFWdkSmcP9fozdztpG1pzrha91qisc
+         mWE3DAhtx7dhBykXPoQj8qymxGRx1b6nrOZIsDI268dIx+JscS9dy7hMEPkqdRqKl6LA
+         qyYV0Xl7k98kWbe2UhrKXN9VGuF6bAVp4vrgCKhkwo5wzZOODYVyK/4Bb7QjjGj54Uj6
+         lu2AXLaKYRgnxKTaGfTszgLPOJcTjslJv+lTdPjocdIutm0pH6d1jg9vevfBxJ0d0QZO
+         WRRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mZrRXivk2wHB6aP0PlOgj0l6NkbmTRIad+kjRkIeDR4=;
+        b=1fTlVPl0a0O1MisDh9e87bj0WeSLgODQO+Dndc/tdilflq7GkKh1UjN/7SShScB8Tj
+         0DRg6AZxrtmZozvrQyp+VJdC2miVpyDWqRsihkPFZTqeyADIGToEZ4RhARl52pqMjgUq
+         BFaEPj26QOf7IHmtUFnpxrq5MUeMPR6ANHnBL/KFo/dDRou4XZvDFwQlF8EHxenidP8R
+         yJmlateK90ngKclQCv5nGBIlGlpj7a2gqC/XhhkxXRzoxTf1FUlcAYTqGu+SnZn9zsi3
+         K4HQWWdPzTOnuDWWxvnwf3hjFvVrc2qPbMs2sySd+YKedJOfs1gjdu8JYxVT3wd2pFYB
+         UYgA==
+X-Gm-Message-State: AOAM532msStTHWqD9oH99TOFbbEmYLAmqe9Cd3qLnoIjdx1Tjt1GPiGm
+        lfHOwnYl2r1J+rhlWQ6hZFfZeOfrbYFJreXrytft2f+EPNw32w==
+X-Google-Smtp-Source: ABdhPJwzeGHd2jm7gKak2ZQJ0e3UgigF3oGOwiQx6dA4Uc7lXFEf4b3PX+pR+6UCSCa/AaSigzQeaiDH5BqcKzALdNk=
+X-Received: by 2002:a05:6402:1e8b:b0:41c:59f6:2c26 with SMTP id
+ f11-20020a0564021e8b00b0041c59f62c26mr3397468edf.156.1651304921031; Sat, 30
+ Apr 2022 00:48:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="-1463811774-987175101-1651304886=:14454"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220429181259.622060-1-dlatypov@google.com> <20220429181259.622060-4-dlatypov@google.com>
+In-Reply-To: <20220429181259.622060-4-dlatypov@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Sat, 30 Apr 2022 03:48:29 -0400
+Message-ID: <CAFd5g45UDN52rDPbz7UU+4C8sh7Q-UwC_BCdNKs7J8aeRBco8A@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] kunit: fix debugfs code to use enum kunit_status,
+ not bool
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     davidgow@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Fri, Apr 29, 2022 at 2:13 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> Commit 6d2426b2f258 ("kunit: Support skipped tests") switched to using
+> `enum kunit_status` to track the result of running a test/suite since we
+> now have more than just pass/fail.
+>
+> This callsite wasn't updated, silently converting to enum to a bool and
+> then back.
+>
+> Fixes: 6d2426b2f258 ("kunit: Support skipped tests")
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 
----1463811774-987175101-1651304886=:14454
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-
-On Sat, 30 Apr 2022, Christophe JAILLET wrote:
-
-> Le 18/03/2022 =C3=A0 15:52, Wan Jiabing a =C3=A9crit=C2=A0:
-> > io->sgl is allocated by kzalloc(). The memory is set to zero.
-> > It is unnecessary to call memset again.
-> >=20
->=20
-> Hi,
->=20
-> Nitpick: this kzalloc() should be a kcalloc() to avoid an open-coded
-> multiplication when computing the size to allocate.
->=20
-
-Seems like kcalloc() conversion could be a separate patch. Perhaps it=20
-could be done everywhere using a coccinelle script.
----1463811774-987175101-1651304886=:14454--
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>

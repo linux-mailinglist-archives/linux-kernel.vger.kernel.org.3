@@ -2,119 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7680515D86
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 15:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E84515D8C
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 15:27:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382686AbiD3N3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 09:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42404 "EHLO
+        id S1382733AbiD3Naj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 09:30:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238390AbiD3N3s (ORCPT
+        with ESMTP id S1382716AbiD3Nah (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 09:29:48 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB7C29C9C
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 06:26:26 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2f7c57ee6feso110505457b3.2
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 06:26:26 -0700 (PDT)
+        Sat, 30 Apr 2022 09:30:37 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A8935DC4
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 06:27:15 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id p6so9295374pjm.1
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 06:27:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=h+wRFsVZ4K28MiXgknTEFp0527Wz31nnhpmKvMdFtgk=;
-        b=ji5KO51EY5LxDOubII9v4JSPit0qIQjkf8NUlScorihNIE6nP0d0Qh5Cz0owzhVU74
-         GdXFtfh28zCFspiOgM99RsCqArXnIfHT6Rae7/NdmIhQ95wE0dfdAIS09Agz+GGLieYM
-         etnZK2EvBfJBadrpwr6E/io9TK2XCE6iNBs/vjrwMqvgrjTjgm0jY0JETyu1xx/02lsf
-         OUvSlEAkMv1imeI+vA5rkuXXGeMZ+cVrwlCTJY+ZG6nRIWcVUcDHKWtSMF06KTI2ctMC
-         j0JQpn84qQ445V6zQawb0i2nAhdNhoOtwVfH0DBFlMayQUU5LQaGevx3CM68osTEqlNJ
-         bi1A==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=oCzWgWhhG7IWlDHkgweCLD8r25SvqJ41BjsLlfD+agc=;
+        b=WLndbh79Pv5SNg8DK8nNF3XTxXb4916n15htOIRK+dLom00X4DHQK8aEbj1TwjiyGy
+         uJqnz7des0BNwWrGA5r3wSLRJTg4PDz/bSMDEeTVcMc3nAzg7cjPtxPT6n7ELnkM5ZLC
+         jU1tFwFkLOSNg+Ddk8RyBZ74EE5MmLS72gnghffxVEilAsLc8i9RmbB0Ih01mHBSlJA1
+         bF0SH75cbBJHrw27r1g9xWPDrEn/tvM3siGr+G4k0ErWtNrZ1cYp3Q5r1L3BYMlveYV4
+         GVwMNcPkd2ySCT8YT8FRH5beDo1i1r9xY05VF4MSGGE2NKa5Ol8QRMhbfoiygPb5ukK6
+         fUwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=h+wRFsVZ4K28MiXgknTEFp0527Wz31nnhpmKvMdFtgk=;
-        b=tSXw2fgv+fgaBFuMSeupzNz5oOSboAggMLdaAIL3rgkm7+kSEgkw4G5ZtpbJMZn+2W
-         38YXAOKqiZu7VCzMOIx8F/kWdcgqsV4iA4l49dYnHViHMrh8CiYTOY26YRL/Apy0HBQz
-         gWP+4mKY3BYMEnXbu1SJc+BS1Dh+qZXISwCBdJ96q+JagSJGaOitfXjbKChlgvJ5/Jcz
-         spYGJO/TtCY+e1HmNUPYFeGDV9Gg70rYUWrRjRl7T7LxiZ8MH7xFb+dZUXxBn2sstXAN
-         B88FHUghg0sWVSR10dqQxs38OfHT2Lp7Czck0C4/nGZJ41VJBrevwk4EbS3CmZfuKW/S
-         nFQg==
-X-Gm-Message-State: AOAM530h1fOwYZiTF8c/3quNlJYdtlaPMdT7RzMIgSfPC0ePPORH+oB2
-        s/Mwx/IhqqclEb6WYEqBHqMPhLmDdD06gGXAW5+1zw==
-X-Google-Smtp-Source: ABdhPJw4GuoBaYZh8SAqU4j8Z/SJ+zQke6niVNaDkfVTu7Qhqks8WxByWajFA90117xorxLrPccJGKqHgW/ROJz8MvE=
-X-Received: by 2002:a81:3252:0:b0:2f6:b826:2286 with SMTP id
- y79-20020a813252000000b002f6b8262286mr3797367ywy.289.1651325185841; Sat, 30
- Apr 2022 06:26:25 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oCzWgWhhG7IWlDHkgweCLD8r25SvqJ41BjsLlfD+agc=;
+        b=LZYyh/b6BuUkI+9zSSOJ9lFfsmi/cihlRk5LqDt3c92HJZpr+llBqsB4m47m67rtil
+         36hV0X33WhpfqufLTXarlIALiiQMYDrhFUcyY1/q1T/GGX13dLn9nLoF1+JzZzVW/cKO
+         aafek44BQ0dt4VdWqNeXnkJthiGmU5dj7gWoox4NGvItYl7HFuFMBdXYMOEaR+wlanS6
+         oNe3xPj8fCb5FAdYCmBhGm3u+HENTMbkMYqx8irRWRk7Vd5s5DSiI39Ut//8iM+k9fCV
+         3q2I/NDR/KhNFbzyVNxWdECFqhs4f+DUfFte4I6a/8Po9KsjF/RUWAu5gNpQvLqPSRpm
+         ULWQ==
+X-Gm-Message-State: AOAM533izm2iPJ4IvzPrYxCgPj0CrfnE8I4ZCnuqKAbYhKggKH3YlWkL
+        Mhyg52jUdMeWNN97muaxzbxnMw==
+X-Google-Smtp-Source: ABdhPJyoZXoUeWNbVxt926XEaxMdZ9eiVvwyjxDOMovIluronLbzZA9Kp3RQvuXCK5E6r0FoMJ8UlA==
+X-Received: by 2002:a17:902:9005:b0:156:8a9d:ba49 with SMTP id a5-20020a170902900500b001568a9dba49mr3922744plp.42.1651325234978;
+        Sat, 30 Apr 2022 06:27:14 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id v12-20020a17090331cc00b0015e8d4eb247sm1439220ple.145.2022.04.30.06.27.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 30 Apr 2022 06:27:14 -0700 (PDT)
+Message-ID: <015f58ed-09c1-cd27-064a-b6c0cc5580d2@kernel.dk>
+Date:   Sat, 30 Apr 2022 07:27:13 -0600
 MIME-Version: 1.0
-References: <20220430055118.1947-1-ansuelsmth@gmail.com> <20220430055118.1947-3-ansuelsmth@gmail.com>
-In-Reply-To: <20220430055118.1947-3-ansuelsmth@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sat, 30 Apr 2022 16:26:15 +0300
-Message-ID: <CAA8EJprqUg4_0yFU1nsV3c-7JH1VTgVE=hyDVWz+Z4BtkRktbQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] ARM: dts: qcom: add syscon and cxo/pxo clock to
- gcc node for ipq8064
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 7/9] io-wq: implement fixed worker logic
+Content-Language: en-US
+To:     Hao Xu <haoxu.linux@gmail.com>, io-uring@vger.kernel.org
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220429101858.90282-1-haoxu.linux@gmail.com>
+ <20220429101858.90282-8-haoxu.linux@gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220429101858.90282-8-haoxu.linux@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 30 Apr 2022 at 15:59, Ansuel Smith <ansuelsmth@gmail.com> wrote:
->
-> Add syscon compatible required for tsens driver to correctly probe driver
-> and access the reg. Also add cxo and pxo tag and declare them as gcc clock
-> now requires them for the ipq8064 gcc driver that has now been modernized.
->
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+On 4/29/22 4:18 AM, Hao Xu wrote:
+> @@ -1030,6 +1101,7 @@ static bool io_wq_work_match_item(struct io_wq_work *work, void *data)
+>  static void io_wqe_enqueue(struct io_wqe *wqe, struct io_wq_work *work)
+>  {
+>  	struct io_wqe_acct *acct = io_work_get_acct(wqe, work);
+> +	struct io_wqe_acct *fixed_acct;
+>  	struct io_cb_cancel_data match;
+>  	unsigned work_flags = work->flags;
+>  	bool do_create;
+> @@ -1044,8 +1116,14 @@ static void io_wqe_enqueue(struct io_wqe *wqe, struct io_wq_work *work)
+>  		return;
+>  	}
+>  
+> +	fixed_acct = io_get_acct(wqe, !acct->index, true);
+> +	if (fixed_acct->fixed_worker_registered && !io_wq_is_hashed(work)) {
+> +		if (io_wqe_insert_private_work(wqe, work, fixed_acct))
+> +			return;
+> +	}
+> +
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
-> ---
->  arch/arm/boot/dts/qcom-ipq8064.dtsi | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> index e6ca8d1d1c5f..ad30f7c8a5a7 100644
-> --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> @@ -298,7 +298,7 @@ smem: smem@41000000 {
->         };
->
->         clocks {
-> -               cxo_board {
-> +               cxo_board: cxo_board {
->                         compatible = "fixed-clock";
->                         #clock-cells = <0>;
->                         clock-frequency = <25000000>;
-> @@ -736,7 +736,9 @@ tsens_calib_backup: calib_backup@410 {
->                 };
->
->                 gcc: clock-controller@900000 {
-> -                       compatible = "qcom,gcc-ipq8064";
-> +                       compatible = "qcom,gcc-ipq8064", "syscon";
-> +                       clocks = <&pxo_board>, <&cxo_board>;
-> +                       clock-names = "pxo", "cxo";
->                         reg = <0x00900000 0x4000>;
->                         #clock-cells = <1>;
->                         #reset-cells = <1>;
-> --
-> 2.34.1
->
-
+As per previous email, I was going to comment back saying "why don't we
+just always do hashed work on the non-fixed workers?" - but that's
+already what you are doing. Isn't this fine, does anything else need to
+get done here in terms of hashed work and fixed workers? If you need
+per-iowq serialization, then you don't get a fixed worker.
 
 -- 
-With best wishes
-Dmitry
+Jens Axboe
+

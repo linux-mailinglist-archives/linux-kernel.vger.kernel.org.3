@@ -2,142 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 530F0515D1A
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 14:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAC87515D2C
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 15:00:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377214AbiD3NAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 09:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41166 "EHLO
+        id S1382598AbiD3NDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 09:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242211AbiD3NAB (ORCPT
+        with ESMTP id S1343716AbiD3NDg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 09:00:01 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1D0CB674F0
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 05:56:38 -0700 (PDT)
-Received: (qmail 986304 invoked by uid 1000); 30 Apr 2022 08:56:38 -0400
-Date:   Sat, 30 Apr 2022 08:56:38 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
-Subject: Re: [RFC v2 35/39] usb: handle HAS_IOPORT dependencies
-Message-ID: <Ym0yBti0J5w2S59W@rowland.harvard.edu>
-References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
- <20220429135108.2781579-65-schnelle@linux.ibm.com>
+        Sat, 30 Apr 2022 09:03:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8866DFD9;
+        Sat, 30 Apr 2022 06:00:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8493F60C11;
+        Sat, 30 Apr 2022 13:00:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CDE34C385AE;
+        Sat, 30 Apr 2022 13:00:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651323611;
+        bh=Wx7soVe2GwQIKmpkckBFOuN9MRuARvTlfUmWFxAYLO8=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=tjndL9h3TDMlAZeDo0bRnqteICKLnT/uBshK5w46ZidyyIyh2ME5PzdygYsWLn3HK
+         XZI+eFhMbuh0xF+YImbicnDW+2P4Wmzsc/lbvstkhRvoge6T72ha+9eWGJR+y8X+5f
+         wCZhrtygS7/afvoci+jz1oBdnIc9IlPd8cZTJ/w7BV2d9JyQhXXJiFASJlY+EKsVVa
+         LGfxzp5T/AdosXbN5mMJIEtFpWN7EadU9J+j8/u6yjiCYvaMMByt9Gatb6ZqNhmY1I
+         ApAWTwM+ZfV64RDlxEdUXPELzonT/dcOGLKvfbUO1dOS0BCdJZYRPIvJPbbT5P/XPQ
+         EeEZj2useH2wg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B46C9F03841;
+        Sat, 30 Apr 2022 13:00:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220429135108.2781579-65-schnelle@linux.ibm.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net/funeth: simplify the return expression of
+ fun_dl_info_get()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165132361173.2405.13440569285124454839.git-patchwork-notify@kernel.org>
+Date:   Sat, 30 Apr 2022 13:00:11 +0000
+References: <20220429090104.3852749-1-chi.minghao@zte.com.cn>
+In-Reply-To: <20220429090104.3852749-1-chi.minghao@zte.com.cn>
+To:     CGEL <cgel.zte@gmail.com>
+Cc:     dmichail@fungible.com, davem@davemloft.net, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        chi.minghao@zte.com.cn, zealci@zte.com.cn
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 03:51:02PM +0200, Niklas Schnelle wrote:
-> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> not being declared. We thus need to guard sections of code calling them
-> as alternative access methods with CONFIG_HAS_IOPORT checks. Similarly
-> drivers requiring these functions need to depend on HAS_IOPORT.
+Hello:
+
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Fri, 29 Apr 2022 09:01:04 +0000 you wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
 > 
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> ---
+> Simplify the return expression.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+> 
+> [...]
 
-...
+Here is the summary with links:
+  - net/funeth: simplify the return expression of fun_dl_info_get()
+    https://git.kernel.org/netdev/net-next/c/ce7deda0d5cd
 
-> diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
-> index ef08d68b9714..4fd06b48149d 100644
-> --- a/drivers/usb/host/pci-quirks.c
-> +++ b/drivers/usb/host/pci-quirks.c
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> @@ -632,7 +590,53 @@ bool usb_amd_pt_check_port(struct device *device, int port)
->  	return !(value & BIT(port_shift));
->  }
->  EXPORT_SYMBOL_GPL(usb_amd_pt_check_port);
-> +#endif
-> @@ -1273,7 +1280,8 @@ static void quirk_usb_early_handoff(struct pci_dev *pdev)
->  			 "Can't enable PCI device, BIOS handoff failed.\n");
->  		return;
->  	}
-> -	if (pdev->class == PCI_CLASS_SERIAL_USB_UHCI)
-> +	if (IS_ENABLED(CONFIG_USB_UHCI_HCD) &&
-> +	    pdev->class == PCI_CLASS_SERIAL_USB_UHCI)
->  		quirk_usb_handoff_uhci(pdev);
 
-We discussed this already.  quirk_usb_handoff_uhci() is supposed to be 
-called even when CONFIG_USB_UHCI_HCD isn't enabled.
-
-...
-
-> diff --git a/drivers/usb/host/uhci-hcd.h b/drivers/usb/host/uhci-hcd.h
-> index 8ae5ccd26753..be4aee1f0ca5 100644
-> --- a/drivers/usb/host/uhci-hcd.h
-> +++ b/drivers/usb/host/uhci-hcd.h
-> @@ -505,36 +505,43 @@ static inline bool uhci_is_aspeed(const struct uhci_hcd *uhci)
->   * we use memory mapped registers.
->   */
->  
-> +#ifdef CONFIG_HAS_IOPORT
-> +#define UHCI_IN(x)	x
-> +#define UHCI_OUT(x)	x
-> +#else
-> +#define UHCI_IN(x)	0
-> +#define UHCI_OUT(x)
-> +#endif
-
-Should have a blank line here.
-
->  #ifndef CONFIG_USB_UHCI_SUPPORT_NON_PCI_HC
->  /* Support PCI only */
->  static inline u32 uhci_readl(const struct uhci_hcd *uhci, int reg)
->  {
-> -	return inl(uhci->io_addr + reg);
-> +	return UHCI_IN(inl(uhci->io_addr + reg));
->  }
->  
->  static inline void uhci_writel(const struct uhci_hcd *uhci, u32 val, int reg)
->  {
-> -	outl(val, uhci->io_addr + reg);
-> +	UHCI_OUT(outl(val, uhci->io_addr + reg));
->  }
->  
->  static inline u16 uhci_readw(const struct uhci_hcd *uhci, int reg)
->  {
-> -	return inw(uhci->io_addr + reg);
-> +	return UHCI_IN(inw(uhci->io_addr + reg));
->  }
->  
->  static inline void uhci_writew(const struct uhci_hcd *uhci, u16 val, int reg)
->  {
-> -	outw(val, uhci->io_addr + reg);
-> +	UHCI_OUT(outw(val, uhci->io_addr + reg));
->  }
->  
->  static inline u8 uhci_readb(const struct uhci_hcd *uhci, int reg)
->  {
-> -	return inb(uhci->io_addr + reg);
-> +	return UHCI_IN(inb(uhci->io_addr + reg));
->  }
->  
->  static inline void uhci_writeb(const struct uhci_hcd *uhci, u8 val, int reg)
->  {
-> -	outb(val, uhci->io_addr + reg);
-> +	UHCI_OUT(outb(val, uhci->io_addr + reg));
->  }
->  
->  #else
-
-I thought you were going to update the definition of 
-uhci_has_pci_registers().  It shouldn't do a test at runtime if 
-CONFIG_HAS_IOPORT is disabled.
-
-Alan Stern

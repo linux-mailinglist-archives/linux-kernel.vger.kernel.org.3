@@ -2,166 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB871515ABF
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 08:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51C96515AC5
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 08:18:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234119AbiD3GP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 02:15:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56458 "EHLO
+        id S241357AbiD3GVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 02:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiD3GPz (ORCPT
+        with ESMTP id S229770AbiD3GVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 02:15:55 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887F4852D4
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 23:12:33 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id k14so8040815pga.0
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 23:12:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=hq6TEPU4jhshR+PB+EisgeeHk2b5bFNKkTEflIlyJDs=;
-        b=mh1IbT4OCl3SdGY0Ln5xYG7mjCYqg2hM+n05W3AOqjWUHqTls6Mfzj6hVvjqPyi7NU
-         HqqbZJixHZGeDFZ48NZclNKb0fkso+tZq5/VUo3crZs6eOPCj7eChjerc/jfCal4uIWh
-         KmnNnChMV1mgiEShx8g9GSiYsMq9EbtZknMW9/VxDkK+s8dkFmact1rhPhsqq3SlWSIW
-         sWqewlBLWInHE94q0/v+Hw9TH+Zl7TTWVsEcBSy7kKIYzo0w6LHPf4H1mIwimzUd7P2D
-         5X5lQD2sTKbL4/NUq5t3n9aBj/0B4FxcEtRvF8RL6AJXq/qkGOQu7+/h7fxpor2j/QPD
-         evaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hq6TEPU4jhshR+PB+EisgeeHk2b5bFNKkTEflIlyJDs=;
-        b=QBJS9yqwYPhxZt3Ht0fOak2r+ouwU+cPY5fnaNYdFRtrC46Ct33GxZkIjcjKVwMNqu
-         VnzH996FObqCTPi+UrbLamp9zLcQX52+ixus6xScC/7Gqem5tTdlbihc6GteA2sv/LqF
-         Gbou+oLb99sNwSqAV7LIpYPp/YLNbzIV6QD8LHtwjJCPc8cCqncL2eoJMTA3CDZSvbvj
-         UGzX1UhhSHo76qoXQhTbIK+nYDSfaAb2ImYhqChdl5q0MmXJwgh/RUfF+NAA2N5DnXIv
-         +3g8GhUsxXoINPAy2FlosNIqzSI1R7DEUWrgunVpggQwxIsSsxJwZMus2bagwX5JBFp3
-         Q26Q==
-X-Gm-Message-State: AOAM533D3+ET7OYvKONr/I3WGDE903xl0L6ssoBXwltCb1vDfyDZumnJ
-        c3AFT+fRtW2b9e2MW4GgsamdTQ==
-X-Google-Smtp-Source: ABdhPJx2PKiEgSvIKKt+CFwwR5+HO+xqLKeXqJ3vxbNu6QtZlkgFQPQ/sC5ZNQHX9Dfnb0mY7ZY6iA==
-X-Received: by 2002:a63:354f:0:b0:398:4ead:866e with SMTP id c76-20020a63354f000000b003984ead866emr2187341pga.322.1651299153008;
-        Fri, 29 Apr 2022 23:12:33 -0700 (PDT)
-Received: from ?IPV6:2409:8a28:e6e:ab40:9d7e:4700:2d24:29fc? ([2409:8a28:e6e:ab40:9d7e:4700:2d24:29fc])
-        by smtp.gmail.com with ESMTPSA id 5-20020aa79205000000b0050dc7628175sm692631pfo.79.2022.04.29.23.12.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 23:12:32 -0700 (PDT)
-Message-ID: <6a86e452-d24d-b371-f343-7e77faeed7ca@bytedance.com>
-Date:   Sat, 30 Apr 2022 14:12:23 +0800
+        Sat, 30 Apr 2022 02:21:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B970ACFB8C;
+        Fri, 29 Apr 2022 23:18:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F12E460A28;
+        Sat, 30 Apr 2022 06:18:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AD55C385AA;
+        Sat, 30 Apr 2022 06:18:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651299503;
+        bh=uYF2s/xQF4T6AlR6mb0JRgmAFtb0jfMpWbE35bo1HwU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2BQcS/4NH+9ysls92X0SSlMU05RTtCM3xnAEHjDjzcWSOmFuV9GpH39yV9EC6WDyn
+         rYjTAhmhtnXik1cjo64wcxr4gxnmY32CXfbLqPHcxoEwfikfFZutcJacNREFh2olqH
+         giURfq009PrksK7aWDe/vXUbWBgFCAsvr8YuvCM0=
+Date:   Sat, 30 Apr 2022 08:18:14 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Sebastian Ene <sebastianene@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        maz@kernel.org, will@kernel.org, qperret@google.com
+Subject: Re: [PATCH v4 2/2] misc: Add a mechanism to detect stalls on guest
+ vCPUs
+Message-ID: <YmzUpr0e+eq0NUYc@kroah.com>
+References: <20220429083030.3241640-1-sebastianene@google.com>
+ <20220429083030.3241640-3-sebastianene@google.com>
+ <YmumSgiTrQUWoXsb@kroah.com>
+ <e94fdd89-7b8e-eec3-4b2f-dcea55c7f0bc@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.1
-Subject: Re: [External] [mark:arm64/ftrace/per-callsite-ops 1/6]
- kernel/trace/fgraph.c:37:12: warning: no previous prototype for
- 'ftrace_enable_ftrace_graph_caller'
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>
-References: <202204300758.ces9aD6G-lkp@intel.com>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <202204300758.ces9aD6G-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e94fdd89-7b8e-eec3-4b2f-dcea55c7f0bc@roeck-us.net>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/30 07:56, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/ftrace/per-callsite-ops
-> head:   2aaba224d039a36f7eca5ad68c77686d3546e4fa
-> commit: 718b0fd1ccf6f04340cb3ad48b667ca05bb7a31c [1/6] ftrace: cleanup ftrace_graph_caller enable and disable
-> config: sh-buildonly-randconfig-r002-20220428 (https://download.01.org/0day-ci/archive/20220430/202204300758.ces9aD6G-lkp@intel.com/config)
-> compiler: sh4-linux-gcc (GCC) 11.3.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=718b0fd1ccf6f04340cb3ad48b667ca05bb7a31c
->         git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
->         git fetch --no-tags mark arm64/ftrace/per-callsite-ops
->         git checkout 718b0fd1ccf6f04340cb3ad48b667ca05bb7a31c
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash kernel/trace/
+On Fri, Apr 29, 2022 at 09:51:51AM -0700, Guenter Roeck wrote:
+> On 4/29/22 01:48, Greg Kroah-Hartman wrote:
+> > On Fri, Apr 29, 2022 at 08:30:33AM +0000, Sebastian Ene wrote:
+> > > This driver creates per-cpu hrtimers which are required to do the
+> > > periodic 'pet' operation. On a conventional watchdog-core driver, the
+> > > userspace is responsible for delivering the 'pet' events by writing to
+> > > the particular /dev/watchdogN node. In this case we require a strong
+> > > thread affinity to be able to account for lost time on a per vCPU.
+> > > 
+> > > This part of the driver is the 'frontend' which is reponsible for
+> > > delivering the periodic 'pet' events, configuring the virtual peripheral
+> > > and listening for cpu hotplug events. The other part of the driver
+> > > handles the peripheral emulation and this part accounts for lost time by
+> > > looking at the /proc/{}/task/{}/stat entries and is located here:
+> > > https://chromium-review.googlesource.com/c/chromiumos/platform/crosvm/+/3548817
+> > > 
+> > > Signed-off-by: Sebastian Ene <sebastianene@google.com>
+> > > ---
+> > >   drivers/misc/Kconfig       |  12 +++
+> > >   drivers/misc/Makefile      |   1 +
+> > >   drivers/misc/vm-watchdog.c | 206 +++++++++++++++++++++++++++++++++++++
+> > >   3 files changed, 219 insertions(+)
+> > >   create mode 100644 drivers/misc/vm-watchdog.c
+> > > 
+> > > diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+> > > index 2b9572a6d114..26c3a99e269c 100644
+> > > --- a/drivers/misc/Kconfig
+> > > +++ b/drivers/misc/Kconfig
+> > > @@ -493,6 +493,18 @@ config OPEN_DICE
+> > >   	  If unsure, say N.
+> > > +config VM_WATCHDOG
+> > > +	tristate "Virtual Machine Watchdog"
+> > > +	select LOCKUP_DETECTOR
+> > > +	help
+> > > +	  Detect CPU locks on the virtual machine. This driver relies on the
+> > > +	  hrtimers which are CPU-binded to do the 'pet' operation. When a vCPU
+> > > +	  has to do a 'pet', it exits the guest through MMIO write and the
+> > > +	  backend driver takes into account the lost ticks for this particular
+> > > +	  CPU.
+> > > +	  To compile this driver as a module, choose M here: the
+> > > +	  module will be called vm-wdt.
+> > 
+> > You forgot to name the module properly here based on the Makefile change
+> > you made.
+> > 
+> > And again, as this is called a "watchdog", it seems crazy that it is not
+> > in drivers/watchdog/
+> > 
 > 
+> I disagree. It is not a watchdog driver in the traditional sense (it does
+> not use, want to use, or need to use the watchdog driver API or ABI).
+> Its functionality is similar to the functionality of kernel/watchdog.c,
+> which doesn't belong into drivers/watchdog either.
 
-Thanks for the report.
+Ah, ok, that makes more sense, the user/kernel api is not the same.
+Someone should put that in the changelog next time :)
 
-BTW, there are so many "-Wmissing-prototypes" warnings if build kernel with "W=1"...
+thanks,
 
-I can't reproduce this warning on x86_64 because the declarations in <linux/ftrace.h>
-
-#ifdef CONFIG_DYNAMIC_FTRACE
-...
-#ifdef CONFIG_FUNCTION_GRAPH_TRACER
-extern void ftrace_graph_caller(void);
-extern int ftrace_enable_ftrace_graph_caller(void);
-extern int ftrace_disable_ftrace_graph_caller(void);
-#else
-static inline int ftrace_enable_ftrace_graph_caller(void) { return 0; }
-static inline int ftrace_disable_ftrace_graph_caller(void) { return 0; }
-#endif
-...
-#endif
-
-Since x86_64 select HAVE_FUNCTION_GRAPH_TRACER only when DYNAMIC_FTRACE,
-so these declarations can be seen by fgraph.c
-
-But on ARCH=sh, HAVE_FUNCTION_GRAPH_TRACER can be selected when !DYNAMIC_FTRACE,
-so these declarations can't be seen by fgraph.c. But in this case, these
-functions are not used anywhere. So there are no real problems exist.
-
-Maybe it's better to put ftrace_[enable,disable]_ftrace_graph_caller definitions
-in "#ifdef CONFIG_DYNAMIC_FTRACE" in fgraph.c, to suppress this warning.
-
-Thanks.
-
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->>> kernel/trace/fgraph.c:37:12: warning: no previous prototype for 'ftrace_enable_ftrace_graph_caller' [-Wmissing-prototypes]
->       37 | int __weak ftrace_enable_ftrace_graph_caller(void)
->          |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>> kernel/trace/fgraph.c:46:12: warning: no previous prototype for 'ftrace_disable_ftrace_graph_caller' [-Wmissing-prototypes]
->       46 | int __weak ftrace_disable_ftrace_graph_caller(void)
->          |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    kernel/trace/fgraph.c:241:15: warning: no previous prototype for 'ftrace_return_to_handler' [-Wmissing-prototypes]
->      241 | unsigned long ftrace_return_to_handler(unsigned long frame_pointer)
->          |               ^~~~~~~~~~~~~~~~~~~~~~~~
->    kernel/trace/fgraph.c:356:6: warning: no previous prototype for 'ftrace_graph_sleep_time_control' [-Wmissing-prototypes]
->      356 | void ftrace_graph_sleep_time_control(bool enable)
->          |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> 
-> vim +/ftrace_enable_ftrace_graph_caller +37 kernel/trace/fgraph.c
-> 
->     32	
->     33	/*
->     34	 * archs can override this function if they must do something
->     35	 * to enable hook for graph tracer.
->     36	 */
->   > 37	int __weak ftrace_enable_ftrace_graph_caller(void)
->     38	{
->     39		return 0;
->     40	}
->     41	
->     42	/*
->     43	 * archs can override this function if they must do something
->     44	 * to disable hook for graph tracer.
->     45	 */
->   > 46	int __weak ftrace_disable_ftrace_graph_caller(void)
->     47	{
->     48		return 0;
->     49	}
->     50	
-> 
+greg k-h

@@ -2,122 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 919C6515B5D
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 10:12:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C4A7515B5F
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 10:14:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232576AbiD3IP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 04:15:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48706 "EHLO
+        id S234679AbiD3IRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 04:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbiD3IPW (ORCPT
+        with ESMTP id S231488AbiD3IRF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 04:15:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7119C5E777
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 01:12:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651306320;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fU7Z+q92leOT4vuuZNlugAe89BeML8kiQw/jyBkx1XI=;
-        b=RZtyDv4jKEtG5KATdbTpSeVCUx86pFtcOf3nVpanmvIp3c6xgeSGJQukulG2oGMKKyIu/k
-        dpN7RQA0oU6AsSAvVl8ue0lw9XL0pGfPxeMC2Sl7ysogtvo+XNYyEur6db0upXZTY+Gz2Q
-        Fe/IrJPtBA47dRpaNdi1Y3IfoUu13iQ=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-659-HvdlGZasOsuJlDNzGVlXTQ-1; Sat, 30 Apr 2022 04:11:59 -0400
-X-MC-Unique: HvdlGZasOsuJlDNzGVlXTQ-1
-Received: by mail-ej1-f69.google.com with SMTP id l20-20020a170906795400b006f3f30daf18so1973303ejo.22
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 01:11:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fU7Z+q92leOT4vuuZNlugAe89BeML8kiQw/jyBkx1XI=;
-        b=uSk9doCRu5m1E1+vZYmAAcxC0Bu+aRazGX1bKEFqEgoN3XywZap3Wj+imnPzK4YvT5
-         ncm9CMT7IMLBw6dSoZMRoPkDi1/EoZmXGjKSsHaO0FAnOJ6KBaMJ65iBI4lFkgjuraHe
-         2S4FwO6ZjBisfCdwZIKDtquQAus27fewUcVJ/HDZaZgKRoV09L1AuKCGaTfbxNxTrwWR
-         QjLMlcfJ/PkY2at5J+WQ+SmYVP17y9riGmhLebPJOkK96SYti1OK0yjDBuZpocIQ+2ZQ
-         OXXWV+dMvO05IaxEvLpxSe48xBLiVc9wK3aTYyKuMGyIewyZOajakqwaXR712kxo1DHD
-         jqtA==
-X-Gm-Message-State: AOAM530xLqLgJKQmXXChuVrK6LuHiOA0Sun9rII00zjqWfYWTKsfP45u
-        oU1pcYl7h85Sb+aLDzkIW5F66SvNggESU+Uc9ahcHWrt1sE3MFTJZ0ztUAZjbW6Lb7Z03jl2Ct5
-        aD2n63fmvmkvAFX1AQ8s/l/p5
-X-Received: by 2002:a05:6402:1e92:b0:426:258:cf51 with SMTP id f18-20020a0564021e9200b004260258cf51mr3511807edf.124.1651306317889;
-        Sat, 30 Apr 2022 01:11:57 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxBc3Rhd7Z8pSjvvWd+/FVAfTZPTCiykZQah+JtLK3LoH9Jg7cxxGVABVZbwNuJkBwNepnmKw==
-X-Received: by 2002:a05:6402:1e92:b0:426:258:cf51 with SMTP id f18-20020a0564021e9200b004260258cf51mr3511795edf.124.1651306317712;
-        Sat, 30 Apr 2022 01:11:57 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id g14-20020a056402180e00b0042617ba6389sm3804614edy.19.2022.04.30.01.11.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 30 Apr 2022 01:11:57 -0700 (PDT)
-Message-ID: <0b18fbcb-97d6-fb82-25b4-1f288a65b78f@redhat.com>
-Date:   Sat, 30 Apr 2022 10:11:56 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v3] KVM: SEV: Mark nested locking of vcpu->lock
-Content-Language: en-US
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Peter Gonda <pgonda@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220407195908.633003-1-pgonda@google.com>
- <CAFNjLiXC0AdOw5f8Ovu47D==ex7F0=WN_Ocirymz4xL=mWvC5A@mail.gmail.com>
- <CAMkAt6r-Mc_YN-gVHuCpTj4E1EmcvyYpP9jhtHo5HRHnoNJAdA@mail.gmail.com>
- <CAMkAt6r+OMPWCbV_svUyGWa0qMzjj2UEG29G6P7jb6uH6yko2w@mail.gmail.com>
- <62e9ece1-5d71-f803-3f65-2755160cf1d1@redhat.com>
- <CAMkAt6q6YLBfo2RceduSXTafckEehawhD4K4hUEuB4ZNqe2kKg@mail.gmail.com>
- <4c0edc90-36a1-4f4c-1923-4b20e7bdbb4c@redhat.com>
- <CAMkAt6oL5qi7z-eh4z7z8WBhpc=Ow6WtcJA5bDi6-aGMnz135A@mail.gmail.com>
- <CAMkAt6rmDrZfN5DbNOTsKFV57PwEnK2zxgBTCbEPeE206+5v5w@mail.gmail.com>
- <20220429010312.4013-1-hdanton@sina.com>
- <20220429114012.4127-1-hdanton@sina.com>
- <20220430015008.4257-1-hdanton@sina.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220430015008.4257-1-hdanton@sina.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 30 Apr 2022 04:17:05 -0400
+Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671F862BDF
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 01:13:39 -0700 (PDT)
+X-QQ-GoodBg: 2
+X-QQ-SSF: 00400000000000F0
+X-QQ-FEAT: YHTLUubWl24Q37pL9zyMyetOwVg0bciU1lNjE8xH1EJaAUgnWhItRY26azBDM
+        q+5G8y5H5aasD1JxZIgt2ED/fz1YQA/4QSWnsxh4tHgUtew2uN2DtZjr1YujxQHRskB9Ovh
+        5E7dIlYES88wwMgtYH1HZp7ZVkxBbqPK6Csw3nD+Q+u7plNzAckeUwGjhaUrB0Z5D+rmV+d
+        W+vQV6fZWA73tOz6q6SVRyOZT1JEFHq+oVMMMEpDbCBw3eGWkAGA2NzLQZ1ONjyediUiDh4
+        lEciRpR9KR1BLSiE1do1bose8wAAXbKIx1unJLAmlLSRNbwO7+wKMMbDMYTshsmmCu0G/bg
+        mn2TGCXTFluZue8QUM9GZzkH624HP8plE56ttygzVJaEqGe2OlEdA/d8OZ8OAVNWdom9bCl
+        x1bi6wBvg1U=
+X-QQ-BUSINESS-ORIGIN: 2
+X-Originating-IP: 218.17.66.222
+X-QQ-STYLE: 
+X-QQ-mid: llogic72t1651306404t281577
+From:   "=?utf-8?B?U2hlbmdob25nIEhhbg==?=" 
+        <hanshenghong2019@email.szu.edu.cn>
+To:     "=?utf-8?B?QWtpcmEgWW9rb3Nhd2E=?=" <akiyks@gmail.com>,
+        "=?utf-8?B?Sm9uYXRoYW4gQ29yYmV0?=" <corbet@lwn.net>
+Cc:     "=?utf-8?B?YWtwbQ==?=" <akpm@linux-foundation.org>,
+        "=?utf-8?B?YmFpaGFvd2Vu?=" <baihaowen@meizu.com>,
+        "=?utf-8?B?c2Vha2VlbA==?=" <seakeel@gmail.com>,
+        "=?utf-8?B?bGludXgtZG9j?=" <linux-doc@vger.kernel.org>,
+        "=?utf-8?B?bGludXgta2VybmVs?=" <linux-kernel@vger.kernel.org>,
+        "=?utf-8?B?Y2FveWl4dWFuMjAxOQ==?=" <caoyixuan2019@email.szu.edu.cn>,
+        "=?utf-8?B?eWVqaWFqaWFuMjAxOA==?=" <yejiajian2018@email.szu.edu.cn>,
+        "=?utf-8?B?5Yav6ICB5biI?=" <yuhongf@szu.edu.cn>
+Subject: Re: [PATCH] Documentation/vm/page_owner.rst: Fix syntax error and Describe details using table
+Mime-Version: 1.0
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: base64
+Date:   Sat, 30 Apr 2022 16:13:24 +0800
+X-Priority: 3
+Message-ID: <tencent_088763F35CE233FB6C9CEB80@qq.com>
+X-QQ-MIME: TCMime 1.0 by Tencent
+X-Mailer: QQMail 2.x
+X-QQ-Mailer: QQMail 2.x
+References: <20220429181926.10658-1-hanshenghong2019@email.szu.edu.cn>
+        <ea37d4f9-26e2-272a-01d6-fa7e8c62687e@gmail.com>
+In-Reply-To: <ea37d4f9-26e2-272a-01d6-fa7e8c62687e@gmail.com>
+X-QQ-ReplyHash: 897282373
+X-QQ-SENDSIZE: 520
+Received: from qq.com (unknown [127.0.0.1])
+        by smtp.qq.com (ESMTP) with SMTP
+        id ; Sat, 30 Apr 2022 16:13:26 +0800 (CST)
+Feedback-ID: llogic:email.szu.edu.cn:qybgforeign:qybgforeign3
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,FROM_EXCESS_BASE64,
+        MSGID_FROM_MTA_HEADER,RCVD_IN_DNSWL_NONE,RCVD_IN_XBL,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/30/22 03:50, Hillf Danton wrote:
-> 	lock for migration
-> 	===
-> 	kvm_for_each_vcpu(i, vcpu, kvm) {
-> 		if (mutex_lock_killable(&vcpu->mutex))
-> 			goto out_unlock;
-> 		lockdep_copy_map(&vcpu->v_dep_map, &vcpu->mutex.dep_map);
-> 		mutex_release(&vcpu->mutex.dep_map, ip);
-> 	}
-> 
-> 
-> 	unlock for migration
-> 	===
-> 	kvm_for_each_vcpu(i, vcpu, kvm) {
-> 		lockdep_copy_map(&vcpu->mutex.dep_map, &vcpu->v_dep_map);
-> 		/*
-> 		 * Or directly acquire without v_dep_map added
-> 		 *
-> 		mutex_acquire(&vcpu->mutex.dep_map, 0, 1,_RET_IP_);
-> 		 */
-> 		mutex_unlock(&vcpu->mutex);
-> 	}
+MCkgSWYgeW91IGhhdmUgcmVjZWl2ZWQgYSBzaW1pbGFyIHJlcGx5LCBwbGVhc2UgcmVmZXIg
+dG8gdGhlIGxhdGVzdCByZXBseS4xKSBBY2NpZGVudGFsbHkgdXNlZCBDaGluZXNlIElucHV0
+IE1ldGhvZCBFZGl0b3IsIGxlYXZpbmcgZnVsbC13aWR0aCBzeW1ib2xzIGR1cmluZyB0aGUg
+dGVzdCwgY2F1c2luZyB0aGUgZG91YmxlIGRhc2hlcyBvZiAiLS0iIGNoYW5nZWQgaW50byAi
+bG9uZyBzaW5nbGUgZGFzaCIgd2hpY2ggc2hvdWxkIG5vdCBoYXZlIG9jY3VycmVkLjIpIElu
+IHRoZSBjdXJyZW50IGRvY3VtZW50LCB0aGUgIlNUQU5EQVJEIEZPUk1BVCBTUEVDSUZJRVJT
+IiB0YWJsZSBkb2VzIG5vdCBjb3JyZWN0bHkgdXNlIHRoZSBmb3JtYXQgb2YgdGhlIHJzdCBk
+b2N1bWVudCwgc28gaW4gdGhlIHdlYnNpdGUgaHR0cHM6Ly93d3cua2VybmVsLm9yZy9kb2Mv
+aHRtbC9sYXRlc3Qvdm0vcGFnZV9vd25lci5odG1sLCBpdCBkb2VzIG5vdCBsb29rIGdvb2Qu
+IFRoZXJlZm9yZSwgdGhlICJTVEFOREFSRCBGT1JNQVQgU1BFQ0lGSUVSUyIgaGFzIGJlZW4g
+YWRqdXN0ZWQgdXNpbmcgdGhlIGZvcm1hdCBvZiB0aGUgcnN0IHRhYmxlLiAqVGhpcyogaXMg
+dGhlIG1haW4gcHVycG9zZS4zKSBJbiB2ZXJzaW9uIDEgYmVmb3JlLCB0aGUgc2VudGVuY2Ug
+bG9vayBsaWtlOiJUYWJsZSAxIHh4eChzb21lIGV4cGxhaW5hdGlvbikuIiBhbmQgIlRhYmxl
+IDIgeHh4KHNvbWUgZXhwbGFpbmF0aW9uKS4iLCBpbiB0aGVzZSAyICJsb25nIiBzZW50ZW5j
+ZXMsIHVzaW5nICIuIiBpbnN0ZWFkIG9mICI6Ii5Ib25lc3RseSwgY29tcGxleCBzZW50ZW5j
+ZSBpcyB1bm5lY2Vzc2FyeS4gV2hlbiBJIHRyaWVkIHRvIG1vZGlmeSB0aGUgc2VudGVuY2Us
+IEkgaWdub3JlIHRoZSBzdHJpY3QgZGlzdGluY3Rpb24gYmV0d2VlbiAiLiIgYW5kICI6Ii5J
+biBzaG9ydCwgVGhpcyBtb2RpZmljYXRpb24gaXMgdW5uZWNlc3NhcnkuSSdtIHRlcnJpYmx5
+IHNvcnJ5IGFib3V0IHRoYXQuNCkgVGhhbmtzLCBTaGVuZ2hvbmcgSGFuLS0tLS0tLS0tLS0t
+LS0tLS0tIE9yaWdpbmFsIC0tLS0tLS0tLS0tLS0tLS0tLUZyb206ICAiQWtpcmEgWW9rb3Nh
+d2EiO0RhdGU6ICBTYXQsIEFwciAzMCwgMjAyMiAwMjo0MCBQTVRvOiAgIlNoZW5naG9uZyBI
+YW4iOyAiSm9uYXRoYW4gQ29yYmV0IjsgQ2M6ICAiYWtwbSI7ICJiYWloYW93ZW4iOyAic2Vh
+a2VlbCI7ICJsaW51eC1kb2MiOyAibGludXgta2VybmVsIjsgImNhb3lpeHVhbjIwMTkiOyAi
+eWVqaWFqaWFuMjAxOCI7ICLlhq/ogIHluIgiOyBTdWJqZWN0OiAgUmU6IFtQQVRDSF0gRG9j
+dW1lbnRhdGlvbi92bS9wYWdlX293bmVyLnJzdDogRml4IHN5bnRheCBlcnJvciBhbmQgRGVz
+Y3JpYmUgZGV0YWlscyB1c2luZyB0YWJsZSBPbiAyMDIyLzA0LzMwIDM6MTksU2hlbmdob25n
+IEhhbiB3cm90ZTo+IFNvbWUgc3ludGF4IGVycm9ycyBleGlzdCBpbiAicGFnZV9vd25lci5y
+c3QiLiBUaGFua3MgdG8gQWtpcmEgWW9rb3Nhd2EgYW5kPiBIYW93ZW4gQmFpIGZvciB0aXBz
+IHRvIGhlbHAgaW1wcm92ZSB0aGUgZG9jdW1lbnRhdGlvbi4+ID4gV2UgdHJ5IHRvIGZpeCB0
+aGVtLiBIb3BlIHRoYXQgdGhlIERvY3VtZW50YXRpb24gaXMgc2hvd2VkIGFzIHdlIGV4cGVj
+dC4+ID4gU2lnbmVkLW9mZi1ieTogU2hlbmdob25nIEhhbiA+IEZpeGVzOiBlZGM5M2FiYmNj
+NmQgKCJ0b29scy92bS9wYWdlX293bmVyX3NvcnQuYzogc3VwcG9ydCBzb3J0aW5nIGJsb2Nr
+cyBieSBtdWx0aXBsZSBrZXlzIik+ID4gLS0tPiBUaGFua3MgSm9uYXRoYW4ncyBzdWdnZXN0
+aW9uLj4gPiBUaGlzIGZpeCBpcyBhIHNpbXBsZXIgdGhhbiBiZWZvcmUuPiBBbmQgeWVzLCBJ
+dCBoYXMgYnVpbHQgaW4gbXkgbWFjaGluZS4+ID4gQmVzdCw+ID4gCVNoZW5naG9uZyBIYW4+
+IC0tLT4gLS0tPiAgRG9jdW1lbnRhdGlvbi92bS9wYWdlX293bmVyLnJzdCB8IDE1ICsrKysr
+KysrKystLS0tLT4gIDEgZmlsZSBjaGFuZ2VkLCAxMCBpbnNlcnRpb25zKCspLCA1IGRlbGV0
+aW9ucygtKT4gPiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi92bS9wYWdlX293bmVyLnJz
+dCBiL0RvY3VtZW50YXRpb24vdm0vcGFnZV9vd25lci5yc3Q+IGluZGV4IDI1NjIyYzcxNS4u
+MGVjYjRhNzM5IDEwMDY0ND4gLS0tIGEvRG9jdW1lbnRhdGlvbi92bS9wYWdlX293bmVyLnJz
+dD4gKysrIGIvRG9jdW1lbnRhdGlvbi92bS9wYWdlX293bmVyLnJzdD4gQEAgLTE3MSwxMSAr
+MTcxLDEyIEBAIFVzYWdlPiAgPiAgU1RBTkRBUkQgRk9STUFUIFNQRUNJRklFUlM+ICA9PT09
+PT09PT09PT09PT09PT09PT09PT09PT4gLTo6PiAgPiAtRm9yIC0tc29ydCBvcHRpb246PiAr
+MSkgRm9yIC0tc29ydCBvcHRpb24uPiAgPiArCT09PT0JCT09PT09PT09PT0JPT09PT09PT09
+PT0+ICAJS0VZCQlMT05HCQlERVNDUklQVElPTj4gKwk9PT09CQk9PT09PT09PT09CT09PT09
+PT09PT09PiAgCXAJCXBpZAkJcHJvY2VzcyBJRD4gIAl0ZwkJdGdpZAkJdGhyZWFkIGdyb3Vw
+IElEPiAgCW4JCW5hbWUJCXRhc2sgY29tbWFuZCBuYW1lPiBAQCAtMTgzLDE0ICsxODQsMTgg
+QEAgRm9yIC0tc29ydCBvcHRpb246PiAgCVQJCXR4dAkJZnVsbCB0ZXh0IG9mIGJsb2NrPiAg
+CWZ0CQlmcmVlX3RzCQl0aW1lc3RhbXAgb2YgdGhlIHBhZ2Ugd2hlbiBpdCB3YXMgcmVsZWFz
+ZWQ+ICAJYXQJCWFsbG9jX3RzCXRpbWVzdGFtcCBvZiB0aGUgcGFnZSB3aGVuIGl0IHdhcyBh
+bGxvY2F0ZWQ+IC0gICAgICAgIGF0b3IgICAgICAgICAgICBhbGxvY2F0b3IgICAgICAgbWVt
+b3J5IGFsbG9jYXRvciBmb3IgcGFnZXM+ICsJYXRvcgkJYWxsb2NhdG9yCW1lbW9yeSBhbGxv
+Y2F0b3IgZm9yIHBhZ2VzPiArCT09PT0JCT09PT09PT09PT0JPT09PT09PT09PT0+ICA+IC1G
+b3IgLS1jdXJsIG9wdGlvbjo+ICsyKSBGb3IgLS1jdXJsIG9wdGlvbi4+ICA+ICsJPT09PQkJ
+PT09PT09PT09PQk9PT09PT09PT09PT4gIAlLRVkJCUxPTkcJCURFU0NSSVBUSU9OPiArCT09
+PT0JCT09PT09PT09PT0JPT09PT09PT09PT0+ICAJcAkJcGlkCQlwcm9jZXNzIElEPiAgCXRn
+CQl0Z2lkCQl0aHJlYWQgZ3JvdXAgSUQ+ICAJbgkJbmFtZQkJdGFzayBjb21tYW5kIG5hbWU+
+ICAJZgkJZnJlZQkJd2hldGhlciB0aGUgcGFnZSBoYXMgYmVlbiByZWxlYXNlZCBvciBub3Q+
+ICAJc3QJCXN0YWNrdHJhY2UJc3RhY2sgdHJhY2Ugb2YgdGhlIHBhZ2UgYWxsb2NhdGlvbj4g
+LSAgICAgICAgYXRvciAgICAgICAgICAgIGFsbG9jYXRvciAgICAgICBtZW1vcnkgYWxsb2Nh
+dG9yIGZvciBwYWdlcz4gKwlhdG9yCQlhbGxvY2F0b3IJbWVtb3J5IGFsbG9jYXRvciBmb3Ig
+cGFnZXM+ICsJPT09PQkJPT09PT09PT09PQk9PT09PT09PT09PVNvLCBJIGhhdmUgYWN0dWFs
+bHkgdGVzdGVkIHRoaXMuQXJlIHlvdSBPSyB3aXRoIHRoZSBsb29rIG9mICAxKSBGb3IgLS1z
+b3J0IG9wdGlvbi5hbmQgIDIpIEZvciAtLWN1cmwgb3B0aW9uLmluIGdlbmVyYXRlZCBIVE1M
+IG9yIFBERiBkb2NzP0luIGxpdGVyYWwgYmxvY2tzLCB5b3Ugd291bGQgc2VlIGRvdWJsZSBk
+YXNoZXMgb2YgIi0tIi5Ob3cgdGhleSBhcmUgY29udmVydGVkIHRvIHNvLWNhbGxlZCBlbmRh
+c2gsIHdoaWNoIGlzIGEgc2luZ2xlIGRhc2hzbGlnaHRseSBsb25nZXIgdGhhbiBhIG5vcm1h
+bCBoeXBoZW4uICBJdCBsb29rcyBjb25mdXNpbmcgdG8gbWUuVG8gcmVtZWR5IHRoaXMsIHlv
+dSBuZWVkIGlubGluZSBsaXRlcmFsIG1hcmtlcnMgb2YgIDEpIEZvciBgYC0tc29ydGBgIG9w
+dGlvbi5hbmQgIDIpIEZvciBgYC0tY3VybGBgIG9wdGlvbi5CeSB0aGUgd2F5LCB0aGlzIHBh
+dGNoIGNoYW5nZXMgIjoiIHRvICIuIiBhdCB0aGUgZW5kIG9mIHRoZW0uQXJlIHRoZXkgaW50
+ZW50aW9uYWwgY2hhbmdlcz8gIElmIHNvLCB3aHk/ICAgICAgICBUaGFua3MsIEFraXJh
 
-Yes this is exactly what Peter is doing, except that we're trying to 
-keep one lock taken.  Thanks for pointing to lock_sock_nested().
 
-Paolo
 

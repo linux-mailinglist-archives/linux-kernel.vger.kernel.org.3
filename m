@@ -2,55 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC725159AD
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 03:51:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9548A5159B1
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 03:51:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382047AbiD3Bxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 21:53:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46492 "EHLO
+        id S240219AbiD3ByG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 21:54:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382036AbiD3Bxf (ORCPT
+        with ESMTP id S1382035AbiD3Bxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 29 Apr 2022 21:53:35 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8A15F5A;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407FD6178;
         Fri, 29 Apr 2022 18:50:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C80D6247B;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 900256243D;
         Sat, 30 Apr 2022 01:50:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BFD70C385AC;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D144BC385AE;
         Sat, 30 Apr 2022 01:50:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1651283411;
-        bh=4amxzgiIc8EudEU2X7SISkhxud6zHWtuW7goa+dtg6o=;
+        bh=fiQr+EHrMiDtkKfEyrknJHIPmgs9EP6w9pQlZtQ+6WU=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=p+Erfm8kFBk8qFdSybLHXIfsUOT0TZ08J1rsUb+vSd/O1FG6SEQssv/JU87BexJWG
-         95xF+P/TTM5gpVNqSyPRbbq0ao3vfk7r3HC0aMUAaoUCVAsvvalkw1YnUq3F3UgE7v
-         GcOQzQ/rr8jWd1fcOwrgq4q7XajhwHN7iUoH34gZd4rOSgC/qcp1fj/jKApZJEgFoi
-         6W0P2lpxiutaAtczH1nF+MWLzK8/p3ifaNJNZmKqvxgQhvJyvA/p5UHgGaciXTJ0yK
-         LRzygJZaDG21gfZ6JIvZpD/sfbBRGW+i/Au7WTVj/7AinYcU6bUhvPhDeTUXK7oU4z
-         +MlCQGh7QwjxQ==
+        b=sQBckF+2Btn45cJ0V63IBV7TPbvs1UZ6Rr8pY7Mxg0XFWi7SAIECSYNQBglIxh8A8
+         Do4dUMHsiYTCnu4RXJEVxyo60eeeBH9KX9A2tODWgyAkuAakQoNCnQPDiOMBSOxUAg
+         z14R3eb+GCFP7ZmHsUqWTmRly6hqHPhVJK2jNxShwGUo6Iiewl6kmEf3VdxZE9Fykn
+         05XhLhgtn4FcU1QnidGSoxnpnOztjTrshDQ+4BNx2pfIV2eNMJPZqVguvd40AnE2IE
+         dZUECZClBdmwylYrgSDo5X35sZqyaWk/Sjp8t3RsXT9LohP+DACjqEQmfT7O7U0Jcg
+         3j+lCMaMixsVw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A38FEE8DBDA;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AD491F03847;
         Sat, 30 Apr 2022 01:50:11 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [Patch net] net: dsa: ksz9477: port mirror sniffing limited to one
- port
+Subject: Re: [PATCH net-next] hinic: fix bug of wq out of bound access
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165128341166.13664.5718757147720361929.git-patchwork-notify@kernel.org>
+Message-Id: <165128341170.13664.7916355260334073632.git-patchwork-notify@kernel.org>
 Date:   Sat, 30 Apr 2022 01:50:11 +0000
-References: <20220428070709.7094-1-arun.ramadoss@microchip.com>
-In-Reply-To: <20220428070709.7094-1-arun.ramadoss@microchip.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, kuba@kernel.org, davem@davemloft.net,
-        olteanv@gmail.com, f.fainelli@gmail.com, vivien.didelot@gmail.com,
-        andrew@lunn.ch, UNGLinuxDriver@microchip.com,
-        woojung.huh@microchip.com
+References: <282817b0e1ae2e28fdf3ed8271a04e77f57bf42e.1651148587.git.mqaio@linux.alibaba.com>
+In-Reply-To: <282817b0e1ae2e28fdf3ed8271a04e77f57bf42e.1651148587.git.mqaio@linux.alibaba.com>
+To:     Qiao Ma <mqaio@linux.alibaba.com>
+Cc:     luobin9@huawei.com, davem@davemloft.net, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -65,23 +61,21 @@ Hello:
 This patch was applied to netdev/net.git (master)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Thu, 28 Apr 2022 12:37:09 +0530 you wrote:
-> This patch limits the sniffing to only one port during the mirror add.
-> And during the mirror_del it checks for all the ports using the sniff,
-> if and only if no other ports are referring, sniffing is disabled.
-> The code is updated based on the review comments of LAN937x port mirror
-> patch.
+On Thu, 28 Apr 2022 20:30:16 +0800 you wrote:
+> If wq has only one page, we need to check wqe rolling over page by
+> compare end_idx and curr_idx, and then copy wqe to shadow wqe to
+> avoid out of bound access.
+> This work has been done in hinic_get_wqe, but missed for hinic_read_wqe.
+> This patch fixes it, and removes unnecessary MASKED_WQE_IDX().
 > 
-> Link: https://patchwork.kernel.org/project/netdevbpf/patch/20210422094257.1641396-8-prasanna.vengateshan@microchip.com/
-> Fixes: b987e98e50ab ("dsa: add DSA switch driver for Microchip KSZ9477")
-> Signed-off-by: Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
-> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+> Fixes: 7dd29ee12865 ("hinic: add sriov feature support")
+> Signed-off-by: Qiao Ma <mqaio@linux.alibaba.com>
 > 
 > [...]
 
 Here is the summary with links:
-  - [net] net: dsa: ksz9477: port mirror sniffing limited to one port
-    https://git.kernel.org/netdev/net/c/fee34dd19938
+  - [net-next] hinic: fix bug of wq out of bound access
+    https://git.kernel.org/netdev/net/c/52b2abef450a
 
 You are awesome, thank you!
 -- 

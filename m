@@ -2,88 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8504515BB6
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 11:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE5B515BBE
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 11:09:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239130AbiD3JKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 05:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39708 "EHLO
+        id S1382435AbiD3JMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 05:12:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238358AbiD3JKW (ORCPT
+        with ESMTP id S1382421AbiD3JMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 05:10:22 -0400
-Received: from smtp.smtpout.orange.fr (smtp04.smtpout.orange.fr [80.12.242.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351E17C782
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 02:07:00 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.180.246])
-        by smtp.orange.fr with ESMTPA
-        id kj42nAiNWPp5ukj42nS5Lg; Sat, 30 Apr 2022 11:06:57 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Sat, 30 Apr 2022 11:06:57 +0200
-X-ME-IP: 86.243.180.246
-Message-ID: <c920e37a-b690-e614-c052-634177bbeb46@wanadoo.fr>
-Date:   Sat, 30 Apr 2022 11:06:53 +0200
+        Sat, 30 Apr 2022 05:12:42 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C707489CCF;
+        Sat, 30 Apr 2022 02:09:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=fmjKi3vzk5o50Dip5Ph0Bmr/f1E5Lj21/lbWqEwgHkk=; b=gP2jQek7ogrpQN1C4MXnP7aih6
+        9MpJEvWzvlOJpxul3NuvKTM+1Aymo8v2WKGSWeTkjPuh9j5Kx6oalC9wJePh3SCBiQauChsIADQ2p
+        awHTCsB7ByqI2tgdiudUdNwUPwJefZVeg1l4ofe5iiqvmn8WItr7C/7gjnoGx4MI1PTeAEK+Kce1l
+        m1YgnfIbhxGraj+tYK/82m+XakPv3zCiqhetcFWQppvw2k+nTdjPrw9LuFPQL2QdjLx1kxy4K5nOQ
+        HB4Fh5lHfvGCgodgr2tGjwSaUNzWQ3LPB+VFSFE1iRiJMLzYHDAcxE15A3g/1tBSl/kbjQgvf7UpB
+        oaxIK3rA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nkj69-00DDvg-Aj; Sat, 30 Apr 2022 09:09:05 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 60B393001EA;
+        Sat, 30 Apr 2022 11:09:03 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 256252028EFE6; Sat, 30 Apr 2022 11:09:03 +0200 (CEST)
+Date:   Sat, 30 Apr 2022 11:09:03 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-hardening@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [RFC PATCH 06/21] cfi: Switch to -fsanitize=kcfi
+Message-ID: <Ymz8rwWGjkVCfMZ1@hirez.programming.kicks-ass.net>
+References: <20220429203644.2868448-1-samitolvanen@google.com>
+ <20220429203644.2868448-7-samitolvanen@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] scsi: elx: efct: remove unnecessary memset in efct_io
-Content-Language: en-US
-To:     Finn Thain <fthain@linux-m68k.org>,
-        Wan Jiabing <wanjiabing@vivo.com>
-Cc:     James Smart <james.smart@broadcom.com>,
-        Ram Vegesna <ram.vegesna@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Daniel Wagner <dwagner@suse.de>, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cocci@inria.fr
-References: <20220318145230.1031-1-wanjiabing@vivo.com>
- <794191df-e745-c591-bf1d-37945f96e73a@wanadoo.fr>
- <eab847fe-8d17-1a38-b55e-e68a2f6a1829@linux-m68k.org>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <eab847fe-8d17-1a38-b55e-e68a2f6a1829@linux-m68k.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220429203644.2868448-7-samitolvanen@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 30/04/2022 à 09:48, Finn Thain a écrit :
-> On Sat, 30 Apr 2022, Christophe JAILLET wrote:
-> 
->> Le 18/03/2022 à 15:52, Wan Jiabing a écrit :
->>> io->sgl is allocated by kzalloc(). The memory is set to zero.
->>> It is unnecessary to call memset again.
->>>
->>
->> Hi,
->>
->> Nitpick: this kzalloc() should be a kcalloc() to avoid an open-coded
->> multiplication when computing the size to allocate.
->>
-> 
-> Seems like kcalloc() conversion could be a separate patch. Perhaps it
-> could be done everywhere using a coccinelle script.
+On Fri, Apr 29, 2022 at 01:36:29PM -0700, Sami Tolvanen wrote:
 
-Sure it can and I guess that many coccinelle script already exist for it.
+> +CC_FLAGS_CFI	:= -fsanitize=kcfi -fno-sanitize-blacklist
 
-I only replied here because of a comment from Joe Perches on the same 
-patch a few month ago (see [1] and [2])
-
-So Wan Jiabing or anyone else, if you want to go one step further, just 
-feel free to propose it.
-
-CJ
-
-
-[1]: 
-https://lore.kernel.org/all/4208b3d08a677601c73889f78dd25e5c9f056a86.camel@perches.com/
-
-[2]: 
-https://lore.kernel.org/all/9be7d5beb437583f8d975d168ac5c3e32fb6e465.1639158677.git.christophe.jaillet@wanadoo.fr/
+I'm somewhat surprised to see CFI is a sanitizer. It just doesn't seem
+to fit in the line of {UB,KC,KA}SAN and friends.

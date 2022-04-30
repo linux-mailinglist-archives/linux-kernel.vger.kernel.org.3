@@ -2,114 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D1825159F9
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 05:00:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0375159FC
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 05:01:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382103AbiD3DEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 23:04:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39958 "EHLO
+        id S1382106AbiD3DE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 23:04:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378132AbiD3DDw (ORCPT
+        with ESMTP id S1382113AbiD3DE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 23:03:52 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA782ADF
-        for <linux-kernel@vger.kernel.org>; Fri, 29 Apr 2022 20:00:29 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id B7E9A5C01A3;
-        Fri, 29 Apr 2022 23:00:26 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Fri, 29 Apr 2022 23:00:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm2; t=1651287626; x=1651374026; bh=38PyJ9IXOsmeJwIX/t9APweLF
-        uKK/8sAQNU4GM49vF4=; b=Vab6SpPtfFDV9UL6GGmFaO1dP+RAzxAKK7BQcLqWR
-        Cd7NggAtpIH3XV9las76MrSegnnBQin5qhFbAX6CPFU27NgxeoJRxIz1sLz8T+Nm
-        uIyff5DaL3DoNTw1PH05BoB/+ksJi3ugmpmXCfXovvsYChYy891vdjIuXHJzVPPV
-        ciwinWbvKRv/2IeF9pW9Xu8n0QyR7pYvMqZsNnZP4wfBDWjMyy2OCeR3o5NvbJqP
-        1E1XjPYhFzx3QeC2SAgGtBj6koRL4VR5z4M+e/iWOKQAVUuzrdYog/gb5lLRVo6T
-        mfhvOo4m71ffSvP6qitrQZqweMFsKiywnjEXu4ErP6O3w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
-        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm1; t=1651287626; x=1651374026; bh=3
-        8PyJ9IXOsmeJwIX/t9APweLFuKK/8sAQNU4GM49vF4=; b=LylEPbIgUsBgdDDjB
-        J7ECMakOTVFI/31K77vaBo4vMv2tJk0hoMsPOGRQDuL7N2ZB21lJSJ8/U95PP1yS
-        uyNZZl8K+uCMN66bcdxrWU84+ZqziuaMCs80juCcnd2TEhD0lAxLnVzx7EMUK83R
-        8XAu9UtNBjnItDPsZfu4F3eZHBgjElwjn6hXnByCyribIJKLcgQ8vMMzzpbfGtm7
-        H4f9xcBKji+otyE6hoSvxNgWFfqSY9i89xINgVQW9nIdL0730zE7FMTkNlNfvmL4
-        L7h7eyrLfUWknRUGdeX7FzRAM2Ms3TYKLn5GFuNr/69GjBzXi8srnfOBaMcBL/Gn
-        mM2jg==
-X-ME-Sender: <xms:SqZsYq1xNI7Aubz0X1IWM9ScaH_2x0zYJLmXxpsbXcrWYxIaiKE0lg>
-    <xme:SqZsYtHw58PbbDoh05VYgAscFBLBbmvMxpGm3yXXeVx65z-iLroQrNjbAlfjwLgKF
-    5MRAKFgSkxyA8A5HQ>
-X-ME-Received: <xmr:SqZsYi6nKQL0vY757ZmtNkmSYi9t-3eB5Tn25VL48dZuWpek5YeyyonjGeB_z6eOTwfu0oTYg3tAFXCI6yh739yuWWB0THCbuKhPQNS6lJMF8pTX4dENRM8EQvI6Wn5wbnIpBA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddtgdeigecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgvlhcu
-    jfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtffrrg
-    htthgvrhhnpeekveelhfejueelleetvdejvdeffeetgeelheeujeffhefgffefkeehhffh
-    keekgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:SqZsYr3uOp_vQgOKzHLrFW4BRX16kkHhTRwkQug7amFu1LVTpVCGTQ>
-    <xmx:SqZsYtE4Ffd_3nrpc7CulqxgYtBFxglBt-F3ntlmBQ1vT3rAgUvO8Q>
-    <xmx:SqZsYk-Tp2Qzfw08egIX7fy6ONlN7ErgDCATAuQoPoarwfA5El11mg>
-    <xmx:SqZsYmOzMOfNeNRdvlertHi7iy_yroxpe6rJeJ2T94NXoY2HDICLZg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 29 Apr 2022 23:00:25 -0400 (EDT)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] riscv: Fix irq_work when SMP is disabled
-Date:   Fri, 29 Apr 2022 22:00:23 -0500
-Message-Id: <20220430030025.58405-1-samuel@sholland.org>
-X-Mailer: git-send-email 2.35.1
+        Fri, 29 Apr 2022 23:04:26 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0DF8C7F7;
+        Fri, 29 Apr 2022 20:01:05 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id p6so8607170plf.9;
+        Fri, 29 Apr 2022 20:01:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sJbeOZdGo/iGCzS2hb9T0p/O4FHAvUxSNhK6RnmmTD8=;
+        b=hRv1rLL+Moem4XVZIiZT+It+KR15QdGjR5AYYIbIoHIu+Y+nsCyj1o++gdwJFwIkAu
+         HsFQlTEN9s28kR6VXCE5gboa++uxnnZJTCKqyezC8hZYoZa4ormK5OHioWvWElKJEgXI
+         YaCpZ/aaOCnvWJVGInDQ7Q5AHY4DtI2PxmGSxQckE9WYw9XFhQ1NxazMej/a3hYrhUN1
+         VjVp+ZaShgksdN44x3xu/56s/ZVMbRSbwwm/ORq09+M/QAFI9V8mzemhcYG6juCLvF5C
+         rH4y1eBB1ETym1s1C2vt9RySabeY/Deu7p8ZCZ/1wDns6/8WUz+qJE4xfwvdRTKt1AKR
+         T8Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sJbeOZdGo/iGCzS2hb9T0p/O4FHAvUxSNhK6RnmmTD8=;
+        b=wmULrwwpD7KMh0eOqGXgPgAeqW2fgrvk0FYdmxWINqXVuDQflmDQNOGPqiySx/Db63
+         GamcGG5iENdXck78dlFS0mOs2F6Ib0z6UOsw/QHJtcxVHZg/F1XHbcZb3kaEm9DXFqq8
+         pDmScEA9CNEXqRdZD02SrCuOOURm82G3CqMVreVu03IMqr8QpNLjAp5WpY231hxFBAAm
+         6EkG5MHVdHx3pxPSFSEjyAqZ5uM347HplPovG3Zc1TZHzJN7wvk/MloAFa0p5mBFBZdw
+         FgxfalfW3gKyEUdQaqPjbufclH5UJ41xxCIVjrqzQxcKU2xDerNxrod+c/X6cI1kv75P
+         n/MQ==
+X-Gm-Message-State: AOAM531rA31Xj2VusD0CnB5+Plny+1df+DxCsobUAE2ltCtiXEAl9TLJ
+        YjhQgTtz45g3/vjkw/6HjLu9fP4gAoBMcxWDZtw=
+X-Google-Smtp-Source: ABdhPJyDXUMYezfyoEDxL3YEYwI2StMRhSXxB6zRjHH5aWYlZLvZ52SIFKGSvmPDLCN9leJowR9UgCy9OUWMoEYRgBA=
+X-Received: by 2002:a17:902:d58a:b0:15d:1cf6:644c with SMTP id
+ k10-20020a170902d58a00b0015d1cf6644cmr2181857plh.67.1651287665115; Fri, 29
+ Apr 2022 20:01:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220421140740.459558-1-benjamin.tissoires@redhat.com>
+ <20220426040314.ez3cdpv2w45vbgkk@MBP-98dd607d3435.dhcp.thefacebook.com> <CAO-hwJLziatB9n5Rut_EYRgfN94t2XX8Zx8B_Zmu2nucTw3k8g@mail.gmail.com>
+In-Reply-To: <CAO-hwJLziatB9n5Rut_EYRgfN94t2XX8Zx8B_Zmu2nucTw3k8g@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 29 Apr 2022 20:00:54 -0700
+Message-ID: <CAADnVQKN==eb3ASQhrJBg4yC8BuRdMQyY-OdRbXhdyv2P8L0-A@mail.gmail.com>
+Subject: Re: [RFC bpf-next v4 0/7] Introduce eBPF support for HID devices (new attempt)
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-irq_work is triggered via an IPI, but the IPI infrastructure is not
-included in uniprocessor kernels. As a result, irq_work never runs.
-Fall back to the tick-based irq_work implementation on uniprocessor
-configurations.
+On Tue, Apr 26, 2022 at 12:20 AM Benjamin Tissoires
+<benjamin.tissoires@redhat.com> wrote:
+>
+> On Tue, Apr 26, 2022 at 6:03 AM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Thu, Apr 21, 2022 at 04:07:33PM +0200, Benjamin Tissoires wrote:
+> > > Hi,
+> > >
+> > > so after the reviews from v3, and some discussion with Alexei, I am
+> > > back with a new version of HID-BPF.
+> > >
+> > > This version is not complete (thus the RFC), but I'd like to share
+> > > it now to get initial feedback, in case I am too far from the actual
+> > > goal.
+> > >
+> > > FTR, the goal is to provide some changes in the core verifier/btf so
+> > > that we can plug in HID-BPF independently from BPF core. This way we can
+> > > extend it without having to care about bpf-next.
+> >
+> > Overall looks great. imo much cleaner, simpler and more extensible
+> > than the earlier versions.
+> > The bpf core extensions are nicely contained and HID side can be
+> > worked on in parallel.
+>
+> \o/
+>
+> >
+> > > The things I am not entirely sure are:
+> > > - do we need only fentry/fexit/fmod_ret BPF program types or should
+> > >   programs that modify the data stream use a different kind?
+> >
+> > Probably not. I'll reply in patch 2.
+> >
+> > > - patch 3/7 is probably not the correct approach (see comments in the
+> > >   patch itself)
+> > >
+> > > We are missing quite a few bits here:
+> > > - selftests for patches 1 to 4
+> > > - add the ability to attach a program to a struct device, and run that
+> > >   program only for that struct device
+> >
+> > yes. That is still to be figured out.
+>
+> I spent some time on that, and I don't think it makes a lot of sense
+> to use the current trampoline approach if we want to keep on using
+> fentry/fexit...
+> - the trampoline is pretty nice, but it adds instructions before
+> calling the actual function, meaning that adding a check on struct
+> device will be quite hard to do ()we have no idea where the struct
+> device is in the arguments) and will take more space on the trampoline
+> itself
+> - there is a limit on how many functions can be attached to a
+> trampoline (38 IIRC), and we probably will explode that number quickly
+> enough when we get more BPF programs to support HID devices.
 
-Fixes: 298447928bb1 ("riscv: Support irq_work via self IPIs")
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
-This was found while bringing up cpufreq on D1. Switching cpufreq
-governors was hanging on irq_work_sync().
+Ohh. This is an obsolete limitation.
+38 was the number since we used half page optimization
+for bpf trampoline.
+It's gone now. We can easily lift this max.
 
- arch/riscv/include/asm/irq_work.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> So my chain of thoughts from yesterday was the following (completely
+> untested of course):
+> - instead of writing a new BPF API that might move in the future while
+> things are settling, I can actually simply load a tracer BPF program
+> from HID that monitors the BPF programs that are attached to a given
+> function
+> - I can also add a new API (a kfunc likely) that "registers" a given
+> BPF program (through its fd) to a given HID device
+> - when a device sends data, it hits hid_bpf_device_event() which will
+> have a default BPF program (loaded by the kernel) that dispatches the
+> registered BPF programs based on the HID device.
+>
+> This would solve the 2 issues above IMO, except that the kfunc to
+> register a HID BPF program will suddenly be not standard.
 
-diff --git a/arch/riscv/include/asm/irq_work.h b/arch/riscv/include/asm/irq_work.h
-index d6c277992f76..b53891964ae0 100644
---- a/arch/riscv/include/asm/irq_work.h
-+++ b/arch/riscv/include/asm/irq_work.h
-@@ -4,7 +4,7 @@
- 
- static inline bool arch_irq_work_has_interrupt(void)
- {
--	return true;
-+	return IS_ENABLED(CONFIG_SMP);
- }
- extern void arch_irq_work_raise(void);
- #endif /* _ASM_RISCV_IRQ_WORK_H */
--- 
-2.35.1
+Could you add more details to these ideas?
+I thought you wanted bpf prog writers to be independent of each other.
+They would tell some framework HID device id/pcie id that they need
+and the rest would be automatic.
+Maybe we can achieve that by adding another layer before libbpf
+that would accept (bpf_prog, hid_id) tuple and insert
+if (hid->id != hid_id) return -E..;
+as the first insn into bpf_prog before loading into the kernel.
+All such progs will be kfunc-s attached to the same hook.
+The kernel will execute them sequentially.
+The framework will provide demux by auto-inserting this 'if'.
+This 'if (hid)' could be a part of sample code too.
+We can simply ask prog writers to follow this style.
 
+Another idea would be to do something like libxdp.
+Attach a "dispatcher" bpf prog to the kfunc hook and use
+some library to attach hid-specific progs as "freplace" kind of
+programs. It's a more involved solution.
+
+Another option is to use tail_calls.
+If hid_id is a relatively small number. The "dispatcher" bpf prog
+can do bpf_tail_call(prog_array, hid_id)
+while hid specific progs insert itself into prog_array
+instead of attaching to kfunc.
+
+> >
+> > > - when running through bpf_prog_test_run_opts, how can we ensure we are
+> > >   talking to the correct device? (I have a feeling this is linked to the
+> > >   previous point)
+> > > - how can we reconnect the device when a report descriptor fixup BPF
+> > >   program is loaded (would it make sense to allow some notifications on
+> > >   when a BPF program is attached/detached to a device, and which
+> > >   function have been traced?)
+> >
+> > Not sure I follow. What kind of notification do you have in mind?
+> > To user space?
+> >
+>
+> No, this is in-kernel notifications.
+> What I want to do, is when I load a BPF program that changes the HID
+> report descriptor, hid-core detects that and reconnects the attached
+> device.
+>
+> But after a couple of days of thinking, and with the above approach
+> where HID would preload a BPF program, I should be able to achieve
+> that with the "register BPF through a HID kfunc call". When I see that
+> we are attaching a HID report descriptor fixup to a given HID device,
+> I can then reconnect the matching device.
+>
+> It would certainly be cleaner to have a general "notify me when a
+> tracer is attached to this particular function", but we can hide that
+> right now with a preloaded BPF program :)
+
+There are few lsm hooks in bpf core. It probably wwill be eird
+for hid core to hook into them. We can add a few tracepoints
+at attach functions if that helps.

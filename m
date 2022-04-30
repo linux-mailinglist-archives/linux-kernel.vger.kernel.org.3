@@ -2,78 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14067515C62
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 13:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB211515C50
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 12:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238682AbiD3LIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 07:08:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42216 "EHLO
+        id S238885AbiD3KkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 06:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235451AbiD3LIk (ORCPT
+        with ESMTP id S230459AbiD3KkP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 07:08:40 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862152183C
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 04:05:11 -0700 (PDT)
-Received: from mail-yb1-f175.google.com ([209.85.219.175]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1Ma1HG-1nNjqD27l6-00W23Y; Sat, 30 Apr 2022 13:05:09 +0200
-Received: by mail-yb1-f175.google.com with SMTP id w187so18600390ybe.2;
-        Sat, 30 Apr 2022 04:05:09 -0700 (PDT)
-X-Gm-Message-State: AOAM531o/3BAN8nqceJV/xsr+E4yVz2GNdptZvfqIMN9bInkV6Fq3mxS
-        XF/+7H5zHjU7aXJJnZT4XERP7tJBoQdkJtbSIAs=
-X-Google-Smtp-Source: ABdhPJwibsCnhqRh57jVjG10phM0BrUgvfZ/Cu+XnlvIN8vHkz0VXxSV0emX0Uq3MS9OyJQ4u/HSolRYBlWtD82GrJc=
-X-Received: by 2002:a25:cdc7:0:b0:648:f57d:c0ed with SMTP id
- d190-20020a25cdc7000000b00648f57dc0edmr3093454ybf.480.1651314908194; Sat, 30
- Apr 2022 03:35:08 -0700 (PDT)
+        Sat, 30 Apr 2022 06:40:15 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E720969707
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 03:36:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651315012; x=1682851012;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=d0ODFG+qWVJosjwuPYNcs5jsoE5HGe3GK5TcLmuvo+A=;
+  b=HQ2FSGsq01eM4XGPrsD0j0auO3YhLxf4E303Babk4pPxm1PHtdbXATqL
+   VSZJF06bF/3USPJtobYPStKOPKW7RuzEGAGckb/ryavxC11FbUVIF3w0f
+   5ejfnqacZf48UlfxmgX7MHqBYhQUWOKIK2Pu/hPgUhF86ULV6sNjs0ZMb
+   BU1QFQZ8+IgniQuflABZ6NcX2fAHoEar3AXK3VrK7R2QUJ1MFk9t2Fx1p
+   b3884UlB7J4gZ8TZ83gCykEHFsP3a68NVDN1clCapMB5q4w0eJCCCdlTI
+   OmtpUYIUy7dThJuY2S4NBashNGP7XEESrrvq8prC2C6YnqbXYJfReU/7a
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="265715070"
+X-IronPort-AV: E=Sophos;i="5.91,187,1647327600"; 
+   d="scan'208";a="265715070"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2022 03:36:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,187,1647327600"; 
+   d="scan'208";a="619087370"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 30 Apr 2022 03:36:51 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nkkSz-00078h-C3;
+        Sat, 30 Apr 2022 10:36:45 +0000
+Date:   Sat, 30 Apr 2022 18:36:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Stephen Boyd <swboyd@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Subject: [drm-msm:msm-next-staging 7/32]
+ drivers/gpu/drm/msm/msm_drv.c:236:17: error: implicit declaration of
+ function 'drm_bridge_remove'; did you mean 'drm_bridge_detach'?
+Message-ID: <202204301804.hJxOQfse-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220430090518.3127980-1-chenhuacai@loongson.cn>
- <20220430090518.3127980-14-chenhuacai@loongson.cn> <CAK8P3a0A9dW4mwJ6JHDiJxizL7vWfr4r4c5KhbjtAY0sWbZJVA@mail.gmail.com>
- <CAAhV-H4te_+AS69viO4eBz=abBUm5oQ6AfoY1Cb+nOCZyyeMdA@mail.gmail.com>
-In-Reply-To: <CAAhV-H4te_+AS69viO4eBz=abBUm5oQ6AfoY1Cb+nOCZyyeMdA@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sat, 30 Apr 2022 12:34:52 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0DqQcApv8aa2dgBS5At=tEkN7cnaskoUeXDi2-Bu9Rnw@mail.gmail.com>
-Message-ID: <CAK8P3a0DqQcApv8aa2dgBS5At=tEkN7cnaskoUeXDi2-Bu9Rnw@mail.gmail.com>
-Subject: Re: [PATCH V9 13/24] LoongArch: Add system call support
-To:     Huacai Chen <chenhuacai@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linux API <linux-api@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:5Q9ONKpvezK/gY6sK2MPxh0TEU0BEAAMPsvROxQ36cnlmFEuzsX
- HJsG/sjFOKpipVSpnXpq9/Ku4sBDl72eHjTZI/jSDmrqMQ8IIFStXLMVQjFdfwzt3St4jP7
- E07FbeDW1UzkQp6jGVh7QHV6fYvi4I2RH664Dtr/txCTm7/GLBVUuHn6rRjXvAUTb4m+3ZQ
- bP4jZMRxNSRZ3WHWQ1MAQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:eulq2tmNm+M=:VWpAPGIqyAGE8XZZ/597/q
- 607IIA8lc0UkUcwtoSUWiqCDiv8NkDTjZf5CfBWHkyYWI5v6ugJBx1Sep2d2fKTf9s0CcHV+6
- AC38+yBaNitt5RSzHOgXZuTrZmc4ItLRupVyAkJ4tio57vcY6BdgebYO6WRZNYdMhYGAQC1Qg
- 4R1mA/zuN3nLbNArfF04xmD5HwT1GIGKvGxa0IHcazrEThfL7T80cxAsgB1saMOA9GKwz9OFu
- Qm/nhJIhjdXrLNzmGYDbU7wN794V4uAAFevqSJ5zZfWZFm21pUCI1Yph3EH6SrRBdeq0QKOD1
- UgBLtiXPwRImYhyQf25phvFNGnitD+4UT1VGY1mJf8m/Nh9DehgXVOwRG1N22h7h3VLuN3wJV
- 7QdiEKnBs+IE7+InKpGuKvZzJGeOzoNNimUPHf7f8MOI/KC8d5IBTTbLW2Ogj/NSqloietbNR
- a15a4J80YGoQh4iO+hmZtJd4JYFy3RAfsXmX1k/3JcJfrBPUU0x/xFIL0vfI5P/oXW4Uv8dOe
- KU3tB5VkK49Q3JPO3spAK/SX9qtD6KjhicJspuTXEi4MzBMtXin7xYVFMqCYC4NWoMqL6UlAC
- wmh2K38Cac6xYB8ctKQ6zDCnJTSVI3yfygTJWisblgZYfKjc6+XiJ9KuLrTP8QEfmXoeuWFY2
- XFIgsjyIGJ1/sLF4fJux9e1rW1r5tEhy0/Z3zbRoDoYHiznnc69tgmUHkeO6VcNtoijrVXV3w
- ZnjocAxXp3e/Lrwbn22lKkzUmskpbwYQvJ3096awfpKnrfwS6OWs4AC6pvVp0Z6tDfFze+o6b
- FsBpaMjQIFzmgpcf9e6egimZxIfpmtmobma8O7cfTq18vbEI8U=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,37 +63,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 30, 2022 at 12:05 PM Huacai Chen <chenhuacai@gmail.com> wrote:
-> On Sat, Apr 30, 2022 at 5:45 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > On Sat, Apr 30, 2022 at 11:05 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> > >
-> > > This patch adds system call support and related uaccess.h for LoongArch.
-> > >
-> > > Q: Why keep __ARCH_WANT_NEW_STAT definition while there is statx:
-> > > A: Until the latest glibc release (2.34), statx is only used for 32-bit
-> > >    platforms, or 64-bit platforms with 32-bit timestamp. I.e., Most 64-
-> > >    bit platforms still use newstat now.
-> > >
-> > > Q: Why keep _ARCH_WANT_SYS_CLONE definition while there is clone3:
-> > > A: The latest glibc release (2.34) has some basic support for clone3 but
-> > >    it isn't complete. E.g., pthread_create() and spawni() have converted
-> > >    to use clone3 but fork() will still use clone. Moreover, some seccomp
-> > >    related applications can still not work perfectly with clone3. E.g.,
-> > >    Chromium sandbox cannot work at all and there is no solution for it,
-> > >    which is more terrible than the fork() story [1].
-> > >
-> > > [1] https://chromium-review.googlesource.com/c/chromium/src/+/2936184
-> >
-> > I still think these have to be removed. There is no mainline glibc or musl
-> > port yet, and neither of them should actually be required. Please remove
-> > them here, and modify your libc patches accordingly when you send those
-> > upstream.
->
-> If this is just a problem that can be resolved by upgrading
-> glibc/musl, I will remove them. But the Chromium problem (or sandbox
-> problem in general) seems to have no solution now.
+tree:   https://gitlab.freedesktop.org/drm/msm.git msm-next-staging
+head:   d2dc68276133362f021bc8d429433b5818826c81
+commit: d28ea556267c4f2ec7264ab49f1b1296834321ec [7/32] drm/msm: properly add and remove internal bridges
+config: parisc-randconfig-r023-20220428 (https://download.01.org/0day-ci/archive/20220430/202204301804.hJxOQfse-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add drm-msm https://gitlab.freedesktop.org/drm/msm.git
+        git fetch --no-tags drm-msm msm-next-staging
+        git checkout d28ea556267c4f2ec7264ab49f1b1296834321ec
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash drivers/gpu/drm/msm/
 
-I added Christian Brauner to Cc now, maybe he has come across the
-sandbox problem before and has an idea for a solution.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-        Arnd
+All errors (new ones prefixed by >>):
+
+   drivers/gpu/drm/msm/msm_drv.c: In function 'msm_drm_uninit':
+>> drivers/gpu/drm/msm/msm_drv.c:236:17: error: implicit declaration of function 'drm_bridge_remove'; did you mean 'drm_bridge_detach'? [-Werror=implicit-function-declaration]
+     236 |                 drm_bridge_remove(priv->bridges[i]);
+         |                 ^~~~~~~~~~~~~~~~~
+         |                 drm_bridge_detach
+   cc1: some warnings being treated as errors
+
+
+vim +236 drivers/gpu/drm/msm/msm_drv.c
+
+   230	
+   231		msm_disp_snapshot_destroy(ddev);
+   232	
+   233		drm_mode_config_cleanup(ddev);
+   234	
+   235		for (i = 0; i < priv->num_bridges; i++)
+ > 236			drm_bridge_remove(priv->bridges[i]);
+   237	
+   238		pm_runtime_get_sync(dev);
+   239		msm_irq_uninstall(ddev);
+   240		pm_runtime_put_sync(dev);
+   241	
+   242		if (kms && kms->funcs)
+   243			kms->funcs->destroy(kms);
+   244	
+   245		if (priv->vram.paddr) {
+   246			unsigned long attrs = DMA_ATTR_NO_KERNEL_MAPPING;
+   247			drm_mm_takedown(&priv->vram.mm);
+   248			dma_free_attrs(dev, priv->vram.size, NULL,
+   249				       priv->vram.paddr, attrs);
+   250		}
+   251	
+   252		component_unbind_all(dev, ddev);
+   253	
+   254		ddev->dev_private = NULL;
+   255		drm_dev_put(ddev);
+   256	
+   257		destroy_workqueue(priv->wq);
+   258	
+   259		return 0;
+   260	}
+   261	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

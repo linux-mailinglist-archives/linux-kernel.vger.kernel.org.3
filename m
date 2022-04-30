@@ -2,87 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB0A8515B1F
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 09:52:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 024B5515B21
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 09:56:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235600AbiD3Hzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 03:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60676 "EHLO
+        id S235487AbiD3H7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 03:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235487AbiD3Hzq (ORCPT
+        with ESMTP id S229728AbiD3H7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 03:55:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADA9517E0;
-        Sat, 30 Apr 2022 00:52:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E6ACEB81A53;
-        Sat, 30 Apr 2022 07:52:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10F04C385A7;
-        Sat, 30 Apr 2022 07:52:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651305142;
-        bh=7WU6Hv+j5IpVc4WlVEIwGBU4ZFEmt4nHCYEncgGlcn8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bftjN0qO/SG4jvtvjb3gkReAtIDReW4NuHomITzamBvbFKa47b+q4or07Bz4gvkPP
-         m+LASPvPyfaXDV9V359Bep0eUtfJmK1BBYPx3yTUU2z9UDIGBf4Q7h9pxJLnG/LDDl
-         Z2O+IfJ/Fea8Ya7bACgDQdH/i++YLQiyKRyAS5To=
-Date:   Sat, 30 Apr 2022 09:52:14 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Tanjore Suresh <tansuresh@google.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-nvme <linux-nvme@lists.infradead.org>,
-        Linux PCI <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH v2 1/3] driver core: Support asynchronous driver shutdown
-Message-ID: <YmzqrqfVLQ9/4KXp@kroah.com>
-References: <20220412224348.1038613-1-tansuresh@google.com>
- <20220412224348.1038613-2-tansuresh@google.com>
- <CAJZ5v0ivNq3aYCEcxPYMosLJCAyWiAnucwOCmRBzkM=sbyPWgQ@mail.gmail.com>
- <CALVARr6v5hcY0Vcf1izPUX-tXNJyyNXBMANbKX4CW9wfRf-pYQ@mail.gmail.com>
+        Sat, 30 Apr 2022 03:59:34 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8B38E1A1;
+        Sat, 30 Apr 2022 00:56:12 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 7056A1C0B82; Sat, 30 Apr 2022 09:56:09 +0200 (CEST)
+Date:   Sat, 30 Apr 2022 09:56:05 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Pavel Machek <pavel@denx.de>, iwamatsu@nigauri.org,
+        dinguyen@kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 4.19 00/53] 4.19.240-rc1 review [net: ethernet: stmmac:
+ fix altr_tse_pcs function when using a]
+Message-ID: <20220430075605.GA13110@amd>
+References: <20220426081735.651926456@linuxfoundation.org>
+ <20220426200000.GB9427@duo.ucw.cz>
+ <YmkrZ5t2cb1JSHR8@kroah.com>
+ <20220429074341.GB1423@amd>
+ <YmuuTb7Cv/JExahQ@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="k+w/mQv8wyuph6w0"
 Content-Disposition: inline
-In-Reply-To: <CALVARr6v5hcY0Vcf1izPUX-tXNJyyNXBMANbKX4CW9wfRf-pYQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YmuuTb7Cv/JExahQ@kroah.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A: http://en.wikipedia.org/wiki/Top_post
-Q: Were do I find info about this thing called top-posting?
-A: Because it messes up the order in which people normally read text.
-Q: Why is top-posting such a bad thing?
-A: Top-posting.
-Q: What is the most annoying thing in e-mail?
 
-A: No.
-Q: Should I include quotations after my reply?
+--k+w/mQv8wyuph6w0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-http://daringfireball.net/2007/07/on_top
+Hi!
 
-On Fri, Apr 29, 2022 at 11:03:07AM -0700, Tanjore Suresh wrote:
-> Rafael,
-> 
-> That is a good observation, however, many of the use cases in data
-> centers (deployment of devices in data centers) do not exploit device
-> power management. Therefore, I'm not sure that is the right way to
-> design this.
+> > > Can you run git bisect?
+> >=20
+> > Not a bisect, but we guessed e2423aa174e6 was responsible, and tested
+> > it boots with that patch reverted.
+> >=20
+> > commit e2423aa174e6c3e9805e96db778245ba73cdd88c
+> >=20
+> >     net: ethernet: stmmac: fix altr_tse_pcs function when using a
+> >     fixed-link
+> >=20
+> >     [ Upstream commit a6aaa00324240967272b451bfa772547bd576ee6 ]
+> >    =20
+>=20
+> Thanks, now reverted from 4.19.y, 4.14.y, and 4.9.y
 
-Yes it is, enable device power management and use that interface please.
-Devices in data centers should of course be doing the same thing as
-everyone else, as it actually saves real money in power costs.  To not
-do so is very odd.
+Thank you!
 
-thanks,
+Best regards,
+								Pavel
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
 
-greg k-h
+--k+w/mQv8wyuph6w0
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iEYEARECAAYFAmJs65QACgkQMOfwapXb+vIZ7QCfRO2U4ed9cCrh6jzxugQeDPj3
+WGcAoLG26DAESv7iYvtlszrb3VM+N1gc
+=e0CJ
+-----END PGP SIGNATURE-----
+
+--k+w/mQv8wyuph6w0--

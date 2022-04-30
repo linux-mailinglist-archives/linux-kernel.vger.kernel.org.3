@@ -2,56 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D59BF515A2A
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 05:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEF00515A2F
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 05:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382104AbiD3DhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 29 Apr 2022 23:37:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59130 "EHLO
+        id S1382157AbiD3DkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 29 Apr 2022 23:40:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232757AbiD3DhL (ORCPT
+        with ESMTP id S232757AbiD3DkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 29 Apr 2022 23:37:11 -0400
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CB7A76D4;
-        Fri, 29 Apr 2022 20:33:51 -0700 (PDT)
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 23U3XaJ2029668;
-        Sat, 30 Apr 2022 12:33:37 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 23U3XaJ2029668
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1651289617;
-        bh=TIGdeb7xdEs/9JV0A7VVLKMrZAPeq/6T37UNVZaHg3A=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lhUWW5QN/Ne1yWqXx1I52pvBhj3CHTCAlLDnmKDwUo+cSdC4LMDZSpByuTqtoa5zE
-         uPZE79G5UvSYRfhV+x3EdslLYWr3kTWMPAfqCjxhTMtG3wZ/crFVfSwMdM3JFzllr5
-         XDXrpbjQUNAuVCDpfUqmV16CG80fXjhcH/9U2eRM+SzSKNQZz0PW4I6pbGPH/UNT9p
-         P8F3k+c9mkITW9PqFx/duH+MN9UYVo0B8r3lZzb8PMVWMMnhLQrIqyjGw4QxWqV/IJ
-         8aRaZRyuHyqffnrBYUAEiYosrczmEMt6z960wi5hbO9YkSeXYtVBiT2GBOdezyNSo0
-         /3XV6rPebGmrg==
-X-Nifty-SrcIP: [209.85.216.47]
-Received: by mail-pj1-f47.google.com with SMTP id p6so8601359pjm.1;
-        Fri, 29 Apr 2022 20:33:37 -0700 (PDT)
-X-Gm-Message-State: AOAM530VAjprWwTSyaY5dw72Pho6bGH881O/5m2EC0+w7CGGhjGMLGq4
-        NT5vzBpVgb1C+gJjZjmSu14mzHAZCJt2Di27Dys=
-X-Google-Smtp-Source: ABdhPJyA7Kh8t38Tgnc7vWeywS0wR/hs6+Uy9mFeW8PUhdl6yVt/CqvOS2lmy8s86o/fRQJQo7INLG5ZVa4ItHZCUPw=
-X-Received: by 2002:a17:90a:e517:b0:1d7:5bbd:f9f0 with SMTP id
- t23-20020a17090ae51700b001d75bbdf9f0mr2302881pjy.77.1651289616490; Fri, 29
- Apr 2022 20:33:36 -0700 (PDT)
+        Fri, 29 Apr 2022 23:40:21 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1367E8165B;
+        Fri, 29 Apr 2022 20:37:01 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id gh6so18724892ejb.0;
+        Fri, 29 Apr 2022 20:37:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=kT+smoqxUUOo2Ktb3O9J5lGl3PYg+G58BG/KvkNJLgY=;
+        b=dOOyVJ1DSf5EiPM0yEiLtTWcQTVfi5wciGDnyaADIduC2+gcdvYlI5tRYQTCHnDhSr
+         LXM7EkzvctBcMF1FminCCFJCS8vCeJtg89aARu0QtQuzx4LOFhqFXLU3eLjm4dWCYU6Q
+         uhQeXljguvxrXhdWkrdjYoGZv31V4VjbY/1d3A/L1tEHt/0l3qyF5jRzpaRh9yUqh2eE
+         kwpPGEpbRyu2V/jHmgUw1VNKSlc9yqC2a5stheuULoxj29pfhDmB6iO7y+p2zYWWYpz6
+         rYvifEr9NB8PQ9rBL5phInZwyTaiEOYcwb+u5YXNMLX0pXqm2BHHny8hO9UKg7ZEJjd5
+         u3Og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=kT+smoqxUUOo2Ktb3O9J5lGl3PYg+G58BG/KvkNJLgY=;
+        b=p6kNj4EolSZ8O2yUel6FfMdvb8z3IuLrydGVsnO+fEMJ+YZ/8eFDb4p8WvZpEbkRPu
+         CdvZ2idaN4nMPYRLQx2dX+U7lf/5YMHLeqrGao83U4Q3j4wFwNAKNfZrS7z2rItlxjjS
+         +IkLpSfwYxgOK1wn5f88ol1CNx6fh/lws1VK/ttOlfiIWA1VRjbzXWzVOw+wuaB4WUbZ
+         4QpmOagUU77JmsbU6kZiTMQEq3/dcUbGORMVttVIJeaBksIez2COi7cwQHuNCGh1flyS
+         gJnAbSWmzjXqGzPADFGcaxyuM9k+RIMnPsN5rP9eJypvu1oB4u8NRbSVezfV4lhTHzdC
+         Fn5w==
+X-Gm-Message-State: AOAM532GiVcUJriZwP99A1SryzprePkR60+bREjZ0/WejsiaNkJLCvRN
+        +LODXshzJz539K68TJ3nN888Il1DPuhwQ7v0E7g=
+X-Google-Smtp-Source: ABdhPJxSwa0ZvThB2y7U1qXJuytrsR3sAUODm38c/6umMoXT+nuUmT29GgsL+afa8y+EZwJlI96akhGnLOunEcy24Ng=
+X-Received: by 2002:a17:906:6a0d:b0:6f3:b341:3b94 with SMTP id
+ qw13-20020a1709066a0d00b006f3b3413b94mr2262811ejc.31.1651289819573; Fri, 29
+ Apr 2022 20:36:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220426035318.3932-1-rdunlap@infradead.org>
-In-Reply-To: <20220426035318.3932-1-rdunlap@infradead.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 30 Apr 2022 12:32:33 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAR86Z2R+CsPZSk-cwi950HGMDptEkdXUD1ZmDz9byfwgg@mail.gmail.com>
-Message-ID: <CAK7LNAR86Z2R+CsPZSk-cwi950HGMDptEkdXUD1ZmDz9byfwgg@mail.gmail.com>
-Subject: Re: [PATCH v2] Makefile: fix 2 typos
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+References: <20220429032621.674865-1-starzhangzsd@gmail.com>
+ <20220429095104.GA11365@alpha.franken.de> <alpine.DEB.2.21.2204291559490.9383@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2204291559490.9383@angie.orcam.me.uk>
+From:   Stephen Zhang <starzhangzsd@gmail.com>
+Date:   Sat, 30 Apr 2022 11:36:23 +0800
+Message-ID: <CANubcdWykz0j5BaGNhYMW16wX9UbfgsLdEs-ebNWCWP+p1OKWw@mail.gmail.com>
+Subject: Re: [PATCH v2] MIPS: undefine and redefine cpu_has_fpu when it is overrided
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     liam.howlett@oracle.com, ebiederm@xmission.com, alobakin@pm.me,
+        f.fainelli@gmail.com, paul@crapouillou.net, linux@roeck-us.net,
+        anemo@mba.ocn.ne.jp, zhangshida <zhangshida@kylinos.cn>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,36 +71,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 12:53 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+Maciej W. Rozycki <macro@orcam.me.uk> =E4=BA=8E2022=E5=B9=B44=E6=9C=8829=E6=
+=97=A5=E5=91=A8=E4=BA=94 23:11=E5=86=99=E9=81=93=EF=BC=9A
 >
-> Fix typos in comments so that they make sense.
+>  Additionally I've thought of adding something like:
 >
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: linux-kbuild@vger.kernel.org
-> ---
-> v2: drop an extra adjective (Masahiro)
+> #if cpu_has_fpu
+> # undef cpu_has_fpu
+> #endif
 >
->  Makefile |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> or maybe even:
 >
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1386,8 +1386,8 @@ scripts_unifdef: scripts_basic
->  # Install
+> #if cpu_has_fpu
+> # error "Forcing `cpu_has_fpu' to non-zero is not supported"
+> #endif
 >
->  # Many distributions have the custom install script, /sbin/installkernel.
-> -# If DKMS is installed, 'make install' will eventually recuses back
-> -# to the this Makefile to build and install external modules.
-> +# If DKMS is installed, 'make install' will eventually recurse back
-> +# to this Makefile to build and install external modules.
->  # Cancel sub_make_done so that options such as M=, V=, etc. are parsed.
+> to arch/mips/include/asm/cpu-features.h, but maybe that's an overkill.
 >
->  install: sub_make_done :=
+>   Maciej
 
-Applied to linux-kbuild. Thanks.
+Yeah, but why do you think that's an overkill? There is a great chance
+people will ignore the note of 'cpu_has_fpu', and it did happen. When
+that happens, there should exist a way to point out  or fix that.
 
+Thomas Bogendoerfer <tsbogend@alpha.franken.de> =E4=BA=8E2022=E5=B9=B44=E6=
+=9C=8829=E6=97=A5=E5=91=A8=E4=BA=94 18:01=E5=86=99=E9=81=93=EF=BC=9A
+>
+> I prefer just removing the #defines from ip27/ip30 cpu-feasture-overrides=
+.h.
+> Or isn't that enough for fixing the problem ?
+>
+> Thomas.
 
--- 
-Best Regards
-Masahiro Yamada
+So maybe that's  why I don't think just removing the #defines from
+ip27/ip30 cpu-feasture-overrides.h. is enough for fixing the problem.
+
+Stephen.

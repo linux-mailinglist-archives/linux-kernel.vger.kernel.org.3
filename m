@@ -2,56 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E3A6515CA2
-	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 14:05:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB766515CAA
+	for <lists+linux-kernel@lfdr.de>; Sat, 30 Apr 2022 14:10:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241593AbiD3MIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 08:08:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34938 "EHLO
+        id S237570AbiD3MNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 08:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238806AbiD3MI3 (ORCPT
+        with ESMTP id S232383AbiD3MNj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 08:08:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6925C663;
-        Sat, 30 Apr 2022 05:05:04 -0700 (PDT)
+        Sat, 30 Apr 2022 08:13:39 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C577659;
+        Sat, 30 Apr 2022 05:10:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BB9D60AF8;
-        Sat, 30 Apr 2022 12:05:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF9E4C385AA;
-        Sat, 30 Apr 2022 12:05:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651320303;
-        bh=tWlItz5i5kXdXuKnvQvNpU5f7HV/eMhhZ4OfG79KfB4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EWPWQ/+A8KiWNeEnnCkAKXMPSezGdtzp5Pu/mRwQ/MU866OQbmFsojF7i409gTuJu
-         COUJKad1RdoM48RcXRCz1/y234ep+r8F5hVv3U8qnSyXd89g/SqzfONVpSS2CCu9eN
-         CMKtf9Kko8TmVqrBl0bJ24rI3PoZ2XY2ikw7YirU=
-Date:   Sat, 30 Apr 2022 14:04:59 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Kai Vehmanen <kai.vehmanen@intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@intel.com>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        mauro.chehab@linux.intel.com,
-        Dan Williams <dan.j.williams@intel.com>
-Subject: Re: [PATCH v2 1/2] module: update dependencies at try_module_get()
-Message-ID: <Ym0l6yeTWCCAeww8@kroah.com>
-References: <cover.1651314499.git.mchehab@kernel.org>
- <3c7547d551558c9da02038dda45992f91b1f5141.1651314499.git.mchehab@kernel.org>
+        by sin.source.kernel.org (Postfix) with ESMTPS id 97B90CE02C7;
+        Sat, 30 Apr 2022 12:10:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9E2A6C385AE;
+        Sat, 30 Apr 2022 12:10:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651320612;
+        bh=lh6YsWWNzTF+K97GRW8ZIrWk45vWopwIEJRFY+ww1RE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Ll8X7x8Km5uESLL4dQBsbreGwaDFmcPQGz/eqWe6gStjgYt1jwA5HI8ssi6/h4SUx
+         1AsdOhgj6UHlqFDhyAnpMUb23Xu56rMqoACG6fD2zKKPZGMwCN0RjbvEa5kFwwzqWh
+         a/nASF7luILFeaY6cbbPE8O/CnXs/NvExPa3skHiViyX8Mv1HpiT0qq74jV8az8xP4
+         01+O7Jv3XH2jHLaBB6Rf5OMpWkQJJ3OcfFm/rV7RV46ZVkR2D7dbNE3yQ8ANrcEHmX
+         kenFGoPgk+zwjV+W+hNjl+naixZjWe1+v2jM+iNx17BXP4ssoU/Lx+6TbXSpBBvPzy
+         st+AIxiUkjX9A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7E9DBF03841;
+        Sat, 30 Apr 2022 12:10:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3c7547d551558c9da02038dda45992f91b1f5141.1651314499.git.mchehab@kernel.org>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/5] generic net and ipv6 minor optimisations
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165132061250.13332.11733885633402337969.git-patchwork-notify@kernel.org>
+Date:   Sat, 30 Apr 2022 12:10:12 +0000
+References: <cover.1651141755.git.asml.silence@gmail.com>
+In-Reply-To: <cover.1651141755.git.asml.silence@gmail.com>
+To:     Pavel Begunkov <asml.silence@gmail.com>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        dsahern@kernel.org, edumazet@google.com,
+        linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,85 +57,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 30, 2022 at 11:30:58AM +0100, Mauro Carvalho Chehab wrote:
-> Sometimes, device drivers are bound into each other via try_module_get(),
-> making such references invisible when looking at /proc/modules or lsmod.
+Hello:
+
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Thu, 28 Apr 2022 11:58:43 +0100 you wrote:
+> 1-3 inline simple functions that only reshuffle arguments possibly adding
+> extra zero args, and call another function. It was benchmarked before with
+> a bunch of extra patches, see for details
 > 
-> Add a function to allow setting up module references for such
-> cases, and call it when try_module_get() is used.
+> https://lore.kernel.org/netdev/cover.1648981570.git.asml.silence@gmail.com/
 > 
-> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> ---
+> It may increase the binary size, but it's the right thing to do and at least
+> without modules it actually sheds some bytes for some standard-ish config.
 > 
-> See [PATCH v2 0/2] at: https://lore.kernel.org/all/cover.1651314499.git.mchehab@kernel.org/
-> 
->  include/linux/module.h |  4 +++-
->  kernel/module/main.c   | 35 +++++++++++++++++++++++++++++++++--
->  2 files changed, 36 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index 46d4d5f2516e..836851baaad4 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -620,7 +620,9 @@ extern void __module_get(struct module *module);
->  
->  /* This is the Right Way to get a module: if it fails, it's being removed,
->   * so pretend it's not there. */
-> -extern bool try_module_get(struct module *module);
-> +extern bool __try_module_get(struct module *module, struct module *this);
-> +
-> +#define try_module_get(mod) __try_module_get(mod, THIS_MODULE)
->  
->  extern void module_put(struct module *module);
->  
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index 05a42d8fcd7a..9f4416381e65 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -631,6 +631,35 @@ static int ref_module(struct module *a, struct module *b)
->  	return 0;
->  }
->  
-> +static int ref_module_dependency(struct module *mod,
-> +				       struct module *this)
+> [...]
 
-This can be on one line, right?
+Here is the summary with links:
+  - [net-next,1/5] net: inline sock_alloc_send_skb
+    https://git.kernel.org/netdev/net-next/c/de32bc6aad09
+  - [net-next,2/5] net: inline skb_zerocopy_iter_dgram
+    https://git.kernel.org/netdev/net-next/c/657dd5f97b2e
+  - [net-next,3/5] net: inline dev_queue_xmit()
+    https://git.kernel.org/netdev/net-next/c/c526fd8f9f4f
+  - [net-next,4/5] ipv6: help __ip6_finish_output() inlining
+    https://git.kernel.org/netdev/net-next/c/4b143ed7dde5
+  - [net-next,5/5] ipv6: refactor ip6_finish_output2()
+    https://git.kernel.org/netdev/net-next/c/58f71be58b87
 
-> +{
-> +	int ret;
-> +
-> +	if (!this || !this->name) {
-> +		return -EINVAL;
-> +	}
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Did you run checkpatch on this?  Please do :)
 
-> +
-> +	if (mod == this)
-> +		return 0;
-
-How can this happen?
-
-When people mistakenly call try_module_get(THIS_MODULE)?  We should
-throw up a big warning when that happens anyway as that's always wrong.
-
-But that's a different issue from this change, sorry for the noise.
-
-> +
-> +	mutex_lock(&module_mutex);
-> +
-> +	ret = ref_module(this, mod);
-> +
-> +#ifdef CONFIG_MODULE_UNLOAD
-> +	if (ret)
-> +		goto ret;
-> +
-> +	ret = sysfs_create_link(mod->holders_dir,
-> +				&this->mkobj.kobj, this->name);
-
-Meta comment, why do we only create links if we can unload things?
-
-thanks,
-
-greg k-h

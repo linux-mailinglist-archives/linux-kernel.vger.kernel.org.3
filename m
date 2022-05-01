@@ -2,138 +2,590 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D940F5163E2
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 12:53:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3771D5163E7
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 12:56:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344988AbiEAKzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 06:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42814 "EHLO
+        id S1345077AbiEAK7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 06:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345077AbiEAKzn (ORCPT
+        with ESMTP id S242879AbiEAK7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 06:55:43 -0400
-Received: from EUR02-HE1-obe.outbound.protection.outlook.com (mail-eopbgr10088.outbound.protection.outlook.com [40.107.1.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C1C3BA49;
-        Sun,  1 May 2022 03:52:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ErMrmFExFgq7KQwzBkALhEDHbBpgeVIXX1jIDgr4L89KkFOOiXwvLgbF59HIZGKYR2lzmGmky2k/f2AUxNhu9+8VvFPc+pfx2h8UOzvA52tsnDgaupTYiDeRlUAyFex8umSYx9MjkJNdq18GSKKH9+pPAzJXpGuyFfHRXoEF00ZsFxxYnfFoSbrd/xaMAHmSbKD1CHnz/dc0JSJ9LL9iegI0sGmT/4kOCxP6VzdbPMYgrMu2q7XtaiG8QoLQUDxYCb4jydX2/LK2Yk4m6aEIYoNxaMkp9eAMeoIHwM7wQKUnHmoc6+fUhJgilDucvHHlqvgsd2WkGxWiGnaup4HpAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CoLEfCYjoAILtO4Zi99NukczUUX2t5v0myQOQO/ik7M=;
- b=WdECXXpjKVIC4Pd1Zwx7KBVm1BSsTQ+MjMoftpoZ2tt9X9FZxkj43dTegI0H9CLxFcDP9tNH2MBCg03GjPqCgrWKtOkmJQjN2AKheV7EbKPmi5hozu39vRUNwLI9EF5JR9DXM6VPj1EWp2SdCFq59/ArpHhDofDfMrQnj3W7YomZ3PeseDYMB+mbkpTKI55/6JuxfMdv//AB4YLQCmOnbcpgzHa6D4R+I4+3ul30mtxgpyNxpzVxT6nQXXPH7YUP6+XbsHIKlB3RIY/yEXkmZVQw2ssjdXHSqLsifv6rETyOJ58prYLmpS52mQb8k3G8v+aJoRuW1mr6eh5HOWgJEQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CoLEfCYjoAILtO4Zi99NukczUUX2t5v0myQOQO/ik7M=;
- b=b22AeJapGrHVrm/Dzg9VPb3QLvBhYXU4Yko+BbcytpdwOmyRrgdDfRqH2aBC409DF0MIsrgytNfGUEXxRmL5wHPPl3k4dKyFxFwK5JNOb+6rv6wTOykfuB4VNen4zzBZhaKY5UBrnS3HcxaE21aT/pIjg4PGXhGnoXnDle2xE+M=
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by DB8PR04MB6523.eurprd04.prod.outlook.com (2603:10a6:10:10f::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.28; Sun, 1 May
- 2022 10:52:09 +0000
-Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::d94f:b885:c587:5cd4]) by VI1PR04MB5136.eurprd04.prod.outlook.com
- ([fe80::d94f:b885:c587:5cd4%6]) with mapi id 15.20.5206.014; Sun, 1 May 2022
- 10:52:09 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Colin Foster <colin.foster@in-advantage.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>
-Subject: Re: [PATCH v1 net 0/2] fix shared vcap_props reference
-Thread-Topic: [PATCH v1 net 0/2] fix shared vcap_props reference
-Thread-Index: AQHYXCEz7GhE7xCbLkaFhySWk3ydjK0J2r4A
-Date:   Sun, 1 May 2022 10:52:09 +0000
-Message-ID: <20220501105208.ynlxqqt6g4oml5fz@skbuf>
-References: <20220429233049.3726791-1-colin.foster@in-advantage.com>
-In-Reply-To: <20220429233049.3726791-1-colin.foster@in-advantage.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b87c7df4-a52e-4de2-f8f6-08da2b60a406
-x-ms-traffictypediagnostic: DB8PR04MB6523:EE_
-x-microsoft-antispam-prvs: <DB8PR04MB652318B88A44091266355294E0FE9@DB8PR04MB6523.eurprd04.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 3YbgTq859gUp1BYckK7YXIYRWzLt3av1MxKSB+OSNZhGsxtbipDsjxMCczJYOH/LTUHLB7J9KFYLBpCjexa2AA8G9tSPKKGZ8uiO7CpqAp2PZ4fOehi2P21bpg5r8rmZe0jcr0ZT/vfiqWoj92aaBkYQxs29kVAgVmZ6jMr2jftneJypvOprls+z/PooePBBBBt1IkppH7j6msGO52B6BULE4wdFa0f9vkR7ZTr1V0Grddzs+xdd5GeCbb805ssxGc2Kp6l5+9y7ts9WwEAJzcd1aocZRg+9AE2SdcHcCa9lFtrhyBFHaUHJmH1c5YZR3gSUZlV+a6IdTQciuUuVOrmzKi6avYDJFGweATbK7NZLuON5bTtVgHGDYEYOV12ppQCtdZ1MdicEH8h6cF8YEd2ehBKIcrgbeMQUeWAR++dlNqC4mzDIeqlpbU+nIDd12hsuftHNQTzUPKGL6xUkyGViuOv7xgrJSNi/d4Bdi8lQKPssLv8G08T76+deEg0jw/LkYcMw7QJvM3Rg/HzfCWgDWzrwcbc5bFePSCQW9zuhGPYOqPk/bsnh64lGKSjtFwbIYsSLcpEwd7865EYWEgwTKMe7t2YIeX4IByDp8ZGId/36z2dVd9c3XzUjSOxs6j7AXfxIwgWoYBOarfW1IlVcJZuXEqDjkz1UBrW6xYbr6k9O51MUoDwYVmoAJVuWrJ2vL6QRoHOE2xOWr5lKXw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(8676002)(26005)(33716001)(2906002)(1076003)(186003)(4326008)(54906003)(71200400001)(8936002)(6506007)(7416002)(558084003)(38100700002)(38070700005)(9686003)(44832011)(6512007)(5660300002)(86362001)(6916009)(122000001)(6486002)(316002)(66556008)(66476007)(76116006)(91956017)(66946007)(66446008)(508600001)(64756008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?IHwy8xBgsqWz0YCpuiweq294dSqGQSSXbNNAFEo/QCjlZjzTqc/Nx9QpOl/c?=
- =?us-ascii?Q?YHbR1joSO4zuCJs/U89uPnNNCTeT4n38r1mdAHDIKRUPQ4ljztfE5hRntxb1?=
- =?us-ascii?Q?l5W7w7B/6Z3R2ycBvIDfTS5iQMXHZuFRVsObnWA/7h75o4plxqqkjTUGdEDd?=
- =?us-ascii?Q?79z1HKB1+wxD7qFBWVDs+XxcGuBKpB4hxUYSnlyai/3WSeyPVo4k3+G04E8r?=
- =?us-ascii?Q?K1Q6BQcmu8xsUHfVcuwZPUGEBfLH510emSNJw8NQ0S+t4HDFW2jDYD4gvyEs?=
- =?us-ascii?Q?Cbb6R0S8xgG3NVqg691Bvg+ybCD60TyIvOrXOIeg067iaGrtXxflgDodS/wP?=
- =?us-ascii?Q?6V927VjTSNrVyGmSnE28jd8YFOGrCt+/BsK2V+mcewJOPpAY4Hon6FVSYQXf?=
- =?us-ascii?Q?gzLlr50ZkooMZtYdz8brq6HE+b59kMApqo4nqEgodkDNQwZApp2udHqH1iLJ?=
- =?us-ascii?Q?dBmiUnxrpUlMNRhRi53Ity41EFDI1ZPuy7vtIfl8Qe9pephwoklNkYl/D20h?=
- =?us-ascii?Q?Jv7v7AlXApneEUvx/I6iCMAtnl2R1Pcha/5hvZPU20oMUS3P84ZF6T5gfdhd?=
- =?us-ascii?Q?6A5ZJLgfmgSX4spW+B2a/ou2t7QbXmGUc17+s6LJuTr2wr+MrlSuQe0xmMBw?=
- =?us-ascii?Q?frSflBviYat4wkSF5yLtFgMJNxTjWmbml0+L7HGkk3uUWiP3g3d+C5aDKynf?=
- =?us-ascii?Q?4CQ4jxhlW28HsT0yRxdfxMa4L8uImIO9ZObyI5hPdU9dyyV4k8oJwO6A64z0?=
- =?us-ascii?Q?31w5kxk37uokZB6EnqfWrrW/JvxxBg5720BgobfXLwTzfNMtkhjjuwx0J59k?=
- =?us-ascii?Q?5WQv3OlnwLK9Pcqldd/7L7GOCbRlco3VvSDP4Es0xQOSosUI2JGFoAdhs1hF?=
- =?us-ascii?Q?1KpvqamV0GiY2A3ED9J6K6RI5nop7eC2NkfVc6EXfVcDe5qefP1yEpQBcvji?=
- =?us-ascii?Q?JyacBn/5gxMCyrQVzIuCC/K5lo5D/TQJsGOI+mVOvimI4RZ4ShmOxkNwUu5e?=
- =?us-ascii?Q?bdo3w7vD1eKxv44eTp/SjGjlTRtpopWnFaqY+0HNeXcBIrKg/7rMB/EXocxg?=
- =?us-ascii?Q?gfbXKH/Rre9hmQtUQfMFtZR/14v01CxVNSuZQIEYH9BzFo/s2YAEjI+skZN/?=
- =?us-ascii?Q?xRDiwKsAB21Nea/cWMQdJRVfVaWS4m9BbqpxuBs6FHXd7GTF/Z7DL1H78wiQ?=
- =?us-ascii?Q?0xDNWSMYTY7gqhI7i0g7apDR5Z5GIklIrP/FxnIP+IBFbMqyy9n7MqLxpJSP?=
- =?us-ascii?Q?q4p6p1A7vQSnTuX2jSS51qVWAW9CW+Y42yPv9PSfFyOX0HHKlrqNM8FMTxrr?=
- =?us-ascii?Q?E+buskAnORcuxd80X02Y4HOkqAhv/kRJ7Po3GAaK7rSn/0Mds2QvU5TB1fl0?=
- =?us-ascii?Q?qpiwhKTZH7d0k7OIq3ZRG+2AoNiFDYDcS+FTUO9FijmtfD3gTVAzGhkOAAnh?=
- =?us-ascii?Q?oKiNw1K6G1Q17EWJCwyOJDVspCTV5u/hYpJLvJYMjhX5DBm9gxQxzLsgmnHN?=
- =?us-ascii?Q?reakUoNRkwUa6NW7+7rKB2CjtYVjyajie4ZqeBbgldgZTCEYSaFcxtaKNUvA?=
- =?us-ascii?Q?zRaVQdKbtdq7cuHCtu2MM586RzAgWYv5a2jfOnekpDRQXdx1/gd+R8QLKoUm?=
- =?us-ascii?Q?/lYuHkJKcTbSeF4++rPQuZPLKYFHBABHGhn582aW1V27UWX6XVyAHKCo+zYz?=
- =?us-ascii?Q?y+W+8Tt8tUTTQbOhqYadRPe82YQDhS7T7bZMU8C5v5l3lVdYqjzf4ShxCINE?=
- =?us-ascii?Q?ZFFO9Pl9WUKdgzx3RJjIMmNCYAEHKA4=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <EF22B4CF02CF1D4DBA9414179F39852B@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Sun, 1 May 2022 06:59:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6910B21E21;
+        Sun,  1 May 2022 03:56:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C794D60DD6;
+        Sun,  1 May 2022 10:56:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F162C385B3;
+        Sun,  1 May 2022 10:56:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651402570;
+        bh=q4fLBq+6Da5fsTfU+1aUTdFsL4jNPN1VCHCJJklCarw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=pErcM2YAHqVKrO+M5uP0TU8zR45g6MS4hTaxPpd+ggdYdeJ5+wUnwD55Y3E9gT48X
+         yCuvCibpX8HuSeykavHCeK7Z1FQgmMrbyepuoXVCvHHxGkZ4RskAbZXVwxGEyMjyMT
+         Zxb8K4+7rGmKjBH6Asn/rKdxW4Zp1etZVod3QsA9NwB9M3XR9X1lc8CGga1WJaS1zl
+         m87qFuBJBOkzRO5yvkyGqvq6Z/TgE2AXfjI72F48+AlylPEHHJHj4zsuUAkmV1evcx
+         3fGpbk9+uYDyTfL+3vQBWzuFlCNH3mcMq4OY2t9tUpNo3vOJhJcOfYeI/6/hltnTrp
+         v15HLoCAyK7qg==
+Received: by mail-vk1-f174.google.com with SMTP id n135so5541677vkn.7;
+        Sun, 01 May 2022 03:56:09 -0700 (PDT)
+X-Gm-Message-State: AOAM531fA3OravoeAF7giPnX//Fl5N5swGbxmcoYJ0UimZ6Xebv/oyAn
+        5aF/AW7ExOxETI5HaFaiDrDcJ+muCfgi2fMCGeM=
+X-Google-Smtp-Source: ABdhPJwoARUpb3nOYB9V9CPQTcqTsJNH/1b4IcQFdbID0rzRrZqarR2VqdZy6CbcEiiHKvy42Pp0k1JpqMlZ+gg7RDA=
+X-Received: by 2002:a05:6122:887:b0:332:699e:7e67 with SMTP id
+ 7-20020a056122088700b00332699e7e67mr1700032vkf.35.1651402568917; Sun, 01 May
+ 2022 03:56:08 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b87c7df4-a52e-4de2-f8f6-08da2b60a406
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 May 2022 10:52:09.4496
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: AnkZEUbTzYv9F8wJud1FOty2qeHGALKSjU2bbEOUmXZpQ5s+QiJCi+KeUOTEsEsMyYtVhk1zPj9VJbJ0xHgXPQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6523
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220430090518.3127980-1-chenhuacai@loongson.cn> <20220430090518.3127980-18-chenhuacai@loongson.cn>
+In-Reply-To: <20220430090518.3127980-18-chenhuacai@loongson.cn>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sun, 1 May 2022 18:55:57 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQ7D_3+V9U=BTPDE-gqxuP5+gLwM9C8_Rxna0GGJ1Yn9A@mail.gmail.com>
+Message-ID: <CAJF2gTQ7D_3+V9U=BTPDE-gqxuP5+gLwM9C8_Rxna0GGJ1Yn9A@mail.gmail.com>
+Subject: Re: [PATCH V9 17/24] LoongArch: Add some library functions
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 04:30:47PM -0700, Colin Foster wrote:
-> I don't have any hardware to confidently test the vcap portions of
-> Ocelot / Felix, so any testers would be appreciated.
+On Sat, Apr 30, 2022 at 5:23 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
+>
+> This patch adds some library functions for LoongArch, including: delay,
+> memset, memcpy, memmove, copy_user, strncpy_user, strnlen_user and tlb
+> dump functions.
+>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>  arch/loongarch/include/asm/delay.h  |  26 +++++++
+>  arch/loongarch/include/asm/string.h |  17 +++++
+>  arch/loongarch/lib/clear_user.S     |  43 +++++++++++
+>  arch/loongarch/lib/copy_user.S      |  47 ++++++++++++
+>  arch/loongarch/lib/delay.c          |  43 +++++++++++
+>  arch/loongarch/lib/dump_tlb.c       | 111 ++++++++++++++++++++++++++++
+>  arch/loongarch/lib/memcpy.S         |  32 ++++++++
+>  arch/loongarch/lib/memmove.S        |  45 +++++++++++
+>  arch/loongarch/lib/memset.S         |  30 ++++++++
+>  9 files changed, 394 insertions(+)
+>  create mode 100644 arch/loongarch/include/asm/delay.h
+>  create mode 100644 arch/loongarch/include/asm/string.h
+>  create mode 100644 arch/loongarch/lib/clear_user.S
+>  create mode 100644 arch/loongarch/lib/copy_user.S
+>  create mode 100644 arch/loongarch/lib/delay.c
+>  create mode 100644 arch/loongarch/lib/dump_tlb.c
+>  create mode 100644 arch/loongarch/lib/memcpy.S
+>  create mode 100644 arch/loongarch/lib/memmove.S
+>  create mode 100644 arch/loongarch/lib/memset.S
+>
+> diff --git a/arch/loongarch/include/asm/delay.h b/arch/loongarch/include/asm/delay.h
+> new file mode 100644
+> index 000000000000..016b3aca65cb
+> --- /dev/null
+> +++ b/arch/loongarch/include/asm/delay.h
+> @@ -0,0 +1,26 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> + */
+> +#ifndef _ASM_DELAY_H
+> +#define _ASM_DELAY_H
+> +
+> +#include <linux/param.h>
+> +
+> +extern void __delay(unsigned long loops);
+> +extern void __ndelay(unsigned long ns);
+> +extern void __udelay(unsigned long us);
+> +
+> +#define ndelay(ns) __ndelay(ns)
+> +#define udelay(us) __udelay(us)
+> +
+> +/* make sure "usecs *= ..." in udelay do not overflow. */
+> +#if HZ >= 1000
+> +#define MAX_UDELAY_MS  1
+> +#elif HZ <= 200
+> +#define MAX_UDELAY_MS  5
+> +#else
+> +#define MAX_UDELAY_MS  (1000 / HZ)
+> +#endif
+> +
+> +#endif /* _ASM_DELAY_H */
+> diff --git a/arch/loongarch/include/asm/string.h b/arch/loongarch/include/asm/string.h
+> new file mode 100644
+> index 000000000000..7b29cc9c70aa
+> --- /dev/null
+> +++ b/arch/loongarch/include/asm/string.h
+> @@ -0,0 +1,17 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> + */
+> +#ifndef _ASM_STRING_H
+> +#define _ASM_STRING_H
+> +
+> +#define __HAVE_ARCH_MEMSET
+> +extern void *memset(void *__s, int __c, size_t __count);
+> +
+> +#define __HAVE_ARCH_MEMCPY
+> +extern void *memcpy(void *__to, __const__ void *__from, size_t __n);
+> +
+> +#define __HAVE_ARCH_MEMMOVE
+> +extern void *memmove(void *__dest, __const__ void *__src, size_t __n);
+> +
+> +#endif /* _ASM_STRING_H */
+> diff --git a/arch/loongarch/lib/clear_user.S b/arch/loongarch/lib/clear_user.S
+> new file mode 100644
+> index 000000000000..b8168d22ac80
+> --- /dev/null
+> +++ b/arch/loongarch/lib/clear_user.S
+> @@ -0,0 +1,43 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> + */
+> +
+> +#include <asm/asm.h>
+> +#include <asm/asmmacro.h>
+> +#include <asm/export.h>
+> +#include <asm/regdef.h>
+> +
+> +.macro fixup_ex from, to, offset, fix
+> +.if \fix
+> +       .section .fixup, "ax"
+> +\to:   addi.d  v0, a1, \offset
+> +       jr      ra
+> +       .previous
+> +.endif
+> +       .section __ex_table, "a"
+> +       PTR     \from\()b, \to\()b
+> +       .previous
+> +.endm
+> +
+> +/*
+> + * unsigned long __clear_user(void *addr, size_t size)
+> + *
+> + * a0: addr
+> + * a1: size
+> + */
+> +SYM_FUNC_START(__clear_user)
+> +       beqz    a1, 2f
+> +
+> +1:     st.b    zero, a0, 0
+> +       addi.d  a0, a0, 1
+> +       addi.d  a1, a1, -1
+> +       bgt     a1, zero, 1b
+> +
+> +2:     move    v0, a1
+> +       jr      ra
+> +
+> +       fixup_ex 1, 3, 0, 1
+> +SYM_FUNC_END(__clear_user)
+> +
+> +EXPORT_SYMBOL(__clear_user)
+> diff --git a/arch/loongarch/lib/copy_user.S b/arch/loongarch/lib/copy_user.S
+> new file mode 100644
+> index 000000000000..43ed26304954
+> --- /dev/null
+> +++ b/arch/loongarch/lib/copy_user.S
+> @@ -0,0 +1,47 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> + */
+> +
+> +#include <asm/asm.h>
+> +#include <asm/asmmacro.h>
+> +#include <asm/export.h>
+> +#include <asm/regdef.h>
+> +
+> +.macro fixup_ex from, to, offset, fix
+> +.if \fix
+> +       .section .fixup, "ax"
+> +\to:   addi.d  v0, a2, \offset
+> +       jr      ra
+> +       .previous
+> +.endif
+> +       .section __ex_table, "a"
+> +       PTR     \from\()b, \to\()b
+> +       .previous
+> +.endm
+> +
+> +/*
+> + * unsigned long __copy_user(void *to, const void *from, size_t n)
+> + *
+> + * a0: to
+> + * a1: from
+> + * a2: n
+> + */
+> +SYM_FUNC_START(__copy_user)
+> +       beqz    a2, 3f
+> +
+> +1:     ld.b    t0, a1, 0
+> +2:     st.b    t0, a0, 0
+> +       addi.d  a0, a0, 1
+> +       addi.d  a1, a1, 1
+> +       addi.d  a2, a2, -1
+> +       bgt     a2, zero, 1b
+> +
+> +3:     move    v0, a2
+> +       jr      ra
+> +
+> +       fixup_ex 1, 4, 0, 1
+> +       fixup_ex 2, 4, 0, 0
+> +SYM_FUNC_END(__copy_user)
+> +
+> +EXPORT_SYMBOL(__copy_user)
+> diff --git a/arch/loongarch/lib/delay.c b/arch/loongarch/lib/delay.c
+> new file mode 100644
+> index 000000000000..5d856694fcfe
+> --- /dev/null
+> +++ b/arch/loongarch/lib/delay.c
+> @@ -0,0 +1,43 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> + */
+> +#include <linux/delay.h>
+> +#include <linux/export.h>
+> +#include <linux/smp.h>
+> +#include <linux/timex.h>
+> +
+> +#include <asm/compiler.h>
+> +#include <asm/processor.h>
+> +
+> +void __delay(unsigned long cycles)
+> +{
+> +       u64 t0 = get_cycles();
+> +
+> +       while ((unsigned long)(get_cycles() - t0) < cycles)
+> +               cpu_relax();
+> +}
+> +EXPORT_SYMBOL(__delay);
+> +
+> +/*
+> + * Division by multiplication: you don't have to worry about
+> + * loss of precision.
+> + *
+> + * Use only for very small delays ( < 1 msec). Should probably use a
+> + * lookup table, really, as the multiplications take much too long with
+> + * short delays.  This is a "reasonable" implementation, though (and the
+> + * first constant multiplications gets optimized away if the delay is
+> + * a constant)
+> + */
+> +
+> +void __udelay(unsigned long us)
+> +{
+> +       __delay((us * 0x000010c7ull * HZ * lpj_fine) >> 32);
+> +}
+> +EXPORT_SYMBOL(__udelay);
+> +
+> +void __ndelay(unsigned long ns)
+> +{
+> +       __delay((ns * 0x00000005ull * HZ * lpj_fine) >> 32);
+> +}
+> +EXPORT_SYMBOL(__ndelay);
+> diff --git a/arch/loongarch/lib/dump_tlb.c b/arch/loongarch/lib/dump_tlb.c
+> new file mode 100644
+> index 000000000000..cda2c6bc7f09
+> --- /dev/null
+> +++ b/arch/loongarch/lib/dump_tlb.c
+> @@ -0,0 +1,111 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> + *
+> + * Derived from MIPS:
+> + * Copyright (C) 1994, 1995 by Waldorf Electronics, written by Ralf Baechle.
+> + * Copyright (C) 1999 by Silicon Graphics, Inc.
+> + */
+> +#include <linux/kernel.h>
+> +#include <linux/mm.h>
+> +
+> +#include <asm/loongarch.h>
+> +#include <asm/page.h>
+> +#include <asm/pgtable.h>
+> +#include <asm/tlb.h>
+> +
+> +void dump_tlb_regs(void)
+> +{
+> +       const int field = 2 * sizeof(unsigned long);
+> +
+> +       pr_info("Index    : %0x\n", read_csr_tlbidx());
+> +       pr_info("PageSize : %0x\n", read_csr_pagesize());
+> +       pr_info("EntryHi  : %0*llx\n", field, read_csr_entryhi());
+> +       pr_info("EntryLo0 : %0*llx\n", field, read_csr_entrylo0());
+> +       pr_info("EntryLo1 : %0*llx\n", field, read_csr_entrylo1());
+> +}
+> +
+> +static void dump_tlb(int first, int last)
+> +{
+> +       unsigned long s_entryhi, entryhi, asid;
+> +       unsigned long long entrylo0, entrylo1, pa;
+> +       unsigned int index;
+> +       unsigned int s_index, s_asid;
+> +       unsigned int pagesize, c0, c1, i;
+> +       unsigned long asidmask = cpu_asid_mask(&current_cpu_data);
+> +       int pwidth = 11;
+> +       int vwidth = 11;
+> +       int asidwidth = DIV_ROUND_UP(ilog2(asidmask) + 1, 4);
+> +
+> +       s_entryhi = read_csr_entryhi();
+> +       s_index = read_csr_tlbidx();
+> +       s_asid = read_csr_asid();
+> +
+> +       for (i = first; i <= last; i++) {
+> +               write_csr_index(i);
+> +               tlb_read();
+> +               pagesize = read_csr_pagesize();
+> +               entryhi  = read_csr_entryhi();
+> +               entrylo0 = read_csr_entrylo0();
+> +               entrylo1 = read_csr_entrylo1();
+> +               index = read_csr_tlbidx();
+> +               asid = read_csr_asid();
+> +
+> +               /* EHINV bit marks entire entry as invalid */
+> +               if (index & CSR_TLBIDX_EHINV)
+> +                       continue;
+> +               /*
+> +                * ASID takes effect in absence of G (global) bit.
+> +                */
+> +               if (!((entrylo0 | entrylo1) & ENTRYLO_G) &&
+> +                   asid != s_asid)
+> +                       continue;
+> +
+> +               /*
+> +                * Only print entries in use
+> +                */
+> +               pr_info("Index: %2d pgsize=%x ", i, (1 << pagesize));
+> +
+> +               c0 = (entrylo0 & ENTRYLO_C) >> ENTRYLO_C_SHIFT;
+> +               c1 = (entrylo1 & ENTRYLO_C) >> ENTRYLO_C_SHIFT;
+> +
+> +               pr_cont("va=%0*lx asid=%0*lx",
+> +                       vwidth, (entryhi & ~0x1fffUL), asidwidth, asid & asidmask);
+> +
+> +               /* NR/NX are in awkward places, so mask them off separately */
+> +               pa = entrylo0 & ~(ENTRYLO_NR | ENTRYLO_NX);
+> +               pa = pa & PAGE_MASK;
+> +               pr_cont("\n\t[");
+> +               pr_cont("ri=%d xi=%d ",
+> +                       (entrylo0 & ENTRYLO_NR) ? 1 : 0,
+> +                       (entrylo0 & ENTRYLO_NX) ? 1 : 0);
+> +               pr_cont("pa=%0*llx c=%d d=%d v=%d g=%d plv=%lld] [",
+> +                       pwidth, pa, c0,
+> +                       (entrylo0 & ENTRYLO_D) ? 1 : 0,
+> +                       (entrylo0 & ENTRYLO_V) ? 1 : 0,
+> +                       (entrylo0 & ENTRYLO_G) ? 1 : 0,
+> +                       (entrylo0 & ENTRYLO_PLV) >> ENTRYLO_PLV_SHIFT);
+> +               /* NR/NX are in awkward places, so mask them off separately */
+> +               pa = entrylo1 & ~(ENTRYLO_NR | ENTRYLO_NX);
+> +               pa = pa & PAGE_MASK;
+> +               pr_cont("ri=%d xi=%d ",
+> +                       (entrylo1 & ENTRYLO_NR) ? 1 : 0,
+> +                       (entrylo1 & ENTRYLO_NX) ? 1 : 0);
+> +               pr_cont("pa=%0*llx c=%d d=%d v=%d g=%d plv=%lld]\n",
+> +                       pwidth, pa, c1,
+> +                       (entrylo1 & ENTRYLO_D) ? 1 : 0,
+> +                       (entrylo1 & ENTRYLO_V) ? 1 : 0,
+> +                       (entrylo1 & ENTRYLO_G) ? 1 : 0,
+> +                       (entrylo1 & ENTRYLO_PLV) >> ENTRYLO_PLV_SHIFT);
+> +       }
+> +       pr_info("\n");
+> +
+> +       write_csr_entryhi(s_entryhi);
+> +       write_csr_tlbidx(s_index);
+> +       write_csr_asid(s_asid);
+> +}
+> +
+> +void dump_tlb_all(void)
+> +{
+> +       dump_tlb(0, current_cpu_data.tlbsize - 1);
+> +}
+> diff --git a/arch/loongarch/lib/memcpy.S b/arch/loongarch/lib/memcpy.S
+> new file mode 100644
+> index 000000000000..d53f1148d26b
+> --- /dev/null
+> +++ b/arch/loongarch/lib/memcpy.S
+> @@ -0,0 +1,32 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> + */
+> +
+> +#include <asm/asmmacro.h>
+> +#include <asm/export.h>
+> +#include <asm/regdef.h>
+> +
+> +/*
+> + * void *memcpy(void *dst, const void *src, size_t n)
+> + *
+> + * a0: dst
+> + * a1: src
+> + * a2: n
+> + */
+> +SYM_FUNC_START(memcpy)
+> +       move    a3, a0
+> +       beqz    a2, 2f
+> +
+> +1:     ld.b    t0, a1, 0
+> +       st.b    t0, a0, 0
+> +       addi.d  a0, a0, 1
+> +       addi.d  a1, a1, 1
+> +       addi.d  a2, a2, -1
+> +       bgt     a2, zero, 1b
+> +
+> +2:     move    v0, a3
+> +       jr      ra
+> +SYM_FUNC_END(memcpy)
+> +
+> +EXPORT_SYMBOL(memcpy)
+> diff --git a/arch/loongarch/lib/memmove.S b/arch/loongarch/lib/memmove.S
+> new file mode 100644
+> index 000000000000..18907d83a83b
+> --- /dev/null
+> +++ b/arch/loongarch/lib/memmove.S
+> @@ -0,0 +1,45 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> + */
+> +
+> +#include <asm/asmmacro.h>
+> +#include <asm/export.h>
+> +#include <asm/regdef.h>
+> +
+> +/*
+> + * void *rmemcpy(void *dst, const void *src, size_t n)
+> + *
+> + * a0: dst
+> + * a1: src
+> + * a2: n
+> + */
+> +SYM_FUNC_START(rmemcpy)
+> +       move    a3, a0
+> +       beqz    a2, 2f
+> +
+> +       add.d   a0, a0, a2
+> +       add.d   a1, a1, a2
+> +
+> +1:     ld.b    t0, a1, -1
+> +       st.b    t0, a0, -1
+> +       addi.d  a0, a0, -1
+> +       addi.d  a1, a1, -1
+> +       addi.d  a2, a2, -1
+> +       bgt     a2, zero, 1b
+> +
+> +2:     move    v0, a3
+> +       jr      ra
+> +SYM_FUNC_END(rmemcpy)
+Why not directly use:
 
-You know about tools/testing/selftests/drivers/net/ocelot/tc_flower_chains.=
-sh,
-right?=
+lib/string.c:
+#ifndef __HAVE_ARCH_MEMCPY
+/**
+ * memcpy - Copy one area of memory to another
+ * @dest: Where to copy to
+ * @src: Where to copy from
+ * @count: The size of the area.
+ *
+ * You should not use this function to access IO space, use memcpy_toio()
+ * or memcpy_fromio() instead.
+ */
+void *memcpy(void *dest, const void *src, size_t count)
+{
+        char *tmp = dest;
+        const char *s = src;
+
+        while (count--)
+                *tmp++ = *s++;
+        return dest;
+}
+EXPORT_SYMBOL(memcpy);
+#endif
+
+Do you want to try a C's string implementation?
+https://lore.kernel.org/linux-csky/202204051450.UN2k1raL-lkp@intel.com/T/#Z2e.:..:20220404142354.2792428-1-guoren::40kernel.org:1arch:csky:lib:string.c
+
+> +
+> +SYM_FUNC_START(memmove)
+> +       blt     a0, a1, 1f      /* dst < src, memcpy */
+> +       blt     a1, a0, 2f      /* src < dst, rmemcpy */
+> +       jr      ra              /* dst == src, return */
+> +
+> +1:     b       memcpy
+> +
+> +2:     b       rmemcpy
+> +SYM_FUNC_END(memmove)
+> +
+> +EXPORT_SYMBOL(memmove)
+> diff --git a/arch/loongarch/lib/memset.S b/arch/loongarch/lib/memset.S
+> new file mode 100644
+> index 000000000000..3fc3e7da5263
+> --- /dev/null
+> +++ b/arch/loongarch/lib/memset.S
+> @@ -0,0 +1,30 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> + */
+> +
+> +#include <asm/asmmacro.h>
+> +#include <asm/export.h>
+> +#include <asm/regdef.h>
+> +
+> +/*
+> + * void *memset(void *s, int c, size_t n)
+> + *
+> + * a0: s
+> + * a1: c
+> + * a2: n
+> + */
+> +SYM_FUNC_START(memset)
+> +       move    a3, a0
+> +       beqz    a2, 2f
+> +
+> +1:     st.b    a1, a0, 0
+> +       addi.d  a0, a0, 1
+> +       addi.d  a2, a2, -1
+> +       bgt     a2, zero, 1b
+> +
+> +2:     move    v0, a3
+> +       jr      ra
+> +SYM_FUNC_END(memset)
+> +
+> +EXPORT_SYMBOL(memset)
+> --
+> 2.27.0
+>
+
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

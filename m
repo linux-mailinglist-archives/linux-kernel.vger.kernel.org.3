@@ -2,106 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E70A5168CA
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 00:48:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2E195168CD
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 00:54:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377519AbiEAWvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 18:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
+        id S1355923AbiEAW6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 18:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234297AbiEAWvp (ORCPT
+        with ESMTP id S234297AbiEAW6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 18:51:45 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF6FB4349C;
-        Sun,  1 May 2022 15:48:10 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id B5CF392009E; Mon,  2 May 2022 00:48:09 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id A6C2392009D;
-        Sun,  1 May 2022 23:48:09 +0100 (BST)
-Date:   Sun, 1 May 2022 23:48:09 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Arnd Bergmann <arnd@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        "open list:CAN NETWORK DRIVERS" <linux-can@vger.kernel.org>,
-        "moderated list:INTEL ETHERNET DRIVERS" 
-        <intel-wired-lan@lists.osuosl.org>,
-        "open list:AX.25 NETWORK LAYER" <linux-hams@vger.kernel.org>
-Subject: Re: [RFC v2 21/39] net: add HAS_IOPORT dependencies
-In-Reply-To: <20220429135108.2781579-36-schnelle@linux.ibm.com>
-Message-ID: <alpine.DEB.2.21.2205012324130.9383@angie.orcam.me.uk>
-References: <20220429135108.2781579-1-schnelle@linux.ibm.com> <20220429135108.2781579-36-schnelle@linux.ibm.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Sun, 1 May 2022 18:58:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD0A3CFD1;
+        Sun,  1 May 2022 15:54:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8489561053;
+        Sun,  1 May 2022 22:54:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEC8EC385B4;
+        Sun,  1 May 2022 22:54:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651445687;
+        bh=XYah/6Osmyojc17k6cqZ+vX1jwgljOTNKYJ/JeSQBfk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=px2suCI3Pu/bkCRbO5tygyBgCnMM71GOuMyeL9LyUC+OsRZ4FVjr/8GI6djLshrvc
+         M19tpJz53lIURMRhXPy2XW85ZAeHo7k74/Oy2bhXdQVTSPw6UIEz6iBkcW0n4OEGuc
+         SaRoGwLbS3qfyOEVT2ycxXzpFEqlwxiWGPFYsGEPzCagLtS4lZaENeuXI3lFeMNtS7
+         Vck9W34Ic6AROOfxEwL89jMHFFypiHlT/chDQNttnQTa/mJMgZNyERq0ioqK61Lwc4
+         GFuttc2DxKBcnMDQw89NpfG1DJ82UTeiCdmMi6tbiSSm5DOnpRgbA/VuH0chgtxE71
+         49iYHjxXsDnog==
+Received: by mail-yb1-f179.google.com with SMTP id s30so23475610ybi.8;
+        Sun, 01 May 2022 15:54:47 -0700 (PDT)
+X-Gm-Message-State: AOAM531c3/uGiP7XzzGT5yqi74TEh3k2wU8DgzvFOBeCxZ70CwWrceF/
+        0OTZs7iopk7caKSdVmKox/1pXaNyPa8smvuAaA==
+X-Google-Smtp-Source: ABdhPJyuplDBOy1HzgzBEurySzDISvnf65i4g3J7NP8mPSls5NwNyrHXj98ge6hOrTKJlam+L9WwpviYEfc1OEFPVok=
+X-Received: by 2002:a25:d194:0:b0:645:7892:43b0 with SMTP id
+ i142-20020a25d194000000b00645789243b0mr8501223ybg.35.1651445686885; Sun, 01
+ May 2022 15:54:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220419094143.9561-1-jason-jh.lin@mediatek.com>
+ <20220419094143.9561-9-jason-jh.lin@mediatek.com> <402f0e60-8d3c-850d-84ff-af5424b72b73@gmail.com>
+In-Reply-To: <402f0e60-8d3c-850d-84ff-af5424b72b73@gmail.com>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Mon, 2 May 2022 06:54:35 +0800
+X-Gmail-Original-Message-ID: <CAAOTY_-jiX_BhaZ5+skRu4RSZLjcHJerVtwH34fz4N6_jbVK0w@mail.gmail.com>
+Message-ID: <CAAOTY_-jiX_BhaZ5+skRu4RSZLjcHJerVtwH34fz4N6_jbVK0w@mail.gmail.com>
+Subject: Re: [PATCH v20 8/8] soc: mediatek: remove DDP_DOMPONENT_DITHER from enum
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     "jason-jh.lin" <jason-jh.lin@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        CK Hu <ck.hu@mediatek.com>, Nancy Lin <nancy.lin@mediatek.com>,
+        Singo Chang <singo.chang@mediatek.com>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 29 Apr 2022, Niklas Schnelle wrote:
+Hi, Matthias:
 
-> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> not being declared. We thus need to add HAS_IOPORT as dependency for
-> those drivers using them. It also turns out that with HAS_IOPORT handled
-> explicitly HAMRADIO does not need the !S390 dependency and successfully
-> builds the bpqether driver.
-[...]
-> diff --git a/drivers/net/fddi/Kconfig b/drivers/net/fddi/Kconfig
-> index 846bf41c2717..fa3f1e0fe143 100644
-> --- a/drivers/net/fddi/Kconfig
-> +++ b/drivers/net/fddi/Kconfig
-> @@ -29,7 +29,7 @@ config DEFZA
->  
->  config DEFXX
->  	tristate "Digital DEFTA/DEFEA/DEFPA adapter support"
-> -	depends on FDDI && (PCI || EISA || TC)
-> +	depends on FDDI && (PCI || EISA || TC) && HAS_IOPORT
->  	help
->  	  This is support for the DIGITAL series of TURBOchannel (DEFTA),
->  	  EISA (DEFEA) and PCI (DEFPA) controllers which can connect you
+Matthias Brugger <matthias.bgg@gmail.com> =E6=96=BC 2022=E5=B9=B44=E6=9C=88=
+22=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=888:42=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+>
+>
+>
+> On 19/04/2022 11:41, jason-jh.lin wrote:
+> > After mmsys and drm change DITHER enum to DDP_COMPONENT_DITHER0,
+> > mmsys header can remove the useless DDP_COMPONENT_DITHER enum.
+> >
+> > Signed-off-by: jason-jh.lin <jason-jh.lin@mediatek.com>
+> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
+abora.com>
+>
+> Acked-by: Matthias Brugger <matthias.bgg@gmail.com>
+>
+> Chun-Kuang, I think it would make sense to take that through your tree as=
+ it
+> depends on the previous patches.
+>
+> I provide you a stable tag so that you can take it:
+> v5.18-next-vdso0-stable-tag
 
- NAK, this has to be sorted out differently (and I think we discussed it 
-before).
+After I take this tag, I find one checkpatch warning:
 
- The driver works just fine with MMIO where available, so if `inb'/`outb' 
-do get removed, then only parts that rely on port I/O need to be disabled.  
-In fact there's already such provision there in drivers/net/fddi/defxx.c 
-for TURBOchannel systems (CONFIG_TC), which have no port I/O space either:
+WARNING: DT compatible string "mediatek,mt8195-mmsys" appears
+un-documented -- check ./Documentation/devicetree/bindings/
+#670: FILE: drivers/soc/mediatek/mtk-mmsys.c:390:
++               .compatible =3D "mediatek,mt8195-mmsys",
 
-#if defined(CONFIG_EISA) || defined(CONFIG_PCI)
-#define dfx_use_mmio bp->mmio
-#else
-#define dfx_use_mmio true
-#endif
+I think this tag lost one binding patch, it's better that this tag has
+no this warning.
 
-so I guess it's just the conditional that will have to be changed to:
+Regards,
+Chun-Kuang.
 
-#ifdef CONFIG_HAS_IOPORT
-
-replacing the current explicit bus dependency list.  The compiler will 
-then optimise away all the port I/O stuff (though I suspect dummy function 
-declarations may be required for `inb'/`outb', etc.).
-
- I can verify a suitable change with a TURBOchannel configuration once the 
-MIPS part has been sorted.
-
-  Maciej
+>
+> Regards,
+> Matthias
+>
+> > ---
+> >   include/linux/soc/mediatek/mtk-mmsys.h | 3 +--
+> >   1 file changed, 1 insertion(+), 2 deletions(-)
+> >
+> > diff --git a/include/linux/soc/mediatek/mtk-mmsys.h b/include/linux/soc=
+/mediatek/mtk-mmsys.h
+> > index 59117d970daf..fb719fd1281c 100644
+> > --- a/include/linux/soc/mediatek/mtk-mmsys.h
+> > +++ b/include/linux/soc/mediatek/mtk-mmsys.h
+> > @@ -16,8 +16,7 @@ enum mtk_ddp_comp_id {
+> >       DDP_COMPONENT_CCORR,
+> >       DDP_COMPONENT_COLOR0,
+> >       DDP_COMPONENT_COLOR1,
+> > -     DDP_COMPONENT_DITHER,
+> > -     DDP_COMPONENT_DITHER0 =3D DDP_COMPONENT_DITHER,
+> > +     DDP_COMPONENT_DITHER0,
+> >       DDP_COMPONENT_DITHER1,
+> >       DDP_COMPONENT_DP_INTF0,
+> >       DDP_COMPONENT_DP_INTF1,

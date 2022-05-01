@@ -2,340 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D674D516340
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 10:55:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4198516342
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 10:55:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238757AbiEAI7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 04:59:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46946 "EHLO
+        id S242072AbiEAI7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 04:59:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233784AbiEAI65 (ORCPT
+        with ESMTP id S241622AbiEAI7K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 04:58:57 -0400
-Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F646571;
-        Sun,  1 May 2022 01:55:25 -0700 (PDT)
-Received: by mail-vk1-xa2c.google.com with SMTP id o132so5464832vko.11;
-        Sun, 01 May 2022 01:55:25 -0700 (PDT)
+        Sun, 1 May 2022 04:59:10 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1B41A3A9
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 01:55:40 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id g20so13545250edw.6
+        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 01:55:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aOUmnl7BKu1huo7JhRvlC6s5ifyyE6pCVv3geLjblJE=;
-        b=iw71wdeVgX/zqOqatNvV37VC5uK48TPq+zz/4eoVern9BMCrd+yw1BVQJhENpcrAY2
-         Y6X1JzJ860vYmWLV+Rc8ED2iFlSJhWX9pTmRJxoOThy1cnnNUrgstPJD0mXXCTrs3Ltq
-         cIaSTPwONr6lyKL86B1BEP9qA0kA4yKjo8NPmkt04+sH9QNPE2kPUxb8QBmaPW2uE81h
-         NHZtiPwQ2ezrLyi+dEY35WkeF49mauv4N/xlLrBVBKmvpScjODdA+zY++S3ht6RDVrv3
-         IJUiMixnC3tvHkaQ1TqrMmZsmOkxSfkW5UkWKr3lKS8zCFq5ZZr1Dn72zwiy2dhQbEoC
-         c+8A==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9Q4D7i4GL8KP5hpGHA7/56lmG9H5Z77KSqaGV3uZPeM=;
+        b=NRJ3Ud1Z3YxwLrFLtiUGSHKmaQQ/gEWMH1cpmTU5i/RMSE/lYjldRIEJfnx80xzGwF
+         nB76PATx5V0L7aI82BrU+nvAqKp6dzYp6rwMKLigl1qoE1/aXy7GJSSypGa531b5On+N
+         5raduwLXLRuYiPE2pwiFe3kB4NMa2pB1GxJcsPELuxbxAreDlahDphEKPIKGikeAwZ08
+         uQKSsFe/dIr0c6xTCn4up4K1mAAGxLL1P4dJPRWtzAiKMLL/t52qk4yfYuponzXYK3Da
+         nG41j1svssmDZ1WcSHXBsXzmDlC3ihEYTADFOTpAcG901AZmeXkdSkf0JZ+Z3A+vUyj3
+         DH2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aOUmnl7BKu1huo7JhRvlC6s5ifyyE6pCVv3geLjblJE=;
-        b=IymEvJ8VLvWky//dDlGZuWB+u6EvE7IuswCPjMrfKUf8cSZGjW2p4NlEKAfd5PN0nX
-         tXQg9PB+ZYIVY4KiY9KGNJLzfaemZapI1K3e0QBL780+cTdIGkRqzKv7IUjNPciMKJlf
-         V59zctSsJBo4X5sHQUbqFgQDYzMAKoDZMB3H33HJRkc3MxQb80FKsws6/yunYqKClH0A
-         +Vf6osoVWSLRPWxfbkpWM2bVjorFw0pENFDkINcWp1OYwzDvHJsgP470koUVCcWEUwl3
-         u4KCeQ4qolZxvJ6iNY5Ebhd0snYR6bGTRt+7rZfXczOWHczD0xzSeo+POMvlwQbKZNC1
-         /4xQ==
-X-Gm-Message-State: AOAM530tqbJ0HNdH4i0PKYGrHWmeOzu/Vkl6uctextqUqHdGI1NE6FWT
-        M0Ipy2i+nSiovTU9z+4i2Pi6a9xyj8vPD1jVKiU=
-X-Google-Smtp-Source: ABdhPJxS0HQA086kEmfeUwIUB4rXhF25fUjifO/tOBjk288xwlcLd601Qz4wOZZ6JkTl16aFo02CLuudHF0mnMcaPS0=
-X-Received: by 2002:a1f:e606:0:b0:34d:76c1:722c with SMTP id
- d6-20020a1fe606000000b0034d76c1722cmr1806372vkh.17.1651395323323; Sun, 01 May
- 2022 01:55:23 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9Q4D7i4GL8KP5hpGHA7/56lmG9H5Z77KSqaGV3uZPeM=;
+        b=mH584Cd5wjxfwfaDUbpw3hSyYaa4kP1WTGoGaXrAKq42hZs+EwbtJI9BbAwhFUznNU
+         6zLhCuiCVI21oHbsqgMQDs4/GFtKyHEfoRD3qaGADbsIxpL6ZulMNy62tjd0AbxcbtxT
+         PnidRupafL2QMYdrFWjqdAms5bkkeH3a1fcCaiZ10eBfBsdLFcii7Kdf6GbiVOKUdL2x
+         KJFLw7P0l2ddEWc9NNUn6x4hKLEnD9otkU14aQPnzu9Tj6eoeaLVihmTACssWY7gOOOd
+         aI9YFu9afCvMQR4xRID22bERoY0dD41vvvG1QTHKXw8d5hpEWWYTYTly80T9NJ15Bxkm
+         A5XA==
+X-Gm-Message-State: AOAM532U1Hpe6nR8bmozYel4qbSuxocI8CM8nhe7DDbebhd6u2wu4L+a
+        HPuSxmhwVB8ymGOyqOBGXeRKeg==
+X-Google-Smtp-Source: ABdhPJzRoUbN7p6a+QsrfdXpuNxUvP73pFrp/NOoq9oxKzcPe6GgKQtTMh5zIkfqEiGB5tCEKhuhTQ==
+X-Received: by 2002:a05:6402:288a:b0:425:c5b2:59d9 with SMTP id eg10-20020a056402288a00b00425c5b259d9mr7923496edb.412.1651395338995;
+        Sun, 01 May 2022 01:55:38 -0700 (PDT)
+Received: from [192.168.0.182] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id gv49-20020a1709072bf100b006f3ef214e35sm2374240ejc.155.2022.05.01.01.55.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 01 May 2022 01:55:38 -0700 (PDT)
+Message-ID: <3c2f2e75-153b-05bf-9878-70fc1c1a81b1@linaro.org>
+Date:   Sun, 1 May 2022 10:55:37 +0200
 MIME-Version: 1.0
-References: <20220430090518.3127980-1-chenhuacai@loongson.cn>
- <20220430090518.3127980-2-chenhuacai@loongson.cn> <Ym47ZAuwEA9as98h@debian.me>
-In-Reply-To: <Ym47ZAuwEA9as98h@debian.me>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Sun, 1 May 2022 16:55:12 +0800
-Message-ID: <CAAhV-H4evqhFc+cqPs-6X-CL71aQJ3ZnbVKGPdOfNeuizzAWeg@mail.gmail.com>
-Subject: Re: [PATCH V9 01/24] Documentation: LoongArch: Add basic documentations
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 4/7] dt-bindings: clock: Add Nuvoton WPCM450
+ clock/reset controller
+Content-Language: en-US
+To:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        linux-clk@vger.kernel.org, openbmc@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+References: <20220429172030.398011-1-j.neuschaefer@gmx.net>
+ <20220429172030.398011-5-j.neuschaefer@gmx.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220429172030.398011-5-j.neuschaefer@gmx.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bagas,
-
-On Sun, May 1, 2022 at 3:49 PM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
->
-> On Sat, Apr 30, 2022 at 05:04:55PM +0800, Huacai Chen wrote:
-> > +Instruction names (Mnemonics)
-> > +-----------------------------
-> > +
-> > +We only list the instruction names here, for details please read the references.
-> > +
-> > +Arithmetic Operation Instructions::
-> > +
-> > +  ADD.W SUB.W ADDI.W ADD.D SUB.D ADDI.D
-> > +  SLT SLTU SLTI SLTUI
-> > +  AND OR NOR XOR ANDN ORN ANDI ORI XORI
-> > +  MUL.W MULH.W MULH.WU DIV.W DIV.WU MOD.W MOD.WU
-> > +  MUL.D MULH.D MULH.DU DIV.D DIV.DU MOD.D MOD.DU
-> > +  PCADDI PCADDU12I PCADDU18I
-> > +  LU12I.W LU32I.D LU52I.D ADDU16I.D
-> > +
-> > +Bit-shift Instructions::
-> > +
-> > +  SLL.W SRL.W SRA.W ROTR.W SLLI.W SRLI.W SRAI.W ROTRI.W
-> > +  SLL.D SRL.D SRA.D ROTR.D SLLI.D SRLI.D SRAI.D ROTRI.D
-> > +
-> > +Bit-manipulation Instructions::
-> > +
-> > +  EXT.W.B EXT.W.H CLO.W CLO.D SLZ.W CLZ.D CTO.W CTO.D CTZ.W CTZ.D
-> > +  BYTEPICK.W BYTEPICK.D BSTRINS.W BSTRINS.D BSTRPICK.W BSTRPICK.D
-> > +  REVB.2H REVB.4H REVB.2W REVB.D REVH.2W REVH.D BITREV.4B BITREV.8B BITREV.W BITREV.D
-> > +  MASKEQZ MASKNEZ
-> > +
-> > +Branch Instructions::
-> > +
-> > +  BEQ BNE BLT BGE BLTU BGEU BEQZ BNEZ B BL JIRL
-> > +
-> > +Load/Store Instructions::
-> > +
-> > +  LD.B LD.BU LD.H LD.HU LD.W LD.WU LD.D ST.B ST.H ST.W ST.D
-> > +  LDX.B LDX.BU LDX.H LDX.HU LDX.W LDX.WU LDX.D STX.B STX.H STX.W STX.D
-> > +  LDPTR.W LDPTR.D STPTR.W STPTR.D
-> > +  PRELD PRELDX
-> > +
-> > +Atomic Operation Instructions::
-> > +
-> > +  LL.W SC.W LL.D SC.D
-> > +  AMSWAP.W AMSWAP.D AMADD.W AMADD.D AMAND.W AMAND.D AMOR.W AMOR.D AMXOR.W AMXOR.D
-> > +  AMMAX.W AMMAX.D AMMIN.W AMMIN.D
-> > +
-> > +Barrier Instructions::
-> > +
-> > +  IBAR DBAR
-> > +
-> > +Special Instructions::
-> > +
-> > +  SYSCALL BREAK CPUCFG NOP IDLE ERTN DBCL RDTIMEL.W RDTIMEH.W RDTIME.D ASRTLE.D ASRTGT.D
-> > +
-> > +Privileged Instructions::
-> > +
-> > +  CSRRD CSRWR CSRXCHG
-> > +  IOCSRRD.B IOCSRRD.H IOCSRRD.W IOCSRRD.D IOCSRWR.B IOCSRWR.H IOCSRWR.W IOCSRWR.D
-> > +  CACOP TLBP(TLBSRCH) TLBRD TLBWR TLBFILL TLBCLR TLBFLUSH INVTLB LDDIR LDPTE
-> > +
->
-> Since these above are list of instruction categories, it's better to use
-> enumerated lists. Also, make use of ReST labels to link to References
-> sections, like this:
-OK, thanks, let me try.
-
-Huacai
->
-> -- >8 --
->
-> diff --git a/Documentation/loongarch/introduction.rst b/Documentation/loongarch/introduction.rst
-> index 420c0d2ebcfbe7..2d83283ecf28b9 100644
-> --- a/Documentation/loongarch/introduction.rst
-> +++ b/Documentation/loongarch/introduction.rst
-> @@ -194,60 +194,61 @@ can see I21L/I21H and I26L/I26H here.
->  Instruction names (Mnemonics)
->  -----------------------------
->
-> -We only list the instruction names here, for details please read the references.
-> +We only list the instruction names here, for details please read the
-> +:ref:`references <loongarch-references>`.
->
-> -Arithmetic Operation Instructions::
-> +1. Arithmetic Operation Instructions::
->
-> -  ADD.W SUB.W ADDI.W ADD.D SUB.D ADDI.D
-> -  SLT SLTU SLTI SLTUI
-> -  AND OR NOR XOR ANDN ORN ANDI ORI XORI
-> -  MUL.W MULH.W MULH.WU DIV.W DIV.WU MOD.W MOD.WU
-> -  MUL.D MULH.D MULH.DU DIV.D DIV.DU MOD.D MOD.DU
-> -  PCADDI PCADDU12I PCADDU18I
-> -  LU12I.W LU32I.D LU52I.D ADDU16I.D
-> +     ADD.W SUB.W ADDI.W ADD.D SUB.D ADDI.D
-> +     SLT SLTU SLTI SLTUI
-> +     AND OR NOR XOR ANDN ORN ANDI ORI XORI
-> +     MUL.W MULH.W MULH.WU DIV.W DIV.WU MOD.W MOD.WU
-> +     MUL.D MULH.D MULH.DU DIV.D DIV.DU MOD.D MOD.DU
-> +     PCADDI PCADDU12I PCADDU18I
-> +     LU12I.W LU32I.D LU52I.D ADDU16I.D
->
-> -Bit-shift Instructions::
-> +2. Bit-shift Instructions::
->
-> -  SLL.W SRL.W SRA.W ROTR.W SLLI.W SRLI.W SRAI.W ROTRI.W
-> -  SLL.D SRL.D SRA.D ROTR.D SLLI.D SRLI.D SRAI.D ROTRI.D
-> +     SLL.W SRL.W SRA.W ROTR.W SLLI.W SRLI.W SRAI.W ROTRI.W
-> +     SLL.D SRL.D SRA.D ROTR.D SLLI.D SRLI.D SRAI.D ROTRI.D
->
-> -Bit-manipulation Instructions::
-> +3. Bit-manipulation Instructions::
->
-> -  EXT.W.B EXT.W.H CLO.W CLO.D SLZ.W CLZ.D CTO.W CTO.D CTZ.W CTZ.D
-> -  BYTEPICK.W BYTEPICK.D BSTRINS.W BSTRINS.D BSTRPICK.W BSTRPICK.D
-> -  REVB.2H REVB.4H REVB.2W REVB.D REVH.2W REVH.D BITREV.4B BITREV.8B BITREV.W BITREV.D
-> -  MASKEQZ MASKNEZ
-> +     EXT.W.B EXT.W.H CLO.W CLO.D SLZ.W CLZ.D CTO.W CTO.D CTZ.W CTZ.D
-> +     BYTEPICK.W BYTEPICK.D BSTRINS.W BSTRINS.D BSTRPICK.W BSTRPICK.D
-> +     REVB.2H REVB.4H REVB.2W REVB.D REVH.2W REVH.D BITREV.4B BITREV.8B BITREV.W BITREV.D
-> +     MASKEQZ MASKNEZ
->
-> -Branch Instructions::
-> +4. Branch Instructions::
->
-> -  BEQ BNE BLT BGE BLTU BGEU BEQZ BNEZ B BL JIRL
-> +     BEQ BNE BLT BGE BLTU BGEU BEQZ BNEZ B BL JIRL
->
-> -Load/Store Instructions::
-> +5. Load/Store Instructions::
->
-> -  LD.B LD.BU LD.H LD.HU LD.W LD.WU LD.D ST.B ST.H ST.W ST.D
-> -  LDX.B LDX.BU LDX.H LDX.HU LDX.W LDX.WU LDX.D STX.B STX.H STX.W STX.D
-> -  LDPTR.W LDPTR.D STPTR.W STPTR.D
-> -  PRELD PRELDX
-> +     LD.B LD.BU LD.H LD.HU LD.W LD.WU LD.D ST.B ST.H ST.W ST.D
-> +     LDX.B LDX.BU LDX.H LDX.HU LDX.W LDX.WU LDX.D STX.B STX.H STX.W STX.D
-> +     LDPTR.W LDPTR.D STPTR.W STPTR.D
-> +     PRELD PRELDX
->
-> -Atomic Operation Instructions::
-> +6. Atomic Operation Instructions::
->
-> -  LL.W SC.W LL.D SC.D
-> -  AMSWAP.W AMSWAP.D AMADD.W AMADD.D AMAND.W AMAND.D AMOR.W AMOR.D AMXOR.W AMXOR.D
-> -  AMMAX.W AMMAX.D AMMIN.W AMMIN.D
-> +     LL.W SC.W LL.D SC.D
-> +     AMSWAP.W AMSWAP.D AMADD.W AMADD.D AMAND.W AMAND.D AMOR.W AMOR.D AMXOR.W AMXOR.D
-> +     AMMAX.W AMMAX.D AMMIN.W AMMIN.D
->
-> -Barrier Instructions::
-> +7. Barrier Instructions::
->
-> -  IBAR DBAR
-> +     IBAR DBAR
->
-> -Special Instructions::
-> +8. Special Instructions::
->
-> -  SYSCALL BREAK CPUCFG NOP IDLE ERTN DBCL RDTIMEL.W RDTIMEH.W RDTIME.D ASRTLE.D ASRTGT.D
-> +     SYSCALL BREAK CPUCFG NOP IDLE ERTN DBCL RDTIMEL.W RDTIMEH.W RDTIME.D ASRTLE.D ASRTGT.D
->
-> -Privileged Instructions::
-> +9. Privileged Instructions::
->
-> -  CSRRD CSRWR CSRXCHG
-> -  IOCSRRD.B IOCSRRD.H IOCSRRD.W IOCSRRD.D IOCSRWR.B IOCSRWR.H IOCSRWR.W IOCSRWR.D
-> -  CACOP TLBP(TLBSRCH) TLBRD TLBWR TLBFILL TLBCLR TLBFLUSH INVTLB LDDIR LDPTE
-> +     CSRRD CSRWR CSRXCHG
-> +     IOCSRRD.B IOCSRRD.H IOCSRRD.W IOCSRRD.D IOCSRWR.B IOCSRWR.H IOCSRWR.W IOCSRWR.D
-> +     CACOP TLBP(TLBSRCH) TLBRD TLBWR TLBFILL TLBCLR TLBFLUSH INVTLB LDDIR LDPTE
->
->  Virtual Memory
->  ==============
-> @@ -315,6 +316,8 @@ MIPS, while New Loongson is based on LoongArch. Take Loongson-3 as an example:
->  Loongson-3A1000/3B1500/3A2000/3A3000/3A4000 are MIPS-compatible, while Loongson-
->  3A5000 (and future revisions) are all based on LoongArch.
->
-> +.. _loongarch-references:
+On 29/04/2022 19:20, Jonathan Neuschäfer wrote:
+> The Nuvoton WPCM450 SoC has a combined clock and reset controller.
+> Add a devicetree binding for it, as well as definitions for the bit
+> numbers used by it.
+> 
+> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> ---
+> 
+> v2:
+> - Various improvements, suggested by Krzysztof Kozlowski
+> 
+> v1:
+> - https://lore.kernel.org/lkml/20220422183012.444674-5-j.neuschaefer@gmx.net/
+> ---
+>  .../bindings/clock/nuvoton,wpcm450-clk.yaml   | 66 ++++++++++++++++++
+>  .../dt-bindings/clock/nuvoton,wpcm450-clk.h   | 67 +++++++++++++++++++
+>  2 files changed, 133 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,wpcm450-clk.yaml
+>  create mode 100644 include/dt-bindings/clock/nuvoton,wpcm450-clk.h
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/nuvoton,wpcm450-clk.yaml b/Documentation/devicetree/bindings/clock/nuvoton,wpcm450-clk.yaml
+> new file mode 100644
+> index 0000000000000..3ed3e40e39637
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/nuvoton,wpcm450-clk.yaml
+> @@ -0,0 +1,66 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/nuvoton,wpcm450-clk.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
->  References
->  ==========
->
->
-> > +
-> > + +---------------------------------------------+
-> > + |::                                           |
-> > + |                                             |
-> > + |    +-----+     +---------+     +-------+    |
-> > + |    | IPI | --> | CPUINTC | <-- | Timer |    |
-> > + |    +-----+     +---------+     +-------+    |
-> > + |                     ^                       |
-> > + |                     |                       |
-> > + |                +---------+     +-------+    |
-> > + |                | LIOINTC | <-- | UARTs |    |
-> > + |                +---------+     +-------+    |
-> > + |                     ^                       |
-> > + |                     |                       |
-> > + |               +-----------+                 |
-> > + |               | HTVECINTC |                 |
-> > + |               +-----------+                 |
-> > + |                ^         ^                  |
-> > + |                |         |                  |
-> > + |          +---------+ +---------+            |
-> > + |          | PCH-PIC | | PCH-MSI |            |
-> > + |          +---------+ +---------+            |
-> > + |            ^     ^           ^              |
-> > + |            |     |           |              |
-> > + |    +---------+ +---------+ +---------+      |
-> > + |    | PCH-LPC | | Devices | | Devices |      |
-> > + |    +---------+ +---------+ +---------+      |
-> > + |         ^                                   |
-> > + |         |                                   |
-> > + |    +---------+                              |
-> > + |    | Devices |                              |
-> > + |    +---------+                              |
-> > + |                                             |
-> > + |                                             |
-> > + +---------------------------------------------+
-> > +
-> ...
-> > +
-> > + +--------------------------------------------------------+
-> > + |::                                                      |
-> > + |                                                        |
-> > + |         +-----+     +---------+     +-------+          |
-> > + |         | IPI | --> | CPUINTC | <-- | Timer |          |
-> > + |         +-----+     +---------+     +-------+          |
-> > + |                      ^       ^                         |
-> > + |                      |       |                         |
-> > + |               +---------+ +---------+     +-------+    |
-> > + |               | EIOINTC | | LIOINTC | <-- | UARTs |    |
-> > + |               +---------+ +---------+     +-------+    |
-> > + |                ^       ^                               |
-> > + |                |       |                               |
-> > + |         +---------+ +---------+                        |
-> > + |         | PCH-PIC | | PCH-MSI |                        |
-> > + |         +---------+ +---------+                        |
-> > + |           ^     ^           ^                          |
-> > + |           |     |           |                          |
-> > + |   +---------+ +---------+ +---------+                  |
-> > + |   | PCH-LPC | | Devices | | Devices |                  |
-> > + |   +---------+ +---------+ +---------+                  |
-> > + |        ^                                               |
-> > + |        |                                               |
-> > + |   +---------+                                          |
-> > + |   | Devices |                                          |
-> > + |   +---------+                                          |
-> > + |                                                        |
-> > + |                                                        |
-> > + +--------------------------------------------------------+
-> > +
->
-> I think just literal blocks is enough for the diagrams above.
->
-> --
-> An old man doll... just what I always wanted! - Clara
+> +title: Nuvoton WPCM450 clock controller
+> +
+> +maintainers:
+> +  - Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> +
+> +description:
+> +  The clock controller of the Nuvoton WPCM450 SoC supplies clocks and resets to
+> +  the rest of the chip.
+> +
+> +properties:
+> +  compatible:
+> +    const: nuvoton,wpcm450-clk
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: Reference clock oscillator (should be 48 MHz)
+> +
+> +  clock-names:
+> +    items:
+> +      - const: refclk
+
+Sorry for not bringing it up earlier - this should be just "ref". Names
+in values should not have suffixes (so no "tx-dma", "wake-gpio",
+"ref-clk" etc).
+
+Best regards,
+Krzysztof

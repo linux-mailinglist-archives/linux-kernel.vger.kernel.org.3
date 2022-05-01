@@ -2,491 +2,435 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9999D51650A
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 17:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3BB851650E
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 18:00:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348539AbiEAQBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 12:01:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43818 "EHLO
+        id S1348649AbiEAQDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 12:03:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343851AbiEAQBd (ORCPT
+        with ESMTP id S240387AbiEAQDU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 12:01:33 -0400
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBDB4AE31
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 08:58:05 -0700 (PDT)
-Date:   Sun, 1 May 2022 23:58:42 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1651420683;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Kly9jfrOqnpY66cRdksibw9X1SkXRSPTrT7a9TH0dRE=;
-        b=CIXjae9KMQBRtavRKQfb+cMFEPd9RkYe8WWbNa6y2SSeSQFtNBHwhyFimkPf2y+u/n7QYM
-        ytImp+s5LniDWT/o/HgXIOSpX1HuFHGICXJEf6U7/ncgoIV85xiGboaxRQymGLzRRI7xwm
-        7q4aGg4bTKRLAc9bEpo3gBLm2qR1/l0=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Tao Zhou <tao.zhou@linux.dev>
-To:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Tao Zhou <tao.zhou@linux.dev>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, linux-kernel@vger.kernel.org, parth@linux.ibm.com,
-        qais.yousef@arm.com, chris.hyser@oracle.com,
-        pkondeti@codeaurora.org, vschneid@redhat.com,
-        patrick.bellasi@matbug.net, David.Laight@aculab.com,
-        pjt@google.com, pavel@ucw.cz, tj@kernel.org,
-        dhaval.giani@oracle.com, qperret@google.com,
-        tim.c.chen@linux.intel.com
-Subject: Re: [RFC 5/6] sched/fair: Take into account latency nice at wakeup
-Message-ID: <Ym6uMoHVkqr9zOpj@geo.homenetwork>
-References: <20220311161406.23497-1-vincent.guittot@linaro.org>
- <20220311161406.23497-6-vincent.guittot@linaro.org>
+        Sun, 1 May 2022 12:03:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59B550065;
+        Sun,  1 May 2022 08:59:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5281F60F23;
+        Sun,  1 May 2022 15:59:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25ACAC385AE;
+        Sun,  1 May 2022 15:59:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651420793;
+        bh=OcyXZkRHPpsVxID3mg1jFwUZyOkf+F6A4Phok4YUP8s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=D00X6zkiTJ/l7231Xh89nEdjX7A28mqR9Z4J80JdiFKtkiz7UA0AjPNvNLne4w8Ka
+         0+PME3sPVJ36PR+I7NcSxp/ybnJHvHGQ3fKNj9mrKXDGecGfbQh5hCR6GbrIn6jc9H
+         QZaOJb7ww8T9neCO0wKG6VSWtnGqAu5A8SCeg7aamtQKC4YV/zY79G4Qw94E3Pej9V
+         oXMqDZlBRy5DaLld8zhW5eK8U+UT9gwerWZWtCPBYNZUfyp9Jrg7VmIeCTD1rdxqd5
+         F9QGce64yPfgUA4+5wAB4Upk5UizH4rQ3P3ZDGYL8FMAeagri1QupLRsvrkFu3kPN+
+         KgJBoaab0xS6A==
+Date:   Sun, 1 May 2022 17:08:07 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-iio@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>
+Subject: Re: [PATCH v3 2/2] iio: adc: ad4130: add AD4130 driver
+Message-ID: <20220501170807.1e728524@jic23-huawei>
+In-Reply-To: <20220419150828.191933-3-cosmin.tanislav@analog.com>
+References: <20220419150828.191933-1-cosmin.tanislav@analog.com>
+        <20220419150828.191933-3-cosmin.tanislav@analog.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220311161406.23497-6-vincent.guittot@linaro.org>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_BTC_ID,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vincent,
+On Tue, 19 Apr 2022 18:08:28 +0300
+Cosmin Tanislav <demonsingur@gmail.com> wrote:
 
-Change to Valentin Schneider's now using mail address.
+> AD4130-8 is an ultra-low power, high precision, measurement solution for
+> low bandwidth battery operated applications.
+> 
+> The fully integrated AFE (Analog Front-End) includes a multiplexer for up
+> to 16 single-ended or 8 differential inputs, PGA (Programmable Gain
+> Amplifier), 24-bit Sigma-Delta ADC, on-chip reference and oscillator,
+> selectable filter options, smart sequencer, sensor biasing and excitation
+> options, diagnostics, and a FIFO buffer.
+> 
+> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
 
-On Fri, Mar 11, 2022 at 05:14:05PM +0100, Vincent Guittot wrote:
+Hi Cosmin,
 
-> Take into account the nice latency priority of a thread when deciding to
-> preempt the current running thread. We don't want to provide more CPU
-> bandwidth to a thread but reorder the scheduling to run latency sensitive
-> task first whenever possible.
-> 
-> As long as a thread didn't use its bandwidth, it will be able to preempt
-> the current thread.
-> 
-> At the opposite, a thread with a low latency priority will preempt current
-> thread at wakeup only to keep fair CPU bandwidth sharing. Otherwise it will
-> wait for the tick to get its sched slice.
-> 
->                                    curr vruntime
->                                        |
->                       sysctl_sched_wakeup_granularity
->                                    <-->
-> ----------------------------------|----|-----------------------|---------------
->                                   |    |<--------------------->
->                                   |    .  sysctl_sched_latency
->                                   |    .
-> default/current latency entity    |    .
->                                   |    .
-> 1111111111111111111111111111111111|0000|-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-
-> se preempts curr at wakeup ------>|<- se doesn't preempt curr -----------------
->                                   |    .
->                                   |    .
->                                   |    .
-> low latency entity                |    .
->                                    ---------------------->|
->                                % of sysctl_sched_latency  |
-> 1111111111111111111111111111111111111111111111111111111111|0000|-1-1-1-1-1-1-1-
-> preempt ------------------------------------------------->|<- do not preempt --
->                                   |    .
->                                   |    .
->                                   |    .
-> high latency entity               |    .
->          |<-----------------------|    .
->          | % of sysctl_sched_latency   .
-> 111111111|0000|-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1
-> preempt->|<- se doesn't preempt curr ------------------------------------------
-> 
-> Tests results of nice latency impact on heavy load like hackbench:
-> 
-> hackbench -l (2560 / group) -g group
-> group        latency 0             latency 19
-> 1            1.450(+/- 0.60%)      1.376(+/- 0.54%) + 5%
-> 4            1.537(+/- 1.75%)      1.335(+/- 1.81%) +13%
-> 8            1.414(+/- 1.91%)      1.348(+/- 1.88%) + 5%
-> 16           1.423(+/- 1.65%)      1.374(+/- 0.58%) + 3%
-> 
-> hackbench -p -l (2560 / group) -g group
-> group
-> 1            1.416(+/- 3.45%)      0.886(+/- 0.54%) +37%
-> 4            1.634(+/- 7.14%)      0.888(+/- 5.40%) +45%
-> 8            1.449(+/- 2.14%)      0.804(+/- 4.55%) +44%
-> 16           0.917(+/- 4.12%)      0.777(+/- 1.41%) +15%
-> 
-> By deacreasing the latency prio, we reduce the number of preemption at
+Sorry this one took me a while to get back to.  Last week was a little
+crazy on the day job front.
 
-s/deacreasing/decreasing/
-s/reduce/increase/
+Anyhow, whilst reading this I realised we have some unclear ABI documentation
+and hence divergence in interpretation of the units of hwfifo_watermark.
+See below. I've not done a thorough audit as don't have enough time today,
+but we have at least some drivers treating it as being in scans (+ the core
+does this for watermark) and some treating it as being in individual channel
+readings...  My intent IIRC was that it was in scans as otherwise you run into
+the problem you are working around with needing to tweak it to match scans
+within each driver.
 
-> wakeup and help hackbench making progress.
-> 
-> Test results of nice latency impact on short live load like cyclictest
-> while competing with heavy load like hackbench:
-> 
-> hackbench -l 10000 -g group &
-> cyclictest --policy other -D 5 -q -n
->         latency 0           latency -20
-> group   min  avg    max     min  avg    max
-> 0       16    17     28      15   17     27
-> 1       61   382  10603      63   89   4628
-> 4       52   437  15455      54   98  16238
-> 8       56   728  38499      61  125  28983
-> 16      53  1215  52207      61  183  80751
-> 
-> group = 0 means that hackbench is not running.
-> 
-> The avg is significantly improved with nice latency -20 especially with
-> large number of groups but min and max remain quite similar. If we add the
-> histogram parameters to get details of latency, we have :
-> 
-> hackbench -l 10000 -g 16 &
-> cyclictest --policy other -D 5 -q -n  -H 20000 --histfile data.txt
->               latency 0    latency -20
-> Min Latencies:    63           62
-> Avg Latencies:  1397          218
-> Max Latencies: 44926        42291
-> 50% latencies:   100           98
-> 75% latencies:   762          116
-> 85% latencies:  1118          126
-> 90% latencies:  1540          130
-> 95% latencies:  5610          138
-> 99% latencies: 13738          266
-> 
-> With percentile details, we see the benefit of nice latency -20 as
-> 1% of the latencies stays above 266us whereas the default latency has
-> got 25% are above 762us and 10% over the 1ms.
-> 
-> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> ---
->  include/linux/sched.h |  4 ++-
->  init/init_task.c      |  2 +-
->  kernel/sched/core.c   | 32 +++++++++++++++++++----
->  kernel/sched/debug.c  |  2 +-
->  kernel/sched/fair.c   | 60 +++++++++++++++++++++++++++++++++++++++++--
->  kernel/sched/sched.h  | 12 +++++++++
->  6 files changed, 102 insertions(+), 10 deletions(-)
-> 
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index 2aa889a59054..9aeb157e819b 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -560,6 +560,8 @@ struct sched_entity {
->  	unsigned long			runnable_weight;
->  #endif
->  
-> +	int				latency_weight;
-> +
->  #ifdef CONFIG_SMP
->  	/*
->  	 * Per entity load average tracking.
-> @@ -779,7 +781,7 @@ struct task_struct {
->  	int				static_prio;
->  	int				normal_prio;
->  	unsigned int			rt_priority;
-> -	int				latency_nice;
-> +	int				latency_prio;
->  
->  	struct sched_entity		se;
->  	struct sched_rt_entity		rt;
-> diff --git a/init/init_task.c b/init/init_task.c
-> index 2afa249c253b..e98c71f24981 100644
-> --- a/init/init_task.c
-> +++ b/init/init_task.c
-> @@ -78,7 +78,7 @@ struct task_struct init_task
->  	.prio		= MAX_PRIO - 20,
->  	.static_prio	= MAX_PRIO - 20,
->  	.normal_prio	= MAX_PRIO - 20,
-> -	.latency_nice	= 0,
-> +	.latency_prio	= NICE_WIDTH - 20,
->  	.policy		= SCHED_NORMAL,
->  	.cpus_ptr	= &init_task.cpus_mask,
->  	.user_cpus_ptr	= NULL,
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 8f8b102a75c4..547b0da01efe 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -1241,6 +1241,11 @@ static void set_load_weight(struct task_struct *p, bool update_load)
->  	}
->  }
->  
-> +static void set_latency_weight(struct task_struct *p)
-> +{
-> +	p->se.latency_weight = sched_latency_to_weight[p->latency_prio];
-> +}
-> +
->  #ifdef CONFIG_UCLAMP_TASK
->  /*
->   * Serializes updates of utilization clamp values
-> @@ -4394,7 +4399,7 @@ int sched_fork(unsigned long clone_flags, struct task_struct *p)
->  	p->prio = current->normal_prio;
->  
->  	/* Propagate the parent's latency requirements to the child as well */
-> -	p->latency_nice = current->latency_nice;
-> +	p->latency_prio = current->latency_prio;
->  
->  	uclamp_fork(p);
->  
-> @@ -4412,7 +4417,7 @@ int sched_fork(unsigned long clone_flags, struct task_struct *p)
->  		p->prio = p->normal_prio = p->static_prio;
->  		set_load_weight(p, false);
->  
-> -		p->latency_nice = DEFAULT_LATENCY_NICE;
-> +		p->latency_prio = NICE_TO_LATENCY(0);
->  		/*
->  		 * We don't need the reset flag anymore after the fork. It has
->  		 * fulfilled its duty:
-> @@ -4420,6 +4425,9 @@ int sched_fork(unsigned long clone_flags, struct task_struct *p)
->  		p->sched_reset_on_fork = 0;
->  	}
->  
-> +	/* Once latency_prio is set, update the latency weight */
-> +	set_latency_weight(p);
-> +
->  	if (dl_prio(p->prio))
->  		return -EAGAIN;
->  	else if (rt_prio(p->prio))
-> @@ -7361,7 +7369,7 @@ static int __sched_setscheduler(struct task_struct *p,
->  		if (attr->sched_latency_nice < MIN_LATENCY_NICE)
->  			return -EINVAL;
->  		/* Use the same security checks as NICE */
-> -		if (attr->sched_latency_nice < p->latency_nice &&
-> +		if (attr->sched_latency_nice < LATENCY_TO_NICE(p->latency_prio) &&
->  		    !capable(CAP_SYS_NICE))
->  			return -EPERM;
->  	}
-> @@ -7401,7 +7409,7 @@ static int __sched_setscheduler(struct task_struct *p,
->  		if (attr->sched_flags & SCHED_FLAG_UTIL_CLAMP)
->  			goto change;
->  		if (attr->sched_flags & SCHED_FLAG_LATENCY_NICE &&
-> -		    attr->sched_latency_nice != p->latency_nice)
-> +		    attr->sched_latency_nice != LATENCY_TO_NICE(p->latency_prio))
->  			goto change;
->  
->  		p->sched_reset_on_fork = reset_on_fork;
-> @@ -7942,7 +7950,7 @@ SYSCALL_DEFINE4(sched_getattr, pid_t, pid, struct sched_attr __user *, uattr,
->  	get_params(p, &kattr);
->  	kattr.sched_flags &= SCHED_FLAG_ALL;
->  
-> -	kattr.sched_latency_nice = p->latency_nice;
-> +	kattr.sched_latency_nice = LATENCY_TO_NICE(p->latency_prio);
->  
->  #ifdef CONFIG_UCLAMP_TASK
->  	/*
-> @@ -10954,6 +10962,20 @@ const u32 sched_prio_to_wmult[40] = {
->   /*  15 */ 119304647, 148102320, 186737708, 238609294, 286331153,
->  };
->  
-> +/*
-> + * latency weight for wakeup preemption
-> + */
-> +const int sched_latency_to_weight[40] = {
-> + /* -20 */      1024,       973,       922,       870,       819,
-> + /* -15 */       768,       717,       666,       614,       563,
-> + /* -10 */       512,       461,       410,       358,       307,
-> + /*  -5 */       256,       205,       154,       102,       51,
-> + /*   0 */	   0,       -51,      -102,      -154,      -205,
-> + /*   5 */      -256,      -307,      -358,      -410,      -461,
-> + /*  10 */      -512,      -563,      -614,      -666,      -717,
-> + /*  15 */      -768,      -819,      -870,      -922,      -973,
-> +};
-> +
->  void call_trace_sched_update_nr_running(struct rq *rq, int count)
->  {
->          trace_sched_update_nr_running_tp(rq, count);
-> diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
-> index 5d76a8927888..253e52ec73fb 100644
-> --- a/kernel/sched/debug.c
-> +++ b/kernel/sched/debug.c
-> @@ -1043,7 +1043,7 @@ void proc_sched_show_task(struct task_struct *p, struct pid_namespace *ns,
->  #endif
->  	P(policy);
->  	P(prio);
-> -	P(latency_nice);
-> +	P(latency_prio);
->  	if (task_has_dl_policy(p)) {
->  		P(dl.runtime);
->  		P(dl.deadline);
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 5c4bfffe8c2c..506c482a0e48 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -5555,6 +5555,35 @@ static int sched_idle_cpu(int cpu)
->  }
->  #endif
->  
-> +static void set_next_buddy(struct sched_entity *se);
-> +
-> +static void check_preempt_from_idle(struct cfs_rq *cfs, struct sched_entity *se)
-> +{
-> +	struct sched_entity *next;
-> +
-> +	if (se->latency_weight <= 0)
-> +		return;
-> +
-> +	if (cfs->nr_running <= 1)
-> +		return;
-> +	/*
-> +	 * When waking from idle, we don't need to check to preempt at wakeup
-> +	 * the idle thread and don't set next buddy as a candidate for being
-> +	 * picked in priority.
-> +	 * In case of simultaneous wakeup from idle, the latency sensitive tasks
-> +	 * lost opportunity to preempt non sensitive tasks which woke up
-> +	 * simultaneously.
-> +	 */
-> +
-> +	if (cfs->next)
-> +		next = cfs->next;
-> +	else
-> +		next = __pick_first_entity(cfs);
-> +
-> +	if (next && wakeup_preempt_entity(next, se) == 1)
-> +		set_next_buddy(se);
-> +}
-> +
->  /*
->   * The enqueue_task method is called before nr_running is
->   * increased. Here we update the fair scheduling stats and
-> @@ -5648,6 +5677,9 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
->  	if (!task_new)
->  		update_overutilized_status(rq);
->  
-> +	if (rq->curr == rq->idle)
-> +		check_preempt_from_idle(cfs_rq_of(&p->se), &p->se);
-> +
->  enqueue_throttle:
->  	if (cfs_bandwidth_used()) {
->  		/*
-> @@ -5669,8 +5701,6 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
->  	hrtick_update(rq);
->  }
->  
-> -static void set_next_buddy(struct sched_entity *se);
-> -
->  /*
->   * The dequeue_task method is called before nr_running is
->   * decreased. We remove the task from the rbtree and
-> @@ -6970,6 +7000,27 @@ balance_fair(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
->  }
->  #endif /* CONFIG_SMP */
->  
-> +static long wakeup_latency_gran(int latency_weight)
-> +{
-> +	long thresh = sysctl_sched_latency;
-> +
-> +	if (!latency_weight)
-> +		return 0;
-> +
-> +	if (sched_feat(GENTLE_FAIR_SLEEPERS))
-> +		thresh >>= 1;
-> +
-> +	/*
-> +	 * Clamp the delta to stay in the scheduler period range
-> +	 * [-sysctl_sched_latency:sysctl_sched_latency]
-> +	 */
-> +	latency_weight = clamp_t(long, latency_weight,
-> +				-1 * NICE_LATENCY_WEIGHT_MAX,
-> +				NICE_LATENCY_WEIGHT_MAX);
-> +
-> +	return (thresh * latency_weight) >> NICE_LATENCY_SHIFT;
-> +}
-> +
->  static unsigned long wakeup_gran(struct sched_entity *se)
->  {
->  	unsigned long gran = sysctl_sched_wakeup_granularity;
-> @@ -7008,6 +7059,10 @@ static int
->  wakeup_preempt_entity(struct sched_entity *curr, struct sched_entity *se)
->  {
->  	s64 gran, vdiff = curr->vruntime - se->vruntime;
-> +	int latency_weight = se->latency_weight - curr->latency_weight;
-> +
-> +	latency_weight = min(latency_weight, se->latency_weight);
-
-Let lable A=se->latency_weight, B=curr->latency_weight, C=A-B.
-
-1 A>0 B>0
-    ::C=A-B<0, min(C,A)=C, latency decrease, C is the real diff value no matter
-      what A is. That means it can be very 'long'(-sched_latency) and vdiff is
-      more possible to be in <= 0 case and return -1.
-    ::C=A-B>0, min(C,A)=A, latency increase, but it is conservative. Limit to
-      A/1024*sched_latency.
-    When latecy is decreased, the negtive value added to vdiff is larger than the
-    positive value added to vdiff when latency is increased.
-
-2 A>0 B<0
-    ::C=A-B>0 and C>A, min(C,A)=A, latency increase and it is conservative.
-
-3 A<0 B<0
-    ::C=A-B>0, min(C,A)=A, latency increase but min(C,A)<0, I think if latency
-    increase means the value added to vdiff will be a positive value to increase
-    the chance to return 1. I would say it is max(C,A)=C
-    ::C=A-B<0, min(C,A)=A, latency decrease and the real negtive value.
-
-4 A<0,B>0
-    ::C=A-B<0, min(C,A)=C, latency decrease and the real negtive value.
-
-Is there a reason that the value when latency increase and latency decrease
-be treated differently. Latency increase value is limited to se's latency_weight
-but latency decrease value can extend to -sched_latency or treat them the same.
-Penalty latency decrease and conserve latency increase.
-
-
-There is any value that this latency_weight can be considered to be a average.
-
-The delta value choose is ~%5 to 1024. %5*sched_latency=0.05*6ms=0.3ms.(no scale)
-I do not think over that vdiff equation  and others though.
+A few other trivial things inline including the alignment issue I emailed
+the list about but haven't sent patches out for yet (about 90 driver are
+affected... *sigh*).
 
 Thanks,
-Tao
-> +	vdiff += wakeup_latency_gran(latency_weight);
->  
->  	if (vdiff <= 0)
->  		return -1;
-> @@ -7117,6 +7172,7 @@ static void check_preempt_wakeup(struct rq *rq, struct task_struct *p, int wake_
->  		return;
->  
->  	update_curr(cfs_rq_of(se));
+
+Jonathan
+
+
+> ---
+
+...
+
+> diff --git a/drivers/iio/adc/Makefile b/drivers/iio/adc/Makefile
+> index 39d806f6d457..c3aa7e4eca2f 100644
+> --- a/drivers/iio/adc/Makefile
+> +++ b/drivers/iio/adc/Makefile
+> @@ -6,6 +6,7 @@
+>  # When adding new entries keep the list in alphabetical order
+>  obj-$(CONFIG_AB8500_GPADC) += ab8500-gpadc.o
+>  obj-$(CONFIG_AD_SIGMA_DELTA) += ad_sigma_delta.o
+> +obj-$(CONFIG_AD4130) += ad4130.o
+>  obj-$(CONFIG_AD7091R5) += ad7091r5.o ad7091r-base.o
+>  obj-$(CONFIG_AD7124) += ad7124.o
+>  obj-$(CONFIG_AD7192) += ad7192.o
+> diff --git a/drivers/iio/adc/ad4130.c b/drivers/iio/adc/ad4130.c
+> new file mode 100644
+> index 000000000000..dd2f18734cba
+> --- /dev/null
+> +++ b/drivers/iio/adc/ad4130.c
+
+...
+
+> +struct ad4130_state {
+> +	const struct ad4130_chip_info	*chip_info;
+> +	struct spi_device		*spi;
+> +	struct regmap			*regmap;
+> +	struct clk			*mclk;
+> +	struct regulator_bulk_data	regulators[4];
+> +	u32				irq_trigger;
+> +	u32				inv_irq_trigger;
 > +
->  	if (wakeup_preempt_entity(se, pse) == 1) {
->  		/*
->  		 * Bias pick_next to pick the sched entity that is
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index 456ad2159eb1..dd92aa9c36f9 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -122,6 +122,17 @@ extern void call_trace_sched_update_nr_running(struct rq *rq, int count);
->   * Default tasks should be treated as a task with latency_nice = 0.
->   */
->  #define DEFAULT_LATENCY_NICE	0
-> +#define DEFAULT_LATENCY_PRIO	(DEFAULT_LATENCY_NICE + LATENCY_NICE_WIDTH/2)
+> +	/*
+> +	 * Synchronize access to members of driver state, and ensure atomicity
+> +	 * of consecutive regmap operations.
+> +	 */
+> +	struct mutex			lock;
+> +	struct completion		completion;
 > +
-> +/*
-> + * Convert user-nice values [ -20 ... 0 ... 19 ]
-> + * to static latency [ 0..39 ],
-> + * and back.
-> + */
-> +#define NICE_TO_LATENCY(nice)	((nice) + DEFAULT_LATENCY_PRIO)
-> +#define LATENCY_TO_NICE(prio)	((prio) - DEFAULT_LATENCY_PRIO)
-> +#define NICE_LATENCY_SHIFT	(SCHED_FIXEDPOINT_SHIFT)
-> +#define NICE_LATENCY_WEIGHT_MAX	(1L << NICE_LATENCY_SHIFT)
->  
->  /*
->   * Increase resolution of nice-level calculations for 64-bit architectures.
-> @@ -2098,6 +2109,7 @@ static_assert(WF_TTWU == SD_BALANCE_WAKE);
->  
->  extern const int		sched_prio_to_weight[40];
->  extern const u32		sched_prio_to_wmult[40];
-> +extern const int		sched_latency_to_weight[40];
->  
->  /*
->   * {de,en}queue flags:
-> -- 
-> 2.17.1
-> 
+> +	struct iio_chan_spec		chans[AD4130_MAX_CHANNELS];
+> +	struct ad4130_chan_info		chans_info[AD4130_MAX_CHANNELS];
+> +	struct ad4130_slot_info		slots_info[AD4130_MAX_SETUPS];
+> +	enum ad4130_pin_function	pins_fn[AD4130_MAX_ANALOG_PINS];
+> +	u32				vbias_pins[AD4130_MAX_ANALOG_PINS];
+> +	u32				num_vbias_pins;
+> +	int				scale_tbls[AD4130_REF_SEL_MAX][AD4130_PGA_NUM][2];
+> +	struct gpio_chip		gc;
+> +	unsigned int			gpio_offsets[AD4130_MAX_GPIOS];
+> +	unsigned int			num_gpios;
+> +
+> +	u32			int_pin_sel;
+> +	u32			int_ref_uv;
+> +	u32			mclk_sel;
+> +	bool			int_ref_en;
+> +	bool			bipolar;
+> +
+> +	unsigned int		num_enabled_channels;
+> +	unsigned int		effective_watermark;
+> +	unsigned int		watermark;
+> +
+> +	struct spi_message	fifo_msg;
+> +	struct spi_transfer	fifo_xfer[2];
+> +
+> +	/*
+> +	 * DMA (thus cache coherency maintenance) requires the
+> +	 * transfer buffers to live in their own cache lines.
+> +	 */
+> +	u8			reset_buf[AD4130_RESET_BUF_SIZE] ____cacheline_aligned;
+
+This needs a fix along with the other set that I'll hopefully get this weekend.
+In meantime if you change this to __aligned(IIO_ALIGN); then the fix I have
+coming shortly will change that define to be large enough for the odd ARM systems
+with 128 byte requirement for DMA and 64 byte L1 cache alignment (which is what
+___cacheline_aligned guarantees.
+
+
+> +	u8			reg_write_tx_buf[4];
+> +	u8			reg_read_tx_buf[1];
+> +	u8			reg_read_rx_buf[3];
+> +	u8			fifo_tx_buf[2];
+> +	u8			fifo_rx_buf[AD4130_FIFO_SIZE *
+> +					    AD4130_FIFO_MAX_SAMPLE_SIZE];
+> +};
+> +
+
+> +static int ad4130_set_fifo_watermark(struct iio_dev *indio_dev, unsigned int val)
+> +{
+> +	struct ad4130_state *st = iio_priv(indio_dev);
+> +	unsigned int eff;
+> +	int ret;
+> +
+> +	if (val > AD4130_FIFO_SIZE)
+> +		return -EINVAL;
+> +
+> +	/*
+> +	 * Always set watermark to a multiple of the number of enabled channels
+> +	 * to avoid making the FIFO unaligned.
+> +	 */
+> +	eff = rounddown(val, st->num_enabled_channels);
+> +
+> +	mutex_lock(&st->lock);
+> +
+> +	ret = regmap_update_bits(st->regmap, AD4130_REG_FIFO_CONTROL,
+> +				 AD4130_WATERMARK_MASK,
+> +				 FIELD_PREP(AD4130_WATERMARK_MASK,
+> +					    ad4130_watermark_reg_val(eff)));
+> +	if (ret)
+> +		goto out;
+> +
+> +	st->effective_watermark = eff;
+> +	st->watermark = val;
+
+Hmm this is a potential inconsistency in the IIO ABI.
+ABI docs describes watermark as being number of 'scan elements' which is
+not the clearest text we could have gone with...
+
+Now I may well have made a mistake in the following as it's rather a long time
+since I last looked at the core handling for this...
+
+The core treats it as number datum (which is same as a scan) when using
+it for the main watermark attribute and also when using watermarks with the
+kfifo (the IIO fifo is made up of objects each of which is a scan. So kfifo_len()
+returns the number of scans.
+ 
+Looking very quickly at a few other drivers 
+adxl367 seems to use number of samples.
+adxl372 is using number of scans.
+bmc150 hardware seems to work on basis of frame count which I 'think' is probably scans.
+fxls8962 uses 'samples count' which is not clearly defined in the datasheet but there
+is an example showing that it's scans (I think)...
+lsm6dsx - some of the fifos used with this are based on tagged data so the connection to
+what hits the front end buffers is non obvious.
+
+So, not great for consistency :( 
+
+Going forwards i think we should standardize the hardware fifo watermark on what is being
+used for the software watermark which I believe is number of scans.
+Not necessary much we can do about old drivers though due to risk of breaking ABI...
+We should make the documentation clearer though.
+
+> +
+> +out:
+> +	mutex_unlock(&st->lock);
+> +
+> +	return ret;
+> +}
+> +
+
+
+...
+
+> +
+> +static int ad4130_parse_fw_channel(struct iio_dev *indio_dev,
+> +				   struct fwnode_handle *child)
+> +{
+> +	struct ad4130_state *st = iio_priv(indio_dev);
+> +	unsigned int index = indio_dev->num_channels++;
+> +	struct device *dev = &st->spi->dev;
+> +	struct ad4130_chan_info *chan_info;
+> +	struct iio_chan_spec *chan;
+> +	u32 pins[2];
+> +	int ret;
+> +
+> +	if (index >= AD4130_MAX_CHANNELS)
+> +		return dev_err_probe(dev, -EINVAL, "Too many channels\n");
+> +
+> +	chan = &st->chans[index];
+> +	chan_info = &st->chans_info[index];
+> +
+> +	*chan = ad4130_channel_template;
+> +	chan->scan_type.realbits = st->chip_info->resolution;
+> +	chan->scan_type.storagebits = st->chip_info->resolution;
+> +	chan->scan_index = index;
+> +
+> +	chan_info->slot = AD4130_INVALID_SLOT;
+> +	chan_info->setup.fs = AD4130_FS_MIN;
+> +	chan_info->initialized = true;
+> +
+> +	ret = fwnode_property_read_u32_array(child, "diff-channels", pins,
+> +					     ARRAY_SIZE(pins));
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = ad4130_validate_diff_channels(st, pins, ARRAY_SIZE(pins));
+> +	if (ret)
+> +		return ret;
+> +
+> +	chan->channel = pins[0];
+> +	chan->channel2 = pins[1];
+> +
+> +	ret = ad4130_parse_fw_setup(st, child, &chan_info->setup);
+> +	if (ret)
+> +		return ret;
+> +
+> +	fwnode_property_read_u32(child, "adi,excitation-pin-0",
+> +				 &chan_info->iout0);
+> +	if (chan_info->setup.iout0_val != AD4130_IOUT_OFF) {
+
+It would be slightly better to set an explicit default value here as the fact it
+is 0 is hidden by the enum. e.g.
+	chan_info->iout0 = AD4130_IOUT_OFF;
+	fwnode_property_read_u32(child, "adi,excitation-pin-0",
+			 	 &chan_info->iout0);
+	if (chan_info->....
+That would save reviewers wondering what the default is and having to go
+check the enum (and I'm lazy :)
+
+> +		ret = ad4130_validate_excitation_pin(st, chan_info->iout0);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	fwnode_property_read_u32(child, "adi,excitation-pin-1",
+> +				 &chan_info->iout1);
+> +	if (chan_info->setup.iout1_val != AD4130_IOUT_OFF) {
+> +		ret = ad4130_validate_excitation_pin(st, chan_info->iout1);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int ad4130_parse_fw_children(struct iio_dev *indio_dev)
+> +{
+> +	struct ad4130_state *st = iio_priv(indio_dev);
+> +	struct device *dev = &st->spi->dev;
+> +	struct fwnode_handle *child;
+> +	int ret;
+> +
+> +	indio_dev->channels = st->chans;
+> +
+> +	device_for_each_child_node(dev, child) {
+> +		ret = ad4130_parse_fw_channel(indio_dev, child);
+> +		if (ret) {
+> +			fwnode_handle_put(child);
+> +			break;
+Trivial, but slight preference for return ret here and
+then return 0 below.
+
+> +		}
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int ad4310_parse_fw(struct iio_dev *indio_dev)
+> +{
+> +	struct ad4130_state *st = iio_priv(indio_dev);
+> +	struct device *dev = &st->spi->dev;
+> +	u32 ext_clk_freq = AD4130_MCLK_FREQ_76_8KHZ;
+> +	bool int_clk_out = false;
+> +	unsigned int i;
+> +	int avdd_uv;
+> +	int irq;
+> +	int ret;
+> +
+
+...
+
+> +
+> +	device_property_read_u32(dev, "adi,ext-clk-freq", &ext_clk_freq);
+
+I'll note this in reviewing the binding, but the naming should incorporate the
+units.
+
+> +	if (ext_clk_freq != AD4130_MCLK_FREQ_153_6KHZ &&
+> +	    ext_clk_freq != AD4130_MCLK_FREQ_76_8KHZ)
+> +		return dev_err_probe(dev, -EINVAL,
+> +				     "Invalid external clock frequency %u\n",
+> +				     ext_clk_freq);
+> +
+
+...
+
+> +
+> +	return 0;
+> +}
+> +
+
+> +
+> +static int ad4130_setup(struct iio_dev *indio_dev)
+> +{
+> +	struct ad4130_state *st = iio_priv(indio_dev);
+> +	struct device *dev = &st->spi->dev;
+> +	unsigned int int_ref_val;
+> +	unsigned long rate = AD4130_MCLK_FREQ_76_8KHZ;
+> +	unsigned int val;
+> +	unsigned int i;
+> +	int ret;
+> +
+> +	if (st->mclk_sel == AD4130_MCLK_153_6KHZ_EXT)
+> +		rate = AD4130_MCLK_FREQ_153_6KHZ;
+> +
+> +	ret = clk_set_rate(st->mclk, rate);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = clk_prepare_enable(st->mclk);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = devm_add_action_or_reset(dev, ad4130_clk_disable_unprepare,
+> +				       st->mclk);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (st->int_ref_uv == AD4130_INT_REF_2_5V)
+> +		int_ref_val = AD4130_INT_REF_VAL_2_5V;
+> +	else
+> +		int_ref_val = AD4130_INT_REF_VAL_1_25V;
+> +
+> +	/* Switch to SPI 4-wire mode. */
+> +	val = AD4130_CSB_EN_MASK;
+
+Trivial but I'd prefer to see this treated as a field as well for consistency.
+	val = FIELD_PREP(AD4130_CSB_EN_MASK, 1);
+
+> +	val |= FIELD_PREP(AD4130_BIPOLAR_MASK, st->bipolar);
+> +	val |= FIELD_PREP(AD4130_INT_REF_EN_MASK, st->int_ref_en);
+> +	val |= FIELD_PREP(AD4130_MODE_MASK, AD4130_MODE_IDLE);
+> +	val |= FIELD_PREP(AD4130_MCLK_SEL_MASK, st->mclk_sel);
+> +	val |= FIELD_PREP(AD4130_INT_REF_VAL_MASK, int_ref_val);
+> +
+> +	ret = regmap_write(st->regmap, AD4130_REG_ADC_CONTROL, val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	val = FIELD_PREP(AD4130_INT_PIN_SEL_MASK, st->int_pin_sel);
+> +	for (i = 0; i < st->num_gpios; i++)
+> +		val |= BIT(st->gpio_offsets[i]);
+> +
+> +	ret = regmap_write(st->regmap, AD4130_REG_IO_CONTROL, val);
+> +	if (ret)
+> +		return ret;
+> +
+

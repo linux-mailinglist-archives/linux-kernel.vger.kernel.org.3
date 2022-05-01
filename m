@@ -2,210 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CB955167C6
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 22:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB475167CF
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 22:41:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354458AbiEAU3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 16:29:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55300 "EHLO
+        id S1354705AbiEAUll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 16:41:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354561AbiEAU33 (ORCPT
+        with ESMTP id S238355AbiEAUlj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 16:29:29 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47FB63F30C;
-        Sun,  1 May 2022 13:26:01 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id p8so10904573pfh.8;
-        Sun, 01 May 2022 13:26:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=poTw99el8hA8UvREnNqZRyuvNRDohAjbzuyQQ6m9nA0=;
-        b=ESH8sti45yasa2IrckGbf5eR2XodldnSQEg3z+ZAtsbSDjzi6WGsRKNU9d3gwwiSQQ
-         GFJyEsvfXhUmfnGoeNMYD6eI8vJE+cYoc/8rxuutDFvzrMppMsH/TG/bd8gLlC/aDBHb
-         ALaVtYmLP6ez1ZO95NaHTSW+glODHwiO5A2bjraS57jgfr0tiRc5MqcONMJYz6HtbPc0
-         iF5sb9Adxw4rWxQyK2X8Rc7g2hsfa2twoYVGYwtLmWuAc0erHZyl2XZLNe7bUXSvIQoB
-         tAeQXnYhHAhhWvKw1YiLSE/MzjvXrEaAwiaJuRskAvCATLQWf3VpouoCEPjRPSnKbIzk
-         q/lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=poTw99el8hA8UvREnNqZRyuvNRDohAjbzuyQQ6m9nA0=;
-        b=Ava/JIZ9P28wtej3PuTR/tyPbQmptzSIeNOK7tBVneh2LoqguID60Ex3F8Uoe66Hzp
-         xgysKydbVV69iUVpw2vpEcyokx6lwYzlosnuTj/d2KzxfqjNMHvd1bWwwnLWJ8dAE/os
-         npEVoP7iO84a86WR4fvvMWIkzGuMgzyvs5eYb9ss/0vGtXUnDDEBnbyGF2PBiDX+WW5+
-         iUgoxb7ysm97Cbo8wWF7iViKcyfCNjjTarZBNXWq19XwKXOoimfvUNgSkqCUhBwbm3aX
-         mrZN+E48ccOikcTyOdscQKHr4B2Ba1t2zn4NmNS+kvK5u8Z//1zvH1EcejUORHfVyczF
-         9h/Q==
-X-Gm-Message-State: AOAM533jJBhHDrOTs+uL7DWJ5eqKkPazOyqQ0UgR5ORCAW0Y5kNkfhQT
-        0Y3PSgdom3M2iMNT4vKmqxtNMUlv86U1xFd/TSPEZoG3dxT0xA==
-X-Google-Smtp-Source: ABdhPJwXFf/e4kdq8gcjbrEsFwJB+GL1XHoOTvpxCSwBmV+0X3Mj3xZKQ49A/5cZMYm1b1UbXyAXSILQcbCn3y4dAT0=
-X-Received: by 2002:a63:6c8a:0:b0:3ab:8c07:4d93 with SMTP id
- h132-20020a636c8a000000b003ab8c074d93mr7240626pgc.431.1651436761019; Sun, 01
- May 2022 13:26:01 -0700 (PDT)
+        Sun, 1 May 2022 16:41:39 -0400
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B63F49C9C
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 13:38:10 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id C15446C0A3E;
+        Sun,  1 May 2022 20:38:09 +0000 (UTC)
+Received: from pdx1-sub0-mail-a272.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 3D0D66C08A7;
+        Sun,  1 May 2022 20:38:09 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1651437489; a=rsa-sha256;
+        cv=none;
+        b=hULsUQVft86mznR4tDpZFynazbDM5OaSjsOXlnH8wQin8ftD4B4/ccKJCcFqx+GiN1Qw6n
+        brYHAIzrj2mUsXL8fbigy0H2Pf9ksvS2oflAbpHa1lk8LTKwvhaY1lKmlFu2uhOIYOyHVi
+        oxYp0RuIoviib/yhvuS2BZBV3J7OQQcPnQtc30L4hRnJskWg0pA02U34RcmbOOao8odmZU
+        Qf58BSZahTgmAyqCSAy9RoTKRwQzdBfMVKEMVXfiraiJhTNwtm+WQ28vWfq1BmLk+zLrtv
+        pO30ifPN7jhrOK6EpqnXagbAUBjdoeOSl/Wy0pXtJxBZAofqkJJPkEs6Yfp4Yg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1651437489;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=tCCVnocf3mgYD9VNhEdRpcvRc6dfJeJKHpburFD1alE=;
+        b=VVtjkx8TnTok11Tnw2x0VLh7sByH7sTOkKM3+/AZGkZ/0ZCp09N47UWNGXKHccKUgPYJ/L
+        GA4YTRZLSPG1KfomlolUfKDn1UCPV4KYzj6i1SyqgslFKfzGMB3R7Dm/cWbrIRhu5t0iD6
+        BsI8OYLSfzlsycuPdntrtTN+01EUdzdVakeJfXnJ3GZWTv4CbyNUHGvcNQAwp1YoL1n4eX
+        c9ecuRkY/YuAEfUPUYLbpiFhgtxbwduVseNO7k6O++aFlgJhj2pDfuwTKJxL5nPM4x+HSy
+        ZxvBhzET6kHSXOiQHAjWZFNe8wh8X0BrO2r2QqZiZjqjXymBhPTHKkEvm7T4YQ==
+ARC-Authentication-Results: i=1;
+        rspamd-847dd8955c-v74k9;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Average-Gusty: 3dc8d98f065d0d91_1651437489555_2285623474
+X-MC-Loop-Signature: 1651437489555:4050904530
+X-MC-Ingress-Time: 1651437489555
+Received: from pdx1-sub0-mail-a272.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.125.123.55 (trex/6.7.1);
+        Sun, 01 May 2022 20:38:09 +0000
+Received: from offworld (unknown [104.36.31.105])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a272.dreamhost.com (Postfix) with ESMTPSA id 4KryjD46VXz3N;
+        Sun,  1 May 2022 13:38:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1651437489;
+        bh=tCCVnocf3mgYD9VNhEdRpcvRc6dfJeJKHpburFD1alE=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=UPvpLYfbJ2bOSCBFt/X2+o0JSM2pH3gHgWHgBQvOg/Rj9JvpyqL23UFh4uX4SLx/t
+         QbPfYMKb6dmlZKoHpAmbrtfu3KUdlHWgTdHiaZoWWwJXS5Wj4ETxlthiPlqxfwAghj
+         oFT9Sk4WbEYhYSy2fg8Jd7algK7jOYKA0BNtlP0qmeYWOx2a81azHmRb3KC2alPzso
+         MjM70/+F/IHygPnXNBp4Dpf81weDDnvqRzQFlZ9s9aI32mg91UBQi5AEXe1EwAryyH
+         JG9P2Yjq4Vr9zAYronRvGK74pNwCcs5/SVIvLCY8GrTp//i2IJTuFsCQtQiVNtUoiF
+         Nmh/nsC8khXIw==
+Date:   Sun, 1 May 2022 13:26:34 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Yu Zhao <yuzhao@google.com>
+Subject: Re: [PATCH v8 00/70] Introducing the Maple Tree
+Message-ID: <20220501202532.y6zmznzshbe33nwx@offworld>
+Mail-Followup-To: Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Yu Zhao <yuzhao@google.com>
+References: <20220426150616.3937571-1-Liam.Howlett@oracle.com>
+ <20220426130857.09f40743b42b5f0bf4f19a59@linux-foundation.org>
+ <20220427140832.mpvnnkkhrbupk46i@revolver>
+ <20220427103331.9876ad87626af0f50e9ced0d@linux-foundation.org>
+ <YmmHqlR6lV84KDrO@casper.infradead.org>
 MIME-Version: 1.0
-References: <20220420211105.14654-1-jagathjog1996@gmail.com>
- <20220420211105.14654-5-jagathjog1996@gmail.com> <CAHp75Vf5pS_TGm5ptN7TyNmhZe_Oz8pVmETT27VeC=BZk9+ezg@mail.gmail.com>
- <20220501172037.5f3d446f@jic23-huawei>
-In-Reply-To: <20220501172037.5f3d446f@jic23-huawei>
-From:   Jagath Jog J <jagathjog1996@gmail.com>
-Date:   Mon, 2 May 2022 01:55:49 +0530
-Message-ID: <CAM+2EuLLRNarHkzr9YXTcSnhdSYcRNZj_tYZK7HN+Jzj0GC5ag@mail.gmail.com>
-Subject: Re: [PATCH v4 4/9] iio: accel: bma400: Add triggered buffer support
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Dan Robertson <dan@dlrobertson.com>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <YmmHqlR6lV84KDrO@casper.infradead.org>
+User-Agent: NeoMutt/20220408
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URI_DOTEDU autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jonathan,
+On Wed, 27 Apr 2022, Matthew Wilcox wrote:
 
-On Sun, May 1, 2022 at 9:42 PM Jonathan Cameron <jic23@kernel.org> wrote:
+>On Wed, Apr 27, 2022 at 10:33:31AM -0700, Andrew Morton wrote:
+>> On Wed, 27 Apr 2022 14:08:39 +0000 Liam Howlett <liam.howlett@oracle.com> wrote:
+>> > The benchmarks are around the same as they have always been.
+>>
+>> So it's presently a wash.
+>>
+>> That makes "the plan" (below) really critical, otherwise there seems
+>> little point in merging this code at this time?
+>>
+>> Please send me many very soothing words about how confident we should
+>> be that the plan will be implemented and that it shall be good?
 >
-> On Wed, 27 Apr 2022 14:34:57 +0200
-> Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
->
-> > On Wed, Apr 20, 2022 at 11:11 PM Jagath Jog J <jagathjog1996@gmail.com> wrote:
-> > >
-> > > Added trigger buffer support to read continuous acceleration
-> > > data from device with data ready interrupt which is mapped
-> > > to INT1 pin.
-> >
-> > LGTM,
-> > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Agreed.  A couple of 'comments' inline but no actual need to change anything.
-> One is contingent on a fix I've not sent out yet for the rest of IIO.
-> The other is potentially a minor improvement for the future.
->
-> Thanks,
->
-> Jonathan
->
-> >
-> > > Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
-> > > ---
-> > >  drivers/iio/accel/Kconfig       |   2 +
-> > >  drivers/iio/accel/bma400.h      |  10 +-
-> > >  drivers/iio/accel/bma400_core.c | 162 +++++++++++++++++++++++++++++++-
-> > >  drivers/iio/accel/bma400_i2c.c  |   2 +-
-> > >  drivers/iio/accel/bma400_spi.c  |   2 +-
-> > >  5 files changed, 170 insertions(+), 8 deletions(-)
->
-> > >
-> > >  #include "bma400.h"
-> > >
-> > > @@ -61,6 +66,14 @@ struct bma400_data {
-> > >         struct bma400_sample_freq sample_freq;
-> > >         int oversampling_ratio;
-> > >         int scale;
-> > > +       struct iio_trigger *trig;
-> > > +       /* Correct time stamp alignment */
-> > > +       struct {
-> > > +               __le16 buff[3];
-> > > +               u8 temperature;
-> > > +               s64 ts __aligned(8);
-> > > +       } buffer ____cacheline_aligned;
->
-> If you are rolling again, could you change this to
-> __aligned(IIO_ALIGN);  See
-> https://lore.kernel.org/linux-iio/20220419121241.00002e42@Huawei.com/
-> for why.
-> Note that I'll be sending a fix patch out for IIO_ALIGN to define
-> it as ARCH_KMALLOC_ALIGN in next few days.
->
-> If you'd pref not to get caught up in that, send it as it stands
-> and I'll fix up once that fix is in place.  What's one more driver
-> on top of the 80+ I have to do anyway :)
->
->
+>Yes, performance-wise it's a wash.  However, Davidlohr was very
+>impressed that it was a wash because we're actually getting rid of three
+>data structures here; the linked list, the rbtree and the vmacache.
+>His opinion was that we should push the maple tree in now, in advance
+>of the future RCU uses.
 
-Sure, I will change that to __aligned(IIO_ALIGN); in the next series.
+Yes I like the maple tree, and at this stage I don't think we can ask
+for more from this series wrt the MM - albeit there seems to still be
+some folks reporting breakage. Fundamentally I see Liam's work to (re)move
+complexity out of the MM (not to say that the actual maple tree is not
+complex) by consolidating the three complimentary data structures very
+much worth it considering performance does not take a hit. This was
+very much a turn off with the range locking approach, which worst case
+scenario incurred in prohibitive overhead. Also as Liam and Matthew
+have mentioned, RCU opens up a lot of nice performance opportunities,
+and in addition academia[1] has shown outstanding scalability of address
+spaces with the foundation of replacing the locked rbtree with RCU
+aware trees.
 
->
-> > > +       __le16 status;
-> > >  };
-> > >
->
-> > > +
-> > > +static const unsigned long bma400_avail_scan_masks[] = {
-> > > +       GENMASK(3, 0),
-> > > +       0
-> > > +};
-> > > +
-> > >  static const struct iio_info bma400_info = {
-> > >         .read_raw          = bma400_read_raw,
-> > >         .read_avail        = bma400_read_avail,
-> > > @@ -814,7 +869,72 @@ static const struct iio_info bma400_info = {
-> > >         .write_raw_get_fmt = bma400_write_raw_get_fmt,
-> > >  };
-> > >
-> > > -int bma400_probe(struct device *dev, struct regmap *regmap, const char *name)
-> > > +static const struct iio_trigger_ops bma400_trigger_ops = {
-> > > +       .set_trigger_state = &bma400_data_rdy_trigger_set_state,
-> > > +       .validate_device = &iio_trigger_validate_own_device,
-> > > +};
-> > > +
-> > > +static irqreturn_t bma400_trigger_handler(int irq, void *p)
-> > > +{
-> > > +       struct iio_poll_func *pf = p;
-> > > +       struct iio_dev *indio_dev = pf->indio_dev;
-> > > +       struct bma400_data *data = iio_priv(indio_dev);
-> > > +       int ret, temp;
-> > > +
-> > > +       /* Lock to protect the data->buffer */
-> > > +       mutex_lock(&data->mutex);
-> > > +
-> > > +       /* bulk read six registers, with the base being the LSB register */
-> > > +       ret = regmap_bulk_read(data->regmap, BMA400_X_AXIS_LSB_REG,
-> > > +                              &data->buffer.buff, sizeof(data->buffer.buff));
-> > > +       if (ret)
-> > > +               goto unlock_err;
-> > > +
-> > > +       ret = regmap_read(data->regmap, BMA400_TEMP_DATA_REG, &temp);
->
-> Given the temperature read is a separate action, it seems like you could sensible
-> add another entry to bma400_avail_scan_masks() for just the accelerometer axis
-> and then only perform this read if the temperature is requested.
->
-> It would be a feature though, so no need to have it in this patch if you
-> prefer not to.
+[1] https://pdos.csail.mit.edu/papers/rcuvm:asplos12.pdf
 
-Sure I will add another entry only for the accelerometer axis and I
-will make changes
-accordingly in the next series.
-
-Do I need to add 'Reviewed-by' tag if the patch gets modified again
-after getting the
-tag?
-
-
->
-> > > +       if (ret)
-> > > +               goto unlock_err;
-> > > +
-> > > +       data->buffer.temperature = temp;
-> > > +
-> > > +       iio_push_to_buffers_with_timestamp(indio_dev, &data->buffer,
-> > > +                                          iio_get_time_ns(indio_dev));
-> > > +
-> > > +       mutex_unlock(&data->mutex);
-> > > +       iio_trigger_notify_done(indio_dev->trig);
-> > > +       return IRQ_HANDLED;
-> > > +
-> > > +unlock_err:
-> > > +       mutex_unlock(&data->mutex);
-> > > +       return IRQ_NONE;
-> > > +}
->
+Thanks,
+Davidlohr

@@ -2,86 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 177395164EF
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 17:18:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 496F95164F2
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 17:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348091AbiEAPVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 11:21:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38194 "EHLO
+        id S1343749AbiEAP1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 11:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348033AbiEAPVb (ORCPT
+        with ESMTP id S229880AbiEAP1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 11:21:31 -0400
-Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E979DBE3E;
-        Sun,  1 May 2022 08:18:04 -0700 (PDT)
-Received: from spock.localnet (unknown [83.148.33.151])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Sun, 1 May 2022 11:27:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76CBD3054E;
+        Sun,  1 May 2022 08:24:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id A6484EB7D61;
-        Sun,  1 May 2022 17:18:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1651418281;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/J2Qg4ZGrbgM3NsVfkQsNh+Hr88w3IF90qf5ZNZMp2w=;
-        b=fkfLpaOP5/1e3t2DI9GF8I86Q2n5h+eGzw/0mMs6eWFWFoX+F8t8lhAHtSOA4JZKL0lV83
-        jn2p/5Pl0Utc/wlWAoS00jyylnWb5AIoDiSS35T9ZuIL1qfpvxgkg4yQNJyWTaOLDUYRIN
-        FDU8FysoGKxcQ5HF/n7bgrSVFYilQkM=
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
-To:     Zev Weiss <zev@bewilderbeest.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Renze Nicolai <renze@rnplus.nl>, openbmc@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 0/7] hwmon: (nct6775) Convert to regmap, add i2c support
-Date:   Sun, 01 May 2022 17:18:00 +0200
-Message-ID: <2508913.OsOuS879W0@natalenko.name>
-In-Reply-To: <bc46d60e-7c89-ad05-780c-9e9fd19f788e@roeck-us.net>
-References: <20220427010154.29749-1-zev@bewilderbeest.net> <bc46d60e-7c89-ad05-780c-9e9fd19f788e@roeck-us.net>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 11C3C60F04;
+        Sun,  1 May 2022 15:24:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0E03C385AA;
+        Sun,  1 May 2022 15:24:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651418648;
+        bh=CHunxDgVf1HuXc+Ni/6ri8VWgAwFx966pPD9sBs4W1w=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BNT/cqEbaaUnLqkAhEJcF5ji36kn9NwD5WEQrmYXTmjAsBTO0N+Rw7j20fw+Sakqe
+         oByg/v7rEbBq4QQVxP7/ixG6QjHJShgE3rOJl6B+O0hx2+kHWqbBVcTzHeVmeqZz9v
+         Z73MQdS8N0jyUJ0gGC149w8iIsgewoYX74mELQBY=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 4.19.241
+Date:   Sun,  1 May 2022 17:23:59 +0200
+Message-Id: <165141863986144@kroah.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
+I'm announcing the release of the 4.19.241 kernel.
 
-On st=C5=99eda 27. dubna 2022 15:37:07 CEST Guenter Roeck wrote:
-> On 4/26/22 18:01, Zev Weiss wrote:
-> > This is v4 of my effort to add i2c support to the nct6775 hwmon
-> > driver.
-> >=20
->=20
-> Thanks a lot for your effort.
->=20
-> I applied patches 2..6 to hwmon-next. The first and the last
-> patch of the series will have to wait for DT maintainer approval.
+All users of the 4.19 kernel series must upgrade.
 
-Zev, sorry I'm late. I've just tested what went into hwmon-next (patches 2.=
-=2E6), and it didn't affect `sensors` output for me, so I guess this confir=
-ms what you asked me to do ("I don't have access to any asuswmi hardware, s=
-o testing of the nct6775-platform driver on that to ensure it doesn't break=
- there would be appreciated (Oleksandr, perhaps?).").
+The updated 4.19.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.19.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
-Guenter, if it's not too late, please consider this as Tested-by: from me o=
-n this part of the submission.
+thanks,
 
-Thanks.
+greg k-h
 
-=2D-=20
-Oleksandr Natalenko (post-factum)
+------------
 
+ Makefile                                            |    2 
+ arch/ia64/kernel/kprobes.c                          |   78 +++++++++++++++++++-
+ arch/powerpc/include/asm/exception-64s.h            |   37 +++++----
+ drivers/block/Kconfig                               |   16 ++++
+ drivers/block/floppy.c                              |   43 ++++++++---
+ drivers/lightnvm/Kconfig                            |    2 
+ drivers/media/platform/vicodec/vicodec-core.c       |    6 -
+ drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c  |    8 ++
+ drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h  |    4 -
+ drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c |   13 ++-
+ drivers/net/hamradio/6pack.c                        |    5 -
+ net/sched/cls_u32.c                                 |   18 ++--
+ 12 files changed, 180 insertions(+), 52 deletions(-)
+
+Dafna Hirschfeld (1):
+      media: vicodec: upon release, call m2m release before freeing ctrl handler
+
+Eric Dumazet (1):
+      net/sched: cls_u32: fix netns refcount changes in u32_change()
+
+Greg Kroah-Hartman (3):
+      Revert "net: ethernet: stmmac: fix altr_tse_pcs function when using a fixed-link"
+      lightnvm: disable the subsystem
+      Linux 4.19.241
+
+Lin Ma (2):
+      hamradio: defer 6pack kfree after unregister_netdev
+      hamradio: remove needs_free_netdev to avoid UAF
+
+Masami Hiramatsu (3):
+      Revert "ia64: kprobes: Fix to pass correct trampoline address to the handler"
+      Revert "ia64: kprobes: Use generic kretprobe trampoline handler"
+      ia64: kprobes: Fix to pass correct trampoline address to the handler
+
+Michael Ellerman (1):
+      powerpc/64s: Unmerge EX_LR and EX_DAR
+
+Nicholas Piggin (1):
+      powerpc/64/interrupt: Temporarily save PPR on stack to fix register corruption due to SLB miss
+
+Willy Tarreau (1):
+      floppy: disable FDRAWCMD by default
 

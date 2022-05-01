@@ -2,82 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC1115162BA
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 10:28:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B1EF5162C0
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 10:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245061AbiEAIcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 04:32:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
+        id S245211AbiEAIgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 04:36:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235721AbiEAIcC (ORCPT
+        with ESMTP id S235721AbiEAIgw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 04:32:02 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266FA48311
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 01:28:38 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id z19so13501819edx.9
-        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 01:28:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zgc67zkHtnI70Xqrll9RfFl1haspBpx7mPEGkL1rk40=;
-        b=A+QEKIECi0tAae9rADyeVBiYUIhqhQK05Yu1OkxFWlyi0dK+56SAbb4CzJ4Ygb70Fu
-         LiWghPF6S33uCCEi43H8JbKarRN2QOId+PaWPbtqi0kQOQ1/uKYa2jd3+O+zZpLwlFN/
-         AfR1a0UKF/D0vWa7adeWC9oK/lzrmBQW9oPWj9313E38WGJkb3TyL+q4rXicJCIlJE/H
-         F31cxaB4YiMbXgPdyOZ6QCK7B7ftcRB0JKzfR7BJAtUsFtwrG8cnWk0TuCUIzSCvfY8r
-         aEh4u3sON1SX49EpSNz2p4kzenK4YjLVYACnsF66zTucW6F7qh89TCB3OL0BWDLGjzpD
-         h87A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zgc67zkHtnI70Xqrll9RfFl1haspBpx7mPEGkL1rk40=;
-        b=dg24IAQez2lcRgDvnCahGey9AuFVltz58gevTZfuKcwFs52L2D5OjYYKvL68gGbC1z
-         auZG3qGL9Hh7gg4nokHUvxw8P0htTliA1itOotql58K4N0K8RHGFwaT+ozFCaBksUr3a
-         Z28hTkRaH198/eihPMu46oLax2t8oB6fSmoukjRBjrNBUVf+874Vbxq4Mzqd0Jbb7zhv
-         k5oniwlrVcviKwXRMkJzrT6VcTWIHJ3/2OE3EKMv7mbzCWGy9YFOGuvMfi4Y14yK4jZZ
-         3qRkckf/KZQO8loaVW6XLcu31FPjdgmc+kzOy6cMI4gghmskSxLmcdUToDCW7VT2nUX8
-         jw7A==
-X-Gm-Message-State: AOAM5311Bznro7nrTh1Qp77EaK725EGkNqyJ1CvDZaKgxc7rdGD30LTJ
-        5qRALQrZlMjp7i6XE7eXHDc7yQ==
-X-Google-Smtp-Source: ABdhPJxElz4BALhOBQaTk8Fr7XUMzW91oTJGLVcpF/k9LdyupAgklMFVfrWCBtTRTY3VvPbjYSEXRA==
-X-Received: by 2002:a05:6402:5211:b0:423:fcbe:cf06 with SMTP id s17-20020a056402521100b00423fcbecf06mr7824844edd.39.1651393716700;
-        Sun, 01 May 2022 01:28:36 -0700 (PDT)
-Received: from [192.168.0.182] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id w17-20020a170907271100b006f3ef214e43sm2388178ejk.169.2022.05.01.01.28.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 01 May 2022 01:28:36 -0700 (PDT)
-Message-ID: <2dab36a0-7262-39f2-f897-4830d3e1ec84@linaro.org>
-Date:   Sun, 1 May 2022 10:28:35 +0200
+        Sun, 1 May 2022 04:36:52 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF0B1AD8D;
+        Sun,  1 May 2022 01:33:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651394007; x=1682930007;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jrNTj0JJ2uvFbhnV20wpOWnX46OpvszfsQI3AOx8Eq0=;
+  b=Swenix9YesygIMhDutlaaNcUoEyHcxRCEYfzwrn0RUELVyawNcRuEb7P
+   7oLp1fNuhOil3b8fozrgsONI7lqgRKixOSBhhR5itbfviNRHdm6QlMPAe
+   r0/GjhLr8FX4BJ1Hx/8K6C/4Gw3e3d3VU7pcCz/te2EYWE35RD4l9PGoR
+   poY+T/C8699vTTdyeohV8ngjFY4oXunQZug2lDHJwP671yhM+hEx6i8Mu
+   bPcLk8o5TI66lnj+TBzar3zRHJaqbZSxW4x/HdyBkw3azaZFOx84ciLHx
+   QhW46gvkQ5U2suJgUNZCqD8pk5G5WnCcr/YyMHs1SxKtsQQfQ0ZT9f7gw
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10333"; a="265830060"
+X-IronPort-AV: E=Sophos;i="5.91,189,1647327600"; 
+   d="scan'208";a="265830060"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 01:33:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,189,1647327600"; 
+   d="scan'208";a="619433028"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 01 May 2022 01:33:24 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nl51A-0008cV-6m;
+        Sun, 01 May 2022 08:33:24 +0000
+Date:   Sun, 1 May 2022 16:32:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Marty E. Plummer" <hanetzer@startmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Wei Xu <xuwei5@hisilicon.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     kbuild-all@lists.01.org,
+        "Marty E. Plummer" <hanetzer@startmail.com>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] arm: hisi: enable Hi3521a soc
+Message-ID: <202205011637.T9bZyDaL-lkp@intel.com>
+References: <20220501051020.2432338-3-hanetzer@startmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v14 04/10] dt-bindings: iio: adc: document qcom-spmi-rradc
-Content-Language: en-US
-To:     Caleb Connolly <caleb.connolly@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Cc:     Jami Kettunen <jami.kettunen@somainline.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-References: <20220429220904.137297-1-caleb.connolly@linaro.org>
- <20220429220904.137297-5-caleb.connolly@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220429220904.137297-5-caleb.connolly@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220501051020.2432338-3-hanetzer@startmail.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,16 +71,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/04/2022 00:08, Caleb Connolly wrote:
-> Add dt-binding docs for the Qualcomm SPMI RRADC found in PMICs like
-> PMI8998 and PMI8994
-> 
-> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
+Hi "Marty,
 
+Thank you for the patch! Yet something to improve:
 
+[auto build test ERROR on clk/clk-next]
+[also build test ERROR on soc/for-next robh/for-next krzk/for-next krzk-mem-ctrl/for-next v5.18-rc4 next-20220429]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+url:    https://github.com/intel-lab-lkp/linux/commits/Marty-E-Plummer/clk-hisilicon-add-CRG-driver-Hi3521a-SoC/20220501-141036
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+config: arm-randconfig-r001-20220501 (https://download.01.org/0day-ci/archive/20220501/202205011637.T9bZyDaL-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/6677e373bf0fbceb87ba267fa934df2f4b7dc0ad
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Marty-E-Plummer/clk-hisilicon-add-CRG-driver-Hi3521a-SoC/20220501-141036
+        git checkout 6677e373bf0fbceb87ba267fa934df2f4b7dc0ad
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Best regards,
-Krzysztof
+All errors (new ones prefixed by >>):
+
+>> make[2]: *** No rule to make target 'arch/arm/boot/dts/hi3521a-rs-dm290e.dtb', needed by '__build'.
+   make[2]: Target '__build' not remade because of errors.
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

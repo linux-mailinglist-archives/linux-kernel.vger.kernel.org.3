@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B30CA51631D
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 10:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D314516312
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 10:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343569AbiEAIsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 04:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42488 "EHLO
+        id S1344145AbiEAIrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 04:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343587AbiEAIpy (ORCPT
+        with ESMTP id S1343592AbiEAIpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 04:45:54 -0400
+        Sun, 1 May 2022 04:45:53 -0400
 Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC794CD59;
-        Sun,  1 May 2022 01:42:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11A34CD69;
+        Sun,  1 May 2022 01:42:27 -0700 (PDT)
 Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-12.nifty.com with ESMTP id 2418f2SB008518;
-        Sun, 1 May 2022 17:41:17 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 2418f2SB008518
+        by conuserg-12.nifty.com with ESMTP id 2418f2SC008518;
+        Sun, 1 May 2022 17:41:18 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 2418f2SC008518
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
         s=dec2015msa; t=1651394478;
-        bh=MLLAKdOtjjfRPFMO1T3BrNLDbeU3kj6UXqQmksZq2zA=;
+        bh=IzSTHBCFo5w8MwRPWETclURyaZh7eklggt7ocsWZ4ns=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hIJAmqJQVYBkdsTKchRWt6W9+m4EhVcJr2r7KwvdFmhivdNWhndcp14Ye4eqwRPx8
-         /UMHhWj24pK1Yz76GxtvGIZrs7SrKlFUeEW1wNLnUpkA8rxGNiiuKn72/ZkUKhxHRC
-         Lp9wR+wg8FNN+KKqDwHjZ4WGrEIXlZpK1uXOLrZUNf0E01IWSQ8al/n11xk//deo7u
-         VW7K2UNn/XLx8PFT3UJlC+RodArQRX8aZDxkKFiHZ6Ad29kDf2DhFU9X3H+hAtbYoA
-         I+SdTw8uclTxVNrrOUjo5OFbm32xdjs+bG0buB5hCvS/jtwDkGAifB73P86uahecDz
-         WbUqRyP53hSYw==
+        b=DtYErU1U++poZDMqANR1RWIH8k5CAruNQAVbJ60k0nGSkFiiUKPK+pR6zI/sBig3h
+         SqMnNk3MC77m/Tcmnho5GcKlaTqBbWmg2D6fGMVJCGfrzFCm1dMaIJQzhpK6HDmuBk
+         SkSzC+0xtkF/ZzE4O3sDWXA4ZL1nYSVtp96vN+czXDViPSMA97LqsKEQ3okmr8u8qL
+         lqsjVPZdGrRNLWrIs3vSZ2klQ5rZVE5qsr/zRg89L/5kMm9qYf6nZUZhzUSx1E4DE6
+         ldP+OCnhkYbIgKwGaB3V5TzmAFsJ5nJFrBrY9KA/bseJ/yzh1YYGRMRXHoCVek3lWi
+         FRhA+ldZYDMlQ==
 X-Nifty-SrcIP: [133.32.177.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
@@ -36,9 +36,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>,
         Michal Marek <michal.lkml@markovi.net>,
         Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH v2 24/26] kbuild: make *.mod rule robust against too long argument error
-Date:   Sun,  1 May 2022 17:40:30 +0900
-Message-Id: <20220501084032.1025918-25-masahiroy@kernel.org>
+Subject: [PATCH v2 25/26] modpost: simplify the ->is_static initialization
+Date:   Sun,  1 May 2022 17:40:31 +0900
+Message-Id: <20220501084032.1025918-26-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220501084032.1025918-1-masahiroy@kernel.org>
 References: <20220501084032.1025918-1-masahiroy@kernel.org>
@@ -53,22 +53,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Like built-in.a, the command length of the *.mod rule scales with
-the depth of the directory times the number of objects in the Makefile.
+->is_static is set to true at allocation, then to false if the symbol
+comes from the dump file.
 
-Add $(obj)/ by the shell command (awk) instead of by Make's builtin
-function.
-
-In-tree modules still have some room to the limit (ARG_MAX=2097152),
-but this is more future-proof for big modules in a deep directory.
-
-For example, you can build i915 as a module (CONFIG_DRM_I915=m) and
-compare drivers/gpu/drm/i915/.i915.mod.cmd with/without this commit.
-
-The issue is more critical for external modules because the M= path
-can be very long as Jeff Johnson reported before [1].
-
-[1] https://lore.kernel.org/linux-kbuild/4c02050c4e95e4cb8cc04282695f8404@codeaurora.org/
+It is simpler to use !mod->from_dump as the init value.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
@@ -76,24 +64,38 @@ Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 Changes in v2:
   - New patch
 
- scripts/Makefile.build | 4 ++--
+ scripts/mod/modpost.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index a9236add4864..b0718076f50b 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -266,8 +266,8 @@ $(obj)/%.o: $(src)/%.c $(recordmcount_source) FORCE
- 	$(call if_changed_rule,cc_o_c)
- 	$(call cmd,force_checksrc)
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index 1f2f53688d40..85fcac84d2d1 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -250,7 +250,7 @@ static struct symbol *alloc_symbol(const char *name)
  
--cmd_mod = echo $(addprefix $(obj)/, $(call real-search, $*.o, .o, -objs -y -m)) | \
--	$(AWK) -v RS='( |\n)' '!x[$$0]++' > $@
-+cmd_mod = echo $(call real-search, $*.o, .o, -objs -y -m) | \
-+	$(AWK) -v RS='( |\n)' '!x[$$0]++ { print("$(obj)/"$$0) }' > $@
+ 	memset(s, 0, sizeof(*s));
+ 	strcpy(s->name, name);
+-	s->is_static = true;
++
+ 	return s;
+ }
  
- $(obj)/%.mod: FORCE
- 	$(call if_changed,mod)
+@@ -424,6 +424,7 @@ static struct symbol *sym_add_exported(const char *name, struct module *mod,
+ 
+ 	s = alloc_symbol(name);
+ 	s->module = mod;
++	s->is_static = !mod->from_dump;
+ 	s->export    = export;
+ 	list_add_tail(&s->list, &mod->exported_symbols);
+ 	hash_add_symbol(s);
+@@ -2518,7 +2519,6 @@ static void read_dump(const char *fname)
+ 			mod->from_dump = true;
+ 		}
+ 		s = sym_add_exported(symname, mod, export_no(export));
+-		s->is_static = false;
+ 		sym_set_crc(s, crc);
+ 		sym_update_namespace(symname, namespace);
+ 	}
 -- 
 2.32.0
 

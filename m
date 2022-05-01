@@ -2,138 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2E195168CD
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 00:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF445168D0
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 01:00:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355923AbiEAW6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 18:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38034 "EHLO
+        id S1378175AbiEAXDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 19:03:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234297AbiEAW6P (ORCPT
+        with ESMTP id S234297AbiEAXD2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 18:58:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD0A3CFD1;
-        Sun,  1 May 2022 15:54:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8489561053;
-        Sun,  1 May 2022 22:54:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEC8EC385B4;
-        Sun,  1 May 2022 22:54:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651445687;
-        bh=XYah/6Osmyojc17k6cqZ+vX1jwgljOTNKYJ/JeSQBfk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=px2suCI3Pu/bkCRbO5tygyBgCnMM71GOuMyeL9LyUC+OsRZ4FVjr/8GI6djLshrvc
-         M19tpJz53lIURMRhXPy2XW85ZAeHo7k74/Oy2bhXdQVTSPw6UIEz6iBkcW0n4OEGuc
-         SaRoGwLbS3qfyOEVT2ycxXzpFEqlwxiWGPFYsGEPzCagLtS4lZaENeuXI3lFeMNtS7
-         Vck9W34Ic6AROOfxEwL89jMHFFypiHlT/chDQNttnQTa/mJMgZNyERq0ioqK61Lwc4
-         GFuttc2DxKBcnMDQw89NpfG1DJ82UTeiCdmMi6tbiSSm5DOnpRgbA/VuH0chgtxE71
-         49iYHjxXsDnog==
-Received: by mail-yb1-f179.google.com with SMTP id s30so23475610ybi.8;
-        Sun, 01 May 2022 15:54:47 -0700 (PDT)
-X-Gm-Message-State: AOAM531c3/uGiP7XzzGT5yqi74TEh3k2wU8DgzvFOBeCxZ70CwWrceF/
-        0OTZs7iopk7caKSdVmKox/1pXaNyPa8smvuAaA==
-X-Google-Smtp-Source: ABdhPJyuplDBOy1HzgzBEurySzDISvnf65i4g3J7NP8mPSls5NwNyrHXj98ge6hOrTKJlam+L9WwpviYEfc1OEFPVok=
-X-Received: by 2002:a25:d194:0:b0:645:7892:43b0 with SMTP id
- i142-20020a25d194000000b00645789243b0mr8501223ybg.35.1651445686885; Sun, 01
- May 2022 15:54:46 -0700 (PDT)
+        Sun, 1 May 2022 19:03:28 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31618483B2;
+        Sun,  1 May 2022 16:00:00 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9F6CCA46;
+        Mon,  2 May 2022 00:59:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1651445997;
+        bh=MRWisMUeM29h2xFjIiLMSuO4mNMpnsXW7jxf3zvDG7g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RnYemCpRbsolGkTv+ZNf5PsT16YG9ykZGLdj6kmq3EcotxP4KcvzLKRGK2ZIF7GXp
+         sATQSKG3GA2Tb3jgBfIyIAhRfFz0Y56D0YtQj8S6DbmDbwrFeeji2UvEmVrAipcA6r
+         rQNJpabheArMOUaE/vbNdpz8NvDScBBJqgQ4t3Yw=
+Date:   Mon, 2 May 2022 01:59:57 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
+Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        hverkuil-cisco@xs4all.nl, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: i2c: ov5645: Remove unneeded of_match_ptr macro
+Message-ID: <Ym8Q7QhoT2aqMrJr@pendragon.ideasonboard.com>
+References: <20220429222754.11333-1-mosescb.dev@gmail.com>
 MIME-Version: 1.0
-References: <20220419094143.9561-1-jason-jh.lin@mediatek.com>
- <20220419094143.9561-9-jason-jh.lin@mediatek.com> <402f0e60-8d3c-850d-84ff-af5424b72b73@gmail.com>
-In-Reply-To: <402f0e60-8d3c-850d-84ff-af5424b72b73@gmail.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Mon, 2 May 2022 06:54:35 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_-jiX_BhaZ5+skRu4RSZLjcHJerVtwH34fz4N6_jbVK0w@mail.gmail.com>
-Message-ID: <CAAOTY_-jiX_BhaZ5+skRu4RSZLjcHJerVtwH34fz4N6_jbVK0w@mail.gmail.com>
-Subject: Re: [PATCH v20 8/8] soc: mediatek: remove DDP_DOMPONENT_DITHER from enum
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     "jason-jh.lin" <jason-jh.lin@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        CK Hu <ck.hu@mediatek.com>, Nancy Lin <nancy.lin@mediatek.com>,
-        Singo Chang <singo.chang@mediatek.com>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220429222754.11333-1-mosescb.dev@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Matthias:
+Hi Moses,
 
-Matthias Brugger <matthias.bgg@gmail.com> =E6=96=BC 2022=E5=B9=B44=E6=9C=88=
-22=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=888:42=E5=AF=AB=E9=81=93=EF=
-=BC=9A
->
->
->
-> On 19/04/2022 11:41, jason-jh.lin wrote:
-> > After mmsys and drm change DITHER enum to DDP_COMPONENT_DITHER0,
-> > mmsys header can remove the useless DDP_COMPONENT_DITHER enum.
-> >
-> > Signed-off-by: jason-jh.lin <jason-jh.lin@mediatek.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
->
-> Acked-by: Matthias Brugger <matthias.bgg@gmail.com>
->
-> Chun-Kuang, I think it would make sense to take that through your tree as=
- it
-> depends on the previous patches.
->
-> I provide you a stable tag so that you can take it:
-> v5.18-next-vdso0-stable-tag
+Thank you for the patch.
 
-After I take this tag, I find one checkpatch warning:
+On Sat, Apr 30, 2022 at 12:27:54AM +0200, Moses Christopher Bollavarapu wrote:
+> of_match_ptr isn't required as CONFIG_OF is already a dependency in Kconfig
 
-WARNING: DT compatible string "mediatek,mt8195-mmsys" appears
-un-documented -- check ./Documentation/devicetree/bindings/
-#670: FILE: drivers/soc/mediatek/mtk-mmsys.c:390:
-+               .compatible =3D "mediatek,mt8195-mmsys",
+And the .of_match_table field hasn't been conditional on CONFIG_OF for a
+long time now.
 
-I think this tag lost one binding patch, it's better that this tag has
-no this warning.
+> Signed-off-by: Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
 
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> ---
+>  drivers/media/i2c/ov5645.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/i2c/ov5645.c b/drivers/media/i2c/ov5645.c
+> index 368fa21e675e..ea73c060514d 100644
+> --- a/drivers/media/i2c/ov5645.c
+> +++ b/drivers/media/i2c/ov5645.c
+> @@ -1283,7 +1283,7 @@ MODULE_DEVICE_TABLE(of, ov5645_of_match);
+>  
+>  static struct i2c_driver ov5645_i2c_driver = {
+>  	.driver = {
+> -		.of_match_table = of_match_ptr(ov5645_of_match),
+> +		.of_match_table = ov5645_of_match,
+>  		.name  = "ov5645",
+>  	},
+>  	.probe_new = ov5645_probe,
+
+-- 
 Regards,
-Chun-Kuang.
 
->
-> Regards,
-> Matthias
->
-> > ---
-> >   include/linux/soc/mediatek/mtk-mmsys.h | 3 +--
-> >   1 file changed, 1 insertion(+), 2 deletions(-)
-> >
-> > diff --git a/include/linux/soc/mediatek/mtk-mmsys.h b/include/linux/soc=
-/mediatek/mtk-mmsys.h
-> > index 59117d970daf..fb719fd1281c 100644
-> > --- a/include/linux/soc/mediatek/mtk-mmsys.h
-> > +++ b/include/linux/soc/mediatek/mtk-mmsys.h
-> > @@ -16,8 +16,7 @@ enum mtk_ddp_comp_id {
-> >       DDP_COMPONENT_CCORR,
-> >       DDP_COMPONENT_COLOR0,
-> >       DDP_COMPONENT_COLOR1,
-> > -     DDP_COMPONENT_DITHER,
-> > -     DDP_COMPONENT_DITHER0 =3D DDP_COMPONENT_DITHER,
-> > +     DDP_COMPONENT_DITHER0,
-> >       DDP_COMPONENT_DITHER1,
-> >       DDP_COMPONENT_DP_INTF0,
-> >       DDP_COMPONENT_DP_INTF1,
+Laurent Pinchart

@@ -2,117 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B46F4516284
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 09:51:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3233E516290
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 10:06:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239540AbiEAHyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 03:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58720 "EHLO
+        id S244106AbiEAIJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 04:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237134AbiEAHxq (ORCPT
+        with ESMTP id S244156AbiEAII6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 03:53:46 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B0B6576;
-        Sun,  1 May 2022 00:50:20 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id d6so13472645ede.8;
-        Sun, 01 May 2022 00:50:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=th+XkMr+xSq8zrqmODzL0k9Rhzhmi8pbbPFc0AQCHUo=;
-        b=bawiRp3YGAQinPjoP6bTDEYBal5Pfxcis4zes1ZbsiieKJMwsPsKr3xvinsksBaQz/
-         BqFV2/N4edlQoy3GwMr7h5eeKuyHLRj7Xk4XFYs/125f6yDIO/af41NddM7SygyLzUl4
-         B2MN1qVswNbRKXAA9gGA4UW4efgce0WNsKn3ap8r1X3Hxo3hm9N/V5w4hoUXci6RQYY/
-         R0cOh9j0PcTnR1u4DpUZjOlk68Y2ZffKDbQv4dBaJs5bi5YHqNOGz3V+eP1k8j0tMClK
-         9cbFTf3JdMSg6IxPvszZ81Vl7Kj5VqhkzPWPedmqxqiz+ufNhBCAbp+UpDujOw4+60wy
-         z+GQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=th+XkMr+xSq8zrqmODzL0k9Rhzhmi8pbbPFc0AQCHUo=;
-        b=wiSxFCmr8I7zb6piimZkh1BeaTM/YAgqsq2U3Scdg5O44ekVYQ43a0LGXxrwWEb3fb
-         FS9xhQBJrExEFdXXktZ7S/CJKuT8KF4vfqD4J5l5gPK9aUG2j++B2tHe72KaIOb071Rr
-         L0wT2OhOWgoRF2Y04OSrp6AuVv9wcgs7VljDz0KC9LUq3hJ8wRzdnbv5tEf77s2GW7XC
-         8172+aKFC+1d0rby7DQiqJjiz+tUFu6O3lITyTrCHh0ZGD2o+OfhBTFWzF99hSLtXpqt
-         hL0g3mfTGO2cXU231mpzweXOjVr2iZ9x/ZIqUIGzHJSY3WYghx22QYsCwnoU2M5p/ohd
-         WE+A==
-X-Gm-Message-State: AOAM530Fv8Z2RZtGyl5MukFhF5EKuHbdTpQ0z+kMMBZ/n6Gotxg9khQ9
-        P6+X3DYPNXgb6ZpaVxekn4Rq7zvlpgGRPAtLwgw=
-X-Google-Smtp-Source: ABdhPJxOLm/7ex3DQLIs0sNDFrYrb7qlhaif/VnBiv4BwNq/I3biHG+3SHYb0Q/8kA81V4ogDaPF0Q7TWs7fbA5+4ts=
-X-Received: by 2002:a05:6402:d51:b0:425:d5e1:e9f0 with SMTP id
- ec17-20020a0564020d5100b00425d5e1e9f0mr7754800edb.125.1651391418629; Sun, 01
- May 2022 00:50:18 -0700 (PDT)
+        Sun, 1 May 2022 04:08:58 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EEC7BC9A;
+        Sun,  1 May 2022 01:05:30 -0700 (PDT)
+Date:   Sun, 01 May 2022 08:05:27 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651392328;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VO070gCuZJTgdUPpsLphHxZNRwVJ9QxlBcypKnh0Pk8=;
+        b=ajJ7IMD9RViTurNoBkm3MWui+gO5eDx5wDr2/kF+dmDapqkpuJfKCWv2Tu29ilhd3yB+B3
+        /0iDaVY+4nrinG5YoG+flDZpmEpEAhFJkzJtOaFnuG1kFGhXtjTqKuaZl8S83HUcBFtS4f
+        rygz90CRHICVk4EbzlmlvXNTAVkAzA4cRMYNzD7dJVa4pMtzHRO0qfroXkCyhCc8NVS0mh
+        GZD8FVC/+l8GKc4B2Bjmf3cC09qI0jXhWXe7fsafyxUWuXT1zgYrUsyxNyGPLyYA2I0fKV
+        5ODRvVC0PmVStI207nTss5T3zhJ7tQKDuyU5vSzRn2qjhWcwx4HBcKvnpmDXUg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651392328;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VO070gCuZJTgdUPpsLphHxZNRwVJ9QxlBcypKnh0Pk8=;
+        b=UMd9eTYLrTLxkw4ZEbA5MIxTbCtOdg6GoqhHqBb4lbhPmGA6j8OEM+mF9gt65pjztHmR3h
+        WkkbyQCypfW6gABw==
+From:   "tip-bot2 for Sebastian Andrzej Siewior" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: sched/core] smp: Make softirq handling RT safe in
+ flush_smp_call_function_queue()
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <YgKgL6aPj8aBES6G@linutronix.de>
+References: <YgKgL6aPj8aBES6G@linutronix.de>
 MIME-Version: 1.0
-References: <20220429164325.1.I2a3b980ea051e59140227999f0f0ca16f1125768@changeid>
-In-Reply-To: <20220429164325.1.I2a3b980ea051e59140227999f0f0ca16f1125768@changeid>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 1 May 2022 09:49:41 +0200
-Message-ID: <CAHp75VdqbXCYoEwxMt7xG55QDu2mXHbnpwdnHb6ktm8NdVPJnQ@mail.gmail.com>
-Subject: Re: [PATCH] device property: Fix recent breakage of fwnode_get_next_parent_dev()
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        freedreno@lists.freedesktop.org,
-        Saravana Kannan <saravanak@google.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-arm-msm@vger.kernel.org, Daniel Scally <djrscally@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <165139232730.4207.638214050053913440.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 30, 2022 at 3:00 PM Douglas Anderson <dianders@chromium.org> wrote:
->
-> Due to a subtle typo, instead of commit 87ffea09470d ("device
-> property: Introduce fwnode_for_each_parent_node()") being a no-op
-> change, it ended up causing the display on my sc7180-trogdor-lazor
-> device from coming up unless I added "fw_devlink=off" to my kernel
-> command line. Fix the typo.
+The following commit has been merged into the sched/core branch of tip:
 
-Sorry and merci pour la fix!
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Commit-ID:     1a90bfd220201fbe050dfc15deaac20ca5f15638
+Gitweb:        https://git.kernel.org/tip/1a90bfd220201fbe050dfc15deaac20ca5f15638
+Author:        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+AuthorDate:    Wed, 13 Apr 2022 15:31:05 +02:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Sun, 01 May 2022 10:03:43 +02:00
 
-> Fixes: 87ffea09470d ("device property: Introduce fwnode_for_each_parent_node()")
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
->
->  drivers/base/property.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/base/property.c b/drivers/base/property.c
-> index 36401cfe432c..52e85dcb20b5 100644
-> --- a/drivers/base/property.c
-> +++ b/drivers/base/property.c
-> @@ -600,7 +600,7 @@ struct device *fwnode_get_next_parent_dev(struct fwnode_handle *fwnode)
->         struct device *dev;
->
->         fwnode_for_each_parent_node(fwnode, parent) {
-> -               dev = get_dev_from_fwnode(fwnode);
-> +               dev = get_dev_from_fwnode(parent);
->                 if (dev) {
->                         fwnode_handle_put(parent);
->                         return dev;
-> --
-> 2.36.0.464.gb9c8b46e94-goog
->
+smp: Make softirq handling RT safe in flush_smp_call_function_queue()
 
+flush_smp_call_function_queue() invokes do_softirq() which is not available
+on PREEMPT_RT. flush_smp_call_function_queue() is invoked from the idle
+task and the migration task with preemption or interrupts disabled.
 
--- 
-With Best Regards,
-Andy Shevchenko
+So RT kernels cannot process soft interrupts in that context as that has to
+acquire 'sleeping spinlocks' which is not possible with preemption or
+interrupts disabled and forbidden from the idle task anyway.
+
+The currently known SMP function call which raises a soft interrupt is in
+the block layer, but this functionality is not enabled on RT kernels due to
+latency and performance reasons.
+
+RT could wake up ksoftirqd unconditionally, but this wants to be avoided if
+there were soft interrupts pending already when this is invoked in the
+context of the migration task. The migration task might have preempted a
+threaded interrupt handler which raised a soft interrupt, but did not reach
+the local_bh_enable() to process it. The "running" ksoftirqd might prevent
+the handling in the interrupt thread context which is causing latency
+issues.
+
+Add a new function which handles this case explicitely for RT and falls
+back to do_softirq() on !RT kernels. In the RT case this warns when one of
+the flushed SMP function calls raised a soft interrupt so this can be
+investigated.
+
+[ tglx: Moved the RT part out of SMP code ]
+
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lore.kernel.org/r/YgKgL6aPj8aBES6G@linutronix.de
+Link: https://lore.kernel.org/r/20220413133024.356509586@linutronix.de
+
+---
+ include/linux/interrupt.h |  9 +++++++++
+ kernel/smp.c              |  5 ++++-
+ kernel/softirq.c          | 13 +++++++++++++
+ 3 files changed, 26 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/interrupt.h b/include/linux/interrupt.h
+index f40754c..a49fe8d 100644
+--- a/include/linux/interrupt.h
++++ b/include/linux/interrupt.h
+@@ -607,6 +607,15 @@ struct softirq_action
+ asmlinkage void do_softirq(void);
+ asmlinkage void __do_softirq(void);
+ 
++#ifdef CONFIG_PREEMPT_RT
++extern void do_softirq_post_smp_call_flush(unsigned int was_pending);
++#else
++static inline void do_softirq_post_smp_call_flush(unsigned int unused)
++{
++	do_softirq();
++}
++#endif
++
+ extern void open_softirq(int nr, void (*action)(struct softirq_action *));
+ extern void softirq_init(void);
+ extern void __raise_softirq_irqoff(unsigned int nr);
+diff --git a/kernel/smp.c b/kernel/smp.c
+index 8e85f22..d54c2fe 100644
+--- a/kernel/smp.c
++++ b/kernel/smp.c
+@@ -696,6 +696,7 @@ static void __flush_smp_call_function_queue(bool warn_cpu_offline)
+  */
+ void flush_smp_call_function_queue(void)
+ {
++	unsigned int was_pending;
+ 	unsigned long flags;
+ 
+ 	if (llist_empty(this_cpu_ptr(&call_single_queue)))
+@@ -704,9 +705,11 @@ void flush_smp_call_function_queue(void)
+ 	cfd_seq_store(this_cpu_ptr(&cfd_seq_local)->idle, CFD_SEQ_NOCPU,
+ 		      smp_processor_id(), CFD_SEQ_IDLE);
+ 	local_irq_save(flags);
++	/* Get the already pending soft interrupts for RT enabled kernels */
++	was_pending = local_softirq_pending();
+ 	__flush_smp_call_function_queue(true);
+ 	if (local_softirq_pending())
+-		do_softirq();
++		do_softirq_post_smp_call_flush(was_pending);
+ 
+ 	local_irq_restore(flags);
+ }
+diff --git a/kernel/softirq.c b/kernel/softirq.c
+index fac8018..9f0aef8 100644
+--- a/kernel/softirq.c
++++ b/kernel/softirq.c
+@@ -294,6 +294,19 @@ static inline void invoke_softirq(void)
+ 		wakeup_softirqd();
+ }
+ 
++/*
++ * flush_smp_call_function_queue() can raise a soft interrupt in a function
++ * call. On RT kernels this is undesired and the only known functionality
++ * in the block layer which does this is disabled on RT. If soft interrupts
++ * get raised which haven't been raised before the flush, warn so it can be
++ * investigated.
++ */
++void do_softirq_post_smp_call_flush(unsigned int was_pending)
++{
++	if (WARN_ON_ONCE(was_pending != local_softirq_pending()))
++		invoke_softirq();
++}
++
+ #else /* CONFIG_PREEMPT_RT */
+ 
+ /*

@@ -2,116 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A9F95162A8
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 10:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89ABC5162B2
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 10:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244354AbiEAIXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 04:23:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43692 "EHLO
+        id S244639AbiEAI3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 04:29:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243479AbiEAIXA (ORCPT
+        with ESMTP id S244592AbiEAI2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 04:23:00 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF67165B5;
-        Sun,  1 May 2022 01:19:36 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id h1so10177680pfv.12;
-        Sun, 01 May 2022 01:19:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Ht4OT46ig/EoBxOChlTP61FKZFFqQrZnU4j/ancIN4w=;
-        b=RaUHoOs4IxM7ZejCqv2Mm0/t+Kj/zIoPdDO/KoYKDaMzekxBRZMVaXZc5jP3KpwQtO
-         FsjhpotpWJdP8DRQZ6jhqY1n1puCZA4A6k/jM7NmLzo+iYxpBpIWe1YomRovG5dF4SVK
-         CWLiwCSM0AUT9AYfKcEttIDmqAv3aDLku29KvIdK/dam5MKaxd/Y5dJFUfiPMKX/Iawj
-         Eqjg91hTM5AITg4Vl92S8PnyxsY7zqK/wQQI1DgTP40qpPQfb8B0BUw8CJwZl5zBDQoK
-         1VByqLpPkF8Lj+Ug+QugNh3LJvgrUGwYb/HRRElxr4fSOPxFj1zUMgj/wWapabSBZ9Q4
-         eAsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Ht4OT46ig/EoBxOChlTP61FKZFFqQrZnU4j/ancIN4w=;
-        b=zHZkjHZ0BkQ9ndwwSr8ZeR7ZK+WzHBt4Qmgahz4RXOeOpv2TfD5++E68FMQ3vpwc1H
-         EcB68HWXetoctWo7OPFdj2jXbNxZHuVEljVHXVugNWJXCynggXDYfARBDJyKEMJgFhoj
-         YgBzrAsRLTdl97ylUE2f3r6M14FLX+UV8gRvreZC8fKxqXr92uehSTN02pb19Xg8WiTc
-         xvbQJgsnBcELLhRLHNmBdP0HMUBE/TeWJu/caDxedfA/C1CJCSrsQryJ7glN9/ZlNChN
-         MOFmsLyyjt8qUfND96jPhNXEYAl68GTbCe4tZGtCssq4FzZ9OVIqh0StyFpHwYB047ne
-         cU6A==
-X-Gm-Message-State: AOAM531rJd8c76z51b6sEjKhcZnY1pvqw68wBMRC7mGOUs3BF/AB+NCc
-        WlYdAoumdlVZvk0lLxE3mnM=
-X-Google-Smtp-Source: ABdhPJz4tKdxnHrISm1J9ZdG5TTXqgLhMjlP15t9o+ZFvO/yHSlN2lzkjC11Jv7dDdvTnTlBFfKWDg==
-X-Received: by 2002:a63:40c7:0:b0:39d:8c29:2f57 with SMTP id n190-20020a6340c7000000b0039d8c292f57mr5541298pga.202.1651393175716;
-        Sun, 01 May 2022 01:19:35 -0700 (PDT)
-Received: from localhost (subs10b-223-255-225-231.three.co.id. [223.255.225.231])
-        by smtp.gmail.com with ESMTPSA id n9-20020a170903110900b0015e8d4eb1c1sm2515905plh.11.2022.05.01.01.19.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 May 2022 01:19:35 -0700 (PDT)
-Date:   Sun, 1 May 2022 15:19:32 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: Re: [PATCH V9 00/22] arch: Add basic LoongArch support
-Message-ID: <Ym5ClK4vg4nodfYV@debian.me>
-References: <20220430090518.3127980-1-chenhuacai@loongson.cn>
+        Sun, 1 May 2022 04:28:47 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056B617E10;
+        Sun,  1 May 2022 01:25:21 -0700 (PDT)
+Date:   Sun, 01 May 2022 08:25:19 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651393520;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9twnfmTeQicWK61lPpH3y68atz1ooDKYw21C5/2KZno=;
+        b=JDk1Gc7Y81h1GwFUvPMI2BbOmjVPrE49rNNS/RripR4rhkfBXVjeQZx0cNzKgi9FDpJegF
+        9DgS6RcT03m63OQ3TQU64RrmMKPKHimyKYUM4AAIFrU/RPcphazW4ibdU2RVJc5mUbVoos
+        QaLYuHZepSUs+JWJ5M4hNTpiCmujnJaQudBm8VWvSbibm7u0zcFXgpxYo5mNK20gnzqp/c
+        1kZcCpGeumYajkZF4YDJ29gvDluCIQ8FSKKd6spFTMRfkmZqwl//AyO640O7x4kYAPtKm/
+        31aXcO/7lBpqi5BDfcdhYmDQqt6U/jHGSelvS0BLYh6KrVgBwDVTzmtox0uR0Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651393520;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9twnfmTeQicWK61lPpH3y68atz1ooDKYw21C5/2KZno=;
+        b=WFdqINj3ETbfJvO2zo9K1OuUAWb8jVnqSmtxS2zpTrRmg2pxr6iZOXnEkzMbVMviEtcDD2
+        2VxekzgpvQgm+iBw==
+From:   "tip-bot2 for Fenghua Yu" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: core/urgent] mm: Fix PASID use-after-free issue
+Cc:     Zhangfei Gao <zhangfei.gao@foxmail.com>,
+        "Jean-Philippe Brucker" <jean-philippe@linaro.org>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220428180041.806809-1-fenghua.yu@intel.com>
+References: <20220428180041.806809-1-fenghua.yu@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220430090518.3127980-1-chenhuacai@loongson.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <165139351922.4207.15523967417383711734.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 30, 2022 at 05:04:54PM +0800, Huacai Chen wrote:
-> Huacai Chen(24):
->  Documentation: LoongArch: Add basic documentations.
->  Documentation/zh_CN: Add basic LoongArch documentations.
->  LoongArch: Add elf-related definitions.
->  LoongArch: Add writecombine support for drm.
->  LoongArch: Add build infrastructure.
->  LoongArch: Add CPU definition headers.
->  LoongArch: Add atomic/locking headers.
->  LoongArch: Add other common headers.
->  LoongArch: Add boot and setup routines.
->  LoongArch: Add exception/interrupt handling. 
->  LoongArch: Add process management.
->  LoongArch: Add memory management.
->  LoongArch: Add system call support.
->  LoongArch: Add signal handling support.
->  LoongArch: Add elf and module support.
->  LoongArch: Add misc common routines.
->  LoongArch: Add some library functions.
->  LoongArch: Add PCI controller support.
->  LoongArch: Add VDSO and VSYSCALL support.
->  LoongArch: Add efistub booting support.
->  LoongArch: Add zboot (compressed kernel) support.
->  LoongArch: Add multi-processor (SMP) support.
->  LoongArch: Add Non-Uniform Memory Access (NUMA) support.
->  LoongArch: Add Loongson-3 default config file.
-> 
+The following commit has been merged into the core/urgent branch of tip:
 
-I have skimmed through patch descriptions, and I see patch 05-24/24 use
-descriptive mood (This patch adds what...). Please write them in
-imperative mood instead.
+Commit-ID:     2667ed10d9f01e250ba806276740782c89d77fda
+Gitweb:        https://git.kernel.org/tip/2667ed10d9f01e250ba806276740782c89d77fda
+Author:        Fenghua Yu <fenghua.yu@intel.com>
+AuthorDate:    Thu, 28 Apr 2022 11:00:41 -07:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Sun, 01 May 2022 10:17:17 +02:00
 
--- 
-An old man doll... just what I always wanted! - Clara
+mm: Fix PASID use-after-free issue
+
+The PASID is being freed too early.  It needs to stay around until after
+device drivers that might be using it have had a chance to clear it out
+of the hardware.
+
+The relevant refcounts are:
+
+  mmget() /mmput()  refcount the mm's address space
+  mmgrab()/mmdrop() refcount the mm itself
+
+The PASID is currently tied to the life of the mm's address space and freed
+in __mmput().  This makes logical sense because the PASID can't be used
+once the address space is gone.
+
+But, this misses an important point: even after the address space is gone,
+the PASID will still be programmed into a device.  Device drivers might,
+for instance, still need to flush operations that are outstanding and need
+to use that PASID.  They do this at file->release() time.
+
+Device drivers call the IOMMU driver to hold a reference on the mm itself
+and drop it at file->release() time.  But, the IOMMU driver holds a
+reference on the mm itself, not the address space.  The address space (and
+the PASID) is long gone by the time the driver tries to clean up.  This is
+effectively a use-after-free bug on the PASID.
+
+To fix this, move the PASID free operation from __mmput() to __mmdrop().
+This ensures that the IOMMU driver's existing mmgrab() keeps the PASID
+allocated until it drops its mm reference.
+
+Fixes: 701fac40384f ("iommu/sva: Assign a PASID to mm on PASID allocation and free it on mm exit")
+Reported-by: Zhangfei Gao <zhangfei.gao@foxmail.com>
+Suggested-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+Suggested-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Tested-by: Zhangfei Gao <zhangfei.gao@foxmail.com>
+Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+Link: https://lore.kernel.org/r/20220428180041.806809-1-fenghua.yu@intel.com
+---
+ kernel/fork.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 9796897..35a3bef 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -792,6 +792,7 @@ void __mmdrop(struct mm_struct *mm)
+ 	mmu_notifier_subscriptions_destroy(mm);
+ 	check_mm(mm);
+ 	put_user_ns(mm->user_ns);
++	mm_pasid_drop(mm);
+ 	free_mm(mm);
+ }
+ EXPORT_SYMBOL_GPL(__mmdrop);
+@@ -1190,7 +1191,6 @@ static inline void __mmput(struct mm_struct *mm)
+ 	}
+ 	if (mm->binfmt)
+ 		module_put(mm->binfmt->module);
+-	mm_pasid_drop(mm);
+ 	mmdrop(mm);
+ }
+ 

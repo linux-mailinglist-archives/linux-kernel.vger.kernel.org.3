@@ -2,121 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC045167F7
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 23:08:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 555C55167F9
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 23:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354943AbiEAVLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 17:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
+        id S1354989AbiEAVMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 17:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbiEAVLI (ORCPT
+        with ESMTP id S230203AbiEAVMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 17:11:08 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56526BAB
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 14:07:42 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id v65so13684861oig.10
-        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 14:07:42 -0700 (PDT)
+        Sun, 1 May 2022 17:12:46 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2121.outbound.protection.outlook.com [40.107.92.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93E4FD12;
+        Sun,  1 May 2022 14:09:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dCyO4af6N9Qqv3s1tec/UbH0/YaOZryKRrFY4PtRINqUmCD0UxFsPLBOVw5PSefBJqxets0uvzJTIoa46/Ygmp0uCWw+K/402m3ClE1w8x5APnEBCGeDAdYFm0Lc1LGwXCsXp+gvgAPw4eP+MOrSFcCzeO30DMOwVOUm487Lv8e/gPlArUPCYc8BfZSRQ+Lud/gBdLCrEvYHPmvzGIvE2kUyvZ0fqxHTQ9l0ZxMFP0R1DcmHiPyW6mKEtT9t+ebJafHKwwJIL8MFIjHecAN2b99SgEV8MB8ldTYTP7quI8aZisCHL6Ma6M33+FQRZN5InobhuiJbC1l37oAd5cQL5Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5iVv4hjrDty+cHwXi5PCANLFTJIxBo8Hl/PfCmNKhYM=;
+ b=IIoQtMeCeUgiRSdsyFux2Z9mfaW/6/XNNoPMxYhBX0K05/yfXpFVJL63xPtQplmpXF1S5y0UbasWpWhYYhj8LLqw2wCLtNpeaEFvbbLzteoH8vGbOh8SIAr/hNAiW4Ok0VyiqFRO4qVCeOxPePHHr8bxR4gnXqBBANiVgnvWovj2xz7ZlKbAncPzxdSewhNaJ7EYuURyKQOCRakZfDrdkjU7Wi/EAybG0i4QFGRWbzYUAaJDoat0TrCiuaB4i6MMIvwyJgoVWIfBqvFyT3QSHY72+176rkYHsIRY3I5XCrv9mzKcO/uQAahUtVO/yyUWeTVBZYl3LXW/HJ2s3v5mow==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:from:subject:to:cc
-         :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=/H502LPEzSt4GoS+P7zqwCislvuDj30cVgMVeYzxz3E=;
-        b=NOWQRxW7LLkiODXK0OuF78r3yEFpwurW1VrEep/Qh5TMdcJ876d0sUX6n+POzXJ0ya
-         /kEwjmcjaM5NwIi/o5wlmJwjtSEaccKEyvMcDdXpbr8y8nXjgMiebNnoODhH3J8b5481
-         jdMCP9ziEZMW2j2xbJqitbUjZ/ZpGGf7GemB3tqcLe8X0gZeLzlvJV4L+yXErTIDVsRV
-         88vn81JksuDFSMEujulUirg6Eay4Uted7J1dNS+Mf2d+eH2VcHOw2ppV+fyatDs5/rsD
-         tSp2WxrLJ88A3kanBYgtWz+C8MZiGH7exiJPSuB5jVkcGFW9Jk8BheMRfJBPB+E0txsJ
-         AN+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :from:subject:to:cc:references:content-language:in-reply-to
-         :content-transfer-encoding;
-        bh=/H502LPEzSt4GoS+P7zqwCislvuDj30cVgMVeYzxz3E=;
-        b=8D04q1zV97deNZcDiLMWkzCUgRaIONVY0aCEal0riWU9Ico+KKvrSDkTtoUnKPLMum
-         5nhGe/24pssv+fA3Hyu/hApRILLzYrU4f8w5pQRvDsTwWYN/h1vQjySylAhQJZV3Zncw
-         LgldvHW4jtKgrxOkiawABYTwnU9+93l2aY22eskafJVFMtTI03meCL5gTk1mYt2jW6YU
-         SS3SlUsViPr8ajVeWiz1WuW8+WYTy2YiBFDUWb639qwuW+Z3QFPWZ8tgR5MxaGwvriVQ
-         F84Rn78aSP8erK3n7JZ4yrg3BY6XCRVwRT/FOxChhG2fAIGwkntX+oDSZyaeiWWPTX1H
-         hrtw==
-X-Gm-Message-State: AOAM532LtyYRpP5nundqCq75CmKIuBL5WkPgWi5tM62hwSnzwur6awha
-        diOHAV+ej2QRJjJ9Kjb6qAP2a0O7zPZoTA==
-X-Google-Smtp-Source: ABdhPJxLdeNOoyD+aZfSlQ9dL/w1A8C0kkskzGCYoohHimyZUO1B79w6AU2HKGq32O4DYY79+UNNAw==
-X-Received: by 2002:a05:6808:3009:b0:2f9:6119:d676 with SMTP id ay9-20020a056808300900b002f96119d676mr4250347oib.205.1651439261684;
-        Sun, 01 May 2022 14:07:41 -0700 (PDT)
-Received: from ?IPV6:2603:8090:2005:39b3::100e? (2603-8090-2005-39b3-0000-0000-0000-100e.res6.spectrum.com. [2603:8090:2005:39b3::100e])
-        by smtp.gmail.com with ESMTPSA id k14-20020a056820016e00b0035eb4e5a6bcsm3253219ood.18.2022.05.01.14.07.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 01 May 2022 14:07:40 -0700 (PDT)
-Sender: Larry Finger <larry.finger@gmail.com>
-Message-ID: <6bd35831-2d7a-77ee-55e9-755ca752b0c8@lwfinger.net>
-Date:   Sun, 1 May 2022 16:07:39 -0500
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5iVv4hjrDty+cHwXi5PCANLFTJIxBo8Hl/PfCmNKhYM=;
+ b=ynif+mBeZjPxLGDyDo+oI499OdgMRndOj8LlY2VEnJiHYgM15B17Eo/aYiIO0sTMS2O29GWVjHNbLZ2eXdbayNuVX2+6BmA5vsQwNEel+6m8sY2xOd3jtVXCgUS0WAFYrPhrhtAeJHhLJwabDDGNBdDMja+srxEBrw/9G67B4Iw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by MWHPR10MB1280.namprd10.prod.outlook.com
+ (2603:10b6:301:8::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Sun, 1 May
+ 2022 21:09:16 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::4581:787c:1a7a:873e]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::4581:787c:1a7a:873e%3]) with mapi id 15.20.5186.028; Sun, 1 May 2022
+ 21:09:16 +0000
+Date:   Sun, 1 May 2022 14:09:10 -0700
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>
+Subject: Re: [PATCH v1 net 0/2] fix shared vcap_props reference
+Message-ID: <20220501210910.GB590748@euler>
+References: <20220429233049.3726791-1-colin.foster@in-advantage.com>
+ <20220501105208.ynlxqqt6g4oml5fz@skbuf>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220501105208.ynlxqqt6g4oml5fz@skbuf>
+X-ClientProxiedBy: SJ0PR13CA0046.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c2::21) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-Subject: Re: Changes in kernel 5.18-rc1 leads to crashes in VirtualBox Virtual
- Machines
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-References: <7f01221d-f693-adf8-f5a5-d71944b44162@lwfinger.net>
- <Ym7Hw9GDPP838JoH@zx2c4.com>
-Content-Language: en-US
-In-Reply-To: <Ym7Hw9GDPP838JoH@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 11bdecb5-0ecc-4686-176a-08da2bb6d99e
+X-MS-TrafficTypeDiagnostic: MWHPR10MB1280:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR10MB12803F02B1EBFFD25AD55960A4FE9@MWHPR10MB1280.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mocuYcjly7fzw9BrZFuXbMNmGcJia4fnwZIF+AsA82F/uN9PZE3TpNe3NRhD9Y83EIheAGo1wqyBD90UyE3k7jTd48j2WbItjwOSg1Nd5UDmcpim5Hbq27Q0zLhNehNT6uU/Iz0pfga9AAIQyLAdmffQXMCoHc+kDzOdJKiH3HO+RGRwAsoYV+1yFsDgBvDfXA/9HKSap8K57ys0Rm7QCz7WZCld9lrKBvrxOwieF07ZLNTGpvnHsrttGFnUTtaO6oWUdEYn8loHSj49S0fz282A5+HPLPy1bTfvKsTyN5fc1h6djelyqd8nmpaGwbHeFh4wuBH00dsMMuj2x75R15wl0D7H+38IKdq2nSLaP8vDf5fzhDnOWNH2qQwRLqLiw/JOJ4AfZ0OxR0VX+ojWsTXoNx35TsSEUCXQ46U5KVVf22K12utiXdGdT1GwW3QvnMs//qk9qbt45TN85QapTOmR9Ydu+wQ6EVVMTVZM90+5R2jwvyNzG/EgYCE/tpV0buyFiTzRCn9ZrnsU8bKdLLZnR6m+RudCZutKgNdc2xJ7eK3KVNoDMonPMe23i+LcP3R7CnXAaFE4i+WBP3Rx8qtBfodVOB4Fcs/hGDrUUsP6+k+UsqN/0783fmU2Z0qmJ7al7CXkd6J1DprfKw6ZAKpmFzPzCBliuMf9hwboX1w3wVyv//2PXmVqHkiKoXqe
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(396003)(346002)(136003)(366004)(39830400003)(376002)(86362001)(6512007)(6486002)(508600001)(2906002)(316002)(6666004)(6506007)(26005)(1076003)(9686003)(52116002)(186003)(33656002)(66556008)(44832011)(33716001)(8676002)(4326008)(66476007)(38350700002)(38100700002)(66946007)(7416002)(54906003)(5660300002)(6916009)(4744005)(8936002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3+WERDVKCeqGwZhoX0YAIjZqTdUPRsQ7351gCG25OleUEiuWH+94Ax4WDhUD?=
+ =?us-ascii?Q?43Dk5uOTn55Js1HAs/GyxSm3nxFYtorEuteOvTvMg6NQ2iqAIUcTLbjCvjbo?=
+ =?us-ascii?Q?9SBmLWI7JlCJR1YKB4Gscfdo+Xn4GyYLrFUUDYGlhPy0DPOdi96RUNmww8HW?=
+ =?us-ascii?Q?7Ivi962z9Ix22byDgR4bHoY3Rjx2Tr9DPv2fiwF7fLMctl4QgQ0LO6+XhiSH?=
+ =?us-ascii?Q?PloQl+jut3kRoFZvvezWtVlKd4q4ndwwN/ADEOmg4ewVG6IykmpAX/KLUeQi?=
+ =?us-ascii?Q?vK0b4ac49a5R9YMSv4sYyK1nPKMfyR5B7X1cAOiRgLkgVgAr5Pv1DBMuG1fi?=
+ =?us-ascii?Q?0DB/GVJD9S2A6C3/H2N84hNx/yvzea6YKsYAwkRSJk6VBdxrGK2MIPFXvDdx?=
+ =?us-ascii?Q?gVPgPN1TL86E6QyVxvv51GFmzX1yoU+8wwV9TXzGv3Utojzs3gbbTCKwBSkv?=
+ =?us-ascii?Q?hR/Gh5d7hP9CFlm0iUbpsQGyu/K94oiZOQ/4XSRsahFcD1FYB+W8lx8slRDJ?=
+ =?us-ascii?Q?Ss0qrMyjaDM/e3SpO8s+UwWc+evcPIqgPVUijvCV7PFHNcb8cmd6az/0ADit?=
+ =?us-ascii?Q?BK59SC7PqOcCVl/TY4JH22JVX0d5q4ueeeTAG6qwUe8g6kIYbCvAoVFVLfoq?=
+ =?us-ascii?Q?CHdof6HaPFW6mPtlZVLL0vy2aoZG+Zi6ZW33hFsqO2l2fyI1usSaudRkWAlc?=
+ =?us-ascii?Q?co7V77QKw4/+4EJKchakUvPkUk2pOc5XiVMfd2uHzd9NSjtqLiAxdEfNDzId?=
+ =?us-ascii?Q?tLkDFlsS+y/CkuZ0oDvdV9Jp8X5j/a5xzXpWMEqbQSIHKU2OnCIxI8pm1hH9?=
+ =?us-ascii?Q?PTNx2cSGBXLtm1wZBBH8lBxpHp4Hy0Qjbj1buKBowCk9yNENsH+7c9/YbWZB?=
+ =?us-ascii?Q?sn0thzwX/+O//gMfzj5JsLxMHx5aExocBreVToicmXyfKqgiVWhbjZ+00+L3?=
+ =?us-ascii?Q?yPPZ5Ckr8Gvm1g4qfJqYUueqWf7KEmXE3IRT6heV3voDthd3rMW8W66AgNlB?=
+ =?us-ascii?Q?eeSTGpJKgXhcPpR71jkr6LvRPew6e89PdUPvRfm2nVahix68/UU1ukG/sgXD?=
+ =?us-ascii?Q?l9ZgPYI6gYAtGk6r35bpQ0HOAoRcBM67k2CVN+87yd6RUCJmM1+lxiFb6v5s?=
+ =?us-ascii?Q?HzOG6EYsZJUwaR2X8p8aoGjQgrq96wdikwXqxsr8uHke6CqwYARRse4s96jX?=
+ =?us-ascii?Q?QqMmQszLG0fwyY/hySdROXBn+5t+8jGNgWqUx6ZjdqKFitSoSHjOMVRZCpCV?=
+ =?us-ascii?Q?60tcyNJ6MJYZtb06rxgMYo9/mglJX7WXMDJaq0Rh74Mbwd91WIsGD66CTZdL?=
+ =?us-ascii?Q?dEqiuSMblQm/6AKkROn0dA1HpTTkPFppixPq/Jvk5Xpf/5RGho50mvk/UkIX?=
+ =?us-ascii?Q?hztea1OSnUMUYsW1VJY6ExFjVeudiimmAUiHVoVEpulz9HGNQ7MODxceTZrH?=
+ =?us-ascii?Q?1iZJz42sf9C3uxAwRd3gwn7cvZ4sf6tDQ2wlpuix9euFGll2mtLgkkwoYNRa?=
+ =?us-ascii?Q?KGIw2giXqxolYFP2FeMEmD0sM/6CiJNwywJyZi85u5UHPy1SVSfN2d8C9zvl?=
+ =?us-ascii?Q?2zghkwiFsntSUgX0IULrJx1lFWaVA8MpYHIimb2GZNAK8MElaI0TSaNyL5xk?=
+ =?us-ascii?Q?fw6yZP4gITHGM2tlVOUXmi95zFSYgOoyHhlSyodFEOCrqb7r6vzl2ufMr+j6?=
+ =?us-ascii?Q?lxSGWPU2DSDfoN1q9ELin3aIBuMHD31tf3tEf/eSkDBkqBpzzFB2oPNI6Lk2?=
+ =?us-ascii?Q?9UCX78C9P8I+Ig7pfLZz0S6YlK1EzwNLG64Z0QXmsbR+ov7uRbPg?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 11bdecb5-0ecc-4686-176a-08da2bb6d99e
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 May 2022 21:09:16.4061
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kapEIXQmonmpGyI2vUvxpsJb2U2OLEX7zyuIKTczkQfIFNm40sN3ayAhkc3hEDIyXXHVCXE8BaJPuknKzzKcuYq/u4C8ohWpZTZoI6iDwtc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1280
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/1/22 12:47, Jason A. Donenfeld wrote:
-> Hi Larry,
+On Sun, May 01, 2022 at 10:52:09AM +0000, Vladimir Oltean wrote:
+> On Fri, Apr 29, 2022 at 04:30:47PM -0700, Colin Foster wrote:
+> > I don't have any hardware to confidently test the vcap portions of
+> > Ocelot / Felix, so any testers would be appreciated.
 > 
-> Thanks for the report. Several questions:
-> 
-> 1) Can you reproduce with 5.18-rc4?
-> 
-> 2) Can you send me a stacktrace from the crash or any relevant console
->     output?
-> 
-> 3) Does the crash happen in the guest or the host?
-> 
-> Question two is very important.
+> You know about tools/testing/selftests/drivers/net/ocelot/tc_flower_chains.sh,
+> right?
 
-Jason,
-
-1. Yes, the problem happens with 5.18-rc4 and -rc5.
-
-3. The crash is in the guest. Nothing unusual is logged in the host.
-
-2. My answer here will be incomplete. There are no stacktraces or console ouput 
-on the host from any of the guest crashes, either in dmesg or under journalctl. 
-The desktop just disappears. The VirtualBox log files show nothing for the Linux 
-guest, and the following for the Windows instance:
-
-00:00:57.908011 GUI: UIMachineLogicNormal::sltCheckForRequestedVisualStateType: 
-Requested-state=0, Machine-state=5
-00:01:24.502961 GIM: HyperV: Guest indicates a fatal condition! P0=0x1e 
-P1=0xffffffffc0000005 P2=0xfffff8054c61e97c P3=0x0 P4=0x28
-00:01:24.503053 GIMHv: BugCheck 1e {ffffffffc0000005, fffff8054c61e97c, 0, 28}
-00:01:24.503054 KMODE_EXCEPTION_NOT_HANDLED
-00:01:24.503054 P1: ffffffffc0000005 - exception code - STATUS_ACCESS_VIOLATION
-00:01:24.503054 P2: fffff8054c61e97c - EIP/RIP
-00:01:24.503054 P3: 0000000000000000 - Xcpt param #0
-00:01:24.503054 P4: 0000000000000028 - Xcpt param #1
-
-Running a 3rd party dump analyzer shows that the crash happens at 
-ntoskrnl.exe+3f7d50. I have installed the Windows debugger, but I think the 
-learning curve will be steep. At this point, I have no further info available.
-
-Thanks,
-
-Larry
+I'll add this to the (long) list of things you've taught / shown me.
+Thanks! And thanks for testing.

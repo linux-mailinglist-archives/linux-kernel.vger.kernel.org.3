@@ -2,131 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 398C851632B
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 10:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C0D516333
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 10:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343573AbiEAIub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 04:50:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57368 "EHLO
+        id S1343723AbiEAIzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 04:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233784AbiEAIu0 (ORCPT
+        with ESMTP id S242408AbiEAIzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 04:50:26 -0400
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2A1E21;
-        Sun,  1 May 2022 01:47:01 -0700 (PDT)
-Received: by mail-vs1-xe2d.google.com with SMTP id z144so11244346vsz.13;
-        Sun, 01 May 2022 01:47:01 -0700 (PDT)
+        Sun, 1 May 2022 04:55:11 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7123011156
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 01:51:46 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id b24so13548731edu.10
+        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 01:51:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YeMrQTzuf2gRQtezWWafNVYSaUpuhBePEKDtQvKbaWw=;
-        b=nWh9yV+kO8Q7Dem2PHaKx8kspjOWTvEYLzCFQFjnTu9qQQZQQqV7uGUKn2xK8RCOYV
-         d29tKQlPggdptI+tPVWVkzfGVc6V5kujnWIFhshwWyTcSz1yCQQBQHznRNadgkgEK0Zn
-         D8vgLMcPz5JIWDfHoJ7z5xaL8L2WVzlV9m56y/JLyPI0PjUBWD3YArgx2hQ6bmr8KL8x
-         +uMkSzcr4RYR6554+4w5GjQHnZGzWWDBloOWQLCA30h9Nec7T+WotqVGq/5yZmNdrFHo
-         URtDSAZR7mq702SxWU4FCHnTJ50bbyjW0Cc8u1e3GRSepWLfipSkHFaZ1Z4O3HaMt/2/
-         znwQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=CJZNRZ79+9Oe+6cMtcCUByKLeX6eyND50QHtbCM/fno=;
+        b=srR4IxVVWOu+WIi+VOm9TX9vriFAk/qoL9BuzocRG4Mk2brHz2P//y7XmhkIy6Mhq8
+         OEwyXRIXS4F9HwJFhO4rkiwEkowHZGWwMdUh8j82y9xOEfKmCqwMkc9dogjuEz2HkaUz
+         Ott/l0bKD6nqtBJFdJdU/b5IIicsYMV8IBLiNj1boQisudb6hz9cJ71hWQgmXGmkYSl8
+         DhPTVNv6QivmLaiOHDdDXPpTnr6AENQu/tiInKwICpRJVMz3O5dkiT3kolZOJ9JMa/kg
+         eiUl46SpwFyLsdmvhuTsMYPoTMp0fu3z+GC7pp6IUQyDSaWlAZNImAOkh/QpJVKqA94K
+         T+Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YeMrQTzuf2gRQtezWWafNVYSaUpuhBePEKDtQvKbaWw=;
-        b=Njuzf94AhD0aFKOulVhpdy111O+AYNpF8cUIzvB/jdaaihpGbttOtrDvYbMPVTyVIC
-         fJlObXCa8QvjZJ5/oiuEForvhyUVsmvFM0uKCBPfwp5BZCw3pi4GDtNvu5U5ayf+jA0x
-         fvHK37KghfmoKXPtYvh4juuADPo6BYMnbFMSja6wk5UfVPy2hGQ/pz0r+5GLNI/Tw2VS
-         hGrufX/YZ4+qEBmwl/40o2kqMrbzxofICE/Q11pGq1PTRNDHjFJC9uuKV+a3jB5QJsZY
-         ei8+UpnEbwInCLUNc1anAllzNT6i+KZZN8eflNfNlK/zIj33sCZWwoN3+QkcSKGWXuWW
-         mE9Q==
-X-Gm-Message-State: AOAM530c25VtSKliUbUYvEIJGg/4yAdeNoaIS+Z9gE8VtyNqTV9ycacW
-        kqSa6AHItWxS/hWOzJ8ht6XizmV/8dRVUlaoD2c=
-X-Google-Smtp-Source: ABdhPJx9y9y0akz5HssQ3SXny9Vs4F60zx3/tiArR/BWCv18jYhs2liGZ4RSuGtueeNr/xqIkWAfYTXzJMlwfI//47k=
-X-Received: by 2002:a67:b142:0:b0:32c:e806:a0b0 with SMTP id
- z2-20020a67b142000000b0032ce806a0b0mr1758746vsl.71.1651394821045; Sun, 01 May
- 2022 01:47:01 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=CJZNRZ79+9Oe+6cMtcCUByKLeX6eyND50QHtbCM/fno=;
+        b=QXI3r3GKoSA2+kp52Kqr56n458XqXEj4tiCYTsknyNe+dpht+P61DA+1dA3MrAx4Tm
+         1yscQ1luDEp7DqRzD5bs9h5hHL8sQVMFMx0zKCi7V26w6bvqQ4CFk58qD00ucOigFfV8
+         h4Yo6DdN6fzz1XJUE/2hGhf8UPnAAaoUcIHYZWNGgwJPRHYJMZiS18nGQdRCUMMSOQwI
+         pusVnybCl8QL/EIgmb0teooPe/Bf9tnXK/ljEHxjfViptEgm2ypWo9b4y7HmhwdbnMbk
+         UAdP37m9XeRg7LJeWJY28lCtY4oU7Wv9txxWhyXh6TU/WxcmAoV/nVsaUkD/yKnuXMAR
+         wgWg==
+X-Gm-Message-State: AOAM5306/fvAnrSQyhYKrHfFMnDfbLdMf75JudEgIxQGWEjWjwsGpVYi
+        MlHYXBxnvrJ2ikU6jTdgpAY4rw==
+X-Google-Smtp-Source: ABdhPJwQvpcqzBB3XGa2jHTPTvXDgRv3AJ8mnCXqOERniHYprhzbmWee/RIRxFfcPQyKOUoOlTgSYg==
+X-Received: by 2002:aa7:df0a:0:b0:425:d4bf:539 with SMTP id c10-20020aa7df0a000000b00425d4bf0539mr7993297edy.24.1651395105069;
+        Sun, 01 May 2022 01:51:45 -0700 (PDT)
+Received: from [192.168.0.182] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id ml22-20020a170906cc1600b006f3ef214ddbsm2407098ejb.65.2022.05.01.01.51.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 01 May 2022 01:51:44 -0700 (PDT)
+Message-ID: <29ba3db6-e5c7-06d3-29d9-918ee5b34555@linaro.org>
+Date:   Sun, 1 May 2022 10:51:43 +0200
 MIME-Version: 1.0
-References: <20220430090518.3127980-1-chenhuacai@loongson.cn>
- <20220430090518.3127980-22-chenhuacai@loongson.cn> <CAK8P3a0LwJ3mMQMFkxGxr+umCMM3dKGRnLF+dMCmD5j43hq2sA@mail.gmail.com>
- <CAAhV-H6vPdLeup38YTj64Xxxk+PTact=DMJTs9efsa1b3t-y2A@mail.gmail.com> <Ym4qNILcz+W7dC9i@shell.armlinux.org.uk>
-In-Reply-To: <Ym4qNILcz+W7dC9i@shell.armlinux.org.uk>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Sun, 1 May 2022 16:46:50 +0800
-Message-ID: <CAAhV-H58HXicH7jj88BFUH8P9cGwXFGjgOoLvZubQsBst+zheQ@mail.gmail.com>
-Subject: Re: [PATCH V9 21/24] LoongArch: Add zboot (compressed kernel) support
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v5 2/6] dt-bindings: PCI: renesas,pci-rcar-gen2: Add
+ device tree support for r9a06g032
+Content-Language: en-US
+To:     Herve Codina <herve.codina@bootlin.com>,
+        Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>
+Cc:     Rob Herring <robh@kernel.org>, linux-pci@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+References: <20220429134143.628428-1-herve.codina@bootlin.com>
+ <20220429134143.628428-4-herve.codina@bootlin.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220429134143.628428-4-herve.codina@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Russell,
+On 29/04/2022 15:41, Herve Codina wrote:
+> Add internal PCI bridge support for the r9a06g032 SOC. The Renesas
+> RZ/N1D (R9A06G032) internal PCI bridge is compatible with the one
+> present in the R-Car Gen2 family.
+> Compared to the R-Car Gen2 family, it needs three clocks instead of
+> one.
+> 
+> The 'resets' property for the RZ/N1 family is not required since
+> there is no reset-controller support yet for the RZ/N1 family.
 
-On Sun, May 1, 2022 at 2:35 PM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
->
-> On Sun, May 01, 2022 at 01:22:25PM +0800, Huacai Chen wrote:
-> > Hi, Arnd,
-> >
-> > On Sat, Apr 30, 2022 at 7:02 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > >
-> > > On Sat, Apr 30, 2022 at 11:05 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> > > >
-> > > > This patch adds zboot (self-extracting compressed kernel) support, all
-> > > > existing in-kernel compressing algorithm and efistub are supported.
-> > > >
-> > > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > >
-> > > I have no objections to adding a decompressor in principle, and
-> > > the implementation seems reasonable. However, I think we should try to
-> > > be consistent between architectures. On both arm64 and riscv, the
-> > > maintainers decided to not include a decompressor and instead leave
-> > > it up to the boot loader to decompress the kernel and enter it from there.
-> > X86, ARM32 and MIPS already support self-extracting kernel, and in
-> > 5.17 we even support self-extracting modules. So I think a
-> > self-extracting kernel is better than a pure compressed kernel.
->
-> FYI, kernel modules are not self-extracting. They don't contain the code
-> to do the decompression - that is contained within the kernel, and it is
-> the kernel that does the decompression. The userspace tooling tells the
-> kernel that the module is compressed.
-I call "self-extracting" here means we don't need out-of-kernel help:
-kernel decompress doesn't need the bootloader, module decompress
-doesn't need kmod.
+This should not be a reason why a property is or is not required. Either
+this is required for device operation or not. If it is required, should
+be in the bindings. Otherwise what are you going to do in the future?
+Add a required property breaking the ABI?
 
-Huacai
->
-> --
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+> 
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  .../bindings/pci/renesas,pci-rcar-gen2.yaml   | 46 ++++++++++++++++---
+>  1 file changed, 39 insertions(+), 7 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/renesas,pci-rcar-gen2.yaml b/Documentation/devicetree/bindings/pci/renesas,pci-rcar-gen2.yaml
+> index 494eb975c146..a9f806794f12 100644
+> --- a/Documentation/devicetree/bindings/pci/renesas,pci-rcar-gen2.yaml
+> +++ b/Documentation/devicetree/bindings/pci/renesas,pci-rcar-gen2.yaml
+> @@ -32,6 +32,10 @@ properties:
+>                - renesas,pci-r8a7793      # R-Car M2-N
+>                - renesas,pci-r8a7794      # R-Car E2
+>            - const: renesas,pci-rcar-gen2 # R-Car Gen2 and RZ/G1
+> +      - items:
+> +          - enum:
+> +              - renesas,pci-r9a06g032     # RZ/N1D
+> +          - const: renesas,pci-rzn1       # RZ/N1
+>  
+>    reg:
+>      items:
+> @@ -41,13 +45,9 @@ properties:
+>    interrupts:
+>      maxItems: 1
+>  
+> -  clocks:
+> -    items:
+> -      - description: Device clock
+> +  clocks: true
+>  
+> -  clock-names:
+> -    items:
+> -      - const: pclk
+> +  clock-names: true
+>  
+>    resets:
+>      maxItems: 1
+> @@ -106,13 +106,45 @@ required:
+>    - interrupt-map
+>    - interrupt-map-mask
+>    - clocks
+> -  - resets
+>    - power-domains
+>    - bus-range
+>    - "#address-cells"
+>    - "#size-cells"
+>    - "#interrupt-cells"
+>  
+> +if:
+
+allOf.
+
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        enum:
+> +          - renesas,pci-rzn1
+> +
+> +then:
+> +  properties:
+> +    clocks:
+> +      items:
+> +        - description: Internal bus clock (AHB) for HOST
+> +        - description: Internal bus clock (AHB) Power Management
+> +        - description: PCI clock for USB subsystem
+> +    clock-names:
+> +      items:
+> +        - const: hclkh
+> +        - const: hclkpm
+> +        - const: pciclk
+> +  required:
+> +    - clock-names
+> +
+> +else:
+> +  properties:
+> +    clocks:
+> +      items:
+> +        - description: Device clock
+> +    clock-names:
+> +      items:
+> +        - const: pclk
+> +  required:
+> +    - resets
+> +
+>  unevaluatedProperties: false
+>  
+>  examples:
+
+
+Best regards,
+Krzysztof

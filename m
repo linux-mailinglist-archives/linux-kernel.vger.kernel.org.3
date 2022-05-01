@@ -2,2465 +2,2098 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8FDE5164DC
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 17:08:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6481D5164E9
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 17:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347913AbiEAPKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 11:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41154 "EHLO
+        id S1347989AbiEAPNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 11:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344498AbiEAPKr (ORCPT
+        with ESMTP id S235718AbiEAPNK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 11:10:47 -0400
-Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5878F13E2B;
-        Sun,  1 May 2022 08:07:18 -0700 (PDT)
-Received: by mail-vk1-xa31.google.com with SMTP id bc42so5682582vkb.12;
-        Sun, 01 May 2022 08:07:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ql6yulR8D7exF1b4D2Apqsk+WSXA37xSf/5jf6L0YBc=;
-        b=Efn+DzU7eXpIqj8bxSoGRoP6J0uxGGMw68mp8DcrNsLFroteviawJ3qxoqPy8aHX+z
-         oag2nSbUSsBe4H4ERqRsNxJ2MMjdcpuTGg2A+Tn1ZPJMzkkYUDPBYXcyCzqsK3GyK8N8
-         7rrrOjBpDViBdXpj8xKGpbjaIH5IGd0ZNrjJJzrgwEMmNcCj06MgKqa2oWCqCNr8oSvd
-         RuXu8YffK31Wc6Dkq0dnkqimMcGxurYzGKih9aIGQTRd7RUNvMVlFATapL2t00U26dAs
-         epG6Dgn+03B3TsHZ7kuNffMYZzPSXDFMSleuY4tcIOAA+Kq0HS2ZxyI6UhS3dFWTyk9L
-         uoCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ql6yulR8D7exF1b4D2Apqsk+WSXA37xSf/5jf6L0YBc=;
-        b=M3rtBvmRW+iPeUC+SeIEjbbWV3BRXE/OrelNny71KbKcX4x6fmbHU5hGvro59Y5XhS
-         wPbkf7yCXC3V8cL0yYswzhCsizDzz6JWUpUTyVNPGqdk/eq6Z4Ub12HGGzCzida2j2c5
-         WUpSb+tdYVmqMx8lWRk8fheNgIzLXnQFXDQ6lWMzR3rztfm1AWXLNLdqHUwh3df6Y0S+
-         zLWmBMrwkyXf+1vCtxzHz/j85EHanQvGWlP4bx/zhoesGSLogo23Zohk1Z80wGz3oNjJ
-         sgM+2htl9LxbBIgXCdwvvrcUfqvywM6vIA6KWaYgtFagFALedqvEY/spM8nxkhrSjag6
-         LFPQ==
-X-Gm-Message-State: AOAM533fUnlTkwRagT/VKAPueDVQGfXbrZ4NuEJn2+YL/OL7pSc+bWL2
-        ayn2bsHRfrN00/f7BnRmRKlMFXudq7qsOEdXLcE=
-X-Google-Smtp-Source: ABdhPJz0Ag4U8pb4Sb19HbEutK64B0pHn60yor+rvjxtRusMA30SIEh8OJU3yrro6chWXE8o/VN67KbAsG2+j+JC56Y=
-X-Received: by 2002:a05:6122:179d:b0:34e:a817:dcb7 with SMTP id
- o29-20020a056122179d00b0034ea817dcb7mr548033vkf.2.1651417636597; Sun, 01 May
- 2022 08:07:16 -0700 (PDT)
+        Sun, 1 May 2022 11:13:10 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4893C19C23
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 08:09:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651417783; x=1682953783;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OvjyxPs+yKpEthVMr9GV7lntbC2H03bBrr63zq5TIPc=;
+  b=nznVHiAnE1JAR2zMXsv1vzG7vjneZCLhXTVn4fFOF3lUbuwJj/KUTCgl
+   HKwjILdxWWGrL+fV4r+eR7o6goHfFpLkJjlPKGZBcrnEwFE327Qu9WYH+
+   ANtnmhNB1FDoE1PHs88+K/JfThS/lZJogJ87Ya3eefsT1Ujm/o1ZJeMlE
+   V6sK7QUh64RnRHIrDThM+m24b0K0XsIdLOyoidXziwRCA04aLyhy1DQ6T
+   qmrG2AJ9nd7pfrEuaJSKW72DB//0i3p3yGJG5xI49D0QsOrV95KJ25YV/
+   35VlgrlTOLEDYulIemv1RuN44cZSY2vbm4VkiMySUzNmr2w42mxJO6g53
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="265872046"
+X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
+   d="scan'208";a="265872046"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 08:09:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
+   d="scan'208";a="598240297"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 01 May 2022 08:09:40 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nlBCd-0008qN-G3;
+        Sun, 01 May 2022 15:09:39 +0000
+Date:   Sun, 1 May 2022 23:08:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alex Deucher <alexander.deucher@amd.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c:3957:6:
+ warning: stack frame size (2424) exceeds limit (2048) in
+ 'dml31_ModeSupportAndSystemConfigurationFull'
+Message-ID: <202205012240.7qrNLV84-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220430090518.3127980-1-chenhuacai@loongson.cn>
- <20220430090518.3127980-7-chenhuacai@loongson.cn> <27fa17f2-1678-d14d-182b-4ef2adeb8634@xen0n.name>
-In-Reply-To: <27fa17f2-1678-d14d-182b-4ef2adeb8634@xen0n.name>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Sun, 1 May 2022 23:07:03 +0800
-Message-ID: <CAAhV-H5cdw+GdKL43dZ2WGpTr3cMARE7Sv34yqOXD8xL_4ZsEw@mail.gmail.com>
-Subject: Re: [PATCH V9 06/24] LoongArch: Add CPU definition headers
-To:     WANG Xuerui <kernel@xen0n.name>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Xuerui,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   57ae8a492116910bad2b3497ffe555b3a4b4180f
+commit: 8fe44c080a53ac0ccbe88053a2e40f9acca33091 drm/amdgpu/display: fold DRM_AMD_DC_DCN3_1 into DRM_AMD_DC_DCN
+date:   10 months ago
+config: x86_64-buildonly-randconfig-r002-20220425 (https://download.01.org/0day-ci/archive/20220501/202205012240.7qrNLV84-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8fe44c080a53ac0ccbe88053a2e40f9acca33091
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 8fe44c080a53ac0ccbe88053a2e40f9acca33091
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/ drivers/media/
 
-On Sun, May 1, 2022 at 7:05 PM WANG Xuerui <kernel@xen0n.name> wrote:
->
->
-> On 4/30/22 17:05, Huacai Chen wrote:
-> > This patch adds common headers (CPU definition and address space layout)
-> > for basic LoongArch support.
-> >
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > ---
-> >   arch/loongarch/include/asm/addrspace.h    |  110 ++
-> >   arch/loongarch/include/asm/cpu-features.h |   69 +
-> >   arch/loongarch/include/asm/cpu-info.h     |  136 ++
-> >   arch/loongarch/include/asm/cpu.h          |  127 ++
-> >   arch/loongarch/include/asm/fpregdef.h     |   49 +
-> >   arch/loongarch/include/asm/loongarch.h    | 1528 +++++++++++++++++++++
-> >   arch/loongarch/include/asm/loongson.h     |  159 +++
-> >   arch/loongarch/include/asm/regdef.h       |   43 +
-> >   8 files changed, 2221 insertions(+)
-> >   create mode 100644 arch/loongarch/include/asm/addrspace.h
-> >   create mode 100644 arch/loongarch/include/asm/cpu-features.h
-> >   create mode 100644 arch/loongarch/include/asm/cpu-info.h
-> >   create mode 100644 arch/loongarch/include/asm/cpu.h
-> >   create mode 100644 arch/loongarch/include/asm/fpregdef.h
-> >   create mode 100644 arch/loongarch/include/asm/loongarch.h
-> >   create mode 100644 arch/loongarch/include/asm/loongson.h
-> >   create mode 100644 arch/loongarch/include/asm/regdef.h
-> >
-> > diff --git a/arch/loongarch/include/asm/addrspace.h b/arch/loongarch/include/asm/addrspace.h
-> > new file mode 100644
-> > index 000000000000..e92541629d25
-> > --- /dev/null
-> > +++ b/arch/loongarch/include/asm/addrspace.h
-> > @@ -0,0 +1,110 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> This file obviously comes from the MIPS asm/addrspace.h, with visible
-> similarities, so you should add attribution here.
-> > + */
-> > +#ifndef _ASM_ADDRSPACE_H
-> > +#define _ASM_ADDRSPACE_H
-> > +
-> > +#include <linux/const.h>
-> > +
-> > +#include <asm/loongarch.h>
-> > +
-> > +/*
-> > + * This gives the physical RAM offset.
-> > + */
-> > +#ifndef __ASSEMBLY__
-> > +#ifndef PHYS_OFFSET
-> > +#define PHYS_OFFSET  _AC(0, UL)
-> > +#endif
-> > +extern unsigned long vm_map_base;
-> > +#endif /* __ASSEMBLY__ */
-> > +
-> > +#ifndef IO_BASE
-> > +#define IO_BASE                      CSR_DMW0_BASE
-> > +#endif
-> > +
-> > +#ifndef CAC_BASE
-> > +#define CAC_BASE             CSR_DMW1_BASE
-> Could use something less terse than the MIPS name... "CACHED_BASE"
-> sounds a lot better while only costing a few more keystrokes.
-I will use CACHE_BASE and UNCACHE_BASE.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > +#endif
-> > +
-> > +#ifndef UNCAC_BASE
-> > +#define UNCAC_BASE           CSR_DMW0_BASE
-> > +#endif
-> > +
-> > +#define DMW_PABITS   48
-> > +#define TO_PHYS_MASK ((1ULL << DMW_PABITS) - 1)
-> > +
-> > +/*
-> > + * Memory above this physical address will be considered highmem.
-> > + */
-> > +#ifndef HIGHMEM_START
-> > +#define HIGHMEM_START                (_AC(1, UL) << _AC(DMW_PABITS, UL))
-> > +#endif
-> > +
-> > +#define TO_PHYS(x)           (             ((x) & TO_PHYS_MASK))
-> > +#define TO_CAC(x)            (CAC_BASE   | ((x) & TO_PHYS_MASK))
-> > +#define TO_UNCAC(x)          (UNCAC_BASE | ((x) & TO_PHYS_MASK))
-> > +
-> > +/*
-> > + * This handles the memory map.
-> > + */
-> > +#ifndef PAGE_OFFSET
-> > +#define PAGE_OFFSET          (CAC_BASE + PHYS_OFFSET)
-> > +#endif
-> > +
-> > +#ifndef FIXADDR_TOP
-> > +#define FIXADDR_TOP          ((unsigned long)(long)(int)0xfffe0000)
-> > +#endif
-> > +
-> > +/*
-> > + *  Configure language
-> What's a "configure language"? This seems to be carried over from MIPS
-> too, better clarify a bit...
-> > + */
-> > +#ifdef __ASSEMBLY__
-> > +#define _ATYPE_
-> > +#define _ATYPE32_
-> > +#define _ATYPE64_
-> > +#define _CONST64_(x) x
-> > +#else
-> > +#define _ATYPE_              __PTRDIFF_TYPE__
-> > +#define _ATYPE32_    int
-> > +#define _ATYPE64_    __s64
-> > +#ifdef CONFIG_64BIT
-> > +#define _CONST64_(x) x ## L
-> > +#else
-> > +#define _CONST64_(x) x ## LL
-> > +#endif
-> > +#endif
-> > +
-> > +/*
-> > + *  32/64-bit LoongArch address spaces
-> > + */
-> > +#ifdef __ASSEMBLY__
-> > +#define _ACAST32_
-> > +#define _ACAST64_
-> > +#else
-> > +#define _ACAST32_            (_ATYPE_)(_ATYPE32_)    /* widen if necessary */
-> > +#define _ACAST64_            (_ATYPE64_)             /* do _not_ narrow */
-> > +#endif
-> > +
-> > +#ifdef CONFIG_32BIT
-> > +
-> > +#define UVRANGE                      0x00000000
-> > +#define KPRANGE0             0x80000000
-> > +#define KPRANGE1             0xa0000000
-> > +#define KVRANGE                      0xc0000000
-> > +
-> > +#else
-> > +
-> > +#define XUVRANGE             _CONST64_(0x0000000000000000)
-> > +#define XSPRANGE             _CONST64_(0x4000000000000000)
-> > +#define XKPRANGE             _CONST64_(0x8000000000000000)
-> > +#define XKVRANGE             _CONST64_(0xc000000000000000)
-> > +
-> > +#endif
-> > +
-> > +/*
-> > + * Returns the physical address of a KPRANGEx / XKPRANGE address
-> > + */
-> > +#define PHYSADDR(a)          ((_ACAST64_(a)) & TO_PHYS_MASK)
-> > +
-> > +#endif /* _ASM_ADDRSPACE_H */
-> > diff --git a/arch/loongarch/include/asm/cpu-features.h b/arch/loongarch/include/asm/cpu-features.h
-> > new file mode 100644
-> > index 000000000000..e29d446112e8
-> > --- /dev/null
-> > +++ b/arch/loongarch/include/asm/cpu-features.h
-> > @@ -0,0 +1,69 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> This is also awfully similar to the MIPS header with the same name. Add
-> attribution... I won't repeat myself for the other files out there, but
-> make sure all derivative work are appropriately marked!
-> > + */
-> > +#ifndef __ASM_CPU_FEATURES_H
-> > +#define __ASM_CPU_FEATURES_H
-> > +
-> > +#include <asm/cpu.h>
-> > +#include <asm/cpu-info.h>
-> > +
-> > +#define cpu_opt(opt)                 (cpu_data[0].options & (opt))
-> > +#define cpu_has(feat)                        (cpu_data[0].options & BIT_ULL(feat))
-> > +
-> > +#define cpu_has_loongarch            (cpu_has_loongarch32 | cpu_has_loongarch64)
-> > +#define cpu_has_loongarch32          (cpu_data[0].isa_level & LOONGARCH_CPU_ISA_32BIT)
-> > +#define cpu_has_loongarch64          (cpu_data[0].isa_level & LOONGARCH_CPU_ISA_64BIT)
-> > +
-> > +#define cpu_icache_line_size()               cpu_data[0].icache.linesz
-> > +#define cpu_dcache_line_size()               cpu_data[0].dcache.linesz
-> > +#define cpu_vcache_line_size()               cpu_data[0].vcache.linesz
-> > +#define cpu_scache_line_size()               cpu_data[0].scache.linesz
-> > +
-> > +#ifdef CONFIG_32BIT
-> > +# define cpu_has_64bits                      (cpu_data[0].isa_level & LOONGARCH_CPU_ISA_64BIT)
-> > +# define cpu_vabits                  31
-> > +# define cpu_pabits                  31
-> > +#endif
-> > +
-> > +#ifdef CONFIG_64BIT
-> > +# define cpu_has_64bits                      1
-> > +# define cpu_vabits                  cpu_data[0].vabits
-> > +# define cpu_pabits                  cpu_data[0].pabits
-> > +# define __NEED_ADDRBITS_PROBE
-> > +#endif
-> > +
-> > +/*
-> > + * SMP assumption: Options of CPU 0 are a superset of all processors.
-> > + * This is true for all known LoongArch systems.
-> > + */
-> > +#define cpu_has_cpucfg               cpu_opt(LOONGARCH_CPU_CPUCFG)
-> > +#define cpu_has_lam          cpu_opt(LOONGARCH_CPU_LAM)
-> > +#define cpu_has_ual          cpu_opt(LOONGARCH_CPU_UAL)
-> > +#define cpu_has_fpu          cpu_opt(LOONGARCH_CPU_FPU)
-> > +#define cpu_has_lsx          cpu_opt(LOONGARCH_CPU_LSX)
-> > +#define cpu_has_lasx         cpu_opt(LOONGARCH_CPU_LASX)
-> > +#define cpu_has_complex              cpu_opt(LOONGARCH_CPU_COMPLEX)
-> > +#define cpu_has_crypto               cpu_opt(LOONGARCH_CPU_CRYPTO)
-> > +#define cpu_has_lvz          cpu_opt(LOONGARCH_CPU_LVZ)
-> > +#define cpu_has_lbt_x86              cpu_opt(LOONGARCH_CPU_LBT_X86)
-> > +#define cpu_has_lbt_arm              cpu_opt(LOONGARCH_CPU_LBT_ARM)
-> > +#define cpu_has_lbt_mips     cpu_opt(LOONGARCH_CPU_LBT_MIPS)
-> > +#define cpu_has_lbt          (cpu_has_lbt_x86|cpu_has_lbt_arm|cpu_has_lbt_mips)
-> > +#define cpu_has_csr          cpu_opt(LOONGARCH_CPU_CSR)
-> > +#define cpu_has_tlb          cpu_opt(LOONGARCH_CPU_TLB)
-> > +#define cpu_has_watch                cpu_opt(LOONGARCH_CPU_WATCH)
-> > +#define cpu_has_vint         cpu_opt(LOONGARCH_CPU_VINT)
-> > +#define cpu_has_csripi               cpu_opt(LOONGARCH_CPU_CSRIPI)
-> > +#define cpu_has_extioi               cpu_opt(LOONGARCH_CPU_EXTIOI)
-> > +#define cpu_has_prefetch     cpu_opt(LOONGARCH_CPU_PREFETCH)
-> > +#define cpu_has_pmp          cpu_opt(LOONGARCH_CPU_PMP)
-> > +#define cpu_has_perf         cpu_opt(LOONGARCH_CPU_PMP)
-> > +#define cpu_has_scalefreq    cpu_opt(LOONGARCH_CPU_SCALEFREQ)
-> > +#define cpu_has_flatmode     cpu_opt(LOONGARCH_CPU_FLATMODE)
-> > +#define cpu_has_eiodecode    cpu_opt(LOONGARCH_CPU_EIODECODE)
-> > +#define cpu_has_guestid              cpu_opt(LOONGARCH_CPU_GUESTID)
-> > +#define cpu_has_hypervisor   cpu_opt(LOONGARCH_CPU_HYPERVISOR)
-> These are all dynamic, according to these definitions, unlike the MIPS
-> asm/cpu-features.h where features can be statically overridden by
-> individual mach. So we can drop most of these and just write
-> cpu_opt(XXX) inline everywhere?
-> > +
-> > +
-> > +#endif /* __ASM_CPU_FEATURES_H */
-> > diff --git a/arch/loongarch/include/asm/cpu-info.h b/arch/loongarch/include/asm/cpu-info.h
-> > new file mode 100644
-> > index 000000000000..8c173ee5650b
-> > --- /dev/null
-> > +++ b/arch/loongarch/include/asm/cpu-info.h
-> > @@ -0,0 +1,136 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> > + */
-> > +#ifndef __ASM_CPU_INFO_H
-> > +#define __ASM_CPU_INFO_H
-> > +
-> > +#include <linux/cache.h>
-> > +#include <linux/types.h>
-> > +
-> > +#include <asm/loongarch.h>
-> > +
-> > +/*
-> > + * Descriptor for a cache
-> > + */
-> > +struct cache_desc {
-> > +     unsigned int waysize;   /* Bytes per way */
-> > +     unsigned short sets;    /* Number of lines per set */
-> > +     unsigned char ways;     /* Number of ways */
-> > +     unsigned char linesz;   /* Size of line in bytes */
-> > +     unsigned char waybit;   /* Bits to select in a cache set */
-> > +     unsigned char flags;    /* Flags describing cache properties */
-> > +};
-> > +
-> > +struct cpuinfo_loongarch {
-> > +     u64                     asid_cache;
-> > +     unsigned long           asid_mask;
-> > +
-> > +     /*
-> > +      * Capability and feature descriptor structure for LoongArch CPU
-> > +      */
-> > +     unsigned long           ases;
-> Please don't use MIPS acronyms, especially NOT this one. ASE means
-> Application-Specific Extension, but LoongArch has none
-> "application-specific" adaptations at the moment...
-OK, ases should be removed.
+All warnings (new ones prefixed by >>):
 
-> > +     unsigned long long      options;
-> > +     unsigned int            processor_id;
-> > +     unsigned int            fpu_vers;
-> > +     unsigned int            fpu_csr0;
-> > +     unsigned int            fpu_mask;
-> > +     unsigned int            cputype;
-> > +     int                     isa_level;
-> > +     int                     tlbsize;
-> > +     int                     tlbsizemtlb;
-> > +     int                     tlbsizestlbsets;
-> > +     int                     tlbsizestlbways;
-> > +     struct cache_desc       icache; /* Primary I-cache */
-> > +     struct cache_desc       dcache; /* Primary D or combined I/D cache */
-> > +     struct cache_desc       vcache; /* Victim cache, between pcache and scache */
-> > +     struct cache_desc       scache; /* Secondary cache */
-> > +     struct cache_desc       tcache; /* Tertiary/split secondary cache */
-> > +     int                     package;/* physical package number */
-> > +     unsigned int            globalnumber;
-> > +     int                     vabits; /* Virtual Address size in bits */
-> > +     int                     pabits; /* Physical Address size in bits */
-> > +     void                    *data;  /* Additional data */
-> > +     unsigned int            watch_dreg_count;   /* Number data breakpoints */
-> > +     unsigned int            watch_ireg_count;   /* Number instruction breakpoints */
-> > +     unsigned int            watch_reg_use_cnt; /* min(NUM_WATCH_REGS, watch_dreg_count + watch_ireg_count), Usable by ptrace */
-> > +     unsigned int            kscratch_mask; /* Usable KScratch mask. */
-> > +} __aligned(SMP_CACHE_BYTES);
-> > +
-> > +extern struct cpuinfo_loongarch cpu_data[];
-> > +#define boot_cpu_data cpu_data[0]
-> > +#define current_cpu_data cpu_data[smp_processor_id()]
-> > +#define raw_current_cpu_data cpu_data[raw_smp_processor_id()]
-> > +
-> > +extern void cpu_probe(void);
-> > +
-> > +extern const char *__cpu_family[];
-> > +extern const char *__cpu_full_name[];
-> > +#define cpu_family_string()  __cpu_family[raw_smp_processor_id()]
-> > +#define cpu_full_name_string()       __cpu_full_name[raw_smp_processor_id()]
-> > +
-> > +struct seq_file;
-> > +struct notifier_block;
-> > +
-> > +extern int register_proc_cpuinfo_notifier(struct notifier_block *nb);
-> > +extern int proc_cpuinfo_notifier_call_chain(unsigned long val, void *v);
-> > +
-> > +#define proc_cpuinfo_notifier(fn, pri)                                       \
-> > +({                                                                   \
-> > +     static struct notifier_block fn##_nb = {                        \
-> > +             .notifier_call = fn,                                    \
-> > +             .priority = pri                                         \
-> > +     };                                                              \
-> > +                                                                     \
-> > +     register_proc_cpuinfo_notifier(&fn##_nb);                       \
-> > +})
-> > +
-> > +struct proc_cpuinfo_notifier_args {
-> > +     struct seq_file *m;
-> > +     unsigned long n;
-> > +};
-> > +
-> > +static inline unsigned int cpu_cluster(struct cpuinfo_loongarch *cpuinfo)
-> > +{
-> > +     return (cpuinfo->globalnumber & LOONGARCH_GLOBALNUMBER_CLUSTER) >>
-> > +             LOONGARCH_GLOBALNUMBER_CLUSTER_SHF;
-> > +}
-> > +
-> > +static inline unsigned int cpu_core(struct cpuinfo_loongarch *cpuinfo)
-> > +{
-> > +     return (cpuinfo->globalnumber & LOONGARCH_GLOBALNUMBER_CORE) >>
-> > +             LOONGARCH_GLOBALNUMBER_CORE_SHF;
-> > +}
-> > +
-> > +extern void cpu_set_cluster(struct cpuinfo_loongarch *cpuinfo, unsigned int cluster);
-> > +extern void cpu_set_core(struct cpuinfo_loongarch *cpuinfo, unsigned int core);
-> > +
-> > +static inline bool cpus_are_siblings(int cpua, int cpub)
-> > +{
-> > +     struct cpuinfo_loongarch *infoa = &cpu_data[cpua];
-> > +     struct cpuinfo_loongarch *infob = &cpu_data[cpub];
-> > +     unsigned int gnuma, gnumb;
-> > +
-> > +     if (infoa->package != infob->package)
-> > +             return false;
-> > +
-> > +     gnuma = infoa->globalnumber & ~LOONGARCH_GLOBALNUMBER_VP;
-> > +     gnumb = infob->globalnumber & ~LOONGARCH_GLOBALNUMBER_VP;
-> > +     if (gnuma != gnumb)
-> > +             return false;
-> > +
-> > +     return true;
-> > +}
->
-> Please don't use the "global number" expression anywhere in the port;
-> come up with another suitable name.
->
-> I'm initially confused by all the "GLOBALNUMBER" and "VP" things, only
-> knowing they might be related to something MIPS-specific, because the
-> "global numbers" of powerpc and microblaze obviously stand for PCI
-> domain number, as explained by their comments. After some further
-> digging it became obvious, that GlobalNumber is actually a MIPSr6+
-> configuration register, introduced by the MT ASE and conveying
-> information regarding Virtual Processors. Of course LoongArch doesn't
-> have anything similar to that...
-Globalnumber can encode cluster number, core number and threading
-number in a single word. Since we have no SMT now, I will remove it.
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn31/dcn31_smu.c:98:5: warning: no previous prototype for function 'dcn31_smu_send_msg_with_param' [-Wmissing-prototypes]
+   int dcn31_smu_send_msg_with_param(
+       ^
+   drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn31/dcn31_smu.c:98:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int dcn31_smu_send_msg_with_param(
+   ^
+   static 
+   1 warning generated.
+--
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn31/dcn31_clk_mgr.c:54:5: warning: no previous prototype for function 'dcn31_get_active_display_cnt_wa' [-Wmissing-prototypes]
+   int dcn31_get_active_display_cnt_wa(
+       ^
+   drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn31/dcn31_clk_mgr.c:54:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int dcn31_get_active_display_cnt_wa(
+   ^
+   static 
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn31/dcn31_clk_mgr.c:491:6: warning: no previous prototype for function 'dcn31_clk_mgr_helper_populate_bw_params' [-Wmissing-prototypes]
+   void dcn31_clk_mgr_helper_populate_bw_params(
+        ^
+   drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn31/dcn31_clk_mgr.c:491:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void dcn31_clk_mgr_helper_populate_bw_params(
+   ^
+   static 
+   2 warnings generated.
+--
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn31/irq_service_dcn31.c:39:20: warning: no previous prototype for function 'to_dal_irq_source_dcn31' [-Wmissing-prototypes]
+   enum dc_irq_source to_dal_irq_source_dcn31(
+                      ^
+   drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn31/irq_service_dcn31.c:39:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   enum dc_irq_source to_dal_irq_source_dcn31(
+   ^
+   static 
+   1 warning generated.
+--
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c:3957:6: warning: stack frame size (2424) exceeds limit (2048) in 'dml31_ModeSupportAndSystemConfigurationFull' [-Wframe-larger-than]
+   void dml31_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
+        ^
+   1 warning generated.
+--
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dce/dce_hwseq.h:642:28: note: expanded from macro 'HWS_SF'
+           .field_name = blk_name ## reg_name ## __ ## field_name ## post_fix
+                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:21:1: note: expanded from here
+   DOMAIN2_PG_STATUS__DOMAIN_PGFSM_PWR_STATUS_MASK
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../include/asic_reg/dcn/dcn_3_1_2_sh_mask.h:5635:111: note: expanded from macro 'DOMAIN2_PG_STATUS__DOMAIN_PGFSM_PWR_STATUS_MASK'
+   #define DOMAIN2_PG_STATUS__DOMAIN_PGFSM_PWR_STATUS_MASK                                                       0xC0000000L
+                                                                                                                 ^~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_resource.c:838:3: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+                   HWSEQ_DCN31_MASK_SH_LIST(_MASK)
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_resource.c:822:2: note: expanded from macro 'HWSEQ_DCN31_MASK_SH_LIST'
+           HWS_SF(, DOMAIN16_PG_STATUS, DOMAIN_PGFSM_PWR_STATUS, mask_sh), \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dce/dce_hwseq.h:642:28: note: expanded from macro 'HWS_SF'
+           .field_name = blk_name ## reg_name ## __ ## field_name ## post_fix
+                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:27:1: note: expanded from here
+   DOMAIN16_PG_STATUS__DOMAIN_PGFSM_PWR_STATUS_MASK
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../include/asic_reg/dcn/dcn_3_1_2_sh_mask.h:5655:111: note: expanded from macro 'DOMAIN16_PG_STATUS__DOMAIN_PGFSM_PWR_STATUS_MASK'
+   #define DOMAIN16_PG_STATUS__DOMAIN_PGFSM_PWR_STATUS_MASK                                                      0xC0000000L
+                                                                                                                 ^~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_resource.c:838:3: note: previous initialization is here
+                   HWSEQ_DCN31_MASK_SH_LIST(_MASK)
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_resource.c:821:2: note: expanded from macro 'HWSEQ_DCN31_MASK_SH_LIST'
+           HWS_SF(, DOMAIN3_PG_STATUS, DOMAIN_PGFSM_PWR_STATUS, mask_sh), \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dce/dce_hwseq.h:642:28: note: expanded from macro 'HWS_SF'
+           .field_name = blk_name ## reg_name ## __ ## field_name ## post_fix
+                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:24:1: note: expanded from here
+   DOMAIN3_PG_STATUS__DOMAIN_PGFSM_PWR_STATUS_MASK
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../include/asic_reg/dcn/dcn_3_1_2_sh_mask.h:5645:111: note: expanded from macro 'DOMAIN3_PG_STATUS__DOMAIN_PGFSM_PWR_STATUS_MASK'
+   #define DOMAIN3_PG_STATUS__DOMAIN_PGFSM_PWR_STATUS_MASK                                                       0xC0000000L
+                                                                                                                 ^~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_resource.c:838:3: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+                   HWSEQ_DCN31_MASK_SH_LIST(_MASK)
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_resource.c:823:2: note: expanded from macro 'HWSEQ_DCN31_MASK_SH_LIST'
+           HWS_SF(, DOMAIN17_PG_STATUS, DOMAIN_PGFSM_PWR_STATUS, mask_sh), \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dce/dce_hwseq.h:642:28: note: expanded from macro 'HWS_SF'
+           .field_name = blk_name ## reg_name ## __ ## field_name ## post_fix
+                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:30:1: note: expanded from here
+   DOMAIN17_PG_STATUS__DOMAIN_PGFSM_PWR_STATUS_MASK
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../include/asic_reg/dcn/dcn_3_1_2_sh_mask.h:5665:111: note: expanded from macro 'DOMAIN17_PG_STATUS__DOMAIN_PGFSM_PWR_STATUS_MASK'
+   #define DOMAIN17_PG_STATUS__DOMAIN_PGFSM_PWR_STATUS_MASK                                                      0xC0000000L
+                                                                                                                 ^~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_resource.c:838:3: note: previous initialization is here
+                   HWSEQ_DCN31_MASK_SH_LIST(_MASK)
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_resource.c:822:2: note: expanded from macro 'HWSEQ_DCN31_MASK_SH_LIST'
+           HWS_SF(, DOMAIN16_PG_STATUS, DOMAIN_PGFSM_PWR_STATUS, mask_sh), \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dce/dce_hwseq.h:642:28: note: expanded from macro 'HWS_SF'
+           .field_name = blk_name ## reg_name ## __ ## field_name ## post_fix
+                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:27:1: note: expanded from here
+   DOMAIN16_PG_STATUS__DOMAIN_PGFSM_PWR_STATUS_MASK
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../include/asic_reg/dcn/dcn_3_1_2_sh_mask.h:5655:111: note: expanded from macro 'DOMAIN16_PG_STATUS__DOMAIN_PGFSM_PWR_STATUS_MASK'
+   #define DOMAIN16_PG_STATUS__DOMAIN_PGFSM_PWR_STATUS_MASK                                                      0xC0000000L
+                                                                                                                 ^~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_resource.c:838:3: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+                   HWSEQ_DCN31_MASK_SH_LIST(_MASK)
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_resource.c:824:2: note: expanded from macro 'HWSEQ_DCN31_MASK_SH_LIST'
+           HWS_SF(, DOMAIN18_PG_STATUS, DOMAIN_PGFSM_PWR_STATUS, mask_sh), \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dce/dce_hwseq.h:642:28: note: expanded from macro 'HWS_SF'
+           .field_name = blk_name ## reg_name ## __ ## field_name ## post_fix
+                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:33:1: note: expanded from here
+   DOMAIN18_PG_STATUS__DOMAIN_PGFSM_PWR_STATUS_MASK
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../include/asic_reg/dcn/dcn_3_1_2_sh_mask.h:5675:111: note: expanded from macro 'DOMAIN18_PG_STATUS__DOMAIN_PGFSM_PWR_STATUS_MASK'
+   #define DOMAIN18_PG_STATUS__DOMAIN_PGFSM_PWR_STATUS_MASK                                                      0xC0000000L
+                                                                                                                 ^~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_resource.c:838:3: note: previous initialization is here
+                   HWSEQ_DCN31_MASK_SH_LIST(_MASK)
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_resource.c:823:2: note: expanded from macro 'HWSEQ_DCN31_MASK_SH_LIST'
+           HWS_SF(, DOMAIN17_PG_STATUS, DOMAIN_PGFSM_PWR_STATUS, mask_sh), \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dce/dce_hwseq.h:642:28: note: expanded from macro 'HWS_SF'
+           .field_name = blk_name ## reg_name ## __ ## field_name ## post_fix
+                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:30:1: note: expanded from here
+   DOMAIN17_PG_STATUS__DOMAIN_PGFSM_PWR_STATUS_MASK
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../include/asic_reg/dcn/dcn_3_1_2_sh_mask.h:5665:111: note: expanded from macro 'DOMAIN17_PG_STATUS__DOMAIN_PGFSM_PWR_STATUS_MASK'
+   #define DOMAIN17_PG_STATUS__DOMAIN_PGFSM_PWR_STATUS_MASK                                                      0xC0000000L
+                                                                                                                 ^~~~~~~~~~~
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_resource.c:1197:20: warning: no previous prototype for function 'dcn31_panel_cntl_create' [-Wmissing-prototypes]
+   struct panel_cntl *dcn31_panel_cntl_create(const struct panel_cntl_init_data *init_data)
+                      ^
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_resource.c:1197:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct panel_cntl *dcn31_panel_cntl_create(const struct panel_cntl_init_data *init_data)
+   ^
+   static 
+   102 warnings generated.
+--
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_init.c:141:6: warning: no previous prototype for function 'dcn31_hw_sequencer_construct' [-Wmissing-prototypes]
+   void dcn31_hw_sequencer_construct(struct dc *dc)
+        ^
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_init.c:141:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void dcn31_hw_sequencer_construct(struct dc *dc)
+   ^
+   static 
+   1 warning generated.
+--
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_dccg.c:112:6: warning: no previous prototype for function 'dccg31_set_dtbclk_dto' [-Wmissing-prototypes]
+   void dccg31_set_dtbclk_dto(
+        ^
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_dccg.c:112:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void dccg31_set_dtbclk_dto(
+   ^
+   static 
+   1 warning generated.
+--
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_dio_link_encoder.c:139:6: warning: no previous prototype for function 'enc31_hw_init' [-Wmissing-prototypes]
+   void enc31_hw_init(struct link_encoder *enc)
+        ^
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_dio_link_encoder.c:139:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void enc31_hw_init(struct link_encoder *enc)
+   ^
+   static 
+   1 warning generated.
+--
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_panel_cntl.c:68:10: warning: no previous prototype for function 'dcn31_panel_cntl_hw_init' [-Wmissing-prototypes]
+   uint32_t dcn31_panel_cntl_hw_init(struct panel_cntl *panel_cntl)
+            ^
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_panel_cntl.c:68:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   uint32_t dcn31_panel_cntl_hw_init(struct panel_cntl *panel_cntl)
+   ^
+   static 
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_panel_cntl.c:99:6: warning: no previous prototype for function 'dcn31_panel_cntl_destroy' [-Wmissing-prototypes]
+   void dcn31_panel_cntl_destroy(struct panel_cntl **panel_cntl)
+        ^
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_panel_cntl.c:99:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void dcn31_panel_cntl_destroy(struct panel_cntl **panel_cntl)
+   ^
+   static 
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_panel_cntl.c:107:6: warning: no previous prototype for function 'dcn31_is_panel_backlight_on' [-Wmissing-prototypes]
+   bool dcn31_is_panel_backlight_on(struct panel_cntl *panel_cntl)
+        ^
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_panel_cntl.c:107:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool dcn31_is_panel_backlight_on(struct panel_cntl *panel_cntl)
+   ^
+   static 
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_panel_cntl.c:117:6: warning: no previous prototype for function 'dcn31_is_panel_powered_on' [-Wmissing-prototypes]
+   bool dcn31_is_panel_powered_on(struct panel_cntl *panel_cntl)
+        ^
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_panel_cntl.c:117:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool dcn31_is_panel_powered_on(struct panel_cntl *panel_cntl)
+   ^
+   static 
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_panel_cntl.c:127:6: warning: no previous prototype for function 'dcn31_store_backlight_level' [-Wmissing-prototypes]
+   void dcn31_store_backlight_level(struct panel_cntl *panel_cntl)
+        ^
+   drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_panel_cntl.c:127:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void dcn31_store_backlight_level(struct panel_cntl *panel_cntl)
+   ^
+   static 
+   5 warnings generated.
 
->
-> > +
-> > +static inline unsigned long cpu_asid_mask(struct cpuinfo_loongarch *cpuinfo)
-> > +{
-> > +     return cpuinfo->asid_mask;
-> > +}
-> > +
-> > +static inline void set_cpu_asid_mask(struct cpuinfo_loongarch *cpuinfo,
-> > +                                  unsigned long asid_mask)
-> > +{
-> > +     cpuinfo->asid_mask = asid_mask;
-> > +}
-> Why keep the accessors when you can just inline the expression at call
-> site? MIPS does this because they have to differentiate based on
-> CONFIG_MIPS_ASID_BITS_VARIABLE, but LoongArch doesn't behave the same,
-> so the 2 functions here should be removed.
-> > +
-> > +#endif /* __ASM_CPU_INFO_H */
-> > diff --git a/arch/loongarch/include/asm/cpu.h b/arch/loongarch/include/asm/cpu.h
-> > new file mode 100644
-> > index 000000000000..62e9cb6520a9
-> > --- /dev/null
-> > +++ b/arch/loongarch/include/asm/cpu.h
-> > @@ -0,0 +1,127 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * cpu.h: Values of the PRId register used to match up
-> > + *     various LoongArch cpu types.
->
-> "PRID"; "CPU".
->
-> Similarly please change all other "PRId" to "PRID" to match the
-> reference manual...
->
-> > + *
-> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> > + */
-> > +#ifndef _ASM_CPU_H
-> > +#define _ASM_CPU_H
-> > +
-> > +/*
-> > + * As of the LoongArch specs from Loongson Technology, the PRId register
-> > + * (CPUCFG.00) is defined in this (backwards compatible) way:
-> > + *
-> > + * +----------------+----------------+----------------+----------------+
-> > + * | Reserved       | Company ID         | Processor ID   | Revision       |
-> > + * +----------------+----------------+----------------+----------------+
-> > + *  31                24 23            16 15             8 7              0
->
-> I can't find the relevant spec... at least not in the Loongson
-> 3A5000/3B5000 Processor Reference Manual nor the LoongArch reference
-> manual. The former only gives the default value of 0x14c010 while the
-> latter only mentions the field's name and meaning.
->
-> Also, "as of the specs" is broken; you should say "As described in the ...".
->
-> > + *
-> > + */
-> > +
-> > +/*
-> > + * Assigned Company values for bits 23:16 of the PRId register.
-> > + */
-> > +
-> > +#define PRID_COMP_MASK               0xff0000
-> > +
-> > +#define PRID_COMP_LOONGSON   0x140000
-> > +
-> > +/*
-> > + * Assigned Processor ID (implementation) values for bits 15:8 of the PRId
-> > + * register.  In order to detect a certain CPU type exactly eventually
-> > + * additional registers may need to be examined.
-> > + */
-> > +
-> > +#define PRID_IMP_MASK                0xff00
-> > +
-> > +#define PRID_IMP_LOONGSON_32 0x4200  /* Loongson 32bit */
-> > +#define PRID_IMP_LOONGSON_64R        0x6100  /* Reduced Loongson 64bit */
-> > +#define PRID_IMP_LOONGSON_64C        0x6300  /* Classic Loongson 64bit */
-> Do we even have "classic" LoongArch cores? This scheme surely is carried
-> over from the MIPS era, but I don't think any of the "classic"
-> Loongson/MIPS cores is getting a LoongArch refresh...
-You should consider 2K500 and so on.
 
-> > +#define PRID_IMP_LOONGSON_64G        0xc000  /* Generic Loongson 64bit */
-> > +#define PRID_IMP_UNKNOWN     0xff00
-> > +
-> > +/*
-> > + * Particular Revision values for bits 7:0 of the PRId register.
-> > + */
-> > +
-> > +#define PRID_REV_MASK                0x00ff
-> > +
-> > +#if !defined(__ASSEMBLY__)
-> > +
-> > +enum cpu_type_enum {
-> > +     CPU_UNKNOWN,
-> > +     CPU_LOONGSON32,
-> > +     CPU_LOONGSON64,
-> > +     CPU_LAST
-> > +};
-> > +
-> > +#endif /* !__ASSEMBLY */
-> > +
-> > +/*
-> > + * ISA Level encodings
-> > + *
-> > + */
-> > +
-> > +#define LOONGARCH_CPU_ISA_LA32R 0x00000001
-> > +#define LOONGARCH_CPU_ISA_LA32S 0x00000002
-> > +#define LOONGARCH_CPU_ISA_LA64  0x00000004
-> > +
-> > +#define LOONGARCH_CPU_ISA_32BIT (LOONGARCH_CPU_ISA_LA32R | LOONGARCH_CPU_ISA_LA32S)
-> > +#define LOONGARCH_CPU_ISA_64BIT LOONGARCH_CPU_ISA_LA64
-> > +
-> > +/*
-> > + * CPU Option encodings
-> > + */
-> > +#define CPU_FEATURE_CPUCFG           0       /* CPU has CPUCFG */
-> > +#define CPU_FEATURE_LAM                      1       /* CPU has Atomic instructions */
-> > +#define CPU_FEATURE_UAL                      2       /* CPU has Unaligned Access support */
-> > +#define CPU_FEATURE_FPU                      3       /* CPU has FPU */
-> > +#define CPU_FEATURE_LSX                      4       /* CPU has 128bit SIMD instructions */
-> > +#define CPU_FEATURE_LASX             5       /* CPU has 256bit SIMD instructions */
-> > +#define CPU_FEATURE_COMPLEX          6       /* CPU has Complex instructions */
-> > +#define CPU_FEATURE_CRYPTO           7       /* CPU has Crypto instructions */
-> > +#define CPU_FEATURE_LVZ                      8       /* CPU has Virtualization extension */
-> > +#define CPU_FEATURE_LBT_X86          9       /* CPU has X86 Binary Translation */
-> > +#define CPU_FEATURE_LBT_ARM          10      /* CPU has ARM Binary Translation */
-> > +#define CPU_FEATURE_LBT_MIPS         11      /* CPU has MIPS Binary Translation */
-> > +#define CPU_FEATURE_TLB                      12      /* CPU has TLB */
-> > +#define CPU_FEATURE_CSR                      13      /* CPU has CSR feature */
-> > +#define CPU_FEATURE_WATCH            14      /* CPU has watchpoint registers */
-> > +#define CPU_FEATURE_VINT             15      /* CPU has vectored interrupts */
-> > +#define CPU_FEATURE_CSRIPI           16      /* CPU has CSR-IPI */
-> > +#define CPU_FEATURE_EXTIOI           17      /* CPU has EXT-IOI */
-> > +#define CPU_FEATURE_PREFETCH         18      /* CPU has prefetch instructions */
-> > +#define CPU_FEATURE_PMP                      19      /* CPU has perfermance counter */
-> > +#define CPU_FEATURE_SCALEFREQ                20      /* CPU support scale cpufreq */
-> > +#define CPU_FEATURE_FLATMODE         21      /* CPU has flatmode */
-> > +#define CPU_FEATURE_EIODECODE                22      /* CPU has extioi int pin decode mode */
-> "EXTIOI interrupt pin decoding mode"?
-> > +#define CPU_FEATURE_GUESTID          23      /* CPU has GuestID feature */
-> > +#define CPU_FEATURE_HYPERVISOR               24      /* CPU has hypervisor (run in VM) */
-> "CPU is virtualized (under a hypervisor)"?
-> > +
-> > +#define LOONGARCH_CPU_CPUCFG         BIT_ULL(CPU_FEATURE_CPUCFG)
-> > +#define LOONGARCH_CPU_LAM            BIT_ULL(CPU_FEATURE_LAM)
-> > +#define LOONGARCH_CPU_UAL            BIT_ULL(CPU_FEATURE_UAL)
-> > +#define LOONGARCH_CPU_FPU            BIT_ULL(CPU_FEATURE_FPU)
-> > +#define LOONGARCH_CPU_LSX            BIT_ULL(CPU_FEATURE_LSX)
-> > +#define LOONGARCH_CPU_LASX           BIT_ULL(CPU_FEATURE_LASX)
-> > +#define LOONGARCH_CPU_COMPLEX                BIT_ULL(CPU_FEATURE_COMPLEX)
-> > +#define LOONGARCH_CPU_CRYPTO         BIT_ULL(CPU_FEATURE_CRYPTO)
-> > +#define LOONGARCH_CPU_LVZ            BIT_ULL(CPU_FEATURE_LVZ)
-> > +#define LOONGARCH_CPU_LBT_X86                BIT_ULL(CPU_FEATURE_LBT_X86)
-> > +#define LOONGARCH_CPU_LBT_ARM                BIT_ULL(CPU_FEATURE_LBT_ARM)
-> > +#define LOONGARCH_CPU_LBT_MIPS               BIT_ULL(CPU_FEATURE_LBT_MIPS)
-> > +#define LOONGARCH_CPU_TLB            BIT_ULL(CPU_FEATURE_TLB)
-> > +#define LOONGARCH_CPU_CSR            BIT_ULL(CPU_FEATURE_CSR)
-> > +#define LOONGARCH_CPU_WATCH          BIT_ULL(CPU_FEATURE_WATCH)
-> > +#define LOONGARCH_CPU_VINT           BIT_ULL(CPU_FEATURE_VINT)
-> > +#define LOONGARCH_CPU_CSRIPI         BIT_ULL(CPU_FEATURE_CSRIPI)
-> > +#define LOONGARCH_CPU_EXTIOI         BIT_ULL(CPU_FEATURE_EXTIOI)
-> > +#define LOONGARCH_CPU_PREFETCH               BIT_ULL(CPU_FEATURE_PREFETCH)
-> > +#define LOONGARCH_CPU_PMP            BIT_ULL(CPU_FEATURE_PMP)
-> > +#define LOONGARCH_CPU_SCALEFREQ              BIT_ULL(CPU_FEATURE_SCALEFREQ)
-> > +#define LOONGARCH_CPU_FLATMODE               BIT_ULL(CPU_FEATURE_FLATMODE)
-> > +#define LOONGARCH_CPU_EIODECODE              BIT_ULL(CPU_FEATURE_EIODECODE)
-> > +#define LOONGARCH_CPU_GUESTID                BIT_ULL(CPU_FEATURE_GUESTID)
-> > +#define LOONGARCH_CPU_HYPERVISOR     BIT_ULL(CPU_FEATURE_HYPERVISOR)
-> > +#endif /* _ASM_CPU_H */
-> > diff --git a/arch/loongarch/include/asm/fpregdef.h b/arch/loongarch/include/asm/fpregdef.h
-> > new file mode 100644
-> > index 000000000000..151dc9aee1c6
-> > --- /dev/null
-> > +++ b/arch/loongarch/include/asm/fpregdef.h
-> > @@ -0,0 +1,49 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * Definitions for the FPU register names
-> > + *
-> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> > + */
-> > +#ifndef _ASM_FPREGDEF_H
-> > +#define _ASM_FPREGDEF_H
-> > +
-> > +#define fv0  $f0     /* return value */
-> > +#define fv1  $f2
-> > +#define fa0  $f12    /* argument registers */
-> > +#define fa1  $f13
-> > +#define fa2  $f14
-> > +#define fa3  $f15
-> > +#define fa4  $f16
-> > +#define fa5  $f17
-> > +#define fa6  $f18
-> > +#define fa7  $f19
-> > +#define ft0  $f4     /* caller saved */
-> > +#define ft1  $f5
-> > +#define ft2  $f6
-> > +#define ft3  $f7
-> > +#define ft4  $f8
-> > +#define ft5  $f9
-> > +#define ft6  $f10
-> > +#define ft7  $f11
-> > +#define ft8  $f20
-> > +#define ft9  $f21
-> > +#define ft10 $f22
-> > +#define ft11 $f23
-> > +#define ft12 $f1
-> > +#define ft13 $f3
-> > +#define fs0  $f24    /* callee saved */
-> > +#define fs1  $f25
-> > +#define fs2  $f26
-> > +#define fs3  $f27
-> > +#define fs4  $f28
-> > +#define fs5  $f29
-> > +#define fs6  $f30
-> > +#define fs7  $f31
-> This doesn't agree with the current ABI spec, and may need further
-> checking. There's no way $f1 could be $ft12 and return values not
-> sharing storage with the first two arguments.
-> > +
-> > +#define fcsr0        $r0
-> > +#define fcsr1        $r1
-> > +#define fcsr2        $r2
-> > +#define fcsr3        $r3
-> > +#define vcsr16       $r16
-> > +
-> > +#endif /* _ASM_FPREGDEF_H */
-> > diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/include/asm/loongarch.h
-> > new file mode 100644
-> > index 000000000000..083e6726d4cb
-> > --- /dev/null
-> > +++ b/arch/loongarch/include/asm/loongarch.h
-> > @@ -0,0 +1,1528 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> > + */
-> > +#ifndef _ASM_LOONGARCH_H
-> > +#define _ASM_LOONGARCH_H
-> > +
-> > +#include <linux/bits.h>
-> > +#include <linux/linkage.h>
-> > +#include <linux/types.h>
-> > +
-> > +#ifndef __ASSEMBLY__
-> > +#include <larchintrin.h>
-> > +
-> > +/*
-> > + * parse_r var, r - Helper assembler macro for parsing register names.
-> > + *
-> > + * This converts the register name in $n form provided in \r to the
-> > + * corresponding register number, which is assigned to the variable \var. It is
-> > + * needed to allow explicit encoding of instructions in inline assembly where
-> > + * registers are chosen by the compiler in $n form, allowing us to avoid using
-> > + * fixed register numbers.
-> > + *
-> > + * It also allows newer instructions (not implemented by the assembler) to be
-> > + * transparently implemented using assembler macros, instead of needing separate
-> > + * cases depending on toolchain support.
-> > + *
-> > + * Simple usage example:
-> > + * __asm__ __volatile__("parse_r addr, %0\n\t"
-> > + *                   "#invtlb op, 0, %0\n\t"
-> > + *                   ".word ((0x6498000) | (addr << 10) | (0 << 5) | op)"
-> > + *                   : "=r" (status);
-> > + */
-> > +
-> > +/* Match an individual register number and assign to \var */
-> > +#define _IFC_REG(n)                          \
-> > +     ".ifc   \\r, $r" #n "\n\t"              \
-> > +     "\\var  = " #n "\n\t"                   \
-> > +     ".endif\n\t"
-> > +
-> > +__asm__(".macro      parse_r var r\n\t"
-> > +     "\\var  = -1\n\t"
-> > +     _IFC_REG(0)  _IFC_REG(1)  _IFC_REG(2)  _IFC_REG(3)
-> > +     _IFC_REG(4)  _IFC_REG(5)  _IFC_REG(6)  _IFC_REG(7)
-> > +     _IFC_REG(8)  _IFC_REG(9)  _IFC_REG(10) _IFC_REG(11)
-> > +     _IFC_REG(12) _IFC_REG(13) _IFC_REG(14) _IFC_REG(15)
-> > +     _IFC_REG(16) _IFC_REG(17) _IFC_REG(18) _IFC_REG(19)
-> > +     _IFC_REG(20) _IFC_REG(21) _IFC_REG(22) _IFC_REG(23)
-> > +     _IFC_REG(24) _IFC_REG(25) _IFC_REG(26) _IFC_REG(27)
-> > +     _IFC_REG(28) _IFC_REG(29) _IFC_REG(30) _IFC_REG(31)
-> > +     ".iflt  \\var\n\t"
-> > +     ".error \"Unable to parse register name \\r\"\n\t"
-> > +     ".endif\n\t"
-> > +     ".endm");
-> > +
-> > +#undef _IFC_REG
-> > +
-> > +/* CPUCFG */
-> > +static inline u32 read_cpucfg(u32 reg)
-> > +{
-> > +     return __cpucfg(reg);
-> > +}
-> > +
-> > +#endif /* !__ASSEMBLY__ */
-> > +
-> > +#ifdef __ASSEMBLY__
-> > +
-> > +/* LoongArch Registers */
-> > +#define REG_RA       0x1
-> > +#define REG_TP       0x2
-> > +#define REG_SP       0x3
-> > +#define REG_A0       0x4
-> > +#define REG_A1       0x5
-> > +#define REG_A2       0x6
-> > +#define REG_A3       0x7
-> > +#define REG_A4       0x8
-> > +#define REG_A5       0x9
-> > +#define REG_A6       0xa
-> > +#define REG_A7       0xb
-> > +#define REG_V0       REG_A0
-> > +#define REG_V1       REG_A1
-> Remove V* aliases per spec.
-> > +#define REG_T0       0xc
-> > +#define REG_T1       0xd
-> > +#define REG_T2       0xe
-> > +#define REG_T3       0xf
-> > +#define REG_T4       0x10
-> > +#define REG_T5       0x11
-> > +#define REG_T6       0x12
-> > +#define REG_T7       0x13
-> > +#define REG_T8       0x14
-> > +#define REG_U0       0x15
-> And document this somewhere.
-OK, thanks.
+vim +/dml31_ModeSupportAndSystemConfigurationFull +3957 drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c
 
-> > +#define REG_FP       0x16
-> > +#define REG_S0       0x17
-> > +#define REG_S1       0x18
-> > +#define REG_S2       0x19
-> > +#define REG_S3       0x1a
-> > +#define REG_S4       0x1b
-> > +#define REG_S5       0x1c
-> > +#define REG_S6       0x1d
-> > +#define REG_S7       0x1e
-> > +#define REG_S8       0x1f
-> > +
-> > +#endif /* __ASSEMBLY__ */
-> > +
-> > +/* Bit Domains for CPUCFG registers */
-> "bit fields"?
-OK, thanks.
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3956  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19 @3957  void dml31_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3958  {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3959  	struct vba_vars_st *v = &mode_lib->vba;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3960  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3961  	int i, j;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3962  	unsigned int k, m;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3963  	int ReorderingBytes;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3964  	int MinPrefetchMode = 0, MaxPrefetchMode = 2;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3965  	bool NoChroma = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3966  	bool EnoughWritebackUnits = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3967  	bool P2IWith420 = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3968  	bool DSCOnlyIfNecessaryWithBPP = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3969  	bool DSC422NativeNotSupported = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3970  	double MaxTotalVActiveRDBandwidth;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3971  	bool ViewportExceedsSurface = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3972  	bool FMTBufferExceeded = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3973  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3974  	/*MODE SUPPORT, VOLTAGE STATE AND SOC CONFIGURATION*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3975  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3976  	CalculateMinAndMaxPrefetchMode(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3977  		mode_lib->vba.AllowDRAMSelfRefreshOrDRAMClockChangeInVblank,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3978  		&MinPrefetchMode, &MaxPrefetchMode);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3979  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3980  	/*Scale Ratio, taps Support Check*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3981  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3982  	v->ScaleRatioAndTapsSupport = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3983  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3984  		if (v->ScalerEnabled[k] == false
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3985  				&& ((v->SourcePixelFormat[k] != dm_444_64 && v->SourcePixelFormat[k] != dm_444_32
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3986  						&& v->SourcePixelFormat[k] != dm_444_16 && v->SourcePixelFormat[k] != dm_mono_16
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3987  						&& v->SourcePixelFormat[k] != dm_mono_8 && v->SourcePixelFormat[k] != dm_rgbe
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3988  						&& v->SourcePixelFormat[k] != dm_rgbe_alpha) || v->HRatio[k] != 1.0 || v->htaps[k] != 1.0
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3989  						|| v->VRatio[k] != 1.0 || v->vtaps[k] != 1.0)) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3990  			v->ScaleRatioAndTapsSupport = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3991  		} else if (v->vtaps[k] < 1.0 || v->vtaps[k] > 8.0 || v->htaps[k] < 1.0 || v->htaps[k] > 8.0
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3992  				|| (v->htaps[k] > 1.0 && (v->htaps[k] % 2) == 1) || v->HRatio[k] > v->MaxHSCLRatio
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3993  				|| v->VRatio[k] > v->MaxVSCLRatio || v->HRatio[k] > v->htaps[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3994  				|| v->VRatio[k] > v->vtaps[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3995  				|| (v->SourcePixelFormat[k] != dm_444_64 && v->SourcePixelFormat[k] != dm_444_32
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3996  						&& v->SourcePixelFormat[k] != dm_444_16 && v->SourcePixelFormat[k] != dm_mono_16
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3997  						&& v->SourcePixelFormat[k] != dm_mono_8 && v->SourcePixelFormat[k] != dm_rgbe
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3998  						&& (v->VTAPsChroma[k] < 1 || v->VTAPsChroma[k] > 8 || v->HTAPsChroma[k] < 1
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  3999  								|| v->HTAPsChroma[k] > 8 || (v->HTAPsChroma[k] > 1 && v->HTAPsChroma[k] % 2 == 1)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4000  								|| v->HRatioChroma[k] > v->MaxHSCLRatio
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4001  								|| v->VRatioChroma[k] > v->MaxVSCLRatio
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4002  								|| v->HRatioChroma[k] > v->HTAPsChroma[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4003  								|| v->VRatioChroma[k] > v->VTAPsChroma[k]))) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4004  			v->ScaleRatioAndTapsSupport = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4005  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4006  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4007  	/*Source Format, Pixel Format and Scan Support Check*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4008  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4009  	v->SourceFormatPixelAndScanSupport = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4010  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4011  		if ((v->SurfaceTiling[k] == dm_sw_linear && (!(v->SourceScan[k] != dm_vert) || v->DCCEnable[k] == true))
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4012  				|| ((v->SurfaceTiling[k] == dm_sw_64kb_d || v->SurfaceTiling[k] == dm_sw_64kb_d_t
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4013  						|| v->SurfaceTiling[k] == dm_sw_64kb_d_x) && !(v->SourcePixelFormat[k] == dm_444_64))) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4014  			v->SourceFormatPixelAndScanSupport = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4015  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4016  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4017  	/*Bandwidth Support Check*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4018  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4019  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4020  		CalculateBytePerPixelAnd256BBlockSizes(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4021  				v->SourcePixelFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4022  				v->SurfaceTiling[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4023  				&v->BytePerPixelY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4024  				&v->BytePerPixelC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4025  				&v->BytePerPixelInDETY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4026  				&v->BytePerPixelInDETC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4027  				&v->Read256BlockHeightY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4028  				&v->Read256BlockHeightC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4029  				&v->Read256BlockWidthY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4030  				&v->Read256BlockWidthC[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4031  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4032  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4033  		if (v->SourceScan[k] != dm_vert) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4034  			v->SwathWidthYSingleDPP[k] = v->ViewportWidth[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4035  			v->SwathWidthCSingleDPP[k] = v->ViewportWidthChroma[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4036  		} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4037  			v->SwathWidthYSingleDPP[k] = v->ViewportHeight[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4038  			v->SwathWidthCSingleDPP[k] = v->ViewportHeightChroma[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4039  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4040  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4041  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4042  		v->ReadBandwidthLuma[k] = v->SwathWidthYSingleDPP[k] * dml_ceil(v->BytePerPixelInDETY[k], 1.0)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4043  				/ (v->HTotal[k] / v->PixelClock[k]) * v->VRatio[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4044  		v->ReadBandwidthChroma[k] = v->SwathWidthYSingleDPP[k] / 2 * dml_ceil(v->BytePerPixelInDETC[k], 2.0)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4045  				/ (v->HTotal[k] / v->PixelClock[k]) * v->VRatio[k] / 2.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4046  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4047  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4048  		if (v->WritebackEnable[k] == true && v->WritebackPixelFormat[k] == dm_444_64) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4049  			v->WriteBandwidth[k] = v->WritebackDestinationWidth[k] * v->WritebackDestinationHeight[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4050  					/ (v->WritebackSourceHeight[k] * v->HTotal[k] / v->PixelClock[k]) * 8.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4051  		} else if (v->WritebackEnable[k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4052  			v->WriteBandwidth[k] = v->WritebackDestinationWidth[k] * v->WritebackDestinationHeight[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4053  					/ (v->WritebackSourceHeight[k] * v->HTotal[k] / v->PixelClock[k]) * 4.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4054  		} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4055  			v->WriteBandwidth[k] = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4056  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4057  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4058  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4059  	/*Writeback Latency support check*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4060  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4061  	v->WritebackLatencySupport = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4062  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4063  		if (v->WritebackEnable[k] == true && (v->WriteBandwidth[k] > v->WritebackInterfaceBufferSize * 1024 / v->WritebackLatency)) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4064  			v->WritebackLatencySupport = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4065  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4066  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4067  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4068  	/*Writeback Mode Support Check*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4069  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4070  	v->TotalNumberOfActiveWriteback = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4071  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4072  		if (v->WritebackEnable[k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4073  			v->TotalNumberOfActiveWriteback = v->TotalNumberOfActiveWriteback + 1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4074  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4075  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4076  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4077  	if (v->TotalNumberOfActiveWriteback > v->MaxNumWriteback) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4078  		EnoughWritebackUnits = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4079  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4080  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4081  	/*Writeback Scale Ratio and Taps Support Check*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4082  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4083  	v->WritebackScaleRatioAndTapsSupport = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4084  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4085  		if (v->WritebackEnable[k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4086  			if (v->WritebackHRatio[k] > v->WritebackMaxHSCLRatio || v->WritebackVRatio[k] > v->WritebackMaxVSCLRatio
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4087  					|| v->WritebackHRatio[k] < v->WritebackMinHSCLRatio
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4088  					|| v->WritebackVRatio[k] < v->WritebackMinVSCLRatio
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4089  					|| v->WritebackHTaps[k] > v->WritebackMaxHSCLTaps
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4090  					|| v->WritebackVTaps[k] > v->WritebackMaxVSCLTaps
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4091  					|| v->WritebackHRatio[k] > v->WritebackHTaps[k] || v->WritebackVRatio[k] > v->WritebackVTaps[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4092  					|| (v->WritebackHTaps[k] > 2.0 && ((v->WritebackHTaps[k] % 2) == 1))) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4093  				v->WritebackScaleRatioAndTapsSupport = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4094  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4095  			if (2.0 * v->WritebackDestinationWidth[k] * (v->WritebackVTaps[k] - 1) * 57 > v->WritebackLineBufferSize) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4096  				v->WritebackScaleRatioAndTapsSupport = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4097  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4098  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4099  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4100  	/*Maximum DISPCLK/DPPCLK Support check*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4101  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4102  	v->WritebackRequiredDISPCLK = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4103  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4104  		if (v->WritebackEnable[k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4105  			v->WritebackRequiredDISPCLK = dml_max(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4106  					v->WritebackRequiredDISPCLK,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4107  					dml31_CalculateWriteBackDISPCLK(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4108  							v->WritebackPixelFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4109  							v->PixelClock[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4110  							v->WritebackHRatio[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4111  							v->WritebackVRatio[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4112  							v->WritebackHTaps[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4113  							v->WritebackVTaps[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4114  							v->WritebackSourceWidth[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4115  							v->WritebackDestinationWidth[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4116  							v->HTotal[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4117  							v->WritebackLineBufferSize));
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4118  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4119  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4120  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4121  		if (v->HRatio[k] > 1.0) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4122  			v->PSCL_FACTOR[k] = dml_min(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4123  					v->MaxDCHUBToPSCLThroughput,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4124  					v->MaxPSCLToLBThroughput * v->HRatio[k] / dml_ceil(v->htaps[k] / 6.0, 1.0));
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4125  		} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4126  			v->PSCL_FACTOR[k] = dml_min(v->MaxDCHUBToPSCLThroughput, v->MaxPSCLToLBThroughput);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4127  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4128  		if (v->BytePerPixelC[k] == 0.0) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4129  			v->PSCL_FACTOR_CHROMA[k] = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4130  			v->MinDPPCLKUsingSingleDPP[k] = v->PixelClock[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4131  					* dml_max3(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4132  							v->vtaps[k] / 6.0 * dml_min(1.0, v->HRatio[k]),
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4133  							v->HRatio[k] * v->VRatio[k] / v->PSCL_FACTOR[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4134  							1.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4135  			if ((v->htaps[k] > 6.0 || v->vtaps[k] > 6.0) && v->MinDPPCLKUsingSingleDPP[k] < 2.0 * v->PixelClock[k]) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4136  				v->MinDPPCLKUsingSingleDPP[k] = 2.0 * v->PixelClock[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4137  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4138  		} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4139  			if (v->HRatioChroma[k] > 1.0) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4140  				v->PSCL_FACTOR_CHROMA[k] = dml_min(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4141  						v->MaxDCHUBToPSCLThroughput,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4142  						v->MaxPSCLToLBThroughput * v->HRatioChroma[k] / dml_ceil(v->HTAPsChroma[k] / 6.0, 1.0));
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4143  			} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4144  				v->PSCL_FACTOR_CHROMA[k] = dml_min(v->MaxDCHUBToPSCLThroughput, v->MaxPSCLToLBThroughput);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4145  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4146  			v->MinDPPCLKUsingSingleDPP[k] = v->PixelClock[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4147  					* dml_max5(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4148  							v->vtaps[k] / 6.0 * dml_min(1.0, v->HRatio[k]),
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4149  							v->HRatio[k] * v->VRatio[k] / v->PSCL_FACTOR[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4150  							v->VTAPsChroma[k] / 6.0 * dml_min(1.0, v->HRatioChroma[k]),
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4151  							v->HRatioChroma[k] * v->VRatioChroma[k] / v->PSCL_FACTOR_CHROMA[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4152  							1.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4153  			if ((v->htaps[k] > 6.0 || v->vtaps[k] > 6.0 || v->HTAPsChroma[k] > 6.0 || v->VTAPsChroma[k] > 6.0)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4154  					&& v->MinDPPCLKUsingSingleDPP[k] < 2.0 * v->PixelClock[k]) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4155  				v->MinDPPCLKUsingSingleDPP[k] = 2.0 * v->PixelClock[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4156  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4157  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4158  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4159  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4160  		int MaximumSwathWidthSupportLuma;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4161  		int MaximumSwathWidthSupportChroma;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4162  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4163  		if (v->SurfaceTiling[k] == dm_sw_linear) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4164  			MaximumSwathWidthSupportLuma = 8192.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4165  		} else if (v->SourceScan[k] == dm_vert && v->BytePerPixelC[k] > 0) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4166  			MaximumSwathWidthSupportLuma = 2880.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4167  		} else if (v->SourcePixelFormat[k] == dm_rgbe_alpha) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4168  			MaximumSwathWidthSupportLuma = 3840.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4169  		} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4170  			MaximumSwathWidthSupportLuma = 5760.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4171  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4172  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4173  		if (v->SourcePixelFormat[k] == dm_420_8 || v->SourcePixelFormat[k] == dm_420_10 || v->SourcePixelFormat[k] == dm_420_12) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4174  			MaximumSwathWidthSupportChroma = MaximumSwathWidthSupportLuma / 2.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4175  		} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4176  			MaximumSwathWidthSupportChroma = MaximumSwathWidthSupportLuma;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4177  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4178  		v->MaximumSwathWidthInLineBufferLuma = v->LineBufferSize * dml_max(v->HRatio[k], 1.0) / v->LBBitPerPixel[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4179  				/ (v->vtaps[k] + dml_max(dml_ceil(v->VRatio[k], 1.0) - 2, 0.0));
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4180  		if (v->BytePerPixelC[k] == 0.0) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4181  			v->MaximumSwathWidthInLineBufferChroma = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4182  		} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4183  			v->MaximumSwathWidthInLineBufferChroma = v->LineBufferSize * dml_max(v->HRatioChroma[k], 1.0) / v->LBBitPerPixel[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4184  					/ (v->VTAPsChroma[k] + dml_max(dml_ceil(v->VRatioChroma[k], 1.0) - 2, 0.0));
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4185  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4186  		v->MaximumSwathWidthLuma[k] = dml_min(MaximumSwathWidthSupportLuma, v->MaximumSwathWidthInLineBufferLuma);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4187  		v->MaximumSwathWidthChroma[k] = dml_min(MaximumSwathWidthSupportChroma, v->MaximumSwathWidthInLineBufferChroma);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4188  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4189  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4190  	CalculateSwathAndDETConfiguration(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4191  			true,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4192  			v->NumberOfActivePlanes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4193  			v->DETBufferSizeInKByte[0],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4194  			v->MaximumSwathWidthLuma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4195  			v->MaximumSwathWidthChroma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4196  			v->SourceScan,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4197  			v->SourcePixelFormat,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4198  			v->SurfaceTiling,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4199  			v->ViewportWidth,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4200  			v->ViewportHeight,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4201  			v->SurfaceWidthY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4202  			v->SurfaceWidthC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4203  			v->SurfaceHeightY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4204  			v->SurfaceHeightC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4205  			v->Read256BlockHeightY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4206  			v->Read256BlockHeightC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4207  			v->Read256BlockWidthY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4208  			v->Read256BlockWidthC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4209  			v->odm_combine_dummy,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4210  			v->BlendingAndTiming,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4211  			v->BytePerPixelY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4212  			v->BytePerPixelC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4213  			v->BytePerPixelInDETY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4214  			v->BytePerPixelInDETC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4215  			v->HActive,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4216  			v->HRatio,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4217  			v->HRatioChroma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4218  			v->NoOfDPPThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4219  			v->swath_width_luma_ub_this_state,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4220  			v->swath_width_chroma_ub_this_state,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4221  			v->SwathWidthYThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4222  			v->SwathWidthCThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4223  			v->SwathHeightYThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4224  			v->SwathHeightCThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4225  			v->DETBufferSizeYThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4226  			v->DETBufferSizeCThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4227  			v->SingleDPPViewportSizeSupportPerPlane,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4228  			&v->ViewportSizeSupport[0][0]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4229  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4230  	for (i = 0; i < v->soc.num_states; i++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4231  		for (j = 0; j < 2; j++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4232  			v->MaxDispclkRoundedDownToDFSGranularity = RoundToDFSGranularityDown(v->MaxDispclk[i], v->DISPCLKDPPCLKVCOSpeed);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4233  			v->MaxDppclkRoundedDownToDFSGranularity = RoundToDFSGranularityDown(v->MaxDppclk[i], v->DISPCLKDPPCLKVCOSpeed);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4234  			v->RequiredDISPCLK[i][j] = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4235  			v->DISPCLK_DPPCLK_Support[i][j] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4236  			for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4237  				v->PlaneRequiredDISPCLKWithoutODMCombine = v->PixelClock[k] * (1.0 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4238  						* (1.0 + v->DISPCLKRampingMargin / 100.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4239  				if ((v->PlaneRequiredDISPCLKWithoutODMCombine >= v->MaxDispclk[i]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4240  						&& v->MaxDispclk[i] == v->MaxDispclk[v->soc.num_states - 1]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4241  						&& v->MaxDppclk[i] == v->MaxDppclk[v->soc.num_states - 1])) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4242  					v->PlaneRequiredDISPCLKWithoutODMCombine = v->PixelClock[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4243  							* (1 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4244  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4245  				v->PlaneRequiredDISPCLKWithODMCombine2To1 = v->PixelClock[k] / 2 * (1 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4246  						* (1 + v->DISPCLKRampingMargin / 100.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4247  				if ((v->PlaneRequiredDISPCLKWithODMCombine2To1 >= v->MaxDispclk[i]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4248  						&& v->MaxDispclk[i] == v->MaxDispclk[v->soc.num_states - 1]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4249  						&& v->MaxDppclk[i] == v->MaxDppclk[v->soc.num_states - 1])) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4250  					v->PlaneRequiredDISPCLKWithODMCombine2To1 = v->PixelClock[k] / 2
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4251  							* (1 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4252  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4253  				v->PlaneRequiredDISPCLKWithODMCombine4To1 = v->PixelClock[k] / 4 * (1 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4254  						* (1 + v->DISPCLKRampingMargin / 100.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4255  				if ((v->PlaneRequiredDISPCLKWithODMCombine4To1 >= v->MaxDispclk[i]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4256  						&& v->MaxDispclk[i] == v->MaxDispclk[v->soc.num_states - 1]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4257  						&& v->MaxDppclk[i] == v->MaxDppclk[v->soc.num_states - 1])) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4258  					v->PlaneRequiredDISPCLKWithODMCombine4To1 = v->PixelClock[k] / 4
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4259  							* (1 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4260  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4261  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4262  				if (v->ODMCombinePolicy == dm_odm_combine_policy_none
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4263  						|| !(v->Output[k] == dm_dp ||
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4264  						     v->Output[k] == dm_edp)) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4265  					v->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_disabled;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4266  					v->PlaneRequiredDISPCLK = v->PlaneRequiredDISPCLKWithoutODMCombine;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4267  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4268  					if (v->HActive[k] / 2 > DCN31_MAX_FMT_420_BUFFER_WIDTH)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4269  						FMTBufferExceeded = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4270  				} else if (v->ODMCombinePolicy == dm_odm_combine_policy_2to1) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4271  					v->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_2to1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4272  					v->PlaneRequiredDISPCLK = v->PlaneRequiredDISPCLKWithODMCombine2To1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4273  				} else if (v->ODMCombinePolicy == dm_odm_combine_policy_4to1
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4274  						|| v->PlaneRequiredDISPCLKWithODMCombine2To1 > v->MaxDispclkRoundedDownToDFSGranularity) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4275  					v->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_4to1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4276  					v->PlaneRequiredDISPCLK = v->PlaneRequiredDISPCLKWithODMCombine4To1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4277  				} else if (v->PlaneRequiredDISPCLKWithoutODMCombine > v->MaxDispclkRoundedDownToDFSGranularity) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4278  					v->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_2to1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4279  					v->PlaneRequiredDISPCLK = v->PlaneRequiredDISPCLKWithODMCombine2To1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4280  				} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4281  					v->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_disabled;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4282  					v->PlaneRequiredDISPCLK = v->PlaneRequiredDISPCLKWithoutODMCombine;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4283  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4284  				if (v->DSCEnabled[k] && v->HActive[k] > DCN31_MAX_DSC_IMAGE_WIDTH
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4285  						&& v->ODMCombineEnablePerState[i][k] != dm_odm_combine_mode_4to1) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4286  					if (v->HActive[k] / 2 > DCN31_MAX_DSC_IMAGE_WIDTH) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4287  						v->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_4to1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4288  						v->PlaneRequiredDISPCLK = v->PlaneRequiredDISPCLKWithODMCombine4To1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4289  					} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4290  						v->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_2to1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4291  						v->PlaneRequiredDISPCLK = v->PlaneRequiredDISPCLKWithODMCombine2To1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4292  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4293  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4294  				if (v->OutputFormat[k] == dm_420 && v->HActive[k] > DCN31_MAX_FMT_420_BUFFER_WIDTH
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4295  						&& v->ODMCombineEnablePerState[i][k] != dm_odm_combine_mode_4to1) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4296  					if (v->HActive[k] / 2 > DCN31_MAX_FMT_420_BUFFER_WIDTH) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4297  						v->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_4to1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4298  						v->PlaneRequiredDISPCLK = v->PlaneRequiredDISPCLKWithODMCombine4To1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4299  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4300  						if (v->HActive[k] / 4 > DCN31_MAX_FMT_420_BUFFER_WIDTH)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4301  							FMTBufferExceeded = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4302  					} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4303  						v->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_2to1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4304  						v->PlaneRequiredDISPCLK = v->PlaneRequiredDISPCLKWithODMCombine2To1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4305  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4306  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4307  				if (v->ODMCombineEnablePerState[i][k] == dm_odm_combine_mode_4to1) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4308  					v->MPCCombine[i][j][k] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4309  					v->NoOfDPP[i][j][k] = 4;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4310  					v->RequiredDPPCLK[i][j][k] = v->MinDPPCLKUsingSingleDPP[k] * (1 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0) / 4;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4311  				} else if (v->ODMCombineEnablePerState[i][k] == dm_odm_combine_mode_2to1) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4312  					v->MPCCombine[i][j][k] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4313  					v->NoOfDPP[i][j][k] = 2;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4314  					v->RequiredDPPCLK[i][j][k] = v->MinDPPCLKUsingSingleDPP[k] * (1 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0) / 2;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4315  				} else if ((v->WhenToDoMPCCombine == dm_mpc_never
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4316  						|| (v->MinDPPCLKUsingSingleDPP[k] * (1 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4317  								<= v->MaxDppclkRoundedDownToDFSGranularity && v->SingleDPPViewportSizeSupportPerPlane[k] == true))) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4318  					v->MPCCombine[i][j][k] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4319  					v->NoOfDPP[i][j][k] = 1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4320  					v->RequiredDPPCLK[i][j][k] = v->MinDPPCLKUsingSingleDPP[k] * (1.0 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4321  				} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4322  					v->MPCCombine[i][j][k] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4323  					v->NoOfDPP[i][j][k] = 2;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4324  					v->RequiredDPPCLK[i][j][k] = v->MinDPPCLKUsingSingleDPP[k] * (1.0 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0) / 2.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4325  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4326  				v->RequiredDISPCLK[i][j] = dml_max(v->RequiredDISPCLK[i][j], v->PlaneRequiredDISPCLK);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4327  				if ((v->MinDPPCLKUsingSingleDPP[k] / v->NoOfDPP[i][j][k] * (1.0 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4328  						> v->MaxDppclkRoundedDownToDFSGranularity)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4329  						|| (v->PlaneRequiredDISPCLK > v->MaxDispclkRoundedDownToDFSGranularity)) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4330  					v->DISPCLK_DPPCLK_Support[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4331  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4332  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4333  			v->TotalNumberOfActiveDPP[i][j] = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4334  			v->TotalNumberOfSingleDPPPlanes[i][j] = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4335  			for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4336  				v->TotalNumberOfActiveDPP[i][j] = v->TotalNumberOfActiveDPP[i][j] + v->NoOfDPP[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4337  				if (v->NoOfDPP[i][j][k] == 1)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4338  					v->TotalNumberOfSingleDPPPlanes[i][j] = v->TotalNumberOfSingleDPPPlanes[i][j] + 1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4339  				if (v->SourcePixelFormat[k] == dm_420_8 || v->SourcePixelFormat[k] == dm_420_10
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4340  						|| v->SourcePixelFormat[k] == dm_420_12 || v->SourcePixelFormat[k] == dm_rgbe_alpha)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4341  					NoChroma = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4342  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4343  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4344  			// UPTO
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4345  			if (j == 1 && v->WhenToDoMPCCombine != dm_mpc_never
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4346  					&& !UnboundedRequest(v->UseUnboundedRequesting, v->TotalNumberOfActiveDPP[i][j], NoChroma, v->Output[0])) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4347  				while (!(v->TotalNumberOfActiveDPP[i][j] >= v->MaxNumDPP || v->TotalNumberOfSingleDPPPlanes[i][j] == 0)) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4348  					double BWOfNonSplitPlaneOfMaximumBandwidth;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4349  					unsigned int NumberOfNonSplitPlaneOfMaximumBandwidth;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4350  					BWOfNonSplitPlaneOfMaximumBandwidth = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4351  					NumberOfNonSplitPlaneOfMaximumBandwidth = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4352  					for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4353  						if (v->ReadBandwidthLuma[k] + v->ReadBandwidthChroma[k] > BWOfNonSplitPlaneOfMaximumBandwidth
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4354  								&& v->ODMCombineEnablePerState[i][k] == dm_odm_combine_mode_disabled && v->MPCCombine[i][j][k] == false) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4355  							BWOfNonSplitPlaneOfMaximumBandwidth = v->ReadBandwidthLuma[k] + v->ReadBandwidthChroma[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4356  							NumberOfNonSplitPlaneOfMaximumBandwidth = k;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4357  						}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4358  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4359  					v->MPCCombine[i][j][NumberOfNonSplitPlaneOfMaximumBandwidth] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4360  					v->NoOfDPP[i][j][NumberOfNonSplitPlaneOfMaximumBandwidth] = 2;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4361  					v->RequiredDPPCLK[i][j][NumberOfNonSplitPlaneOfMaximumBandwidth] =
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4362  							v->MinDPPCLKUsingSingleDPP[NumberOfNonSplitPlaneOfMaximumBandwidth]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4363  									* (1 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100) / 2;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4364  					v->TotalNumberOfActiveDPP[i][j] = v->TotalNumberOfActiveDPP[i][j] + 1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4365  					v->TotalNumberOfSingleDPPPlanes[i][j] = v->TotalNumberOfSingleDPPPlanes[i][j] - 1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4366  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4367  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4368  			if (v->TotalNumberOfActiveDPP[i][j] > v->MaxNumDPP) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4369  				v->RequiredDISPCLK[i][j] = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4370  				v->DISPCLK_DPPCLK_Support[i][j] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4371  				for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4372  					v->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_disabled;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4373  					if (v->SingleDPPViewportSizeSupportPerPlane[k] == false && v->WhenToDoMPCCombine != dm_mpc_never) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4374  						v->MPCCombine[i][j][k] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4375  						v->NoOfDPP[i][j][k] = 2;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4376  						v->RequiredDPPCLK[i][j][k] = v->MinDPPCLKUsingSingleDPP[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4377  								* (1.0 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0) / 2.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4378  					} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4379  						v->MPCCombine[i][j][k] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4380  						v->NoOfDPP[i][j][k] = 1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4381  						v->RequiredDPPCLK[i][j][k] = v->MinDPPCLKUsingSingleDPP[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4382  								* (1.0 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4383  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4384  					if (!(v->MaxDispclk[i] == v->MaxDispclk[v->soc.num_states - 1]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4385  							&& v->MaxDppclk[i] == v->MaxDppclk[v->soc.num_states - 1])) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4386  						v->PlaneRequiredDISPCLK = v->PixelClock[k] * (1.0 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4387  								* (1.0 + v->DISPCLKRampingMargin / 100.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4388  					} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4389  						v->PlaneRequiredDISPCLK = v->PixelClock[k] * (1.0 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4390  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4391  					v->RequiredDISPCLK[i][j] = dml_max(v->RequiredDISPCLK[i][j], v->PlaneRequiredDISPCLK);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4392  					if ((v->MinDPPCLKUsingSingleDPP[k] / v->NoOfDPP[i][j][k] * (1.0 + v->DISPCLKDPPCLKDSCCLKDownSpreading / 100.0)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4393  							> v->MaxDppclkRoundedDownToDFSGranularity)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4394  							|| (v->PlaneRequiredDISPCLK > v->MaxDispclkRoundedDownToDFSGranularity)) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4395  						v->DISPCLK_DPPCLK_Support[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4396  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4397  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4398  				v->TotalNumberOfActiveDPP[i][j] = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4399  				for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4400  					v->TotalNumberOfActiveDPP[i][j] = v->TotalNumberOfActiveDPP[i][j] + v->NoOfDPP[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4401  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4402  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4403  			v->RequiredDISPCLK[i][j] = dml_max(v->RequiredDISPCLK[i][j], v->WritebackRequiredDISPCLK);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4404  			if (v->MaxDispclkRoundedDownToDFSGranularity < v->WritebackRequiredDISPCLK) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4405  				v->DISPCLK_DPPCLK_Support[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4406  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4407  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4408  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4409  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4410  	/*Total Available Pipes Support Check*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4411  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4412  	for (i = 0; i < v->soc.num_states; i++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4413  		for (j = 0; j < 2; j++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4414  			if (v->TotalNumberOfActiveDPP[i][j] <= v->MaxNumDPP) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4415  				v->TotalAvailablePipesSupport[i][j] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4416  			} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4417  				v->TotalAvailablePipesSupport[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4418  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4419  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4420  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4421  	/*Display IO and DSC Support Check*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4422  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4423  	v->NonsupportedDSCInputBPC = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4424  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4425  		if (!(v->DSCInputBitPerComponent[k] == 12.0 || v->DSCInputBitPerComponent[k] == 10.0 || v->DSCInputBitPerComponent[k] == 8.0)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4426  				|| v->DSCInputBitPerComponent[k] > v->MaximumDSCBitsPerComponent) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4427  			v->NonsupportedDSCInputBPC = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4428  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4429  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4430  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4431  	/*Number Of DSC Slices*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4432  	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4433  		if (v->BlendingAndTiming[k] == k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4434  			if (v->PixelClockBackEnd[k] > 3200) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4435  				v->NumberOfDSCSlices[k] = dml_ceil(v->PixelClockBackEnd[k] / 400.0, 4.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4436  			} else if (v->PixelClockBackEnd[k] > 1360) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4437  				v->NumberOfDSCSlices[k] = 8;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4438  			} else if (v->PixelClockBackEnd[k] > 680) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4439  				v->NumberOfDSCSlices[k] = 4;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4440  			} else if (v->PixelClockBackEnd[k] > 340) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4441  				v->NumberOfDSCSlices[k] = 2;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4442  			} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4443  				v->NumberOfDSCSlices[k] = 1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4444  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4445  		} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4446  			v->NumberOfDSCSlices[k] = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4447  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4448  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4449  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4450  	for (i = 0; i < v->soc.num_states; i++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4451  		for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4452  			v->RequiresDSC[i][k] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4453  			v->RequiresFEC[i][k] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4454  			if (v->BlendingAndTiming[k] == k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4455  				if (v->Output[k] == dm_hdmi) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4456  					v->RequiresDSC[i][k] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4457  					v->RequiresFEC[i][k] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4458  					v->OutputBppPerState[i][k] = TruncToValidBPP(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4459  							dml_min(600.0, v->PHYCLKPerState[i]) * 10,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4460  							3,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4461  							v->HTotal[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4462  							v->HActive[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4463  							v->PixelClockBackEnd[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4464  							v->ForcedOutputLinkBPP[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4465  							false,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4466  							v->Output[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4467  							v->OutputFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4468  							v->DSCInputBitPerComponent[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4469  							v->NumberOfDSCSlices[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4470  							v->AudioSampleRate[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4471  							v->AudioSampleLayout[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4472  							v->ODMCombineEnablePerState[i][k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4473  				} else if (v->Output[k] == dm_dp || v->Output[k] == dm_edp) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4474  					if (v->DSCEnable[k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4475  						v->RequiresDSC[i][k] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4476  						v->LinkDSCEnable = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4477  						if (v->Output[k] == dm_dp) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4478  							v->RequiresFEC[i][k] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4479  						} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4480  							v->RequiresFEC[i][k] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4481  						}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4482  					} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4483  						v->RequiresDSC[i][k] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4484  						v->LinkDSCEnable = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4485  						v->RequiresFEC[i][k] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4486  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4487  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4488  					v->Outbpp = BPP_INVALID;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4489  					if (v->PHYCLKPerState[i] >= 270.0) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4490  						v->Outbpp = TruncToValidBPP(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4491  								(1.0 - v->Downspreading / 100.0) * 2700,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4492  								v->OutputLinkDPLanes[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4493  								v->HTotal[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4494  								v->HActive[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4495  								v->PixelClockBackEnd[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4496  								v->ForcedOutputLinkBPP[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4497  								v->LinkDSCEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4498  								v->Output[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4499  								v->OutputFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4500  								v->DSCInputBitPerComponent[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4501  								v->NumberOfDSCSlices[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4502  								v->AudioSampleRate[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4503  								v->AudioSampleLayout[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4504  								v->ODMCombineEnablePerState[i][k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4505  						v->OutputBppPerState[i][k] = v->Outbpp;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4506  						// TODO: Need some other way to handle this nonsense
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4507  						// v->OutputTypeAndRatePerState[i][k] = v->Output[k] & " HBR"
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4508  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4509  					if (v->Outbpp == BPP_INVALID && v->PHYCLKPerState[i] >= 540.0) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4510  						v->Outbpp = TruncToValidBPP(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4511  								(1.0 - v->Downspreading / 100.0) * 5400,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4512  								v->OutputLinkDPLanes[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4513  								v->HTotal[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4514  								v->HActive[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4515  								v->PixelClockBackEnd[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4516  								v->ForcedOutputLinkBPP[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4517  								v->LinkDSCEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4518  								v->Output[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4519  								v->OutputFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4520  								v->DSCInputBitPerComponent[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4521  								v->NumberOfDSCSlices[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4522  								v->AudioSampleRate[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4523  								v->AudioSampleLayout[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4524  								v->ODMCombineEnablePerState[i][k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4525  						v->OutputBppPerState[i][k] = v->Outbpp;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4526  						// TODO: Need some other way to handle this nonsense
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4527  						// v->OutputTypeAndRatePerState[i][k] = v->Output[k] & " HBR2"
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4528  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4529  					if (v->Outbpp == BPP_INVALID && v->PHYCLKPerState[i] >= 810.0) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4530  						v->Outbpp = TruncToValidBPP(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4531  								(1.0 - v->Downspreading / 100.0) * 8100,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4532  								v->OutputLinkDPLanes[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4533  								v->HTotal[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4534  								v->HActive[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4535  								v->PixelClockBackEnd[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4536  								v->ForcedOutputLinkBPP[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4537  								v->LinkDSCEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4538  								v->Output[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4539  								v->OutputFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4540  								v->DSCInputBitPerComponent[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4541  								v->NumberOfDSCSlices[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4542  								v->AudioSampleRate[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4543  								v->AudioSampleLayout[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4544  								v->ODMCombineEnablePerState[i][k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4545  						v->OutputBppPerState[i][k] = v->Outbpp;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4546  						// TODO: Need some other way to handle this nonsense
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4547  						// v->OutputTypeAndRatePerState[i][k] = v->Output[k] & " HBR3"
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4548  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4549  					if (v->Outbpp == BPP_INVALID && v->PHYCLKD18PerState[i] >= 10000.0 / 18) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4550  						v->Outbpp = TruncToValidBPP(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4551  								(1.0 - v->Downspreading / 100.0) * 10000,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4552  								4,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4553  								v->HTotal[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4554  								v->HActive[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4555  								v->PixelClockBackEnd[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4556  								v->ForcedOutputLinkBPP[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4557  								v->LinkDSCEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4558  								v->Output[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4559  								v->OutputFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4560  								v->DSCInputBitPerComponent[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4561  								v->NumberOfDSCSlices[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4562  								v->AudioSampleRate[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4563  								v->AudioSampleLayout[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4564  								v->ODMCombineEnablePerState[i][k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4565  						v->OutputBppPerState[i][k] = v->Outbpp;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4566  						//v->OutputTypeAndRatePerState[i][k] = v->Output[k] & "10x4";
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4567  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4568  					if (v->Outbpp == BPP_INVALID && v->PHYCLKD18PerState[i] >= 12000.0 / 18) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4569  						v->Outbpp = TruncToValidBPP(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4570  								12000,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4571  								4,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4572  								v->HTotal[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4573  								v->HActive[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4574  								v->PixelClockBackEnd[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4575  								v->ForcedOutputLinkBPP[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4576  								v->LinkDSCEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4577  								v->Output[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4578  								v->OutputFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4579  								v->DSCInputBitPerComponent[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4580  								v->NumberOfDSCSlices[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4581  								v->AudioSampleRate[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4582  								v->AudioSampleLayout[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4583  								v->ODMCombineEnablePerState[i][k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4584  						v->OutputBppPerState[i][k] = v->Outbpp;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4585  						//v->OutputTypeAndRatePerState[i][k] = v->Output[k] & "12x4";
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4586  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4587  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4588  			} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4589  				v->OutputBppPerState[i][k] = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4590  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4591  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4592  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4593  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4594  	for (i = 0; i < v->soc.num_states; i++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4595  		v->LinkCapacitySupport[i] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4596  		for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4597  			if (v->BlendingAndTiming[k] == k
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4598  					&& (v->Output[k] == dm_dp ||
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4599  					    v->Output[k] == dm_edp ||
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4600  					    v->Output[k] == dm_hdmi) && v->OutputBppPerState[i][k] == 0) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4601  				v->LinkCapacitySupport[i] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4602  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4603  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4604  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4605  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4606  	// UPTO 2172
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4607  	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4608  		if (v->BlendingAndTiming[k] == k
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4609  				&& (v->Output[k] == dm_dp ||
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4610  				    v->Output[k] == dm_edp ||
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4611  				    v->Output[k] == dm_hdmi)) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4612  			if (v->OutputFormat[k] == dm_420 && v->Interlace[k] == 1 && v->ProgressiveToInterlaceUnitInOPP == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4613  				P2IWith420 = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4614  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4615  			if (v->DSCEnable[k] == true && v->OutputFormat[k] == dm_n422
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4616  					&& !v->DSC422NativeSupport) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4617  				DSC422NativeNotSupported = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4618  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4619  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4620  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4621  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4622  	for (i = 0; i < v->soc.num_states; ++i) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4623  		v->ODMCombine4To1SupportCheckOK[i] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4624  		for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4625  			if (v->BlendingAndTiming[k] == k && v->ODMCombineEnablePerState[i][k] == dm_odm_combine_mode_4to1
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4626  					&& (v->ODMCombine4To1Supported == false || v->Output[k] == dm_dp || v->Output[k] == dm_edp
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4627  							|| v->Output[k] == dm_hdmi)) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4628  				v->ODMCombine4To1SupportCheckOK[i] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4629  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4630  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4631  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4632  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4633  	/* Skip dscclk validation: as long as dispclk is supported, dscclk is also implicitly supported */
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4634  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4635  	for (i = 0; i < v->soc.num_states; i++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4636  		v->NotEnoughDSCUnits[i] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4637  		v->TotalDSCUnitsRequired = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4638  		for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4639  			if (v->RequiresDSC[i][k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4640  				if (v->ODMCombineEnablePerState[i][k] == dm_odm_combine_mode_4to1) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4641  					v->TotalDSCUnitsRequired = v->TotalDSCUnitsRequired + 4.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4642  				} else if (v->ODMCombineEnablePerState[i][k] == dm_odm_combine_mode_2to1) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4643  					v->TotalDSCUnitsRequired = v->TotalDSCUnitsRequired + 2.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4644  				} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4645  					v->TotalDSCUnitsRequired = v->TotalDSCUnitsRequired + 1.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4646  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4647  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4648  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4649  		if (v->TotalDSCUnitsRequired > v->NumberOfDSC) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4650  			v->NotEnoughDSCUnits[i] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4651  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4652  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4653  	/*DSC Delay per state*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4654  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4655  	for (i = 0; i < v->soc.num_states; i++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4656  		for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4657  			if (v->OutputBppPerState[i][k] == BPP_INVALID) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4658  				v->BPP = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4659  			} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4660  				v->BPP = v->OutputBppPerState[i][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4661  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4662  			if (v->RequiresDSC[i][k] == true && v->BPP != 0.0) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4663  				if (v->ODMCombineEnablePerState[i][k] == dm_odm_combine_mode_disabled) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4664  					v->DSCDelayPerState[i][k] = dscceComputeDelay(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4665  							v->DSCInputBitPerComponent[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4666  							v->BPP,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4667  							dml_ceil(1.0 * v->HActive[k] / v->NumberOfDSCSlices[k], 1.0),
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4668  							v->NumberOfDSCSlices[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4669  							v->OutputFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4670  							v->Output[k]) + dscComputeDelay(v->OutputFormat[k], v->Output[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4671  				} else if (v->ODMCombineEnablePerState[i][k] == dm_odm_combine_mode_2to1) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4672  					v->DSCDelayPerState[i][k] = 2.0
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4673  							* (dscceComputeDelay(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4674  									v->DSCInputBitPerComponent[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4675  									v->BPP,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4676  									dml_ceil(1.0 * v->HActive[k] / v->NumberOfDSCSlices[k], 1.0),
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4677  									v->NumberOfDSCSlices[k] / 2,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4678  									v->OutputFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4679  									v->Output[k]) + dscComputeDelay(v->OutputFormat[k], v->Output[k]));
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4680  				} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4681  					v->DSCDelayPerState[i][k] = 4.0
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4682  							* (dscceComputeDelay(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4683  									v->DSCInputBitPerComponent[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4684  									v->BPP,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4685  									dml_ceil(1.0 * v->HActive[k] / v->NumberOfDSCSlices[k], 1.0),
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4686  									v->NumberOfDSCSlices[k] / 4,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4687  									v->OutputFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4688  									v->Output[k]) + dscComputeDelay(v->OutputFormat[k], v->Output[k]));
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4689  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4690  				v->DSCDelayPerState[i][k] = v->DSCDelayPerState[i][k] * v->PixelClock[k] / v->PixelClockBackEnd[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4691  			} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4692  				v->DSCDelayPerState[i][k] = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4693  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4694  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4695  		for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4696  			for (m = 0; m < v->NumberOfActivePlanes; m++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4697  				if (v->BlendingAndTiming[k] == m && v->RequiresDSC[i][m] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4698  					v->DSCDelayPerState[i][k] = v->DSCDelayPerState[i][m];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4699  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4700  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4701  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4702  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4703  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4704  	//Calculate Swath, DET Configuration, DCFCLKDeepSleep
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4705  	//
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4706  	for (i = 0; i < v->soc.num_states; ++i) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4707  		for (j = 0; j <= 1; ++j) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4708  			for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4709  				v->RequiredDPPCLKThisState[k] = v->RequiredDPPCLK[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4710  				v->NoOfDPPThisState[k] = v->NoOfDPP[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4711  				v->ODMCombineEnableThisState[k] = v->ODMCombineEnablePerState[i][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4712  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4713  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4714  			CalculateSwathAndDETConfiguration(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4715  					false,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4716  					v->NumberOfActivePlanes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4717  					v->DETBufferSizeInKByte[0],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4718  					v->MaximumSwathWidthLuma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4719  					v->MaximumSwathWidthChroma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4720  					v->SourceScan,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4721  					v->SourcePixelFormat,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4722  					v->SurfaceTiling,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4723  					v->ViewportWidth,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4724  					v->ViewportHeight,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4725  					v->SurfaceWidthY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4726  					v->SurfaceWidthC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4727  					v->SurfaceHeightY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4728  					v->SurfaceHeightC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4729  					v->Read256BlockHeightY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4730  					v->Read256BlockHeightC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4731  					v->Read256BlockWidthY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4732  					v->Read256BlockWidthC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4733  					v->ODMCombineEnableThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4734  					v->BlendingAndTiming,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4735  					v->BytePerPixelY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4736  					v->BytePerPixelC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4737  					v->BytePerPixelInDETY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4738  					v->BytePerPixelInDETC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4739  					v->HActive,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4740  					v->HRatio,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4741  					v->HRatioChroma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4742  					v->NoOfDPPThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4743  					v->swath_width_luma_ub_this_state,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4744  					v->swath_width_chroma_ub_this_state,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4745  					v->SwathWidthYThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4746  					v->SwathWidthCThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4747  					v->SwathHeightYThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4748  					v->SwathHeightCThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4749  					v->DETBufferSizeYThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4750  					v->DETBufferSizeCThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4751  					v->dummystring,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4752  					&v->ViewportSizeSupport[i][j]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4753  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4754  			CalculateDCFCLKDeepSleep(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4755  					mode_lib,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4756  					v->NumberOfActivePlanes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4757  					v->BytePerPixelY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4758  					v->BytePerPixelC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4759  					v->VRatio,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4760  					v->VRatioChroma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4761  					v->SwathWidthYThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4762  					v->SwathWidthCThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4763  					v->NoOfDPPThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4764  					v->HRatio,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4765  					v->HRatioChroma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4766  					v->PixelClock,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4767  					v->PSCL_FACTOR,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4768  					v->PSCL_FACTOR_CHROMA,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4769  					v->RequiredDPPCLKThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4770  					v->ReadBandwidthLuma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4771  					v->ReadBandwidthChroma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4772  					v->ReturnBusWidth,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4773  					&v->ProjectedDCFCLKDeepSleep[i][j]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4774  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4775  			for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4776  				v->swath_width_luma_ub_all_states[i][j][k] = v->swath_width_luma_ub_this_state[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4777  				v->swath_width_chroma_ub_all_states[i][j][k] = v->swath_width_chroma_ub_this_state[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4778  				v->SwathWidthYAllStates[i][j][k] = v->SwathWidthYThisState[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4779  				v->SwathWidthCAllStates[i][j][k] = v->SwathWidthCThisState[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4780  				v->SwathHeightYAllStates[i][j][k] = v->SwathHeightYThisState[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4781  				v->SwathHeightCAllStates[i][j][k] = v->SwathHeightCThisState[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4782  				v->DETBufferSizeYAllStates[i][j][k] = v->DETBufferSizeYThisState[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4783  				v->DETBufferSizeCAllStates[i][j][k] = v->DETBufferSizeCThisState[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4784  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4785  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4786  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4787  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4788  	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4789  		v->cursor_bw[k] = v->NumberOfCursors[k] * v->CursorWidth[k][0] * v->CursorBPP[k][0] / 8.0
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4790  				/ (v->HTotal[k] / v->PixelClock[k]) * v->VRatio[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4791  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4792  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4793  	for (i = 0; i < v->soc.num_states; i++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4794  		for (j = 0; j < 2; j++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4795  			bool NotUrgentLatencyHiding[DC__NUM_DPP__MAX];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4796  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4797  			for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4798  				v->swath_width_luma_ub_this_state[k] = v->swath_width_luma_ub_all_states[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4799  				v->swath_width_chroma_ub_this_state[k] = v->swath_width_chroma_ub_all_states[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4800  				v->SwathWidthYThisState[k] = v->SwathWidthYAllStates[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4801  				v->SwathWidthCThisState[k] = v->SwathWidthCAllStates[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4802  				v->SwathHeightYThisState[k] = v->SwathHeightYAllStates[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4803  				v->SwathHeightCThisState[k] = v->SwathHeightCAllStates[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4804  				v->DETBufferSizeYThisState[k] = v->DETBufferSizeYAllStates[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4805  				v->DETBufferSizeCThisState[k] = v->DETBufferSizeCAllStates[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4806  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4807  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4808  			v->TotalNumberOfDCCActiveDPP[i][j] = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4809  			for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4810  				if (v->DCCEnable[k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4811  					v->TotalNumberOfDCCActiveDPP[i][j] = v->TotalNumberOfDCCActiveDPP[i][j] + v->NoOfDPP[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4812  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4813  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4814  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4815  			for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4816  				if (v->SourcePixelFormat[k] == dm_420_8 || v->SourcePixelFormat[k] == dm_420_10
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4817  						|| v->SourcePixelFormat[k] == dm_420_12 || v->SourcePixelFormat[k] == dm_rgbe_alpha) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4818  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4819  					if ((v->SourcePixelFormat[k] == dm_420_10 || v->SourcePixelFormat[k] == dm_420_12)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4820  							&& v->SourceScan[k] != dm_vert) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4821  						v->PTEBufferSizeInRequestsForLuma = (v->PTEBufferSizeInRequestsLuma + v->PTEBufferSizeInRequestsChroma)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4822  								/ 2;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4823  						v->PTEBufferSizeInRequestsForChroma = v->PTEBufferSizeInRequestsForLuma;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4824  					} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4825  						v->PTEBufferSizeInRequestsForLuma = v->PTEBufferSizeInRequestsLuma;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4826  						v->PTEBufferSizeInRequestsForChroma = v->PTEBufferSizeInRequestsChroma;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4827  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4828  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4829  					v->PDEAndMetaPTEBytesPerFrameC = CalculateVMAndRowBytes(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4830  							mode_lib,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4831  							v->DCCEnable[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4832  							v->Read256BlockHeightC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4833  							v->Read256BlockWidthC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4834  							v->SourcePixelFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4835  							v->SurfaceTiling[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4836  							v->BytePerPixelC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4837  							v->SourceScan[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4838  							v->SwathWidthCThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4839  							v->ViewportHeightChroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4840  							v->GPUVMEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4841  							v->HostVMEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4842  							v->HostVMMaxNonCachedPageTableLevels,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4843  							v->GPUVMMinPageSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4844  							v->HostVMMinPageSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4845  							v->PTEBufferSizeInRequestsForChroma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4846  							v->PitchC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4847  							0.0,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4848  							&v->MacroTileWidthC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4849  							&v->MetaRowBytesC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4850  							&v->DPTEBytesPerRowC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4851  							&v->PTEBufferSizeNotExceededC[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4852  							&v->dummyinteger7,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4853  							&v->dpte_row_height_chroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4854  							&v->dummyinteger28,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4855  							&v->dummyinteger26,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4856  							&v->dummyinteger23,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4857  							&v->meta_row_height_chroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4858  							&v->dummyinteger8,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4859  							&v->dummyinteger9,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4860  							&v->dummyinteger19,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4861  							&v->dummyinteger20,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4862  							&v->dummyinteger17,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4863  							&v->dummyinteger10,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4864  							&v->dummyinteger11);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4865  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4866  					v->PrefetchLinesC[i][j][k] = CalculatePrefetchSourceLines(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4867  							mode_lib,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4868  							v->VRatioChroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4869  							v->VTAPsChroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4870  							v->Interlace[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4871  							v->ProgressiveToInterlaceUnitInOPP,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4872  							v->SwathHeightCThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4873  							v->ViewportYStartC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4874  							&v->PrefillC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4875  							&v->MaxNumSwC[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4876  				} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4877  					v->PTEBufferSizeInRequestsForLuma = v->PTEBufferSizeInRequestsLuma + v->PTEBufferSizeInRequestsChroma;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4878  					v->PTEBufferSizeInRequestsForChroma = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4879  					v->PDEAndMetaPTEBytesPerFrameC = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4880  					v->MetaRowBytesC = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4881  					v->DPTEBytesPerRowC = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4882  					v->PrefetchLinesC[i][j][k] = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4883  					v->PTEBufferSizeNotExceededC[i][j][k] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4884  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4885  				v->PDEAndMetaPTEBytesPerFrameY = CalculateVMAndRowBytes(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4886  						mode_lib,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4887  						v->DCCEnable[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4888  						v->Read256BlockHeightY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4889  						v->Read256BlockWidthY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4890  						v->SourcePixelFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4891  						v->SurfaceTiling[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4892  						v->BytePerPixelY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4893  						v->SourceScan[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4894  						v->SwathWidthYThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4895  						v->ViewportHeight[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4896  						v->GPUVMEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4897  						v->HostVMEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4898  						v->HostVMMaxNonCachedPageTableLevels,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4899  						v->GPUVMMinPageSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4900  						v->HostVMMinPageSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4901  						v->PTEBufferSizeInRequestsForLuma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4902  						v->PitchY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4903  						v->DCCMetaPitchY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4904  						&v->MacroTileWidthY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4905  						&v->MetaRowBytesY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4906  						&v->DPTEBytesPerRowY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4907  						&v->PTEBufferSizeNotExceededY[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4908  						&v->dummyinteger7,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4909  						&v->dpte_row_height[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4910  						&v->dummyinteger29,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4911  						&v->dummyinteger27,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4912  						&v->dummyinteger24,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4913  						&v->meta_row_height[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4914  						&v->dummyinteger25,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4915  						&v->dpte_group_bytes[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4916  						&v->dummyinteger21,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4917  						&v->dummyinteger22,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4918  						&v->dummyinteger18,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4919  						&v->dummyinteger5,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4920  						&v->dummyinteger6);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4921  				v->PrefetchLinesY[i][j][k] = CalculatePrefetchSourceLines(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4922  						mode_lib,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4923  						v->VRatio[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4924  						v->vtaps[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4925  						v->Interlace[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4926  						v->ProgressiveToInterlaceUnitInOPP,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4927  						v->SwathHeightYThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4928  						v->ViewportYStartY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4929  						&v->PrefillY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4930  						&v->MaxNumSwY[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4931  				v->PDEAndMetaPTEBytesPerFrame[i][j][k] = v->PDEAndMetaPTEBytesPerFrameY + v->PDEAndMetaPTEBytesPerFrameC;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4932  				v->MetaRowBytes[i][j][k] = v->MetaRowBytesY + v->MetaRowBytesC;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4933  				v->DPTEBytesPerRow[i][j][k] = v->DPTEBytesPerRowY + v->DPTEBytesPerRowC;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4934  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4935  				CalculateRowBandwidth(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4936  						v->GPUVMEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4937  						v->SourcePixelFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4938  						v->VRatio[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4939  						v->VRatioChroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4940  						v->DCCEnable[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4941  						v->HTotal[k] / v->PixelClock[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4942  						v->MetaRowBytesY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4943  						v->MetaRowBytesC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4944  						v->meta_row_height[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4945  						v->meta_row_height_chroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4946  						v->DPTEBytesPerRowY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4947  						v->DPTEBytesPerRowC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4948  						v->dpte_row_height[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4949  						v->dpte_row_height_chroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4950  						&v->meta_row_bandwidth[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4951  						&v->dpte_row_bandwidth[i][j][k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4952  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4953  			v->UrgLatency[i] = CalculateUrgentLatency(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4954  					v->UrgentLatencyPixelDataOnly,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4955  					v->UrgentLatencyPixelMixedWithVMData,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4956  					v->UrgentLatencyVMDataOnly,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4957  					v->DoUrgentLatencyAdjustment,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4958  					v->UrgentLatencyAdjustmentFabricClockComponent,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4959  					v->UrgentLatencyAdjustmentFabricClockReference,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4960  					v->FabricClockPerState[i]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4961  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4962  			for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4963  				CalculateUrgentBurstFactor(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4964  						v->swath_width_luma_ub_this_state[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4965  						v->swath_width_chroma_ub_this_state[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4966  						v->SwathHeightYThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4967  						v->SwathHeightCThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4968  						v->HTotal[k] / v->PixelClock[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4969  						v->UrgLatency[i],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4970  						v->CursorBufferSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4971  						v->CursorWidth[k][0],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4972  						v->CursorBPP[k][0],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4973  						v->VRatio[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4974  						v->VRatioChroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4975  						v->BytePerPixelInDETY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4976  						v->BytePerPixelInDETC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4977  						v->DETBufferSizeYThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4978  						v->DETBufferSizeCThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4979  						&v->UrgentBurstFactorCursor[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4980  						&v->UrgentBurstFactorLuma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4981  						&v->UrgentBurstFactorChroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4982  						&NotUrgentLatencyHiding[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4983  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4984  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4985  			v->NotEnoughUrgentLatencyHidingA[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4986  			for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4987  				if (NotUrgentLatencyHiding[k]) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4988  					v->NotEnoughUrgentLatencyHidingA[i][j] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4989  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4990  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4991  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4992  			for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4993  				v->VActivePixelBandwidth[i][j][k] = v->ReadBandwidthLuma[k] * v->UrgentBurstFactorLuma[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4994  						+ v->ReadBandwidthChroma[k] * v->UrgentBurstFactorChroma[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4995  				v->VActiveCursorBandwidth[i][j][k] = v->cursor_bw[k] * v->UrgentBurstFactorCursor[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4996  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4997  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4998  			v->TotalVActivePixelBandwidth[i][j] = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  4999  			v->TotalVActiveCursorBandwidth[i][j] = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5000  			v->TotalMetaRowBandwidth[i][j] = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5001  			v->TotalDPTERowBandwidth[i][j] = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5002  			for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5003  				v->TotalVActivePixelBandwidth[i][j] = v->TotalVActivePixelBandwidth[i][j] + v->VActivePixelBandwidth[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5004  				v->TotalVActiveCursorBandwidth[i][j] = v->TotalVActiveCursorBandwidth[i][j] + v->VActiveCursorBandwidth[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5005  				v->TotalMetaRowBandwidth[i][j] = v->TotalMetaRowBandwidth[i][j] + v->NoOfDPP[i][j][k] * v->meta_row_bandwidth[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5006  				v->TotalDPTERowBandwidth[i][j] = v->TotalDPTERowBandwidth[i][j] + v->NoOfDPP[i][j][k] * v->dpte_row_bandwidth[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5007  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5008  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5009  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5010  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5011  	//Calculate Return BW
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5012  	for (i = 0; i < v->soc.num_states; ++i) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5013  		for (j = 0; j <= 1; ++j) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5014  			for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5015  				if (v->BlendingAndTiming[k] == k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5016  					if (v->WritebackEnable[k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5017  						v->WritebackDelayTime[k] = v->WritebackLatency
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5018  								+ CalculateWriteBackDelay(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5019  										v->WritebackPixelFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5020  										v->WritebackHRatio[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5021  										v->WritebackVRatio[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5022  										v->WritebackVTaps[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5023  										v->WritebackDestinationWidth[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5024  										v->WritebackDestinationHeight[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5025  										v->WritebackSourceHeight[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5026  										v->HTotal[k]) / v->RequiredDISPCLK[i][j];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5027  					} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5028  						v->WritebackDelayTime[k] = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5029  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5030  					for (m = 0; m < v->NumberOfActivePlanes; m++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5031  						if (v->BlendingAndTiming[m] == k && v->WritebackEnable[m] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5032  							v->WritebackDelayTime[k] = dml_max(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5033  									v->WritebackDelayTime[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5034  									v->WritebackLatency
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5035  											+ CalculateWriteBackDelay(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5036  													v->WritebackPixelFormat[m],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5037  													v->WritebackHRatio[m],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5038  													v->WritebackVRatio[m],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5039  													v->WritebackVTaps[m],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5040  													v->WritebackDestinationWidth[m],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5041  													v->WritebackDestinationHeight[m],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5042  													v->WritebackSourceHeight[m],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5043  													v->HTotal[m]) / v->RequiredDISPCLK[i][j]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5044  						}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5045  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5046  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5047  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5048  			for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5049  				for (m = 0; m < v->NumberOfActivePlanes; m++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5050  					if (v->BlendingAndTiming[k] == m) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5051  						v->WritebackDelayTime[k] = v->WritebackDelayTime[m];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5052  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5053  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5054  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5055  			v->MaxMaxVStartup[i][j] = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5056  			for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5057  				v->MaximumVStartup[i][j][k] =
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5058  						(v->Interlace[k] && !v->ProgressiveToInterlaceUnitInOPP) ?
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5059  								dml_floor((v->VTotal[k] - v->VActive[k]) / 2.0, 1.0) :
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5060  								v->VTotal[k] - v->VActive[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5061  										- dml_max(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5062  												1.0,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5063  												dml_ceil(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5064  														1.0 * v->WritebackDelayTime[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5065  																/ (v->HTotal[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5066  																		/ v->PixelClock[k]),
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5067  														1.0));
+5d9e7fe8ef9b1c Nikola Cornij       2021-06-07  5068  				if (v->MaximumVStartup[i][j][k] > 1023)
+5d9e7fe8ef9b1c Nikola Cornij       2021-06-07  5069  					v->MaximumVStartup[i][j][k] = 1023;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5070  				v->MaxMaxVStartup[i][j] = dml_max(v->MaxMaxVStartup[i][j], v->MaximumVStartup[i][j][k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5071  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5072  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5073  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5074  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5075  	ReorderingBytes = v->NumberOfChannels
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5076  			* dml_max3(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5077  					v->UrgentOutOfOrderReturnPerChannelPixelDataOnly,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5078  					v->UrgentOutOfOrderReturnPerChannelPixelMixedWithVMData,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5079  					v->UrgentOutOfOrderReturnPerChannelVMDataOnly);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5080  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5081  	for (i = 0; i < v->soc.num_states; ++i) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5082  		for (j = 0; j <= 1; ++j) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5083  			v->DCFCLKState[i][j] = v->DCFCLKPerState[i];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5084  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5085  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5086  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5087  	if (v->UseMinimumRequiredDCFCLK == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5088  		UseMinimumDCFCLK(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5089  				mode_lib,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5090  				v->MaxInterDCNTileRepeaters,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5091  				MaxPrefetchMode,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5092  				v->DRAMClockChangeLatency,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5093  				v->SREnterPlusExitTime,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5094  				v->ReturnBusWidth,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5095  				v->RoundTripPingLatencyCycles,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5096  				ReorderingBytes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5097  				v->PixelChunkSizeInKByte,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5098  				v->MetaChunkSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5099  				v->GPUVMEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5100  				v->GPUVMMaxPageTableLevels,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5101  				v->HostVMEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5102  				v->NumberOfActivePlanes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5103  				v->HostVMMinPageSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5104  				v->HostVMMaxNonCachedPageTableLevels,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5105  				v->DynamicMetadataVMEnabled,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5106  				v->ImmediateFlipRequirement,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5107  				v->ProgressiveToInterlaceUnitInOPP,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5108  				v->MaxAveragePercentOfIdealFabricAndSDPPortBWDisplayCanUseInNormalSystemOperation,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5109  				v->PercentOfIdealFabricAndSDPPortBWReceivedAfterUrgLatency,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5110  				v->VTotal,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5111  				v->VActive,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5112  				v->DynamicMetadataTransmittedBytes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5113  				v->DynamicMetadataLinesBeforeActiveRequired,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5114  				v->Interlace,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5115  				v->RequiredDPPCLK,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5116  				v->RequiredDISPCLK,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5117  				v->UrgLatency,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5118  				v->NoOfDPP,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5119  				v->ProjectedDCFCLKDeepSleep,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5120  				v->MaximumVStartup,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5121  				v->TotalVActivePixelBandwidth,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5122  				v->TotalVActiveCursorBandwidth,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5123  				v->TotalMetaRowBandwidth,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5124  				v->TotalDPTERowBandwidth,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5125  				v->TotalNumberOfActiveDPP,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5126  				v->TotalNumberOfDCCActiveDPP,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5127  				v->dpte_group_bytes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5128  				v->PrefetchLinesY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5129  				v->PrefetchLinesC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5130  				v->swath_width_luma_ub_all_states,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5131  				v->swath_width_chroma_ub_all_states,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5132  				v->BytePerPixelY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5133  				v->BytePerPixelC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5134  				v->HTotal,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5135  				v->PixelClock,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5136  				v->PDEAndMetaPTEBytesPerFrame,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5137  				v->DPTEBytesPerRow,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5138  				v->MetaRowBytes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5139  				v->DynamicMetadataEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5140  				v->VActivePixelBandwidth,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5141  				v->VActiveCursorBandwidth,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5142  				v->ReadBandwidthLuma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5143  				v->ReadBandwidthChroma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5144  				v->DCFCLKPerState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5145  				v->DCFCLKState);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5146  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5147  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5148  	for (i = 0; i < v->soc.num_states; ++i) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5149  		for (j = 0; j <= 1; ++j) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5150  			double IdealFabricAndSDPPortBandwidthPerState = dml_min(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5151  					v->ReturnBusWidth * v->DCFCLKState[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5152  					v->FabricClockPerState[i] * v->FabricDatapathToDCNDataReturn);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5153  			double IdealDRAMBandwidthPerState = v->DRAMSpeedPerState[i] * v->NumberOfChannels * v->DRAMChannelWidth;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5154  			double PixelDataOnlyReturnBWPerState = dml_min(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5155  					IdealFabricAndSDPPortBandwidthPerState * v->PercentOfIdealFabricAndSDPPortBWReceivedAfterUrgLatency / 100.0,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5156  					IdealDRAMBandwidthPerState * v->PercentOfIdealDRAMBWReceivedAfterUrgLatencyPixelDataOnly / 100.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5157  			double PixelMixedWithVMDataReturnBWPerState = dml_min(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5158  					IdealFabricAndSDPPortBandwidthPerState * v->PercentOfIdealFabricAndSDPPortBWReceivedAfterUrgLatency / 100.0,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5159  					IdealDRAMBandwidthPerState * v->PercentOfIdealDRAMBWReceivedAfterUrgLatencyPixelMixedWithVMData / 100.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5160  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5161  			if (v->HostVMEnable != true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5162  				v->ReturnBWPerState[i][j] = PixelDataOnlyReturnBWPerState;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5163  			} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5164  				v->ReturnBWPerState[i][j] = PixelMixedWithVMDataReturnBWPerState;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5165  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5166  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5167  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5168  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5169  	//Re-ordering Buffer Support Check
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5170  	for (i = 0; i < v->soc.num_states; ++i) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5171  		for (j = 0; j <= 1; ++j) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5172  			if ((v->ROBBufferSizeInKByte - v->PixelChunkSizeInKByte) * 1024 / v->ReturnBWPerState[i][j]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5173  					> (v->RoundTripPingLatencyCycles + __DML_ARB_TO_RET_DELAY__) / v->DCFCLKState[i][j] + ReorderingBytes / v->ReturnBWPerState[i][j]) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5174  				v->ROBSupport[i][j] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5175  			} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5176  				v->ROBSupport[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5177  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5178  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5179  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5180  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5181  	//Vertical Active BW support check
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5182  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5183  	MaxTotalVActiveRDBandwidth = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5184  	for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5185  		MaxTotalVActiveRDBandwidth = MaxTotalVActiveRDBandwidth + v->ReadBandwidthLuma[k] + v->ReadBandwidthChroma[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5186  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5187  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5188  	for (i = 0; i < v->soc.num_states; ++i) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5189  		for (j = 0; j <= 1; ++j) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5190  			v->MaxTotalVerticalActiveAvailableBandwidth[i][j] = dml_min(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5191  					dml_min(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5192  							v->ReturnBusWidth * v->DCFCLKState[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5193  							v->FabricClockPerState[i] * v->FabricDatapathToDCNDataReturn)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5194  							* v->MaxAveragePercentOfIdealFabricAndSDPPortBWDisplayCanUseInNormalSystemOperation / 100,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5195  					v->DRAMSpeedPerState[i] * v->NumberOfChannels * v->DRAMChannelWidth
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5196  							* v->MaxAveragePercentOfIdealDRAMBWDisplayCanUseInNormalSystemOperation / 100);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5197  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5198  			if (MaxTotalVActiveRDBandwidth <= v->MaxTotalVerticalActiveAvailableBandwidth[i][j]) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5199  				v->TotalVerticalActiveBandwidthSupport[i][j] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5200  			} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5201  				v->TotalVerticalActiveBandwidthSupport[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5202  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5203  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5204  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5205  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5206  	v->UrgentLatency = CalculateUrgentLatency(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5207  			v->UrgentLatencyPixelDataOnly,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5208  			v->UrgentLatencyPixelMixedWithVMData,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5209  			v->UrgentLatencyVMDataOnly,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5210  			v->DoUrgentLatencyAdjustment,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5211  			v->UrgentLatencyAdjustmentFabricClockComponent,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5212  			v->UrgentLatencyAdjustmentFabricClockReference,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5213  			v->FabricClock);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5214  	//Prefetch Check
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5215  	for (i = 0; i < v->soc.num_states; ++i) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5216  		for (j = 0; j <= 1; ++j) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5217  			double VMDataOnlyReturnBWPerState;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5218  			double HostVMInefficiencyFactor = 1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5219  			int NextPrefetchModeState = MinPrefetchMode;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5220  			bool UnboundedRequestEnabledThisState = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5221  			int CompressedBufferSizeInkByteThisState = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5222  			double dummy;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5223  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5224  			v->TimeCalc = 24 / v->ProjectedDCFCLKDeepSleep[i][j];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5225  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5226  			v->BandwidthWithoutPrefetchSupported[i][j] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5227  			if (v->TotalVActivePixelBandwidth[i][j] + v->TotalVActiveCursorBandwidth[i][j] + v->TotalMetaRowBandwidth[i][j]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5228  					+ v->TotalDPTERowBandwidth[i][j] > v->ReturnBWPerState[i][j] || v->NotEnoughUrgentLatencyHidingA[i][j]) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5229  				v->BandwidthWithoutPrefetchSupported[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5230  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5231  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5232  			for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5233  				v->NoOfDPPThisState[k] = v->NoOfDPP[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5234  				v->swath_width_luma_ub_this_state[k] = v->swath_width_luma_ub_all_states[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5235  				v->swath_width_chroma_ub_this_state[k] = v->swath_width_chroma_ub_all_states[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5236  				v->SwathWidthYThisState[k] = v->SwathWidthYAllStates[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5237  				v->SwathWidthCThisState[k] = v->SwathWidthCAllStates[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5238  				v->SwathHeightYThisState[k] = v->SwathHeightYAllStates[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5239  				v->SwathHeightCThisState[k] = v->SwathHeightCAllStates[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5240  				v->DETBufferSizeYThisState[k] = v->DETBufferSizeYAllStates[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5241  				v->DETBufferSizeCThisState[k] = v->DETBufferSizeCAllStates[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5242  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5243  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5244  			VMDataOnlyReturnBWPerState = dml_min(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5245  					dml_min(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5246  							v->ReturnBusWidth * v->DCFCLKState[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5247  							v->FabricClockPerState[i] * v->FabricDatapathToDCNDataReturn)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5248  							* v->PercentOfIdealFabricAndSDPPortBWReceivedAfterUrgLatency / 100.0,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5249  					v->DRAMSpeedPerState[i] * v->NumberOfChannels * v->DRAMChannelWidth
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5250  							* v->PercentOfIdealDRAMBWReceivedAfterUrgLatencyVMDataOnly / 100.0);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5251  			if (v->GPUVMEnable && v->HostVMEnable)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5252  				HostVMInefficiencyFactor = v->ReturnBWPerState[i][j] / VMDataOnlyReturnBWPerState;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5253  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5254  			v->ExtraLatency = CalculateExtraLatency(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5255  					v->RoundTripPingLatencyCycles,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5256  					ReorderingBytes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5257  					v->DCFCLKState[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5258  					v->TotalNumberOfActiveDPP[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5259  					v->PixelChunkSizeInKByte,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5260  					v->TotalNumberOfDCCActiveDPP[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5261  					v->MetaChunkSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5262  					v->ReturnBWPerState[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5263  					v->GPUVMEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5264  					v->HostVMEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5265  					v->NumberOfActivePlanes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5266  					v->NoOfDPPThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5267  					v->dpte_group_bytes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5268  					HostVMInefficiencyFactor,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5269  					v->HostVMMinPageSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5270  					v->HostVMMaxNonCachedPageTableLevels);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5271  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5272  			v->NextMaxVStartup = v->MaxMaxVStartup[i][j];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5273  			do {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5274  				v->PrefetchModePerState[i][j] = NextPrefetchModeState;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5275  				v->MaxVStartup = v->NextMaxVStartup;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5276  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5277  				v->TWait = CalculateTWait(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5278  						v->PrefetchModePerState[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5279  						v->DRAMClockChangeLatency,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5280  						v->UrgLatency[i],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5281  						v->SREnterPlusExitTime);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5282  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5283  				for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5284  					Pipe myPipe;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5285  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5286  					myPipe.DPPCLK = v->RequiredDPPCLK[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5287  					myPipe.DISPCLK = v->RequiredDISPCLK[i][j];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5288  					myPipe.PixelClock = v->PixelClock[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5289  					myPipe.DCFCLKDeepSleep = v->ProjectedDCFCLKDeepSleep[i][j];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5290  					myPipe.DPPPerPlane = v->NoOfDPP[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5291  					myPipe.ScalerEnabled = v->ScalerEnabled[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5292  					myPipe.SourceScan = v->SourceScan[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5293  					myPipe.BlockWidth256BytesY = v->Read256BlockWidthY[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5294  					myPipe.BlockHeight256BytesY = v->Read256BlockHeightY[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5295  					myPipe.BlockWidth256BytesC = v->Read256BlockWidthC[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5296  					myPipe.BlockHeight256BytesC = v->Read256BlockHeightC[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5297  					myPipe.InterlaceEnable = v->Interlace[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5298  					myPipe.NumberOfCursors = v->NumberOfCursors[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5299  					myPipe.VBlank = v->VTotal[k] - v->VActive[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5300  					myPipe.HTotal = v->HTotal[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5301  					myPipe.DCCEnable = v->DCCEnable[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5302  					myPipe.ODMCombineIsEnabled = v->ODMCombineEnablePerState[i][k] == dm_odm_combine_mode_4to1
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5303  							|| v->ODMCombineEnablePerState[i][k] == dm_odm_combine_mode_2to1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5304  					myPipe.SourcePixelFormat = v->SourcePixelFormat[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5305  					myPipe.BytePerPixelY = v->BytePerPixelY[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5306  					myPipe.BytePerPixelC = v->BytePerPixelC[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5307  					myPipe.ProgressiveToInterlaceUnitInOPP = v->ProgressiveToInterlaceUnitInOPP;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5308  					v->NoTimeForPrefetch[i][j][k] = CalculatePrefetchSchedule(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5309  							mode_lib,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5310  							HostVMInefficiencyFactor,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5311  							&myPipe,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5312  							v->DSCDelayPerState[i][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5313  							v->DPPCLKDelaySubtotal + v->DPPCLKDelayCNVCFormater,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5314  							v->DPPCLKDelaySCL,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5315  							v->DPPCLKDelaySCLLBOnly,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5316  							v->DPPCLKDelayCNVCCursor,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5317  							v->DISPCLKDelaySubtotal,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5318  							v->SwathWidthYThisState[k] / v->HRatio[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5319  							v->OutputFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5320  							v->MaxInterDCNTileRepeaters,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5321  							dml_min(v->MaxVStartup, v->MaximumVStartup[i][j][k]),
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5322  							v->MaximumVStartup[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5323  							v->GPUVMMaxPageTableLevels,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5324  							v->GPUVMEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5325  							v->HostVMEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5326  							v->HostVMMaxNonCachedPageTableLevels,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5327  							v->HostVMMinPageSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5328  							v->DynamicMetadataEnable[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5329  							v->DynamicMetadataVMEnabled,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5330  							v->DynamicMetadataLinesBeforeActiveRequired[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5331  							v->DynamicMetadataTransmittedBytes[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5332  							v->UrgLatency[i],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5333  							v->ExtraLatency,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5334  							v->TimeCalc,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5335  							v->PDEAndMetaPTEBytesPerFrame[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5336  							v->MetaRowBytes[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5337  							v->DPTEBytesPerRow[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5338  							v->PrefetchLinesY[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5339  							v->SwathWidthYThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5340  							v->PrefillY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5341  							v->MaxNumSwY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5342  							v->PrefetchLinesC[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5343  							v->SwathWidthCThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5344  							v->PrefillC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5345  							v->MaxNumSwC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5346  							v->swath_width_luma_ub_this_state[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5347  							v->swath_width_chroma_ub_this_state[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5348  							v->SwathHeightYThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5349  							v->SwathHeightCThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5350  							v->TWait,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5351  							&v->DSTXAfterScaler[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5352  							&v->DSTYAfterScaler[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5353  							&v->LineTimesForPrefetch[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5354  							&v->PrefetchBW[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5355  							&v->LinesForMetaPTE[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5356  							&v->LinesForMetaAndDPTERow[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5357  							&v->VRatioPreY[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5358  							&v->VRatioPreC[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5359  							&v->RequiredPrefetchPixelDataBWLuma[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5360  							&v->RequiredPrefetchPixelDataBWChroma[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5361  							&v->NoTimeForDynamicMetadata[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5362  							&v->Tno_bw[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5363  							&v->prefetch_vmrow_bw[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5364  							&v->dummy7[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5365  							&v->dummy8[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5366  							&v->dummy13[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5367  							&v->VUpdateOffsetPix[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5368  							&v->VUpdateWidthPix[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5369  							&v->VReadyOffsetPix[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5370  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5371  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5372  				for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5373  					CalculateUrgentBurstFactor(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5374  							v->swath_width_luma_ub_this_state[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5375  							v->swath_width_chroma_ub_this_state[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5376  							v->SwathHeightYThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5377  							v->SwathHeightCThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5378  							v->HTotal[k] / v->PixelClock[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5379  							v->UrgentLatency,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5380  							v->CursorBufferSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5381  							v->CursorWidth[k][0],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5382  							v->CursorBPP[k][0],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5383  							v->VRatioPreY[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5384  							v->VRatioPreC[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5385  							v->BytePerPixelInDETY[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5386  							v->BytePerPixelInDETC[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5387  							v->DETBufferSizeYThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5388  							v->DETBufferSizeCThisState[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5389  							&v->UrgentBurstFactorCursorPre[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5390  							&v->UrgentBurstFactorLumaPre[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5391  							&v->UrgentBurstFactorChroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5392  							&v->NotUrgentLatencyHidingPre[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5393  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5394  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5395  				v->MaximumReadBandwidthWithPrefetch = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5396  				for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5397  					v->cursor_bw_pre[k] = v->NumberOfCursors[k] * v->CursorWidth[k][0] * v->CursorBPP[k][0] / 8.0
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5398  							/ (v->HTotal[k] / v->PixelClock[k]) * v->VRatioPreY[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5399  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5400  					v->MaximumReadBandwidthWithPrefetch =
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5401  							v->MaximumReadBandwidthWithPrefetch
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5402  									+ dml_max4(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5403  											v->VActivePixelBandwidth[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5404  											v->VActiveCursorBandwidth[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5405  													+ v->NoOfDPP[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5406  															* (v->meta_row_bandwidth[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5407  																	+ v->dpte_row_bandwidth[i][j][k]),
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5408  											v->NoOfDPP[i][j][k] * v->prefetch_vmrow_bw[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5409  											v->NoOfDPP[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5410  													* (v->RequiredPrefetchPixelDataBWLuma[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5411  															* v->UrgentBurstFactorLumaPre[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5412  															+ v->RequiredPrefetchPixelDataBWChroma[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5413  																	* v->UrgentBurstFactorChromaPre[k])
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5414  													+ v->cursor_bw_pre[k] * v->UrgentBurstFactorCursorPre[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5415  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5416  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5417  				v->NotEnoughUrgentLatencyHidingPre = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5418  				for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5419  					if (v->NotUrgentLatencyHidingPre[k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5420  						v->NotEnoughUrgentLatencyHidingPre = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5421  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5422  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5423  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5424  				v->PrefetchSupported[i][j] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5425  				if (v->BandwidthWithoutPrefetchSupported[i][j] == false || v->MaximumReadBandwidthWithPrefetch > v->ReturnBWPerState[i][j]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5426  						|| v->NotEnoughUrgentLatencyHidingPre == 1) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5427  					v->PrefetchSupported[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5428  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5429  				for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5430  					if (v->LineTimesForPrefetch[k] < 2.0 || v->LinesForMetaPTE[k] >= 32.0 || v->LinesForMetaAndDPTERow[k] >= 16.0
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5431  							|| v->NoTimeForPrefetch[i][j][k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5432  						v->PrefetchSupported[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5433  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5434  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5435  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5436  				v->DynamicMetadataSupported[i][j] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5437  				for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5438  					if (v->NoTimeForDynamicMetadata[i][j][k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5439  						v->DynamicMetadataSupported[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5440  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5441  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5442  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5443  				v->VRatioInPrefetchSupported[i][j] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5444  				for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5445  					if (v->VRatioPreY[i][j][k] > 4.0 || v->VRatioPreC[i][j][k] > 4.0 || v->NoTimeForPrefetch[i][j][k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5446  						v->VRatioInPrefetchSupported[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5447  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5448  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5449  				v->AnyLinesForVMOrRowTooLarge = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5450  				for (k = 0; k < v->NumberOfActivePlanes; ++k) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5451  					if (v->LinesForMetaAndDPTERow[k] >= 16 || v->LinesForMetaPTE[k] >= 32) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5452  						v->AnyLinesForVMOrRowTooLarge = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5453  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5454  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5455  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5456  				v->NextPrefetchMode = v->NextPrefetchMode + 1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5457  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5458  				if (v->PrefetchSupported[i][j] == true && v->VRatioInPrefetchSupported[i][j] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5459  					v->BandwidthAvailableForImmediateFlip = v->ReturnBWPerState[i][j];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5460  					for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5461  						v->BandwidthAvailableForImmediateFlip = v->BandwidthAvailableForImmediateFlip
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5462  								- dml_max(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5463  										v->VActivePixelBandwidth[i][j][k] + v->VActiveCursorBandwidth[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5464  										v->NoOfDPP[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5465  												* (v->RequiredPrefetchPixelDataBWLuma[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5466  														* v->UrgentBurstFactorLumaPre[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5467  														+ v->RequiredPrefetchPixelDataBWChroma[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5468  																* v->UrgentBurstFactorChromaPre[k])
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5469  												+ v->cursor_bw_pre[k] * v->UrgentBurstFactorCursorPre[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5470  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5471  					v->TotImmediateFlipBytes = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5472  					for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5473  						v->TotImmediateFlipBytes = v->TotImmediateFlipBytes
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5474  								+ v->NoOfDPP[i][j][k] * v->PDEAndMetaPTEBytesPerFrame[i][j][k] + v->MetaRowBytes[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5475  								+ v->DPTEBytesPerRow[i][j][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5476  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5477  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5478  					for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5479  						CalculateFlipSchedule(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5480  								mode_lib,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5481  								HostVMInefficiencyFactor,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5482  								v->ExtraLatency,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5483  								v->UrgLatency[i],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5484  								v->GPUVMMaxPageTableLevels,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5485  								v->HostVMEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5486  								v->HostVMMaxNonCachedPageTableLevels,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5487  								v->GPUVMEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5488  								v->HostVMMinPageSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5489  								v->PDEAndMetaPTEBytesPerFrame[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5490  								v->MetaRowBytes[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5491  								v->DPTEBytesPerRow[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5492  								v->BandwidthAvailableForImmediateFlip,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5493  								v->TotImmediateFlipBytes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5494  								v->SourcePixelFormat[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5495  								v->HTotal[k] / v->PixelClock[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5496  								v->VRatio[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5497  								v->VRatioChroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5498  								v->Tno_bw[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5499  								v->DCCEnable[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5500  								v->dpte_row_height[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5501  								v->meta_row_height[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5502  								v->dpte_row_height_chroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5503  								v->meta_row_height_chroma[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5504  								&v->DestinationLinesToRequestVMInImmediateFlip[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5505  								&v->DestinationLinesToRequestRowInImmediateFlip[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5506  								&v->final_flip_bw[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5507  								&v->ImmediateFlipSupportedForPipe[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5508  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5509  					v->total_dcn_read_bw_with_flip = 0.0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5510  					for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5511  						v->total_dcn_read_bw_with_flip = v->total_dcn_read_bw_with_flip
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5512  								+ dml_max3(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5513  										v->NoOfDPP[i][j][k] * v->prefetch_vmrow_bw[k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5514  										v->NoOfDPP[i][j][k] * v->final_flip_bw[k] + v->VActivePixelBandwidth[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5515  												+ v->VActiveCursorBandwidth[i][j][k],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5516  										v->NoOfDPP[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5517  												* (v->final_flip_bw[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5518  														+ v->RequiredPrefetchPixelDataBWLuma[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5519  																* v->UrgentBurstFactorLumaPre[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5520  														+ v->RequiredPrefetchPixelDataBWChroma[i][j][k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5521  																* v->UrgentBurstFactorChromaPre[k])
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5522  												+ v->cursor_bw_pre[k] * v->UrgentBurstFactorCursorPre[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5523  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5524  					v->ImmediateFlipSupportedForState[i][j] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5525  					if (v->total_dcn_read_bw_with_flip > v->ReturnBWPerState[i][j]) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5526  						v->ImmediateFlipSupportedForState[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5527  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5528  					for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5529  						if (v->ImmediateFlipSupportedForPipe[k] == false) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5530  							v->ImmediateFlipSupportedForState[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5531  						}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5532  					}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5533  				} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5534  					v->ImmediateFlipSupportedForState[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5535  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5536  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5537  				if (v->MaxVStartup <= __DML_VBA_MIN_VSTARTUP__ || v->AnyLinesForVMOrRowTooLarge == false) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5538  					v->NextMaxVStartup = v->MaxMaxVStartup[i][j];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5539  					NextPrefetchModeState = NextPrefetchModeState + 1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5540  				} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5541  					v->NextMaxVStartup = v->NextMaxVStartup - 1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5542  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5543  				v->NextPrefetchMode = v->NextPrefetchMode + 1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5544  			} while (!((v->PrefetchSupported[i][j] == true && v->DynamicMetadataSupported[i][j] == true && v->VRatioInPrefetchSupported[i][j] == true
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5545  					&& ((v->HostVMEnable == false && v->ImmediateFlipRequirement != dm_immediate_flip_required)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5546  							|| v->ImmediateFlipSupportedForState[i][j] == true))
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5547  					|| (v->NextMaxVStartup == v->MaxMaxVStartup[i][j] && NextPrefetchModeState > MaxPrefetchMode)));
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5548  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5549  			CalculateUnboundedRequestAndCompressedBufferSize(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5550  					v->DETBufferSizeInKByte[0],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5551  					v->ConfigReturnBufferSizeInKByte,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5552  					v->UseUnboundedRequesting,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5553  					v->TotalNumberOfActiveDPP[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5554  					NoChroma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5555  					v->MaxNumDPP,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5556  					v->CompressedBufferSegmentSizeInkByte,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5557  					v->Output,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5558  					&UnboundedRequestEnabledThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5559  					&CompressedBufferSizeInkByteThisState);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5560  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5561  			CalculateWatermarksAndDRAMSpeedChangeSupport(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5562  					mode_lib,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5563  					v->PrefetchModePerState[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5564  					v->NumberOfActivePlanes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5565  					v->MaxLineBufferLines,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5566  					v->LineBufferSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5567  					v->WritebackInterfaceBufferSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5568  					v->DCFCLKState[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5569  					v->ReturnBWPerState[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5570  					v->SynchronizedVBlank,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5571  					v->dpte_group_bytes,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5572  					v->MetaChunkSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5573  					v->UrgLatency[i],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5574  					v->ExtraLatency,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5575  					v->WritebackLatency,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5576  					v->WritebackChunkSize,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5577  					v->SOCCLKPerState[i],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5578  					v->DRAMClockChangeLatency,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5579  					v->SRExitTime,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5580  					v->SREnterPlusExitTime,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5581  					v->SRExitZ8Time,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5582  					v->SREnterPlusExitZ8Time,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5583  					v->ProjectedDCFCLKDeepSleep[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5584  					v->DETBufferSizeYThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5585  					v->DETBufferSizeCThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5586  					v->SwathHeightYThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5587  					v->SwathHeightCThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5588  					v->LBBitPerPixel,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5589  					v->SwathWidthYThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5590  					v->SwathWidthCThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5591  					v->HRatio,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5592  					v->HRatioChroma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5593  					v->vtaps,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5594  					v->VTAPsChroma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5595  					v->VRatio,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5596  					v->VRatioChroma,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5597  					v->HTotal,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5598  					v->PixelClock,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5599  					v->BlendingAndTiming,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5600  					v->NoOfDPPThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5601  					v->BytePerPixelInDETY,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5602  					v->BytePerPixelInDETC,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5603  					v->DSTXAfterScaler,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5604  					v->DSTYAfterScaler,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5605  					v->WritebackEnable,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5606  					v->WritebackPixelFormat,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5607  					v->WritebackDestinationWidth,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5608  					v->WritebackDestinationHeight,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5609  					v->WritebackSourceHeight,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5610  					UnboundedRequestEnabledThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5611  					CompressedBufferSizeInkByteThisState,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5612  					&v->DRAMClockChangeSupport[i][j],
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5613  					&v->UrgentWatermark,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5614  					&v->WritebackUrgentWatermark,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5615  					&v->DRAMClockChangeWatermark,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5616  					&v->WritebackDRAMClockChangeWatermark,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5617  					&dummy,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5618  					&dummy,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5619  					&dummy,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5620  					&dummy,
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5621  					&v->MinActiveDRAMClockChangeLatencySupported);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5622  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5623  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5624  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5625  	/*PTE Buffer Size Check*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5626  	for (i = 0; i < v->soc.num_states; i++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5627  		for (j = 0; j < 2; j++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5628  			v->PTEBufferSizeNotExceeded[i][j] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5629  			for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5630  				if (v->PTEBufferSizeNotExceededY[i][j][k] == false || v->PTEBufferSizeNotExceededC[i][j][k] == false) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5631  					v->PTEBufferSizeNotExceeded[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5632  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5633  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5634  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5635  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5636  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5637  	/*Cursor Support Check*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5638  	v->CursorSupport = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5639  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5640  		if (v->CursorWidth[k][0] > 0.0) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5641  			if (v->CursorBPP[k][0] == 64 && v->Cursor64BppSupport == false) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5642  				v->CursorSupport = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5643  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5644  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5645  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5646  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5647  	/*Valid Pitch Check*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5648  	v->PitchSupport = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5649  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5650  		v->AlignedYPitch[k] = dml_ceil(dml_max(v->PitchY[k], v->SurfaceWidthY[k]), v->MacroTileWidthY[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5651  		if (v->DCCEnable[k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5652  			v->AlignedDCCMetaPitchY[k] = dml_ceil(dml_max(v->DCCMetaPitchY[k], v->SurfaceWidthY[k]), 64.0 * v->Read256BlockWidthY[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5653  		} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5654  			v->AlignedDCCMetaPitchY[k] = v->DCCMetaPitchY[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5655  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5656  		if (v->SourcePixelFormat[k] != dm_444_64 && v->SourcePixelFormat[k] != dm_444_32 && v->SourcePixelFormat[k] != dm_444_16
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5657  				&& v->SourcePixelFormat[k] != dm_mono_16 && v->SourcePixelFormat[k] != dm_rgbe
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5658  				&& v->SourcePixelFormat[k] != dm_mono_8) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5659  			v->AlignedCPitch[k] = dml_ceil(dml_max(v->PitchC[k], v->SurfaceWidthC[k]), v->MacroTileWidthC[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5660  			if (v->DCCEnable[k] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5661  				v->AlignedDCCMetaPitchC[k] = dml_ceil(
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5662  						dml_max(v->DCCMetaPitchC[k], v->SurfaceWidthC[k]),
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5663  						64.0 * v->Read256BlockWidthC[k]);
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5664  			} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5665  				v->AlignedDCCMetaPitchC[k] = v->DCCMetaPitchC[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5666  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5667  		} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5668  			v->AlignedCPitch[k] = v->PitchC[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5669  			v->AlignedDCCMetaPitchC[k] = v->DCCMetaPitchC[k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5670  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5671  		if (v->AlignedYPitch[k] > v->PitchY[k] || v->AlignedCPitch[k] > v->PitchC[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5672  				|| v->AlignedDCCMetaPitchY[k] > v->DCCMetaPitchY[k] || v->AlignedDCCMetaPitchC[k] > v->DCCMetaPitchC[k]) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5673  			v->PitchSupport = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5674  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5675  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5676  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5677  	for (k = 0; k < v->NumberOfActivePlanes; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5678  		if (v->ViewportWidth[k] > v->SurfaceWidthY[k] || v->ViewportHeight[k] > v->SurfaceHeightY[k]) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5679  			ViewportExceedsSurface = true;
+28a0a14423b855 Wan Jiabing         2021-06-09  5680  			if (v->SourcePixelFormat[k] != dm_444_64 && v->SourcePixelFormat[k] != dm_444_32
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5681  					&& v->SourcePixelFormat[k] != dm_444_16 && v->SourcePixelFormat[k] != dm_444_8
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5682  					&& v->SourcePixelFormat[k] != dm_rgbe) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5683  				if (v->ViewportWidthChroma[k] > v->SurfaceWidthC[k]
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5684  						|| v->ViewportHeightChroma[k] > v->SurfaceHeightC[k]) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5685  					ViewportExceedsSurface = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5686  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5687  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5688  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5689  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5690  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5691  	/*Mode Support, Voltage State and SOC Configuration*/
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5692  	for (i = v->soc.num_states - 1; i >= 0; i--) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5693  		for (j = 0; j < 2; j++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5694  			if (v->ScaleRatioAndTapsSupport == true && v->SourceFormatPixelAndScanSupport == true && v->ViewportSizeSupport[i][j] == true
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5695  					&& v->LinkCapacitySupport[i] == true && !P2IWith420 && !DSCOnlyIfNecessaryWithBPP
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5696  					&& !DSC422NativeNotSupported && v->ODMCombine4To1SupportCheckOK[i] == true && v->NotEnoughDSCUnits[i] == false
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5697  					&& v->DTBCLKRequiredMoreThanSupported[i] == false
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5698  					&& v->ROBSupport[i][j] == true && v->DISPCLK_DPPCLK_Support[i][j] == true
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5699  					&& v->TotalAvailablePipesSupport[i][j] == true && EnoughWritebackUnits == true
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5700  					&& v->WritebackLatencySupport == true && v->WritebackScaleRatioAndTapsSupport == true
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5701  					&& v->CursorSupport == true && v->PitchSupport == true && ViewportExceedsSurface == false
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5702  					&& v->PrefetchSupported[i][j] == true && v->DynamicMetadataSupported[i][j] == true
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5703  					&& v->TotalVerticalActiveBandwidthSupport[i][j] == true && v->VRatioInPrefetchSupported[i][j] == true
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5704  					&& v->PTEBufferSizeNotExceeded[i][j] == true && v->NonsupportedDSCInputBPC == false
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5705  					&& ((v->HostVMEnable == false && v->ImmediateFlipRequirement != dm_immediate_flip_required)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5706  							|| v->ImmediateFlipSupportedForState[i][j] == true)
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5707  					&& FMTBufferExceeded == false) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5708  				v->ModeSupport[i][j] = true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5709  			} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5710  				v->ModeSupport[i][j] = false;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5711  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5712  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5713  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5714  
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5715  	{
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5716  		unsigned int MaximumMPCCombine = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5717  		for (i = v->soc.num_states; i >= 0; i--) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5718  			if (i == v->soc.num_states || v->ModeSupport[i][0] == true || v->ModeSupport[i][1] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5719  				v->VoltageLevel = i;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5720  				v->ModeIsSupported = v->ModeSupport[i][0] == true || v->ModeSupport[i][1] == true;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5721  				if (v->ModeSupport[i][0] == true) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5722  					MaximumMPCCombine = 0;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5723  				} else {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5724  					MaximumMPCCombine = 1;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5725  				}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5726  			}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5727  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5728  		v->ImmediateFlipSupport = v->ImmediateFlipSupportedForState[v->VoltageLevel][MaximumMPCCombine];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5729  		for (k = 0; k <= v->NumberOfActivePlanes - 1; k++) {
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5730  			v->MPCCombineEnable[k] = v->MPCCombine[v->VoltageLevel][MaximumMPCCombine][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5731  			v->DPPPerPlane[k] = v->NoOfDPP[v->VoltageLevel][MaximumMPCCombine][k];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5732  		}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5733  		v->DCFCLK = v->DCFCLKState[v->VoltageLevel][MaximumMPCCombine];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5734  		v->DRAMSpeed = v->DRAMSpeedPerState[v->VoltageLevel];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5735  		v->FabricClock = v->FabricClockPerState[v->VoltageLevel];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5736  		v->SOCCLK = v->SOCCLKPerState[v->VoltageLevel];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5737  		v->ReturnBW = v->ReturnBWPerState[v->VoltageLevel][MaximumMPCCombine];
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5738  		v->maxMpcComb = MaximumMPCCombine;
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5739  	}
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5740  }
+74458c081fcfb0 Nicholas Kazlauskas 2021-05-19  5741  
 
-Huacai
-> > +#define LOONGARCH_CPUCFG0            0x0
-> > +#define  CPUCFG0_PRID                        GENMASK(31, 0)
-> > +
-> > +#define LOONGARCH_CPUCFG1            0x1
-> > +#define  CPUCFG1_ISGR32                      BIT(0)
-> > +#define  CPUCFG1_ISGR64                      BIT(1)
-> > +#define  CPUCFG1_PAGING                      BIT(2)
-> > +#define  CPUCFG1_IOCSR                       BIT(3)
-> > +#define  CPUCFG1_PABITS                      GENMASK(11, 4)
-> > +#define  CPUCFG1_VABITS                      GENMASK(19, 12)
-> > +#define  CPUCFG1_UAL                 BIT(20)
-> > +#define  CPUCFG1_RI                  BIT(21)
-> > +#define  CPUCFG1_EP                  BIT(22)
-> > +#define  CPUCFG1_RPLV                        BIT(23)
-> > +#define  CPUCFG1_HUGEPG                      BIT(24)
-> > +#define  CPUCFG1_IOCSRBRD            BIT(25)
-> > +#define  CPUCFG1_MSGINT                      BIT(26)
-> These names are not consistent with the reference manual. For example
-> the bits 0-1 is actually an enum, and bit 2 is called PGMMU in the
-> LoongArch reference manual.
-> > +
-> > +#define LOONGARCH_CPUCFG2            0x2
-> > +#define  CPUCFG2_FP                  BIT(0)
-> > +#define  CPUCFG2_FPSP                        BIT(1)
-> > +#define  CPUCFG2_FPDP                        BIT(2)
-> > +#define  CPUCFG2_FPVERS                      GENMASK(5, 3)
-> > +#define  CPUCFG2_LSX                 BIT(6)
-> > +#define  CPUCFG2_LASX                        BIT(7)
-> > +#define  CPUCFG2_COMPLEX             BIT(8)
-> > +#define  CPUCFG2_CRYPTO                      BIT(9)
-> > +#define  CPUCFG2_LVZP                        BIT(10)
-> > +#define  CPUCFG2_LVZVER                      GENMASK(13, 11)
-> > +#define  CPUCFG2_LLFTP                       BIT(14)
-> > +#define  CPUCFG2_LLFTPREV            GENMASK(17, 15)
-> > +#define  CPUCFG2_X86BT                       BIT(18)
-> > +#define  CPUCFG2_ARMBT                       BIT(19)
-> > +#define  CPUCFG2_MIPSBT                      BIT(20)
-> > +#define  CPUCFG2_LSPW                        BIT(21)
-> > +#define  CPUCFG2_LAM                 BIT(22)
-> > +
-> > +#define LOONGARCH_CPUCFG3            0x3
-> > +#define  CPUCFG3_CCDMA                       BIT(0)
-> > +#define  CPUCFG3_SFB                 BIT(1)
-> > +#define  CPUCFG3_UCACC                       BIT(2)
-> > +#define  CPUCFG3_LLEXC                       BIT(3)
-> > +#define  CPUCFG3_SCDLY                       BIT(4)
-> > +#define  CPUCFG3_LLDBAR                      BIT(5)
-> > +#define  CPUCFG3_ITLBT                       BIT(6)
-> > +#define  CPUCFG3_ICACHET             BIT(7)
-> > +#define  CPUCFG3_SPW_LVL             GENMASK(10, 8)
-> > +#define  CPUCFG3_SPW_HG_HF           BIT(11)
-> > +#define  CPUCFG3_RVA                 BIT(12)
-> > +#define  CPUCFG3_RVAMAX                      GENMASK(16, 13)
-> > +
-> > +#define LOONGARCH_CPUCFG4            0x4
-> > +#define  CPUCFG4_CCFREQ                      GENMASK(31, 0)
-> > +
-> > +#define LOONGARCH_CPUCFG5            0x5
-> > +#define  CPUCFG5_CCMUL                       GENMASK(15, 0)
-> > +#define  CPUCFG5_CCDIV                       GENMASK(31, 16)
-> > +
-> > +#define LOONGARCH_CPUCFG6            0x6
-> > +#define  CPUCFG6_PMP                 BIT(0)
-> > +#define  CPUCFG6_PAMVER                      GENMASK(3, 1)
-> > +#define  CPUCFG6_PMNUM                       GENMASK(7, 4)
-> > +#define  CPUCFG6_PMBITS                      GENMASK(13, 8)
-> > +#define  CPUCFG6_UPM                 BIT(14)
-> > +
-> > +#define LOONGARCH_CPUCFG16           0x10
-> > +#define  CPUCFG16_L1_IUPRE           BIT(0)
-> > +#define  CPUCFG16_L1_IUUNIFY         BIT(1)
-> > +#define  CPUCFG16_L1_DPRE            BIT(2)
-> > +#define  CPUCFG16_L2_IUPRE           BIT(3)
-> > +#define  CPUCFG16_L2_IUUNIFY         BIT(4)
-> > +#define  CPUCFG16_L2_IUPRIV          BIT(5)
-> > +#define  CPUCFG16_L2_IUINCL          BIT(6)
-> > +#define  CPUCFG16_L2_DPRE            BIT(7)
-> > +#define  CPUCFG16_L2_DPRIV           BIT(8)
-> > +#define  CPUCFG16_L2_DINCL           BIT(9)
-> > +#define  CPUCFG16_L3_IUPRE           BIT(10)
-> > +#define  CPUCFG16_L3_IUUNIFY         BIT(11)
-> > +#define  CPUCFG16_L3_IUPRIV          BIT(12)
-> > +#define  CPUCFG16_L3_IUINCL          BIT(13)
-> > +#define  CPUCFG16_L3_DPRE            BIT(14)
-> > +#define  CPUCFG16_L3_DPRIV           BIT(15)
-> > +#define  CPUCFG16_L3_DINCL           BIT(16)
-> > +
-> > +#define LOONGARCH_CPUCFG17           0x11
-> > +#define  CPUCFG17_L1I_WAYS_M         GENMASK(15, 0)
-> > +#define  CPUCFG17_L1I_SETS_M         GENMASK(23, 16)
-> > +#define  CPUCFG17_L1I_SIZE_M         GENMASK(30, 24)
-> > +#define  CPUCFG17_L1I_WAYS           0
-> > +#define  CPUCFG17_L1I_SETS           16
-> > +#define  CPUCFG17_L1I_SIZE           24
-> > +
-> > +#define LOONGARCH_CPUCFG18           0x12
-> > +#define  CPUCFG18_L1D_WAYS_M         GENMASK(15, 0)
-> > +#define  CPUCFG18_L1D_SETS_M         GENMASK(23, 16)
-> > +#define  CPUCFG18_L1D_SIZE_M         GENMASK(30, 24)
-> > +#define  CPUCFG18_L1D_WAYS           0
-> > +#define  CPUCFG18_L1D_SETS           16
-> > +#define  CPUCFG18_L1D_SIZE           24
-> > +
-> > +#define LOONGARCH_CPUCFG19           0x13
-> > +#define  CPUCFG19_L2_WAYS_M          GENMASK(15, 0)
-> > +#define  CPUCFG19_L2_SETS_M          GENMASK(23, 16)
-> > +#define  CPUCFG19_L2_SIZE_M          GENMASK(30, 24)
-> > +#define  CPUCFG19_L2_WAYS            0
-> > +#define  CPUCFG19_L2_SETS            16
-> > +#define  CPUCFG19_L2_SIZE            24
-> > +
-> > +#define LOONGARCH_CPUCFG20           0x14
-> > +#define  CPUCFG20_L3_WAYS_M          GENMASK(15, 0)
-> > +#define  CPUCFG20_L3_SETS_M          GENMASK(23, 16)
-> > +#define  CPUCFG20_L3_SIZE_M          GENMASK(30, 24)
-> > +#define  CPUCFG20_L3_WAYS            0
-> > +#define  CPUCFG20_L3_SETS            16
-> > +#define  CPUCFG20_L3_SIZE            24
-> > +
-> > +#define LOONGARCH_CPUCFG48           0x30
-> > +#define  CPUCFG48_MCSR_LCK           BIT(0)
-> > +#define  CPUCFG48_NAP_EN             BIT(1)
-> > +#define  CPUCFG48_VFPU_CG            BIT(2)
-> > +#define  CPUCFG48_RAM_CG             BIT(3)
-> > +
-> > +#ifndef __ASSEMBLY__
-> > +
-> > +/* CSR */
-> > +static __always_inline u32 csr_readl(u32 reg)
-> > +{
-> > +     return __csrrd_w(reg);
-> > +}
-> > +
-> > +static __always_inline u64 csr_readq(u32 reg)
-> > +{
-> > +     return __csrrd_d(reg);
-> > +}
-> > +
-> > +static __always_inline void csr_writel(u32 val, u32 reg)
-> > +{
-> > +     __csrwr_w(val, reg);
-> > +}
-> > +
-> > +static __always_inline void csr_writeq(u64 val, u32 reg)
-> > +{
-> > +     __csrwr_d(val, reg);
-> > +}
-> > +
-> > +static __always_inline u32 csr_xchgl(u32 val, u32 mask, u32 reg)
-> > +{
-> > +     return __csrxchg_w(val, mask, reg);
-> > +}
-> > +
-> > +static __always_inline u64 csr_xchgq(u64 val, u64 mask, u32 reg)
-> > +{
-> > +     return __csrxchg_d(val, mask, reg);
-> > +}
-> > +
-> > +/* IOCSR */
-> > +static __always_inline u32 iocsr_readl(u32 reg)
-> > +{
-> > +     return __iocsrrd_w(reg);
-> > +}
-> > +
-> > +static __always_inline u64 iocsr_readq(u32 reg)
-> > +{
-> > +     return __iocsrrd_d(reg);
-> > +}
-> > +
-> > +static __always_inline void iocsr_writel(u32 val, u32 reg)
-> > +{
-> > +     __iocsrwr_w(val, reg);
-> > +}
-> > +
-> > +static __always_inline void iocsr_writeq(u64 val, u32 reg)
-> > +{
-> > +     __iocsrwr_d(val, reg);
-> > +}
-> > +
-> > +#endif /* !__ASSEMBLY__ */
-> > +
-> > +/* CSR register number */
-> > +
-> > +/* Basic CSR registers */
-> > +#define LOONGARCH_CSR_CRMD           0x0     /* Current mode info */
-> > +#define  CSR_CRMD_WE_SHIFT           9
-> > +#define  CSR_CRMD_WE                 (_ULCAST_(0x1) << CSR_CRMD_WE_SHIFT)
-> > +#define  CSR_CRMD_DACM_SHIFT         7
-> > +#define  CSR_CRMD_DACM_WIDTH         2
-> > +#define  CSR_CRMD_DACM                       (_ULCAST_(0x3) << CSR_CRMD_DACM_SHIFT)
-> > +#define  CSR_CRMD_DACF_SHIFT         5
-> > +#define  CSR_CRMD_DACF_WIDTH         2
-> > +#define  CSR_CRMD_DACF                       (_ULCAST_(0x3) << CSR_CRMD_DACF_SHIFT)
-> > +#define  CSR_CRMD_PG_SHIFT           4
-> > +#define  CSR_CRMD_PG                 (_ULCAST_(0x1) << CSR_CRMD_PG_SHIFT)
-> > +#define  CSR_CRMD_DA_SHIFT           3
-> > +#define  CSR_CRMD_DA                 (_ULCAST_(0x1) << CSR_CRMD_DA_SHIFT)
-> > +#define  CSR_CRMD_IE_SHIFT           2
-> > +#define  CSR_CRMD_IE                 (_ULCAST_(0x1) << CSR_CRMD_IE_SHIFT)
-> > +#define  CSR_CRMD_PLV_SHIFT          0
-> > +#define  CSR_CRMD_PLV_WIDTH          2
-> > +#define  CSR_CRMD_PLV                        (_ULCAST_(0x3) << CSR_CRMD_PLV_SHIFT)
-> > +
-> > +#define PLV_KERN                     0
-> > +#define PLV_USER                     3
-> > +#define PLV_MASK                     0x3
-> > +
-> > +#define LOONGARCH_CSR_PRMD           0x1     /* Prev-exception mode info */
-> > +#define  CSR_PRMD_PWE_SHIFT          3
-> > +#define  CSR_PRMD_PWE                        (_ULCAST_(0x1) << CSR_PRMD_PWE_SHIFT)
-> > +#define  CSR_PRMD_PIE_SHIFT          2
-> > +#define  CSR_PRMD_PIE                        (_ULCAST_(0x1) << CSR_PRMD_PIE_SHIFT)
-> > +#define  CSR_PRMD_PPLV_SHIFT         0
-> > +#define  CSR_PRMD_PPLV_WIDTH         2
-> > +#define  CSR_PRMD_PPLV                       (_ULCAST_(0x3) << CSR_PRMD_PPLV_SHIFT)
-> > +
-> > +#define LOONGARCH_CSR_EUEN           0x2     /* Extended unit enable */
-> > +#define  CSR_EUEN_LBTEN_SHIFT                3
-> > +#define  CSR_EUEN_LBTEN                      (_ULCAST_(0x1) << CSR_EUEN_LBTEN_SHIFT)
-> > +#define  CSR_EUEN_LASXEN_SHIFT               2
-> > +#define  CSR_EUEN_LASXEN             (_ULCAST_(0x1) << CSR_EUEN_LASXEN_SHIFT)
-> > +#define  CSR_EUEN_LSXEN_SHIFT                1
-> > +#define  CSR_EUEN_LSXEN                      (_ULCAST_(0x1) << CSR_EUEN_LSXEN_SHIFT)
-> > +#define  CSR_EUEN_FPEN_SHIFT         0
-> > +#define  CSR_EUEN_FPEN                       (_ULCAST_(0x1) << CSR_EUEN_FPEN_SHIFT)
-> > +
-> > +#define LOONGARCH_CSR_MISC           0x3     /* Misc config */
-> > +
-> > +#define LOONGARCH_CSR_ECFG           0x4     /* Exception config */
-> > +#define  CSR_ECFG_VS_SHIFT           16
-> > +#define  CSR_ECFG_VS_WIDTH           3
-> > +#define  CSR_ECFG_VS                 (_ULCAST_(0x7) << CSR_ECFG_VS_SHIFT)
-> > +#define  CSR_ECFG_IM_SHIFT           0
-> > +#define  CSR_ECFG_IM_WIDTH           13
-> > +#define  CSR_ECFG_IM                 (_ULCAST_(0x1fff) << CSR_ECFG_IM_SHIFT)
-> > +
-> > +#define LOONGARCH_CSR_ESTAT          0x5     /* Exception status */
-> > +#define  CSR_ESTAT_ESUBCODE_SHIFT    22
-> > +#define  CSR_ESTAT_ESUBCODE_WIDTH    9
-> > +#define  CSR_ESTAT_ESUBCODE          (_ULCAST_(0x1ff) << CSR_ESTAT_ESUBCODE_SHIFT)
-> > +#define  CSR_ESTAT_EXC_SHIFT         16
-> > +#define  CSR_ESTAT_EXC_WIDTH         6
-> > +#define  CSR_ESTAT_EXC                       (_ULCAST_(0x3f) << CSR_ESTAT_EXC_SHIFT)
-> > +#define  CSR_ESTAT_IS_SHIFT          0
-> > +#define  CSR_ESTAT_IS_WIDTH          15
-> > +#define  CSR_ESTAT_IS                        (_ULCAST_(0x7fff) << CSR_ESTAT_IS_SHIFT)
-> > +
-> > +#define LOONGARCH_CSR_ERA            0x6     /* ERA */
-> > +
-> > +#define LOONGARCH_CSR_BADV           0x7     /* Bad virtual address */
-> > +
-> > +#define LOONGARCH_CSR_BADI           0x8     /* Bad instruction */
-> > +
-> > +#define LOONGARCH_CSR_EENTRY         0xc     /* Exception entry */
-> > +
-> > +/* TLB related CSR registers */
-> > +#define LOONGARCH_CSR_TLBIDX         0x10    /* TLB Index, EHINV, PageSize, NP */
-> > +#define  CSR_TLBIDX_EHINV_SHIFT              31
-> > +#define  CSR_TLBIDX_EHINV            (_ULCAST_(1) << CSR_TLBIDX_EHINV_SHIFT)
-> > +#define  CSR_TLBIDX_PS_SHIFT         24
-> > +#define  CSR_TLBIDX_PS_WIDTH         6
-> > +#define  CSR_TLBIDX_PS                       (_ULCAST_(0x3f) << CSR_TLBIDX_PS_SHIFT)
-> > +#define  CSR_TLBIDX_IDX_SHIFT                0
-> > +#define  CSR_TLBIDX_IDX_WIDTH                12
-> > +#define  CSR_TLBIDX_IDX                      (_ULCAST_(0xfff) << CSR_TLBIDX_IDX_SHIFT)
-> > +#define  CSR_TLBIDX_SIZEM            0x3f000000
-> > +#define  CSR_TLBIDX_SIZE             CSR_TLBIDX_PS_SHIFT
-> > +#define  CSR_TLBIDX_IDXM             0xfff
-> > +#define  CSR_INVALID_ENTRY(e)                (CSR_TLBIDX_EHINV | e)
-> > +
-> > +#define LOONGARCH_CSR_TLBEHI         0x11    /* TLB EntryHi */
-> > +
-> > +#define LOONGARCH_CSR_TLBELO0                0x12    /* TLB EntryLo0 */
-> > +#define  CSR_TLBLO0_RPLV_SHIFT               63
-> > +#define  CSR_TLBLO0_RPLV             (_ULCAST_(0x1) << CSR_TLBLO0_RPLV_SHIFT)
-> > +#define  CSR_TLBLO0_NX_SHIFT         62
-> > +#define  CSR_TLBLO0_NX                       (_ULCAST_(0x1) << CSR_TLBLO0_NX_SHIFT)
-> > +#define  CSR_TLBLO0_NR_SHIFT         61
-> > +#define  CSR_TLBLO0_NR                       (_ULCAST_(0x1) << CSR_TLBLO0_NR_SHIFT)
-> > +#define  CSR_TLBLO0_PFN_SHIFT                12
-> > +#define  CSR_TLBLO0_PFN_WIDTH                36
-> > +#define  CSR_TLBLO0_PFN                      (_ULCAST_(0xfffffffff) << CSR_TLBLO0_PFN_SHIFT)
-> > +#define  CSR_TLBLO0_GLOBAL_SHIFT     6
-> > +#define  CSR_TLBLO0_GLOBAL           (_ULCAST_(0x1) << CSR_TLBLO0_GLOBAL_SHIFT)
-> > +#define  CSR_TLBLO0_CCA_SHIFT                4
-> > +#define  CSR_TLBLO0_CCA_WIDTH                2
-> > +#define  CSR_TLBLO0_CCA                      (_ULCAST_(0x3) << CSR_TLBLO0_CCA_SHIFT)
-> > +#define  CSR_TLBLO0_PLV_SHIFT                2
-> > +#define  CSR_TLBLO0_PLV_WIDTH                2
-> > +#define  CSR_TLBLO0_PLV                      (_ULCAST_(0x3) << CSR_TLBLO0_PLV_SHIFT)
-> > +#define  CSR_TLBLO0_WE_SHIFT         1
-> > +#define  CSR_TLBLO0_WE                       (_ULCAST_(0x1) << CSR_TLBLO0_WE_SHIFT)
-> > +#define  CSR_TLBLO0_V_SHIFT          0
-> > +#define  CSR_TLBLO0_V                        (_ULCAST_(0x1) << CSR_TLBLO0_V_SHIFT)
-> > +
-> > +#define LOONGARCH_CSR_TLBELO1                0x13    /* TLB EntryLo1 */
-> > +#define  CSR_TLBLO1_RPLV_SHIFT               63
-> > +#define  CSR_TLBLO1_RPLV             (_ULCAST_(0x1) << CSR_TLBLO1_RPLV_SHIFT)
-> > +#define  CSR_TLBLO1_NX_SHIFT         62
-> > +#define  CSR_TLBLO1_NX                       (_ULCAST_(0x1) << CSR_TLBLO1_NX_SHIFT)
-> > +#define  CSR_TLBLO1_NR_SHIFT         61
-> > +#define  CSR_TLBLO1_NR                       (_ULCAST_(0x1) << CSR_TLBLO1_NR_SHIFT)
-> > +#define  CSR_TLBLO1_PFN_SHIFT                12
-> > +#define  CSR_TLBLO1_PFN_WIDTH                36
-> > +#define  CSR_TLBLO1_PFN                      (_ULCAST_(0xfffffffff) << CSR_TLBLO1_PFN_SHIFT)
-> > +#define  CSR_TLBLO1_GLOBAL_SHIFT     6
-> > +#define  CSR_TLBLO1_GLOBAL           (_ULCAST_(0x1) << CSR_TLBLO1_GLOBAL_SHIFT)
-> > +#define  CSR_TLBLO1_CCA_SHIFT                4
-> > +#define  CSR_TLBLO1_CCA_WIDTH                2
-> > +#define  CSR_TLBLO1_CCA                      (_ULCAST_(0x3) << CSR_TLBLO1_CCA_SHIFT)
-> > +#define  CSR_TLBLO1_PLV_SHIFT                2
-> > +#define  CSR_TLBLO1_PLV_WIDTH                2
-> > +#define  CSR_TLBLO1_PLV                      (_ULCAST_(0x3) << CSR_TLBLO1_PLV_SHIFT)
-> > +#define  CSR_TLBLO1_WE_SHIFT         1
-> > +#define  CSR_TLBLO1_WE                       (_ULCAST_(0x1) << CSR_TLBLO1_WE_SHIFT)
-> > +#define  CSR_TLBLO1_V_SHIFT          0
-> > +#define  CSR_TLBLO1_V                        (_ULCAST_(0x1) << CSR_TLBLO1_V_SHIFT)
-> > +
-> > +#define LOONGARCH_CSR_GTLBC          0x15    /* Guest TLB control */
-> > +#define  CSR_GTLBC_RID_SHIFT         16
-> > +#define  CSR_GTLBC_RID_WIDTH         8
-> > +#define  CSR_GTLBC_RID                       (_ULCAST_(0xff) << CSR_GTLBC_RID_SHIFT)
-> > +#define  CSR_GTLBC_TOTI_SHIFT                13
-> > +#define  CSR_GTLBC_TOTI                      (_ULCAST_(0x1) << CSR_GTLBC_TOTI_SHIFT)
-> > +#define  CSR_GTLBC_USERID_SHIFT              12
-> > +#define  CSR_GTLBC_USERID            (_ULCAST_(0x1) << CSR_GTLBC_USERID_SHIFT)
-> > +#define  CSR_GTLBC_GMTLBSZ_SHIFT     0
-> > +#define  CSR_GTLBC_GMTLBSZ_WIDTH     6
-> > +#define  CSR_GTLBC_GMTLBSZ           (_ULCAST_(0x3f) << CSR_GTLBC_GMTLBSZ_SHIFT)
-> > +
-> > +#define LOONGARCH_CSR_TRGP           0x16    /* TLBR read guest info */
-> > +#define  CSR_TRGP_RID_SHIFT          16
-> > +#define  CSR_TRGP_RID_WIDTH          8
-> > +#define  CSR_TRGP_RID                        (_ULCAST_(0xff) << CSR_TRGP_RID_SHIFT)
-> > +#define  CSR_TRGP_GTLB_SHIFT         0
-> > +#define  CSR_TRGP_GTLB                       (1 << CSR_TRGP_GTLB_SHIFT)
-> > +
-> > +#define LOONGARCH_CSR_ASID           0x18    /* ASID */
-> > +#define  CSR_ASID_BIT_SHIFT          16      /* ASIDBits */
-> > +#define  CSR_ASID_BIT_WIDTH          8
-> > +#define  CSR_ASID_BIT                        (_ULCAST_(0xff) << CSR_ASID_BIT_SHIFT)
-> > +#define  CSR_ASID_ASID_SHIFT         0
-> > +#define  CSR_ASID_ASID_WIDTH         10
-> > +#define  CSR_ASID_ASID                       (_ULCAST_(0x3ff) << CSR_ASID_ASID_SHIFT)
-> > +
-> > +#define LOONGARCH_CSR_PGDL           0x19    /* Page table base address when VA[47] = 0 */
-> > +
-> > +#define LOONGARCH_CSR_PGDH           0x1a    /* Page table base address when VA[47] = 1 */
-> > +
-> > +#define LOONGARCH_CSR_PGD            0x1b    /* Page table base */
-> > +
-> > +#define LOONGARCH_CSR_PWCTL0         0x1c    /* PWCtl0 */
-> > +#define  CSR_PWCTL0_PTEW_SHIFT               30
-> > +#define  CSR_PWCTL0_PTEW_WIDTH               2
-> > +#define  CSR_PWCTL0_PTEW             (_ULCAST_(0x3) << CSR_PWCTL0_PTEW_SHIFT)
-> > +#define  CSR_PWCTL0_DIR1WIDTH_SHIFT  25
-> > +#define  CSR_PWCTL0_DIR1WIDTH_WIDTH  5
-> > +#define  CSR_PWCTL0_DIR1WIDTH                (_ULCAST_(0x1f) << CSR_PWCTL0_DIR1WIDTH_SHIFT)
-> > +#define  CSR_PWCTL0_DIR1BASE_SHIFT   20
-> > +#define  CSR_PWCTL0_DIR1BASE_WIDTH   5
-> > +#define  CSR_PWCTL0_DIR1BASE         (_ULCAST_(0x1f) << CSR_PWCTL0_DIR1BASE_SHIFT)
-> > +#define  CSR_PWCTL0_DIR0WIDTH_SHIFT  15
-> > +#define  CSR_PWCTL0_DIR0WIDTH_WIDTH  5
-> > +#define  CSR_PWCTL0_DIR0WIDTH                (_ULCAST_(0x1f) << CSR_PWCTL0_DIR0WIDTH_SHIFT)
-> > +#define  CSR_PWCTL0_DIR0BASE_SHIFT   10
-> > +#define  CSR_PWCTL0_DIR0BASE_WIDTH   5
-> > +#define  CSR_PWCTL0_DIR0BASE         (_ULCAST_(0x1f) << CSR_PWCTL0_DIR0BASE_SHIFT)
-> > +#define  CSR_PWCTL0_PTWIDTH_SHIFT    5
-> > +#define  CSR_PWCTL0_PTWIDTH_WIDTH    5
-> > +#define  CSR_PWCTL0_PTWIDTH          (_ULCAST_(0x1f) << CSR_PWCTL0_PTWIDTH_SHIFT)
-> > +#define  CSR_PWCTL0_PTBASE_SHIFT     0
-> > +#define  CSR_PWCTL0_PTBASE_WIDTH     5
-> > +#define  CSR_PWCTL0_PTBASE           (_ULCAST_(0x1f) << CSR_PWCTL0_PTBASE_SHIFT)
-> > +
-> > +#define LOONGARCH_CSR_PWCTL1         0x1d    /* PWCtl1 */
-> > +#define  CSR_PWCTL1_DIR3WIDTH_SHIFT  18
-> > +#define  CSR_PWCTL1_DIR3WIDTH_WIDTH  5
-> > +#define  CSR_PWCTL1_DIR3WIDTH                (_ULCAST_(0x1f) << CSR_PWCTL1_DIR3WIDTH_SHIFT)
-> > +#define  CSR_PWCTL1_DIR3BASE_SHIFT   12
-> > +#define  CSR_PWCTL1_DIR3BASE_WIDTH   5
-> > +#define  CSR_PWCTL1_DIR3BASE         (_ULCAST_(0x1f) << CSR_PWCTL0_DIR3BASE_SHIFT)
-> > +#define  CSR_PWCTL1_DIR2WIDTH_SHIFT  6
-> > +#define  CSR_PWCTL1_DIR2WIDTH_WIDTH  5
-> > +#define  CSR_PWCTL1_DIR2WIDTH                (_ULCAST_(0x1f) << CSR_PWCTL1_DIR2WIDTH_SHIFT)
-> > +#define  CSR_PWCTL1_DIR2BASE_SHIFT   0
-> > +#define  CSR_PWCTL1_DIR2BASE_WIDTH   5
-> > +#define  CSR_PWCTL1_DIR2BASE         (_ULCAST_(0x1f) << CSR_PWCTL0_DIR2BASE_SHIFT)
-> > +
-> > +#define LOONGARCH_CSR_STLBPGSIZE     0x1e
-> > +#define  CSR_STLBPGSIZE_PS_WIDTH     6
-> > +#define  CSR_STLBPGSIZE_PS           (_ULCAST_(0x3f))
-> > +
-> > +#define LOONGARCH_CSR_RVACFG         0x1f
-> > +#define  CSR_RVACFG_RDVA_WIDTH               4
-> > +#define  CSR_RVACFG_RDVA             (_ULCAST_(0xf))
-> > +
-> > +/* Config CSR registers */
-> > +#define LOONGARCH_CSR_CPUID          0x20    /* CPU core id */
-> > +#define  CSR_CPUID_COREID_WIDTH              9
-> > +#define  CSR_CPUID_COREID            _ULCAST_(0x1ff)
-> > +
-> > +#define LOONGARCH_CSR_PRCFG1         0x21    /* Config1 */
-> > +#define  CSR_CONF1_VSMAX_SHIFT               12
-> > +#define  CSR_CONF1_VSMAX_WIDTH               3
-> > +#define  CSR_CONF1_VSMAX             (_ULCAST_(7) << CSR_CONF1_VSMAX_SHIFT)
-> > +#define  CSR_CONF1_TMRBITS_SHIFT     4
-> > +#define  CSR_CONF1_TMRBITS_WIDTH     8
-> > +#define  CSR_CONF1_TMRBITS           (_ULCAST_(0xff) << CSR_CONF1_TMRBITS_SHIFT)
-> > +#define  CSR_CONF1_KSNUM_WIDTH               4
-> > +#define  CSR_CONF1_KSNUM             _ULCAST_(0xf)
-> > +
-> > +#define LOONGARCH_CSR_PRCFG2         0x22    /* Config2 */
-> > +#define  CSR_CONF2_PGMASK_SUPP               0x3ffff000
-> > +
-> > +#define LOONGARCH_CSR_PRCFG3         0x23    /* Config3 */
-> > +#define  CSR_CONF3_STLBIDX_SHIFT     20
-> > +#define  CSR_CONF3_STLBIDX_WIDTH     6
-> > +#define  CSR_CONF3_STLBIDX           (_ULCAST_(0x3f) << CSR_CONF3_STLBIDX_SHIFT)
-> > +#define  CSR_CONF3_STLBWAYS_SHIFT    12
-> > +#define  CSR_CONF3_STLBWAYS_WIDTH    8
-> > +#define  CSR_CONF3_STLBWAYS          (_ULCAST_(0xff) << CSR_CONF3_STLBWAYS_SHIFT)
-> > +#define  CSR_CONF3_MTLBSIZE_SHIFT    4
-> > +#define  CSR_CONF3_MTLBSIZE_WIDTH    8
-> > +#define  CSR_CONF3_MTLBSIZE          (_ULCAST_(0xff) << CSR_CONF3_MTLBSIZE_SHIFT)
-> > +#define  CSR_CONF3_TLBTYPE_SHIFT     0
-> > +#define  CSR_CONF3_TLBTYPE_WIDTH     4
-> > +#define  CSR_CONF3_TLBTYPE           (_ULCAST_(0xf) << CSR_CONF3_TLBTYPE_SHIFT)
-> > +
-> > +/* Kscratch registers */
-> > +#define LOONGARCH_CSR_KS0            0x30
-> > +#define LOONGARCH_CSR_KS1            0x31
-> > +#define LOONGARCH_CSR_KS2            0x32
-> > +#define LOONGARCH_CSR_KS3            0x33
-> > +#define LOONGARCH_CSR_KS4            0x34
-> > +#define LOONGARCH_CSR_KS5            0x35
-> > +#define LOONGARCH_CSR_KS6            0x36
-> > +#define LOONGARCH_CSR_KS7            0x37
-> > +#define LOONGARCH_CSR_KS8            0x38
-> > +
-> > +/* Exception allocated KS0, KS1 and KS2 statically */
-> > +#define EXCEPTION_KS0                        LOONGARCH_CSR_KS0
-> > +#define EXCEPTION_KS1                        LOONGARCH_CSR_KS1
-> > +#define EXCEPTION_KS2                        LOONGARCH_CSR_KS2
-> > +#define EXC_KSCRATCH_MASK            (1 << 0 | 1 << 1 | 1 << 2)
-> > +
-> > +/* Percpu-data base allocated KS3 statically */
-> > +#define PERCPU_BASE_KS                       LOONGARCH_CSR_KS3
-> > +#define PERCPU_KSCRATCH_MASK         (1 << 3)
-> > +
-> > +/* KVM allocated KS4 and KS5 statically */
-> > +#define KVM_VCPU_KS                  LOONGARCH_CSR_KS4
-> > +#define KVM_TEMP_KS                  LOONGARCH_CSR_KS5
-> > +#define KVM_KSCRATCH_MASK            (1 << 4 | 1 << 5)
-> > +
-> > +/* Timer registers */
-> > +#define LOONGARCH_CSR_TMID           0x40    /* Timer ID */
-> > +
-> > +#define LOONGARCH_CSR_TCFG           0x41    /* Timer config */
-> > +#define  CSR_TCFG_VAL_SHIFT          2
-> > +#define       CSR_TCFG_VAL_WIDTH             48
-> > +#define  CSR_TCFG_VAL                        (_ULCAST_(0x3fffffffffff) << CSR_TCFG_VAL_SHIFT)
-> > +#define  CSR_TCFG_PERIOD_SHIFT               1
-> > +#define  CSR_TCFG_PERIOD             (_ULCAST_(0x1) << CSR_TCFG_PERIOD_SHIFT)
-> > +#define  CSR_TCFG_EN                 (_ULCAST_(0x1))
-> > +
-> > +#define LOONGARCH_CSR_TVAL           0x42    /* Timer value */
-> > +
-> > +#define LOONGARCH_CSR_CNTC           0x43    /* Timer offset */
-> > +
-> > +#define LOONGARCH_CSR_TINTCLR                0x44    /* Timer interrupt clear */
-> > +#define  CSR_TINTCLR_TI_SHIFT                0
-> > +#define  CSR_TINTCLR_TI                      (1 << CSR_TINTCLR_TI_SHIFT)
-> > +
-> > +/* Guest registers */
-> > +#define LOONGARCH_CSR_GSTAT          0x50    /* Guest status */
-> > +#define  CSR_GSTAT_GID_SHIFT         16
-> > +#define  CSR_GSTAT_GID_WIDTH         8
-> > +#define  CSR_GSTAT_GID                       (_ULCAST_(0xff) << CSR_GSTAT_GID_SHIFT)
-> > +#define  CSR_GSTAT_GIDBIT_SHIFT              4
-> > +#define  CSR_GSTAT_GIDBIT_WIDTH              6
-> > +#define  CSR_GSTAT_GIDBIT            (_ULCAST_(0x3f) << CSR_GSTAT_GIDBIT_SHIFT)
-> > +#define  CSR_GSTAT_PVM_SHIFT         1
-> > +#define  CSR_GSTAT_PVM                       (_ULCAST_(0x1) << CSR_GSTAT_PVM_SHIFT)
-> > +#define  CSR_GSTAT_VM_SHIFT          0
-> > +#define  CSR_GSTAT_VM                        (_ULCAST_(0x1) << CSR_GSTAT_VM_SHIFT)
-> > +
-> > +#define LOONGARCH_CSR_GCFG           0x51    /* Guest config */
-> > +#define  CSR_GCFG_GPERF_SHIFT                24
-> > +#define  CSR_GCFG_GPERF_WIDTH                3
-> > +#define  CSR_GCFG_GPERF                      (_ULCAST_(0x7) << CSR_GCFG_GPERF_SHIFT)
-> > +#define  CSR_GCFG_GCI_SHIFT          20
-> > +#define  CSR_GCFG_GCI_WIDTH          2
-> > +#define  CSR_GCFG_GCI                        (_ULCAST_(0x3) << CSR_GCFG_GCI_SHIFT)
-> > +#define  CSR_GCFG_GCI_ALL            (_ULCAST_(0x0) << CSR_GCFG_GCI_SHIFT)
-> > +#define  CSR_GCFG_GCI_HIT            (_ULCAST_(0x1) << CSR_GCFG_GCI_SHIFT)
-> > +#define  CSR_GCFG_GCI_SECURE         (_ULCAST_(0x2) << CSR_GCFG_GCI_SHIFT)
-> > +#define  CSR_GCFG_GCIP_SHIFT         16
-> > +#define  CSR_GCFG_GCIP                       (_ULCAST_(0xf) << CSR_GCFG_GCIP_SHIFT)
-> > +#define  CSR_GCFG_GCIP_ALL           (_ULCAST_(0x1) << CSR_GCFG_GCIP_SHIFT)
-> > +#define  CSR_GCFG_GCIP_HIT           (_ULCAST_(0x1) << (CSR_GCFG_GCIP_SHIFT + 1))
-> > +#define  CSR_GCFG_GCIP_SECURE                (_ULCAST_(0x1) << (CSR_GCFG_GCIP_SHIFT + 2))
-> > +#define  CSR_GCFG_TORU_SHIFT         15
-> > +#define  CSR_GCFG_TORU                       (_ULCAST_(0x1) << CSR_GCFG_TORU_SHIFT)
-> > +#define  CSR_GCFG_TORUP_SHIFT                14
-> > +#define  CSR_GCFG_TORUP                      (_ULCAST_(0x1) << CSR_GCFG_TORUP_SHIFT)
-> > +#define  CSR_GCFG_TOP_SHIFT          13
-> > +#define  CSR_GCFG_TOP                        (_ULCAST_(0x1) << CSR_GCFG_TOP_SHIFT)
-> > +#define  CSR_GCFG_TOPP_SHIFT         12
-> > +#define  CSR_GCFG_TOPP                       (_ULCAST_(0x1) << CSR_GCFG_TOPP_SHIFT)
-> > +#define  CSR_GCFG_TOE_SHIFT          11
-> > +#define  CSR_GCFG_TOE                        (_ULCAST_(0x1) << CSR_GCFG_TOE_SHIFT)
-> > +#define  CSR_GCFG_TOEP_SHIFT         10
-> > +#define  CSR_GCFG_TOEP                       (_ULCAST_(0x1) << CSR_GCFG_TOEP_SHIFT)
-> > +#define  CSR_GCFG_TIT_SHIFT          9
-> > +#define  CSR_GCFG_TIT                        (_ULCAST_(0x1) << CSR_GCFG_TIT_SHIFT)
-> > +#define  CSR_GCFG_TITP_SHIFT         8
-> > +#define  CSR_GCFG_TITP                       (_ULCAST_(0x1) << CSR_GCFG_TITP_SHIFT)
-> > +#define  CSR_GCFG_SIT_SHIFT          7
-> > +#define  CSR_GCFG_SIT                        (_ULCAST_(0x1) << CSR_GCFG_SIT_SHIFT)
-> > +#define  CSR_GCFG_SITP_SHIFT         6
-> > +#define  CSR_GCFG_SITP                       (_ULCAST_(0x1) << CSR_GCFG_SITP_SHIFT)
-> > +#define  CSR_GCFG_MATC_SHITF         4
-> > +#define  CSR_GCFG_MATC_WIDTH         2
-> > +#define  CSR_GCFG_MATC_MASK          (_ULCAST_(0x3) << CSR_GCFG_MATC_SHITF)
-> > +#define  CSR_GCFG_MATC_GUEST         (_ULCAST_(0x0) << CSR_GCFG_MATC_SHITF)
-> > +#define  CSR_GCFG_MATC_ROOT          (_ULCAST_(0x1) << CSR_GCFG_MATC_SHITF)
-> > +#define  CSR_GCFG_MATC_NEST          (_ULCAST_(0x2) << CSR_GCFG_MATC_SHITF)
-> > +
-> > +#define LOONGARCH_CSR_GINTC          0x52    /* Guest interrupt control */
-> > +#define  CSR_GINTC_HC_SHIFT          16
-> > +#define  CSR_GINTC_HC_WIDTH          8
-> > +#define  CSR_GINTC_HC                        (_ULCAST_(0xff) << CSR_GINTC_HC_SHIFT)
-> > +#define  CSR_GINTC_PIP_SHIFT         8
-> > +#define  CSR_GINTC_PIP_WIDTH         8
-> > +#define  CSR_GINTC_PIP                       (_ULCAST_(0xff) << CSR_GINTC_PIP_SHIFT)
-> > +#define  CSR_GINTC_VIP_SHIFT         0
-> > +#define  CSR_GINTC_VIP_WIDTH         8
-> > +#define  CSR_GINTC_VIP                       (_ULCAST_(0xff))
-> > +
-> > +#define LOONGARCH_CSR_GCNTC          0x53    /* Guest timer offset */
-> > +
-> > +/* LLBCTL register */
-> > +#define LOONGARCH_CSR_LLBCTL         0x60    /* LLBit control */
-> > +#define  CSR_LLBCTL_ROLLB_SHIFT              0
-> > +#define  CSR_LLBCTL_ROLLB            (_ULCAST_(1) << CSR_LLBCTL_ROLLB_SHIFT)
-> > +#define  CSR_LLBCTL_WCLLB_SHIFT              1
-> > +#define  CSR_LLBCTL_WCLLB            (_ULCAST_(1) << CSR_LLBCTL_WCLLB_SHIFT)
-> > +#define  CSR_LLBCTL_KLO_SHIFT                2
-> > +#define  CSR_LLBCTL_KLO                      (_ULCAST_(1) << CSR_LLBCTL_KLO_SHIFT)
-> > +
-> > +/* Implement dependent */
-> > +#define LOONGARCH_CSR_IMPCTL1                0x80    /* Loongson config1 */
-> > +#define  CSR_MISPEC_SHIFT            20
-> > +#define  CSR_MISPEC_WIDTH            8
-> > +#define  CSR_MISPEC                  (_ULCAST_(0xff) << CSR_MISPEC_SHIFT)
-> > +#define  CSR_SSEN_SHIFT                      18
-> > +#define  CSR_SSEN                    (_ULCAST_(1) << CSR_SSEN_SHIFT)
-> > +#define  CSR_SCRAND_SHIFT            17
-> > +#define  CSR_SCRAND                  (_ULCAST_(1) << CSR_SCRAND_SHIFT)
-> > +#define  CSR_LLEXCL_SHIFT            16
-> > +#define  CSR_LLEXCL                  (_ULCAST_(1) << CSR_LLEXCL_SHIFT)
-> > +#define  CSR_DISVC_SHIFT             15
-> > +#define  CSR_DISVC                   (_ULCAST_(1) << CSR_DISVC_SHIFT)
-> > +#define  CSR_VCLRU_SHIFT             14
-> > +#define  CSR_VCLRU                   (_ULCAST_(1) << CSR_VCLRU_SHIFT)
-> > +#define  CSR_DCLRU_SHIFT             13
-> > +#define  CSR_DCLRU                   (_ULCAST_(1) << CSR_DCLRU_SHIFT)
-> > +#define  CSR_FASTLDQ_SHIFT           12
-> > +#define  CSR_FASTLDQ                 (_ULCAST_(1) << CSR_FASTLDQ_SHIFT)
-> > +#define  CSR_USERCAC_SHIFT           11
-> > +#define  CSR_USERCAC                 (_ULCAST_(1) << CSR_USERCAC_SHIFT)
-> > +#define  CSR_ANTI_MISPEC_SHIFT               10
-> > +#define  CSR_ANTI_MISPEC             (_ULCAST_(1) << CSR_ANTI_MISPEC_SHIFT)
-> > +#define  CSR_AUTO_FLUSHSFB_SHIFT     9
-> > +#define  CSR_AUTO_FLUSHSFB           (_ULCAST_(1) << CSR_AUTO_FLUSHSFB_SHIFT)
-> > +#define  CSR_STFILL_SHIFT            8
-> > +#define  CSR_STFILL                  (_ULCAST_(1) << CSR_STFILL_SHIFT)
-> > +#define  CSR_LIFEP_SHIFT             7
-> > +#define  CSR_LIFEP                   (_ULCAST_(1) << CSR_LIFEP_SHIFT)
-> > +#define  CSR_LLSYNC_SHIFT            6
-> > +#define  CSR_LLSYNC                  (_ULCAST_(1) << CSR_LLSYNC_SHIFT)
-> > +#define  CSR_BRBTDIS_SHIFT           5
-> > +#define  CSR_BRBTDIS                 (_ULCAST_(1) << CSR_BRBTDIS_SHIFT)
-> > +#define  CSR_RASDIS_SHIFT            4
-> > +#define  CSR_RASDIS                  (_ULCAST_(1) << CSR_RASDIS_SHIFT)
-> > +#define  CSR_STPRE_SHIFT             2
-> > +#define  CSR_STPRE_WIDTH             2
-> > +#define  CSR_STPRE                   (_ULCAST_(3) << CSR_STPRE_SHIFT)
-> > +#define  CSR_INSTPRE_SHIFT           1
-> > +#define  CSR_INSTPRE                 (_ULCAST_(1) << CSR_INSTPRE_SHIFT)
-> > +#define  CSR_DATAPRE_SHIFT           0
-> > +#define  CSR_DATAPRE                 (_ULCAST_(1) << CSR_DATAPRE_SHIFT)
-> > +
-> > +#define LOONGARCH_CSR_IMPCTL2                0x81    /* Loongson config2 */
-> > +#define  CSR_FLUSH_MTLB_SHIFT                0
-> > +#define  CSR_FLUSH_MTLB                      (_ULCAST_(1) << CSR_FLUSH_MTLB_SHIFT)
-> > +#define  CSR_FLUSH_STLB_SHIFT                1
-> > +#define  CSR_FLUSH_STLB                      (_ULCAST_(1) << CSR_FLUSH_STLB_SHIFT)
-> > +#define  CSR_FLUSH_DTLB_SHIFT                2
-> > +#define  CSR_FLUSH_DTLB                      (_ULCAST_(1) << CSR_FLUSH_DTLB_SHIFT)
-> > +#define  CSR_FLUSH_ITLB_SHIFT                3
-> > +#define  CSR_FLUSH_ITLB                      (_ULCAST_(1) << CSR_FLUSH_ITLB_SHIFT)
-> > +#define  CSR_FLUSH_BTAC_SHIFT                4
-> > +#define  CSR_FLUSH_BTAC                      (_ULCAST_(1) << CSR_FLUSH_BTAC_SHIFT)
-> > +
-> > +#define LOONGARCH_CSR_GNMI           0x82
-> > +
-> > +/* TLB Refill registers */
-> > +#define LOONGARCH_CSR_TLBRENTRY              0x88    /* TLB refill exception entry */
-> > +#define LOONGARCH_CSR_TLBRBADV               0x89    /* TLB refill badvaddr */
-> > +#define LOONGARCH_CSR_TLBRERA                0x8a    /* TLB refill ERA */
-> > +#define LOONGARCH_CSR_TLBRSAVE               0x8b    /* KScratch for TLB refill exception */
-> > +#define LOONGARCH_CSR_TLBRELO0               0x8c    /* TLB refill entrylo0 */
-> > +#define LOONGARCH_CSR_TLBRELO1               0x8d    /* TLB refill entrylo1 */
-> > +#define LOONGARCH_CSR_TLBREHI                0x8e    /* TLB refill entryhi */
-> > +#define  CSR_TLBREHI_PS_SHIFT                0
-> > +#define  CSR_TLBREHI_PS                      (_ULCAST_(0x3f) << CSR_TLBREHI_PS_SHIFT)
-> > +#define LOONGARCH_CSR_TLBRPRMD               0x8f    /* TLB refill mode info */
-> > +
-> > +/* Machine Error registers */
-> > +#define LOONGARCH_CSR_MERRCTL                0x90    /* MERRCTL */
-> > +#define LOONGARCH_CSR_MERRINFO1              0x91    /* MError info1 */
-> > +#define LOONGARCH_CSR_MERRINFO2              0x92    /* MError info2 */
-> > +#define LOONGARCH_CSR_MERRENTRY              0x93    /* MError exception entry */
-> > +#define LOONGARCH_CSR_MERRERA                0x94    /* MError exception ERA */
-> > +#define LOONGARCH_CSR_MERRSAVE               0x95    /* KScratch for machine error exception */
-> > +
-> > +#define LOONGARCH_CSR_CTAG           0x98    /* TagLo + TagHi */
-> > +
-> > +#define LOONGARCH_CSR_PRID           0xc0
-> > +
-> > +/* Shadow MCSR : 0xc0 ~ 0xff */
-> > +#define LOONGARCH_CSR_MCSR0          0xc0    /* CPUCFG0 and CPUCFG1 */
-> > +#define  MCSR0_INT_IMPL_SHIFT                58
-> > +#define  MCSR0_INT_IMPL                      0
-> > +#define  MCSR0_IOCSR_BRD_SHIFT               57
-> > +#define  MCSR0_IOCSR_BRD             (_ULCAST_(1) << MCSR0_IOCSR_BRD_SHIFT)
-> > +#define  MCSR0_HUGEPG_SHIFT          56
-> > +#define  MCSR0_HUGEPG                        (_ULCAST_(1) << MCSR0_HUGEPG_SHIFT)
-> > +#define  MCSR0_RPLMTLB_SHIFT         55
-> > +#define  MCSR0_RPLMTLB                       (_ULCAST_(1) << MCSR0_RPLMTLB_SHIFT)
-> > +#define  MCSR0_EP_SHIFT                      54
-> > +#define  MCSR0_EP                    (_ULCAST_(1) << MCSR0_EP_SHIFT)
-> > +#define  MCSR0_RI_SHIFT                      53
-> > +#define  MCSR0_RI                    (_ULCAST_(1) << MCSR0_RI_SHIFT)
-> > +#define  MCSR0_UAL_SHIFT             52
-> > +#define  MCSR0_UAL                   (_ULCAST_(1) << MCSR0_UAL_SHIFT)
-> > +#define  MCSR0_VABIT_SHIFT           44
-> > +#define  MCSR0_VABIT_WIDTH           8
-> > +#define  MCSR0_VABIT                 (_ULCAST_(0xff) << MCSR0_VABIT_SHIFT)
-> > +#define  VABIT_DEFAULT                       0x2f
-> > +#define  MCSR0_PABIT_SHIFT           36
-> > +#define  MCSR0_PABIT_WIDTH           8
-> > +#define  MCSR0_PABIT                 (_ULCAST_(0xff) << MCSR0_PABIT_SHIFT)
-> > +#define  PABIT_DEFAULT                       0x2f
-> > +#define  MCSR0_IOCSR_SHIFT           35
-> > +#define  MCSR0_IOCSR                 (_ULCAST_(1) << MCSR0_IOCSR_SHIFT)
-> > +#define  MCSR0_PAGING_SHIFT          34
-> > +#define  MCSR0_PAGING                        (_ULCAST_(1) << MCSR0_PAGING_SHIFT)
-> > +#define  MCSR0_GR64_SHIFT            33
-> > +#define  MCSR0_GR64                  (_ULCAST_(1) << MCSR0_GR64_SHIFT)
-> > +#define  GR64_DEFAULT                        1
-> > +#define  MCSR0_GR32_SHIFT            32
-> > +#define  MCSR0_GR32                  (_ULCAST_(1) << MCSR0_GR32_SHIFT)
-> > +#define  GR32_DEFAULT                        0
-> > +#define  MCSR0_PRID_WIDTH            32
-> > +#define  MCSR0_PRID                  0x14C010
-> > +
-> > +#define LOONGARCH_CSR_MCSR1          0xc1    /* CPUCFG2 and CPUCFG3 */
-> > +#define  MCSR1_HPFOLD_SHIFT          43
-> > +#define  MCSR1_HPFOLD                        (_ULCAST_(1) << MCSR1_HPFOLD_SHIFT)
-> > +#define  MCSR1_SPW_LVL_SHIFT         40
-> > +#define  MCSR1_SPW_LVL_WIDTH         3
-> > +#define  MCSR1_SPW_LVL                       (_ULCAST_(7) << MCSR1_SPW_LVL_SHIFT)
-> > +#define  MCSR1_ICACHET_SHIFT         39
-> > +#define  MCSR1_ICACHET                       (_ULCAST_(1) << MCSR1_ICACHET_SHIFT)
-> > +#define  MCSR1_ITLBT_SHIFT           38
-> > +#define  MCSR1_ITLBT                 (_ULCAST_(1) << MCSR1_ITLBT_SHIFT)
-> > +#define  MCSR1_LLDBAR_SHIFT          37
-> > +#define  MCSR1_LLDBAR                        (_ULCAST_(1) << MCSR1_LLDBAR_SHIFT)
-> > +#define  MCSR1_SCDLY_SHIFT           36
-> > +#define  MCSR1_SCDLY                 (_ULCAST_(1) << MCSR1_SCDLY_SHIFT)
-> > +#define  MCSR1_LLEXC_SHIFT           35
-> > +#define  MCSR1_LLEXC                 (_ULCAST_(1) << MCSR1_LLEXC_SHIFT)
-> > +#define  MCSR1_UCACC_SHIFT           34
-> > +#define  MCSR1_UCACC                 (_ULCAST_(1) << MCSR1_UCACC_SHIFT)
-> > +#define  MCSR1_SFB_SHIFT             33
-> > +#define  MCSR1_SFB                   (_ULCAST_(1) << MCSR1_SFB_SHIFT)
-> > +#define  MCSR1_CCDMA_SHIFT           32
-> > +#define  MCSR1_CCDMA                 (_ULCAST_(1) << MCSR1_CCDMA_SHIFT)
-> > +#define  MCSR1_LAMO_SHIFT            22
-> > +#define  MCSR1_LAMO                  (_ULCAST_(1) << MCSR1_LAMO_SHIFT)
-> > +#define  MCSR1_LSPW_SHIFT            21
-> > +#define  MCSR1_LSPW                  (_ULCAST_(1) << MCSR1_LSPW_SHIFT)
-> > +#define  MCSR1_MIPSBT_SHIFT          20
-> > +#define  MCSR1_MIPSBT                        (_ULCAST_(1) << MCSR1_MIPSBT_SHIFT)
-> > +#define  MCSR1_ARMBT_SHIFT           19
-> > +#define  MCSR1_ARMBT                 (_ULCAST_(1) << MCSR1_ARMBT_SHIFT)
-> > +#define  MCSR1_X86BT_SHIFT           18
-> > +#define  MCSR1_X86BT                 (_ULCAST_(1) << MCSR1_X86BT_SHIFT)
-> > +#define  MCSR1_LLFTPVERS_SHIFT               15
-> > +#define  MCSR1_LLFTPVERS_WIDTH               3
-> > +#define  MCSR1_LLFTPVERS             (_ULCAST_(7) << MCSR1_LLFTPVERS_SHIFT)
-> > +#define  MCSR1_LLFTP_SHIFT           14
-> > +#define  MCSR1_LLFTP                 (_ULCAST_(1) << MCSR1_LLFTP_SHIFT)
-> > +#define  MCSR1_VZVERS_SHIFT          11
-> > +#define  MCSR1_VZVERS_WIDTH          3
-> > +#define  MCSR1_VZVERS                        (_ULCAST_(7) << MCSR1_VZVERS_SHIFT)
-> > +#define  MCSR1_VZ_SHIFT                      10
-> > +#define  MCSR1_VZ                    (_ULCAST_(1) << MCSR1_VZ_SHIFT)
-> > +#define  MCSR1_CRYPTO_SHIFT          9
-> > +#define  MCSR1_CRYPTO                        (_ULCAST_(1) << MCSR1_CRYPTO_SHIFT)
-> > +#define  MCSR1_COMPLEX_SHIFT         8
-> > +#define  MCSR1_COMPLEX                       (_ULCAST_(1) << MCSR1_COMPLEX_SHIFT)
-> > +#define  MCSR1_LASX_SHIFT            7
-> > +#define  MCSR1_LASX                  (_ULCAST_(1) << MCSR1_LASX_SHIFT)
-> > +#define  MCSR1_LSX_SHIFT             6
-> > +#define  MCSR1_LSX                   (_ULCAST_(1) << MCSR1_LSX_SHIFT)
-> > +#define  MCSR1_FPVERS_SHIFT          3
-> > +#define  MCSR1_FPVERS_WIDTH          3
-> > +#define  MCSR1_FPVERS                        (_ULCAST_(7) << MCSR1_FPVERS_SHIFT)
-> > +#define  MCSR1_FPDP_SHIFT            2
-> > +#define  MCSR1_FPDP                  (_ULCAST_(1) << MCSR1_FPDP_SHIFT)
-> > +#define  MCSR1_FPSP_SHIFT            1
-> > +#define  MCSR1_FPSP                  (_ULCAST_(1) << MCSR1_FPSP_SHIFT)
-> > +#define  MCSR1_FP_SHIFT                      0
-> > +#define  MCSR1_FP                    (_ULCAST_(1) << MCSR1_FP_SHIFT)
-> > +
-> > +#define LOONGARCH_CSR_MCSR2          0xc2    /* CPUCFG4 and CPUCFG5 */
-> > +#define  MCSR2_CCDIV_SHIFT           48
-> > +#define  MCSR2_CCDIV_WIDTH           16
-> > +#define  MCSR2_CCDIV                 (_ULCAST_(0xffff) << MCSR2_CCDIV_SHIFT)
-> > +#define  MCSR2_CCMUL_SHIFT           32
-> > +#define  MCSR2_CCMUL_WIDTH           16
-> > +#define  MCSR2_CCMUL                 (_ULCAST_(0xffff) << MCSR2_CCMUL_SHIFT)
-> > +#define  MCSR2_CCFREQ_WIDTH          32
-> > +#define  MCSR2_CCFREQ                        (_ULCAST_(0xffffffff))
-> > +#define  CCFREQ_DEFAULT                      0x5f5e100       /* 100MHz */
-> > +
-> > +#define LOONGARCH_CSR_MCSR3          0xc3    /* CPUCFG6 */
-> > +#define  MCSR3_UPM_SHIFT             14
-> > +#define  MCSR3_UPM                   (_ULCAST_(1) << MCSR3_UPM_SHIFT)
-> > +#define  MCSR3_PMBITS_SHIFT          8
-> > +#define  MCSR3_PMBITS_WIDTH          6
-> > +#define  MCSR3_PMBITS                        (_ULCAST_(0x3f) << MCSR3_PMBITS_SHIFT)
-> > +#define  PMBITS_DEFAULT                      0x40
-> > +#define  MCSR3_PMNUM_SHIFT           4
-> > +#define  MCSR3_PMNUM_WIDTH           4
-> > +#define  MCSR3_PMNUM                 (_ULCAST_(0xf) << MCSR3_PMNUM_SHIFT)
-> > +#define  MCSR3_PAMVER_SHIFT          1
-> > +#define  MCSR3_PAMVER_WIDTH          3
-> > +#define  MCSR3_PAMVER                        (_ULCAST_(0x7) << MCSR3_PAMVER_SHIFT)
-> > +#define  MCSR3_PMP_SHIFT             0
-> > +#define  MCSR3_PMP                   (_ULCAST_(1) << MCSR3_PMP_SHIFT)
-> > +
-> > +#define LOONGARCH_CSR_MCSR8          0xc8    /* CPUCFG16 and CPUCFG17 */
-> > +#define  MCSR8_L1I_SIZE_SHIFT                56
-> > +#define  MCSR8_L1I_SIZE_WIDTH                7
-> > +#define  MCSR8_L1I_SIZE                      (_ULCAST_(0x7f) << MCSR8_L1I_SIZE_SHIFT)
-> > +#define  MCSR8_L1I_IDX_SHIFT         48
-> > +#define  MCSR8_L1I_IDX_WIDTH         8
-> > +#define  MCSR8_L1I_IDX                       (_ULCAST_(0xff) << MCSR8_L1I_IDX_SHIFT)
-> > +#define  MCSR8_L1I_WAY_SHIFT         32
-> > +#define  MCSR8_L1I_WAY_WIDTH         16
-> > +#define  MCSR8_L1I_WAY                       (_ULCAST_(0xffff) << MCSR8_L1I_WAY_SHIFT)
-> > +#define  MCSR8_L3DINCL_SHIFT         16
-> > +#define  MCSR8_L3DINCL                       (_ULCAST_(1) << MCSR8_L3DINCL_SHIFT)
-> > +#define  MCSR8_L3DPRIV_SHIFT         15
-> > +#define  MCSR8_L3DPRIV                       (_ULCAST_(1) << MCSR8_L3DPRIV_SHIFT)
-> > +#define  MCSR8_L3DPRE_SHIFT          14
-> > +#define  MCSR8_L3DPRE                        (_ULCAST_(1) << MCSR8_L3DPRE_SHIFT)
-> > +#define  MCSR8_L3IUINCL_SHIFT                13
-> > +#define  MCSR8_L3IUINCL                      (_ULCAST_(1) << MCSR8_L3IUINCL_SHIFT)
-> > +#define  MCSR8_L3IUPRIV_SHIFT                12
-> > +#define  MCSR8_L3IUPRIV                      (_ULCAST_(1) << MCSR8_L3IUPRIV_SHIFT)
-> > +#define  MCSR8_L3IUUNIFY_SHIFT               11
-> > +#define  MCSR8_L3IUUNIFY             (_ULCAST_(1) << MCSR8_L3IUUNIFY_SHIFT)
-> > +#define  MCSR8_L3IUPRE_SHIFT         10
-> > +#define  MCSR8_L3IUPRE                       (_ULCAST_(1) << MCSR8_L3IUPRE_SHIFT)
-> > +#define  MCSR8_L2DINCL_SHIFT         9
-> > +#define  MCSR8_L2DINCL                       (_ULCAST_(1) << MCSR8_L2DINCL_SHIFT)
-> > +#define  MCSR8_L2DPRIV_SHIFT         8
-> > +#define  MCSR8_L2DPRIV                       (_ULCAST_(1) << MCSR8_L2DPRIV_SHIFT)
-> > +#define  MCSR8_L2DPRE_SHIFT          7
-> > +#define  MCSR8_L2DPRE                        (_ULCAST_(1) << MCSR8_L2DPRE_SHIFT)
-> > +#define  MCSR8_L2IUINCL_SHIFT                6
-> > +#define  MCSR8_L2IUINCL                      (_ULCAST_(1) << MCSR8_L2IUINCL_SHIFT)
-> > +#define  MCSR8_L2IUPRIV_SHIFT                5
-> > +#define  MCSR8_L2IUPRIV                      (_ULCAST_(1) << MCSR8_L2IUPRIV_SHIFT)
-> > +#define  MCSR8_L2IUUNIFY_SHIFT               4
-> > +#define  MCSR8_L2IUUNIFY             (_ULCAST_(1) << MCSR8_L2IUUNIFY_SHIFT)
-> > +#define  MCSR8_L2IUPRE_SHIFT         3
-> > +#define  MCSR8_L2IUPRE                       (_ULCAST_(1) << MCSR8_L2IUPRE_SHIFT)
-> > +#define  MCSR8_L1DPRE_SHIFT          2
-> > +#define  MCSR8_L1DPRE                        (_ULCAST_(1) << MCSR8_L1DPRE_SHIFT)
-> > +#define  MCSR8_L1IUUNIFY_SHIFT               1
-> > +#define  MCSR8_L1IUUNIFY             (_ULCAST_(1) << MCSR8_L1IUUNIFY_SHIFT)
-> > +#define  MCSR8_L1IUPRE_SHIFT         0
-> > +#define  MCSR8_L1IUPRE                       (_ULCAST_(1) << MCSR8_L1IUPRE_SHIFT)
-> > +
-> > +#define LOONGARCH_CSR_MCSR9          0xc9    /* CPUCFG18 and CPUCFG19 */
-> > +#define  MCSR9_L2U_SIZE_SHIFT                56
-> > +#define  MCSR9_L2U_SIZE_WIDTH                7
-> > +#define  MCSR9_L2U_SIZE                      (_ULCAST_(0x7f) << MCSR9_L2U_SIZE_SHIFT)
-> > +#define  MCSR9_L2U_IDX_SHIFT         48
-> > +#define  MCSR9_L2U_IDX_WIDTH         8
-> > +#define  MCSR9_L2U_IDX                       (_ULCAST_(0xff) << MCSR9_IDX_LOG_SHIFT)
-> > +#define  MCSR9_L2U_WAY_SHIFT         32
-> > +#define  MCSR9_L2U_WAY_WIDTH         16
-> > +#define  MCSR9_L2U_WAY                       (_ULCAST_(0xffff) << MCSR9_L2U_WAY_SHIFT)
-> > +#define  MCSR9_L1D_SIZE_SHIFT                24
-> > +#define  MCSR9_L1D_SIZE_WIDTH                7
-> > +#define  MCSR9_L1D_SIZE                      (_ULCAST_(0x7f) << MCSR9_L1D_SIZE_SHIFT)
-> > +#define  MCSR9_L1D_IDX_SHIFT         16
-> > +#define  MCSR9_L1D_IDX_WIDTH         8
-> > +#define  MCSR9_L1D_IDX                       (_ULCAST_(0xff) << MCSR9_L1D_IDX_SHIFT)
-> > +#define  MCSR9_L1D_WAY_SHIFT         0
-> > +#define  MCSR9_L1D_WAY_WIDTH         16
-> > +#define  MCSR9_L1D_WAY                       (_ULCAST_(0xffff) << MCSR9_L1D_WAY_SHIFT)
-> > +
-> > +#define LOONGARCH_CSR_MCSR10         0xca    /* CPUCFG20 */
-> > +#define  MCSR10_L3U_SIZE_SHIFT               24
-> > +#define  MCSR10_L3U_SIZE_WIDTH               7
-> > +#define  MCSR10_L3U_SIZE             (_ULCAST_(0x7f) << MCSR10_L3U_SIZE_SHIFT)
-> > +#define  MCSR10_L3U_IDX_SHIFT                16
-> > +#define  MCSR10_L3U_IDX_WIDTH                8
-> > +#define  MCSR10_L3U_IDX                      (_ULCAST_(0xff) << MCSR10_L3U_IDX_SHIFT)
-> > +#define  MCSR10_L3U_WAY_SHIFT                0
-> > +#define  MCSR10_L3U_WAY_WIDTH                16
-> > +#define  MCSR10_L3U_WAY                      (_ULCAST_(0xffff) << MCSR10_L3U_WAY_SHIFT)
-> > +
-> > +#define LOONGARCH_CSR_MCSR24         0xf0    /* cpucfg48 */
-> > +#define  MCSR24_RAMCG_SHIFT          3
-> > +#define  MCSR24_RAMCG                        (_ULCAST_(1) << MCSR24_RAMCG_SHIFT)
-> > +#define  MCSR24_VFPUCG_SHIFT         2
-> > +#define  MCSR24_VFPUCG                       (_ULCAST_(1) << MCSR24_VFPUCG_SHIFT)
-> > +#define  MCSR24_NAPEN_SHIFT          1
-> > +#define  MCSR24_NAPEN                        (_ULCAST_(1) << MCSR24_NAPEN_SHIFT)
-> > +#define  MCSR24_MCSRLOCK_SHIFT               0
-> > +#define  MCSR24_MCSRLOCK             (_ULCAST_(1) << MCSR24_MCSRLOCK_SHIFT)
-> > +
-> > +/* Uncached accelerate windows registers */
-> > +#define LOONGARCH_CSR_UCAWIN         0x100
-> > +#define LOONGARCH_CSR_UCAWIN0_LO     0x102
-> > +#define LOONGARCH_CSR_UCAWIN0_HI     0x103
-> > +#define LOONGARCH_CSR_UCAWIN1_LO     0x104
-> > +#define LOONGARCH_CSR_UCAWIN1_HI     0x105
-> > +#define LOONGARCH_CSR_UCAWIN2_LO     0x106
-> > +#define LOONGARCH_CSR_UCAWIN2_HI     0x107
-> > +#define LOONGARCH_CSR_UCAWIN3_LO     0x108
-> > +#define LOONGARCH_CSR_UCAWIN3_HI     0x109
-> > +
-> > +/* Direct Map windows registers */
-> > +#define LOONGARCH_CSR_DMWIN0         0x180   /* 64 direct map win0: MEM & IF */
-> > +#define LOONGARCH_CSR_DMWIN1         0x181   /* 64 direct map win1: MEM & IF */
-> > +#define LOONGARCH_CSR_DMWIN2         0x182   /* 64 direct map win2: MEM */
-> > +#define LOONGARCH_CSR_DMWIN3         0x183   /* 64 direct map win3: MEM */
-> > +
-> > +/* Direct Map window 0/1 */
-> > +#define CSR_DMW0_PLV0                _CONST64_(1 << 0)
-> > +#define CSR_DMW0_VSEG                _CONST64_(0x8000)
-> > +#define CSR_DMW0_BASE                (CSR_DMW0_VSEG << DMW_PABITS)
-> > +#define CSR_DMW0_INIT                (CSR_DMW0_BASE | CSR_DMW0_PLV0)
-> > +
-> > +#define CSR_DMW1_PLV0                _CONST64_(1 << 0)
-> > +#define CSR_DMW1_MAT         _CONST64_(1 << 4)
-> > +#define CSR_DMW1_VSEG                _CONST64_(0x9000)
-> > +#define CSR_DMW1_BASE                (CSR_DMW1_VSEG << DMW_PABITS)
-> > +#define CSR_DMW1_INIT                (CSR_DMW1_BASE | CSR_DMW1_MAT | CSR_DMW1_PLV0)
-> > +
-> > +/* Performance Counter registers */
-> > +#define LOONGARCH_CSR_PERFCTRL0              0x200   /* 32 perf event 0 config */
-> > +#define LOONGARCH_CSR_PERFCNTR0              0x201   /* 64 perf event 0 count value */
-> > +#define LOONGARCH_CSR_PERFCTRL1              0x202   /* 32 perf event 1 config */
-> > +#define LOONGARCH_CSR_PERFCNTR1              0x203   /* 64 perf event 1 count value */
-> > +#define LOONGARCH_CSR_PERFCTRL2              0x204   /* 32 perf event 2 config */
-> > +#define LOONGARCH_CSR_PERFCNTR2              0x205   /* 64 perf event 2 count value */
-> > +#define LOONGARCH_CSR_PERFCTRL3              0x206   /* 32 perf event 3 config */
-> > +#define LOONGARCH_CSR_PERFCNTR3              0x207   /* 64 perf event 3 count value */
-> > +#define  CSR_PERFCTRL_PLV0           (_ULCAST_(1) << 16)
-> > +#define  CSR_PERFCTRL_PLV1           (_ULCAST_(1) << 17)
-> > +#define  CSR_PERFCTRL_PLV2           (_ULCAST_(1) << 18)
-> > +#define  CSR_PERFCTRL_PLV3           (_ULCAST_(1) << 19)
-> > +#define  CSR_PERFCTRL_IE             (_ULCAST_(1) << 20)
-> > +#define  CSR_PERFCTRL_EVENT          0x3ff
-> > +
-> > +/* Debug registers */
-> > +#define LOONGARCH_CSR_MWPC           0x300   /* data breakpoint config */
-> > +#define LOONGARCH_CSR_MWPS           0x301   /* data breakpoint status */
-> > +
-> > +#define LOONGARCH_CSR_DB0ADDR                0x310   /* data breakpoint 0 address */
-> > +#define LOONGARCH_CSR_DB0MASK                0x311   /* data breakpoint 0 mask */
-> > +#define LOONGARCH_CSR_DB0CTL         0x312   /* data breakpoint 0 control */
-> > +#define LOONGARCH_CSR_DB0ASID                0x313   /* data breakpoint 0 asid */
-> > +
-> > +#define LOONGARCH_CSR_DB1ADDR                0x318   /* data breakpoint 1 address */
-> > +#define LOONGARCH_CSR_DB1MASK                0x319   /* data breakpoint 1 mask */
-> > +#define LOONGARCH_CSR_DB1CTL         0x31a   /* data breakpoint 1 control */
-> > +#define LOONGARCH_CSR_DB1ASID                0x31b   /* data breakpoint 1 asid */
-> > +
-> > +#define LOONGARCH_CSR_DB2ADDR                0x320   /* data breakpoint 2 address */
-> > +#define LOONGARCH_CSR_DB2MASK                0x321   /* data breakpoint 2 mask */
-> > +#define LOONGARCH_CSR_DB2CTL         0x322   /* data breakpoint 2 control */
-> > +#define LOONGARCH_CSR_DB2ASID                0x323   /* data breakpoint 2 asid */
-> > +
-> > +#define LOONGARCH_CSR_DB3ADDR                0x328   /* data breakpoint 3 address */
-> > +#define LOONGARCH_CSR_DB3MASK                0x329   /* data breakpoint 3 mask */
-> > +#define LOONGARCH_CSR_DB3CTL         0x32a   /* data breakpoint 3 control */
-> > +#define LOONGARCH_CSR_DB3ASID                0x32b   /* data breakpoint 3 asid */
-> > +
-> > +#define LOONGARCH_CSR_DB4ADDR                0x330   /* data breakpoint 4 address */
-> > +#define LOONGARCH_CSR_DB4MASK                0x331   /* data breakpoint 4 maks */
-> > +#define LOONGARCH_CSR_DB4CTL         0x332   /* data breakpoint 4 control */
-> > +#define LOONGARCH_CSR_DB4ASID                0x333   /* data breakpoint 4 asid */
-> > +
-> > +#define LOONGARCH_CSR_DB5ADDR                0x338   /* data breakpoint 5 address */
-> > +#define LOONGARCH_CSR_DB5MASK                0x339   /* data breakpoint 5 mask */
-> > +#define LOONGARCH_CSR_DB5CTL         0x33a   /* data breakpoint 5 control */
-> > +#define LOONGARCH_CSR_DB5ASID                0x33b   /* data breakpoint 5 asid */
-> > +
-> > +#define LOONGARCH_CSR_DB6ADDR                0x340   /* data breakpoint 6 address */
-> > +#define LOONGARCH_CSR_DB6MASK                0x341   /* data breakpoint 6 mask */
-> > +#define LOONGARCH_CSR_DB6CTL         0x342   /* data breakpoint 6 control */
-> > +#define LOONGARCH_CSR_DB6ASID                0x343   /* data breakpoint 6 asid */
-> > +
-> > +#define LOONGARCH_CSR_DB7ADDR                0x348   /* data breakpoint 7 address */
-> > +#define LOONGARCH_CSR_DB7MASK                0x349   /* data breakpoint 7 mask */
-> > +#define LOONGARCH_CSR_DB7CTL         0x34a   /* data breakpoint 7 control */
-> > +#define LOONGARCH_CSR_DB7ASID                0x34b   /* data breakpoint 7 asid */
-> > +
-> > +#define LOONGARCH_CSR_FWPC           0x380   /* instruction breakpoint config */
-> > +#define LOONGARCH_CSR_FWPS           0x381   /* instruction breakpoint status */
-> > +
-> > +#define LOONGARCH_CSR_IB0ADDR                0x390   /* inst breakpoint 0 address */
-> > +#define LOONGARCH_CSR_IB0MASK                0x391   /* inst breakpoint 0 mask */
-> > +#define LOONGARCH_CSR_IB0CTL         0x392   /* inst breakpoint 0 control */
-> > +#define LOONGARCH_CSR_IB0ASID                0x393   /* inst breakpoint 0 asid */
-> > +
-> > +#define LOONGARCH_CSR_IB1ADDR                0x398   /* inst breakpoint 1 address */
-> > +#define LOONGARCH_CSR_IB1MASK                0x399   /* inst breakpoint 1 mask */
-> > +#define LOONGARCH_CSR_IB1CTL         0x39a   /* inst breakpoint 1 control */
-> > +#define LOONGARCH_CSR_IB1ASID                0x39b   /* inst breakpoint 1 asid */
-> > +
-> > +#define LOONGARCH_CSR_IB2ADDR                0x3a0   /* inst breakpoint 2 address */
-> > +#define LOONGARCH_CSR_IB2MASK                0x3a1   /* inst breakpoint 2 mask */
-> > +#define LOONGARCH_CSR_IB2CTL         0x3a2   /* inst breakpoint 2 control */
-> > +#define LOONGARCH_CSR_IB2ASID                0x3a3   /* inst breakpoint 2 asid */
-> > +
-> > +#define LOONGARCH_CSR_IB3ADDR                0x3a8   /* inst breakpoint 3 address */
-> > +#define LOONGARCH_CSR_IB3MASK                0x3a9   /* breakpoint 3 mask */
-> > +#define LOONGARCH_CSR_IB3CTL         0x3aa   /* inst breakpoint 3 control */
-> > +#define LOONGARCH_CSR_IB3ASID                0x3ab   /* inst breakpoint 3 asid */
-> > +
-> > +#define LOONGARCH_CSR_IB4ADDR                0x3b0   /* inst breakpoint 4 address */
-> > +#define LOONGARCH_CSR_IB4MASK                0x3b1   /* inst breakpoint 4 mask */
-> > +#define LOONGARCH_CSR_IB4CTL         0x3b2   /* inst breakpoint 4 control */
-> > +#define LOONGARCH_CSR_IB4ASID                0x3b3   /* inst breakpoint 4 asid */
-> > +
-> > +#define LOONGARCH_CSR_IB5ADDR                0x3b8   /* inst breakpoint 5 address */
-> > +#define LOONGARCH_CSR_IB5MASK                0x3b9   /* inst breakpoint 5 mask */
-> > +#define LOONGARCH_CSR_IB5CTL         0x3ba   /* inst breakpoint 5 control */
-> > +#define LOONGARCH_CSR_IB5ASID                0x3bb   /* inst breakpoint 5 asid */
-> > +
-> > +#define LOONGARCH_CSR_IB6ADDR                0x3c0   /* inst breakpoint 6 address */
-> > +#define LOONGARCH_CSR_IB6MASK                0x3c1   /* inst breakpoint 6 mask */
-> > +#define LOONGARCH_CSR_IB6CTL         0x3c2   /* inst breakpoint 6 control */
-> > +#define LOONGARCH_CSR_IB6ASID                0x3c3   /* inst breakpoint 6 asid */
-> > +
-> > +#define LOONGARCH_CSR_IB7ADDR                0x3c8   /* inst breakpoint 7 address */
-> > +#define LOONGARCH_CSR_IB7MASK                0x3c9   /* inst breakpoint 7 mask */
-> > +#define LOONGARCH_CSR_IB7CTL         0x3ca   /* inst breakpoint 7 control */
-> > +#define LOONGARCH_CSR_IB7ASID                0x3cb   /* inst breakpoint 7 asid */
-> > +
-> > +#define LOONGARCH_CSR_DEBUG          0x500   /* debug config */
-> > +#define LOONGARCH_CSR_DERA           0x501   /* debug era */
-> > +#define LOONGARCH_CSR_DESAVE         0x502   /* debug save */
-> > +
-> > +/*
-> > + * CSR_ECFG IM
-> > + */
-> > +#define ECFG0_IM             0x00001fff
-> > +#define ECFGB_SIP0           0
-> > +#define ECFGF_SIP0           (_ULCAST_(1) << ECFGB_SIP0)
-> > +#define ECFGB_SIP1           1
-> > +#define ECFGF_SIP1           (_ULCAST_(1) << ECFGB_SIP1)
-> > +#define ECFGB_IP0            2
-> > +#define ECFGF_IP0            (_ULCAST_(1) << ECFGB_IP0)
-> > +#define ECFGB_IP1            3
-> > +#define ECFGF_IP1            (_ULCAST_(1) << ECFGB_IP1)
-> > +#define ECFGB_IP2            4
-> > +#define ECFGF_IP2            (_ULCAST_(1) << ECFGB_IP2)
-> > +#define ECFGB_IP3            5
-> > +#define ECFGF_IP3            (_ULCAST_(1) << ECFGB_IP3)
-> > +#define ECFGB_IP4            6
-> > +#define ECFGF_IP4            (_ULCAST_(1) << ECFGB_IP4)
-> > +#define ECFGB_IP5            7
-> > +#define ECFGF_IP5            (_ULCAST_(1) << ECFGB_IP5)
-> > +#define ECFGB_IP6            8
-> > +#define ECFGF_IP6            (_ULCAST_(1) << ECFGB_IP6)
-> > +#define ECFGB_IP7            9
-> > +#define ECFGF_IP7            (_ULCAST_(1) << ECFGB_IP7)
-> > +#define ECFGB_PMC            10
-> > +#define ECFGF_PMC            (_ULCAST_(1) << ECFGB_PMC)
-> > +#define ECFGB_TIMER          11
-> > +#define ECFGF_TIMER          (_ULCAST_(1) << ECFGB_TIMER)
-> > +#define ECFGB_IPI            12
-> > +#define ECFGF_IPI            (_ULCAST_(1) << ECFGB_IPI)
-> > +#define ECFGF(hwirq)         (_ULCAST_(1) << hwirq)
-> > +
-> > +#define ESTATF_IP            0x00001fff
-> > +
-> > +#define LOONGARCH_IOCSR_FEATURES     0x8
-> > +#define  IOCSRF_TEMP                 BIT_ULL(0)
-> > +#define  IOCSRF_NODECNT                      BIT_ULL(1)
-> > +#define  IOCSRF_MSI                  BIT_ULL(2)
-> > +#define  IOCSRF_EXTIOI                       BIT_ULL(3)
-> > +#define  IOCSRF_CSRIPI                       BIT_ULL(4)
-> > +#define  IOCSRF_FREQCSR                      BIT_ULL(5)
-> > +#define  IOCSRF_FREQSCALE            BIT_ULL(6)
-> > +#define  IOCSRF_DVFSV1                       BIT_ULL(7)
-> > +#define  IOCSRF_EIODECODE            BIT_ULL(9)
-> > +#define  IOCSRF_FLATMODE             BIT_ULL(10)
-> > +#define  IOCSRF_VM                   BIT_ULL(11)
-> > +
-> > +#define LOONGARCH_IOCSR_VENDOR               0x10
-> > +
-> > +#define LOONGARCH_IOCSR_CPUNAME              0x20
-> > +
-> > +#define LOONGARCH_IOCSR_NODECNT              0x408
-> > +
-> > +#define LOONGARCH_IOCSR_MISC_FUNC    0x420
-> > +#define  IOCSR_MISC_FUNC_TIMER_RESET BIT_ULL(21)
-> > +#define  IOCSR_MISC_FUNC_EXT_IOI_EN  BIT_ULL(48)
-> > +
-> > +#define LOONGARCH_IOCSR_CPUTEMP              0x428
-> > +
-> > +/* PerCore CSR, only accessible by local cores */
-> > +#define LOONGARCH_IOCSR_IPI_STATUS   0x1000
-> > +#define LOONGARCH_IOCSR_IPI_EN               0x1004
-> > +#define LOONGARCH_IOCSR_IPI_SET              0x1008
-> > +#define LOONGARCH_IOCSR_IPI_CLEAR    0x100c
-> > +#define LOONGARCH_IOCSR_MBUF0                0x1020
-> > +#define LOONGARCH_IOCSR_MBUF1                0x1028
-> > +#define LOONGARCH_IOCSR_MBUF2                0x1030
-> > +#define LOONGARCH_IOCSR_MBUF3                0x1038
-> > +
-> > +#define LOONGARCH_IOCSR_IPI_SEND     0x1040
-> > +#define  IOCSR_IPI_SEND_IP_SHIFT     0
-> > +#define  IOCSR_IPI_SEND_CPU_SHIFT    16
-> > +#define  IOCSR_IPI_SEND_BLOCKING     BIT(31)
-> > +
-> > +#define LOONGARCH_IOCSR_MBUF_SEND    0x1048
-> > +#define  IOCSR_MBUF_SEND_BLOCKING    BIT_ULL(31)
-> > +#define  IOCSR_MBUF_SEND_BOX_SHIFT   2
-> > +#define  IOCSR_MBUF_SEND_BOX_LO(box) (box << 1)
-> > +#define  IOCSR_MBUF_SEND_BOX_HI(box) ((box << 1) + 1)
-> > +#define  IOCSR_MBUF_SEND_CPU_SHIFT   16
-> > +#define  IOCSR_MBUF_SEND_BUF_SHIFT   32
-> > +#define  IOCSR_MBUF_SEND_H32_MASK    0xFFFFFFFF00000000ULL
-> > +
-> > +#define LOONGARCH_IOCSR_ANY_SEND     0x1158
-> > +#define  IOCSR_ANY_SEND_BLOCKING     BIT_ULL(31)
-> > +#define  IOCSR_ANY_SEND_CPU_SHIFT    16
-> > +#define  IOCSR_ANY_SEND_MASK_SHIFT   27
-> > +#define  IOCSR_ANY_SEND_BUF_SHIFT    32
-> > +#define  IOCSR_ANY_SEND_H32_MASK     0xFFFFFFFF00000000ULL
-> > +
-> > +/* Register offset and bit definition for CSR access */
-> > +#define LOONGARCH_IOCSR_TIMER_CFG       0x1060
-> > +#define LOONGARCH_IOCSR_TIMER_TICK      0x1070
-> > +#define  IOCSR_TIMER_CFG_RESERVED       (_ULCAST_(1) << 63)
-> > +#define  IOCSR_TIMER_CFG_PERIODIC       (_ULCAST_(1) << 62)
-> > +#define  IOCSR_TIMER_CFG_EN             (_ULCAST_(1) << 61)
-> > +#define  IOCSR_TIMER_MASK            0x0ffffffffffffULL
-> > +#define  IOCSR_TIMER_INITVAL_RST        (_ULCAST_(0xffff) << 48)
-> > +
-> > +#define LOONGARCH_IOCSR_EXTIOI_NODEMAP_BASE  0x14a0
-> > +#define LOONGARCH_IOCSR_EXTIOI_IPMAP_BASE    0x14c0
-> > +#define LOONGARCH_IOCSR_EXTIOI_EN_BASE               0x1600
-> > +#define LOONGARCH_IOCSR_EXTIOI_BOUNCE_BASE   0x1680
-> > +#define LOONGARCH_IOCSR_EXTIOI_ISR_BASE              0x1800
-> > +#define LOONGARCH_IOCSR_EXTIOI_ROUTE_BASE    0x1c00
-> > +#define IOCSR_EXTIOI_VECTOR_NUM                      256
-> > +
-> > +#ifndef __ASSEMBLY__
-> > +
-> > +static inline u64 drdtime(void)
-> > +{
-> > +     int rID = 0;
-> > +     u64 val = 0;
-> > +
-> > +     __asm__ __volatile__(
-> > +             "rdtime.d %0, %1 \n\t"
-> > +             : "=r"(val), "=r"(rID)
-> > +             :
-> > +             );
-> > +     return val;
-> > +}
-> > +
-> > +static inline unsigned int get_csr_cpuid(void)
-> > +{
-> > +     return csr_readl(LOONGARCH_CSR_CPUID);
-> > +}
-> > +
-> > +static inline void csr_any_send(unsigned int addr, unsigned int data,
-> > +                             unsigned int data_mask, unsigned int cpu)
-> > +{
-> > +     uint64_t val = 0;
-> > +
-> > +     val = IOCSR_ANY_SEND_BLOCKING | addr;
-> > +     val |= (cpu << IOCSR_ANY_SEND_CPU_SHIFT);
-> > +     val |= (data_mask << IOCSR_ANY_SEND_MASK_SHIFT);
-> > +     val |= ((uint64_t)data << IOCSR_ANY_SEND_BUF_SHIFT);
-> > +     iocsr_writeq(val, LOONGARCH_IOCSR_ANY_SEND);
-> > +}
-> > +
-> > +static inline unsigned int read_csr_excode(void)
-> > +{
-> > +     return (csr_readl(LOONGARCH_CSR_ESTAT) & CSR_ESTAT_EXC) >> CSR_ESTAT_EXC_SHIFT;
-> > +}
-> > +
-> > +static inline void write_csr_index(unsigned int idx)
-> > +{
-> > +     csr_xchgl(idx, CSR_TLBIDX_IDXM, LOONGARCH_CSR_TLBIDX);
-> > +}
-> > +
-> > +static inline unsigned int read_csr_pagesize(void)
-> > +{
-> > +     return (csr_readl(LOONGARCH_CSR_TLBIDX) & CSR_TLBIDX_SIZEM) >> CSR_TLBIDX_SIZE;
-> > +}
-> > +
-> > +static inline void write_csr_pagesize(unsigned int size)
-> > +{
-> > +     csr_xchgl(size << CSR_TLBIDX_SIZE, CSR_TLBIDX_SIZEM, LOONGARCH_CSR_TLBIDX);
-> > +}
-> > +
-> > +static inline unsigned int read_csr_tlbrefill_pagesize(void)
-> > +{
-> > +     return (csr_readq(LOONGARCH_CSR_TLBREHI) & CSR_TLBREHI_PS) >> CSR_TLBREHI_PS_SHIFT;
-> > +}
-> > +
-> > +static inline void write_csr_tlbrefill_pagesize(unsigned int size)
-> > +{
-> > +     csr_xchgq(size << CSR_TLBREHI_PS_SHIFT, CSR_TLBREHI_PS, LOONGARCH_CSR_TLBREHI);
-> > +}
-> > +
-> > +#define read_csr_asid()                      csr_readl(LOONGARCH_CSR_ASID)
-> > +#define write_csr_asid(val)          csr_writel(val, LOONGARCH_CSR_ASID)
-> > +#define read_csr_entryhi()           csr_readq(LOONGARCH_CSR_TLBEHI)
-> > +#define write_csr_entryhi(val)               csr_writeq(val, LOONGARCH_CSR_TLBEHI)
-> > +#define read_csr_entrylo0()          csr_readq(LOONGARCH_CSR_TLBELO0)
-> > +#define write_csr_entrylo0(val)              csr_writeq(val, LOONGARCH_CSR_TLBELO0)
-> > +#define read_csr_entrylo1()          csr_readq(LOONGARCH_CSR_TLBELO1)
-> > +#define write_csr_entrylo1(val)              csr_writeq(val, LOONGARCH_CSR_TLBELO1)
-> > +#define read_csr_ecfg()                      csr_readl(LOONGARCH_CSR_ECFG)
-> > +#define write_csr_ecfg(val)          csr_writel(val, LOONGARCH_CSR_ECFG)
-> > +#define read_csr_estat()             csr_readl(LOONGARCH_CSR_ESTAT)
-> > +#define write_csr_estat(val)         csr_writel(val, LOONGARCH_CSR_ESTAT)
-> > +#define read_csr_tlbidx()            csr_readl(LOONGARCH_CSR_TLBIDX)
-> > +#define write_csr_tlbidx(val)                csr_writel(val, LOONGARCH_CSR_TLBIDX)
-> > +#define read_csr_euen()                      csr_readl(LOONGARCH_CSR_EUEN)
-> > +#define write_csr_euen(val)          csr_writel(val, LOONGARCH_CSR_EUEN)
-> > +#define read_csr_cpuid()             csr_readl(LOONGARCH_CSR_CPUID)
-> > +#define read_csr_prcfg1()            csr_readq(LOONGARCH_CSR_PRCFG1)
-> > +#define write_csr_prcfg1(val)                csr_writeq(val, LOONGARCH_CSR_PRCFG1)
-> > +#define read_csr_prcfg2()            csr_readq(LOONGARCH_CSR_PRCFG2)
-> > +#define write_csr_prcfg2(val)                csr_writeq(val, LOONGARCH_CSR_PRCFG2)
-> > +#define read_csr_prcfg3()            csr_readq(LOONGARCH_CSR_PRCFG3)
-> > +#define write_csr_prcfg3(val)                csr_writeq(val, LOONGARCH_CSR_PRCFG3)
-> > +#define read_csr_stlbpgsize()                csr_readl(LOONGARCH_CSR_STLBPGSIZE)
-> > +#define write_csr_stlbpgsize(val)    csr_writel(val, LOONGARCH_CSR_STLBPGSIZE)
-> > +#define read_csr_rvacfg()            csr_readl(LOONGARCH_CSR_RVACFG)
-> > +#define write_csr_rvacfg(val)                csr_writel(val, LOONGARCH_CSR_RVACFG)
-> > +#define write_csr_tintclear(val)     csr_writel(val, LOONGARCH_CSR_TINTCLR)
-> > +#define read_csr_impctl1()           csr_readq(LOONGARCH_CSR_IMPCTL1)
-> > +#define write_csr_impctl1(val)               csr_writeq(val, LOONGARCH_CSR_IMPCTL1)
-> > +#define write_csr_impctl2(val)               csr_writeq(val, LOONGARCH_CSR_IMPCTL2)
-> > +
-> > +#define read_csr_perfctrl0()         csr_readq(LOONGARCH_CSR_PERFCTRL0)
-> > +#define read_csr_perfcntr0()         csr_readq(LOONGARCH_CSR_PERFCNTR0)
-> > +#define read_csr_perfctrl1()         csr_readq(LOONGARCH_CSR_PERFCTRL1)
-> > +#define read_csr_perfcntr1()         csr_readq(LOONGARCH_CSR_PERFCNTR1)
-> > +#define read_csr_perfctrl2()         csr_readq(LOONGARCH_CSR_PERFCTRL2)
-> > +#define read_csr_perfcntr2()         csr_readq(LOONGARCH_CSR_PERFCNTR2)
-> > +#define read_csr_perfctrl3()         csr_readq(LOONGARCH_CSR_PERFCTRL3)
-> > +#define read_csr_perfcntr3()         csr_readq(LOONGARCH_CSR_PERFCNTR3)
-> > +#define write_csr_perfctrl0(val)     csr_writeq(val, LOONGARCH_CSR_PERFCTRL0)
-> > +#define write_csr_perfcntr0(val)     csr_writeq(val, LOONGARCH_CSR_PERFCNTR0)
-> > +#define write_csr_perfctrl1(val)     csr_writeq(val, LOONGARCH_CSR_PERFCTRL1)
-> > +#define write_csr_perfcntr1(val)     csr_writeq(val, LOONGARCH_CSR_PERFCNTR1)
-> > +#define write_csr_perfctrl2(val)     csr_writeq(val, LOONGARCH_CSR_PERFCTRL2)
-> > +#define write_csr_perfcntr2(val)     csr_writeq(val, LOONGARCH_CSR_PERFCNTR2)
-> > +#define write_csr_perfctrl3(val)     csr_writeq(val, LOONGARCH_CSR_PERFCTRL3)
-> > +#define write_csr_perfcntr3(val)     csr_writeq(val, LOONGARCH_CSR_PERFCNTR3)
-> > +
-> > +/*
-> > + * Manipulate bits in a register.
-> > + */
-> > +#define __BUILD_CSR_COMMON(name)                             \
-> > +static inline unsigned long                                  \
-> > +set_##name(unsigned long set)                                        \
-> > +{                                                            \
-> > +     unsigned long res, new;                                 \
-> > +                                                             \
-> > +     res = read_##name();                                    \
-> > +     new = res | set;                                        \
-> > +     write_##name(new);                                      \
-> > +                                                             \
-> > +     return res;                                             \
-> > +}                                                            \
-> > +                                                             \
-> > +static inline unsigned long                                  \
-> > +clear_##name(unsigned long clear)                            \
-> > +{                                                            \
-> > +     unsigned long res, new;                                 \
-> > +                                                             \
-> > +     res = read_##name();                                    \
-> > +     new = res & ~clear;                                     \
-> > +     write_##name(new);                                      \
-> > +                                                             \
-> > +     return res;                                             \
-> > +}                                                            \
-> > +                                                             \
-> > +static inline unsigned long                                  \
-> > +change_##name(unsigned long change, unsigned long val)               \
-> > +{                                                            \
-> > +     unsigned long res, new;                                 \
-> > +                                                             \
-> > +     res = read_##name();                                    \
-> > +     new = res & ~change;                                    \
-> > +     new |= (val & change);                                  \
-> > +     write_##name(new);                                      \
-> > +                                                             \
-> > +     return res;                                             \
-> > +}
-> > +
-> > +#define __BUILD_CSR_OP(name) __BUILD_CSR_COMMON(csr_##name)
-> > +
-> > +__BUILD_CSR_OP(euen)
-> > +__BUILD_CSR_OP(ecfg)
-> > +__BUILD_CSR_OP(tlbidx)
-> > +
-> > +#define set_csr_estat(val)   \
-> > +     csr_xchgl(val, val, LOONGARCH_CSR_ESTAT)
-> > +#define clear_csr_estat(val) \
-> > +     csr_xchgl(~(val), val, LOONGARCH_CSR_ESTAT)
-> > +
-> > +#endif /* __ASSEMBLY__ */
-> > +
-> > +/* Generic EntryLo bit definitions */
-> > +#define ENTRYLO_V            (_ULCAST_(1) << 0)
-> > +#define ENTRYLO_D            (_ULCAST_(1) << 1)
-> > +#define ENTRYLO_PLV_SHIFT    2
-> > +#define ENTRYLO_PLV          (_ULCAST_(3) << ENTRYLO_PLV_SHIFT)
-> > +#define ENTRYLO_C_SHIFT              4
-> > +#define ENTRYLO_C            (_ULCAST_(3) << ENTRYLO_C_SHIFT)
-> > +#define ENTRYLO_G            (_ULCAST_(1) << 6)
-> > +#define ENTRYLO_NR           (_ULCAST_(1) << 61)
-> > +#define ENTRYLO_NX           (_ULCAST_(1) << 62)
-> > +
-> > +/* LoongArch GlobalNumber definitions */
-> > +#define LOONGARCH_GLOBALNUMBER_VP_SHF        0
-> > +#define LOONGARCH_GLOBALNUMBER_VP            (_ULCAST_(0xff) << LOONGARCH_GLOBALNUMBER_VP_SHF)
-> > +#define LOONGARCH_GLOBALNUMBER_CORE_SHF      8
-> > +#define LOONGARCH_GLOBALNUMBER_CORE          (_ULCAST_(0xff) << LOONGARCH_GLOBALNUMBER_CORE_SHF)
-> > +#define LOONGARCH_GLOBALNUMBER_CLUSTER_SHF   16
-> > +#define LOONGARCH_GLOBALNUMBER_CLUSTER       (_ULCAST_(0xf) << LOONGARCH_GLOBALNUMBER_CLUSTER_SHF)
-> > +
-> > +/* Values for PageSize register */
-> > +#define PS_4K                0x0000000c
-> > +#define PS_8K                0x0000000d
-> > +#define PS_16K               0x0000000e
-> > +#define PS_32K               0x0000000f
-> > +#define PS_64K               0x00000010
-> > +#define PS_128K              0x00000011
-> > +#define PS_256K              0x00000012
-> > +#define PS_512K              0x00000013
-> > +#define PS_1M                0x00000014
-> > +#define PS_2M                0x00000015
-> > +#define PS_4M                0x00000016
-> > +#define PS_8M                0x00000017
-> > +#define PS_16M               0x00000018
-> > +#define PS_32M               0x00000019
-> > +#define PS_64M               0x0000001a
-> > +#define PS_128M              0x0000001b
-> > +#define PS_256M              0x0000001c
-> > +#define PS_512M              0x0000001d
-> > +#define PS_1G                0x0000001e
-> > +
-> > +#define PS_MASK              0x3f000000
-> > +#define PS_SHIFT     24
-> > +
-> > +/* Default page size for a given kernel configuration */
-> > +#ifdef CONFIG_PAGE_SIZE_4KB
-> > +#define PS_DEFAULT_SIZE PS_4K
-> > +#elif defined(CONFIG_PAGE_SIZE_16KB)
-> > +#define PS_DEFAULT_SIZE PS_16K
-> > +#elif defined(CONFIG_PAGE_SIZE_64KB)
-> > +#define PS_DEFAULT_SIZE PS_64K
-> > +#else
-> > +#error Bad page size configuration!
-> > +#endif
-> > +
-> > +/* Default huge tlb size for a given kernel configuration */
-> > +#ifdef CONFIG_PAGE_SIZE_4KB
-> > +#define PS_HUGE_SIZE   PS_1M
-> > +#elif defined(CONFIG_PAGE_SIZE_16KB)
-> > +#define PS_HUGE_SIZE   PS_16M
-> > +#elif defined(CONFIG_PAGE_SIZE_64KB)
-> > +#define PS_HUGE_SIZE   PS_256M
-> > +#else
-> > +#error Bad page size configuration for hugetlbfs!
-> > +#endif
-> > +
-> > +/* ExStatus.ExcCode */
-> > +#define EXCCODE_RSV          0       /* Reserved */
-> > +#define EXCCODE_TLBL         1       /* TLB miss on a load */
-> > +#define EXCCODE_TLBS         2       /* TLB miss on a store */
-> > +#define EXCCODE_TLBI         3       /* TLB miss on a ifetch */
-> > +#define EXCCODE_TLBM         4       /* TLB modified fault */
-> > +#define EXCCODE_TLBNR                5       /* TLB Read-Inhibit exception */
-> > +#define EXCCODE_TLBNX                6       /* TLB Execution-Inhibit exception */
-> > +#define EXCCODE_TLBPE                7       /* TLB Privilege Error */
-> > +#define EXCCODE_ADE          8       /* Address Error */
-> > +     #define EXSUBCODE_ADEF          0       /* Fetch Instruction */
-> > +     #define EXSUBCODE_ADEM          1       /* Access Memory*/
-> > +#define EXCCODE_ALE          9       /* Unalign Access */
-> > +#define EXCCODE_OOB          10      /* Out of bounds */
-> > +#define EXCCODE_SYS          11      /* System call */
-> > +#define EXCCODE_BP           12      /* Breakpoint */
-> > +#define EXCCODE_INE          13      /* Inst. Not Exist */
-> > +#define EXCCODE_IPE          14      /* Inst. Privileged Error */
-> "Privilege Error"?
-> > +#define EXCCODE_FPDIS                15      /* FPU Disabled */
-> > +#define EXCCODE_LSXDIS               16      /* LSX Disabled */
-> > +#define EXCCODE_LASXDIS              17      /* LASX Disabled */
-> > +#define EXCCODE_FPE          18      /* Floating Point Exception */
-> > +     #define EXCSUBCODE_FPE          0       /* Floating Point Exception */
-> > +     #define EXCSUBCODE_VFPE         1       /* Vector Exception */
-> > +#define EXCCODE_WATCH                19      /* Watch address reference */
-> > +#define EXCCODE_BTDIS                20      /* Binary Trans. Disabled */
-> > +#define EXCCODE_BTE          21      /* Binary Trans. Exception */
-> > +#define EXCCODE_PSI          22      /* Guest Privileged Error */
-> > +#define EXCCODE_HYP          23      /* Hypercall */
-> > +#define EXCCODE_GCM          24      /* Guest CSR modified */
-> > +     #define EXCSUBCODE_GCSC         0       /* Software caused */
-> > +     #define EXCSUBCODE_GCHC         1       /* Hardware caused */
-> > +#define EXCCODE_SE           25      /* Security */
-> > +
-> > +#define EXCCODE_INT_START   64
-> > +#define EXCCODE_SIP0        64
-> > +#define EXCCODE_SIP1        65
-> > +#define EXCCODE_IP0         66
-> > +#define EXCCODE_IP1         67
-> > +#define EXCCODE_IP2         68
-> > +#define EXCCODE_IP3         69
-> > +#define EXCCODE_IP4         70
-> > +#define EXCCODE_IP5         71
-> > +#define EXCCODE_IP6         72
-> > +#define EXCCODE_IP7         73
-> > +#define EXCCODE_PMC         74 /* Performance Counter */
-> > +#define EXCCODE_TIMER       75
-> > +#define EXCCODE_IPI         76
-> > +#define EXCCODE_NMI         77
-> > +#define EXCCODE_INT_END     78
-> > +#define EXCCODE_INT_NUM          (EXCCODE_INT_END - EXCCODE_INT_START)
-> > +
-> > +/* FPU register names */
-> > +#define LOONGARCH_FCSR0      $r0
-> > +#define LOONGARCH_FCSR1      $r1
-> > +#define LOONGARCH_FCSR2      $r2
-> > +#define LOONGARCH_FCSR3      $r3
-> > +
-> > +/* FPU Status Register Values */
-> > +#define FPU_CSR_RSVD 0xe0e0fce0
-> > +
-> > +/*
-> > + * X the exception cause indicator
-> > + * E the exception enable
-> > + * S the sticky/flag bit
-> > + */
-> > +#define FPU_CSR_ALL_X        0x1f000000
-> > +#define FPU_CSR_INV_X        0x10000000
-> > +#define FPU_CSR_DIV_X        0x08000000
-> > +#define FPU_CSR_OVF_X        0x04000000
-> > +#define FPU_CSR_UDF_X        0x02000000
-> > +#define FPU_CSR_INE_X        0x01000000
-> > +
-> > +#define FPU_CSR_ALL_S        0x001f0000
-> > +#define FPU_CSR_INV_S        0x00100000
-> > +#define FPU_CSR_DIV_S        0x00080000
-> > +#define FPU_CSR_OVF_S        0x00040000
-> > +#define FPU_CSR_UDF_S        0x00020000
-> > +#define FPU_CSR_INE_S        0x00010000
-> > +
-> > +#define FPU_CSR_ALL_E        0x0000001f
-> > +#define FPU_CSR_INV_E        0x00000010
-> > +#define FPU_CSR_DIV_E        0x00000008
-> > +#define FPU_CSR_OVF_E        0x00000004
-> > +#define FPU_CSR_UDF_E        0x00000002
-> > +#define FPU_CSR_INE_E        0x00000001
-> > +
-> > +/* Bits 8 and 9 of FPU Status Register specify the rounding mode */
-> > +#define FPU_CSR_RM   0x300
-> > +#define FPU_CSR_RN   0x000   /* nearest */
-> > +#define FPU_CSR_RZ   0x100   /* towards zero */
-> > +#define FPU_CSR_RU   0x200   /* towards +Infinity */
-> > +#define FPU_CSR_RD   0x300   /* towards -Infinity */
-> > +
-> > +#define read_fcsr(source)    \
-> > +({   \
-> > +     unsigned int __res;     \
-> > +\
-> > +     __asm__ __volatile__(   \
-> > +     "       movfcsr2gr      %0, "STR(source)"       \n"     \
-> > +     : "=r" (__res));        \
-> > +     __res;  \
-> > +})
-> > +
-> > +#define write_fcsr(dest, val) \
-> > +do { \
-> > +     __asm__ __volatile__(   \
-> > +     "       movgr2fcsr      %0, "STR(dest)" \n"     \
-> > +     : : "r" (val)); \
-> > +} while (0)
-> > +
-> > +#endif /* _ASM_LOONGARCH_H */
-> > diff --git a/arch/loongarch/include/asm/loongson.h b/arch/loongarch/include/asm/loongson.h
-> > new file mode 100644
-> > index 000000000000..4cefd393fd5c
-> > --- /dev/null
-> > +++ b/arch/loongarch/include/asm/loongson.h
-> > @@ -0,0 +1,159 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * Author: Huacai Chen <chenhuacai@loongson.cn>
-> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> Better explain this file's name and purpose... This is mostly
-> definitions for models produced by Loongson Corporation, much like how
-> MTI stands for MIPS the corporation while MIPS stands for the
-> architecture. Don't overload the "Loongson" term, it's too ambiguous
-> already...
-> > + */
-> > +
-> > +#ifndef __ASM_LOONGSON_H
-> > +#define __ASM_LOONGSON_H
-> > +
-> > +#include <linux/init.h>
-> > +#include <linux/io.h>
-> > +#include <linux/irq.h>
-> > +#include <linux/pci.h>
-> > +#include <asm/addrspace.h>
-> > +#include <asm/boot_param.h>
-> > +
-> > +extern const struct plat_smp_ops loongson3_smp_ops;
-> > +
-> > +/* loongson-specific command line, env and memory initialization */
-> > +extern void __init fw_init_environ(void);
-> > +extern void __init fw_init_memory(void);
-> > +extern void __init fw_init_numa_memory(void);
-> > +
-> > +#define LOONGSON_REG(x) \
-> > +     (*(volatile u32 *)((char *)TO_UNCAC(LOONGSON_REG_BASE) + (x)))
-> > +
-> > +#define LOONGSON_LIO_BASE    0x18000000
-> > +#define LOONGSON_LIO_SIZE    0x00100000      /* 1M */
-> > +#define LOONGSON_LIO_TOP     (LOONGSON_LIO_BASE+LOONGSON_LIO_SIZE-1)
-> > +
-> > +#define LOONGSON_BOOT_BASE   0x1c000000
-> > +#define LOONGSON_BOOT_SIZE   0x02000000      /* 32M */
-> > +#define LOONGSON_BOOT_TOP    (LOONGSON_BOOT_BASE+LOONGSON_BOOT_SIZE-1)
-> > +
-> > +#define LOONGSON_REG_BASE    0x1fe00000
-> > +#define LOONGSON_REG_SIZE    0x00100000      /* 1M */
-> > +#define LOONGSON_REG_TOP     (LOONGSON_REG_BASE+LOONGSON_REG_SIZE-1)
-> > +
-> > +/* GPIO Regs - r/w */
-> > +
-> > +#define LOONGSON_GPIODATA            LOONGSON_REG(0x11c)
-> > +#define LOONGSON_GPIOIE                      LOONGSON_REG(0x120)
-> > +#define LOONGSON_REG_GPIO_BASE          (LOONGSON_REG_BASE + 0x11c)
-> > +
-> > +#define MAX_PACKAGES 16
-> > +
-> > +/* Chip Config registor of each physical cpu package */
-> > +extern u64 loongson_chipcfg[MAX_PACKAGES];
-> > +#define LOONGSON_CHIPCFG(id) (*(volatile u32 *)(loongson_chipcfg[id]))
-> > +
-> > +/* Chip Temperature registor of each physical cpu package */
-> > +extern u64 loongson_chiptemp[MAX_PACKAGES];
-> > +#define LOONGSON_CHIPTEMP(id) (*(volatile u32 *)(loongson_chiptemp[id]))
-> > +
-> > +/* Freq Control register of each physical cpu package */
-> > +extern u64 loongson_freqctrl[MAX_PACKAGES];
-> > +#define LOONGSON_FREQCTRL(id) (*(volatile u32 *)(loongson_freqctrl[id]))
-> > +
-> > +#define xconf_readl(addr) readl(addr)
-> > +#define xconf_readq(addr) readq(addr)
-> > +
-> > +static inline void xconf_writel(u32 val, volatile void __iomem *addr)
-> > +{
-> > +     asm volatile (
-> > +     "       st.w    %[v], %[hw], 0  \n"
-> > +     "       ld.b    $r0, %[hw], 0   \n"
-> > +     :
-> > +     : [hw] "r" (addr), [v] "r" (val)
-> > +     );
-> > +}
-> > +
-> > +static inline void xconf_writeq(u64 val64, volatile void __iomem *addr)
-> > +{
-> > +     asm volatile (
-> > +     "       st.d    %[v], %[hw], 0  \n"
-> > +     "       ld.b    $r0, %[hw], 0   \n"
-> > +     :
-> > +     : [hw] "r" (addr),  [v] "r" (val64)
-> > +     );
-> > +}
-> > +
-> > +/* ============== LS7A registers =============== */
-> > +#define LS7A_PCH_REG_BASE            0x10000000UL
-> > +/* LPC regs */
-> > +#define LS7A_LPC_REG_BASE            (LS7A_PCH_REG_BASE + 0x00002000)
-> > +/* CHIPCFG regs */
-> > +#define LS7A_CHIPCFG_REG_BASE                (LS7A_PCH_REG_BASE + 0x00010000)
-> > +/* MISC reg base */
-> > +#define LS7A_MISC_REG_BASE           (LS7A_PCH_REG_BASE + 0x00080000)
-> > +/* ACPI regs */
-> > +#define LS7A_ACPI_REG_BASE           (LS7A_MISC_REG_BASE + 0x00050000)
-> > +/* RTC regs */
-> > +#define LS7A_RTC_REG_BASE            (LS7A_MISC_REG_BASE + 0x00050100)
-> > +
-> > +#define LS7A_DMA_CFG                 (volatile void *)TO_UNCAC(LS7A_CHIPCFG_REG_BASE + 0x041c)
-> > +#define LS7A_DMA_NODE_SHF            8
-> > +#define LS7A_DMA_NODE_MASK           0x1F00
-> > +
-> > +#define LS7A_INT_MASK_REG            (volatile void *)TO_UNCAC(LS7A_PCH_REG_BASE + 0x020)
-> > +#define LS7A_INT_EDGE_REG            (volatile void *)TO_UNCAC(LS7A_PCH_REG_BASE + 0x060)
-> > +#define LS7A_INT_CLEAR_REG           (volatile void *)TO_UNCAC(LS7A_PCH_REG_BASE + 0x080)
-> > +#define LS7A_INT_HTMSI_EN_REG                (volatile void *)TO_UNCAC(LS7A_PCH_REG_BASE + 0x040)
-> > +#define LS7A_INT_ROUTE_ENTRY_REG     (volatile void *)TO_UNCAC(LS7A_PCH_REG_BASE + 0x100)
-> > +#define LS7A_INT_HTMSI_VEC_REG               (volatile void *)TO_UNCAC(LS7A_PCH_REG_BASE + 0x200)
-> > +#define LS7A_INT_STATUS_REG          (volatile void *)TO_UNCAC(LS7A_PCH_REG_BASE + 0x3a0)
-> > +#define LS7A_INT_POL_REG             (volatile void *)TO_UNCAC(LS7A_PCH_REG_BASE + 0x3e0)
-> > +#define LS7A_LPC_INT_CTL             (volatile void *)TO_UNCAC(LS7A_PCH_REG_BASE + 0x2000)
-> > +#define LS7A_LPC_INT_ENA             (volatile void *)TO_UNCAC(LS7A_PCH_REG_BASE + 0x2004)
-> > +#define LS7A_LPC_INT_STS             (volatile void *)TO_UNCAC(LS7A_PCH_REG_BASE + 0x2008)
-> > +#define LS7A_LPC_INT_CLR             (volatile void *)TO_UNCAC(LS7A_PCH_REG_BASE + 0x200c)
-> > +#define LS7A_LPC_INT_POL             (volatile void *)TO_UNCAC(LS7A_PCH_REG_BASE + 0x2010)
-> > +
-> > +#define LS7A_PMCON_SOC_REG           (volatile void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x000)
-> > +#define LS7A_PMCON_RESUME_REG                (volatile void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x004)
-> > +#define LS7A_PMCON_RTC_REG           (volatile void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x008)
-> > +#define LS7A_PM1_EVT_REG             (volatile void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x00c)
-> > +#define LS7A_PM1_ENA_REG             (volatile void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x010)
-> > +#define LS7A_PM1_CNT_REG             (volatile void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x014)
-> > +#define LS7A_PM1_TMR_REG             (volatile void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x018)
-> > +#define LS7A_P_CNT_REG                       (volatile void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x01c)
-> > +#define LS7A_GPE0_STS_REG            (volatile void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x028)
-> > +#define LS7A_GPE0_ENA_REG            (volatile void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x02c)
-> > +#define LS7A_RST_CNT_REG             (volatile void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x030)
-> > +#define LS7A_WD_SET_REG                      (volatile void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x034)
-> > +#define LS7A_WD_TIMER_REG            (volatile void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x038)
-> > +#define LS7A_THSENS_CNT_REG          (volatile void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x04c)
-> > +#define LS7A_GEN_RTC_1_REG           (volatile void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x050)
-> > +#define LS7A_GEN_RTC_2_REG           (volatile void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x054)
-> > +#define LS7A_DPM_CFG_REG             (volatile void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x400)
-> > +#define LS7A_DPM_STS_REG             (volatile void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x404)
-> > +#define LS7A_DPM_CNT_REG             (volatile void *)TO_UNCAC(LS7A_ACPI_REG_BASE + 0x408)
-> > +
-> > +typedef enum {
-> > +     ACPI_PCI_HOTPLUG_STATUS = 1 << 1,
-> > +     ACPI_CPU_HOTPLUG_STATUS = 1 << 2,
-> > +     ACPI_MEM_HOTPLUG_STATUS = 1 << 3,
-> > +     ACPI_POWERBUTTON_STATUS = 1 << 8,
-> > +     ACPI_RTC_WAKE_STATUS    = 1 << 10,
-> > +     ACPI_PCI_WAKE_STATUS    = 1 << 14,
-> > +     ACPI_ANY_WAKE_STATUS    = 1 << 15,
-> > +} AcpiEventStatusBits;
-> > +
-> > +#define HT1LO_OFFSET         0xe0000000000UL
-> > +
-> > +/* PCI Configuration Space Base */
-> > +#define MCFG_EXT_PCICFG_BASE         0xefe00000000UL
-> > +
-> > +/* REG ACCESS*/
-> Do we really need this tiny comment? The code is pretty self-explanatory
-> and the comment end marker is lacking a space before.
-> > +#define ls7a_readb(addr)                       (*(volatile unsigned char  *)TO_UNCAC(addr))
-> > +#define ls7a_readw(addr)                       (*(volatile unsigned short *)TO_UNCAC(addr))
-> > +#define ls7a_readl(addr)                       (*(volatile unsigned int   *)TO_UNCAC(addr))
-> > +#define ls7a_readq(addr)                       (*(volatile unsigned long  *)TO_UNCAC(addr))
-> > +#define ls7a_writeb(val, addr)               *(volatile unsigned char  *)TO_UNCAC(addr) = (val)
-> > +#define ls7a_writew(val, addr)               *(volatile unsigned short *)TO_UNCAC(addr) = (val)
-> > +#define ls7a_writel(val, addr)               ls7a_write_type(val, addr, uint32_t)
-> > +#define ls7a_writeq(val, addr)               ls7a_write_type(val, addr, uint64_t)
-> > +#define ls7a_write(val, addr)                ls7a_write_type(val, addr, uint64_t)
-> > +
-> > +#endif /* __ASM_LOONGSON_H */
-> > diff --git a/arch/loongarch/include/asm/regdef.h b/arch/loongarch/include/asm/regdef.h
-> > new file mode 100644
-> > index 000000000000..9f24f0c05fe3
-> > --- /dev/null
-> > +++ b/arch/loongarch/include/asm/regdef.h
-> > @@ -0,0 +1,43 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> > + */
-> > +#ifndef _ASM_REGDEF_H
-> > +#define _ASM_REGDEF_H
-> > +
-> > +#define zero $r0     /* wired zero */
-> > +#define ra   $r1     /* return address */
-> > +#define tp   $r2
-> > +#define sp   $r3     /* stack pointer */
-> > +#define v0   $r4     /* return value - caller saved */
-> > +#define v1   $r5
-> > +#define a0   $r4     /* argument registers */
-> > +#define a1   $r5
-> > +#define a2   $r6
-> > +#define a3   $r7
-> > +#define a4   $r8
-> > +#define a5   $r9
-> > +#define a6   $r10
-> > +#define a7   $r11
-> > +#define t0   $r12    /* caller saved */
-> > +#define t1   $r13
-> > +#define t2   $r14
-> > +#define t3   $r15
-> > +#define t4   $r16
-> > +#define t5   $r17
-> > +#define t6   $r18
-> > +#define t7   $r19
-> > +#define t8   $r20
-> > +#define u0   $r21
-> > +#define fp   $r22    /* frame pointer */
-> > +#define s0   $r23    /* callee saved */
-> > +#define s1   $r24
-> > +#define s2   $r25
-> > +#define s3   $r26
-> > +#define s4   $r27
-> > +#define s5   $r28
-> > +#define s6   $r29
-> > +#define s7   $r30
-> > +#define s8   $r31
-> > +
-> > +#endif /* _ASM_REGDEF_H */
-> Why can't this file be combined with the FP one (absorbing the FP
-> definitions into this file)? While at it, remove $vX and document $u0 too.
+:::::: The code at line 3957 was first introduced by commit
+:::::: 74458c081fcfb0423877e630de2746daefdb16e4 drm/amd/display: Add DCN3.1 DML calculation support
+
+:::::: TO: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
+:::::: CC: Alex Deucher <alexander.deucher@amd.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

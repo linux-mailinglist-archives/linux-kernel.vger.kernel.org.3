@@ -2,129 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1FB751678C
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 21:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E207D51678E
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 21:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352249AbiEATqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 15:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47862 "EHLO
+        id S1354233AbiEATsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 15:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242704AbiEATqn (ORCPT
+        with ESMTP id S230346AbiEATsV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 15:46:43 -0400
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [5.144.164.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B715D167F7;
-        Sun,  1 May 2022 12:43:17 -0700 (PDT)
-Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 000593F62D;
-        Sun,  1 May 2022 21:43:14 +0200 (CEST)
-Date:   Sun, 1 May 2022 21:43:13 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Adam Skladowski <a39.skl@gmail.com>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-Subject: Re: [PATCH] clk: qcom: smd: Update MSM8976 RPM clocks.
-Message-ID: <20220501194313.zu4dmmlggiksi6ce@SoMainline.org>
-Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
-        Adam Skladowski <a39.skl@gmail.com>, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-References: <20220426090226.27293-1-a39.skl@gmail.com>
+        Sun, 1 May 2022 15:48:21 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B7B10FD9
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 12:44:55 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id kq17so24441923ejb.4
+        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 12:44:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=lSkWyJ22j/Gy1+rBPKEz6ICjIB7fl5dNRWyogOjMNiA=;
+        b=F9jEL0m5dCExabt9JtdIhocs1L9i3dnwB2TDZqj2ap6Lq+zXvHZ6rHaxGaMOzJDjvI
+         kMMdgwzfDyl3DBbW7dmg8TRcHv3hwSG1wTbl8jHJvHExvCr4azznQuC0sT5XTFE+mI/a
+         2NT2CkJpVfMdv2oyovIOLaojlIf7wM4Iw6WTvb/mHTgEd1k2QSHOoZzmgDr3uNwyo64y
+         aOlVwJEmJasp4nv1V46RVWkxbEwG79jS99v+Sq+5CALFlisDqdlWJy3n/CYcIVD2FWBh
+         YHEz0/GiK25AjEBGws1JygK+td5Kfq8pu98IqWQHVbzgCYKCXGAG6XrcLLqkYNFsylEF
+         3CEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=lSkWyJ22j/Gy1+rBPKEz6ICjIB7fl5dNRWyogOjMNiA=;
+        b=EDNQybNKW3isc6Z7yvJU4qXmEb7aWBjmqgcPGvwpZBbwm0o1z0csHwVQD0aHIw8L9X
+         UGpCKpcpMZYrYWe0Pox+/f4y2hV9pfVcI3W5tVxv1uGD0oq9gHT4rr5M1G1M5mH2mSr3
+         I3Ls+v6AXvEbi540u+F9ulEE4bnVO6LbgPBYlOTs64xbowGWFUaENvYdmVSBzXznWcm1
+         /XozYJhwX8p+V1+VwGHr/ZFhGtPeMisZ5yi/+lOU3tAnR6mWRdVH/jWPE457a48jmosD
+         VS9xw8ypJTxsgzxBmgHFmXAnuQvQ4u4YCEa5583trBApE4km55LQjZbxcOWybOXLMmlI
+         4xAg==
+X-Gm-Message-State: AOAM530OwxXBV/aFg+vsEOCh23Cx6StkFGr8rFTSLO/K91nc/9l1vQF+
+        DoGY6/e3uV01+JZmKktpQGk9C5lNH6qL8gqOIUU=
+X-Google-Smtp-Source: ABdhPJwzwsI+XJN31grZYG7NyEU0V0hcG4a1Fj6YmOYwOlEwwGACzdjSwvtwWqOAYxPX3hRzUK5vgehrAuAUhgD0cgY=
+X-Received: by 2002:a17:907:7815:b0:6ce:5242:1280 with SMTP id
+ la21-20020a170907781500b006ce52421280mr8716226ejc.217.1651434293566; Sun, 01
+ May 2022 12:44:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220426090226.27293-1-a39.skl@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+From:   Ozgur Kara <zgrieee@gmail.com>
+Date:   Sun, 1 May 2022 23:44:42 +0400
+Message-ID: <CAOFRbG=mGdbR72moLtW87ZQW_T1HkhZtcpHRGzZy3NZ7afGVqQ@mail.gmail.com>
+Subject: [5.18.0-rc4+] report: kernel compile
+To:     linux-staging@lists.linux.dev, ozgurk@ieee.org
+Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-26 11:02:17, Adam Skladowski wrote:
-> MSM8976 does not have rpm clock named mmssnoc,
-> instead it's called sysmmnoc, drop define and reuse.
-> While we are at it add XO clock to list.
-> 
-> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
+Hi,
 
-This patch should have had a Fixes: tag, not in the least to allow
-backporting but also to have get_maintainer.pl add the original author
-in CC for additional review and sign-off.
+The v5.18.0-rc4+ kernel was automatically tested.
 
-In any case the omission of the XO clock here is intentional: the clock
-might be stopped whereas none of the platform is configured to support
-XO shutdown yet, which is why a "fixed-clock" is used in DT for now.
+Hardware:
 
-With that in mind both changes should have been split into separate
-patches, so that the clock rename can be safely annoted with a Fixes:
-tag.  Presuming the application of this patch to `for-next` isn't final,
-Bjorn is this something we can get worked through?  I've validated the
-rename with my downstream sources, and for that:
+Asus TUF Gaming (notebook) - PASS
+Samsung RC530 (notebook) - FAIL (1)
+HP Compaq 8100 Elite (Workstation) - PASS
 
-    Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+Intel(R) Core(TM) i7-2630QM - PASS
+AMD Ryzen 5 3550H with Radeon Vega Mobile Gfx - PASS
+Intel(R) Core(TM) i3 CPU 550 - PASS
 
-But for the XO addition I'm wary of platform lockups.
+NVIDIA:
 
-- Marijn
+1650 - PASS
+1660 TI - PASS
+1080 - PASS
+1080 TI - PASS
+2060 - PASS
+2060 Super - PASS
+2070 Super - PASS
+2080 - PASS
+2080 TI - PASS
+3060 TI - PASS
+3070 - PASS
 
-> ---
->  drivers/clk/qcom/clk-smd-rpm.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
-> index afc6dc930011..10b4e6d8d10f 100644
-> --- a/drivers/clk/qcom/clk-smd-rpm.c
-> +++ b/drivers/clk/qcom/clk-smd-rpm.c
-> @@ -563,17 +563,19 @@ static const struct rpm_smd_clk_desc rpm_clk_msm8974 = {
->  	.num_clks = ARRAY_SIZE(msm8974_clks),
->  };
->  
-> -DEFINE_CLK_SMD_RPM(msm8976, mmssnoc_ahb_clk, mmssnoc_ahb_a_clk,
-> -		   QCOM_SMD_RPM_BUS_CLK, 2);
->  DEFINE_CLK_SMD_RPM(msm8976, ipa_clk, ipa_a_clk, QCOM_SMD_RPM_IPA_CLK, 0);
->  
->  static struct clk_smd_rpm *msm8976_clks[] = {
-> +	[RPM_SMD_XO_CLK_SRC] = &sdm660_bi_tcxo,
-> +	[RPM_SMD_XO_A_CLK_SRC] = &sdm660_bi_tcxo_a,
->  	[RPM_SMD_PCNOC_CLK] = &msm8916_pcnoc_clk,
->  	[RPM_SMD_PCNOC_A_CLK] = &msm8916_pcnoc_a_clk,
->  	[RPM_SMD_SNOC_CLK] = &msm8916_snoc_clk,
->  	[RPM_SMD_SNOC_A_CLK] = &msm8916_snoc_a_clk,
->  	[RPM_SMD_BIMC_CLK] = &msm8916_bimc_clk,
->  	[RPM_SMD_BIMC_A_CLK] = &msm8916_bimc_a_clk,
-> +	[RPM_SMD_SYSMMNOC_CLK]	= &msm8936_sysmmnoc_clk,
-> +	[RPM_SMD_SYSMMNOC_A_CLK] = &msm8936_sysmmnoc_a_clk,
->  	[RPM_SMD_QDSS_CLK] = &msm8916_qdss_clk,
->  	[RPM_SMD_QDSS_A_CLK] = &msm8916_qdss_a_clk,
->  	[RPM_SMD_BB_CLK1] = &msm8916_bb_clk1,
-> @@ -586,8 +588,6 @@ static struct clk_smd_rpm *msm8976_clks[] = {
->  	[RPM_SMD_BB_CLK1_A_PIN] = &msm8916_bb_clk1_a_pin,
->  	[RPM_SMD_BB_CLK2_PIN] = &msm8916_bb_clk2_pin,
->  	[RPM_SMD_BB_CLK2_A_PIN] = &msm8916_bb_clk2_a_pin,
-> -	[RPM_SMD_MMSSNOC_AHB_CLK] = &msm8976_mmssnoc_ahb_clk,
-> -	[RPM_SMD_MMSSNOC_AHB_A_CLK] = &msm8976_mmssnoc_ahb_a_clk,
->  	[RPM_SMD_DIV_CLK2] = &msm8974_div_clk2,
->  	[RPM_SMD_DIV_A_CLK2] = &msm8974_div_a_clk2,
->  	[RPM_SMD_IPA_CLK] = &msm8976_ipa_clk,
-> -- 
-> 2.25.1
-> 
+Motherboard:
+
+MSI Z170A GAMING M7 (SSD, latest BIOS) - PASS
+ASUSTeK PRIME Z270-A (SSD latest BIOS) - PASS
+Gigabyte Z370 HD3-CF (SSD latest BIOS) - PASS
+ASUSTeK PRIME H270-PLUS (SSD latest BIOS) - PASS
+
+Architectures:
+
+Raspberry PI Model B - FAIL (2)
+
+Fail Log:
+
++ nvidia driver fail.
++ scripts/Makefile.build:497: recipe for target 'arch/arm/kernel' failed

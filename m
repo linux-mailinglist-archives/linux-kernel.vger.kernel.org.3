@@ -2,58 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 065F251681D
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 23:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F2D516829
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 23:41:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355326AbiEAVmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 17:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55964 "EHLO
+        id S1355429AbiEAVot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 17:44:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235278AbiEAVmq (ORCPT
+        with ESMTP id S1355387AbiEAVoo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 17:42:46 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42CCC43AD1
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 14:39:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651441160; x=1682977160;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yqXtKM6SAhUbEx4YQlfI9bk2W+7ys7y+aKqJhnOA0EM=;
-  b=l51zx816lSv32P+K8TmvS0inG6ozdgit13l6lkQtSBEL2OnoEL8aIqF7
-   1kRoPuv9v2mN2o/aPijsSmLjn5glxGL3XUKXsX2ZEdjfpZW3qU4jn7EkN
-   WVTl8yhhRkrkvyFtAta1iscgR4jvy8WXWD+VaVa0Jwv9LBDkv1AIHaHTi
-   D3cw6lvARpHwfe0qXe/Fw4JWblP9fbvMejInq3r3Yx6nS2UeljE4Un3h8
-   kI4fZNmYAk1nkD0JZHJNQeo2nk5fQsnw5+48bKJoe3IeFEpgaK10qFkCu
-   ZyQucIOrLGaGf9wCao8r2rNfu1vyKtVY34T0taHI111XhGi0XXc3f67QZ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="353491484"
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="353491484"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 14:39:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="598352113"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 01 May 2022 14:39:18 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nlHHi-00094t-1O;
-        Sun, 01 May 2022 21:39:18 +0000
-Date:   Mon, 2 May 2022 05:38:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [masahiroy:lto-cleanup-v2 48/55] s390-linux-ld: .tmp_vmlinux.btf:
- warning: allocated section `.rodata' not in segment
-Message-ID: <202205020509.gCxo3JWK-lkp@intel.com>
+        Sun, 1 May 2022 17:44:44 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0326253
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 14:41:16 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id w187so23328200ybe.2
+        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 14:41:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=W/jgoNHxZ0Bthjb3T+ueRSX0j4+9gCUm19tM0i8wHwg=;
+        b=IhdUZeb/2gtz8F3Rms9jbaMLWrgk9MgQ3AsdLov4FK3Mlzh5dB5SkLKChzGtZ8IxYp
+         G5ca/lqDXuEA1sPhEVPyIa/Q2PZiKGOf7YhqAw/IHqTaRS3tfuxe5vxPkiXcKnSSY+3S
+         7ppRg4LQk2Uv9wR63si1SSy6XwiVLL7qFkHNlWqfSlqs0yLXj9GT9hsHOGdPMLeWa4Z5
+         yi/NgdTd0E83Yl+jmXtf3Jut6MVJU1arAhV4mge1OLZtShQSG4PEDF87HlZJ7jAAsXMq
+         NvpTbNSoJchK+6lkQfko/fVrXtHXd/BqfkBEUyV3r++82iVekijvFZHqUIOR58kizRlW
+         mQmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=W/jgoNHxZ0Bthjb3T+ueRSX0j4+9gCUm19tM0i8wHwg=;
+        b=4bwFz9+SUXZY7hgjrqck9LTu4HalzpjVcDASqDylVmN4EngQR7FKNuuk1jaN+8ibVB
+         bhteExa+yfZGcdNHDMzRZvi4yhzp4qVYbaidPBsqWx+wVdTNldD8XYLRabmklDGGQBps
+         Hn3Eot2Qmh3mpGzPr42C6tUQEDXC/IXtC3Q69ZmdvRAHaV58unSspprK5g2n8JCPc5IW
+         m0ry7x/jIPBIMuoOkXAFikbrpUBa7jb2YWeOqs931uD1MBFeY4IzFnKTRkDhFCoMg0Gj
+         MwYxLwmqLa1mRlSwQWTMChQYpJIN+FFzZvUzahtzMOG1fen88G57B8os9Dwj3q9kpma5
+         4QVQ==
+X-Gm-Message-State: AOAM533ab5qp6apyx6Z6wOvhTMbQFJXok0j1NJ2pGQo6gekRPOC6nlSO
+        xi6T/g6xIJIu7VPfeMp0pTL1XyOVoZN7c/BNrAeo9w==
+X-Google-Smtp-Source: ABdhPJxQ+Z2MWNpw84rRmTsi9PlMVLP8E3NHAP2/94wScknuaOhbNIB27Lulcn5Bn4eH53rZYcEIPCq8gj4+tkqqRT4=
+X-Received: by 2002:a25:2905:0:b0:649:7a2b:ca72 with SMTP id
+ p5-20020a252905000000b006497a2bca72mr2453918ybp.492.1651441275908; Sun, 01
+ May 2022 14:41:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220419163810.2118169-1-arnd@kernel.org> <20220419163810.2118169-19-arnd@kernel.org>
+In-Reply-To: <20220419163810.2118169-19-arnd@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sun, 1 May 2022 23:41:04 +0200
+Message-ID: <CACRpkdac8dGKSEmc-HpgooJefrDtiKK+_A1Mv7AJM8yQV9UY-w@mail.gmail.com>
+Subject: Re: [PATCH 18/48] ARM: pxa: hx4700: use gpio descriptors for audio
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     robert.jarzmik@free.fr, linux-arm-kernel@lists.infradead.org,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Tomas Cech <sleep_walker@suse.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-input@vger.kernel.org,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        alsa-devel@alsa-project.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,33 +90,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git lto-cleanup-v2
-head:   0f0c2c6e09ad55e3c5ddb69915460ee54eb913e4
-commit: 58024b1713c48e2cc450f3301fc48077638298cc [48/55] kbuild: embed symbol versions at final link of vmlinux or modules
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20220502/202205020509.gCxo3JWK-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git/commit/?id=58024b1713c48e2cc450f3301fc48077638298cc
-        git remote add masahiroy https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
-        git fetch --no-tags masahiroy lto-cleanup-v2
-        git checkout 58024b1713c48e2cc450f3301fc48077638298cc
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+On Tue, Apr 19, 2022 at 6:41 PM Arnd Bergmann <arnd@kernel.org> wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The audio driver should not use a hardwired gpio number
+> from the header. Change it to use a lookup table.
+>
+> Cc: Philipp Zabel <philipp.zabel@gmail.com>
+> Cc: Paul Parsons <lost.distance@yahoo.com>
+> Acked-by: Mark Brown <broonie@kernel.org>
+> Acked-by: Robert Jarzmik <robert.jarzmik@free.fr>
+> Cc: alsa-devel@alsa-project.org
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-All warnings (new ones prefixed by >>):
+(...)
+> +static struct gpiod_lookup_table hx4700_audio_gpio_table = {
+> +       .dev_id = "hx4700-audio",
+> +       .table = {
+> +               GPIO_LOOKUP("gpio-pxa", GPIO75_HX4700_EARPHONE_nDET,
+> +                           "earphone-ndet", GPIO_ACTIVE_HIGH),
 
->> s390-linux-ld: .tmp_vmlinux.btf: warning: allocated section `.rodata' not in segment
-   s390-linux-objcopy: stSX2pj5: warning: allocated section `.rodata' not in segment
-   s390-linux-ld: .tmp_vmlinux.kallsyms1: warning: allocated section `.rodata' not in segment
->> s390-linux-ld: .tmp_vmlinux.kallsyms2: warning: allocated section `.rodata' not in segment
->> s390-linux-ld: vmlinux: warning: allocated section `.rodata' not in segment
+This looks wrong. The n in nDET in the end of the name of the GPIO line
+means active low does it not?
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+What I usually do when I see this is to properly set it to
+GPIO_ACTIVE_LOW in the descriptor table, then invert the logic
+where it's getting used.
+
+Also rename to earphone-det instead of -ndet
+
+> +               GPIO_LOOKUP("gpio-pxa", GPIO92_HX4700_HP_DRIVER,
+> +                           "hp-driver", GPIO_ACTIVE_HIGH),
+> +               GPIO_LOOKUP("gpio-pxa", GPIO107_HX4700_SPK_nSD,
+> +                           "spk-nsd", GPIO_ACTIVE_HIGH),
+
+Same here. Rename spk-sd
+
+Yours,
+Linus Walleij

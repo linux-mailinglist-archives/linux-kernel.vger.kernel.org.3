@@ -2,43 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD29351672D
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 20:40:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DE9C516749
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 21:07:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355394AbiEASoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 14:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41036 "EHLO
+        id S1350533AbiEATKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 15:10:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351367AbiEASoE (ORCPT
+        with ESMTP id S241351AbiEATJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 14:44:04 -0400
-Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [5.144.164.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A272AFE
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 11:40:35 -0700 (PDT)
-Received: from localhost.localdomain (abxh26.neoplus.adsl.tpnet.pl [83.9.1.26])
-        by m-r2.th.seeweb.it (Postfix) with ESMTPA id EF2393EE66;
-        Sun,  1 May 2022 20:40:30 +0200 (CEST)
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-To:     ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: qcom: msm8994: Fix CPU6/7 reg values
-Date:   Sun,  1 May 2022 20:40:16 +0200
-Message-Id: <20220501184016.64138-1-konrad.dybcio@somainline.org>
-X-Mailer: git-send-email 2.35.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Sun, 1 May 2022 15:09:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4BF33E07;
+        Sun,  1 May 2022 12:06:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85EFD60FCD;
+        Sun,  1 May 2022 19:06:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5731FC385AA;
+        Sun,  1 May 2022 19:06:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651431993;
+        bh=2lKKYOIbpWSXATrBa26WkxbAc0IL8XCCBLSFsZF1LJI=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=LfliSkdxCtUXHG09fyRNVhqa8N9TJ8c/2oKoolIt3fTaaAkcWWuH+IafLkefsVgMv
+         O11AUqhbhSkAn7bFi85ZohdGKJXVL3MULuCEsrquC8AGV6J3PbmQi74UUpnEdicsm4
+         GaFxDPtqvRa2Nsu6Rh1Az+ZqUSSOYG2zeoaw9WaGffQ8+KE/KoNNYqaV65ebaOuTIV
+         54mtbiv1wCXYj+wxiOq7szlnBZ8KZxKbKW1plQXAGy/VlnxvcV5BPS6YBmFRMI+UCE
+         TgSwCLgBxsrQR8i6NoDsvISqYqPmcwSK20svpp/SR1LATLMIHXFyZ5I00fx0qyHIvl
+         ksAyNl8kBdfzQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 44007E6D402;
+        Sun,  1 May 2022 19:06:33 +0000 (UTC)
+Subject: Re: [GIT PULL] KVM fixes for Linux 5.18-rc5 (or -rc6)
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220501173607.947159-1-pbonzini@redhat.com>
+References: <20220501173607.947159-1-pbonzini@redhat.com>
+X-PR-Tracked-List-Id: <kvm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220501173607.947159-1-pbonzini@redhat.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
+X-PR-Tracked-Commit-Id: f751d8eac17692905cdd6935f72d523d8adf3b65
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: b6b2648911bbc13c59def22fd7b4b7c511a4eb92
+Message-Id: <165143199327.12721.12284077184153293337.pr-tracker-bot@kernel.org>
+Date:   Sun, 01 May 2022 19:06:33 +0000
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,36 +61,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CPU6 and CPU7 were mistakengly pointing to CPU5 reg. Fix it.
+The pull request you sent on Sun,  1 May 2022 13:36:07 -0400:
 
-Fixes: 02d8091bbca0 ("arm64: dts: qcom: msm8994: Add a proper CPU map")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
----
- arch/arm64/boot/dts/qcom/msm8994.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8994.dtsi b/arch/arm64/boot/dts/qcom/msm8994.dtsi
-index 97bf84f856bc..7a6e4f788ec9 100644
---- a/arch/arm64/boot/dts/qcom/msm8994.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8994.dtsi
-@@ -100,7 +100,7 @@ CPU5: cpu@101 {
- 		CPU6: cpu@102 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a57";
--			reg = <0x0 0x101>;
-+			reg = <0x0 0x102>;
- 			enable-method = "psci";
- 			next-level-cache = <&L2_1>;
- 		};
-@@ -108,7 +108,7 @@ CPU6: cpu@102 {
- 		CPU7: cpu@103 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a57";
--			reg = <0x0 0x101>;
-+			reg = <0x0 0x103>;
- 			enable-method = "psci";
- 			next-level-cache = <&L2_1>;
- 		};
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/b6b2648911bbc13c59def22fd7b4b7c511a4eb92
+
+Thank you!
+
 -- 
-2.35.2
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

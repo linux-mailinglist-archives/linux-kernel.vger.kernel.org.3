@@ -2,156 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5F87516541
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 18:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6F7C51654E
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 18:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349266AbiEAQb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 12:31:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60104 "EHLO
+        id S1349426AbiEAQka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 12:40:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349218AbiEAQbY (ORCPT
+        with ESMTP id S1347056AbiEAQk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 12:31:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D8411A19;
-        Sun,  1 May 2022 09:27:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C58CE60EF6;
-        Sun,  1 May 2022 16:27:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 108D6C385AA;
-        Sun,  1 May 2022 16:27:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651422478;
-        bh=tfUziATB8ceyhRS+KXLuHyRUSLa9xFmooO49cxRP/XE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=mdfPRTQwhoUF9AgqjmNLDBkpLoeew24KML0puGMY5+NE6v3vOg433Wn8KY6ivpEzU
-         qAuyyhUd0RGBxtI5cyLkSknqhXszq7ZWo//axOFFW7ihA5Iou9Cb317I0LMQLKr3uK
-         6E6a+ybfrtvojC6FKOtw7j9AFnCDjRoK67PLcLqQpukAKVu6ktEyN/GtMi/N/e94DE
-         DmFjdquRqeVA8BvZjEP73U0tykAWV6GX1RU1/7dOP4e4mDUVkT41s0bBPyTFmG9wox
-         4zaWRHp64eYXgftPN9yxleFS1RWT5TIc8Gef02wxQ9yqa0HjtAciGxu+nMUCpZ/aL1
-         n/UpmFV5oYj/Q==
-Date:   Sun, 1 May 2022 17:36:13 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Jagath Jog J <jagathjog1996@gmail.com>
-Cc:     dan@dlrobertson.com, andy.shevchenko@gmail.com,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/9] iio: accel: bma400: Add buffer, step and
- activity/inactivity
-Message-ID: <20220501173613.338c657f@jic23-huawei>
-In-Reply-To: <20220420211105.14654-1-jagathjog1996@gmail.com>
-References: <20220420211105.14654-1-jagathjog1996@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Sun, 1 May 2022 12:40:28 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C157186F2
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 09:37:02 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id a1so14290114edt.3
+        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 09:37:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:subject:message-id:mime-version:content-disposition;
+        bh=cHz2Chb4WauAyCgl7HzeNesuAPLoMUd1ln+Xeg1BqlU=;
+        b=eIICAgahx1Pi255U+g/Kk9Q7E5jEghl2OH+0vD0b58A9Qf9WLKIXcSVkxW3MxGQE/V
+         iifLdPlHOgbvsQ4jkFjZG5oI4vZWjpKsXXs9oowHCCCELnPzNZsQpgZSKxxcDH4rE2x9
+         b8CGqLFBfHniTLTO3c5XT+ocNkkO4dahCO6AbwQwjSMch3TAWaH5jWKGm2zWZA9jyNTE
+         feFklMibUOADm9SjVMl5vEs+XRB6Q4pYlLIXPCsHqPz1pUTLOpdwAJuJFNwHE6fXaSef
+         u9nUoiNecC55Zkv+5dy31XOhkzXoSLHQF4BLSWqwWb+uVve6qQbMWxV7GaScdQbMfiIl
+         9mkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition;
+        bh=cHz2Chb4WauAyCgl7HzeNesuAPLoMUd1ln+Xeg1BqlU=;
+        b=40I0EGecwwYHVOY4yQLrz9/9XGPvnJg3SVnON9rrPZN4TvqK1bb0sUxGG0poCDLoek
+         6IRKZMXe2hYwRd4z0uKl50utVeTMqk3kZkW06L+FWdDxfYohtgcU7w73jbxmc5843fWr
+         qC8nwgMbh5sIIyySDJXYnkx3sLhD9GjF2QfeKM5UmHovzWTggS0Od3sOc3KN9VmpsiDO
+         fthFEnevHcfoFoX1VS7BLfi7QxI7f9EbhOa8i4ASmHvSms5n/12L5njuyd0W7t9iPG1x
+         zyl3d57aLfcDVJz2NK6rlkSu0lsHk3MdjsHQR+7lND58bIotUocp9VHTp8Muyv09hiEE
+         ngcQ==
+X-Gm-Message-State: AOAM531nRh/+yMxTwhaIY+lUHA360vX72RAxgSveT7iCuFlG6dSxuWra
+        YhmPzJEuETb75AXwIQ6JnSU=
+X-Google-Smtp-Source: ABdhPJz4KRMo8eAqZm23yzk/ee5LqUPVku/+0DMinYuo7KtVI/w2jd5IdlzNDGxF29rOKpZtADHcNw==
+X-Received: by 2002:aa7:d708:0:b0:427:b5ee:b8f2 with SMTP id t8-20020aa7d708000000b00427b5eeb8f2mr4594397edq.404.1651423021044;
+        Sun, 01 May 2022 09:37:01 -0700 (PDT)
+Received: from matrix-ESPRIMO-P710 (p54a074e9.dip0.t-ipconnect.de. [84.160.116.233])
+        by smtp.gmail.com with ESMTPSA id u5-20020a056402064500b0042617ba63a0sm5551023edx.42.2022.05.01.09.36.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 May 2022 09:37:00 -0700 (PDT)
+Date:   Sun, 1 May 2022 18:36:48 +0200
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     Forest Bond <forest@alittletooquiet.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] staging: vt6655: Fix name and return value of
+ CARDbGetCurrentTSF
+Message-ID: <cover.1651422181.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 21 Apr 2022 02:40:56 +0530
-Jagath Jog J <jagathjog1996@gmail.com> wrote:
+Fix name of the function that uses CamelCase which
+is not accepted by checkpatch.pl
 
-> This patch series adds trigger buffer support with data ready interrupt,
-> separate channel for step counter, an event for step change interrupt,
-> activity recognition and activity/inactivity event support.
+Replace unused return value.
 
-Hi Jagath,
+Tested with vt6655 on mini PCI Module
+Transferred this patch over wlan connection of vt6655
 
-This is coming together nicely. I'm fine with all the patches
-I haven't sent specific replies for.
+Philipp Hortmann (2):
+  staging: vt6655: Rename function CARDbGetCurrentTSF
+  staging: vt6655: Replace unused return value of card_get_current_tsf
 
-Thanks,
+ drivers/staging/vt6655/card.c        | 22 ++++++++++------------
+ drivers/staging/vt6655/card.h        |  2 +-
+ drivers/staging/vt6655/device_main.c |  2 +-
+ 3 files changed, 12 insertions(+), 14 deletions(-)
 
-Jonathan
-
-> 
-> changes since v3
-> 1. Removed all the unnecessary mutex locking for regmap.
-> 2. Corrected the mutex locking and unlocking for device private data
-> members.
-> 3. Mutex locking and unlocking is used to protect the device private
-> structure members.
-> 4. Using DMA safe buffer for regmap_bulk_write() and regmap_bulk_read().
-> 
-> 1/9: Fixed the comment.
-> 
-> 3/9: Added () for the function name in the comment.
-> 
-> 4/9: Handling error cases with goto in bma400_trigger_handler().
->      Mutex locking and unlocking is used to protect the data->buffer.
->      Using DMA safe buffer for regmap_bulk_read().
->      Mutex locking and unlocking is used to protect the data->status in
->      bma400_interrupt.
-> 
-> 5/9: Using DMA safe buffers to read steps value by allocating memory internally.
->      Using DMA safe buffers for regmap_bulk_write(). 
->      Removed the lock for regmap().
-> 
-> 6/9: Removed the duplication of code for enabling step, added function to handle
->      the step enable. 
-> 
-> 7/9: Removed the lock for regmap().
->      Mutex locking and unlocking is used to protect the data members.
-> 
-> 8/9: Removed the lock for regmap().
-> 
-> 9/9. Added __be16 duration in struct bma400_data.
->      Fixed the warning - impossible condition '(reg < 0) => (0-255 < 0)'
->      Fixed error: call to __compiletime_assert_272
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> 
-> changes since v2
-> 1. Reordering of header includes in the separate patch.
-> 2. Matching the IIO syntax for multiline comment.
-> 3. Following the preference in the interrupt handler for returning.
-> 4. Add support for activity recognition.
-> 5. Add support for debugfs to access registers from userspace.
-> 6. Add support for activity and inactivity events
-> 
-> changes since v1
-> 1. Added comment section that describes the math for scale calculation.
-> 2. Added separate devm_add_action_or_reset() calls to disable regulator
->    and to put the sensor in power down mode.
-> 3. Remove the err_reg_disable and out, goto labels and returning directly
->    if error occurs.
-> 4. Added mutex calls while putting sensor in power down.
-> 5. Added ___cacheline_aligned for device data.
-> 6. Ordering the header includes.
-> 7. Handling erroneous and spurious interrupts in the interrupt handler
->    by returning IRQ_NONE.
-> 8. Using dev_err_probe() instead of dev_err().
-> 9. Configured the interrupt to open drain.
-> 10. Using le16_to_cpu() to fix the sparse warning.
-> 11. Checking the step change event is enabled or not.
-> 12. Enabling the step change event will also enable the step channel.
-> 13. Using FIELD_GET() instead of bitwise operation.
-> 14. Removal of dead code in the _event_config().
-> 
-> Jagath Jog J (9):
->   iio: accel: bma400: Fix the scale min and max macro values
->   iio: accel: bma400: Reordering of header files
->   iio: accel: bma400: conversion to device-managed function
->   iio: accel: bma400: Add triggered buffer support
->   iio: accel: bma400: Add separate channel for step counter
->   iio: accel: bma400: Add step change event
->   iio: accel: bma400: Add activity recognition support
->   iio: accel: bma400: Add debugfs register access support
->   iio: accel: bma400: Add support for activity and inactivity events
-> 
->  drivers/iio/accel/Kconfig       |   2 +
->  drivers/iio/accel/bma400.h      |  50 ++-
->  drivers/iio/accel/bma400_core.c | 694 +++++++++++++++++++++++++++++---
->  drivers/iio/accel/bma400_i2c.c  |  10 +-
->  drivers/iio/accel/bma400_spi.c  |   8 +-
->  5 files changed, 697 insertions(+), 67 deletions(-)
-> 
+-- 
+2.25.1
 

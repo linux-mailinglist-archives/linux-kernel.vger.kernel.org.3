@@ -2,62 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 368CC51647A
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 15:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6736251647C
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 15:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346722AbiEANE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 09:04:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32846 "EHLO
+        id S1345347AbiEANJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 09:09:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbiEANE4 (ORCPT
+        with ESMTP id S1347329AbiEANJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 09:04:56 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F7B17AAA
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 06:01:30 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id u9so10046775plf.6
-        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 06:01:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ThyRTKjdeg/D3GoZEAF2qAHjp8u7PbcqfFeGm9LJNZU=;
-        b=QvzEO85GX0Vj/kGddWdIS1wghVldyMC1NjUi3vDtVpTiv0Dw43/BGsdSk+oc5jJxNh
-         2NeV8T3O5rG+0KOa4Y48A7UUdVXuGWOjWzc8QM788o1y1OxoYGAgoDupvtA2FOBGymHV
-         ZU1wmk+myBZJYC5On42xpWUhPU9Hxb/yYCCoo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ThyRTKjdeg/D3GoZEAF2qAHjp8u7PbcqfFeGm9LJNZU=;
-        b=QPnrimVCALShn+j6aRI7HNwcJZt8jwDjLdIH9msmQsb8OYRzNFdNj2GqQXNZsiTMjk
-         AS3cjkHJixPhdoGZf3a1iKoxhVEdK5IUwjQJX4CQJtUU843rlEiaRLtbxuaa90BmpUFn
-         Cat2MN156NsUIFHenNiffhukNzrT76lnIM0rz9CNVos4cDenwSq+x5sTPEm7Ze9r0So5
-         CvaIayWFEXRuNMMUhBQQwK80YDPtoFKC3cYwxQQdUvkiXEWt+chFtN6BPAFIhQMBAZ/S
-         0yrbDbKOtEWNzl/67RqjqmlG2gdGwL4RSNUE63hFehnxufalszkDHCNT14Dd2r3UBGEd
-         XsSg==
-X-Gm-Message-State: AOAM532CD8bfIZ40QfNqwOW/RqDKVGAaYKZZ4T/FRFPfaQjB/FXwzD4C
-        1cyCyEPnpRMa7/qFBxHpztwGrmgpx/UITZgx54mgJVi2DwptEg==
-X-Google-Smtp-Source: ABdhPJwGdonmbGg5X/LvIJpd3OF0GpSJlBvKd61HOTvebhOMEZ+PLY2slkBQVWsIwCsydZnysQeWo9zDBrslFWPFw4c=
-X-Received: by 2002:a17:90a:4417:b0:1ca:a861:3fbf with SMTP id
- s23-20020a17090a441700b001caa8613fbfmr13322405pjg.80.1651410089648; Sun, 01
- May 2022 06:01:29 -0700 (PDT)
+        Sun, 1 May 2022 09:09:11 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D8533E32;
+        Sun,  1 May 2022 06:05:42 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1nl9Ge-0006BV-1w; Sun, 01 May 2022 15:05:40 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     linux-rockchip@lists.infradead.org,
+        Peter Geis <pgwipeout@gmail.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Subject: Re: (subset) [PATCH v2 0/7] Add support for several new rk3566 SBCs
+Date:   Sun,  1 May 2022 15:05:38 +0200
+Message-Id: <165141025789.655760.7485683050420620213.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220429115252.2360496-1-pgwipeout@gmail.com>
+References: <20220429115252.2360496-1-pgwipeout@gmail.com>
 MIME-Version: 1.0
-References: <20220501102256.6379-1-fujimotokosuke0@gmail.com>
-In-Reply-To: <20220501102256.6379-1-fujimotokosuke0@gmail.com>
-From:   Tsugikazu Shibata <shibata@linuxfoundation.org>
-Date:   Sun, 1 May 2022 22:01:18 +0900
-Message-ID: <CAO+cJp21-DaqsiFVDDO7X50oPyVMzbazdeYAtaDJA083HXsdrw@mail.gmail.com>
-Subject: Re: [PATCH v5] docs/trans/ja_JP/howto: Don't mention specific kernel versions
-To:     Kosuke Fujimoto <fujimotokosuke0@gmail.com>
-Cc:     corbet@lwn.net, Akira Yokosawa <akiyks@gmail.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,130 +43,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8gRnVqaW1vdG8tc2FuLA0KDQpPbiBTdW4sIE1heSAxLCAyMDIyIGF0IDc6MjMgUE0gS29z
-dWtlIEZ1amltb3RvDQo8ZnVqaW1vdG9rb3N1a2UwQGdtYWlsLmNvbT4gd3JvdGU6DQo+DQo+ICAg
-ICBUaGlzIGNoYW5nZSBpcyBiYXNlZCBvbiBjb21taXQgZDJiMDA4ZjEzNGI3DQo+ICAgICAoIkRv
-Y3VtZW50YXRpb24vcHJvY2Vzcy9ob3d0bzogVXBkYXRlIGZvciA0LnggLT4gNS54IHZlcnNpb25p
-bmciKS4NCj4NCj4gICAgIFJlcGxhY2UgIjQueCBrZXJuZWwgdmVyc2lvbiIgd2l0aCBnZW5lcmlj
-IHRlcm0gc3VjaCBhcyAibWFpbmxpbmUgdHJlZSINCj4NCj4gICAgIFNpZ25lZC1vZmYtYnk6IEtv
-c3VrZSBGdWppbW90byA8ZnVqaW1vdG9rb3N1a2UwQGdtYWlsLmNvbT4NCj4gICAgIFJldmlld2Vk
-LWJ5OiBBa2lyYSBZb2tvc2F3YSA8YWtpeWtzQGdtYWlsLmNvbT4NCg0KTm93LCBhbGwgbG9va3Mg
-Z29vZCB0byBtZS4NCg0KQWNrZWQtYnk6IFRzdWdpa2F6dSBTaGliYXRhIDxzaGliYXRhQGxpbnV4
-Zm91bmRhdGlvbi5vcmc+DQoNClRoYW5rIHlvdSBmb3IgeW91ciBjaGFuZ2VzIQ0KVHN1Z2lrYXp1
-IFNoaWJhdGENCg0KPiAgICAgLS0tDQo+ICAgICBWMjogUmVmb3JtYXR0ZWQgY29tbWl0IGxvZyBt
-ZXNzYWdlIChZb2tvc2F3YS1zYW4pDQo+ICAgICBWMzogVXBkYXRlZCBzb21lIGV4cHJlc3Npb25z
-IChTaGliYXRhLXNhbikNCj4gICAgIC0gYWRkZWQgInZlcnNpb24gbnVtYmVyIiBpbiBtYWlubGlu
-ZSB0cmVlIHNlY3Rpb24NCj4gICAgIC0gdXBkYXRlZCBmcm9tICJzdGFibGUga2VybmVsIiB0byAi
-c3RhYmxlIHRyZWUiDQo+ICAgICBWNDogQWRkZWQgcmV2aWV3ZWQgYnkgdGFnIGFuZCByZW1vdmVk
-IGV4dHJhIGNoYXJhY3RlcnMgKFlva29zYXdhLXNhbikNCj4g44CAICBWNTogUmVtb3ZlZCBhbiBl
-eHRyYSBjaGFyYWN0ZXIgKFNoaWJhdGEtc2FuKQ0KPiAtLS0NCj4gIERvY3VtZW50YXRpb24vdHJh
-bnNsYXRpb25zL2phX0pQL2hvd3RvLnJzdCB8IDQ0ICsrKysrKysrKysrLS0tLS0tLS0tLS0NCj4g
-IDEgZmlsZSBjaGFuZ2VkLCAyMSBpbnNlcnRpb25zKCspLCAyMyBkZWxldGlvbnMoLSkNCj4NCj4g
-ZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vdHJhbnNsYXRpb25zL2phX0pQL2hvd3RvLnJzdCBi
-L0RvY3VtZW50YXRpb24vdHJhbnNsYXRpb25zL2phX0pQL2hvd3RvLnJzdA0KPiBpbmRleCBkNjY3
-ZjlkOGEwMmEuLjM4ZmVkNmZlNjJmZSAxMDA2NDQNCj4gLS0tIGEvRG9jdW1lbnRhdGlvbi90cmFu
-c2xhdGlvbnMvamFfSlAvaG93dG8ucnN0DQo+ICsrKyBiL0RvY3VtZW50YXRpb24vdHJhbnNsYXRp
-b25zL2phX0pQL2hvd3RvLnJzdA0KPiBAQCAtMjYyLDIxICsyNjIsMjEgQEAgTGludXgg44Kr44O8
-44ON44Or44Gu6ZaL55m644OX44Ot44K744K544Gv54++5Zyo5bm+44Gk44GL44Gu55Ww44Gq44KL
-44Oh44Kk44OzDQo+ICDjg4HjgI3jgajlpJrmlbDjga7jgrXjg5bjgrfjgrnjg4bjg6Dmr47jga7j
-gqvjg7zjg43jg6vjg5bjg6njg7Pjg4HjgYvjgonmp4vmiJDjgZXjgozjgb7jgZnjgILjgZPjgozj
-gonjga4NCj4gIOODluODqeODs+ODgeOBqOOBryAtDQo+DQo+IC0gIC0g44Oh44Kk44Oz44GuIDQu
-eCDjgqvjg7zjg43jg6vjg4Tjg6rjg7wNCj4gLSAgLSA0LngueSAtc3RhYmxlIOOCq+ODvOODjeOD
-q+ODhOODquODvA0KPiAtICAtIOOCteODluOCt+OCueODhuODoOavjuOBruOCq+ODvOODjeODq+OD
-hOODquODvOOBqOODkeODg+ODgQ0KPiAtICAtIOe1seWQiOODhuOCueODiOOBruOBn+OCgeOBriA0
-LnggLW5leHQg44Kr44O844ON44Or44OE44Oq44O8DQo+ICsgIC0gTGludXMg44Gu44Oh44Kk44Oz
-44Op44Kk44Oz44OE44Oq44O8DQo+ICsgIC0g44Oh44K444Oj44O855Wq5Y+344KS44G+44Gf44GQ
-5pWw5pys44Gu5a6J5a6a54mI44OE44Oq44O8DQo+ICsgIC0g44K144OW44K344K544OG44Og5q+O
-44Gu44Kr44O844ON44Or44OE44Oq44O8DQo+ICsgIC0g57Wx5ZCI44OG44K544OI44Gu44Gf44KB
-44GuIGxpbnV4LW5leHQg44Kr44O844ON44Or44OE44Oq44O8DQo+DQo+IC00Lngg44Kr44O844ON
-44Or44OE44Oq44O8DQo+ICvjg6HjgqTjg7Pjg6njgqTjg7Pjg4Tjg6rjg7wNCj4gIH5+fn5+fn5+
-fn5+fn5+fn5+fg0KPg0KPiAtNC54IOOCq+ODvOODjeODq+OBryBMaW51cyBUb3J2YWxkcyDjgavj
-gojjgaPjgabjg6Hjg7Pjg4bjg4rjg7PjgrnjgZXjgozjgIENCj4gLWh0dHBzOi8va2VybmVsLm9y
-ZyDjga4gcHViL2xpbnV4L2tlcm5lbC92NC54LyDjg4fjgqPjg6zjgq/jg4jjg6rjgavlrZjlnKjj
-gZfjgb7jgZnjgIINCj4gK+ODoeOCpOODs+ODqeOCpOODs+ODhOODquODvOOBryBMaW51cyBUb3J2
-YWxkcyDjgavjgojjgaPjgabjg6Hjg7Pjg4bjg4rjg7PjgrnjgZXjgozjgIENCj4gK2h0dHBzOi8v
-a2VybmVsLm9yZyDjga7jg6rjg53jgrjjg4jjg6rjgavlrZjlnKjjgZfjgb7jgZnjgIINCj4gIOOB
-k+OBrumWi+eZuuODl+ODreOCu+OCueOBr+S7peS4i+OBruOBqOOBiuOCiiAtDQo+DQo+ICAgIC0g
-5paw44GX44GE44Kr44O844ON44Or44GM44Oq44Oq44O844K544GV44KM44Gf55u05b6M44Gr44CB
-MumAsemWk+OBrueJueWIpeacn+mWk+OBjOioreOBkeOCieOCjOOAgQ0KPiAgICAgIOOBk+OBruac
-n+mWk+S4reOBq+OAgeODoeODs+ODhuODiumBlOOBryBMaW51cyDjgavlpKfjgY3jgarlt67liIbj
-gpLpgIHjgovjgZPjgajjgYzjgafjgY3jgb7jgZnjgIINCj4gLSAgICDjgZPjga7jgojjgYbjgarl
-t67liIbjga/pgJrluLggLW5leHQg44Kr44O844ON44Or44Gr5pWw6YCx6ZaT5ZCr44G+44KM44Gm
-44GN44Gf44OR44OD44OB44Gn44GZ44CCDQo+ICsgICAg44GT44Gu44KI44GG44Gq5beu5YiG44Gv
-6YCa5bi4IGxpbnV4LW5leHQg44Kr44O844ON44Or44Gr5pWw6YCx6ZaT5ZCr44G+44KM44Gm44GN
-44Gf44OR44OD44OB44Gn44GZ44CCDQo+ICAgICAg5aSn44GN44Gq5aSJ5pu044GvIGdpdCjjgqvj
-g7zjg43jg6vjga7jgr3jg7zjgrnnrqHnkIbjg4Tjg7zjg6vjgIHoqbPntLDjga8NCj4gICAgICBo
-dHRwOi8vZ2l0LXNjbS5jb20vIOWPgueFpykg44KS5L2/44Gj44Gm6YCB44KL44Gu44GM5aW944G+
-44GX44GE44KE44KK5pa544Gn44GZ44GM44CB44OR44ODDQo+ICAgICAg44OB44OV44Kh44Kk44Or
-44Gu5b2i5byP44Gu44G+44G+6YCB44KL44Gu44Gn44KC5Y2B5YiG44Gn44GZ44CCDQo+IEBAIC0z
-MDMsMjAgKzMwMywxOCBAQCBBbmRyZXcgTW9ydG9uIOOBjCBMaW51eC1rZXJuZWwg44Oh44O844Oq
-44Oz44Kw44Oq44K544OI44Gr44Kr44O844ON44Or44Oq44Oq44O8DQo+ICAgICAgICAgIOWJjeOC
-guOBo+OBpuaxuuOCgeOCieOCjOOBn+ioiOeUu+OBq+OCiOOBo+OBpuODquODquODvOOCueOBleOC
-jOOCi+OCguOBruOBp+OBr+OBquOBhOOBi+OCiQ0KPiAgICAgICAgICDjgafjgZnjgILjgI0qDQo+
-DQo+IC00LngueSAtc3RhYmxlIOOCq+ODvOODjeODq+ODhOODquODvA0KPiAtfn5+fn5+fn5+fn5+
-fn5+fn5+fn5+fn5+fn5+fg0KPiAr44Oh44K444Oj44O855Wq5Y+344KS44G+44Gf44GQ5pWw5pys
-44Gu5a6J5a6a54mI44OE44Oq44O8DQo+ICt+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+
-fn5+fn5+fn4NCj4NCj4gIOODkOODvOOCuOODp+ODs+eVquWPt+OBjDPjgaTjga7mlbDlrZfjgavl
-iIbjgYvjgozjgabjgYTjgovjgqvjg7zjg43jg6vjga8gLXN0YWJsZSDjgqvjg7zjg43jg6vjgafj
-gZnjgIINCj4gLeOBk+OCjOOBq+OBr+OAgTQueCDjgqvjg7zjg43jg6vjgafopovjgaTjgYvjgaPj
-gZ/jgrvjgq3jg6Xjg6rjg4bjgqPllY/poYzjgoTph43lpKfjgarlvozmiLvjgorjgavlr77jgZkN
-Cj4gLeOCi+avlOi8g+eahOWwj+OBleOBhOmHjeimgeOBquS/ruato+OBjOWQq+OBvuOCjOOBvuOB
-meOAgg0KPiAr44GT44KM44Gr44Gv5pyA5Yid44GuMuOBpOOBruODkOODvOOCuOODp+ODs+eVquWP
-t+OBruaVsOWtl+OBq+WvvuW/nOOBl+OBn+OAgQ0KPiAr44Oh44Kk44Oz44Op44Kk44Oz44Oq44Oq
-44O844K544Gn6KaL44Gk44GL44Gj44Gf44K744Kt44Ol44Oq44OG44Kj5ZWP6aGM44KEDQo+ICvp
-h43lpKfjgarlvozmiLvjgorjgavlr77jgZnjgovmr5TovIPnmoTlsI/jgZXjgYTph43opoHjgark
-v67mraPjgYzlkKvjgb7jgozjgb7jgZnjgIINCj4NCj4gIOOBk+OCjOOBr+OAgemWi+eZui/lrp/p
-qJPnmoTjg5Djg7zjgrjjg6fjg7Pjga7jg4bjgrnjg4jjgavljZTlipvjgZnjgovjgZPjgajjgavo
-iIjlkbPjgYznhKHjgY/jgIHmnIDmlrANCj4gIOOBruWuieWumuOBl+OBn+OCq+ODvOODjeODq+OC
-kuS9v+OBhOOBn+OBhOODpuODvOOCtuOBq+aOqOWlqOOBmeOCi+ODluODqeODs+ODgeOBp+OBmeOA
-gg0KPg0KPiAt44KC44GX44CBNC54Lnkg44Kr44O844ON44Or44GM5a2Y5Zyo44GX44Gq44GE5aC0
-5ZCI44Gr44Gv44CB55Wq5Y+344GM5LiA55Wq5aSn44GN44GEIDQueCDjgYzmnIDmlrANCj4gLeOB
-ruWuieWumueJiOOCq+ODvOODjeODq+OBp+OBmeOAgg0KPiAtDQo+IC00LngueSDjga8gInN0YWJs
-ZSIg44OB44O844OgIDxzdGFibGVAdmdlci5rZXJuZWwub3JnPiDjgafjg6Hjg7Pjg4bjgZXjgozj
-gabjgYrjgorjgIENCj4gK+WuieWumueJiOODhOODquODvOOBryJzdGFibGUiIOODgeODvOODoCA8
-c3RhYmxlQHZnZXIua2VybmVsLm9yZz4g44Gn44Oh44Oz44OG44GV44KM44Gm44GK44KK44CBDQo+
-ICDlv4XopoHjgavlv5zjgZjjgabjg6rjg6rjg7zjgrnjgZXjgozjgb7jgZnjgILpgJrluLjjga7j
-g6rjg6rjg7zjgrnmnJ/plpPjga8gMumAsemWk+avjuOBp+OBmeOBjOOAgeW3rg0KPiAg44GX6L+r
-44Gj44Gf5ZWP6aGM44GM44Gq44GR44KM44Gw44KC44GG5bCR44GX6ZW344GP44Gq44KL44GT44Go
-44KC44GC44KK44G+44GZ44CC44K744Kt44Ol44Oq44OG44Kj6ZaiDQo+ICDpgKPjga7llY/poYzj
-ga7loLTlkIjjga/jgZPjgozjgavlr77jgZfjgabjgaDjgYTjgZ/jgYTjga7loLTlkIjjgIHjgZnj
-gZDjgavjg6rjg6rjg7zjgrnjgYzjgZXjgozjgb7jgZnjgIINCj4gQEAgLTMyNiw3ICszMjQsNyBA
-QCBEb2N1bWVudGF0aW9uL3Byb2Nlc3Mvc3RhYmxlLWtlcm5lbC1ydWxlcy5yc3Qg44OV44Kh44Kk
-44Or44Gr44Gv44Gp44Gu44KI44GG44GqDQo+ICDpoZ7jga7lpInmm7TjgYwgLXN0YWJsZSDjg4Tj
-g6rjg7zjgavlj5fjgZHlhaXjgozlj6/og73jgYvjgIHjgb7jgZ/jg6rjg6rjg7zjgrnjg5fjg63j
-grvjgrnjgYzjganjgYYNCj4gIOWLleOBj+OBi+OBjOiomOi/sOOBleOCjOOBpuOBhOOBvuOBmeOA
-gg0KPg0KPiAt44K144OW44K344K544OG44Og5q+O44Gu44Kr44O844ON44Or44OE44Oq44O844Go
-44OR44OD44OBDQo+ICvjgrXjg5bjgrfjgrnjg4bjg6Dmr47jga7jgqvjg7zjg43jg6vjg4Tjg6rj
-g7wNCj4gIH5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+DQo+DQo+ICDjgZ3j
-gozjgZ7jgozjga7jgqvjg7zjg43jg6vjgrXjg5bjgrfjgrnjg4bjg6Djga7jg6Hjg7Pjg4bjg4rp
-gZTjga8gLS0tIOOBneOBl+OBpuWkmuOBj+OBruOCq+ODvOODjeODqw0KPiBAQCAtMzUxLDE5ICsz
-NDksMTkgQEAgcXVpbHQg44K344Oq44O844K644Go44GX44Gm5YWs6ZaL44GV44KM44Gm44GE44KL
-44OR44OD44OB44Kt44Ol44O844KC5L2/44KP44KMDQo+ICDjgZHjgovjgZPjgajjgYzjgafjgY3j
-gb7jgZnjgILlpKfpg6jliIbjga7jgZPjgozjgonjga4gcGF0Y2h3b3JrIOOBruOCteOCpOODiOOB
-rw0KPiAgaHR0cHM6Ly9wYXRjaHdvcmsua2VybmVsLm9yZy8g44Gn44Oq44K544OI44GV44KM44Gm
-44GE44G+44GZ44CCDQo+DQo+IC3ntbHlkIjjg4bjgrnjg4jjga7jgZ/jgoHjga4gNC54IC1uZXh0
-IOOCq+ODvOODjeODq+ODhOODquODvA0KPiAtfn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+
-fn5+fn5+fn5+fn5+fg0KPiAr57Wx5ZCI44OG44K544OI44Gu44Gf44KB44GuIGxpbnV4LW5leHQg
-44Kr44O844ON44Or44OE44Oq44O8DQo+ICt+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+
-fn5+fn5+fn5+fn5+fn5+DQo+DQo+IC3jgrXjg5bjgrfjgrnjg4bjg6Djg4Tjg6rjg7zjga7mm7Tm
-lrDlhoXlrrnjgYzjg6HjgqTjg7Pjg6njgqTjg7Pjga4gNC54IOODhOODquODvOOBq+ODnuODvOOC
-uOOBleOCjOOCiw0KPiAr44K144OW44K344K544OG44Og44OE44Oq44O844Gu5pu05paw5YaF5a65
-44GM44Oh44Kk44Oz44Op44Kk44Oz44OE44Oq44O844Gr44Oe44O844K444GV44KM44KLDQo+ICDl
-iY3jgavjgIHjgZ3jgozjgonjga/ntbHlkIjjg4bjgrnjg4jjgZXjgozjgovlv4XopoHjgYzjgYLj
-gorjgb7jgZnjgILjgZPjga7nm67nmoTjga7jgZ/jgoHjgIHlrp/os6rnmoTjgasNCj4gIOWFqOOC
-teODluOCt+OCueODhuODoOODhOODquODvOOBi+OCieOBu+OBvOavjuaXpeODl+ODq+OBleOCjOOB
-puOBp+OBjeOCi+eJueWIpeOBquODhuOCueODiOeUqOOBruODquODneOCuA0KPiAg44OI44Oq44GM
-5a2Y5Zyo44GX44G+44GZLQ0KPg0KPiAgICAgICAgIGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvP3A9
-bGludXgva2VybmVsL2dpdC9uZXh0L2xpbnV4LW5leHQuZ2l0DQo+DQo+IC3jgZPjga7jgoTjgorm
-lrnjgavjgojjgaPjgabjgIEtbmV4dCDjgqvjg7zjg43jg6vjga/mrKHjga7jg57jg7zjgrjmqZ/k
-vJrjgafjganjgpPjgarjgoLjga7jgYzjg6HjgqTjg7MNCj4gLeODqeOCpOODs+OCq+ODvOODjeOD
-q+OBq+ODnuODvOOCuOOBleOCjOOCi+OBi+OAgeOBiuOBiuOBvuOBi+OBquOBruWxleacm+OCkuaP
-kOS+m+OBl+OBvuOBmeOAgi1uZXh0IOOCq+ODvA0KPiAt44ON44Or44Gu5a6f6KGM44OG44K544OI
-44KS6KGM44GG5YaS6Zm65aW944GN44Gq44OG44K544K/44O844Gv5aSn44GE44Gr5q2T6L+O44GV
-44KM44G+44GZ44CCDQo+ICvjgZPjga7jgoTjgormlrnjgavjgojjgaPjgabjgIFsaW51eC1uZXh0
-IOOBr+asoeOBruODnuODvOOCuOapn+S8muOBp+OBqeOCk+OBquOCguOBruOBjOODoeOCpOODsw0K
-PiAr44Op44Kk44Oz44Gr44Oe44O844K444GV44KM44KL44GL44CB44GK44GK44G+44GL44Gq5bGV
-5pyb44KS5o+Q5L6b44GX44G+44GZ44CCDQo+ICtsaW51eC1uZXh0IOOBruWun+ihjOODhuOCueOD
-iOOCkuihjOOBhuWGkumZuuWlveOBjeOBquODhuOCueOCv+ODvOOBr+Wkp+OBhOOBq+atk+i/juOB
-leOCjOOBvuOBmeOAgg0KPg0KPiAg44OQ44Kw44Os44Od44O844OIDQo+ICAtLS0tLS0tLS0tLS0t
-DQo+IC0tDQo+IDIuMjUuMQ0KPg0K
+On Fri, 29 Apr 2022 07:52:45 -0400, Peter Geis wrote:
+> The following series adds support for the following single board
+> computers:
+> - Pine64 Quartz64 Model B
+> - Pine64 SoQuartz SoM with RPi CM4IO carrier board
+> - Firefly Station M2
+> 
+> Patches 1, 2, and 3 add the requisite dt-bindings.
+> Patch 4 adds support for the SFC to the rk356x device tree.
+> Patch 5 adds the Quartz64 Model B device tree.
+> Patch 6 adds the SoQuartz CM4IO device tree.
+> Patch 7 adds the Firefly Station M2 device tree.
+> 
+> [...]
+
+Applied, thanks!
+
+[1/7] dt-bindings: arm: rockchip: Add Pine64 Quartz64 Model B
+      commit: c37415f55bdadffe5b4c0e7981e9fc7e8b96beea
+[2/7] dt-bindings: arm: rockchip: Add Pine64 SoQuartz SoM
+      commit: c466828fb3ba8cb7f5c3bf28766da9b70bf9745e
+[3/7] dt-bindings: arm: rockchip: Add Firefly Station M2
+      commit: e52ded5543708e0382f236ce35372a63f4568341
+[5/7] arm64: dts: rockchip: add Pine64 Quartz64-B device tree
+      commit: dcc8c66bef79befa6c9ebe7d7d62b0ce66983c20
+[6/7] arm64: dts: rockchip: add SoQuartz CM4IO dts
+      commit: 5859b5a9c3ac92d831bed164374cb837519524ad
+[7/7] arm64: dts: rockchip: add dts for Firefly Station M2 rk3566
+      commit: 30ac9b4e25d8cece00d32c7419f9d919f55421fe
+
+I've adjusted the styling of comments a bit, also dropped one double
+newline as well as fixed the node name for the ethernet-phy for QuartzB.
+
+Best regards,
+-- 
+Heiko Stuebner <heiko@sntech.de>

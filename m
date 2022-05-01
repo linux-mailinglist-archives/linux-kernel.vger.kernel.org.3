@@ -2,76 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F6C1516134
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 04:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A59BD516144
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 04:55:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237211AbiEAChI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 22:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
+        id S237961AbiEAC6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 22:58:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231355AbiEAChG (ORCPT
+        with ESMTP id S229829AbiEAC6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 22:37:06 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48BC46174;
-        Sat, 30 Apr 2022 19:33:38 -0700 (PDT)
-X-UUID: 2e9c20c5999a4152b8eeaa71899e396d-20220501
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:050d0d68-fa53-43fd-864b-3c9a7c6b227d,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:51
-X-CID-INFO: VERSION:1.1.4,REQID:050d0d68-fa53-43fd-864b-3c9a7c6b227d,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:51
-X-CID-META: VersionHash:faefae9,CLOUDID:01dc4c2f-6199-437e-8ab4-9920b4bc5b76,C
-        OID:a2a59d27761f,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 2e9c20c5999a4152b8eeaa71899e396d-20220501
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <yong.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 369075166; Sun, 01 May 2022 10:33:32 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Sun, 1 May 2022 10:33:31 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sun, 1 May 2022 10:33:30 +0800
-Message-ID: <7a1dd83d191a843b0e4276bcf1790b697d2deebd.camel@mediatek.com>
-Subject: Re: [PATCH v6 31/34] iommu/mediatek: Get the proper bankid for
- multi banks
-From:   Yong Wu <yong.wu@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Rob Herring <robh+dt@kernel.org>, Will Deacon <will@kernel.org>
-CC:     Robin Murphy <robin.murphy@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <iommu@lists.linux-foundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>, <youlin.pei@mediatek.com>,
-        <anan.sun@mediatek.com>, <xueqi.zhang@mediatek.com>,
-        <yen-chang.chen@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <mingyuan.ma@mediatek.com>, <yf.wang@mediatek.com>,
-        <libo.kang@mediatek.com>, <chengci.xu@mediatek.com>
-Date:   Sun, 1 May 2022 10:33:30 +0800
-In-Reply-To: <cc7cc7a8-c7a2-56a1-47bf-6c553c200b33@gmail.com>
-References: <20220407075726.17771-1-yong.wu@mediatek.com>
-         <20220407075726.17771-32-yong.wu@mediatek.com>
-         <cc7cc7a8-c7a2-56a1-47bf-6c553c200b33@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Sat, 30 Apr 2022 22:58:20 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3886457165;
+        Sat, 30 Apr 2022 19:54:56 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id l18so22117344ejc.7;
+        Sat, 30 Apr 2022 19:54:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=vtEgEgvSSjpz3nKvUKDHSWfXwEKAllpdOTPmgbe3VTU=;
+        b=WZlOgahsRkrmuzO/r4wOaLfAz/ZuvgTNA1Zk40/AfCYLiYF6tUiUNsZJ9OlbR+4d9B
+         jsbxe7QuhkWbS4yF2IiMCNXMEmW/Ba1z9IGD39xpfmrP79oXApPV/TUy8L4dfgKwCjJO
+         uUWSus0iSWfXtiy30aH6xP3TrD0rAvGg78aTW45Bkfua3G85OxJZMz/dN7HzMc9uX6M+
+         52V+7ds89VCI0+JYX1TKdM1BszkULmgwS2eSK0VCdfGfmJXog3ST7UAnaPJz4TE5e0wv
+         D1pHyJpI/3zVJKPuHym6aJpU0ti65cpTjRL3Gn/KReVPQXDtVAOp3XzotGfQzIBWoLRU
+         sImg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=vtEgEgvSSjpz3nKvUKDHSWfXwEKAllpdOTPmgbe3VTU=;
+        b=Hprr0GnkdXu920xN1EhjBlccR+85DGf7hMcfgvSHFQKSa4xDl2OOno26hFGW+KxNxa
+         C2ajgE1B2daSL/QK/qwGp5A/sJt+wrgtGcrjdC6XsYeMoNJNN9pBhgCkRuooxx8KZtKr
+         PZNVkFzSW3hBapwMMo8jUqLZneq8yBORWZtL87v/MSq0/tN6YJLy5nQXd9qSuFqTpS+i
+         C2FmusbucV4JFx2OmjT+uAnnAjQH2rys8OKqCnfr7uvCtOvO0/x6hUNiMuDihhz4IBJn
+         PeUdeaaVajzuhVovXwU+2jmJSc+slqjyh/AR7wTnpxOPs9RfXQjjIBcEhpOk0DjoTcOw
+         w18w==
+X-Gm-Message-State: AOAM533wgEQJZoBK3NtKEVIfNKMTtUHpKzYHESJcpjjqpE/xvCu115Tz
+        5NiFbFXWfkLMHnqLzKJiBX9yjq6basgo5NWy0+4=
+X-Google-Smtp-Source: ABdhPJz+Tih7i4xXMFnHO3J7aRp+hxiEmn2HRzTfHYwq1cqS8fVNVGmW987agqV2cborfDXGLQR4MmfvN7SorBr7OXk=
+X-Received: by 2002:a17:907:7b9d:b0:6df:fb8f:fe82 with SMTP id
+ ne29-20020a1709077b9d00b006dffb8ffe82mr5908361ejc.652.1651373694643; Sat, 30
+ Apr 2022 19:54:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
+References: <20220429032621.674865-1-starzhangzsd@gmail.com>
+ <20220429095104.GA11365@alpha.franken.de> <alpine.DEB.2.21.2204291559490.9383@angie.orcam.me.uk>
+ <CANubcdWykz0j5BaGNhYMW16wX9UbfgsLdEs-ebNWCWP+p1OKWw@mail.gmail.com> <alpine.DEB.2.21.2204301609310.9383@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2204301609310.9383@angie.orcam.me.uk>
+From:   Stephen Zhang <starzhangzsd@gmail.com>
+Date:   Sun, 1 May 2022 10:54:17 +0800
+Message-ID: <CANubcdUxobBn968rtz0z-zZVJQfV5k3PQcdLdXNbsw3mEphk0A@mail.gmail.com>
+Subject: Re: [PATCH v2] MIPS: undefine and redefine cpu_has_fpu when it is overrided
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        liam.howlett@oracle.com, ebiederm@xmission.com, alobakin@pm.me,
+        f.fainelli@gmail.com, paul@crapouillou.net, linux@roeck-us.net,
+        anemo@mba.ocn.ne.jp, zhangshida <zhangshida@kylinos.cn>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,99 +72,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matthias,
+Maciej W. Rozycki <macro@orcam.me.uk> =E4=BA=8E2022=E5=B9=B44=E6=9C=8830=E6=
+=97=A5=E5=91=A8=E5=85=AD 23:38=E5=86=99=E9=81=93=EF=BC=9A
+>
+>  Adding a safety check would be a separate improvement.  Please feel free
+> to submit one.
+>
+>  We need to keep fixes and improvements as separate changes.  For one
+> fixes can be candidates for backporting while improvements are never
+> backported; cf. Documentation/process/stable-kernel-rules.rst.
+>
+>  I hope this clears your concerns.  Let me know if you have further
+> questions.
+>
+>   Maciej
 
-Thanks very much for reviewing.
+Thanks for your elaboration.It helps a lot.
+I want to submit a v3 patch like:
 
-On Thu, 2022-04-28 at 16:14 +0200, Matthias Brugger wrote:
-> 
-> On 07/04/2022 09:57, Yong Wu wrote:
-> > We preassign some ports in a special bank via the new defined
-> > banks_portmsk. Put it in the plat_data means it is not expected to
-> > be
-> > adjusted dynamically.
-> > 
-> > If the iommu id in the iommu consumer's dtsi node is inside this
-> > banks_portmsk, then we switch it to this special iommu bank, and
-> > initialise the IOMMU bank HW.
-> > 
-> > Each a bank has the independent pgtable(4GB iova range). Each a
-> > bank
-> > is a independent iommu domain/group. Currently we don't separate
-> > different
-> > iova ranges inside a bank.
-> > 
-> > Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <
-> > angelogioacchino.delregno@collabora.com>
-> > ---
-> >   drivers/iommu/mtk_iommu.c | 39
-> > ++++++++++++++++++++++++++++++++++++---
-> >   1 file changed, 36 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-> > index 0828cff97625..d42b3d35a36e 100644
-> > --- a/drivers/iommu/mtk_iommu.c
-> > +++ b/drivers/iommu/mtk_iommu.c
+#if cpu_has_fpu
+# error "Forcing `cpu_has_fpu' to non-zero is not supported"
+#endif
 
-[snip]
+but this will cause the link error if not combined with the fix:
 
-> > @@ -802,6 +828,7 @@ static struct iommu_group
-> > *mtk_iommu_device_group(struct device *dev)
-> >   	struct mtk_iommu_data *c_data = dev_iommu_priv_get(dev), *data;
-> >   	struct list_head *hw_list = c_data->hw_list;
-> >   	struct iommu_group *group;
-> > +	unsigned int bankid, groupid;
-> >   	int regionid;
-> >   
-> >   	data = mtk_iommu_get_frst_data(hw_list);
-> > @@ -812,12 +839,18 @@ static struct iommu_group
-> > *mtk_iommu_device_group(struct device *dev)
-> >   	if (regionid < 0)
-> >   		return ERR_PTR(regionid);
-> >   
-> > +	bankid = mtk_iommu_get_bank_id(dev, data->plat_data);
-> 
-> I think code readability would be improved if we add a new function
-> like 
-> mtk_iommu_get_id which call mtk_iommu_get_bankid and if necessary 
-> mtk_iommu_get_regionid.
+MIPS: IP30: Remove incorrect `cpu_has_fpu' override
 
-OK, I will define a new function, like mtk_iommu_get_group_id for the
-readability.
-
-> 
-> >   	mutex_lock(&data->mutex);
-> > -	group = data->m4u_group[regionid];
-> > +	/*
-> > +	 * If the bank function is enabled, each a bank is a iommu
-> > group/domain.
-> > +	 * otherwise, each a iova region is a iommu group/domain.
-> 
-> While at it:
-> "If the bank function is enabled, each bank is a iommu group/domain.
-> Otherwise, 
-> each iova region is a iommu group/domain."
-
-And move this comment into the new funtion.
-
-Also of course, I will fix the other two comments and send v7.
-
-Thanks.
-
-> 
-> Regards,
-> Matthias
-> 
-> > +	 */
-> > +	groupid = bankid ? bankid : regionid;
-> > +	group = data->m4u_group[groupid];
-> >   	if (!group) {
-> >   		group = iommu_group_alloc();
-> >   		if (!IS_ERR(group))
-> > -			data->m4u_group[regionid] = group;
-> > +			data->m4u_group[groupid] = group;
-> >   	} else {
-> >   		iommu_group_ref_get(group);
-> >   	}
-
+Maybe I should submit one first, and see how it goes then.

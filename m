@@ -2,188 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4567E5163A2
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 12:23:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B575163AF
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 12:35:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245559AbiEAK0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 06:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57594 "EHLO
+        id S1343916AbiEAKiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 06:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239481AbiEAK03 (ORCPT
+        with ESMTP id S237780AbiEAKh7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 06:26:29 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA441C920;
-        Sun,  1 May 2022 03:23:03 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id gj17-20020a17090b109100b001d8b390f77bso14013117pjb.1;
-        Sun, 01 May 2022 03:23:03 -0700 (PDT)
+        Sun, 1 May 2022 06:37:59 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A30ADEAA
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 03:34:33 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id i19so23011807eja.11
+        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 03:34:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=DIcjCIE+821m+IWtooO9mfLI7f6RDT26Z08POJoaqYU=;
-        b=WBrrUvpQr+8M2uys/q8rKRcOBjJ/BHWVt7WZMK2alpYC+3R0u9Nh0Cfr3SDjhc8uwZ
-         RXDxHNvWTtOmjbcFjeJcFAps4wYAhZ9NShQ+ZrQYZu0F5DfdQUj/NEjzHHVeKar8Bg7f
-         6ZSFlv8rXCd3+axM78i+BIZibLX2eNevQNEVoif01K7iiSWAgNrS8Lrfw+MzyqJcgSuL
-         KjGh8PWSNq2l2eHkquFQnU4bAsiM5jOMHxC+L4WGcngNcTK22F7F187ABrieKB0Of28t
-         3ZygR3NXScMN+hZG2xKnblt1qVolPALWgif3BXl1cmIfC4reMEbnYKN3bQhZw77fMMje
-         zg6Q==
+        bh=Cp7/o6x5IzdrJbmJy3xqPuHx+JaFO1sYCDgkJSh0CjQ=;
+        b=lRUnRnElduCIHzH2HCmBQKpbPMKJplrJTWLK3nlYHZEzMU1pMnrAqF9Lzz9+dKPIje
+         xkcB7rLy23kfMNWttlsYJGyPyQgR3FcMq6EyQqbFe+6WIjgCv28J21pA/NhfmcH9rpv9
+         fIMXYWW/f5omnPuLmdxanIRO0RBrA0rhFctJW16EWdCVC4geXUDy2l3eBJLJx4n7dqw8
+         X034WxW7aIUREWHWoeyYzIflzjYY5jNV2EWo61pW4IWW+gxQqPc4ruf50+NcmiWhB2By
+         0CuyOxshcyC4XY7nyqRjVDr1XaNzzuFnFD7Ntqk7pb+sLJ5zyZsU0Tp+pVsJRUmHKn76
+         9JFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=DIcjCIE+821m+IWtooO9mfLI7f6RDT26Z08POJoaqYU=;
-        b=MgbAbhTpAJJprLQiFvtwrGVo6dOCLUXMEbSPPeC+vQGXpifDs8tv1OFsp+aB48PCwt
-         cP8iUNUZboLwUXk6CxbMOyQnZjAP1Y8Z/tKtOAFtaMXMQSR/ktFbdI0L/uSxbTqd6Tbe
-         Bysarvho/GaJlh66UjzSSeuplnNHibB/XZbEJw3w6M8NIURhI2XQLFkMiOg11Vx6doRt
-         BXWw2BfoyGfSBZeQme0WnkF1npljM5/JmEOyVMN631HIOMZgz7+o4vuWSE19dgDH3rUq
-         8o8UqK1UgstUmLYwJJ+fuvs1HbmuCrCCdJsYyxuvj5CMrn5T3jG7WCDbGDda0IwWd0Jz
-         rrPg==
-X-Gm-Message-State: AOAM533q0ewWk0VL43WAcdlkt3hDPulfXwarF11+u1IrXw4QJ/YXz59I
-        dIZXlLvfxnZJh7AIv8ucIVw=
-X-Google-Smtp-Source: ABdhPJx6vbu/y4WRqtx+l8hEQqtX3dIhG1q+B9OQhBo0sDUN5GZeqT/00FPhX85+RqXmm9j2EjRHRQ==
-X-Received: by 2002:a17:902:a714:b0:154:6dfe:bba9 with SMTP id w20-20020a170902a71400b001546dfebba9mr7060966plq.124.1651400582690;
-        Sun, 01 May 2022 03:23:02 -0700 (PDT)
-Received: from localhost.localdomain (164.174.128.101.dy.bbexcite.jp. [101.128.174.164])
-        by smtp.gmail.com with ESMTPSA id n15-20020a17090a928f00b001d903861194sm17606060pjo.30.2022.05.01.03.22.59
+        bh=Cp7/o6x5IzdrJbmJy3xqPuHx+JaFO1sYCDgkJSh0CjQ=;
+        b=pVqYSi4sCFJbkVP0Gx7W28eOZFa37DslbaPbHaauR4pB9vf6HHnifJxAPSO7XtCqH1
+         UFSnILQOTU5ZILsShqTDhWdqKX1ltEHGoRbNaOxVuBeqd2wSDOzT8HDMpUTZDf8q94YH
+         ojdd99Ug7b2qTA0MS3/FdUygqae9nAbzqP9gWLizhIQDTgYRot05IQcqg9uBaBS8xTPL
+         l6lhYfAYylawWb9Hp9zJ16hvgqhOlP+DJFNyHjhGP3ODRYMdPszKDfy0R1sWli5ZXgKr
+         Mx1fmDLrvwRVr5mlFWiRCYBg2QMiaEFy6aZpOWKFXvXeEgiI0V2aRkCOXUSGGI7tQGiP
+         E2fw==
+X-Gm-Message-State: AOAM5335kaT0xDU1vyC+4xSjxwTZL9ISPXpElD/jCWc4FzlQUeh+ycfY
+        IScC6zC3mbvw5aV0CtSoixCG+Q==
+X-Google-Smtp-Source: ABdhPJwv+vVoRb9P/PghU+aWHDJQi4gjxoCN9SWVZ4Ok6tA0pak1jR6F73PxC22SovUKL1Q3a1g77w==
+X-Received: by 2002:a17:907:9710:b0:6f3:6e7e:d5bd with SMTP id jg16-20020a170907971000b006f36e7ed5bdmr6946306ejc.252.1651401271825;
+        Sun, 01 May 2022 03:34:31 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id gv49-20020a1709072bf100b006f3ef214e35sm2443733ejc.155.2022.05.01.03.34.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 May 2022 03:23:01 -0700 (PDT)
-From:   Kosuke Fujimoto <fujimotokosuke0@gmail.com>
-To:     shibata@linuxfoundation.org
-Cc:     Kosuke Fujimoto <fujimotokosuke0@gmail.com>, corbet@lwn.net,
-        akiyks@gmail.com, skhan@linuxfoundation.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5]     docs/trans/ja_JP/howto: Don't mention specific kernel versions
-Date:   Sun,  1 May 2022 19:22:56 +0900
-Message-Id: <20220501102256.6379-1-fujimotokosuke0@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 01 May 2022 03:34:31 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Jassi Brar <jassisinghbrar@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Tushar Khandelwal <Tushar.Khandelwal@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Peng Fan <peng.fan@nxp.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/2] mailbox: correct kerneldoc
+Date:   Sun,  1 May 2022 12:34:27 +0200
+Message-Id: <20220501103428.111286-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-    This change is based on commit d2b008f134b7
-    ("Documentation/process/howto: Update for 4.x -> 5.x versioning").
+Correct kerneldoc warnings like:
 
-    Replace "4.x kernel version" with generic term such as "mainline tree"
+  drivers/mailbox/arm_mhu_db.c:47:
+    warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+  drivers/mailbox/qcom-ipcc.c:58:
+    warning: Function parameter or member 'num_chans' not described in 'qcom_ipcc'
 
-    Signed-off-by: Kosuke Fujimoto <fujimotokosuke0@gmail.com>
-    Reviewed-by: Akira Yokosawa <akiyks@gmail.com>
-    ---
-    V2: Reformatted commit log message (Yokosawa-san)
-    V3: Updated some expressions (Shibata-san)
-    - added "version number" in mainline tree section
-    - updated from "stable kernel" to "stable tree"
-    V4: Added reviewed by tag and removed extra characters (Yokosawa-san)
-  　V5: Removed an extra character (Shibata-san)
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/translations/ja_JP/howto.rst | 44 +++++++++++-----------
- 1 file changed, 21 insertions(+), 23 deletions(-)
+ drivers/mailbox/arm_mhu_db.c | 2 +-
+ drivers/mailbox/arm_mhuv2.c  | 3 ++-
+ drivers/mailbox/qcom-ipcc.c  | 3 ++-
+ 3 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/translations/ja_JP/howto.rst b/Documentation/translations/ja_JP/howto.rst
-index d667f9d8a02a..38fed6fe62fe 100644
---- a/Documentation/translations/ja_JP/howto.rst
-+++ b/Documentation/translations/ja_JP/howto.rst
-@@ -262,21 +262,21 @@ Linux カーネルの開発プロセスは現在幾つかの異なるメイン
- チ」と多数のサブシステム毎のカーネルブランチから構成されます。これらの
- ブランチとは -
+diff --git a/drivers/mailbox/arm_mhu_db.c b/drivers/mailbox/arm_mhu_db.c
+index 8674153cc893..aa0a4d83880f 100644
+--- a/drivers/mailbox/arm_mhu_db.c
++++ b/drivers/mailbox/arm_mhu_db.c
+@@ -44,7 +44,7 @@ struct arm_mhu {
+ };
  
--  - メインの 4.x カーネルツリー
--  - 4.x.y -stable カーネルツリー
--  - サブシステム毎のカーネルツリーとパッチ
--  - 統合テストのための 4.x -next カーネルツリー
-+  - Linus のメインラインツリー
-+  - メジャー番号をまたぐ数本の安定版ツリー
-+  - サブシステム毎のカーネルツリー
-+  - 統合テストのための linux-next カーネルツリー
- 
--4.x カーネルツリー
-+メインラインツリー
- ~~~~~~~~~~~~~~~~~~
- 
--4.x カーネルは Linus Torvalds によってメンテナンスされ、
--https://kernel.org の pub/linux/kernel/v4.x/ ディレクトリに存在します。
-+メインラインツリーは Linus Torvalds によってメンテナンスされ、
-+https://kernel.org のリポジトリに存在します。
- この開発プロセスは以下のとおり -
- 
-   - 新しいカーネルがリリースされた直後に、2週間の特別期間が設けられ、
-     この期間中に、メンテナ達は Linus に大きな差分を送ることができます。
--    このような差分は通常 -next カーネルに数週間含まれてきたパッチです。
-+    このような差分は通常 linux-next カーネルに数週間含まれてきたパッチです。
-     大きな変更は git(カーネルのソース管理ツール、詳細は
-     http://git-scm.com/ 参照) を使って送るのが好ましいやり方ですが、パッ
-     チファイルの形式のまま送るのでも十分です。
-@@ -303,20 +303,18 @@ Andrew Morton が Linux-kernel メーリングリストにカーネルリリー
-         前もって決められた計画によってリリースされるものではないから
-         です。」*
- 
--4.x.y -stable カーネルツリー
--~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+メジャー番号をまたぐ数本の安定版ツリー
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 
- バージョン番号が3つの数字に分かれているカーネルは -stable カーネルです。
--これには、4.x カーネルで見つかったセキュリティ問題や重大な後戻りに対す
--る比較的小さい重要な修正が含まれます。
-+これには最初の2つのバージョン番号の数字に対応した、
-+メインラインリリースで見つかったセキュリティ問題や
-+重大な後戻りに対する比較的小さい重要な修正が含まれます。
- 
- これは、開発/実験的バージョンのテストに協力することに興味が無く、最新
- の安定したカーネルを使いたいユーザに推奨するブランチです。
- 
--もし、4.x.y カーネルが存在しない場合には、番号が一番大きい 4.x が最新
--の安定版カーネルです。
--
--4.x.y は "stable" チーム <stable@vger.kernel.org> でメンテされており、
-+安定版ツリーは"stable" チーム <stable@vger.kernel.org> でメンテされており、
- 必要に応じてリリースされます。通常のリリース期間は 2週間毎ですが、差
- し迫った問題がなければもう少し長くなることもあります。セキュリティ関
- 連の問題の場合はこれに対してだいたいの場合、すぐにリリースがされます。
-@@ -326,7 +324,7 @@ Documentation/process/stable-kernel-rules.rst ファイルにはどのような
- 類の変更が -stable ツリーに受け入れ可能か、またリリースプロセスがどう
- 動くかが記述されています。
- 
--サブシステム毎のカーネルツリーとパッチ
-+サブシステム毎のカーネルツリー
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 
- それぞれのカーネルサブシステムのメンテナ達は --- そして多くのカーネル
-@@ -351,19 +349,19 @@ quilt シリーズとして公開されているパッチキューも使われ
- けることができます。大部分のこれらの patchwork のサイトは
- https://patchwork.kernel.org/ でリストされています。
- 
--統合テストのための 4.x -next カーネルツリー
--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+統合テストのための linux-next カーネルツリー
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 
--サブシステムツリーの更新内容がメインラインの 4.x ツリーにマージされる
-+サブシステムツリーの更新内容がメインラインツリーにマージされる
- 前に、それらは統合テストされる必要があります。この目的のため、実質的に
- 全サブシステムツリーからほぼ毎日プルされてできる特別なテスト用のリポジ
- トリが存在します-
- 
-        https://git.kernel.org/?p=linux/kernel/git/next/linux-next.git
- 
--このやり方によって、-next カーネルは次のマージ機会でどんなものがメイン
--ラインカーネルにマージされるか、おおまかなの展望を提供します。-next カー
--ネルの実行テストを行う冒険好きなテスターは大いに歓迎されます。
-+このやり方によって、linux-next は次のマージ機会でどんなものがメイン
-+ラインにマージされるか、おおまかな展望を提供します。
-+linux-next の実行テストを行う冒険好きなテスターは大いに歓迎されます。
- 
- バグレポート
- -------------
+ /**
+- * ARM MHU Mailbox allocated channel information
++ * struct mhu_db_channel - ARM MHU Mailbox allocated channel information
+  *
+  * @mhu: Pointer to parent mailbox device
+  * @pchan: Physical channel within which this doorbell resides in
+diff --git a/drivers/mailbox/arm_mhuv2.c b/drivers/mailbox/arm_mhuv2.c
+index d997f8ebfa98..a47aef8df52f 100644
+--- a/drivers/mailbox/arm_mhuv2.c
++++ b/drivers/mailbox/arm_mhuv2.c
+@@ -160,7 +160,8 @@ enum mhuv2_frame {
+  * struct mhuv2 - MHUv2 mailbox controller data
+  *
+  * @mbox:	Mailbox controller belonging to the MHU frame.
+- * @send/recv:	Base address of the register mapping region.
++ * @send:	Base address of the register mapping region.
++ * @recv:	Base address of the register mapping region.
+  * @frame:	Frame type: RECEIVER_FRAME or SENDER_FRAME.
+  * @irq:	Interrupt.
+  * @windows:	Channel windows implemented by the platform.
+diff --git a/drivers/mailbox/qcom-ipcc.c b/drivers/mailbox/qcom-ipcc.c
+index c5d963222014..881706da59c0 100644
+--- a/drivers/mailbox/qcom-ipcc.c
++++ b/drivers/mailbox/qcom-ipcc.c
+@@ -41,9 +41,10 @@ struct qcom_ipcc_chan_info {
+  * @dev:		Device associated with this instance
+  * @base:		Base address of the IPCC frame associated to APSS
+  * @irq_domain:		The irq_domain associated with this instance
+- * @chan:		The mailbox channels array
++ * @chans:		The mailbox channels array
+  * @mchan:		The per-mailbox channel info array
+  * @mbox:		The mailbox controller
++ * @num_chans:		Number of @chans elements
+  * @irq:		Summary irq
+  */
+ struct qcom_ipcc {
 -- 
-2.25.1
+2.32.0
 

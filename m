@@ -2,59 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F2F751619C
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 06:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 188075161DC
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 07:02:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236930AbiEAEdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 00:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58048 "EHLO
+        id S239950AbiEAFFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 01:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiEAEdf (ORCPT
+        with ESMTP id S238021AbiEAFFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 00:33:35 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D13BE9
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 21:30:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651379408; x=1682915408;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=q5AVfg/RvNHVlzWVyiEqd8E8CxJ1CYs3+SOBK7SKTtQ=;
-  b=N/vcvjC3+fv4Des5TGESz7lrGHRem0LYegp5QBKvlvL9r2W4E21LWacb
-   6t7I9/X0M0DP9+Fc4W8IbtWeTJ7DicFzhkL3GiSi4nc0jFi74BsqdAERP
-   dbSBaQeAV3xwRSGnsacM/B4J6qszdtS+UzmUrkSYLN0tlLSpcYXoy4aVc
-   sLhBtOJWD+fs9ZpRhJ4dH2g13/yBaJqx9jfeJ1h7qnmPFNfVKq9Qzg/KH
-   zWNQ0ngYtD7+TgSpwqzQZpQfPO9Bp5HPrsQ5NQJMV+Sm1ePMGl6TB29mj
-   momuZ3YawsZQWAU6UrzPcf3fZ2By19o3P1j7she27GL5g2LheknmLrCzA
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10333"; a="353385532"
-X-IronPort-AV: E=Sophos;i="5.91,189,1647327600"; 
-   d="scan'208";a="353385532"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2022 21:30:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,189,1647327600"; 
-   d="scan'208";a="561116743"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 30 Apr 2022 21:30:06 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nl1Di-0008To-85;
-        Sun, 01 May 2022 04:30:06 +0000
-Date:   Sun, 1 May 2022 12:29:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ilya Leoshkevich <iii@linux.ibm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Heiko Carstens <hca@linux.ibm.com>
-Subject: include/linux/seq_file.h:247:9: warning: 'strncpy' output may be
- truncated copying 4 bytes from a string of length 4
-Message-ID: <202205011239.gGl2ZZel-lkp@intel.com>
+        Sun, 1 May 2022 01:05:50 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB4611C03
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 22:02:25 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-ed9a75c453so1247080fac.11
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 22:02:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0aKCZgVZHwh4Tv70zY74+bpoUv5Mj7mL2pJZ6Uamnh0=;
+        b=Ln32ZkW57DHk3aYeYYGzHho7w7JQd5orJTF5/OJ7Q3YlblYmhE67Hvg/CZnF1R54l6
+         fKTSg5LO2nFbIE/JhjzNWLZsGUQFiTU5IDe5snREQYmJiU0BRRjbEOtYmXggrLCwMBpn
+         cpQTPJPhseMBEFKoZjGFEsdw3sHBvYzmY1q6Vv2VT8aVXbvl9123tIoSXdGuZruI7KbK
+         H63Qbk9J3cfS/9s/wxU4Z06WY6FnZXQxx7RxDAVm5UwBib1jl8Yi11aBMfBmYJBqAqnL
+         L9zZO6om03JYIK4Rt9Sujy65oQzcn8b2U/O2aoqed94XIOwMusr2Gx/HIJUipGkHeYa4
+         xHJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0aKCZgVZHwh4Tv70zY74+bpoUv5Mj7mL2pJZ6Uamnh0=;
+        b=j+W45T+HGHGkwZo8nnMSmHBxVB0qAkA8kVSf/hNHzApAaO+dQ8tRmr0rf7RwANuQXx
+         t9oIit9ji5oI9nlUGhJ5lNUpaFEZ03n0sCYVkYB6Gq0ay0R4l2GsQOn0Sm50WsFzzlb8
+         JYBpcxDKrcvfFxfsDf/aJ1exGuDa8fymbSbJX9yljJVVkbqn9pcDIxrylzQdMnuuIarD
+         o2NLQceOdDj+TYMjsgzbC1iLUUmqt+Wp6PHhokM4OTe2IWxQB1XYxwksPBPNWg5Cms+4
+         IIq3pk31z6KEiEQzj7o3dk1IPa7yeJ8MFu1Q7uUaX5wiPCATA1AAB0Fz4bHaxV9HXNmK
+         q+Ig==
+X-Gm-Message-State: AOAM532OiKZ1m0jIP637EX3nI/mptkQubj3Y8Off/kkbfUu+/B2m4puI
+        GD8kEHg4GnmQ2jZ23SLWnetZrhCVRT3KUcU5auQ=
+X-Google-Smtp-Source: ABdhPJxkbSmv7zG4Q6GTSFIGixxeDClKJ/03SoB2VGTC4Uoq/VdDkmPjtpXE3JrrRup2rlDG2eEBsHH5wSkon090EyU=
+X-Received: by 2002:a05:6870:c141:b0:e2:9512:de42 with SMTP id
+ g1-20020a056870c14100b000e29512de42mr2520243oad.288.1651381345179; Sat, 30
+ Apr 2022 22:02:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20220430164021.537668-1-gch981213@gmail.com>
+In-Reply-To: <20220430164021.537668-1-gch981213@gmail.com>
+From:   Chuanhong Guo <gch981213@gmail.com>
+Date:   Sun, 1 May 2022 13:02:13 +0800
+Message-ID: <CAJsYDVJ8VFELnWP-OrH9qzQjbrLZKA721+xj_ngjegPE=fAyrA@mail.gmail.com>
+Subject: Re: [PATCH] mtd: nand: ecc-mtk: add external ecc engine support
+To:     linux-mtd@lists.infradead.org
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,73 +73,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ilya,
+Hi!
 
-FYI, the error/warning still remains.
+On Sun, May 1, 2022 at 12:40 AM Chuanhong Guo <gch981213@gmail.com> wrote:
+> [...]
+>
+> +static const u8 ecc_strength_mt7621[] = { 4 };
+> +
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   57ae8a492116910bad2b3497ffe555b3a4b4180f
-commit: e37b3dd063a1a68e28a7cfaf77c84c472112e330 s390: enable KCSAN
-date:   9 months ago
-config: s390-randconfig-r015-20220501 (https://download.01.org/0day-ci/archive/20220501/202205011239.gGl2ZZel-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e37b3dd063a1a68e28a7cfaf77c84c472112e330
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e37b3dd063a1a68e28a7cfaf77c84c472112e330
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/seq_file_net.h:5,
-                    from include/net/net_namespace.h:179,
-                    from include/linux/inet.h:42,
-                    from fs/ocfs2/super.c:21:
-   fs/ocfs2/super.c: In function 'ocfs2_show_options':
->> include/linux/seq_file.h:247:9: warning: 'strncpy' output may be truncated copying 4 bytes from a string of length 4 [-Wstringop-truncation]
-     247 |         strncpy(val_buf, value, length);                \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/ocfs2/super.c:1539:17: note: in expansion of macro 'seq_show_option_n'
-    1539 |                 seq_show_option_n(s, "cluster_stack", osb->osb_cluster_stack,
-         |                 ^~~~~~~~~~~~~~~~~
-
-
-vim +/strncpy +247 include/linux/seq_file.h
-
-a068acf2ee7769 Kees Cook 2015-09-04  233  
-a068acf2ee7769 Kees Cook 2015-09-04  234  /**
-a068acf2ee7769 Kees Cook 2015-09-04  235   * seq_show_option_n - display mount options with appropriate escapes
-a068acf2ee7769 Kees Cook 2015-09-04  236   *		       where @value must be a specific length.
-a068acf2ee7769 Kees Cook 2015-09-04  237   * @m: the seq_file handle
-a068acf2ee7769 Kees Cook 2015-09-04  238   * @name: the mount option name
-a068acf2ee7769 Kees Cook 2015-09-04  239   * @value: the mount option name's value, cannot be NULL
-a068acf2ee7769 Kees Cook 2015-09-04  240   * @length: the length of @value to display
-a068acf2ee7769 Kees Cook 2015-09-04  241   *
-a068acf2ee7769 Kees Cook 2015-09-04  242   * This is a macro since this uses "length" to define the size of the
-a068acf2ee7769 Kees Cook 2015-09-04  243   * stack buffer.
-a068acf2ee7769 Kees Cook 2015-09-04  244   */
-a068acf2ee7769 Kees Cook 2015-09-04  245  #define seq_show_option_n(m, name, value, length) {	\
-a068acf2ee7769 Kees Cook 2015-09-04  246  	char val_buf[length + 1];			\
-a068acf2ee7769 Kees Cook 2015-09-04 @247  	strncpy(val_buf, value, length);		\
-a068acf2ee7769 Kees Cook 2015-09-04  248  	val_buf[length] = '\0';				\
-a068acf2ee7769 Kees Cook 2015-09-04  249  	seq_show_option(m, name, val_buf);		\
-a068acf2ee7769 Kees Cook 2015-09-04  250  }
-a068acf2ee7769 Kees Cook 2015-09-04  251  
-
-:::::: The code at line 247 was first introduced by commit
-:::::: a068acf2ee77693e0bf39d6e07139ba704f461c3 fs: create and use seq_show_option for escaping
-
-:::::: TO: Kees Cook <keescook@chromium.org>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+Oops. This is a leftover line when I tried to split commits.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards,
+Chuanhong Guo

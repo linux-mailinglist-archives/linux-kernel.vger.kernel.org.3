@@ -2,150 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB475167CF
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 22:41:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F55B5167CA
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 22:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354705AbiEAUll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 16:41:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60444 "EHLO
+        id S1354594AbiEAUbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 16:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238355AbiEAUlj (ORCPT
+        with ESMTP id S244899AbiEAUbJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 16:41:39 -0400
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B63F49C9C
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 13:38:10 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id C15446C0A3E;
-        Sun,  1 May 2022 20:38:09 +0000 (UTC)
-Received: from pdx1-sub0-mail-a272.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 3D0D66C08A7;
-        Sun,  1 May 2022 20:38:09 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1651437489; a=rsa-sha256;
-        cv=none;
-        b=hULsUQVft86mznR4tDpZFynazbDM5OaSjsOXlnH8wQin8ftD4B4/ccKJCcFqx+GiN1Qw6n
-        brYHAIzrj2mUsXL8fbigy0H2Pf9ksvS2oflAbpHa1lk8LTKwvhaY1lKmlFu2uhOIYOyHVi
-        oxYp0RuIoviib/yhvuS2BZBV3J7OQQcPnQtc30L4hRnJskWg0pA02U34RcmbOOao8odmZU
-        Qf58BSZahTgmAyqCSAy9RoTKRwQzdBfMVKEMVXfiraiJhTNwtm+WQ28vWfq1BmLk+zLrtv
-        pO30ifPN7jhrOK6EpqnXagbAUBjdoeOSl/Wy0pXtJxBZAofqkJJPkEs6Yfp4Yg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1651437489;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=tCCVnocf3mgYD9VNhEdRpcvRc6dfJeJKHpburFD1alE=;
-        b=VVtjkx8TnTok11Tnw2x0VLh7sByH7sTOkKM3+/AZGkZ/0ZCp09N47UWNGXKHccKUgPYJ/L
-        GA4YTRZLSPG1KfomlolUfKDn1UCPV4KYzj6i1SyqgslFKfzGMB3R7Dm/cWbrIRhu5t0iD6
-        BsI8OYLSfzlsycuPdntrtTN+01EUdzdVakeJfXnJ3GZWTv4CbyNUHGvcNQAwp1YoL1n4eX
-        c9ecuRkY/YuAEfUPUYLbpiFhgtxbwduVseNO7k6O++aFlgJhj2pDfuwTKJxL5nPM4x+HSy
-        ZxvBhzET6kHSXOiQHAjWZFNe8wh8X0BrO2r2QqZiZjqjXymBhPTHKkEvm7T4YQ==
-ARC-Authentication-Results: i=1;
-        rspamd-847dd8955c-v74k9;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Average-Gusty: 3dc8d98f065d0d91_1651437489555_2285623474
-X-MC-Loop-Signature: 1651437489555:4050904530
-X-MC-Ingress-Time: 1651437489555
-Received: from pdx1-sub0-mail-a272.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.125.123.55 (trex/6.7.1);
-        Sun, 01 May 2022 20:38:09 +0000
-Received: from offworld (unknown [104.36.31.105])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a272.dreamhost.com (Postfix) with ESMTPSA id 4KryjD46VXz3N;
-        Sun,  1 May 2022 13:38:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1651437489;
-        bh=tCCVnocf3mgYD9VNhEdRpcvRc6dfJeJKHpburFD1alE=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=UPvpLYfbJ2bOSCBFt/X2+o0JSM2pH3gHgWHgBQvOg/Rj9JvpyqL23UFh4uX4SLx/t
-         QbPfYMKb6dmlZKoHpAmbrtfu3KUdlHWgTdHiaZoWWwJXS5Wj4ETxlthiPlqxfwAghj
-         oFT9Sk4WbEYhYSy2fg8Jd7algK7jOYKA0BNtlP0qmeYWOx2a81azHmRb3KC2alPzso
-         MjM70/+F/IHygPnXNBp4Dpf81weDDnvqRzQFlZ9s9aI32mg91UBQi5AEXe1EwAryyH
-         JG9P2Yjq4Vr9zAYronRvGK74pNwCcs5/SVIvLCY8GrTp//i2IJTuFsCQtQiVNtUoiF
-         Nmh/nsC8khXIw==
-Date:   Sun, 1 May 2022 13:26:34 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Yu Zhao <yuzhao@google.com>
-Subject: Re: [PATCH v8 00/70] Introducing the Maple Tree
-Message-ID: <20220501202532.y6zmznzshbe33nwx@offworld>
-Mail-Followup-To: Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Yu Zhao <yuzhao@google.com>
-References: <20220426150616.3937571-1-Liam.Howlett@oracle.com>
- <20220426130857.09f40743b42b5f0bf4f19a59@linux-foundation.org>
- <20220427140832.mpvnnkkhrbupk46i@revolver>
- <20220427103331.9876ad87626af0f50e9ced0d@linux-foundation.org>
- <YmmHqlR6lV84KDrO@casper.infradead.org>
+        Sun, 1 May 2022 16:31:09 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B71543EE7;
+        Sun,  1 May 2022 13:27:42 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id gj17-20020a17090b109100b001d8b390f77bso14636202pjb.1;
+        Sun, 01 May 2022 13:27:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=A0bEJs7qgg/eX6nUTN2NKhZYoTjWbfIDdjjcVr0MKn0=;
+        b=j+TvewDN/kI4TIXi0Uj6To92nH4CpMfaizm/t37LfhTx55UMcby1jK6vfE0cJ6gMKP
+         FasRMems0yURB5dgj96Jyt2oaqWtAhW5YHGnhn3lJRBjSDbC7QoWIOcM0jKWcEtXwuNM
+         wtl0XOD6AAj3u9B9jmDMSLGzzUkGueKu8uq3ch4YeeS8ecLtnz7xanl6ZLpRVObbGNOt
+         ytuy6BqXgQ8FjVsfGGwkIZ7GE93TWk0ienpbJkAbbkK24JFIsvhnWjpUsiupqAYNpVRp
+         ZQ8qgcLX1YxzjTx5/hegJJIv+mkOY0vpX/mXGEIX93s/P+SVcfGQR83hFY7Pa0wNOsf/
+         GMkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=A0bEJs7qgg/eX6nUTN2NKhZYoTjWbfIDdjjcVr0MKn0=;
+        b=SjHzu4f0doOT5BkvhHz3R/VmEzynoDaz/CvgWW5TraV89igSKqitfYfGEH6WoGNtQV
+         sX5CvWrke/BLYzolBkuGOAjE2CMGdHmCK8uKTltgomCFT5IZgZvamYboL5f2reHb9V30
+         5b/tfp7cHwjeEPRJ7rtN5xkz3Ru4hhZ7clqJjMu4WVFGZIRd3EBJDPycgVoUsKPYTtIh
+         Cr1DnkRy79qQEEEa+nHMRW8vEzpT5EzKofPYaOWRAVpH7u5Xha5x0z/cZ0tWD9HYE+ug
+         /94HGRIloT8EWAEg+zsWPRF42biiz7yi2Wf5q/0URU2Py1ceeq27f7t2JDuu0nbDfOr2
+         rhKA==
+X-Gm-Message-State: AOAM532nlPqitKfipymgtWsf0ntFOsZt746JtWKOIdGAYntdwUc++LtG
+        l5PFvYKdi6hK2PCgc6bpEJaqsXlQqINNHrBQEe8=
+X-Google-Smtp-Source: ABdhPJwm7QsGb1flanj0/iVrkkfHHUEGVd7uWE4OvR8bWCBKO+qnfZgqzifffqvCmJEzL9FcLcasYZWXj1RV3BFTb4s=
+X-Received: by 2002:a17:902:f547:b0:15d:10ce:e2ff with SMTP id
+ h7-20020a170902f54700b0015d10cee2ffmr8441158plf.80.1651436861735; Sun, 01 May
+ 2022 13:27:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <YmmHqlR6lV84KDrO@casper.infradead.org>
-User-Agent: NeoMutt/20220408
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URI_DOTEDU autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220420211105.14654-1-jagathjog1996@gmail.com>
+ <20220420211105.14654-7-jagathjog1996@gmail.com> <20220501173110.67a18bf9@jic23-huawei>
+In-Reply-To: <20220501173110.67a18bf9@jic23-huawei>
+From:   Jagath Jog J <jagathjog1996@gmail.com>
+Date:   Mon, 2 May 2022 01:57:30 +0530
+Message-ID: <CAM+2EuL7Qcj2znsmXPd6Q7wT-EQrUa=y6idcH=rryQdSiGSdOg@mail.gmail.com>
+Subject: Re: [PATCH v4 6/9] iio: accel: bma400: Add step change event
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Dan Robertson <dan@dlrobertson.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 27 Apr 2022, Matthew Wilcox wrote:
+Hi Jonathan,
 
->On Wed, Apr 27, 2022 at 10:33:31AM -0700, Andrew Morton wrote:
->> On Wed, 27 Apr 2022 14:08:39 +0000 Liam Howlett <liam.howlett@oracle.com> wrote:
->> > The benchmarks are around the same as they have always been.
->>
->> So it's presently a wash.
->>
->> That makes "the plan" (below) really critical, otherwise there seems
->> little point in merging this code at this time?
->>
->> Please send me many very soothing words about how confident we should
->> be that the plan will be implemented and that it shall be good?
+On Sun, May 1, 2022 at 9:52 PM Jonathan Cameron <jic23@kernel.org> wrote:
 >
->Yes, performance-wise it's a wash.  However, Davidlohr was very
->impressed that it was a wash because we're actually getting rid of three
->data structures here; the linked list, the rbtree and the vmacache.
->His opinion was that we should push the maple tree in now, in advance
->of the future RCU uses.
+> On Thu, 21 Apr 2022 02:41:02 +0530
+> Jagath Jog J <jagathjog1996@gmail.com> wrote:
+>
+> > Added support for event when there is a detection of step change.
+> > INT1 pin is used to interrupt and event is pushed to userspace.
+> >
+> > Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
+> Hi Jagath,
+>
+> A query about handling of multiple interrupts...
+>
+> > ---
+> >  drivers/iio/accel/bma400.h      |  2 +
+> >  drivers/iio/accel/bma400_core.c | 75 +++++++++++++++++++++++++++++++++
+> >  2 files changed, 77 insertions(+)
+> >
+> >   * Read-write configuration registers
+> > diff --git a/drivers/iio/accel/bma400_core.c b/drivers/iio/accel/bma400_core.c
+> > index aafb5a40944d..fe101df7b773 100644
+> > --- a/drivers/iio/accel/bma400_core.c
+> > +++ b/drivers/iio/accel/bma400_core.c
+>
+> >
+> >  static const struct iio_trigger_ops bma400_trigger_ops = {
+> > @@ -971,6 +1035,7 @@ static irqreturn_t bma400_interrupt(int irq, void *private)
+> >  {
+> >       struct iio_dev *indio_dev = private;
+> >       struct bma400_data *data = iio_priv(indio_dev);
+> > +     s64 timestamp = iio_get_time_ns(indio_dev);
+> >       int ret;
+> >
+> >       /* Lock to protect the data->status */
+> > @@ -981,6 +1046,16 @@ static irqreturn_t bma400_interrupt(int irq, void *private)
+> >       if (ret)
+> >               goto unlock_err;
+> >
+> > +     if (FIELD_GET(BMA400_STEP_STAT_MASK, le16_to_cpu(data->status))) {
+> > +             iio_push_event(indio_dev,
+> > +                            IIO_EVENT_CODE(IIO_STEPS, 0, IIO_NO_MOD,
+> > +                                           IIO_EV_DIR_NONE,
+> > +                                           IIO_EV_TYPE_CHANGE, 0, 0, 0),
+> > +                            timestamp);
+> > +             mutex_unlock(&data->mutex);
+>
+> Is it possible for two interrupt sources to be active at the same time?
 
-Yes I like the maple tree, and at this stage I don't think we can ask
-for more from this series wrt the MM - albeit there seems to still be
-some folks reporting breakage. Fundamentally I see Liam's work to (re)move
-complexity out of the MM (not to say that the actual maple tree is not
-complex) by consolidating the three complimentary data structures very
-much worth it considering performance does not take a hit. This was
-very much a turn off with the range locking approach, which worst case
-scenario incurred in prohibitive overhead. Also as Liam and Matthew
-have mentioned, RCU opens up a lot of nice performance opportunities,
-and in addition academia[1] has shown outstanding scalability of address
-spaces with the foundation of replacing the locked rbtree with RCU
-aware trees.
+Yeah, it is possible when multiple interrupts are enabled like data ready,
+step and generic interrupts.
 
-[1] https://pdos.csail.mit.edu/papers/rcuvm:asplos12.pdf
+> Given the device is clearing interrupts on read (which is unusual enough to
+> make me check that on the datasheet) you will loose any other events.
+>
+> Normal trick is to act on all set bits and if any of them were acted on
+> return HANDLED.
 
-Thanks,
-Davidlohr
+Then I will push all the events that occurred and then in the end I will return
+HANDLED so that none of the events are missed.
+I will change this in the next version.
+
+Thank you,
+Jagath
+
+
+>
+> > +             return IRQ_HANDLED;
+> > +     }
+> > +
+> >       if (FIELD_GET(BMA400_INT_DRDY_MSK, le16_to_cpu(data->status))) {
+> >               mutex_unlock(&data->mutex);
+> >               iio_trigger_poll_chained(data->trig);
+>

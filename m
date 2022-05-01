@@ -2,130 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E393551629A
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 10:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F12BE51629C
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 10:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243434AbiEAIQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 04:16:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
+        id S244046AbiEAIQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 04:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiEAIQD (ORCPT
+        with ESMTP id S243553AbiEAIQc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 04:16:03 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA131402A;
-        Sun,  1 May 2022 01:12:39 -0700 (PDT)
-Date:   Sun, 01 May 2022 08:12:36 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651392757;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Btm8cdhggXjho6O0WPgq4RkAAi9zylcOI/eBifzYWp8=;
-        b=WLK3Z36jq0QkP6HqWQgymJ+5w6nepgQbmdC4B5mau7rLZJjyyBC12c+ADWi3ALCCoEityh
-        9eQnaq4ASKphRUnPu5MTnOaWL3mwiFoSbvuB0Yj30ij3pHQax/vbsHjGE3fTpOW9qnjw6y
-        DHnz55tZKuHP4MbKyxtLHeDpP8vv7D/tiqedJ3ZNm0YCYFdpcK+1c1JUqYBvtQcGrnURZ2
-        sB+gkxJ+LXaFFYdm+bN1iY4cpaP9V1DlZaolPuvBHBlSvcpTWBXetQ8xS0lh7VgA+6PjhC
-        N0tFfedGbZvA3AtLNwZkqJn16qquyZzNzHkfyaiQSf2GmL7SFUdDrSFbb+3Fbw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651392757;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Btm8cdhggXjho6O0WPgq4RkAAi9zylcOI/eBifzYWp8=;
-        b=eeGr6Yw/+j0xBR79JMNk1GCZz/kWWvkfLK/C4b0J2vxmG+Dq5rtg0ScHm4/RMH4N+s8RU5
-        LCvv3xTQOuFeBjBg==
-From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/pci/xen: Disable PCI/MSI[-X] masking for XEN_HVM guests
-Cc:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
-        Dusty Mabe <dustymabe@redhat.com>,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Noah Meyerhans <noahm@debian.org>, stable@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <87tuaduxj5.ffs@tglx>
-References: <87tuaduxj5.ffs@tglx>
+        Sun, 1 May 2022 04:16:32 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F99C15FF8
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 01:13:08 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id i27so22746655ejd.9
+        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 01:13:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XrKlK/wlEuAV8r4Uf6E1ukYjJx77nczax1aunKH5Q+4=;
+        b=YXINqYqsI0H9E96YUKV9+Mjzm52tkYI1g7ZqF8iLgJkMSH9V6NboFQLX3+U09VaasC
+         1Cis79Ded3Ql2O3zeNDUdojx0Lryo2uqklTYBces9JIway60hBgeHf0G7HNFSEt4RTgp
+         gCxNhm2+SZSmmsiSd6Xe3OXN6pleuh9F8IywWLaGMoKLJBl+7sUdYSx/9jzHA/lxnrH+
+         ZWN8pAKLurFJ0gg/ayepSUraNgr8/zPGPWQQeNr3OxdDhaW4EVfD4rsjiw/8qyAKDJ3G
+         tSqSTe8ey/7N+6DEAEFV4b71o382zMgdXAqxyZQ9Mo0rDLaIwGFLoDHx2dCm3K/01bt2
+         m7cA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XrKlK/wlEuAV8r4Uf6E1ukYjJx77nczax1aunKH5Q+4=;
+        b=PnDMnw4JbqH6x/avmtSir9Sa/0Y2YYDWl/8jL83MlFXMvxRDdKzk781jE1hnT+J6i5
+         Y0ayAfqY1pg04OFlMuZjKRLgwyFVlp23WuNya37jtjblsCTULub7rklXflcYpOtEMbGo
+         KCk/j9Nz3gwoQn1ZOHBJLLBvLzdyJCnZouu38fXhQh6edX3VaU1oysT8lUoZcjN4m7WU
+         G8DYg76I+ax8WlmMETV8yycKrKc+PehFuhQGPjfkP+aqy683NtOg/1KZxRZ4BShgPuP2
+         9257hjE635yewxK8UwnyjofgLaaHnFZan1cYYZ5IfrloEn4DMzdjwu5CasbGjSw7U+9X
+         Hr9w==
+X-Gm-Message-State: AOAM531PPDiGbUuV3xHHui7vAe9oj2goMHJOt4hLrW3xbAlsk+fXLBuk
+        rSLVPDALwzfgQLsgotEiFOsSTg==
+X-Google-Smtp-Source: ABdhPJwXuUt0sftDa1TvYqXx+d7cm+eB/BhcX08Oq5n1MDafYYfJxDamHA1BTbHyE/MfVzuLR/AHJw==
+X-Received: by 2002:a17:906:2319:b0:6f3:ad55:8fee with SMTP id l25-20020a170906231900b006f3ad558feemr6692397eja.26.1651392786726;
+        Sun, 01 May 2022 01:13:06 -0700 (PDT)
+Received: from [192.168.0.182] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id j12-20020aa7c40c000000b0042617ba63cbsm5047785edq.85.2022.05.01.01.13.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 01 May 2022 01:13:06 -0700 (PDT)
+Message-ID: <c58c2d00-2b07-8873-2146-738199855492@linaro.org>
+Date:   Sun, 1 May 2022 10:13:05 +0200
 MIME-Version: 1.0
-Message-ID: <165139275608.4207.16060979873182920732.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/7] dt-bindings: arm: rockchip: Add Pine64 Quartz64
+ Model B
+Content-Language: en-US
+To:     Peter Geis <pgwipeout@gmail.com>,
+        linux-rockchip@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220429115252.2360496-1-pgwipeout@gmail.com>
+ <20220429115252.2360496-2-pgwipeout@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220429115252.2360496-2-pgwipeout@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+On 29/04/2022 13:52, Peter Geis wrote:
+> The Quartz64 Model B is a compact single board computer from Pine64
+> based on the rk3566 SoC. It outputs on uart2 for the debug console.
+> 
+> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
 
-Commit-ID:     7e0815b3e09986d2fe651199363e135b9358132a
-Gitweb:        https://git.kernel.org/tip/7e0815b3e09986d2fe651199363e135b9358132a
-Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Thu, 28 Apr 2022 15:50:54 +02:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Fri, 29 Apr 2022 14:37:39 +02:00
 
-x86/pci/xen: Disable PCI/MSI[-X] masking for XEN_HVM guests
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-When a XEN_HVM guest uses the XEN PIRQ/Eventchannel mechanism, then
-PCI/MSI[-X] masking is solely controlled by the hypervisor, but contrary to
-XEN_PV guests this does not disable PCI/MSI[-X] masking in the PCI/MSI
-layer.
 
-This can lead to a situation where the PCI/MSI layer masks an MSI[-X]
-interrupt and the hypervisor grants the write despite the fact that it
-already requested the interrupt. As a consequence interrupt delivery on the
-affected device is not happening ever.
-
-Set pci_msi_ignore_mask to prevent that like it's done for XEN_PV guests
-already.
-
-Fixes: 809f9267bbab ("xen: map MSIs into pirqs")
-Reported-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-Reported-by: Dusty Mabe <dustymabe@redhat.com>
-Reported-by: Salvatore Bonaccorso <carnil@debian.org>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Noah Meyerhans <noahm@debian.org>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/87tuaduxj5.ffs@tglx
-
----
- arch/x86/pci/xen.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/pci/xen.c b/arch/x86/pci/xen.c
-index 9bb1e29..b94f727 100644
---- a/arch/x86/pci/xen.c
-+++ b/arch/x86/pci/xen.c
-@@ -467,7 +467,6 @@ static __init void xen_setup_pci_msi(void)
- 		else
- 			xen_msi_ops.setup_msi_irqs = xen_setup_msi_irqs;
- 		xen_msi_ops.teardown_msi_irqs = xen_pv_teardown_msi_irqs;
--		pci_msi_ignore_mask = 1;
- 	} else if (xen_hvm_domain()) {
- 		xen_msi_ops.setup_msi_irqs = xen_hvm_setup_msi_irqs;
- 		xen_msi_ops.teardown_msi_irqs = xen_teardown_msi_irqs;
-@@ -481,6 +480,11 @@ static __init void xen_setup_pci_msi(void)
- 	 * in allocating the native domain and never use it.
- 	 */
- 	x86_init.irqs.create_pci_msi_domain = xen_create_pci_msi_domain;
-+	/*
-+	 * With XEN PIRQ/Eventchannels in use PCI/MSI[-X] masking is solely
-+	 * controlled by the hypervisor.
-+	 */
-+	pci_msi_ignore_mask = 1;
- }
- 
- #else /* CONFIG_PCI_MSI */
+Best regards,
+Krzysztof

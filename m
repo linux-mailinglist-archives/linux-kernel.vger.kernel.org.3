@@ -2,80 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6736251647C
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 15:06:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E09516481
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 15:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345347AbiEANJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 09:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
+        id S1347079AbiEANQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 09:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347329AbiEANJL (ORCPT
+        with ESMTP id S240284AbiEANQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 09:09:11 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D8533E32;
-        Sun,  1 May 2022 06:05:42 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1nl9Ge-0006BV-1w; Sun, 01 May 2022 15:05:40 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     linux-rockchip@lists.infradead.org,
-        Peter Geis <pgwipeout@gmail.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Subject: Re: (subset) [PATCH v2 0/7] Add support for several new rk3566 SBCs
-Date:   Sun,  1 May 2022 15:05:38 +0200
-Message-Id: <165141025789.655760.7485683050420620213.b4-ty@sntech.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220429115252.2360496-1-pgwipeout@gmail.com>
-References: <20220429115252.2360496-1-pgwipeout@gmail.com>
+        Sun, 1 May 2022 09:16:35 -0400
+Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA192127A
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 06:13:09 -0700 (PDT)
+Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+        by conuserg-11.nifty.com with ESMTP id 241D8TQo018740;
+        Sun, 1 May 2022 22:08:29 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 241D8TQo018740
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1651410510;
+        bh=Fmg4C09ULmcdlCQ7G/HgMU42/2hgN/vUJbg9dyGBwP0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Bzc3Aykk50p2V+GC4ErxY+Z5DdBiuLZXJeYATq47uk3XNLduZCcHy0cApl2Rrsb9Z
+         CXMDw/soW0HsPCFCwa8GWL5e93ozm7jDX/hGrSknNNjIF7Z975qTs2Cvik18XZ12+s
+         rL6O5+ayjD57b/4oHob1wJSaqVi2SbUA/1uL2G7Cmz9Y0AzNWOYdzmv/UZDrUnKmjz
+         EAfTdWXzzsjj5hnLzzpLEyTgtw+5vD0BsUG9R9ulxtxzyn4YETcwmRHGLHmYl7iCpm
+         xpKmmdkLE7vWgJ2DOjeQT0ltGvmCPG02PnqfzJiSmfe2fZNlvdyNBU8TCABp3cS4Yp
+         vvjdHKKtaJ9hQ==
+X-Nifty-SrcIP: [133.32.177.133]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-crypto@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?q?Breno=20Leit=C3=A3o?= <leitao@debian.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Paulo Flabiano Smorigo <pfsmorigo@gmail.com>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH] crypto: vmx - Align the short log with Makefile cleanups
+Date:   Sun,  1 May 2022 22:07:49 +0900
+Message-Id: <20220501130749.1123387-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 29 Apr 2022 07:52:45 -0400, Peter Geis wrote:
-> The following series adds support for the following single board
-> computers:
-> - Pine64 Quartz64 Model B
-> - Pine64 SoQuartz SoM with RPi CM4IO carrier board
-> - Firefly Station M2
-> 
-> Patches 1, 2, and 3 add the requisite dt-bindings.
-> Patch 4 adds support for the SFC to the rk356x device tree.
-> Patch 5 adds the Quartz64 Model B device tree.
-> Patch 6 adds the SoQuartz CM4IO device tree.
-> Patch 7 adds the Firefly Station M2 device tree.
-> 
-> [...]
+I notieced the log is not properly aligned:
 
-Applied, thanks!
+  PERL drivers/crypto/vmx/aesp8-ppc.S
+  CC [M]  fs/xfs/xfs_reflink.o
+  PERL drivers/crypto/vmx/ghashp8-ppc.S
+  CC [M]  drivers/crypto/vmx/aes.o
 
-[1/7] dt-bindings: arm: rockchip: Add Pine64 Quartz64 Model B
-      commit: c37415f55bdadffe5b4c0e7981e9fc7e8b96beea
-[2/7] dt-bindings: arm: rockchip: Add Pine64 SoQuartz SoM
-      commit: c466828fb3ba8cb7f5c3bf28766da9b70bf9745e
-[3/7] dt-bindings: arm: rockchip: Add Firefly Station M2
-      commit: e52ded5543708e0382f236ce35372a63f4568341
-[5/7] arm64: dts: rockchip: add Pine64 Quartz64-B device tree
-      commit: dcc8c66bef79befa6c9ebe7d7d62b0ce66983c20
-[6/7] arm64: dts: rockchip: add SoQuartz CM4IO dts
-      commit: 5859b5a9c3ac92d831bed164374cb837519524ad
-[7/7] arm64: dts: rockchip: add dts for Firefly Station M2 rk3566
-      commit: 30ac9b4e25d8cece00d32c7419f9d919f55421fe
+Add some spaces after 'PERL'.
 
-I've adjusted the styling of comments a bit, also dropped one double
-newline as well as fixed the node name for the ethernet-phy for QuartzB.
+While I was here, I cleaned up the Makefile:
 
-Best regards,
+ - Merge the two similar rules
+
+ - Remove redundant 'clean-files' (Having 'targets' is enough)
+
+ - Move the flavour into the build command
+
+This still avoids the build failures fixed by commit 4ee812f6143d
+("crypto: vmx - Avoid weird build failures").
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
+
+ drivers/crypto/vmx/Makefile | 17 +++--------------
+ 1 file changed, 3 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/crypto/vmx/Makefile b/drivers/crypto/vmx/Makefile
+index 709670d2b553..df93ba63b1cd 100644
+--- a/drivers/crypto/vmx/Makefile
++++ b/drivers/crypto/vmx/Makefile
+@@ -2,21 +2,10 @@
+ obj-$(CONFIG_CRYPTO_DEV_VMX_ENCRYPT) += vmx-crypto.o
+ vmx-crypto-objs := vmx.o aesp8-ppc.o ghashp8-ppc.o aes.o aes_cbc.o aes_ctr.o aes_xts.o ghash.o
+ 
+-ifeq ($(CONFIG_CPU_LITTLE_ENDIAN),y)
+-override flavour := linux-ppc64le
+-else
+-override flavour := linux-ppc64
+-endif
+-
+-quiet_cmd_perl = PERL $@
+-      cmd_perl = $(PERL) $(<) $(flavour) > $(@)
++quiet_cmd_perl = PERL    $@
++      cmd_perl = $(PERL) $< $(if $(CONFIG_LITTLE_ENDIAN), linux-ppc64le, linux-ppc64) > $@
+ 
+ targets += aesp8-ppc.S ghashp8-ppc.S
+ 
+-$(obj)/aesp8-ppc.S: $(src)/aesp8-ppc.pl FORCE
+-	$(call if_changed,perl)
+-  
+-$(obj)/ghashp8-ppc.S: $(src)/ghashp8-ppc.pl FORCE
++$(obj)/aesp8-ppc.S $(obj)/ghashp8-ppc.S: $(obj)/%.S: $(src)/%.pl FORCE
+ 	$(call if_changed,perl)
+-
+-clean-files := aesp8-ppc.S ghashp8-ppc.S
 -- 
-Heiko Stuebner <heiko@sntech.de>
+2.32.0
+

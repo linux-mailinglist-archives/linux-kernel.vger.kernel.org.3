@@ -2,87 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 169A051681B
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 23:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 065F251681D
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 23:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355207AbiEAVjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 17:39:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46190 "EHLO
+        id S1355326AbiEAVmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 17:42:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355069AbiEAVjG (ORCPT
+        with ESMTP id S235278AbiEAVmq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 17:39:06 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAF43D48B
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 14:35:38 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2f7d621d1caso131220617b3.11
-        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 14:35:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=T254pOQ0OrSDi8zN/59MRP0JPU9NfQ5B5Rmbgtdrkko=;
-        b=wlpA+CfyvX91ALnfVCMPP166Rc0Mpatt42DsMvCkWJmeZUVRfB6mnUYecnMGRNYbhI
-         ld8YsssomjW9oCtQmr15blAmBLS+t4KouSWHxbIZVjnsq1DnJlp8Fx6XNCVuGUF0GS/N
-         6klXRU6dGXOQupaFrwlX9Yah5rEs29v06x/UCbuJ/f0GQoJQPiBvrEccSjVf/VH42K7p
-         RwLGlqfP5o3h1uwBR8xQuBvPKaAX5Sq4RHEUwFvP/y5fx9owfyl5p9sMhmOT/ahPJUD6
-         7q+tV1u5MOsspWP4YhNR748kjKGgc9lX4NNszXKAVeEM0jxtUxFRG3LYR6gGsd4NYws0
-         Yv1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=T254pOQ0OrSDi8zN/59MRP0JPU9NfQ5B5Rmbgtdrkko=;
-        b=AqwgOa9GBIiNDl0JagM7Yxok50AGUt9JNdAr5wCBcZwqW/lxSFrnbjN5DD+mbNdyK4
-         pFhPDpKrQFIoGYqdQrhmt4wdtyErqoY6SU7bgTBTX8li8vPA/nieONUw1mUV/uEgP85p
-         AAsdEuHrP+6u5ykb5nCJwJ6q3MLrgg2QQl6TZOfZbaPdGZYhu3Kcwi4pDzIkogaD7jLW
-         Q7FGOY27f6V0mSmEJTj3IZ+GAJ4tak4J6BM/eHbDImXac78Jzg79gvd+XsJlTjf1vgru
-         AomQBhepa0rVcGUq8BkwaXkfrcGT/T9BEcIUdEoDNGdMLdqhaznYtLDarUgKJREEh3P/
-         7CbQ==
-X-Gm-Message-State: AOAM533aRsFX/l7rsrq+T96LT5gP2xYnmscA/5AtX/Gb+68pGE4WTnWj
-        dIUjh16QPNVTXMM7bKBPYAf67CC/DomZUlJ20SwuDQ==
-X-Google-Smtp-Source: ABdhPJyiNIf7FX2G9hbcHdCnWtNprAICIXfmTZ2O7M9XljL3Duwj1WbWX/AgvgI1z1Nmh9oOd4l1d7OyIUiw7QC5qEY=
-X-Received: by 2002:a0d:ddc6:0:b0:2f8:a506:a5c0 with SMTP id
- g189-20020a0dddc6000000b002f8a506a5c0mr9543818ywe.140.1651440937377; Sun, 01
- May 2022 14:35:37 -0700 (PDT)
+        Sun, 1 May 2022 17:42:46 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42CCC43AD1
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 14:39:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651441160; x=1682977160;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yqXtKM6SAhUbEx4YQlfI9bk2W+7ys7y+aKqJhnOA0EM=;
+  b=l51zx816lSv32P+K8TmvS0inG6ozdgit13l6lkQtSBEL2OnoEL8aIqF7
+   1kRoPuv9v2mN2o/aPijsSmLjn5glxGL3XUKXsX2ZEdjfpZW3qU4jn7EkN
+   WVTl8yhhRkrkvyFtAta1iscgR4jvy8WXWD+VaVa0Jwv9LBDkv1AIHaHTi
+   D3cw6lvARpHwfe0qXe/Fw4JWblP9fbvMejInq3r3Yx6nS2UeljE4Un3h8
+   kI4fZNmYAk1nkD0JZHJNQeo2nk5fQsnw5+48bKJoe3IeFEpgaK10qFkCu
+   ZyQucIOrLGaGf9wCao8r2rNfu1vyKtVY34T0taHI111XhGi0XXc3f67QZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="353491484"
+X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
+   d="scan'208";a="353491484"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 14:39:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
+   d="scan'208";a="598352113"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 01 May 2022 14:39:18 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nlHHi-00094t-1O;
+        Sun, 01 May 2022 21:39:18 +0000
+Date:   Mon, 2 May 2022 05:38:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [masahiroy:lto-cleanup-v2 48/55] s390-linux-ld: .tmp_vmlinux.btf:
+ warning: allocated section `.rodata' not in segment
+Message-ID: <202205020509.gCxo3JWK-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220419163810.2118169-1-arnd@kernel.org> <20220419163810.2118169-18-arnd@kernel.org>
-In-Reply-To: <20220419163810.2118169-18-arnd@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 1 May 2022 23:35:26 +0200
-Message-ID: <CACRpkda10Cv9W07FjO4Ww58V_cgP05Thz-7cv6aF=QC8iW2vDA@mail.gmail.com>
-Subject: Re: [PATCH 17/48] ARM: pxa: corgi: use gpio descriptors for audio
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     robert.jarzmik@free.fr, linux-arm-kernel@lists.infradead.org,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Tomas Cech <sleep_walker@suse.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-input@vger.kernel.org,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        alsa-devel@alsa-project.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,20 +61,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 6:41 PM Arnd Bergmann <arnd@kernel.org> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git lto-cleanup-v2
+head:   0f0c2c6e09ad55e3c5ddb69915460ee54eb913e4
+commit: 58024b1713c48e2cc450f3301fc48077638298cc [48/55] kbuild: embed symbol versions at final link of vmlinux or modules
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20220502/202205020509.gCxo3JWK-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git/commit/?id=58024b1713c48e2cc450f3301fc48077638298cc
+        git remote add masahiroy https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
+        git fetch --no-tags masahiroy lto-cleanup-v2
+        git checkout 58024b1713c48e2cc450f3301fc48077638298cc
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The audio driver should not use a hardwired gpio number
-> from the header. Change it to use a lookup table.
->
-> Acked-by: Mark Brown <broonie@kernel.org>
-> Cc: alsa-devel@alsa-project.org
-> Acked-by: Robert Jarzmik <robert.jarzmik@free.fr>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Looks good to me!
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+All warnings (new ones prefixed by >>):
 
-Yours,
-Linus Walleij
+>> s390-linux-ld: .tmp_vmlinux.btf: warning: allocated section `.rodata' not in segment
+   s390-linux-objcopy: stSX2pj5: warning: allocated section `.rodata' not in segment
+   s390-linux-ld: .tmp_vmlinux.kallsyms1: warning: allocated section `.rodata' not in segment
+>> s390-linux-ld: .tmp_vmlinux.kallsyms2: warning: allocated section `.rodata' not in segment
+>> s390-linux-ld: vmlinux: warning: allocated section `.rodata' not in segment
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

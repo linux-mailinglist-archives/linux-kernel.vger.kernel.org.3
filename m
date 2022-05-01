@@ -2,137 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 076015164C3
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 16:39:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA40C5164D1
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 16:52:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346165AbiEAOmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 10:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56970 "EHLO
+        id S1347743AbiEAOzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 10:55:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232359AbiEAOmI (ORCPT
+        with ESMTP id S232359AbiEAOzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 10:42:08 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E91149F2A
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 07:38:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651415921; x=1682951921;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cquL9LpGj1ymKGxbolyrfJ/ZYjYl+h86vKDu4S2wv1k=;
-  b=V0cbHspPSAlJiU/r3JRcy/R0OONp2KMEQ4vjN8fVv/j88CkZgIWXgaPc
-   P0VZ+vFAvqzl1Km7f0LD/nuq8i8tHd0ztMSGH0fEarmusdV8UFAaI9HFY
-   2C7V9GMmf3c4a+IOm/5KdnTOmiAt3+r3O9oOlyxjQLy1QL9sahjlVxcZ1
-   H0XNx/8nt/raIZC8rWuGu4JvkrV+M3bq3Io9eerihhHiuzfjUfJc9DBT5
-   51QE3VZTuk6p0wyhuLDY+EKm3uni5Yd+LJsLoLx8RXuakcfR8/HA6glIg
-   vMXaZQIPp6XTc9OQ8fYiYzSdjQ0BEU3bbGw/GHpt9e9hrEhv26J1t63xR
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="248987476"
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="248987476"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 07:38:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="545271287"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 01 May 2022 07:38:39 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nlAic-0008pH-Ta;
-        Sun, 01 May 2022 14:38:38 +0000
-Date:   Sun, 1 May 2022 22:38:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:crng/random/jd/premature-next 22/22]
- drivers/char/random.c:966:17: error: too many arguments to function
- 'crng_reseed'
-Message-ID: <202205012224.yDMg4Wy1-lkp@intel.com>
+        Sun, 1 May 2022 10:55:20 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3180E5620C;
+        Sun,  1 May 2022 07:51:54 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id i19so23634516eja.11;
+        Sun, 01 May 2022 07:51:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=giNJtnXNgjus22Md6SDUlBihs7U3KtlYNlVQZ8xutao=;
+        b=a2R50dzLINR25axZ4jeR88HH5E2Nq307jUkh0Fm5GrUuuRZWzUqA4Q5Hcg1nz8NZc1
+         DJxtx5/pE/tUY54O2NEmiZke2aFCxfiJy2CzXyM38kTCegrxmEM7fJZOmq6ftT4KK4Ox
+         VdGDODvbOAA6OjKoCjwOV/wcXudhvsbdlJykUnA5bwPlDv2gMYRSK0uyVMnIf+KhDKr3
+         /mz52xADn7825LNNfzJ8WXSFZArwfq2FQMx2cN9b9bNepacrtjkulh1LW2V/hR0FMaRy
+         AaA/tidfxqpRattY6gdS91nAKByH52NvlzonTRWrRjS9bdMN5abTt1B4ULrY9McMdJG+
+         k57w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=giNJtnXNgjus22Md6SDUlBihs7U3KtlYNlVQZ8xutao=;
+        b=Is8cJBwtYuOA3obtP43pxrLT9dMq6+FVxCK6K2YbvsAekdJrxhKVjOPylOyEKpn5Eq
+         fWOxIYEUDtzSa0em4VlpnOzW1hbkl+bu53xtwKaOlOJK2IHBr3NSfILb300UwCkedeS5
+         sZN4FbLYcuUOwFPFqW9HqgnJdbwJgyx64tuY0h4YAR30jPIiPKXuC1awJq1+bVimwCmp
+         RRZHz6YIExQ/fAF5wnPoXM57O2NVlLXdQmeOoYTPvy8v3XmVAoGuTy0lTnY91v3RPeAX
+         x8dyQEBVcMRuGC8b+kgqKLNEUYzswEYpu4vZdodPPEGB90Ght8NQtswlVJ9rcyEs31Lo
+         2MuA==
+X-Gm-Message-State: AOAM530+Azk4BFlWfQWSz/liIRre4B/1PlzDv1rdRhwdjwjGmvVlZkW8
+        6tt01HqSa1Nwqf7GanR14Rg=
+X-Google-Smtp-Source: ABdhPJzAO4OVzB2zKnvo1AwV1LuTGcHkEWaqmZKCH4RV4X60K2GobawEweLrCj7L0xaq2A5NPwSIoQ==
+X-Received: by 2002:a17:906:559:b0:6f3:8ba6:39c8 with SMTP id k25-20020a170906055900b006f38ba639c8mr7852405eja.486.1651416712663;
+        Sun, 01 May 2022 07:51:52 -0700 (PDT)
+Received: from ?IPV6:2a06:a003:501a:a7ce:5405:3d01:56ff:a60d? ([2a06:a003:501a:a7ce:5405:3d01:56ff:a60d])
+        by smtp.gmail.com with ESMTPSA id de46-20020a1709069bee00b006f3ef214e5asm2667120ejc.192.2022.05.01.07.51.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 01 May 2022 07:51:52 -0700 (PDT)
+Message-ID: <909094fd-ded0-38f9-b374-dd5f7b63e298@gmail.com>
+Date:   Sun, 1 May 2022 17:51:49 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: [PATCH v2 1/2] dt-bindings: mtd: partitions: Add binding for Sercomm
+ parser
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     NOGUCHI Hiroshi <drvlabo@gmail.com>, Karim <Karimdplay@gmail.com>,
+        M <x1@disroot.org>, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220406195557.1956-1-csharper2005@gmail.com>
+ <20220406195946.2019-1-csharper2005@gmail.com>
+ <8d0d8b27-35ff-3693-cf80-897b80c26b4e@linaro.org>
+ <57bebf2f-af4c-b2d9-10e5-19e5104946fb@gmail.com>
+ <29cfa017-bbaf-3aba-fe1d-06771957dbaa@linaro.org>
+ <1b391399-984b-7a63-3265-62ef09caec39@gmail.com>
+ <bd533827-b575-caad-c230-af060851b231@gmail.com>
+ <db70e53b-7484-43bf-e9c8-b6a2dce1fbb5@linaro.org>
+ <25da3f43-c46e-8108-2da9-0e4f2b7cc1a4@gmail.com>
+ <b279040a-a782-a2ca-2acb-2d8f07709081@linaro.org>
+ <1c19faf9-fc1c-9adf-d038-97b673a8f0be@gmail.com>
+ <a84df850-149e-9656-43fa-1f040368a9f1@linaro.org>
+ <0450d781-c506-c28e-a0e5-435bee16721f@gmail.com>
+ <2e51842a-d2c9-8953-13aa-02ad3abb3f14@linaro.org>
+ <ee5f293a-e59a-03d8-d9e4-ef35d33b5383@gmail.com>
+ <6c3ba4a7-80b0-5fd1-eb08-1f9e256b02c4@linaro.org>
+From:   Mikhail Zhilkin <csharper2005@gmail.com>
+In-Reply-To: <6c3ba4a7-80b0-5fd1-eb08-1f9e256b02c4@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block crng/random/jd/premature-next
-head:   0f5d33eaa0e077a5d2dfee756ebf254686f268bd
-commit: 0f5d33eaa0e077a5d2dfee756ebf254686f268bd [22/22] random: do not pretend to handle premature-next model
-config: powerpc-allnoconfig (https://download.01.org/0day-ci/archive/20220501/202205012224.yDMg4Wy1-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/0f5d33eaa0e077a5d2dfee756ebf254686f268bd
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block crng/random/jd/premature-next
-        git checkout 0f5d33eaa0e077a5d2dfee756ebf254686f268bd
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/char/
+On 5/1/2022 11:17 AM, Krzysztof Kozlowski wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> On 30/04/2022 20:54, Mikhail Zhilkin wrote:
+>>  patternProperties:
+>>    "@[0-9a-f]+$":
+>> -    $ref: "partition.yaml#"
+>> +    allOf:
+>> +      - $ref: "partition.yaml#"
+>> +      - if:
+>> +          properties:
+>> +            compatible:
+>> +              contains:
+>> +                const: sercomm,sc-partitions
+>> +        then:
+>> +          properties:
+>> +            sercomm,scpart-id:
+>> +              description: Partition id in Sercomm partition map. Parser
+>> +                uses this id to get partition offset and size values from
+>> +                dynamic partition map.
+> Partition offset and size values are not derived from scpart-id. I am
+> sorry but after all these questions - it's the third time now - you
+> never answer why do you need this property and what is it used for. From
+> all the examples it could be simply removed and the partition map will
+> be exactly the same.
+scpart-id is necessary to get (using mtd parser) partition offset and
+size from dynamic partition map (NOT from the reg property):
 
-All errors (new ones prefixed by >>):
+❯ xxd -e -c 12 -s $((0x800)) -l $((0x78)) mtd1
+00000800: 00000000 00000000 00100000  ............
+0000080c: 00000001 00100000 00100000  ............
+00000818: 00000002 00200000 00100000  ...... .....
+00000824: 00000003 00300000 00100000  ......0.....
+00000830: 00000004 00400000 00600000  ......@...`.
+0000083c: 00000005 00a00000 00600000  ..........`.
+00000848: 00000006 01000000 02000000  ............
+00000854: 00000007 03000000 02000000  ............
+00000860: 00000008 05000000 01400000  ..........@.
+0000086c: 00000009 06400000 01b80000  ......@.....
+          scpart-id  offset      size
 
-   drivers/char/random.c: In function 'random_pm_notification':
->> drivers/char/random.c:966:17: error: too many arguments to function 'crng_reseed'
-     966 |                 crng_reseed(true);
-         |                 ^~~~~~~~~~~
-   drivers/char/random.c:265:13: note: declared here
-     265 | static void crng_reseed(void)
-         |             ^~~~~~~~~~~
+With sercomm,sc-partitions the reg property will be ignored (offset =
+0x200000, size = 0x100000) and the values will be taken from partition map.
 
+For example we have this is dts:
 
-vim +/crng_reseed +966 drivers/char/random.c
+partition@200000 {
+            label = "Factory";
+            reg = <0x200000 0x100000>;
+            sercomm,scpart-id = <2>;
+            read-only;
+        };
 
-3655adc7089da4 Jason A. Donenfeld 2022-02-11  942  
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  943  static int random_pm_notification(struct notifier_block *nb, unsigned long action, void *data)
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  944  {
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  945  	unsigned long flags, entropy = random_get_entropy();
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  946  
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  947  	/*
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  948  	 * Encode a representation of how long the system has been suspended,
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  949  	 * in a way that is distinct from prior system suspends.
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  950  	 */
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  951  	ktime_t stamps[] = {
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  952  		ktime_get(),
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  953  		ktime_get_boottime(),
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  954  		ktime_get_real()
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  955  	};
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  956  
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  957  	spin_lock_irqsave(&input_pool.lock, flags);
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  958  	_mix_pool_bytes(&action, sizeof(action));
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  959  	_mix_pool_bytes(stamps, sizeof(stamps));
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  960  	_mix_pool_bytes(&entropy, sizeof(entropy));
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  961  	spin_unlock_irqrestore(&input_pool.lock, flags);
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  962  
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  963  	if (crng_ready() && (action == PM_RESTORE_PREPARE ||
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  964  	    (action == PM_POST_SUSPEND &&
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  965  	     !IS_ENABLED(CONFIG_PM_AUTOSLEEP) && !IS_ENABLED(CONFIG_ANDROID)))) {
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01 @966  		crng_reseed(true);
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  967  		pr_notice("crng reseeded on system resumption\n");
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  968  	}
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  969  	return 0;
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  970  }
-da1a2e23f28eac Jason A. Donenfeld 2022-05-01  971  
+Dynamic partition map:
 
-:::::: The code at line 966 was first introduced by commit
-:::::: da1a2e23f28eac7746add084c7807fffcf255f9d random: mix in timestamps and reseed on system restore
+scpart-id = 2; offset = 0x00200000; size = 0x00100000
 
-:::::: TO: Jason A. Donenfeld <Jason@zx2c4.com>
-:::::: CC: Jason A. Donenfeld <Jason@zx2c4.com>
+00000002 00200000 00100000  ...... .....
+
+In this example the offset and size are the same in reg and dynamic
+partition map. If device have bad blocks on NAND the values will be a
+little different. And we have to take partition offsets from partition
+map to avoid boot loops, wrong eeprom location and other bad things.
+
+Is there anything that needs to be explained in more detail?
+
+> Best regards,
+> Krzysztof
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+Mikhail
+

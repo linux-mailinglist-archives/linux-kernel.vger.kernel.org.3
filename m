@@ -2,113 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C15AE516241
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 08:36:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C25516257
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 09:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242356AbiEAGjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 02:39:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57800 "EHLO
+        id S242449AbiEAGxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 02:53:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231721AbiEAGjc (ORCPT
+        with ESMTP id S242235AbiEAGxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 02:39:32 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E6E101F9;
-        Sat, 30 Apr 2022 23:36:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=zMD4l/5Yp5noATOxsomtn9uqwj1ijFkZXxY4PadNJEc=; b=DiBgExZ2aFk1+wh8QtkKwZo18+
-        RILXrbmHMSW20x90e8CQKMMcK950wv7VWUDausJJR3sIyNzeuYfaT6NBhDS6NeduoWG6F+AzvDicO
-        R1GD5P5bEe2zf4x0paq0m4WyzGB+efA6zUIx3WXoKQXj50r5svCBeNq1Sctg3PDzQF9HYS7QRc8x3
-        3RcbAeFOOOybNT5og/ZfN2hDEghLVDRryTrjdPhn9UXDJipkaSa9TxQ8Xj/7L6ertd1a3Wao1xd3x
-        PnnhEDUs07YOwTmQKOgql7SpyA/BNv2ObJs58rDZnghi59En/6A29x/linm2u4pcrU1GhQhRLbAjg
-        edmDqv2g==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58470)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nl3BG-0005zM-7z; Sun, 01 May 2022 07:35:41 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nl3B6-0003fQ-IU; Sun, 01 May 2022 07:35:32 +0100
-Date:   Sun, 1 May 2022 07:35:32 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Huacai Chen <chenhuacai@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>
-Subject: Re: [PATCH V9 21/24] LoongArch: Add zboot (compressed kernel) support
-Message-ID: <Ym4qNILcz+W7dC9i@shell.armlinux.org.uk>
-References: <20220430090518.3127980-1-chenhuacai@loongson.cn>
- <20220430090518.3127980-22-chenhuacai@loongson.cn>
- <CAK8P3a0LwJ3mMQMFkxGxr+umCMM3dKGRnLF+dMCmD5j43hq2sA@mail.gmail.com>
- <CAAhV-H6vPdLeup38YTj64Xxxk+PTact=DMJTs9efsa1b3t-y2A@mail.gmail.com>
+        Sun, 1 May 2022 02:53:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4D6A7E585
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 23:50:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651387806;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=q3u3MlJs34Y3mqoufs+636rYeTTf6eHsg/a1Eoy23vg=;
+        b=QzZGxAU/4z9ehAnJDw250F3Ft2FuOVUimus99mftgeDzVoV6z7Wu43LUxBPg8VIVwdY7uj
+        lA9oRkdi+ZjOTWHLX5YKma8XxczBQmbnuXj6aHbfwb7UrZXDl12843gSamXP21PlbDh/ij
+        DznZEbd7MZEWG/zIG7Ou5dlOFaDtGu4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-612-Q1LTSDhBP5a7f4e66Oa3zA-1; Sun, 01 May 2022 02:50:01 -0400
+X-MC-Unique: Q1LTSDhBP5a7f4e66Oa3zA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 78A3A8002BF;
+        Sun,  1 May 2022 06:50:00 +0000 (UTC)
+Received: from starship (unknown [10.40.192.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 463DA14152E6;
+        Sun,  1 May 2022 06:49:58 +0000 (UTC)
+Message-ID: <3f0a9c9782b90e882da1229c00241da8cef89b21.camel@redhat.com>
+Subject: Re: [PATCH v2 11/12] KVM: SVM: Do not inhibit APICv when x2APIC is
+ present
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        pbonzini@redhat.com, joro@8bytes.org, jon.grimm@amd.com,
+        wei.huang2@amd.com, terry.bowman@amd.com
+Date:   Sun, 01 May 2022 09:49:57 +0300
+In-Reply-To: <YmwZxAWJ8KqHodbf@google.com>
+References: <20220412115822.14351-1-suravee.suthikulpanit@amd.com>
+         <20220412115822.14351-12-suravee.suthikulpanit@amd.com>
+         <3fd0aabb6288a5703760da854fd6b09a485a2d69.camel@redhat.com>
+         <01460b72-1189-fef1-9718-816f2f658d42@amd.com>
+         <b9ee5f62e904a690d7e2d8837ade8ece7e24a359.camel@redhat.com>
+         <41b1e63ad6e45be019bbedc93bd18cfcb9475b06.camel@redhat.com>
+         <YmwZxAWJ8KqHodbf@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAhV-H6vPdLeup38YTj64Xxxk+PTact=DMJTs9efsa1b3t-y2A@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 01, 2022 at 01:22:25PM +0800, Huacai Chen wrote:
-> Hi, Arnd,
+On Fri, 2022-04-29 at 17:00 +0000, Sean Christopherson wrote:
+> On Tue, Apr 26, 2022, Maxim Levitsky wrote:
+> > On Tue, 2022-04-26 at 10:06 +0300, Maxim Levitsky wrote:
+> > BTW, can I ask you to check something on the AMD side of things of AVIC?
+> > 
+> > I noticed that AMD's manual states that:
+> > 
+> > "Multiprocessor VM requirements. When running a VM which has multiple virtual CPUs, and the
+> > VMM runs a virtual CPU on a core which had last run a different virtual CPU from the same VM,
+> > regardless of the respective ASID values, care must be taken to flush the TLB on the VMRUN using a
+> > TLB_CONTROL value of 3h. Failure to do so may result in stale mappings misdirecting virtual APIC
+> > accesses to the previous virtual CPU's APIC backing page."
+> > 
+> > It it relevant to KVM? I don't fully understand why it was mentioned that ASID doesn't matter,
+> > what makes it special about 'virtual CPU from the same VM' if ASID doesn't matter? 
 > 
-> On Sat, Apr 30, 2022 at 7:02 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > On Sat, Apr 30, 2022 at 11:05 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> > >
-> > > This patch adds zboot (self-extracting compressed kernel) support, all
-> > > existing in-kernel compressing algorithm and efistub are supported.
-> > >
-> > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> >
-> > I have no objections to adding a decompressor in principle, and
-> > the implementation seems reasonable. However, I think we should try to
-> > be consistent between architectures. On both arm64 and riscv, the
-> > maintainers decided to not include a decompressor and instead leave
-> > it up to the boot loader to decompress the kernel and enter it from there.
-> X86, ARM32 and MIPS already support self-extracting kernel, and in
-> 5.17 we even support self-extracting modules. So I think a
-> self-extracting kernel is better than a pure compressed kernel.
+> I believe it's calling out that, because vCPUs from the same VM likely share an ASID,
+> the magic TLB entry for the APIC-access page, which redirects to the virtual APIC page,
+> will be preserved.  And so if the hypervisor doesn't flush the ASID/TLB, accelerated
+> xAPIC accesses for the new vCPU will go to the previous vCPU's virtual APIC page.
 
-FYI, kernel modules are not self-extracting. They don't contain the code
-to do the decompression - that is contained within the kernel, and it is
-the kernel that does the decompression. The userspace tooling tells the
-kernel that the module is compressed.
+This is what I want to think as well, but the manual says explicitly 
+"regardless of the respective ASID values"
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+On the face value of it, the only logical way to read this IMHO,
+is that every time apic backing page is changed, we need to issue a TLB flush.
+
+Best regards,
+	Maxim Levitsky
+
+> 
+> Intel has the same requirement, though this specific scenario isn't as well documented.
+> E.g. even if using EPT and VPID, the EPT still needs to be invalidated because the
+> TLB can cache guest-physical mappings, which are not associated with a VPID.
+> 
+> Huh.  I was going to say that KVM does the necessary flushes in vmx_vcpu_load_vmcs()
+> and pre_svm_run(), but I don't think that's true.  KVM flushes if the _new_ VMCS/VMCB
+> is being migrated to a different pCPU, but neither VMX nor SVM flush when switching
+> between vCPUs that are both "loaded" on the current pCPU.
+> 
+> Switching between vmcs01 and vmcs02 is ok, because KVM always forces a different
+> EPTP, even if L1 is using shadow paging (the guest_mode bit in the role prevents
+> reusing a root).  nSVM is "ok" because it flushes on every transition anyways.
+> 
+
+

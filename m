@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F2DA5162FB
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 10:44:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A94B251630F
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 10:44:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343540AbiEAIqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 04:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42064 "EHLO
+        id S1344102AbiEAIrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 04:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343496AbiEAIpu (ORCPT
+        with ESMTP id S1343590AbiEAIpy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 04:45:50 -0400
+        Sun, 1 May 2022 04:45:54 -0400
 Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E12E4C78B;
-        Sun,  1 May 2022 01:42:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF3C4C7BE;
+        Sun,  1 May 2022 01:42:26 -0700 (PDT)
 Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-12.nifty.com with ESMTP id 2418f2Rt008518;
-        Sun, 1 May 2022 17:41:07 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 2418f2Rt008518
+        by conuserg-12.nifty.com with ESMTP id 2418f2Ru008518;
+        Sun, 1 May 2022 17:41:08 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 2418f2Ru008518
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
         s=dec2015msa; t=1651394468;
-        bh=nqOwWZU/3WvDM0nGPo3Nyua+Qk38pqiTNHwRVkuJFf0=;
+        bh=b7dWhvTr9FrQ+5Dw80ljJlpc6iDLA8xOJ7ErDXQoiLs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qKhAqpGlRTBN2yfW448P+xDa3CHR5Udd/iH6n9/6rI7Ox0XpSOxK4l/jeJgvPgIa7
-         KqD+p/NXwOWMnvA5el3GPM2k38vyfqoIWWiVvRYyEkaHUX3geSC5s6jes4496/LJDP
-         +WCHX4eGjgl5ytehiUNiToxt0qALNdFQNFMOQRtupuEW/V83tRim95tXsaFB+z/FCX
-         QZRXR2IhHcHMN3bBPIQRMise43ZO+rMkKUgTonTnt8ehYbeI3ZB5s/vlc5JlOsNoR3
-         np8Tt/l9VqJqGMQHrDTaR5+skro6PhyiHuNNauKeM0FUHJOLUizsQF3aPJdHnuuYwT
-         iGfNrZ+dJXR2g==
+        b=R13VRpUybqhQRpyVbQu+a3VqGuVr5Lo089hvMLNpmQbqn3HWZ2bG0jMf8x96YikTn
+         UdvblE148Z0hgr3flP3TJnc66HF08ogif9sulMtKZT27oEbpMfEyBz07LZ4xOVxmF1
+         l6vrZweWt8OzMRN4ckm+yLsBozkqrtU9msAz9CG6TL0sYDrdG5G329q7dN9fw/VsAI
+         hwpFdMAubQRy5BUDgUsM/pgzdQJbnk0scxpXeAEETXt3+UrAbWtBHXiEzst9h3S+AO
+         MAjltbzQ8HE5WCJi0kiXuih7QO3T1pbKzZojBgKAmNlMcX1oFc7VS6HDk36oKPJ8m6
+         A1fnTX4rkPBsg==
 X-Nifty-SrcIP: [133.32.177.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
@@ -36,9 +36,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Michal Marek <michal.lkml@markovi.net>
-Subject: [PATCH v2 08/26] modpost: traverse the namespace_list in order
-Date:   Sun,  1 May 2022 17:40:14 +0900
-Message-Id: <20220501084032.1025918-9-masahiroy@kernel.org>
+Subject: [PATCH v2 09/26] modpost: dump Module.symvers in the same order of modules.order
+Date:   Sun,  1 May 2022 17:40:15 +0900
+Message-Id: <20220501084032.1025918-10-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220501084032.1025918-1-masahiroy@kernel.org>
 References: <20220501084032.1025918-1-masahiroy@kernel.org>
@@ -53,8 +53,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the doubly linked list to traverse the list in the added order.
-This makes the code more consistent.
+modpost dumps the exported symbols into Module.symvers, but currently
+in random order because it iterates in the hash table.
+
+Add a linked list of exported symbols in struct module, so we can
+iterate on symbols per module.
+
+This commit makes Module.symvers much more readable; the outer loop in
+write_dump() iterates over the modules in the order of modules.order,
+and the inner loop dumps symbols in each module.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
@@ -62,113 +69,84 @@ Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
 (no changes since v1)
 
- scripts/mod/modpost.c | 33 +++++++++++++++------------------
- scripts/mod/modpost.h |  4 ++--
- 2 files changed, 17 insertions(+), 20 deletions(-)
+ scripts/mod/modpost.c | 29 +++++++++++++----------------
+ scripts/mod/modpost.h |  1 +
+ 2 files changed, 14 insertions(+), 16 deletions(-)
 
 diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 5e99493b0a82..d0cf94e1e984 100644
+index d0cf94e1e984..cd49ef7b5953 100644
 --- a/scripts/mod/modpost.c
 +++ b/scripts/mod/modpost.c
-@@ -186,6 +186,8 @@ static struct module *new_module(const char *modname)
+@@ -185,6 +185,7 @@ static struct module *new_module(const char *modname)
+ 	mod = NOFAIL(malloc(sizeof(*mod) + strlen(modname) + 1));
  	memset(mod, 0, sizeof(*mod));
  
++	INIT_LIST_HEAD(&mod->exported_symbols);
  	INIT_LIST_HEAD(&mod->unresolved_symbols);
-+	INIT_LIST_HEAD(&mod->missing_namespaces);
-+	INIT_LIST_HEAD(&mod->imported_namespaces);
+ 	INIT_LIST_HEAD(&mod->missing_namespaces);
+ 	INIT_LIST_HEAD(&mod->imported_namespaces);
+@@ -211,7 +212,7 @@ static struct module *new_module(const char *modname)
  
- 	strcpy(mod->name, modname);
- 	mod->is_vmlinux = (strcmp(modname, "vmlinux") == 0);
-@@ -288,39 +290,34 @@ static struct symbol *find_symbol(const char *name)
- }
+ struct symbol {
+ 	struct symbol *next;
+-	struct list_head list;	/* link to module::unresolved_symbols */
++	struct list_head list;	/* link to module::exported_symbols or module::unresolved_symbols */
+ 	struct module *module;
+ 	char *namespace;
+ 	unsigned int crc;
+@@ -413,6 +414,7 @@ static struct symbol *sym_add_exported(const char *name, struct module *mod,
  
- struct namespace_list {
--	struct namespace_list *next;
-+	struct list_head list;
- 	char namespace[];
- };
- 
--static bool contains_namespace(struct namespace_list *list,
--			       const char *namespace)
-+static bool contains_namespace(struct list_head *head, const char *namespace)
+ 	if (!s) {
+ 		s = new_symbol(name, mod, export);
++		list_add_tail(&s->list, &mod->exported_symbols);
+ 	} else if (!external_module || s->module->is_vmlinux ||
+ 		   s->module == mod) {
+ 		warn("%s: '%s' exported twice. Previous export was in %s%s\n",
+@@ -2456,22 +2458,17 @@ static void read_dump(const char *fname)
+ static void write_dump(const char *fname)
  {
--	for (; list; list = list->next)
-+	struct namespace_list *list;
-+
-+	list_for_each_entry(list, head, list) {
- 		if (!strcmp(list->namespace, namespace))
- 			return true;
-+	}
+ 	struct buffer buf = { };
+-	struct symbol *symbol;
+-	const char *namespace;
+-	int n;
++	struct module *mod;
++	struct symbol *sym;
  
- 	return false;
- }
- 
--static void add_namespace(struct namespace_list **list, const char *namespace)
-+static void add_namespace(struct list_head *head, const char *namespace)
- {
- 	struct namespace_list *ns_entry;
- 
--	if (!contains_namespace(*list, namespace)) {
--		ns_entry = NOFAIL(malloc(sizeof(struct namespace_list) +
-+	if (!contains_namespace(head, namespace)) {
-+		ns_entry = NOFAIL(malloc(sizeof(*ns_entry) +
- 					 strlen(namespace) + 1));
- 		strcpy(ns_entry->namespace, namespace);
--		ns_entry->next = *list;
--		*list = ns_entry;
-+		list_add_tail(&ns_entry->list, head);
+-	for (n = 0; n < SYMBOL_HASH_SIZE ; n++) {
+-		symbol = symbolhash[n];
+-		while (symbol) {
+-			if (!symbol->module->from_dump) {
+-				namespace = symbol->namespace;
+-				buf_printf(&buf, "0x%08x\t%s\t%s\t%s\t%s\n",
+-					   symbol->crc, symbol->name,
+-					   symbol->module->name,
+-					   export_str(symbol->export),
+-					   namespace ? namespace : "");
+-			}
+-			symbol = symbol->next;
++	list_for_each_entry(mod, &modules, list) {
++		if (mod->from_dump)
++			continue;
++		list_for_each_entry(sym, &mod->exported_symbols, list) {
++			buf_printf(&buf, "0x%08x\t%s\t%s\t%s\t%s\n",
++				   sym->crc, sym->name, mod->name,
++				   export_str(sym->export),
++				   sym->namespace ?: "");
+ 		}
  	}
- }
- 
--static bool module_imports_namespace(struct module *module,
--				     const char *namespace)
--{
--	return contains_namespace(module->imported_namespaces, namespace);
--}
--
- static const struct {
- 	const char *str;
- 	enum export export;
-@@ -2190,7 +2187,7 @@ static void check_exports(struct module *mod)
- 			basename = mod->name;
- 
- 		if (exp->namespace &&
--		    !module_imports_namespace(mod, exp->namespace)) {
-+		    !contains_namespace(&mod->imported_namespaces, exp->namespace)) {
- 			modpost_log(allow_missing_ns_imports ? LOG_WARN : LOG_ERROR,
- 				    "module %s uses symbol %s from namespace %s, but does not import it.\n",
- 				    basename, exp->name, exp->namespace);
-@@ -2489,12 +2486,12 @@ static void write_namespace_deps_files(const char *fname)
- 
- 	list_for_each_entry(mod, &modules, list) {
- 
--		if (mod->from_dump || !mod->missing_namespaces)
-+		if (mod->from_dump || list_empty(&mod->missing_namespaces))
- 			continue;
- 
- 		buf_printf(&ns_deps_buf, "%s.ko:", mod->name);
- 
--		for (ns = mod->missing_namespaces; ns; ns = ns->next)
-+		list_for_each_entry(ns, &mod->missing_namespaces, list)
- 			buf_printf(&ns_deps_buf, " %s", ns->namespace);
- 
- 		buf_printf(&ns_deps_buf, "\n");
+ 	write_buf(&buf, fname);
 diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
-index 65296eca20a1..2a8c1ad0305e 100644
+index 2a8c1ad0305e..1c2d6498d764 100644
 --- a/scripts/mod/modpost.h
 +++ b/scripts/mod/modpost.h
-@@ -120,9 +120,9 @@ struct module {
- 	struct buffer dev_table_buf;
- 	char	     srcversion[25];
- 	// Missing namespace dependencies
--	struct namespace_list *missing_namespaces;
-+	struct list_head missing_namespaces;
- 	// Actual imported namespaces
--	struct namespace_list *imported_namespaces;
-+	struct list_head imported_namespaces;
- 	char name[];
- };
+@@ -111,6 +111,7 @@ buf_write(struct buffer *buf, const char *s, int len);
  
+ struct module {
+ 	struct list_head list;
++	struct list_head exported_symbols;
+ 	struct list_head unresolved_symbols;
+ 	bool is_gpl_compatible;
+ 	bool from_dump;		/* true if module was loaded from *.symvers */
 -- 
 2.32.0
 

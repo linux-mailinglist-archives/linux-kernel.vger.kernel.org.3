@@ -2,106 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E9485168BE
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 00:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0BED5168C0
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 00:42:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355654AbiEAWoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 18:44:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60460 "EHLO
+        id S1377946AbiEAWps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 18:45:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234297AbiEAWoH (ORCPT
+        with ESMTP id S234297AbiEAWpp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 18:44:07 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94C3C14023;
-        Sun,  1 May 2022 15:40:40 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 2E01592009C; Mon,  2 May 2022 00:40:39 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 2645D92009B;
-        Sun,  1 May 2022 23:40:39 +0100 (BST)
-Date:   Sun, 1 May 2022 23:40:39 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        "open list:IA64 (Itanium) PLATFORM" <linux-ia64@vger.kernel.org>,
-        "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
-        "open list:SUPERH" <linux-sh@vger.kernel.org>,
-        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
-        <sparclinux@vger.kernel.org>
-Subject: Re: [RFC v2 01/39] Kconfig: introduce HAS_IOPORT option and select
- it as necessary
-In-Reply-To: <20220429135108.2781579-2-schnelle@linux.ibm.com>
-Message-ID: <alpine.DEB.2.21.2205012335020.9383@angie.orcam.me.uk>
-References: <20220429135108.2781579-1-schnelle@linux.ibm.com> <20220429135108.2781579-2-schnelle@linux.ibm.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Sun, 1 May 2022 18:45:45 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BDD138BC7;
+        Sun,  1 May 2022 15:42:18 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ks1SS5Gcrz4xLS;
+        Mon,  2 May 2022 08:42:16 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1651444937;
+        bh=Ja6QUs7OnhdZ/iA7yTkwhQXIGgTj/2x9XaqehBvIwr8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=CfL1Ba6iSDshGnfiPKOuVBthhnXSbv+veZ7znQxiqhEIqQ1vayzYY+A0zOm/gAVW5
+         rhs2L0ndwqXCQQkrNc2tcMnzOx3/rMvEGj2yAui5WeOHRdUt/cUYOM3Y3Bomlo0Z2W
+         sOx/NZ6Im3Q78b4iTITVQgdgRmJgaHBCcyiyVvFpeqiBZye+l1fcCwgeEN+NE8eQmH
+         NlT2QavElwDMNQfDs8wwKTXiMv1grqetOT6zjnsUOU2G2zaA2S1wOhOTW4GjCAEJiY
+         SNRi5qjwJcRVXIKZnX3w93xHfjE05v7s/LG8ARUvW92z80GsClA+PkOVl0y+D+J8J1
+         M/Qj1UMFJfkUg==
+Date:   Mon, 2 May 2022 08:42:15 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Rob Clark <robdclark@gmail.com>, Sean Paul <seanpaul@chromium.org>
+Cc:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the drm-msm tree
+Message-ID: <20220502084215.22650230@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/5ao83D5c4YM5zRVZjz9o.2.";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 29 Apr 2022, Niklas Schnelle wrote:
+--Sig_/5ao83D5c4YM5zRVZjz9o.2.
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> We introduce a new HAS_IOPORT Kconfig option to indicate support for
-> I/O Port access. In a future patch HAS_IOPORT=n will disable compilation
-> of the I/O accessor functions inb()/outb() and friends on architectures
-> which can not meaningfully support legacy I/O spaces such as s390 or
-> where such support is optional. The "depends on" relations on HAS_IOPORT
-> in drivers as well as ifdefs for HAS_IOPORT specific sections will be
-> added in subsequent patches on a per subsystem basis.
-[...]
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index de3b32a507d2..4c55df08d6f1 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -47,6 +47,7 @@ config MIPS
->  	select GENERIC_SMP_IDLE_THREAD
->  	select GENERIC_TIME_VSYSCALL
->  	select GUP_GET_PTE_LOW_HIGH if CPU_MIPS32 && PHYS_ADDR_T_64BIT
-> +	select HAS_IOPORT
->  	select HAVE_ARCH_COMPILER_H
->  	select HAVE_ARCH_JUMP_LABEL
->  	select HAVE_ARCH_KGDB if MIPS_FP_SUPPORT
+Hi all,
 
- NAK, not all MIPS systems have the port I/O space, and we have it already 
-handled via the NO_IOPORT_MAP option.  We'll need to have HAS_IOPORT set 
-to !NO_IOPORT_MAP (or vice versa) for the MIPS architecture.
+In commit
 
-  Maciej
+  e7855117de91 ("drm/msm/dp: stop event kernel thread when DP unbind")
+
+Fixes tag
+
+  Fixes: e91e3065a806 ("drm/msm/dp: Add DP compliance tests on Snapdragon C=
+hipsets")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: 8ede2ecc3e5e ("drm/msm/dp: Add DP compliance tests on Snapdragon Chi=
+psets")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/5ao83D5c4YM5zRVZjz9o.2.
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJvDMcACgkQAVBC80lX
+0Gz5qQf/d/DCzVAzm4PFEUzW1Ps6hUYn+M7a8VbGbJyIiczaY4XVUaetO/1/xT7G
+6w9RdxyW55aQOjuTV1Jk6ot9vbmiRSKY7fZA64K0Qc06u+yK9lhinBxJOO/dPwYJ
+uhiBRdH8lZ6DQ3b3G5MkPjmN0qFs81CRLt+962BRNVsD2eSXPT9L9zUFBj3c+aOr
+eFy8lrUHa621jhuJMUboREEU6a+xl+k5xM7auGAHvyQOISkyAi1modnbgNVah3e7
+vNfkKMnUsfJNpxnNWc/PhEcSAexuh5VENJ6/BrU2ofHyVhoSnk29oxFjMMPEwYMH
+SUbdDvzQll825MeJtKBdYTkpJWc1XQ==
+=LCrB
+-----END PGP SIGNATURE-----
+
+--Sig_/5ao83D5c4YM5zRVZjz9o.2.--

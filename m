@@ -2,78 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E654516123
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 02:54:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46E42516126
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 03:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238275AbiEAA4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 20:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54316 "EHLO
+        id S238771AbiEABGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 21:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232966AbiEAA4E (ORCPT
+        with ESMTP id S232966AbiEABGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 20:56:04 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54085712CF
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 17:52:40 -0700 (PDT)
+        Sat, 30 Apr 2022 21:06:14 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A1D1EEC7
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 18:02:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651366360; x=1682902360;
+  t=1651366969; x=1682902969;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=KeiIkU5A2/ILSDDQ3rm64QTRXlvB3gB+6CBbAyTV0Pc=;
-  b=VBekC33JdTRVNs0vwzr+0F+JEE1t1QlvGjdjBSD9uvoDgOASq1/CYfPb
-   u5rmeHSa1YGQ0fTjoWDMbePPhk9k0HJygirVnzCLIG5TNKi52YEQvI9qz
-   6wo6jP9YkTRGWlmeh0/EbWs4JJOsfOu0fccID0JVrc+ZcYOMqDSUmdybP
-   LCB44hpEighy0PVDuzXDSXN0syr2URxq6x6AMdBxE+pzvY9+agp8iY/KN
-   0DScc7w+QZMwcK1aNRuLO54WqTWDYahnZuUGPsghwdGc+8COAc6ziT/NC
-   xtv2lZifE8noJbWdnZ2iLlG+xiB7wkfaRH3fyfWr398etNcVZmiGWGkgL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10333"; a="292117999"
+  bh=buYy0AIOZ5elzslx5uVRcad8u3HB9OJai1BPjDQvznU=;
+  b=jBI0rfKHvqa+MO9Qqo7aueF1lyQXsVUx+o0b0ZZWf7hj5eNMYM5fyj3T
+   KEOposMKQK4xCtj+uj3WONcASzl1L/zXMXyhCBloE09Lsrwz+vdZuU0y/
+   upSutWkP9d3KWJ+At3NFPKItqfGTlhgiV544nUdj/ZeQVDyAID1sNxnf6
+   XufwsDWrjW3CgH1zravYRHIx8T8OY5Gw2V9cs2sTiCC1NHvwk/OQ6sKIM
+   6yERPec/J4p8tdbJE9TUtS3oyYYMaqbfJRpGvwMw9m2iooomTDxam5NPt
+   DGDw2yI1bxjAemhVLup0SINCnHTCeSiHifTD4EF2hrGD6iabZLbmrTGaD
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10333"; a="248901157"
 X-IronPort-AV: E=Sophos;i="5.91,189,1647327600"; 
-   d="scan'208";a="292117999"
+   d="scan'208";a="248901157"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2022 17:52:40 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2022 18:02:48 -0700
 X-IronPort-AV: E=Sophos;i="5.91,189,1647327600"; 
-   d="scan'208";a="732795574"
+   d="scan'208";a="732800067"
 Received: from svkandu1-mobl.amr.corp.intel.com (HELO [10.212.233.173]) ([10.212.233.173])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2022 17:52:38 -0700
-Message-ID: <176621b0-9ae1-e6e9-50a3-a336a483282b@linux.intel.com>
-Date:   Sat, 30 Apr 2022 17:52:37 -0700
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2022 18:02:48 -0700
+Message-ID: <9ea1434b-9b61-62f4-85db-ae1369740ec7@linux.intel.com>
+Date:   Sat, 30 Apr 2022 18:02:48 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Firefox/91.0 Thunderbird/91.7.0
 Subject: Re: [PATCH v4 3/3] x86/tdx: Add Quote generation support
 Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
         Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org
 References: <20220422233418.1203092-1-sathyanarayanan.kuppuswamy@linux.intel.com>
  <20220422233418.1203092-4-sathyanarayanan.kuppuswamy@linux.intel.com>
- <5dabb285563c3eb06cf4a06ad264556c11ffc928.camel@intel.com>
+ <20220427061438.GB4167861@ls.amr.corp.intel.com>
 From:   Sathyanarayanan Kuppuswamy 
         <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <5dabb285563c3eb06cf4a06ad264556c11ffc928.camel@intel.com>
+In-Reply-To: <20220427061438.GB4167861@ls.amr.corp.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kai,
+Hi,
 
-On 4/26/22 2:47 AM, Kai Huang wrote:
-> On Fri, 2022-04-22 at 16:34 -0700, Kuppuswamy Sathyanarayanan wrote:
+On 4/26/22 11:14 PM, Isaku Yamahata wrote:
+> On Fri, Apr 22, 2022 at 04:34:18PM -0700,
+> Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
+> 
 >> In TDX guest, the second stage in attestation process is quote
 >> generation and signing. GetQuote hypercall can be used by the TD guest
 >> to request VMM facilitate the quote generation via a Quoting Enclave
@@ -177,59 +179,39 @@ On 4/26/22 2:47 AM, Kai Huang wrote:
 >> +		ret = -EFAULT;
 >> +		goto quote_failed;
 >> +	}
-> 
-> So if I read correctly, you are depending on userspace to prepare the
-> tdx_quote_hdr, right?
-
-Yes.
-
-> 
-> If so, should the driver check the correctness of the hdr? For instance, whether
-> hdr.version == 1, etc?
-
-If there are incorrect values in quote header, GetQuote hypercall will
-fail automatically. So I don't think we need to check for it explicitly
-here and return error.
-
-> 
 >> +
 >> +	/* Submit GetQuote Request */
 >> +	err = tdx_hcall_get_quote(quote_buf, quote_buf_len);
 >> +	if (err) {
 >> +		/* if failed, copy hypercall error code to user buffer */
 >> +		ret = put_user(err, (long __user *)argp);
+> 
+> ret is ignored.  Do you want to return TDX status code to user?
+> Does just -EIO suffice?
+> (If you really want, the TDX status code should be defined as uapi.)
+
+I will remove it in next version.
+
+> 
+> 
 >> +		ret = -EIO;
 >> +		goto quote_failed;
 >> +	}
-> 
-> Similar to getting TDREPORT, is there any particular case that needs to pass
-> TDVMCALL error code back to userspace?
-
-I have mainly returned this error code for debug purpose. It does not
-have any other use case. As I have mentioned for TDREPORT use case, I
-plan to remove it in next version.
-
-> 
 >> +
 >> +	/* Wait for attestation completion */
 >> +	ret = wait_for_completion_interruptible_timeout(
 >> +			&req_compl,
 >> +			msecs_to_jiffies(quote_req.timeout));
->> +	if (ret <= 0) {
->> +		ret = -EIO;
->> +		goto quote_failed;
->> +	}
->> +
->> +	/* Copy generated Quote data back to user buffer */
->> +	if (copy_to_user((void __user *)quote_req.buf, quote_buf, quote_buf_len)) {
->> +		ret = -EFAULT;
->> +		goto quote_failed;
->> +	}
->> +
->> +	quote_hdr = (struct tdx_quote_hdr *)quote_buf;
->> +
->> +	/* Make sure quote generation is successful */
->> +	if (!quote_hdr->status)
+> 
+> If you want to support timeout, you need to handle in-flight case below.
+
+Regarding IN_FLIGHT case, I will let user agent handle it. I am going to
+change this code to just copy the quote data once hypercall is
+successful.
+
+
+> 
+> 
 >> +		ret = 0;
 >> +	else
 >> +		ret = -EIO;
@@ -238,23 +220,22 @@ plan to remove it in next version.
 >> +	if (quote_buf)
 >> +		dma_free_coherent(&pdev->dev, quote_buf_len, quote_buf, handle);
 > 
-> Will dma_free_coherent() convert the shared buffer back to private (using
-> MapGPA)?
+> quote_buf can be still owned by VMM because timeout is used above.
+> Even if interrupt is arrived,  quote_hdr->status can still be in-flight.
+
+Since timeout behavior is not clearly defined in the spec, I let the
+user agent configure the appropriate timeout value. Once it timesout,
+I assume QE/QGS/VMM will no longer respond or use the buffer. I have
+planned to add the following help in struct tdx_quote_hdr.timeout.
+
+@timeout: Time to wait for VMM to respond back to GetQuote request.
+This value is dependent on response time of the Quoting Enclave
+(QE) or Quote generation service (QGS) involved. It is expected
+the user agent is aware of it and sets the appropriate value.
+
+Agree ?
+
 > 
-> If so, since it's possible to timeout, if the buffer still have IN_FLIGHT flag
-> set (VMM is still using it), can we do it?
-
-We depend on user agent to set appropriate timeout specific to QE/QGS
-involved. So once it timeout, we assume VMM/QE/QGS will not update it
-anymore.
-
-> 
-> Isaku, what will happen if guest uses MapGPA to convert a buffer back to private
-> while it still has IN_FLIGHT set?
-
-This is not defined in spec. Since we allow user agent select the time
-timeout, we assume QE/QGS will not update it after the timeout value.
-
 > 
 >> +
 >> +	mutex_unlock(&quote_lock);
@@ -355,14 +336,6 @@ timeout, we assume QE/QGS will not update it after the timeout value.
 >> + * return 0 on success or failure error number.
 >> + */
 >> +long tdx_hcall_get_quote(void *data, u64 len)
-> 
-> Rename data/len to something meaningful, i.e. quote_buf, quote_len ?
-
-I plan to move the hypercall implementation to attest.c.
-
-As for names, I am fine with quote_buf and quote_len
-
-> 
 >> +{
 >> +	u64 ret;
 >> +
@@ -373,25 +346,12 @@ As for names, I am fine with quote_buf and quote_len
 >> +	if (!data || !cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
 >> +		return -EINVAL;
 > 
-> The same comment to tdx_mcall_get_tdreport().  You can have a single check of
-> X86_FEATURE_TDX_GUEST during driver initialization and refuse to initialize the
-> driver if it's not.
-
-Yes. Moved it to initcall of attestation driver.
-
+> Isn't X86_FEATURE_TDX_GUEST checked on module loading time?
 > 
 >> +
 >> +	/*
 >> +	 * Pass the physical address of tdreport data to the VMM
 >> +	 * and trigger the TDQUOTE generation. It is not a blocking
-> 
-> I see there is inconsistency regarding to how to spell TD Quote.  I have seen
-> TDQUOTE, TD QUOTE, quote, and Quote.  I guess we can have a unified way for
-> this.  How about: Quote, or TD Quote (when you want to highlight TD)?
-
-Ok.
-
-> 
 >> +	 * call, hence completion of this request will be notified to
 >> +	 * the TD guest via a callback interrupt. More info about ABI
 >> +	 * can be found in TDX Guest-Host-Communication Interface
@@ -431,30 +391,10 @@ Ok.
 >>   
 >> +/*
 >> + * TDX_CMD_GEN_QUOTE IOCTL is used to request TD QUOTE from the VMM. User
-> 
-> Replace "TD QUOTE" to some consistent name.
-
-Ok.
-
-> 
 >> + * should pass TD report data of size TDX_TDREPORT_LEN bytes via user input
->> + * buffer of quote size.
->>
-> 
-> This is not correct.  The data userspace put into the buffer is transparent to
-> driver.  It's between userspace attestation agent and QE/QGS.  In fact, Intel's
-> implementation has an additional header besides TDREPORT, and the whole data is
-> encoded in proto2 format.
-
-Noted. I will fix the description in next version.
-
-> 
->> Once IOCTL is successful quote data is copied back to
+>> + * buffer of quote size. Once IOCTL is successful quote data is copied back to
 >> + * the user buffer. On failure, TDCALL error code is copied back to the user
 >> + * buffer.
-> 
-> The output data may be more than the Quote, the same as above.
-> 
 >> + */
 >> +#define TDX_CMD_GEN_QUOTE		_IOR('T', 0x02, __u64)
 >> +
@@ -465,6 +405,13 @@ Noted. I will fix the description in next version.
 >> +	__u64 len;
 >> +	/* Quote generation timeout value in ms */
 >> +	__u32 timeout;
+> 
+> What's the point of timeout?
+
+Explained above.
+
+> 
+> 
 >> +};
 >> +
 >> +/*
@@ -477,6 +424,13 @@ Noted. I will fix the description in next version.
 >> +	__u64 version;
 >> +	/* Status code of Quote request, filled by VMM */
 >> +	__u64 status;
+> 
+> If you export version and status, also define related constants for user space.
+
+Ok.
+
+> 
+> 
 >> +	/* Length of TDREPORT, filled by TD */
 >> +	__u32 in_len;
 >> +	/* Length of Quote, filled by VMM */
@@ -484,13 +438,11 @@ Noted. I will fix the description in next version.
 >> +	/* Actual Quote data */
 >> +	__u64 data;
 >> +};
-> 
-> Needs to be '__u64 data[0]'.  The first 8B data isn't header.
-
-Ok.
-
-> 
-> 
+>> +
+>>   #endif /* _UAPI_ASM_X86_TDX_H */
+>> -- 
+>> 2.25.1
+>>
 > 
 
 -- 

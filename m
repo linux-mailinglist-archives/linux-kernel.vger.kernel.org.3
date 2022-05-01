@@ -2,76 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 607E5516789
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 21:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1FB751678C
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 21:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354114AbiEATpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 15:45:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42534 "EHLO
+        id S1352249AbiEATqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 15:46:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242704AbiEATp3 (ORCPT
+        with ESMTP id S242704AbiEATqn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 15:45:29 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1468013CD6
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 12:42:03 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id p12so22282584lfs.5
-        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 12:42:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Sb18QTlst2GMPixG5lE6GOjj3E96mmvATu5tTksShfU=;
-        b=TPihLFQQ4TWDX9nyo9eCksuPePuKQj3FzZ/C87BLTD8aIaShyo2SlgnTcXqOpZtcS+
-         Dn7LNhJBtTFkm8uEQxw1I+4HIzocK/AR5JyyNhoaX4yQkIJOz2UWuUdAdTxjn2FOMO8M
-         0EMZ5vxdxu54t7qriPzXmDNxxqas6rRXAMVaDCMZDQ3SLK4sM/OCsbfAMYu/8QcLk0TD
-         VwB2JQdzRdqvdKGtE8yYGKNGa+KKJMVLDmMG5dGoYr2wPhr2tyuaK8sbZb8ytksO+oK2
-         dAcKPBJAkWvMCyQGsIJ35FBMZ15N7dT67NfDyJm2cBwk5k/wjvZQqhKe1phZ9JMYHeWZ
-         GJ8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Sb18QTlst2GMPixG5lE6GOjj3E96mmvATu5tTksShfU=;
-        b=1RfcqH0LpFBf8orkGLfkp2J4TTt0oV0po3tNl2GPeVKtTTtJ1h7zRg6Q6E9oadfE+6
-         ddsPykEYq8XJG4aD8tGN6HaxZLwretKx7qw1IN0nI3da2JyDwPvBMf0iYnU1kJ9aV+kA
-         q5FYzuZz3ZRG/QwA2tB6L/anrDyM0k5sPnSfOTlKam4Tju+nN4mhAKRE6h8eZrMEPLoo
-         VCLXWnpPg6P7SgJf6LqytTG3Gdyu7nlLPo+O/L5h08WgCK6lR+vur+InLZrRgpEHQA3v
-         Mm2a33fpZRDOctJ08j3V5kM+Hk7HhZ1E45qGts7+jVhQWJy5ZPzgbZQRZ7TZgZlUVLUh
-         n7gQ==
-X-Gm-Message-State: AOAM532KCpP+ySmm/w2PKRnhMsoLro5cB5OW8bnsQ9Z80e58an3YQXUB
-        +CX5nHepwG5aoQxLqsmckB2dCw==
-X-Google-Smtp-Source: ABdhPJytmnEVlN3dum4EEXcube6P1OlhJMzZ/zB9pTJSGUqHDLak5XL2jo+QmoYS/dUC1eYNua8nsw==
-X-Received: by 2002:a05:6512:1085:b0:472:1013:aac7 with SMTP id j5-20020a056512108500b004721013aac7mr7136469lfg.463.1651434121431;
-        Sun, 01 May 2022 12:42:01 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id z1-20020a2eb521000000b0024f3d1dae97sm869668ljm.31.2022.05.01.12.42.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 01 May 2022 12:42:00 -0700 (PDT)
-Message-ID: <1c66890b-6736-61ef-7d16-619f90ced4a0@linaro.org>
-Date:   Sun, 1 May 2022 22:41:59 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v3 0/2] spmi: pmic-arb: Add support for PMIC v7
-Content-Language: en-GB
-To:     Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        David Collins <quic_collinsd@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org,
+        Sun, 1 May 2022 15:46:43 -0400
+Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [5.144.164.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B715D167F7;
+        Sun,  1 May 2022 12:43:17 -0700 (PDT)
+Received: from SoMainline.org (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 000593F62D;
+        Sun,  1 May 2022 21:43:14 +0200 (CEST)
+Date:   Sun, 1 May 2022 21:43:13 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Adam Skladowski <a39.skl@gmail.com>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        David Dai <daidavid1@codeaurora.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220201134108.2677578-1-vkoul@kernel.org>
- <YhUVAwtfjuIdKrRQ@matsya>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <YhUVAwtfjuIdKrRQ@matsya>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+Subject: Re: [PATCH] clk: qcom: smd: Update MSM8976 RPM clocks.
+Message-ID: <20220501194313.zu4dmmlggiksi6ce@SoMainline.org>
+Mail-Followup-To: Marijn Suijten <marijn.suijten@somainline.org>,
+        Adam Skladowski <a39.skl@gmail.com>, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+References: <20220426090226.27293-1-a39.skl@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220426090226.27293-1-a39.skl@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,46 +59,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/02/2022 19:53, Vinod Koul wrote:
-> On 01-02-22, 19:11, Vinod Koul wrote:
->> Hello,
->>
->> The is version 3 of support for PMIC v7. I have added a new property
->> qcom,bus-id for supporting v7 and then add driver changes for v7
->>
->> This depends on yaml conversion patch:
->> https://lore.kernel.org/linux-arm-msm/20211227170151.73116-1-david@ixit.cz/
+On 2022-04-26 11:02:17, Adam Skladowski wrote:
+> MSM8976 does not have rpm clock named mmssnoc,
+> instead it's called sysmmnoc, drop define and reuse.
+> While we are at it add XO clock to list.
 > 
-> Any feedback on this...
+> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
 
-Another gracious reminder about these patches. At this moment this is 
-one of the important pieces lacking for the full SM8450 support in the 
-upstream kernel.
+This patch should have had a Fixes: tag, not in the least to allow
+backporting but also to have get_maintainer.pl add the original author
+in CC for additional review and sign-off.
 
+In any case the omission of the XO clock here is intentional: the clock
+might be stopped whereas none of the platform is configured to support
+XO shutdown yet, which is why a "fixed-clock" is used in DT for now.
+
+With that in mind both changes should have been split into separate
+patches, so that the clock rename can be safely annoted with a Fixes:
+tag.  Presuming the application of this patch to `for-next` isn't final,
+Bjorn is this something we can get worked through?  I've validated the
+rename with my downstream sources, and for that:
+
+    Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+
+But for the XO addition I'm wary of platform lockups.
+
+- Marijn
+
+> ---
+>  drivers/clk/qcom/clk-smd-rpm.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
->>
->> Changes since v2:
->>   - Drop yaml conversion patch
->>   - Fix author for spmi patch
->> Changes since v1:
->>   - Add yaml conversion patch and new binding
->>   - fix driver bug report by Jonathan
->>
->> David Collins (1):
->>    spmi: pmic-arb: Add support for PMIC v7
->>
->> Vinod Koul (1):
->>    dt-bindings: spmi: Add qcom,bus-id
->>
->>   .../bindings/spmi/qcom,spmi-pmic-arb.yaml     |  11 +
->>   drivers/spmi/spmi-pmic-arb.c                  | 233 ++++++++++++++++--
->>   2 files changed, 225 insertions(+), 19 deletions(-)
->>
->> -- 
->> 2.31.1
+> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
+> index afc6dc930011..10b4e6d8d10f 100644
+> --- a/drivers/clk/qcom/clk-smd-rpm.c
+> +++ b/drivers/clk/qcom/clk-smd-rpm.c
+> @@ -563,17 +563,19 @@ static const struct rpm_smd_clk_desc rpm_clk_msm8974 = {
+>  	.num_clks = ARRAY_SIZE(msm8974_clks),
+>  };
+>  
+> -DEFINE_CLK_SMD_RPM(msm8976, mmssnoc_ahb_clk, mmssnoc_ahb_a_clk,
+> -		   QCOM_SMD_RPM_BUS_CLK, 2);
+>  DEFINE_CLK_SMD_RPM(msm8976, ipa_clk, ipa_a_clk, QCOM_SMD_RPM_IPA_CLK, 0);
+>  
+>  static struct clk_smd_rpm *msm8976_clks[] = {
+> +	[RPM_SMD_XO_CLK_SRC] = &sdm660_bi_tcxo,
+> +	[RPM_SMD_XO_A_CLK_SRC] = &sdm660_bi_tcxo_a,
+>  	[RPM_SMD_PCNOC_CLK] = &msm8916_pcnoc_clk,
+>  	[RPM_SMD_PCNOC_A_CLK] = &msm8916_pcnoc_a_clk,
+>  	[RPM_SMD_SNOC_CLK] = &msm8916_snoc_clk,
+>  	[RPM_SMD_SNOC_A_CLK] = &msm8916_snoc_a_clk,
+>  	[RPM_SMD_BIMC_CLK] = &msm8916_bimc_clk,
+>  	[RPM_SMD_BIMC_A_CLK] = &msm8916_bimc_a_clk,
+> +	[RPM_SMD_SYSMMNOC_CLK]	= &msm8936_sysmmnoc_clk,
+> +	[RPM_SMD_SYSMMNOC_A_CLK] = &msm8936_sysmmnoc_a_clk,
+>  	[RPM_SMD_QDSS_CLK] = &msm8916_qdss_clk,
+>  	[RPM_SMD_QDSS_A_CLK] = &msm8916_qdss_a_clk,
+>  	[RPM_SMD_BB_CLK1] = &msm8916_bb_clk1,
+> @@ -586,8 +588,6 @@ static struct clk_smd_rpm *msm8976_clks[] = {
+>  	[RPM_SMD_BB_CLK1_A_PIN] = &msm8916_bb_clk1_a_pin,
+>  	[RPM_SMD_BB_CLK2_PIN] = &msm8916_bb_clk2_pin,
+>  	[RPM_SMD_BB_CLK2_A_PIN] = &msm8916_bb_clk2_a_pin,
+> -	[RPM_SMD_MMSSNOC_AHB_CLK] = &msm8976_mmssnoc_ahb_clk,
+> -	[RPM_SMD_MMSSNOC_AHB_A_CLK] = &msm8976_mmssnoc_ahb_a_clk,
+>  	[RPM_SMD_DIV_CLK2] = &msm8974_div_clk2,
+>  	[RPM_SMD_DIV_A_CLK2] = &msm8974_div_a_clk2,
+>  	[RPM_SMD_IPA_CLK] = &msm8976_ipa_clk,
+> -- 
+> 2.25.1
 > 
-
-
--- 
-With best wishes
-Dmitry

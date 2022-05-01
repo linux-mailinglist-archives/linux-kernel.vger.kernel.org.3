@@ -2,47 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B525516663
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 18:58:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E8A516679
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 19:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352747AbiEAQ6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 12:58:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38708 "EHLO
+        id S1352054AbiEARDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 13:03:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352834AbiEAQ5g (ORCPT
+        with ESMTP id S240473AbiEARDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 12:57:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E35403F5
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 09:53:12 -0700 (PDT)
+        Sun, 1 May 2022 13:03:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7ADBC0;
+        Sun,  1 May 2022 10:00:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D04A1B80E31
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 16:53:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96444C385A9;
-        Sun,  1 May 2022 16:53:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651423989;
-        bh=nkjHtAJ4XLlAFk1INlv36kPJqLeaDiFCFeY0oL7x8Vo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QJRCCCNcwfEFyUnEvQxuaGu3PICioUHQah5L43GkUUnMidPPm3E9+9Vtc4rVE3gRw
-         kgRaFov0/mgd1zze/UrFCQYvRl5ZTYmVatfetoAFnwtXm8cX/wWFm2Z/vmBgHBjLek
-         PMtdoXRsF1uzAd0BJA1ECjQMvazKGkPIkYX5o1dI=
-Date:   Sun, 1 May 2022 18:53:02 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>
-Cc:     Forest Bond <forest@alittletooquiet.net>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] staging: vt6655: Replace unused return value of
- card_get_current_tsf
-Message-ID: <Ym667tWcJtK08lm5@kroah.com>
-References: <cover.1651422181.git.philipp.g.hortmann@gmail.com>
- <2533d7e6b64660e0c23e495a56737fc35b2f916b.1651422181.git.philipp.g.hortmann@gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id AFD68B80E91;
+        Sun,  1 May 2022 17:00:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5C73BC385AE;
+        Sun,  1 May 2022 17:00:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651424411;
+        bh=l1DrxRfrHZ3UoGV2MYuGEotCSiWiPeK59jKSCQKDDkE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=YZ5lp245eN7rbZhvRt8aFIdscFMfp8CtkiQDvkzcMO7s8nSihBad/iEhXxUd859Sz
+         LQ86Fj2fqNu5104BpnkMRXUr1hAzA/bMG0QbIivFdS3UQiy4+Abw7oVBPYETq7/ePE
+         fUFDfEt48PKUf+9tIAGi+ZeyGszP5/7t4R0/G9OLd+0w6APsA21vZ1VFEfjC3+bkVC
+         r5N0WNh74t1e3ssFIi1d3L4Bl8H8RfO+w8nBDsGdR1/QXApThR6N6teY9dsKNOT4tJ
+         +lMhJNsNyS0HKSAs3UVpMjYV94UEbHmay5Iop9nkEVoOSmwEXDQwqrkFiOZLbi8rGe
+         oM68jaJeGEKUQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3F8B2F03847;
+        Sun,  1 May 2022 17:00:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2533d7e6b64660e0c23e495a56737fc35b2f916b.1651422181.git.philipp.g.hortmann@gmail.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] net: dsa: b53: convert to phylink_pcs
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165142441125.26534.13651898801015170990.git-patchwork-notify@kernel.org>
+Date:   Sun, 01 May 2022 17:00:11 +0000
+References: <20220429164303.712695-1-f.fainelli@gmail.com>
+In-Reply-To: <20220429164303.712695-1-f.fainelli@gmail.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     netdev@vger.kernel.org, rmk+kernel@armlinux.org.uk, andrew@lunn.ch,
+        vivien.didelot@gmail.com, olteanv@gmail.com, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, linux@armlinux.org.uk,
+        linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -53,102 +59,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 01, 2022 at 06:37:11PM +0200, Philipp Hortmann wrote:
-> Replace unused return value with u64 to increase readability,
-> reduce address and dereference operators and omit pqwCurrTSF that
-> uses CamelCase which is not accepted by checkpatch.pl
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Fri, 29 Apr 2022 09:43:03 -0700 you wrote:
+> From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
 > 
-> Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
-> ---
-> Diffs for testing:
->         u64 qwNextTBTT;
+> Convert B53 to use phylink_pcs for the serdes rather than hooking it
+> into the MAC-layer callbacks.
 > 
->         qwNextTBTT = card_get_current_tsf(priv); /* Get Local TSF counter */
-> +       dev_info(&priv->pcid->dev, "CARDbSetBeaconPeriod 0x%016llx", qwNextTBTT);
-
-Don't put a diff in a diff please, git _should_ handle it, but I know
-other tools that will choke on it.
-
->         qwNextTBTT = CARDqGetNextTBTT(qwNextTBTT, wBeaconInterval);
+> Fixes: 81c1681cbb9f ("net: dsa: b53: mark as non-legacy")
+> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+> Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 > 
->         /* set HW beacon interval */
-> @@ -810,7 +810,7 @@ void CARDvSetFirstNextTBTT(struct vnt_private *priv,
->         u64 qwNextTBTT;
-> 
->         qwNextTBTT = card_get_current_tsf(priv); /* Get Local TSF counter */
-> +       dev_info(&priv->pcid->dev, "CARDvSetFirstNextTBTT 0x%016llx", qwNextTBTT);
->         qwNextTBTT = CARDqGetNextTBTT(qwNextTBTT, wBeaconInterval);
->         /* Set NextTBTT */
->         VNSvOutPortD(iobase + MAC_REG_NEXTTBTT, (u32)qwNextTBTT);
-> Log:
-> vt6655 0000:01:05.0: CARDbSetBeaconPeriod  0x00 00 00 01 4a 89 52 c4
-> vt6655 0000:01:05.0: CARDvSetFirstNextTBTT 0x00 00 00 01 4a 89 52 dc
-> ---
->  drivers/staging/vt6655/card.c        | 20 +++++++++-----------
->  drivers/staging/vt6655/card.h        |  2 +-
->  drivers/staging/vt6655/device_main.c |  2 +-
->  3 files changed, 11 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/staging/vt6655/card.c b/drivers/staging/vt6655/card.c
-> index d1dfd96e13b7..50d70ebff83a 100644
-> --- a/drivers/staging/vt6655/card.c
-> +++ b/drivers/staging/vt6655/card.c
-> @@ -288,7 +288,7 @@ bool CARDbUpdateTSF(struct vnt_private *priv, unsigned char byRxRate,
->  	u64 local_tsf;
->  	u64 qwTSFOffset = 0;
->  
-> -	card_get_current_tsf(priv, &local_tsf);
-> +	local_tsf = card_get_current_tsf(priv);
+> [...]
 
-{sigh}  I should read all patches in the series before complaining about
-previous ones, sorry about that.
+Here is the summary with links:
+  - [net] net: dsa: b53: convert to phylink_pcs
+    https://git.kernel.org/netdev/net/c/79396934e289
 
-Looks much better, except for the function name.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-
->  
->  	if (qwBSSTimestamp != local_tsf) {
->  		qwTSFOffset = CARDqGetTSFOffset(byRxRate, qwBSSTimestamp,
-> @@ -320,9 +320,9 @@ bool CARDbUpdateTSF(struct vnt_private *priv, unsigned char byRxRate,
->  bool CARDbSetBeaconPeriod(struct vnt_private *priv,
->  			  unsigned short wBeaconInterval)
->  {
-> -	u64 qwNextTBTT = 0;
-> +	u64 qwNextTBTT;
->  
-> -	card_get_current_tsf(priv, &qwNextTBTT); /* Get Local TSF counter */
-> +	qwNextTBTT = card_get_current_tsf(priv); /* Get Local TSF counter */
->  
->  	qwNextTBTT = CARDqGetNextTBTT(qwNextTBTT, wBeaconInterval);
->  
-> @@ -739,7 +739,7 @@ u64 CARDqGetTSFOffset(unsigned char byRxRate, u64 qwTSF1, u64 qwTSF2)
->   *
->   * Return Value: true if success; otherwise false
->   */
-> -bool card_get_current_tsf(struct vnt_private *priv, u64 *pqwCurrTSF)
-> +u64 card_get_current_tsf(struct vnt_private *priv)
->  {
->  	void __iomem *iobase = priv->port_offset;
->  	unsigned short ww;
-> @@ -753,16 +753,14 @@ bool card_get_current_tsf(struct vnt_private *priv, u64 *pqwCurrTSF)
->  			break;
->  	}
->  	if (ww == W_MAX_TIMEOUT)
-> -		return false;
-> +		return 0;
->  	low = ioread32(iobase + MAC_REG_TSFCNTR);
->  	high = ioread32(iobase + MAC_REG_TSFCNTR + 4);
->  #ifdef __BIG_ENDIAN
-
-Note, this #ifdef really should never be in kernel code if you are doing
-things properly.  There are functions to handle this correctly...
-
-Things get "fun" when you have devices in one endian running on busses
-of other endian.  Hopefully this driver never has to deal with that, but
-for many others we do, so please stick with the normal functions to
-handle this whenever possible.
-
-thanks,
-
-greg k-h

@@ -2,449 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46E42516126
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 03:29:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92010516131
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 04:27:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238771AbiEABGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 30 Apr 2022 21:06:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52410 "EHLO
+        id S234479AbiEACaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 30 Apr 2022 22:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232966AbiEABGO (ORCPT
+        with ESMTP id S231355AbiEACaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 30 Apr 2022 21:06:14 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A1D1EEC7
-        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 18:02:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651366969; x=1682902969;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=buYy0AIOZ5elzslx5uVRcad8u3HB9OJai1BPjDQvznU=;
-  b=jBI0rfKHvqa+MO9Qqo7aueF1lyQXsVUx+o0b0ZZWf7hj5eNMYM5fyj3T
-   KEOposMKQK4xCtj+uj3WONcASzl1L/zXMXyhCBloE09Lsrwz+vdZuU0y/
-   upSutWkP9d3KWJ+At3NFPKItqfGTlhgiV544nUdj/ZeQVDyAID1sNxnf6
-   XufwsDWrjW3CgH1zravYRHIx8T8OY5Gw2V9cs2sTiCC1NHvwk/OQ6sKIM
-   6yERPec/J4p8tdbJE9TUtS3oyYYMaqbfJRpGvwMw9m2iooomTDxam5NPt
-   DGDw2yI1bxjAemhVLup0SINCnHTCeSiHifTD4EF2hrGD6iabZLbmrTGaD
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10333"; a="248901157"
-X-IronPort-AV: E=Sophos;i="5.91,189,1647327600"; 
-   d="scan'208";a="248901157"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2022 18:02:48 -0700
-X-IronPort-AV: E=Sophos;i="5.91,189,1647327600"; 
-   d="scan'208";a="732800067"
-Received: from svkandu1-mobl.amr.corp.intel.com (HELO [10.212.233.173]) ([10.212.233.173])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2022 18:02:48 -0700
-Message-ID: <9ea1434b-9b61-62f4-85db-ae1369740ec7@linux.intel.com>
-Date:   Sat, 30 Apr 2022 18:02:48 -0700
+        Sat, 30 Apr 2022 22:30:07 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2079.outbound.protection.outlook.com [40.107.215.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FFD0222B3
+        for <linux-kernel@vger.kernel.org>; Sat, 30 Apr 2022 19:26:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RPCt+nHoWq1WcmjlCQuRmZIxhREACNvCZbr8zaLMprzx0gqzVGol2hjdqN2YuYC+CAXdUKhAQqdT53lmdvrFRV0gwJLOV+SFPBAq9ZA9z7aq3X5e2UpwnyZcnQ9uIUhI1FCroE/2BRk6iV4F8IznZw6O34DWxjw5ibj54B9JuJ0kummkHDUns2wLvcvj2Re35XElwAhSNd/7DHq1/9T53bTPsk6T6RF0Uantkv1bEH+Ju/96uOSGn+ziPIvsWGUPQ+elEn50Is8rgTLbUvb1U7QNuBD5p3ReBmNfGys3U4mhgQpPxeZLW8Y7w+w44l7h7uMEgrtCUnF0QBLue8WY4A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2YJA02Ye7gdr6TGHzL/5GLNb4tdB0TwsaEQiEJSbyMQ=;
+ b=At2Rvhce/gdFmMptM+WTO/PEMfE83+//5eNeEDEdavMI+K+WicFw8axuzyQCOwZvH6JiOmQpbgRRA/C1ak1hDQ9zB0a7RCova4AcyA65Md3MQ95z5ns1jV72bphe9/5yshPm8xwW300kWMITgbdyztdYI6igKw/63NPOGQjL62qFxWFTdmGmkCzp+2185chI0aewSX4FKNxd3kwm3GDX34MAQn7WZdGWaRVfYeKzxMf/2qPCzUqG2X8x0Tpd1I9Hy0jQle0EqLqJVtWDf0BjKln3NFy2iLfhtzdXP+A97Puq6dk7YzBYvuRrXA2Dr7vU612TXVYc/jjTqKV2J8/ycQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oppo.com; dmarc=pass action=none header.from=oppo.com;
+ dkim=pass header.d=oppo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2YJA02Ye7gdr6TGHzL/5GLNb4tdB0TwsaEQiEJSbyMQ=;
+ b=NE9umwf2P9q3EJh8uK9OXWGoRmPUYbW4jzBrmFLD7bBPIhdhMWc8YyY9hK/Czy3wP//zbz3uuxB/QYkeHOIZXws9BfQTfwk5FbPXJeWffGrpMU+rIItGWkll2fN2igNnQ8pt0y2f9dQwmu+oaTk8Nwf2WIdymLvP2e8uFoT1oTY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oppo.com;
+Received: from TY2PR02MB4431.apcprd02.prod.outlook.com
+ (2603:1096:404:8003::13) by HK2PR02MB4132.apcprd02.prod.outlook.com
+ (2603:1096:202:34::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.14; Sun, 1 May
+ 2022 02:26:38 +0000
+Received: from TY2PR02MB4431.apcprd02.prod.outlook.com
+ ([fe80::8179:176f:a62e:c998]) by TY2PR02MB4431.apcprd02.prod.outlook.com
+ ([fe80::8179:176f:a62e:c998%7]) with mapi id 15.20.5206.014; Sun, 1 May 2022
+ 02:26:37 +0000
+Date:   Sun, 1 May 2022 10:26:35 +0800
+From:   "lipeifeng@oppo.com" <lipeifeng@oppo.com>
+To:     akpm <akpm@linux-foundation.org>
+Cc:     michel <michel@lespinasse.org>, hughd <hughd@google.com>,
+        linux-mm <linux-mm@kvack.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "Barry Song" <21cnbao@gmail.com>,
+        zhangshiming <zhangshiming@oppo.com>,
+        peifengl55 <peifengl55@gmail.com>
+Subject: Re: Re: [PATCH] mm: fix align-error when get_addr in unmapped_area_topdown
+References: <20220412081014.399-1-lipeifeng@oppo.com>, 
+        <20220412142238.93e36cc4095e4e0b362db348@linux-foundation.org>, 
+        <2022041310411426044561@oppo.com>
+X-GUID: F468858B-7128-42F6-B94C-D7FED1D67A00
+X-Has-Attach: no
+X-Mailer: Foxmail 7.2.16.188[cn]
+Message-ID: <2022050110235766139218@oppo.com>
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: base64
+X-ClientProxiedBy: SG2PR02CA0067.apcprd02.prod.outlook.com
+ (2603:1096:4:54::31) To TY2PR02MB4431.apcprd02.prod.outlook.com
+ (2603:1096:404:8003::13)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.7.0
-Subject: Re: [PATCH v4 3/3] x86/tdx: Add Quote generation support
-Content-Language: en-US
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org
-References: <20220422233418.1203092-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220422233418.1203092-4-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220427061438.GB4167861@ls.amr.corp.intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20220427061438.GB4167861@ls.amr.corp.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 304264bb-5e5c-46b0-ed1e-08da2b1a047d
+X-MS-TrafficTypeDiagnostic: HK2PR02MB4132:EE_
+X-Microsoft-Antispam-PRVS: <HK2PR02MB413238CF2E769A01279259A5C6FE9@HK2PR02MB4132.apcprd02.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9s4bKCJCNxpNntsvBGph3gDD1QNpzOyqCKITV+87SLr8/ah96mRquZs0rehQ5pz9V2abH6L3QK5pGJ/vIECVFwINg2kYandGPjLfO0ueZqy4lwZ2bQT7fLWZbEtvDYcRZkgavdapYjk9hVCPOO9FUYnEopXS8Rn/0KupHGj++yv/0U/pjy4xaBXmO5V4grTfGSSWnfu1HjpItS+oiRmafx/C+2M0xciwyOHKeuwboN5gVvOS29WjakpckFEUrB/Tbg2aCNHLjVZQn1HlcHTumsvCSnVQlfVa/HYhxC5yptKVaKzUm3AfvWmRiBUBEp7KeUa+iTqIMVu2aqorO248Zr1VZ+SjXu4XFFcc6h5/UcMHK6TRLgqjCxRHaMrUNnh++4sN5bJyfjK0j1RXazc4FOKUbk8po07sykL6HgTEdmLM7UnMytrCL9uVM/zkOiL9l9NiVwauZZGc6BqCCZj8b7k65oedYHSdS3BnwmNb9woMcSjWZBmDbbnpxeFGRxPvNt7l43C+UDaO+eKJvYVwBfrgE9mY4/QcQha+OBRDg/RIjCvl1QHhlYbY+BXevWDNV9GH90B7T6XYH9zylNbJUUdp+DytT6pI6GYtB4AIQaye3l3KvPjPpEMtD1Hmywc2xkcq5j7K5iQqsaNgYZcvC35qTNSAGQQ/M/RYpDiBEyomIV89i8HWU+UOKK0qWKo4lMy37zMRtP3/VjeCGTwnpwNSmGYeK80lyb2UPEZ4ZKstvNVVymggDSq/y+TC2xUV0fh6VeadQgloXU+7mtJYd3skmxJWplXJZQZtCYZ73cY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR02MB4431.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4326008)(5660300002)(8936002)(66556008)(37786003)(6486002)(966005)(66476007)(508600001)(38350700002)(38100700002)(6916009)(98106002)(2906002)(36756003)(54906003)(2616005)(6512007)(316002)(58226001)(83380400001)(6506007)(186003)(26005)(1076003)(66946007)(8676002)(53546011)(52116002)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aU5EMEJDUWJKOXRvUDZRWEpOSGZDRDZlUFRBd09lRm9tWFJDQ1FtUy8wNmZO?=
+ =?utf-8?B?SDNVb0JBRklMdEJoN3ovOWxlckxDdEIxdnN4YVZheW9QRWlwWW82TTBOR21H?=
+ =?utf-8?B?cC9PR2JnUHZVczdkTVlmeHVrNWErdGR4dEhUc21LTzRDejhFMkVIWGdsOGsy?=
+ =?utf-8?B?UGdOOHNjVGtpTnRHZnBTOGs2enhGaDAzRkczckgyRlB6ZlJMOWVoMHk5Yll4?=
+ =?utf-8?B?RmEvL1EwUnEyRzZQS3BHaCs2U3hra2N1ejRWdWhpdXlDQk5VTzRVeHN2d2da?=
+ =?utf-8?B?aFU4QnVRSW53eWlZUVkrazAvdjQvVzhHZzJXUERWM0xDU0Z0U2lucjVxVGpM?=
+ =?utf-8?B?WVhGb21yaUZ3YWRvOFBzRTVGcFVrMlQ1Zmt0R1U3UnpxckZwZDdWaEZkdndC?=
+ =?utf-8?B?VGlBM2YrZzcrZHY2bkdUK0FEUGY4TGFxMFVwK2thMlkwdWVFb1g0UFBqUlc2?=
+ =?utf-8?B?VmZnMFB4UEFGN0g3WmpZWUwyTFI1dUlwc24yaEM3dWhGbkxIWFBRQi9neERl?=
+ =?utf-8?B?NlJ6V3hpSVIxNFF2WjJINVdtVk5WT0tnUUhkei94SXFGNUpqU1NiMXpkZkgy?=
+ =?utf-8?B?MEpENE1MNG4reUxxVDJreDUrejNqTkxsV0RDRmlpajRUTDVtTi9rVFRLemFo?=
+ =?utf-8?B?YW5Ta01Hb2ZjY0pJcmxhZ3BsZmNpem1GQUhMZHc3bnF4SFluSzRpbnlSWDQ1?=
+ =?utf-8?B?N0pDb2cra0t2NnR3YWYzWGhNY2VjSHBoajkxUTkwRTdtbC9lYjZvcVh5bXBx?=
+ =?utf-8?B?akZjVS85cWFBa2hDVm9RelRDRi9hQkZZL0Fnd3FqZW5zaDFjZUNxSjhlbEEy?=
+ =?utf-8?B?MlZaNmRubDU3Z0doTmRnU3NrVndBNEpXcC81L1RxWW11bWRzOW4rRmE5OWxv?=
+ =?utf-8?B?d0dHTmF5cUpkdlpKVStJQlptTVBUU0M2MmhHeG1rVGtUQmVCWG14Wk1ISGdR?=
+ =?utf-8?B?TVZ3WllWTndFa3k2SFZQMEtqWmEyajhINi9tZnduWmcvY3JpNncwQ1gxUDJZ?=
+ =?utf-8?B?bTArMTFFVTRNSVduS0hRTllZbVZwL094Q2wzbkc5N2lQMllEQWt2MUtpNWpM?=
+ =?utf-8?B?eTlmeFY4WGpsQjRHaFlBelB1Ly9XZjdWV3BtTHNXbGh0c2Q4YUl2RVc0Nk14?=
+ =?utf-8?B?WFk3bnhZcnpIVzZkKzJlN1k2M1VGTzY2c08yTjZJdU5NRzMzakgvTFJHeXZu?=
+ =?utf-8?B?K2xLTUxDUG13NDByeVU0cEdkWFdqY2JwR0R4alpNeVhET2crckpXZ0xyTmlk?=
+ =?utf-8?B?V3F1L0xteWtSY09PSWpNWVdpZWo0OHBNeWdBSUgzRWpJemxObk1nb2dHL1Ju?=
+ =?utf-8?B?dm90THJiVFRwdkRtRlo3eHpTZWM1eEFhT3VIWmJ4RXVDKzBnbVJWRGlDcWRU?=
+ =?utf-8?B?aGhqNVRucnplV043aFI3NkwraFZ2ZGt4K1k1ZkdvR2MvbnB2N3lESzVqcGpN?=
+ =?utf-8?B?Qm5ka3FpWk9UM0RZckxFeS84M3p4YXlwT2dvRGpCMmEwdTBFdzdZVEk0TDhq?=
+ =?utf-8?B?M0pjR3JkOC9FS1ZFQ3JLTUhyWEFBeCtabnB5ZElqNzFLempFTG1lWGt0Q3ZE?=
+ =?utf-8?B?bUR2M0h4UFJTWjZIUTZEaVRRMFQzYVpxbTlZSVVEM3IxUEpxcWdYZ0VYRWQ5?=
+ =?utf-8?B?cTluQTlxeno3NWtycXBNdTFwbllRZVBnd2NTQUVqK3pGUHE0WXgrUG1hTjBM?=
+ =?utf-8?B?UURXOU9wTTVHcHNFTlFCR3ppYkJHSjhxTkN0aHF4ZStRVlRtSDB6U05STUgr?=
+ =?utf-8?B?WDBBdEw5aDVFTGRMNVpWMmZRa1cxKzBLMXNtKzk5UE1DdkhhZFJZeDN0M3Bp?=
+ =?utf-8?B?RWRRQ2J5RHptTzF2Zk9yZVdQZDZZTlgrMGtJU0l3dG9QWmVrSmRscmdPQzk2?=
+ =?utf-8?B?ZndQenFyNDRJVnhUdjJ4L0srU2hMRHAxeVRNWk5JVktxSm1FTnZJTGd3NnlK?=
+ =?utf-8?B?VTU4MlpBeWYyUDVFRDVVK2NReW9xUTRCS2h6bWxPN0VkOHlBa0RrcTdFdHBP?=
+ =?utf-8?B?eExJQ1pSMk03STZ3ZXBGVlg4cW1oM0ZKa0dEU01jV2FpNnY2YTNJc0tZKzhy?=
+ =?utf-8?B?Q0NrUGE3eXdzNVRJU2hrWEVmc21yRUZSVzNnZFhuUkJ2OEZMZWhHTVArOG9F?=
+ =?utf-8?B?dzRNZHN1MGZIaGdMcmFzUm9hZGFDQXB1TlNsRlBvdGZyOWNrN3NYU1NkbTA1?=
+ =?utf-8?B?a0g5SzdYVUJlTDBMTzVGdlVrYVZLekxROWF1NEtVSVM1Y3Q3VXhVS29hRlpv?=
+ =?utf-8?B?VlZkemVXWERSZjlJUFlmTWlnOFk5ZWIra1ZXbklVVzFGVVY3bHlBbHdRaC9U?=
+ =?utf-8?B?M2hMcUNSQzJKeSs2d01sczM2RlQ3RXBWYVJ0amdFeXM2NHErM0tOTWNTbWNN?=
+ =?utf-8?Q?CgQkI7HkMg386ecU=3D?=
+X-OriginatorOrg: oppo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 304264bb-5e5c-46b0-ed1e-08da2b1a047d
+X-MS-Exchange-CrossTenant-AuthSource: TY2PR02MB4431.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 May 2022 02:26:37.9145
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: L6qmGmbaZx+6VpgpfZnD8nZpGVnDgErcnhSSUBn1qPjMAxNmL6onuYmav07OCfyrnDx2nGKYQCwXZxr9vIZHMQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK2PR02MB4132
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 4/26/22 11:14 PM, Isaku Yamahata wrote:
-> On Fri, Apr 22, 2022 at 04:34:18PM -0700,
-> Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
-> 
->> In TDX guest, the second stage in attestation process is quote
->> generation and signing. GetQuote hypercall can be used by the TD guest
->> to request VMM facilitate the quote generation via a Quoting Enclave
->> (QE). More details about GetQuote hypercall can be found in TDX
->> Guest-Host Communication Interface (GHCI) for Intel TDX 1.0, section
->> titled "TDG.VP.VMCALL<GetQuote>.
->>
->> Since GetQuote is an asynchronous request hypercall, it will not block
->> till the quote is generated. So VMM uses callback interrupt vector
->> configured by SetupEventNotifyInterrupt hypercall to notify the guest
->> about quote generation completion or failure. Upon receiving the
->> completion notification, status can be found in the Quote data header.
->>
->> Add tdx_hcall_get_quote() helper function to implement the GetQuote
->> hypercall and add TDX_CMD_GEN_QUOTE IOCTL support to allow the user
->> agent request for quote generation.
->>
->> When a user agent requests for quote generation, it is expected that
->> the user agent knows about the Quoting Enclave response time, and sets
->> a valid timeout value for the quote generation completion. Timeout
->> support is added to make sure the kernel does not wait for the
->> quote completion indefinitely.
->>
->> Although GHCI specification does not restrict parallel GetQuote
->> requests, since quote generation is not in performance critical path
->> and the frequency of attestation requests are expected to be low, only
->> support serialized quote generation requests. Serialization support is
->> added via a mutex lock (attest_lock). Parallel quote request support
->> can be added once demand arises.
->>
->> Reviewed-by: Tony Luck <tony.luck@intel.com>
->> Reviewed-by: Andi Kleen <ak@linux.intel.com>
->> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
->> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
->> ---
->>   arch/x86/coco/tdx/attest.c      | 118 +++++++++++++++++++++++++++++++-
->>   arch/x86/coco/tdx/tdx.c         |  37 ++++++++++
->>   arch/x86/include/asm/tdx.h      |   2 +
->>   arch/x86/include/uapi/asm/tdx.h |  36 ++++++++++
->>   4 files changed, 191 insertions(+), 2 deletions(-)
->>
->> diff --git a/arch/x86/coco/tdx/attest.c b/arch/x86/coco/tdx/attest.c
->> index b776e81f6c20..d485163d3222 100644
->> --- a/arch/x86/coco/tdx/attest.c
->> +++ b/arch/x86/coco/tdx/attest.c
->> @@ -32,6 +32,11 @@
->>   static struct platform_device *pdev;
->>   static struct miscdevice miscdev;
->>   
->> +/* Completion object to track GetQuote completion status */
->> +static DECLARE_COMPLETION(req_compl);
->> +/* Mutex to serialize GetQuote requests */
->> +static DEFINE_MUTEX(quote_lock);
->> +
->>   static long tdx_get_tdreport(void __user *argp)
->>   {
->>   	void *report_buf = NULL, *tdreport_buf = NULL;
->> @@ -79,6 +84,95 @@ static long tdx_get_tdreport(void __user *argp)
->>   	return ret;
->>   }
->>   
->> +static long tdx_get_tdquote(void __user *argp)
->> +{
->> +	struct tdx_quote_hdr *quote_hdr;
->> +	struct tdx_quote_req quote_req;
->> +	void *quote_buf = NULL;
->> +	dma_addr_t handle;
->> +	long ret = 0, err;
->> +	u64 quote_buf_len;
->> +
->> +	mutex_lock(&quote_lock);
->> +
->> +	reinit_completion(&req_compl);
->> +
->> +	/* Copy Quote request struct from user buffer */
->> +	if (copy_from_user(&quote_req, argp, sizeof(struct tdx_quote_req)))
->> +		return -EFAULT;
->> +
->> +	/* Make sure the length & timeout is valid */
->> +	if (quote_req.len <= 0 || quote_req.timeout <= 0)
->> +		return -EINVAL;
->> +
->> +	/* Align with page size to meet 4K alignment */
->> +	quote_buf_len = PAGE_ALIGN(quote_req.len);
->> +
->> +	/*
->> +	 * Allocate DMA buffer to get TDQUOTE data from the VMM.
->> +	 * dma_alloc_coherent() API internally marks allocated
->> +	 * memory as shared with VMM. So explicit shared mapping is
->> +	 * not required.
->> +	 */
->> +	quote_buf = dma_alloc_coherent(&pdev->dev, quote_buf_len, &handle,
->> +					GFP_KERNEL | __GFP_ZERO);
->> +	if (!quote_buf) {
->> +		ret = -ENOMEM;
->> +		goto quote_failed;
->> +	}
->> +
->> +	/* Copy TDREPORT from user Quote data buffer to kernel Quote buffer */
->> +	if (copy_from_user(quote_buf, (void __user *)quote_req.buf, quote_req.len)) {
->> +		ret = -EFAULT;
->> +		goto quote_failed;
->> +	}
->> +
->> +	/* Submit GetQuote Request */
->> +	err = tdx_hcall_get_quote(quote_buf, quote_buf_len);
->> +	if (err) {
->> +		/* if failed, copy hypercall error code to user buffer */
->> +		ret = put_user(err, (long __user *)argp);
-> 
-> ret is ignored.  Do you want to return TDX status code to user?
-> Does just -EIO suffice?
-> (If you really want, the TDX status code should be defined as uapi.)
-
-I will remove it in next version.
-
-> 
-> 
->> +		ret = -EIO;
->> +		goto quote_failed;
->> +	}
->> +
->> +	/* Wait for attestation completion */
->> +	ret = wait_for_completion_interruptible_timeout(
->> +			&req_compl,
->> +			msecs_to_jiffies(quote_req.timeout));
-> 
-> If you want to support timeout, you need to handle in-flight case below.
-
-Regarding IN_FLIGHT case, I will let user agent handle it. I am going to
-change this code to just copy the quote data once hypercall is
-successful.
-
-
-> 
-> 
->> +		ret = 0;
->> +	else
->> +		ret = -EIO;
->> +
->> +quote_failed:
->> +	if (quote_buf)
->> +		dma_free_coherent(&pdev->dev, quote_buf_len, quote_buf, handle);
-> 
-> quote_buf can be still owned by VMM because timeout is used above.
-> Even if interrupt is arrived,  quote_hdr->status can still be in-flight.
-
-Since timeout behavior is not clearly defined in the spec, I let the
-user agent configure the appropriate timeout value. Once it timesout,
-I assume QE/QGS/VMM will no longer respond or use the buffer. I have
-planned to add the following help in struct tdx_quote_hdr.timeout.
-
-@timeout: Time to wait for VMM to respond back to GetQuote request.
-This value is dependent on response time of the Quoting Enclave
-(QE) or Quote generation service (QGS) involved. It is expected
-the user agent is aware of it and sets the appropriate value.
-
-Agree ?
-
-> 
-> 
->> +
->> +	mutex_unlock(&quote_lock);
->> +
->> +	return ret;
->> +}
->> +
->> +static void attestation_callback_handler(void)
->> +{
->> +	complete(&req_compl);
->> +}
->> +
->>   static long tdx_attest_ioctl(struct file *file, unsigned int cmd,
->>   			     unsigned long arg)
->>   {
->> @@ -89,6 +183,9 @@ static long tdx_attest_ioctl(struct file *file, unsigned int cmd,
->>   	case TDX_CMD_GET_TDREPORT:
->>   		ret = tdx_get_tdreport(argp);
->>   		break;
->> +	case TDX_CMD_GEN_QUOTE:
->> +		ret = tdx_get_tdquote(argp);
->> +		break;
->>   	default:
->>   		pr_err("cmd %d not supported\n", cmd);
->>   		break;
->> @@ -103,6 +200,14 @@ static const struct file_operations tdx_attest_fops = {
->>   	.llseek		= no_llseek,
->>   };
->>   
->> +/* Helper function to cleanup attestation related allocations */
->> +static void _tdx_attest_remove(void)
->> +{
->> +	misc_deregister(&miscdev);
->> +
->> +	tdx_remove_ev_notify_handler();
->> +}
->> +
->>   static int tdx_attest_probe(struct platform_device *attest_pdev)
->>   {
->>   	struct device *dev = &attest_pdev->dev;
->> @@ -114,6 +219,15 @@ static int tdx_attest_probe(struct platform_device *attest_pdev)
->>   
->>   	pdev = attest_pdev;
->>   
->> +	ret = dma_set_coherent_mask(dev, DMA_BIT_MASK(64));
->> +	if (ret) {
->> +		pr_err("dma set coherent mask failed\n");
->> +		goto failed;
->> +	}
->> +
->> +	/* Register attestation event notify handler */
->> +	tdx_setup_ev_notify_handler(attestation_callback_handler);
->> +
->>   	miscdev.name = DRIVER_NAME;
->>   	miscdev.minor = MISC_DYNAMIC_MINOR;
->>   	miscdev.fops = &tdx_attest_fops;
->> @@ -130,7 +244,7 @@ static int tdx_attest_probe(struct platform_device *attest_pdev)
->>   	return 0;
->>   
->>   failed:
->> -	misc_deregister(&miscdev);
->> +	_tdx_attest_remove();
->>   
->>   	pr_debug("module initialization failed\n");
->>   
->> @@ -139,7 +253,7 @@ static int tdx_attest_probe(struct platform_device *attest_pdev)
->>   
->>   static int tdx_attest_remove(struct platform_device *attest_pdev)
->>   {
->> -	misc_deregister(&miscdev);
->> +	_tdx_attest_remove();
->>   	pr_debug("module is successfully removed\n");
->>   	return 0;
->>   }
->> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
->> index d0c62b94a1f6..cba22a8d4084 100644
->> --- a/arch/x86/coco/tdx/tdx.c
->> +++ b/arch/x86/coco/tdx/tdx.c
->> @@ -25,6 +25,7 @@
->>   
->>   /* TDX hypercall Leaf IDs */
->>   #define TDVMCALL_MAP_GPA		0x10001
->> +#define TDVMCALL_GET_QUOTE		0x10002
->>   #define TDVMCALL_SETUP_NOTIFY_INTR	0x10004
->>   
->>   /* MMIO direction */
->> @@ -214,6 +215,42 @@ static long tdx_hcall_set_notify_intr(u8 vector)
->>   	return 0;
->>   }
->>   
->> +/*
->> + * tdx_hcall_get_quote() - Request for TDQUOTE using TDREPORT.
->> + *
->> + * @data        : Address of 4KB aligned GPA memory which contains
->> + *                TDREPORT_STRUCT.
->> + * @len		: Length of the GPA in bytes.
->> + *
->> + * return 0 on success or failure error number.
->> + */
->> +long tdx_hcall_get_quote(void *data, u64 len)
->> +{
->> +	u64 ret;
->> +
->> +	/*
->> +	 * Use confidential guest TDX check to ensure this API is only
->> +	 * used by TDX guest platforms.
->> +	 */
->> +	if (!data || !cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
->> +		return -EINVAL;
-> 
-> Isn't X86_FEATURE_TDX_GUEST checked on module loading time?
-> 
->> +
->> +	/*
->> +	 * Pass the physical address of tdreport data to the VMM
->> +	 * and trigger the TDQUOTE generation. It is not a blocking
->> +	 * call, hence completion of this request will be notified to
->> +	 * the TD guest via a callback interrupt. More info about ABI
->> +	 * can be found in TDX Guest-Host-Communication Interface
->> +	 * (GHCI), sec titled "TDG.VP.VMCALL<GetQuote>".
->> +	 */
->> +	ret = _tdx_hypercall(TDVMCALL_GET_QUOTE, cc_mkdec(virt_to_phys(data)),
->> +			     len, 0, 0);
->> +	if (ret)
->> +		return ret;
->> +
->> +	return 0;
->> +}
->> +
->>   static u64 get_cc_mask(void)
->>   {
->>   	struct tdx_module_output out;
->> diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
->> index 89ed09809c13..90c2a5f6c40c 100644
->> --- a/arch/x86/include/asm/tdx.h
->> +++ b/arch/x86/include/asm/tdx.h
->> @@ -73,6 +73,8 @@ void tdx_setup_ev_notify_handler(void (*handler)(void));
->>   
->>   void tdx_remove_ev_notify_handler(void);
->>   
->> +long tdx_hcall_get_quote(void *data, u64 len);
->> +
->>   #else
->>   
->>   static inline void tdx_early_init(void) { };
->> diff --git a/arch/x86/include/uapi/asm/tdx.h b/arch/x86/include/uapi/asm/tdx.h
->> index c21f9d6fe88b..69259b7841a9 100644
->> --- a/arch/x86/include/uapi/asm/tdx.h
->> +++ b/arch/x86/include/uapi/asm/tdx.h
->> @@ -20,4 +20,40 @@
->>    */
->>   #define TDX_CMD_GET_TDREPORT		_IOWR('T', 0x01, __u64)
->>   
->> +/*
->> + * TDX_CMD_GEN_QUOTE IOCTL is used to request TD QUOTE from the VMM. User
->> + * should pass TD report data of size TDX_TDREPORT_LEN bytes via user input
->> + * buffer of quote size. Once IOCTL is successful quote data is copied back to
->> + * the user buffer. On failure, TDCALL error code is copied back to the user
->> + * buffer.
->> + */
->> +#define TDX_CMD_GEN_QUOTE		_IOR('T', 0x02, __u64)
->> +
->> +struct tdx_quote_req {
->> +	/* Buffer address to store Quote data */
->> +	__u64 buf;
->> +	/* Length of the Quote buffer */
->> +	__u64 len;
->> +	/* Quote generation timeout value in ms */
->> +	__u32 timeout;
-> 
-> What's the point of timeout?
-
-Explained above.
-
-> 
-> 
->> +};
->> +
->> +/*
->> + * Format of quote data header. More details can be found in
->> + * TDX Guest-Host Communication Interface (GHCI) for Intel TDX
->> + * 1.0, section titled "TDG.VP.VMCALL<GetQuote>"
->> + */
->> +struct tdx_quote_hdr {
->> +	/* Quote version, filled by TD */
->> +	__u64 version;
->> +	/* Status code of Quote request, filled by VMM */
->> +	__u64 status;
-> 
-> If you export version and status, also define related constants for user space.
-
-Ok.
-
-> 
-> 
->> +	/* Length of TDREPORT, filled by TD */
->> +	__u32 in_len;
->> +	/* Length of Quote, filled by VMM */
->> +	__u32 out_len;
->> +	/* Actual Quote data */
->> +	__u64 data;
->> +};
->> +
->>   #endif /* _UAPI_ASM_X86_TDX_H */
->> -- 
->> 2.25.1
->>
-> 
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+SGnCoEFuZHJld++8mgoKRXhjdXNlIG1lLCBoZXJlIGlzIGEgcXVlc3Rpb24gdG8gY29uc3VsdDoK
+CldoeSBkaWQgdGhlIHR3byBwYXRjaGVzIHN1ZGRlbmx5IGRpc2FwcGVhciB3aXRob3V0IGFueSBl
+bWFpbCBvciBub3RpY2UgZm9yIHVzPwpBbmQgdGhleSBoYWQgYmVlbiBtZXJnZWQgaW4gbGludXgt
+bmV4dC5naXQgb24gQXByaWwgNSBhbmQgMTMuCgoKMS7CoG1tLW1vZGlmeS10aGUtbWV0aG9kLXRv
+LXNlYXJjaC1hZGRyLWluLXVubWFwcGVkX2FyZWFfdG9wZG93bi5wYXRjaCBhZGRlZCB0byAtbW0g
+dHJlZQpUaGlzIHBhdGNoIHNob3VsZCBzb29uIGFwcGVhciBhdApodHRwczovL296bGFicy5vcmcv
+fmFrcG0vbW1vdHMvYnJva2VuLW91dC9tbS1tb2RpZnktdGhlLW1ldGhvZC10by1zZWFyY2gtYWRk
+ci1pbi11bm1hcHBlZF9hcmVhX3RvcGRvd24ucGF0Y2gKYW5kIGxhdGVyIGF0Cmh0dHBzOi8vb3ps
+YWJzLm9yZy9+YWtwbS9tbW90bS9icm9rZW4tb3V0L21tLW1vZGlmeS10aGUtbWV0aG9kLXRvLXNl
+YXJjaC1hZGRyLWluLXVubWFwcGVkX2FyZWFfdG9wZG93bi5wYXRjaAoKCjIuwqBtbS1maXgtYWxp
+Z24tZXJyb3Itd2hlbi1nZXRfYWRkci1pbi11bm1hcHBlZF9hcmVhX3RvcGRvd24ucGF0Y2ggYWRk
+ZWQgdG8gLW1tIHRyZWUKVGhpcyBwYXRjaCBzaG91bGQgc29vbiBhcHBlYXIgYXQKaHR0cHM6Ly9v
+emxhYnMub3JnL35ha3BtL21tb3RzL2Jyb2tlbi1vdXQvbW0tZml4LWFsaWduLWVycm9yLXdoZW4t
+Z2V0X2FkZHItaW4tdW5tYXBwZWRfYXJlYV90b3Bkb3duLnBhdGNoCmFuZCBsYXRlciBhdApodHRw
+czovL296bGFicy5vcmcvfmFrcG0vbW1vdG0vYnJva2VuLW91dC9tbS1maXgtYWxpZ24tZXJyb3It
+d2hlbi1nZXRfYWRkci1pbi11bm1hcHBlZF9hcmVhX3RvcGRvd24ucGF0Y2gKCkhvcGUgdG8gcmVj
+ZWl2ZSB5b3VyIHJlcGx5IGFuZCB0aGFuayB5b3UgZm9yIHlvdXIgZ3VpZGFuY2UuCmxpcGVpZmVu
+Z0BvcHBvLmNvbQrCoApGcm9tOsKgbGlwZWlmZW5nQG9wcG8uY29tCkRhdGU6wqAyMDIyLTA0LTEz
+wqAxMToyOApUbzrCoGFrcG0KQ0M6wqBtaWNoZWw7IGh1Z2hkOyBsaW51eC1tbTsgbGludXgta2Vy
+bmVsOyBCYXJyeSBTb25nOyB6aGFuZ3NoaW1pbmcKU3ViamVjdDrCoFJlOiBSZTogW1BBVENIXSBt
+bTogZml4IGFsaWduLWVycm9yIHdoZW4gZ2V0X2FkZHIgaW4gdW5tYXBwZWRfYXJlYV90b3Bkb3du
+CgphbmTCoApIacKgQW5kcmV3IE1vcnRvbu+8mgoKPiBXaGF0IGFyZSB0aGUgcnVudGltZSBhZmZl
+Y3RzIG9mIHRoaXMgYnVnPwpJdCB3aWxsIGdpdmUgYSBiYWQgYWRkciB3aGljaCBpcyBub3QgYXQg
+dGhlwqBkZXNpcmVkIGFsaWdtZW50IHRvIHVzZXIgaWYgdHJpZ2dlcizCoAp3aGljaCBtYXliZSBj
+YXVzZSBzb21lIGRldmljZSBhZGRyIGFjY2VzcyBleGNlcHRpb24uCgpNeSB1bmRlcnN0YW5kaW5n
+IHdhcyB0aGF0IGl0IGlzIHJlYWxseSByYXJlIHRvIHRyaWdnZXIgYW5kIGkgZG9uJ3Qga25vdwp3
+aGV0aGVyIGl0IHdpbGwgdGlyZ2dlciBpbiB1c2VyLXNjZW5jZSwgdGhlIHJlYXNvbiBpcyBpbiAi
+aG93IHRvIHRyaWdnZXIgaXQiLgoKPiBob3cgYXJlIHlvdSBhYmxlIHRvwqB0cmlnZ2VyIGl0PwpN
+eSB1bmRlcnN0YW5kaW5nIHdhcyB0aGF0IGl0IGlzIHJlYWxseSByYXJlIHRvIHRyaWdnZXIsCm9u
+bHkgaWYgdGhlIGZvbGxvd2luZyBjb25kaXRpb25zIGFyZSBtZXQ6CgoxLiAoaW5mby0+aGlnaF9s
+aW1pdCAtIGluZm8tPmxvd19saW1pdCkgPCAoaW5mby0+bGVuZ3RoICsgaW5mby0+YWxpZ25fbWFz
+aykKMi4gVGhlcmUgaXMgYSBhZGRyIHNwYWNlIGluIG1tLT5tbV9yYgrCoCDCoCDCoC0tLS0KwqAg
+wqAgwqAgwqB8CsKgIMKgIMKgIMKgfArCoCDCoCDCoCDCoHwKwqAgwqAgwqAgZ2FwX2VuZCA9IHZt
+YV9zdGFydF9nYXAodm1hMF91ZXNkKSDCoCDCoC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tIC0tLS0tLS0tLS0tLS0tLS0tLS18CsKgIMKgIMKgIMKgfCDCoCDCoCDCoCDCoCDCoCDCoCDC
+oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
+oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
+oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
+oCDCoCDCoCDCoCDCoCDCoCB8CsKgIMKgIMKgIMKgfCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
+oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
+oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
+oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
+oCDCoCDCoCDCoCB8CsKgIMKgIMKgIMKgfCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
+oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
+oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
+oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
+oCDCoCB8CsKgIMKgIMKgIGluZm8tPmhpZ2hfbGltaXQgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
+wqAgLS0tLS0tLS0tLS0tLS0tLS0tLXwgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
+wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
+wqAgwqAgwqAgfCDCoCA+IGluZm8tPmxlbmd0aArCoCDCoCDCoCDCoHwgwqAgwqAgwqAgwqAgwqAg
+wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
+wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgfCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
+oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
+oCDCoCDCoCDCoCDCoCDCoCDCoCB8IMKgCsKgIMKgIMKgIMKgfCDCoCDCoCDCoCDCoCDCoCDCoCDC
+oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
+oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCB8IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
+IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
+IMKgIMKgIMKgIMKgIMKgIHwKwqAgwqAgwqAgwqB8IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
+IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
+IMKgIMKgIMKgIMKgIMKgIMKgIMKgIHwgwqAgPCBpbmZvLT5sZW5ndGggKyDCoMKgaW5mby0+YWxp
+Z25fbWFza8KgIMKgIMKgfArCoCDCoCDCoCBpbmZvLT5sb3dfbGltaXQgwqAgwqAgwqAgwqAgwqAg
+wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqB8
+IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
+IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIHwKwqAgwqAgwqAgwqB8
+IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
+IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIHwgwqAgwqAg
+wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
+wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgfArCoCDCoCDCoGdhcF9zdGFydCA9
+IMKgdm1hX2VuZF9nYXAodm1hMV91c2VkKSDCoCDCoC0tLS0tfC0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS18IMKgIMKgIMKgwqAKwqAgwqAgwqAgwqB8CsKgIMKg
+wqAKSW4gdGhlIGFib3ZlIGNhc2UsOgoyLjEgd2Ugd2lsbCBnZXQgZ2VwX2VuZCBmaXJzdGx577ya
+Cj4Jd2hpbGUgKHRydWUpIHsKPgkvKiBWaXNpdCByaWdodCBzdWJ0cmVlIGlmIGl0IGxvb2tzIHBy
+b21pc2luZyAqLwo+CWdhcF9zdGFydCA9IHZtYS0+dm1fcHJldiA/IHZtX2VuZF9nYXAodm1hLT52
+bV9wcmV2KSA6IDA7Cj4JaWYgKGdhcF9zdGFydCA8PSBoaWdoX2xpbWl0ICYmIHZtYS0+dm1fcmIu
+cmJfcmlnaHQpIHsKPglzdHJ1Y3Qgdm1fYXJlYV9zdHJ1Y3QgKnJpZ2h0ID0KPglyYl9lbnRyeSh2
+bWEtPnZtX3JiLnJiX3JpZ2h0LAo+CXN0cnVjdCB2bV9hcmVhX3N0cnVjdCwgdm1fcmIpOwo+CWlm
+IChyaWdodC0+cmJfc3VidHJlZV9nYXAgPj0gbGVuZ3RoKSB7Cj4Jdm1hID0gcmlnaHQ7Cj4JY29u
+dGludWU7Cj4JfQo+CX0KPgo+IGNoZWNrX2N1cnJlbnQ6Cj4JLyogQ2hlY2sgaWYgY3VycmVudCBu
+b2RlIGhhcyBhIHN1aXRhYmxlIGdhcCAqLwo+CWdhcF9lbmQgPSB2bV9zdGFydF9nYXAodm1hKTsK
+PglpZiAoZ2FwX2VuZCA8IGxvd19saW1pdCkKPglyZXR1cm4gLUVOT01FTTsKPglpZiAoZ2FwX3N0
+YXJ0IDw9IGhpZ2hfbGltaXQgJiYKPgnCoCDCoGdhcF9lbmQgPiBnYXBfc3RhcnQgJiYgZ2FwX2Vu
+ZCAtIGdhcF9zdGFydCA+PSBsZW5ndGgpIHsKPglnYXBfZW5kX3RtcCA9IGdhcF9lbmQgLSBpbmZv
+LT5sZW5ndGg7Cj4JZ2FwX2VuZF90bXAgLT0gKGdhcF9lbmRfdG1wIC0gaW5mby0+YWxpZ25fb2Zm
+c2V0KSAmIGluZm8tPmFsaWduX21hc2s7Cj4JaWYgKGdhcF9lbmRfdG1wID49IGdhcF9zdGFydCkK
+Pglnb3RvIGZvdW5kOwo+Cj4JfQoKMi4yIHdlIGNsaXAgaXQgd2l0aCB0aGUgb3JpZ2luYWwgaGln
+aF9saW1pdDoKYnV0IGlmIGluZm8tPmhpZ2hfbGltaXQgLcKgaW5mby0+bG93X2xpbWl0IDzCoGlu
+Zm8tPmxlbmd0aCArIGluZm8tPmFsaWduX21hc2ssCndlIGNhbiBub3QgcHJvbWlzZSBnZXQgYSBh
+ZGRyIGF0IHRoZSBkZXNpcmVkIGFsaWdubWVudCwgaXQgd2lsbCBjYXVzZSB0byByZXR1cm4gYSBh
+ZGRyIGluIGFsaWduIGVycm9yLgrCoCDCoAo+IGZvdW5kOgo+CS8qIFdlIGZvdW5kIGEgc3VpdGFi
+bGUgZ2FwLiBDbGlwIGl0IHdpdGggdGhlIG9yaWdpbmFsIGhpZ2hfbGltaXQuICovCj4JaWYgKGdh
+cF9lbmQgPiBpbmZvLT5oaWdoX2xpbWl0KQo+CWdhcF9lbmQgPSBpbmZvLT5oaWdoX2xpbWl0Owo+
+Cj4gZm91bmRfaGlnaGVzdDoKPgkvKiBDb21wdXRlIGhpZ2hlc3QgZ2FwIGFkZHJlc3MgYXQgdGhl
+IGRlc2lyZWQgYWxpZ25tZW50ICovCj4JZ2FwX2VuZCAtPSBpbmZvLT5sZW5ndGg7Cj4JZ2FwX2Vu
+ZCAtPSAoZ2FwX2VuZCAtIGluZm8tPmFsaWduX29mZnNldCkgJiBpbmZvLT5hbGlnbl9tYXNrOwo+
+CVZNX0JVR19PTihnYXBfZW5kIDwgaW5mby0+bG93X2xpbWl0KTsKPglWTV9CVUdfT04oZ2FwX2Vu
+ZCA8IGdhcF9zdGFydCk7Cj4JcmV0dXJuIGdhcF9lbmQ7CgoKVGhlIHBhdGNoIG11c3QgcmVxdWly
+ZTrCoGluZm8tPmhpZ2hfbGltaXQgLcKgZ2FwX3N0YXJ0wqAgPsKgaW5mby0+bGVuZ3RoICsgaW5m
+by0+YWxpZ25fbWFzay4KU28gdGhhdCB3aGVuwqBnYXBfZW5kID0gaW5mby0+aGlnaF9saW1pdCwg
+d2UgY2FuIGdldCBhIHJpZ2h0IGFkZHIgYXQgdGhlIGRlc2lyZWQgYWxpZ25tZW50IGJ5IGdhcF9l
+bmQuCgpUaGFuayB5b3UgdmVyeSBtdWNoIGluZGVlZCBmb3IgYXNraW5nIHN1Y2ggbmljZSBwcm9i
+bGVtc8KgCnNvIHRoYXQgaSBjYW4gdHJ5IG15IGJlc3QgdG8gZXhwbGFpbiBob3cgdGhlIHBhdGNo
+IHdvcmsuCgpwbHMgbGV0IG1lIGtub3cgaWYgdGhlcmUgYXJlIGFueSBwcm9ibGVtIGluIHRoZSBw
+YXRjaCwgdGh4cy4KCmxpcGVpZmVuZ0BvcHBvLmNvbQrCoApGcm9tOsKgQW5kcmV3IE1vcnRvbgpE
+YXRlOsKgMjAyMi0wNC0xM8KgMDU6MjIKVG86wqBsaXBlaWZlbmcKQ0M6wqBtaWNoZWw7IGh1Z2hk
+OyBsaW51eC1tbTsgbGludXgta2VybmVsOyAyMWNuYmFvOyB6aGFuZ3NoaW1pbmcKU3ViamVjdDrC
+oFJlOiBbUEFUQ0hdIG1tOiBmaXggYWxpZ24tZXJyb3Igd2hlbiBnZXRfYWRkciBpbiB1bm1hcHBl
+ZF9hcmVhX3RvcGRvd24KT24gVHVlLCAxMiBBcHIgMjAyMiAxNjoxMDoxNCArMDgwMCBsaXBlaWZl
+bmdAb3Bwby5jb20gd3JvdGU6CsKgCj4gRnJvbTogbGlwZWlmZW5nIDxsaXBlaWZlbmdAb3Bwby5j
+b20+Cj4KPiB3aGVuIHdlIGZvdW5kIGEgc3VpdGFibGUgZ2FwX2VuZCg+IGluZm8tPmhpZ2hfbGlt
+aXQpLCBnYXBfZW5kCj4gbXVzdCBiZSBzZXQgdG8gaW5mby0+aGlnaF9saW1pdC4gQW5kIHdlIHdp
+bGwgZ2V0IHRoZSBnYXBfZW5kCj4gYWZ0ZXIgY29tcHV0aW5nIGhpZ2hlc3QgZ2FwIGFkZHJlc3Mg
+YXQgdGhlIGRlc2lyZWQgYWxpZ25tZW50Lgo+Cj4gMjA5NiBmb3VuZDoKPiAyMDk3wqDCoMKgwqDC
+oMKgwqDCoCBpZiAoZ2FwX2VuZCA+IGluZm8tPmhpZ2hfbGltaXQpCj4gMjA5OMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgIGdhcF9lbmQgPSBpbmZvLT5oaWdoX2xpbWl0Owo+IDIwOTkK
+PiAyMTAwIGZvdW5kX2hpZ2hlc3Q6Cj4gMjEwMcKgwqDCoMKgwqDCoMKgwqAgZ2FwX2VuZCAtPSBp
+bmZvLT5sZW5ndGg7Cj4gMjEwMsKgwqDCoMKgwqDCoMKgwqAgZ2FwX2VuZCAtPSAoZ2FwX2VuZCAt
+IGluZm8tPmFsaWduX29mZnNldCkgJiBpbmZvLT5hbGlnbl9tYXNrOwo+IDIxMDMKPiAyMTA0wqDC
+oMKgwqDCoMKgwqDCoCBWTV9CVUdfT04oZ2FwX2VuZCA8IGluZm8tPmxvd19saW1pdCk7Cj4gMjEw
+NcKgwqDCoMKgwqDCoMKgwqAgVk1fQlVHX09OKGdhcF9lbmQgPCBnYXBfc3RhcnQpOwo+IDIxMDbC
+oMKgwqDCoMKgwqDCoMKgIHJldHVybiBnYXBfZW5kOwo+Cj4gc28gd2UgbXVzdCBwcm9taXNlOiBp
+bmZvLT5oaWdoX2xpbWl0IC0gaW5mby0+bG93X2xpbWl0ID49Cj4gaW5mby0+bGVuZ3RoICsgaW5m
+by0+YWxpZ25fbWFzay4KPiBPciBpbiByYXJlIGNhc2VzKGluZm8tPmhpZ2hfbGltaXQgLSBpbmZv
+LT5sb3dfbGltaXQgPAo+IGluZm8tPmxlbmd0aCArIGluZm8tPmFsaWduX21hc2spIHdlIHdpbGwg
+Z2V0IHRoZSBhZGRyIGluCj4gYWxpZ24tZXJyb3IgaWYgZm91bmQgc3VpdGFibGUgZ2FwX2VuZCg+
+IGluZm8tPmhpZ2hfbGltaXQpLgo+CsKgClRoYW5rcy4KwqAKV2hhdCBhcmUgdGhlIHJ1bnRpbWUg
+YWZmZWN0cyBvZiB0aGlzIGJ1ZywgYW5kIGhvdyBhcmUgeW91IGFibGUgdG8KdHJpZ2dlciBpdD8K
+wqAKPiAtLS0gYS9tbS9tbWFwLmMKPiArKysgYi9tbS9tbWFwLmMKPiBAQCAtMjAwOSw3ICsyMDA5
+LDYgQEAgc3RhdGljIHVuc2lnbmVkIGxvbmcgdW5tYXBwZWRfYXJlYV90b3Bkb3duKHN0cnVjdCB2
+bV91bm1hcHBlZF9hcmVhX2luZm8gKmluZm8pCj7CoCBpZiAobGVuZ3RoIDwgaW5mby0+bGVuZ3Ro
+KQo+wqAgcmV0dXJuIC1FTk9NRU07Cj7CoAo+IC0JbGVuZ3RoID0gaW5mby0+bGVuZ3RoOwo+wqAg
+LyoKPsKgICogQWRqdXN0IHNlYXJjaCBsaW1pdHMgYnkgdGhlIGRlc2lyZWQgbGVuZ3RoLgo+wqAg
+KiBTZWUgaW1wbGVtZW50YXRpb24gY29tbWVudCBhdCB0b3Agb2YgdW5tYXBwZWRfYXJlYSgpLgo+
+IEBAIC0yMDIxLDYgKzIwMjAsOCBAQCBzdGF0aWMgdW5zaWduZWQgbG9uZyB1bm1hcHBlZF9hcmVh
+X3RvcGRvd24oc3RydWN0IHZtX3VubWFwcGVkX2FyZWFfaW5mbyAqaW5mbykKPsKgCj7CoCBpZiAo
+aW5mby0+bG93X2xpbWl0ID4gaGlnaF9saW1pdCkKPsKgIHJldHVybiAtRU5PTUVNOwo+ICsKPiAr
+CWxlbmd0aCA9IGluZm8tPmxlbmd0aDsKPsKgIGxvd19saW1pdCA9IGluZm8tPmxvd19saW1pdCAr
+IGxlbmd0aDsKPsKgCj7CoCAvKiBDaGVjayBoaWdoZXN0IGdhcCwgd2hpY2ggZG9lcyBub3QgcHJl
+Y2VkZSBhbnkgcmJ0cmVlIG5vZGUgKi8KPiAtLQo+IDIuNy40

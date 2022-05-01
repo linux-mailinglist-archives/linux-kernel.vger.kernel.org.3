@@ -2,233 +2,416 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D664051628F
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 10:06:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55745516292
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 10:09:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243734AbiEAIJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 04:09:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38484 "EHLO
+        id S241751AbiEAIMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 04:12:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244173AbiEAII6 (ORCPT
+        with ESMTP id S229632AbiEAIMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 04:08:58 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40BAA22518;
-        Sun,  1 May 2022 01:05:31 -0700 (PDT)
-Date:   Sun, 01 May 2022 08:05:29 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651392330;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=x+spWrcPrbTUUZGwE7e3adfKfCHYQ3Ba2eFYiYfXCJ0=;
-        b=eE8y6XRp0yiMmdl2cxhuAt8RVcYycgB0eo/6Y4ZK8eLCxQeVAJX5bn+oGasRFz4LyRYQ0t
-        9S87S06XFcp7jHtGjkDbAdL7MyoPscmPLyofWuktoLPFwUpjGuFwDlqWPOsuMdsomDsILH
-        jqlI1SkrwC+PMtc4Q5+sof1r0+MkFCdAx2NQOYpnQHbPPuCucz9Napp5U1D7gAfe4yL4/3
-        r2b1anIIGF5i5yEgIENh93PvBOLrZJCdH3pzkUP5dEkCOSbmE2/ToP/OraxmrWza89lLCq
-        GgC4Jqd1KcI6GUJjhx9EVEYz4i8153y21wHJD/WvBYty5vN+k0Hq5O3F/ujozQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651392330;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=x+spWrcPrbTUUZGwE7e3adfKfCHYQ3Ba2eFYiYfXCJ0=;
-        b=Qq/CLeBvJTCIQ2zOE19+HXxaKspxmSDeUCSosxFjIYEyigGEBwIKV2DUwPy5I3Bmyo7GpB
-        Wkzc5e/KEXIBCuBw==
-From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched: Fix missing prototype warnings
-Cc:     kernel test robot <lkp@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220413133024.249118058@linutronix.de>
-References: <20220413133024.249118058@linutronix.de>
+        Sun, 1 May 2022 04:12:51 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC0113D64
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 01:09:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651392566; x=1682928566;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=XJ8ivdgXfCkfi29KrUHdjElrRLrWDx9n7Agjr5EDbrs=;
+  b=U+Xx0vzymRNfFIfc8V6be9623I1RLXcjh03zSfVBdWMuxNqDAbW1swrm
+   IdM1SYWuWndzKInkbw2CQ6JDIK6uVCYeh02EbVSL+DZWI4/XYMUAbmYnt
+   /H4VEs6aaDz/OoCr72U9xDWf+ycG9xRRRuJpgAagG3+istqwtnFJkmAAn
+   mQCsUPZQ6XR1Lv40b4yAgCyxZ5MCxW8RH04QAzC5HwmQrlqckRTq0b+pF
+   s5M2YX+OfRQ9cqFVveXiiIVk0h0RYU92FxX/XMQEJu6qaj7qGuUQWUXbv
+   p2jVNkmIvKn1yG+B7fAUz/dIGZttxxXi0qSxu0t+SkLhN8B63SvrAlFgp
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10333"; a="248939218"
+X-IronPort-AV: E=Sophos;i="5.91,189,1647327600"; 
+   d="scan'208";a="248939218"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 01:09:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,189,1647327600"; 
+   d="scan'208";a="809742382"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 01 May 2022 01:09:24 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nl4dw-0008c2-0h;
+        Sun, 01 May 2022 08:09:24 +0000
+Date:   Sun, 01 May 2022 16:09:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/urgent] BUILD SUCCESS
+ 1fa568e26f001e951b634d62ef3accdc80a87c7b
+Message-ID: <626e4022.HXJiLOsG553mOsg9%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Message-ID: <165139232942.4207.4368657808943389619.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/core branch of tip:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
+branch HEAD: 1fa568e26f001e951b634d62ef3accdc80a87c7b  bug: Have __warn() prototype defined unconditionally
 
-Commit-ID:     d664e399128bd78b905ff480917e2c2d4949e101
-Gitweb:        https://git.kernel.org/tip/d664e399128bd78b905ff480917e2c2d4949e101
-Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Wed, 13 Apr 2022 15:31:02 +02:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Sun, 01 May 2022 10:03:43 +02:00
+elapsed time: 7019m
 
-sched: Fix missing prototype warnings
+configs tested: 323
+configs skipped: 7
 
-A W=1 build emits more than a dozen missing prototype warnings related to
-scheduler and scheduler specific includes.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220413133024.249118058@linutronix.de
----
- include/linux/sched.h        | 2 ++
- kernel/sched/build_policy.c  | 2 ++
- kernel/sched/build_utility.c | 1 +
- kernel/sched/core.c          | 3 +++
- kernel/sched/deadline.c      | 2 --
- kernel/sched/fair.c          | 1 +
- kernel/sched/sched.h         | 8 ++------
- kernel/sched/smp.h           | 6 ++++++
- kernel/stop_machine.c        | 2 --
- 9 files changed, 17 insertions(+), 10 deletions(-)
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+mips                 randconfig-c004-20220425
+i386                 randconfig-c001-20220425
+i386                          randconfig-c001
+mips                     decstation_defconfig
+m68k                            q40_defconfig
+arm                           corgi_defconfig
+sh                           se7724_defconfig
+parisc                generic-32bit_defconfig
+m68k                         amcore_defconfig
+arc                        nsim_700_defconfig
+sh                           se7206_defconfig
+sh                               j2_defconfig
+arm                        cerfcube_defconfig
+sh                           se7751_defconfig
+arm                         assabet_defconfig
+mips                  decstation_64_defconfig
+arm                            zeus_defconfig
+s390                             allmodconfig
+sh                          rsk7264_defconfig
+mips                  maltasmvp_eva_defconfig
+mips                      maltasmvp_defconfig
+arm                         lubbock_defconfig
+m68k                                defconfig
+sh                          sdk7780_defconfig
+powerpc                     tqm8555_defconfig
+arm                          badge4_defconfig
+riscv             nommu_k210_sdcard_defconfig
+powerpc                   motionpro_defconfig
+arc                        nsimosci_defconfig
+powerpc                      arches_defconfig
+powerpc                 linkstation_defconfig
+sh                     sh7710voipgw_defconfig
+sh                        edosk7705_defconfig
+arm                         lpc18xx_defconfig
+mips                           ip32_defconfig
+arm                          pxa910_defconfig
+powerpc                     ep8248e_defconfig
+s390                                defconfig
+mips                         tb0226_defconfig
+arc                            hsdk_defconfig
+mips                          rb532_defconfig
+mips                        vocore2_defconfig
+powerpc                      ppc6xx_defconfig
+arm                       multi_v4t_defconfig
+arm                      jornada720_defconfig
+powerpc                    adder875_defconfig
+sh                           se7619_defconfig
+alpha                               defconfig
+h8300                               defconfig
+riscv                    nommu_k210_defconfig
+powerpc                     tqm8548_defconfig
+sh                   secureedge5410_defconfig
+sh                            shmin_defconfig
+sh                          r7780mp_defconfig
+sh                     magicpanelr2_defconfig
+nios2                               defconfig
+powerpc                     taishan_defconfig
+sparc                       sparc64_defconfig
+powerpc                        cell_defconfig
+parisc                generic-64bit_defconfig
+arm                         cm_x300_defconfig
+microblaze                      mmu_defconfig
+m68k                       m5208evb_defconfig
+arc                              alldefconfig
+powerpc                 mpc837x_mds_defconfig
+xtensa                       common_defconfig
+sh                             sh03_defconfig
+arm                       imx_v6_v7_defconfig
+ia64                      gensparse_defconfig
+m68k                            mac_defconfig
+i386                             alldefconfig
+arm                        clps711x_defconfig
+powerpc                     tqm8541_defconfig
+powerpc                       holly_defconfig
+mips                            gpr_defconfig
+xtensa                           allyesconfig
+arm                            lart_defconfig
+powerpc                         ps3_defconfig
+sh                          r7785rp_defconfig
+powerpc                 mpc8540_ads_defconfig
+arm                             pxa_defconfig
+arm                        keystone_defconfig
+arm                         vf610m4_defconfig
+powerpc                     mpc83xx_defconfig
+sh                      rts7751r2d1_defconfig
+sh                        sh7785lcr_defconfig
+sparc                               defconfig
+arm                        mini2440_defconfig
+sh                ecovec24-romimage_defconfig
+sh                         ap325rxa_defconfig
+mips                       bmips_be_defconfig
+m68k                        m5272c3_defconfig
+sh                             shx3_defconfig
+sh                           se7780_defconfig
+arc                     nsimosci_hs_defconfig
+sh                          kfr2r09_defconfig
+m68k                       bvme6000_defconfig
+sh                          landisk_defconfig
+arc                         haps_hs_defconfig
+xtensa                  cadence_csp_defconfig
+parisc                              defconfig
+sh                         ecovec24_defconfig
+arm                             ezx_defconfig
+powerpc                      cm5200_defconfig
+xtensa                         virt_defconfig
+powerpc                      mgcoge_defconfig
+m68k                       m5475evb_defconfig
+arm                            qcom_defconfig
+sh                   sh7724_generic_defconfig
+mips                     loongson1b_defconfig
+m68k                        m5307c3_defconfig
+mips                            ar7_defconfig
+arm                          lpd270_defconfig
+openrisc                  or1klitex_defconfig
+ia64                            zx1_defconfig
+arm                          simpad_defconfig
+m68k                          sun3x_defconfig
+nios2                            allyesconfig
+m68k                          multi_defconfig
+arm                        multi_v7_defconfig
+microblaze                          defconfig
+powerpc                     pq2fads_defconfig
+arm                           sunxi_defconfig
+ia64                             alldefconfig
+mips                         cobalt_defconfig
+sh                          lboxre2_defconfig
+arm                         nhk8815_defconfig
+mips                       capcella_defconfig
+powerpc                 mpc837x_rdb_defconfig
+sh                           sh2007_defconfig
+powerpc                     asp8347_defconfig
+sh                        edosk7760_defconfig
+arm                       aspeed_g5_defconfig
+m68k                             alldefconfig
+arm                           h3600_defconfig
+powerpc                    amigaone_defconfig
+sh                           se7721_defconfig
+powerpc                           allnoconfig
+powerpc                   currituck_defconfig
+arm                           tegra_defconfig
+sh                            hp6xx_defconfig
+openrisc                 simple_smp_defconfig
+arm                      integrator_defconfig
+i386                                defconfig
+mips                           jazz_defconfig
+powerpc                      chrp32_defconfig
+arm                      footbridge_defconfig
+powerpc                 mpc85xx_cds_defconfig
+sh                   rts7751r2dplus_defconfig
+parisc64                            defconfig
+arc                                 defconfig
+openrisc                    or1ksim_defconfig
+powerpc                    sam440ep_defconfig
+arm                  randconfig-c002-20220425
+x86_64               randconfig-c001-20220425
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220428
+arm                  randconfig-c002-20220427
+arm                  randconfig-c002-20220429
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+csky                                defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+sh                               allmodconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+x86_64               randconfig-a015-20220425
+x86_64               randconfig-a014-20220425
+x86_64               randconfig-a011-20220425
+x86_64               randconfig-a012-20220425
+x86_64               randconfig-a016-20220425
+x86_64               randconfig-a013-20220425
+i386                 randconfig-a014-20220425
+i386                 randconfig-a012-20220425
+i386                 randconfig-a011-20220425
+i386                 randconfig-a015-20220425
+i386                 randconfig-a013-20220425
+i386                 randconfig-a016-20220425
+i386                          randconfig-a012
+i386                          randconfig-a016
+i386                          randconfig-a014
+s390                 randconfig-r044-20220425
+arc                  randconfig-r043-20220425
+riscv                randconfig-r042-20220425
+arc                  randconfig-r043-20220428
+arc                  randconfig-r043-20220429
+s390                 randconfig-r044-20220429
+riscv                randconfig-r042-20220429
+riscv                             allnoconfig
+riscv                            allyesconfig
+riscv                            allmodconfig
+riscv                          rv32_defconfig
+riscv                    nommu_virt_defconfig
+riscv                               defconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
+x86_64                           rhel-8.3-syz
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index fc74ea2..a27316f 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -2388,4 +2388,6 @@ static inline void sched_core_free(struct task_struct *tsk) { }
- static inline void sched_core_fork(struct task_struct *p) { }
- #endif
- 
-+extern void sched_set_stop_task(int cpu, struct task_struct *stop);
-+
- #endif
-diff --git a/kernel/sched/build_policy.c b/kernel/sched/build_policy.c
-index e0104b4..d9dc9ab 100644
---- a/kernel/sched/build_policy.c
-+++ b/kernel/sched/build_policy.c
-@@ -15,6 +15,7 @@
- /* Headers: */
- #include <linux/sched/clock.h>
- #include <linux/sched/cputime.h>
-+#include <linux/sched/hotplug.h>
- #include <linux/sched/posix-timers.h>
- #include <linux/sched/rt.h>
- 
-@@ -31,6 +32,7 @@
- #include <uapi/linux/sched/types.h>
- 
- #include "sched.h"
-+#include "smp.h"
- 
- #include "autogroup.h"
- #include "stats.h"
-diff --git a/kernel/sched/build_utility.c b/kernel/sched/build_utility.c
-index eec0849..99bdd96 100644
---- a/kernel/sched/build_utility.c
-+++ b/kernel/sched/build_utility.c
-@@ -14,6 +14,7 @@
- #include <linux/sched/debug.h>
- #include <linux/sched/isolation.h>
- #include <linux/sched/loadavg.h>
-+#include <linux/sched/nohz.h>
- #include <linux/sched/mm.h>
- #include <linux/sched/rseq_api.h>
- #include <linux/sched/task_stack.h>
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 068c088..e644578 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -26,7 +26,10 @@
- #include <linux/topology.h>
- #include <linux/sched/clock.h>
- #include <linux/sched/cond_resched.h>
-+#include <linux/sched/cputime.h>
- #include <linux/sched/debug.h>
-+#include <linux/sched/hotplug.h>
-+#include <linux/sched/init.h>
- #include <linux/sched/isolation.h>
- #include <linux/sched/loadavg.h>
- #include <linux/sched/mm.h>
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index fb4255a..6ae4236 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -1220,8 +1220,6 @@ int dl_runtime_exceeded(struct sched_dl_entity *dl_se)
- 	return (dl_se->runtime <= 0);
- }
- 
--extern bool sched_rt_bandwidth_account(struct rt_rq *rt_rq);
--
- /*
-  * This function implements the GRUB accounting rule:
-  * according to the GRUB reclaiming algorithm, the runtime is
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 6ca054b..bc9f6e9 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -36,6 +36,7 @@
- #include <linux/sched/cond_resched.h>
- #include <linux/sched/cputime.h>
- #include <linux/sched/isolation.h>
-+#include <linux/sched/nohz.h>
- 
- #include <linux/cpuidle.h>
- #include <linux/interrupt.h>
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 762be73..4784898 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -1833,12 +1833,7 @@ static inline void dirty_sched_domain_sysctl(int cpu)
- #endif
- 
- extern int sched_update_scaling(void);
--
--extern void flush_smp_call_function_from_idle(void);
--
--#else /* !CONFIG_SMP: */
--static inline void flush_smp_call_function_from_idle(void) { }
--#endif
-+#endif /* CONFIG_SMP */
- 
- #include "stats.h"
- 
-@@ -2315,6 +2310,7 @@ extern void resched_cpu(int cpu);
- 
- extern struct rt_bandwidth def_rt_bandwidth;
- extern void init_rt_bandwidth(struct rt_bandwidth *rt_b, u64 period, u64 runtime);
-+extern bool sched_rt_bandwidth_account(struct rt_rq *rt_rq);
- 
- extern void init_dl_bandwidth(struct dl_bandwidth *dl_b, u64 period, u64 runtime);
- extern void init_dl_task_timer(struct sched_dl_entity *dl_se);
-diff --git a/kernel/sched/smp.h b/kernel/sched/smp.h
-index 9620e32..5719bf9 100644
---- a/kernel/sched/smp.h
-+++ b/kernel/sched/smp.h
-@@ -7,3 +7,9 @@
- extern void sched_ttwu_pending(void *arg);
- 
- extern void send_call_function_single_ipi(int cpu);
-+
-+#ifdef CONFIG_SMP
-+extern void flush_smp_call_function_from_idle(void);
-+#else
-+static inline void flush_smp_call_function_from_idle(void) { }
-+#endif
-diff --git a/kernel/stop_machine.c b/kernel/stop_machine.c
-index cbc3027..6da7b91 100644
---- a/kernel/stop_machine.c
-+++ b/kernel/stop_machine.c
-@@ -535,8 +535,6 @@ void stop_machine_park(int cpu)
- 	kthread_park(stopper->thread);
- }
- 
--extern void sched_set_stop_task(int cpu, struct task_struct *stop);
--
- static void cpu_stop_create(unsigned int cpu)
- {
- 	sched_set_stop_task(cpu, per_cpu(cpu_stopper.thread, cpu));
+clang tested configs:
+riscv                randconfig-c006-20220425
+mips                 randconfig-c004-20220425
+x86_64               randconfig-c007-20220425
+arm                  randconfig-c002-20220425
+i386                 randconfig-c001-20220425
+powerpc              randconfig-c003-20220425
+riscv                randconfig-c006-20220427
+mips                 randconfig-c004-20220427
+x86_64                        randconfig-c007
+i386                          randconfig-c001
+arm                  randconfig-c002-20220427
+powerpc              randconfig-c003-20220427
+riscv                randconfig-c006-20220428
+mips                 randconfig-c004-20220428
+arm                  randconfig-c002-20220428
+powerpc              randconfig-c003-20220428
+powerpc              randconfig-c003-20220501
+riscv                randconfig-c006-20220501
+mips                 randconfig-c004-20220501
+arm                  randconfig-c002-20220501
+riscv                randconfig-c006-20220429
+mips                 randconfig-c004-20220429
+arm                  randconfig-c002-20220429
+powerpc              randconfig-c003-20220429
+mips                          ath79_defconfig
+arm                       spear13xx_defconfig
+arm                         shannon_defconfig
+mips                   sb1250_swarm_defconfig
+mips                     loongson2k_defconfig
+s390                             alldefconfig
+arm                        vexpress_defconfig
+arm                         palmz72_defconfig
+arm                       cns3420vb_defconfig
+arm                          pxa168_defconfig
+powerpc                    socrates_defconfig
+arm                            dove_defconfig
+powerpc                     tqm5200_defconfig
+powerpc                 mpc832x_rdb_defconfig
+mips                     cu1830-neo_defconfig
+powerpc                    mvme5100_defconfig
+powerpc                      ppc44x_defconfig
+arm                         s3c2410_defconfig
+arm                           omap1_defconfig
+arm                      pxa255-idp_defconfig
+powerpc                 mpc8315_rdb_defconfig
+arm                       aspeed_g4_defconfig
+powerpc                      walnut_defconfig
+arm                              alldefconfig
+mips                            e55_defconfig
+arm                       mainstone_defconfig
+arm                          moxart_defconfig
+mips                           mtx1_defconfig
+arm                         bcm2835_defconfig
+mips                malta_qemu_32r6_defconfig
+powerpc                       ebony_defconfig
+powerpc                  mpc885_ads_defconfig
+arm                       imx_v4_v5_defconfig
+powerpc                          allyesconfig
+powerpc                      katmai_defconfig
+powerpc                     pseries_defconfig
+mips                       lemote2f_defconfig
+powerpc                     kmeter1_defconfig
+x86_64                           allyesconfig
+powerpc                        fsp2_defconfig
+mips                      malta_kvm_defconfig
+mips                           ip27_defconfig
+mips                       rbtx49xx_defconfig
+powerpc                          allmodconfig
+powerpc                 mpc8560_ads_defconfig
+riscv                          rv32_defconfig
+mips                     cu1000-neo_defconfig
+arm                             mxs_defconfig
+powerpc                     skiroot_defconfig
+mips                      bmips_stb_defconfig
+arm                       versatile_defconfig
+arm                     davinci_all_defconfig
+x86_64               randconfig-a002-20220425
+x86_64               randconfig-a004-20220425
+x86_64               randconfig-a003-20220425
+x86_64               randconfig-a001-20220425
+x86_64               randconfig-a005-20220425
+x86_64               randconfig-a006-20220425
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+i386                 randconfig-a003-20220425
+i386                 randconfig-a002-20220425
+i386                 randconfig-a001-20220425
+i386                 randconfig-a005-20220425
+i386                 randconfig-a006-20220425
+i386                 randconfig-a004-20220425
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220425
+hexagon              randconfig-r041-20220425
+hexagon              randconfig-r041-20220428
+riscv                randconfig-r042-20220428
+hexagon              randconfig-r045-20220428
+s390                 randconfig-r044-20220428
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

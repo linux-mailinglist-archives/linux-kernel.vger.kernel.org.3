@@ -2,86 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B971F5162C1
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 10:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1561A5162C6
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 10:34:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245399AbiEAIhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 04:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48578 "EHLO
+        id S245648AbiEAIhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 04:37:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245223AbiEAIhO (ORCPT
+        with ESMTP id S245461AbiEAIhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 04:37:14 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4022C1ADA9;
-        Sun,  1 May 2022 01:33:48 -0700 (PDT)
-Received: from mail-yw1-f175.google.com ([209.85.128.175]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MXp1Q-1nLlhf1EYG-00Y9J0; Sun, 01 May 2022 10:33:47 +0200
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-2f7c424c66cso122625357b3.1;
-        Sun, 01 May 2022 01:33:46 -0700 (PDT)
-X-Gm-Message-State: AOAM533k9kFTTG4MJ3KeAtcE/p3KbXo9IY6TP/yDjxc07BhxaHvGH3og
-        FDomw6R4yVA0cIk/Vd+7fCzNAsurCinjojOiqMc=
-X-Google-Smtp-Source: ABdhPJx7EkELZrBAmPjNc/73odhjEgqgTI5PwY7c4bA/A+enkyNER6K6fXqCt4wvYWQxX6D6K32sBvkhhAy1mpKvnE4=
-X-Received: by 2002:a81:5594:0:b0:2f8:f39c:4cfc with SMTP id
- j142-20020a815594000000b002f8f39c4cfcmr3827327ywb.495.1651394025779; Sun, 01
- May 2022 01:33:45 -0700 (PDT)
+        Sun, 1 May 2022 04:37:20 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A3F1AF1C
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 01:33:55 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id gh6so22888395ejb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 01:33:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=juphbGtVRI7AgwIBx/gVkRn1JsqVAIzvaH2H1Ynllr4=;
+        b=Ink2fnHkVWHDhPUFXh+DIhg9JOPJqIFKPZidd0JPdal2U+pv+v44Rrrq2/+XykLTUC
+         yiYFlX95J2ma8UL59qsoWaNO+5mj9DOQZZv7ZyOBoG0wXBU8HiaZydTfzKaZR1JfAKjZ
+         ZMgmAizrjpzSZwwM5qmeChXnYGKGWJGbSn0Jb2ktSExcVYcgtGtO9aWPpneL+0PSJWsT
+         hZzEnFGlo55eHclKU+tDgSkMwrzaUXbHRcd4Y+7SzjjLkW1jnyEtokp+ryzytujT0qlt
+         n0zmdzgN/evgrXCOsiFOodHpK6p5MUBcUJGFmNWutvGWTDtN7W/2D4pLVYqEVhn1xo5J
+         EoAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=juphbGtVRI7AgwIBx/gVkRn1JsqVAIzvaH2H1Ynllr4=;
+        b=XO9YIC92bKtjED39sLfD2M1LNtzCR4MPL5rcrSIedzVGwyaVHGUOoZrWKQv60ZpNVz
+         4wfkBPBQ1w3he0x8Di5v3zq+Y/Wq2O7/671MkngWUi6B+DHaINHuXkO7vMA1zHOBtcym
+         Prr5pTaKquBXRhHPdOBWxMU4jsRe0irOV185HJHhq+zjlNeFQPptEbKgNOdU1psDZdql
+         96hyebIF7ml1pxDrq5De8GszSSI2yC1Dmr+7xapDJvEkrgnQkTYvxoYb1g8ArWxzRLJe
+         CcC6ckBblN2AHMT4TzKMp18w/kxNDMI3xL6SyMG9QbLJLfgzZ7khdKiYk6ZAUc0O+/WG
+         9RUQ==
+X-Gm-Message-State: AOAM53271dDLi31Q4wKykABTDxDyDa9KaSkXDBBj6mpm/G7NlUQ9au4C
+        ig89auAIuFQdSV5wh+lyutZEcQ==
+X-Google-Smtp-Source: ABdhPJxAWLnuoKSS1igYp6oJJh+6W/c2qh9JvOdGJryIMghe4U60loFIZvJD6/J0AKyCZMskknqNKw==
+X-Received: by 2002:a17:907:7da2:b0:6f4:1b12:fea3 with SMTP id oz34-20020a1709077da200b006f41b12fea3mr5239590ejc.95.1651394034166;
+        Sun, 01 May 2022 01:33:54 -0700 (PDT)
+Received: from [192.168.0.182] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id og10-20020a1709071dca00b006f3ef214dccsm2364144ejc.50.2022.05.01.01.33.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 01 May 2022 01:33:53 -0700 (PDT)
+Message-ID: <9d40d129-1ab8-fb2b-48cd-7f206da45632@linaro.org>
+Date:   Sun, 1 May 2022 10:33:52 +0200
 MIME-Version: 1.0
-References: <20220430090518.3127980-1-chenhuacai@loongson.cn>
- <20220430090518.3127980-22-chenhuacai@loongson.cn> <CAK8P3a0LwJ3mMQMFkxGxr+umCMM3dKGRnLF+dMCmD5j43hq2sA@mail.gmail.com>
- <CAAhV-H6vPdLeup38YTj64Xxxk+PTact=DMJTs9efsa1b3t-y2A@mail.gmail.com>
-In-Reply-To: <CAAhV-H6vPdLeup38YTj64Xxxk+PTact=DMJTs9efsa1b3t-y2A@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sun, 1 May 2022 10:33:29 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0E7P_TOJsT9=+O56L2=oyeMGckTvkb4OnK1MPcETLdtg@mail.gmail.com>
-Message-ID: <CAK8P3a0E7P_TOJsT9=+O56L2=oyeMGckTvkb4OnK1MPcETLdtg@mail.gmail.com>
-Subject: Re: [PATCH V9 21/24] LoongArch: Add zboot (compressed kernel) support
-To:     Huacai Chen <chenhuacai@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:src+v3wBVklFZE1E4lfrlLne3rNdSOB4FX3sLApOQfv8Gs2B0tj
- pOq2uSS8e7pNBa1C6K7GM034WtoPrgJU7RFx4/cuwsLgGX3K8e4hWw24lIc9azQ4bBw1Rbl
- gqTI94TCqgHO2NwQBDfIQBILO5+lF0WNqx8q0Cenyi4rAucuWXdNfTU6WvafvAdPfgQK4yr
- vONUXt3vHmABjlrdurKoQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:CRjxA0bumHE=:dTvbCg2jL7wtOcoEhG7xHZ
- +x32gw83qJ/4snuVOZBs3hIymWE9/Ht4sHvOzN2+9bIZ5jMvvexfegGvKlmKh6a67PGmMSvSI
- rPLC3tkJMD6yzP5cq9tNjwMl+sxszX+PmGcwH70A/71KHZ7XGMcU51sbet97ISTYfDEdKRFpb
- hiyz6nF8rxuCX7s0nZ7DSefyhPSakgiItN0X18Lv+UdFWLPQv+dMl7zwaWrabUY+WkBZTzzBp
- /VNpAdlrPrDEKNV036MVLGf38Y6UnO9tw8z50UFRyRuGaEXwXeeRwjRjn1pIHIoxL7rDFRpJ8
- FM5unSyNkalFbf2CMd8quZH/gjOh0DJmiZe6dicGaTbfsH5LjRn2hPLT75u00CNt7mMgs6jEv
- Q5BW6hvEjp7/tI5PE5P/RiHjJVWV1ia/LD9xAIhMVDah1R9hk/UEl89/SR0qZBhSFC51dNwdt
- gIm10h+KVXgehPBKfP9OQd+c+8PpeDQLBBNo5Tkkifs7x2fC4cksGF1TBO536ZtjFj0BBpSLu
- 7q+2rfncuy5U4nSNmqKDGYas7nYKgO42GZxTzU3+1ylJ1n16L3CCisARTAaXUu3X1gB3i+o+X
- UHGnKoeJuOzcaAHNzx2NMZ6hh5S4NjsP9Cd727GVyyMKZgIjlw1mb9Gy9qBQJi1Ua9NwvxI8e
- ACxhYXKnvAYl5J5f8MrpRTtKhQknMDkXnwEJUkNCDLdD4idE0fDcz6WB7FKM9a7oaIuSB32+q
- 9QhAMdy0efvoC9UFxfh3yJNCjmhB6r12Iue74rQppbUAjbbK/wCgN3xvwuIl8Fo54yibVJiyK
- Zd9GP8GfntRPga2oBTTkFHqCfatMu/2y+TZA/FTTLy0ZbeC3MY=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/5] dt-bindings: thermal: tsens: Add ipq8074 compatible
+Content-Language: en-US
+To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
+        bjorn.andersson@linaro.org, amitk@kernel.org,
+        thara.gopinath@linaro.org, rafael@kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220430205101.459782-1-robimarko@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220430205101.459782-1-robimarko@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,38 +78,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 1, 2022 at 7:22 AM Huacai Chen <chenhuacai@gmail.com> wrote:
-> On Sat, Apr 30, 2022 at 7:02 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > On Sat, Apr 30, 2022 at 11:05 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> > >
-> > > This patch adds zboot (self-extracting compressed kernel) support, all
-> > > existing in-kernel compressing algorithm and efistub are supported.
-> > >
-> > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> >
-> > I have no objections to adding a decompressor in principle, and
-> > the implementation seems reasonable. However, I think we should try to
-> > be consistent between architectures. On both arm64 and riscv, the
-> > maintainers decided to not include a decompressor and instead leave
-> > it up to the boot loader to decompress the kernel and enter it from there.
->
-> X86, ARM32 and MIPS already support self-extracting kernel, and in
-> 5.17 we even support self-extracting modules. So I think a
-> self-extracting kernel is better than a pure compressed kernel.
+On 30/04/2022 22:50, Robert Marko wrote:
+> Qualcomm IPQ8074 has tsens v2.3.0 block, though unlike existing v2 IP it
+> only uses one IRQ, so tsens v2 compatible cannot be used as the fallback.
+> 
+> We also have to make sure that correct interrupts are set according to
+> compatibles, so populate interrupt information per compatibles.
+> 
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
+> ---
+>  .../bindings/thermal/qcom-tsens.yaml          | 79 ++++++++++++++++---
+>  1 file changed, 68 insertions(+), 11 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> index b6406bcc683f..44ebdfd4560a 100644
+> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> @@ -56,22 +56,19 @@ properties:
+>                - qcom,sm8350-tsens
+>            - const: qcom,tsens-v2
+>  
+> +      - description: v2 of TSENS with combined interrupt
+> +        items:
 
-These three support it because they always have and it's hard to
-remove features later because it breaks user setups. Among the
-architectures we merged since the start of the git history in 2005, only
-xtensa supports compressed kernels, the rest rely on the boot loader.
+It's just an enum, no list here.
 
-> > Adding the arm64, risc-v and uefi maintainers for further discussion here,
-> > see full below.
->
-> Keeping consistency across architectures (support self-extracting for
-> all modern architectures) looks good to me, but can we do that after
-> this series? I think that needs a long time to discuss and develop.
+> +          - enum:
+> +              - qcom,ipq8074-tsens
+> +
+>    reg:
+>      items:
+>        - description: TM registers
+>        - description: SROT registers
+>  
+> -  interrupts:
+> -    minItems: 1
+> -    items:
+> -      - description: Combined interrupt if upper or lower threshold crossed
+> -      - description: Interrupt if critical threshold crossed
+> +  interrupts: true
 
-Right, just drop this patch then, and we can get back to doing it for
-all UEFI users after loongarch is merged.
+minItems: 1
+maxItems: 2
 
-      Arnd
+>  
+> -  interrupt-names:
+> -    minItems: 1
+> -    items:
+> -      - const: uplow
+> -      - const: critical
+> +  interrupt-names: true
+
+minItems: 1
+maxItems: 2
+
+
+Best regards,
+Krzysztof

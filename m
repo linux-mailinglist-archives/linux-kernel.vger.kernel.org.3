@@ -2,416 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55745516292
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 10:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E393551629A
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 10:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241751AbiEAIMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 04:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49624 "EHLO
+        id S243434AbiEAIQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 04:16:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiEAIMv (ORCPT
+        with ESMTP id S229632AbiEAIQD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 04:12:51 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC0113D64
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 01:09:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651392566; x=1682928566;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=XJ8ivdgXfCkfi29KrUHdjElrRLrWDx9n7Agjr5EDbrs=;
-  b=U+Xx0vzymRNfFIfc8V6be9623I1RLXcjh03zSfVBdWMuxNqDAbW1swrm
-   IdM1SYWuWndzKInkbw2CQ6JDIK6uVCYeh02EbVSL+DZWI4/XYMUAbmYnt
-   /H4VEs6aaDz/OoCr72U9xDWf+ycG9xRRRuJpgAagG3+istqwtnFJkmAAn
-   mQCsUPZQ6XR1Lv40b4yAgCyxZ5MCxW8RH04QAzC5HwmQrlqckRTq0b+pF
-   s5M2YX+OfRQ9cqFVveXiiIVk0h0RYU92FxX/XMQEJu6qaj7qGuUQWUXbv
-   p2jVNkmIvKn1yG+B7fAUz/dIGZttxxXi0qSxu0t+SkLhN8B63SvrAlFgp
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10333"; a="248939218"
-X-IronPort-AV: E=Sophos;i="5.91,189,1647327600"; 
-   d="scan'208";a="248939218"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 01:09:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,189,1647327600"; 
-   d="scan'208";a="809742382"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 01 May 2022 01:09:24 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nl4dw-0008c2-0h;
-        Sun, 01 May 2022 08:09:24 +0000
-Date:   Sun, 01 May 2022 16:09:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/urgent] BUILD SUCCESS
- 1fa568e26f001e951b634d62ef3accdc80a87c7b
-Message-ID: <626e4022.HXJiLOsG553mOsg9%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sun, 1 May 2022 04:16:03 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA131402A;
+        Sun,  1 May 2022 01:12:39 -0700 (PDT)
+Date:   Sun, 01 May 2022 08:12:36 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651392757;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Btm8cdhggXjho6O0WPgq4RkAAi9zylcOI/eBifzYWp8=;
+        b=WLK3Z36jq0QkP6HqWQgymJ+5w6nepgQbmdC4B5mau7rLZJjyyBC12c+ADWi3ALCCoEityh
+        9eQnaq4ASKphRUnPu5MTnOaWL3mwiFoSbvuB0Yj30ij3pHQax/vbsHjGE3fTpOW9qnjw6y
+        DHnz55tZKuHP4MbKyxtLHeDpP8vv7D/tiqedJ3ZNm0YCYFdpcK+1c1JUqYBvtQcGrnURZ2
+        sB+gkxJ+LXaFFYdm+bN1iY4cpaP9V1DlZaolPuvBHBlSvcpTWBXetQ8xS0lh7VgA+6PjhC
+        N0tFfedGbZvA3AtLNwZkqJn16qquyZzNzHkfyaiQSf2GmL7SFUdDrSFbb+3Fbw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651392757;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Btm8cdhggXjho6O0WPgq4RkAAi9zylcOI/eBifzYWp8=;
+        b=eeGr6Yw/+j0xBR79JMNk1GCZz/kWWvkfLK/C4b0J2vxmG+Dq5rtg0ScHm4/RMH4N+s8RU5
+        LCvv3xTQOuFeBjBg==
+From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/pci/xen: Disable PCI/MSI[-X] masking for XEN_HVM guests
+Cc:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
+        Dusty Mabe <dustymabe@redhat.com>,
+        Salvatore Bonaccorso <carnil@debian.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Noah Meyerhans <noahm@debian.org>, stable@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <87tuaduxj5.ffs@tglx>
+References: <87tuaduxj5.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Message-ID: <165139275608.4207.16060979873182920732.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
-branch HEAD: 1fa568e26f001e951b634d62ef3accdc80a87c7b  bug: Have __warn() prototype defined unconditionally
+The following commit has been merged into the x86/urgent branch of tip:
 
-elapsed time: 7019m
+Commit-ID:     7e0815b3e09986d2fe651199363e135b9358132a
+Gitweb:        https://git.kernel.org/tip/7e0815b3e09986d2fe651199363e135b9358132a
+Author:        Thomas Gleixner <tglx@linutronix.de>
+AuthorDate:    Thu, 28 Apr 2022 15:50:54 +02:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Fri, 29 Apr 2022 14:37:39 +02:00
 
-configs tested: 323
-configs skipped: 7
+x86/pci/xen: Disable PCI/MSI[-X] masking for XEN_HVM guests
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+When a XEN_HVM guest uses the XEN PIRQ/Eventchannel mechanism, then
+PCI/MSI[-X] masking is solely controlled by the hypervisor, but contrary to
+XEN_PV guests this does not disable PCI/MSI[-X] masking in the PCI/MSI
+layer.
 
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-mips                 randconfig-c004-20220425
-i386                 randconfig-c001-20220425
-i386                          randconfig-c001
-mips                     decstation_defconfig
-m68k                            q40_defconfig
-arm                           corgi_defconfig
-sh                           se7724_defconfig
-parisc                generic-32bit_defconfig
-m68k                         amcore_defconfig
-arc                        nsim_700_defconfig
-sh                           se7206_defconfig
-sh                               j2_defconfig
-arm                        cerfcube_defconfig
-sh                           se7751_defconfig
-arm                         assabet_defconfig
-mips                  decstation_64_defconfig
-arm                            zeus_defconfig
-s390                             allmodconfig
-sh                          rsk7264_defconfig
-mips                  maltasmvp_eva_defconfig
-mips                      maltasmvp_defconfig
-arm                         lubbock_defconfig
-m68k                                defconfig
-sh                          sdk7780_defconfig
-powerpc                     tqm8555_defconfig
-arm                          badge4_defconfig
-riscv             nommu_k210_sdcard_defconfig
-powerpc                   motionpro_defconfig
-arc                        nsimosci_defconfig
-powerpc                      arches_defconfig
-powerpc                 linkstation_defconfig
-sh                     sh7710voipgw_defconfig
-sh                        edosk7705_defconfig
-arm                         lpc18xx_defconfig
-mips                           ip32_defconfig
-arm                          pxa910_defconfig
-powerpc                     ep8248e_defconfig
-s390                                defconfig
-mips                         tb0226_defconfig
-arc                            hsdk_defconfig
-mips                          rb532_defconfig
-mips                        vocore2_defconfig
-powerpc                      ppc6xx_defconfig
-arm                       multi_v4t_defconfig
-arm                      jornada720_defconfig
-powerpc                    adder875_defconfig
-sh                           se7619_defconfig
-alpha                               defconfig
-h8300                               defconfig
-riscv                    nommu_k210_defconfig
-powerpc                     tqm8548_defconfig
-sh                   secureedge5410_defconfig
-sh                            shmin_defconfig
-sh                          r7780mp_defconfig
-sh                     magicpanelr2_defconfig
-nios2                               defconfig
-powerpc                     taishan_defconfig
-sparc                       sparc64_defconfig
-powerpc                        cell_defconfig
-parisc                generic-64bit_defconfig
-arm                         cm_x300_defconfig
-microblaze                      mmu_defconfig
-m68k                       m5208evb_defconfig
-arc                              alldefconfig
-powerpc                 mpc837x_mds_defconfig
-xtensa                       common_defconfig
-sh                             sh03_defconfig
-arm                       imx_v6_v7_defconfig
-ia64                      gensparse_defconfig
-m68k                            mac_defconfig
-i386                             alldefconfig
-arm                        clps711x_defconfig
-powerpc                     tqm8541_defconfig
-powerpc                       holly_defconfig
-mips                            gpr_defconfig
-xtensa                           allyesconfig
-arm                            lart_defconfig
-powerpc                         ps3_defconfig
-sh                          r7785rp_defconfig
-powerpc                 mpc8540_ads_defconfig
-arm                             pxa_defconfig
-arm                        keystone_defconfig
-arm                         vf610m4_defconfig
-powerpc                     mpc83xx_defconfig
-sh                      rts7751r2d1_defconfig
-sh                        sh7785lcr_defconfig
-sparc                               defconfig
-arm                        mini2440_defconfig
-sh                ecovec24-romimage_defconfig
-sh                         ap325rxa_defconfig
-mips                       bmips_be_defconfig
-m68k                        m5272c3_defconfig
-sh                             shx3_defconfig
-sh                           se7780_defconfig
-arc                     nsimosci_hs_defconfig
-sh                          kfr2r09_defconfig
-m68k                       bvme6000_defconfig
-sh                          landisk_defconfig
-arc                         haps_hs_defconfig
-xtensa                  cadence_csp_defconfig
-parisc                              defconfig
-sh                         ecovec24_defconfig
-arm                             ezx_defconfig
-powerpc                      cm5200_defconfig
-xtensa                         virt_defconfig
-powerpc                      mgcoge_defconfig
-m68k                       m5475evb_defconfig
-arm                            qcom_defconfig
-sh                   sh7724_generic_defconfig
-mips                     loongson1b_defconfig
-m68k                        m5307c3_defconfig
-mips                            ar7_defconfig
-arm                          lpd270_defconfig
-openrisc                  or1klitex_defconfig
-ia64                            zx1_defconfig
-arm                          simpad_defconfig
-m68k                          sun3x_defconfig
-nios2                            allyesconfig
-m68k                          multi_defconfig
-arm                        multi_v7_defconfig
-microblaze                          defconfig
-powerpc                     pq2fads_defconfig
-arm                           sunxi_defconfig
-ia64                             alldefconfig
-mips                         cobalt_defconfig
-sh                          lboxre2_defconfig
-arm                         nhk8815_defconfig
-mips                       capcella_defconfig
-powerpc                 mpc837x_rdb_defconfig
-sh                           sh2007_defconfig
-powerpc                     asp8347_defconfig
-sh                        edosk7760_defconfig
-arm                       aspeed_g5_defconfig
-m68k                             alldefconfig
-arm                           h3600_defconfig
-powerpc                    amigaone_defconfig
-sh                           se7721_defconfig
-powerpc                           allnoconfig
-powerpc                   currituck_defconfig
-arm                           tegra_defconfig
-sh                            hp6xx_defconfig
-openrisc                 simple_smp_defconfig
-arm                      integrator_defconfig
-i386                                defconfig
-mips                           jazz_defconfig
-powerpc                      chrp32_defconfig
-arm                      footbridge_defconfig
-powerpc                 mpc85xx_cds_defconfig
-sh                   rts7751r2dplus_defconfig
-parisc64                            defconfig
-arc                                 defconfig
-openrisc                    or1ksim_defconfig
-powerpc                    sam440ep_defconfig
-arm                  randconfig-c002-20220425
-x86_64               randconfig-c001-20220425
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220428
-arm                  randconfig-c002-20220427
-arm                  randconfig-c002-20220429
-ia64                                defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-csky                                defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-sh                               allmodconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-x86_64               randconfig-a015-20220425
-x86_64               randconfig-a014-20220425
-x86_64               randconfig-a011-20220425
-x86_64               randconfig-a012-20220425
-x86_64               randconfig-a016-20220425
-x86_64               randconfig-a013-20220425
-i386                 randconfig-a014-20220425
-i386                 randconfig-a012-20220425
-i386                 randconfig-a011-20220425
-i386                 randconfig-a015-20220425
-i386                 randconfig-a013-20220425
-i386                 randconfig-a016-20220425
-i386                          randconfig-a012
-i386                          randconfig-a016
-i386                          randconfig-a014
-s390                 randconfig-r044-20220425
-arc                  randconfig-r043-20220425
-riscv                randconfig-r042-20220425
-arc                  randconfig-r043-20220428
-arc                  randconfig-r043-20220429
-s390                 randconfig-r044-20220429
-riscv                randconfig-r042-20220429
-riscv                             allnoconfig
-riscv                            allyesconfig
-riscv                            allmodconfig
-riscv                          rv32_defconfig
-riscv                    nommu_virt_defconfig
-riscv                               defconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
-x86_64                           rhel-8.3-syz
+This can lead to a situation where the PCI/MSI layer masks an MSI[-X]
+interrupt and the hypervisor grants the write despite the fact that it
+already requested the interrupt. As a consequence interrupt delivery on the
+affected device is not happening ever.
 
-clang tested configs:
-riscv                randconfig-c006-20220425
-mips                 randconfig-c004-20220425
-x86_64               randconfig-c007-20220425
-arm                  randconfig-c002-20220425
-i386                 randconfig-c001-20220425
-powerpc              randconfig-c003-20220425
-riscv                randconfig-c006-20220427
-mips                 randconfig-c004-20220427
-x86_64                        randconfig-c007
-i386                          randconfig-c001
-arm                  randconfig-c002-20220427
-powerpc              randconfig-c003-20220427
-riscv                randconfig-c006-20220428
-mips                 randconfig-c004-20220428
-arm                  randconfig-c002-20220428
-powerpc              randconfig-c003-20220428
-powerpc              randconfig-c003-20220501
-riscv                randconfig-c006-20220501
-mips                 randconfig-c004-20220501
-arm                  randconfig-c002-20220501
-riscv                randconfig-c006-20220429
-mips                 randconfig-c004-20220429
-arm                  randconfig-c002-20220429
-powerpc              randconfig-c003-20220429
-mips                          ath79_defconfig
-arm                       spear13xx_defconfig
-arm                         shannon_defconfig
-mips                   sb1250_swarm_defconfig
-mips                     loongson2k_defconfig
-s390                             alldefconfig
-arm                        vexpress_defconfig
-arm                         palmz72_defconfig
-arm                       cns3420vb_defconfig
-arm                          pxa168_defconfig
-powerpc                    socrates_defconfig
-arm                            dove_defconfig
-powerpc                     tqm5200_defconfig
-powerpc                 mpc832x_rdb_defconfig
-mips                     cu1830-neo_defconfig
-powerpc                    mvme5100_defconfig
-powerpc                      ppc44x_defconfig
-arm                         s3c2410_defconfig
-arm                           omap1_defconfig
-arm                      pxa255-idp_defconfig
-powerpc                 mpc8315_rdb_defconfig
-arm                       aspeed_g4_defconfig
-powerpc                      walnut_defconfig
-arm                              alldefconfig
-mips                            e55_defconfig
-arm                       mainstone_defconfig
-arm                          moxart_defconfig
-mips                           mtx1_defconfig
-arm                         bcm2835_defconfig
-mips                malta_qemu_32r6_defconfig
-powerpc                       ebony_defconfig
-powerpc                  mpc885_ads_defconfig
-arm                       imx_v4_v5_defconfig
-powerpc                          allyesconfig
-powerpc                      katmai_defconfig
-powerpc                     pseries_defconfig
-mips                       lemote2f_defconfig
-powerpc                     kmeter1_defconfig
-x86_64                           allyesconfig
-powerpc                        fsp2_defconfig
-mips                      malta_kvm_defconfig
-mips                           ip27_defconfig
-mips                       rbtx49xx_defconfig
-powerpc                          allmodconfig
-powerpc                 mpc8560_ads_defconfig
-riscv                          rv32_defconfig
-mips                     cu1000-neo_defconfig
-arm                             mxs_defconfig
-powerpc                     skiroot_defconfig
-mips                      bmips_stb_defconfig
-arm                       versatile_defconfig
-arm                     davinci_all_defconfig
-x86_64               randconfig-a002-20220425
-x86_64               randconfig-a004-20220425
-x86_64               randconfig-a003-20220425
-x86_64               randconfig-a001-20220425
-x86_64               randconfig-a005-20220425
-x86_64               randconfig-a006-20220425
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-i386                 randconfig-a003-20220425
-i386                 randconfig-a002-20220425
-i386                 randconfig-a001-20220425
-i386                 randconfig-a005-20220425
-i386                 randconfig-a006-20220425
-i386                 randconfig-a004-20220425
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220425
-hexagon              randconfig-r041-20220425
-hexagon              randconfig-r041-20220428
-riscv                randconfig-r042-20220428
-hexagon              randconfig-r045-20220428
-s390                 randconfig-r044-20220428
+Set pci_msi_ignore_mask to prevent that like it's done for XEN_PV guests
+already.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Fixes: 809f9267bbab ("xen: map MSIs into pirqs")
+Reported-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+Reported-by: Dusty Mabe <dustymabe@redhat.com>
+Reported-by: Salvatore Bonaccorso <carnil@debian.org>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Tested-by: Noah Meyerhans <noahm@debian.org>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/87tuaduxj5.ffs@tglx
+
+---
+ arch/x86/pci/xen.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/pci/xen.c b/arch/x86/pci/xen.c
+index 9bb1e29..b94f727 100644
+--- a/arch/x86/pci/xen.c
++++ b/arch/x86/pci/xen.c
+@@ -467,7 +467,6 @@ static __init void xen_setup_pci_msi(void)
+ 		else
+ 			xen_msi_ops.setup_msi_irqs = xen_setup_msi_irqs;
+ 		xen_msi_ops.teardown_msi_irqs = xen_pv_teardown_msi_irqs;
+-		pci_msi_ignore_mask = 1;
+ 	} else if (xen_hvm_domain()) {
+ 		xen_msi_ops.setup_msi_irqs = xen_hvm_setup_msi_irqs;
+ 		xen_msi_ops.teardown_msi_irqs = xen_teardown_msi_irqs;
+@@ -481,6 +480,11 @@ static __init void xen_setup_pci_msi(void)
+ 	 * in allocating the native domain and never use it.
+ 	 */
+ 	x86_init.irqs.create_pci_msi_domain = xen_create_pci_msi_domain;
++	/*
++	 * With XEN PIRQ/Eventchannels in use PCI/MSI[-X] masking is solely
++	 * controlled by the hypervisor.
++	 */
++	pci_msi_ignore_mask = 1;
+ }
+ 
+ #else /* CONFIG_PCI_MSI */

@@ -2,138 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9041F5167D9
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 22:46:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAC055167F3
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 23:00:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354776AbiEAUt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 16:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49128 "EHLO
+        id S1354915AbiEAVD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 17:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238355AbiEAUty (ORCPT
+        with ESMTP id S1354821AbiEAVDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 16:49:54 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C8559B87;
-        Sun,  1 May 2022 13:46:27 -0700 (PDT)
-Date:   Sun, 01 May 2022 20:46:23 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651437985;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=557Zdz5NnkEbZAML/Rf00CcEcDkEAYNoO9M1iqJXXJg=;
-        b=BQCZ4I1GCX7u4Gxj7oF4nPU93AjM1MM4zWhkhZoP/SWkLz5imU30cuAeB0GZpE1GaokLSv
-        seALoXUqH07L8ri0N47rurJT8oq1zmSlHm3PFzP9Dj7kxIxlUvfAZr9Iz7OlrzrDZ8I/mF
-        fbOKkUfibi+jEM/IR0fd6sUntwwaBxeftVXOSvdtPaxjBjPKDjN3UFZvi3VvUVeM7KlUIv
-        wyx6yGFpFCum6VEUcY9ztmgDQZKku5R92IJw3KBDq0bdjoXhqJUcMa1NIYqs037AYgsn/0
-        PgQwhPswfQlDqXUvuYkAJPPYG/YYeG7uy/2+So2H6xG+F1td4MvXXcaVHfOk+Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651437985;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=557Zdz5NnkEbZAML/Rf00CcEcDkEAYNoO9M1iqJXXJg=;
-        b=ZTZMmiKF/orzzHWjUFrPDJ7Jqp5HGrLTJatvmpHVMf3G7gAnaebeD3JI9p5sx0JY1BQQIa
-        lawFwMF+/1sZyABA==
-From:   "tip-bot2 for Kuppuswamy Sathyanarayanan" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/apic] x86/apic: Do apic driver probe for "nosmp" use case
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: =?utf-8?q?=3Ca64f864e1114bcd63593286aaf61142cfce384ea=2E16500?=
- =?utf-8?q?76869=2Egit=2Esathyanarayanan=2Ekuppuswamy=40intel=2Ecom=3E?=
-References: =?utf-8?q?=3Ca64f864e1114bcd63593286aaf61142cfce384ea=2E165007?=
- =?utf-8?q?6869=2Egit=2Esathyanarayanan=2Ekuppuswamy=40intel=2Ecom=3E?=
+        Sun, 1 May 2022 17:03:24 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D7E1839E
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 13:59:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651438798; x=1682974798;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=sTXUHZGRdaQGIilzruUCfrQPVIuxTfDw0+VGOd61v3Q=;
+  b=NgixMk5OdnLill6mz+BjcqXECVDyPSiNjSyUp/AadWgSaFQuGBNB2Y2j
+   pkaPfGDP2hjEqurqoEgwVWeKt7HHS2O047lTePCI3b9QT4hdwPdDX8QQ8
+   IQd+mo5CqK6w8gjXSUv3lTJurlo+USIx15PRC0iXTats6iApT2XrQ2ADj
+   uDTTr4h6vHOGhOOyFVPFRDeitrHDZhQm5msp8lqgpDaSEMYlh8+O9qda+
+   enk3pj4gX9EkCN5VyqgEGOqG02vMlCE4xMNmoV15SdU6VbSKUX/iQqUoU
+   4KDsvzOl0GAGUqGDNe9Usi6lIyRiaxs18tOLmbWQ3Kk7zw8XtWjydNhj+
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="247614176"
+X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
+   d="scan'208";a="247614176"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 13:59:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
+   d="scan'208";a="688945535"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 01 May 2022 13:59:56 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nlGfb-00093R-SB;
+        Sun, 01 May 2022 20:59:55 +0000
+Date:   Mon, 02 May 2022 04:59:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/urgent] BUILD SUCCESS
+ 7e0815b3e09986d2fe651199363e135b9358132a
+Message-ID: <626ef4a9./No71nRMp7N+KVqk%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Message-ID: <165143798346.4207.13836898834353689685.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/apic branch of tip:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
+branch HEAD: 7e0815b3e09986d2fe651199363e135b9358132a  x86/pci/xen: Disable PCI/MSI[-X] masking for XEN_HVM guests
 
-Commit-ID:     7a116a2dd32d96869f0f93bac00b900859ba0434
-Gitweb:        https://git.kernel.org/tip/7a116a2dd32d96869f0f93bac00b900859ba0434
-Author:        Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-AuthorDate:    Sat, 16 Apr 2022 02:45:32 
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Sun, 01 May 2022 22:40:29 +02:00
+elapsed time: 744m
 
-x86/apic: Do apic driver probe for "nosmp" use case
+configs tested: 123
+configs skipped: 77
 
-For the "nosmp" use case, the APIC initialization code selects
-"APIC_SYMMETRIC_IO_NO_ROUTING" as the default interrupt mode and avoids
-probing APIC drivers.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-This works well for the default APIC modes, but for the x2APIC case the
-probe function is required to allocate the cluster_hotplug mask. So in the
-APIC_SYMMETRIC_IO_NO_ROUTING case when the x2APIC is initialized it
-dereferences a NULL pointer and the kernel crashes.
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+arm                         s3c6400_defconfig
+parisc                generic-64bit_defconfig
+alpha                               defconfig
+mips                    maltaup_xpa_defconfig
+sh                        sh7763rdp_defconfig
+h8300                    h8300h-sim_defconfig
+arm                        oxnas_v6_defconfig
+arm                          pxa3xx_defconfig
+arc                        nsimosci_defconfig
+arm                          exynos_defconfig
+powerpc                 mpc834x_itx_defconfig
+sh                          sdk7780_defconfig
+powerpc64                        alldefconfig
+arm                           sama5_defconfig
+m68k                        m5307c3_defconfig
+sparc                               defconfig
+sparc64                             defconfig
+h8300                            alldefconfig
+m68k                          atari_defconfig
+arm                            zeus_defconfig
+arm                            mps2_defconfig
+xtensa                         virt_defconfig
+powerpc                    amigaone_defconfig
+sh                               allmodconfig
+sh                        sh7785lcr_defconfig
+m68k                         amcore_defconfig
+powerpc                    sam440ep_defconfig
+m68k                       m5475evb_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220501
+ia64                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a015
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+arc                  randconfig-r043-20220501
+s390                 randconfig-r044-20220501
+riscv                randconfig-r042-20220501
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                                  kexec
+x86_64                           rhel-8.3-syz
+x86_64                          rhel-8.3-func
+x86_64                               rhel-8.3
+x86_64                         rhel-8.3-kunit
 
-This was observed on a TDX platform where x2APIC is enabled and "nosmp"
-command line option is allowed.
+clang tested configs:
+x86_64                        randconfig-c007
+i386                          randconfig-c001
+powerpc              randconfig-c003-20220501
+riscv                randconfig-c006-20220501
+mips                 randconfig-c004-20220501
+arm                  randconfig-c002-20220501
+mips                        omega2p_defconfig
+mips                   sb1250_swarm_defconfig
+powerpc                      ppc64e_defconfig
+arm                     davinci_all_defconfig
+powerpc                 mpc8272_ads_defconfig
+mips                           mtx1_defconfig
+powerpc                     ksi8560_defconfig
+arm                          ep93xx_defconfig
+arm                         s3c2410_defconfig
+mips                malta_qemu_32r6_defconfig
+powerpc                      pmac32_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64                        randconfig-a012
+i386                          randconfig-a013
+i386                          randconfig-a015
+i386                          randconfig-a011
 
-To fix this issue, probe APIC drivers via default_setup_apic_routing() for
-the APIC_SYMMETRIC_IO_NO_ROUTING interrupt mode too.
-
-Suggested-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Link: https://lore.kernel.org/r/a64f864e1114bcd63593286aaf61142cfce384ea.1650076869.git.sathyanarayanan.kuppuswamy@intel.com
-
----
- arch/x86/kernel/apic/apic.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
-index 13819bf..25e92d7 100644
---- a/arch/x86/kernel/apic/apic.c
-+++ b/arch/x86/kernel/apic/apic.c
-@@ -1428,22 +1428,21 @@ void __init apic_intr_mode_init(void)
- 		return;
- 	case APIC_VIRTUAL_WIRE:
- 		pr_info("APIC: Switch to virtual wire mode setup\n");
--		default_setup_apic_routing();
- 		break;
- 	case APIC_VIRTUAL_WIRE_NO_CONFIG:
- 		pr_info("APIC: Switch to virtual wire mode setup with no configuration\n");
- 		upmode = true;
--		default_setup_apic_routing();
- 		break;
- 	case APIC_SYMMETRIC_IO:
- 		pr_info("APIC: Switch to symmetric I/O mode setup\n");
--		default_setup_apic_routing();
- 		break;
- 	case APIC_SYMMETRIC_IO_NO_ROUTING:
- 		pr_info("APIC: Switch to symmetric I/O mode setup in no SMP routine\n");
- 		break;
- 	}
- 
-+	default_setup_apic_routing();
-+
- 	if (x86_platform.apic_post_init)
- 		x86_platform.apic_post_init();
- 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

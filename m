@@ -2,135 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A69045167CC
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 22:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9041F5167D9
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 22:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354623AbiEAUdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 16:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36710 "EHLO
+        id S1354776AbiEAUt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 16:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238355AbiEAUdB (ORCPT
+        with ESMTP id S238355AbiEAUty (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 16:33:01 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2CDE4579D
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 13:29:34 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id m23so16343614ljb.8
-        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 13:29:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0WCdfVPEiIZbfwmSuN4pUHlfdRjDkBGXXq+S9mIzLMw=;
-        b=aBHtGzDZ4qi+VE9Rk91uFJa58dwO9qAdJDh6FRARUFdk71fL/zPNFxPSkRoP9NeGmh
-         s9YO/oxx/Ryl4lRK21Q6tW951kP/GrzfpZH1lTBoQ7lbQzLLSuxJCp6C7aOPJXlCO6Ne
-         mDj53KCXjFDgtdoxLNONkrBR+GF1izY1YvzO4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0WCdfVPEiIZbfwmSuN4pUHlfdRjDkBGXXq+S9mIzLMw=;
-        b=BFrQYXQcwljPSBHV2mZ5iQgz9mn2xFtLunBLK94ADsBxj8AgZjbsJ23mvZ+SgfJ9w3
-         ETEGD7XutVR/xRhGEeB8J4KfdOFcF3Lzw/biCDo+V+aYZfdiLgAowpDj2GUsukpk3f+w
-         CxtmLxInfAAJh4CdHPzjJzg4ava6uCzgUt7mjHE0T5htdOfds0sS+ZbfPpqlzDtxlreP
-         tEX8RU0bBh57/zL0bSw5Dv7vw89vKECOUpuFs5ZReuTdtxAJKlcL8if2RvkconO8nNH5
-         gDp7lnn+aSEH9+n6D9TFoA+BlHD89ocvkKIw0Xcvqpi3T82khLbXYtpQ9xQGNVPcf5pQ
-         nNkg==
-X-Gm-Message-State: AOAM5302HHJZUW4AJEn4OvLLBKbnkeGdXRiJxIJTCCNZNYMHpIM5XB3/
-        C8PINjugzS9yF2z/TKQMhE6bZfsj15mPT843gjkvBxCzaUTT+9Xx
-X-Google-Smtp-Source: ABdhPJwq0bqP3CIpf7H7b5QMwov+3I4DdcADmIkwqdINAd18fkcLIrD4+yERs89l89xgBUyELXGd+WMuVUjSjvUU+fA=
-X-Received: by 2002:a05:651c:890:b0:248:5819:b949 with SMTP id
- d16-20020a05651c089000b002485819b949mr6240103ljq.476.1651436973033; Sun, 01
- May 2022 13:29:33 -0700 (PDT)
+        Sun, 1 May 2022 16:49:54 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C8559B87;
+        Sun,  1 May 2022 13:46:27 -0700 (PDT)
+Date:   Sun, 01 May 2022 20:46:23 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651437985;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=557Zdz5NnkEbZAML/Rf00CcEcDkEAYNoO9M1iqJXXJg=;
+        b=BQCZ4I1GCX7u4Gxj7oF4nPU93AjM1MM4zWhkhZoP/SWkLz5imU30cuAeB0GZpE1GaokLSv
+        seALoXUqH07L8ri0N47rurJT8oq1zmSlHm3PFzP9Dj7kxIxlUvfAZr9Iz7OlrzrDZ8I/mF
+        fbOKkUfibi+jEM/IR0fd6sUntwwaBxeftVXOSvdtPaxjBjPKDjN3UFZvi3VvUVeM7KlUIv
+        wyx6yGFpFCum6VEUcY9ztmgDQZKku5R92IJw3KBDq0bdjoXhqJUcMa1NIYqs037AYgsn/0
+        PgQwhPswfQlDqXUvuYkAJPPYG/YYeG7uy/2+So2H6xG+F1td4MvXXcaVHfOk+Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651437985;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=557Zdz5NnkEbZAML/Rf00CcEcDkEAYNoO9M1iqJXXJg=;
+        b=ZTZMmiKF/orzzHWjUFrPDJ7Jqp5HGrLTJatvmpHVMf3G7gAnaebeD3JI9p5sx0JY1BQQIa
+        lawFwMF+/1sZyABA==
+From:   "tip-bot2 for Kuppuswamy Sathyanarayanan" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/apic] x86/apic: Do apic driver probe for "nosmp" use case
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Luck <tony.luck@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: =?utf-8?q?=3Ca64f864e1114bcd63593286aaf61142cfce384ea=2E16500?=
+ =?utf-8?q?76869=2Egit=2Esathyanarayanan=2Ekuppuswamy=40intel=2Ecom=3E?=
+References: =?utf-8?q?=3Ca64f864e1114bcd63593286aaf61142cfce384ea=2E165007?=
+ =?utf-8?q?6869=2Egit=2Esathyanarayanan=2Ekuppuswamy=40intel=2Ecom=3E?=
 MIME-Version: 1.0
-References: <CAOFRbG=mGdbR72moLtW87ZQW_T1HkhZtcpHRGzZy3NZ7afGVqQ@mail.gmail.com>
- <CAHk-=whXp7Ps9ML5ThsX1tvdRg6SKRH3r6MM1-EA_Y8-n+6v2A@mail.gmail.com>
-In-Reply-To: <CAHk-=whXp7Ps9ML5ThsX1tvdRg6SKRH3r6MM1-EA_Y8-n+6v2A@mail.gmail.com>
-From:   Ozgur Karatas <ozgurk@ieee.org>
-Date:   Mon, 2 May 2022 00:29:21 +0400
-Message-ID: <CAADfD8wdze1z4UX4w54hkumziwD0huJTxYVY+ojkOAXuVa1E=Q@mail.gmail.com>
-Subject: Re: [5.18.0-rc4+] report: kernel compile
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Ozgur Kara <zgrieee@gmail.com>, linux-staging@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <165143798346.4207.13836898834353689685.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 2, 2022 at 12:13 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Sun, May 1, 2022 at 12:44 PM Ozgur Kara <zgrieee@gmail.com> wrote:
-> >
-> > Samsung RC530 (notebook) - FAIL (1)
-> > Raspberry PI Model B - FAIL (2)
-> >
-> > Fail Log:
-> >
-> > + nvidia driver fail.
-> > + scripts/Makefile.build:497: recipe for target 'arch/arm/kernel' failed
->
-> Is there full information available somewhere?
+The following commit has been merged into the x86/apic branch of tip:
 
-Hi Linus,
+Commit-ID:     7a116a2dd32d96869f0f93bac00b900859ba0434
+Gitweb:        https://git.kernel.org/tip/7a116a2dd32d96869f0f93bac00b900859ba0434
+Author:        Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+AuthorDate:    Sat, 16 Apr 2022 02:45:32 
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Sun, 01 May 2022 22:40:29 +02:00
 
-this was an e-mail that automatically tests and informs on existing
-hardware now i'm interested understanding issues because i wanted to
-see if its kernel related or not, both seem to be caused by drivers
-and in both of them driver was used with dkms (nvidia and rtl8812au
-wireless).
+x86/apic: Do apic driver probe for "nosmp" use case
 
-I will be setting up the bot to send mail with details only in the
-perpetrator and perpetrator logs.
-Sorry, Regards.
+For the "nosmp" use case, the APIC initialization code selects
+"APIC_SYMMETRIC_IO_NO_ROUTING" as the default interrupt mode and avoids
+probing APIC drivers.
 
+This works well for the default APIC modes, but for the x2APIC case the
+probe function is required to allocate the cluster_hotplug mask. So in the
+APIC_SYMMETRIC_IO_NO_ROUTING case when the x2APIC is initialized it
+dereferences a NULL pointer and the kernel crashes.
 
-  NVIDIA driver fail output:
+This was observed on a TDX platform where x2APIC is enabled and "nosmp"
+command line option is allowed.
 
-nvidia-legacy-390xx-uvm.ko:
- - Uninstallation
-   - Deleting from: /lib/modules/5.10.0-13-amd64/updates/dkms/
- - Original module
-   - No original module was found for this module on this kernel.
-   - Use the dkms install command to reinstall any previous module version.
+To fix this issue, probe APIC drivers via default_setup_apic_routing() for
+the APIC_SYMMETRIC_IO_NO_ROUTING interrupt mode too.
 
-depmod....
+Suggested-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Link: https://lore.kernel.org/r/a64f864e1114bcd63593286aaf61142cfce384ea.1650076869.git.sathyanarayanan.kuppuswamy@intel.com
 
-DKMS: uninstall completed.
+---
+ arch/x86/kernel/apic/apic.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-------------------------------
-Deleting module version: 390.144
-completely from the DKMS tree.
-------------------------------
-Done.
-Loading new nvidia-legacy-390xx-390.144 DKMS files...
-Building for 5.18.0-rc4+
-Building initial module for 5.18.0-rc4+
-Error! Bad return status for module build on kernel: 5.18.0-rc4+ (x86_64)
-Consult /var/lib/dkms/nvidia-legacy-390xx/390.144/build/make.log for
-more information
-
-   Raspberry PI fail output:
-
-dkms build -m 8812au -v 5.6.4.2_35491.20191025
-
-Kernel preparation unnecessary for this kernel. Skipping...
-
-Building module:
-cleaning build area...
-'make' -j4 KVER=5.18.0-rc4+
-KSRC=/lib/modules/5.18.0.-rc4+/build..........................................(bad
-exit status: 2)
-Error! Bad return status for module build on kernel: 5.18.0-rc4+
-make: *** [Makefile:2304: dkms_install] Error 10
-
->
->             Linus
+diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
+index 13819bf..25e92d7 100644
+--- a/arch/x86/kernel/apic/apic.c
++++ b/arch/x86/kernel/apic/apic.c
+@@ -1428,22 +1428,21 @@ void __init apic_intr_mode_init(void)
+ 		return;
+ 	case APIC_VIRTUAL_WIRE:
+ 		pr_info("APIC: Switch to virtual wire mode setup\n");
+-		default_setup_apic_routing();
+ 		break;
+ 	case APIC_VIRTUAL_WIRE_NO_CONFIG:
+ 		pr_info("APIC: Switch to virtual wire mode setup with no configuration\n");
+ 		upmode = true;
+-		default_setup_apic_routing();
+ 		break;
+ 	case APIC_SYMMETRIC_IO:
+ 		pr_info("APIC: Switch to symmetric I/O mode setup\n");
+-		default_setup_apic_routing();
+ 		break;
+ 	case APIC_SYMMETRIC_IO_NO_ROUTING:
+ 		pr_info("APIC: Switch to symmetric I/O mode setup in no SMP routine\n");
+ 		break;
+ 	}
+ 
++	default_setup_apic_routing();
++
+ 	if (x86_platform.apic_post_init)
+ 		x86_platform.apic_post_init();
+ 

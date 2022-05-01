@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30EA05166AC
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 19:36:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6195D5166B0
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 19:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353411AbiEARiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 13:38:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57660 "EHLO
+        id S1353443AbiEARiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 13:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238006AbiEARiL (ORCPT
+        with ESMTP id S238006AbiEARiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 13:38:11 -0400
+        Sun, 1 May 2022 13:38:22 -0400
 Received: from mx-out2.startmail.com (mx-out2.startmail.com [145.131.90.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4542558A;
-        Sun,  1 May 2022 10:34:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34A419295;
+        Sun,  1 May 2022 10:34:54 -0700 (PDT)
 From:   "Marty E. Plummer" <hanetzer@startmail.com>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=startmail.com;
-        s=2020-07; t=1651426483;
-        bh=uKzsMocNPxB/1naUTtl2JkyJA/D3L/SWYnjbfsqOT1w=;
+        s=2020-07; t=1651426492;
+        bh=ZlYQ6zXPRyx9tIJksGvtci2N5RBaWhofXYTcshNRkV8=;
         h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version:Content-Transfer-Encoding:From:Subject:To:Date:Sender:
          Content-Type:Content-Transfer-Encoding:Content-Disposition:
          Mime-Version:Reply-To:In-Reply-To:References:Message-Id:Autocrypt;
-        b=WYaiRbatvJm/8SQF7Nzn7XFo7NjpgIMTOuO6l/SERnqOHLbnzovP0hbOpjzheVFA0
-         0vd/8SuWOqDGi5q9G77a59Hm29i/KKTgrb3VmEEJsAobFAXCTIYwQlqZbvnO60bAa4
-         ZQCzPjg9Ri9/6F8LVdGdXY9QCIm9q1ySoiOgVXCTKvOsw+1b76ZEclu90t3oTBLC8A
-         Gdx4RqezEJ0AqVHN3b3MX7gU6F/LGWDKaqMlS4qhduESRCw+GeOavpG67HbdhJyKQ7
-         epFmTVi7VetgStPqxwk5g1BpJIFooQiQKhfFRpwoEk9k6Xvb4EavAwlTo+Mh34aC+z
-         zUCQgDLWAaR5Q==
+        b=f11JUJqZz4GDB2IcOlSnA8sIKvXmojnQU/guQTUqnHXhhMKiJzmpuuJj3dqZ03+Wm
+         XmAS29ZazgYnLTxSI/hqU6ctfUFTLd7qKNJo86AezfPZ0Up9xUFL+rJqCjMMtSCaU1
+         31PPxdMlCZ8oAxYLBbyzS2QSjYmEE8itUVrJI/7LZRKmViF8CcHpelznFPemATUZOw
+         4nUUznbx/eBuNYy0PgNYZZImKzdrr82BpmOiNtgK2jEfZvUNK2TgsNynFflw0dxesZ
+         6f1enyMsxdgAI2Dq0cBOQMVHiiz6EgcdufTYpoijhr9bnPmc1oLtfAVbFMswpC+Pd1
+         f9qBSz4GHSZEA==
 To:     arnd@arndb.de, cai.huoqing@linux.dev, christian.koenig@amd.com,
         devicetree@vger.kernel.org, gengdongjiu@huawei.com,
         hanetzer@startmail.com, krzysztof.kozlowski+dt@linaro.org,
@@ -40,9 +40,9 @@ To:     arnd@arndb.de, cai.huoqing@linux.dev, christian.koenig@amd.com,
         robh+dt@kernel.org, sboyd@kernel.org, soc@kernel.org,
         sumit.semwal@linaro.org, tudor.ambarus@microchip.com,
         vigneshr@ti.com, xuwei5@hisilicon.com
-Subject: [RFC v2 1/2] clk: hisilicon: add CRG driver Hi3521a SoC
-Date:   Sun,  1 May 2022 12:34:22 -0500
-Message-Id: <20220501173423.2473093-2-hanetzer@startmail.com>
+Subject: [RFC v2 2/2] arm: hisi: enable Hi3521a soc
+Date:   Sun,  1 May 2022 12:34:23 -0500
+Message-Id: <20220501173423.2473093-3-hanetzer@startmail.com>
 In-Reply-To: <20220501173423.2473093-1-hanetzer@startmail.com>
 References: <20220501054440.2434247-1-hanetzer@startmail.com>
  <20220501173423.2473093-1-hanetzer@startmail.com>
@@ -57,237 +57,625 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add CRG driver for Hi3521A SoC. CRG (Clock and Reset Generator) module
-generates clock and reset signals used by other module blocks on SoC.
+Enable Hisilicon Hi3521A/Hi3520DCV300 SoC. This SoC series includes
+hardware mutlimedia codec cores, commonly used in consumer cctv/dvr
+security systems and ipcameras. The arm core is a Cortex A7.
+
+Add hi3521a.dtsi and hi3521a-rs-dm290e.dts for RaySharp CCTV systems,
+marketed under the name Samsung SDR-B74301N.
 
 Signed-off-by: Marty E. Plummer <hanetzer@startmail.com>
 ---
- drivers/clk/hisilicon/Kconfig             |   8 ++
- drivers/clk/hisilicon/Makefile            |   1 +
- drivers/clk/hisilicon/crg-hi3521a.c       | 141 ++++++++++++++++++++++
- include/dt-bindings/clock/hi3521a-clock.h |  34 ++++++
- 4 files changed, 184 insertions(+)
- create mode 100644 drivers/clk/hisilicon/crg-hi3521a.c
- create mode 100644 include/dt-bindings/clock/hi3521a-clock.h
+ arch/arm/boot/dts/Makefile              |   2 +
+ arch/arm/boot/dts/hi3521a-rs-dm290e.dts | 134 ++++++++
+ arch/arm/boot/dts/hi3521a.dtsi          | 423 ++++++++++++++++++++++++
+ arch/arm/mach-hisi/Kconfig              |   9 +
+ 4 files changed, 568 insertions(+)
+ create mode 100644 arch/arm/boot/dts/hi3521a-rs-dm290e.dts
+ create mode 100644 arch/arm/boot/dts/hi3521a.dtsi
 
-diff --git a/drivers/clk/hisilicon/Kconfig b/drivers/clk/hisilicon/Kconfig
-index c1ec75aa4ccd..72435c06bf4d 100644
---- a/drivers/clk/hisilicon/Kconfig
-+++ b/drivers/clk/hisilicon/Kconfig
-@@ -15,6 +15,14 @@ config COMMON_CLK_HI3519
- 	help
- 	  Build the clock driver for hi3519.
- 
-+config COMMON_CLK_HI3521A
-+	tristate "Hi3521a Clock Driver"
-+	depends on ARCH_HISI || COMPILE_TEST
-+	select RESET_HISI
-+	default ARCH_HISI
-+	help
-+	  Build the clock driver for hi3521a.
-+
- config COMMON_CLK_HI3559A
- 	bool "Hi3559A Clock Driver"
- 	depends on ARCH_HISI || COMPILE_TEST
-diff --git a/drivers/clk/hisilicon/Makefile b/drivers/clk/hisilicon/Makefile
-index 2978e56cb876..dc27acc5b885 100644
---- a/drivers/clk/hisilicon/Makefile
-+++ b/drivers/clk/hisilicon/Makefile
-@@ -10,6 +10,7 @@ obj-$(CONFIG_ARCH_HIP04)	+= clk-hip04.o
- obj-$(CONFIG_ARCH_HIX5HD2)	+= clk-hix5hd2.o
- obj-$(CONFIG_COMMON_CLK_HI3516CV300)	+= crg-hi3516cv300.o
- obj-$(CONFIG_COMMON_CLK_HI3519)	+= clk-hi3519.o
-+obj-$(CONFIG_COMMON_CLK_HI3521A)	+= crg-hi3521a.o
- obj-$(CONFIG_COMMON_CLK_HI3559A)	+= clk-hi3559a.o
- obj-$(CONFIG_COMMON_CLK_HI3660) += clk-hi3660.o
- obj-$(CONFIG_COMMON_CLK_HI3670) += clk-hi3670.o
-diff --git a/drivers/clk/hisilicon/crg-hi3521a.c b/drivers/clk/hisilicon/crg-hi3521a.c
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 7c16f8a2b738..535cef3b14ab 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -242,6 +242,8 @@ dtb-$(CONFIG_ARCH_GEMINI) += \
+ 	gemini-ssi1328.dtb \
+ 	gemini-wbd111.dtb \
+ 	gemini-wbd222.dtb
++dtb-$(CONFIG_ARCH_HI3521A) += \
++	hi3521a-rs-dm290e.dtb
+ dtb-$(CONFIG_ARCH_HI3xxx) += \
+ 	hi3620-hi4511.dtb
+ dtb-$(CONFIG_ARCH_HIGHBANK) += \
+diff --git a/arch/arm/boot/dts/hi3521a-rs-dm290e.dts b/arch/arm/boot/dts/hi3521a-rs-dm290e.dts
 new file mode 100644
-index 000000000000..42d8ff440f07
+index 000000000000..b24fcf2ca85e
 --- /dev/null
-+++ b/drivers/clk/hisilicon/crg-hi3521a.c
-@@ -0,0 +1,141 @@
-+/* SPDX-License-Identifier:	GPL-2.0-or-later */
++++ b/arch/arm/boot/dts/hi3521a-rs-dm290e.dts
+@@ -0,0 +1,134 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
-+ * Copyright (C) 2017-2022 Marty E. Plummer <hanetzer@startmail.com>
++ * Copyright (C) 2017-2022 Marty Plummer <hanetzer@startmail.com>
 + */
-+#include <linux/clk-provider.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
++
++#include "hi3521a.dtsi"
++
++/ {
++	model = "RaySharp RS-DM-290E DVR Board";
++	compatible = "raysharp,rs-dm-290e", "hisilicon,hi3521a";
++
++	aliases {
++		serial0 = &uart0;
++		serial1 = &uart1;
++		serial2 = &uart2;
++	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	memory@800000000 {
++		device_type = "memory";
++		reg = <0x80000000 0xf00000>;
++	};
++};
++
++&hi_sfc {
++	status = "okay";
++	spi-nor@0 {
++		// compatible = "jedec,spi-nor";
++		compatible = "macronix,mx25l25635e", "jedec,spi-nor";
++		reg = <0>;
++		spi-max-frequency = <150000000>;
++		// spi-rx-bus-width = <1>;
++		// spi-tx-bus-width = <1>;
++		// m25p,default-addr-width = <4>;
++		// spi-max-frequency = <160000000>;
++		m25p,fast-read;
++
++		partitions {
++			compatible = "fixed-partitions";
++			#address-cells = <1>;
++			#size-cells = <1>;
++			
++			u-boot@0 {
++				label = "u-boot";
++				reg = <0x0 0x50000>;
++				read-only;
++			};
++			u-boot-env@50000 {
++				label = "u-boot-env";
++				reg = <0x50000 0x20000>;
++			};
++			kernel@70000 {
++				label = "kernel";
++				reg = <0x70000 0x700000>;
++			};
++			rootfs@770000 {
++				label = "rootfs";
++				reg = <0x800000 0x300000>;
++				read-only;
++			};
++			extra@b00000 {
++				label = "extra";
++				reg = <0xb00000 0x1500000>;
++			};
++		};
++	};
++};
++
++&dual_timer0 {
++	status = "okay";
++};
++
++&uart0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart0_pmx_func &uart0_cfg_func>;
++	status = "okay";
++};
++
++&pmx0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&sfc_pmx_func>;
++	uart0_pmx_func: uart0_pmx_func {
++		pinctrl-single,pins = <
++			0x00e8 0x0
++			0x00ec 0x0
++		>;
++	};
++
++	sfc_pmx_func: sfc_pmx_func {
++		pinctrl-single,pins = <
++			0x00c4 0x1
++			0x00c8 0x1
++			0x00cc 0x1
++			0x00d0 0x1
++			0x00d4 0x1
++		>;
++	};
++};
++
++&pmx1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&sfc_cfg_func>;
++	uart0_cfg_func: uart0_cfg_func {
++		pinctrl-single,pins = <
++			0x00e8 0x0
++			0x00ec 0x0
++		>;
++	};
++	sfc_cfg_func: sfc_cfg_func {
++		pinctrl-single,pins = <
++			0x00c4 0x58
++			0x00c8 0x28
++			0x00cc 0x38
++			0x00d0 0x38
++			0x00d4 0x38
++		>;
++	};
++};
++
++/* &gmac0 { */
++/* 	#address-cells = <1>; */
++/* 	#size-cells = <0>; */
++/* 	phy-handle = <&phy3>; */
++/* 	phy-mode = "rgmii"; */
++/* 	mac-address = [00 00 00 00 00 00]; */
++/* 	status = "okay"; */
++/**/
++/* 	phy3: ethernet-phy@3 { */
++/* 		reg = <3>; */
++/* 	}; */
++/* }; */
+diff --git a/arch/arm/boot/dts/hi3521a.dtsi b/arch/arm/boot/dts/hi3521a.dtsi
+new file mode 100644
+index 000000000000..53993a32fd5d
+--- /dev/null
++++ b/arch/arm/boot/dts/hi3521a.dtsi
+@@ -0,0 +1,423 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Copyright (C) 2017-2022 Marty Plummer <hanetzer@startmail.com>
++ */
 +
 +#include <dt-bindings/clock/hi3521a-clock.h>
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++/dts-v1/;
++/ {
++	#address-cells = <1>;
++	#size-cells = <1>;
 +
-+#include "clk.h"
-+#include "crg.h"
-+#include "reset.h"
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
 +
-+#define HI3521A_INNER_CLK_OFFSET	64
-+#define HI3521A_FIXED_2M			65
-+#define HI3521A_FIXED_24M			66
-+#define HI3521A_FIXED_50M			67
-+#define HI3521A_FIXED_83M			68
-+#define HI3521A_FIXED_100M			69
-+#define HI3521A_FIXED_150M			70
-+#define HI3521A_FIXED_202P5M		71
-+#define HI3521A_FIXED_250M			72
-+#define HI3521A_SYSAXI_MUX			73
-+#define HI3521A_FMC_MUX				74
-+#define HI3521A_UART_MUX			75
-+#define HI3521A_SP804_CLK			76
++		cpu0: cpu@0 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a7";
++			reg = <0>;
++			clock-frequency = <1100000000>;
++		};
++	};
 +
-+#define HI3521A_NR_CLKS				128
++	timer {
++		compatible = "arm,armv7-timer";
++		interrupt-parent = <&gic>;
++		interrupts = <GIC_PPI 13 0xf08>,
++			     <GIC_PPI 14 0xf08>,
++			     <GIC_PPI 11 0xf08>,
++			     <GIC_PPI 10 0xf08>;
++		clock-frequency = <24000000>;
++	};
 +
-+static const struct hisi_fixed_rate_clock hi3521a_fixed_rate_clks[] = {
-+	{ HI3521A_FIXED_2M,         "2m", NULL, 0,   2000000, },
-+	{ HI3521A_FIXED_3M,         "3m", NULL, 0,   3000000, },
-+	{ HI3521A_FIXED_24M,       "24m", NULL, 0,  24000000, },
-+	{ HI3521A_FIXED_50M,       "50m", NULL, 0,  50000000, },
-+	{ HI3521A_FIXED_83M,       "83m", NULL, 0,  83000000, },
-+	{ HI3521A_FIXED_100M,     "100m", NULL, 0, 100000000, },
-+	{ HI3521A_FIXED_150M,     "150m", NULL, 0, 150000000, },
-+	{ HI3521A_FIXED_202P5M, "202p5m", NULL, 0, 202500000, },
-+	{ HI3521A_FIXED_250M,     "250m", NULL, 0, 250000000, },
++	pmu {
++		compatible = "arm,cortex-a7-pmu";
++		interrupt-parent = <&gic>;
++		interrupts = <GIC_SPI 54 IRQ_TYPE_LEVEL_HIGH>;
++	};
++
++	gic: interrupt-controller@10301000 {
++		compatible = "arm,pl390";
++		#interrupt-cells = <3>;
++		interrupt-controller;
++		reg = <0x10301000 0x1000>, <0x10302000 0x1000>;
++	};
++
++	xtal24m: xtal24m {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <24000000>;
++	};
++
++	clk_3m: clk_3m {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <3000000>;
++	};
++
++	soc {
++		#address-cells = <1>;
++		#size-cells = <1>;
++		compatible = "simple-bus";
++		interrupt-parent = <&gic>;
++		ranges;
++
++		hi_sfc: spi@10000000 {
++			compatible = "hisilicon,hi3521a-spi-nor", "hisilicon,fmc-spi-nor";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0x10000000 0x1000>, <0x14000000 0x10000>;
++			reg-names = "control", "memory";
++			clocks = <&crg HI3521A_FMC_CLK>;
++			interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
++			status = "disabled";
++		};
++
++		/* usb0: usb@10030000 { */
++		/* 		compatible = "generic-ohci"; */
++		/* 		reg = <0x10030000 0x1000>; */
++		/* 		interrupts = <GIC_SPI 50 IRQ_TYPE_LEVEL_HIGH>; */
++		/* 		clocks = <&crg > */
++		/* 	}; */
++		dmac: dma-controller@10060000 {
++			compatible = "arm,pl080", "arm,primecell";
++			arm,primecell-periphid = <0x00041080>;
++			reg = <0x10060000 0x1000>;
++			interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&crg HI3521A_DMAC_CLK>;
++			clock-names = "apb_pclk";
++			lli-bus-interface-ahb1;
++			lli-bus-interface-ahb2;
++			mem-bus-interface-ahb1;
++			mem-bus-interface-ahb2;
++			memcpy-burst-size = <256>;
++			memcpy-bus-width = <32>;
++			#dma-cells = <2>;
++			status = "okay";
++		};
++
++		gmac0: ethernet@100a0000 {
++			compatible = "hisilicon,hisi-gmac-v1";
++			reg = <0x100a0000 0x1000>, <0x1204008c 0x4>;
++			interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&crg HI3521A_ETH_CLK>, <&crg HI3521A_ETH_MACIF_CLK>;
++			clock-names = "mac_core", "mac_ifc";
++			/* resets = <&crg 0x78 0>, <&crg 0x78 2>, <&crg 0x78 5>; */
++			/* reset-names = "mac_core", "mac_ifc", "phy"; */
++			/* hisilicon,phy-reset-delays-us = <10000 10000 30000>; */
++			status = "disabled";
++		};
++
++		dual_timer0: timer@12000000 {
++			compatible = "arm,sp804", "arm,primecell";
++			interrupts = <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>;
++			reg = <0x12000000 0x1000>;
++			clocks = <&sysctrl HI3521A_TIMER0_CLK>,
++				 <&sysctrl HI3521A_TIMER1_CLK>,
++				 <&crg HI3521A_APB_CLK>;
++			clock-names = "timer0clk", "timer1clk", "apb_pclk";
++			status = "disabled";
++		};
++
++		dual_timer1: timer@12010000 {
++			compatible = "arm,sp804", "arm,primecell";
++			interrupts = <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>;
++			reg = <0x12010000 0x1000>;
++			clocks = <&sysctrl HI3521A_TIMER2_CLK>,
++				 <&sysctrl HI3521A_TIMER3_CLK>,
++				 <&crg HI3521A_APB_CLK>;
++			clock-names = "timer0clk", "timer1clk", "apb_pclk";
++			status = "disabled";
++		};
++
++		dual_timer2: timer@12020000 {
++			compatible = "arm,sp804", "arm,primecell";
++			interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
++			reg = <0x12020000 0x1000>;
++			clocks = <&sysctrl HI3521A_TIMER4_CLK>,
++				 <&sysctrl HI3521A_TIMER5_CLK>,
++				 <&crg HI3521A_APB_CLK>;
++			clock-names = "timer0clk", "timer1clk", "apb_pclk";
++			status = "disabled";
++		};
++
++		dual_timer3: timer@12030000 {
++			compatible = "arm,sp804", "arm,primecell";
++			interrupts = <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>;
++			reg = <0x12030000 0x1000>;
++			clocks = <&sysctrl HI3521A_TIMER6_CLK>,
++				 <&sysctrl HI3521A_TIMER7_CLK>,
++				 <&crg HI3521A_APB_CLK>;
++			clock-names = "timer0clk", "timer1clk", "apb_pclk";
++			status = "disabled";
++		};
++
++		crg: clock-reset-controller@12040000 {
++			compatible = "hisilicon,hi3521a-crg";
++			#clock-cells = <1>;
++			#reset-cells = <2>;
++			reg = <0x12040000 0x1000>;
++		};
++
++		sysctrl: system-controller@12050000 {
++			compatible = "hisilicon,hi3521a-sysctrl", "syscon";
++			reg = <0x12050000 0x1000>;
++			#clock-cells = <1>;
++			#reset-cells = <2>;
++		};
++
++		reboot {
++			compatible = "syscon-reboot";
++			regmap = <&sysctrl>;
++			offset = <0x4>;
++			mask = <0xdeadbeef>;
++		};
++
++		wdt0: watchdog@12070000 {
++			compatible = "arm,sp805", "arm,primecell";
++			arm,primecell-periphid = <0x00141805>;
++			reg = <0x12070000 0x1000>;
++			interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&crg HI3521A_FIXED_3M>;
++			clock-names = "apb_pclk";
++		};
++
++		uart0: serial@12080000 {
++			compatible = "arm,pl011", "arm,primecell";
++			reg = <0x12080000 0x1000>;
++			interrupts = <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&crg HI3521A_UART0_CLK>, <&crg HI3521A_UART0_CLK>;
++			clock-names = "uartclk", "apb_pclk";
++			dmas = <&dmac 0 1>, <&dmac 1 2>;
++			dma-names = "rx", "tx";
++			status = "disabled";
++		};
++
++		uart1: serial@12090000 {
++			compatible = "arm,pl011", "arm,primecell";
++			reg = <0x12090000 0x1000>;
++			interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&crg HI3521A_UART1_CLK>;
++			clock-names = "apb_pclk";
++			dmas = <&dmac 2 1>, <&dmac 3 2>;
++			dma-names = "rx", "tx";
++			status = "disabled";
++		};
++
++		uart2: serial@120a0000 {
++			compatible = "arm,pl011", "arm,primecell";
++			reg = <0x120a0000 0x1000>;
++			interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&crg HI3521A_UART2_CLK>;
++			clock-names = "apb_pclk";
++			dmas = <&dmac 4 1>, <&dmac 5 2>;
++			dma-names = "rx", "tx";
++			status = "disabled";
++		};
++
++		spi_bus0: spi@120d0000 {
++			compatible = "arm,pl022", "arm,primecell";
++			reg = <0x120d0000 0x1000>;
++			arm,primecell-periphid = <0x00041022>;
++			interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&crg HI3521A_SPI0_CLK>;
++			clock-names = "apb_pclk";
++			dmas = <&dmac 6 1>, <&dmac 7 2>;
++			dma-names = "rx", "tx";
++			num-cs = <2>;
++			status = "disabled";
++		};
++
++		pmx0: pinmux@120f0000 {
++			compatible = "pinctrl-single";
++			reg = <0x120f0000 0x188>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			#pinctrl-cells = <1>;
++			#gpio-range-cells = <3>;
++			ranges;
++
++			pinctrl-single,register-width = <32>;
++			pinctrl-single,function-mask = <7>;
++			/* pin base, nr pins & gpio function */
++			pinctrl-single,gpio-range = <
++				&range 58 4 0
++			>;
++
++			range: gpio-range {
++				#pinctrl-single,gpio-range-cells = <3>;
++			};
++		};
++
++		pmx1: pinmux@120f0800 {
++			compatible = "pinconf-single";
++			reg = <0x120f0800 0x1d4>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			#pinctrl-cells = <1>;
++			ranges;
++
++			pinctrl-single,register-width = <32>;
++		};
++
++		gpio0: gpio@12150000 {
++			compatible = "arm,pl061", "arm,primecell";
++			reg = <0x12150000 0x1000>;
++			interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++			status = "disabled";
++		};
++
++		gpio1: gpio@12160000 {
++			compatible = "arm,pl061", "arm,primecell";
++			reg = <0x12160000 0x1000>;
++			interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++			status = "disabled";
++		};
++
++		gpio2: gpio@12170000 {
++			compatible = "arm,pl061", "arm,primecell";
++			reg = <0x12170000 0x1000>;
++			interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++			status = "disabled";
++		};
++
++		gpio3: gpio@12180000 {
++			compatible = "arm,pl061", "arm,primecell";
++			reg = <0x12180000 0x1000>;
++			interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++			status = "disabled";
++		};
++
++		gpio4: gpio@12190000 {
++			compatible = "arm,pl061", "arm,primecell";
++			reg = <0x12190000 0x1000>;
++			interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++			status = "disabled";
++		};
++
++		gpio5: gpio@121a0000 {
++			compatible = "arm,pl061", "arm,primecell";
++			reg = <0x121a0000 0x1000>;
++			interrupts = <GIC_SPI 58 IRQ_TYPE_LEVEL_HIGH>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++			status = "disabled";
++		};
++
++		gpio6: gpio@121b0000 {
++			compatible = "arm,pl061", "arm,primecell";
++			reg = <0x121b0000 0x1000>;
++			interrupts = <GIC_SPI 58 IRQ_TYPE_LEVEL_HIGH>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++			status = "disabled";
++		};
++
++		gpio7: gpio@121c0000 {
++			compatible = "arm,pl061", "arm,primecell";
++			reg = <0x121c0000 0x1000>;
++			interrupts = <GIC_SPI 58 IRQ_TYPE_LEVEL_HIGH>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++			status = "disabled";
++		};
++
++		gpio8: gpio@121d0000 {
++			compatible = "arm,pl061", "arm,primecell";
++			reg = <0x121d0000 0x1000>;
++			interrupts = <GIC_SPI 58 IRQ_TYPE_LEVEL_HIGH>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++			status = "disabled";
++		};
++
++		gpio9: gpio@121e0000 {
++			compatible = "arm,pl061", "arm,primecell";
++			reg = <0x121e0000 0x1000>;
++			interrupts = <GIC_SPI 58 IRQ_TYPE_LEVEL_HIGH>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++			status = "disabled";
++		};
++
++		gpio10: gpio@121f0000 {
++			compatible = "arm,pl061", "arm,primecell";
++			reg = <0x121f0000 0x1000>;
++			interrupts = <GIC_SPI 59 IRQ_TYPE_LEVEL_HIGH>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++			status = "disabled";
++		};
++
++		gpio11: gpio@12200000 {
++			compatible = "arm,pl061", "arm,primecell";
++			reg = <0x12200000 0x1000>;
++			interrupts = <GIC_SPI 59 IRQ_TYPE_LEVEL_HIGH>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++			status = "disabled";
++		};
++
++		gpio12: gpio@12210000 {
++			compatible = "arm,pl061", "arm,primecell";
++			reg = <0x12210000 0x1000>;
++			interrupts = <GIC_SPI 59 IRQ_TYPE_LEVEL_HIGH>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++			status = "disabled";
++		};
++
++		gpio13: gpio@12220000 {
++			compatible = "arm,pl061", "arm,primecell";
++			reg = <0x12220000 0x1000>;
++			interrupts = <GIC_SPI 59 IRQ_TYPE_LEVEL_HIGH>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++			status = "disabled";
++		};
++	};
 +};
+diff --git a/arch/arm/mach-hisi/Kconfig b/arch/arm/mach-hisi/Kconfig
+index 2e980f834a6a..165ffb972157 100644
+--- a/arch/arm/mach-hisi/Kconfig
++++ b/arch/arm/mach-hisi/Kconfig
+@@ -13,6 +13,15 @@ if ARCH_HISI
+ 
+ menu "Hisilicon platform type"
+ 
++config ARCH_HI3521A
++	bool "Hisilicon Hi3521a/Hi3520dcv300 family"
++	depends on ARCH_MULTI_V7
++	select CACHE_L2X0
++	select PINCTRL
++	select PINCTRL_SINGLE
++	help
++	  Hisilicon Hi3521a/Hi3520dcv300 family
 +
-+static const char *const sysaxi_mux_p[] = { "24m", "250m", "202p5m", };
-+static const char *const uart_mux_p[] = { "apb", "2m", "24m", };
-+static const char *const fmc_mux_p[] = { "24m", "83m", "150m", };
-+static const char *const timer_mux_p[] = { "3m", "clk_sp804", };
-+
-+static const u32 sysaxi_mux_table[] = {0, 1, 2};
-+static const u32 uart_mux_table[] = {0, 1, 2};
-+static const u32 fmc_mux_table[] = {0, 1, 2};
-+static const u32 timer_mux_table[] = {0, 1};
-+
-+static const struct hisi_mux_clock hi3521a_mux_clks[] = {
-+	{ HI3521A_APB_CLK, "apb", sysaxi_mux_p, ARRAY_SIZE(sysaxi_mux_p),
-+		CLK_SET_RATE_PARENT, 0x34, 12, 2, 0, sysaxi_mux_table, },
-+	{ HI3521A_UART_MUX, "uart_mux", uart_mux_p, ARRAY_SIZE(uart_mux_p),
-+		CLK_SET_RATE_PARENT, 0x84, 18, 2, 0, uart_mux_table, },
-+	{ HI3521A_FMC_MUX, "fmc_mux", fmc_mux_p, ARRAY_SIZE(fmc_mux_p),
-+		CLK_SET_RATE_PARENT, 0x74, 2, 2, 0, fmc_mux_table, },
-+};
-+
-+static const struct hisi_gate_clock hi3521a_gate_clks[] = {
-+	{ HI3521A_FMC_CLK, "clk_fmc", "fmc_mux", CLK_SET_RATE_PARENT,
-+		0x74, 1, 0, },
-+	{ HI3521A_ETH_CLK, "clk_eth", NULL, 0, 0x78, 1, 0, },
-+	{ HI3521A_ETH_MACIF_CLK, "clk_eth_macif", NULL, 0x78, 3, 0, },
-+	{ HI3521A_DMAC_CLK, "clk_dmac", NULL, 0, 0x80, 5, 0, },
-+	{ HI3521A_UART0_CLK, "clk_uart0", "uart_mux", CLK_SET_RATE_PARENT,
-+		0x84, 15, 0, },
-+	{ HI3521A_UART1_CLK, "clk_uart1", "uart_mux", CLK_SET_RATE_PARENT,
-+		0x84, 16, 0, },
-+	{ HI3521A_UART2_CLK, "clk_uart2", "uart_mux", CLK_SET_RATE_PARENT,
-+		0x84, 17, 0, },
-+	{ HI3521A_SPI0_CLK, "clk_spi0", "50m", CLK_SET_RATE_PARENT,
-+		0x84, 13, 0, },
-+};
-+
-+static const struct hisi_fixed_factor_clock hi3521a_fixed_factor_clks[] = {
-+	{ HI3521A_SP804_CLK, "clk_sp804", "apb", 1, 4, CLK_SET_RATE_PARENT },
-+};
-+
-+static void __init hi3521a_crg_init(struct device_node *np)
-+{
-+	struct hisi_clock_data *clk_data;
-+
-+	clk_data = hisi_clk_init(np, HI3521A_NR_CLKS);
-+	if (!clk_data)
-+		return;
-+
-+	hisi_clk_register_fixed_rate(hi3521a_fixed_rate_clks,
-+				ARRAY_SIZE(hi3521a_fixed_rate_clks),
-+				clk_data);
-+	hisi_clk_register_mux(hi3521a_mux_clks,
-+				ARRAY_SIZE(hi3521a_mux_clks),
-+				clk_data);
-+	hisi_clk_register_gate(hi3521a_gate_clks,
-+				ARRAY_SIZE(hi3521a_gate_clks),
-+				clk_data);
-+	hisi_clk_register_fixed_factor(hi3521a_fixed_factor_clks,
-+				ARRAY_SIZE(hi3521a_fixed_factor_clks),
-+				clk_data);
-+}
-+CLK_OF_DECLARE(hi3521a_clk, "hisilicon,hi3521a-crg", hi3521a_crg_init);
-+
-+#define HI3521A_SYSCTRL_NR_CLKS 16
-+
-+static const struct hisi_mux_clock hi3521a_sysctrl_mux_clks[] = {
-+	{ HI3521A_TIMER0_CLK, "clk_timer0", timer_mux_p, ARRAY_SIZE(timer_mux_p),
-+		CLK_SET_RATE_PARENT, 0, 16, 1, 0, timer_mux_table, },
-+	{ HI3521A_TIMER1_CLK, "clk_timer1", timer_mux_p, ARRAY_SIZE(timer_mux_p),
-+		CLK_SET_RATE_PARENT, 0, 18, 1, 0, timer_mux_table, },
-+	{ HI3521A_TIMER2_CLK, "clk_timer2", timer_mux_p, ARRAY_SIZE(timer_mux_p),
-+		CLK_SET_RATE_PARENT, 0, 20, 1, 0, timer_mux_table, },
-+	{ HI3521A_TIMER3_CLK, "clk_timer3", timer_mux_p, ARRAY_SIZE(timer_mux_p),
-+		CLK_SET_RATE_PARENT, 0, 22, 1, 0, timer_mux_table, },
-+	{ HI3521A_TIMER4_CLK, "clk_timer4", timer_mux_p, ARRAY_SIZE(timer_mux_p),
-+		CLK_SET_RATE_PARENT, 0, 25, 1, 0, timer_mux_table, },
-+	{ HI3521A_TIMER5_CLK, "clk_timer5", timer_mux_p, ARRAY_SIZE(timer_mux_p),
-+		CLK_SET_RATE_PARENT, 0, 27, 1, 0, timer_mux_table, },
-+	{ HI3521A_TIMER6_CLK, "clk_timer6", timer_mux_p, ARRAY_SIZE(timer_mux_p),
-+		CLK_SET_RATE_PARENT, 0, 29, 1, 0, timer_mux_table, },
-+	{ HI3521A_TIMER7_CLK, "clk_timer7", timer_mux_p, ARRAY_SIZE(timer_mux_p),
-+		CLK_SET_RATE_PARENT, 0, 31, 1, 0, timer_mux_table, },
-+};
-+
-+static void __init hi3521a_sysctrl_init(struct device_node *np)
-+{
-+	struct hisi_clock_data *clk_data;
-+
-+	clk_data = hisi_clk_init(np, HI3521A_SYSCTRL_NR_CLKS);
-+	if (!clk_data)
-+		return;
-+
-+	hisi_clk_register_mux(hi3521a_sysctrl_mux_clks,
-+				ARRAY_SIZE(hi3521a_sysctrl_mux_clks),
-+				clk_data);
-+}
-+CLK_OF_DECLARE(hi3521a_sysctrl, "hisilicon,hi3521a-sysctrl", hi3521a_sysctrl_init);
-diff --git a/include/dt-bindings/clock/hi3521a-clock.h b/include/dt-bindings/clock/hi3521a-clock.h
-new file mode 100644
-index 000000000000..416a08079002
---- /dev/null
-+++ b/include/dt-bindings/clock/hi3521a-clock.h
-@@ -0,0 +1,34 @@
-+/* SPDX-License-Identifier:	GPL-2.0-or-later */
-+/*
-+ * Copyright (C) 2017-2022 Marty E. Plummer <hanetzer@startmail.com>
-+ */
-+
-+#ifndef __DTS_HI3521A_CLOCK_H
-+#define __DTS_HI3521A_CLOCK_H
-+
-+/* clocks provided by the crg */
-+#define HI3521A_FIXED_3M		1
-+#define HI3521A_FMC_CLK			2
-+#define HI3521A_SPI0_CLK		3
-+#define HI3521A_UART0_CLK		4
-+#define HI3521A_UART1_CLK		5
-+#define HI3521A_UART2_CLK		6
-+#define HI3521A_DMAC_CLK		7
-+#define HI3521A_IR_CLK			8
-+#define HI3521A_ETH_CLK			9
-+#define HI3521A_ETH_MACIF_CLK	10
-+#define HI3521A_USB2_BUS_CLK	11
-+#define HI3521A_USB2_PORT_CLK	12
-+#define HI3521A_APB_CLK			13
-+
-+/* clocks provided by the sysctrl */
-+#define HI3521A_TIMER0_CLK		1
-+#define HI3521A_TIMER1_CLK		2
-+#define HI3521A_TIMER2_CLK		3
-+#define HI3521A_TIMER3_CLK		4
-+#define HI3521A_TIMER4_CLK		5
-+#define HI3521A_TIMER5_CLK		6
-+#define HI3521A_TIMER6_CLK		7
-+#define HI3521A_TIMER7_CLK		8
-+
-+#endif /* __DTS_HI3521A_CLK_H */
+ config ARCH_HI3xxx
+ 	bool "Hisilicon Hi36xx family"
+ 	depends on ARCH_MULTI_V7
 -- 
 2.35.1
 

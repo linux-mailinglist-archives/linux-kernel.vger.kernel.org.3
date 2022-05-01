@@ -2,111 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF654516230
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 08:22:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45AFF516239
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 08:31:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241798AbiEAGZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 02:25:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56106 "EHLO
+        id S241921AbiEAGfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 02:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231721AbiEAGZs (ORCPT
+        with ESMTP id S231721AbiEAGez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 02:25:48 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85DD650464;
-        Sat, 30 Apr 2022 23:22:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=3+qzA7PHMmDHNHuNIiXNUOUy8rzwaRd3MaO7YujuXCQ=; b=xXWvZRUz+UeJyVHlrRbK9vEEWU
-        kc13z1UURFsemmhkm8BX2rGCOM6oSATTMIpaHZkI0Clvngr4KK9i0rMgFKxoy+8CjVUVp3CNvGtUO
-        koMDmQsRLXiXKAxNVVjGlD0sk0A7biSGGwTs3dcmWh8ivQkfXXh3mxHnpJXaxnfCmgZMGUeFWVMVN
-        T+/OKD2uj9nKchkGTuBuevzcr8ph2nfMCtvB7A0vobMrOVwsEq1qIxfJvpt45TIMu9I8/Vs/HKbeH
-        gb09Y8J9r/CtQcN56LflJToxs3TxQhnYdpUk1/H3POiJ3/BZH2m7oReSWZLRelFIC+Rv3g6d9vbuO
-        o0yR0hgw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58468)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nl2yF-0005yo-0i; Sun, 01 May 2022 07:22:14 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nl2yC-0003fG-Os; Sun, 01 May 2022 07:22:12 +0100
-Date:   Sun, 1 May 2022 07:22:12 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] net: phy: fix motorcomm module automatic loading
-Message-ID: <Ym4nFLqOsozrb+HM@shell.armlinux.org.uk>
-References: <20220228233057.1140817-1-pgwipeout@gmail.com>
- <Yh1lboz7VDiuYuZV@shell.armlinux.org.uk>
- <CAMdYzYrNvUUMom4W4uD9yf9LtFK1h5Xw+9GYc54hB5+iqVmJtw@mail.gmail.com>
- <CAMdYzYrFuMw4aj_9L698ZhL7Xqy8=NeXhy9HDz4ug-v3=f4fpw@mail.gmail.com>
- <Ym1bWHNj0p6L9lY8@lunn.ch>
- <CAMdYzYq41TndbJK-=ah31=vECisgRbPmtFYwOLQQ7yn4L=JVYw@mail.gmail.com>
+        Sun, 1 May 2022 02:34:55 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA5E12AA1;
+        Sat, 30 Apr 2022 23:31:30 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id c11so63861plg.13;
+        Sat, 30 Apr 2022 23:31:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=C3fw8DIFF0S9vtq6+VZ86MGJHG+O7QFGmF8dzFDlkn0=;
+        b=b50AxEBIlMAkxEuc8Xq73f92g/HVSeCn7ILG63CJBJ8YxHsInlZ7048PQdWBooTpqX
+         hLCCUyzXzOMXdjTF0xcZ3g+Q0WCMyD1YI//fNd1trC4NOjZimLUwGmF2SJcA8kyfJuux
+         lKsvNWlOchpbigmyhpC4/3c/VibhAjka2RUqg/cD6k6r/11ydL6/wtDlwXBnW2KoUST0
+         /TIeHsyesmLkRA7J6zw8PSZBnbkEgPSaEhkXOFJBwMWfJVSGkZsunJ0Lp/kICuMuu3Yo
+         2dnGMPID0hO+4H8x14/ohVo8BuhCYplSUWM7l6TiOtIlfKEOQOQvcgcG3LmNv91MmMqI
+         ztSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=C3fw8DIFF0S9vtq6+VZ86MGJHG+O7QFGmF8dzFDlkn0=;
+        b=nzTymDs7Bxy0vPWTSenQ/a8EchX/YeWRIyJaN9wsRTOaqkEzshOBZPeemcGJO8ddZ4
+         yBsoCCwnzjQrnfKfuse8eQLHuaRxV8g0ho4ETTpMP//MG0oMKrJrlk85srpxsTg17BYq
+         MhgJQqS1fOiqm9uNpHBgOB7LPuWodF0+Mw94qjJQuUXei1kuNNnLEuVGTVsOuUV91IKt
+         7YuySq5LV1hmWwB6GM8TUQ/iCWyMsY+49Nm/izmr6GmEyKBCF75IpcwkYT3ATyCCC+N8
+         rkglUYkZJaDQpWZfWf8VVI+NJb7cWEMenPAUqBlqq3M14L3NiMxmT0jBcph5tPV+Obn0
+         v1VA==
+X-Gm-Message-State: AOAM532WUUpVTDJT0HjjalW3Qp1CXL7XI4Vm0JTBnEnxUxsKH3ACmMa0
+        2yk1CWHNSagkyRsPXhEXgYBVf6X9jXmovYfQ
+X-Google-Smtp-Source: ABdhPJzxT9dATzzPTyUZNf4N+sT4vHr6bBbiLdGX8A9LUpAGqEl7PEIOQTDpKPo2eXY8ayPjvim6UQ==
+X-Received: by 2002:a17:90a:6445:b0:1d6:a69e:406c with SMTP id y5-20020a17090a644500b001d6a69e406cmr12149202pjm.49.1651386690104;
+        Sat, 30 Apr 2022 23:31:30 -0700 (PDT)
+Received: from [127.0.0.1] ([103.121.210.106])
+        by smtp.gmail.com with ESMTPSA id j12-20020a170903028c00b0015e8d4eb1b6sm2383682plr.0.2022.04.30.23.31.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 30 Apr 2022 23:31:29 -0700 (PDT)
+Message-ID: <30161ae8-690a-4423-546a-8fbea9f0bdb1@gmail.com>
+Date:   Sun, 1 May 2022 14:30:57 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMdYzYq41TndbJK-=ah31=vECisgRbPmtFYwOLQQ7yn4L=JVYw@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [RFC v3 0/9] fixed worker
+Content-Language: en-US
+To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220429101858.90282-1-haoxu.linux@gmail.com>
+ <ee61dae0-30d4-b301-a787-ea83be3f9308@kernel.dk>
+From:   Hao Xu <haoxu.linux@gmail.com>
+In-Reply-To: <ee61dae0-30d4-b301-a787-ea83be3f9308@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 30, 2022 at 12:31:27PM -0400, Peter Geis wrote:
-> On Sat, Apr 30, 2022 at 11:52 AM Andrew Lunn <andrew@lunn.ch> wrote:
-> >
-> > > Good Morning,
-> > >
-> > > After testing various configurations I found what is actually
-> > > happening here. When libphy is built in but the phy drivers are
-> > > modules and not available in the initrd, the generic phy driver binds
-> > > here. This allows the phy to come up but it is not functional.
-> >
-> > What MAC are you using?
+On 4/30/22 21:11, Jens Axboe wrote:
+> On 4/29/22 4:18 AM, Hao Xu wrote:
+>> This is the third version of fixed worker implementation.
+>> Wrote a nop test program to test it, 3 fixed-workers VS 3 normal workers.
+>> normal workers:
+>> ./run_nop_wqe.sh nop_wqe_normal 200000 100 3 1-3
+>>          time spent: 10464397 usecs      IOPS: 1911242
+>>          time spent: 9610976 usecs       IOPS: 2080954
+>>          time spent: 9807361 usecs       IOPS: 2039284
+>>
+>> fixed workers:
+>> ./run_nop_wqe.sh nop_wqe_fixed 200000 100 3 1-3
+>>          time spent: 17314274 usecs      IOPS: 1155116
+>>          time spent: 17016942 usecs      IOPS: 1175299
+>>          time spent: 17908684 usecs      IOPS: 1116776
 > 
-> Specifically Motorcomm, but I've discovered it can happen with any of
-> the phy drivers with the right kconfig.
+> I saw these numbers in v2 as well, and I have to admit I don't
+> understand them. Because on the surface, it sure looks like the first
+> set of results (labeled "normal") are better than the second "fixed"
+> set. Am I reading them wrong, or did you transpose them?
+Sorry, I transposed them..
 > 
-> >
-> > Why is you interface being brought up by the initramfs? Are you using
-> > NFS root from within the initramfs?
+> I think this patch series would benefit from a higher level description
+> of what fixed workers mean in this context. How are they different from
+> the existing workers, and why would it improve things.
+Sure, put that in the Patch 7/9, I'll move it to the cover letter as
+well.
 > 
-> This was discovered with embedded programming. It's common to have a
-> small initramfs, or forgo an initramfs altogether.
+>> things to be done:
+>>   - Still need some thinking about the work cancellation
+> 
+> Can you expand? What are the challenges with fixed workers and
+> cancelation?
+Currently, when a fixed worker fetch all the works from its private work
+list, I use a temporary acct struct to hold them. This means at that
+moment the cancellation cannot find these works which are going to run
+but not in the private work list already. This won't be a big problem,
+another acct member in io_worker{} should be good enough to resolve
+that.
+> 
+>>   - not very sure IO_WORKER_F_EXIT is safe enough on synchronization
+>>   - the iowq hash stuff is not compatible with fixed worker for now
+> 
+> We might need to extract the hashing out a bit so it's not as tied to
+> the existing implementation.
+> 
 
-If you're talking about embedded, it makes more sense to have the PHY
-drivers built-in. They will take up less text and data space that way.
-Typically, PHY drivers have very small amounts of text and data, and
-both of these end up being rounded up to a page size when loaded as a
-module.
-
-> Another cause is a
-> mismatch in kernel config where phylib is built in because of a
-> dependency, but the rest of the phy drivers are modular.
-> The key is:
-> - phylib is built in
-> - ethernet driver is built in
-> - the phy driver is a module
-> - modules aren't available at probe time (for any reason).
-
-This is why many ethernet drivers connect with their PHY in their
-.ndo_open method, rather than at probe time.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

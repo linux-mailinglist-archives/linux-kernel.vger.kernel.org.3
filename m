@@ -2,130 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EACF5516417
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 13:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8E3151641C
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 13:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346134AbiEALbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 07:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40998 "EHLO
+        id S1346061AbiEALcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 07:32:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346104AbiEALb2 (ORCPT
+        with ESMTP id S1346155AbiEALcB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 07:31:28 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C3D6D38F
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 04:27:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651404479; x=1682940479;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=qUZYbemYGfqX6UdR8vYw2GY0BXDxcZJ9d/Mb3z7FWrs=;
-  b=S8HKWubqDQbjTXMNVljA59OTwY/1h29/pRa/UKpG01lMH/+8yCSjJi/x
-   AbDkMvfmGj1FQ9s9sc+gbp/R0bMFZZ09J8YVva6lKVtYeADHSYGQ5MYSs
-   uQAsQ8x3bO+Eybo8s1zRZUGN9S+FRUVzXurxlUhHGZFQ2F+88ZL1gb+Ht
-   TEU9HUg7454u7+JAVdZKARoYbon78lwm4h2zno06hpAaMPx7WDxoqfBtt
-   r4FQJspyP2vM4PJDo6Bqrxc+ilfGKMQnMHv2h8iFy4wDspIswkXgrfphk
-   NtqmRZlF9PhSBMRrGIDpiyLPljwj28f9RDo5J/xNbT6MmFyggpZuzaWyn
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10333"; a="246912737"
-X-IronPort-AV: E=Sophos;i="5.91,189,1647327600"; 
-   d="scan'208";a="246912737"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 04:27:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,189,1647327600"; 
-   d="scan'208";a="545114953"
-Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by orsmga002.jf.intel.com with ESMTP; 01 May 2022 04:27:56 -0700
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>
-Cc:     Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH 5/5] iommu/vt-d: Remove hard coding PGSNP bit in PASID entries
-Date:   Sun,  1 May 2022 19:24:34 +0800
-Message-Id: <20220501112434.874236-6-baolu.lu@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220501112434.874236-1-baolu.lu@linux.intel.com>
-References: <20220501112434.874236-1-baolu.lu@linux.intel.com>
+        Sun, 1 May 2022 07:32:01 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FEA46D3BD;
+        Sun,  1 May 2022 04:28:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=j2MeoyDNnhtCNI4diPE6KeBtDiVOdWvq3i/pv7roOCY=; b=rh8fo1F7nz7o0sWw61t+nRCLI5
+        jZ65Mk+l9VOd49fIcfWlmEIDUA2lSnZLqtyWv7QK3OE/Q2H+gpW0K5mvoTwzqkvVI8d478PlhBGJd
+        N8Z7YjkL/7UhYNr2/hZR2ATgsy5kQWJurEwA6dvZ5Qk25xMKqGTCbRzWxAsN8IBWaD8gnN4pBQul5
+        uaEiMMiXjErxBo5SgMhSAFHCahNYoBkNptOVT0I9aYIs4jNrFpuWBd2vfI0SQCoWP7P5Ie1TLjh6m
+        5zgw3JAtOlyXomqSary+dknNeLBB0IQ4dMisBYpRSloi6OCTiCe6TA6NjTqGIVIt5nycfecnzXbHe
+        HfmrqEAg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58472)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nl7kV-0006CR-Vh; Sun, 01 May 2022 12:28:23 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nl7kQ-0003qP-21; Sun, 01 May 2022 12:28:18 +0100
+Date:   Sun, 1 May 2022 12:28:18 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Huacai Chen <chenhuacai@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>
+Subject: Re: [PATCH V9 21/24] LoongArch: Add zboot (compressed kernel) support
+Message-ID: <Ym5u0jR0PXwziqF8@shell.armlinux.org.uk>
+References: <20220430090518.3127980-1-chenhuacai@loongson.cn>
+ <20220430090518.3127980-22-chenhuacai@loongson.cn>
+ <CAK8P3a0LwJ3mMQMFkxGxr+umCMM3dKGRnLF+dMCmD5j43hq2sA@mail.gmail.com>
+ <CAAhV-H6vPdLeup38YTj64Xxxk+PTact=DMJTs9efsa1b3t-y2A@mail.gmail.com>
+ <Ym4qNILcz+W7dC9i@shell.armlinux.org.uk>
+ <CAAhV-H58HXicH7jj88BFUH8P9cGwXFGjgOoLvZubQsBst+zheQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAhV-H58HXicH7jj88BFUH8P9cGwXFGjgOoLvZubQsBst+zheQ@mail.gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As enforce_cache_coherency has been introduced into the iommu_domain_ops,
-the kernel component which owns the iommu domain is able to opt-in its
-requirement for force snooping support. The iommu driver has no need to
-hard code the page snoop control bit in the PASID table entries anymore.
+On Sun, May 01, 2022 at 04:46:50PM +0800, Huacai Chen wrote:
+> Hi, Russell,
+> 
+> On Sun, May 1, 2022 at 2:35 PM Russell King (Oracle)
+> <linux@armlinux.org.uk> wrote:
+> >
+> > On Sun, May 01, 2022 at 01:22:25PM +0800, Huacai Chen wrote:
+> > > Hi, Arnd,
+> > >
+> > > On Sat, Apr 30, 2022 at 7:02 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > > >
+> > > > On Sat, Apr 30, 2022 at 11:05 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
+> > > > >
+> > > > > This patch adds zboot (self-extracting compressed kernel) support, all
+> > > > > existing in-kernel compressing algorithm and efistub are supported.
+> > > > >
+> > > > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > > >
+> > > > I have no objections to adding a decompressor in principle, and
+> > > > the implementation seems reasonable. However, I think we should try to
+> > > > be consistent between architectures. On both arm64 and riscv, the
+> > > > maintainers decided to not include a decompressor and instead leave
+> > > > it up to the boot loader to decompress the kernel and enter it from there.
+> > > X86, ARM32 and MIPS already support self-extracting kernel, and in
+> > > 5.17 we even support self-extracting modules. So I think a
+> > > self-extracting kernel is better than a pure compressed kernel.
+> >
+> > FYI, kernel modules are not self-extracting. They don't contain the code
+> > to do the decompression - that is contained within the kernel, and it is
+> > the kernel that does the decompression. The userspace tooling tells the
+> > kernel that the module is compressed.
+> I call "self-extracting" here means we don't need out-of-kernel help:
+> kernel decompress doesn't need the bootloader, module decompress
+> doesn't need kmod.
 
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
----
- drivers/iommu/intel/pasid.h | 1 -
- drivers/iommu/intel/iommu.c | 3 ---
- drivers/iommu/intel/pasid.c | 6 ------
- 3 files changed, 10 deletions(-)
+As I understand it, it does require out-of-kernel help. The module
+loading program needs to pass in to the finit_module syscall a flag
+to tell the kernel to decompress it. See the
+MODULE_INIT_COMPRESSED_FILE flag.
 
-diff --git a/drivers/iommu/intel/pasid.h b/drivers/iommu/intel/pasid.h
-index 583ea67fc783..394e6284ce1f 100644
---- a/drivers/iommu/intel/pasid.h
-+++ b/drivers/iommu/intel/pasid.h
-@@ -48,7 +48,6 @@
-  */
- #define PASID_FLAG_SUPERVISOR_MODE	BIT(0)
- #define PASID_FLAG_NESTED		BIT(1)
--#define PASID_FLAG_PAGE_SNOOP		BIT(2)
- 
- /*
-  * The PASID_FLAG_FL5LP flag Indicates using 5-level paging for first-
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index d5808495eb64..edd3d940eb25 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -2432,9 +2432,6 @@ static int domain_setup_first_level(struct intel_iommu *iommu,
- 	if (level == 5)
- 		flags |= PASID_FLAG_FL5LP;
- 
--	if (domain->domain.type == IOMMU_DOMAIN_UNMANAGED)
--		flags |= PASID_FLAG_PAGE_SNOOP;
--
- 	return intel_pasid_setup_first_level(iommu, dev, (pgd_t *)pgd, pasid,
- 					     domain->iommu_did[iommu->seq_id],
- 					     flags);
-diff --git a/drivers/iommu/intel/pasid.c b/drivers/iommu/intel/pasid.c
-index 815c744e6a34..dc5020320323 100644
---- a/drivers/iommu/intel/pasid.c
-+++ b/drivers/iommu/intel/pasid.c
-@@ -625,9 +625,6 @@ int intel_pasid_setup_first_level(struct intel_iommu *iommu,
- 		}
- 	}
- 
--	if (flags & PASID_FLAG_PAGE_SNOOP)
--		pasid_set_pgsnp(pte);
--
- 	pasid_set_domain_id(pte, did);
- 	pasid_set_address_width(pte, iommu->agaw);
- 	pasid_set_page_snoop(pte, !!ecap_smpwc(iommu->ecap));
-@@ -710,9 +707,6 @@ int intel_pasid_setup_second_level(struct intel_iommu *iommu,
- 	pasid_set_fault_enable(pte);
- 	pasid_set_page_snoop(pte, !!ecap_smpwc(iommu->ecap));
- 
--	if (domain->domain.type == IOMMU_DOMAIN_UNMANAGED)
--		pasid_set_pgsnp(pte);
--
- 	/*
- 	 * Since it is a second level only translation setup, we should
- 	 * set SRE bit as well (addresses are expected to be GPAs).
+So it's definitely not "self-extracting" by any sense of "self". My
+definition of "self-extracting" is where a program contains the
+extractor inside the same image, and when the program is run, it
+performs the extraction using code contained within the image itself.
+
+Your definition would mean a gzipped kernel binary would be able to
+be called "self-extracting" if the boot loader decompresses it. This
+is definitely not "self-extracting" in my book.
+
+Sorry to be such a pedant.
+
 -- 
-2.25.1
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

@@ -2,50 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB665166D1
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 19:55:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E32D5166D8
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 20:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353582AbiEAR7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 13:59:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45122 "EHLO
+        id S1354201AbiEASFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 14:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353556AbiEAR7C (ORCPT
+        with ESMTP id S1353631AbiEASE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 13:59:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE5571A39B;
-        Sun,  1 May 2022 10:55:36 -0700 (PDT)
+        Sun, 1 May 2022 14:04:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0CD369E3;
+        Sun,  1 May 2022 11:01:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6306D60F75;
-        Sun,  1 May 2022 17:55:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E07C3C385A9;
-        Sun,  1 May 2022 17:55:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6437CB80E9F;
+        Sun,  1 May 2022 18:01:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 655F6C385AA;
+        Sun,  1 May 2022 18:01:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651427735;
-        bh=L5wYZWSFVoGzNdMX0h3jxQx9rzpHO69jZH46PS8EiH4=;
+        s=k20201202; t=1651428089;
+        bh=mQ5z/2/gMvNxLbhWmeTsQypZp/LJsH4r9iPhByXwQo8=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=m9BUdF0tMKH/aUr65QFJkuxnW7F51cBus71jRRaYcbXuH+/s7nHsdfX9qJWYTf7Fs
-         OEj6mT2U42TwAxekuSLozZwLBGMvLJP1hytVmynls3gqZxz4HaCAd4xu9X2FsyncOA
-         CNIDtUh/LUX/KaBdp9pxWzu8fbwnLBRDQFcTkUt7QoF1W+Xw07wSv3GTy0iBozSRy1
-         Epkg/vcxRtA5qKaZTzllPRLcx1rcNoYtJZRfBdL3vF3bbxf7PjoPrR6OszPrZbOw8T
-         Ju+OzcbU0Upskgesgmgqfqmtv3yyXNppY1lrYOx8ZUF2D5cT60r4gwEXsf+7XgpAC0
-         flRHn/nLw7mXA==
-Date:   Sun, 1 May 2022 19:03:49 +0100
+        b=e64OFrHSq/TLL5FsVHn4J/HK5UCqexybkALjKeKHqOAy9cObzQZkzi3vmm5whsgrt
+         3fjnxwJQ5aH49QMA5C237irX8B739kR9IP6B41gdkfd5MrmQwvDTYM4KaKoCmpWBEn
+         tijPgGYy8ehuEb6vXPiRb2XwjYpdPiJ/4mPc3Uv4cMWmBtTLDjq8jlk61L3vsX3D+N
+         lX4im5rQGDZ41qhg0xQxgTat9kVBwrYlNHxZmUM5icNVqV26cEii9CJYMNwioFEfLl
+         Y72SCgYGgDBFeiBYqBKTI9GH8LH8IhZjkNAqZho6ox0+G8cgqpTbdWEzeXcLQgHmfU
+         hHY9x9XV6g22A==
+Date:   Sun, 1 May 2022 19:09:43 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     linux-kernel@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sean Nyekjaer <sean@geanix.com>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] Add support for texas dac121c081 to the dac5571
- driver
-Message-ID: <20220501190349.54aa48a3@jic23-huawei>
-In-Reply-To: <20220428204439.4ec2b4ae@jic23-huawei>
-References: <42db911c-5eba-0511-3e8c-8011a2a5b44a@axentia.se>
-        <20220428204439.4ec2b4ae@jic23-huawei>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>,
+        Jose Cazarin <joseespiriki@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Peter Rosin <peda@axentia.se>
+Subject: Re: linux-next: manual merge of the iio tree with the
+ char-misc.current tree
+Message-ID: <20220501190943.28ec3d4c@jic23-huawei>
+In-Reply-To: <20220429144721.63ae260f@canb.auug.org.au>
+References: <20220429143517.75be9c04@canb.auug.org.au>
+        <20220429144721.63ae260f@canb.auug.org.au>
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -60,53 +62,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Apr 2022 20:44:39 +0100
-Jonathan Cameron <jic23@kernel.org> wrote:
+On Fri, 29 Apr 2022 14:47:21 +1000
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-> On Mon, 25 Apr 2022 22:46:30 +0200
-> Peter Rosin <peda@axentia.se> wrote:
+> Hi all,
 > 
-> > Hi!
-> > 
-> > The new chip works much like the other chips supported by the driver, so
-> > this is just adding another compatible to the list.
-> > 
-> > Chenages since v1:
-> > - Guenter Roeck noticed elsewhere that my mail setup was botched and
-> >   that my patches were clobbered. Hopefully fixed. *blush*
-> > - added tags from Sean Nyekjaer and Rob Herring  
+> On Fri, 29 Apr 2022 14:35:17 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > diff --cc drivers/iio/dac/ti-dac5571.c
+> > index 0b775f943db3,96b86e2dcc6b..000000000000
+> > --- a/drivers/iio/dac/ti-dac5571.c
+> > +++ b/drivers/iio/dac/ti-dac5571.c
+> > @@@ -393,15 -386,16 +394,16 @@@ static int dac5571_remove(struct i2c_cl
+> >   }
+> >   
+> >   static const struct of_device_id dac5571_of_id[] = {
+> >  -	{.compatible = "ti,dac5571"},
+> >  -	{.compatible = "ti,dac6571"},
+> >  -	{.compatible = "ti,dac7571"},
+> >  -	{.compatible = "ti,dac5574"},
+> >  -	{.compatible = "ti,dac6574"},
+> >  -	{.compatible = "ti,dac7574"},
+> >  -	{.compatible = "ti,dac5573"},
+> >  -	{.compatible = "ti,dac6573"},
+> >  -	{.compatible = "ti,dac7573"},
+> >  -	{.compatible = "ti,dac121c081"},
+> >  +	{.compatible = "ti,dac5571", .data = (void *)single_8bit},
+> >  +	{.compatible = "ti,dac6571", .data = (void *)single_10bit},
+> >  +	{.compatible = "ti,dac7571", .data = (void *)single_12bit},
+> >  +	{.compatible = "ti,dac5574", .data = (void *)quad_8bit},
+> >  +	{.compatible = "ti,dac6574", .data = (void *)quad_10bit},
+> >  +	{.compatible = "ti,dac7574", .data = (void *)quad_12bit},
+> >  +	{.compatible = "ti,dac5573", .data = (void *)quad_8bit},
+> >  +	{.compatible = "ti,dac6573", .data = (void *)quad_10bit},
+> >  +	{.compatible = "ti,dac7573", .data = (void *)quad_12bit},
+> > ++	{.compatible = "ti,dac121c081", data = (void *)single_12bit},  
+>                                         ^
+> I fixed up the missing '.'
 > 
-> Applied.  Thanks
 
-Backed out temporarily because they have crossed with a fix (that I'd
-forgotten about) and were requiring a non trivial merge in linux-next.
+Thanks Stephen and sorry I missed this one locally! Trying to sneak
+a last few patches in at the end of the day is always a bad idea -
+particularly my memory of what is going through my various branches is
+clearly less than perfect!
 
-https://patchwork.kernel.org/project/linux-iio/patch/20220324234340.32402-1-laurent.pinchart@ideasonboard.com/
+I've decided to back the series out for now and resolve it once the
+fix in char-misc fix filters back to my tree.
 
-Hopefully that will get resolved in my upstream fairly soon and I can
-fix this one up whilst applying it myself.
-
-Thanks,
+Thanks as ever for your hard work!
 
 Jonathan
-
-
-
-> 
-> Jonathan
-> 
-> > 
-> > Cheers,
-> > Peter
-> > 
-> > Peter Rosin (2):
-> >   dt-bindings: iio: ti-dac5571: Add ti,dac121c081
-> >   iio: dac: ti-dac5571: add support for ti,dac121c081
-> > 
-> >  Documentation/devicetree/bindings/iio/dac/ti,dac5571.yaml | 1 +
-> >  drivers/iio/dac/Kconfig                                   | 2 +-
-> >  drivers/iio/dac/ti-dac5571.c                              | 3 +++
-> >  3 files changed, 5 insertions(+), 1 deletion(-)
-> >   
-> 
-

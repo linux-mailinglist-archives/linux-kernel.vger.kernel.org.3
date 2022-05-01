@@ -2,149 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD4551645D
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 14:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 301B8516466
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 14:30:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346974AbiEAM27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 08:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59904 "EHLO
+        id S1347143AbiEAMdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 08:33:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234166AbiEAM24 (ORCPT
+        with ESMTP id S1346975AbiEAMdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 08:28:56 -0400
-Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C298EE017;
-        Sun,  1 May 2022 05:25:27 -0700 (PDT)
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 241COxAn017333;
-        Sun, 1 May 2022 21:25:00 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 241COxAn017333
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1651407900;
-        bh=s9WJsNSqpPu5bcg8syEMbH4y6ywS2B+iJi17yrfL59w=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZwU0SrYVAmuqx7ZPBWALLSvJ72XApDjVU/+M8tiMYdoaqL9sEVG/VtUU40ufqmHi8
-         XskoLhhYh+2LRs43jkgv0YVcQOHUuhgZpaAFUzYUBvvTDiPWt/pQvknK21V9xOvX0R
-         DnokeReLawxxnt9Ki9WL90W8Iu2NR3BCO0XCbHWXOPQ3wgrfHNDZbPE+1QZYPREIiS
-         liBuVeUSTyMQXz7/8xDoHfABVegTw7FWscZ7kl0wrkANh82Co7tO9kxNAq2+4aJa/f
-         vJJnrGmUOl/2XZdYADC/w51+LrTbPLPpS02d8A8Fpq9zWcjpfyLKl/gvjbFnurl3eW
-         C9c4eKUdZLDAQ==
-X-Nifty-SrcIP: [209.85.215.179]
-Received: by mail-pg1-f179.google.com with SMTP id bg9so9845821pgb.9;
-        Sun, 01 May 2022 05:25:00 -0700 (PDT)
-X-Gm-Message-State: AOAM5303c3JgWrB+bjObd2EfsYwyucbyozqUnAo4jAviLnxhUaj+HWYe
-        bY+IiuVT4BusS/bLp9IZvPGVL7QBcdJ6tZnzERE=
-X-Google-Smtp-Source: ABdhPJweSJ5bmDryx8QPRvubCmslr51jm3f8PW+XSTdkqy/t55C0Hk6kBtzuRE4UIvahL2188zio4+mAtCSuUoYGj7k=
-X-Received: by 2002:a05:6a00:a02:b0:4fd:f9dd:5494 with SMTP id
- p2-20020a056a000a0200b004fdf9dd5494mr7285242pfh.68.1651407899203; Sun, 01 May
- 2022 05:24:59 -0700 (PDT)
+        Sun, 1 May 2022 08:33:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03732CEE;
+        Sun,  1 May 2022 05:30:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B666B80D39;
+        Sun,  1 May 2022 12:30:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4209BC385A9;
+        Sun,  1 May 2022 12:30:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651408212;
+        bh=fbgICJHMyi+PJLgMW4ywEn4tsp6nyzCg/096sp1Xdz4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=k7pPi1lDlbo274WbeJec2G3wTZbigFuwDcWoweZo+unCzhkx3d/TVggZmF4Re1dg0
+         lBSU1lViYqU+S/jiU/Y5BHYfbVjbAkvs599vSSu4N1pYhwqXhrxBdOnhbBusWkeEUd
+         H6QbPSjkTtDFvuhRcfnUIbdkdgKh+ouPYEAQshIE6qjnEEAuwFCDI7xvM4dw2mm40H
+         SC7m9Ow6zPto3+kBRfM0uXxTwOqaJc+PPNuU6j1vQ8ijWaiifoQ6iyxr52+zIGbEp5
+         XeBivddtb85tpTI1BvKLGL1p+CGu2qFyPw+5CJ/SDtpPYbkm31I6IC6tj6Ez9phB30
+         XHHUi8KSONN0Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 23921E8DBDA;
+        Sun,  1 May 2022 12:30:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220501084032.1025918-1-masahiroy@kernel.org>
-In-Reply-To: <20220501084032.1025918-1-masahiroy@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 1 May 2022 21:23:54 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASYKttAZMnirt-aVSJqbgY1Cagj3URstv-9zs+-RKDi8g@mail.gmail.com>
-Message-ID: <CAK7LNASYKttAZMnirt-aVSJqbgY1Cagj3URstv-9zs+-RKDi8g@mail.gmail.com>
-Subject: Re: [PATCH v2 00/26] kbuild: yet another series of cleanups (modpost
- and LTO)
-To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v6 0/2] Replace improper checks and fix bugs in nfc
+ subsystem
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165140821214.17181.2516718625750053871.git-patchwork-notify@kernel.org>
+Date:   Sun, 01 May 2022 12:30:12 +0000
+References: <cover.1651235400.git.duoming@zju.edu.cn>
+In-Reply-To: <cover.1651235400.git.duoming@zju.edu.cn>
+To:     Duoming Zhou <duoming@zju.edu.cn>
+Cc:     krzysztof.kozlowski@linaro.org, kuba@kernel.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        netdev@vger.kernel.org, alexander.deucher@amd.com,
+        broonie@kernel.org, linma@zju.edu.cn
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 1, 2022 at 5:42 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
->
-> This is the third batch of cleanups in this development cycle.
->
-> Major changes in v2:
->
->  - V1 did not work with CONFIG_MODULE_REL_CRCS.
->    I fixed this for v2.
->
->  - Reflect some review comments in v1
->
->  - Refactor the code more
->
->  - Avoid too long argument error
->
+Hello:
 
+This series was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-This series is available at:
+On Fri, 29 Apr 2022 20:45:49 +0800 you wrote:
+> The first patch is used to replace improper checks in netlink related
+> functions of nfc core, the second patch is used to fix bugs in
+> nfcmrvl driver.
+> 
+> Duoming Zhou (2):
+>   nfc: replace improper check device_is_registered() in netlink related
+>     functions
+>   nfc: nfcmrvl: main: reorder destructive operations in
+>     nfcmrvl_nci_unregister_dev to avoid bugs
+> 
+> [...]
 
-git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
-lto-cleanup-v2
+Here is the summary with links:
+  - [net,v6,1/2] nfc: replace improper check device_is_registered() in netlink related functions
+    https://git.kernel.org/netdev/net/c/da5c0f119203
+  - [net,v6,2/2] nfc: nfcmrvl: main: reorder destructive operations in nfcmrvl_nci_unregister_dev to avoid bugs
+    https://git.kernel.org/netdev/net/c/d270453a0d9e
 
-
-
-
-
-
-
->
-> Masahiro Yamada (26):
->   modpost: use bool type where appropriate
->   modpost: change mod->gpl_compatible to bool type
->   modpost: import include/linux/list.h
->   modpost: traverse modules in order
->   modpost: add sym_add_unresolved() helper
->   modpost: traverse unresolved symbols in order
->   modpost: use doubly linked list for dump_lists
->   modpost: traverse the namespace_list in order
->   modpost: dump Module.symvers in the same order of modules.order
->   modpost: move static EXPORT_SYMBOL check to check_exports()
->   modpost: make multiple export error
->   modpost: make sym_add_exported() always allocate a new symbol
->   modpost: split new_symbol() to symbol allocation and hash table
->     addition
->   modpost: mitigate false-negatives for static EXPORT_SYMBOL checks
->   kbuild: record symbol versions in *.cmd files
->   kbuild: generate a list of objects in vmlinux
->   modpost: extract symbol versions from *.cmd files
->   modpost: generate linker script to collect symbol versions
->   kbuild: embed symbol versions at final link of vmlinux or modules
->   kbuild: stop merging *.symversions
->   genksyms: adjust the output format for .cmd files
->   kbuild: do not create *.prelink.o for Clang LTO or IBT
->   kbuild: make built-in.a rule robust against too long argument error
->   kbuild: make *.mod rule robust against too long argument error
->   modpost: simplify the ->is_static initialization
->   modpost: use hlist for hash table implementation
->
->  .gitignore                  |   1 +
->  Makefile                    |   1 +
->  scripts/Kbuild.include      |   4 +
->  scripts/Makefile.build      | 118 +++------
->  scripts/Makefile.lib        |   7 -
->  scripts/Makefile.modfinal   |   6 +-
->  scripts/Makefile.modpost    |  10 +-
->  scripts/genksyms/genksyms.c |  17 +-
->  scripts/link-vmlinux.sh     |  34 +--
->  scripts/mod/file2alias.c    |   2 -
->  scripts/mod/list.h          | 265 +++++++++++++++++++
->  scripts/mod/modpost.c       | 501 ++++++++++++++++++++++--------------
->  scripts/mod/modpost.h       |  24 +-
->  scripts/mod/sumversion.c    |   8 +-
->  14 files changed, 650 insertions(+), 348 deletions(-)
->  create mode 100644 scripts/mod/list.h
->
-> --
-> 2.32.0
->
-
-
+You are awesome, thank you!
 -- 
-Best Regards
-Masahiro Yamada
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

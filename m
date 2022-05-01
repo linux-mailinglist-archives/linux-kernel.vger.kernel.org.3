@@ -2,87 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 585E8516870
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 23:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F2FB516875
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 23:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355530AbiEAVx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 17:53:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54840 "EHLO
+        id S1376562AbiEAV7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 17:59:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355443AbiEAVxu (ORCPT
+        with ESMTP id S1376452AbiEAV7K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 17:53:50 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C90C9FFD
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 14:50:23 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2f7d621d1caso131383697b3.11
-        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 14:50:23 -0700 (PDT)
+        Sun, 1 May 2022 17:59:10 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164882E0A5
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 14:55:43 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id s30so23340045ybi.8
+        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 14:55:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=DrYFNF6XiUDLRQ8BG/sFtx3Ph/Zfoke+tXA+P2uLssI=;
-        b=d2nReteaB3Jz4i06NpIM6gnz5B8hQwBBjiPEVsw+epXirApSHuit8G+1KpGNH0E41i
-         zxQnSRyQRoC4LRDvTTpNQXXWsgzjSg9lPXQ+2R5TERxPbgFoJ0rO3XT8c3m0Yq0HNGg1
-         xoDglp5RLj9nKgfEQ74i2SHqKwgwMdRpEEtiYG/Om0Qpux5sR/mLSHSOL9gM6Vj1gMWz
-         VoIYgx1rBx+zz3z7FpvoE8zQGdfABxOi+Ob8Z9KwW9nuJHZuBF/shpRDF0nV/UEdNxMy
-         YZNy+kAfKoMJQflpdXIk7n78QiZxl/VYBhTpXLO/UC9d4n5NKuo5I3ZCPC4z1lrBlf8C
-         mZEA==
+        bh=7rmKOmP5MkmzB6kYwqydPOY8Y/8AVOpHSwETVjiHA9I=;
+        b=WAyuZryKlUvTJ6kmm5uy/jwqa15kiwrjusdIJ5eDuY3LzFArwiFBHppsGeFl93dGUA
+         aRFZM3OGRe9/1ZsfBAGsNrxtq9VIqDWOo4wYESFLFR0W3DPEm0C8ARYo3KzTKrBTkijw
+         r9Ri8TPuCaeRW63/lCZyBKuHyXD3oxSXHsAVra2RElgjum4GrMmy4OjAN3XpyQWy8TaO
+         yhLZRuBdNh8ocwUvZOb/5JKSEUzIjBzxE7DFL06GDxVfT8sWPk2RvudjrEDKInmr1+w3
+         5mOCiOp/5riekUqXbLCnRgTzfgjOdBAs7UcD7j5V28WNlgR84z+jAMc7M2oX2RI1uoY9
+         cX6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=DrYFNF6XiUDLRQ8BG/sFtx3Ph/Zfoke+tXA+P2uLssI=;
-        b=uBzL69YL9KeqtayaIPbZl+m5Io9iSnbc4Pe+iKWNkNfLaPA2qWc4O7A077Ry18ECg5
-         Y81J75SyGw3gd0CXY6/IqK+pl0NfiFSyAQ3k2/ntqpzMPtRu/T72eka76zdFphsrHoGf
-         SVUYBUN6TGbqNv0rY/zOKX+QIwBJpFRZifSsp599qB0FA4Og4NWMAj7bMS9OiQD7wskS
-         SAvd6iEusHYKYi9ED1KMjYSOXiUlk8qf/Wc+vGTvSrejMXpOCKivv2Nw9weguLIdjYBw
-         /6P9Tr6JYIeJG25r3KRE3E+4iduYRYSlzfyWgK62LU6snGEVFIbsKPP1xnjEgMn90m4e
-         w/9g==
-X-Gm-Message-State: AOAM5326gi3iyzb6ZMfzuVqyxCxinv4wrqqljLSGUcmWKd7/VJyO1MBi
-        VDSdYmNkftVO/uhXUzzdJCKzw/kZ0CKOc9FiiQckzw==
-X-Google-Smtp-Source: ABdhPJy78P6hUpCS1kUYg8tICBMpcOG7ZelV2yx+uOWLM+IsGmklihAlHCtdjke+EOaf0s2Ys/opvH6nxxiY8Y3Ggaw=
-X-Received: by 2002:a0d:e5c6:0:b0:2f8:c866:7af9 with SMTP id
- o189-20020a0de5c6000000b002f8c8667af9mr9181281ywe.268.1651441822394; Sun, 01
- May 2022 14:50:22 -0700 (PDT)
+        bh=7rmKOmP5MkmzB6kYwqydPOY8Y/8AVOpHSwETVjiHA9I=;
+        b=JGhKyEqMI4/no5AUvmWkgfcf3gkIvqjecY83H6M5jEbS9e8arMxBz9rU4hlAUTIotB
+         649mzRLuvd0P2hk4wXyL1XbflreFHMhbmnltIJwilU8Q7h04hlGb9oMSs+f57lxIWV+t
+         y22HFfQds+3EsUO1lG72wGuMR0W2S85iY3d7o9bAyZDlGaQbY/mhIwt4W3anlKr5zmth
+         kesEboAFdHGze+NEAtyx1LynwDf+GJdeXZVXYm/e6YtHSyL9jHFjKbIExetuOyTuA93p
+         xccN5CyYaPHEvUcYb+WGpssZKF+PpSUNUJhG6DqBHxT1V+CZOBt3QGX6fc7DLHkD0Laj
+         AZwQ==
+X-Gm-Message-State: AOAM532x2zu5F1ZJGHkQq/GwnYDoIBXFaXOGp4KHY2lCrZ6j7Y9fUeIT
+        6RMVXD+HhAbeMLLdolJH22ENYq1plTy2On9TOoM11g==
+X-Google-Smtp-Source: ABdhPJxqR+wj7vzqumSDiGlciHIivrD/WScHz6GVJNOR1rgSzhxVA4VDvKDovYr4a2IaCgbibVBmgNfiIylUorU7RJY=
+X-Received: by 2002:a25:e684:0:b0:645:d429:78e9 with SMTP id
+ d126-20020a25e684000000b00645d42978e9mr8676157ybh.369.1651442142362; Sun, 01
+ May 2022 14:55:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220419163810.2118169-1-arnd@kernel.org> <20220419163810.2118169-26-arnd@kernel.org>
-In-Reply-To: <20220419163810.2118169-26-arnd@kernel.org>
+References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
+ <20220429135108.2781579-19-schnelle@linux.ibm.com> <Ymv3DnS1vPMY8QIg@fedora>
+ <f006229ae056d4cdcf57fc5722a695ad4c257182.camel@linux.ibm.com> <YmwGLrh4U+pVJo0m@fedora>
+In-Reply-To: <YmwGLrh4U+pVJo0m@fedora>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 1 May 2022 23:50:10 +0200
-Message-ID: <CACRpkdYs+0OdHfXGXwX3hdwV+BLi=V6FUkJEkm_ckbuR6QHToQ@mail.gmail.com>
-Subject: Re: [PATCH 25/48] ARM: pxa: zylonite: use gpio lookup instead mfp header
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     robert.jarzmik@free.fr, linux-arm-kernel@lists.infradead.org,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Tomas Cech <sleep_walker@suse.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-input@vger.kernel.org,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        alsa-devel@alsa-project.org
+Date:   Sun, 1 May 2022 23:55:31 +0200
+Message-ID: <CACRpkdaha37y-ZNSqYSbf=TvsJNcvbH1Y=N0JkVCewB-Lvf81Q@mail.gmail.com>
+Subject: Re: [RFC v2 10/39] gpio: add HAS_IOPORT dependencies
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,22 +73,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 6:42 PM Arnd Bergmann <arnd@kernel.org> wrote:
+On Fri, Apr 29, 2022 at 5:37 PM William Breathitt Gray
+<william.gray@linaro.org> wrote:
+> On Fri, Apr 29, 2022 at 04:46:00PM +0200, Niklas Schnelle wrote:
 
-> From: Arnd Bergmann <arnd@arndb.de>
+> > Good question. As far as I can see most (all?) of these have "select
+> > ISA_BUS_API" which is "def_bool ISA". Now "config ISA" seems to
+> > currently be repeated in architectures and doesn't have an explicit
+> > HAS_IOPORT dependency (it maybe should have one). But it does only make
+> > sense on architectures with HAS_IOPORT set.
 >
-> The mach/mfp.h header is only used by this one driver
-> for hardcoded gpio numbers. Change that to use a lookup
-> table instead.
->
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: linux-input@vger.kernel.org
-> Acked-by: Robert Jarzmik <robert.jarzmik@free.fr>
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> There is such a thing as ISA DMA, but you'll still need to initialize
+> the device via the IO Port bus first, so perhaps setting HAS_IOPORT for
+> "config ISA" is the right thing to do: all ISA devices are expected to
+> communicate in some way via ioport.
 
-Looks good to me!
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Adding that dependency seems like the right solution to me.
 
 Yours,
 Linus Walleij

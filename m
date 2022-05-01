@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB3BF51632D
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 10:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9D41516327
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 10:47:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344736AbiEAIsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 04:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44212 "EHLO
+        id S1343817AbiEAIsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 04:48:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344187AbiEAIqS (ORCPT
+        with ESMTP id S1344177AbiEAIqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 04:46:18 -0400
+        Sun, 1 May 2022 04:46:16 -0400
 Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4F54E3A6;
-        Sun,  1 May 2022 01:42:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D91E4CD59;
+        Sun,  1 May 2022 01:42:45 -0700 (PDT)
 Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-12.nifty.com with ESMTP id 2418f2S2008518;
+        by conuserg-12.nifty.com with ESMTP id 2418f2S3008518;
         Sun, 1 May 2022 17:41:12 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 2418f2S2008518
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 2418f2S3008518
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1651394472;
-        bh=GPcoq5UmVXCtNYinWnkOBgyynm/22Xa0IYnJlhllxx8=;
+        s=dec2015msa; t=1651394473;
+        bh=48YeH5yLVjVlCyq9pr+WDCNXaWRxxkvMIZASlpjblKk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e59m/v0iJt1xlzsi/cefKqY8/FDkHpd9nO83IG7HXKSBzM1mjRoJYuyISzsGr134w
-         VvjNH7mQ+ffcwJLy1KEPKJYJjHHp8F/QiJwHcY4T4Ejibpbv6701vvAXUewLJ3zJud
-         fF+5fWI3t0Oanxi0a74Q4QMfZB5hFfGM4cks4yRetUFL8xwH0bfs0ADFaXbmGdIxsj
-         NJ7rlJS/W5kx6pvzqdLyFGaoZAC2XUIFRuCNIxnraOf7nryWLnWujicvocvA3x5d9d
-         sRvSLzp0YZ41N00nmtyfXX0xSqy4esyXh3lGDgn8OeufnrBLYUe3n0k/W++Potu7Y0
-         fAjpQpqIpYj0Q==
+        b=WVwc3OaY4iXLOvVOKd74uPe60KP3vepPod/hp9ZUxHhvhhLGU7XzC+22e7B8iUDiF
+         6HGLtpzILSQz4yNSY0BcOM9scMmEIoI28Ktt47pHhhzxXUwhkswBbe5UKyZC9xbblI
+         Pj1YkvxDUJ76DRRTfnnijr/luDxx7om3s+5v1pIeFhi3sX5S568ieT+Ssz7CcaamT8
+         z6oj7Fe89lbMyboQTArFwkaqK5fuHwQBvQLGjlLXbBp8e4OR/QoNxB7SIwS1/9dUwu
+         6FMpCAG1wpfn9wiR1XrCgb6sDmOacA4DC+ezejhMoRcb5ZxrWvpJIrdqMrfLHhsRWs
+         WO87XtFCL6+EA==
 X-Nifty-SrcIP: [133.32.177.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
@@ -36,12 +36,10 @@ Cc:     linux-kernel@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>,
         Nicolas Schier <nicolas@fjasle.eu>,
         Michal Marek <michal.lkml@markovi.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        llvm@lists.linux.dev
-Subject: [PATCH v2 15/26] kbuild: record symbol versions in *.cmd files
-Date:   Sun,  1 May 2022 17:40:21 +0900
-Message-Id: <20220501084032.1025918-16-masahiroy@kernel.org>
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: [PATCH v2 16/26] kbuild: generate a list of objects in vmlinux
+Date:   Sun,  1 May 2022 17:40:22 +0900
+Message-Id: <20220501084032.1025918-17-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220501084032.1025918-1-masahiroy@kernel.org>
 References: <20220501084032.1025918-1-masahiroy@kernel.org>
@@ -56,70 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When CONFIG_MODVERSIONS=y, the output from genksyms is saved in
-separate *.symversions files, and will be used much later when
-CONFIG_LTO_CLANG=y because it is impossible to update LLVM bit code
-here.
+A *.mod file lists the member objects of a module, but vmlinux does
+not have such a file to list out all the member objects.
 
-This approach is not robust because:
-
- - *.symversions may or may not exist. If *.symversions does not
-   exist, we never know if it is missing for legitimate reason
-   (i.e. no EXPORT_SYMBOL) or something bad has happened (for
-   example, the user accidentally deleted it). Once it occurs,
-   it is not self-healing because *.symversions is generated
-   as a side effect.
-
- - stale (i.e. invalid) *.symversions might be picked up if an
-   object is generated in a non-ordinary way, and corresponding
-   *.symversions (, which was generated by old builds) just happen
-   to exist.
-
-A more robust approach is to save symbol versions in *.cmd files
-because:
-
- - *.cmd always exists (if the object is generated by if_changed
-   rule or friends). Even if the user accidentally deletes it,
-   it will be regenerated in the next build.
-
- - *.cmd is always re-generated when the object is updated. This
-   avoid stale version information being picked up.
-
-I will remove *.symversions later.
+Generate this list to allow modpost to know all the member objects.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Tested-by: Nicolas Schier <nicolas@fjasle.eu>
 Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
 ---
 
 Changes in v2:
-  - Fix CONFIG_MODULE_REL_CRCS=y case
+  - Move '> .vmlinux.objs' to the outside of the loop (Nicolas)
+  - Clean up .vmlinux.objs explicitly
 
- scripts/Makefile.build | 7 +++++++
- 1 file changed, 7 insertions(+)
+ scripts/link-vmlinux.sh | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index f6a506318795..a1023868775f 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -171,10 +171,17 @@ ifdef CONFIG_MODVERSIONS
+diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+index 20f44504a644..eceb3ee7ec06 100755
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -311,6 +311,7 @@ cleanup()
+ 	rm -f vmlinux.map
+ 	rm -f vmlinux.o
+ 	rm -f .vmlinux.d
++	rm -f .vmlinux.objs
+ }
  
- # Generate .o.symversions files for each .o with exported symbols, and link these
- # to the kernel and/or modules at the end.
+ # Use "make V=1" to debug this script
+@@ -342,6 +343,16 @@ ${MAKE} -f "${srctree}/scripts/Makefile.build" obj=init need-builtin=1
+ modpost_link vmlinux.o
+ objtool_link vmlinux.o
+ 
++# Generate the list of objects in vmlinux
++for f in ${KBUILD_VMLINUX_OBJS} ${KBUILD_VMLINUX_LIBS}; do
++	case ${f} in
++	*.a)
++		${AR} t ${f} ;;
++	*)
++		echo ${f} ;;
++	esac
++done > .vmlinux.objs
 +
-+genksyms_format_rel_crc := [^_]*__crc_\([^ ]*\) = \.; LONG(\([^)]*\)).*
-+genksyms_format_normal := __crc_\(.*\) = \(.*\);
-+genksyms_format := $(if $(CONFIG_MODULE_REL_CRCS),$(genksyms_format_rel_crc),$(genksyms_format_normal))
-+
- gen_symversions =								\
- 	if $(NM) $@ 2>/dev/null | grep -q __ksymtab; then			\
- 		$(call cmd_gensymtypes_$(1),$(KBUILD_SYMTYPES),$(@:.o=.symtypes)) \
- 		    > $@.symversions;						\
-+		sed -n 's/$(genksyms_format)/$(pound)SYMVER \1 \2/p' $@.symversions \
-+			>> $(dot-target).cmd;					\
- 	else									\
- 		rm -f $@.symversions;						\
- 	fi
+ # modpost vmlinux.o to check for section mismatches
+ ${MAKE} -f "${srctree}/scripts/Makefile.modpost" MODPOST_VMLINUX=1
+ 
 -- 
 2.32.0
 

@@ -2,207 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC055167F3
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 23:00:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EC045167F7
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 23:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354915AbiEAVD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 17:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52452 "EHLO
+        id S1354943AbiEAVLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 17:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354821AbiEAVDY (ORCPT
+        with ESMTP id S230203AbiEAVLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 17:03:24 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D7E1839E
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 13:59:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651438798; x=1682974798;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=sTXUHZGRdaQGIilzruUCfrQPVIuxTfDw0+VGOd61v3Q=;
-  b=NgixMk5OdnLill6mz+BjcqXECVDyPSiNjSyUp/AadWgSaFQuGBNB2Y2j
-   pkaPfGDP2hjEqurqoEgwVWeKt7HHS2O047lTePCI3b9QT4hdwPdDX8QQ8
-   IQd+mo5CqK6w8gjXSUv3lTJurlo+USIx15PRC0iXTats6iApT2XrQ2ADj
-   uDTTr4h6vHOGhOOyFVPFRDeitrHDZhQm5msp8lqgpDaSEMYlh8+O9qda+
-   enk3pj4gX9EkCN5VyqgEGOqG02vMlCE4xMNmoV15SdU6VbSKUX/iQqUoU
-   4KDsvzOl0GAGUqGDNe9Usi6lIyRiaxs18tOLmbWQ3Kk7zw8XtWjydNhj+
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="247614176"
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="247614176"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 13:59:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="688945535"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 01 May 2022 13:59:56 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nlGfb-00093R-SB;
-        Sun, 01 May 2022 20:59:55 +0000
-Date:   Mon, 02 May 2022 04:59:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/urgent] BUILD SUCCESS
- 7e0815b3e09986d2fe651199363e135b9358132a
-Message-ID: <626ef4a9./No71nRMp7N+KVqk%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sun, 1 May 2022 17:11:08 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56526BAB
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 14:07:42 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id v65so13684861oig.10
+        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 14:07:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=/H502LPEzSt4GoS+P7zqwCislvuDj30cVgMVeYzxz3E=;
+        b=NOWQRxW7LLkiODXK0OuF78r3yEFpwurW1VrEep/Qh5TMdcJ876d0sUX6n+POzXJ0ya
+         /kEwjmcjaM5NwIi/o5wlmJwjtSEaccKEyvMcDdXpbr8y8nXjgMiebNnoODhH3J8b5481
+         jdMCP9ziEZMW2j2xbJqitbUjZ/ZpGGf7GemB3tqcLe8X0gZeLzlvJV4L+yXErTIDVsRV
+         88vn81JksuDFSMEujulUirg6Eay4Uted7J1dNS+Mf2d+eH2VcHOw2ppV+fyatDs5/rsD
+         tSp2WxrLJ88A3kanBYgtWz+C8MZiGH7exiJPSuB5jVkcGFW9Jk8BheMRfJBPB+E0txsJ
+         AN+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :from:subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=/H502LPEzSt4GoS+P7zqwCislvuDj30cVgMVeYzxz3E=;
+        b=8D04q1zV97deNZcDiLMWkzCUgRaIONVY0aCEal0riWU9Ico+KKvrSDkTtoUnKPLMum
+         5nhGe/24pssv+fA3Hyu/hApRILLzYrU4f8w5pQRvDsTwWYN/h1vQjySylAhQJZV3Zncw
+         LgldvHW4jtKgrxOkiawABYTwnU9+93l2aY22eskafJVFMtTI03meCL5gTk1mYt2jW6YU
+         SS3SlUsViPr8ajVeWiz1WuW8+WYTy2YiBFDUWb639qwuW+Z3QFPWZ8tgR5MxaGwvriVQ
+         F84Rn78aSP8erK3n7JZ4yrg3BY6XCRVwRT/FOxChhG2fAIGwkntX+oDSZyaeiWWPTX1H
+         hrtw==
+X-Gm-Message-State: AOAM532LtyYRpP5nundqCq75CmKIuBL5WkPgWi5tM62hwSnzwur6awha
+        diOHAV+ej2QRJjJ9Kjb6qAP2a0O7zPZoTA==
+X-Google-Smtp-Source: ABdhPJxLdeNOoyD+aZfSlQ9dL/w1A8C0kkskzGCYoohHimyZUO1B79w6AU2HKGq32O4DYY79+UNNAw==
+X-Received: by 2002:a05:6808:3009:b0:2f9:6119:d676 with SMTP id ay9-20020a056808300900b002f96119d676mr4250347oib.205.1651439261684;
+        Sun, 01 May 2022 14:07:41 -0700 (PDT)
+Received: from ?IPV6:2603:8090:2005:39b3::100e? (2603-8090-2005-39b3-0000-0000-0000-100e.res6.spectrum.com. [2603:8090:2005:39b3::100e])
+        by smtp.gmail.com with ESMTPSA id k14-20020a056820016e00b0035eb4e5a6bcsm3253219ood.18.2022.05.01.14.07.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 01 May 2022 14:07:40 -0700 (PDT)
+Sender: Larry Finger <larry.finger@gmail.com>
+Message-ID: <6bd35831-2d7a-77ee-55e9-755ca752b0c8@lwfinger.net>
+Date:   Sun, 1 May 2022 16:07:39 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+From:   Larry Finger <Larry.Finger@lwfinger.net>
+Subject: Re: Changes in kernel 5.18-rc1 leads to crashes in VirtualBox Virtual
+ Machines
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+References: <7f01221d-f693-adf8-f5a5-d71944b44162@lwfinger.net>
+ <Ym7Hw9GDPP838JoH@zx2c4.com>
+Content-Language: en-US
+In-Reply-To: <Ym7Hw9GDPP838JoH@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
-branch HEAD: 7e0815b3e09986d2fe651199363e135b9358132a  x86/pci/xen: Disable PCI/MSI[-X] masking for XEN_HVM guests
+On 5/1/22 12:47, Jason A. Donenfeld wrote:
+> Hi Larry,
+> 
+> Thanks for the report. Several questions:
+> 
+> 1) Can you reproduce with 5.18-rc4?
+> 
+> 2) Can you send me a stacktrace from the crash or any relevant console
+>     output?
+> 
+> 3) Does the crash happen in the guest or the host?
+> 
+> Question two is very important.
 
-elapsed time: 744m
+Jason,
 
-configs tested: 123
-configs skipped: 77
+1. Yes, the problem happens with 5.18-rc4 and -rc5.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+3. The crash is in the guest. Nothing unusual is logged in the host.
 
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-arm                         s3c6400_defconfig
-parisc                generic-64bit_defconfig
-alpha                               defconfig
-mips                    maltaup_xpa_defconfig
-sh                        sh7763rdp_defconfig
-h8300                    h8300h-sim_defconfig
-arm                        oxnas_v6_defconfig
-arm                          pxa3xx_defconfig
-arc                        nsimosci_defconfig
-arm                          exynos_defconfig
-powerpc                 mpc834x_itx_defconfig
-sh                          sdk7780_defconfig
-powerpc64                        alldefconfig
-arm                           sama5_defconfig
-m68k                        m5307c3_defconfig
-sparc                               defconfig
-sparc64                             defconfig
-h8300                            alldefconfig
-m68k                          atari_defconfig
-arm                            zeus_defconfig
-arm                            mps2_defconfig
-xtensa                         virt_defconfig
-powerpc                    amigaone_defconfig
-sh                               allmodconfig
-sh                        sh7785lcr_defconfig
-m68k                         amcore_defconfig
-powerpc                    sam440ep_defconfig
-m68k                       m5475evb_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220501
-ia64                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a015
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-arc                  randconfig-r043-20220501
-s390                 randconfig-r044-20220501
-riscv                randconfig-r042-20220501
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                                  kexec
-x86_64                           rhel-8.3-syz
-x86_64                          rhel-8.3-func
-x86_64                               rhel-8.3
-x86_64                         rhel-8.3-kunit
+2. My answer here will be incomplete. There are no stacktraces or console ouput 
+on the host from any of the guest crashes, either in dmesg or under journalctl. 
+The desktop just disappears. The VirtualBox log files show nothing for the Linux 
+guest, and the following for the Windows instance:
 
-clang tested configs:
-x86_64                        randconfig-c007
-i386                          randconfig-c001
-powerpc              randconfig-c003-20220501
-riscv                randconfig-c006-20220501
-mips                 randconfig-c004-20220501
-arm                  randconfig-c002-20220501
-mips                        omega2p_defconfig
-mips                   sb1250_swarm_defconfig
-powerpc                      ppc64e_defconfig
-arm                     davinci_all_defconfig
-powerpc                 mpc8272_ads_defconfig
-mips                           mtx1_defconfig
-powerpc                     ksi8560_defconfig
-arm                          ep93xx_defconfig
-arm                         s3c2410_defconfig
-mips                malta_qemu_32r6_defconfig
-powerpc                      pmac32_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-i386                          randconfig-a013
-i386                          randconfig-a015
-i386                          randconfig-a011
+00:00:57.908011 GUI: UIMachineLogicNormal::sltCheckForRequestedVisualStateType: 
+Requested-state=0, Machine-state=5
+00:01:24.502961 GIM: HyperV: Guest indicates a fatal condition! P0=0x1e 
+P1=0xffffffffc0000005 P2=0xfffff8054c61e97c P3=0x0 P4=0x28
+00:01:24.503053 GIMHv: BugCheck 1e {ffffffffc0000005, fffff8054c61e97c, 0, 28}
+00:01:24.503054 KMODE_EXCEPTION_NOT_HANDLED
+00:01:24.503054 P1: ffffffffc0000005 - exception code - STATUS_ACCESS_VIOLATION
+00:01:24.503054 P2: fffff8054c61e97c - EIP/RIP
+00:01:24.503054 P3: 0000000000000000 - Xcpt param #0
+00:01:24.503054 P4: 0000000000000028 - Xcpt param #1
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Running a 3rd party dump analyzer shows that the crash happens at 
+ntoskrnl.exe+3f7d50. I have installed the Windows debugger, but I think the 
+learning curve will be steep. At this point, I have no further info available.
+
+Thanks,
+
+Larry

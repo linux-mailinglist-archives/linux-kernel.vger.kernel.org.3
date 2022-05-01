@@ -2,170 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9155851644D
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 14:00:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77AFD51644E
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 14:02:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346761AbiEAMD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 08:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58944 "EHLO
+        id S1346793AbiEAMGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 08:06:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244686AbiEAMD2 (ORCPT
+        with ESMTP id S232381AbiEAMGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 08:03:28 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6242B3A5C2
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 05:00:02 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Sun, 1 May 2022 08:06:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DADD123172
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 05:02:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0BDBE1F381;
-        Sun,  1 May 2022 12:00:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1651406401; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=lNz5IXxXcYlZTmGO3DgkWPcaex/L3iRTYIdpycamsJs=;
-        b=safl9peKZWA8YL9hjzM65XDO2SNqilqBMLfX5YBKDIn7DZYHSKRQrkIuzcqB9f/PcN+Ums
-        F18Ps39vpRbdAa25Y+4hWvmeUHLQOa5gHozWQYrxPPLlo9EJ2qD0pJ+cdbeXLwX3HMZF8v
-        9GDD4zO5Kk8n0Z9BQjjwxH9lgeaKqqo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1651406401;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=lNz5IXxXcYlZTmGO3DgkWPcaex/L3iRTYIdpycamsJs=;
-        b=fY/6ee+KlAGmnljZaCJ67F2b5+6ikVEFvd7uj/hUKNx/ELVBu29wJhsjUTA+NQzX+AfaH2
-        eEZtsTzCvGxlKODQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EBA0813AE0;
-        Sun,  1 May 2022 12:00:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id sGIYOUB2bmKENAAAMHmgww
-        (envelope-from <bp@suse.de>); Sun, 01 May 2022 12:00:00 +0000
-Date:   Sun, 1 May 2022 13:59:58 +0200
-From:   Borislav Petkov <bp@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] x86/urgent for 5.18
-Message-ID: <Ym52PqI9BCAfDZuX@zn.tnic>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4835860EA1
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 12:02:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40E80C385AA;
+        Sun,  1 May 2022 12:02:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651406556;
+        bh=3jiGB3l/BCNDk9mdCFdwTsJm8ACLeE2RYaBMzyjS/pQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ejof5RBF5RSp/H+2Zlnms4Ch9GRzKJjZm2UidbRcF4662qifP3AGTn+1m5SbsYOC1
+         bryoEtmeNV5UGyFZM8gUq6C8BGOFUfeqDumAEftB80JyWHdg05RMakVKKjrArub6ro
+         M5fWyD3nAYmC3en7n7tw9L7Fdq8Mz7RlDK4jy4pa1wnmcR/Wi1R1qbvO55VNDcd9aY
+         kHGubSwWm3K6z2SX4Z9K64/ftGCpHqGvLGMr5Annlz2CZMyKpF4ULqiz/EUTQOzinl
+         eYZaqoLhr12IGkpY4StpDERW5RJVGMeh44EsuP+4D/PlEUDUlaKGU1FJG0avId2l65
+         QONVmkphySvxw==
+Received: by pali.im (Postfix)
+        id 22902942; Sun,  1 May 2022 14:02:33 +0200 (CEST)
+Date:   Sun, 1 May 2022 14:02:33 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] irqchip/armada-370-xp: Do not allow mapping IRQ 0
+ and 1
+Message-ID: <20220501120233.xfzh62tbuuvatx3v@pali>
+References: <20220425113706.29310-1-pali@kernel.org>
+ <20220425113706.29310-2-pali@kernel.org>
+ <YmvafYwhtIoaOMmk@lunn.ch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YmvafYwhtIoaOMmk@lunn.ch>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Friday 29 April 2022 14:30:53 Andrew Lunn wrote:
+> On Mon, Apr 25, 2022 at 01:37:06PM +0200, Pali Rohár wrote:
+> > IRQs 0 and 1 cannot be mapped, they are handled internally by this driver
+> > and this driver does not call generic_handle_domain_irq() for these IRQs.
+> > So do not allow mapping these IRQs and correctly propagate error from the
+> > .irq_map callback.
+> 
+> So you are referring to this?
+> 
+>                 /* Check if the interrupt is not masked on current CPU.
+>                  * Test IRQ (0-1) and FIQ (8-9) mask bits.
+>                  */
+>                 if (!(irqsrc & ARMADA_370_XP_INT_IRQ_FIQ_MASK(cpuid)))
+>                         continue;
+> 
+>                 if (irqn == 1) {
+>                         armada_370_xp_handle_msi_irq(NULL, true);
+>                         continue;
+>                 }
 
-please pull a biggish bunch of urgent x86 fixes for 5.18.
+I'm referring to irqn, which is not handled on armada_370_xp_mpic_domain
+via generic_handle_domain_irq() when it is == 1.
 
-Thx.
+Also I'm referring to another section:
 
----
+		if (irqnr > 1) {
+			generic_handle_domain_irq(armada_370_xp_mpic_domain,
+						  irqnr);
+			continue;
+		}
 
-The following changes since commit b2d229d4ddb17db541098b83524d901257e93845:
+		/* MSI handling */
+		if (irqnr == 1)
+			armada_370_xp_handle_msi_irq(regs, false);
 
-  Linux 5.18-rc3 (2022-04-17 13:57:31 -0700)
+#ifdef CONFIG_SMP
+		/* IPI Handling */
+		if (irqnr == 0) {
+			unsigned long ipimask;
+			int ipi;
 
-are available in the Git repository at:
+			ipimask = readl_relaxed(per_cpu_int_base +
+						ARMADA_370_XP_IN_DRBEL_CAUSE_OFFS)
+				& IPI_DOORBELL_MASK;
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v5.18_rc5
+			for_each_set_bit(ipi, &ipimask, IPI_DOORBELL_END)
+				generic_handle_domain_irq(ipi_domain, ipi);
+		}
+#endif
 
-for you to fetch changes up to 7e0815b3e09986d2fe651199363e135b9358132a:
+First 'if (irqnr > 1)' just cause that irqnr 0 and 1 are not handled on
+armada_370_xp_mpic_domain via generic_handle_domain_irq().
 
-  x86/pci/xen: Disable PCI/MSI[-X] masking for XEN_HVM guests (2022-04-29 14:37:39 +0200)
+> 
+> Should the two FIQ interrupts also return -EINVAL?
+> 
+>        Andrew
 
-----------------------------------------------------------------
-- A fix to disable PCI/MSI[-X] masking for XEN_HVM guests as that is
-solely controlled by the hypervisor
+No. Following code
 
-- A build fix to make the function prototype (__warn()) as visible as
-the definition itself
+		irqsrc = readl_relaxed(main_int_base +
+				       ARMADA_370_XP_INT_SOURCE_CTL(irqn));
 
-- A bunch of objtool annotation fixes which have accumulated over time
+		/* Check if the interrupt is not masked on current CPU.
+		 * Test IRQ (0-1) and FIQ (8-9) mask bits.
+		 */
+		if (!(irqsrc & ARMADA_370_XP_INT_IRQ_FIQ_MASK(cpuid)))
+			continue;
 
-- An ORC unwinder fix to handle bad input gracefully
+skips processing irqn interrupt if it is masked for the current CPU.
+Interrupt irqn is **unmasked** on CPU0 if either bit 0 or 8 is set in
+register ARMADA_370_XP_INT_IRQ_FIQ_MASK. And **unmasked** on CPU1 if
+either bit 1 or 9 is set.
 
-- Well, we thought the microcode gets loaded in time in order to restore
-the microcode-emulated MSRs but we thought wrong. So there's a fix for
-that to have the ordering done properly
+The reason for this check and skipping is because some per-cpu
+interrupts on A375, A38x and A39x can be handled directly via GIC and
+also via MPIC subhierarchy (it depends what you put into DTS, both
+options are possible and working, just some interrupts are MPIC-only).
+So if you unmask some interrupt on GIC and interrupt is triggered then
+also MPIC per-CPU cause register contains in bit for that triggered
+interrupt (even you have not asked MPIC to unmask interrupt). And once
+another MPIC interrupt is triggered then routine for handling MPIC
+subhierarchy see that some cause bits are set and tried to call
+generic_handle_domain_irq() for all of them, also for those which are
+masked. That is why it is needed to check if MPIC interrupt is masked on
+the current CPU or not prior processing it.
 
-- Add new Intel model numbers
-
-- A spelling fix
-
-----------------------------------------------------------------
-Borislav Petkov (1):
-      x86/cpu: Load microcode during restore_processor_state()
-
-Dmitry Monakhov (1):
-      x86/unwind/orc: Recheck address range after stack info was updated
-
-Josh Poimboeuf (8):
-      MAINTAINERS: Add x86 unwinding entry
-      objtool: Enable unreachable warnings for CLANG LTO
-      x86/static_call: Add ANNOTATE_NOENDBR to static call trampoline
-      x86/retpoline: Add ANNOTATE_NOENDBR for retpolines
-      x86/uaccess: Add ENDBR to __put_user_nocheck*()
-      x86/xen: Add ANNOTATE_NOENDBR to startup_xen()
-      objtool: Print data address for "!ENDBR" data warnings
-      objtool: Use offstr() to print address of missing ENDBR
-
-Nur Hussein (1):
-      x86/Kconfig: fix the spelling of 'becoming' in X86_KERNEL_IBT config
-
-Peter Zijlstra (4):
-      lib/strn*,objtool: Enforce user_access_begin() rules
-      x86,xen,objtool: Add UNWIND hint
-      x86,objtool: Mark cpu_startup_entry() __noreturn
-      x86,objtool: Explicitly mark idtentry_body()s tail REACHABLE
-
-Shida Zhang (1):
-      bug: Have __warn() prototype defined unconditionally
-
-Thomas Gleixner (1):
-      x86/pci/xen: Disable PCI/MSI[-X] masking for XEN_HVM guests
-
-Tony Luck (1):
-      x86/cpu: Add new Alderlake and Raptorlake CPU model numbers
-
- MAINTAINERS                          |  9 +++++++++
- arch/x86/Kconfig                     |  2 +-
- arch/x86/entry/entry_64.S            |  3 +++
- arch/x86/include/asm/intel-family.h  |  3 +++
- arch/x86/include/asm/microcode.h     |  2 ++
- arch/x86/include/asm/static_call.h   |  1 +
- arch/x86/kernel/cpu/microcode/core.c |  6 +++---
- arch/x86/kernel/unwind_orc.c         |  8 ++++----
- arch/x86/lib/putuser.S               |  4 ++++
- arch/x86/lib/retpoline.S             |  2 +-
- arch/x86/pci/xen.c                   |  6 +++++-
- arch/x86/platform/pvh/head.S         |  1 +
- arch/x86/power/cpu.c                 | 10 +++++++++-
- arch/x86/xen/xen-head.S              |  1 +
- include/asm-generic/bug.h            | 11 ++++++-----
- include/linux/cpu.h                  |  2 +-
- lib/strncpy_from_user.c              |  2 +-
- lib/strnlen_user.c                   |  2 +-
- scripts/Makefile.build               |  2 +-
- scripts/link-vmlinux.sh              |  2 +-
- tools/objtool/check.c                | 13 +++++--------
- 21 files changed, 63 insertions(+), 29 deletions(-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg
+So those bits 0-1 and 8-9 have nothing with mapping interrupts.

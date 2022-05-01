@@ -2,267 +2,425 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A59516354
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 11:02:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9770D516359
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 11:10:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344470AbiEAJF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 05:05:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40452 "EHLO
+        id S234528AbiEAJNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 05:13:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344403AbiEAJFy (ORCPT
+        with ESMTP id S229527AbiEAJM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 05:05:54 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4B5694A0
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 02:02:29 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id m11-20020a056e020deb00b002cbde7e7dcfso6023119ilj.2
-        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 02:02:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=P+O7ufqa93FBYiLQsa6nwfl7FdghLuWW8u1OubTNuYI=;
-        b=EHoRG9YHqjSiGgg+DU2/pP6HmCW56grdLhycPEquQ5z9TA8vgG9lO9EU1LGHNOvich
-         PDtw7k0mc1rNnjDf7yZd3iwi5whejsAsaufAMoyt7a8XJC3xrrmUZxu2OTi0aQCaTX8K
-         3zmCxDXICbjENF+Ohrs7UTjCNzUC4Npxv4QTMh/7wOdGIR4SkDHkiXYDCqqeyRLpIod3
-         qkrC5oqrCVPFx4aeddFFWgcfTyq32O2Bm4wG88a1ZSOAS/8AsxjuY1AGVbhDAugXA4jF
-         Kl9dy8m516z+jPCKaAAVdAhtnzqMqXppDKVXhkoY0YvLO4+IQYeG0PsAwtwXqe4/LMAc
-         Av8A==
-X-Gm-Message-State: AOAM533U9h2+qFZ3RhyF0BRzFKnG5AODpOsyDeApFDzpzLCZ+l6ZjavK
-        58APesH9gbmnRA7TbUngaR5ECYnB96ZS5x4Us34Wf5HjInu5
-X-Google-Smtp-Source: ABdhPJzhyHTsyWv402caixLvYEVtRf13gwiTTXTH49NP3qoe21UZLQRQFSKjvg2ABwe+hchGf6oZ4NLykskFrc0aG0RZ5qch25H2
+        Sun, 1 May 2022 05:12:57 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A9477F05
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 02:09:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651396172; x=1682932172;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=izf3j8nv1+1BQIOmomy08ISmrbFh5+WmQrKVlcfarwI=;
+  b=c2holLBq2EXJCCPf94witKDA4Y5QeMV/3r197qDjmDY0F7a3WJHdEq9U
+   Jvo6ySYftTMPxqA2yD2zwtiJK2r6uL9e8DazaYdehAoRTR1gw4yAs/WdM
+   7j0ArC1PvHlnB1sQBfLwVWQBapPOJB/VJKVMLyRSQFkMCPHP9i3A46ym7
+   B0yM+VHmoN3IL7/C3ocXdU37ntyO47vvYr1mTHuiwYUtQbxwFVdQrSIM2
+   oOsbYo6QqQqN9JDiFFx4i69ajSwtG/ujDqz0PzYlsy2HKnZAwNp7/oTeY
+   WpoM2U+uYS7eo/VbmXtmEAT1EOb/7sEpKBnry2ZQt5v6GAX+UW7twl0aw
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10333"; a="264576347"
+X-IronPort-AV: E=Sophos;i="5.91,189,1647327600"; 
+   d="scan'208";a="264576347"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 02:09:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,189,1647327600"; 
+   d="scan'208";a="630695623"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 01 May 2022 02:09:30 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nl5a6-0008dd-8s;
+        Sun, 01 May 2022 09:09:30 +0000
+Date:   Sun, 01 May 2022 17:08:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:for-next/kspp-fam0] BUILD SUCCESS
+ 2dc0d92fc1c88ac9c3c8021033878dc415471210
+Message-ID: <626e4e20.+c6f2/DKwuNFFDs7%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:2148:b0:2cd:8c85:b5c0 with SMTP id
- d8-20020a056e02214800b002cd8c85b5c0mr2738688ilv.249.1651395748245; Sun, 01
- May 2022 02:02:28 -0700 (PDT)
-Date:   Sun, 01 May 2022 02:02:28 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f537cc05ddef88db@google.com>
-Subject: [syzbot] BUG: Bad page map (5)
-From:   syzbot <syzbot+915f3e317adb0e85835f@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, andrii@kernel.org, ast@kernel.org,
-        bigeasy@linutronix.de, bpf@vger.kernel.org, brauner@kernel.org,
-        daniel@iogearbox.net, david@redhat.com, ebiederm@xmission.com,
-        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
-        linux-kernel@vger.kernel.org, luto@kernel.org,
-        netdev@vger.kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git for-next/kspp-fam0
+branch HEAD: 2dc0d92fc1c88ac9c3c8021033878dc415471210  uapi: wireless: Replace zero-length array with flexible-array member
 
-syzbot found the following issue on:
+elapsed time: 6777m
 
-HEAD commit:    0966d385830d riscv: Fix auipc+jalr relocation range checks
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
-console output: https://syzkaller.appspot.com/x/log.txt?x=10e1526cf00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6295d67591064921
-dashboard link: https://syzkaller.appspot.com/bug?extid=915f3e317adb0e85835f
-compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: riscv64
+configs tested: 328
+configs skipped: 6
 
-Unfortunately, I don't have any reproducer for this issue yet.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+915f3e317adb0e85835f@syzkaller.appspotmail.com
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+mips                 randconfig-c004-20220425
+i386                 randconfig-c001-20220425
+powerpc              randconfig-c003-20220428
+i386                          randconfig-c001
+mips                     decstation_defconfig
+m68k                            q40_defconfig
+arm                           corgi_defconfig
+sh                           se7724_defconfig
+parisc                generic-32bit_defconfig
+m68k                         amcore_defconfig
+arc                        nsim_700_defconfig
+sh                           se7206_defconfig
+ia64                          tiger_defconfig
+mips                         cobalt_defconfig
+sh                               j2_defconfig
+arm                        cerfcube_defconfig
+sh                           se7751_defconfig
+arm                         assabet_defconfig
+mips                  decstation_64_defconfig
+arm                            zeus_defconfig
+s390                             allmodconfig
+sh                          rsk7264_defconfig
+mips                  maltasmvp_eva_defconfig
+mips                      maltasmvp_defconfig
+arm                         lubbock_defconfig
+m68k                                defconfig
+sh                          sdk7780_defconfig
+powerpc                     tqm8555_defconfig
+mips                             allyesconfig
+mips                         tb0226_defconfig
+arc                        nsimosci_defconfig
+powerpc                      arches_defconfig
+powerpc                 linkstation_defconfig
+sh                     sh7710voipgw_defconfig
+sh                        edosk7705_defconfig
+arm                         lpc18xx_defconfig
+mips                           ip32_defconfig
+arm                          pxa910_defconfig
+powerpc                     ep8248e_defconfig
+s390                                defconfig
+sh                        edosk7760_defconfig
+powerpc                 mpc834x_mds_defconfig
+powerpc                      ppc6xx_defconfig
+arm                       multi_v4t_defconfig
+arm                      jornada720_defconfig
+powerpc                    adder875_defconfig
+sh                           se7619_defconfig
+sh                   secureedge5410_defconfig
+sh                            shmin_defconfig
+sh                          r7780mp_defconfig
+sh                     magicpanelr2_defconfig
+nios2                               defconfig
+powerpc                     taishan_defconfig
+sparc                       sparc64_defconfig
+powerpc                        cell_defconfig
+parisc                generic-64bit_defconfig
+arm                         cm_x300_defconfig
+sh                             sh03_defconfig
+arm                       imx_v6_v7_defconfig
+ia64                      gensparse_defconfig
+m68k                            mac_defconfig
+ia64                         bigsur_defconfig
+m68k                          sun3x_defconfig
+arm                         nhk8815_defconfig
+i386                             alldefconfig
+arm                        clps711x_defconfig
+powerpc                     tqm8541_defconfig
+powerpc                       holly_defconfig
+mips                            gpr_defconfig
+arm                            lart_defconfig
+powerpc                         ps3_defconfig
+sh                          r7785rp_defconfig
+powerpc                 mpc8540_ads_defconfig
+alpha                               defconfig
+arm                             pxa_defconfig
+arm                        keystone_defconfig
+arm                         vf610m4_defconfig
+m68k                           sun3_defconfig
+arc                                 defconfig
+powerpc                     mpc83xx_defconfig
+sh                      rts7751r2d1_defconfig
+sparc                               defconfig
+arm                        mini2440_defconfig
+sh                ecovec24-romimage_defconfig
+sh                         ap325rxa_defconfig
+mips                       bmips_be_defconfig
+m68k                        m5272c3_defconfig
+sh                             shx3_defconfig
+sh                           se7780_defconfig
+arc                     nsimosci_hs_defconfig
+m68k                       m5249evb_defconfig
+xtensa                           alldefconfig
+arm                          gemini_defconfig
+sh                          kfr2r09_defconfig
+m68k                       bvme6000_defconfig
+sh                          landisk_defconfig
+arc                         haps_hs_defconfig
+m68k                       m5208evb_defconfig
+xtensa                  cadence_csp_defconfig
+parisc                              defconfig
+powerpc                     tqm8548_defconfig
+sh                         ecovec24_defconfig
+xtensa                         virt_defconfig
+powerpc                      mgcoge_defconfig
+powerpc                   motionpro_defconfig
+m68k                       m5475evb_defconfig
+powerpc                 mpc837x_mds_defconfig
+arc                            hsdk_defconfig
+arm                            qcom_defconfig
+sh                   sh7724_generic_defconfig
+mips                     loongson1b_defconfig
+m68k                        m5307c3_defconfig
+mips                            ar7_defconfig
+arm                          lpd270_defconfig
+openrisc                  or1klitex_defconfig
+ia64                            zx1_defconfig
+arm                          simpad_defconfig
+nios2                            allyesconfig
+arm                      integrator_defconfig
+um                               alldefconfig
+sh                          rsk7201_defconfig
+arm                        oxnas_v6_defconfig
+m68k                          multi_defconfig
+arm                        multi_v7_defconfig
+microblaze                          defconfig
+powerpc                     pq2fads_defconfig
+arm                           sunxi_defconfig
+ia64                             alldefconfig
+sh                          lboxre2_defconfig
+mips                       capcella_defconfig
+powerpc                 mpc837x_rdb_defconfig
+sh                           sh2007_defconfig
+powerpc                     asp8347_defconfig
+sparc64                          alldefconfig
+sh                           se7750_defconfig
+sh                  sh7785lcr_32bit_defconfig
+arm                       aspeed_g5_defconfig
+m68k                             alldefconfig
+arm                           h3600_defconfig
+powerpc                    amigaone_defconfig
+sh                           se7721_defconfig
+powerpc                           allnoconfig
+powerpc                   currituck_defconfig
+powerpc                      cm5200_defconfig
+arm                           tegra_defconfig
+sh                            hp6xx_defconfig
+openrisc                 simple_smp_defconfig
+m68k                        mvme16x_defconfig
+mips                           jazz_defconfig
+powerpc                      makalu_defconfig
+powerpc                      chrp32_defconfig
+arm                      footbridge_defconfig
+powerpc                 mpc85xx_cds_defconfig
+sh                   rts7751r2dplus_defconfig
+parisc64                            defconfig
+mips                          rb532_defconfig
+powerpc                  storcenter_defconfig
+x86_64                           alldefconfig
+openrisc                    or1ksim_defconfig
+powerpc                    sam440ep_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220428
+x86_64               randconfig-c001-20220425
+arm                  randconfig-c002-20220425
+arm                  randconfig-c002-20220427
+arm                  randconfig-c002-20220429
+arm                  randconfig-c002-20220501
+arm                  randconfig-c002-20220426
+ia64                                defconfig
+ia64                             allyesconfig
+ia64                             allmodconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+csky                                defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+sh                               allmodconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64               randconfig-a015-20220425
+x86_64               randconfig-a014-20220425
+x86_64               randconfig-a011-20220425
+x86_64               randconfig-a013-20220425
+x86_64               randconfig-a012-20220425
+x86_64               randconfig-a016-20220425
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                 randconfig-a014-20220425
+i386                 randconfig-a012-20220425
+i386                 randconfig-a011-20220425
+i386                 randconfig-a015-20220425
+i386                 randconfig-a013-20220425
+i386                 randconfig-a016-20220425
+i386                          randconfig-a012
+i386                          randconfig-a016
+i386                          randconfig-a014
+arc                  randconfig-r043-20220425
+s390                 randconfig-r044-20220425
+riscv                randconfig-r042-20220425
+arc                  randconfig-r043-20220428
+arc                  randconfig-r043-20220429
+s390                 randconfig-r044-20220429
+riscv                randconfig-r042-20220429
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
+x86_64                           rhel-8.3-syz
 
-netdevsim netdevsim0 netdevsim1: set [1, 0] type 2 family 0 port 6081 - 0
-netdevsim netdevsim0 netdevsim2: set [1, 0] type 2 family 0 port 6081 - 0
-netdevsim netdevsim0 netdevsim3: set [1, 0] type 2 family 0 port 6081 - 0
-BUG: Bad page map in process syz-executor.0  pte:ffffaf80215a00f0 pmd:285e7c01
-addr:00007fffbd3e6000 vm_flags:100400fb anon_vma:0000000000000000 mapping:ffffaf800ab1e058 index:3c
-file:kcov fault:0x0 mmap:kcov_mmap readpage:0x0
-CPU: 1 PID: 2051 Comm: syz-executor.0 Not tainted 5.17.0-rc1-syzkaller-00002-g0966d385830d #0
-Hardware name: riscv-virtio,qemu (DT)
-Call Trace:
-[<ffffffff8000a228>] dump_backtrace+0x2e/0x3c arch/riscv/kernel/stacktrace.c:113
-[<ffffffff831668cc>] show_stack+0x34/0x40 arch/riscv/kernel/stacktrace.c:119
-[<ffffffff831756ba>] __dump_stack lib/dump_stack.c:88 [inline]
-[<ffffffff831756ba>] dump_stack_lvl+0xe4/0x150 lib/dump_stack.c:106
-[<ffffffff83175742>] dump_stack+0x1c/0x24 lib/dump_stack.c:113
-[<ffffffff803cdcdc>] print_bad_pte+0x3d4/0x4a0 mm/memory.c:563
-[<ffffffff803d1622>] vm_normal_page+0x20c/0x22a mm/memory.c:626
-[<ffffffff803dbb4e>] copy_present_pte mm/memory.c:949 [inline]
-[<ffffffff803dbb4e>] copy_pte_range mm/memory.c:1074 [inline]
-[<ffffffff803dbb4e>] copy_pmd_range mm/memory.c:1160 [inline]
-[<ffffffff803dbb4e>] copy_pud_range mm/memory.c:1197 [inline]
-[<ffffffff803dbb4e>] copy_p4d_range mm/memory.c:1221 [inline]
-[<ffffffff803dbb4e>] copy_page_range+0x828/0x236c mm/memory.c:1294
-[<ffffffff80049bcc>] dup_mmap kernel/fork.c:612 [inline]
-[<ffffffff80049bcc>] dup_mm+0xb5c/0xe10 kernel/fork.c:1451
-[<ffffffff8004c7c6>] copy_mm kernel/fork.c:1503 [inline]
-[<ffffffff8004c7c6>] copy_process+0x25da/0x3c34 kernel/fork.c:2164
-[<ffffffff8004e106>] kernel_clone+0xee/0x920 kernel/fork.c:2555
-[<ffffffff8004ea2a>] __do_sys_clone+0xf2/0x12e kernel/fork.c:2672
-[<ffffffff8004ee4e>] sys_clone+0x32/0x44 kernel/fork.c:2640
-[<ffffffff80005716>] ret_from_syscall+0x0/0x2
-BUG: Bad page map in process syz-executor.0  pte:ffffffff801110e4 pmd:285e7c01
-addr:00007fffbd3e7000 vm_flags:100400fb anon_vma:0000000000000000 mapping:ffffaf800ab1e058 index:3d
-file:kcov fault:0x0 mmap:kcov_mmap readpage:0x0
-CPU: 1 PID: 2051 Comm: syz-executor.0 Tainted: G    B             5.17.0-rc1-syzkaller-00002-g0966d385830d #0
-Hardware name: riscv-virtio,qemu (DT)
-Call Trace:
-[<ffffffff8000a228>] dump_backtrace+0x2e/0x3c arch/riscv/kernel/stacktrace.c:113
-[<ffffffff831668cc>] show_stack+0x34/0x40 arch/riscv/kernel/stacktrace.c:119
-[<ffffffff831756ba>] __dump_stack lib/dump_stack.c:88 [inline]
-[<ffffffff831756ba>] dump_stack_lvl+0xe4/0x150 lib/dump_stack.c:106
-[<ffffffff83175742>] dump_stack+0x1c/0x24 lib/dump_stack.c:113
-[<ffffffff803cdcdc>] print_bad_pte+0x3d4/0x4a0 mm/memory.c:563
-[<ffffffff803d1622>] vm_normal_page+0x20c/0x22a mm/memory.c:626
-[<ffffffff803dbb4e>] copy_present_pte mm/memory.c:949 [inline]
-[<ffffffff803dbb4e>] copy_pte_range mm/memory.c:1074 [inline]
-[<ffffffff803dbb4e>] copy_pmd_range mm/memory.c:1160 [inline]
-[<ffffffff803dbb4e>] copy_pud_range mm/memory.c:1197 [inline]
-[<ffffffff803dbb4e>] copy_p4d_range mm/memory.c:1221 [inline]
-[<ffffffff803dbb4e>] copy_page_range+0x828/0x236c mm/memory.c:1294
-[<ffffffff80049bcc>] dup_mmap kernel/fork.c:612 [inline]
-[<ffffffff80049bcc>] dup_mm+0xb5c/0xe10 kernel/fork.c:1451
-[<ffffffff8004c7c6>] copy_mm kernel/fork.c:1503 [inline]
-[<ffffffff8004c7c6>] copy_process+0x25da/0x3c34 kernel/fork.c:2164
-[<ffffffff8004e106>] kernel_clone+0xee/0x920 kernel/fork.c:2555
-[<ffffffff8004ea2a>] __do_sys_clone+0xf2/0x12e kernel/fork.c:2672
-[<ffffffff8004ee4e>] sys_clone+0x32/0x44 kernel/fork.c:2640
-[<ffffffff80005716>] ret_from_syscall+0x0/0x2
-BUG: Bad page map in process syz-executor.0  pte:ffffffff801110e4 pmd:285e7c01
-addr:00007fffbd3ef000 vm_flags:100400fb anon_vma:0000000000000000 mapping:ffffaf800ab1e058 index:45
-file:kcov fault:0x0 mmap:kcov_mmap readpage:0x0
-CPU: 1 PID: 2051 Comm: syz-executor.0 Tainted: G    B             5.17.0-rc1-syzkaller-00002-g0966d385830d #0
-Hardware name: riscv-virtio,qemu (DT)
-Call Trace:
-[<ffffffff8000a228>] dump_backtrace+0x2e/0x3c arch/riscv/kernel/stacktrace.c:113
-[<ffffffff831668cc>] show_stack+0x34/0x40 arch/riscv/kernel/stacktrace.c:119
-[<ffffffff831756ba>] __dump_stack lib/dump_stack.c:88 [inline]
-[<ffffffff831756ba>] dump_stack_lvl+0xe4/0x150 lib/dump_stack.c:106
-[<ffffffff83175742>] dump_stack+0x1c/0x24 lib/dump_stack.c:113
-[<ffffffff803cdcdc>] print_bad_pte+0x3d4/0x4a0 mm/memory.c:563
-[<ffffffff803d1622>] vm_normal_page+0x20c/0x22a mm/memory.c:626
-[<ffffffff803dbb4e>] copy_present_pte mm/memory.c:949 [inline]
-[<ffffffff803dbb4e>] copy_pte_range mm/memory.c:1074 [inline]
-[<ffffffff803dbb4e>] copy_pmd_range mm/memory.c:1160 [inline]
-[<ffffffff803dbb4e>] copy_pud_range mm/memory.c:1197 [inline]
-[<ffffffff803dbb4e>] copy_p4d_range mm/memory.c:1221 [inline]
-[<ffffffff803dbb4e>] copy_page_range+0x828/0x236c mm/memory.c:1294
-[<ffffffff80049bcc>] dup_mmap kernel/fork.c:612 [inline]
-[<ffffffff80049bcc>] dup_mm+0xb5c/0xe10 kernel/fork.c:1451
-[<ffffffff8004c7c6>] copy_mm kernel/fork.c:1503 [inline]
-[<ffffffff8004c7c6>] copy_process+0x25da/0x3c34 kernel/fork.c:2164
-[<ffffffff8004e106>] kernel_clone+0xee/0x920 kernel/fork.c:2555
-[<ffffffff8004ea2a>] __do_sys_clone+0xf2/0x12e kernel/fork.c:2672
-[<ffffffff8004ee4e>] sys_clone+0x32/0x44 kernel/fork.c:2640
-[<ffffffff80005716>] ret_from_syscall+0x0/0x2
-BUG: Bad page map in process syz-executor.0  pte:41b58ab3 pmd:285e7c01
-addr:00007fffbd3f4000 vm_flags:100400fb anon_vma:0000000000000000 mapping:ffffaf800ab1e058 index:4a
-file:kcov fault:0x0 mmap:kcov_mmap readpage:0x0
-CPU: 1 PID: 2051 Comm: syz-executor.0 Tainted: G    B             5.17.0-rc1-syzkaller-00002-g0966d385830d #0
-Hardware name: riscv-virtio,qemu (DT)
-Call Trace:
-[<ffffffff8000a228>] dump_backtrace+0x2e/0x3c arch/riscv/kernel/stacktrace.c:113
-[<ffffffff831668cc>] show_stack+0x34/0x40 arch/riscv/kernel/stacktrace.c:119
-[<ffffffff831756ba>] __dump_stack lib/dump_stack.c:88 [inline]
-[<ffffffff831756ba>] dump_stack_lvl+0xe4/0x150 lib/dump_stack.c:106
-[<ffffffff83175742>] dump_stack+0x1c/0x24 lib/dump_stack.c:113
-[<ffffffff803cdcdc>] print_bad_pte+0x3d4/0x4a0 mm/memory.c:563
-[<ffffffff803d1622>] vm_normal_page+0x20c/0x22a mm/memory.c:626
-[<ffffffff803dbb4e>] copy_present_pte mm/memory.c:949 [inline]
-[<ffffffff803dbb4e>] copy_pte_range mm/memory.c:1074 [inline]
-[<ffffffff803dbb4e>] copy_pmd_range mm/memory.c:1160 [inline]
-[<ffffffff803dbb4e>] copy_pud_range mm/memory.c:1197 [inline]
-[<ffffffff803dbb4e>] copy_p4d_range mm/memory.c:1221 [inline]
-[<ffffffff803dbb4e>] copy_page_range+0x828/0x236c mm/memory.c:1294
-[<ffffffff80049bcc>] dup_mmap kernel/fork.c:612 [inline]
-[<ffffffff80049bcc>] dup_mm+0xb5c/0xe10 kernel/fork.c:1451
-[<ffffffff8004c7c6>] copy_mm kernel/fork.c:1503 [inline]
-[<ffffffff8004c7c6>] copy_process+0x25da/0x3c34 kernel/fork.c:2164
-[<ffffffff8004e106>] kernel_clone+0xee/0x920 kernel/fork.c:2555
-[<ffffffff8004ea2a>] __do_sys_clone+0xf2/0x12e kernel/fork.c:2672
-[<ffffffff8004ee4e>] sys_clone+0x32/0x44 kernel/fork.c:2640
-[<ffffffff80005716>] ret_from_syscall+0x0/0x2
-BUG: Bad page map in process syz-executor.0  pte:ffffffff8451f630 pmd:285e7c01
-addr:00007fffbd3f5000 vm_flags:100400fb anon_vma:0000000000000000 mapping:ffffaf800ab1e058 index:4b
-file:kcov fault:0x0 mmap:kcov_mmap readpage:0x0
-CPU: 1 PID: 2051 Comm: syz-executor.0 Tainted: G    B             5.17.0-rc1-syzkaller-00002-g0966d385830d #0
-Hardware name: riscv-virtio,qemu (DT)
-Call Trace:
-[<ffffffff8000a228>] dump_backtrace+0x2e/0x3c arch/riscv/kernel/stacktrace.c:113
-[<ffffffff831668cc>] show_stack+0x34/0x40 arch/riscv/kernel/stacktrace.c:119
-[<ffffffff831756ba>] __dump_stack lib/dump_stack.c:88 [inline]
-[<ffffffff831756ba>] dump_stack_lvl+0xe4/0x150 lib/dump_stack.c:106
-[<ffffffff83175742>] dump_stack+0x1c/0x24 lib/dump_stack.c:113
-[<ffffffff803cdcdc>] print_bad_pte+0x3d4/0x4a0 mm/memory.c:563
-[<ffffffff803d1622>] vm_normal_page+0x20c/0x22a mm/memory.c:626
-[<ffffffff803dbb4e>] copy_present_pte mm/memory.c:949 [inline]
-[<ffffffff803dbb4e>] copy_pte_range mm/memory.c:1074 [inline]
-[<ffffffff803dbb4e>] copy_pmd_range mm/memory.c:1160 [inline]
-[<ffffffff803dbb4e>] copy_pud_range mm/memory.c:1197 [inline]
-[<ffffffff803dbb4e>] copy_p4d_range mm/memory.c:1221 [inline]
-[<ffffffff803dbb4e>] copy_page_range+0x828/0x236c mm/memory.c:1294
-[<ffffffff80049bcc>] dup_mmap kernel/fork.c:612 [inline]
-[<ffffffff80049bcc>] dup_mm+0xb5c/0xe10 kernel/fork.c:1451
-[<ffffffff8004c7c6>] copy_mm kernel/fork.c:1503 [inline]
-[<ffffffff8004c7c6>] copy_process+0x25da/0x3c34 kernel/fork.c:2164
-[<ffffffff8004e106>] kernel_clone+0xee/0x920 kernel/fork.c:2555
-[<ffffffff8004ea2a>] __do_sys_clone+0xf2/0x12e kernel/fork.c:2672
-[<ffffffff8004ee4e>] sys_clone+0x32/0x44 kernel/fork.c:2640
-[<ffffffff80005716>] ret_from_syscall+0x0/0x2
-Unable to handle kernel paging request at virtual address ffffaf847c9ffff8
-Oops [#1]
-Modules linked in:
-CPU: 1 PID: 2051 Comm: syz-executor.0 Tainted: G    B             5.17.0-rc1-syzkaller-00002-g0966d385830d #0
-Hardware name: riscv-virtio,qemu (DT)
-epc : __nr_to_section include/linux/mmzone.h:1396 [inline]
-epc : __pfn_to_section include/linux/mmzone.h:1480 [inline]
-epc : pfn_swap_entry_to_page include/linux/swapops.h:252 [inline]
-epc : copy_nonpresent_pte mm/memory.c:798 [inline]
-epc : copy_pte_range mm/memory.c:1053 [inline]
-epc : copy_pmd_range mm/memory.c:1160 [inline]
-epc : copy_pud_range mm/memory.c:1197 [inline]
-epc : copy_p4d_range mm/memory.c:1221 [inline]
-epc : copy_page_range+0x1ade/0x236c mm/memory.c:1294
- ra : __nr_to_section include/linux/mmzone.h:1396 [inline]
- ra : __pfn_to_section include/linux/mmzone.h:1480 [inline]
- ra : pfn_swap_entry_to_page include/linux/swapops.h:252 [inline]
- ra : copy_nonpresent_pte mm/memory.c:798 [inline]
- ra : copy_pte_range mm/memory.c:1053 [inline]
- ra : copy_pmd_range mm/memory.c:1160 [inline]
- ra : copy_pud_range mm/memory.c:1197 [inline]
- ra : copy_p4d_range mm/memory.c:1221 [inline]
- ra : copy_page_range+0x1ade/0x236c mm/memory.c:1294
-epc : ffffffff803dce04 ra : ffffffff803dce04 sp : ffffaf80215a3680
- gp : ffffffff85863ac0 tp : ffffaf8007409840 t0 : ffffaf80215a3830
- t1 : fffff5ef042b4705 t2 : 00007fff83b1f010 s0 : ffffaf80215a38e0
- s1 : ffffffff80110fdc a0 : ffffaf847c9ffff8 a1 : 0000000000000007
- a2 : 1ffff5f08f93ffff a3 : ffffffff803dce04 a4 : 0000000000000000
- a5 : ffffaf847c9ffff8 a6 : 0000000000f00000 a7 : ffffaf80215a382f
- s2 : ffffaf802159ffb0 s3 : ffffaf800f182fb0 s4 : 0000000000000000
- s5 : 7c1ffffffff00221 s6 : 001ffffffff00221 s7 : ffffaf847c9ffff8
- s8 : 000000000000001f s9 : 00007fffbd400000 s10: ffffaf800e521840
- s11: 00007fffbd3f6000 t3 : 000000000001fffe t4 : fffff5ef042b4704
- t5 : fffff5ef042b4706 t6 : 000000000002463c
-status: 0000000000000120 badaddr: ffffaf847c9ffff8 cause: 000000000000000d
-[<ffffffff80049bcc>] dup_mmap kernel/fork.c:612 [inline]
-[<ffffffff80049bcc>] dup_mm+0xb5c/0xe10 kernel/fork.c:1451
-[<ffffffff8004c7c6>] copy_mm kernel/fork.c:1503 [inline]
-[<ffffffff8004c7c6>] copy_process+0x25da/0x3c34 kernel/fork.c:2164
-[<ffffffff8004e106>] kernel_clone+0xee/0x920 kernel/fork.c:2555
-[<ffffffff8004ea2a>] __do_sys_clone+0xf2/0x12e kernel/fork.c:2672
-[<ffffffff8004ee4e>] sys_clone+0x32/0x44 kernel/fork.c:2640
-[<ffffffff80005716>] ret_from_syscall+0x0/0x2
----[ end trace 0000000000000000 ]---
+clang tested configs:
+riscv                randconfig-c006-20220425
+mips                 randconfig-c004-20220425
+x86_64               randconfig-c007-20220425
+arm                  randconfig-c002-20220425
+i386                 randconfig-c001-20220425
+powerpc              randconfig-c003-20220425
+riscv                randconfig-c006-20220427
+mips                 randconfig-c004-20220427
+x86_64                        randconfig-c007
+i386                          randconfig-c001
+arm                  randconfig-c002-20220427
+powerpc              randconfig-c003-20220427
+riscv                randconfig-c006-20220428
+mips                 randconfig-c004-20220428
+arm                  randconfig-c002-20220428
+powerpc              randconfig-c003-20220428
+powerpc              randconfig-c003-20220501
+riscv                randconfig-c006-20220501
+mips                 randconfig-c004-20220501
+arm                  randconfig-c002-20220501
+riscv                randconfig-c006-20220429
+mips                 randconfig-c004-20220429
+arm                  randconfig-c002-20220429
+powerpc              randconfig-c003-20220429
+mips                          ath79_defconfig
+arm                       spear13xx_defconfig
+mips                   sb1250_swarm_defconfig
+arm                         shannon_defconfig
+mips                     loongson2k_defconfig
+arm                        vexpress_defconfig
+arm                         palmz72_defconfig
+arm                       cns3420vb_defconfig
+arm                          pxa168_defconfig
+powerpc                    socrates_defconfig
+arm                            dove_defconfig
+powerpc                     tqm5200_defconfig
+powerpc                 mpc832x_rdb_defconfig
+mips                     cu1830-neo_defconfig
+powerpc                    mvme5100_defconfig
+powerpc                      ppc44x_defconfig
+arm                         s3c2410_defconfig
+arm                            mmp2_defconfig
+powerpc                      katmai_defconfig
+arm                      pxa255-idp_defconfig
+powerpc                 mpc8315_rdb_defconfig
+arm                       aspeed_g4_defconfig
+powerpc                      walnut_defconfig
+arm                              alldefconfig
+mips                            e55_defconfig
+arm                          moxart_defconfig
+mips                           mtx1_defconfig
+arm                         bcm2835_defconfig
+mips                          rm200_defconfig
+arm                       netwinder_defconfig
+mips                          ath25_defconfig
+powerpc                  mpc885_ads_defconfig
+mips                malta_qemu_32r6_defconfig
+powerpc                       ebony_defconfig
+arm                       imx_v4_v5_defconfig
+powerpc                          allyesconfig
+powerpc                     pseries_defconfig
+mips                       lemote2f_defconfig
+powerpc                     kmeter1_defconfig
+x86_64                           allyesconfig
+mips                           ip28_defconfig
+mips                      maltaaprp_defconfig
+powerpc                        fsp2_defconfig
+mips                      malta_kvm_defconfig
+mips                           ip27_defconfig
+mips                       rbtx49xx_defconfig
+powerpc                          allmodconfig
+powerpc                 mpc8560_ads_defconfig
+i386                             allyesconfig
+riscv                          rv32_defconfig
+mips                     cu1000-neo_defconfig
+arm                             mxs_defconfig
+powerpc                 linkstation_defconfig
+mips                      bmips_stb_defconfig
+arm                       versatile_defconfig
+arm                     davinci_all_defconfig
+x86_64               randconfig-a002-20220425
+x86_64               randconfig-a004-20220425
+x86_64               randconfig-a003-20220425
+x86_64               randconfig-a001-20220425
+x86_64               randconfig-a005-20220425
+x86_64               randconfig-a006-20220425
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+i386                 randconfig-a003-20220425
+i386                 randconfig-a002-20220425
+i386                 randconfig-a004-20220425
+i386                 randconfig-a001-20220425
+i386                 randconfig-a005-20220425
+i386                 randconfig-a006-20220425
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+hexagon              randconfig-r041-20220428
+riscv                randconfig-r042-20220428
+hexagon              randconfig-r045-20220428
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

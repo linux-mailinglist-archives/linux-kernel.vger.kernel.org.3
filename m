@@ -2,58 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C5755166A6
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 19:32:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0DDF5166AA
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 19:34:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353236AbiEARfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 13:35:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50082 "EHLO
+        id S1353311AbiEARiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 13:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238006AbiEARfR (ORCPT
+        with ESMTP id S238006AbiEARiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 13:35:17 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CAB4A19A
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 10:31:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651426312; x=1682962312;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=94gJY802+7MmTS+7/i3dw7bQ/nPs2nvASExVe0txqaY=;
-  b=TPtIzoG9CzPQI83oYYILdom9f58dQm19+dbyyBpJthJE53+sE42oCilY
-   NpeAAeXQ7YeSTEu3O5CscH2FC6bE8uTnSYxrDnzex5aRduL/FbIRqLe1s
-   n8+dlKqOa2DA4HC0PxTBM9tqO5naYmQkROWLcO1jG/GKB4ecLrIQgrbJJ
-   hzT3QzRhS63fE9Fc0BdJykGeaEriWuR2dIvF+qBWEtEn5nUQTQsSgmhbf
-   iDZsKvQujGSDDudhdsrcl2f7cYMeS61MeW87O0AqoBAtwrEfSaqfkauBr
-   HfrGJru2ZQ1YPe8zXMr5qUq4Ujh8lUf/t7E3fNc8SucEvehfOBbRiOGPc
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="292215849"
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="292215849"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 10:31:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="707284985"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 01 May 2022 10:31:50 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nlDQE-0008wS-4L;
-        Sun, 01 May 2022 17:31:50 +0000
-Date:   Mon, 2 May 2022 01:31:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [masahiroy:lto-cleanup-v2 48/55] s390-linux-ld:
- .tmp_vmlinux.kallsyms1: warning: allocated section `.rodata' not in segment
-Message-ID: <202205020142.tuVjG3mE-lkp@intel.com>
+        Sun, 1 May 2022 13:38:05 -0400
+Received: from mx-out2.startmail.com (mx-out2.startmail.com [145.131.90.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63009FD29;
+        Sun,  1 May 2022 10:34:39 -0700 (PDT)
+From:   "Marty E. Plummer" <hanetzer@startmail.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=startmail.com;
+        s=2020-07; t=1651426477;
+        bh=tPKqcMoeXO7fbOhD7EzqxPB0j0wCmwR22hp6X3JxcpQ=;
+        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version:Content-Transfer-Encoding:From:Subject:To:Date:Sender:
+         Content-Type:Content-Transfer-Encoding:Content-Disposition:
+         Mime-Version:Reply-To:In-Reply-To:References:Message-Id:Autocrypt;
+        b=XfylJujgPDxhUPj14UR8eI/v2OYDosnRFRlwFgWdUjup1ZjOFs/ek+bOCrJwmDBSv
+         KQo1nZ+aFpCDRHjXi4ayrHD17AAj//FYewB1g9Gn+R6hL8YFeb0yqsRdYfPAsykx7y
+         1Rj2dXbCwllftTpA5WvDxLn5cTvbKxpm5B5X5Gw+o4HqqhKJHKl2aUYNt2hGTxHD85
+         o6ktWQ1eKt4RSdH/H0IkAEsdQRh+0fHXmyfJmNG1qZ+rh+jRJcaceeYDNWV41ZR1Cp
+         ZrrZAV0Ny8xeJg42Jia7CGrT+es+URAKWRSeD+dKzsZ+xzQZj17zBsZaP8HqPv6qiv
+         wJRGcYFCPyKXA==
+To:     arnd@arndb.de, cai.huoqing@linux.dev, christian.koenig@amd.com,
+        devicetree@vger.kernel.org, gengdongjiu@huawei.com,
+        hanetzer@startmail.com, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux@armlinux.org.uk, michael@walle.cc, miquel.raynal@bootlin.com,
+        mturquette@baylibre.com, novikov@ispras.ru, olof@lixom.net,
+        p.yadav@ti.com, rdunlap@infradead.org, richard@nod.at,
+        robh+dt@kernel.org, sboyd@kernel.org, soc@kernel.org,
+        sumit.semwal@linaro.org, tudor.ambarus@microchip.com,
+        vigneshr@ti.com, xuwei5@hisilicon.com
+Subject: [RFC v2 0/2] Hi3521a support.
+Date:   Sun,  1 May 2022 12:34:21 -0500
+Message-Id: <20220501173423.2473093-1-hanetzer@startmail.com>
+In-Reply-To: <20220501054440.2434247-1-hanetzer@startmail.com>
+References: <20220501054440.2434247-1-hanetzer@startmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,48 +56,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git lto-cleanup-v2
-head:   0f0c2c6e09ad55e3c5ddb69915460ee54eb913e4
-commit: 58024b1713c48e2cc450f3301fc48077638298cc [48/55] kbuild: embed symbol versions at final link of vmlinux or modules
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20220502/202205020142.tuVjG3mE-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git/commit/?id=58024b1713c48e2cc450f3301fc48077638298cc
-        git remote add masahiroy https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
-        git fetch --no-tags masahiroy lto-cleanup-v2
-        git checkout 58024b1713c48e2cc450f3301fc48077638298cc
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+Resend RFC.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Changes in v2:
+- Actually include the dts files.
+- DT Bindings still missing, as the the driver is not quite complete
+  (need to add the reset controller bindings, have't quite figured that
+  out yet.)
 
-All warnings (new ones prefixed by >>):
+Marty E. Plummer (2):
+  clk: hisilicon: add CRG driver Hi3521a SoC
+  arm: hisi: enable Hi3521a soc
 
->> s390-linux-ld: .tmp_vmlinux.kallsyms1: warning: allocated section `.rodata' not in segment
-   s390-linux-ld: kernel/dma/coherent.o: in function `dma_init_coherent_memory':
-   coherent.c:(.text+0xea): undefined reference to `memremap'
-   s390-linux-ld: coherent.c:(.text+0x1f8): undefined reference to `memunmap'
-   s390-linux-ld: kernel/dma/coherent.o: in function `dma_declare_coherent_memory':
-   coherent.c:(.text+0x5e4): undefined reference to `memunmap'
-   s390-linux-ld: drivers/irqchip/irq-al-fic.o: in function `al_fic_init_dt':
-   irq-al-fic.c:(.init.text+0x7a): undefined reference to `of_iomap'
-   s390-linux-ld: irq-al-fic.c:(.init.text+0x4f4): undefined reference to `iounmap'
-   s390-linux-ld: drivers/clk/clk-fixed-mmio.o: in function `fixed_mmio_clk_setup':
-   clk-fixed-mmio.c:(.text+0x90): undefined reference to `of_iomap'
-   s390-linux-ld: clk-fixed-mmio.c:(.text+0xcc): undefined reference to `iounmap'
-   s390-linux-ld: drivers/clocksource/timer-of.o: in function `timer_of_init':
-   timer-of.c:(.init.text+0x144): undefined reference to `of_iomap'
-   s390-linux-ld: timer-of.c:(.init.text+0x76e): undefined reference to `iounmap'
-   s390-linux-ld: drivers/clocksource/timer-of.o: in function `timer_of_cleanup':
-   timer-of.c:(.init.text+0x968): undefined reference to `iounmap'
-   s390-linux-ld: drivers/clocksource/timer-microchip-pit64b.o: in function `mchp_pit64b_dt_init_timer':
-   timer-microchip-pit64b.c:(.init.text+0x684): undefined reference to `of_iomap'
-   s390-linux-ld: timer-microchip-pit64b.c:(.init.text+0xcda): undefined reference to `iounmap'
+ arch/arm/boot/dts/Makefile                |   2 +
+ arch/arm/boot/dts/hi3521a-rs-dm290e.dts   | 134 +++++++
+ arch/arm/boot/dts/hi3521a.dtsi            | 423 ++++++++++++++++++++++
+ arch/arm/mach-hisi/Kconfig                |   9 +
+ drivers/clk/hisilicon/Kconfig             |   8 +
+ drivers/clk/hisilicon/Makefile            |   1 +
+ drivers/clk/hisilicon/crg-hi3521a.c       | 141 ++++++++
+ include/dt-bindings/clock/hi3521a-clock.h |  34 ++
+ 8 files changed, 752 insertions(+)
+ create mode 100644 arch/arm/boot/dts/hi3521a-rs-dm290e.dts
+ create mode 100644 arch/arm/boot/dts/hi3521a.dtsi
+ create mode 100644 drivers/clk/hisilicon/crg-hi3521a.c
+ create mode 100644 include/dt-bindings/clock/hi3521a-clock.h
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+

@@ -2,49 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45376516503
-	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 17:39:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9398516504
+	for <lists+linux-kernel@lfdr.de>; Sun,  1 May 2022 17:44:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348262AbiEAPm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 11:42:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54472 "EHLO
+        id S1348285AbiEAPnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 11:43:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235811AbiEAPm5 (ORCPT
+        with ESMTP id S1348271AbiEAPnI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 11:42:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E213017AAE;
-        Sun,  1 May 2022 08:39:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BA3B60ECE;
-        Sun,  1 May 2022 15:39:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16FF9C385AE;
-        Sun,  1 May 2022 15:39:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651419570;
-        bh=IDs94/j7EVhpVcbaLpo+hUQVhDxmlGNKvAv4h1iJscs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UbKgg2fbvlieEKjX3jJO2gBr42PPDiFuq0gE20pj7G1gHuEZnWNT8B2pmO5YVNN57
-         +yY96leONI0UXkoBHA6clMea+jpwstccf7EENIHx4l+5smrlb8o1Qus8aYETMCb5Rt
-         xJ4UO7vF0+iaTTY3e5I2HpXb/16ZcIcTtUc1QTtg=
-Date:   Sun, 1 May 2022 17:39:19 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Kushagra Verma <kushagra765@outlook.com>
-Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB / dwc3: remove a possible unnecessary 'out of
- memory' message
-Message-ID: <Ym6pp/O1fpneA5ZW@kroah.com>
-References: <SI2PR01MB3929F20DA02363BD6A88657DF8FE9@SI2PR01MB3929.apcprd01.prod.exchangelabs.com>
+        Sun, 1 May 2022 11:43:08 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B3F193DB
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 08:39:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651419582; x=1682955582;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/TgsjwlvHAh/qydNuC8PW9CTu2rM/PWkuRUhpecRFsc=;
+  b=CBeJSd6dus58U5f3cJbOx9eKMXn4suBBAJJKp9lzLorqJ/HrlBKzeHZM
+   XTYOWTW3/ZWwFKJfFplT/ZQ+kg1c+RZX4i+arB1s0OC3Hg5PZF2pOs/Wv
+   8+uuVIvvDcPSGd29BoqdGKrihxP1CwATFmvJ5IKOAvQUPAcfNVfqfgkeD
+   NIXOmPRXPoDYJT9pEo8NtdmoXvTHuZAuO2j/Ofiqn9/0qlqlih5xt86ZL
+   592QFpxWuPLMf6+QWuptexnGBJ/H/TTb53mf0Jw0Ig9UCAy65MrEzsgV6
+   3zAVyaFzzgozyy/gh9B/SBOkQ+OJXAp8UERqGW87HZuNWZG1WOool5esl
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="327554620"
+X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
+   d="scan'208";a="327554620"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 08:39:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
+   d="scan'208";a="535458123"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 01 May 2022 08:39:40 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nlBfg-0008rH-3k;
+        Sun, 01 May 2022 15:39:40 +0000
+Date:   Sun, 1 May 2022 23:39:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: kernel/sched/core.c:5220:20: error: no previous prototype for
+ 'task_sched_runtime'
+Message-ID: <202205012340.UzMUgB84-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <SI2PR01MB3929F20DA02363BD6A88657DF8FE9@SI2PR01MB3929.apcprd01.prod.exchangelabs.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,62 +61,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 01, 2022 at 09:01:36PM +0530, Kushagra Verma wrote:
-> This patch removes a possible unnecessary out of memory message from
-> core.c
-> as reported by checkpatch.pl:
->    WARNING: Possible unnecessary 'out of memory' message
-> 
-> Signed-off-by: Kushagra Verma <kushagra765@outlook.com>
-> ---
->  drivers/usb/dwc3/core.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 25c686a752b0..4ee787de2956 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -844,10 +844,8 @@ static void dwc3_set_incr_burst_type(struct dwc3
-> *dwc)
->  		return;
->  
->  	vals = kcalloc(ntype, sizeof(u32), GFP_KERNEL);
-> -	if (!vals) {
-> -		dev_err(dev, "Error to get memory\n");
-> +	if (!vals)
->  		return;
-> -	}
->  
->  	/* Get INCR burst type, and parse it */
->  	ret = device_property_read_u32_array(dev,
-> -- 
-> 2.32.0
-> 
-> 
-> 
+Hi Ingo,
 
-Hi,
+FYI, the error/warning still remains.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   57ae8a492116910bad2b3497ffe555b3a4b4180f
+commit: 4ff8f2ca6ccd9e0cc5665d09f86d631b3ae3a14c sched/headers: Reorganize, clean up and optimize kernel/sched/sched.h dependencies
+date:   10 weeks ago
+config: x86_64-sof-customedconfig-edison-defconfig (https://download.01.org/0day-ci/archive/20220501/202205012340.UzMUgB84-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4ff8f2ca6ccd9e0cc5665d09f86d631b3ae3a14c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 4ff8f2ca6ccd9e0cc5665d09f86d631b3ae3a14c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
-  and can not be applied.  Please read the file,
-  Documentation/email-clients.txt in order to fix this.
+All errors (new ones prefixed by >>):
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+   kernel/sched/core.c:3516:6: error: no previous prototype for 'sched_set_stop_task' [-Werror=missing-prototypes]
+    3516 | void sched_set_stop_task(int cpu, struct task_struct *stop)
+         |      ^~~~~~~~~~~~~~~~~~~
+>> kernel/sched/core.c:5220:20: error: no previous prototype for 'task_sched_runtime' [-Werror=missing-prototypes]
+    5220 | unsigned long long task_sched_runtime(struct task_struct *p)
+         |                    ^~~~~~~~~~~~~~~~~~
+>> kernel/sched/core.c:8931:6: error: no previous prototype for 'idle_task_exit' [-Werror=missing-prototypes]
+    8931 | void idle_task_exit(void)
+         |      ^~~~~~~~~~~~~~
+>> kernel/sched/core.c:9164:5: error: no previous prototype for 'sched_cpu_activate' [-Werror=missing-prototypes]
+    9164 | int sched_cpu_activate(unsigned int cpu)
+         |     ^~~~~~~~~~~~~~~~~~
+>> kernel/sched/core.c:9209:5: error: no previous prototype for 'sched_cpu_deactivate' [-Werror=missing-prototypes]
+    9209 | int sched_cpu_deactivate(unsigned int cpu)
+         |     ^~~~~~~~~~~~~~~~~~~~
+>> kernel/sched/core.c:9284:5: error: no previous prototype for 'sched_cpu_starting' [-Werror=missing-prototypes]
+    9284 | int sched_cpu_starting(unsigned int cpu)
+         |     ^~~~~~~~~~~~~~~~~~
+>> kernel/sched/core.c:9305:5: error: no previous prototype for 'sched_cpu_wait_empty' [-Werror=missing-prototypes]
+    9305 | int sched_cpu_wait_empty(unsigned int cpu)
+         |     ^~~~~~~~~~~~~~~~~~~~
+>> kernel/sched/core.c:9347:5: error: no previous prototype for 'sched_cpu_dying' [-Werror=missing-prototypes]
+    9347 | int sched_cpu_dying(unsigned int cpu)
+         |     ^~~~~~~~~~~~~~~
+>> kernel/sched/core.c:9370:13: error: no previous prototype for 'sched_init_smp' [-Werror=missing-prototypes]
+    9370 | void __init sched_init_smp(void)
+         |             ^~~~~~~~~~~~~~
+>> kernel/sched/core.c:9431:13: error: no previous prototype for 'sched_init' [-Werror=missing-prototypes]
+    9431 | void __init sched_init(void)
+         |             ^~~~~~~~~~
+   cc1: all warnings being treated as errors
+--
+>> kernel/sched/fair.c:10634:6: error: no previous prototype for 'nohz_balance_enter_idle' [-Werror=missing-prototypes]
+   10634 | void nohz_balance_enter_idle(int cpu)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
+--
+   In file included from kernel/sched/build_utility.c:79:
+>> kernel/sched/loadavg.c:245:6: error: no previous prototype for 'calc_load_nohz_start' [-Werror=missing-prototypes]
+     245 | void calc_load_nohz_start(void)
+         |      ^~~~~~~~~~~~~~~~~~~~
+>> kernel/sched/loadavg.c:258:6: error: no previous prototype for 'calc_load_nohz_remote' [-Werror=missing-prototypes]
+     258 | void calc_load_nohz_remote(struct rq *rq)
+         |      ^~~~~~~~~~~~~~~~~~~~~
+>> kernel/sched/loadavg.c:263:6: error: no previous prototype for 'calc_load_nohz_stop' [-Werror=missing-prototypes]
+     263 | void calc_load_nohz_stop(void)
+         |      ^~~~~~~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
 
-thanks,
 
-greg k-h's patch email bot
+vim +/task_sched_runtime +5220 kernel/sched/core.c
+
+6075620b0590ea kernel/sched/core.c Giovanni Gherdovich 2016-08-05  5214  
+c5f8d99585d7b5 kernel/sched.c      Hidetoshi Seto      2009-03-31  5215  /*
+c5f8d99585d7b5 kernel/sched.c      Hidetoshi Seto      2009-03-31  5216   * Return accounted runtime for the task.
+c5f8d99585d7b5 kernel/sched.c      Hidetoshi Seto      2009-03-31  5217   * In case the task is currently running, return the runtime plus current's
+c5f8d99585d7b5 kernel/sched.c      Hidetoshi Seto      2009-03-31  5218   * pending runtime that have not been accounted yet.
+c5f8d99585d7b5 kernel/sched.c      Hidetoshi Seto      2009-03-31  5219   */
+c5f8d99585d7b5 kernel/sched.c      Hidetoshi Seto      2009-03-31 @5220  unsigned long long task_sched_runtime(struct task_struct *p)
+c5f8d99585d7b5 kernel/sched.c      Hidetoshi Seto      2009-03-31  5221  {
+eb58075149b7f0 kernel/sched/core.c Peter Zijlstra      2015-07-31  5222  	struct rq_flags rf;
+c5f8d99585d7b5 kernel/sched.c      Hidetoshi Seto      2009-03-31  5223  	struct rq *rq;
+6e998916dfe327 kernel/sched/core.c Stanislaw Gruszka   2014-11-12  5224  	u64 ns;
+c5f8d99585d7b5 kernel/sched.c      Hidetoshi Seto      2009-03-31  5225  
+
+:::::: The code at line 5220 was first introduced by commit
+:::::: c5f8d99585d7b5b7e857fabf8aefd0174903a98c posixtimers, sched: Fix posix clock monotonicity
+
+:::::: TO: Hidetoshi Seto <seto.hidetoshi@jp.fujitsu.com>
+:::::: CC: Ingo Molnar <mingo@elte.hu>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E43F5517545
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 19:01:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8155951754C
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 19:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353113AbiEBREm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 13:04:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44818 "EHLO
+        id S1386305AbiEBRGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 13:06:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386464AbiEBREa (ORCPT
+        with ESMTP id S1357301AbiEBRGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 13:04:30 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA4425F7
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 10:00:58 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id dk23so28893990ejb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 10:00:58 -0700 (PDT)
+        Mon, 2 May 2022 13:06:39 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5926725EA
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 10:03:10 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id be20so17293732edb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 10:03:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=pw2/oXmpaIHCVTryeNN1ZqUEyp67KQCQZki+AHhMtg4=;
-        b=WFLlqSaRxtRM1eXCMOy3bfOnfmy/O0CNxC/Kvxvq/ZIAe6jSq6QKKTxR2533G2Ma+M
-         cJ7mlkEywoFDQhZG7+kRn8mhBuqtd3heRlnY0oV+pOFJG3vEXsS/ZpfmMuuJ838fRTyq
-         Xk6I4ysRfS7pCyUZj4MDQtXlPkIN333kbsYkE=
+        bh=/u6ctPDMxVgGjtnFGMUjLT8WYXeEvvG7PHjNe0QwddI=;
+        b=U+6pAjMkfydxMfXGeTmt3HKbxbXevcplbal5L1ckkQu9nHhDDr4SDRGgBekVn87CJd
+         YrmGEanXaLZSZ82VJResvpoYyRkLUcrMX7ZgkOFM7hnObCOd86KUkbaj6zmv9dig+Cl6
+         pXz5+eXdWfU0Vqp7yPjv4dFgsa7Lo+L0IpdMk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=pw2/oXmpaIHCVTryeNN1ZqUEyp67KQCQZki+AHhMtg4=;
-        b=RYhf4/Q5YT+g3XccJquruic3bp6OWO7g+k+ZKVcmvwaC6452iXRXLD78EzMGCuTI4K
-         MFJLFXIoErG1xLWN+28fRgT74pvcSBFOnZt6XPK9MMJnaAaJD7SZoIxkn59dgzUbCWT7
-         zQWKxoRfxkniJyuiUuBXuWl+qRMsRfeYBsa1hetK8u8OIjquqXd5gwlP6R1xpxhVDo6w
-         cmlDN8l/lfEYFVGyPzpqJyzWCu7YIJUNcoJmf6NzgxHWcmjBIGZ7W4rs45EHxGFaJ5Jy
-         xBU/FQsnayBZMsSYxDv9AF5eYg1KwWVPVhTqZQV6tQ6H6vrw2O9bZe11+WV8ZbL0mtLt
-         u8yw==
-X-Gm-Message-State: AOAM5300vNXwhBmLUFhY5la68ErHWzY5VYaPYR/x68KdU88reUmFLYbi
-        ZYbC8KZZDetxM6EcfuEtEy9e9Ef9u1l6qZke
-X-Google-Smtp-Source: ABdhPJzXJBmbCAhIYzuXYO5JSbPNqAkkp1zp+lqt9HQHdD9KgA8gMv/zGzlBZR8bZ2MBmoeERNXGLQ==
-X-Received: by 2002:a17:907:3fa6:b0:6f3:a758:73b3 with SMTP id hr38-20020a1709073fa600b006f3a75873b3mr12143791ejc.108.1651510857164;
-        Mon, 02 May 2022 10:00:57 -0700 (PDT)
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
-        by smtp.gmail.com with ESMTPSA id er22-20020a170907739600b006f3ef214e7bsm3793006ejc.225.2022.05.02.10.00.56
+        bh=/u6ctPDMxVgGjtnFGMUjLT8WYXeEvvG7PHjNe0QwddI=;
+        b=X7E1nvoI6giUgDmrhFUzNjCsPJzEpVJHY/3FzBWlxmdiIdVZV2+UJCV9T1ZGdieyaf
+         trZ3+T8mIV/wnQjOm+OWmoaaj1Q7UVIWVq6ePJeW0v2I8YZ+gmizehk1MSJVhF0GbrMg
+         OcqzoKLBL/kV45zytNmLgkC6NRSJKSPYKF6Lmv5ty1eS313+KGlNr245OvS9/hqNy8bF
+         36yvF8i4hLT6JMujNbRtiA6W3tVbfnMobQDuzsarpuP0ACyvL9asc9Oq5AghvDv5kZ1g
+         R6mIye70lwFv++g1zxuSJub5Ak2v34yLmZe0o/fQUO9KiRbRTHXuOTB0Z6UNB7ith+aG
+         Setg==
+X-Gm-Message-State: AOAM531u1UD6sIkUI401l4WHN2eNIjfSVpQNz2RiV/aCQhR1eyOmh8pP
+        9TKgoxnfsLF78R1xp4Ec6lnmXfGM5ht4i9hn
+X-Google-Smtp-Source: ABdhPJx27BFvrnTzAfOrhJHaLFA6B1F/Usvgj+q5/e58ASh1G9/HJPr5LBeD6x4ELT8Y+CiBgKxtbQ==
+X-Received: by 2002:a05:6402:5107:b0:427:ded9:9234 with SMTP id m7-20020a056402510700b00427ded99234mr646768edd.275.1651510988667;
+        Mon, 02 May 2022 10:03:08 -0700 (PDT)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
+        by smtp.gmail.com with ESMTPSA id cy19-20020a0564021c9300b0042617ba6386sm6761042edb.16.2022.05.02.10.03.06
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 10:00:56 -0700 (PDT)
-Received: by mail-wm1-f49.google.com with SMTP id k126so5184219wme.2
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 10:00:56 -0700 (PDT)
-X-Received: by 2002:a05:600c:4e44:b0:394:46b4:7b0e with SMTP id
- e4-20020a05600c4e4400b0039446b47b0emr57531wmq.29.1651510855777; Mon, 02 May
- 2022 10:00:55 -0700 (PDT)
+        Mon, 02 May 2022 10:03:07 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id k2so20323333wrd.5
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 10:03:06 -0700 (PDT)
+X-Received: by 2002:a5d:6d09:0:b0:20c:53a9:cc30 with SMTP id
+ e9-20020a5d6d09000000b0020c53a9cc30mr9166713wrq.513.1651510986299; Mon, 02
+ May 2022 10:03:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220429233112.2851665-1-swboyd@chromium.org> <20220429233112.2851665-2-swboyd@chromium.org>
-In-Reply-To: <20220429233112.2851665-2-swboyd@chromium.org>
+References: <20220429233112.2851665-1-swboyd@chromium.org> <20220429233112.2851665-3-swboyd@chromium.org>
+In-Reply-To: <20220429233112.2851665-3-swboyd@chromium.org>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 2 May 2022 10:00:44 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VX8EEgkeLgKwyKvjztcjbA8UhKOUpTr-sS1_Ec=QcWbA@mail.gmail.com>
-Message-ID: <CAD=FV=VX8EEgkeLgKwyKvjztcjbA8UhKOUpTr-sS1_Ec=QcWbA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: google,cros-ec-keyb: Introduce
- switches only compatible
+Date:   Mon, 2 May 2022 10:02:54 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WAbfe9BC5QPDezz3FSEwHRFdQeZpARJYT4b9V1rNp_nA@mail.gmail.com>
+Message-ID: <CAD=FV=WAbfe9BC5QPDezz3FSEwHRFdQeZpARJYT4b9V1rNp_nA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] Input: cros-ec-keyb - skip keyboard registration
+ for switches compatible
 To:     Stephen Boyd <swboyd@chromium.org>
 Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
@@ -86,38 +86,23 @@ Hi,
 
 On Fri, Apr 29, 2022 at 4:31 PM Stephen Boyd <swboyd@chromium.org> wrote:
 >
-> If the device is a detachable, this device won't have a matrix keyboard
-> but it may have some button switches, e.g. volume buttons and power
-> buttons. Let's add a more specific compatible for this type of device
-> that indicates to the OS that there are only switches and no matrix
-> keyboard present. If only the switches compatible is present, then the
-> matrix keyboard properties are denied. This lets us gracefully migrate
-> devices that only have switches over to the new compatible string.
-
-I know the history here so I know the reasons for the 3 choices, but
-I'm not sure I'd fully understand it just from the description above.
-Maybe a summary in the CL desc would help?
-
-Summary:
-
-1. If you have a matrix keyboard and maybe also some buttons/switches
-then use the compatible: google,cros-ec-keyb
-
-2. If you only have buttons/switches but you want to be compatible
-with the old driver in Linux that looked for the compatible
-"google,cros-ec-keyb" and required the matrix properties, use the
-compatible: "google,cros-ec-keyb-switches", "google,cros-ec-keyb"
-
-3. If you have only buttons/switches and don't need compatibility with
-old Linux drivers, use the compatible: "google,cros-ec-keyb-switches"
-
-
-> Similarly, start enforcing that the keypad rows/cols and keymap
-> properties exist if the google,cros-ec-keyb compatible is present. This
-> more clearly describes what the driver is expecting, i.e. that the
-> kernel driver will fail to probe if the row or column or keymap
-> properties are missing and only the google,cros-ec-keyb compatible is
-> present.
+> In commit 4352e23a7ff2 ("Input: cros-ec-keyb - only register keyboard if
+> rows/columns exist") we skipped registration of the keyboard if the
+> row/columns property didn't exist, but that has a slight problem for
+> existing DTBs. The DTBs have the rows/columns properties, so removing
+> the properties to indicate only switches exist makes this keyboard
+> driver fail to probe, resulting in broken power and volume buttons. Ease
+> the migration of existing DTBs by skipping keyboard registration if the
+> google,cros-ec-keyb-switches compatible exists.
+>
+> The end result is that new DTBs can either choose to remove the matrix
+> keymap properties or leave them in place and add this new compatible
+> indicating the matrix keyboard properties should be ignored. Existing
+> DTBs will continue to work, but they will keep registering the keyboard
+> that does nothing. To fix that problem we can add this extra compatible
+> to existing DTBs and the keyboard will stop being registered. Finally,
+> if google,cros-ec-keyb is missing then this driver won't even attempt to
+> register the matrix keyboard.
 >
 > Cc: Krzysztof Kozlowski <krzk@kernel.org>
 > Cc: Rob Herring <robh+dt@kernel.org>
@@ -127,90 +112,32 @@ old Linux drivers, use the compatible: "google,cros-ec-keyb-switches"
 > Cc: Douglas Anderson <dianders@chromium.org>
 > Cc: Hsin-Yi Wang <hsinyi@chromium.org>
 > Cc: "Joseph S. Barrera III" <joebar@chromium.org>
+> Fixes: 4352e23a7ff2 ("Input: cros-ec-keyb - only register keyboard if rows/columns exist")
 > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 > ---
->  .../bindings/input/google,cros-ec-keyb.yaml   | 95 +++++++++++++++++--
->  1 file changed, 89 insertions(+), 6 deletions(-)
+>  drivers/input/keyboard/cros_ec_keyb.c | 15 +++++++++++++--
+>  1 file changed, 13 insertions(+), 2 deletions(-)
 >
-> diff --git a/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml b/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
-> index e8f137abb03c..c1b079449cf3 100644
-> --- a/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
-> +++ b/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
-> @@ -15,14 +15,19 @@ description: |
->    Google's ChromeOS EC Keyboard is a simple matrix keyboard
->    implemented on a separate EC (Embedded Controller) device. It provides
->    a message for reading key scans from the EC. These are then converted
-> -  into keycodes for processing by the kernel.
-> -
-> -allOf:
-> -  - $ref: "/schemas/input/matrix-keymap.yaml#"
-> +  into keycodes for processing by the kernel. This device also supports
-> +  switches/buttons like power and volume buttons.
->
->  properties:
->    compatible:
-> -    const: google,cros-ec-keyb
-> +    oneOf:
-> +      - items:
-> +          - const: google,cros-ec-keyb-switches
-> +      - items:
-> +          - const: google,cros-ec-keyb-switches
-> +          - const: google,cros-ec-keyb
-> +      - items:
-> +          - const: google,cros-ec-keyb
->
->    google,needs-ghost-filter:
->      description:
-> @@ -41,15 +46,40 @@ properties:
->        where the lower 16 bits are reserved. This property is specified only
->        when the keyboard has a custom design for the top row keys.
->
-> +dependencies:
-> +  function-row-phsymap: [ 'linux,keymap' ]
-> +  google,needs-ghost-filter: [ 'linux,keymap' ]
+> diff --git a/drivers/input/keyboard/cros_ec_keyb.c b/drivers/input/keyboard/cros_ec_keyb.c
+> index eef909e52e23..1bbe2987bf52 100644
+> --- a/drivers/input/keyboard/cros_ec_keyb.c
+> +++ b/drivers/input/keyboard/cros_ec_keyb.c
+> @@ -536,6 +536,12 @@ static int cros_ec_keyb_register_matrix(struct cros_ec_keyb *ckdev)
+>         u32 *physmap;
+>         u32 key_pos;
+>         unsigned int row, col, scancode, n_physmap;
+> +       bool register_keyboard;
 > +
->  required:
->    - compatible
+> +       /* Skip matrix registration if no keyboard */
+> +       register_keyboard = device_get_match_data(dev);
+> +       if (!register_keyboard)
+> +               return 0;
 >
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: google,cros-ec-keyb
-> +    then:
-> +      allOf:
-> +        - $ref: "/schemas/input/matrix-keymap.yaml#"
-> +  - if:
-> +      not:
-> +        properties:
-> +          compatible:
-> +            contains:
-> +              const: google,cros-ec-keyb-switches
-> +    then:
-> +      required:
-> +        - keypad,num-rows
-> +        - keypad,num-columns
-> +        - linux,keymap
+>         /*
+>          * No rows and columns? There isn't a matrix but maybe there are
 
-I think that:
-
-1. If you only have buttons/switches and care about backward
-compatibility, you use the "two compatibles" version.
-
-2. If you care about backward compatibility then you _must_ include
-the matrix properties.
-
-Thus I would be tempted to say that we should just have one "if" test
-that says that if matrix properties are allowed then they're also
-required.
-
-That goes against the recently landed commit 4352e23a7ff2 ("Input:
-cros-ec-keyb - only register keyboard if rows/columns exist") but
-perhaps we should just _undo_ that that since it landed pretty
-recently and say that the truly supported way to specify that you only
-have keyboards/switches is with the compatible.
-
-What do you think?
+As per my comments in patch #1, I wonder if it makes sense to delete
+the "No rows and columns?" logic and settle on the compatible as the
+one true way to specify this.
 
 -Doug

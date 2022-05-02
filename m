@@ -2,62 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B50D516E38
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 12:35:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C4A3516E36
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 12:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384697AbiEBKjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 06:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43184 "EHLO
+        id S1384667AbiEBKjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 06:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384718AbiEBKjE (ORCPT
+        with ESMTP id S1384695AbiEBKjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 06:39:04 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929C41095
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 03:35:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651487734; x=1683023734;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=zme2bzTcTZV/5vtvzNRcSb+yOsr8qbK1hibOHo76+wI=;
-  b=TwW4slbPcg0UnVy3ku0x2uK49WvQrZ2KFXABJaQLohPofJ/H7OVdzYtX
-   Jt7H7a9GgxKqZ2HOv1q2cpZ155zZPihAtbxNEIzFQSjStA+nBndDV4YmT
-   T3XV7JXlqFIyI5RZAFvjyCCO2PqaZeq+ESZK5Z1D+RLLG3G1JBH/MSysR
-   XccCVHVs9hcLyRG7QZC0hW886/s77ueKsU/OG5yTTiaA6o+r3/ktr5vcf
-   ojoDIdCce6Ay2MoBlIUC3UJtO3qPd9GKsahE8wz2GiWOcFnWl1XBUnWIj
-   OwCVvUbM+Q3dFYwntcEee9oGPLi9L6FIoTvZcAkzf1f52rQ9W3+J3mG+T
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="267334078"
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="267334078"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 03:35:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="516014895"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 02 May 2022 03:35:32 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nlTOt-0009UR-G2;
-        Mon, 02 May 2022 10:35:31 +0000
-Date:   Mon, 2 May 2022 18:35:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:axboe/linux-block/for-5.19/io_uring-pbuf 48/89]
- fs/io_uring.c:8498:6: warning: unused variable 'i'
-Message-ID: <202205021814.miF011yS-lkp@intel.com>
+        Mon, 2 May 2022 06:39:03 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD512BFA;
+        Mon,  2 May 2022 03:35:33 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id CD1991F896;
+        Mon,  2 May 2022 10:35:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1651487731; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Dn9XSHCKolq6/lQSxksAI1EWQRJzfzUctxGyNj4FIbc=;
+        b=H4Pm0Q0yA3s++FBy4JhcAn+VXsuwbz8Fxq1+g7xdI//6lmgPdtYrk9qwl89iFjgY0q+v9A
+        vFfgslZCIPHnKronaXZ/xRH87DKgxyVR8/JSXQlT/q/Pwr5ghzvKTpZcu2JAFb64XOum3g
+        5KuwBjjGXfL0jKv0D9JkVIZKHfgyH5c=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1651487731;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Dn9XSHCKolq6/lQSxksAI1EWQRJzfzUctxGyNj4FIbc=;
+        b=ganiifpaAbCaoGrzd9cDb8HCGMIpNTyU2n6eScpJ0CJfhXLvFgc8nPVsZ6QrNcNCjCSg1R
+        3/CwDrQVFXtGwPAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4DFCC133E5;
+        Mon,  2 May 2022 10:35:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id dugIEvKzb2IfRQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 02 May 2022 10:35:30 +0000
+Message-ID: <c120e1c4-ac5c-afd5-8dd1-b4b51e0dcca9@suse.de>
+Date:   Mon, 2 May 2022 12:35:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 0/3] drm: Allow simpledrm to setup its emulated FB as
+ firmware provided
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Alain Volmat <alain.volmat@foss.st.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Alexey Brodkin <abrodkin@synopsys.com>,
+        Alison Wang <alison.wang@nxp.com>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Brian Starkey <brian.starkey@arm.com>,
+        Chen Feng <puck.chen@hisilicon.com>,
+        Chen-Yu Tsai <wens@csie.org>, Chia-I Wu <olvaffe@gmail.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Airlie <airlied@redhat.com>,
+        David Airlie <airlied@linux.ie>, Emma Anholt <emma@anholt.net>,
+        Evan Quan <evan.quan@amd.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Hao Fang <fanghao11@huawei.com>,
+        Hyun Kwon <hyun.kwon@xilinx.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Joel Stanley <joel@jms.id.au>,
+        John Stultz <john.stultz@linaro.org>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Marek Vasut <marex@denx.de>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Nirmoy Das <nirmoy.das@amd.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Solomon Chiu <solomon.chiu@amd.com>,
+        Stefan Agner <stefan@agner.ch>,
+        Tian Tao <tiantao6@hisilicon.com>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Xinliang Liu <xinliang.liu@linaro.org>,
+        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Yong Wu <yong.wu@mediatek.com>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-mediatek@lists.infradead.org,
+        linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, spice-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+References: <20220502084830.285639-1-javierm@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220502084830.285639-1-javierm@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------bZs9O7gVydbPyh0mFowmyKkQ"
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,191 +150,175 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block axboe/linux-block/for-5.=
-19/io_uring-pbuf
-head:   086401d42d41ebb636d9293288494033cbf9ba10
-commit: 5e45690a1cb8cb591ccf4a517cdd6ad6cb369ac4 [48/89] io_uring: store SC=
-M state in io_fixed_file->file_ptr
-config: mips-randconfig-r015-20220501 (https://download.01.org/0day-ci/arch=
-ive/20220502/202205021814.miF011yS-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d=
-36061e42b495d1f4c7e933e260eac260ed)
-reproduce (this is a W=3D1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/=
-make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/ammarfaizi2/linux-block/commit/5e45690a1cb8cb5=
-91ccf4a517cdd6ad6cb369ac4
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/lin=
-ux-block
-        git fetch --no-tags ammarfaizi2-block axboe/linux-block/for-5.19/io=
-_uring-pbuf
-        git checkout 5e45690a1cb8cb591ccf4a517cdd6ad6cb369ac4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=3D=
-1 O=3Dbuild_dir ARCH=3Dmips SHELL=3D/bin/bash
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------bZs9O7gVydbPyh0mFowmyKkQ
+Content-Type: multipart/mixed; boundary="------------JAaQiYXsw1Wg2huPZuTUbFwL";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ linux-kernel@vger.kernel.org
+Cc: Alain Volmat <alain.volmat@foss.st.com>,
+ Alex Deucher <alexander.deucher@amd.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Alexey Brodkin <abrodkin@synopsys.com>, Alison Wang <alison.wang@nxp.com>,
+ Andrew Jeffery <andrew@aj.id.au>,
+ Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+ Boris Brezillon <bbrezillon@kernel.org>,
+ Brian Starkey <brian.starkey@arm.com>, Chen Feng <puck.chen@hisilicon.com>,
+ Chen-Yu Tsai <wens@csie.org>, Chia-I Wu <olvaffe@gmail.com>,
+ =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+ Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+ Claudiu Beznea <claudiu.beznea@microchip.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Dave Airlie <airlied@redhat.com>,
+ David Airlie <airlied@linux.ie>, Emma Anholt <emma@anholt.net>,
+ Evan Quan <evan.quan@amd.com>, Fabio Estevam <festevam@gmail.com>,
+ Gerd Hoffmann <kraxel@redhat.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Gurchetan Singh <gurchetansingh@chromium.org>,
+ Hans de Goede <hdegoede@redhat.com>, Hao Fang <fanghao11@huawei.com>,
+ Hyun Kwon <hyun.kwon@xilinx.com>, Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Jerome Brunet <jbrunet@baylibre.com>, Joel Stanley <joel@jms.id.au>,
+ John Stultz <john.stultz@linaro.org>, Jyri Sarha <jyri.sarha@iki.fi>,
+ Kevin Hilman <khilman@baylibre.com>,
+ Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
+ Linus Walleij <linus.walleij@linaro.org>, Liviu Dudau <liviu.dudau@arm.com>,
+ Lucas De Marchi <lucas.demarchi@intel.com>,
+ Lucas Stach <l.stach@pengutronix.de>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Marek Vasut <marex@denx.de>, Mario Limonciello <mario.limonciello@amd.com>,
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Maxime Ripard <mripard@kernel.org>, Michal Simek <michal.simek@xilinx.com>,
+ NXP Linux Team <linux-imx@nxp.com>, Neil Armstrong
+ <narmstrong@baylibre.com>, Nicolas Ferre <nicolas.ferre@microchip.com>,
+ Nirmoy Das <nirmoy.das@amd.com>, =?UTF-8?Q?Noralf_Tr=c3=b8nnes?=
+ <noralf@tronnes.org>, "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+ Paul Cercueil <paul@crapouillou.net>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Philipp Zabel <p.zabel@pengutronix.de>,
+ Philippe Cornu <philippe.cornu@foss.st.com>,
+ Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+ Sam Ravnborg <sam@ravnborg.org>, Samuel Holland <samuel@sholland.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
+ Solomon Chiu <solomon.chiu@amd.com>, Stefan Agner <stefan@agner.ch>,
+ Tian Tao <tiantao6@hisilicon.com>, Tomi Valkeinen <tomba@kernel.org>,
+ Xinliang Liu <xinliang.liu@linaro.org>,
+ Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+ Yannick Fertre <yannick.fertre@foss.st.com>, Yong Wu <yong.wu@mediatek.com>,
+ amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+ linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-aspeed@lists.ozlabs.org, linux-mediatek@lists.infradead.org,
+ linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com, linux-sunxi@lists.linux.dev,
+ spice-devel@lists.freedesktop.org, virtualization@lists.linux-foundation.org
+Message-ID: <c120e1c4-ac5c-afd5-8dd1-b4b51e0dcca9@suse.de>
+Subject: Re: [PATCH 0/3] drm: Allow simpledrm to setup its emulated FB as
+ firmware provided
+References: <20220502084830.285639-1-javierm@redhat.com>
+In-Reply-To: <20220502084830.285639-1-javierm@redhat.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+--------------JAaQiYXsw1Wg2huPZuTUbFwL
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-All warnings (new ones prefixed by >>):
+SGkgSmF2aWVyDQoNCkFtIDAyLjA1LjIyIHVtIDEwOjQ4IHNjaHJpZWIgSmF2aWVyIE1hcnRp
+bmV6IENhbmlsbGFzOg0KPiBIZWxsbywNCj4gDQo+IFRoaXMgc2VyaWVzIGNvbnRhaW4gcGF0
+Y2hlcyBzdWdnZXN0ZWQgYnkgVGhvbWFzIFppbW1lcm1hbm5hcyBhIGZlZWRiYWNrIGZvcg0K
+PiAiW1JGQyBQQVRDSCB2NCAwMC8xMV0gRml4IHNvbWUgcmFjZSBiZXR3ZWVuIHN5c2ZiIGRl
+dmljZSByZWdpc3RyYXRpb24gYW5kDQo+IGRyaXZlcnMgcHJvYmUiIFswXS4NCj4gDQo+IFNp
+bmNlIG90aGVyIGNoYW5nZXMgaW4gWzBdIHdlcmUgbW9yZSBjb250cm92ZXJzaWFsLCBJIGRl
+Y2lkZWQgdG8ganVzdCBzcGxpdA0KPiB0aGlzIHBhcnQgaW4gYSBuZXcgcGF0Y2gtc2V0IGFu
+ZCByZXZpc2l0IHRoZSByZXN0IG9mIHRoZSBwYXRjaGVzIGxhdGVyLg0KPiANCj4gUGF0Y2gg
+IzEgaXMganVzdCBhIGNsZWFudXAgc2luY2Ugd2hlbiB3b3JraW5nIG9uIHRoaXMgbm90aWNl
+ZCB0aGF0IHNvbWUgRFJNDQo+IGRyaXZlcnMgd2VyZSBwYXNzaW5nIGFzIHByZWZlcnJlZCBi
+aXRzIHBlciBwaXhlbCB0byBkcm1fZmJkZXZfZ2VuZXJpY19zZXR1cCgpDQo+IHRoZSB2YWx1
+ZSB0aGF0IGlzIHRoZSBkZWZhdWx0IGFueXdheXMuDQo+IA0KPiBQYXRjaCAjMiByZW5hbWVz
+IHRoZSAncHJlZmVycmVkX2JwcCcgZHJtX2ZiZGV2X2dlbmVyaWNfc2V0dXAoKSBwYXJhbWV0
+ZXIgdG8NCj4gJ29wdGlvbnMnLCBhbmQgbWFrZSB0aGlzIGEgbXVsdGkgZmllbGQgcGFyYW1l
+dGVyIHNvIHRoYXQgaXQgY2FuIGJlIGV4dGVuZGVkDQo+IGxhdGVyIHRvIHBhc3Mgb3RoZXIg
+b3B0aW9ucyBhcyB3ZWxsLg0KPiANCj4gUGF0Y2ggIzMgZmluYWxseSBhZGRzIHRoZSBuZXcg
+RFJNX0ZCX0ZXIG9wdGlvbiBhbmQgbWFrZXMgc2ltcGxlZHJtIHRvIHVzZSBpdA0KPiBzbyB0
+aGF0IHRoZSByZWdpc3RlcmVkIGZyYW1lYnVmZmVyIGRldmljZSBpcyBhbHNvIG1hcmtlZCBh
+cyBmaXJtd2FyZSBwcm92aWRlZC4NCg0KRm9yIHRoZSB3aG9sZSBwYXRjaHNldDoNCg0KUmV2
+aWV3ZWQtYnk6IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KDQpU
+aGFua3MgYSBsb3QhDQoNCj4gDQo+IFswXTogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGtt
+bC8yMDIyMDQyOTA4NDI1My4xMDg1OTExLTEtamF2aWVybUByZWRoYXQuY29tLw0KPiANCj4g
+DQo+IEphdmllciBNYXJ0aW5leiBDYW5pbGxhcyAoMyk6DQo+ICAgIGRybTogUmVtb3ZlIHN1
+cGVyZmx1b3VzIGFyZyB3aGVuIGNhbGxpbmcgdG8gZHJtX2ZiZGV2X2dlbmVyaWNfc2V0dXAo
+KQ0KPiAgICBkcm0vZmItaGVscGVyOiBSZW5hbWUgcHJlZmVycmVkX2JwcCBkcm1fZmJkZXZf
+Z2VuZXJpY19zZXR1cCgpDQo+ICAgICAgcGFyYW1ldGVyDQo+ICAgIGRybTogQWxsb3cgc2lt
+cGxlZHJtIHRvIHNldHVwIGl0cyBlbXVsYXRlZCBGQiBhcyBmaXJtd2FyZSBwcm92aWRlZA0K
+PiANCj4gICBkcml2ZXJzL2dwdS9kcm0vYW1kL2FtZGdwdS9hbWRncHVfZHJ2LmMgICAgICAg
+fCAgNiArKystLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS9hcm0vaGRsY2RfZHJ2LmMgICAgICAg
+ICAgICAgICB8ICAyICstDQo+ICAgZHJpdmVycy9ncHUvZHJtL2FybS9tYWxpZHBfZHJ2LmMg
+ICAgICAgICAgICAgIHwgIDIgKy0NCj4gICBkcml2ZXJzL2dwdS9kcm0vYXNwZWVkL2FzcGVl
+ZF9nZnhfZHJ2LmMgICAgICAgfCAgMiArLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS9hc3QvYXN0
+X2Rydi5jICAgICAgICAgICAgICAgICB8ICAyICstDQo+ICAgZHJpdmVycy9ncHUvZHJtL2F0
+bWVsLWhsY2RjL2F0bWVsX2hsY2RjX2RjLmMgIHwgIDIgKy0NCj4gICBkcml2ZXJzL2dwdS9k
+cm0vZHJtX2Rydi5jICAgICAgICAgICAgICAgICAgICAgfCAgMiArLQ0KPiAgIGRyaXZlcnMv
+Z3B1L2RybS9kcm1fZmJfaGVscGVyLmMgICAgICAgICAgICAgICB8IDI1ICsrKysrKysrKysr
+KysrKystLS0NCj4gICBkcml2ZXJzL2dwdS9kcm0vZnNsLWRjdS9mc2xfZGN1X2RybV9kcnYu
+YyAgICAgfCAgMiArLQ0KPiAgIC4uLi9ncHUvZHJtL2hpc2lsaWNvbi9oaWJtYy9oaWJtY19k
+cm1fZHJ2LmMgICB8ICAyICstDQo+ICAgLi4uL2dwdS9kcm0vaGlzaWxpY29uL2tpcmluL2tp
+cmluX2RybV9kcnYuYyAgIHwgIDIgKy0NCj4gICBkcml2ZXJzL2dwdS9kcm0vaW14L2Rjc3Mv
+ZGNzcy1rbXMuYyAgICAgICAgICAgfCAgMiArLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS9pbXgv
+aW14LWRybS1jb3JlLmMgICAgICAgICAgICB8ICAyICstDQo+ICAgZHJpdmVycy9ncHUvZHJt
+L2luZ2VuaWMvaW5nZW5pYy1kcm0tZHJ2LmMgICAgIHwgIDIgKy0NCj4gICBkcml2ZXJzL2dw
+dS9kcm0vbWNkZS9tY2RlX2Rydi5jICAgICAgICAgICAgICAgfCAgMiArLQ0KPiAgIGRyaXZl
+cnMvZ3B1L2RybS9tZWRpYXRlay9tdGtfZHJtX2Rydi5jICAgICAgICB8ICAyICstDQo+ICAg
+ZHJpdmVycy9ncHUvZHJtL21lc29uL21lc29uX2Rydi5jICAgICAgICAgICAgIHwgIDIgKy0N
+Cj4gICBkcml2ZXJzL2dwdS9kcm0vbXhzZmIvbXhzZmJfZHJ2LmMgICAgICAgICAgICAgfCAg
+MiArLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS9wbDExMS9wbDExMV9kcnYuYyAgICAgICAgICAg
+ICB8ICAyICstDQo+ICAgZHJpdmVycy9ncHUvZHJtL3F4bC9xeGxfZHJ2LmMgICAgICAgICAg
+ICAgICAgIHwgIDIgKy0NCj4gICBkcml2ZXJzL2dwdS9kcm0vcmNhci1kdS9yY2FyX2R1X2Ry
+di5jICAgICAgICAgfCAgMiArLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS9zdGkvc3RpX2Rydi5j
+ICAgICAgICAgICAgICAgICB8ICAyICstDQo+ICAgZHJpdmVycy9ncHUvZHJtL3N0bS9kcnYu
+YyAgICAgICAgICAgICAgICAgICAgIHwgIDIgKy0NCj4gICBkcml2ZXJzL2dwdS9kcm0vc3Vu
+NGkvc3VuNGlfZHJ2LmMgICAgICAgICAgICAgfCAgMiArLQ0KPiAgIGRyaXZlcnMvZ3B1L2Ry
+bS90aWRzcy90aWRzc19kcnYuYyAgICAgICAgICAgICB8ICAyICstDQo+ICAgZHJpdmVycy9n
+cHUvZHJtL3RpbGNkYy90aWxjZGNfZHJ2LmMgICAgICAgICAgIHwgIDIgKy0NCj4gICBkcml2
+ZXJzL2dwdS9kcm0vdGlueS9hcmNwZ3UuYyAgICAgICAgICAgICAgICAgfCAgMiArLQ0KPiAg
+IGRyaXZlcnMvZ3B1L2RybS90aW55L2JvY2hzLmMgICAgICAgICAgICAgICAgICB8ICAyICst
+DQo+ICAgZHJpdmVycy9ncHUvZHJtL3RpbnkvY2lycnVzLmMgICAgICAgICAgICAgICAgIHwg
+IDIgKy0NCj4gICBkcml2ZXJzL2dwdS9kcm0vdGlueS9zaW1wbGVkcm0uYyAgICAgICAgICAg
+ICAgfCAgMiArLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS90dmUyMDAvdHZlMjAwX2Rydi5jICAg
+ICAgICAgICB8ICAyICstDQo+ICAgZHJpdmVycy9ncHUvZHJtL3Zib3h2aWRlby92Ym94X2Ry
+di5jICAgICAgICAgIHwgIDIgKy0NCj4gICBkcml2ZXJzL2dwdS9kcm0vdmM0L3ZjNF9kcnYu
+YyAgICAgICAgICAgICAgICAgfCAgMiArLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS92aXJ0aW8v
+dmlydGdwdV9kcnYuYyAgICAgICAgICB8ICAyICstDQo+ICAgZHJpdmVycy9ncHUvZHJtL3hs
+bngvenlucW1wX2Rwc3ViLmMgICAgICAgICAgIHwgIDIgKy0NCj4gICBpbmNsdWRlL2RybS9k
+cm1fZmJfaGVscGVyLmggICAgICAgICAgICAgICAgICAgfCAyMiArKysrKysrKysrKysrKysr
+DQo+ICAgMzYgZmlsZXMgY2hhbmdlZCwgODAgaW5zZXJ0aW9ucygrKSwgMzkgZGVsZXRpb25z
+KC0pDQo+IA0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2
+ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRz
+dHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5i
+ZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
 
->> fs/io_uring.c:8498:6: warning: unused variable 'i'
-   int i;
-   ^
-   fatal error: error in backend: Nested variants found in inline asm strin=
-g: ' .set push
-   .set mips64r2
-   .if ( 0x00 ) !=3D -1)) 0x00 ) !=3D -1)) : ($( static struct ftrace_branc=
-h_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_=
-branch"))) __if_trace =3D $( .func =3D __func__, .file =3D "arch/mips/inclu=
-de/asm/atomic.h", .line =3D 155, $); 0x00 ) !=3D -1)) : $))) ) && ( 0 ); .s=
-et push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
-   1: ll $0, $1 # atomic_add
-   addu $0, $2
-   sc $0, $1
-   beqz $0, 1b
-   .set pop
-   '
-   PLEASE submit a bug report to https://github.com/llvm/llvm-project/issue=
-s/ and include the crash backtrace, preprocessed source, and associated run=
- script.
-   Stack dump:
-   0. Program arguments: clang -Wp,-MMD,fs/.io_uring.o.d -nostdinc -Iarch/m=
-ips/include -I./arch/mips/include/generated -Iinclude -I./include -Iarch/mi=
-ps/include/uapi -I./arch/mips/include/generated/uapi -Iinclude/uapi -I./inc=
-lude/generated/uapi -include include/linux/compiler-version.h -include incl=
-ude/linux/kconfig.h -include include/linux/compiler_types.h -D__KERNEL__ -D=
-VMLINUX_LOAD_ADDRESS=3D0xffffffff84000000 -DLINKER_LOAD_ADDRESS=3D0x8400000=
-0 -DDATAOFFSET=3D0 -Qunused-arguments -fmacro-prefix-map=3D=3D -DKBUILD_EXT=
-RA_WARN1 -Wall -Wundef -Werror=3Dstrict-prototypes -Wno-trigraphs -fno-stri=
-ct-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=3Dimplicit-function-=
-declaration -Werror=3Dimplicit-int -Werror=3Dreturn-type -Wno-format-securi=
-ty -std=3Dgnu11 --target=3Dmips-linux -fintegrated-as -Werror=3Dunknown-war=
-ning-option -Werror=3Dignored-optimization-argument -mno-check-zero-divisio=
-n -mabi=3D32 -G 0 -mno-abicalls -fno-pic -pipe -msoft-float -DGAS_HAS_SET_H=
-ARDFLOAT -Wa,-msoft-float -ffreestanding -EB -fno-stack-check -march=3Dmips=
-32 -Wa,--trap -DTOOLCHAIN_SUPPORTS_VIRT -Iarch/mips/include/asm/mach-ath25 =
--Iarch/mips/include/asm/mach-generic -fno-asynchronous-unwind-tables -fno-d=
-elete-null-pointer-checks -Wno-frame-address -Wno-address-of-packed-member =
--O2 -Wframe-larger-than=3D1024 -fno-stack-protector -Wimplicit-fallthrough =
--Wno-gnu -Wno-unused-but-set-variable -Wno-unused-const-variable -fno-stack=
--clash-protection -pg -Wdeclaration-after-statement -Wvla -Wno-pointer-sign=
- -Wcast-function-type -fno-strict-overflow -fno-stack-check -Werror=3Ddate-=
-time -Werror=3Dincompatible-pointer-types -Wextra -Wunused -Wno-unused-para=
-meter -Wmissing-declarations -Wmissing-format-attribute -Wmissing-prototype=
-s -Wold-style-definition -Wmissing-include-dirs -Wunused-but-set-variable -=
-Wunused-const-variable -Wno-missing-field-initializers -Wno-sign-compare -W=
-no-type-limits -Wno-shift-negative-value -I fs -I ./fs -DKBUILD_MODFILE=3D"=
-fs/io_uring" -DKBUILD_BASENAME=3D"io_uring" -DKBUILD_MODNAME=3D"io_uring" -=
-D__KBUILD_MODNAME=3Dkmod_io_uring -c -o fs/io_uring.o fs/io_uring.c
-   1. <eof> parser at end of file
-   2. Code generation
-   3. Running pass 'Function Pass Manager' on module 'fs/io_uring.c'.
-   4. Running pass 'Mips Assembly Printer' on function '@io_uring_cancel_ge=
-neric'
-   #0 0x000055fc440b0cdf Signals.cpp:0:0
-   #1 0x000055fc440aeb04 llvm::sys::CleanupOnSignal(unsigned long) (/opt/cr=
-oss/clang-09325d3606/bin/clang-15+0x34b1b04)
-   #2 0x000055fc43fedf17 llvm::CrashRecoveryContext::HandleExit(int) (/opt/=
-cross/clang-09325d3606/bin/clang-15+0x33f0f17)
-   #3 0x000055fc440a713e llvm::sys::Process::Exit(int, bool) (/opt/cross/cl=
-ang-09325d3606/bin/clang-15+0x34aa13e)
-   #4 0x000055fc41cbf28b (/opt/cross/clang-09325d3606/bin/clang-15+0x10c228=
-b)
-   #5 0x000055fc43ff4a4c llvm::report_fatal_error(llvm::Twine const&, bool)=
- (/opt/cross/clang-09325d3606/bin/clang-15+0x33f7a4c)
-   #6 0x000055fc44d33540 llvm::AsmPrinter::emitInlineAsm(llvm::MachineInstr=
- const (/opt/cross/clang-09325d3606/bin/clang-15+0x4136540)
-   #7 0x000055fc44d2f442 llvm::AsmPrinter::emitFunctionBody() (/opt/cross/c=
-lang-09325d3606/bin/clang-15+0x4132442)
-   #8 0x000055fc427533f7 llvm::MipsAsmPrinter::runOnMachineFunction(llvm::M=
-achineFunction&) (/opt/cross/clang-09325d3606/bin/clang-15+0x1b563f7)
-   #9 0x000055fc4343a6ad llvm::MachineFunctionPass::runOnFunction(llvm::Fun=
-ction&) (.part.53) MachineFunctionPass.cpp:0:0
-   #10 0x000055fc438832c7 llvm::FPPassManager::runOnFunction(llvm::Function=
-&) (/opt/cross/clang-09325d3606/bin/clang-15+0x2c862c7)
-   #11 0x000055fc43883441 llvm::FPPassManager::runOnModule(llvm::Module&) (=
-/opt/cross/clang-09325d3606/bin/clang-15+0x2c86441)
-   #12 0x000055fc43883fbf llvm::legacy::PassManagerImpl::run(llvm::Module&)=
- (/opt/cross/clang-09325d3606/bin/clang-15+0x2c86fbf)
-   #13 0x000055fc443dd37f clang::EmitBackendOutput(clang::DiagnosticsEngine=
-&, clang::HeaderSearchOptions const&, clang::CodeGenOptions const&, clang::=
-TargetOptions const&, clang::LangOptions const&, llvm::StringRef, clang::Ba=
-ckendAction, std::unique_ptr<llvm::raw_pwrite_stream, std::default_delete<l=
-lvm::raw_pwrite_stream> >) (/opt/cross/clang-09325d3606/bin/clang-15+0x37e0=
-37f)
-   #14 0x000055fc4505ccd1 clang::BackendConsumer::HandleTranslationUnit(cla=
-ng::ASTContext&) (/opt/cross/clang-09325d3606/bin/clang-15+0x445fcd1)
-   #15 0x000055fc45be2ac1 clang::ParseAST(clang::Sema&, bool, bool) (/opt/c=
-ross/clang-09325d3606/bin/clang-15+0x4fe5ac1)
-   #16 0x000055fc4505c395 clang::CodeGenAction::ExecuteAction() (/opt/cross=
-/clang-09325d3606/bin/clang-15+0x445f395)
-   #17 0x000055fc44a44751 clang::FrontendAction::Execute() (/opt/cross/clan=
-g-09325d3606/bin/clang-15+0x3e47751)
-   #18 0x000055fc449d8d0a clang::CompilerInstance::ExecuteAction(clang::Fro=
-ntendAction&) (/opt/cross/clang-09325d3606/bin/clang-15+0x3ddbd0a)
-   #19 0x000055fc44b0bc6b (/opt/cross/clang-09325d3606/bin/clang-15+0x3f0ec=
-6b)
-   #20 0x000055fc41cc083c cc1_main(llvm::ArrayRef<char char (/opt/cross/cla=
-ng-09325d3606/bin/clang-15+0x10c383c)
-   #21 0x000055fc41cbd50b ExecuteCC1Tool(llvm::SmallVectorImpl<char driver.=
-cpp:0:0
-   #22 0x000055fc44867d95 void llvm::function_ref<void ()>::callback_fn<cla=
-ng::driver::CC1Command::Execute(llvm::ArrayRef<llvm::Optional<llvm::StringR=
-ef> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::alloca=
-tor<char> const::'lambda'()>(long) Job.cpp:0:0
-   #23 0x000055fc43feddd3 llvm::CrashRecoveryContext::RunSafely(llvm::funct=
-ion_ref<void ()>) (/opt/cross/clang-09325d3606/bin/clang-15+0x33f0dd3)
-   #24 0x000055fc4486868e clang::driver::CC1Command::Execute(llvm::ArrayRef=
-<llvm::Optional<llvm::StringRef> >, std::__cxx11::basic_string<char, std::c=
-har_traits<char>, std::allocator<char> const (.part.216) Job.cpp:0:0
-   #25 0x000055fc4483aa17 clang::driver::Compilation::ExecuteCommand(clang:=
-:driver::Command const&, clang::driver::Command const (/opt/cross/clang-093=
-25d3606/bin/clang-15+0x3c3da17)
-   #26 0x000055fc4483b3f7 clang::driver::Compilation::ExecuteJobs(clang::dr=
-iver::JobList const&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
-ommand >&) const (/opt/cross/clang-09325d3606/bin/clang-15+0x3c3e3f7)
-   #27 0x000055fc448448ea clang::driver::Driver::ExecuteCompilation(clang::=
-driver::Compilation&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
-ommand >&) (/opt/cross/clang-09325d3606/bin/clang-15+0x3c478ea)
-   #28 0x000055fc41c0994f main (/opt/cross/clang-09325d3606/bin/clang-15+0x=
-100c94f)
-   #29 0x00007f969d4be7fd __libc_start_main (/lib/x86_64-linux-gnu/libc.so.=
-6+0x237fd)
-   #30 0x000055fc41cbd02a _start (/opt/cross/clang-09325d3606/bin/clang-15+=
-0x10c002a)
-   clang-15: error: clang frontend command failed with exit code 70 (use -v=
- to see invocation)
-   clang version 15.0.0 (git://gitmirror/llvm_project 09325d36061e42b495d1f=
-4c7e933e260eac260ed)
-   Target: mips-unknown-linux
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-09325d3606/bin
-   clang-15: note: diagnostic msg:
-   Makefile arch block certs crypto drivers fs include init ipc kernel lib =
-mm nr_bisected scripts security sound source usr virt
+--------------JAaQiYXsw1Wg2huPZuTUbFwL--
 
+--------------bZs9O7gVydbPyh0mFowmyKkQ
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-vim +/i +8498 fs/io_uring.c
+-----BEGIN PGP SIGNATURE-----
 
-9123c8ffce1610 Pavel Begunkov   2021-06-14  8495 =20
-fff4db76be297b Pavel Begunkov   2021-04-25  8496  static void __io_sqe_file=
-s_unregister(struct io_ring_ctx *ctx)
-1ad555c6ae6e28 Bijan Mottahedeh 2021-01-15  8497  {
-1f59bc0f18cf46 Pavel Begunkov   2022-04-06 @8498  	int i;
-1f59bc0f18cf46 Pavel Begunkov   2022-04-06  8499 =20
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJvs/EFAwAAAAAACgkQlh/E3EQov+Bv
+yxAAyojQIwyTt0AkQrH8ujHQ2z3VZLLTBfvwuS0Xf7dxJnvpnddrmMLeQjx/dJgIsu5Kpoq+cC89
+JF4cEgYrs1G9WTVDlxCJ6aMAA8EV3lRH6ECyFZrbc8MNiebvArPucqStj6VQiaLNYDS/TMGBTBdO
+/rxHsubsTAALLJkWsuEoSJMATSrWyqdxzVwj0DUmMZCc2p3zF7+PakvAE8OHpzNOQYg++vORApLq
+4qHowqHrVSPpbACr+XhYpOMuzo4dWJDx98HuVrzXDNOBtcll5tTGTOuJv2tJw+aotRhGuV71ALNd
+yKPP2+GV+kCwNOVcr8OEnfCQa26DsIzooE2SlHwcnIRksqxoKiheTT9YCL+LA7cY0K+h2ybmjqaS
+awZ5pzqRq9egCdFc1KGCctvRxm+BVVnXHGJ4nsGtQp8Z34tClsjquHGR1BFfNw1NEG/jOh7iFY/j
+kvo5qlUcKW28ooufV/c7fZ/u0M++S9nJSgAO3XnXwG2DhZ0FtKz95EsfKAQZLY/fFv/m05mdr/KZ
+OIZ/OcBWfPLwNcR9MVHSArO1VYFUqQSsi8IJUhYZKKhpYmAXrF/h0YeUOLlLRvfB4OtuuOyZQ+zt
+Y2UtHrTmNm7pHfj2IOCPJDvnLfbMUsQQvYxpBWIF5lslFkzCrnECTSy/8Ue36oRlan7yclndRQvm
+h0A=
+=gWxx
+-----END PGP SIGNATURE-----
 
-:::::: The code at line 8498 was first introduced by commit
-:::::: 1f59bc0f18cf46abe27ea18cfa4cb7f1b4166896 io_uring: don't scm-account=
- for non af_unix sockets
-
-:::::: TO: Pavel Begunkov <asml.silence@gmail.com>
-:::::: CC: Jens Axboe <axboe@kernel.dk>
-
---=20
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--------------bZs9O7gVydbPyh0mFowmyKkQ--

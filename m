@@ -2,167 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AAA15171AB
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 16:34:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DE5F5171AC
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 16:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385574AbiEBOiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 10:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43888 "EHLO
+        id S1385768AbiEBOjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 10:39:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378194AbiEBOiH (ORCPT
+        with ESMTP id S1385591AbiEBOir (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 10:38:07 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B3C5F81;
-        Mon,  2 May 2022 07:34:39 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 242EVH50020019;
-        Mon, 2 May 2022 14:34:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=WdExTye17olTIg6QT8mBBfdfn+P/Stz7q1ekNoAttpE=;
- b=dxJ6fZaDeSA4ihga6rpilVdEGfjabtwwsf0ZJVuk3WBq2lc6XY5E8vJ90pFhHIwnS7ic
- s9M+aPW0IRYqIe7FV1Bf/NuQ3Ixo9S85C9EqHjVF9GDZQHywaoMvjvp2K2uEOktqV7RW
- n36HAaX1wbRZrSrd9ZPPFtVmk09yEOfP3RlqCuaqCzAPpXgnPkfjezg7XwWeU3Cif8dq
- cLEfIwW6QLsy4sKI4+v0l+JMQgbi5oYpI/hr6OGAL7UVnFMg9MsftDd5bzXxC3eHu0fQ
- xKPlBebfDEEmMesP30yAmbZz/kk5tQbbaJXiSdNN2mHxcpjpEhuDFb1CKrET1LGX8KFO 2g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fth4tg18m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 May 2022 14:34:16 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 242EYG7c031072;
-        Mon, 2 May 2022 14:34:16 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fth4tg186-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 May 2022 14:34:16 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 242EWbT2032085;
-        Mon, 2 May 2022 14:34:14 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03fra.de.ibm.com with ESMTP id 3fscdk1nuk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 May 2022 14:34:13 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 242EKu3q23462322
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 2 May 2022 14:20:56 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 82282AE055;
-        Mon,  2 May 2022 14:34:11 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1A6E6AE045;
-        Mon,  2 May 2022 14:34:11 +0000 (GMT)
-Received: from sig-9-145-11-74.uk.ibm.com (unknown [9.145.11.74])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  2 May 2022 14:34:11 +0000 (GMT)
-Message-ID: <438c88e740f674ad334cdc88004fcec5b9ec57f4.camel@linux.ibm.com>
-Subject: Re: [RFC v2 04/39] char: impi, tpm: depend on HAS_IOPORT
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        Corey Minyard <minyard@acm.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "moderated list:IPMI SUBSYSTEM" 
-        <openipmi-developer@lists.sourceforge.net>,
-        "open list:TPM DEVICE DRIVER" <linux-integrity@vger.kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Date:   Mon, 02 May 2022 16:34:10 +0200
-In-Reply-To: <ff7605de-fe12-3bbf-cce9-aec18be9d54e@pengutronix.de>
-References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
-         <20220429135108.2781579-7-schnelle@linux.ibm.com>
-         <07c39877d9e940a96be41e21e22fe45dbb73d949.camel@linux.ibm.com>
-         <ff7605de-fe12-3bbf-cce9-aec18be9d54e@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Fm4gl_CCV9IRrCnZDVRyK0djotDq9YcN
-X-Proofpoint-ORIG-GUID: eIPjDVk3Gk_Wv_RNZGcDg89tcb5gRnjm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-02_04,2022-05-02_03,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- impostorscore=0 phishscore=0 mlxlogscore=920 spamscore=0 bulkscore=0
- clxscore=1011 suspectscore=0 lowpriorityscore=0 priorityscore=1501
- mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205020114
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 2 May 2022 10:38:47 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FE626E
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 07:35:17 -0700 (PDT)
+Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 34B321EC0455;
+        Mon,  2 May 2022 16:35:12 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1651502112;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=xkMo8IXjwSpSn3yFdYrBLF5OKTpukIzfN2ZfXfe5+JU=;
+        b=g8WtUhdLz2SwUpnTdEDnmjnBUusVsLPo7yw8+u9/0uiq9mWgDDR8mXLZXugOnq9DoJxLmf
+        ezQRZbpCUAmqqk75bJOKYGvzmq02HnYfd/pASAPgRdp0AOSEXHDBW5ZkQwVE+qPP3uFiPB
+        JXxd1a1acDHm+4KatO1jsnNabZ4DXYE=
+Date:   Mon, 2 May 2022 16:35:10 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Filipe Manana <fdmanana@suse.com>
+Subject: Re: [patch 3/3] x86/fpu: Make FPU protection more robust
+Message-ID: <Ym/sHqKqmLOJubgE@zn.tnic>
+References: <20220501192740.203963477@linutronix.de>
+ <20220501193102.704267030@linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220501193102.704267030@linutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-29 at 16:33 +0200, Ahmad Fatoum wrote:
-> Hello Niklas,
-> 
-> On 29.04.22 16:23, Niklas Schnelle wrote:
-> > > Hello Niklas,
-> > > 
-> > > On 29.04.22 15:50, Niklas Schnelle wrote:
-> > > > In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> > > > not being declared. We thus need to add this dependency and ifdef
-> > > > sections of code using inb()/outb() as alternative access methods.
-> > > > 
-> > > > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> > > > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> > > 
-> > > [snip]
-> > > 
-> > > > diff --git a/drivers/char/tpm/tpm_infineon.c b/drivers/char/tpm/tpm_infineon.c
-> > > > index 9c924a1440a9..2d2ae37153ba 100644
-> > > > --- a/drivers/char/tpm/tpm_infineon.c
-> > > > +++ b/drivers/char/tpm/tpm_infineon.c
-> > > > @@ -51,34 +51,40 @@ static struct tpm_inf_dev tpm_dev;
-> > > >  
-> > > >  static inline void tpm_data_out(unsigned char data, unsigned char offset)
-> > > >  {
-> > > > +#ifdef CONFIG_HAS_IOPORT
-> > > >       if (tpm_dev.iotype == TPM_INF_IO_PORT)
-> > > >               outb(data, tpm_dev.data_regs + offset);
-> > > >       else
-> > > > +#endif
-> > > 
-> > > This looks ugly. Can't you declare inb/outb anyway and skip the definition,
-> > > so you can use IS_ENABLED() here instead?
-> > > 
-> > > You can mark the declarations with __compiletime_error("some message"), so
-> > > if an IS_ENABLED() reference is not removed at compile time, you get some
-> > > readable error message instead of a link error.
-> > > 
-> > > Cheers,
-> > > Ahmad
-> > 
-> > I didn't know about __compiletime_error() that certainly sounds
-> > interesting even when using a normal #ifdef.
-> > 
-> > That said either with the function not being declared or this
-> > __compiletime_error() mechanism I would think that using IS_ENABLED()
-> > relies on compiler optimizations not to compile in the missing/error
-> > function call, right? I'm not sure if that is something we should do.
-> 
-> Yes, it assumes your compiler is able to discard the body of an if (0),
-> which we already assume, otherwise it wouldn't make sense for any existing
-> code to use __compiletime_error().
-> 
-> To me this sounds much cleaner than #ifdefs in the midst of functions,
-> which are a detriment to maintainability.
-> 
-> Cheers,
-> Ahmad
-> 
+On Sun, May 01, 2022 at 09:31:47PM +0200, Thomas Gleixner wrote:
+> --- a/arch/x86/kernel/fpu/core.c
+> +++ b/arch/x86/kernel/fpu/core.c
+> @@ -42,7 +42,7 @@ struct fpu_state_config fpu_user_cfg __r
+>  struct fpstate init_fpstate __ro_after_init;
+>  
+>  /* Track in-kernel FPU usage */
+> -static DEFINE_PER_CPU(bool, in_kernel_fpu);
+> +static DEFINE_PER_CPU(bool, fpu_in_use);
+>  
+>  /*
+>   * Track which context is using the FPU on the CPU:
+> @@ -50,6 +50,50 @@ static DEFINE_PER_CPU(bool, in_kernel_fp
+>  DEFINE_PER_CPU(struct fpu *, fpu_fpregs_owner_ctx);
+>  
+>  /**
+> + * fpregs_lock - Lock FPU state for maintenance operations
 
-Ok, makes sense. I'll look into using __compiletime_error() and
-IS_ENABLED().
+"maintenance"?
 
+> + *
+> + * This protects against preemption, soft interrupts and in-kernel FPU
+> + * usage on both !RT and RT enabled kernels.
+> + *
+> + * !RT kernels use local_bh_disable() to prevent soft interrupt processing
+> + * and preemption.
+> + *
+> + * On RT kernels local_bh_disable() is not sufficient because it only
+> + * serializes soft interrupt related sections via a local lock, but stays
+> + * preemptible. Disabling preemption is the right choice here as bottom
+> + * half processing is always in thread context on RT kernels so it
+> + * implicitly prevents bottom half processing as well.
+> + */
+> +void fpregs_lock(void)
+> +{
+> +	if (!IS_ENABLED(CONFIG_PREEMPT_RT))
+> +		local_bh_disable();
+> +	else
+> +		preempt_disable();
 
+So I'm wondering: can we get rid of this distinction and simply do
+preempt_disable()?
+
+Or can FPU be used in softirq processing too so we want to block that
+there?
+
+But even if, fpu_in_use will already state that fact...
+
+...
+
+> @@ -410,10 +433,9 @@ void kernel_fpu_begin_mask(unsigned int
+>  {
+>  	preempt_disable();
+>  
+> -	WARN_ON_FPU(!kernel_fpu_usable());
+> -	WARN_ON_FPU(this_cpu_read(in_kernel_fpu));
+> +	WARN_ON_ONCE(!kernel_fpu_usable());
+>  
+> -	this_cpu_write(in_kernel_fpu, true);
+> +	this_cpu_write(fpu_in_use, true);
+
+This starts to look awfully similar to fpregs_lock()...
+
+>  
+>  	if (!(current->flags & PF_KTHREAD) &&
+>  	    !test_thread_flag(TIF_NEED_FPU_LOAD)) {
+> @@ -433,9 +455,9 @@ EXPORT_SYMBOL_GPL(kernel_fpu_begin_mask)
+>  
+>  void kernel_fpu_end(void)
+>  {
+> -	WARN_ON_FPU(!this_cpu_read(in_kernel_fpu));
+> +	WARN_ON_ONCE(!this_cpu_read(fpu_in_use));
+>  
+> -	this_cpu_write(in_kernel_fpu, false);
+> +	this_cpu_write(fpu_in_use, false);
+>  	preempt_enable();
+
+... and this to fpregs_unlock().
+
+Can we use those here too instead of open-coding them mostly?
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

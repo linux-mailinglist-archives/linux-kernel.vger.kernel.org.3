@@ -2,62 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71EF051737D
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26C7E51738B
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:02:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386077AbiEBQEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 12:04:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42248 "EHLO
+        id S1386017AbiEBQE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 12:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386043AbiEBQEP (ORCPT
+        with ESMTP id S1386076AbiEBQEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 12:04:15 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2120765C9;
-        Mon,  2 May 2022 09:00:45 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id be20so17106487edb.12;
-        Mon, 02 May 2022 09:00:45 -0700 (PDT)
+        Mon, 2 May 2022 12:04:20 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F0CBC2B;
+        Mon,  2 May 2022 09:00:51 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id d6so17121294ede.8;
+        Mon, 02 May 2022 09:00:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wjQ73BAIILYC1+0nV8Fv2/VrUlnVSQ20HYOpjrtsozU=;
-        b=izxMgHnVTjQtxi0cBdAf4GgktfRRrjeZe8qcLyyLH3iVfCcwdIo3a6yBCjzsi+r1bH
-         hBJdynCUXrXhFPEvpxR2d5ii9mJwY5p9brcE0im2wr1CoHzA43MZhQ0mOEMLjIegHj5d
-         mEl30VS4kaiCG/OB7K0WuAPCVRGRBq6cF30vWIycS65QaU9ygXDnvgNKppvj7mTryhXD
-         tkg0AkigY3BSPgt/ELPyzBiQLZgqSkO+h8YyPixbbwuObJK7GFPTTUSesfrh1nvCaCAd
-         soM7KQxotfSQYkn16Xajf1t1kRsdfuzUfOfLNYC0qPyi60wgFtNlnML/uZWqRw6Nit7d
-         OGeQ==
+        bh=aLDcUxz3GuWsYBElhW2059fIPwppem/EwWmuSm4Ac4s=;
+        b=p2mMHYdm4s0Fe8eLp8ERpUnJyX4PhGrwmqIwslSk6X+INW0IxkvEzoXFPk5VwYyO1a
+         xgug13nZSLsUz2buOHh61+6dEuIB0yNvD1GJRLUTd4rXVHTtZ2bQm7uI52hbmW9lz92I
+         G3g70LDEbT3ChfGiaqyV0ueg72L/6JiMzGNWSua1CDj2q46MAD5Vo3Qj0FjZacUxjx+L
+         irnzdPDPT3QjIzAMCxMVVPmNAZqGsF8AJh9T3H21jyPG8BZSlEorhoD078aLr8QEPsxY
+         ehrVFar8Jdye0i/es4zJWKuaEZK/vAsj/r9ha9j8p+B4ewbP19nc3pcIs2Fu0m3lZW9I
+         tlKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wjQ73BAIILYC1+0nV8Fv2/VrUlnVSQ20HYOpjrtsozU=;
-        b=vkBrvQfwQ4CTedxHJDnV4k6r2wzAeXZXLOGcxa5473AqOj+VCOE7DylJk8XzyVZFTA
-         yhNrZu3n5AXNE4oiTozTIWKVYosRqLzzgIeY9fBVY6ciXVzEVrbINNvFkRFuTN757AMF
-         VQnh8aDwgC6ykV8nPBnDg8XH/8PlrsCo4HOwkc+6I7tHtkOJDOSjo1x7k7YY3m8bn6tp
-         1PyxovywPUTcysms9WK+oJ9gifuVV00+ERzIA7zOAk5tcoVn/tXcTlqVk35hOLe5Xg0g
-         f3PoNamO/zZdhkv06aRqNfu6oxqTxo7lViIuJ2B5AhabP+Qr1yZcCXx9t6729kPVVRAP
-         7rDQ==
-X-Gm-Message-State: AOAM532FQLa+YqV+quTqEtN8gU3sbotZ94/5K1ms+K7yMsYw9+QXNRXW
-        KnfyqJoJTXuC4ZagNWDc2OYXH5U8+doPbg==
-X-Google-Smtp-Source: ABdhPJxhzpAFlYxaUPbP6TMOumSjwFz73fdn5NFv1d4yiY6VDqRjLxfDkTlnA+d+pM3kpEgA9XNnSg==
-X-Received: by 2002:a05:6402:1c1e:b0:416:5b93:eacf with SMTP id ck30-20020a0564021c1e00b004165b93eacfmr14093940edb.302.1651507243611;
-        Mon, 02 May 2022 09:00:43 -0700 (PDT)
+        bh=aLDcUxz3GuWsYBElhW2059fIPwppem/EwWmuSm4Ac4s=;
+        b=CVFopP47hjifR1DTvxq6Et+N0UUQPiC4lVRWArAB6uYFE5ioriDSnI5WqSLuo6Ub4G
+         IGc+ENkNDzXqVgKQfpJfxjw2qZ53TYLZiyocarVTmq0UGbIUtxz6CcLPl9o/FY8sxaKk
+         cM2qVxAp9VszFT3UpTukwf1ARMVQfiWh6st3dT3hNKYEdMM8IRweOoEFdZRUSwKXkQAn
+         essgGfp6WPJgESYzUbgzZ5ajCp9gJN5HrTUeS9UJP6IX4574gidbbrIjvIjiN+Xxwqp8
+         AoS9ysJRVEhou112JuzbCKJ4INnDT/m9ExsaT+d1u/Dpy6fYD3J22oVMKK57hsxrEnF0
+         H8jg==
+X-Gm-Message-State: AOAM531W3o8lzkt1YtnB3eAlxzJy0lhx/vQvP3y01z6CS0JuvSMVCgyp
+        3GVsdF/u4HfHEkKIoyQ1l/e9p1SZlfZsUQ==
+X-Google-Smtp-Source: ABdhPJxEIZ3VG0JCxGGF6OC6lyuVM4utpAI+bDEKxf+HczJGz8fO+DWFU6VtPAlp6gvFM43q022t0A==
+X-Received: by 2002:a05:6402:5107:b0:427:ded9:9234 with SMTP id m7-20020a056402510700b00427ded99234mr410981edd.275.1651507249567;
+        Mon, 02 May 2022 09:00:49 -0700 (PDT)
 Received: from debianHome.localdomain (dynamic-077-001-135-067.77.1.pool.telefonica.de. [77.1.135.67])
-        by smtp.gmail.com with ESMTPSA id h18-20020a1709070b1200b006f3ef214dd3sm3689996ejl.57.2022.05.02.09.00.42
+        by smtp.gmail.com with ESMTPSA id h18-20020a1709070b1200b006f3ef214dd3sm3689996ejl.57.2022.05.02.09.00.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 09:00:43 -0700 (PDT)
+        Mon, 02 May 2022 09:00:49 -0700 (PDT)
 From:   =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
 To:     selinux@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>, Serge Hallyn <serge@hallyn.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Alistair Delva <adelva@google.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Stefan Haberland <sth@linux.ibm.com>,
+        Jan Hoeppner <hoeppner@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Serge Hallyn <serge@hallyn.com>, Arnd Bergmann <arnd@arndb.de>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Ondrej Zary <linux@zary.sk>,
+        David Yang <davidcomponentone@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Yang Guang <yang.guang5@zte.com.cn>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Du Cheng <ducheng2@gmail.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-s390@vger.kernel.org,
         linux-security-module@vger.kernel.org
-Subject: [PATCH v2 3/8] block: use new capable_or functionality
-Date:   Mon,  2 May 2022 18:00:24 +0200
-Message-Id: <20220502160030.131168-2-cgzones@googlemail.com>
+Subject: [PATCH v2 4/8] drivers: use new capable_or functionality
+Date:   Mon,  2 May 2022 18:00:25 +0200
+Message-Id: <20220502160030.131168-3-cgzones@googlemail.com>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220502160030.131168-1-cgzones@googlemail.com>
 References: <20220217145003.78982-2-cgzones@googlemail.com>
@@ -80,33 +103,110 @@ is required to have any of two capabilities.
 
 Reorder CAP_SYS_ADMIN last.
 
-Fixes: 94c4b4fd25e6 ("block: Check ADMIN before NICE for IOPRIO_CLASS_RT")
-
 Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
 ---
- block/ioprio.c | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ drivers/media/common/saa7146/saa7146_video.c     | 2 +-
+ drivers/media/pci/bt8xx/bttv-driver.c            | 3 +--
+ drivers/media/pci/saa7134/saa7134-video.c        | 3 +--
+ drivers/media/platform/nxp/fsl-viu.c             | 2 +-
+ drivers/media/test-drivers/vivid/vivid-vid-cap.c | 2 +-
+ drivers/net/caif/caif_serial.c                   | 2 +-
+ drivers/s390/block/dasd_eckd.c                   | 2 +-
+ 7 files changed, 7 insertions(+), 9 deletions(-)
 
-diff --git a/block/ioprio.c b/block/ioprio.c
-index 2fe068fcaad5..52d5da286323 100644
---- a/block/ioprio.c
-+++ b/block/ioprio.c
-@@ -37,14 +37,7 @@ int ioprio_check_cap(int ioprio)
+diff --git a/drivers/media/common/saa7146/saa7146_video.c b/drivers/media/common/saa7146/saa7146_video.c
+index 66215d9106a4..5eabc2e77cc2 100644
+--- a/drivers/media/common/saa7146/saa7146_video.c
++++ b/drivers/media/common/saa7146/saa7146_video.c
+@@ -470,7 +470,7 @@ static int vidioc_s_fbuf(struct file *file, void *fh, const struct v4l2_framebuf
  
- 	switch (class) {
- 		case IOPRIO_CLASS_RT:
--			/*
--			 * Originally this only checked for CAP_SYS_ADMIN,
--			 * which was implicitly allowed for pid 0 by security
--			 * modules such as SELinux. Make sure we check
--			 * CAP_SYS_ADMIN first to avoid a denial/avc for
--			 * possibly missing CAP_SYS_NICE permission.
--			 */
--			if (!capable(CAP_SYS_ADMIN) && !capable(CAP_SYS_NICE))
-+			if (!capable_or(CAP_SYS_NICE, CAP_SYS_ADMIN))
- 				return -EPERM;
- 			fallthrough;
- 			/* rt has prio field too */
+ 	DEB_EE("VIDIOC_S_FBUF\n");
+ 
+-	if (!capable(CAP_SYS_ADMIN) && !capable(CAP_SYS_RAWIO))
++	if (!capable_or(CAP_SYS_RAWIO, CAP_SYS_ADMIN))
+ 		return -EPERM;
+ 
+ 	/* check args */
+diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
+index 5ca3d0cc653a..4143f380d44d 100644
+--- a/drivers/media/pci/bt8xx/bttv-driver.c
++++ b/drivers/media/pci/bt8xx/bttv-driver.c
+@@ -2569,8 +2569,7 @@ static int bttv_s_fbuf(struct file *file, void *f,
+ 	const struct bttv_format *fmt;
+ 	int retval;
+ 
+-	if (!capable(CAP_SYS_ADMIN) &&
+-		!capable(CAP_SYS_RAWIO))
++	if (!capable_or(CAP_SYS_RAWIO, CAP_SYS_ADMIN))
+ 		return -EPERM;
+ 
+ 	/* check args */
+diff --git a/drivers/media/pci/saa7134/saa7134-video.c b/drivers/media/pci/saa7134/saa7134-video.c
+index 48543ad3d595..684208ebfdbd 100644
+--- a/drivers/media/pci/saa7134/saa7134-video.c
++++ b/drivers/media/pci/saa7134/saa7134-video.c
+@@ -1798,8 +1798,7 @@ static int saa7134_s_fbuf(struct file *file, void *f,
+ 	struct saa7134_dev *dev = video_drvdata(file);
+ 	struct saa7134_format *fmt;
+ 
+-	if (!capable(CAP_SYS_ADMIN) &&
+-	   !capable(CAP_SYS_RAWIO))
++	if (!capable_or(CAP_SYS_RAWIO, CAP_SYS_ADMIN))
+ 		return -EPERM;
+ 
+ 	/* check args */
+diff --git a/drivers/media/platform/nxp/fsl-viu.c b/drivers/media/platform/nxp/fsl-viu.c
+index afc96f6db2a1..c5ed4c4a1587 100644
+--- a/drivers/media/platform/nxp/fsl-viu.c
++++ b/drivers/media/platform/nxp/fsl-viu.c
+@@ -803,7 +803,7 @@ static int vidioc_s_fbuf(struct file *file, void *priv, const struct v4l2_frameb
+ 	const struct v4l2_framebuffer *fb = arg;
+ 	struct viu_fmt *fmt;
+ 
+-	if (!capable(CAP_SYS_ADMIN) && !capable(CAP_SYS_RAWIO))
++	if (!capable_or(CAP_SYS_RAWIO, CAP_SYS_ADMIN))
+ 		return -EPERM;
+ 
+ 	/* check args */
+diff --git a/drivers/media/test-drivers/vivid/vivid-vid-cap.c b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
+index b9caa4b26209..a0cfcf6c22c4 100644
+--- a/drivers/media/test-drivers/vivid/vivid-vid-cap.c
++++ b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
+@@ -1253,7 +1253,7 @@ int vivid_vid_cap_s_fbuf(struct file *file, void *fh,
+ 	if (dev->multiplanar)
+ 		return -ENOTTY;
+ 
+-	if (!capable(CAP_SYS_ADMIN) && !capable(CAP_SYS_RAWIO))
++	if (!capable_or(CAP_SYS_RAWIO, CAP_SYS_ADMIN))
+ 		return -EPERM;
+ 
+ 	if (dev->overlay_cap_owner)
+diff --git a/drivers/net/caif/caif_serial.c b/drivers/net/caif/caif_serial.c
+index 688075859ae4..f17b618d8858 100644
+--- a/drivers/net/caif/caif_serial.c
++++ b/drivers/net/caif/caif_serial.c
+@@ -326,7 +326,7 @@ static int ldisc_open(struct tty_struct *tty)
+ 	/* No write no play */
+ 	if (tty->ops->write == NULL)
+ 		return -EOPNOTSUPP;
+-	if (!capable(CAP_SYS_ADMIN) && !capable(CAP_SYS_TTY_CONFIG))
++	if (!capable_or(CAP_SYS_TTY_CONFIG, CAP_SYS_ADMIN))
+ 		return -EPERM;
+ 
+ 	/* release devices to avoid name collision */
+diff --git a/drivers/s390/block/dasd_eckd.c b/drivers/s390/block/dasd_eckd.c
+index 8410a25a65c1..9b5d22dd3e7b 100644
+--- a/drivers/s390/block/dasd_eckd.c
++++ b/drivers/s390/block/dasd_eckd.c
+@@ -5319,7 +5319,7 @@ static int dasd_symm_io(struct dasd_device *device, void __user *argp)
+ 	char psf0, psf1;
+ 	int rc;
+ 
+-	if (!capable(CAP_SYS_ADMIN) && !capable(CAP_SYS_RAWIO))
++	if (!capable_or(CAP_SYS_RAWIO, CAP_SYS_ADMIN))
+ 		return -EACCES;
+ 	psf0 = psf1 = 0;
+ 
 -- 
 2.36.0
 

@@ -2,136 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE93516EA5
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 13:14:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BABC516EAF
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 13:16:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384682AbiEBLRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 07:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56980 "EHLO
+        id S1384707AbiEBLS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 07:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379775AbiEBLRH (ORCPT
+        with ESMTP id S1381044AbiEBLSv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 07:17:07 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA04DE93;
-        Mon,  2 May 2022 04:13:32 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id t6so19179217wra.4;
-        Mon, 02 May 2022 04:13:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=SC8skA+OBCO4ttnMU6A69mO02uNTXym35DLsl/48diU=;
-        b=JTQTr1GnJeZgk06pN6GhaUb2czWsZHnh/AlHrbSZz19/kw5xmFBnm05PNJiBpsipKw
-         WiPO8kbX3nazhOCZLjBYTRoSdC5iXl/YjAIxGxjexHt5VTWk21U5T7oQ+auduHMgFcJd
-         yXT4Yt1+ssKjfnOtJuDrE4tOA0x1zSpqQAH4DhhN5SJurEMG7vQ9JrQmHEMbJlNeG1xy
-         1GD/aklFtrnsasmbWmYey4hFJg446lYncvxLLK5pDP8rSMz8vZuvisuwWR98b1xsc4Qk
-         rxOzCV2A5UVCHoL5E/UwbFSrgbOIo+7JLx+75cjBsGJ4jmQWVrsbDo3WjCUCxN++sId9
-         wx4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=SC8skA+OBCO4ttnMU6A69mO02uNTXym35DLsl/48diU=;
-        b=FjheUtmZGwH3HXmLsKGSmjltdcO6sXb2wGSLeapOHwzqugIIrVzMutrF2LvdnDCoUq
-         qZ6um+wovnaXBGaEPadGDdmC08InREzalwagq5WFqPriU8XZHb7U/FNbuUtoRufYsLJT
-         BegYd3NZOTFolvs6ihwjKBe6rb5bWlHwSkLdw55kga1oP7ORuUBHMHX4Nd3W2SCBW8IS
-         lTRviPLBQW6Jva/M4rsHovYeBhEzlHtuQmE72Z/FnS/zL8zkyBUMbya62u0T2oZ9O3Vr
-         Ei7y6An3Re/PuWaq5tW9rcaBANm3imUrYrp8dyU/QnQhUd8HsCACI83GjUGh5PLxyM5o
-         EW8A==
-X-Gm-Message-State: AOAM530B9JVv6OgCAcuoTp1zP3TsdcBp8BJUdFcYXfRzVm0pF9/6UVaq
-        EgOZtTODfPe4hr1u1AaBJrKfATwQI34=
-X-Google-Smtp-Source: ABdhPJwAZjweYGcKXuo+OPnc4VEy9KNTspk7hnk96q2DV2S8nKCINtxuBB5vrZYuZtadYwOzOTolVA==
-X-Received: by 2002:adf:e10a:0:b0:20a:86a3:d06f with SMTP id t10-20020adfe10a000000b0020a86a3d06fmr9415372wrz.249.1651490011107;
-        Mon, 02 May 2022 04:13:31 -0700 (PDT)
-Received: from localhost.localdomain ([213.215.174.110])
-        by smtp.gmail.com with ESMTPSA id c11-20020adfa70b000000b0020c5253d90esm9082836wrd.90.2022.05.02.04.13.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 04:13:30 -0700 (PDT)
-From:   Andrea Zanotti <andreazanottifo@gmail.com>
-To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Andrea Zanotti <andreazanottifo@gmail.com>
-Subject: [PATCH] spi: omap2-mcspi: add support for interword delay
-Date:   Mon,  2 May 2022 13:13:00 +0200
-Message-Id: <20220502111300.24754-1-andreazanottifo@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 2 May 2022 07:18:51 -0400
+Received: from relay5.mymailcheap.com (relay5.mymailcheap.com [159.100.248.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA528640A
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 04:15:19 -0700 (PDT)
+Received: from relay4.mymailcheap.com (relay4.mymailcheap.com [137.74.80.154])
+        by relay5.mymailcheap.com (Postfix) with ESMTPS id A8E5D267CE;
+        Mon,  2 May 2022 11:15:17 +0000 (UTC)
+Received: from filter1.mymailcheap.com (filter1.mymailcheap.com [149.56.130.247])
+        by relay4.mymailcheap.com (Postfix) with ESMTPS id A953F20017;
+        Mon,  2 May 2022 11:15:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+        by filter1.mymailcheap.com (Postfix) with ESMTP id 032542A2AE;
+        Mon,  2 May 2022 11:15:14 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at filter1.mymailcheap.com
+Received: from filter1.mymailcheap.com ([127.0.0.1])
+        by localhost (filter1.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 7omtSMs1A6sZ; Mon,  2 May 2022 11:15:13 +0000 (UTC)
+Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by filter1.mymailcheap.com (Postfix) with ESMTPS;
+        Mon,  2 May 2022 11:15:13 +0000 (UTC)
+Received: from [127.0.0.1] (unknown [64.225.114.122])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 22815405D8;
+        Mon,  2 May 2022 11:15:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
+        t=1651490112; bh=rUT7KoKRnXsktcX5dLdRErqPLZQBY5ISASFS45PYPuA=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=lVYp40sOuy3Tl/aX6MU6s+mzMFA9W2Tmea013ogW60hxMjcRcxsOgbiQEVZemFUtj
+         iVulfzPiiJypRDVvvFEABrViGJodFpr2srOgzhCzKQ7+OWZzpCXY3t4ddxz2uSwv5p
+         88PHW6rI7Osufk7244uzAH31BVbtHTdG8DnEKDoY=
+Date:   Mon, 02 May 2022 19:15:01 +0800
+From:   Icenowy Zheng <icenowy@aosc.io>
+To:     Maxime Ripard <maxime@cerno.tech>, Ruslan Zalata <rz@fabmicro.ru>
+CC:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2=5D_hwmon=3A_=28sun4i-lradc=29_Add_dri?= =?US-ASCII?Q?ver_for_LRADC_found_on_Allwinner_A13/A20_SoC?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20220502110010.q7vvdkdpaiz5acjl@houat>
+References: <20220428210906.29527-1-rz@fabmicro.ru> <20220502110010.q7vvdkdpaiz5acjl@houat>
+Message-ID: <7433B295-D896-4BF8-87DF-87EB89D7A550@aosc.io>
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The module omap2-mcspi does not support the interword delay
-parameter present in the spi transfer. On one side, if the module
-is instructed to use the dma, this parameter is correctly ignored.
-However, without the usage of the dma, that parameter should be
-used.
 
-The patch introduce the handling of such delay in the omap2-mcspi
-module, using standard spi_delay struct. The patch has been tested
-using as benchmark a DM3730.
 
-The delay function used (spi_delay_exec) is already present in the
-kernel and it checks on its own the validity of the input, as such,
-no additional checks are present.
+=E4=BA=8E 2022=E5=B9=B45=E6=9C=882=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=8D=887:=
+00:10, Maxime Ripard <maxime@cerno=2Etech> =E5=86=99=E5=88=B0:
+>Hi,
+>
+>On Thu, Apr 28, 2022 at 09:09:03PM +0000, Ruslan Zalata wrote:
+>> Some Allwinner SoCs like A13, A20 or T2 are equipped with two-channel
+>> low rate (6 bit) ADC that is often used for extra keys=2E There's a dri=
+ver
+>> for that already implementing standard input device, but it has these
+>> limitations: 1) it cannot be used for general ADC data equisition, and
+>> 2) it uses only one LRADC channel of two available=2E
+>>=20
+>> This driver provides basic hwmon interface to both channels of LRADC on
+>> such Allwinner SoCs=2E
+>>=20
+>> Signed-off-by: Ruslan Zalata <rz@fabmicro=2Eru>
+>> ---
+>>  MAINTAINERS                       |   6 +
+>>  drivers/hwmon/Kconfig             |  13 ++
+>>  drivers/hwmon/Makefile            |   1 +
+>>  drivers/hwmon/sun4i-lradc-hwmon=2Ec | 280 ++++++++++++++++++++++++++++=
+++
+>>  4 files changed, 300 insertions(+)
+>>  create mode 100644 drivers/hwmon/sun4i-lradc-hwmon=2Ec
+>>=20
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 5e8c2f61176=2E=2Ed9c71e94133 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -18861,6 +18861,12 @@ S:	Maintained
+>>  F:	Documentation/devicetree/bindings/input/allwinner,sun4i-a10-lradc-k=
+eys=2Eyaml
+>>  F:	drivers/input/keyboard/sun4i-lradc-keys=2Ec
+>> =20
+>> +SUN4I LOW RES ADC HWMON DRIVER
+>> +M:	Ruslan Zalata <rz@fabmicro=2Eru>
+>> +L:	linux-hwmon@vger=2Ekernel=2Eorg
+>> +S:	Maintained
+>> +F:	drivers/hwmon/sun4i-lradc-hwmon=2Ec
+>> +
+>>  SUNDANCE NETWORK DRIVER
+>>  M:	Denis Kirjanov <kda@linux-powerpc=2Eorg>
+>>  L:	netdev@vger=2Ekernel=2Eorg
+>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+>> index 68a8a27ab3b=2E=2E86776488a81 100644
+>> --- a/drivers/hwmon/Kconfig
+>> +++ b/drivers/hwmon/Kconfig
+>> @@ -1691,6 +1691,19 @@ config SENSORS_SIS5595
+>>  	  This driver can also be built as a module=2E If so, the module
+>>  	  will be called sis5595=2E
+>> =20
+>> +config SENSORS_SUN4I_LRADC
+>> +	tristate "Allwinner A13/A20 LRADC hwmon"
+>> +	depends on ARCH_SUNXI && !KEYBOARD_SUN4I_LRADC
+>> +	help
+>> +	  Say y here to support the LRADC found in Allwinner A13/A20 SoCs=2E
+>> +	  Both channels are supported=2E
+>> +
+>> +	  This driver can also be built as module=2E If so, the module
+>> +	  will be called sun4i-lradc-hwmon=2E
+>> +
+>> +	  This option is not compatible with KEYBOARD_SUN4I_LRADC, one
+>> +	  of these must be used at a time=2E
+>
+>How do you plan on enforcing that?
+>
+>I guess a better path forward would be to either register an hwmon
+>device in the original driver, or convert that driver to iio and use
+>iio-hwmon=2E
 
-The range of usage of the udelay function is incremented to 200 us,
-as the change from udelay to usleep_range introduces not
-neglectible delays.
+I think this driver should be use IIO, and then try to probe an IIO input
+if possible=2E
 
-Signed-off-by: Andrea Zanotti <andreazanottifo@gmail.com>
----
- drivers/spi/spi-omap2-mcspi.c | 6 ++++++
- drivers/spi/spi.c             | 2 +-
- 2 files changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi-omap2-mcspi.c b/drivers/spi/spi-omap2-mcspi.c
-index d4c9510af393..a79934be7037 100644
---- a/drivers/spi/spi-omap2-mcspi.c
-+++ b/drivers/spi/spi-omap2-mcspi.c
-@@ -758,6 +758,8 @@ omap2_mcspi_txrx_pio(struct spi_device *spi, struct spi_transfer *xfer)
- 				dev_vdbg(&spi->dev, "read-%d %02x\n",
- 						word_len, *(rx - 1));
- 			}
-+			/* Add word delay between each word */
-+			spi_delay_exec(&xfer->word_delay, xfer);
- 		} while (c);
- 	} else if (word_len <= 16) {
- 		u16		*rx;
-@@ -805,6 +807,8 @@ omap2_mcspi_txrx_pio(struct spi_device *spi, struct spi_transfer *xfer)
- 				dev_vdbg(&spi->dev, "read-%d %04x\n",
- 						word_len, *(rx - 1));
- 			}
-+			/* Add word delay between each word */
-+			spi_delay_exec(&xfer->word_delay, xfer);
- 		} while (c >= 2);
- 	} else if (word_len <= 32) {
- 		u32		*rx;
-@@ -852,6 +856,8 @@ omap2_mcspi_txrx_pio(struct spi_device *spi, struct spi_transfer *xfer)
- 				dev_vdbg(&spi->dev, "read-%d %08x\n",
- 						word_len, *(rx - 1));
- 			}
-+			/* Add word delay between each word */
-+			spi_delay_exec(&xfer->word_delay, xfer);
- 		} while (c >= 4);
- 	}
- 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 419de3d40481..5fa36c469ba0 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1143,7 +1143,7 @@ static void _spi_transfer_delay_ns(u32 ns)
- 	} else {
- 		u32 us = DIV_ROUND_UP(ns, 1000);
- 
--		if (us <= 10)
-+		if (us <= 200)
- 			udelay(us);
- 		else
- 			usleep_range(us, us + DIV_ROUND_UP(us, 10));
--- 
-2.17.1
-
+>
+>Maxime

@@ -2,102 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E667B516F1C
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 13:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CBED516F20
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 13:54:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233014AbiEBLzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 07:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45900 "EHLO
+        id S1384768AbiEBL5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 07:57:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232701AbiEBLzr (ORCPT
+        with ESMTP id S233094AbiEBL5m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 07:55:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8213719C3B
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 04:52:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651492334;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4NqBPLX8TzclPanWWsLIm67uAy6NiGYXkNprNmZ5h2U=;
-        b=ZhpNlM1QZ9FB06pwwTMp4YxtpmD+Y3iPtOZSCJCasC+TzBvcpv0+t0CCM4sJIQdw+HQHY2
-        s2cYTFv519S4POYbjgN4+rLUtWqntbZlvO5CWRmNpojQe9LxbB/JXcCtLG2Alv16nryKVU
-        nvc3aSt5mqF54xzL6YE2gpwdmWmOkw0=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-315-D8bz-OnHOly547M5SIYjxQ-1; Mon, 02 May 2022 07:52:13 -0400
-X-MC-Unique: D8bz-OnHOly547M5SIYjxQ-1
-Received: by mail-ej1-f72.google.com with SMTP id x2-20020a1709065ac200b006d9b316257fso6699569ejs.12
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 04:52:13 -0700 (PDT)
+        Mon, 2 May 2022 07:57:42 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65BB1A044
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 04:54:13 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id i38so25514041ybj.13
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 04:54:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=450+a8YD7aZQ0EGwCGQKaHlnNFXghGzV04RemoibDz0=;
+        b=V+y9BcKPTPPewHAowP0m9B4NF9B2bPaEnby0teZKw0gCUMoO/0/BCRPcnFs1FRNZx+
+         ZrOFb8tsHaTMwN4FDqA/ZRJasiUiJcxNlpRJLQAEubEcmFMIHrA4+iuuWDxEECasppS7
+         CJ5EQ+4nK2fvi8Yk8q4L/IXNbyPVL478KJ74W3MU5pGhbOmmCYD9vVcUieHdTvOD4EGy
+         oad/Fzx9zwJ4WqLJhMQ9mqhs4lMrh2XdyOwimlkhqD9Ks7OxkRTsWIgbxny9q1tNtdDP
+         pyC/NCSZLbfKrCV/HmElBs9I79Ehuo3/+juuijxCkdow80Ex7E5AaUs2UwXO1gs8k3Va
+         5XwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=4NqBPLX8TzclPanWWsLIm67uAy6NiGYXkNprNmZ5h2U=;
-        b=MopCkMNwIfrDqt+KurIYl7BJKg3AZdUB1uhaLY2XO58ogpe0vvRj0OwjDCMAaZhezM
-         1tyyOPW2iLBJqQyAvO1c5M7/RkdMpwb2oq7goqd0LcQsvU6EGc3zz2uEO1ziBiE3pKfj
-         FTJv0iIibDNR/3W2Oihlu5aZhlKle7gmVVazNentNOYNGiSu9myyELfoC2fOp3+9WmhF
-         FboyAkGESXDqBTGcBDBp6wAGeOMtmMp/MP1vJBYZfkfebgxP0SVyrh333bQHvhQT4I/c
-         KoaYpIK6IFUiIhK16znJQsntzR24WRrGJSiXrd2Z/TAAV0H0UvEFZRaASEglUiGyikLb
-         RMBQ==
-X-Gm-Message-State: AOAM5325KUC757qwHpTEEDLjbqHJqnhAR4MtgnW2x13wXK28TLX10Wwv
-        vEIyXstkymwu7GG+jphK4alhw0DNLOjQoI2zYFwxKKC+jAcpemWLWDfzSCSVuZEmcqUX4SGQkY1
-        o7/s//Wug6jwAaP0PcJHlIjuY
-X-Received: by 2002:a17:907:ea8:b0:6f4:78d1:806d with SMTP id ho40-20020a1709070ea800b006f478d1806dmr237372ejc.448.1651492332309;
-        Mon, 02 May 2022 04:52:12 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy7KJP4JNBhC3BYz4fdMtonBbL+pNQ691k+NxaTuWInVE57dVdzaO1Hr7zV3crJJ9y691uFQg==
-X-Received: by 2002:a17:907:ea8:b0:6f4:78d1:806d with SMTP id ho40-20020a1709070ea800b006f478d1806dmr237359ejc.448.1651492332135;
-        Mon, 02 May 2022 04:52:12 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id en22-20020a17090728d600b006f3ef214ddesm3520943ejc.68.2022.05.02.04.52.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 04:52:11 -0700 (PDT)
-Message-ID: <8e2213fa-981a-11cd-5bcc-3338d3b2c5de@redhat.com>
-Date:   Mon, 2 May 2022 13:52:10 +0200
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=450+a8YD7aZQ0EGwCGQKaHlnNFXghGzV04RemoibDz0=;
+        b=ksSE8B1bQxr0pHaBYG1D43c7CevePNgKimIVKmMUhON4pgQ+Bg5gC3Ae+pf8h8f4h3
+         1TAKPRLfu3PgnfTzaOQUJhCV3EisKi4hQb5Ak5I5UGZx2uBDDZfwNGwC8SkCCY+ixqpM
+         yFRp/fuswG0rfQLq6JY3A2TrEQeT3+ubDL1c3/khvwcyGTfeJ3sGI087gZVHaszGWWmv
+         U8736Lm4lXEPQvbNsuQiUDyotOXBqimI3f8Q8LbgqbFLDaF++6JcMKJFfzJ5qMyoQqCU
+         Am8RwRyNpOa34ewcx9/sYuXni/HmHu1snDh3NZ7ZTkMAaHqSSXbMXLnFwwGJLGRPsrVe
+         FE3g==
+X-Gm-Message-State: AOAM5318bZUNuJfIDjJfelxjq1cTYAtPVTvHem1YHGu4Pz8dFJvJhIFW
+        1TOh5Y3Ml48BLGvyWBqRHVwFssiK8x1peuRsKZ2IZLGXOes9wA==
+X-Google-Smtp-Source: ABdhPJxTUvo0GQhDgWM8GuEQ4ebpQT8+1plB7ML+kfOwbJaylX/Ujo5HfIclJo1hBLTC/jH/9soCUcwSmJX/Cr22u8Q=
+X-Received: by 2002:a25:6652:0:b0:645:d4c1:eb7 with SMTP id
+ z18-20020a256652000000b00645d4c10eb7mr9786088ybm.412.1651492452482; Mon, 02
+ May 2022 04:54:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] KVM: x86/mmu: Do not create SPTEs for GFNs that exceed
- host.MAXPHYADDR
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>
-References: <20220428233416.2446833-1-seanjc@google.com>
- <2d10ff16d3f5fa03886721c24f2db10d79759ed2.camel@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <2d10ff16d3f5fa03886721c24f2db10d79759ed2.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 2 May 2022 17:24:01 +0530
+Message-ID: <CA+G9fYuD_pcr4eyFSNg+XCf8TpdU+m6yRKugCoOp+pFRAdAo=w@mail.gmail.com>
+Subject: [arm] lib: bitmap.sh: BUG: KFENCE: out-of-bounds read in _find_next_bit_le+0x10/0x48
+To:     open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Marco Elver <elver@google.com>,
+        Kees Cook <keescook@google.com>, decot@googlers.com,
+        "Tobin C. Harding" <tobin@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/2/22 13:12, Kai Huang wrote:
->> -		if (unlikely(!enable_mmio_caching)) {
->> +		if (unlikely(!enable_mmio_caching) ||
->> +		    unlikely(fault->gfn > kvm_mmu_max_gfn_host())) {
-> Shouldn't we check fault->gfn against cpuid_maxphyaddr(vcpu) instead of
-> kvm_mmu_max_gfn_host() here?
+Following kernel BUG KFENCE noticed on qemu_arm while testing lib: bitmap.sh
+with kselftest merge config build image [1] & [2].
 
-No, the point of this check is to handle the case where 
-kvm_mmu_max_gfn_host() is smaller than cpuid_maxphyaddr().
+metadata:
+  git_ref: master
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline
+  git_sha: 672c0c5173427e6b3e2a9bbb7be51ceeec78093a
+  git_describe: v5.18-rc5
+  kernel_version: 5.18.0-rc5
+  kernel-config: https://builds.tuxbuild.com/28a2wdk3XzmLVGqD5njLS4uX1tm/config
+  artifact-location: https://builds.tuxbuild.com/28a2wdk3XzmLVGqD5njLS4uX1tm
+  toolchain: gcc-10
 
-Paolo
 
+Test log:
+---------
+# selftests: lib: bitmap.sh
+[   36.266913] test_bitmap: loaded.
+[   36.269151] test_bitmap: parselist: 14: input is '0-2047:128/256'
+OK, Time: 4600
+[   36.273024] ==================================================================
+[   36.275942] BUG: KFENCE: out-of-bounds read in _find_next_bit_le+0x10/0x48
+[   36.275942]
+[   36.279808] Out-of-bounds read at 0x9ec8e937 (4096B right of kfence-#29):
+[   36.283046]  _find_next_bit_le+0x10/0x48
+[   36.285030]
+[   36.285816] kfence-#29: 0xf28dd28d-0x0b305c8e, size=4096, cache=kmalloc-4k
+[   36.285816]
+[   36.289807] allocated by task 498 on cpu 1 at 36.272960s:
+[   36.292432]  test_bitmap_printlist+0x2c/0x13c [test_bitmap]
+[   36.295174]  test_bitmap_init+0x5c/0xefc [test_bitmap]
+[   36.297709]  do_one_initcall+0x70/0x330
+[   36.299605]  do_init_module+0x4c/0x26c
+[   36.301484]  sys_finit_module+0xdc/0x138
+[   36.303452]  ret_fast_syscall+0x0/0x1c
+[   36.305294]  0xbebec788
+[   36.306516]
+[   36.307264] CPU: 1 PID: 498 Comm: modprobe Not tainted 5.18.0-rc5 #1
+[   36.310304] Hardware name: Generic DT based system
+[   36.312658] ==================================================================
+[   36.316609] test_bitmap: bitmap_print_to_pagebuf: input is '0-32767
+[   36.316609] ', Time: 43635540
+[   36.333605] test_bitmap: all 1945 tests passed
+[   36.360116] test_bitmap: unloaded.
+# bitmap: ok
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+--
+Linaro LKFT
+https://lkft.linaro.org
+
+[1] https://lkft.validation.linaro.org/scheduler/job/4975877#L995
+[2] https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v5.18-rc5/testrun/9320073/suite/linux-log-parser/test/check-kernel-bug-4975877/log

@@ -2,70 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 046B3517147
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 16:11:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 610CC51714B
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 16:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352279AbiEBOOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 10:14:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52928 "EHLO
+        id S1385510AbiEBOP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 10:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385495AbiEBOO1 (ORCPT
+        with ESMTP id S1376812AbiEBOPw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 10:14:27 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22FCD15A09;
-        Mon,  2 May 2022 07:10:57 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id y21so16774088edo.2;
-        Mon, 02 May 2022 07:10:57 -0700 (PDT)
+        Mon, 2 May 2022 10:15:52 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1390915733
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 07:12:23 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id m23so18596026ljc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 07:12:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=joK5j7ew5SKN/cHxslItBx63j5PdrPIBK5veE/G0SHQ=;
-        b=HoTx0fI9k/wNi8rf31TR+bf9CBgvi+XlcN26lQIR2oH50DFX3uY8EjYs8+G9Ly2AX6
-         VPiXuWl7g1L+R+0+J1tpVhf4zprGMtz4C9LDN/Qc721rO0peoxWUrcKYLl0kciA4tqxQ
-         1KowbweQSYEX5KdI3o8/+qh+R7PyJ3OccMWbBK10okckN8R3Q0gY6c3EkRMJegBaKMZI
-         936Msgv+6Au0TlDpcEAoY7o80jMmf/3NxXozY4m+iJ2RyuL0MOCa1VWtSr08jqiE4A6L
-         C73Sp9OLZalQdJcEQEHzDVNfcQs9a/u0xbXkxTGFvEY5Oul2MsuNymLbIj8SGyfqGbeK
-         T0Pg==
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=SWU6aLH9edvsAPiYZzsg3YZpGJqJmDtADV4YivTa3fc=;
+        b=f2GkEAq7tbE93SNbjvDPYMlOFQ58Y+ElOYaqZnJD4c83pm7kgbsu24P55eBrONDrbi
+         75i/xrj3xo0AaLEs4lRM4tgZgnj79ALseI+iOfODcR6Juf5m0Qk36UONR03WXbfdjELj
+         3pr+R05iPT7iWhlpOOmhl9Zi5RLBkiIYwZcbQK1OvHFnD4HJj1RBTWzEIcpKRZQZJqwB
+         Qwy/T9MAwk0W+u1S8/G0la9G3DfemELFLiujJ6nunWaxGBK7RodwaZc30/IW1LctuflQ
+         6fQuC43kFdHFUKM5nQKgDJICuMv3k7iDqi/Tsc+ByAyNwU2HlVonl1Hp5vUYZhxZHx5g
+         P9jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=joK5j7ew5SKN/cHxslItBx63j5PdrPIBK5veE/G0SHQ=;
-        b=dRuV5eaY38O+aBx4w8/pMtLlw4RYWLJsyvc0uoIp3vRHTUukHqby9dlyFX7NFwqNTC
-         r0MjWk77d1G5OqdutR5It+hPQmcyfys/3S+Yht4IzMWa7EAvd/6vB8KBvb1NWx0NAGhS
-         nuDtvPEeYgksizkJ81JgYXaTjEkaAcngN7EqPMESU75LQacZIqTiHWWcCJGkDWVGjpdC
-         bXsYkGhdLNoyTkgmjj1Bx+KBz9GiG2NGp4fy1CctgHGWeaAAj1pcD5U1rYXpo9sOtJYt
-         vUZc19Bj5Ccpv1nN0t3k9CpjObUGcpkolu1LFGwOK3Pxx3eGfANaQpsDBfYwmmEmhmcY
-         qiLA==
-X-Gm-Message-State: AOAM532eYFKBZKDHUQySsbJpvucyRd59mWSOw5wu+29cgQiCAAnY/1aW
-        uay2MEKn8RR78mW1Ph0i9mXdBuMHsjY=
-X-Google-Smtp-Source: ABdhPJz6NFDvTejbV7HnVzqZN55zXR3cWNJXtPu/IPMmkDmCdKUEg/L8wi7+Q3qw3YfQxCG1r7+jBA==
-X-Received: by 2002:aa7:dd91:0:b0:427:b2c4:1c7a with SMTP id g17-20020aa7dd91000000b00427b2c41c7amr9825791edv.91.1651500655633;
-        Mon, 02 May 2022 07:10:55 -0700 (PDT)
-Received: from debianHome.localdomain (dynamic-077-001-135-067.77.1.pool.telefonica.de. [77.1.135.67])
-        by smtp.gmail.com with ESMTPSA id s23-20020a056402037700b0042617ba639bsm6732338edw.37.2022.05.02.07.10.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 07:10:55 -0700 (PDT)
-From:   =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
-To:     selinux@vger.kernel.org
-Cc:     Paul Moore <paul@paul-moore.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH] selinux: avoid extra semicolon
-Date:   Mon,  2 May 2022 16:10:51 +0200
-Message-Id: <20220502141052.34413-1-cgzones@googlemail.com>
-X-Mailer: git-send-email 2.36.0
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=SWU6aLH9edvsAPiYZzsg3YZpGJqJmDtADV4YivTa3fc=;
+        b=LAd4z15WPlwGxzLVgeqFufueU8D2Zec2eL6Y9Dap1dIhgHypxXReOPO2U6nwsTHnjZ
+         ttTiViHvx9gd+PVGBLCtjC7kNiyZnz8WcnAtWHiXzU84FFWMEwNKw8BBYVAjje3Ybo/H
+         4IyKVQpeqdEL7wkQgSYwGkCeyUSFXPCZhmKgb8Ln8M7pmwePqoGBoQE0EnoOtIxuW5uq
+         jLmmnmqWAxdWacrh4vz6hQWBkexSSN7uhOyW5nQAoGoGspkRPyjI/hTuP0vJcqy6f7jO
+         RZVPCSoTt1sjLdgF7Ef3EMWe+3o1P+ns9zHsMFE0Ony+Yd29Qdsac/Mf4iJHNyntB+hp
+         cO8Q==
+X-Gm-Message-State: AOAM531pVxCcb7NCjfAhslaeOnEhzqbASvLKy5EWk+1yh9+t5Kc20fwh
+        z7QNvWvvov0hMTu3CwE3wVNuiGQgpTLT0Q==
+X-Google-Smtp-Source: ABdhPJwJVFKBA2YxjJ+Wxyv20p1DVv/+TL02PG0KRMZrpfXHMJvtrhM0yW5BAY+E44Ci7QRynV5CXg==
+X-Received: by 2002:a2e:7f0b:0:b0:24f:e04:d0c with SMTP id a11-20020a2e7f0b000000b0024f0e040d0cmr7876359ljd.441.1651500741329;
+        Mon, 02 May 2022 07:12:21 -0700 (PDT)
+Received: from [192.168.1.7] ([212.22.223.21])
+        by smtp.gmail.com with ESMTPSA id bf10-20020a2eaa0a000000b0024f3d1dae8bsm1074171ljb.19.2022.05.02.07.12.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 May 2022 07:12:20 -0700 (PDT)
+Subject: Re: [PATCH v2 19/19] xen/xenbus: eliminate xenbus_grant_ring()
+To:     Juergen Gross <jgross@suse.com>
+Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>
+References: <20220428082743.16593-1-jgross@suse.com>
+ <20220428082743.16593-20-jgross@suse.com>
+ <bf14e3e1-fc4d-1eee-1dfb-1ba3423f0b6f@gmail.com>
+ <b31f2358-625e-68ff-8182-8b91820ad25e@suse.com>
+From:   Oleksandr <olekstysh@gmail.com>
+Message-ID: <44c08aed-8426-4d79-3fe7-2c854c711526@gmail.com>
+Date:   Mon, 2 May 2022 17:12:19 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <b31f2358-625e-68ff-8182-8b91820ad25e@suse.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+Content-Language: en-US
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,38 +78,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wrap macro into `do { } while (0)` to avoid Clang emitting warnings
-about extra semicolons.
-Similar to userspace commit
-https://github.com/SELinuxProject/selinux/commit/9d85aa60d12e468e7fd510c2b5475b5299b71622
 
-Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
----
- security/selinux/ss/avtab.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 02.05.22 16:30, Juergen Gross wrote:
 
-diff --git a/security/selinux/ss/avtab.c b/security/selinux/ss/avtab.c
-index cfdae20792e1..6178af5fedbe 100644
---- a/security/selinux/ss/avtab.c
-+++ b/security/selinux/ss/avtab.c
-@@ -40,7 +40,7 @@ static inline int avtab_hash(const struct avtab_key *keyp, u32 mask)
- 
- 	u32 hash = 0;
- 
--#define mix(input) { \
-+#define mix(input) do { \
- 	u32 v = input; \
- 	v *= c1; \
- 	v = (v << r1) | (v >> (32 - r1)); \
-@@ -48,7 +48,7 @@ static inline int avtab_hash(const struct avtab_key *keyp, u32 mask)
- 	hash ^= v; \
- 	hash = (hash << r2) | (hash >> (32 - r2)); \
- 	hash = hash * m + n; \
--}
-+} while (0)
- 
- 	mix(keyp->target_class);
- 	mix(keyp->target_type);
+Hello Juergen
+
+
+> On 29.04.22 17:10, Oleksandr wrote:
+>>
+>> On 28.04.22 11:27, Juergen Gross wrote:
+>>
+>>
+>> Hello Juergen
+>>
+>>
+>>> There is no external user of xenbus_grant_ring() left, so merge it into
+>>> the only caller xenbus_setup_ring().
+>>>
+>>> Signed-off-by: Juergen Gross <jgross@suse.com>
+>>> ---
+>>> V2:
+>>> - make error message more precise (Andrew Cooper)
+>>> ---
+>>>   drivers/xen/xenbus/xenbus_client.c | 65 
+>>> +++++++++---------------------
+>>>   include/xen/xenbus.h               |  2 -
+>>>   2 files changed, 19 insertions(+), 48 deletions(-)
+>>>
+>>> diff --git a/drivers/xen/xenbus/xenbus_client.c 
+>>> b/drivers/xen/xenbus/xenbus_client.c
+>>> index 1a2e0d94ccd1..d6fdd2d209d3 100644
+>>> --- a/drivers/xen/xenbus/xenbus_client.c
+>>> +++ b/drivers/xen/xenbus/xenbus_client.c
+>>> @@ -363,50 +363,6 @@ static void xenbus_switch_fatal(struct 
+>>> xenbus_device *dev, int depth, int err,
+>>>           __xenbus_switch_state(dev, XenbusStateClosing, 1);
+>>>   }
+>>> -/**
+>>> - * xenbus_grant_ring
+>>> - * @dev: xenbus device
+>>> - * @vaddr: starting virtual address of the ring
+>>> - * @nr_pages: number of pages to be granted
+>>> - * @grefs: grant reference array to be filled in
+>>> - *
+>>> - * Grant access to the given @vaddr to the peer of the given device.
+>>> - * Then fill in @grefs with grant references.  Return 0 on success, or
+>>> - * -errno on error.  On error, the device will switch to
+>>> - * XenbusStateClosing, and the error will be saved in the store.
+>>> - */
+>>> -int xenbus_grant_ring(struct xenbus_device *dev, void *vaddr,
+>>> -              unsigned int nr_pages, grant_ref_t *grefs)
+>>> -{
+>>> -    int err;
+>>> -    unsigned int i;
+>>> -    grant_ref_t gref_head;
+>>> -
+>>> -    err = gnttab_alloc_grant_references(nr_pages, &gref_head);
+>>> -    if (err) {
+>>> -        xenbus_dev_fatal(dev, err, "granting access to ring page");
+>>> -        return err;
+>>> -    }
+>>> -
+>>> -    for (i = 0; i < nr_pages; i++) {
+>>> -        unsigned long gfn;
+>>> -
+>>> -        if (is_vmalloc_addr(vaddr))
+>>> -            gfn = pfn_to_gfn(vmalloc_to_pfn(vaddr));
+>>> -        else
+>>> -            gfn = virt_to_gfn(vaddr);
+>>> -
+>>> -        grefs[i] = gnttab_claim_grant_reference(&gref_head);
+>>> -        gnttab_grant_foreign_access_ref(grefs[i], dev->otherend_id,
+>>> -                        gfn, 0);
+>>> -
+>>> -        vaddr = vaddr + XEN_PAGE_SIZE;
+>>> -    }
+>>> -
+>>> -    return 0;
+>>> -}
+>>> -EXPORT_SYMBOL_GPL(xenbus_grant_ring);
+>>> -
+>>>   /*
+>>>    * xenbus_setup_ring
+>>>    * @dev: xenbus device
+>>> @@ -424,6 +380,7 @@ int xenbus_setup_ring(struct xenbus_device *dev, 
+>>> gfp_t gfp, void **vaddr,
+>>>                 unsigned int nr_pages, grant_ref_t *grefs)
+>>>   {
+>>>       unsigned long ring_size = nr_pages * XEN_PAGE_SIZE;
+>>> +    grant_ref_t gref_head;
+>>>       unsigned int i;
+>>>       int ret;
+>>> @@ -433,9 +390,25 @@ int xenbus_setup_ring(struct xenbus_device 
+>>> *dev, gfp_t gfp, void **vaddr,
+>>>           goto err;
+>>>       }
+>>> -    ret = xenbus_grant_ring(dev, *vaddr, nr_pages, grefs);
+>>> -    if (ret)
+>>> +    ret = gnttab_alloc_grant_references(nr_pages, &gref_head);
+>>> +    if (ret) {
+>>> +        xenbus_dev_fatal(dev, ret, "granting access to %u ring pages",
+>>> +                 nr_pages);
+>>>           goto err;
+>>> +    }
+>>> +
+>>> +    for (i = 0; i < nr_pages; i++) {
+>>> +        unsigned long gfn;
+>>> +
+>>> +        if (is_vmalloc_addr(*vaddr))
+>>> +            gfn = pfn_to_gfn(vmalloc_to_pfn(vaddr[i]));
+>>> +        else
+>>> +            gfn = virt_to_gfn(vaddr[i]);
+>>> +
+>>> +        grefs[i] = gnttab_claim_grant_reference(&gref_head);
+>>
+>> gnttab_claim_grant_reference() can return error if no free grant 
+>> reference remains.
+>
+> This can happen only in case gnttab_alloc_grant_references() didn't
+> allocate enough grants but told us it succeeded doing so.
+>
+>> I understand this patch only moves the code, but probably it would be 
+>> better to add a missing check here (and likely rollback already 
+>> processed grants if any?).
+>
+> I don't think this is needed, as this would be a clear bug in the code.
+
+I would put WARN_ON_ONCE if ref is an error value then like xen-netfront 
+does. Either way, with or without it you can add my:
+
+Reviewed-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+
+
+
+>
+>
+>
+> Juergen
+
 -- 
-2.36.0
+Regards,
+
+Oleksandr Tyshchenko
 

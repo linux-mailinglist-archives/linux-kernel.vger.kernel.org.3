@@ -2,138 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DE5F5171AC
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 16:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8A985171B4
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 16:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385768AbiEBOjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 10:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44616 "EHLO
+        id S237904AbiEBOld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 10:41:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385591AbiEBOir (ORCPT
+        with ESMTP id S237747AbiEBOl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 10:38:47 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FE626E
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 07:35:17 -0700 (PDT)
-Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 34B321EC0455;
-        Mon,  2 May 2022 16:35:12 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1651502112;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=xkMo8IXjwSpSn3yFdYrBLF5OKTpukIzfN2ZfXfe5+JU=;
-        b=g8WtUhdLz2SwUpnTdEDnmjnBUusVsLPo7yw8+u9/0uiq9mWgDDR8mXLZXugOnq9DoJxLmf
-        ezQRZbpCUAmqqk75bJOKYGvzmq02HnYfd/pASAPgRdp0AOSEXHDBW5ZkQwVE+qPP3uFiPB
-        JXxd1a1acDHm+4KatO1jsnNabZ4DXYE=
-Date:   Mon, 2 May 2022 16:35:10 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Filipe Manana <fdmanana@suse.com>
-Subject: Re: [patch 3/3] x86/fpu: Make FPU protection more robust
-Message-ID: <Ym/sHqKqmLOJubgE@zn.tnic>
-References: <20220501192740.203963477@linutronix.de>
- <20220501193102.704267030@linutronix.de>
+        Mon, 2 May 2022 10:41:28 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AD510BD
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 07:37:59 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id i62so11841423pgd.6
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 07:37:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=74bxgGuHU9jSk3+QuQXZKRvlg8V04rNVxn+TIhl3ghI=;
+        b=US2i16G1FslRkGzUxXxBxn5PpAczH/bRPVsvbNYjBDpAbIud3dKvEm6qAcX8D/oZ5Z
+         Tk9hvG3m4vnc71cxDEuZQRK/OOh4iXy1/kZVMLznQYGfhpbxBzLaTpJr7xzbcITYCPoR
+         d+Qx9Lsf6E7YpfDfJwEzuvPwbx3SMTstl+zX30Yzd5dIFyfrgjAqTESfzPSnxoKc66Pw
+         HYpEOptx+COAhLTNA1avuz+BaGoEm9EBzevRp4pdPJWXXZn1dLx6adODGE0pH46ilwUT
+         k2Ush7C83FevsksKSoImxQFzDDSLTI0oI+vQAzXUD4dl+j++RxPC9LjzqYDQy2FMVMrR
+         uAdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=74bxgGuHU9jSk3+QuQXZKRvlg8V04rNVxn+TIhl3ghI=;
+        b=xQ2HUtFXiWQC3AN2piT/XUGtvXPesmFLgBRq/gvknj8566rZ+TYgqs9S/OqHMsTfcb
+         K+8jKpY3X3MKE4SzgSS/K8h7ZfH3blGOcRBMfhODRlkrdlL5qsATA7fcvbleVPHISNIk
+         nAYiyvI8OeXJKteSozOcsQRRLyWQby0brM0eJMpJl8pnjLR+aPnGxPudgR92yvlODztf
+         PlXI0KQtCvgpcm8MNaU3X+pkJ2+5Ea+YCpWUJwnPuLCT3VyTaVv4HENNcKLSIltXfo+x
+         GaaYKFTfkd+DNUbXRTsy9fFgHYjQzlbbqGH/p8pNgtLXkzO3JPbVq8dPpLGYayo19OE2
+         QFCA==
+X-Gm-Message-State: AOAM5311CLzn2hb3Qke4QM9WWLRSrScCXU6d+ev+zeg++mWZ/Du4uK1C
+        hA5VIKGs1/GgPWDA7vHEKTtjzMogO4xxCGdYIBjxsQ==
+X-Google-Smtp-Source: ABdhPJxO8+87e2lHNCFbPay2aHSBemsxX2KpF1wpvTcg1JbtYVs08QwN6sikfE7I6JCo0Vr2Ph9NRx2sMzw7tPml9ys=
+X-Received: by 2002:a62:6d47:0:b0:4fe:15fa:301d with SMTP id
+ i68-20020a626d47000000b004fe15fa301dmr11688627pfc.29.1651502278898; Mon, 02
+ May 2022 07:37:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220501193102.704267030@linutronix.de>
+References: <20220425134424.1150965-1-treapking@chromium.org>
+In-Reply-To: <20220425134424.1150965-1-treapking@chromium.org>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Mon, 2 May 2022 16:37:48 +0200
+Message-ID: <CAG3jFys-qNAER4xVhbNqE9xbsjTMEbaBR291Kc1M1SKkH5oE1w@mail.gmail.com>
+Subject: Re: [PATCH] drm/bridge: it6505: Send DPCD SET_POWER to downstream
+To:     Pin-Yen Lin <treapking@chromium.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Allen Chen <allen.chen@ite.com.tw>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Hermes Wu <hermes.wu@ite.com.tw>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 01, 2022 at 09:31:47PM +0200, Thomas Gleixner wrote:
-> --- a/arch/x86/kernel/fpu/core.c
-> +++ b/arch/x86/kernel/fpu/core.c
-> @@ -42,7 +42,7 @@ struct fpu_state_config fpu_user_cfg __r
->  struct fpstate init_fpstate __ro_after_init;
->  
->  /* Track in-kernel FPU usage */
-> -static DEFINE_PER_CPU(bool, in_kernel_fpu);
-> +static DEFINE_PER_CPU(bool, fpu_in_use);
->  
->  /*
->   * Track which context is using the FPU on the CPU:
-> @@ -50,6 +50,50 @@ static DEFINE_PER_CPU(bool, in_kernel_fp
->  DEFINE_PER_CPU(struct fpu *, fpu_fpregs_owner_ctx);
->  
->  /**
-> + * fpregs_lock - Lock FPU state for maintenance operations
-
-"maintenance"?
-
-> + *
-> + * This protects against preemption, soft interrupts and in-kernel FPU
-> + * usage on both !RT and RT enabled kernels.
-> + *
-> + * !RT kernels use local_bh_disable() to prevent soft interrupt processing
-> + * and preemption.
-> + *
-> + * On RT kernels local_bh_disable() is not sufficient because it only
-> + * serializes soft interrupt related sections via a local lock, but stays
-> + * preemptible. Disabling preemption is the right choice here as bottom
-> + * half processing is always in thread context on RT kernels so it
-> + * implicitly prevents bottom half processing as well.
-> + */
-> +void fpregs_lock(void)
-> +{
-> +	if (!IS_ENABLED(CONFIG_PREEMPT_RT))
-> +		local_bh_disable();
-> +	else
-> +		preempt_disable();
-
-So I'm wondering: can we get rid of this distinction and simply do
-preempt_disable()?
-
-Or can FPU be used in softirq processing too so we want to block that
-there?
-
-But even if, fpu_in_use will already state that fact...
-
-...
-
-> @@ -410,10 +433,9 @@ void kernel_fpu_begin_mask(unsigned int
+On Mon, 25 Apr 2022 at 15:44, Pin-Yen Lin <treapking@chromium.org> wrote:
+>
+> Send DPCD SET_POWER command to downstream in .atomic_disable to make the
+> downstream monitor enter the power down mode, so the device suspend won't
+> be affected.
+>
+> Fixes: b5c84a9edcd418 ("drm/bridge: add it6505 driver")
+> Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
+> ---
+>
+>  drivers/gpu/drm/bridge/ite-it6505.c | 29 ++++++++++++++++++-----------
+>  1 file changed, 18 insertions(+), 11 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
+> index 8fed30df08b0..4b673c4792d7 100644
+> --- a/drivers/gpu/drm/bridge/ite-it6505.c
+> +++ b/drivers/gpu/drm/bridge/ite-it6505.c
+> @@ -737,8 +737,9 @@ static int it6505_drm_dp_link_probe(struct drm_dp_aux *aux,
+>         return 0;
+>  }
+>
+> -static int it6505_drm_dp_link_power_up(struct drm_dp_aux *aux,
+> -                                      struct it6505_drm_dp_link *link)
+> +static int it6505_drm_dp_link_set_power(struct drm_dp_aux *aux,
+> +                                       struct it6505_drm_dp_link *link,
+> +                                       u8 mode)
 >  {
->  	preempt_disable();
->  
-> -	WARN_ON_FPU(!kernel_fpu_usable());
-> -	WARN_ON_FPU(this_cpu_read(in_kernel_fpu));
-> +	WARN_ON_ONCE(!kernel_fpu_usable());
->  
-> -	this_cpu_write(in_kernel_fpu, true);
-> +	this_cpu_write(fpu_in_use, true);
+>         u8 value;
+>         int err;
+> @@ -752,18 +753,20 @@ static int it6505_drm_dp_link_power_up(struct drm_dp_aux *aux,
+>                 return err;
+>
+>         value &= ~DP_SET_POWER_MASK;
+> -       value |= DP_SET_POWER_D0;
+> +       value |= mode;
+>
+>         err = drm_dp_dpcd_writeb(aux, DP_SET_POWER, value);
+>         if (err < 0)
+>                 return err;
+>
+> -       /*
+> -        * According to the DP 1.1 specification, a "Sink Device must exit the
+> -        * power saving state within 1 ms" (Section 2.5.3.1, Table 5-52, "Sink
+> -        * Control Field" (register 0x600).
+> -        */
+> -       usleep_range(1000, 2000);
+> +       if (mode == DP_SET_POWER_D0) {
+> +               /*
+> +                * According to the DP 1.1 specification, a "Sink Device must
+> +                * exit the power saving state within 1 ms" (Section 2.5.3.1,
+> +                * Table 5-52, "Sink Control Field" (register 0x600).
+> +                */
+> +               usleep_range(1000, 2000);
+> +       }
+>
+>         return 0;
+>  }
+> @@ -2624,7 +2627,8 @@ static enum drm_connector_status it6505_detect(struct it6505 *it6505)
+>         if (it6505_get_sink_hpd_status(it6505)) {
+>                 it6505_aux_on(it6505);
+>                 it6505_drm_dp_link_probe(&it6505->aux, &it6505->link);
+> -               it6505_drm_dp_link_power_up(&it6505->aux, &it6505->link);
+> +               it6505_drm_dp_link_set_power(&it6505->aux, &it6505->link,
+> +                                            DP_SET_POWER_D0);
+>                 it6505->auto_train_retry = AUTO_TRAIN_RETRY;
+>
+>                 if (it6505->dpcd[0] == 0) {
+> @@ -2960,8 +2964,11 @@ static void it6505_bridge_atomic_disable(struct drm_bridge *bridge,
+>
+>         DRM_DEV_DEBUG_DRIVER(dev, "start");
+>
+> -       if (it6505->powered)
+> +       if (it6505->powered) {
+>                 it6505_video_disable(it6505);
+> +               it6505_drm_dp_link_set_power(&it6505->aux, &it6505->link,
+> +                                            DP_SET_POWER_D3);
+> +       }
+>  }
+>
+>  static enum drm_connector_status
+> --
+> 2.36.0.rc2.479.g8af0fa9b8e-goog
+>
 
-This starts to look awfully similar to fpregs_lock()...
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
 
->  
->  	if (!(current->flags & PF_KTHREAD) &&
->  	    !test_thread_flag(TIF_NEED_FPU_LOAD)) {
-> @@ -433,9 +455,9 @@ EXPORT_SYMBOL_GPL(kernel_fpu_begin_mask)
->  
->  void kernel_fpu_end(void)
->  {
-> -	WARN_ON_FPU(!this_cpu_read(in_kernel_fpu));
-> +	WARN_ON_ONCE(!this_cpu_read(fpu_in_use));
->  
-> -	this_cpu_write(in_kernel_fpu, false);
-> +	this_cpu_write(fpu_in_use, false);
->  	preempt_enable();
-
-... and this to fpregs_unlock().
-
-Can we use those here too instead of open-coding them mostly?
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Applied to drm-misc-next.

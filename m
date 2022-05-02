@@ -2,167 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB0F516E73
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 12:59:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 585C3516E3E
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 12:42:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbiEBLCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 07:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58386 "EHLO
+        id S1384571AbiEBKpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 06:45:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiEBLC2 (ORCPT
+        with ESMTP id S1384787AbiEBKpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 07:02:28 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62F5B39;
-        Mon,  2 May 2022 03:58:59 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id k23so27083873ejd.3;
-        Mon, 02 May 2022 03:58:59 -0700 (PDT)
+        Mon, 2 May 2022 06:45:21 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E6841D31B
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 03:41:52 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d15so12152693plh.2
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 03:41:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=94vn6QxCatU8SdwHnwlVFIAEM6kk0iWhQcT6gEzd07o=;
-        b=gIBigXRWRP2bwFWuVaRSpDB2XK5tmhst9NbbZAKxjzpxZ57dRDRuhB46XoS4fChnGH
-         AfmhiEWPWkHnIsdl2+uETGhLw+jDKVnZne+9aEhxND5jB3Uf2VEMfhVSxTUb8URewf+R
-         9yak+DM1mxKZ/azkdttalqJS8mezrEiIUsC3XPQZmuUF6rYTAanG/tv3Yf867xzx0f38
-         xZUNaFAqUe2knvK48Xl2Mudjw48BV/xtFyjb19c74borxpX3yoql620dC7rPBgImci9p
-         F9vYZ50KABB5DMsailubtBdEds6kOlwUi1cCSRP9CY3R3e420YM3whMl1xlOfblsCw9m
-         Xacg==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=q6Rnw46tJ5c8TR1VH8c4HYYn4D03M2nHnAjzUXe5flU=;
+        b=Pjh9MgqoFCWgam7pbQq637Hxn3x2ZC0hKooYXRjuuTbn5yQ7/kxKf8F24mJbZ3q/HM
+         ukCCI6nYrzsGtJ5Ix6j6vsOKgG16OAzrD7H19+FAbI+D/wCakEuhDUaVLRB0c/ipLCpB
+         M+qADP0jKkXABJzJhfldb5yS8XY7toT4iHKCUTdZhqXkJYPXUNls9NC9mLo+Xw8DGkV9
+         z2sdCnW9v8kPNMa9EKnJQR+4JVZo11Fho3Lxqaei20V69OUFL3OhuoMMqNwePJ5cpqV4
+         RUPfWfkI/V2Pyl+SJcR5Arhqdsg7R8AONJV4N4qr3TLak40Rl4NkxaHLehZ1K2bZcLG8
+         wqqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=94vn6QxCatU8SdwHnwlVFIAEM6kk0iWhQcT6gEzd07o=;
-        b=GBpnpnyvcxvQrz9hwd5XtGq7dUkpyn621tUI50pKyeYfwcfDCMM1u1WtLCIHPjgDp3
-         6giUiZslQNPnaGgcFB8dT+xnWFR0XKPzGI4hh9bcJwnVsbcaRnZ9QYnrwiGpPr2bjfHx
-         mNx2aDsRysNvKUPdj+WIrCdXDpThaHyvQ7vhYbvC/pR06jjntinMMQsxHArP8eOWB9Fi
-         787FaqCdelmBGI0BXriTqrQGlK9z4TAXIvJcIwrVXMlHbtTTbr4teTGES6ksM/H7igOO
-         EM4ENVD+hp0y5ltjFJ+o119+iMiJ/gVku1k8a56VJoXeoIlnaux/j527e8LqjZQePv9F
-         R3gw==
-X-Gm-Message-State: AOAM530nPcp+kTRMJ07pwPORDPfjcP4hpqcrilGbf3GwZzAoq/W6Phcu
-        1wOH2tsy2VlZUkUH3mtkQgI=
-X-Google-Smtp-Source: ABdhPJxPUVektfI6QlOweHtlDjKawi2DznTY/c8J0WmbTy3aNTOdjpiML6izXDS8jIbBZBWL5NL6BQ==
-X-Received: by 2002:a17:907:d28:b0:6f4:6375:5245 with SMTP id gn40-20020a1709070d2800b006f463755245mr2281563ejc.12.1651489138048;
-        Mon, 02 May 2022 03:58:58 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.gmail.com with ESMTPSA id n6-20020a056402514600b0042617ba63bcsm6596291edd.70.2022.05.02.03.58.56
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=q6Rnw46tJ5c8TR1VH8c4HYYn4D03M2nHnAjzUXe5flU=;
+        b=bH2rF3KYRW0tTryVA9NrVH+OPNj4FQq/xej3USWd42iPNyApn3vvZcMdUa8jmzk0dt
+         BxiqZTfC7WJgNm4fMlp82bIm18KmRuo+nrMELDlDFfoLqByf7FMMTVsydZgTnzvlSmVK
+         sOKX18dtpFHYojnaVdMquaAJI1l7JENVm3QUJ2owt1/8Kc8+7MAj6rMBXBEK/r4FRkpi
+         c1z68jVdyfVeqLUoQlD0vR4XAKQgrLN1lnMp8v+Hent+4GdPaqwvVQ1jTZ1qVmW8YpbU
+         V1JMWTG7BZeonos8l65FBw2Z+VH/ihHh0ZYPL5eFBrZCPCIoma8rTJ8ebtHV0UKHDyqE
+         iVaw==
+X-Gm-Message-State: AOAM531LaveUmza7oGTUwvLGuqBniCAiN3EArZ9Wt5e1cmbgWJ4WHOLS
+        vvrQdzn7PLB+1uxBp5C4ctFw2bENrVFE
+X-Google-Smtp-Source: ABdhPJwAs8+H3r7smNJ+ixQ2yCIe61zHgAhL1t7EBRsXyLhMAbzuX4wAz4gQxsVHn/Tux9b0w9j4Dg==
+X-Received: by 2002:a17:902:8d8e:b0:159:4f6:c4aa with SMTP id v14-20020a1709028d8e00b0015904f6c4aamr11199720plo.115.1651488111837;
+        Mon, 02 May 2022 03:41:51 -0700 (PDT)
+Received: from localhost.localdomain ([27.111.75.99])
+        by smtp.gmail.com with ESMTPSA id x10-20020a1709029a4a00b0015e8d4eb2ccsm4368434plv.278.2022.05.02.03.41.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 03:58:57 -0700 (PDT)
-Message-ID: <626fb971.1c69fb81.fcab0.5f71@mx.google.com>
-X-Google-Original-Message-ID: <Ym+1BPrdj2qz/SmT@Ansuel-xps.>
-Date:   Mon, 2 May 2022 12:40:04 +0200
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] dt-bindings: arm: msm: Convert kpss-gcc driver
- Documentation to yaml
-References: <20220430060125.9124-1-ansuelsmth@gmail.com>
- <20220430060125.9124-4-ansuelsmth@gmail.com>
- <fec305d1-d4b3-3f9d-bc31-bc33490d1ad7@linaro.org>
- <626d4cbf.1c69fb81.e6965.76b4@mx.google.com>
- <0711b822-506b-7b90-6b63-50c5c0ce4f6e@linaro.org>
+        Mon, 02 May 2022 03:41:51 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     mhi@lists.linux.dev
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
+        loic.poulain@linaro.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 0/5] MHI host cleanups
+Date:   Mon,  2 May 2022 16:11:39 +0530
+Message-Id: <20220502104144.91806-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0711b822-506b-7b90-6b63-50c5c0ce4f6e@linaro.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 01, 2022 at 10:26:47AM +0200, Krzysztof Kozlowski wrote:
-> On 30/04/2022 09:42, Ansuel Smith wrote:
-> > On Sat, Apr 30, 2022 at 04:40:54PM +0200, Krzysztof Kozlowski wrote:
-> >> On 30/04/2022 08:01, Ansuel Smith wrote:
-> >>> Convert kpss-gcc driver Documentation to yaml.
-> >>> Add #clock-cells additional binding to required bindings and example
-> >>> as it's a required binding for clock-output-names.
-> >>>
-> >>> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> >>
-> >>
-> >> (...)
-> >>
-> >>> +properties:
-> >>> +  compatible:
-> >>> +    items:
-> >>> +      - enum:
-> >>> +          - qcom,kpss-gcc-ipq8064
-> >>> +          - qcom,kpss-gcc-apq8064
-> >>> +          - qcom,kpss-gcc-msm8974
-> >>> +          - qcom,kpss-gcc-msm8960
-> >>> +      - const: qcom,kpss-gcc
-> >>> +
-> >>> +  reg:
-> >>> +    maxItems: 1
-> >>> +
-> >>> +  clocks:
-> >>> +    items:
-> >>> +      - description: phandle to pll8_vote
-> >>> +      - description: phandle to pxo_board
-> >>> +
-> >>> +  clock-names:
-> >>> +    items:
-> >>> +      - const: pll8_vote
-> >>> +      - const: pxo
-> >>> +
-> >>> +  clock-output-names:
-> >>> +    const: acpu_l2_aux
-> >>
-> >> It does not make sense having a constant output name. What is the
-> >> meaning this property in such case? The original binding did not enforce it.
-> >>
-> >>
-> >>
-> >> Best regards,
-> >> Krzysztof
-> > 
-> > Mh. Should I just drop the const and put a description referring to an
-> > advised name? The driver with the kpss-gcc hardcode the name to
-> > acpu_l2_aux that's why I thought it was a correct conversion using a
-> > const but I assume this is another problem of not making a correct 1:1
-> > conversion and adding fixes on pure conversion.
-> 
-> Hard-coding a name by implementation is not a reason to put that name in
-> DTS. DTS is not a place for values stored in the driver.
-> 
-> > Think I should drop it and put a description to it. (and then later fix
-> > it when I will push the other series with all the tweaks)
-> 
-> The driver kpss-gcc does not use this property at all, so I am not sure
-> if there is a point to even keep it. Any other user of bindings makes
-> use of the property?
-> 
-> 
-> Best regards,
-> Krzysztof
+Hi,
 
-The idea is that you put the clk name in 'clock-output-names' and the
-driver needs to have support for it (and set the clk name based on the
-name defined in the dts)
+This series has few cleanups to the MHI host stack. Apart from the cleanups,
+patch (5/5) removes the redundant dma_wmb() from mhi_ring_chan_db() function.
+I've provided the reasoning in the commit message, if my understanding is wrong
+please let me know.
 
-This driver doesn't have support for it and is actually hardcoded.
-So you are right and I should just drop it.
+Thanks,
+Mani
 
-But now another question... Since #clock-cells was added as a
-requirement for clock-output-names, should I drop also that?
+Manivannan Sadhasivam (5):
+  bus: mhi: host: Rename process_db callback to ring_db
+  bus: mhi: host: Rename mhi_db_brstmode() and mhi_db_brstmode_disable()
+  bus: mhi: host: Use {READ/WITE}_ONCE macros for db_mode and db_val
+  bus: mhi: host: Rename parse_{rsc/xfer}_event to
+    process{rsc/xfer}_event
+  bus: mhi: host: Remove redundant dma_wmb() before ctx wp update
 
-In theory #clock-cells should always be declared for clock providers, is
-it right to add it in the conversion commit or I should put this change
-in another commit? (since it's now an addition and now something required
-to fix a bot warning)
+ drivers/bus/mhi/host/init.c     | 12 +++++------
+ drivers/bus/mhi/host/internal.h |  6 +++---
+ drivers/bus/mhi/host/main.c     | 37 ++++++++++++++++-----------------
+ 3 files changed, 27 insertions(+), 28 deletions(-)
 
 -- 
-	Ansuel
+2.25.1
+

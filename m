@@ -2,124 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB115176BE
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 20:44:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C44955176C0
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 20:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242270AbiEBSrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 14:47:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56366 "EHLO
+        id S1346358AbiEBSrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 14:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbiEBSrd (ORCPT
+        with ESMTP id S1345938AbiEBSrv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 14:47:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C159260F4
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 11:44:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651517042;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=7G1poOEMReOFGnC0Us25exoH9KAMdn29EthSamAbOPc=;
-        b=IB/8B6BLhiZCM1FwLgKHSFeCMudVvayGZuHzkMary10MHZV4cMu0eXgihHgnkSlAW7WbKs
-        yX60MDzJ9UCwHxTq4bazR1DysBR2lFoC6y38spmk10Vu+H3ltYgYgrgijpFL7yHrHkVCBx
-        2xTtipdT731xDAVBwtm4QnwXAZEaHic=
-Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
- [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-673-OakeLXamPGWeVdxEK-MZAQ-1; Mon, 02 May 2022 14:44:01 -0400
-X-MC-Unique: OakeLXamPGWeVdxEK-MZAQ-1
-Received: by mail-ot1-f71.google.com with SMTP id w8-20020a9d5388000000b0060613b46a98so1571676otg.8
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 11:44:01 -0700 (PDT)
+        Mon, 2 May 2022 14:47:51 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A97F63D0;
+        Mon,  2 May 2022 11:44:21 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id e3so13113278ios.6;
+        Mon, 02 May 2022 11:44:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=kag0W5KSVm45wT2YJIgHV3pPE4Il9KPW/q5fD/AIv6E=;
+        b=YYZhTjBKfWlOrPpS24xigKe2erAj7g8ET79Enx4NjPB00O1NaBeXyD6g55Pw2dBucV
+         wI7zsIiq0GQaQSkW0K8EULv5LMbZmsSSjXQEbHtnnfISTf55L3M8CtmAeBBtomtv5miM
+         rYIfsNyzPZvdhDYy3ClDbeIRHepfxIKlZ1NG1PtOWeG6GKfb6DzI4MizZ0hDS//eYjp0
+         wySriFoYDhKKg4voV87SdhIb99FjOZ0P6CpYFcxz3FKSxqPc+aIOZx03OqfR5W8yuQpd
+         EkNG0q14jo7DY0PReX3ZE1aQHnyOgGDd4tDQAo/jJggBeqPdJK/x630qNVqkKFx/8Lta
+         f7bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=7G1poOEMReOFGnC0Us25exoH9KAMdn29EthSamAbOPc=;
-        b=A1/x7n+/cZe9QzsmkUayN8AJv1eMzwpy6EAh0Gc/sYblphhPnKMBbLLMJVqHOipRP9
-         8Ukhs9fzoYXnTfQbuGwfHLhFXgmTI07T+DiQbRA83vbiixqRFABjptPETKqOa/SPlth+
-         g5AEHkixlfDP5C8s6st5NDMVQZJf6Lv0pylibVFE5phNWE1CMVQdEkcKJVPYx4CuIGqO
-         e2//jHOOin1h9Umz4xRxboG77xboa6RezaaWmJfZvilqppfUXv+82hvse8OIsvOrEBxV
-         I/Oh5jNY1MIALT3DPlQjiFrPHKP8MBxvEHA8bbJmev2OC7moNe8tn/l6Uk8/WN3GKnaa
-         TV4Q==
-X-Gm-Message-State: AOAM533BEvnI/osX6KwEKdadTVsV80l0j/9ICd/YBbH1ruODBXQiSHkM
-        sy4k3CkIOSfielokuDYWnu17+zXJHvwyTL3at14GuVCu/gZvUydbC6a2i/ahoxDr5RR89tmU2cM
-        4PxiBs+ZV8ikSEo3c+043NuvX
-X-Received: by 2002:a05:6808:124d:b0:325:788d:e23d with SMTP id o13-20020a056808124d00b00325788de23dmr242201oiv.267.1651517040816;
-        Mon, 02 May 2022 11:44:00 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzRUXu471IEGrZLxcEbLEi/3H6c//jwnIiNRuOEi8DV1xn2Tn8hH+1nrApiGgqLDS+he9PJGQ==
-X-Received: by 2002:a05:6808:124d:b0:325:788d:e23d with SMTP id o13-20020a056808124d00b00325788de23dmr242195oiv.267.1651517040612;
-        Mon, 02 May 2022 11:44:00 -0700 (PDT)
-Received: from treble.attlocal.net ([2600:1700:6e32:6c00::a])
-        by smtp.gmail.com with ESMTPSA id r2-20020a05687002c200b000e99b1909d4sm5370524oaf.25.2022.05.02.11.43.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 11:44:00 -0700 (PDT)
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Kaiwan N Billimoria <kaiwan.billimoria@gmail.com>
-Subject: [PATCH] scripts/faddr2line: Only use text symbols to calculate function size
-Date:   Mon,  2 May 2022 11:43:50 -0700
-Message-Id: <2fb2bc4e857848c83cfa96483e4b25b23d46be49.1651516951.git.jpoimboe@redhat.com>
-X-Mailer: git-send-email 2.34.1
+        bh=kag0W5KSVm45wT2YJIgHV3pPE4Il9KPW/q5fD/AIv6E=;
+        b=A+74/6pgIDQTHuvQbQsnP3ySW856euLEUJcfLljy0skfABMXqVlJQvnEmBTUZ/PAKS
+         N1q1IYdy6aCi5RGIgyYiTh0aVvOombZo3df1KTu753smKGO+9oTLAXdzX1MVPhQWVXpK
+         Pm7jWGcgkKN3lzy0E2wNWSStewGUjU7YSYWlSBsVDi/YPE5saYAUXRiDONdf+lHKvTbe
+         V5ELUTRXW6gTz3Ebm0Hu07K9A1OlptQckCOaJ5MiTnrusnmdfqoRIpuuxI+K+CPc8pKx
+         N/adjxXVUl508n1fKScQsLFB8rqNN1rEYF5WNHpt2m4hwV7WmeiTYQyq4E401HDHczql
+         lJcA==
+X-Gm-Message-State: AOAM530234gkuDLql3FcpsBFKzQQR/K8fiqsbVqbe+693CIvETT+iwiW
+        oPeUAhjlv7G3edb6wLEhg2NNDN8jmDg=
+X-Google-Smtp-Source: ABdhPJyAgRgwSGKQgX14pN0L3BMo2qgWA4xuMMw0pRSeUrjOmrvAs68ST+AI9dv0iqIU9KHPY/J2xw==
+X-Received: by 2002:a5e:d61a:0:b0:657:c106:6009 with SMTP id w26-20020a5ed61a000000b00657c1066009mr4508768iom.105.1651517060733;
+        Mon, 02 May 2022 11:44:20 -0700 (PDT)
+Received: from ?IPV6:2600:1700:2442:6db0:bd98:70d3:4542:6c6a? ([2600:1700:2442:6db0:bd98:70d3:4542:6c6a])
+        by smtp.gmail.com with ESMTPSA id w63-20020a025d42000000b0032b3a781760sm3245998jaa.36.2022.05.02.11.44.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 May 2022 11:44:20 -0700 (PDT)
+Message-ID: <c9819833-5c51-070b-ca77-ce273aa46fcf@gmail.com>
+Date:   Mon, 2 May 2022 13:44:19 -0500
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/3] of: overlay: add entry to of_overlay_action_name[]
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Pantelis Antoniou <pantelis.antoniou@konsulko.com>,
+        Slawomir Stepien <slawomir.stepien@nokia.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Slawomir Stepien <sst@poczta.fm>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+References: <20220501000543.1368005-1-frowand.list@gmail.com>
+ <20220501000543.1368005-2-frowand.list@gmail.com>
+ <YnAOEqO23BQk53vz@robh.at.kernel.org>
+ <367805de-3ef5-1e1d-3711-7d21b500a886@gmail.com>
+ <CAL_JsqJByh1kt13ATU0J8nYbusYu3XY3bXLwyuDg8XD6xmDkMA@mail.gmail.com>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <CAL_JsqJByh1kt13ATU0J8nYbusYu3XY3bXLwyuDg8XD6xmDkMA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the following commit
+On 5/2/22 13:29, Rob Herring wrote:
+> On Mon, May 2, 2022 at 1:17 PM Frank Rowand <frowand.list@gmail.com> wrote:
+>>
+>> On 5/2/22 12:00, Rob Herring wrote:
+>>> On Sat, Apr 30, 2022 at 07:05:41PM -0500, frowand.list@gmail.com wrote:
+>>>> From: Frank Rowand <frank.rowand@sony.com>
+>>>>
+>>>> The values of enum of_overlay_notify_action are used to index into
+>>>> array of_overlay_action_name.  Add an entry to of_overlay_action_name
+>>>> for the value recently added to of_overlay_notify_action.
+>>>>
+>>>> Array of_overlay_action_name[] is moved into include/linux/of.h
+>>>> adjacent to enum of_overlay_notify_action to make the connection
+>>>> between the two more obvious if either is modified in the future.
+>>>>
+>>>> The only use of of_overlay_action_name is for error reporting in
+>>>> overlay_notify().  All callers of overlay_notify() report the same
+>>>> error, but with fewer details.  Remove the redundant error reports
+>>>> in the callers.
+>>>>
+>>>> Fixes: 067c098766c6 ("of: overlay: rework overlay apply and remove kfree()s")
+>>>> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+>>>> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
+>>>> ---
+>>>>  drivers/of/overlay.c | 27 +++++----------------------
+>>>>  include/linux/of.h   | 13 +++++++++++++
+>>>>  2 files changed, 18 insertions(+), 22 deletions(-)
+>>>
+>>> This isn't applying for me.
+>>
+>> Weird, patch can apply it, but 'git am' does not work.  I see that when
+>> I try that on your dt/next branch.
+>>
+>> The problem seems to be that I did not create the series on top of
+>> dt/next: 5f756a2eaa44 of: overlay: do not break notify on NOTIFY_{OK|STOP}.
+> 
+> It should be more than just that. It was also not any base I have in
+> my tree, so 'git am' wouldn't try a 3-way merge either.
 
-  efdb4167e676 ("scripts/faddr2line: Fix "size mismatch" error")
+That was the only thing patch mentioned when it applied successfully,
+a little bit of fuzz around the few lines in that patch.  I thought
+it a little weird that 'git am' didn't handle that, but it was easy
+enough to rebase instead of debugging git.
 
-it was discovered that faddr2line can't just read a function's ELF
-size, because that wouldn't match the kallsyms function size which is
-printed in the stack trace.  The kallsyms size includes any padding
-after the function, whereas the ELF size does not.
+> 
+>> I have rebased the series on top of that patch and am sending v2.
+> 
+> Thanks.
 
-So faddr2line has to manually calculate the size of a function similar
-to how kallsyms does.  It does so by starting with a sorted list of
-symbols and subtracting the function address from the subsequent
-symbol's address.
+I just now tried the v2 series emails on top of your dt/next and 'git am'
+is happy with it.
 
-That calculation is broken in the case where the function is the last
-(or only) symbol in the .text section, which can occur quite commonly in
-a kernel module or a .o file.  In that case, the next symbol in the
-sorted list might actually be a data symbol, which breaks the function
-size detection:
-
-  $ scripts/faddr2line sound/soundcore.ko sound_devnode+0x5/0x35
-  bad symbol size: base: 0x0000000000000000 end: 0x0000000000000000
-
-Fix it by only including text symbols in the symbol list.
-
-Fixes: efdb4167e676 ("scripts/faddr2line: Fix "size mismatch" error")
-Reported-by: Kaiwan N Billimoria <kaiwan.billimoria@gmail.com>
-Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
----
- scripts/faddr2line | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/scripts/faddr2line b/scripts/faddr2line
-index 6c6439f69a72..2a130134f1e6 100755
---- a/scripts/faddr2line
-+++ b/scripts/faddr2line
-@@ -189,7 +189,7 @@ __faddr2line() {
- 
- 		DONE=1
- 
--	done < <(${NM} -n $objfile | awk -v fn=$func -v end=$file_end '$3 == fn { found=1; line=$0; start=$1; next } found == 1 { found=0; print line, "0x"$1 } END {if (found == 1) print line, end; }')
-+	done < <(${NM} -n $objfile | awk -v fn=$func -v end=$file_end '$2 !~ /[Tt]/ {next} $3 == fn { found=1; line=$0; start=$1; next } found == 1 { found=0; print line, "0x"$1 } END {if (found == 1) print line, end; }')
- }
- 
- [[ $# -lt 2 ]] && usage
--- 
-2.34.1
+> 
+> Rob
 

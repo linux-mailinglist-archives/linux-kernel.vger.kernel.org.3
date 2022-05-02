@@ -2,132 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71080517314
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 17:42:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4217517310
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 17:41:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357707AbiEBPpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 11:45:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53408 "EHLO
+        id S1385967AbiEBPow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 11:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357766AbiEBPpN (ORCPT
+        with ESMTP id S1384180AbiEBPos (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 11:45:13 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFBB65A6
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 08:41:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651506100; x=1683042100;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dtpuVPkQosFhnNZt5DpSIn/618logEfRhrZLF3ipPIw=;
-  b=RUrQYA7jst4zRNfgJQMrC4OvHfGhaE5PHEYDXuU2qcNkBkO2Vtj1hhN8
-   Jinc3NaDkyHhdOWxaQOcAffxLqiZDwL84egBDSSkIO9XDqDFBbKG50jEk
-   /k3kGKMLeYJVDCC2zJY2gMNnv6J38VrLvVJmoY7emqdTrtt4oN5ShB7OU
-   xXxaMQ8+UwmwFQHGb3xtdTyY+40qRtzDkxTh2+uVNc9TLcIuLZoQi5uXi
-   EqfuFmHK5zJmd1J9zUW2Bnahs6gEe8LU5d0NKojKjPYvWsKQ0qrM4JcN+
-   zq72WA7tsDkoKVqK8C/V/8LhBfZrmW5H6LTWCuwVqlfO70gIpnU4Am6+0
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="353673662"
-X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
-   d="scan'208";a="353673662"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 08:41:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
-   d="scan'208";a="535898306"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 02 May 2022 08:41:37 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nlYB1-0009ed-FV;
-        Mon, 02 May 2022 15:41:31 +0000
-Date:   Mon, 2 May 2022 23:40:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gaston Gonzalez <gascoar@gmail.com>,
-        linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>
-Subject: Re: [PATCH v1 1/1] staging: vc04_services: Re-use generic struct
- s32_fract
-Message-ID: <202205022340.RcyzPlQJ-lkp@intel.com>
-References: <20220502120355.84334-1-andriy.shevchenko@linux.intel.com>
+        Mon, 2 May 2022 11:44:48 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B8BEB92
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 08:41:19 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id be20so17045381edb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 08:41:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=kdTSJmnbBK4N/virhew8A7fzQDKu0iWJnLEnGHSX4Dw=;
+        b=LiDnLEt9mMDcOUqe/y+G7PLlyLQ2PDwgp6TDpNZqUbbnzLevTkk2hqa5oP4qOkhVZp
+         TZF69jYA8rlqeLHQolaHiJaBRX/gD8RbJZVtnj/1DrQ/baBCHIkhL3Zj5Zjpu8yV6Hwn
+         SGZdKypbE7W780qgiJ+fz67GeKkj0J2r73jmahViqDnzjpSy8W1Vt13nv59wLr7o0r3b
+         zAdKAg4Qt6/WeKUbNfDIwug7M7j0sUaGfE4tQ/SMylmac3l7OPaxBSxuZWbrQ/tHvNXA
+         eRfhV1Np33vY302pf5LvB2W2zuBa0uYt3+zpoYWMWtBGmNX8ALOtqIalGGhM8BTu7Evv
+         BH1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=kdTSJmnbBK4N/virhew8A7fzQDKu0iWJnLEnGHSX4Dw=;
+        b=wHcb5TUk7CW192DbnyzZ0NWbk6uMeemC04uzfN2ap+OIu+RqawiHPKM8AZUyiQuBgR
+         zKyMAYUGaVhRpuITd5Jd2SJKwgSYD1HKWgFkuuUsba0mz2FVtpCuHY9OvKbOPvT+nFDx
+         MTOD0js3XRbIm+8pq4/sSZJM2MxYbxuO/FHfdIQDSFipQo2TXUfe1BQIWDQiMsnFuW/j
+         +S/sdvQZaWhKGLLWnuAyJmDz54bOqMe8n9PKOML4weh1kk7sBAs+43/feCtkeB0UJ8TZ
+         Jk2/DE1pvLGnQRy211tpTknvgqFzae7YR2xSxn6mmnKrD+O9lxuk4OK8PZbHlmqWHWYE
+         taNg==
+X-Gm-Message-State: AOAM532q4FF7jy6L266tXy/WE+7yah4Kvy0j4z5Muwv9X1o/L6jMbPxK
+        ZWsLwdPErgMHqNh2DkC4kUyK4DFSf+VhND5hQQTo03TpWb0=
+X-Google-Smtp-Source: ABdhPJxQnoPAmGDkrnWenR9mItq06e4ef1D3WBimAj2Hf0fi9PpGTmNe2mQQ/IajB0EwH90WPecfV26+ZZYtEIqZSp8=
+X-Received: by 2002:a05:6512:2398:b0:473:9cf5:1750 with SMTP id
+ c24-20020a056512239800b004739cf51750mr3834545lfv.300.1651506066453; Mon, 02
+ May 2022 08:41:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220502120355.84334-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Sender: arunadogbe@gmail.com
+Received: by 2002:a05:6512:22c5:0:0:0:0 with HTTP; Mon, 2 May 2022 08:41:05
+ -0700 (PDT)
+From:   Lisa Williams <lw4666555@gmail.com>
+Date:   Mon, 2 May 2022 16:41:05 +0100
+X-Google-Sender-Auth: Us32P7O15QDQmfhDpX_dAhvk4jw
+Message-ID: <CAPsVOGzyJPMeju17bbvX5hTyTOHJGABCr0Oy1WjZZxhKcxQcvQ@mail.gmail.com>
+Subject: Hi Dear!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on staging/staging-testing]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/staging-vc04_services-Re-use-generic-struct-s32_fract/20220502-200543
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git 5fe7856ad59afc56a6ff35d091bfaddd1d4f4bce
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220502/202205022340.RcyzPlQJ-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c0fbdbd092e007c2567a367389e86df9d1cd7ee3
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/staging-vc04_services-Re-use-generic-struct-s32_fract/20220502-200543
-        git checkout c0fbdbd092e007c2567a367389e86df9d1cd7ee3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/staging/vc04_services/bcm2835-camera/controls.c: In function 'ctrl_set_rational':
->> drivers/staging/vc04_services/bcm2835-camera/controls.c:162:24: error: 'struct s32_fract' has no member named 'numumerator'; did you mean 'numerator'?
-     162 |         rational_value.numumerator = ctrl->val;
-         |                        ^~~~~~~~~~~
-         |                        numerator
-
-
-vim +162 drivers/staging/vc04_services/bcm2835-camera/controls.c
-
-   152	
-   153	static int ctrl_set_rational(struct bcm2835_mmal_dev *dev,
-   154				     struct v4l2_ctrl *ctrl,
-   155				     const struct bcm2835_mmal_v4l2_ctrl *mmal_ctrl)
-   156	{
-   157		struct s32_fract rational_value;
-   158		struct vchiq_mmal_port *control;
-   159	
-   160		control = &dev->component[COMP_CAMERA]->control;
-   161	
- > 162		rational_value.numumerator = ctrl->val;
-   163		rational_value.denominator = 100;
-   164	
-   165		return vchiq_mmal_port_parameter_set(dev->instance, control,
-   166						     mmal_ctrl->mmal_id,
-   167						     &rational_value,
-   168						     sizeof(rational_value));
-   169	}
-   170	
-
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Hi Dear
+
+My name is Lisa Williams, I am from United States of America, Its my
+pleasure to contact you for new and special friendship, I will be glad to
+see your reply for us to know each other better
+
+Yours
+Lisa

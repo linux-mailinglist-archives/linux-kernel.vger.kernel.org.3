@@ -2,125 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E49F2516B34
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 09:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 877EE516B39
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 09:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358527AbiEBH2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 03:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36540 "EHLO
+        id S1379415AbiEBH3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 03:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358563AbiEBH2B (ORCPT
+        with ESMTP id S1358666AbiEBH32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 03:28:01 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392C817A94
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 00:24:33 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id m6so11090697iob.4
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 00:24:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=U3yK116U7QtcL5LqxzCgKsq8iaHrCKZT63ym/sXbAKc=;
-        b=Bzi+R0R7QaC+1bjX2bo/eUhZOcarNK1lhHQK3BnkDNsZ/YQ2kF65HgubGNE1g9QjAF
-         VClt8yFpYSC5oht9s5BVdGzylLx1SGefdWn/yZSkP43v9ZQ/U115ldRP4mIaned4xy+i
-         XIOYoMJFeLcWOEhr5AxcXnBEpdEmwdLfO6uO7xJ6U4GX4NaQbgjWU8WH2H/DzUzqOLnG
-         Y07pCf3IIYshAUYH77brXREcB5+CeW72v1d84nST1hyzetu4eMbN4GXW/ybvmO2gKA4z
-         6cXwi4THka5cWO2I5lnhUndPk6YD5GJn9zIhAtE8MWZojqFyir63YUwehSgoAGHPtqPb
-         sMAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=U3yK116U7QtcL5LqxzCgKsq8iaHrCKZT63ym/sXbAKc=;
-        b=1zpblwnFn2JJpfEDn2gtkVbsmT9sZ1X099YleSenV5rukdoewdoTfSYUcyvWjcm5Pq
-         0VQAV25uLFIaSZ2vTuczZHW9YWp739YRy7Li/n2Bw2D+G2bJNz5rUbtjzARe4+sgXLJb
-         X0RoRViZOMFss12xxB/QaEj/PsxXK9EukDJnAvOKXA+H4NcO4QvU6j+kfUNil2TVla4y
-         m44odaFOR24YTVg9fINhKmHMTfpQogoKwKG7QFbFAn+/mgKnlSSaYoeyvgx0yZYC3dN7
-         rfpveOBDOfPZdnCjnimAFPimHVrKV7WJ4cYPg1juCawauZK6z0W5wMpciBAJaCx0dYsP
-         4EyQ==
-X-Gm-Message-State: AOAM531WIJ7p9Q8y7cvFema/5mfFXuYdkKm/PG1DpZuMxGoMwgGlEuLq
-        X8uRkUrz28VgfxVhOgzX4QzVvw==
-X-Google-Smtp-Source: ABdhPJxeI2hWA90VpSmXaKqPppDo5J6dwWDCrTz4glAq2DiVVqCq9f3COwPcysvhW/KDXqg9MvY5ZQ==
-X-Received: by 2002:a05:6638:2643:b0:323:c3e3:fcec with SMTP id n3-20020a056638264300b00323c3e3fcecmr4517508jat.289.1651476272267;
-        Mon, 02 May 2022 00:24:32 -0700 (PDT)
-Received: from google.com (194.225.68.34.bc.googleusercontent.com. [34.68.225.194])
-        by smtp.gmail.com with ESMTPSA id z7-20020a926507000000b002cde6e352e5sm2494262ilb.47.2022.05.02.00.24.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 00:24:31 -0700 (PDT)
-Date:   Mon, 2 May 2022 07:24:28 +0000
-From:   Oliver Upton <oupton@google.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v4 4/4] KVM: arm64/mmu: count KVM s2 mmu usage in
- secondary pagetable stats
-Message-ID: <Ym+HLD/U0wwrxtaB@google.com>
-References: <20220429201131.3397875-1-yosryahmed@google.com>
- <20220429201131.3397875-5-yosryahmed@google.com>
+        Mon, 2 May 2022 03:29:28 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EEA0B186C9;
+        Mon,  2 May 2022 00:25:58 -0700 (PDT)
+Received: by ajax-webmail-mail-app4 (Coremail) ; Mon, 2 May 2022 15:25:14
+ +0800 (GMT+08:00)
+X-Originating-IP: [10.190.66.80]
+Date:   Mon, 2 May 2022 15:25:14 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, kuba@kernel.org,
+        gregkh@linuxfoundation.org, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, alexander.deucher@amd.com,
+        akpm@linux-foundation.org, broonie@kernel.org,
+        netdev@vger.kernel.org, linma@zju.edu.cn
+Subject: Re: Re: [PATCH net v5 2/2] nfc: nfcmrvl: main: reorder destructive
+ operations in nfcmrvl_nci_unregister_dev to avoid bugs
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <405e3948-7fb2-01de-4c01-29775a21218c@linaro.org>
+References: <cover.1651194245.git.duoming@zju.edu.cn>
+ <bb2769acc79f42d25d61ed8988c8d240c8585f33.1651194245.git.duoming@zju.edu.cn>
+ <8656d527-94ab-228f-66f1-06e5d533e16a@linaro.org>
+ <73fe1723.69fe.1807498ab4d.Coremail.duoming@zju.edu.cn>
+ <405e3948-7fb2-01de-4c01-29775a21218c@linaro.org>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220429201131.3397875-5-yosryahmed@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Message-ID: <614ae365.b499.18083a8bb17.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cS_KCgCHj6dah29i5GA0Ag--.5296W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgESAVZdtZfSggAAsp
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yosry,
+CgoKPiAtLS0tLeWOn+Wni+mCruS7ti0tLS0tCj4g5Y+R5Lu25Lq6OiAiS3J6eXN6dG9mIEtvemxv
+d3NraSIgPGtyenlzenRvZi5rb3psb3dza2lAbGluYXJvLm9yZz4KPiDlj5HpgIHml7bpl7Q6IDIw
+MjItMDUtMDIgMTQ6MzQ6MDcgKOaYn+acn+S4gCkKPiDmlLbku7bkuro6IGR1b21pbmdAemp1LmVk
+dS5jbgo+IOaKhOmAgTogbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZywga3ViYUBrZXJuZWwu
+b3JnLCBncmVna2hAbGludXhmb3VuZGF0aW9uLm9yZywgZGF2ZW1AZGF2ZW1sb2Z0Lm5ldCwgZWR1
+bWF6ZXRAZ29vZ2xlLmNvbSwgcGFiZW5pQHJlZGhhdC5jb20sIGFsZXhhbmRlci5kZXVjaGVyQGFt
+ZC5jb20sIGFrcG1AbGludXgtZm91bmRhdGlvbi5vcmcsIGJyb29uaWVAa2VybmVsLm9yZywgbmV0
+ZGV2QHZnZXIua2VybmVsLm9yZywgbGlubWFAemp1LmVkdS5jbgo+IOS4u+mimDogUmU6IFtQQVRD
+SCBuZXQgdjUgMi8yXSBuZmM6IG5mY21ydmw6IG1haW46IHJlb3JkZXIgZGVzdHJ1Y3RpdmUgb3Bl
+cmF0aW9ucyBpbiBuZmNtcnZsX25jaV91bnJlZ2lzdGVyX2RldiB0byBhdm9pZCBidWdzCj4gCj4g
+T24gMjkvMDQvMjAyMiAxMToxMywgZHVvbWluZ0B6anUuZWR1LmNuIHdyb3RlOgo+ID4gSGVsbG8s
+Cj4gPiAKPiA+IE9uIEZyaSwgMjkgQXByIDIwMjIgMDk6Mjc6NDggKzAyMDAgS3J6eXN6dG9mIHdy
+b3RlOgo+ID4gCj4gPj4+IFRoZXJlIGFyZSBkZXN0cnVjdGl2ZSBvcGVyYXRpb25zIHN1Y2ggYXMg
+bmZjbXJ2bF9md19kbmxkX2Fib3J0IGFuZAo+ID4+PiBncGlvX2ZyZWUgaW4gbmZjbXJ2bF9uY2lf
+dW5yZWdpc3Rlcl9kZXYuIFRoZSByZXNvdXJjZXMgc3VjaCBhcyBmaXJtd2FyZSwKPiA+Pj4gZ3Bp
+byBhbmQgc28gb24gY291bGQgYmUgZGVzdHJ1Y3RlZCB3aGlsZSB0aGUgdXBwZXIgbGF5ZXIgZnVu
+Y3Rpb25zIHN1Y2ggYXMKPiA+Pj4gbmZjbXJ2bF9md19kbmxkX3N0YXJ0IGFuZCBuZmNtcnZsX25j
+aV9yZWN2X2ZyYW1lIGlzIGV4ZWN1dGluZywgd2hpY2ggbGVhZHMKPiA+Pj4gdG8gZG91YmxlLWZy
+ZWUsIHVzZS1hZnRlci1mcmVlIGFuZCBudWxsLXB0ci1kZXJlZiBidWdzLgo+ID4+Pgo+ID4+PiBU
+aGVyZSBhcmUgdGhyZWUgc2l0dWF0aW9ucyB0aGF0IGNvdWxkIGxlYWQgdG8gZG91YmxlLWZyZWUg
+YnVncy4KPiA+Pj4KPiA+Pj4gVGhlIGZpcnN0IHNpdHVhdGlvbiBpcyBzaG93biBiZWxvdzoKPiA+
+Pj4KPiA+Pj4gICAgKFRocmVhZCAxKSAgICAgICAgICAgICAgICAgfCAgICAgIChUaHJlYWQgMikK
+PiA+Pj4gbmZjbXJ2bF9md19kbmxkX3N0YXJ0ICAgICAgICAgfAo+ID4+PiAgLi4uICAgICAgICAg
+ICAgICAgICAgICAgICAgICB8ICBuZmNtcnZsX25jaV91bnJlZ2lzdGVyX2Rldgo+ID4+PiAgcmVs
+ZWFzZV9maXJtd2FyZSgpICAgICAgICAgICB8ICAgbmZjbXJ2bF9md19kbmxkX2Fib3J0Cj4gPj4+
+ICAga2ZyZWUoZncpIC8vKDEpICAgICAgICAgICAgIHwgICAgZndfZG5sZF9vdmVyCj4gPj4+ICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAgIHJlbGVhc2VfZmlybXdhcmUKPiA+Pj4g
+ICAuLi4gICAgICAgICAgICAgICAgICAgICAgICAgfCAgICAgIGtmcmVlKGZ3KSAvLygyKQo+ID4+
+PiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgICAuLi4KPiA+Pj4KPiA+Pj4gVGhl
+IHNlY29uZCBzaXR1YXRpb24gaXMgc2hvd24gYmVsb3c6Cj4gPj4+Cj4gPj4+ICAgIChUaHJlYWQg
+MSkgICAgICAgICAgICAgICAgIHwgICAgICAoVGhyZWFkIDIpCj4gPj4+IG5mY21ydmxfZndfZG5s
+ZF9zdGFydCAgICAgICAgIHwKPiA+Pj4gIC4uLiAgICAgICAgICAgICAgICAgICAgICAgICAgfAo+
+ID4+PiAgbW9kX3RpbWVyICAgICAgICAgICAgICAgICAgICB8Cj4gPj4+ICAod2FpdCBhIHRpbWUp
+ICAgICAgICAgICAgICAgIHwKPiA+Pj4gIGZ3X2RubGRfdGltZW91dCAgICAgICAgICAgICAgfCAg
+bmZjbXJ2bF9uY2lfdW5yZWdpc3Rlcl9kZXYKPiA+Pj4gICAgZndfZG5sZF9vdmVyICAgICAgICAg
+ICAgICAgfCAgIG5mY21ydmxfZndfZG5sZF9hYm9ydAo+ID4+PiAgICAgcmVsZWFzZV9maXJtd2Fy
+ZSAgICAgICAgICB8ICAgIGZ3X2RubGRfb3Zlcgo+ID4+PiAgICAgIGtmcmVlKGZ3KSAvLygxKSAg
+ICAgICAgICB8ICAgICByZWxlYXNlX2Zpcm13YXJlCj4gPj4+ICAgICAgLi4uICAgICAgICAgICAg
+ICAgICAgICAgIHwgICAgICBrZnJlZShmdykgLy8oMikKPiA+Pgo+ID4+IEhvdyBleGFjdGx5IHRo
+ZSBjYXNlIGhlcmUgaXMgYmVpbmcgcHJldmVudGVkPwo+ID4+Cj4gPj4gSWYgbmZjbXJ2bF9uY2lf
+dW5yZWdpc3Rlcl9kZXYoKSBoYXBwZW5zIHNsaWdodGx5IGVhcmxpZXIsIGJlZm9yZQo+ID4+IGZ3
+X2RubGRfdGltZW91dCgpIG9uIHRoZSBsZWZ0IHNpZGUgKFQxKSwgdGhlIFQxIHdpbGwgc3RpbGwg
+aGl0IGl0LCB3b24ndCBpdD8KPiA+IAo+ID4gSSB0aGluayBpdCBjb3VsZCBiZSBwcmV2ZW50ZWQu
+IFdlIHVzZSBuY2lfdW5yZWdpc3Rlcl9kZXZpY2UoKSB0byBzeW5jaHJvbml6ZSwgaWYgdGhlCj4g
+PiBmaXJtd2FyZSBkb3dubG9hZCByb3V0aW5lIGlzIHJ1bm5pbmcsIHRoZSBjbGVhbnVwIHJvdXRp
+bmUgd2lsbCB3YWl0IGl0IHRvIGZpbmlzaC4gCj4gPiBUaGUgZmxhZyAiZndfZG93bmxvYWRfaW5f
+cHJvZ3Jlc3MiIHdpbGwgYmUgc2V0IHRvIGZhbHNlLCBpZiB0aGUgdGhlIGZpcm13YXJlIGRvd25s
+b2FkCj4gPiByb3V0aW5lIGlzIGZpbmlzaGVkLiAKPiAKPiBmd19kb3dubG9hZF9pbl9wcm9ncmVz
+cyBpcyBub3Qgc3luY2hyb25pemVkIGluCj4gbmZjbXJ2bF9uY2lfdW5yZWdpc3Rlcl9kZXYoKSwg
+c28gZXZlbiBpZiBmd19kbmxkX3RpbWVvdXQoKSBzZXQgaXQgdG8KPiB0cnVlLCB0aGUgbmZjbXJ2
+bF9uY2lfdW5yZWdpc3Rlcl9kZXYoKSBoYXBwZW5pbmcgY29uY3VycmVudGx5IHdpbGwgbm90Cj4g
+c2VlIHVwZGF0ZWQgZndfZG93bmxvYWRfaW5fcHJvZ3Jlc3MuCgpUaGUgZndfZG93bmxvYWRfaW5f
+cHJvZ3Jlc3MgaXMgc2V0IHRvIGZhbHNlIGluIG5mY19md19kb3dubG9hZCgpLiBUaGUgbmZjX2Z3
+X2Rvd25sb2FkKCkgaXMKc3luY2hyb25pemVkIHdpdGggbmZjX3VucmVnaXN0ZXJfZGV2aWNlKCku
+IElmIG5mY19md19kb3dubG9hZCgpIGlzIHJ1bm5pbmcsIG5mY191bnJlZ2lzdGVyX2RldmljZSgp
+CndpbGwgd2FpdCBuZmNfZndfZG93bmxvYWQoKSB0byBmaW5pc2guIFNvIHRoZSBuZmNtcnZsX25j
+aV91bnJlZ2lzdGVyX2RldigpIGNvdWxkIHNlZSB0aGUgdXBkYXRlZApmd19kb3dubG9hZF9pbl9w
+cm9ncmVzcy4gVGhlIHByb2Nlc3MgaXMgc2hvd24gYmVsb3c6CgogICAgICAgIChUaHJlYWQgMSkg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAgICAgKFRocmVhZCAy
+KQogbmZjbXJ2bF9uY2lfdW5yZWdpc3Rlcl9kZXYgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIHwgbmZjX2Z3X2Rvd25sb2FkCiAgIG5jaV91bnJlZ2lzdGVyX2RldmljZSAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgfCAgLi4uCiAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgZGV2aWNlX2xvY2soKQogICAgIC4u
+LiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIGRl
+di0+ZndfZG93bmxvYWRfaW5fcHJvZ3Jlc3MgPSBmYWxzZTsgLy8oMSkKICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICBkZXZpY2VfdW5s
+b2NrKCkKICAgICBuZmNfdW5yZWdpc3Rlcl9kZXZpY2UgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICB8IAogICBpZiAocHJpdi0+bmRldi0+bmZjX2Rldi0+ZndfZG93bmxvYWRfaW5fcHJv
+Z3Jlc3MpIC8vKDIpIHwgCiAgICAgbmZjbXJ2bF9md19kbmxkX2Fib3J0KHByaXYpOyAvL25vdCBl
+eGVjdXRlICAgICAgICAgICAgfCAgIAoKV2Ugc2V0IGZ3X2Rvd25sb2FkX2luX3Byb2dyZXNzIHRv
+IGZhbHNlIGluIHBvc2l0aW9uICgxKSBhbmQgdGhlIGNoZWNrIGluIHBvc2l0aW9uICgyKSB3aWxs
+IGZhaWwsCnRoZSBuZmNtcnZsX2Z3X2RubGRfYWJvcnQoKSBpbiBuZmNtcnZsX25jaV91bnJlZ2lz
+dGVyX2RldigpIHdpbGwgbm90IGV4ZWN1dGUuIFNvIHRoZSBkb3VibGUtZnJlZQpidWdzIGNvdWxk
+IGJlIHByZXZlbnRlZC4KCj4gPiBBbHRob3VnaCB0aGUgdGltZXIgaGFuZGxlciBmd19kbmxkX3Rp
+bWVvdXQoKSBjb3VsZCBiZSBydW5uaW5nLCBuZmNtcnZsX25jaV91bnJlZ2lzdGVyX2RldigpCj4g
+PiB3aWxsIGNoZWNrIHRoZSBmbGFnICJmd19kb3dubG9hZF9pbl9wcm9ncmVzcyIgd2hpY2ggaXMg
+YWxyZWFkeSBzZXQgdG8gZmFsc2UgYW5kIG5mY21ydmxfZndfZG5sZF9hYm9ydCgpCj4gPiBpbiBu
+ZmNtcnZsX25jaV91bnJlZ2lzdGVyX2RldigpIHdpbGwgbm90IGV4ZWN1dGUuCj4gCj4gSSBhbSBz
+b3JyeSwgYnV0IHlvdSBjYW5ub3QgbW92ZSBjb2RlIGFyb3VuZCBob3BpbmcgaXQgd2lsbCBieSBp
+dHNlbGYKPiBzb2x2ZSBzeW5jaHJvbml6YXRpb24gaXNzdWVzLgoKSSB0aGluayB0aGlzIHNvbHV0
+aW9uIHNvdmUgc3luY2hyb25pemF0aW9uIGlzc3Vlcy4gSWYgeW91IHN0aWxsIGhhdmUgYW55IHF1
+ZXN0aW9ucyB3ZWxjb21lIHRvIGFzayBtZS4KCkJlc3QgcmVnYXJkcywKRHVvbWluZyBaaG91Cg==
 
-On Fri, Apr 29, 2022 at 08:11:31PM +0000, Yosry Ahmed wrote:
-> Count the pages used by KVM in arm64 for stage2 mmu in secondary pagetable
-> stats.
-> 
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> ---
->  arch/arm64/kvm/mmu.c | 35 +++++++++++++++++++++++++++++++----
->  1 file changed, 31 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> index 53ae2c0640bc..fc5030307cce 100644
-> --- a/arch/arm64/kvm/mmu.c
-> +++ b/arch/arm64/kvm/mmu.c
-> @@ -92,9 +92,13 @@ static bool kvm_is_device_pfn(unsigned long pfn)
->  static void *stage2_memcache_zalloc_page(void *arg)
->  {
->  	struct kvm_mmu_memory_cache *mc = arg;
-> +	void *virt;
->  
->  	/* Allocated with __GFP_ZERO, so no need to zero */
-> -	return kvm_mmu_memory_cache_alloc(mc);
-> +	virt = kvm_mmu_memory_cache_alloc(mc);
-> +	if (virt)
-> +		kvm_account_pgtable_pages(virt, +1);
-
-Sorry I didn't say it last time around, would now be a good time to
-clean up the funky sign convention of kvm_mod_used_mmu_pages()? Or limit
-the funk to just x86 :)
-
---
-Thanks,
-Oliver

@@ -2,223 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 860B2517690
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 20:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DED99517694
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 20:33:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385315AbiEBSfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 14:35:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48938 "EHLO
+        id S1386889AbiEBSgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 14:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbiEBSft (ORCPT
+        with ESMTP id S230421AbiEBSga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 14:35:49 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA566278
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 11:32:19 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id t25so2623191ljd.6
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 11:32:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+TExx3LHdScpDYiBZLipOD0qdfGO/2GznrveBrUCOCs=;
-        b=BkReB81MgT2jOJhgtx1mGJ+CRS9eIg3X3ERuc0Q198tbiLg/1kTk4PaNcxIWxpg7jp
-         hQSu7WMFsduzU3ycU3GrxAqXC60MVOHiec9rEmEjbvH7+4j+ki+HRSNgARIMshzzHjab
-         KQf/QDCTJKX2+d5Q+zaeU5f99f5YiS6cgVHgU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+TExx3LHdScpDYiBZLipOD0qdfGO/2GznrveBrUCOCs=;
-        b=SKfpTyyJvCzZoBHueElAoF+5Biw+r7QxNjb+sNplQlMRyvzcnK1/LEeROFqPH+fyx1
-         fmZ+PTy3+4Tg9ToQUen6L2A1f+jMJREKbqSPRSG/v38cEkP7JBA45ABsH6i9eMZ5PX4J
-         sZuQOhgASgMczAww8cuEiypWpkM3iMpj3dTjgMeJsQpgJxHQW+gyG6Qm0KMTMfJ0XjOT
-         bPwFl0EV0d/avmG1J/Th0KnzFT9cGyrmhdcOjiyt6G7zTErunqMRPzLhJSaNYGfuegpb
-         TaviWWo2x6sR8Mi35NMaPClcIMTMnhfTRweluCP1bKMc2a+vAkijninOxfdkKPlGFx+H
-         wJ1g==
-X-Gm-Message-State: AOAM533nPJuaDzg4pLuz+cOc5WspkZ2Pk3FJihF/5psX7hkuhfG8cz95
-        jzY9dwOMDoG+Gi3dsoQtDFZD/+YxKJZYQOex
-X-Google-Smtp-Source: ABdhPJz+MKAXJWg0kxocMbQ0zSNnl472hvL7thRS3VmhyEDqpeDi9bUsSkSUrvbmtiC356584k6UwQ==
-X-Received: by 2002:a2e:8395:0:b0:24f:f16:1fd2 with SMTP id x21-20020a2e8395000000b0024f0f161fd2mr8815188ljg.42.1651516337183;
-        Mon, 02 May 2022 11:32:17 -0700 (PDT)
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com. [209.85.167.49])
-        by smtp.gmail.com with ESMTPSA id j2-20020ac253a2000000b0047255d211c9sm763542lfh.248.2022.05.02.11.32.15
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 11:32:16 -0700 (PDT)
-Received: by mail-lf1-f49.google.com with SMTP id w19so26683956lfu.11
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 11:32:15 -0700 (PDT)
-X-Received: by 2002:ac2:4203:0:b0:448:8053:d402 with SMTP id
- y3-20020ac24203000000b004488053d402mr9537978lfh.687.1651516335359; Mon, 02
- May 2022 11:32:15 -0700 (PDT)
+        Mon, 2 May 2022 14:36:30 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C758162FE;
+        Mon,  2 May 2022 11:33:00 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id 06AA31F42817
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1651516379;
+        bh=dKN4ju/bbXDAUouowRwoVB4iWM1AzKPnXRrkmI1NJjs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=efhPJidgcFGegYu1ZY05ABw0Si1mNWIAWya2bP0OsaFzSdbsiPhWaR+Am8PfD5kh9
+         M1T4AlAb0QFKqpS0kEEWvfDQdEucaGhuQkiIeEaIrPTFZhIASTRFEcxlxWwWxtz9gp
+         Pg70/qGpFx4kiiZJPuJaSMyd1f/I51VyFPFWHDlorNA98f57zGktln3LSU9DO0owSg
+         cEt0VRj/JblrydGpYhl2LXT6uOKcrGGSGKoOoGGYd26PAIdKzeI7NGkDs1o4dDEOKg
+         QspKV2hQTY03EOEZkSRapY+1AFZnZOZUWpSLuCzzyqGmWadSVgEAYDcpPimYIAgN0m
+         bdJZNaGTR3z0g==
+Date:   Mon, 2 May 2022 14:32:54 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        kernel@collabora.com, Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-mediatek@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Subject: Re: [PATCH 1/2] dt-bindings: remoteproc: mediatek: Fix optional
+ reg-names for mtk,scp
+Message-ID: <20220502183254.qb2paehrlkmhbhf6@notapiano>
+References: <20220429211111.2214119-1-nfraprado@collabora.com>
+ <20220429211111.2214119-2-nfraprado@collabora.com>
+ <1651505609.475123.1161772.nullmailer@robh.at.kernel.org>
 MIME-Version: 1.0
-References: <20220426145445.2282274-1-agruenba@redhat.com> <CAHk-=wi7o+fHYBTuCQQdHD112YHQtO21Y3+wxNYypjdo8feKFg@mail.gmail.com>
- <CAHc6FU48681X8aUK+g7UUN7q5b6rkVBzTP7h_zbE4XqZYAiw3g@mail.gmail.com>
- <CAHk-=wjMB1-xCOCBtsSMmQuFV9G+vNyCY1O_LsoqOd=0QS4yYg@mail.gmail.com>
- <CAHc6FU5Bag5W2t79+WzUq=NibtEF+7z6=jyNCkLMMp9Yqvpmqw@mail.gmail.com>
- <CAHk-=whaz-g_nOOoo8RRiWNjnv2R+h6_xk2F1J4TuSRxk1MtLw@mail.gmail.com>
- <CAHc6FU5654k7QBU97g_Ubj8cJEWuA_bXPuXOPpBBYoXVPMJG=g@mail.gmail.com>
- <CAHk-=wgSYSNc5sF2EVxhjbSc+c4LTs90aYaK2wavNd_m2bUkGg@mail.gmail.com>
- <CAHc6FU69E4ke4Xg3zQ2MqjLbfM65D9ZajdY5MRDLN0azZOGmVQ@mail.gmail.com>
- <CAHk-=whQxvMvty8SjiGMh+gM4VmCYvqn6EAwmrDXJaHT2Aa+UA@mail.gmail.com>
- <CAHk-=wicJdoCjPLu7FhaErr6Z3UaW820U2b+F-8P4qwSFUZ0mg@mail.gmail.com>
- <CAHc6FU7GkXLkns5PONLvsSi6HB+rjaNSyFeQFS034tKL-JueMw@mail.gmail.com>
- <CAHk-=wg4ypnZUA5BOHAF1miKvOhW2yQSruuBKNXMDR=dTmp+ww@mail.gmail.com> <CAHc6FU6VgQDO7HT5f4S_4f=9hczKGRDQ6SbQ5kNHMi4i-6rxVA@mail.gmail.com>
-In-Reply-To: <CAHc6FU6VgQDO7HT5f4S_4f=9hczKGRDQ6SbQ5kNHMi4i-6rxVA@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 2 May 2022 11:31:58 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whL74iP6v2P+OafGO0H72ag4wt42k+Kc_01boLP8aqUNQ@mail.gmail.com>
-Message-ID: <CAHk-=whL74iP6v2P+OafGO0H72ag4wt42k+Kc_01boLP8aqUNQ@mail.gmail.com>
-Subject: Re: [GIT PULL] gfs2 fix
-To:     Andreas Gruenbacher <agruenba@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Chinner <dchinner@redhat.com>
-Cc:     cluster-devel <cluster-devel@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: multipart/mixed; boundary="00000000000082fc6805de0b9c04"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1651505609.475123.1161772.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000082fc6805de0b9c04
-Content-Type: text/plain; charset="UTF-8"
+On Mon, May 02, 2022 at 10:33:29AM -0500, Rob Herring wrote:
+> On Fri, 29 Apr 2022 17:11:09 -0400, Nícolas F. R. A. Prado wrote:
+> > The SCP has three memory regions: sram, l1tcm and cfg. Only sram is
+> > required, the other two are optional. Fix the dt-binding so that the
+> > optional regions can be omitted and passed in any order.
+> > 
+> > Also add the missing minItems to the reg property and update the
+> > description.
+> > 
+> > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> > 
+> > ---
+> > 
+> >  .../devicetree/bindings/remoteproc/mtk,scp.yaml      | 12 +++++++++---
+> >  1 file changed, 9 insertions(+), 3 deletions(-)
+> > 
+> 
+> Running 'make dtbs_check' with the schema in this patch gives the
+> following warnings. Consider if they are expected or the schema is
+> incorrect. These may not be new warnings.
 
-On Thu, Apr 28, 2022 at 10:39 AM Andreas Gruenbacher
-<agruenba@redhat.com> wrote:
->
-> Yes, but note that it's gfs2_file_buffered_write() that fails. When
-> the pagefault_disable/enable() around iomap_file_buffered_write() is
-> removed, the corruption goes away.
+Hi Rob,
 
-I looked some more at this on and off, and ended up even more confused.
+These indeed aren't new warnings. But in any case, the fix for the interrupts
+one is already on its way to mainline [1]. And the memory-region one is what is
+fixed by patch 2 in this series.
 
-For some reason, I'd mostly looked at the read case, because I had
-mis-read some of your emails and thought it was the buffered reads
-that caused problems.
+Thanks,
+Nícolas
 
-Then I went back more carefully, and realized you had always said
-gfs2_file_buffered_write() was where the issues happened, and looked
-at that path more, and that confused me even *MORE*.
+[1] https://lore.kernel.org/all/165066838719.2742284.7900096409445311556.b4-ty@linaro.org/
 
-Because that case has always done the copy from user space with page
-faults disabled, because of the traditional deadlock with reading from
-user space while holding the page lock on the target page cache page.
-
-So that is not really about the new deadlock with filesystem locks,
-that was fixed by 00bfe02f4796 ("gfs2: Fix mmap + page fault deadlocks
-for buffered I/O").
-
-So now that I'm looking at the right function (maybe) I'm going "huh",
-because it's none of the complex cases that would seem to fail, it's
-literally just the fault_in_iov_iter_readable() that we've always done
-in iomap_write_iter() that presumably starts failing.
-
-But *that* old code seems bogus too. It's doing
-
-                if (unlikely(fault_in_iov_iter_readable(i, bytes) == bytes)) {
-                        status = -EFAULT;
-                        break;
-                }
-
-which on the face of it is sane: it's saying "if we can't fault in any
-bytes, then stop trying".
-
-And it's good, and correct, but it does leave one case open.
-
-Because what if the result is "we can fault things in _partially_"?
-
-The code blithely goes on and tries to do the whole 'bytes' range _anyway_.
-
-Now, with a bug-free filesystem, this really shouldn't matter, since
-the later copy_page_from_iter_atomic() thing should then DTRT anyway,
-but this does mean that one fundamental thing that that commit
-00bfe02f4796 changed is that it basically disabled that
-fault_in_iov_iter_readable() that *used* to fault in the whole range,
-and now potentially only faults in a small area.
-
-That, in turn, means that in practice it *used* to do "write_end()"
-with a fully successful range, ie when it did that
-
-                status = a_ops->write_end(file, mapping, pos, bytes, copied,
-                                                page, fsdata);
-
-then "bytes" and "copied" were the same.
-
-But now that commit 00bfe02f4796 added the "disable_pagefault()"
-around the whole thing, fault_in_iov_iter_readable() will easily fail
-half-way instead of bringing the next page in, and then that
-->write_begin() to ->write_end() sequence will see the copy in the
-middle failing half-way too, and you'll have that write_end()
-condition with the write _partially_ succeeding.
-
-Which is the complex case for write_end() that you practically
-speaking never saw before (it *could* happen with a race with swap-out
-or similar, but it was not really something you could trigger in real
-life.
-
-And I suspect this is what bites you with gfs2
-
-To *test* that hypothesis, how about you try this attached patch? The
-generic_perform_write() function in mm/filemap.c has the same exact
-pattern, but as mentioned, a filesystem really needs to be able to
-handle the partial write_end() case, so it's not a *bug* in that code,
-but it migth be triggering a bug in gfs2.
-
-And gfs2 only uses the iomap_write_iter() case, I think. So that's the
-only case this attached patch changes.
-
-Again - I think the unpatched iomap_write_iter() code is fine, but I
-think it may be what then triggers the real bug in gfs2. So this patch
-is not wrong per se, but this patch is basically a "hide the problem"
-patch, and it would be very interesting to hear if it does indeed fix
-your test-case.
-
-Because that would pinpoint exactly what the bug is.
-
-I'm adding Christoph and Darrick as iomap maintainers here to the
-participants (and Dave Chinner in case he's also the temporary
-maintainer because Darrick is doing reviews) not because they
-necessarily care, but just because this test-patch obviously involves
-the iomap code.
-
-NOTE! This patch is entirely untested. I also didn't actually yet go
-look at what gfs2 does when 'bytes' and 'copied' are different. But
-since I finally think I figured out what might be going on, I decided
-I'd send this out sooner rather than later.
-
-Because this is the first thing that makes me go "Aaahh.. This might
-explain it".
-
-                   Linus
-
---00000000000082fc6805de0b9c04
-Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
-Content-Disposition: attachment; filename="patch.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l2p2606f0>
-X-Attachment-Id: f_l2p2606f0
-
-IGZzL2lvbWFwL2J1ZmZlcmVkLWlvLmMgfCA5ICsrKysrKysrLQogMSBmaWxlIGNoYW5nZWQsIDgg
-aW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL2ZzL2lvbWFwL2J1ZmZl
-cmVkLWlvLmMgYi9mcy9pb21hcC9idWZmZXJlZC1pby5jCmluZGV4IDhjZTg3MjAwOTNiOS4uZWIx
-OTczNzkyYzY4IDEwMDY0NAotLS0gYS9mcy9pb21hcC9idWZmZXJlZC1pby5jCisrKyBiL2ZzL2lv
-bWFwL2J1ZmZlcmVkLWlvLmMKQEAgLTc1OCwxMyArNzU4LDIwIEBAIHN0YXRpYyBsb2ZmX3QgaW9t
-YXBfd3JpdGVfaXRlcihzdHJ1Y3QgaW9tYXBfaXRlciAqaXRlciwgc3RydWN0IGlvdl9pdGVyICpp
-KQogCQlpZiAoYnl0ZXMgPiBsZW5ndGgpCiAJCQlieXRlcyA9IGxlbmd0aDsKIAorCQkvKiBOb2Jv
-ZHkgX3Nob3VsZF8gY2FsbCB1cyB3aXRoIGFuIGVtcHR5IGl0ZXIsIGJ1dC4uICovCisJCWlmIChX
-QVJOX09OX09OQ0UoIWJ5dGVzKSkgeworCQkJc3RhdHVzID0gMDsKKwkJCWJyZWFrOworCQl9CisK
-IAkJLyoKIAkJICogQnJpbmcgaW4gdGhlIHVzZXIgcGFnZSB0aGF0IHdlJ2xsIGNvcHkgZnJvbSBf
-Zmlyc3RfLgogCQkgKiBPdGhlcndpc2UgdGhlcmUncyBhIG5hc3R5IGRlYWRsb2NrIG9uIGNvcHlp
-bmcgZnJvbSB0aGUKIAkJICogc2FtZSBwYWdlIGFzIHdlJ3JlIHdyaXRpbmcgdG8sIHdpdGhvdXQg
-aXQgYmVpbmcgbWFya2VkCiAJCSAqIHVwLXRvLWRhdGUuCiAJCSAqLwotCQlpZiAodW5saWtlbHko
-ZmF1bHRfaW5faW92X2l0ZXJfcmVhZGFibGUoaSwgYnl0ZXMpID09IGJ5dGVzKSkgeworCQlieXRl
-cyAtPSBmYXVsdF9pbl9pb3ZfaXRlcl9yZWFkYWJsZShpLCBieXRlcyk7CisJCWlmICh1bmxpa2Vs
-eSghYnl0ZXMpKSB7CiAJCQlzdGF0dXMgPSAtRUZBVUxUOwogCQkJYnJlYWs7CiAJCX0K
---00000000000082fc6805de0b9c04--
+> 
+> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+> This will change in the future.
+> 
+> Full log is available here: https://patchwork.ozlabs.org/patch/
+> 
+> 
+> scp@10500000: interrupts: [[0, 174, 4]] is not of type 'object'
+> 	arch/arm64/boot/dts/mediatek/mt8183-evb.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-burnet.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-cozmo.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-damu.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14-sku2.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku1.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku6.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku7.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-juniper-sku16.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kappa.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kenzo.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-sku0.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-sku1.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu-sku22.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku16.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku272.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku288.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku32.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku0.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku176.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dtb
+> 
+> scp@10500000: memory-region: [[25]] is not of type 'object'
+> 	arch/arm64/boot/dts/mediatek/mt8183-evb.dtb
+> 
+> scp@10500000: memory-region: [[27]] is not of type 'object'
+> 	arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dtb
+> 
+> scp@10500000: memory-region: [[28]] is not of type 'object'
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-burnet.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-cozmo.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-damu.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14-sku2.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku1.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku6.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku7.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-juniper-sku16.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kappa.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kenzo.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-sku0.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-sku1.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu-sku22.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku16.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku272.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku288.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku32.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku0.dtb
+> 	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku176.dtb
+> 
+> 
+> -- 
+> To unsubscribe, send mail to kernel-unsubscribe@lists.collabora.co.uk.

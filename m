@@ -2,107 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DDE55173F4
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:12:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABEC25173F3
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385906AbiEBQP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 12:15:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57836 "EHLO
+        id S240025AbiEBQQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 12:16:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386196AbiEBQPj (ORCPT
+        with ESMTP id S1386111AbiEBQPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 12:15:39 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABDD2DFFC;
-        Mon,  2 May 2022 09:12:09 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nfraprado)
-        with ESMTPSA id 34F4B1F42BC7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651507928;
-        bh=yFJOMKwuIhisyg/HTjYUfFFgojnjn1gaRe4MzlvPbJ8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WugItvxTkOGGNHaEeKBTDncAM3wUeRs3oShgHGf4GWeVrX/mMiT1QygpMU4x5j065
-         Gt6pyaBHFSuQyXEAYYa28BgHWT2AFjZ8qhjXyFtxtQaQAgj1scf++bvYnN0LPsRNLi
-         Nce9SmSI9VJi9VrUeXPTLEafQp1+wPzugsIy3ByqPyONYVqhh07PyqnzfKsbe/QdCG
-         M96xm5UA5kIIdPqVzlfRRSV4yCAJ8jrFmk0njylohNyipmPCk2/FWxZxrQV8qDr8Iy
-         LL96d6HWQYUl894lIIUIdjaj/+4WOzRgEiBtOgz52UELJWKVB3NbSFCGf44AUVzO6H
-         Ua1OkdPiuO7ug==
-Date:   Mon, 2 May 2022 12:12:03 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] arm64: dts: mediatek: Add fallback compatible for
- mt8192's flash
-Message-ID: <20220502161203.pfmjyep4escqwjix@notapiano>
-References: <20220429195745.2203461-1-nfraprado@collabora.com>
+        Mon, 2 May 2022 12:15:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD9EBC93;
+        Mon,  2 May 2022 09:12:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 27141B8187D;
+        Mon,  2 May 2022 16:12:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAA36C385A4;
+        Mon,  2 May 2022 16:12:08 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ZTIUL47t"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1651507927;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JthCT2QbwaNt2DB/F/sxRyKukGJ0r6w86ZPxmmA4K2I=;
+        b=ZTIUL47tvZtuvCUjjZMxKFfCRkY8sopVe/HQ8NTwyO2noS3cv31HHMJV6NvUrCSpQ5dHy8
+        EjGU0nc0qviHQVdS3wDIY9FPoGDdY52b6Axrn3EkE76PlJx6kWhx1v6LPgD05WgaAxEkV+
+        YSxaN3oHZ8Khpp6ZW3HdGY+r4UpC91k=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d724f6c4 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Mon, 2 May 2022 16:12:06 +0000 (UTC)
+Date:   Mon, 2 May 2022 18:12:03 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Lennart Poettering <mzxreary@0pointer.de>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Alexander Graf <graf@amazon.com>,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        Torben Hansen <htorben@amazon.co.uk>,
+        Jann Horn <jannh@google.com>
+Subject: Re: [PATCH 2/2] random: add fork_event sysctl for polling VM forks
+Message-ID: <YnAC00VtU8MGb7vO@zx2c4.com>
+References: <20220502140602.130373-1-Jason@zx2c4.com>
+ <20220502140602.130373-2-Jason@zx2c4.com>
+ <Ym/7UlgQ5VjjC76P@gardel-login>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220429195745.2203461-1-nfraprado@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Ym/7UlgQ5VjjC76P@gardel-login>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 03:57:45PM -0400, Nícolas F. R. A. Prado wrote:
-> The dt-binding for Mediatek's SPI NOR flash controller expects a mt8173
-> fallback compatible for mt8192, so add it in mt8192.dtsi.
+On Mon, May 02, 2022 at 05:40:02PM +0200, Lennart Poettering wrote:
+> On Mo, 02.05.22 16:06, Jason A. Donenfeld (Jason@zx2c4.com) wrote:
 > 
-> The driver already sets custom data based on the mt8192 compatible, so
-> this fallback compatible won't be used and is added purely to suppress
-> the dt-binding warning.
+> > In order to inform userspace of virtual machine forks, this commit adds
+> > a "fork_event" sysctl, which does not return any data, but allows
+> > userspace processes to poll() on it for notification of VM forks.
+> >
+> > It avoids exposing the actual vmgenid from the hypervisor to userspace,
+> > in case there is any randomness value in keeping it secret. Rather,
+> > userspace is expected to simply use getrandom() if it wants a fresh
+> > value.
 > 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> Wouldn't it make sense to expose a monotonic 64bit counter of detected
+> VM forks since boot through read()? It might be interesting to know
+> for userspace how many forks it missed the fork events for. Moreover it
+> might be interesting to userspace to know if any fork happened so far
+> *at* *all*, by checking if the counter is non-zero.
 
-By the way, I wonder if this patch should be accompanied by a patch adding the 
-mediatek,mt8192-nor standalone compatible as deprecated in the dt-binding. I
-feel like the answer is in theory yes, but in practice no.
-
-The fact that the mediatek,mt8192-nor standalone compatible was accepted in the
-devicetree means that it should show in the dt-binding, since it's an acceptable
-binding. But since the binding already shows up there with a fallback binding,
-then this standalone binding should be considered deprecated.
-
-But in practice, the mediatek,mt8192-nor is the more specific binding so
-documenting its standalone use as deprecated wouldn't accomplish much.
-
-What do you think?
-
-Thanks,
-Nícolas
+"Might be interesting" is different from "definitely useful". I'm not
+going to add this without a clear use case. This feature is pretty
+narrowly scoped in its objectives right now, and I intend to keep it
+that way if possible. (And yes, I realize that is likely considerably
+different from your development philosophy.)
 
 > 
-> ---
-> 
->  arch/arm64/boot/dts/mediatek/mt8192.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> index 26dbe9ecc528..32a836105ea7 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> @@ -896,7 +896,7 @@ pcie_intc0: interrupt-controller {
->  		};
->  
->  		nor_flash: spi@11234000 {
-> -			compatible = "mediatek,mt8192-nor";
-> +			compatible = "mediatek,mt8192-nor", "mediatek,mt8173-nor";
->  			reg = <0 0x11234000 0 0xe0>;
->  			interrupts = <GIC_SPI 431 IRQ_TYPE_LEVEL_HIGH 0>;
->  			clocks = <&topckgen CLK_TOP_SFLASH_SEL>,
-> -- 
-> 2.36.0
-> 
+> (Ideally that counter file would even be mmapable...)
+
+You missed the last year of discussion about this and why we have wound
+up here as a first step. Check the archives for extensive discussion.
+
+Jason

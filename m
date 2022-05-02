@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2902251773D
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 21:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA24C517744
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 21:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387076AbiEBTRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 15:17:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45652 "EHLO
+        id S1387088AbiEBTSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 15:18:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387066AbiEBTRk (ORCPT
+        with ESMTP id S232584AbiEBTSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 15:17:40 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFA7DECC
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 12:14:10 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id g26-20020a25b11a000000b0064984a4ffb7so2855324ybj.7
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 12:14:10 -0700 (PDT)
+        Mon, 2 May 2022 15:18:08 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08789DEB1
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 12:14:37 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id b33-20020a25aea1000000b0064588c45fbaso8591450ybj.16
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 12:14:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:cc;
-        bh=kctQu0Q+rBx9IOI1jVYX1kCsToTQ9FXaErspFG8A+BM=;
-        b=PUaFQEUXTVeO3j8UqhdilVFBoS8MQyXXLOdKDTrAxE3OYq/faQPkSJWo8e7me1GEfx
-         6PsNj1xxLGPhdzYlihe1rWIfDUcGXvJXU10tkvtxr6B/1FN7NalgVecXju0dhY3zvC3z
-         Wn9cP13pNuedWp+KZQejkmkLKJWMyilvnVCZCeigqzu7y0HNaezqXPUdmoMOtc+bcbZg
-         iGVOT37xPO8vnZ857v/bBUTDGk0QN0BZCLo8QSwtH1V7yUaedGw7RwWpenSonKMyFTwi
-         MaX/+nPpNpve5ilD2cuRr96xbl7NBZ2cJyokJ9Cl3NLX6dlXkrvqfAJBFp8SZMNQPpEZ
-         jtEw==
+        bh=ipd0BefF9+t+n+BDA9qzK3ST29aGb9VMcXpg3CY250w=;
+        b=fVIpIWNh7zPAAtchL34lpjR7VmL/rbh4QOlccErxfDjE0KYgyhgo2f9JKaAV/B3tWD
+         MxCiCYhVyv8F63UsENToArfPZvAslNNo/Qu68rLtSkLkLg9ua9HMGyv2Nwe9/7AASh5i
+         BobIpUh/UB0odGf+AoWdO8myMUZ0IUbReLTbxNOv5+D/GCt/2m92U7fGxLg18Ez67ZQb
+         4BfiJuZV3qHm+pzU441EVuhASuGcXposOq/D+cF3Ta0bcF5i+xaTZbMzyo2ZpZzCyc/i
+         RaFq8+0+xm8tJblNw9lckgnQdTdMhtsMg1l2UKHbKKSdrNqXCz/AvtrbKkQhuMv1NF1i
+         USPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:cc;
-        bh=kctQu0Q+rBx9IOI1jVYX1kCsToTQ9FXaErspFG8A+BM=;
-        b=hc5qJIrrzBy0uRmIGV4UR/SV27aYUB5VzD44UI8ofi61uTlOvjuZgErORzHn+W/Pca
-         Fb3hBLrY2Y+Ediia4KP5UmjSp8SzFHPI31KevRclAUO7VcbadmTytQLJfr/EazL3DNU3
-         xvqYd7gzeTF02iYhI63SDhO0ItGqNmGhGzcpwnJV906XP9JGN9hdirT4SwNtR/cbCe72
-         CPd9LkB967wRPAW3FO1LPSBeYFmgKowmQxpQ2u9k9vYsgQizAosh9ltEuGbjQfUOWLln
-         4DxaHSU+2RLhnCQET2SoCHzTTTilsfKl62KQIUVkvlDbj83ZXma0xBq2OJqNauQ10ja5
-         2C4A==
-X-Gm-Message-State: AOAM5327olPCe1o9iajQpT8nBNIkqqpN3UeKrmb0XeAZ2YkT23ILQzcD
-        J0E/ZVA97lJHpAmi4PX8QEFDAxbyzyaAogo2jg==
-X-Google-Smtp-Source: ABdhPJxJbanbmKIqaVzeagTqMg3TVUzh6s0fqdiC3NI5Unq1sq+s6VeUa3qJVINa7kZWA+10cnCzYiMEVqhMJfYwMg==
+        bh=ipd0BefF9+t+n+BDA9qzK3ST29aGb9VMcXpg3CY250w=;
+        b=5iUe1R0nX0vTCuDhAA25gApUt6WgeMF9Kc3vWTGHrDVJNY/GjX0FcfzFyD17N/W28B
+         qrgghlJSDnUJixaBFMEmc7RpuImSRGewXrSpatbxXQq5vyRtwguJltgdTOaFTF94PTIq
+         Ez8qV/lTxLxkavGMJcf7EnejiZPOioz7iHiKC9p3BM9C72xkfVB+XOLKXxb3Ki9mV8nZ
+         jHgQ10hD4xXeW+Fu5nnSC2x4q+QEP92wvow9vjrJ68gciBbrIImFWO0rgYtTyt219IPi
+         7npl7jPPdyy10EFri+P2DpRApMkOxfs8sk+9Ryim1CT+mUCFjMnlcPu+AQG85Pu2HWUD
+         QS5w==
+X-Gm-Message-State: AOAM530YQdR3OS1LWuNWT5q2siihBA7h1AR6RXRILIhvsjq+nxxPb1tl
+        t7KsUZLrt9Oi9A3OtOyMNtAvAlVAaOgq5rI+sg==
+X-Google-Smtp-Source: ABdhPJzHCwIdJBjgxBAhHOPW83nydzx6a6Ghl99nsHDS8GeBKfnj+2gJ4yayUqDCoRfzGDmOaLGKU5KAvcjqU3rRPw==
 X-Received: from kaleshsingh.mtv.corp.google.com ([2620:15c:211:200:55c:7548:7073:c14f])
- (user=kaleshsingh job=sendgmr) by 2002:a05:6902:50c:b0:648:67e5:f160 with
- SMTP id x12-20020a056902050c00b0064867e5f160mr11569415ybs.22.1651518850044;
- Mon, 02 May 2022 12:14:10 -0700 (PDT)
-Date:   Mon,  2 May 2022 12:12:04 -0700
+ (user=kaleshsingh job=sendgmr) by 2002:a81:2492:0:b0:2eb:250d:9cd8 with SMTP
+ id k140-20020a812492000000b002eb250d9cd8mr12136698ywk.238.1651518876776; Mon,
+ 02 May 2022 12:14:36 -0700 (PDT)
+Date:   Mon,  2 May 2022 12:12:05 -0700
 In-Reply-To: <20220502191222.4192768-1-kaleshsingh@google.com>
-Message-Id: <20220502191222.4192768-5-kaleshsingh@google.com>
+Message-Id: <20220502191222.4192768-6-kaleshsingh@google.com>
 Mime-Version: 1.0
 References: <20220502191222.4192768-1-kaleshsingh@google.com>
 X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [PATCH v2 4/5] KVM: arm64: Allocate shared stacktrace pages
+Subject: [PATCH v2 5/5] KVM: arm64: Unwind and dump nVHE hypervisor stacktrace
 From:   Kalesh Singh <kaleshsingh@google.com>
 Cc:     mark.rutland@arm.com, broonie@kernel.org, will@kernel.org,
         maz@kernel.org, qperret@google.com, tabba@google.com,
@@ -62,14 +62,13 @@ Cc:     mark.rutland@arm.com, broonie@kernel.org, will@kernel.org,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
         Alexei Starovoitov <ast@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
         "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
         Andrew Jones <drjones@redhat.com>,
-        Marco Elver <elver@google.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
         Kefeng Wang <wangkefeng.wang@huawei.com>,
         Keir Fraser <keirf@google.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
@@ -84,124 +83,267 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The nVHE hypervisor can use this shared area to dump its stacktrace
-addresses on hyp_panic(). Symbolization and printing the stacktrace can
-then be handled by the host in EL1 (done in a later patch in this series).
+On hyp_panic(), the hypervisor dumps the addresses for its stacktrace
+entries to a page shared with the host. The host then symbolizes and
+prints the hyp stacktrace before panicking itself.
+
+Example stacktrace:
+
+[  122.051187] kvm [380]: Invalid host exception to nVHE hyp!
+[  122.052467] kvm [380]: nVHE HYP call trace:
+[  122.052814] kvm [380]: [<ffff800008f5b550>] __kvm_nvhe___pkvm_vcpu_init_traps+0x1f0/0x1f0
+[  122.053865] kvm [380]: [<ffff800008f560f0>] __kvm_nvhe_hyp_panic+0x130/0x1c0
+[  122.054367] kvm [380]: [<ffff800008f56190>] __kvm_nvhe___kvm_vcpu_run+0x10/0x10
+[  122.054878] kvm [380]: [<ffff800008f57a40>] __kvm_nvhe_handle___kvm_vcpu_run+0x30/0x50
+[  122.055412] kvm [380]: [<ffff800008f57d2c>] __kvm_nvhe_handle_trap+0xbc/0x160
+[  122.055911] kvm [380]: [<ffff800008f56864>] __kvm_nvhe___host_exit+0x64/0x64
+[  122.056417] kvm [380]: ---- end of nVHE HYP call trace ----
 
 Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+Reviewed-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/kvm_asm.h |  1 +
- arch/arm64/kvm/arm.c             | 34 ++++++++++++++++++++++++++++++++
- arch/arm64/kvm/hyp/nvhe/setup.c  | 11 +++++++++++
- 3 files changed, 46 insertions(+)
 
-diff --git a/arch/arm64/include/asm/kvm_asm.h b/arch/arm64/include/asm/kvm_asm.h
-index 2e277f2ed671..ad31ac68264f 100644
---- a/arch/arm64/include/asm/kvm_asm.h
-+++ b/arch/arm64/include/asm/kvm_asm.h
-@@ -174,6 +174,7 @@ struct kvm_nvhe_init_params {
- 	unsigned long hcr_el2;
- 	unsigned long vttbr;
- 	unsigned long vtcr;
-+	unsigned long stacktrace_hyp_va;
+Changes in v2:
+  - Add Mark's Reviewed-by tag
+
+ arch/arm64/include/asm/stacktrace.h | 42 ++++++++++++++--
+ arch/arm64/kernel/stacktrace.c      | 75 +++++++++++++++++++++++++++++
+ arch/arm64/kvm/handle_exit.c        |  4 ++
+ arch/arm64/kvm/hyp/nvhe/switch.c    |  4 ++
+ 4 files changed, 121 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm64/include/asm/stacktrace.h b/arch/arm64/include/asm/stacktrace.h
+index f5af9a94c5a6..3063912107b0 100644
+--- a/arch/arm64/include/asm/stacktrace.h
++++ b/arch/arm64/include/asm/stacktrace.h
+@@ -5,6 +5,7 @@
+ #ifndef __ASM_STACKTRACE_H
+ #define __ASM_STACKTRACE_H
+ 
++#include <linux/kvm_host.h>
+ #include <linux/percpu.h>
+ #include <linux/sched.h>
+ #include <linux/sched/task_stack.h>
+@@ -19,10 +20,12 @@ enum stack_type {
+ #ifndef __KVM_NVHE_HYPERVISOR__
+ 	STACK_TYPE_TASK,
+ 	STACK_TYPE_IRQ,
+-	STACK_TYPE_OVERFLOW,
+ 	STACK_TYPE_SDEI_NORMAL,
+ 	STACK_TYPE_SDEI_CRITICAL,
++#else /* __KVM_NVHE_HYPERVISOR__ */
++	STACK_TYPE_HYP,
+ #endif /* !__KVM_NVHE_HYPERVISOR__ */
++	STACK_TYPE_OVERFLOW,
+ 	STACK_TYPE_UNKNOWN,
+ 	__NR_STACK_TYPES
  };
+@@ -55,6 +58,9 @@ static inline bool on_stack(unsigned long sp, unsigned long size,
+ extern void dump_backtrace(struct pt_regs *regs, struct task_struct *tsk,
+ 			   const char *loglvl);
  
- /* Translate a kernel address @ptr into its equivalent linear mapping */
-diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-index d300def44f5c..26005182da20 100644
---- a/arch/arm64/kvm/arm.c
-+++ b/arch/arm64/kvm/arm.c
-@@ -50,6 +50,7 @@ DEFINE_STATIC_KEY_FALSE(kvm_protected_mode_initialized);
- DECLARE_KVM_HYP_PER_CPU(unsigned long, kvm_hyp_vector);
++extern void hyp_dump_backtrace(unsigned long hyp_offset);
++
++DECLARE_PER_CPU(unsigned long, kvm_arm_hyp_stacktrace_page);
+ DECLARE_PER_CPU(unsigned long *, irq_stack_ptr);
  
- static DEFINE_PER_CPU(unsigned long, kvm_arm_hyp_stack_page);
-+DEFINE_PER_CPU(unsigned long, kvm_arm_hyp_stacktrace_page);
- unsigned long kvm_arm_hyp_percpu_base[NR_CPUS];
- DECLARE_KVM_NVHE_PER_CPU(struct kvm_nvhe_init_params, kvm_init_params);
+ static inline bool on_irq_stack(unsigned long sp, unsigned long size,
+@@ -91,8 +97,32 @@ static inline bool on_overflow_stack(unsigned long sp, unsigned long size,
+ static inline bool on_overflow_stack(unsigned long sp, unsigned long size,
+ 			struct stack_info *info) { return false; }
+ #endif
+-#endif /* !__KVM_NVHE_HYPERVISOR__ */
++#else /* __KVM_NVHE_HYPERVISOR__ */
++
++extern void hyp_save_backtrace(void);
++
++DECLARE_PER_CPU(unsigned long [PAGE_SIZE/sizeof(long)], overflow_stack);
++DECLARE_PER_CPU(struct kvm_nvhe_init_params, kvm_init_params);
++
++static inline bool on_overflow_stack(unsigned long sp, unsigned long size,
++				 struct stack_info *info)
++{
++	unsigned long low = (unsigned long)this_cpu_ptr(overflow_stack);
++	unsigned long high = low + PAGE_SIZE;
++
++	return on_stack(sp, size, low, high, STACK_TYPE_OVERFLOW, info);
++}
++
++static inline bool on_hyp_stack(unsigned long sp, unsigned long size,
++				 struct stack_info *info)
++{
++	struct kvm_nvhe_init_params *params = this_cpu_ptr(&kvm_init_params);
++	unsigned long high = params->stack_hyp_va;
++	unsigned long low = high - PAGE_SIZE;
  
-@@ -1484,6 +1485,7 @@ static void cpu_prepare_hyp_mode(int cpu)
- 	tcr |= (idmap_t0sz & GENMASK(TCR_TxSZ_WIDTH - 1, 0)) << TCR_T0SZ_OFFSET;
- 	params->tcr_el2 = tcr;
++	return on_stack(sp, size, low, high, STACK_TYPE_HYP, info);
++}
++#endif /* !__KVM_NVHE_HYPERVISOR__ */
  
-+	params->stacktrace_hyp_va = kern_hyp_va(per_cpu(kvm_arm_hyp_stacktrace_page, cpu));
- 	params->pgd_pa = kvm_mmu_get_httbr();
- 	if (is_protected_kvm_enabled())
- 		params->hcr_el2 = HCR_HOST_NVHE_PROTECTED_FLAGS;
-@@ -1777,6 +1779,7 @@ static void teardown_hyp_mode(void)
- 	free_hyp_pgds();
- 	for_each_possible_cpu(cpu) {
- 		free_page(per_cpu(kvm_arm_hyp_stack_page, cpu));
-+		free_page(per_cpu(kvm_arm_hyp_stacktrace_page, cpu));
- 		free_pages(kvm_arm_hyp_percpu_base[cpu], nvhe_percpu_order());
- 	}
+ /*
+  * We can only safely access per-cpu stacks from current in a non-preemptible
+@@ -105,6 +135,9 @@ static inline bool on_accessible_stack(const struct task_struct *tsk,
+ 	if (info)
+ 		info->type = STACK_TYPE_UNKNOWN;
+ 
++	if (on_overflow_stack(sp, size, info))
++		return true;
++
+ #ifndef __KVM_NVHE_HYPERVISOR__
+ 	if (on_task_stack(tsk, sp, size, info))
+ 		return true;
+@@ -112,10 +145,11 @@ static inline bool on_accessible_stack(const struct task_struct *tsk,
+ 		return false;
+ 	if (on_irq_stack(sp, size, info))
+ 		return true;
+-	if (on_overflow_stack(sp, size, info))
+-		return true;
+ 	if (on_sdei_stack(sp, size, info))
+ 		return true;
++#else /* __KVM_NVHE_HYPERVISOR__ */
++	if (on_hyp_stack(sp, size, info))
++		return true;
+ #endif /* !__KVM_NVHE_HYPERVISOR__ */
+ 
+ 	return false;
+diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
+index f346b4c66f1c..c81dea9760ac 100644
+--- a/arch/arm64/kernel/stacktrace.c
++++ b/arch/arm64/kernel/stacktrace.c
+@@ -104,6 +104,7 @@ static int notrace __unwind_next(struct task_struct *tsk,
+ 	 *
+ 	 * TASK -> IRQ -> OVERFLOW -> SDEI_NORMAL
+ 	 * TASK -> SDEI_NORMAL -> SDEI_CRITICAL -> OVERFLOW
++	 * HYP -> OVERFLOW
+ 	 *
+ 	 * ... but the nesting itself is strict. Once we transition from one
+ 	 * stack to another, it's never valid to unwind back to that first
+@@ -242,7 +243,81 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
+ 
+ 	unwind(task, &state, consume_entry, cookie);
  }
-@@ -1868,6 +1871,23 @@ static int init_hyp_mode(void)
- 		per_cpu(kvm_arm_hyp_stack_page, cpu) = stack_page;
- 	}
- 
-+	/*
-+	 * Allocate stacktrace pages for Hypervisor-mode.
-+	 * This is used by the hypervisor to share its stacktrace
-+	 * with the host on a hyp_panic().
-+	 */
-+	for_each_possible_cpu(cpu) {
-+		unsigned long stacktrace_page;
 +
-+		stacktrace_page = __get_free_page(GFP_KERNEL);
-+		if (!stacktrace_page) {
-+			err = -ENOMEM;
-+			goto out_err;
-+		}
++/**
++ * Symbolizes and dumps the hypervisor backtrace from the shared
++ * stacktrace page.
++ */
++noinline notrace void hyp_dump_backtrace(unsigned long hyp_offset)
++{
++	unsigned long *stacktrace_pos =
++		(unsigned long *)*this_cpu_ptr(&kvm_arm_hyp_stacktrace_page);
++	unsigned long va_mask = GENMASK_ULL(vabits_actual - 1, 0);
++	unsigned long pc = *stacktrace_pos++;
 +
-+		per_cpu(kvm_arm_hyp_stacktrace_page, cpu) = stacktrace_page;
++	kvm_err("nVHE HYP call trace:\n");
++
++	while (pc) {
++		pc &= va_mask;		/* Mask tags */
++		pc += hyp_offset;	/* Convert to kern addr */
++		kvm_err("[<%016lx>] %pB\n", pc, (void *)pc);
++		pc = *stacktrace_pos++;
 +	}
 +
- 	/*
- 	 * Allocate and initialize pages for Hypervisor-mode percpu regions.
- 	 */
-@@ -1975,6 +1995,20 @@ static int init_hyp_mode(void)
- 		params->stack_hyp_va = hyp_addr + (2 * PAGE_SIZE);
++	kvm_err("---- end of nVHE HYP call trace ----\n");
++}
+ #else /* __KVM_NVHE_HYPERVISOR__ */
+ DEFINE_PER_CPU(unsigned long [PAGE_SIZE/sizeof(long)], overflow_stack)
+ 	__aligned(16);
++
++static int notrace unwind_next(struct task_struct *tsk,
++			       struct unwind_state *state)
++{
++	struct stack_info info;
++
++	return __unwind_next(tsk, state, &info);
++}
++
++/**
++ * Saves a hypervisor stacktrace entry (address) to the shared stacktrace page.
++ */
++static bool hyp_save_backtrace_entry(void *arg, unsigned long where)
++{
++	struct kvm_nvhe_init_params *params = this_cpu_ptr(&kvm_init_params);
++	unsigned long **stacktrace_pos = (unsigned long **)arg;
++	unsigned long stacktrace_start, stacktrace_end;
++
++	stacktrace_start = (unsigned long)params->stacktrace_hyp_va;
++	stacktrace_end = stacktrace_start + PAGE_SIZE - (2 * sizeof(long));
++
++	if ((unsigned long) *stacktrace_pos > stacktrace_end)
++		return false;
++
++	/* Save the entry to the current pos in stacktrace page */
++	**stacktrace_pos = where;
++
++	/* A zero entry delimits the end of the stacktrace. */
++	*(*stacktrace_pos + 1) = 0UL;
++
++	/* Increment the current pos */
++	++*stacktrace_pos;
++
++	return true;
++}
++
++/**
++ * Saves hypervisor stacktrace to the shared stacktrace page.
++ */
++noinline notrace void hyp_save_backtrace(void)
++{
++	struct kvm_nvhe_init_params *params = this_cpu_ptr(&kvm_init_params);
++	void *stacktrace_start = (void *)params->stacktrace_hyp_va;
++	struct unwind_state state;
++
++	unwind_init(&state, (unsigned long)__builtin_frame_address(0),
++			_THIS_IP_);
++
++	unwind(NULL, &state, hyp_save_backtrace_entry, &stacktrace_start);
++}
++
+ #endif /* !__KVM_NVHE_HYPERVISOR__ */
+diff --git a/arch/arm64/kvm/handle_exit.c b/arch/arm64/kvm/handle_exit.c
+index 2e61a987b0d5..f1a6b556ec32 100644
+--- a/arch/arm64/kvm/handle_exit.c
++++ b/arch/arm64/kvm/handle_exit.c
+@@ -17,6 +17,7 @@
+ #include <asm/kvm_emulate.h>
+ #include <asm/kvm_mmu.h>
+ #include <asm/debug-monitors.h>
++#include <asm/stacktrace.h>
+ #include <asm/traps.h>
+ 
+ #include <kvm/arm_hypercalls.h>
+@@ -325,6 +326,9 @@ void __noreturn __cold nvhe_hyp_panic_handler(u64 esr, u64 spsr,
+ 				(void *)panic_addr);
  	}
  
-+	/*
-+	 * Map the hyp stacktrace pages.
-+	 */
-+	for_each_possible_cpu(cpu) {
-+		char *stacktrace_page = (char *)per_cpu(kvm_arm_hyp_stacktrace_page, cpu);
++	/* Dump the hypervisor stacktrace */
++	hyp_dump_backtrace(hyp_offset);
 +
-+		err = create_hyp_mappings(stacktrace_page, stacktrace_page + PAGE_SIZE,
-+					  PAGE_HYP);
-+		if (err) {
-+			kvm_err("Cannot map hyp stacktrace page\n");
-+			goto out_err;
-+		}
-+	}
-+
- 	for_each_possible_cpu(cpu) {
- 		char *percpu_begin = (char *)kvm_arm_hyp_percpu_base[cpu];
- 		char *percpu_end = percpu_begin + nvhe_percpu_size();
-diff --git a/arch/arm64/kvm/hyp/nvhe/setup.c b/arch/arm64/kvm/hyp/nvhe/setup.c
-index e8d4ea2fcfa0..9b81bf2d40d7 100644
---- a/arch/arm64/kvm/hyp/nvhe/setup.c
-+++ b/arch/arm64/kvm/hyp/nvhe/setup.c
-@@ -135,6 +135,17 @@ static int recreate_hyp_mappings(phys_addr_t phys, unsigned long size,
+ 	/*
+ 	 * Hyp has panicked and we're going to handle that by panicking the
+ 	 * kernel. The kernel offset will be revealed in the panic so we're
+diff --git a/arch/arm64/kvm/hyp/nvhe/switch.c b/arch/arm64/kvm/hyp/nvhe/switch.c
+index 978f1b94fb25..95d810e86c7d 100644
+--- a/arch/arm64/kvm/hyp/nvhe/switch.c
++++ b/arch/arm64/kvm/hyp/nvhe/switch.c
+@@ -25,6 +25,7 @@
+ #include <asm/fpsimd.h>
+ #include <asm/debug-monitors.h>
+ #include <asm/processor.h>
++#include <asm/stacktrace.h>
  
- 		/* Update stack_hyp_va to end of the stack's private VA range */
- 		params->stack_hyp_va = hyp_addr + (2 * PAGE_SIZE);
-+
-+		/*
-+		 * Map the stacktrace pages as shared and transfer ownership to
-+		 * the hypervisor.
-+		 */
-+		prot = pkvm_mkstate(PAGE_HYP, PKVM_PAGE_SHARED_OWNED);
-+		start = (void *)params->stacktrace_hyp_va;
-+		end = start + PAGE_SIZE;
-+		ret = pkvm_create_mappings(start, end, prot);
-+		if (ret)
-+			return ret;
+ #include <nvhe/fixed_config.h>
+ #include <nvhe/mem_protect.h>
+@@ -395,6 +396,9 @@ asmlinkage void __noreturn hyp_panic(void)
+ 		__sysreg_restore_state_nvhe(host_ctxt);
  	}
  
- 	/*
++	/* Save the hypervisor stacktrace */
++	hyp_save_backtrace();
++
+ 	__hyp_do_panic(host_ctxt, spsr, elr, par);
+ 	unreachable();
+ }
 -- 
 2.36.0.464.gb9c8b46e94-goog
 

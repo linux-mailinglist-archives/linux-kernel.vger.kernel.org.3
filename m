@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B64D351759B
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 19:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28E565175A3
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 19:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386616AbiEBRVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 13:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59084 "EHLO
+        id S1386635AbiEBRVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 13:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386609AbiEBRVL (ORCPT
+        with ESMTP id S1386620AbiEBRVQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 13:21:11 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8980AE7C
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 10:17:41 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id p4so17427307edx.0
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 10:17:41 -0700 (PDT)
+        Mon, 2 May 2022 13:21:16 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9269B1DA
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 10:17:46 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id l7so29012108ejn.2
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 10:17:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=U6I8l2/ksiQd63xGl5KCPWmwyj9JWjRhGv3A0r30Lxs=;
-        b=eTQFfROjG1qUk1tXr04rLGRtNfHRxSVeDMHEKcSFJsWB2lR87/reU6RgOyiv7E0qxt
-         fUq+C3AJS8urPlLqMtWicVO+G9N1mRO6lsGXvu7mjehiG33ekyO0H9hzZBSmG8CoJ/H/
-         xlGLQpdPwl7jKLkTG4yZ/QYEk11Z1W9wmbWRo=
+        bh=gMqBgTrhfUKKEl/G5V1eWPOJxywdk0FK8Tb1dsdlXpM=;
+        b=Fc3vRfuW5NtMW7EI2ZBMV+YnIKqAMpApdt4JOF20Q5AAQ6HDr4LiYSVM0xZoUyNqn+
+         OgeNUG46t2hjmY46svxZFz3QtaSSArm1HTAVYQil+AjrxmYeEUh7vEQwXgLEnVl5aq6t
+         ZtoZ8IKY/USy5HQHZcyaOmwqGjHrFecdY3cNI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=U6I8l2/ksiQd63xGl5KCPWmwyj9JWjRhGv3A0r30Lxs=;
-        b=Yr29hjb/uD6AJ+b4euaW2jLMBxACZmRNbXIt2VrwHfFoUKaTJkXiTyfjnxb6bkI1VI
-         eB73F+wMDkqdZpeOSjPOW1mN4XdP4QoW3QTjgE6UepKkw4jGSA7iX1yeq2shqeIR56Ss
-         M0wf9D/XFKWGCCiw+mOzsmpz6h4P507PbQYn4a+POP5yC19rEf2ncZNBWgal3YbUUlvu
-         7kJ20Y80M6kpTofoXve5Q1xm7GmH8euEJThi+c81riXQNLoxDSbw64UvJt/MxMnBJLAK
-         8GKBgFBTwvO3hFzHR4HSTv4qNEaL8nHC0iShiS/z2UhIq3IRkfvJHkKk8/OKJYZGm13Z
-         bIhQ==
-X-Gm-Message-State: AOAM531Xap8odoRU6JvRMOfsAU2Yu6PaeT35xgMefGzVgntQ//2wlbqI
-        d2Mu3zSCezFEc89da/T5VTsBoazzrFo263Dc
-X-Google-Smtp-Source: ABdhPJxSUoS8p/2gO+gHgXATI55+ws10xvA6wfsgiJzZstLUtIuZZRgC/kcvPV1qjCbTPTlSwCDsCg==
-X-Received: by 2002:a05:6402:2999:b0:418:eb22:64f9 with SMTP id eq25-20020a056402299900b00418eb2264f9mr13968140edb.391.1651511860298;
-        Mon, 02 May 2022 10:17:40 -0700 (PDT)
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com. [209.85.128.42])
-        by smtp.gmail.com with ESMTPSA id ci18-20020a170907267200b006e8c7f3992esm3756632ejc.2.2022.05.02.10.17.38
+        bh=gMqBgTrhfUKKEl/G5V1eWPOJxywdk0FK8Tb1dsdlXpM=;
+        b=tV3S8GGSZNueVh4BiWEvKz6MGTFkESLgPeooTdKyrex/J8rFLkl0+EeAYd1iqXqOwy
+         3nL3a1QfUllJMXdXs0p1koof9g7ol3Mel9WhnIwh7AsaSJKFjI3MCuBl9ghr5BhLL8OM
+         w+PtDsLu30MCMLvf0+XE8jg2B8y37s7Cgja7qps59F15vzfajr/M1VbFcHu7m84SRNR7
+         RMdCQaUHqrSIMU8MhKBAoN3ULkOsOWMGOudtf9KLN/90FR7plZa6j7f8REq+UfyrUXLB
+         Iw0PiY8PpdRkPCfQv7k5bleoafKTh/70PBSXqFreUIW6BTUu9IuqIrSJcRYFUYa4Lvle
+         CStg==
+X-Gm-Message-State: AOAM532puXR0GPPr9jEOW/O3bJX+mOpIVT0II+HAFgZmwJrFOEYFtXXM
+        VibLE8G/E0crT50YdE8TLLW1no1Cxh9Xl97v
+X-Google-Smtp-Source: ABdhPJymMQzdS5x5ykX/WUNocfxc6pX5Q4deuPG9cl6nEjFU5xLZYM4Kl/29Z2dXdEYqpkJ901OwGw==
+X-Received: by 2002:a17:907:1b10:b0:6e4:bac5:f080 with SMTP id mp16-20020a1709071b1000b006e4bac5f080mr12120491ejc.24.1651511865121;
+        Mon, 02 May 2022 10:17:45 -0700 (PDT)
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
+        by smtp.gmail.com with ESMTPSA id zp1-20020a17090684e100b006f3ef214defsm3746311ejb.85.2022.05.02.10.17.43
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 10:17:39 -0700 (PDT)
-Received: by mail-wm1-f42.google.com with SMTP id m62so8598831wme.5
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 10:17:38 -0700 (PDT)
-X-Received: by 2002:a05:600c:3c99:b0:392:b49c:7b79 with SMTP id
- bg25-20020a05600c3c9900b00392b49c7b79mr89734wmb.199.1651511858472; Mon, 02
- May 2022 10:17:38 -0700 (PDT)
+        Mon, 02 May 2022 10:17:44 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id k2so20366603wrd.5
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 10:17:43 -0700 (PDT)
+X-Received: by 2002:a5d:42c8:0:b0:20a:d91f:87b5 with SMTP id
+ t8-20020a5d42c8000000b0020ad91f87b5mr10141812wrr.301.1651511863286; Mon, 02
+ May 2022 10:17:43 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220430011402.1.If7c3471db53bea55213f7bcf17e9043084d3ac0c@changeid>
- <20220430011402.2.Iac7ac752b18224ab1458a7681301d9b48cab25c4@changeid>
-In-Reply-To: <20220430011402.2.Iac7ac752b18224ab1458a7681301d9b48cab25c4@changeid>
+ <20220430011402.3.Ic20d0c002ac5406b880cbdf9824739f38740926c@changeid>
+In-Reply-To: <20220430011402.3.Ic20d0c002ac5406b880cbdf9824739f38740926c@changeid>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 2 May 2022 10:17:26 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XZsUkCMjV9bBweVOPgJBUi72hDXpiMcuQfi7ZcQ4xqtw@mail.gmail.com>
-Message-ID: <CAD=FV=XZsUkCMjV9bBweVOPgJBUi72hDXpiMcuQfi7ZcQ4xqtw@mail.gmail.com>
-Subject: Re: [PATCH 2/5] arm64: dts: qcom: sc7180: Add mrbland dts files
+Date:   Mon, 2 May 2022 10:17:31 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UKSsOoer-9sUMP4AYF=A0L2Wg+cZ40Q_22m=GZjoUzuw@mail.gmail.com>
+Message-ID: <CAD=FV=UKSsOoer-9sUMP4AYF=A0L2Wg+cZ40Q_22m=GZjoUzuw@mail.gmail.com>
+Subject: Re: [PATCH 3/5] arm64: dts: qcom: sc7180: Add quackingstick dts files
 To:     "Joseph S. Barrera III" <joebar@chromium.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         Alexandru M Stan <amstan@chromium.org>,
@@ -73,7 +73,7 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,19 +86,16 @@ Hi,
 On Sat, Apr 30, 2022 at 1:18 AM Joseph S. Barrera III
 <joebar@chromium.org> wrote:
 >
-> Mrbland is a trogdor-based board. These dts files are copies from
+> Quackingstick is a trogdor-based board. These dts files are copies from
 > the downstream Chrome OS 5.4 kernel, but with downstream bits removed.
 >
 > Signed-off-by: Joseph S. Barrera III <joebar@chromium.org>
 > ---
 >
->  arch/arm64/boot/dts/qcom/Makefile             |   4 +
->  .../qcom/sc7180-trogdor-mrbland-rev0-auo.dts  |  22 ++
->  .../qcom/sc7180-trogdor-mrbland-rev0-boe.dts  |  22 ++
->  .../dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi |  53 +++
->  .../qcom/sc7180-trogdor-mrbland-rev1-auo.dts  |  22 ++
->  .../qcom/sc7180-trogdor-mrbland-rev1-boe.dts  |  24 ++
->  .../boot/dts/qcom/sc7180-trogdor-mrbland.dtsi | 352 ++++++++++++++++++
->  7 files changed, 499 insertions(+)
+>  arch/arm64/boot/dts/qcom/Makefile             |   2 +
+>  .../sc7180-trogdor-quackingstick-r0-lte.dts   |  38 ++
+>  .../qcom/sc7180-trogdor-quackingstick-r0.dts  |  26 ++
+>  .../qcom/sc7180-trogdor-quackingstick.dtsi    | 324 ++++++++++++++++++
+>  4 files changed, 390 insertions(+)
 
 Reviewed-by: Douglas Anderson <dianders@chromium.org>

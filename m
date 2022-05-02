@@ -2,134 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E21517826
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 22:31:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D657517829
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 22:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387403AbiEBUfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 16:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58872 "EHLO
+        id S1387413AbiEBUfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 16:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350516AbiEBUfE (ORCPT
+        with ESMTP id S1350516AbiEBUfk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 16:35:04 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6EB9AE53;
-        Mon,  2 May 2022 13:31:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1651523479;
-        bh=XklK64zlUwZuEnTr5Rz+EiXQTXXwRojoscvTGaQkPJ8=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=XQ+uAwyGERKUngyZtQi62d8g5F9lhnZI0SoQ0xUzv8toiQBxsjLYOY+niHdbr+qtV
-         Y3vbMPm8OX3DtxECaoocvNsFBo85P7VEykdnNM8TZZ2elqHaU98pTWAiBQzA68dkKf
-         o393Z4KnmCSOPscAK9mJjnbAnFsfctIdNp6ZrreQ=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MVN6j-1nNB2G0ha3-00SNt6; Mon, 02
- May 2022 22:31:19 +0200
-Subject: Re: [PATCH 2/2] hwmon: acpi_power_meter: convert to
- hwmon_device_register_with_info
-To:     LABBE Corentin <clabbe@baylibre.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220502124249.682058-1-clabbe@baylibre.com>
- <20220502124249.682058-2-clabbe@baylibre.com>
- <0b154a30-7765-e3ac-9980-0ecc7447d7ad@roeck-us.net> <YnAqDxfTU27USQI+@Red>
-From:   Armin Wolf <W_Armin@gmx.de>
-Message-ID: <1b2bf215-faa1-649d-5ab4-85fc0b907ec2@gmx.de>
-Date:   Mon, 2 May 2022 22:31:18 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Mon, 2 May 2022 16:35:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C31B1E2;
+        Mon,  2 May 2022 13:32:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E657660B00;
+        Mon,  2 May 2022 20:32:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFB14C385A4;
+        Mon,  2 May 2022 20:32:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651523528;
+        bh=xyHnevJ0bkGZ99FU3xXECPdssgskXtwRkKrhR/D9hOk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=MQtRi7FlqJJpVvSQnmizAN4fk541RLiiKL8fVIjFlJTtJlV43GsqRvatoB40sjtnz
+         NuAyDcsgB85FayQ1smVmZJHW5xINveJYIrYEHX0OrSKzaAQZPoxf7fUrzkTCZar4Vl
+         RFDlsrIrIOngDEEEt2YgIF7PeYypOxmkBZRYQ9J9rmYJtE2YwOFKcdlt02293Xz6QG
+         AdzwCaWKiYmr1MLdaFr6mT65SIy4qlgUqtJPo/uaxPOOPhhWfZiwlM3Pn+Tj3RWfAf
+         JfLa6V4oJWkNo6gFB8HmlUwlzGfRB7ukea7oZXiwGGYdEKnVsyEpzrl79oSQN2i2XD
+         yO+ogbdgQ6vLQ==
+Date:   Mon, 2 May 2022 15:32:05 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Myron Stowe <myron.stowe@redhat.com>,
+        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
+        Benoit =?iso-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
+        Hui Wang <hui.wang@canonical.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v2 0/3] x86/PCI: Log E820 clipping
+Message-ID: <20220502203205.GA349835@bhelgaas>
 MIME-Version: 1.0
-In-Reply-To: <YnAqDxfTU27USQI+@Red>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
-X-Provags-ID: V03:K1:M5uxf6WZcoVerfbPEAZEXF5O2+y/AzMfRsfNLeOoqO9A7Y9K8z2
- BlqUfqkvRX/hUWYAO5Dfl17zUZGKiHFyKwacDA9IVdgikTm0+LB57B5MFIWO7AScvjfiROg
- 7FJKlQdKMxhML/1Uxs/7HIS1SXM11c3UwCMJV7Nk+uVkKs1lw8u2NgqSS05mXBaia2Un8RI
- EjLLURKa8YvirUfxhmNGQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:xFFzEfXvQII=:r67yR4TqmVHHinn9NzbmMU
- d0sMuGwMdQ7gF4D+ozNZuY2dWJzut4o75cg3EpkHZe0c0euD0Z+u8cCeiUaj5Beyx+NO6C2UJ
- XNdkJCUVAmSFRG6rPXTfLl8bMyl+WXSGl4crW+bKz9OAVE3tj30Y6+RDo8eZf6BQh8UM4xcre
- gTDwuaSk4G7UvIQj8fqYUprxV2aMLlQB4ZTpPIiMOtQ/ynoWg1J/shqyS4JDMmV031np+Qw4Y
- vW0baxnUrwLzlhmPMXtKdEwhVpaQroIXmAG+R55x3jqR+Jkg66OQPMU9JbWKe9KnmiX/rhtbL
- pUucz9ZHla2RWUrNrX2GT+yo3MhhbPM0vclSiZ1BwovbyF/VFSkV9pc9A2zWf55VQePSiywVy
- dQD9BTc70RchHQKZRsYZlx2tkPg7gJsjYngGNxO3nbb/8Sw81v0mMOsGZSgKPD3jmeEBoBWWR
- PAt60lHeQSaiifHWl8IZx0SjUIa7aRREITgUYrahCkjaBnPN9Kv+E5unrJ1lYxWzBNjv8AMsJ
- dk10y9Bd96YKhC5WWQUCEM/ntfG4KpvqeOaA8Csn0usHlJJKQtrVwVZ8//mfiqIRz5oGUkUc4
- ICzfEDnUW5hA1JeL4+5Y4GerznEYjEbYEGfL408xjw9TCfD+JIFdJKVC4Hqm4/VpCtHQCGLgp
- gIo5aaGWn2zVNSw86iPS2K/3y0Orp/G1ehk9HD8SYkhOillMZ6whrOQnHOWvffYpUJyV+bmQ3
- VnBwMCNw+rETVOAYH7c8rk49MolFpO0OEOndwUAFCWm2jhOBt8x8Lvjgbf4mm127PcH8UVCMJ
- erLScY28S8zQ4RqK45SIG7L39dQdi42GtLddzrXj2FgQp1pP1DEOYfZKyw1Jrn3eX8tKAxOhY
- dVChwwuDEzbs8/31Xk/wWq0LnUzo1WYwYymqf4L+pabvvb3PTDeSlCCn/MS7WtC2TUTN2/KZZ
- 5QhT/5tzqUJU26wf2UcJQO///ZhzAbJein4tJzUtgOwvtHJzC0PozI/uBRMD3NBTuJH7K7gut
- 66/jBG+dJFlN4LyGqiYBSL1ms9zd3melUcuksYJvL8rG+a7eQfZnzPR6zGz86qwYytaZcjF8M
- EnKn8+KGabAUdM=
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7bbd9205-aa35-4a27-0df4-8f2b22603831@redhat.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 02.05.22 um 20:59 schrieb LABBE Corentin:
+On Mon, May 02, 2022 at 02:24:26PM +0200, Hans de Goede wrote:
+> On 4/19/22 18:45, Bjorn Helgaas wrote:
+> > On Tue, Apr 19, 2022 at 05:16:44PM +0200, Hans de Goede wrote:
+> >> On 4/19/22 17:03, Bjorn Helgaas wrote:
+> >>> On Tue, Apr 19, 2022 at 11:59:17AM +0200, Hans de Goede wrote:
 
-> Le Mon, May 02, 2022 at 06:34:44AM -0700, Guenter Roeck a =C3=A9crit :
->> On 5/2/22 05:42, Corentin Labbe wrote:
->>> Booting lead to a hwmon_device_register() is deprecated. Please conver=
-t the driver to use hwmon_device_register_with_info().
->>> So let's convert the driver to use hwmon_device_register_with_info().
->>>
->>> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
->>> ---
->>>    drivers/hwmon/acpi_power_meter.c | 5 ++++-
->>>    1 file changed, 4 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_pow=
-er_meter.c
->>> index d2545a1be9fc..98293727f980 100644
->>> --- a/drivers/hwmon/acpi_power_meter.c
->>> +++ b/drivers/hwmon/acpi_power_meter.c
->>> @@ -891,7 +891,10 @@ static int acpi_power_meter_add(struct acpi_devic=
-e *device)
->>>    	if (res)
->>>    		goto exit_free_capability;
->>>
->>> -	resource->hwmon_dev =3D hwmon_device_register(&device->dev);
->>> +	resource->hwmon_dev =3D hwmon_device_register_with_info(&device->dev=
-,
->>> +							      ACPI_POWER_METER_DEVICE_NAME,
->>> +							      NULL, NULL,
->>> +							      NULL);
->> NACK. That isn't a conversion to the new API, it just abuses the fact
->> that the new API has to accept a NULL info pointer for historic reasons=
-.
->>
-> Hello
->
-> I am sorry, I found a driver doing it, so I believed it was okay.
-> Converting seems not to hard but, by using the new API, how can I conver=
-t power1_model_number/power1_is_battery attribute ?
-> There are the remaining attributes I dont find how to convert.
->
-> Regards
+> >>>> So what is the plan to actually fix the issue seen on some
+> >>>> Lenovo models and Clevo Barebones ?   As I mentioned previously
+> >>>> I think that since all our efforts have failed so far that we
+> >>>> should maybe reconsider just using DMI quirks to ignore the
+> >>>> E820 reservation windows for host bridges on affected models ?
+> >>>
+> >>> I have been resisting DMI quirks but I'm afraid there's no other
+> >>> way.
+> >>
+> >> Well there is the first match adjacent windows returned by _CRS
+> >> and only then do the "covers whole region" exception check. I
+> >> still think that would work at least for the chromebook
+> >> regression...
+> > 
+> > Without a crystal clear strategy, I think we're going to be
+> > tweaking the algorithm forever as the _CRS/E820 mix changes.
+> > That's why I think that in the long term, a "use _CRS only, with
+> > quirks for exceptions" strategy will be simplest.
+> 
+> Looking at the amount of exception we already now about I'm not sure
+> if that will work well.
 
-Hi,
+It's possible that many quirks will be required.  But I think in the
+long run the value of the simplest, most obvious strategy is huge.
+It's laid out in the spec already and it's the clearest way to
+agreement between firmware and OS.  When we trip over something, it's
+very easy to determine whether _CRS is wrong or Linux is using it
+wrong.  If we have to bring in question of looking at E820 entries,
+possibly merging them, using them or not based on overlaps ... that's
+a much more difficult conversation without a clear resolution.
 
-for allowing the driver to provide nonstandard attributes, hwmon_device_re=
-gister_with_info()
-has the argument "extra_groups" which is an pointer to a list of sysfs att=
-ribute groups.
-There are some drivers which are using this functionality, maybe you can u=
-se them as an
-inspiration.
+> > So I think we should go ahead with DMI quirks instead of trying to
+> > make the algorithm smarter, and yes, I think we will need commandline
+> > arguments, probably one to force E820 clipping for future machines,
+> > and one to disable it for old machines.
+> 
+> So what you are suggesting is to go back to a bios-date based approach
+> (to determine old vs new machines) combined with DMI quirks to force
+> E820 clipping on new machines which turn out to need it despite them
+> being new ?
 
-Just a question: what is the name of the driver you originally used as an =
-inspiration?
+Yes.  It's ugly but I think the 10-year outlook is better.
 
-Armin Wolf
+> I have the feeling that if we switch to top-down allocating
+> that we can then switch to just using _CRS and that everything
+> will then just work, because we then match what Windows is doing...
 
+Yes, it might.  But I'm not 100% comfortable because it basically
+sweeps _CRS bugs under the rug, and we may trip over them as we do
+more hotplug and (eventually) resource rebalancing.  I think we need
+to work toward getting _CRS more reliable.
+
+Bjorn

@@ -2,92 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B17D517A01
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 00:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33393517A04
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 00:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241604AbiEBWgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 18:36:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35462 "EHLO
+        id S244076AbiEBWg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 18:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiEBWf6 (ORCPT
+        with ESMTP id S229462AbiEBWgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 18:35:58 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABBEFA1B2
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 15:32:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651530748; x=1683066748;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YlaDj/iYhMm/6LNBaHJL/0fPCODKjiNytW/Jy8TwmLs=;
-  b=Do4s9IeIprkHCh1TZyfdy8ENY0mnHod1F5lrQvaPH1UHGxUZCnVuOuKB
-   YsG7pwwWCHU22kBFt27sn55MrnZvQ13XY1IIAjbE8VS+8AB+2nZSFoc3q
-   hG+wOFmr1SmbUAdrpVsv/cvYZHkbM8xv3xw3cxADu9XKuNGCdCYQA6IN3
-   YvPxriQd/x6pl6oEGAdAO+eBjkwzRyNNouSOv1+AHrKx/0rVGWeMqBHoS
-   6f+V5ZSht7lrKrfMf/hNQtgBeQT1ignCl15ZdLrPUSNyXbozMowzfrpXa
-   P84f2VnH7LAVOZLRGgZQ/0oA+jGWHeTTxh/q6OQBDlFpBEDGwmI7/otS6
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="327888460"
-X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="327888460"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 15:32:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="516315405"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 02 May 2022 15:32:26 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nleag-0009w3-9U;
-        Mon, 02 May 2022 22:32:26 +0000
-Date:   Tue, 3 May 2022 06:31:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     kbuild-all@lists.01.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: [pdx86-platform-drivers-x86:review-hans 31/32]
- thinkpad_acpi.c:undefined reference to `acpi_unregister_lps0_dev'
-Message-ID: <202205030623.pq4pdZmb-lkp@intel.com>
+        Mon, 2 May 2022 18:36:23 -0400
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B751DA1B2;
+        Mon,  2 May 2022 15:32:53 -0700 (PDT)
+Received: by mail-ot1-f48.google.com with SMTP id m6-20020a05683023a600b0060612720715so3401252ots.10;
+        Mon, 02 May 2022 15:32:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XSA9YndvfNYBh4vCbeUSx3HnFvZdR1DxFJAhwqu75m0=;
+        b=4V35YE40lhHsC1lwUNaepjeKvVK0FuDe99SWnjWuL/NCISd4SQv8UdrHiZppXuf+Yr
+         733OLuuHny8xHNhmZ32PskCTqnfCnT8qIUSHbS4Jh/aSu4E/scj7q+geeWUl9QkEvGLN
+         WSTgKKGKzAwNpP9XnPCJtrcB4ol7frodJeAiwUCfF+26B5SWYkkJfntsvND1rZ9NSmxY
+         t1ZM9UqOWZEn3ZvA8N+EFwHQ9aqkjd7JdUHXtJ0+Eoxuiszt0MUiiU1b+c2epEhBq9u5
+         ckSGMd7R/pRAB7vaHAE0wWUUjFvAfYJYEC9WNylH2+kDrWw+z7NG/mfLDSVz/50xtBqE
+         KA+w==
+X-Gm-Message-State: AOAM531OT+eXBfkve1uLcqRKYPlh75oQSNvmtvo1VP6ThFzfHxRu3Le0
+        mMRU9zVM+a3ffXe9ypMdy+bl6FJMkQ==
+X-Google-Smtp-Source: ABdhPJzF2BhR/JXe6VIWEotbfWv8kVNDq/XceNLCdYXdx8vxLRKHHvOxpjQARdjMPuAAOHHRfZ0lZg==
+X-Received: by 2002:a05:6830:1d92:b0:606:a1e:946a with SMTP id y18-20020a0568301d9200b006060a1e946amr4185338oti.294.1651530773029;
+        Mon, 02 May 2022 15:32:53 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id n10-20020a9d6f0a000000b0060603221264sm3377485otq.52.2022.05.02.15.32.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 May 2022 15:32:52 -0700 (PDT)
+Received: (nullmailer pid 1916692 invoked by uid 1000);
+        Mon, 02 May 2022 22:32:51 -0000
+Date:   Mon, 2 May 2022 17:32:51 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Nathan Rossi <nathan@nathanrossi.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH 1/2] dt-bindings: net: dsa: marvell: Add
+ single-chip-address property
+Message-ID: <YnBcE96wbQxZguw2@robh.at.kernel.org>
+References: <20220423131427.237160-1-nathan@nathanrossi.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220423131427.237160-1-nathan@nathanrossi.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git review-hans
-head:   acbb6b34258ea867c21d47ab53934ef9dbc442a0
-commit: a50dfa903391d542025a92c92606425fbccc8323 [31/32] platform/x86: thinkpad_acpi: Add a s2idle resume quirk for a number of laptops
-config: i386-randconfig-a014 (https://download.01.org/0day-ci/archive/20220503/202205030623.pq4pdZmb-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/commit/?id=a50dfa903391d542025a92c92606425fbccc8323
-        git remote add pdx86-platform-drivers-x86 https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git
-        git fetch --no-tags pdx86-platform-drivers-x86 review-hans
-        git checkout a50dfa903391d542025a92c92606425fbccc8323
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On Sat, Apr 23, 2022 at 01:14:27PM +0000, Nathan Rossi wrote:
+> Some Marvell DSA devices can be accessed in a single chip addressing
+> mode. This is currently configured by setting the address of the switch
+> to 0. However switches in this configuration do not respond to address
+> 0, only responding to higher addresses (fixed addressed based on the
+> switch model) for the individual ports/etc. This is a feature to allow
+> for other phys to exist on the same mdio bus.
+> 
+> This change defines a 'single-chip-address' property in order to
+> explicitly define that the chip is accessed in this mode. This allows
+> for a switch to have an address defined other than 0, so that address
+> 0 can be used for another mdio device.
+> 
+> Signed-off-by: Nathan Rossi <nathan@nathanrossi.com>
+> ---
+>  Documentation/devicetree/bindings/net/dsa/marvell.txt | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/dsa/marvell.txt b/Documentation/devicetree/bindings/net/dsa/marvell.txt
+> index 2363b41241..5c7304274c 100644
+> --- a/Documentation/devicetree/bindings/net/dsa/marvell.txt
+> +++ b/Documentation/devicetree/bindings/net/dsa/marvell.txt
+> @@ -46,6 +46,8 @@ Optional properties:
+>  - mdio?		: Container of PHYs and devices on the external MDIO
+>  			  bus. The node must contains a compatible string of
+>  			  "marvell,mv88e6xxx-mdio-external"
+> +- single-chip-address	: Device is configured to use single chip addressing
+> +			  mode.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Doesn't sound like a common feature, it needs a vendor prefix.
 
-All errors (new ones prefixed by >>):
+Some of the commit message explanation of what 'single chip addressing' 
+is is needed here.
 
-   ld: drivers/platform/x86/thinkpad_acpi.o: in function `thinkpad_acpi_module_exit':
->> thinkpad_acpi.c:(.text+0x2722): undefined reference to `acpi_unregister_lps0_dev'
-   ld: drivers/platform/x86/thinkpad_acpi.o: in function `thinkpad_acpi_module_init':
->> thinkpad_acpi.c:(.init.text+0x1afd): undefined reference to `acpi_register_lps0_dev'
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Rob

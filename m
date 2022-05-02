@@ -2,84 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 088DE517891
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 22:51:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62922517895
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 22:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236708AbiEBUyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 16:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41098 "EHLO
+        id S1387490AbiEBUy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 16:54:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387509AbiEBUyK (ORCPT
+        with ESMTP id S1387414AbiEBUyY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 16:54:10 -0400
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49826B19;
-        Mon,  2 May 2022 13:50:40 -0700 (PDT)
-Received: by mail-oi1-f181.google.com with SMTP id r1so16201213oie.4;
-        Mon, 02 May 2022 13:50:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=E7dLfkQB5iRNEh+Agl2ljIZWdTsg7pWZ55/DrU1lX3U=;
-        b=yBOxF9Ici3jkKgH3ukbY3khU7J14nGIVzlvI6IqoyExuzE54dfGddWul2f/QC0hBiz
-         dBxI72Qb4R/TNGM9qqRzO7MIXI/js/eYgeo55x/ev0KVgDJwXwCioOGCpbq1fl06wCkk
-         9Vcz0AE5tykyvvCmYOd5boun8ZNg25v+h/ykiSMS1vYgDRGES8HdcTWV1if4PdKAzB4l
-         T93z0UNSdHY822sqfkWL3TMe1HgzWmfA19Hh47+k8rjbhOfXphcAwfKnO08loJQjF1jR
-         lvkZHOUTr/HybHPQcWc84ehwO5RFauUAna3A/nLSZubv3Nm8EKqd+FDgrET/9kkbJdxw
-         GGXA==
-X-Gm-Message-State: AOAM530QuT4Eo5cqjDRlipNvzGmORPDdG0s56pCmi4u6eBYNlhofteWJ
-        bIwAsIbx2uHPwCgB7QXnqg==
-X-Google-Smtp-Source: ABdhPJx8kDbeKKYG/ADawW42HXqiWmqrHC2ycDpq4wT5cjjBJkWPZp69DHt8An0bXLasg+8qjsWfEQ==
-X-Received: by 2002:aca:641:0:b0:325:473:403b with SMTP id 62-20020aca0641000000b003250473403bmr488975oig.116.1651524639465;
-        Mon, 02 May 2022 13:50:39 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i9-20020aca2b09000000b00324f24e623fsm2687395oik.3.2022.05.02.13.50.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 13:50:38 -0700 (PDT)
-Received: (nullmailer pid 1723863 invoked by uid 1000);
-        Mon, 02 May 2022 20:50:37 -0000
-Date:   Mon, 2 May 2022 15:50:37 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-renesas-soc@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: interrupt-controller: Add Renesas
- RZ/G2L Interrupt Controller
-Message-ID: <YnBEHdWD+Z5ojbu/@robh.at.kernel.org>
-References: <20220421221159.31729-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220421221159.31729-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Mon, 2 May 2022 16:54:24 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9736EA194;
+        Mon,  2 May 2022 13:50:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651524654; x=1683060654;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=sl4N8i1omNpsjiy3tkB6ukBb3Fz0rso7EMwA3taLqsQ=;
+  b=MT3Ki9JXEfqC2bdqyUp5uyTJR+gvNsHqZtPoyv5SpyRfSkdBb8f9jNI2
+   r/idP4SLQxd8kiqYNcF3RI4zI4h+g663iwxWDQFC2rYDrpAQy1Kj3Rd06
+   7NFzlU/fDqltEbTNVQ//j2gMJQbqb9x1AL+W5xywBIdcH7uu2/Ao59aaT
+   NBb5aTkaCrbTEGnCnTWNPUneoZITXInAXJ9ro4W95WBrR3fqkCVX/cIPK
+   D00irbgjLS4+dyUYPAjD51GbG5hi6EvLbId0b/y5dU0u9dV+fxTYjZVt8
+   jbvoNkDlUDQ2H1OMxeHc9DfInsywSsSktCC44lPqyzrL/ngB8aXZlrS1R
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="327870006"
+X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
+   d="scan'208";a="327870006"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 13:50:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
+   d="scan'208";a="546616829"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga002.jf.intel.com with ESMTP; 02 May 2022 13:50:54 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, viresh.kumar@linaro.org
+Cc:     lenb@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] cpufreq: intel_pstate: Support Sapphire Rapids OOB mode
+Date:   Mon,  2 May 2022 13:50:52 -0700
+Message-Id: <20220502205052.1257462-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220421221159.31729-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 21 Apr 2022 23:11:58 +0100, Lad Prabhakar wrote:
-> Add DT bindings for the Renesas RZ/G2L Interrupt Controller.
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
->  .../renesas,rzg2l-irqc.yaml                   | 131 ++++++++++++++++++
->  1 file changed, 131 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/renesas,rzg2l-irqc.yaml
-> 
+Prevent intel_pstate to load when OOB (Out Of Band) P-states mode is
+enabled in Sapphire Rapids. The OOB identifying bits are same as the
+prior generation CPUs like Ice Lake servers. So, also add Sapphire
+Rapids to intel_pstate_cpu_oob_ids list.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+ drivers/cpufreq/intel_pstate.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+index 846bb3a78788..76d59b3f35e4 100644
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -2424,6 +2424,7 @@ static const struct x86_cpu_id intel_pstate_cpu_oob_ids[] __initconst = {
+ 	X86_MATCH(BROADWELL_X,		core_funcs),
+ 	X86_MATCH(SKYLAKE_X,		core_funcs),
+ 	X86_MATCH(ICELAKE_X,		core_funcs),
++	X86_MATCH(SAPPHIRERAPIDS_X,	core_funcs),
+ 	{}
+ };
+ 
+-- 
+2.31.1
+

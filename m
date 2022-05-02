@@ -2,133 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 069AD5173BF
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:07:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CC9A5173CC
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:08:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241115AbiEBQKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 12:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
+        id S241145AbiEBQLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 12:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240854AbiEBQKr (ORCPT
+        with ESMTP id S241843AbiEBQLe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 12:10:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E49EDE95
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 09:07:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651507636;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=s70MT6Y6b+EWzPq4TYtvjBhW+c7gKt8WCUmst+yWMcA=;
-        b=NOoPok6F3YLUvVYVKt0qwJG6RoU5PWdXFGSPb9ePPBDnF6dxQn3TlXsrV4i0w/NbtB6mG6
-        +OHYXJTom6VrDI5UcXv0MxtAklLUkuXb6tgcBc3hFOe1xuxBvuh6eq80E3f76Cz0ieGcGQ
-        +Raf/RLlEpAe0C5hcIlJSERBXN0UnZI=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-86-XKnsIJCBPLGUprwFo3Bohg-1; Mon, 02 May 2022 12:07:15 -0400
-X-MC-Unique: XKnsIJCBPLGUprwFo3Bohg-1
-Received: by mail-ej1-f71.google.com with SMTP id cw19-20020a170906479300b006f3e54b1dbcso4951204ejc.4
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 09:07:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=s70MT6Y6b+EWzPq4TYtvjBhW+c7gKt8WCUmst+yWMcA=;
-        b=qXGRC+Y/RdSA97IPrU6G1JKxZLy3ZWjUcPFVAUQ7SUG+W8o+dsUiCDd8nwToDp4gF+
-         p4cPJ2HADe8lnNYm/jiyHOonPjT2DW39Jrmrbq+lNcKh2UnMaM9VjKQn/AA0x+5gtoP5
-         mH39oTT7g+J0T8hdFBFPAkZxJBKUNuHWoRvD5KuQbBmhMYcGQW7xHAPE+Cshto2Plot+
-         1+x5sUAV70MepUjV7TT25W3RBA1ApIYHJBaisW5hVA9C6KbL5iOebAOAl5VVQ0hNYtzf
-         wmtYb4dW++RM6PeudlV6hBvk2ktuLwqbo0Hq+kjydI6bpgLtQ2djIf1iOomncyU1gb5r
-         +tmA==
-X-Gm-Message-State: AOAM532Zc535wyI6+nQYemDJpR0eFhKRA4ntNNqyGcN/F5MGCcKAQZB6
-        E3bwlNWpYNnS/iWdssEcxXFNOKueiIlQbnMN5HtfRG71XpSOCVCqHnfu3JF3l3rUEs3r4v2eXlM
-        2PC0qxiU4lgyQZ5KQj1dC4g5j
-X-Received: by 2002:a17:907:72d4:b0:6f4:7b2:1dea with SMTP id du20-20020a17090772d400b006f407b21deamr12049351ejc.532.1651507634255;
-        Mon, 02 May 2022 09:07:14 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxHV9JQOzWXQ2/EuMLNL2Sk7plhApTBZcA1FAn/4yisC7DdLA+Ho0CT7zFqHqrSbD0Bufb/EQ==
-X-Received: by 2002:a17:907:72d4:b0:6f4:7b2:1dea with SMTP id du20-20020a17090772d400b006f407b21deamr12049334ejc.532.1651507634023;
-        Mon, 02 May 2022 09:07:14 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id zp1-20020a17090684e100b006f3ef214df0sm3710399ejb.86.2022.05.02.09.07.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 09:07:13 -0700 (PDT)
-Message-ID: <a06997fe-8dd7-e91a-2017-912827f554e7@redhat.com>
-Date:   Mon, 2 May 2022 18:07:11 +0200
+        Mon, 2 May 2022 12:11:34 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95DACDF94
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 09:07:59 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:39356)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nlYaW-00G66k-43; Mon, 02 May 2022 10:07:52 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:36676 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nlYaV-002zy7-2q; Mon, 02 May 2022 10:07:51 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Alexey Gladkov <legion@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Daniel Walsh <dwalsh@redhat.com>,
+        Davidlohr Bueso <dbueso@suse.de>,
+        Kirill Tkhai <ktkhai@virtuozzo.com>,
+        Linux Containers <containers@lists.linux.dev>,
+        Manfred Spraul <manfred@colorfullife.com>,
+        Serge Hallyn <serge@hallyn.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Vasily Averin <vvs@virtuozzo.com>
+References: <CAHk-=wgBB8iPd0W=MQWnQJukMAPAqgsC0QX2wwiSvcct9zu_RA@mail.gmail.com>
+        <cover.1650631347.git.legion@kernel.org>
+        <e2c8df40672ca854b754cc3a412be2d6f684ac8b.1650631347.git.legion@kernel.org>
+Date:   Mon, 02 May 2022 11:07:24 -0500
+In-Reply-To: <e2c8df40672ca854b754cc3a412be2d6f684ac8b.1650631347.git.legion@kernel.org>
+        (Alexey Gladkov's message of "Fri, 22 Apr 2022 14:53:37 +0200")
+Message-ID: <875ymnvryb.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v9 8/9] KVM: x86: Allow userspace set maximum VCPU id for
- VM
-Content-Language: en-US
-To:     Zeng Guang <guang.zeng@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        Kai Huang <kai.huang@intel.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Robert Hu <robert.hu@intel.com>, Gao Chao <chao.gao@intel.com>
-References: <20220419154444.11888-1-guang.zeng@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220419154444.11888-1-guang.zeng@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nlYaV-002zy7-2q;;;mid=<875ymnvryb.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1+wXehoCMqRnCn8sog7V37uBF8NwpGbygA=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;Alexey Gladkov <legion@kernel.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 389 ms - load_scoreonly_sql: 0.07 (0.0%),
+        signal_user_changed: 12 (3.0%), b_tie_ro: 10 (2.6%), parse: 1.01
+        (0.3%), extract_message_metadata: 12 (3.1%), get_uri_detail_list: 1.43
+        (0.4%), tests_pri_-1000: 15 (3.8%), tests_pri_-950: 1.30 (0.3%),
+        tests_pri_-900: 1.09 (0.3%), tests_pri_-90: 54 (13.8%), check_bayes:
+        52 (13.3%), b_tokenize: 7 (1.8%), b_tok_get_all: 8 (1.9%),
+        b_comp_prob: 2.1 (0.6%), b_tok_touch_all: 31 (8.0%), b_finish: 0.86
+        (0.2%), tests_pri_0: 282 (72.4%), check_dkim_signature: 0.86 (0.2%),
+        check_dkim_adsp: 3.3 (0.8%), poll_dns_idle: 0.75 (0.2%), tests_pri_10:
+        2.1 (0.5%), tests_pri_500: 6 (1.7%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v1 1/4] ipc: Remove extra1 field abuse to pass ipc
+ namespace
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/19/22 17:44, Zeng Guang wrote:
-> +Userspace is able to calculate the limit to APIC ID values from designated CPU
-> +topology. This capability allows userspace to specify maximum possible APIC ID
-> +assigned for current VM session prior to the creation of vCPUs. By design, it
-> +can set only once and doesn't accept change any more. KVM will manage memory
-> +allocation of VM-scope structures which depends on the value of APIC ID.
-> +
-> +Calling KVM_CHECK_EXTENSION for this capability returns the value of maximum APIC
-> +ID that KVM supports at runtime. It sets as KVM_MAX_VCPU_IDS by default.
+Alexey Gladkov <legion@kernel.org> writes:
 
-Better:
+> Eric Biederman pointed out that using .extra1 to pass ipc namespace
+> looks like an ugly hack and there is a better solution.
+>
+> Link: https://lore.kernel.org/lkml/87czib9g38.fsf@email.froward.int.ebiederm.org/
+> Signed-off-by: Eric W. Biederman <ebiederm@xmission.com>
+> Signed-off-by: Alexey Gladkov <legion@kernel.org>
+> ---
+>  ipc/ipc_sysctl.c | 26 ++++++++------------------
+>  1 file changed, 8 insertions(+), 18 deletions(-)
+>
+> diff --git a/ipc/ipc_sysctl.c b/ipc/ipc_sysctl.c
+> index 15210ac47e9e..eb7ba8e0a355 100644
+> @@ -55,20 +50,15 @@ static int proc_ipc_auto_msgmni(struct ctl_table *table, int write,
+>  static int proc_ipc_sem_dointvec(struct ctl_table *table, int write,
+>  	void *buffer, size_t *lenp, loff_t *ppos)
+>  {
+> -	struct ipc_namespace *ns = table->extra1;
+> -	struct ctl_table ipc_table;
+> +	struct ipc_namespace *ns =
+> +		container_of(table->data, struct ipc_namespace, sem_ctls);
+>  	int ret, semmni;
+>  
+> -	memcpy(&ipc_table, table, sizeof(ipc_table));
+> -
+> -	ipc_table.extra1 = NULL;
+> -	ipc_table.extra2 = NULL;
+> -
+>  	semmni = ns->sem_ctls[3];
+>  	ret = proc_dointvec(table, write, buffer, lenp, ppos);
+>  
+>  	if (!ret)
+> -		ret = sem_check_semmni(current->nsproxy->ipc_ns);
+> +		ret = sem_check_semmni(ns);
+		^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This capability allows userspace to specify maximum possible APIC ID
-assigned for current VM session prior to the creation of vCPUs, saving
-memory for data structures indexed by the APIC ID.  Userspace is able
-to calculate the limit to APIC ID values from designated
-CPU topology.
+Can you break this one line change into a separate patch?
 
-The value can be changed only until KVM_ENABLE_CAP is set to a nonzero
-value or until a vCPU is created.  Upon creation of the first vCPU,
-if the value was set to zero or KVM_ENABLE_CAP was not invoked, KVM
-uses the return value of KVM_CHECK_EXTENSION(KVM_CAP_MAX_VCPU_ID) as
-the maximum APIC ID.
+It is a bug fix so that the entire function uses the same
+ns value.  I expect the change would read easier if the
+change was separate.
 
->   	case KVM_CAP_MAX_VCPU_ID:
-> -		r = KVM_MAX_VCPU_IDS;
-> +		if (!kvm->arch.max_vcpu_ids)
-> +			r = KVM_MAX_VCPU_IDS;
-> +		else
-> +			r = kvm->arch.max_vcpu_ids;
+>  
+>  	/*
+>  	 * Reset the semmni value if an error happens.
 
-I think returning the constant KVM_CAP_MAX_VCPU_IDS is better.
-
-Paolo
-
+Eric

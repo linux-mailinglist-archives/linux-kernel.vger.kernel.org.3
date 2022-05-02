@@ -2,81 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9945178F2
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 23:13:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6766D51790B
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 23:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387596AbiEBVRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 17:17:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54098 "EHLO
+        id S1387627AbiEBVXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 17:23:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbiEBVRW (ORCPT
+        with ESMTP id S1387603AbiEBVXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 17:17:22 -0400
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED092193;
-        Mon,  2 May 2022 14:13:52 -0700 (PDT)
-Received: by mail-oo1-f52.google.com with SMTP id e7-20020a4aaac7000000b00330e3ddfd4bso2788103oon.8;
-        Mon, 02 May 2022 14:13:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3q+qtdP+luQ33LzicXlYLTVCEnsuA+2H8mH4UxrS+O4=;
-        b=wJfQW5CapC3feMuRnr7bjiOZvNAPFzK1bgAdQptjB1PRIKengWCm8zzTpZcVx6RDLF
-         +LxFt3usfXm7GDTUoAq5YEDcqdmcodSzvdpVVdgVhnPcsYYZz0cQ8FPrFYaLpiZnlXVG
-         yaHDwSVMuVdhHCYiG4R5Zno9bBdFisrV7JXX9im6BolDjUymTpNclj1xrMwzpKq4kDAA
-         eJ4SpSmaKS2tjg2BqYf0GjYjIwITNXBZS6Uf8PASlfaivEed+Oa9cyr8sRgYL6ivu5be
-         MNdo8ZZ8LpbBLWca86B85dIKczf1uRxpbgyblTecgK8SOcgYK1fetlXb7SUxGSYGHiha
-         iJtg==
-X-Gm-Message-State: AOAM53391vpaPtLg9lWa7zj/iiNtnPQGVCk0ex/D07MPI5Pa9iTf44En
-        RWab3zeCdszZRa36CayDlA==
-X-Google-Smtp-Source: ABdhPJzdddq7QjHdq1Gyqkm9hnLQMotisgl4Ju8ztMqS+jbqac/2Etf+2iATS8SO6UwVwY2Ix6AJGQ==
-X-Received: by 2002:a4a:d40d:0:b0:33a:33be:9c1e with SMTP id n13-20020a4ad40d000000b0033a33be9c1emr4627230oos.96.1651526031874;
-        Mon, 02 May 2022 14:13:51 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id o11-20020a54478b000000b00325cda1ff93sm2771256oic.18.2022.05.02.14.13.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 14:13:51 -0700 (PDT)
-Received: (nullmailer pid 1763244 invoked by uid 1000);
-        Mon, 02 May 2022 21:13:50 -0000
-Date:   Mon, 2 May 2022 16:13:50 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc:     etienne.carriere@st.com, arnd@arndb.de,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Marek Vasut <marex@denx.de>, soc@kernel.org,
-        robh+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/8] dt-bindings: clock: stm32mp1: describes clocks if
- "st,stm32mp1-rcc-secure"
-Message-ID: <YnBJjhv6uu2USIUs@robh.at.kernel.org>
-References: <20220422150952.20587-1-alexandre.torgue@foss.st.com>
- <20220422150952.20587-3-alexandre.torgue@foss.st.com>
+        Mon, 2 May 2022 17:23:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E808A1AE;
+        Mon,  2 May 2022 14:20:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A2BF7B819F6;
+        Mon,  2 May 2022 21:20:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 57EB0C385A4;
+        Mon,  2 May 2022 21:20:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651526411;
+        bh=uLcybJcnNqI+j6jIrxeeIUMhxnhYzGU+2Dt86UpKrzM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=sj6W1PWf9Gt4mLhi3rCR8bKAXR2IvFbcXIHi4Z/WRFxS29M5gfLrLQ2H8Gb9cZpSo
+         vfbyETCmuzWQ9XOwl11yAG2LfkzSfRyZvXwl+wg2QwQcTQRMvXbqTjfo9LCeMYIzxf
+         Nt1P8iQ8w6hmk9HPueO1fCQ3fB7clX8fH6CMkq73rglut7fI/iYx5RynoUXfhHacyp
+         D/7vKqg1r+gk+TBnGXJBFCrlzXL3wFyapHNBMXI5zFUaVfkBNfMGDNCUo7BgWUzlaz
+         eZBGmF4EmUiqXFALNgEBkar85bhxxgWYsAS7RDEKF6+z4rTHMWzHfHT+w0nFyIBrUS
+         FbL5hbVAzN+Xw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3D4EAE6D402;
+        Mon,  2 May 2022 21:20:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422150952.20587-3-alexandre.torgue@foss.st.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v1 net-next 0/2] ocelot stats improvement
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165152641124.9389.11966311067254454723.git-patchwork-notify@kernel.org>
+Date:   Mon, 02 May 2022 21:20:11 +0000
+References: <20220430232327.4091825-1-colin.foster@in-advantage.com>
+In-Reply-To: <20220430232327.4091825-1-colin.foster@in-advantage.com>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        davem@davemloft.net, UNGLinuxDriver@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.manoil@nxp.com,
+        vladimir.oltean@nxp.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Apr 2022 17:09:46 +0200, Alexandre Torgue wrote:
-> In case of "st,stm32mp1-rcc-secure" (stm32mp1 clock driver with RCC
-> security support hardened), "clocks" and "clock-names" describe oscillators
-> and are required.
-> 
-> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
-> 
+Hello:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+This series was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Sat, 30 Apr 2022 16:23:25 -0700 you wrote:
+> A couple of pick-ups after f187bfa6f35 ("net: ethernet: ocelot: remove
+> the need for num_stats initializer") - one addresses a warning
+> patchwork flagged about operator precedence when using macro arguments.
+> The other is a reduction of unnecessary memory allocation.
+> 
+> Colin Foster (2):
+>   net: mscc: ocelot: remove unnecessary variable
+>   net: mscc: ocelot: add missed parentheses around macro argument
+> 
+> [...]
+
+Here is the summary with links:
+  - [v1,net-next,1/2] net: mscc: ocelot: remove unnecessary variable
+    https://git.kernel.org/netdev/net-next/c/05e4ed1ce585
+  - [v1,net-next,2/2] net: mscc: ocelot: add missed parentheses around macro argument
+    https://git.kernel.org/netdev/net-next/c/8c5b07da9bc8
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

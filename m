@@ -2,74 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1047451758E
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 19:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE0C4517590
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 19:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386578AbiEBRPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 13:15:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55350 "EHLO
+        id S1386590AbiEBRQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 13:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386537AbiEBRPg (ORCPT
+        with ESMTP id S242903AbiEBRQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 13:15:36 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2EC6176
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 10:12:07 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id w19so26314095lfu.11
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 10:12:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=tfJfzW5D4/+mvV5ypqeVXDbthQVO2IvgikDBXjGyA60=;
-        b=Jk1QN88CqvFdk0UuRuqURJ4UVhpx8OAxnd0T493cwxqjOVXjBnAeoL1MaFMAWTRShO
-         dZ69nMzm3LLz5RUjb3A+97DsAxCv5FfIKrQtCD+1CGB0FUNIw5/8axd156kxWuRCeJAZ
-         qyxq3e4bZo9MffWtnlr78MZyevS6X1fzaRemUL6vVl5nTs5Gk2ei10hH7srkUh+vhLGA
-         YmqbDDOGu3AlNL7Besk0vVhmRFs2Bfg/pA/5v7itsUmoF+AIeMFjnzmVuDZTq/vYdR8K
-         hfUwI06aYWpby8NTV7c+BS5wj+dBKJASQ4UK7G8Vsukj6jPKM2qko9QQ955jz4T32Yxs
-         5LWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tfJfzW5D4/+mvV5ypqeVXDbthQVO2IvgikDBXjGyA60=;
-        b=tEMft9fboNowraTKIuOuDKcYiPiKyPN1BaZ1cBikzD+x3n6XAZWQsoJc12+ahv3Aza
-         LvFgjL5g9h2IJyF8h9K/sf0+qwcHoMIWmsCch3MDQ1uEVtw+FQV2kNQqfxopEAMd9f+A
-         liFr2/8TF2gQmf4jdyiBpAuOoUUjadWZEdVboO/UKRtKV8QtJJxf3wllr00EsLAYxeLV
-         mRu3xubIB1u3AhwvHypTsBn11Za1At9sAUY+MwXDXXWii8ChQXz4DXkxyqOwk8c6MCIV
-         fK2hSENjLHZJxuE/EMPOjI1n/dFwSaRQMF5SqhBjS4NFFt/OF9q+QiJXwvyq9Nl3EOqt
-         AGzg==
-X-Gm-Message-State: AOAM5302mxTncmMc6A8XG6H25ij1sNFFPO+w1kiG9NYEaSkBIgV9u1j3
-        BuUXMivelJ9eF57W/3LDWmPy5w==
-X-Google-Smtp-Source: ABdhPJxK9FbHHdv2wyG8oI74ITCgks3MnQGVEBJhOGVP3JLuuzGptrCfLdlnkkol35ZbWzze7LqIEQ==
-X-Received: by 2002:a05:6512:448:b0:472:3c0e:cf7f with SMTP id y8-20020a056512044800b004723c0ecf7fmr9457323lfk.279.1651511525368;
-        Mon, 02 May 2022 10:12:05 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id be40-20020a05651c172800b0024f3d1daec5sm1108268ljb.77.2022.05.02.10.12.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 10:12:05 -0700 (PDT)
-Message-ID: <f9dbdfc1-117c-b713-7f1d-40de9726baa1@linaro.org>
-Date:   Mon, 2 May 2022 20:12:04 +0300
+        Mon, 2 May 2022 13:16:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C80B4627B;
+        Mon,  2 May 2022 10:12:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6419661307;
+        Mon,  2 May 2022 17:12:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4AC0C385AC;
+        Mon,  2 May 2022 17:12:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651511565;
+        bh=F4A/7EYGFEZrN9M1/Wu0JMGDPGLaRN8iNpkNaFcYLn4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=HVQdD5ETXp+x2uaRabpPzAVsPDBGswx4EsgZzOWr4HhCJrQvl8HQHpHNXZZIqdfgF
+         GCRatzouZgTdWnuiDMBWeTP8+VnaxQvvXbJHIrFo6XOBDkWpScEi/0yM/5kwSOkiDD
+         UBejt4S3hXRhz4SUzDimE6aFOqd/uTaxgyMt1GuTAUAsODI3v3wDbyRhOv6TaiMOYL
+         g04/9otO0978IaAHmLG/zNSHukXV4ojB35fvPsOOl21gBrBp02FeIiUzmUX9qZMWgR
+         eaj3Sf7+U1ztyPWJiStP8I+u0OpMsZ3ijPHnmCwhIq1y8fEv7pQPPV8m5l8MbLtcZZ
+         tqHsO8rGG9fFw==
+Received: by mail-pg1-f172.google.com with SMTP id q76so9085676pgq.10;
+        Mon, 02 May 2022 10:12:45 -0700 (PDT)
+X-Gm-Message-State: AOAM533tj8Eh9RKSo5wSNZOALq9AkdQmV9lz+Z0OfnylWBmmfXpbIph6
+        Ec1SsORtMw97UKD5xysQ8Cb4/iPSjqXNOXNCgQ==
+X-Google-Smtp-Source: ABdhPJzl9m0fFoAHvEl1DDBVONz2rISSslZowrjuzounK+sTYQiF+nbi0wBRKNwITCH0g2lI5Eh9KosK3zmFFUU25sA=
+X-Received: by 2002:a05:6a00:10d0:b0:4f7:5af4:47b6 with SMTP id
+ d16-20020a056a0010d000b004f75af447b6mr12481460pfu.6.1651511565254; Mon, 02
+ May 2022 10:12:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2] drm/msm/disp/dpu1: avoid clearing hw interrupts if
- hw_intr is null during drm uninit
-Content-Language: en-GB
-To:     Vinod Polimera <quic_vpolimer@quicinc.com>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, robdclark@gmail.com,
-        dianders@chromium.org, swboyd@chromium.org,
-        quic_kalyant@quicinc.com, quic_abhinavk@quicinc.com
-References: <1651509846-4842-1-git-send-email-quic_vpolimer@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1651509846-4842-1-git-send-email-quic_vpolimer@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20220502165818.4002157-1-matthew.gerlach@linux.intel.com>
+In-Reply-To: <20220502165818.4002157-1-matthew.gerlach@linux.intel.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 2 May 2022 12:12:33 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKwr7Je51X=OVd5Mfxe=Ztvp7jY2WcTu+treB3x7QBxfA@mail.gmail.com>
+Message-ID: <CAL_JsqKwr7Je51X=OVd5Mfxe=Ztvp7jY2WcTu+treB3x7QBxfA@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: intel: add device tree for n6000
+To:     matthew.gerlach@linux.intel.com
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, dinguyen@vger.kernel.org,
+        robh+dt@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,59 +64,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/05/2022 19:44, Vinod Polimera wrote:
-> If edp modeset init is failed due to panel being not ready and
-> probe defers during drm bind, avoid clearing irqs and derefernce
-> hw_intr when hw_intr is null.
-> 
-> BUG: Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-> 
-> Call trace:
->   dpu_core_irq_uninstall+0x50/0xb0
->   dpu_irq_uninstall+0x18/0x24
->   msm_drm_uninit+0xd8/0x16c
->   msm_drm_bind+0x580/0x5fc
->   try_to_bring_up_master+0x168/0x1c0
->   __component_add+0xb4/0x178
->   component_add+0x1c/0x28
->   dp_display_probe+0x38c/0x400
->   platform_probe+0xb0/0xd0
->   really_probe+0xcc/0x2c8
->   __driver_probe_device+0xbc/0xe8
->   driver_probe_device+0x48/0xf0
->   __device_attach_driver+0xa0/0xc8
->   bus_for_each_drv+0x8c/0xd8
->   __device_attach+0xc4/0x150
->   device_initial_probe+0x1c/0x28
-> 
-> Changes in V2:
-> - Update commit message and coreect fixes tag.
-> 
-> Fixes: f25f656608e3 ("drm/msm/dpu: merge struct dpu_irq into struct dpu_hw_intr")
-> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
-
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
+On Mon, May 2, 2022 at 11:58 AM <matthew.gerlach@linux.intel.com> wrote:
+>
+> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>
+> Add a device tree for the n6000 instantiation of Agilex
+> Hard Processor System (HPS).
+>
+> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 > ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
-> index c515b7c..ab28577 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
-> @@ -599,6 +599,9 @@ void dpu_core_irq_uninstall(struct dpu_kms *dpu_kms)
->   {
->   	int i;
->   
-> +	if (!dpu_kms->hw_intr)
-> +		return;
+>  arch/arm64/boot/dts/intel/Makefile            |  1 +
+>  .../boot/dts/intel/socfpga_agilex_n6000.dts   | 77 +++++++++++++++++++
+>  2 files changed, 78 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/intel/socfpga_agilex_n6000.dts
+>
+> diff --git a/arch/arm64/boot/dts/intel/Makefile b/arch/arm64/boot/dts/intel/Makefile
+> index 0b5477442263..1425853877cc 100644
+> --- a/arch/arm64/boot/dts/intel/Makefile
+> +++ b/arch/arm64/boot/dts/intel/Makefile
+> @@ -1,5 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  dtb-$(CONFIG_ARCH_INTEL_SOCFPGA) += socfpga_agilex_socdk.dtb \
+>                                 socfpga_agilex_socdk_nand.dtb \
+> +                               socfpga_agilex_n6000.dtb \
+
+Alphabetical order.
+
+>                                 socfpga_n5x_socdk.dtb
+>  dtb-$(CONFIG_ARCH_KEEMBAY) += keembay-evm.dtb
+> diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex_n6000.dts b/arch/arm64/boot/dts/intel/socfpga_agilex_n6000.dts
+> new file mode 100644
+> index 000000000000..07f5a5983e5c
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/intel/socfpga_agilex_n6000.dts
+> @@ -0,0 +1,77 @@
+> +// SPDX-License-Identifier:     GPL-2.0
+> +/*
+> + * Copyright (C) 2021-2022, Intel Corporation
+> + */
+> +#include "socfpga_agilex.dtsi"
 > +
->   	pm_runtime_get_sync(&dpu_kms->pdev->dev);
->   	for (i = 0; i < dpu_kms->hw_intr->total_irqs; i++)
->   		if (!list_empty(&dpu_kms->hw_intr->irq_cb_tbl[i]))
+> +/ {
+> +       model = "SoCFPGA Agilex n6000";
+> +
+> +       aliases {
+> +               serial0 = &uart1;
+> +               serial1 = &uart0;
+> +               ethernet0 = &gmac0;
+> +               ethernet1 = &gmac1;
+> +               ethernet2 = &gmac2;
+> +       };
+> +
+> +       chosen {
+> +               stdout-path = "serial0:115200n8";
+> +       };
+> +
+> +       memory {
+> +               device_type = "memory";
+> +               /* We expect the bootloader to fill in the reg */
+> +               reg = <0 0 0 0>;
+> +       };
+> +
+> +       soc {
+> +               clocks {
+> +                       osc1 {
+> +                               clock-frequency = <25000000>;
+> +                       };
+> +               };
+> +               agilex_hps_bridges: bridge@80000000 {
+> +                       compatible = "simple-bus";
+> +                       reg = <0x80000000 0x60000000>,
+> +                               <0xf9000000 0x00100000>;
+> +                       reg-names = "axi_h2f", "axi_h2f_lw";
+> +                       #address-cells = <0x2>;
+> +                       #size-cells = <0x1>;
+> +                       ranges = <0x00000000 0x00000000 0xf9000000 0x00001000>;
+> +
+> +                       uio_cp_eng@0xf9000000 {
 
+Unit addresses shouldn't have '0x' and the address is wrong as it
+should match the child address (0). dtc will tell you this though you
+need 'W=1'. Run this and schema checks and don't add new warnings.
 
--- 
-With best wishes
-Dmitry
+> +                               compatible = "generic-uio";
+
+NAK. Not documented and that's because this is not a h/w device.
+
+> +                               reg = <0x00000000 0x00000000 0x00001000>;
+> +                               status = "okay";
+
+That's the default.
+
+> +                       };
+> +               };
+> +       };
+> +};
+> +
+> +&uart0 {
+> +       status = "okay";
+> +};
+> +
+> +&uart1 {
+> +       status = "okay";
+> +};
+> +
+> +&spi0 {
+> +       status = "okay";
+> +
+> +       spidev: spidev@0 {
+> +               status = "okay";
+> +               compatible = "linux,spidev";
+> +               spi-max-frequency = <25000000>;
+> +               reg = <0>;
+> +       };
+> +};
+> +
+> +&watchdog0 {
+> +       status = "okay";
+> +};
+> +
+> +&fpga_mgr {
+> +       status = "disabled";
+> +};
+> --
+> 2.25.1
+>

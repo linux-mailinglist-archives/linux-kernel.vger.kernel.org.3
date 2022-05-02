@@ -2,91 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78377517002
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 15:06:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E49C517004
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 15:09:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235180AbiEBNKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 09:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40016 "EHLO
+        id S1385152AbiEBNNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 09:13:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234947AbiEBNKC (ORCPT
+        with ESMTP id S234947AbiEBNNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 09:10:02 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C60319292
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 06:06:33 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id y63so15129471oia.7
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 06:06:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YpduY3LUujj9agt2pyGYTYUcOltpq+QJYgSduqrfP7U=;
-        b=GV90JjF4D7CFDFpMIEVMlD+rNmMAkAKeJwY/3MeT+jIh15ZtQsFlSqF5wddudZNkWc
-         9kolMChs2vjLRYPHYp/aV6Hlpu5E74JJuZoVvrn0VwIEyVwaR6maMvZyBJ9w3IJMtU0F
-         YcnzHjtir5Wlt6tZttOiyM/fEZ+wrsYEXsuW7I5S3pbWOMA4DWg5tnqjTC/t3eOMNs6U
-         uhGa5aeDiMN79Zwujw9ofbp23NpfxJFfr8GHXk3bJpL9rNKmOGjTG5c5CAMdd2B5tivi
-         HLSvfp0IAZuUNSI9UMuaVbeDYcPcUpP0nVMYyPNv+bjr5H/MEXs1Hbz25qwArp3voUdW
-         oW/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YpduY3LUujj9agt2pyGYTYUcOltpq+QJYgSduqrfP7U=;
-        b=gzZyzcD471TSwyP8hVElBnXr85/DcC7zlkzhS+iL9vJQFOwDYJ7PxNJ6+sL9OiDuau
-         7F5SnJuVAKYcqLSyCIo8OryTnQ7ViwR9x4hGFcIXtsHVNbZBMeH6yN0axGenfTZ/mL0z
-         89Nnl09YMipLS+gKxyMJCCM6S+lvUEKor68A5UpdpdvxHU0qzqEk0Rsy0x/Qpmt+ep0y
-         IqPUVC1x2nU+sinoZaWKQjMa5rJZYQ/G96Mfrv4SL7M8gUATsxvsvsyvFuxgCLuSgYxm
-         DkyQOXoCBnhfvmyTuSGtaaYKuV4s03+8av+RpIuIiO7pj/2+dwdUE8EpRijtgbtZ2aWJ
-         fZfw==
-X-Gm-Message-State: AOAM531CjShHPH4JA8eu5zLQVMOYquJcHfrIkzM/hUDXa0u4pyQrRZgx
-        eghBj8ofmw1BEKRBn+0oy3OMhg==
-X-Google-Smtp-Source: ABdhPJy6gYlkrEw3HdhYgJS+i0PI5/yd6+OPCsHSn/J3tWNjwTbyMiQZ+NvTBxbS58riCDUPJjLlbg==
-X-Received: by 2002:a05:6808:2097:b0:326:c73:10c6 with SMTP id s23-20020a056808209700b003260c7310c6mr1321633oiw.182.1651496792671;
-        Mon, 02 May 2022 06:06:32 -0700 (PDT)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id i13-20020a54408d000000b00325cda1ffb9sm2282403oii.56.2022.05.02.06.06.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 06:06:31 -0700 (PDT)
-Date:   Mon, 2 May 2022 06:08:18 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v3 1/3] regulator: dt-bindings: qcom,rpmh: update
- maintainers
-Message-ID: <Ym/XwheROw9Y1JGx@ripper>
-References: <20220426105501.73200-1-krzysztof.kozlowski@linaro.org>
- <20220426105501.73200-2-krzysztof.kozlowski@linaro.org>
- <YmlIDn1aHSrcoeoJ@sirena.org.uk>
+        Mon, 2 May 2022 09:13:12 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C5319290
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 06:09:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=lEEpp6Yh5c17KamMJCZy6/ew0Vycd9WIVP93R8z7Vuc=; b=mVJscScUJ9u/IezeDDPgHYhNoC
+        LH4VIJwDlSwRibe5Wlt6baYceOoWgSVtXPObRhZVZbvber38kBcjC478fiS6lGmPVrgF1cx6hD1cN
+        DBmRb8AhFFJip93WgfDZeOTD+aawpzpSUEiCc8vm86wTwi9p3WHXtJBZmILZKF/A4OxALgHMbyrFM
+        fX7vDu4llt0eQ++gNOhS0W2/agaRyKYZnZtmjkkwQHoes/HOE0DBjXt3DHc8U2mMhDYHb6NKOou8x
+        WYvnXEeuJb6S1olbM0kHCs1z+CkZzlsFQCs1N2+6U5CVP5VLDe6fFcGMFpGTUZrmE5TpYVq3oH/2K
+        ozgGhRRA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nlVnj-00ATF3-14; Mon, 02 May 2022 13:09:19 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 15EB030017D;
+        Mon,  2 May 2022 15:09:17 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id DEC0A20288CED; Mon,  2 May 2022 15:09:16 +0200 (CEST)
+Date:   Mon, 2 May 2022 15:09:16 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     x86@kernel.org, jpoimboe@redhat.com
+Cc:     linux-kernel@vger.kernel.org, elver@google.com, jbaron@akamai.com,
+        rostedt@goodmis.org, ardb@kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v2 3/3] jump_label,noinstr: Avoid instrumentation for
+ JUMP_LABEL=n builds
+Message-ID: <Ym/X/BuXCi8H0vud@hirez.programming.kicks-ass.net>
+References: <20220502110741.951055904@infradead.org>
+ <20220502111216.350926848@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YmlIDn1aHSrcoeoJ@sirena.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220502111216.350926848@infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 27 Apr 06:41 PDT 2022, Mark Brown wrote:
 
-> On Tue, Apr 26, 2022 at 12:54:59PM +0200, Krzysztof Kozlowski wrote:
-> 
-> >  maintainers:
-> > -  - David Collins <collinsd@codeaurora.org>
-> > +  - Bjorn Andersson <bjorn.andersson@linaro.org>
-> > +  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> Bjorn, are you OK with this?
+Subject: jump_label,noinstr: Avoid instrumentation for JUMP_LABEL=n builds
+From: Peter Zijlstra <peterz@infradead.org>
+Date: Mon May  2 12:30:20 CEST 2022
 
-Acked-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+When building x86_64 with JUMP_LABEL=n it's possible for
+instrumentation to sneak into noinstr:
+
+vmlinux.o: warning: objtool: exit_to_user_mode+0x14: call to static_key_count.constprop.0() leaves .noinstr.text section
+vmlinux.o: warning: objtool: syscall_exit_to_user_mode+0x2d: call to static_key_count.constprop.0() leaves .noinstr.text section
+vmlinux.o: warning: objtool: irqentry_exit_to_user_mode+0x1b: call to static_key_count.constprop.0() leaves .noinstr.text section
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ include/linux/jump_label.h |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+--- a/include/linux/jump_label.h
++++ b/include/linux/jump_label.h
+@@ -256,9 +256,9 @@ extern void static_key_disable_cpuslocke
+ #include <linux/atomic.h>
+ #include <linux/bug.h>
+ 
+-static inline int static_key_count(struct static_key *key)
++static __always_inline int static_key_count(struct static_key *key)
+ {
+-	return atomic_read(&key->enabled);
++	return arch_atomic_read(&key->enabled.count);
+ }
+ 
+ static __always_inline void jump_label_init(void)

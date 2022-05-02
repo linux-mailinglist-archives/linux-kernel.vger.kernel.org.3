@@ -2,67 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 585C3516E3E
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 12:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7F0D516E45
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 12:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384571AbiEBKpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 06:45:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
+        id S1384832AbiEBKpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 06:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384787AbiEBKpV (ORCPT
+        with ESMTP id S1384539AbiEBKpY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 06:45:21 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E6841D31B
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 03:41:52 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d15so12152693plh.2
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 03:41:52 -0700 (PDT)
+        Mon, 2 May 2022 06:45:24 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FDDC1DA77
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 03:41:56 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id k1so3540264pll.4
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 03:41:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=q6Rnw46tJ5c8TR1VH8c4HYYn4D03M2nHnAjzUXe5flU=;
-        b=Pjh9MgqoFCWgam7pbQq637Hxn3x2ZC0hKooYXRjuuTbn5yQ7/kxKf8F24mJbZ3q/HM
-         ukCCI6nYrzsGtJ5Ix6j6vsOKgG16OAzrD7H19+FAbI+D/wCakEuhDUaVLRB0c/ipLCpB
-         M+qADP0jKkXABJzJhfldb5yS8XY7toT4iHKCUTdZhqXkJYPXUNls9NC9mLo+Xw8DGkV9
-         z2sdCnW9v8kPNMa9EKnJQR+4JVZo11Fho3Lxqaei20V69OUFL3OhuoMMqNwePJ5cpqV4
-         RUPfWfkI/V2Pyl+SJcR5Arhqdsg7R8AONJV4N4qr3TLak40Rl4NkxaHLehZ1K2bZcLG8
-         wqqw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=JKnMyfhOMcsp0MsdczDOFIryPKT28w/sEU1b3opPMj4=;
+        b=O6R4e4fF2JRQwROcaZV6fUssqeJO//zhbZl/mygKM0rUko6rIudC3TWlpYR5xD+w5j
+         O1vko1UT0iYKBb0nGllAQkYuWbGg6j4UwfxRykZE0CFhYm/2yLZ6e62W4jFWnHbBrpiB
+         IQ023QuotgXM4STWbFo8BHA/y6a6KSGVNJWBwGAxBPB634un15s3CDi579H9vn/V9hYM
+         PLRWjk471I80dm6Utq8xoVVQXzwsXJ+CIqWTEHlqIc+MkyYWnikgzIAJDGudnRU9iNGs
+         XEFbzOACRYMjI69uPXA27wSm/+SNxklYUZO33zXj4pcemEfGYoPQW9ritWjopwk+pQyv
+         Fm5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=q6Rnw46tJ5c8TR1VH8c4HYYn4D03M2nHnAjzUXe5flU=;
-        b=bH2rF3KYRW0tTryVA9NrVH+OPNj4FQq/xej3USWd42iPNyApn3vvZcMdUa8jmzk0dt
-         BxiqZTfC7WJgNm4fMlp82bIm18KmRuo+nrMELDlDFfoLqByf7FMMTVsydZgTnzvlSmVK
-         sOKX18dtpFHYojnaVdMquaAJI1l7JENVm3QUJ2owt1/8Kc8+7MAj6rMBXBEK/r4FRkpi
-         c1z68jVdyfVeqLUoQlD0vR4XAKQgrLN1lnMp8v+Hent+4GdPaqwvVQ1jTZ1qVmW8YpbU
-         V1JMWTG7BZeonos8l65FBw2Z+VH/ihHh0ZYPL5eFBrZCPCIoma8rTJ8ebtHV0UKHDyqE
-         iVaw==
-X-Gm-Message-State: AOAM531LaveUmza7oGTUwvLGuqBniCAiN3EArZ9Wt5e1cmbgWJ4WHOLS
-        vvrQdzn7PLB+1uxBp5C4ctFw2bENrVFE
-X-Google-Smtp-Source: ABdhPJwAs8+H3r7smNJ+ixQ2yCIe61zHgAhL1t7EBRsXyLhMAbzuX4wAz4gQxsVHn/Tux9b0w9j4Dg==
-X-Received: by 2002:a17:902:8d8e:b0:159:4f6:c4aa with SMTP id v14-20020a1709028d8e00b0015904f6c4aamr11199720plo.115.1651488111837;
-        Mon, 02 May 2022 03:41:51 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=JKnMyfhOMcsp0MsdczDOFIryPKT28w/sEU1b3opPMj4=;
+        b=bZOP/PdxeffIVpD3OK/oqedre2u4NMEhPf4GMiwvBdvp2fokpxwuNEv/b4eBUg+6+w
+         ViLdVQEatyjnSrcliVAHfe5Pde44oUwNnavijBV+NLTDdKM/0opYqrHtVtuiuY1Pg+N/
+         xNpSnBqVib7E+PBiUlo+ZfOa6MDLEPFSiuJakuVEG57W397WQiOxZ/FrqinPVKE1rHm1
+         iRC3FEgKuwkm1QsT+Iflv+3SsBrrqCzFG2xfl3lzXHmxsZubumG0veUXNH4f3h+31E8n
+         67etWUJKlv/7FXARTYyU8VLKDpvgvLHYuj+XCC2u60a9hTJlxxsIYCl4ZFMqXNigMTe6
+         tt1A==
+X-Gm-Message-State: AOAM532LQcHS4ibL7+wkJzLgqs0+HbJ33oTU+wJYVIs5gix5HSARWsYT
+        o9esf7XzGLZf8py+imHUEV9R
+X-Google-Smtp-Source: ABdhPJxeoDTclX0N6gVfJXR/OjRtjLRieZ90rR0+HvO760NBSIZXKa71fIyZSZ6sgxVOrrg51R2Nnw==
+X-Received: by 2002:a17:90b:1d92:b0:1dc:3f14:f8d0 with SMTP id pf18-20020a17090b1d9200b001dc3f14f8d0mr8882476pjb.7.1651488115195;
+        Mon, 02 May 2022 03:41:55 -0700 (PDT)
 Received: from localhost.localdomain ([27.111.75.99])
-        by smtp.gmail.com with ESMTPSA id x10-20020a1709029a4a00b0015e8d4eb2ccsm4368434plv.278.2022.05.02.03.41.48
+        by smtp.gmail.com with ESMTPSA id x10-20020a1709029a4a00b0015e8d4eb2ccsm4368434plv.278.2022.05.02.03.41.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 03:41:51 -0700 (PDT)
+        Mon, 02 May 2022 03:41:54 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     mhi@lists.linux.dev
 Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
         loic.poulain@linaro.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 0/5] MHI host cleanups
-Date:   Mon,  2 May 2022 16:11:39 +0530
-Message-Id: <20220502104144.91806-1-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 1/5] bus: mhi: host: Rename process_db callback to ring_db
+Date:   Mon,  2 May 2022 16:11:40 +0530
+Message-Id: <20220502104144.91806-2-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220502104144.91806-1-manivannan.sadhasivam@linaro.org>
+References: <20220502104144.91806-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,29 +72,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+"process_db" might be confusing at times as it also implies that the
+function is used to process the doorbells from the endpoint device.
+So rename it to "ring_db" to make it clear that it is only used to ring
+doorbell to the device.
 
-This series has few cleanups to the MHI host stack. Apart from the cleanups,
-patch (5/5) removes the redundant dma_wmb() from mhi_ring_chan_db() function.
-I've provided the reasoning in the commit message, if my understanding is wrong
-please let me know.
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+ drivers/bus/mhi/host/init.c     | 8 ++++----
+ drivers/bus/mhi/host/internal.h | 2 +-
+ drivers/bus/mhi/host/main.c     | 4 ++--
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-Thanks,
-Mani
-
-Manivannan Sadhasivam (5):
-  bus: mhi: host: Rename process_db callback to ring_db
-  bus: mhi: host: Rename mhi_db_brstmode() and mhi_db_brstmode_disable()
-  bus: mhi: host: Use {READ/WITE}_ONCE macros for db_mode and db_val
-  bus: mhi: host: Rename parse_{rsc/xfer}_event to
-    process{rsc/xfer}_event
-  bus: mhi: host: Remove redundant dma_wmb() before ctx wp update
-
- drivers/bus/mhi/host/init.c     | 12 +++++------
- drivers/bus/mhi/host/internal.h |  6 +++---
- drivers/bus/mhi/host/main.c     | 37 ++++++++++++++++-----------------
- 3 files changed, 27 insertions(+), 28 deletions(-)
-
+diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
+index e43e2e145871..50d2a1f66e5e 100644
+--- a/drivers/bus/mhi/host/init.c
++++ b/drivers/bus/mhi/host/init.c
+@@ -669,9 +669,9 @@ static int parse_ev_cfg(struct mhi_controller *mhi_cntrl,
+ 			goto error_ev_cfg;
+ 
+ 		if (mhi_event->db_cfg.brstmode == MHI_DB_BRST_ENABLE)
+-			mhi_event->db_cfg.process_db = mhi_db_brstmode;
++			mhi_event->db_cfg.ring_db = mhi_db_brstmode;
+ 		else
+-			mhi_event->db_cfg.process_db = mhi_db_brstmode_disable;
++			mhi_event->db_cfg.ring_db = mhi_db_brstmode_disable;
+ 
+ 		mhi_event->data_type = event_cfg->data_type;
+ 
+@@ -806,9 +806,9 @@ static int parse_ch_cfg(struct mhi_controller *mhi_cntrl,
+ 		}
+ 
+ 		if (mhi_chan->db_cfg.brstmode == MHI_DB_BRST_ENABLE)
+-			mhi_chan->db_cfg.process_db = mhi_db_brstmode;
++			mhi_chan->db_cfg.ring_db = mhi_db_brstmode;
+ 		else
+-			mhi_chan->db_cfg.process_db = mhi_db_brstmode_disable;
++			mhi_chan->db_cfg.ring_db = mhi_db_brstmode_disable;
+ 
+ 		mhi_chan->configured = true;
+ 
+diff --git a/drivers/bus/mhi/host/internal.h b/drivers/bus/mhi/host/internal.h
+index b10a99f8200c..3305f4d93580 100644
+--- a/drivers/bus/mhi/host/internal.h
++++ b/drivers/bus/mhi/host/internal.h
+@@ -142,7 +142,7 @@ struct db_cfg {
+ 	u32 pollcfg;
+ 	enum mhi_db_brst_mode brstmode;
+ 	dma_addr_t db_val;
+-	void (*process_db)(struct mhi_controller *mhi_cntrl,
++	void (*ring_db)(struct mhi_controller *mhi_cntrl,
+ 			   struct db_cfg *db_cfg, void __iomem *io_addr,
+ 			   dma_addr_t db_val);
+ };
+diff --git a/drivers/bus/mhi/host/main.c b/drivers/bus/mhi/host/main.c
+index 7da5a16d721b..c46bd2dd546b 100644
+--- a/drivers/bus/mhi/host/main.c
++++ b/drivers/bus/mhi/host/main.c
+@@ -112,7 +112,7 @@ void mhi_ring_er_db(struct mhi_event *mhi_event)
+ {
+ 	struct mhi_ring *ring = &mhi_event->ring;
+ 
+-	mhi_event->db_cfg.process_db(mhi_event->mhi_cntrl, &mhi_event->db_cfg,
++	mhi_event->db_cfg.ring_db(mhi_event->mhi_cntrl, &mhi_event->db_cfg,
+ 				     ring->db_addr, le64_to_cpu(*ring->ctxt_wp));
+ }
+ 
+@@ -141,7 +141,7 @@ void mhi_ring_chan_db(struct mhi_controller *mhi_cntrl,
+ 	dma_wmb();
+ 	*ring->ctxt_wp = cpu_to_le64(db);
+ 
+-	mhi_chan->db_cfg.process_db(mhi_cntrl, &mhi_chan->db_cfg,
++	mhi_chan->db_cfg.ring_db(mhi_cntrl, &mhi_chan->db_cfg,
+ 				    ring->db_addr, db);
+ }
+ 
 -- 
 2.25.1
 

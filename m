@@ -2,64 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38A0A516A54
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 07:36:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5065C516A55
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 07:38:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357857AbiEBFjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 01:39:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60544 "EHLO
+        id S1357884AbiEBFmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 01:42:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237358AbiEBFje (ORCPT
+        with ESMTP id S230340AbiEBFmQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 01:39:34 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C8922B22;
-        Sun,  1 May 2022 22:36:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651469762; x=1683005762;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VN2Zm1BBS3mxvF53LSYwLQlUjRVI0VrfzdOsCRVAdiw=;
-  b=Q/eXx1mLB3qiSQ9xppuyFolBj6Vpx/Lm7DRpMlpGwpOFIrZAAzmwT37v
-   R90xKrt8zpNGhIgUFWUbemmjxOQJ0DHWYdDrrJ9Rd5rClzaq+MPx+BtDa
-   sf8qeitchX2v0+ck9cNBeRaxhTBUOBRK/Y+utTCwUkCyTiW7f+5vR8gdA
-   OcoH4aPpm0hx6TOEq0v98d9D9CH/JNDZ1Rfby+2D18MJI1UdTWea6ty93
-   E2kDwuLjUaTK6Rjf4OKaATffFX3uv3kShuIK9yNgW1QRcUMRR8fic6Gug
-   jZcdzm/DscvlN1em65X9lru2edX/9LhiFKsh0CAl1l5oVYmVHYcFfj2tS
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="249101404"
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="249101404"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 22:36:02 -0700
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="652686312"
-Received: from iweiny-server.sc.intel.com (HELO localhost) ([172.25.222.75])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 22:36:01 -0700
-Date:   Sun, 1 May 2022 22:36:01 -0700
-From:   ira.weiny@intel.com
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH V8 03/10] PCI: Create PCI library functions in support of
- DOE mailboxes.
-Message-ID: <Ym9tstPbqtQeolof@iweiny-server>
-References: <20220414203237.2198665-4-ira.weiny@intel.com>
- <20220428212723.GA44322@bhelgaas>
+        Mon, 2 May 2022 01:42:16 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2045.outbound.protection.outlook.com [40.107.243.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0A022B22
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 22:38:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SPKJ2bvZONnAWGqNvAWJ93L23TPF0DHE50W67szPwq4yXHMd5q4d+GVn3F3PgGUT2jp3DwtMT1iK8udhSjtPLPt/2HdqnzS8N5m1wC5GEL8VCEvjkyIOoYpB3INQnWqvo40QfdvT0FB6uo0jdnwBSIIDlm1g1SZHzRGDybDPd4du8QhGoEHlYBb/5vcolgC7kJrynFvJaiunsRYpK21hrxHjQ9330iWW4fKHTozd8d7VMWK1yurk+7lKssuQc5EnxQ/cNY2wTI1ipbK7bzyhdCbRNdNQRxlZLNfe7Y+FmI3229ZEaTYER258k2oSod6FgbzM1yo9mCvPIDv6ICCuYg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Qczw66JeKpAxp60sZnJG1FZAK/b1HltlQz03V/RyrB8=;
+ b=jhGBvyu/rOKrkcVw6rEpNXfjBqHdiG5SiI3fFaPO1XjzYRGdZKWltstqeB4gRCrbU1rpMZK2QwVa8N9kSJPyafy+jd7/Rqwh+RvVUhaPOSnMd4arujeoXL3y8ynqiTc/kLIVdfB3Q2PLPvdcWiH/scPvxB7HVgbxR1LGufYrU6YNc64CAaGcILskFzghRbmYQbvTo78J3MwhDDg/wpGvgH6DwGvIIslzMqXQVYmuW471EqRgVvXSLPjWxisFNdgXGWb/dwWi8jzkASrPULBc/UD6fkiFmSC+CUAXJpOx0CN4/JGFlxIPIbijuuOz2i15KjdrnOg2sEV3OOTay//8bA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Qczw66JeKpAxp60sZnJG1FZAK/b1HltlQz03V/RyrB8=;
+ b=OavTw+s1ax1NMtEDlayoJNYJL2bAnoJVaU7t1zyrd+ensjXkGPbnrCd3rHesz9FpNhqfLb5eXGpYlKTC3H/F3P6/5/I7QXWPAy7+s2iSuMbDYZ9emY4S796XeStHA+XyCHYesZduLb4Bw8K/rTIlRPll7pwIIjiu0M5HrJGirkIOG8yX+YMj4/b38xQllOHvJCcUzBbmV6kbjZSPVgSyHgi0FTbftRPMRo1CJg3R1c5/OzC49UOcgf2koXwcK+5Wtfj5LtTIydy0KiKbkwB566wq9z7TMM73xXlBa25eMkYT85V+Wr1HhpnSh90xlSCx8I3PNqBdNLZCWAgM6HFFGw==
+Received: from DM8PR12MB5400.namprd12.prod.outlook.com (2603:10b6:8:3b::12) by
+ PH7PR12MB5654.namprd12.prod.outlook.com (2603:10b6:510:137::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Mon, 2 May
+ 2022 05:38:41 +0000
+Received: from DM8PR12MB5400.namprd12.prod.outlook.com
+ ([fe80::ec12:70ec:e591:ab6]) by DM8PR12MB5400.namprd12.prod.outlook.com
+ ([fe80::ec12:70ec:e591:ab6%4]) with mapi id 15.20.5206.024; Mon, 2 May 2022
+ 05:38:41 +0000
+From:   Eli Cohen <elic@nvidia.com>
+To:     Jason Wang <jasowang@redhat.com>, "mst@redhat.com" <mst@redhat.com>
+CC:     "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "si-wei.liu@oracle.com" <si-wei.liu@oracle.com>
+Subject: RE: [PATCH 3/3] vdpa/mlx5: Add RX MAC VLAN filter support
+Thread-Topic: [PATCH 3/3] vdpa/mlx5: Add RX MAC VLAN filter support
+Thread-Index: AQHYTZ/gfi8xb9Qas06QkK06kSieDKzwXvKAgBrILhA=
+Date:   Mon, 2 May 2022 05:38:40 +0000
+Message-ID: <DM8PR12MB540032F367E9DB4C277AB946ABC19@DM8PR12MB5400.namprd12.prod.outlook.com>
+References: <20220411122942.225717-1-elic@nvidia.com>
+ <20220411122942.225717-4-elic@nvidia.com>
+ <eb381955-0a64-011f-2732-943c60541b18@redhat.com>
+In-Reply-To: <eb381955-0a64-011f-2732-943c60541b18@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 7e642dbe-24b6-4b80-d38a-08da2bfe03a9
+x-ms-traffictypediagnostic: PH7PR12MB5654:EE_
+x-microsoft-antispam-prvs: <PH7PR12MB5654D76DA34B2F937EBEBD7AABC19@PH7PR12MB5654.namprd12.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: l/N+JeThAzA6R7uhD5mTesA7GkVBDOGIkKdGMRKjAghKSlj7wTtx8TpQK7sQKCptjTmB8BXxAbOAvy4UN8ahXG48ieNDlBuU0Y/TgcEt2TFZyig5tbmKwl/ht+w6g0AiIg0TpBKPDThL0YaNTTQ4/FqiMc80IzdEZTd2coxqX/7GYjtYA5FfZKOWGUpAuDCzs/6rb98EJBOI7zrjUXJPxPcRrAut/Q4/NF9clS3lkYuEwspIq1KS8JOPMavRRqB1yTSIY4KR15Fls/rYUugyqYCvtrfMIUDQlpn0w0VVQgU3eFORc8uThnH1ofT/xL8qo5sCxmEWMzLzugvPzMtVgaYjEyacXXpD60ekV7ZsmCDYi/gQWIm+IEkD0uqJm8obv7Wr5Wz63wY9O0xu2/roowyaiHRLPlVZxc20sU8RjYy5cA4tVRZi259TYYNPZYYYUryJZI9ubcaSERq+cg3pXmiaKE3QlrX3Oga9ChJDV7PQ4o/uE74HH+ms4y/3EO80i7bkG81yhpS9v70uwslbmbM/vQsM4lgoqDqF8Zs6DtLc+INu8Vbl1Pgs65iA823TXTQxEWxHsAZUIKsDdd/zmxKRGGgYnrSFmol85KNvVZKT4SRydF85HUzGffoMFCkI3DmbPvSrTILbzNpoVeF7jB4V/m6jevTUsy+S3xZP4Hg8jHwi4FSmRteoyOwCkeV8k4gjqD/sZ4cJS012N8H+6w==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5400.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(26005)(6506007)(2906002)(9686003)(53546011)(122000001)(38070700005)(38100700002)(86362001)(55016003)(33656002)(52536014)(508600001)(83380400001)(30864003)(5660300002)(8936002)(316002)(64756008)(54906003)(76116006)(8676002)(110136005)(71200400001)(4326008)(66446008)(66476007)(66556008)(66946007)(7696005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WHY5TmxxQjY3Y1VjVU84K1JuK2xGdkd0R1k4Znh5SUVVL3FDT0FwRnE5Z0Fv?=
+ =?utf-8?B?azRLWTROMWV0WUhieUVGajRVUGtlTngwNTY4dHorMHRNV04zUnJyVHFFamhv?=
+ =?utf-8?B?dlczMmRuRmhZZkwrQnZNZTZwY1QzOTc2VlRVRzFTQkNZTTQrT0hRUERTOXUw?=
+ =?utf-8?B?em02ZEVQTTJta1hhTXNvcGFud0ZFaHFlMW16ZEFXZmQ1WkFHMTY2bDh2TEts?=
+ =?utf-8?B?emxsOUtlMzhtS2JDUll6WlJpakpTSGdXZkkxaDJoRU8vaSs1NXN5aUFIbFp4?=
+ =?utf-8?B?UFZYblRFbUN3T2ZuWjFsdnl4c2hMb0YwdDhEeml1bGxISitMaXdBN29qbTk3?=
+ =?utf-8?B?OFNydUxOckxTb3ZHQlJLNkZEVWpvdjBaZ3YzOFRNcHRMbkdBNVE1RWF6WHpV?=
+ =?utf-8?B?VWRhZzd2clpoNHM1MHhqMUl5bkFlWGlzdlhNSWtBTUl0d1RZTDV3ZGkrYnhn?=
+ =?utf-8?B?YnV3QTVOUzhiUmtlc0xMdnhtd0ErNy9XQ1VEUGhKZjlWN2ZQcTdYNDhsTkdY?=
+ =?utf-8?B?SndIdG5LUUpZaXhGNWRqVnk1aEtPOGo4S0lDQUFNdlRrOWtJSTI3V0pOR095?=
+ =?utf-8?B?SmdEYmxpMDFjMEtkOFBEUHRUaDMvTnFjc1FPb2lhQ3Z4OTRxbzNHaTNUUW1C?=
+ =?utf-8?B?UHJ1NE9XTWRFYjEzekNLaGlXeWNlaW5GNXNSQndnZ3ZEaFRQcGdGaE1XbTY2?=
+ =?utf-8?B?UEFDYy9WenhOYVdueUM3dWNLd1hRMHUzNVNYQTBQY0Z5NmNVOHpmb2NkL2tS?=
+ =?utf-8?B?OVJ1bGdVdjBlUmRMWWF5b0I3dVhXYVpaMGZZcDU1TVlmSTUvdjNUL1hTdU50?=
+ =?utf-8?B?KzlkeDkzTFJYdFZ6ZFk3SGI0ZWN4TTJyWEEvbmphZ3IzOEJQcVdRNHIvUkN2?=
+ =?utf-8?B?OEZiSXg3UFNlSXlVRmI5QkJ3TisvNGR1dUdlMGpOWm9KSlhiYTZ6cjBVU2Ru?=
+ =?utf-8?B?SEdVRG92RWJ5TXRHL3I4UzREaDk0MnQzU0dsWmM5RTNLNXgxMGpQN1BRdnpo?=
+ =?utf-8?B?L1hLOCtsZWRweEhMTVhGWjd3TlB1T2pOZWNyb2lVR1V3ZUQrazUrb0ZNTEE2?=
+ =?utf-8?B?T1BtT1dINHZrY1NrMlVONGpGK1lVSHJOdVBuVFQ4VGRIR0J3YWlsbEpyaE91?=
+ =?utf-8?B?SGVaT05KNEZyblNhamxldVJlczk3Y1FzNGRuUDRNZEJZcVhGaCt0VFJ3d3l0?=
+ =?utf-8?B?VzlzQ3lQemJ0bjhVdUsrMUVqQWlMN2w3MzQ1MllDWkx6aFlBWE5PbFFjdU41?=
+ =?utf-8?B?NDlUUFJsdURuWlFLdDNRUFF1Ym1zMm5rNDMwd0JjTFNJY2FCS0F1Um5ITXVI?=
+ =?utf-8?B?WmNyTDV1Nk9SL2JqdFMyMWJsWFhlVzBrQUpwQU1LZUlzRGQ1VUlZdkFtZkh2?=
+ =?utf-8?B?NWw4NnRQOW5pYW5qK2t6QnliZlJTeXdrZ1JjanBEdUlIQmxVVXhBdmpHL1Q5?=
+ =?utf-8?B?OTJRQXNiOCs4UmxibmRJZ2h1MDVRT3k0SFdXWmhtS3dxWitLSFZ5d3BGN01L?=
+ =?utf-8?B?VWVBL1JzTFpBRXpNUkY5V2xjQS9QODU5anhZMWkzT283ckMxR2dZaHprbGE3?=
+ =?utf-8?B?VlIzSkt2ZDByNmxzU1IzS2wrT0NPRzFRV1NoekpTRHBHSUJ1MkFTZ3htYjFL?=
+ =?utf-8?B?bUlpOWxVMTFBNTRuUlMvMUkyWURrcm95S0tpQnl2L1FYRGUxTVh0cEdrMjUv?=
+ =?utf-8?B?MHdBZ25XWEQ2RmczSDZSL09tQ0JpYXJpR2ZnK1hOdnJTRXRMZzRkWTg3R25o?=
+ =?utf-8?B?eGlOdHNaUGkxUXlTWFNFSEZFMUVOSEI2UFU2TGVWNCt6cU93SThPbElhSXU1?=
+ =?utf-8?B?R3pMZEg0ZTE3L0UwbjZiWEFDUWRNWG1vZTBnckZ6bXIyREFmZ1l1MmFYWStH?=
+ =?utf-8?B?anRJcnpvQkNHZTVEZEVIa3JCWllhMC9iaWkvU3N3M1ZVeHZiOGpFRDIvbkRk?=
+ =?utf-8?B?eEtYd3prREFqTDNKcGlEV2gvbDJHY2QzQS9Tc2xNTTFhelBhYlErK1JKTUxV?=
+ =?utf-8?B?ei9TVkloTTFLWWR6dEhnMGZKdXdLQkcrRWZ4c1FXcnhmT0p4b3N0RE5FNGU1?=
+ =?utf-8?B?UVU0SzNWNUtoU2tFUVNwNnVjR3liTHZsNU5mcjhmRXA4elZIcWk5T2FXa01j?=
+ =?utf-8?B?dDZuZzdKUmhuajBCNTBzclRheFZuZi8zbU9vSnQ1MU9CV0lVYVcwU0kxSE1p?=
+ =?utf-8?B?WXp4czdMdzZTNHp5VE1qZVhxekhESExwSzBWSTN2d1BWOVhwbFlnaEljNUtN?=
+ =?utf-8?B?anhLMWlZQ1UxRWRlbE1kbC9rUmhNMU5OaDJZMndkWWpRSWd4ODA3WTRZNVIy?=
+ =?utf-8?Q?FDKWGZyN3gFx0CAHiV?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220428212723.GA44322@bhelgaas>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5400.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7e642dbe-24b6-4b80-d38a-08da2bfe03a9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 May 2022 05:38:40.9183
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: R68Nmfkh1bW1ehNC83Fga56eMp8E9QeRLxQ0tNdqnk59u6tra+fuZkQHpYKQSJ9/
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5654
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,984 +133,278 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 04:27:23PM -0500, Bjorn Helgaas wrote:
-> On Thu, Apr 14, 2022 at 01:32:30PM -0700, ira.weiny@intel.com wrote:
-> > From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > 
-> > Introduced in a PCI v6.0[1], DOE provides a config space based mailbox
->  
->   Introduced in PCIe r6.0, sec 6.30, DOE ...
-
-Fixed.  Sorry I missed the fact that PCI uses 'r'.
-
-> 
-> > with standard protocol discovery.  Each mailbox is accessed through a
-> > DOE Extended Capability.
-> > 
-> > Each DOE mailbox must support the DOE discovery protocol in addition to
-> > any number of additional protocols.
-> > 
-> > Define core PCI functionality to manage a single PCI DOE mailbox at a
-> > defined config space offset.  Functionality includes creating, supported
-> > protocol queries, submit tasks to, and destroying the new state objects.
-> > 
-> > If interrupts are desired, interrupts vectors should be allocated prior
-> > to asking for irq's when creating a mailbox object.
->                 IRQs
-
-Fixed.
-
-> 
-> > [1] https://members.pcisig.com/wg/PCI-SIG/document/16609
-> 
-> The link is only useful for PCI-SIG members, and only as long as the
-> SIG maintains this structure.  I think "PCIe r6.0" is sufficient.
-
-Removed.  thanks.
-
-> 
-> > Cc: Christoph Hellwig <hch@infradead.org>
-> > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > Co-developed-by: Ira Weiny <ira.weiny@intel.com>
-> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> 
-> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-
-thanks!
-
-> 
-> Minor comments below.
-> 
-
-[snip]
-
-> > ---
-> >  drivers/pci/Kconfig           |   3 +
-> >  drivers/pci/Makefile          |   1 +
-> >  drivers/pci/pci-doe.c         | 607 ++++++++++++++++++++++++++++++++++
-> >  include/linux/pci-doe.h       | 119 +++++++
-> >  include/uapi/linux/pci_regs.h |  29 +-
-> >  5 files changed, 758 insertions(+), 1 deletion(-)
-> >  create mode 100644 drivers/pci/pci-doe.c
-> >  create mode 100644 include/linux/pci-doe.h
-> > 
-> > diff --git a/drivers/pci/Kconfig b/drivers/pci/Kconfig
-> > index 133c73207782..b2f2e588a817 100644
-> > --- a/drivers/pci/Kconfig
-> > +++ b/drivers/pci/Kconfig
-> > @@ -121,6 +121,9 @@ config XEN_PCIDEV_FRONTEND
-> >  config PCI_ATS
-> >  	bool
-> >  
-> > +config PCI_DOE
-> > +	bool
-> > +
-> >  config PCI_ECAM
-> >  	bool
-> >  
-> > diff --git a/drivers/pci/Makefile b/drivers/pci/Makefile
-> > index 0da6b1ebc694..b609d8ad813d 100644
-> > --- a/drivers/pci/Makefile
-> > +++ b/drivers/pci/Makefile
-> > @@ -31,6 +31,7 @@ obj-$(CONFIG_PCI_ECAM)		+= ecam.o
-> >  obj-$(CONFIG_PCI_P2PDMA)	+= p2pdma.o
-> >  obj-$(CONFIG_XEN_PCIDEV_FRONTEND) += xen-pcifront.o
-> >  obj-$(CONFIG_VGA_ARB)		+= vgaarb.o
-> > +obj-$(CONFIG_PCI_DOE)		+= pci-doe.o
-> 
-> Is there value in the "pci-" prefix?
-
-Not really.
-
-> There are a few other files with
-> the prefix, but I can't remember why.  Most things are of the form
-> "doe.c".
-
-Because of the mixed bag I was not sure which was preferred.  I chose poorly.
-I'll remove the prefix.
-
-> 
-> >  # Endpoint library must be initialized before its users
-> >  obj-$(CONFIG_PCI_ENDPOINT)	+= endpoint/
-> > diff --git a/drivers/pci/pci-doe.c b/drivers/pci/pci-doe.c
-> > new file mode 100644
-> > index 000000000000..ccf936421d2a
-> > --- /dev/null
-> > +++ b/drivers/pci/pci-doe.c
-> > @@ -0,0 +1,607 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Data Object Exchange
-> > + * https://members.pcisig.com/wg/PCI-SIG/document/16609
-> 
-> I think "PCIe r6.0, sec 6.30" is more generally useful.
-
-Done.
-
-> 
-> > + * Copyright (C) 2021 Huawei
-> > + *	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > + *
-> > + * Copyright (C) 2022 Intel Corporation
-> > + *	Ira Weiny <ira.weiny@intel.com>
-> > + */
-> > +
-> > +#include <linux/bitfield.h>
-> > +#include <linux/delay.h>
-> > +#include <linux/jiffies.h>
-> > +#include <linux/mutex.h>
-> > +#include <linux/pci.h>
-> > +#include <linux/pci-doe.h>
-> > +#include <linux/workqueue.h>
-> > +
-> > +#define PCI_DOE_PROTOCOL_DISCOVERY 0
-> > +
-> > +#define PCI_DOE_BUSY_MAX_RETRIES 16
-> > +#define PCI_DOE_POLL_INTERVAL (HZ / 128)
-> > +
-> > +/* Timeout of 1 second from 6.30.2 Operation, PCI Spec v6.0 */
-> 
-> Pedantic: the PCI specs use "r6.0", not "v6.0".  Reverse for ACPI.  Of
-> course.  Even worse, PCI uses "Revision" for the major, "Version" for
-> the minor.
-
-Thanks for letting me know.
-
-> 
-> > +#define PCI_DOE_TIMEOUT HZ
-> > +
-> > +static irqreturn_t pci_doe_irq_handler(int irq, void *data)
-> > +{
-> > +	struct pci_doe_mb *doe_mb = data;
-> > +	struct pci_dev *pdev = doe_mb->pdev;
-> > +	int offset = doe_mb->cap_offset;
-> > +	u32 val;
-> > +
-> > +	pci_read_config_dword(pdev, offset + PCI_DOE_STATUS, &val);
-> > +
-> > +	/* Leave the error case to be handled outside IRQ */
-> 
-> s/irq/IRQ/ for similar comment and log message uses below.
-
-Done.
-
-> 
-> > +	if (FIELD_GET(PCI_DOE_STATUS_ERROR, val)) {
-> > +		mod_delayed_work(system_wq, &doe_mb->statemachine, 0);
-> > +		return IRQ_HANDLED;
-> > +	}
-> > +
-> > +	if (FIELD_GET(PCI_DOE_STATUS_INT_STATUS, val)) {
-> > +		pci_write_config_dword(pdev, offset + PCI_DOE_STATUS,
-> > +					PCI_DOE_STATUS_INT_STATUS);
-> > +		mod_delayed_work(system_wq, &doe_mb->statemachine, 0);
-> > +		return IRQ_HANDLED;
-> > +	}
-> > +
-> > +	return IRQ_NONE;
-> > +}
-> > +
-> > +/*
-> > + * Only called when safe to directly access the DOE from
-> > + * doe_statemachine_work().  Outside access is not protected.  Users who
-> > + * perform such access are left with the pieces.
-> > + */
-> > +static void pci_doe_abort_start(struct pci_doe_mb *doe_mb)
-> > +{
-> > +	struct pci_dev *pdev = doe_mb->pdev;
-> > +	int offset = doe_mb->cap_offset;
-> > +	u32 val;
-> > +
-> > +	val = PCI_DOE_CTRL_ABORT;
-> > +	if (doe_mb->irq >= 0)
-> > +		val |= PCI_DOE_CTRL_INT_EN;
-> > +	pci_write_config_dword(pdev, offset + PCI_DOE_CTRL, val);
-> > +
-> > +	doe_mb->timeout_jiffies = jiffies + HZ;
-> > +	schedule_delayed_work(&doe_mb->statemachine, HZ);
-> > +}
-> > +
-> > +static int pci_doe_send_req(struct pci_doe_mb *doe_mb, struct pci_doe_task *task)
-> 
-> Wrap to fit in 80 columns, like the rest of drivers/pci/*
-
-Done.
-
-> 
-> > +{
-> > +	struct pci_dev *pdev = doe_mb->pdev;
-> > +	int offset = doe_mb->cap_offset;
-> > +	u32 val;
-> > +	int i;
-> > +
-> > +	/*
-> > +	 * Check the DOE busy bit is not set. If it is set, this could indicate
-> > +	 * someone other than Linux (e.g. firmware) is using the mailbox. Note
-> > +	 * it is expected that firmware and OS will negotiate access rights via
-> > +	 * an, as yet to be defined method.
-> > +	 */
-> > +	pci_read_config_dword(pdev, offset + PCI_DOE_STATUS, &val);
-> > +	if (FIELD_GET(PCI_DOE_STATUS_BUSY, val))
-> > +		return -EBUSY;
-> > +
-> > +	if (FIELD_GET(PCI_DOE_STATUS_ERROR, val))
-> > +		return -EIO;
-> > +
-> > +	/* Write DOE Header */
-> > +	val = FIELD_PREP(PCI_DOE_DATA_OBJECT_HEADER_1_VID, task->prot.vid) |
-> > +		FIELD_PREP(PCI_DOE_DATA_OBJECT_HEADER_1_TYPE, task->prot.type);
-> > +	pci_write_config_dword(pdev, offset + PCI_DOE_WRITE, val);
-> > +	/* Length is 2 DW of header + length of payload in DW */
-> > +	pci_write_config_dword(pdev, offset + PCI_DOE_WRITE,
-> > +			       FIELD_PREP(PCI_DOE_DATA_OBJECT_HEADER_2_LENGTH,
-> > +					  2 + task->request_pl_sz /
-> > +						sizeof(u32)));
-> > +	for (i = 0; i < task->request_pl_sz / sizeof(u32); i++)
-> > +		pci_write_config_dword(pdev, offset + PCI_DOE_WRITE,
-> > +				       task->request_pl[i]);
-> > +
-> > +	val = PCI_DOE_CTRL_GO;
-> > +	if (doe_mb->irq >= 0)
-> > +		val |= PCI_DOE_CTRL_INT_EN;
-> > +
-> > +	pci_write_config_dword(pdev, offset + PCI_DOE_CTRL, val);
-> > +	/* Request is sent - now wait for poll or IRQ */
-> > +	return 0;
-> > +}
-> > +
-> > +static int pci_doe_recv_resp(struct pci_doe_mb *doe_mb, struct pci_doe_task *task)
-> > +{
-> > +	struct pci_dev *pdev = doe_mb->pdev;
-> > +	int offset = doe_mb->cap_offset;
-> > +	size_t length;
-> > +	u32 val;
-> > +	int i;
-> > +
-> > +	/* Read the first dword to get the protocol */
-> > +	pci_read_config_dword(pdev, offset + PCI_DOE_READ, &val);
-> > +	if ((FIELD_GET(PCI_DOE_DATA_OBJECT_HEADER_1_VID, val) != task->prot.vid) ||
-> > +	    (FIELD_GET(PCI_DOE_DATA_OBJECT_HEADER_1_TYPE, val) != task->prot.type)) {
-> > +		pci_err(pdev,
-> > +			"Expected [VID, Protocol] = [%#x, %#x], got [%#x, %#x]\n",
-> 
-> Needs a "DOE" or similar hint for where to look when you see this
-> error.
-> 
-> "%04x" is the typical way we print a PCI vendor ID.  I guess a leading
-> "0x" isn't a disaster, but I do think it should be 4 hex digits so it
-> doesn't look like a length or something.
-
-I'll match it up.  Using '%04x' for vendor ID and '%02x' for type.
-
-> 
-> It looks like you anticipate multiple DOE capabilities.  Maybe
-> messages should include the capability offset to be specific?
-
-Great idea, I've added 'DOE [%x]' as a prefix to all messages.
-
-> I see you print with %u in pci_doe_create_mb().  I'm pretty sure
-> "lspci -vv" prints them in hex, and it's probably useful to match.
-
-Yes matching is good.  lspci does print in hex and without the 0x.
-
-> 
-> > +			task->prot.vid, task->prot.type,
-> > +			FIELD_GET(PCI_DOE_DATA_OBJECT_HEADER_1_VID, val),
-> > +			FIELD_GET(PCI_DOE_DATA_OBJECT_HEADER_1_TYPE, val));
-> > +		return -EIO;
-> > +	}
-> > +
-> > +	pci_write_config_dword(pdev, offset + PCI_DOE_READ, 0);
-> > +	/* Read the second dword to get the length */
-> > +	pci_read_config_dword(pdev, offset + PCI_DOE_READ, &val);
-> > +	pci_write_config_dword(pdev, offset + PCI_DOE_READ, 0);
-> > +
-> > +	length = FIELD_GET(PCI_DOE_DATA_OBJECT_HEADER_2_LENGTH, val);
-> > +	if (length > SZ_1M || length < 2)
-> > +		return -EIO;
-> > +
-> > +	/* First 2 dwords have already been read */
-> > +	length -= 2;
-> > +	/* Read the rest of the response payload */
-> > +	for (i = 0; i < min(length, task->response_pl_sz / sizeof(u32)); i++) {
-> > +		pci_read_config_dword(pdev, offset + PCI_DOE_READ,
-> > +				      &task->response_pl[i]);
-> > +		pci_write_config_dword(pdev, offset + PCI_DOE_READ, 0);
-> > +	}
-> > +
-> > +	/* Flush excess length */
-> > +	for (; i < length; i++) {
-> > +		pci_read_config_dword(pdev, offset + PCI_DOE_READ, &val);
-> > +		pci_write_config_dword(pdev, offset + PCI_DOE_READ, 0);
-> > +	}
-> > +	/* Final error check to pick up on any since Data Object Ready */
-> > +	pci_read_config_dword(pdev, offset + PCI_DOE_STATUS, &val);
-> > +	if (FIELD_GET(PCI_DOE_STATUS_ERROR, val))
-> > +		return -EIO;
-> > +
-> > +	return min(length, task->response_pl_sz / sizeof(u32)) * sizeof(u32);
-> > +}
-> > +
-> > +static void signal_task_complete(struct pci_doe_task *task, int rv)
-> > +{
-> > +	task->rv = rv;
-> > +	task->complete(task);
-> > +}
-> > +
-> > +static void retire_cur_task(struct pci_doe_mb *doe_mb)
-> > +{
-> > +	mutex_lock(&doe_mb->task_lock);
-> > +	doe_mb->cur_task = NULL;
-> > +	mutex_unlock(&doe_mb->task_lock);
-> > +	wake_up_interruptible(&doe_mb->wq);
-> > +}
-> > +
-> > +static void doe_statemachine_work(struct work_struct *work)
-> > +{
-> > +	struct delayed_work *w = to_delayed_work(work);
-> > +	struct pci_doe_mb *doe_mb = container_of(w, struct pci_doe_mb,
-> > +						 statemachine);
-> > +	struct pci_dev *pdev = doe_mb->pdev;
-> > +	int offset = doe_mb->cap_offset;
-> > +	struct pci_doe_task *task;
-> > +	u32 val;
-> > +	int rc;
-> > +
-> > +	mutex_lock(&doe_mb->task_lock);
-> > +	task = doe_mb->cur_task;
-> > +	mutex_unlock(&doe_mb->task_lock);
-> > +
-> > +	if (test_and_clear_bit(PCI_DOE_FLAG_ABORT, &doe_mb->flags)) {
-> > +		/*
-> > +		 * Currently only used during init - care needed if
-> > +		 * pci_doe_abort() is generally exposed as it would impact
-> > +		 * queries in flight.
-> > +		 */
-> > +		if (task)
-> > +			pr_err("Aborting with active task!\n");
-> 
-> This should be a dev_err() and probably include "DOE" or some kind of
-> hint about what this applies to.
-
-I think you mean pci_err()?
-
-I've updated all the pci_*() messages with 'DOE @ [offset]:' prefix.
-
-> 
-> > +		doe_mb->state = DOE_WAIT_ABORT;
-> > +		pci_doe_abort_start(doe_mb);
-> > +		return;
-> > +	}
-> > +
-> > +	switch (doe_mb->state) {
-> > +	case DOE_IDLE:
-> > +		if (task == NULL)
-> > +			return;
-> > +
-> > +		rc = pci_doe_send_req(doe_mb, task);
-> 
-> Add blank line before block comment.
-
-done
-
-> 
-> > +		/*
-> > +		 * The specification does not provide any guidance on how long
-> > +		 * some other entity could keep the DOE busy, so try for 1
-> > +		 * second then fail. Busy handling is best effort only, because
-> > +		 * there is no way of avoiding racing against another user of
-> > +		 * the DOE.
-> > +		 */
-> > +		if (rc == -EBUSY) {
-> > +			doe_mb->busy_retries++;
-> > +			if (doe_mb->busy_retries == PCI_DOE_BUSY_MAX_RETRIES) {
-> > +				/* Long enough, fail this request */
-> > +				pci_warn(pdev,
-> > +					"DOE busy for too long (> 1 sec)\n");
-> > +				doe_mb->busy_retries = 0;
-> > +				goto err_busy;
-> > +			}
-> > +			schedule_delayed_work(w, HZ / PCI_DOE_BUSY_MAX_RETRIES);
-> > +			return;
-> > +		}
-> > +		if (rc)
-> > +			goto err_abort;
-> > +		doe_mb->busy_retries = 0;
-> > +
-> > +		doe_mb->state = DOE_WAIT_RESP;
-> > +		doe_mb->timeout_jiffies = jiffies + HZ;
-> > +		/* Now poll or wait for IRQ with timeout */
-> > +		if (doe_mb->irq >= 0)
-> > +			schedule_delayed_work(w, PCI_DOE_TIMEOUT);
-> > +		else
-> > +			schedule_delayed_work(w, PCI_DOE_POLL_INTERVAL);
-> > +		return;
-> > +
-> > +	case DOE_WAIT_RESP:
-> > +		/* Not possible to get here with NULL task */
-> > +		pci_read_config_dword(pdev, offset + PCI_DOE_STATUS, &val);
-> > +		if (FIELD_GET(PCI_DOE_STATUS_ERROR, val)) {
-> > +			rc = -EIO;
-> > +			goto err_abort;
-> > +		}
-> > +
-> > +		if (!FIELD_GET(PCI_DOE_STATUS_DATA_OBJECT_READY, val)) {
-> > +			/* If not yet at timeout reschedule otherwise abort */
-> > +			if (time_after(jiffies, doe_mb->timeout_jiffies)) {
-> > +				rc = -ETIMEDOUT;
-> > +				goto err_abort;
-> > +			}
-> > +			schedule_delayed_work(w, PCI_DOE_POLL_INTERVAL);
-> > +			return;
-> > +		}
-> > +
-> > +		rc  = pci_doe_recv_resp(doe_mb, task);
-> > +		if (rc < 0)
-> > +			goto err_abort;
-> > +
-> > +		doe_mb->state = DOE_IDLE;
-> > +
-> > +		retire_cur_task(doe_mb);
-> > +		/* Set the return value to the length of received payload */
-> > +		signal_task_complete(task, rc);
-> > +
-> > +		return;
-> > +
-> > +	case DOE_WAIT_ABORT:
-> > +	case DOE_WAIT_ABORT_ON_ERR:
-> > +		pci_read_config_dword(pdev, offset + PCI_DOE_STATUS, &val);
-> > +
-> > +		if (!FIELD_GET(PCI_DOE_STATUS_ERROR, val) &&
-> > +		    !FIELD_GET(PCI_DOE_STATUS_BUSY, val)) {
-> > +			/* Back to normal state - carry on */
-> > +			retire_cur_task(doe_mb);
-> > +
-> > +			/*
-> > +			 * For deliberately triggered abort, someone is
-> > +			 * waiting.
-> > +			 */
-> > +			if (doe_mb->state == DOE_WAIT_ABORT) {
-> > +				if (task)
-> > +					signal_task_complete(task, -EFAULT);
-> > +				complete(&doe_mb->abort_c);
-> > +			}
-> > +
-> > +			doe_mb->state = DOE_IDLE;
-> > +			return;
-> > +		}
-> > +		if (time_after(jiffies, doe_mb->timeout_jiffies)) {
-> > +			/* Task has timed out and is dead - abort */
-> > +			pci_err(pdev, "DOE ABORT timed out\n");
-> > +			set_bit(PCI_DOE_FLAG_DEAD, &doe_mb->flags);
-> > +			retire_cur_task(doe_mb);
-> > +
-> > +			if (doe_mb->state == DOE_WAIT_ABORT) {
-> > +				if (task)
-> > +					signal_task_complete(task, -EFAULT);
-> > +				complete(&doe_mb->abort_c);
-> > +			}
-> > +		}
-> > +		return;
-> > +	}
-> > +
-> > +err_abort:
-> > +	doe_mb->state = DOE_WAIT_ABORT_ON_ERR;
-> > +	pci_doe_abort_start(doe_mb);
-> > +err_busy:
-> > +	signal_task_complete(task, rc);
-> > +	if (doe_mb->state == DOE_IDLE)
-> > +		retire_cur_task(doe_mb);
-> > +}
-> > +
-> > +static void pci_doe_task_complete(struct pci_doe_task *task)
-> > +{
-> > +	complete(task->private);
-> > +}
-> > +
-> > +static int pci_doe_discovery(struct pci_doe_mb *doe_mb, u8 *index, u16 *vid,
-> > +			     u8 *protocol)
-> > +{
-> > +	u32 request_pl = FIELD_PREP(PCI_DOE_DATA_OBJECT_DISC_REQ_3_INDEX,
-> > +				    *index);
-> > +	u32 response_pl;
-> > +	DECLARE_COMPLETION_ONSTACK(c);
-> > +	struct pci_doe_task task = {
-> > +		.prot.vid = PCI_VENDOR_ID_PCI_SIG,
-> > +		.prot.type = PCI_DOE_PROTOCOL_DISCOVERY,
-> > +		.request_pl = &request_pl,
-> > +		.request_pl_sz = sizeof(request_pl),
-> > +		.response_pl = &response_pl,
-> > +		.response_pl_sz = sizeof(response_pl),
-> > +		.complete = pci_doe_task_complete,
-> > +		.private = &c,
-> > +	};
-> > +	int ret;
-> > +
-> > +	ret = pci_doe_submit_task(doe_mb, &task);
-> > +	if (ret < 0)
-> > +		return ret;
-> > +
-> > +	wait_for_completion(&c);
-> > +
-> > +	if (task.rv != sizeof(response_pl))
-> > +		return -EIO;
-> > +
-> > +	*vid = FIELD_GET(PCI_DOE_DATA_OBJECT_DISC_RSP_3_VID, response_pl);
-> > +	*protocol = FIELD_GET(PCI_DOE_DATA_OBJECT_DISC_RSP_3_PROTOCOL,
-> > +			      response_pl);
-> > +	*index = FIELD_GET(PCI_DOE_DATA_OBJECT_DISC_RSP_3_NEXT_INDEX,
-> > +			   response_pl);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int pci_doe_cache_protocols(struct pci_doe_mb *doe_mb)
-> > +{
-> > +	u8 index = 0;
-> > +	int num_prots;
-> > +	int rc;
-> > +
-> > +	/* Discovery protocol must always be supported and must report itself */
-> > +	num_prots = 1;
-> > +
-> > +	doe_mb->prots = kcalloc(num_prots, sizeof(*doe_mb->prots), GFP_KERNEL);
-> > +	if (!doe_mb->prots)
-> > +		return -ENOMEM;
-> > +
-> > +	/*
-> > +	 * NOTE: doe_mb_prots is freed by pci_doe_free_mb automatically on
-> 
-> "pci_doe_free_mb()" to match other function name references.
-
-oops...  done.
-
-> 
-> > +	 * error if pci_doe_cache_protocols() fails past this point.
-> > +	 */
-> > +	do {
-> > +		struct pci_doe_protocol *prot;
-> > +
-> > +		prot = &doe_mb->prots[num_prots - 1];
-> > +		rc = pci_doe_discovery(doe_mb, &index, &prot->vid, &prot->type);
-> > +		if (rc)
-> > +			return rc;
-> > +
-> > +		if (index) {
-> > +			struct pci_doe_protocol *prot_new;
-> > +
-> > +			num_prots++;
-> > +			prot_new = krealloc(doe_mb->prots,
-> > +					    sizeof(*doe_mb->prots) * num_prots,
-> > +					    GFP_KERNEL);
-> > +			if (!prot_new)
-> > +				return -ENOMEM;
-> > +
-> > +			doe_mb->prots = prot_new;
-> > +		}
-> > +	} while (index);
-> > +
-> > +	doe_mb->num_prots = num_prots;
-> > +	return 0;
-> > +}
-> > +
-> > +static int pci_doe_abort(struct pci_doe_mb *doe_mb)
-> > +{
-> > +	reinit_completion(&doe_mb->abort_c);
-> > +	set_bit(PCI_DOE_FLAG_ABORT, &doe_mb->flags);
-> > +	schedule_delayed_work(&doe_mb->statemachine, 0);
-> > +	wait_for_completion(&doe_mb->abort_c);
-> > +
-> > +	if (test_bit(PCI_DOE_FLAG_DEAD, &doe_mb->flags))
-> > +		return -EIO;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int pci_doe_request_irq(struct pci_doe_mb *doe_mb)
-> > +{
-> > +	struct pci_dev *pdev = doe_mb->pdev;
-> > +	int offset = doe_mb->cap_offset;
-> > +	int doe_irq, rc;
-> > +	u32 val;
-> > +
-> > +	pci_read_config_dword(pdev, offset + PCI_DOE_CAP, &val);
-> > +
-> > +	if (!FIELD_GET(PCI_DOE_CAP_INT, val))
-> > +		return -EOPNOTSUPP;
-> > +
-> > +	doe_irq = FIELD_GET(PCI_DOE_CAP_IRQ, val);
-> > +	rc = pci_request_irq(pdev, doe_irq, pci_doe_irq_handler,
-> > +			     NULL, doe_mb,
-> > +			     "DOE[%d:%s]", doe_irq, pci_name(pdev));
-> > +	if (rc)
-> > +		return rc;
-> > +
-> > +	doe_mb->irq = doe_irq;
-> > +	pci_write_config_dword(pdev, offset + PCI_DOE_CTRL,
-> > +			       PCI_DOE_CTRL_INT_EN);
-> > +	return 0;
-> > +}
-> > +
-> > +static void pci_doe_free_mb(struct pci_doe_mb *doe_mb)
-> > +{
-> > +	if (doe_mb->irq >= 0)
-> > +		pci_free_irq(doe_mb->pdev, doe_mb->irq, doe_mb);
-> > +	kfree(doe_mb->prots);
-> > +	kfree(doe_mb);
-> > +}
-> > +
-> > +/**
-> > + * pci_doe_create_mb() - Create a DOE mailbox object
-> > + *
-> > + * @pdev: PCI device to create the DOE mailbox for
-> > + * @cap_offset: Offset of the DOE mailbox
-> > + * @use_irq: Should the state machine use an irq
-> > + *
-> > + * Create a single mailbox object to manage the mailbox protocol at the
-> > + * cap_offset specified.
-> > + *
-> > + * Caller should allocate PCI irq vectors before setting use_irq.
-> > + *
-> > + * RETURNS: created mailbox object on success
-> > + *	    ERR_PTR(-errno) on failure
-> > + */
-> > +struct pci_doe_mb *pci_doe_create_mb(struct pci_dev *pdev, u16 cap_offset,
-> > +				     bool use_irq)
-> > +{
-> > +	struct pci_doe_mb *doe_mb;
-> > +	int rc;
-> > +
-> > +	doe_mb = kzalloc(sizeof(*doe_mb), GFP_KERNEL);
-> > +	if (!doe_mb)
-> > +		return ERR_PTR(-ENOMEM);
-> > +
-> > +	doe_mb->pdev = pdev;
-> > +	init_completion(&doe_mb->abort_c);
-> > +	doe_mb->irq = -1;
-> > +	doe_mb->cap_offset = cap_offset;
-> > +
-> > +	init_waitqueue_head(&doe_mb->wq);
-> > +	mutex_init(&doe_mb->task_lock);
-> > +	INIT_DELAYED_WORK(&doe_mb->statemachine, doe_statemachine_work);
-> > +	doe_mb->state = DOE_IDLE;
-> > +
-> > +	if (use_irq) {
-> > +		rc = pci_doe_request_irq(doe_mb);
-> > +		if (rc)
-> > +			pci_err(pdev, "DOE request irq failed for mailbox @ %u : %d\n",
-
-This and below are changed to print:
-
-"DOE [%x] ..." rather than print the offset at the end.
-
-This makes these consistent with the other errors per your feedback.
-
-It also made these messages more concise.  :-D
-
-> > +				cap_offset, rc);
-> > +	}
-> > +
-> > +	/* Reset the mailbox by issuing an abort */
-> > +	rc = pci_doe_abort(doe_mb);
-> > +	if (rc) {
-> > +		pci_err(pdev, "DOE failed to reset the mailbox @ %u : %d\n",
-> > +			cap_offset, rc);
-> > +		pci_doe_free_mb(doe_mb);
-> > +		return ERR_PTR(rc);
-> > +	}
-> > +
-> > +	rc = pci_doe_cache_protocols(doe_mb);
-> > +	if (rc) {
-> > +		pci_err(pdev, "DOE failed to cache protocols for mailbox @ %u : %d\n",
-> > +			cap_offset, rc);
-> > +		pci_doe_free_mb(doe_mb);
-> > +		return ERR_PTR(rc);
-> > +	}
-> > +
-> > +	return doe_mb;
-> > +}
-> > +EXPORT_SYMBOL_GPL(pci_doe_create_mb);
-> > +
-> > +/**
-> > + * pci_doe_supports_prot() - Return if the DOE instance supports the given
-> > + *			     protocol
-> > + * @doe_mb: DOE mailbox capability to query
-> > + * @vid: Protocol Vendor ID
-> > + * @type: protocol type
->              Protocol
-
-Done.
-
-> > + *
-> > + * RETURNS: True if the DOE device supports the protocol specified
-> 
-> I think you typically use "DOE mailbox", not "DOE device".
-
-Yep.  That was left over from the Auxiliary device stuff.  Fixed.
-
-> 
-> > + */
-> > +bool pci_doe_supports_prot(struct pci_doe_mb *doe_mb, u16 vid, u8 type)
-> > +{
-> > +	int i;
-> > +
-> > +	/* The discovery protocol must always be supported */
-> > +	if (vid == PCI_VENDOR_ID_PCI_SIG && type == PCI_DOE_PROTOCOL_DISCOVERY)
-> > +		return true;
-> > +
-> > +	for (i = 0; i < doe_mb->num_prots; i++)
-> > +		if ((doe_mb->prots[i].vid == vid) &&
-> > +		    (doe_mb->prots[i].type == type))
-> > +			return true;
-> > +
-> > +	return false;
-> > +}
-> > +EXPORT_SYMBOL_GPL(pci_doe_supports_prot);
-> > +
-> > +/**
-> > + * pci_doe_submit_task() - Submit a task to be processed by the state machine
-> > + *
-> > + * @doe_mb: DOE mailbox capability to submit to
-> > + * @task: task to be queued
-> > + *
-> > + * Submit a DOE task (request/response) to the DOE mailbox to be processed.
-> > + * Returns upon queueing the task object.  If the queue is full this function
-> > + * will sleep until there is room in the queue.
-> > + *
-> > + * task->complete will be called when the state machine is done processing this
-> > + * task.
-> > + *
-> > + * Excess data will be discarded.
-> > + *
-> > + * RETURNS: 0 when task has been successful queued, -ERRNO on error
-> > + */
-> > +int pci_doe_submit_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task)
-> > +{
-> > +	if (!pci_doe_supports_prot(doe_mb, task->prot.vid, task->prot.type))
-> > +		return -EINVAL;
-> > +
-> > +	/* DOE requests must be a whole number of DW */
-> > +	if (task->request_pl_sz % sizeof(u32))
-> > +		return -EINVAL;
-> > +
-> > +again:
-> > +	mutex_lock(&doe_mb->task_lock);
-> > +	if (doe_mb->cur_task) {
-> > +		mutex_unlock(&doe_mb->task_lock);
-> > +		wait_event_interruptible(doe_mb->wq, doe_mb->cur_task == NULL);
-> > +		goto again;
-> > +	}
-> > +
-> > +	if (test_bit(PCI_DOE_FLAG_DEAD, &doe_mb->flags)) {
-> > +		mutex_unlock(&doe_mb->task_lock);
-> > +		return -EIO;
-> > +	}
-> > +	doe_mb->cur_task = task;
-> > +	mutex_unlock(&doe_mb->task_lock);
-> > +	schedule_delayed_work(&doe_mb->statemachine, 0);
-> > +
-> > +	return 0;
-> > +}
-> > +EXPORT_SYMBOL_GPL(pci_doe_submit_task);
-> > +
-> > +/**
-> > + * pci_doe_destroy_mb() - Destroy a DOE mailbox object created with
-> > + * pci_doe_create_mb()
-> > + *
-> > + * @doe_mb: DOE mailbox capability structure to destroy
-> > + *
-> > + * The mailbox becomes invalid and should not be used after this call.
-> > + */
-> > +void pci_doe_destroy_mb(struct pci_doe_mb *doe_mb)
-> > +{
-> > +	/* abort any work in progress */
-> > +	pci_doe_abort(doe_mb);
-> > +
-> > +	/* halt the state machine */
-> > +	cancel_delayed_work_sync(&doe_mb->statemachine);
-> > +
-> > +	pci_doe_free_mb(doe_mb);
-> > +}
-> > +EXPORT_SYMBOL_GPL(pci_doe_destroy_mb);
-> > diff --git a/include/linux/pci-doe.h b/include/linux/pci-doe.h
-> > new file mode 100644
-> > index 000000000000..7e6ebaf9930a
-> > --- /dev/null
-> > +++ b/include/linux/pci-doe.h
-> > @@ -0,0 +1,119 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * Data Object Exchange
-> > + * https://members.pcisig.com/wg/PCI-SIG/document/16609
-> 
-> Ditto.
-
-Done.
-
-Thanks for the in depth review,
-Ira
-
-> 
-> > + *
-> > + * Copyright (C) 2021 Huawei
-> > + *     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > + *
-> > + * Copyright (C) 2022 Intel Corporation
-> > + *	Ira Weiny <ira.weiny@intel.com>
-> > + */
-> > +
-> > +#ifndef LINUX_PCI_DOE_H
-> > +#define LINUX_PCI_DOE_H
-> > +
-> > +#include <linux/completion.h>
-> > +
-> > +enum pci_doe_state {
-> > +	DOE_IDLE,
-> > +	DOE_WAIT_RESP,
-> > +	DOE_WAIT_ABORT,
-> > +	DOE_WAIT_ABORT_ON_ERR,
-> > +};
-> > +
-> > +#define PCI_DOE_FLAG_ABORT	0
-> > +#define PCI_DOE_FLAG_DEAD	1
-> > +
-> > +struct pci_doe_protocol {
-> > +	u16 vid;
-> > +	u8 type;
-> > +};
-> > +
-> > +/**
-> > + * struct pci_doe_task - represents a single query/response
-> > + *
-> > + * @prot: DOE Protocol
-> > + * @request_pl: The request payload
-> > + * @request_pl_sz: Size of the request payload
-> > + * @response_pl: The response payload
-> > + * @response_pl_sz: Size of the response payload
-> > + * @rv: Return value.  Length of received response or error
-> > + * @complete: Called when task is complete
-> > + * @private: Private data for the consumer
-> > + */
-> > +struct pci_doe_task {
-> > +	struct pci_doe_protocol prot;
-> > +	u32 *request_pl;
-> > +	size_t request_pl_sz;
-> > +	u32 *response_pl;
-> > +	size_t response_pl_sz;
-> > +	int rv;
-> > +	void (*complete)(struct pci_doe_task *task);
-> > +	void *private;
-> > +};
-> > +
-> > +/**
-> > + * struct pci_doe_mb - State for a single DOE mailbox
-> > + *
-> > + * This state is used to manage a single DOE mailbox capability.  All fields
-> > + * should be considered opaque to the consumers and the structure passed into
-> > + * the helpers below after being created by devm_pci_doe_create()
-> > + *
-> > + * @pdev: PCI device this belongs to mailbox belongs to
-> > + * @abort_c: Completion used for initial abort handling
-> > + * @irq: Interrupt used for signaling DOE ready or abort
-> > + * @prots: Array of protocols supported on this DOE
-> > + * @num_prots: Size of prots array
-> > + * @cap_offset: Capability offset
-> > + * @wq: Wait queue to wait on if a query is in progress
-> > + * @cur_task: Current task the state machine is working on
-> > + * @task_lock: Protect cur_task
-> > + * @statemachine: Work item for the DOE state machine
-> > + * @state: Current state of this DOE
-> > + * @timeout_jiffies: 1 second after GO set
-> > + * @busy_retries: Count of retry attempts
-> > + * @flags: Bit array of PCI_DOE_FLAG_* flags
-> > + *
-> > + * Note: prots can't be allocated with struct size because the number of
-> > + * protocols is not known until after this structure is in use.  However, the
-> > + * single discovery protocol is always required to query for the number of
-> > + * protocols.
-> > + */
-> > +struct pci_doe_mb {
-> > +	struct pci_dev *pdev;
-> > +	struct completion abort_c;
-> > +	int irq;
-> > +	struct pci_doe_protocol *prots;
-> > +	int num_prots;
-> > +	u16 cap_offset;
-> > +
-> > +	wait_queue_head_t wq;
-> > +	struct pci_doe_task *cur_task;
-> > +	struct mutex task_lock;
-> > +	struct delayed_work statemachine;
-> > +	enum pci_doe_state state;
-> > +	unsigned long timeout_jiffies;
-> > +	unsigned int busy_retries;
-> > +	unsigned long flags;
-> > +};
-> > +
-> > +/**
-> > + * pci_doe_for_each_off - Iterate each DOE capability
-> > + * @pdev: struct pci_dev to iterate
-> > + * @off: u16 of config space offset of each mailbox capability found
-> > + */
-> > +#define pci_doe_for_each_off(pdev, off) \
-> > +	for (off = pci_find_next_ext_capability(pdev, off, \
-> > +					PCI_EXT_CAP_ID_DOE); \
-> > +		off > 0; \
-> > +		off = pci_find_next_ext_capability(pdev, off, \
-> > +					PCI_EXT_CAP_ID_DOE))
-> > +
-> > +struct pci_doe_mb *pci_doe_create_mb(struct pci_dev *pdev, u16 cap_offset,
-> > +				     bool use_irq);
-> > +void pci_doe_destroy_mb(struct pci_doe_mb *doe_mb);
-> > +bool pci_doe_supports_prot(struct pci_doe_mb *doe_mb, u16 vid, u8 type);
-> > +int pci_doe_submit_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task);
-> > +
-> > +#endif
-> > diff --git a/include/uapi/linux/pci_regs.h b/include/uapi/linux/pci_regs.h
-> > index bee1a9ed6e66..4e96b45ee36d 100644
-> > --- a/include/uapi/linux/pci_regs.h
-> > +++ b/include/uapi/linux/pci_regs.h
-> > @@ -736,7 +736,8 @@
-> >  #define PCI_EXT_CAP_ID_DVSEC	0x23	/* Designated Vendor-Specific */
-> >  #define PCI_EXT_CAP_ID_DLF	0x25	/* Data Link Feature */
-> >  #define PCI_EXT_CAP_ID_PL_16GT	0x26	/* Physical Layer 16.0 GT/s */
-> > -#define PCI_EXT_CAP_ID_MAX	PCI_EXT_CAP_ID_PL_16GT
-> > +#define PCI_EXT_CAP_ID_DOE	0x2E	/* Data Object Exchange */
-> > +#define PCI_EXT_CAP_ID_MAX	PCI_EXT_CAP_ID_DOE
-> >  
-> >  #define PCI_EXT_CAP_DSN_SIZEOF	12
-> >  #define PCI_EXT_CAP_MCAST_ENDPOINT_SIZEOF 40
-> > @@ -1102,4 +1103,30 @@
-> >  #define  PCI_PL_16GT_LE_CTRL_USP_TX_PRESET_MASK		0x000000F0
-> >  #define  PCI_PL_16GT_LE_CTRL_USP_TX_PRESET_SHIFT	4
-> >  
-> > +/* Data Object Exchange */
-> > +#define PCI_DOE_CAP		0x04    /* DOE Capabilities Register */
-> > +#define  PCI_DOE_CAP_INT			0x00000001  /* Interrupt Support */
-> > +#define  PCI_DOE_CAP_IRQ			0x00000ffe  /* Interrupt Message Number */
-> > +#define PCI_DOE_CTRL		0x08    /* DOE Control Register */
-> > +#define  PCI_DOE_CTRL_ABORT			0x00000001  /* DOE Abort */
-> > +#define  PCI_DOE_CTRL_INT_EN			0x00000002  /* DOE Interrupt Enable */
-> > +#define  PCI_DOE_CTRL_GO			0x80000000  /* DOE Go */
-> > +#define PCI_DOE_STATUS		0x0c    /* DOE Status Register */
-> > +#define  PCI_DOE_STATUS_BUSY			0x00000001  /* DOE Busy */
-> > +#define  PCI_DOE_STATUS_INT_STATUS		0x00000002  /* DOE Interrupt Status */
-> > +#define  PCI_DOE_STATUS_ERROR			0x00000004  /* DOE Error */
-> > +#define  PCI_DOE_STATUS_DATA_OBJECT_READY	0x80000000  /* Data Object Ready */
-> > +#define PCI_DOE_WRITE		0x10    /* DOE Write Data Mailbox Register */
-> > +#define PCI_DOE_READ		0x14    /* DOE Read Data Mailbox Register */
-> > +
-> > +/* DOE Data Object - note not actually registers */
-> > +#define PCI_DOE_DATA_OBJECT_HEADER_1_VID		0x0000ffff
-> > +#define PCI_DOE_DATA_OBJECT_HEADER_1_TYPE		0x00ff0000
-> > +#define PCI_DOE_DATA_OBJECT_HEADER_2_LENGTH		0x0003ffff
-> > +
-> > +#define PCI_DOE_DATA_OBJECT_DISC_REQ_3_INDEX		0x000000ff
-> > +#define PCI_DOE_DATA_OBJECT_DISC_RSP_3_VID		0x0000ffff
-> > +#define PCI_DOE_DATA_OBJECT_DISC_RSP_3_PROTOCOL		0x00ff0000
-> > +#define PCI_DOE_DATA_OBJECT_DISC_RSP_3_NEXT_INDEX	0xff000000
-> > +
-> >  #endif /* LINUX_PCI_REGS_H */
-> > -- 
-> > 2.35.1
-> > 
+PiBGcm9tOiBKYXNvbiBXYW5nIDxqYXNvd2FuZ0ByZWRoYXQuY29tPg0KPiBTZW50OiBGcmlkYXks
+IEFwcmlsIDE1LCAyMDIyIDY6NTkgQU0NCj4gVG86IEVsaSBDb2hlbiA8ZWxpY0BudmlkaWEuY29t
+PjsgbXN0QHJlZGhhdC5jb20NCj4gQ2M6IHZpcnR1YWxpemF0aW9uQGxpc3RzLmxpbnV4LWZvdW5k
+YXRpb24ub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBzaS13ZWkubGl1QG9yYWNs
+ZS5jb20NCj4gU3ViamVjdDogUmU6IFtQQVRDSCAzLzNdIHZkcGEvbWx4NTogQWRkIFJYIE1BQyBW
+TEFOIGZpbHRlciBzdXBwb3J0DQo+IA0KPiANCj4g5ZyoIDIwMjIvNC8xMSAyMDoyOSwgRWxpIENv
+aGVuIOWGmemBkzoNCj4gPiBTdXBwb3J0IEhXIG9mZmxvYWRlZCBmaWx0ZXJpbmcgb2YgTUFDL1ZM
+QU4gcGFja2V0cy4NCj4gPiBUbyBhbGxvdyB0aGF0LCB3ZSBhZGQgYSBoYW5kbGVyIHRvIGhhbmRs
+ZSBWTEFOIGNvbmZpZ3VyYXRpb25zIGNvbWluZw0KPiA+IHRocm91Z2ggdGhlIGNvbnRyb2wgVlEu
+IFR3byBvcGVyYXRpb25zIGFyZSBzdXBwb3J0ZWQuDQo+ID4NCj4gPiAxLiBBZGRpbmcgVkxBTiAt
+IGluIHRoaXMgY2FzZSwgYW4gZW50cnkgd2lsbCBiZSBhZGRlZCB0byB0aGUgUlggZmxvdw0KPiA+
+ICAgICB0YWJsZSB0aGF0IHdpbGwgYWxsb3cgdGhlIGNvbWJpbmF0aW9uIG9mIHRoZSBNQUMvVkxB
+TiB0byBiZQ0KPiA+ICAgICBmb3J3YXJkZWQgdG8gdGhlIFRJUi4NCj4gPiAyLiBSZW1vdmluZyBW
+TEFOIC0gd2lsbCByZW1vdmUgdGhlIGVudHJ5IGZyb20gdGhlIGZsb3cgdGFibGUsDQo+ID4gICAg
+IGVmZmVjdGl2ZWx5IGJsb2NraW5nIHN1Y2ggcGFja2V0cyBmcm9tIGdvaW5nIHRocm91Z2guDQo+
+ID4NCj4gPiBDdXJyZW50bHkgdGhlIGNvbnRyb2wgVlEgZG9lcyBub3QgcHJvcGFnYXRlIGNoYW5n
+ZXMgdG8gdGhlIE1BQyBvZiB0aGUNCj4gPiBWTEFOIGRldmljZSBzbyB3ZSBhbHdheXMgdXNlIHRo
+ZSBNQUMgb2YgdGhlIHBhcmVudCBkZXZpY2UuDQo+ID4NCj4gPiBFeGFtcGxlczoNCj4gPiAxLiBD
+cmVhdGUgdmxhbiBkZXZpY2U6DQo+ID4gJCBpcCBsaW5rIGFkZCBsaW5rIGVuczEgbmFtZSBlbnMx
+LjggdHlwZSB2bGFuIGlkIDgNCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IEVsaSBDb2hlbiA8ZWxp
+Y0BudmlkaWEuY29tPg0KPiA+IC0tLQ0KPiA+ICAgZHJpdmVycy92ZHBhL21seDUvbmV0L21seDVf
+dm5ldC5jIHwgMjc0ICsrKysrKysrKysrKysrKysrKysrKysrLS0tLS0tLQ0KPiA+ICAgMSBmaWxl
+IGNoYW5nZWQsIDIxNiBpbnNlcnRpb25zKCspLCA1OCBkZWxldGlvbnMoLSkNCj4gPg0KPiA+IGRp
+ZmYgLS1naXQgYS9kcml2ZXJzL3ZkcGEvbWx4NS9uZXQvbWx4NV92bmV0LmMgYi9kcml2ZXJzL3Zk
+cGEvbWx4NS9uZXQvbWx4NV92bmV0LmMNCj4gPiBpbmRleCA1YWE2MjIwYzcxMjkuLmY4MWY5YTIx
+M2VkMiAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL3ZkcGEvbWx4NS9uZXQvbWx4NV92bmV0LmMN
+Cj4gPiArKysgYi9kcml2ZXJzL3ZkcGEvbWx4NS9uZXQvbWx4NV92bmV0LmMNCj4gPiBAQCAtNDgs
+NiArNDgsOCBAQCBNT0RVTEVfTElDRU5TRSgiRHVhbCBCU0QvR1BMIik7DQo+ID4NCj4gPiAgICNk
+ZWZpbmUgTUxYNV9GRUFUVVJFKF9tdmRldiwgX2ZlYXR1cmUpICghISgoX212ZGV2KS0+YWN0dWFs
+X2ZlYXR1cmVzICYgQklUX1VMTChfZmVhdHVyZSkpKQ0KPiA+DQo+ID4gKyNkZWZpbmUgTUxYNVZf
+VU5UQUdHRUQgMHgxMDAwDQo+ID4gKw0KPiA+ICAgc3RydWN0IG1seDVfdmRwYV9uZXRfcmVzb3Vy
+Y2VzIHsNCj4gPiAgIAl1MzIgdGlzbjsNCj4gPiAgIAl1MzIgdGRuOw0KPiA+IEBAIC0xNDMsNiAr
+MTQ1LDggQEAgc3RhdGljIGJvb2wgaXNfaW5kZXhfdmFsaWQoc3RydWN0IG1seDVfdmRwYV9kZXYg
+Km12ZGV2LCB1MTYgaWR4KQ0KPiA+ICAgCXJldHVybiBpZHggPD0gbXZkZXYtPm1heF9pZHg7DQo+
+ID4gICB9DQo+ID4NCj4gPiArI2RlZmluZSBNTFg1Vl9NQUNWTEFOX1NJWkUgMjU2DQo+ID4gKw0K
+PiA+ICAgc3RydWN0IG1seDVfdmRwYV9uZXQgew0KPiA+ICAgCXN0cnVjdCBtbHg1X3ZkcGFfZGV2
+IG12ZGV2Ow0KPiA+ICAgCXN0cnVjdCBtbHg1X3ZkcGFfbmV0X3Jlc291cmNlcyByZXM7DQo+ID4g
+QEAgLTE1NiwxNCArMTYwLDIwIEBAIHN0cnVjdCBtbHg1X3ZkcGFfbmV0IHsNCj4gPiAgIAkgKi8N
+Cj4gPiAgIAlzdHJ1Y3QgbXV0ZXggcmVzbG9jazsNCj4gPiAgIAlzdHJ1Y3QgbWx4NV9mbG93X3Rh
+YmxlICpyeGZ0Ow0KPiA+IC0Jc3RydWN0IG1seDVfZmxvd19oYW5kbGUgKnJ4X3J1bGVfdWNhc3Q7
+DQo+ID4gLQlzdHJ1Y3QgbWx4NV9mbG93X2hhbmRsZSAqcnhfcnVsZV9tY2FzdDsNCj4gPiAgIAli
+b29sIHNldHVwOw0KPiA+ICAgCXUzMiBjdXJfbnVtX3ZxczsNCj4gPiAgIAl1MzIgcnF0X3NpemU7
+DQo+ID4gICAJc3RydWN0IG5vdGlmaWVyX2Jsb2NrIG5iOw0KPiA+ICAgCXN0cnVjdCB2ZHBhX2Nh
+bGxiYWNrIGNvbmZpZ19jYjsNCj4gPiAgIAlzdHJ1Y3QgbWx4NV92ZHBhX3dxX2VudCBjdnFfZW50
+Ow0KPiA+ICsJc3RydWN0IGhsaXN0X2hlYWQgbWFjdmxhbl9oYXNoW01MWDVWX01BQ1ZMQU5fU0la
+RV07DQo+ID4gK307DQo+ID4gKw0KPiA+ICtzdHJ1Y3QgbWFjdmxhbl9ub2RlIHsNCj4gPiArCXN0
+cnVjdCBobGlzdF9ub2RlIGhsaXN0Ow0KPiA+ICsJc3RydWN0IG1seDVfZmxvd19oYW5kbGUgKnVj
+YXN0X3J1bGU7DQo+ID4gKwlzdHJ1Y3QgbWx4NV9mbG93X2hhbmRsZSAqbWNhc3RfcnVsZTsNCj4g
+PiArCXU2NCBtYWN2bGFuOw0KPiA+ICAgfTsNCj4gPg0KPiA+ICAgc3RhdGljIHZvaWQgZnJlZV9y
+ZXNvdXJjZXMoc3RydWN0IG1seDVfdmRwYV9uZXQgKm5kZXYpOw0KPiA+IEBAIC0xMzQ2LDEyICsx
+MzU2LDE3IEBAIHN0YXRpYyB2b2lkIGRlc3Ryb3lfdGlyKHN0cnVjdCBtbHg1X3ZkcGFfbmV0ICpu
+ZGV2KQ0KPiA+ICAgCW1seDVfdmRwYV9kZXN0cm95X3RpcigmbmRldi0+bXZkZXYsIG5kZXYtPnJl
+cy50aXJuKTsNCj4gPiAgIH0NCj4gPg0KPiA+IC1zdGF0aWMgaW50IGFkZF9md2RfdG9fdGlyKHN0
+cnVjdCBtbHg1X3ZkcGFfbmV0ICpuZGV2KQ0KPiA+ICsjZGVmaW5lIE1BWF9TVEVFUklOR19FTlQg
+MHg4MDAwDQo+ID4gKyNkZWZpbmUgTUFYX1NURUVSSU5HX0dST1VQUyAyDQo+ID4gKw0KPiA+ICtz
+dGF0aWMgaW50IG1seDVfdmRwYV9hZGRfbWFjX3ZsYW5fcnVsZXMoc3RydWN0IG1seDVfdmRwYV9u
+ZXQgKm5kZXYsIHU4ICptYWMsDQo+ID4gKwkJCQkJdTE2IHZpZCwgYm9vbCB0YWdnZWQsDQo+ID4g
+KwkJCQkJc3RydWN0IG1seDVfZmxvd19oYW5kbGUgKip1Y2FzdCwNCj4gPiArCQkJCQlzdHJ1Y3Qg
+bWx4NV9mbG93X2hhbmRsZSAqKm1jYXN0KQ0KPiA+ICAgew0KPiA+ICAgCXN0cnVjdCBtbHg1X2Zs
+b3dfZGVzdGluYXRpb24gZGVzdCA9IHt9Ow0KPiA+IC0Jc3RydWN0IG1seDVfZmxvd190YWJsZV9h
+dHRyIGZ0X2F0dHIgPSB7fTsNCj4gPiAgIAlzdHJ1Y3QgbWx4NV9mbG93X2FjdCBmbG93X2FjdCA9
+IHt9Ow0KPiA+IC0Jc3RydWN0IG1seDVfZmxvd19uYW1lc3BhY2UgKm5zOw0KPiA+ICsJc3RydWN0
+IG1seDVfZmxvd19oYW5kbGUgKnJ1bGU7DQo+ID4gICAJc3RydWN0IG1seDVfZmxvd19zcGVjICpz
+cGVjOw0KPiA+ICAgCXZvaWQgKmhlYWRlcnNfYzsNCj4gPiAgIAl2b2lkICpoZWFkZXJzX3Y7DQo+
+ID4gQEAgLTEzNjQsNzQgKzEzNzksMTc4IEBAIHN0YXRpYyBpbnQgYWRkX2Z3ZF90b190aXIoc3Ry
+dWN0IG1seDVfdmRwYV9uZXQgKm5kZXYpDQo+ID4gICAJCXJldHVybiAtRU5PTUVNOw0KPiA+DQo+
+ID4gICAJc3BlYy0+bWF0Y2hfY3JpdGVyaWFfZW5hYmxlID0gTUxYNV9NQVRDSF9PVVRFUl9IRUFE
+RVJTOw0KPiA+IC0JZnRfYXR0ci5tYXhfZnRlID0gMjsNCj4gPiAtCWZ0X2F0dHIuYXV0b2dyb3Vw
+Lm1heF9udW1fZ3JvdXBzID0gMjsNCj4gPiAtDQo+ID4gLQlucyA9IG1seDVfZ2V0X2Zsb3dfbmFt
+ZXNwYWNlKG5kZXYtPm12ZGV2Lm1kZXYsIE1MWDVfRkxPV19OQU1FU1BBQ0VfQllQQVNTKTsNCj4g
+PiAtCWlmICghbnMpIHsNCj4gPiAtCQltbHg1X3ZkcGFfd2FybigmbmRldi0+bXZkZXYsICJmYWls
+ZWQgdG8gZ2V0IGZsb3cgbmFtZXNwYWNlXG4iKTsNCj4gPiAtCQllcnIgPSAtRU9QTk9UU1VQUDsN
+Cj4gPiAtCQlnb3RvIGVycl9uczsNCj4gPiAtCX0NCj4gPiAtDQo+ID4gLQluZGV2LT5yeGZ0ID0g
+bWx4NV9jcmVhdGVfYXV0b19ncm91cGVkX2Zsb3dfdGFibGUobnMsICZmdF9hdHRyKTsNCj4gPiAt
+CWlmIChJU19FUlIobmRldi0+cnhmdCkpIHsNCj4gPiAtCQllcnIgPSBQVFJfRVJSKG5kZXYtPnJ4
+ZnQpOw0KPiA+IC0JCWdvdG8gZXJyX25zOw0KPiA+IC0JfQ0KPiA+IC0NCj4gPiAgIAloZWFkZXJz
+X2MgPSBNTFg1X0FERFJfT0YoZnRlX21hdGNoX3BhcmFtLCBzcGVjLT5tYXRjaF9jcml0ZXJpYSwg
+b3V0ZXJfaGVhZGVycyk7DQo+ID4gLQlkbWFjX2MgPSBNTFg1X0FERFJfT0YoZnRlX21hdGNoX3Bh
+cmFtLCBoZWFkZXJzX2MsIG91dGVyX2hlYWRlcnMuZG1hY180N18xNik7DQo+ID4gLQltZW1zZXQo
+ZG1hY19jLCAweGZmLCBFVEhfQUxFTik7DQo+ID4gICAJaGVhZGVyc192ID0gTUxYNV9BRERSX09G
+KGZ0ZV9tYXRjaF9wYXJhbSwgc3BlYy0+bWF0Y2hfdmFsdWUsIG91dGVyX2hlYWRlcnMpOw0KPiA+
+ICsJZG1hY19jID0gTUxYNV9BRERSX09GKGZ0ZV9tYXRjaF9wYXJhbSwgaGVhZGVyc19jLCBvdXRl
+cl9oZWFkZXJzLmRtYWNfNDdfMTYpOw0KPiA+ICAgCWRtYWNfdiA9IE1MWDVfQUREUl9PRihmdGVf
+bWF0Y2hfcGFyYW0sIGhlYWRlcnNfdiwgb3V0ZXJfaGVhZGVycy5kbWFjXzQ3XzE2KTsNCj4gPiAt
+CWV0aGVyX2FkZHJfY29weShkbWFjX3YsIG5kZXYtPmNvbmZpZy5tYWMpOw0KPiA+IC0NCj4gPiAr
+CW1lbXNldChkbWFjX2MsIDB4ZmYsIEVUSF9BTEVOKTsNCj4gPiArCWV0aGVyX2FkZHJfY29weShk
+bWFjX3YsIG1hYyk7DQo+ID4gKwlNTFg1X1NFVChmdGVfbWF0Y2hfc2V0X2x5cl8yXzQsIGhlYWRl
+cnNfYywgY3ZsYW5fdGFnLCAxKTsNCj4gPiArCWlmICh0YWdnZWQpIHsNCj4gPiArCQlNTFg1X1NF
+VChmdGVfbWF0Y2hfc2V0X2x5cl8yXzQsIGhlYWRlcnNfdiwgY3ZsYW5fdGFnLCAxKTsNCj4gPiAr
+CQlNTFg1X1NFVF9UT19PTkVTKGZ0ZV9tYXRjaF9zZXRfbHlyXzJfNCwgaGVhZGVyc19jLCBmaXJz
+dF92aWQpOw0KPiA+ICsJCU1MWDVfU0VUKGZ0ZV9tYXRjaF9zZXRfbHlyXzJfNCwgaGVhZGVyc19j
+LCBmaXJzdF92aWQsIHZpZCk7DQo+ID4gKwl9DQo+ID4gICAJZmxvd19hY3QuYWN0aW9uID0gTUxY
+NV9GTE9XX0NPTlRFWFRfQUNUSU9OX0ZXRF9ERVNUOw0KPiA+ICAgCWRlc3QudHlwZSA9IE1MWDVf
+RkxPV19ERVNUSU5BVElPTl9UWVBFX1RJUjsNCj4gPiAgIAlkZXN0LnRpcl9udW0gPSBuZGV2LT5y
+ZXMudGlybjsNCj4gPiAtCW5kZXYtPnJ4X3J1bGVfdWNhc3QgPSBtbHg1X2FkZF9mbG93X3J1bGVz
+KG5kZXYtPnJ4ZnQsIHNwZWMsICZmbG93X2FjdCwgJmRlc3QsIDEpOw0KPiA+ICsJcnVsZSA9IG1s
+eDVfYWRkX2Zsb3dfcnVsZXMobmRldi0+cnhmdCwgc3BlYywgJmZsb3dfYWN0LCAmZGVzdCwgMSk7
+DQo+ID4gKwlpZiAoSVNfRVJSKHJ1bGUpKQ0KPiA+ICsJCXJldHVybiBQVFJfRVJSKHJ1bGUpOw0K
+PiA+DQo+ID4gLQlpZiAoSVNfRVJSKG5kZXYtPnJ4X3J1bGVfdWNhc3QpKSB7DQo+ID4gLQkJZXJy
+ID0gUFRSX0VSUihuZGV2LT5yeF9ydWxlX3VjYXN0KTsNCj4gPiAtCQluZGV2LT5yeF9ydWxlX3Vj
+YXN0ID0gTlVMTDsNCj4gPiAtCQlnb3RvIGVycl9ydWxlX3VjYXN0Ow0KPiA+IC0JfQ0KPiA+ICsJ
+KnVjYXN0ID0gcnVsZTsNCj4gPg0KPiA+ICAgCW1lbXNldChkbWFjX2MsIDAsIEVUSF9BTEVOKTsN
+Cj4gPiAgIAltZW1zZXQoZG1hY192LCAwLCBFVEhfQUxFTik7DQo+ID4gICAJZG1hY19jWzBdID0g
+MTsNCj4gPiAgIAlkbWFjX3ZbMF0gPSAxOw0KPiA+IC0JZmxvd19hY3QuYWN0aW9uID0gTUxYNV9G
+TE9XX0NPTlRFWFRfQUNUSU9OX0ZXRF9ERVNUOw0KPiA+IC0JbmRldi0+cnhfcnVsZV9tY2FzdCA9
+IG1seDVfYWRkX2Zsb3dfcnVsZXMobmRldi0+cnhmdCwgc3BlYywgJmZsb3dfYWN0LCAmZGVzdCwg
+MSk7DQo+ID4gLQlpZiAoSVNfRVJSKG5kZXYtPnJ4X3J1bGVfbWNhc3QpKSB7DQo+ID4gLQkJZXJy
+ID0gUFRSX0VSUihuZGV2LT5yeF9ydWxlX21jYXN0KTsNCj4gPiAtCQluZGV2LT5yeF9ydWxlX21j
+YXN0ID0gTlVMTDsNCj4gPiAtCQlnb3RvIGVycl9ydWxlX21jYXN0Ow0KPiA+ICsJcnVsZSA9IG1s
+eDVfYWRkX2Zsb3dfcnVsZXMobmRldi0+cnhmdCwgc3BlYywgJmZsb3dfYWN0LCAmZGVzdCwgMSk7
+DQo+ID4gKwlrdmZyZWUoc3BlYyk7DQo+ID4gKwlpZiAoSVNfRVJSKHJ1bGUpKSB7DQo+ID4gKwkJ
+ZXJyID0gUFRSX0VSUihydWxlKTsNCj4gPiArCQlnb3RvIGVycl9tY2FzdDsNCj4gPiAgIAl9DQo+
+ID4NCj4gPiAtCWt2ZnJlZShzcGVjKTsNCj4gPiArCSptY2FzdCA9IHJ1bGU7DQo+ID4gICAJcmV0
+dXJuIDA7DQo+ID4NCj4gPiAtZXJyX3J1bGVfbWNhc3Q6DQo+ID4gLQltbHg1X2RlbF9mbG93X3J1
+bGVzKG5kZXYtPnJ4X3J1bGVfdWNhc3QpOw0KPiA+IC0JbmRldi0+cnhfcnVsZV91Y2FzdCA9IE5V
+TEw7DQo+ID4gLWVycl9ydWxlX3VjYXN0Og0KPiA+IC0JbWx4NV9kZXN0cm95X2Zsb3dfdGFibGUo
+bmRldi0+cnhmdCk7DQo+ID4gLWVycl9uczoNCj4gPiAtCWt2ZnJlZShzcGVjKTsNCj4gPiArZXJy
+X21jYXN0Og0KPiA+ICsJbWx4NV9kZWxfZmxvd19ydWxlcygqdWNhc3QpOw0KPiA+ICsJcmV0dXJu
+IGVycjsNCj4gPiArfQ0KPiA+ICsNCj4gPiArc3RhdGljIHZvaWQgbWx4NV92ZHBhX2RlbF9tYWNf
+dmxhbl9ydWxlcyhzdHJ1Y3QgbWx4NV92ZHBhX25ldCAqbmRldiwNCj4gPiArCQkJCQkgc3RydWN0
+IG1seDVfZmxvd19oYW5kbGUgKnVjYXN0LA0KPiA+ICsJCQkJCSBzdHJ1Y3QgbWx4NV9mbG93X2hh
+bmRsZSAqbWNhc3QpDQo+ID4gK3sNCj4gPiArCW1seDVfZGVsX2Zsb3dfcnVsZXModWNhc3QpOw0K
+PiA+ICsJbWx4NV9kZWxfZmxvd19ydWxlcyhtY2FzdCk7DQo+ID4gK30NCj4gPiArDQo+ID4gK3N0
+YXRpYyB1NjQgc2VhcmNoX3ZhbCh1OCAqbWFjLCB1MTYgdmxhbiwgYm9vbCB0YWdnZWQpDQo+ID4g
+K3sNCj4gPiArCXU2NCB2YWw7DQo+ID4gKw0KPiA+ICsJaWYgKCF0YWdnZWQpDQo+ID4gKwkJdmxh
+biA9IE1MWDVWX1VOVEFHR0VEOw0KPiA+ICsNCj4gPiArCXZhbCA9ICh1NjQpdmxhbiA8PCA0OCB8
+DQo+ID4gKwkgICAgICAodTY0KW1hY1swXSA8PCA0MCB8DQo+ID4gKwkgICAgICAodTY0KW1hY1sx
+XSA8PCAzMiB8DQo+ID4gKwkgICAgICAodTY0KW1hY1syXSA8PCAyNCB8DQo+ID4gKwkgICAgICAo
+dTY0KW1hY1szXSA8PCAxNiB8DQo+ID4gKwkgICAgICAodTY0KW1hY1s0XSA8PCA4IHwNCj4gPiAr
+CSAgICAgICh1NjQpbWFjWzVdOw0KPiA+ICsNCj4gPiArCXJldHVybiB2YWw7DQo+ID4gK30NCj4g
+PiArDQo+ID4gK3N0YXRpYyBzdHJ1Y3QgbWFjdmxhbl9ub2RlICptYWNfdmxhbl9sb29rdXAoc3Ry
+dWN0IG1seDVfdmRwYV9uZXQgKm5kZXYsIHU2NCB2YWx1ZSkNCj4gPiArew0KPiA+ICsJc3RydWN0
+IG1hY3ZsYW5fbm9kZSAqcG9zOw0KPiA+ICsJdTMyIGlkeDsNCj4gPiArDQo+ID4gKwlpZHggPSBo
+YXNoXzY0KHZhbHVlLCA4KTsgLy8gdGJkIDgNCj4gPiArCWhsaXN0X2Zvcl9lYWNoX2VudHJ5KHBv
+cywgJm5kZXYtPm1hY3ZsYW5faGFzaFtpZHhdLCBobGlzdCkgew0KPiA+ICsJCWlmIChwb3MtPm1h
+Y3ZsYW4gPT0gdmFsdWUpDQo+ID4gKwkJCXJldHVybiBwb3M7DQo+ID4gKwl9DQo+ID4gKwlyZXR1
+cm4gTlVMTDsNCj4gPiArfQ0KPiA+ICsNCj4gPiArc3RhdGljIGludCBtYWNfdmxhbl9hZGQoc3Ry
+dWN0IG1seDVfdmRwYV9uZXQgKm5kZXYsIHU4ICptYWMsIHUxNiB2bGFuLCBib29sIHRhZ2dlZCkg
+Ly8gdmxhbiAtPiB2aWQNCj4gPiArew0KPiANCj4gDQo+IEkgZ3Vlc3MgY2hlY2twYXRjaCBtYXkg
+bm90IGJlIGhhcHB5IHdpdGggc3VjaCBraW5kIG9mIGNvbW1lbnQuDQpDaGVja3BhdGNoIGRpZCBu
+b3QgY2F0Y2ggdGhpcyBidXQgSSB3aWxsIGZpeC4NCj4gDQo+IA0KPiA+ICsJc3RydWN0IG1hY3Zs
+YW5fbm9kZSAqcHRyOw0KPiA+ICsJdTY0IHZhbDsNCj4gPiArCXUzMiBpZHg7DQo+ID4gKwlpbnQg
+ZXJyOw0KPiA+ICsNCj4gPiArCXZhbCA9IHNlYXJjaF92YWwobWFjLCB2bGFuLCB0YWdnZWQpOw0K
+PiA+ICsJaWYgKG1hY192bGFuX2xvb2t1cChuZGV2LCB2YWwpKQ0KPiA+ICsJCXJldHVybiAtRUVY
+SVNUOw0KPiA+ICsNCj4gPiArCXB0ciA9IGt6YWxsb2Moc2l6ZW9mKCpwdHIpLCBHRlBfS0VSTkVM
+KTsNCj4gPiArCWlmICghcHRyKQ0KPiA+ICsJCXJldHVybiAtRU5PTUVNOw0KPiA+ICsNCj4gPiAr
+CWVyciA9IG1seDVfdmRwYV9hZGRfbWFjX3ZsYW5fcnVsZXMobmRldiwgbmRldi0+Y29uZmlnLm1h
+YywgdmxhbiwgdGFnZ2VkLA0KPiA+ICsJCQkJCSAgICZwdHItPnVjYXN0X3J1bGUsICZwdHItPm1j
+YXN0X3J1bGUpOw0KPiA+ICsJaWYgKGVycikNCj4gPiArCQlnb3RvIGVycl9hZGQ7DQo+ID4gKw0K
+PiA+ICsJcHRyLT5tYWN2bGFuID0gdmFsOw0KPiA+ICsJaWR4ID0gaGFzaF82NCh2YWwsIDgpOw0K
+PiA+ICsJaGxpc3RfYWRkX2hlYWQoJnB0ci0+aGxpc3QsICZuZGV2LT5tYWN2bGFuX2hhc2hbaWR4
+XSk7DQo+ID4gKwlyZXR1cm4gMDsNCj4gPiArDQo+ID4gK2Vycl9hZGQ6DQo+ID4gKwlrZnJlZShw
+dHIpOw0KPiA+ICAgCXJldHVybiBlcnI7DQo+ID4gICB9DQo+ID4NCj4gPiAtc3RhdGljIHZvaWQg
+cmVtb3ZlX2Z3ZF90b190aXIoc3RydWN0IG1seDVfdmRwYV9uZXQgKm5kZXYpDQo+ID4gK3N0YXRp
+YyB2b2lkIG1hY192bGFuX2RlbChzdHJ1Y3QgbWx4NV92ZHBhX25ldCAqbmRldiwgdTggKm1hYywg
+dTE2IHZsYW4sIGJvb2wgdGFnZ2VkKQ0KPiA+ICAgew0KPiA+IC0JaWYgKCFuZGV2LT5yeF9ydWxl
+X3VjYXN0KQ0KPiA+ICsJc3RydWN0IG1hY3ZsYW5fbm9kZSAqcHRyOw0KPiA+ICsNCj4gPiArCXB0
+ciA9IG1hY192bGFuX2xvb2t1cChuZGV2LCBzZWFyY2hfdmFsKG1hYywgdmxhbiwgdGFnZ2VkKSk7
+DQo+ID4gKwlpZiAoIXB0cikNCj4gPiAgIAkJcmV0dXJuOw0KPiA+DQo+ID4gLQltbHg1X2RlbF9m
+bG93X3J1bGVzKG5kZXYtPnJ4X3J1bGVfbWNhc3QpOw0KPiA+IC0JbmRldi0+cnhfcnVsZV9tY2Fz
+dCA9IE5VTEw7DQo+ID4gLQltbHg1X2RlbF9mbG93X3J1bGVzKG5kZXYtPnJ4X3J1bGVfdWNhc3Qp
+Ow0KPiA+IC0JbmRldi0+cnhfcnVsZV91Y2FzdCA9IE5VTEw7DQo+ID4gKwlobGlzdF9kZWwoJnB0
+ci0+aGxpc3QpOw0KPiA+ICsJbWx4NV92ZHBhX2RlbF9tYWNfdmxhbl9ydWxlcyhuZGV2LCBwdHIt
+PnVjYXN0X3J1bGUsIHB0ci0+bWNhc3RfcnVsZSk7DQo+ID4gKwlrZnJlZShwdHIpOw0KPiA+ICt9
+DQo+ID4gKw0KPiA+ICtzdGF0aWMgdm9pZCBjbGVhcl9tYWNfdmxhbl90YWJsZShzdHJ1Y3QgbWx4
+NV92ZHBhX25ldCAqbmRldikNCj4gPiArew0KPiA+ICsJc3RydWN0IG1hY3ZsYW5fbm9kZSAqcG9z
+Ow0KPiA+ICsJc3RydWN0IGhsaXN0X25vZGUgKm47DQo+ID4gKwlpbnQgaTsNCj4gPiArDQo+ID4g
+Kwlmb3IgKGkgPSAwOyBpIDwgTUxYNVZfTUFDVkxBTl9TSVpFOyBpKyspIHsNCj4gPiArCQlobGlz
+dF9mb3JfZWFjaF9lbnRyeV9zYWZlKHBvcywgbiwgJm5kZXYtPm1hY3ZsYW5faGFzaFtpXSwgaGxp
+c3QpIHsNCj4gPiArCQkJaGxpc3RfZGVsKCZwb3MtPmhsaXN0KTsNCj4gPiArCQkJbWx4NV92ZHBh
+X2RlbF9tYWNfdmxhbl9ydWxlcyhuZGV2LCBwb3MtPnVjYXN0X3J1bGUsIHBvcy0+bWNhc3RfcnVs
+ZSk7DQo+ID4gKwkJCWtmcmVlKHBvcyk7DQo+ID4gKwkJfQ0KPiA+ICsJfQ0KPiA+ICt9DQo+ID4g
+Kw0KPiA+ICtzdGF0aWMgaW50IHNldHVwX3N0ZWVyaW5nKHN0cnVjdCBtbHg1X3ZkcGFfbmV0ICpu
+ZGV2KQ0KPiA+ICt7DQo+ID4gKwlzdHJ1Y3QgbWx4NV9mbG93X3RhYmxlX2F0dHIgZnRfYXR0ciA9
+IHt9Ow0KPiA+ICsJc3RydWN0IG1seDVfZmxvd19uYW1lc3BhY2UgKm5zOw0KPiA+ICsJaW50IGVy
+cjsNCj4gPiArDQo+ID4gKwlmdF9hdHRyLm1heF9mdGUgPSBNQVhfU1RFRVJJTkdfRU5UOw0KPiA+
+ICsJZnRfYXR0ci5hdXRvZ3JvdXAubWF4X251bV9ncm91cHMgPSBNQVhfU1RFRVJJTkdfR1JPVVBT
+Ow0KPiA+ICsNCj4gPiArCW5zID0gbWx4NV9nZXRfZmxvd19uYW1lc3BhY2UobmRldi0+bXZkZXYu
+bWRldiwgTUxYNV9GTE9XX05BTUVTUEFDRV9CWVBBU1MpOw0KPiA+ICsJaWYgKCFucykgew0KPiA+
+ICsJCW1seDVfdmRwYV93YXJuKCZuZGV2LT5tdmRldiwgImZhaWxlZCB0byBnZXQgZmxvdyBuYW1l
+c3BhY2VcbiIpOw0KPiA+ICsJCXJldHVybiAtRU9QTk9UU1VQUDsNCj4gPiArCX0NCj4gPiArDQo+
+ID4gKwluZGV2LT5yeGZ0ID0gbWx4NV9jcmVhdGVfYXV0b19ncm91cGVkX2Zsb3dfdGFibGUobnMs
+ICZmdF9hdHRyKTsNCj4gPiArCWlmIChJU19FUlIobmRldi0+cnhmdCkpIHsNCj4gPiArCQltbHg1
+X3ZkcGFfd2FybigmbmRldi0+bXZkZXYsICJmYWlsZWQgdG8gY3JlYXRlIGZsb3cgdGFibGVcbiIp
+Ow0KPiA+ICsJCXJldHVybiBQVFJfRVJSKG5kZXYtPnJ4ZnQpOw0KPiA+ICsJfQ0KPiA+ICsNCj4g
+PiArCWVyciA9IG1hY192bGFuX2FkZChuZGV2LCBuZGV2LT5jb25maWcubWFjLCAwLCBmYWxzZSk7
+DQo+ID4gKwlpZiAoZXJyKQ0KPiA+ICsJCWdvdG8gZXJyX2FkZDsNCj4gPiArDQo+ID4gKwlyZXR1
+cm4gMDsNCj4gPiArDQo+ID4gK2Vycl9hZGQ6DQo+ID4gKwltbHg1X2Rlc3Ryb3lfZmxvd190YWJs
+ZShuZGV2LT5yeGZ0KTsNCj4gPiArCXJldHVybiBlcnI7DQo+ID4gK30NCj4gPiArDQo+ID4gK3N0
+YXRpYyB2b2lkIHRlYXJkb3duX3N0ZWVyaW5nKHN0cnVjdCBtbHg1X3ZkcGFfbmV0ICpuZGV2KQ0K
+PiA+ICt7DQo+ID4gKwljbGVhcl9tYWNfdmxhbl90YWJsZShuZGV2KTsNCj4gPiAgIAltbHg1X2Rl
+c3Ryb3lfZmxvd190YWJsZShuZGV2LT5yeGZ0KTsNCj4gPiAgIH0NCj4gPg0KPiA+IEBAIC0xNDgy
+LDkgKzE2MDEsOSBAQCBzdGF0aWMgdmlydGlvX25ldF9jdHJsX2FjayBoYW5kbGVfY3RybF9tYWMo
+c3RydWN0IG1seDVfdmRwYV9kZXYgKm12ZGV2LCB1OCBjbWQpDQo+ID4NCj4gPiAgIAkJLyogTmVl
+ZCByZWNyZWF0ZSB0aGUgZmxvdyB0YWJsZSBlbnRyeSwgc28gdGhhdCB0aGUgcGFja2V0IGNvdWxk
+IGZvcndhcmQgYmFjaw0KPiA+ICAgCQkgKi8NCj4gPiAtCQlyZW1vdmVfZndkX3RvX3RpcihuZGV2
+KTsNCj4gPiArCQltYWNfdmxhbl9kZWwobmRldiwgbmRldi0+Y29uZmlnLm1hYywgMCwgZmFsc2Up
+Ow0KPiA+DQo+ID4gLQkJaWYgKGFkZF9md2RfdG9fdGlyKG5kZXYpKSB7DQo+ID4gKwkJaWYgKG1h
+Y192bGFuX2FkZChuZGV2LCBuZGV2LT5jb25maWcubWFjLCAwLCBmYWxzZSkpIHsNCj4gPiAgIAkJ
+CW1seDVfdmRwYV93YXJuKG12ZGV2LCAiZmFpbGVkIHRvIGluc2VydCBmb3J3YXJkIHJ1bGVzLCB0
+cnkgdG8gcmVzdG9yZVxuIik7DQo+ID4NCj4gPiAgIAkJCS8qIEFsdGhvdWdoIGl0IGhhcmRseSBy
+dW4gaGVyZSwgd2Ugc3RpbGwgbmVlZCBkb3VibGUgY2hlY2sgKi8NCj4gPiBAQCAtMTUwOCw3ICsx
+NjI3LDcgQEAgc3RhdGljIHZpcnRpb19uZXRfY3RybF9hY2sgaGFuZGxlX2N0cmxfbWFjKHN0cnVj
+dCBtbHg1X3ZkcGFfZGV2ICptdmRldiwgdTggY21kKQ0KPiA+DQo+ID4gICAJCQltZW1jcHkobmRl
+di0+Y29uZmlnLm1hYywgbWFjX2JhY2ssIEVUSF9BTEVOKTsNCj4gPg0KPiA+IC0JCQlpZiAoYWRk
+X2Z3ZF90b190aXIobmRldikpDQo+ID4gKwkJCWlmIChtYWNfdmxhbl9hZGQobmRldiwgbmRldi0+
+Y29uZmlnLm1hYywgMCwgZmFsc2UpKQ0KPiA+ICAgCQkJCW1seDVfdmRwYV93YXJuKG12ZGV2LCAi
+cmVzdG9yZSBmb3J3YXJkIHJ1bGVzIGZhaWxlZDogaW5zZXJ0IGZvcndhcmQgcnVsZXMgZmFpbGVk
+XG4iKTsNCj4gPg0KPiA+ICAgCQkJYnJlYWs7DQo+ID4gQEAgLTE2MTAsNiArMTcyOSw0MiBAQCBz
+dGF0aWMgdmlydGlvX25ldF9jdHJsX2FjayBoYW5kbGVfY3RybF9tcShzdHJ1Y3QgbWx4NV92ZHBh
+X2RldiAqbXZkZXYsIHU4IGNtZCkNCj4gPiAgIAlyZXR1cm4gc3RhdHVzOw0KPiA+ICAgfQ0KPiA+
+DQo+ID4gK3N0YXRpYyB2aXJ0aW9fbmV0X2N0cmxfYWNrIGhhbmRsZV9jdHJsX3ZsYW4oc3RydWN0
+IG1seDVfdmRwYV9kZXYgKm12ZGV2LCB1OCBjbWQpDQo+ID4gK3sNCj4gPiArCXN0cnVjdCBtbHg1
+X3ZkcGFfbmV0ICpuZGV2ID0gdG9fbWx4NV92ZHBhX25kZXYobXZkZXYpOw0KPiA+ICsJdmlydGlv
+X25ldF9jdHJsX2FjayBzdGF0dXMgPSBWSVJUSU9fTkVUX0VSUjsNCj4gPiArCXN0cnVjdCBtbHg1
+X2NvbnRyb2xfdnEgKmN2cSA9ICZtdmRldi0+Y3ZxOw0KPiA+ICsJc3RydWN0IHZpcnRpb19uZXRf
+Y3RybF92bGFuIHZsYW47DQo+ID4gKwlzaXplX3QgcmVhZDsNCj4gPiArCXUxNiBpZDsNCj4gPiAr
+DQo+ID4gKwlzd2l0Y2ggKGNtZCkgew0KPiA+ICsJY2FzZSBWSVJUSU9fTkVUX0NUUkxfVkxBTl9B
+REQ6DQo+ID4gKwkJcmVhZCA9IHZyaW5naF9pb3ZfcHVsbF9pb3RsYigmY3ZxLT52cmluZywgJmN2
+cS0+cmlvdiwgKHZvaWQgKikmdmxhbiwgc2l6ZW9mKHZsYW4pKTsNCj4gPiArCQlpZiAocmVhZCAh
+PSBzaXplb2YodmxhbikpDQo+ID4gKwkJCWJyZWFrOw0KPiA+ICsNCj4gPiArCQlpZCA9IG1seDV2
+ZHBhMTZfdG9fY3B1KG12ZGV2LCB2bGFuLmlkKTsNCj4gPiArCQlpZiAobWFjX3ZsYW5fYWRkKG5k
+ZXYsIG5kZXYtPmNvbmZpZy5tYWMsIGlkLCB0cnVlKSkNCj4gPiArCQkJYnJlYWs7DQo+IA0KPiAN
+Cj4gVGhpcyBtYXkgd29yayBub3cgYnV0IEkgd29uZGVyIGlmIHdlIGhhZCB0aGUgcGxhbiB0byBz
+dXBwb3J0DQo+IFZJUlRJT19ORVRfRl9DVFJMX1JYPw0KPiANCj4gaWYgJG1hYyBpcyBub3QgaW4g
+JG1hY190YWJsZQ0KPiAgwqDCoMKgIGRyb3A7DQo+IGlmICR2bGFuIGlzIG5vdCBpbiAkdmxhbl90
+YWJsZQ0KPiAgwqDCoMKgIGRyb3A7DQo+IA0KPiBXaXRoIHRoYXQgZmVhdHVyZXMgd2UgcHJvYmFi
+bHkgcmVxdWlyZXMgdGhlIGRlZGljYXRlZCB2bGFuIGZpbHRlcnMNCj4gd2l0aG91dCBhIG1hYz8g
+T3IgZG8gd2Ugd2FudCB0byBhICRtYWMgKiAkdmxhbnMgcnVsZXM/DQo+IA0KPiBJZiB5ZXMsIG1h
+eWJlIGl0J3MgYmV0dGVyIHRvIGRlY291cGxlIHZsYW4gZmlsdGVycyBmcm9tIG1hYyBub3cuDQo+
+IA0KDQpJZiB3ZSB1c2UgZGVkaWNhdGVkIGZpbHRlciB0YWJsZXMgZm9yIFZMQU4gYW5kIE1BQyB3
+b3JraW5nIGluIHNlcmllcywNCndlIG1heSBub3QgaGF2ZSBmdWxsIGNvbnRyb2wgb3ZlciBpbmNv
+bWluZyB0cmFmZmljIGZpbHRlcmluZy4NCkZvciBleGFtcGxlLCBzdXBwb3NlIHdlIGhhdmUgVkxB
+TiB0YWJsZSBhbGxvd2luZyB2MSBhbmQgdjIgdG8gZ28gdGhyb3VnaCwNCmFuZCBhIE1BQyB0YWJs
+ZSBhbGxvd2luZyBtMSBhbmQgbTIgdG8gZ28gdGhyb3VnaC4NCg0KSWYgd2Ugd2FudCBvbmx5ICh2
+MSwgbTEpIGFuZCAodjIsIG0yKSB0byBnbyB0aHJvdWdoIGJ1dCBub3QgKHYxLCBtMikgb3IgKHYy
+LCBtMSkNCnRoZW4gaXQgd291bGQgbm90IGJlIHBvc3NpYmxlIHRvIGJsb2NrIHRoZSBsYXR0ZXIu
+DQoNCkFzIEkgY2FuIHNlZSwgdGhlIHNwZWMgZG9lcyBub3QgcmVxdWlyZSB0aGF0IGZpbmVzc2Ug
+YnV0IEkgd29uZGVyIGlmIHRoaXMgbm90DQp3aGF0IHJlYWwgbGlmZSByZXF1aXJlcy4NCklmIHlv
+dSB0aGluayB3ZSBzaG91bGQgZm9sbG93IHRoZSBzcGVjIGxldCBtZSBrbm93IGFuZCB3aWxsIHBy
+ZXBhcmUgYSBuZXcgdmVyc2lvbi4NCg0KPiBUaGFua3MNCj4gDQo+IA0KPiA+ICsNCj4gPiArCQlz
+dGF0dXMgPSBWSVJUSU9fTkVUX09LOw0KPiA+ICsJCWJyZWFrOw0KPiA+ICsJY2FzZSBWSVJUSU9f
+TkVUX0NUUkxfVkxBTl9ERUw6DQo+ID4gKwkJcmVhZCA9IHZyaW5naF9pb3ZfcHVsbF9pb3RsYigm
+Y3ZxLT52cmluZywgJmN2cS0+cmlvdiwgKHZvaWQgKikmdmxhbiwgc2l6ZW9mKHZsYW4pKTsNCj4g
+PiArCQlpZiAocmVhZCAhPSBzaXplb2YodmxhbikpDQo+ID4gKwkJCWJyZWFrOw0KPiA+ICsNCj4g
+PiArCQlpZCA9IG1seDV2ZHBhMTZfdG9fY3B1KG12ZGV2LCB2bGFuLmlkKTsNCj4gPiArCQltYWNf
+dmxhbl9kZWwobmRldiwgbmRldi0+Y29uZmlnLm1hYywgaWQsIHRydWUpOw0KPiA+ICsJCWJyZWFr
+Ow0KPiA+ICsJZGVmYXVsdDoNCj4gPiArCWJyZWFrOw0KPiA+ICt9DQo+ID4gKw0KPiA+ICtyZXR1
+cm4gc3RhdHVzOw0KPiA+ICt9DQo+ID4gKw0KPiA+ICAgc3RhdGljIHZvaWQgbWx4NV9jdnFfa2lj
+a19oYW5kbGVyKHN0cnVjdCB3b3JrX3N0cnVjdCAqd29yaykNCj4gPiAgIHsNCj4gPiAgIAl2aXJ0
+aW9fbmV0X2N0cmxfYWNrIHN0YXR1cyA9IFZJUlRJT19ORVRfRVJSOw0KPiA+IEBAIC0xNjU0LDcg
+KzE4MDksOSBAQCBzdGF0aWMgdm9pZCBtbHg1X2N2cV9raWNrX2hhbmRsZXIoc3RydWN0IHdvcmtf
+c3RydWN0ICp3b3JrKQ0KPiA+ICAgCQljYXNlIFZJUlRJT19ORVRfQ1RSTF9NUToNCj4gPiAgIAkJ
+CXN0YXR1cyA9IGhhbmRsZV9jdHJsX21xKG12ZGV2LCBjdHJsLmNtZCk7DQo+ID4gICAJCQlicmVh
+azsNCj4gPiAtDQo+ID4gKwkJY2FzZSBWSVJUSU9fTkVUX0NUUkxfVkxBTjoNCj4gPiArCQkJc3Rh
+dHVzID0gaGFuZGxlX2N0cmxfdmxhbihtdmRldiwgY3RybC5jbWQpOw0KPiA+ICsJCQlicmVhazsN
+Cj4gPiAgIAkJZGVmYXVsdDoNCj4gPiAgIAkJCWJyZWFrOw0KPiA+ICAgCQl9DQo+ID4gQEAgLTE5
+MTMsNiArMjA3MCw3IEBAIHN0YXRpYyB1NjQgZ2V0X3N1cHBvcnRlZF9mZWF0dXJlcyhzdHJ1Y3Qg
+bWx4NV9jb3JlX2RldiAqbWRldikNCj4gPiAgIAltbHhfdmRwYV9mZWF0dXJlcyB8PSBCSVRfVUxM
+KFZJUlRJT19ORVRfRl9NUSk7DQo+ID4gICAJbWx4X3ZkcGFfZmVhdHVyZXMgfD0gQklUX1VMTChW
+SVJUSU9fTkVUX0ZfU1RBVFVTKTsNCj4gPiAgIAltbHhfdmRwYV9mZWF0dXJlcyB8PSBCSVRfVUxM
+KFZJUlRJT19ORVRfRl9NVFUpOw0KPiA+ICsJbWx4X3ZkcGFfZmVhdHVyZXMgfD0gQklUX1VMTChW
+SVJUSU9fTkVUX0ZfQ1RSTF9WTEFOKTsNCj4gPg0KPiA+ICAgCXJldHVybiBtbHhfdmRwYV9mZWF0
+dXJlczsNCj4gPiAgIH0NCj4gPiBAQCAtMjE5OCw5ICsyMzU2LDkgQEAgc3RhdGljIGludCBzZXR1
+cF9kcml2ZXIoc3RydWN0IG1seDVfdmRwYV9kZXYgKm12ZGV2KQ0KPiA+ICAgCQlnb3RvIGVycl90
+aXI7DQo+ID4gICAJfQ0KPiA+DQo+ID4gLQllcnIgPSBhZGRfZndkX3RvX3RpcihuZGV2KTsNCj4g
+PiArCWVyciA9IHNldHVwX3N0ZWVyaW5nKG5kZXYpOw0KPiA+ICAgCWlmIChlcnIpIHsNCj4gPiAt
+CQltbHg1X3ZkcGFfd2FybihtdmRldiwgImFkZF9md2RfdG9fdGlyXG4iKTsNCj4gPiArCQltbHg1
+X3ZkcGFfd2FybihtdmRldiwgInNldHVwX3N0ZWVyaW5nXG4iKTsNCj4gPiAgIAkJZ290byBlcnJf
+ZndkOw0KPiA+ICAgCX0NCj4gPiAgIAluZGV2LT5zZXR1cCA9IHRydWU7DQo+ID4gQEAgLTIyMjYs
+NyArMjM4NCw3IEBAIHN0YXRpYyB2b2lkIHRlYXJkb3duX2RyaXZlcihzdHJ1Y3QgbWx4NV92ZHBh
+X25ldCAqbmRldikNCj4gPiAgIAlpZiAoIW5kZXYtPnNldHVwKQ0KPiA+ICAgCQlyZXR1cm47DQo+
+ID4NCj4gPiAtCXJlbW92ZV9md2RfdG9fdGlyKG5kZXYpOw0KPiA+ICsJdGVhcmRvd25fc3RlZXJp
+bmcobmRldik7DQo+ID4gICAJZGVzdHJveV90aXIobmRldik7DQo+ID4gICAJZGVzdHJveV9ycXQo
+bmRldik7DQo+ID4gICAJdGVhcmRvd25fdmlydHF1ZXVlcyhuZGV2KTsNCg0K

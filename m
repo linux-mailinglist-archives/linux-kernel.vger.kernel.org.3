@@ -2,73 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A3D3516FBD
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 14:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66421516FC1
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 14:44:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385072AbiEBMq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 08:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44056 "EHLO
+        id S1385081AbiEBMr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 08:47:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385060AbiEBMqY (ORCPT
+        with ESMTP id S237379AbiEBMr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 08:46:24 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982CF13EA8
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 05:42:52 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 49F2C1F38D;
-        Mon,  2 May 2022 12:42:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1651495371; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Mon, 2 May 2022 08:47:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8DAF213E91
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 05:44:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651495466;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=xgm4ncx470cGggZLgVgaWjDmGH77PXuStFOsEvpnKuA=;
-        b=GesygcDIQ6YbGF8QBPFDxalMykXY+FjBGWk3ktEBvjeCFM4+0p2hnni6kuVDa/eyEdvwzS
-        Ha+bTdqQkymGS7IYXjmxJe01IMgxTFem4ahcUeE+fYrSSoHGtyEgQfRknuFsx9ScjzN94H
-        ji83OdQQFw7pWN8/MqkIj3/gVa5YO1Q=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=vS6aYjf5BkmHwIAK/loQ2sNshRhq0zEaS4wmG9psNgU=;
+        b=QqLUVtCTpO6xKsu55Sb1TxAaeieVxH/mdQ+iOlsGK1hTozzH5g+s2aNvRORs9DPDqNFycW
+        LCUf1eeX6PVFwg/nQStEv/4LhCf/wyujTCmtIIj2Gi2kj1lPGJuwszqWrmj30snuK72Fc+
+        iY3g4VaRgEoez2mxET3w4ApH91dtvKk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-647-0Nnr-ju4Nz-H9zbMp3MV2A-1; Mon, 02 May 2022 08:44:15 -0400
+X-MC-Unique: 0Nnr-ju4Nz-H9zbMp3MV2A-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DC691133E5;
-        Mon,  2 May 2022 12:42:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id GjU6NMrRb2K8fwAAMHmgww
-        (envelope-from <jgross@suse.com>); Mon, 02 May 2022 12:42:50 +0000
-Message-ID: <6c0dd7c7-593b-d8cf-347b-3d32310fcc11@suse.com>
-Date:   Mon, 2 May 2022 14:42:50 +0200
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 580D42811769;
+        Mon,  2 May 2022 12:44:05 +0000 (UTC)
+Received: from fedora (unknown [10.22.8.190])
+        by smtp.corp.redhat.com (Postfix) with SMTP id F025140FF6B3;
+        Mon,  2 May 2022 12:44:01 +0000 (UTC)
+Date:   Mon, 2 May 2022 09:44:00 -0300
+From:   Wander Lairson Costa <wander@redhat.com>
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 2/3] x86/tdx: Add TDX Guest event notify interrupt
+ support
+Message-ID: <Ym/SEKWS7ouTHtsF@fedora>
+References: <20220501183500.2242828-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220501183500.2242828-3-sathyanarayanan.kuppuswamy@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Content-Language: en-US
-To:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        Borislav Petkov <bp@alien8.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, X86 ML <x86@kernel.org>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-References: <20220421141055.316239-1-jiangshanlai@gmail.com>
- <20220421141055.316239-4-jiangshanlai@gmail.com> <YmmBHABKMk7Ctx46@zn.tnic>
- <CAJhGHyANWhu-HX20_4XhgACE8tUd8SFa5BTH-ynJscNQ7QxBRw@mail.gmail.com>
-From:   Juergen Gross <jgross@suse.com>
-Subject: Re: [PATCH V6 3/8] x86/entry: Move PUSH_AND_CLEAR_REGS out of
- error_entry()
-In-Reply-To: <CAJhGHyANWhu-HX20_4XhgACE8tUd8SFa5BTH-ynJscNQ7QxBRw@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------1JwBUxJAdhW3J26I4MnuZyS9"
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220501183500.2242828-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,159 +73,235 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------1JwBUxJAdhW3J26I4MnuZyS9
-Content-Type: multipart/mixed; boundary="------------YqP1iwCRBUTIZeXz0804kjpB";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Lai Jiangshan <jiangshanlai@gmail.com>, Borislav Petkov <bp@alien8.de>
-Cc: LKML <linux-kernel@vger.kernel.org>, Peter Zijlstra
- <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@redhat.com>,
- Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- X86 ML <x86@kernel.org>, Lai Jiangshan <jiangshan.ljs@antgroup.com>,
- Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>
-Message-ID: <6c0dd7c7-593b-d8cf-347b-3d32310fcc11@suse.com>
-Subject: Re: [PATCH V6 3/8] x86/entry: Move PUSH_AND_CLEAR_REGS out of
- error_entry()
-References: <20220421141055.316239-1-jiangshanlai@gmail.com>
- <20220421141055.316239-4-jiangshanlai@gmail.com> <YmmBHABKMk7Ctx46@zn.tnic>
- <CAJhGHyANWhu-HX20_4XhgACE8tUd8SFa5BTH-ynJscNQ7QxBRw@mail.gmail.com>
-In-Reply-To: <CAJhGHyANWhu-HX20_4XhgACE8tUd8SFa5BTH-ynJscNQ7QxBRw@mail.gmail.com>
+On Sun, May 01, 2022 at 11:34:59AM -0700, Kuppuswamy Sathyanarayanan wrote:
+> Host-guest event notification via configured interrupt vector is useful
+> in cases where a guest makes an asynchronous request and needs a
+> callback from the host to indicate the completion or to let the host
+> notify the guest about events like device removal. One usage example is,
+> callback requirement of GetQuote asynchronous hypercall.
+> 
+> In TDX guest, SetupEventNotifyInterrupt hypercall can be used by the
+> guest to specify which interrupt vector to use as an event-notify
+> vector to the VMM. Details about the SetupEventNotifyInterrupt
+> hypercall can be found in TDX Guest-Host Communication Interface
+> (GHCI) Specification, sec 3.5 "VP.VMCALL<SetupEventNotifyInterrupt>".
+> Add a tdx_hcall_set_notify_intr() helper function to implement the
+> SetupEventNotifyInterrupt hypercall.
+> 
+> Reserve 0xec IRQ vector address for TDX guest to receive the event
+> completion notification from VMM. Also add related IDT handler to
+> process the notification event.
+> 
+> Add support to track the notification event status via
+> /proc/interrupts.
+> 
+> Reviewed-by: Tony Luck <tony.luck@intel.com>
+> Reviewed-by: Andi Kleen <ak@linux.intel.com>
+> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> ---
+>  arch/x86/coco/tdx/tdx.c            | 73 ++++++++++++++++++++++++++++++
+>  arch/x86/include/asm/hardirq.h     |  3 ++
+>  arch/x86/include/asm/idtentry.h    |  4 ++
+>  arch/x86/include/asm/irq_vectors.h |  7 ++-
+>  arch/x86/include/asm/tdx.h         |  4 ++
+>  arch/x86/kernel/irq.c              |  7 +++
+>  6 files changed, 97 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+> index 03deb4d6920d..b49211994864 100644
+> --- a/arch/x86/coco/tdx/tdx.c
+> +++ b/arch/x86/coco/tdx/tdx.c
+> @@ -11,6 +11,10 @@
+>  #include <asm/insn.h>
+>  #include <asm/insn-eval.h>
+>  #include <asm/pgtable.h>
+> +#include <asm/apic.h>
+> +#include <asm/idtentry.h>
+> +#include <asm/irq_regs.h>
+> +#include <asm/desc.h>
+>  
+>  /* TDX module Call Leaf IDs */
+>  #define TDX_GET_INFO			1
+> @@ -19,6 +23,7 @@
+>  
+>  /* TDX hypercall Leaf IDs */
+>  #define TDVMCALL_MAP_GPA		0x10001
+> +#define TDVMCALL_SETUP_NOTIFY_INTR	0x10004
+>  
+>  /* MMIO direction */
+>  #define EPT_READ	0
+> @@ -34,6 +39,28 @@
+>  #define VE_GET_PORT_NUM(e)	((e) >> 16)
+>  #define VE_IS_IO_STRING(e)	((e) & BIT(4))
+>  
+> +/*
+> + * Handler used to report notifications about
+> + * TDX_GUEST_EVENT_NOTIFY_VECTOR IRQ. Currently it will be
+> + * used only by the attestation driver. So, race condition
+> + * with read/write operation is not considered.
+> + */
+> +static void (*tdx_event_notify_handler)(void);
+> +
+> +/* Helper function to register tdx_event_notify_handler */
+> +void tdx_setup_ev_notify_handler(void (*handler)(void))
+> +{
+> +	tdx_event_notify_handler = handler;
+> +}
+> +EXPORT_SYMBOL_GPL(tdx_setup_ev_notify_handler);
+> +
+> +/* Helper function to unregister tdx_event_notify_handler */
+> +void tdx_remove_ev_notify_handler(void)
+> +{
+> +	tdx_event_notify_handler = NULL;
+> +}
+> +EXPORT_SYMBOL_GPL(tdx_remove_ev_notify_handler);
+> +
+>  /*
+>   * Wrapper for standard use of __tdx_hypercall with no output aside from
+>   * return code.
+> @@ -98,6 +125,46 @@ static inline void tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
+>  		panic("TDCALL %lld failed (Buggy TDX module!)\n", fn);
+>  }
+>  
+> +/* TDX guest event notification handler */
+> +DEFINE_IDTENTRY_SYSVEC(sysvec_tdx_event_notify)
+> +{
+> +	struct pt_regs *old_regs = set_irq_regs(regs);
+> +
+> +	inc_irq_stat(irq_tdx_event_notify_count);
+> +
+> +	if (tdx_event_notify_handler)
+> +		tdx_event_notify_handler();
+> +
+> +	ack_APIC_irq();
+> +
+> +	set_irq_regs(old_regs);
+> +}
+> +
+> +/*
+> + * tdx_hcall_set_notify_intr() - Setup Event Notify Interrupt Vector.
+> + *
+> + * @vector: Vector address to be used for notification.
+> + *
+> + * return 0 on success or failure error number.
+> + */
+> +static long tdx_hcall_set_notify_intr(u8 vector)
+> +{
+> +	/* Minimum vector value allowed is 32 */
+> +	if (vector < 32)
+> +		return -EINVAL;
+> +
+> +	/*
+> +	 * Register callback vector address with VMM. More details
+> +	 * about the ABI can be found in TDX Guest-Host-Communication
+> +	 * Interface (GHCI), sec titled
+> +	 * "TDG.VP.VMCALL<SetupEventNotifyInterrupt>".
+> +	 */
+> +	if (_tdx_hypercall(TDVMCALL_SETUP_NOTIFY_INTR, vector, 0, 0, 0))
+> +		return -EIO;
+> +
+> +	return 0;
+> +}
+> +
+>  static u64 get_cc_mask(void)
+>  {
+>  	struct tdx_module_output out;
+> @@ -688,5 +755,11 @@ void __init tdx_early_init(void)
+>  	x86_platform.guest.enc_tlb_flush_required   = tdx_tlb_flush_required;
+>  	x86_platform.guest.enc_status_change_finish = tdx_enc_status_changed;
+>  
+> +	alloc_intr_gate(TDX_GUEST_EVENT_NOTIFY_VECTOR,
+> +			asm_sysvec_tdx_event_notify);
+> +
+> +	if (tdx_hcall_set_notify_intr(TDX_GUEST_EVENT_NOTIFY_VECTOR))
+> +		pr_warn("Setting event notification interrupt failed\n");
+> +
+>  	pr_info("Guest detected\n");
+>  }
+> diff --git a/arch/x86/include/asm/hardirq.h b/arch/x86/include/asm/hardirq.h
+> index 275e7fd20310..582deff56210 100644
+> --- a/arch/x86/include/asm/hardirq.h
+> +++ b/arch/x86/include/asm/hardirq.h
+> @@ -44,6 +44,9 @@ typedef struct {
+>  	unsigned int irq_hv_reenlightenment_count;
+>  	unsigned int hyperv_stimer0_count;
+>  #endif
+> +#if IS_ENABLED(CONFIG_INTEL_TDX_GUEST)
+> +	unsigned int irq_tdx_event_notify_count;
+> +#endif
+>  } ____cacheline_aligned irq_cpustat_t;
+>  
+>  DECLARE_PER_CPU_SHARED_ALIGNED(irq_cpustat_t, irq_stat);
+> diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
+> index 72184b0b2219..655086dd940e 100644
+> --- a/arch/x86/include/asm/idtentry.h
+> +++ b/arch/x86/include/asm/idtentry.h
+> @@ -700,6 +700,10 @@ DECLARE_IDTENTRY_SYSVEC(HYPERVISOR_CALLBACK_VECTOR,	sysvec_xen_hvm_callback);
+>  DECLARE_IDTENTRY_SYSVEC(HYPERVISOR_CALLBACK_VECTOR,	sysvec_kvm_asyncpf_interrupt);
+>  #endif
+>  
+> +#if IS_ENABLED(CONFIG_INTEL_TDX_GUEST)
+> +DECLARE_IDTENTRY_SYSVEC(TDX_GUEST_EVENT_NOTIFY_VECTOR,	sysvec_tdx_event_notify);
+> +#endif
+> +
+>  #undef X86_TRAP_OTHER
+>  
+>  #endif
+> diff --git a/arch/x86/include/asm/irq_vectors.h b/arch/x86/include/asm/irq_vectors.h
+> index 43dcb9284208..82ac0c0a34b1 100644
+> --- a/arch/x86/include/asm/irq_vectors.h
+> +++ b/arch/x86/include/asm/irq_vectors.h
+> @@ -104,7 +104,12 @@
+>  #define HYPERV_STIMER0_VECTOR		0xed
+>  #endif
+>  
+> -#define LOCAL_TIMER_VECTOR		0xec
+> +#if IS_ENABLED(CONFIG_INTEL_TDX_GUEST)
+> +/* Vector on which TDX Guest event notification is delivered */
+> +#define TDX_GUEST_EVENT_NOTIFY_VECTOR	0xec
+> +#endif
+> +
+> +#define LOCAL_TIMER_VECTOR		0xeb
+>  
+>  #define NR_VECTORS			 256
+>  
+> diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
+> index 020c81a7c729..eb4db837cc44 100644
+> --- a/arch/x86/include/asm/tdx.h
+> +++ b/arch/x86/include/asm/tdx.h
+> @@ -67,6 +67,10 @@ void tdx_safe_halt(void);
+>  
+>  bool tdx_early_handle_ve(struct pt_regs *regs);
+>  
+> +void tdx_setup_ev_notify_handler(void (*handler)(void));
+> +
+> +void tdx_remove_ev_notify_handler(void);
+> +
+>  #else
+>  
+>  static inline void tdx_early_init(void) { };
+> diff --git a/arch/x86/kernel/irq.c b/arch/x86/kernel/irq.c
+> index 766ffe3ba313..a96ecd866723 100644
+> --- a/arch/x86/kernel/irq.c
+> +++ b/arch/x86/kernel/irq.c
+> @@ -181,6 +181,13 @@ int arch_show_interrupts(struct seq_file *p, int prec)
+>  		seq_printf(p, "%10u ",
+>  			   irq_stats(j)->kvm_posted_intr_wakeup_ipis);
+>  	seq_puts(p, "  Posted-interrupt wakeup event\n");
+> +#endif
+> +#if IS_ENABLED(CONFIG_INTEL_TDX_GUEST)
+> +	seq_printf(p, "%*s: ", prec, "TGN");
+> +	for_each_online_cpu(j)
+> +		seq_printf(p, "%10u ",
+> +			   irq_stats(j)->irq_tdx_event_notify_count);
+> +	seq_puts(p, "  TDX Guest event notification\n");
+>  #endif
+>  	return 0;
+>  }
+> -- 
+> 2.25.1
+> 
 
---------------YqP1iwCRBUTIZeXz0804kjpB
-Content-Type: multipart/mixed; boundary="------------dcDkuqcQuUZZxGvU0KNv8qYn"
+Acked-by: Wander Lairson Costa <wander@redhat.com>
 
---------------dcDkuqcQuUZZxGvU0KNv8qYn
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-
-T24gMjguMDQuMjIgMDI6MzMsIExhaSBKaWFuZ3NoYW4gd3JvdGU6DQo+IE9uIFRodSwgQXBy
-IDI4LCAyMDIyIGF0IDE6NDUgQU0gQm9yaXNsYXYgUGV0a292IDxicEBhbGllbjguZGU+IHdy
-b3RlOg0KPj4NCj4+IE9uIFRodSwgQXByIDIxLCAyMDIyIGF0IDEwOjEwOjUwUE0gKzA4MDAs
-IExhaSBKaWFuZ3NoYW4gd3JvdGU6DQo+Pj4gRnJvbTogTGFpIEppYW5nc2hhbiA8amlhbmdz
-aGFuLmxqc0BhbnRncm91cC5jb20+DQo+Pj4NCj4+PiBUaGUgbWFjcm8gaWR0ZW50cnkgY2Fs
-bHMgZXJyb3JfZW50cnkoKSB1bmNvbmRpdGlvbmFsbHkgZXZlbiBvbiBYRU5QVi4NCj4+PiBC
-dXQgdGhlIGNvZGUgWEVOUFYgbmVlZHMgaW4gZXJyb3JfZW50cnkoKSBpcyBQVVNIX0FORF9D
-TEVBUl9SRUdTIG9ubHkuDQo+Pj4gQW5kIGVycm9yX2VudHJ5KCkgYWxzbyBjYWxscyBzeW5j
-X3JlZ3MoKSB3aGljaCBoYXMgdG8gZGVhbCB3aXRoIHRoZQ0KPj4+IGNhc2Ugb2YgWEVOUFYg
-dmlhIGFuIGV4dHJhIGJyYW5jaCBzbyB0aGF0IGl0IGRvZXNuJ3QgY29weSB0aGUgcHRfcmVn
-cy4NCj4+DQo+PiBXaGF0IGV4dHJhIGJyYW5jaD8NCj4+DQo+PiBEbyB5b3UgbWVhbiB0aGUN
-Cj4+DQo+PiAgICAgICAgICBpZiAocmVncyAhPSBlcmVncykNCj4+DQo+PiB0ZXN0IGluIHN5
-bmNfcmVncygpPw0KPiANCj4gSGVsbG8sIEJvcmlzbGF2DQo+IA0KPiBZZXMuDQo+IA0KPj4N
-Cj4+IEknbSBjb25mdXNlZC4gQXJlIHlvdSwgcGVyIGNoYW5jZSwgYWltaW5nIHRvIG9wdGlt
-aXplIFhFTlBWIGhlcmUgb3INCj4+IHdoYXQncyB1cD8NCj4gDQo+IA0KPiBUaGUgYnJhbmNo
-IGluIHN5bmNfcmVncygpIGNhbiBiZSBvcHRpbWl6ZWQgb3V0IGZvciB0aGUgbm9uLVhFTlBW
-IGNhc2UNCj4gc2luY2UgWEVOUFYgZG9lc24ndCBjYWxsIHN5bmNfcmVncygpIGFmdGVyIHBh
-dGNoNSB3aGljaCBtYWtlcyBYRU5QVg0KPiBub3QgY2FsbCBlcnJvcl9lbnRyeSgpLg0KPiAN
-Cj4gVGhlIGFpbSBvZiB0aGlzIHBhdGNoIGFuZCBtb3N0IG9mIHRoZSBwYXRjaHNldCBpcyB0
-byBtYWtlDQo+IGVycm9yX2VudHJ5KCkgYmUgYWJsZSB0byBiZSBjb252ZXJ0ZWQgdG8gQy4g
-IEFuZCBYRU5QViBjYXNlcyBjYW4NCj4gYWxzbyBiZSBvcHRpbWl6ZWQgaW4gdGhlIHBhdGNo
-c2V0IGFsdGhvdWdoIGl0IGlzIG5vdCB0aGUgbWFqb3IgbWFpbi4NCj4gDQo+Pg0KPj4+IEFu
-ZCBQVVNIX0FORF9DTEVBUl9SRUdTIGluIGVycm9yX2VudHJ5KCkgbWFrZXMgdGhlIHN0YWNr
-IG5vdCByZXR1cm4gdG8NCj4+PiBpdHMgb3JpZ2luYWwgcGxhY2Ugd2hlbiB0aGUgZnVuY3Rp
-b24gcmV0dXJucywgd2hpY2ggbWVhbnMgaXQgaXMgbm90DQo+Pj4gcG9zc2libGUgdG8gY29u
-dmVydCBpdCB0byBhIEMgZnVuY3Rpb24uDQo+Pj4NCj4+PiBNb3ZlIFBVU0hfQU5EX0NMRUFS
-X1JFR1Mgb3V0IG9mIGVycm9yX2VudHJ5KCksIGFkZCBhIGZ1bmN0aW9uIHRvIHdyYXANCj4+
-PiBQVVNIX0FORF9DTEVBUl9SRUdTIGFuZCBjYWxsIGl0IGJlZm9yZSBlcnJvcl9lbnRyeSgp
-Lg0KPj4+DQo+Pj4gVGhlIG5ldyBmdW5jdGlvbiBjYWxsIGFkZHMgdHdvIGluc3RydWN0aW9u
-cyAoQ0FMTCBhbmQgUkVUKSBmb3IgZXZlcnkNCj4+PiBpbnRlcnJ1cHQgb3IgZXhjZXB0aW9u
-Lg0KPj4NCj4+IE5vdCBvbmx5IC0gaXQgcHVzaGVzIGFsbCB0aGUgcmVncyBpbiBQVVNIX0FO
-RF9DTEVBUl9SRUdTIHRvby4gSSBkb24ndA0KPj4gdW5kZXJzdGFuZCB3aHkgdGhhdCBtYXR0
-ZXJzIGhlcmU/IEl0IHdhcyBkb25lIGluIGVycm9yX2VudHJ5IGFueXdheS4NCj4+DQo+IA0K
-PiBDb21wYXJlZCB0byB0aGUgb3JpZ2luYWwgY29kZSwgYWRkaW5nIHRoZSBuZXcgZnVuY3Rp
-b24gY2FsbCBhZGRzIHR3bw0KPiBpbnN0cnVjdGlvbnMgKENBTEwgYW5kIFJFVCkgZm9yIGV2
-ZXJ5IGludGVycnVwdCBvciBleGNlcHRpb24uDQo+IA0KPiBQVVNIX0FORF9DTEVBUl9SRUdT
-IGlzIG5vdCBleHRyYSBpbnN0cnVjdGlvbnMgYWRkZWQgaGVyZS4NCj4gDQo+IFNpbmNlIHRo
-aXMgcGF0Y2ggYWRkcyBleHRyYSBvdmVyaGVhZCAoQ0FMTCBhbmQgUkVUKSwgdGhlIGNoYW5n
-ZWxvZw0KPiBoYXMgdG8gZXhwbGFpbiB3aHkgaXQgaXMgd29ydGggaXQgbm90IGp1c3QgZm9y
-IGNvbnZlcnRpbmcgQVNNIHRvIEMuDQo+IA0KPiBUaGUgZXhwbGFuYXRpb24gaW4gdGhlIGNo
-YW5nZWxvZyBpcyB0aGF0IGl0IGNhbiBiZSBvZmZzZXR0ZWQgYnkgbGF0ZXINCj4gcmVkdWNl
-ZCBvdmVyaGVhZC4NCg0KSSB0aGluayB5b3UgY291bGQgYXZvaWQgdGhlIGV4dHJhIGNhbGwv
-cmV0IGJ5IGRvaW5nIHNvbWV0aGluZyBsaWtlOg0KDQpTWU1fQ09ERV9TVEFSVF9MT0NBTChl
-cnJvcl9leGl0X3B1c2hfYW5kX3NhdmUpDQoJVU5XSU5EX0hJTlRfRlVOQw0KCVBVU0hfQU5E
-X0NMRUFSX1JFR1Mgc2F2ZV9yZXQ9MQ0KCUVOQ09ERV9GUkFNRV9QT0lOVEVSIDgNCglqbXAg
-ZXJyb3JfZXhpdA0KU1lNX0NPREVfRU5EKGVycm9yX2V4aXRfcHVzaF9hbmRfc2F2ZSkNCg0K
-Li4uIGFuZCB1c2UgdGhpcyBpbnN0ZWFkIG9mIHBhdGNoIDU6DQoNCglBTFRFUk5BVElWRSAi
-Y2FsbCBlcnJvcl9lbnRyeV9wdXNoX2FuZF9zYXZlOyBtb3ZxICVyYXgsICVyc3AiLCBcDQoJ
-CSJjYWxsIHB1c2hfYW5kX2NsZWFyX3JlZ3MiLCBYODZfRkVBVFVSRV9YRU5QVg0KDQoNCkp1
-ZXJnZW4NCg0K
---------------dcDkuqcQuUZZxGvU0KNv8qYn
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
-
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------dcDkuqcQuUZZxGvU0KNv8qYn--
-
---------------YqP1iwCRBUTIZeXz0804kjpB--
-
---------------1JwBUxJAdhW3J26I4MnuZyS9
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmJv0coFAwAAAAAACgkQsN6d1ii/Ey9t
-cQf/T/qaEXMWEP2zMxRuVzZ+BNzlimARvAKy4BUlLdBuxZbEnQW0E9QIoXzcJQqxkZIMWn4vYgVu
-1a2Gv7ln+t+PsnsMQDJdQ9yRgQOprGJJIcHL2lUwQ+YC8r2HZ5eLq6rtZbxbeHcnd/xbaglNhATL
-hy3jtjsysmP5NmqjfC8g2NlH2Kdlx9rRAa58OLungD5vzpdou0U5xr/lKU2w2GkIc0cK2F8v1CRE
-0DPC+6A8TZEPgc2TyPeEB0wwgNbOWeom4mhB+zlwQPvt2iOTGw001umPEjffZ4E4wO4RvdEu9err
-sBF0nNSd1acPHS/ClA5SrqCbJi06ht9bwKGpWD70fA==
-=IuUX
------END PGP SIGNATURE-----
-
---------------1JwBUxJAdhW3J26I4MnuZyS9--

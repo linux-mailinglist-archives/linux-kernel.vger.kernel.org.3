@@ -2,54 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D646516D7B
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 11:38:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 385B4516D7D
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 11:38:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384276AbiEBJlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 05:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41972 "EHLO
+        id S1384277AbiEBJmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 05:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384260AbiEBJlR (ORCPT
+        with ESMTP id S1381191AbiEBJmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 05:41:17 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4C515A22;
-        Mon,  2 May 2022 02:37:48 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651484267;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bQykcMLoo3whmre75eemO2BA9Si3o9mNKcRIijtvUfk=;
-        b=XBdjfKe1Dkrz1xS4lgbxg4+Xdi9FHfpQWtUHVGsy+kluZqlqT5HZ34j07EpaeTp6Nuoz4A
-        7JN3rh8M87SxPSIMTNlEsEBEB0sFMp893gzxSswdwVWAO4EdASuIxNMtYSiAqEIllm5MmK
-        gxJMraMEpJ+N08aJagDo6zZB0xfsE6yTxAyR2yvbp/iMrGay8rvkO8zo5IEctDWTSgwFVn
-        0XNXVRTetdkyle6WknpSNIXALp1DO7LvKWKHT+oRLzQDtPNLWyqWKqlr2POgteln6/o0fU
-        F7/lLdfFi2fY442kwsD0EkowbQr7KaYER/bqp/R/Qk6Oa2kCbKweNpOTF30keg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651484267;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bQykcMLoo3whmre75eemO2BA9Si3o9mNKcRIijtvUfk=;
-        b=LY1K/DPFg7Mos6VSpKHVS2booc8Iw7choSEnDW2iiCcxWF2qLPVcST9n1fhHDocoNcuJZw
-        XgOMvnVhGCvCepBg==
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        arnd@arndb.de, Theodore Ts'o <tytso@mit.edu>
-Subject: Re: [PATCH v6 06/17] timekeeping: add raw clock fallback for
- random_get_entropy()
-In-Reply-To: <YmageFiSs0h1jzS7@zx2c4.com>
-References: <20220423212623.1957011-1-Jason@zx2c4.com>
- <20220423212623.1957011-7-Jason@zx2c4.com> <87y1zt1gqw.ffs@tglx>
- <YmageFiSs0h1jzS7@zx2c4.com>
-Date:   Mon, 02 May 2022 11:37:46 +0200
-Message-ID: <87y1zkmg0l.ffs@tglx>
+        Mon, 2 May 2022 05:42:21 -0400
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F6111144;
+        Mon,  2 May 2022 02:38:52 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: hector@marcansoft.com)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id B6B5441982;
+        Mon,  2 May 2022 09:38:47 +0000 (UTC)
+From:   Hector Martin <marcan@marcan.st>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Hector Martin <marcan@marcan.st>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] PCI: apple: PWREN GPIO support & related fixes
+Date:   Mon,  2 May 2022 18:38:29 +0900
+Message-Id: <20220502093832.32778-1-marcan@marcan.st>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,30 +47,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25 2022 at 15:22, Jason A. Donenfeld wrote:
-> On Mon, Apr 25, 2022 at 02:37:11PM +0200, Thomas Gleixner wrote:
->> On Sat, Apr 23 2022 at 23:26, Jason A. Donenfeld wrote:
->> >
->> > Cc: Thomas Gleixner <tglx@linutronix.de>
->> > Cc: Arnd Bergmann <arnd@arndb.de>
->> > Cc: Theodore Ts'o <tytso@mit.edu>
->> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
->> 
->> Not that I care much, but in general taking over authorship w/o
->> attribution via Suggested-by or such is frowned upon.
->
-> Sorry about that. Usually I'm pretty good about adding those. I guess
-> something must have gotten lost this time through, as the v1 of this
-> started out using sched_clock() (Arnd's suggestion) and then moved to
-> using the raw ktime clock after your suggestion, and I missed the
-> Suggested-by. I'll add that. Meanwhile, do you want to Ack this patch?
-> Do the technical aspects look okay to you?
+Hi all,
 
-Yes. Please fix the subject line:
+This short series adds support for the PWREN GPIO to the Apple PCIe
+controller driver, and along the way fixes some GPIO handling issues
+which cropped up.
 
-     timekeeping: Add raw clock fallback for random_get_entropy()
+Since the PWREN GPIO is provided by SMC which is a fairly high level
+driver, PCI can probe before it is ready. Worse, only some devices
+need PWREN, which can make the probe fail halfway through with some
+ports initialized and not others, which the driver cannot recover
+gracefully from. The second patch fixes this situation, so probe
+deferral works properly in these cases. The third patch adds PWREN
+support per se, and the first one is just related stuff I noticed
+while writing this.
 
-and stick the Cc's below the SOB, so it conforms with the TIP tree
-rules. Other than that:
+Hector Martin (3):
+  PCI: apple: GPIO handling nitfixes
+  PCI: apple: Probe all GPIOs for availability first
+  PCI: apple: Add support for optional PWREN GPIO
 
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+ drivers/pci/controller/pcie-apple.c | 67 ++++++++++++++++++++++++++---
+ 1 file changed, 60 insertions(+), 7 deletions(-)
+
+-- 
+2.35.1
+

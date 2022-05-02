@@ -2,214 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65CF651761C
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 19:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCA9E517623
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 19:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386744AbiEBRtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 13:49:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50812 "EHLO
+        id S1386774AbiEBRwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 13:52:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386738AbiEBRtG (ORCPT
+        with ESMTP id S240418AbiEBRwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 13:49:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2AD9B6448
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 10:45:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651513536;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZpWtnU28DeMLlZx+0CF26u0/lqm9paj6qvzL5cYPTzY=;
-        b=aoix2u2FzHT9dSo6N3teaaUWMwq+ZukKFyXTsSiXahBXq5p+Cq5uzPaWTq+fUCQjADmlNM
-        mnW3BaknatT5ZEtTZV8y+MNf7LrUFwMRL07skCceyc0NNEqhhsfB9AtcECt6rsZ/Q/1bET
-        gSpKXAwFNcf0UtmOO4huGCa2R5o14yg=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-661-8DZ1PbNdONGRTdkr9khnLA-1; Mon, 02 May 2022 13:45:35 -0400
-X-MC-Unique: 8DZ1PbNdONGRTdkr9khnLA-1
-Received: by mail-ed1-f72.google.com with SMTP id b24-20020a50e798000000b0041631767675so9095077edn.23
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 10:45:35 -0700 (PDT)
+        Mon, 2 May 2022 13:52:33 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682C665C1;
+        Mon,  2 May 2022 10:49:02 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id j8-20020a17090a060800b001cd4fb60dccso13308724pjj.2;
+        Mon, 02 May 2022 10:49:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=COitYDD2QK7Io8HotGUG1E8FA+/THRtBu4YhBbnt/9Y=;
+        b=HOyChXNPd0gP8UKUBeE83hBU+0I2BPcZUG97FRQMY6OdeL1mY1npyxO6BZgT3VAeAp
+         0elyzuO/naP/5I+8qrVeGHEnOFq/CcW0LCmKn9XPrUKUZasvV/MEP6aT/NyAr7ys++0B
+         J44ALS2noyL9fwIcrl6+QM1i/Rj+mPZYo347HeVMJ1U2xzedNrK4kyg1F52zm26VtIkU
+         t5Yb3R3eWyrMd/KGCDJWKL42ROc0YefM3H6fx3URH4r86wVEX+mDLM+OcCRYqD7oYATm
+         PUtxnJrhRMeiYuhPsn+KfyOqm7MHqqbAWntdfLi4mjt2D03YdLlKT3X1E4MZzYsMM6wU
+         OtSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZpWtnU28DeMLlZx+0CF26u0/lqm9paj6qvzL5cYPTzY=;
-        b=kQwcAqqgthBTJppj5DTMAFkeVpQ085iA0vFFJoKKI8qe1sHhRId73TVxqdsnXR0YIW
-         9ftVSgNqOpKfWMHm66H3lqY2Xg74HEEQRoVMoVlStpT5+QerAt+koBLLoXXCpuVjQFcX
-         UUv4YMS3x8xzjh/dBjbyk1HNHziAMSx3mwMOCFbIZN5EGu5Yx7uYZSzmuxaEFJiLMCKW
-         BxDJXvhDB8aZWBakVSYLEc6X8D1OME9fuCRul2QA43/ANPRCKEdcSfrs6x3ltCxUnm4y
-         VSzTx0whHkAs/q6C52ftN77Ko9dfCnXOgVNNggeA9mVffvsMLJAZIwx2oBtbXUp2wA57
-         9/yg==
-X-Gm-Message-State: AOAM530i7XlOIOJZQLkIZ7xLIe9xswht/4Vks16cYDCsNw4ZrMErwVnd
-        fFs+vuJrqYlu0Y5Vy6MQG/rfw3h01topir4ZMwsS+xHo9hlBSTtOoQnd9q3m1Fme+RJxbu7pSLi
-        qQgEtUucT4gY9xsimk9vHhICU
-X-Received: by 2002:a05:6402:b4d:b0:425:ec4a:a37e with SMTP id bx13-20020a0564020b4d00b00425ec4aa37emr14220527edb.292.1651513533711;
-        Mon, 02 May 2022 10:45:33 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxVrLFuHmAYZ/x2elNEJveRt7ttFsZaihrGxO8iC2geGMkN3uJQP2EAc8iuaFAz0U/8B26UUQ==
-X-Received: by 2002:a05:6402:b4d:b0:425:ec4a:a37e with SMTP id bx13-20020a0564020b4d00b00425ec4aa37emr14220501edb.292.1651513533309;
-        Mon, 02 May 2022 10:45:33 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id mm9-20020a170906cc4900b006f3ef214dd9sm3776233ejb.63.2022.05.02.10.45.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 10:45:32 -0700 (PDT)
-Message-ID: <93a99e53-abf6-db1b-f610-e94cd8d93a5c@redhat.com>
-Date:   Mon, 2 May 2022 19:45:30 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=COitYDD2QK7Io8HotGUG1E8FA+/THRtBu4YhBbnt/9Y=;
+        b=8RQMkIUu56s5EhcJ5AAn00RqL3RjJ5gpjVBfAuyRYrJcu188SFMWDEH3FV2mFs9o/P
+         Rk0wCo28IyKIGJtkDIxDlFafw6a/Je5bjvVUf6U/V0XF6QC98+WK8sw3wimYAZQaUXmT
+         X1QjeOA9yvB6yE9WCy0iRLl0vGGW8zcI0bY3b6Q9uXKiE8fB4Yy29+OvnBe/u1faWCy1
+         ky5xgkOaZXAwdWCSmqhacvEPhBiun8/VdLetbHu1/4msWxEGWDiqxyvrwmV6eeXGMFd6
+         rj1+ztleYDB+IbMTCXpIjSypa9SNumYLDjpw57dKdaJf7yPf6ZPvQWsb+byzp0zV5JAb
+         q+hg==
+X-Gm-Message-State: AOAM533BX0kNhXZHlQdWO+cB3aNpQLWVeWW4lnlAeE16RoDCN6YwyPtG
+        rTbCZlrirPwQamMpHqi+yCvpJDPUfHMExBKTvw4=
+X-Google-Smtp-Source: ABdhPJw033z/wJCqMFoN48CqODTw8SowfGoCVw6iDHO+NnvXKCmKg2FFVSOMM6+brasxr0pC2UIGiFYYpF4KzZUBQ1c=
+X-Received: by 2002:a17:903:32d2:b0:15d:ea5:3e0f with SMTP id
+ i18-20020a17090332d200b0015d0ea53e0fmr13007774plr.117.1651513741762; Mon, 02
+ May 2022 10:49:01 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v4] KVM: SEV: Mark nested locking of vcpu->lock
-Content-Language: en-US
-To:     Peter Gonda <pgonda@google.com>, kvm@vger.kernel.org
-Cc:     John Sperbeck <jsperbeck@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Hillf Danton <hdanton@sina.com>, linux-kernel@vger.kernel.org
-References: <20220502165807.529624-1-pgonda@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220502165807.529624-1-pgonda@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <165119280115.15698.2629172320052218921.stgit@noble.brown>
+ <165119301488.15698.9457662928942765453.stgit@noble.brown>
+ <CAHbLzko+9nBem8GnxQJ8RQu7bizQMMmS1TNqbRXcgkjUs+JuMw@mail.gmail.com> <165146539609.24404.4051313590023463843@noble.neil.brown.name>
+In-Reply-To: <165146539609.24404.4051313590023463843@noble.neil.brown.name>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Mon, 2 May 2022 10:48:49 -0700
+Message-ID: <CAHbLzkpF4zedBmipjX8Zy5F=Fffez+xgxTAvveaz1nRHb9Wg_Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] MM: handle THP in swap_*page_fs()
+To:     NeilBrown <neilb@suse.de>, Huang Ying <ying.huang@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Christoph Hellwig <hch@lst.de>,
+        Miaohe Lin <linmiaohe@huawei.com>, linux-nfs@vger.kernel.org,
+        Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/2/22 18:58, Peter Gonda wrote:
-> svm_vm_migrate_from() uses sev_lock_vcpus_for_migration() to lock all
-> source and target vcpu->locks. Unfortunately there is an 8 subclass
-> limit, so a new subclass cannot be used for each vCPU. Instead maintain
-> ownership of the first vcpu's mutex.dep_map using a role specific
-> subclass: source vs target. Release the other vcpu's mutex.dep_maps.
-> 
-> Fixes: b56639318bb2b ("KVM: SEV: Add support for SEV intra host migration")
-> Reported-by: John Sperbeck<jsperbeck@google.com>
-> Suggested-by: David Rientjes <rientjes@google.com>
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Hillf Danton <hdanton@sina.com>
-> Cc: kvm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Peter Gonda <pgonda@google.com>
+On Sun, May 1, 2022 at 9:23 PM NeilBrown <neilb@suse.de> wrote:
+>
+> On Sat, 30 Apr 2022, Yang Shi wrote:
+> > On Thu, Apr 28, 2022 at 5:44 PM NeilBrown <neilb@suse.de> wrote:
+> > >
+> > > Pages passed to swap_readpage()/swap_writepage() are not necessarily all
+> > > the same size - there may be transparent-huge-pages involves.
+> > >
+> > > The BIO paths of swap_*page() handle this correctly, but the SWP_FS_OPS
+> > > path does not.
+> > >
+> > > So we need to use thp_size() to find the size, not just assume
+> > > PAGE_SIZE, and we need to track the total length of the request, not
+> > > just assume it is "page * PAGE_SIZE".
+> >
+> > Swap-over-nfs doesn't support THP swap IIUC. So SWP_FS_OPS should not
+> > see THP at all. But I agree to remove the assumption about page size
+> > in this path.
+>
+> Can you help me understand this please.  How would the swap code know
+> that swap-over-NFS doesn't support THP swap?  There is no reason that
+> NFS wouldn't be able to handle 2MB writes.  Even 1GB should work though
+> NFS would have to split into several smaller WRITE requests.
 
-Looks good, thanks!
+AFAICT, THP swap is only supported on non-rotate block devices, for
+example, SSD, PMEM, etc. IIRC, the swap device has to support the
+cluster in order to swap THP. The cluster is only supported by
+non-rotate block devices.
 
-Paolo
+Looped Ying in, who is the author of THP swap.
 
-> ---
-> 
-> V4
->   * Due to 8 subclass limit keep dep_map on only the first vcpu and
->     release the others.
-> 
-> V3
->   * Updated signature to enum to self-document argument.
->   * Updated comment as Seanjc@ suggested.
-> 
-> Tested by running sev_migrate_tests with lockdep enabled. Before we see
-> a warning from sev_lock_vcpus_for_migration(). After we get no warnings.
-> 
-> ---
->   arch/x86/kvm/svm/sev.c | 46 ++++++++++++++++++++++++++++++++++++++----
->   1 file changed, 42 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index 75fa6dd268f0..0239def64eaa 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-> @@ -1591,24 +1591,55 @@ static void sev_unlock_two_vms(struct kvm *dst_kvm, struct kvm *src_kvm)
->   	atomic_set_release(&src_sev->migration_in_progress, 0);
->   }
->   
-> +/*
-> + * To suppress lockdep false positives, subclass all vCPU mutex locks by
-> + * assigning even numbers to the source vCPUs and odd numbers to destination
-> + * vCPUs based on the vCPU's index.
-> + */
-> +enum sev_migration_role {
-> +	SEV_MIGRATION_SOURCE = 0,
-> +	SEV_MIGRATION_TARGET,
-> +	SEV_NR_MIGRATION_ROLES,
-> +};
->   
-> -static int sev_lock_vcpus_for_migration(struct kvm *kvm)
-> +static int sev_lock_vcpus_for_migration(struct kvm *kvm,
-> +					enum sev_migration_role role)
->   {
->   	struct kvm_vcpu *vcpu;
->   	unsigned long i, j;
-> +	bool first = true;
->   
->   	kvm_for_each_vcpu(i, vcpu, kvm) {
-> -		if (mutex_lock_killable(&vcpu->mutex))
-> +		if (mutex_lock_killable_nested(&vcpu->mutex, role))
->   			goto out_unlock;
-> +
-> +		if (first) {
-> +			/*
-> +			 * Reset the role to one that avoids colliding with
-> +			 * the role used for the first vcpu mutex.
-> +			 */
-> +			role = SEV_NR_MIGRATION_ROLES;
-> +			first = false;
-> +		} else {
-> +			mutex_release(&vcpu->mutex.dep_map, _THIS_IP_);
-> +		}
->   	}
->   
->   	return 0;
->   
->   out_unlock:
-> +
-> +	first = true;
->   	kvm_for_each_vcpu(j, vcpu, kvm) {
->   		if (i == j)
->   			break;
->   
-> +		if (first)
-> +			first = false;
-> +		else
-> +			mutex_acquire(&vcpu->mutex.dep_map, role, 0, _THIS_IP_);
-> +
-> +
->   		mutex_unlock(&vcpu->mutex);
->   	}
->   	return -EINTR;
-> @@ -1618,8 +1649,15 @@ static void sev_unlock_vcpus_for_migration(struct kvm *kvm)
->   {
->   	struct kvm_vcpu *vcpu;
->   	unsigned long i;
-> +	bool first = true;
->   
->   	kvm_for_each_vcpu(i, vcpu, kvm) {
-> +		if (first)
-> +			first = false;
-> +		else
-> +			mutex_acquire(&vcpu->mutex.dep_map,
-> +				      SEV_NR_MIGRATION_ROLES, 0, _THIS_IP_);
-> +
->   		mutex_unlock(&vcpu->mutex);
->   	}
->   }
-> @@ -1745,10 +1783,10 @@ int sev_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_fd)
->   		charged = true;
->   	}
->   
-> -	ret = sev_lock_vcpus_for_migration(kvm);
-> +	ret = sev_lock_vcpus_for_migration(kvm, SEV_MIGRATION_SOURCE);
->   	if (ret)
->   		goto out_dst_cgroup;
-> -	ret = sev_lock_vcpus_for_migration(source_kvm);
-> +	ret = sev_lock_vcpus_for_migration(source_kvm, SEV_MIGRATION_TARGET);
->   	if (ret)
->   		goto out_dst_vcpu;
->   
-
+>
+> Thanks,
+> NeilBrown
+>
+>
+> >
+> > >
+> > > Reported-by: Miaohe Lin <linmiaohe@huawei.com>
+> > > Signed-off-by: NeilBrown <neilb@suse.de>
+> > > ---
+> > >  mm/page_io.c |   23 +++++++++++++----------
+> > >  1 file changed, 13 insertions(+), 10 deletions(-)
+> > >
+> > > diff --git a/mm/page_io.c b/mm/page_io.c
+> > > index c132511f521c..d636a3531cad 100644
+> > > --- a/mm/page_io.c
+> > > +++ b/mm/page_io.c
+> > > @@ -239,6 +239,7 @@ struct swap_iocb {
+> > >         struct kiocb            iocb;
+> > >         struct bio_vec          bvec[SWAP_CLUSTER_MAX];
+> > >         int                     pages;
+> > > +       int                     len;
+> > >  };
+> > >  static mempool_t *sio_pool;
+> > >
+> > > @@ -261,7 +262,7 @@ static void sio_write_complete(struct kiocb *iocb, long ret)
+> > >         struct page *page = sio->bvec[0].bv_page;
+> > >         int p;
+> > >
+> > > -       if (ret != PAGE_SIZE * sio->pages) {
+> > > +       if (ret != sio->len) {
+> > >                 /*
+> > >                  * In the case of swap-over-nfs, this can be a
+> > >                  * temporary failure if the system has limited
+> > > @@ -301,7 +302,7 @@ static int swap_writepage_fs(struct page *page, struct writeback_control *wbc)
+> > >                 sio = *wbc->swap_plug;
+> > >         if (sio) {
+> > >                 if (sio->iocb.ki_filp != swap_file ||
+> > > -                   sio->iocb.ki_pos + sio->pages * PAGE_SIZE != pos) {
+> > > +                   sio->iocb.ki_pos + sio->len != pos) {
+> > >                         swap_write_unplug(sio);
+> > >                         sio = NULL;
+> > >                 }
+> > > @@ -312,10 +313,12 @@ static int swap_writepage_fs(struct page *page, struct writeback_control *wbc)
+> > >                 sio->iocb.ki_complete = sio_write_complete;
+> > >                 sio->iocb.ki_pos = pos;
+> > >                 sio->pages = 0;
+> > > +               sio->len = 0;
+> > >         }
+> > >         sio->bvec[sio->pages].bv_page = page;
+> > > -       sio->bvec[sio->pages].bv_len = PAGE_SIZE;
+> > > +       sio->bvec[sio->pages].bv_len = thp_size(page);
+> > >         sio->bvec[sio->pages].bv_offset = 0;
+> > > +       sio->len += thp_size(page);
+> > >         sio->pages += 1;
+> > >         if (sio->pages == ARRAY_SIZE(sio->bvec) || !wbc->swap_plug) {
+> > >                 swap_write_unplug(sio);
+> > > @@ -371,8 +374,7 @@ void swap_write_unplug(struct swap_iocb *sio)
+> > >         struct address_space *mapping = sio->iocb.ki_filp->f_mapping;
+> > >         int ret;
+> > >
+> > > -       iov_iter_bvec(&from, WRITE, sio->bvec, sio->pages,
+> > > -                     PAGE_SIZE * sio->pages);
+> > > +       iov_iter_bvec(&from, WRITE, sio->bvec, sio->pages, sio->len);
+> > >         ret = mapping->a_ops->swap_rw(&sio->iocb, &from);
+> > >         if (ret != -EIOCBQUEUED)
+> > >                 sio_write_complete(&sio->iocb, ret);
+> > > @@ -383,7 +385,7 @@ static void sio_read_complete(struct kiocb *iocb, long ret)
+> > >         struct swap_iocb *sio = container_of(iocb, struct swap_iocb, iocb);
+> > >         int p;
+> > >
+> > > -       if (ret == PAGE_SIZE * sio->pages) {
+> > > +       if (ret == sio->len) {
+> > >                 for (p = 0; p < sio->pages; p++) {
+> > >                         struct page *page = sio->bvec[p].bv_page;
+> > >
+> > > @@ -415,7 +417,7 @@ static void swap_readpage_fs(struct page *page,
+> > >                 sio = *plug;
+> > >         if (sio) {
+> > >                 if (sio->iocb.ki_filp != sis->swap_file ||
+> > > -                   sio->iocb.ki_pos + sio->pages * PAGE_SIZE != pos) {
+> > > +                   sio->iocb.ki_pos + sio->len != pos) {
+> > >                         swap_read_unplug(sio);
+> > >                         sio = NULL;
+> > >                 }
+> > > @@ -426,10 +428,12 @@ static void swap_readpage_fs(struct page *page,
+> > >                 sio->iocb.ki_pos = pos;
+> > >                 sio->iocb.ki_complete = sio_read_complete;
+> > >                 sio->pages = 0;
+> > > +               sio->len = 0;
+> > >         }
+> > >         sio->bvec[sio->pages].bv_page = page;
+> > > -       sio->bvec[sio->pages].bv_len = PAGE_SIZE;
+> > > +       sio->bvec[sio->pages].bv_len = thp_size(page);
+> > >         sio->bvec[sio->pages].bv_offset = 0;
+> > > +       sio->len += thp_size(page);
+> > >         sio->pages += 1;
+> > >         if (sio->pages == ARRAY_SIZE(sio->bvec) || !plug) {
+> > >                 swap_read_unplug(sio);
+> > > @@ -521,8 +525,7 @@ void __swap_read_unplug(struct swap_iocb *sio)
+> > >         struct address_space *mapping = sio->iocb.ki_filp->f_mapping;
+> > >         int ret;
+> > >
+> > > -       iov_iter_bvec(&from, READ, sio->bvec, sio->pages,
+> > > -                     PAGE_SIZE * sio->pages);
+> > > +       iov_iter_bvec(&from, READ, sio->bvec, sio->pages, sio->len);
+> > >         ret = mapping->a_ops->swap_rw(&sio->iocb, &from);
+> > >         if (ret != -EIOCBQUEUED)
+> > >                 sio_read_complete(&sio->iocb, ret);
+> > >
+> > >
+> > >
+> >

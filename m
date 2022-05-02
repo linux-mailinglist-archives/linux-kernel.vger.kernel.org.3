@@ -2,218 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF2C1516A9D
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 08:00:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59568516AA1
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 08:03:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383406AbiEBGDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 02:03:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59920 "EHLO
+        id S1383420AbiEBGHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 02:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231432AbiEBGD3 (ORCPT
+        with ESMTP id S1348929AbiEBGHK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 02:03:29 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB343FBF0;
-        Sun,  1 May 2022 23:00:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651471201; x=1683007201;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=rhf9Y5lTA+NJj7q6473ZroJ+mCTDCnohi+5bLCeIjTM=;
-  b=NQpvGDmXxmsUYFRqNER9b/ccLQO6tCPFndzNvpMO7Lo/y7Y4Be0za6Nj
-   0ypb0rWM7gPNvSV23fRNkQyU1SmqVS5JdKAUvF7DzU4eD5DDj3kunNt/A
-   WaInHCD+bb9KxjCZ8ZoUUexRCfY2Pkryn8jI+3mfTRx0OE8ssbzvFs53O
-   Q1sVi/lXdh40j/vS+lwMHgGz4iQ+1+QJ9ZTw3ql51Ol5r3Ckqvj6r3sKd
-   1LpAU7ixNciBx4V8odDSJzCZwbD8OzEPSBBmey40isx08V4x1WgugKPdy
-   pFNXPHbPzWSXzPeFmW8Wm/OO93YGTdna0aJ6VRRPs1pD0IFEq40e14gyX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="264718945"
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="264718945"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 23:00:01 -0700
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="535701165"
-Received: from bwu50-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.2.219])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 22:59:57 -0700
-Message-ID: <af603d66512ec5dca0c240cf81c83de7dfe730e7.camel@intel.com>
-Subject: Re: [PATCH v3 13/21] x86/virt/tdx: Allocate and set up PAMTs for
- TDMRs
-From:   Kai Huang <kai.huang@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-Date:   Mon, 02 May 2022 17:59:55 +1200
-In-Reply-To: <5984b61f-6a4a-c12a-944d-f4a78bdefc3d@intel.com>
-References: <cover.1649219184.git.kai.huang@intel.com>
-         <ffc2eefdd212a31278978e8bfccd571355db69b0.1649219184.git.kai.huang@intel.com>
-         <c9b17e50-e665-3fc6-be8c-5bb16afa784e@intel.com>
-         <3664ab2a8e0b0fcbb4b048b5c3aa5a6e85f9618a.camel@intel.com>
-         <5984b61f-6a4a-c12a-944d-f4a78bdefc3d@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Mon, 2 May 2022 02:07:10 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935504BB9A
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 23:03:40 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id v12so18228975wrv.10
+        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 23:03:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4Wu5UbbLjO4fkVtRhATuGMYwwxjW91yZECIVVs3EXU0=;
+        b=SCvBo61Id+dAqR8kqisUnDTJuBNQj7Vs0uVgzw/U9Quq+SsoF9gpIsUOLyajaPHVFL
+         UGEXVCOvJgY5QKV17WRq/67bA3xhjSOhxEiS+1+2peE2irX76CoXN82/MBw1LgM6L5hD
+         2C02doNAqdL7lOsGzcA0nDSRdIIZZAAgULjF4iv9rK2JhCUHFzTvEIhbyGz4rAjMwNdC
+         PL3i2q02XucjoePSxwqHT0XWq7hDq68pzo39J3oaUP6B9cwXCowSnIteVJbLzRdi4xzN
+         wyhoJ43ogDBU4ZNUlbfcMv3DM/hNx/sp4o5HvQNon4W4REW++0v3SCCgS0aMf96kWfDz
+         kAQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4Wu5UbbLjO4fkVtRhATuGMYwwxjW91yZECIVVs3EXU0=;
+        b=zW3lfwNHRgByMqMPapXBfWoKvIhuphGoej+OQbJ/dg5Kyrxz5x/tuoPaCiGefmkBrj
+         u1AFNgKK03YDhDMJRntEObi7l11ZBscZ9YJULP/KR4FIwxbW7JrIT3zFLQvkBMZqxeGe
+         roE9Lds6Xl3KLLd/1owOnh/fs6lB+Ry1pwzsCgmmoNPUa+tpYba3dxXt8RdfzX9a7lMT
+         HRoMeAjPiMi9CC14rZGZqWzbE8Ub7pGhiOTlK3fAsWBqxr+/dN/BrH6jnYoh0EC70sf2
+         6T5UD6mpylvqgbZoEl7Hb7aTaKtT4X4mQxDawvg+r6huhsPRpPj2dkXycsKCbZavC/IQ
+         69ZA==
+X-Gm-Message-State: AOAM533NFVRF8Jf8PafGllFgjZwiEsNaJn2KiVDHJDNVKt/d2Ohc9SiD
+        +Eok1ssykMOLfzCGEDpHaFcprCX7d34MKm3W
+X-Google-Smtp-Source: ABdhPJwl/CgLhe01W0w1JZFddXPSEEwRbA3/K8E4VQg0z0/nxjTEpnDO3f469W8gdZ1CLEFJzCRw2g==
+X-Received: by 2002:a5d:64c8:0:b0:20c:6969:b277 with SMTP id f8-20020a5d64c8000000b0020c6969b277mr866262wri.354.1651471419059;
+        Sun, 01 May 2022 23:03:39 -0700 (PDT)
+Received: from google.com (49.222.77.34.bc.googleusercontent.com. [34.77.222.49])
+        by smtp.gmail.com with ESMTPSA id y8-20020adfc7c8000000b0020c5253d902sm6212164wrg.78.2022.05.01.23.03.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 May 2022 23:03:38 -0700 (PDT)
+Date:   Mon, 2 May 2022 06:03:37 +0000
+From:   Sebastian Ene <sebastianene@google.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org,
+        qperret@google.com, will@kernel.org, maz@kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v4 0/2] Detect stalls on guest vCPUS
+Message-ID: <Ym90OaUsWW6hjjo9@google.com>
+References: <20220429083030.3241640-1-sebastianene@google.com>
+ <YmxJyUqdsZmm8yE2@robh.at.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmxJyUqdsZmm8yE2@robh.at.kernel.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-29 at 07:20 -0700, Dave Hansen wrote:
-> On 4/29/22 00:46, Kai Huang wrote:
-> > On Thu, 2022-04-28 at 10:12 -0700, Dave Hansen wrote:
-> > > This is also a good place to note the downsides of using
-> > > alloc_contig_pages().
+On Fri, Apr 29, 2022 at 03:25:45PM -0500, Rob Herring wrote:
+> On Fri, Apr 29, 2022 at 08:30:29AM +0000, Sebastian Ene wrote:
+> > This adds a mechanism to detect stalls on the guest vCPUS by creating a
+> > per CPU hrtimer which periodically 'pets' the host backend driver.
+> > On a conventional watchdog-core driver, the userspace is responsible for
+> > delivering the 'pet' events by writing to the particular /dev/watchdogN node.
+> > In this case we require a strong thread affinity to be able to
+> > account for lost time on a per vCPU basis.
 > > 
-> > For instance:
+> > This device driver acts as a soft lockup detector by relying on the host
+> > backend driver to measure the elapesed time between subsequent 'pet' events.
+> > If the elapsed time doesn't match an expected value, the backend driver
+> > decides that the guest vCPU is locked and resets the guest. The host
+> > backend driver takes into account the time that the guest is not
+> > running. The communication with the backend driver is done through MMIO
+> > and the register layout of the virtual watchdog is described as part of
+> > the backend driver changes.
 > > 
-> > 	The allocation may fail when memory usage is under pressure.
-> 
-> It's not really memory pressure, though.  The larger the allocation, the
-> more likely it is to fail.  The more likely it is that the kernel can't
-> free the memory or that if you need 1GB of contiguous memory that
-> 999.996MB gets freed, but there is one stubborn page left.
-> 
-> alloc_contig_pages() can and will fail.  The only mitigation which is
-> guaranteed to avoid this is doing the allocation at boot.  But, you're
-> not doing that to avoid wasting memory on every TDX system that doesn't
-> use TDX.
-> 
-> A *good* way (although not foolproof) is to launch a TDX VM early in
-> boot before memory gets fragmented or consumed.  You might even want to
-> recommend this in the documentation.
-
-"launch a TDX VM early in boot" I suppose you mean having some boot-time service
-which launches a TDX VM before we get the login interface.  I'll put this in the
-documentation.
-
-How about adding below in the changelog:
-
-"
-However using alloc_contig_pages() to allocate large physically contiguous
-memory at runtime may fail.  The larger the allocation, the more likely it is to
-fail.  Due to the fragmentation, the kernel may need to move pages out of the
-to-be-allocated contiguous memory range but it may fail to move even the last
-stubborn page.  A good way (although not foolproof) is to launch a TD VM early
-in boot to get PAMTs allocated before memory gets fragmented or consumed.
-"
-
-> 
-> > > > +/*
-> > > > + * Locate the NUMA node containing the start of the given TDMR's first
-> > > > + * RAM entry.  The given TDMR may also cover memory in other NUMA nodes.
-> > > > + */
-> > > 
-> > > Please add a sentence or two on the implications here of what this means
-> > > when it happens.  Also, the joining of e820 regions seems like it might
-> > > span NUMA nodes.  What prevents that code from just creating one large
-> > > e820 area that leads to one large TDMR and horrible NUMA affinity for
-> > > these structures?
+> > The host backend driver is implemented as part of:
+> > https://chromium-review.googlesource.com/c/chromiumos/platform/crosvm/+/3548817
 > > 
-> > How about adding:
-> > 
-> > 	When TDMR is created, it stops spanning at NUAM boundary.
-> 
-> I actually don't know what that means at all.  I was thinking of
-> something like this.
-> 
-> /*
->  * Pick a NUMA node on which to allocate this TDMR's metadata.
->  *
->  * This is imprecise since TDMRs are 1GB aligned and NUMA nodes might
->  * not be.  If the TDMR covers more than one node, just use the _first_
->  * one.  This can lead to small areas of off-node metadata for some
->  * memory.
->  */
+> > Changelog v4:
+> >  - rename the source from vm-wdt.c -> vm-watchdog.c
+> >  - convert all the error logging calls from pr_* to dev_* calls
+> >  - rename the DTS node "clock" to "clock-frequency"
 
-Thanks.
+Hi,
 
 > 
-> > > > +static int tdmr_get_nid(struct tdmr_info *tdmr)
-> > > > +{
-> > > > +	u64 start, end;
-> > > > +	int i;
-> > > > +
-> > > > +	/* Find the first RAM entry covered by the TDMR */
+> Why do I have a v4 now when the discussion on v3 is not concluded. Give 
+> folks some time to respond. We're busy drinking from the firehose.
 > 
-> There's something else missing in here.  Why not just do:
-> 
-> 	return phys_to_target_node(TDMR_START(tdmr));
-> 
-> This would explain it:
-> 
-> 	/*
-> 	 * The beginning of the TDMR might not point to RAM.
-> 	 * Find its first RAM address which which its node can
-> 	 * be found.
-> 	 */
 
-Will use this.  Thanks.
+I am trying to address the issues incrementlly keeping a week cadence.
+Any feedback on this is welcomed.
 
-> 
-> > > > +	e820_for_each_mem(i, start, end)
-> > > > +		if (end > TDMR_START(tdmr))
-> > > > +			break;
-> > > 
-> > > Brackets around the big loop, please.
-> > 
-> > OK.
-> > 
-> > > 
-> > > > +	/*
-> > > > +	 * One TDMR must cover at least one (or partial) RAM entry,
-> > > > +	 * otherwise it is kernel bug.  WARN_ON() in this case.
-> > > > +	 */
-> > > > +	if (WARN_ON_ONCE((start >= end) || start >= TDMR_END(tdmr)))
-> > > > +		return 0;
-> 
-> This really means "no RAM found for this TDMR", right?  Can we say that,
-> please.
-
-OK will add it.  How about:
-
-	/*
-	 * No RAM found for this TDMR.  WARN() in this case, as it
-	 * cannot happen otherwise it is a kernel bug.
-	 */
-
-> 
-> 
-> > > > +	/*
-> > > > +	 * Allocate one chunk of physically contiguous memory for all
-> > > > +	 * PAMTs.  This helps minimize the PAMT's use of reserved areas
-> > > > +	 * in overlapped TDMRs.
-> > > > +	 */
-> > > 
-> > > Ahh, this explains it.  Considering that tdmr_get_pamt_sz() is really
-> > > just two lines of code, I'd probably just the helper and open-code it
-> > > here.  Then you only have one place to comment on it.
-> > 
-> > It has a loop and internally calls __tdmr_get_pamt_sz().  It looks doesn't fit
-> > if we open-code it here.
-> > 
-> > How about move this comment to tdmr_get_pamt_sz()?
-> 
-> I thought about that.  But tdmr_get_pamt_sz() isn't itself doing any
-> allocation so it doesn't make a whole lot of logical sense.  This is a
-> place where a helper _can_ be removed.  Remove it, please.
-
-OK.  Will remove the helper.  Thanks.
-
--- 
 Thanks,
--Kai
+Seb
 
-
+> Rob

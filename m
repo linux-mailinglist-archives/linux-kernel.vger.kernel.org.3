@@ -2,135 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9627651763F
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 20:02:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC09517649
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 20:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386778AbiEBSFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 14:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59320 "EHLO
+        id S1386806AbiEBSGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 14:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244294AbiEBSFX (ORCPT
+        with ESMTP id S1386791AbiEBSGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 14:05:23 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7093113D
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 11:01:53 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8A023484;
-        Mon,  2 May 2022 20:01:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1651514511;
-        bh=67dJ41o3vCWN4qbsLwb+8WQiFi5Hhk+5gnF+lEfS/O0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wY8yZ28zD03WpGE6pKLG8r5qRoXLg1yZi9pNrc+T3Rin4Kb2QID5s5ge3R3VlmrM5
-         /38QaJTAweQJLJMPywP/5/3yS9mx1D9hP9f+13JjqIYMONKrp6w4dyzMIxg7vrlrKu
-         +pRHjxOuAOcm+Efn0ecFW3wk/j7U0MC3KhGR7UFE=
-Date:   Mon, 2 May 2022 21:01:51 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 3/3] drm: Allow simpledrm to setup its emulated FB as
- firmware provided
-Message-ID: <YnAcj9O3l/qLc5ss@pendragon.ideasonboard.com>
-References: <20220502153900.408522-1-javierm@redhat.com>
- <20220502153900.408522-4-javierm@redhat.com>
- <YnAEDlikr+d8cvy4@pendragon.ideasonboard.com>
- <9556f080-d309-f396-6d28-1190bc94cc38@redhat.com>
+        Mon, 2 May 2022 14:06:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C211113D
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 11:02:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651514556;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/7hFm9ltFIzBATidA3Ww0iDJkWtpV+O0jI4LMjG86v8=;
+        b=JFTpcd50zgJOki0UH1r7lZxpArDCzT9229Q1bn/TynvU/835HdM6e/P7zbOGTEWMt3S5oc
+        PN25mrztMS0KxwgmKsGqwiXytpeN0O7lR3Szga4FEnnGDenzusDOJibuc0F57ZgHttQnnN
+        Kgz1u6V66WbuyKTDcdSAMIW6A6EguNI=
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
+ [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-462-2KcjjT-CP-edNLHnJrQCCw-1; Mon, 02 May 2022 14:02:35 -0400
+X-MC-Unique: 2KcjjT-CP-edNLHnJrQCCw-1
+Received: by mail-pf1-f200.google.com with SMTP id y141-20020a626493000000b0050d8c0745a3so7514678pfb.21
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 11:02:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=/7hFm9ltFIzBATidA3Ww0iDJkWtpV+O0jI4LMjG86v8=;
+        b=5CLuIsE2hcHJJovUZ6TDdo4WMYnl/PuX119IPwrrgIK0Ro8h5VgWnuXlv6YvlGjPpX
+         Cve7ctO3G6ld3yNhCE7L8ZpfTDlxK/LKaqiTkF2MLMPb9m4mBfdNxTAdyyGqaSSDW2gq
+         H2f6AmxFPWnS5Q0YE4QizNvCr3ri72KiTx3PJ3+jWsyeGDGJT0136UDRMxD8P47y4UkC
+         plS6LdDT6/+0Iyu6D/psRi0Ei6j3Guyc/sEZwNHOJCXE3LMb0dQuthplQcLL7m/F8V7V
+         ETDUFxe6q5ivoc0oZCkF988H1Nn7Ywrk7ybsaPdtoGiTYrVp9k+FycpL53BKBKuc+jbd
+         Y+kQ==
+X-Gm-Message-State: AOAM5321IqKRfgWUNmySqfH/0o0/DkYMdxCzVm/yg0LIMFtCFQ1Zb9dc
+        QVa+NIXC4AbpPUhQ/SipYSpFvGBs0LarVC2R8Xby60d9rmHFJck9Ik/9dSY8dpKAs15wujAAV//
+        ck59IiBz3rGXgtSXKe1wKnyyO
+X-Received: by 2002:a63:8442:0:b0:3ab:2451:5239 with SMTP id k63-20020a638442000000b003ab24515239mr10519518pgd.75.1651514554314;
+        Mon, 02 May 2022 11:02:34 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwSCpzMt2Hf99prkkLKqQDtNuXYmNZP4X35wY6IcPgEq003e4qRkyfeq0V97I2uydXBXWVeWg==
+X-Received: by 2002:a63:8442:0:b0:3ab:2451:5239 with SMTP id k63-20020a638442000000b003ab24515239mr10519492pgd.75.1651514554007;
+        Mon, 02 May 2022 11:02:34 -0700 (PDT)
+Received: from [10.10.69.234] ([8.34.116.185])
+        by smtp.gmail.com with ESMTPSA id x17-20020a17090ab01100b001d97f7fca06sm656pjq.24.2022.05.02.11.02.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 May 2022 11:02:33 -0700 (PDT)
+Message-ID: <29d0c1c3-a44e-4573-7e7e-32be07544dbe@redhat.com>
+Date:   Mon, 2 May 2022 20:02:31 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <9556f080-d309-f396-6d28-1190bc94cc38@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-US
+To:     Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        John Dias <joaodias@google.com>
+References: <20220502173558.2510641-1-minchan@kernel.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH] mm: fix is_pinnable_page against on cma page
+In-Reply-To: <20220502173558.2510641-1-minchan@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Javier,
-
-On Mon, May 02, 2022 at 07:09:17PM +0200, Javier Martinez Canillas wrote:
-> On 5/2/22 18:17, Laurent Pinchart wrote:
-> > On Mon, May 02, 2022 at 05:39:00PM +0200, Javier Martinez Canillas wrote:
-> >> Indicate to fbdev subsystem that the registered framebuffer is provided by
-> >> the system firmware, so that it can handle accordingly. For example, would
-> >> unregister the FB devices if asked to remove the conflicting framebuffers.
-> >>
-> >> Add a new DRM_FB_FW field to drm_fbdev_generic_setup() options parameter.
-> >> Drivers can use this to indicate the FB helper initialization that the FB
-> >> registered is provided by the firmware, so it can be configured as such.
-> >>
-> >> Suggested-by: Thomas Zimmermann <tzimmermann@suse.de>
-> >> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> >> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
-> >> ---
-> >>
-> >> (no changes since v1)
-> >>
-> >>  drivers/gpu/drm/drm_fb_helper.c  |  9 +++++++++
-> >>  drivers/gpu/drm/tiny/simpledrm.c |  2 +-
-> >>  include/drm/drm_fb_helper.h      | 10 ++++++++++
-> >>  3 files changed, 20 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
-> >> index fd0084ad77c3..775e47c5de1f 100644
-> >> --- a/drivers/gpu/drm/drm_fb_helper.c
-> >> +++ b/drivers/gpu/drm/drm_fb_helper.c
-> >> @@ -1891,6 +1891,10 @@ __drm_fb_helper_initial_config_and_unlock(struct drm_fb_helper *fb_helper,
-> >>  		/* don't leak any physical addresses to userspace */
-> >>  		info->flags |= FBINFO_HIDE_SMEM_START;
-> >>  
-> >> +	/* Indicate that the framebuffer is provided by the firmware */
-> >> +	if (fb_helper->firmware)
-> >> +		info->flags |= FBINFO_MISC_FIRMWARE;
-> >> +
-> >>  	/* Need to drop locks to avoid recursive deadlock in
-> >>  	 * register_framebuffer. This is ok because the only thing left to do is
-> >>  	 * register the fbdev emulation instance in kernel_fb_helper_list. */
-> >> @@ -2512,6 +2516,8 @@ static const struct drm_client_funcs drm_fbdev_client_funcs = {
-> >>   *
-> >>   * * DRM_FB_BPP: bits per pixel for the device. If the field is not set,
-> >>   *   @dev->mode_config.preferred_depth is used instead.
-> >> + * * DRM_FB_FW: if the framebuffer for the device is provided by the
-> >> + *   system firmware.
-> >>   *
-> >>   * This function sets up generic fbdev emulation for drivers that supports
-> >>   * dumb buffers with a virtual address and that can be mmap'ed.
-> >> @@ -2538,6 +2544,7 @@ void drm_fbdev_generic_setup(struct drm_device *dev, unsigned int options)
-> >>  {
-> >>  	struct drm_fb_helper *fb_helper;
-> >>  	unsigned int preferred_bpp = DRM_FB_GET_OPTION(DRM_FB_BPP, options);
-> >> +	bool firmware = DRM_FB_GET_OPTION(DRM_FB_FW, options);
-> >>  	int ret;
-> >>  
-> >>  	drm_WARN(dev, !dev->registered, "Device has not been registered.\n");
-> >> @@ -2570,6 +2577,8 @@ void drm_fbdev_generic_setup(struct drm_device *dev, unsigned int options)
-> >>  		preferred_bpp = 32;
-> >>  	fb_helper->preferred_bpp = preferred_bpp;
-> >>  
-> >> +	fb_helper->firmware = firmware;
-> > 
-> > I'd get rid of the local variable and write
-> >
+On 02.05.22 19:35, Minchan Kim wrote:
+> Pages on CMA area could have MIGRATE_ISOLATE as well as MIGRATE_CMA
+> so current is_pinnable_page could miss CMA pages which has MIGRATE_
+> ISOLATE. It ends up putting CMA pages longterm pinning possible on
+> pin_user_pages APIs so CMA allocation fails.
 > 
-> I actually considered that but then decided to add a local variable to
-> have both options set in the same place, since I thought that would be
-> easier to read and also consistent with how preferred_bpp is handled.
+> The CMA allocation path protects the migration type change race
+> using zone->lock but what GUP path need to know is just whether the
+> page is on CMA area or not rather than exact type. Thus, we don't
+> need zone->lock but just checks the migratype in either of
+> (MIGRATE_ISOLATE and MIGRATE_CMA).
 > 
-> Maybe I could go the other way around and rework patch 2/3 to also not
-> require a preferred_bpp local variable ? That patch won't be as small
-> as it's now though. -- 
+> Signed-off-by: Minchan Kim <minchan@kernel.org>
+> ---
+>  include/linux/mm.h | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 6acca5cecbc5..f59bbe3296e3 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -1625,8 +1625,10 @@ static inline bool page_needs_cow_for_dma(struct vm_area_struct *vma,
+>  #ifdef CONFIG_MIGRATION
+>  static inline bool is_pinnable_page(struct page *page)
+>  {
+> -	return !(is_zone_movable_page(page) || is_migrate_cma_page(page)) ||
+> -		is_zero_pfn(page_to_pfn(page));
+> +	int mt = get_pageblock_migratetype(page);
+> +
+> +	return !(is_zone_movable_page(page) || mt == MIGRATE_CMA ||
+> +		mt == MIGRATE_ISOLATE || is_zero_pfn(page_to_pfn(page)));
+>  }
+>  #else
+>  static inline bool is_pinnable_page(struct page *page)
 
-Up to you, or you could ignore the comment, it's minor. If you want to
-keep the variable, you could also make it const, it's a good practice to
-show it isn't intended to be modified.
+That implies that other memory ranges that are currently isolated
+(memory offlining, alloc_contig_range()) cannot be pinned. That might
+not be a bad thing, however, I think we could end up failing to pin
+something that's temporarily unmovable (due to temporary references).
+
+However, I assume we have the same issue right now already with
+ZONE_MOVABLE and MIGRATE_CMA when trying to pin a page residing on these
+there are temporarily unmovable and we fail to migrate. But it would now
+apply even without ZONE_MOVABLE or MIGRATE_CMA. Hm...
+
 
 -- 
-Regards,
+Thanks,
 
-Laurent Pinchart
+David / dhildenb
+

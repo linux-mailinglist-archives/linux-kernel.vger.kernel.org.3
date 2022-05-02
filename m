@@ -2,264 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E67D5517A28
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 00:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7343B517A2D
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 00:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238447AbiEBWqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 18:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39720 "EHLO
+        id S232785AbiEBWse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 18:48:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376784AbiEBWpO (ORCPT
+        with ESMTP id S230368AbiEBWs3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 18:45:14 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8DBFD20;
-        Mon,  2 May 2022 15:41:41 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 63DAB22260;
-        Tue,  3 May 2022 00:41:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1651531299;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=quewXMLWRGuNF9x++PYzltF9q3n3loXTwHKkv1bRl80=;
-        b=S6XX6MD6Qfd5FP38C5rYyyDzh+gBnoUBB5GRQDCtLOehVyQdtg74gt1KsU5d3tSIgVHhNd
-        /azGu+C/VqbpJCLsZfQvajEB5tHixNAdqAlS9WC7+koMEeIQM16Sb4644ev+LVc8vLwkdB
-        XPsp9rjhoEhH05Y/J34JJLJPdzh4H4E=
-From:   Michael Walle <michael@walle.cc>
-To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Tudor.Ambarus@microchip.com,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH v4 13/13] ARM: dts: kswitch-d10: enable networking
-Date:   Tue,  3 May 2022 00:41:27 +0200
-Message-Id: <20220502224127.2604333-14-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220502224127.2604333-1-michael@walle.cc>
-References: <20220502224127.2604333-1-michael@walle.cc>
+        Mon, 2 May 2022 18:48:29 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2551E0AA
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 15:44:58 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id l11-20020a17090a49cb00b001d923a9ca99so582119pjm.1
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 15:44:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9Pev6TadqoPCvCslhpANrkqa0tRzANTdzEtaxAf0Hbw=;
+        b=IO+ItVxTbHRREuluGK2fhmQblF4cgW5vavOTKIpFPkRROJX9gmuVnnXRYdROnlh0zK
+         5E/tkPZJOY5b9uCPVSTrQo5ZT1qEvx0sCk9u5l6zkQG9tJNfyrMIAV++5Lw/q2Ftl4OP
+         5q5eBsfs5slcB3cSP6ZXkHWEyjFQtO83O56Dk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9Pev6TadqoPCvCslhpANrkqa0tRzANTdzEtaxAf0Hbw=;
+        b=JkxuA7Kj5GsXHcOkWj/TFpTc7w8LfEeODlQHHWOMjkt6amGKwczFfjxdUgpUiD6Nm/
+         /JbJZO+LjnIomrhr2C7EicBuUpXwlxJwT0ZjU/StBJ4FKBPVj75uU7i2jGsCjWQECukd
+         fO34Ye30VQHwHd2uF8q0W+GqokZ13a7DYdr2Fhaqgmi4cTPLA3vnqeHjq1r4kFWBLOnq
+         gpylmA11pIG/vW0x8MLw3a36XYW4aZDYmlBkPmbA8rHwnKlFYAo7AZt2CvkGTONZz0LN
+         4fsD3NqParg/EtJbaj+LwqjmIAc6QT3CaCki9J/lxxfHqq7FVB+a2fzciv0s7HymczYA
+         QOtw==
+X-Gm-Message-State: AOAM532+LqbUbyLlYnBkESfF3hSmevHYZLaenj7+XLkU1Cza4RgqAwyP
+        Pxn3attDSvRnhd51RPbNU8g5Pg==
+X-Google-Smtp-Source: ABdhPJxhVHtiibpNcHj8mIUaI5q3jvfhB3UxBy63zLm72g4zQPjmd26WW0fmoc9EkpEka6ka3qUucw==
+X-Received: by 2002:a17:902:d4c2:b0:15e:abd0:926f with SMTP id o2-20020a170902d4c200b0015eabd0926fmr4925055plg.129.1651531497972;
+        Mon, 02 May 2022 15:44:57 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:1e1a:955c:a9ca:e550])
+        by smtp.gmail.com with UTF8SMTPSA id f3-20020a17090a654300b001d26c7d5aacsm218470pjs.13.2022.05.02.15.44.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 May 2022 15:44:57 -0700 (PDT)
+Date:   Mon, 2 May 2022 15:44:56 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, dm-devel@redhat.com,
+        linux-raid@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Song Liu <song@kernel.org>
+Subject: Re: [PATCH v2 2/3] LoadPin: Enable loading from trusted dm-verity
+ devices
+Message-ID: <YnBe6K72iKSDSqk9@google.com>
+References: <20220426213110.3572568-1-mka@chromium.org>
+ <20220426143059.v2.2.I01c67af41d2f6525c6d023101671d7339a9bc8b5@changeid>
+ <202204302316.AF04961@keescook>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <202204302316.AF04961@keescook>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable all the necessary network related nodes, wire the pinctrl
-configurations, add the PHYs and connect them to the corresponding
-network ports.
+On Sat, Apr 30, 2022 at 11:21:54PM -0700, Kees Cook wrote:
+> On Tue, Apr 26, 2022 at 02:31:09PM -0700, Matthias Kaehlcke wrote:
+> > I'm still doubting what would be the best way to configure
+> > the list of trusted digests. The approach in v2 of writing
+> > a path through sysctl is flexible, but it also feels a bit
+> > odd. I did some experiments with passing a file descriptor
+> > through sysctl, but it's also odd and has its own issues.
+> > Passing the list through a kernel parameter seems hacky.
+> > A Kconfig string would work, but can be have issues when
+> > the same config is used for different platforms, where
+> > some may have trusted digests and others not.
+> 
+> I prefer the idea of passing an fd, since that can just use LoadPin
+> itself to verify the origin of the fd.
+> 
+> I also agree, though, that it's weird as a sysctl. Possible thoughts:
+> 
+> - make it a new ioctl on /dev/mapper/control (seems reasonable given
+>   that it's specifically about dm devices).
+> - have LoadPin grow a securityfs node, maybe something like
+>   /sys/kernel/security/loadpin/dm-verify and do the ioctl there (seems
+>   reasonable given that it's specifically about LoadPin, but is perhaps
+>   more overhead to built the securityfs).
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- ...lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts | 16 +++
- .../lan966x-kontron-kswitch-d10-mmt-8g.dts    | 26 +++++
- .../dts/lan966x-kontron-kswitch-d10-mmt.dtsi  | 97 +++++++++++++++++++
- 3 files changed, 139 insertions(+)
+Thanks for your feedback!
 
-diff --git a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
-index 7b12cbe11c58..0f555eb45bda 100644
---- a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
-+++ b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
-@@ -76,3 +76,19 @@ fc4_b_pins: fc4-b-i2c-pins {
- 		function = "fc4_b";
- 	};
- };
-+
-+&port2 {
-+	phys = <&serdes 2 SERDES6G(0)>;
-+	sfp = <&sfp0>;
-+	managed = "in-band-status";
-+	phy-mode = "sgmii";
-+	status = "okay";
-+};
-+
-+&port3 {
-+	phys = <&serdes 3 SERDES6G(1)>;
-+	sfp = <&sfp1>;
-+	managed = "in-band-status";
-+	phy-mode = "sgmii";
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dts b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dts
-index 4b35f6c46e7f..5feef9a59a79 100644
---- a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dts
-+++ b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dts
-@@ -11,3 +11,29 @@ / {
- 	compatible = "kontron,kswitch-d10-mmt-8g", "kontron,s1921",
- 		     "microchip,lan9668", "microchip,lan966";
- };
-+
-+&mdio0 {
-+	phy2: ethernet-phy@3 {
-+		reg = <3>;
-+	};
-+
-+	phy3: ethernet-phy@4 {
-+		reg = <4>;
-+	};
-+};
-+
-+&port2 {
-+	phys = <&serdes 2 SERDES6G(0)>;
-+	phy-handle = <&phy2>;
-+	phy-mode = "sgmii";
-+	managed = "in-band-status";
-+	status = "okay";
-+};
-+
-+&port3 {
-+	phys = <&serdes 3 SERDES6G(1)>;
-+	phy-handle = <&phy3>;
-+	phy-mode = "sgmii";
-+	managed = "in-band-status";
-+	status = "okay";
-+};
-diff --git a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi
-index 4c1ebb4aa5b0..4cab1b3b3b29 100644
---- a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi
-+++ b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi
-@@ -5,6 +5,7 @@
- 
- /dts-v1/;
- #include "lan966x.dtsi"
-+#include "dt-bindings/phy/phy-lan966x-serdes.h"
- 
- / {
- 	aliases {
-@@ -52,6 +53,12 @@ fc3_b_pins: fc3-b-pins {
- 		function = "fc3_b";
- 	};
- 
-+	miim_c_pins: miim-c-pins {
-+		/* MDC, MDIO */
-+		pins = "GPIO_59", "GPIO_60";
-+		function = "miim_c";
-+	};
-+
- 	sgpio_a_pins: sgpio-a-pins {
- 		/* SCK, D0, D1 */
- 		pins = "GPIO_32", "GPIO_33", "GPIO_34";
-@@ -71,6 +78,92 @@ usart0_pins: usart0-pins {
- 	};
- };
- 
-+&mdio0 {
-+	pinctrl-0 = <&miim_c_pins>;
-+	pinctrl-names = "default";
-+	reset-gpios = <&gpio 29 GPIO_ACTIVE_LOW>;
-+	clock-frequency = <2500000>;
-+	status = "okay";
-+
-+	phy4: ethernet-phy@5 {
-+		reg = <5>;
-+		coma-mode-gpios = <&gpio 37 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	phy5: ethernet-phy@6 {
-+		reg = <6>;
-+		coma-mode-gpios = <&gpio 37 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	phy6: ethernet-phy@7 {
-+		reg = <7>;
-+		coma-mode-gpios = <&gpio 37 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	phy7: ethernet-phy@8 {
-+		reg = <8>;
-+		coma-mode-gpios = <&gpio 37 GPIO_ACTIVE_HIGH>;
-+	};
-+};
-+
-+&mdio1 {
-+	status = "okay";
-+};
-+
-+&phy0 {
-+	status = "okay";
-+};
-+
-+&phy1 {
-+	status = "okay";
-+};
-+
-+&port0 {
-+	phys = <&serdes 0 CU(0)>;
-+	phy-handle = <&phy0>;
-+	phy-mode = "gmii";
-+	status = "okay";
-+};
-+
-+&port1 {
-+	phys = <&serdes 1 CU(1)>;
-+	phy-handle = <&phy1>;
-+	phy-mode = "gmii";
-+	status = "okay";
-+};
-+
-+&port4 {
-+	phys = <&serdes 4 SERDES6G(2)>;
-+	phy-handle = <&phy4>;
-+	phy-mode = "qsgmii";
-+	status = "okay";
-+};
-+
-+&port5 {
-+	phys = <&serdes 5 SERDES6G(2)>;
-+	phy-handle = <&phy5>;
-+	phy-mode = "qsgmii";
-+	status = "okay";
-+};
-+
-+&port6 {
-+	phys = <&serdes 6 SERDES6G(2)>;
-+	phy-handle = <&phy6>;
-+	phy-mode = "qsgmii";
-+	status = "okay";
-+};
-+
-+&port7 {
-+	phys = <&serdes 7 SERDES6G(2)>;
-+	phy-handle = <&phy7>;
-+	phy-mode = "qsgmii";
-+	status = "okay";
-+};
-+
-+&serdes {
-+	status = "okay";
-+};
-+
- &sgpio {
- 	pinctrl-0 = <&sgpio_a_pins>, <&sgpio_b_pins>;
- 	pinctrl-names = "default";
-@@ -88,6 +181,10 @@ sgpio_out: gpio@1 {
- 	};
- };
- 
-+&switch {
-+	status = "okay";
-+};
-+
- &watchdog {
- 	status = "okay";
- };
--- 
-2.30.2
-
+Agreed that an ioctl is preferable over a sysctl interface. I wasn't aware
+of securityfs and prefer it over a /dev/mapper/control ioctl. Ultimately
+the list of digests is meaningful to LoadPin, not (directly) to the device
+mapper / verity. I'm not sure how well this feature of integrating LoadPin
+with verity will be by the verity maintainers in the first place, it's
+probably best to limit the LoadPin specific stuff in verity to a minimum.
+I experimented a bit with the securityfs option, building it doesn't seem
+too much of an overhead. If loadpin.c ends up too cluttered with the
+verity and securityfs stuff I could try to outsource some of it to (a)
+dedicated file(s).

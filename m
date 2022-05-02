@@ -2,193 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7588516BFA
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 10:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3BDE516C01
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 10:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383733AbiEBI13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 04:27:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44704 "EHLO
+        id S1383752AbiEBIaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 04:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359278AbiEBI11 (ORCPT
+        with ESMTP id S1379079AbiEBIaF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 04:27:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA38B4B1D2
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 01:23:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651479838;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bFjPQJ4gs0bSHs76Svu0ngyI6tX2L+HSW5bxHt+dBUk=;
-        b=igwv3Fn0WvWPPoI9GTHtq2zdR0lD9B03VIZj6qtxjIx+Ac7bITFND1v8hYQXvqKhg+By9O
-        yY/e70TEACWgnUhJGFcV3Uk6Q4e2DnJZWug4Dk8LJt/YIBzoPHBLMZ1QglqziVze86eiNA
-        A0eYrop3PLASiZWgNMnZyPfYLypdJWw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-629-42pL4FRSMGWZ-kxRO2QG-Q-1; Mon, 02 May 2022 04:23:55 -0400
-X-MC-Unique: 42pL4FRSMGWZ-kxRO2QG-Q-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4330985A5A8;
-        Mon,  2 May 2022 08:23:55 +0000 (UTC)
-Received: from [10.72.12.86] (ovpn-12-86.pek2.redhat.com [10.72.12.86])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1BDA4416146;
-        Mon,  2 May 2022 08:23:48 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v6 03/18] KVM: arm64: Add SDEI virtualization
- infrastructure
-To:     Oliver Upton <oupton@google.com>
-Cc:     kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
-        eauger@redhat.com, Jonathan.Cameron@huawei.com,
-        vkuznets@redhat.com, will@kernel.org, shannon.zhaosl@gmail.com,
-        james.morse@arm.com, mark.rutland@arm.com, maz@kernel.org,
-        pbonzini@redhat.com, shan.gavin@gmail.com
-References: <YmMiyt/TDjJt0mdG@google.com>
- <36899ea9-e8bd-27b2-8dfb-75b76eab50d7@redhat.com>
- <YmRI7Bh7fWCYLUGT@google.com>
- <0e26da1a-00bb-3d63-a8bf-6cd3271b0a38@redhat.com>
- <Ymr45B+8xTlhi7vk@google.com>
- <96711526-c4f3-3b50-c015-beba8cc9fcc9@redhat.com>
- <Ym1EztjkJIHrg4Qz@google.com>
- <62f06a03-d6fc-3803-a2d2-7a85cf733459@redhat.com>
- <Ym9So9YariC0M7Zu@google.com>
- <2d631426-17fd-e7e3-5c62-eda547732bb7@redhat.com>
- <Ym+O+JLU5e9NUs39@google.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <a5b81935-50e6-72c5-58bc-bf591f9b826e@redhat.com>
-Date:   Mon, 2 May 2022 16:23:45 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
-MIME-Version: 1.0
-In-Reply-To: <Ym+O+JLU5e9NUs39@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+        Mon, 2 May 2022 04:30:05 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E0B522EB;
+        Mon,  2 May 2022 01:26:36 -0700 (PDT)
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2426eC2D030335;
+        Mon, 2 May 2022 08:26:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=c4F418i+uSY5SQ6IJyvNoDoM0QEZy3napvtaDUHfy0I=;
+ b=HzUzLL/HjPhwv8gvMuxpqbDgvJ3kgKRkJVUs5qqeU0YC/hUxnRQ1NRGDmmrlOirZdTMv
+ 8F27mbJ/+KUz6r5LwheWjj620v6GooMCTw/HMrOlJBlDyS3FsrDhKq+dkQlpFX+MF9Vp
+ hJMeDxWGP7W+yPrmbWOF94hhv+SRNhBc8uXPA5Hve4F+LIPFcDDF49C426/9uKu6SKiU
+ 7InuTYLgr+13JbjB6PehCYTu6qvfho2a+NZr7wZr9rzV1X7tDvALmwq8G4Wocn7iinsi
+ H1whJoo7wYmxQlBuIZPeabnJV+zgxd0hoFEl+9ew2JFcjdCDO8uB85DNiBs8LedjniCf KQ== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ft7tmbs5a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 May 2022 08:26:28 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2428D9Km021486;
+        Mon, 2 May 2022 08:26:26 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04ams.nl.ibm.com with ESMTP id 3frvr8tcct-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 May 2022 08:26:25 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2428QNvX52756784
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 2 May 2022 08:26:23 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A3C2111C04C;
+        Mon,  2 May 2022 08:26:23 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 562FD11C04A;
+        Mon,  2 May 2022 08:26:23 +0000 (GMT)
+Received: from sig-9-145-11-74.uk.ibm.com (unknown [9.145.11.74])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  2 May 2022 08:26:23 +0000 (GMT)
+Message-ID: <bc46562ab57cfc1e0805280b7fb153b02885c72c.camel@linux.ibm.com>
+Subject: Re: [RFC v2 35/39] usb: handle HAS_IOPORT dependencies
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
+Date:   Mon, 02 May 2022 10:26:23 +0200
+In-Reply-To: <Ym0yBti0J5w2S59W@rowland.harvard.edu>
+References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
+         <20220429135108.2781579-65-schnelle@linux.ibm.com>
+         <Ym0yBti0J5w2S59W@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ewUH-9lsWOSWBJybGhHLJUarXPcD4BQx
+X-Proofpoint-ORIG-GUID: ewUH-9lsWOSWBJybGhHLJUarXPcD4BQx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-02_02,2022-04-28_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 impostorscore=0 suspectscore=0 clxscore=1015 spamscore=0
+ bulkscore=0 adultscore=0 mlxlogscore=781 phishscore=0 mlxscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205020062
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oliver,
-
-On 5/2/22 3:57 PM, Oliver Upton wrote:
-> On Mon, May 02, 2022 at 03:25:40PM +0800, Gavin Shan wrote:
->> Oliver, how about to adjust struct kvm_sdei_vcpu like below. With the
->> changes, struct kvm_sdei_vcpu::unregistering is dropped, to match with
->> the specification strictly.
->>
->>     struct kvm_sdei_vcpu {
->>         unsigned long registered;
->>         unsigned long enabled;
->>         unsigned long running;        // renamed from 'active' to match the specification strictly
->>         unsigned long pending;        // event pending for delivery
->>            :
->>     };
->>
->>     state                          @registered  @enabled  @running  @pending
->>     --------------------------------------------------------------------------------
->>     unregistered                   0            0         0/1       0
->>     registered-disabled            1            0         0         0/1
->>     registered-enabled             1            1         0/1       0/1
->>     handler-running                0/1          0/1       1         0/1
->>
->> We can use the specific encoding to represent the unregistration-pending.
->>
->>     state                          @registered  @enabled  @running  @pending
->>     -------------------------------------------------------------------------
->>     handler-running                0            0          1        0
+On Sat, 2022-04-30 at 08:56 -0400, Alan Stern wrote:
+> On Fri, Apr 29, 2022 at 03:51:02PM +0200, Niklas Schnelle wrote:
+> > In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> > not being declared. We thus need to guard sections of code calling them
+> > as alternative access methods with CONFIG_HAS_IOPORT checks. Similarly
+> > drivers requiring these functions need to depend on HAS_IOPORT.
+> > 
+> > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > ---
 > 
-> Right, this is what I had in mind. This encodes the
-> 'handler-unregister-pending' state.
+> ...
 > 
-
-Cool, Thanks for your confirm. I think we're on same page for the
-data structures now. With this, I'm able to start working on next
-revision. Oliver, I'm sorry for taking you too much time to reach
-to the point :)
-
->> Thanks for your valuable comments, Oliver. I'm not starting to work on
->> v7 yet. I also would like to make everything clear before that. In that
->> case, it will be easier for you to review next revision :)
->>
->>>>>>            unsigned long pending;       /* the event is pending for delivery and handling */
->>>>>>            unsigned long active;        /* the event is currently being handled           */
->>>>>>
->>>>>>            :
->>>>>>            <this part is just like what you suggested>
->>>>>>        };
->>>>>>
->>>>>> I rename @pending to @unregister. Besides, there are two states added:
->>>>>>
->>>>>>       @pending: Indicate there has one event has been injected. The next step
->>>>>>                 for the event is to deliver it for handling. For one particular
->>>>>>                 event, we allow one pending event in the maximum.
->>>>>
->>>>> Right, if an event retriggers when it is pending we still dispatch a
->>>>> single event to the guest. And since we're only doing normal priority
->>>>> events, it is entirely implementation defined which gets dispatched
->>>>> first.
->>>>>
->>>>
->>>> Yep, we will simply rely on find_first_bit() for the priority. It means
->>>> the software signaled event, whose number is zero, will have the highest
->>>> priority.
->>>>
->>>>>>       @active:  Indicate the event is currently being handled. The information
->>>>>>                 stored in 'struct kvm_sdei_event_context' instance can be
->>>>>>                 correlated with the event.
->>>>>
->>>>> Does this need to be a bitmap though? We can't ever have more than one
->>>>> SDEI event active at a time since this is private to a vCPU.
->>>>>
->>>>
->>>> Yes, one event is active at most on one particular vCPU. So tt don't
->>>> have to be a bitmap necessarily. The reason I proposed to use bitmap
->>>> for this state is to having all (event) states represented by bitmaps.
->>>> In this way, all states are managed in a unified fashion. The alternative
->>>> way is to have "unsigned long active_event", which traces the active
->>>> event number. It also consumes 8-bytes when live migration is concerned.
->>>> So I prefer a bitmap :)
->>>>
->>>
->>> The small benefit of using the event number is that we can address all
->>> events in 8 bytes, whereas we'd need to extend the bitmap for >64
->>> events. I suppose we'll run into that issue either way, since the
->>> pending, registered, and enabled portions are also bitmaps.
->>>
->>> When live migration is in scope we should probably bark at userspace if
->>> it attempts to set more than a single bit in the register.
->>>
->>
->> Even it's unlikely to support the shared event, bitmap will help in that
->> case. I'm not sure about other VMM, the pseudo firmware registers are
->> almost transparent to user space in QEMU. They're accessed and no one
->> cares the values reading from and writing to these registers in QEMU ;-)
+> > diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
+> > index ef08d68b9714..4fd06b48149d 100644
+> > --- a/drivers/usb/host/pci-quirks.c
+> > +++ b/drivers/usb/host/pci-quirks.c
+> > @@ -632,7 +590,53 @@ bool usb_amd_pt_check_port(struct device *device, int port)
+> >  	return !(value & BIT(port_shift));
+> >  }
+> >  EXPORT_SYMBOL_GPL(usb_amd_pt_check_port);
+> > +#endif
+> > @@ -1273,7 +1280,8 @@ static void quirk_usb_early_handoff(struct pci_dev *pdev)
+> >  			 "Can't enable PCI device, BIOS handoff failed.\n");
+> >  		return;
+> >  	}
+> > -	if (pdev->class == PCI_CLASS_SERIAL_USB_UHCI)
+> > +	if (IS_ENABLED(CONFIG_USB_UHCI_HCD) &&
+> > +	    pdev->class == PCI_CLASS_SERIAL_USB_UHCI)
+> >  		quirk_usb_handoff_uhci(pdev);
 > 
-> Regardless of whether userspace actually manipulates the registers we
-> should still reject unsupported values. For example:
-> 
-> Let's say the VM is started on a kernel that introduced yet another SDEI
-> widget outside of your series. The VM was migrated back to an older
-> kernel w/o the SDEI widget, and as such the VMM attempts to set the
-> widget bit. Since the old kernel doesn't know what to do with the value
-> it should return EINVAL to userspace.
-> 
+> We discussed this already.  quirk_usb_handoff_uhci() is supposed to be 
+> called even when CONFIG_USB_UHCI_HCD isn't enabled.
 
-Yep, agreed. Thanks for the examples and details. Lets have more
-discussion when the series to support migration is posted.
+Sorry I missed this part. Done.
 
-Thanks,
-Gavin
+> 
+> ...
+> 
+> > diff --git a/drivers/usb/host/uhci-hcd.h b/drivers/usb/host/uhci-hcd.h
+> > index 8ae5ccd26753..be4aee1f0ca5 100644
+> > --- a/drivers/usb/host/uhci-hcd.h
+> > +++ b/drivers/usb/host/uhci-hcd.h
+> > @@ -505,36 +505,43 @@ static inline bool uhci_is_aspeed(const struct uhci_hcd *uhci)
+> >   * we use memory mapped registers.
+> >   */
+> >  
+> > +#ifdef CONFIG_HAS_IOPORT
+> > +#define UHCI_IN(x)	x
+> > +#define UHCI_OUT(x)	x
+> > +#else
+> > +#define UHCI_IN(x)	0
+> > +#define UHCI_OUT(x)
+> > +#endif
+> 
+> Should have a blank line here.
+
+Done
+
+> 
+> >  #ifndef CONFIG_USB_UHCI_SUPPORT_NON_PCI_HC
+> >  /* Support PCI only */
+> >  static inline u32 uhci_readl(const struct uhci_hcd *uhci, int reg)
+> >  {
+> > -	return inl(uhci->io_addr + reg);
+> > +	return UHCI_IN(inl(uhci->io_addr + reg));
+> >  }
+> >  
+> >  static inline void uhci_writel(const struct uhci_hcd *uhci, u32 val, int reg)
+> >  {
+> > -	outl(val, uhci->io_addr + reg);
+> > +	UHCI_OUT(outl(val, uhci->io_addr + reg));
+> >  }
+> >  
+> >  static inline u16 uhci_readw(const struct uhci_hcd *uhci, int reg)
+> >  {
+> > -	return inw(uhci->io_addr + reg);
+> > +	return UHCI_IN(inw(uhci->io_addr + reg));
+> >  }
+> >  
+> >  static inline void uhci_writew(const struct uhci_hcd *uhci, u16 val, int reg)
+> >  {
+> > -	outw(val, uhci->io_addr + reg);
+> > +	UHCI_OUT(outw(val, uhci->io_addr + reg));
+> >  }
+> >  
+> >  static inline u8 uhci_readb(const struct uhci_hcd *uhci, int reg)
+> >  {
+> > -	return inb(uhci->io_addr + reg);
+> > +	return UHCI_IN(inb(uhci->io_addr + reg));
+> >  }
+> >  
+> >  static inline void uhci_writeb(const struct uhci_hcd *uhci, u8 val, int reg)
+> >  {
+> > -	outb(val, uhci->io_addr + reg);
+> > +	UHCI_OUT(outb(val, uhci->io_addr + reg));
+> >  }
+> >  
+> >  #else
+> 
+> I thought you were going to update the definition of 
+> uhci_has_pci_registers().  It shouldn't do a test at runtime if 
+> CONFIG_HAS_IOPORT is disabled.
+> 
+> Alan Stern
+
+Good point. Done.
+
 

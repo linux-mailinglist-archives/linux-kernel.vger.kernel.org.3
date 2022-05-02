@@ -2,272 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A344516CB0
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 11:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9200516CDB
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 11:02:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383986AbiEBJER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 05:04:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54868 "EHLO
+        id S1376962AbiEBJGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 05:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384013AbiEBJED (ORCPT
+        with ESMTP id S239442AbiEBJGD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 05:04:03 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C441137
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 02:00:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651482031; x=1683018031;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Hr5vqRxCNdfg1gPxBPslp0x49GZXgJzACnkmrlWmFaM=;
-  b=A+9GFhtuqAzoccGHYT1ggYVFFdn67JHTojd4EcG3hGMzXGMk4De+LaRJ
-   Kjo0ViIGoaSlQn2S9LH4rb8yDVGGl6Uq6nsPhQOShj3+7T5Uvax3SkNCD
-   V4Q9Yv2XXPWCU3OZ6xd7Qi6K96B5yNe/zQ3pE5FYZ1aFa/CTgdbKXfgr3
-   6uVrouaOji4z1D44LHktS6bwKMtwPc4g0axC4sHO6rvHd3/167ZLJ8JlI
-   n7sfmxhC66+61RrSht6SL89qUJiH5utoKj8BZFxrwybMHKm02M65pvUEl
-   qLlme6w2VOISzyl4Z0kLm2Ach3jSLKXl2zishK2z5daoNzPniVEoVlqnK
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="247072270"
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="247072270"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 02:00:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="689890297"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 02 May 2022 02:00:29 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nlRuu-0009Qx-Pp;
-        Mon, 02 May 2022 09:00:28 +0000
-Date:   Mon, 02 May 2022 16:59:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/sev] BUILD SUCCESS
- c2106a231c2ba36ff9af50cdf2867b9a5f8150a6
-Message-ID: <626f9d77.7u4x8iZeTwI18KFq%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Mon, 2 May 2022 05:06:03 -0400
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CBD1D0CE
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 02:02:34 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: hector@marcansoft.com)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 607AE419BC;
+        Mon,  2 May 2022 09:02:28 +0000 (UTC)
+From:   Hector Martin <marcan@marcan.st>
+Cc:     Hector Martin <marcan@marcan.st>,
+        Anup Patel <anup.patel@broadcom.com>,
+        Vinod Koul <vkoul@kernel.org>, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: [PATCH 0/7] mailbox: apple: peek_data cleanup and implementation
+Date:   Mon,  2 May 2022 18:02:18 +0900
+Message-Id: <20220502090225.26478-1-marcan@marcan.st>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: application/octet-stream
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,BODY_EMPTY,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,TVD_SPACE_RATIO autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dHJlZS9icmFuY2g6IGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJu
-ZWwvZ2l0L3BldGVyei9xdWV1ZS5naXQgeDg2L3NldgpicmFuY2ggSEVBRDogYzIxMDZhMjMx
-YzJiYTM2ZmY5YWY1MGNkZjI4NjdiOWE1ZjgxNTBhNiAgeDg2L3NldjogR2V0IHRoZSBBUCBq
-dW1wIHRhYmxlIGFkZHJlc3MgZnJvbSBzZWNyZXRzIHBhZ2UKClVudmVyaWZpZWQgV2Fybmlu
-ZyAobGlrZWx5IGZhbHNlIHBvc2l0aXZlLCBwbGVhc2UgY29udGFjdCB1cyBpZiBpbnRlcmVz
-dGVkKToKCng4Nl82NCxDT05GSUdfQ1JZUFRPX0FFQUQyLENPTkZJR19TRVZfR1VFU1QsMCww
-LFVOTUVUX0FMQVJNLFRydWUsa2lzbWV0LXRlc3QtY2FzZXMvdWRkLXg4Nl82NC1DT05GSUdf
-Q1JZUFRPX0FFQUQyLUNPTkZJR19TRVZfR1VFU1QtMC0wLmNvbmZpZw0KeDg2XzY0LENPTkZJ
-R19DUllQVE9fR0NNLENPTkZJR19TRVZfR1VFU1QsMCwwLFVOTUVUX0FMQVJNLFRydWUsa2lz
-bWV0LXRlc3QtY2FzZXMvdWRkLXg4Nl82NC1DT05GSUdfQ1JZUFRPX0dDTS1DT05GSUdfU0VW
-X0dVRVNULTAtMC5jb25maWcNCgpXYXJuaW5nIGlkcyBncm91cGVkIGJ5IGtjb25maWdzOgoK
-Z2NjX3JlY2VudF9lcnJvcnMKYC0tIHg4Nl82NC1hbGxub2NvbmZpZwogICAgfC0tIHg4Nl82
-NC1DT05GSUdfQ1JZUFRPX0FFQUQyLUNPTkZJR19TRVZfR1VFU1QtVU5NRVRfQUxBUk0tVHJ1
-ZS1raXNtZXQtdGVzdC1jYXNlcy11ZGQteDg2XzY0LUNPTkZJR19DUllQVE9fQUVBRDItQ09O
-RklHX1NFVl9HVUVTVC0uY29uZmlnCiAgICBgLS0geDg2XzY0LUNPTkZJR19DUllQVE9fR0NN
-LUNPTkZJR19TRVZfR1VFU1QtVU5NRVRfQUxBUk0tVHJ1ZS1raXNtZXQtdGVzdC1jYXNlcy11
-ZGQteDg2XzY0LUNPTkZJR19DUllQVE9fR0NNLUNPTkZJR19TRVZfR1VFU1QtLmNvbmZpZwoK
-ZWxhcHNlZCB0aW1lOiA3MDE4bQoKY29uZmlncyB0ZXN0ZWQ6IDIxMgpjb25maWdzIHNraXBw
-ZWQ6IDYKClRoZSBmb2xsb3dpbmcgY29uZmlncyBoYXZlIGJlZW4gYnVpbHQgc3VjY2Vzc2Z1
-bGx5LgpNb3JlIGNvbmZpZ3MgbWF5IGJlIHRlc3RlZCBpbiB0aGUgY29taW5nIGRheXMuCgpn
-Y2MgdGVzdGVkIGNvbmZpZ3M6CmFybTY0ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-IGRlZmNvbmZpZwphcm02NCAgICAgICAgICAgICAgICAgICAgICAgICAgICBhbGx5ZXNjb25m
-aWcKYXJtICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgYWxsbW9kY29uZmlnCmFybSAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGRlZmNvbmZpZwphcm0gICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICBhbGx5ZXNjb25maWcKaTM4NiAgICAgICAgICAgICAgICAg
-ICAgICAgICAgcmFuZGNvbmZpZy1jMDAxCnNoICAgICAgICAgICAgICAgICAgICAgICAgICAg
-c2U3NzI0X2RlZmNvbmZpZwpwYXJpc2MgICAgICAgICAgICAgICAgZ2VuZXJpYy0zMmJpdF9k
-ZWZjb25maWcKc2ggICAgICAgICAgICAgICAgICAgICAgICAgIGxhbmRpc2tfZGVmY29uZmln
-CmFyYyAgICAgICAgICAgICAgICAgICAgdmRrX2hzMzhfc21wX2RlZmNvbmZpZwpwb3dlcnBj
-ICAgICAgICAgICAgICAgICBtcGM4Mzd4X21kc19kZWZjb25maWcKYXJtICAgICAgICAgICAg
-ICAgICAgICAgICAgbWluaTI0NDBfZGVmY29uZmlnCmFyYyAgICAgICAgICAgICAgICAgICAg
-IGhhcHNfaHNfc21wX2RlZmNvbmZpZwphcm0gICAgICAgICAgICAgICAgICAgICAgICBjZXJm
-Y3ViZV9kZWZjb25maWcKcG93ZXJwYyAgICAgICAgICAgICAgICAgY2FueW9ubGFuZHNfZGVm
-Y29uZmlnCmFybSAgICAgICAgICAgICAgICAgICAgICAgICAgbHBkMjcwX2RlZmNvbmZpZwpw
-b3dlcnBjICAgICAgICAgICAgICAgICAgICAgZXA4MjQ4ZV9kZWZjb25maWcKczM5MCAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgZGVmY29uZmlnCm1pcHMgICAgICAgICAgICAg
-ICAgICAgICAgICAgdGIwMjI2X2RlZmNvbmZpZwphcmMgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgaHNka19kZWZjb25maWcKbWlwcyAgICAgICAgICAgICAgICAgICAgICAgICAgcmI1
-MzJfZGVmY29uZmlnCm1pcHMgICAgICAgICAgICAgICAgICAgICAgICB2b2NvcmUyX2RlZmNv
-bmZpZwpzaCAgICAgICAgICAgICAgICAgICAgICAgICAgIHNlNzYxOV9kZWZjb25maWcKbWlw
-cyAgICAgICAgICAgICAgICAgIG1hbHRhc212cF9ldmFfZGVmY29uZmlnCm1pcHMgICAgICAg
-ICAgICAgICAgICAgICAgICAgICBpcDMyX2RlZmNvbmZpZwphcm0gICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIHB4YV9kZWZjb25maWcKcG93ZXJwYyAgICAgICAgICAgICAgICAgICAg
-IHJlZHdvb2RfZGVmY29uZmlnCnNoICAgICAgICAgICAgICAgICAgICAgICAgICByc2s3MjY5
-X2RlZmNvbmZpZwpzaCAgICAgICAgICAgICAgICAgICAgICAgIHNoNzc2M3JkcF9kZWZjb25m
-aWcKaDgzMDAgICAgICAgICAgICAgICAgICAgIGg4MzAwaC1zaW1fZGVmY29uZmlnCmFybSAg
-ICAgICAgICAgICAgICAgICAgICAgIG94bmFzX3Y2X2RlZmNvbmZpZwpwb3dlcnBjICAgICAg
-ICAgICAgICAgICAgICAgdGFpc2hhbl9kZWZjb25maWcKc3BhcmMgICAgICAgICAgICAgICAg
-ICAgICAgIHNwYXJjNjRfZGVmY29uZmlnCmNza3kgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgIGRlZmNvbmZpZwp4dGVuc2EgICAgICAgICAgICAgICAgICAgICAgICAgICBhbGx5
-ZXNjb25maWcKcG93ZXJwYyAgICAgICAgICAgICAgICAgICAgIHRxbTg1NDFfZGVmY29uZmln
-CnBvd2VycGMgICAgICAgICAgICAgICAgICAgICAgIGhvbGx5X2RlZmNvbmZpZwptaXBzICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgIGdwcl9kZWZjb25maWcKYXJtICAgICAgICAgICAg
-ICAgICAgICAgICAgIGxwYzE4eHhfZGVmY29uZmlnCmFybSAgICAgICAgICAgICAgICAgICAg
-ICAgICAgaW9wMzJ4X2RlZmNvbmZpZwpuaW9zMiAgICAgICAgICAgICAgICAgICAgICAgICAz
-YzEyMF9kZWZjb25maWcKc2ggICAgICAgICAgICAgICAgICAgICAgICAgIHNkazc3ODBfZGVm
-Y29uZmlnCmFybSAgICAgICAgICAgICAgICAgICAgICAgICAgICBsYXJ0X2RlZmNvbmZpZwpw
-b3dlcnBjICAgICAgICAgICAgICAgICAgICAgICAgIHBzM19kZWZjb25maWcKc2ggICAgICAg
-ICAgICAgICAgICAgICAgICAgIHI3Nzg1cnBfZGVmY29uZmlnCnBvd2VycGMgICAgICAgICAg
-ICAgICAgIG1wYzg1NDBfYWRzX2RlZmNvbmZpZwphbHBoYSAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICBkZWZjb25maWcKYXJjICAgICAgICAgICAgICAgICAgICAgbnNpbW9zY2lf
-aHNfZGVmY29uZmlnCm02OGsgICAgICAgICAgICAgICAgICAgICAgIG01Mjc1ZXZiX2RlZmNv
-bmZpZwpzaCAgICAgICAgICAgICAgICAgICBzaDc3MjRfZ2VuZXJpY19kZWZjb25maWcKbTY4
-ayAgICAgICAgICAgICAgICAgICAgICAgIG01MjcyYzNfZGVmY29uZmlnCnNoICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICBzaHgzX2RlZmNvbmZpZwpzaCAgICAgICAgICAgICAgICAg
-ICAgICAgICAgIHNlNzc4MF9kZWZjb25maWcKbWlwcyAgICAgICAgICAgICAgICAgICAgICBt
-YWx0YXNtdnBfZGVmY29uZmlnCnBvd2VycGMgICAgICAgICAgICAgICAgICAgICAgbWdjb2dl
-X2RlZmNvbmZpZwptNjhrICAgICAgICAgICAgICAgICAgICAgICBidm1lNjAwMF9kZWZjb25m
-aWcKcG93ZXJwYyAgICAgICAgICAgICAgICAgICBtb3Rpb25wcm9fZGVmY29uZmlnCm02OGsg
-ICAgICAgICAgICAgICAgICAgICAgIG01NDc1ZXZiX2RlZmNvbmZpZwp4dGVuc2EgICAgICAg
-ICAgICAgICAgICAgICAgICAgdmlydF9kZWZjb25maWcKbWlwcyAgICAgICAgICAgICAgICAg
-ICAgICAgICBkYjF4eHhfZGVmY29uZmlnCm02OGsgICAgICAgICAgICAgICAgICAgICAgICAg
-IG11bHRpX2RlZmNvbmZpZwphcm0gICAgICAgICAgICAgICAgICAgICAgICAgIGV4eW5vc19k
-ZWZjb25maWcKcG93ZXJwYyAgICAgICAgICAgICAgICAgbXBjODM0eF9tZHNfZGVmY29uZmln
-CnBvd2VycGMgICAgICAgICAgICAgICAgICAgICAgICBjZWxsX2RlZmNvbmZpZwptaXBzICAg
-ICAgICAgICAgICAgICAgICAgbG9vbmdzb24xYl9kZWZjb25maWcKYXJtICAgICAgICAgICAg
-ICAgICAgICAgICAgICBzaW1wYWRfZGVmY29uZmlnCnNoICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgc2U3MjA2X2RlZmNvbmZpZwptNjhrICAgICAgICAgICAgICAgICAgICAgICAgICBz
-dW4zeF9kZWZjb25maWcKbmlvczIgICAgICAgICAgICAgICAgICAgICAgICAgICAgYWxseWVz
-Y29uZmlnCm02OGsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGRlZmNvbmZpZwpz
-aCAgICAgICAgICAgICAgICAgICAgICAgIGVkb3NrNzcwNV9kZWZjb25maWcKc3BhcmMgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgZGVmY29uZmlnCnNwYXJjNjQgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgIGRlZmNvbmZpZwptaXBzICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgamF6el9kZWZjb25maWcKc2ggICAgICAgICAgICAgICAgICAgICAgICAgICBzZTc3
-MjJfZGVmY29uZmlnCmFyYyAgICAgICAgICAgICAgICAgICAgICAgIG5zaW1fNzAwX2RlZmNv
-bmZpZwptaXBzICAgICAgICAgICAgICAgICAgICAgICBjYXBjZWxsYV9kZWZjb25maWcKcG93
-ZXJwYyAgICAgICAgICAgICAgICAgbXBjODM3eF9yZGJfZGVmY29uZmlnCmg4MzAwICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIGFsbGRlZmNvbmZpZwptNjhrICAgICAgICAgICAgICAg
-ICAgICAgICAgICBhdGFyaV9kZWZjb25maWcKYXJtICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgIHpldXNfZGVmY29uZmlnCmFybSAgICAgICAgICAgICAgICAgICAgICAgICAgICBtcHMy
-X2RlZmNvbmZpZwphcm0gICAgICAgICAgICAgICAgICAgICAgICBtdWx0aV92N19kZWZjb25m
-aWcKYXJtICAgICAgICAgICAgICAgICAgICAgZXNlcmllc19weGFfZGVmY29uZmlnCmFybSAg
-ICAgICAgICAgICAgICAgICAgICAgICAgIGlteHJ0X2RlZmNvbmZpZwptaXBzICAgICAgICAg
-ICAgICAgICAgICBtYWx0YXVwX3hwYV9kZWZjb25maWcKb3BlbnJpc2MgICAgICAgICAgICAg
-ICAgICAgIG9yMWtzaW1fZGVmY29uZmlnCnNoICAgICAgICAgICAgICAgICAgICAgICAgZWRv
-c2s3NzYwX2RlZmNvbmZpZwpwb3dlcnBjICAgICAgICAgICAgICAgICBtcGM4NXh4X2Nkc19k
-ZWZjb25maWcKc2ggICAgICAgICAgICAgICAgICAgICAgICAgYXAzMjVyeGFfZGVmY29uZmln
-CnNoICAgICAgICAgICAgICAgIGVjb3ZlYzI0LXJvbWltYWdlX2RlZmNvbmZpZwpzaCAgICAg
-ICAgICAgICAgICAgICAgICAgICAga2ZyMnIwOV9kZWZjb25maWcKeDg2XzY0ICAgICAgICAg
-ICAgICAgICAgICAgICAgcmFuZGNvbmZpZy1jMDAxCmFybSAgICAgICAgICAgICAgICAgIHJh
-bmRjb25maWctYzAwMi0yMDIyMDQyNwphcm0gICAgICAgICAgICAgICAgICByYW5kY29uZmln
-LWMwMDItMjAyMjA0MjgKaWE2NCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZGVm
-Y29uZmlnCmlhNjQgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGFsbG1vZGNvbmZpZwpp
-YTY0ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBhbGx5ZXNjb25maWcKbTY4ayAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgYWxseWVzY29uZmlnCm02OGsgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIGFsbG1vZGNvbmZpZwpuaW9zMiAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICBkZWZjb25maWcKYXJjICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-YWxseWVzY29uZmlnCmFscGhhICAgICAgICAgICAgICAgICAgICAgICAgICAgIGFsbHllc2Nv
-bmZpZwpoODMwMCAgICAgICAgICAgICAgICAgICAgICAgICAgICBhbGx5ZXNjb25maWcKYXJj
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZGVmY29uZmlnCnNoICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIGFsbG1vZGNvbmZpZwpzMzkwICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICBhbGxtb2Rjb25maWcKcGFyaXNjICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgZGVmY29uZmlnCnBhcmlzYzY0ICAgICAgICAgICAgICAgICAgICAgICAgICAg
-IGRlZmNvbmZpZwpwYXJpc2MgICAgICAgICAgICAgICAgICAgICAgICAgICBhbGx5ZXNjb25m
-aWcKczM5MCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgYWxseWVzY29uZmlnCmkzODYg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgIGFsbHllc2NvbmZpZwpzcGFyYyAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICBhbGx5ZXNjb25maWcKaTM4NiAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgZGVmY29uZmlnCmkzODYgICAgICAgICAgICAgICAgICAgZGViaWFu
-LTEwLjMta3NlbGZ0ZXN0cwppMzg2ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZGVi
-aWFuLTEwLjMKbWlwcyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgYWxseWVzY29uZmln
-Cm1pcHMgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGFsbG1vZGNvbmZpZwpwb3dlcnBj
-ICAgICAgICAgICAgICAgICAgICAgICAgICBhbGx5ZXNjb25maWcKcG93ZXJwYyAgICAgICAg
-ICAgICAgICAgICAgICAgICAgIGFsbG5vY29uZmlnCnBvd2VycGMgICAgICAgICAgICAgICAg
-ICAgICAgICAgIGFsbG1vZGNvbmZpZwp4ODZfNjQgICAgICAgICAgICAgICAgICAgICAgICBy
-YW5kY29uZmlnLWEwMDYKeDg2XzY0ICAgICAgICAgICAgICAgICAgICAgICAgcmFuZGNvbmZp
-Zy1hMDA0Cng4Nl82NCAgICAgICAgICAgICAgICAgICAgICAgIHJhbmRjb25maWctYTAwMgp4
-ODZfNjQgICAgICAgICAgICAgICAgICAgICAgICByYW5kY29uZmlnLWEwMTEKeDg2XzY0ICAg
-ICAgICAgICAgICAgICAgICAgICAgcmFuZGNvbmZpZy1hMDEzCng4Nl82NCAgICAgICAgICAg
-ICAgICAgICAgICAgIHJhbmRjb25maWctYTAxNQppMzg2ICAgICAgICAgICAgICAgICAgICAg
-ICAgICByYW5kY29uZmlnLWEwMTIKaTM4NiAgICAgICAgICAgICAgICAgICAgICAgICAgcmFu
-ZGNvbmZpZy1hMDE2CmkzODYgICAgICAgICAgICAgICAgICAgICAgICAgIHJhbmRjb25maWct
-YTAxNAphcmMgICAgICAgICAgICAgICAgICByYW5kY29uZmlnLXIwNDMtMjAyMjA0MjcKcmlz
-Y3YgICAgICAgICAgICAgICAgcmFuZGNvbmZpZy1yMDQyLTIwMjIwNDI3CnMzOTAgICAgICAg
-ICAgICAgICAgIHJhbmRjb25maWctcjA0NC0yMDIyMDQyNwphcmMgICAgICAgICAgICAgICAg
-ICByYW5kY29uZmlnLXIwNDMtMjAyMjA0MjgKcmlzY3YgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgZGVmY29uZmlnCnJpc2N2ICAgICAgICAgICAgICAgICAgICBub21tdV92aXJ0
-X2RlZmNvbmZpZwpyaXNjdiAgICAgICAgICAgICAgICAgICAgICAgICAgcnYzMl9kZWZjb25m
-aWcKcmlzY3YgICAgICAgICAgICAgICAgICAgIG5vbW11X2syMTBfZGVmY29uZmlnCnJpc2N2
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBhbGxub2NvbmZpZwpyaXNjdiAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICBhbGxtb2Rjb25maWcKcmlzY3YgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgYWxseWVzY29uZmlnCng4Nl82NCAgICAgICAgICAgICAgICAgICAgcmhl
-bC04LjMta3NlbGZ0ZXN0cwp1bSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaTM4Nl9k
-ZWZjb25maWcKdW0gICAgICAgICAgICAgICAgICAgICAgICAgICB4ODZfNjRfZGVmY29uZmln
-Cng4Nl82NCAgICAgICAgICAgICAgICAgICAgICAgICAgcmhlbC04LjMtZnVuYwp4ODZfNjQg
-ICAgICAgICAgICAgICAgICAgICAgICAgICByaGVsLTguMy1zeXoKeDg2XzY0ICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgIGtleGVjCng4Nl82NCAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIGRlZmNvbmZpZwp4ODZfNjQgICAgICAgICAgICAgICAgICAgICAgICAg
-cmhlbC04LjMta3VuaXQKeDg2XzY0ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHJo
-ZWwtOC4zCng4Nl82NCAgICAgICAgICAgICAgICAgICAgICAgICAgIGFsbHllc2NvbmZpZwoK
-Y2xhbmcgdGVzdGVkIGNvbmZpZ3M6CnJpc2N2ICAgICAgICAgICAgICAgIHJhbmRjb25maWct
-YzAwNi0yMDIyMDQyOAptaXBzICAgICAgICAgICAgICAgICByYW5kY29uZmlnLWMwMDQtMjAy
-MjA0MjgKeDg2XzY0ICAgICAgICAgICAgICAgICAgICAgICAgcmFuZGNvbmZpZy1jMDA3Cmkz
-ODYgICAgICAgICAgICAgICAgICAgICAgICAgIHJhbmRjb25maWctYzAwMQphcm0gICAgICAg
-ICAgICAgICAgICByYW5kY29uZmlnLWMwMDItMjAyMjA0MjgKcG93ZXJwYyAgICAgICAgICAg
-ICAgcmFuZGNvbmZpZy1jMDAzLTIwMjIwNDI4CnBvd2VycGMgICAgICAgICAgICAgIHJhbmRj
-b25maWctYzAwMy0yMDIyMDUwMQpyaXNjdiAgICAgICAgICAgICAgICByYW5kY29uZmlnLWMw
-MDYtMjAyMjA1MDEKbWlwcyAgICAgICAgICAgICAgICAgcmFuZGNvbmZpZy1jMDA0LTIwMjIw
-NTAxCmFybSAgICAgICAgICAgICAgICAgIHJhbmRjb25maWctYzAwMi0yMDIyMDUwMQpyaXNj
-diAgICAgICAgICAgICAgICByYW5kY29uZmlnLWMwMDYtMjAyMjA0MjkKbWlwcyAgICAgICAg
-ICAgICAgICAgcmFuZGNvbmZpZy1jMDA0LTIwMjIwNDI5CmFybSAgICAgICAgICAgICAgICAg
-IHJhbmRjb25maWctYzAwMi0yMDIyMDQyOQpwb3dlcnBjICAgICAgICAgICAgICByYW5kY29u
-ZmlnLWMwMDMtMjAyMjA0MjkKczM5MCAgICAgICAgICAgICAgICAgcmFuZGNvbmZpZy1jMDA1
-LTIwMjIwNDI4Cm1pcHMgICAgICAgICAgICAgICAgICAgc2IxMjUwX3N3YXJtX2RlZmNvbmZp
-Zwphcm0gICAgICAgICAgICAgICAgICAgICAgICBtYWdpY2lhbl9kZWZjb25maWcKcmlzY3Yg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgIGFsbG5vY29uZmlnCnBvd2VycGMgICAgICAg
-ICAgICAgICAgIG1wYzgzNnhfcmRrX2RlZmNvbmZpZwphcm0gICAgICAgICAgICAgICAgICAg
-ICAgICBtdmVidV92NV9kZWZjb25maWcKbWlwcyAgICAgICAgICAgICAgICAgICAgICBtYWx0
-YV9rdm1fZGVmY29uZmlnCmFybTY0ICAgICAgICAgICAgICAgICAgICAgICAgICAgIGFsbHll
-c2NvbmZpZwpwb3dlcnBjICAgICAgICAgICAgICAgICAgICAgdHFtODU0MF9kZWZjb25maWcK
-YXJtICAgICAgICAgICAgICAgICAgICAgICBzcGVhcjEzeHhfZGVmY29uZmlnCnBvd2VycGMg
-ICAgICAgICAgICAgICAgICAgICAgcHBjNjRlX2RlZmNvbmZpZwpwb3dlcnBjICAgICAgICAg
-ICAgICAgICAgICAgdHFtNTIwMF9kZWZjb25maWcKYXJtICAgICAgICAgICAgICAgICAgICAg
-ICAgICBtb3hhcnRfZGVmY29uZmlnCm1pcHMgICAgICAgICAgICAgICAgICAgICAgICAgICBt
-dHgxX2RlZmNvbmZpZwphcm0gICAgICAgICAgICAgICAgICAgICAgIGNuczM0MjB2Yl9kZWZj
-b25maWcKcG93ZXJwYyAgICAgICAgICAgICAgICAgbXBjODMxNV9yZGJfZGVmY29uZmlnCnBv
-d2VycGMgICAgICAgICAgICAgICAgICBtcGM4ODVfYWRzX2RlZmNvbmZpZwpwb3dlcnBjICAg
-ICAgICAgICAgICAgICBtcGM4MzJ4X21kc19kZWZjb25maWcKbWlwcyAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIGphenpfZGVmY29uZmlnCmFybSAgICAgICAgICAgICAgICAgICAgICAg
-IHZleHByZXNzX2RlZmNvbmZpZwptaXBzICAgICAgICAgICAgICAgICAgICAgICByYnR4NDl4
-eF9kZWZjb25maWcKcG93ZXJwYyAgICAgICAgICAgICAgICAgICAgICAgICAgYWxsbW9kY29u
-ZmlnCnBvd2VycGMgICAgICAgICAgICAgICAgICAgICBza2lyb290X2RlZmNvbmZpZwp4ODZf
-NjQgICAgICAgICAgICAgICAgICAgICAgICByYW5kY29uZmlnLWEwMDEKeDg2XzY0ICAgICAg
-ICAgICAgICAgICAgICAgICAgcmFuZGNvbmZpZy1hMDAzCng4Nl82NCAgICAgICAgICAgICAg
-ICAgICAgICAgIHJhbmRjb25maWctYTAwNQppMzg2ICAgICAgICAgICAgICAgICAgICAgICAg
-ICByYW5kY29uZmlnLWEwMDIKaTM4NiAgICAgICAgICAgICAgICAgICAgICAgICAgcmFuZGNv
-bmZpZy1hMDA2CmkzODYgICAgICAgICAgICAgICAgICAgICAgICAgIHJhbmRjb25maWctYTAw
-NAp4ODZfNjQgICAgICAgICAgICAgICByYW5kY29uZmlnLWEwMTUtMjAyMjA1MDIKeDg2XzY0
-ICAgICAgICAgICAgICAgcmFuZGNvbmZpZy1hMDEyLTIwMjIwNTAyCng4Nl82NCAgICAgICAg
-ICAgICAgIHJhbmRjb25maWctYTAxNi0yMDIyMDUwMgp4ODZfNjQgICAgICAgICAgICAgICBy
-YW5kY29uZmlnLWEwMTQtMjAyMjA1MDIKeDg2XzY0ICAgICAgICAgICAgICAgcmFuZGNvbmZp
-Zy1hMDEzLTIwMjIwNTAyCng4Nl82NCAgICAgICAgICAgICAgIHJhbmRjb25maWctYTAxMS0y
-MDIyMDUwMgp4ODZfNjQgICAgICAgICAgICAgICAgICAgICAgICByYW5kY29uZmlnLWEwMTIK
-eDg2XzY0ICAgICAgICAgICAgICAgICAgICAgICAgcmFuZGNvbmZpZy1hMDE0Cng4Nl82NCAg
-ICAgICAgICAgICAgICAgICAgICAgIHJhbmRjb25maWctYTAxNgppMzg2ICAgICAgICAgICAg
-ICAgICByYW5kY29uZmlnLWEwMTEtMjAyMjA1MDIKaTM4NiAgICAgICAgICAgICAgICAgcmFu
-ZGNvbmZpZy1hMDEzLTIwMjIwNTAyCmkzODYgICAgICAgICAgICAgICAgIHJhbmRjb25maWct
-YTAxNi0yMDIyMDUwMgppMzg2ICAgICAgICAgICAgICAgICByYW5kY29uZmlnLWEwMTUtMjAy
-MjA1MDIKaTM4NiAgICAgICAgICAgICAgICAgcmFuZGNvbmZpZy1hMDE0LTIwMjIwNTAyCmkz
-ODYgICAgICAgICAgICAgICAgIHJhbmRjb25maWctYTAxMi0yMDIyMDUwMgppMzg2ICAgICAg
-ICAgICAgICAgICAgICAgICAgICByYW5kY29uZmlnLWEwMTMKaTM4NiAgICAgICAgICAgICAg
-ICAgICAgICAgICAgcmFuZGNvbmZpZy1hMDExCmkzODYgICAgICAgICAgICAgICAgICAgICAg
-ICAgIHJhbmRjb25maWctYTAxNQpoZXhhZ29uICAgICAgICAgICAgICByYW5kY29uZmlnLXIw
-NDEtMjAyMjA0MjgKcmlzY3YgICAgICAgICAgICAgICAgcmFuZGNvbmZpZy1yMDQyLTIwMjIw
-NDI4CmhleGFnb24gICAgICAgICAgICAgIHJhbmRjb25maWctcjA0NS0yMDIyMDQyOApoZXhh
-Z29uICAgICAgICAgICAgICByYW5kY29uZmlnLXIwNDUtMjAyMjA0MjcKaGV4YWdvbiAgICAg
-ICAgICAgICAgcmFuZGNvbmZpZy1yMDQxLTIwMjIwNDI3CnMzOTAgICAgICAgICAgICAgICAg
-IHJhbmRjb25maWctcjA0NC0yMDIyMDQyOAoKLS0gCjAtREFZIENJIEtlcm5lbCBUZXN0IFNl
-cnZpY2UKaHR0cHM6Ly8wMS5vcmcvbGtwCg==
+Cc: Anup Patel <anup.patel@broadcom.com>
+Cc: Vinod Koul <vkoul@kernel.org> (maintainer:DMA GENERIC OFFLOAD ENGINE SUBSYSTEM)
+Cc: Sven Peter <sven@svenpeter.dev> (maintainer:ARM/APPLE MACHINE SUPPORT)
+Cc: Alyssa Rosenzweig <alyssa@rosenzweig.io> (reviewer:ARM/APPLE MACHINE SUPPORT)
+To: Jassi Brar <jassisinghbrar@gmail.com> (maintainer:MAILBOX API)
+Cc: Mun Yew Tham <mun.yew.tham@intel.com> (maintainer:ALTERA MAILBOX DRIVER)
+Cc: Chen-Yu Tsai <wens@csie.org> (maintainer:ARM/Allwinner sunXi SoC support)
+Cc: Jernej Skrabec <jernej.skrabec@gmail.com> (maintainer:ARM/Allwinner sunXi SoC support)
+Cc: Samuel Holland <samuel@sholland.org> (maintainer:ARM/Allwinner sunXi SoC support)
+Cc: Michal Simek <michal.simek@xilinx.com> (supporter:ARM/ZYNQ ARCHITECTURE)
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-doc@vger.kernel.org (open list:DOCUMENTATION)
+Cc: linux-kernel@vger.kernel.org (open list)
+Cc: dmaengine@vger.kernel.org (open list:DMA GENERIC OFFLOAD ENGINE SUBSYSTEM)
+Cc: linux-arm-kernel@lists.infradead.org (moderated list:ARM/APPLE MACHINE SUPPORT)
+Cc: linux-sunxi@lists.linux.dev (open list:ARM/Allwinner sunXi SoC support)
+
+Hi all,
+
+We had to implement atomic mailbox operations for apple-mailbox, and
+along the way we ran into a mailbox API issue. This series attempts
+to clean up the problem first, and then adds the apple implementation.
+
+The mailbox API has a `peek_data` operation. Its intent and
+documentation is rather ambiguous; at first glance and based on the
+name, it seems like it should only check for whether data is currently
+pending in the controller, without actually delivering it to the
+consumer. However, this interpretation is not useful for anything: the
+function can be called from atomic context, but without a way to
+actually *poll* for data from atomic context, there is no use in just
+checking for whether data is available.
+
+A more useful operation would be one that actually *polls* for incoming
+data and delivers it to the consumer, synchronously and from atomic
+context. This is what we need for apple-mailbox (in particular because
+the upcoming SMC driver needs to be able to talk to the mailbox from
+atomic context, for reboot/shutdown requests and possibly panic stuff).
+
+Over time, various drivers have implemented this with "peek"
+semantics... and none of them have any users. Which isn't surprising,
+given how these sematics aren't terribly useful :-)
+
+There is, however, one driver that has instead interpreted this as a
+poll operation: bcm-flexrm-mailbox. And, in fact, that is the only
+mailbox with a consumer that actually uses the peek_data op.
+
+So, it seems pretty clear that we should rename this to poll_data and
+fix the documentation. Since the existing "peek" semantics
+implementations are unused, we can just remove them. That leaves just
+bcm-flexrm-mailbox (producer) and bcm-sba-raid (consumer) to fix up
+along with the rename. This series does that, then implements the
+missing ops for apple-mailbox.
+
+Merge notes: it would be helpful if we could merge this via the SoC
+tree, or otherwise I can provide a git branch so you can pull the
+changes directly, and then we can merge it into SoC as well.
+The upcoming SMC driver needs poll_data, and that will allow us to
+merge that with the proper dependencies without waiting for a merge
+cycle in between.
+
+Hector Martin (7):
+  mailbox: zynq: Remove unused zynqmp_ipi_peek_data
+  mailbox: sun6i: Unexport unused sun6i_msgbox_peek_data
+  mailbox: ti-msgmgr Remove unused ti_msgmgr_queue_peek_data
+  mailbox: altera: Remove unused altera_mbox_peek_data
+  mailbox: Rename peek_data to poll_data and fix documentation
+  mailbox: apple: Implement flush() operation
+  mailbox: apple: Implement poll_data() operation
+
+ Documentation/driver-api/mailbox.rst |  2 +-
+ drivers/dma/bcm-sba-raid.c           |  4 +-
+ drivers/mailbox/apple-mailbox.c      | 64 ++++++++++++++++++++++++++--
+ drivers/mailbox/bcm-flexrm-mailbox.c |  4 +-
+ drivers/mailbox/mailbox-altera.c     |  8 ----
+ drivers/mailbox/mailbox.c            | 25 +++++------
+ drivers/mailbox/sun6i-msgbox.c       |  1 -
+ drivers/mailbox/ti-msgmgr.c          | 28 ------------
+ drivers/mailbox/zynqmp-ipi-mailbox.c | 41 ------------------
+ include/linux/mailbox_client.h       |  2 +-
+ include/linux/mailbox_controller.h   |  6 +--
+ 11 files changed, 81 insertions(+), 104 deletions(-)
+
+-- 
+2.35.1
+

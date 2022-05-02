@@ -2,64 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06FE6517AD4
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 01:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C27D3517AEA
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 01:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbiEBXi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 19:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60604 "EHLO
+        id S229719AbiEBXmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 19:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbiEBXhi (ORCPT
+        with ESMTP id S230115AbiEBXlE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 19:37:38 -0400
+        Mon, 2 May 2022 19:41:04 -0400
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9B031DDA;
-        Mon,  2 May 2022 16:34:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC0ABF1
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 16:37:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651534446; x=1683070446;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nUwdA0ziW/oAngkHF65MDeVXJ9fwpPSasMNceDCwLpk=;
-  b=nvluUV7UHa8M8j5h0sQ0phvSRZJG8/xQCD9H4fOntnT/JRmjYBUe3DU8
-   Fr+hlzOslEauAbltSbSxn/y3Bn7fIfxdnYS8xD2ZIH9vzjotbT7iam9x5
-   YW3Vyv68AJ3riQl184eOHoIak2e5/UQ26TVOuB7pAUmTJ3RN24uw6cx66
-   QgSMe73x94X4TCQySBZbHwLWMf1o+a+2UL4AghnQlIkTMFvd53+cc0qa0
-   EFWxdyfQvdrEt0wFR/4Fm7QhMduMn+HUGk7MxFc90PuQtGO8Zh2YOCJOu
-   cMkQOVZOgjb4IXaNcYSVAIgWkYSb9Tyd4DWYvVS3EmoP1Q/VCeFtUz8Jn
+  t=1651534653; x=1683070653;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=4XLZUUn5VZ5th7pOOR71IpH56PArGKxViiV6iEMdEEc=;
+  b=Qs6v6pIIQbAOamRHNu6kOWlpLBN2uWqLlXqCtRsnLPxpKVKJeyG670RK
+   m9wtQuTyeL79n+JUzX59BtIaSEdQefSJFSAFSpZ7a3qN0UtK+5kur/xqj
+   zg/7gHdHzHsi5AEkP6UQ5/UUnullzLDYcSh7yjk+BAa0RN/eE6Fm8qvYz
+   X+ZGcuzhjQMB8ToRT5bUzgH1QgX0lzJ1tqfOVRKlBzYe2qd0f5PSxm8WU
+   siDUgBKsHZrbNg6RwobY3wchPSgvnkFlJ9DyrYz0CfwdHhFmn85sLElLq
+   nDhbOSSCdcQTuVHZod0rRir5j2xCmlmilMEq0MLH5QcVC5VcsSyLPoPYD
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="247265525"
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="247265995"
 X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="247265525"
+   d="scan'208";a="247265995"
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 16:34:06 -0700
-X-ExtLoop1: 1
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 16:37:33 -0700
 X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="887442966"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 02 May 2022 16:34:03 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nlfYJ-0009zA-3Z;
-        Mon, 02 May 2022 23:34:03 +0000
-Date:   Tue, 3 May 2022 07:33:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Max Staudt <max@enpas.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     kbuild-all@lists.01.org, linux-can@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vincent Mailhol <vincent.mailhol@gmail.com>,
-        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org,
-        Max Staudt <max@enpas.org>
-Subject: Re: [PATCH v4] can, tty: elmcan CAN/ldisc driver for ELM327 based
- OBD-II adapters
-Message-ID: <202205030715.YJrfVKUa-lkp@intel.com>
-References: <20220502151222.10681-1-max@enpas.org>
+   d="scan'208";a="887448290"
+Received: from chgan-mobl1.gar.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.60.238])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 16:37:29 -0700
+Message-ID: <0c31f9e5d74b8f5e494fcd3d9c0ebb6668f57c74.camel@intel.com>
+Subject: Re: [PATCH v5 1/3] x86/tdx: Add TDX Guest attestation interface
+ driver
+From:   Kai Huang <kai.huang@intel.com>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 03 May 2022 11:37:27 +1200
+In-Reply-To: <e673ea3d-ae4f-39ed-33a5-c6480e58c6d8@linux.intel.com>
+References: <20220501183500.2242828-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <20220501183500.2242828-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <5473f606bd8e60dd7b8d58a540285d126a1361bd.camel@intel.com>
+         <e5aed619-20ce-7eb3-22a3-64b51de9cce3@linux.intel.com>
+         <b8eadd3079101a2cf93ee87d36dbedf93d8a2725.camel@intel.com>
+         <e673ea3d-ae4f-39ed-33a5-c6480e58c6d8@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220502151222.10681-1-max@enpas.org>
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -70,246 +77,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Max,
+> > > 
+> > > > 
+> > > > For instance, after rough thinking, why is the IOCTL better than below approach
+> > > > using /sysfs?
+> > > > 
+> > > > echo <REPORTDATA> > /sys/kernel/coco/tdx/attest/reportdata
+> > > > cat /sys/kernel/coco/tdx/attest/tdreport
+> > > > 
+> > > > Each "echo <REPORTDATA>" to '/sys/.../reportdata' triggers the driver to call
+> > > > TDCALL to get the TDREPORT, which is available at '/sys/.../tdreport'.
+> > > > 
+> > > > The benefit of using IOCTL I can think of now is it is perhaps more secure, as
+> > > > with IOCTL the REPORTDATA and the TDREPORT is visible to the process which calls
+> > > > the IOCTL, while using the /sysfs they are potentially visible to any process.
+> > > > Especially the REPORTDATA, i.e. it can come from attestation service after the
+> > > > TD attestation agent sets up a secure connection with it.
+> > > > 
+> > > > Anyway, my 2cents above.
+> > > 
+> > > IMO, since TDREPORT is not a secret we don't have to hightlight security
+> > > concern here.
+> > > 
+> > 
+> > Right the TDREPORT itself isn't a secret.  However my thinking is the REPORTDATA
+> > might be.  It's typically provided by the attestation service to the TD so the
+> > Quote can be verified for instance per-session or per-connect or whatever.  The
+> > REPORTDATA is the only thing that can be used to prevent reply attack anyway.
+> >  From this perspective, it is kinda secret.  However the TDREPORT can be captured
+> > by untrusted software and used for reply attack if no crypto-protection is used
+> > when it is sent to the QE, so I am not sure how bad can the reply attack cause.
+> > 
+> > > How about following?
+> > > 
+> > > Operations like getting TDREPORT or Quote generation involves sending
+> > > a blob of data as input and getting another blob of data as output. It
+> > > was considered to use a sysfs interface for this, but it doesn't fit
+> > > well into the standard sysfs model for configuring values. It would be
+> > > possible to do read/write on files, but it would need multiple file
+> > > descriptors, which would be somewhat messy. IOCTLs seems to be the best
+> > > fitting and simplest model here.
+> > > 
+> > > 
+> > 
+> > Let's forget about GetQuote now.  As you can see it has couple of problems.
+> > 
+> > If we don't argue from security perspective, what's wrong with the approach
+> > using /sysfs I mentioned above?
+> 
+> Sysfs is generally used for configuring values. As I have mentioned, it
+> does not fit well for our use case where we want to send blob of data
+> as input and get another blob as an output. But, if you really want to
+> use it, you can implement it like you have mentioned (with multiple
+> files). But I don't see any advantage in doing it.
 
-I love your patch! Yet something to improve:
+I am not so sure about this argument.  Will leave this to maintainers.
 
-[auto build test ERROR on tty/tty-testing]
-[also build test ERROR on linus/master v5.18-rc5 next-20220502]
-[cannot apply to mkl-can-next/testing linux/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+My point is to me from security's perspective, IOCTL fits better.  And you can
+add this to your changelog.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Max-Staudt/can-tty-elmcan-CAN-ldisc-driver-for-ELM327-based-OBD-II-adapters/20220502-232340
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220503/202205030715.YJrfVKUa-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/abb85fc1dc50ffca72049df7c5714a83d081d6f6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Max-Staudt/can-tty-elmcan-CAN-ldisc-driver-for-ELM327-based-OBD-II-adapters/20220502-232340
-        git checkout abb85fc1dc50ffca72049df7c5714a83d081d6f6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
+> 
+> Also, in the future, if you want to support multiple requests in
+> parallel, sysfs model will not work.
+> 
+> 
+> > > 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I think you are mixing getting TDREPORT and GetQuote.  What's the point of
+supporting get TDREPORT in parallel?  You can only get one TDREPORT from TDX
+module at one time.
 
-All errors (new ones prefixed by >>):
+> > > > 
+> > > > > + *
+> > > > > + * @reportdata : User-defined 64-Byte REPORTDATA to be included into
+> > > > > + *		 TDREPORT. Typically it can be some nonce provided by
+> > > > > + *		 attestation software so the generated TDREPORT can be
+> > > > > + *		 uniquely verified.
+> > > > > + * @tdreport   : TDREPORT output from TDCALL[TDG.MR.REPORT] of size
+> > > > > + *		 TDX_REPORT_LEN.
+> > > > > + *
+> > > > > + * Used in TDX_CMD_GET_REPORT IOCTL request.
+> > > > > + */
+> > > > > +struct tdx_report_req {
+> > > > > +	union {
+> > > > > +		__u8 reportdata[TDX_REPORTDATA_LEN];
+> > > > > +		__u8 tdreport[TDX_REPORT_LEN];
+> > > > > +	};
+> > > > > +};
+> > > > 
+> > > > I am not sure overriding the input is a good idea, but will leave to others.
+> > > 
+> > > TDCALL uses it that way. So I have followed the same model.
+> > 
+> > Which TDCALL?
+> 
+> TDG.MR.REPORT. It uses the same buffer as input and output.
+> 
+> 
+It doesn't override the REPORTDATA:
 
-   In file included from arch/arc/include/asm/bug.h:30,
-                    from include/linux/bug.h:5,
-                    from include/linux/cpumask.h:14,
-                    from include/linux/mm_types_task.h:14,
-                    from include/linux/mm_types.h:5,
-                    from include/linux/buildid.h:5,
-                    from include/linux/module.h:14,
-                    from drivers/net/can/elmcan.c:16:
-   drivers/net/can/elmcan.c: In function 'elm327_send':
->> include/linux/lockdep.h:286:61: error: invalid type argument of '->' (have 'spinlock_t' {aka 'struct spinlock'})
-     286 | #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-         |                                                             ^~
-   include/asm-generic/bug.h:122:32: note: in definition of macro 'WARN_ON'
-     122 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   include/linux/lockdep.h:316:9: note: in expansion of macro 'lockdep_assert'
-     316 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |         ^~~~~~~~~~~~~~
-   include/linux/lockdep.h:316:24: note: in expansion of macro 'lockdep_is_held'
-     316 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |                        ^~~~~~~~~~~~~~~
-   drivers/net/can/elmcan.c:130:9: note: in expansion of macro 'lockdep_assert_held'
-     130 |         lockdep_assert_held(elm->lock);
-         |         ^~~~~~~~~~~~~~~~~~~
-   drivers/net/can/elmcan.c: In function 'elm327_kick_into_cmd_mode':
->> include/linux/lockdep.h:286:61: error: invalid type argument of '->' (have 'spinlock_t' {aka 'struct spinlock'})
-     286 | #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-         |                                                             ^~
-   include/asm-generic/bug.h:122:32: note: in definition of macro 'WARN_ON'
-     122 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   include/linux/lockdep.h:316:9: note: in expansion of macro 'lockdep_assert'
-     316 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |         ^~~~~~~~~~~~~~
-   include/linux/lockdep.h:316:24: note: in expansion of macro 'lockdep_is_held'
-     316 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |                        ^~~~~~~~~~~~~~~
-   drivers/net/can/elmcan.c:160:9: note: in expansion of macro 'lockdep_assert_held'
-     160 |         lockdep_assert_held(elm->lock);
-         |         ^~~~~~~~~~~~~~~~~~~
-   drivers/net/can/elmcan.c: In function 'elm327_send_frame':
->> include/linux/lockdep.h:286:61: error: invalid type argument of '->' (have 'spinlock_t' {aka 'struct spinlock'})
-     286 | #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-         |                                                             ^~
-   include/asm-generic/bug.h:122:32: note: in definition of macro 'WARN_ON'
-     122 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   include/linux/lockdep.h:316:9: note: in expansion of macro 'lockdep_assert'
-     316 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |         ^~~~~~~~~~~~~~
-   include/linux/lockdep.h:316:24: note: in expansion of macro 'lockdep_is_held'
-     316 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |                        ^~~~~~~~~~~~~~~
-   drivers/net/can/elmcan.c:173:9: note: in expansion of macro 'lockdep_assert_held'
-     173 |         lockdep_assert_held(elm->lock);
-         |         ^~~~~~~~~~~~~~~~~~~
-   drivers/net/can/elmcan.c: In function 'elm327_init':
->> include/linux/lockdep.h:286:61: error: invalid type argument of '->' (have 'spinlock_t' {aka 'struct spinlock'})
-     286 | #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-         |                                                             ^~
-   include/asm-generic/bug.h:122:32: note: in definition of macro 'WARN_ON'
-     122 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   include/linux/lockdep.h:316:9: note: in expansion of macro 'lockdep_assert'
-     316 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |         ^~~~~~~~~~~~~~
-   include/linux/lockdep.h:316:24: note: in expansion of macro 'lockdep_is_held'
-     316 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |                        ^~~~~~~~~~~~~~~
-   drivers/net/can/elmcan.c:235:9: note: in expansion of macro 'lockdep_assert_held'
-     235 |         lockdep_assert_held(elm->lock);
-         |         ^~~~~~~~~~~~~~~~~~~
-   drivers/net/can/elmcan.c: In function 'elm327_feed_frame_to_netdev':
->> include/linux/lockdep.h:286:61: error: invalid type argument of '->' (have 'spinlock_t' {aka 'struct spinlock'})
-     286 | #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-         |                                                             ^~
-   include/asm-generic/bug.h:122:32: note: in definition of macro 'WARN_ON'
-     122 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   include/linux/lockdep.h:316:9: note: in expansion of macro 'lockdep_assert'
-     316 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |         ^~~~~~~~~~~~~~
-   include/linux/lockdep.h:316:24: note: in expansion of macro 'lockdep_is_held'
-     316 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |                        ^~~~~~~~~~~~~~~
-   drivers/net/can/elmcan.c:265:9: note: in expansion of macro 'lockdep_assert_held'
-     265 |         lockdep_assert_held(elm->lock);
-         |         ^~~~~~~~~~~~~~~~~~~
-   drivers/net/can/elmcan.c: In function 'elm327_uart_side_failure':
->> include/linux/lockdep.h:286:61: error: invalid type argument of '->' (have 'spinlock_t' {aka 'struct spinlock'})
-     286 | #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-         |                                                             ^~
-   include/asm-generic/bug.h:122:32: note: in definition of macro 'WARN_ON'
-     122 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   include/linux/lockdep.h:316:9: note: in expansion of macro 'lockdep_assert'
-     316 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |         ^~~~~~~~~~~~~~
-   include/linux/lockdep.h:316:24: note: in expansion of macro 'lockdep_is_held'
-     316 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |                        ^~~~~~~~~~~~~~~
-   drivers/net/can/elmcan.c:286:9: note: in expansion of macro 'lockdep_assert_held'
-     286 |         lockdep_assert_held(elm->lock);
-         |         ^~~~~~~~~~~~~~~~~~~
-   drivers/net/can/elmcan.c: In function 'elm327_parse_error':
->> include/linux/lockdep.h:286:61: error: invalid type argument of '->' (have 'spinlock_t' {aka 'struct spinlock'})
-     286 | #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-         |                                                             ^~
-   include/asm-generic/bug.h:122:32: note: in definition of macro 'WARN_ON'
-     122 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   include/linux/lockdep.h:316:9: note: in expansion of macro 'lockdep_assert'
-     316 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |         ^~~~~~~~~~~~~~
-   include/linux/lockdep.h:316:24: note: in expansion of macro 'lockdep_is_held'
-     316 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |                        ^~~~~~~~~~~~~~~
-   drivers/net/can/elmcan.c:327:9: note: in expansion of macro 'lockdep_assert_held'
-     327 |         lockdep_assert_held(elm->lock);
-         |         ^~~~~~~~~~~~~~~~~~~
-   drivers/net/can/elmcan.c: In function 'elm327_parse_frame':
->> include/linux/lockdep.h:286:61: error: invalid type argument of '->' (have 'spinlock_t' {aka 'struct spinlock'})
-     286 | #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-         |                                                             ^~
-   include/asm-generic/bug.h:122:32: note: in definition of macro 'WARN_ON'
-     122 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   include/linux/lockdep.h:316:9: note: in expansion of macro 'lockdep_assert'
-     316 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |         ^~~~~~~~~~~~~~
-   include/linux/lockdep.h:316:24: note: in expansion of macro 'lockdep_is_held'
-     316 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |                        ^~~~~~~~~~~~~~~
-   drivers/net/can/elmcan.c:394:9: note: in expansion of macro 'lockdep_assert_held'
-     394 |         lockdep_assert_held(elm->lock);
-         |         ^~~~~~~~~~~~~~~~~~~
-   drivers/net/can/elmcan.c: In function 'elm327_parse_line':
->> include/linux/lockdep.h:286:61: error: invalid type argument of '->' (have 'spinlock_t' {aka 'struct spinlock'})
-     286 | #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-         |                                                             ^~
-   include/asm-generic/bug.h:122:32: note: in definition of macro 'WARN_ON'
-     122 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   include/linux/lockdep.h:316:9: note: in expansion of macro 'lockdep_assert'
-     316 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |         ^~~~~~~~~~~~~~
-   include/linux/lockdep.h:316:24: note: in expansion of macro 'lockdep_is_held'
-     316 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |                        ^~~~~~~~~~~~~~~
-   drivers/net/can/elmcan.c:516:9: note: in expansion of macro 'lockdep_assert_held'
-     516 |         lockdep_assert_held(elm->lock);
-         |         ^~~~~~~~~~~~~~~~~~~
-   drivers/net/can/elmcan.c: In function 'elm327_handle_prompt':
->> include/linux/lockdep.h:286:61: error: invalid type argument of '->' (have 'spinlock_t' {aka 'struct spinlock'})
-     286 | #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-         |                                                             ^~
-   include/asm-generic/bug.h:122:32: note: in definition of macro 'WARN_ON'
-     122 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   include/linux/lockdep.h:316:9: note: in expansion of macro 'lockdep_assert'
-     316 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |         ^~~~~~~~~~~~~~
-   include/linux/lockdep.h:316:24: note: in expansion of macro 'lockdep_is_held'
-     316 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |                        ^~~~~~~~~~~~~~~
-   drivers/net/can/elmcan.c:550:9: note: in expansion of macro 'lockdep_assert_held'
-     550 |         lockdep_assert_held(elm->lock);
-         |         ^~~~~~~~~~~~~~~~~~~
-   drivers/net/can/elmcan.c: In function 'elm327_drop_bytes':
->> include/linux/lockdep.h:286:61: error: invalid type argument of '->' (have 'spinlock_t' {aka 'struct spinlock'})
-     286 | #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-         |                                                             ^~
-   include/asm-generic/bug.h:122:32: note: in definition of macro 'WARN_ON'
-     122 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   include/linux/lockdep.h:316:9: note: in expansion of macro 'lockdep_assert'
-     316 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |         ^~~~~~~~~~~~~~
-   include/linux/lockdep.h:316:24: note: in expansion of macro 'lockdep_is_held'
-     316 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |                        ^~~~~~~~~~~~~~~
-   drivers/net/can/elmcan.c:655:9: note: in expansion of macro 'lockdep_assert_held'
-     655 |         lockdep_assert_held(elm->lock);
-         |         ^~~~~~~~~~~~~~~~~~~
-   drivers/net/can/elmcan.c: In function 'elm327_parse_rxbuf':
->> include/linux/lockdep.h:286:61: error: invalid type argument of '->' (have 'spinlock_t' {aka 'struct spinlock'})
-     286 | #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
-         |                                                             ^~
-   include/asm-generic/bug.h:122:32: note: in definition of macro 'WARN_ON'
-     122 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   include/linux/lockdep.h:316:9: note: in expansion of macro 'lockdep_assert'
-     316 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |         ^~~~~~~~~~~~~~
-   include/linux/lockdep.h:316:24: note: in expansion of macro 'lockdep_is_held'
-     316 |         lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
-         |                        ^~~~~~~~~~~~~~~
-   drivers/net/can/elmcan.c:666:9: note: in expansion of macro 'lockdep_assert_held'
-     666 |         lockdep_assert_held(elm->lock);
-         |         ^~~~~~~~~~~~~~~~~~~
+Input:
 
+RCX:	1024B-aligned guest physical address of newly created report structure
+RDX:	64B-aligned guest physical address of additional data to be signed
 
-vim +286 include/linux/lockdep.h
+As you can see the buffer to hold TDREPORT and REPORTDATA are not the same.
 
-f607c668577481 Peter Zijlstra 2009-07-20  285  
-f8319483f57f1c Peter Zijlstra 2016-11-30 @286  #define lockdep_is_held(lock)		lock_is_held(&(lock)->dep_map)
-f8319483f57f1c Peter Zijlstra 2016-11-30  287  #define lockdep_is_held_type(lock, r)	lock_is_held_type(&(lock)->dep_map, (r))
-f607c668577481 Peter Zijlstra 2009-07-20  288  
+Anyway, we are talking about userspace ABI.  I don't see why this is related
+here.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+-Kai
+
+

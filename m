@@ -2,164 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C716E517386
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1729E5173AB
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:04:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355534AbiEBQFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 12:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43252 "EHLO
+        id S1347559AbiEBQHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 12:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386161AbiEBQEr (ORCPT
+        with ESMTP id S1386145AbiEBQGv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 12:04:47 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0AFDEE7;
-        Mon,  2 May 2022 09:00:58 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id gh6so28686239ejb.0;
-        Mon, 02 May 2022 09:00:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=B/k9asq89XDwMG68daWGZty3oeCwoDEDaFSOuEQBtd0=;
-        b=Kks+DHgbblcpg3oeQsjmU6As85p9JWAM6iYN03INHpKmsDsZDYUt9RmrNZO+a4yTOj
-         3IcLeT4NcmDHllUnAJB3GGxDkNWXGSp3RhnAVE31QSplhnuc8HfzGDFE1orJPHWX9JxU
-         eD+R8gvRB50EsPNi3c9tiOztuxPYAbJOSc5MTHUKy0Byz88hfDo62Duf9JXQaY1+/K56
-         lhkuInv8yRcfj4eCQDF3Lc2mKyXcLX5MBDDvvov0tQlyTCpwqwThMODe75U7RXq5ytGj
-         qe7EfAnsQ1rhxrPvEMey38x7me6Xjkuy5IdEiBlVyrUtE/mo6DEySlwhGFlcmuo/nfSh
-         Zmlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=B/k9asq89XDwMG68daWGZty3oeCwoDEDaFSOuEQBtd0=;
-        b=Y/7OydD6Hg0HmoNTwXst8xFFeYrYKXqwRlP9IB6d8ggDGZOGcwG8MFuhV+APHmRIS2
-         MdPiorXa3iO4MO8FJkU0Phb62wtC1gFd44XNwldl1DhV7vFntphZJg5hNO81gQUmoP8F
-         cvG5VvRRpHEbh6zURZzr4UYKbeSa4dwinrG2ZTcODf+fDqEBBWNtAXk1nnjurzNJ0su8
-         BuDFDDxDpWmBw6WVl/5VVRbaao6jJE5JtxB5z3p9YdKhoJfl3wzbtau5VMiOXJgyaYH3
-         YCFc8Om/6+ypIaIM67883LDs/ilwyFsfMhzjtGPgLwW/wh0MQqV4vPFy2oxIV41jnY+X
-         i0WQ==
-X-Gm-Message-State: AOAM532Cg8iodUPPPjogh6FPCdkoO7eeBKWkEjzzrdpyhhSCBZly2XQF
-        sTDwde/XWQfK1EtaZxOWcxDTlrwDBxlKsg==
-X-Google-Smtp-Source: ABdhPJyGrEf0l0QdeT1UVkkGDk/FoP0BwN4rrVHQ6HPsh9J12efhB4B6hiKMIq71/OS1e/S6vs9qBQ==
-X-Received: by 2002:a17:907:6e8a:b0:6f4:2a65:eb4b with SMTP id sh10-20020a1709076e8a00b006f42a65eb4bmr8588785ejc.597.1651507257320;
-        Mon, 02 May 2022 09:00:57 -0700 (PDT)
-Received: from debianHome.localdomain (dynamic-077-001-135-067.77.1.pool.telefonica.de. [77.1.135.67])
-        by smtp.gmail.com with ESMTPSA id h18-20020a1709070b1200b006f3ef214dd3sm3689996ejl.57.2022.05.02.09.00.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 09:00:56 -0700 (PDT)
-From:   =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
-To:     selinux@vger.kernel.org
-Cc:     Serge Hallyn <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/8] capability: add capable_or to test for multiple caps with exactly one audit message
-Date:   Mon,  2 May 2022 18:00:30 +0200
-Message-Id: <20220502160030.131168-8-cgzones@googlemail.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220502160030.131168-1-cgzones@googlemail.com>
-References: <20220217145003.78982-2-cgzones@googlemail.com>
- <20220502160030.131168-1-cgzones@googlemail.com>
+        Mon, 2 May 2022 12:06:51 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF9813F47
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 09:02:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651507371; x=1683043371;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=KBeRLrN5kv3noIyPri6QAd7wn59IyT9R4gQ29Lb1Sro=;
+  b=fxGnrEbHjt031uucAZrzL8dA823hgzHBGsItyzf7AR2ChteiJ8hKaOXV
+   TqpdaUB7YORtAlX2gzYz+njluysXdKUCgXwRANy6OnDdfpBgBwYumy9vz
+   3uUuz874jGGseM++oPUpOMKEKt9PN8lWmu6zHNx4U0jBKJA0S1AR6SwSO
+   blRuglIeTf4gf/xf294nEJJGqyV35+1wmuiy+WeoUktTO9a8j1Cm5LC9N
+   ueuvCuu7VJUS4TlqhkSEfwCHrXxOlLiti2zkp9X4uAnMh07PuLhpd+ZMO
+   e3iuN/N3TcDmqJfcV5iHrY9JJb1gua48yNvPmqZM4aFE+eijwIIEv2cHi
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="330238577"
+X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
+   d="scan'208";a="330238577"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 09:02:37 -0700
+X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
+   d="scan'208";a="583766235"
+Received: from wahmed-mobl.amr.corp.intel.com (HELO [10.209.71.202]) ([10.209.71.202])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 09:02:30 -0700
+Message-ID: <aae6c58c-a89f-e24c-946b-c16b2415c77e@linux.intel.com>
+Date:   Mon, 2 May 2022 09:02:27 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [PATCH v5 3/3] x86/tdx: Add Quote generation support
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+References: <20220501183500.2242828-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20220501183500.2242828-4-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <7daf429ffda2bf834c129899426e204fbbcbd0b0.camel@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <7daf429ffda2bf834c129899426e204fbbcbd0b0.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the interface `capable_or()` as an alternative to or multiple
-`capable()` calls, like `capable_or(CAP_SYS_NICE, CAP_SYS_ADMIN)`
-instead of `capable(CAP_SYS_NICE) || capable(CAP_SYS_ADMIN)`.
-`capable_or()` will in particular generate exactly one audit message,
-either for the left most capability in effect or, if the task has none,
-the first one.
-This is especially helpful with regard to SELinux, where each audit
-message about a not allowed capability will create an avc denial.
-Using this function with the least invasive capability as left most
-argument (e.g. CAP_SYS_NICE before CAP_SYS_ADMIN) enables policy writers
-to only allow the least invasive one and SELinux domains pass this check
-with only capability:sys_nice or capability:sys_admin allowed without
-any avc denial message.
+Hi Kai,
 
-Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+On 5/1/22 10:01 PM, Kai Huang wrote:
+> 
+>> +
+>> +static long tdx_get_quote(void __user *argp)
+>> +{
+>> +	struct tdx_quote_req quote_req;
+>> +	long ret = 0;
+>> +	int order;
+>> +
+>> +	/* Hold lock to serialize GetQuote requests */
+>> +	mutex_lock(&quote_lock);
+>> +
+>> +	reinit_completion(&req_compl);
+>> +
+>> +	/* Copy GetQuote request struct from user buffer */
+>> +	if (copy_from_user(&quote_req, argp, sizeof(struct tdx_quote_req))) {
+>> +		ret = -EFAULT;
+>> +		goto quote_failed;
+>> +	}
+>> +
+>> +	/* Make sure the length & timeout is valid */
+>> +	if (!quote_req.len || !quote_req.timeout) {
+>> +		ret = -EINVAL;
+>> +		goto quote_failed;
+>> +	}
+>> +
+>> +	/* Get order for Quote buffer page allocation */
+>> +	order = get_order(quote_req.len);
+>> +
+>> +	/*
+>> +	 * Allocate buffer to get TD Quote from the VMM.
+>> +	 * Size needs to be 4KB aligned (which is already
+>> +	 * met in page allocation).
+>> +	 */
+>> +	tdquote = (void *)__get_free_pages(GFP_KERNEL | __GFP_ZERO, order);
+>> +	if (!tdquote) {
+>> +		ret = -ENOMEM;
+>> +		goto quote_failed;
+>> +	}
+>> +
+>> +	/*
+>> +	 * Since this buffer will be shared with the VMM via GetQuote
+>> +	 * hypercall, decrypt it.
+>> +	 */
+>> +	ret = set_memory_decrypted((unsigned long)tdquote, 1UL << order);
+>> +	if (ret)
+>> +		goto quote_failed;
+>> +
+>> +	/* Copy TDREPORT from user buffer to kernel Quote buffer */
+>> +	if (copy_from_user(tdquote, (void __user *)quote_req.buf, quote_req.len)) {
+>> +		ret = -EFAULT;
+>> +		goto quote_failed;
+>> +	}
+>> +
+>> +	/* Submit GetQuote Request */
+>> +	ret = tdx_get_quote_hypercall(tdquote, (1ULL << order) * PAGE_SIZE);
+>> +	if (ret) {
+>> +		pr_err("GetQuote hypercall failed, status:%lx\n", ret);
+>> +		ret = -EIO;
+>> +		goto quote_failed;
+>> +	}
+>> +
+>> +	/* Wait for attestation completion */
+>> +	ret = wait_for_completion_interruptible(&req_compl);
+>> +	if (ret <= 0) {
+>> +		ret = -EIO;
+>> +		goto quote_failed;
+>> +	}
+>> +
+>> +	/* Copy output data back to user buffer */
+>> +	if (copy_to_user((void __user *)quote_req.buf, tdquote, quote_req.len))
+>> +		ret = -EFAULT;
+>> +
+>> +quote_failed:
+>> +	if (tdquote)
+>> +		free_pages((unsigned long)tdquote, order);
+> 
+> The buffer is freed w/o being converted back to private.  How can you prevent
+> the buffer from being allocated by kernel and used as private pages again?
 
----
-v2:
-   avoid varargs and fix to two capabilities; capable_or3() can be added
-   later if needed
----
- include/linux/capability.h |  5 +++++
- kernel/capability.c        | 29 +++++++++++++++++++++++++++++
- 2 files changed, 34 insertions(+)
+Yes. It needs set_memory_encrypted() call here. I will fix this in next
+version.
 
-diff --git a/include/linux/capability.h b/include/linux/capability.h
-index 65efb74c3585..a16d1edea9b3 100644
---- a/include/linux/capability.h
-+++ b/include/linux/capability.h
-@@ -207,6 +207,7 @@ extern bool has_ns_capability(struct task_struct *t,
- extern bool has_capability_noaudit(struct task_struct *t, int cap);
- extern bool has_ns_capability_noaudit(struct task_struct *t,
- 				      struct user_namespace *ns, int cap);
-+extern bool capable_or(int cap1, int cap2);
- extern bool capable(int cap);
- extern bool ns_capable(struct user_namespace *ns, int cap);
- extern bool ns_capable_noaudit(struct user_namespace *ns, int cap);
-@@ -230,6 +231,10 @@ static inline bool has_ns_capability_noaudit(struct task_struct *t,
- {
- 	return true;
- }
-+static inline bool capable_or(int cap1, int cap2)
-+{
-+	return true;
-+}
- static inline bool capable(int cap)
- {
- 	return true;
-diff --git a/kernel/capability.c b/kernel/capability.c
-index 765194f5d678..cd8f3efe6d08 100644
---- a/kernel/capability.c
-+++ b/kernel/capability.c
-@@ -435,6 +435,35 @@ bool ns_capable_setid(struct user_namespace *ns, int cap)
- }
- EXPORT_SYMBOL(ns_capable_setid);
- 
-+/**
-+ * capable_or - Determine if the current task has one of two superior capabilities in effect
-+ * @cap1: The capabilities to be tested for first
-+ * @cap2: The capabilities to be tested for secondly
-+ *
-+ * Return true if the current task has at one of the two given superior
-+ * capabilities currently available for use, false if not.
-+ *
-+ * In contrast to or'ing capable() this call will create exactly one audit
-+ * message, either for @cap1, if it is granted or both are not permitted,
-+ * or @cap2, if it is granted while the other one is not.
-+ *
-+ * The capabilities should be ordered from least to most invasive, i.e. CAP_SYS_ADMIN last.
-+ *
-+ * This sets PF_SUPERPRIV on the task if the capability is available on the
-+ * assumption that it's about to be used.
-+ */
-+bool capable_or(int cap1, int cap2)
-+{
-+	if (ns_capable_noaudit(&init_user_ns, cap1))
-+		return ns_capable(&init_user_ns, cap1);
-+
-+	if (ns_capable_noaudit(&init_user_ns, cap2))
-+		return ns_capable(&init_user_ns, cap2);
-+
-+	return ns_capable(&init_user_ns, cap1);
-+}
-+EXPORT_SYMBOL(capable_or);
-+
- /**
-  * capable - Determine if the current task has a superior capability in effect
-  * @cap: The capability to be tested for
+> 
+> Also, the  buffer may be still used by VMM when timeout (IN_FLIGHT), how can
+> this even work?
+
+We will never reach here for IN_FLIGHT case. We will block in
+wait_for_completion_interruptible() till the status changes to success
+or failure.
+
+> 
+>> +	tdquote = NULL;
+>> +	mutex_unlock(&quote_lock);
+>> +	return ret;
+>> +}
+>> +
+>> +static void attestation_callback_handler(void)
+>> +{
+>> +	struct tdx_quote_hdr *quote_hdr;
+>> +
+>> +	quote_hdr = (struct tdx_quote_hdr *) tdquote;
+>> +
+>> +	/* Check for spurious callback IRQ case */
+>> +	if (!tdquote || quote_hdr->status == GET_QUOTE_IN_FLIGHT)
+>> +		return;
+> 
+> I don't get the logic.  Please explain.
+
+I am trying to handle spurious IRQ case here. If we receive a callback
+IRQ from VMM before even we allocate tdquote or post the GetQuote
+request, accessing quote_hdr->status will lead to NULL pointer
+exception. So I have added check for valid quote buffer (tdquote !=
+NULL)
+
+Second condition (quote_hdr->status == GET_QUOTE_IN_FLIGHT)) makes
+sure we don't mark the current quote request complete until the
+Quote buffer status changes to GET_QUOTE_SUCCESS, GET_QUOTE_ERROR or
+GET_QUOTE_SERVICE_UNAVAILABLE.
+
+> 
+>> +
+>> +	complete(&req_compl);
+>> +}
+>> +
+> 
+
 -- 
-2.36.0
-
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

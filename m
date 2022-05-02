@@ -2,222 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF19C5179C4
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 00:08:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71CAB5179C9
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 00:08:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231447AbiEBWLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 18:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50200 "EHLO
+        id S237821AbiEBWLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 18:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387829AbiEBWKo (ORCPT
+        with ESMTP id S1387794AbiEBWLd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 18:10:44 -0400
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC8F1121;
-        Mon,  2 May 2022 15:07:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1651529234; x=1683065234;
-  h=from:to:cc:subject:date:message-id:references:
-   content-transfer-encoding:mime-version;
-  bh=+p2bilC194FPBJ3EhZ84ajc8No9hIc4J6p2u9fdAvuI=;
-  b=Rnc+BC2ivyCa9VLJfI1yebwAusK05jtnOItLVzWsJ0HWT+Qlm2ub41Hk
-   IRCH0PgePNEtAGKaflBcL+z1qu1Zqw5nGP6Zk+sZOE19NaqL7enyIo2cU
-   t7Qek3jzUlu85JzCviW91hGr4hAE2Isc4SD1qRS5kKRX5tH4ZLOrtMosz
-   RvDDDSnwh1n+VS3ykK4VzbtaSLT6XwLH8wwqYGQHMsddPOnKxFReE3/sI
-   tw81dqfkYf+T5RXP4a054cVTOmB1zLRC5RgibtEIPi6rNBNDKjozFssNv
-   u+WLtZVm0l464985+AwVK0yU241QB9YmgwUH+l1VDz28NYvDZWjzK9DXj
-   g==;
-X-IronPort-AV: E=Sophos;i="5.91,193,1647273600"; 
-   d="scan'208";a="204240683"
-Received: from mail-dm6nam11lp2177.outbound.protection.outlook.com (HELO NAM11-DM6-obe.outbound.protection.outlook.com) ([104.47.57.177])
-  by ob1.hgst.iphmx.com with ESMTP; 03 May 2022 06:07:11 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F3QL/V2u5Z9tHa3rV6Y9ldSxbaXZhaut63nyivn7ROFWzwgiOSR+LSP1EaVcun1Q/u06BHkv/LAK+/0G94jxwI94ZksuXu9L59ttHiJq5Q4x/GmeqQFqRyjHe2F+YOtLC6/k1Ph3rGdKSbxXeoharBFAN2xdHAdqC3kqS2VNsxXm7dLkfsexkbYqP7M1H7IDGSmWS3CcCVQQgmblDEI6fOv7xvUqg08GGSI5zTcaf8ADjjx+K1UO3sjez0fgpA83tC3W7M76NZVpyfYMPyOpvDtVJ3d5/6eRZcqcK7DtTCL0mOVtX28VDj8ToCNUltFXLYPS/+aW3RQSFXm6631pnw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dWU1zcAodQa0jLxSBgS1NZFyLWXl0T4b+RTjxmMzIno=;
- b=bOOhYt1aqX06yIkffV9jnnFsrSahjFdxBdPxr82tazWGGHMvB/8+cGhrlBD1PbECnwmxrELAJMN9j3yn1x3HyNxsil+AOPDYe87tMZeOXrm9mSNUGy7GhyJ8cQZl1GhMqEopl/uDkzHo9Qx81xEO6WjfDv+vaTCffccr/bHzfwDPFaEVJjtSp+U6fg384Erba0ir9YBa4msB23u3IghJeDnWW5eXtQKbEr05CM7JQbH4IX12SzXk5lVv41ZmXtr3pKyas1FfhLJr2H+uwekkeVvrU4CSup4lCiOHBppSC9WjDr0GqppwJeGrIM+RpinRVmhNw26ttBkyxRSahE19aw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dWU1zcAodQa0jLxSBgS1NZFyLWXl0T4b+RTjxmMzIno=;
- b=PCSsY2cyXcsvwkQEv2UuoPYH6CY8ROT6vLSsb7WbfRPyXYuPMJNM3LGjGluBUf2qFQlFNnA7K/bRfsGpjTc1EGIhP8krwRjqAfcpoEAgV0QaoSvXFoaY4XnewslOYiYqKQvYtLCKQUrlGTyqEXB6OGIq9oT2qaMwSrOV+a+ogDA=
-Received: from PH0PR04MB7416.namprd04.prod.outlook.com (2603:10b6:510:12::17)
- by SN6PR04MB5181.namprd04.prod.outlook.com (2603:10b6:805:f7::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Mon, 2 May
- 2022 22:07:10 +0000
-Received: from PH0PR04MB7416.namprd04.prod.outlook.com
- ([fe80::6cfd:b252:c66e:9e12]) by PH0PR04MB7416.namprd04.prod.outlook.com
- ([fe80::6cfd:b252:c66e:9e12%3]) with mapi id 15.20.5206.024; Mon, 2 May 2022
- 22:07:10 +0000
-From:   Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
-To:     Pankaj Raghav <p.raghav@samsung.com>,
-        "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "snitzer@kernel.org" <snitzer@kernel.org>,
-        "hch@lst.de" <hch@lst.de>, "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        Naohiro Aota <Naohiro.Aota@wdc.com>,
-        "sagi@grimberg.me" <sagi@grimberg.me>,
-        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>,
-        "dsterba@suse.com" <dsterba@suse.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        "clm@fb.com" <clm@fb.com>,
-        "gost.dev@samsung.com" <gost.dev@samsung.com>,
-        "chao@kernel.org" <chao@kernel.org>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "josef@toxicpanda.com" <josef@toxicpanda.com>,
-        "jonathan.derrick@linux.dev" <jonathan.derrick@linux.dev>,
-        "agk@redhat.com" <agk@redhat.com>,
-        "kbusch@kernel.org" <kbusch@kernel.org>,
-        "kch@nvidia.com" <kch@nvidia.com>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "jiangbo.365@bytedance.com" <jiangbo.365@bytedance.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        =?iso-8859-1?Q?Matias_Bj=F8rling?= <Matias.Bjorling@wdc.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>
-Subject: Re: [PATCH 00/16] support non power of 2 zoned devices
-Thread-Topic: [PATCH 00/16] support non power of 2 zoned devices
-Thread-Index: AQHYWlBbVAcTcxyrHkCrWR4NhJ2aaA==
-Date:   Mon, 2 May 2022 22:07:09 +0000
-Message-ID: <PH0PR04MB74167FC8BA634A3DA09586489BC19@PH0PR04MB7416.namprd04.prod.outlook.com>
-References: <CGME20220427160256eucas1p2db2b58792ffc93026d870c260767da14@eucas1p2.samsung.com>
- <20220427160255.300418-1-p.raghav@samsung.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wdc.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 737a42a1-6be8-4ddc-e1f5-08da2c881a90
-x-ms-traffictypediagnostic: SN6PR04MB5181:EE_
-x-microsoft-antispam-prvs: <SN6PR04MB51816E48C7920B640CBD56BA9BC19@SN6PR04MB5181.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Kqd/h6p7qnADrAZ0vPTmp/tqhmWk3UMQKEFF0+hJzb98kgf35QW8bLHflCtDtmag3Om5qn6cXZfM/J/c7ucCBM0ubkLj/OxrJ4ymQ+OTRC2PtC7r7bc10NdXwmGN5aUN6Kt4qDuJV+6tFtZqiMjeiMwBbknXdm3Hx+S2IY75lJ7CiYDxEaq+yi8LYbTq7u05zyFqsZlh0qiWfCwp9EOU/zRS7VL3fkpzakifMHF6fRbRJUisM3vUQj2SjGt34mW5bb4+QlHQhsiz9LB6V3lIfdbvUZHFb9YkQxYCq4OTq8UnsAh/oq2xIpB1T6aHU+CE3aGXgDaxDagbqQr95SOJLwTnZH6ofmNXZB+DQ3NG2P3C2q3kW9osl3xk3aS2mYl/E26H9xHVtZx/e1PxlADY3BNjlKLsXyuH53O3hqatvwKzh3v98h2tdpTSENUX5gTu9YnTQ2pj4qRo8r3/Z68TAVp60ko0q+qJfKW3rZoXmBo2YM0f+Koa2o587XdAzRKrzv+Hrmwhp3NtNCJ6B30QiwPYMuutpurvoCOojQ2FbYW1/5zMqADUZGIUdHsir510h54VX7XLZXykdKJPVyLfV+Q1DmmQ27hEwbOC6Eg3sGlHyiR3NKNtSyhh7TBWyBtd/kTSK4rEcnxHMQ/yIFkzb8qylt9kq7aSAVORqb4h05iBnAP3uimjyZIEB2rzw4/abec2otGlstG5LyQFpTbx5ItzEa1w2ycIEQUhWfFbEh0Zdu36FOvxC+B5+WDkQya3svFZ2d/q3Ild8/YpSpb5Gx/1p4u3qNWreqEsACx5Oa6vkaXtvOM59K2HBAqBDUV+
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR04MB7416.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(110136005)(86362001)(8676002)(4326008)(33656002)(66556008)(508600001)(66946007)(76116006)(66446008)(66476007)(966005)(55016003)(64756008)(71200400001)(54906003)(316002)(38070700005)(38100700002)(2906002)(83380400001)(186003)(7416002)(8936002)(5660300002)(921005)(9686003)(6506007)(7696005)(26005)(122000001)(52536014)(53546011)(82960400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?P6ofxjqdMTFATnV/5tCxB+leHjJbejMM+tFIMKgLJfyLd33uD0ZROxfmzM?=
- =?iso-8859-1?Q?bU11gSHxNkUCgkW1bG1IZcXHStFR5UNomn51aBeQTEmsG8MzeLgwxFCRso?=
- =?iso-8859-1?Q?mGMdLRsWC2YhkLUJgqNKuAzy/Dp4Zq/32Te9z2MH9ohQntXSEPrGctU/53?=
- =?iso-8859-1?Q?OKgmFCweNwiIpRrUw/uSH4SOvNIZ4vvbR2vTXwYvF7XVTm2My+5OgYOJhp?=
- =?iso-8859-1?Q?mUUGODEGXH91CVW4jQYttQ/Soue4ncP4stS6+ftqIcfdgN+6HHjlg4BFK1?=
- =?iso-8859-1?Q?nO5ExMdAIA88aeI2z0sV0+k4GGK/TlmPVNSd5G+nIu3i0uy5vGLk5a6VK6?=
- =?iso-8859-1?Q?2yMsYVlqCvH4GSWyJhwotwfNwlfzv5JaAIUV/eOWq6ZtdEUOmDlnKajXE2?=
- =?iso-8859-1?Q?AnKmZWLzmIDMgwTxLWzQXNZtW3Vs3TeKFKqSjdg5UVpUA7XAyo8KsyvS2d?=
- =?iso-8859-1?Q?bjfTQpdCheuAK3jPRG0UO9UY4S0KROvdev//xMAIVzvWSgubDgUoXXb7uw?=
- =?iso-8859-1?Q?qcufuB1+G2kXUozBN4qpsS6HS6+/Szef1sWEvfjZtJZL4FBqR8t5aAVuM/?=
- =?iso-8859-1?Q?2fiOUSApYsENbZ4OVann5Ih+koMjkyczdvpqlNn0AGYGwmKobNyxvlSauk?=
- =?iso-8859-1?Q?tLJJvyJYn7gpTM94mou5MK5gAqYRRW8War4ZcrEj83KlaqtNb8asIGIZ2v?=
- =?iso-8859-1?Q?qyJhF/SUJ06+r0Vcpc+LgpGtDqysMBZkROy/WlKlxPRKVtZ4EkSC05kb+j?=
- =?iso-8859-1?Q?5RX9kocnheUpZG7o+kA1BtYiF5L6fBZntPBSbRxtz4hLkg1dG3clMiPIgg?=
- =?iso-8859-1?Q?qdOm0frLxyDTuUAQf2npsgHO4FJykAD2F15eyczm8OqgQHilJCwF3GSRW6?=
- =?iso-8859-1?Q?mEQ30Ig6ug4drcyqeuj88ys5HRcxHqbxuDw3zV0Ou1yEJ4J5KfbXFQM0ki?=
- =?iso-8859-1?Q?MqsZH6+/u60C8+ol+UiagA4tKn5Mnoe5f7bss/153jEU4Og+b9k6gN20vx?=
- =?iso-8859-1?Q?FKRBfTaFHvuKqfB4r4RXRyhCeoEWlxThuVTmGPNauZ34ibZn3ezPFwBo5T?=
- =?iso-8859-1?Q?ipkqS2DwVlE5xk+8TagFipMVGHLNU8qsEi57wlxZlliFx1fBpWsnBL7TL6?=
- =?iso-8859-1?Q?o8WONe35+/H/IzidR9zFCVSRugEHBvuOXk9xg4VxWWW1ZzqZ2ROJiud9yl?=
- =?iso-8859-1?Q?MtQrPcWTv80YgQDuYofPVap5xCUKyCqD+vt+oipXJMXFsskNj6FYhwHyBm?=
- =?iso-8859-1?Q?GjvMWPi3jLwrl5dcr20g7/vap3c7z4HhKriu0GFETw9d7lh2/OC1X5H+fi?=
- =?iso-8859-1?Q?+kBm7F4gifcCHCxAYJCfpJVNK8Bbgr0bNldWJXD2DX/iAvnFMmxzi1G8qR?=
- =?iso-8859-1?Q?TxAekoWB148BPQOBeRySZyl0zNXeoOGVLf+2ej5Z2pFoFgCYxUpSrgochd?=
- =?iso-8859-1?Q?TtKwTx/ermFrGJfQo+1xCVVnjv/iitwvX7jl4cJ81ezNJJsK5A85q/Yx2H?=
- =?iso-8859-1?Q?/zbNsa6lkRUTVNJB4n8rJUmNNvl5XsBYwMkpzXXybtSMbUQ6kI+ZiKGwF+?=
- =?iso-8859-1?Q?yKqTKny4tAls78Or5YNqyyeiCWtj37f+P8RJ9KLcTk/hm8Vg80ZEvXdrqh?=
- =?iso-8859-1?Q?Y07uI+3ZbszSMGFZD/aUM7oCM7OiKq/itLfKRyx8lWkudzKz7Q5pNoR1s8?=
- =?iso-8859-1?Q?XZcL3swH9jP0WNKQf1KSWHZZ/08Ama1Lu167dfSvDnb6Bwt40y+P5LTg6D?=
- =?iso-8859-1?Q?YM4F6DRUXyH9/VkSg9/vIG2+7HbNWxtgnYhRiAPlYif7nsYCuKbq8NZ7lS?=
- =?iso-8859-1?Q?ybKrrTsc5zXcuCrfBWbPCW0LGiXuOuY=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 2 May 2022 18:11:33 -0400
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B7DC1121
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 15:08:00 -0700 (PDT)
+Received: by mail-pj1-f53.google.com with SMTP id iq2-20020a17090afb4200b001d93cf33ae9so571748pjb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 15:08:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=+WzlqIMp293K3H3f2sHDB997qf0xEgsGTkNiSko9TGw=;
+        b=iJWcWAk2swrrWfIviGf86iD3M9J1puJ2JvBtRZ9SL1K30RPUCsY/R4pR9OBaK1OEqP
+         +rMj9KG9WrrIS+AJBIz7SjPgBarLCkiIsRRwuihCQtlvo3fjs34dmX2N63ga6pe7IluG
+         yP6HXcVJJUrvE9wgtHifOFGa9OLJ7igi/yLIe0fFMTMcx93S7BfJ2HOCQg7FIgF5W9dW
+         MgxiVLyXzm3EM/DCAwjboDw1OSO259boJnU+yKkISIpV7BNwebAW05T2yh57p2OSwlp1
+         WZlTDKqUds2dnSGiF/uppbVVGmmuUlSRY1/7MelFiNpxF9XtGWGMFkzNX/3lEAazKr5R
+         5TrQ==
+X-Gm-Message-State: AOAM532rZahUXwyaalwjACS8aDYTmRTyBExMKLoaY7dlwxU5NfYCTSLy
+        ZIF8dZYV72D8Ba21V+X9I22QGQ==
+X-Google-Smtp-Source: ABdhPJy77EMHFvDo/1IyhZFgTnu75Y3CzXZKSBDCXc2aNKF4uB76iHf85o37EM0Bt3dSQlistTdcqA==
+X-Received: by 2002:a17:903:2043:b0:15b:f6ff:79ed with SMTP id q3-20020a170903204300b0015bf6ff79edmr13581711pla.15.1651529279501;
+        Mon, 02 May 2022 15:07:59 -0700 (PDT)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id s13-20020a170902988d00b0015e8d4eb2a1sm5105174plp.235.2022.05.02.15.07.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 May 2022 15:07:58 -0700 (PDT)
+From:   Kevin Hilman <khilman@kernel.org>
+To:     Chen-Yu Tsai <wenst@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Roger Lu <roger.lu@mediatek.com>,
+        =?utf-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
+        <rex-bc.chen@mediatek.com>
+Cc:     Enric Balletbo Serra <eballetbo@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jia-wei Chang <jia-wei.chang@mediatek.com>
+Subject: Re: [PATCH v24 0/7] soc: mediatek: SVS: introduce MTK SVS
+In-Reply-To: <CAGXv+5HtMVCUdV=kNfOTCp3-1gEzTWtZ1xapgw=L-C2nTC0yag@mail.gmail.com>
+References: <20220420102044.10832-1-roger.lu@mediatek.com>
+ <7hczhbe3wn.fsf@baylibre.com>
+ <3d463c8b099fdb1c9a0df9e615a8ca1d8a034120.camel@mediatek.com>
+ <7hsfq6ql4v.fsf@baylibre.com>
+ <d67d5f4f2ec96ade2398e7c0897dbb16bf5fb145.camel@mediatek.com>
+ <ca127f7f-0620-1c03-4f39-206945b0e612@gmail.com>
+ <CAGXv+5HtMVCUdV=kNfOTCp3-1gEzTWtZ1xapgw=L-C2nTC0yag@mail.gmail.com>
+Date:   Mon, 02 May 2022 15:07:58 -0700
+Message-ID: <7h8rrjr3k1.fsf@baylibre.com>
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR04MB7416.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 737a42a1-6be8-4ddc-e1f5-08da2c881a90
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 May 2022 22:07:09.8911
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pXSrpwmMcyRTXNrz68EpBiuYw5Pa+tQrKzFBtB/vEuBvZU0/1YCUZGY85gPHrGWwgqhO24XrDnLv9PFZCzRHRd43nlRi4zPyiSYm28446/s=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR04MB5181
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/04/2022 09:03, Pankaj Raghav wrote:=0A=
-> - Background and Motivation:=0A=
-> =0A=
-> The zone storage implementation in Linux, introduced since v4.10, first=
-=0A=
-> targetted SMR drives which have a power of 2 (po2) zone size alignment=0A=
-> requirement. The po2 zone size was further imposed implicitly by the=0A=
-> block layer's blk_queue_chunk_sectors(), used to prevent IO merging=0A=
-> across chunks beyond the specified size, since v3.16 through commit=0A=
-> 762380ad9322 ("block: add notion of a chunk size for request merging").=
-=0A=
-> But this same general block layer po2 requirement for blk_queue_chunk_sec=
-tors()=0A=
-> was removed on v5.10 through commit 07d098e6bbad ("block: allow 'chunk_se=
-ctors'=0A=
-> to be non-power-of-2"). NAND, which is the media used in newer zoned stor=
-age=0A=
-> devices, does not naturally align to po2, and so the po2 requirement=0A=
-> does not make sense for those type of zone storage devices.=0A=
-> =0A=
-> Removing the po2 requirement from zone storage should therefore be possib=
-le=0A=
-> now provided that no userspace regression and no performance regressions =
-are=0A=
-> introduced. Stop-gap patches have been already merged into f2fs-tools to=
-=0A=
-> proactively not allow npo2 zone sizes until proper support is added [0].=
-=0A=
-> Additional kernel stop-gap patches are provided in this series for dm-zon=
-ed.=0A=
-> Support for npo2 zonefs and btrfs support is addressed in this series.=0A=
-> =0A=
-> There was an effort previously [1] to add support to non po2 devices via=
-=0A=
-> device level emulation but that was rejected with a final conclusion=0A=
-> to add support for non po2 zoned device in the complete stack[2].=0A=
-=0A=
-Hey Pankaj,=0A=
-=0A=
-One thing I'm concerned with this patches is, once we have npo2 zones (or t=
-o be precise =0A=
-not fs_info->sectorsize aligned zones) we have to check on every allocation=
- if we still =0A=
-have at least have fs_info->sectorsize bytes left in a zone. If not we need=
- to =0A=
-explicitly finish the zone, otherwise we'll run out of max active zones. =
-=0A=
-=0A=
-This is a problem for zoned btrfs at the moment already but it'll be even w=
-orse=0A=
-with npo2, because we're never implicitly finishing zones.=0A=
-=0A=
-See also =0A=
-https://lore.kernel.org/linux-btrfs/42758829d8696a471a27f7aaeab5468f60b1565=
-d.1651157034.git.naohiro.aota@wdc.com=0A=
-=0A=
-Thanks,=0A=
-	Johannes=0A=
+Chen-Yu Tsai <wenst@chromium.org> writes:
+
+> On Fri, Apr 22, 2022 at 11:38 PM Matthias Brugger
+> <matthias.bgg@gmail.com> wrote:
+>>
+>>
+>>
+>> On 22/04/2022 04:24, Roger Lu wrote:
+>> > Hi Kevin,
+>> >
+>> > On Thu, 2022-04-21 at 12:41 -0700, Kevin Hilman wrote:
+>> >> Hi Roger,
+>> >>
+>> >> Roger Lu <roger.lu@mediatek.com> writes:
+>> >>
+>> >>> On Wed, 2022-04-20 at 16:22 -0700, Kevin Hilman wrote:
+>> >>
+>> >> [...]
+>> >>
+>> >>>> That being said, it would be really nice to see an integration tree
+>> >>>> where this was all tested on mainline (e.g. v5.17, or v5.18-rc)
+>> >>>>
+>> >>>> For example, I can apply this to v5.18-rc2 and boot on my mt8183-pumpkin
+>> >>>> board, it fails to probe[1] because there is no CCI node in the upstream
+>> >>>> mt8183.dtsi.
+>> >>>>
+>> >>>> I'm assuming this series is also not very useful without the CPUfreq
+>> >>>> series from Rex, so being able to test this, CCI and CPUfreq together on
+>> >>>> MT8183 on a mainline kernel would be very helpful.
+>> >>>>
+>> >>>> Kevin
+>> >>>>
+>> >>>> [1]
+>> >>>> [    0.573332] mtk-svs 1100b000.svs: cannot find cci node
+>> >>>> [    0.574061] mtk-svs 1100b000.svs: error -ENODEV: svs platform probe
+>> >>>> fail
+>> >>>
+>> >>> Just share. I've tested this series on below two platforms and it works as
+>> >>> expected.
+>> >>> - mt8183-Krane (kernel-v5.10)
+>> >>> - mt8192-Hayato (kernel-v5.4)
+>> >>
+>> >> Unfortunately testing on v5.4 and v5.10 with lots of other additional
+>> >> out-of-tree patches does not give much confidence that this series works
+>> >> with upstream, especially when I've given a few reasons why it will not
+>> >> work uptream.
+>> >>
+>> >> The examples I gave above for CCI and CPUs/cluster disable are good
+>> >> examples, but another one I forgot to mention is the dependency on Mali.
+>> >> The SVS driver will never probe because it also depens on a "mali" node,
+>> >> which doesn't exist upstream either (but panfrost does, and acutually
+>> >> loads/probes fine on v5.17/v5.18) so this should be fixed to work with
+>> >> upstream panfrost.
+>> >>
+>> >> IMO, in order for this to be merged upstream, it should at least have
+>> >> some basic validation with upstream, and so far I have not even been
+>> >> able to make it successfuly probe.  To do that, you will need to either
+>> >> provide a list of the dependencies for testing this with mainline
+>> >> (e.g. CCI series, CPUfreq series, any DT changes), or even better, an
+>> >> integration tree based on recent mainline (e.g. v5.17 stable, or
+>> >> v5.18-rc) which shows all the patches (in addition to this series) used
+>> >> to validate this on mainline.
+>> >
+>> > No problem. We'll find a machine that can be run correctly with recent mainline
+>> > (e.g. v5.17 stable, or v5.18-rc) and add patches (CCI series + CPUfreq series +
+>> > any DT changes) to test this SVS series. Thanks very much.
+>> >
+>>
+>> Thanks Roger. I'll wait until this got tested with upstream Linux, before I will
+>> apply all the patches.
+>
+> Hi everyone,
+>
+> I've put together an integration test branch:
+>
+> https://github.com/wens/linux/commits/mt8183-cpufreq-cci-svs-test
+>
+> This branch is based on next-20220422 and includes the following series:
+>
+> - ANX7625 DPI support v2
+>   https://lore.kernel.org/all/20220422084720.959271-1-xji@analogixsemi.com/
+> - MTK SVS v24
+>   https://lore.kernel.org/all/20220420102044.10832-1-roger.lu@mediatek.com/
+> - MTK cpufreq v4
+>   https://lore.kernel.org/all/20220422075239.16437-1-rex-bc.chen@mediatek.com/
+> - PM / devfreq core patches from
+>   http://git.kernel.org/chanwoo/h/devfreq-testing
+>   PM / devfreq: Export devfreq_get_freq_range symbol within devfreq
+>   PM / devfreq: Add cpu based scaling support to passive governor
+>   PM / devfreq: passive: Reduce duplicate code when passive_devfreq case
+>   PM / devfreq: passive: Update frequency when start governor
+> - CCI devfreq v2
+>   https://lore.kernel.org/all/20220408052150.22536-1-johnson.wang@mediatek.com/
+>
+> And some patches of my own to fix some errors. See the last handful of
+> patches including and after the fixup! one.
+
+Thanks for setting up this branch.
+
+> This was tested on Juniper (Acer Chromebook Spin 311) that has MT8183.
+
+Is there an upstream DT for this platform?
+
+I tried this series on mt8183-pumpkin, and since the upstream DT doesn't
+define a CCI regulator, the CCI driver fails to probe.  Without CCI, the
+SVS driver also fails to probe.  So the platform boots, but has neither
+CCI nor SVS.
+
+If I add a regulator for CCI[1], it goes farther, but then fails more
+noisly[2]
+
+
+> Looking at the mcu_*_sel clocks from /sys/kernel/debug/clk/clk_summary ,
+> it does seem like things are happening, though I'm not sure how to
+> thoroughly test this, especially SVS.
+
+I think you're probably seeing CPU DVFS (CPUfreq) working, but I suspect
+neither CCI or SVS have successfully loaded.
+
+Kevin
+
+
+
+[1]
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts b/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
+index b288b508fa4c..e064c06dc0d7 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
++++ b/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
+@@ -384,6 +384,10 @@ &mfg {
+ 	domain-supply = <&mt6358_vgpu_reg>;
+ };
+ 
++&cci {
++	proc-supply = <&mt6358_vproc12_reg>;
++};
++
+ &cpu0 {
+ 	proc-supply = <&mt6358_vproc12_reg>;
+ };
+
+
+[2]
+[    0.560083] mtk-ccifreq cci: devfreq_add_device: Unable to start governor for the device
+[    0.576083] ------------[ cut here ]------------
+[    0.576670] WARNING: CPU: 3 PID: 1 at drivers/devfreq/governor_passive.c:382 devfreq_passive_event_handler+0x80/0x3a0
+[    0.578021] Modules linked in:
+[    0.578413] CPU: 3 PID: 1 Comm: swapper/0 Not tainted 5.18.0-rc3-next-20220422-05886-g9cd0610279c1-dirty #58
+[    0.579653] Hardware name: Pumpkin MT8183 (DT)
+[    0.580217] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    0.581097] pc : devfreq_passive_event_handler+0x80/0x3a0
+[    0.581780] lr : devfreq_passive_event_handler+0x7c/0x3a0
+[    0.582463] sp : ffff80000808ba40
+[    0.582883] x29: ffff80000808ba40 x28: 0000000000000000 x27: fffffffffffffdfb
+[    0.583788] x26: ffff0000037ba810 x25: ffff80000808bb40 x24: ffff80000a406640
+[    0.584691] x23: ffff8000099153c8 x22: ffff0000037ba800 x21: 0000000000000000
+[    0.585595] x20: ffff0000035c40a0 x19: ffff0000035c4080 x18: 0000000000000000
+[    0.586267] mmc0: new ultra high speed SDR104 SDIO card at address 0001
+[    0.586498] x17: 6f6620726f6e7265 x16: 766f672074726174 x15: 000006837f6218f7
+[    0.588233] x14: 0000000000000320 x13: 0000000000000001 x12: 0000000000000000
+[    0.589137] x11: 0000000000000001 x10: 0000000000000a50 x9 : ffff80000808b7a0
+[    0.590041] x8 : ffff0000028b0ab0 x7 : ffff00007fb19d00 x6 : 00000000076832c3
+[    0.590945] x5 : 00000000410fd030 x4 : 0000000000000000 x3 : ffff80000a3f70e8
+[    0.591849] x2 : 0000000000000000 x1 : ffff0000028b0000 x0 : 00000000fffffffe
+[    0.592753] Call trace:
+[    0.593065]  devfreq_passive_event_handler+0x80/0x3a0
+[    0.593706]  devfreq_remove_device+0x38/0xd0
+[    0.594247]  devfreq_add_device+0x328/0x5f0
+[    0.594778]  devm_devfreq_add_device+0x64/0xb0
+[    0.595341]  mtk_ccifreq_probe+0x340/0x4e0
+[    0.595860]  platform_probe+0x68/0xe0
+[    0.596330]  really_probe.part.0+0x9c/0x29c
+[    0.596862]  __driver_probe_device+0x98/0x144
+[    0.597416]  driver_probe_device+0xac/0x140
+[    0.597948]  __driver_attach+0xf8/0x190
+[    0.598436]  bus_for_each_dev+0x70/0xd0
+[    0.598925]  driver_attach+0x24/0x30
+[    0.599380]  bus_add_driver+0x14c/0x1f0
+[    0.599868]  driver_register+0x78/0x130
+[    0.600356]  __platform_driver_register+0x28/0x34
+[    0.600954]  mtk_ccifreq_platdrv_init+0x1c/0x28
+[    0.601531]  do_one_initcall+0x50/0x1c0
+[    0.602021]  kernel_init_freeable+0x20c/0x290
+[    0.602576]  kernel_init+0x28/0x13c
+[    0.603024]  ret_from_fork+0x10/0x20
+[    0.603480] ---[ end trace 0000000000000000 ]---
+

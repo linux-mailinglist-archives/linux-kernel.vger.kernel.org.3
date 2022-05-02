@@ -2,53 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48042516E0C
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 12:19:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96210516E0E
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 12:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384463AbiEBKW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 06:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34882 "EHLO
+        id S244001AbiEBKYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 06:24:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384510AbiEBKWY (ORCPT
+        with ESMTP id S1384506AbiEBKXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 06:22:24 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF63263B
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 03:18:54 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1nlT8c-0006jf-QH; Mon, 02 May 2022 12:18:42 +0200
-Message-ID: <f91157496327cead5d098a4f37e9f019e526f7c8.camel@pengutronix.de>
-Subject: Re: [PATCH v1 0/4] imx8mm display controller power sequence
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Viraj Shah <viraj.shah@linutronix.de>, shawnguo@kernel.org,
-        s.hauer@pengutronix.de
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 02 May 2022 12:18:39 +0200
-In-Reply-To: <20220502100233.6023-1-viraj.shah@linutronix.de>
-References: <20220502100233.6023-1-viraj.shah@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Mon, 2 May 2022 06:23:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02EBE3D;
+        Mon,  2 May 2022 03:20:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5D83DB8136B;
+        Mon,  2 May 2022 10:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05879C385A4;
+        Mon,  2 May 2022 10:20:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651486817;
+        bh=H/4R1EpBq3eerMw2bv6Q6fjwZU5GW14BHJfL5BIi01c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ZkBM2DVEvOdESoOmys2DpmqzePhzFi2hk0IO6/HkOtTTHgGE+kdBjSTEvI3FQNHng
+         09NK8z2MBRIWYdOZDaADDLfPvdE41T8KDF7Q3wkRIETWvYcf08FLfHEQHqHPN+Ozs8
+         ++Zwp0blzkOJHpvMhPsb+rzgZlxFtZZAP4HHor9QuXECEFOSVO4cHRqJuHs1b8TIih
+         TkRh9st5lhW2i+huOxLs9SIHFa43KfASQDF9w3Gm4mBFPgUWcM9ZMPIgUH0BeBUXXN
+         TWmeRrOR8CBk1oOCclBPzExK23KpW0UsE1QIKkeHTrT9sfOhoHXoZgJAfLGtcFi7PZ
+         TlanNJnU6eEaQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nlTA6-008OSK-Dt; Mon, 02 May 2022 11:20:14 +0100
+Date:   Mon, 02 May 2022 11:20:13 +0100
+Message-ID: <87h768i6ci.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 1/3] PCI: apple: GPIO handling nitfixes
+In-Reply-To: <20220502093832.32778-2-marcan@marcan.st>
+References: <20220502093832.32778-1-marcan@marcan.st>
+        <20220502093832.32778-2-marcan@marcan.st>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: marcan@marcan.st, lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com, bhelgaas@google.com, alyssa@rosenzweig.io, sven@svenpeter.dev, linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,37 +71,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Viraj,
-
-Am Montag, dem 02.05.2022 um 12:02 +0200 schrieb Viraj Shah:
-> This patch queue addresses the power sequence of the display controller
-> of the imx8mm SoC. The sequence mentioned in example code 5 in section
-> 5.2.9.5 of reference manual imx-8MMini-yhsc.pdf was not being performed.
-> This meant that the display controller was not coming up.
-
-I don't know where you got the idea that the current implementation
-doesn't work. Numerous people are using this to get the i.MX8MM display
-light up. All you need to do is add the various display pipeline
-peripherals into the virtual power-domains provided by the blk-ctrl
-driver. The only thing that prevents upstream from having a working
-display pipeline is the conversion of the exynos-dsi into a proper
-bridge driver, which has just landed upstream and the addition of a few
-DT nodes, now that the drivers are getting ready.
-
-Regards,
-Lucas
-
+On Mon, 02 May 2022 10:38:30 +0100,
+Hector Martin <marcan@marcan.st> wrote:
 > 
-> Viraj Shah (4):
->   soc: imx: gpcv2: Power sequence for DISP
->   soc: imx: imx8m-blk-ctrl: Display Power ON sequence
->   soc: imx: imx8m-blk-ctrl: Add reset bits for mipi dsi phy
->   arm64: dts: imx8mm.dtsi: Add resets for dispmix power domain.
+> - Use devm managed GPIO getter
+> - GPIO ops can sleep in this context
 > 
->  arch/arm64/boot/dts/freescale/imx8mm.dtsi |  1 +
->  drivers/soc/imx/gpcv2.c                   | 36 +++++++++++++++++++----
->  drivers/soc/imx/imx8m-blk-ctrl.c          |  9 ++++--
->  3 files changed, 38 insertions(+), 8 deletions(-)
+> Fixes: 1e33888fbe44 ("PCI: apple: Add initial hardware bring-up")
+> Cc: stable@vger.kernel.org
+
+Why the Cc: stable? I'd guess that at a push, the devm_*() usage help
+with potential memory leaks when the driver fails to probe, but it
+would be good to call that out in the commit message.
+
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>  drivers/pci/controller/pcie-apple.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
+> diff --git a/drivers/pci/controller/pcie-apple.c b/drivers/pci/controller/pcie-apple.c
+> index a2c3c207a04b..e0c06c0ee731 100644
+> --- a/drivers/pci/controller/pcie-apple.c
+> +++ b/drivers/pci/controller/pcie-apple.c
+> @@ -516,8 +516,8 @@ static int apple_pcie_setup_port(struct apple_pcie *pcie,
+>  	u32 stat, idx;
+>  	int ret, i;
+>  
+> -	reset = gpiod_get_from_of_node(np, "reset-gpios", 0,
+> -				       GPIOD_OUT_LOW, "PERST#");
+> +	reset = devm_gpiod_get_from_of_node(pcie->dev, np, "reset-gpios", 0,
+> +					    GPIOD_OUT_LOW, "PERST#");
+>  	if (IS_ERR(reset))
+>  		return PTR_ERR(reset);
+>  
+> @@ -541,7 +541,7 @@ static int apple_pcie_setup_port(struct apple_pcie *pcie,
+>  	rmw_set(PORT_APPCLK_EN, port->base + PORT_APPCLK);
+>  
+>  	/* Assert PERST# before setting up the clock */
+> -	gpiod_set_value(reset, 1);
+> +	gpiod_set_value_cansleep(reset, 1);
+>  
+>  	ret = apple_pcie_setup_refclk(pcie, port);
+>  	if (ret < 0)
+> @@ -552,7 +552,7 @@ static int apple_pcie_setup_port(struct apple_pcie *pcie,
+>  
+>  	/* Deassert PERST# */
+>  	rmw_set(PORT_PERST_OFF, port->base + PORT_PERST);
+> -	gpiod_set_value(reset, 0);
+> +	gpiod_set_value_cansleep(reset, 0);
+>  
+>  	/* Wait for 100ms after PERST# deassertion (PCIe r5.0, 6.6.1) */
+>  	msleep(100);
 
+Otherwise:
 
+Acked-by: Marc Zyngier <maz@kernel.org>
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

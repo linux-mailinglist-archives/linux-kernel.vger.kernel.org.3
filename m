@@ -2,189 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C502517846
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 22:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B51F51784C
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 22:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236868AbiEBUjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 16:39:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60758 "EHLO
+        id S1381756AbiEBUmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 16:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234868AbiEBUiq (ORCPT
+        with ESMTP id S236153AbiEBUmg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 16:38:46 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D7021A6;
-        Mon,  2 May 2022 13:35:16 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id y63so16356881oia.7;
-        Mon, 02 May 2022 13:35:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=Wbb/YCuXfU00DfHND/DHy2kwUE+lT6TSINXYpJ/qV5I=;
-        b=FLLW/uyff9Ycgsqvr7B/1rKKbYcqxPHcB/Z4Dzkise/sBahurt9MkB5d2Pwdq0mBx6
-         JBZ79EtlI9uPK5x9zPokW236sVzMczhGdVx1gIMZGk636HBXuHx4CTnG4GED7AvGzHUW
-         Thvss09ZX4qJwF85xOtO/5anUeLJUCJLQqE2oTAv7ob7MgOQbZ8FIG2ataSCB11SLPi/
-         zWRPk8cies0VayUBETQZF0ATO7Ph0YxmHCoLhEDbHA/tOq7AD79YUjIKnbLY1pjSmHsB
-         fjVxpaNMsC7JbyjvdifBLlvwCFZr+BZVQ35H0Bzt/dw9KykTjCJryLdhyJ23VfF7JeHa
-         F90Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=Wbb/YCuXfU00DfHND/DHy2kwUE+lT6TSINXYpJ/qV5I=;
-        b=ozV8FDbO8mlL5w2pcJ57nvVIUa+TRjkC1wVDhF2V35UGVtT9YlED0K4hAGo0Dx3kES
-         rPmKeh6ZzkFvnZGqjmVOJkCGNYassAytxhi7kAnHYVT9no6wsMZ7VK75817MuKTaHDJE
-         6rVhfuPoetwvXXN7Z4XN+SNfgMjb/2u1PuHOG3exg87uqIEqxXv+vF8qU6nif3OW4b4A
-         bS8e7o54rxu+m0znTxeCQXcnqvaaznSkgq2654Dpv1ch+6GSXX8Vp2kCMHzTIPTeqUD4
-         oxTBIWoj8dSXMoVeVu/09PCj8ymRvqd/5R6iM5aVeu/4iR6rBDnQQ13ltFhgBw3get+n
-         a8NQ==
-X-Gm-Message-State: AOAM531kngqZ9obTjKD55+i6DE0ZN6M8zie4DUrFwc93fxP7/x04Rogq
-        D+p3Ou0uelVDh7XHmbokqPE=
-X-Google-Smtp-Source: ABdhPJwiM/GiwIXmL7hyCptsmhhiYotg3kbrvacK9o0+PJRo8UrmYe/PJoRe3aFR7xYQMKwGGCJYVg==
-X-Received: by 2002:a05:6808:1311:b0:325:bb64:ced6 with SMTP id y17-20020a056808131100b00325bb64ced6mr454522oiv.13.1651523716162;
-        Mon, 02 May 2022 13:35:16 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e2-20020a4aa602000000b0035ef3da8387sm1302819oom.4.2022.05.02.13.35.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 13:35:15 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c001d58e-9a78-6338-a533-d0f215b3dfd1@roeck-us.net>
-Date:   Mon, 2 May 2022 13:35:11 -0700
+        Mon, 2 May 2022 16:42:36 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7D9A1A8
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 13:39:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651523946; x=1683059946;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=YlV00rHkt3/lqBWMC8ZTJ1eu+DtwtICYFU8r59KkKkQ=;
+  b=YulbQXUF1w5thfRece+u3yY6YnQYBptwEeRdUoSka6TZY+Mk31t2l7iO
+   6cXWgqi6PikCaYUFVqSgECMQPyK2HImVWyb8Zy5iFgCIYxnX2atCCoWh6
+   RNym/IaUX3DN3JVb+oSUCm5wxizF+wpnV99bEaKCtadSDafVbQdN7PuO3
+   hH6Tqj2P0E/UlepBk57zxNwVVTQwCmU+DOcOJGLsvLWWRgdaAG1LPUyNL
+   ZUC1/IUUYaRBfykkeyc4m1BgNu5nrjP1KRcRzTnd4aXzzn5i3inIH2l8g
+   kuuKBi0im6/Mq6+igH0dTX+yKEfgBxZi0lv51xJW9/g1U/B0B6q6Qd2lf
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="264915751"
+X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
+   d="scan'208";a="264915751"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 13:39:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
+   d="scan'208";a="620068587"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 02 May 2022 13:39:05 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nlcoy-0009qx-MJ;
+        Mon, 02 May 2022 20:39:04 +0000
+Date:   Tue, 03 May 2022 04:38:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/fpu] BUILD SUCCESS
+ b91c0922bf1ed15b67a6faa404bc64e3ed532ec2
+Message-ID: <62704146.ARVWgAor3Ewgm9/h%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-References: <20220419163810.2118169-1-arnd@kernel.org>
- <3b4046ed-fd75-13ea-fac3-06469172806c@roeck-us.net>
- <CAK8P3a1LzEG1vo+5nMrnL3TOMcbSKJ3u=StcfY8dajV2raUBjA@mail.gmail.com>
- <3df135a2-17f5-d6c6-b4a8-e1a60e254297@roeck-us.net>
- <CAK8P3a2EHMQPN4ny9sXXuReFG0jN0hyRV7h9v_AR_0pqpOU41w@mail.gmail.com>
- <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
- <6f1b27fa-96d1-4be7-ac6a-762610314f2a@roeck-us.net>
- <8d6d453a-e6fc-439b-2f34-e60c22fc9e98@roeck-us.net>
- <CAK8P3a2Ekvis1YcrJZtuga+XQdbeTC98PkOszCpS2DiZri7VMQ@mail.gmail.com>
- <149509dd-f43d-1b27-4395-81eab4ff3455@roeck-us.net>
- <CAK8P3a05vFdBnXXAMPVS82xX29+uinvWPcWxAgvj0TfoOk+1kg@mail.gmail.com>
- <b13783aa-9225-d52a-3800-c97ad772688b@roeck-us.net>
- <CAK8P3a3S5OjkKq_u5FpnwzYv+0+typya6Z4MzTez5ZH+do00xQ@mail.gmail.com>
- <CAK8P3a3jiqf_zpBsZyvAb5ZtkwDa7KkqExqDAdpY_pYqkr_NgQ@mail.gmail.com>
- <4dcdbfe2-9edf-320b-d123-3b62c8b5e28e@roeck-us.net>
- <CAK8P3a0ogn1wgPBDHkT=Fb8ufA+y8Ax1Qov2-vRXfC08QqnrQA@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
-In-Reply-To: <CAK8P3a0ogn1wgPBDHkT=Fb8ufA+y8Ax1Qov2-vRXfC08QqnrQA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/2/22 12:21, Arnd Bergmann wrote:
-> On Mon, May 2, 2022 at 6:26 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> With v5.18-rc1-49-gcb813018b5c1, I still get:
->>
->> [    0.797668] RAMDISK: Couldn't find valid RAM disk image starting at 0.
->> [    0.805262] /dev/root: Can't open blockdev
->> [    0.805487] VFS: Cannot open root device "(null)" or unknown-block(0,0): error -6
->> [    0.805674] Please append a correct "root=" boot option; here are the available partitions:
->>
->> when trying to boot z2 from initrd.
->>
->> The other problems are gone.
-> 
-> Ok, progress!
-> 
-> What is your qemu command line? I see that z2 has no pcmcia device, so
-> I tried booting
-> from MMC, but this already fails with 5.18-rc1 without any of my
-> patches, giving me
-> 
-> [    0.697481] Creating 3 MTD partitions on "physmap-flash":
-> [    0.698161] 0x000000000000-0x000000040000 : "U-Boot Bootloader"
-> [    0.702815] 0x000000040000-0x000000060000 : "U-Boot Environment"
-> [    0.706541] 0x000000060000-0x000000800000 : "Flash"
-> [    0.718066] pxa2xx-mci pxa2xx-mci.0: incomplete constraints, dummy
-> supplies not allowed
-> [    0.718501] pxa2xx-mci pxa2xx-mci.0: incomplete constraints, dummy
-> supplies not allowed
-> 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/fpu
+branch HEAD: b91c0922bf1ed15b67a6faa404bc64e3ed532ec2  x86/fpu: Cleanup variable shadowing
 
-To boot from initrd:
+elapsed time: 735m
 
-qemu-system-arm -M z2 -kernel \
-      arch/arm/boot/zImage -no-reboot -initrd \
-      rootfs-armv5.cpio --append \
-      "panic=-1 slub_debug=FZPUA rdinit=/sbin/init console=ttyS0" -nographic \
-      -monitor null -serial stdio
+configs tested: 134
+configs skipped: 76
 
-where rootfs-armv5.cpio is from my repository at github.com.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-https://github.com/groeck/linux-build-test/blob/master/rootfs/arm/rootfs-armv5.cpio.gz
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+sh                            shmin_defconfig
+mips                  maltasmvp_eva_defconfig
+sh                               j2_defconfig
+sh                        apsh4ad0a_defconfig
+mips                             allyesconfig
+powerpc                mpc7448_hpc2_defconfig
+sh                        sh7763rdp_defconfig
+h8300                    h8300h-sim_defconfig
+arm                        oxnas_v6_defconfig
+powerpc                       ppc64_defconfig
+sh                           sh2007_defconfig
+mips                         cobalt_defconfig
+h8300                            alldefconfig
+m68k                          atari_defconfig
+arm                            zeus_defconfig
+arm                            mps2_defconfig
+xtensa                  audio_kc705_defconfig
+sh                   sh7770_generic_defconfig
+riscv             nommu_k210_sdcard_defconfig
+sh                         ecovec24_defconfig
+xtensa                         virt_defconfig
+powerpc                    amigaone_defconfig
+sh                        sh7785lcr_defconfig
+sh                           se7721_defconfig
+sh                           se7705_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220501
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+i386                 randconfig-a004-20220502
+i386                 randconfig-a006-20220502
+i386                 randconfig-a002-20220502
+i386                 randconfig-a003-20220502
+i386                 randconfig-a001-20220502
+i386                 randconfig-a005-20220502
+x86_64               randconfig-a006-20220502
+x86_64               randconfig-a002-20220502
+x86_64               randconfig-a001-20220502
+x86_64               randconfig-a004-20220502
+x86_64               randconfig-a005-20220502
+x86_64               randconfig-a003-20220502
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220501
+arc                  randconfig-r043-20220502
+s390                 randconfig-r044-20220501
+riscv                randconfig-r042-20220501
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
 
-> Do  you have MMC or some other rootfs working without my patch series?
-> 
+clang tested configs:
+x86_64                        randconfig-c007
+i386                          randconfig-c001
+powerpc              randconfig-c003-20220501
+riscv                randconfig-c006-20220501
+mips                 randconfig-c004-20220501
+arm                  randconfig-c002-20220501
+arm                           spitz_defconfig
+mips                      maltaaprp_defconfig
+arm                         palmz72_defconfig
+arm                         socfpga_defconfig
+mips                           mtx1_defconfig
+riscv                    nommu_virt_defconfig
+powerpc                     ksi8560_defconfig
+arm                            dove_defconfig
+powerpc                   bluestone_defconfig
+x86_64                           allyesconfig
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64               randconfig-a011-20220502
+x86_64               randconfig-a012-20220502
+x86_64               randconfig-a013-20220502
+x86_64               randconfig-a016-20220502
+x86_64               randconfig-a015-20220502
+x86_64               randconfig-a014-20220502
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
 
-I can boot z2 from mmc and flash, but I have a number of configuration
-flags enabled on top of pxa_defconfig. That also works with your latest patch
-series. See
-https://kerneltests.org/builders/qemu-arm-testing/builds/75/steps/qemubuildcommand/logs/stdio
-
-     # Always enable ...
-     enable_config "${defconfig}" CONFIG_DEVTMPFS CONFIG_DEVTMPFS_MOUNT CONFIG_BLK_DEV_INITRD
-     # Options needed to be built into the kernel for device support
-     # on pxa devices
-     # MTD, squashfs
-     enable_config_cond "${defconfig}" CONFIG_MTD_BLOCK CONFIG_MTD_PXA2XX CONFIG_SQUASHFS
-     # MMC
-     enable_config_cond "${defconfig}" CONFIG_MMC_BLOCK CONFIG_MMC_PXA
-     # PCMCIA
-     enable_config_cond "${defconfig}" CONFIG_ATA CONFIG_BLK_DEV_SD CONFIG_PCCARD
-     enable_config_cond "${defconfig}" CONFIG_PCMCIA CONFIG_PATA_PCMCIA CONFIG_PCMCIA_PXA2XX
-     # USB
-     enable_config_cond "${defconfig}" CONFIG_USB CONFIG_USB_STORAGE CONFIG_USB_OHCI_HCD CONFIG_USB_OHCI_HCD_PXA27X
-
-Hope this helps,
-Guenter
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

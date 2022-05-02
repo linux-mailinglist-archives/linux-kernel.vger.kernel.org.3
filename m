@@ -2,146 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA00516A17
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 06:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB275516A1A
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 06:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357685AbiEBEki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 00:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37168 "EHLO
+        id S1381663AbiEBEnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 00:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356680AbiEBEka (ORCPT
+        with ESMTP id S1350459AbiEBEnU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 00:40:30 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58693ED39;
-        Sun,  1 May 2022 21:37:02 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id z8so14271776oix.3;
-        Sun, 01 May 2022 21:37:02 -0700 (PDT)
+        Mon, 2 May 2022 00:43:20 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE7B3FD94
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 21:39:52 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id m14-20020a17090a34ce00b001d5fe250e23so11845677pjf.3
+        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 21:39:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3Br+n0K7k+C3+/ovSPrijxX1Bg3JwPDAx3LhT1Kpj2g=;
-        b=TCiS84NLvK+JrFbA6TX6NtQYy+yW7yMaYBWXWPLx+H73p5Lt7kUcF508gkiQ7Nj4nu
-         eerRo7WxHXpyUkbOnAmBXgGigsOv/NI7HnOEngWp+nMkcY0zgdrqA5riuePMymvxyrBw
-         zZJQkVfAxdJqOeKdEONcTVCa5X8O1YDDpqIcvB9o7qiCq6mscQ/JstbL7WszcxpIvILE
-         aSh0CnpLHyCgHOQEUknd2SzfIab3UfJb5Df56Yy1U6W81sVhNK3WmjLDQQsjo8y+Iwen
-         Ac8YnkPXoyUVs9eSHCySjK2gxWhjO3z7vxA9DmhA48dsc70z6PyjfQFRbg3rs311lYww
-         6kHA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Q6JAdcJJ5Qoz6lAJknf+7RgOR6g1kzTLvudjVEl/CYY=;
+        b=k9DoJBIeLjtq7XTDsgDYhnunfFtS3OjDrzj25MKoXmKOVHaSvYwy4wWxKR7RLP1C4p
+         ahOFyr2uL2oR+LXLd1Xh0rjo/t83aM/td7si3cf3mwZAEQf7QdnI95XorOKffwUqxhai
+         KfWzGfOzeBSYn+20ZegeUpXcHtSJZFqABrsm2nZogrmy8eCLI9O/G9URUmLNNnyYIdiU
+         7omSW+Ib7TyNhC0W/oL0C2bMp3oaR9c7g20RfYRYu9+tefwj2DrAG9HMXnE3yxHbr4mj
+         tKDFYgtBNKK/IkK6k0bdPwx/P74KUgXErxS8IC6NUtus3pAh/uy13mXV+8BpjexUCZri
+         zSGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=3Br+n0K7k+C3+/ovSPrijxX1Bg3JwPDAx3LhT1Kpj2g=;
-        b=E29jJvWXVDfEOivey1iwaVHXxtKKkVNDBbP4rwQImvhJ/I9YZZZcLhnE7mOUd1OKQD
-         D85xBFFaHg2B4+kRcT94cCpT52H+fQ13QHdwaLxkl2b+2H7Ret6mhhq4lCVfI1dg3FIv
-         yvOrdaRP2PSY1aJxF3kzcBCeWkQSVU5f9NlUyZVnIwCw1XpXuaVmgZIJq7Tw9MpT9Suz
-         FyJeh/tM+84337VrVtFY38cy63a+5VIWy6fWiAP7etgqfCFdoX/XDlhy5acTbpm6pIcT
-         wZI2EX+hWco/63Fj1mGPwSwpI+uUgTM+OCX73fop6ObnLEqAboIanbddV7+ti1xxyQj7
-         ETow==
-X-Gm-Message-State: AOAM531MEgDsRL36Fzn4huNJUVENhuWJ5NooKIiU3EOLaq+BNXrbPfJQ
-        kUqgrT6lPM4sbxoEY2U3chw=
-X-Google-Smtp-Source: ABdhPJzgsc7TDcfYAfnEzfTGoGl31PnF5rdBOgRRwX9+taIY+hY8x6NG2jlkaznhgK25o+E710qFEQ==
-X-Received: by 2002:aca:5d85:0:b0:325:bf2b:253c with SMTP id r127-20020aca5d85000000b00325bf2b253cmr4856622oib.85.1651466222076;
-        Sun, 01 May 2022 21:37:02 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b3-20020a056870918300b000eb639a5652sm3067377oaf.37.2022.05.01.21.37.01
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Q6JAdcJJ5Qoz6lAJknf+7RgOR6g1kzTLvudjVEl/CYY=;
+        b=3kh5uqw3FJApmW6KtLV+doAphWKBrw60e9dWTTtxXUomdNTxm9mHyF33mxe2y05NgE
+         T4xM6HGD8nhfY4WfLoGW88XdHz3DItJYKxM4/FoVbf4kl7priAR6KyFbgMGBIR9rvbIY
+         oPB3XYM5rrmLU/JQzjnnI+WaaMqYnKFMBrETkoPe5+ctBr8Jt1U4jxADvI5IBrRmvzuo
+         SogmF+RYr4DBUaHDI191+vO+xRE/WPIQb4wiElynd9cqngaDB9ETLS2GTH6A06Xtjynv
+         d+LzWzJ7RXgQOUgvobie/QIUTsZEmpHViNFq9AA4oi1WIjqYnlCWatkPEvBiMvbuvEWE
+         d9PQ==
+X-Gm-Message-State: AOAM531JvCAfO/mTYaXW7eIVnxtUrDPOyFhXi2ARpdYfz9RRYtQ4O2MU
+        U6doI+RCw7iwZOv+51FKp/iZ
+X-Google-Smtp-Source: ABdhPJws5mLlqRV9/kn0AvQrQHPyMTyEdrmcG2GWvpHvmg9kKNkP/Ht87dmDzG//yhrRrCUyc0qasg==
+X-Received: by 2002:a17:90a:dd46:b0:1b8:8:7303 with SMTP id u6-20020a17090add4600b001b800087303mr16177172pjv.197.1651466392013;
+        Sun, 01 May 2022 21:39:52 -0700 (PDT)
+Received: from localhost.localdomain ([27.111.75.99])
+        by smtp.gmail.com with ESMTPSA id s25-20020a62e719000000b0050dc76281cbsm3644657pfh.165.2022.05.01.21.39.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 May 2022 21:37:01 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 1 May 2022 21:37:00 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     jdelvare@suse.com, robh+dt@kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] hwmon: (adt7475) Use enum chips when loading
- attenuator settings
-Message-ID: <20220502043700.GA1719447@roeck-us.net>
-References: <20220323034056.260455-1-chris.packham@alliedtelesis.co.nz>
- <20220323034056.260455-4-chris.packham@alliedtelesis.co.nz>
+        Sun, 01 May 2022 21:39:51 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     mhi@lists.linux.dev
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v2] bus: mhi: ep: Power up/down MHI stack during MHI RESET
+Date:   Mon,  2 May 2022 10:09:46 +0530
+Message-Id: <20220502043946.24432-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220323034056.260455-4-chris.packham@alliedtelesis.co.nz>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 04:40:56PM +1300, Chris Packham wrote:
-> Make use of enum chips and use a switch statement in load_attenuators()
-> so that the compiler can tell us if we've failed to cater for a
-> supported chip.
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+During graceful shutdown scenario, host will issue MHI RESET to the
+endpoint device before initiating shutdown. In that case, it makes sense
+to completely power down the MHI stack as sooner or later the access to
+MMIO registers will be prohibited. Also, the stack needs to be powered
+up in the case of SYS_ERR to recover the device.
 
-Applied to hwmon-next.
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
 
-Thanks,
-Guenter
+Changes in v2:
 
-> ---
-> 
-> Notes:
->     Changes in v3:
->     - Reword commit message
->     - Use switch instead of if/else
->     Changes in v2:
->     - New
-> 
->  drivers/hwmon/adt7475.c | 23 ++++++++++-------------
->  1 file changed, 10 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/hwmon/adt7475.c b/drivers/hwmon/adt7475.c
-> index 6de501de41b2..ac480e6e4818 100644
-> --- a/drivers/hwmon/adt7475.c
-> +++ b/drivers/hwmon/adt7475.c
-> @@ -1569,12 +1569,12 @@ static int set_property_bit(const struct i2c_client *client, char *property,
->  	return ret;
->  }
->  
-> -static int load_attenuators(const struct i2c_client *client, int chip,
-> +static int load_attenuators(const struct i2c_client *client, enum chips chip,
->  			    struct adt7475_data *data)
->  {
-> -	int ret;
-> -
-> -	if (chip == adt7476 || chip == adt7490) {
-> +	switch (chip) {
-> +	case adt7476:
-> +	case adt7490:
->  		set_property_bit(client, "adi,bypass-attenuator-in0",
->  				 &data->config4, 4);
->  		set_property_bit(client, "adi,bypass-attenuator-in1",
-> @@ -1584,18 +1584,15 @@ static int load_attenuators(const struct i2c_client *client, int chip,
->  		set_property_bit(client, "adi,bypass-attenuator-in4",
->  				 &data->config4, 7);
->  
-> -		ret = i2c_smbus_write_byte_data(client, REG_CONFIG4,
-> -						data->config4);
-> -		if (ret < 0)
-> -			return ret;
-> -	} else if (chip == adt7473 || chip == adt7475) {
-> +		return i2c_smbus_write_byte_data(client, REG_CONFIG4,
-> +						 data->config4);
-> +	case adt7473:
-> +	case adt7475:
->  		set_property_bit(client, "adi,bypass-attenuator-in1",
->  				 &data->config2, 5);
->  
-> -		ret = i2c_smbus_write_byte_data(client, REG_CONFIG2,
-> -						data->config2);
-> -		if (ret < 0)
-> -			return ret;
-> +		return i2c_smbus_write_byte_data(client, REG_CONFIG2,
-> +						 data->config2);
->  	}
->  
->  	return 0;
+* Removed unused variables
+
+ drivers/bus/mhi/ep/main.c | 35 +++++++----------------------------
+ 1 file changed, 7 insertions(+), 28 deletions(-)
+
+diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
+index 40109a79017a..59fe8633d4c9 100644
+--- a/drivers/bus/mhi/ep/main.c
++++ b/drivers/bus/mhi/ep/main.c
+@@ -973,11 +973,9 @@ static void mhi_ep_abort_transfer(struct mhi_ep_cntrl *mhi_cntrl)
+ static void mhi_ep_reset_worker(struct work_struct *work)
+ {
+ 	struct mhi_ep_cntrl *mhi_cntrl = container_of(work, struct mhi_ep_cntrl, reset_work);
+-	struct device *dev = &mhi_cntrl->mhi_dev->dev;
+ 	enum mhi_state cur_state;
+-	int ret;
+ 
+-	mhi_ep_abort_transfer(mhi_cntrl);
++	mhi_ep_power_down(mhi_cntrl);
+ 
+ 	spin_lock_bh(&mhi_cntrl->state_lock);
+ 	/* Reset MMIO to signal host that the MHI_RESET is completed in endpoint */
+@@ -990,27 +988,8 @@ static void mhi_ep_reset_worker(struct work_struct *work)
+ 	 * issue reset during shutdown also and we don't need to do re-init in
+ 	 * that case.
+ 	 */
+-	if (cur_state == MHI_STATE_SYS_ERR) {
+-		mhi_ep_mmio_init(mhi_cntrl);
+-
+-		/* Set AMSS EE before signaling ready state */
+-		mhi_ep_mmio_set_env(mhi_cntrl, MHI_EE_AMSS);
+-
+-		/* All set, notify the host that we are ready */
+-		ret = mhi_ep_set_ready_state(mhi_cntrl);
+-		if (ret)
+-			return;
+-
+-		dev_dbg(dev, "READY state notification sent to the host\n");
+-
+-		ret = mhi_ep_enable(mhi_cntrl);
+-		if (ret) {
+-			dev_err(dev, "Failed to enable MHI endpoint: %d\n", ret);
+-			return;
+-		}
+-
+-		enable_irq(mhi_cntrl->irq);
+-	}
++	if (cur_state == MHI_STATE_SYS_ERR)
++		mhi_ep_power_up(mhi_cntrl);
+ }
+ 
+ /*
+@@ -1089,11 +1068,11 @@ EXPORT_SYMBOL_GPL(mhi_ep_power_up);
+ 
+ void mhi_ep_power_down(struct mhi_ep_cntrl *mhi_cntrl)
+ {
+-	if (mhi_cntrl->enabled)
++	if (mhi_cntrl->enabled) {
+ 		mhi_ep_abort_transfer(mhi_cntrl);
+-
+-	kfree(mhi_cntrl->mhi_event);
+-	disable_irq(mhi_cntrl->irq);
++		kfree(mhi_cntrl->mhi_event);
++		disable_irq(mhi_cntrl->irq);
++	}
+ }
+ EXPORT_SYMBOL_GPL(mhi_ep_power_down);
+ 
+-- 
+2.25.1
+

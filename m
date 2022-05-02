@@ -2,184 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82FEB5171EC
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 16:48:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D4F5171F0
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 16:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385607AbiEBOvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 10:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57908 "EHLO
+        id S1385615AbiEBOvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 10:51:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350573AbiEBOvh (ORCPT
+        with ESMTP id S1350573AbiEBOvy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 10:51:37 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C067767D;
-        Mon,  2 May 2022 07:48:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1651502847;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=gbCKt3vPpEPi1+UqrESQDFS2PsBWY0AgZ4n3u84ceTg=;
-    b=R3FhLGwbtFMeqs8ilz93/4MwPMXrKXAlBe+xL7aEQyQiOerbUVxo435mE8nhcCEnex
-    z/c3kb4KjhQ15yJRK734bHvZP8aG4+MhQghSXBBFr5SEatYrn44CaYQkTcAIEJrf1nLh
-    8pykVLtx9WeghdhqoVdLE1TWG2V0FRfjkLIaW6PkSPS4xKpx1CwCFDNXruaoXnBBqGad
-    JdC+CTugi4xNW+2go+2p8QLjizaog/qLEuKNi7KmYg0ed5TF/HwrxgAhxDNS2ySmznFy
-    Tj4RMCf5MrklzaZsveNYOWbkVL/LIoYlX08+gEf+iEzn4tn+n3X9JpNX6N2VU2M46yVE
-    /BCg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7gpw91N5y2S3i8V+"
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.42.2 DYNA|AUTH)
-    with ESMTPSA id k708cfy42ElNWek
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Mon, 2 May 2022 16:47:23 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH] wl1251: dynamically allocate memory used for DMA
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <CAK8P3a3OiFJiR40FXmCZTc1fMZBteGjXqipDcvZqoO85QBxYow@mail.gmail.com>
-Date:   Mon, 2 May 2022 16:47:22 +0200
-Cc:     Tony Lindgren <tony@atomide.com>, Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>, kernel@pyra-handheld.com,
-        linux-omap <linux-omap@vger.kernel.org>,
-        Luca Coelho <luca@coelho.fi>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <123640FA-6AF2-4C0E-A7CC-31DCC4CEA15B@goldelico.com>
-References: <1676021ae8b6d7aada0b1806fed99b1b8359bdc4.1651495112.git.hns@goldelico.com>
- <CAK8P3a3OiFJiR40FXmCZTc1fMZBteGjXqipDcvZqoO85QBxYow@mail.gmail.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 2 May 2022 10:51:54 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710999FF1
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 07:48:25 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 230BA1F38D;
+        Mon,  2 May 2022 14:48:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1651502904; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oL5aruEm90sJ5sm/xZJzQZSAFeKPbOQn51medaxSNpo=;
+        b=jLf3/4fes+dwOivLP5p/l86M6kaXPwDp2i2MNn8Sl23k827rc+qMG/HvZ2J0TanwJKQquy
+        3FxqbcG4sp8NhyVHEx4mfmFmj3/c6PA2wQ9FLbkE9C3MevtL0irK3yZ/H+cXFt8W7FssXZ
+        8bUzI41UWDRmbpKMD0O6r258FfAkXis=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1651502904;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oL5aruEm90sJ5sm/xZJzQZSAFeKPbOQn51medaxSNpo=;
+        b=nShChD+jEIGqsiJVYp+DWku7SnaEfBlSBN2kuRJias7mjhC1bn3Apx4WRbrSz032DxCaFm
+        Ysf1UOzHOZP5N5AA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 171F3133E5;
+        Mon,  2 May 2022 14:48:24 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id UaedBTjvb2I9PQAAMHmgww
+        (envelope-from <bp@suse.de>); Mon, 02 May 2022 14:48:24 +0000
+Date:   Mon, 2 May 2022 16:48:22 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Michael Roth <michael.roth@amd.com>
+Subject: Re: [tip:x86/sev 55/55] arch/x86/kernel/sev.c:605:17: sparse:
+ sparse: incorrect type in argument 1 (different address spaces)
+Message-ID: <Ym/vNnmW09TPxBEi@zn.tnic>
+References: <202205022233.XgNDR7WR-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <202205022233.XgNDR7WR-lkp@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On Mon, May 02, 2022 at 10:19:04PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/sev
+> head:   c2106a231c2ba36ff9af50cdf2867b9a5f8150a6
+> commit: c2106a231c2ba36ff9af50cdf2867b9a5f8150a6 [55/55] x86/sev: Get the AP jump table address from secrets page
+> config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220502/202205022233.XgNDR7WR-lkp@intel.com/config)
+> compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+> reproduce:
+>         # apt-get install sparse
+>         # sparse version: v0.6.4-dirty
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=c2106a231c2ba36ff9af50cdf2867b9a5f8150a6
+>         git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+>         git fetch --no-tags tip x86/sev
+>         git checkout c2106a231c2ba36ff9af50cdf2867b9a5f8150a6
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> 
+> sparse warnings: (new ones prefixed by >>)
+> >> arch/x86/kernel/sev.c:605:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got struct snp_secrets_page_layout *[assigned] layout @@
+>    arch/x86/kernel/sev.c:605:17: sparse:     expected void volatile [noderef] __iomem *addr
+>    arch/x86/kernel/sev.c:605:17: sparse:     got struct snp_secrets_page_layout *[assigned] layout
+> 
+> vim +605 arch/x86/kernel/sev.c
+> 
+>    588	
+>    589	static u64 __init get_snp_jump_table_addr(void)
+>    590	{
+>    591		struct snp_secrets_page_layout *layout;
+>    592		u64 pa, addr;
+>    593	
+>    594		pa = get_secrets_page();
+>    595		if (!pa)
+>    596			return 0;
+>    597	
+>    598		layout = (__force void *)ioremap_encrypted(pa, PAGE_SIZE);
+>    599		if (!layout) {
+>    600			pr_err("Unable to locate AP jump table address: failed to map the SNP secrets page.\n");
+>    601			return 0;
+>    602		}
+>    603	
+>    604		addr = layout->os_area.ap_jump_table_pa;
+>  > 605		iounmap(layout);
+>    606	
+>    607		return addr;
+>    608	}
+>    609	
+> 
+> -- 
 
-> Am 02.05.2022 um 16:06 schrieb Arnd Bergmann <arnd@arndb.de>:
->=20
-> On Mon, May 2, 2022 at 2:38 PM H. Nikolaus Schaller =
-<hns@goldelico.com> wrote:
->> With introduction of vmap'ed stacks, stack parameters can no
->> longer be used for DMA and now leads to kernel panic.
->>=20
->> It happens at several places for the wl1251 (e.g. when
->> accessed through SDIO) making it unuseable on e.g. the
->> OpenPandora.
->>=20
->> We solve this by allocating temporary buffers or use wl1251_read32().
->=20
-> This looks all correct to me. I had another look at the related wlcore
-> driver now,
-> and see that the same problem existed there but was fixed back in 2012
-> in a different way, see 690142e98826 ("wl12xx: fix DMA-API-related =
-warnings").
+Mike, that ok?
 
-Interesting!
+---
+diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+index 166375084b1f..c05f0124c410 100644
+--- a/arch/x86/kernel/sev.c
++++ b/arch/x86/kernel/sev.c
+@@ -589,20 +589,23 @@ static u64 __init get_secrets_page(void)
+ static u64 __init get_snp_jump_table_addr(void)
+ {
+ 	struct snp_secrets_page_layout *layout;
++	void __iomem *mem;
+ 	u64 pa, addr;
+ 
+ 	pa = get_secrets_page();
+ 	if (!pa)
+ 		return 0;
+ 
+-	layout = (__force void *)ioremap_encrypted(pa, PAGE_SIZE);
+-	if (!layout) {
++	mem = ioremap_encrypted(pa, PAGE_SIZE);
++	if (!mem) {
+ 		pr_err("Unable to locate AP jump table address: failed to map the SNP secrets page.\n");
+ 		return 0;
+ 	}
+ 
++	layout = (__force struct snp_secrets_page_layout *)mem;
++
+ 	addr = layout->os_area.ap_jump_table_pa;
+-	iounmap(layout);
++	iounmap(mem);
+ 
+ 	return addr;
+ }
 
->=20
-> The approach in the wlcore driver appears to be simpler because it
-> avoids dynamic memory allocation and the associated error handling.
+-- 
+Regards/Gruss,
+    Boris.
 
-It looks as if it just avoids kmalloc/free sequences in event handling
-by allocating a big enough buffer once.
-
-wl1271_cmd_wait_for_event_or_timeout() allocates it like we do now.
-
-> However, it probably makes another problem worse that also exists
-> here:
->=20
-> static inline u32 wl1251_read32(struct wl1251 *wl, int addr)
-> {
->       u32 response;
->       wl->if_ops->read(wl, addr, &wl->buffer_32, =
-sizeof(wl->buffer_32));
->       return le32_to_cpu(wl->buffer_32);
-> }
->=20
-> I think the 'buffer_32' member of 'struct wl1251' needs an explicit
-> '__cacheline_aligned' attribute to avoid potentially clobbering
-> some of the structure during a DMA write.
->=20
-> I don't know if anyone cares enough about the two drivers to
-> have an opinion. I've added Luca to Cc, but he hasn't maintained
-> the driver since 2013 and probably doesn't.
-
-Well, there seems to be quite some common code but indeed devices
-using these older chips are getting rare so it is probably not worth
-combining code. And testing needs someone who owns boards
-with both chips...
-
->=20
-> It's probably ok to just apply your patch for the moment to fix
-> the regression we saw on the machines that we know use this.
->=20
-> One more detail:
->=20
->> diff --git a/drivers/net/wireless/ti/wl1251/event.c =
-b/drivers/net/wireless/ti/wl1251/event.c
->> index e6d426edab56b..e945aafd88ee5 100644
->> --- a/drivers/net/wireless/ti/wl1251/event.c
->> +++ b/drivers/net/wireless/ti/wl1251/event.c
->> @@ -169,11 +169,9 @@ int wl1251_event_wait(struct wl1251 *wl, u32 =
-mask, int timeout_ms)
->>                msleep(1);
->>=20
->>                /* read from both event fields */
->> -               wl1251_mem_read(wl, wl->mbox_ptr[0], &events_vector,
->> -                               sizeof(events_vector));
->> +               events_vector =3D wl1251_mem_read32(wl, =
-wl->mbox_ptr[0]);
->>                event =3D events_vector & mask;
->> -               wl1251_mem_read(wl, wl->mbox_ptr[1], &events_vector,
->> -                               sizeof(events_vector));
->> +               events_vector =3D wl1251_mem_read32(wl, =
-wl->mbox_ptr[1]);
->>                event |=3D events_vector & mask;
->=20
-> This appears to change endianness of the data, on big-endian kernels.
-> Is that intentional?
-
-Hm. I didn't think about it. I just noticed that wl1251_mem_read32 uses =
-the
-internal buffer so we don't have to allocate its own buffer any more.
-
->=20
-> My first guess would be that the driver never worked correctly on =
-big-endian
-> machines, and that the change is indeed correct, but on the other hand
-> the conversion was added in commit ac9e2d9afa90 ("wl1251: convert
-> 32-bit values to le32 before writing to the chip") in a way that =
-suggests it
-> was meant to work on both.
-
-wl1251_event_wait() seems to work with the masks provided by code.
-So I guess the conversion to le32 is harmless on the OpenPandora.
-Most likely it should be done on big endian devices. I.e. we might have
-done the right thing.
-
-Let's see if someone compains or knows more. Otherwise we should
-fix it just for the Pandora and N900 (both omap3 based) as the only
-upstream users of this chip.
-
-BR and thanks,
-Nikolaus
-
-
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

@@ -2,114 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF1351777F
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 21:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E69DE517782
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 21:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233598AbiEBTl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 15:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57286 "EHLO
+        id S1351078AbiEBTpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 15:45:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232548AbiEBTlY (ORCPT
+        with ESMTP id S232548AbiEBTpC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 15:41:24 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C6065D4
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 12:37:54 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id t25so2830632ljd.6
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 12:37:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=J7CBsRSCXXbD2/NTY2D5JamVPix8X/S/pKY0BP5yLBM=;
-        b=t558DsrcLANHfzoqL9k9rSR9hcDj2jp1a50++NsDsBG6Kqz8P1S5fyIO6vJzyeSnPY
-         jFiS4a0TeP4oHp5+RCGhQezFeLCtr+ShAPkOlDPoanNfqphdGAdeEsopDn1HP0uTtmzl
-         C+C1HgrN9fh76OvW++baovvPOP1si22RlJzrXefq4EEQaldw/C+ijUjxUxttekLO0mOJ
-         jcK/lL9vBtiDxfDMTyxX0gQLfAt6JOhU2s8V536Mf8LPQCzyog9upddfbV27W5pSPiGV
-         VpoLsS+GyYSl1fM2UJsRtiQCnZP3f6aY9+34QzJxKXQrXyeRPYErVgH2Xhxj7Cev4prC
-         BxYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=J7CBsRSCXXbD2/NTY2D5JamVPix8X/S/pKY0BP5yLBM=;
-        b=JJIMYfn0jMRazDsezXljBgRTaVFvJy+f0rMJHSHyoo7Q5z1rtNjRLtuLm7fyvtlh/+
-         a94FKKm0ZmgSilMtQNpZgKTvIa40FzVIK0Tdd7qQRCB9aGdZ/gm9YXSt+sVX7Uqd78g+
-         C0SaMfopqv279jXp91m5m19CTKafIheQvIiRAHD6Ly4SxMST1791jDuzhI9yxsDpOWh9
-         nrmovQ3jdaMRxxA1oDZ+1sbnPUoQCnOS2aNW5N5CPT9eYG1GI3f8H1yRJf8v6p0viVXZ
-         3bLJuN/9OQ8wzWzNsMsHGwG0d4Pht16UdDZmBCTnsVOQRZprdyS+cp3zFPxJ5knbCUCy
-         aYcQ==
-X-Gm-Message-State: AOAM532TPkKX2bK3QqaWXMSE1ngELyUgQZAY7k8/zdvXphjmPdLSWJao
-        ddxzOwyehH1F6b+NUarMWbX7Kg==
-X-Google-Smtp-Source: ABdhPJxDKQ1glTiWrGq7xgdFpGeMkHjOz9EqJyGVjvY/OadZro3UgEgWuIyZiDuVAogp/hCPxUS4lQ==
-X-Received: by 2002:a2e:86c6:0:b0:246:3c93:1c8a with SMTP id n6-20020a2e86c6000000b002463c931c8amr8410222ljj.354.1651520272491;
-        Mon, 02 May 2022 12:37:52 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.177])
-        by smtp.gmail.com with ESMTPSA id e7-20020a056512090700b0047255d211aesm774858lft.221.2022.05.02.12.37.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 12:37:51 -0700 (PDT)
-Message-ID: <7509fa9f-9d15-2f29-cb2f-ac0e8d99a948@openvz.org>
-Date:   Mon, 2 May 2022 22:37:49 +0300
+        Mon, 2 May 2022 15:45:02 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A5863F6
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 12:41:31 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E27C1484;
+        Mon,  2 May 2022 21:41:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1651520489;
+        bh=7fS1iDiQS0BFHXb6Blv7uJsVuEU2kQ6EnwifQcIZAzE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L6vTOnaYs7l4Xlv3+utCAZq5wLz1L8z9dE5E8+De/yg2+Pma+zdmoo/867c5Ze76+
+         exCdf2KgzXrGOkXEsHqhG4eyuJpbCE1tqzVXQPVbHV8+oMRr0hcpp/eZbX9GD6wYiL
+         rZ001sxYlJkkZ4F/yveoIbAQI0FZ6+DVNlid2hh0=
+Date:   Mon, 2 May 2022 22:41:28 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v2 1/3] drm: Remove superfluous arg when calling to
+ drm_fbdev_generic_setup()
+Message-ID: <YnAz6HPPfWpYcZvF@pendragon.ideasonboard.com>
+References: <20220502153900.408522-1-javierm@redhat.com>
+ <20220502153900.408522-2-javierm@redhat.com>
+ <YnABjdpGC166yIY7@pendragon.ideasonboard.com>
+ <5dd80287-1b09-d02c-9f67-5a0bb0a4566c@redhat.com>
+ <bc6b6598-0e09-1a43-4086-e4164ab42a20@redhat.com>
+ <YnAkwRL7b++a0omG@pendragon.ideasonboard.com>
+ <21db3772-b85a-59ff-df17-9056b3099977@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: kernfs memcg accounting
-Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Shakeel Butt <shakeelb@google.com>, kernel@openvz.org,
-        Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
-        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tejun Heo <tj@kernel.org>
-References: <7e867cb0-89d6-402c-33d2-9b9ba0ba1523@openvz.org>
- <20220427140153.GC9823@blackbody.suse.cz>
-From:   Vasily Averin <vvs@openvz.org>
-In-Reply-To: <20220427140153.GC9823@blackbody.suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <21db3772-b85a-59ff-df17-9056b3099977@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/27/22 17:01, Michal Koutný wrote:
-> Hello Vasily.
+On Mon, May 02, 2022 at 09:28:45PM +0200, Javier Martinez Canillas wrote:
+> On 5/2/22 20:36, Laurent Pinchart wrote:
+> > On Mon, May 02, 2022 at 07:15:16PM +0200, Javier Martinez Canillas wrote:
+> >> On 5/2/22 18:55, Javier Martinez Canillas wrote:
+> >>
+> >> [snip]
+> >>
+> >>>> drop the depth option to drm_fbdev_generic_setup() ? There's a FIXME
+> >>>> comment in drm_fbdev_generic_setup() that could be related.
+> >>>
+> >>> A FIXME makes sense, I'll add that to when posting a v3.
+> >>
+> >> There's actually a FIXME already in drm_fbdev_generic_setup(), so it's
+> >> a documented issue [0]:
+> > 
+> > That's what I meant by "there's a FIXME" :-) It doesn't have to be
+> > addressed by this series, but it would be good to fix it.
 > 
-> On Wed, Apr 27, 2022 at 01:37:50PM +0300, Vasily Averin <vvs@openvz.org> wrote:
->> diff --git a/fs/kernfs/mount.c b/fs/kernfs/mount.c
->> index cfa79715fc1a..2881aeeaa880 100644
->> --- a/fs/kernfs/mount.c
->> +++ b/fs/kernfs/mount.c
->> @@ -391,7 +391,7 @@ void __init kernfs_init(void)
->>  {
->>  	kernfs_node_cache = kmem_cache_create("kernfs_node_cache",
->>  					      sizeof(struct kernfs_node),
->> -					      0, SLAB_PANIC, NULL);
->> +					      0, SLAB_PANIC | SLAB_ACCOUNT, NULL);
-> 
-> kernfs accounting you say?
-> kernfs backs up also cgroups, so the parent-child accounting comes to my
-> mind.
-> See the temporary switch to parent memcg in mem_cgroup_css_alloc().
+> doh, I misread your original email. Yes, it's the same issue as you
+> said and something that I plan to look at some point as a follow-up.
+>  
+> I hope that we could just replace fbcon with a kms/systemd-consoled/foo
+> user-space implementation before fixing all the stuff in the DRM fbdev
+> emulation layer :)
 
-Dear Michal,
-I did not understand your statement. Could you please explain it in more details?
+If you can do that, I'll provide champagne :-)
 
-I see that cgroup_mkdir()->cgroup_create() creates new kernfs node for new
-sub-directory, and with my patch account memory of kernfs node to memcg 
-of current process.
-Do you think it is incorrect and new kernfs node should be accounted
-to memcg of parent cgroup, as mem_cgroup_css_alloc()-> mem_cgroup_alloc() does?
-Perhaps you mean that in this case kernfs should not be counted at all,
-as almost all neighboring allocations do?
+-- 
+Regards,
 
-Thank you,
-	Vasily Averin
+Laurent Pinchart

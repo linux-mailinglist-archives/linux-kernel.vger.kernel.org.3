@@ -2,50 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5CE516F46
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 14:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C21B5516F4B
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 14:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233452AbiEBMJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 08:09:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33462 "EHLO
+        id S1384883AbiEBMKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 08:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233362AbiEBMJw (ORCPT
+        with ESMTP id S1358164AbiEBMKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 08:09:52 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D76213D2A
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 05:06:23 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id j4-20020a92c204000000b002caad37af3fso7069754ilo.22
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 05:06:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=oeRvHAY7DuWM+jFTn8eavTdlO6S9pp+ZLgkiUkQfQDM=;
-        b=I9w9GZiSyLzaIV1tL1WmhLCvpPvlfeicqMsO6QF0bUldmqJEX0+iLGzYiBxWrhPYZW
-         8jy8fm9yH0IZi449FeF8W6HrSX2RecSQbyWu2rpUFHqSclQFCflDJpf1HGa6VEJOIAuX
-         Kjn8anUOR44cOxm6XG3mwvK67jcbZklaWHql/J17HzkEyzhlWgQ4SjwwtKCDWkQacL9W
-         W9Vthr683sjclyajd2Xx7OQCUh5ai5LASTNldpJSaJ0Fm+6p3GD1Q8g6kd4ULsBB4K0V
-         WjRS3Vago+1PTmzrlAPTgpMD2waLi+d7MbSMvSuxzCkHV+mYcQ9HIEC39rXOeXeYhZ20
-         wZGg==
-X-Gm-Message-State: AOAM530O6mS/2RELsOfkQg9yzvyXnt1rL0rGR9ktM/1BqEzcMD+Bfc9J
-        GpStCEp498Ec/7duv2+a/pl02XnmNTcUGrp/ag5pdvOTOXMo
-X-Google-Smtp-Source: ABdhPJwr7jcFq7L29JlK2/QBm/OHeN6Ztj7HKKNpoca889T778HD3nh9ibg3iV1nGB5UqzSKOMNqPN2wzpn4h1hAdfrclrDR0S9T
+        Mon, 2 May 2022 08:10:42 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E40F6140F6
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 05:07:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651493233; x=1683029233;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=S4zRqF7wBu13eawZ9T5/EyBFgesQlI5D9pMOFKmrM6E=;
+  b=a6rGR7Vdj6VS6c/nVR4npIG1gj04lTTm18V60IaA5Ir92Nux0eaKTJFv
+   XpVqFC0pah74lasXaZiFmLaNZD1dXe8G0jEbgy2J2Q/U5jrbas0CTKJcm
+   i5X5yImdkJr8oQzOgw+W0p/H9iS5ekhhI+NMIa4FhS8kfV6TQTLjBhH6q
+   RTnz0iSLWJ5pdfU007LYPEEuIefqnS1IKMhUgKjiORgmTRF4bVMl88MiI
+   ZjA5xKWa3jklSLJ4J2HZqBtzhNP/mGS0wgO9EZ7EFNXcRmarxz677yf9G
+   a8Y9wdBVJzGf6Ky0yzygnN8hnInfns58ODL3oeeP+ueWSrgobXY6l/tOC
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="267063652"
+X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
+   d="scan'208";a="267063652"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 05:07:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
+   d="scan'208";a="652792713"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 02 May 2022 05:07:12 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nlUpb-0009XR-ES;
+        Mon, 02 May 2022 12:07:11 +0000
+Date:   Mon, 2 May 2022 20:06:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Arend van Spriel <arend.vanspriel@broadcom.com>
+Subject: [asahilinux:bits/080-wifi 5/28]
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:1849:25: warning:
+ format '%ld' expects argument of type 'long int', but argument 4 has type
+ 'size_t' {aka 'unsigned int'}
+Message-ID: <202205021926.yNtpCBqV-lkp@intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3291:b0:32a:8493:fad1 with SMTP id
- f17-20020a056638329100b0032a8493fad1mr4470087jav.19.1651493182581; Mon, 02
- May 2022 05:06:22 -0700 (PDT)
-Date:   Mon, 02 May 2022 05:06:22 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007f31db05de0638f0@google.com>
-Subject: [syzbot] general protection fault in vma_interval_tree_remove
-From:   syzbot <syzbot+ee1fdd8dcc770a3a169a@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,117 +64,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+tree:   https://github.com/AsahiLinux/linux bits/080-wifi
+head:   a61fbffc5fad05fe49dfd9a09b3c2482ac250d46
+commit: deeb9254b770bcac4848911a5af7d496138e2ab8 [5/28] brcmfmac: pcie: Read Apple OTP information
+config: powerpc-buildonly-randconfig-r006-20220501 (https://download.01.org/0day-ci/archive/20220502/202205021926.yNtpCBqV-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/AsahiLinux/linux/commit/deeb9254b770bcac4848911a5af7d496138e2ab8
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/080-wifi
+        git checkout deeb9254b770bcac4848911a5af7d496138e2ab8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/net/wireless/broadcom/brcm80211/brcmfmac/
 
-syzbot found the following issue on:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-HEAD commit:    bdc61aad77fa Add linux-next specific files for 20220428
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1196c4bcf00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=87767e89da13a759
-dashboard link: https://syzkaller.appspot.com/bug?extid=ee1fdd8dcc770a3a169a
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+All warnings (new ones prefixed by >>):
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ee1fdd8dcc770a3a169a@syzkaller.appspotmail.com
-
-RBP: 0000000020000000 R08: 0000000000000004 R09: 0000000000000000
-R10: 0000000000008011 R11: 0000000000000206 R12: 0000000020000800
-R13: 0000000020000000 R14: 00000000200007c0 R15: 0000000020000000
- </TASK>
-general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-CPU: 1 PID: 32272 Comm: syz-executor.4 Not tainted 5.18.0-rc4-next-20220428-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:rb_set_parent_color include/linux/rbtree_augmented.h:165 [inline]
-RIP: 0010:____rb_erase_color lib/rbtree.c:359 [inline]
-RIP: 0010:__rb_erase_color+0x2fd/0xdb0 lib/rbtree.c:413
-Code: 00 4d 89 ec 4d 8b 6d 10 e9 ac fd ff ff 4c 89 60 10 eb be 4c 89 e9 48 89 e8 4c 89 6d 10 48 c1 e9 03 49 89 6c 24 08 48 83 c8 01 <80> 3c 19 00 0f 85 1d 08 00 00 49 89 45 00 48 89 e8 48 c1 e8 03 80
-RSP: 0018:ffffc900149ffa48 EFLAGS: 00010286
-RAX: ffff88801f3fbb21 RBX: dffffc0000000000 RCX: 0000000000000000
-RDX: ffffed1002fe1617 RSI: ffff888017f0b0b8 RDI: ffff8880790928a0
-RBP: ffff88801f3fbb20 R08: ffff88801f3fbb30 R09: ffff888017f0b0af
-R10: ffffffff81b01168 R11: 0000000000000001 R12: ffff888079092898
-R13: 0000000000000000 R14: ffff888017f0b0b8 R15: ffffffff81afff50
-FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 000000001da88000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- rb_erase_augmented include/linux/rbtree_augmented.h:305 [inline]
- rb_erase_augmented_cached include/linux/rbtree_augmented.h:314 [inline]
- vma_interval_tree_remove+0x694/0xed0 mm/interval_tree.c:23
- __remove_shared_vm_struct mm/mmap.c:160 [inline]
- unlink_file_vma+0xbd/0x110 mm/mmap.c:175
- free_pgtables+0x255/0x420 mm/memory.c:440
- exit_mmap+0x1ff/0x740 mm/mmap.c:3148
- __mmput+0xe4/0x460 kernel/fork.c:1175
- mmput+0x5c/0x70 kernel/fork.c:1197
- exit_mm kernel/exit.c:510 [inline]
- do_exit+0xa18/0x2a00 kernel/exit.c:782
- do_group_exit+0xd2/0x2f0 kernel/exit.c:925
- __do_sys_exit_group kernel/exit.c:936 [inline]
- __se_sys_exit_group kernel/exit.c:934 [inline]
- __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:934
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f858fe890e9
-Code: Unable to access opcode bytes at RIP 0x7f858fe890bf.
-RSP: 002b:00007f85910bbaf8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f858fe890e9
-RDX: 00007f858fe89132 RSI: 0000000000000000 RDI: 000000000000000b
-RBP: 000000000000000b R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000004 R11: 0000000000000246 R12: 0000000020000800
-R13: 0000000020000000 R14: 00000000200007c0 R15: 0000000020000000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:rb_set_parent_color include/linux/rbtree_augmented.h:165 [inline]
-RIP: 0010:____rb_erase_color lib/rbtree.c:359 [inline]
-RIP: 0010:__rb_erase_color+0x2fd/0xdb0 lib/rbtree.c:413
-Code: 00 4d 89 ec 4d 8b 6d 10 e9 ac fd ff ff 4c 89 60 10 eb be 4c 89 e9 48 89 e8 4c 89 6d 10 48 c1 e9 03 49 89 6c 24 08 48 83 c8 01 <80> 3c 19 00 0f 85 1d 08 00 00 49 89 45 00 48 89 e8 48 c1 e8 03 80
-RSP: 0018:ffffc900149ffa48 EFLAGS: 00010286
-RAX: ffff88801f3fbb21 RBX: dffffc0000000000 RCX: 0000000000000000
-RDX: ffffed1002fe1617 RSI: ffff888017f0b0b8 RDI: ffff8880790928a0
-RBP: ffff88801f3fbb20 R08: ffff88801f3fbb30 R09: ffff888017f0b0af
-R10: ffffffff81b01168 R11: 0000000000000001 R12: ffff888079092898
-R13: 0000000000000000 R14: ffff888017f0b0b8 R15: ffffffff81afff50
-FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 000000001da88000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	00 4d 89             	add    %cl,-0x77(%rbp)
-   3:	ec                   	in     (%dx),%al
-   4:	4d 8b 6d 10          	mov    0x10(%r13),%r13
-   8:	e9 ac fd ff ff       	jmpq   0xfffffdb9
-   d:	4c 89 60 10          	mov    %r12,0x10(%rax)
-  11:	eb be                	jmp    0xffffffd1
-  13:	4c 89 e9             	mov    %r13,%rcx
-  16:	48 89 e8             	mov    %rbp,%rax
-  19:	4c 89 6d 10          	mov    %r13,0x10(%rbp)
-  1d:	48 c1 e9 03          	shr    $0x3,%rcx
-  21:	49 89 6c 24 08       	mov    %rbp,0x8(%r12)
-  26:	48 83 c8 01          	or     $0x1,%rax
-* 2a:	80 3c 19 00          	cmpb   $0x0,(%rcx,%rbx,1) <-- trapping instruction
-  2e:	0f 85 1d 08 00 00    	jne    0x851
-  34:	49 89 45 00          	mov    %rax,0x0(%r13)
-  38:	48 89 e8             	mov    %rbp,%rax
-  3b:	48 c1 e8 03          	shr    $0x3,%rax
-  3f:	80                   	.byte 0x80
+   In file included from drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:33:
+   drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c: In function 'brcmf_pcie_parse_otp':
+>> drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:1849:25: warning: format '%ld' expects argument of type 'long int', but argument 4 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
+    1849 |         brcmf_dbg(PCIE, "parse_otp size=%ld\n", size);
+         |                         ^~~~~~~~~~~~~~~~~~~~~~  ~~~~
+         |                                                 |
+         |                                                 size_t {aka unsigned int}
+   drivers/net/wireless/broadcom/brcm80211/brcmfmac/debug.h:77:21: note: in definition of macro 'brcmf_dbg'
+      77 |                     fmt, ##__VA_ARGS__);                        \
+         |                     ^~~
+   drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c:1849:43: note: format string is defined here
+    1849 |         brcmf_dbg(PCIE, "parse_otp size=%ld\n", size);
+         |                                         ~~^
+         |                                           |
+         |                                           long int
+         |                                         %d
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+vim +1849 drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+  1842	
+  1843	static int
+  1844	brcmf_pcie_parse_otp(struct brcmf_pciedev_info *devinfo, u8 *otp, size_t size)
+  1845	{
+  1846		int p = 0;
+  1847		int ret = -EINVAL;
+  1848	
+> 1849		brcmf_dbg(PCIE, "parse_otp size=%ld\n", size);
+  1850	
+  1851		while (p < (size - 1)) {
+  1852			u8 type = otp[p];
+  1853			u8 length = otp[p + 1];
+  1854	
+  1855			if (type == 0)
+  1856				break;
+  1857	
+  1858			if ((p + 2 + length) > size)
+  1859				break;
+  1860	
+  1861			switch (type) {
+  1862			case BRCMF_OTP_SYS_VENDOR:
+  1863				brcmf_dbg(PCIE, "OTP @ 0x%x (%d): SYS_VENDOR\n",
+  1864					  p, length);
+  1865				ret = brcmf_pcie_parse_otp_sys_vendor(devinfo,
+  1866								      &otp[p + 2],
+  1867								      length);
+  1868				break;
+  1869			case BRCMF_OTP_BRCM_CIS:
+  1870				brcmf_dbg(PCIE, "OTP @ 0x%x (%d): BRCM_CIS\n",
+  1871					  p, length);
+  1872				break;
+  1873			default:
+  1874				brcmf_dbg(PCIE, "OTP @ 0x%x (%d): Unknown type 0x%x\n",
+  1875					  p, length, type);
+  1876				break;
+  1877			}
+  1878	
+  1879			p += 2 + length;
+  1880		}
+  1881	
+  1882		return ret;
+  1883	}
+  1884	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

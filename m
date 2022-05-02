@@ -2,73 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 089A551713A
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 16:06:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DAD051713E
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 16:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385568AbiEBOJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 10:09:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47060 "EHLO
+        id S236851AbiEBOJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 10:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385647AbiEBOJV (ORCPT
+        with ESMTP id S236744AbiEBOJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 10:09:21 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247A611C0F;
-        Mon,  2 May 2022 07:05:51 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id t5so6097343edw.11;
-        Mon, 02 May 2022 07:05:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pPLLrK87W5L0xDS+IAmgyi2hotQv2CviI90UwehzET8=;
-        b=hmwoWd+7A0ykHs4a7yIByjDsaD/555iYWv+o5vIkKMRNFHBgkVh08WtoVS0qZy5qg1
-         aursqahrAnvKBXwaEm7qNxfzmpO6HTMQo9GBKFBPmEtgDCw78/7MqlLwChTtfIyYmmgF
-         EanfTT6fkKHKzycCLw6k5nAC2vT9HY51Hmbq25Ec4o3thDyf1lpQDIoi6nhVD1SPZM1k
-         p/TRfT5KJQ52fRbDo0oKgiWgKdf6+QUFu8820KL5vh4vPpR7QWHijDRPmZKymg0NoZ4I
-         e5QexQWmWNwKU0eBDUHnoMT6XFhtD/w0cUbamJxfsjXjNeNOuLW9XFkEjAH3ICfO7WmF
-         XiqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pPLLrK87W5L0xDS+IAmgyi2hotQv2CviI90UwehzET8=;
-        b=bpyxXgv6qk9PJMwZMTvNxhtgD846rziHusczV8JOckgS+42iV6c28O2R7jNr1oZVTV
-         ZcXD61ThMwTaJzEJvO6WvTrxW8DYO2gWeEXMEcVW5Gjr53ygC82b7BrNwdMiqHgbAZmo
-         Dw92eMFPuKiWmwkjHF3BeXD4l4xTZXd3yAgBh8sDXd23cs+frmtEyZWuEIflinJhNrJO
-         0bV096Xry+ONT1nSmPcQmX6EGNdqsonLa96FS3jFVs+E/lKNatELDriHLrvFTbsb2gVQ
-         2IiAVZgVvFpiHjWHHnW1Yuahjbo458SP3W6WXaYL+c9pFvu4t4dBOl9ZNOCNdRibVxd9
-         pO8g==
-X-Gm-Message-State: AOAM532Y/OyBwhJfFzkJwAkW3vTboO7FQxZ+6FNcctnrMAc/pBSSZV/6
-        Ll8n8RvH9ZK8sOQHZPxfgQnHKwcO+nI=
-X-Google-Smtp-Source: ABdhPJz6MwjmAyI5sDX00wnuRU4QLpTrLSXCZiWltNObVS9OTx1QifsXZ0NGMiXZyfadV36KrOFXWw==
-X-Received: by 2002:a50:e78d:0:b0:41d:c8ec:81b0 with SMTP id b13-20020a50e78d000000b0041dc8ec81b0mr13340760edn.56.1651500349642;
-        Mon, 02 May 2022 07:05:49 -0700 (PDT)
-Received: from debianHome.localdomain (dynamic-077-001-135-067.77.1.pool.telefonica.de. [77.1.135.67])
-        by smtp.gmail.com with ESMTPSA id jx28-20020a170907761c00b006f3ef214e29sm3682355ejc.143.2022.05.02.07.05.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 07:05:49 -0700 (PDT)
-From:   =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
-To:     selinux@vger.kernel.org
-Cc:     Paul Moore <paul@paul-moore.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Michal Orzel <michalorzel.eng@gmail.com>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        Austin Kim <austin.kim@lge.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] selinux: fix indentation level of mls_ops block
-Date:   Mon,  2 May 2022 16:05:46 +0200
-Message-Id: <20220502140547.32685-1-cgzones@googlemail.com>
-X-Mailer: git-send-email 2.36.0
+        Mon, 2 May 2022 10:09:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EECAEE03F;
+        Mon,  2 May 2022 07:06:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6120AB8115F;
+        Mon,  2 May 2022 14:06:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7230AC385AC;
+        Mon,  2 May 2022 14:06:21 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="eWJc49DY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1651500379;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=+7+HGir1Cy6uU4bq/QSK6Sa0K4vOQe5UFQEDdB+7RMI=;
+        b=eWJc49DY3MlUFo3eogAJqMeRkRrRIoCzUvKiQAh5btUyGLkMzSvCJcS5QPFb2l8HKapJrg
+        nQE7N4FjRz4A5porfk0mUwLD5XcKSjb9z3rFmNGVwvS3vfTMF8Lfpu6EGhjL6xXtTqxOuQ
+        UuocIv+v31Sgk/OWwIhfVawGtbu61Z8=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 160ad175 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Mon, 2 May 2022 14:06:18 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Subject: [PATCH 1/2] sysctl: read() must consume poll events, not poll()
+Date:   Mon,  2 May 2022 16:06:01 +0200
+Message-Id: <20220502140602.130373-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,68 +57,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add one level of indentation to the code block of the label mls_ops in
-constraint_expr_eval(), to adjust the trailing break; to the parent
-case: branch.
+Events that poll() responds to are supposed to be consumed when the file
+is read(), not by the poll() itself. By putting it on the poll() itself,
+it makes it impossible to poll() on a epoll file descriptor, since the
+event gets consumed too early. Jann wrote a PoC, available in the link
+below.
 
-Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+Reported-by: Jann Horn <jannh@google.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org
+Link: https://lore.kernel.org/lkml/CAG48ez1F0P7Wnp=PGhiUej=u=8CSF6gpD9J=Oxxg0buFRqV1tA@mail.gmail.com/
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- security/selinux/ss/services.c | 42 +++++++++++++++++-----------------
- 1 file changed, 21 insertions(+), 21 deletions(-)
+ fs/proc/proc_sysctl.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/security/selinux/ss/services.c b/security/selinux/ss/services.c
-index 802a80648c6c..e62e04b1ec6c 100644
---- a/security/selinux/ss/services.c
-+++ b/security/selinux/ss/services.c
-@@ -358,27 +358,27 @@ static int constraint_expr_eval(struct policydb *policydb,
- 				l2 = &(tcontext->range.level[1]);
- 				goto mls_ops;
- mls_ops:
--			switch (e->op) {
--			case CEXPR_EQ:
--				s[++sp] = mls_level_eq(l1, l2);
--				continue;
--			case CEXPR_NEQ:
--				s[++sp] = !mls_level_eq(l1, l2);
--				continue;
--			case CEXPR_DOM:
--				s[++sp] = mls_level_dom(l1, l2);
--				continue;
--			case CEXPR_DOMBY:
--				s[++sp] = mls_level_dom(l2, l1);
--				continue;
--			case CEXPR_INCOMP:
--				s[++sp] = mls_level_incomp(l2, l1);
--				continue;
--			default:
--				BUG();
--				return 0;
--			}
--			break;
-+				switch (e->op) {
-+				case CEXPR_EQ:
-+					s[++sp] = mls_level_eq(l1, l2);
-+					continue;
-+				case CEXPR_NEQ:
-+					s[++sp] = !mls_level_eq(l1, l2);
-+					continue;
-+				case CEXPR_DOM:
-+					s[++sp] = mls_level_dom(l1, l2);
-+					continue;
-+				case CEXPR_DOMBY:
-+					s[++sp] = mls_level_dom(l2, l1);
-+					continue;
-+				case CEXPR_INCOMP:
-+					s[++sp] = mls_level_incomp(l2, l1);
-+					continue;
-+				default:
-+					BUG();
-+					return 0;
-+				}
-+				break;
- 			default:
- 				BUG();
- 				return 0;
+diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+index 7d9cfc730bd4..1aa145794207 100644
+--- a/fs/proc/proc_sysctl.c
++++ b/fs/proc/proc_sysctl.c
+@@ -622,6 +622,14 @@ static ssize_t proc_sys_call_handler(struct kiocb *iocb, struct iov_iter *iter,
+ 
+ static ssize_t proc_sys_read(struct kiocb *iocb, struct iov_iter *iter)
+ {
++	struct inode *inode = file_inode(iocb->ki_filp);
++	struct ctl_table_header *head = grab_header(inode);
++	struct ctl_table *table = PROC_I(inode)->sysctl_entry;
++
++	if (!IS_ERR(head) && table->poll)
++		iocb->ki_filp->private_data = proc_sys_poll_event(table->poll);
++	sysctl_head_finish(head);
++
+ 	return proc_sys_call_handler(iocb, iter, 0);
+ }
+ 
+@@ -668,10 +676,8 @@ static __poll_t proc_sys_poll(struct file *filp, poll_table *wait)
+ 	event = (unsigned long)filp->private_data;
+ 	poll_wait(filp, &table->poll->wait, wait);
+ 
+-	if (event != atomic_read(&table->poll->event)) {
+-		filp->private_data = proc_sys_poll_event(table->poll);
++	if (event != atomic_read(&table->poll->event))
+ 		ret = EPOLLIN | EPOLLRDNORM | EPOLLERR | EPOLLPRI;
+-	}
+ 
+ out:
+ 	sysctl_head_finish(head);
 -- 
-2.36.0
+2.35.1
 

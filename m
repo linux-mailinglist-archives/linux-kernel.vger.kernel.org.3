@@ -2,267 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC16C517277
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 17:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7200951727F
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 17:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376454AbiEBP2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 11:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60756 "EHLO
+        id S1385746AbiEBP3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 11:29:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239588AbiEBP17 (ORCPT
+        with ESMTP id S1385726AbiEBP3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 11:27:59 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDFFB13CCD;
-        Mon,  2 May 2022 08:24:29 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id gh6so28500015ejb.0;
-        Mon, 02 May 2022 08:24:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5JlRQCvAcuJPfq+J5yVcoCOkpKkMcU56ENlg86d7ai8=;
-        b=pJu49czcNYpe0rC6GeFENSl/WLDwHSVM5d56cL3COHRer/SHDhAc6nvpgSRHmPFvJa
-         lGmKgJJp0dXvB8UK4fhxFkske3G4yOY3XV4ys3nXHOTCtWQ4qXwAxJuNnjsXGkOENUKx
-         MxGdTes95b970fM0J87w17qIpkvZ0bBMq/ONxlF2Fjtg25O/KHkq1Wlo+EferYDSfljS
-         vmA0vGWjPEfhO+tDdaEoCThBtKbtLLVZw+CFiWurUOZvHw4wfWQLDl94qRAWtBL0dpEQ
-         T1+smn1nrlEAKC+/dB0HI+tFPzIrlZaOvOw+Fn8AfFaqyBrjMOV2ZeU6ym0mAfIfEX84
-         byUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5JlRQCvAcuJPfq+J5yVcoCOkpKkMcU56ENlg86d7ai8=;
-        b=iKJmR7PBa1I2i+8F7zBvbQoirSM/Gi3xqbIfVMVkQw40UBFtIhHCJED593QxxCby37
-         xNsvYgHZBUV2vik9vdgxVDvaAQelO0RI2Rr2/3NyV0KWU1yZxnw208Hk02BiuMqLpZzq
-         BdWVG3pCK44bF9dgVm4DqbDLCKKtj9gLq5Ee7tWxIx2fRa3Y29LVjFYj/qA9pwQ4zEYZ
-         Gx01wELixpNWVldRbYAIooafZgmLvUi6uoBIYKAoAvAAWGZwOtunmt8Z5HUmMGl2AmvS
-         ywLSGCJ8ODgfcycHW+CTqyAkFAhv/ol+BKpD3t9maOtjF8pQ9Y9g5RRLjpG8+9/cIM1I
-         ECYg==
-X-Gm-Message-State: AOAM533iOqoRwPGf5metbpKgyHJI/bv6aPTdBtnWJg++gIGIjVMEsgfy
-        1U7ELKrR1jQQGdnO/PFad8EiIcuGG65JTQ==
-X-Google-Smtp-Source: ABdhPJzb+5ieXFsu0eXyyU2x+aSBTk3OL+QJNpbY6q1pm/iOpFUlMnHZ617ZOGJbdaq4srMD4470gw==
-X-Received: by 2002:a17:907:6daa:b0:6f4:4822:549d with SMTP id sb42-20020a1709076daa00b006f44822549dmr5737046ejc.322.1651505068151;
-        Mon, 02 May 2022 08:24:28 -0700 (PDT)
-Received: from debianHome.localdomain (dynamic-077-001-135-067.77.1.pool.telefonica.de. [77.1.135.67])
-        by smtp.gmail.com with ESMTPSA id hx8-20020a170906846800b006f3ef214dd0sm3641947ejc.54.2022.05.02.08.24.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 08:24:26 -0700 (PDT)
-From:   =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
-To:     selinux@vger.kernel.org
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] [RFC PATCH] sched: only perform capability check on privileged operation
-Date:   Mon,  2 May 2022 17:24:14 +0200
-Message-Id: <20220502152414.110922-1-cgzones@googlemail.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20200904160031.6444-1-cgzones@googlemail.com>
-References: <20200904160031.6444-1-cgzones@googlemail.com>
+        Mon, 2 May 2022 11:29:19 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C271913DCD;
+        Mon,  2 May 2022 08:25:48 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 242EGuP1023012;
+        Mon, 2 May 2022 17:25:32 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=0JY2d4G0/9ojnnPUTXCbTsscUCh+1Ur6T7M/thuZ+6k=;
+ b=Xg9f9f+bGTNx/dlF8d4WCPoiyDN8IXWJ4fRqDWhTx+dgo0nWDFuCpBjgBZrX/qTQJD9P
+ eGJsnJHI8bWH6xjHWeoyIC3Cssk22kgxTKF1c14L52F2I8bp5hN6UciG6gbRfUzWN3qZ
+ dbWHkSajCWnOXCuMtkx2FR+/WC4ybyH/HhBcsxbq8Oh37uW68PBGzUDuiV4RaX2usPYY
+ 3A9gCPEqNN56oQpVwefy7nTta7lfMUS1Kv2vXK1fZMxycgAWEU/EjIPeWW6vnUB5lV23
+ 4Ywfkl+LPkl4p+Vk4OT5NMMIqJ4O0L4d7aJ0ubvEEmHxgUH0rcMYIYvZDq4xyBNyrHN4 3w== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3frthjhc5y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 May 2022 17:25:32 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B321610002A;
+        Mon,  2 May 2022 17:25:31 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A9ECD22AFFD;
+        Mon,  2 May 2022 17:25:31 +0200 (CEST)
+Received: from localhost (10.75.127.46) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 2 May 2022 17:25:31
+ +0200
+From:   Fabien Dessenne <fabien.dessenne@foss.st.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <linux-gpio@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Fabien Dessenne <fabien.dessenne@foss.st.com>
+Subject: [PATCH] pinctrl: stm32: improve debugfs information of pinconf-pins entry
+Date:   Mon, 2 May 2022 17:25:24 +0200
+Message-ID: <20220502152524.283374-1-fabien.dessenne@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-02_04,2022-05-02_03,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sched_setattr(2) issues via kernel/sched/core.c:__sched_setscheduler()
-a CAP_SYS_NICE audit event unconditionally, even when the requested
-operation does not require that capability / is unprivileged, i.e. for
-reducing niceness.
-This is relevant in connection with SELinux, where a capability check
-results in a policy decision and by default a denial message on
-insufficient permission is issued.
-It can lead to three undesired cases:
-  1. A denial message is generated, even in case the operation was an
-     unprivileged one and thus the syscall succeeded, creating noise.
-  2. To avoid the noise from 1. the policy writer adds a rule to ignore
-     those denial messages, hiding future syscalls, where the task
-     performs an actual privileged operation, leading to hidden limited
-     functionality of that task.
-  3. To avoid the noise from 1. the policy writer adds a rule to allow
-     the task the capability CAP_SYS_NICE, while it does not need it,
-     violating the principle of least privilege.
+Print the name of the selected alternate function in addition to its
+number. Ex:
+   "pin 135 (PI7): alternate 10 (SAI2_FS_A) - ..."
 
-Conduct privilged/unprivileged categorization first and perform a
-capable test (and at most once) only if needed.
-
-Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
-
+Signed-off-by: Fabien Dessenne <fabien.dessenne@foss.st.com>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
 ---
-v2:
-  add is_nice_reduction() to avoid duplicate capable(CAP_SYS_NICE)
-  checks via can_nice()
----
- kernel/sched/core.c | 135 +++++++++++++++++++++++++++-----------------
- 1 file changed, 84 insertions(+), 51 deletions(-)
+ drivers/pinctrl/stm32/pinctrl-stm32.c | 31 +++++++++++++++++++++++----
+ drivers/pinctrl/stm32/pinctrl-stm32.h | 13 +++++------
+ 2 files changed, 34 insertions(+), 10 deletions(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index d575b4914925..b9c1e67af46f 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -7211,6 +7211,86 @@ static bool check_same_owner(struct task_struct *p)
- 	return match;
+diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
+index b308e7bb7487..2e8421600db5 100644
+--- a/drivers/pinctrl/stm32/pinctrl-stm32.c
++++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
+@@ -507,7 +507,7 @@ stm32_pctrl_find_group_by_pin(struct stm32_pinctrl *pctl, u32 pin)
+ static bool stm32_pctrl_is_function_valid(struct stm32_pinctrl *pctl,
+ 		u32 pin_num, u32 fnum)
+ {
+-	int i;
++	int i, k;
+ 
+ 	for (i = 0; i < pctl->npins; i++) {
+ 		const struct stm32_desc_pin *pin = pctl->pins + i;
+@@ -516,7 +516,7 @@ static bool stm32_pctrl_is_function_valid(struct stm32_pinctrl *pctl,
+ 		if (pin->pin.number != pin_num)
+ 			continue;
+ 
+-		while (func && func->name) {
++		for (k = 0; k < STM32_CONFIG_NUM; k++) {
+ 			if (func->num == fnum)
+ 				return true;
+ 			func++;
+@@ -1118,10 +1118,27 @@ static int stm32_pconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
+ 	return 0;
  }
  
-+/*
-+ * is_nice_reduction - check if nice value is an actual reduction
-+ *
-+ * Similar to can_nice() but does not perform a capability check.
-+ *
-+ * @p: task
-+ * @nice: nice value
-+ */
-+static bool is_nice_reduction(const struct task_struct *p, const int nice)
++static struct stm32_desc_pin *
++stm32_pconf_get_pin_desc_by_pin_number(struct stm32_pinctrl *pctl,
++				       unsigned int pin_number)
 +{
-+	/* Convert nice value [19,-20] to rlimit style value [1,40]: */
-+	int nice_rlim = nice_to_rlimit(nice);
++	struct stm32_desc_pin *pins = pctl->pins;
++	int i;
 +
-+	return (nice_rlim <= task_rlimit(p, RLIMIT_NICE));
++	for (i = 0; i < pctl->npins; i++) {
++		if (pins->pin.number == pin_number)
++			return pins;
++		pins++;
++	}
++	return NULL;
 +}
 +
-+/*
-+ * Allow unprivileged RT tasks to decrease priority.
-+ * Only issue a capable test if needed and only once to avoid an audit
-+ * event on permitted non-privileged operations:
-+ */
-+static int user_check_sched_setscheduler(struct task_struct *p,
-+					 const struct sched_attr *attr,
-+					 int policy, int reset_on_fork)
-+{
-+	if (fair_policy(policy)) {
-+		if (attr->sched_nice < task_nice(p) &&
-+			!is_nice_reduction(p, attr->sched_nice))
-+			goto req_priv;
-+	}
+ static void stm32_pconf_dbg_show(struct pinctrl_dev *pctldev,
+ 				 struct seq_file *s,
+ 				 unsigned int pin)
+ {
++	struct stm32_pinctrl *pctl = pinctrl_dev_get_drvdata(pctldev);
++	const struct stm32_desc_pin *pin_desc;
+ 	struct pinctrl_gpio_range *range;
+ 	struct stm32_gpio_bank *bank;
+ 	int offset;
+@@ -1171,7 +1188,12 @@ static void stm32_pconf_dbg_show(struct pinctrl_dev *pctldev,
+ 	case 2:
+ 		drive = stm32_pconf_get_driving(bank, offset);
+ 		speed = stm32_pconf_get_speed(bank, offset);
+-		seq_printf(s, "%d - %s - %s - %s %s", alt,
++		pin_desc = stm32_pconf_get_pin_desc_by_pin_number(pctl, pin);
++		if (!pin_desc)
++			return;
 +
-+	if (rt_policy(policy)) {
-+		unsigned long rlim_rtprio =
-+		task_rlimit(p, RLIMIT_RTPRIO);
-+
-+		/* Can't set/change the rt policy: */
-+		if (policy != p->policy && !rlim_rtprio)
-+			goto req_priv;
-+
-+		/* Can't increase priority: */
-+		if (attr->sched_priority > p->rt_priority &&
-+			attr->sched_priority > rlim_rtprio)
-+			goto req_priv;
-+	}
-+
-+	/*
-+	 * Can't set/change SCHED_DEADLINE policy at all for now
-+	 * (safest behavior); in the future we would like to allow
-+	 * unprivileged DL tasks to increase their relative deadline
-+	 * or reduce their runtime (both ways reducing utilization)
-+	 */
-+	if (dl_policy(policy))
-+		goto req_priv;
-+
-+	/*
-+	 * Treat SCHED_IDLE as nice 20. Only allow a switch to
-+	 * SCHED_NORMAL if the RLIMIT_NICE would normally permit it.
-+	 */
-+	if (task_has_idle_policy(p) && !idle_policy(policy)) {
-+		if (!is_nice_reduction(p, task_nice(p)))
-+			goto req_priv;
-+	}
-+
-+	/* Can't change other user's priorities: */
-+	if (!check_same_owner(p))
-+		goto req_priv;
-+
-+	/* Normal users shall not reset the sched_reset_on_fork flag: */
-+	if (p->sched_reset_on_fork && !reset_on_fork)
-+		goto req_priv;
-+
-+	return 0;
-+
-+req_priv:
-+	if (!capable(CAP_SYS_NICE))
-+		return -EPERM;
-+
-+	return 0;
-+}
-+
- static int __sched_setscheduler(struct task_struct *p,
- 				const struct sched_attr *attr,
- 				bool user, bool pi)
-@@ -7252,58 +7332,11 @@ static int __sched_setscheduler(struct task_struct *p,
- 	    (rt_policy(policy) != (attr->sched_priority != 0)))
- 		return -EINVAL;
++		seq_printf(s, "%d (%s) - %s - %s - %s %s", alt,
++			   pin_desc->functions[alt + 1].name,
+ 			   drive ? "open drain" : "push pull",
+ 			   biasing[bias],
+ 			   speeds[speed], "speed");
+@@ -1386,7 +1408,8 @@ static int stm32_pctrl_create_pins_tab(struct stm32_pinctrl *pctl,
+ 		if (pctl->pkg && !(pctl->pkg & p->pkg))
+ 			continue;
+ 		pins->pin = p->pin;
+-		pins->functions = p->functions;
++		memcpy((struct stm32_desc_pin *)pins->functions, p->functions,
++		       STM32_CONFIG_NUM * sizeof(struct stm32_desc_function));
+ 		pins++;
+ 		nb_pins_available++;
+ 	}
+diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.h b/drivers/pinctrl/stm32/pinctrl-stm32.h
+index b9584039cdf5..2ac2db41a498 100644
+--- a/drivers/pinctrl/stm32/pinctrl-stm32.h
++++ b/drivers/pinctrl/stm32/pinctrl-stm32.h
+@@ -17,6 +17,7 @@
+ #define STM32_PIN_GPIO		0
+ #define STM32_PIN_AF(x)		((x) + 1)
+ #define STM32_PIN_ANALOG	(STM32_PIN_AF(15) + 1)
++#define STM32_CONFIG_NUM	(STM32_PIN_ANALOG + 1)
  
--	/*
--	 * Allow unprivileged RT tasks to decrease priority:
--	 */
--	if (user && !capable(CAP_SYS_NICE)) {
--		if (fair_policy(policy)) {
--			if (attr->sched_nice < task_nice(p) &&
--			    !can_nice(p, attr->sched_nice))
--				return -EPERM;
--		}
--
--		if (rt_policy(policy)) {
--			unsigned long rlim_rtprio =
--					task_rlimit(p, RLIMIT_RTPRIO);
--
--			/* Can't set/change the rt policy: */
--			if (policy != p->policy && !rlim_rtprio)
--				return -EPERM;
--
--			/* Can't increase priority: */
--			if (attr->sched_priority > p->rt_priority &&
--			    attr->sched_priority > rlim_rtprio)
--				return -EPERM;
--		}
--
--		 /*
--		  * Can't set/change SCHED_DEADLINE policy at all for now
--		  * (safest behavior); in the future we would like to allow
--		  * unprivileged DL tasks to increase their relative deadline
--		  * or reduce their runtime (both ways reducing utilization)
--		  */
--		if (dl_policy(policy))
--			return -EPERM;
--
--		/*
--		 * Treat SCHED_IDLE as nice 20. Only allow a switch to
--		 * SCHED_NORMAL if the RLIMIT_NICE would normally permit it.
--		 */
--		if (task_has_idle_policy(p) && !idle_policy(policy)) {
--			if (!can_nice(p, task_nice(p)))
--				return -EPERM;
--		}
--
--		/* Can't change other user's priorities: */
--		if (!check_same_owner(p))
--			return -EPERM;
--
--		/* Normal users shall not reset the sched_reset_on_fork flag: */
--		if (p->sched_reset_on_fork && !reset_on_fork)
--			return -EPERM;
--	}
--
- 	if (user) {
-+		retval = user_check_sched_setscheduler(p, attr, policy, reset_on_fork);
-+		if (retval)
-+			return retval;
-+
- 		if (attr->sched_flags & SCHED_FLAG_SUGOV)
- 			return -EINVAL;
+ /*  package information */
+ #define STM32MP_PKG_AA		BIT(0)
+@@ -31,26 +32,26 @@ struct stm32_desc_function {
  
+ struct stm32_desc_pin {
+ 	struct pinctrl_pin_desc pin;
+-	const struct stm32_desc_function *functions;
++	const struct stm32_desc_function functions[STM32_CONFIG_NUM];
+ 	const unsigned int pkg;
+ };
+ 
+ #define STM32_PIN(_pin, ...)					\
+ 	{							\
+ 		.pin = _pin,					\
+-		.functions = (struct stm32_desc_function[]){	\
+-			__VA_ARGS__, { } },			\
++		.functions = {	\
++			__VA_ARGS__},			\
+ 	}
+ 
+ #define STM32_PIN_PKG(_pin, _pkg, ...)					\
+ 	{							\
+ 		.pin = _pin,					\
+ 		.pkg  = _pkg,				\
+-		.functions = (struct stm32_desc_function[]){	\
+-			__VA_ARGS__, { } },			\
++		.functions = {	\
++			__VA_ARGS__},			\
+ 	}
+ #define STM32_FUNCTION(_num, _name)		\
+-	{							\
++	[_num] = {						\
+ 		.num = _num,					\
+ 		.name = _name,					\
+ 	}
 -- 
-2.36.0
+2.25.1
 

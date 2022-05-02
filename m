@@ -2,308 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 697EE516F3D
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 14:05:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63448516F43
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 14:05:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384881AbiEBMIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 08:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58202 "EHLO
+        id S1384917AbiEBMJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 08:09:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384870AbiEBMIe (ORCPT
+        with ESMTP id S1384885AbiEBMIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 08:08:34 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6068013F62
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 05:05:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651493104; x=1683029104;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=9ajzmig39sZIW1tda8C5ZrZa0JA+CxOakY6tZ5XPreo=;
-  b=hQ2bwn6syai8i5WDBHKr+PJPDra+ueTWwwxc41MC4PlUjxqwAjv6UEC5
-   qKV7EmkyQcSRkov8iJuoVnETP1IDAzGsC0sIcjdCpx1Q6EQC7hMJY8uKc
-   Z6xtyq1TILRMPrYPgnP4gC13sPxioi2v8OOlyjhClDVjTSRFr/nxAEabU
-   vniXIJtxG+7ZwAOPhEi2DFI8ktAW1wwXvJklrJYaPlCUkoUq/fkfTGXkp
-   abupjqc55+M2u/iSBJl/qjRt9JRnahX8AcajKuQYV0KPrIggw2gjrUO4X
-   BrL6UelpqaWjE5GXf5Bc4P3VZYPTa3/QfUSPr/KvbFIE41EHTdz7dXNdL
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="330179199"
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="330179199"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 05:05:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="663493307"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 02 May 2022 05:04:58 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id F3115179; Mon,  2 May 2022 15:04:58 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org
-Cc:     James Schulman <james.schulman@cirrus.com>,
-        David Rhodes <david.rhodes@cirrus.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Subject: [PATCH v1 1/1] ASoC: cs43130: Re-use generic struct u16_fract
-Date:   Mon,  2 May 2022 15:04:55 +0300
-Message-Id: <20220502120455.84386-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 2 May 2022 08:08:40 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779BB14094
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 05:05:10 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2f7d19cac0bso144758677b3.13
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 05:05:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=h3tCKH7ebkKPQvrWw7j6hFFjOOim/c0BmjpoSMuBdrQ=;
+        b=CNJZDsF19g7FivqUW2Z1eJq8XN5EV2igI4ab6j9NUAqteLblakIst+IpEeHS/Pv+EL
+         7g40JlM0BF7AEQnCwqm4RUo0/63RBy/xP2b9pKPTF3H8BNB9fJ5h4AADMMjvh0ZrTnV6
+         +7vMPLJTpI6Un9uNKqGUR/G4FhisOA1vCjDw35emsEReezFS5JJAFg0bp+s+XvJaRbUs
+         QHHSfjMW7xNMywwbEgMVEWk24wbe9bYNLsfWcLnDFHHuxR1M2AvZ+C2PvL+Mq5PAhKs9
+         nWZyYPBBLtnJ/R0+l5PNhYKlxdlbC4UqonVhi3/jp2LFYLvbiydBN1ZkYi4KbacB4NFy
+         4YLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=h3tCKH7ebkKPQvrWw7j6hFFjOOim/c0BmjpoSMuBdrQ=;
+        b=4sbpbX0Ka+Xyd0CnxdlgjyouJjiEeZZF5U0NwMobqDeDQFOFAOTq5TKbtBWZxwDdQo
+         rAeli35MnKnWA4yyiFbHgb3eD1xbxgKf45u12gm/PvlW+iwSI/5/7qVRjAd9SrP0HV0V
+         otyJ3i9XdefO8g0XDJcb3m4Hfcv1Mr7e3oa9poquWPwSvmm46Uqs2243blb0YfdrkjR0
+         Z2aeXm4Cs/BD/sBN8UbanW2Frp6ejuAXt4udsLBNEvojcgatuKnw35DXHZWr4Zwj4yCV
+         padoffhOPxA1MEHoXNRHmYCnIUVyIe/wKeB+j/n05KqAz4tW54lwB0KGVmXtq/XGcDfJ
+         BEzA==
+X-Gm-Message-State: AOAM531F1H3HH3AeGfOmvMz3aHtnS5KcDBMsOgIZwRgBr7f+BlKiB5oT
+        D8DMhlISVhOa+Ke11z74zV174bcVHVqURr+8A0Vl6hP0ZjbuQA==
+X-Google-Smtp-Source: ABdhPJy+md5hEGolmEI3F2msfSAnd2QAPV6G68T06cTpxGxu+bBbbObkukwSus5TTSIkxDs9lTrJPGOrLWkRlCsL6pM=
+X-Received: by 2002:a81:478b:0:b0:2ea:da8c:5c21 with SMTP id
+ u133-20020a81478b000000b002eada8c5c21mr11112137ywa.189.1651493108690; Mon, 02
+ May 2022 05:05:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 2 May 2022 17:34:56 +0530
+Message-ID: <CA+G9fYs2YeyM-v-zea0D7nDk4m+=iCgYgt4pfMVUL-LmXkdHMA@mail.gmail.com>
+Subject: selftests: net: pmtu.sh: BUG: unable to handle page fault for
+ address: 2509c000
+To:     open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Netdev <netdev@vger.kernel.org>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Guillaume Nault <gnault@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of custom data type re-use generic struct u16_fract.
-No changes intended.
+Following kernel BUG noticed on qemu_i386 while testing
+selftests: net: pmtu.sh  with kselftest merge config build image [1] & [2]
+and after this BUG test hung.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- sound/soc/codecs/cs43130.c |  16 ++--
- sound/soc/codecs/cs43130.h | 151 +++++++++++++++++++------------------
- 2 files changed, 84 insertions(+), 83 deletions(-)
+metadata:
+  git_ref: master
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline
+  git_sha: 672c0c5173427e6b3e2a9bbb7be51ceeec78093a
+  git_describe: v5.18-rc5
+  kernel_version: 5.18.0-rc5
+  kernel-config: https://builds.tuxbuild.com/28a2wrzQ62tLypUV7bgCOXEGKig/config
+  build-url: https://gitlab.com/Linaro/lkft/mirrors/torvalds/linux-mainline/-/pipelines/528952197
+  artifact-location: https://builds.tuxbuild.com/28a2wrzQ62tLypUV7bgCOXEGKig
+  toolchain: gcc-11
 
-diff --git a/sound/soc/codecs/cs43130.c b/sound/soc/codecs/cs43130.c
-index 04548b577ad5..a2bce0f9f247 100644
---- a/sound/soc/codecs/cs43130.c
-+++ b/sound/soc/codecs/cs43130.c
-@@ -712,30 +712,30 @@ static int cs43130_set_sp_fmt(int dai_id, unsigned int bitwidth_sclk,
- 	case CS43130_ASP_PCM_DAI:
- 	case CS43130_ASP_DOP_DAI:
- 		regmap_write(cs43130->regmap, CS43130_ASP_DEN_1,
--			     (clk_gen->den & CS43130_SP_M_LSB_DATA_MASK) >>
-+			     (clk_gen->v.denominator & CS43130_SP_M_LSB_DATA_MASK) >>
- 			     CS43130_SP_M_LSB_DATA_SHIFT);
- 		regmap_write(cs43130->regmap, CS43130_ASP_DEN_2,
--			     (clk_gen->den & CS43130_SP_M_MSB_DATA_MASK) >>
-+			     (clk_gen->v.denominator & CS43130_SP_M_MSB_DATA_MASK) >>
- 			     CS43130_SP_M_MSB_DATA_SHIFT);
- 		regmap_write(cs43130->regmap, CS43130_ASP_NUM_1,
--			     (clk_gen->num & CS43130_SP_N_LSB_DATA_MASK) >>
-+			     (clk_gen->v.numerator & CS43130_SP_N_LSB_DATA_MASK) >>
- 			     CS43130_SP_N_LSB_DATA_SHIFT);
- 		regmap_write(cs43130->regmap, CS43130_ASP_NUM_2,
--			     (clk_gen->num & CS43130_SP_N_MSB_DATA_MASK) >>
-+			     (clk_gen->v.numerator & CS43130_SP_N_MSB_DATA_MASK) >>
- 			     CS43130_SP_N_MSB_DATA_SHIFT);
- 		break;
- 	case CS43130_XSP_DOP_DAI:
- 		regmap_write(cs43130->regmap, CS43130_XSP_DEN_1,
--			     (clk_gen->den & CS43130_SP_M_LSB_DATA_MASK) >>
-+			     (clk_gen->v.denominator & CS43130_SP_M_LSB_DATA_MASK) >>
- 			     CS43130_SP_M_LSB_DATA_SHIFT);
- 		regmap_write(cs43130->regmap, CS43130_XSP_DEN_2,
--			     (clk_gen->den & CS43130_SP_M_MSB_DATA_MASK) >>
-+			     (clk_gen->v.denominator & CS43130_SP_M_MSB_DATA_MASK) >>
- 			     CS43130_SP_M_MSB_DATA_SHIFT);
- 		regmap_write(cs43130->regmap, CS43130_XSP_NUM_1,
--			     (clk_gen->num & CS43130_SP_N_LSB_DATA_MASK) >>
-+			     (clk_gen->v.numerator & CS43130_SP_N_LSB_DATA_MASK) >>
- 			     CS43130_SP_N_LSB_DATA_SHIFT);
- 		regmap_write(cs43130->regmap, CS43130_XSP_NUM_2,
--			     (clk_gen->num & CS43130_SP_N_MSB_DATA_MASK) >>
-+			     (clk_gen->v.numerator & CS43130_SP_N_MSB_DATA_MASK) >>
- 			     CS43130_SP_N_MSB_DATA_SHIFT);
- 		break;
- 	default:
-diff --git a/sound/soc/codecs/cs43130.h b/sound/soc/codecs/cs43130.h
-index e62d671e95bb..1dd893674313 100644
---- a/sound/soc/codecs/cs43130.h
-+++ b/sound/soc/codecs/cs43130.h
-@@ -10,6 +10,8 @@
- #ifndef __CS43130_H__
- #define __CS43130_H__
- 
-+#include <linux/math.h>
-+
- /* CS43130 registers addresses */
- /* all reg address is shifted by a byte for control byte to be LSB */
- #define CS43130_FIRSTREG	0x010000
-@@ -372,97 +374,96 @@ enum cs43130_dai_id {
- };
- 
- struct cs43130_clk_gen {
--	unsigned int	mclk_int;
--	int		fs;
--	u16		den;
--	u16		num;
-+	unsigned int		mclk_int;
-+	int			fs;
-+	struct u16_fract	v;
- };
- 
- /* frm_size = 16 */
- static const struct cs43130_clk_gen cs43130_16_clk_gen[] = {
--	{22579200,	32000,		441,		10,},
--	{22579200,	44100,		32,		1,},
--	{22579200,	48000,		147,		5,},
--	{22579200,	88200,		16,		1,},
--	{22579200,	96000,		147,		10,},
--	{22579200,	176400,		8,		1,},
--	{22579200,	192000,		147,		20,},
--	{22579200,	352800,		4,		1,},
--	{22579200,	384000,		147,		40,},
--	{24576000,	32000,		48,		1,},
--	{24576000,	44100,		5120,		147,},
--	{24576000,	48000,		32,		1,},
--	{24576000,	88200,		2560,		147,},
--	{24576000,	96000,		16,		1,},
--	{24576000,	176400,		1280,		147,},
--	{24576000,	192000,		8,		1,},
--	{24576000,	352800,		640,		147,},
--	{24576000,	384000,		4,		1,},
-+	{ 22579200,	32000,		.v = { 441,	10, }, },
-+	{ 22579200,	44100,		.v = { 32,	1, }, },
-+	{ 22579200,	48000,		.v = { 147,	5, }, },
-+	{ 22579200,	88200,		.v = { 16,	1, }, },
-+	{ 22579200,	96000,		.v = { 147,	10, }, },
-+	{ 22579200,	176400,		.v = { 8,	1, }, },
-+	{ 22579200,	192000,		.v = { 147,	20, }, },
-+	{ 22579200,	352800,		.v = { 4,	1, }, },
-+	{ 22579200,	384000,		.v = { 147,	40, }, },
-+	{ 24576000,	32000,		.v = { 48,	1, }, },
-+	{ 24576000,	44100,		.v = { 5120,	147, }, },
-+	{ 24576000,	48000,		.v = { 32,	1, }, },
-+	{ 24576000,	88200,		.v = { 2560,	147, }, },
-+	{ 24576000,	96000,		.v = { 16,	1, }, },
-+	{ 24576000,	176400,		.v = { 1280,	147, }, },
-+	{ 24576000,	192000,		.v = { 8,	1, }, },
-+	{ 24576000,	352800,		.v = { 640,	147, }, },
-+	{ 24576000,	384000,		.v = { 4,	1, }, },
- };
- 
- /* frm_size = 32 */
- static const struct cs43130_clk_gen cs43130_32_clk_gen[] = {
--	{22579200,	32000,		441,		20,},
--	{22579200,	44100,		16,		1,},
--	{22579200,	48000,		147,		10,},
--	{22579200,	88200,		8,		1,},
--	{22579200,	96000,		147,		20,},
--	{22579200,	176400,		4,		1,},
--	{22579200,	192000,		147,		40,},
--	{22579200,	352800,		2,		1,},
--	{22579200,	384000,		147,		80,},
--	{24576000,	32000,		24,		1,},
--	{24576000,	44100,		2560,		147,},
--	{24576000,	48000,		16,		1,},
--	{24576000,	88200,		1280,		147,},
--	{24576000,	96000,		8,		1,},
--	{24576000,	176400,		640,		147,},
--	{24576000,	192000,		4,		1,},
--	{24576000,	352800,		320,		147,},
--	{24576000,	384000,		2,		1,},
-+	{ 22579200,	32000,		.v = { 441,	20, }, },
-+	{ 22579200,	44100,		.v = { 16,	1, }, },
-+	{ 22579200,	48000,		.v = { 147,	10, }, },
-+	{ 22579200,	88200,		.v = { 8,	1, }, },
-+	{ 22579200,	96000,		.v = { 147,	20, }, },
-+	{ 22579200,	176400,		.v = { 4,	1, }, },
-+	{ 22579200,	192000,		.v = { 147,	40, }, },
-+	{ 22579200,	352800,		.v = { 2,	1, }, },
-+	{ 22579200,	384000,		.v = { 147,	80, }, },
-+	{ 24576000,	32000,		.v = { 24,	1, }, },
-+	{ 24576000,	44100,		.v = { 2560,	147, }, },
-+	{ 24576000,	48000,		.v = { 16,	1, }, },
-+	{ 24576000,	88200,		.v = { 1280,	147, }, },
-+	{ 24576000,	96000,		.v = { 8,	1, }, },
-+	{ 24576000,	176400,		.v = { 640,	147, }, },
-+	{ 24576000,	192000,		.v = { 4,	1, }, },
-+	{ 24576000,	352800,		.v = { 320,	147, }, },
-+	{ 24576000,	384000,		.v = { 2,	1, }, },
- };
- 
- /* frm_size = 48 */
- static const struct cs43130_clk_gen cs43130_48_clk_gen[] = {
--	{22579200,	32000,		147,		100,},
--	{22579200,	44100,		32,		3,},
--	{22579200,	48000,		49,		5,},
--	{22579200,	88200,		16,		3,},
--	{22579200,	96000,		49,		10,},
--	{22579200,	176400,		8,		3,},
--	{22579200,	192000,		49,		20,},
--	{22579200,	352800,		4,		3,},
--	{22579200,	384000,		49,		40,},
--	{24576000,	32000,		16,		1,},
--	{24576000,	44100,		5120,		441,},
--	{24576000,	48000,		32,		3,},
--	{24576000,	88200,		2560,		441,},
--	{24576000,	96000,		16,		3,},
--	{24576000,	176400,		1280,		441,},
--	{24576000,	192000,		8,		3,},
--	{24576000,	352800,		640,		441,},
--	{24576000,	384000,		4,		3,},
-+	{ 22579200,	32000,		.v = { 147,	100, }, },
-+	{ 22579200,	44100,		.v = { 32,	3, }, },
-+	{ 22579200,	48000,		.v = { 49,	5, }, },
-+	{ 22579200,	88200,		.v = { 16,	3, }, },
-+	{ 22579200,	96000,		.v = { 49,	10, }, },
-+	{ 22579200,	176400,		.v = { 8,	3, }, },
-+	{ 22579200,	192000,		.v = { 49,	20, }, },
-+	{ 22579200,	352800,		.v = { 4,	3, }, },
-+	{ 22579200,	384000,		.v = { 49,	40, }, },
-+	{ 24576000,	32000,		.v = { 16,	1, }, },
-+	{ 24576000,	44100,		.v = { 5120,	441, }, },
-+	{ 24576000,	48000,		.v = { 32,	3, }, },
-+	{ 24576000,	88200,		.v = { 2560,	441, }, },
-+	{ 24576000,	96000,		.v = { 16,	3, }, },
-+	{ 24576000,	176400,		.v = { 1280,	441, }, },
-+	{ 24576000,	192000,		.v = { 8,	3, }, },
-+	{ 24576000,	352800,		.v = { 640,	441, }, },
-+	{ 24576000,	384000,		.v = { 4,	3, }, },
- };
- 
- /* frm_size = 64 */
- static const struct cs43130_clk_gen cs43130_64_clk_gen[] = {
--	{22579200,	32000,		441,		40,},
--	{22579200,	44100,		8,		1,},
--	{22579200,	48000,		147,		20,},
--	{22579200,	88200,		4,		1,},
--	{22579200,	96000,		147,		40,},
--	{22579200,	176400,		2,		1,},
--	{22579200,	192000,		147,		80,},
--	{22579200,	352800,		1,		1,},
--	{24576000,	32000,		12,		1,},
--	{24576000,	44100,		1280,		147,},
--	{24576000,	48000,		8,		1,},
--	{24576000,	88200,		640,		147,},
--	{24576000,	96000,		4,		1,},
--	{24576000,	176400,		320,		147,},
--	{24576000,	192000,		2,		1,},
--	{24576000,	352800,		160,		147,},
--	{24576000,	384000,		1,		1,},
-+	{ 22579200,	32000,		.v = { 441,	40, }, },
-+	{ 22579200,	44100,		.v = { 8,	1, }, },
-+	{ 22579200,	48000,		.v = { 147,	20, }, },
-+	{ 22579200,	88200,		.v = { 4,	1, }, },
-+	{ 22579200,	96000,		.v = { 147,	40, }, },
-+	{ 22579200,	176400,		.v = { 2,	1, }, },
-+	{ 22579200,	192000,		.v = { 147,	80, }, },
-+	{ 22579200,	352800,		.v = { 1,	1, }, },
-+	{ 24576000,	32000,		.v = { 12,	1, }, },
-+	{ 24576000,	44100,		.v = { 1280,	147, }, },
-+	{ 24576000,	48000,		.v = { 8,	1, }, },
-+	{ 24576000,	88200,		.v = { 640,	147, }, },
-+	{ 24576000,	96000,		.v = { 4,	1, }, },
-+	{ 24576000,	176400,		.v = { 320,	147, }, },
-+	{ 24576000,	192000,		.v = { 2,	1, }, },
-+	{ 24576000,	352800,		.v = { 160,	147, }, },
-+	{ 24576000,	384000,		.v = { 1,	1, }, },
- };
- 
- struct cs43130_bitwidth_map {
--- 
-2.35.1
 
+Test log:
+---------
+# selftests: net: pmtu.sh
+[  468.730000] ip (15022) used greatest stack depth: 4232 bytes left
+
+<trim>
+
+# TEST: ipv6: cleanup of cached exceptions                            [ OK ]
+[  587.633640] IPv6: ADDRCONF(NETDEV_CHANGE): veth_A-R1: link becomes ready
+[  587.695867] IPv6: ADDRCONF(NETDEV_CHANGE): veth_A-R2: link becomes ready
+[  587.758384] IPv6: ADDRCONF(NETDEV_CHANGE): veth_B-R1: link becomes ready
+[  587.821528] IPv6: ADDRCONF(NETDEV_CHANGE): veth_B-R2: link becomes ready
+# TEST: ipv6: cleanup of cached exceptions - nexthop objects          [ OK ]
+[  591.442819] BUG: unable to handle page fault for address: 2509c000
+[  591.444468] #PF: supervisor read access in kernel mode
+[  591.445810] #PF: error_code(0x0000) - not-present page
+[  591.447175] *pde = 00000000
+[  591.448121] Oops: 0000 [#1] PREEMPT SMP
+[  591.449350] CPU: 3 PID: 0 Comm: swapper/3 Not tainted 5.18.0-rc5 #1
+[  591.451373] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS 1.12.0-1 04/01/2014
+[  591.453404] EIP: percpu_counter_add_batch+0x2e/0xe0
+[  591.454134] Code: ec 20 89 5d f4 89 c3 b8 01 00 00 00 89 75 f8 89
+7d fc 89 55 ec 89 4d f0 e8 3f f0 a3 ff b8 5f c4 c7 cf e8 e5 43 bd 00
+8b 4b 34 <64> 8b 39 89 7d e0 89 fe 8b 45 08 c1 ff 1f 03 75 ec 13 7d f0
+89 45
+[  591.456840] EAX: 00000003 EBX: c60fd540 ECX: 00000000 EDX: cfc7c45f
+[  591.457755] ESI: 00000000 EDI: c11a92c0 EBP: c1251f40 ESP: c1251f20
+[  591.458686] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00210202
+[  591.459688] CR0: 80050033 CR2: 2509c000 CR3: 05401000 CR4: 003506d0
+[  591.460628] Call Trace:
+[  591.461009]  <SOFTIRQ>
+[  591.461366]  dst_destroy+0xac/0xe0
+[  591.461879]  dst_destroy_rcu+0x10/0x20
+[  591.462438]  rcu_core+0x354/0xa50
+[  591.462942]  ? rcu_core+0x2fd/0xa50
+[  591.463462]  rcu_core_si+0xd/0x10
+[  591.463962]  __do_softirq+0x14f/0x4ae
+[  591.464509]  ? __entry_text_end+0x8/0x8
+[  591.465108]  call_on_stack+0x4c/0x60
+[  591.465637]  </SOFTIRQ>
+[  591.466010]  ? __irq_exit_rcu+0xca/0x130
+[  591.466588]  ? irq_exit_rcu+0xd/0x20
+[  591.467132]  ? sysvec_apic_timer_interrupt+0x36/0x50
+[  591.467868]  ? handle_exception+0x133/0x133
+[  591.468481]  ? __sched_text_end+0x2/0x2
+[  591.469079]  ? sysvec_call_function_single+0x50/0x50
+[  591.469804]  ? default_idle+0x13/0x20
+[  591.470346]  ? sysvec_call_function_single+0x50/0x50
+[  591.471068]  ? default_idle+0x13/0x20
+[  591.471605]  ? arch_cpu_idle+0x12/0x20
+[  591.472164]  ? default_idle_call+0x52/0xa0
+[  591.472788]  ? do_idle+0x20a/0x270
+[  591.473289]  ? cpu_startup_entry+0x20/0x30
+[  591.473890]  ? cpu_startup_entry+0x25/0x30
+[  591.474489]  ? start_secondary+0x10f/0x140
+[  591.475098]  ? startup_32_smp+0x161/0x164
+[  591.475687] Modules linked in: sit xt_policy iptable_filter
+ip_tables x_tables veth fuse [last unloaded: test_blackhole_dev]
+[  591.477321] CR2: 000000002509c000
+[  591.477818] ---[ end trace 0000000000000000 ]---
+[  591.478500] EIP: percpu_counter_add_batch+0x2e/0xe0
+[  591.479218] Code: ec 20 89 5d f4 89 c3 b8 01 00 00 00 89 75 f8 89
+7d fc 89 55 ec 89 4d f0 e8 3f f0 a3 ff b8 5f c4 c7 cf e8 e5 43 bd 00
+8b 4b 34 <64> 8b 39 89 7d e0 89 fe 8b 45 08 c1 ff 1f 03 75 ec 13 7d f0
+89 45
+[  591.481915] EAX: 00000003 EBX: c60fd540 ECX: 00000000 EDX: cfc7c45f
+[  591.482829] ESI: 00000000 EDI: c11a92c0 EBP: c1251f40 ESP: c1251f20
+[  591.483739] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00210202
+[  591.484744] CR0: 80050033 CR2: 2509c000 CR3: 05401000 CR4: 003506d0
+[  591.485656] Kernel panic - not syncing: Fatal exception in interrupt
+[  591.486680] Kernel Offset: disabled
+[  591.487215] ---[ end Kernel panic - not syncing: Fatal exception in
+interrupt ]---
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+--
+Linaro LKFT
+https://lkft.linaro.org
+
+[1] https://lkft.validation.linaro.org/scheduler/job/4976107#L4726
+[2] https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v5.18-rc5/testrun/9320607/suite/linux-log-parser/test/check-kernel-bug-4976107/log

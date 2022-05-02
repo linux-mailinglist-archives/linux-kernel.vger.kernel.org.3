@@ -2,262 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 095FC516F88
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 14:24:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 854C6516F93
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 14:28:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385028AbiEBM2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 08:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53636 "EHLO
+        id S1385029AbiEBMb2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 2 May 2022 08:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235914AbiEBM2C (ORCPT
+        with ESMTP id S233328AbiEBMbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 08:28:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F03DCBC00
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 05:24:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651494272;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0PWb4JWsmuGJGKazGQUhn92eJLKgCumnf5HYFTKEj0Q=;
-        b=SyxdXfIpmHgqnsZCVr0X82Uoin9mkbq7HHOQjccH1nBP+gqhkzKRrQjlz7IL1aA/HCvagf
-        rITMRgQqzZQ9RiVlbQvjCTWTAwSHLwtq5prNRC3YsXNcdm91swnLTjpbEH8ZoEHsu2z5fg
-        R2cBd++SRdLiSVLmasK0w8inOdxF6LM=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-501-4uEP5u1bNQaZCfSvh2km8A-1; Mon, 02 May 2022 08:24:29 -0400
-X-MC-Unique: 4uEP5u1bNQaZCfSvh2km8A-1
-Received: by mail-ej1-f72.google.com with SMTP id go17-20020a1709070d9100b006f46e53a2a9so454723ejc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 05:24:28 -0700 (PDT)
+        Mon, 2 May 2022 08:31:25 -0400
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB11DF77;
+        Mon,  2 May 2022 05:27:52 -0700 (PDT)
+Received: by mail-qk1-f174.google.com with SMTP id w3so3384071qkb.3;
+        Mon, 02 May 2022 05:27:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0PWb4JWsmuGJGKazGQUhn92eJLKgCumnf5HYFTKEj0Q=;
-        b=7WER5ZhuP5+aPmNid1qr2zcp0o63BBe6hmzL52/U3xmtOfDEoYwE28QmtZ4LVeoDl1
-         0e8GNtK/w3j2QnQAkeVoO2VXHj8rhv5rCKPQWdeeRkpMJUI2xVD5GH1AVitZ8rWWoOwr
-         DlwyCA1vKitwBMbvTxHBh+FbowZilggOSwpsbDCTYc9KQCd02OcH7PuIhfNuXwBBdM0Q
-         HgPCLsYK0NspryFf3vfqBHvIhEH3HNulDCME+G/kTsOtu+41FrFyYa0stRUL+RJqqgCP
-         JMHmcYx9IptRpgIphDYR9yIcPlIFD73oUKit56B8fGuOpIdHrTIqWI25+BVWvYyA7+6d
-         ri7Q==
-X-Gm-Message-State: AOAM531AQitFOnY2FoO85zjK4Qrt37gEfFPy4NvlzxOq+iRZ+yLfCYnC
-        u6QCO59bR1nMJiw89xRHky0CTbZXaFVfC5KEWpwyAhcvKojQHRHUMGqukXK+rVZI/ch7V9zfHcr
-        bXdAYjAS+lFJ+e1yqy7k37EWz
-X-Received: by 2002:a17:907:2d93:b0:6f3:8524:6f92 with SMTP id gt19-20020a1709072d9300b006f385246f92mr11143448ejc.556.1651494267902;
-        Mon, 02 May 2022 05:24:27 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyMW9CzlQ1mWVSORPBTlZIOJx0ICt1p3XiOTG1lGD/OnYJxBBIM7JMB0Hy5A+bQT4uoHzsPcg==
-X-Received: by 2002:a17:907:2d93:b0:6f3:8524:6f92 with SMTP id gt19-20020a1709072d9300b006f385246f92mr11143438ejc.556.1651494267611;
-        Mon, 02 May 2022 05:24:27 -0700 (PDT)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id q8-20020aa7cc08000000b0042617ba637esm6575823edt.8.2022.05.02.05.24.26
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=OZOhIRLHadZelGhWCCz2d6EAN6hg5trw+/CH6vCu8dY=;
+        b=O75okN2XOoH0w5bHMCV0S0BbJnMMD2FIgHB4hf/HPYNFVEqs13qIZMjBEY0QDd16q0
+         QiyCugag+c0aIgRMxI5NiVXHr0N/1kVdLCrJcpW07hnm378AN+4bsUi/nRK5PvchIMO2
+         nP3meCz5Pf5T9EoUUr+u/0q/y/VUDt51/NnDpucJaoKblEFhKe0bIonfOvYlde+46N2Y
+         8BFK64M2p4ucYNvs4vqjFiZw/j8gx9/gS5yk9NVr7Z6ln6pZWMhyH/Cv5RsvMo6mBUVY
+         cjcaPHVUzry2mY1sbPU53DS9PTeL7foRfjUYFh8qsgR+ab1S2uj6Chvq1tc5ugAvG/42
+         Cyzg==
+X-Gm-Message-State: AOAM532eckHJvEiapK0E83mnxfAinWt6nz3i/gMmJudkAvzhGTcX0b+B
+        /8Pt8+PyNRXQEhTOh7SsJkqDxMReVCEF6A==
+X-Google-Smtp-Source: ABdhPJzMgVLS5luW/l+97mtR1yUsk+k8p9J4QpOQj3bJoW6C42jmQEDhcCX7wZpNDv+PC7W2yKJMVA==
+X-Received: by 2002:a05:620a:288c:b0:699:bbc6:9e54 with SMTP id j12-20020a05620a288c00b00699bbc69e54mr8359480qkp.226.1651494471216;
+        Mon, 02 May 2022 05:27:51 -0700 (PDT)
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
+        by smtp.gmail.com with ESMTPSA id g23-20020ac84817000000b002f39b99f693sm4005911qtq.45.2022.05.02.05.27.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 05:24:27 -0700 (PDT)
-Message-ID: <7bbd9205-aa35-4a27-0df4-8f2b22603831@redhat.com>
-Date:   Mon, 2 May 2022 14:24:26 +0200
+        Mon, 02 May 2022 05:27:50 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-2f16645872fso145572887b3.4;
+        Mon, 02 May 2022 05:27:50 -0700 (PDT)
+X-Received: by 2002:a81:913:0:b0:2f7:c833:f304 with SMTP id
+ 19-20020a810913000000b002f7c833f304mr11185923ywj.283.1651494470388; Mon, 02
+ May 2022 05:27:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2 0/3] x86/PCI: Log E820 clipping
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Myron Stowe <myron.stowe@redhat.com>,
-        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
-        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
-        Hui Wang <hui.wang@canonical.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20220419164526.GA1204065@bhelgaas>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220419164526.GA1204065@bhelgaas>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220429143505.88208-1-clement.leger@bootlin.com>
+ <20220429123235.3098ed12@kernel.org> <20220502085103.19b4f47b@fixe.home>
+In-Reply-To: <20220502085103.19b4f47b@fixe.home>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 2 May 2022 14:27:38 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVKY7=CjfazEjNw-5vGP0_eQFX=K1H7DOSWajo2u-dkAQ@mail.gmail.com>
+Message-ID: <CAMuHMdVKY7=CjfazEjNw-5vGP0_eQFX=K1H7DOSWajo2u-dkAQ@mail.gmail.com>
+Subject: Re: [net-next v2 00/12] add support for Renesas RZ/N1 ethernet
+ subsystem devices
+To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?Q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Clément,
 
-Sorry for the late reply.
+On Mon, May 2, 2022 at 8:52 AM Clément Léger <clement.leger@bootlin.com> wrote:
+> Le Fri, 29 Apr 2022 12:32:35 -0700,
+> Jakub Kicinski <kuba@kernel.org> a écrit :
+>
+> > On Fri, 29 Apr 2022 16:34:53 +0200 Clément Léger wrote:
+> > > The Renesas RZ/N1 SoCs features an ethernet subsystem which contains
+> > > (most notably) a switch, two GMACs, and a MII converter [1]. This
+> > > series adds support for the switch and the MII converter.
+> > >
+> > > The MII converter present on this SoC has been represented as a PCS
+> > > which sit between the MACs and the PHY. This PCS driver is probed from
+> > > the device-tree since it requires to be configured. Indeed the MII
+> > > converter also contains the registers that are handling the muxing of
+> > > ports (Switch, MAC, HSR, RTOS, etc) internally to the SoC.
+> > >
+> > > The switch driver is based on DSA and exposes 4 ports + 1 CPU
+> > > management port. It include basic bridging support as well as FDB and
+> > > statistics support.
+> >
+> > Build's not happy (W=1 C=1):
+> >
+> > drivers/net/dsa/rzn1_a5psw.c:574:29: warning: symbol 'a5psw_switch_ops' was not declared. Should it be static?
+> > In file included from ../drivers/net/dsa/rzn1_a5psw.c:17:
+> > drivers/net/dsa/rzn1_a5psw.h:221:1: note: offset of packed bit-field ‘port_mask’ has changed in GCC 4.4
+> >   221 | } __packed;
+> >       | ^
+> >
+>
+> Hi Jakub, I only had this one (due to the lack of W=1 C=1 I guess) which
+> I thought (wrongly) that it was due to my GCC version:
+>
+>   CC      net/dsa/switch.o
+>   CC      net/dsa/tag_8021q.o
+> In file included from ../drivers/net/dsa/rzn1_a5psw.c:17:
+> ../drivers/net/dsa/rzn1_a5psw.h:221:1: note: offset of packed bit-field
+>   ‘port_mask’ has changed in GCC 4.4 221 | } __packed;
+>       | ^
+>   CC      kernel/module.o
+>   CC      drivers/net/ethernet/stmicro/stmmac/dwmac1000_core.o
+>   CC      drivers/net/ethernet/stmicro/stmmac/dwmac100_core.o
+>
+> I'll fix the other errors which are more trivial, however, I did not
+> found a way to fix the packed bit-field warning.
 
-On 4/19/22 18:45, Bjorn Helgaas wrote:
-> On Tue, Apr 19, 2022 at 05:16:44PM +0200, Hans de Goede wrote:
->> Hi,
->>
->> On 4/19/22 17:03, Bjorn Helgaas wrote:
->>> On Tue, Apr 19, 2022 at 11:59:17AM +0200, Hans de Goede wrote:
->>>> On 1/1/70 01:00, Bjorn Helgaas wrote:
->>>>> This is still work-in-progress on the issue of PNP0A03 _CRS methods that
->>>>> are buggy or not interpreted correctly by Linux.
->>>>>
->>>>> The previous try at:
->>>>>   https://lore.kernel.org/r/20220304035110.988712-1-helgaas@kernel.org
->>>>> caused regressions on some Chromebooks:
->>>>>   https://lore.kernel.org/r/Yjyv03JsetIsTJxN@sirena.org.uk
->>>>>
->>>>> This v2 drops the commit that caused the Chromebook regression, so it also
->>>>> doesn't fix the issue we were *trying* to fix on Lenovo Yoga and Clevo
->>>>> Barebones.
->>>>>
->>>>> The point of this v2 update is to split the logging patch into (1) a pure
->>>>> logging addition and (2) the change to only clip PCI windows, which was
->>>>> previously hidden inside the logging patch and not well documented.
->>>>>
->>>>> Bjorn Helgaas (3):
->>>>>   x86/PCI: Eliminate remove_e820_regions() common subexpressions
->>>>>   x86: Log resource clipping for E820 regions
->>>>>   x86/PCI: Clip only host bridge windows for E820 regions
->>>>
->>>> Thanks, the entire series looks good to me:
->>>>
->>>> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
->>>
->>> Thank you!
->>>
->>>> So what is the plan to actually fix the issue seen on some Lenovo models
->>>> and Clevo Barebones ?   As I mentioned previously I think that since all
->>>> our efforts have failed so far that we should maybe reconsider just
->>>> using DMI quirks to ignore the E820 reservation windows for host bridges
->>>> on affected models ?
->>>
->>> I have been resisting DMI quirks but I'm afraid there's no other way.
->>
->> Well there is the first match adjacent windows returned by _CRS and
->> only then do the "covers whole region" exception check. I still
->> think that would work at least for the chromebook regression...
-> 
-> Without a crystal clear strategy, I think we're going to be tweaking
-> the algorithm forever as the _CRS/E820 mix changes.  That's why I
-> think that in the long term, a "use _CRS only, with quirks for
-> exceptions" strategy will be simplest.
+The "port_mask" field is split across 2 u8s.
+What about using u16 instead, and adding explicit padding while
+at it? The below gets rid of the warning, while the generated code
+is the same.
 
-Looking at the amount of exception we already now about I'm
-not sure if that will work well.
+--- a/drivers/net/dsa/rzn1_a5psw.h
++++ b/drivers/net/dsa/rzn1_a5psw.h
+@@ -169,10 +169,11 @@
 
+ struct fdb_entry {
+        u8 mac[ETH_ALEN];
+-       u8 valid:1;
+-       u8 is_static:1;
+-       u8 prio:3;
+-       u8 port_mask:5;
++       u16 valid:1;
++       u16 is_static:1;
++       u16 prio:3;
++       u16 port_mask:5;
++       u16 reserved:6;
+ } __packed;
 
-> 
->> So do you want me to give that a try; or shall I write a patch
->> using DMI quirks. And if we go the DMI quirks, what about
->> matching cmdline arguments?  If we add matching cmdline arguments,
->> which seems to be the sensible thing to do then to allow users
->> to test if they need the quirk, then we basically end up with my
->> first attempt at fixing this from 6 months ago:
->>
->> https://lore.kernel.org/linux-pci/20211005150956.303707-1-hdegoede@redhat.com/
-> 
-> So I think we should go ahead with DMI quirks instead of trying to
-> make the algorithm smarter, and yes, I think we will need commandline
-> arguments, probably one to force E820 clipping for future machines,
-> and one to disable it for old machines.
+ union lk_data {
 
-So what you are suggesting is to go back to a bios-date based approach
-(to determine old vs new machines) combined with DMI quirks to force
-E820 clipping on new machines which turn out to need it despite them
-being new ?
+Gr{oetje,eeting}s,
 
-> 
->>> I think the web we've gotten into, where vendors have used E820 to
->>> interact with _CRS in incompatible and undocumented ways, is not
->>> sustainable.
->>>
->>> I'm not aware of any spec that says the OS should use E820 to clip
->>> things out of _CRS, so I think the long term plan should be to
->>> decouple them by default.
->>
->> Right and AFAICT the reason Windows is getting away with this is
->> the same as with the original Dell _CRS has overlap with
->> physical RAM issue (1), Linux assigns address to unassigneds BAR-s
->> starting with the lowest available address in the bridge window,
->> where as Windows assigns addresses from the highest available
->> address in the window.
-> 
-> Right, I agree.  I'm guessing Chromebooks don't get tested with
-> Windows at all, so we don't even have that level of testing to help.
-> 
->> So the real fix here might very well be
->> to rework the BAR assignment code to switch to fill the window
->> from the top rather then from the bottom. AFAICT all issues where
->> excluding _E820 reservations have helped are with _E820 - bridge
->> window overlaps at the bottom of the window.
->>
->> IOW these are really all bugs in the _CRS method for the bridge,
->> which Windows does not hit because it never actually uses
->> the lowest address(es) of the _CRS returned window.
-> 
-> Yes.  We actually did try this
-> (https://git.kernel.org/linus/1af3c2e45e7a), but unfortunately we had
-> to revert it.  Even more unfortunately, the revert
-> (https://git.kernel.org/linus/5e52f1c5e85f) doesn't have any details
-> about what went wrong.
+                        Geert
 
-When I first started working on this I did read the entire old
-email thread and IIRC this approach was reverted because the
-e820 based approach was deemed to be a cleaner fix. Also the
-single resource_alloc_from_bottom flag influenced all types
-of resource allocations, not just PCI host bridge window
-allocations.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Note that the current kernel no longer has the resource_alloc_from_bottom
-flag. Still I think it might be worthwhile to give switching to
-top-down allocating for host bridge window allocs a try. Maybe we
-can make the desired allocation strategy a flag in the resource ?
-
-I have the feeling that if we switch to top-down allocating
-that we can then switch to just using _CRS and that everything
-will then just work, because we then match what Windows is doing...
-
-Regards,
-
-Hans
-
-
-
-
-
-
-
-> 
->> 1) At least I read in either a bugzilla, or email thread about
->> this that Windows allocating bridge window space from the top
->> was assumed to be why Windows was not impacted.
->>
->>> Straw man:
->>>
->>>   - Disable E820 clipping by default.
->>>
->>>   - Add a quirk to enable E820 clipping for machines older than X,
->>>     e.g., 2023, to avoid breaking machines that currently work.
->>>
->>>   - Add quirks to disable E820 clipping for individual machines like
->>>     the Lenovo and Clevos that predate X, but E820 clipping breaks
->>>     them.
->>>
->>>   - Add quirks to enable E820 clipping for individual machines like
->>>     the Chromebooks (and probably machines we don't know about yet)
->>>     that have devices that consume part of _CRS but are not
->>>     enumerable.
->>>
->>>   - Communicate this to OEMs to try to prevent future machines that
->>>     need quirks.
->>>
->>> Bjorn
->>>
->>
-> 
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

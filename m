@@ -2,109 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7C545179DF
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 00:19:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C39B5179E8
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 00:22:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239918AbiEBWW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 18:22:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56394 "EHLO
+        id S231174AbiEBWZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 18:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230490AbiEBWWZ (ORCPT
+        with ESMTP id S231423AbiEBWXy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 18:22:25 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1B92AD
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 15:18:53 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id a23-20020a17090a6d9700b001d60327d73aso273988pjk.7
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 15:18:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
-        bh=TXIIJNLl5tS81cj1e6Sb3BybyFnRD2QLWwcLwhsiYDs=;
-        b=Qa0ikLUOxl2s5X8Ry8796VJb+tcDzIXLzrUSN7TnPSNNudW3bfEOQOU0kLfq1hxTfN
-         IP0sESs7FFstPfBGMaVlPw3HKJgDcJGjTmkSLqd0UrTUQtGrrOhmhHaEUYguiGrFlYpi
-         XX6v9u/nMe9PUrknwsQNDkHoJxoVXIQ2wh/eH25qHwZnKU/rnkU+MdkHiS3BC1oHQHOZ
-         ec8cSZKZ6NgLQEGvkV5zimwoWmRB8l7ztqb2//HE10AiNxDZOLT6df1hYp9p/CZGSAN7
-         WU8sq/BbQhJhtywBCzi4+sBjdWtrTkNbehr+5R6iHdwswF7JtkjD7Jo+AS2tZUokyc/C
-         eXjg==
+        Mon, 2 May 2022 18:23:54 -0400
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF10A1BE;
+        Mon,  2 May 2022 15:20:24 -0700 (PDT)
+Received: by mail-oi1-f178.google.com with SMTP id y63so16590242oia.7;
+        Mon, 02 May 2022 15:20:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
-         :from:to:cc;
-        bh=TXIIJNLl5tS81cj1e6Sb3BybyFnRD2QLWwcLwhsiYDs=;
-        b=X/A4SoyRNHOOVypGclEBNCq7YX+NjQxq+S4NcgWAq5KQ+I7jcLPZ/AyZSKM4jgEwv2
-         NGoB5i6BRlEilEr/3XJjfs+uB5Khqjftxdpdo0gJPqyjVm2eH0lYDYUTumLUltLE1jHm
-         OCWNYcURNNqjX66AJAwuz4Wk5kMs1ZzVhrSjzDYtsznU4/kuE4pTX9DSs+kNU1k6uBis
-         VXWnP7GdvvSVUzn+EQ07dGLGQjQIIXE30Dse0ZnDvmZ690STVNDCZiqvL15TnZePziuw
-         dRw6A+SxRrBfp8DxWTbvTBGAwiZOfr3kQGUlhRoeKhWoDB3/1ioXr8207wxb34Df7bm6
-         KF8A==
-X-Gm-Message-State: AOAM530jIlhWx8lz8glyjCNDeTTjoQdJS0RGajN26uzYxSiJ6QeT63VM
-        RO01E3fPrDtwksy1g8FnqXxD0kr/hQI=
-X-Google-Smtp-Source: ABdhPJzAB+fTD/4HJyBSgaZ6B+/uiqDSapY8Q+Y3yfuxmKFMC3Uamz17CxAwrCKbS6zRQaerkilOVz5CgnQ=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:90a:c986:b0:1d9:56e7:4e83 with SMTP id
- w6-20020a17090ac98600b001d956e74e83mr149900pjt.1.1651529932080; Mon, 02 May
- 2022 15:18:52 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Mon,  2 May 2022 22:18:50 +0000
-Message-Id: <20220502221850.131873-1-seanjc@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [PATCH] KVM: VMX: Exit to userspace if vCPU has injected exception
- and invalid state
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+cfafed3bb76d3e37581b@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VR6aQATCwdPyj2a2nSMH6aYl4mUSCVGJN91iqP+EUDc=;
+        b=XSU42yiZiJu/CzAJFTD/5J2C91N0mAM3f+J74g/XKVxqL9TrSrrJvP40rPzEE7Z7LA
+         ZwxJvJ4wwfh8vNeYFMH+o9O+mKcQgz6JsynGhoh3tNLCwdHqFWOch6EBkGJD++GJg37x
+         /w6YIolQwahv3Mm3qTxHSowh+GYwTTh3lSY2csYZvJvSgCwYO2GG+HmfWHhUHVswVDvI
+         WxCwO873xS7FacqlW8tM3uWe8eJ54G5f9wWE2i1HT9qLeNcgRxEoQNMcjsFJmHbKoSl+
+         J7YAW0C0eZrWn1q7KgjKyUYMo2ZWpVAQHSnkBUiwx2B2PkGHzQrZvDrN1Z+dGtlkClub
+         pNoA==
+X-Gm-Message-State: AOAM531dtkYJ/dm6dsVlG0033Otu6GOSzUYHNIQ8XiMgxixAtyIPnrqe
+        XpjtMtEGyeynjku6Fa04Gw==
+X-Google-Smtp-Source: ABdhPJx8V52EJ5MZQdiCVJ7+iHueY+QIxBxyN68rDX9lMZGqh4wHsvqRFvMWHd4cNinWBJjPJ6PZNg==
+X-Received: by 2002:a54:4e92:0:b0:325:224c:8ff7 with SMTP id c18-20020a544e92000000b00325224c8ff7mr586298oiy.154.1651530023456;
+        Mon, 02 May 2022 15:20:23 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id dw40-20020a056870772800b000e686d1387csm6287149oab.22.2022.05.02.15.20.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 May 2022 15:20:23 -0700 (PDT)
+Received: (nullmailer pid 1896541 invoked by uid 1000);
+        Mon, 02 May 2022 22:20:21 -0000
+Date:   Mon, 2 May 2022 17:20:21 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@lists.collabora.co.uk,
+        Kever Yang <kever.yang@rock-chips.com>, kernel@collabora.com,
+        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        Sugar Zhang <sugar.zhang@rock-chips.com>
+Subject: Re: [PATCHv1 18/19] arm64: dts: rockchip: Add base DT for rk3588 SoC
+Message-ID: <YnBZJa/dCKnGRF3n@robh.at.kernel.org>
+References: <20220422170920.401914-1-sebastian.reichel@collabora.com>
+ <20220422170920.401914-19-sebastian.reichel@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220422170920.401914-19-sebastian.reichel@collabora.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Exit to userspace with an emulation error if KVM encounters an injected
-exception with invalid guest state, in addition to the existing check of
-bailing if there's a pending exception (KVM doesn't support emulating
-exceptions except when emulating real mode via vm86).
+On Fri, Apr 22, 2022 at 07:09:19PM +0200, Sebastian Reichel wrote:
+> From: Kever Yang <kever.yang@rock-chips.com>
+> 
+> This initial version supports (single core) CPU, dma, interrupts, timers,
+> UART and SDHCI. In short - everything necessary to boot Linux on this
+> system on chip.
+> 
+> The DT is split into rk3588 and rk3588s, which is a reduced version
+> (i.e. with less peripherals) of the former.
+> 
+> Signed-off-by: Yifeng Zhao <yifeng.zhao@rock-chips.com>
+> Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
+> Signed-off-by: Sugar Zhang <sugar.zhang@rock-chips.com>
+> Signed-off-by: Kever Yang <kever.yang@rock-chips.com>
+> [rebase, squash and reword commit message]
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
 
-In theory, KVM should never get to such a situation as KVM is supposed to
-exit to userspace before injecting an exception with invalid guest state.
-But in practice, userspace can intervene and manually inject an exception
-and/or stuff registers to force invalid guest state while a previously
-injected exception is awaiting reinjection.
+[...]
 
-Fixes: fc4fad79fc3d ("KVM: VMX: Reject KVM_RUN if emulation is required with pending exception")
-Reported-by: syzbot+cfafed3bb76d3e37581b@syzkaller.appspotmail.com
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/vmx/vmx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> diff --git a/include/dt-bindings/clock/rk3588-cru.h b/include/dt-bindings/clock/rk3588-cru.h
+> index d51e6ed939b3..2f046f048a83 100644
+> --- a/include/dt-bindings/clock/rk3588-cru.h
+> +++ b/include/dt-bindings/clock/rk3588-cru.h
+> @@ -1451,6 +1451,7 @@
+>  #define SCMI_CRYPTO_CORE		20
+>  #define SCMI_CRYPTO_PKA			21
+>  #define SCMI_SPLL			22
+> +#define SCMI_HCLK_SD			23
 
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index cf8581978bce..c41f0ac700c7 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -5465,7 +5465,7 @@ static bool vmx_emulation_required_with_pending_exception(struct kvm_vcpu *vcpu)
- 	struct vcpu_vmx *vmx = to_vmx(vcpu);
- 
- 	return vmx->emulation_required && !vmx->rmode.vm86_active &&
--	       vcpu->arch.exception.pending;
-+	       (vcpu->arch.exception.pending || vcpu->arch.exception.injected);
- }
- 
- static int handle_invalid_guest_state(struct kvm_vcpu *vcpu)
+Belongs in the header patch?
 
-base-commit: 84e5ffd045f33e4fa32370135436d987478d0bf7
--- 
-2.36.0.464.gb9c8b46e94-goog
-
+>  
+>  /********Name=SECURE_SOFTRST_CON00,Offset=0xA00********/
+>  #define SRST_A_SECURE_NS_BIU		10
+> -- 
+> 2.35.1
+> 
+> 

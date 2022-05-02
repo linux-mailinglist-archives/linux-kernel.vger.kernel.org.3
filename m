@@ -2,166 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57942516B06
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 09:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D431A516B03
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 09:02:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358315AbiEBHGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 03:06:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41642 "EHLO
+        id S1358201AbiEBHFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 03:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358215AbiEBHGH (ORCPT
+        with ESMTP id S238801AbiEBHF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 03:06:07 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBF364D3
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 00:02:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651474959; x=1683010959;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LRyLlJLvu19lLwxcC7JKQKdYckR3OJ2ppVlcOdhNaMY=;
-  b=V5AmglOmdRprpSCHTrQEb1hk/3d3jpP/vKmwK6MPP3muDdrP0cCbyF8E
-   OV67BrCjuUPdbPN73N12CNqQgN1zap7l4+qtrKPaKfhCHankA4OJ8UrSx
-   igN2zTITA6z12754Y7hQKQaQO5I63Izo69c7rk5zUH1mgVPqZ+hNv7r76
-   CUAaxJXu1QTKoOdWUIaOMLmACU+c9Ms6PWuOEIIGO7plp2xPcC0mWtawh
-   vNHpSd2h4PxW4pkEA0t3GiI3UDH3S+8aAeyecGDUKXPIL4vRPbFtGM9Xj
-   0QAvbt8/AZ0aUXtHwWwELTwZI5YvInPI2kGR+JMkRd3abFRLUz2UaBsGH
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="292320196"
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="292320196"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 00:02:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="545906944"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 02 May 2022 00:02:23 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nlQ4c-0009MB-Lm;
-        Mon, 02 May 2022 07:02:22 +0000
-Date:   Mon, 2 May 2022 15:01:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: [drm-msm:msm-next-staging 61/96]
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c:253:22: warning:
- variable 'mode' is uninitialized when used here
-Message-ID: <202205021439.HE0yB3Rm-lkp@intel.com>
+        Mon, 2 May 2022 03:05:27 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D9C6460;
+        Mon,  2 May 2022 00:01:58 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id gj17-20020a17090b109100b001d8b390f77bso15408208pjb.1;
+        Mon, 02 May 2022 00:01:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=t7MLSEk1Zg4N4Mn5YyAWZbEoas0CNhuGYCu9wwnw6i0=;
+        b=ahirv5dzvVouAXT8RwoOabSoKNJRRFLUSaFEEDTZHdRUVq8VW4Lg+/2s7OcTUPj+LF
+         e/Gub+1gSkUehxRdDEmTx8QS4LhPhfbBlFWTAYI3NNvlq4OpoH6wDUAwjxQ0TzoUQVWQ
+         zuawSMlfn12c9eNHRqiLgln342w45ahqetAY825Q4YzsyV/5IN0P1dZSgByv04NeM6cv
+         1nj7oIwFez4xYH5gp8kvEvBPQxkacKDdCBPvha7MRShPSEtAphDqOZuWNx8tfp0J5+ZV
+         k9njEY5PmaM/hWLDv4jjUwTmP98fgYJPWVSeU+wGwxGxns5rqc45RsuW7hqGpuindlCE
+         YCcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=t7MLSEk1Zg4N4Mn5YyAWZbEoas0CNhuGYCu9wwnw6i0=;
+        b=kWQCx5yRvEI/Oyc+zvtGgn0pqhVUPi1wVtwhD30zr0xHSUEH0C8MHi1y5dWBcl1igP
+         zoPeJgKiue7Kyd7dT6wHYD0Qhdo8M09ksu5KDQ6koPMW9B3hLXnrBf5QE2J8oEfy5rZ6
+         zYJHE+VHtYHFYzTImdY01uPi3F1eZCGerj78sxr7nom3RTRJp1kZ0Vn+XM4u6tHedtIt
+         1GE5q0BObwtZlGzvFishOIetdCSzNV51Eq6D90VDVJIvoNtP+c8BfqN23bUt1HbCCBER
+         9+56WaMUXNGVZ2ZiGhE6hR6CGXI77MErDZkYXdRE90YeurN0mZlRnzifJXSbTiZosylH
+         trog==
+X-Gm-Message-State: AOAM532cG43wWpHctFpnAjABDzbZC7k01/MJRCPQSID0bO7n8fBAOA6X
+        XLPTlkXRdzyM8wf8jTxzzJCsG6jqz/qlkczrKnlt9nvcM58VnQ==
+X-Google-Smtp-Source: ABdhPJyLnXWeFBYfu0Jytog6gpjuXEhblMXCokzspuU4e1BS5ALMzpdzv00HDfvDy9mglADiTH0OmM5KUFbsINklhtk=
+X-Received: by 2002:a17:90b:380b:b0:1dc:6d24:76ff with SMTP id
+ mq11-20020a17090b380b00b001dc6d2476ffmr393653pjb.42.1651474917714; Mon, 02
+ May 2022 00:01:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220415005015.525191-1-avagin@gmail.com>
+In-Reply-To: <20220415005015.525191-1-avagin@gmail.com>
+From:   Andrei Vagin <avagin@gmail.com>
+Date:   Mon, 2 May 2022 00:01:46 -0700
+Message-ID: <CANaxB-wcf0Py9eCeA8YKcBSnwzW6pKAD5edCDUadebmo=JLYhA@mail.gmail.com>
+Subject: Re: [PATCH] fs: sendfile handles O_NONBLOCK of out_fd
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-fsdevel <linux-fsdevel@vger.kernel.org>, stable@kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://gitlab.freedesktop.org/drm/msm.git msm-next-staging
-head:   f1fc2b87de4719cfa8e193e0746cc524dd9f7472
-commit: d7d0e73f7de33a2b9998b607707a3e944ef3b86d [61/96] drm/msm/dpu: introduce the dpu_encoder_phys_* for writeback
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220502/202205021439.HE0yB3Rm-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        git remote add drm-msm https://gitlab.freedesktop.org/drm/msm.git
-        git fetch --no-tags drm-msm msm-next-staging
-        git checkout d7d0e73f7de33a2b9998b607707a3e944ef3b86d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/dma/ti/ drivers/gpu/drm/msm/ drivers/pci/controller/dwc/
+Andrew, could you take a look at this patch?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Here is a small reproducer for the problem:
 
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c:253:22: warning: variable 'mode' is uninitialized when used here [-Wuninitialized]
-                           phys_enc->wb_idx, mode->name, mode->hdisplay, mode->vdisplay);
-                                             ^~~~
-   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h:36:21: note: expanded from macro 'DPU_DEBUG'
-                           DRM_DEBUG(fmt, ##__VA_ARGS__); \
-                                            ^~~~~~~~~~~
-   include/drm/drm_print.h:526:32: note: expanded from macro 'DRM_DEBUG'
-           __drm_dbg(DRM_UT_CORE, fmt, ##__VA_ARGS__)
-                                         ^~~~~~~~~~~
-   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c:250:37: note: initialize the variable 'mode' to silence this warning
-           const struct drm_display_mode *mode;
-                                              ^
-                                               = NULL
-   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c:410:6: warning: variable 'refcount' set but not used [-Wunused-but-set-variable]
-           int refcount;
-               ^
-   2 warnings generated.
+#define _GNU_SOURCE /* See feature_test_macros(7) */
+#include <fcntl.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <errno.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/sendfile.h>
 
 
-vim +/mode +253 drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_wb.c
+#define FILE_SIZE (1UL << 30)
+int main(int argc, char **argv) {
+        int p[2], fd;
 
-   237	
-   238	/**
-   239	 * dpu_encoder_phys_wb_atomic_check - verify and fixup given atomic states
-   240	 * @phys_enc:	Pointer to physical encoder
-   241	 * @crtc_state:	Pointer to CRTC atomic state
-   242	 * @conn_state:	Pointer to connector atomic state
-   243	 */
-   244	static int dpu_encoder_phys_wb_atomic_check(
-   245			struct dpu_encoder_phys *phys_enc,
-   246			struct drm_crtc_state *crtc_state,
-   247			struct drm_connector_state *conn_state)
-   248	{
-   249		struct drm_framebuffer *fb;
-   250		const struct drm_display_mode *mode;
-   251	
-   252		DPU_DEBUG("[atomic_check:%d, \"%s\",%d,%d]\n",
- > 253				phys_enc->wb_idx, mode->name, mode->hdisplay, mode->vdisplay);
-   254	
-   255		if (!conn_state->writeback_job || !conn_state->writeback_job->fb)
-   256			return 0;
-   257	
-   258		fb = conn_state->writeback_job->fb;
-   259		mode = &crtc_state->mode;
-   260	
-   261		if (!conn_state || !conn_state->connector) {
-   262			DPU_ERROR("invalid connector state\n");
-   263			return -EINVAL;
-   264		} else if (conn_state->connector->status !=
-   265				connector_status_connected) {
-   266			DPU_ERROR("connector not connected %d\n",
-   267					conn_state->connector->status);
-   268			return -EINVAL;
-   269		}
-   270	
-   271		DPU_DEBUG("[fb_id:%u][fb:%u,%u]\n", fb->base.id,
-   272				fb->width, fb->height);
-   273	
-   274		if (fb->width != mode->hdisplay) {
-   275			DPU_ERROR("invalid fb w=%d, mode w=%d\n", fb->width,
-   276					mode->hdisplay);
-   277			return -EINVAL;
-   278		} else if (fb->height != mode->vdisplay) {
-   279			DPU_ERROR("invalid fb h=%d, mode h=%d\n", fb->height,
-   280					  mode->vdisplay);
-   281			return -EINVAL;
-   282		} else if (fb->width > DEFAULT_MAX_WRITEBACK_WIDTH) {
-   283			DPU_ERROR("invalid fb w=%d, maxlinewidth=%u\n",
-   284					  fb->width, DEFAULT_MAX_WRITEBACK_WIDTH);
-   285			return -EINVAL;
-   286		}
-   287	
-   288		return 0;
-   289	}
-   290	
+        if (pipe2(p, O_NONBLOCK))
+                return 1;
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+        fd = open(argv[1], O_RDWR | O_TMPFILE, 0666);
+        if (fd < 0)
+                return 1;
+        ftruncate(fd, FILE_SIZE);
+
+        if (sendfile(p[1], fd, 0, FILE_SIZE) == -1) {
+                fprintf(stderr, "FAIL\n");
+        }
+        if (sendfile(p[1], fd, 0, FILE_SIZE) != -1 || errno != EAGAIN) {
+                fprintf(stderr, "FAIL\n");
+        }
+        return 0;
+}
+
+It worked before b964bf53e540, it is stuck after b964bf53e540, and it
+works again with this fix.
+
+Thanks,
+Andrei
+
+On Thu, Apr 14, 2022 at 5:50 PM Andrei Vagin <avagin@gmail.com> wrote:
+>
+> sendfile has to return EAGAIN if out_fd is nonblocking and the write
+> into it would block.
+>
+> Cc: Al Viro <viro@zeniv.linux.org.uk>
+> Cc: stable@kernel.org
+> Fixes: b964bf53e540 ("teach sendfile(2) to handle send-to-pipe directly")
+> Signed-off-by: Andrei Vagin <avagin@gmail.com>
+> ---
+>  fs/read_write.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/fs/read_write.c b/fs/read_write.c
+> index e643aec2b0ef..ee59419cbf0f 100644
+> --- a/fs/read_write.c
+> +++ b/fs/read_write.c
+> @@ -1247,6 +1247,9 @@ static ssize_t do_sendfile(int out_fd, int in_fd, loff_t *ppos,
+>                                           count, fl);
+>                 file_end_write(out.file);
+>         } else {
+> +               if (out.file->f_flags & O_NONBLOCK)
+> +                       fl |= SPLICE_F_NONBLOCK;
+> +
+>                 retval = splice_file_to_pipe(in.file, opipe, &pos, count, fl);
+>         }
+>
+> --
+> 2.35.1
+>

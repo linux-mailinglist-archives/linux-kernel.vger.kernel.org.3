@@ -2,174 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED4E517273
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 17:25:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 145B351726F
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 17:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239120AbiEBP10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 11:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59680 "EHLO
+        id S239223AbiEBP1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 11:27:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239375AbiEBP1P (ORCPT
+        with ESMTP id S238609AbiEBP1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 11:27:15 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694C113D1E
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 08:23:40 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id F398D240006;
-        Mon,  2 May 2022 15:23:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1651505018;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=epNsehOQ5G2G1dNlTN4p4tzZ/vqrI4nGDtqFzUY+KDg=;
-        b=UWVp04zye+oewABRxix51t0TRsFXXR3pLjoejridAOZVIoUAaZGVHC0dkBUK97Qc4LOOHG
-        h/Y59+vPypLBYLcCZjf1RRUv2vcJc7Sab1eha4osGA7LF9lmzgYiupY1l0VzcwDKIL7x/Z
-        EzyQuIHjB0u+F7Nb/Uj5Us1BrOAp1xH4RFI8tO+6lzRboOJ2/99mzViA0WN+vN0lodshUB
-        r/8fjiiyUsVvPevw06ErSaoVXMH45EpSTZ/a9vaW23m+9rkQ2bTtv+XG7VAuF2noDSv94Z
-        ShyC061S5uaVWNylxQJvLOEOkd66AtRzpuGsDij3YknopqkNhWkJ7Dvla2npFA==
-From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
-To:     Russell King <linux@armlinux.org.uk>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>
-Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v3 2/2] ARM: at91: pm: add support for sama5d2 secure suspend
-Date:   Mon,  2 May 2022 17:22:19 +0200
-Message-Id: <20220502152219.216758-3-clement.leger@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220502152219.216758-1-clement.leger@bootlin.com>
-References: <20220502152219.216758-1-clement.leger@bootlin.com>
+        Mon, 2 May 2022 11:27:03 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF1513CC9
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 08:23:30 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2f7c57ee6feso151623327b3.2
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 08:23:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ea1oEhzhMj8grWxQC5SgcBArE4/rXmfoEAuZM9GaSnk=;
+        b=e8jLUWg60Xj2yGbY7ch7OqYrOgajvXWhT4iTIr2BEfGc4+9NKE3qXx5Xs7EWsTT9GL
+         OeGOmR0vut0qQzy7JH/IrH9ka8nmoGFb2Gvyc23nt5LdSRcK5YcEOi9gq0tuIX1LeJ8F
+         dgO5NTyqgBNIjtZfsGM/MVGmXurbMVjBLSFRbguI2sjEXBxprRb2lYwaWk3ntkRBUDU5
+         w3d7TRfSKPgIEQBDgV73myrvp6CyIfvHo0gPoeiO3QhVlTaXfe6T8J6DfnjHgI0tJoXs
+         /uqM+NbLt9VQB70/97KqEMc8frtLzcwZYPKAQP5xl9ZKUvDReHs43KuwvnY0KNe0WvE5
+         DjCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ea1oEhzhMj8grWxQC5SgcBArE4/rXmfoEAuZM9GaSnk=;
+        b=ueXjcX0Vfv3v4Wce+xdXI1VnJUxglSxNDsDYw3Pit9nZ34cGxH63bCc5EeHNdgbs//
+         ajMe6CDAz5lSNyX4tOvD5rt+MXc+ItmOAAE3yNs6AlXHLl28KjwcNkc0yIgZDptlciJ2
+         UucRXIyBbnfuSA+172giRbdsoQnpnFjYiH688fT4EJB5LL9MsjRaituPpqHvB2JP/+xH
+         eBqC8uJsiMfQSqxiKZ2msV8BZLid7z38cd78bB0Lzz0elSWCcgm7rnztmJ+g6NoOJv8+
+         iFVolZ+/iFPS1l58WG7sU9yvjF0xk5YmJPNBqDtvSEdw7l+iCUxa7YvztRjjleCUGCtm
+         rXEA==
+X-Gm-Message-State: AOAM5312oMhQz8awoCbxZ/KWmOupdLlobeHqn2JSr1wJ3Lficn8tX25e
+        yCF9amsLVAI01+JJOe217bC+E++9Yn0WAzut7UpWqw==
+X-Google-Smtp-Source: ABdhPJzuy+A0wik9KFC+HHMm48ehGTHQOFaLPm3WarFTvUfmKlDOQAAm23en8K1MA9diKN/+E2i0Bt2GyOtIU8ryfck=
+X-Received: by 2002:a81:a93:0:b0:2f4:d65a:d44e with SMTP id
+ 141-20020a810a93000000b002f4d65ad44emr11108924ywk.243.1651505009686; Mon, 02
+ May 2022 08:23:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220429203644.2868448-1-samitolvanen@google.com>
+ <202204291545.47C6A97EA2@keescook> <Ymz7DWkRJy3PMaHm@hirez.programming.kicks-ass.net>
+In-Reply-To: <Ymz7DWkRJy3PMaHm@hirez.programming.kicks-ass.net>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Mon, 2 May 2022 08:22:57 -0700
+Message-ID: <CABCJKuckt75qA1op-LpkJnQsJC36m9fstbY3uD=7pET2VyyZSg@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/21] KCFI support
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
+        linux-hardening@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When running with OP-TEE, the suspend control is handled securely.
-Suspend can be entered using PSCI support. Since the sama5d2 supports
-multiple suspend modes, add a new CONFIG_ATMEL_SECURE_PM which will
-send a SMC call to select the suspend mode at init time.
+On Sat, Apr 30, 2022 at 2:02 AM Peter Zijlstra <peterz@infradead.org> wrote=
+:
+>
+> On Fri, Apr 29, 2022 at 03:53:12PM -0700, Kees Cook wrote:
+> > On Fri, Apr 29, 2022 at 01:36:23PM -0700, Sami Tolvanen wrote:
+> > > KCFI is a proposed forward-edge control-flow integrity scheme for
+> > > Clang, which is more suitable for kernel use than the existing CFI
+> > > scheme used by CONFIG_CFI_CLANG. KCFI doesn't require LTO, doesn't
+> > > alter function references to point to a jump table, and won't break
+> > > function address equality.
+> >
+> > =F0=9F=8E=89 :)
+> >
+> > > The latest LLVM patches are here:
+> > >
+> > >   https://reviews.llvm.org/D119296
+> > >   https://reviews.llvm.org/D124211
+> > >
+> > > [...]
+> > > To test this series, you'll need to compile your own Clang toolchain
+> > > with the patches linked above. You can also find the complete source
+> > > tree here:
+> > >
+> > >   https://github.com/samitolvanen/llvm-project/commits/kcfi-rfc
+> >
+> > And note that this RFC is seeking to break a bit of a circular dependen=
+cy
+> > with regard to the design of __builtin_kcfi_call_unchecked (D124211
+> > above), as the implementation has gone around a few times in review wit=
+hin
+> > LLVM, and we want to make sure that kernel folks are okay with what was
+> > settled on. If there are no objections on the kernel side, then we can
+> > land the KCFI patches, as this is basically the only remaining blocker.
+>
+> So aside from the static_call usage, was there any other?
 
-"atmel.pm_modes" boot argument is still supported for compatibility
-purposes but the standby value is actually ignored since PSCI suspend
-is used and it only support one mode (suspend).
+Not at the moment, and it looks like we can get rid of that too.
 
-Signed-off-by: Clément Léger <clement.leger@bootlin.com>
----
- arch/arm/mach-at91/Kconfig      | 11 +++++++++-
- arch/arm/mach-at91/pm.c         | 36 +++++++++++++++++++++++++++++++++
- arch/arm/mach-at91/sam_secure.h |  4 ++++
- 3 files changed, 50 insertions(+), 1 deletion(-)
+> Anyway, I think I hate that __builtin, I'd *much* rather see a variable
+> attribute or qualifier for this, such that one can mark a function
+> pointer as not doing CFI.
+>
+> I simply doesn't make sense to have a builtin that operates on an
+> expression. The whole thing is about indirect calls, IOW function
+> pointers.
 
-diff --git a/arch/arm/mach-at91/Kconfig b/arch/arm/mach-at91/Kconfig
-index 279810381256..0e05da5b0aa3 100644
---- a/arch/arm/mach-at91/Kconfig
-+++ b/arch/arm/mach-at91/Kconfig
-@@ -209,7 +209,16 @@ config SOC_SAMA5
- 	select SRAM if PM
- 
- config ATMEL_PM
--	bool
-+	bool "Atmel PM support"
-+
-+config ATMEL_SECURE_PM
-+	bool "Atmel Secure PM support"
-+	depends on SOC_SAMA5D2 && ATMEL_PM
-+	select ARM_PSCI
-+	help
-+	  When running under a TEE, the suspend mode must be requested to be set
-+	  at TEE level. When enable, this option will use secure monitor calls
-+	  to set the suspend level. PSCI is then used to enter suspend.
- 
- config SOC_SAMA7
- 	bool
-diff --git a/arch/arm/mach-at91/pm.c b/arch/arm/mach-at91/pm.c
-index 0fd609e26615..d6886af9b205 100644
---- a/arch/arm/mach-at91/pm.c
-+++ b/arch/arm/mach-at91/pm.c
-@@ -27,6 +27,7 @@
- 
- #include "generic.h"
- #include "pm.h"
-+#include "sam_secure.h"
- 
- #define BACKUP_DDR_PHY_CALIBRATION	(9)
- 
-@@ -881,6 +882,35 @@ static int __init at91_pm_backup_init(void)
- 	return ret;
- }
- 
-+static void at91_pm_secure_init(void)
-+{
-+	int suspend_mode;
-+	struct arm_smccc_res res;
-+
-+	suspend_mode = soc_pm.data.suspend_mode;
-+
-+	res = sam_smccc_call(SAMA5_SMC_SIP_SET_SUSPEND_MODE,
-+			     suspend_mode, 0);
-+	if (res.a0 == 0) {
-+		pr_info("AT91: Secure PM: suspend mode set to %s\n",
-+			pm_modes[suspend_mode].pattern);
-+		return;
-+	}
-+
-+	pr_warn("AT91: Secure PM: %s mode not supported !\n",
-+		pm_modes[suspend_mode].pattern);
-+
-+	res = sam_smccc_call(SAMA5_SMC_SIP_GET_SUSPEND_MODE, 0, 0);
-+	if (res.a0 == 0) {
-+		pr_warn("AT91: Secure PM: failed to get default mode\n");
-+		return;
-+	}
-+
-+	pr_info("AT91: Secure PM: using default suspend mode %s\n",
-+		pm_modes[suspend_mode].pattern);
-+
-+	soc_pm.data.suspend_mode = res.a1;
-+}
- static const struct of_device_id atmel_shdwc_ids[] = {
- 	{ .compatible = "atmel,sama5d2-shdwc" },
- 	{ .compatible = "microchip,sam9x60-shdwc" },
-@@ -1213,6 +1243,12 @@ void __init sama5d2_pm_init(void)
- 	if (!IS_ENABLED(CONFIG_SOC_SAMA5D2))
- 		return;
- 
-+	if (IS_ENABLED(CONFIG_ATMEL_SECURE_PM)) {
-+		pr_warn("AT91: Secure PM: ignoring standby mode\n");
-+		at91_pm_secure_init();
-+		return;
-+	}
-+
- 	at91_pm_modes_validate(modes, ARRAY_SIZE(modes));
- 	at91_pm_modes_init(iomaps, ARRAY_SIZE(iomaps));
- 	ret = at91_dt_ramc(false);
-diff --git a/arch/arm/mach-at91/sam_secure.h b/arch/arm/mach-at91/sam_secure.h
-index 360036672f52..1e7d8b20ba1e 100644
---- a/arch/arm/mach-at91/sam_secure.h
-+++ b/arch/arm/mach-at91/sam_secure.h
-@@ -8,6 +8,10 @@
- 
- #include <linux/arm-smccc.h>
- 
-+/* Secure Monitor mode APIs */
-+#define SAMA5_SMC_SIP_SET_SUSPEND_MODE	0x400
-+#define SAMA5_SMC_SIP_GET_SUSPEND_MODE	0x401
-+
- void __init sam_secure_init(void);
- struct arm_smccc_res sam_smccc_call(u32 fn, u32 arg0, u32 arg1);
- 
--- 
-2.34.1
+I also thought an attribute would be more convenient, but the compiler
+folks prefer a built-in:
 
+https://reviews.llvm.org/D122673
+
+Sami

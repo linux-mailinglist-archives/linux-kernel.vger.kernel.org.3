@@ -2,132 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F505170DC
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 15:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29D265170DF
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 15:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232825AbiEBNt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 09:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56150 "EHLO
+        id S1385425AbiEBNt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 09:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385518AbiEBNtU (ORCPT
+        with ESMTP id S1352494AbiEBNtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 09:49:20 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0786512614;
-        Mon,  2 May 2022 06:45:52 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-ed9ac77cbbso3710387fac.1;
-        Mon, 02 May 2022 06:45:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=KlkPJd9IPwI3xuM5T+5Eqx8x2n4AENEmfcA0g1h3kb8=;
-        b=Y9Ge8Zh0P8Nn7vrmdfyiKMNSXTRSp9YFHQZim+UHkCEFcfwdVdW7Vb8ezfueGEUcHa
-         B1aAFddnxIPGLjcRzkP7XtGk2dlF8RTkPlKJaCYmt9O1naej9QSykekHptyii+fwZRQy
-         l1EWiBVCqbJWRkZ4Klnvtx0ozhx62AmU09qkR9Ola2hClwQjEQZyfYh6q/uEpQuAyrm/
-         YDfjUjrwscX61c0ALQUvQcDFIU5370j4EfVKP7iQobmAodMzzuNMPCmW4S2LWhgAbo8X
-         VwWzk9s3kNbfC3hUgXGX/2R2pel9rOhniwQEMnG5Tpm9jRGvRtVuWVtt1ofUS4hLNBNY
-         P3Eg==
+        Mon, 2 May 2022 09:49:45 -0400
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97DFC1260F;
+        Mon,  2 May 2022 06:46:16 -0700 (PDT)
+Received: by mail-qt1-f174.google.com with SMTP id x22so5973403qto.2;
+        Mon, 02 May 2022 06:46:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=KlkPJd9IPwI3xuM5T+5Eqx8x2n4AENEmfcA0g1h3kb8=;
-        b=GlaqFoK98nXaEEYvyCg7kUV2gvAIhFDe7jvAcGk5OPws8WwO7CX7y7roSQPVnZVebg
-         80brvven4c0dIYkmGfxyCDAmYaEayqTQRgjJRVU+06XTVWojlpFudpuyNQiwAqqIKLMG
-         nz0hSosO/BoWUL2TayosZULy7xhUG4rM3PjX7C9omb0ghmO5KsFMmwabF/pHkjP7uwee
-         emPp6qXPpnRkyk9Io72nKjmhAhcmK1vxKdbKvjjTOVcCjzgPzD/m8mIIUbWM2gUrA0hL
-         LS627xsLm+EnZyCz2hk4LxvI/7LA6UjE7jsntNZXV8DWnhMQ09KU+KNAFgZQYyNn9A2N
-         6c1w==
-X-Gm-Message-State: AOAM531tY60jo5iauU6oCT2LzUvclGVdGN4j9DcdeIMxf9NkYrvNj747
-        F+dw6UGdetW9/GvaGgmNo1t/1naRFi4rZ2G5mZs=
-X-Google-Smtp-Source: ABdhPJx5rwU6X5NnnuNmcAS5EItDn5UYn1+bETi6E6Je7tDTBL6rzvnM5hyy2El994VvmDm+qlbjgH1Ln9bev9p14BE=
-X-Received: by 2002:a05:6870:5b8a:b0:e6:589e:201d with SMTP id
- em10-20020a0568705b8a00b000e6589e201dmr6394064oab.71.1651499145960; Mon, 02
- May 2022 06:45:45 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=aTBaCHq+ZPp/83sC9QEFQMvZBDoFtqtvGEyIKWXC9I0=;
+        b=pQ0P7mdf3UfBoup1qMUmHoQwKcTRRGn38eIKFi87irzAHAkTP7Eu5jXNGMJGKDbVti
+         L+x1yV1Cb14Cyy9xBgqmVbuSFK1MweBcOcHFw8xV3KA0QlmD4vI+XF7pECmw8Yv2Ni5V
+         vATM0y6LUAphA3jSfgBQ2ZmsnUa07bDmjwN08335wXwC6bUXAghkZNoRyWnrxGMNUMsS
+         IJTERPbjbIidIRoKRQcW12SL8QAknVBXSMPIRzGUMon9VskWApqBxsTu7Lvu1e2coXg2
+         K+uMquDSk3R4jCJMCwzBukrflB4ogqmJT/HmD9Kk/B3QUq9adH2uZ2MRUhRgNTwCQYZP
+         Xs0g==
+X-Gm-Message-State: AOAM532Ch/q2zwC0ISwdZrGP3M4sr/I8BQ0dXNXUBw9tOSuVV0DR1XXh
+        0ExQdYMwZR2Uw9yEi6kqtSCkn0/wZzs4ow==
+X-Google-Smtp-Source: ABdhPJxTmoL7T7I9Bkm5J8hYQjUv66Agz4bGolXwY6cMH+wJofMkI7y1cP/Da2V20fn5iJ80vXN8AQ==
+X-Received: by 2002:ac8:5896:0:b0:2f3:a7b1:a2cb with SMTP id t22-20020ac85896000000b002f3a7b1a2cbmr2515932qta.476.1651499175408;
+        Mon, 02 May 2022 06:46:15 -0700 (PDT)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id s126-20020a37a984000000b0069fca79fa3asm3538092qke.62.2022.05.02.06.46.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 May 2022 06:46:15 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id g28so26067571ybj.10;
+        Mon, 02 May 2022 06:46:15 -0700 (PDT)
+X-Received: by 2002:a25:4506:0:b0:648:cfc2:301d with SMTP id
+ s6-20020a254506000000b00648cfc2301dmr10228415yba.380.1651499174794; Mon, 02
+ May 2022 06:46:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220125143304.34628-1-cgzones@googlemail.com>
- <CAHC9VhSdGeZ9x-0Hvk9mE=YMXbpk-tC5Ek+uGFGq5U+51qjChw@mail.gmail.com>
- <CAJ2a_DeAUcGTGm_fk8viVbeFXr6FLrJ-oLw-abwFND6Kv0u0gQ@mail.gmail.com> <CAHC9VhRRBrLVtvmbJSTZ7fOkD-8AN4iM0WRmeL4ND001d3viJg@mail.gmail.com>
-In-Reply-To: <CAHC9VhRRBrLVtvmbJSTZ7fOkD-8AN4iM0WRmeL4ND001d3viJg@mail.gmail.com>
-From:   =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
-Date:   Mon, 2 May 2022 15:45:35 +0200
-Message-ID: <CAJ2a_DeT6AG0jp4gTdsEy7nh=s6cLR7QCsYXAz2+3vsdRKxddg@mail.gmail.com>
-Subject: Re: [RFC PATCH] mm: create security context for memfd_secret inodes
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     SElinux list <selinux@vger.kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>
+References: <20220429082637.1308182-1-yangyingliang@huawei.com>
+In-Reply-To: <20220429082637.1308182-1-yangyingliang@huawei.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 2 May 2022 15:46:03 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUUiXB3ouxM57Dy+puY-WfV4jpgnRwB8THSQqbhgvkk+g@mail.gmail.com>
+Message-ID: <CAMuHMdUUiXB3ouxM57Dy+puY-WfV4jpgnRwB8THSQqbhgvkk+g@mail.gmail.com>
+Subject: Re: [PATCH 1/2] pinctrl: renesas: fix possible null-ptr-deref in sh_pfc_map_resources()
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Feb 2022 at 23:32, Paul Moore <paul@paul-moore.com> wrote:
+On Fri, Apr 29, 2022 at 4:30 PM Yang Yingliang <yangyingliang@huawei.com> wrote:
+> It will cause null-ptr-deref when using 'res', if platform_get_resource()
+> returns NULL, so move using 'res' after devm_ioremap_resource() that
+> will check it to avoid null-ptr-deref.
+> And use devm_platform_get_and_ioremap_resource() to simplify code.
 >
-> On Thu, Feb 17, 2022 at 9:24 AM Christian G=C3=B6ttsche
-> <cgzones@googlemail.com> wrote:
-> > On Thu, 27 Jan 2022 at 00:01, Paul Moore <paul@paul-moore.com> wrote:
-> > > On Tue, Jan 25, 2022 at 9:33 AM Christian G=C3=B6ttsche
-> > > <cgzones@googlemail.com> wrote:
-> > > >
-> > > > Create a security context for the inodes created by memfd_secret(2)=
- via
-> > > > the LSM hook inode_init_security_anon to allow a fine grained contr=
-ol.
-> > > > As secret memory areas can affect hibernation and have a global sha=
-red
-> > > > limit access control might be desirable.
-> > > >
-> > > > Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
-> > > > ---
-> > > > An alternative way of checking memfd_secret(2) is to create a new L=
-SM
-> > > > hook and e.g. for SELinux check via a new process class permission.
-> > > > ---
-> > > >  mm/secretmem.c | 9 +++++++++
-> > > >  1 file changed, 9 insertions(+)
-> > >
-> > > This seems reasonable to me, and I like the idea of labeling the anon
-> > > inode as opposed to creating a new set of LSM hooks.  If we want to
-> > > apply access control policy to the memfd_secret() fds we are going to
-> > > need to attach some sort of LSM state to the inode, we might as well
-> > > use the mechanism we already have instead of inventing another one.
-> >
-> > Any further comments (on design or implementation)?
-> >
-> > Should I resend a non-rfc?
->
-> I personally would really like to see a selinux-testsuite for this so
-> that we can verify it works not just now but in the future too.  I
-> think having a test would also help demonstrate the usefulness of the
-> additional LSM controls.
->
+> Fixes: c7977ec4a336 ("pinctrl: sh-pfc: Convert to platform_get_*()")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 
-Any comments (especially from the mm people)?
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-pinctrl-for-v5.19.
 
-Draft SELinux testsuite patch:
-https://github.com/SELinuxProject/selinux-testsuite/pull/80
+Gr{oetje,eeting}s,
 
-> > One naming question:
-> > Should the anonymous inode class be named "[secretmem]", like
-> > "[userfaultfd]", or "[secret_mem]" similar to "[io_uring]"?
->
-> The pr_fmt() string in mm/secretmem.c uses "secretmem" so I would
-> suggest sticking with "[secretmem]", although that is question best
-> answered by the secretmem maintainer.
->
-> --
-> paul-moore.com
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

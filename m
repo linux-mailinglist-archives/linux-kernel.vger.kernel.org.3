@@ -2,140 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE79D517183
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 16:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7DB051718C
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 16:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237585AbiEBO3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 10:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38398 "EHLO
+        id S1350442AbiEBObq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 10:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237408AbiEBO3q (ORCPT
+        with ESMTP id S237602AbiEBObn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 10:29:46 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BDB3DFF3
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 07:26:17 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id t11-20020a17090ad50b00b001d95bf21996so16227210pju.2
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 07:26:17 -0700 (PDT)
+        Mon, 2 May 2022 10:31:43 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C538DE006
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 07:28:14 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id v12so19771627wrv.10
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 07:28:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3BfTecELncQo+MNmOrEVdpVY4MKw3ykdNOngFq2vpEA=;
-        b=nlEGE88TfuhYScKEinFaoc5rceXxa8XrGcaZaXC85R5Ua1dFEJu3XwrQwS9W5zP0ov
-         1ZikyBkktgggbx4qMDaRRK+Pz06aKjCPIynSZ67Fi9tYi3L7T6RXC/CDJC7/Xnc+eEEU
-         NNYdKcmxpvOgDPrrA/QV9zvUX9uz/eUBlLBvag5mqIDZrc8jbY6ekIofWlZCv+wKd/D0
-         TLNjsnNAyBRpQrQqbZ3L0Y5LA2FzDmIi+JErF8T0JeRSSvwvdsQCC7lsx+boi4TNIrsO
-         aVnuzQJS0p75jkexoO7ReRO1aGvRkeA9l3OA8fOdiY+EKIRfGQtHk/JAnvw1cS/bfjP8
-         0scA==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=PQJ/katdNCiV6NuMD6Q8JYHjEJO0fdOai4gF5RPTvuA=;
+        b=egGNYKxYxioAsa+M+5MDNCxNunG7MPC0Qtz8jwhkVOJL7pcWe8h8anLOvdsHso3az9
+         mtspTPjIOB0ETM2hpRqTVwEKPUNYtTP6gCe6lnMH0ib9YCCNV3zvImoKAP5xSdZ2ZLd8
+         gjdC5SX6tAblz1pIxmcqWmpOzRSyB2UAMA8QPwVwn3Jt/4rwiORAn2jchnczDJLdZVF7
+         yJvR0W3FBaen4SR9hilNuCEOm0yPOTcZuPP+AtDEMrOhAPiDJHVXA5XHghy9TPqEawFz
+         BEmfaVzW4r+pD5wNYui6t4ws/yM25n62bVyqmRePpf0VUnG7cYkFdqcRl3pbeKqHiq3P
+         YQKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3BfTecELncQo+MNmOrEVdpVY4MKw3ykdNOngFq2vpEA=;
-        b=yDkyZ2bcNOE/6cG6m1hL1pQCzZZF0V2gNaNyZMAQ360XHHePkFwiDutgYtkRFxBoVW
-         kJH3bCN5ahUfeAEzI2dvCzDBRL4gAd7tioWMxeE1RH6we7y/bP5nB+hWdjl9fJLHYfFy
-         AiFNkt0hLko9MeFOQ4lQ0EIUNgbHDobrNJG3y782oV0+K5lvExvKjWJkcmwZryIbpsoe
-         uBPQNNS54N+jg4bapcYUGlogQgmqo9p29DSLARWJaXoYBzrfxl+aUApNRllxdRkaWSX/
-         TIfAfgdeMITwX9dZFEBFPf27XMBTnYcInwVCqrGkpV8A/CoqYniTIiMTF+F1Aw64A6LV
-         cVsg==
-X-Gm-Message-State: AOAM532djdCzTVAgCAbZRv7kR7W9PQ5JJoWSFbgtuUX3xYae9mggwdLh
-        C+3dmG3GeUj99bLJ2PNSrzu+DXx6OBZsXJKLDSijMA==
-X-Google-Smtp-Source: ABdhPJwocUL+W9zxZIvjEloZYnEbg/cP02pumTmxSJz/dIfLCydeibCk/PpvPcTl7r7HiM/1LA7UxYijjIW9ZFmvq04=
-X-Received: by 2002:a17:90b:1e4e:b0:1dc:583c:398 with SMTP id
- pi14-20020a17090b1e4e00b001dc583c0398mr6056116pjb.232.1651501576683; Mon, 02
- May 2022 07:26:16 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=PQJ/katdNCiV6NuMD6Q8JYHjEJO0fdOai4gF5RPTvuA=;
+        b=Ex0ihs7zZ5VaPtKSsRABys/WqzLVA6VOQswBd9ZH+bfVBidg8YP49wTY4h0hpN7cJY
+         lQ14yiiId+iZUkbaVd4ST5ESq3/zmn1KX915fgp5g6tb+tZLo50rhSPd1jPetH8tFzy2
+         rK34s6eejokUdEhVCqZuA12C5PHtRbLnK/SbyzJcpO+hbC9g4nkLVyV9qV6A9akomjtE
+         JglfwiivfQXkGEODLJa1wD0okOkxdHuzYrVPeyrYaO38BmS1m9jdun5tXdVUIzJrPu+z
+         7YeLWrNNtQKg8hh1QxdzUmhnm35+XuKmD4mXd80VehJ3hlo1krq8CdwSCwZhKMChTSCc
+         yveA==
+X-Gm-Message-State: AOAM53054y8EyN7S1FVLhBOx6k4xzwT4gyG9/dbJw3ImaMGSSS8ZnQuL
+        sVjqK+7I/Saz3UDAf4djDQN5VoacYh/CmSG6kXA=
+X-Google-Smtp-Source: ABdhPJw3zlSpxfBUZfcd441g4Y+/+8zdDOoMBi7bBret895gql6EwyHwo4AkVSPyMTa2yVH6B/BvcvGwbbjMBCAm6E0=
+X-Received: by 2002:adf:f783:0:b0:20a:e0a7:6c33 with SMTP id
+ q3-20020adff783000000b0020ae0a76c33mr9414136wrp.187.1651501693397; Mon, 02
+ May 2022 07:28:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220430064828.2470989-1-jstultz@google.com>
-In-Reply-To: <20220430064828.2470989-1-jstultz@google.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Mon, 2 May 2022 16:26:05 +0200
-Message-ID: <CAG3jFyurX5MKDr9=kEFT6AaV+HZf588cAMLaBG8G+6CAr-3QJQ@mail.gmail.com>
-Subject: Re: [RFC][PATCH 1/2] drm/bridge: lt9611: Consolidate detection logic
-To:     John Stultz <jstultz@google.com>
-Cc:     linux-kernel@vger.kernel.org, Yongqin Liu <yongqin.liu@linaro.org>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        kernel-team@android.com
+Received: by 2002:a05:6000:168e:0:0:0:0 with HTTP; Mon, 2 May 2022 07:28:12
+ -0700 (PDT)
+Reply-To: rgicompanyltd1@gmail.com
+From:   RGI COMPANY LTD <antonioman388@gmail.com>
+Date:   Mon, 2 May 2022 22:28:12 +0800
+Message-ID: <CALR66yoqhQvqkR=yxbkHAoYwZwjJP1cqLXn09VteF22OPv8OZA@mail.gmail.com>
+Subject: Greetings
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=7.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM,UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:42f listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [antonioman388[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [antonioman388[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [rgicompanyltd1[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  1.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 30 Apr 2022 at 08:48, John Stultz <jstultz@google.com> wrote:
->
-> This patch simply consolidates the duplicated detection
-> functionality in the driver.
->
-> Cc: Yongqin Liu <yongqin.liu@linaro.org>
-> Cc: Amit Pundir <amit.pundir@linaro.org>
-> Cc: Peter Collingbourne <pcc@google.com>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Robert Foss <robert.foss@linaro.org>
-> Cc: kernel-team@android.com
-> Signed-off-by: John Stultz <jstultz@google.com>
-> ---
->  drivers/gpu/drm/bridge/lontium-lt9611.c | 22 ++++++++--------------
->  1 file changed, 8 insertions(+), 14 deletions(-)
->
-> diff --git a/drivers/gpu/drm/bridge/lontium-lt9611.c b/drivers/gpu/drm/bridge/lontium-lt9611.c
-> index 63df2e8a8abc..bf66af668f61 100644
-> --- a/drivers/gpu/drm/bridge/lontium-lt9611.c
-> +++ b/drivers/gpu/drm/bridge/lontium-lt9611.c
-> @@ -578,10 +578,8 @@ static struct lt9611_mode *lt9611_find_mode(const struct drm_display_mode *mode)
->  }
->
->  /* connector funcs */
-> -static enum drm_connector_status
-> -lt9611_connector_detect(struct drm_connector *connector, bool force)
-> +static enum drm_connector_status __lt9611_detect(struct lt9611 *lt9611)
->  {
-> -       struct lt9611 *lt9611 = connector_to_lt9611(connector);
->         unsigned int reg_val = 0;
->         int connected = 0;
->
-> @@ -594,6 +592,12 @@ lt9611_connector_detect(struct drm_connector *connector, bool force)
->         return lt9611->status;
->  }
->
-> +static enum drm_connector_status
-> +lt9611_connector_detect(struct drm_connector *connector, bool force)
-> +{
-> +       return __lt9611_detect(connector_to_lt9611(connector));
-> +}
-> +
->  static int lt9611_read_edid(struct lt9611 *lt9611)
->  {
->         unsigned int temp;
-> @@ -887,17 +891,7 @@ static void lt9611_bridge_mode_set(struct drm_bridge *bridge,
->
->  static enum drm_connector_status lt9611_bridge_detect(struct drm_bridge *bridge)
->  {
-> -       struct lt9611 *lt9611 = bridge_to_lt9611(bridge);
-> -       unsigned int reg_val = 0;
-> -       int connected;
-> -
-> -       regmap_read(lt9611->regmap, 0x825e, &reg_val);
-> -       connected  = reg_val & BIT(0);
-> -
-> -       lt9611->status = connected ?  connector_status_connected :
-> -                               connector_status_disconnected;
-> -
-> -       return lt9611->status;
-> +       return __lt9611_detect(bridge_to_lt9611(bridge));
->  }
->
->  static struct edid *lt9611_bridge_get_edid(struct drm_bridge *bridge,
+-- 
+From: RGI Company Ltd
+Address, Netherlands
+Call:+3197005033311
+02/05/2022
 
-I think this looks good. Thank John!
+Atten:
 
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+RGI Genealogical Investigators specializes in probate research to locate
+missing funds, inherited funds around the world. We can also help you find
+wills, obtain copies of certificates.
+
+Recently a woman from the Rothschild family, one of the famous families in
+Europe contacted our company that we should contact a business minded
+person who is capable of investing her funds in a lucrative business.
+
+Our service fee is 2% of the funds and we will be paid after you receive
+the funds. The funds transfer process should take just a matter of days as
+we have the mechanism and expertise to get this done quickly. Please if you
+find this letter offensive ignore it and accept our apologies
+
+Warmest Regards,
+
+Dr. J.T Woods, CEO
+RGI Genealogical

@@ -2,192 +2,307 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C27D3517AEA
+	by mail.lfdr.de (Postfix) with ESMTP id 7A70B517AE9
 	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 01:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbiEBXmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 19:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45574 "EHLO
+        id S229987AbiEBXmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 19:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbiEBXlE (ORCPT
+        with ESMTP id S229542AbiEBXmb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 19:41:04 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC0ABF1
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 16:37:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651534653; x=1683070653;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=4XLZUUn5VZ5th7pOOR71IpH56PArGKxViiV6iEMdEEc=;
-  b=Qs6v6pIIQbAOamRHNu6kOWlpLBN2uWqLlXqCtRsnLPxpKVKJeyG670RK
-   m9wtQuTyeL79n+JUzX59BtIaSEdQefSJFSAFSpZ7a3qN0UtK+5kur/xqj
-   zg/7gHdHzHsi5AEkP6UQ5/UUnullzLDYcSh7yjk+BAa0RN/eE6Fm8qvYz
-   X+ZGcuzhjQMB8ToRT5bUzgH1QgX0lzJ1tqfOVRKlBzYe2qd0f5PSxm8WU
-   siDUgBKsHZrbNg6RwobY3wchPSgvnkFlJ9DyrYz0CfwdHhFmn85sLElLq
-   nDhbOSSCdcQTuVHZod0rRir5j2xCmlmilMEq0MLH5QcVC5VcsSyLPoPYD
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="247265995"
-X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="247265995"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 16:37:33 -0700
-X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="887448290"
-Received: from chgan-mobl1.gar.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.60.238])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 16:37:29 -0700
-Message-ID: <0c31f9e5d74b8f5e494fcd3d9c0ebb6668f57c74.camel@intel.com>
-Subject: Re: [PATCH v5 1/3] x86/tdx: Add TDX Guest attestation interface
- driver
-From:   Kai Huang <kai.huang@intel.com>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 03 May 2022 11:37:27 +1200
-In-Reply-To: <e673ea3d-ae4f-39ed-33a5-c6480e58c6d8@linux.intel.com>
-References: <20220501183500.2242828-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-         <20220501183500.2242828-2-sathyanarayanan.kuppuswamy@linux.intel.com>
-         <5473f606bd8e60dd7b8d58a540285d126a1361bd.camel@intel.com>
-         <e5aed619-20ce-7eb3-22a3-64b51de9cce3@linux.intel.com>
-         <b8eadd3079101a2cf93ee87d36dbedf93d8a2725.camel@intel.com>
-         <e673ea3d-ae4f-39ed-33a5-c6480e58c6d8@linux.intel.com>
+        Mon, 2 May 2022 19:42:31 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E0627FFC
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 16:38:58 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id b6-20020a170903228600b0015d22ba49a9so7171523plh.16
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 16:38:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=p7us8BZf0fK1RrSD6y3PdjBRGI3gB6CktXng+w8fit8=;
+        b=ZFtXfGzbmAJt3k1RJe4no9H5OjZL/uK5Zt0HNoiErHqBqSoz71OwvmHLW6HHVqw48M
+         paWxhHQiADMiWxG9eOrAwIBQC3P5UH9RrImw8cdehFtXM2f9n8EtIKfLTRkbxrJr9PEU
+         4ZLlSBRYVpIIdBuQkydEN15hsaHS3yUnPpS2fvxI29+3pSLuRbVWf3Y41u1xBWenx6wp
+         vyWsjpFOm/HRiJSxLq+QpCk8FME5/qYaynxVkF1pS3LXBPl7vT0SQKDT0vO6n9jOc2uD
+         nC3CMP25k+1hU5/c1/VbGvxMJ97eeIjPs2UHXZ/coJ+6t81nleuFA3DCvSNpQnITbLb2
+         dQvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=p7us8BZf0fK1RrSD6y3PdjBRGI3gB6CktXng+w8fit8=;
+        b=1JHPo0b+hFGpw4jdXUwM1ESlWbd1iU0jC9X3435VYatKVRSormMVzuvIJ7BNCrxSnE
+         TtwMMBPNsRMqpHGWFxT1jyWCf0MIR/NbrzybuLH5lBKTsB1i+FtvNwAlWBLSIv+/OhtL
+         FZQSu84ZWVP5ZLM3MgNNglaBnNSVkYt1J61djPG2cG+o1SQcPIeC32Mek/pWWw43LFFf
+         ynNhIp5eIij4UkwTcc6xWgltFYKxiKIzKDuPq9P0zv1cR2AiS7Pp2VAiyWR5aF0cqANs
+         10IaX0CYxr7ipqWwkPptVPdrpXcRjQ3vcIpxPWi+BqJlYBJfuMryKpOI1E1LEuZ792F1
+         oL5A==
+X-Gm-Message-State: AOAM530BgRAFXgNgasMCP8L50ZWu+6V1Yl3//SM3U+RbAH5Aeu4P+bpI
+        ZrVZ4soEMvqIFfbYVC7wxTat9bosbB0g
+X-Google-Smtp-Source: ABdhPJwf4ixwRgkC/4vK073vja+uTjkR9lkJA8OfzTI/L1mkBxBA/FIGRn2PdKec/lBJjYP3/0OfZfI/OStR
+X-Received: from rananta-virt.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1bcc])
+ (user=rananta job=sendgmr) by 2002:a17:902:e848:b0:15e:ad4f:8cde with SMTP id
+ t8-20020a170902e84800b0015ead4f8cdemr4523017plg.60.1651534737969; Mon, 02 May
+ 2022 16:38:57 -0700 (PDT)
+Date:   Mon,  2 May 2022 23:38:44 +0000
+Message-Id: <20220502233853.1233742-1-rananta@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
+Subject: [PATCH v7 0/9] KVM: arm64: Add support for hypercall services selection
+From:   Raghavendra Rao Ananta <rananta@google.com>
+To:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Raghavendra Rao Anata <rananta@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > > 
-> > > > 
-> > > > For instance, after rough thinking, why is the IOCTL better than below approach
-> > > > using /sysfs?
-> > > > 
-> > > > echo <REPORTDATA> > /sys/kernel/coco/tdx/attest/reportdata
-> > > > cat /sys/kernel/coco/tdx/attest/tdreport
-> > > > 
-> > > > Each "echo <REPORTDATA>" to '/sys/.../reportdata' triggers the driver to call
-> > > > TDCALL to get the TDREPORT, which is available at '/sys/.../tdreport'.
-> > > > 
-> > > > The benefit of using IOCTL I can think of now is it is perhaps more secure, as
-> > > > with IOCTL the REPORTDATA and the TDREPORT is visible to the process which calls
-> > > > the IOCTL, while using the /sysfs they are potentially visible to any process.
-> > > > Especially the REPORTDATA, i.e. it can come from attestation service after the
-> > > > TD attestation agent sets up a secure connection with it.
-> > > > 
-> > > > Anyway, my 2cents above.
-> > > 
-> > > IMO, since TDREPORT is not a secret we don't have to hightlight security
-> > > concern here.
-> > > 
-> > 
-> > Right the TDREPORT itself isn't a secret.  However my thinking is the REPORTDATA
-> > might be.  It's typically provided by the attestation service to the TD so the
-> > Quote can be verified for instance per-session or per-connect or whatever.  The
-> > REPORTDATA is the only thing that can be used to prevent reply attack anyway.
-> >  From this perspective, it is kinda secret.  However the TDREPORT can be captured
-> > by untrusted software and used for reply attack if no crypto-protection is used
-> > when it is sent to the QE, so I am not sure how bad can the reply attack cause.
-> > 
-> > > How about following?
-> > > 
-> > > Operations like getting TDREPORT or Quote generation involves sending
-> > > a blob of data as input and getting another blob of data as output. It
-> > > was considered to use a sysfs interface for this, but it doesn't fit
-> > > well into the standard sysfs model for configuring values. It would be
-> > > possible to do read/write on files, but it would need multiple file
-> > > descriptors, which would be somewhat messy. IOCTLs seems to be the best
-> > > fitting and simplest model here.
-> > > 
-> > > 
-> > 
-> > Let's forget about GetQuote now.  As you can see it has couple of problems.
-> > 
-> > If we don't argue from security perspective, what's wrong with the approach
-> > using /sysfs I mentioned above?
-> 
-> Sysfs is generally used for configuring values. As I have mentioned, it
-> does not fit well for our use case where we want to send blob of data
-> as input and get another blob as an output. But, if you really want to
-> use it, you can implement it like you have mentioned (with multiple
-> files). But I don't see any advantage in doing it.
+Hello,
 
-I am not so sure about this argument.  Will leave this to maintainers.
+Continuing the discussion from [1], the series tries to add support
+for the userspace to elect the hypercall services that it wishes
+to expose to the guest, rather than the guest discovering them
+unconditionally. The idea employed by the series was taken from
+[1] as suggested by Marc Z.
 
-My point is to me from security's perspective, IOCTL fits better.  And you can
-add this to your changelog.
+In a broad sense, the concept is similar to the current implementation
+of PSCI interface- create a 'firmware psuedo-register' to handle the
+firmware revisions. The series extends this idea to all the other
+hypercalls such as TRNG (True Random Number Generator), PV_TIME
+(Paravirtualized Time), and PTP (Precision Time protocol).
 
-> 
-> Also, in the future, if you want to support multiple requests in
-> parallel, sysfs model will not work.
-> 
-> 
-> > > 
+For better categorization and future scaling, these firmware registers
+are categorized based on the service call owners. Also, unlike the
+existing firmware psuedo-registers, they hold the features supported
+in the form of a bitmap.
 
-I think you are mixing getting TDREPORT and GetQuote.  What's the point of
-supporting get TDREPORT in parallel?  You can only get one TDREPORT from TDX
-module at one time.
+During the VM initialization, the registers holds an upper-limit of
+the features supported by each one of them. It's expected that the
+userspace discover the features provided by each register via GET_ONE_REG,
+and writeback the desired values using SET_ONE_REG. KVM allows this
+modification only until the VM has started.
 
-> > > > 
-> > > > > + *
-> > > > > + * @reportdata : User-defined 64-Byte REPORTDATA to be included into
-> > > > > + *		 TDREPORT. Typically it can be some nonce provided by
-> > > > > + *		 attestation software so the generated TDREPORT can be
-> > > > > + *		 uniquely verified.
-> > > > > + * @tdreport   : TDREPORT output from TDCALL[TDG.MR.REPORT] of size
-> > > > > + *		 TDX_REPORT_LEN.
-> > > > > + *
-> > > > > + * Used in TDX_CMD_GET_REPORT IOCTL request.
-> > > > > + */
-> > > > > +struct tdx_report_req {
-> > > > > +	union {
-> > > > > +		__u8 reportdata[TDX_REPORTDATA_LEN];
-> > > > > +		__u8 tdreport[TDX_REPORT_LEN];
-> > > > > +	};
-> > > > > +};
-> > > > 
-> > > > I am not sure overriding the input is a good idea, but will leave to others.
-> > > 
-> > > TDCALL uses it that way. So I have followed the same model.
-> > 
-> > Which TDCALL?
-> 
-> TDG.MR.REPORT. It uses the same buffer as input and output.
-> 
-> 
-It doesn't override the REPORTDATA:
+Some of the standard function-ids, such as ARM_SMCCC_VERSION_FUNC_ID,
+need not be associated with a feature bit. For such ids, the series
+introduced an allowed-list (in kvm_hvc_call_default_allowed()), that holds
+all such ids. As a result, the functions that are not elected by userspace,
+or if they are not a part of this allowed-list, will be denied for when
+the guests invoke them.
 
-Input:
+Older VMMs can simply ignore this interface and the hypercall services
+will be exposed unconditionally to the guests, thus ensuring backward
+compatibility.
 
-RCX:	1024B-aligned guest physical address of newly created report structure
-RDX:	64B-aligned guest physical address of additional data to be signed
+The patches are based off of mainline kernel 5.18-rc5, with the selftest
+patches from [2] applied.
 
-As you can see the buffer to hold TDREPORT and REPORTDATA are not the same.
+Patch-1 factors out the non-PSCI related interface from psci.c to
+hypercalls.c, as the series would extend the list in the upcoming
+patches.
 
-Anyway, we are talking about userspace ABI.  I don't see why this is related
-here.
+Patch-2 sets up the framework for the bitmap firmware psuedo-registers.
+It includes read/write support for the registers, and a helper to check
+if a particular hypercall service is supported for the guest.
+It also adds the register KVM_REG_ARM_STD_HYP_BMAP to support ARM's
+standard secure services.
+
+Patch-3 introduces the firmware register, KVM_REG_ARM_STD_HYP_BMAP,
+which holds the standard hypervisor services (such as PV_TIME).
+
+Patch-4 introduces the firmware register, KVM_REG_ARM_VENDOR_HYP_BMAP,
+which holds the vendor specific hypercall services.
+
+Patch-5,6 Add the necessary documentation for the newly added firmware
+registers.
+
+Patch-7 imports the SMCCC definitions from linux/arm-smccc.h into tools/
+for further use in selftests.
+
+Patch-8 adds the selftest to test the guest (using 'hvc') and userspace
+interfaces (SET/GET_ONE_REG).
+
+Patch-9 adds these firmware registers into the get-reg-list selftest.
+
+[1]: https://lore.kernel.org/kvmarm/874kbcpmlq.wl-maz@kernel.org/T/
+[2]: https://lore.kernel.org/all/20220409184549.1681189-1-oupton@google.com/
+
+Regards,
+Raghavendra
+
+v6 -> v7:
+
+Addressed the comments by Gavin and Reiji:
+
+- kvm_arm_set_fw_reg_bmap() is optimzed to avoid unnecessary
+  serialization of kvm->lock by checking for the KVM_ARCH_FLAG_HAS_RAN_ONCE
+  flag or for a bitmap update before taking the lock (Reiji).
+- kvm_psci_func_id_is_valid() avoids depending on *vcpu to figure out
+  if the PSCI version is 0.1. Instead, it checks the same using KVM_PSCI_FN()
+  for range 0 to 3 (Reiji).
+- Fixed typos and comments (Gavin). 
+
+v5 -> v6:
+
+Addressed the comments by Marc and Gavin:
+
+- Bitmaps are represented using 'unsigned long' inctead of 'u64' (Marc).
+- Replaced the array holding the allowed-list,
+  hvc_func_default_allowed_list[], which looked up the func_id using a
+  loop, with a switch-case statement (Marc).
+- kvm_arm_set_fw_reg_bmap() now always returns -EBUSY for any 'write' of
+  the bitmap value after the VM has started running. Documentation is
+  adjusted accordingly (Marc).
+- kvm_psci_func_id_is_valid() is moved from an inline function to
+  kvm/psci.c (Marc).
+- Merged ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID into bit-0 of the vendor
+  hypervisor firmware register (Gavin).
+- Macro optimizations and replace arg0 with arg1 (to comply with KVM
+  convention) in hypercalls.c selftest (Gavin).
+- Dropped the patch v5 10/10 (Add KVM_REG_ARM_FW_REG(3) to get-reg-list)
+  as it was already uploaded by Andrew.
+- Fixed typos
+
+v4 -> v5:
+
+Addressed comments by Oliver (thank you!):
+
+- Rebased the series to accommodate ARM_SMCCC_ARCH_WORKAROUND_3
+  and PSCI 1.1 changes, and capturing VM's first run.
+- Removed the patches related to register scoping (v4 02/13 and
+  03/13). I plan to re-introduce them in its own series.
+- Dropped the patch that captures VM's first run.
+- Moved the bitmap feature firmware registers to its own CORPOC
+  space (0x0016).
+- Move the KVM_REG_ARM_*_BIT_MAX definitions from uapi header
+  to internal header (arm_hypercalls.h).
+- Renamed the hypercall descriptor to 'struct kvm_smccc_features',
+  and kvm_hvc_call_supported() to kvm_hvc_call_allowed().
+- Introduced an allowed-list to hold the function-ids that aren't
+  represented by feature-bits.
+- Introduced kvm_psci_func_id_is_valid() to check if a given
+  function-id is a valid PSCI id, which is used in
+  kvm_hvc_call_allowed().
+- Introduced KVM_REG_ARM_VENDOR_HYP_BIT_FUNC_FEAT as bit-0 of
+  KVM_REG_ARM_VENDOR_HYP_BMAP register and
+  KVM_REG_ARM_VENDOR_HYP_BIT_PTP is moved to bit-1.
+- Updated the arm-smccc.h import to include the definition of
+  ARM_SMCCC_ARCH_WORKAROUND_3.
+- Introduced the KVM_REG_ARM_FW_FEAT_BMAP COPROC definition to
+  get-reg-list selftest.
+- Created a new patch to include KVM_REG_ARM_FW_REG(3) in
+  get-reg-list.
+
+
+v3 -> v4
+
+Addressed comments and took suggestions by Reiji, Oliver, Marc,
+Sean and Jim:
+
+- Renamed and moved the VM has run once check to arm64.
+- Introduced the capability to dynamically modify the register
+  encodings to include the scope information.
+- Replaced mutex_lock with READ_ONCE and WRITE_ONCE when the
+  bitmaps are accessed.
+- The hypercalls selftest re-runs with KVM_CAP_ARM_REG_SCOPE
+  enabled.
+
+v2 -> v3
+
+Addressed comments by Marc and Andrew:
+
+- Dropped kvm_vcpu_has_run_once() implementation.
+- Redifined kvm_vm_has_run_once() as kvm_vm_has_started() in the core
+  KVM code that introduces a new field, 'vm_started', to track this.
+- KVM_CAP_ARM_HVC_FW_REG_BMAP returns the number of psuedo-firmware
+  bitmap registers upon a 'read'. Support for 'write' removed.
+- Removed redundant spinlock, 'fw_reg_bmap_enabled' fields from the
+  hypercall descriptor structure.
+- A separate sub-struct to hold the bitmap info is removed. The bitmap
+  info is directly stored in the hypercall descriptor structure
+  (struct kvm_hvc_desc).
+
+v1 -> v2
+
+Addressed comments by Oliver (thanks!):
+
+- Introduced kvm_vcpu_has_run_once() and kvm_vm_has_run_once() in the
+  core kvm code, rather than relying on ARM specific
+  vcpu->arch.has_run_once.
+- Writing to KVM_REG_ARM_PSCI_VERSION is done in hypercalls.c itself,
+  rather than separating out to psci.c.
+- Introduced KVM_CAP_ARM_HVC_FW_REG_BMAP to enable the extension.
+- Tracks the register accesses from VMM to decide whether to sanitize
+  a register or not, as opposed to sanitizing upon the first 'write'
+  in v1.
+- kvm_hvc_call_supported() is implemented using a direct switch-case
+  statement, instead of looping over all the registers to pick the
+  register for the function-id.
+- Replaced the register bit definitions with #defines, instead of enums.
+- Removed the patch v1-06/08 that imports the firmware register
+  definitions as it's not needed.
+- Separated out the documentations in its own patch, and the renaming
+  of hypercalls.rst to psci.rst into another patch.
+- Add the new firmware registers to get-reg-list KVM selftest.
+
+v1: https://lore.kernel.org/kvmarm/20211102002203.1046069-1-rananta@google.com/
+v2: https://lore.kernel.org/kvmarm/20211113012234.1443009-1-rananta@google.com/
+v3: https://lore.kernel.org/linux-arm-kernel/20220104194918.373612-1-rananta@google.com/
+v4: https://lore.kernel.org/lkml/20220224172559.4170192-1-rananta@google.com/
+v5: https://lore.kernel.org/lkml/20220407011605.1966778-1-rananta@google.com/
+v6: https://lore.kernel.org/kvmarm/20220423000328.2103733-1-rananta@google.com/
+
+Raghavendra Rao Ananta (9):
+  KVM: arm64: Factor out firmware register handling from psci.c
+  KVM: arm64: Setup a framework for hypercall bitmap firmware registers
+  KVM: arm64: Add standard hypervisor firmware register
+  KVM: arm64: Add vendor hypervisor firmware register
+  Docs: KVM: Rename psci.rst to hypercalls.rst
+  Docs: KVM: Add doc for the bitmap firmware registers
+  tools: Import ARM SMCCC definitions
+  selftests: KVM: aarch64: Introduce hypercall ABI test
+  selftests: KVM: aarch64: Add the bitmap firmware registers to
+    get-reg-list
+
+ Documentation/virt/kvm/api.rst                |  16 +
+ Documentation/virt/kvm/arm/hypercalls.rst     | 135 +++++++
+ Documentation/virt/kvm/arm/psci.rst           |  77 ----
+ arch/arm64/include/asm/kvm_host.h             |  16 +
+ arch/arm64/include/uapi/asm/kvm.h             |  16 +
+ arch/arm64/kvm/arm.c                          |   1 +
+ arch/arm64/kvm/guest.c                        |  10 +-
+ arch/arm64/kvm/hypercalls.c                   | 325 ++++++++++++++++-
+ arch/arm64/kvm/psci.c                         | 186 +---------
+ include/kvm/arm_hypercalls.h                  |  17 +
+ include/kvm/arm_psci.h                        |   9 +-
+ tools/include/linux/arm-smccc.h               | 193 ++++++++++
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../selftests/kvm/aarch64/get-reg-list.c      |   8 +
+ .../selftests/kvm/aarch64/hypercalls.c        | 336 ++++++++++++++++++
+ 16 files changed, 1078 insertions(+), 269 deletions(-)
+ create mode 100644 Documentation/virt/kvm/arm/hypercalls.rst
+ delete mode 100644 Documentation/virt/kvm/arm/psci.rst
+ create mode 100644 tools/include/linux/arm-smccc.h
+ create mode 100644 tools/testing/selftests/kvm/aarch64/hypercalls.c
 
 -- 
-Thanks,
--Kai
-
+2.36.0.464.gb9c8b46e94-goog
 

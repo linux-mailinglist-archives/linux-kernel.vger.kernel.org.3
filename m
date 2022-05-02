@@ -2,184 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12A6E517467
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:36:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7280451746A
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:37:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243065AbiEBQje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 12:39:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49376 "EHLO
+        id S243137AbiEBQkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 12:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241337AbiEBQjb (ORCPT
+        with ESMTP id S241337AbiEBQkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 12:39:31 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A3055BE;
-        Mon,  2 May 2022 09:36:01 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:60884)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nlZ1i-00DCkL-Hp; Mon, 02 May 2022 10:35:58 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:36694 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nlZ1h-0037gA-G0; Mon, 02 May 2022 10:35:58 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
-References: <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
-        <20220429214837.386518-7-ebiederm@xmission.com>
-        <20220502153934.GD17276@redhat.com>
-Date:   Mon, 02 May 2022 11:35:50 -0500
-In-Reply-To: <20220502153934.GD17276@redhat.com> (Oleg Nesterov's message of
-        "Mon, 2 May 2022 17:39:35 +0200")
-Message-ID: <87levjrixl.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-MIME-Version: 1.0
+        Mon, 2 May 2022 12:40:35 -0400
+Received: from na01-obe.outbound.protection.outlook.com (unknown [52.101.57.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2763660C3;
+        Mon,  2 May 2022 09:37:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bvJRWPCwkiRDlcr5GBrsdqbTuG/65i5ctItRJL/QmteRS9tPBwSt7mDe6Jpduxr+juPyMI0QbTzincat1H+h4pX4oXPHMvF2i9qNI8n0zF5WPfr/KtOV2SQAnmWSc2QI0OYBWjT2bciTBPuU3mLihmXKAYY7uwkyPyTrClHRB8HWmReam65KT2Q5ZjpBkgobRcOzc9YrOLFMYf7EGGnCBX/YWSEGuQyqz3IcjIAHSSllmDTtQNbyXeKHdPylA13JpY4ejsDQgOhuXuwNQnFbV+yt3em8/JCMGNGVDb8WX23Jd/e1OhAMFPn3BWaUP3Fk/sdgAeLYVK430XE3yJpT2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LDEmLVK6oCHMQV761SGma4KHXpB+/6mD8OLMmo8di54=;
+ b=OTTej6STFU5cGIYyQsSxe5Bb0mBPeoXOjZYUioipazuzh2r9juNo7LvJ97vBVVc0ysX8fupeWtjUelkCXEQRB60xl689hRRtkSehOvjZL0jU29yJuz5cugrkWNpWGNUwLmcTR0kr2/nHzxNIoKSmmiLUJ0oz4IY8XItZbZvbyRHkRJvSdeSFzopAln+i5HpoS0JZ2OqvlIHMD9LKETYh7WQ4gTj+quvhjehu+IoUT8N1vjMzT1HmCTGnOHiq6KX88aAa3EGd+JAX1x/CR11CsOld4Iq7Kpxp8UYT0F2K52psAQT79OlzDVDyKZZ1EG3zsGLE09Q+AHBFkzG3q7J6wA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LDEmLVK6oCHMQV761SGma4KHXpB+/6mD8OLMmo8di54=;
+ b=Siv1ayp4LTPBjLndJ76fbFlOLfAuMg9OE9hhVgjZeE1Rlorh5f2dQhuOlTt58/S95w2QykwzafOgEHE98jk3kaLqKSxC2N0w+qyC19IhMdJiIGmwvAA8/uynimR07kKCdDv5UbyZ8Fq97ur7Ml8n50YwZq1Du6p/Ca9s+GVdSnE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+Received: from DM6PR21MB1370.namprd21.prod.outlook.com (2603:10b6:5:16b::28)
+ by DM6PR21MB1180.namprd21.prod.outlook.com (2603:10b6:5:161::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.4; Mon, 2 May
+ 2022 16:37:02 +0000
+Received: from DM6PR21MB1370.namprd21.prod.outlook.com
+ ([fe80::588e:9ede:461a:2372]) by DM6PR21MB1370.namprd21.prod.outlook.com
+ ([fe80::588e:9ede:461a:2372%4]) with mapi id 15.20.5250.004; Mon, 2 May 2022
+ 16:37:02 +0000
+From:   Michael Kelley <mikelley@microsoft.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, vkuznets@redhat.com,
+        decui@microsoft.com, drawat.floss@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        deller@gmx.de, dri-devel@lists.freedesktop.org,
+        linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org
+Cc:     mikelley@microsoft.com
+Subject: [PATCH 0/4] Remove support for Hyper-V 2008 and 2008R2/Win7
+Date:   Mon,  2 May 2022 09:36:27 -0700
+Message-Id: <1651509391-2058-1-git-send-email-mikelley@microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
 Content-Type: text/plain
-X-XM-SPF: eid=1nlZ1h-0037gA-G0;;;mid=<87levjrixl.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1/z6Qf/UXEKB8pTQyW3Pw5hOTrbz9KRVus=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-ClientProxiedBy: MW2PR2101CA0020.namprd21.prod.outlook.com
+ (2603:10b6:302:1::33) To DM6PR21MB1370.namprd21.prod.outlook.com
+ (2603:10b6:5:16b::28)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 88afdc49-77e2-4979-85f0-08da2c59fc36
+X-MS-TrafficTypeDiagnostic: DM6PR21MB1180:EE_
+X-LD-Processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+X-Microsoft-Antispam-PRVS: <DM6PR21MB1180D93559687104B53B1BDED7C19@DM6PR21MB1180.namprd21.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0e497YHycIrEJJSV7TXqHnsGCle71faQ4IsD+Ls6b1tCbXHQza7ktdjrdxbYbCLdAjqMPOaq9HAkpFoasEICACSQz/nf5P1P9qixKoq0oxFJ8ydCpLgz3AYhtr0xDzBB56oB9C2DspK2vwgS9y0g9xfpfOtZeUOCN8zV8KXdGN7YU0xNZTkzDiaKxVpRJ5ipWuqT4ofNmGeAZyAj6Ni0iebnlL5C8Fyd/atGnBVP6KbfyWE8dfKVrLEOWlHADqbJAdJFXMr+41p1CHffJmtkFUHPfYGX0BUw5zrl778s1gzsiWAbr6or32bsLlF1qRM2Y3DPxeR9PoCm38xflb6pACygoTTBgdnCoxmeHhgnOa+zczYeEtqq9WCV0mNUbdHArmOVKJNxLeaaJDvxG6GCwj49sFBLgYf80aIhfDTVmnd0FGGuOHV+cBMGfXXjDLhjPFsJzUdPQZ2ALxBi6y9y8XvxNOft6jDqWQXQPTx4dqo7BMB6om9vUlhgr1jrr+5xjAsHIJyRlkA/kECtWpwlp1p1NGHfE4NCqtfAkoSGUcnvGA75z6O4ls/6RnTgXrMm+VPBWDZTR8Cw31ifIolQdniwDMbiM+qaMJeVAeHwR4EAxTfwUD+KpVJ8G8NYuAg4SVPhJIcNny+TVeTY+cs+P7PBMEtgjBBIX2xvs8ETwPdRIzwjwHl3qFlZwCXwlH6F9MkTfhl/NCiZBjQhN1Qm0ovtPrQKtWpu3IBe9QwFeWFZTlzj0A8l6V03pkzDVE6+qqaEj72Jk9QWF8TvkeI/qg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR21MB1370.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(451199009)(82950400001)(7416002)(10290500003)(66946007)(6486002)(66556008)(66476007)(2616005)(107886003)(6512007)(26005)(921005)(5660300002)(6506007)(83380400001)(508600001)(82960400001)(86362001)(6666004)(316002)(8936002)(38350700002)(38100700002)(186003)(52116002)(4326008)(36756003)(8676002)(2906002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?65UUDA/L9Kssg3JMtYYtMEiKe81jiSqez50j07JWwwFoBvF0N4kk1x+7A25D?=
+ =?us-ascii?Q?FOFuoH0eiOCJMgDKcu3n8UCynybpbeX2N2F160hYydckb4Ubvp+wr2dGKskm?=
+ =?us-ascii?Q?VFcQf5bN080dK9qCHkYZAY0vDjjZrj2g5prL4qTbqDl6o7/hzed1pQ/tvbR3?=
+ =?us-ascii?Q?dfZsSxOrAWL3D29kf6nUIcEHKMRLaWu3wmL5KwXugzmuZHGZXbhk5dB5ZN12?=
+ =?us-ascii?Q?+B7pokiGF+xPeDNUJ3ml+EDGuxNiPsi2+LDz5qpgnwgxcMtsr5EdipgOv6LE?=
+ =?us-ascii?Q?rG47kc4SWCllezBPSUOQov94hkBQ8e/CNsFv38pisLwhcI8Z8UrImHWSjIzQ?=
+ =?us-ascii?Q?M57g+hwg2J5mnaL987nR0htoXeIolbUrEvAH2nc19xxdFw6SG59MgoCaxIqS?=
+ =?us-ascii?Q?azj9z5s6fFdjsVoQ0QIIIMiJCm6abrRQQ5B6Cosi6pMIBAXddxIxTb5eyw5H?=
+ =?us-ascii?Q?HVHEqkJ2tNum51L9essqX6k8/kOzk9ejHkt6V6bgTdVPNcnPF652CcvoYCZs?=
+ =?us-ascii?Q?eNQQM5hEjLW9Kyghnnp9OvRFYrpMHKRx+ZsgqDx1EFeWLI5djly4kDt5+HZg?=
+ =?us-ascii?Q?X4P6FtAhAyjhqtEdPQR+8mBuoZrYtpxs0HLSlIiQJJlDdWCBa6Au/ojdGoUF?=
+ =?us-ascii?Q?ESNcO7PckRlH8Oq030KMJgiZDWGEpjPrwE9CB8ZB2ZfUWjTeZ/PM6zk9xhqO?=
+ =?us-ascii?Q?c2UKkqhV2AxZkkpJGfRVLHa0pmUyjmnVe87lu8NpOWu3NN8wvipUZoCdmGB/?=
+ =?us-ascii?Q?HF2PlwVIVaWLQ6/orQLmcihLIZtw7xUO4vaEWN+RZnKd4txzchulIvBQxDob?=
+ =?us-ascii?Q?F3MrLYdUHFf8N2Lx+ITQQ/AJlCS+icBzVS2YPb4idTMVNac9AoSdFyiIWMQg?=
+ =?us-ascii?Q?AER/qjzdvqEVS8VtkG8vLHr+++8h26tOBX832y2waPPO45OkwoUKkkA5A9uu?=
+ =?us-ascii?Q?DmEIYsmxvEaB51o3REzdofBaw9skUN4FqP6JIjMCHPK2tgCDLg9gymNtxqiV?=
+ =?us-ascii?Q?8K3VB01Go7GA0MkPLcA690B2mG5Sq1ILDVNVCFH5zzXT0tmjtZ6oVGY/a7T/?=
+ =?us-ascii?Q?OVU2MhxXOZZYmopp3yKiEeoy/ezvpGh41iIlpoCwUCb46mdlgAIpaqTbk19l?=
+ =?us-ascii?Q?bTodE+lallghjD+hsZzxJ+XB9lVweo4GCakV2iYu+Z0RchO6kYPKOMeRD+oK?=
+ =?us-ascii?Q?6bV5H5Nn9m5bKKEw6DZQPfAsfpM68NUUMLC4JfzIYqmiNdqhC+rZkCy8qijJ?=
+ =?us-ascii?Q?m/BBLzBhhGZmdVcGDrqQE/1BiMWIRM05cwlBGclvA5RMM36/JUhwOmzMrn4x?=
+ =?us-ascii?Q?1+JeugyTAyewtnH9+Eh1lR46v1M52mP9b5cCyAVspgs0q59tsaxc7dniP6iN?=
+ =?us-ascii?Q?xf4Hbc0hFcYRiEEqjF3F2x/UcvY0goscN733Q/N3nwWgvxfEfmFHjjeUFUeR?=
+ =?us-ascii?Q?sKFJV/hAD7tCjzRph2+7AYQWKG1GlJiqqSmMFO6PvliiI/Fl+4WlOIA8Rnd1?=
+ =?us-ascii?Q?3orQ+2LU3D65sPYHpRRYc2s6CPB8A87PekU+E3Ec3i/ICPGfI3KhIzLl71wr?=
+ =?us-ascii?Q?Yp3cMcQLzyJYbbE5pikZvAHub3U1kyscEMZ7SX5Jt0v1PH0J4HkB4uDZ3kRt?=
+ =?us-ascii?Q?SxfrzA1su5oYNOhI4wLJdfx8DzulBaxw5duu9G+XyZ2ewnUoGvHksnf8s266?=
+ =?us-ascii?Q?QNib8iKAYxAza20ZQY9jEAeoM5TEzt8pAH9XFqSsw5nDcyL2Z0D52riOSiN/?=
+ =?us-ascii?Q?N4mrK7JCA8mbAe+H+8/RRt6eNCManAg=3D?=
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 88afdc49-77e2-4979-85f0-08da2c59fc36
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR21MB1370.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2022 16:37:02.2389
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: XEFTeKT6lhkz/0zj+qwOoshzmXXfPL7qCTwhsNJV5meVTA6tgcO00CQk7rPYpuGndn/mPlZxNKrQaUsGn3Chrw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR21MB1180
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Oleg Nesterov <oleg@redhat.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 483 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 3.8 (0.8%), b_tie_ro: 2.7 (0.6%), parse: 0.81
-        (0.2%), extract_message_metadata: 3.3 (0.7%), get_uri_detail_list:
-        1.78 (0.4%), tests_pri_-1000: 3.2 (0.7%), tests_pri_-950: 0.97 (0.2%),
-        tests_pri_-900: 0.86 (0.2%), tests_pri_-90: 67 (13.8%), check_bayes:
-        65 (13.5%), b_tokenize: 8 (1.6%), b_tok_get_all: 10 (2.1%),
-        b_comp_prob: 2.7 (0.6%), b_tok_touch_all: 42 (8.6%), b_finish: 0.71
-        (0.1%), tests_pri_0: 390 (80.7%), check_dkim_signature: 0.61 (0.1%),
-        check_dkim_adsp: 4.2 (0.9%), poll_dns_idle: 2.8 (0.6%), tests_pri_10:
-        1.81 (0.4%), tests_pri_500: 6 (1.3%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v2 07/12] ptrace: Don't change __state
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Oleg Nesterov <oleg@redhat.com> writes:
+Linux code for running as a Hyper-V guest includes special cases for the
+first released versions of Hyper-V: 2008 and 2008R2/Windows 7. These
+versions were very thinly used for running Linux guests when first
+released more than 12 years ago, and they are now out of support
+(except for extended security updates). As initial versions, they
+lack the performance features needed for effective production usage
+of Linux guests. In total, there's no need to continue to support
+the latest Linux kernels on these versions of Hyper-V.
 
-> On 04/29, Eric W. Biederman wrote:
->>
->> Stop playing with tsk->__state to remove TASK_WAKEKILL while a ptrace
->> command is executing.
->
-> Eric, I'll read this patch and the rest of this series tomorrow.
-> Somehow I failed to force myself to read yet another version after
-> weekend ;)
+Simplify the code for running on Hyper-V by removing the special
+cases. This includes removing the negotiation of the VMbus protocol
+versions for 2008 and 2008R2, and the special case code based on
+those VMbus protocol versions. Changes are in the core VMbus code and
+several drivers for synthetic VMbus devices.
 
-That is quite alright.
+Some drivers have driver-specific protocols with the Hyper-V host and
+may have versions of those protocols that are limited to 2008 and
+2008R2. This patch set does the clean-up only for the top-level
+VMbus protocol versions, and not the driver-specific protocols.
+Cleaning up the driver-specific protocols can be done with
+follow-on patches.
 
-> plus I don't really understand this one...
->
->>  #define TASK_KILLABLE			(TASK_WAKEKILL | TASK_UNINTERRUPTIBLE)
->>  #define TASK_STOPPED			(TASK_WAKEKILL | __TASK_STOPPED)
->> -#define TASK_TRACED			(TASK_WAKEKILL | __TASK_TRACED)
->> +#define TASK_TRACED			__TASK_TRACED
-> ...
->>  static inline void signal_wake_up(struct task_struct *t, bool resume)
->>  {
->> -	signal_wake_up_state(t, resume ? TASK_WAKEKILL : 0);
->> +	unsigned int state = 0;
->> +	if (resume) {
->> +		state = TASK_WAKEKILL;
->> +		if (!(t->jobctl & JOBCTL_PTRACE_FROZEN))
->> +			state |= __TASK_TRACED;
->> +	}
->> +	signal_wake_up_state(t, state);
->
-> Can't understand why is this better than the previous version which removed
-> TASK_WAKEKILL if resume... Looks a bit strange to me. But again, I didn't
-> look at the next patches yet.
+There's no specific urgency to removing the special case code for
+2008 and 2008R2, so if the broader Linux kernel community surfaces
+a reason why this clean-up should not be done now, we can wait.
+But I think we want to eventually stop carrying around this extra
+baggage, and based on discussions with the Hyper-V team within
+Microsoft, we're already past the point that it has any value.
 
-The goal is to replace the existing mechanism with an equivalent one,
-so that we don't have to be clever and deal with it being slightly
-different in one case.
+Michael Kelley (4):
+  Drivers: hv: vmbus: Remove support for Hyper-V 2008 and Hyper-V
+    2008R2/Win7
+  scsi: storvsc: Remove support for Hyper-V 2008 and 2008R2/Win7
+  video: hyperv_fb: Remove support for Hyper-V 2008 and 2008R2/Win7
+  drm/hyperv: Remove support for Hyper-V 2008 and 2008R2/Win7
 
-The difference is how does signal_pending_state affect how schedule will
-sleep in ptrace_stop.
+ drivers/gpu/drm/hyperv/hyperv_drm_proto.c | 23 ++++--------
+ drivers/hv/channel_mgmt.c                 | 29 ++++++---------
+ drivers/hv/connection.c                   |  6 ++--
+ drivers/hv/vmbus_drv.c                    | 60 +++++++------------------------
+ drivers/scsi/storvsc_drv.c                | 36 +++++--------------
+ drivers/video/fbdev/hyperv_fb.c           | 23 ++----------
+ include/linux/hyperv.h                    | 10 ++++--
+ 7 files changed, 52 insertions(+), 135 deletions(-)
 
-As the patch is constructed currently (and how the existing code works)
-is that signal_pending_state will always sleep if ptrace_freeze_traced
-completes successfully.
-
-When TASK_WAKEKILL was included in TASK_TRACED schedule might refuse
-to sleep even though ptrace_freeze_traced completed successfully.  As
-you pointed out wait_task_inactive would then fail, keeping
-ptrace_check_attach from succeeded.
-
-Other than complicating the analysis by adding extra states we need to
-consider when reviewing the patch, the practical difference is for
-Peter's plans to fix PREEMPT_RT or the freezer wait_task_inactive needs
-to cope with the final being changed by something else. (TASK_FROZEN in
-the freezer case).  I can only see that happening by removing the
-dependency on the final state in wait_task_inactive.  Which we can't do
-if we depend on wait_task_inactive failing if the process is in the
-wrong state.
-
-
->> @@ -2209,11 +2209,8 @@ static int ptrace_stop(int exit_code, int why, int clear_code,
->>  		spin_lock_irq(&current->sighand->siglock);
->>  	}
->>
->> -	/*
->> -	 * schedule() will not sleep if there is a pending signal that
->> -	 * can awaken the task.
->> -	 */
->> -	set_special_state(TASK_TRACED);
->> +	if (!__fatal_signal_pending(current))
->> +		set_special_state(TASK_TRACED);
->
-> This is where I stuck. This probably makes sense, but what does it buy
-> for this particular patch?
->
-> And if we check __fatal_signal_pending(), why can't ptrace_stop() simply
-> return ?
-
-Again this is about preserving existing behavior as much as possible to
-simplify analsysis of the patch.
-
-The current code depends upon schedule not sleeping if there was a fatal
-signal received before ptrace_stop is called.  With TASK_WAKEKILL
-removed from TASK_TRACED that no longer happens.  Just not setting
-TASK_TRACED when !__fatal_signal_pending has the same effect.
-
-
-At a practical level I think it also has an impact on patch:
-"10/12 ptrace: Only return signr from ptrace_stop if it was provided".
-
-At a minimum the code would need to do something like:
-	if (__fatal_signal_pending(current)) {
-		return clear_code ? 0 : exit_code;
-        }
-
-With a little bit of care put in to ensure everytime the logic changes
-that early return changes too.  I think that just complicates things
-unnecessarily.
-
-Eric
-
-
+-- 
+1.8.3.1
 

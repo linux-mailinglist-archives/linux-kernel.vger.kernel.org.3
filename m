@@ -2,90 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4185D516FB9
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 14:41:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CECAD516FBB
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 14:42:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385056AbiEBMpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 08:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42990 "EHLO
+        id S1385058AbiEBMqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 08:46:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385036AbiEBMpU (ORCPT
+        with ESMTP id S1382666AbiEBMqK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 08:45:20 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03DE313E9A;
-        Mon,  2 May 2022 05:41:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651495312; x=1683031312;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PFv7xf39B7dctfrpvPmGz6siPWZ4sWErtUwGztT4Aps=;
-  b=M1+WM26SdLQ/uKqeLT+JqIOS7EUqtHHaqSna5UV/j6OIW6nDNxVRFeoO
-   dQjTCiP6D/mY6yKW/eTPj4g0UDG1JbPrBLPY8zu1NTBjfXBaliZp7UqQA
-   hq5HpZMUVMeRBPTJVVkMKIP24V0XSI2BuqSy+Hm5D5/+zhtNCxNwXcdHD
-   E=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 02 May 2022 05:41:51 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 05:41:51 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 2 May 2022 05:41:50 -0700
-Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 2 May 2022
- 05:41:47 -0700
-Date:   Mon, 2 May 2022 08:41:46 -0400
-From:   Qian Cai <quic_qiancai@quicinc.com>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-CC:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        <lkft-triage@lists.linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>, "Zi Yan" <ziy@nvidia.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David Hildenbrand" <david@redhat.com>,
-        Eric Ren <renzhengeek@gmail.com>,
-        "kernel test robot" <lkp@intel.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        "Mike Rapoport" <rppt@linux.ibm.com>,
-        Minchan Kim <minchan@kernel.org>,
-        "Oscar Salvador" <osalvador@suse.de>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Chen Wandun <chenwandun@huawei.com>, NeilBrown <neilb@suse.de>,
-        <joao.m.martins@oracle.com>, <mawupeng1@huawei.com>,
-        Wei Yang <richard.weiyang@gmail.com>,
-        Song Liu <song@kernel.org>
-Subject: Re: [next] mm: libhugetlbfs: WARNING: at mm/page_alloc.c:5368
- __alloc_pages
-Message-ID: <20220502124146.GA71@qian>
-References: <CA+G9fYveMF-NU-rvrsbaora2g2QWxrkF7AWViuDrJyN9mNScJg@mail.gmail.com>
- <20220429160317.GA71@qian>
- <CA+G9fYui9OuyFbg7SV8D_4ueC_Jc=71ybbhBeif0bczo957Hqg@mail.gmail.com>
+        Mon, 2 May 2022 08:46:10 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D8613E19;
+        Mon,  2 May 2022 05:42:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=+VctyfpBc7br87X3mwa6CtDZ/oohz2FVFhUyHvvKoK0=; b=iviY4w3WFQEGDJuoWPrmdDQXb7
+        O66C1jQqmZVWsPWpxF9k4oBlUc8fbqaEKVcZCsO+LhuCBpedYK4xTSCEkvOB+U5kvwzxCCAPvMm5K
+        eF8JAYZscPIkC/SLmjh6d9Br9TLxDOIXebsxEAZa4D63qYqWs0olIIh+a/hAVwbUE8AY=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nlVNf-000tpN-8Z; Mon, 02 May 2022 14:42:23 +0200
+Date:   Mon, 2 May 2022 14:42:23 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v1 1/1] net: phy: dp83td510: Add support for the
+ DP83TD510 Ethernet PHY
+Message-ID: <Ym/Rr6BN7b/Y6mqu@lunn.ch>
+References: <20220502085437.142000-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYui9OuyFbg7SV8D_4ueC_Jc=71ybbhBeif0bczo957Hqg@mail.gmail.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+In-Reply-To: <20220502085437.142000-1-o.rempel@pengutronix.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 30, 2022 at 03:41:41AM +0530, Naresh Kamboju wrote:
-> The reported kernel warning was not solved by reverted above patches.
+> +static void mmd_phy_indirect(struct mii_bus *bus, int phy_addr, int devad,
+> +			     u16 regnum)
+> +{
+> +	/* Write the desired MMD Devad */
+> +	__mdiobus_write(bus, phy_addr, MII_MMD_CTRL, devad);
+> +
+> +	/* Write the desired MMD register address */
+> +	__mdiobus_write(bus, phy_addr, MII_MMD_DATA, regnum);
+> +
+> +	/* Select the Function : DATA with no post increment */
+> +	__mdiobus_write(bus, phy_addr, MII_MMD_CTRL,
+> +			devad | MII_MMD_CTRL_NOINCR);
+> +}
 
-Thanks for the confirmation. Then, I can't think of any other good
-candidates at the moment apart from doing brutal-force bisecting.
+Please make the version in phy-core.c global scope.
+
+A better explanation of what is going on here would be good.
+
+> +	/* This PHY supports only C22 MDIO opcodes. We can use only indirect
+> +	 * access.
+> +	 */
+> +	mmd_phy_indirect(bus, phy_addr, devad, regnum);
+
+This comment suggests it is because it cannot do C45. But the core
+should handle this, it would use indirect access. However, you have
+hijacked phydev->drv->read_mmd to allow you to translate standard
+registers to vendor registers. This bypasses the cores fallback to
+indirect access.
+
+> +static struct phy_driver dp83td510_driver[] = {
+> +{
+> +	PHY_ID_MATCH_MODEL(DP83TD510E_PHY_ID),
+> +	.name		= "TI DP83TD510E",
+> +
+> +	.config_aneg	= genphy_c45_config_aneg,
+> +	.read_status	= genphy_c45_read_status,
+> +	.get_features	= dp83td510_get_features,
+> +	.config_intr	= dp83td510_config_intr,
+> +	.handle_interrupt = dp83td510_handle_interrupt,
+> +
+> +	.suspend	= genphy_suspend,
+> +	.resume		= genphy_resume,
+> +	.read_mmd	= dp83td510_read_mmd,
+> +	.write_mmd	= dp83td510_write_mmd,
+
+Given how far this PHY is away from standards, you might get a smaller
+simpler driver if you ignore genphy all together, write your own
+config_aneg and read_status, and don't mess with .read_mmd and
+write_mmd.
+
+	Andrew

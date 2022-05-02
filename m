@@ -2,117 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C266516BEA
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 10:16:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDC65516BE7
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 10:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383741AbiEBISk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 04:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49604 "EHLO
+        id S1381868AbiEBITV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 04:19:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383746AbiEBISb (ORCPT
+        with ESMTP id S1383781AbiEBIS5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 04:18:31 -0400
+        Mon, 2 May 2022 04:18:57 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8132F43EDE;
-        Mon,  2 May 2022 01:15:00 -0700 (PDT)
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by gandalf.ozlabs.org (Postfix) with ESMTP id 4KsG9G6MMjz4ySx;
-        Mon,  2 May 2022 18:14:58 +1000 (AEST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C94340E76;
+        Mon,  2 May 2022 01:15:14 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KsG992Kv1z4x7Y;
-        Mon,  2 May 2022 18:14:53 +1000 (AEST)
-From:   =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
-To:     linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-aspeed@lists.ozlabs.org, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Potin Lai <potin.lai@quantatw.com>,
-        Jae Hyun Yoo <quic_jaehyoo@quicinc.com>,
-        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
-Subject: [PATCH v5 11/11] mtd: spi-nor: aspeed: set the decoding size to at least 2MB for AST2600
-Date:   Mon,  2 May 2022 10:13:41 +0200
-Message-Id: <20220502081341.203369-12-clg@kaod.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220502081341.203369-1-clg@kaod.org>
-References: <20220502081341.203369-1-clg@kaod.org>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KsG9X4nGyz4ySl;
+        Mon,  2 May 2022 18:15:12 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1651479312;
+        bh=Rzpw6ZsH/MWWZ/X5MTCwUPV2BZCr6uYUd8WpPKHD5L8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=MiFw2G0etsH4FWY8E0+NUIWiCJV+EH4sTLonvA2d3bRnORgEkAGzRxR7u3xiOPv2V
+         eQuSlWF49wgLqzDV7R8R6pFcIoLCFDNA2zYEt/IKn2kjsDFQ1oRJI/Rc2EoGhhEPzB
+         GzA6XUPladwEY+De3+DV3SjTQ+aW57IFn6pNqH/dZQPdc6uBV7XVb3tTypK8ORUiyK
+         hPV4Lgvh093FzIfZPeR8RmwlcN0eEUUzuKYfG4DnJI+Y7dCP2GxhEaAYuAykEt6Iim
+         ZOBE4X0sl7T6SRteRdWSUydLKWbQ3lFY6eL67lijSjLkqV+V5QfTezDIVMVxvgGvGY
+         FohKR2ApefHzg==
+Date:   Mon, 2 May 2022 18:15:12 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the bitmap tree
+Message-ID: <20220502181512.4b42ffc6@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Gfd8S5fLDtCea+rpX4tQ_ZF";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Potin Lai <potin.lai@quantatw.com>
+--Sig_/Gfd8S5fLDtCea+rpX4tQ_ZF
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-In AST2600, the unit of SPI CEx decoding range register is 1MB, and end
-address offset is set to the acctual offset - 1MB. If the flash only has
-1MB, the end address will has same value as start address, which will
-causing unexpected errors.
+Hi all,
 
-This patch set the decoding size to at least 2MB to avoid decoding errors.
+After merging the bitmap tree, today's linux-next build (native perf)
+failed like this:
 
-Tested:
-root@bletchley:~# dmesg | grep "aspeed-smc 1e631000.spi: CE0 window"
-[   59.328134] aspeed-smc 1e631000.spi: CE0 window resized to 2MB (AST2600 Decoding)
-[   59.343001] aspeed-smc 1e631000.spi: CE0 window [ 0x50000000 - 0x50200000 ] 2MB
-root@bletchley:~# devmem 0x1e631030
-0x00100000
+../lib/bitmap.c:21:5: error: conflicting types for '__bitmap_weight_cmp'; h=
+ave 'int(const long unsigned int *, unsigned int,  int)'
+   21 | int __bitmap_weight_cmp(const unsigned long *bitmap, unsigned int b=
+its, int num)
+      |     ^~~~~~~~~~~~~~~~~~~
+In file included from ../lib/bitmap.c:6:
+tools/include/linux/bitmap.h:15:5: note: previous declaration of '__bitmap_=
+weight_cmp' with type 'int(const long unsigned int *, unsigned int,  unsign=
+ed int)'
+   15 | int __bitmap_weight_cmp(const unsigned long *bitmap, unsigned int b=
+its,
+      |     ^~~~~~~~~~~~~~~~~~~
+../lib/bitmap.c: In function '__bitmap_weight_cmp':
+../lib/bitmap.c:26:50: error: comparison of integer expressions of differen=
+t signedness: 'unsigned int' and 'int' [-Werror=3Dsign-compare]
+   26 |                 if (w + bits - k * BITS_PER_LONG < num)
+      |                                                  ^
+../lib/bitmap.c:31:23: error: comparison of integer expressions of differen=
+t signedness: 'unsigned int' and 'int' [-Werror=3Dsign-compare]
+   31 |                 if (w > num)
+      |                       ^
+cc1: all warnings being treated as errors
+tools/perf/../lib/bitmap.c:21:5: error: conflicting types for '__bitmap_wei=
+ght_cmp'; have 'int(const long unsigned int *, unsigned int,  int)'
+   21 | int __bitmap_weight_cmp(const unsigned long *bitmap, unsigned int b=
+its, int num)
+      |     ^~~~~~~~~~~~~~~~~~~
+In file included from tools/perf/../lib/bitmap.c:6:
+tools/include/linux/bitmap.h:15:5: note: previous declaration of '__bitmap_=
+weight_cmp' with type 'int(const long unsigned int *, unsigned int,  unsign=
+ed int)'
+   15 | int __bitmap_weight_cmp(const unsigned long *bitmap, unsigned int b=
+its,
+      |     ^~~~~~~~~~~~~~~~~~~
+tools/perf/../lib/bitmap.c: In function '__bitmap_weight_cmp':
+tools/perf/../lib/bitmap.c:26:50: error: comparison of integer expressions =
+of different signedness: 'unsigned int' and 'int' [-Werror=3Dsign-compare]
+   26 |                 if (w + bits - k * BITS_PER_LONG < num)
+      |                                                  ^
+tools/perf/../lib/bitmap.c:31:23: error: comparison of integer expressions =
+of different signedness: 'unsigned int' and 'int' [-Werror=3Dsign-compare]
+   31 |                 if (w > num)
+      |                       ^
+cc1: all warnings being treated as errors
 
-Tested-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-Signed-off-by: Potin Lai <potin.lai@quantatw.com>
-[ clg : Ported on new spi-mem driver ]
-Signed-off-by: Cédric Le Goater <clg@kaod.org>
----
- drivers/spi/spi-aspeed-smc.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+Probably caused by commit
 
-diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
-index 35f6934847b7..496f3e1e9079 100644
---- a/drivers/spi/spi-aspeed-smc.c
-+++ b/drivers/spi/spi-aspeed-smc.c
-@@ -474,6 +474,8 @@ static int aspeed_spi_set_window(struct aspeed_spi *aspi,
-  *   is correct.
-  */
- static const struct aspeed_spi_data ast2500_spi_data;
-+static const struct aspeed_spi_data ast2600_spi_data;
-+static const struct aspeed_spi_data ast2600_fmc_data;
- 
- static int aspeed_spi_chip_adjust_window(struct aspeed_spi_chip *chip,
- 					 u32 local_offset, u32 size)
-@@ -497,6 +499,17 @@ static int aspeed_spi_chip_adjust_window(struct aspeed_spi_chip *chip,
- 			 chip->cs, size >> 20);
- 	}
- 
-+	/*
-+	 * The decoding size of AST2600 SPI controller should set at
-+	 * least 2MB.
-+	 */
-+	if ((aspi->data == &ast2600_spi_data || aspi->data == &ast2600_fmc_data) &&
-+	    size < SZ_2M) {
-+		size = SZ_2M;
-+		dev_info(aspi->dev, "CE%d window resized to %dMB (AST2600 Decoding)",
-+			 chip->cs, size >> 20);
-+	}
-+
- 	aspeed_spi_get_windows(aspi, windows);
- 
- 	/* Adjust this chip window */
--- 
-2.35.1
+  4252f3915e02 ("tools: bitmap: sync bitmap_weight")
 
+I have used the bitmap tree from next-20220429 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Gfd8S5fLDtCea+rpX4tQ_ZF
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJvkxAACgkQAVBC80lX
+0GzSXwf8CFrhV2ag5S7nRSQZdQCaTTf31ASdAyMMt3ZzC8bsJQmrJEOIvWk9PbK0
+0erXnPlGiHgQYOoloN5WTvX5V0AQnfA08hcwYkJ/rNUTgto1plxubSMPxR+JKX1e
+5SYWhaBm/vfN3zQK0787+t0DbjI5YtFspn8qmSCLmuZvNRn4F+fSZ7NbRiVYVDvi
+QwU6e5yXlu0RdASI+G3NmIn7bOOmcdUWAn2WX7VoCrgr6fPfmpZaHSjshiGPLdFL
+9NXLEmyge/mxNc7HSaxlUdXDaIKBM9rfk1LxP2OHtyRGR5BDJQyoDG5YF85pK7LB
+dl8Sx7luFdWUgXluVokY76Ah9Eun/g==
+=BGNj
+-----END PGP SIGNATURE-----
+
+--Sig_/Gfd8S5fLDtCea+rpX4tQ_ZF--

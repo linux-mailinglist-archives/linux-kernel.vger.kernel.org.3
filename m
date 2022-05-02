@@ -2,129 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE1B251752B
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B29517531
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386351AbiEBQ6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 12:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39014 "EHLO
+        id S243304AbiEBRAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 13:00:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242965AbiEBQ6q (ORCPT
+        with ESMTP id S242425AbiEBRAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 12:58:46 -0400
+        Mon, 2 May 2022 13:00:38 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 837C12C8
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 09:55:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62A3831C
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 09:57:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651510514;
+        s=mimecast20190719; t=1651510628;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xIzcVGz7jvv3xeuZxkzYe3VCF5DB6mpSZGaw7yGILbk=;
-        b=SDtSlUc13IxTk2d2uTpkbrEQb/AR1rEp0VgyNjrMKfMcEiyDlCtE+CyXywytNhHzm+klds
-        MisVw+JGvj128/KoQIwEr+PMcuKp9u6W3E6Kwden5jQCyujWR7MLkLJQw9egWYhqhUpKCt
-        0Ebtdxi7axwZGY4J0aXvWLAEx2TDTRE=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=K0Gq4g+r6nSFFN2UMiOU7agj8frQhJOC3wt5ScKN4WI=;
+        b=EuaI6+8mGao7a8l+K63gjGBTuhOaz9qc/BGKNFHMEg40mW5WtgLZIF9RjoeRcIZLAO04Rc
+        5ZZmOh/tLkWmcpODSmYsqbE8j4iiDhq94ej36Wb0yZoAEft7kIIF9nW+S/54yO3gxlN4Hf
+        uJl/Syqb7aElGuowD8ShM8d+LnU7+rU=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-614-E6SKIEb-MjKlWtU_CdckhA-1; Mon, 02 May 2022 12:55:13 -0400
-X-MC-Unique: E6SKIEb-MjKlWtU_CdckhA-1
-Received: by mail-wr1-f70.google.com with SMTP id j21-20020adfa555000000b0020adb9ac14fso5488252wrb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 09:55:13 -0700 (PDT)
+ us-mta-84-XQMEEnjZOW-EnBBejkhOMw-1; Mon, 02 May 2022 12:57:07 -0400
+X-MC-Unique: XQMEEnjZOW-EnBBejkhOMw-1
+Received: by mail-wm1-f71.google.com with SMTP id v9-20020a05600c214900b00393fedddf26so23157wml.1
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 09:57:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=xIzcVGz7jvv3xeuZxkzYe3VCF5DB6mpSZGaw7yGILbk=;
-        b=6Wet0Z0Lr1u8qdxZJI5lnrKtbbAdS5INLqQ14bKH/2WACXyVRHVcrh2GE2Q7pn+Zrv
-         J1LeNq2BeAEwL6fJ2DeVtNdFD5owa8FHKEiVnnl/Qe59H5+9zkpvn421zv9JPa7QPbQa
-         BS6nbZonBja/lrMBIvCqP9pBhGpaaDrUMk5Dbsk2XlA0WExzp+gt170W7S+xPFI7N624
-         RP2FDS0FugIT6O0kt0QZNem4kVL5s3KgK9PpM7xzRSws63UHNX0bem2t5fpeNr9iCItV
-         c1rJENxkK+jSTxWxmY/EKSwwBD6aceEsPS0qNhzxzv7Wtetmg4chSrVHPc0i643XdsxM
-         XUkw==
-X-Gm-Message-State: AOAM533GsVrbDRru2nY/DGroiV1HhrBUdrqQcg2W8K94Jebmh2HXQ29V
-        hLRq2ZX73VbwmLPZXYYk2U+ok3oNHnlbOsNHCfY47rzWgBnlDGw1inVptKNAM+nb3jyD39+nng5
-        bf28hyJtWuXYksYasEQ5DNznn
-X-Received: by 2002:a05:600c:220e:b0:394:2695:ce9b with SMTP id z14-20020a05600c220e00b003942695ce9bmr63526wml.64.1651510512505;
-        Mon, 02 May 2022 09:55:12 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyXHCdnrBQZAdylY92wBiX6hj/7UIQj39kbqjBAbaznjJ5J3GoSPQN7nxolvY6RoRBArA57Pw==
-X-Received: by 2002:a05:600c:220e:b0:394:2695:ce9b with SMTP id z14-20020a05600c220e00b003942695ce9bmr63506wml.64.1651510512248;
-        Mon, 02 May 2022 09:55:12 -0700 (PDT)
+        bh=K0Gq4g+r6nSFFN2UMiOU7agj8frQhJOC3wt5ScKN4WI=;
+        b=qRf1cEaUC5F5d1M7iHTDfizYeOTS5tpYS3Va0v0a/SoiKIltvAXquZgpsB8bD6isuo
+         P5Z3JsbpPEg/0apklI53s7p9TfqHL7nOuM0v6rHgue1Gx/VK8RfIMnKGdtsrvjJr84I6
+         4Q4pqT4a0GC7bNB+csDo45V4gEyOhZ9qjSk4byVKblBqK9QBupOs94TFxdVcg7VKOh0t
+         9zsNw0SFp5Ze6jQiV8aHoT39LsszcUdZ3AtinUNl7Hr6/yoKMTij7LLO7Xt+HRy8cq6W
+         tJ1AfEFbJyVXl5Rpj7Yqjtkl39SkW7OsoXsIKG58/o8Ao7iZhIejpEnJcUzapu0trces
+         SbZg==
+X-Gm-Message-State: AOAM5319xLS181qjveWJljWbE5XCIlkdu2MXiCEg2g3DKArJ+wvLvxr0
+        VXbkOOWAJwC5TfpX5wMFuS7NpNvNrZHKLQRpl61TKc/7dTDQfqYfNuhNikf+UFxNudZixF+Xu43
+        d4hTnQUgT3n3DzL0xvdaK7cTk
+X-Received: by 2002:a05:600c:4f08:b0:391:fe3c:40e6 with SMTP id l8-20020a05600c4f0800b00391fe3c40e6mr78536wmq.34.1651510626174;
+        Mon, 02 May 2022 09:57:06 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzBR5y6TmCRfu+8hzM0SQTGA4cZrpN3ZhuFriWyFUH2mb/ZbNn3olE2yOJI8bAuj+96a04yXQ==
+X-Received: by 2002:a05:600c:4f08:b0:391:fe3c:40e6 with SMTP id l8-20020a05600c4f0800b00391fe3c40e6mr78523wmq.34.1651510625948;
+        Mon, 02 May 2022 09:57:05 -0700 (PDT)
 Received: from [192.168.1.129] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id q29-20020adfb19d000000b0020c5253d8e9sm7222672wra.53.2022.05.02.09.55.11
+        by smtp.gmail.com with ESMTPSA id r20-20020adfa154000000b0020c5253d8c7sm7273243wrr.19.2022.05.02.09.57.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 09:55:11 -0700 (PDT)
-Message-ID: <5dd80287-1b09-d02c-9f67-5a0bb0a4566c@redhat.com>
-Date:   Mon, 2 May 2022 18:55:10 +0200
+        Mon, 02 May 2022 09:57:05 -0700 (PDT)
+Message-ID: <ac202e93-cde2-99fa-5aca-abdc1cf6a3bf@redhat.com>
+Date:   Mon, 2 May 2022 18:57:04 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
-Subject: Re: [PATCH v2 1/3] drm: Remove superfluous arg when calling to
- drm_fbdev_generic_setup()
+Subject: Re: [PATCH v2 2/3] drm/fb-helper: Rename preferred_bpp
+ drm_fbdev_generic_setup() parameter
 Content-Language: en-US
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     linux-kernel@vger.kernel.org,
         Thomas Zimmermann <tzimmermann@suse.de>,
         Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-mediatek@lists.infradead.org,
+        linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, spice-devel@lists.freedesktop.org,
         virtualization@lists.linux-foundation.org
 References: <20220502153900.408522-1-javierm@redhat.com>
- <20220502153900.408522-2-javierm@redhat.com>
- <YnABjdpGC166yIY7@pendragon.ideasonboard.com>
+ <20220502153900.408522-3-javierm@redhat.com>
+ <YnABz/4haOHe66Do@pendragon.ideasonboard.com>
 From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <YnABjdpGC166yIY7@pendragon.ideasonboard.com>
+In-Reply-To: <YnABz/4haOHe66Do@pendragon.ideasonboard.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Laurent,
-
-On 5/2/22 18:06, Laurent Pinchart wrote:
+On 5/2/22 18:07, Laurent Pinchart wrote:
 > Hi Javier,
 > 
 > Thank you for the patch.
 > 
-> On Mon, May 02, 2022 at 05:38:58PM +0200, Javier Martinez Canillas wrote:
->> The drm_fbdev_generic_setup() function already sets the preferred bits per
->> pixel for the device to dev->mode_config.preferred_depth, if preferred_bpp
->> value is zero.
+> On Mon, May 02, 2022 at 05:38:59PM +0200, Javier Martinez Canillas wrote:
+>> By default the bits per pixel for the emulated framebuffer device is set
+>> to dev->mode_config.preferred_depth, but some devices need another value.
 >>
->> Passing the same value to the function is unnecessary. Let's cleanup that
->> in the two drivers that do it.
+>> Since this second parameter is only used by a few drivers, and to allow
+>> drivers to use it for passing other configurations when registering the
+>> fbdev, rename @preferred_bpp to @options and make it a multi-field param.
+>>
+>> The DRM_FB_OPTION() and DRM_FB_GET_OPTION() macros are provided to drivers
+>> for computing options bitfield values and getting the values respectively
+>>
+>> For now, only the DRM_FB_BPP option exists but other options can be added.
+>>
+>> Suggested-by: Thomas Zimmermann <tzimmermann@suse.de>
+>> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+>> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+>> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+>> ---
+>>
+>> Changes in v2:
+>> - Rename DRM_FB_SET_OPTION() to DRM_FB_SET() and make more clear in the
 > 
-> This looks fine, so
+> I assume you meant DRM_FB_OPTION() here, not DRM_FB_SET().
 > 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> 
-> but why do we have two different mechanisms to set the preferred depth ?
-> Could we get all drivers to set dev->mode_config.preferred_depth and
+>>   kernel-doc what this macro does (Laurent Pinchart).
+>>
 
-Yes, that's the plan and the reason why when we were discussing with Thomas
-about how to pass this option to the FB helper layer, we agreed on reusing
-the @preferred_bpp parameter rather than adding a third parameter to
-drm_fbdev_generic_setup(). Since in the future drivers shouldn't pass that
-information to the FB helper and just get it from the default mode config.
+Right, that's a typo. The patch description and content are correct though.
 
-But doing that would require more auditing to all drivers and it could add
-regressions while patches 1/2 and 2/2 in this series shouldn't cause any
-behavioral changes.
+I'll fix the patch history log in v3.
 
-> drop the depth option to drm_fbdev_generic_setup() ? There's a FIXME
-> comment in drm_fbdev_generic_setup() that could be related.
->
-
-A FIXME makes sense, I'll add that to when posting a v3.
- Best regards,
+-- 
+Best regards,
 
 Javier Martinez Canillas
 Linux Engineering

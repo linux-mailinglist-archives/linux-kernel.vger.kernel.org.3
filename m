@@ -2,196 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F00E51753C
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4663517538
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357356AbiEBRCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 13:02:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
+        id S244546AbiEBRCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 13:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350054AbiEBRCJ (ORCPT
+        with ESMTP id S236013AbiEBRCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 13:02:09 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D8C38A7
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 09:58:40 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id r204-20020a632bd5000000b003c1720b306bso6099020pgr.8
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 09:58:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=bPx4uFSnc14yK8QTU/QEz0rdJyrogPiWttuTKlYBjBw=;
-        b=Qwbi3YniGcw+A+s7IOlUFx7dzRTqP2JZQYXQBah7k5tLMg/Mjq5gKYiLjvhOJJSqmn
-         +7UPgTqf/omglpT3nftLpmilF/NwSTftkx9l64Eh8XmCA4YR9WJVtrvxjrLnrrhKFzSm
-         NtmkEyQuiMcN/zzRyiSebm22aIsD1kV44OOG132zJ/Bnn4LCTNhAGyA2iZeledgKRKg2
-         C9p5VrvrjbNMQaefgRfQ1P6780BOJbB/K18QQeESeVPovL6eX/PSVcr+YyMtGOeg1BRd
-         Urv2vr9FHcTbhHZdr9wbZZ4P6GzQ1lDRILuojWGgHAxffEQ4uRDcQvxC6sll+5O8Qu1o
-         9n3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=bPx4uFSnc14yK8QTU/QEz0rdJyrogPiWttuTKlYBjBw=;
-        b=OGmOvRwfmsUqSUpNKWjaCeGbk3kajXyMr4ZKbEDcnCpPXFdnqcSWqK6Bti78TwRbGE
-         BoelipJ2ESMaVVa+SIp5FcDmmhtdp2S18XwoaIyLDoXwu12IWTwaedinSkbfYeXVr3GV
-         gLupzx3eIWyOSRC+4cnU5FYvf044OOztQcE4ozxzQULaV+5nQgzPji+DhuaWCkVmS44P
-         krfcHHtX03q5XPpg8lgp0PM8XZTSuiilvS80mgtb4tpO5DPNrEWkiW9E15PCr/tDJwEE
-         mzNvfu1DUJOVPuj9NQ21q2FdXhr7G5N50upzUmVQ2gg+mCijZ0UJ38rblJoN3BfakIKS
-         C+oA==
-X-Gm-Message-State: AOAM532RsFpBgNq79ZL+9+9u7mGlnx7Ktnr8+Nhnppw21HBimkv8c+l+
-        sT3Vv7cAuWUkEA/O04PnBJ75YoVPp60=
-X-Google-Smtp-Source: ABdhPJzjhh/6LjTaauro8zl2Yor4TiNpnia0tJxk7Gu6fIKG7L7M+LcVnTGo4t8ZQ8KWcpmRpBCQXVMkO30=
-X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:a504:c712:edfe:ed97])
- (user=pgonda job=sendgmr) by 2002:a05:6a00:1d8f:b0:50d:cbc5:ff90 with SMTP id
- z15-20020a056a001d8f00b0050dcbc5ff90mr11545687pfw.50.1651510719447; Mon, 02
- May 2022 09:58:39 -0700 (PDT)
-Date:   Mon,  2 May 2022 09:58:07 -0700
-Message-Id: <20220502165807.529624-1-pgonda@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [PATCH v4] KVM: SEV: Mark nested locking of vcpu->lock
-From:   Peter Gonda <pgonda@google.com>
-To:     kvm@vger.kernel.org
-Cc:     Peter Gonda <pgonda@google.com>,
-        John Sperbeck <jsperbeck@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Hillf Danton <hdanton@sina.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 2 May 2022 13:02:03 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C86A101F;
+        Mon,  2 May 2022 09:58:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651510713; x=1683046713;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wdkPKD+2olSZMP2pvVUKLQSf4T0fJjUAyhUpxv6oQQM=;
+  b=M3KRZu2CUgaDc56Skujk4wLtFAT3Orlj+IMmoqLjH0ubU+vMl9FVrvRt
+   Ggkgba5KvgRJpN4bxgy5jYPgdQolSI7iiK8f3qIg09Z62lk/uX1SRJPNd
+   dkudj+D+t8CvGAriqATGRR+s2JOS4GvEkkqBkPbJbO7er3FtQQll1ficT
+   r5h7AMlmMzBVY1I9Tfx3EOrQRQ9JZQy5Yf7Ld3L99yf7BoRoBiurY5OAs
+   jkJvlhhesYdE6XPZWyxR5SKN4b+xp0V2pcDwiKNaFx/SjhlwC4cwVNYlK
+   gR2qIPtrPBsMcAxOHGjZs9Fn5ECc/+qCd+qjY2zmfe9z1MKL6pxd2FLZL
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="353696317"
+X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
+   d="scan'208";a="353696317"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 09:58:32 -0700
+X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
+   d="scan'208";a="583796556"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 09:58:32 -0700
+From:   matthew.gerlach@linux.intel.com
+To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        dinguyen@vger.kernel.org, robh+dt@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: [PATCH] arm64: dts: intel: add device tree for n6000
+Date:   Mon,  2 May 2022 09:58:18 -0700
+Message-Id: <20220502165818.4002157-1-matthew.gerlach@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-svm_vm_migrate_from() uses sev_lock_vcpus_for_migration() to lock all
-source and target vcpu->locks. Unfortunately there is an 8 subclass
-limit, so a new subclass cannot be used for each vCPU. Instead maintain
-ownership of the first vcpu's mutex.dep_map using a role specific
-subclass: source vs target. Release the other vcpu's mutex.dep_maps.
+From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 
-Fixes: b56639318bb2b ("KVM: SEV: Add support for SEV intra host migration")
-Reported-by: John Sperbeck<jsperbeck@google.com>
-Suggested-by: David Rientjes <rientjes@google.com>
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Hillf Danton <hdanton@sina.com>
-Cc: kvm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Peter Gonda <pgonda@google.com>
+Add a device tree for the n6000 instantiation of Agilex
+Hard Processor System (HPS).
 
+Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 ---
+ arch/arm64/boot/dts/intel/Makefile            |  1 +
+ .../boot/dts/intel/socfpga_agilex_n6000.dts   | 77 +++++++++++++++++++
+ 2 files changed, 78 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/intel/socfpga_agilex_n6000.dts
 
-V4
- * Due to 8 subclass limit keep dep_map on only the first vcpu and
-   release the others.
-
-V3
- * Updated signature to enum to self-document argument.
- * Updated comment as Seanjc@ suggested.
-
-Tested by running sev_migrate_tests with lockdep enabled. Before we see
-a warning from sev_lock_vcpus_for_migration(). After we get no warnings.
-
----
- arch/x86/kvm/svm/sev.c | 46 ++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 42 insertions(+), 4 deletions(-)
-
-diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index 75fa6dd268f0..0239def64eaa 100644
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -1591,24 +1591,55 @@ static void sev_unlock_two_vms(struct kvm *dst_kvm, struct kvm *src_kvm)
- 	atomic_set_release(&src_sev->migration_in_progress, 0);
- }
- 
+diff --git a/arch/arm64/boot/dts/intel/Makefile b/arch/arm64/boot/dts/intel/Makefile
+index 0b5477442263..1425853877cc 100644
+--- a/arch/arm64/boot/dts/intel/Makefile
++++ b/arch/arm64/boot/dts/intel/Makefile
+@@ -1,5 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ dtb-$(CONFIG_ARCH_INTEL_SOCFPGA) += socfpga_agilex_socdk.dtb \
+ 				socfpga_agilex_socdk_nand.dtb \
++				socfpga_agilex_n6000.dtb \
+ 				socfpga_n5x_socdk.dtb
+ dtb-$(CONFIG_ARCH_KEEMBAY) += keembay-evm.dtb
+diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex_n6000.dts b/arch/arm64/boot/dts/intel/socfpga_agilex_n6000.dts
+new file mode 100644
+index 000000000000..07f5a5983e5c
+--- /dev/null
++++ b/arch/arm64/boot/dts/intel/socfpga_agilex_n6000.dts
+@@ -0,0 +1,77 @@
++// SPDX-License-Identifier:     GPL-2.0
 +/*
-+ * To suppress lockdep false positives, subclass all vCPU mutex locks by
-+ * assigning even numbers to the source vCPUs and odd numbers to destination
-+ * vCPUs based on the vCPU's index.
++ * Copyright (C) 2021-2022, Intel Corporation
 + */
-+enum sev_migration_role {
-+	SEV_MIGRATION_SOURCE = 0,
-+	SEV_MIGRATION_TARGET,
-+	SEV_NR_MIGRATION_ROLES,
++#include "socfpga_agilex.dtsi"
++
++/ {
++	model = "SoCFPGA Agilex n6000";
++
++	aliases {
++		serial0 = &uart1;
++		serial1 = &uart0;
++		ethernet0 = &gmac0;
++		ethernet1 = &gmac1;
++		ethernet2 = &gmac2;
++	};
++
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
++	memory {
++		device_type = "memory";
++		/* We expect the bootloader to fill in the reg */
++		reg = <0 0 0 0>;
++	};
++
++	soc {
++		clocks {
++			osc1 {
++				clock-frequency = <25000000>;
++			};
++		};
++		agilex_hps_bridges: bridge@80000000 {
++			compatible = "simple-bus";
++			reg = <0x80000000 0x60000000>,
++				<0xf9000000 0x00100000>;
++			reg-names = "axi_h2f", "axi_h2f_lw";
++			#address-cells = <0x2>;
++			#size-cells = <0x1>;
++			ranges = <0x00000000 0x00000000 0xf9000000 0x00001000>;
++
++			uio_cp_eng@0xf9000000 {
++				compatible = "generic-uio";
++				reg = <0x00000000 0x00000000 0x00001000>;
++				status = "okay";
++			};
++		};
++	};
 +};
- 
--static int sev_lock_vcpus_for_migration(struct kvm *kvm)
-+static int sev_lock_vcpus_for_migration(struct kvm *kvm,
-+					enum sev_migration_role role)
- {
- 	struct kvm_vcpu *vcpu;
- 	unsigned long i, j;
-+	bool first = true;
- 
- 	kvm_for_each_vcpu(i, vcpu, kvm) {
--		if (mutex_lock_killable(&vcpu->mutex))
-+		if (mutex_lock_killable_nested(&vcpu->mutex, role))
- 			goto out_unlock;
 +
-+		if (first) {
-+			/*
-+			 * Reset the role to one that avoids colliding with
-+			 * the role used for the first vcpu mutex.
-+			 */
-+			role = SEV_NR_MIGRATION_ROLES;
-+			first = false;
-+		} else {
-+			mutex_release(&vcpu->mutex.dep_map, _THIS_IP_);
-+		}
- 	}
- 
- 	return 0;
- 
- out_unlock:
++&uart0 {
++	status = "okay";
++};
 +
-+	first = true;
- 	kvm_for_each_vcpu(j, vcpu, kvm) {
- 		if (i == j)
- 			break;
- 
-+		if (first)
-+			first = false;
-+		else
-+			mutex_acquire(&vcpu->mutex.dep_map, role, 0, _THIS_IP_);
++&uart1 {
++	status = "okay";
++};
 +
++&spi0 {
++	status = "okay";
 +
- 		mutex_unlock(&vcpu->mutex);
- 	}
- 	return -EINTR;
-@@ -1618,8 +1649,15 @@ static void sev_unlock_vcpus_for_migration(struct kvm *kvm)
- {
- 	struct kvm_vcpu *vcpu;
- 	unsigned long i;
-+	bool first = true;
- 
- 	kvm_for_each_vcpu(i, vcpu, kvm) {
-+		if (first)
-+			first = false;
-+		else
-+			mutex_acquire(&vcpu->mutex.dep_map,
-+				      SEV_NR_MIGRATION_ROLES, 0, _THIS_IP_);
++	spidev: spidev@0 {
++		status = "okay";
++		compatible = "linux,spidev";
++		spi-max-frequency = <25000000>;
++		reg = <0>;
++	};
++};
 +
- 		mutex_unlock(&vcpu->mutex);
- 	}
- }
-@@ -1745,10 +1783,10 @@ int sev_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_fd)
- 		charged = true;
- 	}
- 
--	ret = sev_lock_vcpus_for_migration(kvm);
-+	ret = sev_lock_vcpus_for_migration(kvm, SEV_MIGRATION_SOURCE);
- 	if (ret)
- 		goto out_dst_cgroup;
--	ret = sev_lock_vcpus_for_migration(source_kvm);
-+	ret = sev_lock_vcpus_for_migration(source_kvm, SEV_MIGRATION_TARGET);
- 	if (ret)
- 		goto out_dst_vcpu;
- 
++&watchdog0 {
++	status = "okay";
++};
++
++&fpga_mgr {
++	status = "disabled";
++};
 -- 
-2.36.0.464.gb9c8b46e94-goog
+2.25.1
 

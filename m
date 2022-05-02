@@ -2,49 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CECAD516FBB
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 14:42:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D3BE516FC0
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 14:43:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385058AbiEBMqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 08:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43770 "EHLO
+        id S1385087AbiEBMqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 08:46:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382666AbiEBMqK (ORCPT
+        with ESMTP id S1385073AbiEBMq2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 08:46:10 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D8613E19;
-        Mon,  2 May 2022 05:42:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=+VctyfpBc7br87X3mwa6CtDZ/oohz2FVFhUyHvvKoK0=; b=iviY4w3WFQEGDJuoWPrmdDQXb7
-        O66C1jQqmZVWsPWpxF9k4oBlUc8fbqaEKVcZCsO+LhuCBpedYK4xTSCEkvOB+U5kvwzxCCAPvMm5K
-        eF8JAYZscPIkC/SLmjh6d9Br9TLxDOIXebsxEAZa4D63qYqWs0olIIh+a/hAVwbUE8AY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nlVNf-000tpN-8Z; Mon, 02 May 2022 14:42:23 +0200
-Date:   Mon, 2 May 2022 14:42:23 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v1 1/1] net: phy: dp83td510: Add support for the
- DP83TD510 Ethernet PHY
-Message-ID: <Ym/Rr6BN7b/Y6mqu@lunn.ch>
-References: <20220502085437.142000-1-o.rempel@pengutronix.de>
+        Mon, 2 May 2022 08:46:28 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7775413E9E
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 05:42:57 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id j15so19473586wrb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 05:42:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vVvWe9CoZBTdNyE3eHbun0xPih5mbPe7IlFMtVIhZ0k=;
+        b=BtfBeu1aqgUSyQZe0mcdvRYb4j2TlOHGS0GBgmr+zcQ4ScZSQr+K1DKeD5S6N/Ofpl
+         pztcRIH6/NR6QIuTCyzBERhX8TOM7J5l0ghTn7CgX2/2LrUr6uyiNv4c0IIVgBbnCfuF
+         VjWjH8kumF+/tkE7dJl3FD5pC2MMQq7GvGtiadpRUtKA0WEEWtypxfL7Eu2IxA7bKXTb
+         yqQFkMtdKknCX1prLQMQ+5j6sR7opHwsQx3Y8c4bHOzY2JPjcZKdt5zPprM5tdupTemm
+         +fTnb6kYK/dxEVN9ayKa8366ubv6qOYvD0W9uOL4rt09/BAn4uMKXre2mP4/gG+64JTI
+         U2YQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vVvWe9CoZBTdNyE3eHbun0xPih5mbPe7IlFMtVIhZ0k=;
+        b=DRCAvzLelkmTbheKcV4mPT278EMjD9ZDyX3qcdQ7A7lzzR2dYev21V91tKvXJLsRo/
+         p8TiGPdh/009MGmeVtuLiP4nu+KsmAe4Y0c4arz/1KSzE6mJcWjOc8RZyYP+U5kquKyA
+         q0RzcBTY8Nyc/YioytJjAV/cucIgUz/0XguIae81hIOb9dKjM5rfrqyEHvJARPATZe1/
+         7Oo1ucnXgwVVxCSs2+VIQXBWvxxiVMDtphCadDIMecn1bTrjpdWZaxpV5N6sWSrGI90K
+         kr6XVkrZbxVUkTFVqnFq0ZuHn3Fe4BKw8lUM6nuW04mkzs7qT+n2qS0rjb2zU2vjVCod
+         OOFA==
+X-Gm-Message-State: AOAM533JCWNXtdHlK8aU8uJAoG133d1W7Dr8hJvIUeUCwSPdAsvkn3ke
+        r66OYfVykdzlWNg1vWBbeautyE9j0t8Nlg==
+X-Google-Smtp-Source: ABdhPJz/ybYbVPx+PHksA3jc6jfVx19vofEhtVZf31TSZntCS76xIG2EvhKN0/UCRxIrp4CsmUaYeQ==
+X-Received: by 2002:adf:f64f:0:b0:209:ead2:e0ae with SMTP id x15-20020adff64f000000b00209ead2e0aemr9378966wrp.277.1651495376039;
+        Mon, 02 May 2022 05:42:56 -0700 (PDT)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id n10-20020a05600c294a00b003942a244f30sm6254680wmd.9.2022.05.02.05.42.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 May 2022 05:42:55 -0700 (PDT)
+From:   Corentin Labbe <clabbe@baylibre.com>
+To:     jdelvare@suse.com, linux@roeck-us.net
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Corentin Labbe <clabbe@baylibre.com>
+Subject: [PATCH 1/2] hwmon: acpi_power_meter: fix style issue
+Date:   Mon,  2 May 2022 12:42:48 +0000
+Message-Id: <20220502124249.682058-1-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220502085437.142000-1-o.rempel@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,54 +67,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +static void mmd_phy_indirect(struct mii_bus *bus, int phy_addr, int devad,
-> +			     u16 regnum)
-> +{
-> +	/* Write the desired MMD Devad */
-> +	__mdiobus_write(bus, phy_addr, MII_MMD_CTRL, devad);
-> +
-> +	/* Write the desired MMD register address */
-> +	__mdiobus_write(bus, phy_addr, MII_MMD_DATA, regnum);
-> +
-> +	/* Select the Function : DATA with no post increment */
-> +	__mdiobus_write(bus, phy_addr, MII_MMD_CTRL,
-> +			devad | MII_MMD_CTRL_NOINCR);
-> +}
+Fix style issues found by checkpatch.
 
-Please make the version in phy-core.c global scope.
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+---
+ drivers/hwmon/acpi_power_meter.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-A better explanation of what is going on here would be good.
+diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_power_meter.c
+index c405a5869581..d2545a1be9fc 100644
+--- a/drivers/hwmon/acpi_power_meter.c
++++ b/drivers/hwmon/acpi_power_meter.c
+@@ -481,7 +481,7 @@ static struct sensor_template meter_attrs[] = {
+ 	RO_SENSOR_TEMPLATE("power1_average_interval_max", show_val, 1),
+ 	RO_SENSOR_TEMPLATE("power1_is_battery", show_val, 5),
+ 	RW_SENSOR_TEMPLATE(POWER_AVG_INTERVAL_NAME, show_avg_interval,
+-		set_avg_interval, 0),
++			   set_avg_interval, 0),
+ 	{},
+ };
+ 
+@@ -530,6 +530,7 @@ static void remove_domain_devices(struct acpi_power_meter_resource *resource)
+ 
+ 	for (i = 0; i < resource->num_domain_devices; i++) {
+ 		struct acpi_device *obj = resource->domain_devices[i];
++
+ 		if (!obj)
+ 			continue;
+ 
+@@ -580,7 +581,7 @@ static int read_domain_devices(struct acpi_power_meter_resource *resource)
+ 	}
+ 
+ 	resource->holders_dir = kobject_create_and_add("measures",
+-					&resource->acpi_dev->dev.kobj);
++						       &resource->acpi_dev->dev.kobj);
+ 	if (!resource->holders_dir) {
+ 		res = -ENOMEM;
+ 		goto exit_free;
+@@ -590,7 +591,7 @@ static int read_domain_devices(struct acpi_power_meter_resource *resource)
+ 
+ 	for (i = 0; i < pss->package.count; i++) {
+ 		struct acpi_device *obj;
+-		union acpi_object *element = &(pss->package.elements[i]);
++		union acpi_object *element = &pss->package.elements[i];
+ 
+ 		/* Refuse non-references */
+ 		if (element->type != ACPI_TYPE_LOCAL_REFERENCE)
+@@ -603,7 +604,7 @@ static int read_domain_devices(struct acpi_power_meter_resource *resource)
+ 			continue;
+ 
+ 		res = sysfs_create_link(resource->holders_dir, &obj->dev.kobj,
+-				      kobject_name(&obj->dev.kobj));
++					kobject_name(&obj->dev.kobj));
+ 		if (res) {
+ 			acpi_dev_put(obj);
+ 			resource->domain_devices[i] = NULL;
+@@ -788,7 +789,7 @@ static int read_capabilities(struct acpi_power_meter_resource *resource)
+ 	str = &resource->model_number;
+ 
+ 	for (i = 11; i < 14; i++) {
+-		union acpi_object *element = &(pss->package.elements[i]);
++		union acpi_object *element = &pss->package.elements[i];
+ 
+ 		if (element->type != ACPI_TYPE_STRING) {
+ 			res = -EINVAL;
+@@ -868,8 +869,7 @@ static int acpi_power_meter_add(struct acpi_device *device)
+ 	if (!device)
+ 		return -EINVAL;
+ 
+-	resource = kzalloc(sizeof(struct acpi_power_meter_resource),
+-			   GFP_KERNEL);
++	resource = kzalloc(sizeof(*resource), GFP_KERNEL);
+ 	if (!resource)
+ 		return -ENOMEM;
+ 
+@@ -884,7 +884,8 @@ static int acpi_power_meter_add(struct acpi_device *device)
+ 	if (res)
+ 		goto exit_free;
+ 
+-	resource->trip[0] = resource->trip[1] = -1;
++	resource->trip[0] = -1;
++	resource->trip[1] = -1;
+ 
+ 	res = setup_attrs(resource);
+ 	if (res)
+-- 
+2.35.1
 
-> +	/* This PHY supports only C22 MDIO opcodes. We can use only indirect
-> +	 * access.
-> +	 */
-> +	mmd_phy_indirect(bus, phy_addr, devad, regnum);
-
-This comment suggests it is because it cannot do C45. But the core
-should handle this, it would use indirect access. However, you have
-hijacked phydev->drv->read_mmd to allow you to translate standard
-registers to vendor registers. This bypasses the cores fallback to
-indirect access.
-
-> +static struct phy_driver dp83td510_driver[] = {
-> +{
-> +	PHY_ID_MATCH_MODEL(DP83TD510E_PHY_ID),
-> +	.name		= "TI DP83TD510E",
-> +
-> +	.config_aneg	= genphy_c45_config_aneg,
-> +	.read_status	= genphy_c45_read_status,
-> +	.get_features	= dp83td510_get_features,
-> +	.config_intr	= dp83td510_config_intr,
-> +	.handle_interrupt = dp83td510_handle_interrupt,
-> +
-> +	.suspend	= genphy_suspend,
-> +	.resume		= genphy_resume,
-> +	.read_mmd	= dp83td510_read_mmd,
-> +	.write_mmd	= dp83td510_write_mmd,
-
-Given how far this PHY is away from standards, you might get a smaller
-simpler driver if you ignore genphy all together, write your own
-config_aneg and read_status, and don't mess with .read_mmd and
-write_mmd.
-
-	Andrew

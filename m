@@ -2,78 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 001CF517730
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 21:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 626F051773A
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 21:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232500AbiEBTP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 15:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43900 "EHLO
+        id S1387067AbiEBTRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 15:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232124AbiEBTP0 (ORCPT
+        with ESMTP id S1387053AbiEBTRS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 15:15:26 -0400
-Received: from smtp-42ab.mail.infomaniak.ch (smtp-42ab.mail.infomaniak.ch [84.16.66.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1835CB7F
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 12:11:55 -0700 (PDT)
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KsXlG0SWnzMqFPG;
-        Mon,  2 May 2022 21:11:54 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4KsXlF18QfzlhSMS;
-        Mon,  2 May 2022 21:11:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1651518714;
-        bh=0NxUaaWbrR2tDqr7m+/6m1rvuQPmqjcU76RBWpb2ACo=;
-        h=Date:From:To:Cc:References:Subject:In-Reply-To:From;
-        b=bn9kQv/9cYMoic4chLoAuI0NTaixiFmyd0AVe5+MB/o3qzTIRPBCjxK9baQXjuyrO
-         6IQguVyyZjdlm6mL4SwdN0JAIajtfuB5IyCu0pdBD1VMDeoCHYn8jN8Ra1HbeLJghP
-         NKYmm3EH0g+EgCOMfbk+6fFDaXl8nu7qxE/6P6UM=
-Message-ID: <ee3feb13-fbf8-6651-76ff-1324878d72e8@digikod.net>
-Date:   Mon, 2 May 2022 21:13:05 +0200
+        Mon, 2 May 2022 15:17:18 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32655DEA2
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 12:13:49 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id z18so16553188iob.5
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 12:13:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=y0LBGAd1mzPzBgDI34ZO9E56JL4JndzFBjXWTJ7seYs=;
+        b=ckPp/NdRMXgf5FFXPyGc9liaDJqL2hcNn8pjXgoavzCrY0KDzgtvF0XFqZcMNDXfOr
+         6l0lOd/hHI50esNE7LrmDR6dg2UfbkHDyciTF6LeHVIUleHrSlXIeRHzr97J1v7x8kSk
+         uzomDevaWRkXHoUH1qWDXTMfMsXSKVz+jFnJCewEpD4C6IMblNSJx23INuzLghEhlxQE
+         6mEsGQvJu3GuLNm3d8F4s/JrjutfEMrDVMEOfsJPdPIG+JojWyMeaaIRprxbMHoaoQxh
+         Gk4SpxniQhemtQMl77jiDeVgdZebFILROTazekNN8BwMh2KFYXZPPdsTcFTHY45nWptd
+         Am4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=y0LBGAd1mzPzBgDI34ZO9E56JL4JndzFBjXWTJ7seYs=;
+        b=mQmjkc8aYAwHJDA7WXzNScxejz1TNN83nGeAvthnUPrC9cAVRNkcxdhYb4+H2viGx3
+         qSwy81XKV1WO/eLNIHRBuu1EnBQjv7QY5efUCgHwGOxnz6eF6OdKZsZnRKzvx2p7qSb4
+         PxEm3MvWDL3sNgO9woUYYWC6nbdZ1BAZQxd8nf46VrqWO7+j3r0ZBLzwBu8w0Lm98+sA
+         GDDJ3lm9dBxNqdtzrTY3HSyFJLkWA/m74VzxFZPehtAC27C9CoCwQiVBxjtPAMgoqase
+         Pwmgbz9NWq0BvprJLUGJRkA8efUP1N2+gern1GaQVMhIjuYfToM4OnOWSsEajZo5n7lO
+         inEQ==
+X-Gm-Message-State: AOAM530lWzvG850vEVYPswA6+prBjQclgaC4Sw467V8E5B8Fm8gzgeYc
+        Ii9Fe6J3GCri7TI0dfItIipU7jeF6LsEDV/6sOKNrg==
+X-Google-Smtp-Source: ABdhPJwHqlWg5WB6OOOBQLDDEVN8nqKNBqzia3qBgR8p0HecQJbYk6Xkq8myPoSaLOqltKHBMqJU5Kkn5+UKlAQieTA=
+X-Received: by 2002:a6b:4419:0:b0:657:aeaa:d2e with SMTP id
+ r25-20020a6b4419000000b00657aeaa0d2emr4701122ioa.24.1651518828432; Mon, 02
+ May 2022 12:13:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: 
-Content-Language: en-US
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-To:     Miguel Ojeda <ojeda@kernel.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <8b6b252b-47a6-9d52-f0bd-10d3bc4ad244@digikod.net>
-Subject: Re: clang-format inconsistencies with checkpatch.pl
-In-Reply-To: <8b6b252b-47a6-9d52-f0bd-10d3bc4ad244@digikod.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220412224348.1038613-1-tansuresh@google.com>
+ <20220412224348.1038613-2-tansuresh@google.com> <CAJZ5v0ivNq3aYCEcxPYMosLJCAyWiAnucwOCmRBzkM=sbyPWgQ@mail.gmail.com>
+ <CALVARr6v5hcY0Vcf1izPUX-tXNJyyNXBMANbKX4CW9wfRf-pYQ@mail.gmail.com> <YmzqrqfVLQ9/4KXp@kroah.com>
+In-Reply-To: <YmzqrqfVLQ9/4KXp@kroah.com>
+From:   Tanjore Suresh <tansuresh@google.com>
+Date:   Mon, 2 May 2022 12:13:37 -0700
+Message-ID: <CALVARr50MWexNpCf_PoZ4-pdnexiZiibz7Nd0PH+b-EVnBUN6w@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] driver core: Support asynchronous driver shutdown
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-nvme <linux-nvme@lists.infradead.org>,
+        Linux PCI <linux-pci@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Apr 30, 2022 at 12:52 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> A: http://en.wikipedia.org/wiki/Top_post
+> Q: Were do I find info about this thing called top-posting?
+> A: Because it messes up the order in which people normally read text.
+> Q: Why is top-posting such a bad thing?
+> A: Top-posting.
+> Q: What is the most annoying thing in e-mail?
+>
+> A: No.
+> Q: Should I include quotations after my reply?
+>
+> http://daringfireball.net/2007/07/on_top
+>
+> On Fri, Apr 29, 2022 at 11:03:07AM -0700, Tanjore Suresh wrote:
+> > Rafael,
+> >
+> > That is a good observation, however, many of the use cases in data
+> > centers (deployment of devices in data centers) do not exploit device
+> > power management. Therefore, I'm not sure that is the right way to
+> > design this.
+>
+> Yes it is, enable device power management and use that interface please.
+> Devices in data centers should of course be doing the same thing as
+> everyone else, as it actually saves real money in power costs.  To not
+> do so is very odd.
+>
 
-On 23/04/2022 13:45, Mickaël Salaün wrote:
-> Hi,
-> 
-> I would like to use clang-format (with a pinned version, probably 14) to 
-> keep a consistent coding style, or at least start with one. However, 
-> there is some inconsistencies with the checkpatch.pl script:
-> 
-> In some cases, goto labels are indented, which checkpatch.pl doesn't like.
+I guess we are intermixing the  terminology of device power management
+with shutdown.
+My second, third reasoning in my previous e-mail, thought it brings
+out that difference. Maybe not.
+I will try one more time, my thought process on this one.
 
-This can be fixed with SplitEmptyFunction: false. I'll send a patch for 
-that if it's OK with you.
+This patch is only for shutdown. The shutdown can be done in a system
+in various flavors,
+(this may include a power being pulled from the system components when
+all the devices
+are quiescent and it can also be soft shutdown, where power is not
+removed from the system, but system
+could be attempting a reboot)
 
-> 
-> checkpatch.pl complains about some functions (e.g. FIXTURE or 
-> FIXTURE_VARIANT_ADD) that get an open brace just after but without a space.
+The device power management allows the device to bring down any
+devices that may be idle to various power states that
+device may support in a selective manner & based on the transition
+allowed by the device. Such a transition initiated by
+the system can be achieved using the 'dpm' interface for runtime power
+management (more for extending laptop battery life).
+It can also be exploited for system sleep models (suspend and resume -
+where state is preserved and restarted from where it left off
+--> More applicable for laptops/desktops). That does not mean data
+center devices cannot exploit, but they worry about slight latency
+variation in any
+I/O initiated to any device. Such power management could introduce
+more latency when it transitions from one state to another.
+Therefore, the use case is more apt for Laptops, in certain cases
+desktops in my opinion or understanding.
 
-Miguel, do you know how/if clang-format can enforce that style? FIXTURE 
-macros are struct declarations though.
+The shutdown entry point has been traditionally different and the
+semantics is that the whole system is going down to a
+quiescent state and power may be pulled or may not be, IMO, i am
+seeing both are independent requirements, in my view.
+Let me know if I am mistaken. I am not sure why we should break the
+shutdown semantics as understood by driver developers and
+overload it with dpm requirements?
+
+Thanks
+sureshtk
+
+
+> thanks,
+>
+> greg k-h

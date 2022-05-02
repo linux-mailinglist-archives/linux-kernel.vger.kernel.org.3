@@ -2,129 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3C56517595
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 19:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DA48517599
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 19:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386538AbiEBRTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 13:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57652 "EHLO
+        id S1386606AbiEBRVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 13:21:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386632AbiEBRSw (ORCPT
+        with ESMTP id S1347686AbiEBRU6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 13:18:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9A5012631
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 10:15:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651511719;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TNhZbt5WmLs9YdL2p377OAwSFXloJynsUEcZgN+34jM=;
-        b=EAiKspRfImrtcdZ4wf21vE6xt7sOY+yxJ3xGIV+upESPXrZzXDskjMOjTuKmei09lnIb7P
-        +3En3/EQeIiZjR4pRcUzqhto8e6FjjGSAqs8N+CLpr9PU2jpeG2EiB75h4iNP7Igm4jbdE
-        rJ4DCmroYMklNlhC/MOcN1c+40i/lVM=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-655-9_GDwuzAN8KLHBputbILYw-1; Mon, 02 May 2022 13:15:19 -0400
-X-MC-Unique: 9_GDwuzAN8KLHBputbILYw-1
-Received: by mail-wr1-f72.google.com with SMTP id g7-20020adfbc87000000b0020ac76d254bso5514803wrh.6
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 10:15:18 -0700 (PDT)
+        Mon, 2 May 2022 13:20:58 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 180376593
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 10:17:29 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id m20so28938798ejj.10
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 10:17:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oTeGZRyE2mr2u+m1voN9Z49X34/v4brkQnKi8WE42ks=;
+        b=JxCTtdo7XskJybuw+4NTUgwS8Au5koSIUQ7QZEpluKPGW4M2qVduWv8V3CDMR53GbQ
+         bI0iW4GTIpjXVQ12039X53L5Z5txctbYgvwRt7a2YYI/VN8UEkbiO/y8v6UMkVk/464O
+         IIxEw0Q4uWhxMz7xmgfA5TH+ehxSMM0U0cAk4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=TNhZbt5WmLs9YdL2p377OAwSFXloJynsUEcZgN+34jM=;
-        b=Yi3VAYc5nlvd4ILZZavDi0w1xIGTX7CwyItlMtYQNa/cw4YHvuSSXiVg5j0XTg1KTU
-         tOFlk+PSoxFVzFEqaaxWF53HIGZ1jjYZDHvE8DNVR/jM9B4ZqiCfCK5IeaSwKBCH8w8U
-         q9r+onu2cZHeyoWe2khTlDp01ShBwqLu21CJhte8oN0yUpeaVYojrr/pJcHBTTkToqw5
-         l+DRoSSgN1Q60SDHGvPPGV3bxF4PS8H/ZsdKflXvnhOR99T2EwGZYI6qPbOYILDM/FJh
-         W2SssuEschF4D9n5jBSpRQ1Nfckd2jd83lvxmgPN3ISVZDiXulrz35mbn1noRvXQPFh3
-         r1Mw==
-X-Gm-Message-State: AOAM531n/NEMNZ4ZXp1jJlUU/gniR2JxW83vtdAPDwTLZy5+W9NXBBCv
-        +TtBhNVPfmBDbpNGJLMBEiUL/BFiyBMgW3OYdBFQWqMhg2bL+xBB/RIE1d+0WodJCpRuqDb1pye
-        89B9W5VoFvT54XAjQd9hIllZq
-X-Received: by 2002:adf:d1c9:0:b0:203:c4f8:dd17 with SMTP id b9-20020adfd1c9000000b00203c4f8dd17mr10068562wrd.633.1651511717578;
-        Mon, 02 May 2022 10:15:17 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwsIQ70V0swN3ajpzcihZtgWd7Y7xEQmDVKoinoDZrZIjQMH2cqaPWdg9iqJElhYFpe1gjTzA==
-X-Received: by 2002:adf:d1c9:0:b0:203:c4f8:dd17 with SMTP id b9-20020adfd1c9000000b00203c4f8dd17mr10068550wrd.633.1651511717373;
-        Mon, 02 May 2022 10:15:17 -0700 (PDT)
-Received: from [192.168.1.129] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id u21-20020adfa195000000b0020c5253d8c4sm7520081wru.16.2022.05.02.10.15.16
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oTeGZRyE2mr2u+m1voN9Z49X34/v4brkQnKi8WE42ks=;
+        b=7PKpjryKJWJU4vaYXFqrtXXvT8SGk5nsiw4NTRUInBAMmc6Nrv9sw76xkMOSpVp/9Q
+         b/y+V1ELhHKS3+hjTygLSrkN1VAltVmsgy6Bd9YL7J4irr7yUUIbgd+j1UfFM+g1tuJh
+         DR96AOKWIHmNXEq53xOGtoonNqzB0zuq9dUQguO0CpypD7wEEh+Jn5wIfOPFTYaO15jM
+         pI8BAXuh/2DWENvCHXNUcpIpb3IyTj8sV2jTJrE0p5OOH89YK3gM39Q4tkHfickFYYSF
+         JxYI9ELG5MUqc8vZc6KxSHzj0sqadm2aX/7qdENShK4l/RpBWBc7MVmUtfR37s2iowjT
+         KYJg==
+X-Gm-Message-State: AOAM532N/gmpLfphHV7zwiHYGtBgvEKGRpT7UzphMhLWXmUw+fLywUJy
+        iX/d1UIzP8IpZxVs1Mn5m6Llbx+0WwW7QUlD
+X-Google-Smtp-Source: ABdhPJzqsy8ojNWiwAygO4pXVChKS72VfxeSgYV5j5oe6/2Tp9an/PknSb4/9V+RutT0Y2cgzJ54yw==
+X-Received: by 2002:a17:906:9702:b0:6f4:6ae8:194d with SMTP id k2-20020a170906970200b006f46ae8194dmr2498621ejx.747.1651511847358;
+        Mon, 02 May 2022 10:17:27 -0700 (PDT)
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
+        by smtp.gmail.com with ESMTPSA id b12-20020a05640202cc00b0042617ba63b5sm6929206edx.63.2022.05.02.10.17.26
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 10:15:17 -0700 (PDT)
-Message-ID: <bc6b6598-0e09-1a43-4086-e4164ab42a20@redhat.com>
-Date:   Mon, 2 May 2022 19:15:16 +0200
+        Mon, 02 May 2022 10:17:26 -0700 (PDT)
+Received: by mail-wm1-f53.google.com with SMTP id m2-20020a1ca302000000b003943bc63f98so1693843wme.4
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 10:17:26 -0700 (PDT)
+X-Received: by 2002:a05:600c:4e44:b0:394:46b4:7b0e with SMTP id
+ e4-20020a05600c4e4400b0039446b47b0emr110547wmq.29.1651511846037; Mon, 02 May
+ 2022 10:17:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2 1/3] drm: Remove superfluous arg when calling to
- drm_fbdev_generic_setup()
-Content-Language: en-US
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-References: <20220502153900.408522-1-javierm@redhat.com>
- <20220502153900.408522-2-javierm@redhat.com>
- <YnABjdpGC166yIY7@pendragon.ideasonboard.com>
- <5dd80287-1b09-d02c-9f67-5a0bb0a4566c@redhat.com>
-In-Reply-To: <5dd80287-1b09-d02c-9f67-5a0bb0a4566c@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220430011402.1.If7c3471db53bea55213f7bcf17e9043084d3ac0c@changeid>
+In-Reply-To: <20220430011402.1.If7c3471db53bea55213f7bcf17e9043084d3ac0c@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 2 May 2022 10:17:13 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=U-YCicgn06BnvCLHvXWw1-XzKhu8TMDm4T5LphoBOUBQ@mail.gmail.com>
+Message-ID: <CAD=FV=U-YCicgn06BnvCLHvXWw1-XzKhu8TMDm4T5LphoBOUBQ@mail.gmail.com>
+Subject: Re: [PATCH 1/5] arm64: dts: qcom: sc7180: Add wormdingler dts files
+To:     "Joseph S. Barrera III" <joebar@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Alexandru M Stan <amstan@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/2/22 18:55, Javier Martinez Canillas wrote:
+Hi,
 
-[snip]
+On Sat, Apr 30, 2022 at 1:18 AM Joseph S. Barrera III
+<joebar@chromium.org> wrote:
+>
+> Wormdingler is a trogdor-based board, shipping to customers as the
+> Lenovo IdeaPad Chromebook Duet 3. These dts files are copies from
+> the downstream Chrome OS 5.4 kernel, but with downstream bits removed.
+>
+> Signed-off-by: Joseph S. Barrera III <joebar@chromium.org>
+> ---
 
-> 
->> drop the depth option to drm_fbdev_generic_setup() ? There's a FIXME
->> comment in drm_fbdev_generic_setup() that could be related.
->>
-> 
-> A FIXME makes sense, I'll add that to when posting a v3.
+I was expecting that this patch series would be labeled "v3" and would
+also have version history. What happened? I provided the tags you
+needed for stuff like this in v2 and even wrote the history bits for
+you... [1]
 
-There's actually a FIXME already in drm_fbdev_generic_setup(), so it's
-a documented issue [0]:
 
-void drm_fbdev_generic_setup(struct drm_device *dev,
-			     unsigned int preferred_bpp)
-{
-...
-	/*
-	 * FIXME: This mixes up depth with bpp, which results in a glorious
-	 * mess, resulting in some drivers picking wrong fbdev defaults and
-	 * others wrong preferred_depth defaults.
-	 */
-	if (!preferred_bpp)
-		preferred_bpp = dev->mode_config.preferred_depth;
-	if (!preferred_bpp)
-		preferred_bpp = 32;
-	fb_helper->preferred_bpp = preferred_bpp;
-...
-}
+[1] https://lore.kernel.org/r/CAD=FV=XbQ7LhnxGAavLL3XDpPigwtCz0CF3YcZ=ywrXwu=uiMQ@mail.gmail.com/
 
-[0]: https://elixir.bootlin.com/linux/v5.18-rc5/source/drivers/gpu/drm/drm_fb_helper.c#L2553
 
--- 
-Best regards,
+> @@ -0,0 +1,33 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Google Wormdingler board device tree source
+> + *
+> + * Copyright 2021 Google LLC.
+> + *
+> + * SKU: 0x0001 => 1
+> + *  - bits 11..8: Panel ID: 0x0 (INX)
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "sc7180-trogdor-wormdingler.dtsi"
 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+In my reply to your v2 I was suggesting that the rt5682s files could
+be done more cleanly. I guess it's not 100% needed and could always be
+a later cleanup, but any reason why you decided not to do it?
 
+
+> +&ap_tp_i2c {
+> +       status = "disabled";
+> +};
+> +
+> +&backlight {
+> +       pwms = <&cros_ec_pwm 0>;
+> +};
+
+Downstream we have:
+
+&camcc {
+       status = "okay";
+};
+
+Why did you remove it here? You didn't in the previous version. Coach
+Z and Homestar still define it upstream and they work fine. Even if we
+haven't finished defining the MIPI camera bits, enabling the camera
+clock controller should still be fine, right?
+
+
+Also in my reply to v2 I suggested that you delete the keypad num-rows
+/ num-columns in wormdingler.dtsi. Hmmm, but I guess maybe we should
+put the num-rows/num-columns change on hold while we settle on an
+approach for it [1].
+
+
+So I guess overall summary:
+* Pretty sure you want "camcc", so please spin with that.
+* Please figure out how to tag your series as v4 and have version history.
+* I would still prefer the rt5682s stuff be cleaned up but if it's
+really too hard we can do it in a follow-up.
+
+
+
+[1] https://lore.kernel.org/r/CAD=FV=VX8EEgkeLgKwyKvjztcjbA8UhKOUpTr-sS1_Ec=QcWbA@mail.gmail.com

@@ -2,232 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C5C051692C
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 03:44:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE884516946
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 03:54:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356453AbiEBBsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 21:48:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35830 "EHLO
+        id S1356477AbiEBBzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 21:55:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230455AbiEBBsI (ORCPT
+        with ESMTP id S230455AbiEBBzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 21:48:08 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4114AEAA;
-        Sun,  1 May 2022 18:44:41 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id p12so11290641pfn.0;
-        Sun, 01 May 2022 18:44:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=45/vefmAOs7jyOLkjPvaCzZ3Mr4L7nUL4GQTRp6tqe4=;
-        b=joLJdRPQBi9WnNBC6XJUCAuK5cCfVx4A58Ds3gAJK3YPVJ0VF6R7Q94E5R8HFuurci
-         VUTurL1ED7uuiJr8/T57CNzj1EWhhmuQWJSkH879W8jKtkoWOxSFJ+7bn+jg85Xatjut
-         bhjDkgpYtXFEkdOL5o6rCfw5dfVXSSch6FcplaEoU/5JUxEjNQZlBsz7OLl55xhe0iWq
-         SWSupIP1WayZ4InD/e1XRFT2WFmpEH2/C8/5fq868wWyYnDsT1tb529VdkyTRv1Oq/CS
-         bcocR+HyglawWtZUqscZx7NWTuDMyTgUEE1zSR5r8ORB/QB9H46m2IyIj2n0RxuScXb1
-         2pUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=45/vefmAOs7jyOLkjPvaCzZ3Mr4L7nUL4GQTRp6tqe4=;
-        b=34ZJRr3M3Im4m1LsahW+CkS0tp+wuNrVqmiU7z5VxQggzEN57qGdgQRna7dm5czwSY
-         cdrJXK+/o2vFKrWK7fj5K3pm/ZpGqU/dNXDwEXUwbX2RNNKGwwk1b9uvtpNjMdRINJ9p
-         LmI5uDpt9rgH9WrraUvtWV6Kk46ichdkBEZSKliScA6CcUFbDSXJRpvVDZOm1W6n60u7
-         8evZMB5aOJ23lfQoLX0VZB6MAcZPn9AXAFVPankgXAgUmHQkMeEHPwY9k0ErpBAfiEdI
-         NwPXt+zXWC6Ehwq8D8ZP4yMwNpTTFFEeQEkzH0Sb4Si/4utyQYppP9LW0rW4fRRnuNGK
-         3JTw==
-X-Gm-Message-State: AOAM532eZu37Q4MtXzNQ1dUKHRtlQbpRCoZgnA4GjFfrW1v23rw2wYoX
-        1OCpE5LeZBNODgNPier6yo8=
-X-Google-Smtp-Source: ABdhPJzLS9jPlqZ0qOAGE9vCkUweuHxaJ8ewW3XmxdmtO8IuZMAZrTmWYPfOooIsxbv+vFALKRiK5Q==
-X-Received: by 2002:a05:6a00:22c4:b0:50d:ed2b:2002 with SMTP id f4-20020a056a0022c400b0050ded2b2002mr2528969pfj.54.1651455880796;
-        Sun, 01 May 2022 18:44:40 -0700 (PDT)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id v2-20020aa78502000000b0050dc7628146sm3433518pfn.32.2022.05.01.18.44.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 01 May 2022 18:44:40 -0700 (PDT)
-Message-ID: <e2c14da5-4759-8175-2042-30fba995b883@gmail.com>
-Date:   Mon, 2 May 2022 10:44:35 +0900
+        Sun, 1 May 2022 21:55:13 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89D417E28
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 18:51:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651456305; x=1682992305;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=nBgb/6v6Rg6UR6PoLHzzUhaMGDDupSCLP2KtncAqse0=;
+  b=W/KYE00/wid05ES16m/yLQM6Y8nac1U4Z0eo4rH8l7b4ssfedy783hKh
+   gAlTmlohgGfMvsMasWxDj5Y/LmHpSn59CXczfLQFNC5+t2XOhxn4NIYHA
+   2i32WobZ15zrSbhgAnV97V8vAzndCNw2zM/nlm7aje+YEZeos7UMOgp6Q
+   6f2ncJqCYohYCNKZv4bkUUvPBRu3PxheqEpt9fwn9vBZUujID2dh4JK8V
+   MMM/xEdVF3WuTUKBYMF+tokl632Ky9fT0ehheCzidNJ9NupFWSG0KzPYl
+   NPB7B3+puEWTnXOUZ32YVJXjZQkVl+b6G/kCvw8vSOsIMm4Tc6p0IRPFw
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="266958363"
+X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
+   d="scan'208";a="266958363"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 18:51:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
+   d="scan'208";a="707406440"
+Received: from allen-box.sh.intel.com ([10.239.159.48])
+  by fmsmga001.fm.intel.com with ESMTP; 01 May 2022 18:51:41 -0700
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Eric Auger <eric.auger@redhat.com>, Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        Lu Baolu <baolu.lu@linux.intel.com>
+Subject: [PATCH v5 00/12] iommu: SVA and IOPF refactoring
+Date:   Mon,  2 May 2022 09:48:30 +0800
+Message-Id: <20220502014842.991097-1-baolu.lu@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: Resend: [PATCH] Documentation/vm/page_owner.rst: Fix syntax error
- and Describe details using table
-Content-Language: en-US
-To:     Shenghong Han <hanshenghong2019@email.szu.edu.cn>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     akpm <akpm@linux-foundation.org>, baihaowen <baihaowen@meizu.com>,
-        seakeel <seakeel@gmail.com>,
-        linux-doc <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        caoyixuan2019 <caoyixuan2019@email.szu.edu.cn>,
-        yejiajian2018 <yejiajian2018@email.szu.edu.cn>,
-        yuhongf <yuhongf@szu.edu.cn>
-References: <20220429181926.10658-1-hanshenghong2019@email.szu.edu.cn>
- <ea37d4f9-26e2-272a-01d6-fa7e8c62687e@gmail.com>
- <tencent_640F24F90BA09A5302AA9BD7@qq.com>
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <tencent_640F24F90BA09A5302AA9BD7@qq.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-On Sat, 30 Apr 2022 18:25:29 +0800,
-Shenghong Han wrote:
-> The one reply archived at "https://lore.kernel.org/linux-doc/tencent_088763F35CE233FB6C9CEB80@qq.com/"(On 2022/04/30 16:13) is broken-looking. 
-> 
-> Apologize for that!
-> 
-> Resend that reply:
-> 
-> 0) If you have received a similar reply, please refer to the latest reply.
-> 
-> 1) Accidentally used Chinese Input Method Editor, leaving full-width> symbols during the test, causing the double dashes of "--" changed into
-> "long single dash" which should not have occurred.
-I don't see any "full-width" symbols in your patch.
+Hi folks,
 
-> 
-> 2) In the current document, the "STANDARD FORMAT SPECIFIERS" table
-> does not correctly use the format of the rst document, so in the
-> website https://www.kernel.org/doc/html/latest/vm/page_owner.html,
-Now that the web page catches up v5.18-rc5, how does it look to
-you?
+The former part of this series refactors the IOMMU SVA code by assigning
+an SVA type of iommu_domain to a shared virtual address and replacing
+sva_bind/unbind iommu ops with attach/detach_dev_pasid domain ops.
 
-"the current document" is always changing, so it doesn't mean
-anything...
+The latter part changes the existing I/O page fault handling framework
+from only serving SVA to a generic one. Any driver or component could
+handle the I/O page faults for its domain in its own way by installing
+an I/O page fault handler.
 
-> it does not look good. Therefore, the "STANDARD FORMAT SPECIFIERS"
-> has been adjusted using the format of the rst table. *This* is the
-> main purpose.
-> 
-> 3) In version 1 before(On 2022/04/30 1:19), the sentence look> like:"Table 1 xxx(some explaination)." and "Table 2 xxx(some
-> explaination).", in these 2 "long" sentences, using "." instead of
-> ":".Honestly, complex sentence is unnecessary. When I tried to
-> modify the sentence, I ignore the strict distinction between "."
-> and ":".In short, This modification is unnecessary.
-OK.
+This series has been functionally tested on an x86 machine and compile
+tested for other architectures.
 
-> 4) Apologize again for the troubles that my clumsy behaviors have> caused.
-Looks like you have still a lot to improve...
+This series is also available on github:
+[2] https://github.com/LuBaolu/intel-iommu/commits/iommu-sva-refactoring-v5
 
-Akira
+Please review and suggest.
 
-> 
-> Thanks, 
-> 
-> Shenghong Han
->  
-> ------------------ Original ------------------
-> From:  "Akira Yokosawa"<akiyks@gmail.com>;
-> Date:  Sat, Apr 30, 2022 02:40 PM
-> To:  "Shenghong Han"<hanshenghong2019@email.szu.edu.cn>; "Jonathan Corbet"<corbet@lwn.net>;
-> Cc:  "akpm"<akpm@linux-foundation.org>; "baihaowen"<baihaowen@meizu.com>; "seakeel"<seakeel@gmail.com>; "linux-doc"<linux-doc@vger.kernel.org>; "linux-kernel"<linux-kernel@vger.kernel.org>; "caoyixuan2019"<caoyixuan2019@email.szu.edu.cn>; "yejiajian2018"<yejiajian2018@email.szu.edu.cn>; "yuhongf"<yuhongf@szu.edu.cn>;
-> Subject:  Re: [PATCH] Documentation/vm/page_owner.rst: Fix syntax error and Describe details using table
->  
-> On 2022/04/30 3:19,
-> Shenghong Han wrote:
->> Some syntax errors exist in "page_owner.rst". Thanks to Akira Yokosawa and
->> Haowen Bai for tips to help improve the documentation.
->>
->> We try to fix them. Hope that the Documentation is showed as we expect.
->>
->> Signed-off-by: Shenghong Han <hanshenghong2019@email.szu.edu.cn>
->> Fixes: edc93abbcc6d ("tools/vm/page_owner_sort.c: support sorting blocks by multiple keys")
->>
->> ---
->> Thanks Jonathan's suggestion.
->>
->> This fix is a simpler than before.
->> And yes, It has built in my machine.
->>
->> Best,
->>
->> Shenghong Han
->> ---
->> ---
->>  Documentation/vm/page_owner.rst | 15 ++++++++++-----
->>  1 file changed, 10 insertions(+), 5 deletions(-)
->>
->> diff --git a/Documentation/vm/page_owner.rst b/Documentation/vm/page_owner.rst
->> index 25622c715..0ecb4a739 100644
->> --- a/Documentation/vm/page_owner.rst
->> +++ b/Documentation/vm/page_owner.rst
->> @@ -171,11 +171,12 @@ Usage
->>
->>  STANDARD FORMAT SPECIFIERS
->>  ==========================
->> -::
->>
->> -For --sort option:
->> +1) For --sort option.
->>
->> + ==== ========== ===========
->>  KEY LONG DESCRIPTION
->> + ==== ========== ===========
->>  p pid process ID
->>  tg tgid thread group ID
->>  n name task command name
->> @@ -183,14 +184,18 @@ For --sort option:
->>  T txt full text of block
->>  ft free_ts timestamp of the page when it was released
->>  at alloc_ts timestamp of the page when it was allocated
->> -        ator            allocator       memory allocator for pages
->> + ator allocator memory allocator for pages
->> + ==== ========== ===========
->>
->> -For --curl option:
->> +2) For --curl option.
->>
->> + ==== ========== ===========
->>  KEY LONG DESCRIPTION
->> + ==== ========== ===========
->>  p pid process ID
->>  tg tgid thread group ID
->>  n name task command name
->>  f free whether the page has been released or not
->>  st stacktrace stack trace of the page allocation
->> -        ator            allocator       memory allocator for pages
->> + ator allocator memory allocator for pages
->> + ==== ========== ===========
-> 
-> So, I have actually tested this.
-> 
-> Are you OK with the look of
-> 
->   1) For --sort option.
-> 
-> and
-> 
->   2) For --curl option.
-> 
-> in generated HTML or PDF docs?
-> 
-> In literal blocks, you would see double dashes of "--".
-> Now they are converted to so-called endash, which is a single dash
-> slightly longer than a normal hyphen.  It looks confusing to me.
-> 
-> To remedy this, you need inline literal markers of
-> 
->   1) For ``--sort`` option.
-> 
-> and
-> 
->   2) For ``--curl`` option.
-> 
-> 
-> By the way, this patch changes ":" to "." at the end of them.
-> Are they intentional changes?  If so, why?
-> 
->         Thanks, Akira
+Best regards,
+baolu
+
+Change log:
+v5:
+ - Address review comments from Jean-Philippe Brucker. Very appreciated!
+ - Remove redundant pci aliases check in
+   device_group_immutable_singleton().
+ - Treat all buses exept PCI as static in immutable singleton check.
+ - As the sva_bind/unbind() have already guaranteed sva domain free only
+   after iopf_queue_flush_dev(), remove the unnecessary domain refcount.
+ - Move domain get() out of the list iteration in iopf_handle_group().
+
+v4:
+ - https://lore.kernel.org/linux-iommu/20220421052121.3464100-1-baolu.lu@linux.intel.com/
+ - Solve the overlap with another series and make this series
+   self-contained.
+ - No objection to the abstraction of data structure during v3 review.
+   Hence remove the RFC subject prefix.
+ - Refine the immutable singleton group code according to Kevin's
+   comments.
+
+v3:
+ - https://lore.kernel.org/linux-iommu/20220410102443.294128-1-baolu.lu@linux.intel.com/
+ - Rework iommu_group_singleton_lockdown() by adding a flag to the group
+   that positively indicates the group can never have more than one
+   member, even after hot plug.
+ - Abstract the data structs used for iommu sva in a separated patches to
+   make it easier for review.
+ - I still keep the RFC prefix in this series as above two significant
+   changes need at least another round review to be finalized.
+ - Several misc refinements.
+
+v2:
+ - https://lore.kernel.org/linux-iommu/20220329053800.3049561-1-baolu.lu@linux.intel.com/
+ - Add sva domain life cycle management to avoid race between unbind and
+   page fault handling.
+ - Use a single domain for each mm.
+ - Return a single sva handler for the same binding.
+ - Add a new helper to meet singleton group requirement.
+ - Rework the SVA domain allocation for arm smmu v3 driver and move the
+   pasid_bit initialization to device probe.
+ - Drop the patch "iommu: Handle IO page faults directly".
+ - Add mmget_not_zero(mm) in SVA page fault handler.
+
+v1:
+ - https://lore.kernel.org/linux-iommu/20220320064030.2936936-1-baolu.lu@linux.intel.com/
+ - Initial post.
+
+Dave Jiang (1):
+  dmaengine: idxd: Separate user and kernel pasid enabling
+
+Lu Baolu (11):
+  iommu: Add pasid_bits field in struct dev_iommu
+  iommu: Add attach/detach_dev_pasid domain ops
+  iommu/sva: Basic data structures for SVA
+  iommu/vt-d: Remove SVM_FLAG_SUPERVISOR_MODE support
+  iommu/vt-d: Add SVA domain support
+  arm-smmu-v3/sva: Add SVA domain support
+  iommu/sva: Use attach/detach_pasid_dev in SVA interfaces
+  iommu: Remove SVA related callbacks from iommu ops
+  iommu: Prepare IOMMU domain for IOPF
+  iommu: Per-domain I/O page fault handling
+  iommu: Rename iommu-sva-lib.{c,h}
+
+ include/linux/intel-iommu.h                   |   5 +-
+ include/linux/iommu.h                         | 100 ++++--
+ drivers/dma/idxd/idxd.h                       |   6 +
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h   |  25 +-
+ .../iommu/{iommu-sva-lib.h => iommu-sva.h}    |   3 +-
+ drivers/dma/idxd/cdev.c                       |   4 +-
+ drivers/dma/idxd/init.c                       |  30 +-
+ .../iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c   |  85 ++---
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c   |  28 +-
+ drivers/iommu/intel/iommu.c                   |  20 +-
+ drivers/iommu/intel/svm.c                     | 135 +++----
+ drivers/iommu/io-pgfault.c                    |  66 +---
+ drivers/iommu/iommu-sva-lib.c                 |  71 ----
+ drivers/iommu/iommu-sva.c                     | 328 ++++++++++++++++++
+ drivers/iommu/iommu.c                         | 189 +++++-----
+ drivers/iommu/Makefile                        |   2 +-
+ 16 files changed, 672 insertions(+), 425 deletions(-)
+ rename drivers/iommu/{iommu-sva-lib.h => iommu-sva.h} (91%)
+ delete mode 100644 drivers/iommu/iommu-sva-lib.c
+ create mode 100644 drivers/iommu/iommu-sva.c
+
+-- 
+2.25.1
+

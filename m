@@ -2,54 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D5F3516F12
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 13:48:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71CC1516F14
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 13:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241744AbiEBLvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 07:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40968 "EHLO
+        id S1384817AbiEBLwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 07:52:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiEBLvs (ORCPT
+        with ESMTP id S229651AbiEBLwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 07:51:48 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2470167CE
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 04:48:19 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id x13-20020a0566022c4d00b0065491fa5614so10611026iov.9
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 04:48:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=Yz+wn22ujEUKCk4p7FisUPt8bMfaKkzSjy4HRUtOLdg=;
-        b=l3LKPzectHmAhPTUCSgTOyVZYtIdYlH9IPX0l16fCCG1gj/RNXrKulXBPXpWyL4uVE
-         vhLOsGZyR6/H+DhMDSag076uliTgAgqX4l+coxY96gD1520wE0PXlKxWpOfLTJjgxOFh
-         xJ+a7OJIDl6ozeFwlFuCb8q442uMLMQQft/cTTrBfAzZ8zHR0UZ8ZZzoeoBT6h5txnGC
-         IYJjo3ncRKPDRtM5NSU+KBnioJGeIsCGpthUiFkWH7kfU3xXu6L9PUZYBQeb/TLFGSyN
-         BvLc/o2sj916EJmIKYz4XGkuMtR34QU26nGiVrHIT4wocoSOOdIQWaZ04/SK+PBDMs4W
-         WAUg==
-X-Gm-Message-State: AOAM533kZ3EmoF4MrzKRAglTWIQoxdSc4R6GfUgHhcIfm5h3fgz7U6fj
-        QSTgUwN9cdrLTBizqSRxSDUWdeIDrmzshm1494rFIiGpYS5B
-X-Google-Smtp-Source: ABdhPJxXHkBU1sNJNGtPP588E9+M/reUxQ54mGhlaY7+ODPl9vfDYmAh81OuYUTPBUyJRxclevbNy+NMlHq2gpG/YkFVDB3XHU3m
-MIME-Version: 1.0
-X-Received: by 2002:a02:a518:0:b0:32a:fd7e:ace0 with SMTP id
- e24-20020a02a518000000b0032afd7eace0mr4632233jam.208.1651492099286; Mon, 02
- May 2022 04:48:19 -0700 (PDT)
-Date:   Mon, 02 May 2022 04:48:19 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ed68ec05de05f7c4@google.com>
-Subject: [syzbot] WARNING in vmx_queue_exception (2)
-From:   syzbot <syzbot+cfafed3bb76d3e37581b@syzkaller.appspotmail.com>
-To:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        pbonzini@redhat.com, seanjc@google.com,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
-        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Mon, 2 May 2022 07:52:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92534167D4;
+        Mon,  2 May 2022 04:48:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D83461216;
+        Mon,  2 May 2022 11:48:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BA1EC385A4;
+        Mon,  2 May 2022 11:48:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651492129;
+        bh=Q/Dwiz7iDgoIpV/c4fgjsYyhGcgio6QJN9349xFIIes=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LcpF+LDS2Amjh/S9E3y1f4npeLGj9+v6LLbQN6K43SuwbTsU7+htBpA3Hg43E6yHw
+         kZGBYVpM5dZmmCWlPUeAyXMGcCEd38aXCM5JwimdilO7dgoR/RS9Ki8tBscks+Bnmh
+         CFaQd4iQJl9Cay6eC1nQGcEGtY7fUls8wDkVv5Eeco648KrHZb2UZL7vpxwCZCcCe0
+         dPV6bWVqnRel5ReSPpjrmnnRkNUfx1i5h2HuuFxFjSUUwg4AhmC1bzaGLjIFeFCCSm
+         SWyq39aiC4XvbLX2Oou8w6ojJ3XMqFwycdGWHzyn2H5LXIoDotqv1btABjRpRH0Thd
+         Bn0N8pAse3KoQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nlUXn-008PI4-4z; Mon, 02 May 2022 12:48:47 +0100
+Date:   Mon, 02 May 2022 12:48:46 +0100
+Message-ID: <87bkwgi28x.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Thomas Pfaff <tpfaff@pcs.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        <linux-kernel@vger.kernel.org>, <linux-rt-users@vger.kernel.org>
+Subject: Re: [PATCH v3] irq/core: synchronize irq_thread startup
+In-Reply-To: <552fe7b4-9224-b183-bb87-a8f36d335690@pcs.com>
+References: <552fe7b4-9224-b183-bb87-a8f36d335690@pcs.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: tpfaff@pcs.com, tglx@linutronix.de, linux-kernel@vger.kernel.org, linux-rt-users@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,72 +65,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, 02 May 2022 12:28:29 +0100,
+Thomas Pfaff <tpfaff@pcs.com> wrote:
+> 
+> From: Thomas Pfaff <tpfaff@pcs.com>
+> 
+> While running
+> "while /bin/true; do setserial /dev/ttyS0 uart none;
+> setserial /dev/ttyS0 uart 16550A; done"
+> on a kernel with threaded irqs, setserial is hung after some calls.
+> 
+> setserial opens the device, this will install an irq handler if the uart is
+> not none, followed by TIOCGSERIAL and TIOCSSERIAL ioctls.
+> Then the device is closed. On close, synchronize_irq() is called by
+> serial_core.
+> 
+> If the close comes too fast, the irq_thread does not really start,
+> it is terminated immediately without going into irq_thread().
+> But an interrupt might already been handled by
+> irq_default_primary_handler(), going to __irq_wake_thread() and
+> incrementing threads_active.
+> If this happens, synchronize_irq() will hang forever, because the
+> irq_thread is already dead, and threads_active will never be decremented.
+> 
+> The fix is to make sure that the irq_thread is really started
+> during __setup_irq().
+> 
+> Signed-off-by: Thomas Pfaff <tpfaff@pcs.com>
 
-syzbot found the following issue on:
+Reviewed-by: Marc Zyngier <maz@kernel.org>
 
-HEAD commit:    57ae8a492116 Merge tag 'driver-core-5.18-rc5' of git://git..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16d27d72f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d21a72f6016e37e8
-dashboard link: https://syzkaller.appspot.com/bug?extid=cfafed3bb76d3e37581b
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1202b25af00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1386a07af00000
+	M.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+cfafed3bb76d3e37581b@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 2 PID: 3674 at arch/x86/kvm/vmx/vmx.c:1628 vmx_queue_exception+0x3e6/0x450 arch/x86/kvm/vmx/vmx.c:1628
-Modules linked in:
-CPU: 2 PID: 3674 Comm: syz-executor352 Not tainted 5.18.0-rc4-syzkaller-00396-g57ae8a492116 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-RIP: 0010:vmx_queue_exception+0x3e6/0x450 arch/x86/kvm/vmx/vmx.c:1628
-Code: 89 fa 48 c1 ea 03 0f b6 04 02 48 89 fa 83 e2 07 38 d0 7f 04 84 c0 75 6c 44 0f b6 b5 7c 0d 00 00 e9 16 ff ff ff e8 5a 7b 58 00 <0f> 0b e9 87 fd ff ff e8 5e 72 a3 00 e9 b5 fc ff ff e8 54 72 a3 00
-RSP: 0018:ffffc90003017b10 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000080000800 RCX: 0000000000000000
-RDX: ffff88801d230100 RSI: ffffffff811fe996 RDI: 0000000000000003
-RBP: ffff888023464040 R08: 0000000000000000 R09: 0000000000000001
-R10: ffffffff811fe71b R11: 0000000000000000 R12: 0000000000000001
-R13: 00000000fffffffd R14: 0000000000000000 R15: dffffc0000000000
-FS:  0000555555918300(0000) GS:ffff88802cc00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 00000000235cc000 CR4: 0000000000152ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- kvm_inject_exception arch/x86/kvm/x86.c:9339 [inline]
- inject_pending_event+0x592/0x1480 arch/x86/kvm/x86.c:9350
- vcpu_enter_guest arch/x86/kvm/x86.c:10072 [inline]
- vcpu_run arch/x86/kvm/x86.c:10360 [inline]
- kvm_arch_vcpu_ioctl_run+0xff7/0x6680 arch/x86/kvm/x86.c:10561
- kvm_vcpu_ioctl+0x570/0xf30 arch/x86/kvm/../../../virt/kvm/kvm_main.c:3943
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7effdacd6f49
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc580ec718 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007effdacd6f49
-RDX: 0000000000000000 RSI: 000000000000ae80 RDI: 0000000000000005
-RBP: 00007effdac9aa40 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007effdac9aad0
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+-- 
+Without deviation from the norm, progress is not possible.

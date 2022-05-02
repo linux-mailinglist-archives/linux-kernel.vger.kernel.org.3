@@ -2,194 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32BA45171DB
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 16:46:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82FEB5171EC
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 16:48:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385595AbiEBOtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 10:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56896 "EHLO
+        id S1385607AbiEBOvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 10:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385685AbiEBOtR (ORCPT
+        with ESMTP id S1350573AbiEBOvh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 10:49:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B993B766D
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 07:45:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651502745;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=B4pQrxwbMkCLJ5ROt7mPOSwd6NiZcg0UnB/It7+vur8=;
-        b=Emo2+bVJsNMD5NIa/uHZ2TEiWacSZH+3o7UHUc7BMPOHavluFfTvqUNTmgw9c/GHYb86cu
-        rSvhWMBhFULRol/QjwUQu6i9nnkln1hcr++/rWbgYUNJRO86z6yYzKXRgP3+kkmFFUmY3k
-        AC5t5b4TWq3L9F/8CVSJsPBbWfPT7b4=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-325-Yq0OadoIP4OF8pP0OOCN-Q-1; Mon, 02 May 2022 10:45:44 -0400
-X-MC-Unique: Yq0OadoIP4OF8pP0OOCN-Q-1
-Received: by mail-ed1-f70.google.com with SMTP id k13-20020a50ce4d000000b00425e4447e64so8806277edj.22
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 07:45:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=B4pQrxwbMkCLJ5ROt7mPOSwd6NiZcg0UnB/It7+vur8=;
-        b=sfdc7Jv7H05h580umMxNN3AOoOEQi2OflJYlwO7+qIk4hL1hAUuF/6RgDuDNMw1U3r
-         ELHelMbf6PbqfQI7tZ0BJ8VLM53bxv/tC9uoHMJ3QYUPWWwz8xC93HT3cxDu49Rhw0sL
-         n/Xy2GPFzxct22Nc4o8bC4IaL4srhhsWn1s4gS9CbrdZlk0VYGLHb8kVPEw/TssyhU2k
-         D7hITUL7/tbqcfiaEKktAs06DVaDR02qZujMB69pbVZB0af102ZzZQI9uL9J2hy9PH7V
-         FdOBeBUp13eKxSdsK7qy7Pu50p8YmZedjl2OwW3xB3YHFnIKOHdOMRG4wIuQELXvv+4U
-         U9PQ==
-X-Gm-Message-State: AOAM533nhYV4tAZ4IWlLnmuSQWbudrOnw8UYbtTox7jUYcwaJuFhynKA
-        gFbx7zzpCKwm30GLPQCRODOsSCCg9W+KHaSP40xl0plvAHwtVzLUtO6AE2KN4R1ChZL0PHIt+XQ
-        u/w/+XdpzPMNk5SNBqjarIKu6
-X-Received: by 2002:aa7:d416:0:b0:425:f5c7:d633 with SMTP id z22-20020aa7d416000000b00425f5c7d633mr13503786edq.105.1651502743724;
-        Mon, 02 May 2022 07:45:43 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwvSFWfM2G/qAaAHK+B/XTlThC9zby/KRVnSdmSjo6AXVwHq4i/vQblfOGY/9duxKZi86DgHQ==
-X-Received: by 2002:aa7:d416:0:b0:425:f5c7:d633 with SMTP id z22-20020aa7d416000000b00425f5c7d633mr13503769edq.105.1651502743524;
-        Mon, 02 May 2022 07:45:43 -0700 (PDT)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id h21-20020a1709070b1500b006f3ef214e17sm3645444ejl.125.2022.05.02.07.45.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 07:45:42 -0700 (PDT)
-Message-ID: <7609be8e-6331-2b4b-3349-bf300bb6af15@redhat.com>
-Date:   Mon, 2 May 2022 16:45:42 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 4/4] platform/x86: pmc_atom: make the PMC driver actually
- unselectable
-Content-Language: en-US
-To:     Paul Gortmaker <paul.gortmaker@windriver.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-References: <20220428062430.31010-1-paul.gortmaker@windriver.com>
- <20220428062430.31010-5-paul.gortmaker@windriver.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220428062430.31010-5-paul.gortmaker@windriver.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Mon, 2 May 2022 10:51:37 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C067767D;
+        Mon,  2 May 2022 07:48:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1651502847;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=gbCKt3vPpEPi1+UqrESQDFS2PsBWY0AgZ4n3u84ceTg=;
+    b=R3FhLGwbtFMeqs8ilz93/4MwPMXrKXAlBe+xL7aEQyQiOerbUVxo435mE8nhcCEnex
+    z/c3kb4KjhQ15yJRK734bHvZP8aG4+MhQghSXBBFr5SEatYrn44CaYQkTcAIEJrf1nLh
+    8pykVLtx9WeghdhqoVdLE1TWG2V0FRfjkLIaW6PkSPS4xKpx1CwCFDNXruaoXnBBqGad
+    JdC+CTugi4xNW+2go+2p8QLjizaog/qLEuKNi7KmYg0ed5TF/HwrxgAhxDNS2ySmznFy
+    Tj4RMCf5MrklzaZsveNYOWbkVL/LIoYlX08+gEf+iEzn4tn+n3X9JpNX6N2VU2M46yVE
+    /BCg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7gpw91N5y2S3i8V+"
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.42.2 DYNA|AUTH)
+    with ESMTPSA id k708cfy42ElNWek
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Mon, 2 May 2022 16:47:23 +0200 (CEST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH] wl1251: dynamically allocate memory used for DMA
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <CAK8P3a3OiFJiR40FXmCZTc1fMZBteGjXqipDcvZqoO85QBxYow@mail.gmail.com>
+Date:   Mon, 2 May 2022 16:47:22 +0200
+Cc:     Tony Lindgren <tony@atomide.com>, Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Discussions about the Letux Kernel 
+        <letux-kernel@openphoenux.org>, kernel@pyra-handheld.com,
+        linux-omap <linux-omap@vger.kernel.org>,
+        Luca Coelho <luca@coelho.fi>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <123640FA-6AF2-4C0E-A7CC-31DCC4CEA15B@goldelico.com>
+References: <1676021ae8b6d7aada0b1806fed99b1b8359bdc4.1651495112.git.hns@goldelico.com>
+ <CAK8P3a3OiFJiR40FXmCZTc1fMZBteGjXqipDcvZqoO85QBxYow@mail.gmail.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+X-Mailer: Apple Mail (2.3445.104.21)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Arnd,
 
-On 4/28/22 08:24, Paul Gortmaker wrote:
-> This caught my eye when I saw it was def_bool and hence largely
-> pointless to have a Kconfig for it at all.
-> 
-> Yet there is no reason why you shouldn't be able to opt out of Atom
-> platform support if you only care about desktop and server class CPUs.
-> 
-> It was introduced as def_bool, but there is no obvious reason as to why
-> it was forcibly built-in for everyone, other than LPSS implicitly
-> relying on it (which is now fixed).  So here we fix up the Kconfig and
-> open the door for people to opt out.
-> 
-> Since putting "default y" on anything that isn't absolutely essential is
-> generally frowned upon, I made the default be CONFIG_MATOM.  People who
-> use "make oldconfig" or similar won't notice any difference.
-> 
-> The two "unchanged" lines for PCI and COMMON_CLK appear in the diff from
-> fixing a whitespace issue that somehow managed to live on despite being
-> moved between two different Kconfig files since its introduction.
-> 
-> Cc: Aubrey Li <aubrey.li@linux.intel.com>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: Mark Gross <markgross@kernel.org>
-> Cc: platform-driver-x86@vger.kernel.org
-> Signed-off-by: Paul Gortmaker <paul.gortmaker@windriver.com>
-> ---
->  drivers/platform/x86/Kconfig | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
-> index f08ad85683cb..86459e99d831 100644
-> --- a/drivers/platform/x86/Kconfig
-> +++ b/drivers/platform/x86/Kconfig
-> @@ -1163,6 +1163,11 @@ config WINMATE_FM07_KEYS
->  endif # X86_PLATFORM_DEVICES
->  
->  config PMC_ATOM
-> -       def_bool y
-> -       depends on PCI
-> -       select COMMON_CLK
-> +	bool "Intel Atom SOC Power Management Controller driver"
-> +	default MATOM
+> Am 02.05.2022 um 16:06 schrieb Arnd Bergmann <arnd@arndb.de>:
+>=20
+> On Mon, May 2, 2022 at 2:38 PM H. Nikolaus Schaller =
+<hns@goldelico.com> wrote:
+>> With introduction of vmap'ed stacks, stack parameters can no
+>> longer be used for DMA and now leads to kernel panic.
+>>=20
+>> It happens at several places for the wl1251 (e.g. when
+>> accessed through SDIO) making it unuseable on e.g. the
+>> OpenPandora.
+>>=20
+>> We solve this by allocating temporary buffers or use wl1251_read32().
+>=20
+> This looks all correct to me. I had another look at the related wlcore
+> driver now,
+> and see that the same problem existed there but was fixed back in 2012
+> in a different way, see 690142e98826 ("wl12xx: fix DMA-API-related =
+warnings").
 
-Besides the remarks from Andy, this does seem like a weird default,
-MATOM means that gcc is passed -march=atom nothing more and nothing
-less. For a distro kernel which may e.g. set 
-CONFIG_GENERIC_CPU we still want this enabled. But as said it is
-brought in by CONFIG_X86_INTEL_LPSS when that is set. 
+Interesting!
 
-Thinking more about this I think it might be best to just do this
-instead, replacing patch 2 + 4 of this set:
+>=20
+> The approach in the wlcore driver appears to be simpler because it
+> avoids dynamic memory allocation and the associated error handling.
 
-diff --git a/drivers/clk/x86/Makefile b/drivers/clk/x86/Makefile
-index 1244c4e568ff..c2088b3c4081 100644
---- a/drivers/clk/x86/Makefile
-+++ b/drivers/clk/x86/Makefile
-@@ -1,6 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0-only
--obj-$(CONFIG_PMC_ATOM)		+= clk-pmc-atom.o
- obj-$(CONFIG_X86_AMD_PLATFORM_DEVICE)	+= clk-fch.o
--clk-x86-lpss-y			:= clk-lpss-atom.o
--obj-$(CONFIG_X86_INTEL_LPSS)	+= clk-x86-lpss.o
-+obj-$(CONFIG_X86_INTEL_LPSS)	+= clk-lpss-atom.o clk-pmc-atom.o
- obj-$(CONFIG_CLK_LGM_CGU)	+= clk-cgu.o clk-cgu-pll.o clk-lgm.o
-diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
-index f08ad85683cb..85c396a43048 100644
---- a/drivers/platform/x86/Kconfig
-+++ b/drivers/platform/x86/Kconfig
-@@ -1161,8 +1161,3 @@ config WINMATE_FM07_KEYS
- 	  that delivers key events when these buttons are pressed.
- 
- endif # X86_PLATFORM_DEVICES
--
--config PMC_ATOM
--       def_bool y
--       depends on PCI
--       select COMMON_CLK
-diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
-index 4a59f47a46e2..cc2a74713313 100644
---- a/drivers/platform/x86/Makefile
-+++ b/drivers/platform/x86/Makefile
-@@ -126,7 +126,7 @@ obj-$(CONFIG_INTEL_SCU_PCI)		+= intel_scu_pcidrv.o
- obj-$(CONFIG_INTEL_SCU_PLATFORM)	+= intel_scu_pltdrv.o
- obj-$(CONFIG_INTEL_SCU_WDT)		+= intel_scu_wdt.o
- obj-$(CONFIG_INTEL_SCU_IPC_UTIL)	+= intel_scu_ipcutil.o
--obj-$(CONFIG_PMC_ATOM)			+= pmc_atom.o
-+obj-$(CONFIG_X86_INTEL_LPSS)		+= pmc_atom.o
- 
- # Siemens Simatic Industrial PCs
- obj-$(CONFIG_SIEMENS_SIMATIC_IPC)	+= simatic-ipc.o
+It looks as if it just avoids kmalloc/free sequences in event handling
+by allocating a big enough buffer once.
 
+wl1271_cmd_wait_for_event_or_timeout() allocates it like we do now.
 
-This just folds the enabling of the pmc_atom code into the same
-Kconfig option as the one used the the LPSS code, so this actually
-simplify things; while at the same time making it possible to
-not build the pmc_atom code by unselecting the CONFIG_X86_INTEL_LPSS
-option.
+> However, it probably makes another problem worse that also exists
+> here:
+>=20
+> static inline u32 wl1251_read32(struct wl1251 *wl, int addr)
+> {
+>       u32 response;
+>       wl->if_ops->read(wl, addr, &wl->buffer_32, =
+sizeof(wl->buffer_32));
+>       return le32_to_cpu(wl->buffer_32);
+> }
+>=20
+> I think the 'buffer_32' member of 'struct wl1251' needs an explicit
+> '__cacheline_aligned' attribute to avoid potentially clobbering
+> some of the structure during a DMA write.
+>=20
+> I don't know if anyone cares enough about the two drivers to
+> have an opinion. I've added Luca to Cc, but he hasn't maintained
+> the driver since 2013 and probably doesn't.
 
-Regards,
+Well, there seems to be quite some common code but indeed devices
+using these older chips are getting rare so it is probably not worth
+combining code. And testing needs someone who owns boards
+with both chips...
 
-Hans
+>=20
+> It's probably ok to just apply your patch for the moment to fix
+> the regression we saw on the machines that we know use this.
+>=20
+> One more detail:
+>=20
+>> diff --git a/drivers/net/wireless/ti/wl1251/event.c =
+b/drivers/net/wireless/ti/wl1251/event.c
+>> index e6d426edab56b..e945aafd88ee5 100644
+>> --- a/drivers/net/wireless/ti/wl1251/event.c
+>> +++ b/drivers/net/wireless/ti/wl1251/event.c
+>> @@ -169,11 +169,9 @@ int wl1251_event_wait(struct wl1251 *wl, u32 =
+mask, int timeout_ms)
+>>                msleep(1);
+>>=20
+>>                /* read from both event fields */
+>> -               wl1251_mem_read(wl, wl->mbox_ptr[0], &events_vector,
+>> -                               sizeof(events_vector));
+>> +               events_vector =3D wl1251_mem_read32(wl, =
+wl->mbox_ptr[0]);
+>>                event =3D events_vector & mask;
+>> -               wl1251_mem_read(wl, wl->mbox_ptr[1], &events_vector,
+>> -                               sizeof(events_vector));
+>> +               events_vector =3D wl1251_mem_read32(wl, =
+wl->mbox_ptr[1]);
+>>                event |=3D events_vector & mask;
+>=20
+> This appears to change endianness of the data, on big-endian kernels.
+> Is that intentional?
+
+Hm. I didn't think about it. I just noticed that wl1251_mem_read32 uses =
+the
+internal buffer so we don't have to allocate its own buffer any more.
+
+>=20
+> My first guess would be that the driver never worked correctly on =
+big-endian
+> machines, and that the change is indeed correct, but on the other hand
+> the conversion was added in commit ac9e2d9afa90 ("wl1251: convert
+> 32-bit values to le32 before writing to the chip") in a way that =
+suggests it
+> was meant to work on both.
+
+wl1251_event_wait() seems to work with the masks provided by code.
+So I guess the conversion to le32 is harmless on the OpenPandora.
+Most likely it should be done on big endian devices. I.e. we might have
+done the right thing.
+
+Let's see if someone compains or knows more. Otherwise we should
+fix it just for the Pandora and N900 (both omap3 based) as the only
+upstream users of this chip.
+
+BR and thanks,
+Nikolaus
+
 

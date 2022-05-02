@@ -2,152 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65E31516A2C
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 06:51:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABCB7516A2E
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 06:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383272AbiEBEy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 00:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41594 "EHLO
+        id S1383287AbiEBFBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 01:01:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350459AbiEBEy4 (ORCPT
+        with ESMTP id S1346303AbiEBFBV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 00:54:56 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1548713DC6
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 21:51:29 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id i1so5490239plg.7
-        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 21:51:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2tvM/1t2XqsQv5qtt2IQD9gIkDfu8eB+KlKnKPZPDEc=;
-        b=dJbkZMqcwDS95Bfzh5MBlN+4eMMjdo2Iw6nHzJL8yE8QGzSbGsVgX+d5A5aH0PcnTp
-         SXFMPe/GM+mq9/RX6jACraGOz6wSVyhscqR+uo0jGa8K646WGvytO0vY+w7fw9XsWt+w
-         PwVX163mh5IsZvaO9a25hdKovJdFmvSJ+/ax8aqH5TyYIBLbt0VIYWxy2ylsKJs1XXC6
-         lVQlmiU9ZvjZlJth+oRgNsIXhfdmrhNo1supc3PFJFuWCQG7xR0eBjeTkIzGoAtlmFpL
-         DIlx+rQXuIDM6qaxML0/uXZ5FagGwvOLljbZ6RSwNxkSlsxG951HZphHGpDhxkUCkVQO
-         vzLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2tvM/1t2XqsQv5qtt2IQD9gIkDfu8eB+KlKnKPZPDEc=;
-        b=TMS5fVbxbLOOaRcsQ8FEB8oh57DtPB4+Cnjf7DV/tY31Z/sEWrDthIa91iABwivsFV
-         14pJmWsmkmXOnFbk4WFBkNiJvZetgYIM3cc4oSXRAqkAvdlBywxXyrY1ra/8CXAewre/
-         DHxa3FhNAirKhUPgWRXo/50PgXgD4Sx+bmpd6Q86j9n6AmCCrVoJlhvcogPQjW1xc+dD
-         bf10Dkqz/pMf9v9OAI2/Tow/Hpqy6LUethzhs/JBiqlhupxk+SEIIOyvVE0qFIXRqqs3
-         ok/298MbyDQaRtvvFYfvhk6RDJo4+OCxFab5XQsaSkS7JY95O/jwyEw2gKF48B8BGlSN
-         fw8w==
-X-Gm-Message-State: AOAM533yG77Eh+C9wE+sT7FZCgcCp5+3u2mzd9GQoQvRPSlqglJrzaTa
-        PNefq+bE8id7yNM5LGpcxtM=
-X-Google-Smtp-Source: ABdhPJywG0PfuTkOuyhpd8EQideyvT73rVZnVt88Bs7aJseLJ6MKXTMD+Ub81AsROmDTN2J8zNghdg==
-X-Received: by 2002:a17:902:d4c2:b0:15e:aec8:6a6e with SMTP id o2-20020a170902d4c200b0015eaec86a6emr131302plg.57.1651467088366;
-        Sun, 01 May 2022 21:51:28 -0700 (PDT)
-Received: from localhost.localdomain ([2001:e60:9053:cb2b:2141:650c:835f:37fb])
-        by smtp.gmail.com with ESMTPSA id n14-20020a17090ac68e00b001d9e3b0e10fsm16521950pjt.16.2022.05.01.21.51.15
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 01 May 2022 21:51:28 -0700 (PDT)
-From:   Levi Yun <ppbuk5246@gmail.com>
-To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        naveen.n.rao@linux.ibm.com, davem@davemloft.net,
-        mhiramat@kernel.org, rostedt@goodmis.org,
-        yun.wang@linux.alibaba.com
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Levi Yun <ppbuk5246@gmail.com>
-Subject: [PATCH] kprobe: sync issue's on ftraced-kprobe.
-Date:   Mon,  2 May 2022 13:51:02 +0900
-Message-Id: <20220502045102.40005-1-ppbuk5246@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 2 May 2022 01:01:21 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F9F58E4E;
+        Sun,  1 May 2022 21:57:54 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E8691210E1;
+        Mon,  2 May 2022 04:57:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1651467472; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=VjyD08gDOYWy1q/rpusK4veIP/i1qsv19rrIqO0F3Hk=;
+        b=M3vMTpud8eW0VE2Pb9OVoKUtuCEZn5Pnz49HmvxriDhkcSpbjykyFK4QW+hXwBXWRIolbz
+        IZjKeERyf3ueLNWiGD5S5/xNaTBdVBzMEiB5D6D8znjEtC28TfRbq6+q49KtfA3DNh12Tz
+        QqW6wbyJkvTJmXqG3D04Q2GXYrQiLVE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1651467472;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=VjyD08gDOYWy1q/rpusK4veIP/i1qsv19rrIqO0F3Hk=;
+        b=tKXvdWdITEUp4ffkEbhK+3ZplXSemTpcgCIjcPJVxpaHLuvcBOlm4NCy5ePfJ3NDr9Jgvd
+        PLvTlLLjAyEGzWBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 38EB713491;
+        Mon,  2 May 2022 04:57:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id yT96Nc1kb2JZRAAAMHmgww
+        (envelope-from <neilb@suse.de>); Mon, 02 May 2022 04:57:49 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Miaohe Lin" <linmiaohe@huawei.com>
+Cc:     "Andrew Morton" <akpm@linux-foundation.org>,
+        "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        "Christoph Hellwig" <hch@lst.de>, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MM: handle THP in swap_*page_fs() - count_vm_events()
+Date:   Mon, 02 May 2022 14:57:46 +1000
+Message-id: <165146746627.24404.2324091720943354711@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In kprobe_ftrace_handler, it accesses get kporbe without kprobe_mutex
-held.
 
-This makes some of synchronizing issue when we use kprobe API in
-kernel-module.
+We need to use count_swpout_vm_event() for sio_write_complete() and
+sio_read_complete(), to get correct counting.
 
-Below is what i experienced:
+This patch should be squased into
+    MM: handle THP in swap_*page_fs()
 
-CPU 0									CPU 1
-<...>									<In module code>
-kprobe_ftrace_handler
-    get_kprobe
-        __this_cpu_write
-									unregister_kprobe
-									unload_module
-						<			kprobe memory gone>
-	p->pre_handler <access invalid memory>
-	page_fault
-		kprobe_fault_handler
-			(In here, kprobe memory gone,
-			 double page fault is happening inifinie).
-
-Signed-off-by: Levi Yun <ppbuk5246@gmail.com>
+Reported-by: Miaohe Lin <linmiaohe@huawei.com>
+Signed-off-by: NeilBrown <neilb@suse.de>
 ---
- arch/x86/kernel/kprobes/ftrace.c | 3 +++
- include/linux/kprobes.h          | 2 ++
- kernel/kprobes.c                 | 2 +-
- 3 files changed, 6 insertions(+), 1 deletion(-)
+ mm/page_io.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/kernel/kprobes/ftrace.c b/arch/x86/kernel/kprobes/ftrace.c
-index dd2ec14adb77..76147ff6ed88 100644
---- a/arch/x86/kernel/kprobes/ftrace.c
-+++ b/arch/x86/kernel/kprobes/ftrace.c
-@@ -25,6 +25,7 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
- 	if (bit < 0)
- 		return;
- 
-+	mutex_lock(&kprobe_mutex);
- 	p = get_kprobe((kprobe_opcode_t *)ip);
- 	if (unlikely(!p) || kprobe_disabled(p))
- 		goto out;
-@@ -57,7 +58,9 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
- 		 */
- 		__this_cpu_write(current_kprobe, NULL);
- 	}
-+
- out:
-+	mutex_unlock(&kprobe_mutex);
- 	ftrace_test_recursion_unlock(bit);
- }
- NOKPROBE_SYMBOL(kprobe_ftrace_handler);
-diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
-index 157168769fc2..4a18147ff6d6 100644
---- a/include/linux/kprobes.h
-+++ b/include/linux/kprobes.h
-@@ -191,6 +191,8 @@ struct kprobe_blacklist_entry {
- DECLARE_PER_CPU(struct kprobe *, current_kprobe);
- DECLARE_PER_CPU(struct kprobe_ctlblk, kprobe_ctlblk);
- 
-+extern struct mutex kprobe_mutex;
-+
- extern void kprobe_busy_begin(void);
- extern void kprobe_busy_end(void);
- 
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index dd58c0be9ce2..b65f055b6fa2 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -64,7 +64,7 @@ static struct hlist_head kprobe_table[KPROBE_TABLE_SIZE];
- static bool kprobes_all_disarmed;
- 
- /* This protects 'kprobe_table' and 'optimizing_list' */
--static DEFINE_MUTEX(kprobe_mutex);
-+DEFINE_MUTEX(kprobe_mutex);
- static DEFINE_PER_CPU(struct kprobe *, kprobe_instance);
- 
- kprobe_opcode_t * __weak kprobe_lookup_name(const char *name,
--- 
-2.35.1
+diff --git a/mm/page_io.c b/mm/page_io.c
+index d636a3531cad..3e2e9029ce50 100644
+--- a/mm/page_io.c
++++ b/mm/page_io.c
+@@ -280,8 +280,10 @@ static void sio_write_complete(struct kiocb *iocb, long =
+ret)
+ 			set_page_dirty(page);
+ 			ClearPageReclaim(page);
+ 		}
+-	} else
+-		count_vm_events(PSWPOUT, sio->pages);
++	} else {
++		for (p =3D 0; p < sio->pages; p++)
++			count_swpout_vm_event(sio->bvec[p].bv_page);
++	}
+=20
+ 	for (p =3D 0; p < sio->pages; p++)
+ 		end_page_writeback(sio->bvec[p].bv_page);
+@@ -390,9 +392,9 @@ static void sio_read_complete(struct kiocb *iocb, long re=
+t)
+ 			struct page *page =3D sio->bvec[p].bv_page;
+=20
+ 			SetPageUptodate(page);
++			count_swpout_vm_event(page);
+ 			unlock_page(page);
+ 		}
+-		count_vm_events(PSWPIN, sio->pages);
+ 	} else {
+ 		for (p =3D 0; p < sio->pages; p++) {
+ 			struct page *page =3D sio->bvec[p].bv_page;
+--=20
+2.36.0
 

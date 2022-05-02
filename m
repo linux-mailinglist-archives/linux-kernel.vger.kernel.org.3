@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE3D251760B
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 19:41:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C39517603
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 19:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386662AbiEBRoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 13:44:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46818 "EHLO
+        id S1348652AbiEBRof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 13:44:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244279AbiEBRob (ORCPT
+        with ESMTP id S244303AbiEBRob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 2 May 2022 13:44:31 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8029E2BC4
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 10:41:00 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id j6so29055831ejc.13
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 10:41:00 -0700 (PDT)
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1682A1176
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 10:41:02 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id dk23so29084744ejb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 10:41:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=1W5zUO25QYJDYm48XI9iv2r7F+nu9wTwCVMIXiaenyo=;
-        b=kMOGIerUlb3HpXuBAaw/lID827I31KbK2l9E10nZIUvHPPXSq9JEg+darQjC98n5oF
-         R+t4Jx9tf3GFAsnPR8OUACLd+44Oubm7Vfa982KmngRIgGq0baPLO2gQOuXIL9YqCaUO
-         5xJxzSQ2vbVlnytaVEe7RD+xxXfB6d0f4tGCr3aKyTEqEeofrlM1vvsxazJ6fuvUbskk
-         Cb+mi1OIulzayDjzjV5RFyEzGkzcSmTxqgiKNlixrOyQpQhQG1E1S/RmaKdqa5otyPAh
-         oG+L6isfO5+XujQlkgqcyEvPMD1SMRyjUtVGFh4PkDEGj5e0OP1jDkNPF814Fms+/Hl0
-         2QIg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=UkkhaokilCoJ0QaueTDdKBuZpYOWRWhVaZ7JrjJkA3o=;
+        b=BktsFjJdGmJoDTHt7Qxdi86FPqzMC+UYkC6iUWwzusIikkuUtffdC7m7laQTaRbRzr
+         IGsoGkeQcChOvf+/0+ihUrMEIvjd/NXR/dhG1EjS9dfGaJN2X9WPvZnvAPFwiPUMe/3w
+         A+avpsxkYoYetcijXjQJ7E/k1pGUhj70wm7aj3lDMlbwoETOR1HR+tOKrPSV226cog7g
+         DNzqKU0Q0987Y+ckPspG91c4sTyn261lMXxTvG5JO/YlU5Jyca2FOAp8Hbl/g7BRZHn6
+         jmgGjqdWBxNRZarb5XXzbdoBi4tccgk1ISBtgg417h4DaD4v3DKfgPRrsVrbko3bGDxS
+         sJQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=1W5zUO25QYJDYm48XI9iv2r7F+nu9wTwCVMIXiaenyo=;
-        b=ZpZvmIRf1FWmg+hyKxEiDaBPkTRf4186+HPFmKKwxkeJ/MYjOaKM2cMV038DI+WrMJ
-         AR3fFuM3lBbjTndtilwY3ep1ORtbQIizwn3/pHLZZ8Gkv5JqVx4mDpFJqxUXdr4Pagze
-         BuuMdvTYg43qRDnMkq18eQCTaSOKWVzZtJlY+oVKhBBkIy3u7c9DpWmF8RWwfBNIeA79
-         6zBUtXeu5glawom1xr42IPZf1Ll5CSjYxPD+7PL+oPcoaHan6NVHZSuHI3o2MeSonmU8
-         wJ0qE84yExPS+hS+GYFkrJ45VS68/JwzHZqbOqdbJrRztJ4zY7YTu8rAX8tBwYlG+kX3
-         PU8A==
-X-Gm-Message-State: AOAM5311EKjeA01yF2vjdTcjDT/2r5Y0zbaVvJdMeYbN7++iGjoLv7l2
-        AT4PSfsSEcxgfX8plixDdiUWVg==
-X-Google-Smtp-Source: ABdhPJxuf2r3ulY9Xs12BKmEwrFywSFpVtuRQmD/odAKd+JmlEVobu4mcdYLNjSZBcwrV7m06rY5iw==
-X-Received: by 2002:a17:907:d09:b0:6e8:3eef:3192 with SMTP id gn9-20020a1709070d0900b006e83eef3192mr11913430ejc.122.1651513259100;
-        Mon, 02 May 2022 10:40:59 -0700 (PDT)
+        bh=UkkhaokilCoJ0QaueTDdKBuZpYOWRWhVaZ7JrjJkA3o=;
+        b=VapJ8XdLFLyWA+6yjL8sBgA6AYE/aY6XjD7Tm1TdnCqdvo/PSeysccL27oVSS56S+N
+         3AJCrv6/phZ0NUcgzY06B+jSBXBIeVOjKVXU1QWb/odoEmv9DqhFRtjzHE/ELAl0K0On
+         LewIUXxaWX9XVEPzeIQB7zQhvCB8AzUdcZ52qyGdB8VHktxW+7RIpXRRR6T8zvIGA2QB
+         RVMM1GIX3bcFkzmNrBSOX2NxHDoc4bKK0K495gAfvQ4RUhnxK9pt13LQ7HaAmRGqZAqQ
+         Qhm58PSj0Pn57itGN5WmMyB7qAnCHBJBkuQhv3DRok+6/Cue3OxHSEMlZbZXLNfA7fv3
+         8asQ==
+X-Gm-Message-State: AOAM5329RhK+2IuGr+PDAESaH/PMkhm8syAJn3Jf89jidNhTOhXOtbIA
+        PhuGKyQNXfozNSGGZZxlDE5csw==
+X-Google-Smtp-Source: ABdhPJxs3JqFEQJiL9TsyibqF6kFQ7Za9DgvTtPT5avNOut+DvmuByM4d/56w4gRGV+UiudPoiMWFQ==
+X-Received: by 2002:a17:906:6a0d:b0:6f3:b341:3b94 with SMTP id qw13-20020a1709066a0d00b006f3b3413b94mr12140446ejc.31.1651513260401;
+        Mon, 02 May 2022 10:41:00 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id n9-20020aa7c689000000b0042617ba639csm6908547edq.38.2022.05.02.10.40.58
+        by smtp.gmail.com with ESMTPSA id n9-20020aa7c689000000b0042617ba639csm6908547edq.38.2022.05.02.10.40.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 10:40:58 -0700 (PDT)
+        Mon, 02 May 2022 10:40:59 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Andy Gross <agross@kernel.org>,
@@ -59,9 +59,10 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/4] dt-bindings: interconnect: qcom,sdm845-cpu-bwmon: add BWMON device
-Date:   Mon,  2 May 2022 19:40:43 +0200
-Message-Id: <20220502174046.139234-2-krzysztof.kozlowski@linaro.org>
+Cc:     Thara Gopinath <thara.gopinath@linaro.org>
+Subject: [PATCH 2/4] opp: Add apis to retrieve opps with interconnect bandwidth
+Date:   Mon,  2 May 2022 19:40:44 +0200
+Message-Id: <20220502174046.139234-3-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220502174046.139234-1-krzysztof.kozlowski@linaro.org>
 References: <20220502174046.139234-1-krzysztof.kozlowski@linaro.org>
@@ -77,128 +78,187 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bindings for the Qualcomm Bandwidth Monitor device providing
-performance data on interconnects.  The bindings describe only BWMON
-version 4, e.g. the instance on SDM845 between CPU and Last Level Cache
-Controller.
+Add dev_pm_opp_find_bw_ceil and dev_pm_opp_find_bw_floor to retrieve opps
+based on interconnect associated with the opp and bandwidth. The index
+variable is the index of the interconnect as specified in the opp table
+in Devicetree.
 
+Co-developed-by: Thara Gopinath <thara.gopinath@linaro.org>
+Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../interconnect/qcom,sdm845-cpu-bwmon.yaml   | 105 ++++++++++++++++++
- 1 file changed, 105 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml
+ drivers/opp/core.c     | 120 +++++++++++++++++++++++++++++++++++++++++
+ include/linux/pm_opp.h |  19 +++++++
+ 2 files changed, 139 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml
-new file mode 100644
-index 000000000000..c9b68ca87548
---- /dev/null
-+++ b/Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml
-@@ -0,0 +1,105 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/interconnect/qcom,sdm845-cpu-bwmon.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 2945f3c1ce09..8125342cee2f 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -729,6 +729,126 @@ struct dev_pm_opp *dev_pm_opp_find_freq_ceil_by_volt(struct device *dev,
+ }
+ EXPORT_SYMBOL_GPL(dev_pm_opp_find_freq_ceil_by_volt);
+ 
++/**
++ * dev_pm_opp_find_bw_ceil() - Search for a rounded ceil bandwidth
++ * @dev:	device for which we do this operation
++ * @freq:	start bandwidth
++ * @index:	which bandwidth to compare, in case of OPPs with several values
++ *
++ * Search for the matching floor *available* OPP from a starting bandwidth
++ * for a device.
++ *
++ * Return: matching *opp and refreshes *bw accordingly, else returns
++ * ERR_PTR in case of error and should be handled using IS_ERR. Error return
++ * values can be:
++ * EINVAL:	for bad pointer
++ * ERANGE:	no match found for search
++ * ENODEV:	if device not found in list of registered devices
++ *
++ * The callers are required to call dev_pm_opp_put() for the returned OPP after
++ * use.
++ */
++struct dev_pm_opp *dev_pm_opp_find_bw_ceil(struct device *dev,
++					   unsigned int *bw, int index)
++{
++	struct opp_table *opp_table;
++	struct dev_pm_opp *temp_opp, *opp = ERR_PTR(-ERANGE);
 +
-+title: Qualcomm Interconnect Bandwidth Monitor
++	if (!dev || !bw) {
++		dev_err(dev, "%s: Invalid argument bw=%p\n", __func__, bw);
++		return ERR_PTR(-EINVAL);
++	}
 +
-+maintainers:
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
++	opp_table = _find_opp_table(dev);
++	if (IS_ERR(opp_table))
++		return ERR_CAST(opp_table);
 +
-+description:
-+  Bandwidth Monitor measures current throughput on buses between various NoC
-+  fabrics and provides information when it crosses configured thresholds.
++	if (index >= opp_table->path_count)
++		return ERR_PTR(-EINVAL);
 +
-+properties:
-+  compatible:
-+    enum:
-+      - qcom,sdm845-cpu-bwmon       # BWMON v4
++	mutex_lock(&opp_table->lock);
 +
-+  interconnects:
-+    maxItems: 2
++	list_for_each_entry(temp_opp, &opp_table->opp_list, node) {
++		if (temp_opp->available && temp_opp->bandwidth) {
++			if (temp_opp->bandwidth[index].peak >= *bw) {
++				opp = temp_opp;
++				*bw = opp->bandwidth[index].peak;
 +
-+  interconnect-names:
-+    items:
-+      - const: ddr
-+      - const: l3c
++				/* Increment the reference count of OPP */
++				dev_pm_opp_get(opp);
++				break;
++			}
++		}
++	}
 +
-+  interrupts:
-+    maxItems: 1
++	mutex_unlock(&opp_table->lock);
++	dev_pm_opp_put_opp_table(opp_table);
 +
-+  operating-points-v2: true
-+  opp-table: true
++	return opp;
++}
++EXPORT_SYMBOL_GPL(dev_pm_opp_find_bw_ceil);
 +
-+  reg:
-+    # Currently described BWMON v4 and v5 use one register address space.
-+    # BWMON v2 uses two register spaces - not yet described.
-+    maxItems: 1
++/**
++ * dev_pm_opp_find_bw_floor() - Search for a rounded floor bandwidth
++ * @dev:	device for which we do this operation
++ * @freq:	start bandwidth
++ * @index:	which bandwidth to compare, in case of OPPs with several values
++ *
++ * Search for the matching floor *available* OPP from a starting bandwidth
++ * for a device.
++ *
++ * Return: matching *opp and refreshes *bw accordingly, else returns
++ * ERR_PTR in case of error and should be handled using IS_ERR. Error return
++ * values can be:
++ * EINVAL:	for bad pointer
++ * ERANGE:	no match found for search
++ * ENODEV:	if device not found in list of registered devices
++ *
++ * The callers are required to call dev_pm_opp_put() for the returned OPP after
++ * use.
++ */
++struct dev_pm_opp *dev_pm_opp_find_bw_floor(struct device *dev,
++					    unsigned int *bw, int index)
++{
++	struct opp_table *opp_table;
++	struct dev_pm_opp *temp_opp, *opp = ERR_PTR(-ERANGE);
 +
-+required:
-+  - compatible
-+  - interconnects
-+  - interconnect-names
-+  - interrupts
-+  - operating-points-v2
-+  - opp-table
-+  - reg
++	if (!dev || !bw) {
++		dev_err(dev, "%s: Invalid argument bw=%p\n", __func__, bw);
++		return ERR_PTR(-EINVAL);
++	}
 +
-+additionalProperties: false
++	opp_table = _find_opp_table(dev);
++	if (IS_ERR(opp_table))
++		return ERR_CAST(opp_table);
 +
-+examples:
-+  - |
-+    #include <dt-bindings/interconnect/qcom,osm-l3.h>
-+    #include <dt-bindings/interconnect/qcom,sdm845.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
++	if (index >= opp_table->path_count)
++		return ERR_PTR(-EINVAL);
 +
-+    pmu@1436400 {
-+        compatible = "qcom,sdm845-cpu-bwmon";
-+        reg = <0x01436400 0x600>;
++	mutex_lock(&opp_table->lock);
 +
-+        interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
++	list_for_each_entry(temp_opp, &opp_table->opp_list, node) {
++		if (temp_opp->available && temp_opp->bandwidth) {
++			/* go to the next node, before choosing prev */
++			if (temp_opp->bandwidth[index].peak > *bw)
++				break;
++			opp = temp_opp;
++		}
++	}
 +
-+        interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
-+                        <&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-+        interconnect-names = "ddr", "l3c";
++	/* Increment the reference count of OPP */
++	if (!IS_ERR(opp))
++		dev_pm_opp_get(opp);
++	mutex_unlock(&opp_table->lock);
++	dev_pm_opp_put_opp_table(opp_table);
 +
-+        operating-points-v2 = <&cpu_bwmon_opp_table>;
++	if (!IS_ERR(opp))
++		*bw = opp->bandwidth[index].peak;
 +
-+        cpu_bwmon_opp_table: opp-table {
-+            compatible = "operating-points-v2";
++	return opp;
++}
++EXPORT_SYMBOL_GPL(dev_pm_opp_find_bw_floor);
 +
-+            opp-0 {
-+                opp-peak-kBps = <800000 4800000>;
-+                opp-avg-kBps = <800000 4800000>;
-+            };
-+            opp-1 {
-+                opp-peak-kBps = <1804000 9216000>;
-+                opp-avg-kBps = <1804000 9216000>;
-+            };
-+            opp-2 {
-+                opp-peak-kBps = <2188000 11980800>;
-+                opp-avg-kBps = <2188000 11980800>;
-+            };
-+            opp-3 {
-+                opp-peak-kBps = <3072000 15052800>;
-+                opp-avg-kBps = <3072000 15052800>;
-+            };
-+            opp-4 {
-+                opp-peak-kBps = <4068000 19353600>;
-+                opp-avg-kBps = <4068000 19353600>;
-+            };
-+            opp-5 {
-+                opp-peak-kBps = <5412000 20889600>;
-+                opp-avg-kBps = <5412000 20889600>;
-+            };
-+            opp-6 {
-+                opp-peak-kBps = <6220000 22425600>;
-+                opp-avg-kBps = <6220000 22425600>;
-+            };
-+            opp-7 {
-+                opp-peak-kBps = <7216000 25497600>;
-+                opp-avg-kBps = <7216000 25497600>;
-+            };
-+        };
-+    };
+ static int _set_opp_voltage(struct device *dev, struct regulator *reg,
+ 			    struct dev_pm_opp_supply *supply)
+ {
+diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
+index 0d85a63a1f78..dcea178868c9 100644
+--- a/include/linux/pm_opp.h
++++ b/include/linux/pm_opp.h
+@@ -129,6 +129,13 @@ struct dev_pm_opp *dev_pm_opp_find_freq_ceil_by_volt(struct device *dev,
+ 
+ struct dev_pm_opp *dev_pm_opp_find_freq_ceil(struct device *dev,
+ 					     unsigned long *freq);
++
++struct dev_pm_opp *dev_pm_opp_find_bw_ceil(struct device *dev,
++					   unsigned int *bw, int index);
++
++struct dev_pm_opp *dev_pm_opp_find_bw_floor(struct device *dev,
++					   unsigned int *bw, int index);
++
+ void dev_pm_opp_put(struct dev_pm_opp *opp);
+ 
+ int dev_pm_opp_add(struct device *dev, unsigned long freq,
+@@ -279,6 +286,18 @@ static inline struct dev_pm_opp *dev_pm_opp_find_freq_ceil(struct device *dev,
+ 	return ERR_PTR(-EOPNOTSUPP);
+ }
+ 
++static inline struct dev_pm_opp *dev_pm_opp_find_bw_ceil(struct device *dev,
++					unsigned int *bw, int index)
++{
++	return ERR_PTR(-EOPNOTSUPP);
++}
++
++static inline struct dev_pm_opp *dev_pm_opp_find_bw_floor(struct device *dev,
++					unsigned int *bw, int index)
++{
++	return ERR_PTR(-EOPNOTSUPP);
++}
++
+ static inline void dev_pm_opp_put(struct dev_pm_opp *opp) {}
+ 
+ static inline int dev_pm_opp_add(struct device *dev, unsigned long freq,
 -- 
 2.32.0
 

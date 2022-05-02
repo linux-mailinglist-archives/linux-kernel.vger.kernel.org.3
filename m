@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A2C4516E9C
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 13:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4918D516E9D
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 13:13:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233926AbiEBLQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 07:16:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55908 "EHLO
+        id S1350637AbiEBLQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 07:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232127AbiEBLQV (ORCPT
+        with ESMTP id S231997AbiEBLQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 07:16:21 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857755FFA
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 04:12:53 -0700 (PDT)
+        Mon, 2 May 2022 07:16:24 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A8626D1
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 04:12:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=9HmtpnMy2TgReU4YIb75qrQVXcE+pFVlRmoqNCAWKJk=; b=Pp9iFkHJznwCUWPc1IoxBkJ0sQ
-        YgXkBDD+AlFX/WN9vrgRWofwabPVgdWtUBzvNmNcOxqiKhQZFTLciuX3THbHKmPn9/yeymD0uDlTK
-        7MQorIHjc834/sj0eMV53L2Nu/OGu+kSaA157AwrSTLwmx06G7SemRB+rpvH2ChuLK3XOGAUU3jMp
-        1In2sjbETeG4QzYR3/a9A4yAQwtSKi4bOMRnzksuZT4UM55bp644zo2ru8oX3UiE/PV38aAATFvl2
-        tTh7WsGrtdeXgvwaStpe2yFBxltF/OjTXeH2xNcYk+65iwq8mxNUMIeSUttiCN/oneQp211jZkras
-        q2TWjGmw==;
+        bh=IboLsRTGfsW5mAOfgWVbq8NTNwIsQlJU0nFRW/NtXfE=; b=U5qiIMSOIeVcTRivs/9mkXqVeO
+        EorD5rMULKDErza5ssoI6BlhhuZrIs2tyXBh2ClHsEqYyhRDrTxFPz6h+zVW+wIaKk6cqoffQ2HOZ
+        3iMy/z8Yu9RzcSmAPXDz+gjDJcKH8nwhUbFUj/u5bz2gNmMDs5Jk71Gsi0rWkMZ3lPFZq7oMNquek
+        XG8qVSFuwWwR2So/JF2x+qx1aL8+mw8Ld6g8MXI0gr/5xKz6gfYsc6ZkOZV0dem5xjD3kQi0bp94L
+        PcJ1gnUy/28e44sVh4v1DraANswz1A1X7DH5/i5bHLNDstPfI7cQtpyGYqiFKTcvDqqScZK0saRhH
+        HPuuKfyA==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nlTyn-00ARA8-Ln; Mon, 02 May 2022 11:12:39 +0000
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nlTyn-00ElGQ-O4; Mon, 02 May 2022 11:12:38 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3A9423004B5;
-        Mon,  2 May 2022 13:12:34 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3876030047E;
+        Mon,  2 May 2022 13:12:35 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id E014420288D08; Mon,  2 May 2022 13:12:34 +0200 (CEST)
-Message-ID: <20220502111216.290518605@infradead.org>
+        id E2ECF20288D0D; Mon,  2 May 2022 13:12:34 +0200 (CEST)
+Message-ID: <20220502111216.350926848@infradead.org>
 User-Agent: quilt/0.66
-Date:   Mon, 02 May 2022 13:07:43 +0200
+Date:   Mon, 02 May 2022 13:07:44 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     x86@kernel.org, jpoimboe@redhat.com
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         elver@google.com, jbaron@akamai.com, rostedt@goodmis.org,
         ardb@kernel.org, kernel test robot <lkp@intel.com>
-Subject: [PATCH 2/3] x86/cpu: Elide KCSAN for cpu_has() and friends
+Subject: [PATCH 3/3] jump_label,noinstr: Avoid instrumentation for JUMP_LABEL=n builds
 References: <20220502110741.951055904@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,27 +58,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vmlinux.o: warning: objtool: enter_from_user_mode+0x24: call to __kcsan_check_access() leaves .noinstr.text section
-vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x28: call to __kcsan_check_access() leaves .noinstr.text section
-vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x24: call to __kcsan_check_access() leaves .noinstr.text section
-vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x24: call to __kcsan_check_access() leaves .noinstr.text section
+When building x86_64 with JUMP_LABEL=n it's possible for
+instrumentation to sneak into noinstr:
+
+vmlinux.o: warning: objtool: exit_to_user_mode+0x14: call to static_key_count.constprop.0() leaves .noinstr.text section
+vmlinux.o: warning: objtool: syscall_exit_to_user_mode+0x2d: call to static_key_count.constprop.0() leaves .noinstr.text section
+vmlinux.o: warning: objtool: irqentry_exit_to_user_mode+0x1b: call to static_key_count.constprop.0() leaves .noinstr.text section
 
 Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/x86/include/asm/cpufeature.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/jump_label.h |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/arch/x86/include/asm/cpufeature.h
-+++ b/arch/x86/include/asm/cpufeature.h
-@@ -51,7 +51,7 @@ extern const char * const x86_power_flag
- extern const char * const x86_bug_flags[NBUGINTS*32];
+--- a/include/linux/jump_label.h
++++ b/include/linux/jump_label.h
+@@ -256,9 +256,9 @@ extern void static_key_disable_cpuslocke
+ #include <linux/atomic.h>
+ #include <linux/bug.h>
  
- #define test_cpu_cap(c, bit)						\
--	 test_bit(bit, (unsigned long *)((c)->x86_capability))
-+	 arch_test_bit(bit, (unsigned long *)((c)->x86_capability))
+-static inline int static_key_count(struct static_key *key)
++static __always_inline int static_key_count(struct static_key *key)
+ {
+-	return atomic_read(&key->enabled);
++	return READ_ONCE_NOCHECK(&key->enabled.count);
+ }
  
- /*
-  * There are 32 bits/features in each mask word.  The high bits
+ static __always_inline void jump_label_init(void)
 
 

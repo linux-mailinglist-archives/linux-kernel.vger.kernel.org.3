@@ -2,88 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC04517930
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 23:35:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF10517927
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 23:32:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387755AbiEBVjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 17:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35608 "EHLO
+        id S1387679AbiEBVfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 17:35:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387727AbiEBVjD (ORCPT
+        with ESMTP id S239512AbiEBVfw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 17:39:03 -0400
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E728564D6;
-        Mon,  2 May 2022 14:35:33 -0700 (PDT)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-e9027efe6aso15505227fac.10;
-        Mon, 02 May 2022 14:35:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NT3TCOHAgj+vdyt2sEgp7l3FsjbmObj02EKHyM2g53k=;
-        b=K3X14Ia8+PYsae57kHz1c4CtmWvE/7KuGZNpCzxDa0x4Y8jmL3R7Bd0wSAcsZcO3qj
-         68ygmRvb5xf89QekgX8wQ1r+IuiGgubrU1ZaerPcWIRsauzQ88AFXfjDzCcJQ+oU9i9Z
-         qB0+sZDyigrBqh5vnwtNYnAr6FZzGQEtamiYShhsUF1B3/LkWw1UHtbccDLBNQJk2jjX
-         dyxbZI14g35kN3OfB+FQZ1kGLwipH2t43doeTWwOJ3QmSV+G99E2ssWcNQJ7G5+hJUoU
-         Rzr8ondXC/rWE5JF4RRuM2x/7rhDXHWR3YMqO3yNDpHnzGV2cKseLB6QynKRrz6bq+bO
-         O5TQ==
-X-Gm-Message-State: AOAM5307AqEEJeHBjQHVWztJKOOf88NFOR/TO71OTvsip99K4PilAKWp
-        jNXdmqYtpGMsNXrA0Fp0ag==
-X-Google-Smtp-Source: ABdhPJylq3vUy3dAJvMPmpgnVj4BH7chXBbaFIQei9aSlly/yv1cZ/9zNHEEasLZ4ywd53cUfQWseQ==
-X-Received: by 2002:a05:6870:648d:b0:ec:b32d:3e1b with SMTP id cz13-20020a056870648d00b000ecb32d3e1bmr509121oab.283.1651527333236;
-        Mon, 02 May 2022 14:35:33 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w5-20020a9d70c5000000b0060603221268sm3260916otj.56.2022.05.02.14.35.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 14:35:32 -0700 (PDT)
-Received: (nullmailer pid 1799513 invoked by uid 1000);
-        Mon, 02 May 2022 21:35:31 -0000
-Date:   Mon, 2 May 2022 16:35:31 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     icenowy@outlook.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Icenowy Zheng <icenowy@aosc.io>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 09/12] dt-bindings: arm: sunxi: add compatible strings
- for Sipeed MaixSense
-Message-ID: <YnBOoxkKdKLwErxY@robh.at.kernel.org>
-References: <20220422140902.1058101-1-icenowy@aosc.io>
- <BYAPR20MB24723FAF3BE29BB7CD8341CCBCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+        Mon, 2 May 2022 17:35:52 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F52E09E
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 14:32:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651527143; x=1683063143;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=G0FF9i1jLHjZ/yzasx+agtmTQl9xoAQw3ixOJN2ci8o=;
+  b=dz7We7e+kF/k31RFE3cuiz4z2jAyl+enLi/JHSTbhc6Psyiw9m80sx+O
+   HoCpmCrdJdCJAaPdB2NhhOxB5YpFbf4yuM0HKEOIHEwbgXm9XpIq68vub
+   L8ZpYBhGOaDIF4XPAo6r5TG/BVWvwrQnxTHlcHXy8UEeOEpWgdIMMLoWg
+   phtDGyUz9eOvWDjwe0QFMTSJnknHyTKH4sFfR4+W8gcRnqCUbW49jWfFH
+   TJqKlDIprExlNAln8diHsOkcAwPh4vzPBxqxnRWRxjerY6fbC9kVJjTQt
+   6GaktZ3hpQQvmAoOQglCrtPf6C++u3/TpnWKaCkwMe3187PNHTyTtil83
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="353769373"
+X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
+   d="scan'208";a="353769373"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 14:32:23 -0700
+X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
+   d="scan'208";a="652997307"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 14:32:22 -0700
+Date:   Mon, 2 May 2022 14:36:03 -0700
+From:   Jacob Pan <jacob.jun.pan@intel.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
+        "Alex Williamson" <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        <iommu@lists.linux-foundation.org>, <linux-kernel@vger.kernel.org>,
+        jacob.jun.pan@intel.com
+Subject: Re: [PATCH 4/5] iommu/vt-d: Remove domain_update_iommu_snooping()
+Message-ID: <20220502143603.4143dd66@jacob-builder>
+In-Reply-To: <20220501112434.874236-5-baolu.lu@linux.intel.com>
+References: <20220501112434.874236-1-baolu.lu@linux.intel.com>
+        <20220501112434.874236-5-baolu.lu@linux.intel.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR20MB24723FAF3BE29BB7CD8341CCBCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Apr 2022 23:41:12 +0800, icenowy@outlook.com wrote:
-> From: Icenowy Zheng <icenowy@aosc.io>
-> 
-> Sipeed MaixSense is an Allwinner R329 development kit based on Maix IIA
-> SoM.
-> 
-> Add compatible strings for it.
-> 
-> Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
-> ---
->  Documentation/devicetree/bindings/arm/sunxi.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
+Hi BaoLu,
 
-Acked-by: Rob Herring <robh@kernel.org>
+On Sun, 1 May 2022 19:24:33 +0800, Lu Baolu <baolu.lu@linux.intel.com>
+wrote:
+
+> The IOMMU force snooping capability is not required to be consistent
+> among all the IOMMUs anymore. Remove force snooping capability check
+> in the IOMMU hot-add path and domain_update_iommu_snooping() becomes
+> a dead code now.
+> 
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> ---
+>  drivers/iommu/intel/iommu.c | 34 +---------------------------------
+>  1 file changed, 1 insertion(+), 33 deletions(-)
+> 
+> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> index 3c1c228f9031..d5808495eb64 100644
+> --- a/drivers/iommu/intel/iommu.c
+> +++ b/drivers/iommu/intel/iommu.c
+> @@ -533,33 +533,6 @@ static void domain_update_iommu_coherency(struct
+> dmar_domain *domain) rcu_read_unlock();
+>  }
+>  
+> -static bool domain_update_iommu_snooping(struct intel_iommu *skip)
+> -{
+> -	struct dmar_drhd_unit *drhd;
+> -	struct intel_iommu *iommu;
+> -	bool ret = true;
+> -
+> -	rcu_read_lock();
+> -	for_each_active_iommu(iommu, drhd) {
+> -		if (iommu != skip) {
+> -			/*
+> -			 * If the hardware is operating in the scalable
+> mode,
+> -			 * the snooping control is always supported
+> since we
+> -			 * always set PASID-table-entry.PGSNP bit if the
+> domain
+> -			 * is managed outside (UNMANAGED).
+> -			 */
+> -			if (!sm_supported(iommu) &&
+> -			    !ecap_sc_support(iommu->ecap)) {
+> -				ret = false;
+> -				break;
+> -			}
+> -		}
+> -	}
+> -	rcu_read_unlock();
+> -
+> -	return ret;
+> -}
+> -
+>  static int domain_update_iommu_superpage(struct dmar_domain *domain,
+>  					 struct intel_iommu *skip)
+>  {
+> @@ -3593,12 +3566,7 @@ static int intel_iommu_add(struct dmar_drhd_unit
+> *dmaru) iommu->name);
+>  		return -ENXIO;
+>  	}
+> -	if (!ecap_sc_support(iommu->ecap) &&
+> -	    domain_update_iommu_snooping(iommu)) {
+> -		pr_warn("%s: Doesn't support snooping.\n",
+> -			iommu->name);
+> -		return -ENXIO;
+> -	}
+> +
+Maybe I missed earlier patches, so this bit can also be deleted?
+
+struct dmar_domain {
+	u8 iommu_snooping: 1;		/* indicate snooping control
+feature */
+
+>  	sp = domain_update_iommu_superpage(NULL, iommu) - 1;
+>  	if (sp >= 0 && !(cap_super_page_val(iommu->cap) & (1 << sp))) {
+>  		pr_warn("%s: Doesn't support large page.\n",
+
+
+Thanks,
+
+Jacob

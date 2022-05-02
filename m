@@ -2,155 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 964CD51701A
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 15:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9327751701C
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 15:17:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385208AbiEBNUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 09:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49922 "EHLO
+        id S1385224AbiEBNVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 09:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235101AbiEBNU0 (ORCPT
+        with ESMTP id S1385210AbiEBNVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 09:20:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 33F40B7DB
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 06:16:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651497417;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7cwYIEVCgK2ZcDFx93WqFNXSS/yGNvEyS5NdQXSjyRE=;
-        b=KuEh1X3sFn5fghAS/5r06hv2bvbcB+fqigiNIqfBi1rVpEgbAdbdOKnkgzsU1Ie7LScsHn
-        8exe3kMD7vr8xOypjEAePsaruvGb5eJdz68NQ+01Nw6ym1p+/zsAMrB/ENT3xBYUWsIUI7
-        rWyW0kv6RUq5xqjZ1XdwS1lN+DYqDoI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-617-fzoOXCXYMGKzZRnuTYVwLw-1; Mon, 02 May 2022 09:16:53 -0400
-X-MC-Unique: fzoOXCXYMGKzZRnuTYVwLw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 702178015BA;
-        Mon,  2 May 2022 13:16:52 +0000 (UTC)
-Received: from fedora (unknown [10.22.8.190])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 3FA28C52C84;
-        Mon,  2 May 2022 13:16:49 +0000 (UTC)
-Date:   Mon, 2 May 2022 10:16:48 -0300
-From:   Wander Lairson Costa <wander@redhat.com>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 3/3] x86/tdx: Add Quote generation support
-Message-ID: <Ym/ZwMUHbgz4av3U@fedora>
-References: <20220501183500.2242828-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220501183500.2242828-4-sathyanarayanan.kuppuswamy@linux.intel.com>
+        Mon, 2 May 2022 09:21:06 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4118DB7DB;
+        Mon,  2 May 2022 06:17:38 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id D8BAC5C0089;
+        Mon,  2 May 2022 09:17:35 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 02 May 2022 09:17:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=living180.net;
+         h=cc:cc:content-transfer-encoding:content-type:date:date:from
+        :from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1651497455; x=1651583855; bh=Re
+        UNB5qURC1x6lVfQVLPXptH6UKZn9HvHv/GBtLg1r8=; b=o/ytHf5mWgj1XYJ48V
+        YNMhE+RdxqOxN2l4Oz0JV0ZJ8HSxMbxXkHdRDuX3lAJ/WsTs2DYy1FsXAle7wiJM
+        AXnlbUf1H6DSDd4eCqG5c0QJBSKmGPzvlf/5+Ufi0YTVw+ZevQv+MgWAWArGQ3H2
+        WyJ1gId21z3xTPulBr1I39xfVUmkwHNbGobQghhKwgEWh9By6B1s5yNTxhKP5aHw
+        9Xx9aNvBU73NwItmo1DMWbjpkj2tSIQejpAY3YPdoE/fB79hBMj+/dgcxqvGBdfb
+        OJv4Ns6/gviVwWEAtmGAcs0+wQ8YjC+fuqiLf8rKHb4phZeGOqAFsYloUhlX2tDM
+        RE4g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1651497455; x=1651583855; bh=ReUNB5qURC1x6lVfQVLPXptH6UKZn9HvHv/
+        GBtLg1r8=; b=v2fHZeUsa1HzjFnENokBZVERtuU/DS6fo1d3j4gH8cYehUxp0TQ
+        Acgv2dGpUH7lIc231gVslpwnoLg72WUy9IvalFBBUYJhG9nrF+UCMqZKc0522+53
+        QN3JDzCDgGEGMo6j4GU45UNO+BkKwXNnyCzSHRrzx1Go4zwOsX9TFsxCtx7ANl4+
+        aG2auxt07O3X5vuWAkZRTAGEL4fQTArEiLOubKEQmtdszGvMW+kV3o5uo0EhgJlN
+        pjfVgL8LP/J5+EFPHQA0sU9oUpol/+cpw7+g78+1gQK58boIvcMYAzSVCprzy93M
+        MCMzmXvtJCd0ICQOdmVLWx+R1PJ9itDxrVg==
+X-ME-Sender: <xms:79lvYhhKUjtopLgrujDk0-uF4cMvJk0A7wGUMNkQXFetGoojB4puNA>
+    <xme:79lvYmA4sZZUYWi_pDly5MsQnTGk8M8gIVpnz3GVdQBcCChn3UlWQOGW-TUdyB2Lp
+    BkoYJudM5wuBw>
+X-ME-Received: <xmr:79lvYhGZ-5GS059KtRjQyL-KJG0eiZoXkR-sUuJOF16_BHjTlqp00zUTsBwkCQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehgdeiudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfhufevvfgtgfesthekredttdefjeenucfhrhhomhepffgrnhhivghl
+    ucfjrghrughinhhguceoughhrghrughinhhgsehlihhvihhnghdukedtrdhnvghtqeenuc
+    ggtffrrghtthgvrhhnpedvffelhffgvdefueeufffhgeekgeehtedvudeikeefudejgfej
+    lefgleehfedtvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpeguhhgrrhguihhngheslhhivhhinhhgudektddrnhgvth
+X-ME-Proxy: <xmx:79lvYmTeNFKxc22-4DensirrktA3_tGVi7b6lZDCLptp_JH3H_MJyg>
+    <xmx:79lvYuxMxHiCvYqEQO2FfXplWfl0eCIDxjaEGOCTSKo9DBhcutfM6A>
+    <xmx:79lvYs5kJ9v9SKa7IYueaZdi-0fYg_FWsTm0jdjl3XhYfXZ9qbnPBg>
+    <xmx:79lvYi9WHiEdEGGUOLar5bHZQJrHt0A56UtKUjZPowiyzWnD-ZxwmA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 2 May 2022 09:17:33 -0400 (EDT)
+Message-ID: <7925e262-e0d4-6791-e43b-d37e9d693414@living180.net>
+Date:   Mon, 2 May 2022 16:17:30 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220501183500.2242828-4-sathyanarayanan.kuppuswamy@linux.intel.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+From:   Daniel Harding <dharding@living180.net>
+Subject: [REGRESSION] lxc-stop hang on 5.17.x kernels
+Content-Language: en-US
+Cc:     regressions@lists.linux.dev, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+To:     Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 01, 2022 at 11:35:00AM -0700, Kuppuswamy Sathyanarayanan wrote:
+I use lxc-4.0.12 on Gentoo, built with io-uring support 
+(--enable-liburing), targeting liburing-2.1.  My kernel config is a very 
+lightly modified version of Fedora's generic kernel config. After moving 
+from the 5.16.x series to the 5.17.x kernel series, I started noticed 
+frequent hangs in lxc-stop.  It doesn't happen 100% of the time, but 
+definitely more than 50% of the time.  Bisecting narrowed down the issue 
+to commit aa43477b040251f451db0d844073ac00a8ab66ee: io_uring: poll 
+rework. Testing indicates the problem is still present in 5.18-rc5. 
+Unfortunately I do not have the expertise with the codebases of either 
+lxc or io-uring to try to debug the problem further on my own, but I can 
+easily apply patches to any of the involved components (lxc, liburing, 
+kernel) and rebuild for testing or validation.  I am also happy to 
+provide any further information that would be helpful with reproducing 
+or debugging the problem.
 
-[snip]
+Regards,
 
-> +
-> +static long tdx_get_quote(void __user *argp)
-> +{
-> +	struct tdx_quote_req quote_req;
-> +	long ret = 0;
-> +	int order;
-> +
-> +	/* Hold lock to serialize GetQuote requests */
-> +	mutex_lock(&quote_lock);
-> +
-> +	reinit_completion(&req_compl);
-> +
-> +	/* Copy GetQuote request struct from user buffer */
-> +	if (copy_from_user(&quote_req, argp, sizeof(struct tdx_quote_req))) {
-> +		ret = -EFAULT;
-> +		goto quote_failed;
-> +	}
-> +
-> +	/* Make sure the length & timeout is valid */
-> +	if (!quote_req.len || !quote_req.timeout) {
-> +		ret = -EINVAL;
-> +		goto quote_failed;
-> +	}
-> +
-> +	/* Get order for Quote buffer page allocation */
-> +	order = get_order(quote_req.len);
-> +
-> +	/*
-> +	 * Allocate buffer to get TD Quote from the VMM.
-> +	 * Size needs to be 4KB aligned (which is already
-> +	 * met in page allocation).
-> +	 */
-> +	tdquote = (void *)__get_free_pages(GFP_KERNEL | __GFP_ZERO, order);
-> +	if (!tdquote) {
-> +		ret = -ENOMEM;
-> +		goto quote_failed;
-> +	}
-> +
-> +	/*
-> +	 * Since this buffer will be shared with the VMM via GetQuote
-> +	 * hypercall, decrypt it.
-> +	 */
-> +	ret = set_memory_decrypted((unsigned long)tdquote, 1UL << order);
-> +	if (ret)
-> +		goto quote_failed;
-> +
-> +	/* Copy TDREPORT from user buffer to kernel Quote buffer */
-> +	if (copy_from_user(tdquote, (void __user *)quote_req.buf, quote_req.len)) {
-> +		ret = -EFAULT;
-> +		goto quote_failed;
-> +	}
-> +
-> +	/* Submit GetQuote Request */
-> +	ret = tdx_get_quote_hypercall(tdquote, (1ULL << order) * PAGE_SIZE);
-> +	if (ret) {
-> +		pr_err("GetQuote hypercall failed, status:%lx\n", ret);
-> +		ret = -EIO;
-> +		goto quote_failed;
-> +	}
-> +
-> +	/* Wait for attestation completion */
-> +	ret = wait_for_completion_interruptible(&req_compl);
-> +	if (ret <= 0) {
-> +		ret = -EIO;
-> +		goto quote_failed;
-> +	}
-> +
-> +	/* Copy output data back to user buffer */
-> +	if (copy_to_user((void __user *)quote_req.buf, tdquote, quote_req.len))
-> +		ret = -EFAULT;
-> +
+Daniel Harding
 
-IIUC, ret has a positive value at this point, due to the call to
-wait_for_completion_interruptible, so we need add "ret = 0;"
-here, don't we?
-
-[snip]
-
+#regzbot introduced: aa43477b040251f451db0d844073ac00a8ab66ee

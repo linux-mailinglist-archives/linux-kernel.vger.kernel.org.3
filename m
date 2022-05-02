@@ -2,149 +2,356 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 570CD517238
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 17:06:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E680051723E
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 17:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385661AbiEBPJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 11:09:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43922 "EHLO
+        id S1385670AbiEBPLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 11:11:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385660AbiEBPIl (ORCPT
+        with ESMTP id S1352318AbiEBPLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 11:08:41 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A0C10E6;
-        Mon,  2 May 2022 08:05:11 -0700 (PDT)
-Received: from mail-yw1-f179.google.com ([209.85.128.179]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MryOx-1oEmLg2M1l-00nxkF; Mon, 02 May 2022 17:05:09 +0200
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-2ec42eae76bso150714817b3.10;
-        Mon, 02 May 2022 08:05:09 -0700 (PDT)
-X-Gm-Message-State: AOAM531qJEsIAio7JduzkVdmX1EK2TQP8rIcNodqd4lUARfvitrqpSKk
-        C+aOAOuNwdLew/HhVVjv5rK9mC79+fAiLxh5nUI=
-X-Google-Smtp-Source: ABdhPJxAfT0mtI2mFGcDcjtQzedzMQz8eYf0Fg1hWBegKvQSKsyfxj/GbmFIqytbHgyFBYqHFBk+z8YEmiN6Z7/aQXY=
-X-Received: by 2002:a81:ad7:0:b0:2e6:84de:3223 with SMTP id
- 206-20020a810ad7000000b002e684de3223mr11916494ywk.209.1651503907978; Mon, 02
- May 2022 08:05:07 -0700 (PDT)
+        Mon, 2 May 2022 11:11:11 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF74211A20
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 08:07:40 -0700 (PDT)
+Date:   Mon, 2 May 2022 23:08:15 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1651504058;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pAsrVPwwMe1ey1EltZSu/7ualzBfPJpsOxaHqeGmNrE=;
+        b=vJFId66tF13eIq5GDcbcBJ7xkPJhXYSdJLq8IvGrZRaTvdspMMkgD/Dhop4dLLHYuiDV5U
+        hk5h6+CGSrsTdQQjyhqqGQ/ZzRpRCosZVNocPOvz9ooZ0WMZkiMfweZjzrl6PUMxXR0xKQ
+        Oag/bb/9BsCHU1f7FH4NI1z39/6yA9s=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Tao Zhou <tao.zhou@linux.dev>
+To:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Tao Zhou <tao.zhou@linux.dev>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, linux-kernel@vger.kernel.org, parth@linux.ibm.com,
+        qais.yousef@arm.com, chris.hyser@oracle.com, vschneid@redhat.com,
+        patrick.bellasi@matbug.net, David.Laight@aculab.com,
+        pjt@google.com, pavel@ucw.cz, tj@kernel.org, qperret@google.com,
+        tim.c.chen@linux.intel.com
+Subject: Re: [RFC 5/6] sched/fair: Take into account latency nice at wakeup
+Message-ID: <Ym/z39Qk/QDJckKE@geo.homenetwork>
+References: <20220311161406.23497-1-vincent.guittot@linaro.org>
+ <20220311161406.23497-6-vincent.guittot@linaro.org>
+ <Ym6uMoHVkqr9zOpj@geo.homenetwork>
+ <CAKfTPtD2Hb_ZU8x1J9B6he7fYNvw2AyUBOKdfRk6zcSvJEvYTg@mail.gmail.com>
+ <CAKfTPtCkMGnATuBZObRTabn0-OTUbB6j8f_Sg57HCg4cgQ96rQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <1676021ae8b6d7aada0b1806fed99b1b8359bdc4.1651495112.git.hns@goldelico.com>
- <CAK8P3a3OiFJiR40FXmCZTc1fMZBteGjXqipDcvZqoO85QBxYow@mail.gmail.com> <123640FA-6AF2-4C0E-A7CC-31DCC4CEA15B@goldelico.com>
-In-Reply-To: <123640FA-6AF2-4C0E-A7CC-31DCC4CEA15B@goldelico.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 2 May 2022 17:04:51 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0owDwLYJ1nk6HciV=15wecC6QHPY-QiseRmeRnahcXXQ@mail.gmail.com>
-Message-ID: <CAK8P3a0owDwLYJ1nk6HciV=15wecC6QHPY-QiseRmeRnahcXXQ@mail.gmail.com>
-Subject: Re: [PATCH] wl1251: dynamically allocate memory used for DMA
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Tony Lindgren <tony@atomide.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>, kernel@pyra-handheld.com,
-        linux-omap <linux-omap@vger.kernel.org>,
-        Luca Coelho <luca@coelho.fi>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:zjQz1dRpin9BiZg3s4VBfMuW9U+tlPf2caryZKIggkYhZ9Cjemd
- ow0D5GPGmRyloMl0oFDiGVSTOcj+6eu1WRzK2U5RioJjJ6icxlipq0t8eyFQLRz3yIcnXd9
- qoGiYQfXLpaXpfG+iBH0QqAGH9UcOaqPsszZbfbCGBlMNMuD6O15gsi8OkdBu2K2yGf6D7Z
- agURek6T9zdUGkRBpxD+g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:+cN6JuZ3Xro=:DVKj7YeXKBDE0Q9n6DEm06
- zXsZXZaulGdxTb7bhZwiH5xbP8lT2A4gv8QuMqzIevINKjnFi5uAqEYgJETFmRed1uTeZHwfc
- XQwq9QD+UN97jr+gRsqi2kekTgPzMKR6Q+xkzTKHxZKuB3j3Bd8+/ld/kODfmm976DJTJx2Cw
- ZVE0RG5aPH61joAXXYLeotKSMLraYmqxbkGoWrGtY1Za0+EQw/yXuuXVCvjpaBJ2bmYqBicOM
- /uQ6ZIpDCkgdmWlSmvnXlSLOOMVhKbmj/ynGyo749ZIlnb5MAtSo+CYF6BweAUrtOkAu3YhaZ
- uSXurW96e9Sd2gOxWTgBgD2+JF1nYZJwy+SoHWiwv3SFjhxVfkWP0Dexq2qObQHXFDujyzMJf
- k/yssEMaWTepybDzutgQae46ge30N4fUhv/vuxsb9hVK3YknAYo0h3SapvpBJ5H/xd/T8/5uM
- 9OFMS8Yl+zLcrqK+Ui0Wpn0tICLFQZMzvydVPyjBnb0s5JFQzF6sWhHG1g8wGbMNRKneubUh2
- vW2FNcfrcbY9V2HuAODHrl4NSir3iyuvtc4iRDRFomWpyZ3MtUemFORxXr1mQ9thsnklvyi26
- eFVX8zIXBe5zcmrJ4XvrikG9DtMPJlcZVrh8km8+L285dI260csYPNL3Qi0TZYDMsWOBVYjFw
- hcWNfxKQEX+1jFi3gp9jOc763x4HK3krfb5klOa7NpXJAVPR5WlZ8DlSiDZHWlps5JJqPdhWG
- VXdiRJSuX/OedDmfr6K3X8ERvvegTf5BhpvMHiWk8fCIlxmZ6K0lTmwTqk1vZ0tBOVdoyY9gq
- xGIlNpmiaTKh18E7cNZDi7H0RUBDH/76AMh40HIwrx79ta9NXs=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtCkMGnATuBZObRTabn0-OTUbB6j8f_Sg57HCg4cgQ96rQ@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_BTC_ID,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 2, 2022 at 4:47 PM H. Nikolaus Schaller <hns@goldelico.com> wrote:
-> > Am 02.05.2022 um 16:06 schrieb Arnd Bergmann <arnd@arndb.de>:
-> > On Mon, May 2, 2022 at 2:38 PM H. Nikolaus Schaller <hns@goldelico.com> wrote:
+On Mon, May 02, 2022 at 02:30:55PM +0200, Vincent Guittot wrote:
+
+> On Mon, 2 May 2022 at 11:54, Vincent Guittot <vincent.guittot@linaro.org> wrote:
 > >
-> > The approach in the wlcore driver appears to be simpler because it
-> > avoids dynamic memory allocation and the associated error handling.
->
-> It looks as if it just avoids kmalloc/free sequences in event handling
-> by allocating a big enough buffer once.
->
-> wl1271_cmd_wait_for_event_or_timeout() allocates it like we do now.
-
-Ah right, I missed that one.
-
-> > However, it probably makes another problem worse that also exists
-> > here:
+> > Hi Tao,
 > >
-> > static inline u32 wl1251_read32(struct wl1251 *wl, int addr)
-> > {
-> >       u32 response;
-> >       wl->if_ops->read(wl, addr, &wl->buffer_32, sizeof(wl->buffer_32));
-> >       return le32_to_cpu(wl->buffer_32);
-> > }
+> > On Sun, 1 May 2022 at 17:58, Tao Zhou <tao.zhou@linux.dev> wrote:
+> > >
+> > > Hi Vincent,
+> > >
+> > > Change to Valentin Schneider's now using mail address.
 > >
-> > I think the 'buffer_32' member of 'struct wl1251' needs an explicit
-> > '__cacheline_aligned' attribute to avoid potentially clobbering
-> > some of the structure during a DMA write.
+> > Thanks
 > >
-> > I don't know if anyone cares enough about the two drivers to
-> > have an opinion. I've added Luca to Cc, but he hasn't maintained
-> > the driver since 2013 and probably doesn't.
->
-> Well, there seems to be quite some common code but indeed devices
-> using these older chips are getting rare so it is probably not worth
-> combining code. And testing needs someone who owns boards
-> with both chips...
+> > >
+> > > On Fri, Mar 11, 2022 at 05:14:05PM +0100, Vincent Guittot wrote:
+> > >
+> > > > Take into account the nice latency priority of a thread when deciding to
+> > > > preempt the current running thread. We don't want to provide more CPU
+> > > > bandwidth to a thread but reorder the scheduling to run latency sensitive
+> > > > task first whenever possible.
+> > > >
+> > > > As long as a thread didn't use its bandwidth, it will be able to preempt
+> > > > the current thread.
+> > > >
+> > > > At the opposite, a thread with a low latency priority will preempt current
+> > > > thread at wakeup only to keep fair CPU bandwidth sharing. Otherwise it will
+> > > > wait for the tick to get its sched slice.
+> > > >
+> > > >                                    curr vruntime
+> > > >                                        |
+> > > >                       sysctl_sched_wakeup_granularity
+> > > >                                    <-->
+> > > > ----------------------------------|----|-----------------------|---------------
+> > > >                                   |    |<--------------------->
+> > > >                                   |    .  sysctl_sched_latency
+> > > >                                   |    .
+> > > > default/current latency entity    |    .
+> > > >                                   |    .
+> > > > 1111111111111111111111111111111111|0000|-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-
+> > > > se preempts curr at wakeup ------>|<- se doesn't preempt curr -----------------
+> > > >                                   |    .
+> > > >                                   |    .
+> > > >                                   |    .
+> > > > low latency entity                |    .
+> > > >                                    ---------------------->|
+> > > >                                % of sysctl_sched_latency  |
+> > > > 1111111111111111111111111111111111111111111111111111111111|0000|-1-1-1-1-1-1-1-
+> > > > preempt ------------------------------------------------->|<- do not preempt --
+> > > >                                   |    .
+> > > >                                   |    .
+> > > >                                   |    .
+> > > > high latency entity               |    .
+> > > >          |<-----------------------|    .
+> > > >          | % of sysctl_sched_latency   .
+> > > > 111111111|0000|-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1
+> > > > preempt->|<- se doesn't preempt curr ------------------------------------------
+> > > >
+> > > > Tests results of nice latency impact on heavy load like hackbench:
+> > > >
+> > > > hackbench -l (2560 / group) -g group
+> > > > group        latency 0             latency 19
+> > > > 1            1.450(+/- 0.60%)      1.376(+/- 0.54%) + 5%
+> > > > 4            1.537(+/- 1.75%)      1.335(+/- 1.81%) +13%
+> > > > 8            1.414(+/- 1.91%)      1.348(+/- 1.88%) + 5%
+> > > > 16           1.423(+/- 1.65%)      1.374(+/- 0.58%) + 3%
+> > > >
+> > > > hackbench -p -l (2560 / group) -g group
+> > > > group
+> > > > 1            1.416(+/- 3.45%)      0.886(+/- 0.54%) +37%
+> > > > 4            1.634(+/- 7.14%)      0.888(+/- 5.40%) +45%
+> > > > 8            1.449(+/- 2.14%)      0.804(+/- 4.55%) +44%
+> > > > 16           0.917(+/- 4.12%)      0.777(+/- 1.41%) +15%
+> > > >
+> > > > By deacreasing the latency prio, we reduce the number of preemption at
+> > >
+> > > s/deacreasing/decreasing/
+> >
+> > yes
+> >
+> > > s/reduce/increase/
+> >
+> > not in the case of hackbench tests above. By decreasing the latency
+> > prio of all hackbench threads, we make sure that they will not preempt
+> > the current thread and let it move forward so we reduce the number of
+> > preemption.
+> >
+> > >
+> > > > wakeup and help hackbench making progress.
+> > > >
+> > > > Test results of nice latency impact on short live load like cyclictest
+> > > > while competing with heavy load like hackbench:
+> > > >
+> > > > hackbench -l 10000 -g group &
+> > > > cyclictest --policy other -D 5 -q -n
+> > > >         latency 0           latency -20
+> > > > group   min  avg    max     min  avg    max
+> > > > 0       16    17     28      15   17     27
+> > > > 1       61   382  10603      63   89   4628
+> > > > 4       52   437  15455      54   98  16238
+> > > > 8       56   728  38499      61  125  28983
+> > > > 16      53  1215  52207      61  183  80751
+> > > >
+> > > > group = 0 means that hackbench is not running.
+> > > >
+> > > > The avg is significantly improved with nice latency -20 especially with
+> > > > large number of groups but min and max remain quite similar. If we add the
+> > > > histogram parameters to get details of latency, we have :
+> > > >
+> > > > hackbench -l 10000 -g 16 &
+> > > > cyclictest --policy other -D 5 -q -n  -H 20000 --histfile data.txt
+> > > >               latency 0    latency -20
+> > > > Min Latencies:    63           62
+> > > > Avg Latencies:  1397          218
+> > > > Max Latencies: 44926        42291
+> > > > 50% latencies:   100           98
+> > > > 75% latencies:   762          116
+> > > > 85% latencies:  1118          126
+> > > > 90% latencies:  1540          130
+> > > > 95% latencies:  5610          138
+> > > > 99% latencies: 13738          266
+> > > >
+> > > > With percentile details, we see the benefit of nice latency -20 as
+> > > > 1% of the latencies stays above 266us whereas the default latency has
+> > > > got 25% are above 762us and 10% over the 1ms.
+> > > >
+> >
+> > [..]
+> >
+> > > > +static long wakeup_latency_gran(int latency_weight)
+> > > > +{
+> > > > +     long thresh = sysctl_sched_latency;
+> > > > +
+> > > > +     if (!latency_weight)
+> > > > +             return 0;
+> > > > +
+> > > > +     if (sched_feat(GENTLE_FAIR_SLEEPERS))
+> > > > +             thresh >>= 1;
+> > > > +
+> > > > +     /*
+> > > > +      * Clamp the delta to stay in the scheduler period range
+> > > > +      * [-sysctl_sched_latency:sysctl_sched_latency]
+> > > > +      */
+> > > > +     latency_weight = clamp_t(long, latency_weight,
+> > > > +                             -1 * NICE_LATENCY_WEIGHT_MAX,
+> > > > +                             NICE_LATENCY_WEIGHT_MAX);
+> > > > +
+> > > > +     return (thresh * latency_weight) >> NICE_LATENCY_SHIFT;
+> > > > +}
+> > > > +
+> > > >  static unsigned long wakeup_gran(struct sched_entity *se)
+> > > >  {
+> > > >       unsigned long gran = sysctl_sched_wakeup_granularity;
+> > > > @@ -7008,6 +7059,10 @@ static int
+> > > >  wakeup_preempt_entity(struct sched_entity *curr, struct sched_entity *se)
+> > > >  {
+> > > >       s64 gran, vdiff = curr->vruntime - se->vruntime;
+> > > > +     int latency_weight = se->latency_weight - curr->latency_weight;
+> > > > +
+> > > > +     latency_weight = min(latency_weight, se->latency_weight);
+> > >
+> > > Let lable A=se->latency_weight, B=curr->latency_weight, C=A-B.
+> > >
+> > > 1 A>0 B>0
+> > >     ::C=A-B<0, min(C,A)=C, latency decrease, C is the real diff value no matter
+> > >       what A is. That means it can be very 'long'(-sched_latency) and vdiff is
+> > >       more possible to be in <= 0 case and return -1.
+> > >     ::C=A-B>0, min(C,A)=A, latency increase, but it is conservative. Limit to
+> >
+> > A>0 and B>0  then min(C=A-B, A) = C
 
-No, I wasn't even thinking of combining code, just whether there
-is value in keeping the similar bits in sync to ensure we have the
-same set of bugs on both ;-)
+It's my mistake. And in this case the calculating of value added to vdiff
+for latency increase and deleted to vdiff for latency decrease is the same.
 
-I think the best fix for both drivers would be to keep the DMA
-members (partition and buffer_32) in the respective device
-structures, but mark each one as aligned.
+> >
+> > >       A/1024*sched_latency.
+> > >     When latecy is decreased, the negtive value added to vdiff is larger than the
+> > >     positive value added to vdiff when latency is increased.
+> >
+> > When the weight > 0, the tasks have some latency requirements so we
+> > use their relative priority to decide if we can preempt current which
+> > also has some latency requirement
+> >
+> > >
+> > > 2 A>0 B<0
+> > >     ::C=A-B>0 and C>A, min(C,A)=A, latency increase and it is conservative.
+> 
+> For this one we want to use delta like for UC 1 above
+> 
+> > >
+> > > 3 A<0 B<0
+> > >     ::C=A-B>0, min(C,A)=A, latency increase but min(C,A)<0, I think if latency
+> > >     increase means the value added to vdiff will be a positive value to increase
+> > >     the chance to return 1. I would say it is max(C,A)=C
+> > >     ::C=A-B<0, min(C,A)=A, latency decrease and the real negtive value.
+> >
+> > When the weight < 0, the tasks haven't latency requirement and even
+> > don't care of being scheduled "quickly". In this case, we don't care
+> > about the relative priority but we want to minimize the preemption of
+> > current so we use the weight
+> >
+> > >
+> > > 4 A<0,B>0
+> > >     ::C=A-B<0, min(C,A)=C, latency decrease and the real negtive value.
+> 
+> And for this one we probably want to use A like for other UC with A < 0
+> 
+> I'm going to update the way the weight is computed to match this
 
-> > My first guess would be that the driver never worked correctly on big-endian
-> > machines, and that the change is indeed correct, but on the other hand
-> > the conversion was added in commit ac9e2d9afa90 ("wl1251: convert
-> > 32-bit values to le32 before writing to the chip") in a way that suggests it
-> > was meant to work on both.
->
-> wl1251_event_wait() seems to work with the masks provided by code.
-> So I guess the conversion to le32 is harmless on the OpenPandora.
-> Most likely it should be done on big endian devices. I.e. we might have
-> done the right thing.
->
-> Let's see if someone compains or knows more. Otherwise we should
-> fix it just for the Pandora and N900 (both omap3 based) as the only
-> upstream users.
+According to your explanations, the min(C,A) is used for A and B both in
+the negtive region or in the postive region, the max(C,A) is use for A and
+B both not in the same region.
 
-Ok. In general I like ensure we keep things working for big-endian
-kernels, which are meant to work on any ARMv6+ or newer machine.
-Most of the time it's just a couple of drivers (like this one) that get
-in the way of actually doing it, but then again very few people ever
-care about big-endian ARMv6/v7.
+if ((A>>31)^(B>>31))
+  max(C,A)
+else
+  min(C,A)
 
-If we don't have a reason to believe this one is actually wrong, I think
-fixing the endian issue silently is fine, as is ignoring the potential
-other endian issues in the same driver that nobody complained about
-in the past decade ;-)
 
-       Arnd
+wakeup_preempt_entity(struct sched_entity *curr, struct sched_entity *se)
+{
+    s64 gran, vdiff = curr->vruntime - se->vruntime;
+    int latency_weight = se->latency_weight - curr->latency_weight;
+
+    if ((se->latency_weight>>(WMULT_SHIFT-1)) ^
+         curr->latency_weight>>(WMULT_SHIFT-1))
+        latency_weight = max(latency_weight, se->latency_weight);
+    else
+        latency_weight = min(latency_weight, se->latency_weight);
+
+    vdiff += wakeup_latency_gran(latency_weight);
+    ...
+}
+
+> > >
+> > > Is there a reason that the value when latency increase and latency decrease
+> > > be treated differently. Latency increase value is limited to se's latency_weight
+> >
+> > I have tried to explain why I treat differently if weight is > 0 or < 0.
+> >
+> > > but latency decrease value can extend to -sched_latency or treat them the same.
+> > > Penalty latency decrease and conserve latency increase.
+> > >
+> > >
+> > > There is any value that this latency_weight can be considered to be a average.
+> > >
+> > > The delta value choose is ~%5 to 1024. %5*sched_latency=0.05*6ms=0.3ms.(no scale)
+> > > I do not think over that vdiff equation  and others though.
+> > >
+> > > Thanks,
+> > > Tao
+> > > > +     vdiff += wakeup_latency_gran(latency_weight);
+> > > >
+> > > >       if (vdiff <= 0)
+> > > >               return -1;
+> > > > @@ -7117,6 +7172,7 @@ static void check_preempt_wakeup(struct rq *rq, struct task_struct *p, int wake_
+> > > >               return;
+> > > >
+> > > >       update_curr(cfs_rq_of(se));
+> > > > +
+> > > >       if (wakeup_preempt_entity(se, pse) == 1) {
+> > > >               /*
+> > > >                * Bias pick_next to pick the sched entity that is
+> > > > diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> > > > index 456ad2159eb1..dd92aa9c36f9 100644
+> > > > --- a/kernel/sched/sched.h
+> > > > +++ b/kernel/sched/sched.h
+> > > > @@ -122,6 +122,17 @@ extern void call_trace_sched_update_nr_running(struct rq *rq, int count);
+> > > >   * Default tasks should be treated as a task with latency_nice = 0.
+> > > >   */
+> > > >  #define DEFAULT_LATENCY_NICE 0
+> > > > +#define DEFAULT_LATENCY_PRIO (DEFAULT_LATENCY_NICE + LATENCY_NICE_WIDTH/2)
+> > > > +
+> > > > +/*
+> > > > + * Convert user-nice values [ -20 ... 0 ... 19 ]
+> > > > + * to static latency [ 0..39 ],
+> > > > + * and back.
+> > > > + */
+> > > > +#define NICE_TO_LATENCY(nice)        ((nice) + DEFAULT_LATENCY_PRIO)
+> > > > +#define LATENCY_TO_NICE(prio)        ((prio) - DEFAULT_LATENCY_PRIO)
+> > > > +#define NICE_LATENCY_SHIFT   (SCHED_FIXEDPOINT_SHIFT)
+> > > > +#define NICE_LATENCY_WEIGHT_MAX      (1L << NICE_LATENCY_SHIFT)
+> > > >
+> > > >  /*
+> > > >   * Increase resolution of nice-level calculations for 64-bit architectures.
+> > > > @@ -2098,6 +2109,7 @@ static_assert(WF_TTWU == SD_BALANCE_WAKE);
+> > > >
+> > > >  extern const int             sched_prio_to_weight[40];
+> > > >  extern const u32             sched_prio_to_wmult[40];
+> > > > +extern const int             sched_latency_to_weight[40];
+> > > >
+> > > >  /*
+> > > >   * {de,en}queue flags:
+> > > > --
+> > > > 2.17.1
+> > > >

@@ -2,63 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 958D7517A4C
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 01:02:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 847FB517A4E
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 01:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232974AbiEBXFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 19:05:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57398 "EHLO
+        id S233544AbiEBXGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 19:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbiEBXFl (ORCPT
+        with ESMTP id S230157AbiEBXGD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 19:05:41 -0400
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F6B2DAB6;
-        Mon,  2 May 2022 16:02:11 -0700 (PDT)
-Received: by mail-oi1-f177.google.com with SMTP id z8so16683564oix.3;
-        Mon, 02 May 2022 16:02:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WR/yNaVn0oKvy+CnVuoKUFtzBzSP5sIDulB7MsR7hO8=;
-        b=3VyCCiQzm/6A3n9txOycqgc7J0+/YCmAO1drlgvgu4l6k6vrahk2OTUDa7ES+eshrd
-         Sp2NI+3Ifimqhi98V7rhZCvLxVfTN5xqAlnXaoLlPEzJm9TX686qFR9r00oyggGqRNT+
-         flQA2gySHHsyMoS4qNQFsqT6f2+zhK8UhFcKmCs9/FJyORCOCHWo3HlzZdFED79nAhSE
-         FpCXq+EdpUJ32NpdddpoUhQB5on9My8tQhDuS3Vg7pu5oxu2jxpOF/sTRWDo/OH0w6Ob
-         wV4A4okCD3YoHBaTxMx0mRaLtkVu0aAEsBMUIrHNqIcxwwNPaLieeGaFPpf6ZAnM//ne
-         xRtQ==
-X-Gm-Message-State: AOAM531FHUMxSHyba7sYVhCZ8tr8UyKwPszrOEqAhcKf/wYqy+fMVZ2o
-        ar99AQ2NjPFTJy4H4xazgw==
-X-Google-Smtp-Source: ABdhPJyrrrVy/nBJX0NxS3n0bBBerGGiEY+59Kdl77j+XTI2OWdQl05GkFXTfkI0N6SkepTNcpUUnw==
-X-Received: by 2002:a05:6808:1c7:b0:326:134f:1f50 with SMTP id x7-20020a05680801c700b00326134f1f50mr670432oic.203.1651532530718;
-        Mon, 02 May 2022 16:02:10 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w23-20020a9d6757000000b0060603221257sm3378457otm.39.2022.05.02.16.02.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 16:02:10 -0700 (PDT)
-Received: (nullmailer pid 1963769 invoked by uid 1000);
-        Mon, 02 May 2022 23:02:09 -0000
-Date:   Mon, 2 May 2022 18:02:09 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 1/3] arm64: dts: freescale: Add i.MX93 dtsi support
-Message-ID: <YnBi8dnKQQC0bHsR@robh.at.kernel.org>
-References: <20220425110330.1630984-1-peng.fan@oss.nxp.com>
- <20220425110330.1630984-2-peng.fan@oss.nxp.com>
+        Mon, 2 May 2022 19:06:03 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7522E08C
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 16:02:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651532552; x=1683068552;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=j303USipVxSvMHFwHqXEX3lsXm1sVh5NnGsTiMU8U6Y=;
+  b=LYWV7UD1LzkHC/Y2pmxtfOskMxpvwS2spfvOu00wH7QEeC0vS0eHVYIy
+   J5d+I3Xu1s/tTPg1Nd9cyJiScdezTucB0jRcPtuOcuxZ7A/UXB0N/mGf1
+   sd3BHgC1y+5e4GF1V7DIbGPFivp3JNm+JaoTaFMRPVKeRHICo5f9tnClf
+   v4A41gOTgfmGDKjTm2EJC3HnvJoMrUYazQ8BU2lHZQrtqP2SkK9vqmCf+
+   lzdyzSiodp1ERBQKFKcSHVEKnE2723NbyC3WKTcXBIwtWpkQq2lKM+pLl
+   k9R/ti4xsrnPySBuu7eNV5Tgm5P+LHxVozJTWOVc4BOxPpyvZru1yxt8M
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="353789501"
+X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
+   d="scan'208";a="353789501"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 16:02:32 -0700
+X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
+   d="scan'208";a="707807330"
+Received: from chgan-mobl1.gar.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.60.238])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 16:02:28 -0700
+Message-ID: <232da85c6d77c6875919abc486e0b25eac025bd6.camel@intel.com>
+Subject: Re: [PATCH v5 3/3] x86/tdx: Add Quote generation support
+From:   Kai Huang <kai.huang@intel.com>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 03 May 2022 11:02:26 +1200
+In-Reply-To: <aae6c58c-a89f-e24c-946b-c16b2415c77e@linux.intel.com>
+References: <20220501183500.2242828-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <20220501183500.2242828-4-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <7daf429ffda2bf834c129899426e204fbbcbd0b0.camel@intel.com>
+         <aae6c58c-a89f-e24c-946b-c16b2415c77e@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220425110330.1630984-2-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,36 +74,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 07:03:28PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
 > 
-> The i.MX 93 applications processors are the first in the i.MX portfolio
-> to integrate the scalable Arm Cortex-A55 core, bringing performance
-> and energy efficiency to Linux-based edge applications and the
-> Arm Ethos-U65 microNPU, enabling developers to create more capable,
-> cost-effective and energy-efficient ML applications.
+> > 
+> > Also, the  buffer may be still used by VMM when timeout (IN_FLIGHT), how can
+> > this even work?
 > 
-> Add the basic dtsi support for i.MX93.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  arch/arm64/boot/dts/freescale/imx93-pinfunc.h | 623 ++++++++++++++++++
->  arch/arm64/boot/dts/freescale/imx93.dtsi      | 337 ++++++++++
->  2 files changed, 960 insertions(+)
->  create mode 100755 arch/arm64/boot/dts/freescale/imx93-pinfunc.h
->  create mode 100644 arch/arm64/boot/dts/freescale/imx93.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx93-pinfunc.h b/arch/arm64/boot/dts/freescale/imx93-pinfunc.h
-> new file mode 100755
-> index 000000000000..f848ccd411cb
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/freescale/imx93-pinfunc.h
-> @@ -0,0 +1,623 @@
-> +/* SPDX-License-Identifier: GPL-2.0+ */
+> We will never reach here for IN_FLIGHT case. We will block in
+> wait_for_completion_interruptible() till the status changes to success
+> or failure.
 
-Your licensing isn't consistent. The board dts is different. Dual 
-licensing is what's correct.
+But you still have 'timeout' in userspace ABI?
 
-Your company is okay with GPLv3?
+> 
+> > 
+> > > +	tdquote = NULL;
+> > > +	mutex_unlock(&quote_lock);
+> > > +	return ret;
+> > > +}
+> > > +
+> > > +static void attestation_callback_handler(void)
+> > > +{
+> > > +	struct tdx_quote_hdr *quote_hdr;
+> > > +
+> > > +	quote_hdr = (struct tdx_quote_hdr *) tdquote;
+> > > +
+> > > +	/* Check for spurious callback IRQ case */
+> > > +	if (!tdquote || quote_hdr->status == GET_QUOTE_IN_FLIGHT)
+> > > +		return;
+> > 
+> > I don't get the logic.  Please explain.
+> 
+> I am trying to handle spurious IRQ case here. If we receive a callback
+> IRQ from VMM before even we allocate tdquote or post the GetQuote
+> request, accessing quote_hdr->status will lead to NULL pointer
+> exception. So I have added check for valid quote buffer (tdquote !=
+> NULL)
 
-Rob
+tdquote here isn't protected mutex, so even after you check tdquote != NULL, you
+cannot guarantee it is still valid when you check quote_hdr. 
+
+For instance, you receive two interrupts in very short time.  The first
+interrupt gets you out from wait_for_completion_interruptible().  Then second
+interrupt comes, and you can potentially have situation like below:
+
+	cpu 0					cpu 1
+
+	tdx_get_quote				attestation_callback_hander
+						
+						!tdquote
+		...
+		tdquote = NULL;
+
+						quote_hdr->status == ...
+
+
+And the 'quote_hdr' is even initialized at the beginning, and when it is used,
+the actual tdquote may already been freed.
+
+Or did I get it wrong?
+
+> 
+> Second condition (quote_hdr->status == GET_QUOTE_IN_FLIGHT)) makes
+> sure we don't mark the current quote request complete until the
+> Quote buffer status changes to GET_QUOTE_SUCCESS, GET_QUOTE_ERROR or
+> GET_QUOTE_SERVICE_UNAVAILABLE.
+
+I thought the GHCI spec says VMM will always inject intererupt after the Quote
+is ready, so we can have assumption it won't inject when buffer is still
+IN_FLIGHT.  But I am also not so sure.
+
+
+Anyway, to me it seems there's ambiguities around GetQuote and
+SetupEventNotifyInterrupt.  This is the reason that I suggested  you to split
+the basic driver out and you can even upstream it first w/o GetQuote support.  I
+think you may want to actually start to consider to upstream the basic driver
+first.
+
+
+-- 
+Thanks,
+-Kai
+
+

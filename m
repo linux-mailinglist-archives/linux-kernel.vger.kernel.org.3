@@ -2,114 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B939B517315
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 17:42:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA68D517317
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 17:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbiEBPpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 11:45:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53436 "EHLO
+        id S1385956AbiEBPqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 11:46:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385938AbiEBPpO (ORCPT
+        with ESMTP id S241392AbiEBPql (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 11:45:14 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D75D6
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 08:41:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651506105; x=1683042105;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=9Es5XqFtpVE3LdYUHq79mdDv756yQwrZat3r/qgRHNc=;
-  b=Wrls+B1BczEur3+ydRAQU3ZdMHzLc0KHTZBL0qbI4zxNur7RJMz1EzfF
-   jRouvnsPiUXygcpteYB0mD35BSE/ax7Awg3XbFaJ9cUsYuF8y8pH+AUQm
-   er6PWJNaEMa9s2idw2a1Y7XWU0EL9VzIF73hqd9LOQ7ELMSOZ536AiIu3
-   jsQ9Nd6o92CHMK96YOpPalcOXhiyJLoCh/erCVqcZlPvaX2T9vSBe6cjJ
-   JILqk6dTR+Wx+9vkoBR4vWa+if4wS1ZBLQ3wXAJPJ+XKGjebImOvFcE8j
-   r0aRJBD7Zn/mQ+q2xM1C6JJHXJslkl+fFt5lwlAOvlW7/LcS3EteXa79F
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="247150718"
-X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
-   d="scan'208";a="247150718"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 08:41:45 -0700
-X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
-   d="scan'208";a="583756662"
-Received: from wagoleb-mobl1.ger.corp.intel.com (HELO localhost) ([10.249.155.30])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 08:41:42 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch
-Cc:     Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] drm: drm_gem.h: Add explicit includes for
- DEFINE_DRM_GEM_FOPS
-In-Reply-To: <1651262112-29664-1-git-send-email-quic_jhugo@quicinc.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <1651262112-29664-1-git-send-email-quic_jhugo@quicinc.com>
-Date:   Mon, 02 May 2022 18:41:39 +0300
-Message-ID: <87y1zkq6vg.fsf@intel.com>
+        Mon, 2 May 2022 11:46:41 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 169A5B92;
+        Mon,  2 May 2022 08:43:12 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id y3so28448308ejo.12;
+        Mon, 02 May 2022 08:43:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AjFRgeqn9Z/mHKiToXMOXpMUQKhByRvH8NHC9cBSak4=;
+        b=dcs05AyxQY0SurUNVWPgJgvK8LLXk9f5qGT2X3c4mI1SS12yrtGRrwFG3bXYAE3HBN
+         u/TquAfYlnsgu0CDFAS2IYlgU6UQQtL95oi+Uc/DuyfaSe9JROyR4QO7HYnwKyinduwW
+         uRr8EJbqU93Cb9S64XO99OotNGbGHcAuvhR68p+Q6FW5JN7fdrzHAVF5G5AETe+hSGZd
+         PuFiNZ6ozMNEtMqS3YUYbDRcNe2fRkGnKXaCQ4CdStGDdLYnvDzKCpk67ivSLan4eoUF
+         GIJQbifN4a8MU1EPd/oJaJJ0OHyf/05qVezaHRPoCig7ys808tpalSQhANsINLFcR1P1
+         sLKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AjFRgeqn9Z/mHKiToXMOXpMUQKhByRvH8NHC9cBSak4=;
+        b=sxlQCOA3YGPGjWsjCNwNi2d8dWN1VnJirQb9NlGYc96SGq1ipfDigO6hy5vVhd7hTH
+         BD8PDCNJ+vPUbxP1K2huimMfSyp7m9tlvuj6BjHhrWxBUNozme6LMsjL6DaHZpzaHQet
+         Kv4ZraWgdL5jU5QjLd63Sf6zLPLhvewVScvhTi53XQH3UYVFgjujhQtSTQAnQu3BxhOd
+         /rRABzwSVByQVX6501/Z6KpXqZ4uaAKxka1LrJ7g/VZGBfy5qzgrBJoQvkQSi5aqGvvB
+         2vvcZ0SeWFGW+ufHkEd8FTBrGCCAn3ZqAZoT49SWNP3Xe3jgIL/oEF8U4J/pCQRbJZaH
+         w+wQ==
+X-Gm-Message-State: AOAM533U37bLAsR4DqoF+kv1zWwROzdU5jqsa9JslNzTn9aknDpGG9T0
+        4PqHNlTC2j/UP2cvxKFWosEBKz/LBfkfHfbynvc=
+X-Google-Smtp-Source: ABdhPJwmhjZIF781k5jQnI0bM4revnE4BFmfozMQdI1ybDOI+aak+5cGQFZlOlIrri+uALZ6UW56hpaV1qQnjzlOvjM=
+X-Received: by 2002:a17:907:968e:b0:6db:aed5:43c8 with SMTP id
+ hd14-20020a170907968e00b006dbaed543c8mr11815421ejc.636.1651506190563; Mon, 02
+ May 2022 08:43:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220502164557.3cbb18ca@canb.auug.org.au>
+In-Reply-To: <20220502164557.3cbb18ca@canb.auug.org.au>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 2 May 2022 17:42:34 +0200
+Message-ID: <CAHp75VddQMK7b-xbPy91rQ0QskXerhnY_sRiT0ZfGraRmKpL_Q@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the pinctrl tree with the gpio-intel tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 29 Apr 2022, Jeffrey Hugo <quic_jhugo@quicinc.com> wrote:
-> DEFINE_DRM_GEM_FOPS() references drm functions from other headers.  For
-> example drm_open() is defined in drm_file.h and drm_ioctl() is defined
-> in drm_ioctl.h.  Since drm_gem.h doesn't include these headers, it
-> relies on an implicit include from the .c file to have included these
-> required headers before DEFINE_DRM_GEM_FOPS() gets used.  Relying on
-> these implicit includes can cause build failures for new code that
-> doesn't know about these requirements, and can lead to future problems
-> if the headers ever get restructured as there will be a need to update
-> every downstream file that includes drm_gem.h.
+On Mon, May 2, 2022 at 5:39 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
-> Lets fix this explicitly including the required headers in drm_gem.h so
-> that code that includes drm_gem.h does not need to worry about these
-> implicit dependencies.
-
-In the general case, I tend to agree, but in this specific instance I
-think I'd err on the side of fewer includes. I think the more likely
-outcome here is accumulating implicit dependencies on symbols from
-drm_file.h and drm_ioctl.h by including drm_gem.h only!
-
-I do think headers need to be self-contained, and we actually enforce
-this in i915 (see HDRTEST in drivers/gpu/drm/i915/Makefile), but not to
-the point of macro expansions.
-
-BR,
-Jani.
-
-
-
+> Hi all,
 >
-> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-> ---
->  include/drm/drm_gem.h | 2 ++
->  1 file changed, 2 insertions(+)
+> Today's linux-next merge of the pinctrl tree got a conflict in:
 >
-> diff --git a/include/drm/drm_gem.h b/include/drm/drm_gem.h
-> index 9d7c61a..1cbe3d8 100644
-> --- a/include/drm/drm_gem.h
-> +++ b/include/drm/drm_gem.h
-> @@ -37,6 +37,8 @@
->  #include <linux/kref.h>
->  #include <linux/dma-resv.h>
->  
-> +#include <drm/drm_file.h>
-> +#include <drm/drm_ioctl.h>
->  #include <drm/drm_vma_manager.h>
->  
->  struct iosys_map;
+>   drivers/pinctrl/stm32/pinctrl-stm32.c
+>
+> between commit:
+>
+>   bb949ed9b16b ("pinctrl: stm32: Switch to use for_each_gpiochip_node() helper")
+>
+> from the gpio-intel tree and commit:
+>
+>   c954531bc5d8 ("pinctrl: stm32: improve bank clocks management")
+>
+> from the pinctrl tree.
+>
+> I fixed it up (I think, see below) and can carry the fix as
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
+
+Thanks for the fix. I think the best course of action is that Linus W.
+can pull the same branch that GPIO tree has into the pin control tree
+and resolve that, because the drivers touched are all pin control
+drivers while the core part of GPIO subsystem was updated.
+
+> --
+> Cheers,
+> Stephen Rothwell
+>
+> diff --cc drivers/pinctrl/stm32/pinctrl-stm32.c
+> index 7aecd0efde07,b308e7bb7487..000000000000
+> --- a/drivers/pinctrl/stm32/pinctrl-stm32.c
+> +++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
+> @@@ -1544,34 -1508,44 +1506,38 @@@ int stm32_pctl_probe(struct platform_de
+>                 return -ENOMEM;
+>
+>         i = 0;
+>  -      for_each_available_child_of_node(np, child) {
+>  +      for_each_gpiochip_node(dev, child) {
+>                 struct stm32_gpio_bank *bank = &pctl->banks[i];
+>  +              struct device_node *np = to_of_node(child);
+>
+>  -              if (of_property_read_bool(child, "gpio-controller")) {
+>  -                      bank->rstc = of_reset_control_get_exclusive(child,
+>  -                                                                  NULL);
+>  -                      if (PTR_ERR(bank->rstc) == -EPROBE_DEFER) {
+>  -                              of_node_put(child);
+>  -                              return -EPROBE_DEFER;
+>  -                      }
+>  -
+>  -                      bank->clk = of_clk_get_by_name(child, NULL);
+>  -                      if (IS_ERR(bank->clk)) {
+>  -                              if (PTR_ERR(bank->clk) != -EPROBE_DEFER)
+>  -                                      dev_err(dev,
+>  -                                              "failed to get clk (%ld)\n",
+>  -                                              PTR_ERR(bank->clk));
+>  -                              of_node_put(child);
+>  -                              return PTR_ERR(bank->clk);
+>  -                      }
+>  -                      i++;
+>  +              bank->rstc = of_reset_control_get_exclusive(np, NULL);
+>  +              if (PTR_ERR(bank->rstc) == -EPROBE_DEFER) {
+>  +                      fwnode_handle_put(child);
+>  +                      return -EPROBE_DEFER;
+>                 }
+>  -      }
+>
+>  -      for_each_available_child_of_node(np, child) {
+>  -              if (of_property_read_bool(child, "gpio-controller")) {
+>  -                      ret = stm32_gpiolib_register_bank(pctl, child);
+>  -                      if (ret) {
+>  -                              of_node_put(child);
+>  +              bank->clk = of_clk_get_by_name(np, NULL);
+>  +              if (IS_ERR(bank->clk)) {
+>  +                      if (PTR_ERR(bank->clk) != -EPROBE_DEFER)
+>  +                              dev_err(dev, "failed to get clk (%ld)\n", PTR_ERR(bank->clk));
+>  +                      fwnode_handle_put(child);
+>  +                      return PTR_ERR(bank->clk);
+>  +              }
+>  +              i++;
+>  +      }
+>
+>  -                              for (i = 0; i < pctl->nbanks; i++)
+>  -                                      clk_disable_unprepare(pctl->banks[i].clk);
+>  +      for_each_gpiochip_node(dev, child) {
+>  +              ret = stm32_gpiolib_register_bank(pctl, child);
+>  +              if (ret) {
+>  +                      fwnode_handle_put(child);
+> +
+>  -                              return ret;
+>  -                      }
+> ++                      for (i = 0; i < pctl->nbanks; i++)
+> ++                              clk_disable_unprepare(pctl->banks[i].clk);
+> +
+>  -                      pctl->nbanks++;
+>  +                      return ret;
+>                 }
+>  +
+>  +              pctl->nbanks++;
+>         }
+>
+>         dev_info(dev, "Pinctrl STM32 initialized\n");
+
+
 
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+With Best Regards,
+Andy Shevchenko

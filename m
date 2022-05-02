@@ -2,188 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BE35517976
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 23:53:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC82351798E
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 23:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353189AbiEBV4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 17:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43774 "EHLO
+        id S1387757AbiEBWB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 18:01:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237647AbiEBVzy (ORCPT
+        with ESMTP id S1387840AbiEBV7k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 17:55:54 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC633624A
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 14:52:22 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id q8so16100113oif.13
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 14:52:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Itt6Al99ZXx55Z0+z/aCQlFJ/Qfe/PU2t5niCqn7/5o=;
-        b=KMInJEqwKGYo9VD+rJE0s46CLrRx3VyNtX3LYH2SLwXOspWyNxcn9rlbSkgtE86l8u
-         5ocLNSoT3Hhk6px4uPINBumsib5vPUUYsBpVKUCWMFi+PFwtgdYiw0E8G5f22yXdxDaz
-         N5Gf/uXZFkSM3+yxnyL5vmL0UqTMLXuje6AXD0CUjgLedqtmUVNd+sQrmYg/+k87sV42
-         3nq+VHpdTe2MTy1YiGUarcMG2vSLFc05X5TA2iyclcv0/vmMBPUKKvnlIgN9begP2MSC
-         Ue+x2kYdfOEw46yHnDydj6ISm/Ue1htfjqX+nRjXfS94lo3j4dk8ZJPChc76s1/3ee0t
-         tyDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Itt6Al99ZXx55Z0+z/aCQlFJ/Qfe/PU2t5niCqn7/5o=;
-        b=VrUSW47aMAZRBh/lw1gK0XDlrbtsAkT3LpcyehnFQFjrNIxfv4MyekPH5ATy6auCXz
-         MpJ59gVTLHNAnVA93TLHzqKEwtP6yqqgdu/AuzJNewJdz27DQdab8uMyC0euSKa21ibO
-         A3J+MPBg41UZ543bF/9/V/Bi6w9uu+ApIyEwoMcGIciLDK6rqNxwmWCTz6J1FpA8Oqty
-         1SxQWc9XBOn/i56j/iVe3hB69w4NLXmZItzpkGF8F19P5bJklEk+pzK6BzhQkv91282a
-         qUVJyBGGeP/qtImPinUzn4Ou/rXJclghEE2kP/KzUU38r3IOynJM7xlUzEm+mRvBEhsJ
-         EAwg==
-X-Gm-Message-State: AOAM530azfzFj+6UX2CnaTY9rJxYVYplb7mqIEA+VMOE9U67Ii216LI5
-        ru1qsPfJ3qCP32sERUA/DdyesQ==
-X-Google-Smtp-Source: ABdhPJzbdVQSZgbYyzvz3zoArhe5129vL7dGg1H3rMhLTvKMlXnmgkmSK4GtIZT7xVGzTPb9GMp6dw==
-X-Received: by 2002:a05:6808:aa4:b0:325:91ff:43cc with SMTP id r4-20020a0568080aa400b0032591ff43ccmr582084oij.166.1651528342081;
-        Mon, 02 May 2022 14:52:22 -0700 (PDT)
-Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id k16-20020a544710000000b00325cda1ff8asm2720406oik.9.2022.05.02.14.52.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 14:52:21 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH 2/2] soc: qcom: llcc: Add sc8180x and sc8280xp configurations
-Date:   Mon,  2 May 2022 14:54:06 -0700
-Message-Id: <20220502215406.612967-3-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220502215406.612967-1-bjorn.andersson@linaro.org>
-References: <20220502215406.612967-1-bjorn.andersson@linaro.org>
+        Mon, 2 May 2022 17:59:40 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64455F33;
+        Mon,  2 May 2022 14:55:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651528558; x=1683064558;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=xkColIiWzUzT63cjf0p5tiFtU1yhRN1jJlgXlzvVJqY=;
+  b=AfWWk3dqhm8sCaX51ak8gVDAVC/2QTLsqoO3+DlRUDn7w/jboVdQzT+k
+   rMYzpoNIub05Z0u1y3jNK3oCL1PO2P1lDC8uX58BWu/zGvDwqb9HnMLIo
+   2JoacArZzTYA1ROGGEzV3MixzNOOGKgVLQXtfzizqj+Ucyr7z6MhEKpwU
+   V5iobYoQzkW+Nz5xBABrBz1BGomYblJvFUNQ9Zovf1mdQLw7s1Wq++0Oe
+   p9uiZfsVDMAQeUkVBr7EBUrFZtcMFWOOr339iJ7Tlpu3/4lyMp/+j71go
+   8ox4cFUUgzqEtn7R6ir+ExbuJElfGvVnrH9kB2BUyChGyYjbCw2qhVTQs
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="266924602"
+X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
+   d="scan'208";a="266924602"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 14:55:58 -0700
+X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
+   d="scan'208";a="598813198"
+Received: from chgan-mobl1.gar.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.60.238])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 14:55:54 -0700
+Message-ID: <8ba1a3ec3a4c5a02c28476cbb36118f61aea8a6c.camel@intel.com>
+Subject: Re: [PATCH v3 13/21] x86/virt/tdx: Allocate and set up PAMTs for
+ TDMRs
+From:   Kai Huang <kai.huang@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+Date:   Tue, 03 May 2022 09:55:52 +1200
+In-Reply-To: <8d5715b5-d561-f482-af11-03a9a46e651a@intel.com>
+References: <cover.1649219184.git.kai.huang@intel.com>
+         <ffc2eefdd212a31278978e8bfccd571355db69b0.1649219184.git.kai.huang@intel.com>
+         <c9b17e50-e665-3fc6-be8c-5bb16afa784e@intel.com>
+         <3664ab2a8e0b0fcbb4b048b5c3aa5a6e85f9618a.camel@intel.com>
+         <5984b61f-6a4a-c12a-944d-f4a78bdefc3d@intel.com>
+         <af603d66512ec5dca0c240cf81c83de7dfe730e7.camel@intel.com>
+         <8d5715b5-d561-f482-af11-03a9a46e651a@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add LLCC configuration data for the SC8180X and SC8280XP platforms,
-based on the downstream tables.
+On Mon, 2022-05-02 at 07:17 -0700, Dave Hansen wrote:
+> On 5/1/22 22:59, Kai Huang wrote:
+> > On Fri, 2022-04-29 at 07:20 -0700, Dave Hansen wrote:
+> > How about adding below in the changelog:
+> > 
+> > "
+> > However using alloc_contig_pages() to allocate large physically contiguous
+> > memory at runtime may fail.  The larger the allocation, the more likely it is to
+> > fail.  Due to the fragmentation, the kernel may need to move pages out of the
+> > to-be-allocated contiguous memory range but it may fail to move even the last
+> > stubborn page.  A good way (although not foolproof) is to launch a TD VM early
+> > in boot to get PAMTs allocated before memory gets fragmented or consumed.
+> > "
+> 
+> Better, although it's getting a bit off topic for this changelog.
+> 
+> Just be short and sweet:
+> 
+> 1. the allocation can fail
+> 2. Launch a VM early to (badly) mitigate this
+> 3. the only way to fix it is to add a boot option
+> 
+OK. Thanks.
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
+> 
+> > > > > > +	/*
+> > > > > > +	 * One TDMR must cover at least one (or partial) RAM entry,
+> > > > > > +	 * otherwise it is kernel bug.  WARN_ON() in this case.
+> > > > > > +	 */
+> > > > > > +	if (WARN_ON_ONCE((start >= end) || start >= TDMR_END(tdmr)))
+> > > > > > +		return 0;
+> > > 
+> > > This really means "no RAM found for this TDMR", right?  Can we say that,
+> > > please.
+> > 
+> > OK will add it.  How about:
+> > 
+> > 	/*
+> > 	 * No RAM found for this TDMR.  WARN() in this case, as it
+> > 	 * cannot happen otherwise it is a kernel bug.
+> > 	 */
+> 
+> The only useful information in that comment is the first sentence.  The
+> jibberish about WARN() is patently obvious from the next two lines of code.
+> 
+> *WHY* can't this happen?  How might it have actually happened?
 
-Changs since v1:
-- Updated tables according to documentation - thanks Sai!
+When TDMRs are created, we already have made sure one TDMR must cover at least
+one or partial RAM entry.
 
- drivers/soc/qcom/llcc-qcom.c       | 60 ++++++++++++++++++++++++++++++
- include/linux/soc/qcom/llcc-qcom.h |  2 +
- 2 files changed, 62 insertions(+)
-
-diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
-index 85ba8209b182..4b143cf7b4ce 100644
---- a/drivers/soc/qcom/llcc-qcom.c
-+++ b/drivers/soc/qcom/llcc-qcom.c
-@@ -130,6 +130,50 @@ static const struct llcc_slice_config sc7280_data[] =  {
- 	{ LLCC_MODPE,    29, 64,  1, 1, 0x3f, 0x0, 0, 0, 0, 1, 0, 0},
- };
- 
-+static const struct llcc_slice_config sc8180x_data[] = {
-+	{ LLCC_CPUSS,    1, 6144,  1, 1, 0xfff, 0x0,   0, 0, 0, 1, 1 },
-+	{ LLCC_VIDSC0,   2, 512,   2, 1, 0xfff, 0x0,   0, 0, 0, 1, 0 },
-+	{ LLCC_VIDSC1,   3, 512,   2, 1, 0xfff, 0x0,   0, 0, 0, 1, 0 },
-+	{ LLCC_AUDIO,    6, 1024,  1, 1, 0xfff, 0x0,   0, 0, 0, 1, 0 },
-+	{ LLCC_MDMHPGRW, 7, 3072,  1, 1, 0x3ff, 0xc00, 0, 0, 0, 1, 0 },
-+	{ LLCC_MDM,      8, 3072,  1, 1, 0xfff, 0x0,   0, 0, 0, 1, 0 },
-+	{ LLCC_MODHW,    9, 1024,  1, 1, 0xfff, 0x0,   0, 0, 0, 1, 0 },
-+	{ LLCC_CMPT,     10, 6144, 1, 1, 0xfff, 0x0,   0, 0, 0, 1, 0 },
-+	{ LLCC_GPUHTW,   11, 1024, 1, 1, 0xfff, 0x0,   0, 0, 0, 1, 0 },
-+	{ LLCC_GPU,      12, 5120, 1, 1, 0xfff, 0x0,   0, 0, 0, 1, 0 },
-+	{ LLCC_MMUHWT,   13, 1024, 1, 1, 0xfff, 0x0,   0, 0, 0, 0, 1 },
-+	{ LLCC_CMPTDMA,  15, 6144, 1, 1, 0xfff, 0x0,   0, 0, 0, 1, 0 },
-+	{ LLCC_DISP,     16, 6144, 1, 1, 0xfff, 0x0,   0, 0, 0, 1, 0 },
-+	{ LLCC_VIDFW,    17, 1024, 1, 1, 0xfff, 0x0,   0, 0, 0, 1, 0 },
-+	{ LLCC_MDMHPFX,  20, 1024, 2, 1, 0xfff, 0x0,   0, 0, 0, 1, 0 },
-+	{ LLCC_MDMPNG,   21, 1024, 0, 1, 0xc,   0x0,   0, 0, 0, 1, 0 },
-+	{ LLCC_AUDHW,    22, 1024, 1, 1, 0xfff, 0x0,   0, 0, 0, 1, 0 },
-+	{ LLCC_NPU,      23, 6144, 1, 1, 0xfff, 0x0,   0, 0, 0, 1, 0 },
-+	{ LLCC_WLHW,     24, 6144, 1, 1, 0xfff, 0x0,   0, 0, 0, 1, 0 },
-+	{ LLCC_MODPE,    29, 512,  1, 1, 0xc,   0x0,   0, 0, 0, 1, 0 },
-+	{ LLCC_APTCM,    30, 512,  3, 1, 0x0,   0x1,   1, 0, 0, 1, 0 },
-+	{ LLCC_WRCACHE,  31, 128,  1, 1, 0xfff, 0x0,   0, 0, 0, 0, 0 },
-+};
-+
-+static const struct llcc_slice_config sc8280xp_data[] = {
-+	{ LLCC_CPUSS,    1,  6144, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 1, 0 },
-+	{ LLCC_VIDSC0,   2,  512,  3, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-+	{ LLCC_AUDIO,    6,  1024, 1, 1, 0xfff, 0x0, 0, 0, 0, 0, 0, 0 },
-+	{ LLCC_CMPT,     10, 6144, 1, 1, 0xfff, 0x0, 0, 0, 0, 0, 0, 0 },
-+	{ LLCC_GPUHTW,   11, 1024, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-+	{ LLCC_GPU,      12, 4096, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 1 },
-+	{ LLCC_MMUHWT,   13, 1024, 1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
-+	{ LLCC_DISP,     16, 6144, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-+	{ LLCC_AUDHW,    22, 2048, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-+	{ LLCC_DRE,      26, 1024, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-+	{ LLCC_CVP,      28, 512,  3, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-+	{ LLCC_APTCM,    30, 1024, 3, 1, 0x0,   0x1, 1, 0, 0, 1, 0, 0 },
-+	{ LLCC_WRCACHE,  31, 1024, 1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
-+	{ LLCC_CVPFW,    32, 512,  1, 0, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-+	{ LLCC_CPUSS1,   33, 2048, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-+	{ LLCC_CPUHWT,   36, 512,  1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
-+};
-+
- static const struct llcc_slice_config sdm845_data[] =  {
- 	{ LLCC_CPUSS,    1,  2816, 1, 0, 0xffc, 0x2,   0, 0, 1, 1, 1 },
- 	{ LLCC_VIDSC0,   2,  512,  2, 1, 0x0,   0x0f0, 0, 0, 1, 1, 0 },
-@@ -276,6 +320,20 @@ static const struct qcom_llcc_config sc7280_cfg = {
- 	.reg_offset	= llcc_v1_2_reg_offset,
- };
- 
-+static const struct qcom_llcc_config sc8180x_cfg = {
-+	.sct_data	= sc8180x_data,
-+	.size		= ARRAY_SIZE(sc8180x_data),
-+	.need_llcc_cfg	= true,
-+	.reg_offset	= llcc_v1_2_reg_offset,
-+};
-+
-+static const struct qcom_llcc_config sc8280xp_cfg = {
-+	.sct_data	= sc8280xp_data,
-+	.size		= ARRAY_SIZE(sc8280xp_data),
-+	.need_llcc_cfg	= true,
-+	.reg_offset	= llcc_v1_2_reg_offset,
-+};
-+
- static const struct qcom_llcc_config sdm845_cfg = {
- 	.sct_data	= sdm845_data,
- 	.size		= ARRAY_SIZE(sdm845_data),
-@@ -741,6 +799,8 @@ static int qcom_llcc_probe(struct platform_device *pdev)
- static const struct of_device_id qcom_llcc_of_match[] = {
- 	{ .compatible = "qcom,sc7180-llcc", .data = &sc7180_cfg },
- 	{ .compatible = "qcom,sc7280-llcc", .data = &sc7280_cfg },
-+	{ .compatible = "qcom,sc8180x-llcc", .data = &sc8180x_cfg },
-+	{ .compatible = "qcom,sc8280xp-llcc", .data = &sc8280xp_cfg },
- 	{ .compatible = "qcom,sdm845-llcc", .data = &sdm845_cfg },
- 	{ .compatible = "qcom,sm6350-llcc", .data = &sm6350_cfg },
- 	{ .compatible = "qcom,sm8150-llcc", .data = &sm8150_cfg },
-diff --git a/include/linux/soc/qcom/llcc-qcom.h b/include/linux/soc/qcom/llcc-qcom.h
-index 0bc21ee58fac..9ed5384c5ca1 100644
---- a/include/linux/soc/qcom/llcc-qcom.h
-+++ b/include/linux/soc/qcom/llcc-qcom.h
-@@ -29,6 +29,8 @@
- #define LLCC_AUDHW       22
- #define LLCC_NPU         23
- #define LLCC_WLHW        24
-+#define LLCC_PIMEM       25
-+#define LLCC_DRE         26
- #define LLCC_CVP         28
- #define LLCC_MODPE       29
- #define LLCC_APTCM       30
 -- 
-2.35.1
+Thanks,
+-Kai
+
 

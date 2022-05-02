@@ -2,111 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8B60516B49
+	by mail.lfdr.de (Postfix) with ESMTP id 7ED62516B48
 	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 09:29:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383566AbiEBHcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 03:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49406 "EHLO
+        id S1348591AbiEBHcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 03:32:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383588AbiEBHcN (ORCPT
+        with ESMTP id S1383578AbiEBHcY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 03:32:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1A3B580F8
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 00:28:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651476517;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EywQlrSHGmaFztkZ6nGxOyoDkOWNb3RCFHAorrh5itE=;
-        b=efIw1PXTrPTf7FjTeosoLAFbiyfv7W3g62lYAd41v/jXdxsSANho2S7OS+sIUHZgKltmq2
-        2+KEpo8IDMgDdIBLGAp5MVfIZN/jVFkUKhY5CeWCesvrzpIkEWrck67fxU/Bm8He6j4wLm
-        lHTpjniLWr/SG8jZRGfOZD1yKRG35f8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-561-29NrMOZXMyqurb0Nic8wWA-1; Mon, 02 May 2022 03:28:34 -0400
-X-MC-Unique: 29NrMOZXMyqurb0Nic8wWA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2689F1014A67;
-        Mon,  2 May 2022 07:28:34 +0000 (UTC)
-Received: from [10.72.12.86] (ovpn-12-86.pek2.redhat.com [10.72.12.86])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 19C92112D165;
-        Mon,  2 May 2022 07:28:27 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v6 04/18] KVM: arm64: Support SDEI_EVENT_REGISTER
- hypercall
-To:     Oliver Upton <oupton@google.com>
-Cc:     kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
-        eauger@redhat.com, Jonathan.Cameron@huawei.com,
-        vkuznets@redhat.com, will@kernel.org, shannon.zhaosl@gmail.com,
-        james.morse@arm.com, mark.rutland@arm.com, maz@kernel.org,
-        pbonzini@redhat.com, shan.gavin@gmail.com
-References: <20220403153911.12332-1-gshan@redhat.com>
- <20220403153911.12332-5-gshan@redhat.com> <Ym1Nsaq/ERUx/ebD@google.com>
- <6e7cb20d-24c4-b357-8830-a68ff05638fe@redhat.com>
- <Ym9TarUE6+lJ0izt@google.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <a6122234-907a-4ede-26fc-872c196c5912@redhat.com>
-Date:   Mon, 2 May 2022 15:28:24 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Mon, 2 May 2022 03:32:24 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8313A186D2
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 00:28:56 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id y3so26111952ejo.12
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 00:28:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=M/NousMCOU2e8E7hccDsKNh4JGgzjX6q7ryA6BmSRng=;
+        b=gBUPE1p+7lsQ4itS6GewgP6XozdgUjNm2CHpGIWblg5O286TIpp8Y8VU8HVPlL7xKI
+         Z97lK1hGjOgDECZVjh2eU1xfKTa8dmuLv+zk5tFVsp5N4WXdzqR3PtDoDb3cbfqaJ5Hg
+         Jy4uDHaUg8UBLLgRfXapyRCsMSpjo7VgqolOGpKv2nU/WIsvswLPV4nZFqnj/njrh7k9
+         Ln02Zt8ib/p56Hbu4zHY2t5d16gkxXlO1mT9YDTBHUPx49miHu+1tEM9fF8RVDUl+UXo
+         55lvAmxRno4i6RGOB6jrABkGgbvBvD+3tGenFZj/eOF7zJ4m11usrJErh4PmlV/dQmq0
+         BY1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=M/NousMCOU2e8E7hccDsKNh4JGgzjX6q7ryA6BmSRng=;
+        b=14ojr2n45ERndG477lqzUkfE1V0ebrQRiw5dnZgr87y/YIeoSGe2SfnErdQqA5vIFi
+         p2hOnHxsFmYr7z2rNVgKFtW17UqaqXbaOvUlQW7qmbNcPXreQR7Uw+dO7EkbCnXndKgs
+         P+X7sNZ+EvQMoB7FRumVefO4EqncxOQ4eyBcN1WY+5kMiHUompmvgbh3S1PaRwhRztK3
+         sELzP/8iA9oD8l01kFhNmMmU1LVqJkESzWOYQ2dAAm8FjnX12X5dHPRc4KLdJc6x4lKW
+         54hEISdPJRyV9Y1dFw09YrugycTc/5bPf9NWpxREvYZVuguIAwcxGY0yHyxRBlZOUFLb
+         0lDA==
+X-Gm-Message-State: AOAM530qn1lQ5cD/xiYGs8iyEaxhONxb3bZnw+vJhKA5l5h+CEqJm0U7
+        7rLosRTO/Mao6NzNyLowlaZVqQ==
+X-Google-Smtp-Source: ABdhPJy1WAFLZ6+3JWSAnuTXC9t3CGDp5zLxhd0V+yCegQ2Y56/R48BrbmskPXklEKAAbTvczq4ekw==
+X-Received: by 2002:a17:907:3f96:b0:6f3:cd20:b00c with SMTP id hr22-20020a1709073f9600b006f3cd20b00cmr10092926ejc.185.1651476534983;
+        Mon, 02 May 2022 00:28:54 -0700 (PDT)
+Received: from [192.168.0.188] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id jx28-20020a170907761c00b006f3ef214e29sm3361223ejc.143.2022.05.02.00.28.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 May 2022 00:28:54 -0700 (PDT)
+Message-ID: <dab1dd94-71af-e17c-cf90-662615c4a9f3@linaro.org>
+Date:   Mon, 2 May 2022 09:28:53 +0200
 MIME-Version: 1.0
-In-Reply-To: <Ym9TarUE6+lJ0izt@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/9] ARM: dts: zynq-7000: drop useless
+ 'dma-channels/requests' properties
 Content-Language: en-US
+To:     Michal Simek <michal.simek@xilinx.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Rob Herring <robh@kernel.org>
+References: <20220430121902.59895-1-krzysztof.kozlowski@linaro.org>
+ <20220430121902.59895-2-krzysztof.kozlowski@linaro.org>
+ <a838f962-354c-9dcf-c0dc-80d1a6cd4fc3@xilinx.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <a838f962-354c-9dcf-c0dc-80d1a6cd4fc3@xilinx.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oliver,
-
-On 5/2/22 11:43 AM, Oliver Upton wrote:
-> On Mon, May 02, 2022 at 10:55:51AM +0800, Gavin Shan wrote:
->>>> +	unsigned long route_mode = smccc_get_arg(vcpu, 4);
->>>
->>> This is really 'flags'. route_mode is bit[0]. I imagine we don't want to
->>> support relative mode, so bit[1] is useless for us in that case too.
->>>
->>> The spec is somewhat imprecise on what happens for reserved flags. The
->>> prototype in section 5.1.2 of [1] suggests that reserved bits must be
->>> zero, but 5.1.2.3 'Client responsibilities' does not state that invalid
->>> flags result in an error.
->>>
->>> Arm TF certainly rejects unexpected flags [2].
->>>
->>> [1]: DEN0054C https://developer.arm.com/documentation/den0054/latest
->>> [2]: https://github.com/ARM-software/arm-trusted-firmware/blob/66c3906e4c32d675eb06bd081de8a3359f76b84c/services/std_svc/sdei/sdei_main.c#L260
->>>
->>
->> Yes, This chunk of code is still stick to old specification. Lets
->> improve in next respin:
->>
->>     - Rename @route_mode to @flags
->>     - Reject if the reserved bits are set.
->>     - Reject if relative mode (bit#1) is selected.
->>     - Reject if routing mode (bit#0) isn't RM_ANY (0).
+On 02/05/2022 09:27, Michal Simek wrote:
 > 
-> Bit[0] is ignored for private events, actually. So we really just reject
-> if any of bit[63:1] are set.
 > 
+> On 4/30/22 14:18, Krzysztof Kozlowski wrote:
+>> The pl330 DMA controller provides number of DMA channels and requests
+>> through its registers, so duplicating this information (with a chance of
+>> mistakes) in DTS is pointless.  Additionally the DTS used always wrong
+>> property names which causes DT schema check failures - the bindings
+>> documented 'dma-channels' and 'dma-requests' properties without leading
+>> hash sign.
+>>
+>> Reported-by: Rob Herring <robh@kernel.org>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>
+>> ---
+>>
+>> Not adding acquired review tag because of significant change.
+>> ---
+>>   arch/arm/boot/dts/zynq-7000.dtsi | 2 --
+>>   1 file changed, 2 deletions(-)
+>>
+>> diff --git a/arch/arm/boot/dts/zynq-7000.dtsi b/arch/arm/boot/dts/zynq-7000.dtsi
+>> index 47c2a4b14c06..c193264a86ff 100644
+>> --- a/arch/arm/boot/dts/zynq-7000.dtsi
+>> +++ b/arch/arm/boot/dts/zynq-7000.dtsi
+>> @@ -343,8 +343,6 @@ dmac_s: dmac@f8003000 {
+>>   			             <0 40 4>, <0 41 4>,
+>>   			             <0 42 4>, <0 43 4>;
+>>   			#dma-cells = <1>;
+>> -			#dma-channels = <8>;
+>> -			#dma-requests = <4>;
+>>   			clocks = <&clkc 27>;
+>>   			clock-names = "apb_pclk";
+>>   		};
+> 
+> Acked-by: Michal Simek <michal.simek@amd.com>
+> 
+> If you can take it via your tree that would be great (easier for me than sending 
+> pull request with just one patch) but I can also take it.
 
-It makes sense to me. Thanks for your confirm :)
+Thanks, I will take it.
 
-Thanks,
-Gavin
 
+Best regards,
+Krzysztof

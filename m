@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 597E2516F0E
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 13:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D5F3516F12
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 13:48:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384796AbiEBLuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 07:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40186 "EHLO
+        id S241744AbiEBLvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 07:51:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241744AbiEBLuK (ORCPT
+        with ESMTP id S229651AbiEBLvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 07:50:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE87C165BF;
-        Mon,  2 May 2022 04:46:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A5CF61216;
-        Mon,  2 May 2022 11:46:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E0CBC385AC;
-        Mon,  2 May 2022 11:46:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651492000;
-        bh=MUFykdNVid0aaejhToLZfeDf3CUxpzSoP2z1PtGS1uo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=enpPRHfBVOI08gdtMVVVQ6aNPivGjpflVMCIBXbkX9T7XVKCDIAIMRrKHFeoEZtnn
-         hULZLu0WMW6MCCU0JzE4RkGfY0Yd8R4l53LV9e0KqVkAvqhKn0RN/uSa5cWJXIXjk9
-         RlZ0W6beSn+rqDfcVBoLLYu10B4mmZc2JSQsC3dM=
-Date:   Mon, 2 May 2022 13:46:39 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Dan Vacura <w36195@motorola.com>
-Cc:     linux-usb@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Felipe Balbi <balbi@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: uvc: allow for application to cleanly
- shutdown
-Message-ID: <Ym/En8EjfkpIVm+a@kroah.com>
-References: <20220429192001.385636-1-w36195@motorola.com>
- <YmzrwgiEO2hoKM4U@kroah.com>
- <Ym9Z+BfHcwDKlwjy@p1g3>
+        Mon, 2 May 2022 07:51:48 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2470167CE
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 04:48:19 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id x13-20020a0566022c4d00b0065491fa5614so10611026iov.9
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 04:48:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=Yz+wn22ujEUKCk4p7FisUPt8bMfaKkzSjy4HRUtOLdg=;
+        b=l3LKPzectHmAhPTUCSgTOyVZYtIdYlH9IPX0l16fCCG1gj/RNXrKulXBPXpWyL4uVE
+         vhLOsGZyR6/H+DhMDSag076uliTgAgqX4l+coxY96gD1520wE0PXlKxWpOfLTJjgxOFh
+         xJ+a7OJIDl6ozeFwlFuCb8q442uMLMQQft/cTTrBfAzZ8zHR0UZ8ZZzoeoBT6h5txnGC
+         IYJjo3ncRKPDRtM5NSU+KBnioJGeIsCGpthUiFkWH7kfU3xXu6L9PUZYBQeb/TLFGSyN
+         BvLc/o2sj916EJmIKYz4XGkuMtR34QU26nGiVrHIT4wocoSOOdIQWaZ04/SK+PBDMs4W
+         WAUg==
+X-Gm-Message-State: AOAM533kZ3EmoF4MrzKRAglTWIQoxdSc4R6GfUgHhcIfm5h3fgz7U6fj
+        QSTgUwN9cdrLTBizqSRxSDUWdeIDrmzshm1494rFIiGpYS5B
+X-Google-Smtp-Source: ABdhPJxXHkBU1sNJNGtPP588E9+M/reUxQ54mGhlaY7+ODPl9vfDYmAh81OuYUTPBUyJRxclevbNy+NMlHq2gpG/YkFVDB3XHU3m
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ym9Z+BfHcwDKlwjy@p1g3>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a02:a518:0:b0:32a:fd7e:ace0 with SMTP id
+ e24-20020a02a518000000b0032afd7eace0mr4632233jam.208.1651492099286; Mon, 02
+ May 2022 04:48:19 -0700 (PDT)
+Date:   Mon, 02 May 2022 04:48:19 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ed68ec05de05f7c4@google.com>
+Subject: [syzbot] WARNING in vmx_queue_exception (2)
+From:   syzbot <syzbot+cfafed3bb76d3e37581b@syzkaller.appspotmail.com>
+To:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mingo@redhat.com,
+        pbonzini@redhat.com, seanjc@google.com,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,110 +57,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 01, 2022 at 11:11:36PM -0500, Dan Vacura wrote:
-> On Sat, Apr 30, 2022 at 09:56:50AM +0200, Greg Kroah-Hartman wrote:
-> > On Fri, Apr 29, 2022 at 02:20:01PM -0500, Dan Vacura wrote:
-> > > Several types of kernel panics can occur due to timing during the uvc
-> > > gadget removal. This appears to be a problem with gadget resources being
-> > > managed by both the client application's v4l2 open/close and the UDC
-> > > gadget bind/unbind. Since the concept of USB_GADGET_DELAYED_STATUS
-> > > doesn't exist for unbind, add a wait to allow for the application to
-> > > close out.
-> > > 
-> > > Some examples of the panics that can occur are:
-> > > 
-> > > <1>[ 1147.652313] Unable to handle kernel NULL pointer dereference at
-> > > virtual address 0000000000000028
-> > > <4>[ 1147.652510] Call trace:
-> > > <4>[ 1147.652514]  usb_gadget_disconnect+0x74/0x1f0
-> > > <4>[ 1147.652516]  usb_gadget_deactivate+0x38/0x168
-> > > <4>[ 1147.652520]  usb_function_deactivate+0x54/0x90
-> > > <4>[ 1147.652524]  uvc_function_disconnect+0x14/0x38
-> > > <4>[ 1147.652527]  uvc_v4l2_release+0x34/0xa0
-> > > <4>[ 1147.652537]  __fput+0xdc/0x2c0
-> > > <4>[ 1147.652540]  ____fput+0x10/0x1c
-> > > <4>[ 1147.652545]  task_work_run+0xe4/0x12c
-> > > <4>[ 1147.652549]  do_notify_resume+0x108/0x168
-> > > 
-> > > <1>[  282.950561][ T1472] Unable to handle kernel NULL pointer
-> > > dereference at virtual address 00000000000005b8
-> > > <6>[  282.953111][ T1472] Call trace:
-> > > <6>[  282.953121][ T1472]  usb_function_deactivate+0x54/0xd4
-> > > <6>[  282.953134][ T1472]  uvc_v4l2_release+0xac/0x1e4
-> > > <6>[  282.953145][ T1472]  v4l2_release+0x134/0x1f0
-> > > <6>[  282.953167][ T1472]  __fput+0xf4/0x428
-> > > <6>[  282.953178][ T1472]  ____fput+0x14/0x24
-> > > <6>[  282.953193][ T1472]  task_work_run+0xac/0x130
-> > > 
-> > > <3>[  213.410077][   T29] configfs-gadget gadget: uvc: Failed to queue
-> > > request (-108).
-> > > <1>[  213.410116][   T29] Unable to handle kernel NULL pointer
-> > > dereference at virtual address 0000000000000003
-> > > <6>[  213.413460][   T29] Call trace:
-> > > <6>[  213.413474][   T29]  uvcg_video_pump+0x1f0/0x384
-> > > <6>[  213.413489][   T29]  process_one_work+0x2a4/0x544
-> > > <6>[  213.413502][   T29]  worker_thread+0x350/0x784
-> > > <6>[  213.413515][   T29]  kthread+0x2ac/0x320
-> > > <6>[  213.413528][   T29]  ret_from_fork+0x10/0x30
-> > > 
-> > > Signed-off-by: Dan Vacura <w36195@motorola.com>
-> > > ---
-> > >  drivers/usb/gadget/function/f_uvc.c    | 24 ++++++++++++++++++++++++
-> > >  drivers/usb/gadget/function/uvc.h      |  2 ++
-> > >  drivers/usb/gadget/function/uvc_v4l2.c |  3 ++-
-> > >  3 files changed, 28 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-> > > index 50e6e7a58b41..3cc8cf24a7c7 100644
-> > > --- a/drivers/usb/gadget/function/f_uvc.c
-> > > +++ b/drivers/usb/gadget/function/f_uvc.c
-> > > @@ -892,13 +892,36 @@ static void uvc_function_unbind(struct usb_configuration *c,
-> > >  {
-> > >  	struct usb_composite_dev *cdev = c->cdev;
-> > >  	struct uvc_device *uvc = to_uvc(f);
-> > > +	int wait_ret = 1;
-> > >  
-> > >  	uvcg_info(f, "%s()\n", __func__);
-> > 
-> > Ick, wait, is that in the kernel?  That needs to be removed, ftrace can
-> > do that for you.
-> 
-> Yes, part of the kernel, and tbh, I find it to be quite helpful in
-> debugging field issues from customers, where enabling ftrace isn't
-> practical.
+Hello,
 
-Why isn't ftrace ok to enable in a running kernel?
+syzbot found the following issue on:
 
-Worst case, this should be dev_dbg(), right?
+HEAD commit:    57ae8a492116 Merge tag 'driver-core-5.18-rc5' of git://git..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16d27d72f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d21a72f6016e37e8
+dashboard link: https://syzkaller.appspot.com/bug?extid=cfafed3bb76d3e37581b
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1202b25af00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1386a07af00000
 
-> If you still want to remove, there are other locations in
-> this gadget driver that log function entry. Perhaps it'd be better to
-> do a separate change that cleans up logging a bit or do you prefer to
-> just refactor this one now?
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+cfafed3bb76d3e37581b@syzkaller.appspotmail.com
 
-This commit is fine, it's a separate issue, I just noticed it as it was
-in the context of this change.
+------------[ cut here ]------------
+WARNING: CPU: 2 PID: 3674 at arch/x86/kvm/vmx/vmx.c:1628 vmx_queue_exception+0x3e6/0x450 arch/x86/kvm/vmx/vmx.c:1628
+Modules linked in:
+CPU: 2 PID: 3674 Comm: syz-executor352 Not tainted 5.18.0-rc4-syzkaller-00396-g57ae8a492116 #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+RIP: 0010:vmx_queue_exception+0x3e6/0x450 arch/x86/kvm/vmx/vmx.c:1628
+Code: 89 fa 48 c1 ea 03 0f b6 04 02 48 89 fa 83 e2 07 38 d0 7f 04 84 c0 75 6c 44 0f b6 b5 7c 0d 00 00 e9 16 ff ff ff e8 5a 7b 58 00 <0f> 0b e9 87 fd ff ff e8 5e 72 a3 00 e9 b5 fc ff ff e8 54 72 a3 00
+RSP: 0018:ffffc90003017b10 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000080000800 RCX: 0000000000000000
+RDX: ffff88801d230100 RSI: ffffffff811fe996 RDI: 0000000000000003
+RBP: ffff888023464040 R08: 0000000000000000 R09: 0000000000000001
+R10: ffffffff811fe71b R11: 0000000000000000 R12: 0000000000000001
+R13: 00000000fffffffd R14: 0000000000000000 R15: dffffc0000000000
+FS:  0000555555918300(0000) GS:ffff88802cc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000000 CR3: 00000000235cc000 CR4: 0000000000152ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ kvm_inject_exception arch/x86/kvm/x86.c:9339 [inline]
+ inject_pending_event+0x592/0x1480 arch/x86/kvm/x86.c:9350
+ vcpu_enter_guest arch/x86/kvm/x86.c:10072 [inline]
+ vcpu_run arch/x86/kvm/x86.c:10360 [inline]
+ kvm_arch_vcpu_ioctl_run+0xff7/0x6680 arch/x86/kvm/x86.c:10561
+ kvm_vcpu_ioctl+0x570/0xf30 arch/x86/kvm/../../../virt/kvm/kvm_main.c:3943
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7effdacd6f49
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffc580ec718 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007effdacd6f49
+RDX: 0000000000000000 RSI: 000000000000ae80 RDI: 0000000000000005
+RBP: 00007effdac9aa40 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007effdac9aad0
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
 
-> > > +	/* If we know we're connected via v4l2, then there should be a cleanup
-> > > +	 * of the device from userspace either via UVC_EVENT_DISCONNECT or
-> > > +	 * though the video device removal uevent. Allow some time for the
-> > > +	 * application to close out before things get deleted.
-> > > +	 */
-> > > +	if (uvc->func_connected) {
-> > > +		uvcg_info(f, "%s waiting for clean disconnect\n", __func__);
-> > > +		wait_ret = wait_event_interruptible_timeout(uvc->func_connected_queue,
-> > > +				uvc->func_connected == false, msecs_to_jiffies(500));
-> > > +		uvcg_info(f, "%s done waiting with ret: %u\n", __func__, wait_ret);
-> > 
-> > Please remove debugging code before submitting patches.
-> 
-> Will do.
 
-But this should be removed :)
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Feel free to change it to dev_dbg(), which gives you the __func__
-automatically without anything extra needed.
-
-thanks,
-
-greg k-h
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

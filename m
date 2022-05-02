@@ -2,171 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5088551719A
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 16:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29AC751719F
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 16:32:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348733AbiEBOee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 10:34:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42092 "EHLO
+        id S1385546AbiEBOgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 10:36:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236543AbiEBOea (ORCPT
+        with ESMTP id S236543AbiEBOgE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 10:34:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A3917F38
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 07:31:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651501860;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Mon, 2 May 2022 10:36:04 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D73FE7
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 07:32:35 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id AE5FC210DF;
+        Mon,  2 May 2022 14:32:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1651501953; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=c77/rDIAYeEnW8QDTuHFvfz/klWTZsXPW+s3RWN5ms4=;
-        b=MPAo7waG9P1AG/9PngZTpGFNUbB8JYD8DhaDrigfuDWKdOIkC8RqxQ2WUA4ebWNS4IRIBE
-        c706inCwhza6Vn1AKqogNNdzj/k1CYaUbv+0djoAa7Dn1psHCayLW295JHsZWllmbkuadH
-        K7z+Amxr3lI0FTJ+WGH1Pg93COvJbW4=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-577-H4mcFkj7OY-Q72G3TtmlbQ-1; Mon, 02 May 2022 10:30:59 -0400
-X-MC-Unique: H4mcFkj7OY-Q72G3TtmlbQ-1
-Received: by mail-ed1-f72.google.com with SMTP id l24-20020a056402231800b00410f19a3103so8804002eda.5
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 07:30:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=c77/rDIAYeEnW8QDTuHFvfz/klWTZsXPW+s3RWN5ms4=;
-        b=V/D44GmGFP8LBxZTUcoAY6dWzIlqR9DnQ5fOAKFcR/waN+/K49mALMR37U3NLSWgfe
-         2Xs8cJNELtOErnuX8Zra23DdUFM7oXA1faSgJifAGqJ+pikBcJJr7g24BV6BFxRbMYnN
-         nZ2N3FdM26rW6xJN+FNSxoCAZYSLLB2tPPWqxpSag/LWbsaLkuGRlEVh+AY2Puv4G4GK
-         svhVutB01WQ9OVHMyJ6y2VoQHP0KLZoRfOnRIIyAgp1P8CcQ/ZfRCdJcIYrHJfiWWLca
-         jmDPK7/YP66mov2IN2tZOH1R71h8//0FW0but26I/Gw4qDqHgNmB8W1ZkXQhIxU5mvAr
-         iQKQ==
-X-Gm-Message-State: AOAM532W+J4ygzRM5Wso0dDMtKFgTnlBAjGtvJTVnDriP0srtSPPS/LE
-        PVV7UmS3VhtI0MowHVckjymyDG/+0h/Gdz2yzhzjg1FeUKykmbkXaVpqO3/SN0vjXKT4vbOEkTK
-        TF+UINosqeGbj3gQk/eIJ8jGV
-X-Received: by 2002:a17:907:2cc3:b0:6da:e6cb:2efa with SMTP id hg3-20020a1709072cc300b006dae6cb2efamr11358685ejc.169.1651501858373;
-        Mon, 02 May 2022 07:30:58 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwLx4IDXJr0EkxOumtryaZEbv9FTqjHDJFUHQuJ26Yauo+JoJXebyA8GYbJpiGICTwaJs7ASg==
-X-Received: by 2002:a17:907:2cc3:b0:6da:e6cb:2efa with SMTP id hg3-20020a1709072cc300b006dae6cb2efamr11358667ejc.169.1651501858142;
-        Mon, 02 May 2022 07:30:58 -0700 (PDT)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id hy24-20020a1709068a7800b006f3ef214e76sm3602483ejc.220.2022.05.02.07.30.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 07:30:57 -0700 (PDT)
-Message-ID: <827dc313-33ff-1c91-afaf-7645b655a1be@redhat.com>
-Date:   Mon, 2 May 2022 16:30:57 +0200
+        bh=Hr8tg7qMvq7+HBRxnxzbzDH6LiepcRan1rlU5pg3igw=;
+        b=dIRWbKzV+mgrep8V4vn6J11EgOs6HpBkjha5xwQ7g1/RxopgD8e3yjmnJZ1Z9xxhOpL3Sr
+        qf5atz9xzNtOAAwjzyyNHATcXY1kyXTrJ5GH/gL8k/2RhmkeYAC3NHz5iHODuPDCME45fV
+        jw2N5qRBWGucw9dUgSX/ZvJZMJfjbhU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1651501953;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Hr8tg7qMvq7+HBRxnxzbzDH6LiepcRan1rlU5pg3igw=;
+        b=RhbLrLuZ4DthDjKP5l+A5wN1STKadLhlkwnWvBYP4T8R0WoNgqhwVHK0kBkE8gKqFQz5Mc
+        K/i7AeSn+IXPQSCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7961013491;
+        Mon,  2 May 2022 14:32:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id CN3IHIHrb2I5NgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 02 May 2022 14:32:33 +0000
+Message-ID: <869155ca-cf9c-d334-c815-56f0e9eb2b2b@suse.de>
+Date:   Mon, 2 May 2022 16:32:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 0/4] platform: allow ATOM PMC code to be optional
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] drm/ast: Atomic CR/SR reg R/W
 Content-Language: en-US
-To:     Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-References: <20220428062430.31010-1-paul.gortmaker@windriver.com>
- <YmpoeJtFNSyCq1QL@smile.fi.intel.com> <20220428181131.GG12977@windriver.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220428181131.GG12977@windriver.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Kuo-Hsiang Chou <kuohsiang_chou@aspeedtech.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     Ryan Chen <ryan_chen@aspeedtech.com>,
+        "airlied@linux.ie" <airlied@linux.ie>,
+        =?UTF-8?B?5riF5rC05L+uKG8tc2hpbWl6dSkt5Y+w54GjTkVD?= 
+        <o-shimizu@nec.com.tw>, Jenmin Yuan <jenmin_yuan@aspeedtech.com>,
+        "airlied@redhat.com" <airlied@redhat.com>,
+        Arc Sung <arc_sung@aspeedtech.com>,
+        Luke Chen <luke_chen@aspeedtech.com>
+References: <20210917072226.17357-1-kuohsiang_chou@aspeedtech.com>
+ <7c128e03-842a-57b3-0c11-24fed9d4d126@suse.de>
+ <HK2PR06MB3300C768B6A3C390A7D1BBC28CAA9@HK2PR06MB3300.apcprd06.prod.outlook.com>
+ <HK2PR06MB3300EB8A7BEB41907FB7FC5F8C6A9@HK2PR06MB3300.apcprd06.prod.outlook.com>
+ <4a7ce84d-faef-4fb2-d36d-5cff2fba8ecf@suse.de>
+ <HK2PR06MB3300A0A69348024725AFD4BE8C6D9@HK2PR06MB3300.apcprd06.prod.outlook.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <HK2PR06MB3300A0A69348024725AFD4BE8C6D9@HK2PR06MB3300.apcprd06.prod.outlook.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------wzzUxt8MQyWnqJGFQv6a0wjb"
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------wzzUxt8MQyWnqJGFQv6a0wjb
+Content-Type: multipart/mixed; boundary="------------jq5GfvK6DDMjQqDrbTiNIaKJ";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Kuo-Hsiang Chou <kuohsiang_chou@aspeedtech.com>,
+ "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc: Ryan Chen <ryan_chen@aspeedtech.com>, "airlied@linux.ie"
+ <airlied@linux.ie>, =?UTF-8?B?5riF5rC05L+uKG8tc2hpbWl6dSkt5Y+w54GjTkVD?=
+ <o-shimizu@nec.com.tw>, Jenmin Yuan <jenmin_yuan@aspeedtech.com>,
+ "airlied@redhat.com" <airlied@redhat.com>, Arc Sung
+ <arc_sung@aspeedtech.com>, Luke Chen <luke_chen@aspeedtech.com>
+Message-ID: <869155ca-cf9c-d334-c815-56f0e9eb2b2b@suse.de>
+Subject: Re: [PATCH] drm/ast: Atomic CR/SR reg R/W
+References: <20210917072226.17357-1-kuohsiang_chou@aspeedtech.com>
+ <7c128e03-842a-57b3-0c11-24fed9d4d126@suse.de>
+ <HK2PR06MB3300C768B6A3C390A7D1BBC28CAA9@HK2PR06MB3300.apcprd06.prod.outlook.com>
+ <HK2PR06MB3300EB8A7BEB41907FB7FC5F8C6A9@HK2PR06MB3300.apcprd06.prod.outlook.com>
+ <4a7ce84d-faef-4fb2-d36d-5cff2fba8ecf@suse.de>
+ <HK2PR06MB3300A0A69348024725AFD4BE8C6D9@HK2PR06MB3300.apcprd06.prod.outlook.com>
+In-Reply-To: <HK2PR06MB3300A0A69348024725AFD4BE8C6D9@HK2PR06MB3300.apcprd06.prod.outlook.com>
 
-On 4/28/22 20:11, Paul Gortmaker wrote:
-> [Re: [PATCH 0/4] platform: allow ATOM PMC code to be optional] On 28/04/2022 (Thu 13:12) Andy Shevchenko wrote:
-> 
->> On Thu, Apr 28, 2022 at 02:24:26AM -0400, Paul Gortmaker wrote:
->>> A few months back I was doing a test build for "defconfig-like" COTS
->>> hardware and happened to notice some pmc-atom stuff being built.  Fine,
->>> I thought - the defconfig isn't minimal - we all know that - what Kconfig
->>> do I use to turn that off?  Well, imagine my surprise when I found out
->>> you couldn't turn it [Atom Power Management Controller] code off!
->>
->> Turning it off on BayTrail and CherryTrail devices will be devastating
->> to the users' experience. And plenty of cheap tablets are exactly made
->> on that SoCs.
-> 
-> Sure, but I could say the same thing for DRM_I915 and millions of
-> desktop PC users - yet we still give all the other non i915 users the
-> option to be able to turn it off.  Pick any other Kconfig value you like
-> and the same thing holds true.
-> 
-> Just so we are on the same page - I want to give the option to let
-> people opt out, and at the same time not break existing users. If you
-> think the defconfig default of being off is too risky, then I am OK with
-> that and we can just start by exposing the option with "default y".
-> 
-> So, to that end - are you OK with exposing the Kconfig so people can
-> opt out, or are you 100% against exposing the Kconfig at all?  That
-> obviously has the most impact on what I do or don't do next.
-> 
->>> Normally we all agree to not use "default y" unless unavoidable, but
->>> somehow this was added as "def_bool y" which is even worse ; you can
->>> see the Kconfig setting but there is *no* way you can turn it off.
->>>
->>> After investigating, I found no reason why the atom code couldn't be
->>> opt-out with just minor changes that the original addition overlooked.
->>>
->>> And so this series addreses that.  I tried to be sensitive to not
->>> break any existing configs in the process, but the defconfig will
->>> now intentionally be different and exclude this atom specific code.
->>>
->>> Using a defconfig on today's linux-next, here is the delta summary:
->>>
->>> $ ./scripts/bloat-o-meter -c ../pmc-atom-pre/vmlinux ../pmc-atom-post/vmlinux|grep add/remove
->>> add/remove: 0/410 grow/shrink: 0/7 up/down: 0/-47659 (-47659)
->>> add/remove: 0/105 grow/shrink: 0/1 up/down: 0/-6848 (-6848)
->>> add/remove: 0/56 grow/shrink: 0/1 up/down: 0/-10155 (-10155)
->>>
->>> $ ./scripts/bloat-o-meter -c ../pmc-atom-pre/vmlinux ../pmc-atom-post/vmlinux|grep Total
->>> Total: Before=13626994, After=13579335, chg -0.35%
->>> Total: Before=3572137, After=3565289, chg -0.19%
->>> Total: Before=1235335, After=1225180, chg -0.82%
->>>
->>> It is hard to reclaim anything against the inevitable growth in
->>> footprint, so I'd say we should be glad to take whatever we can.
->>>
->>> Boot tested defconfig on today's linux-next on older non-atom COTS.
->>
->> I believe this needs an extensive test done by Hans who possesses a lot of
->> problematic devices that require that module to be present.
-> 
-> Input from Hans is 100% welcome - but maybe again if we just consider
-> using "default y" even though it isn't typical - then your concerns are
-> not as extensive?
+--------------jq5GfvK6DDMjQqDrbTiNIaKJ
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-I have no objection against allowing disabling the PMC_ATOM Kconfig option.
+SGkNCg0KQW0gMDYuMTIuMjEgdW0gMDI6Mzggc2NocmllYiBLdW8tSHNpYW5nIENob3U6DQoN
+Cj4gSSdtIG5vdCBnb2luZyB0byBtZXJnZSB0aGlzIHBhdGNoLiBBcyBJIHNhaWQsIEkgZG9u
+J3QgdGhpbmsgaXQgZml4ZXMgdGhlIHByb2JsZW0uIE1vdXNlIG1vdmVtZW50IGFuZCByZXNv
+bHV0aW9uIHN3aXRjaGluZyBzaG91bGQgbm90IGludGVyZmVyZSB3aXRoIGVhY2ggb3RoZXIu
+IFRoZSBEUk0gZnJhbWV3b3JrIHNob3VsZCBndWFyYW50ZWUgdGhhdC4NCj4gT0ssIHRoYW5r
+cyBmb3IgeW91ciBjb25maXJtYXRpb24uDQo+IA0KPiBJIGNhbm5vdCByZXByb2R1Y2UgdGhl
+IGlzc3VlLCBidXQgdGhlcmUncyBtb3N0IGxpa2VseSBzb21ldGhpbmcgZWxzZSBoYXBwZW5p
+bmcgaGVyZS4gSG93IGNhbiB0aGUgc3lzdGVtIHN3aXRjaCByZXNvbHV0aW9uIGFuZCBjaGFu
+Z2UgdGhlIG1vdXNlIGF0IHRoZSBzYW1lIHRpbWU/DQo+IFN1cmUsIHdlIHdpbGwgY2hlY2sg
+aWYgdGhlcmUgaXMgYSAxMDAgcGVyY2VudCBtZXRob2QgdG8gcmVwcm9kdWNlIHRoZSBpc3N1
+ZS4NCj4gVGhhbmtzIGZvciB5b3VyIHJlc3BvbnNlcy4NCg0KSSd2ZSBiZWVuIGF3YXkgZm9y
+IGEgd2hpbGU7IHNvcnJ5IGZvciBhbGwgdGhpcyB0YWtpbmcgc28gbG9uZy4gIEkndmUgDQpt
+ZWFud2hpbGUgYmVlbiBhYmxlIHRvIHJlcHJvZHVjZSB0aGUgcHJvYmxlbS4gSXQgaGFwcGVu
+cyB3aGVuIEdOT01FIA0KY29uY3VycmVudGx5IHRyaWVzIHRvIHNldCB0aGUgdmlkZW8gbW9k
+ZSBhbmQgcmVhZCB0aGUgYXZhaWxhYmxlIHZpZGVvIA0KbW9kZXMgZnJvbSBFRElELiBSZWFk
+aW5nIEVESUQgaXMgbm90IHByb3RlY3RlZCBhZ2FpbnN0IGNvbmN1cnJlbnQgbW9kZSANCnNl
+dHRpbmcgb3IgY3Vyc29yIG1vdmVtZW50Lg0KDQpJJ3ZlIHBvc3RlZCBhIHBhdGNoc2V0IHRo
+YXQgc2hvdWxkIGZpeCB0aGUgcHJvYmxlbS4gU2VlIFsxXS4NCg0KQmVzdCByZWdhcmRzDQpU
+aG9tYXMNCg0KWzFdIA0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvZHJpLWRldmVsLzIwMjIw
+NTAyMTQyNTE0LjIxNzQtMS10emltbWVybWFubkBzdXNlLmRlL1QvI3QNCg0KPiANCj4gUmVn
+YXJkcywNCj4gCUt1by1Ic2lhbmcgQ2hvdQ0KPiANCj4gQmVzdCByZWdhcmRzDQo+IFRob21h
+cw0KPiANCj4+DQo+PiBIaSBUb21hcywNCj4+IEdvb2QgZGF5IQ0KPj4gTWF5IEkgdW5kZXJz
+dGFuZCB0aGUgcmV2aWV3IHN0YXR1cywgb3IgaXMgdGhlcmUgYW55dGhpbmcgSSBjYW4gZG8g
+dG8gaW1wcm92ZSBpdD8gVGhhbmtzIQ0KPj4NCj4+IEJlc3QgUmVnYXJkcywNCj4+IAlLdW8t
+SHNpYW5nIENob3UNCj4+DQo+PiBCZXN0IFJlZ2FyZHMsDQo+PiAgICAJS3VvLUhzaWFuZyBD
+aG91DQo+Pg0KPj4gQmVzdCByZWdhcmRzDQo+PiBUaG9tYXMNCj4+DQo+Pj4NCj4+PiBTaWdu
+ZWQtb2ZmLWJ5OiBLdW9Ic2lhbmcgQ2hvdSA8a3VvaHNpYW5nX2Nob3VAYXNwZWVkdGVjaC5j
+b20+DQo+Pj4gLS0tDQo+Pj4gICAgIGRyaXZlcnMvZ3B1L2RybS9hc3QvYXN0X21haW4uYyB8
+IDQ4ICsrKysrKysrKysrKysrKysrKysrKysrKystLS0tLS0tLS0NCj4+PiAgICAgMSBmaWxl
+IGNoYW5nZWQsIDM2IGluc2VydGlvbnMoKyksIDEyIGRlbGV0aW9ucygtKQ0KPj4+DQo+Pj4g
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9hc3QvYXN0X21haW4uYw0KPj4+IGIvZHJp
+dmVycy9ncHUvZHJtL2FzdC9hc3RfbWFpbi5jIGluZGV4IDc5YTM2MTg2Ny4uMWQ4ZmE3MGM1
+IDEwMDY0NA0KPj4+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9hc3QvYXN0X21haW4uYw0KPj4+
+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9hc3QvYXN0X21haW4uYw0KPj4+IEBAIC00MSwyOCAr
+NDEsNTIgQEAgdm9pZCBhc3Rfc2V0X2luZGV4X3JlZ19tYXNrKHN0cnVjdCBhc3RfcHJpdmF0
+ZSAqYXN0LA0KPj4+ICAgICAJCQkgICAgdWludDMyX3QgYmFzZSwgdWludDhfdCBpbmRleCwN
+Cj4+PiAgICAgCQkJICAgIHVpbnQ4X3QgbWFzaywgdWludDhfdCB2YWwpDQo+Pj4gICAgIHsN
+Cj4+PiAtCXU4IHRtcDsNCj4+PiAtCWFzdF9pb193cml0ZTgoYXN0LCBiYXNlLCBpbmRleCk7
+DQo+Pj4gLQl0bXAgPSAoYXN0X2lvX3JlYWQ4KGFzdCwgYmFzZSArIDEpICYgbWFzaykgfCB2
+YWw7DQo+Pj4gLQlhc3Rfc2V0X2luZGV4X3JlZyhhc3QsIGJhc2UsIGluZGV4LCB0bXApOw0K
+Pj4+ICsJdWludDE2X3Qgdm9sYXRpbGUgdXNEYXRhOw0KPj4+ICsJdWludDhfdCAgdm9sYXRp
+bGUgakRhdGE7DQo+Pj4gKw0KPj4+ICsJZG8gew0KPj4+ICsJCWFzdF9pb193cml0ZTgoYXN0
+LCBiYXNlLCBpbmRleCk7DQo+Pj4gKwkJdXNEYXRhID0gYXN0X2lvX3JlYWQxNihhc3QsIGJh
+c2UpOw0KPj4+ICsJfSB3aGlsZSAoKHVpbnQ4X3QpKHVzRGF0YSkgIT0gaW5kZXgpOw0KPj4+
+ICsNCj4+PiArCWpEYXRhICA9ICh1aW50OF90KSh1c0RhdGEgPj4gOCk7DQo+Pj4gKwlqRGF0
+YSAmPSBtYXNrOw0KPj4+ICsJakRhdGEgfD0gdmFsOw0KPj4+ICsJdXNEYXRhID0gKCh1aW50
+MTZfdCkgakRhdGEgPDwgOCkgfCAodWludDE2X3QpIGluZGV4Ow0KPj4+ICsJYXN0X2lvX3dy
+aXRlMTYoYXN0LCBiYXNlLCB1c0RhdGEpOw0KPj4+ICAgICB9DQo+Pj4NCj4+PiAgICAgdWlu
+dDhfdCBhc3RfZ2V0X2luZGV4X3JlZyhzdHJ1Y3QgYXN0X3ByaXZhdGUgKmFzdCwNCj4+PiAg
+ICAgCQkJICB1aW50MzJfdCBiYXNlLCB1aW50OF90IGluZGV4KQ0KPj4+ICAgICB7DQo+Pj4g
+LQl1aW50OF90IHJldDsNCj4+PiAtCWFzdF9pb193cml0ZTgoYXN0LCBiYXNlLCBpbmRleCk7
+DQo+Pj4gLQlyZXQgPSBhc3RfaW9fcmVhZDgoYXN0LCBiYXNlICsgMSk7DQo+Pj4gLQlyZXR1
+cm4gcmV0Ow0KPj4+ICsJdWludDE2X3Qgdm9sYXRpbGUgdXNEYXRhOw0KPj4+ICsJdWludDhf
+dCAgdm9sYXRpbGUgakRhdGE7DQo+Pj4gKw0KPj4+ICsJZG8gew0KPj4+ICsJCWFzdF9pb193
+cml0ZTgoYXN0LCBiYXNlLCBpbmRleCk7DQo+Pj4gKwkJdXNEYXRhID0gYXN0X2lvX3JlYWQx
+Nihhc3QsIGJhc2UpOw0KPj4+ICsJfSB3aGlsZSAoKHVpbnQ4X3QpKHVzRGF0YSkgIT0gaW5k
+ZXgpOw0KPj4+ICsNCj4+PiArCWpEYXRhICA9ICh1aW50OF90KSh1c0RhdGEgPj4gOCk7DQo+
+Pj4gKw0KPj4+ICsJcmV0dXJuIGpEYXRhOw0KPj4+ICAgICB9DQo+Pj4NCj4+PiAgICAgdWlu
+dDhfdCBhc3RfZ2V0X2luZGV4X3JlZ19tYXNrKHN0cnVjdCBhc3RfcHJpdmF0ZSAqYXN0LA0K
+Pj4+ICAgICAJCQkgICAgICAgdWludDMyX3QgYmFzZSwgdWludDhfdCBpbmRleCwgdWludDhf
+dCBtYXNrKQ0KPj4+ICAgICB7DQo+Pj4gLQl1aW50OF90IHJldDsNCj4+PiAtCWFzdF9pb193
+cml0ZTgoYXN0LCBiYXNlLCBpbmRleCk7DQo+Pj4gLQlyZXQgPSBhc3RfaW9fcmVhZDgoYXN0
+LCBiYXNlICsgMSkgJiBtYXNrOw0KPj4+IC0JcmV0dXJuIHJldDsNCj4+PiArCXVpbnQxNl90
+IHZvbGF0aWxlIHVzRGF0YTsNCj4+PiArCXVpbnQ4X3QgIHZvbGF0aWxlIGpEYXRhOw0KPj4+
+ICsNCj4+PiArCWRvIHsNCj4+PiArCQlhc3RfaW9fd3JpdGU4KGFzdCwgYmFzZSwgaW5kZXgp
+Ow0KPj4+ICsJCXVzRGF0YSA9IGFzdF9pb19yZWFkMTYoYXN0LCBiYXNlKTsNCj4+PiArCX0g
+d2hpbGUgKCh1aW50OF90KSh1c0RhdGEpICE9IGluZGV4KTsNCj4+PiArDQo+Pj4gKwlqRGF0
+YSAgPSAodWludDhfdCkodXNEYXRhID4+IDgpOw0KPj4+ICsJakRhdGEgJj0gbWFzazsNCj4+
+PiArDQo+Pj4gKwlyZXR1cm4gakRhdGE7DQo+Pj4gICAgIH0NCj4+Pg0KPj4+ICAgICBzdGF0
+aWMgdm9pZCBhc3RfZGV0ZWN0X2NvbmZpZ19tb2RlKHN0cnVjdCBkcm1fZGV2aWNlICpkZXYs
+IHUzMg0KPj4+ICpzY3VfcmV2KQ0KPj4+IC0tDQo+Pj4gMi4xOC40DQo+Pj4NCj4+DQo+PiAt
+LQ0KPj4gVGhvbWFzIFppbW1lcm1hbm4NCj4+IEdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXIN
+Cj4+IFNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KPj4gTWF4ZmVsZHN0
+ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55IChIUkIgMzY4MDksIEFHIE7DvHJuYmVy
+ZykNCj4+IEdlc2Now6RmdHNmw7xocmVyOiBGZWxpeCBJbWVuZMO2cmZmZXINCj4+DQo+IA0K
+PiAtLQ0KPiBUaG9tYXMgWmltbWVybWFubg0KPiBHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVy
+DQo+IFNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KPiBNYXhmZWxkc3Ry
+LiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCj4gKEhSQiAzNjgwOSwgQUcgTsO8cm5i
+ZXJnKQ0KPiBHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQoNCi0tIA0KVGhvbWFzIFpp
+bW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29s
+dXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBH
+ZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjog
+SXZvIFRvdGV2DQo=
 
-As for users breaking support for BYT/CHT setups because they forget
-to enable this, without X86_INTEL_LPSS being enabled BYT/CHT are pretty
-much broken anyways and since patch 2/4 adds a "select PMC_ATOM" to the
-X86_INTEL_LPSS Kconfig option I'm not really worried about that.
+--------------jq5GfvK6DDMjQqDrbTiNIaKJ--
 
-I'm afraid this patch-set might break some randomconfig builds though,
-but I cannot see anything obviously causing such breakage here, so
-I think it would be fine to just merge this series as is and then
-see if we get any breakage reports.
+--------------wzzUxt8MQyWnqJGFQv6a0wjb
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-Andy, are you ok with me moving ahead and merging this series as is?
+-----BEGIN PGP SIGNATURE-----
 
-Regards,
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmJv64EFAwAAAAAACgkQlh/E3EQov+C7
+xQ//cgBVHEuNi37X7EVR30pP1yw4aTWd/9Im5/e8ABjgzCptBq6HIejXC0KdRRrilMpzRdLtMCon
+3xRV8OmcJG0gQbaET1SZAVEvJJSTEGwLWfcntSDWYO5UcEJcXZ43rKZT6FpDJSjHZ/XJetvXdp3u
+1srpsSciase/4lzj1Mzae83MmVzmZlaiKkxkUrVSUskEqqSIK2lVxsDJBDW1FIJmOckpcZsukvAC
+EhWJSRWlb2ng7C3+JbKZcRypWzxmpE3GKgghHqE85muzH7F0bTp2mBFq/I2FYH1zACR3i2MxEOXk
+CAnY5Jvew/CPQLkIOVqkwwUCd31QLdl+l8nxSt4vtNFHEZUr1J9v4bl8L9vtfHvdqOryO6Qzumvc
+hrTruO5LtZFcYlmU6CEvZIrHdoq1+Ny0E9JCPPs0106BktEoN7q7QkgJ2XzuFUk0UgDpA8KqM05P
+hIRE/3WpQxkC8Dw+OioF/PxwUsd9G04io0gWDmOl4gMQOlwKeOVOAaDeQseFeiqamZY/n6xrygPY
+Aow0ODahJfOK4qVik8y3xiWcNKIg+BpClOoLPvsbcil611rG4WCpMqVug0BZporwNs/X0l+jFANi
+aVgNaVj0DEK25vY8KHXcHIgMpHNUTJKkO8A49Hwusmuk/6Lxf4Hrtm6JGLt488SE8S3DtFjRIc6m
+4S0=
+=yMm0
+-----END PGP SIGNATURE-----
 
-Hans
-
+--------------wzzUxt8MQyWnqJGFQv6a0wjb--

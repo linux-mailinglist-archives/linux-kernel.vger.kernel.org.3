@@ -2,59 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9611751765D
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 20:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4136C51765E
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 20:16:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386701AbiEBSSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 14:18:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37474 "EHLO
+        id S1386809AbiEBSTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 14:19:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241230AbiEBSSI (ORCPT
+        with ESMTP id S229667AbiEBSTX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 14:18:08 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFECF2A
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 11:14:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651515278; x=1683051278;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KPpe6VAMOiLpnTdW7yBa/TtsFWVoUvsg/hRr+MHjv2U=;
-  b=DfAoIeZuhyX+iILidSSnDYoFY1MU0EHK20Mpta4uMBaWycEceVWtAJ0f
-   CgMWcNo3KuJoy6DP1ovbqtDm54pK0q8qqTR2rv3DgWNDLd5xbBo1Uv9BQ
-   NKMYHaRKametCLCMM8Sd+t/mUfkW0Q2tGsOTZOHOrxwW8GAE0lKZXOl60
-   WnlahiLrGxoxukqXQfKlhj69KtdoDeFvrm3btXdhwsRtr6FHqHCcfzSHG
-   0QDZhr8N6Fo7+aOwRhmZU8eH39mj+lXbnB1fyU+oRHeyCf1mAnq4Ov8CB
-   WG/1+xHTtEPRTnie42LI2DnNx49qUDQYV56u6n2pgsfNjIn8QRbIcyblO
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="330280296"
-X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
-   d="scan'208";a="330280296"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 11:14:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
-   d="scan'208";a="516223108"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 02 May 2022 11:14:35 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nlaZ9-0009lD-7p;
-        Mon, 02 May 2022 18:14:35 +0000
-Date:   Tue, 3 May 2022 02:14:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/100-shutdown-notifier 4/20] vmlinux.o: warning:
- objtool: sys_off_handler_power_off() falls through to next function
- type_store()
-Message-ID: <202205030240.yKG1jNwn-lkp@intel.com>
+        Mon, 2 May 2022 14:19:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E746E1F
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 11:15:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651515352;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=epUA9W1bsIXNwUgl2HYw+NvnSlY06rrcwcViZej6KSU=;
+        b=QzKmhciyjAipRY8h6wf+viWjyUT1UEGmI7VX+vs80JbuclRcobGImFF2T2ZT4FtRtSHGA/
+        l3fquuuxKS3fc7E+hQhOJyUn2QHqsmE+MNYPTtCLzrTOVV7zL/d2pZzETC0W2gmiMMX5Hw
+        u9ywMQfU1DSXfE1G8tmBURCwtszjfEc=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-349-kb8YTdE_NjmYh3pWzZ87VA-1; Mon, 02 May 2022 14:15:51 -0400
+X-MC-Unique: kb8YTdE_NjmYh3pWzZ87VA-1
+Received: by mail-qt1-f200.google.com with SMTP id a20-20020a05622a02d400b002f390c55f36so8602790qtx.16
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 11:15:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=epUA9W1bsIXNwUgl2HYw+NvnSlY06rrcwcViZej6KSU=;
+        b=hDAn9RNXRJRIXovYhgoxnKnTcrS+ouk8eazbVOUPYPtbMCBXhAtmslfIosxSDrjmUz
+         sJZ6DR05COlbckc9Q3KmFm8wvFJoqnu+HCJcn0RxFlNg/fu8khL/O/TXXiIK3YNg5PhT
+         3qmzAbsN1Cq8gC3Lahi2kctRCrFNJX23+glum82pkdgF1JOFICTVoQ4SZg1vbsRMJNcQ
+         dyC8v0CdVQO1NMS/dN/8WOl1vIaluCqddBvE0pYWdngnrv8PjlmgCZLAj4uA3Q7RExeN
+         Sxj+wyBntrnc4IibxpTAS955g/zT3e0yHK/Qzzkjw1BB0AXCemYPrbNk4zzfvLB/MLpS
+         H5mQ==
+X-Gm-Message-State: AOAM531+S608QXbFr5qvlcH86ppAUjtuQO6oKrJoKH9JVWNb456H/1bs
+        YbMdd7haRlG7KCZ7AoJI1ErjhN+Kyl73i6MOdpqWWKBzvZUqMe86vuR+6cD2tgsRYzZMwOBc5eW
+        Mu1JSXstMfapkhuIxRYXWjGWi
+X-Received: by 2002:a05:620a:2941:b0:69f:fda4:9ba7 with SMTP id n1-20020a05620a294100b0069ffda49ba7mr183220qkp.435.1651515351035;
+        Mon, 02 May 2022 11:15:51 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxqQZHbiej89J6ibYm9zWkLDeKxMVX0oYh0s2MaJATifMEcrIjUpz1YBul1Cvd3jOjwN6FpYg==
+X-Received: by 2002:a05:620a:2941:b0:69f:fda4:9ba7 with SMTP id n1-20020a05620a294100b0069ffda49ba7mr183204qkp.435.1651515350736;
+        Mon, 02 May 2022 11:15:50 -0700 (PDT)
+Received: from treble ([2600:1700:6e32:6c00::a])
+        by smtp.gmail.com with ESMTPSA id h10-20020ac8744a000000b002f39b99f695sm4467623qtr.47.2022.05.02.11.15.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 May 2022 11:15:50 -0700 (PDT)
+Date:   Mon, 2 May 2022 11:15:47 -0700
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] objtool: Fix SLS checks
+Message-ID: <20220502181547.fzz2yre2p4akph4s@treble>
+References: <Ym0UWja2L40QbgEc@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <Ym0UWja2L40QbgEc@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,52 +75,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/100-shutdown-notifier
-head:   06115822707a3ed6f89da2ea9c157c283b6750ee
-commit: 6025f4b3d1a321e1cfc8a6b6651395cc43ceb2f3 [4/20] kernel: Add combined power-off+restart handler call chain API
-config: x86_64-randconfig-c001-20220502 (https://download.01.org/0day-ci/archive/20220503/202205030240.yKG1jNwn-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/AsahiLinux/linux/commit/6025f4b3d1a321e1cfc8a6b6651395cc43ceb2f3
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/100-shutdown-notifier
-        git checkout 6025f4b3d1a321e1cfc8a6b6651395cc43ceb2f3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On Sat, Apr 30, 2022 at 12:50:02PM +0200, Peter Zijlstra wrote:
+> 
+> Fix the SLS validation; not having a next instruction is also a fail
+> when the next instruction should be INSN_TRAP.
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  tools/objtool/check.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+> index 3f6785415894..3354101ffe34 100644
+> --- a/tools/objtool/check.c
+> +++ b/tools/objtool/check.c
+> @@ -3380,7 +3380,7 @@ static int validate_branch(struct objtool_file *file, struct symbol *func,
+>  
+>  		case INSN_RETURN:
+>  			if (sls && !insn->retpoline_safe &&
+> -			    next_insn && next_insn->type != INSN_TRAP) {
+> +			    (!next_insn || (next_insn && next_insn->type != INSN_TRAP))) {
+>  				WARN_FUNC("missing int3 after ret",
+>  					  insn->sec, insn->offset);
+>  			}
+> @@ -3428,7 +3428,7 @@ static int validate_branch(struct objtool_file *file, struct symbol *func,
+>  
+>  		case INSN_JUMP_DYNAMIC:
+>  			if (sls && !insn->retpoline_safe &&
+> -			    next_insn && next_insn->type != INSN_TRAP) {
+> +			    (!next_insn || (next_insn && next_insn->type != INSN_TRAP))) {
+>  				WARN_FUNC("missing int3 after indirect jump",
+>  					  insn->sec, insn->offset);
+>  			}
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+My SLS rewrite in tip/objtool/core already fixed this, FWIW.  But this
+could be good for -urgent.
 
-All warnings (new ones prefixed by >>):
+Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
 
-   vmlinux.o: warning: objtool: ibt_selftest()+0x11: sibling call from callable instruction with modified stack frame
-   vmlinux.o: warning: objtool: ftrace_caller()+0x98: call without frame pointer save/setup
-   vmlinux.o: warning: objtool: ftrace_regs_caller()+0xe2: call without frame pointer save/setup
-   vmlinux.o: warning: objtool: return_to_handler()+0x14: call without frame pointer save/setup
->> vmlinux.o: warning: objtool: sys_off_handler_power_off() falls through to next function type_store()
-   vmlinux.o: warning: objtool: kvm_spurious_fault()+0x21: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __wrgsbase_inactive()+0x2a: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __rdgsbase_inactive()+0x29: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: fixup_bad_iret()+0x7e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: noist_exc_debug()+0x45: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_nmi()+0xba: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: poke_int3_handler()+0x49: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: mce_check_crashing_cpu()+0x11: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: do_machine_check()+0x57: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_machine_check()+0x57: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_enter()+0x50: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_exit()+0x40: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: enter_from_user_mode()+0x24: call to __kcsan_check_access() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode()+0x28: call to __kcsan_check_access() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare()+0x24: call to __kcsan_check_access() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exit_to_user_mode()+0x18: call to static_key_count.constprop.0() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_exit_to_user_mode()+0x31: call to static_key_count.constprop.0() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode()+0x24: call to __kcsan_check_access() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_exit_to_user_mode()+0x1f: call to static_key_count.constprop.0() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_exit()+0x31: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: ibt_selftest()+0x1e: return with modified stack frame
+Here's another SLS improvement I mentioned to you the other day, do you
+agree we should do this as well?
 
+
+From: Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: [PATCH] x86/speculation: Mitigate SLS for JMP_NOSPEC with retpolines disabled
+
+Having disabled retpolines doesn't necessarily mean the user doesn't
+care about straight-line speculation.  For example, retpolines are
+disabled when eIBRS is used.
+
+If CONFIG_SLS is enabled, properly mitigate SLS for JMP_NOSPEC for the
+retpolines disabled cases.
+
+Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
+---
+ arch/x86/include/asm/nospec-branch.h | 13 ++++++++++---
+ tools/objtool/check.c                |  3 ---
+ 2 files changed, 10 insertions(+), 6 deletions(-)
+
+diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
+index acbaeaf83b61..0648746bf60b 100644
+--- a/arch/x86/include/asm/nospec-branch.h
++++ b/arch/x86/include/asm/nospec-branch.h
+@@ -75,6 +75,13 @@
+ 	.popsection
+ .endm
+ 
++.macro INDIRECT_JMP reg
++	jmp *%\reg
++#ifdef CONFIG_SLS
++	int3
++#endif
++.endm
++
+ /*
+  * JMP_NOSPEC and CALL_NOSPEC macros can be used instead of a simple
+  * indirect jmp/call which may be susceptible to the Spectre variant 2
+@@ -82,11 +89,11 @@
+  */
+ .macro JMP_NOSPEC reg:req
+ #ifdef CONFIG_RETPOLINE
+-	ALTERNATIVE_2 __stringify(ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), \
++	ALTERNATIVE_2 __stringify(ANNOTATE_RETPOLINE_SAFE; INDIRECT_JMP \reg), \
+ 		      __stringify(jmp __x86_indirect_thunk_\reg), X86_FEATURE_RETPOLINE, \
+-		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), X86_FEATURE_RETPOLINE_LFENCE
++		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; INDIRECT_JMP \reg), X86_FEATURE_RETPOLINE_LFENCE
+ #else
+-	jmp	*%\reg
++	INDIRECT_JMP \reg
+ #endif
+ .endm
+ 
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index e7983c3e2408..3cf3ad0b5db5 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -3842,9 +3842,6 @@ static int validate_sls(struct objtool_file *file)
+ 	for_each_insn(file, insn) {
+ 		next_insn = next_insn_same_sec(file, insn);
+ 
+-		if (insn->retpoline_safe)
+-			continue;
+-
+ 		switch (insn->type) {
+ 		case INSN_RETURN:
+ 			if (!next_insn || next_insn->type != INSN_TRAP) {
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.34.1
+

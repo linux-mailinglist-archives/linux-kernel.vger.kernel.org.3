@@ -2,204 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A97EE517470
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FE165174AB
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379907AbiEBQk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 12:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49946 "EHLO
+        id S233176AbiEBQqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 12:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243212AbiEBQkk (ORCPT
+        with ESMTP id S232817AbiEBQqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 12:40:40 -0400
-Received: from na01-obe.outbound.protection.outlook.com (unknown [52.101.57.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DFA165D3;
-        Mon,  2 May 2022 09:37:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W1jOZJ4WbNLczMyKCwjZ8MQI/UTjIeUYhI3SP5fbQ0QmgZEJgQTyypvIfdIwNuDY7mtMeYJI1cKkGeWCny7PMDmc/+Xqgf5EP7FMntor8oF0Rxvi/EL1w/offK3hlM3lKlrkIFKotfz+j2CM4FX9iHv+NtQ1b/VUESIq0m1zHymbDgaTPpkwv5GIpYoor/zaduh83/7LThCuhWUSqTFBSMlqjyE1H/ByXx2UPybJsdopbzyX20B7lAdS21nVCMm8ptXwA1XEF/9LZt1577FUemNQ97ZoZ23h2egCIq6iaxgBcySpyhgFpiLe2x63R3isK3RPJh5L4IbE9nfUKJOllQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f/Q7CqmIrXWTJW6KP03YP2l7/pKl9BfEPheXtcb5nyg=;
- b=llmOkeiecwMECfdefLJroXHawJ+2Wo2FoM0hpFapIjvN+3WHG/CdbJ3r+/0gbMNeFspTADewjY9bECVbBQlbztlN0x+luZUo3YUFnH8O3ZBHgNyjwJiCadYyvmWzwcHAOZleAb6tK1pJR5ekKDarXfGSakblNaMM/g06PvlTKiEzas6vcCeYx43y/zxhh2yYMsiEoei1FV0Ujb+aTKzDmX8fgBQH0yyl6mY3sckiRZ7rdA+7XPeYoGCqfAAORRgG8kdTqNrTz6L7kcWw8CpuwSO7cTo8lYNidDlm9YrQekPNH8NHA4brC6hRov/ZLmWT9rR+SWngkEDlh8DRxT7+Ww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f/Q7CqmIrXWTJW6KP03YP2l7/pKl9BfEPheXtcb5nyg=;
- b=b7FgZ5tODXorjjwgImOSbf8W/pDixmeTH6GL6wMbwhkj0B2vvyqrEgC7b1bghHM1GlNJDXgNNvEMMKtHWT3UKFsA4FTYA0ysS2XPAVqwsFJz9iUncF6z1dEDocFBn8PxaXzRI0px5UKg+aRjGEPR/ZMNbU/zI/MPfyTlarTezTw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-Received: from DM6PR21MB1370.namprd21.prod.outlook.com (2603:10b6:5:16b::28)
- by DM6PR21MB1180.namprd21.prod.outlook.com (2603:10b6:5:161::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.4; Mon, 2 May
- 2022 16:37:07 +0000
-Received: from DM6PR21MB1370.namprd21.prod.outlook.com
- ([fe80::588e:9ede:461a:2372]) by DM6PR21MB1370.namprd21.prod.outlook.com
- ([fe80::588e:9ede:461a:2372%4]) with mapi id 15.20.5250.004; Mon, 2 May 2022
- 16:37:07 +0000
-From:   Michael Kelley <mikelley@microsoft.com>
-To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, vkuznets@redhat.com,
-        decui@microsoft.com, drawat.floss@gmail.com, airlied@linux.ie,
-        daniel@ffwll.ch, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        deller@gmx.de, dri-devel@lists.freedesktop.org,
-        linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org
-Cc:     mikelley@microsoft.com
-Subject: [PATCH 4/4] drm/hyperv: Remove support for Hyper-V 2008 and 2008R2/Win7
-Date:   Mon,  2 May 2022 09:36:31 -0700
-Message-Id: <1651509391-2058-5-git-send-email-mikelley@microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1651509391-2058-1-git-send-email-mikelley@microsoft.com>
-References: <1651509391-2058-1-git-send-email-mikelley@microsoft.com>
-Content-Type: text/plain
-X-ClientProxiedBy: MW2PR2101CA0020.namprd21.prod.outlook.com
- (2603:10b6:302:1::33) To DM6PR21MB1370.namprd21.prod.outlook.com
- (2603:10b6:5:16b::28)
+        Mon, 2 May 2022 12:46:15 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD036369
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 09:42:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651509765; x=1683045765;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=D3wMZFZpe2ZlYEhjuVFF/JE9SxqxI1IK1rZxLLvrtns=;
+  b=ca3tgYFtr6g5b9I0JwszflTwdTa5KvLb6eMMJ5wIGpR7nVPdMuKzNAuQ
+   uSJXA2NqLQXPpo6BDtkHSV6yjELRSCT3FjowPrbx9Z0J7u4728Qyj2+zz
+   E3zp0oU/yKNXW33H1nYRIOAHsXd1aoF2HzrCaUlq4TV01htkReLyqXsVO
+   wL+dN+87dluKobO1tGFFppgbGVqeI2iIY1BZDIUQ28RUBhmDSyf36D7Ts
+   qoWy4uToGLoLmdp19QF8HrK+0AHqW7zlFrVDduV3FbIHbQeQE+zR+O0XS
+   NqCE4pg+SxLmPtT3d1YT86HQD18hgGmRgWIrBH7k92BT3cMZZNLaZFUTX
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="327803555"
+X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
+   d="scan'208";a="327803555"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 09:42:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
+   d="scan'208";a="516177017"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 02 May 2022 09:42:43 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nlZ8F-0009hD-7Q;
+        Mon, 02 May 2022 16:42:43 +0000
+Date:   Tue, 3 May 2022 00:42:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:bits/070-audio 2/20] drivers/dma/apple-admac.c:203:11:
+ warning: format specifies type 'unsigned long long' but the argument has
+ type 'dma_addr_t' (aka 'unsigned int')
+Message-ID: <202205030024.ZdYFyB3P-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c1684c8c-944d-4e0a-6444-08da2c59ff79
-X-MS-TrafficTypeDiagnostic: DM6PR21MB1180:EE_
-X-LD-Processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-X-Microsoft-Antispam-PRVS: <DM6PR21MB1180E39CED978D6542A63E95D7C19@DM6PR21MB1180.namprd21.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: J4pTyf8BzTuf4lgsgVJmsZzV1m06ZP0ZdtesfJjVp1HWkhK+FSmUfu1kIg2IT2e9IBEpyrvQ/Zh0Ar6ym09LVPDB3ePGmkX/xw4+doYYwVm2NiDtd25NpxTOmRgzncwuDA213QMhcBHZTiBc/LIwWLhyaq54619tDsKAMFQYT0a+dCgwqweRk4x/CNrCpVWQb8c4+AJ/rAV9ZvD+fi/PMeFQ8i17bW+O34VpmtbYDkhi6U/NYBtvMI3L3wsjkPD3GBO4qJ9fcD2xKSBqsrxl6GDirF+PUhDFkK//ZF5IM5MuMPzE+Le/KnYzSYf1fp6F0IujIO2pKnTdkramAoZT07kc0PKJhJ2KUYun9Hb+TdcPngtihrRyW4b+owdn2UQey8L+i8NCJyX2JbeQdKbyNpquwv4OC7pwaGVDDfQCXE8UDrmnvzJWClbMzHZaObLp55kJ41DVFkMyzYQDSghyp33DI1YNsE+I6lQsTuxz4bhmKSTN8PLcKaD4iHV95dGKZcCVQU4MmKYEhiv6cWjjVRvgbiYX2XGyHNx1nMm7J2dn+vGEnDLO9Hd8muNZSQWa94ahJ369FWp+OeydDlX6PXkGFRGh3j77zTX/p2jmfjMh1ETlrjUBNbTvgExyxRclsZEGUA6n5BRAI5kH4mJmGPYJTQ4RLBJ/xwZxUHUxzxiNnDkQtu8fwS9L7PEViw3oZyGsiehENoyVb1MD8WM3Y6bPLnwo08I3qaUDgC8/DdOmkJlYxYgoUlt/88uzRTDcViP1DvtAgd/DFU8gifqU2A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR21MB1370.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(451199009)(82950400001)(7416002)(10290500003)(66946007)(6486002)(66556008)(66476007)(2616005)(107886003)(6512007)(26005)(921005)(5660300002)(6506007)(83380400001)(508600001)(82960400001)(86362001)(6666004)(316002)(8936002)(38350700002)(38100700002)(186003)(52116002)(4326008)(36756003)(8676002)(2906002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kQfFLCwxFkW77JGzTBl0d88VVAFHRINR1oXNL0fgV1eanIgaLCi+qirYUu5T?=
- =?us-ascii?Q?ryHluB20wy1ctFAJpx2llZP/pgM0GCr4iNVmEr9o/VoflAucBx/qin8IHBJP?=
- =?us-ascii?Q?9MhDQv3xEaT+PqxNF0myTyFsgxzYkRrPwTikj83QuzkyzEHp1MDMeAe5xs4R?=
- =?us-ascii?Q?oMFKrfQdhy/8BGU4Cwjoygb+SiPrCXRjbL3bwM1pvilPpeUe/T620gKAru6f?=
- =?us-ascii?Q?/cLA/JsBTey02tSgA8AsRc7wrW+gdJyM8H1OrI/Jrf94h4DDveSBA6hWBnLt?=
- =?us-ascii?Q?Pvvl6SZyYGcdP62obDKKIPGMSAT8dOhF8TQRak3M6oPsPKuLCljVCSE95Tkh?=
- =?us-ascii?Q?85knlKYKQi6W5gkVYC6rOSBpXVKlBX4gAHKLsuKthzirIDB+HAefTCJ2fDVO?=
- =?us-ascii?Q?pnnncVBRE/yqFvuel71g4zbRWNfV51L6VBsgrSAOdXEJ7m1yuTMrH4h/7aG3?=
- =?us-ascii?Q?A8W46EtG9OXKVIdYTjYsbJWPjZ/hPD43bmpIWDF2GdhtKrcR4lNR3Mc6iej0?=
- =?us-ascii?Q?re1+gCkxarTDlZIrmgJJfn8fx8oPQjvv0GNHMVMVJLi7NhyGHGulmpioC9PK?=
- =?us-ascii?Q?C1Zr2uRNmqHi+WgonNyQc7W9qGU4/vaT5dbaRMvRRLH3Z/iOYc+cuyhtmIs5?=
- =?us-ascii?Q?scfZgtqlm5DdsHugNLZWl5GnLIj0AcIzIUAhED88L/b1UqQvugZdeZMs8u1W?=
- =?us-ascii?Q?gapdwMu7PWAteKhmtGs6xVgfXmXV/hzBi8S97mCH/eFufOYJTq/rqx+2RLYp?=
- =?us-ascii?Q?9b+5zUPPkOWLX6ml9AwUGgv8bUpu2pZfBuWFRwRz+BMP5qLGJ8p75V5byN7h?=
- =?us-ascii?Q?1kJ9fpbQYv8QuUlQwDcHhMcWJQ7lr28HLDjtqF9jD+E7TWeqSK2ntQ5kaH5f?=
- =?us-ascii?Q?3Fu95Hvwzk6+k1QESqsMmtYQQE4xxgXNCy+8w5HWsvPKLoGYtxIJNFRgz8+l?=
- =?us-ascii?Q?heSfX9FAjypfCeGuin6xiNYACdN8AQdQvw8FFzYQTJcvMVQyqQjWtF+7aJLW?=
- =?us-ascii?Q?wTz8JLx8VUyHGJ8/kq33xbQW6qofofdQbQYEGlAN2GZ5VbVL3VWI9GvZun8c?=
- =?us-ascii?Q?pLtvyQzITiwvQ9mb43Lvmi1qw4cXBdhPRXvesJUILQHzxwxEasJBFp3Iq0Xb?=
- =?us-ascii?Q?ePbc1l2ELzMFwOm2Z50M5E/PPgh45bvScfjW0bAB+P8xMprVjPnhjuu3bivb?=
- =?us-ascii?Q?cfkf/mC1pb/jVtqdRsMOvn1JUcaPO9fWm4TWBkQTykiReizQFnB2DCp8La4F?=
- =?us-ascii?Q?UM6OP+B0aQoXVAo77A023nAcEQ9OP0kSKuYHLrL0agRQgssBQ11BD6T00ZL0?=
- =?us-ascii?Q?TO7svVbiQVfTa2P+TRydsgQwZXvKLKnrpjtfPmR9R3g/cpqgUveuhSw1WBPL?=
- =?us-ascii?Q?KglI3B3Yb2EGWixAgYEPtFRqHs9gXg76aZO/mKkUlDEJZrhi/ihaToJ4Bwli?=
- =?us-ascii?Q?YXOWqw330Q6bjNu0aCvptvhPBYEiMFHWAHo7x/EUMNLt+VVXUsirdBvZoA27?=
- =?us-ascii?Q?aykMpR4kX1vkMCdnq0IGs2f97Sifs7zdx21bthMlk3UeZ8CvQGT4fJhTaw9+?=
- =?us-ascii?Q?7x7JorSuF2CjglInCEmcii3abP+K4r66QuCC0UjjBCgtaFughXUCytPUI7Hp?=
- =?us-ascii?Q?zr4eZCpbtBShPcszrJG5jBhNOQ0RnLfzsFgAmtAePEee1rIUqWo8bGWWxV8n?=
- =?us-ascii?Q?/tJzl+nNpiYdQuCNu02kvLjXi3AnNmN1XHpysfJsGjtHUs/M/F+NFBFx6vWU?=
- =?us-ascii?Q?ilNlaL/gra2juxFZ3zHnQD1g/C0gEZY=3D?=
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c1684c8c-944d-4e0a-6444-08da2c59ff79
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR21MB1370.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2022 16:37:07.7353
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3UtRDPArWZI/KLjZXUlPUZJJ+16zbSJUY93iF+cjQpU28y4ixFVzvXHf6CPNZAV3qDsF4joL7bAUIWWD1PX4eg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR21MB1180
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DRM Hyper-V driver has special case code for running on the first
-released versions of Hyper-V: 2008 and 2008 R2/Windows 7.  These versions
-are now out of support (except for extended security updates) and lack
-support for performance features that are needed for effective production
-usage of Linux guests.
+tree:   https://github.com/AsahiLinux/linux bits/070-audio
+head:   91b81123719d8b742da188f01ee3d897e0fac92b
+commit: 428ea35bca43fe213456fa57640c57deeadc4204 [2/20] dmaengine: apple-admac: Add Apple ADMAC driver
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220503/202205030024.ZdYFyB3P-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/AsahiLinux/linux/commit/428ea35bca43fe213456fa57640c57deeadc4204
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/070-audio
+        git checkout 428ea35bca43fe213456fa57640c57deeadc4204
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/dma/ drivers/platform/ sound/soc/
 
-The negotiation of the VMbus protocol versions required by these old
-Hyper-V versions has been removed from the VMbus driver.  So now remove
-the handling of these VMbus protocol versions from the DRM Hyper-V
-driver.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Michael Kelley <mikelley@microsoft.com>
----
- drivers/gpu/drm/hyperv/hyperv_drm_proto.c | 23 +++++++----------------
- 1 file changed, 7 insertions(+), 16 deletions(-)
+All warnings (new ones prefixed by >>):
 
-diff --git a/drivers/gpu/drm/hyperv/hyperv_drm_proto.c b/drivers/gpu/drm/hyperv/hyperv_drm_proto.c
-index c0155c6..76a182a 100644
---- a/drivers/gpu/drm/hyperv/hyperv_drm_proto.c
-+++ b/drivers/gpu/drm/hyperv/hyperv_drm_proto.c
-@@ -18,16 +18,16 @@
- #define SYNTHVID_VERSION(major, minor) ((minor) << 16 | (major))
- #define SYNTHVID_VER_GET_MAJOR(ver) (ver & 0x0000ffff)
- #define SYNTHVID_VER_GET_MINOR(ver) ((ver & 0xffff0000) >> 16)
-+
-+/* Support for VERSION_WIN7 is removed. #define is retained for reference. */
- #define SYNTHVID_VERSION_WIN7 SYNTHVID_VERSION(3, 0)
- #define SYNTHVID_VERSION_WIN8 SYNTHVID_VERSION(3, 2)
- #define SYNTHVID_VERSION_WIN10 SYNTHVID_VERSION(3, 5)
- 
--#define SYNTHVID_DEPTH_WIN7 16
- #define SYNTHVID_DEPTH_WIN8 32
--#define SYNTHVID_FB_SIZE_WIN7 (4 * 1024 * 1024)
-+#define SYNTHVID_WIDTH_WIN8 1600
-+#define SYNTHVID_HEIGHT_WIN8 1200
- #define SYNTHVID_FB_SIZE_WIN8 (8 * 1024 * 1024)
--#define SYNTHVID_WIDTH_MAX_WIN7 1600
--#define SYNTHVID_HEIGHT_MAX_WIN7 1200
- 
- enum pipe_msg_type {
- 	PIPE_MSG_INVALID,
-@@ -496,12 +496,6 @@ int hyperv_connect_vsp(struct hv_device *hdev)
- 	case VERSION_WIN8:
- 	case VERSION_WIN8_1:
- 		ret = hyperv_negotiate_version(hdev, SYNTHVID_VERSION_WIN8);
--		if (!ret)
--			break;
--		fallthrough;
--	case VERSION_WS2008:
--	case VERSION_WIN7:
--		ret = hyperv_negotiate_version(hdev, SYNTHVID_VERSION_WIN7);
- 		break;
- 	default:
- 		ret = hyperv_negotiate_version(hdev, SYNTHVID_VERSION_WIN10);
-@@ -513,18 +507,15 @@ int hyperv_connect_vsp(struct hv_device *hdev)
- 		goto error;
- 	}
- 
--	if (hv->synthvid_version == SYNTHVID_VERSION_WIN7)
--		hv->screen_depth = SYNTHVID_DEPTH_WIN7;
--	else
--		hv->screen_depth = SYNTHVID_DEPTH_WIN8;
-+	hv->screen_depth = SYNTHVID_DEPTH_WIN8;
- 
- 	if (hyperv_version_ge(hv->synthvid_version, SYNTHVID_VERSION_WIN10)) {
- 		ret = hyperv_get_supported_resolution(hdev);
- 		if (ret)
- 			drm_err(dev, "Failed to get supported resolution from host, use default\n");
- 	} else {
--		hv->screen_width_max = SYNTHVID_WIDTH_MAX_WIN7;
--		hv->screen_height_max = SYNTHVID_HEIGHT_MAX_WIN7;
-+		hv->screen_width_max = SYNTHVID_WIDTH_WIN8;
-+		hv->screen_height_max = SYNTHVID_HEIGHT_WIN8;
- 	}
- 
- 	hv->mmio_megabytes = hdev->channel->offermsg.offer.mmio_megabytes;
+>> drivers/dma/apple-admac.c:203:11: warning: format specifies type 'unsigned long long' but the argument has type 'dma_addr_t' (aka 'unsigned int') [-Wformat]
+                   channo, addr, (u32) tx->period_len, FLAG_DESC_NOTIFY);
+                           ^~~~
+   include/linux/dev_printk.h:155:39: note: expanded from macro 'dev_dbg'
+           dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                        ~~~     ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:167:19: note: expanded from macro 'dynamic_dev_dbg'
+                              dev, fmt, ##__VA_ARGS__)
+                                   ~~~    ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:152:56: note: expanded from macro '_dynamic_func_call'
+           __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+                                                                 ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:134:15: note: expanded from macro '__dynamic_func_call'
+                   func(&id, ##__VA_ARGS__);               \
+                               ^~~~~~~~~~~
+>> drivers/dma/apple-admac.c:206:46: warning: shift count >= width of type [-Wshift-count-overflow]
+           admac_poke(ad, REG_DESC_WRITE(channo), addr >> 32);
+                                                       ^  ~~
+>> drivers/dma/apple-admac.c:260:5: warning: no previous prototype for function 'admac_cyclic_read_residue' [-Wmissing-prototypes]
+   u32 admac_cyclic_read_residue(struct admac_data *ad, int channo, struct admac_tx *adtx)
+       ^
+   drivers/dma/apple-admac.c:260:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   u32 admac_cyclic_read_residue(struct admac_data *ad, int channo, struct admac_tx *adtx)
+   ^
+   static 
+   3 warnings generated.
+
+
+vim +203 drivers/dma/apple-admac.c
+
+   187	
+   188	/*
+   189	 * Write one hardware descriptor for a dmaegine cyclic transaction.
+   190	 */
+   191	static void admac_cyclic_write_one_desc(struct admac_data *ad, int channo,
+   192						struct admac_tx *tx)
+   193	{
+   194		dma_addr_t addr;
+   195	
+   196		if (WARN_ON(!tx->cyclic))
+   197			return;
+   198	
+   199		addr = tx->buf_addr + (tx->submitted_pos % tx->buf_len);
+   200		WARN_ON(addr + tx->period_len > tx->buf_end);
+   201	
+   202		dev_dbg(ad->dev, "ch%d descriptor: addr=0x%llx len=0x%x flags=0x%lx\n",
+ > 203			channo, addr, (u32) tx->period_len, FLAG_DESC_NOTIFY);
+   204	
+   205		admac_poke(ad, REG_DESC_WRITE(channo), addr);
+ > 206		admac_poke(ad, REG_DESC_WRITE(channo), addr >> 32);
+   207		admac_poke(ad, REG_DESC_WRITE(channo), tx->period_len);
+   208		admac_poke(ad, REG_DESC_WRITE(channo), FLAG_DESC_NOTIFY);
+   209	
+   210		tx->submitted_pos += tx->period_len;
+   211		tx->submitted_pos %= 2 * tx->buf_len;
+   212	}
+   213	
+   214	/*
+   215	 * Write all the hardware descriptors for a cyclic transaction
+   216	 * there is space for.
+   217	 */
+   218	static void admac_cyclic_write_desc(struct admac_data *ad, int channo,
+   219						struct admac_tx *tx)
+   220	{
+   221		int i;
+   222	
+   223		for (i = 0; i < 4; i++) {
+   224			if (admac_peek(ad, REG_DESC_RING(channo)) & RING_FULL)
+   225				break;
+   226			admac_cyclic_write_one_desc(ad, channo, tx);
+   227		}
+   228	}
+   229	
+   230	static int admac_alloc_chan_resources(struct dma_chan *chan)
+   231	{
+   232		return 0;
+   233	}
+   234	
+   235	static void admac_free_chan_resources(struct dma_chan *chan)
+   236	{
+   237		// TODO
+   238	}
+   239	
+   240	static int admac_ring_noccupied_slots(int ringval)
+   241	{
+   242		int wrslot = FIELD_GET(RING_WRITE_SLOT, ringval);
+   243		int rdslot = FIELD_GET(RING_READ_SLOT, ringval);
+   244	
+   245		if (wrslot != rdslot) {
+   246			return (wrslot + 4 - rdslot) % 4;
+   247		} else {
+   248			WARN_ON((ringval & (RING_FULL | RING_EMPTY)) == 0);
+   249	
+   250			if (ringval & RING_FULL)
+   251				return 4;
+   252			else
+   253				return 0;
+   254		}
+   255	}
+   256	
+   257	/*
+   258	 * Read from hardware the residue of a cyclic dmaengine transaction.
+   259	 */
+ > 260	u32 admac_cyclic_read_residue(struct admac_data *ad, int channo, struct admac_tx *adtx)
+   261	{
+   262		u32 ring1, ring2;
+   263		u32 residue1, residue2;
+   264		int nreports;
+   265		size_t pos;
+   266	
+   267		ring1 =    admac_peek(ad, REG_REPORT_RING(channo));
+   268		residue1 = admac_peek(ad, REG_RESIDUE(channo));
+   269		ring2 =    admac_peek(ad, REG_REPORT_RING(channo));
+   270		residue2 = admac_peek(ad, REG_RESIDUE(channo));
+   271	
+   272		if (residue2 > residue1) {
+   273			// engine must have loaded next descriptor between the two residue reads
+   274			nreports = admac_ring_noccupied_slots(ring1) + 1;
+   275		} else {
+   276			// no descriptor load between the two reads, ring2 is safe to use
+   277			nreports = admac_ring_noccupied_slots(ring2);
+   278		}
+   279	
+   280		pos = adtx->reclaimed_pos + adtx->period_len * (nreports + 1) \
+   281							 - residue2;
+   282	
+   283		return adtx->buf_len - pos % adtx->buf_len;
+   284	}
+   285	
+
 -- 
-1.8.3.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

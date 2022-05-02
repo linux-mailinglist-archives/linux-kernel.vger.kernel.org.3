@@ -2,143 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 280475170B9
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 15:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05BF55170BB
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 15:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385337AbiEBNmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 09:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47854 "EHLO
+        id S1385352AbiEBNnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 09:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385346AbiEBNmr (ORCPT
+        with ESMTP id S1385346AbiEBNnB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 09:42:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 03369DF01
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 06:39:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651498757;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AACCYwEb3HAEwNDAWzh6kcVyACHhLSxVfI/MApFcd18=;
-        b=K5e678xA1LSNJSzVEU6wUOVqslkHv57QMs14rl+Azv2dqvh1YrUrf6JezAZN0jN54diW3R
-        cJ1KsyghtCEJPj3Iyx+8/9DvOLnggOWilI274c7V3/PtpoXrSsMB5EyzJn5j7AZIrmMzOT
-        xZNtmeCMefxjzRM0colJ0C6FsWfDH0w=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-460-6NUqvsDkMkKIlf9hwQPv5A-1; Mon, 02 May 2022 09:39:16 -0400
-X-MC-Unique: 6NUqvsDkMkKIlf9hwQPv5A-1
-Received: by mail-wr1-f71.google.com with SMTP id k20-20020adfc714000000b001e305cd1597so5307117wrg.19
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 06:39:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AACCYwEb3HAEwNDAWzh6kcVyACHhLSxVfI/MApFcd18=;
-        b=NTzMMTx19b3JfdVmaRtLaOz2BTi43TknUPmOfXGyTT0DNMdwrw6nR9S6MMAHLHdLe7
-         K3eN7Cwr1dQVnxoIAatST+LNzLvw+Fama5i3L6mbe0vQZl/r/kY1YnVmtbaKgdw50l7N
-         WhPukVdUCwN2HA4Tz8r+Sufo3Ey9ukYeS9ncmqIlIpWuPUUEF1Z2eruA+3wPUSJEYKvL
-         DnyFTxEhjnp8724QG4oS4/mclyv9C9IAHCmG2mf1wVlKgrONLezkAlSWz4Y1WJwLgAKu
-         Y63E67CK4JN9fyXJ3A3G6sYhA1DA2Q/Kf2flR7VLNfXdNsEks51yiMY8uTbCaebAfXL9
-         GjJA==
-X-Gm-Message-State: AOAM530hBcealNIK8KuJBTKx9VxiXfQ4wZbHLVRJ/IIUX4T0vrVIxOwh
-        yqvEpeLpyxvDC7g9Fc2EyJ7TPNPJEEegfhYVun37c9o265pGuuK3sgMj9zp6Ur4TjLnyZZ5kVVn
-        TKiiNnN/u+2zy2HWTWsrqMBkA
-X-Received: by 2002:a5d:6949:0:b0:20a:e021:f8e0 with SMTP id r9-20020a5d6949000000b0020ae021f8e0mr9732262wrw.231.1651498754780;
-        Mon, 02 May 2022 06:39:14 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyiFHiruw5PqOFfDYvA2cdleMn/Sl8zUlYotGSp7XuBWv4ZRfgdGg8OrKeSHP/woSkX0+a5Lw==
-X-Received: by 2002:a5d:6949:0:b0:20a:e021:f8e0 with SMTP id r9-20020a5d6949000000b0020ae021f8e0mr9732248wrw.231.1651498754561;
-        Mon, 02 May 2022 06:39:14 -0700 (PDT)
-Received: from [192.168.1.129] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id v22-20020adf8b56000000b0020c5253d8d4sm7052912wra.32.2022.05.02.06.39.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 06:39:14 -0700 (PDT)
-Message-ID: <f4430a8a-1112-9f27-4c38-4fc852c811fd@redhat.com>
-Date:   Mon, 2 May 2022 15:39:13 +0200
+        Mon, 2 May 2022 09:43:01 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB90DED2;
+        Mon,  2 May 2022 06:39:31 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2B0B65C00E1;
+        Mon,  2 May 2022 09:39:31 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Mon, 02 May 2022 09:39:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1651498771; x=1651585171; bh=b/HxRexqfg
+        Eb8+SHUnuabjiYGZLnMMek+P3/ue2RuKo=; b=kqHt5l9GKf/t74JrB2a/N3kLZv
+        0amV60x+HegodkRcYRpR0bwgE6HqVice9AkD5bn/AO+XAPVv6VsD18gECO6MIzBe
+        Ch4NxwghtZ19LHZLm4tN/NsIbTmLX0P3vTpPaoCNAoTK1BnuyMVaNx2XvO2QwnbW
+        JrOXSnGAmyBvpYEdmAQiFbaggGaRK5KQGjHmB4z3bGDNuqOX0jxzVVV2AiciYhUM
+        3YVzS6sHJiP/m7+JZSlVPl3XIyytLx+vEjmQc+wslUxVUly0vBDROBVz1kgduxXl
+        G59xKcwCZ1jZGuWl5V3NHgT4FEawobSfO4BHuEqlE2geGytd0QRp0vESAqEw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651498771; x=
+        1651585171; bh=b/HxRexqfgEb8+SHUnuabjiYGZLnMMek+P3/ue2RuKo=; b=N
+        IRUbTsQaEhLeVEydXxCOFA8ChDyAivepcydJpPl6CArJV58na9ilEqft3/lWjUR1
+        M6vAsuLbRJ/oRGLrq3HZaRKmyfO3mDnqHNNidYkCJa/rAr6ElTkSfxpsaa4GQzPT
+        zuthGkbJgb+A2OuFB4vp7K4Voyq2061I0eCbz3jLYkPYNC35+Y12+emNo/xq+cNj
+        yDr2sgpcQvlNQERSZ/s7EWk74o9zUb+5Uo//QtXMmFAopwJJ4cpfuZiZXXv1Y7cv
+        QG3/nfDSqzPASWLls37MCkGmB0ivX4YFmybGZIfJ/Mv9Y/uf7w7B8dt3J8VpIV/R
+        dGOzKmA/Ox578Q3seSNPg==
+X-ME-Sender: <xms:Et9vYlrjslC-ETH5AGbvpaQhjJghfwDbDa7OHLx1eVTNemm0Xh6iSg>
+    <xme:Et9vYnrFW_9ezUl8rETO4ojr7EUTqkWuwFJvXi0pJcsXGUpFAsZg_mKBuFZ1kxM45
+    DZIoobe7BSSRCFXQ5o>
+X-ME-Received: <xmr:Et9vYiMJV_06NYgYMOeWBtuO5cijNKXbghu3bTnH1oo6PPm1jMEOzoJ9AVDjcI02QGoqPdlvjxSInHqbYTwM6FLwhCC1T9FwC_kIZpw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehgdeiiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
+    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:Et9vYg7CaxtWDU2eqb9e9kqqPZm9bxaJW_tGKYuHvoRcKfGifUUFQw>
+    <xmx:Et9vYk74ZcL7Qer8JM-aditq1vPt4bMcpIRn2hxCTiRt_nm1U5KJtg>
+    <xmx:Et9vYohpT28Gl5j9b3dNLYqAHqkjv4n4bggMTLkm71KFFC1rmn3hEg>
+    <xmx:E99vYmuAtnzedLswK4NAkLoRolYaZGRj7heks-VeQkHZf3OutTBzog>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 2 May 2022 09:39:29 -0400 (EDT)
+Date:   Mon, 2 May 2022 15:39:27 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Ruslan Zalata <rz@fabmicro.ru>, Jean Delvare <jdelvare@suse.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v2] hwmon: (sun4i-lradc) Add driver for LRADC found on
+ Allwinner A13/A20 SoC
+Message-ID: <20220502133927.4wqhru4es32gws2b@houat>
+References: <20220428210906.29527-1-rz@fabmicro.ru>
+ <20220502110010.q7vvdkdpaiz5acjl@houat>
+ <21a89ae0-7152-49eb-7500-7d46dfb259f6@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 2/2] fbdev: Make fb_release() return -ENODEV if fbdev was
- unregistered
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-fbdev@vger.kernel.org, Helge Deller <deller@gmx.de>,
-        Zheyu Ma <zheyuma97@gmail.com>,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        dri-devel@lists.freedesktop.org, Maxime Ripard <maxime@cerno.tech>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Guenter Roeck <linux@roeck-us.net>
-References: <20220502130944.363776-1-javierm@redhat.com>
- <20220502130944.363776-3-javierm@redhat.com>
- <193c9eef-af13-219c-e5e0-2cc9469bf562@suse.de>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <193c9eef-af13-219c-e5e0-2cc9469bf562@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tamuqpt5k5qosgyi"
+Content-Disposition: inline
+In-Reply-To: <21a89ae0-7152-49eb-7500-7d46dfb259f6@roeck-us.net>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Thomas,
 
-On 5/2/22 15:20, Thomas Zimmermann wrote:
-> 
-> 
-> Am 02.05.22 um 15:09 schrieb Javier Martinez Canillas:
->> A reference to the framebuffer device struct fb_info is stored in the file
->> private data, but this reference could no longer be valid and must not be
->> accessed directly. Instead, the file_fb_info() accessor function must be
->> used since it does sanity checking to make sure that the fb_info is valid.
->>
->> This can happen for example if the fbdev driver was one that is using a
->> framebuffer provided by the system firmware. In that case, the fbdev core
->> could unregister the framebuffer device if a real video driver is probed.
->>
->> Reported-by: Maxime Ripard <maxime@cerno.tech>
->> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> 
-> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
->
+--tamuqpt5k5qosgyi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks.
- 
-> This seems like the correct thing to do in any case. Thanks for the 
+On Mon, May 02, 2022 at 06:31:56AM -0700, Guenter Roeck wrote:
+> On 5/2/22 04:00, Maxime Ripard wrote:
+> > Hi,
+> >=20
+> > On Thu, Apr 28, 2022 at 09:09:03PM +0000, Ruslan Zalata wrote:
+> > > Some Allwinner SoCs like A13, A20 or T2 are equipped with two-channel
+> > > low rate (6 bit) ADC that is often used for extra keys. There's a dri=
+ver
+> > > for that already implementing standard input device, but it has these
+> > > limitations: 1) it cannot be used for general ADC data equisition, and
+> > > 2) it uses only one LRADC channel of two available.
+> > >=20
+> > > This driver provides basic hwmon interface to both channels of LRADC =
+on
+> > > such Allwinner SoCs.
+> > >=20
+> > > Signed-off-by: Ruslan Zalata <rz@fabmicro.ru>
+> > > ---
+> > >   MAINTAINERS                       |   6 +
+> > >   drivers/hwmon/Kconfig             |  13 ++
+> > >   drivers/hwmon/Makefile            |   1 +
+> > >   drivers/hwmon/sun4i-lradc-hwmon.c | 280 +++++++++++++++++++++++++++=
++++
+> > >   4 files changed, 300 insertions(+)
+> > >   create mode 100644 drivers/hwmon/sun4i-lradc-hwmon.c
+> > >=20
+> > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > index 5e8c2f61176..d9c71e94133 100644
+> > > --- a/MAINTAINERS
+> > > +++ b/MAINTAINERS
+> > > @@ -18861,6 +18861,12 @@ S:	Maintained
+> > >   F:	Documentation/devicetree/bindings/input/allwinner,sun4i-a10-lrad=
+c-keys.yaml
+> > >   F:	drivers/input/keyboard/sun4i-lradc-keys.c
+> > > +SUN4I LOW RES ADC HWMON DRIVER
+> > > +M:	Ruslan Zalata <rz@fabmicro.ru>
+> > > +L:	linux-hwmon@vger.kernel.org
+> > > +S:	Maintained
+> > > +F:	drivers/hwmon/sun4i-lradc-hwmon.c
+> > > +
+> > >   SUNDANCE NETWORK DRIVER
+> > >   M:	Denis Kirjanov <kda@linux-powerpc.org>
+> > >   L:	netdev@vger.kernel.org
+> > > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> > > index 68a8a27ab3b..86776488a81 100644
+> > > --- a/drivers/hwmon/Kconfig
+> > > +++ b/drivers/hwmon/Kconfig
+> > > @@ -1691,6 +1691,19 @@ config SENSORS_SIS5595
+> > >   	  This driver can also be built as a module. If so, the module
+> > >   	  will be called sis5595.
+> > > +config SENSORS_SUN4I_LRADC
+> > > +	tristate "Allwinner A13/A20 LRADC hwmon"
+> > > +	depends on ARCH_SUNXI && !KEYBOARD_SUN4I_LRADC
+> > > +	help
+> > > +	  Say y here to support the LRADC found in Allwinner A13/A20 SoCs.
+> > > +	  Both channels are supported.
+> > > +
+> > > +	  This driver can also be built as module. If so, the module
+> > > +	  will be called sun4i-lradc-hwmon.
+> > > +
+> > > +	  This option is not compatible with KEYBOARD_SUN4I_LRADC, one
+> > > +	  of these must be used at a time.
+> >=20
+> > How do you plan on enforcing that?
+> >=20
+> 	depends on ARCH_SUNXI && !KEYBOARD_SUN4I_LRADC
 
-Agreed, it's certainly a bug if not the same that was already reported.
+Right, but that just doesn't fly for any generic distro / build-system.
 
-> patch. Before merging, you should also add
-> 
-> Fixes: 27599aacbaef ("fbdev: Hot-unplug firmware fb devices on forced 
-> removal")
+Maxime
 
-I thought about that but I don't think that's accurate since the bug is
-not related to that commit. That might make easier to reproduce it but
-is something that would happen anyway if for example someone attempted
-to remove a module or unbind the device using the sysfs entries.
+--tamuqpt5k5qosgyi
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Maybe I can comment in the commit message that this change made it more
-likely to occur and for that reason I'm adding a fixes tag.
+-----BEGIN PGP SIGNATURE-----
 
-> Reported-by: Junxiao Chang <junxiao.chang@intel.com>
->
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYm/fDwAKCRDj7w1vZxhR
+xSVHAQD142Lap5ZsMcemWljKEK+KsiCz85L2Rgh7n1gU1OLGQwD/UT/E/ugwkLyK
+p/8dvzoTP4avZO6kO1wOsHMzgQVfrwM=
+=ZSfL
+-----END PGP SIGNATURE-----
 
-Indeed.
- -- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+--tamuqpt5k5qosgyi--

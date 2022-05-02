@@ -2,104 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D39E517040
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 15:24:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85E38517041
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 15:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385247AbiEBN2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 09:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57332 "EHLO
+        id S1380694AbiEBN3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 09:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352916AbiEBN1y (ORCPT
+        with ESMTP id S1385265AbiEBN2w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 09:27:54 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12719193F1
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 06:24:18 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KsP212WPzz4ySv;
-        Mon,  2 May 2022 23:24:09 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1651497854;
-        bh=mC2Kj2FsQGLbwukle8P0U7WJDz+AcbyDLiDbnVAIbco=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=G0CzGoy5f90lqzQ39jqJmnyU4tVEYFt4isrq/7g2xFmI+n7Qhg2/PnCdeuCo5BSVB
-         VD1pp70M/E/l5ex1V2gm/E1hWzrlAwd2gRYEBkj7cfh2R/l6Wjqdcr9v1E1jNsY++7
-         r/UpYjDLJM/GAYLVV0uqjYE85MsUZidyWVmm5k08wVryjAhvUxUE/QRWe4/gLEmual
-         EDKEOa3wt7jaHVolUf/L8km3zcj+YVlVPikzZ449e1e+QYc80xWz8vCZe62WDpWcUb
-         18t9u4ud0Voc7xMp1/bp1LmOSzSmkU1WWNQKM6P2Cgx79O0vSAVJbRz0PCKDmRN+Lb
-         84hxZsYDz4Wzg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     CGEL <cgel.zte@gmail.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Sandipan Das <sandipan@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Cc:     Jing Yangyang <jing.yangyang@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH linux-next] power:pkeys: fix bugon.cocci warnings
-In-Reply-To: <20210825064228.70487-1-deng.changcheng@zte.com.cn>
-References: <20210825064228.70487-1-deng.changcheng@zte.com.cn>
-Date:   Mon, 02 May 2022 23:24:07 +1000
-Message-ID: <8735hsvzig.fsf@mpe.ellerman.id.au>
+        Mon, 2 May 2022 09:28:52 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C132526FA
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 06:25:22 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id t6so19596243wra.4
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 06:25:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=d1w5KNGZlTby5n3yh1tUKik48sS/s0HNFzIllnPu0NA=;
+        b=GQ8+YWL1sW0nw7vaDKDF6NhZOlpCMGU0MMsBNkEwVTLijsOMokNkZov099GVZhTUqU
+         YE2jAGOZbomNE1+VnaBWTj76IJdJPt2y/XrA7KRn+yPvmkd+BRoSgVYDt/wFMmy0dtvP
+         QFfYH3Spg3Ex4R/583JetjV2L8jFMKHipyfqE8KGWUZ0CCTBUIT8h/NowrN5hJ2yV8RU
+         hjvB2LWXHdn2rojyg9oWEGC193gJeruZkX8gq4lrhSUTb5AmKqwjS3FIeclE6B+wVHpQ
+         PVO3KPD5hMFeG/cGfH5u8zjEC/Tuhep5qpbZqjw8DGxVPtchpcMYRuaknOJJ8ZMo4O/d
+         90Qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=d1w5KNGZlTby5n3yh1tUKik48sS/s0HNFzIllnPu0NA=;
+        b=hxtbhFtKwymSBDd9SAJISmX9kKnXaMeXVL9g45sJ8RLXq3Wxaad678gidAQ1IjOQ8l
+         646PqaId4bcBtz3tCPcCq6ArZJjvu85Vm7MfZqXbzzTT9G4oJ5bfWRWFLlgtmsNIWFPJ
+         Hi6xNqUaVZvWKcinRmnT3CsyUv4wzagCoSojDfIKB9jhKzEmsjqEtJj4Fbm/v5Reb26c
+         WEG5vu0bhHEovH+A5n8hBNGzHXagUqSCi1PcYZkc6jt8ym5EtFsd/0ZlW9BqzUGoyYc4
+         dxVGpOdoSEiYN+75mZ04f9jQg4BFHeOVV9kR3/Ouq9/S9OZgmZ+luYyxu1lgHJjivb06
+         t1Yw==
+X-Gm-Message-State: AOAM530gQx8duvjE6p4L2fjKLmH7CCbaPb3Ms8eeRzV0S0lc5tYp7ktd
+        89TWdAEJnSyMW0TX8gXkT5Fvvw==
+X-Google-Smtp-Source: ABdhPJyORHPotq9IJJawWGEiaAYv0R0g0uWJi3J4vzrOnWTdnLOl46f4UN/qxb8PlywGiT63Q+AAcA==
+X-Received: by 2002:a05:6000:3c9:b0:20c:4e4e:863f with SMTP id b9-20020a05600003c900b0020c4e4e863fmr9139762wrg.4.1651497920748;
+        Mon, 02 May 2022 06:25:20 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:15:13:bdb8:d8d3:6904:292f])
+        by smtp.gmail.com with ESMTPSA id o3-20020adfba03000000b0020c5253d90asm7351891wrg.86.2022.05.02.06.25.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 May 2022 06:25:20 -0700 (PDT)
+Date:   Mon, 2 May 2022 15:25:14 +0200
+From:   Marco Elver <elver@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, jpoimboe@redhat.com, linux-kernel@vger.kernel.org,
+        jbaron@akamai.com, rostedt@goodmis.org, ardb@kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2 3/3] jump_label,noinstr: Avoid instrumentation for
+ JUMP_LABEL=n builds
+Message-ID: <Ym/buh8nDPFhohc2@elver.google.com>
+References: <20220502110741.951055904@infradead.org>
+ <20220502111216.350926848@infradead.org>
+ <Ym/X/BuXCi8H0vud@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ym/X/BuXCi8H0vud@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/2.1.4 (2021-12-11)
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CGEL <cgel.zte@gmail.com> writes:
-> From: Jing Yangyang <jing.yangyang@zte.com.cn>
->
-> Use BUG_ON instead of a if condition followed by BUG.
->
-> ./arch/powerpc/include/asm/book3s/64/pkeys.h:21:2-5:WARNING
-> Use BUG_ON instead of if condition followed by BUG.
-> ./arch/powerpc/include/asm/book3s/64/pkeys.h:14:2-5:WARNING
-> Use BUG_ON instead of if condition followed by BUG.
->
-> Generated by: scripts/coccinelle/misc/bugon.cocci
->
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Jing Yangyang <jing.yangyang@zte.com.cn>
+On Mon, May 02, 2022 at 03:09PM +0200, Peter Zijlstra wrote:
+> 
+> Subject: jump_label,noinstr: Avoid instrumentation for JUMP_LABEL=n builds
+> From: Peter Zijlstra <peterz@infradead.org>
+> Date: Mon May  2 12:30:20 CEST 2022
+> 
+> When building x86_64 with JUMP_LABEL=n it's possible for
+> instrumentation to sneak into noinstr:
+> 
+> vmlinux.o: warning: objtool: exit_to_user_mode+0x14: call to static_key_count.constprop.0() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: syscall_exit_to_user_mode+0x2d: call to static_key_count.constprop.0() leaves .noinstr.text section
+> vmlinux.o: warning: objtool: irqentry_exit_to_user_mode+0x1b: call to static_key_count.constprop.0() leaves .noinstr.text section
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 > ---
->  arch/powerpc/include/asm/book3s/64/pkeys.h | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/powerpc/include/asm/book3s/64/pkeys.h b/arch/powerpc/include/asm/book3s/64/pkeys.h
-> index 5b17813..5f74f0c 100644
-> --- a/arch/powerpc/include/asm/book3s/64/pkeys.h
-> +++ b/arch/powerpc/include/asm/book3s/64/pkeys.h
-> @@ -10,15 +10,13 @@ static inline u64 vmflag_to_pte_pkey_bits(u64 vm_flags)
->  	if (!mmu_has_feature(MMU_FTR_PKEY))
->  		return 0x0UL;
+>  include/linux/jump_label.h |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> --- a/include/linux/jump_label.h
+> +++ b/include/linux/jump_label.h
+> @@ -256,9 +256,9 @@ extern void static_key_disable_cpuslocke
+>  #include <linux/atomic.h>
+>  #include <linux/bug.h>
 >  
-> -	if (radix_enabled())
-> -		BUG();
-> +	BUG_ON(radix_enabled());
->  	return hash__vmflag_to_pte_pkey_bits(vm_flags);
->  }
->  
->  static inline u16 pte_to_pkey_bits(u64 pteflags)
+> -static inline int static_key_count(struct static_key *key)
+> +static __always_inline int static_key_count(struct static_key *key)
 >  {
-> -	if (radix_enabled())
-> -		BUG();
-> +	BUG_ON(radix_enabled());
->  	return hash__pte_to_pkey_bits(pteflags);
+> -	return atomic_read(&key->enabled);
+> +	return arch_atomic_read(&key->enabled.count);
+
+Curious if this compiles - s/.count// ?
+
 >  }
-
-Have you checked how this changes the generated code?
-
-radix_enabled() is a jump label, via mmu_feature().
-
-Possibly the compiler just works it all out and generates the same code,
-but I'd want some evidence of that before merging this.
-
-cheers
+>  
+>  static __always_inline void jump_label_init(void)

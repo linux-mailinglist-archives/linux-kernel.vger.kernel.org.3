@@ -2,106 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F14B05168ED
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 01:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA1005168F5
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 02:01:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356161AbiEBAAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 20:00:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38350 "EHLO
+        id S1356243AbiEBAFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 20:05:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiEBAAJ (ORCPT
+        with ESMTP id S229449AbiEBAFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 20:00:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD6E41981
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 16:56:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7009BB81020
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 23:56:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB327C385AE;
-        Sun,  1 May 2022 23:56:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1651449399;
-        bh=E3IU7wp+u3xButnlu57iaqCHUQJvl7jir8ysbnCd3lI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=EFR6Rgf+Ae6rGv1Wap4GiK0sCiqyhF/2eM2nybh6VJDsGTrMwxKAUt3FpuJ8rupEO
-         tjWFXoJi+JdomJfFCdlmlzTlXen/XmBrzdIR5siEDIOJK17fhC+b1NOWcwHz7O2IKB
-         hejdCuxWt8/k3ikeUgQbMj7l18qea9I8+RKjjjcs=
-Date:   Sun, 1 May 2022 16:56:33 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Davidlohr Bueso <dave@stgolabs.net>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Yu Zhao <yuzhao@google.com>
-Subject: Re: [PATCH v8 00/70] Introducing the Maple Tree
-Message-Id: <20220501165633.056319565dce429e36d25a0a@linux-foundation.org>
-In-Reply-To: <20220501202532.y6zmznzshbe33nwx@offworld>
-References: <20220426150616.3937571-1-Liam.Howlett@oracle.com>
-        <20220426130857.09f40743b42b5f0bf4f19a59@linux-foundation.org>
-        <20220427140832.mpvnnkkhrbupk46i@revolver>
-        <20220427103331.9876ad87626af0f50e9ced0d@linux-foundation.org>
-        <YmmHqlR6lV84KDrO@casper.infradead.org>
-        <20220501202532.y6zmznzshbe33nwx@offworld>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 1 May 2022 20:05:09 -0400
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAE162FC;
+        Sun,  1 May 2022 17:01:42 -0700 (PDT)
+Received: by mail-vs1-xe2c.google.com with SMTP id c62so12314720vsc.10;
+        Sun, 01 May 2022 17:01:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=0Td4oiGEn76YE86E1aORkuCrqQirCdqspkzlKcZCyrY=;
+        b=fU4yq50q2lQ3XuLdj/qGGDFPc8g3IoPe3R2fNAkZYkADZWlCeJmGai2z8oB95Enj+b
+         OAzgPYD1lDelMiSIQF4I3d2B4Yuq17YQOZmcgwWc1WtWrNe4O2rH0dWEvYZhkPw6m6PG
+         69a6QFQxB8lOvHNxX/Ekl5xo1FNp0BdDP2y+9oOzmzq+KlMPxk1JK2Y0uve70rsaeLG+
+         e3z6JWucbF9VjgBbKKGxAoSjDoC9cg58D8NwJSw6Hsccu5cvBQQo3qKdww8iAiAtoXnR
+         VevmJKMpGDEhaAHxqQSjDAbyNAkcAW9mvgZtvAqUGOyazA7ML4VAegw68uB3Rserr6Va
+         4AzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=0Td4oiGEn76YE86E1aORkuCrqQirCdqspkzlKcZCyrY=;
+        b=IJYVS+x28iBgXfCAU+Mll9cx1wOsMZq8vhS2bgAFyBRvVh1KuR5rnclTHXRjETUunF
+         8tYjPFw+tmnbudLiVWcpcKnqUc9OEFZQP1k/UJn9x71oZMVjo61TMaoFOVKM7DyGiDFQ
+         osGbHGPXkhZWy5T8oLGGlerapi4Pu3pd5xoItl0udeg/ExJM0jKGGiHGPmxnF4MtrOi1
+         qU1O4Mj22dvwB/hg2uc270+Z0x06oZRq+i/fE9D9/ITGVtp/0Qa5rlMRUYId2sDzGxO6
+         Vz72aPPgEJfOyt9vJQKT2cg6koUT4lMHCgq3Gmm7qzEZw4UzF3PAakpB0TOci5IytAw/
+         Qlqg==
+X-Gm-Message-State: AOAM532ifm8zagSPZqsqkNhzQWy7V3rmVyo/zAq2utjwwuq2IgKSDOpG
+        UzfGaqGV7O2EKp0Y8vKXwFJzcXdeTNALiOhdvpE=
+X-Google-Smtp-Source: ABdhPJx1LTNtGjC4S/dJvwCxmfi42wRxvYaWkAkZZY1UkYum9sFJturAmVyB2ut7y9HxV6wtSJLcf6hlza0EMjoIuyE=
+X-Received: by 2002:a67:be0b:0:b0:32c:d82f:6723 with SMTP id
+ x11-20020a67be0b000000b0032cd82f6723mr2711106vsq.67.1651449701274; Sun, 01
+ May 2022 17:01:41 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220430090518.3127980-1-chenhuacai@loongson.cn>
+ <20220430090518.3127980-11-chenhuacai@loongson.cn> <4dd26d88b807c967dbbc81a7b2e5f4084d9603d7.camel@mengyan1223.wang>
+ <2a534c89b3c905a34f947fb2739d58c9373bb915.camel@mengyan1223.wang>
+In-Reply-To: <2a534c89b3c905a34f947fb2739d58c9373bb915.camel@mengyan1223.wang>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Mon, 2 May 2022 08:01:31 +0800
+Message-ID: <CAAhV-H5vviww-h7BuhCitHVGeExjMOuWaap=iAc9ekqJzppgwQ@mail.gmail.com>
+Subject: Re: [PATCH V9 10/24] LoongArch: Add exception/interrupt handling
+To:     Xi Ruoyao <xry111@mengyan1223.wang>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 1 May 2022 13:26:34 -0700 Davidlohr Bueso <dave@stgolabs.net> wrote:
+Hi, Ruoyao,
 
-> On Wed, 27 Apr 2022, Matthew Wilcox wrote:
-> 
-> >On Wed, Apr 27, 2022 at 10:33:31AM -0700, Andrew Morton wrote:
-> >> On Wed, 27 Apr 2022 14:08:39 +0000 Liam Howlett <liam.howlett@oracle.com> wrote:
-> >> > The benchmarks are around the same as they have always been.
-> >>
-> >> So it's presently a wash.
-> >>
-> >> That makes "the plan" (below) really critical, otherwise there seems
-> >> little point in merging this code at this time?
-> >>
-> >> Please send me many very soothing words about how confident we should
-> >> be that the plan will be implemented and that it shall be good?
+On Mon, May 2, 2022 at 1:08 AM Xi Ruoyao <xry111@mengyan1223.wang> wrote:
+>
+> On Mon, 2022-05-02 at 00:27 +0800, Xi Ruoyao wrote:
+> > On Sat, 2022-04-30 at 17:05 +0800, Huacai Chen wrote:
+> > > +struct acpi_madt_lio_pic;
+> > > +struct acpi_madt_eio_pic;
+> > > +struct acpi_madt_ht_pic;
+> > > +struct acpi_madt_bio_pic;
+> > > +struct acpi_madt_msi_pic;
+> > > +struct acpi_madt_lpc_pic;
 > >
-> >Yes, performance-wise it's a wash.  However, Davidlohr was very
-> >impressed that it was a wash because we're actually getting rid of three
-> >data structures here; the linked list, the rbtree and the vmacache.
-> >His opinion was that we should push the maple tree in now, in advance
-> >of the future RCU uses.
-> 
-> Yes I like the maple tree, and at this stage I don't think we can ask
-> for more from this series wrt the MM - albeit there seems to still be
-> some folks reporting breakage. Fundamentally I see Liam's work to (re)move
-> complexity out of the MM (not to say that the actual maple tree is not
-> complex) by consolidating the three complimentary data structures very
-> much worth it considering performance does not take a hit. This was
-> very much a turn off with the range locking approach, which worst case
-> scenario incurred in prohibitive overhead. Also as Liam and Matthew
-> have mentioned, RCU opens up a lot of nice performance opportunities,
-> and in addition academia[1] has shown outstanding scalability of address
-> spaces with the foundation of replacing the locked rbtree with RCU
-> aware trees.
+> > Where are those defined?  I can't find them and the compilation fails
+> > with:
+> >
+> > arch/loongarch/kernel/irq.c: In function =E2=80=98find_pch_pic=E2=80=99=
+:
+> > arch/loongarch/kernel/irq.c:48:32: error: invalid use of undefined
+> > type =E2=80=98struct acpi_madt_bio_pic=E2=80=99
+> >    48 |                 start =3D irq_cfg->gsi_base;
+> >       |                                ^~
+> > arch/loongarch/kernel/irq.c:49:32: error: invalid use of undefined
+> > type =E2=80=98struct acpi_madt_bio_pic=E2=80=99
+> >    49 |                 end   =3D irq_cfg->gsi_base + irq_cfg->size;
+> >       |                                ^~
+> > arch/loongarch/kernel/irq.c:49:52: error: invalid use of undefined
+> > type =E2=80=98struct acpi_madt_bio_pic=E2=80=99
+> >    49 |                 end   =3D irq_cfg->gsi_base + irq_cfg->size;
+> >       |                                                    ^~
+>
+> Alright, my bad... I didn't realize the LoongArch patches are splitted
+> into multiple series for multiple lists.  But is this the SOP of kernel
+> patch reviewing?  Would it be easier to just send one series and CC all
+> relevent lists?
+The acpi stuff should go to acpica project first, then Rafael sync the
+code to the kernel. The current status is acpica has merged LoongArch
+support, but hasn't yet gone to the kernel.
+ACPI: Add LoongArch-related definitions by chenhuacai =C2=B7 Pull Request
+#757 =C2=B7 acpica/acpica =C2=B7 GitHub
 
-Thanks.   That sounded like a wordy acked-by to me? :)
-
-Liam, I think the above is useful background for the [0/N].
-
-> [1] https://pdos.csail.mit.edu/papers/rcuvm:asplos12.pdf
-
-As is that.  The paper seems shockingly relevant.  Do we know the
-authors or is it a cosmic coincidence?
-
+Huacai
+>
+> --
+> Xi Ruoyao <xry111@mengyan1223.wang>
+> School of Aerospace Science and Technology, Xidian University

@@ -2,154 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E68C5175A4
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 19:18:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F73A5175B5
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 19:23:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386654AbiEBRVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 13:21:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59312 "EHLO
+        id S243868AbiEBR1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 13:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386634AbiEBRVV (ORCPT
+        with ESMTP id S235761AbiEBR1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 13:21:21 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72596B7D4;
-        Mon,  2 May 2022 10:17:48 -0700 (PDT)
-Received: (Authenticated sender: joao@overdrivepizza.com)
-        by mail.gandi.net (Postfix) with ESMTPA id BA33C1BF205;
-        Mon,  2 May 2022 17:17:42 +0000 (UTC)
+        Mon, 2 May 2022 13:27:05 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B237A26E0;
+        Mon,  2 May 2022 10:23:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651512216; x=1683048216;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=LU179n8muWviqqb25jsmrJha83hqn2FjKhu7EZ5iR2M=;
+  b=MPweH+e4JhkJHQ2ct240bWvWRdizj4rRZaIY796PHPVlqM2dpC7UYjvS
+   7ZsiHbeWzcqOriwoj4D4l979T7x7+tLG87K4VsVWU7z2m6p2vuNz+MYBh
+   gKNFddwKetzSFSUpb+SpspyTJkBR68tPLZcGGGek4us20SWTLImE8bVXh
+   NH8vZFuJIf5tX2mFcsKG8CYfOnU6pADxj7OG8kz5XZtk9f27V5E0jzTct
+   FlZ7nhjpIyzeUci5iA9gRbt6c/eSEL5oOhjrnWEaDeMOPNnChpO3g3jKA
+   1mV10WcVedqt2LbIH9/lioMFdzq9Clqt8Lk42/m+jLg8tumEpbAcIvLfV
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="247823198"
+X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
+   d="scan'208";a="247823198"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 10:23:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
+   d="scan'208";a="516195920"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga003.jf.intel.com with ESMTP; 02 May 2022 10:23:35 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Mon, 2 May 2022 10:23:35 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Mon, 2 May 2022 10:23:34 -0700
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.027;
+ Mon, 2 May 2022 10:23:34 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        "markgross@kernel.org" <markgross@kernel.org>
+CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "Joseph, Jithu" <jithu.joseph@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
+Subject: RE: [PATCH v5 00/10] Introduce In Field Scan driver
+Thread-Topic: [PATCH v5 00/10] Introduce In Field Scan driver
+Thread-Index: AQHYWxYVdsKdZt61BUSHj1qB1cqAT60MLiKA//+uBGA=
+Date:   Mon, 2 May 2022 17:23:34 +0000
+Message-ID: <6171e5bfd1c5402692dca346fc2a5350@intel.com>
+References: <20220422200219.2843823-1-tony.luck@intel.com>
+ <20220428153849.295779-1-tony.luck@intel.com>
+ <13054c5c-ed48-b7a2-a800-25b9b1b1ab0d@redhat.com>
+In-Reply-To: <13054c5c-ed48-b7a2-a800-25b9b1b1ab0d@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.401.20
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Date:   Mon, 02 May 2022 10:17:42 -0700
-From:   Joao Moreira <joao@overdrivepizza.com>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        peterz@infradead.org, andrew.cooper3@citrix.com,
-        keescook@chromium.org, samitolvanen@google.com,
-        mark.rutland@arm.com, hjl.tools@gmail.com,
-        alyssa.milburn@linux.intel.com, ndesaulniers@google.com,
-        gabriel.gomes@linux.intel.com, rick.p.edgecombe@intel.com
-Subject: Re: [RFC PATCH 01/11] x86: kernel FineIBT
-In-Reply-To: <20220429013704.4n4lmadpstdioe7a@treble>
-References: <20220420004241.2093-1-joao@overdrivepizza.com>
- <20220420004241.2093-2-joao@overdrivepizza.com>
- <20220429013704.4n4lmadpstdioe7a@treble>
-Message-ID: <d82459b887bcaf9181ad836051e2d16b@overdrivepizza.com>
-X-Sender: joao@overdrivepizza.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-28 18:37, Josh Poimboeuf wrote:
-> On Tue, Apr 19, 2022 at 05:42:31PM -0700, joao@overdrivepizza.com 
-> wrote:
->> +void __noendbr __fineibt_handler(void){
->> +	unsigned i;
->> +	unsigned long flags;
->> +	bool skip;
->> +	void * ret;
->> +	void * caller;
->> +
->> +	DO_ALL_PUSHS;
-> 
-> So this function isn't C ABI compliant, right? e.g. the compiler just
-> calls the handler without regard for preserving registers?
-> 
-> If this function is going to be implemented in C, it should probably
-> have an asm thunk wrapper which can properly save/restore the registers
-> before calling into the C version.
-> 
-> Even better, if the compiler did an invalid op (UD2?), which I think 
-> you
-> mentioned elsewhere, instead of calling the handler directly, and there
-> were a way for the trap code to properly detect it as a FineIBT
-> violation, we could get rid of the pushes/pops, plus the uaccess 
-> objtool
-> warning from patch 7, plus I'm guessing a bunch of noinstr validation
-> warnings.
-
-Cool, I'll try to come up with something!
-
-> 
->> +
->> +	spin_lock_irqsave(&fineibt_lock, flags);
->> +	skip = false;
->> +
->> +	asm("\t movq 0x90(%%rsp),%0" : "=r"(ret));
->> +	asm("\t movq 0x98(%%rsp),%0" : "=r"(caller));
-> 
-> This is making some questionable assumptions about the stack layout.
-> 
-> I assume this function is still in the prototype stage ;-)
-
-Yeah, this is just a messy instrumentation to get reports about 
-mismatching prototypes (as the ones reported further down the series).
-
-The issue with having the call is that it bloats the binary, so the ud2 
-is 3-bytes-per-function better. Yet, we may consider a FINEIBT_DEBUG 
-config, which can then enable a handler. This would be useful together 
-with a fuzzer or a stress tool to cover possible control-flow paths 
-within the kernel and map mismatching prototypes more properly I guess.
-
-> 
->> +	if(!skip) {
->> +		printk("FineIBT violation: %px:%px:%u\n", ret, caller,
->> +				vlts_next);
->> +	}
->> +	DO_ALL_POPS;
->> +}
-> 
-> Right now this handler just does a printk if it hasn't already for this
-> caller/callee combo, and then resumes control.  Which is fine for
-> debugging, but it really needs to behave similarly to an IBT violation,
-> by panicking unless "ibt=warn" on the cmdline.
-> 
-> Not sure what would happen for "ibt=off"?  Maybe apply_ibt_endbr() 
-> could
-> NOP out all the FineIBT stuff.
-
-Either that, or...
-
-I'm thinking about a way to have FineIBT interchangeable with KCFI. 
-Currently KCFI adds a 4 byte hash + 2 byte nops before function entry, 
-to allow for proper prototype checking. After that, there should be an 
-ENDBR of 4 bytes. This gives us 10 bytes in total. Then, my yet to be 
-properly thought idea would be patch these 10 bytes with:
-
-endbr
-call fineibt_handler_<$HASH>
-nop
-
-and then, on the caller side, patch the "cmp <$HASH>, -0x6(%r11); je; 
-ud2; call" sequence with a "sub 0x6, r11; mov $HASH, %r10; call %r11, 
-add 0x6 %r11". This would then allow the kernel to verify if the CPU is 
-IBT capable on boot time and only then setting the proper scheme.
-
-The downsides of having something like this would be that this sub 
-r11/add r11 sequence is kinda meh. We can avoid that by having two 
-padding nops after the original ENDBR, which will be skipped when the 
-function is reached directly by the linker optimization I'm working on, 
-and that we can convert into a JMP -offset that makes control flow reach 
-the padding area before the prologue and from where we can call the 
-fineibt_handler function. The resulting instrumentation would be 
-something like:
-
-1:
-call fineibt_handler_<$HASH>
-jmp 2f
-<foo>
-endbr
-jmp 1b
-2:
-
-Also, it would prevent a paranoid user to have both schemes 
-simultaneously (there are reasons why people could want that).
-
-Any thoughts?
+PiBJJ3ZlIHRha2VuIGEgcXVpY2sgbG9vayBhdCB0aGUgZW50aXJlIHNlcmllcyBhbmQgaXQgbG9v
+a3MgZ29vZCB0byBtZS4NCj4NCj4gSSdtIGZpbmUgd2l0aCB0aGlzIGVudGlyZSBzZXJpZXMgZ2V0
+dGluZyBtZXJnZWQgdGhyb3VnaCB0aGUgVElQDQo+IHRyZWUsIGhlcmUgaXMgbXkgYWNrIGZvciBt
+ZXJnaW5nIHRoZSBkcml2ZXJzL3BsYXRmb3JtL3g4NiBiaXRzDQo+IHRocm91Z2ggdGhlIFRJUCB0
+cmVlOg0KPg0KPiBBY2tlZC1ieTogSGFucyBkZSBHb2VkZSA8aGRlZ29lZGVAcmVkaGF0LmNvbT4N
+Cg0KDQpIYW5zLA0KDQpUaGFua3MgZm9yIGxvb2tpbmcsIGFuZCBkb3VibGUgdGhhbmtzIGZvciB0
+aGUgIkFjayIuDQoNCi1Ub255DQoNCg==

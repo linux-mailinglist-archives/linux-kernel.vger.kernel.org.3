@@ -2,89 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83E95516B1B
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 09:08:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D616516B22
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 09:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358496AbiEBHLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 03:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56862 "EHLO
+        id S1358521AbiEBHL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 03:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354251AbiEBHLk (ORCPT
+        with ESMTP id S1358514AbiEBHLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 03:11:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0FE38DBC;
-        Mon,  2 May 2022 00:08:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 2 May 2022 03:11:52 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3633FBD8
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 00:08:18 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1714DB81147;
-        Mon,  2 May 2022 07:08:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBB14C385B4;
-        Mon,  2 May 2022 07:08:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651475289;
-        bh=X5DDZ5cu8Ec0v5TpZDEASVCpiKVJTD3WHl3xILny+5s=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Ftc66P1KRLtIxbphpeXSRKGK+ku85pG3xcLnI/ILm+zDUqAWSpZi/jH68+mJyw4e4
-         qrSk4knKQzczwh6juw3h25W1EEaFoJp13UogCVeUFApS4IlTRxkiRu31rw+h42AEEo
-         yVvI3NHLHqZRZMWf/GwdXrO0fkciYsoEJY1TJDzJqiHn5YRljNyBweeocP1TAdMDIW
-         SjWUyPk2BlfHWlnvCbBf3F73MPSMg+TT/ecnNgdjKm4f099yYZrBX2f5FXLl9T5/YR
-         SvkcpkVzscWXQHMTAsjSEd0WcjGhlhqUMXSf9/gRaXtg84BSH7Y053ojFgR2kKR7NX
-         cyQX12I4WnqMQ==
-Received: by mail-yb1-f182.google.com with SMTP id m128so24603743ybm.5;
-        Mon, 02 May 2022 00:08:09 -0700 (PDT)
-X-Gm-Message-State: AOAM533YXgNgVBCaIk7s9X4l2uGaKY7PX9fESMeQGr95OIWvy9Hgok5G
-        skFANhKVeVZqhSpAEiicidyCvsqdenyuPV2U89E=
-X-Google-Smtp-Source: ABdhPJzh1sjDRx5OtKZisw0kK2teD3n3NIRAbZSwmRkDNwDLe6EnG5RDGjvENlJGwWWdkEOx8bePQy1Q38g26+xkjEA=
-X-Received: by 2002:a25:31c2:0:b0:641:660f:230f with SMTP id
- x185-20020a2531c2000000b00641660f230fmr9381815ybx.472.1651475288728; Mon, 02
- May 2022 00:08:08 -0700 (PDT)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 505271F893;
+        Mon,  2 May 2022 07:08:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1651475297; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/j6Eg6YlmI7iyXEZqBuBXLr/ocf52MgeS8WAphcSYV8=;
+        b=iuQgPNDaOhD81DIQbtYM+zdB4DNg6dH2M9EujdpbzYBX0o3FqmcyM+10AyehxoqhL+/4Oh
+        nEUDLPrAwGfsMG5F6k0+1MY9i9lepO8Tf0kbcEfm1Vnhdbo/r4sKtkxLEAg8SN4nYDmZTF
+        WJQItEcJRKEsrYToHNZK+42wAsweKeI=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0AA4C13491;
+        Mon,  2 May 2022 07:08:17 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Nj9DAWGDb2JObQAAMHmgww
+        (envelope-from <jgross@suse.com>); Mon, 02 May 2022 07:08:17 +0000
+Message-ID: <36f1c727-846b-0b81-192c-d2ecfce1fbf8@suse.com>
+Date:   Mon, 2 May 2022 09:08:16 +0200
 MIME-Version: 1.0
-References: <20220419163810.2118169-1-arnd@kernel.org> <20220419163810.2118169-19-arnd@kernel.org>
- <CACRpkdac8dGKSEmc-HpgooJefrDtiKK+_A1Mv7AJM8yQV9UY-w@mail.gmail.com>
-In-Reply-To: <CACRpkdac8dGKSEmc-HpgooJefrDtiKK+_A1Mv7AJM8yQV9UY-w@mail.gmail.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Mon, 2 May 2022 09:07:52 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0w3gFzZoBzyRsi1Ta4prESf8Fp0=quAPSKMnaXvbXNTQ@mail.gmail.com>
-Message-ID: <CAK8P3a0w3gFzZoBzyRsi1Ta4prESf8Fp0=quAPSKMnaXvbXNTQ@mail.gmail.com>
-Subject: Re: [PATCH 18/48] ARM: pxa: hx4700: use gpio descriptors for audio
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Tomas Cech <sleep_walker@suse.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-US
+To:     Liam Howlett <liam.howlett@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Yu Zhao <yuzhao@google.com>
+References: <20220426150616.3937571-1-Liam.Howlett@oracle.com>
+ <20220426150616.3937571-24-Liam.Howlett@oracle.com>
+ <20220428201947.GA1912192@roeck-us.net>
+ <20220429003841.cx7uenepca22qbdl@revolver>
+ <20220428181621.636487e753422ad0faf09bd6@linux-foundation.org>
+ <20220502001358.s2azy37zcc27vgdb@revolver>
+From:   Juergen Gross <jgross@suse.com>
+Subject: Re: [PATCH v8 23/70] mm/mmap: change do_brk_flags() to expand
+ existing VMA and add do_brk_munmap()
+In-Reply-To: <20220502001358.s2azy37zcc27vgdb@revolver>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------TG19cOB040TsYSrWWtHms0Hp"
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -93,217 +75,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 1, 2022 at 11:41 PM Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> (...)
-> > +static struct gpiod_lookup_table hx4700_audio_gpio_table = {
-> > +       .dev_id = "hx4700-audio",
-> > +       .table = {
-> > +               GPIO_LOOKUP("gpio-pxa", GPIO75_HX4700_EARPHONE_nDET,
-> > +                           "earphone-ndet", GPIO_ACTIVE_HIGH),
->
-> This looks wrong. The n in nDET in the end of the name of the GPIO line
-> means active low does it not?
->
-> What I usually do when I see this is to properly set it to
-> GPIO_ACTIVE_LOW in the descriptor table, then invert the logic
-> where it's getting used.
->
-> Also rename to earphone-det instead of -ndet
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------TG19cOB040TsYSrWWtHms0Hp
+Content-Type: multipart/mixed; boundary="------------eQFY0OLHlpcTTgDu1TS5og2K";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Liam Howlett <liam.howlett@oracle.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+ "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+ "linux-mm@kvack.org" <linux-mm@kvack.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ Yu Zhao <yuzhao@google.com>
+Message-ID: <36f1c727-846b-0b81-192c-d2ecfce1fbf8@suse.com>
+Subject: Re: [PATCH v8 23/70] mm/mmap: change do_brk_flags() to expand
+ existing VMA and add do_brk_munmap()
+References: <20220426150616.3937571-1-Liam.Howlett@oracle.com>
+ <20220426150616.3937571-24-Liam.Howlett@oracle.com>
+ <20220428201947.GA1912192@roeck-us.net>
+ <20220429003841.cx7uenepca22qbdl@revolver>
+ <20220428181621.636487e753422ad0faf09bd6@linux-foundation.org>
+ <20220502001358.s2azy37zcc27vgdb@revolver>
+In-Reply-To: <20220502001358.s2azy37zcc27vgdb@revolver>
 
-Thanks for taking a look! I changed it now, but I don't know if
-I got the correct number of inversions in the end. How does this look?
+--------------eQFY0OLHlpcTTgDu1TS5og2K
+Content-Type: multipart/mixed; boundary="------------G0AS1ttLSwQrwrirTlS2RYK0"
 
-          Arnd
+--------------G0AS1ttLSwQrwrirTlS2RYK0
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-commit 9d452c9cbee59fc58c940b5f7ae5a40579aab0d2
-Author: Arnd Bergmann <arnd@arndb.de>
-Date:   Wed Sep 11 14:27:13 2019 +0200
+T24gMDIuMDUuMjIgMDI6MTQsIExpYW0gSG93bGV0dCB3cm90ZToNCj4gKiBBbmRyZXcgTW9y
+dG9uIDxha3BtQGxpbnV4LWZvdW5kYXRpb24ub3JnPiBbMjIwNDI4IDIxOjE2XToNCj4+IE9u
+IEZyaSwgMjkgQXByIDIwMjIgMDA6Mzg6NTAgKzAwMDAgTGlhbSBIb3dsZXR0IDxsaWFtLmhv
+d2xldHRAb3JhY2xlLmNvbT4gd3JvdGU6DQo+Pg0KPj4+PiBtbS9tbWFwLmM6IEluIGZ1bmN0
+aW9uICdkb19icmtfZmxhZ3MnOg0KPj4+PiBtbS9tbWFwLmM6MjkwODoxNzogZXJyb3I6IGlt
+cGxpY2l0IGRlY2xhcmF0aW9uIG9mIGZ1bmN0aW9uDQo+Pj4+IAkna2h1Z2VwYWdlZF9lbnRl
+cl92bWFfbWVyZ2UnOyBkaWQgeW91IG1lYW4gJ2todWdlcGFnZWRfZW50ZXJfdm1hJz8NCj4+
+Pj4NCj4+Pj4gSXQgYXBwZWFycyB0aGF0IHRoaXMgaXMgbGF0ZXIgZml4ZWQsIGJ1dCBpdCBo
+dXJ0cyBiaXNlY3RhYmlsaXR5DQo+Pj4+IChhbmQgcHJldmVudHMgbWUgZnJvbSBmaW5kaW5n
+IHRoZSBhY3R1YWwgYnVpbGQgZmFpbHVyZSBpbiBsaW51eC1uZXh0DQo+Pj4+IHdoZW4gdHJ5
+aW5nIHRvIGJ1aWxkIGNvcmVuZXQ2NF9zbXBfZGVmY29uZmlnKS4NCj4+Pg0KPj4+IFllYWgs
+IHRoYXQga2h1Z2VwYWdlZF9lbnRlcl92bWFfbWVyZ2Ugd2FzIHJlbmFtZWQgaW4gYW5vdGhl
+ciBwYXRjaCBzZXQuDQo+Pj4gQW5kcmV3IG1hZGUgdGhlIGNvcnJlY3Rpb24gYnV0IGtlcHQg
+dGhlIHBhdGNoIGFzIGl0IHdhcy4gIEkgdGhpbmsgdGhlDQo+Pj4gc3VnZ2VzdGVkIGNoYW5n
+ZSBpcyByaWdodC4uIGlmIHlvdSByZWFkIHRoZSBjb21taXQgdGhhdCBpbnRyb2R1Y2VkDQo+
+Pj4ga2h1Z2VwYWdlZF9lbnRlcl92bWEoKSwgaXQgc2VlbXMgcmlnaHQgYXQgbGVhc3QuDQo+
+Pg0KPj4gVGhpbmdzIGFyZSBhIGJpdCBjcmF6eSBsYXRlbHkuICBNZXJnZSBpc3N1ZXMgd2l0
+aCBtYXBsZXRyZWUsIG1lcmdlDQo+PiBpc3N1ZXMgd2l0aCBtZ2xydSBvbiBtYXBsZXRyZWUs
+IG1lIGRvaW5nIGEgYnVuY2ggb2YgcmV0b29saW5nIHRvIHN0YXJ0DQo+PiBwdWJsaXNoaW5n
+L21lcmdpbmcgdmlhIGdpdCwgbWFwbGV0cmVlIHJ1bnRpbWUgaXNzdWVzLCBldGMuDQo+Pg0K
+Pj4gSSd2ZSBkcm9wcGVkIHRoZSBtYXBsZXRyZWUgcGF0Y2hlcyBhZ2Fpbi4gIFBsZWFzZSBz
+Y29vcCB1cCBhbGwga25vd24NCj4+IGZpeGVzIGFuZCByZWRvIGFnYWluc3QgdGhlIChub24t
+cmViYXNpbmcpIG1tLXN0YWJsZSBicmFuY2ggYXQNCj4+IGdpdDovL2dpdC5rZXJuZWwub3Jn
+L3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9ha3BtL21tDQo+IA0KPiBPa2F5LCBzb3VuZHMg
+Z29vZC4NCj4gDQo+IEkgaGF2ZSBiZWVuIHBvcnRpbmcgbXkgcGF0Y2hlcyBvdmVyIGFuZCBo
+aXQgYSBiaXQgb2YgYSBzbmFnLiBJdCBsb29rZWQNCj4gbGlrZSBteSBwYXRjaGVzIHdlcmUg
+bm90IGJvb3Rpbmcgb24gdGhlIHMzOTAgLSBidXQgbm90IGFsbCB0aGUgdGltZS4gU28NCj4g
+SSByZXZlcnRlZCBiYWNrIHRvIG1tLXN0YWJsZSAoMDU5MzQyZDFkZDRlKSBhbmQgZm91bmQg
+dGhhdCBhbHNvIGZhaWxlZA0KPiB0byBib290IHNvbWV0aW1lcyBvbiBteSBxZW11IHNldHVw
+LiAgV2hlbiBpdCBmYWlscyBpdCdzIH40LTVzZWMgaW50bw0KPiBib290aW5nLiAgVGhlIGxh
+c3QgdGhpbmcgSSBzZWUgaXM6DQo+IA0KPiAiWyAgICA0LjY2ODkxNl0gU3BlY3RyZSBWMiBt
+aXRpZ2F0aW9uOiBleGVjdXRlIHRyYW1wb2xpbmVzIg0KPiANCj4gSSd2ZSBiaXNlY3RlZCBi
+YWNrIHRvIGNvbW1pdCBlNTUzZjYyZjEwZDkgKG1tLCBwYWdlX2FsbG9jOiBmaXgNCj4gYnVp
+bGRfem9uZXJlZnNfbm9kZSgpKQ0KPiANCj4gV2l0aCB0aGUgdGhpcyBjb21taXQsIEkgYW0g
+dW5hYmxlIHRvIGJvb3Qgb25lIG91dCBvZiB0aHJlZSB0aW1lcy4gIFdoZW4NCj4gdXNpbmcg
+dGhlIHByZXZpb3VzIGNvbW1pdCBJIHdhcyBub3QgYWJsZSB0byBnZXQgaXQgdG8gaGFuZyBh
+ZnRlciB0cnlpbmcNCj4gMTArIHRpbWVzLiAgVGhpcyBpcyBhIHFlbXUgczM5MCBpbnN0YWxs
+IHdpdGggS0FTQU4gb24gYW5kIEkgc2VlIG5vIGVycm9yDQo+IG1lc3NhZ2VzLiAgSSB0aGlu
+ayBpdCdzIGxpa2VseSBpdCBpcyB0aGlzIHBhdGNoLCBidXQgbm8gZ3VhcmFudGVlZC4NCg0K
+VGhpcyBzb3VuZHMgbGlrZSBhIHJhY2UgY29uZGl0aW9uIGR1cmluZyB0aGUgc2V0dXAgb2Yg
+bWVtb3J5IHpvbmVzLg0KDQpJIGNvdWxkIGltYWdpbmUgbXkgcGF0Y2ggaXMgdHJpZ2dlcmlu
+ZyB0aGlzIHByb2JsZW0sIGJ1dCBpdCBzaG91bGQNCm5vdCBiZSB0aGUgcmVhbCByb290IGNh
+dXNlLg0KDQpJJ20gbm8gZXhwZXJ0IHJlZ2FyZGluZyB6b25lIHNldHVwLCBidXQgSSB0aGlu
+ayBpdCBtaWdodCBoZWxwIHRvDQpwcmludCBzb21lIHpvbmUgZGF0YSBpbiBjYXNlIHRoZSBw
+cm9ibGVtIGlzIGhhcHBlbmluZy4gV2hpY2ggZGF0YSBpcw0KbmVlZGVkIEkgaGF2ZSBubyBy
+ZWFsIGlkZWEsIGJ1dCBtYXliZSBzb21lb25lIGVsc2UgY2FuIGhlbHAgaGVyZS4gVGhlDQpm
+b2xsb3dpbmcgZGlmZiBzaG91bGQgcmVjb2duaXplIHRoZSBwcm9ibGVtYXRpYyBjYXNlIChp
+dCBtaWdodCBzaG93DQpmYWxzZSBwb3NpdGl2ZXMsIHRob3VnaCk6DQoNCmRpZmYgLS1naXQg
+YS9tbS9wYWdlX2FsbG9jLmMgYi9tbS9wYWdlX2FsbG9jLmMNCmluZGV4IDBlNDIwMzgzODJj
+MS4uMjNmMDI5ZjM5OTg1IDEwMDY0NA0KLS0tIGEvbW0vcGFnZV9hbGxvYy5jDQorKysgYi9t
+bS9wYWdlX2FsbG9jLmMNCkBAIC02MTMyLDYgKzYxMzIsOSBAQCBzdGF0aWMgaW50IGJ1aWxk
+X3pvbmVyZWZzX25vZGUocGdfZGF0YV90ICpwZ2RhdCwgc3RydWN0IA0Kem9uZXJlZiAqem9u
+ZXJlZnMpDQogICAgICAgICAgICAgICAgIHpvbmVfdHlwZS0tOw0KICAgICAgICAgICAgICAg
+ICB6b25lID0gcGdkYXQtPm5vZGVfem9uZXMgKyB6b25lX3R5cGU7DQogICAgICAgICAgICAg
+ICAgIGlmIChwb3B1bGF0ZWRfem9uZSh6b25lKSkgew0KKyAgICAgICAgICAgICAgICAgICAg
+ICAgaWYgKCFtYW5hZ2VkX3pvbmUoem9uZSkpIHsNCisgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgLyogUHJpbnQgc29tZSBkYXRhIHJlZ2FyZGluZyB0aGUgem9uZS4gKi8NCisg
+ICAgICAgICAgICAgICAgICAgICAgIH0NCiAgICAgICAgICAgICAgICAgICAgICAgICB6b25l
+cmVmX3NldF96b25lKHpvbmUsICZ6b25lcmVmc1tucl96b25lcysrXSk7DQogICAgICAgICAg
+ICAgICAgICAgICAgICAgY2hlY2tfaGlnaGVzdF96b25lKHpvbmVfdHlwZSk7DQogICAgICAg
+ICAgICAgICAgIH0NCg0KDQpKdWVyZ2VuDQoNCg==
+--------------G0AS1ttLSwQrwrirTlS2RYK0
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-    ARM: pxa: hx4700: use gpio descriptors for audio
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-    The audio driver should not use a hardwired gpio number
-    from the header. Change it to use a lookup table.
+xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjri
+oyspZKOBycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2
+kaV2KL9650I1SJvedYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i
+1TXkH09XSSI8mEQ/ouNcMvIJNwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/B
+BLUVbDa4+gmzDC9ezlZkTZG2t14zWPvxXP3FAp2pkW0xqG7/377qptDmrk42GlSK
+N4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEBAAHNHEp1ZXJnZW4gR3Jvc3Mg
+PGpnQHBmdXBmLm5ldD7CwHkEEwECACMFAlOMcBYCGwMHCwkIBwMCAQYVCAIJCgsE
+FgIDAQIeAQIXgAAKCRCw3p3WKL8TL0KdB/93FcIZ3GCNwFU0u3EjNbNjmXBKDY4F
+UGNQH2lvWAUy+dnyThpwdtF/jQ6j9RwE8VP0+NXcYpGJDWlNb9/JmYqLiX2Q3Tye
+vpB0CA3dbBQp0OW0fgCetToGIQrg0MbD1C/sEOv8Mr4NAfbauXjZlvTj30H2jO0u
++6WGM6nHwbh2l5O8ZiHkH32iaSTfN7Eu5RnNVUJbvoPHZ8SlM4KWm8rG+lIkGurq
+qu5gu8q8ZMKdsdGC4bBxdQKDKHEFExLJK/nRPFmAuGlId1E3fe10v5QL+qHI3EIP
+tyfE7i9Hz6rVwi7lWKgh7pe0ZvatAudZ+JNIlBKptb64FaiIOAWDCx1SzR9KdWVy
+Z2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+wsB5BBMBAgAjBQJTjHCvAhsDBwsJ
+CAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey/HmQf/RtI7kv5A2PS4
+RF7HoZhPVPogNVbC4YA6lW7DrWf0teC0RR3MzXfy6pJ+7KLgkqMlrAbN/8Dvjoz7
+8X+5vhH/rDLa9BuZQlhFmvcGtCF8eR0T1v0nC/nuAFVGy+67q2DH8As3KPu0344T
+BDpAvr2uYM4tSqxK4DURx5INz4ZZ0WNFHcqsfvlGJALDeE0LhITTd9jLzdDad1pQ
+SToCnLl6SBJZjDOX9QQcyUigZFtCXFst4dlsvddrxyqT1f17+2cFSdu7+ynLmXBK
+7abQ3rwJY8SbRO2iRulogc5vr/RLMMlscDAiDkaFQWLoqHHOdfO9rURssHNN8WkM
+nQfvUewRz80hSnVlcmdlbiBHcm9zcyA8amdyb3NzQG5vdmVsbC5jb20+wsB5BBMB
+AgAjBQJTjHDXAhsDBwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/
+Ey8PUQf/ehmgCI9jB9hlgexLvgOtf7PJnFOXgMLdBQgBlVPO3/D9R8LtF9DBAFPN
+hlrsfIG/SqICoRCqUcJ96Pn3P7UUinFG/I0ECGF4EvTE1jnDkfJZr6jrbjgyoZHi
+w/4BNwSTL9rWASyLgqlA8u1mf+c2yUwcGhgkRAd1gOwungxcwzwqgljf0N51N5Jf
+VRHRtyfwq/ge+YEkDGcTU6Y0sPOuj4Dyfm8fJzdfHNQsWq3PnczLVELStJNdapwP
+OoE+lotufe3AM2vAEYJ9rTz3Cki4JFUsgLkHFqGZarrPGi1eyQcXeluldO3m91NK
+/1xMI3/+8jbO0tsn1tqSEUGIJi7ox80eSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1
+c2UuZGU+wsB5BBMBAgAjBQJTjHDrAhsDBwsJCAcDAgEGFQgCCQoLBBYCAwECHgEC
+F4AACgkQsN6d1ii/Ey+LhQf9GL45eU5vOowA2u5N3g3OZUEBmDHVVbqMtzwlmNC4
+k9Kx39r5s2vcFl4tXqW7g9/ViXYuiDXb0RfUpZiIUW89siKrkzmQ5dM7wRqzgJpJ
+wK8Bn2MIxAKArekWpiCKvBOB/Cc+3EXE78XdlxLyOi/NrmSGRIov0karw2RzMNOu
+5D+jLRZQd1Sv27AR+IP3I8U4aqnhLpwhK7MEy9oCILlgZ1QZe49kpcumcZKORmzB
+TNh30FVKK1EvmV2xAKDoaEOgQB4iFQLhJCdP1I5aSgM5IVFdn7v5YgEYuJYx37Io
+N1EblHI//x/e2AaIHpzK5h88NEawQsaNRpNSrcfbFmAg987ATQRTjHAWAQgAyzH6
+AOODMBjgfWE9VeCgsrwH3exNAU32gLq2xvjpWnHIs98ndPUDpnoxWQugJ6MpMncr
+0xSwFmHEgnSEjK/PAjppgmyc57BwKII3sV4on+gDVFJR6Y8ZRwgnBC5mVM6JjQ5x
+Dk8WRXljExRfUX9pNhdE5eBOZJrDRoLUmmjDtKzWaDhIg/+1Hzz93X4fCQkNVbVF
+LELU9bMaLPBG/x5q4iYZ2k2ex6d47YE1ZFdMm6YBYMOljGkZKwYde5ldM9mo45mm
+we0icXKLkpEdIXKTZeKDO+Hdv1aqFuAcccTg9RXDQjmwhC3yEmrmcfl0+rPghO0I
+v3OOImwTEe4co3c1mwARAQABwsBfBBgBAgAJBQJTjHAWAhsMAAoJELDendYovxMv
+Q/gH/1ha96vm4P/L+bQpJwrZ/dneZcmEwTbe8YFsw2V/Buv6Z4Mysln3nQK5ZadD
+534CF7TDVft7fC4tU4PONxF5D+/tvgkPfDAfF77zy2AH1vJzQ1fOU8lYFpZXTXIH
+b+559UqvIB8AdgR3SAJGHHt4RKA0F7f5ipYBBrC6cyXJyyoprT10EMvU8VGiwXvT
+yJz3fjoYsdFzpWPlJEBRMedCot60g5dmbdrZ5DWClAr0yau47zpWj3enf1tLWaqc
+suylWsviuGjKGw7KHQd3bxALOknAp4dN3QwBYCKuZ7AddY9yjynVaD5X7nF9nO5B
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
-    Cc: Philipp Zabel <philipp.zabel@gmail.com>
-    Cc: Paul Parsons <lost.distance@yahoo.com>
-    Acked-by: Mark Brown <broonie@kernel.org>
-    Acked-by: Robert Jarzmik <robert.jarzmik@free.fr>
-    Cc: alsa-devel@alsa-project.org
-    Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+--------------G0AS1ttLSwQrwrirTlS2RYK0--
 
-diff --git a/arch/arm/mach-pxa/hx4700-pcmcia.c
-b/arch/arm/mach-pxa/hx4700-pcmcia.c
-index e8acbfc9ef6c..e2331dfe427d 100644
---- a/arch/arm/mach-pxa/hx4700-pcmcia.c
-+++ b/arch/arm/mach-pxa/hx4700-pcmcia.c
-@@ -10,7 +10,7 @@
- #include <linux/irq.h>
+--------------eQFY0OLHlpcTTgDu1TS5og2K--
 
- #include <asm/mach-types.h>
--#include <mach/hx4700.h>
-+#include "hx4700.h"
+--------------TG19cOB040TsYSrWWtHms0Hp
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
- #include <pcmcia/soc_common.h>
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/arch/arm/mach-pxa/hx4700.c b/arch/arm/mach-pxa/hx4700.c
-index 140a44cb2989..2ae06edf413c 100644
---- a/arch/arm/mach-pxa/hx4700.c
-+++ b/arch/arm/mach-pxa/hx4700.c
-@@ -41,7 +41,7 @@
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmJvg2AFAwAAAAAACgkQsN6d1ii/Ey85
+ggf/UfGA2BrkwJlb0BJDUO4idQSI2yFXWYgwqqHXGfxzzvVSNGVFKYHgOyspsJ7eYp4gSaubKcQ2
+8OrOMlaiP87rZDhmyyLHXvKcUA3/9wvQB+3DjhLsYzbrua6A5+UDWNI9tUiS5feX2uDFfbO7QiIn
+rRWGQqwhIfHOAOfvTHmZXR6iETjlKEHMz4s/AT99SlaLGESI9EG2yz7gRXPpnx/7x+TWauQq5RJb
+b+4T8hTaQJorkkQ0fcwes68IvqvvSx+jjx1jmZ5lJIWi6IJCOoASLMFhfS5+/n7k4+wCqIQdaemF
+5F/oTFyY8l6wIIDE0RKOQzxGFG+L/BX4IhUkVLUNNQ==
+=5eAW
+-----END PGP SIGNATURE-----
 
- #include "pxa27x.h"
- #include "addr-map.h"
--#include <mach/hx4700.h>
-+#include "hx4700.h"
- #include <linux/platform_data/irda-pxaficp.h>
-
- #include <sound/ak4641.h>
-@@ -834,6 +834,19 @@ static struct i2c_board_info i2c_board_info[]
-__initdata = {
-        },
- };
-
-+static struct gpiod_lookup_table hx4700_audio_gpio_table = {
-+       .dev_id = "hx4700-audio",
-+       .table = {
-+               GPIO_LOOKUP("gpio-pxa", GPIO75_HX4700_EARPHONE_nDET,
-+                           "earphone-det", GPIO_ACTIVE_LOW),
-+               GPIO_LOOKUP("gpio-pxa", GPIO92_HX4700_HP_DRIVER,
-+                           "hp-driver", GPIO_ACTIVE_HIGH),
-+               GPIO_LOOKUP("gpio-pxa", GPIO107_HX4700_SPK_nSD,
-+                           "spk-sd", GPIO_ACTIVE_LOW),
-+               { },
-+       },
-+};
-+
- static struct platform_device audio = {
-        .name   = "hx4700-audio",
-        .id     = -1,
-@@ -895,6 +908,7 @@ static void __init hx4700_init(void)
-
-        gpiod_add_lookup_table(&bq24022_gpiod_table);
-        gpiod_add_lookup_table(&gpio_vbus_gpiod_table);
-+       gpiod_add_lookup_table(&hx4700_audio_gpio_table);
-        platform_add_devices(devices, ARRAY_SIZE(devices));
-        pwm_add_table(hx4700_pwm_lookup, ARRAY_SIZE(hx4700_pwm_lookup));
-
-diff --git a/arch/arm/mach-pxa/include/mach/hx4700.h
-b/arch/arm/mach-pxa/hx4700.h
-similarity index 99%
-rename from arch/arm/mach-pxa/include/mach/hx4700.h
-rename to arch/arm/mach-pxa/hx4700.h
-index 0c30e6d9c660..ce2db33989e1 100644
---- a/arch/arm/mach-pxa/include/mach/hx4700.h
-+++ b/arch/arm/mach-pxa/hx4700.h
-@@ -10,7 +10,7 @@
-
- #include <linux/gpio.h>
- #include <linux/mfd/asic3.h>
--#include "irqs.h" /* PXA_NR_BUILTIN_GPIO */
-+#include <mach/irqs.h> /* PXA_NR_BUILTIN_GPIO */
-
- #define HX4700_ASIC3_GPIO_BASE PXA_NR_BUILTIN_GPIO
- #define HX4700_EGPIO_BASE      (HX4700_ASIC3_GPIO_BASE + ASIC3_NUM_GPIOS)
-diff --git a/sound/soc/pxa/hx4700.c b/sound/soc/pxa/hx4700.c
-index 7334fac758de..a0734b742322 100644
---- a/sound/soc/pxa/hx4700.c
-+++ b/sound/soc/pxa/hx4700.c
-@@ -10,7 +10,7 @@
- #include <linux/interrupt.h>
- #include <linux/platform_device.h>
- #include <linux/delay.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
-
- #include <sound/core.h>
- #include <sound/jack.h>
-@@ -18,10 +18,10 @@
- #include <sound/pcm_params.h>
- #include <sound/soc.h>
-
--#include <mach/hx4700.h>
- #include <asm/mach-types.h>
- #include "pxa2xx-i2s.h"
-
-+static struct gpio_desc *gpiod_hp_driver, *gpiod_spk_sd;
- static struct snd_soc_jack hs_jack;
-
- /* Headphones jack detection DAPM pin */
-@@ -40,9 +40,7 @@ static struct snd_soc_jack_pin hs_jack_pin[] = {
-
- /* Headphones jack detection GPIO */
- static struct snd_soc_jack_gpio hs_jack_gpio = {
--       .gpio           = GPIO75_HX4700_EARPHONE_nDET,
--       .invert         = true,
--       .name           = "hp-gpio",
-+       .name           = "earphone-det",
-        .report         = SND_JACK_HEADPHONE,
-        .debounce_time  = 200,
- };
-@@ -81,14 +79,14 @@ static const struct snd_soc_ops hx4700_ops = {
- static int hx4700_spk_power(struct snd_soc_dapm_widget *w,
-                            struct snd_kcontrol *k, int event)
- {
--       gpio_set_value(GPIO107_HX4700_SPK_nSD, !!SND_SOC_DAPM_EVENT_ON(event));
-+       gpiod_set_value(gpiod_spk_sd, !!SND_SOC_DAPM_EVENT_ON(event));
-        return 0;
- }
-
- static int hx4700_hp_power(struct snd_soc_dapm_widget *w,
-                           struct snd_kcontrol *k, int event)
- {
--       gpio_set_value(GPIO92_HX4700_HP_DRIVER, !!SND_SOC_DAPM_EVENT_ON(event));
-+       gpiod_set_value(gpiod_hp_driver, !!SND_SOC_DAPM_EVENT_ON(event));
-        return 0;
- }
-
-@@ -162,11 +160,6 @@ static struct snd_soc_card snd_soc_card_hx4700 = {
-        .fully_routed           = true,
- };
-
--static struct gpio hx4700_audio_gpios[] = {
--       { GPIO107_HX4700_SPK_nSD, GPIOF_OUT_INIT_HIGH, "SPK_POWER" },
--       { GPIO92_HX4700_HP_DRIVER, GPIOF_OUT_INIT_LOW, "EP_POWER" },
--};
--
- static int hx4700_audio_probe(struct platform_device *pdev)
- {
-        int ret;
-@@ -174,26 +167,26 @@ static int hx4700_audio_probe(struct
-platform_device *pdev)
-        if (!machine_is_h4700())
-                return -ENODEV;
-
--       ret = gpio_request_array(hx4700_audio_gpios,
--                               ARRAY_SIZE(hx4700_audio_gpios));
-+       gpiod_hp_driver = devm_gpiod_get(&pdev->dev, "hp-driver",
-GPIOD_OUT_HIGH);
-+       ret = PTR_ERR_OR_ZERO(gpiod_hp_driver);
-+       if (ret)
-+               return ret;
-+       gpiod_spk_sd = devm_gpiod_get(&pdev->dev, "spk-sd", GPIOD_OUT_LOW);
-+       ret = PTR_ERR_OR_ZERO(gpiod_spk_sd);
-        if (ret)
-                return ret;
-
-+       hs_jack_gpio.gpiod_dev = &pdev->dev;
-        snd_soc_card_hx4700.dev = &pdev->dev;
-        ret = devm_snd_soc_register_card(&pdev->dev, &snd_soc_card_hx4700);
--       if (ret)
--               gpio_free_array(hx4700_audio_gpios,
--                               ARRAY_SIZE(hx4700_audio_gpios));
-
-        return ret;
- }
-
- static int hx4700_audio_remove(struct platform_device *pdev)
- {
--       gpio_set_value(GPIO92_HX4700_HP_DRIVER, 0);
--       gpio_set_value(GPIO107_HX4700_SPK_nSD, 0);
--
--       gpio_free_array(hx4700_audio_gpios, ARRAY_SIZE(hx4700_audio_gpios));
-+       gpiod_set_value(gpiod_hp_driver, 0);
-+       gpiod_set_value(gpiod_spk_sd, 0);
-        return 0;
- }
+--------------TG19cOB040TsYSrWWtHms0Hp--

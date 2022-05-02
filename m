@@ -2,90 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 571B9516E22
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 12:29:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61290516E29
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 12:31:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384558AbiEBKdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 06:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52186 "EHLO
+        id S1384587AbiEBKfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 06:35:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384595AbiEBKcy (ORCPT
+        with ESMTP id S1384538AbiEBKen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 06:32:54 -0400
-Received: from smtp-190e.mail.infomaniak.ch (smtp-190e.mail.infomaniak.ch [185.125.25.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED359BCB4
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 03:28:32 -0700 (PDT)
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KsK7L19PDzMpnT4;
-        Mon,  2 May 2022 12:28:30 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4KsK7K1rsBzlhSLy;
-        Mon,  2 May 2022 12:28:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1651487310;
-        bh=bptxyVnLNXDttaSUgFWYcO2XLQjIKj3V2V77zSKRijg=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=sYTRVnzK1acffNdh7/XJLYB4Fjo92WqaJCNs/hMVa+uJfHNWBKhAZHNpBtt1fEaMD
-         237w1h/545j3O0sw7hscVWWqPSrmj4czUN0G/e84DS0j+Fw9voO3MZkJyguMiD9ffv
-         FTxBLd6NoJWv7jjmx56xV1bhdGBqEtTYdhXHZ2Xc=
-Message-ID: <32f41b83-2019-475b-b72a-6b824fe796f8@digikod.net>
-Date:   Mon, 2 May 2022 12:29:41 +0200
-MIME-Version: 1.0
-User-Agent: 
-Content-Language: en-US
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <8b6b252b-47a6-9d52-f0bd-10d3bc4ad244@digikod.net>
- <CANiq72nLOfmEt-CZBmm2ouEB_x6Jm9ggDVFCVJxYxKw7O0LTzQ@mail.gmail.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Subject: Re: clang-format inconsistencies with checkpatch.pl
-In-Reply-To: <CANiq72nLOfmEt-CZBmm2ouEB_x6Jm9ggDVFCVJxYxKw7O0LTzQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 2 May 2022 06:34:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9990B7F0;
+        Mon,  2 May 2022 03:31:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B5AB6123B;
+        Mon,  2 May 2022 10:31:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E887C385A4;
+        Mon,  2 May 2022 10:31:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651487473;
+        bh=F47tb2LcIQl1JzmX/6+L6mZEb8vZi9kPtE/YAoCVFFQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RbZeh2W3aXkSAYwbcO1vfSGS9AalqPh0LtpikQHrl1l6XQJJMZpAFRtIgkuxVW2Fe
+         ncn/24QnrG+TKvF+jpgTBnp4dqNqAmt2irGJpvxucnGXK3316JTsFEnQfdWOPJ4w+m
+         Y5Xg2Tdgc2p56WW1yOx6+mmkLBcV++Fk5uNIwjgKrD0tUys8gyI+bbrnEW7PcIY+Ao
+         pggFxy0cGNuKDukuJz93xigqnijwnu8EvFlWZzwpVZGcwKCYBS5sUa9nMamp6H5z0p
+         Xy01cTMR2Klt/Rut43CblnibnjlKkjCZP6Njf7uG5NVF63Qno68PN8MbclRfvi9eWC
+         6edOpUA8dU6PQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nlTKh-008OYC-DR; Mon, 02 May 2022 11:31:11 +0100
+Date:   Mon, 02 May 2022 11:31:11 +0100
+Message-ID: <87ee1ci5u8.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] PCI: apple: Add support for optional PWREN GPIO
+In-Reply-To: <20220502093832.32778-4-marcan@marcan.st>
+References: <20220502093832.32778-1-marcan@marcan.st>
+        <20220502093832.32778-4-marcan@marcan.st>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: marcan@marcan.st, lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com, bhelgaas@google.com, alyssa@rosenzweig.io, sven@svenpeter.dev, linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 23/04/2022 18:14, Miguel Ojeda wrote:
-> Hi Mickaël,
+On Mon, 02 May 2022 10:38:32 +0100,
+Hector Martin <marcan@marcan.st> wrote:
 > 
-> On Sat, Apr 23, 2022 at 1:45 PM Mickaël Salaün <mic@digikod.net> wrote:
->>
->> I also noticed that there is some clang-format configuration lines that
->> are commented because of incompatibilities with versions older than 6.
->> Shouldn't we require a minimal version, at least the 6th?
-> 
-> I will be increasing this cycle the version to 11, which is the
-> minimum LLVM supported at the moment, and then keep it sync'd to that
-> minimum.
+> WiFi and SD card devices on M1 Macs have a separate power enable GPIO.
+> Add support for this to the PCIe controller. This is modeled after how
+> pcie-fu740 does it.
 
-OK, thanks.
+Please update the DT binding to reflect this as an optional property.
 
 > 
->> About checkpatch.pl, it incorrectly warns about space between function
->> name and open parenthesis for *for_each* functions (specifically
->> interpreted as "for" statements in .clang-format, e.g. list_for_each_entry).
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>  drivers/pci/controller/pcie-apple.c | 35 ++++++++++++++++++++++++++---
+>  1 file changed, 32 insertions(+), 3 deletions(-)
 > 
-> Note that the prevailing kernel style is to not have a space. This
-> should be fixed with the increase to 11.
+> diff --git a/drivers/pci/controller/pcie-apple.c b/drivers/pci/controller/pcie-apple.c
+> index e3aa2d461739..5b73c03ebe94 100644
+> --- a/drivers/pci/controller/pcie-apple.c
+> +++ b/drivers/pci/controller/pcie-apple.c
+> @@ -518,6 +518,16 @@ static int apple_pcie_probe_port(struct device_node *np)
+>  	}
+>  
+>  	gpiod_put(gd);
+> +
+> +	gd = gpiod_get_from_of_node(np, "pwren-gpios", 0,
+> +				    GPIOD_OUT_LOW, "PWREN");
+> +	if (IS_ERR(gd)) {
+> +		if (PTR_ERR(gd) != -ENOENT)
+> +			return PTR_ERR(gd);
+> +	} else {
+> +		gpiod_put(gd);
+> +	}
+> +
+>  	return 0;
+>  }
+>  
+> @@ -526,7 +536,7 @@ static int apple_pcie_setup_port(struct apple_pcie *pcie,
+>  {
+>  	struct platform_device *platform = to_platform_device(pcie->dev);
+>  	struct apple_pcie_port *port;
+> -	struct gpio_desc *reset;
+> +	struct gpio_desc *reset, *pwren = NULL;
+>  	u32 stat, idx;
+>  	int ret, i;
+>  
+> @@ -535,6 +545,15 @@ static int apple_pcie_setup_port(struct apple_pcie *pcie,
+>  	if (IS_ERR(reset))
+>  		return PTR_ERR(reset);
+>  
+> +	pwren = devm_gpiod_get_from_of_node(pcie->dev, np, "pwren-gpios", 0,
+> +					    GPIOD_OUT_LOW, "PWREN");
+> +	if (IS_ERR(pwren)) {
+> +		if (PTR_ERR(pwren) == -ENOENT)
+> +			pwren = NULL;
+> +		else
+> +			return PTR_ERR(pwren);
+> +	}
+> +
+>  	port = devm_kzalloc(pcie->dev, sizeof(*port), GFP_KERNEL);
+>  	if (!port)
+>  		return -ENOMEM;
+> @@ -557,12 +576,22 @@ static int apple_pcie_setup_port(struct apple_pcie *pcie,
+>  	/* Assert PERST# before setting up the clock */
+>  	gpiod_set_value_cansleep(reset, 1);
+>  
+> +	/* Power on the device if required */
+> +	if (pwren)
+> +		gpiod_set_value_cansleep(pwren, 1);
 
-I was talking about the ForEachMacros exceptions. Should these be 
-removed or at least not updated for new for_each functions [1]?
+nit: AFAICT, the gpiod_* helpers already check for a NULL descriptor,
+and silently return without an error.
 
-[1] https://lore.kernel.org/r/20220412153906.428179-1-mic@digikod.net
+> +
+>  	ret = apple_pcie_setup_refclk(pcie, port);
+>  	if (ret < 0)
+>  		return ret;
+>  
+> -	/* The minimal Tperst-clk value is 100us (PCIe CEM r5.0, 2.9.2) */
+> -	usleep_range(100, 200);
+> +	/*
+> +	 * The minimal Tperst-clk value is 100us (PCIe CEM r5.0, 2.9.2)
+> +	 * If powering up, the minimal Tpvperl is 100ms
+> +	 */
+> +	if (pwren)
+> +		msleep(100);
+> +	else
+> +		usleep_range(100, 200);
+>  
+>  	/* Deassert PERST# */
+>  	rmw_set(PORT_PERST_OFF, port->base + PORT_PERST);
+
+With the documentation aspect addressed:
+
+Acked-by: Marc Zyngier <maz@kernel.org>
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

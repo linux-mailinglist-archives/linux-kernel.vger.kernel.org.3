@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C6DC516A35
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 07:02:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B7E516A37
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 07:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383300AbiEBFFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 01:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39200 "EHLO
+        id S1383306AbiEBFHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 01:07:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346303AbiEBFFX (ORCPT
+        with ESMTP id S1346303AbiEBFHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 01:05:23 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C66C18B2F
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 22:01:56 -0700 (PDT)
+        Mon, 2 May 2022 01:07:34 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B5E18B2F;
+        Sun,  1 May 2022 22:04:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651467716; x=1683003716;
+  t=1651467847; x=1683003847;
   h=message-id:subject:from:to:cc:date:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Wm7gwDXh9BZWcKpELhaTWGGoPu2BD2ENh7B7L0WCkxg=;
-  b=BVf0vN0NSjGonh304H0GIHMRiJsZLH/n27jcQL+fK35S7M2kIcJxxZ35
-   vZaEmU4g2YcnR/F4pUd9f0nztiCjtrZ8G5KbBstiZnyVsErFYHKyXr7xr
-   g53ZEg9cD5rDe5uGbSyIvtMxVaVyvQMSYdoJ4woUsqwPyxUlzvuRZGEuA
-   FYyumK+gXvyhh2BUE8N3WaSoFYRu+mvqLRtQVFG/p9fA57VAivY3FfDgN
-   flWD1N96mUjwLTFQcj2pjoGoF28QfMpmq12zXc5u09egKyZfWzP2CBc2W
-   OoZu23Zmy5875/0yug+52+ALTFYYjU6AX/q7XgbbjRB1rlaYYKtPZ2CYE
+  bh=V1kJORjn9br3AwkVpZzF5nhWVGElfcC89uM3ZN5Q7cY=;
+  b=gVJwl2PMfLj6VpOQNkWMvxOuwhnAbKplGGK7G3Jx+6gZ4rezkXjKajpA
+   c8RWIIhQeXMK2jjKjrvEnTdT7yRsIvV0cWSjmSNvtc/LPAnI/EfUubqxm
+   cAyhG6BHvQBQB93ydUfndyLy4+X+09MAiv2wfvVS1vIq0dNbeZDgm2Aik
+   aNc8vmIyLluBVXhokmeBTynPPmZCzZybP7v81IY8Nati2m6bn56Iy/Aky
+   64jmCvA/Jfwhud+rjagttrRqwGwN1H5iRuBw8oxYBVfmPUMlQ81dUIAq2
+   Hm5O2c0unCMlzpAyd7sFP4NRpdsYvxCAuWlwC8+Uv7FO8mFjn5l67cowd
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="265971855"
+X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="247674779"
 X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="265971855"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 22:01:56 -0700
+   d="scan'208";a="247674779"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 22:04:07 -0700
 X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="707463129"
+   d="scan'208";a="886061235"
 Received: from bwu50-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.2.219])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 22:01:52 -0700
-Message-ID: <7daf429ffda2bf834c129899426e204fbbcbd0b0.camel@intel.com>
-Subject: Re: [PATCH v5 3/3] x86/tdx: Add Quote generation support
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 22:04:04 -0700
+Message-ID: <33e3c91973dd22cada87d9c78e3e4b9eb4da9778.camel@intel.com>
+Subject: Re: [PATCH v3 09/21] x86/virt/tdx: Get information about TDX module
+ and convertible memory
 From:   Kai Huang <kai.huang@intel.com>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 02 May 2022 17:01:50 +1200
-In-Reply-To: <20220501183500.2242828-4-sathyanarayanan.kuppuswamy@linux.intel.com>
-References: <20220501183500.2242828-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-         <20220501183500.2242828-4-sathyanarayanan.kuppuswamy@linux.intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+Date:   Mon, 02 May 2022 17:04:02 +1200
+In-Reply-To: <4aea41ea-211f-fbde-34e9-4c4467ebc848@intel.com>
+References: <cover.1649219184.git.kai.huang@intel.com>
+         <145620795852bf24ba2124a3f8234fd4aaac19d4.1649219184.git.kai.huang@intel.com>
+         <f929fb7a-5bdc-2567-77aa-762a098c8513@intel.com>
+         <0bab7221179229317a11311386c968bd0d40e344.camel@intel.com>
+         <98f81eed-e532-75bc-d2d8-4e020517b634@intel.com>
+         <be31134cf44a24d6d38fbf39e9e18ef223e216c6.camel@intel.com>
+         <4aea41ea-211f-fbde-34e9-4c4467ebc848@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
@@ -72,107 +73,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 2022-04-29 at 10:47 -0700, Dave Hansen wrote:
+> On 4/28/22 16:14, Kai Huang wrote:
+> > On Thu, 2022-04-28 at 07:06 -0700, Dave Hansen wrote:
+> > > On 4/27/22 17:15, Kai Huang wrote:
+> > > > > Couldn't we get rid of that comment if you did something like:
+> > > > > 
+> > > > > 	ret = tdx_get_sysinfo(&tdx_cmr_array, &tdx_sysinfo);
+> > > > 
+> > > > Yes will do.
+> > > > 
+> > > > > and preferably make the variables function-local.
+> > > > 
+> > > > 'tdx_sysinfo' will be used by KVM too.
+> > > 
+> > > In other words, it's not a part of this series so I can't review whether
+> > > this statement is correct or whether there's a better way to hand this
+> > > information over to KVM.
+> > > 
+> > > This (minor) nugget influencing the design also isn't even commented or
+> > > addressed in the changelog.
+> > 
+> > TDSYSINFO_STRUCT is 1024B and CMR array is 512B, so I don't think it should be
+> > in the stack.  I can change to use dynamic allocation at the beginning and free
+> > it at the end of the function.  KVM support patches can change it to static
+> > variable in the file.
+> 
+> 2k of stack is big, but it isn't a deal breaker for something that's not
+> nested anywhere and that's only called once in a pretty controlled
+> setting and not in interrupt context.  I wouldn't cry about it.
 
-> +
-> +static long tdx_get_quote(void __user *argp)
-> +{
-> +	struct tdx_quote_req quote_req;
-> +	long ret = 0;
-> +	int order;
-> +
-> +	/* Hold lock to serialize GetQuote requests */
-> +	mutex_lock(&quote_lock);
-> +
-> +	reinit_completion(&req_compl);
-> +
-> +	/* Copy GetQuote request struct from user buffer */
-> +	if (copy_from_user(&quote_req, argp, sizeof(struct tdx_quote_req))) {
-> +		ret = -EFAULT;
-> +		goto quote_failed;
-> +	}
-> +
-> +	/* Make sure the length & timeout is valid */
-> +	if (!quote_req.len || !quote_req.timeout) {
-> +		ret = -EINVAL;
-> +		goto quote_failed;
-> +	}
-> +
-> +	/* Get order for Quote buffer page allocation */
-> +	order = get_order(quote_req.len);
-> +
-> +	/*
-> +	 * Allocate buffer to get TD Quote from the VMM.
-> +	 * Size needs to be 4KB aligned (which is already
-> +	 * met in page allocation).
-> +	 */
-> +	tdquote = (void *)__get_free_pages(GFP_KERNEL | __GFP_ZERO, order);
-> +	if (!tdquote) {
-> +		ret = -ENOMEM;
-> +		goto quote_failed;
-> +	}
-> +
-> +	/*
-> +	 * Since this buffer will be shared with the VMM via GetQuote
-> +	 * hypercall, decrypt it.
-> +	 */
-> +	ret = set_memory_decrypted((unsigned long)tdquote, 1UL << order);
-> +	if (ret)
-> +		goto quote_failed;
-> +
-> +	/* Copy TDREPORT from user buffer to kernel Quote buffer */
-> +	if (copy_from_user(tdquote, (void __user *)quote_req.buf, quote_req.len)) {
-> +		ret = -EFAULT;
-> +		goto quote_failed;
-> +	}
-> +
-> +	/* Submit GetQuote Request */
-> +	ret = tdx_get_quote_hypercall(tdquote, (1ULL << order) * PAGE_SIZE);
-> +	if (ret) {
-> +		pr_err("GetQuote hypercall failed, status:%lx\n", ret);
-> +		ret = -EIO;
-> +		goto quote_failed;
-> +	}
-> +
-> +	/* Wait for attestation completion */
-> +	ret = wait_for_completion_interruptible(&req_compl);
-> +	if (ret <= 0) {
-> +		ret = -EIO;
-> +		goto quote_failed;
-> +	}
-> +
-> +	/* Copy output data back to user buffer */
-> +	if (copy_to_user((void __user *)quote_req.buf, tdquote, quote_req.len))
-> +		ret = -EFAULT;
-> +
-> +quote_failed:
-> +	if (tdquote)
-> +		free_pages((unsigned long)tdquote, order);
+OK.  I'll change to use function local variables for both of them.
 
-The buffer is freed w/o being converted back to private.  How can you prevent
-the buffer from being allocated by kernel and used as private pages again?
+-- 
+Thanks,
+-Kai
 
-Also, the  buffer may be still used by VMM when timeout (IN_FLIGHT), how can
-this even work?
-
-> +	tdquote = NULL;
-> +	mutex_unlock(&quote_lock);
-> +	return ret;
-> +}
-> +
-> +static void attestation_callback_handler(void)
-> +{
-> +	struct tdx_quote_hdr *quote_hdr;
-> +
-> +	quote_hdr = (struct tdx_quote_hdr *) tdquote;
-> +
-> +	/* Check for spurious callback IRQ case */
-> +	if (!tdquote || quote_hdr->status == GET_QUOTE_IN_FLIGHT)
-> +		return;
-
-I don't get the logic.  Please explain.
-
-> +
-> +	complete(&req_compl);
-> +}
-> +
 

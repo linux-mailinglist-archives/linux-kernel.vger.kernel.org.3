@@ -2,73 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B8965171B5
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 16:38:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91EF75171BD
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 16:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238120AbiEBOln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 10:41:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47688 "EHLO
+        id S237847AbiEBOmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 10:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237898AbiEBOlg (ORCPT
+        with ESMTP id S238024AbiEBOmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 10:41:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E5E212620
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 07:38:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651502287;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wVoPR7+BaUM00iEkwlBxjF0xXPgmMZX2vpPWycEtV78=;
-        b=c4nzDu6RKXJ+l12VxDYsxfPyjlT70JPw1gUqzy/HCdWGNFO/Dvb3r0zVwJPSvMU0QDM8oX
-        Shh9jxfgMZjrVHQOoaHCINAynYglCrs6VXIAaDMZ/5s5pVxGj0PdHYFE7R362T7Y1x7Cxe
-        oGm3xNLyOINVDrAnW07gXwQEjI+GxPI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-152-MmWCcKafP32gX5GLYtBFzw-1; Mon, 02 May 2022 10:37:59 -0400
-X-MC-Unique: MmWCcKafP32gX5GLYtBFzw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 2 May 2022 10:42:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A9A410BD;
+        Mon,  2 May 2022 07:38:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3E91C3806707;
-        Mon,  2 May 2022 14:37:58 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.34])
-        by smtp.corp.redhat.com (Postfix) with SMTP id DBB8540869CE;
-        Mon,  2 May 2022 14:37:52 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Mon,  2 May 2022 16:37:57 +0200 (CEST)
-Date:   Mon, 2 May 2022 16:37:51 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org,
-        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v2 06/12] ptrace: Reimplement PTRACE_KILL by always
- sending SIGKILL
-Message-ID: <20220502143750.GC17276@redhat.com>
-References: <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
- <20220429214837.386518-6-ebiederm@xmission.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9808160FAD;
+        Mon,  2 May 2022 14:38:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AAF0C385AC;
+        Mon,  2 May 2022 14:38:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651502314;
+        bh=5xmYs16DqQgvQQ7n8Eayk+zOE2UfeGbZ788MYHG/7C0=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=IwFi0V7jBWekNpU1Soz8LkJsUFRzMgEoIqJaHkIc3S8nt49GInIlirO6RrYn9pRGx
+         wkXv32V1UOIlev3yzM9vqY3UmUhU/MnOEHVRslt0gDj8Sgz+Hml8/uV0mUfDo8yMlQ
+         W5A6TbYsElP40EEPUbGbaCTUdrti70OqGustplloPw8QEMpuVsNl1LBJorO3vnpl/+
+         9nJjF09qS2CFYPhDITC1IH54GLNgvN61MUfsX81TD8YWgKuVun9/hFIU2BQcfDvTj+
+         jCDtFr3JZQZRlot/nNbBNJYIU+5AsX38ntxfWk7vCugJZnyS1ynU7grlN0NirkVsi2
+         DmOYkCWreUluw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220429214837.386518-6-ebiederm@xmission.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] [v3] plfxlc: fix le16_to_cpu warning for beacon_interval
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <CWLP265MB3217FDFE8E945E52492B002FE0FC9@CWLP265MB3217.GBRP265.PROD.OUTLOOK.COM>
+References: <CWLP265MB3217FDFE8E945E52492B002FE0FC9@CWLP265MB3217.GBRP265.PROD.OUTLOOK.COM>
+To:     Srinivasan Raju <srini.raju@purelifi.com>
+Cc:     unlisted-recipients:; (no To-header on input)
+        "David S. Miller" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "open list:NETWORKING DRIVERS (WIRELESS)" 
+        <linux-wireless@vger.kernel.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Illegal-Object: Syntax error in Cc: address found on vger.kernel.org:
+        Cc:     unlisted-recipients:; (no To-header on input)"David S. Miller" <davem@davemloft.net>
+                                                                     ^-missing end of address
+User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <165150230926.32510.3611898103134896335.kvalo@kernel.org>
+Date:   Mon,  2 May 2022 14:38:31 +0000 (UTC)
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,39 +65,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/29, Eric W. Biederman wrote:
->
-> Call send_sig_info in PTRACE_KILL instead of ptrace_resume.  Calling
-> ptrace_resume is not safe to call if the task has not been stopped
-> with ptrace_freeze_traced.
+Srinivasan Raju <srini.raju@purelifi.com> wrote:
 
-Oh, I was never, never able to understand why do we have PTRACE_KILL
-and what should it actually do.
+> Fix the following sparse warnings:
+> drivers/net/wireless/purelifi/plfxlc/chip.c:36:31: sparse: expected unsigned short [usertype] beacon_interval
+> drivers/net/wireless/purelifi/plfxlc/chip.c:36:31: sparse: got restricted __le16 [usertype]
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Srinivasan Raju <srini.raju@purelifi.com>
 
-I suggested many times to simply remove it but OK, we probably can't
-do this.
+Failed to apply, please rebase on top of wireless-next. And also I
+strongly recommend to use git send-email for avoiding any formatting
+problems.
 
-> --- a/kernel/ptrace.c
-> +++ b/kernel/ptrace.c
-> @@ -1238,7 +1238,7 @@ int ptrace_request(struct task_struct *child, long request,
->  	case PTRACE_KILL:
->  		if (child->exit_state)	/* already dead */
->  			return 0;
-> -		return ptrace_resume(child, request, SIGKILL);
-> +		return send_sig_info(SIGKILL, SEND_SIG_NOINFO, child);
+error: patch failed: drivers/net/wireless/purelifi/plfxlc/chip.c:29
+error: drivers/net/wireless/purelifi/plfxlc/chip.c: patch does not apply
+error: Did you hand edit your patch?
+It does not apply to blobs recorded in its index.
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+Applying: plfxlc: fix le16_to_cpu warning for beacon_interval
+Using index info to reconstruct a base tree...
+Patch failed at 0001 plfxlc: fix le16_to_cpu warning for beacon_interval
 
-Note that currently ptrace(PTRACE_KILL) can never fail (yes, yes, it
-is unsafe), but send_sig_info() can. If we do not remove PTRACE_KILL,
-then I'd suggest
+Patch set to Changes Requested.
 
-	case PTRACE_KILL:
-		if (!child->exit_state)
-			send_sig_info(SIGKILL);
-		return 0;
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/CWLP265MB3217FDFE8E945E52492B002FE0FC9@CWLP265MB3217.GBRP265.PROD.OUTLOOK.COM/
 
-to make this change a bit more compatible.
-
-Also, please remove the note about PTRACE_KILL in set_task_blockstep().
-
-Oleg.
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 

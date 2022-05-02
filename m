@@ -2,156 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E3A516DCE
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 12:01:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3632E516DD1
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 12:01:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384393AbiEBKEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 06:04:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
+        id S1384515AbiEBKFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 06:05:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384346AbiEBKEU (ORCPT
+        with ESMTP id S1384502AbiEBKFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 06:04:20 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A17BC2645
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 03:00:46 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 33C57210E5;
-        Mon,  2 May 2022 10:00:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1651485645; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iTKK1xDtnmXAYeBi+dPbi8yteaHw0P2nDeN1SBWNaj0=;
-        b=MgkEFVOILNEsJGU7lV+W1Duv+D56s8qcIPD4uiurhbUaI/fFhxuJSLbeXuUPNPmp3T3LwB
-        R8LwQ+czdbKNkckdwJ54YxfupZX0dszqy2x2mwyobcMoRGhMdLOwgVeXLBw9NYfsakApZx
-        MF9gYw0I7LGB3sNLonS1iTGeVvrNLko=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1651485645;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iTKK1xDtnmXAYeBi+dPbi8yteaHw0P2nDeN1SBWNaj0=;
-        b=Nj3KJAWkFC19kauBWwlkVq6mk+bTmGIo7dy42UvYuLm4H1AizBwqdlXYcPuTlnjyD92aF5
-        MrexEt86CBj5ENCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 10CF513491;
-        Mon,  2 May 2022 10:00:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id xXQUA82rb2J9NgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 02 May 2022 10:00:45 +0000
-Message-ID: <49b0d611-e116-c78d-cf14-6d5f96ae500e@suse.cz>
-Date:   Mon, 2 May 2022 12:00:44 +0200
+        Mon, 2 May 2022 06:05:08 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF0363F8;
+        Mon,  2 May 2022 03:01:24 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R371e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VC-hchj_1651485680;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VC-hchj_1651485680)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 02 May 2022 18:01:22 +0800
+Date:   Mon, 2 May 2022 18:01:20 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Matthew Wilcox <willy@infradead.org>, Gao Xiang <xiang@kernel.org>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the folio tree
+Message-ID: <Ym+r8OK3eWUihmr6@B-P7TQMD6M-0146.local>
+References: <20220502180425.7305c335@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To:     Wonhyuk Yang <vvghjk1234@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220430002555.3881-1-vvghjk1234@gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [Patch v3] mm/slub: Remove repeated action in calculate_order()
-In-Reply-To: <20220430002555.3881-1-vvghjk1234@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220502180425.7305c335@canb.auug.org.au>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/30/22 02:25, Wonhyuk Yang wrote:
-> To calculate order, calc_slab_order() is called repeatly changing the
-> fract_leftover. Thus, the branch which is not dependent on
-> fract_leftover is executed repeatly. So make it run only once.
+Hi Stephen,
+
+On Mon, May 02, 2022 at 06:04:25PM +1000, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Plus, when min_object reached to 1, we set fract_leftover to 1. In
-> this case, we can calculate order by max(slub_min_order,
-> get_order(size)) instead of calling calc_slab_order().
+> After merging the folio tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
 > 
-> No functional impact expected.
+> fs/erofs/fscache.c:255:10: error: 'const struct address_space_operations' has no member named 'readpage'
+>   255 |         .readpage = erofs_fscache_meta_readpage,
+>       |          ^~~~~~~~
+> fs/erofs/fscache.c:255:21: error: initialization of 'int (*)(struct page *, struct writeback_control *)' from incompatible pointer type 'int (*)(struct file *, struct page *)' [-Werror=incompatible-pointer-types]
+>   255 |         .readpage = erofs_fscache_meta_readpage,
+>       |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> fs/erofs/fscache.c:255:21: note: (near initialization for 'erofs_fscache_meta_aops.writepage')
+> fs/erofs/fscache.c:259:10: error: 'const struct address_space_operations' has no member named 'readpage'
+>   259 |         .readpage = erofs_fscache_readpage,
+>       |          ^~~~~~~~
+> fs/erofs/fscache.c:259:21: error: initialization of 'int (*)(struct page *, struct writeback_control *)' from incompatible pointer type 'int (*)(struct file *, struct page *)' [-Werror=incompatible-pointer-types]
+>   259 |         .readpage = erofs_fscache_readpage,
+>       |                     ^~~~~~~~~~~~~~~~~~~~~~
+> fs/erofs/fscache.c:259:21: note: (near initialization for 'erofs_fscache_access_aops.writepage')
 > 
-> Signed-off-by: Wonhyuk Yang <vvghjk1234@gmail.com>
-> Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> Caused by commit
+> 
+>   00da6d4b7219 ("mm,fs: Remove stray references to ->readpage")
+> 
+> interacting with commits
+> 
+>   60aa7e805f00 ("erofs: implement fscache-based metadata read")
+>   e472f468adbe ("erofs: implement fscache-based data read for non-inline layout")
+> 
+> from the erofs tree.
+> 
+> I have applied the following merge fix patch.
+> 
+
+That looks good to me, will point out this conflict then.
+
+Thanks,
+Gao Xiang
+
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Mon, 2 May 2022 17:57:39 +1000
+> Subject: [PATCH] fixup for "mm,fs: Remove stray references to ->readpage"
+> 
+> interacting with commits
+> 
+>   60aa7e805f00 ("erofs: implement fscache-based metadata read")
+>   e472f468adbe ("erofs: implement fscache-based data read for non-inline layout")
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 > ---
+>  fs/erofs/fscache.c | 10 ++++------
+>  1 file changed, 4 insertions(+), 6 deletions(-)
 > 
->  mm/slub.c | 18 +++++++-----------
->  1 file changed, 7 insertions(+), 11 deletions(-)
+> diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
+> index a402d8f0a063..1bb2d0fc19c8 100644
+> --- a/fs/erofs/fscache.c
+> +++ b/fs/erofs/fscache.c
+> @@ -59,10 +59,9 @@ static int erofs_fscache_read_folios(struct fscache_cookie *cookie,
+>  	return ret;
+>  }
+>  
+> -static int erofs_fscache_meta_readpage(struct file *data, struct page *page)
+> +static int erofs_fscache_meta_read_folio(struct file *data, struct folio *folio)
+>  {
+>  	int ret;
+> -	struct folio *folio = page_folio(page);
+>  	struct super_block *sb = folio_mapping(folio)->host->i_sb;
+>  	struct erofs_map_dev mdev = {
+>  		.m_deviceid = 0,
+> @@ -110,9 +109,8 @@ static int erofs_fscache_readpage_inline(struct folio *folio,
+>  	return 0;
+>  }
+>  
+> -static int erofs_fscache_readpage(struct file *file, struct page *page)
+> +static int erofs_fscache_read_folio(struct file *file, struct folio *folio)
+>  {
+> -	struct folio *folio = page_folio(page);
+>  	struct inode *inode = folio_mapping(folio)->host;
+>  	struct super_block *sb = inode->i_sb;
+>  	struct erofs_map_blocks map;
+> @@ -252,11 +250,11 @@ static void erofs_fscache_readahead(struct readahead_control *rac)
+>  }
+>  
+>  static const struct address_space_operations erofs_fscache_meta_aops = {
+> -	.readpage = erofs_fscache_meta_readpage,
+> +	.read_folio = erofs_fscache_meta_read_folio,
+>  };
+>  
+>  const struct address_space_operations erofs_fscache_access_aops = {
+> -	.readpage = erofs_fscache_readpage,
+> +	.read_folio = erofs_fscache_read_folio,
+>  	.readahead = erofs_fscache_readahead,
+>  };
+>  
+> -- 
+> 2.35.1
 > 
-> diff --git a/mm/slub.c b/mm/slub.c
-> index ed5c2c03a47a..1fe4d62b72b8 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -3795,9 +3795,6 @@ static inline unsigned int calc_slab_order(unsigned int size,
->  	unsigned int min_order = slub_min_order;
->  	unsigned int order;
->  
-> -	if (order_objects(min_order, size) > MAX_OBJS_PER_PAGE)
-> -		return get_order(size * MAX_OBJS_PER_PAGE) - 1;
-> -
->  	for (order = max(min_order, (unsigned int)get_order(min_objects * size));
->  			order <= max_order; order++) {
->  
-> @@ -3820,6 +3817,11 @@ static inline int calculate_order(unsigned int size)
->  	unsigned int max_objects;
->  	unsigned int nr_cpus;
->  
-> +	if (unlikely(order_objects(slub_min_order, size) > MAX_OBJS_PER_PAGE)) {
-> +		order = get_order(size * MAX_OBJS_PER_PAGE) - 1;
-> +		goto out;
-> +	}
+> -- 
+> Cheers,
+> Stephen Rothwell
 
-Hm interestingly, both before and after your patch, MAX_OBJS_PER_PAGE might
-be theoretically overflowed not by slub_min_order, but then with higher
-orders. Seems to be prevented only as a side-effect of fragmentation close
-to none, thus higher orders not attempted. Would be maybe less confusing to
-check that explicitly. Even if that's wasteful, but this is not really perf
-critical code.
-
-> +
->  	/*
->  	 * Attempt to find best configuration for a slab. This
->  	 * works by first attempting to generate a layout with
-> @@ -3865,14 +3867,8 @@ static inline int calculate_order(unsigned int size)
->  	 * We were unable to place multiple objects in a slab. Now
->  	 * lets see if we can place a single object there.
->  	 */
-> -	order = calc_slab_order(size, 1, slub_max_order, 1);
-> -	if (order <= slub_max_order)
-> -		return order;
-> -
-> -	/*
-> -	 * Doh this slab cannot be placed using slub_max_order.
-> -	 */
-> -	order = calc_slab_order(size, 1, MAX_ORDER, 1);
-> +	order = max_t(unsigned int, slub_min_order, get_order(size));
-
-If we failed to assign order above, then AFAICS it means even slub_min_order
-will not give us more than 1 object per slub. Thus it doesn't make sense to
-use it in a max() formula, and we can just se get_order(), no?
-
-> +out:
->  	if (order < MAX_ORDER)
->  		return order;
->  	return -ENOSYS;
 

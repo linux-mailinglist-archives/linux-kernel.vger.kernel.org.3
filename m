@@ -2,148 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E3185177A5
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 22:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C3655177C0
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 22:07:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234964AbiEBUGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 16:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38962 "EHLO
+        id S1387243AbiEBULZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 16:11:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233643AbiEBUF7 (ORCPT
+        with ESMTP id S1387219AbiEBUK7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 16:05:59 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD62BC3D
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 13:02:29 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id y63so16272178oia.7
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 13:02:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=landley-net.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=QEMEmP9AFwKD9PuPFuz7FtA9CKMnwJQdZuR1KlEi0ec=;
-        b=TGAsUXy8H/BxAJnKXeAzdX4rbwF1tnpUhGUo74IEgZTF2PzOrDwfbPqi5TOyIPrlOo
-         e+LTfigpajFOE7cy4pFswHBbUFgZoJLhSKwSzGqWdhiGr1TJa5LP/U4aozq8+29WSl1c
-         9evbOrsV8PzQHsiO3HN5GYmh1I2wSylM/DbEmOBUIIjdhGpAkibuVqh4G2VfyrZHM97S
-         Qmtrd30A/CQ5VY7rN3SShduRAWwtB2pagExtU7bpDCNo3wOYidk6AS3r3rrn/4D2HDVc
-         uuEmvqaTt2HxCcpkWcpjdAjhbc3UuSu4OxX7XtYu/QLUVdnuTw1oJUBvL1e4UUyjxCbD
-         7Wmg==
+        Mon, 2 May 2022 16:10:59 -0400
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E09F7DF38;
+        Mon,  2 May 2022 13:07:28 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-d39f741ba0so15310507fac.13;
+        Mon, 02 May 2022 13:07:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QEMEmP9AFwKD9PuPFuz7FtA9CKMnwJQdZuR1KlEi0ec=;
-        b=2gao3jitqXzdiD5Q/TPr9y6XStaEaj5GkHhzcISKy6csgJc7dZPBse4T5Qs1jh8GGk
-         JEA5vOLQ2B1rgoc12B2JkC7Nbdnm1D4O42/Kc2Tr5UIjeYTYIas1v9KkkMJSQJCh+Kyv
-         B701fARUYLR6C302kJjqnniIQ+dAkLgb+3kWP5SGuiZ1C5lRfVAPIdvPbY1tYtgDZQ3p
-         B37imUyr2hTJgF0liL9Xc+jCvktfLEREUXAG1QbWGbwlhWi+Ujoihw843WjXSdWgZlhv
-         Z9dV0+j/lWTD1klF+uDDhXzuSfBLrN3lmX+ii3uHimsvXSYZATGL6ovp+vWJYsaA4YYa
-         fO6g==
-X-Gm-Message-State: AOAM530gl4pvu0ssORrdUPpvxWkX7uR2YvL13eP8P+zGzrO1DyA4ya9V
-        izfAiKpvxKEUrtzrGq9zLZl/Mw==
-X-Google-Smtp-Source: ABdhPJyEv7A2qZgdGaNVirxGDjsj+wiE7tAobTjtZKmxCrNgz12wtGoVx3tKYgNGWRq3h80A3hKoSg==
-X-Received: by 2002:aca:1b0a:0:b0:325:bff8:e73a with SMTP id b10-20020aca1b0a000000b00325bff8e73amr397100oib.168.1651521748923;
-        Mon, 02 May 2022 13:02:28 -0700 (PDT)
-Received: from [192.168.86.188] ([136.62.4.88])
-        by smtp.gmail.com with ESMTPSA id l1-20020a4abe01000000b0035eb4e5a6c2sm4268400oop.24.2022.05.02.13.02.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 13:02:28 -0700 (PDT)
-Message-ID: <2a3f8b4c-2c0d-28bc-8dcd-c56c7b8a2bb4@landley.net>
-Date:   Mon, 2 May 2022 15:07:08 -0500
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=129YywHdJ973F50ifsDVI7bgy1S0h7j6acF+IWGZdlo=;
+        b=Co67Il5CVDnGp/qrb8EgaSl120bpHW61HPYfTsaSAUO431M+AqURnkPMBYfnHl6FD6
+         ni7HSsB6Gztze637S4saaC5p2lIANHHoAkQdL9t1B6q2W+LkmcH17nyi/psiXIcgrNsW
+         mwOlE6uTXH1Vc9Z61/y0WoCpYmcIeR1r2eQiiEQmoh6SLawvAFX2fVC2jjJ0lg/rD0mz
+         VUrM78018r8+Ypvv56kd1O153PflNEShhLeSS8BxEsUqu5Cdh92i7ns9V0OlPOtU+ke8
+         SvvMN2GqLjdiuT/I17qxCMzYtlz5VGocVGB+B997tdh34LxKx7Nyc7hduBVgQ6BXq5Vk
+         zL9A==
+X-Gm-Message-State: AOAM533r1qPIV/oRIA7BEEXC1MHphVWJ5W7JcrCrYE+uGliTMDiB+12/
+        qcYUZ1PTzalJ5PEDrGz/ZMgXWsS5+A==
+X-Google-Smtp-Source: ABdhPJw113cybGiYritBoyKxgm2uTKS5UJsRWeQkHqIE1RJ3gS+hFHjrH1ZHwKJ2Mn557d92SQbjSg==
+X-Received: by 2002:a05:6870:41ca:b0:e9:c84:987a with SMTP id z10-20020a05687041ca00b000e90c84987amr353974oac.149.1651522048111;
+        Mon, 02 May 2022 13:07:28 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c9-20020a9d2789000000b0060603221279sm3212537otb.73.2022.05.02.13.07.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 May 2022 13:07:27 -0700 (PDT)
+Received: (nullmailer pid 1651102 invoked by uid 1000);
+        Mon, 02 May 2022 20:07:26 -0000
+Date:   Mon, 2 May 2022 15:07:26 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Tanmay Shah <tanmay.shah@xilinx.com>
+Cc:     mathieu.poirier@linaro.org, bjorn.andersson@linaro.org,
+        michal.simek@xilinx.com, bill.mills@linaro.org,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 1/6] dt-bindings: remoteproc: Add Xilinx RPU subsystem
+ bindings
+Message-ID: <YnA5/iiZ3qq9+iNk@robh.at.kernel.org>
+References: <20220420074450.2034092-1-tanmay.shah@xilinx.com>
+ <20220420074450.2034092-2-tanmay.shah@xilinx.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v3] sh: avoid using IRQ0 on SH3/4
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Rich Felker <dalias@libc.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <2584ba18-9653-9310-efc1-8b3b3e221eea@omp.ru>
- <11021433-66c0-3c56-42bd-207a5ae8d267@physik.fu-berlin.de>
- <2ebef1ac-e5c5-980c-9413-22a6cccdfa1d@landley.net>
- <CAMuHMdWN0vRYhK7O0MgOSCtisw3RDvp4vxSS2VF-9uGDdOEb7g@mail.gmail.com>
-From:   Rob Landley <rob@landley.net>
-In-Reply-To: <CAMuHMdWN0vRYhK7O0MgOSCtisw3RDvp4vxSS2VF-9uGDdOEb7g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220420074450.2034092-2-tanmay.shah@xilinx.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/2/22 03:37, Geert Uytterhoeven wrote:
-> Hi Rob,
-...
-> Until I tried "ifconfig eth0 up", which causes a lock-up.
-> Interestingly, the 8139 irq was 112 with and without Sergey's patch,
-> so there must be an irq remapping missing.
-
-Yup, that's it.
-
-> I also test regularly on landisk, where 8139 Ethernet works fine.
-> Turns out landisk uses arch/sh/drivers/pci/fixups-landisk.c to fixup
-> the irq...
-
-I didn't think the patch was wrong per se, just that something broke when
-jiggled. :(
-
-> arch/sh/include/mach-common/mach/r2d.h has:
-> #define R2D_FPGA_IRQ_BASE       100
-> Subtracting 16 here does not help.
+On Wed, Apr 20, 2022 at 12:44:47AM -0700, Tanmay Shah wrote:
+> Xilinx ZynqMP platform has dual-core ARM Cortex R5 Realtime Processing
+> Unit(RPU) subsystem. This patch adds dt-bindings for RPU subsystem (cluster).
 > 
-> With this (gmail-whitespace-damaged) patch:
+> Signed-off-by: Tanmay Shah <tanmay.shah@xilinx.com>
+> ---
 > 
-> --- a/arch/sh/drivers/pci/fixups-rts7751r2d.c
-> +++ b/arch/sh/drivers/pci/fixups-rts7751r2d.c
-> @@ -31,9 +31,9 @@ static char lboxre2_irq_tab[] = {
->  int pcibios_map_platform_irq(const struct pci_dev *pdev, u8 slot, u8 pin)
->  {
->         if (mach_is_lboxre2())
-> -               return lboxre2_irq_tab[slot];
-> +               return lboxre2_irq_tab[slot] - 16;
->         else
-> -               return rts7751r2d_irq_tab[slot];
-> +               return rts7751r2d_irq_tab[slot] - 16;
->  }
+> Changes in v4:
+>   - Add memory-region, mboxes and mbox-names properties in example
 > 
->  int pci_fixup_pcic(struct pci_channel *chan)
+> Changes in v3:
+>   - None
 > 
-> it no longer crashes, but ifconfig still fails:
+>  .../bindings/remoteproc/xlnx,r5f-rproc.yaml   | 145 ++++++++++++++++++
+>  include/dt-bindings/power/xlnx-zynqmp-power.h |   6 +
+>  2 files changed, 151 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/remoteproc/xlnx,r5f-rproc.yaml
 > 
-> / # ifconfig eth0 up
-> ifconfig: ioctl 0x8914 failed: Invalid argument
+> diff --git a/Documentation/devicetree/bindings/remoteproc/xlnx,r5f-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/xlnx,r5f-rproc.yaml
+> new file mode 100644
+> index 000000000000..c1f99e17b4b2
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/remoteproc/xlnx,r5f-rproc.yaml
+> @@ -0,0 +1,145 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/remoteproc/xlnx,r5f-rproc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Xilinx R5F processor subsystem
+> +
+> +maintainers:
+> +  - Ben Levinsky <ben.levinsky@xilinx.com>
+> +  - Tanmay Shah <tanmay.shah@xilinx.com>
+> +
+> +description: |
+> +  The Xilinx platforms include a pair of Cortex-R5F processors (RPU) for
+> +  real-time processing based on the Cortex-R5F processor core from ARM.
+> +  The Cortex-R5F processor implements the Arm v7-R architecture and includes a
+> +  floating-point unit that implements the Arm VFPv3 instruction set.
+> +
+> +properties:
+> +  compatible:
+> +    const: xlnx,zynqmp-r5fss
+> +
+> +  xlnx,cluster-mode:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: |
+> +      The RPU MPCore can operate in split mode(Dual-processor performance), Safety
+> +      lock-step mode(Both RPU cores execute the same code in lock-step,
+> +      clock-for-clock) or Single CPU mode (RPU core 0 can be held in reset while
+> +      core 1 runs normally). The processor does not support dynamic configuration.
+> +      Switching between modes is only permitted immediately after a processor reset.
+> +      If set to  1 then lockstep mode and if 0 then split mode.
+> +      If set to  2 then single CPU mode. When not defined, default will be lockstep mode.
 
-Sounds like it's now outside of the IRQ range allocation, but I can't find where
-that's requested when registering the controller? (What is a "swizzle" anyway?)
+Constraints of the possible values?
 
-I'm looking at kernel/cpu/sh4/setup-sh7750.c but I don't understand why it might
-work for landisk but not there. (Bit out of my depth in this plumbing.
-Head-scratching at include/linux/sh_intc.h #defining DECLARE_INTC_DESC()... hard
-to work backwards to find where this stuff STARTS...)
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 1
+> +
+> +  reg:
+> +    items:
+> +      - description: RPU subsystem status and control registers
+> +
+> +patternProperties:
+> +  "^r5f-[a-f0-9]+$":
+> +    type: object
+> +    description: |
+> +      The RPU is located in the Low Power Domain of the Processor Subsystem.
+> +      Each processor includes separate L1 instruction and data caches and
+> +      tightly coupled memories (TCM). System memory is cacheable, but the TCM
+> +      memory space is non-cacheable.
+> +
+> +      Each RPU contains one 64KB memory and two 32KB memories that
+> +      are accessed via the TCM A and B port interfaces, for a total of 128KB
+> +      per processor. In lock-step mode, the processor has access to 256KB of
+> +      TCM memory.
+> +
+> +    properties:
+> +      compatible:
+> +        const: xlnx,zynqmp-r5f
+> +
+> +      power-domains:
+> +        description: |
+> +          phandle to a PM domain provider node and an args specifier containing
+> +          the r5f0 and r5f1 node id value.
 
-> Note that there are more implementations of pcibios_map_platform_irq()
-> that do not use evt2irq(), and thus are probably broken by this patch.
+You don't need to redefine what this is, but you need to define how many 
+entries and what they are. It sounds like 2 how this is worded, but the 
+example shows 1 entry.
 
-Yup. Sounds like something could be consolidated. Unfortunately I only have 4
-test systems for this platform, only 2 of which are easy to cycle...
+> +
+> +      reg:
+> +        items:
+> +          - description: RPU0 and RPU1 control and status registers
 
-> Gr{oetje,eeting}s,
+1 or 2 entries?
+
+> +
+> +      mboxes:
+> +        items:
+> +          - description: |
+> +              Bi-directional channel to send data to RPU and receive ack from RPU.
+> +              Request and response message buffers are available and each buffer is 32 bytes.
+> +          - description: |
+> +              Bi-directional channel to receive data from RPU and send ack from RPU.
+> +              Request and response message buffers are available and each buffer is 32 bytes.
+
+I don't think I'd call this bi-directional. Aren't mboxes one direction 
+of data flow and the ack is just a detail of the protocol?
+
+> +        minItems: 1
+> +
+> +      mbox-names:
+> +        items:
+> +          - const: tx
+> +          - const: rx
+> +        minItems: 1
+> +
+> +      sram:
+> +        $ref: /schemas/types.yaml#/definitions/phandle-array
+> +        minItems: 1
+> +        description: |
+> +          phandles to one or more reserved on-chip SRAM regions. Other than TCM,
+> +          the RPU can execute instructions and access data from, the OCM memory,
+> +          the main DDR memory, and other system memories.
+> +
+> +          The regions should be defined as child nodes of the respective SRAM
+> +          node, and should be defined as per the generic bindings in,
+> +          Documentation/devicetree/bindings/sram/sram.yaml
+> +
+> +      memory-region:
+> +        $ref: /schemas/types.yaml#/definitions/phandle-array
+
+Already has a type. 
+
+This needs how many and what each one is.
+
+> +        description: |
+> +          List of phandles to the reserved memory regions associated with the
+> +          remoteproc device. This is variable and describes the memories shared with
+> +          the remote processor (e.g. remoteproc firmware and carveouts, rpmsg
+> +          vrings, ...). This reserved memory region will be allocated on DDR memory.
+> +          See Documentation/devicetree/bindings/reserved-memory/reserved-memory.txt
+
+Don't link to old text bindings.
+
+> +
+> +    required:
+> +      - compatible
+> +      - power-domains
+
+reg should be required or dropped altogether.
+
+> +
+> +    unevaluatedProperties: false
+> +
+> +required:
+> +  - compatible
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    r5fss: r5fss@ff9a0000 {
+> +        compatible = "xlnx,zynqmp-r5fss";
+> +        xlnx,cluster-mode = <1>;
+> +
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +        reg = <0xff9a0000 0x228>;
+> +
+> +        r5f-0 {
+> +            compatible = "xlnx,zynqmp-r5f";
+> +            power-domains = <&zynqmp_firmware 0x7>;
+> +            memory-region = <&rproc_0_fw_image>, <&rpu0vdev0buffer>, <&rpu0vdev0vring0>, <&rpu0vdev0vring1>;
+> +            mboxes = <&ipi_mailbox_rpu0 0>, <&ipi_mailbox_rpu0 1>;
+> +            mbox-names = "tx", "rx";
+> +        };
+> +
+> +        r5f-1 {
+> +            compatible = "xlnx,zynqmp-r5f";
+> +            power-domains = <&zynqmp_firmware 0x8>;
+> +            memory-region = <&rproc_1_fw_image>, <&rpu1vdev0buffer>, <&rpu1vdev0vring0>, <&rpu1vdev0vring1>;
+> +            mboxes = <&ipi_mailbox_rpu1 0>, <&ipi_mailbox_rpu1 1>;
+> +            mbox-names = "tx", "rx";
+> +        };
+> +    };
+> +...
+> diff --git a/include/dt-bindings/power/xlnx-zynqmp-power.h b/include/dt-bindings/power/xlnx-zynqmp-power.h
+> index 0d9a412fd5e0..618024cbb20d 100644
+> --- a/include/dt-bindings/power/xlnx-zynqmp-power.h
+> +++ b/include/dt-bindings/power/xlnx-zynqmp-power.h
+> @@ -6,6 +6,12 @@
+>  #ifndef _DT_BINDINGS_ZYNQMP_POWER_H
+>  #define _DT_BINDINGS_ZYNQMP_POWER_H
+>  
+> +#define		PD_RPU_0	7
+> +#define		PD_RPU_1	8
+> +#define		PD_R5_0_ATCM	15
+> +#define		PD_R5_0_BTCM	16
+> +#define		PD_R5_1_ATCM	17
+> +#define		PD_R5_1_BTCM	18
+>  #define		PD_USB_0	22
+>  #define		PD_USB_1	23
+>  #define		PD_TTC_0	24
+> -- 
+> 2.25.1
 > 
->                         Geert
-
-I can try sticking printk() into this to track it down if you haven't got any
-more time to look at it. I don't understand this plumbing very well but "error
-return code comes from here, that tested this variable, which was set here..."
-is generally a deterministic approach, if glacial.
-
-Rob
+> 

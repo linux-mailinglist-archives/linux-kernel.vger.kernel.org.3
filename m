@@ -2,129 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC82351798E
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 23:58:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C6E517996
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 00:00:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387757AbiEBWB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 18:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46230 "EHLO
+        id S1387772AbiEBWDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 18:03:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387840AbiEBV7k (ORCPT
+        with ESMTP id S231668AbiEBWDR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 17:59:40 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64455F33;
-        Mon,  2 May 2022 14:55:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651528558; x=1683064558;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=xkColIiWzUzT63cjf0p5tiFtU1yhRN1jJlgXlzvVJqY=;
-  b=AfWWk3dqhm8sCaX51ak8gVDAVC/2QTLsqoO3+DlRUDn7w/jboVdQzT+k
-   rMYzpoNIub05Z0u1y3jNK3oCL1PO2P1lDC8uX58BWu/zGvDwqb9HnMLIo
-   2JoacArZzTYA1ROGGEzV3MixzNOOGKgVLQXtfzizqj+Ucyr7z6MhEKpwU
-   V5iobYoQzkW+Nz5xBABrBz1BGomYblJvFUNQ9Zovf1mdQLw7s1Wq++0Oe
-   p9uiZfsVDMAQeUkVBr7EBUrFZtcMFWOOr339iJ7Tlpu3/4lyMp/+j71go
-   8ox4cFUUgzqEtn7R6ir+ExbuJElfGvVnrH9kB2BUyChGyYjbCw2qhVTQs
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="266924602"
-X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="266924602"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 14:55:58 -0700
-X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="598813198"
-Received: from chgan-mobl1.gar.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.60.238])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 14:55:54 -0700
-Message-ID: <8ba1a3ec3a4c5a02c28476cbb36118f61aea8a6c.camel@intel.com>
-Subject: Re: [PATCH v3 13/21] x86/virt/tdx: Allocate and set up PAMTs for
- TDMRs
-From:   Kai Huang <kai.huang@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-Date:   Tue, 03 May 2022 09:55:52 +1200
-In-Reply-To: <8d5715b5-d561-f482-af11-03a9a46e651a@intel.com>
-References: <cover.1649219184.git.kai.huang@intel.com>
-         <ffc2eefdd212a31278978e8bfccd571355db69b0.1649219184.git.kai.huang@intel.com>
-         <c9b17e50-e665-3fc6-be8c-5bb16afa784e@intel.com>
-         <3664ab2a8e0b0fcbb4b048b5c3aa5a6e85f9618a.camel@intel.com>
-         <5984b61f-6a4a-c12a-944d-f4a78bdefc3d@intel.com>
-         <af603d66512ec5dca0c240cf81c83de7dfe730e7.camel@intel.com>
-         <8d5715b5-d561-f482-af11-03a9a46e651a@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Mon, 2 May 2022 18:03:17 -0400
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392471FF;
+        Mon,  2 May 2022 14:59:47 -0700 (PDT)
+Received: by mail-oo1-f48.google.com with SMTP id l9-20020a4abe09000000b0035eb3d4a2aeso1929899oop.0;
+        Mon, 02 May 2022 14:59:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OfkNLJQzEZ7e5xPqfxUYJG64Wv+bQWkevq09mi7Lx3c=;
+        b=aH+vPtiB8afc82+9H3j0WhIkxZLLh2yOvX15hoqRTWu+pf00Mw6OjT8FxUtH1nOulL
+         avYb0UoOcu/e6YvBWKVpZwu8/U8OZ9XKJqs04JrrZIcjoaqgzf1b3Z1Wb4cPED0aavaQ
+         JZ5kdvUuk3N9jT8YNmJsqxA5DvNnlDl2kykBYPGkwWSfmNjtQ3i9jcZ8qE9SxtHKPoCo
+         kw5SJAR0gvf3pODtIGTHcLYNBWjdNCJLsi3yvDsrj/wuUfkGpMiPa2i+YjqGRfwGqbZd
+         qYmY7ZsosJZ0qP5DqtyOwO8sttB7YQ7FW2EI+Y85w8I6/0swidZ8+KSnC/ZfXy3QPVu/
+         xOHA==
+X-Gm-Message-State: AOAM532+2NohzzVA++hkcrUyRpD6yeDGFWOOpZACaswhTWzCEVbqt6II
+        co+ZJs8cpFaRJy9XJZD+ag==
+X-Google-Smtp-Source: ABdhPJx1LDExPGSXpHz8IMEURBsoMHXT9iZfDmEKZxw3kRgHSp4/DSf2T1IKY9UfgGxULbEh9lAUBQ==
+X-Received: by 2002:a4a:ac45:0:b0:35e:a8f2:7f55 with SMTP id q5-20020a4aac45000000b0035ea8f27f55mr4805941oon.46.1651528786470;
+        Mon, 02 May 2022 14:59:46 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s1-20020a4ae541000000b0035eb4e5a6c8sm4329464oot.30.2022.05.02.14.59.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 May 2022 14:59:46 -0700 (PDT)
+Received: (nullmailer pid 1863055 invoked by uid 1000);
+        Mon, 02 May 2022 21:59:45 -0000
+Date:   Mon, 2 May 2022 16:59:45 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Oleksandr Tyshchenko <olekstysh@gmail.com>
+Cc:     xen-devel@lists.xenproject.org,
+        virtualization@lists.linux-foundation.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Julien Grall <julien@xen.org>, Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: Re: [PATCH V1 4/6] dt-bindings: Add xen,dev-domid property
+ description for xen-grant DMA ops
+Message-ID: <YnBUUclJqkvKsV2o@robh.at.kernel.org>
+References: <1650646263-22047-1-git-send-email-olekstysh@gmail.com>
+ <1650646263-22047-5-git-send-email-olekstysh@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1650646263-22047-5-git-send-email-olekstysh@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-05-02 at 07:17 -0700, Dave Hansen wrote:
-> On 5/1/22 22:59, Kai Huang wrote:
-> > On Fri, 2022-04-29 at 07:20 -0700, Dave Hansen wrote:
-> > How about adding below in the changelog:
-> > 
-> > "
-> > However using alloc_contig_pages() to allocate large physically contiguous
-> > memory at runtime may fail.  The larger the allocation, the more likely it is to
-> > fail.  Due to the fragmentation, the kernel may need to move pages out of the
-> > to-be-allocated contiguous memory range but it may fail to move even the last
-> > stubborn page.  A good way (although not foolproof) is to launch a TD VM early
-> > in boot to get PAMTs allocated before memory gets fragmented or consumed.
-> > "
+On Fri, Apr 22, 2022 at 07:51:01PM +0300, Oleksandr Tyshchenko wrote:
+> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
 > 
-> Better, although it's getting a bit off topic for this changelog.
+> Introduce Xen specific binding for the virtualized device (e.g. virtio)
+> to be used by Xen grant DMA-mapping layer in the subsequent commit.
 > 
-> Just be short and sweet:
+> This binding indicates that Xen grant mappings scheme needs to be
+> enabled for the device which DT node contains that property and specifies
+> the ID of Xen domain where the corresponding backend resides. The ID
+> (domid) is used as an argument to the grant mapping APIs.
 > 
-> 1. the allocation can fail
-> 2. Launch a VM early to (badly) mitigate this
-> 3. the only way to fix it is to add a boot option
+> This is needed for the option to restrict memory access using Xen grant
+> mappings to work which primary goal is to enable using virtio devices
+> in Xen guests.
 > 
-OK. Thanks.
+> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+> ---
+> Changes RFC -> V1:
+>    - update commit subject/description and text in description
+>    - move to devicetree/bindings/arm/
+> ---
+>  .../devicetree/bindings/arm/xen,dev-domid.yaml     | 37 ++++++++++++++++++++++
+>  1 file changed, 37 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/xen,dev-domid.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/xen,dev-domid.yaml b/Documentation/devicetree/bindings/arm/xen,dev-domid.yaml
+> new file mode 100644
+> index 00000000..ef0f747
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/xen,dev-domid.yaml
+> @@ -0,0 +1,37 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/xen,dev-domid.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Xen specific binding for the virtualized device (e.g. virtio)
+> +
+> +maintainers:
+> +  - Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+> +
+> +select: true
 
-> 
-> > > > > > +	/*
-> > > > > > +	 * One TDMR must cover at least one (or partial) RAM entry,
-> > > > > > +	 * otherwise it is kernel bug.  WARN_ON() in this case.
-> > > > > > +	 */
-> > > > > > +	if (WARN_ON_ONCE((start >= end) || start >= TDMR_END(tdmr)))
-> > > > > > +		return 0;
-> > > 
-> > > This really means "no RAM found for this TDMR", right?  Can we say that,
-> > > please.
-> > 
-> > OK will add it.  How about:
-> > 
-> > 	/*
-> > 	 * No RAM found for this TDMR.  WARN() in this case, as it
-> > 	 * cannot happen otherwise it is a kernel bug.
-> > 	 */
-> 
-> The only useful information in that comment is the first sentence.  The
-> jibberish about WARN() is patently obvious from the next two lines of code.
-> 
-> *WHY* can't this happen?  How might it have actually happened?
+Do we really need to support this property everywhere?
 
-When TDMRs are created, we already have made sure one TDMR must cover at least
-one or partial RAM entry.
+> +
+> +description:
+> +  This binding indicates that Xen grant mappings scheme needs to be enabled
+> +  for that device and specifies the ID of Xen domain where the corresponding
+> +  device (backend) resides. This is needed for the option to restrict memory
+> +  access using Xen grant mappings to work.
+> +
+> +properties:
+> +  xen,dev-domid:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      The domid (domain ID) of the domain where the device (backend) is running.
+> +
+> +additionalProperties: true
+> +
+> +examples:
+> +  - |
+> +    virtio_block@3000 {
 
--- 
-Thanks,
--Kai
+virtio@3000
 
+> +            compatible = "virtio,mmio";
+> +            reg = <0x3000 0x100>;
+> +            interrupts = <41>;
+> +
+> +            /* The device is located in Xen domain with ID 1 */
+> +            xen,dev-domid = <1>;
 
+This fails validation:
+
+Documentation/devicetree/bindings/arm/xen,dev-domid.example.dtb: virtio_block@3000: xen,dev-domid: [[1]] is not of type 'object'
+        From schema: /home/rob/proj/git/linux-dt/Documentation/devicetree/bindings/virtio/mmio.yaml
+
+The property has to be added to the virtio/mmio.yaml schema. If it is 
+not needed elsewhere, then *just* add the property there.
+
+Rob

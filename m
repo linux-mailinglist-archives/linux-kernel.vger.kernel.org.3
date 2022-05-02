@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 504EF516DDB
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 12:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2C32516DDA
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 12:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384443AbiEBKGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 06:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47082 "EHLO
+        id S1384496AbiEBKGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 06:06:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384354AbiEBKG1 (ORCPT
+        with ESMTP id S1384366AbiEBKG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 2 May 2022 06:06:27 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CB111165;
-        Mon,  2 May 2022 03:02:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D8111A04
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 03:02:47 -0700 (PDT)
 From:   Viraj Shah <viraj.shah@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651485765;
+        s=2020; t=1651485766;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=WHd3sYmGrhY6M+5FnEIdkE/HqreC6sBnMmlSZvNnFpc=;
-        b=r0zn+wZ51sP9aEwYpzCnMZ0yX5wqsri6t4lYJ4cjqRNMGkYVvXQal3fSND4y5kmK1cojGm
-        3NgeN4bmU81hcmRsj8kE5ISxwFWZhNpe50dO0HA9+3AB4NEWeMengXhbce+HIBlNumilv/
-        3rJNMZiQs8UdFvlggdMN0FLdKt1AuJq892vb/4xIgq1ehKr9M81Rm8Bt8AI4R0yN8dA62q
-        I5Q0j4fs70EOEvtfEWcEJjjrQNuGeSkFDfNGjOw3/RhDPw44p79Cg1esfVrwfvHuEQcwRH
-        xorQnPjcEjDzuui8HfdXRe+go2rwEbrukAyx4rDLyd4tOrjiB+pMPRCwEbig2w==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kFbaTBJ6AL/X2QNd2kSlQdvhpj3h8osfwHT7cP5luao=;
+        b=ecFdqLEbt2QBAgdMnwZIVO7M+kTY7MbFKwl7xJ3yUbcdGbGorZIyle5SffnfrUD7cgXFAU
+        R7b+U/oUhfa3afDtTx6gAzGyeQqULJMQlj3kz6/UgKavTrBIyMBo2BOWqliW7jLGRbiIBS
+        zWESVymhNpNJ05klQrkf/F5i+BqVEHYF723hJLi763SjZgQk+dHu4zvHMq0mD1PVKW4tFt
+        5iMemher/eZ2IdZFSDUV37NOJr0bONtIjooRQ8Mgy5Qbnr6C6Enq9gObhtfT+zTfig2MCg
+        m2C6+0C//Qwq8U/hdO1JedktHKwb9M61FLt66Puin7BsNpqFzDgREvlVuavqSg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651485765;
+        s=2020e; t=1651485766;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=WHd3sYmGrhY6M+5FnEIdkE/HqreC6sBnMmlSZvNnFpc=;
-        b=+vwnH20JgOmFpv2rtlYhJNjVvYFHRhxW0sK2xJEh1imI5MEzSPO2gOOL5a3By6P/N8y+uN
-        l0wpjdogZs4Kc3Dw==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kFbaTBJ6AL/X2QNd2kSlQdvhpj3h8osfwHT7cP5luao=;
+        b=Zsz0j7wTyu86KZrkCFDG/37bshIgmR0pr0gPWky8FVTaAJhAKSe/9m0OcJXeExTFQRA4nm
+        UNziTDS+LijQq+Bw==
 To:     shawnguo@kernel.org, s.hauer@pengutronix.de
 Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         NXP Linux Team <linux-imx@nxp.com>,
         Lucas Stach <l.stach@pengutronix.de>,
         Peng Fan <peng.fan@nxp.com>,
         Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 0/4] imx8mm display controller power sequence 
-Date:   Mon,  2 May 2022 12:02:29 +0200
-Message-Id: <20220502100233.6023-1-viraj.shah@linutronix.de>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 1/4] soc: imx8mm: gpcv2: Power sequence for DISP
+Date:   Mon,  2 May 2022 12:02:30 +0200
+Message-Id: <20220502100233.6023-2-viraj.shah@linutronix.de>
+In-Reply-To: <20220502100233.6023-1-viraj.shah@linutronix.de>
+References: <20220502100233.6023-1-viraj.shah@linutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -63,22 +62,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch queue addresses the power sequence of the display controller
-of the imx8mm SoC. The sequence mentioned in example code 5 in section
-5.2.9.5 of reference manual imx-8MMini-yhsc.pdf was not being performed.
-This meant that the display controller was not coming up.
+As per the imx8mm reference manual, read bit 25(GPC_DISPMIX_
+PWRDNACKN) of the power handshake register and wait for ack during
+power on/off.
 
-Viraj Shah (4):
-  soc: imx: gpcv2: Power sequence for DISP
-  soc: imx: imx8m-blk-ctrl: Display Power ON sequence
-  soc: imx: imx8m-blk-ctrl: Add reset bits for mipi dsi phy
-  arm64: dts: imx8mm.dtsi: Add resets for dispmix power domain.
+Signed-off-by: Viraj Shah <viraj.shah@linutronix.de>
+---
+ drivers/soc/imx/gpcv2.c | 36 +++++++++++++++++++++++++++++++-----
+ 1 file changed, 31 insertions(+), 5 deletions(-)
 
- arch/arm64/boot/dts/freescale/imx8mm.dtsi |  1 +
- drivers/soc/imx/gpcv2.c                   | 36 +++++++++++++++++++----
- drivers/soc/imx/imx8m-blk-ctrl.c          |  9 ++++--
- 3 files changed, 38 insertions(+), 8 deletions(-)
-
+diff --git a/drivers/soc/imx/gpcv2.c b/drivers/soc/imx/gpcv2.c
+index 3cb123016b3e..8ee70c30964f 100644
+--- a/drivers/soc/imx/gpcv2.c
++++ b/drivers/soc/imx/gpcv2.c
+@@ -254,11 +254,24 @@ static int imx_pgc_power_up(struct generic_pm_domain *genpd)
+ 		/*
+ 		 * As per "5.5.9.4 Example Code 4" in IMX7DRM.pdf wait
+ 		 * for PUP_REQ/PDN_REQ bit to be cleared
++		 *
++		 * As per "5.2.9.5 Example Code 5" in i.MX-8MMini-yhsc.pdf
++		 * Display power on section checks for bit 25 of
++		 * Power handshake register to be cleared.
+ 		 */
+-		ret = regmap_read_poll_timeout(domain->regmap,
+-					       GPC_PU_PGC_SW_PUP_REQ, reg_val,
+-					       !(reg_val & domain->bits.pxx),
+-					       0, USEC_PER_MSEC);
++		if (domain->bits.pxx == IMX8MM_DISPMIX_SW_Pxx_REQ) {
++			regmap_update_bits(domain->regmap, GPC_PU_PWRHSK,
++				   BIT(7), BIT(7));
++			ret = regmap_read_poll_timeout(domain->regmap,
++						GPC_PU_PWRHSK, reg_val,
++						!(reg_val & IMX8MM_DISPMIX_HSK_PWRDNACKN),
++						0, USEC_PER_MSEC);
++		} else
++			ret = regmap_read_poll_timeout(domain->regmap,
++						GPC_PU_PGC_SW_PUP_REQ, reg_val,
++						!(reg_val & domain->bits.pxx),
++						0, USEC_PER_MSEC);
++
+ 		if (ret) {
+ 			dev_err(domain->dev, "failed to command PGC\n");
+ 			goto out_clk_disable;
+@@ -355,11 +368,24 @@ static int imx_pgc_power_down(struct generic_pm_domain *genpd)
+ 		/*
+ 		 * As per "5.5.9.4 Example Code 4" in IMX7DRM.pdf wait
+ 		 * for PUP_REQ/PDN_REQ bit to be cleared
++		 *
++		 * As per "5.2.9.5 Example Code 5" in i.MX-8MMini-yhsc.pdf
++		 * Display power on section checks for bit 25 of
++		 * Power handshake register to be set.
+ 		 */
+-		ret = regmap_read_poll_timeout(domain->regmap,
++		if (domain->bits.pxx == IMX8MM_DISPMIX_SW_Pxx_REQ) {
++			regmap_clear_bits(domain->regmap, GPC_PU_PWRHSK,
++				   BIT(7));
++			ret = regmap_read_poll_timeout(domain->regmap,
++						GPC_PU_PWRHSK, reg_val,
++						!(reg_val & IMX8MM_DISPMIX_HSK_PWRDNACKN),
++						0, USEC_PER_MSEC);
++		} else {
++			ret = regmap_read_poll_timeout(domain->regmap,
+ 					       GPC_PU_PGC_SW_PDN_REQ, reg_val,
+ 					       !(reg_val & domain->bits.pxx),
+ 					       0, USEC_PER_MSEC);
++		}
+ 		if (ret) {
+ 			dev_err(domain->dev, "failed to command PGC\n");
+ 			goto out_clk_disable;
 -- 
 2.20.1
 

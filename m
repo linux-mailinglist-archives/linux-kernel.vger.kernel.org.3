@@ -2,140 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6C755178DB
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 23:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 204B75178DC
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 23:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387572AbiEBVOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 17:14:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51814 "EHLO
+        id S1387589AbiEBVOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 17:14:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233954AbiEBVOp (ORCPT
+        with ESMTP id S1387577AbiEBVOt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 17:14:45 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E131104
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 14:11:15 -0700 (PDT)
+        Mon, 2 May 2022 17:14:49 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A126DFBA
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 14:11:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651525875; x=1683061875;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SQceIYpObcRJKDIzO2ofiVSapZ/ciaY5IFvlc2e2pH0=;
-  b=ULQf61m7ArC4lNWp8BddiZnHsoT70VbcPcfrqL8THPuwG8/LTs5fTz0q
-   QCuIax3zi9C/6hvoergMS2uvXgppRvNY8HWvGb1v6fkEtHTeKyRBVy9oz
-   e0XfpLQ1OPFchiX1RuHWtAlFAde0+t8RtFA39CadwEySsG7t8SvVL0pZP
-   rheIRJd7oBmdceNRGjm4mAgw/alXfdTPRtGQF5kmUBpJs8gxlZ4swGjbU
-   OAklIUENYwAgOZsdnuyGymNqNe+mYRc2VOsqGviMwT7k3CE3awNAoX88Q
-   PF1NS50vrJArloSGl+DKT4wG2cw6p8W3+w/0aF2/S+teV2EdxA3/tr4Bw
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="353765056"
+  t=1651525879; x=1683061879;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=e51YJRAyK2oFyodJN78dW1B+cSnosSuF7pHpOHVfPBM=;
+  b=mNN7X9lhpbLIcryVYnzuKS3u15g6XrkIm7kTpZ2xNLDyEkoAUfScgLlP
+   0J4cuCE2Csy6tFGnqRl/+voKA6fqF2dfMRL3PnC4k8N5H6F06elKf7bB+
+   2ZZRsZt32sj42aMmuvfKYh6Er/naUiJN034GJGdyxi9qJ2JIyp+62+5yp
+   xlYR5rHfTaa/8cujWibd7IdtNFDBZZnasoTr9Rd6pR3pz/43H8hotorNl
+   UbP3F68wUO/irL64yLIBf+B41q26D+3qKk/fMai4RaUIejdzxReoAjaqq
+   WoSHMuh/5RIsMCFKE+hkubrow4MAajcIWoyAhDeSe55GWbFwEQYDZD3tz
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="266917355"
 X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="353765056"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 14:11:15 -0700
+   d="scan'208";a="266917355"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 14:11:18 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="620075494"
+   d="scan'208";a="583902533"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 02 May 2022 14:11:13 -0700
+  by orsmga008.jf.intel.com with ESMTP; 02 May 2022 14:11:15 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nldK4-0009sa-IV;
+        id 1nldK4-0009sV-FJ;
         Mon, 02 May 2022 21:11:12 +0000
-Date:   Tue, 3 May 2022 05:10:08 +0800
+Date:   Tue, 3 May 2022 05:10:23 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Changpeng Liu <changpeng.liu@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Guenter Roeck <groeck@chromium.org>,
-        Daniel Verkamp <dverkamp@chromium.org>,
-        Stephen Barber <smbarber@chromium.org>,
-        Dylan Reid <dgreid@chromium.org>,
-        Ryan Case <ryandcase@chromium.org>
-Subject: [jsarha:topic/cros-sof-v4.19 353/6555]
- drivers/block/virtio_blk.c:197:32: sparse: sparse: incorrect type in
- assignment (different base types)
-Message-ID: <202205030546.EHrD3oCf-lkp@intel.com>
+To:     Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        John Dias <joaodias@google.com>,
+        Minchan Kim <minchan@kernel.org>
+Subject: Re: [PATCH] mm: fix is_pinnable_page against on cma page
+Message-ID: <202205030525.VFo3Ds9w-lkp@intel.com>
+References: <20220502173558.2510641-1-minchan@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220502173558.2510641-1-minchan@kernel.org>
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jsarha/linux topic/cros-sof-v4.19
-head:   d7a3e91d8d16d1ef8653deec5a1fffc4de034a0c
-commit: 9f34ca2c7bcf381efb6f3e1a876dedf95f9b68ed [353/6555] BACKPORT: FROMLIST: virtio_blk: add discard and write zeroes support
-config: i386-randconfig-s002-20220502 (https://download.01.org/0day-ci/archive/20220503/202205030546.EHrD3oCf-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/jsarha/linux/commit/9f34ca2c7bcf381efb6f3e1a876dedf95f9b68ed
-        git remote add jsarha https://github.com/jsarha/linux
-        git fetch --no-tags jsarha topic/cros-sof-v4.19
-        git checkout 9f34ca2c7bcf381efb6f3e1a876dedf95f9b68ed
+Hi Minchan,
+
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on hnaz-mm/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Minchan-Kim/mm-fix-is_pinnable_page-against-on-cma-page/20220503-013733
+base:   https://github.com/hnaz/linux-mm master
+config: x86_64-randconfig-a012-20220502 (https://download.01.org/0day-ci/archive/20220503/202205030525.VFo3Ds9w-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/1b8636710c31d44310f1d344e337c207562b851d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Minchan-Kim/mm-fix-is_pinnable_page-against-on-cma-page/20220503-013733
+        git checkout 1b8636710c31d44310f1d344e337c207562b851d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/block/ drivers/input/keyboard/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 prepare
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/block/virtio_blk.c:197:32: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __virtio32 [usertype] flags @@     got restricted __le32 [usertype] @@
-   drivers/block/virtio_blk.c:197:32: sparse:     expected restricted __virtio32 [usertype] flags
-   drivers/block/virtio_blk.c:197:32: sparse:     got restricted __le32 [usertype]
->> drivers/block/virtio_blk.c:198:38: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __virtio32 [usertype] num_sectors @@     got restricted __le32 [usertype] @@
-   drivers/block/virtio_blk.c:198:38: sparse:     expected restricted __virtio32 [usertype] num_sectors
-   drivers/block/virtio_blk.c:198:38: sparse:     got restricted __le32 [usertype]
->> drivers/block/virtio_blk.c:199:33: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __virtio64 [usertype] sector @@     got restricted __le64 [usertype] @@
-   drivers/block/virtio_blk.c:199:33: sparse:     expected restricted __virtio64 [usertype] sector
-   drivers/block/virtio_blk.c:199:33: sparse:     got restricted __le64 [usertype]
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+>> include/linux/mm.h:1630:47: error: use of undeclared identifier 'MIGRATE_CMA'; did you mean 'MIGRATE_SYNC'?
+           return !(is_zone_movable_page(page) || mt == MIGRATE_CMA ||
+                                                        ^~~~~~~~~~~
+                                                        MIGRATE_SYNC
+   include/linux/migrate_mode.h:18:2: note: 'MIGRATE_SYNC' declared here
+           MIGRATE_SYNC,
+           ^
+   In file included from arch/x86/kernel/asm-offsets.c:13:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+>> include/linux/mm.h:1631:9: error: use of undeclared identifier 'MIGRATE_ISOLATE'; did you mean 'MIGRATE_MOVABLE'?
+                   mt == MIGRATE_ISOLATE || is_zero_pfn(page_to_pfn(page)));
+                         ^~~~~~~~~~~~~~~
+                         MIGRATE_MOVABLE
+   include/linux/mmzone.h:44:2: note: 'MIGRATE_MOVABLE' declared here
+           MIGRATE_MOVABLE,
+           ^
+   2 errors generated.
+   make[2]: *** [scripts/Makefile.build:122: arch/x86/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1283: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:226: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
-vim +197 drivers/block/virtio_blk.c
 
-   175	
-   176	
-   177	static inline int virtblk_setup_discard_write_zeroes(struct request *req,
-   178							     bool unmap)
-   179	{
-   180		unsigned short segments = blk_rq_nr_discard_segments(req);
-   181		unsigned short n = 0;
-   182		struct virtio_blk_discard_write_zeroes *range;
-   183		struct bio *bio;
-   184		u32 flags = 0;
-   185	
-   186		if (unmap)
-   187			flags |= VIRTIO_BLK_WRITE_ZEROES_FLAG_UNMAP;
-   188	
-   189		range = kmalloc_array(segments, sizeof(*range), GFP_ATOMIC);
-   190		if (!range)
-   191			return -ENOMEM;
-   192	
-   193		__rq_for_each_bio(bio, req) {
-   194			u64 sector = bio->bi_iter.bi_sector;
-   195			u32 num_sectors = bio->bi_iter.bi_size >> 9;
-   196	
- > 197			range[n].flags = cpu_to_le32(flags);
- > 198			range[n].num_sectors = cpu_to_le32(num_sectors);
- > 199			range[n].sector = cpu_to_le64(sector);
-   200			n++;
-   201		}
-   202	
-   203		req->special_vec.bv_page = virt_to_page(range);
-   204		req->special_vec.bv_offset = offset_in_page(range);
-   205		req->special_vec.bv_len = sizeof(*range) * segments;
-   206		req->rq_flags |= RQF_SPECIAL_PAYLOAD;
-   207	
-   208		return 0;
-   209	}
-   210	
+vim +1630 include/linux/mm.h
+
+  1623	
+  1624	/* MIGRATE_CMA and ZONE_MOVABLE do not allow pin pages */
+  1625	#ifdef CONFIG_MIGRATION
+  1626	static inline bool is_pinnable_page(struct page *page)
+  1627	{
+  1628		int mt = get_pageblock_migratetype(page);
+  1629	
+> 1630		return !(is_zone_movable_page(page) || mt == MIGRATE_CMA ||
+> 1631			mt == MIGRATE_ISOLATE || is_zero_pfn(page_to_pfn(page)));
+  1632	}
+  1633	#else
+  1634	static inline bool is_pinnable_page(struct page *page)
+  1635	{
+  1636		return true;
+  1637	}
+  1638	#endif
+  1639	
 
 -- 
 0-DAY CI Kernel Test Service

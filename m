@@ -2,233 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29205516A1E
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 06:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65E31516A2C
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 06:51:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383241AbiEBEuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 00:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
+        id S1383272AbiEBEy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 00:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350459AbiEBEuO (ORCPT
+        with ESMTP id S1350459AbiEBEy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 00:50:14 -0400
+        Mon, 2 May 2022 00:54:56 -0400
 Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407AB20190
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 21:46:47 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id h12so11604584plf.12
-        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 21:46:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1548713DC6
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 21:51:29 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id i1so5490239plg.7
+        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 21:51:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=s57ARSA94pPZPqDottlmXRZq12YDZaNbYb69xMN7IG4=;
-        b=ytWdhCoC34qw4fTbqu60vecvNnmKWy7jGvokRxmcYhPIMMTjVWdyy5hq/p/Dz4qxRl
-         Ur4Z2h2hINXCYmiPYTW77cVt18nRooMetzcWeEsH8eq1/wtF6d5IgrpyV3MIx+O2fpyv
-         +aPCLx1C+iY4b0wLyfePD68clv0yzj/kIQALWLJe+Hz1SMLu0VcvWc62bW+KmjsAQcBN
-         PHGHFi264goOdeyD/qK8CokMU+8Pd1K2bYh8nQv8+Qx5iQV83wIhQ2SRX34HHqUNC+jN
-         fXoEcOGbWQTSmhMFDddbTqKdDPTFIhSyj8rivaT5YvWCgq9j+59NACGnslVIaqCzeX7T
-         jmDA==
+        bh=2tvM/1t2XqsQv5qtt2IQD9gIkDfu8eB+KlKnKPZPDEc=;
+        b=dJbkZMqcwDS95Bfzh5MBlN+4eMMjdo2Iw6nHzJL8yE8QGzSbGsVgX+d5A5aH0PcnTp
+         SXFMPe/GM+mq9/RX6jACraGOz6wSVyhscqR+uo0jGa8K646WGvytO0vY+w7fw9XsWt+w
+         PwVX163mh5IsZvaO9a25hdKovJdFmvSJ+/ax8aqH5TyYIBLbt0VIYWxy2ylsKJs1XXC6
+         lVQlmiU9ZvjZlJth+oRgNsIXhfdmrhNo1supc3PFJFuWCQG7xR0eBjeTkIzGoAtlmFpL
+         DIlx+rQXuIDM6qaxML0/uXZ5FagGwvOLljbZ6RSwNxkSlsxG951HZphHGpDhxkUCkVQO
+         vzLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=s57ARSA94pPZPqDottlmXRZq12YDZaNbYb69xMN7IG4=;
-        b=ZXNAR4L9Q3nq3BFA91ubjCBIxpODmcYYIrZPvYyjQ0pLD4PL/fXgvQJH6UsrWy4gyU
-         +G25Fi1yw4RCfA0lYjPUhib84+NS2sym9/Rw7Ol8QhpV7IrVnAoGiEBGtDknZEThxgYk
-         IGwtvkBE51rmImaMRCWH0w8ENC7Mf7CnsKp3JRgOtkXttf3nkA/T3tEud9+7Fu+d6ieU
-         hqkFJqjUa7NyOZprf1i941hV7mMGijNJl+aUgqRjdG4cXxWjkNuapw+O5RUHiIG86ZOJ
-         raQx6Sl2own1SOgCEUGuoHRokgwXKWrtlYD+GJ9x4tXAzHzxgs8bBT5gwHIfr3pOwTam
-         VK4g==
-X-Gm-Message-State: AOAM531tb4PhXV+Rql99C4qopBrhi70w4o7my6DOzxAreegX39szlyEt
-        CD5xwuGMyzZJifl4k96ec4Jj
-X-Google-Smtp-Source: ABdhPJzCUjDUYqxv8Wa4kYEoqw6GPAng1W0s+fb29/aRsm5fulQ9nXySkKxO0DwzKZvkvdXnu/7nRQ==
-X-Received: by 2002:a17:903:1211:b0:15e:8208:8cc0 with SMTP id l17-20020a170903121100b0015e82088cc0mr10184715plh.52.1651466806727;
-        Sun, 01 May 2022 21:46:46 -0700 (PDT)
-Received: from localhost.localdomain ([27.111.75.99])
-        by smtp.gmail.com with ESMTPSA id r13-20020a62e40d000000b0050dc76281bcsm3659243pfh.150.2022.05.01.21.46.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 May 2022 21:46:46 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com
-Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH] PCI: qcom-ep: Move enable/disable resources code to common functions
-Date:   Mon,  2 May 2022 10:16:25 +0530
-Message-Id: <20220502044625.25210-1-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        bh=2tvM/1t2XqsQv5qtt2IQD9gIkDfu8eB+KlKnKPZPDEc=;
+        b=TMS5fVbxbLOOaRcsQ8FEB8oh57DtPB4+Cnjf7DV/tY31Z/sEWrDthIa91iABwivsFV
+         14pJmWsmkmXOnFbk4WFBkNiJvZetgYIM3cc4oSXRAqkAvdlBywxXyrY1ra/8CXAewre/
+         DHxa3FhNAirKhUPgWRXo/50PgXgD4Sx+bmpd6Q86j9n6AmCCrVoJlhvcogPQjW1xc+dD
+         bf10Dkqz/pMf9v9OAI2/Tow/Hpqy6LUethzhs/JBiqlhupxk+SEIIOyvVE0qFIXRqqs3
+         ok/298MbyDQaRtvvFYfvhk6RDJo4+OCxFab5XQsaSkS7JY95O/jwyEw2gKF48B8BGlSN
+         fw8w==
+X-Gm-Message-State: AOAM533yG77Eh+C9wE+sT7FZCgcCp5+3u2mzd9GQoQvRPSlqglJrzaTa
+        PNefq+bE8id7yNM5LGpcxtM=
+X-Google-Smtp-Source: ABdhPJywG0PfuTkOuyhpd8EQideyvT73rVZnVt88Bs7aJseLJ6MKXTMD+Ub81AsROmDTN2J8zNghdg==
+X-Received: by 2002:a17:902:d4c2:b0:15e:aec8:6a6e with SMTP id o2-20020a170902d4c200b0015eaec86a6emr131302plg.57.1651467088366;
+        Sun, 01 May 2022 21:51:28 -0700 (PDT)
+Received: from localhost.localdomain ([2001:e60:9053:cb2b:2141:650c:835f:37fb])
+        by smtp.gmail.com with ESMTPSA id n14-20020a17090ac68e00b001d9e3b0e10fsm16521950pjt.16.2022.05.01.21.51.15
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 01 May 2022 21:51:28 -0700 (PDT)
+From:   Levi Yun <ppbuk5246@gmail.com>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        naveen.n.rao@linux.ibm.com, davem@davemloft.net,
+        mhiramat@kernel.org, rostedt@goodmis.org,
+        yun.wang@linux.alibaba.com
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Levi Yun <ppbuk5246@gmail.com>
+Subject: [PATCH] kprobe: sync issue's on ftraced-kprobe.
+Date:   Mon,  2 May 2022 13:51:02 +0900
+Message-Id: <20220502045102.40005-1-ppbuk5246@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In kprobe_ftrace_handler, it accesses get kporbe without kprobe_mutex
+held.
 
-Remove code duplication by moving the code related to enabling/disabling
-the resources (PHY, CLK, Reset) to common functions so that they can be
-called from multiple places.
+This makes some of synchronizing issue when we use kprobe API in
+kernel-module.
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-[mani: renamed the functions and reworded the commit message]
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Below is what i experienced:
+
+CPU 0									CPU 1
+<...>									<In module code>
+kprobe_ftrace_handler
+    get_kprobe
+        __this_cpu_write
+									unregister_kprobe
+									unload_module
+						<			kprobe memory gone>
+	p->pre_handler <access invalid memory>
+	page_fault
+		kprobe_fault_handler
+			(In here, kprobe memory gone,
+			 double page fault is happening inifinie).
+
+Signed-off-by: Levi Yun <ppbuk5246@gmail.com>
 ---
- drivers/pci/controller/dwc/pcie-qcom-ep.c | 86 ++++++++++++-----------
- 1 file changed, 45 insertions(+), 41 deletions(-)
+ arch/x86/kernel/kprobes/ftrace.c | 3 +++
+ include/linux/kprobes.h          | 2 ++
+ kernel/kprobes.c                 | 2 +-
+ 3 files changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom-ep.c b/drivers/pci/controller/dwc/pcie-qcom-ep.c
-index 6ce8eddf3a37..1c38dcf3e52e 100644
---- a/drivers/pci/controller/dwc/pcie-qcom-ep.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom-ep.c
-@@ -223,11 +223,8 @@ static void qcom_pcie_dw_stop_link(struct dw_pcie *pci)
- 	disable_irq(pcie_ep->perst_irq);
- }
- 
--static int qcom_pcie_perst_deassert(struct dw_pcie *pci)
-+static int qcom_pcie_enable_resources(struct qcom_pcie_ep *pcie_ep)
- {
--	struct qcom_pcie_ep *pcie_ep = to_pcie_ep(pci);
--	struct device *dev = pci->dev;
--	u32 val, offset;
- 	int ret;
- 
- 	ret = clk_bulk_prepare_enable(ARRAY_SIZE(qcom_pcie_ep_clks),
-@@ -247,6 +244,38 @@ static int qcom_pcie_perst_deassert(struct dw_pcie *pci)
- 	if (ret)
- 		goto err_phy_exit;
- 
-+	return 0;
-+
-+err_phy_exit:
-+	phy_exit(pcie_ep->phy);
-+err_disable_clk:
-+	clk_bulk_disable_unprepare(ARRAY_SIZE(qcom_pcie_ep_clks),
-+				   qcom_pcie_ep_clks);
-+
-+	return ret;
-+}
-+
-+static void qcom_pcie_disable_resources(struct qcom_pcie_ep *pcie_ep)
-+{
-+	phy_power_off(pcie_ep->phy);
-+	phy_exit(pcie_ep->phy);
-+	clk_bulk_disable_unprepare(ARRAY_SIZE(qcom_pcie_ep_clks),
-+				   qcom_pcie_ep_clks);
-+}
-+
-+static int qcom_pcie_perst_deassert(struct dw_pcie *pci)
-+{
-+	struct qcom_pcie_ep *pcie_ep = to_pcie_ep(pci);
-+	struct device *dev = pci->dev;
-+	u32 val, offset;
-+	int ret;
-+
-+	ret = qcom_pcie_enable_resources(pcie_ep);
-+	if (ret) {
-+		dev_err(dev, "Failed to enable resources: %d\n", ret);
-+		return ret;
-+	}
-+
- 	/* Assert WAKE# to RC to indicate device is ready */
- 	gpiod_set_value_cansleep(pcie_ep->wake, 1);
- 	usleep_range(WAKE_DELAY_US, WAKE_DELAY_US + 500);
-@@ -335,7 +364,7 @@ static int qcom_pcie_perst_deassert(struct dw_pcie *pci)
- 	ret = dw_pcie_ep_init_complete(&pcie_ep->pci.ep);
- 	if (ret) {
- 		dev_err(dev, "Failed to complete initialization: %d\n", ret);
--		goto err_phy_power_off;
-+		goto err_disable_resources;
- 	}
- 
- 	/*
-@@ -355,13 +384,8 @@ static int qcom_pcie_perst_deassert(struct dw_pcie *pci)
- 
- 	return 0;
- 
--err_phy_power_off:
--	phy_power_off(pcie_ep->phy);
--err_phy_exit:
--	phy_exit(pcie_ep->phy);
--err_disable_clk:
--	clk_bulk_disable_unprepare(ARRAY_SIZE(qcom_pcie_ep_clks),
--				   qcom_pcie_ep_clks);
-+err_disable_resources:
-+	qcom_pcie_disable_resources(pcie_ep);
- 
- 	return ret;
- }
-@@ -376,10 +400,7 @@ static void qcom_pcie_perst_assert(struct dw_pcie *pci)
+diff --git a/arch/x86/kernel/kprobes/ftrace.c b/arch/x86/kernel/kprobes/ftrace.c
+index dd2ec14adb77..76147ff6ed88 100644
+--- a/arch/x86/kernel/kprobes/ftrace.c
++++ b/arch/x86/kernel/kprobes/ftrace.c
+@@ -25,6 +25,7 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+ 	if (bit < 0)
  		return;
+ 
++	mutex_lock(&kprobe_mutex);
+ 	p = get_kprobe((kprobe_opcode_t *)ip);
+ 	if (unlikely(!p) || kprobe_disabled(p))
+ 		goto out;
+@@ -57,7 +58,9 @@ void kprobe_ftrace_handler(unsigned long ip, unsigned long parent_ip,
+ 		 */
+ 		__this_cpu_write(current_kprobe, NULL);
  	}
- 
--	phy_power_off(pcie_ep->phy);
--	phy_exit(pcie_ep->phy);
--	clk_bulk_disable_unprepare(ARRAY_SIZE(qcom_pcie_ep_clks),
--				   qcom_pcie_ep_clks);
-+	qcom_pcie_disable_resources(pcie_ep);
- 	pcie_ep->link_status = QCOM_PCIE_EP_LINK_DISABLED;
++
+ out:
++	mutex_unlock(&kprobe_mutex);
+ 	ftrace_test_recursion_unlock(bit);
  }
+ NOKPROBE_SYMBOL(kprobe_ftrace_handler);
+diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
+index 157168769fc2..4a18147ff6d6 100644
+--- a/include/linux/kprobes.h
++++ b/include/linux/kprobes.h
+@@ -191,6 +191,8 @@ struct kprobe_blacklist_entry {
+ DECLARE_PER_CPU(struct kprobe *, current_kprobe);
+ DECLARE_PER_CPU(struct kprobe_ctlblk, kprobe_ctlblk);
  
-@@ -643,43 +664,26 @@ static int qcom_pcie_ep_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
++extern struct mutex kprobe_mutex;
++
+ extern void kprobe_busy_begin(void);
+ extern void kprobe_busy_end(void);
  
--	ret = clk_bulk_prepare_enable(ARRAY_SIZE(qcom_pcie_ep_clks),
--				      qcom_pcie_ep_clks);
--	if (ret)
-+	ret = qcom_pcie_enable_resources(pcie_ep);
-+	if (ret) {
-+		dev_err(dev, "Failed to enable resources: %d\n", ret);
- 		return ret;
--
--	ret = qcom_pcie_ep_core_reset(pcie_ep);
--	if (ret)
--		goto err_disable_clk;
--
--	ret = phy_init(pcie_ep->phy);
--	if (ret)
--		goto err_disable_clk;
--
--	/* PHY needs to be powered on for dw_pcie_ep_init() */
--	ret = phy_power_on(pcie_ep->phy);
--	if (ret)
--		goto err_phy_exit;
-+	}
+diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+index dd58c0be9ce2..b65f055b6fa2 100644
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -64,7 +64,7 @@ static struct hlist_head kprobe_table[KPROBE_TABLE_SIZE];
+ static bool kprobes_all_disarmed;
  
- 	ret = dw_pcie_ep_init(&pcie_ep->pci.ep);
- 	if (ret) {
- 		dev_err(dev, "Failed to initialize endpoint: %d\n", ret);
--		goto err_phy_power_off;
-+		goto err_disable_resources;
- 	}
+ /* This protects 'kprobe_table' and 'optimizing_list' */
+-static DEFINE_MUTEX(kprobe_mutex);
++DEFINE_MUTEX(kprobe_mutex);
+ static DEFINE_PER_CPU(struct kprobe *, kprobe_instance);
  
- 	ret = qcom_pcie_ep_enable_irq_resources(pdev, pcie_ep);
- 	if (ret)
--		goto err_phy_power_off;
-+		goto err_disable_resources;
- 
- 	return 0;
- 
--err_phy_power_off:
--	phy_power_off(pcie_ep->phy);
--err_phy_exit:
--	phy_exit(pcie_ep->phy);
--err_disable_clk:
--	clk_bulk_disable_unprepare(ARRAY_SIZE(qcom_pcie_ep_clks),
--				   qcom_pcie_ep_clks);
-+err_disable_resources:
-+	qcom_pcie_disable_resources(pcie_ep);
- 
- 	return ret;
- }
+ kprobe_opcode_t * __weak kprobe_lookup_name(const char *name,
 -- 
-2.25.1
+2.35.1
 

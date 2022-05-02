@@ -2,97 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE6D517044
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 15:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D59C3517043
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 15:26:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385248AbiEBN3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 09:29:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60894 "EHLO
+        id S1385264AbiEBN3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 09:29:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385270AbiEBN3m (ORCPT
+        with ESMTP id S1385237AbiEBN3s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 09:29:42 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5F1192B8
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 06:26:02 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id o69so11325129pjo.3
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 06:26:02 -0700 (PDT)
+        Mon, 2 May 2022 09:29:48 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79A7120B3
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 06:26:18 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id b19so19536091wrh.11
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 06:26:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=u1bDTYTZw1pMjI7Gqthg6fqrtoSnEG5Dk6/Cva86VCI=;
-        b=J8Zdfqky2G1V8EPU1ecXE3UoyFHfxsLoaZAqG1MZpJBsvn3p/pzvopC7EtHDzygAzv
-         WD3/uf9+OzfoKTnviGt0r3Wf9rA3sBjvr6JQ34+f2CZqLVAu3nCeEV6HQq0OXGPtBap+
-         WaZAaLCC0IXSkD0EcLYc7qX5h3MpjEoBY/Xd3bH4olmsTKKcEulfGRHQmB4ZfIhiYfqK
-         SSPMfQv4pFCtmO17HeunMnDleLR/4yhC/Untzzc5EWObwKj3ToOw0qGR2Jf9jtXM7imX
-         SW5LG9+WIexO9pvqe4S3Pp0Gr39wvgtlcSq4aFpbqOyk0Msg0XRXTREEnLeAhq7EoiF8
-         9w4w==
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=7va6PYBEaxzVzOFHDSxBigUPhGrAPiX/eRU/9Co02p4=;
+        b=AnBPxQolRVHO+FrQ7f570AYbIgZj9KcNPmUzEH/1OGPWQQeVqKu3Il+19v28POAWJr
+         TTrRdx+ZkcCt1hPmDflyQMsQCJhpy7VdT+C5Ofvakl47Axy2r9p8qTHbeHdseISiuvF/
+         VilMTV4GxHTI4/l5SwFuk/XO3SpIcpu4pDpwpxwia1yLcFKtUfI4EvzZVWLWjo3bQXV6
+         jud88VV7ZIfaF6a+kLruWw+HnOyAJU01MbvZclSWcAQf1ii4ai15OmvOc/SBOdivaWEB
+         S+pHR05iF4DOZW4KyTghWk+vUhDGHfstQhyHdEd/naRnB4kyroaee7IxEQlnSNlEufv5
+         IvRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=u1bDTYTZw1pMjI7Gqthg6fqrtoSnEG5Dk6/Cva86VCI=;
-        b=Bl8AVE9Ec0azkp7OSLPu6bm7ydTWXJJZrUblbHYh0bqOTHTHbruU/0tpolbZdTBXCa
-         9uqnsh55f10Jfd1330OqGp9u/60yl++kte2HjyDYMbwSsYWtDiR2xOl5KDe3OzIBjENK
-         wkhMezpobH/x5CHggxj3vp++CQO/b6kXfzfKq6RKy72P8Nd6eqgfzJDmQal+KPdgSOPr
-         YDMezUBcKqfrrd8eRDcG3hK3GjRz7F5tP5gV1zaeaKqo16tHHKC+TbA79j6KCE4NLiV1
-         0nm8zrztWBP741wJe2wBdwoha3bjcMQT52JeRWNO/8Mn/PUWk8apbrGo522W+dGmTi3b
-         Hk2w==
-X-Gm-Message-State: AOAM531l0i4Y14FeBxhlW+m2uC6Oknjq1DvKs4oYnzeOfKdJfYKYdXoZ
-        jHng0Aw8lSoQbNJBr409C7k+Bw==
-X-Google-Smtp-Source: ABdhPJzQTiuO7lIQ/FePbEmWbZv+DY73/I4ctb8nms0SxtRXkj+EdjJSmDi2u1196zt5vr0VCWjOpA==
-X-Received: by 2002:a17:90b:3b4c:b0:1da:2001:a222 with SMTP id ot12-20020a17090b3b4c00b001da2001a222mr13020897pjb.84.1651497962364;
-        Mon, 02 May 2022 06:26:02 -0700 (PDT)
-Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id m10-20020a170902db0a00b0015e8d4eb2dbsm4627740plx.293.2022.05.02.06.26.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 06:26:01 -0700 (PDT)
-Message-ID: <6ad38ecc-b2a9-f0e9-f7c7-f312a2763f97@kernel.dk>
-Date:   Mon, 2 May 2022 07:26:00 -0600
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=7va6PYBEaxzVzOFHDSxBigUPhGrAPiX/eRU/9Co02p4=;
+        b=qNLzOORtK/aA7XnJB5L9hpSx8bluW0ZNT/n9pdsNKGAoYAa45yt0wamBe0VB8Iqh6m
+         NpcXuiC70+ytlEUiVPdSlwSzxz/bIuOeaMQmgbXYM61rWkXYx0XtCdrii3zmSNnKJHOW
+         zHbQSSDgjnOhCeWNgohovqoZo3qg1DFlvwWaAbQ8aTZbjNcSXIIg5DqS5AEF6kLhrOay
+         ksyOjV9QCV8wRpmczzq9FIqGrTokGo9R8odQ4U4vpJuErMz2KdX2zlbzyNZspdGdeQTD
+         C2NpdcQloWZPfyHtrql4ztsngezOZ6VNcXfTFUUgCZD/PpWRe/kkGuHnKVIPZrASTyzf
+         mcbQ==
+X-Gm-Message-State: AOAM532nIB3NA+vppt6LVZNO5M+Ypwf+Iof9FTDc1IPYVZITEXsUWtc5
+        TeCwYwpzdl369+R6C1zcBP8Be2VwiCZFBRFSow==
+X-Google-Smtp-Source: ABdhPJx5qgwgHkbUeJCQ8qUos5ih2nZxsWFi2y3wuniZlxapd2dkaT0UIVIHsx816q/hlRMoUL60rsqKC3y4D+L0ZkY=
+X-Received: by 2002:adf:eb4d:0:b0:1ed:c1f7:a951 with SMTP id
+ u13-20020adfeb4d000000b001edc1f7a951mr9029355wrn.454.1651497977121; Mon, 02
+ May 2022 06:26:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [REGRESSION] lxc-stop hang on 5.17.x kernels
-Content-Language: en-US
-To:     Daniel Harding <dharding@living180.net>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Cc:     regressions@lists.linux.dev, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <7925e262-e0d4-6791-e43b-d37e9d693414@living180.net>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <7925e262-e0d4-6791-e43b-d37e9d693414@living180.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Sender: felyikpuckan@gmail.com
+Received: by 2002:a05:600c:a07:0:0:0:0 with HTTP; Mon, 2 May 2022 06:26:16
+ -0700 (PDT)
+From:   dr adama ali <dradamaali4@gmail.com>
+Date:   Mon, 2 May 2022 01:26:16 -1200
+X-Google-Sender-Auth: 2hYG7-JEOTdNxdlRp9y1LdqHKy8
+Message-ID: <CACF60HgpXRJje=G-ssX_g_R0ZL1H+dDOy3YWaF_0AZS+93BgvA@mail.gmail.com>
+Subject: Greetings,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_80,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:42f listed in]
+        [list.dnswl.org]
+        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
+        *      [score: 0.8936]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [dradamaali4[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
+        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  1.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/2/22 7:17 AM, Daniel Harding wrote:
-> I use lxc-4.0.12 on Gentoo, built with io-uring support
-> (--enable-liburing), targeting liburing-2.1.  My kernel config is a
-> very lightly modified version of Fedora's generic kernel config. After
-> moving from the 5.16.x series to the 5.17.x kernel series, I started
-> noticed frequent hangs in lxc-stop.  It doesn't happen 100% of the
-> time, but definitely more than 50% of the time.  Bisecting narrowed
-> down the issue to commit aa43477b040251f451db0d844073ac00a8ab66ee:
-> io_uring: poll rework. Testing indicates the problem is still present
-> in 5.18-rc5. Unfortunately I do not have the expertise with the
-> codebases of either lxc or io-uring to try to debug the problem
-> further on my own, but I can easily apply patches to any of the
-> involved components (lxc, liburing, kernel) and rebuild for testing or
-> validation.  I am also happy to provide any further information that
-> would be helpful with reproducing or debugging the problem.
+Greetings My Dear Friend,
 
-Do you have a recipe to reproduce the hang? That would make it
-significantly easier to figure out.
+Before I introduce myself, I wish to inform you that this letter is not a
+hoax mail and I urge you to treat it serious. This letter must come to you
+as a big surprise, but I believe it is only a day that people meet and
+become great friends and business partners. Please I want you to read this
+letter very carefully and I must apologize for barging this message into
+your mail box without any formal introduction due to the urgency and
+confidentiality of this business and I know that this message will come to
+you as a surprise. Please
 
--- 
-Jens Axboe
 
+this is not a joke and I will not like you to joke with it ok, With due
+respect to your person and much sincerity of purpose, I make this contact
+with you as I believe that you can be of great assistance to me. My name is
+DR.ADAMA ALI, from Burkina Faso, West Africa. I work in Bank Of Africa
+(BOA) as telex manager, please see this as a confidential message and do
+not reveal it to another person and let me know whether you can be of
+assistance regarding my proposal below because it is top secret.
+
+
+I am about to retire from active Banking service to start a new life but I
+am skeptical to reveal this particular secret to a stranger. You must
+assure me that everything will be handled confidentially because we are not
+going to suffer again in life. It has been 10 years now that most of the
+greedy African Politicians used our bank to launder money overseas through
+the help of their Political advisers. Most of the funds which they
+transferred out of the shores of Africa were gold and oil money that was
+supposed to have been used to develop the continent. Their Political
+advisers always inflated the amounts before transferring to foreign
+accounts, so I also used the opportunity to divert part of the funds hence
+I am aware that there is no official trace of how much was transferred as
+all the accounts used for such transfers were being closed after transfer.
+I acted as the Bank Officer to most of the politicians and when I
+discovered that they were using me to succeed in their greedy act; I also
+cleaned some of their banking records from the Bank files and no one cared
+to ask me
+
+
+because the money was too much for them to control. They laundered over
+$5billion Dollars during the process.Before I send this message to you, I
+have already diverted ($10.5million Dollars) to an escrow account belonging
+to no one in the bank. The bank is anxious now to know who the beneficiary
+to the funds is because they have made a lot of profits with the funds. It
+is more than Eight years now and most of the politicians are no longer
+using our bank to transfer funds overseas. The ($10.5million Dollars) has
+been laying waste in our bank and I don=E2=80=99t want to retire from the b=
+ank
+without transferring the funds to a foreign account to enable me share the
+proceeds with the receiver (a foreigner). The money will be shared 60% for
+me and 40% for you. There is no one coming to ask you about the funds
+because I secured everything. I only want you to assist me by providing a
+reliable bank account where the funds can be transferred.
+
+
+You are not to face any difficulties or legal implications as I am going to
+handle the transfer personally. If you are capable of receiving the funds,
+do let me know immediately to enable me give you a detailed information on
+what to do. For me, I have not stolen the money from anyone because the
+other people that took the whole money did not face any problems. This is
+my chance to grab my own life opportunity but you must keep the details of
+the funds secret to avoid any leakages as no one in the bank knows about my
+plans Please get back to me if you are interested and capable to handle
+this project, I shall intimate you on what to do when I hear from your
+confirmation and acceptance.If you are capable of being my trusted
+associate do declare your consent to me. I am looking forward to hear from
+you immediately for further information.
+
+
+
+Thanks with my best regards.
+DR.ADAMA ALI
+Telex Manager
+Bank Of Africa(BOA)
+Burkina Faso

@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1561E516F3C
+	by mail.lfdr.de (Postfix) with ESMTP id D1CC7516F3E
 	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 14:05:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384871AbiEBMIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 08:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57504 "EHLO
+        id S1384875AbiEBMIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 08:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384862AbiEBMIE (ORCPT
+        with ESMTP id S1384863AbiEBMIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 2 May 2022 08:08:04 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49BFA12AFA;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1D313D6D;
         Mon,  2 May 2022 05:04:35 -0700 (PDT)
-Date:   Mon, 02 May 2022 12:04:31 -0000
+Date:   Mon, 02 May 2022 12:04:32 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651493072;
+        s=2020; t=1651493073;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YATk2HB+C5fwK8D8cN/gu91IL0UXOJNedtSVFfvFfmc=;
-        b=YQCTJtMuvi4kUrtZ2UK05zVIn76iqKAGULzgVzbMMb9f4mZevp2G/rGlo0akG0rfe/adKx
-        D7KRdvpHhv+fR1wJ6Es7qpn2zsubI4quXlCH51uXwNL7Kfr0uF6EjjxQuw1BkTRInPgJuw
-        GU+2u61TcxcUbVudlGYrlPybNUFjdExAGUaFDDnhg6pRaF1knISG1iClneiD6F3kDpAWJA
-        49wtMLHCM9RLfLKxljNTzYbslV9ICtd/Xe5pEhZwG9cpCLDvjd3/RuTeuvuUMbvqkdQQfu
-        2eI7LcK+EGBWWGX/X8n79keOzGGvbeK0INQStxQiYBhGUSP8TA31W1mg+VRdEA==
+        bh=z8X/9Q4KBvNpgeKtB/Wu+gpbUp9bksPoT5kvw77NT5U=;
+        b=RWNQ8yNyrI/V7ntL9yhRqAcgISi2e512U7Cxg1P0TGd7OWm5NjyUepNyjxqxNxwTgNw55t
+        Trnva+SYHiGNBefFa/CaTu034+1kkn/jpotj98OEkVO5cMuZCkGx4pe9UNSz7U63GSQZg3
+        cjfhXHTtwLTnzcWfotEoFqEj7i6SvUD8ejoJOVltQbsnQGrfYTM5nXQqqWWJ1DNq/+YQyQ
+        8QigciQA3qPwWWiUimcWGZFwRyONcuORUwlzY5ISSifSYEUN/cgNu0j0jZngDyoECTRMbW
+        GxyPcV7jhi6/eFO1RKgm+BHLAvWtqtRURCrW312wEmNN3s9V/t7x5vx0ZWw9HA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651493072;
+        s=2020e; t=1651493073;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YATk2HB+C5fwK8D8cN/gu91IL0UXOJNedtSVFfvFfmc=;
-        b=k3U2UU3Bwkbkv86MYlSSzwaHDvwhYTosOjA5Ouj//sgD95ZeVOaSCNUBnwzeA+lVKu01Cz
-        eT/acSOuNU5oYuDA==
+        bh=z8X/9Q4KBvNpgeKtB/Wu+gpbUp9bksPoT5kvw77NT5U=;
+        b=NSovzquFxKhbtiRbJe0gioXDwCcxBxl8SzBz9IZDHpEpjtHZsjkv1BMHkE0iZN8A7YvUP0
+        omqX00Rv/McVlUBQ==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] timekeeping: Consolidate fast timekeeper
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+Subject: [tip: timers/core] timekeeping: Annotate ktime_get_boot_fast_ns()
+ with data_race()
+Cc:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220415091921.072296632@linutronix.de>
-References: <20220415091921.072296632@linutronix.de>
+In-Reply-To: <20220415091920.956045162@linutronix.de>
+References: <20220415091920.956045162@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <165149307143.4207.5088655039432642801.tip-bot2@tip-bot2>
+Message-ID: <165149307242.4207.1206001832585845014.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,67 +67,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     90be8d6c1f91e1e5121c219726524c91b52bfc20
-Gitweb:        https://git.kernel.org/tip/90be8d6c1f91e1e5121c219726524c91b52bfc20
+Commit-ID:     eff4849f928f2b90402907e06a6de1619cf16b1a
+Gitweb:        https://git.kernel.org/tip/eff4849f928f2b90402907e06a6de1619cf16b1a
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Fri, 15 Apr 2022 11:19:38 +02:00
+AuthorDate:    Fri, 15 Apr 2022 11:19:35 +02:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Mon, 02 May 2022 14:00:20 +02:00
 
-timekeeping: Consolidate fast timekeeper
+timekeeping: Annotate ktime_get_boot_fast_ns() with data_race()
 
-Provide a inline function which replaces the copy & pasta.
+Accessing timekeeper::offset_boot in ktime_get_boot_fast_ns() is an
+intended data race as the reader side cannot synchronize with a writer and
+there is no space in struct tk_read_base of the NMI safe timekeeper.
+
+Mark it so.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220415091921.072296632@linutronix.de
+Link: https://lore.kernel.org/r/20220415091920.956045162@linutronix.de
 
 ---
- kernel/time/timekeeping.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ kernel/time/timekeeping.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
-index 3479804..8895ff2 100644
+index 2c22023..3479804 100644
 --- a/kernel/time/timekeeping.c
 +++ b/kernel/time/timekeeping.c
-@@ -429,6 +429,14 @@ static void update_fast_timekeeper(const struct tk_read_base *tkr,
- 	memcpy(base + 1, base, sizeof(*base));
- }
- 
-+static __always_inline u64 fast_tk_get_delta_ns(struct tk_read_base *tkr)
-+{
-+	u64 delta, cycles = tk_clock_read(tkr);
-+
-+	delta = clocksource_delta(cycles, tkr->cycle_last, tkr->mask);
-+	return timekeeping_delta_to_ns(tkr, delta);
-+}
-+
- static __always_inline u64 __ktime_get_fast_ns(struct tk_fast *tkf)
+@@ -528,7 +528,7 @@ u64 notrace ktime_get_boot_fast_ns(void)
  {
- 	struct tk_read_base *tkr;
-@@ -439,12 +447,7 @@ static __always_inline u64 __ktime_get_fast_ns(struct tk_fast *tkf)
- 		seq = raw_read_seqcount_latch(&tkf->seq);
- 		tkr = tkf->base + (seq & 0x01);
- 		now = ktime_to_ns(tkr->base);
--
--		now += timekeeping_delta_to_ns(tkr,
--				clocksource_delta(
--					tk_clock_read(tkr),
--					tkr->cycle_last,
--					tkr->mask));
-+		now += fast_tk_get_delta_ns(tkr);
- 	} while (read_seqcount_latch_retry(&tkf->seq, seq));
+ 	struct timekeeper *tk = &tk_core.timekeeper;
  
- 	return now;
-@@ -560,10 +563,7 @@ static __always_inline u64 __ktime_get_real_fast(struct tk_fast *tkf, u64 *mono)
- 		tkr = tkf->base + (seq & 0x01);
- 		basem = ktime_to_ns(tkr->base);
- 		baser = ktime_to_ns(tkr->base_real);
--
--		delta = timekeeping_delta_to_ns(tkr,
--				clocksource_delta(tk_clock_read(tkr),
--				tkr->cycle_last, tkr->mask));
-+		delta = fast_tk_get_delta_ns(tkr);
- 	} while (read_seqcount_latch_retry(&tkf->seq, seq));
+-	return (ktime_get_mono_fast_ns() + ktime_to_ns(tk->offs_boot));
++	return (ktime_get_mono_fast_ns() + ktime_to_ns(data_race(tk->offs_boot)));
+ }
+ EXPORT_SYMBOL_GPL(ktime_get_boot_fast_ns);
  
- 	if (mono)

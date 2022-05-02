@@ -2,111 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D45D0516992
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 05:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D1B4516990
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 05:19:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357115AbiEBDXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 23:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52444 "EHLO
+        id S1356753AbiEBDTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 23:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352309AbiEBDXl (ORCPT
+        with ESMTP id S1349452AbiEBDTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 23:23:41 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8A632B;
-        Sun,  1 May 2022 20:20:13 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id iq2-20020a17090afb4200b001d93cf33ae9so15064891pjb.5;
-        Sun, 01 May 2022 20:20:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IePjmsv/wJb+ld44IWbALrDKn84ocVyOv7AyLW74QVM=;
-        b=MslsXcZBG2Ebnlr9tTvufxRaYlBTsHexqrXWNDSpk3cQquHbeSpd6jMP+ZKXNWJZtD
-         Gx2GrUAph/nqjClE8WNNBueryr+yg3+Q9NdZusbcvZSKmyinEMLnvCwVNqG3u4hxifRi
-         7aA/oxJJf9e9MTtdwqrB/ZD+t4OjLxwlIOb+wapIlDfnoWlVLFfEgluFDr4vvh1y5zth
-         xactzwlG1YxnnwnihWIsWZJmKdD/FbaEXsT+N6veOcVMfB/WElUyKDeQR2BnrpUCM1Yf
-         glUQoT66t1jG8D3S9AboY8f1djrcUH8Ese8wL2RgzcA1y7o/geuQ7dutNH7HR+dlhwzJ
-         TKjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IePjmsv/wJb+ld44IWbALrDKn84ocVyOv7AyLW74QVM=;
-        b=XOWRCAM6xNkXq1a1l+7YkStbdIMP9YiNL50e9jQ7dhIWMxcBYBUOmZDjdmVQjz8Lt7
-         ME3gV1+5SMaGf6UORVuZDaenX3f/U9hG1Ablff8NwQ1SdlBuz2jOBFv8Bgh2xzibquJK
-         istLP38rwNSjnVlscEhlOPB5XS9fph/qVGWP1zyVbar2O5b1N4KDR7AMvYiwBlIrynxJ
-         xGQqHGY75Op5tLAgxcgZtj95B/ec7Y1ReAPkGR4txjux3IY9KTn8FpiXda67ts80Ye0Y
-         YuUGWR4grRe2gByYIoD18pJ0PBxYllIfFgdnOJIuOMq0oqEyAYM1gJA3DIy1lciEDxMn
-         DzBA==
-X-Gm-Message-State: AOAM530tmupPDjiZKuWx8zMOxUI/ErUX9JNtzvbTT9vmaQRV+7AjMRLu
-        vqe+p4ZV65+eeMbQ0vt9Q1Y=
-X-Google-Smtp-Source: ABdhPJxEVZNbg++xtGxYC7vFyL8C5z1r9M//0XFPWYGl7jb9BmPnwTVysa5bRV8u5tMhTopwQPwSXw==
-X-Received: by 2002:a17:90a:a593:b0:1c9:b837:e77d with SMTP id b19-20020a17090aa59300b001c9b837e77dmr10778341pjq.205.1651461612983;
-        Sun, 01 May 2022 20:20:12 -0700 (PDT)
-Received: from localhost.localdomain ([103.197.71.140])
-        by smtp.gmail.com with ESMTPSA id i1-20020a17090332c100b0015e8d4eb1f4sm3507824plr.62.2022.05.01.20.20.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 May 2022 20:20:12 -0700 (PDT)
-From:   Stephen Zhang <starzhangzsd@gmail.com>
-To:     macro@orcam.me.uk, tsbogend@alpha.franken.de,
-        liam.howlett@oracle.com, geert@linux-m68k.org,
-        ebiederm@xmission.com, dbueso@suse.de, alobakin@pm.me,
-        f.fainelli@gmail.com, paul@crapouillou.net, linux@roeck-us.net,
-        anemo@mba.ocn.ne.jp
-Cc:     zhangshida@kylinos.cn, starzhangzsd@gmail.com,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: [PATCH v4] MIPS: adding a safety check for cpu_has_fpu
-Date:   Mon,  2 May 2022 11:20:02 +0800
-Message-Id: <20220502032002.840029-1-starzhangzsd@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 1 May 2022 23:19:47 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46432DAA5
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 20:16:18 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Ks7TV5FR2zGp2K;
+        Mon,  2 May 2022 11:13:34 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 2 May 2022 11:16:15 +0800
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 2 May 2022 11:16:14 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     <catalin.marinas@arm.com>, <will@kernel.org>,
+        <akpm@linux-foundation.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <linux-mm@kvack.org>, <hch@infradead.org>, <arnd@arndb.de>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH v2 resend 4/5] arm64: mm: Convert to GENERIC_IOREMAP
+Date:   Mon, 2 May 2022 11:27:51 +0800
+Message-ID: <20220502032751.21503-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20220429103225.75121-5-wangkefeng.wang@huawei.com>
+References: <20220429103225.75121-5-wangkefeng.wang@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shida Zhang <zhangshida@kylinos.cn>
+Add hook for arm64's special operation when ioremap() and iounmap(),
+then ioremap_wc/np/cache is converted to use ioremap_prot()
+from GENERIC_IOREMAP, update the Copyright and kill the unused
+inclusions.
 
-There is a chance 'cpu_has_fpu' would still be overridden when the
-CONFIG_MIPS_FP_SUPPORT configuration option has been disabled. So
-add a safety check for 'cpu_has_fpu'.
-
-Suggested-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Signed-off-by: Shida Zhang <zhangshida@kylinos.cn>
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 ---
- Changelog in v1 -> v2:
- - Choose to redefine cpu_has_fpu to solve the problem silently.
+v2 resend:
+- use IOMEM_ERR_PTR to fix sparse warning found by lkp
 
- Changelog in v2 -> v3:
- - Choose to point out the error instead.
+ arch/arm64/Kconfig          |  1 +
+ arch/arm64/include/asm/io.h | 20 ++++++---
+ arch/arm64/kernel/acpi.c    |  2 +-
+ arch/arm64/mm/ioremap.c     | 85 +++++--------------------------------
+ 4 files changed, 27 insertions(+), 81 deletions(-)
 
- Changelog in v3 -> v4:
- - Make the check work for 'nofpu' option.
-
- arch/mips/include/asm/cpu-features.h | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/arch/mips/include/asm/cpu-features.h b/arch/mips/include/asm/cpu-features.h
-index de8cb2ccb781..c0983130a44c 100644
---- a/arch/mips/include/asm/cpu-features.h
-+++ b/arch/mips/include/asm/cpu-features.h
-@@ -133,6 +133,9 @@
- #  define raw_cpu_has_fpu	0
- # endif
- #else
-+# if cpu_has_fpu
-+#  error "Forcing `cpu_has_fpu' to non-zero is not supported"
-+# endif
- # define raw_cpu_has_fpu	cpu_has_fpu
- #endif
- #ifndef cpu_has_32fpr
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 20ea89d9ac2f..56673209fdb9 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -123,6 +123,7 @@ config ARM64
+ 	select GENERIC_CPU_VULNERABILITIES
+ 	select GENERIC_EARLY_IOREMAP
+ 	select GENERIC_IDLE_POLL_SETUP
++	select GENERIC_IOREMAP
+ 	select GENERIC_IRQ_IPI
+ 	select GENERIC_IRQ_PROBE
+ 	select GENERIC_IRQ_SHOW
+diff --git a/arch/arm64/include/asm/io.h b/arch/arm64/include/asm/io.h
+index 7fd836bea7eb..042fa01940b8 100644
+--- a/arch/arm64/include/asm/io.h
++++ b/arch/arm64/include/asm/io.h
+@@ -163,13 +163,21 @@ extern void __memset_io(volatile void __iomem *, int, size_t);
+ /*
+  * I/O memory mapping functions.
+  */
+-extern void __iomem *__ioremap(phys_addr_t phys_addr, size_t size, pgprot_t prot);
+-extern void iounmap(volatile void __iomem *addr);
+-extern void __iomem *ioremap_cache(phys_addr_t phys_addr, size_t size);
+ 
+-#define ioremap(addr, size)		__ioremap((addr), (size), __pgprot(PROT_DEVICE_nGnRE))
+-#define ioremap_wc(addr, size)		__ioremap((addr), (size), __pgprot(PROT_NORMAL_NC))
+-#define ioremap_np(addr, size)		__ioremap((addr), (size), __pgprot(PROT_DEVICE_nGnRnE))
++void __iomem *arch_ioremap(phys_addr_t phys_addr, size_t size, unsigned long prot);
++#define arch_ioremap arch_ioremap
++
++int arch_iounmap(void __iomem *addr);
++#define arch_iounmap arch_iounmap
++
++#define _PAGE_IOREMAP PROT_DEVICE_nGnRE
++
++#define ioremap_wc(addr, size)		ioremap_prot((addr), (size), PROT_NORMAL_NC)
++#define ioremap_np(addr, size)		ioremap_prot((addr), (size), PROT_DEVICE_nGnRnE)
++#define ioremap_cache(addr, size) ({							\
++	pfn_is_map_memory(__phys_to_pfn(addr)) ?					\
++	(void __iomem *)__phys_to_virt(addr) : ioremap_prot(addr, size, PROT_NORMAL);	\
++})
+ 
+ /*
+  * io{read,write}{16,32,64}be() macros
+diff --git a/arch/arm64/kernel/acpi.c b/arch/arm64/kernel/acpi.c
+index e4dea8db6924..a5a256e3f9fe 100644
+--- a/arch/arm64/kernel/acpi.c
++++ b/arch/arm64/kernel/acpi.c
+@@ -351,7 +351,7 @@ void __iomem *acpi_os_ioremap(acpi_physical_address phys, acpi_size size)
+ 				prot = __acpi_get_writethrough_mem_attribute();
+ 		}
+ 	}
+-	return __ioremap(phys, size, prot);
++	return ioremap_prot(phys, size, pgprot_val(prot));
+ }
+ 
+ /*
+diff --git a/arch/arm64/mm/ioremap.c b/arch/arm64/mm/ioremap.c
+index b7c81dacabf0..08fc30eb2721 100644
+--- a/arch/arm64/mm/ioremap.c
++++ b/arch/arm64/mm/ioremap.c
+@@ -1,96 +1,33 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * Based on arch/arm/mm/ioremap.c
+- *
+- * (C) Copyright 1995 1996 Linus Torvalds
+- * Hacked for ARM by Phil Blundell <philb@gnu.org>
+- * Hacked to allow all architectures to build, and various cleanups
+- * by Russell King
+- * Copyright (C) 2012 ARM Ltd.
+- */
+ 
+-#include <linux/export.h>
+ #include <linux/mm.h>
+ #include <linux/vmalloc.h>
+ #include <linux/io.h>
+ 
+-#include <asm/fixmap.h>
+-#include <asm/tlbflush.h>
+-
+-static void __iomem *__ioremap_caller(phys_addr_t phys_addr, size_t size,
+-				      pgprot_t prot, void *caller)
++void __iomem *arch_ioremap(phys_addr_t phys_addr, size_t size, unsigned long prot)
+ {
+-	unsigned long last_addr;
+-	unsigned long offset = phys_addr & ~PAGE_MASK;
+-	int err;
+-	unsigned long addr;
+-	struct vm_struct *area;
+-
+-	/*
+-	 * Page align the mapping address and size, taking account of any
+-	 * offset.
+-	 */
+-	phys_addr &= PAGE_MASK;
+-	size = PAGE_ALIGN(size + offset);
++	unsigned long last_addr = phys_addr + size - 1;
++	int ret = -EINVAL;
+ 
+-	/*
+-	 * Don't allow wraparound, zero size or outside PHYS_MASK.
+-	 */
+-	last_addr = phys_addr + size - 1;
+-	if (!size || last_addr < phys_addr || (last_addr & ~PHYS_MASK))
+-		return NULL;
++	/* Don't allow outside PHYS_MASK */
++	if (last_addr & ~PHYS_MASK)
++		return IOMEM_ERR_PTR(ret);
+ 
+-	/*
+-	 * Don't allow RAM to be mapped.
+-	 */
++	/* Don't allow RAM to be mapped. */
+ 	if (WARN_ON(pfn_is_map_memory(__phys_to_pfn(phys_addr))))
+-		return NULL;
++		return IOMEM_ERR_PTR(ret);
+ 
+-	area = get_vm_area_caller(size, VM_IOREMAP, caller);
+-	if (!area)
+-		return NULL;
+-	addr = (unsigned long)area->addr;
+-	area->phys_addr = phys_addr;
+-
+-	err = ioremap_page_range(addr, addr + size, phys_addr, prot);
+-	if (err) {
+-		vunmap((void *)addr);
+-		return NULL;
+-	}
+-
+-	return (void __iomem *)(offset + addr);
+-}
+-
+-void __iomem *__ioremap(phys_addr_t phys_addr, size_t size, pgprot_t prot)
+-{
+-	return __ioremap_caller(phys_addr, size, prot,
+-				__builtin_return_address(0));
++	return NULL;
+ }
+-EXPORT_SYMBOL(__ioremap);
+ 
+-void iounmap(volatile void __iomem *io_addr)
++int arch_iounmap(void __iomem *addr)
+ {
+-	unsigned long addr = (unsigned long)io_addr & PAGE_MASK;
+-
+ 	/*
+ 	 * We could get an address outside vmalloc range in case
+ 	 * of ioremap_cache() reusing a RAM mapping.
+ 	 */
+-	if (is_vmalloc_addr((void *)addr))
+-		vunmap((void *)addr);
+-}
+-EXPORT_SYMBOL(iounmap);
+-
+-void __iomem *ioremap_cache(phys_addr_t phys_addr, size_t size)
+-{
+-	/* For normal memory we already have a cacheable mapping. */
+-	if (pfn_is_map_memory(__phys_to_pfn(phys_addr)))
+-		return (void __iomem *)__phys_to_virt(phys_addr);
+-
+-	return __ioremap_caller(phys_addr, size, __pgprot(PROT_NORMAL),
+-				__builtin_return_address(0));
++	return is_vmalloc_addr(addr) ? 0 : -EINVAL;
+ }
+-EXPORT_SYMBOL(ioremap_cache);
+ 
+ /*
+  * Must be called after early_fixmap_init
 -- 
-2.30.2
+2.35.3
 

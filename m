@@ -2,215 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D490F516F6B
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 14:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8ED6516F6E
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 14:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384944AbiEBMT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 08:19:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43596 "EHLO
+        id S1384968AbiEBMTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 08:19:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385051AbiEBMTY (ORCPT
+        with ESMTP id S1384965AbiEBMTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 08:19:24 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2986A12097
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 05:15:55 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id bq30so24946323lfb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 05:15:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=zF2cE9+P0Hg5X3nSpzQOTg1K/5ZJ3rPndlEIKRoSDaE=;
-        b=8UEmygGrLhp+zPnr4D7bOp+vs7LlPYg2S3/xyDed0anZr1IHNhAVGPvTPtlJ5Wdbvi
-         TheDYWElLLlOPoDL+7H+GvXvpMcijUFW7qUV0Yy+5aMthqi8pIFazE9oCTPg/oMSTsCL
-         lWDaTSJvvkhowIn/T/vwRgME6AMoK+sMNXK2/OQdHuadCFH3O5vEGCsvpf/RY8d9x2xZ
-         3PjDmNeVwkFWS7cekO5vYkoyPerJaJq/CEDaWGy3ugmjhrWChzYLn8dzSNES5wosXznv
-         i+w1jVJK58S7J2xJhZTEXYnH4xVzDT7jRW8n+gEsPQ+5ZPZtHlI+SQQF4q26TRHMQXqF
-         Y43w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:references:content-language:in-reply-to
-         :content-transfer-encoding;
-        bh=zF2cE9+P0Hg5X3nSpzQOTg1K/5ZJ3rPndlEIKRoSDaE=;
-        b=eiaECxq4QTZ2H+3XTNlUSYJiEdbC9pujU3mfwKpLswUFXgVBjD+Iof0MdwI9G2Gpdz
-         kcDK4bRAJtyqLLLyltv1YtgVgSJVQIKltFILYOPkdYC+4Vvx1APl2Ksd7dNYdq+5I/Hz
-         cYuYIWPKMWIvHsKfQOipWNtEumjYY6MGMeYsPokoDy1sgyznUydeQUY7hNP8ErMOA35b
-         /PPd6VZYeXBAkOC2CB72iKr+5Q40uXbTwUu1NzC4gay5+rggAMx4JwP5dnqRMENO5rB8
-         5kyGfAUcwSA3FZ3VJUCWVi+zWbU23pTFBAr1BPAcWV1rsg0lpzjOpyISiSEmnq4K8mtW
-         qWEg==
-X-Gm-Message-State: AOAM530eYS+xUJlrRU3dT0vJDzf/+ijPPSh8CWoFXzdzs5cHdE+aU+Qo
-        Y0jiO3wXPGa8LoGI7IZLrQBMYg==
-X-Google-Smtp-Source: ABdhPJwkDTEskzw4tw9Vq22RaRk6KjYv0enSGIlQ810JvdVySd9J8zis8/RvtsOJPDji2cp8jppRUA==
-X-Received: by 2002:a05:6512:b18:b0:44a:9a1f:dcf6 with SMTP id w24-20020a0565120b1800b0044a9a1fdcf6mr8517690lfu.4.1651493753494;
-        Mon, 02 May 2022 05:15:53 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.177])
-        by smtp.gmail.com with ESMTPSA id 7-20020a05651c128700b0024f3d1daebcsm1003262ljc.68.2022.05.02.05.15.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 05:15:53 -0700 (PDT)
-Message-ID: <354a0a5f-9ec3-a25c-3215-304eab2157bc@openvz.org>
-Date:   Mon, 2 May 2022 15:15:51 +0300
+        Mon, 2 May 2022 08:19:42 -0400
+X-Greylist: delayed 9429 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 02 May 2022 05:16:04 PDT
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8539915A1A;
+        Mon,  2 May 2022 05:16:04 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 609183FA5E;
+        Mon,  2 May 2022 12:16:00 +0000 (UTC)
+Message-ID: <f241698b-96ad-6268-217d-da64d8d7cb22@marcan.st>
+Date:   Mon, 2 May 2022 21:15:57 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-From:   Vasily Averin <vvs@openvz.org>
-Subject: [PATCH memcg v2] memcg: accounting for objects allocated for new
- netdevice
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     kernel@openvz.org, Florian Westphal <fw@strlen.de>,
-        linux-kernel@vger.kernel.org,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org,
-        netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        linux-fsdevel@vger.kernel.org
-References: <53613f02-75f2-0546-d84c-a5ed989327b6@openvz.org>
-Content-Language: en-US
-In-Reply-To: <53613f02-75f2-0546-d84c-a5ed989327b6@openvz.org>
+Subject: Re: [PATCH 3/3] PCI: apple: Add support for optional PWREN GPIO
+Content-Language: es-ES
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220502093832.32778-1-marcan@marcan.st>
+ <20220502093832.32778-4-marcan@marcan.st> <87ee1ci5u8.wl-maz@kernel.org>
+From:   Hector Martin <marcan@marcan.st>
+In-Reply-To: <87ee1ci5u8.wl-maz@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Creating a new netdevice allocates at least ~50Kb of memory for various
-kernel objects, but only ~5Kb of them are accounted to memcg. As a result,
-creating an unlimited number of netdevice inside a memcg-limited container
-does not fall within memcg restrictions, consumes a significant part
-of the host's memory, can cause global OOM and lead to random kills of
-host processes.
+On 02/05/2022 19.31, Marc Zyngier wrote:
+> On Mon, 02 May 2022 10:38:32 +0100,
+> Hector Martin <marcan@marcan.st> wrote:
+>>
+>> WiFi and SD card devices on M1 Macs have a separate power enable GPIO.
+>> Add support for this to the PCIe controller. This is modeled after how
+>> pcie-fu740 does it.
+> 
+> Please update the DT binding to reflect this as an optional property.
 
-The main consumers of non-accounted memory are:
- ~10Kb   80+ kernfs nodes
- ~6Kb    ipv6_add_dev() allocations
-  6Kb    __register_sysctl_table() allocations
-  4Kb    neigh_sysctl_register() allocations
-  4Kb    __devinet_sysctl_register() allocations
-  4Kb    __addrconf_sysctl_register() allocations
+That's a bit more involved than you might think, considering we aren't
+checking *any* properties in the root port child nodes right now :-)
 
-Accounting of these objects allows to increase the share of memcg-related
-memory up to 60-70% (~38Kb accounted vs ~54Kb total for dummy netdevice
-on typical VM with default Fedora 35 kernel) and this should be enough
-to somehow protect the host from misuse inside container.
+How's this?
 
-Other related objects are quite small and may not be taken into account
-to minimize the expected performance degradation.
+patternProperties:
+  "^pci@":
+    $ref: /schemas/pci/pci-bus.yaml#
+    type: object
+    description: A single PCI root port
 
-It should be separately mentonied ~300 bytes of percpu allocation
-of struct ipstats_mib in snmp6_alloc_dev(), on huge multi-cpu nodes
-it can become the main consumer of memory.
+    properties:
+      reg:
+        maxItems: 1
 
-This patch does not enables kernfs accounting as it affects
-other parts of the kernel and should be discussed separately.
-However, even without kernfs, this patch significantly improves the
-current situation and allows to take into account more than half
-of all netdevice allocations.
+      pwren-gpios:
+        description: Optional GPIO to power on the device
+        maxItems: 1
 
-Signed-off-by: Vasily Averin <vvs@openvz.org>
----
-v2: 1) kernfs accounting moved into separate patch, suggested by
-    Shakeel and mkoutny@.
-    2) in ipv6_add_dev() changed original "sizeof(struct inet6_dev)"
-    to "sizeof(*ndev)", according to checkpath.pl recommendation:
-      CHECK: Prefer kzalloc(sizeof(*ndev)...) over kzalloc(sizeof
-        (struct inet6_dev)...)
----
- fs/proc/proc_sysctl.c | 2 +-
- net/core/neighbour.c  | 2 +-
- net/ipv4/devinet.c    | 2 +-
- net/ipv6/addrconf.c   | 8 ++++----
- 4 files changed, 7 insertions(+), 7 deletions(-)
+    required:
+      - reset-gpios
+      - interrupt-controller
+      - "#interrupt-cells"
+      - interrupt-map-mask
+      - interrupt-map
 
-diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
-index 7d9cfc730bd4..df4604fea4f8 100644
---- a/fs/proc/proc_sysctl.c
-+++ b/fs/proc/proc_sysctl.c
-@@ -1333,7 +1333,7 @@ struct ctl_table_header *__register_sysctl_table(
- 		nr_entries++;
- 
- 	header = kzalloc(sizeof(struct ctl_table_header) +
--			 sizeof(struct ctl_node)*nr_entries, GFP_KERNEL);
-+			 sizeof(struct ctl_node)*nr_entries, GFP_KERNEL_ACCOUNT);
- 	if (!header)
- 		return NULL;
- 
-diff --git a/net/core/neighbour.c b/net/core/neighbour.c
-index ec0bf737b076..3dcda2a54f86 100644
---- a/net/core/neighbour.c
-+++ b/net/core/neighbour.c
-@@ -3728,7 +3728,7 @@ int neigh_sysctl_register(struct net_device *dev, struct neigh_parms *p,
- 	char neigh_path[ sizeof("net//neigh/") + IFNAMSIZ + IFNAMSIZ ];
- 	char *p_name;
- 
--	t = kmemdup(&neigh_sysctl_template, sizeof(*t), GFP_KERNEL);
-+	t = kmemdup(&neigh_sysctl_template, sizeof(*t), GFP_KERNEL_ACCOUNT);
- 	if (!t)
- 		goto err;
- 
-diff --git a/net/ipv4/devinet.c b/net/ipv4/devinet.c
-index fba2bffd65f7..47523fe5b891 100644
---- a/net/ipv4/devinet.c
-+++ b/net/ipv4/devinet.c
-@@ -2566,7 +2566,7 @@ static int __devinet_sysctl_register(struct net *net, char *dev_name,
- 	struct devinet_sysctl_table *t;
- 	char path[sizeof("net/ipv4/conf/") + IFNAMSIZ];
- 
--	t = kmemdup(&devinet_sysctl, sizeof(*t), GFP_KERNEL);
-+	t = kmemdup(&devinet_sysctl, sizeof(*t), GFP_KERNEL_ACCOUNT);
- 	if (!t)
- 		goto out;
- 
-diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
-index f908e2fd30b2..290e5e671774 100644
---- a/net/ipv6/addrconf.c
-+++ b/net/ipv6/addrconf.c
-@@ -342,7 +342,7 @@ static int snmp6_alloc_dev(struct inet6_dev *idev)
- {
- 	int i;
- 
--	idev->stats.ipv6 = alloc_percpu(struct ipstats_mib);
-+	idev->stats.ipv6 = alloc_percpu_gfp(struct ipstats_mib, GFP_KERNEL_ACCOUNT);
- 	if (!idev->stats.ipv6)
- 		goto err_ip;
- 
-@@ -358,7 +358,7 @@ static int snmp6_alloc_dev(struct inet6_dev *idev)
- 	if (!idev->stats.icmpv6dev)
- 		goto err_icmp;
- 	idev->stats.icmpv6msgdev = kzalloc(sizeof(struct icmpv6msg_mib_device),
--					   GFP_KERNEL);
-+					   GFP_KERNEL_ACCOUNT);
- 	if (!idev->stats.icmpv6msgdev)
- 		goto err_icmpmsg;
- 
-@@ -382,7 +382,7 @@ static struct inet6_dev *ipv6_add_dev(struct net_device *dev)
- 	if (dev->mtu < IPV6_MIN_MTU)
- 		return ERR_PTR(-EINVAL);
- 
--	ndev = kzalloc(sizeof(struct inet6_dev), GFP_KERNEL);
-+	ndev = kzalloc(sizeof(*ndev), GFP_KERNEL_ACCOUNT);
- 	if (!ndev)
- 		return ERR_PTR(err);
- 
-@@ -7029,7 +7029,7 @@ static int __addrconf_sysctl_register(struct net *net, char *dev_name,
- 	struct ctl_table *table;
- 	char path[sizeof("net/ipv6/conf/") + IFNAMSIZ];
- 
--	table = kmemdup(addrconf_sysctl, sizeof(addrconf_sysctl), GFP_KERNEL);
-+	table = kmemdup(addrconf_sysctl, sizeof(addrconf_sysctl), GFP_KERNEL_ACCOUNT);
- 	if (!table)
- 		goto out;
- 
 -- 
-2.31.1
-
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

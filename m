@@ -2,146 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9405B5170D7
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 15:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F505170DC
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 15:46:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385411AbiEBNrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 09:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53120 "EHLO
+        id S232825AbiEBNt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 09:49:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385431AbiEBNra (ORCPT
+        with ESMTP id S1385518AbiEBNtU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 09:47:30 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0410E1276F;
-        Mon,  2 May 2022 06:43:57 -0700 (PDT)
+        Mon, 2 May 2022 09:49:20 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0786512614;
+        Mon,  2 May 2022 06:45:52 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-ed9ac77cbbso3710387fac.1;
+        Mon, 02 May 2022 06:45:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651499038; x=1683035038;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=TxRhC+xkcMIDEeWKsFRO7rKwaJaujGtLJjq0HY5brGs=;
-  b=GWPgJ7Xf21MWoijEsUgftnmCfRLduJvmg31q1iQeuuDrTfrLUXBqQMyp
-   V022WtMEgR38v2PN7yOIcbvVJW8i4pL5vU27ywQo31OjN8kOc4peUqzss
-   jaQWC9j26b87H0P4X1aqxQ+EqYvNQu61jir+nMJIDertambEgVP2r5gey
-   U=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 02 May 2022 06:43:57 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 06:43:56 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 2 May 2022 06:43:56 -0700
-Received: from [10.216.10.218] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 2 May 2022
- 06:43:52 -0700
-Message-ID: <0243675f-2083-f5cc-5570-d880889daa8b@quicinc.com>
-Date:   Mon, 2 May 2022 19:13:49 +0530
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=KlkPJd9IPwI3xuM5T+5Eqx8x2n4AENEmfcA0g1h3kb8=;
+        b=Y9Ge8Zh0P8Nn7vrmdfyiKMNSXTRSp9YFHQZim+UHkCEFcfwdVdW7Vb8ezfueGEUcHa
+         B1aAFddnxIPGLjcRzkP7XtGk2dlF8RTkPlKJaCYmt9O1naej9QSykekHptyii+fwZRQy
+         l1EWiBVCqbJWRkZ4Klnvtx0ozhx62AmU09qkR9Ola2hClwQjEQZyfYh6q/uEpQuAyrm/
+         YDfjUjrwscX61c0ALQUvQcDFIU5370j4EfVKP7iQobmAodMzzuNMPCmW4S2LWhgAbo8X
+         VwWzk9s3kNbfC3hUgXGX/2R2pel9rOhniwQEMnG5Tpm9jRGvRtVuWVtt1ofUS4hLNBNY
+         P3Eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=KlkPJd9IPwI3xuM5T+5Eqx8x2n4AENEmfcA0g1h3kb8=;
+        b=GlaqFoK98nXaEEYvyCg7kUV2gvAIhFDe7jvAcGk5OPws8WwO7CX7y7roSQPVnZVebg
+         80brvven4c0dIYkmGfxyCDAmYaEayqTQRgjJRVU+06XTVWojlpFudpuyNQiwAqqIKLMG
+         nz0hSosO/BoWUL2TayosZULy7xhUG4rM3PjX7C9omb0ghmO5KsFMmwabF/pHkjP7uwee
+         emPp6qXPpnRkyk9Io72nKjmhAhcmK1vxKdbKvjjTOVcCjzgPzD/m8mIIUbWM2gUrA0hL
+         LS627xsLm+EnZyCz2hk4LxvI/7LA6UjE7jsntNZXV8DWnhMQ09KU+KNAFgZQYyNn9A2N
+         6c1w==
+X-Gm-Message-State: AOAM531tY60jo5iauU6oCT2LzUvclGVdGN4j9DcdeIMxf9NkYrvNj747
+        F+dw6UGdetW9/GvaGgmNo1t/1naRFi4rZ2G5mZs=
+X-Google-Smtp-Source: ABdhPJx5rwU6X5NnnuNmcAS5EItDn5UYn1+bETi6E6Je7tDTBL6rzvnM5hyy2El994VvmDm+qlbjgH1Ln9bev9p14BE=
+X-Received: by 2002:a05:6870:5b8a:b0:e6:589e:201d with SMTP id
+ em10-20020a0568705b8a00b000e6589e201dmr6394064oab.71.1651499145960; Mon, 02
+ May 2022 06:45:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v12 4/4] arm64: dts: qcom: sc7280-herobrine: Add lpi
- pinmux properties for CRD 3.0/3.1
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        <quic_rohkumar@quicinc.com>,
-        "Srinivas Kandagatla" <srinivas.kandagatla@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Judy Hsiao <judyhsiao@chromium.org>,
-        "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
-References: <1651079383-7665-1-git-send-email-quic_srivasam@quicinc.com>
- <1651079383-7665-5-git-send-email-quic_srivasam@quicinc.com>
- <YmsrB6Q89II5w1+9@google.com>
- <CAD=FV=XxeZsiOVVBDK_vmx0nhT7roB2FqcaPXsH3+jzTHFXMxw@mail.gmail.com>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <CAD=FV=XxeZsiOVVBDK_vmx0nhT7roB2FqcaPXsH3+jzTHFXMxw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220125143304.34628-1-cgzones@googlemail.com>
+ <CAHC9VhSdGeZ9x-0Hvk9mE=YMXbpk-tC5Ek+uGFGq5U+51qjChw@mail.gmail.com>
+ <CAJ2a_DeAUcGTGm_fk8viVbeFXr6FLrJ-oLw-abwFND6Kv0u0gQ@mail.gmail.com> <CAHC9VhRRBrLVtvmbJSTZ7fOkD-8AN4iM0WRmeL4ND001d3viJg@mail.gmail.com>
+In-Reply-To: <CAHC9VhRRBrLVtvmbJSTZ7fOkD-8AN4iM0WRmeL4ND001d3viJg@mail.gmail.com>
+From:   =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Date:   Mon, 2 May 2022 15:45:35 +0200
+Message-ID: <CAJ2a_DeT6AG0jp4gTdsEy7nh=s6cLR7QCsYXAz2+3vsdRKxddg@mail.gmail.com>
+Subject: Re: [RFC PATCH] mm: create security context for memfd_secret inodes
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     SElinux list <selinux@vger.kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-security-module@vger.kernel.org,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 17 Feb 2022 at 23:32, Paul Moore <paul@paul-moore.com> wrote:
+>
+> On Thu, Feb 17, 2022 at 9:24 AM Christian G=C3=B6ttsche
+> <cgzones@googlemail.com> wrote:
+> > On Thu, 27 Jan 2022 at 00:01, Paul Moore <paul@paul-moore.com> wrote:
+> > > On Tue, Jan 25, 2022 at 9:33 AM Christian G=C3=B6ttsche
+> > > <cgzones@googlemail.com> wrote:
+> > > >
+> > > > Create a security context for the inodes created by memfd_secret(2)=
+ via
+> > > > the LSM hook inode_init_security_anon to allow a fine grained contr=
+ol.
+> > > > As secret memory areas can affect hibernation and have a global sha=
+red
+> > > > limit access control might be desirable.
+> > > >
+> > > > Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> > > > ---
+> > > > An alternative way of checking memfd_secret(2) is to create a new L=
+SM
+> > > > hook and e.g. for SELinux check via a new process class permission.
+> > > > ---
+> > > >  mm/secretmem.c | 9 +++++++++
+> > > >  1 file changed, 9 insertions(+)
+> > >
+> > > This seems reasonable to me, and I like the idea of labeling the anon
+> > > inode as opposed to creating a new set of LSM hooks.  If we want to
+> > > apply access control policy to the memfd_secret() fds we are going to
+> > > need to attach some sort of LSM state to the inode, we might as well
+> > > use the mechanism we already have instead of inventing another one.
+> >
+> > Any further comments (on design or implementation)?
+> >
+> > Should I resend a non-rfc?
+>
+> I personally would really like to see a selinux-testsuite for this so
+> that we can verify it works not just now but in the future too.  I
+> think having a test would also help demonstrate the usefulness of the
+> additional LSM controls.
+>
 
-On 4/29/2022 9:40 PM, Doug Anderson wrote:
-Thanks for your time Doug Anderson!!!
-> Hi,
+Any comments (especially from the mm people)?
+
+Draft SELinux testsuite patch:
+https://github.com/SELinuxProject/selinux-testsuite/pull/80
+
+> > One naming question:
+> > Should the anonymous inode class be named "[secretmem]", like
+> > "[userfaultfd]", or "[secret_mem]" similar to "[io_uring]"?
 >
-> On Thu, Apr 28, 2022 at 5:02 PM Matthias Kaehlcke <mka@chromium.org> wrote:
->> On Wed, Apr 27, 2022 at 10:39:43PM +0530, Srinivasa Rao Mandadapu wrote:
->>> Add LPASS LPI pinctrl properties, which are required for Audio
->>> functionality on herobrine based platforms of rev5+
->>> (aka CRD 3.0/3.1) boards.
->>>
->>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->>> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->>> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->> I'm not super firm in pinctrl territory, a few maybe silly questions
->> below.
->>
->>>   arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts | 84 +++++++++++++++++++++++
->>>   1 file changed, 84 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
->>> index deaea3a..dfc42df 100644
->>> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
->>> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
->>> @@ -111,6 +111,90 @@ ap_ts_pen_1v8: &i2c13 {
->>>    * - If a pin is not hooked up on Qcard, it gets no name.
->>>    */
->>>
->>> +&lpass_dmic01 {
->>> +     clk {
->>> +             drive-strength = <8>;
->>> +     };
-> Ugh, I've been distracted and I hadn't realized we were back to the
-> two-level syntax. Definitely not my favorite for all the reasons I
-> talked about [1]. I guess you took Bjorn's silence to my response to
-> mean that you should switch back to this way? :(
+> The pr_fmt() string in mm/secretmem.c uses "secretmem" so I would
+> suggest sticking with "[secretmem]", although that is question best
+> answered by the secretmem maintainer.
 >
-> Bjorn: can you clarify?
->
-> [1] https://lore.kernel.org/r/CAD=FV=VicFiX6QkBksZs1KLwJ5x4eCte6j5RWOBPN+WwiXm2Cw@mail.gmail.com/
-Actually Your comment addressed for MI2S pin control nodes, but missed 
-here. Will address same here.
->>> +};
->>> +
->>> +&lpass_dmic01_sleep {
->>> +     clk {
->>> +             drive-strength = <2>;
->> Does the drive strength really matter in the sleep state, is the SoC actively
->> driving the pin?
-> My understanding is that if a pin is left as an output in sleep state
-> that there is a slight benefit to switching it to drive-strength 2.
-Okay. Will keep this setting as it is. Please correct me if my 
-understanding is wrong.
->
->
->>> +             bias-disable;
->> What should this be in active/default state? If I understand correctly
->> after a transition from 'sleep' to 'default' this setting will remain,
->> since the default config doesn't specify a setting for bias.
-> Your understanding matches mine but I haven't tested it and I remember
-> sometimes being surprised in this corner of pinmux before. I think
-> it's better to put the bias in the default state if it should be that
-> way all the time, or have a bias in both the default and sleep state
-> if they need to be different.
-Okay. Will update accordingly.
+> --
+> paul-moore.com

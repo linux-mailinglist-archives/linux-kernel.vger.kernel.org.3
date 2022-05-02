@@ -2,76 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B2B8517933
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 23:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DC04517930
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 23:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387703AbiEBVjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 17:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35554 "EHLO
+        id S1387755AbiEBVjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 17:39:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387708AbiEBViy (ORCPT
+        with ESMTP id S1387727AbiEBVjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 17:38:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15712AEA;
-        Mon,  2 May 2022 14:35:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C3F2610A2;
-        Mon,  2 May 2022 21:35:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AE92C385A4;
-        Mon,  2 May 2022 21:35:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651527323;
-        bh=JQlhWUdt5hFLtKr37+zH2vvNvGjSiMJ+6VapbGrJxNM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Je8Assa0vA995iDge5hh7xALu5lsOaY8MZ4ThHq1cRlAlZB4JevmLZmWfFEoit9RJ
-         BneRF1QGmgFOs2/eJpVdv5l17wA2HzHGFEiEvjA39yN7WZoegTsO8fRZ5JktbFjTK0
-         aA3Sjusbyh0bHgHLRoHUMXS4F6GYDDLy9AyN0D+C08d/pKo1fYq9pC3Cbqns0OXMRy
-         sRmICZB/I1quQvKhAPNcWVZ5vf0csauMY9UOz9Skui7G9iahKmGiZlA3MZECWX99Js
-         88suibN4r7kQp4h3qoe0W5HGAdE+wkCsX7vuvg5RAITstv3vbg9gi6R3lrgFsGPWSZ
-         HZ9MIuefpRcNA==
-Date:   Mon, 2 May 2022 14:35:22 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     netdev@vger.kernel.org, Stefan Hajnoczi <stefanha@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vilas R K <vilas.r.k@intel.com>,
-        linux-kernel@vger.kernel.org, "Michael S. Tsirkin" <mst@redhat.com>
-Subject: Re: [PATCH net-next 0/2] vsock/virtio: add support for device
- suspend/resume
-Message-ID: <20220502143522.2ea422c9@kernel.org>
-In-Reply-To: <20220428132241.152679-1-sgarzare@redhat.com>
-References: <20220428132241.152679-1-sgarzare@redhat.com>
+        Mon, 2 May 2022 17:39:03 -0400
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E728564D6;
+        Mon,  2 May 2022 14:35:33 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-e9027efe6aso15505227fac.10;
+        Mon, 02 May 2022 14:35:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NT3TCOHAgj+vdyt2sEgp7l3FsjbmObj02EKHyM2g53k=;
+        b=K3X14Ia8+PYsae57kHz1c4CtmWvE/7KuGZNpCzxDa0x4Y8jmL3R7Bd0wSAcsZcO3qj
+         68ygmRvb5xf89QekgX8wQ1r+IuiGgubrU1ZaerPcWIRsauzQ88AFXfjDzCcJQ+oU9i9Z
+         qB0+sZDyigrBqh5vnwtNYnAr6FZzGQEtamiYShhsUF1B3/LkWw1UHtbccDLBNQJk2jjX
+         dyxbZI14g35kN3OfB+FQZ1kGLwipH2t43doeTWwOJ3QmSV+G99E2ssWcNQJ7G5+hJUoU
+         Rzr8ondXC/rWE5JF4RRuM2x/7rhDXHWR3YMqO3yNDpHnzGV2cKseLB6QynKRrz6bq+bO
+         O5TQ==
+X-Gm-Message-State: AOAM5307AqEEJeHBjQHVWztJKOOf88NFOR/TO71OTvsip99K4PilAKWp
+        jNXdmqYtpGMsNXrA0Fp0ag==
+X-Google-Smtp-Source: ABdhPJylq3vUy3dAJvMPmpgnVj4BH7chXBbaFIQei9aSlly/yv1cZ/9zNHEEasLZ4ywd53cUfQWseQ==
+X-Received: by 2002:a05:6870:648d:b0:ec:b32d:3e1b with SMTP id cz13-20020a056870648d00b000ecb32d3e1bmr509121oab.283.1651527333236;
+        Mon, 02 May 2022 14:35:33 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w5-20020a9d70c5000000b0060603221268sm3260916otj.56.2022.05.02.14.35.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 May 2022 14:35:32 -0700 (PDT)
+Received: (nullmailer pid 1799513 invoked by uid 1000);
+        Mon, 02 May 2022 21:35:31 -0000
+Date:   Mon, 2 May 2022 16:35:31 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     icenowy@outlook.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Icenowy Zheng <icenowy@aosc.io>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 09/12] dt-bindings: arm: sunxi: add compatible strings
+ for Sipeed MaixSense
+Message-ID: <YnBOoxkKdKLwErxY@robh.at.kernel.org>
+References: <20220422140902.1058101-1-icenowy@aosc.io>
+ <BYAPR20MB24723FAF3BE29BB7CD8341CCBCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR20MB24723FAF3BE29BB7CD8341CCBCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Apr 2022 15:22:39 +0200 Stefano Garzarella wrote:
-> Vilas reported that virtio-vsock no longer worked properly after
-> suspend/resume (echo mem >/sys/power/state).
-> It was impossible to connect to the host and vice versa.
+On Fri, 22 Apr 2022 23:41:12 +0800, icenowy@outlook.com wrote:
+> From: Icenowy Zheng <icenowy@aosc.io>
 > 
-> Indeed, the support has never been implemented.
+> Sipeed MaixSense is an Allwinner R329 development kit based on Maix IIA
+> SoM.
 > 
-> This series implement .freeze and .restore callbacks of struct virtio_driver
-> to support device suspend/resume.
+> Add compatible strings for it.
 > 
-> The first patch factors our the code to initialize and delete VQs.
-> The second patch uses that code to support device suspend/resume.
+> Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
+> ---
+>  Documentation/devicetree/bindings/arm/sunxi.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
 
-This set got a "Not Applicable" in patchwork, I'm not sure why.
-Michael I presume net-next is fine? Can we get an Ack?
+Acked-by: Rob Herring <robh@kernel.org>

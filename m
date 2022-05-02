@@ -2,107 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABFFB5174D4
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 006B55174B1
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357593AbiEBQse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 12:48:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56776 "EHLO
+        id S232817AbiEBQqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 12:46:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386441AbiEBQsD (ORCPT
+        with ESMTP id S1386334AbiEBQqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 12:48:03 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA53B10FEA;
-        Mon,  2 May 2022 09:44:27 -0700 (PDT)
+        Mon, 2 May 2022 12:46:49 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F72A1A8
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 09:43:19 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-e5ca5c580fso14787719fac.3
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 09:43:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651509868; x=1683045868;
-  h=from:to:cc:subject:date:message-id;
-  bh=/hBP51dakvyFvptK3SaVoqwhUb9b+sUY7FBEgdyP/G0=;
-  b=he2bz44j29Gw2C0tHNXGGlhlU+u6i0iN3aeUwULoDYFqlWO0FYXPnFaO
-   BKeROB7G3cDytkmTaEf2clhUPaM+oYXUKPk/+lGCeBv+YXB3KwFKTFJDq
-   MoQ2lstz006XEq+Ly4J3mAW9gVHvNKVdP35ofGq8pqky7QhwSNHkDaYHZ
-   A=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 02 May 2022 09:44:27 -0700
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 02 May 2022 09:44:25 -0700
-X-QCInternal: smtphost
-Received: from vpolimer-linux.qualcomm.com ([10.204.67.235])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 02 May 2022 22:14:11 +0530
-Received: by vpolimer-linux.qualcomm.com (Postfix, from userid 463814)
-        id 8727E28A6; Mon,  2 May 2022 22:14:09 +0530 (IST)
-From:   Vinod Polimera <quic_vpolimer@quicinc.com>
-To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
-Cc:     Vinod Polimera <quic_vpolimer@quicinc.com>,
-        linux-kernel@vger.kernel.org, robdclark@gmail.com,
-        dianders@chromium.org, swboyd@chromium.org,
-        quic_kalyant@quicinc.com, quic_abhinavk@quicinc.com,
-        dmitry.baryshkov@linaro.org
-Subject: [PATCH v2] drm/msm/disp/dpu1: avoid clearing hw interrupts if hw_intr is null during drm uninit
-Date:   Mon,  2 May 2022 22:14:06 +0530
-Message-Id: <1651509846-4842-1-git-send-email-quic_vpolimer@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=h+aAmktrhHjAvWVorgG3HkK53F/Z1E5yTUMK0PKA93c=;
+        b=jCqteN1q3mTZAX7ZLV7IR9r4xFQBqwSuYHj5TiDLt0Ibat8Bdh1Zq9Cse71ct/arPp
+         qndAtu1y3HImmRCGMKiYysaHdmd9ctLYyw+zB5IIX34rOv44uIaW1oQ4AUE1mlM/EtTP
+         gGnyLn/fN65RNc4KrMS1h54pCq9x1rwt5yo159Idhjn0Wd0Q44b0QBfnbn+yva2pWvEp
+         M6+hzRxjHBhhibqheEP2WNdSZNxhz7wAiXdBwQ/zG2ypIhQbGCOcVSZz7H+Ipd6ZXTDm
+         VxoTqsNXS4dQXXzsLv01dKuEMcyUylfGOYxAqDAdGbRal5ChLubmbZoeHmSX6cLIWEt8
+         7mAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=h+aAmktrhHjAvWVorgG3HkK53F/Z1E5yTUMK0PKA93c=;
+        b=XjR5DI1UxIOyP4ZBzrDtio/nSliqme2P/eKKDtESFpN8wSC29P1c4re//iVVRKNw9/
+         sO9rjpQYD1z2bPi9Le9FHqKil4e5SXS9pMUe6vEP6PQjK6ulRyN75K/B++EjnJRwNyK5
+         wsqFp1o0H4ISPF7SCNO+/FARjOHNr5n+dOUI1SRZG5im4Q64DFChYCUC+WMfC1U4nk5U
+         TWHA74E0skHkbSlhXQiFAonywEtr0OoQLysn2cCXr70fHf3uIXb9P8Jmq65MVOh9bkT/
+         ySla4IFdUJyj/UkjrttDdfzXHdVN1dICJ2BjlWb0yhv/0gDJ3HbQniJ6dFNhDx2gyd41
+         PT1A==
+X-Gm-Message-State: AOAM532iHdHbBpONMcd79cymhxIp7XMU9FYCBkRCdgTSVkpaE7BpfbAA
+        gUT08BVwVi5YTOJvFcU/BYXb/w==
+X-Google-Smtp-Source: ABdhPJylGLGMM5RJS9kZI/ssSmqpYEetSRGQTQyROGceaGmcbZtqhrS/OxqIn22r+my6dGgm5Pv8qw==
+X-Received: by 2002:a05:6871:92:b0:d9:abe2:936e with SMTP id u18-20020a056871009200b000d9abe2936emr4933689oaa.83.1651509799097;
+        Mon, 02 May 2022 09:43:19 -0700 (PDT)
+Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id dx4-20020a056870768400b000e686d13897sm6012889oab.49.2022.05.02.09.43.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 May 2022 09:43:18 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] thermal/drivers/qcom/lmh: Add sc8180x compatible
+Date:   Mon,  2 May 2022 09:45:03 -0700
+Message-Id: <20220502164504.3972938-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If edp modeset init is failed due to panel being not ready and
-probe defers during drm bind, avoid clearing irqs and derefernce
-hw_intr when hw_intr is null.
+The LMh instances in the Qualcomm SC8180X platform looks to behave
+similar to those in SM8150, add additional compatibles to allow
+platform specific behavior to be added if needed.
 
-BUG: Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-
-Call trace:
- dpu_core_irq_uninstall+0x50/0xb0
- dpu_irq_uninstall+0x18/0x24
- msm_drm_uninit+0xd8/0x16c
- msm_drm_bind+0x580/0x5fc
- try_to_bring_up_master+0x168/0x1c0
- __component_add+0xb4/0x178
- component_add+0x1c/0x28
- dp_display_probe+0x38c/0x400
- platform_probe+0xb0/0xd0
- really_probe+0xcc/0x2c8
- __driver_probe_device+0xbc/0xe8
- driver_probe_device+0x48/0xf0
- __device_attach_driver+0xa0/0xc8
- bus_for_each_drv+0x8c/0xd8
- __device_attach+0xc4/0x150
- device_initial_probe+0x1c/0x28
-
-Changes in V2:
-- Update commit message and coreect fixes tag.
-
-Fixes: f25f656608e3 ("drm/msm/dpu: merge struct dpu_irq into struct dpu_hw_intr")
-Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/thermal/qcom/lmh.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
-index c515b7c..ab28577 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
-@@ -599,6 +599,9 @@ void dpu_core_irq_uninstall(struct dpu_kms *dpu_kms)
- {
- 	int i;
+diff --git a/drivers/thermal/qcom/lmh.c b/drivers/thermal/qcom/lmh.c
+index c7f91cbdccc7..d3d9b9fa49e8 100644
+--- a/drivers/thermal/qcom/lmh.c
++++ b/drivers/thermal/qcom/lmh.c
+@@ -220,6 +220,7 @@ static int lmh_probe(struct platform_device *pdev)
+ }
  
-+	if (!dpu_kms->hw_intr)
-+		return;
-+
- 	pm_runtime_get_sync(&dpu_kms->pdev->dev);
- 	for (i = 0; i < dpu_kms->hw_intr->total_irqs; i++)
- 		if (!list_empty(&dpu_kms->hw_intr->irq_cb_tbl[i]))
+ static const struct of_device_id lmh_table[] = {
++	{ .compatible = "qcom,sc8180x-lmh", },
+ 	{ .compatible = "qcom,sdm845-lmh", .data = (void *)LMH_ENABLE_ALGOS},
+ 	{ .compatible = "qcom,sm8150-lmh", },
+ 	{}
 -- 
-2.7.4
+2.35.1
 

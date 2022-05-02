@@ -2,170 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7775517415
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:17:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5924E517417
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:18:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386266AbiEBQU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 12:20:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34632 "EHLO
+        id S1386286AbiEBQVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 12:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382720AbiEBQUv (ORCPT
+        with ESMTP id S1355099AbiEBQVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 12:20:51 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59FCE0C4
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 09:17:20 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1555C474;
-        Mon,  2 May 2022 18:17:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1651508239;
-        bh=c+lFCqqrxYQkBT4Dk1RtT/1nSh3E7EO4tZr2yzZYmYI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E6VHAMn3IuCnmDyXupcm1VxxL/fCaJsfOpOk0BF0ok1Be+zl9cuHuaV22sUgCMHKI
-         PMCTsRA/pWv3s+s2mjByj5GDWvJGUkQ+3/NZp/TYckr7YjPguUgoH4gG3sL0jj5GVU
-         vSiid340Eer6gfojKpc20F0j1AM1OLozPtI9WYA4=
-Date:   Mon, 2 May 2022 19:17:18 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 3/3] drm: Allow simpledrm to setup its emulated FB as
- firmware provided
-Message-ID: <YnAEDlikr+d8cvy4@pendragon.ideasonboard.com>
-References: <20220502153900.408522-1-javierm@redhat.com>
- <20220502153900.408522-4-javierm@redhat.com>
+        Mon, 2 May 2022 12:21:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14ADE0A7
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 09:18:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 95CB6612CE
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 16:18:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65977C385A4;
+        Mon,  2 May 2022 16:18:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651508294;
+        bh=M6o+XxaxmZ2PAVL435U0BCsvOvNrKswGfCIA9dmiNo8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=W7vn5MSZNXpDr3O2iJhQUUj/gESuFXrOrdS0BNi1WkLYksKH+TvxNX+7Av0qnsjgn
+         JgrQrFQY032Tcm09Eb+L+/4r1NAP9BtNYIgBJWjcKtOG2qqYeVpsEiatJsfqEfDGg/
+         Lks+1xoHZ7cifriyBOIg36JtCqdcAiporuo+Mnnl/+0s7VvpLFOVzHbdIfYp/XHi1O
+         Jj1DFF0ybIZhxxwXA9yYJRCsptVZW2aMeZtzB8FSMd7lEmFJOQt8hQ9bwaVffPBRc8
+         xmJC86N28swQ6ABtsEBDOn9iL9Z80D0PSR+j845VLogYADuVMb/n1BZAOrCxm3zgRY
+         MpUCZzYXj7S4Q==
+From:   SeongJae Park <sj@kernel.org>
+To:     Rongwei Wang <rongwei.wang@linux.alibaba.com>
+Cc:     sj@kernel.org, akpm@linux-foundation.org, linux-damon@amazon.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] mm/damon/sysfs: support fixed virtual address ranges monitoring
+Date:   Mon,  2 May 2022 16:18:10 +0000
+Message-Id: <20220502161810.134199-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <80586516-d783-8f81-f6d7-338d9af7a3e6@linux.alibaba.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220502153900.408522-4-javierm@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Javier,
+Hi Rongwei,
 
-Thank you for the patch.
+On Mon, 2 May 2022 15:56:58 +0800 Rongwei Wang <rongwei.wang@linux.alibaba.com> wrote:
 
-On Mon, May 02, 2022 at 05:39:00PM +0200, Javier Martinez Canillas wrote:
-> Indicate to fbdev subsystem that the registered framebuffer is provided by
-> the system firmware, so that it can handle accordingly. For example, would
-> unregister the FB devices if asked to remove the conflicting framebuffers.
+> Hi, SeongJae
 > 
-> Add a new DRM_FB_FW field to drm_fbdev_generic_setup() options parameter.
-> Drivers can use this to indicate the FB helper initialization that the FB
-> registered is provided by the firmware, so it can be configured as such.
+> I had read and tested your patchset these days. It works.
+
+Thank you for the tests! :D
+
+> It seems that these patches only fix the issue about init_regions in 
+> DAMON-sysfs, but not fix in DAMON-dbgfs? maybe I missing something.
 > 
-> Suggested-by: Thomas Zimmermann <tzimmermann@suse.de>
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
-> ---
+> If so, do you have any plan to fix this bug in dbgfs? Actually, what I 
+> want to say is that I ready a patch for solving the init_regions related 
+> bug in dbgfs these days. I not sure if you're interested in it.
+
+The plan is to freeze DAMON debugfs interface after DAMON sysfs interface is
+merged, and then entirely remove it after next LTS kernel.  It was mentioned in
+the sysfs interface patchset as below:
+https://lore.kernel.org/linux-mm/20220228081314.5770-1-sj@kernel.org/
+
+    Future Plan of DAMON_DBGFS Deprecation
+    ======================================
+    
+    Once this patchset is merged, DAMON_DBGFS development will be frozen.  That is,
+    we will maintain it to work as is now so that no users will be break.  But, it
+    will not be extended to provide any new feature of DAMON.  The support will be
+    continued only until next LTS release.  After that, we will drop DAMON_DBGFS.
+
+The plan was also shared in the kernel doc as below[1], but maybe it was too
+small to read, or ambiguous.  Sorry if it was the case.
+
+    debugfs interface. This is almost identical to sysfs interface. This will
+    be _removed_ after next LTS kernel is released, so users should move to the
+    sysfs interface.
+
+[1] https://docs.kernel.org/admin-guide/mm/damon/usage.html#debugfs-interface
+
+So, I don't have a big interest at extending DAMON debugfs for fvaddr.  That
+said, of course we could discuss more if you really need it.  If so, please let
+me know.
+
+
+Thanks,
+SJ
+
 > 
-> (no changes since v1)
+> Best Regards,
+> Rongwei
 > 
->  drivers/gpu/drm/drm_fb_helper.c  |  9 +++++++++
->  drivers/gpu/drm/tiny/simpledrm.c |  2 +-
->  include/drm/drm_fb_helper.h      | 10 ++++++++++
->  3 files changed, 20 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
-> index fd0084ad77c3..775e47c5de1f 100644
-> --- a/drivers/gpu/drm/drm_fb_helper.c
-> +++ b/drivers/gpu/drm/drm_fb_helper.c
-> @@ -1891,6 +1891,10 @@ __drm_fb_helper_initial_config_and_unlock(struct drm_fb_helper *fb_helper,
->  		/* don't leak any physical addresses to userspace */
->  		info->flags |= FBINFO_HIDE_SMEM_START;
->  
-> +	/* Indicate that the framebuffer is provided by the firmware */
-> +	if (fb_helper->firmware)
-> +		info->flags |= FBINFO_MISC_FIRMWARE;
-> +
->  	/* Need to drop locks to avoid recursive deadlock in
->  	 * register_framebuffer. This is ok because the only thing left to do is
->  	 * register the fbdev emulation instance in kernel_fb_helper_list. */
-> @@ -2512,6 +2516,8 @@ static const struct drm_client_funcs drm_fbdev_client_funcs = {
->   *
->   * * DRM_FB_BPP: bits per pixel for the device. If the field is not set,
->   *   @dev->mode_config.preferred_depth is used instead.
-> + * * DRM_FB_FW: if the framebuffer for the device is provided by the
-> + *   system firmware.
->   *
->   * This function sets up generic fbdev emulation for drivers that supports
->   * dumb buffers with a virtual address and that can be mmap'ed.
-> @@ -2538,6 +2544,7 @@ void drm_fbdev_generic_setup(struct drm_device *dev, unsigned int options)
->  {
->  	struct drm_fb_helper *fb_helper;
->  	unsigned int preferred_bpp = DRM_FB_GET_OPTION(DRM_FB_BPP, options);
-> +	bool firmware = DRM_FB_GET_OPTION(DRM_FB_FW, options);
->  	int ret;
->  
->  	drm_WARN(dev, !dev->registered, "Device has not been registered.\n");
-> @@ -2570,6 +2577,8 @@ void drm_fbdev_generic_setup(struct drm_device *dev, unsigned int options)
->  		preferred_bpp = 32;
->  	fb_helper->preferred_bpp = preferred_bpp;
->  
-> +	fb_helper->firmware = firmware;
-
-I'd get rid of the local variable and write
-
-	fb_helper->firmware = DRM_FB_GET_OPTION(DRM_FB_FW, options);
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> +
->  	ret = drm_fbdev_client_hotplug(&fb_helper->client);
->  	if (ret)
->  		drm_dbg_kms(dev, "client hotplug ret=%d\n", ret);
-> diff --git a/drivers/gpu/drm/tiny/simpledrm.c b/drivers/gpu/drm/tiny/simpledrm.c
-> index f5b8e864a5cd..5dcc21ea6180 100644
-> --- a/drivers/gpu/drm/tiny/simpledrm.c
-> +++ b/drivers/gpu/drm/tiny/simpledrm.c
-> @@ -901,7 +901,7 @@ static int simpledrm_probe(struct platform_device *pdev)
->  	if (ret)
->  		return ret;
->  
-> -	drm_fbdev_generic_setup(dev, 0);
-> +	drm_fbdev_generic_setup(dev, DRM_FB_SET_OPTION(DRM_FB_FW, 1));
->  
->  	return 0;
->  }
-> diff --git a/include/drm/drm_fb_helper.h b/include/drm/drm_fb_helper.h
-> index 740f87560102..77a72d55308d 100644
-> --- a/include/drm/drm_fb_helper.h
-> +++ b/include/drm/drm_fb_helper.h
-> @@ -44,6 +44,7 @@ enum mode_set_atomic {
->  };
->  
->  #define DRM_FB_BPP_MASK GENMASK(7, 0)
-> +#define DRM_FB_FW_MASK GENMASK(8, 8)
->  
->  /* Using the GNU statement expression extension */
->  #define DRM_FB_OPTION(option, value)				\
-> @@ -197,6 +198,15 @@ struct drm_fb_helper {
->  	 * See also: @deferred_setup
->  	 */
->  	int preferred_bpp;
-> +
-> +	/**
-> +	 * @firmware:
-> +	 *
-> +	 * Set if the driver indicates to the FB helper initialization that the
-> +	 * framebuffer for the device being registered is provided by firmware,
-> +	 * so that it can pass this on when registering the framebuffer device.
-> +	 */
-> +	bool firmware;
->  };
->  
->  static inline struct drm_fb_helper *
-
--- 
-Regards,
-
-Laurent Pinchart

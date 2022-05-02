@@ -2,129 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0414F516A56
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 07:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53495516A62
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 07:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383310AbiEBFnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 01:43:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40582 "EHLO
+        id S1383362AbiEBFp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 01:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230340AbiEBFmy (ORCPT
+        with ESMTP id S1349296AbiEBFpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 01:42:54 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2043.outbound.protection.outlook.com [40.107.237.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3288722B22
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 22:39:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=h9QxIZZo9wautjlH3BkpfsKTByyCSjLSbl7De3VQqKfR+3F81SHjaS8TT/+Y2Xa34e9e4RQONRe7y2wUNbkmJE7py+GgZcFWV2OUc+RHB7nWBh5CDnrs2W3UvAE3B1cjbclq4X2dcv5+28qkMdP2F92fOUgxa4sL65Wt74enDYjSmnh8mdcSURBSkuOoVJjj6e09M3F9/ymABjsWpREhmirczPCQ1m4PtK1Gfjly0iITRRzFOkTtujKeQOq0WG2k3sqTXUSVaLBn6TyYvladO6o16M0gcZVaGVcQ/8zz5MM8X6x+DPwwMXpGLi49k/gohI6BS+/xkA/7QKWgMV7zzQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3yVuZRxBTQ0B288zOTbYg7fZ/XFPIffQAylFLWpZNjU=;
- b=IHO+k3+Yq0X3VkdGIePqeDhDx7G6NlkSEj/Zcgo+55l6ylGZJYvzQtfsRx+mSXAj375DYN1GFbKEeW0NnLSBDwmrInf5oUXivgW0gQSHp3n4iOxhTlCydPz3pXBaybf/NLOd4y0jGT+/GSg7ZxRXFJcJG2vGUq6kXfKBqHgHOLaeqc/y4U+xObJPB8EvaiHXm7yCYOdspGzp1eD0i6xYKZwPopdYmH0nVaD7FVMLxj+AdqlmQg8TZf/GjT17YbtBAiKkdNbhXKmUb/ZVigNMSqf+gDJWRCcLd/VWKKBeOjNRefF5Us6tuGsT2B2QNu9+FxxFvkCEm+d4OKnWr+P0rQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3yVuZRxBTQ0B288zOTbYg7fZ/XFPIffQAylFLWpZNjU=;
- b=ek+y95i1YYLKRn9iJyktG6G3SzaZhXLlBtNEuhz6uvGozIJoYXRFcmheU598I/KWS3Qk3P8xuXEjlkaRzYzWnxOdk4lmHVjSbYLOVAUr9hNUG+NVc+3Lsv/tROR5/azLm3aXVhyzWju8tfnOIhZnfKLgyII46kmFtG9PDo1opqiVzEMfrjXKJrip/OkJuGPK0DJ2uxceKth1rSdQcRGEzGF9xlFY3KAOU5/2sb4gR7higIbKEf8kcxhaCEtwhedtokGiV4dIJRq0tEQT5zsznawVAaCZsUaCDes1Dp7pSEB8iTBsM8AAfzqA+Q9msPt8zrYX5zlmAfcCCTOZn6aevg==
-Received: from DM8PR12MB5400.namprd12.prod.outlook.com (2603:10b6:8:3b::12) by
- BL0PR12MB2418.namprd12.prod.outlook.com (2603:10b6:207:4d::24) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5206.24; Mon, 2 May 2022 05:39:24 +0000
-Received: from DM8PR12MB5400.namprd12.prod.outlook.com
- ([fe80::ec12:70ec:e591:ab6]) by DM8PR12MB5400.namprd12.prod.outlook.com
- ([fe80::ec12:70ec:e591:ab6%4]) with mapi id 15.20.5206.024; Mon, 2 May 2022
- 05:39:24 +0000
-From:   Eli Cohen <elic@nvidia.com>
-To:     Jason Wang <jasowang@redhat.com>, "mst@redhat.com" <mst@redhat.com>
-CC:     "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "si-wei.liu@oracle.com" <si-wei.liu@oracle.com>
-Subject: RE: [PATCH 2/3] virtio_net: Add control VQ struct to carry vlan id
-Thread-Topic: [PATCH 2/3] virtio_net: Add control VQ struct to carry vlan id
-Thread-Index: AQHYTZ/hj5Spfna2WEePDBasFt5hh6zwTraAgBrj7jA=
-Date:   Mon, 2 May 2022 05:39:24 +0000
-Message-ID: <DM8PR12MB540018FAE7E58DFCE3FECAE3ABC19@DM8PR12MB5400.namprd12.prod.outlook.com>
-References: <20220411122942.225717-1-elic@nvidia.com>
- <20220411122942.225717-3-elic@nvidia.com>
- <87985be4-8cb0-2292-d799-5a91fb32acda@redhat.com>
-In-Reply-To: <87985be4-8cb0-2292-d799-5a91fb32acda@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3cfcac94-08b2-42fb-84b5-08da2bfe1dbe
-x-ms-traffictypediagnostic: BL0PR12MB2418:EE_
-x-microsoft-antispam-prvs: <BL0PR12MB24183A92028DA6D07A8A7697ABC19@BL0PR12MB2418.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Wfbj/erNKhH2pBj0S12IgtFhYC+pYC/jwyi9vCtudKnDfXHQ7GZQh8CdwTRjbpKyEdnGShbwbaGHgMuNBRFzXFxOn11fVOeM7ajnRfHA8CLNVwNAN8+K3R2y5UylXGnY7rgNL/fx0TDr8Bt07rItMnW/LYzBKSpHku0xOw2+tkGd7/g30xoIhX2bVJKvYZWo7dgzGbwUs1sInKVMx07JgYsuQARwu/eH8Le6eLbmToHAjkqbGMER5QM2cZzKc5VN7c9+RCcED7bFamjw1fx0ncxXu7gK16cHP3/6sotrrs2Pi2Yf/AkbjFK9uZ5lIYS+xfGRWDHemrcy+DM3kTuwLk+mCMUY+L8Gfkt/+tzlm2JTJYl6k+ZsnJjj1H/teG+gBJXfL5RjjttH4MPgYnbfI7GtK1WXvx0wANWmsPdCKg2Oprswuov8uS4iZST8TEUBCzgdP5+jtnRSyThMsl8cLILGKTjBOKTQUamFW6ClrUtyH3YIvVTrNqhhy9mNsSAfTI6TQdp9O3hVgUWHw1R1eUingOnLCU2aRqe7n6WVa7JpSjebMQ14QwYi3EBaVqB4iwu5ImA0+rMWQdvpy2kyxPK7yfaKQCH2A9z+YBdE5K/dNtuoT/eqxfX03IQqX9MEySwxgBhkncAu5x4aDhh1K+zmYQTig3bjls+vKdmPR7fX3C40hdkLNqWpULoOhKdkr6GWH5fenL8d1mMdx/+v+A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5400.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(122000001)(66446008)(38100700002)(66556008)(38070700005)(110136005)(33656002)(508600001)(316002)(7696005)(64756008)(54906003)(83380400001)(2906002)(71200400001)(6506007)(26005)(66476007)(66946007)(9686003)(4326008)(186003)(8676002)(76116006)(8936002)(5660300002)(52536014)(55016003)(86362001)(53546011);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SnIrTUMzMjlmK1NMWFRtc1BvRm5VZ29wODNNVUdvUFRiMm9RVDkrRlRVV1JW?=
- =?utf-8?B?blU4Nm43Q3lFS003Kzd5QURkZ3d3WDcrMXRnaUl0dkVDd1ZmYnhsbmdOc1JW?=
- =?utf-8?B?Y1BLb1VtTU9BV0MxVkR2TFd6MDdsN0lTdWdoeDV1UkI1Mml5Y2JmUkhYWWVS?=
- =?utf-8?B?K2ZNMjlJQ3A3dlFrUlZSeGJXODlOc0xuYmlnVU5aczk4TE9va1dXS0ZKZWMr?=
- =?utf-8?B?WHcvSUJzcTlwN0RCMTNHS3V5b3dNWGpHUVB6OW5kaUxsZG12SDZwOFJpTHJp?=
- =?utf-8?B?Y1RjbU5BMmRNai8rdGR3MGQrUUEzdlE0MmZyVU1RZXBEOGc0L0JzMVBOMVVS?=
- =?utf-8?B?S2hPRmdpU2VhbXJlZHhRQjRKMGxFNjg2K3M4NTdyaTVuZ0o1QmUvcExkUnZB?=
- =?utf-8?B?V0FNN1ZmOGJZZ3VJaW4vd0t2SURQa3VQV0x6T2hvZ0NqZ2l3N2o3eUMwNGVy?=
- =?utf-8?B?UmhzNUtNUCtxbnpDV0dISURJVTJnNmxoQjR1ZzgxUnhVRGhmbmtCTHE4by8z?=
- =?utf-8?B?dW9hOHZJZnArZG1uOE1GY3lJTWljdHB3MHpQYnRCd3B3UVZRVzlDTU45SG5o?=
- =?utf-8?B?MDlHeUxtejNXZUN6UmVyM2ZMbGV4eDBwaDBNMGtpa1FGTUh5TVBHcHp5dGt2?=
- =?utf-8?B?WjZOZ0pycVAwQXRaZWpyZklibDRhWWtIekxoRXZnV2VwUjdBVDBzRGNyUnVr?=
- =?utf-8?B?ZXVKaWljK0FERWlkQ2t5NW1la25IVjRndDhCZDNOZFVPNVptbE5qcnNoc3Rs?=
- =?utf-8?B?SUY3YTc4clZmbEhjTFc3b0E0L2JPdGI4K05QdFJ5MGhaYU4wMXZDSklsV2dH?=
- =?utf-8?B?SVdRVFBYWHVmOVdWTElCa3JpMU0yeHcwTEJlY3A3MlpHUkc5Lyt4bUpGUGlS?=
- =?utf-8?B?RUYxV3JMemtYdUc3eDgvSjU3RGRXUzdJUHRES3lXSkFqS2dUdzRoTTRBK3NE?=
- =?utf-8?B?R1RIdUQ1OEoyU0hSTzMrTCs1ejg1WTQ0RXl5QnF3aVdnQnovSEVSZ3pad0Vj?=
- =?utf-8?B?bGEyZm11NXV3eUVyMHRGR01PK08vclZrajE1Rm1ibHpXT3k5eVRsbmxhZzR1?=
- =?utf-8?B?K1R6YWZjNXJsRlBnS0dRZ0htYnZUNkVmM1BBTjcwd2cxT0VUcG1mQjdKZm91?=
- =?utf-8?B?NjMxODdJai92cGVabU9xYlB6alNXOXIrYTFYRC94MU1ER3ZCOTJKblk1eStE?=
- =?utf-8?B?N05wbUswWkpHSGVsVS9UaklZaTV0TXdKeUFLL2RCYmY5YTNNd2tGYWNhMm5T?=
- =?utf-8?B?RGRtQW5TN1VLMWxVbzBmYVJDdXlETTRqM1l5aFZIWStINDVoZXFIeXZNQytm?=
- =?utf-8?B?V2x6TGkxMjZEU1p6TVRYaCtjclY2aXNvMzJQcGljT2pjanFPeitmVEk1R2Jq?=
- =?utf-8?B?UkYvK2tkL3cyQkxrY3A3QWpCSVJ0Y1crVlFBd0pvM3VXVGxKeGVxa3l3T1Bo?=
- =?utf-8?B?WG1wZUM0cUZFeFBPbENoNStLZTBYN2JkN2tiWHBmZjQ3eHlmS2lxV3JLQTRs?=
- =?utf-8?B?T3hqSkgrRERrZ2RQTElYS1gwSHJVdHYwdVMvaWZaRTZRNzZDQXl6MnpMUGxi?=
- =?utf-8?B?Vi9JVG1uQ25iLzV5L1U0VXFLaTZrL1JPZEw1MFJ1WnNEanRQZm5CSFhZQVVG?=
- =?utf-8?B?UEFKeUF0TVFVSnlqTWtKMjRPNjJLYXZvYXZvdWFFNDN2MVI4WmsyWnBaWml0?=
- =?utf-8?B?VURLcXFuSnIvWjR6YlNmWTRhcHNmdUtJbUh0Q1o0V0VoUVNrTWxSdExGaTVk?=
- =?utf-8?B?WUdPaEROZFJwR0RWQ2NaendieUNmMnNOV1pJdlY1QzRLTllHd3FHdzJRbTQv?=
- =?utf-8?B?dWZHbWtYMEJmVTU4U205ZjJOYmFjNjR5Y2plaWpEMGpCbnFpcmJlVVQ1TGxr?=
- =?utf-8?B?dEFVQWYrYXVrNUZMMGFZbEtBaUx2ZFNsTUVpVnFSZ2JTM3JMeTBCSk1ZRHdP?=
- =?utf-8?B?eVBNSnhPU0tNbG9Rd0wrUndxRFYzRGM3L0dIRXBTWWUyQ25zWHJ2RXBGTTAz?=
- =?utf-8?B?VHJmU3NmaEh0N2ZVZHpxTUZSN21ReHpqaUVLbDlvMmFRb3poU29PRG16TEUv?=
- =?utf-8?B?OGlQaE9mQTl6dDRWZXRjRXdKUXFrSjNmUzc3UGpFSkg2WndJMWZYend6RkQ1?=
- =?utf-8?B?WXROYkVXaUNJVzhQa3JlMTVOM2cwZlViODMrNmluRThYWjBxaHorak4rNTdY?=
- =?utf-8?B?VEtNZi9WTmZRQXI5MHhRbkFQb1NHOTNia09ZdXZOOFY0MzVxQ0dzQTNjTzJa?=
- =?utf-8?B?Z2cxUzY1V2FRbUl4YUs3WVJzeFdqeWx1T1RUT3FLZ0JNU1NDZ0ZIY1JKeWRH?=
- =?utf-8?Q?ARhogOuNyOrLgRcyQK?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 2 May 2022 01:45:55 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953AB35847;
+        Sun,  1 May 2022 22:42:27 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id e2so18211216wrh.7;
+        Sun, 01 May 2022 22:42:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=SFf90Cp87yxtikwr5SrnqckhY2eRdXiPSkqLmdjSB0Y=;
+        b=mdV8gUBfaGKV1xac9Fiq0BXYwgb3hP57li604oiegba4cvbj1pMaXz/DN3sYIqhhQJ
+         1jU8oDoMqE5mXAFxOieJKCSi39cshQTbMNHkSSwmWq65LOgTNnEpRESqalbv+tSPWJIR
+         uy7UI+FzEjUZlyXN8+xikq6VznA4QpzvpT1tEYOj/SPlE3jjx/A6cspg9FQnqpHqn6KQ
+         yIp1dvoSjMDYUZdy+hOqsKd7YrFT5ZfrrRcpv+eWPO7xcAzoXcZqhbJQAuWFix4VkW3v
+         hR7L3/p0AqS6TXhTf5hBlYXiKYEMIow7cX939169/z2xX0giDSazAI1pPNmStA6KJpDs
+         0LWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SFf90Cp87yxtikwr5SrnqckhY2eRdXiPSkqLmdjSB0Y=;
+        b=qnF5tAFmWx4JVGq0j/4N+Ii9Q6pUOUHjzCjkaOaZK3jyrcDL7N3tFZV5uUWJ7/qk0J
+         PlfpCiMmKl7enmh67dyJS5+0THszmVY2KHpfdQU0g/TntfG4ToYEbGs5WHAbn1z6oIBw
+         8UWN0hB8x466mtzQlw4JKz2/0GTxtj1llZP+npLKDG/zJGl3SUOYCP58oJYSLEso6SDq
+         1YpSBS//cbF8jgMZfKr83qi+QxYIWhISbTM2IdaNgs0y0XJwGjPYZu+BCXfXJ5fsaYF0
+         dso+/DgjCPAUJc/IDrE+oPPKgu1LaVmzUgAerPI89LXSvQ91R61Q9s/hiPys6Cyir7sH
+         j3Lw==
+X-Gm-Message-State: AOAM530RaxQJJS+DbxsLMSN7P0Fn96HxYfSBvYx9IHg/IqVD63JjQEPG
+        V5BqduDg6Owhm8ALEEirnww=
+X-Google-Smtp-Source: ABdhPJyZAcTn+ctBQ3cxL4EATaIUzzLMQqvYgKQQ4Qhmg9bQpcj1kAPOtDlrfaCGmcSPEu7FoGQmKw==
+X-Received: by 2002:a05:6000:1681:b0:20c:5aa2:ae14 with SMTP id y1-20020a056000168100b0020c5aa2ae14mr4740062wrd.443.1651470146011;
+        Sun, 01 May 2022 22:42:26 -0700 (PDT)
+Received: from ?IPV6:2a06:a003:501a:a7ce:5405:3d01:56ff:a60d? ([2a06:a003:501a:a7ce:5405:3d01:56ff:a60d])
+        by smtp.gmail.com with ESMTPSA id 6-20020a05600c230600b003942a244ecfsm5397359wmo.20.2022.05.01.22.42.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 01 May 2022 22:42:25 -0700 (PDT)
+Message-ID: <abf8fb56-2ad0-8128-ccd4-105055af9226@gmail.com>
+Date:   Mon, 2 May 2022 08:42:24 +0300
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5400.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3cfcac94-08b2-42fb-84b5-08da2bfe1dbe
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 May 2022 05:39:24.6746
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: m5Kjv4TNpNdM30FxrDE2Gwqw19de0Zdwk2a6+0t99Kw+3geW5mG4d+2a8FFOq0ht
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB2418
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: [PATCH v2 1/2] dt-bindings: mtd: partitions: Add binding for Sercomm
+ parser
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     NOGUCHI Hiroshi <drvlabo@gmail.com>, Karim <Karimdplay@gmail.com>,
+        M <x1@disroot.org>, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220406195557.1956-1-csharper2005@gmail.com>
+ <20220406195946.2019-1-csharper2005@gmail.com>
+ <8d0d8b27-35ff-3693-cf80-897b80c26b4e@linaro.org>
+ <57bebf2f-af4c-b2d9-10e5-19e5104946fb@gmail.com>
+ <29cfa017-bbaf-3aba-fe1d-06771957dbaa@linaro.org>
+ <1b391399-984b-7a63-3265-62ef09caec39@gmail.com>
+ <bd533827-b575-caad-c230-af060851b231@gmail.com>
+ <db70e53b-7484-43bf-e9c8-b6a2dce1fbb5@linaro.org>
+ <25da3f43-c46e-8108-2da9-0e4f2b7cc1a4@gmail.com>
+ <b279040a-a782-a2ca-2acb-2d8f07709081@linaro.org>
+ <1c19faf9-fc1c-9adf-d038-97b673a8f0be@gmail.com>
+ <a84df850-149e-9656-43fa-1f040368a9f1@linaro.org>
+ <0450d781-c506-c28e-a0e5-435bee16721f@gmail.com>
+ <2e51842a-d2c9-8953-13aa-02ad3abb3f14@linaro.org>
+ <ee5f293a-e59a-03d8-d9e4-ef35d33b5383@gmail.com>
+ <6c3ba4a7-80b0-5fd1-eb08-1f9e256b02c4@linaro.org>
+ <909094fd-ded0-38f9-b374-dd5f7b63e298@gmail.com>
+ <11fbbafd-e7ce-f921-2073-146e96f01f6b@linaro.org>
+From:   Mikhail Zhilkin <csharper2005@gmail.com>
+In-Reply-To: <11fbbafd-e7ce-f921-2073-146e96f01f6b@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -132,28 +98,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBKYXNvbiBXYW5nIDxqYXNvd2FuZ0ByZWRoYXQuY29tPg0KPiBTZW50OiBGcmlkYXks
-IEFwcmlsIDE1LCAyMDIyIDY6MDEgQU0NCj4gVG86IEVsaSBDb2hlbiA8ZWxpY0BudmlkaWEuY29t
-PjsgbXN0QHJlZGhhdC5jb20NCj4gQ2M6IHZpcnR1YWxpemF0aW9uQGxpc3RzLmxpbnV4LWZvdW5k
-YXRpb24ub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBzaS13ZWkubGl1QG9yYWNs
-ZS5jb20NCj4gU3ViamVjdDogUmU6IFtQQVRDSCAyLzNdIHZpcnRpb19uZXQ6IEFkZCBjb250cm9s
-IFZRIHN0cnVjdCB0byBjYXJyeSB2bGFuIGlkDQo+IA0KPiANCj4g5ZyoIDIwMjIvNC8xMSAyMDoy
-OSwgRWxpIENvaGVuIOWGmemBkzoNCj4gPiBBZGQgc3RydWN0dXJlIHRvIGRlZmluZSB0aGUgcGF5
-bG9hZCBvZiBjb250cm9sIFZRIG1lc3NhZ2VzIGNhcnJ5aW5nIHRoZQ0KPiA+IGNvbmZpZ3VyZWQg
-dmxhbiBJRC4gSXQgd2lsbCBiZSB1c2VkIGluIHN1YnNlcXVlbnQgcGF0Y2hlcyBvZiB0aGlzDQo+
-ID4gc2VyaWVzLg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogRWxpIENvaGVuIDxlbGljQG52aWRp
-YS5jb20+DQo+ID4gLS0tDQo+ID4gICBpbmNsdWRlL3VhcGkvbGludXgvdmlydGlvX25ldC5oIHwg
-MyArKysNCj4gPiAgIDEgZmlsZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKykNCj4gPg0KPiA+IGRp
-ZmYgLS1naXQgYS9pbmNsdWRlL3VhcGkvbGludXgvdmlydGlvX25ldC5oIGIvaW5jbHVkZS91YXBp
-L2xpbnV4L3ZpcnRpb19uZXQuaA0KPiA+IGluZGV4IDNmNTVhNDIxNWYxMS4uYjk0YTQwNWZhOGQy
-IDEwMDY0NA0KPiA+IC0tLSBhL2luY2x1ZGUvdWFwaS9saW51eC92aXJ0aW9fbmV0LmgNCj4gPiAr
-KysgYi9pbmNsdWRlL3VhcGkvbGludXgvdmlydGlvX25ldC5oDQo+ID4gQEAgLTI3MCw2ICsyNzAs
-OSBAQCBzdHJ1Y3QgdmlydGlvX25ldF9jdHJsX21hYyB7DQo+ID4gICAjZGVmaW5lIFZJUlRJT19O
-RVRfQ1RSTF9WTEFOICAgICAgIDINCj4gPiAgICAjZGVmaW5lIFZJUlRJT19ORVRfQ1RSTF9WTEFO
-X0FERCAgICAgICAgICAgICAwDQo+ID4gICAgI2RlZmluZSBWSVJUSU9fTkVUX0NUUkxfVkxBTl9E
-RUwgICAgICAgICAgICAgMQ0KPiA+ICtzdHJ1Y3QgdmlydGlvX25ldF9jdHJsX3ZsYW4gew0KPiA+
-ICsJX192aXJ0aW8xNiBpZDsNCj4gPiArfTsNCj4gDQo+IA0KPiBJdCBsb29rcyB0byBtZSB0aGVy
-ZSdzIG5vIG5lZWQgdG8gYm90aGVyIHVBUEkgYW5kIHdlIGNhbiBzaW1wbHkgdXNlDQo+IF9fdmly
-dGlvMTYgaW4gcGF0Y2ggMz8NCj4gDQoNClN1cmUNCg0KPiBUaGFua3MNCj4gDQo+IA0KPiA+DQo+
-ID4gICAvKg0KPiA+ICAgICogQ29udHJvbCBsaW5rIGFubm91bmNlIGFja25vd2xlZGdlbWVudA0K
-DQo=
+On 5/1/2022 7:17 PM, Krzysztof Kozlowski wrote:
+
+> On 01/05/2022 16:51, Mikhail Zhilkin wrote:
+>> On 5/1/2022 11:17 AM, Krzysztof Kozlowski wrote:
+>>
+>>> On 30/04/2022 20:54, Mikhail Zhilkin wrote:
+>>>>  patternProperties:
+>>>>    "@[0-9a-f]+$":
+>>>> -    $ref: "partition.yaml#"
+>>>> +    allOf:
+>>>> +      - $ref: "partition.yaml#"
+>>>> +      - if:
+>>>> +          properties:
+>>>> +            compatible:
+>>>> +              contains:
+>>>> +                const: sercomm,sc-partitions
+>>>> +        then:
+>>>> +          properties:
+>>>> +            sercomm,scpart-id:
+>>>> +              description: Partition id in Sercomm partition map. Parser
+>>>> +                uses this id to get partition offset and size values from
+>>>> +                dynamic partition map.
+>>> Partition offset and size values are not derived from scpart-id. I am
+>>> sorry but after all these questions - it's the third time now - you
+>>> never answer why do you need this property and what is it used for. From
+>>> all the examples it could be simply removed and the partition map will
+>>> be exactly the same.
+>> scpart-id is necessary to get (using mtd parser) partition offset and
+>> size from dynamic partition map (NOT from the reg property):
+>>
+>> ❯ xxd -e -c 12 -s $((0x800)) -l $((0x78)) mtd1
+>> 00000800: 00000000 00000000 00100000  ............
+>> 0000080c: 00000001 00100000 00100000  ............
+>> 00000818: 00000002 00200000 00100000  ...... .....
+>> 00000824: 00000003 00300000 00100000  ......0.....
+>> 00000830: 00000004 00400000 00600000  ......@...`.
+>> 0000083c: 00000005 00a00000 00600000  ..........`.
+>> 00000848: 00000006 01000000 02000000  ............
+>> 00000854: 00000007 03000000 02000000  ............
+>> 00000860: 00000008 05000000 01400000  ..........@.
+>> 0000086c: 00000009 06400000 01b80000  ......@.....
+>>           scpart-id  offset      size
+>>
+>> With sercomm,sc-partitions the reg property will be ignored (offset =
+>> 0x200000, size = 0x100000) and the values will be taken from partition map.
+>>
+>> For example we have this is dts:
+>>
+>> partition@200000 {
+>>             label = "Factory";
+>>             reg = <0x200000 0x100000>;
+>>             sercomm,scpart-id = <2>;
+>>             read-only;
+>>         };
+>>
+>> Dynamic partition map:
+>>
+>> scpart-id = 2; offset = 0x00200000; size = 0x00100000
+>>
+>> 00000002 00200000 00100000  ...... .....
+>>
+>> In this example the offset and size are the same in reg and dynamic
+>> partition map. If device have bad blocks on NAND the values will be a
+>> little different. And we have to take partition offsets from partition
+>> map to avoid boot loops, wrong eeprom location and other bad things.
+>>
+>> Is there anything that needs to be explained in more detail?
+> Thanks a lot, this clarifies the topic. Looks good. Maybe you could put
+> parts of this into the scpart-id field description?
+
+Thank you for you support! I updated the scpart-id description and hope
+this should be clear enough. If so, I'll prepare PATCH v3.
+
+ patternProperties:
+   "@[0-9a-f]+$":
+-    $ref: "partition.yaml#"
++    allOf:
++      - $ref: "partition.yaml#"
++      - if:
++          properties:
++            compatible:
++              contains:
++                const: sercomm,sc-partitions
++        then:
++          properties:
++            sercomm,scpart-id:
++              description: Partition id in Sercomm partition map. Mtd
++                parser uses this id to find a record in the partiton map
++                containing offset and size of the current partition. The
++                values from partition map overrides partition offset and
++                size defined in reg property of the dts. Frequently these
++                values are the same, but may differ if device has bad
++                eraseblocks on a flash.
++              $ref: /schemas/types.yaml#/definitions/uint32
+
+> Best regards,
+> Krzysztof
+
+-- 
+Best regards,
+Mikhail
+

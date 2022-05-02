@@ -2,121 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7DB051718C
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 16:28:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2E7517190
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 16:29:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350442AbiEBObq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 10:31:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39246 "EHLO
+        id S1383214AbiEBOc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 10:32:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237602AbiEBObn (ORCPT
+        with ESMTP id S237408AbiEBOc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 10:31:43 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C538DE006
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 07:28:14 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id v12so19771627wrv.10
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 07:28:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=PQJ/katdNCiV6NuMD6Q8JYHjEJO0fdOai4gF5RPTvuA=;
-        b=egGNYKxYxioAsa+M+5MDNCxNunG7MPC0Qtz8jwhkVOJL7pcWe8h8anLOvdsHso3az9
-         mtspTPjIOB0ETM2hpRqTVwEKPUNYtTP6gCe6lnMH0ib9YCCNV3zvImoKAP5xSdZ2ZLd8
-         gjdC5SX6tAblz1pIxmcqWmpOzRSyB2UAMA8QPwVwn3Jt/4rwiORAn2jchnczDJLdZVF7
-         yJvR0W3FBaen4SR9hilNuCEOm0yPOTcZuPP+AtDEMrOhAPiDJHVXA5XHghy9TPqEawFz
-         BEmfaVzW4r+pD5wNYui6t4ws/yM25n62bVyqmRePpf0VUnG7cYkFdqcRl3pbeKqHiq3P
-         YQKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=PQJ/katdNCiV6NuMD6Q8JYHjEJO0fdOai4gF5RPTvuA=;
-        b=Ex0ihs7zZ5VaPtKSsRABys/WqzLVA6VOQswBd9ZH+bfVBidg8YP49wTY4h0hpN7cJY
-         lQ14yiiId+iZUkbaVd4ST5ESq3/zmn1KX915fgp5g6tb+tZLo50rhSPd1jPetH8tFzy2
-         rK34s6eejokUdEhVCqZuA12C5PHtRbLnK/SbyzJcpO+hbC9g4nkLVyV9qV6A9akomjtE
-         JglfwiivfQXkGEODLJa1wD0okOkxdHuzYrVPeyrYaO38BmS1m9jdun5tXdVUIzJrPu+z
-         7YeLWrNNtQKg8hh1QxdzUmhnm35+XuKmD4mXd80VehJ3hlo1krq8CdwSCwZhKMChTSCc
-         yveA==
-X-Gm-Message-State: AOAM53054y8EyN7S1FVLhBOx6k4xzwT4gyG9/dbJw3ImaMGSSS8ZnQuL
-        sVjqK+7I/Saz3UDAf4djDQN5VoacYh/CmSG6kXA=
-X-Google-Smtp-Source: ABdhPJw3zlSpxfBUZfcd441g4Y+/+8zdDOoMBi7bBret895gql6EwyHwo4AkVSPyMTa2yVH6B/BvcvGwbbjMBCAm6E0=
-X-Received: by 2002:adf:f783:0:b0:20a:e0a7:6c33 with SMTP id
- q3-20020adff783000000b0020ae0a76c33mr9414136wrp.187.1651501693397; Mon, 02
- May 2022 07:28:13 -0700 (PDT)
+        Mon, 2 May 2022 10:32:27 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C40E006;
+        Mon,  2 May 2022 07:28:58 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651501737;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rb63Ilz2a3MgquUItpmidx+dZok0Dnfpw8mB5HBqGls=;
+        b=ckiN2f0IxLCVuw+Erz1V1znQt/IkZUGAdYMjorzGJc3Xxhe3eaFPfvKGhPiC4jle12NZZ9
+        txy88OLMYijAX/KzrMUnI0ZgVgGRNlon9EXRQNtwT0aROPA0I75oTtMVRYX8zhktk7ku+y
+        CKjtRg/hFWUJAw80zrniUVm63unPqJldrF2hWT9aZWDWVxRua+3gRMu9dS4/+URQIw7h8R
+        Z9fXiMVCcqsEM42W/CvqaUKtTaQXLi5h5lTXHJTxyipnfsaFp7a0mxHR9mjBDwxu0BNbFX
+        K0revuyX2z+P6A13rXvY7dyUcRDaoe8IKR0vZCWhgVIbGQ6l1/sk+ZOxlJiQdA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651501737;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rb63Ilz2a3MgquUItpmidx+dZok0Dnfpw8mB5HBqGls=;
+        b=1ZYLX3rcmTiXjhAHt3j+QVZyYtcQa4TMvCLaAWKAAuqiP6DJgs0z8l78QGxi0OQ+72ehKh
+        X5xeJeF8jcThhxCA==
+To:     Thomas Pfaff <tpfaff@pcs.com>
+Cc:     linux-kernel@vger.kernel.org, linux-rt-users@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>, Lukas Wunner <lukas@wunner.de>
+Subject: Re: [PATCH v3] irq/core: synchronize irq_thread startup
+In-Reply-To: <552fe7b4-9224-b183-bb87-a8f36d335690@pcs.com>
+References: <552fe7b4-9224-b183-bb87-a8f36d335690@pcs.com>
+Date:   Mon, 02 May 2022 16:28:56 +0200
+Message-ID: <87mtg0m2jb.ffs@tglx>
 MIME-Version: 1.0
-Received: by 2002:a05:6000:168e:0:0:0:0 with HTTP; Mon, 2 May 2022 07:28:12
- -0700 (PDT)
-Reply-To: rgicompanyltd1@gmail.com
-From:   RGI COMPANY LTD <antonioman388@gmail.com>
-Date:   Mon, 2 May 2022 22:28:12 +0800
-Message-ID: <CALR66yoqhQvqkR=yxbkHAoYwZwjJP1cqLXn09VteF22OPv8OZA@mail.gmail.com>
-Subject: Greetings
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM,UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:42f listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [antonioman388[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [antonioman388[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [rgicompanyltd1[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  1.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-From: RGI Company Ltd
-Address, Netherlands
-Call:+3197005033311
-02/05/2022
+On Mon, May 02 2022 at 13:28, Thomas Pfaff wrote:
+> While running
+> "while /bin/true; do setserial /dev/ttyS0 uart none;
+> setserial /dev/ttyS0 uart 16550A; done"
+> on a kernel with threaded irqs, setserial is hung after some calls.
+>
+> setserial opens the device, this will install an irq handler if the uart is
+> not none, followed by TIOCGSERIAL and TIOCSSERIAL ioctls.
+> Then the device is closed. On close, synchronize_irq() is called by
+> serial_core.
 
-Atten:
+This comment made me look deeper because I expected that free_irq()
+would hang.
 
-RGI Genealogical Investigators specializes in probate research to locate
-missing funds, inherited funds around the world. We can also help you find
-wills, obtain copies of certificates.
+But free_irq() stopped issuing synchronize_irq() with commit
+519cc8652b3a ("genirq: Synchronize only with single thread on
+free_irq()"). And that turns out to be the root cause of the problem.
+I should have caught that back then, but in hindsight ....
 
-Recently a woman from the Rothschild family, one of the famous families in
-Europe contacted our company that we should contact a business minded
-person who is capable of investing her funds in a lucrative business.
+While the proposed patch works, I think the real solution is to ensure
+that both the hardware interrupt _and_ the interrupt threads which are
+associated to the removed action are in quiescent state. This should
+catch the case you observed.
 
-Our service fee is 2% of the funds and we will be paid after you receive
-the funds. The funds transfer process should take just a matter of days as
-we have the mechanism and expertise to get this done quickly. Please if you
-find this letter offensive ignore it and accept our apologies
+Something like the untested below.
 
-Warmest Regards,
+Thanks,
 
-Dr. J.T Woods, CEO
-RGI Genealogical
+        tglx
+---
+Subject: genirq: Quiesce interrupt threads in free_irq()
+From: Thomas Gleixner <tglx@linutronix.de>
+Date: Mon, 02 May 2022 15:40:25 +0200
+
+Fill void...
+
+Fixes: 519cc8652b3a ("genirq: Synchronize only with single thread on free_irq()")
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+---
+ kernel/irq/manage.c |   25 +++++++++++++++++++++----
+ 1 file changed, 21 insertions(+), 4 deletions(-)
+
+--- a/kernel/irq/manage.c
++++ b/kernel/irq/manage.c
+@@ -1914,6 +1914,22 @@ static struct irqaction *__free_irq(stru
+ 	 */
+ 	__synchronize_hardirq(desc, true);
+ 
++	/*
++	 * Wait for associated interrupt threads to complete. This cannot
++	 * use synchronize_irq() due to interrupt sharing in the PCIe
++	 * layer. See 519cc8652b3a ("genirq: Synchronize only with single
++	 * thread on free_irq()") for further explanation.
++	 */
++	if (action->thread) {
++		unsigned int thread_mask = action->thread_mask;
++
++		if (action->secondary)
++			thread_mask |= action->secondary->thread_mask;
++
++		wait_event(desc->wait_for_threads,
++			   !(atomic_read(&desc->threads_active) & thread_mask));
++	}
++
+ #ifdef CONFIG_DEBUG_SHIRQ
+ 	/*
+ 	 * It's a shared IRQ -- the driver ought to be prepared for an IRQ
+@@ -1931,10 +1947,11 @@ static struct irqaction *__free_irq(stru
+ #endif
+ 
+ 	/*
+-	 * The action has already been removed above, but the thread writes
+-	 * its oneshot mask bit when it completes. Though request_mutex is
+-	 * held across this which prevents __setup_irq() from handing out
+-	 * the same bit to a newly requested action.
++	 * The action has already been removed above and both the hardware
++	 * interrupt and the associated threads have been synchronized,
++	 * which means they are in quiescent state. request_mutex is still
++	 * held which prevents __setup_irq() from handing out action's
++	 * thread_mask to a newly requested action.
+ 	 */
+ 	if (action->thread) {
+ 		kthread_stop(action->thread);
+

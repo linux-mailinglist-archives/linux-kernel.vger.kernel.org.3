@@ -2,512 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 592DD51740A
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9511451740E
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:16:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386259AbiEBQTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 12:19:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33256 "EHLO
+        id S1386257AbiEBQUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 12:20:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386244AbiEBQTp (ORCPT
+        with ESMTP id S1386250AbiEBQUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 12:19:45 -0400
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329BBDF6C;
-        Mon,  2 May 2022 09:16:14 -0700 (PDT)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.94.2)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1nlYia-00087B-PA; Mon, 02 May 2022 18:16:12 +0200
-Date:   Mon, 2 May 2022 17:16:06 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     linux-block@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Tom Rini <trini@konsulko.com>, Jens Axboe <axboe@kernel.dk>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH 2/5] block: add partition parser for U-Boot uImage.FIT
-Message-ID: <YnADxlR9R6/Z5zEb@makrotopia.org>
+        Mon, 2 May 2022 12:20:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D6BAE0AD
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 09:16:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651508197;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rsSALeBOA7ZWPCcmJgm1/wGrXg4q+JRs+W7rdBh5ql0=;
+        b=ddC85xIe6EyqknPGRq3GtNS4EXuI15HxsJdpEO0Tl5onc3PSWV58fjxh9JHjYSDOHF1hVw
+        NxwOlAb+slnI8T04sYUzBU1TlxbmKXf/9ALAOD0aoaN4606cGwnZvz0q45bGsl0v4QyfKt
+        EDH3AlW6m3HF3wuoQWaEowMNEoXCNJU=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-621-dH9-QEFyMpmXPjuTvrU91Q-1; Mon, 02 May 2022 12:16:36 -0400
+X-MC-Unique: dH9-QEFyMpmXPjuTvrU91Q-1
+Received: by mail-ej1-f70.google.com with SMTP id jg5-20020a170907970500b006f42a861bb9so1609980ejc.11
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 09:16:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=rsSALeBOA7ZWPCcmJgm1/wGrXg4q+JRs+W7rdBh5ql0=;
+        b=dUnfqrJ45UFO21IdwvfnpuOoDOdi/N2JDdIUG7iqAxXSxrNV31DqcAA5jbVAA9Qu9D
+         IKy/kPXYLIXBbll+QLQ7Na2pkNCOKBuvJCWmvgh3a1iUm8d94TBbQc5/7WN0vk9ZjvgI
+         dGFBw9L9OF742fX+omtgWclFK7dLgHhn04Fd9LevPIGqHAEzgeAf+YOMXngKWJpfHz6I
+         kYV2mKqCoB38SzT6GFlMMOKfYRv6JAs3zpLhMnNgBRguzPeirtGrMPhjn9hrsJwQxYPW
+         m5F0ki7xYSe7S1OxVs1Ip1Rg4JhDWKhWoU2T2wyU6kTCKAmFrdB0ODLD8zWwvKwku0im
+         vtaA==
+X-Gm-Message-State: AOAM530z+ygCG4xKdEtueQScRiFlxB3gGPHNT1pOKC8pdKJZfEYn1c0f
+        2xUVbFNts2mwei7gtcHF7mWCf5Z2NMEsUpVScZpjVrvqJ6vVwW1RtvqOsmVDd34hJkgk4sKITVN
+        NeS0tO98dXPtWW+PeykNDBoU0
+X-Received: by 2002:a17:907:7243:b0:6f4:1ce5:4ac4 with SMTP id ds3-20020a170907724300b006f41ce54ac4mr10031089ejc.198.1651508195310;
+        Mon, 02 May 2022 09:16:35 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzU+EeBkU27lcZBl76YkQuPJxEcLDXD3icDKAgpvTHo8/6jVVf/8/GP3t2VfXVkZob1OASV3A==
+X-Received: by 2002:a17:907:7243:b0:6f4:1ce5:4ac4 with SMTP id ds3-20020a170907724300b006f41ce54ac4mr10031056ejc.198.1651508195058;
+        Mon, 02 May 2022 09:16:35 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id j12-20020a50ed0c000000b0042617ba63d4sm6834162eds.94.2022.05.02.09.16.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 May 2022 09:16:34 -0700 (PDT)
+Message-ID: <bcb2a90f-a2ed-94fa-985e-d7b9efe52ae4@redhat.com>
+Date:   Mon, 2 May 2022 18:16:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,PDS_OTHER_BAD_TLD,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v9 9/9] KVM: VMX: enable IPI virtualization
+Content-Language: en-US
+To:     Zeng Guang <guang.zeng@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        Kai Huang <kai.huang@intel.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Robert Hu <robert.hu@intel.com>, Gao Chao <chao.gao@intel.com>
+References: <20220419154510.11938-1-guang.zeng@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220419154510.11938-1-guang.zeng@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce a new partition parser for U-Boot's Flattened-Image-Tree (FIT) in
-order to allow Linux to mount the filesystem part of a uImage.FIT.
+On 4/19/22 17:45, Zeng Guang wrote:
+> +static bool vmx_can_use_pi_wakeup(struct kvm_vcpu *vcpu)
+> +{
+> +	/*
+> +	 * If a blocked vCPU can be the target of posted interrupts,
+> +	 * switching notification vector is needed so that kernel can
+> +	 * be informed when an interrupt is posted and get the chance
+> +	 * to wake up the blocked vCPU. For now, using posted interrupt
+> +	 * for vCPU wakeup when IPI virtualization or VT-d PI can be
+> +	 * enabled.
+> +	 */
+> +	return vmx_can_use_ipiv(vcpu) || vmx_can_use_vtd_pi(vcpu->kvm);
+> +}
 
-uImage.FIT needs to be created with external data and aligned to the
-system's memory page size. e.g.
- mkimage -E -B 0x1000 -p 0x1000 ...
+Slightly more accurate name and comment:
 
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
- MAINTAINERS               |   6 +
- block/partitions/Kconfig  |  14 ++
- block/partitions/Makefile |   1 +
- block/partitions/check.h  |   5 +
- block/partitions/core.c   |   3 +
- block/partitions/fit.c    | 352 ++++++++++++++++++++++++++++++++++++++
- 6 files changed, 381 insertions(+)
- create mode 100644 block/partitions/fit.c
+static bool vmx_needs_pi_wakeup(struct kvm_vcpu *vcpu)
+{
+         /*
+          * The default posted interrupt vector does nothing when
+          * invoked outside guest mode.   Return whether a blocked vCPU
+          * can be the target of posted interrupts, as is the case when
+          * using either IPI virtualization or VT-d PI, so that the
+          * notification vector is switched to the one that calls
+          * back to the pi_wakeup_handler() function.
+          */
+         return vmx_can_use_ipiv(vcpu) || vmx_can_use_vtd_pi(vcpu->kvm);
+}
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d4d4aa20fd0847..c9d3775b795ab5 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7687,6 +7687,12 @@ F:	Documentation/firmware_class/
- F:	drivers/base/firmware_loader/
- F:	include/linux/firmware.h
- 
-+FIT PARTITION TABLE (uImage.FIT)
-+M:	Daniel Golle <daniel@makrotopia.org>
-+L:	linux-block@vger.kernel.org
-+S:	Maintained
-+F:	block/partitions/fit.c
-+
- FLEXTIMER FTM-QUADDEC DRIVER
- M:	Patrick Havelange <patrick.havelange@essensium.com>
- L:	linux-iio@vger.kernel.org
-diff --git a/block/partitions/Kconfig b/block/partitions/Kconfig
-index 7aff4eb81c60f4..65d55885321722 100644
---- a/block/partitions/Kconfig
-+++ b/block/partitions/Kconfig
-@@ -103,6 +103,20 @@ config ATARI_PARTITION
- 	  Say Y here if you would like to use hard disks under Linux which
- 	  were partitioned under the Atari OS.
- 
-+config FIT_PARTITION
-+	bool "Flattened-Image-Tree (FIT) partition support" if PARTITION_ADVANCED
-+	default n
-+	help
-+	  Say Y here if your system needs to mount the filesystem part of
-+	  a Flattened-Image-Tree (FIT) image commonly used with Das U-Boot.
-+
-+	  uImage.FIT needs to be created with external data and aligned to
-+	  the systems memory page size. e.g.
-+	    mkimage -E -B 0x1000 -p 0x1000 ...
-+
-+	  If your system doesn't use U-Boot or you don't need to mount uImage.FIT
-+	  filesystem sub-images in Linux, say N.
-+
- config IBM_PARTITION
- 	bool "IBM disk label and partition support"
- 	depends on PARTITION_ADVANCED && S390
-diff --git a/block/partitions/Makefile b/block/partitions/Makefile
-index a7f05cdb02a844..d319eb1deba97a 100644
---- a/block/partitions/Makefile
-+++ b/block/partitions/Makefile
-@@ -8,6 +8,7 @@ obj-$(CONFIG_ACORN_PARTITION) += acorn.o
- obj-$(CONFIG_AMIGA_PARTITION) += amiga.o
- obj-$(CONFIG_ATARI_PARTITION) += atari.o
- obj-$(CONFIG_AIX_PARTITION) += aix.o
-+obj-$(CONFIG_FIT_PARTITION) += fit.o
- obj-$(CONFIG_CMDLINE_PARTITION) += cmdline.o
- obj-$(CONFIG_MAC_PARTITION) += mac.o
- obj-$(CONFIG_LDM_PARTITION) += ldm.o
-diff --git a/block/partitions/check.h b/block/partitions/check.h
-index 4ffa2359b1a37e..32bbeed08d703a 100644
---- a/block/partitions/check.h
-+++ b/block/partitions/check.h
-@@ -57,6 +57,7 @@ int amiga_partition(struct parsed_partitions *state);
- int atari_partition(struct parsed_partitions *state);
- int cmdline_partition(struct parsed_partitions *state);
- int efi_partition(struct parsed_partitions *state);
-+int fit_partition(struct parsed_partitions *state);
- int ibm_partition(struct parsed_partitions *);
- int karma_partition(struct parsed_partitions *state);
- int ldm_partition(struct parsed_partitions *state);
-@@ -67,3 +68,7 @@ int sgi_partition(struct parsed_partitions *state);
- int sun_partition(struct parsed_partitions *state);
- int sysv68_partition(struct parsed_partitions *state);
- int ultrix_partition(struct parsed_partitions *state);
-+
-+int parse_fit_partitions(struct parsed_partitions *state, u64 fit_start_sector,
-+			 u64 sectors, int *slot, int max_slot, bool add_remain);
-+
-diff --git a/block/partitions/core.c b/block/partitions/core.c
-index 3e70860beb655e..78d2aac1471bc7 100644
---- a/block/partitions/core.c
-+++ b/block/partitions/core.c
-@@ -47,6 +47,9 @@ static int (*check_part[])(struct parsed_partitions *) = {
- #ifdef CONFIG_EFI_PARTITION
- 	efi_partition,		/* this must come before msdos */
- #endif
-+#ifdef CONFIG_FIT_PARTITION
-+	fit_partition,
-+#endif
- #ifdef CONFIG_SGI_PARTITION
- 	sgi_partition,
- #endif
-diff --git a/block/partitions/fit.c b/block/partitions/fit.c
-new file mode 100644
-index 00000000000000..076c7c7426a420
---- /dev/null
-+++ b/block/partitions/fit.c
-@@ -0,0 +1,352 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ *  fs/partitions/fit.c
-+ *  Copyright (C) 2021  Daniel Golle
-+ *
-+ *  headers extracted from U-Boot mkimage sources
-+ *  (C) Copyright 2008 Semihalf
-+ *  (C) Copyright 2000-2005
-+ *  Wolfgang Denk, DENX Software Engineering, wd@denx.de.
-+ *
-+ *  based on existing partition parsers
-+ *  Copyright (C) 1991-1998  Linus Torvalds
-+ *  Re-organised Feb 1998 Russell King
-+ */
-+
-+#include <linux/libfdt.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/of_fdt.h>
-+#include <linux/types.h>
-+
-+#include "check.h"
-+
-+#define FIT_IMAGES_PATH		"/images"
-+#define FIT_CONFS_PATH		"/configurations"
-+
-+/* hash/signature/key node */
-+#define FIT_HASH_NODENAME	"hash"
-+#define FIT_ALGO_PROP		"algo"
-+#define FIT_VALUE_PROP		"value"
-+#define FIT_IGNORE_PROP		"uboot-ignore"
-+#define FIT_SIG_NODENAME	"signature"
-+#define FIT_KEY_REQUIRED	"required"
-+#define FIT_KEY_HINT		"key-name-hint"
-+
-+/* cipher node */
-+#define FIT_CIPHER_NODENAME	"cipher"
-+#define FIT_ALGO_PROP		"algo"
-+
-+/* image node */
-+#define FIT_DATA_PROP		"data"
-+#define FIT_DATA_POSITION_PROP	"data-position"
-+#define FIT_DATA_OFFSET_PROP	"data-offset"
-+#define FIT_DATA_SIZE_PROP	"data-size"
-+#define FIT_TIMESTAMP_PROP	"timestamp"
-+#define FIT_DESC_PROP		"description"
-+#define FIT_ARCH_PROP		"arch"
-+#define FIT_TYPE_PROP		"type"
-+#define FIT_OS_PROP		"os"
-+#define FIT_COMP_PROP		"compression"
-+#define FIT_ENTRY_PROP		"entry"
-+#define FIT_LOAD_PROP		"load"
-+
-+/* configuration node */
-+#define FIT_KERNEL_PROP		"kernel"
-+#define FIT_FILESYSTEM_PROP	"filesystem"
-+#define FIT_RAMDISK_PROP	"ramdisk"
-+#define FIT_FDT_PROP		"fdt"
-+#define FIT_LOADABLE_PROP	"loadables"
-+#define FIT_DEFAULT_PROP	"default"
-+#define FIT_SETUP_PROP		"setup"
-+#define FIT_FPGA_PROP		"fpga"
-+#define FIT_FIRMWARE_PROP	"firmware"
-+#define FIT_STANDALONE_PROP	"standalone"
-+
-+#define MIN_FREE_SECT		16
-+#define REMAIN_VOLNAME		"rootfs_data"
-+#define MAX_FIT_LOADABLES	16
-+
-+/**
-+ * parse_fit_partitions - map uImage.FIT filesystem sub-images into sub-partitions
-+ * @state: pointer to partition parser state
-+ * @fit_start_sector: start sector of the FIT structure on disk
-+ * @sectors: number of sectors of the uImage.FIT partition or 0 if whole device
-+ * @slot: pointer to the current partition slot number
-+ * @add_remain: map unused sectors into additional partition
-+ *
-+ * To be called by other partition parsers on physical block devices or using
-+ * wrapper function int fit_partition(struct parsed_partitions *state) for the
-+ * whole disk, relevant typically for ubiblock or mtdblock devices.
-+ */
-+int parse_fit_partitions(struct parsed_partitions *state, u64 fit_start_sector,
-+			 u64 sectors, int *slot, int max_slot, bool add_remain)
-+{
-+	struct block_device *bdev = state->disk->part0;
-+	struct address_space *mapping = bdev->bd_inode->i_mapping;
-+	struct page *page;
-+	void *fit, *init_fit;
-+	struct partition_meta_info *info;
-+	char tmp[sizeof(info->volname)];
-+	u64 dsize, dsectors, imgmaxsect = 0;
-+	u32 size, image_pos, image_len;
-+	const u32 *image_offset_be, *image_len_be, *image_pos_be;
-+	int ret = 1, node, images, config;
-+	const char *image_name, *image_type, *image_description,
-+		*config_default, *config_description, *config_loadables;
-+	int image_name_len, image_type_len, image_description_len,
-+		config_default_len, config_description_len,
-+		config_loadables_len;
-+	sector_t start_sect, nr_sects;
-+	size_t label_min;
-+	struct device_node *np = NULL;
-+	const char *bootconf;
-+	const char *loadable;
-+	bool found;
-+	int loadables_rem_len, loadable_len;
-+	u16 loadcnt;
-+
-+	/* uImage.FIT should be aligned to page boundaries */
-+	if (fit_start_sector % (1 << (PAGE_SHIFT - SECTOR_SHIFT)))
-+		return 0;
-+
-+	/* map first page */
-+	page = read_mapping_page(
-+		mapping, fit_start_sector >> (PAGE_SHIFT - SECTOR_SHIFT), NULL);
-+
-+	if (IS_ERR(page))
-+		return -EFAULT;
-+
-+	if (PageError(page))
-+		return -EFAULT;
-+
-+	init_fit = page_address(page);
-+
-+	if (!init_fit) {
-+		put_page(page);
-+		return -EFAULT;
-+	}
-+
-+	/* uImage.FIT is based on flattened device tree structure */
-+	if (fdt_check_header(init_fit)) {
-+		put_page(page);
-+		return 0;
-+	}
-+
-+	/* acquire disk or partition size */
-+	dsectors = get_capacity(bdev->bd_disk);
-+	if (sectors)
-+		dsectors = min_t(u64, sectors, dsectors);
-+
-+	dsize = dsectors << SECTOR_SHIFT;
-+	size = fdt_totalsize(init_fit);
-+
-+	/* silently skip non-external-data legacy uImage.FIT */
-+	if (size > PAGE_SIZE) {
-+		put_page(page);
-+		return 0;
-+	}
-+
-+	/* abort if FIT structure is larger than disk or partition size */
-+	if (size >= dsize) {
-+		state->access_beyond_eod = 1;
-+		put_page(page);
-+		return -EFBIG;
-+	}
-+
-+	/*
-+	 * copy FIT structure for further processing
-+	 * this is necessary for libfdt to work
-+	 */
-+	fit = kmemdup(init_fit, size, GFP_KERNEL);
-+	put_page(page);
-+	if (!fit)
-+		return -ENOMEM;
-+
-+	/* set boot config node name U-Boot may have added to the device tree */
-+	np = of_find_node_by_path("/chosen");
-+	if (np)
-+		bootconf = of_get_property(np, "u-boot,bootconf", NULL);
-+	else
-+		bootconf = NULL;
-+
-+	/* find configuration path in uImage.FIT */
-+	config = fdt_path_offset(fit, FIT_CONFS_PATH);
-+	if (config < 0) {
-+		pr_err("FIT: Cannot find %s node: %d\n",
-+		       FIT_CONFS_PATH, config);
-+		ret = -ENOENT;
-+		goto ret_out;
-+	}
-+
-+	/* get default configuration node name */
-+	config_default =
-+		fdt_getprop(fit, config, FIT_DEFAULT_PROP, &config_default_len);
-+
-+	/* make sure we got either default or selected boot config node name */
-+	if (!config_default && !bootconf) {
-+		pr_err("FIT: Cannot find default configuration\n");
-+		ret = -ENOENT;
-+		goto ret_out;
-+	}
-+
-+	/* find selected boot config node, fallback on default config node */
-+	node = fdt_subnode_offset(fit, config, bootconf ?: config_default);
-+	if (node < 0) {
-+		pr_err("FIT: Cannot find %s node: %d\n",
-+		       bootconf ?: config_default, node);
-+		ret = -ENOENT;
-+		goto ret_out;
-+	}
-+
-+	/* get selected configuration data */
-+	config_description =
-+		fdt_getprop(fit, node, FIT_DESC_PROP, &config_description_len);
-+	config_loadables = fdt_getprop(fit, node, FIT_LOADABLE_PROP,
-+				       &config_loadables_len);
-+
-+	pr_info("FIT: %s configuration: \"%s\"%s%s%s\n",
-+		bootconf ? "Selected" : "Default", bootconf ?: config_default,
-+		config_description ? " (" : "", config_description ?: "",
-+		config_description ? ")" : "");
-+
-+	if (!config_loadables || !config_loadables_len) {
-+		pr_err("FIT: No loadables configured in \"%s\"\n",
-+		       bootconf ?: config_default);
-+		ret = -ENOENT;
-+		goto ret_out;
-+	}
-+
-+	/* get images path in uImage.FIT */
-+	images = fdt_path_offset(fit, FIT_IMAGES_PATH);
-+	if (images < 0) {
-+		pr_err("FIT: Cannot find %s node: %d\n", FIT_IMAGES_PATH, images);
-+		ret = -EINVAL;
-+		goto ret_out;
-+	}
-+
-+	/* allocate one slot for mapping remaing space */
-+	if (add_remain)
-+		--max_slot;
-+
-+	/* iterate over images in uImage.FIT */
-+	fdt_for_each_subnode(node, fit, images) {
-+		image_name = fdt_get_name(fit, node, &image_name_len);
-+		image_type = fdt_getprop(fit, node, FIT_TYPE_PROP, &image_type_len);
-+		image_offset_be = fdt_getprop(fit, node, FIT_DATA_OFFSET_PROP, NULL);
-+		image_pos_be = fdt_getprop(fit, node, FIT_DATA_POSITION_PROP, NULL);
-+		image_len_be = fdt_getprop(fit, node, FIT_DATA_SIZE_PROP, NULL);
-+
-+		if (!image_name || !image_type || !image_len_be)
-+			continue;
-+
-+		image_len = be32_to_cpu(*image_len_be);
-+		if (!image_len)
-+			continue;
-+
-+		if (image_offset_be)
-+			image_pos = be32_to_cpu(*image_offset_be) + size;
-+		else if (image_pos_be)
-+			image_pos = be32_to_cpu(*image_pos_be);
-+		else
-+			continue;
-+
-+		image_description = fdt_getprop(fit, node, FIT_DESC_PROP,
-+						&image_description_len);
-+
-+		pr_info("FIT: %16s sub-image 0x%08x..0x%08x \"%s\" %s%s%s\n",
-+			image_type, image_pos, image_pos + image_len - 1,
-+			image_name, image_description ? "(" : "",
-+			image_description ?: "", image_description ? ") " : "");
-+
-+		/* only 'filesystem' images should be mapped as partitions */
-+		if (strcmp(image_type, FIT_FILESYSTEM_PROP))
-+			continue;
-+
-+		/* check if sub-image is part of configured loadables */
-+		found = false;
-+		loadable = config_loadables;
-+		loadables_rem_len = config_loadables_len;
-+		for (loadcnt = 0; loadables_rem_len > 1 &&
-+				  loadcnt < MAX_FIT_LOADABLES; ++loadcnt) {
-+			loadable_len =
-+				strnlen(loadable, loadables_rem_len - 1) + 1;
-+			loadables_rem_len -= loadable_len;
-+			if (!strncmp(image_name, loadable, loadable_len)) {
-+				found = true;
-+				break;
-+			}
-+			loadable += loadable_len;
-+		}
-+		if (!found)
-+			continue;
-+
-+		if (image_pos % (1 << PAGE_SHIFT)) {
-+			pr_err("FIT: image %s start not aligned to page boundaries, skipping\n",
-+			       image_name);
-+			continue;
-+		}
-+
-+		if (image_len % (1 << PAGE_SHIFT)) {
-+			pr_err("FIT: sub-image %s end not aligned to page boundaries, skipping\n",
-+			       image_name);
-+			continue;
-+		}
-+
-+		start_sect = image_pos >> SECTOR_SHIFT;
-+		nr_sects = image_len >> SECTOR_SHIFT;
-+		imgmaxsect = (imgmaxsect < (start_sect + nr_sects)) ?
-+				     (start_sect + nr_sects) :
-+					   imgmaxsect;
-+
-+		if (start_sect + nr_sects > dsectors) {
-+			state->access_beyond_eod = 1;
-+			continue;
-+		}
-+
-+		put_partition(state, *slot, fit_start_sector + start_sect,
-+			      nr_sects);
-+		state->parts[*slot].flags = ADDPART_FLAG_READONLY;
-+		state->parts[*slot].has_info = true;
-+		info = &state->parts[*slot].info;
-+
-+		label_min = min_t(int, sizeof(info->volname) - 1, image_name_len);
-+		strncpy(info->volname, image_name, label_min);
-+		info->volname[label_min] = '\0';
-+
-+		snprintf(tmp, sizeof(tmp), "(%s)", info->volname);
-+		strlcat(state->pp_buf, tmp, PAGE_SIZE);
-+
-+		if (++(*slot) > max_slot)
-+			break;
-+	}
-+
-+	/* in case uImage.FIT is stored in a partition, map the remaining space */
-+	if (add_remain && (imgmaxsect + MIN_FREE_SECT) < dsectors) {
-+		put_partition(state, *slot, fit_start_sector + imgmaxsect,
-+			      dsectors - imgmaxsect);
-+		state->parts[*slot].flags = 0;
-+		info = &state->parts[*slot].info;
-+		strcpy(info->volname, REMAIN_VOLNAME);
-+		snprintf(tmp, sizeof(tmp), "(%s)", REMAIN_VOLNAME);
-+		strlcat(state->pp_buf, tmp, PAGE_SIZE);
-+		++(*slot);
-+	}
-+ret_out:
-+	kfree(fit);
-+	return ret;
-+}
-+
-+/**
-+ * fit_partition - map uImage.FIT filesystem sub-images into partitions
-+ * @state: pointer to partition parser state
-+ *
-+ * Used to parse uImage.FIT structure for images directly stored on
-+ * the whole block device (typically ubiblock or mtdblock).
-+ */
-+int fit_partition(struct parsed_partitions *state)
-+{
-+	int slot = 1;
-+
-+	return parse_fit_partitions(state, 0, 0, &slot, MAX_FIT_LOADABLES, false);
-+}
--- 
-2.36.0
+
+Paolo
 

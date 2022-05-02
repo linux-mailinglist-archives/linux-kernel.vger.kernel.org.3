@@ -2,103 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8CF7516B4E
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 09:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D48BD516B53
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 09:36:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358607AbiEBHh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 03:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35384 "EHLO
+        id S1383573AbiEBHik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 03:38:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242657AbiEBHh0 (ORCPT
+        with ESMTP id S242657AbiEBHih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 03:37:26 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E117F114D;
-        Mon,  2 May 2022 00:33:58 -0700 (PDT)
-Date:   Mon, 02 May 2022 07:33:55 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651476837;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9Hl93BaP+6Fz4+/p8Q6tSarrF/dIp3vDcExxf3BnwgQ=;
-        b=YCPOc6+wufYjQF7S9TThe94SeQhsZ3wvWdNDDKfrkg75fbDytxgw+kBJeUFtJGK8hPMDE3
-        ITtTsMMFkA3BKSIytvbA1eACQCAotjDpR3QxkA5+9aw9jUBdBk2tY9BctO3/iaqbSm+eIU
-        Z1AT6Z2CxXRDSfJIpl6BcBTDR1qpPCTiBPI+yPNH3x5V7bZKRJ/j7cM5aW2AEZxe8sHDS3
-        uHtKUImduaY78T1trfyDVNbsObkAdznycru2MGj6IVxSs6IFYFC13IbEx6JzXCpX0PyNLq
-        XMYVM1DPR8ZhkIbJJ6ABeq2Aa7wN4wrJKtshRKnc/C3yf1gWrv/jrByBu9loHg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651476837;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9Hl93BaP+6Fz4+/p8Q6tSarrF/dIp3vDcExxf3BnwgQ=;
-        b=114+oRhU/Vz7aPBZa6iQlyCq0XTduTRToXwpNv0fdTQqypkGHRsyrX3WN+L1F5zFNjS+Tu
-        2XGkobkVWdBjv+Cw==
-From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/fpu] x86/fpu: Cleanup variable shadowing
-Cc:     kernel test robot <lkp@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <202204262032.jFYKit5j-lkp@intel.com>
-References: <202204262032.jFYKit5j-lkp@intel.com>
-MIME-Version: 1.0
-Message-ID: <165147683595.4207.10467691801544326592.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 2 May 2022 03:38:37 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDA88114D
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 00:35:08 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 82A3E5C00A8;
+        Mon,  2 May 2022 03:35:06 -0400 (EDT)
+Received: from imap47 ([10.202.2.97])
+  by compute2.internal (MEProxy); Mon, 02 May 2022 03:35:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1651476906; x=1651563306; bh=S2
+        nsONwhQYHk2WKWDIyib55Mao5pVha1rrbz562lqmw=; b=oMUJjZC9VFI4Y9ZrrS
+        AVqmJhpnsCyVFrdsVUne/zN81T2i++nCMRrEdDARwqM9CFe0yVq584k+kigJxcSA
+        doxh2Cof4hoy/Sqt8N3Y6RV5w2t9vruwZfzOJl5fhWmvuMk1P0MdDJtcb54PkZDX
+        TIpSP4ErmPBXCUIZAY2ZmH6b295yA90xKb3blwSnz+1cLlWv97hcAcOwD45J54GV
+        lqU+nSYhbu8dNcuCSMsOZbNSryy/nQODry8iZ2anLLxOgOFoq9GC7dzAWxLIBXij
+        KlUx96XizjSrNjQFCmyD2D6ncEKZm/dcUa2cx3oe53A1ZJSk5g+MlMcAZLpF+1t8
+        eVBQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651476906; x=
+        1651563306; bh=S2nsONwhQYHk2WKWDIyib55Mao5pVha1rrbz562lqmw=; b=S
+        M1YGUSmmWpAzX4pJNIGyY14o6WVvnzwZAVEN2FaJiem0WxT6XhivjkMH/h7fHeRs
+        l67xjIEGkeSQoNgyvlWQ7Se2My33LVFH7gX0J9U6hYLH05lTEJoAtKwBHBhZC/Su
+        1brsjbwOgmMEj+OJmYqeXg68Yne8mT5hNSHhGdyb/U4E1TuCBQprjGya6ZcgJgDv
+        bKptHPgcWZ0xcWwBWuuHPnPwbMJlFqzCbpvCK2XgpcQH71OEXIQ2ix5aMtmqW4v8
+        zC063gswEadAIcX5gYgUpoPsS/DZzh6Y/kTbTSyHnJ7z4WzARStHnO6HXYUACC6h
+        v63YcRIAi7AhvwkKY6Jew==
+X-ME-Sender: <xms:qYlvYkNI3FpX87qJEzYVswQN7KzEjnqtZzsrpD26KTTNRP3x71xw1A>
+    <xme:qYlvYq8ScZiZVrt5p6MWp-vynjoWpa9dpTa5WjLh_PBrAq-KQYNtt62-M5Sr7QOBp
+    PLUGYbUn2-_3kileO8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeggdduvdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfufhv
+    vghnucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrf
+    grthhtvghrnhepleevgfegffehvedtieevhfekheeftedtjeetudevieehveevieelgffh
+    ieevieeunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshhvvghnsehsvhgvnhhpvghtvghrrdguvghv
+X-ME-Proxy: <xmx:qYlvYrSGonH9NsOeZBPC23NXzV_0opuzLRw2AGCkgSKiSTA4Y0N-uw>
+    <xmx:qYlvYst-DPIYZsJNrFqYjI21Q6RhtqhhA_4-kanAFTX38ea9_GUoqw>
+    <xmx:qYlvYscipHKO3907Ai6w-NmOgH49dT7FS-QWF3Vzzt47xd8dclIEFA>
+    <xmx:qolvYk5Pf2GWGcdDAF7M-UsGCZbwuKoiEScXOvpq5ALVfUMFxof8Pg>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 1C0E0A60063; Mon,  2 May 2022 03:35:04 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-591-gfe6c3a2700-fm-20220427.001-gfe6c3a27
+Mime-Version: 1.0
+Message-Id: <5291f623-6f0d-4cc0-8358-6aea4e8aa667@www.fastmail.com>
+In-Reply-To: <CAK8P3a2Cq5oa8e7SAQ-mOGnytEjnOa4esr1gsfsS3ceH+A2f2g@mail.gmail.com>
+References: <202205020811.kEEGO8QC-lkp@intel.com>
+ <CAK8P3a2Cq5oa8e7SAQ-mOGnytEjnOa4esr1gsfsS3ceH+A2f2g@mail.gmail.com>
+Date:   Mon, 02 May 2022 09:34:44 +0200
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Arnd Bergmann" <arnd@arndb.de>,
+        "kernel test robot" <lkp@intel.com>
+Cc:     clang-built-linux <llvm@lists.linux.dev>, kbuild-all@lists.01.org,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        "Hector Martin" <marcan@marcan.st>
+Subject: Re: [asahilinux:asahi-soc/rtkit-sart-nvme 4/6] drivers/soc/apple/sart.c:284:4:
+ warning: format specifies type 'unsigned long long' but the argument has type
+ 'phys_addr_t' (aka 'unsigned int')
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/fpu branch of tip:
+Hi Arnd,
 
-Commit-ID:     b91c0922bf1ed15b67a6faa404bc64e3ed532ec2
-Gitweb:        https://git.kernel.org/tip/b91c0922bf1ed15b67a6faa404bc64e3ed532ec2
-Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Mon, 02 May 2022 09:20:42 +02:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Mon, 02 May 2022 09:28:31 +02:00
+On Mon, May 2, 2022, at 08:39, Arnd Bergmann wrote:
+> On Mon, May 2, 2022 at 2:21 AM kernel test robot <lkp@intel.com> wrote:
+>
+>>    277
+>>    278                  clear_bit(i, &sart->used_entries);
+>>    279                  dev_dbg(sart->dev, "cleared entry %d\n", i);
+>>    280                  return 0;
+>>    281          }
+>>    282
+>>    283          dev_warn(sart->dev, "entry [paddr: 0x%llx, size: 0x%zx] not found\n",
+>>  > 284                   paddr, size);
+>>    285
+>
+> Hi Sven,
+>
+> to print a phys_addr_t, you should pass the address by reference and use
+> the special "%pap" format string modifier. I'm not entirely sure if it should
+> actually be a dma_addr_t instead of a phys_addr_t. If the type gets changed,
+> the format string would become "%pad".
 
-x86/fpu: Cleanup variable shadowing
+I've been using %pa for all other prints in this file since v1 and just
+missed this one for some reason. I'm a bit confused why the bots found this last
+one only now but I'll fix it as well.
 
-Addresses: warning: Local variable 'mask' shadows outer variable
 
-Remove extra variable declaration and switch the bit mask assignment to use
-BIT_ULL() while at it.
+Thanks,
 
-Fixes: 522e92743b35 ("x86/fpu: Deduplicate copy_uabi_from_user/kernel_to_xstate()")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/lkml/202204262032.jFYKit5j-lkp@intel.com
----
- arch/x86/kernel/fpu/xstate.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-index 31c12f4..81fcd04 100644
---- a/arch/x86/kernel/fpu/xstate.c
-+++ b/arch/x86/kernel/fpu/xstate.c
-@@ -1233,7 +1233,7 @@ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
- 	}
- 
- 	for (i = 0; i < XFEATURE_MAX; i++) {
--		u64 mask = ((u64)1 << i);
-+		mask = BIT_ULL(i);
- 
- 		if (hdr.xfeatures & mask) {
- 			void *dst = __raw_xsave_addr(xsave, i);
+Sven

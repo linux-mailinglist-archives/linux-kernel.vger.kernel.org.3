@@ -2,102 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADD59517208
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 16:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 533E951720C
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 16:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238712AbiEBO7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 10:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
+        id S1376402AbiEBPAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 11:00:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238740AbiEBO6w (ORCPT
+        with ESMTP id S238740AbiEBPAB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 10:58:52 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329D421AE
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 07:55:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=YttNPnloQVd2Mgtd4qh1LVWzGbOYyikCld4Yn2jXJd8=; b=HsdG5RnnaP6tqPf5ffNlaVSFIX
-        4uRd6sKzfE02z+HA1IhxNanlssfvXnO5h9AEQh1ZZfLKGdwLeEcpjmZEdubxVX3mnigbtfDUrJ3VA
-        /U+V0qt3gzr8D9z0ZxYE/nrQjzT3BMHBjr868nrpTm13mF6zIaHrjdSRYsFSf3H/5erneGPPf/nbx
-        seCSzhy8SOiXPjhIthtbW9O0c/oEeHW1NvSxJv4kYDWz8v7cbtma+MQCeDglhoXBOHT2vCxR+g7Q0
-        xs5/MmYu22NQ/LzTRQxOcMTjkJTSYX+Y1zOQObONz/01nEO/ECyBJSBZMivhjIKMR4Yj2o4MNrenH
-        dTISZWHg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nlXRw-00EtbN-AU; Mon, 02 May 2022 14:54:56 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8416430031D;
-        Mon,  2 May 2022 16:54:53 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 6B5B620288CEB; Mon,  2 May 2022 16:54:53 +0200 (CEST)
-Date:   Mon, 2 May 2022 16:54:53 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Marco Elver <elver@google.com>
-Cc:     x86@kernel.org, jpoimboe@redhat.com, linux-kernel@vger.kernel.org,
-        jbaron@akamai.com, rostedt@goodmis.org, ardb@kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2 3/3] jump_label,noinstr: Avoid instrumentation for
- JUMP_LABEL=n builds
-Message-ID: <Ym/wvdBuvFuHzw15@hirez.programming.kicks-ass.net>
-References: <20220502110741.951055904@infradead.org>
- <20220502111216.350926848@infradead.org>
- <Ym/X/BuXCi8H0vud@hirez.programming.kicks-ass.net>
- <Ym/buh8nDPFhohc2@elver.google.com>
+        Mon, 2 May 2022 11:00:01 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2083.outbound.protection.outlook.com [40.107.92.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0044621A
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 07:56:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jZVB3JmpjfyDYp3Y+MwQcZNhTruVNTegAyRK9NwkSJUa4XoT3DtfiBqDsQABmYJbPf6f6wujeMJF7WZ6wFq57n6kV+B85T147zqpwWXK1A2VIzXE2uquL/0BEV3sFUiQP3hMzGNXHYJ0Q6WyGq05ubD9SchhpdRdudFNlbjfgQycRPA4qEloEAsESNYgPWUICB5MQVRVCjc9QYowk9oTAWdlCMJHR3lcMi+m55WrUesniJStXbw2a998AGdbUM2iEzCIWpPUDq3SozsHcFEzyJA18V8y5Qm0FqVpJvwT/c9FKfz9GIAOaqs6zUWNMdTzarWh73xxAybBi4h5KHqsZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=f19Hvv6ohCbZM50V+dNU96oJQqBPReVz6ZtcldeqBWc=;
+ b=lY4Tx6ez8Xw0QvD1ukdgpA4UypqQF2HKlxMx5Epf0l5WqCB526tx9jKuRNtXnyGoSWu/aPSnU49hSTSTae57ApAivm6oxHEc9sLX7+OWMf8a9DTu1FhjAeT7sAd1tKt7VcaIiw3lAfOD1i6jPytT9gZDSDAxIU/cdSZrnUuynro3khWUsByXIxc65lMi9CuyVaR6NMNiAGErw3XIyxXUGL7JBKzB1/Xk9qWMzsjCl+wMuAsNLi3eXk9AkbTM1D0lfq9pNMm9Y7lEh3rFR6zC4Yx98JHf+FeVKymTCWmgI76Ti0b1mH24i8Fbx/qPLjxMWTUE2P6wGyMPTciwr1V/Ww==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=f19Hvv6ohCbZM50V+dNU96oJQqBPReVz6ZtcldeqBWc=;
+ b=YmC4lrde1xYiW5OzIwlE66mJEmZxOHBxct6k1Bv2z/y5s7ufCGSmZwDujFbs0TqmnzXfKOdtlT/AqvLM7ej2GVgw57RGhMj9X8Kg/JgSjiTIO0MN37jo82mEKlFgmjIoNU3rHAUyNh2NQbIh1DzW4MgzydMKNNnZK4FcyIF7jG8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from SA0PR12MB4526.namprd12.prod.outlook.com (2603:10b6:806:98::23)
+ by DM5PR12MB1660.namprd12.prod.outlook.com (2603:10b6:4:9::22) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5186.18; Mon, 2 May 2022 14:56:29 +0000
+Received: from SA0PR12MB4526.namprd12.prod.outlook.com
+ ([fe80::89d2:6db0:5fc9:cc03]) by SA0PR12MB4526.namprd12.prod.outlook.com
+ ([fe80::89d2:6db0:5fc9:cc03%5]) with mapi id 15.20.5206.024; Mon, 2 May 2022
+ 14:56:29 +0000
+Message-ID: <6977b3d5-0aa8-3d57-c9ad-0742bdd3dc8f@amd.com>
+Date:   Mon, 2 May 2022 09:56:25 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCHv4] drm/amdgpu: disable ASPM on Intel Alder Lake based
+ systems
+Content-Language: en-US
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Dave Airlie <airlied@linux.ie>, Xinhui Pan <xinhui.pan@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        Alex Deucher <alexdeucher@gmail.com>,
+        amd-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Alexander Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>
+References: <20220412215000.897344-1-richard.gong@amd.com>
+ <d4ba3998-34aa-86d2-bde9-bc6ae9d8d08d@molgen.mpg.de>
+ <CADnq5_MgvcGPWf2gYn_3qCr+Gq1P39tvv-W-o8NhivvMpMwUBA@mail.gmail.com>
+ <91e916e3-d793-b814-6cbf-abee0667f5f8@molgen.mpg.de>
+ <94fd858d-1792-9c05-b5c6-1b028427687d@amd.com>
+ <efc1dfd1-2b54-aee5-1497-4b800a468141@molgen.mpg.de>
+ <237da02b-0ed8-6b1c-3eaf-5574aab4f13f@amd.com>
+ <294555b4-2d1b-270f-6682-3a17e9df133c@molgen.mpg.de>
+ <5adfe067-dc00-6567-e218-c5c68670cf5b@amd.com>
+ <543a9e76-ca90-984b-b155-a0647cdeacff@molgen.mpg.de>
+From:   "Gong, Richard" <richard.gong@amd.com>
+In-Reply-To: <543a9e76-ca90-984b-b155-a0647cdeacff@molgen.mpg.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MN2PR20CA0028.namprd20.prod.outlook.com
+ (2603:10b6:208:e8::41) To SA0PR12MB4526.namprd12.prod.outlook.com
+ (2603:10b6:806:98::23)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ym/buh8nDPFhohc2@elver.google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9aefbcec-d554-47e7-3a55-08da2c4bf050
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1660:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB16609FE54BC314E149F8529395C19@DM5PR12MB1660.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: MIHSkBf/Xmb5mr14AozEm8afMMZn7TlFFMvN200pR2bLa9PxE4TMyBqgL82lfYuzHbUTOJ2HxiJ2gtFIbRmHgH3EsOmWIgRBT9yf8bFjXIzURJ4Lx92IU4/80KA1pJKwur0VXRxtHiI0vMmQadh9mHcIWezQoKCBTTjwxvUcbuOBY76+q4wCwJBxyCSYA9ndvPZ5UMHujwVPu0rvWv/7bBRaLYD0ljZ7cuecwcVFneqek4Rl+w0GHQo0t2iokS8YIcK9UB5aojrHkGUGO5Q38vQgGR+cg9l7sVSDM9wzRkpg7TALnchk+kDecmo9YWebgw0zG7GydwdcJJOvA1zjopNzRvEYS2pV1eLodE2LpUrGbBEj1DVsShgDj6H7fRwUoj7leD9aMPdlUurHXujvdw+1sbrrTsarhat7VreHI57AM5fNZEpk42Dpz5wQeaRkYsDE+kLh2cuX7lqd4DMJweeacDrCJv2z6g10rVfRlIBZ6h1SAM+JKRf0dYsGkO1gsp5/dM/++Y9VUcQg1UecI+VApwbrMTDl29cuTf/M3t2cZT8H+WEvMrYQaloIZrCdzDE9j4QXOsgp3Frmoa1EGdAd2giYO92dEKIxsHoc6DKHAlrn5S16wsSqIZ3t8CF48ok9pv+Cwoip65irPPkzIbxP2ZWgLdVEBav4Nq6IXgXkjC339OpzfzfFhFaVQ0xnhBKemhjsnjJG43jawKQD0X1fZErlNowCchjEOgHTg4bGLErKBHENsTlS85e/I93C
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA0PR12MB4526.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(31696002)(86362001)(8676002)(4326008)(66556008)(66946007)(508600001)(66476007)(6486002)(54906003)(316002)(6916009)(38100700002)(2906002)(36756003)(83380400001)(2616005)(31686004)(186003)(8936002)(6512007)(5660300002)(6666004)(6506007)(26005)(53546011)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bENYNG9DL2ZuL3lnQ2tMbm9lWVo5S1pISTlqdnVuZWIvV2ZIRWhLdWJlWGhG?=
+ =?utf-8?B?R2tTbGhqUFMvZTBQd3c4VHZKTEZpT3kxWElBYWNVTy9wMGVEaEI0VTl0K20v?=
+ =?utf-8?B?SzZtZUd2b1EyYm5FRWdJbmp4QVNVWWtFZk00aGFqVC82bFRyUUNvNGpsN0lD?=
+ =?utf-8?B?OEFFd0lpc0Qwd1dhLzJ4b0Fob3hIcWxMZWtuV0JRL1NKUG1hWTBqcXRCeVQz?=
+ =?utf-8?B?Y29qeCtRUUVkWXowR3ZNZk1wNUdJeHRuNThrWllIYlZpQmJzcm5GOVp0bEpE?=
+ =?utf-8?B?OEwxU2FKRXUvdjNyTTc3V0l5aE0yZlZKSUxRMFl3TFYwK21jVm8yZGZtM1dp?=
+ =?utf-8?B?YjJEYzRVMkRKODZkM1U1N1ZhbmdCOGY4RFYxVmlkY21tNTcwMnU0U0xNNUlm?=
+ =?utf-8?B?Y2EvUVdQYk5ld3Q2UkJSK2k2U2Uxdk95WEdxWVBTWHluSTFLSXhzakVMcU5W?=
+ =?utf-8?B?dkJ3bUZUc1duY01mQ28rU0dtWCsydjRiQUozNElDRCsxRzlwT2Z6eTZraXly?=
+ =?utf-8?B?WE9nbUgrSVl5Nk9QKytWS0RwQjRxcUNTUUxVdkZraDFVWmtwNGlScmNyRG54?=
+ =?utf-8?B?ZFNuMFRRK3RUVXNDdi9yYTZmNzQrR28yNm9sL3V1L0pNTzNpTElyNG45UDlU?=
+ =?utf-8?B?a3BQR1BhbXBlWVRzTGVHRTFycW5FT0FvM2lCUlduT21rbzNaZ0puSWEyV3Zw?=
+ =?utf-8?B?Y0RBT1JFS2lHMHdDaVVyb0RyeXc4YmdUeGlVaThLeklIY0ZZY2NNTGZzTndy?=
+ =?utf-8?B?SWNQV2toYzlLa2FPditXZGljbUNCblRDSUtSb1ZlNlcxVnVNd3Y4YVEvTFp3?=
+ =?utf-8?B?SVluZkx2SnVTamhqV09GMTR3MUdXTFRHSG0wS1N5M1AvdXFGSjM5eTlwRUV2?=
+ =?utf-8?B?VEZvUGZkaGVGNk1FUjhra1V4VFFhVm5lbkhCTTRiQ0V5ZzJpNjNVbUFNWkNY?=
+ =?utf-8?B?QWQyZUZIWjR3WXRSclFtT1Bza1VmMUFxY2dmcHpNQVE0UFdOYVBabkxieE1J?=
+ =?utf-8?B?SFR1TnRBZ2Q5YzVJRTJMMTFBMFhvV3hQTjA1UTdsc2k3RmFmSVFGS1lab2Ft?=
+ =?utf-8?B?TmIzenJnLzNKQ3ZZaHpWSk5Hc1JJTVJGUkpFUTlYenRMbkdTVUwwcmhMd3RI?=
+ =?utf-8?B?akxvWGY2SG1iVjhYaEJoUGhKWDBzNE16c3dZYmJQVlBMN0Y3VGt1OHFoRGFl?=
+ =?utf-8?B?UW03SVRha202bVBuRUt2Nk9WRzM4VEZXeHhNcW1EVUEySGJuMmVLZ3VTTXkx?=
+ =?utf-8?B?SDBmRlB2NS91czZEaUNYSlhPeHFnQ2NSYlQ4ODhrNmR4eEJQMDVKUW1vVUdO?=
+ =?utf-8?B?SlpqZ29jSkhMbzM2YWxGQVBCRjY0cTlOWWZaL1RaMFVrQ1ZWbjB5emNGRExn?=
+ =?utf-8?B?aWhiYXhqb2hqS0habXFwS2tXZFVRQzRWdXNNbC81REwyRTRsVDhHLzh4OWNI?=
+ =?utf-8?B?WExjanhQNTh6WEE5Tm41YWhMTnFoNTBzOTlxanNuOERnYWc0TzdUZjc1NU1Y?=
+ =?utf-8?B?dXI5WVgwL284VVl1NUVxMm04UVRUTUhhNklidmtOQStpbDloYWNTVXVnQXI3?=
+ =?utf-8?B?OHJncEZab0JWQ3dsb3JQUGtmRm00T2ZneVRKQ0szNTRCL1AxZEoraXRCRU9H?=
+ =?utf-8?B?dXBhSzdhaWkrSWpUQmUzZHlVRGllalJWUm13MXJ3eTlaOUVoR0VxcWJ4azgv?=
+ =?utf-8?B?R21IRHhHWU9aYTF6a1NrRnlXOGNKZTY2MjdrWGEzR25lMllCUmI3WXEwa1Js?=
+ =?utf-8?B?ZG9SajJxVlZSeExWYjJOcVY5WW0wZGhVSlZLN2FVTUE2MUllK2xSUzlWb2VP?=
+ =?utf-8?B?U1JRaGJ6QXJYODZJQW1XL1pMbFcxUTk2RzQ2TGJqOExUTWZVNUhWTmZIaFNW?=
+ =?utf-8?B?RW9LdE0yVGVBQVNUdWoxUXd1d0tFUmNsRkQ1TWdZWXpqQTdQYTFRait3ZTI1?=
+ =?utf-8?B?RTlNWExDc2F5NVdjVXFpWHhTWFFicUFYRWd6WFVhZUI5TmVCeUJ4eWltUmkv?=
+ =?utf-8?B?ZnczUlpqMCs3N0laRlpib1BYWjJ0Z0lBbTNwYU5WcmNqZzRCR2p3cFRpYmpD?=
+ =?utf-8?B?UHlGWEF1S2RCSGpxUnJPT0kvUEY2Q2VVa0FDdTRKMG8wTXNUVUdHWC9GWHlJ?=
+ =?utf-8?B?aG0yS3NOSVh1bndrb01iZTQ3bHFHaWFwMXZWclgzZUxzbUVrVU1sTEtoWmlv?=
+ =?utf-8?B?dDZGUkFodUErbXA3SmhZUVM5dGlVd0RDL0F2SmFCSi94TUZLMDUrZDBtaHow?=
+ =?utf-8?B?WVpURGVVT2xscnkzSnh2SS9zaHFzREZ3V1BNL1Zjcmo2UFBUcE5JNFVMSjhj?=
+ =?utf-8?B?VUhvb0VqQ0M1eGlPRWpTSE5Fc2tzeFN4S01FdDhPY3U5ZmVZTllUUT09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9aefbcec-d554-47e7-3a55-08da2c4bf050
+X-MS-Exchange-CrossTenant-AuthSource: SA0PR12MB4526.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2022 14:56:29.3711
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QQSif34cQ7mgOgTLVcbIbR2v4GzI+c9tNf+UxlekdcbEX/iqUvW9c2t0XVbs5x4z0PnVaBjo+1Obuqs7+oGrlw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1660
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 02, 2022 at 03:25:14PM +0200, Marco Elver wrote:
-> On Mon, May 02, 2022 at 03:09PM +0200, Peter Zijlstra wrote:
-> > 
-> > Subject: jump_label,noinstr: Avoid instrumentation for JUMP_LABEL=n builds
-> > From: Peter Zijlstra <peterz@infradead.org>
-> > Date: Mon May  2 12:30:20 CEST 2022
-> > 
-> > When building x86_64 with JUMP_LABEL=n it's possible for
-> > instrumentation to sneak into noinstr:
-> > 
-> > vmlinux.o: warning: objtool: exit_to_user_mode+0x14: call to static_key_count.constprop.0() leaves .noinstr.text section
-> > vmlinux.o: warning: objtool: syscall_exit_to_user_mode+0x2d: call to static_key_count.constprop.0() leaves .noinstr.text section
-> > vmlinux.o: warning: objtool: irqentry_exit_to_user_mode+0x1b: call to static_key_count.constprop.0() leaves .noinstr.text section
-> > 
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > ---
-> >  include/linux/jump_label.h |    4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > --- a/include/linux/jump_label.h
-> > +++ b/include/linux/jump_label.h
-> > @@ -256,9 +256,9 @@ extern void static_key_disable_cpuslocke
-> >  #include <linux/atomic.h>
-> >  #include <linux/bug.h>
-> >  
-> > -static inline int static_key_count(struct static_key *key)
-> > +static __always_inline int static_key_count(struct static_key *key)
-> >  {
-> > -	return atomic_read(&key->enabled);
-> > +	return arch_atomic_read(&key->enabled.count);
-> 
-> Curious if this compiles - s/.count// ?
+Hi Paul,
 
-It does if you have JUMP_LABEL=y... (-:
+On 5/1/2022 2:08 AM, Paul Menzel wrote:
+> Dear Richard,
+>
+>
+> Sorry for the late reply.
+>
+> Am 26.04.22 um 15:53 schrieb Gong, Richard:
+>
+>> On 4/21/2022 12:35 AM, Paul Menzel wrote:
+>
+>>> Am 21.04.22 um 03:12 schrieb Gong, Richard:
+>>>
+>>>> On 4/20/2022 3:29 PM, Paul Menzel wrote:
+>>>
+>>>>> Am 19.04.22 um 23:46 schrieb Gong, Richard:
+>>>>>
+>>>>>> On 4/14/2022 2:52 AM, Paul Menzel wrote:
+>>>>>>> [Cc: -kernel test robot <lkp@intel.com>]
+>>>>>
+>>>>> […]
+>>>>>
+>>>>>>> Am 13.04.22 um 15:00 schrieb Alex Deucher:
+>>>>>>>> On Wed, Apr 13, 2022 at 3:43 AM Paul Menzel wrote:
+>>>>>>>
+>>>>>>>>> Thank you for sending out v4.
+>>>>>>>>>
+>>>>>>>>> Am 12.04.22 um 23:50 schrieb Richard Gong:
+>
+> […]
+>
+>>>>>>>>> I am still not clear, what “hang during suspend/resume” means. 
+>>>>>>>>> I guess
+>>>>>>>>> suspending works fine? During resume (S3 or S0ix?), where does 
+>>>>>>>>> it hang?
+>>>>>>>>> The system is functional, but there are only display problems?
+>>>>>> System freeze after suspend/resume.
+>>>>>
+>>>>> But you see certain messages still? At what point does it freeze 
+>>>>> exactly? In the bug report you posted Linux messages.
+>>>>
+>>>> No, the system freeze then users have to recycle power to recover.
+>>>
+>>> Then I misread the issue? Did you capture the messages over serial 
+>>> log then?
+>>
+>> I think so. We captured dmesg log.
 
-*sigh*... how I about I go back to mowing the lawn and try again
-later...
+make a correction, the previous 'dmesg log' description was not accurate.
+
+I referred that to the kernel log captured via 'journalctl' after 
+recycling the power. I should use kernel log rather than 'dmesg log' to 
+avoid the confusion.
+
+>
+> Then the (whole) system did *not* freeze, if you could still log in 
+> (maybe over network) and execute `dmesg`. Please also paste the 
+> amdgpu(?) error logs in the commit message.
+
+As mentioned in my "previous previous" reply, the user have to recycle 
+power to reset the system.
+
+When issue occurred, keyboard/mouse didn't work.  'demsg' and ssh didn't 
+work either.
+
+>
+>> As mentioned early we need support from Intel on how to get ASPM 
+>> working for VI generation on Intel Alder Lake, but we don't know 
+>> where things currently stand.
+>
+> Who is working on this, and knows?
+
+I have no idea.
+
+
+>
+> Kind regards,
+>
+> Paul
+
+Regards,
+
+Richard
+

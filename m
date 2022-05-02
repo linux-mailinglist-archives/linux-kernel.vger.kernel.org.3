@@ -2,122 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B785170A9
+	by mail.lfdr.de (Postfix) with ESMTP id 69FD25170AA
 	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 15:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381276AbiEBNkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 09:40:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45692 "EHLO
+        id S1354840AbiEBNkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 09:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385362AbiEBNkF (ORCPT
+        with ESMTP id S1385370AbiEBNkF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 2 May 2022 09:40:05 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7851BDEC4;
-        Mon,  2 May 2022 06:36:30 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id B20D75C00F3;
-        Mon,  2 May 2022 09:36:29 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 02 May 2022 09:36:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=living180.net;
-         h=cc:cc:content-transfer-encoding:content-type:date:date:from
-        :from:in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1651498589; x=
-        1651584989; bh=DKuJbHbyPUqgLeOliLIbXn1AoO2Mdbl5+P4gRT3Ay2E=; b=D
-        mpGN6XA6cMKSi58bz3l8aZ6f0nZszYbA57byZEbN4UOYQ6UwC9zY1CN0M7rLG9Rp
-        q0Jk6futlLfwjyvo3EhDLr0YzYoW2y5Mo9l1zzF100c/iGKBXxRKEcsMp8nsrEei
-        3EMHXn1AkMu8JH0aySNvRhy48fGYw4/yDwsUE6AucL3JdUaGwUAI4xAB6Sdw56mn
-        LzfRX0yF9BjT/eBfDZDj35CKGPb69j00NAweMEIu8VoDtzb6dE2+2hrcQ8sOCE/Q
-        R3sFogjT/PIGWHMZMeSM78V/pN1t/scgdt4MoyegXQLZ6xNsp0pzHFNqlB8zxnxy
-        OKg5iQjQIXNIztZdFhsYg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1651498589; x=1651584989; bh=DKuJbHbyPUqgL
-        eOliLIbXn1AoO2Mdbl5+P4gRT3Ay2E=; b=HCNoHfoxXu5Wonbjc0N2bAf8Zbggb
-        kG4mENbrXQA6sPgYaiyfUvA+ky2FYQb8v3o1a7IrfJmr6SAKXaZixnVRuPpFTvR4
-        HjiYNIH2YcyILGa4KlQFggRSCRfMEN86oNY9/bgnc2HZ3UMwM7wRox01lQddOoVp
-        QOfvxlbIM/zvGepMNdJntQygbEhiDVQ4K/4Tav/0xclLRq0W6rYpTsLCOCEyfdmp
-        brVXOfoyxYZc57oONlnwsi6mvFFrkJG9JSQcRzL61fILXC/UlxjH8w+Tj9RdnmzY
-        VqBxhey0BPevrDSlxcaVqwE7xXtrioIX2lJ/ifpbnF/+SrjN8L1MS9RgQ==
-X-ME-Sender: <xms:Xd5vYsLhYpjzpC-TL0WWuUWl6FB0vf6R9X2HChrPT4ovNz7lcjBJ0g>
-    <xme:Xd5vYsKHvFsaocy11JZ8OSVxVKoGy9ZWWlP8OKJvWLMhvqFlwDOEi5F_wu9-a-WD8
-    ItHalHdVW0VnQ>
-X-ME-Received: <xmr:Xd5vYstxdsteZjhvMhvsU6OgPoxl98lJM0o4URL_hVQ4hcrmHj-zeZgNaE9Mcw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehgdeigecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfuvfevfhfhjggtgfesthekredttdefjeenucfhrhhomhepffgrnhhi
-    vghlucfjrghrughinhhguceoughhrghrughinhhgsehlihhvihhnghdukedtrdhnvghtqe
-    enucggtffrrghtthgvrhhnpeelkeehgeeffeefvdfhffdvteettdejteeutdfgvdduieef
-    leefieegudfhjefhjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpeguhhgrrhguihhngheslhhivhhinhhgudektddrnhgvth
-X-ME-Proxy: <xmx:Xd5vYpZBskH2A79RM7vKtKYDmdZ2Tg3uDoKFI9CUiB3qtX2gCJjPEA>
-    <xmx:Xd5vYjZ1Xub_x4b2yVMuz3swAMw6oRFY-8BCQFQIOqlIh1p77nc4pg>
-    <xmx:Xd5vYlAINVZfKhjtyTgsgV8CUFQZIggdNSh3ZpAHmpgLzKMmFvpykw>
-    <xmx:Xd5vYvEnONa3IdegVxs9PKQ6WxqtlvtT8hmW_bD6_iFdL3i4MkOz2A>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 2 May 2022 09:36:28 -0400 (EDT)
-Message-ID: <ccf6cea1-1139-cd73-c4e5-dc9799708bdd@living180.net>
-Date:   Mon, 2 May 2022 16:36:25 +0300
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C49140F3
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 06:36:28 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id p10so25271661lfa.12
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 06:36:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=sPNChsGYk7kHE/rCDooMX11EJCDPE+Ox4AJuqojjAS4=;
+        b=oMyzTIQDDDkGSqMMk6jcH3Jg3mOWazFOFwqR8EyExlL855INKMIuaBkCZwvdgRpQSD
+         biuD4BmyhgnU+ANzhEkwdNHyFuPiASTFGfXH7JoHfMhBtseilEctTctKHd1Z5QYpIeyh
+         XCBKI9nH1N78fYzf8GPhsTsXjmLO8rakFYZrfwhEpi9DGSBHuyM7Kyzd7RCTX53lpQV2
+         AAgicbO0zVpm57tZpTUKqHTOhO/EJQ9lQ16JCpzBQasFSbKey6Q9NKDvke2t9g+Su53U
+         XrVFnmOMFo0w1Fu6ajlfu9QgB04IgkrRWFpyWkdh+dnaXEjEmg6QDV7a4CYqhpLi/K7r
+         jzBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=sPNChsGYk7kHE/rCDooMX11EJCDPE+Ox4AJuqojjAS4=;
+        b=2FqaQaOe9iKzppzDxPWKUIW4toa1De2oeY4fW6kEawanZBMiNnfV2/6aihQk4/YH5c
+         05f1jluOC+N2tUqLKZydMVkZcIboTrcozN7dGPKkF5KA0n+yhxNl5TUa6VsdFlVrymTU
+         GTQnWHx7D803iAF6EstKXNr9RISJQFfKTLU3JoqYGZi2LZWfd5g/SJAEXX5adNBxlgy9
+         3aXZwkvNFr+VNQOusBPsbgGUOzYVVMBsotpiddhYiPuFo0Mdrnufc4A3nPYFzRIDd/Do
+         3zK115EJKtmBD5EHw3htctg9Xzyct+vQ4MUILs5iqMxAJlZmliFzYbbPkVBS0BNamOa1
+         PcNg==
+X-Gm-Message-State: AOAM530fSIO2VlwuMiCyx6WaAqVmwMn/RL3RJvDB02XFM3vSW4FaAzl1
+        TTav4cW0FIMkB19VkFgwHYyDIg==
+X-Google-Smtp-Source: ABdhPJxn5B/JuXc6CCfatjGdv/+EBL9v9FlbJORmKz12IPtE+wybn1otAHjNPLgeBTtopFpf2dEoaA==
+X-Received: by 2002:a05:6512:3986:b0:472:4f5:33a0 with SMTP id j6-20020a056512398600b0047204f533a0mr8679514lfu.341.1651498587285;
+        Mon, 02 May 2022 06:36:27 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id h18-20020ac25d72000000b0047255d210e2sm704383lft.17.2022.05.02.06.36.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 May 2022 06:36:26 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 6096C104AD8; Mon,  2 May 2022 16:38:10 +0300 (+03)
+Date:   Mon, 2 May 2022 16:38:10 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Wander Lairson Costa <wander@redhat.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv5 04/12] x86/boot: Add infrastructure required for
+ unaccepted memory support
+Message-ID: <20220502133810.gvmaqxvspzdvzrhv@box.shutemov.name>
+References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
+ <20220425033934.68551-5-kirill.shutemov@linux.intel.com>
+ <YmvExncBpvDdfTjd@fedora>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [REGRESSION] lxc-stop hang on 5.17.x kernels
-Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Cc:     regressions@lists.linux.dev, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <7925e262-e0d4-6791-e43b-d37e9d693414@living180.net>
- <6ad38ecc-b2a9-f0e9-f7c7-f312a2763f97@kernel.dk>
-From:   Daniel Harding <dharding@living180.net>
-In-Reply-To: <6ad38ecc-b2a9-f0e9-f7c7-f312a2763f97@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmvExncBpvDdfTjd@fedora>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/2/22 16:26, Jens Axboe wrote:
-> On 5/2/22 7:17 AM, Daniel Harding wrote:
->> I use lxc-4.0.12 on Gentoo, built with io-uring support
->> (--enable-liburing), targeting liburing-2.1.  My kernel config is a
->> very lightly modified version of Fedora's generic kernel config. After
->> moving from the 5.16.x series to the 5.17.x kernel series, I started
->> noticed frequent hangs in lxc-stop.  It doesn't happen 100% of the
->> time, but definitely more than 50% of the time.  Bisecting narrowed
->> down the issue to commit aa43477b040251f451db0d844073ac00a8ab66ee:
->> io_uring: poll rework. Testing indicates the problem is still present
->> in 5.18-rc5. Unfortunately I do not have the expertise with the
->> codebases of either lxc or io-uring to try to debug the problem
->> further on my own, but I can easily apply patches to any of the
->> involved components (lxc, liburing, kernel) and rebuild for testing or
->> validation.  I am also happy to provide any further information that
->> would be helpful with reproducing or debugging the problem.
-> Do you have a recipe to reproduce the hang? That would make it
-> significantly easier to figure out.
+On Fri, Apr 29, 2022 at 07:58:14AM -0300, Wander Lairson Costa wrote:
+> On Mon, Apr 25, 2022 at 06:39:26AM +0300, Kirill A. Shutemov wrote:
+> 
+> [snip]
 
-I can reproduce it with just the following:
-
-     sudo lxc-create --n lxc-test --template download --bdev dir --dir 
-/var/lib/lxc/lxc-test/rootfs -- -d ubuntu -r bionic -a amd64
-     sudo lxc-start -n lxc-test
-     sudo lxc-stop -n lxc-test
-
-The lxc-stop command never exits and the container continues running.  
-If that isn't sufficient to reproduce, please let me know.
+As I said in the commit message, all that code added by the patch is copy
+of the battle-tested code from the main kernel. I'm not sure what the
+value of these review comment. Hm?
 
 -- 
-Regards,
-
-Daniel Harding
+ Kirill A. Shutemov

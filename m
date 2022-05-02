@@ -2,93 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 690D3516DB1
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 11:48:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 015DD516DB5
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 11:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384342AbiEBJvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 05:51:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36788 "EHLO
+        id S1384377AbiEBJwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 05:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384415AbiEBJvA (ORCPT
+        with ESMTP id S1384304AbiEBJv4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 05:51:00 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3B113E83;
-        Mon,  2 May 2022 02:47:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651484851; x=1683020851;
-  h=from:to:cc:subject:date:message-id;
-  bh=lJvh+GysjJsgQmdPaDpyMJYF+wTQQxzW4XnXPVDg9Vw=;
-  b=JgunQ+LjvysXcudWrN8L9OdTMlZwsS1lTDvOUBbNFzqej58ZLyndwRd0
-   dOyz0pu6EkZFHxEaJkmLhZA3nUuiQUKicP2Tu4YYxpPVd1ipZvVSDkLbV
-   6bofWbjG01dDAgMTuj2CLUoTphnO7Y/KX/e39AQcUSN8JxdjM+VssDTFz
-   g=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 02 May 2022 02:47:30 -0700
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 02 May 2022 02:47:29 -0700
-X-QCInternal: smtphost
-Received: from hu-vnivarth-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.111.166])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 02 May 2022 15:17:18 +0530
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
-        id F34363CB4; Mon,  2 May 2022 15:17:17 +0530 (+0530)
-From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Subject: [PATCH] serial: core: Do stop_rx in suspend path for console if console_suspend is disabled
-Date:   Mon,  2 May 2022 15:17:15 +0530
-Message-Id: <1651484835-25189-1-git-send-email-quic_vnivarth@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Mon, 2 May 2022 05:51:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C163E90;
+        Mon,  2 May 2022 02:48:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DCDC611F6;
+        Mon,  2 May 2022 09:48:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE57CC385A4;
+        Mon,  2 May 2022 09:48:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651484907;
+        bh=km8t5GpWZMuY8sFBom7Ai4dq7ayaMW+RDKrREB38Qpw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dBpvmz6sEN1MJSCG6kftcwf2X41LKcoSP+2cvL+Mu7aaUuifXIn2IzlCzjSlKhIBn
+         mGw6RHBuQhmpr6g9XCDrg7a5LrfailJ/55TjXnF0zMiXKdcFyrgY1K7g445sPce5L8
+         oMqDksVZbBO2MK43HzGadn8kLatdYQVxmDgu5X0E45DWFURQATkuzFSyYfj0nAAYOu
+         NFzKof5QKEpKbVfPAbMrjyO9EGWXQS6nO+WnqUbBQCu6Mpb+O1VxYF5bC6P6nS6oZr
+         JpJlAIognaEJvVN0T9GVOhGfuEZHtJOTLtEntvW6vfDMlw7BTGjHAg/mN2w3ftJty/
+         rSxiqU4ncTzfw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nlSfI-008O7L-OG; Mon, 02 May 2022 10:48:24 +0100
+Date:   Mon, 02 May 2022 10:49:05 +0100
+Message-ID: <87k0b4i7se.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Oliver Upton <oupton@google.com>
+Cc:     Yosry Ahmed <yosryahmed@google.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v4 4/4] KVM: arm64/mmu: count KVM s2 mmu usage in secondary pagetable stats
+In-Reply-To: <Ym+HLD/U0wwrxtaB@google.com>
+References: <20220429201131.3397875-1-yosryahmed@google.com>
+        <20220429201131.3397875-5-yosryahmed@google.com>
+        <Ym+HLD/U0wwrxtaB@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: oupton@google.com, yosryahmed@google.com, tj@kernel.org, hannes@cmpxchg.org, lizefan.x@bytedance.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org, akpm@linux-foundation.org, mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com, cgroups@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org, linux-mm@kvack.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the case of console_suspend disabled, if back to back suspend/resume
-test is executed, at the end of test, sometimes console would appear to
-be frozen not responding to input. This would happen because, during
-resume, rx transactions can come in before system is ready, malfunction
-of rx happens in turn resulting in console appearing to be stuck.
+On Mon, 02 May 2022 08:24:28 +0100,
+Oliver Upton <oupton@google.com> wrote:
+> 
+> Hi Yosry,
+> 
+> On Fri, Apr 29, 2022 at 08:11:31PM +0000, Yosry Ahmed wrote:
+> > Count the pages used by KVM in arm64 for stage2 mmu in secondary pagetable
+> > stats.
+> > 
+> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> > ---
+> >  arch/arm64/kvm/mmu.c | 35 +++++++++++++++++++++++++++++++----
+> >  1 file changed, 31 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> > index 53ae2c0640bc..fc5030307cce 100644
+> > --- a/arch/arm64/kvm/mmu.c
+> > +++ b/arch/arm64/kvm/mmu.c
+> > @@ -92,9 +92,13 @@ static bool kvm_is_device_pfn(unsigned long pfn)
+> >  static void *stage2_memcache_zalloc_page(void *arg)
+> >  {
+> >  	struct kvm_mmu_memory_cache *mc = arg;
+> > +	void *virt;
+> >  
+> >  	/* Allocated with __GFP_ZERO, so no need to zero */
+> > -	return kvm_mmu_memory_cache_alloc(mc);
+> > +	virt = kvm_mmu_memory_cache_alloc(mc);
+> > +	if (virt)
+> > +		kvm_account_pgtable_pages(virt, +1);
+> 
+> Sorry I didn't say it last time around, would now be a good time to
+> clean up the funky sign convention of kvm_mod_used_mmu_pages()? Or limit
+> the funk to just x86 :)
 
-Do a stop_rx in suspend sequence to prevent this.
+Indeed. I pointed this out in my initial review of this series, and
+expected these to be gone by now.
 
-Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
----
- drivers/tty/serial/serial_core.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+	M.
 
-diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-index 82a1770..e8c6875 100644
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@ -2211,9 +2211,16 @@ int uart_suspend_port(struct uart_driver *drv, struct uart_port *uport)
- 	}
- 	put_device(tty_dev);
- 
--	/* Nothing to do if the console is not suspending */
--	if (!console_suspend_enabled && uart_console(uport))
-+	/*
-+	 * Nothing to do if the console is not suspending
-+	 * except stop_rx to prevent any asynchronous data
-+	 * over RX line. Re start_rx, when required, is
-+	 * done by set_termios in resume sequence
-+	 */
-+	if (!console_suspend_enabled && uart_console(uport)) {
-+		uport->ops->stop_rx(uport);
- 		goto unlock;
-+	}
- 
- 	uport->suspended = 1;
- 
 -- 
-Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
-
+Without deviation from the norm, progress is not possible.

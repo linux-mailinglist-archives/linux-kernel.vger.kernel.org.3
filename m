@@ -2,106 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3887517582
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 19:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88825517588
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 19:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386521AbiEBRNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 13:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51874 "EHLO
+        id S1386398AbiEBRO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 13:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386532AbiEBRM6 (ORCPT
+        with ESMTP id S242779AbiEBRO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 13:12:58 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59CA5F98
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 10:09:28 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id c11so2698654plg.13
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 10:09:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YBdd2ryEYbQhNto7V+FEIeigFcKN5dcvsQcbEloBsSw=;
-        b=XYRI5MqlUqBCgnv3M/9BUQuzTOPzzNxiJdVK1orCZnzHz7dA6reJYKPqYCU1tcPmtq
-         cUigVtCagPxRxAmkyrVrK0V062Z1GofJ9KKeCG9eWm39/CqCM8nBoKs+Y0dZmtWHeDt7
-         VZL6umn0BklTenRO/3A0Ow1+x28lU2+ZRRdLQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YBdd2ryEYbQhNto7V+FEIeigFcKN5dcvsQcbEloBsSw=;
-        b=TTg68zG1eJYmZzjVKQvt5UPl+/fkMg9L9+PcogoObVGbT1xoZf9l6QVol6fSHZWG9S
-         tFZQO12plcoih2Xopmxj1T/Vbyhxuvfz9CbCOgiMEhmz2nT6t69nuLG1pG+arS3H8vek
-         Yrk5J3y+yOQvSEycKF89MLI+71osZ/w82ZO0yZVpBPOnXUVXlvFjktDh+BWJoJzF6of3
-         z2Mul/1tQ7sKuGTUokKxRmXrdFrjfhSpt4CWVqLwcI2dJppFfvYAyGVlvd+8vcFnmnQr
-         C8X09EIdvofJLvI6rzk1UDE1M1feYiLMF/RGQBxYZM0mhKzLZnMXxF3hsCzwFctvv78u
-         XIgg==
-X-Gm-Message-State: AOAM5331MIlKcvHRPcQSBTHMlovyywFuonub8I/1vi9wPpZkYY8/D4Zk
-        tihmNs9mRC8b2ZFAKv1elBuBEA==
-X-Google-Smtp-Source: ABdhPJxkgIjQEoLrqIr9pTzpjKkepzj3G16lxAM5zrjtg1fwCIRZhywsUjgqUg/oWK4ovXfHbqsB0Q==
-X-Received: by 2002:a17:902:cec5:b0:15d:1e53:6f1a with SMTP id d5-20020a170902cec500b0015d1e536f1amr12831600plg.2.1651511368310;
-        Mon, 02 May 2022 10:09:28 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:c272:7186:601f:66e6])
-        by smtp.gmail.com with UTF8SMTPSA id co21-20020a17090afe9500b001cd4989fedcsm19210563pjb.40.2022.05.02.10.09.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 10:09:27 -0700 (PDT)
-Date:   Mon, 2 May 2022 10:09:25 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Greg KH <greg@kroah.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Douglas Anderson <dianders@chromium.org>
-Subject: Re: linux-next: build failure after merge of the usb tree
-Message-ID: <YnAQRQWK6ozI8DZJ@google.com>
-References: <20220502210728.0b36f3cd@canb.auug.org.au>
- <Ym/DPS99n8K8Lltu@kroah.com>
+        Mon, 2 May 2022 13:14:27 -0400
+Received: from forward103j.mail.yandex.net (forward103j.mail.yandex.net [IPv6:2a02:6b8:0:801:2::106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F0A6176
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 10:10:57 -0700 (PDT)
+Received: from forward101q.mail.yandex.net (forward101q.mail.yandex.net [IPv6:2a02:6b8:c0e:4b:0:640:4012:bb98])
+        by forward103j.mail.yandex.net (Yandex) with ESMTP id 22C80100A0A;
+        Mon,  2 May 2022 20:10:55 +0300 (MSK)
+Received: from vla1-692e383ae130.qloud-c.yandex.net (vla1-692e383ae130.qloud-c.yandex.net [IPv6:2a02:6b8:c0d:4e82:0:640:692e:383a])
+        by forward101q.mail.yandex.net (Yandex) with ESMTP id 1D94E13E80013;
+        Mon,  2 May 2022 20:10:55 +0300 (MSK)
+Received: from vla3-3dd1bd6927b2.qloud-c.yandex.net (vla3-3dd1bd6927b2.qloud-c.yandex.net [2a02:6b8:c15:350f:0:640:3dd1:bd69])
+        by vla1-692e383ae130.qloud-c.yandex.net (mxback/Yandex) with ESMTP id wAlxiCjCOW-Arg8C3hQ;
+        Mon, 02 May 2022 20:10:55 +0300
+X-Yandex-Fwd: 2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lach.pw; s=mail; t=1651511455;
+        bh=EL8vW3m6OCPjznoXCXY4p2BDvFflry15CcmJdzjBFzA=;
+        h=In-Reply-To:References:Date:Subject:Cc:To:From:Message-Id;
+        b=RPvmFqyXyvXTbC7t2B4nTfJalnZxzc+ZnNhCz/ep8OGSnG0IjIKX1qMACxgxOCGil
+         lxgKYO5D8uCFhUUwa9VNVNUD08ctt9zK+iVWnseEnYmWJgpGb86KnMj4bsF4jwceOQ
+         NbqsrEgGtiuYr7bGiUu85sqiRrFPQCTzAQgkBBi4=
+Authentication-Results: vla1-692e383ae130.qloud-c.yandex.net; dkim=pass header.i=@lach.pw
+Received: by vla3-3dd1bd6927b2.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id xTgxo8AHyR-ApMSX4BE;
+        Mon, 02 May 2022 20:10:52 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+From:   Yaroslav Bolyukin <iam@lach.pw>
+To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        "Lin, Wayne" <Wayne.Lin@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Yaroslav Bolyukin <iam@lach.pw>
+Subject: [RESEND PATCH v2 1/2] drm/edid: parse DRM VESA dsc bpp target
+Date:   Mon,  2 May 2022 20:10:30 +0300
+Message-Id: <20220502171031.11797-1-iam@lach.pw>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220220151940.58327-1-iam@lach.pw>
+References: <20220220151940.58327-1-iam@lach.pw>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Ym/DPS99n8K8Lltu@kroah.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 02, 2022 at 01:40:45PM +0200, Greg KH wrote:
-> On Mon, May 02, 2022 at 09:07:28PM +1000, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > After merging the usb tree, today's linux-next build (x86_64
-> > modules_install) failed like this:
-> > 
-> > depmod: ERROR: Cycle detected: usbcore -> onboard_usb_hub -> usbcore
-> > depmod: ERROR: Found 2 modules in dependency cycles!
-> > 
-> > Caused by commit
-> > 
-> >   c40b62216c1a ("usb: core: hcd: Create platform devices for onboard hubs in probe()")
-> > 
-> > I have reverted that commit for today.
-> 
-> argh, I thought the build issues were fixed :(
+As per DisplayID v2.0 Errata E9 spec "DSC pass-through timing support"
+VESA vendor-specific data block may contain target DSC bits per pixel
+fields
 
-Sorry about that :(
+Signed-off-by: Yaroslav Bolyukin <iam@lach.pw>
+---
+ drivers/gpu/drm/drm_edid.c  | 33 ++++++++++++++++++++++-----------
+ include/drm/drm_connector.h |  6 ++++++
+ include/drm/drm_displayid.h |  4 ++++
+ 3 files changed, 32 insertions(+), 11 deletions(-)
 
-The *build* issues were actually fixed, however I did not try
-modules_install ...
+diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
+index bc43e1b32092..e2ced222a081 100644
+--- a/drivers/gpu/drm/drm_edid.c
++++ b/drivers/gpu/drm/drm_edid.c
+@@ -5433,7 +5433,7 @@ static void drm_parse_vesa_mso_data(struct drm_connector *connector,
+ 	if (oui(vesa->oui[0], vesa->oui[1], vesa->oui[2]) != VESA_IEEE_OUI)
+ 		return;
+ 
+-	if (sizeof(*vesa) != sizeof(*block) + block->num_bytes) {
++	if (block->num_bytes < 5) {
+ 		drm_dbg_kms(connector->dev, "Unexpected VESA vendor block size\n");
+ 		return;
+ 	}
+@@ -5453,20 +5453,29 @@ static void drm_parse_vesa_mso_data(struct drm_connector *connector,
+ 		break;
+ 	}
+ 
+-	if (!info->mso_stream_count) {
+-		info->mso_pixel_overlap = 0;
+-		return;
++	info->mso_pixel_overlap = 0;
++
++	if (info->mso_stream_count) {
++		info->mso_pixel_overlap = FIELD_GET(DISPLAYID_VESA_MSO_OVERLAP, vesa->mso);
++		if (info->mso_pixel_overlap > 8) {
++			drm_dbg_kms(connector->dev, "Reserved MSO pixel overlap value %u\n",
++				info->mso_pixel_overlap);
++			info->mso_pixel_overlap = 8;
++		}
++
++		drm_dbg_kms(connector->dev, "MSO stream count %u, pixel overlap %u\n",
++			info->mso_stream_count, info->mso_pixel_overlap);
+ 	}
+ 
+-	info->mso_pixel_overlap = FIELD_GET(DISPLAYID_VESA_MSO_OVERLAP, vesa->mso);
+-	if (info->mso_pixel_overlap > 8) {
+-		drm_dbg_kms(connector->dev, "Reserved MSO pixel overlap value %u\n",
+-			    info->mso_pixel_overlap);
+-		info->mso_pixel_overlap = 8;
++	if (block->num_bytes < 7) {
++		/* DSC bpp is optional */
++		return;
+ 	}
+ 
+-	drm_dbg_kms(connector->dev, "MSO stream count %u, pixel overlap %u\n",
+-		    info->mso_stream_count, info->mso_pixel_overlap);
++	info->dp_dsc_bpp = FIELD_GET(DISPLAYID_VESA_DSC_BPP_INT, vesa->dsc_bpp_int) * 16 +
++		FIELD_GET(DISPLAYID_VESA_DSC_BPP_FRACT, vesa->dsc_bpp_fract);
++
++	drm_dbg_kms(connector->dev, "DSC bits per pixel %u\n", info->dp_dsc_bpp);
+ }
+ 
+ static void drm_update_mso(struct drm_connector *connector, const struct edid *edid)
+@@ -5511,6 +5520,8 @@ drm_reset_display_info(struct drm_connector *connector)
+ 
+ 	info->mso_stream_count = 0;
+ 	info->mso_pixel_overlap = 0;
++
++	info->dp_dsc_bpp = 0;
+ }
+ 
+ u32 drm_add_display_info(struct drm_connector *connector, const struct edid *edid)
+diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
+index 3ac4bf87f257..77ce9515afc4 100644
+--- a/include/drm/drm_connector.h
++++ b/include/drm/drm_connector.h
+@@ -634,6 +634,12 @@ struct drm_display_info {
+ 	 * @mso_pixel_overlap: eDP MSO segment pixel overlap, 0-8 pixels.
+ 	 */
+ 	u8 mso_pixel_overlap;
++
++	/**
++	 * @dp_dsc_bpp: DP Display-Stream-Compression (DSC) timing's target
++	 * DST bits per pixel in 6.4 fixed point format. 0 means undefined
++	 */
++	u16 dp_dsc_bpp;
+ };
+ 
+ int drm_display_info_set_bus_formats(struct drm_display_info *info,
+diff --git a/include/drm/drm_displayid.h b/include/drm/drm_displayid.h
+index 7ffbd9f7bfc7..1be6deddcce3 100644
+--- a/include/drm/drm_displayid.h
++++ b/include/drm/drm_displayid.h
+@@ -131,12 +131,16 @@ struct displayid_detailed_timing_block {
+ 
+ #define DISPLAYID_VESA_MSO_OVERLAP	GENMASK(3, 0)
+ #define DISPLAYID_VESA_MSO_MODE		GENMASK(6, 5)
++#define DISPLAYID_VESA_DSC_BPP_INT	GENMASK(5, 0)
++#define DISPLAYID_VESA_DSC_BPP_FRACT GENMASK(3, 0)
+ 
+ struct displayid_vesa_vendor_specific_block {
+ 	struct displayid_block base;
+ 	u8 oui[3];
+ 	u8 data_structure_type;
+ 	u8 mso;
++	u8 dsc_bpp_int;
++	u8 dsc_bpp_fract;
+ } __packed;
+ 
+ /* DisplayID iteration */
 
-> I'll go revert that series from my tree later today, thanks for the
-> report.
+base-commit: 6a47a16dcef3fdda79a95452964d001a620db473
+-- 
+2.35.1
 
-I think the dependency situation can only be resolved by linking
-onboard_hub_create/destroy_pdevs() into the USB core module. My initial
-idea was to build them into the kernel binary, however that doesn't
-work because onboard_hub_create_pdevs() calls usb_of_get_device_node(),
-which is part of the core module when CONFIG_USB=m. The two function
-are relatively lightweight and don't depend on internals of the
-onboard_usb_hub driver (besides the device id table) so linking them
-into the core module doesn't seem too ugly.

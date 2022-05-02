@@ -2,189 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 624FE5179FF
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 00:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD675179F9
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 00:27:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343905AbiEBWci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 18:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
+        id S1344107AbiEBWa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 18:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiEBWcg (ORCPT
+        with ESMTP id S229876AbiEBWay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 18:32:36 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6280CB7E4
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 15:29:05 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220502222902euoutp014ee6c569db8463530ebbb6d0e507d9a9~rakc6X7BD0106001060euoutp016
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 22:29:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220502222902euoutp014ee6c569db8463530ebbb6d0e507d9a9~rakc6X7BD0106001060euoutp016
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1651530542;
-        bh=JISPIXGx+t2797poWPfDGEXeiCnRRaIzH+pykhQARJ8=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=BxpFuHTvvdrTin1VCBJBRV/oEFtBFk0hW2MtR13eQNhIIuKugbRbGf9Hp3RFtrNcI
-         TEa+O6ZGSwOQ0z2xF9fQMxFkyBEtUPR8asube+hys2KJ4JGg5S9DcjWdASFgSFp1rD
-         bwGTHc8mCk07L0mx2yCeAXUv/1hsC1GzOJ+LA1j4=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20220502222901eucas1p17d2b8f927ccab98b8d62154285f6a68c~rakbrOuJh1783017830eucas1p1s;
-        Mon,  2 May 2022 22:29:01 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 3D.70.10009.D2B50726; Mon,  2
-        May 2022 23:29:01 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220502222900eucas1p267df21cbfbdd081fc78ea567cf8f145d~rakbXzDWh0571905719eucas1p2I;
-        Mon,  2 May 2022 22:29:00 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220502222900eusmtrp1af424595ed1aaa8c9a6fd6b1a9ef9375~rakbVt4qn1603816038eusmtrp1h;
-        Mon,  2 May 2022 22:29:00 +0000 (GMT)
-X-AuditID: cbfec7f2-e95ff70000002719-d7-62705b2dc747
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 95.3E.09522.C2B50726; Mon,  2
-        May 2022 23:29:00 +0100 (BST)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220502222900eusmtip2149c260383c899bca1cb4148e433dd8b~rakasr7SN3199331993eusmtip2I;
-        Mon,  2 May 2022 22:29:00 +0000 (GMT)
-Message-ID: <601d6979-7462-6f20-0d60-2fcfcf1e405b@samsung.com>
-Date:   Tue, 3 May 2022 00:29:00 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
-        Gecko/20100101 Thunderbird/91.8.0
-Subject: Re: [PATCH printk v5 1/1] printk: extend console_lock for
- per-console locking
-Content-Language: en-US
-To:     John Ogness <john.ogness@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
+        Mon, 2 May 2022 18:30:54 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17422B7E4
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 15:27:24 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so15619274fac.7
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 15:27:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Q1/lFLcP1AWgd2rGaGmUgZjwGNyyx6HDGRnQm/XP760=;
+        b=KrgecL+KJYML3Y0FKmqgYha8httPmD2RHkLgw3CJ8+pPp9ACK5H6RRqVZFFV1XtyMR
+         vOYYhudHUu0x7MGQ5MYbBTa1qc8oVy4vhe2JvnLjQl2cnGyto9OmJHAECHAiMiZJnquC
+         DsyBA13iIqoTSWuh2bi1PFxC6jzuKyqb2hYiZuxsV3iTLWM2UXSQv1eIfd2C5kRau9KT
+         9XT1AW4JDUz0fqfP7+1c+hOCqRr39FJsoNgpue5pbCx9ysLbdoebZ2Fwbbd5fNwpX4E7
+         Wzo1kPmt6fJbt5GgA3aAUCMVyG1zHYamNwuh1YRtgtUZeW9XQqYtAbYw7N+SAwLeJ6uh
+         mT1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Q1/lFLcP1AWgd2rGaGmUgZjwGNyyx6HDGRnQm/XP760=;
+        b=q7NhwQa5klzgIqY0x9vqPfP0k3WQTw+gRG9ezQ2SUMtrVrjycj2rh9wX6Oc91xn4Lc
+         Vcq6JW7zfxEVf+cqEgdkfqm34uhQivlFR3LQPImD7gFkZd0B0b8/BFenl4Qvm/T0drMK
+         hTM0e+Zoi4lGZXDPTKrKaCRWJ3bkEfVcUrWDkcmgMh3KiHhAVMTsI1lyzWXtsrOm2IPc
+         it8p8COc00U+DMkyCrdhar8ZXTAsBPKeIKi8KPo1LDp+Erxl29Ww1iuouo019qKkEJa+
+         j7HyB8FpMZhmqJHACoihjlMs31tzBp8uWx4YN73twoIA9IugGs3WOArYbLPboNyQBVsy
+         5vlA==
+X-Gm-Message-State: AOAM530W+LzlhqpouK0+h5DC0n6A4Pv+GDqMHGtFnjXqtnjueD3amGxR
+        M4JPGD4YIAmDHcNPcr0pA04aoQ==
+X-Google-Smtp-Source: ABdhPJzBNC6JTKJRzvnWOAFUlkOXZGDgbE+a8MVXLphLOTH8PsKmrO5U6VkT4JBOToFxmN9bQmyU1w==
+X-Received: by 2002:a05:6870:618e:b0:e5:c2f3:e009 with SMTP id a14-20020a056870618e00b000e5c2f3e009mr615742oah.10.1651530443371;
+        Mon, 02 May 2022 15:27:23 -0700 (PDT)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id t6-20020a056870f20600b000e686d1388dsm6955309oao.39.2022.05.02.15.27.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 May 2022 15:27:22 -0700 (PDT)
+Date:   Mon, 2 May 2022 15:29:08 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-amlogic@lists.infradead.org
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <87y1zkkrjy.fsf@jogness.linutronix.de>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBKsWRmVeSWpSXmKPExsWy7djPc7q60QVJBnOOsFo0L17PZrHtynxG
-        iwWzuS0u75rDZvH/8VdWi30dD5gsdm9cxGaxedNUZgcOj9kNF1k8WvbdYvd4d+4cu8f+uWvY
-        PTYvqfdYv+Uqi8fnTXIB7FFcNimpOZllqUX6dglcGZM/LWIpeCNcseDmW/YGxnUCXYycHBIC
-        JhLdb2cxdzFycQgJrGCUOH/jEjuE84VR4tnWPWwQzmdGiTVdrYwwLR1b1rFAJJYzSrScmsoO
-        khAS+MgoceVNPIjNK2AnsefUHiYQm0VAReLfnbfMEHFBiZMzn7CA2KICSRJz990DinNwCAtE
-        SLTtDQUJMwuIS9x6Mh+sVUTAW2LV671gFzELfGWUmDz5P9gRbAKGEl1vu9hAbE4BY4mHk4+z
-        QTTLS2x/OwfsHwmBLxwSh57/Z4K42kXi+vq1ULawxKvjW9ghbBmJ05N7WECOkBDIl/g7wxgi
-        XCFx7fUaZgjbWuLOuV9sICXMApoS63fpQ4QdJab86mOH6OSTuPFWEOICPolJ26YzQ4R5JTra
-        hCCq1SRmHV8Ht/PghUvMExiVZiGFySwkz89C8ssshL0LGFlWMYqnlhbnpqcWG+allusVJ+YW
-        l+al6yXn525iBCam0/+Of9rBOPfVR71DjEwcjIcYJTiYlUR42zbkJAnxpiRWVqUW5ccXleak
-        Fh9ilOZgURLnTc7ckCgkkJ5YkpqdmlqQWgSTZeLglGpgypj04Yb61+IiXjaZievvHHwS4tqd
-        7co/w2KlwpOf9otOzozerMGp+WWuxP3OXYV3e9PKzx7rU84+Eju/PbZ+Q2ZcNUOFV0vY3adz
-        ZCZIefm1OXmctC7XYjY0rxVf/Th4ZrzdxjOp1+2MjszQ6Tb8vGTbgsyVnfVreJQ9Ziu/lZ/r
-        Mndj/Lxjp3fvyyxz4QqyCBdS8Pn0ePI3p+/t87eZ2s+RTzigw/r7j+TiPfnRbdXvM1l+eX7W
-        +Ml82+bQ0weWx6t3/Dzcuk377z4+dePnN96mnZ27vSDmePbtQCWBn3NVY594v2B7s/55W6pm
-        KpdnfbayumUnm2KKHWe74syV7QrB66I5XtT9tvs4adUSJZbijERDLeai4kQAKbCBJbsDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrLIsWRmVeSWpSXmKPExsVy+t/xe7o60QVJBusbtS2aF69ns9h2ZT6j
-        xYLZ3BaXd81hs/j/+Curxb6OB0wWuzcuYrPYvGkqswOHx+yGiyweLftusXu8O3eO3WP/3DXs
-        HpuX1Hus33KVxePzJrkA9ig9m6L80pJUhYz84hJbpWhDCyM9Q0sLPSMTSz1DY/NYKyNTJX07
-        m5TUnMyy1CJ9uwS9jMmfFrEUvBGuWHDzLXsD4zqBLkZODgkBE4mOLetYQGwhgaWMElM36UDE
-        ZSROTmtghbCFJf5c62LrYuQCqnnPKLF2cwszSIJXwE5iz6k9TCA2i4CKxL87b6HighInZz4B
-        GyoqkCTxYttzxi5GDg5hgQiJ971gYWYBcYlbT+aDtYoIeEuser2XHWQ+s8BXoPkfnjFCLOtn
-        leh/dxGsg03AUKLrLcgVnBycAsYSDycfZ4OYZCbRtbWLEcKWl9j+dg7zBEahWUjumIVk4Swk
-        LbOQtCxgZFnFKJJaWpybnltsqFecmFtcmpeul5yfu4kRGI/bjv3cvINx3quPeocYmTgYDzFK
-        cDArifC2bchJEuJNSaysSi3Kjy8qzUktPsRoCgyMicxSosn5wISQVxJvaGZgamhiZmlgamlm
-        rCTO61nQkSgkkJ5YkpqdmlqQWgTTx8TBKdXA5HOLXaMu79fbes1vJX85wv6cZUtceKP86c5/
-        U1PP7c+P+MK4aoaoSKXc3l/8Gy1/WHcF2R8vmCTpdfqo+anVswNOM/rpnK1U3e1le/LRga8L
-        DB0TWRamzbyocq6k9+w/J6f1XHwbnVaIMh1vcbOa9LHnttFWWV5/N+/ntYvvafP67933/v+R
-        hUdOLHCc9lorJOzZE0mJtfM9z4vXlp1YcO7x1O6iVYFTT9ocknz7n/txrHDFhpVJkXtXGgfH
-        LelXY1RvYD72O3SXl0rh0bsh+p6yr3Ylx2z13rQ+5WlVcJj4kpfFyXw3thxIejp57p0ztw+d
-        /JqozL3my3euf+ym7hsPbcz/dVjqweTXcyJUk2uVWIozEg21mIuKEwHaym2MUAMAAA==
-X-CMS-MailID: 20220502222900eucas1p267df21cbfbdd081fc78ea567cf8f145d
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c
-References: <20220421212250.565456-1-john.ogness@linutronix.de>
-        <20220421212250.565456-15-john.ogness@linutronix.de>
-        <878rrs6ft7.fsf@jogness.linutronix.de> <Ymfgis0EAw0Oxoa5@alley>
-        <Ymfwk+X0CHq6ex3s@alley>
-        <CGME20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c@eucas1p2.samsung.com>
-        <2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com> <Ymjy3rHRenba7r7R@alley>
-        <b6c1a8ac-c691-a84d-d3a1-f99984d32f06@samsung.com>
-        <87fslyv6y3.fsf@jogness.linutronix.de>
-        <51dfc4a0-f6cf-092f-109f-a04eeb240655@samsung.com>
-        <87k0b6blz2.fsf@jogness.linutronix.de>
-        <32bba8f8-dec7-78aa-f2e5-f62928412eda@samsung.com>
-        <87y1zkkrjy.fsf@jogness.linutronix.de>
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v4 5/5] drm/msm/dp: Implement hpd_notify()
+Message-ID: <YnBbNO31bwNUoRQL@ripper>
+References: <20220502165316.4167199-1-bjorn.andersson@linaro.org>
+ <20220502165316.4167199-6-bjorn.andersson@linaro.org>
+ <672e7dac-fe3b-591f-6837-3ce06a0b44c2@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <672e7dac-fe3b-591f-6837-3ce06a0b44c2@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi John,
+On Mon 02 May 13:59 PDT 2022, Kuogee Hsieh wrote:
 
-On 02.05.2022 15:11, John Ogness wrote:
-> On 2022-05-02, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
->> Data written to /dev/kmsg and all kernel logs were always displayed
->> correctly. Also data written directly to /dev/ttyAML0 is displayed
->> properly on the console. The latter doesn't however trigger the input
->> related activity.
->>
->> It looks that the data read from the uart is delivered only if other
->> activity happens on the kernel console. If I type 'reboot' and press
->> enter, nothing happens immediately. If I type 'date >/dev/ttyAML0' via
->> ssh then, I only see the date printed on the console. However if I
->> type 'date >/dev/kmsg', the the date is printed and reboot happens.
-> I suppose if you login via ssh and check /proc/interrupts, then type
-> some things over serial, then check /proc/interrupts again, you will see
-> there have been no interrupts for the uart. But interrupts for other
-> devices are happening. Is this correct?
+> 
+> On 5/2/2022 9:53 AM, Bjorn Andersson wrote:
+> > The Qualcomm DisplayPort driver contains traces of the necessary
+> > plumbing to hook up USB HPD, in the form of the dp_hpd module and the
+> > dp_usbpd_cb struct. Use this as basis for implementing the
+> > hpd_notify() callback, by amending the dp_hpd module with the
+> > missing logic.
+> > 
+> > Overall the solution is similar to what's done downstream, but upstream
+> > all the code to disect the HPD notification lives on the calling side of
+> > drm_connector_oob_hotplug_event().
+> > 
+> > drm_connector_oob_hotplug_event() performs the lookup of the
+> > drm_connector based on fwnode, hence the need to assign the fwnode in
+> > dp_drm_connector_init().
+> > 
+> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > ---
+> > 
+> > Changes since v3:
+> > - Implements hpd_notify instead of oob_hotplug_event
+> > - Rebased on new cleanup patch from Dmitry
+> > - Set hpd_state to ST_MAINLINK_READY when dp_display_usbpd_configure() succeeds
+> > 
+> >   drivers/gpu/drm/msm/dp/dp_display.c | 26 ++++++++++++++++++++++++++
+> >   drivers/gpu/drm/msm/dp/dp_display.h |  1 +
+> >   drivers/gpu/drm/msm/dp/dp_drm.c     |  3 +++
+> >   drivers/gpu/drm/msm/dp/dp_drm.h     |  2 ++
+> >   4 files changed, 32 insertions(+)
+> > 
+> > diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> > index b447446d75e9..080294ac6144 100644
+> > --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> > +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> > @@ -83,6 +83,8 @@ struct dp_display_private {
+> >   	bool hpd_irq_on;
+> >   	bool audio_supported;
+> > +	bool connected;
+> > +
+> >   	struct drm_device *drm_dev;
+> >   	struct platform_device *pdev;
+> >   	struct dentry *root;
+> > @@ -1271,6 +1273,7 @@ static int dp_display_probe(struct platform_device *pdev)
+> >   	if (!desc)
+> >   		return -EINVAL;
+> > +	dp->dp_display.dev = &pdev->dev;
+> >   	dp->pdev = pdev;
+> >   	dp->name = "drm_dp";
+> >   	dp->dp_display.connector_type = desc->connector_type;
+> > @@ -1760,3 +1763,26 @@ void dp_bridge_mode_set(struct drm_bridge *drm_bridge,
+> >   	dp_display->dp_mode.h_active_low =
+> >   		!!(dp_display->dp_mode.drm_mode.flags & DRM_MODE_FLAG_NHSYNC);
+> >   }
+> > +
+> > +void dp_bridge_hpd_notify(struct drm_bridge *bridge,
+> > +			  enum drm_connector_status status)
+> > +{
+> > +	struct msm_dp_bridge *dp_bridge = to_dp_bridge(bridge);
+> > +	struct msm_dp *dp = dp_bridge->dp_display;
+> > +	struct dp_display_private *dp_display = container_of(dp, struct dp_display_private, dp_display);
+> > +	int ret;
+> > +
+> > +	drm_dbg_dp(dp_display->drm_dev, "status: %d connected: %d\n", status, dp_display->connected);
+> > +
+> > +	if (!dp_display->connected && status == connector_status_connected) {
+> > +		dp_display->connected = true;
+> > +		ret = dp_display_usbpd_configure(dp_display);
+> > +		if (!ret)
+> > +			dp_display->hpd_state = ST_MAINLINK_READY;
+> > +	} else if (status != connector_status_connected) {
+> > +		dp_display->connected = false;
+> > +		dp_display_notify_disconnect(dp_display);
+> > +	} else {
+> > +		dp_display_usbpd_attention(dp_display);
+> > +	}
+> > +}
+> 
+> I would assume dp_bridge_hpd_notify() will server same purpose as
+> dp_display_irq_handler() if hpd_notification is enabled.
+> 
 
-Right. The counter for ttyAML0 is not increased when lockup happens and 
-I type something to the uart console.
+I agree with this statement.
 
->> For comparison, here is a 't' sysrq result from the 'working' serial
->> console (next-20220429), which happens usually 1 of 4 boots:
->>
->> https://protect2.fireeye.com/v1/url?k=3ef0fd63-5f7be855-3ef1762c-000babff9b5d-2e40dc5adc30a14c&q=1&e=1469838f-8586-403e-bd4d-922675d8b658&u=https%3A%2F%2Fpastebin.com%2Fmp8zGFbW
-> This still looks odd to me. We should be seeing a trace originating from
-> ret_from_fork+0x10/0x20 and kthread+0x118/0x11c.
->
-> I wonder if the early creation of the thread is somehow causing
-> problems. Could you try the following patch to see if it makes a
-> difference? I would also like to see the sysrq-t output with this patch
-> applied:
->
-> ---------------- BEGIN PATCH ---------------
-> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-> index 2311a0ad584a..c4362d25de22 100644
-> --- a/kernel/printk/printk.c
-> +++ b/kernel/printk/printk.c
-> @@ -3837,7 +3837,7 @@ static int __init printk_activate_kthreads(void)
->   
->   	return 0;
->   }
-> -early_initcall(printk_activate_kthreads);
-> +late_initcall(printk_activate_kthreads);
->   
->   #if defined CONFIG_PRINTK
->   /* If @con is specified, only wait for that console. Otherwise wait for all. */
-> ---------------- END PATCH ---------------
->
-> Thanks for your help with this!
+> In that case, should dp_bridge_hpd_notify() add
+> EV_HPD_PLUG_INT/EV_IRQ_HPD_INT/EV_HPD_UNPLUG_INT
+> 
 
-Well, nothing has changed. The lockup still happens.
+I tried this originally, but couldn't get it to work and expected that
+as the downstream driver doesn't do this, there was some good reason for
+me not to do it either.
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+> into event q to kick off corresponding
+> dp_hpd_plug_handle()/dp_irq_hpd_handle()/dp_hpd_unplug_handle()?
+> 
 
+But since then the driver has been cleaned up significantly, so I
+decided to give it a test again.
+Unfortunately it still doesn't work, but now it's easier to trace.
+
+Replacing the 3 cases with relevant calls to dp_add_event() results in
+us inserting a EV_HPD_UNPLUG_INT event really early, before things has
+been brought up. This will result in dp_hpd_unplug_handle() trying to
+disable the dp_catalog_hpd_config_intr(), which will crash as the
+hardware isn't yet clocked up.
+
+Further more, this points out the main difference between the normal HPD
+code and the USB HPD code; dp_catalog_hpd_config_intr() will enable the
+plug/unplug interrupts, which it shouldn't do for USB-controlled.
+
+
+So it seems we need two code paths after all.
+
+> By the way, I am going to test this patch out.
+> 
+> Any patches I have to pull in before apply this serial patches?
+> 
+
+The patches applies on Dmitry's msm-next-staging, which I've merged on
+top of linux-next together with a number of pending patches to get the
+DPU up on SM8350 and a pmic_glink driver which I'm about to post.
+
+But to validate that it doesn't affect your non-USB case, Dmitry's
+branch should be sufficient.
+
+Thanks,
+Bjorn
+
+> > diff --git a/drivers/gpu/drm/msm/dp/dp_display.h b/drivers/gpu/drm/msm/dp/dp_display.h
+> > index 4f9fe4d7610b..2d2614bc5a14 100644
+> > --- a/drivers/gpu/drm/msm/dp/dp_display.h
+> > +++ b/drivers/gpu/drm/msm/dp/dp_display.h
+> > @@ -11,6 +11,7 @@
+> >   #include "disp/msm_disp_snapshot.h"
+> >   struct msm_dp {
+> > +	struct device *dev;
+> >   	struct drm_device *drm_dev;
+> >   	struct device *codec_dev;
+> >   	struct drm_bridge *bridge;
+> > diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
+> > index 62d58b9c4647..821cfd37b1fb 100644
+> > --- a/drivers/gpu/drm/msm/dp/dp_drm.c
+> > +++ b/drivers/gpu/drm/msm/dp/dp_drm.c
+> > @@ -68,6 +68,7 @@ static const struct drm_bridge_funcs dp_bridge_ops = {
+> >   	.mode_valid   = dp_bridge_mode_valid,
+> >   	.get_modes    = dp_bridge_get_modes,
+> >   	.detect       = dp_bridge_detect,
+> > +	.hpd_notify   = dp_bridge_hpd_notify,
+> >   };
+> >   struct drm_bridge *dp_bridge_init(struct msm_dp *dp_display, struct drm_device *dev,
+> > @@ -138,6 +139,8 @@ struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display)
+> >   	if (IS_ERR(connector))
+> >   		return connector;
+> > +	connector->fwnode = fwnode_handle_get(dev_fwnode(dp_display->dev));
+> > +
+> >   	drm_connector_attach_encoder(connector, dp_display->encoder);
+> >   	return connector;
+> > diff --git a/drivers/gpu/drm/msm/dp/dp_drm.h b/drivers/gpu/drm/msm/dp/dp_drm.h
+> > index f4b1ed1e24f7..3b7480a86844 100644
+> > --- a/drivers/gpu/drm/msm/dp/dp_drm.h
+> > +++ b/drivers/gpu/drm/msm/dp/dp_drm.h
+> > @@ -32,5 +32,7 @@ enum drm_mode_status dp_bridge_mode_valid(struct drm_bridge *bridge,
+> >   void dp_bridge_mode_set(struct drm_bridge *drm_bridge,
+> >   			const struct drm_display_mode *mode,
+> >   			const struct drm_display_mode *adjusted_mode);
+> > +void dp_bridge_hpd_notify(struct drm_bridge *bridge,
+> > +			  enum drm_connector_status status);
+> >   #endif /* _DP_DRM_H_ */

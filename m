@@ -2,81 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6692F516917
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 03:04:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EE5C516918
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 03:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356288AbiEBBHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 21:07:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51538 "EHLO
+        id S1356330AbiEBBIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 21:08:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231254AbiEBBHe (ORCPT
+        with ESMTP id S231254AbiEBBIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 21:07:34 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC453AA49
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 18:04:06 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id w5-20020a17090aaf8500b001d74c754128so14972897pjq.0
-        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 18:04:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=FuWLGbnADKrl4A1syPhPXKuQOu6m8jQIYMoHCl1Ol1o=;
-        b=Rb7AelR2nkOQeVv31XJPbDhPfFWtYn1uIfa+g1dbFP2YVGuObIDgW5JKE0WU2RQ26u
-         /hxKFjcu5c+K2sdCeq0OkLG+0fngV3qtSCiwHx8b53HyIIyZOZQFvbAKKw08W5oMKCAl
-         MdiQZvb2K6MyaE150H2qO7cWj5nsg61VYevhiD0QH1xeEMXKBtlUvUACurBLM4lcftQR
-         4pIVP8hYEdzt5LXjzZjloRGH3dCMfMOLDdtgODgr9/XEwEFg2vSZj1HETGCTAmove6G+
-         DfWNQrhqtcKJAHGZkgsCeGV0uULi7kgP6+r9MZSLS0Du6REDbCgtct6N8n93kdorQlmP
-         +hRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=FuWLGbnADKrl4A1syPhPXKuQOu6m8jQIYMoHCl1Ol1o=;
-        b=1uwxoYDvQ73Lkks0TRQqlet5IwFSf+57QE8tRG5nBdYNpe2yQ+KgxKulNDagiaaVmw
-         6PV02SpGV5yx8/ahdCfmvYb5RZx6BozB3G8wYmBnAWEDunSbzUgkeCMI4QENz2IzZy6q
-         8pMmDeYd77Yhavx73G3hhUFKjdvfMEeAojV09ggtFEZkHpXXSJudc8P5CdRRcy5Kr8ny
-         2fJWNo4cPGQLHR0SJiEloZSnHfz0KePRLyhNcG9cGtuTfOLAIig3qhYQ2YHwBJmwOEcF
-         P2QyNCuBobyq3QZccYscbbZrYeOMo4QAbl4Pr8dDlmLQMR61ZqXkSOQtf2PljP3d7344
-         81lQ==
-X-Gm-Message-State: AOAM530k5glEk75LyAHv6mTnW3uv7bPuLG395xOMxTHsmhqhHVSzkBCA
-        hyBwEC4gO09R4d6e209QospH1A==
-X-Google-Smtp-Source: ABdhPJyD2UoMHfENDkkp1YeWcSmn9t2AcMxPzhx0iLqv54pJl+i+LVY1hPfF8VZLXwmv4cmWJFBMrA==
-X-Received: by 2002:a17:90a:1946:b0:1d2:d49b:1db with SMTP id 6-20020a17090a194600b001d2d49b01dbmr15705389pjh.30.1651453446106;
-        Sun, 01 May 2022 18:04:06 -0700 (PDT)
-Received: from [2620:15c:29:204:e310:ef81:d548:9992] ([2620:15c:29:204:e310:ef81:d548:9992])
-        by smtp.gmail.com with ESMTPSA id y1-20020a1709027c8100b0015e8d4eb29bsm3423635pll.229.2022.05.01.18.04.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 May 2022 18:04:05 -0700 (PDT)
-Date:   Sun, 1 May 2022 18:04:05 -0700 (PDT)
-From:   David Rientjes <rientjes@google.com>
-To:     Davidlohr Bueso <dave@stgolabs.net>,
-        Yuanchu Xie <yuanchu@google.com>
-cc:     Wei Xu <weixugc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Yang Shi <shy828301@gmail.com>, Linux MM <linux-mm@kvack.org>,
-        Greg Thelen <gthelen@google.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alistair Popple <apopple@nvidia.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Feng Tang <feng.tang@intel.com>, Jonathan.Cameron@huawei.com
-Subject: Re: RFC: Memory Tiering Kernel Interfaces
-In-Reply-To: <20220501175813.tvytoosygtqlh3nn@offworld>
-Message-ID: <69d7a550-737-9324-b092-97d72487e7dc@google.com>
-References: <CAAPL-u9sVx94ACSuCVN8V0tKp+AMxiY89cro0japtyB=xNfNBw@mail.gmail.com> <20220501175813.tvytoosygtqlh3nn@offworld>
+        Sun, 1 May 2022 21:08:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F643AA47
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 18:05:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0B71B80EAB
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 01:05:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0021DC385A9;
+        Mon,  2 May 2022 01:05:04 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="RuBV6/El"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1651453503;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jzyK9MyT8mC9OCGXyGNgpyYRzPGiZMOnxTghjkCxxdQ=;
+        b=RuBV6/ElADelu236LLJpnixADUBmGhgpH9boUwmTsIKn/Iwr+GeczNq/UjJM7cmjrWUMNm
+        Gb7eCllj/tD6S8QVkizTEc2cOdcpHMLASs6+ud78QdJ6kell+tbQn+PyMseBCWCylZEurl
+        KNTbFEt4y0iHkmniFE3cUBMvi3re8TI=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id cba3d5bf (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Mon, 2 May 2022 01:05:02 +0000 (UTC)
+Date:   Mon, 2 May 2022 03:05:01 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Larry Finger <Larry.Finger@lwfinger.net>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: Re: Changes in kernel 5.18-rc1 leads to crashes in VirtualBox
+ Virtual Machines
+Message-ID: <Ym8uPcuQpq1xBS6d@zx2c4.com>
+References: <7f01221d-f693-adf8-f5a5-d71944b44162@lwfinger.net>
+ <Ym7Hw9GDPP838JoH@zx2c4.com>
+ <6bd35831-2d7a-77ee-55e9-755ca752b0c8@lwfinger.net>
+ <Ym8YlXYM4HQg8tq7@zx2c4.com>
+ <Ym8hoW7J60xAQv8f@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Ym8hoW7J60xAQv8f@zx2c4.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,91 +61,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 1 May 2022, Davidlohr Bueso wrote:
+Hi Larry,
 
-> Nice summary, thanks. I don't know who of the interested parties will be
-> at lsfmm, but fyi we have a couple of sessions on memory tiering Tuesday
-> at 14:00 and 15:00.
+On Mon, May 02, 2022 at 02:11:13AM +0200, Jason A. Donenfeld wrote:
+> Hey again,
 > 
-> On Fri, 29 Apr 2022, Wei Xu wrote:
+> I just installed VirtualBox ontop of 5.18-rc4, and then I made a new VM
+> with a fresh install of OpenSUSE, and everything is fine. No issues at
+> all.
 > 
-> > The current kernel has the basic memory tiering support: Inactive
-> > pages on a higher tier NUMA node can be migrated (demoted) to a lower
-> > tier NUMA node to make room for new allocations on the higher tier
-> > NUMA node.  Frequently accessed pages on a lower tier NUMA node can be
-> > migrated (promoted) to a higher tier NUMA node to improve the
-> > performance.
+> So you're going to have to provide more information.
 > 
-> Regardless of the promotion algorithm, at some point I see the NUMA hinting
-> fault mechanism being in the way of performance. It would be nice if hardware
-> began giving us page "heatmaps" instead of having to rely on faulting or
-> sampling based ways to identify hot memory.
-> 
+> Jason
 
-Hi Davidlohr,
+With still no more information provided from you, I've gone scouring and
+found your much more informative bug report here:
+https://www.virtualbox.org/ticket/20914 along with a larger log here
+https://www.virtualbox.org/attachment/ticket/20914/Windows%2010%20Clone-2022-04-24-20-55-56.log
 
-I tend to agree with this and we've been discussing potential hardware 
-assistance for page heatmaps as well, but not as an extension of sampling 
-techniques that rely on the page table Accessed bit.
+Why would you not have sent me all this information right away? Surely
+you know how to report bugs. If you're going to concern me with the
+possibility that I've broken something, at least give me enough detail
+to be able to do something. Otherwise it's pure frustration.
 
-Have you thought about what hardware could give us here that would allow 
-us to identify the set of hottest (or coldest) pages over a range so that 
-we don't need to iterate through it?
+Anyway, it's still too little information, but I could extract the
+Windows build from that log file, pull down ntoskrnl.exe and hope it
+roughly matches, and then go to work in IDA Pro trying to figure out
+what's going on at ntoskrnl.exe+3f7d50, and if I managed to grab the
+right build -- which I more than likely did not -- then that's a `mov
+byte ptr gs:853h, 0` in KiInterruptDispatch, which seems entirely
+unrelated to the change you mentioned.
 
-Adding Yuanchu Xie <yuanchu@google.com> who has been looking into this 
-recently.
+So I think it'd be a good moment for you to show your bisect logs so we
+can be certain we're after the right thing.
 
-> > A tiering relationship between NUMA nodes in the form of demotion path
-> > is created during the kernel initialization and updated when a NUMA
-> > node is hot-added or hot-removed.  The current implementation puts all
-> > nodes with CPU into the top tier, and then builds the tiering hierarchy
-> > tier-by-tier by establishing the per-node demotion targets based on
-> > the distances between nodes.
-> > 
-> > The current memory tiering interface needs to be improved to address
-> > several important use cases:
-> > 
-> > * The current tiering initialization code always initializes
-> >  each memory-only NUMA node into a lower tier.  But a memory-only
-> >  NUMA node may have a high performance memory device (e.g. a DRAM
-> >  device attached via CXL.mem or a DRAM-backed memory-only node on
-> >  a virtual machine) and should be put into the top tier.
-> 
-> At least the CXL memory (volatile or not) will still be slower than
-> regular DRAM, so I think that we'd not want this to be top-tier. But
-> in general, yes I agree that defining top tier as whether or not the
-> node has a CPU a bit limiting, as you've detailed here.
-> 
-> > Tiering Hierarchy Initialization
-> > ================================
-> > 
-> > By default, all memory nodes are in the top tier (N_TOPTIER_MEMORY).
-> > 
-> > A device driver can remove its memory nodes from the top tier, e.g.
-> > a dax driver can remove PMEM nodes from the top tier.
-> > 
-> > The kernel builds the memory tiering hierarchy and per-node demotion
-> > order tier-by-tier starting from N_TOPTIER_MEMORY.  For a node N, the
-> > best distance nodes in the next lower tier are assigned to
-> > node_demotion[N].preferred and all the nodes in the next lower tier
-> > are assigned to node_demotion[N].allowed.
-> > 
-> > node_demotion[N].preferred can be empty if no preferred demotion node
-> > is available for node N.
-> 
-> Upon cases where there more than one possible demotion node (with equal
-> cost), I'm wondering if we want to do something better than choosing
-> randomly, like we do now - perhaps round robin? Of course anything
-> like this will require actual performance data, something I have seen
-> very little of.
-> 
-> > Memory tiering hierarchy is rebuilt upon hot-add or hot-remove of a
-> > memory node, but is NOT rebuilt upon hot-add or hot-remove of a CPU
-> > node.
-> 
-> I think this makes sense.
-> 
-> Thanks,
-> Davidlohr
-> 
-> 
+Jason

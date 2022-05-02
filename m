@@ -2,133 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F65251695E
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 04:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5A13516963
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 04:17:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356781AbiEBCST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 22:18:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44320 "EHLO
+        id S1356799AbiEBCVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 22:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353279AbiEBCSJ (ORCPT
+        with ESMTP id S245558AbiEBCVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 22:18:09 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C842393F4
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 19:14:42 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id z16so11282304pfh.3
-        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 19:14:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=H9Zc9nR5HF3q1y+Yx3OL+fSqNywovBTwxuLs72zTvHg=;
-        b=1vU/4GAOi00mRtC5wHK/dRlqiqCE16izQuZx27fyqkwGLm+Mn+L1ANOqbblfrNSBsf
-         G/x/JoiW+hDVz2XR8yDFEYQmevD+W1OJJzzBEjN2wNL2D4GTnE03fBzW+wQCCVM0mrnd
-         3v/ONyDFirtcsQ8RUv/ZtTlAuTeb/xOuVMg3io7D85vdV1GqH4dOc3qM3KIT7FGHrTyp
-         PEtYL/Id0khOvOr1gEze3kQO5PKbeRvBj3CHhMqfVr3LF/UqHDdndMKzOhzgCur0uZtb
-         QvFa9w0lrKDVOKNxxIXBHShN1jDw8dtkfWrTz+EwOAm66q+pd5AXZxSvCQuLiRFEt1Bh
-         MKCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=H9Zc9nR5HF3q1y+Yx3OL+fSqNywovBTwxuLs72zTvHg=;
-        b=D2tThjvLM+FhCx9rfYM3ocCXCqdudNW57KOwEjBzSIxcds/pm5jsCRjXVYa2y7/bW2
-         F/LThcE95/l0eb67GYla4ehq8DPrT3WC8rLSs1FnGqGYh6OM3YkNDbRoEOhkz09NqxIM
-         YYWyOnfT0H7xFbahk6EfPGWun2d6x98WIuHtIjg/YVMyx/PowWe8jSErfbYfV0cV2fSa
-         65+z8k9jkwpk9WPwaP++pT5mbHTDXnYtl5b8T0KtilzZmwrmmCMQr0S6VeomXHyHflme
-         kkWwsMEs7Vh1dgTaxoLtiC37QuNprvmMK6Pmidoh+hqK4kT8oUcJevbhR7CP0f3i2eRc
-         U6PA==
-X-Gm-Message-State: AOAM532QR6KBjYaoBmfU+vFu6y6jNPC4X8+0K5TU1VafRchQYG+amp9Q
-        Te6v6ABtfmWoVZtI+/pPQ8CrCA==
-X-Google-Smtp-Source: ABdhPJxuk0kNHg3iy/qNkBFhLB8Ijo3uvjEHYaPHRKXNcGcNZ/BS7H1rHSaYgrlk8JNdXXj403p62A==
-X-Received: by 2002:a05:6a00:1354:b0:50d:bf8c:6657 with SMTP id k20-20020a056a00135400b0050dbf8c6657mr9477441pfu.45.1651457681756;
-        Sun, 01 May 2022 19:14:41 -0700 (PDT)
-Received: from x1.hsd1.or.comcast.net ([2601:1c2:1001:7090:c18e:6070:88f2:a04d])
-        by smtp.gmail.com with ESMTPSA id j2-20020a17090a734200b001cd4989febcsm18714475pjs.8.2022.05.01.19.14.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 May 2022 19:14:41 -0700 (PDT)
-From:   Drew Fustini <dfustini@baylibre.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Nishanth Menon <nm@ti.com>, Dave Gerlach <d-gerlach@ti.com>,
-        Tony Lindgren <tony@atomide.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Drew Fustini <dfustini@baylibre.com>,
-        Keerthy <j-keerthy@ti.com>
-Subject: [PATCH 3/3] ARM: dts: am43xx: Add i2c voltage scaling firmware to wkup_m3_ipc
-Date:   Sun,  1 May 2022 19:15:09 -0700
-Message-Id: <20220502021508.1342869-4-dfustini@baylibre.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220502021508.1342869-1-dfustini@baylibre.com>
-References: <20220502021508.1342869-1-dfustini@baylibre.com>
+        Sun, 1 May 2022 22:21:10 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5707D3F329;
+        Sun,  1 May 2022 19:17:42 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ks6Dx3Lcgz4xdK;
+        Mon,  2 May 2022 12:17:37 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1651457857;
+        bh=oCHuLM+Twa0KW/0Rao6m39tBwQtrdlow9N7TrfkpjXE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tnyavbJvW4POG27Bdr15ta+J2JmVfXPoNca+16LvXJfl8qIWIDXB8poB+pYsYdCvO
+         dG1CDj0482t/8IPcizBt7ETI6I3La9me8cyqtM3SQnF9oNJYmOMtG8SsZBIjygKYrQ
+         XG+0k4e9/tG7RQJY/rABNGrujvHMcKOX59UwRKPuzHG29dIhpdgwCSzKTP2KY0tTBU
+         /0JaiJ2BZyje8Gl2YsXU75k0G9He8mkw9ZtPOsN+PFDs+TVUlLcanEaYPIX9XZSTlC
+         iGMGSI852EqMMf2uiw0OZcHKWZwd2qgxew1rNfju7DLuxzRTvqq9ef9UW+8GDz6iC8
+         zInWP0ynU/QVQ==
+Date:   Mon, 2 May 2022 12:17:36 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Fabien Parent <fparent@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the input tree
+Message-ID: <20220502121736.57b06150@canb.auug.org.au>
+In-Reply-To: <20220427104825.15a04680@canb.auug.org.au>
+References: <20220427104825.15a04680@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/cqmxetHSojN.V3L2ZDJqX0i";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Gerlach <d-gerlach@ti.com>
+--Sig_/cqmxetHSojN.V3L2ZDJqX0i
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Add appropriate firmware-name property for all am43xx platforms.
+Hi all,
 
-Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
-Signed-off-by: Keerthy <j-keerthy@ti.com>
-[dfustini: change property from 'ti,scale-data-fw' to 'firmware-name']
-Signed-off-by: Drew Fustini <dfustini@baylibre.com>
----
- arch/arm/boot/dts/am437x-gp-evm.dts  | 1 +
- arch/arm/boot/dts/am437x-sk-evm.dts  | 4 ++++
- arch/arm/boot/dts/am43x-epos-evm.dts | 4 ++++
- 3 files changed, 9 insertions(+)
+On Wed, 27 Apr 2022 10:48:25 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the input tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>=20
+> drivers/input/keyboard/mtk-pmic-keys.c:93:36: error: 'MT6359_TOPSTATUS' u=
+ndeclared here (not in a function); did you mean 'MT6358_TOPSTATUS'?
+>    93 |                 MTK_PMIC_KEYS_REGS(MT6359_TOPSTATUS,
+>       |                                    ^~~~~~~~~~~~~~~~
+> drivers/input/keyboard/mtk-pmic-keys.c:48:35: note: in definition of macr=
+o 'MTK_PMIC_KEYS_REGS'
+>    48 |         .deb_reg                =3D _deb_reg,             \
+>       |                                   ^~~~~~~~
+> drivers/input/keyboard/mtk-pmic-keys.c:98:25: error: 'MT6359_TOP_RST_MISC=
+' undeclared here (not in a function); did you mean 'MT6358_TOP_RST_MISC'?
+>    98 |         .pmic_rst_reg =3D MT6359_TOP_RST_MISC,
+>       |                         ^~~~~~~~~~~~~~~~~~~
+>       |                         MT6358_TOP_RST_MISC
+>=20
+> Caused by commit
+>=20
+>   0f97adf64314 ("Input: mtk-pmic-keys - add support for MT6359")
+>=20
+> I have used the input tree from next-20220426 for today.
 
-diff --git a/arch/arm/boot/dts/am437x-gp-evm.dts b/arch/arm/boot/dts/am437x-gp-evm.dts
-index 91b67b428a06..46d5361fe876 100644
---- a/arch/arm/boot/dts/am437x-gp-evm.dts
-+++ b/arch/arm/boot/dts/am437x-gp-evm.dts
-@@ -1129,6 +1129,7 @@ &cpu {
- 
- &wkup_m3_ipc {
- 	ti,set-io-isolation;
-+	firmware-name = "am43x-evm-scale-data.bin";
- };
- 
- &pruss1_mdio {
-diff --git a/arch/arm/boot/dts/am437x-sk-evm.dts b/arch/arm/boot/dts/am437x-sk-evm.dts
-index 20a34d2d85df..e5a825a525f9 100644
---- a/arch/arm/boot/dts/am437x-sk-evm.dts
-+++ b/arch/arm/boot/dts/am437x-sk-evm.dts
-@@ -893,6 +893,10 @@ vpfe0_ep: endpoint {
- 	};
- };
- 
-+&wkup_m3_ipc {
-+	firmware-name = "am43x-evm-scale-data.bin";
-+};
-+
- &pruss1_mdio {
- 	status = "disabled";
- };
-diff --git a/arch/arm/boot/dts/am43x-epos-evm.dts b/arch/arm/boot/dts/am43x-epos-evm.dts
-index 4f9a7251a107..50c33418703a 100644
---- a/arch/arm/boot/dts/am43x-epos-evm.dts
-+++ b/arch/arm/boot/dts/am43x-epos-evm.dts
-@@ -1019,6 +1019,10 @@ &cpu {
- 	cpu0-supply = <&dcdc2>;
- };
- 
-+&wkup_m3_ipc {
-+	firmware-name = "am43x-evm-scale-data.bin";
-+};
-+
- &pruss1_mdio {
- 	status = "disabled";
- };
--- 
-2.32.0
+I am still getting this failure.
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/cqmxetHSojN.V3L2ZDJqX0i
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJvP0AACgkQAVBC80lX
+0Gz/2Qf/Xi4WxgKu9cc10EF+dNPgIaCJek+cf0oj4Z022oAwlaokU+0PAZVoxfYZ
+wh71IqYPglhmfVXDVZ2+3tDRxBmyk0fzj3NgQ4dQVhfPyyMvai8nNw+dljBhPguZ
+8O4xV0RrQessuaDERPgRa8l26sU8ohdmHxhllbJkxQN5kfMJhkDDqa2Y5Tom40D7
+YgI6J/1dQHLVhi0F78Eu0WAm29v8W900i1QtJByVsjiq9FCk2if/nPphxcg2oVtx
+2IuMtqE3afE8vbt0304vNupva7gHUQk3WK4nxamyu7NzUrAuVl+HNwtPTXx5o6BQ
+Ai60k7YIGPYGufo6d+9rjAgp2wYVbg==
+=4grN
+-----END PGP SIGNATURE-----
+
+--Sig_/cqmxetHSojN.V3L2ZDJqX0i--

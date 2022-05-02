@@ -2,129 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B83517543
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 19:01:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E43F5517545
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 19:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386519AbiEBREZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 13:04:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43820 "EHLO
+        id S1353113AbiEBREm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 13:04:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386641AbiEBREL (ORCPT
+        with ESMTP id S1386464AbiEBREa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 13:04:11 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0F410D4
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 10:00:41 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id c23so12965561plo.0
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 10:00:41 -0700 (PDT)
+        Mon, 2 May 2022 13:04:30 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA4425F7
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 10:00:58 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id dk23so28893990ejb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 10:00:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=eHBpjvV0xsoV/2E/yxAKoD7xjO9zfwPQ1d4jUnUE31Y=;
-        b=lvPK8H4vc+BAN657Xx1F3TXqqpbu97mZf4LGDeuVQ7CbIZ119ejBP80HsujmBElg5y
-         3OhzGwB5VlmeWNEpAOhWTHzjWyWgdkx3UVnNXF9steLeFtmf/a7us+5RUQWiHvUf1Wuz
-         hvkMpVlZ5dxVrU+4mElHsi5xYRNkKYWOnKe7ovwse/i6hZHIDI30x5QwktxDXfJxvb2d
-         scRF/cieQHMixK1Tyr/AH6Zw6BRZ5qhpF08qqvFcoonw0cM0ApL/TA5zVXmsuZJQ5JbG
-         OogWPxMHngRSfkPBHGOeCooTysASe6w3InrtP+UEMuHam2naL+jmOJlwn7DAhxcwAFUa
-         fN4Q==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pw2/oXmpaIHCVTryeNN1ZqUEyp67KQCQZki+AHhMtg4=;
+        b=WFLlqSaRxtRM1eXCMOy3bfOnfmy/O0CNxC/Kvxvq/ZIAe6jSq6QKKTxR2533G2Ma+M
+         cJ7mlkEywoFDQhZG7+kRn8mhBuqtd3heRlnY0oV+pOFJG3vEXsS/ZpfmMuuJ838fRTyq
+         Xk6I4ysRfS7pCyUZj4MDQtXlPkIN333kbsYkE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=eHBpjvV0xsoV/2E/yxAKoD7xjO9zfwPQ1d4jUnUE31Y=;
-        b=GEW8zDYnZMyqTmFZvYWTMeyW5oVRQNgejzJGOCxyZJqOE4l7DR4WbAfQZPdpNobZ+a
-         EmZ/RenM7vT5P+1G9BLuqvJP7ZgpZtMG2X6sqHXG7IPYiMys0JfiKVzHnIS1j4ZWVPbf
-         5lgYaTXWTUb7dm5EhYiearRvnrKceWfmJhbENNz0AFcG2cqczcXXhSPK4jyFkPNZ04Ja
-         87fbT3FzPiJcBXWHsaObx4Klc9icL0Lj/3JNqZ6zODJXWuWIbSZH+1pdo/sc/+1kMDSM
-         baUq6m1g7dj58pjbKfnk+YrAYXMugg4RqXCWnLgKryEFpQ5HkRudzPpCfMJyuWwHzUph
-         q3LA==
-X-Gm-Message-State: AOAM531YnICNiOVXahaCRpc+x0D44r1DIiWVQFLGT1X3RTuukfiTkIHB
-        CMhom/h9AppfcJ2WoUXXPKrGlg==
-X-Google-Smtp-Source: ABdhPJz86mhBbGpqIE9j8RYZ8M7M1FBCdLWOj6qLKCtxIG/rlugzA0w1yHfEGRZM801GfYtiy1htYQ==
-X-Received: by 2002:a17:902:70c1:b0:156:16c0:dc7b with SMTP id l1-20020a17090270c100b0015616c0dc7bmr12658855plt.85.1651510840897;
-        Mon, 02 May 2022 10:00:40 -0700 (PDT)
-Received: from [10.10.71.43] ([8.34.116.185])
-        by smtp.gmail.com with ESMTPSA id m7-20020a170902f64700b0015e8d4eb1fdsm4908003plg.71.2022.05.02.10.00.39
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pw2/oXmpaIHCVTryeNN1ZqUEyp67KQCQZki+AHhMtg4=;
+        b=RYhf4/Q5YT+g3XccJquruic3bp6OWO7g+k+ZKVcmvwaC6452iXRXLD78EzMGCuTI4K
+         MFJLFXIoErG1xLWN+28fRgT74pvcSBFOnZt6XPK9MMJnaAaJD7SZoIxkn59dgzUbCWT7
+         zQWKxoRfxkniJyuiUuBXuWl+qRMsRfeYBsa1hetK8u8OIjquqXd5gwlP6R1xpxhVDo6w
+         cmlDN8l/lfEYFVGyPzpqJyzWCu7YIJUNcoJmf6NzgxHWcmjBIGZ7W4rs45EHxGFaJ5Jy
+         xBU/FQsnayBZMsSYxDv9AF5eYg1KwWVPVhTqZQV6tQ6H6vrw2O9bZe11+WV8ZbL0mtLt
+         u8yw==
+X-Gm-Message-State: AOAM5300vNXwhBmLUFhY5la68ErHWzY5VYaPYR/x68KdU88reUmFLYbi
+        ZYbC8KZZDetxM6EcfuEtEy9e9Ef9u1l6qZke
+X-Google-Smtp-Source: ABdhPJzXJBmbCAhIYzuXYO5JSbPNqAkkp1zp+lqt9HQHdD9KgA8gMv/zGzlBZR8bZ2MBmoeERNXGLQ==
+X-Received: by 2002:a17:907:3fa6:b0:6f3:a758:73b3 with SMTP id hr38-20020a1709073fa600b006f3a75873b3mr12143791ejc.108.1651510857164;
+        Mon, 02 May 2022 10:00:57 -0700 (PDT)
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
+        by smtp.gmail.com with ESMTPSA id er22-20020a170907739600b006f3ef214e7bsm3793006ejc.225.2022.05.02.10.00.56
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 10:00:40 -0700 (PDT)
-Message-ID: <371c01dd-258c-e428-7428-ff390b664752@kernel.dk>
-Date:   Mon, 2 May 2022 11:00:38 -0600
+        Mon, 02 May 2022 10:00:56 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id k126so5184219wme.2
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 10:00:56 -0700 (PDT)
+X-Received: by 2002:a05:600c:4e44:b0:394:46b4:7b0e with SMTP id
+ e4-20020a05600c4e4400b0039446b47b0emr57531wmq.29.1651510855777; Mon, 02 May
+ 2022 10:00:55 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [REGRESSION] lxc-stop hang on 5.17.x kernels
-Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Daniel Harding <dharding@living180.net>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Cc:     regressions@lists.linux.dev, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <7925e262-e0d4-6791-e43b-d37e9d693414@living180.net>
- <6ad38ecc-b2a9-f0e9-f7c7-f312a2763f97@kernel.dk>
- <ccf6cea1-1139-cd73-c4e5-dc9799708bdd@living180.net>
- <bb283ff5-6820-d096-2fca-ae7679698a50@kernel.dk>
-In-Reply-To: <bb283ff5-6820-d096-2fca-ae7679698a50@kernel.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220429233112.2851665-1-swboyd@chromium.org> <20220429233112.2851665-2-swboyd@chromium.org>
+In-Reply-To: <20220429233112.2851665-2-swboyd@chromium.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 2 May 2022 10:00:44 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VX8EEgkeLgKwyKvjztcjbA8UhKOUpTr-sS1_Ec=QcWbA@mail.gmail.com>
+Message-ID: <CAD=FV=VX8EEgkeLgKwyKvjztcjbA8UhKOUpTr-sS1_Ec=QcWbA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: google,cros-ec-keyb: Introduce
+ switches only compatible
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
+        chrome-platform@lists.linux.dev,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        "Joseph S. Barrera III" <joebar@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/2/22 7:59 AM, Jens Axboe wrote:
-> On 5/2/22 7:36 AM, Daniel Harding wrote:
->> On 5/2/22 16:26, Jens Axboe wrote:
->>> On 5/2/22 7:17 AM, Daniel Harding wrote:
->>>> I use lxc-4.0.12 on Gentoo, built with io-uring support
->>>> (--enable-liburing), targeting liburing-2.1.  My kernel config is a
->>>> very lightly modified version of Fedora's generic kernel config. After
->>>> moving from the 5.16.x series to the 5.17.x kernel series, I started
->>>> noticed frequent hangs in lxc-stop.  It doesn't happen 100% of the
->>>> time, but definitely more than 50% of the time.  Bisecting narrowed
->>>> down the issue to commit aa43477b040251f451db0d844073ac00a8ab66ee:
->>>> io_uring: poll rework. Testing indicates the problem is still present
->>>> in 5.18-rc5. Unfortunately I do not have the expertise with the
->>>> codebases of either lxc or io-uring to try to debug the problem
->>>> further on my own, but I can easily apply patches to any of the
->>>> involved components (lxc, liburing, kernel) and rebuild for testing or
->>>> validation.  I am also happy to provide any further information that
->>>> would be helpful with reproducing or debugging the problem.
->>> Do you have a recipe to reproduce the hang? That would make it
->>> significantly easier to figure out.
->>
->> I can reproduce it with just the following:
->>
->>     sudo lxc-create --n lxc-test --template download --bdev dir --dir /var/lib/lxc/lxc-test/rootfs -- -d ubuntu -r bionic -a amd64
->>     sudo lxc-start -n lxc-test
->>     sudo lxc-stop -n lxc-test
->>
->> The lxc-stop command never exits and the container continues running.
->> If that isn't sufficient to reproduce, please let me know.
-> 
-> Thanks, that's useful! I'm at a conference this week and hence have
-> limited amount of time to debug, hopefully Pavel has time to take a look
-> at this.
+Hi,
 
-Didn't manage to reproduce. Can you try, on both the good and bad
-kernel, to do:
+On Fri, Apr 29, 2022 at 4:31 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> If the device is a detachable, this device won't have a matrix keyboard
+> but it may have some button switches, e.g. volume buttons and power
+> buttons. Let's add a more specific compatible for this type of device
+> that indicates to the OS that there are only switches and no matrix
+> keyboard present. If only the switches compatible is present, then the
+> matrix keyboard properties are denied. This lets us gracefully migrate
+> devices that only have switches over to the new compatible string.
 
-# echo 1 > /sys/kernel/debug/tracing/events/io_uring/enable
+I know the history here so I know the reasons for the 3 choices, but
+I'm not sure I'd fully understand it just from the description above.
+Maybe a summary in the CL desc would help?
 
-run lxc-stop
+Summary:
 
-# cp /sys/kernel/debug/tracing/trace ~/iou-trace
+1. If you have a matrix keyboard and maybe also some buttons/switches
+then use the compatible: google,cros-ec-keyb
 
-so we can see what's going on? Looking at the source, lxc is just using
-plain POLL_ADD, so I'm guessing it's not getting a notification when it
-expects to, or it's POLL_REMOVE not doing its job. If we have a trace
-from both a working and broken kernel, that might shed some light on it.
+2. If you only have buttons/switches but you want to be compatible
+with the old driver in Linux that looked for the compatible
+"google,cros-ec-keyb" and required the matrix properties, use the
+compatible: "google,cros-ec-keyb-switches", "google,cros-ec-keyb"
 
--- 
-Jens Axboe
+3. If you have only buttons/switches and don't need compatibility with
+old Linux drivers, use the compatible: "google,cros-ec-keyb-switches"
 
+
+> Similarly, start enforcing that the keypad rows/cols and keymap
+> properties exist if the google,cros-ec-keyb compatible is present. This
+> more clearly describes what the driver is expecting, i.e. that the
+> kernel driver will fail to probe if the row or column or keymap
+> properties are missing and only the google,cros-ec-keyb compatible is
+> present.
+>
+> Cc: Krzysztof Kozlowski <krzk@kernel.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: <devicetree@vger.kernel.org>
+> Cc: Benson Leung <bleung@chromium.org>
+> Cc: Guenter Roeck <groeck@chromium.org>
+> Cc: Douglas Anderson <dianders@chromium.org>
+> Cc: Hsin-Yi Wang <hsinyi@chromium.org>
+> Cc: "Joseph S. Barrera III" <joebar@chromium.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>  .../bindings/input/google,cros-ec-keyb.yaml   | 95 +++++++++++++++++--
+>  1 file changed, 89 insertions(+), 6 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml b/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
+> index e8f137abb03c..c1b079449cf3 100644
+> --- a/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
+> +++ b/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
+> @@ -15,14 +15,19 @@ description: |
+>    Google's ChromeOS EC Keyboard is a simple matrix keyboard
+>    implemented on a separate EC (Embedded Controller) device. It provides
+>    a message for reading key scans from the EC. These are then converted
+> -  into keycodes for processing by the kernel.
+> -
+> -allOf:
+> -  - $ref: "/schemas/input/matrix-keymap.yaml#"
+> +  into keycodes for processing by the kernel. This device also supports
+> +  switches/buttons like power and volume buttons.
+>
+>  properties:
+>    compatible:
+> -    const: google,cros-ec-keyb
+> +    oneOf:
+> +      - items:
+> +          - const: google,cros-ec-keyb-switches
+> +      - items:
+> +          - const: google,cros-ec-keyb-switches
+> +          - const: google,cros-ec-keyb
+> +      - items:
+> +          - const: google,cros-ec-keyb
+>
+>    google,needs-ghost-filter:
+>      description:
+> @@ -41,15 +46,40 @@ properties:
+>        where the lower 16 bits are reserved. This property is specified only
+>        when the keyboard has a custom design for the top row keys.
+>
+> +dependencies:
+> +  function-row-phsymap: [ 'linux,keymap' ]
+> +  google,needs-ghost-filter: [ 'linux,keymap' ]
+> +
+>  required:
+>    - compatible
+>
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: google,cros-ec-keyb
+> +    then:
+> +      allOf:
+> +        - $ref: "/schemas/input/matrix-keymap.yaml#"
+> +  - if:
+> +      not:
+> +        properties:
+> +          compatible:
+> +            contains:
+> +              const: google,cros-ec-keyb-switches
+> +    then:
+> +      required:
+> +        - keypad,num-rows
+> +        - keypad,num-columns
+> +        - linux,keymap
+
+I think that:
+
+1. If you only have buttons/switches and care about backward
+compatibility, you use the "two compatibles" version.
+
+2. If you care about backward compatibility then you _must_ include
+the matrix properties.
+
+Thus I would be tempted to say that we should just have one "if" test
+that says that if matrix properties are allowed then they're also
+required.
+
+That goes against the recently landed commit 4352e23a7ff2 ("Input:
+cros-ec-keyb - only register keyboard if rows/columns exist") but
+perhaps we should just _undo_ that that since it landed pretty
+recently and say that the truly supported way to specify that you only
+have keyboards/switches is with the compatible.
+
+What do you think?
+
+-Doug

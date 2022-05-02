@@ -2,114 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1805B516979
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 04:46:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A13516982
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 04:57:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357020AbiEBCoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 22:44:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48372 "EHLO
+        id S1357013AbiEBC7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 22:59:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354699AbiEBCn7 (ORCPT
+        with ESMTP id S245246AbiEBC7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 22:43:59 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7587CB86D
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 19:40:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651459232; x=1682995232;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=/YGMfrYTxMbbne12FKu10wyZkVvhumkNt5KrqfxjqUE=;
-  b=Y6hk60n3VOvVUin6C1qp0+K7NMqoNU/rkNPwSDhWZ0f/YsH3aHv2vyge
-   VtVzvfmZ69bCSBUDgpA3tDkOc0Goo/woak/bkwXR8fqGxrn2YxeOZXjb2
-   X1+yWegtHto5TOojWJhGPg++s/+fWRLUcZ/Py4SZ4fnc+qgh3Ufix/bV+
-   B0WR/25fxZ/3kT9F3BXqQYXKpdu+o6PGKKFyFl4tEz3cYSju8kc05XWRi
-   1Jy4QYbI7cKtsRiGssIiFibff3eH1tXrI5bV1aksw+p2iVAPW1x6SGSTG
-   7kHz8GYPcf8TpIbufCo1SFYBQMVpMV7zvGsyAMoHtd1A6RZUsI86Mq4+m
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="266972364"
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="266972364"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 19:40:32 -0700
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="535644476"
-Received: from bwu50-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.2.219])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 19:40:28 -0700
-Message-ID: <243e918c523320ba3d216cbe22d24fe5ce33f370.camel@intel.com>
-Subject: Re: [PATCH v5 3/3] x86/tdx: Add Quote generation support
-From:   Kai Huang <kai.huang@intel.com>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 02 May 2022 14:40:26 +1200
-In-Reply-To: <20220501183500.2242828-4-sathyanarayanan.kuppuswamy@linux.intel.com>
-References: <20220501183500.2242828-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-         <20220501183500.2242828-4-sathyanarayanan.kuppuswamy@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Sun, 1 May 2022 22:59:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 311C5DEEE
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 19:56:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651460165;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NGrvaoQnB+WDFfZErhtm13zCdjhlGof9BLg4Q1WShAo=;
+        b=MsmceqkSz7CVt5mJT6TPWaUrmffTthkgy7m6mOgbuS8PPwYDdWKJ6xuw/P5ewrQWOG7+/z
+        sjrPT5rS0BbFSeaq7a2hdNtpMQVNCBIimCBbm+6AIkP5+VyC11fqnVqX9JvBHMoUYubawC
+        fYWHA0nF5brOrPsRqdfPsZ3Bxcbamec=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-511-2zOJRDJYNA6WS2DmvQbokw-1; Sun, 01 May 2022 22:56:02 -0400
+X-MC-Unique: 2zOJRDJYNA6WS2DmvQbokw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6273E8002B2;
+        Mon,  2 May 2022 02:56:01 +0000 (UTC)
+Received: from [10.72.12.86] (ovpn-12-86.pek2.redhat.com [10.72.12.86])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 09B971469399;
+        Mon,  2 May 2022 02:55:54 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v6 04/18] KVM: arm64: Support SDEI_EVENT_REGISTER
+ hypercall
+To:     Oliver Upton <oupton@google.com>
+Cc:     kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        eauger@redhat.com, Jonathan.Cameron@huawei.com,
+        vkuznets@redhat.com, will@kernel.org, shannon.zhaosl@gmail.com,
+        james.morse@arm.com, mark.rutland@arm.com, maz@kernel.org,
+        pbonzini@redhat.com, shan.gavin@gmail.com
+References: <20220403153911.12332-1-gshan@redhat.com>
+ <20220403153911.12332-5-gshan@redhat.com> <Ym1Nsaq/ERUx/ebD@google.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <6e7cb20d-24c4-b357-8830-a68ff05638fe@redhat.com>
+Date:   Mon, 2 May 2022 10:55:51 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
+In-Reply-To: <Ym1Nsaq/ERUx/ebD@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Oliver,
 
-> +
-> +	/* Get order for Quote buffer page allocation */
-> +	order = get_order(quote_req.len);
-> +
-> +	/*
-> +	 * Allocate buffer to get TD Quote from the VMM.
-> +	 * Size needs to be 4KB aligned (which is already
-> +	 * met in page allocation).
-> +	 */
-> +	tdquote = (void *)__get_free_pages(GFP_KERNEL | __GFP_ZERO, order);
-> +	if (!tdquote) {
-> +		ret = -ENOMEM;
-> +		goto quote_failed;
-> +	}
+On 4/30/22 10:54 PM, Oliver Upton wrote:
+> On Sun, Apr 03, 2022 at 11:38:57PM +0800, Gavin Shan wrote:
+>> This supports SDEI_EVENT_REGISTER hypercall, which is used by guest
+>> to register event. The event won't be raised until it's registered
+>> and enabled. For those KVM owned events, they can't be registered
+>> if they aren't exposed.
+>>
+>> Signed-off-by: Gavin Shan <gshan@redhat.com>
+>> ---
+>>   arch/arm64/kvm/sdei.c | 78 +++++++++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 78 insertions(+)
+>>
+>> diff --git a/arch/arm64/kvm/sdei.c b/arch/arm64/kvm/sdei.c
+>> index 3507e33ec00e..89c1b231cb60 100644
+>> --- a/arch/arm64/kvm/sdei.c
+>> +++ b/arch/arm64/kvm/sdei.c
+>> @@ -25,6 +25,81 @@ static struct kvm_sdei_exposed_event exposed_events[] = {
+>>   	for (idx = 0, event = &exposed_events[0];	\
+>>   	     idx < ARRAY_SIZE(exposed_events);		\
+>>   	     idx++, event++)
+>> +#define kvm_sdei_for_each_event(vsdei, event, idx)	\
+>> +	for (idx = 0, event = &vsdei->events[0];	\
+>> +	     idx < ARRAY_SIZE(exposed_events);		\
+>> +	     idx++, event++)
+>> +
+>> +static struct kvm_sdei_event *find_event(struct kvm_vcpu *vcpu,
+>> +					 unsigned int num)
+>> +{
+>> +	struct kvm_sdei_vcpu *vsdei = vcpu->arch.sdei;
+>> +	struct kvm_sdei_event *event;
+>> +	int i;
+>> +
+>> +	kvm_sdei_for_each_event(vsdei, event, i) {
+>> +		if (event->exposed_event->num == num)
+>> +			return event;
+>> +	}
+>> +
+>> +	return NULL;
+>> +}
+> 
+> I imagine you'll drop this hunk in the next spin.
+> 
 
-You can use alloc_pages_exact().
+Yes, I will :)
 
-> +
-> +	/*
-> +	 * Since this buffer will be shared with the VMM via GetQuote
-> +	 * hypercall, decrypt it.
-> +	 */
-> +	ret = set_memory_decrypted((unsigned long)tdquote, 1UL << order);
-> +	if (ret)
-> +		goto quote_failed;
+>> +static unsigned long hypercall_register(struct kvm_vcpu *vcpu)
+> 
+> Hmm, hypercall_ is not a very descriptive scope. Could you instead do
+> something like kvm_sdei_?
+> 
+> so for this one, kvm_sdei_event_register()? Provides decent context
+> clues to connect back to the spec as well.
+> 
 
+Sure. I will revise the names of all functions for hypercalls and
+remove "hypercall" prefix. For this particular case, I would use
+event_register() because "kvm_sdei_" prefix has been reserved for
+those global scoped functions :)
 
-Again, Dave and Andi already commented you should use vmap() to avoid breaking
-up the direct-mapping.  Please use vmap() instead.
+>> +{
+>> +	struct kvm_sdei_vcpu *vsdei = vcpu->arch.sdei;
+>> +	struct kvm_sdei_event *event;
+>> +	unsigned int num = smccc_get_arg(vcpu, 1);
+>> +	unsigned long ep_address = smccc_get_arg(vcpu, 2);
+>> +	unsigned long ep_arg = smccc_get_arg(vcpu, 3);
+> 
+> We discussed using some structure to track the registered context of an
+> event. Maybe just build it on the stack then assign it in the array?
+> 
 
-https://lore.kernel.org/all/ce0feeec-a949-35f8-3010-b0d69acbbc2e@linux.intel.com/
+Yes, It will be something like below:
 
-Will review the rest later.
+      struct kvm_sdei_event_handler handler = {
+             .ep_address = smccc_get_arg(vcpu, 2),
+             .ep_arg     = smccc_get_arg(vcpu, 3),
+      };
 
+>> +	unsigned long route_mode = smccc_get_arg(vcpu, 4);
+> 
+> This is really 'flags'. route_mode is bit[0]. I imagine we don't want to
+> support relative mode, so bit[1] is useless for us in that case too.
+> 
+> The spec is somewhat imprecise on what happens for reserved flags. The
+> prototype in section 5.1.2 of [1] suggests that reserved bits must be
+> zero, but 5.1.2.3 'Client responsibilities' does not state that invalid
+> flags result in an error.
+> 
+> Arm TF certainly rejects unexpected flags [2].
+> 
+> [1]: DEN0054C https://developer.arm.com/documentation/den0054/latest
+> [2]: https://github.com/ARM-software/arm-trusted-firmware/blob/66c3906e4c32d675eb06bd081de8a3359f76b84c/services/std_svc/sdei/sdei_main.c#L260
+> 
 
--- 
+Yes, This chunk of code is still stick to old specification. Lets
+improve in next respin:
+
+    - Rename @route_mode to @flags
+    - Reject if the reserved bits are set.
+    - Reject if relative mode (bit#1) is selected.
+    - Reject if routing mode (bit#0) isn't RM_ANY (0).
+    - @route_affinity will be dropped.
+
 Thanks,
--Kai
-
+Gavin
 

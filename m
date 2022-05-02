@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F000516F55
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 14:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36864516F58
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 14:13:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384913AbiEBMOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 08:14:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38304 "EHLO
+        id S1384924AbiEBMQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 08:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384622AbiEBMOc (ORCPT
+        with ESMTP id S1384916AbiEBMQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 08:14:32 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158F3BFA;
-        Mon,  2 May 2022 05:11:04 -0700 (PDT)
-Date:   Mon, 02 May 2022 12:11:01 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651493462;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DqLyU6eqOYm5mbsrgaYZRI+vMRTFZkpfrcGpvit8sCs=;
-        b=lfASwGypYDAxvZnjOsBm4ApDvAjAkjdu/FCKFjVtUiheCv+RHaBRPU0gndgZEpxnN9OEod
-        NCspsyMQEBIMdHG3CG0Jr3nemhpSHBvrDTDtanay/gDRhm+00c3UycX4GX2Tvkts2kf+an
-        q6qVwVKgsBUKHlyZWhN4uY8a2Gf3tL+ghNHaSFeUhVYetrt9yHOxA5UGZcgeFj7PcJskS9
-        aeePq6XOysgwj8tJsCh4SKwQ1qS9MFHAZESg1cMLmaIkNmeu47sDcuZq4Vt/wLMzTZQDk6
-        Ohph7tvNE6u3f/3+rQU2Hmyre8HfipgUhLwy/dGUwLYEtYPRTsX4MJnDdEZLng==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651493462;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DqLyU6eqOYm5mbsrgaYZRI+vMRTFZkpfrcGpvit8sCs=;
-        b=JcWQUm6Z51InkI7cK1DYUOhX1XFMuQ/ShJFozA3/cG5yHC5kBruHWnpslSV6NypSpCNpv/
-        NMLLHVkjZ/5kDUDQ==
-From:   "tip-bot2 for Minghao Chi" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/core] genirq: Use pm_runtime_resume_and_get() instead of
- pm_runtime_get_sync()
-Cc:     Zeal Robot <zealci@zte.com.cn>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, maz@kernel.org
-In-Reply-To: <20220418110716.2559453-1-chi.minghao@zte.com.cn>
-References: <20220418110716.2559453-1-chi.minghao@zte.com.cn>
+        Mon, 2 May 2022 08:16:06 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CFCF14
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 05:12:35 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id l7so27417346ejn.2
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 05:12:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+GbW9lhOFF5KXo9xug99W/WsonkZx+ThY9PcaPlAUco=;
+        b=Z2TeefYz2wjRgvDurfjRhcnoy/dzOezKzMbKLUxGjxKrPADD4F3ug8uG8RbFD0xwrE
+         C1d9orHqdq9vw8ipvahOAC2/z8umXeKMfAbwDaAh7m6kmOlCFZ3IRAK5fkWJQnxV1BNd
+         Q+pCkIAoOGJeICcdD0YntlIhYP6lL5Lewe5jei4hgyYDetBN4PzDMWlRo6E+vEp/sA0/
+         XIqRHiGsRzC+r0y/1mRc8+R4HHigJw6KM8ySdfhUmRZ2OpNYNtGnZE2j0Sz+Xi/luWKa
+         bFpSX/Ze/bLlJcgNYAZfypnde9u6psjRDiLRE8X6bp2eVJVwGa2NdLWO6+1s1puorVyH
+         COYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+GbW9lhOFF5KXo9xug99W/WsonkZx+ThY9PcaPlAUco=;
+        b=HeAXTcQwILH+FXUe19t4ijLQVPukQxQMZdrc33U1jEdlVU4EQ9LaTIptPBrTmVAqay
+         KoqznrG+HTa04tUjUHza7zVSFLDL2NNI3yFAvJbFTZgzvJQgRMuZrnk+a8K9xmg2V4In
+         QU4eJX/lC4AsuxgIj5Ex+Y0aJAFyBbvr2QiP77qBawHkKH6oWVZTsg0LPTm2usT2aF1v
+         /6KfA56GV/T+noaZGZoTSFw3tItwAZ6bLXTfvFnEz66/ucXvtscU/WNDcAMgkqfwvWPR
+         xtyMPEbLNQvteCmFVYblioNLIHEfozNT+maQojhxt1UOsY2dbp3y90KQcCElP+lgXA0W
+         2ALg==
+X-Gm-Message-State: AOAM532pJBrNnm7l3fPQjOXw9BQ3hcT03khJ5pUFVS3MZEHdCvuHuPtI
+        cK+SJ/wJDQX5D8nyIAXjWXV+0v8OtoFd6Zdy1Cgcz6dX6VTAQw==
+X-Google-Smtp-Source: ABdhPJx9cHHsrODR/QKr4vfa+VYk/ZMOeW2OHBi3Px9GgvkczgpK4jBUmP9QqsrWu2s6dNtgCOEcdGJ3nLMscIMeboM=
+X-Received: by 2002:a17:907:97cf:b0:6df:846f:ad0a with SMTP id
+ js15-20020a17090797cf00b006df846fad0amr10914101ejc.286.1651493554126; Mon, 02
+ May 2022 05:12:34 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <165149346127.4207.7891496748759999918.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+References: <20220425111135.1632047-1-peng.fan@oss.nxp.com>
+In-Reply-To: <20220425111135.1632047-1-peng.fan@oss.nxp.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 2 May 2022 14:12:23 +0200
+Message-ID: <CAMRc=MdBgrkva2w-CYkFHpWXFsp1qCP6W9Lm3YuqN2Ox=o3_og@mail.gmail.com>
+Subject: Re: [PATCH] gpio: drop the SOC_VF610 dependency for GPIO_VF610
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peng Fan <peng.fan@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,52 +68,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/core branch of tip:
+On Mon, Apr 25, 2022 at 1:09 PM Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
+>
+> From: Peng Fan <peng.fan@nxp.com>
+>
+> i.MX7ULP, i.MX8 and i.MX9 use this driver, so drop
+> the SOC_VF610 dependcy to make the driver could be built
+> for i.MX platform.
 
-Commit-ID:     ce4818957fdc5bca57fc2c92b0dfe109d26bcc47
-Gitweb:        https://git.kernel.org/tip/ce4818957fdc5bca57fc2c92b0dfe109d26bcc47
-Author:        Minghao Chi <chi.minghao@zte.com.cn>
-AuthorDate:    Mon, 18 Apr 2022 11:07:16 
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Mon, 02 May 2022 14:08:08 +02:00
+In the future use `gpio: <driver>: ...` for the commit message.
 
-genirq: Use pm_runtime_resume_and_get() instead of pm_runtime_get_sync()
+Applied, thanks!
 
-pm_runtime_resume_and_get() achieves the same and simplifies the code.
+Bart
 
-[ tglx: Simplify it further by presetting retval ]
-
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/20220418110716.2559453-1-chi.minghao@zte.com.cn
----
- kernel/irq/chip.c | 13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
-
-diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
-index 54af0de..e6b8e56 100644
---- a/kernel/irq/chip.c
-+++ b/kernel/irq/chip.c
-@@ -1573,17 +1573,12 @@ static struct device *irq_get_parent_device(struct irq_data *data)
- int irq_chip_pm_get(struct irq_data *data)
- {
- 	struct device *dev = irq_get_parent_device(data);
--	int retval;
-+	int retval = 0;
- 
--	if (IS_ENABLED(CONFIG_PM) && dev) {
--		retval = pm_runtime_get_sync(dev);
--		if (retval < 0) {
--			pm_runtime_put_noidle(dev);
--			return retval;
--		}
--	}
-+	if (IS_ENABLED(CONFIG_PM) && dev)
-+		retval = pm_runtime_resume_and_get(dev);
- 
--	return 0;
-+	return retval;
- }
- 
- /**
+>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  drivers/gpio/Kconfig | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+> index 82a3bda6e047..9f2a076da6af 100644
+> --- a/drivers/gpio/Kconfig
+> +++ b/drivers/gpio/Kconfig
+> @@ -681,10 +681,10 @@ config GPIO_UNIPHIER
+>
+>  config GPIO_VF610
+>         def_bool y
+> -       depends on ARCH_MXC && SOC_VF610
+> +       depends on ARCH_MXC
+>         select GPIOLIB_IRQCHIP
+>         help
+> -         Say yes here to support Vybrid vf610 GPIOs.
+> +         Say yes here to support i.MX or Vybrid vf610 GPIOs.
+>
+>  config GPIO_VISCONTI
+>         tristate "Toshiba Visconti GPIO support"
+> --
+> 2.25.1
+>

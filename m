@@ -2,147 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E840516B62
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 09:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3B45516B64
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 09:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358857AbiEBHrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 03:47:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58828 "EHLO
+        id S1382920AbiEBHug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 03:50:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350995AbiEBHrJ (ORCPT
+        with ESMTP id S1350995AbiEBHud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 03:47:09 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202E72715D;
-        Mon,  2 May 2022 00:43:38 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KsFT26MdJz4xXk;
-        Mon,  2 May 2022 17:43:34 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651477416;
-        bh=nxcY+wlkmUEFwHJpOpv1mcBXCb0BZLBH2dC8Mvqgl5U=;
-        h=Date:From:To:Cc:Subject:From;
-        b=X372vutKHx2ANNxVi4FFyKrBjYWazZy8UwGQR7xghPuDkPwHzzbxbcUSsCZClM6c1
-         tBZy+34TcqoIBuacpadUO7PL8ev7DzVm7Trvzm5b4VdTZf5pepSwc0WcMA14AQ1+Dk
-         iX7HiKzF6wJCYL3oHIV4s70dF7JzpSHXNCDRI+LtttBVuphbZ+2zo0OxtWd5VlSJmL
-         ib3Y1fK/snCg4gQbVcfgfhW3HXdM42ywuJVWbh4voNGI0kB4DmSGj5+d4cmH13HL7i
-         zYTj23KD66K7FZNGgFhvoPSyk7wpSPgMOxXC+H0Nbg+2QPpkt6iGleHr64mJfA4XxP
-         q5DcfEUR3ZoCg==
-Date:   Mon, 2 May 2022 17:43:33 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Matthew Wilcox <willy@infradead.org>,
-        David Sterba <dsterba@suse.cz>
-Cc:     Christoph Hellwig <hch@lst.de>, David Sterba <dsterba@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the folio tree with the btrfs tree
-Message-ID: <20220502174305.1cbf7b40@canb.auug.org.au>
+        Mon, 2 May 2022 03:50:33 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19DC629CA5;
+        Mon,  2 May 2022 00:47:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=pOoEoq3uxOd2hY3qnCRK9aDXRSIdbU9S375EHmEixg8=; b=Zx1qMADDPH8oEOTa4jVupxWl6E
+        jp0Ix1UpwVxb/Fun8uQkpi/VDVUrELD+eS/RX9VUTmUff5Lfk9pHLGnzXGRo5XQjnKpVQAnDGA+HY
+        6njW7JD42U9XDnB6D3TI9rmTZ/aqSpbsxfUtPIHKH48smGoBc+hsJpqXaRadtuEJcHvW3GiOXvq13
+        d4zs632v/3gKbbrqz0yWyBW7gjlr+57/KxIGorr/dnptiwV1AYALOr2y65wpMHAAJ4xsSV0n37yzE
+        19MxrkmlClL3jeLhLETg9bIIv0pjGFEOLCYtKCiGSpok8qhV9B6cU0FBm//Y4T/y5l5jfkXJiDpIU
+        UHe+W3Jw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nlQlP-00AOnG-Mt; Mon, 02 May 2022 07:46:36 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4FA2398035B; Mon,  2 May 2022 09:46:33 +0200 (CEST)
+Date:   Mon, 2 May 2022 09:46:33 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>, X86 ML <x86@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-hardening@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        llvm@lists.linux.dev
+Subject: Re: [RFC PATCH 14/21] treewide: static_call: Pass call arguments to
+ the macro
+Message-ID: <20220502074633.GA479834@worktop.programming.kicks-ass.net>
+References: <20220429203644.2868448-1-samitolvanen@google.com>
+ <20220429203644.2868448-15-samitolvanen@google.com>
+ <Ymxy/CU+tZhQ9UtN@hirez.programming.kicks-ass.net>
+ <CABCJKud8vC6RwQLs2YXnZMZaXGNYBEq+sNmOsgGjjAw4MfuZuw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/jn1Ms63ppBkLEKtFyZNOA4W";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABCJKud8vC6RwQLs2YXnZMZaXGNYBEq+sNmOsgGjjAw4MfuZuw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/jn1Ms63ppBkLEKtFyZNOA4W
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Apr 29, 2022 at 05:49:21PM -0700, Sami Tolvanen wrote:
+> On Fri, Apr 29, 2022 at 4:21 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> > Can you explain why this is needed? I don't think there are any indirect
+> > calls to get confused about. That is, if you have STATIC_CALL_INLINE
+> > then the compiler should be emitting direct calls to the trampoline.
+> 
+> Clang emits an indirect call for ({ &f; })(), which is optimized into
+> a direct call when possible. Come to think of it, the recent
+> InstCombine change to the compiler patch should solve this issue. Let
+> me double check, I'd be more than happy to drop these two patches.
 
-Hi all,
+Oooh, but this must not require any magic. That is, we have a *ton* of
+code that relies on constant propagation of function pointers to not
+emit indirect calls.
 
-Today's linux-next merge of the folio tree got conflicts in:
+Please make sure that 'just-works'.
 
-  fs/btrfs/ctree.h
-  fs/btrfs/inode.c
+Look at all the __always_inline functions in rbtree*.h for instance,
+some like latch and augment rely on quite complicated const propagation
+for the actual function pointer is in a const struct.
 
-between commit:
+I've verified all that actually generates direct calls when we did that
+code (on GCC, clang wasn't really a thing back then).
 
-  a3e4d924b41d ("btrfs: move btrfs_readpage to extent_io.c")
 
-from the btrfs tree and commit:
 
-  5a912a9c68ac ("btrfs: Convert btrfs to read_folio")
-
-from the folio tree.
-
-I fixed it up (I used the conflicting parts of the above files from the
-former and applied the below patch) and can carry the fix as necessary.
-This is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 2 May 2022 17:21:26 +1000
-Subject: [PATCH] fix up for "btrfs: move btrfs_readpage to extent_io.c"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- fs/btrfs/extent_io.c | 3 ++-
- fs/btrfs/extent_io.h | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/fs/btrfs/extent_io.c b/fs/btrfs/extent_io.c
-index 5de09556b1c3..aa8905a0d63a 100644
---- a/fs/btrfs/extent_io.c
-+++ b/fs/btrfs/extent_io.c
-@@ -3792,8 +3792,9 @@ static int btrfs_do_readpage(struct page *page, struc=
-t extent_map **em_cached,
- 	return ret;
- }
-=20
--int btrfs_readpage(struct file *file, struct page *page)
-+int btrfs_read_folio(struct file *file, struct folio *folio)
- {
-+	struct page *page =3D &folio->page;
- 	struct btrfs_inode *inode =3D BTRFS_I(page->mapping->host);
- 	u64 start =3D page_offset(page);
- 	u64 end =3D start + PAGE_SIZE - 1;
-diff --git a/fs/btrfs/extent_io.h b/fs/btrfs/extent_io.h
-index 375a721c48eb..4a2205fd189a 100644
---- a/fs/btrfs/extent_io.h
-+++ b/fs/btrfs/extent_io.h
-@@ -166,7 +166,7 @@ typedef struct extent_map *(get_extent_t)(struct btrfs_=
-inode *inode,
- int try_release_extent_mapping(struct page *page, gfp_t mask);
- int try_release_extent_buffer(struct page *page);
-=20
--int btrfs_readpage(struct file *file, struct page *page);
-+int btrfs_read_folio(struct file *file, struct folio *folio);
- int extent_write_full_page(struct page *page, struct writeback_control *wb=
-c);
- int extent_write_locked_range(struct inode *inode, u64 start, u64 end);
- int extent_writepages(struct address_space *mapping,
---=20
-2.35.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/jn1Ms63ppBkLEKtFyZNOA4W
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJvi6YACgkQAVBC80lX
-0GzL2Qf+JmpUJDiYOmb7QWDIaPWWF1+L0XINehDtxVS6WKRPzQn/v6Y3fCLedqxz
-yAhRgMPY2fcI0I3oCnTLET6rIKgXF+bn6xA4hMHDjSerWKN0qYtFv2QpYs0oIymU
-mkolecA410LZENlpe9KjlQ0yUaCKnQoey/qAyL3SWOFaQGoLcGSl92Q+2GCx7LR1
-/bfmtLcViVDhEi2g245x8PkTz++krGdSTi51hMK03HzbXep8h9s4Qv5uspJSxoYd
-gheEx+KTBbUjCUEqi7qT7jWrJdeXfgA+DflYtmrTAnI3rzSy+Ix2wkA90iM/FF+7
-b7YYTjq5Ol9ZbB+hOxgKcXKx0lCVhg==
-=HzLx
------END PGP SIGNATURE-----
-
---Sig_/jn1Ms63ppBkLEKtFyZNOA4W--

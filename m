@@ -2,495 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C0F651699E
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 05:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D4C5169A0
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 05:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357238AbiEBDtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 23:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57132 "EHLO
+        id S1357274AbiEBDuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 23:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbiEBDtg (ORCPT
+        with ESMTP id S229650AbiEBDuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 23:49:36 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F1F538BCC
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 20:46:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651463166; x=1682999166;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZPi9SoD/AS62EXZrLmm45vddBskVzjJNNWobOlGclRc=;
-  b=XHRUdTB4TXo33mMOptzdbHLXgjtxdrPRbjXwLiThDOZYFrpWnXzRPSMX
-   03bQougQXWQofH2AiF4sek9ESyi4dmANJvgCOetaQYrcmsQRL4jnFkxM+
-   VuuJd9lKrkPUXXEO11+uXW3DVPKXyXnVCUXeOXOK0xiqRyQYY0QD1hAD4
-   EBnbzRxsfAwsjLnteLNzazfSbCAi3PWwbWBowCicVJHdwGUAxzw6bVubW
-   G4KHM5Hg5P5C5r/CctmevlzktiJv68ODip1lL/uuYNmsDH1RCtXLptQe9
-   LQ2SsVNSKQdS1HwGXJ+g2ur6dF449OrlAuyPrBeKoXiFAPNQxHgram+LP
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="292290029"
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="292290029"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 20:45:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="689404788"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 01 May 2022 20:45:56 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nlN0V-0009Ff-GU;
-        Mon, 02 May 2022 03:45:55 +0000
-Date:   Mon, 2 May 2022 11:45:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nemanja Rakovic <nemanja.rakovic@syrmia.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [linux-stable-rc:linux-5.17.y 619/1879] mips64el-linux-ld: warning:
- orphan section `.ctors.65436' from `fs/netfs/read_helper.o' being placed in
- section `.ctors.65436'
-Message-ID: <202205021147.LlaNjR9Q-lkp@intel.com>
+        Sun, 1 May 2022 23:50:02 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E366F4E3AD;
+        Sun,  1 May 2022 20:46:30 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ks8CP4kgGz4ySt;
+        Mon,  2 May 2022 13:46:25 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1651463186;
+        bh=DmSduLjo8at0fNn2LOdFmpFx0UqJcMIFmirLxanyDgQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=cqIKMBEZ4kT+BAhTB8x75sVjRR7GyUyfWzDBf7j5Auoo0QT9l80H+IWEWsHivRnY/
+         ld2Af3jErz4PtZvMNsB2L1M8exco97KP97dQFdurj3jZmDB8PoiLupscsc1onGzBZc
+         mEEzNcRH/47dTl+1V8vxRoTTD77zVKvc7yh5ZOcDFZHswUiYDPX4moRDXoFa43w6Jn
+         8DqRN6myr1NYFosGeDl4uHeig0/36D543xiH7ZsW14FHtiuX0lf3zzNxONOobcYsCi
+         IrDcZ0yHcRyYmYRxegPXd4cJMOX4InPAbM6scYTVZKjsviPKPIv3Ee2vFhZ1NZY7bS
+         S1KWPoWJqhrbQ==
+Date:   Mon, 2 May 2022 13:46:24 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Joerg Roedel <joro@8bytes.org>, Christoph Hellwig <hch@lst.de>
+Cc:     Joerg Roedel <jroedel@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: linux-next: manual merge of the iommu tree with the dma-mapping
+ tree
+Message-ID: <20220502134624.76a88cff@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/7GZ7tWIWZ_rgS1FrWCEH6AY";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
-head:   2731bd17017d4a0e2180a1917ab22d7820a07330
-commit: 958b5990153934ba68436305f53f48ed87a1ae9a [619/1879] mips: Enable KCSAN
-config: mips-randconfig-r014-20220502 (https://download.01.org/0day-ci/archive/20220502/202205021147.LlaNjR9Q-lkp@intel.com/config)
-compiler: mips64el-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=958b5990153934ba68436305f53f48ed87a1ae9a
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.17.y
-        git checkout 958b5990153934ba68436305f53f48ed87a1ae9a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+--Sig_/7GZ7tWIWZ_rgS1FrWCEH6AY
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Hi all,
 
-All warnings (new ones prefixed by >>):
+Today's linux-next merge of the iommu tree got a conflict in:
 
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/attr.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/bad_inode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/file.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/filesystems.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/namespace.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/seq_file.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/xattr.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/libfs.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fs-writeback.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/pnode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/splice.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/sync.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/utimes.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/d_path.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/stack.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fs_struct.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/statfs.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fs_pin.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/nsfs.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fs_types.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fs_context.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fs_parser.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fsopen.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/init.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/kernel_read_file.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/remap_range.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/no-block.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc_namespace.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/notify/fsnotify.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/notify/notification.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/notify/group.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/notify/mark.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/notify/fdinfo.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/notify/dnotify/dnotify.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/eventpoll.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/anon_inodes.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/signalfd.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/eventfd.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/io_uring.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/io-wq.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/crypto/crypto.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/crypto/fname.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/crypto/hkdf.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/crypto/hooks.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/crypto/keyring.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/crypto/keysetup.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/crypto/keysetup_v1.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/crypto/policy.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/locks.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/binfmt_script.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/binfmt_elf.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/compat_binfmt_elf.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/posix_acl.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/coredump.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/quota/dquot.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/quota/quota.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/quota/kqid.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/task_mmu.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/inode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/root.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/base.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/generic.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/array.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/fd.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/proc_tty.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/cmdline.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/consoles.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/cpuinfo.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/devices.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/interrupts.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/loadavg.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/meminfo.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/stat.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/uptime.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/util.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/version.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/softirqs.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/namespaces.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/self.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/thread_self.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/vmcore.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/page.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/bootconfig.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/kernfs/mount.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/kernfs/inode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/kernfs/dir.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/kernfs/file.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/kernfs/symlink.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/sysfs/file.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/sysfs/dir.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/sysfs/symlink.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/sysfs/mount.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/sysfs/group.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/configfs/inode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/configfs/file.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/configfs/dir.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/configfs/symlink.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/configfs/mount.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/configfs/item.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/devpts/inode.o' being placed in section `.ctors.65436'
->> mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/netfs/read_helper.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/netfs/stats.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fscache/cache.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fscache/cookie.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fscache/io.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fscache/main.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fscache/volume.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fscache/proc.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/cramfs/inode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/cramfs/uncompress.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/ramfs/inode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/ramfs/file-mmu.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/ecryptfs/dentry.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/ecryptfs/file.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/ecryptfs/inode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/ecryptfs/main.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/ecryptfs/super.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/ecryptfs/mmap.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/ecryptfs/read_write.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/ecryptfs/crypto.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/ecryptfs/keystore.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/ecryptfs/kthread.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/ecryptfs/debug.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/unicode/utf8-norm.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/unicode/utf8-core.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/autofs/init.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/autofs/inode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/autofs/root.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/autofs/symlink.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/autofs/waitq.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/autofs/expire.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/autofs/dev-ioctl.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fuse/dev.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fuse/dir.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fuse/file.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fuse/inode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fuse/control.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fuse/xattr.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fuse/acl.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fuse/readdir.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fuse/ioctl.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fuse/virtio_fs.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/debugfs/inode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/debugfs/file.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/tracefs/inode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/pstore/inode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/pstore/platform.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `ipc/compat.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `ipc/util.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `ipc/msgutil.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `ipc/msg.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `ipc/sem.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `ipc/shm.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `ipc/syscall.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/keys/gc.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/keys/key.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/keys/keyring.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/keys/keyctl.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/keys/permission.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/keys/process_keys.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/keys/request_key.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/keys/request_key_auth.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/keys/user_defined.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/keys/compat.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/keys/proc.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/keys/persistent.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/keys/keyctl_pkey.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/commoncap.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/min_addr.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/inode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/device_cgroup.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/api.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/cipher.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/compress.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/memneq.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/algapi.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/scatterwalk.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/proc.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/aead.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/geniv.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/skcipher.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/ahash.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/shash.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/akcipher.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/kpp.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/sm2signature.asn1.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/sm2.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/acompress.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/scompress.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/algboss.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/testmgr.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/cmac.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/hmac.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/crypto_null.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/md5.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/rmd160.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/sha1_generic.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/sha512_generic.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/sha3_generic.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/sm3_generic.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/gf128mul.o' being placed in section `.ctors.65436'
---
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/attr.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/bad_inode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/file.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/filesystems.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/namespace.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/seq_file.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/xattr.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/libfs.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fs-writeback.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/pnode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/splice.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/sync.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/utimes.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/d_path.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/stack.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fs_struct.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/statfs.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fs_pin.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/nsfs.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fs_types.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fs_context.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fs_parser.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fsopen.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/init.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/kernel_read_file.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/remap_range.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/no-block.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc_namespace.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/notify/fsnotify.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/notify/notification.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/notify/group.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/notify/mark.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/notify/fdinfo.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/notify/dnotify/dnotify.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/eventpoll.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/anon_inodes.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/signalfd.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/eventfd.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/io_uring.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/io-wq.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/crypto/crypto.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/crypto/fname.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/crypto/hkdf.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/crypto/hooks.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/crypto/keyring.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/crypto/keysetup.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/crypto/keysetup_v1.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/crypto/policy.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/locks.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/binfmt_script.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/binfmt_elf.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/compat_binfmt_elf.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/posix_acl.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/coredump.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/quota/dquot.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/quota/quota.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/quota/kqid.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/task_mmu.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/inode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/root.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/base.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/generic.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/array.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/fd.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/proc_tty.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/cmdline.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/consoles.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/cpuinfo.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/devices.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/interrupts.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/loadavg.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/meminfo.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/stat.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/uptime.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/util.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/version.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/softirqs.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/namespaces.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/self.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/thread_self.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/vmcore.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/page.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/proc/bootconfig.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/kernfs/mount.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/kernfs/inode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/kernfs/dir.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/kernfs/file.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/kernfs/symlink.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/sysfs/file.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/sysfs/dir.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/sysfs/symlink.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/sysfs/mount.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/sysfs/group.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/configfs/inode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/configfs/file.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/configfs/dir.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/configfs/symlink.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/configfs/mount.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/configfs/item.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/devpts/inode.o' being placed in section `.ctors.65436'
->> mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/netfs/read_helper.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/netfs/stats.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fscache/cache.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fscache/cookie.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fscache/io.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fscache/main.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fscache/volume.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fscache/proc.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/cramfs/inode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/cramfs/uncompress.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/ramfs/inode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/ramfs/file-mmu.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/ecryptfs/dentry.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/ecryptfs/file.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/ecryptfs/inode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/ecryptfs/main.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/ecryptfs/super.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/ecryptfs/mmap.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/ecryptfs/read_write.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/ecryptfs/crypto.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/ecryptfs/keystore.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/ecryptfs/kthread.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/ecryptfs/debug.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/unicode/utf8-norm.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/unicode/utf8-core.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/autofs/init.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/autofs/inode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/autofs/root.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/autofs/symlink.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/autofs/waitq.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/autofs/expire.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/autofs/dev-ioctl.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fuse/dev.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fuse/dir.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fuse/file.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fuse/inode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fuse/control.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fuse/xattr.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fuse/acl.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fuse/readdir.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fuse/ioctl.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/fuse/virtio_fs.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/debugfs/inode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/debugfs/file.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/tracefs/inode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/pstore/inode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `fs/pstore/platform.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `ipc/compat.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `ipc/util.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `ipc/msgutil.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `ipc/msg.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `ipc/sem.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `ipc/shm.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `ipc/syscall.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/keys/gc.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/keys/key.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/keys/keyring.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/keys/keyctl.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/keys/permission.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/keys/process_keys.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/keys/request_key.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/keys/request_key_auth.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/keys/user_defined.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/keys/compat.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/keys/proc.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/keys/persistent.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/keys/keyctl_pkey.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/commoncap.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/min_addr.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/inode.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `security/device_cgroup.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/api.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/cipher.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/compress.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/memneq.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/algapi.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/scatterwalk.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/proc.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/aead.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/geniv.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/skcipher.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/ahash.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/shash.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/akcipher.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/kpp.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/sm2signature.asn1.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/sm2.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/acompress.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/scompress.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/algboss.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/testmgr.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/cmac.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/hmac.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/crypto_null.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/md5.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/rmd160.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/sha1_generic.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/sha512_generic.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/sha3_generic.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/sm3_generic.o' being placed in section `.ctors.65436'
-   mips64el-linux-ld: warning: orphan section `.ctors.65436' from `crypto/gf128mul.o' being placed in section `.ctors.65436'
-..
+  drivers/iommu/amd/iommu.c
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+between commit:
+
+  78013eaadf69 ("x86: remove the IOMMU table infrastructure")
+
+from the dma-mapping tree and commit:
+
+  121660bba631 ("iommu/amd: Enable swiotlb in all cases")
+
+from the iommu tree.
+
+I fixed it up (the latter removed the code modified by the former) and
+can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the
+conflicting tree to minimise any particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/7GZ7tWIWZ_rgS1FrWCEH6AY
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJvVBAACgkQAVBC80lX
+0Gx+awf/WqWsSl3QqzaIQybbjAoE0rFK29ObGI7FQEgM/lPzdNyvhROgv+pBijfK
+sC3WhxSmgNhkQA7LBLaOCwA0I/ZnWRj2Cz/ZLJRFwRHyj7qALGidPFbUPfztUN3S
+1mzMlLdd9mJUs+BbDQyUXBNA2JmKUWfMQLQFHlJjeqON0/iPuMjOOIqq3Mm3WgeJ
+EGICfEyPCJ0g2WDb8U5uAGYTe5vdTy9EfUipESJV0k28uouRHSOL/MmVHDpt3sJQ
+SOqW0GuQEEj3cjnmDGoO8UyxSRG0dZpKR6UxcKCbs2YF3DnNe/R9FReD2/zFAide
+nMaJadfGabk2k+bCqmOoDgKOh0h1aQ==
+=F/hy
+-----END PGP SIGNATURE-----
+
+--Sig_/7GZ7tWIWZ_rgS1FrWCEH6AY--

@@ -2,52 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F46516C9D
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 10:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6381C516CA0
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 10:56:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383952AbiEBI6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 04:58:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41198 "EHLO
+        id S1383970AbiEBI6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 04:58:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231442AbiEBI6S (ORCPT
+        with ESMTP id S1383958AbiEBI6d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 04:58:18 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822FF26132
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 01:54:49 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nlRpJ-0002Gg-IE; Mon, 02 May 2022 10:54:41 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nlRpJ-006UvK-As; Mon, 02 May 2022 10:54:39 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nlRpG-000axD-E2; Mon, 02 May 2022 10:54:38 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH net-next v1 1/1] net: phy: dp83td510: Add support for the DP83TD510 Ethernet PHY
-Date:   Mon,  2 May 2022 10:54:37 +0200
-Message-Id: <20220502085437.142000-1-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        Mon, 2 May 2022 04:58:33 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0429426132;
+        Mon,  2 May 2022 01:55:05 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 8D15D1F4305D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1651481701;
+        bh=3BW+nxuTRA49LbcdXaeq9ZCmg12LIlVHpHv79umm3nU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jDPcTXu8R4vBjXC9eYZzcXigt/dEgh9fzk8DyL5ipvwVNXD+kb9RvR+nBzl0A1x+1
+         n8waVx/o+73r2krzd2TsWxU/5vPWvSFWAGsfOUPeXPuvbBgsJ7CU2hDZDu+E5yMeSF
+         ZUKxBlCmoYazE+C9EJWr45b9h7vTlyTO1TkD9zuE93hQWuaCByEnWCExEZ3wS07Sxf
+         FejKSb9B1B3bEwUUOijFwtLJ2iMe2xxHSGAkjn/zsemHMihFSA0aYne+VdDuMS2NIe
+         v3IzKoMOS6UjYgmLQwJ+N8BA4oh1lf2KYilAKr2usTB4Q9LoAWmrD2O8bVmfvnWyFr
+         QdAMettwC+Pig==
+Message-ID: <c56464d3-d33d-1797-2c98-67bec34df756@collabora.com>
+Date:   Mon, 2 May 2022 10:54:57 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH V5 12/16] dt-bindings: reset: mediatek: Add infra_ao reset
+ bit for MT8195
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     p.zabel@pengutronix.de, chun-jie.chen@mediatek.com,
+        wenst@chromium.org, runyang.chen@mediatek.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220428115620.13512-1-rex-bc.chen@mediatek.com>
+ <20220428115620.13512-13-rex-bc.chen@mediatek.com>
+ <839978c5-c337-7784-a04f-26b9883c703b@linaro.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <839978c5-c337-7784-a04f-26b9883c703b@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,354 +64,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DP83TD510E is an ultra-low power Ethernet physical layer transceiver
-that supports 10M single pair cable.
+Il 29/04/22 23:13, Krzysztof Kozlowski ha scritto:
+> On 28/04/2022 13:56, Rex-BC Chen wrote:
+>> To support reset of infra_ao, add the bit definitions for MT8195.
+>> The infra_ao reset includes 5 banks and 32 bits for each bank.
+>>
+>> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+>> ---
+>>   include/dt-bindings/reset/mt8195-resets.h | 170 ++++++++++++++++++++++
+>>   1 file changed, 170 insertions(+)
+>>
+>> diff --git a/include/dt-bindings/reset/mt8195-resets.h b/include/dt-bindings/reset/mt8195-resets.h
+>> index a26bccc8b957..463114014483 100644
+>> --- a/include/dt-bindings/reset/mt8195-resets.h
+>> +++ b/include/dt-bindings/reset/mt8195-resets.h
+>> @@ -7,6 +7,7 @@
+>>   #ifndef _DT_BINDINGS_RESET_CONTROLLER_MT8195
+>>   #define _DT_BINDINGS_RESET_CONTROLLER_MT8195
+>>   
+>> +/* TOPRGU resets */
+>>   #define MT8195_TOPRGU_CONN_MCU_SW_RST          0
+>>   #define MT8195_TOPRGU_INFRA_GRST_SW_RST        1
+>>   #define MT8195_TOPRGU_APU_SW_RST               2
+>> @@ -26,4 +27,173 @@
+>>   
+>>   #define MT8195_TOPRGU_SW_RST_NUM               16
+>>   
+>> +/* INFRA RST0 */
+>> +#define MT8195_INFRA_RST0_THERM_CTRL_SWRST	0
+>> +#define MT8195_INFRA_RST0_RSV0			1
+>> +#define MT8195_INFRA_RST0_DISP_PWM1_SWRST	2
+>> +#define MT8195_INFRA_RST0_RSV1			3
+>> +#define MT8195_INFRA_RST0_MSDC3_SWRST		4
+>> +#define MT8195_INFRA_RST0_MSDC2_SWRST		5
+>> +#define MT8195_INFRA_RST0_MSDC1_SWRST		6
+>> +#define MT8195_INFRA_RST0_MSDC0_SWRST		7
+>> +#define MT8195_INFRA_RST0_RSV2			8
+>> +#define MT8195_INFRA_RST0_AP_DMA_SWRST		9
+>> +#define MT8195_INFRA_RST0_MIPI_D_SWRST		10
+>> +#define MT8195_INFRA_RST0_RSV3			11
+>> +#define MT8195_INFRA_RST0_RSV4			12
+>> +#define MT8195_INFRA_RST0_SSUSB_TOP_SWRST	13
+>> +#define MT8195_INFRA_RST0_DISP_PWM_SWRST	14
+>> +#define MT8195_INFRA_RST0_AUXADC_SWRST		15
+>> +#define MT8195_INFRA_RST0_RSV5			16
+>> +#define MT8195_INFRA_RST0_RSV6			17
+>> +#define MT8195_INFRA_RST0_RSV7			18
+>> +#define MT8195_INFRA_RST0_RSV8			19
+>> +#define MT8195_INFRA_RST0_RSV9			20
+>> +#define MT8195_INFRA_RST0_RSV10			21
+>> +#define MT8195_INFRA_RST0_RSV11			22
+>> +#define MT8195_INFRA_RST0_RSV12			23
+>> +#define MT8195_INFRA_RST0_RSV13			24
+>> +#define MT8195_INFRA_RST0_RSV14			25
+>> +#define MT8195_INFRA_RST0_RSV15			26
+>> +#define MT8195_INFRA_RST0_RSV16			27
+>> +#define MT8195_INFRA_RST0_RSV17			28
+>> +#define MT8195_INFRA_RST0_RSV18			29
+>> +#define MT8195_INFRA_RST0_RSV19			30
+>> +#define MT8195_INFRA_RST0_RSV20			31
+> 
+> These are not proper IDs... don't work-around usage of bits with fake
+> reserved IDs...
 
-This driver was tested with NXP SJA1105, STMMAC and ASIX AX88772B USB Ethernet
-controller.
+Hello Krzysztof,
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- drivers/net/phy/Kconfig     |   6 +
- drivers/net/phy/Makefile    |   1 +
- drivers/net/phy/dp83td510.c | 299 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 306 insertions(+)
- create mode 100644 drivers/net/phy/dp83td510.c
+Actually, I get that it may seem that Rex is trying to cheat with fake
+reserved numbers... but it's really how the registers are laid out: there
+really are reserved bits in between used reset bits.
 
-diff --git a/drivers/net/phy/Kconfig b/drivers/net/phy/Kconfig
-index bbbf6c07ea53..9fee639ee5c8 100644
---- a/drivers/net/phy/Kconfig
-+++ b/drivers/net/phy/Kconfig
-@@ -342,6 +342,12 @@ config DP83869_PHY
- 	  Currently supports the DP83869 PHY.  This PHY supports copper and
- 	  fiber connections.
- 
-+config DP83TD510_PHY
-+	tristate "Texas Instruments DP83TD510 Ethernet 10Base-T1L PHY"
-+	help
-+	  Support for the DP83TD510 Ethernet 10Base-T1L PHY. This PHY supports
-+	  a 10M single pair Ethernet connection for up to 1000 meter cable.
-+
- config VITESSE_PHY
- 	tristate "Vitesse PHYs"
- 	help
-diff --git a/drivers/net/phy/Makefile b/drivers/net/phy/Makefile
-index b82651b57043..b12b1d86fc99 100644
---- a/drivers/net/phy/Makefile
-+++ b/drivers/net/phy/Makefile
-@@ -57,6 +57,7 @@ obj-$(CONFIG_DP83848_PHY)	+= dp83848.o
- obj-$(CONFIG_DP83867_PHY)	+= dp83867.o
- obj-$(CONFIG_DP83869_PHY)	+= dp83869.o
- obj-$(CONFIG_DP83TC811_PHY)	+= dp83tc811.o
-+obj-$(CONFIG_DP83TD510_PHY)	+= dp83td510.o
- obj-$(CONFIG_FIXED_PHY)		+= fixed_phy.o
- obj-$(CONFIG_ICPLUS_PHY)	+= icplus.o
- obj-$(CONFIG_INTEL_XWAY_PHY)	+= intel-xway.o
-diff --git a/drivers/net/phy/dp83td510.c b/drivers/net/phy/dp83td510.c
-new file mode 100644
-index 000000000000..90531d849545
---- /dev/null
-+++ b/drivers/net/phy/dp83td510.c
-@@ -0,0 +1,299 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Driver for the Texas Instruments DP83TD510 PHY
-+ * Copyright (c) 2022 Pengutronix, Oleksij Rempel <kernel@pengutronix.de>
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/phy.h>
-+
-+#define DP83TD510E_PHY_ID			0x20000181
-+
-+/* MDIO_MMD_VEND2 registers */
-+#define DP83TD510E_PHY_STS			0x10
-+#define DP83TD510E_STS_MII_INT			BIT(7)
-+
-+#define DP83TD510E_GEN_CFG			0x11
-+#define DP83TD510E_GENCFG_INT_POLARITY		BIT(3)
-+#define DP83TD510E_GENCFG_INT_EN		BIT(1)
-+#define DP83TD510E_GENCFG_INT_OE		BIT(0)
-+
-+#define DP83TD510E_INTERRUPT_REG_1		0x12
-+#define DP83TD510E_INT1_LINK			BIT(13)
-+#define DP83TD510E_INT1_LINK_EN			BIT(5)
-+
-+static const u16 devad1[] = {
-+	0x000, 0x007, 0x00B, 0x012, 0x834, 0x8F6, 0x8F7, 0x8F8
-+};
-+
-+static const u16 devad3[] = {
-+	0x3000, 0x38E6, 0x38E7
-+};
-+
-+static const u16 devad7[] = {
-+	0x200, 0x201, 0x202, 0x203, 0x204, 0x205, 0x206, 0x207, 0x208, 0x209,
-+	0x20A, 0x20B, 0x20C, 0x20D, 0x20E, 0x20F };
-+
-+static const u16 devad1f[] = {
-+	0x0, 0x2, 0x3, 0x10, 0x11, 0x12, 0x13, 0x15, 0x16, 0x17, 0x18, 0x19,
-+	0x1E, 0x119, 0x11A, 0x11B, 0x11C, 0x11D, 0x11E, 0x11F, 0x120, 0x121,
-+	0x122, 0x123, 0x124, 0x125, 0x126, 0x127, 0x128, 0x129, 0x12A, 0x12B,
-+	0x12C, 0x12D, 0x12E, 0x12F, 0x130, 0x300, 0x301, 0x302, 0x303, 0x304,
-+	0x305, 0x306, 0x307, 0x308, 0x309, 0x30A, 0x420, 0x460, 0x461, 0x462,
-+	0x463, 0x467, 0x468, 0x469, 0x60C, 0x872, 0x88D, 0x88E, 0x88F, 0x890,
-+	0x891, 0x892, 0x898, 0x899, 0x89A, 0x89B, 0x89C, 0x89D, 0x8E9, 0x8EA,
-+	0x8EB, 0x8EC, 0x8ED, 0x8EE, 0xA9D, 0xA9F, 0xE01
-+};
-+
-+/* This PHY has some differences compared to 802.3cg-2019 specification. To
-+ * avoid misconfiguration it is better to validate register accesses.
-+ */
-+static int dp83td510_validate_mmd(struct phy_device *phydev, int devad,
-+				  u16 regnum)
-+{
-+	const u16 *regs;
-+	size_t size;
-+	int i;
-+
-+	switch (devad) {
-+	case MDIO_MMD_PMAPMD:
-+		regs = &devad1[0];
-+		size = ARRAY_SIZE(devad1);
-+		break;
-+	case MDIO_MMD_PCS:
-+		regs = &devad3[0];
-+		size = ARRAY_SIZE(devad3);
-+		break;
-+	case MDIO_MMD_AN:
-+		regs = &devad7[0];
-+		size = ARRAY_SIZE(devad7);
-+		break;
-+	case MDIO_MMD_VEND2:
-+		regs = &devad1f[0];
-+		size = ARRAY_SIZE(devad1f);
-+		break;
-+	default:
-+		phydev_err(phydev, "Unknown device %i.%i\n", devad, regnum);
-+		return -ENOTSUPP;
-+	}
-+
-+	for (i = 0; i < size; i++)
-+		if (regs[i] == regnum)
-+			return 0;
-+
-+	phydev_err(phydev, "Unknown register %i.%i\n", devad, regnum);
-+
-+	WARN_ON_ONCE(1);
-+
-+	return -ENOTSUPP;
-+}
-+
-+static void mmd_phy_indirect(struct mii_bus *bus, int phy_addr, int devad,
-+			     u16 regnum)
-+{
-+	/* Write the desired MMD Devad */
-+	__mdiobus_write(bus, phy_addr, MII_MMD_CTRL, devad);
-+
-+	/* Write the desired MMD register address */
-+	__mdiobus_write(bus, phy_addr, MII_MMD_DATA, regnum);
-+
-+	/* Select the Function : DATA with no post increment */
-+	__mdiobus_write(bus, phy_addr, MII_MMD_CTRL,
-+			devad | MII_MMD_CTRL_NOINCR);
-+}
-+
-+static int dp83td510_read_mmd(struct phy_device *phydev, int devad, u16 regnum)
-+{
-+	struct mii_bus *bus = phydev->mdio.bus;
-+	int phy_addr = phydev->mdio.addr;
-+	int val;
-+
-+	if (regnum > (u16)~0 || devad > 32)
-+		return -EINVAL;
-+
-+	switch (devad) {
-+	case MDIO_MMD_PMAPMD:
-+		/* we do not have 1.1 register. Link status 1.1.2 can get on 7.513.2 */
-+		if (regnum == MDIO_STAT1) {
-+			devad = MDIO_MMD_AN;
-+			regnum = MDIO_AN_T1_STAT;
-+		}
-+		/* 1.8 register is not present on this PHY, without it PHYlib
-+		 * can't find T1 capabilities register.
-+		 */
-+		if (regnum == MDIO_STAT2)
-+			return MDIO_PMA_STAT2_EXTABLE;
-+
-+		break;
-+	case MDIO_MMD_AN:
-+		/* Not supported on T1 or at least not on this PHY, use 7.512
-+		 * instead. This regs look similar.
-+		 */
-+		if (regnum == MDIO_CTRL1)
-+			regnum = MDIO_AN_T1_CTRL;
-+		break;
-+	case MDIO_MMD_PCS:
-+		if (regnum == MDIO_PCS_EEE_ABLE)
-+			return 0;
-+		break;
-+	}
-+
-+	val = dp83td510_validate_mmd(phydev, devad, regnum);
-+	if (val < 0)
-+		return 0;
-+
-+	/* This PHY supports only C22 MDIO opcodes. We can use only indirect
-+	 * access.
-+	 */
-+	mmd_phy_indirect(bus, phy_addr, devad, regnum);
-+
-+	/* Read the content of the MMD's selected register */
-+	val = __mdiobus_read(bus, phy_addr, MII_MMD_DATA);
-+
-+	return val;
-+}
-+
-+static int dp83td510_write_mmd(struct phy_device *phydev, int devad, u16 regnum,
-+			       u16 val)
-+{
-+	struct mii_bus *bus = phydev->mdio.bus;
-+	int phy_addr = phydev->mdio.addr;
-+	int ret;
-+
-+	if (regnum > (u16)~0 || devad > 32)
-+		return -EINVAL;
-+
-+	if (devad == MDIO_MMD_PMAPMD) {
-+		/* RO regs, nothing to write */
-+		if (regnum == MDIO_CTRL1 || regnum == MDIO_CTRL2)
-+			return 0;
-+	}
-+
-+	ret = dp83td510_validate_mmd(phydev, devad, regnum);
-+	if (ret < 0)
-+		return 0;
-+
-+	/* This PHY supports only C22 MDIO opcodes. We can use only indirect
-+	 * access.
-+	 */
-+	mmd_phy_indirect(bus, phy_addr, devad, regnum);
-+
-+	/* Write the data into MMD's selected register */
-+	return __mdiobus_write(bus, phy_addr, MII_MMD_DATA, val);
-+}
-+
-+static int dp83td510_config_intr(struct phy_device *phydev)
-+{
-+	int ret;
-+
-+	if (phydev->interrupts == PHY_INTERRUPT_ENABLED) {
-+		/* Clear any pending interrupts */
-+		ret = phy_write_mmd(phydev, MDIO_MMD_VEND2, DP83TD510E_PHY_STS,
-+				    0x0);
-+		if (ret)
-+			return ret;
-+
-+		ret = phy_write_mmd(phydev, MDIO_MMD_VEND2,
-+				    DP83TD510E_INTERRUPT_REG_1,
-+				    DP83TD510E_INT1_LINK_EN);
-+		if (ret)
-+			return ret;
-+
-+		ret = phy_set_bits_mmd(phydev, MDIO_MMD_VEND2,
-+				       DP83TD510E_GEN_CFG,
-+				       DP83TD510E_GENCFG_INT_POLARITY |
-+				       DP83TD510E_GENCFG_INT_EN |
-+				       DP83TD510E_GENCFG_INT_OE);
-+	} else {
-+		ret = phy_write_mmd(phydev, MDIO_MMD_VEND2,
-+				    DP83TD510E_INTERRUPT_REG_1, 0x0);
-+		if (ret)
-+			return ret;
-+
-+		ret = phy_clear_bits_mmd(phydev, MDIO_MMD_VEND2,
-+					 DP83TD510E_GEN_CFG,
-+					 DP83TD510E_GENCFG_INT_EN);
-+		if (ret)
-+			return ret;
-+
-+		/* Clear any pending interrupts */
-+		ret = phy_write_mmd(phydev, MDIO_MMD_VEND2, DP83TD510E_PHY_STS,
-+				    0x0);
-+	}
-+
-+	return ret;
-+}
-+
-+static irqreturn_t dp83td510_handle_interrupt(struct phy_device *phydev)
-+{
-+	int  ret;
-+
-+	ret = phy_read_mmd(phydev, MDIO_MMD_VEND2, DP83TD510E_PHY_STS);
-+	if (ret < 0) {
-+		phy_error(phydev);
-+		return IRQ_NONE;
-+	} else if (!(ret & DP83TD510E_STS_MII_INT)) {
-+		return IRQ_NONE;
-+	}
-+
-+	/* Read the current enabled interrupts */
-+	ret = phy_read_mmd(phydev, MDIO_MMD_VEND2, DP83TD510E_INTERRUPT_REG_1);
-+	if (ret < 0) {
-+		phy_error(phydev);
-+		return IRQ_NONE;
-+	} else if (!(ret & DP83TD510E_INT1_LINK_EN) ||
-+		   !(ret & DP83TD510E_INT1_LINK)) {
-+		return IRQ_NONE;
-+	}
-+
-+	phy_trigger_machine(phydev);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int dp83td510_get_features(struct phy_device *phydev)
-+{
-+	/* This PHY can't respond on MDIO bus if no RMII clock is enabled.
-+	 * In case RMII mode is used (most meaningful mode for this PHY) and
-+	 * the PHY do not have own XTAL, and CLK providing MAC is not probed,
-+	 * we won't be able to read all needed ability registers.
-+	 * So provide it manually.
-+	 */
-+
-+	linkmode_set_bit(ETHTOOL_LINK_MODE_Autoneg_BIT, phydev->supported);
-+	linkmode_set_bit(ETHTOOL_LINK_MODE_Asym_Pause_BIT, phydev->supported);
-+	linkmode_set_bit(ETHTOOL_LINK_MODE_Pause_BIT, phydev->supported);
-+	linkmode_set_bit(ETHTOOL_LINK_MODE_10baseT1L_Full_BIT,
-+			 phydev->supported);
-+
-+	return 0;
-+}
-+
-+static struct phy_driver dp83td510_driver[] = {
-+{
-+	PHY_ID_MATCH_MODEL(DP83TD510E_PHY_ID),
-+	.name		= "TI DP83TD510E",
-+
-+	.config_aneg	= genphy_c45_config_aneg,
-+	.read_status	= genphy_c45_read_status,
-+	.get_features	= dp83td510_get_features,
-+	.config_intr	= dp83td510_config_intr,
-+	.handle_interrupt = dp83td510_handle_interrupt,
-+
-+	.suspend	= genphy_suspend,
-+	.resume		= genphy_resume,
-+	.read_mmd	= dp83td510_read_mmd,
-+	.write_mmd	= dp83td510_write_mmd,
-+} };
-+module_phy_driver(dp83td510_driver);
-+
-+static struct mdio_device_id __maybe_unused dp83td510_tbl[] = {
-+	{ PHY_ID_MATCH_MODEL(DP83TD510E_PHY_ID) },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(mdio, dp83td510_tbl);
-+
-+MODULE_DESCRIPTION("Texas Instruments DP83TD510E PHY driver");
-+MODULE_AUTHOR("Oleksij Rempel <kernel@pengutronix.de>");
-+MODULE_LICENSE("GPL v2");
--- 
-2.30.2
+I don't think that the reserved bits are doing anything though, so the
+best way to proceed is to just remove them and map the dt-bindings IDs to
+the HW register's bits in the driver instead.
+Even though the current approach is very simplistic, I agree that this is
+not how it's supposed to be done (and I'm sort-of sad about that).
+
+Rex, please map these values in the reset driver so that, in this header,
+you'll get something like:
+
+#define MT8195_INFRA_RST0_THERM_CTRL_SWRST	0
+#define MT8195_INFRA_RST0_DISP_PWM1_SWRST	1
+#define MT8195_INFRA_RST0_MSDC3_SWRST		2
+#define .... (etc)
+
+Cheers,
+Angelo
+
+> 
+> Best regards,
+> Krzysztof
 

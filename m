@@ -2,118 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A131351691C
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 03:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FA47516926
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 03:38:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356424AbiEBBTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 21:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50074 "EHLO
+        id S1350570AbiEBBmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 21:42:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231254AbiEBBTO (ORCPT
+        with ESMTP id S233379AbiEBBmP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 21:19:14 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3219911A25;
-        Sun,  1 May 2022 18:15:45 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ks4sS4QPmz4xdK;
-        Mon,  2 May 2022 11:15:39 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651454141;
-        bh=Jk7AExWT9OpK1U0dF6pKqW8jWAbfXyujcmahNjOhKxk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=gttuS7JDBltC7uIehF4yyOjE/3mApywujCd66Wp5IzzfvUOZDdMCHkqRRCWQnAFJs
-         5sWp93yniP2sU9DewQhV3PVX8qAhc6+7/n0qKHaX7kbrGCltYkoD70BlFWeRGviB8y
-         6PDltBpWQ+0X9zsA9xPePcZWBFeB6EHQt6orykHMMppouZkFzMrCbnwkRSSB+XbACo
-         vhqoXr++nqqI1K6lPKveI25wFl2CPaS52JGX0sxZZetLy0wtsivCZxBP/+8fu0+Ykf
-         1H+RCLWe6s93O7TixDkHj+rk5X9Q1aRqEl1B88IAtWGVwfq0ZWIzFr6J4bLE5uQ1fX
-         Vr/ghQhU2DaiQ==
-Date:   Mon, 2 May 2022 11:15:39 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Hangbin Liu <liuhangbin@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Joachim Wiberg <troglobit@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20220502111539.0b7e4621@canb.auug.org.au>
+        Sun, 1 May 2022 21:42:15 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5214318E35;
+        Sun,  1 May 2022 18:38:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651455528; x=1682991528;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=GB5FNSl/Q5I54V+rN8pZy3Znz3ryXNi/K6XHiOqMzB4=;
+  b=rATZE1J1W2JnO9AEqYZ+0ImpNUBUdmBnvARAKCjWBjNUe0WYMzBOCKDS
+   w8Iwbi3xDQyMnLG7Kp4Lctj4aCQn1ooaTIGvYI7Iby4QXSuX7RYEFGRDC
+   UBxegr4p5dFc32iVlQgmXRcnnyAoawpzci06eECcn0yoRiDy4SyAOBHlo
+   E=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 01 May 2022 18:38:48 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 18:38:48 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Sun, 1 May 2022 18:38:27 -0700
+Received: from [10.38.245.205] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Sun, 1 May 2022
+ 18:38:24 -0700
+Message-ID: <200eddae-02b8-5479-3e81-1f3885200ac0@quicinc.com>
+Date:   Sun, 1 May 2022 18:38:22 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/WYaI_2j9ow=s5DrQWb3PW8e";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [Freedreno] [PATCH] drm/msm/disp/dpu1: avoid clearing hw
+ interrupts if hw_intr is null during drm uninit
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Vinod Polimera <quic_vpolimer@quicinc.com>,
+        <devicetree@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>
+CC:     <quic_kalyant@quicinc.com>, <robdclark@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <dianders@chromium.org>
+References: <1650952931-31988-1-git-send-email-quic_vpolimer@quicinc.com>
+ <CAE-0n52cSR_xCxF+_UeK8CaHqsu=4HOtfWQ3BMmx2Tx3kmk-ZA@mail.gmail.com>
+ <e20d94d7-a865-21f7-0514-706992294614@linaro.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <e20d94d7-a865-21f7-0514-706992294614@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/WYaI_2j9ow=s5DrQWb3PW8e
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Looks like our new CI has given all the answers we need :) which is a 
+great win for the CI in my opinion.
 
-Hi all,
+Take a look at this report : 
+https://gitlab.freedesktop.org/drm/msm/-/jobs/22015361
 
-Today's linux-next merge of the net-next tree got a conflict in:
+This issue seems to be because this change 
+https://github.com/torvalds/linux/commit/169466d4e59ca204683998b7f45673ebf0eb2de6 
+is missing in our tree.
 
-  tools/testing/selftests/net/forwarding/Makefile
+Without this change, what happens is that we are not hitting the return 
+0 because we check for ENODEV.
 
-between commit:
 
-  f62c5acc800e ("selftests/net/forwarding: add missing tests to Makefile")
+   /*
+      * External bridges are mandatory for eDP interfaces: one has to
+      * provide at least an eDP panel (which gets wrapped into 
+panel-bridge).
+      *
+      * For DisplayPort interfaces external bridges are optional, so
+      * silently ignore an error if one is not present (-ENODEV).
+      */
+     rc = dp_parser_find_next_bridge(dp_priv->parser);
+     if (!dp->is_edp && rc == -ENODEV)
+         return 0;
 
-from the net tree and commit:
+So, I think we should do both:
 
-  50fe062c806e ("selftests: forwarding: new test, verify host mdb entries")
+1) Since we are running CI on the tree, backport this change so that 
+this error path doesnt hit?
 
-from the net-next tree.
+2) Add this protection as well because this shows that we can indeed hit 
+this path in EDEFER cases causing this crash.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+Thanks
 
---=20
-Cheers,
-Stephen Rothwell
+Abhinav
 
-diff --cc tools/testing/selftests/net/forwarding/Makefile
-index c87e674b61b1,ae80c2aef577..000000000000
---- a/tools/testing/selftests/net/forwarding/Makefile
-+++ b/tools/testing/selftests/net/forwarding/Makefile
-@@@ -2,7 -2,7 +2,8 @@@
- =20
-  TEST_PROGS =3D bridge_igmp.sh \
-  	bridge_locked_port.sh \
-+ 	bridge_mdb.sh \
- +	bridge_mld.sh \
-  	bridge_port_isolation.sh \
-  	bridge_sticky_fdb.sh \
-  	bridge_vlan_aware.sh \
-
---Sig_/WYaI_2j9ow=s5DrQWb3PW8e
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJvMLsACgkQAVBC80lX
-0Gy2Zwf+PfEcGvSUt8bqUHECfKbdzaRDWbpkHLpB0FWKiQxnW8dW/gQV/f4eVluh
-sKEBu4ZCogom7qFMnKahaIwGn3pvsnx9JZ8pHGBi3lyLKDvM15RdspPH0n7yNI8S
-PftiIJM6S/8LV6O/6fB1sUaU4Am/+7xRha/FgdPVZ2mDi2xPGKhfiisoTnsWvggu
-blsRl7eBh7AYk+utRVjYFqbqp1Nqv8fzVnbVl1b8JW8nOqOcVK7v8hkfaY2w/jSA
-tDkt+kUZgyf8S/wkGf/UFbkV1W00cGEhqw3hiPsrygDVP1OAGvGHgfgRriLTFasV
-FyODnI2T3UpMfdEVlNwaaidRtIXESQ==
-=35uy
------END PGP SIGNATURE-----
-
---Sig_/WYaI_2j9ow=s5DrQWb3PW8e--
+On 4/27/2022 3:53 AM, Dmitry Baryshkov wrote:
+> On 27/04/2022 00:50, Stephen Boyd wrote:
+>> Quoting Vinod Polimera (2022-04-25 23:02:11)
+>>> Avoid clearing irqs and derefernce hw_intr when hw_intr is null.
+>>
+>> Presumably this is only the case when the display driver doesn't fully
+>> probe and something probe defers? Can you clarify how this situation
+>> happens?
+>>
+>>>
+>>> BUG: Unable to handle kernel NULL pointer dereference at virtual 
+>>> address 0000000000000000
+>>>
+>>> Call trace:
+>>>   dpu_core_irq_uninstall+0x50/0xb0
+>>>   dpu_irq_uninstall+0x18/0x24
+>>>   msm_drm_uninit+0xd8/0x16c
+>>>   msm_drm_bind+0x580/0x5fc
+>>>   try_to_bring_up_master+0x168/0x1c0
+>>>   __component_add+0xb4/0x178
+>>>   component_add+0x1c/0x28
+>>>   dp_display_probe+0x38c/0x400
+>>>   platform_probe+0xb0/0xd0
+>>>   really_probe+0xcc/0x2c8
+>>>   __driver_probe_device+0xbc/0xe8
+>>>   driver_probe_device+0x48/0xf0
+>>>   __device_attach_driver+0xa0/0xc8
+>>>   bus_for_each_drv+0x8c/0xd8
+>>>   __device_attach+0xc4/0x150
+>>>   device_initial_probe+0x1c/0x28
+>>>
+>>> Fixes: a73033619ea ("drm/msm/dpu: squash dpu_core_irq into 
+>>> dpu_hw_interrupts")
+>>
+>> The fixes tag looks odd. In dpu_core_irq_uninstall() at that commit it
+>> is dealing with 'irq_obj' which isn't a pointer. After commit
+>> f25f656608e3 ("drm/msm/dpu: merge struct dpu_irq into struct
+>> dpu_hw_intr") dpu_core_irq_uninstall() starts using 'hw_intr' which is
+>> allocated on the heap. If we backported this patch to a place that had
+>> a73033619ea without f25f656608e3 it wouldn't make any sense.
+> 
+> I'd agree here. The following tag would be correct:
+> 
+> Fixes: f25f656608e3 ("drm/msm/dpu: merge struct dpu_irq into struct 
+> dpu_hw_intr")
+> 
+> 
+>>
+>>> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+>>> ---
+>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c | 3 +++
+>>>   1 file changed, 3 insertions(+)
+>>>
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c 
+>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
+>>> index c515b7c..ab28577 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
+>>> @@ -599,6 +599,9 @@ void dpu_core_irq_uninstall(struct dpu_kms *dpu_kms)
+>>>   {
+>>>          int i;
+>>>
+>>> +       if (!dpu_kms->hw_intr)
+>>> +               return;
+>>> +
+>>>          pm_runtime_get_sync(&dpu_kms->pdev->dev);
+>>>          for (i = 0; i < dpu_kms->hw_intr->total_irqs; i++)
+> 
+> 

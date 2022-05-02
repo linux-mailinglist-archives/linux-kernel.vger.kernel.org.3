@@ -2,101 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E538F517813
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 22:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E21517826
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 22:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385578AbiEBUaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 16:30:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57030 "EHLO
+        id S1387403AbiEBUfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 16:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233639AbiEBUa1 (ORCPT
+        with ESMTP id S1350516AbiEBUfE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 16:30:27 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8529FE2
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 13:26:57 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id k126so5432858wme.2
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 13:26:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=matchdayarena-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:reply-to:to:subject:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lJ+KH0aRdl8k8CwFrYo0ipoiGK0sWPv66PH3fZBi6XE=;
-        b=G1eWQAqHWkwMyCp6DGl0+lJAyVpDdF660ofb2j+dHM8+vYDizJS2KqFMTzeSh7Q1ax
-         WNAl7+3No6iLJ4iYPe5YIyMdTswEHbYwz51+yjdpVIUVVgXLnWdj1KnWINgTbiLBaP47
-         xrvpQfItRJ/wjr29rR/O6YYFE3zHqRBIEss+6b8WW2EBsSztBqgiAdECA0pZ2+gkvSb6
-         XvQbYwYma89BPbx8nE/1+K/WQjPLMZ3u48CcAnFqbRlFIzT5WYCDAJfgWIujdNGC7pj+
-         oM+gmjO77jmkzZ9Wl7rFmEsTKb+YQgFjUbZyGzKL7IbjK3oEAkjoEu6CstooEjbPRqHJ
-         uYhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:reply-to:to:subject:message-id
-         :mime-version:content-transfer-encoding;
-        bh=lJ+KH0aRdl8k8CwFrYo0ipoiGK0sWPv66PH3fZBi6XE=;
-        b=w2wwhNuMsMyAhUHwZWBqo5g9AKxwIefX4xB+diaXvSPRhy0HGIWAz0NK7Nr+KC/c+h
-         bh80OEbxLM1QoK1Od8PgKfVTib6SOGnPdkmZ0w7pYK2B8UYvHAKuTLUR4bKTHflCMU6f
-         5sd/LKEEGbTlrasa1GVQCUtbuvh983elFXxVVW6lWd5grKpcGUjoSjcyRM+2rh/DihSR
-         zvZRHmc8f3O+lJDYObL9//Pe8s4t8quY1RVvi2tbeISoe0DLRoyMgCVbRciBqxSKFJdD
-         2nICEdI+iEblLBZcYe+kULbGHD/cr9eQKxSnGLRokozP3CMAhS9k+x2/vI5jDZcFMcbS
-         /Atw==
-X-Gm-Message-State: AOAM532j7yPlVoJn5XEu79ujLQRBscCn4qvHtcgCdjAE5I/o/Z37VqZW
-        eOPPE2NagnXAolgFXrPV9AIwrFKh4MegAGVUaq2GanHZ
-X-Google-Smtp-Source: ABdhPJymaRxNk23Iz4XOLMvAMyaxBHlfUxXuVf3jFb58YgRU2Xd8MpKJHmk3O8MkNDd333ivEV4s7g==
-X-Received: by 2002:a05:600c:4994:b0:394:dcb:d66d with SMTP id h20-20020a05600c499400b003940dcbd66dmr609479wmp.178.1651523215468;
-        Mon, 02 May 2022 13:26:55 -0700 (PDT)
-Received: from localhhost.com ([41.218.193.3])
-        by smtp.gmail.com with ESMTPSA id l3-20020adfbd83000000b0020aca418f26sm7943969wrh.1.2022.05.02.13.26.54
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Mon, 02 May 2022 13:26:55 -0700 (PDT)
-Date:   Mon, 02 May 2022 13:26:55 -0700 (PDT)
-X-Google-Original-Date: 02 May 2022 20:26:48 +0800
-From:   RGICOMPANYLTD <no-reply@matchdayarena.com>
-X-Google-Original-From: RGICOMPANYLTD<Admin@localhhost.com>
-Reply-To: rgicompanyltd1@gmail.com
-To:     linux-kernel@vger.kernel.org
-Subject: Greetings
-Message-ID: <20220502202647.8BB3F87241F888A3@localhhost.com>
+        Mon, 2 May 2022 16:35:04 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6EB9AE53;
+        Mon,  2 May 2022 13:31:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1651523479;
+        bh=XklK64zlUwZuEnTr5Rz+EiXQTXXwRojoscvTGaQkPJ8=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=XQ+uAwyGERKUngyZtQi62d8g5F9lhnZI0SoQ0xUzv8toiQBxsjLYOY+niHdbr+qtV
+         Y3vbMPm8OX3DtxECaoocvNsFBo85P7VEykdnNM8TZZ2elqHaU98pTWAiBQzA68dkKf
+         o393Z4KnmCSOPscAK9mJjnbAnFsfctIdNp6ZrreQ=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MVN6j-1nNB2G0ha3-00SNt6; Mon, 02
+ May 2022 22:31:19 +0200
+Subject: Re: [PATCH 2/2] hwmon: acpi_power_meter: convert to
+ hwmon_device_register_with_info
+To:     LABBE Corentin <clabbe@baylibre.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220502124249.682058-1-clabbe@baylibre.com>
+ <20220502124249.682058-2-clabbe@baylibre.com>
+ <0b154a30-7765-e3ac-9980-0ecc7447d7ad@roeck-us.net> <YnAqDxfTU27USQI+@Red>
+From:   Armin Wolf <W_Armin@gmx.de>
+Message-ID: <1b2bf215-faa1-649d-5ab4-85fc0b907ec2@gmx.de>
+Date:   Mon, 2 May 2022 22:31:18 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
+In-Reply-To: <YnAqDxfTU27USQI+@Red>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Language: en-US
+X-Provags-ID: V03:K1:M5uxf6WZcoVerfbPEAZEXF5O2+y/AzMfRsfNLeOoqO9A7Y9K8z2
+ BlqUfqkvRX/hUWYAO5Dfl17zUZGKiHFyKwacDA9IVdgikTm0+LB57B5MFIWO7AScvjfiROg
+ 7FJKlQdKMxhML/1Uxs/7HIS1SXM11c3UwCMJV7Nk+uVkKs1lw8u2NgqSS05mXBaia2Un8RI
+ EjLLURKa8YvirUfxhmNGQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:xFFzEfXvQII=:r67yR4TqmVHHinn9NzbmMU
+ d0sMuGwMdQ7gF4D+ozNZuY2dWJzut4o75cg3EpkHZe0c0euD0Z+u8cCeiUaj5Beyx+NO6C2UJ
+ XNdkJCUVAmSFRG6rPXTfLl8bMyl+WXSGl4crW+bKz9OAVE3tj30Y6+RDo8eZf6BQh8UM4xcre
+ gTDwuaSk4G7UvIQj8fqYUprxV2aMLlQB4ZTpPIiMOtQ/ynoWg1J/shqyS4JDMmV031np+Qw4Y
+ vW0baxnUrwLzlhmPMXtKdEwhVpaQroIXmAG+R55x3jqR+Jkg66OQPMU9JbWKe9KnmiX/rhtbL
+ pUucz9ZHla2RWUrNrX2GT+yo3MhhbPM0vclSiZ1BwovbyF/VFSkV9pc9A2zWf55VQePSiywVy
+ dQD9BTc70RchHQKZRsYZlx2tkPg7gJsjYngGNxO3nbb/8Sw81v0mMOsGZSgKPD3jmeEBoBWWR
+ PAt60lHeQSaiifHWl8IZx0SjUIa7aRREITgUYrahCkjaBnPN9Kv+E5unrJ1lYxWzBNjv8AMsJ
+ dk10y9Bd96YKhC5WWQUCEM/ntfG4KpvqeOaA8Csn0usHlJJKQtrVwVZ8//mfiqIRz5oGUkUc4
+ ICzfEDnUW5hA1JeL4+5Y4GerznEYjEbYEGfL408xjw9TCfD+JIFdJKVC4Hqm4/VpCtHQCGLgp
+ gIo5aaGWn2zVNSw86iPS2K/3y0Orp/G1ehk9HD8SYkhOillMZ6whrOQnHOWvffYpUJyV+bmQ3
+ VnBwMCNw+rETVOAYH7c8rk49MolFpO0OEOndwUAFCWm2jhOBt8x8Lvjgbf4mm127PcH8UVCMJ
+ erLScY28S8zQ4RqK45SIG7L39dQdi42GtLddzrXj2FgQp1pP1DEOYfZKyw1Jrn3eX8tKAxOhY
+ dVChwwuDEzbs8/31Xk/wWq0LnUzo1WYwYymqf4L+pabvvb3PTDeSlCCn/MS7WtC2TUTN2/KZZ
+ 5QhT/5tzqUJU26wf2UcJQO///ZhzAbJein4tJzUtgOwvtHJzC0PozI/uBRMD3NBTuJH7K7gut
+ 66/jBG+dJFlN4LyGqiYBSL1ms9zd3melUcuksYJvL8rG+a7eQfZnzPR6zGz86qwYytaZcjF8M
+ EnKn8+KGabAUdM=
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: RGI Company Ltd
-Address, Netherlands
-Call:+3197005033311
-02/5/2022
+Am 02.05.22 um 20:59 schrieb LABBE Corentin:
 
-Atten:
+> Le Mon, May 02, 2022 at 06:34:44AM -0700, Guenter Roeck a =C3=A9crit :
+>> On 5/2/22 05:42, Corentin Labbe wrote:
+>>> Booting lead to a hwmon_device_register() is deprecated. Please conver=
+t the driver to use hwmon_device_register_with_info().
+>>> So let's convert the driver to use hwmon_device_register_with_info().
+>>>
+>>> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+>>> ---
+>>>    drivers/hwmon/acpi_power_meter.c | 5 ++++-
+>>>    1 file changed, 4 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/hwmon/acpi_power_meter.c b/drivers/hwmon/acpi_pow=
+er_meter.c
+>>> index d2545a1be9fc..98293727f980 100644
+>>> --- a/drivers/hwmon/acpi_power_meter.c
+>>> +++ b/drivers/hwmon/acpi_power_meter.c
+>>> @@ -891,7 +891,10 @@ static int acpi_power_meter_add(struct acpi_devic=
+e *device)
+>>>    	if (res)
+>>>    		goto exit_free_capability;
+>>>
+>>> -	resource->hwmon_dev =3D hwmon_device_register(&device->dev);
+>>> +	resource->hwmon_dev =3D hwmon_device_register_with_info(&device->dev=
+,
+>>> +							      ACPI_POWER_METER_DEVICE_NAME,
+>>> +							      NULL, NULL,
+>>> +							      NULL);
+>> NACK. That isn't a conversion to the new API, it just abuses the fact
+>> that the new API has to accept a NULL info pointer for historic reasons=
+.
+>>
+> Hello
+>
+> I am sorry, I found a driver doing it, so I believed it was okay.
+> Converting seems not to hard but, by using the new API, how can I conver=
+t power1_model_number/power1_is_battery attribute ?
+> There are the remaining attributes I dont find how to convert.
+>
+> Regards
 
-RGI Genealogical Investigators specializes in probate research to=20
-locate missing funds, inherited funds around the world. We can=20
-also help you find wills, obtain copies of certificates.
+Hi,
 
-Recently a woman from the Rothschild family, one of the famous=20
-families in Europe contacted our company that we should contact a=20
-business minded person who is capable of investing her funds in a=20
-lucrative business.
+for allowing the driver to provide nonstandard attributes, hwmon_device_re=
+gister_with_info()
+has the argument "extra_groups" which is an pointer to a list of sysfs att=
+ribute groups.
+There are some drivers which are using this functionality, maybe you can u=
+se them as an
+inspiration.
 
-Our service fee is 2% of the funds and we will be paid after you=20
-receive the funds. The funds transfer process should take just a=20
-matter of days as we have the mechanism and expertise to get this=20
-done quickly. Please if you find this letter offensive ignore it=20
-and accept our apologies
+Just a question: what is the name of the driver you originally used as an =
+inspiration?
 
-Warmest Regards,
-
-Dr. J.T Woods, CEO
-RGI Genealogical
-
+Armin Wolf
 

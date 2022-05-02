@@ -2,69 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C044351700F
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 15:11:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D13C8517013
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 15:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385189AbiEBNPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 09:15:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45600 "EHLO
+        id S1385193AbiEBNQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 09:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351348AbiEBNPD (ORCPT
+        with ESMTP id S1351348AbiEBNQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 09:15:03 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55075D69
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 06:11:33 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651497090;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ggFgY/zK0y72ZUtp6KigXGll6Hp+UovEpSfnz2w+970=;
-        b=vTF3+lOygvZywEc8UOCDeFCHievf/zlP6DE4bG/HypfnZQOxRZeWw0g2pq1ihKyBjafuS2
-        5oVT4DtRYCHZargZ6EV/gP3DlCe9gjfV927uV+GZdruxjLImz+bPFQj6dfogkUBSeN8Q8c
-        HIBRSY7rtXFYGUXRMN90xPvCw9L2m/wUyBbDvSUiWgL2NnhDIgNzbXaYV07+2vExx+SYTg
-        wNyHvxHeSXjc4tpCEghafuSQlIAJkk7Z8scRZrIC6/nuf98VRHkRTD/SjFB57F3rkAunJ1
-        pEER6DYEYZrU5hxZbR0qW+HcS3f3SKamkAz+6hnK88QpWLp+KanTIMtxnQivRg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651497090;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ggFgY/zK0y72ZUtp6KigXGll6Hp+UovEpSfnz2w+970=;
-        b=3T6JKye25mxbWo8WRxifuqeA96PeYYZMI/3rW+b2iio0VVDVwarm0EcC24fy0Vn6+xcGXD
-        esJc+78qanVrKEBQ==
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-amlogic@lists.infradead.org
-Subject: Re: [PATCH printk v5 1/1] printk: extend console_lock for
- per-console locking
-In-Reply-To: <32bba8f8-dec7-78aa-f2e5-f62928412eda@samsung.com>
-References: <20220421212250.565456-1-john.ogness@linutronix.de>
- <20220421212250.565456-15-john.ogness@linutronix.de>
- <878rrs6ft7.fsf@jogness.linutronix.de> <Ymfgis0EAw0Oxoa5@alley>
- <Ymfwk+X0CHq6ex3s@alley>
- <CGME20220427070833eucas1p27a32ce7c41c0da26f05bd52155f0031c@eucas1p2.samsung.com>
- <2a82eae7-a256-f70c-fd82-4e510750906e@samsung.com>
- <Ymjy3rHRenba7r7R@alley>
- <b6c1a8ac-c691-a84d-d3a1-f99984d32f06@samsung.com>
- <87fslyv6y3.fsf@jogness.linutronix.de>
- <51dfc4a0-f6cf-092f-109f-a04eeb240655@samsung.com>
- <87k0b6blz2.fsf@jogness.linutronix.de>
- <32bba8f8-dec7-78aa-f2e5-f62928412eda@samsung.com>
-Date:   Mon, 02 May 2022 15:17:29 +0206
-Message-ID: <87y1zkkrjy.fsf@jogness.linutronix.de>
+        Mon, 2 May 2022 09:16:31 -0400
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35894C0C;
+        Mon,  2 May 2022 06:12:58 -0700 (PDT)
+Received: by mail-vs1-xe33.google.com with SMTP id z144so13497137vsz.13;
+        Mon, 02 May 2022 06:12:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=Q9PzyxjQuHY1spsfkApUPqmCQWtSz+AxNkiNIjpbrU8=;
+        b=mJDEqDsVQSGSuhg63i6rSSlbP++q3ToYeRW7DKxkb1Mgg6ahghRFMAMYVO8Z248Wpv
+         /zMAOvyhuFpiRAqn2VhRMA3uu9E2VH6ACglzHVwKn/4w8bGMp9mQx2Xcx1aHcJFCULwd
+         /WzVHWm330mmycVGKOMDo98gNZZW3mekRi0x/PDJGRx9yPLvbhVlqTbbAjcKUl3QFBOx
+         r5f57N5BwI9bpueFyyiPE8lmhgNPHdUr+4NejTLlWU9CozHtjS9GpXqjB0SCJG7l9tFN
+         reM2aggIX8NxhU2uBmPxOp9y1Y09HDqTmQmXVatCdmw685GsgJmU9inIuFvA4fvUDJ4+
+         S/sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=Q9PzyxjQuHY1spsfkApUPqmCQWtSz+AxNkiNIjpbrU8=;
+        b=VdLAWV52D5pn2k1CuyI1OZbZNcpOhc/XnOrelEDMdscMbG8L7ox9QW1ANuX38m3SxA
+         qUWwAq1KsqKFxPo6SRmiU4tZuEs5OWeElZEykY1UofV0mOdYuTd7KZCpYq9aFcZ5T7X9
+         cLpCzu5L0S8KDLq9f+yZp62fa2cSL2cpe//6uhAW89DonLd6V/iFcKKe9SNU7uprLNIj
+         iSXfnkkInNYMkkRyhRqKlMx3EFBG3ik4oTO0w/RaMYbRYw7Da227lfYLOu1fc85s4K3Q
+         mBsHF3rNK3eUi8XQXTjno44ISuOYjXx5AzDUZgOlY2Of1rrzq2n5LZIo06VwN4j8h6vZ
+         Yn7g==
+X-Gm-Message-State: AOAM531D+AaEh5TE2UYiOlLG9PhmKgW9WvB54Xje1xzfHINbv6LNGY/j
+        F7ai/IkOOjBwoqexkneSV/Lj+C0Gx16BjRak/2RYXwdybpjQwTF7
+X-Google-Smtp-Source: ABdhPJxbInO0MY7QS0qnVFBBJNpXUEKl/C28qXUrrFqVm+asE7qWtoiTdPab5crnAQKYbzgVZXYAV22vfuroIRfDXxo=
+X-Received: by 2002:a67:c107:0:b0:32d:3ac1:1e71 with SMTP id
+ d7-20020a67c107000000b0032d3ac11e71mr1332770vsj.41.1651497177274; Mon, 02 May
+ 2022 06:12:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220426131102.23966-1-andrea.merello@gmail.com>
+ <20220426131102.23966-9-andrea.merello@gmail.com> <CAHp75VdLiBkg100UjFN36rW_vaOObOoJ_Mv9n=4LjSWb+dQWMw@mail.gmail.com>
+ <CAN8YU5PzwmeQ9XA3qod7HejG6cCLCrPvda5eomCh5hUze_DWcA@mail.gmail.com> <CAHp75VfOZpD135q_eERnLk0NorXwPxY8DFbKMu+eKV8XahGC1A@mail.gmail.com>
+In-Reply-To: <CAHp75VfOZpD135q_eERnLk0NorXwPxY8DFbKMu+eKV8XahGC1A@mail.gmail.com>
+Reply-To: andrea.merello@gmail.com
+From:   Andrea Merello <andrea.merello@gmail.com>
+Date:   Mon, 2 May 2022 15:12:45 +0200
+Message-ID: <CAN8YU5P_vGV0vrhdy273ef9GH2Y2=TbXbsiho=V9vG44NXAujA@mail.gmail.com>
+Subject: Re: [v5 08/14] iio: imu: add Bosch Sensortec BNO055 core driver
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matt Ranostay <matt.ranostay@konsulko.com>,
+        Alexandru Ardelean <ardeleanalex@gmail.com>,
+        jmondi <jacopo@jmondi.org>,
+        Andrea Merello <andrea.merello@iit.it>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,52 +78,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-02, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
-> Data written to /dev/kmsg and all kernel logs were always displayed
-> correctly. Also data written directly to /dev/ttyAML0 is displayed
-> properly on the console. The latter doesn't however trigger the input
-> related activity.
+Il giorno lun 2 mag 2022 alle ore 12:12 Andy Shevchenko
+<andy.shevchenko@gmail.com> ha scritto:
+
+One inline comment. OK for the rest
+
+> > > > +#define BNO055_ATTR_VALS(...)          \
+> > > > +       .vals = (int[]){ __VA_ARGS__},  \
+> > > > +       .len = ARRAY_SIZE(((int[]){__VA_ARGS__}))
+
+[...]
+
+> And my point about readability. The reader, and even the author after
+> some time, may have no clue in this forest of the macros and castings
+> what's going on.
+
+While I'm OK wrt your point in general, consider that it's just a
+three LOC macro, used only in a few structs just below. I wouldn't say
+it's so inricated; I've seen by far worse in the kernel :)
+
+> > but about avoiding as much as
+> > possible bugs caused by mismatched attr_vals, attr_aux and
+> > ARRAY_SIZE() arg. e.g:
+> > bno055_sysfs_attr_avail(priv, bno_foo_vals, ARRAY_SIZE(bno_bar_vals),
+> > bno_foobar_aux, vals, len)
+> >
+> > I used to make quite a lot of mess until I grouped all the stuff in
+> > one struct :/
 >
-> It looks that the data read from the uart is delivered only if other
-> activity happens on the kernel console. If I type 'reboot' and press
-> enter, nothing happens immediately. If I type 'date >/dev/ttyAML0' via
-> ssh then, I only see the date printed on the console. However if I
-> type 'date >/dev/kmsg', the the date is printed and reboot happens.
+> If something you want to prevent at compile time, consider to utilize
+> static_assert() and / or BUILD_BUG_ON() depending on the place in the
+> code (the former is preferred).
 
-I suppose if you login via ssh and check /proc/interrupts, then type
-some things over serial, then check /proc/interrupts again, you will see
-there have been no interrupts for the uart. But interrupts for other
-devices are happening. Is this correct?
-
-> For comparison, here is a 't' sysrq result from the 'working' serial
-> console (next-20220429), which happens usually 1 of 4 boots:
->
-> https://pastebin.com/mp8zGFbW
-
-This still looks odd to me. We should be seeing a trace originating from
-ret_from_fork+0x10/0x20 and kthread+0x118/0x11c.
-
-I wonder if the early creation of the thread is somehow causing
-problems. Could you try the following patch to see if it makes a
-difference? I would also like to see the sysrq-t output with this patch
-applied:
-
----------------- BEGIN PATCH ---------------
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index 2311a0ad584a..c4362d25de22 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -3837,7 +3837,7 @@ static int __init printk_activate_kthreads(void)
- 
- 	return 0;
- }
--early_initcall(printk_activate_kthreads);
-+late_initcall(printk_activate_kthreads);
- 
- #if defined CONFIG_PRINTK
- /* If @con is specified, only wait for that console. Otherwise wait for all. */
----------------- END PATCH ---------------
-
-Thanks for your help with this!
-
-John
+I would be happy to get rid of my macro and use those assertion
+things, but I can't see how exactly. Do you have any advice about how
+to take advantage of them for catching bugs like the one above in this
+specific case?

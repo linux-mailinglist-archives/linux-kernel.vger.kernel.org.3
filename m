@@ -2,298 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E70516BA4
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 10:03:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52481516BA6
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 10:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380904AbiEBIG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 04:06:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
+        id S1383605AbiEBIH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 04:07:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358862AbiEBIGz (ORCPT
+        with ESMTP id S233357AbiEBIH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 04:06:55 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B35237A9A;
-        Mon,  2 May 2022 01:03:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651478607; x=1683014607;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VNzLJZCKJPTc1+NVzoAgq7H9FpiozJX9NX1c5BIpYHo=;
-  b=hWLhJk8XgwgsiOjcH07x5IqZ8AfDtSAlrW6F034UMG3nLX5/JY4aQ4/S
-   fRwc4oMggZ5h+44LTswMzGS1ZxGWE6j1ib/x59QktTKhBy3hk8LpNet94
-   5wHdC6LVRP4hH3O1pmKsm1ZDEtL+RsGuI+YS97POZbFHmyq3PP46h+Ayx
-   iPP2sF1pFWq0HVH7Cwm9QSuKKhpYHNGC8MZjLOpX7UyxIxRzHh4a/9Sco
-   5UOScO2EnQTZgnrPpaUGjTTsijDe0B29QdAH4Ezlc7jh0xU6XIGAhqBQ1
-   Qsdu5gplM7HbSFBZO+Dv/2sTQDZLkxgAXFOL/LacRfJHvuN7zj4nIUwci
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="267023288"
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="267023288"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 01:03:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="583577028"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 02 May 2022 01:03:24 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nlR1f-0009Nn-UB;
-        Mon, 02 May 2022 08:03:23 +0000
-Date:   Mon, 2 May 2022 16:02:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dharmendra Singh <dharamhans87@gmail.com>, miklos@szeredi.hu
-Cc:     kbuild-all@lists.01.org, Dharmendra Singh <dharamhans87@gmail.com>,
-        linux-fsdevel@vger.kernel.org, fuse-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, bschubert@ddn.com
-Subject: Re: [PATCH v3 3/3] Avoid lookup in d_revalidate()
-Message-ID: <202205021542.b9f01HaG-lkp@intel.com>
-References: <20220502054628.25826-4-dharamhans87@gmail.com>
+        Mon, 2 May 2022 04:07:57 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E9E37A9E;
+        Mon,  2 May 2022 01:04:28 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KsFx641x8z4x7Y;
+        Mon,  2 May 2022 18:04:26 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1651478667;
+        bh=AlKYgOI+es/EpKkfFdJ/AxpxreKRAHEWfgntPF/V9j8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TbAEob4ktIYddDMwS7uzfRJILYgVdZ9CrtmR/77ag/wgTRFL9wiXFwSIHjduwUnIc
+         0O0LDQPT6BpG51OukVBoKn9jOq14G9+l0bOi0ftxcMr7CPaJ5hb50pK4FQvxNNhRe8
+         FaN6Z8FNjgBAfpbIMtf3Hi+0untYO1sj9yfufDJXMPRQcohyeL7api2HCljPnOXXvb
+         vKwwdUNfm+OfDj8MWb3LFRr38ENPe1nnqpZKc1Re8gF0O8ShaGYmhjxlT4pMoPTK/r
+         1Y1pdlyC1uwNvglVRxY4Bb8QfQ6PxNpSGwynPCm2xe9ZY90FKL49uhwgxf1nyCP83u
+         yWjzLCa6aZPgQ==
+Date:   Mon, 2 May 2022 18:04:25 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Matthew Wilcox <willy@infradead.org>, Gao Xiang <xiang@kernel.org>
+Cc:     Gao Xiang <hsiangkao@linux.alibaba.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the folio tree
+Message-ID: <20220502180425.7305c335@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220502054628.25826-4-dharamhans87@gmail.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/aILqJDFCeVw.QWbKJYPtk/K";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dharmendra,
+--Sig_/aILqJDFCeVw.QWbKJYPtk/K
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for the patch! Perhaps something to improve:
+Hi all,
 
-[auto build test WARNING on v5.18-rc5]
-[cannot apply to mszeredi-fuse/for-next next-20220429]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+After merging the folio tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dharmendra-Singh/FUSE-Implement-atomic-lookup-open-create/20220502-134729
-base:    672c0c5173427e6b3e2a9bbb7be51ceeec78093a
-config: arm-randconfig-p002-20220501 (https://download.01.org/0day-ci/archive/20220502/202205021542.b9f01HaG-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a531ce8124c046dffefe5cd731c952c8f7248c5b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Dharmendra-Singh/FUSE-Implement-atomic-lookup-open-create/20220502-134729
-        git checkout a531ce8124c046dffefe5cd731c952c8f7248c5b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash fs/fuse/
-reproduce (cppcheck warning):
-        # apt-get install cppcheck
-        git checkout a531ce8124c046dffefe5cd731c952c8f7248c5b
-        cppcheck --quiet --enable=style,performance,portability --template=gcc FILE
+fs/erofs/fscache.c:255:10: error: 'const struct address_space_operations' h=
+as no member named 'readpage'
+  255 |         .readpage =3D erofs_fscache_meta_readpage,
+      |          ^~~~~~~~
+fs/erofs/fscache.c:255:21: error: initialization of 'int (*)(struct page *,=
+ struct writeback_control *)' from incompatible pointer type 'int (*)(struc=
+t file *, struct page *)' [-Werror=3Dincompatible-pointer-types]
+  255 |         .readpage =3D erofs_fscache_meta_readpage,
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+fs/erofs/fscache.c:255:21: note: (near initialization for 'erofs_fscache_me=
+ta_aops.writepage')
+fs/erofs/fscache.c:259:10: error: 'const struct address_space_operations' h=
+as no member named 'readpage'
+  259 |         .readpage =3D erofs_fscache_readpage,
+      |          ^~~~~~~~
+fs/erofs/fscache.c:259:21: error: initialization of 'int (*)(struct page *,=
+ struct writeback_control *)' from incompatible pointer type 'int (*)(struc=
+t file *, struct page *)' [-Werror=3Dincompatible-pointer-types]
+  259 |         .readpage =3D erofs_fscache_readpage,
+      |                     ^~~~~~~~~~~~~~~~~~~~~~
+fs/erofs/fscache.c:259:21: note: (near initialization for 'erofs_fscache_ac=
+cess_aops.writepage')
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Caused by commit
 
-All warnings (new ones prefixed by >>):
+  00da6d4b7219 ("mm,fs: Remove stray references to ->readpage")
 
->> fs/fuse/dir.c:571:5: warning: no previous prototype for 'fuse_do_atomic_common' [-Wmissing-prototypes]
-     571 | int fuse_do_atomic_common(struct inode *dir, struct dentry *entry,
-         |     ^~~~~~~~~~~~~~~~~~~~~
+interacting with commits
 
+  60aa7e805f00 ("erofs: implement fscache-based metadata read")
+  e472f468adbe ("erofs: implement fscache-based data read for non-inline la=
+yout")
 
-cppcheck possible warnings: (new ones prefixed by >>, may not real problems)
+from the erofs tree.
 
->> fs/fuse/inode.c:411:17: warning: Uninitialized variable: fm_iter->sb [uninitvar]
-     if (!fm_iter->sb)
-                   ^
+I have applied the following merge fix patch.
 
-vim +/fuse_do_atomic_common +571 fs/fuse/dir.c
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 2 May 2022 17:57:39 +1000
+Subject: [PATCH] fixup for "mm,fs: Remove stray references to ->readpage"
 
-   564	
-   565	
-   566	/*
-   567	 * This is common function for initiating atomic operations into libfuse.
-   568	 * Currently being used by Atomic create(atomic lookup + create) and
-   569	 * Atomic open(atomic lookup + open).
-   570	 */
- > 571	int fuse_do_atomic_common(struct inode *dir, struct dentry *entry,
-   572				  struct dentry **alias, struct file *file,
-   573				  struct inode *reval_inode, unsigned int flags,
-   574				  umode_t mode, uint32_t opcode)
-   575	{
-   576		int err;
-   577		struct inode *inode;
-   578		struct fuse_mount *fm = get_fuse_mount(dir);
-   579		struct fuse_conn *fc = get_fuse_conn(dir);
-   580		FUSE_ARGS(args);
-   581		struct fuse_forget_link *forget;
-   582		struct fuse_create_in inarg;
-   583		struct fuse_open_out outopen;
-   584		struct fuse_entry_out outentry;
-   585		struct fuse_inode *fi;
-   586		struct fuse_file *ff;
-   587		struct dentry *res = NULL;
-   588		void *security_ctx = NULL;
-   589		u32 security_ctxlen;
-   590		bool atomic_create = (opcode == FUSE_ATOMIC_CREATE ? true : false);
-   591		bool create_op = (opcode == FUSE_CREATE ||
-   592				  opcode == FUSE_ATOMIC_CREATE) ? true : false;
-   593		u64 attr_version = fuse_get_attr_version(fm->fc);
-   594	
-   595		if (alias)
-   596			*alias = NULL;
-   597	
-   598		/* Userspace expects S_IFREG in create mode */
-   599		BUG_ON(create_op && (mode & S_IFMT) != S_IFREG);
-   600	
-   601		forget = fuse_alloc_forget();
-   602		err = -ENOMEM;
-   603		if (!forget)
-   604			goto out_err;
-   605	
-   606		err = -ENOMEM;
-   607		ff = fuse_file_alloc(fm);
-   608		if (!ff)
-   609			goto out_put_forget_req;
-   610	
-   611		if (!fc->dont_mask)
-   612			mode &= ~current_umask();
-   613	
-   614		flags &= ~O_NOCTTY;
-   615		memset(&inarg, 0, sizeof(inarg));
-   616		memset(&outentry, 0, sizeof(outentry));
-   617		inarg.flags = flags;
-   618		inarg.mode = mode;
-   619		inarg.umask = current_umask();
-   620	
-   621		if (fm->fc->handle_killpriv_v2 && (flags & O_TRUNC) &&
-   622		    !(flags & O_EXCL) && !capable(CAP_FSETID)) {
-   623			inarg.open_flags |= FUSE_OPEN_KILL_SUIDGID;
-   624		}
-   625	
-   626		args.opcode = opcode;
-   627		args.nodeid = get_node_id(dir);
-   628		args.in_numargs = 2;
-   629		args.in_args[0].size = sizeof(inarg);
-   630		args.in_args[0].value = &inarg;
-   631		args.in_args[1].size = entry->d_name.len + 1;
-   632		args.in_args[1].value = entry->d_name.name;
-   633		args.out_numargs = 2;
-   634		args.out_args[0].size = sizeof(outentry);
-   635		args.out_args[0].value = &outentry;
-   636		args.out_args[1].size = sizeof(outopen);
-   637		args.out_args[1].value = &outopen;
-   638	
-   639		if (fm->fc->init_security) {
-   640			err = get_security_context(entry, mode, &security_ctx,
-   641						   &security_ctxlen);
-   642			if (err)
-   643				goto out_put_forget_req;
-   644	
-   645			args.in_numargs = 3;
-   646			args.in_args[2].size = security_ctxlen;
-   647			args.in_args[2].value = security_ctx;
-   648		}
-   649	
-   650		err = fuse_simple_request(fm, &args);
-   651		kfree(security_ctx);
-   652		if (err)
-   653			goto out_free_ff;
-   654	
-   655		err = -EIO;
-   656		if (!S_ISREG(outentry.attr.mode) || invalid_nodeid(outentry.nodeid) ||
-   657		    fuse_invalid_attr(&outentry.attr))
-   658			goto out_free_ff;
-   659	
-   660		ff->fh = outopen.fh;
-   661		ff->nodeid = outentry.nodeid;
-   662		ff->open_flags = outopen.open_flags;
-   663	
-   664		/* Inode revalidation was bypassed previously for type other than
-   665		 * directories, revalidate now as we got fresh attributes.
-   666		 */
-   667		if (reval_inode) {
-   668			err = fuse_atomic_open_revalidate_inode(reval_inode, entry, fi,
-   669								forget, &outentry,
-   670								attr_version);
-   671			if (err)
-   672				goto out_free_ff;
-   673			inode = reval_inode;
-   674			kfree(forget);
-   675			goto out_finish_open;
-   676		}
-   677		inode = fuse_iget(dir->i_sb, outentry.nodeid, outentry.generation,
-   678				  &outentry.attr, entry_attr_timeout(&outentry), 0);
-   679		if (!inode) {
-   680			flags &= ~(O_CREAT | O_EXCL | O_TRUNC);
-   681			fuse_sync_release(NULL, ff, flags);
-   682			fuse_queue_forget(fm->fc, forget, outentry.nodeid, 1);
-   683			err = -ENOMEM;
-   684			goto out_err;
-   685		}
-   686		kfree(forget);
-   687		/*
-   688		 * In atomic create, we skipped lookup and it is very much likely that
-   689		 * dentry has DCACHE_PAR_LOOKUP flag set on it so call d_splice_alias().
-   690		 * Note: Only REG file is allowed under create/atomic create.
-   691		 */
-   692		/* There is special case when at very first call where we check if
-   693		 * atomic create is implemented by USER SPACE/libfuse or not, we
-   694		 * skipped lookup. Now, in case where atomic create is not implemented
-   695		 * underlying, we fall back to FUSE_CREATE. here we are required to handle
-   696		 * DCACHE_PAR_LOOKUP flag.
-   697		 */
-   698		if (!atomic_create && !d_in_lookup(entry) && fm->fc->no_atomic_create)
-   699			d_instantiate(entry, inode);
-   700		else {
-   701			res = d_splice_alias(inode, entry);
-   702			if (res) {
-   703				 /* Close the file in user space, but do not unlink it,
-   704				  * if it was created - with network file systems other
-   705				  * clients might have already accessed it.
-   706				  */
-   707				if (IS_ERR(res)) {
-   708					fi = get_fuse_inode(inode);
-   709					fuse_sync_release(fi, ff, flags);
-   710					fuse_queue_forget(fm->fc, forget, outentry.nodeid, 1);
-   711					err = PTR_ERR(res);
-   712					goto out_err;
-   713				}
-   714				entry = res;
-   715				if (alias)
-   716					*alias = res;
-   717			}
-   718		}
-   719		fuse_change_entry_timeout(entry, &outentry);
-   720		/*
-   721		 * In case of atomic create, we want to indicate directory change
-   722		 * only if USER SPACE actually created the file.
-   723		 */
-   724		if (!atomic_create || (outopen.open_flags & FOPEN_FILE_CREATED))
-   725			fuse_dir_changed(dir);
-   726		err = finish_open(file, entry, generic_file_open);
-   727	out_finish_open:
-   728		if (err) {
-   729			fi = get_fuse_inode(inode);
-   730			fuse_sync_release(fi, ff, flags);
-   731		} else {
-   732			file->private_data = ff;
-   733			fuse_finish_open(inode, file);
-   734		}
-   735		return err;
-   736	
-   737	out_free_ff:
-   738		fuse_file_free(ff);
-   739	out_put_forget_req:
-   740		kfree(forget);
-   741	out_err:
-   742		return err;
-   743	}
-   744	
+interacting with commits
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+  60aa7e805f00 ("erofs: implement fscache-based metadata read")
+  e472f468adbe ("erofs: implement fscache-based data read for non-inline la=
+yout")
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ fs/erofs/fscache.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
+index a402d8f0a063..1bb2d0fc19c8 100644
+--- a/fs/erofs/fscache.c
++++ b/fs/erofs/fscache.c
+@@ -59,10 +59,9 @@ static int erofs_fscache_read_folios(struct fscache_cook=
+ie *cookie,
+ 	return ret;
+ }
+=20
+-static int erofs_fscache_meta_readpage(struct file *data, struct page *pag=
+e)
++static int erofs_fscache_meta_read_folio(struct file *data, struct folio *=
+folio)
+ {
+ 	int ret;
+-	struct folio *folio =3D page_folio(page);
+ 	struct super_block *sb =3D folio_mapping(folio)->host->i_sb;
+ 	struct erofs_map_dev mdev =3D {
+ 		.m_deviceid =3D 0,
+@@ -110,9 +109,8 @@ static int erofs_fscache_readpage_inline(struct folio *=
+folio,
+ 	return 0;
+ }
+=20
+-static int erofs_fscache_readpage(struct file *file, struct page *page)
++static int erofs_fscache_read_folio(struct file *file, struct folio *folio)
+ {
+-	struct folio *folio =3D page_folio(page);
+ 	struct inode *inode =3D folio_mapping(folio)->host;
+ 	struct super_block *sb =3D inode->i_sb;
+ 	struct erofs_map_blocks map;
+@@ -252,11 +250,11 @@ static void erofs_fscache_readahead(struct readahead_=
+control *rac)
+ }
+=20
+ static const struct address_space_operations erofs_fscache_meta_aops =3D {
+-	.readpage =3D erofs_fscache_meta_readpage,
++	.read_folio =3D erofs_fscache_meta_read_folio,
+ };
+=20
+ const struct address_space_operations erofs_fscache_access_aops =3D {
+-	.readpage =3D erofs_fscache_readpage,
++	.read_folio =3D erofs_fscache_read_folio,
+ 	.readahead =3D erofs_fscache_readahead,
+ };
+=20
+--=20
+2.35.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/aILqJDFCeVw.QWbKJYPtk/K
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJvkIkACgkQAVBC80lX
+0GzACgf/a6pKIsy2qA2M/IHl2rYJ/zahTNsXgWDJ1yFXBJIkKSb+A55iyo0kQZQg
+Z8/ctAYCcfvsHgFeFpfcTxA74DKaGdqHRTr6Zjp77BuYuCtP0NHTbdMVDatU1XoQ
+9WmmU5NEya4gQtMOf3zlV4cWxCoPG3KllgWzOaYF71cee9YeJhE114/S1vnlxyai
+NFjjJA1gUeD0xajUZJdZ/ZVCRHL+VSgolON6nuS+GzN58XoAQjXXLBNYQxZY94mD
+J0U+Smakk0is6I+dRvL6shG1M425jCQD8sHNCtr4KZYXJwfTx/RrusrWqyptihHF
+WKoKXbOJ6CdjRojfPciponq4wLU99A==
+=V2VD
+-----END PGP SIGNATURE-----
+
+--Sig_/aILqJDFCeVw.QWbKJYPtk/K--

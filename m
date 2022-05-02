@@ -2,96 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C83D6516F25
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 13:56:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE03C516F27
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 13:57:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384822AbiEBL75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 07:59:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50538 "EHLO
+        id S1384830AbiEBMAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 08:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233089AbiEBL7v (ORCPT
+        with ESMTP id S1384823AbiEBMAl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 07:59:51 -0400
+        Mon, 2 May 2022 08:00:41 -0400
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C501B796;
-        Mon,  2 May 2022 04:56:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899FA1B79A
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 04:57:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651492583; x=1683028583;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=LU/yq2s1oiKyRxaX8QPYQK3cW92BG0hvyB55dS1zvnY=;
-  b=bGR0VMGNJiB0kh6bqN3kxw3bFix7H9IWfbmn9pY2Q3aaE6cc7WPr7ViT
-   G7bqSLJB9O8CDj5MXPHRlqxKeBnKVGw1ku5HCCgNWOqYtYvN76LxRSXcr
-   OQkO+w+jNyDfjEJuXbOJsC3bpD26+V+/a2OnfLKQMA4kw9G2EYy7kfWYM
-   RRLmK9sYUW08xeUqH7xSWaWG3CzioR0weqs1cAw+jqlQKv6CCc2097Vb9
-   eNjYw5+dmPTjnCn83q0aFkSLo0Q9s2BOaK2CO41Zl454Gi/xv+zBWm2yC
-   nktYWs+VR0nCfq5fUil8KulDOKlhXwqtEUVnUU9K41MWmPmaPXD9agpCn
+  t=1651492632; x=1683028632;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nZP/1+6lT8kAc58d0aWd4V/lSg7XdvpNjFkvBSMZQLU=;
+  b=bxetFV9gaEapfGvQfgjo7cSVIyU5Sdm8YU4aCYfuhBTODoP8nI4bspDZ
+   IMtLBWQmPqdi6j3TqV7oRnK6O/XTI0i/TY8IXEZ4xeDo/1BUpqsbHGk4v
+   Fi75uQz6ahFoRfvp6JxmFo3G3xP+45Xa//i/oDW6IYqUwXStIhmEdDFj1
+   pJwoxy2emzzmd2PQ4dv1WJFkEjpxtINk7uYR3JhihwXq9mskn5pGzHK/R
+   kYyMxTEYnmZPRTXrRwf8GYezpaDVVG4gY7ee4O9J0wCNOquelko9LhLKj
+   HqQdJHOzYkKxIzGYVOoZGdJrivfZCQ4dl+YZBMOkkwBBdFlbHVj5wssVX
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="247100462"
+X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="247100668"
 X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="247100462"
+   d="scan'208";a="247100668"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 04:56:22 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 04:57:12 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="707576070"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 02 May 2022 04:56:20 -0700
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] serial: 8250: dw: Fix NULL pointer dereference
-Date:   Mon,  2 May 2022 14:56:21 +0300
-Message-Id: <20220502115621.77985-1-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+   d="scan'208";a="707576172"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 02 May 2022 04:57:11 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nlUfu-0009X9-JN;
+        Mon, 02 May 2022 11:57:10 +0000
+Date:   Mon, 2 May 2022 19:56:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dafna Hirschfeld <dhirschfeld@habana.ai>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Oded Gabbay <ogabbay@kernel.org>
+Subject: [ogabbay:habanalabs-next 44/44]
+ drivers/misc/habanalabs/gaudi/gaudi.c:4743:5: warning: no previous prototype
+ for 'gaudi_scrub_device_dram'
+Message-ID: <202205021930.5T9x6nUF-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dw8250_platform_data is only used on DT platforms for now.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git habanalabs-next
+head:   70f82d1e3fe1618ef992a2bb3cf4af85eaed0f5a
+commit: 70f82d1e3fe1618ef992a2bb3cf4af85eaed0f5a [44/44] habanalabs: add device memory scrub ability through debugfs
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220502/202205021930.5T9x6nUF-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git/commit/?id=70f82d1e3fe1618ef992a2bb3cf4af85eaed0f5a
+        git remote add ogabbay https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git
+        git fetch --no-tags ogabbay habanalabs-next
+        git checkout 70f82d1e3fe1618ef992a2bb3cf4af85eaed0f5a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/misc/
 
-Fixes: 4a218b277fdb ("serial: 8250: dw: Create a generic platform data structure")
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
-Hi,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I'm sorry, I have to resend this (to you guys).
-I left out the mailing lists.
+All warnings (new ones prefixed by >>):
 
-Br,
----
- drivers/tty/serial/8250/8250_dw.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>> drivers/misc/habanalabs/gaudi/gaudi.c:4743:5: warning: no previous prototype for 'gaudi_scrub_device_dram' [-Wmissing-prototypes]
+    4743 | int gaudi_scrub_device_dram(struct hl_device *hdev, u64 val)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~
 
-diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/8250_dw.c
-index 0cf1a99dc1244..31422e44c64ff 100644
---- a/drivers/tty/serial/8250/8250_dw.c
-+++ b/drivers/tty/serial/8250/8250_dw.c
-@@ -433,9 +433,9 @@ static void dw8250_prepare_rx_dma(struct uart_8250_port *p)
- static void dw8250_quirks(struct uart_port *p, struct dw8250_data *data)
- {
- 	struct device_node *np = p->dev->of_node;
--	unsigned int quirks = data->pdata->quirks;
- 
- 	if (np) {
-+		unsigned int quirks = data->pdata->quirks;
- 		int id;
- 
- 		/* get index of serial line, if found in DT aliases */
+
+vim +/gaudi_scrub_device_dram +4743 drivers/misc/habanalabs/gaudi/gaudi.c
+
+  4742	
+> 4743	int gaudi_scrub_device_dram(struct hl_device *hdev, u64 val)
+  4744	{
+  4745		struct asic_fixed_properties *prop = &hdev->asic_prop;
+  4746		u64  cur_addr = DRAM_BASE_ADDR_USER;
+  4747		u32 chunk_size, busy;
+  4748		int rc, dma_id;
+  4749	
+  4750		while (cur_addr < prop->dram_end_address) {
+  4751			for (dma_id = 0 ; dma_id < DMA_NUMBER_OF_CHANNELS ; dma_id++) {
+  4752				u32 dma_offset = dma_id * DMA_CORE_OFFSET;
+  4753	
+  4754				chunk_size =
+  4755				min((u64)SZ_2G, prop->dram_end_address - cur_addr);
+  4756	
+  4757				dev_dbg(hdev->dev,
+  4758					"Doing HBM scrubbing for 0x%09llx - 0x%09llx\n",
+  4759					cur_addr, cur_addr + chunk_size);
+  4760	
+  4761				WREG32(mmDMA0_CORE_SRC_BASE_LO + dma_offset,
+  4762						lower_32_bits(val));
+  4763				WREG32(mmDMA0_CORE_SRC_BASE_HI + dma_offset,
+  4764						upper_32_bits(val));
+  4765				WREG32(mmDMA0_CORE_DST_BASE_LO + dma_offset,
+  4766							lower_32_bits(cur_addr));
+  4767				WREG32(mmDMA0_CORE_DST_BASE_HI + dma_offset,
+  4768							upper_32_bits(cur_addr));
+  4769				WREG32(mmDMA0_CORE_DST_TSIZE_0 + dma_offset,
+  4770						chunk_size);
+  4771				WREG32(mmDMA0_CORE_COMMIT + dma_offset,
+  4772						((1 << DMA0_CORE_COMMIT_LIN_SHIFT) |
+  4773						(1 << DMA0_CORE_COMMIT_MEM_SET_SHIFT)));
+  4774	
+  4775				cur_addr += chunk_size;
+  4776	
+  4777				if (cur_addr == prop->dram_end_address)
+  4778					break;
+  4779			}
+  4780	
+  4781			for (dma_id = 0 ; dma_id < DMA_NUMBER_OF_CHANNELS ; dma_id++) {
+  4782				u32 dma_offset = dma_id * DMA_CORE_OFFSET;
+  4783	
+  4784				rc = hl_poll_timeout(
+  4785					hdev,
+  4786					mmDMA0_CORE_STS0 + dma_offset,
+  4787					busy,
+  4788					((busy & DMA0_CORE_STS0_BUSY_MASK) == 0),
+  4789					1000,
+  4790					HBM_SCRUBBING_TIMEOUT_US);
+  4791	
+  4792				if (rc) {
+  4793					dev_err(hdev->dev,
+  4794						"DMA Timeout during HBM scrubbing of DMA #%d\n",
+  4795						dma_id);
+  4796					return -EIO;
+  4797				}
+  4798			}
+  4799		}
+  4800	
+  4801		return 0;
+  4802	}
+  4803	
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

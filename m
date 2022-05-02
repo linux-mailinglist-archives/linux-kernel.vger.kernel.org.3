@@ -2,89 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86EFB5178C9
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 23:07:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EA7E5178D7
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 23:09:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236906AbiEBVLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 17:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
+        id S1387566AbiEBVMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 17:12:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232009AbiEBVLJ (ORCPT
+        with ESMTP id S233954AbiEBVMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 17:11:09 -0400
-Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFA9B7FF;
-        Mon,  2 May 2022 14:07:39 -0700 (PDT)
-Received: by mail-oo1-f50.google.com with SMTP id y22-20020a4acb96000000b0035eb01f5b65so2037652ooq.5;
-        Mon, 02 May 2022 14:07:39 -0700 (PDT)
+        Mon, 2 May 2022 17:12:30 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D218DEEC
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 14:09:00 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 202so2313725pgc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 14:09:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=txaJV3dRNivG0NhQ8k6fgkkv9GXMKI0xKoeOEZVcpBA=;
+        b=OMUOJdST+dvUnnVGFp2+FaA5H2l3LP29+HkC14csGRlQnEAJhmjbkjs0HwpfMmycp2
+         I3SglPp4bwHWZJm7HlP6gp4yv9rEtXa0+uBv4PYpUybL6HsuYcYmpMvyNpHRaZtAieJk
+         m3io1XTZWbNQPGL9ubBllICMRhpKPkcXhwPFU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=a371VTHbSEYi79+z15TeJoB6mz5PgVgi7zKHT0xX1Kk=;
-        b=GhX3UgmnDtcfEU9Ang1A4+quExwXkfIA6A+hv5BGzkUXQAAMb4AMrAEoO1NjxjSLQR
-         RB3HDbBSMAgzFF6xgxFQoRy88vX83iQlNAN0IWkig+SvvW6kBh3AIi4CGkhuXbrhCsqz
-         8+3Ix9rMEAo430ND5VfO3I6B45TRI+nvA8vHl0tNbHCL02W8GTX1KyLkxTP+GAg4v0ZV
-         7gSgLUGWZ59k/GK8z6XEUr8CCQToMDPQje5w053h63nqZ2DrrxTQb/44OXETVYdQ5UUe
-         DFpefgILxDIEFh9p2C8BRvmnQaJG+n7iG8ykneJ/vW7eAQwTuatHYsH6N4wC4D9Vtyie
-         DiVA==
-X-Gm-Message-State: AOAM532iOR5341u17JOV1ztXkFMtSyWk9redmlul9U9srEK/+Ld8tg35
-        YnWEi0GTcDeR7HVsrmE7nQ==
-X-Google-Smtp-Source: ABdhPJy6gQDKkHfAjtBO138VnCai1byqDYuCDzwBFDj3hayyiSHN7IKBKJSlh5E+ccDtYeuAvkjfMQ==
-X-Received: by 2002:a4a:d48c:0:b0:35e:aa26:b720 with SMTP id o12-20020a4ad48c000000b0035eaa26b720mr4702936oos.12.1651525658914;
-        Mon, 02 May 2022 14:07:38 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id x108-20020a9d37f5000000b006060322123csm3242660otb.12.2022.05.02.14.07.37
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=txaJV3dRNivG0NhQ8k6fgkkv9GXMKI0xKoeOEZVcpBA=;
+        b=Leav6p/onxVHz4AMKmb7O7ZH7UEKxLoEz7AcbqMIBz7SQtj1Vmg+pkuu9TOwK+NHJz
+         IerTMCPw//Qqk2tnQ/N+MlGfiIhdWUoOzjyvvJ/FwBNCbPxSA2jfloRu6P9nBnnVEYfw
+         0ydBEyepngAkf689kDXxkttgvBzfGP2I6w+E5VLyfhtM0La7QWFdIGnyBY7bM0Jy49n4
+         zb710KN+Elk3+PTHE+1vdEi3Pi6ZmWYwEWD9vfEUIazJj4n0RKzG0CTO6wE19F8xOQLJ
+         UltDlCi3J3qOEocMnguE6DPI4bVNJ19dhf/G/1M6/QsH2EEreEPs2Dw5Ffdylb0A03ZD
+         HUcQ==
+X-Gm-Message-State: AOAM531+vF4qEdiQHadg4NAUIQoyr7aZhyqvND8q4bS7YA/wAo71em0H
+        HMgWVH1KWHuUw1fkqgo/IBO1Rg==
+X-Google-Smtp-Source: ABdhPJyLhNfT4wJssP/9HEx9GbXsbFV1WJMQKfg68czKh2y4qLKTONEURq/1HUf46yfcZ9nbnVr55w==
+X-Received: by 2002:a63:512:0:b0:3c2:2f7c:cc73 with SMTP id 18-20020a630512000000b003c22f7ccc73mr4589256pgf.96.1651525739830;
+        Mon, 02 May 2022 14:08:59 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:202:201:c718:98e4:f528:12ec])
+        by smtp.gmail.com with ESMTPSA id j22-20020a17090a7e9600b001d903861194sm140331pjl.30.2022.05.02.14.08.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 14:07:38 -0700 (PDT)
-Received: (nullmailer pid 1752385 invoked by uid 1000);
-        Mon, 02 May 2022 21:07:37 -0000
-Date:   Mon, 2 May 2022 16:07:37 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Xin Ji <xji@analogixsemi.com>
-Cc:     Jonas Karlman <jonas@kwiboo.se>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, bliang@analogixsemi.com,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        dri-devel@lists.freedesktop.org, Rob Herring <robh+dt@kernel.org>,
-        qwen@analogixsemi.com, linux-kernel@vger.kernel.org,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] dt-bindings:drm/bridge:anx7625: add port@0
- property
-Message-ID: <YnBIGY+EWuZ2/rGI@robh.at.kernel.org>
-References: <20220422084720.959271-1-xji@analogixsemi.com>
- <20220422084720.959271-3-xji@analogixsemi.com>
+        Mon, 02 May 2022 14:08:59 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     stable@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Gwendal Grignou <gwendal@chromium.org>, Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH] iio:proximity:sx_common: Fix device property parsing on DT systems
+Date:   Mon,  2 May 2022 14:08:58 -0700
+Message-Id: <20220502210858.3377574-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422084720.959271-3-xji@analogixsemi.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 22 Apr 2022 16:47:17 +0800, Xin Ji wrote:
-> Add 'bus-type' and 'data-lanes' define, bus-type 7 for MIPI DPI
-> input, others for DSI input.
-> 
-> Signed-off-by: Xin Ji <xji@analogixsemi.com>
-> 
-> ---
-> V1 -> V2: rebase on the latest code.
-> ---
->  .../display/bridge/analogix,anx7625.yaml      | 19 ++++++++++++++++++-
->  1 file changed, 18 insertions(+), 1 deletion(-)
-> 
+commit 74a53a959028e5f28e3c0e9445a876e5c8da147c upstream.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+After commit 7a3605bef878 ("iio: sx9310: Support ACPI property") we
+started using the 'indio_dev->dev' to extract device properties for
+various register settings in sx9310_get_default_reg(). This broke DT
+based systems because dev_fwnode() used in the device_property*() APIs
+can't find an 'of_node'. That's because the 'indio_dev->dev.of_node'
+pointer isn't set until iio_device_register() is called. Set the pointer
+earlier, next to where the ACPI companion is set, so that the device
+property APIs work on DT systems.
+
+Cc: Gwendal Grignou <gwendal@chromium.org>
+Fixes: 7a3605bef878 ("iio: sx9310: Support ACPI property")
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+Reviewed-by: Gwendal Grignou <gwendal@chromium.org>
+Link: https://lore.kernel.org/r/20220331210425.3908278-1-swboyd@chromium.org
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+[swboyd@chromium.org: Move to sx9310 probe because we don't have commit
+caa8ce7f6149 ("iio:proximity:sx9310: Extract common Semtech sensor
+logic") applied]
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
+
+This applies cleanly to 5.15.y as well.
+
+ drivers/iio/proximity/sx9310.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/iio/proximity/sx9310.c b/drivers/iio/proximity/sx9310.c
+index a3fdb59b06d2..976220bdf81a 100644
+--- a/drivers/iio/proximity/sx9310.c
++++ b/drivers/iio/proximity/sx9310.c
+@@ -1436,6 +1436,7 @@ static int sx9310_probe(struct i2c_client *client)
+ 		return ret;
+ 
+ 	ACPI_COMPANION_SET(&indio_dev->dev, ACPI_COMPANION(dev));
++	indio_dev->dev.of_node = client->dev.of_node;
+ 	indio_dev->channels = sx9310_channels;
+ 	indio_dev->num_channels = ARRAY_SIZE(sx9310_channels);
+ 	indio_dev->info = &sx9310_info;
+-- 
+https://chromeos.dev
+

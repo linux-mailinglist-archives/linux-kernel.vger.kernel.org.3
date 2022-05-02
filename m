@@ -2,348 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA24C517744
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 21:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 001CF517730
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 21:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387088AbiEBTSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 15:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46452 "EHLO
+        id S232500AbiEBTP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 15:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232584AbiEBTSI (ORCPT
+        with ESMTP id S232124AbiEBTP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 15:18:08 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08789DEB1
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 12:14:37 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id b33-20020a25aea1000000b0064588c45fbaso8591450ybj.16
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 12:14:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:cc;
-        bh=ipd0BefF9+t+n+BDA9qzK3ST29aGb9VMcXpg3CY250w=;
-        b=fVIpIWNh7zPAAtchL34lpjR7VmL/rbh4QOlccErxfDjE0KYgyhgo2f9JKaAV/B3tWD
-         MxCiCYhVyv8F63UsENToArfPZvAslNNo/Qu68rLtSkLkLg9ua9HMGyv2Nwe9/7AASh5i
-         BobIpUh/UB0odGf+AoWdO8myMUZ0IUbReLTbxNOv5+D/GCt/2m92U7fGxLg18Ez67ZQb
-         4BfiJuZV3qHm+pzU441EVuhASuGcXposOq/D+cF3Ta0bcF5i+xaTZbMzyo2ZpZzCyc/i
-         RaFq8+0+xm8tJblNw9lckgnQdTdMhtsMg1l2UKHbKKSdrNqXCz/AvtrbKkQhuMv1NF1i
-         USPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:cc;
-        bh=ipd0BefF9+t+n+BDA9qzK3ST29aGb9VMcXpg3CY250w=;
-        b=5iUe1R0nX0vTCuDhAA25gApUt6WgeMF9Kc3vWTGHrDVJNY/GjX0FcfzFyD17N/W28B
-         qrgghlJSDnUJixaBFMEmc7RpuImSRGewXrSpatbxXQq5vyRtwguJltgdTOaFTF94PTIq
-         Ez8qV/lTxLxkavGMJcf7EnejiZPOioz7iHiKC9p3BM9C72xkfVB+XOLKXxb3Ki9mV8nZ
-         jHgQ10hD4xXeW+Fu5nnSC2x4q+QEP92wvow9vjrJ68gciBbrIImFWO0rgYtTyt219IPi
-         7npl7jPPdyy10EFri+P2DpRApMkOxfs8sk+9Ryim1CT+mUCFjMnlcPu+AQG85Pu2HWUD
-         QS5w==
-X-Gm-Message-State: AOAM530YQdR3OS1LWuNWT5q2siihBA7h1AR6RXRILIhvsjq+nxxPb1tl
-        t7KsUZLrt9Oi9A3OtOyMNtAvAlVAaOgq5rI+sg==
-X-Google-Smtp-Source: ABdhPJzHCwIdJBjgxBAhHOPW83nydzx6a6Ghl99nsHDS8GeBKfnj+2gJ4yayUqDCoRfzGDmOaLGKU5KAvcjqU3rRPw==
-X-Received: from kaleshsingh.mtv.corp.google.com ([2620:15c:211:200:55c:7548:7073:c14f])
- (user=kaleshsingh job=sendgmr) by 2002:a81:2492:0:b0:2eb:250d:9cd8 with SMTP
- id k140-20020a812492000000b002eb250d9cd8mr12136698ywk.238.1651518876776; Mon,
- 02 May 2022 12:14:36 -0700 (PDT)
-Date:   Mon,  2 May 2022 12:12:05 -0700
-In-Reply-To: <20220502191222.4192768-1-kaleshsingh@google.com>
-Message-Id: <20220502191222.4192768-6-kaleshsingh@google.com>
-Mime-Version: 1.0
-References: <20220502191222.4192768-1-kaleshsingh@google.com>
-X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-Subject: [PATCH v2 5/5] KVM: arm64: Unwind and dump nVHE hypervisor stacktrace
-From:   Kalesh Singh <kaleshsingh@google.com>
-Cc:     mark.rutland@arm.com, broonie@kernel.org, will@kernel.org,
-        maz@kernel.org, qperret@google.com, tabba@google.com,
-        surenb@google.com, kernel-team@android.com,
-        Kalesh Singh <kaleshsingh@google.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Keir Fraser <keirf@google.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        Mon, 2 May 2022 15:15:26 -0400
+Received: from smtp-42ab.mail.infomaniak.ch (smtp-42ab.mail.infomaniak.ch [84.16.66.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1835CB7F
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 12:11:55 -0700 (PDT)
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KsXlG0SWnzMqFPG;
+        Mon,  2 May 2022 21:11:54 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4KsXlF18QfzlhSMS;
+        Mon,  2 May 2022 21:11:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1651518714;
+        bh=0NxUaaWbrR2tDqr7m+/6m1rvuQPmqjcU76RBWpb2ACo=;
+        h=Date:From:To:Cc:References:Subject:In-Reply-To:From;
+        b=bn9kQv/9cYMoic4chLoAuI0NTaixiFmyd0AVe5+MB/o3qzTIRPBCjxK9baQXjuyrO
+         6IQguVyyZjdlm6mL4SwdN0JAIajtfuB5IyCu0pdBD1VMDeoCHYn8jN8Ra1HbeLJghP
+         NKYmm3EH0g+EgCOMfbk+6fFDaXl8nu7qxE/6P6UM=
+Message-ID: <ee3feb13-fbf8-6651-76ff-1324878d72e8@digikod.net>
+Date:   Mon, 2 May 2022 21:13:05 +0200
+MIME-Version: 1.0
+User-Agent: 
+Content-Language: en-US
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+To:     Miguel Ojeda <ojeda@kernel.org>,
+        Andy Whitcroft <apw@canonical.com>,
+        Joe Perches <joe@perches.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
+References: <8b6b252b-47a6-9d52-f0bd-10d3bc4ad244@digikod.net>
+Subject: Re: clang-format inconsistencies with checkpatch.pl
+In-Reply-To: <8b6b252b-47a6-9d52-f0bd-10d3bc4ad244@digikod.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On hyp_panic(), the hypervisor dumps the addresses for its stacktrace
-entries to a page shared with the host. The host then symbolizes and
-prints the hyp stacktrace before panicking itself.
 
-Example stacktrace:
+On 23/04/2022 13:45, Mickaël Salaün wrote:
+> Hi,
+> 
+> I would like to use clang-format (with a pinned version, probably 14) to 
+> keep a consistent coding style, or at least start with one. However, 
+> there is some inconsistencies with the checkpatch.pl script:
+> 
+> In some cases, goto labels are indented, which checkpatch.pl doesn't like.
 
-[  122.051187] kvm [380]: Invalid host exception to nVHE hyp!
-[  122.052467] kvm [380]: nVHE HYP call trace:
-[  122.052814] kvm [380]: [<ffff800008f5b550>] __kvm_nvhe___pkvm_vcpu_init_traps+0x1f0/0x1f0
-[  122.053865] kvm [380]: [<ffff800008f560f0>] __kvm_nvhe_hyp_panic+0x130/0x1c0
-[  122.054367] kvm [380]: [<ffff800008f56190>] __kvm_nvhe___kvm_vcpu_run+0x10/0x10
-[  122.054878] kvm [380]: [<ffff800008f57a40>] __kvm_nvhe_handle___kvm_vcpu_run+0x30/0x50
-[  122.055412] kvm [380]: [<ffff800008f57d2c>] __kvm_nvhe_handle_trap+0xbc/0x160
-[  122.055911] kvm [380]: [<ffff800008f56864>] __kvm_nvhe___host_exit+0x64/0x64
-[  122.056417] kvm [380]: ---- end of nVHE HYP call trace ----
+This can be fixed with SplitEmptyFunction: false. I'll send a patch for 
+that if it's OK with you.
 
-Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
-Reviewed-by: Mark Brown <broonie@kernel.org>
----
+> 
+> checkpatch.pl complains about some functions (e.g. FIXTURE or 
+> FIXTURE_VARIANT_ADD) that get an open brace just after but without a space.
 
-Changes in v2:
-  - Add Mark's Reviewed-by tag
-
- arch/arm64/include/asm/stacktrace.h | 42 ++++++++++++++--
- arch/arm64/kernel/stacktrace.c      | 75 +++++++++++++++++++++++++++++
- arch/arm64/kvm/handle_exit.c        |  4 ++
- arch/arm64/kvm/hyp/nvhe/switch.c    |  4 ++
- 4 files changed, 121 insertions(+), 4 deletions(-)
-
-diff --git a/arch/arm64/include/asm/stacktrace.h b/arch/arm64/include/asm/stacktrace.h
-index f5af9a94c5a6..3063912107b0 100644
---- a/arch/arm64/include/asm/stacktrace.h
-+++ b/arch/arm64/include/asm/stacktrace.h
-@@ -5,6 +5,7 @@
- #ifndef __ASM_STACKTRACE_H
- #define __ASM_STACKTRACE_H
- 
-+#include <linux/kvm_host.h>
- #include <linux/percpu.h>
- #include <linux/sched.h>
- #include <linux/sched/task_stack.h>
-@@ -19,10 +20,12 @@ enum stack_type {
- #ifndef __KVM_NVHE_HYPERVISOR__
- 	STACK_TYPE_TASK,
- 	STACK_TYPE_IRQ,
--	STACK_TYPE_OVERFLOW,
- 	STACK_TYPE_SDEI_NORMAL,
- 	STACK_TYPE_SDEI_CRITICAL,
-+#else /* __KVM_NVHE_HYPERVISOR__ */
-+	STACK_TYPE_HYP,
- #endif /* !__KVM_NVHE_HYPERVISOR__ */
-+	STACK_TYPE_OVERFLOW,
- 	STACK_TYPE_UNKNOWN,
- 	__NR_STACK_TYPES
- };
-@@ -55,6 +58,9 @@ static inline bool on_stack(unsigned long sp, unsigned long size,
- extern void dump_backtrace(struct pt_regs *regs, struct task_struct *tsk,
- 			   const char *loglvl);
- 
-+extern void hyp_dump_backtrace(unsigned long hyp_offset);
-+
-+DECLARE_PER_CPU(unsigned long, kvm_arm_hyp_stacktrace_page);
- DECLARE_PER_CPU(unsigned long *, irq_stack_ptr);
- 
- static inline bool on_irq_stack(unsigned long sp, unsigned long size,
-@@ -91,8 +97,32 @@ static inline bool on_overflow_stack(unsigned long sp, unsigned long size,
- static inline bool on_overflow_stack(unsigned long sp, unsigned long size,
- 			struct stack_info *info) { return false; }
- #endif
--#endif /* !__KVM_NVHE_HYPERVISOR__ */
-+#else /* __KVM_NVHE_HYPERVISOR__ */
-+
-+extern void hyp_save_backtrace(void);
-+
-+DECLARE_PER_CPU(unsigned long [PAGE_SIZE/sizeof(long)], overflow_stack);
-+DECLARE_PER_CPU(struct kvm_nvhe_init_params, kvm_init_params);
-+
-+static inline bool on_overflow_stack(unsigned long sp, unsigned long size,
-+				 struct stack_info *info)
-+{
-+	unsigned long low = (unsigned long)this_cpu_ptr(overflow_stack);
-+	unsigned long high = low + PAGE_SIZE;
-+
-+	return on_stack(sp, size, low, high, STACK_TYPE_OVERFLOW, info);
-+}
-+
-+static inline bool on_hyp_stack(unsigned long sp, unsigned long size,
-+				 struct stack_info *info)
-+{
-+	struct kvm_nvhe_init_params *params = this_cpu_ptr(&kvm_init_params);
-+	unsigned long high = params->stack_hyp_va;
-+	unsigned long low = high - PAGE_SIZE;
- 
-+	return on_stack(sp, size, low, high, STACK_TYPE_HYP, info);
-+}
-+#endif /* !__KVM_NVHE_HYPERVISOR__ */
- 
- /*
-  * We can only safely access per-cpu stacks from current in a non-preemptible
-@@ -105,6 +135,9 @@ static inline bool on_accessible_stack(const struct task_struct *tsk,
- 	if (info)
- 		info->type = STACK_TYPE_UNKNOWN;
- 
-+	if (on_overflow_stack(sp, size, info))
-+		return true;
-+
- #ifndef __KVM_NVHE_HYPERVISOR__
- 	if (on_task_stack(tsk, sp, size, info))
- 		return true;
-@@ -112,10 +145,11 @@ static inline bool on_accessible_stack(const struct task_struct *tsk,
- 		return false;
- 	if (on_irq_stack(sp, size, info))
- 		return true;
--	if (on_overflow_stack(sp, size, info))
--		return true;
- 	if (on_sdei_stack(sp, size, info))
- 		return true;
-+#else /* __KVM_NVHE_HYPERVISOR__ */
-+	if (on_hyp_stack(sp, size, info))
-+		return true;
- #endif /* !__KVM_NVHE_HYPERVISOR__ */
- 
- 	return false;
-diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
-index f346b4c66f1c..c81dea9760ac 100644
---- a/arch/arm64/kernel/stacktrace.c
-+++ b/arch/arm64/kernel/stacktrace.c
-@@ -104,6 +104,7 @@ static int notrace __unwind_next(struct task_struct *tsk,
- 	 *
- 	 * TASK -> IRQ -> OVERFLOW -> SDEI_NORMAL
- 	 * TASK -> SDEI_NORMAL -> SDEI_CRITICAL -> OVERFLOW
-+	 * HYP -> OVERFLOW
- 	 *
- 	 * ... but the nesting itself is strict. Once we transition from one
- 	 * stack to another, it's never valid to unwind back to that first
-@@ -242,7 +243,81 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
- 
- 	unwind(task, &state, consume_entry, cookie);
- }
-+
-+/**
-+ * Symbolizes and dumps the hypervisor backtrace from the shared
-+ * stacktrace page.
-+ */
-+noinline notrace void hyp_dump_backtrace(unsigned long hyp_offset)
-+{
-+	unsigned long *stacktrace_pos =
-+		(unsigned long *)*this_cpu_ptr(&kvm_arm_hyp_stacktrace_page);
-+	unsigned long va_mask = GENMASK_ULL(vabits_actual - 1, 0);
-+	unsigned long pc = *stacktrace_pos++;
-+
-+	kvm_err("nVHE HYP call trace:\n");
-+
-+	while (pc) {
-+		pc &= va_mask;		/* Mask tags */
-+		pc += hyp_offset;	/* Convert to kern addr */
-+		kvm_err("[<%016lx>] %pB\n", pc, (void *)pc);
-+		pc = *stacktrace_pos++;
-+	}
-+
-+	kvm_err("---- end of nVHE HYP call trace ----\n");
-+}
- #else /* __KVM_NVHE_HYPERVISOR__ */
- DEFINE_PER_CPU(unsigned long [PAGE_SIZE/sizeof(long)], overflow_stack)
- 	__aligned(16);
-+
-+static int notrace unwind_next(struct task_struct *tsk,
-+			       struct unwind_state *state)
-+{
-+	struct stack_info info;
-+
-+	return __unwind_next(tsk, state, &info);
-+}
-+
-+/**
-+ * Saves a hypervisor stacktrace entry (address) to the shared stacktrace page.
-+ */
-+static bool hyp_save_backtrace_entry(void *arg, unsigned long where)
-+{
-+	struct kvm_nvhe_init_params *params = this_cpu_ptr(&kvm_init_params);
-+	unsigned long **stacktrace_pos = (unsigned long **)arg;
-+	unsigned long stacktrace_start, stacktrace_end;
-+
-+	stacktrace_start = (unsigned long)params->stacktrace_hyp_va;
-+	stacktrace_end = stacktrace_start + PAGE_SIZE - (2 * sizeof(long));
-+
-+	if ((unsigned long) *stacktrace_pos > stacktrace_end)
-+		return false;
-+
-+	/* Save the entry to the current pos in stacktrace page */
-+	**stacktrace_pos = where;
-+
-+	/* A zero entry delimits the end of the stacktrace. */
-+	*(*stacktrace_pos + 1) = 0UL;
-+
-+	/* Increment the current pos */
-+	++*stacktrace_pos;
-+
-+	return true;
-+}
-+
-+/**
-+ * Saves hypervisor stacktrace to the shared stacktrace page.
-+ */
-+noinline notrace void hyp_save_backtrace(void)
-+{
-+	struct kvm_nvhe_init_params *params = this_cpu_ptr(&kvm_init_params);
-+	void *stacktrace_start = (void *)params->stacktrace_hyp_va;
-+	struct unwind_state state;
-+
-+	unwind_init(&state, (unsigned long)__builtin_frame_address(0),
-+			_THIS_IP_);
-+
-+	unwind(NULL, &state, hyp_save_backtrace_entry, &stacktrace_start);
-+}
-+
- #endif /* !__KVM_NVHE_HYPERVISOR__ */
-diff --git a/arch/arm64/kvm/handle_exit.c b/arch/arm64/kvm/handle_exit.c
-index 2e61a987b0d5..f1a6b556ec32 100644
---- a/arch/arm64/kvm/handle_exit.c
-+++ b/arch/arm64/kvm/handle_exit.c
-@@ -17,6 +17,7 @@
- #include <asm/kvm_emulate.h>
- #include <asm/kvm_mmu.h>
- #include <asm/debug-monitors.h>
-+#include <asm/stacktrace.h>
- #include <asm/traps.h>
- 
- #include <kvm/arm_hypercalls.h>
-@@ -325,6 +326,9 @@ void __noreturn __cold nvhe_hyp_panic_handler(u64 esr, u64 spsr,
- 				(void *)panic_addr);
- 	}
- 
-+	/* Dump the hypervisor stacktrace */
-+	hyp_dump_backtrace(hyp_offset);
-+
- 	/*
- 	 * Hyp has panicked and we're going to handle that by panicking the
- 	 * kernel. The kernel offset will be revealed in the panic so we're
-diff --git a/arch/arm64/kvm/hyp/nvhe/switch.c b/arch/arm64/kvm/hyp/nvhe/switch.c
-index 978f1b94fb25..95d810e86c7d 100644
---- a/arch/arm64/kvm/hyp/nvhe/switch.c
-+++ b/arch/arm64/kvm/hyp/nvhe/switch.c
-@@ -25,6 +25,7 @@
- #include <asm/fpsimd.h>
- #include <asm/debug-monitors.h>
- #include <asm/processor.h>
-+#include <asm/stacktrace.h>
- 
- #include <nvhe/fixed_config.h>
- #include <nvhe/mem_protect.h>
-@@ -395,6 +396,9 @@ asmlinkage void __noreturn hyp_panic(void)
- 		__sysreg_restore_state_nvhe(host_ctxt);
- 	}
- 
-+	/* Save the hypervisor stacktrace */
-+	hyp_save_backtrace();
-+
- 	__hyp_do_panic(host_ctxt, spsr, elr, par);
- 	unreachable();
- }
--- 
-2.36.0.464.gb9c8b46e94-goog
-
+Miguel, do you know how/if clang-format can enforce that style? FIXTURE 
+macros are struct declarations though.

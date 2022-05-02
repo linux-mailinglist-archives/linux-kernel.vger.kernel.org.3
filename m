@@ -2,60 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E01D1517A2F
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 00:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B711D517A34
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 00:50:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231258AbiEBWwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 18:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45482 "EHLO
+        id S234379AbiEBWxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 18:53:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiEBWw2 (ORCPT
+        with ESMTP id S229496AbiEBWx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 18:52:28 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD3D558E
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 15:48:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651531735; x=1683067735;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=/pDjDneyjwgNJpDMN5wO7esLEMqgdDQZo4u8PWBiJKE=;
-  b=dN7wbM2ZSKZvgH8wBVjnHjKEHW0z2nmX5VBtx8ofyQQioyGbsau0SQ8W
-   dNH+AilL+3hswMiQZNLkZhYZIr3Udjhdxdfwom4qi+IXcrnu3/j1Dg4rz
-   O30mFSuIDe8JFFjtobub/d3bJ0aFZ8uokbgpqSbq/tQrBeFwDHzQeCyUN
-   isXma4thMaj8/er/ZMkweCN0FF/P2IWKNKI9hsprK44YDUA35wYXWX4ga
-   oaCI91owwHbnz0t3rG7dZqRR6FOcCjNqpK9/WhK78tAi7AvoWEcoqkdyp
-   mISHg/AZWox31aIhecwGCdHeCFHRLODFgf5RytaeDppJyEJEyIYZYVxPT
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="353786968"
-X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="353786968"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 15:48:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="653024657"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 02 May 2022 15:48:54 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nleqb-0009x1-B6;
-        Mon, 02 May 2022 22:48:53 +0000
-Date:   Tue, 03 May 2022 06:48:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:testing/stringop-overflow] BUILD REGRESSION
- 841e98dddf647582547543eba0a1e3e8c8f8db9c
-Message-ID: <62705fab.KPRuiM/Lf3t5oMFA%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Mon, 2 May 2022 18:53:26 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B548101D6;
+        Mon,  2 May 2022 15:49:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651531790; x=1683067790;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Y2wn3flT+tFdrnHrZ+pTxgWJaDMdWSAtJwHSKiL20DU=;
+  b=iRiuMVmHItuxA5WO0cNmHS34269wHudWA+pUWlpMi4Z0xUKhgbqYVN88
+   +OtHmbd1iEMAO5klNBq2CRcaVVEtkikdzqf6HK6+8gB/Flt4cDjjtnrJu
+   J9mlP8YdqHyxiLglgDA922+heTQG6nxFWFGOLhQLkzaEmYG04tDqZKtXy
+   0=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 02 May 2022 15:49:20 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 15:49:18 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 2 May 2022 15:49:18 -0700
+Received: from [10.110.10.127] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 2 May 2022
+ 15:49:17 -0700
+Message-ID: <9e982cdb-3c83-519b-2803-e308da7bc9b2@quicinc.com>
+Date:   Mon, 2 May 2022 15:49:16 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v4 5/5] drm/msm/dp: Implement hpd_notify()
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <intel-gfx@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <freedreno@lists.freedesktop.org>, <linux-usb@vger.kernel.org>
+References: <20220502165316.4167199-1-bjorn.andersson@linaro.org>
+ <20220502165316.4167199-6-bjorn.andersson@linaro.org>
+ <672e7dac-fe3b-591f-6837-3ce06a0b44c2@quicinc.com> <YnBbNO31bwNUoRQL@ripper>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <YnBbNO31bwNUoRQL@ripper>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,1047 +84,183 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/stringop-overflow
-branch HEAD: 841e98dddf647582547543eba0a1e3e8c8f8db9c  Makefile: Enable -Wstringop-overflow
 
-Error/Warning reports:
+On 5/2/2022 3:29 PM, Bjorn Andersson wrote:
+> On Mon 02 May 13:59 PDT 2022, Kuogee Hsieh wrote:
+>
+>> On 5/2/2022 9:53 AM, Bjorn Andersson wrote:
+>>> The Qualcomm DisplayPort driver contains traces of the necessary
+>>> plumbing to hook up USB HPD, in the form of the dp_hpd module and the
+>>> dp_usbpd_cb struct. Use this as basis for implementing the
+>>> hpd_notify() callback, by amending the dp_hpd module with the
+>>> missing logic.
+>>>
+>>> Overall the solution is similar to what's done downstream, but upstream
+>>> all the code to disect the HPD notification lives on the calling side of
+>>> drm_connector_oob_hotplug_event().
+>>>
+>>> drm_connector_oob_hotplug_event() performs the lookup of the
+>>> drm_connector based on fwnode, hence the need to assign the fwnode in
+>>> dp_drm_connector_init().
+>>>
+>>> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>>> ---
+>>>
+>>> Changes since v3:
+>>> - Implements hpd_notify instead of oob_hotplug_event
+>>> - Rebased on new cleanup patch from Dmitry
+>>> - Set hpd_state to ST_MAINLINK_READY when dp_display_usbpd_configure() succeeds
+>>>
+>>>    drivers/gpu/drm/msm/dp/dp_display.c | 26 ++++++++++++++++++++++++++
+>>>    drivers/gpu/drm/msm/dp/dp_display.h |  1 +
+>>>    drivers/gpu/drm/msm/dp/dp_drm.c     |  3 +++
+>>>    drivers/gpu/drm/msm/dp/dp_drm.h     |  2 ++
+>>>    4 files changed, 32 insertions(+)
+>>>
+>>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+>>> index b447446d75e9..080294ac6144 100644
+>>> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+>>> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+>>> @@ -83,6 +83,8 @@ struct dp_display_private {
+>>>    	bool hpd_irq_on;
+>>>    	bool audio_supported;
+>>> +	bool connected;
+>>> +
+>>>    	struct drm_device *drm_dev;
+>>>    	struct platform_device *pdev;
+>>>    	struct dentry *root;
+>>> @@ -1271,6 +1273,7 @@ static int dp_display_probe(struct platform_device *pdev)
+>>>    	if (!desc)
+>>>    		return -EINVAL;
+>>> +	dp->dp_display.dev = &pdev->dev;
+>>>    	dp->pdev = pdev;
+>>>    	dp->name = "drm_dp";
+>>>    	dp->dp_display.connector_type = desc->connector_type;
+>>> @@ -1760,3 +1763,26 @@ void dp_bridge_mode_set(struct drm_bridge *drm_bridge,
+>>>    	dp_display->dp_mode.h_active_low =
+>>>    		!!(dp_display->dp_mode.drm_mode.flags & DRM_MODE_FLAG_NHSYNC);
+>>>    }
+>>> +
+>>> +void dp_bridge_hpd_notify(struct drm_bridge *bridge,
+>>> +			  enum drm_connector_status status)
+>>> +{
+>>> +	struct msm_dp_bridge *dp_bridge = to_dp_bridge(bridge);
+>>> +	struct msm_dp *dp = dp_bridge->dp_display;
+>>> +	struct dp_display_private *dp_display = container_of(dp, struct dp_display_private, dp_display);
+>>> +	int ret;
+>>> +
+>>> +	drm_dbg_dp(dp_display->drm_dev, "status: %d connected: %d\n", status, dp_display->connected);
+>>> +
+>>> +	if (!dp_display->connected && status == connector_status_connected) {
+>>> +		dp_display->connected = true;
+>>> +		ret = dp_display_usbpd_configure(dp_display);
+>>> +		if (!ret)
+>>> +			dp_display->hpd_state = ST_MAINLINK_READY;
+>>> +	} else if (status != connector_status_connected) {
+>>> +		dp_display->connected = false;
+>>> +		dp_display_notify_disconnect(dp_display);
+>>> +	} else {
+>>> +		dp_display_usbpd_attention(dp_display);
+>>> +	}
+>>> +}
+>> I would assume dp_bridge_hpd_notify() will server same purpose as
+>> dp_display_irq_handler() if hpd_notification is enabled.
+>>
+> I agree with this statement.
+>
+>> In that case, should dp_bridge_hpd_notify() add
+>> EV_HPD_PLUG_INT/EV_IRQ_HPD_INT/EV_HPD_UNPLUG_INT
+>>
+> I tried this originally, but couldn't get it to work and expected that
+> as the downstream driver doesn't do this, there was some good reason for
+> me not to do it either.
+>
+>> into event q to kick off corresponding
+>> dp_hpd_plug_handle()/dp_irq_hpd_handle()/dp_hpd_unplug_handle()?
+>>
+> But since then the driver has been cleaned up significantly, so I
+> decided to give it a test again.
+> Unfortunately it still doesn't work, but now it's easier to trace.
+>
+> Replacing the 3 cases with relevant calls to dp_add_event() results in
+> us inserting a EV_HPD_UNPLUG_INT event really early, before things has
+> been brought up. This will result in dp_hpd_unplug_handle() trying to
+> disable the dp_catalog_hpd_config_intr(), which will crash as the
+> hardware isn't yet clocked up.
+>
+> Further more, this points out the main difference between the normal HPD
+> code and the USB HPD code; dp_catalog_hpd_config_intr() will enable the
+> plug/unplug interrupts, which it shouldn't do for USB-controlled.
+>
+>
+> So it seems we need two code paths after all.
+>
+>> By the way, I am going to test this patch out.
+>>
+>> Any patches I have to pull in before apply this serial patches?
+>>
+> The patches applies on Dmitry's msm-next-staging, which I've merged on
+> top of linux-next together with a number of pending patches to get the
+> DPU up on SM8350 and a pmic_glink driver which I'm about to post.
+>
+> But to validate that it doesn't affect your non-USB case, Dmitry's
+> branch should be sufficient.
+>
+> Thanks,
+> Bjorn
 
-https://lore.kernel.org/lkml/202204281117.CPeehgnR-lkp@intel.com
-https://lore.kernel.org/lkml/202204281235.5QhYdg1I-lkp@intel.com
-https://lore.kernel.org/lkml/202204282134.8kzHtDU9-lkp@intel.com
+Hi Bjorn,
 
-Error/Warning: (recently discovered and may have been fixed)
+Which release image you had flashed?
 
-drivers/gpu/drm/i915/intel_pm.c:3106:9: error: 'intel_read_wm_latency' accessing 16 bytes in a region of size 10 [-Werror=stringop-overflow=]
-drivers/scsi/bnx2fc/bnx2fc_fcoe.c:833:32: warning: 'fcoe_wwn_from_mac' accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
-drivers/scsi/fcoe/fcoe.c:744:32: warning: 'fcoe_wwn_from_mac' accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
-drivers/scsi/qedf/qedf_main.c:3520:30: warning: 'fcoe_wwn_from_mac' accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
-lib/zstd/decompress/huf_decompress.c:700:5: warning: 'HUF_fillDTableX2.constprop' accessing 624 bytes in a region of size 52 [-Wstringop-overflow=]
+I have ChromeOS-test-R100-14526.69.0-trogdor.tar flashed.
 
-Unverified Error/Warning (likely false positive, please contact us if interested):
+1) Is this will work?
 
-arch/x86/mm/pgtable.c:437:13: warning: 'preallocate_pmds.constprop' accessing 4 bytes in a region of size 0 [-Wstringop-overflow=]
-arch/x86/mm/pgtable.c:437:13: warning: 'preallocate_pmds.constprop' accessing 8 bytes in a region of size 0 [-Wstringop-overflow=]
-arch/x86/mm/pgtable.c:462:9: warning: 'free_pmds.constprop' accessing 8 bytes in a region of size 0 [-Wstringop-overflow=]
-arch/x86/mm/pgtable.c:464:9: warning: 'free_pmds.constprop' accessing 4 bytes in a region of size 0 [-Wstringop-overflow=]
-arch/x86/mm/pgtable.c:464:9: warning: 'free_pmds.constprop' accessing 8 bytes in a region of size 0 [-Wstringop-overflow=]
-cc1: warning: writing 16 bytes into a region of size 0 [-Wstringop-overflow=]
-drivers/char/xillybus/xillybus_core.c:1059:50: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:1461:17: warning: 'dp_decide_lane_settings' accessing 4 bytes in a region of size 1 [-Wstringop-overflow=]
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:2584:25: warning: 'dp_decide_lane_settings' accessing 4 bytes in a region of size 1 [-Wstringop-overflow=]
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dpia.c:493:17: warning: 'dp_decide_lane_settings' accessing 4 bytes in a region of size 1 [-Wstringop-overflow=]
-drivers/gpu/drm/i915/intel_pm.c:3106:9: warning: 'intel_read_wm_latency' accessing 16 bytes in a region of size 10 [-Wstringop-overflow=]
-drivers/hwmon/pc87360.c:1609:44: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
-drivers/infiniband/hw/mlx4/main.c:297:33: warning: writing 16 bytes into a region of size 0 [-Wstringop-overflow=]
-drivers/mtd/nand/raw/nand_bbt.c:584:32: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
-fs/omfs/file.c:170:9: warning: writing 16 bytes into a region of size 0 [-Wstringop-overflow=]
-lib/test_kasan.c:194:63: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
-lib/test_kasan.c:274:49: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
-lib/vsprintf.c:2881:33: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
-lib/vsprintf.c:2894:33: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
-lib/vsprintf.c:2940:33: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
-lib/vsprintf.c:3379:33: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
-lib/vsprintf.c:3392:33: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
+2) how about EC? do I need to upgrade EC image?
 
-Error/Warning ids grouped by kconfigs:
+Thanks,
 
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   |-- drivers-scsi-bnx2fc-bnx2fc_fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-fcoe-fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-qedf-qedf_main.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- alpha-buildonly-randconfig-r001-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- alpha-buildonly-randconfig-r003-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- alpha-defconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- alpha-randconfig-c024-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- alpha-randconfig-m031-20220427
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- alpha-randconfig-r002-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- alpha-randconfig-r011-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- alpha-randconfig-r013-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- alpha-randconfig-r014-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- alpha-randconfig-r025-20220427
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- alpha-randconfig-r035-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arc-alldefconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- arc-allmodconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arc-allyesconfig
-|   |-- drivers-scsi-bnx2fc-bnx2fc_fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-fcoe-fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-qedf-qedf_main.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arc-axs103_defconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- arc-buildonly-randconfig-r002-20220428
-|   |-- drivers-mtd-nand-raw-nand_bbt.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- arc-defconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- arc-nsim_700_defconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- arc-nsimosci_defconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- arc-randconfig-c024-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arc-randconfig-r005-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arc-randconfig-r015-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arc-randconfig-r021-20220427
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arc-randconfig-r024-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arc-randconfig-r031-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arc-randconfig-r032-20220428
-|   `-- drivers-char-xillybus-xillybus_core.c:warning:writing-byte-into-a-region-of-size
-|-- arc-randconfig-r033-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arc-randconfig-r036-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arc-randconfig-r043-20220428
-|   |-- drivers-mtd-nand-raw-nand_bbt.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- arc-randconfig-s031-20220427
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arm-allmodconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:dp_decide_lane_settings-accessing-bytes-in-a-region-of-size
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dpia.c:warning:dp_decide_lane_settings-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-bnx2fc-bnx2fc_fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-fcoe-fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-qedf-qedf_main.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- lib-test_kasan.c:warning:writing-byte-into-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arm-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:dp_decide_lane_settings-accessing-bytes-in-a-region-of-size
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dpia.c:warning:dp_decide_lane_settings-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-bnx2fc-bnx2fc_fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-fcoe-fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-qedf-qedf_main.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- lib-test_kasan.c:warning:writing-byte-into-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arm-at91_dt_defconfig
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arm-buildonly-randconfig-r003-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arm-buildonly-randconfig-r004-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arm-cerfcube_defconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- arm-clps711x_defconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arm-defconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arm-eseries_pxa_defconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- arm-exynos_defconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arm-ezx_defconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arm-gemini_defconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arm-imx_v6_v7_defconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arm-imxrt_defconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- arm-integrator_defconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arm-lpd270_defconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- arm-nhk8815_defconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arm-omap2plus_defconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arm-randconfig-c002-20220427
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arm-randconfig-c002-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arm-randconfig-r014-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arm-randconfig-r021-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arm-trizeps4_defconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arm-viper_defconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- arm64-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:dp_decide_lane_settings-accessing-bytes-in-a-region-of-size
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dpia.c:warning:dp_decide_lane_settings-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-bnx2fc-bnx2fc_fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-fcoe-fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-qedf-qedf_main.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- lib-test_kasan.c:warning:writing-byte-into-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arm64-defconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arm64-randconfig-r002-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arm64-randconfig-r004-20220428
-|   |-- fs-omfs-file.c:warning:writing-bytes-into-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arm64-randconfig-r005-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- arm64-randconfig-r006-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- csky-buildonly-randconfig-r001-20220427
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- csky-buildonly-randconfig-r006-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- csky-defconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- h8300-allnoconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- h8300-allyesconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- h8300-buildonly-randconfig-r001-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- h8300-buildonly-randconfig-r004-20220427
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- h8300-buildonly-randconfig-r004-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- h8300-randconfig-r011-20220428
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- h8300-randconfig-r021-20220427
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- h8300-randconfig-r024-20220427
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- h8300-randconfig-r032-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- h8300-randconfig-r034-20220428
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- h8300-randconfig-s032-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- i386-allyesconfig
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- drivers-gpu-drm-i915-intel_pm.c:error:intel_read_wm_latency-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-bnx2fc-bnx2fc_fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-fcoe-fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-qedf-qedf_main.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- i386-debian-10.3
-|   |-- drivers-gpu-drm-i915-intel_pm.c:warning:intel_read_wm_latency-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- i386-debian-10.3-kselftests
-|   |-- drivers-gpu-drm-i915-intel_pm.c:warning:intel_read_wm_latency-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- i386-defconfig
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- drivers-gpu-drm-i915-intel_pm.c:error:intel_read_wm_latency-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- i386-randconfig-a001
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- i386-randconfig-a003
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- i386-randconfig-a005
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- i386-randconfig-a012
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- i386-randconfig-a014
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- i386-randconfig-a016
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- i386-randconfig-c001
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- i386-randconfig-c021
-|   |-- arch-x86-mm-pgtable.c:warning:free_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- i386-randconfig-m021
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- i386-randconfig-s001
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- drivers-gpu-drm-i915-intel_pm.c:error:intel_read_wm_latency-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- i386-randconfig-s002
-|   |-- arch-x86-mm-pgtable.c:warning:free_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- drivers-gpu-drm-i915-intel_pm.c:error:intel_read_wm_latency-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- i386-tinyconfig
-|   `-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|-- ia64-alldefconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- ia64-allmodconfig
-|   |-- drivers-scsi-bnx2fc-bnx2fc_fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-fcoe-fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-qedf-qedf_main.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- ia64-allnoconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- ia64-allyesconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- ia64-buildonly-randconfig-r002-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- ia64-buildonly-randconfig-r006-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- ia64-defconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- ia64-randconfig-m031-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- ia64-randconfig-r014-20220427
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- ia64-randconfig-r024-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- ia64-randconfig-r026-20220427
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- m68k-allmodconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- m68k-allyesconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- m68k-buildonly-randconfig-r003-20220427
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- m68k-bvme6000_defconfig
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- m68k-defconfig
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- m68k-m5208evb_defconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- m68k-multi_defconfig
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- m68k-randconfig-c003-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- m68k-randconfig-c023-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- m68k-randconfig-m031-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- m68k-randconfig-p002-20220428
-|   |-- drivers-hwmon-pc87360.c:warning:writing-byte-into-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- m68k-randconfig-r016-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- m68k-randconfig-r024-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- m68k-randconfig-s031-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- microblaze-allmodconfig
-|   |-- drivers-scsi-bnx2fc-bnx2fc_fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-fcoe-fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-qedf-qedf_main.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- microblaze-buildonly-randconfig-r002-20220427
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- microblaze-buildonly-randconfig-r004-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- microblaze-buildonly-randconfig-r006-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- microblaze-mmu_defconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- microblaze-randconfig-c023-20220427
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- microblaze-randconfig-c023-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- microblaze-randconfig-r012-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- microblaze-randconfig-r025-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- microblaze-randconfig-r026-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- microblaze-randconfig-r031-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- microblaze-randconfig-r032-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- mips-allmodconfig
-|   |-- drivers-scsi-bnx2fc-bnx2fc_fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-fcoe-fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-qedf-qedf_main.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- mips-allyesconfig
-|   |-- drivers-scsi-bnx2fc-bnx2fc_fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-fcoe-fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-qedf-qedf_main.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- mips-capcella_defconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- mips-ci20_defconfig
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- mips-cobalt_defconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- mips-db1xxx_defconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- mips-ip32_defconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- mips-maltasmvp_eva_defconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- mips-maltaup_xpa_defconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- mips-randconfig-r015-20220428
-|   |-- arch-mips-boot-compressed-..-..-..-..-lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- mips-randconfig-r016-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- mips-randconfig-r021-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- mips-randconfig-r025-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- nios2-alldefconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- nios2-allyesconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- nios2-buildonly-randconfig-r004-20220428
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- nios2-defconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- nios2-randconfig-r026-20220427
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- nios2-randconfig-r034-20220428
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- openrisc-allnoconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- openrisc-buildonly-randconfig-r005-20220427
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- openrisc-or1ksim_defconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- openrisc-randconfig-c003-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- openrisc-randconfig-r002-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- openrisc-randconfig-r016-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- parisc-allyesconfig
-|   |-- drivers-scsi-bnx2fc-bnx2fc_fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-fcoe-fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-qedf-qedf_main.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- parisc-buildonly-randconfig-r004-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- parisc-defconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- parisc-randconfig-c004-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- parisc-randconfig-c023-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- parisc-randconfig-r016-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- parisc-randconfig-r021-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- parisc-randconfig-r024-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- parisc-randconfig-r025-20220427
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- parisc-randconfig-r025-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- parisc64-defconfig
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- powerpc-allmodconfig
-|   |-- drivers-scsi-bnx2fc-bnx2fc_fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-fcoe-fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-qedf-qedf_main.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- powerpc-allyesconfig
-|   |-- drivers-scsi-bnx2fc-bnx2fc_fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-fcoe-fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-qedf-qedf_main.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- powerpc-amigaone_defconfig
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- powerpc-arches_defconfig
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- powerpc-buildonly-randconfig-r006-20220427
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- powerpc-mpc85xx_cds_defconfig
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- powerpc-ppc64_defconfig
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- powerpc-ppc6xx_defconfig
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- powerpc-pq2fads_defconfig
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- powerpc-randconfig-p002-20220429
-|   |-- lib-test_kasan.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- powerpc-randconfig-r012-20220427
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- powerpc-randconfig-r016-20220427
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- powerpc-randconfig-r031-20220428
-|   |-- lib-test_kasan.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- powerpc64-randconfig-c003-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- powerpc64-randconfig-c004-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- powerpc64-randconfig-c024-20220427
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- powerpc64-randconfig-p001-20220429
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- powerpc64-randconfig-r034-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- powerpc64-randconfig-r035-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- powerpc64-randconfig-r036-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- powerpc64-randconfig-s032-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- riscv-allmodconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:dp_decide_lane_settings-accessing-bytes-in-a-region-of-size
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dpia.c:warning:dp_decide_lane_settings-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-bnx2fc-bnx2fc_fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-fcoe-fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-qedf-qedf_main.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- lib-test_kasan.c:warning:writing-byte-into-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- riscv-allnoconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- riscv-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:dp_decide_lane_settings-accessing-bytes-in-a-region-of-size
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dpia.c:warning:dp_decide_lane_settings-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-bnx2fc-bnx2fc_fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-fcoe-fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-qedf-qedf_main.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- lib-test_kasan.c:warning:writing-byte-into-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- riscv-defconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- riscv-nommu_virt_defconfig
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- riscv-randconfig-c004-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- riscv-randconfig-r003-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- riscv-rv32_defconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- s390-allmodconfig
-|   |-- lib-test_kasan.c:warning:writing-byte-into-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- s390-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:dp_decide_lane_settings-accessing-bytes-in-a-region-of-size
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dpia.c:warning:dp_decide_lane_settings-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-bnx2fc-bnx2fc_fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-fcoe-fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-qedf-qedf_main.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- lib-test_kasan.c:warning:writing-byte-into-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- s390-defconfig
-|   |-- drivers-infiniband-hw-mlx4-main.c:warning:writing-bytes-into-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- s390-randconfig-m031-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- s390-randconfig-r003-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- s390-randconfig-r022-20220427
-|   |-- drivers-scsi-bnx2fc-bnx2fc_fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-fcoe-fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- s390-randconfig-r034-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- s390-randconfig-s032-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- s390-zfcpdump_defconfig
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- sh-allmodconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- sh-allnoconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- sh-allyesconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- sh-buildonly-randconfig-r001-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- sh-buildonly-randconfig-r002-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- sh-edosk7705_defconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- sh-magicpanelr2_defconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- sh-polaris_defconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- sh-randconfig-r023-20220427
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- sh-se7206_defconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- sh-se7619_defconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- sh-se7712_defconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- sh-sh7710voipgw_defconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- sh-shmin_defconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- sparc-allyesconfig
-|   |-- drivers-scsi-bnx2fc-bnx2fc_fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-fcoe-fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-qedf-qedf_main.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- sparc-defconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- sparc-randconfig-c003-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- sparc-randconfig-c024-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- sparc-randconfig-r012-20220428
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- sparc-randconfig-r014-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- sparc-randconfig-r023-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- sparc-sparc64_defconfig
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- sparc64-alldefconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- sparc64-buildonly-randconfig-r001-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- sparc64-randconfig-c004-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- sparc64-randconfig-p001-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- sparc64-randconfig-r001-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- sparc64-randconfig-r005-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- sparc64-randconfig-r024-20220427
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- sparc64-randconfig-r026-20220428
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- sparc64-randconfig-s032-20220427
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- x86_64-allmodconfig
-|   |-- arch-x86-mm-pgtable.c:warning:free_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   `-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|-- x86_64-allyesconfig
-|   |-- arch-x86-mm-pgtable.c:warning:free_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:dp_decide_lane_settings-accessing-bytes-in-a-region-of-size
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dpia.c:warning:dp_decide_lane_settings-accessing-bytes-in-a-region-of-size
-|   |-- drivers-gpu-drm-i915-intel_pm.c:error:intel_read_wm_latency-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-bnx2fc-bnx2fc_fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-fcoe-fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-qedf-qedf_main.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- lib-test_kasan.c:warning:writing-byte-into-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- x86_64-defconfig
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- drivers-gpu-drm-i915-intel_pm.c:error:intel_read_wm_latency-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- x86_64-kexec
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-bnx2fc-bnx2fc_fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-fcoe-fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- x86_64-randconfig-a002
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- x86_64-randconfig-a004
-|   |-- arch-x86-mm-pgtable.c:warning:free_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- x86_64-randconfig-a006
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- x86_64-randconfig-a011
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- cc1:warning:writing-bytes-into-a-region-of-size
-|   |-- drivers-gpu-drm-i915-intel_pm.c:warning:intel_read_wm_latency-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- x86_64-randconfig-a013
-|   |-- arch-x86-mm-pgtable.c:warning:free_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- x86_64-randconfig-a015
-|   |-- arch-x86-mm-pgtable.c:warning:free_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- x86_64-randconfig-c001
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- x86_64-randconfig-c002
-|   |-- arch-x86-mm-pgtable.c:warning:free_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- drivers-gpu-drm-i915-intel_pm.c:error:intel_read_wm_latency-accessing-bytes-in-a-region-of-size
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- x86_64-randconfig-c022
-|   |-- arch-x86-mm-pgtable.c:warning:free_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- x86_64-randconfig-m001
-|   |-- arch-x86-mm-pgtable.c:warning:free_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- x86_64-randconfig-s021
-|   |-- arch-x86-mm-pgtable.c:warning:free_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- x86_64-randconfig-s022
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- x86_64-rhel-8.3
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- drivers-gpu-drm-i915-intel_pm.c:warning:intel_read_wm_latency-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- x86_64-rhel-8.3-func
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- drivers-gpu-drm-i915-intel_pm.c:warning:intel_read_wm_latency-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- x86_64-rhel-8.3-kselftests
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- drivers-gpu-drm-i915-intel_pm.c:warning:intel_read_wm_latency-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- x86_64-rhel-8.3-kunit
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- drivers-gpu-drm-i915-intel_pm.c:warning:intel_read_wm_latency-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- x86_64-rhel-8.3-syz
-|   |-- arch-x86-mm-pgtable.c:warning:free_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- arch-x86-mm-pgtable.c:warning:preallocate_pmds.constprop-accessing-bytes-in-a-region-of-size
-|   |-- drivers-gpu-drm-i915-intel_pm.c:error:intel_read_wm_latency-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- xtensa-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:dp_decide_lane_settings-accessing-bytes-in-a-region-of-size
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dpia.c:warning:dp_decide_lane_settings-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-bnx2fc-bnx2fc_fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-fcoe-fcoe.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- drivers-scsi-qedf-qedf_main.c:warning:fcoe_wwn_from_mac-accessing-bytes-in-a-region-of-size
-|   |-- lib-test_kasan.c:warning:writing-byte-into-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- xtensa-common_defconfig
-|   `-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|-- xtensa-randconfig-r002-20220428
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:dp_decide_lane_settings-accessing-bytes-in-a-region-of-size
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dpia.c:warning:dp_decide_lane_settings-accessing-bytes-in-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- xtensa-randconfig-r004-20220428
-|   |-- lib-test_kasan.c:warning:writing-byte-into-a-region-of-size
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- xtensa-randconfig-r011-20220427
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- xtensa-randconfig-r023-20220428
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-|-- xtensa-randconfig-r035-20220428
-|   |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
-`-- xtensa-smp_lx200_defconfig
-    |-- lib-vsprintf.c:warning:writing-byte-into-a-region-of-size
-    `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2.constprop-accessing-bytes-in-a-region-of-size
+kuogee
 
-elapsed time: 6997m
 
-configs tested: 173
-configs skipped: 5
-
-gcc tested configs:
-arm                              allyesconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm64                               defconfig
-arm                              allmodconfig
-i386                          randconfig-c001
-arm                         at91_dt_defconfig
-powerpc                       ppc64_defconfig
-sh                             shx3_defconfig
-sh                        sh7763rdp_defconfig
-mips                           ci20_defconfig
-arc                        nsimosci_defconfig
-powerpc                      arches_defconfig
-powerpc                 linkstation_defconfig
-sh                     sh7710voipgw_defconfig
-sh                        edosk7705_defconfig
-mips                           ip32_defconfig
-arm                          lpd270_defconfig
-riscv                            allyesconfig
-arc                                 defconfig
-arm                            lart_defconfig
-sh                           se7619_defconfig
-mips                  maltasmvp_eva_defconfig
-sh                   secureedge5410_defconfig
-sh                            shmin_defconfig
-sh                          r7780mp_defconfig
-powerpc                     taishan_defconfig
-sparc                       sparc64_defconfig
-s390                       zfcpdump_defconfig
-s390                                defconfig
-arm                        trizeps4_defconfig
-arc                          axs103_defconfig
-m68k                       m5208evb_defconfig
-arc                              alldefconfig
-powerpc                   currituck_defconfig
-powerpc                 mpc837x_mds_defconfig
-xtensa                       common_defconfig
-powerpc                    amigaone_defconfig
-microblaze                      mmu_defconfig
-sh                          polaris_defconfig
-xtensa                    smp_lx200_defconfig
-arm                          gemini_defconfig
-arm                       imx_v6_v7_defconfig
-nios2                            alldefconfig
-mips                         db1xxx_defconfig
-m68k                          multi_defconfig
-arm                          exynos_defconfig
-powerpc                 mpc834x_mds_defconfig
-arm                        cerfcube_defconfig
-sh                           se7722_defconfig
-mips                           jazz_defconfig
-ia64                             alldefconfig
-parisc                              defconfig
-mips                         cobalt_defconfig
-sh                          lboxre2_defconfig
-arm                         nhk8815_defconfig
-sh                           se7712_defconfig
-sh                             sh03_defconfig
-sparc64                          alldefconfig
-sh                     magicpanelr2_defconfig
-arm                     eseries_pxa_defconfig
-arm                           imxrt_defconfig
-mips                    maltaup_xpa_defconfig
-openrisc                    or1ksim_defconfig
-arm                      integrator_defconfig
-sh                          landisk_defconfig
-powerpc                      ppc6xx_defconfig
-i386                                defconfig
-m68k                       bvme6000_defconfig
-powerpc                 mpc85xx_cds_defconfig
-sh                        edosk7760_defconfig
-um                             i386_defconfig
-mips                       capcella_defconfig
-sh                         ap325rxa_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220428
-arm                  randconfig-c002-20220427
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-sh                               allmodconfig
-s390                             allmodconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a015
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-i386                          randconfig-a016
-i386                          randconfig-a012
-i386                          randconfig-a014
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-
-clang tested configs:
-riscv                randconfig-c006-20220428
-mips                 randconfig-c004-20220428
-x86_64                        randconfig-c007
-i386                          randconfig-c001
-arm                  randconfig-c002-20220428
-powerpc              randconfig-c003-20220428
-s390                 randconfig-c005-20220428
-riscv                randconfig-c006-20220429
-mips                 randconfig-c004-20220429
-arm                  randconfig-c002-20220429
-powerpc              randconfig-c003-20220429
-arm                       spear13xx_defconfig
-mips                   sb1250_swarm_defconfig
-arm                         shannon_defconfig
-powerpc                     tqm8540_defconfig
-powerpc                     ppa8548_defconfig
-arm64                            allyesconfig
-arm                         hackkit_defconfig
-mips                      bmips_stb_defconfig
-arm                           sama7_defconfig
-powerpc                  mpc885_ads_defconfig
-arm                       cns3420vb_defconfig
-powerpc                    socrates_defconfig
-arm                         bcm2835_defconfig
-powerpc                 mpc832x_mds_defconfig
-hexagon                          alldefconfig
-mips                           ip28_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a015
-i386                          randconfig-a011
-i386                          randconfig-a013
-hexagon              randconfig-r045-20220428
-riscv                randconfig-r042-20220428
-s390                 randconfig-r044-20220428
-hexagon              randconfig-r041-20220428
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.h b/drivers/gpu/drm/msm/dp/dp_display.h
+>>> index 4f9fe4d7610b..2d2614bc5a14 100644
+>>> --- a/drivers/gpu/drm/msm/dp/dp_display.h
+>>> +++ b/drivers/gpu/drm/msm/dp/dp_display.h
+>>> @@ -11,6 +11,7 @@
+>>>    #include "disp/msm_disp_snapshot.h"
+>>>    struct msm_dp {
+>>> +	struct device *dev;
+>>>    	struct drm_device *drm_dev;
+>>>    	struct device *codec_dev;
+>>>    	struct drm_bridge *bridge;
+>>> diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
+>>> index 62d58b9c4647..821cfd37b1fb 100644
+>>> --- a/drivers/gpu/drm/msm/dp/dp_drm.c
+>>> +++ b/drivers/gpu/drm/msm/dp/dp_drm.c
+>>> @@ -68,6 +68,7 @@ static const struct drm_bridge_funcs dp_bridge_ops = {
+>>>    	.mode_valid   = dp_bridge_mode_valid,
+>>>    	.get_modes    = dp_bridge_get_modes,
+>>>    	.detect       = dp_bridge_detect,
+>>> +	.hpd_notify   = dp_bridge_hpd_notify,
+>>>    };
+>>>    struct drm_bridge *dp_bridge_init(struct msm_dp *dp_display, struct drm_device *dev,
+>>> @@ -138,6 +139,8 @@ struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display)
+>>>    	if (IS_ERR(connector))
+>>>    		return connector;
+>>> +	connector->fwnode = fwnode_handle_get(dev_fwnode(dp_display->dev));
+>>> +
+>>>    	drm_connector_attach_encoder(connector, dp_display->encoder);
+>>>    	return connector;
+>>> diff --git a/drivers/gpu/drm/msm/dp/dp_drm.h b/drivers/gpu/drm/msm/dp/dp_drm.h
+>>> index f4b1ed1e24f7..3b7480a86844 100644
+>>> --- a/drivers/gpu/drm/msm/dp/dp_drm.h
+>>> +++ b/drivers/gpu/drm/msm/dp/dp_drm.h
+>>> @@ -32,5 +32,7 @@ enum drm_mode_status dp_bridge_mode_valid(struct drm_bridge *bridge,
+>>>    void dp_bridge_mode_set(struct drm_bridge *drm_bridge,
+>>>    			const struct drm_display_mode *mode,
+>>>    			const struct drm_display_mode *adjusted_mode);
+>>> +void dp_bridge_hpd_notify(struct drm_bridge *bridge,
+>>> +			  enum drm_connector_status status);
+>>>    #endif /* _DP_DRM_H_ */

@@ -2,130 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CF5E5175E2
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 19:33:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C68055175E4
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 19:33:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386681AbiEBRg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 13:36:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41598 "EHLO
+        id S1386690AbiEBRhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 13:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241242AbiEBRg1 (ORCPT
+        with ESMTP id S241242AbiEBRhE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 13:36:27 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD4525DE;
-        Mon,  2 May 2022 10:32:58 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id D072E5C00A4;
-        Mon,  2 May 2022 13:32:55 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Mon, 02 May 2022 13:32:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1651512775; x=1651599175; bh=O38fQ+vhsG
-        3gGTdn+UJjK1HqNAThZrZHdOVpoaDuDIc=; b=MfRDZYe8MasDLw7mnSR0nMcXO6
-        4/BCqUrbkFqYZBEg0l+kIuUu6oDux71JQEo4L3/7mxaUcoK9AFLnkicX5gwhdHWN
-        jBxjAWO3MdnwOVQ4ez83ZxnoyOWmbSp3YHhyqleeDE+HBesK93l7m5KUTujlaJ8s
-        0PfRo43FJ5WOdd31QrOF/H5kAAr1twj/vgproC2yiRYRGE/Ps1kgFFmTd/pXRfzq
-        SjRGwbqxkBL4PpMVh+fKGoFh4FytcqeAv/9sbZ1uW7rO+2+vt6/PULnkpeLPP9x9
-        LKs3sNjOxlENZiGVC6uRyUrH7ww1I2j+NxJC0BAW5qRnjCwxSdv3/OqZy9mA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651512775; x=
-        1651599175; bh=O38fQ+vhsG3gGTdn+UJjK1HqNAThZrZHdOVpoaDuDIc=; b=E
-        NFahZAk5ymZsCbb2bg/Gia3AhsCEykD3oglo8tKhbCiyBDXqLGzlxuhGI01p+To5
-        xGR77tObewUcCG1ALI5rvG54B/1fmHLfECDhSGCvgYxovwQVDBLlBXXRHutaex9C
-        Buo7PTm/0Fs+wPvPzrxTSfuCqr/RgtbVqKsxgvfTAYcWcfCb5rFzY39I4bCYR/vg
-        4mDbX9Dqj4F7zO63SFgbu7DIV0eWuT88dmqa5aadVsIOp2mofsdrc8U69OufaHIE
-        ta8fV8z06i0MxmsYBU+0llN98//hGRCrBQqQq/zQkQFWTY35/TefXboiOnkqwUmk
-        GbTlug8kJY/sjPd7XT2bg==
-X-ME-Sender: <xms:xxVwYhy2SpiN1vpHDohvZSnkv7UOWSEA1CYaZrVUV1sy2y8L7CX8gg>
-    <xme:xxVwYhTOMmlbD4v814N_qBA2LzTYZwNHjENTONxPWKC2WM7lOyEGKEEMsVEV8lWS6
-    EIEEGsK_uEiSg>
-X-ME-Received: <xmr:xxVwYrUOmLnZKFDuC0Xcj0dGMzd_MNZh8xq0GZyyemV9Jl-kk1JnShAYy1j3wEy8qbeM76wOARdSAKSVdul1zR8syJ8DQXU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehgdduudefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:xxVwYjhNtGyCWWcsHe0GmGDF8X-J5IFvMV_pQLxcl2kmHgXxXJ8uIQ>
-    <xmx:xxVwYjD1CEJmfWGEmVqyU_0Qy-CEFvziBfrFk8CZ-XESFJqJ-EpBfg>
-    <xmx:xxVwYsIhQFO4fw5hIX51dstWR7fAk8I8saF5VsyRJZzy8Mu2Qp9khQ>
-    <xmx:xxVwYn4zV4CuB7AdrMyFHv8zUngSDZ9eWG1s_x4BaKa8GF7ENN6_MQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 2 May 2022 13:32:55 -0400 (EDT)
-Date:   Mon, 2 May 2022 19:32:54 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Douglas Anderson <dianders@chromium.org>
-Subject: Re: linux-next: build failure after merge of the usb tree
-Message-ID: <YnAVxtQNOOhtz3lO@kroah.com>
-References: <20220502210728.0b36f3cd@canb.auug.org.au>
- <Ym/DPS99n8K8Lltu@kroah.com>
- <YnAQRQWK6ozI8DZJ@google.com>
+        Mon, 2 May 2022 13:37:04 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495C8626A
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 10:33:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651512815; x=1683048815;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=h0EHRxcpoq2g8LuBm4WbI+oGogv4tJyq6kV607NlG5g=;
+  b=glzF6FmErs2Ysc4FFboTpiK7ANZgvIoqSwKip3qCiAk0DjSGKvdGw4tJ
+   D+kv2c76UiYktulWzG3YdCPbezvcdY0Q4nzvkLlDpMiToFoIXF3z6JuXP
+   +iLs5sLgewriEIk6Cv2LNX8iA1vUbNPwayql96ZTZ/epVzbZtC9yWzTiX
+   01yI+ZKtVHXZI9r/VnUmr0VuXBDAYFiCz21k8mwniQyMaBCnIb1QhFkgX
+   b7sH5Ur0Zrc2qRxKODuHU2Ll8sqP8ybb1Q2ihuD8fQuP12f+ts1ETE1lV
+   RmOK5MwqurM+E5ZJSUEkdel99vUSWQFlitjdVTmaqifqxcDQLeD834ULo
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="327820607"
+X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
+   d="scan'208";a="327820607"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 10:33:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
+   d="scan'208";a="516200401"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 02 May 2022 10:33:33 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nlZvQ-0009jn-Es;
+        Mon, 02 May 2022 17:33:32 +0000
+Date:   Tue, 3 May 2022 01:33:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dan Carpenter <error27@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Chuck Lever <chuck.lever@oracle.com>
+Subject: [linux-stable-rc:linux-5.4.y 2861/3424]
+ include/linux/sunrpc/xdr.h:539:17: error: comparison is always false due to
+ limited range of data type
+Message-ID: <202205030134.lKvFZB5b-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YnAQRQWK6ozI8DZJ@google.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 02, 2022 at 10:09:25AM -0700, Matthias Kaehlcke wrote:
-> On Mon, May 02, 2022 at 01:40:45PM +0200, Greg KH wrote:
-> > On Mon, May 02, 2022 at 09:07:28PM +1000, Stephen Rothwell wrote:
-> > > Hi all,
-> > > 
-> > > After merging the usb tree, today's linux-next build (x86_64
-> > > modules_install) failed like this:
-> > > 
-> > > depmod: ERROR: Cycle detected: usbcore -> onboard_usb_hub -> usbcore
-> > > depmod: ERROR: Found 2 modules in dependency cycles!
-> > > 
-> > > Caused by commit
-> > > 
-> > >   c40b62216c1a ("usb: core: hcd: Create platform devices for onboard hubs in probe()")
-> > > 
-> > > I have reverted that commit for today.
-> > 
-> > argh, I thought the build issues were fixed :(
-> 
-> Sorry about that :(
-> 
-> The *build* issues were actually fixed, however I did not try
-> modules_install ...
-> 
-> > I'll go revert that series from my tree later today, thanks for the
-> > report.
-> 
-> I think the dependency situation can only be resolved by linking
-> onboard_hub_create/destroy_pdevs() into the USB core module. My initial
-> idea was to build them into the kernel binary, however that doesn't
-> work because onboard_hub_create_pdevs() calls usb_of_get_device_node(),
-> which is part of the core module when CONFIG_USB=m. The two function
-> are relatively lightweight and don't depend on internals of the
-> onboard_usb_hub driver (besides the device id table) so linking them
-> into the core module doesn't seem too ugly.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+head:   4426e6017f73bbbd65270965ecc11b6b3ff4af4d
+commit: ce1aa09cc14ed625104acc2d487bd92b9a88efe2 [2861/3424] NFSD: prevent integer overflow on 32 bit systems
+config: sparc64-buildonly-randconfig-r004-20220501 (https://download.01.org/0day-ci/archive/20220503/202205030134.lKvFZB5b-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=ce1aa09cc14ed625104acc2d487bd92b9a88efe2
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-5.4.y
+        git checkout ce1aa09cc14ed625104acc2d487bd92b9a88efe2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=sparc64 SHELL=/bin/bash arch/sparc/kernel/
 
-I'll try to look at this next week, it shouldn't be that complex.  If it
-is, something feels wrong...
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-thanks,
+All errors (new ones prefixed by >>):
 
-greg k-h
+   In file included from include/linux/sunrpc/sched.h:19,
+                    from include/linux/sunrpc/auth.h:15,
+                    from include/linux/nfs_fs.h:31,
+                    from arch/sparc/kernel/sys_sparc32.c:25:
+   include/linux/sunrpc/xdr.h: In function 'xdr_stream_decode_uint32_array':
+>> include/linux/sunrpc/xdr.h:539:17: error: comparison is always false due to limited range of data type [-Werror=type-limits]
+     539 |         if (len > SIZE_MAX / sizeof(*p))
+         |                 ^
+   cc1: all warnings being treated as errors
+
+
+vim +539 include/linux/sunrpc/xdr.h
+
+   517	
+   518	/**
+   519	 * xdr_stream_decode_uint32_array - Decode variable length array of integers
+   520	 * @xdr: pointer to xdr_stream
+   521	 * @array: location to store the integer array or NULL
+   522	 * @array_size: number of elements to store
+   523	 *
+   524	 * Return values:
+   525	 *   On success, returns number of elements stored in @array
+   526	 *   %-EBADMSG on XDR buffer overflow
+   527	 *   %-EMSGSIZE if the size of the array exceeds @array_size
+   528	 */
+   529	static inline ssize_t
+   530	xdr_stream_decode_uint32_array(struct xdr_stream *xdr,
+   531			__u32 *array, size_t array_size)
+   532	{
+   533		__be32 *p;
+   534		__u32 len;
+   535		ssize_t retval;
+   536	
+   537		if (unlikely(xdr_stream_decode_u32(xdr, &len) < 0))
+   538			return -EBADMSG;
+ > 539		if (len > SIZE_MAX / sizeof(*p))
+   540			return -EBADMSG;
+   541		p = xdr_inline_decode(xdr, len * sizeof(*p));
+   542		if (unlikely(!p))
+   543			return -EBADMSG;
+   544		if (array == NULL)
+   545			return len;
+   546		if (len <= array_size) {
+   547			if (len < array_size)
+   548				memset(array+len, 0, (array_size-len)*sizeof(*array));
+   549			array_size = len;
+   550			retval = len;
+   551		} else
+   552			retval = -EMSGSIZE;
+   553		for (; array_size > 0; p++, array++, array_size--)
+   554			*array = be32_to_cpup(p);
+   555		return retval;
+   556	}
+   557	#endif /* __KERNEL__ */
+   558	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

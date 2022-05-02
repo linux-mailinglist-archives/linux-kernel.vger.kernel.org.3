@@ -2,331 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB2F516ADC
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 08:26:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5A5516ADF
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 08:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377987AbiEBG37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 02:29:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42836 "EHLO
+        id S1383364AbiEBGe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 02:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiEBG3y (ORCPT
+        with ESMTP id S1351045AbiEBGew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 02:29:54 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A219641E
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 23:26:25 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2425PxBM023753;
-        Mon, 2 May 2022 06:25:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : subject :
- in-reply-to : references : date : message-id : mime-version :
- content-type; s=pp1; bh=/bN9H5J34zj0F4jdbLgzwCkZsU1qqfHCCMvbF+K5ZjE=;
- b=GoCKF/eeLLHo73MoELpUdmpMYHk60oRH7q/1Vy+hJ7uxVo3ZRsz1wkDFKbxJvbdMoHMC
- 8QIj7EQfn+irIzwQZr8qjKpXEiWe/FsDc7LdbaSYnNSciA3SHwYk9vmCnv/WjxRzaghy
- CaMgcpzhAa+itgxWnY+anGXBoAT4n3V31QWdeQMyaz9dW6Y/crhK4Dr/5lvoWHa2+xje
- PPoUrd0karReqsvq2dTnfKYS65TIHn+lKvRgZI/KEQSsO1u+EEeppri0A1tb49FpN8tJ
- 4HQD4wg8hqXwBNO0lfp1vCet21t4NnBsKdJOMTjyASpbtbGvlnnVOJcrUE5M7219O0kV dg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ft9588xjp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 May 2022 06:25:57 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2426PvBd003053;
-        Mon, 2 May 2022 06:25:57 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ft9588xjc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 May 2022 06:25:57 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2426NBK2022414;
-        Mon, 2 May 2022 06:25:55 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma05wdc.us.ibm.com with ESMTP id 3frvr9khkk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 May 2022 06:25:55 +0000
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2426PtxB34013476
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 2 May 2022 06:25:55 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 48812B2066;
-        Mon,  2 May 2022 06:25:55 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 585C0B206C;
-        Mon,  2 May 2022 06:25:49 +0000 (GMT)
-Received: from skywalker.linux.ibm.com (unknown [9.43.74.71])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon,  2 May 2022 06:25:49 +0000 (GMT)
-X-Mailer: emacs 29.0.50 (via feedmail 11-beta-1 I)
-From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-To:     Wei Xu <weixugc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Yang Shi <shy828301@gmail.com>, Linux MM <linux-mm@kvack.org>,
-        Greg Thelen <gthelen@google.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alistair Popple <apopple@nvidia.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Michal Hocko <mhocko@kernel.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Feng Tang <feng.tang@intel.com>, Jonathan.Cameron@huawei.com
-Subject: Re: RFC: Memory Tiering Kernel Interfaces
-In-Reply-To: <CAAPL-u9sVx94ACSuCVN8V0tKp+AMxiY89cro0japtyB=xNfNBw@mail.gmail.com>
-References: <CAAPL-u9sVx94ACSuCVN8V0tKp+AMxiY89cro0japtyB=xNfNBw@mail.gmail.com>
-Date:   Mon, 02 May 2022 11:55:43 +0530
-Message-ID: <87ilqov4bc.fsf@linux.ibm.com>
+        Mon, 2 May 2022 02:34:52 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39F66367
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 23:31:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651473084; x=1683009084;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=FEOmMqLtE0UdioK63JNCa+6iTD3V4OZduVfNZUkUvb4=;
+  b=YS6Uq+8bOm+ZLMMKVSWwOWKIpZRNMFSynfhogLDfwDtdTtHfb541fqUK
+   TLWfKKk7drVuH0KeJdxat8E9ltSg62/W4aY4a3UWu/FMi88u46GBc1y01
+   +rivHyY3uYQit4sUcwsHfNuqMeZyTDKjz52Jm7MUXwMWCKjJhSu/YUmp7
+   lqo1g9OBV0t48YIt2P9fbsvaFnCavrcvtLOUbB926JjE18Y8P1+2z7Idf
+   MMLCB2SQ2+BHDgG8M4bInsWAFFpTi5T8x3b221q+MPVO+rPcdlufBaAAU
+   PkFD5CNNRBomeJ81PlDwffCMfbOAg8jtP+9Si3nNk43MwH2ydcN22KulQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="327674314"
+X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
+   d="scan'208";a="327674314"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 23:31:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
+   d="scan'208";a="515939630"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 01 May 2022 23:31:22 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nlPac-0009LP-0r;
+        Mon, 02 May 2022 06:31:22 +0000
+Date:   Mon, 2 May 2022 14:31:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [tomoyo-test1:master 2/2] include/linux/compiler_types.h:352:45:
+ error: call to '__compiletime_assert_302' declared with attribute error:
+ Please avoid flushing system_long_wq.
+Message-ID: <202205021411.imkBoPfj-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: tBavHxFj9p49AMvjwO992uc9yzn1wJcY
-X-Proofpoint-ORIG-GUID: kbeYfgTovJHWY9wLdyPg4GJZLn40DBM1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-02_01,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- clxscore=1011 mlxscore=0 bulkscore=0 phishscore=0 impostorscore=0
- priorityscore=1501 lowpriorityscore=0 mlxlogscore=999 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205020046
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wei Xu <weixugc@google.com> writes:
+tree:   https://scm.osdn.net/gitroot/tomoyo/tomoyo-test1.git master
+head:   c806998d6e2cfdbcf8f4b241b709552b7d85fa3e
+commit: c806998d6e2cfdbcf8f4b241b709552b7d85fa3e [2/2] workqueue: Wrap flush_workqueue() using a macro
+config: x86_64-randconfig-a015 (https://download.01.org/0day-ci/archive/20220502/202205021411.imkBoPfj-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        git remote add tomoyo-test1 https://scm.osdn.net/gitroot/tomoyo/tomoyo-test1.git
+        git fetch --no-tags tomoyo-test1 master
+        git checkout c806998d6e2cfdbcf8f4b241b709552b7d85fa3e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-....
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
->
-> Tiering Hierarchy Initialization
-> ================================
->
-> By default, all memory nodes are in the top tier (N_TOPTIER_MEMORY).
->
-> A device driver can remove its memory nodes from the top tier, e.g.
-> a dax driver can remove PMEM nodes from the top tier.
+All errors (new ones prefixed by >>):
 
-Should we look at the tier in which to place the memory an option that
-device drivers like dax driver can select? Or dax driver just selects
-the desire to mark a specific memory only numa node as demotion target
-and won't explicity specify the tier in which it should be placed. I
-would like to go for the later and choose the tier details based on the
-current memory tiers and the NUMA distance value (even HMAT at some
-point in the future). The challenge with NUMA distance though is which
-distance value we will pick. For example, in your example1. 
+   In file included from <command-line>:
+   In function 'rnbd_destroy_sessions',
+       inlined from 'rnbd_client_exit' at drivers/block/rnbd/rnbd-clt.c:1801:2:
+>> include/linux/compiler_types.h:352:45: error: call to '__compiletime_assert_302' declared with attribute error: Please avoid flushing system_long_wq.
+     352 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                                             ^
+   include/linux/compiler_types.h:333:25: note: in definition of macro '__compiletime_assert'
+     333 |                         prefix ## suffix();                             \
+         |                         ^~~~~~
+   include/linux/compiler_types.h:352:9: note: in expansion of macro '_compiletime_assert'
+     352 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/workqueue.h:666:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+     666 |         BUILD_BUG_ON_MSG(__builtin_constant_p(&(wq) == &system_long_wq) && \
+         |         ^~~~~~~~~~~~~~~~
+   drivers/block/rnbd/rnbd-clt.c:1769:9: note: in expansion of macro 'flush_workqueue'
+    1769 |         flush_workqueue(system_long_wq);
+         |         ^~~~~~~~~~~~~~~
+--
+   In file included from <command-line>:
+   drivers/infiniband/core/device.c: In function 'ib_core_cleanup':
+>> include/linux/compiler_types.h:352:45: error: call to '__compiletime_assert_514' declared with attribute error: Please avoid flushing system_unbound_wq.
+     352 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                                             ^
+   include/linux/compiler_types.h:333:25: note: in definition of macro '__compiletime_assert'
+     333 |                         prefix ## suffix();                             \
+         |                         ^~~~~~
+   include/linux/compiler_types.h:352:9: note: in expansion of macro '_compiletime_assert'
+     352 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/workqueue.h:669:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+     669 |         BUILD_BUG_ON_MSG(__builtin_constant_p(&(wq) == &system_unbound_wq) && \
+         |         ^~~~~~~~~~~~~~~~
+   drivers/infiniband/core/device.c:2857:9: note: in expansion of macro 'flush_workqueue'
+    2857 |         flush_workqueue(system_unbound_wq);
+         |         ^~~~~~~~~~~~~~~
 
- node   0    1    2    3
-    0  10   20   30   40
-    1  20   10   40   30
-    2  30   40   10   40
-    3  40   30   40   10
 
-When Node3 is registered, how do we decide to create a Tier2 or add it
-to Tier1? . We could say devices that wish to be placed in the same tier
-will have same distance as the existing tier device ie, for the above
-case,
+vim +/__compiletime_assert_302 +352 include/linux/compiler_types.h
 
-node_distance[2][2] == node_distance[2][3] ? Can we expect the firmware
-to have distance value like that? 
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  338  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  339  #define _compiletime_assert(condition, msg, prefix, suffix) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  340  	__compiletime_assert(condition, msg, prefix, suffix)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  341  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  342  /**
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  343   * compiletime_assert - break build and emit msg if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  344   * @condition: a compile-time constant condition to check
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  345   * @msg:       a message to emit if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  346   *
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  347   * In tradition of POSIX assert, this macro will break the build if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  348   * supplied condition is *false*, emitting the supplied error message if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  349   * compiler has support to do so.
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  350   */
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  351  #define compiletime_assert(condition, msg) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21 @352  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  353  
 
->
-> The kernel builds the memory tiering hierarchy and per-node demotion
-> order tier-by-tier starting from N_TOPTIER_MEMORY.  For a node N, the
-> best distance nodes in the next lower tier are assigned to
-> node_demotion[N].preferred and all the nodes in the next lower tier
-> are assigned to node_demotion[N].allowed.
->
-> node_demotion[N].preferred can be empty if no preferred demotion node
-> is available for node N.
->
-> If the userspace overrides the tiers via the memory_tiers sysfs
-> interface, the kernel then only rebuilds the per-node demotion order
-> accordingly.
->
-> Memory tiering hierarchy is rebuilt upon hot-add or hot-remove of a
-> memory node, but is NOT rebuilt upon hot-add or hot-remove of a CPU
-> node.
->
->
-> Memory Allocation for Demotion
-> ==============================
->
-> When allocating a new demotion target page, both a preferred node
-> and the allowed nodemask are provided to the allocation function.
-> The default kernel allocation fallback order is used to allocate the
-> page from the specified node and nodemask.
->
-> The memopolicy of cpuset, vma and owner task of the source page can
-> be set to refine the demotion nodemask, e.g. to prevent demotion or
-> select a particular allowed node as the demotion target.
->
->
-> Examples
-> ========
->
-> * Example 1:
->   Node 0 & 1 are DRAM nodes, node 2 & 3 are PMEM nodes.
->
->   Node 0 has node 2 as the preferred demotion target and can also
->   fallback demotion to node 3.
->
->   Node 1 has node 3 as the preferred demotion target and can also
->   fallback demotion to node 2.
->
->   Set mempolicy to prevent cross-socket demotion and memory access,
->   e.g. cpuset.mems=0,2
->
-> node distances:
-> node   0    1    2    3
->    0  10   20   30   40
->    1  20   10   40   30
->    2  30   40   10   40
->    3  40   30   40   10
->
-> /sys/devices/system/node/memory_tiers
-> 0-1
-> 2-3
+:::::: The code at line 352 was first introduced by commit
+:::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
 
-How can I make Node3 the demotion target for Node2 in this case? Can
-we have one file for each tier? ie, we start with
-/sys/devices/system/node/memory_tier0. Removing a node with memory from
-the above file/list results in the creation of new tiers.
+:::::: TO: Will Deacon <will@kernel.org>
+:::::: CC: Will Deacon <will@kernel.org>
 
-/sys/devices/system/node/memory_tier0
-0-1
-/sys/devices/system/node/memory_tier1
-2-3
-
-echo 2 > /sys/devices/system/node/memory_tier1
-/sys/devices/system/node/memory_tier1
-2
-/sys/devices/system/node/memory_tier2
-3
-
->
-> N_TOPTIER_MEMORY: 0-1
->
-> node_demotion[]:
->   0: [2], [2-3]
->   1: [3], [2-3]
->   2: [],  []
->   3: [],  []
->
-> * Example 2:
->   Node 0 & 1 are DRAM nodes.
->   Node 2 is a PMEM node and closer to node 0.
->
->   Node 0 has node 2 as the preferred and only demotion target.
->
->   Node 1 has no preferred demotion target, but can still demote
->   to node 2.
->
->   Set mempolicy to prevent cross-socket demotion and memory access,
->   e.g. cpuset.mems=0,2
->
-> node distances:
-> node   0    1    2
->    0  10   20   30
->    1  20   10   40
->    2  30   40   10
->
-> /sys/devices/system/node/memory_tiers
-> 0-1
-> 2
->
-> N_TOPTIER_MEMORY: 0-1
->
-> node_demotion[]:
->   0: [2], [2]
->   1: [],  [2]
->   2: [],  []
->
->
-> * Example 3:
->   Node 0 & 1 are DRAM nodes.
->   Node 2 is a PMEM node and has the same distance to node 0 & 1.
->
->   Node 0 has node 2 as the preferred and only demotion target.
->
->   Node 1 has node 2 as the preferred and only demotion target.
->
-> node distances:
-> node   0    1    2
->    0  10   20   30
->    1  20   10   30
->    2  30   30   10
->
-> /sys/devices/system/node/memory_tiers
-> 0-1
-> 2
->
-> N_TOPTIER_MEMORY: 0-1
->
-> node_demotion[]:
->   0: [2], [2]
->   1: [2], [2]
->   2: [],  []
->
->
-> * Example 4:
->   Node 0 & 1 are DRAM nodes, Node 2 is a memory-only DRAM node.
->
->   All nodes are top-tier.
->
-> node distances:
-> node   0    1    2
->    0  10   20   30
->    1  20   10   30
->    2  30   30   10
->
-> /sys/devices/system/node/memory_tiers
-> 0-2
->
-> N_TOPTIER_MEMORY: 0-2
->
-> node_demotion[]:
->   0: [],  []
->   1: [],  []
->   2: [],  []
->
->
-> * Example 5:
->   Node 0 is a DRAM node with CPU.
->   Node 1 is a HBM node.
->   Node 2 is a PMEM node.
->
->   With userspace override, node 1 is the top tier and has node 0 as
->   the preferred and only demotion target.
->
->   Node 0 is in the second tier, tier 1, and has node 2 as the
->   preferred and only demotion target.
->
->   Node 2 is in the lowest tier, tier 2, and has no demotion targets.
->
-> node distances:
-> node   0    1    2
->    0  10   21   30
->    1  21   10   40
->    2  30   40   10
->
-> /sys/devices/system/node/memory_tiers (userspace override)
-> 1
-> 0
-> 2
->
-> N_TOPTIER_MEMORY: 1
->
-> node_demotion[]:
->   0: [2], [2]
->   1: [0], [0]
->   2: [],  []
->
-> -- Wei
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

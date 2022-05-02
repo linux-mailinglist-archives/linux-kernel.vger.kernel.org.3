@@ -2,150 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BABC516EAF
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 13:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1024516EC3
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 13:19:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384707AbiEBLS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 07:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58774 "EHLO
+        id S1384692AbiEBLWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 07:22:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381044AbiEBLSv (ORCPT
+        with ESMTP id S231325AbiEBLWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 07:18:51 -0400
-Received: from relay5.mymailcheap.com (relay5.mymailcheap.com [159.100.248.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA528640A
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 04:15:19 -0700 (PDT)
-Received: from relay4.mymailcheap.com (relay4.mymailcheap.com [137.74.80.154])
-        by relay5.mymailcheap.com (Postfix) with ESMTPS id A8E5D267CE;
-        Mon,  2 May 2022 11:15:17 +0000 (UTC)
-Received: from filter1.mymailcheap.com (filter1.mymailcheap.com [149.56.130.247])
-        by relay4.mymailcheap.com (Postfix) with ESMTPS id A953F20017;
-        Mon,  2 May 2022 11:15:14 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
-        by filter1.mymailcheap.com (Postfix) with ESMTP id 032542A2AE;
-        Mon,  2 May 2022 11:15:14 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at filter1.mymailcheap.com
-Received: from filter1.mymailcheap.com ([127.0.0.1])
-        by localhost (filter1.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 7omtSMs1A6sZ; Mon,  2 May 2022 11:15:13 +0000 (UTC)
-Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by filter1.mymailcheap.com (Postfix) with ESMTPS;
-        Mon,  2 May 2022 11:15:13 +0000 (UTC)
-Received: from [127.0.0.1] (unknown [64.225.114.122])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 22815405D8;
-        Mon,  2 May 2022 11:15:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
-        t=1651490112; bh=rUT7KoKRnXsktcX5dLdRErqPLZQBY5ISASFS45PYPuA=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=lVYp40sOuy3Tl/aX6MU6s+mzMFA9W2Tmea013ogW60hxMjcRcxsOgbiQEVZemFUtj
-         iVulfzPiiJypRDVvvFEABrViGJodFpr2srOgzhCzKQ7+OWZzpCXY3t4ddxz2uSwv5p
-         88PHW6rI7Osufk7244uzAH31BVbtHTdG8DnEKDoY=
-Date:   Mon, 02 May 2022 19:15:01 +0800
-From:   Icenowy Zheng <icenowy@aosc.io>
-To:     Maxime Ripard <maxime@cerno.tech>, Ruslan Zalata <rz@fabmicro.ru>
-CC:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2=5D_hwmon=3A_=28sun4i-lradc=29_Add_dri?= =?US-ASCII?Q?ver_for_LRADC_found_on_Allwinner_A13/A20_SoC?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20220502110010.q7vvdkdpaiz5acjl@houat>
-References: <20220428210906.29527-1-rz@fabmicro.ru> <20220502110010.q7vvdkdpaiz5acjl@houat>
-Message-ID: <7433B295-D896-4BF8-87DF-87EB89D7A550@aosc.io>
+        Mon, 2 May 2022 07:22:30 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236B1BC17
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 04:19:01 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id g20so16219634edw.6
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 04:19:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HkHb9zDzaQCh7icuTIrBW1dLzBtZj3gG9lMpTgSrSE4=;
+        b=yqitAepL/r7UgctBxOUq2kCCbQqEQvIwdOiY8s3pSmTs6ORlW41oYP2FWA7dfxvzb+
+         jL/viL3ecqJ26Fuc6oLYfD8+WhGMwM/ABX2edufGwRlrUfG2cQUWxUrsRwzcvzzVXcDk
+         sIw9Sv9yjknXSHSnPYnAgnzoI6OuKqGCCkb0hzYI7P+VMZH5o0GvJcJ0lPOhJx6Hz3GA
+         Aw+KSSOe917yRmBHbzDjfhYkFueOBCZhqYxLZwvtnUu0V05e2ZxqULfphKrbYjChXjU3
+         W3NOqmCKvb/iGzBOOBfag2KPQ/9p95eMAogvsIJhL5WfaAmou9TRL5ZfaCaZowDMvODr
+         tHXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HkHb9zDzaQCh7icuTIrBW1dLzBtZj3gG9lMpTgSrSE4=;
+        b=wor+w33hM/t3SZ1RsOY1hsMcUk05N5hEMD6laBDcG59+3hh1Pg7C0pZ5uigi5/ej+O
+         23coBN9FHzIvoMTUd8CkQ0lPK88L/WLYNjTCb8kIqdLUgbiiMxS/GstWJpGeXyMPI0SE
+         qeeepbITc33bAt0jmA4JDXrFX9D+cKlgiRW/IwPTjcQHT+pPTTsMKYKFNtgF+bm1Qjex
+         juv59wGx3Kr0gma5hM+eArgRruh2917oy5dBNZc+6Lb+wQd1yy4LoibeW7ouc7I2cIAZ
+         wgP27ZVeGl/qzsdnsUePsfjTb6+rcyaJbHaOcZO+4UH5QuYjEtThfbDfGm3DKQxfPV6+
+         bK/Q==
+X-Gm-Message-State: AOAM530UDrcrHTA3LvICwEXNWKw2qxoagz648amkELTk9VjxIR5JA76a
+        mbs6OlhPSrUXTJTWcKY/ZOCTRMp+7Gd2IKq86azXiQ==
+X-Google-Smtp-Source: ABdhPJwBrdywMt5x3Ze2ZxcFXXgrCbDZxAOQm3OTuht5rGWTVnQ9/gIhZUySEPXpta7fcDmFxIYbg84nCTDMxM6xgCk=
+X-Received: by 2002:aa7:c49a:0:b0:425:d526:98ad with SMTP id
+ m26-20020aa7c49a000000b00425d52698admr12673123edq.352.1651490339736; Mon, 02
+ May 2022 04:18:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220427144620.9105-1-pmalgujar@marvell.com> <20220427144620.9105-2-pmalgujar@marvell.com>
+In-Reply-To: <20220427144620.9105-2-pmalgujar@marvell.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 2 May 2022 13:18:49 +0200
+Message-ID: <CAMRc=Mf91eMF7D6CRtA8-HQ7pdtP343WUGhLG4qti_9zJF4ELQ@mail.gmail.com>
+Subject: Re: [PATCH 1/5] gpio: thunderx: avoid potential deadlock
+To:     Piyush Malgujar <pmalgujar@marvell.com>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Richter <rric@kernel.org>, cchavva@marvell.com,
+        wsadowski@marvell.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-=E4=BA=8E 2022=E5=B9=B45=E6=9C=882=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=8D=887:=
-00:10, Maxime Ripard <maxime@cerno=2Etech> =E5=86=99=E5=88=B0:
->Hi,
+On Wed, Apr 27, 2022 at 4:46 PM Piyush Malgujar <pmalgujar@marvell.com> wrote:
 >
->On Thu, Apr 28, 2022 at 09:09:03PM +0000, Ruslan Zalata wrote:
->> Some Allwinner SoCs like A13, A20 or T2 are equipped with two-channel
->> low rate (6 bit) ADC that is often used for extra keys=2E There's a dri=
-ver
->> for that already implementing standard input device, but it has these
->> limitations: 1) it cannot be used for general ADC data equisition, and
->> 2) it uses only one LRADC channel of two available=2E
->>=20
->> This driver provides basic hwmon interface to both channels of LRADC on
->> such Allwinner SoCs=2E
->>=20
->> Signed-off-by: Ruslan Zalata <rz@fabmicro=2Eru>
->> ---
->>  MAINTAINERS                       |   6 +
->>  drivers/hwmon/Kconfig             |  13 ++
->>  drivers/hwmon/Makefile            |   1 +
->>  drivers/hwmon/sun4i-lradc-hwmon=2Ec | 280 ++++++++++++++++++++++++++++=
-++
->>  4 files changed, 300 insertions(+)
->>  create mode 100644 drivers/hwmon/sun4i-lradc-hwmon=2Ec
->>=20
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 5e8c2f61176=2E=2Ed9c71e94133 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -18861,6 +18861,12 @@ S:	Maintained
->>  F:	Documentation/devicetree/bindings/input/allwinner,sun4i-a10-lradc-k=
-eys=2Eyaml
->>  F:	drivers/input/keyboard/sun4i-lradc-keys=2Ec
->> =20
->> +SUN4I LOW RES ADC HWMON DRIVER
->> +M:	Ruslan Zalata <rz@fabmicro=2Eru>
->> +L:	linux-hwmon@vger=2Ekernel=2Eorg
->> +S:	Maintained
->> +F:	drivers/hwmon/sun4i-lradc-hwmon=2Ec
->> +
->>  SUNDANCE NETWORK DRIVER
->>  M:	Denis Kirjanov <kda@linux-powerpc=2Eorg>
->>  L:	netdev@vger=2Ekernel=2Eorg
->> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
->> index 68a8a27ab3b=2E=2E86776488a81 100644
->> --- a/drivers/hwmon/Kconfig
->> +++ b/drivers/hwmon/Kconfig
->> @@ -1691,6 +1691,19 @@ config SENSORS_SIS5595
->>  	  This driver can also be built as a module=2E If so, the module
->>  	  will be called sis5595=2E
->> =20
->> +config SENSORS_SUN4I_LRADC
->> +	tristate "Allwinner A13/A20 LRADC hwmon"
->> +	depends on ARCH_SUNXI && !KEYBOARD_SUN4I_LRADC
->> +	help
->> +	  Say y here to support the LRADC found in Allwinner A13/A20 SoCs=2E
->> +	  Both channels are supported=2E
->> +
->> +	  This driver can also be built as module=2E If so, the module
->> +	  will be called sun4i-lradc-hwmon=2E
->> +
->> +	  This option is not compatible with KEYBOARD_SUN4I_LRADC, one
->> +	  of these must be used at a time=2E
+> Using irqsave/irqrestore locking variants to avoid any deadlock.
 >
->How do you plan on enforcing that?
->
->I guess a better path forward would be to either register an hwmon
->device in the original driver, or convert that driver to iio and use
->iio-hwmon=2E
 
-I think this driver should be use IIO, and then try to probe an IIO input
-if possible=2E
+I see you'll be resending this anyway so would you mind providing an
+example of a deadlock that is possible with no-irqsave variants?
+Thanks.
 
->
->Maxime
+Bart
+
+> Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
+> ---

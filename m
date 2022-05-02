@@ -2,244 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D1B4516990
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 05:19:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 021F751699B
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 05:42:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356753AbiEBDTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 23:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44862 "EHLO
+        id S1357160AbiEBDpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 23:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349452AbiEBDTr (ORCPT
+        with ESMTP id S229650AbiEBDp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 23:19:47 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46432DAA5
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 20:16:18 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Ks7TV5FR2zGp2K;
-        Mon,  2 May 2022 11:13:34 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 2 May 2022 11:16:15 +0800
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 2 May 2022 11:16:14 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     <catalin.marinas@arm.com>, <will@kernel.org>,
-        <akpm@linux-foundation.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <linux-mm@kvack.org>, <hch@infradead.org>, <arnd@arndb.de>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH v2 resend 4/5] arm64: mm: Convert to GENERIC_IOREMAP
-Date:   Mon, 2 May 2022 11:27:51 +0800
-Message-ID: <20220502032751.21503-1-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220429103225.75121-5-wangkefeng.wang@huawei.com>
-References: <20220429103225.75121-5-wangkefeng.wang@huawei.com>
+        Sun, 1 May 2022 23:45:29 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3EDD45060
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 20:42:00 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id k1so2955998pll.4
+        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 20:42:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VhMy0JI7nNqcQppVA0JnYf0znLff5xYbmdVFPc+7KFQ=;
+        b=ChL4RwRqNvbXjaSPkV0XOY0AhGcyDG9VMONy6kHgvW0Up2Ct3NrlwsQ8JPPPgxhxzx
+         MyHet0Q8sDBWDLzfsKwdb8kC1fZQUjdhMTKmd6bqo5Bn98pct4S58/gI1ScGiCsjtyy0
+         HULbiWyczH59s7EOEMjnL4nOFAOWSn5JsqIdVpmOCR6flpN/Z/O/kMvAnuRbFNFjLuVW
+         SCzFmWTI4Q3K8EQE5jFn3mqh53rdRAMCtj8ZUKUbTKx/6U6ueg/QAc3OQ8CLl+GiRpgk
+         s9Gxm4imDmYRi0Qsc5um+i4MzvnuLQT0p9xlBpSC7Z9spKmy+dP96bvyOVsywCYkFJGi
+         GMyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VhMy0JI7nNqcQppVA0JnYf0znLff5xYbmdVFPc+7KFQ=;
+        b=wbU64viq0l91X2U+wSaUuG8ZjxU9GYgQvW+NgdcdSJBrTz1NB5zniF6t0SPcdklajj
+         Bi67KI2MY92+ADVPCmKeRxckr5cnsfDLNC1NaY6JtC59Rk/Ogh7fWGAhvCJWQIRFnvwq
+         0kAd6YFQQXgSZFDNaYi9zupa5zPWFcBxrAniy5fxalJPbcBMC/9Aw2LGQTxjjb/ftN4I
+         nlkX+nFxknSbvt6BRXvfSDGUkUkJwsSlXlgLTqDKIAOpbyBBHQycj2LKU41beibbGWtO
+         P5R+0l4Wp6VqlFrE/lalFpRkWVOW3Z7rUztpL8KUVZcQjmfL8f/n56Q69BX7G9L6dxsn
+         Bscg==
+X-Gm-Message-State: AOAM530P7YqL8CAWq1pxW/ZD1fJl+tfx1SPiSRMJPZtKjX4T5jD0+yyg
+        teF0Fp+pc/m5lk21f6xHd0uUdg==
+X-Google-Smtp-Source: ABdhPJxQ9L5CeBdFW4cwMPIBeK3305HYCgwmo/7c5uyUgh63G1/L1nCkVvbO8lV2mxdW6FmybkuIGw==
+X-Received: by 2002:a17:902:b948:b0:153:9994:b587 with SMTP id h8-20020a170902b94800b001539994b587mr10048888pls.68.1651462920135;
+        Sun, 01 May 2022 20:42:00 -0700 (PDT)
+Received: from x1.hsd1.or.comcast.net ([2601:1c2:1001:7090:c18e:6070:88f2:a04d])
+        by smtp.gmail.com with ESMTPSA id h25-20020aa786d9000000b0050dc7628131sm3677842pfo.11.2022.05.01.20.41.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 May 2022 20:41:59 -0700 (PDT)
+From:   Drew Fustini <dfustini@baylibre.com>
+To:     Nishanth Menon <nm@ti.com>, Santosh Shilimkar <ssantosh@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Drew Fustini <dfustini@baylibre.com>,
+        Brad Griffis <bgriffis@ti.com>, Dave Gerlach <d-gerlach@ti.com>
+Subject: [PATCH] soc: ti: wkup_m3_ipc: Add debug option to halt m3 in suspend
+Date:   Sun,  1 May 2022 20:32:12 -0700
+Message-Id: <20220502033211.1383158-1-dfustini@baylibre.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add hook for arm64's special operation when ioremap() and iounmap(),
-then ioremap_wc/np/cache is converted to use ioremap_prot()
-from GENERIC_IOREMAP, update the Copyright and kill the unused
-inclusions.
+From: Dave Gerlach <d-gerlach@ti.com>
 
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+Add a debugfs option to allow configurable halting of the wkup_m3
+during suspend at the last possible point before low power mode entry.
+This condition can only be resolved through JTAG and advancing beyond
+the while loop in a8_lp_ds0_handler [1]. Although this hangs the system
+it forces the system to remain active once it has been entirely
+configured for low power mode entry, allowing for register inspection
+through JTAG to help in debugging transition errors.
+
+Halt mode can be set using the enable_off_mode entry under wkup_m3_ipc
+in the debugfs.
+
+[1] https://git.ti.com/cgit/processor-firmware/ti-amx3-cm3-pm-firmware/tree/src/pm_services/pm_handlers.c?h=08.02.00.006#n141
+
+Suggested-by: Brad Griffis <bgriffis@ti.com>
+Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
+[dfustini: add link for a8_lp_ds0_handler() in ti-amx3-cm3-pm-firmware]
+Signed-off-by: Drew Fustini <dfustini@baylibre.com>
 ---
-v2 resend:
-- use IOMEM_ERR_PTR to fix sparse warning found by lkp
+ drivers/soc/ti/wkup_m3_ipc.c | 79 +++++++++++++++++++++++++++++++++++-
+ include/linux/wkup_m3_ipc.h  |  2 +
+ 2 files changed, 80 insertions(+), 1 deletion(-)
 
- arch/arm64/Kconfig          |  1 +
- arch/arm64/include/asm/io.h | 20 ++++++---
- arch/arm64/kernel/acpi.c    |  2 +-
- arch/arm64/mm/ioremap.c     | 85 +++++--------------------------------
- 4 files changed, 27 insertions(+), 81 deletions(-)
-
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 20ea89d9ac2f..56673209fdb9 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -123,6 +123,7 @@ config ARM64
- 	select GENERIC_CPU_VULNERABILITIES
- 	select GENERIC_EARLY_IOREMAP
- 	select GENERIC_IDLE_POLL_SETUP
-+	select GENERIC_IOREMAP
- 	select GENERIC_IRQ_IPI
- 	select GENERIC_IRQ_PROBE
- 	select GENERIC_IRQ_SHOW
-diff --git a/arch/arm64/include/asm/io.h b/arch/arm64/include/asm/io.h
-index 7fd836bea7eb..042fa01940b8 100644
---- a/arch/arm64/include/asm/io.h
-+++ b/arch/arm64/include/asm/io.h
-@@ -163,13 +163,21 @@ extern void __memset_io(volatile void __iomem *, int, size_t);
- /*
-  * I/O memory mapping functions.
+diff --git a/drivers/soc/ti/wkup_m3_ipc.c b/drivers/soc/ti/wkup_m3_ipc.c
+index c35eaecf4ab4..19bed465ad94 100644
+--- a/drivers/soc/ti/wkup_m3_ipc.c
++++ b/drivers/soc/ti/wkup_m3_ipc.c
+@@ -7,6 +7,7 @@
+  * Dave Gerlach <d-gerlach@ti.com>
   */
--extern void __iomem *__ioremap(phys_addr_t phys_addr, size_t size, pgprot_t prot);
--extern void iounmap(volatile void __iomem *addr);
--extern void __iomem *ioremap_cache(phys_addr_t phys_addr, size_t size);
  
--#define ioremap(addr, size)		__ioremap((addr), (size), __pgprot(PROT_DEVICE_nGnRE))
--#define ioremap_wc(addr, size)		__ioremap((addr), (size), __pgprot(PROT_NORMAL_NC))
--#define ioremap_np(addr, size)		__ioremap((addr), (size), __pgprot(PROT_DEVICE_nGnRnE))
-+void __iomem *arch_ioremap(phys_addr_t phys_addr, size_t size, unsigned long prot);
-+#define arch_ioremap arch_ioremap
-+
-+int arch_iounmap(void __iomem *addr);
-+#define arch_iounmap arch_iounmap
-+
-+#define _PAGE_IOREMAP PROT_DEVICE_nGnRE
-+
-+#define ioremap_wc(addr, size)		ioremap_prot((addr), (size), PROT_NORMAL_NC)
-+#define ioremap_np(addr, size)		ioremap_prot((addr), (size), PROT_DEVICE_nGnRnE)
-+#define ioremap_cache(addr, size) ({							\
-+	pfn_is_map_memory(__phys_to_pfn(addr)) ?					\
-+	(void __iomem *)__phys_to_virt(addr) : ioremap_prot(addr, size, PROT_NORMAL);	\
-+})
++#include <linux/debugfs.h>
+ #include <linux/err.h>
+ #include <linux/firmware.h>
+ #include <linux/kernel.h>
+@@ -50,6 +51,9 @@
+ #define IPC_IO_ISOLATION_STAT_SHIFT	(10)
+ #define IPC_IO_ISOLATION_STAT_MASK	(0x1 << 10)
  
- /*
-  * io{read,write}{16,32,64}be() macros
-diff --git a/arch/arm64/kernel/acpi.c b/arch/arm64/kernel/acpi.c
-index e4dea8db6924..a5a256e3f9fe 100644
---- a/arch/arm64/kernel/acpi.c
-+++ b/arch/arm64/kernel/acpi.c
-@@ -351,7 +351,7 @@ void __iomem *acpi_os_ioremap(acpi_physical_address phys, acpi_size size)
- 				prot = __acpi_get_writethrough_mem_attribute();
- 		}
++#define IPC_DBG_HALT_SHIFT		(11)
++#define IPC_DBG_HALT_MASK		(0x1 << 11)
++
+ #define M3_STATE_UNKNOWN		0
+ #define M3_STATE_RESET			1
+ #define M3_STATE_INITED			2
+@@ -157,6 +161,73 @@ static int wkup_m3_init_scale_data(struct wkup_m3_ipc *m3_ipc,
+ 	return ret;
+ }
+ 
++#ifdef CONFIG_DEBUG_FS
++static void wkup_m3_set_halt_late(bool enabled)
++{
++	if (enabled)
++		m3_ipc_state->halt = (1 << IPC_DBG_HALT_SHIFT);
++	else
++		m3_ipc_state->halt = 0;
++}
++
++static int option_get(void *data, u64 *val)
++{
++	u32 *option = data;
++
++	*val = *option;
++
++	return 0;
++}
++
++static int option_set(void *data, u64 val)
++{
++	u32 *option = data;
++
++	*option = val;
++
++	if (option == &m3_ipc_state->halt) {
++		if (val)
++			wkup_m3_set_halt_late(true);
++		else
++			wkup_m3_set_halt_late(false);
++	}
++
++	return 0;
++}
++
++DEFINE_SIMPLE_ATTRIBUTE(wkup_m3_ipc_option_fops, option_get, option_set,
++			"%llu\n");
++
++static int wkup_m3_ipc_dbg_init(struct wkup_m3_ipc *m3_ipc)
++{
++	m3_ipc->dbg_path = debugfs_create_dir("wkup_m3_ipc", NULL);
++
++	if (!m3_ipc->dbg_path)
++		return -EINVAL;
++
++	(void)debugfs_create_file("enable_late_halt", 0644,
++				  m3_ipc->dbg_path,
++				  &m3_ipc->halt,
++				  &wkup_m3_ipc_option_fops);
++
++	return 0;
++}
++
++static inline void wkup_m3_ipc_dbg_destroy(struct wkup_m3_ipc *m3_ipc)
++{
++	debugfs_remove_recursive(m3_ipc->dbg_path);
++}
++#else
++static inline int wkup_m3_ipc_dbg_init(struct wkup_m3_ipc *m3_ipc)
++{
++	return 0;
++}
++
++static inline void wkup_m3_ipc_dbg_destroy(struct wkup_m3_ipc *m3_ipc)
++{
++}
++#endif /* CONFIG_DEBUG_FS */
++
+ static void am33xx_txev_eoi(struct wkup_m3_ipc *m3_ipc)
+ {
+ 	writel(AM33XX_M3_TXEV_ACK,
+@@ -402,7 +473,9 @@ static int wkup_m3_prepare_low_power(struct wkup_m3_ipc *m3_ipc, int state)
+ 	wkup_m3_ctrl_ipc_write(m3_ipc, m3_power_state, 1);
+ 	wkup_m3_ctrl_ipc_write(m3_ipc, m3_ipc->mem_type |
+ 			       m3_ipc->vtt_conf |
+-			       m3_ipc->isolation_conf, 4);
++			       m3_ipc->isolation_conf |
++			       m3_ipc->halt, 4);
++
+ 	wkup_m3_ctrl_ipc_write(m3_ipc, DS_IPC_DEFAULT, 2);
+ 	wkup_m3_ctrl_ipc_write(m3_ipc, DS_IPC_DEFAULT, 3);
+ 	wkup_m3_ctrl_ipc_write(m3_ipc, DS_IPC_DEFAULT, 6);
+@@ -633,6 +706,8 @@ static int wkup_m3_ipc_probe(struct platform_device *pdev)
+ 		goto err_put_rproc;
  	}
--	return __ioremap(phys, size, prot);
-+	return ioremap_prot(phys, size, pgprot_val(prot));
- }
  
- /*
-diff --git a/arch/arm64/mm/ioremap.c b/arch/arm64/mm/ioremap.c
-index b7c81dacabf0..08fc30eb2721 100644
---- a/arch/arm64/mm/ioremap.c
-+++ b/arch/arm64/mm/ioremap.c
-@@ -1,96 +1,33 @@
- // SPDX-License-Identifier: GPL-2.0-only
--/*
-- * Based on arch/arm/mm/ioremap.c
-- *
-- * (C) Copyright 1995 1996 Linus Torvalds
-- * Hacked for ARM by Phil Blundell <philb@gnu.org>
-- * Hacked to allow all architectures to build, and various cleanups
-- * by Russell King
-- * Copyright (C) 2012 ARM Ltd.
-- */
++	wkup_m3_ipc_dbg_init(m3_ipc);
++
+ 	return 0;
  
--#include <linux/export.h>
- #include <linux/mm.h>
- #include <linux/vmalloc.h>
- #include <linux/io.h>
+ err_put_rproc:
+@@ -644,6 +719,8 @@ static int wkup_m3_ipc_probe(struct platform_device *pdev)
  
--#include <asm/fixmap.h>
--#include <asm/tlbflush.h>
--
--static void __iomem *__ioremap_caller(phys_addr_t phys_addr, size_t size,
--				      pgprot_t prot, void *caller)
-+void __iomem *arch_ioremap(phys_addr_t phys_addr, size_t size, unsigned long prot)
+ static int wkup_m3_ipc_remove(struct platform_device *pdev)
  {
--	unsigned long last_addr;
--	unsigned long offset = phys_addr & ~PAGE_MASK;
--	int err;
--	unsigned long addr;
--	struct vm_struct *area;
--
--	/*
--	 * Page align the mapping address and size, taking account of any
--	 * offset.
--	 */
--	phys_addr &= PAGE_MASK;
--	size = PAGE_ALIGN(size + offset);
-+	unsigned long last_addr = phys_addr + size - 1;
-+	int ret = -EINVAL;
++	wkup_m3_ipc_dbg_destroy(m3_ipc_state);
++
+ 	mbox_free_channel(m3_ipc_state->mbox);
  
--	/*
--	 * Don't allow wraparound, zero size or outside PHYS_MASK.
--	 */
--	last_addr = phys_addr + size - 1;
--	if (!size || last_addr < phys_addr || (last_addr & ~PHYS_MASK))
--		return NULL;
-+	/* Don't allow outside PHYS_MASK */
-+	if (last_addr & ~PHYS_MASK)
-+		return IOMEM_ERR_PTR(ret);
+ 	rproc_shutdown(m3_ipc_state->rproc);
+diff --git a/include/linux/wkup_m3_ipc.h b/include/linux/wkup_m3_ipc.h
+index fef0fac60f8c..26d1eb058fa3 100644
+--- a/include/linux/wkup_m3_ipc.h
++++ b/include/linux/wkup_m3_ipc.h
+@@ -36,6 +36,7 @@ struct wkup_m3_ipc {
+ 	int vtt_conf;
+ 	int isolation_conf;
+ 	int state;
++	u32 halt;
  
--	/*
--	 * Don't allow RAM to be mapped.
--	 */
-+	/* Don't allow RAM to be mapped. */
- 	if (WARN_ON(pfn_is_map_memory(__phys_to_pfn(phys_addr))))
--		return NULL;
-+		return IOMEM_ERR_PTR(ret);
+ 	unsigned long volt_scale_offsets;
+ 	const char *sd_fw_name;
+@@ -46,6 +47,7 @@ struct wkup_m3_ipc {
  
--	area = get_vm_area_caller(size, VM_IOREMAP, caller);
--	if (!area)
--		return NULL;
--	addr = (unsigned long)area->addr;
--	area->phys_addr = phys_addr;
--
--	err = ioremap_page_range(addr, addr + size, phys_addr, prot);
--	if (err) {
--		vunmap((void *)addr);
--		return NULL;
--	}
--
--	return (void __iomem *)(offset + addr);
--}
--
--void __iomem *__ioremap(phys_addr_t phys_addr, size_t size, pgprot_t prot)
--{
--	return __ioremap_caller(phys_addr, size, prot,
--				__builtin_return_address(0));
-+	return NULL;
- }
--EXPORT_SYMBOL(__ioremap);
+ 	struct wkup_m3_ipc_ops *ops;
+ 	int is_rtc_only;
++	struct dentry *dbg_path;
+ };
  
--void iounmap(volatile void __iomem *io_addr)
-+int arch_iounmap(void __iomem *addr)
- {
--	unsigned long addr = (unsigned long)io_addr & PAGE_MASK;
--
- 	/*
- 	 * We could get an address outside vmalloc range in case
- 	 * of ioremap_cache() reusing a RAM mapping.
- 	 */
--	if (is_vmalloc_addr((void *)addr))
--		vunmap((void *)addr);
--}
--EXPORT_SYMBOL(iounmap);
--
--void __iomem *ioremap_cache(phys_addr_t phys_addr, size_t size)
--{
--	/* For normal memory we already have a cacheable mapping. */
--	if (pfn_is_map_memory(__phys_to_pfn(phys_addr)))
--		return (void __iomem *)__phys_to_virt(phys_addr);
--
--	return __ioremap_caller(phys_addr, size, __pgprot(PROT_NORMAL),
--				__builtin_return_address(0));
-+	return is_vmalloc_addr(addr) ? 0 : -EINVAL;
- }
--EXPORT_SYMBOL(ioremap_cache);
- 
- /*
-  * Must be called after early_fixmap_init
+ struct wkup_m3_wakeup_src {
 -- 
-2.35.3
+2.32.0
 

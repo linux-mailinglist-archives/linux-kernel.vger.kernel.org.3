@@ -2,149 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3632E516DD1
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 12:01:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB05516DD6
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 12:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384515AbiEBKFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 06:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45368 "EHLO
+        id S1384467AbiEBKF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 06:05:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384502AbiEBKFI (ORCPT
+        with ESMTP id S1384507AbiEBKF0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 06:05:08 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF0363F8;
-        Mon,  2 May 2022 03:01:24 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R371e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VC-hchj_1651485680;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VC-hchj_1651485680)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 02 May 2022 18:01:22 +0800
-Date:   Mon, 2 May 2022 18:01:20 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Matthew Wilcox <willy@infradead.org>, Gao Xiang <xiang@kernel.org>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the folio tree
-Message-ID: <Ym+r8OK3eWUihmr6@B-P7TQMD6M-0146.local>
-References: <20220502180425.7305c335@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220502180425.7305c335@canb.auug.org.au>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 2 May 2022 06:05:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432A663F3;
+        Mon,  2 May 2022 03:01:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4320B8136B;
+        Mon,  2 May 2022 10:01:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F2EDC385AF;
+        Mon,  2 May 2022 10:01:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651485707;
+        bh=+lWf8A4QQf40c+YASmhZUbPkXSvAxkZ9F5BSWGticCQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=FKR/B9fZmmLbqGk2BQuYviL/XzIJF1U2nKrfXCttl+j/KZdc5z9e4rcsXlHyk705n
+         +pGtAhAn2D8QPRGZefbUbpnEb8LG0RC+pkZjWD/0MYs5sTcN+l5TR0DO10TF2SFytM
+         4MrhmJ/DwgcUmmRsvmn1INgekDoa9ty4EiAmC/NdhLiLrvoJxl5PluL08sW21BhooF
+         6H0SwL9kHmYP0ydts/IZkhBOaQAhEU03KSiAiyuBVWbYIc+LIjqmH3O/p5Y6gSDMxz
+         +4Ycdw+3oDj5DFsMB9/pHUghXa20tyiG/vl7xF2eNhusq2WI0rWStOMcGLgqGxS0CL
+         nubamuYv6PSvg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nlSsD-008OF8-9K; Mon, 02 May 2022 11:01:45 +0100
+Date:   Mon, 02 May 2022 11:01:44 +0100
+Message-ID: <87ilqoi77b.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Oliver Upton <oupton@google.com>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v4 1/4] mm: add NR_SECONDARY_PAGETABLE to count secondary page table uses.
+In-Reply-To: <20220429201131.3397875-2-yosryahmed@google.com>
+References: <20220429201131.3397875-1-yosryahmed@google.com>
+        <20220429201131.3397875-2-yosryahmed@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: yosryahmed@google.com, tj@kernel.org, hannes@cmpxchg.org, lizefan.x@bytedance.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org, akpm@linux-foundation.org, mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com, oupton@google.com, cgroups@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org, linux-mm@kvack.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+On Fri, 29 Apr 2022 21:11:28 +0100,
+Yosry Ahmed <yosryahmed@google.com> wrote:
+> 
+> Add NR_SECONDARY_PAGETABLE stat to count secondary page table uses, e.g.
+> KVM mmu. This provides more insights on the kernel memory used
+> by a workload.
+> 
+> This stat will be used by subsequent patches to count KVM mmu
+> memory usage.
+> 
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> ---
+>  Documentation/admin-guide/cgroup-v2.rst | 5 +++++
+>  Documentation/filesystems/proc.rst      | 4 ++++
+>  drivers/base/node.c                     | 2 ++
+>  fs/proc/meminfo.c                       | 2 ++
+>  include/linux/mmzone.h                  | 1 +
+>  mm/memcontrol.c                         | 1 +
+>  mm/page_alloc.c                         | 6 +++++-
+>  mm/vmstat.c                             | 1 +
+>  8 files changed, 21 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+> index 69d7a6983f78..828cb6b6f918 100644
+> --- a/Documentation/admin-guide/cgroup-v2.rst
+> +++ b/Documentation/admin-guide/cgroup-v2.rst
+> @@ -1312,6 +1312,11 @@ PAGE_SIZE multiple when read back.
+>  	  pagetables
+>                  Amount of memory allocated for page tables.
+>  
+> +	  secondary_pagetables
+> +		Amount of memory allocated for secondary page tables,
+> +		this currently includes KVM mmu allocations on x86
+> +		and arm64.
 
-On Mon, May 02, 2022 at 06:04:25PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the folio tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> fs/erofs/fscache.c:255:10: error: 'const struct address_space_operations' has no member named 'readpage'
->   255 |         .readpage = erofs_fscache_meta_readpage,
->       |          ^~~~~~~~
-> fs/erofs/fscache.c:255:21: error: initialization of 'int (*)(struct page *, struct writeback_control *)' from incompatible pointer type 'int (*)(struct file *, struct page *)' [-Werror=incompatible-pointer-types]
->   255 |         .readpage = erofs_fscache_meta_readpage,
->       |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> fs/erofs/fscache.c:255:21: note: (near initialization for 'erofs_fscache_meta_aops.writepage')
-> fs/erofs/fscache.c:259:10: error: 'const struct address_space_operations' has no member named 'readpage'
->   259 |         .readpage = erofs_fscache_readpage,
->       |          ^~~~~~~~
-> fs/erofs/fscache.c:259:21: error: initialization of 'int (*)(struct page *, struct writeback_control *)' from incompatible pointer type 'int (*)(struct file *, struct page *)' [-Werror=incompatible-pointer-types]
->   259 |         .readpage = erofs_fscache_readpage,
->       |                     ^~~~~~~~~~~~~~~~~~~~~~
-> fs/erofs/fscache.c:259:21: note: (near initialization for 'erofs_fscache_access_aops.writepage')
-> 
-> Caused by commit
-> 
->   00da6d4b7219 ("mm,fs: Remove stray references to ->readpage")
-> 
-> interacting with commits
-> 
->   60aa7e805f00 ("erofs: implement fscache-based metadata read")
->   e472f468adbe ("erofs: implement fscache-based data read for non-inline layout")
-> 
-> from the erofs tree.
-> 
-> I have applied the following merge fix patch.
-> 
+Can you please explain what the rationale is for this? We already
+account for the (arm64) S2 PTs as a userspace allocation (see
+115bae923ac8bb29ee635). You are saying that this is related to a
+'workload', but given that the accounting is global, I fail to see how
+you can attribute these allocations on a particular VM.
 
-That looks good to me, will point out this conflict then.
+What do you plan to do for IOMMU page tables? After all, they serve
+the exact same purpose, and I'd expect these to be handled the same
+way (i.e. why is this KVM specific?).
 
 Thanks,
-Gao Xiang
 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Mon, 2 May 2022 17:57:39 +1000
-> Subject: [PATCH] fixup for "mm,fs: Remove stray references to ->readpage"
-> 
-> interacting with commits
-> 
->   60aa7e805f00 ("erofs: implement fscache-based metadata read")
->   e472f468adbe ("erofs: implement fscache-based data read for non-inline layout")
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  fs/erofs/fscache.c | 10 ++++------
->  1 file changed, 4 insertions(+), 6 deletions(-)
-> 
-> diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
-> index a402d8f0a063..1bb2d0fc19c8 100644
-> --- a/fs/erofs/fscache.c
-> +++ b/fs/erofs/fscache.c
-> @@ -59,10 +59,9 @@ static int erofs_fscache_read_folios(struct fscache_cookie *cookie,
->  	return ret;
->  }
->  
-> -static int erofs_fscache_meta_readpage(struct file *data, struct page *page)
-> +static int erofs_fscache_meta_read_folio(struct file *data, struct folio *folio)
->  {
->  	int ret;
-> -	struct folio *folio = page_folio(page);
->  	struct super_block *sb = folio_mapping(folio)->host->i_sb;
->  	struct erofs_map_dev mdev = {
->  		.m_deviceid = 0,
-> @@ -110,9 +109,8 @@ static int erofs_fscache_readpage_inline(struct folio *folio,
->  	return 0;
->  }
->  
-> -static int erofs_fscache_readpage(struct file *file, struct page *page)
-> +static int erofs_fscache_read_folio(struct file *file, struct folio *folio)
->  {
-> -	struct folio *folio = page_folio(page);
->  	struct inode *inode = folio_mapping(folio)->host;
->  	struct super_block *sb = inode->i_sb;
->  	struct erofs_map_blocks map;
-> @@ -252,11 +250,11 @@ static void erofs_fscache_readahead(struct readahead_control *rac)
->  }
->  
->  static const struct address_space_operations erofs_fscache_meta_aops = {
-> -	.readpage = erofs_fscache_meta_readpage,
-> +	.read_folio = erofs_fscache_meta_read_folio,
->  };
->  
->  const struct address_space_operations erofs_fscache_access_aops = {
-> -	.readpage = erofs_fscache_readpage,
-> +	.read_folio = erofs_fscache_read_folio,
->  	.readahead = erofs_fscache_readahead,
->  };
->  
-> -- 
-> 2.35.1
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+	M.
 
-
+-- 
+Without deviation from the norm, progress is not possible.

@@ -2,81 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC09517649
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 20:02:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CC6251764E
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 20:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386806AbiEBSGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 14:06:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59886 "EHLO
+        id S244613AbiEBSJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 14:09:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386791AbiEBSGG (ORCPT
+        with ESMTP id S238752AbiEBSJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 14:06:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C211113D
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 11:02:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651514556;
+        Mon, 2 May 2022 14:09:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A6824F;
+        Mon,  2 May 2022 11:05:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8452DB81995;
+        Mon,  2 May 2022 18:05:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2319FC385A4;
+        Mon,  2 May 2022 18:05:50 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="foTQPk/H"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1651514748;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/7hFm9ltFIzBATidA3Ww0iDJkWtpV+O0jI4LMjG86v8=;
-        b=JFTpcd50zgJOki0UH1r7lZxpArDCzT9229Q1bn/TynvU/835HdM6e/P7zbOGTEWMt3S5oc
-        PN25mrztMS0KxwgmKsGqwiXytpeN0O7lR3Szga4FEnnGDenzusDOJibuc0F57ZgHttQnnN
-        Kgz1u6V66WbuyKTDcdSAMIW6A6EguNI=
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
- [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-462-2KcjjT-CP-edNLHnJrQCCw-1; Mon, 02 May 2022 14:02:35 -0400
-X-MC-Unique: 2KcjjT-CP-edNLHnJrQCCw-1
-Received: by mail-pf1-f200.google.com with SMTP id y141-20020a626493000000b0050d8c0745a3so7514678pfb.21
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 11:02:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=/7hFm9ltFIzBATidA3Ww0iDJkWtpV+O0jI4LMjG86v8=;
-        b=5CLuIsE2hcHJJovUZ6TDdo4WMYnl/PuX119IPwrrgIK0Ro8h5VgWnuXlv6YvlGjPpX
-         Cve7ctO3G6ld3yNhCE7L8ZpfTDlxK/LKaqiTkF2MLMPb9m4mBfdNxTAdyyGqaSSDW2gq
-         H2f6AmxFPWnS5Q0YE4QizNvCr3ri72KiTx3PJ3+jWsyeGDGJT0136UDRMxD8P47y4UkC
-         plS6LdDT6/+0Iyu6D/psRi0Ei6j3Guyc/sEZwNHOJCXE3LMb0dQuthplQcLL7m/F8V7V
-         ETDUFxe6q5ivoc0oZCkF988H1Nn7Ywrk7ybsaPdtoGiTYrVp9k+FycpL53BKBKuc+jbd
-         Y+kQ==
-X-Gm-Message-State: AOAM5321IqKRfgWUNmySqfH/0o0/DkYMdxCzVm/yg0LIMFtCFQ1Zb9dc
-        QVa+NIXC4AbpPUhQ/SipYSpFvGBs0LarVC2R8Xby60d9rmHFJck9Ik/9dSY8dpKAs15wujAAV//
-        ck59IiBz3rGXgtSXKe1wKnyyO
-X-Received: by 2002:a63:8442:0:b0:3ab:2451:5239 with SMTP id k63-20020a638442000000b003ab24515239mr10519518pgd.75.1651514554314;
-        Mon, 02 May 2022 11:02:34 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwSCpzMt2Hf99prkkLKqQDtNuXYmNZP4X35wY6IcPgEq003e4qRkyfeq0V97I2uydXBXWVeWg==
-X-Received: by 2002:a63:8442:0:b0:3ab:2451:5239 with SMTP id k63-20020a638442000000b003ab24515239mr10519492pgd.75.1651514554007;
-        Mon, 02 May 2022 11:02:34 -0700 (PDT)
-Received: from [10.10.69.234] ([8.34.116.185])
-        by smtp.gmail.com with ESMTPSA id x17-20020a17090ab01100b001d97f7fca06sm656pjq.24.2022.05.02.11.02.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 11:02:33 -0700 (PDT)
-Message-ID: <29d0c1c3-a44e-4573-7e7e-32be07544dbe@redhat.com>
-Date:   Mon, 2 May 2022 20:02:31 +0200
+        bh=ctDsXsKXvAtZj691w4iWAEq9RykXl3vWrD9DktFiGVY=;
+        b=foTQPk/HYdy167gL1/7PpthZ+BJtH/emMh3g9JqQsWiye7suZmTFXAoDLqutHT6ZJS/cmq
+        n1ko2twM3MeT/jcKNO+Qqhe4jHuDdqxZpg2p1UYkHrOQjVwGqqHvGEKBgUrL71G69WYM/B
+        GbP1nSXoT0ngZedfSfHzrFNIuVPyIH8=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 83a2e9c6 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Mon, 2 May 2022 18:05:45 +0000 (UTC)
+Date:   Mon, 2 May 2022 20:04:21 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Lennart Poettering <mzxreary@0pointer.de>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Alexander Graf <graf@amazon.com>,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        Torben Hansen <htorben@amazon.co.uk>,
+        Jann Horn <jannh@google.com>
+Subject: Re: [PATCH 2/2] random: add fork_event sysctl for polling VM forks
+Message-ID: <YnAc4hwPyByF4kZ5@zx2c4.com>
+References: <20220502140602.130373-1-Jason@zx2c4.com>
+ <20220502140602.130373-2-Jason@zx2c4.com>
+ <Ym/7UlgQ5VjjC76P@gardel-login>
+ <YnAC00VtU8MGb7vO@zx2c4.com>
+ <YnAMBzhcJhGR5XOK@gardel-login>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Content-Language: en-US
-To:     Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        John Dias <joaodias@google.com>
-References: <20220502173558.2510641-1-minchan@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH] mm: fix is_pinnable_page against on cma page
-In-Reply-To: <20220502173558.2510641-1-minchan@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YnAMBzhcJhGR5XOK@gardel-login>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,54 +69,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02.05.22 19:35, Minchan Kim wrote:
-> Pages on CMA area could have MIGRATE_ISOLATE as well as MIGRATE_CMA
-> so current is_pinnable_page could miss CMA pages which has MIGRATE_
-> ISOLATE. It ends up putting CMA pages longterm pinning possible on
-> pin_user_pages APIs so CMA allocation fails.
+Hey Lennart,
+
+On Mon, May 02, 2022 at 06:51:19PM +0200, Lennart Poettering wrote:
+> On Mo, 02.05.22 18:12, Jason A. Donenfeld (Jason@zx2c4.com) wrote:
 > 
-> The CMA allocation path protects the migration type change race
-> using zone->lock but what GUP path need to know is just whether the
-> page is on CMA area or not rather than exact type. Thus, we don't
-> need zone->lock but just checks the migratype in either of
-> (MIGRATE_ISOLATE and MIGRATE_CMA).
+> > > > In order to inform userspace of virtual machine forks, this commit adds
+> > > > a "fork_event" sysctl, which does not return any data, but allows
+> > > > userspace processes to poll() on it for notification of VM forks.
+> > > >
+> > > > It avoids exposing the actual vmgenid from the hypervisor to userspace,
+> > > > in case there is any randomness value in keeping it secret. Rather,
+> > > > userspace is expected to simply use getrandom() if it wants a fresh
+> > > > value.
+> > >
+> > > Wouldn't it make sense to expose a monotonic 64bit counter of detected
+> > > VM forks since boot through read()? It might be interesting to know
+> > > for userspace how many forks it missed the fork events for. Moreover it
+> > > might be interesting to userspace to know if any fork happened so far
+> > > *at* *all*, by checking if the counter is non-zero.
+> >
+> > "Might be interesting" is different from "definitely useful". I'm not
+> > going to add this without a clear use case. This feature is pretty
+> > narrowly scoped in its objectives right now, and I intend to keep it
+> > that way if possible.
 > 
-> Signed-off-by: Minchan Kim <minchan@kernel.org>
-> ---
->  include/linux/mm.h | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+> Sure, whatever. I mean, if you think it's preferable to have 3 API
+> abstractions for the same concept each for it's special usecase, then
+> that's certainly one way to do things. I personally would try to
+> figure out a modicum of generalization for things like this. But maybe
+> that' just me…
 > 
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 6acca5cecbc5..f59bbe3296e3 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -1625,8 +1625,10 @@ static inline bool page_needs_cow_for_dma(struct vm_area_struct *vma,
->  #ifdef CONFIG_MIGRATION
->  static inline bool is_pinnable_page(struct page *page)
->  {
-> -	return !(is_zone_movable_page(page) || is_migrate_cma_page(page)) ||
-> -		is_zero_pfn(page_to_pfn(page));
-> +	int mt = get_pageblock_migratetype(page);
-> +
-> +	return !(is_zone_movable_page(page) || mt == MIGRATE_CMA ||
-> +		mt == MIGRATE_ISOLATE || is_zero_pfn(page_to_pfn(page)));
->  }
->  #else
->  static inline bool is_pinnable_page(struct page *page)
+> I can just tell you, that in systemd we'd have a usecase for consuming
+> such a generation counter: we try to provide stable MAC addresses for
+> synthetic network interfaces managed by networkd, so we hash them from
+> /etc/machine-id, but otoh people also want them to change when they
+> clone their VMs. We could very nicely solve this if we had a
+> generation counter easily accessible from userspace, that starts at 0
+> initially. Because then we can hash as we always did when the counter
+> is zero, but otherwise use something else, possibly hashed from the
+> generation counter.
 
-That implies that other memory ranges that are currently isolated
-(memory offlining, alloc_contig_range()) cannot be pinned. That might
-not be a bad thing, however, I think we could end up failing to pin
-something that's temporarily unmovable (due to temporary references).
+This doesn't work, because you could have memory-A split into memory-A.1
+and memory-A.2, and both A.2 and A.1 would ++counter, and wind up with
+the same new value "2". The solution is to instead have the hypervisor
+pass a unique value and a counter. We currently have a 16 byte unique
+value from the hypervisor, which I'm keeping as a kernel space secret
+for the RNG; we're waiting on a word-sized monotonic counter interface
+from hypervisors in the future. When we have the latter, then we can
+start talking about mmapable things. Your use case would probably be
+served by exposing that 16-byte unique value (hashed with some constant
+for safety I suppose), but I'm hesitant to start going down that route
+all at once, especially if we're to have a more useful counter in the
+future.
 
-However, I assume we have the same issue right now already with
-ZONE_MOVABLE and MIGRATE_CMA when trying to pin a page residing on these
-there are temporarily unmovable and we fail to migrate. But it would now
-apply even without ZONE_MOVABLE or MIGRATE_CMA. Hm...
-
-
--- 
-Thanks,
-
-David / dhildenb
-
+Jason

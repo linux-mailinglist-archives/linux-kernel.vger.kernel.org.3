@@ -2,77 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DAF0517264
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 17:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D79A517268
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 17:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385748AbiEBPYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 11:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56146 "EHLO
+        id S1385739AbiEBPYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 11:24:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385801AbiEBPYI (ORCPT
+        with ESMTP id S1385751AbiEBPYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 11:24:08 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6CA1208C
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 08:20:39 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id w17so26569119ybh.9
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 08:20:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VG2N1KHd1YR2ZF1sjkCgsuS94s3wv0dEZ2AS2biKRuc=;
-        b=nCCr/m44vAOB3fWxcTwSvULnXuiNVu4xAEa/q8PX0e8wp//HRJ3pAwZlfI8oXQakqb
-         PBNA5VrluDTvJXwHjjEqKVrz+t1ZAhOuAy0UZ/lpPuIF5TfAQhvGp0eP9kDlGthADP7B
-         jQS2jgmlIf2O2YIMWFKayiS6OkGnXXTuI6mSozGLIgWSqWTudoL0mragtOrIMycv0iNu
-         cZvbiKKjzeuQMjCAHgd1ar9MSdep3a1AilDwleb2gMChOjj8zJLFVuMg4VeHUCWQC8gh
-         4i9wU09zBuZyOBMRAX6+2An3+4aqYMkmsLVezmWAt06zT2xLERXvPiNYHUXkJ6I1taeF
-         kDFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VG2N1KHd1YR2ZF1sjkCgsuS94s3wv0dEZ2AS2biKRuc=;
-        b=pTgVLKq+5v25Kx5ccd+cc76bchfLuDSY4K3qiF9QghW7NOedV2bQenajdgVvo/hKys
-         +ERqoP4BP9Lz+/CRtsd7KdCJMPPlwiCBWS6An4+S2uH1QgtJyvcm6M4sv5qT2DIdG7Td
-         jUX8mSVrgEUvKnM1sjufzLfC7D6jfNDpjvr877owz+ZCY12ib9gLREq7h55Csfa38+Je
-         BsGL6Ej5Tn3+vsq/XsLcYoPDZTwDkRUuFuyjn6Nfm39rcACtZ36CDpWp9bkzROd3rNrz
-         xzAnk4azs8lfvd0GS81paLjq37IQy8qZDXez0GKOX1V/38qluOiQU5e9AMU10zONQ7UJ
-         yFNQ==
-X-Gm-Message-State: AOAM531SD+k7D+tttN3CpzJ+dxV81QwqJcXO60noE5IN//t3uu8/CdDm
-        tUGDDgKWMi5UmCcY1ynNmnkdLNI5Z5Bc4DweRjzknA==
-X-Google-Smtp-Source: ABdhPJzqk8+IJH8fkyTp0bTuIuMWgJsHqUrnpAZSbYcMmkZ/+21K1dsNoH6iUg94I0Y7z6gpiKYrRf3BnqDN09p5vbs=
-X-Received: by 2002:a25:3455:0:b0:648:44db:51e0 with SMTP id
- b82-20020a253455000000b0064844db51e0mr10124096yba.314.1651504838091; Mon, 02
- May 2022 08:20:38 -0700 (PDT)
+        Mon, 2 May 2022 11:24:00 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DEEBA1AF
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 08:20:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651504830; x=1683040830;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=3eV2vVXH7WHHzEX7UlnYBUTcCZN92RvrzzPd/WWwpzQ=;
+  b=UxnBSN9QyG/5RrrRGvMOO76SDBEOJBprRzOqswsjTr9UXBFQmmrepSPl
+   DeaKUF7SqT0iStblxnkwyFFNsEtDs8h7cGsCLl3kqF4DwQra+uKrQtFQB
+   PqD/7gK7j8XSqOH5PpxpVe4XHgkzUKqwK7jJ+QPWbs7975qjZlDkkp1c3
+   cCUvVHrBNiolTLxD3O0uOYvgJh2VbKdhAAmsdTLvpPxe8Ate4AXVPvl3m
+   FWGd3y3nDRhx1Gv+5Md0luynz5Dv4XnIG7g9IIag6ZoQ9cDoJfL36cgBo
+   y4OqHjIAJAEgT+vOEi4Vkdhw6OwvQFEePHeDjha138Q2bmwkw7QtKAo/0
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="330227449"
+X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
+   d="scan'208";a="330227449"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 08:20:28 -0700
+X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
+   d="scan'208";a="663565365"
+Received: from gsteinke-mobl.amr.corp.intel.com (HELO [10.209.165.8]) ([10.209.165.8])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 08:20:26 -0700
+Message-ID: <c18e273b-f30c-da5c-581b-0cc4672f4481@intel.com>
+Date:   Mon, 2 May 2022 08:20:45 -0700
 MIME-Version: 1.0
-References: <20220429203644.2868448-1-samitolvanen@google.com>
- <20220429203644.2868448-22-samitolvanen@google.com> <Ym0ASy87mE3r3EVE@hirez.programming.kicks-ass.net>
-In-Reply-To: <Ym0ASy87mE3r3EVE@hirez.programming.kicks-ass.net>
-From:   Sami Tolvanen <samitolvanen@google.com>
-Date:   Mon, 2 May 2022 08:20:05 -0700
-Message-ID: <CABCJKucK39XnVPA=EhLSJ+vcgVLCSgnGzLrRy9tZSM2jzZtUBg@mail.gmail.com>
-Subject: Re: [RFC PATCH 21/21] x86: Add support for CONFIG_CFI_CLANG
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>, X86 ML <x86@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-hardening@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: RFC: Memory Tiering Kernel Interfaces
+Content-Language: en-US
+To:     Wei Xu <weixugc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Yang Shi <shy828301@gmail.com>, Linux MM <linux-mm@kvack.org>,
+        Greg Thelen <gthelen@google.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alistair Popple <apopple@nvidia.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Michal Hocko <mhocko@kernel.org>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Feng Tang <feng.tang@intel.com>, Jonathan.Cameron@huawei.com
+References: <CAAPL-u9sVx94ACSuCVN8V0tKp+AMxiY89cro0japtyB=xNfNBw@mail.gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <CAAPL-u9sVx94ACSuCVN8V0tKp+AMxiY89cro0japtyB=xNfNBw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,17 +75,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 30, 2022 at 2:24 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Fri, Apr 29, 2022 at 01:36:44PM -0700, Sami Tolvanen wrote:
-> > -     if (report_bug(regs->ip, regs) == BUG_TRAP_TYPE_WARN) {
-> > +     if (report_bug(regs->ip, regs) == BUG_TRAP_TYPE_WARN ||
-> > +         report_cfi(regs->ip, regs) == BUG_TRAP_TYPE_WARN) {
->
-> This way you'll first get a BUG splat and then tack on the CFI thing.
+> The current memory tiering interface needs to be improved to address
+> several important use cases:
 
-The CFI ud2 isn't in the bug table, which means find_bug returns
-BUG_TRAP_TYPE_NONE and report_bug bails out before printing out
-anything.
+FWIW, I totally agree.  We knew when that code went in that the default
+ordering was feeble.  There were patches to export the demotion order
+and allow it to be modified from userspace, but they were jettisoned at
+some point.
 
-Sami
+> Memory tiering hierarchy is rebuilt upon hot-add or hot-remove of a
+> memory node, but is NOT rebuilt upon hot-add or hot-remove of a CPU
+> node.
+
+Yeah, this would be a welcome improvement if we can get there.
+
+> * /sys/devices/system/node/memory_tiers
+> 
+>   Format: node list (one tier per line, in the tier order)
+> 
+>   When read, list memory nodes by tiers.
+
+Nit: this would seems to violate the one-value-per-file sysfs guideline.
+ It can be fixed by making tiers actual objects, which would have some
+other nice benefits too.

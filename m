@@ -2,85 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD675179F9
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 00:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6CD4517A00
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 00:31:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344107AbiEBWa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 18:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32870 "EHLO
+        id S233584AbiEBWeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 18:34:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiEBWay (ORCPT
+        with ESMTP id S229462AbiEBWee (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 18:30:54 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17422B7E4
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 15:27:24 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so15619274fac.7
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 15:27:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Q1/lFLcP1AWgd2rGaGmUgZjwGNyyx6HDGRnQm/XP760=;
-        b=KrgecL+KJYML3Y0FKmqgYha8httPmD2RHkLgw3CJ8+pPp9ACK5H6RRqVZFFV1XtyMR
-         vOYYhudHUu0x7MGQ5MYbBTa1qc8oVy4vhe2JvnLjQl2cnGyto9OmJHAECHAiMiZJnquC
-         DsyBA13iIqoTSWuh2bi1PFxC6jzuKyqb2hYiZuxsV3iTLWM2UXSQv1eIfd2C5kRau9KT
-         9XT1AW4JDUz0fqfP7+1c+hOCqRr39FJsoNgpue5pbCx9ysLbdoebZ2Fwbbd5fNwpX4E7
-         Wzo1kPmt6fJbt5GgA3aAUCMVyG1zHYamNwuh1YRtgtUZeW9XQqYtAbYw7N+SAwLeJ6uh
-         mT1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Q1/lFLcP1AWgd2rGaGmUgZjwGNyyx6HDGRnQm/XP760=;
-        b=q7NhwQa5klzgIqY0x9vqPfP0k3WQTw+gRG9ezQ2SUMtrVrjycj2rh9wX6Oc91xn4Lc
-         Vcq6JW7zfxEVf+cqEgdkfqm34uhQivlFR3LQPImD7gFkZd0B0b8/BFenl4Qvm/T0drMK
-         hTM0e+Zoi4lGZXDPTKrKaCRWJ3bkEfVcUrWDkcmgMh3KiHhAVMTsI1lyzWXtsrOm2IPc
-         it8p8COc00U+DMkyCrdhar8ZXTAsBPKeIKi8KPo1LDp+Erxl29Ww1iuouo019qKkEJa+
-         j7HyB8FpMZhmqJHACoihjlMs31tzBp8uWx4YN73twoIA9IugGs3WOArYbLPboNyQBVsy
-         5vlA==
-X-Gm-Message-State: AOAM530W+LzlhqpouK0+h5DC0n6A4Pv+GDqMHGtFnjXqtnjueD3amGxR
-        M4JPGD4YIAmDHcNPcr0pA04aoQ==
-X-Google-Smtp-Source: ABdhPJzBNC6JTKJRzvnWOAFUlkOXZGDgbE+a8MVXLphLOTH8PsKmrO5U6VkT4JBOToFxmN9bQmyU1w==
-X-Received: by 2002:a05:6870:618e:b0:e5:c2f3:e009 with SMTP id a14-20020a056870618e00b000e5c2f3e009mr615742oah.10.1651530443371;
-        Mon, 02 May 2022 15:27:23 -0700 (PDT)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id t6-20020a056870f20600b000e686d1388dsm6955309oao.39.2022.05.02.15.27.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 15:27:22 -0700 (PDT)
-Date:   Mon, 2 May 2022 15:29:08 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4 5/5] drm/msm/dp: Implement hpd_notify()
-Message-ID: <YnBbNO31bwNUoRQL@ripper>
-References: <20220502165316.4167199-1-bjorn.andersson@linaro.org>
- <20220502165316.4167199-6-bjorn.andersson@linaro.org>
- <672e7dac-fe3b-591f-6837-3ce06a0b44c2@quicinc.com>
+        Mon, 2 May 2022 18:34:34 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF196A1B2
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 15:31:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651530663; x=1683066663;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=tFPyJeC9v4cwAKfebe+SVDC0yXGBwGjA41mm9dEzQmw=;
+  b=B5GLNbd5wnAiIwymz+dX4S+GvBT+Hz7g8+oQMV+pnvpue4n6gXRU6KTs
+   PxYcVUQ978Ih5/wvS20o5eZRr5M9YtZLUWISEe/OJZF0XOPEKLwyMAOrF
+   g/8k6Er7ZE1waVO6xk/aRZzgj5MQqmgZg7TlWUoG9LWywNh+9JFQxN/34
+   9ZMJFLu9nwhpbPyFR7+WPokCgOuh+QCy8oLe9GEJH8z5+ZEyA62byM9pp
+   KOO5Hh5+JZz9r3hxch+HRsXH/OfYH3oSBdUlRJpsOa7l2L1QrTk2vS3vr
+   W3UtxqfTYwCArbh+x/X7PZJY6Gbh3KF71pQSOpikWtVnXcivjlaXkpnbL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="266192524"
+X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
+   d="scan'208";a="266192524"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 15:31:03 -0700
+X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
+   d="scan'208";a="598826345"
+Received: from chgan-mobl1.gar.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.60.238])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 15:30:59 -0700
+Message-ID: <b8eadd3079101a2cf93ee87d36dbedf93d8a2725.camel@intel.com>
+Subject: Re: [PATCH v5 1/3] x86/tdx: Add TDX Guest attestation interface
+ driver
+From:   Kai Huang <kai.huang@intel.com>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 03 May 2022 10:30:57 +1200
+In-Reply-To: <e5aed619-20ce-7eb3-22a3-64b51de9cce3@linux.intel.com>
+References: <20220501183500.2242828-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <20220501183500.2242828-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <5473f606bd8e60dd7b8d58a540285d126a1361bd.camel@intel.com>
+         <e5aed619-20ce-7eb3-22a3-64b51de9cce3@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <672e7dac-fe3b-591f-6837-3ce06a0b44c2@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,172 +75,196 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 02 May 13:59 PDT 2022, Kuogee Hsieh wrote:
 
 > 
-> On 5/2/2022 9:53 AM, Bjorn Andersson wrote:
-> > The Qualcomm DisplayPort driver contains traces of the necessary
-> > plumbing to hook up USB HPD, in the form of the dp_hpd module and the
-> > dp_usbpd_cb struct. Use this as basis for implementing the
-> > hpd_notify() callback, by amending the dp_hpd module with the
-> > missing logic.
+> Also note that the MAC added to the TDREPORT is bound to the platform.
+> So TDREPORT can only be verified locally. Intel SGX Quote Enclave (QE)
+> can be leveraged to verify the TDREPORT locally and convert it to a
+> remote verifiable Quote to support remote attestation of the TDREPORT.
+
+Why "can be"?  TDX must use QE to generate the Quote.
+
+[...]
+
+> 
 > > 
-> > Overall the solution is similar to what's done downstream, but upstream
-> > all the code to disect the HPD notification lives on the calling side of
-> > drm_connector_oob_hotplug_event().
+> > For instance, after rough thinking, why is the IOCTL better than below approach
+> > using /sysfs?
 > > 
-> > drm_connector_oob_hotplug_event() performs the lookup of the
-> > drm_connector based on fwnode, hence the need to assign the fwnode in
-> > dp_drm_connector_init().
+> > echo <REPORTDATA> > /sys/kernel/coco/tdx/attest/reportdata
+> > cat /sys/kernel/coco/tdx/attest/tdreport
 > > 
-> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > ---
+> > Each "echo <REPORTDATA>" to '/sys/.../reportdata' triggers the driver to call
+> > TDCALL to get the TDREPORT, which is available at '/sys/.../tdreport'.
 > > 
-> > Changes since v3:
-> > - Implements hpd_notify instead of oob_hotplug_event
-> > - Rebased on new cleanup patch from Dmitry
-> > - Set hpd_state to ST_MAINLINK_READY when dp_display_usbpd_configure() succeeds
+> > The benefit of using IOCTL I can think of now is it is perhaps more secure, as
+> > with IOCTL the REPORTDATA and the TDREPORT is visible to the process which calls
+> > the IOCTL, while using the /sysfs they are potentially visible to any process.
+> > Especially the REPORTDATA, i.e. it can come from attestation service after the
+> > TD attestation agent sets up a secure connection with it.
 > > 
-> >   drivers/gpu/drm/msm/dp/dp_display.c | 26 ++++++++++++++++++++++++++
-> >   drivers/gpu/drm/msm/dp/dp_display.h |  1 +
-> >   drivers/gpu/drm/msm/dp/dp_drm.c     |  3 +++
-> >   drivers/gpu/drm/msm/dp/dp_drm.h     |  2 ++
-> >   4 files changed, 32 insertions(+)
+> > Anyway, my 2cents above.
+> 
+> IMO, since TDREPORT is not a secret we don't have to hightlight security
+> concern here. 
+> 
+
+Right the TDREPORT itself isn't a secret.  However my thinking is the REPORTDATA
+might be.  It's typically provided by the attestation service to the TD so the
+Quote can be verified for instance per-session or per-connect or whatever.  The
+REPORTDATA is the only thing that can be used to prevent reply attack anyway. 
+From this perspective, it is kinda secret.  However the TDREPORT can be captured
+by untrusted software and used for reply attack if no crypto-protection is used
+when it is sent to the QE, so I am not sure how bad can the reply attack cause.
+
+> How about following?
+> 
+> Operations like getting TDREPORT or Quote generation involves sending
+> a blob of data as input and getting another blob of data as output. It
+> was considered to use a sysfs interface for this, but it doesn't fit
+> well into the standard sysfs model for configuring values. It would be
+> possible to do read/write on files, but it would need multiple file
+> descriptors, which would be somewhat messy. IOCTLs seems to be the best
+> fitting and simplest model here.
+> 
+> 
+
+Let's forget about GetQuote now.  As you can see it has couple of problems.  
+
+If we don't argue from security perspective, what's wrong with the approach
+using /sysfs I mentioned above?
+
+[...]
+
+> > > +
+> > > +	/*
+> > > +	 * Generate TDREPORT using "TDG.MR.REPORT" TDCALL.
+> > > +	 *
+> > > +	 * Pass the physical address of user generated REPORTDATA
+> > > +	 * and the physical address of the output buffer to the TDX
+> > > +	 * module to generate the TDREPORT. Generated data contains
+> > > +	 * measurements/configuration data of the TD guest. More info
+> > > +	 * about ABI can be found in TDX 1.0 Module specification, sec
+> > > +	 * titled "TDG.MR.REPORT".
 > > 
-> > diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> > index b447446d75e9..080294ac6144 100644
-> > --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> > +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> > @@ -83,6 +83,8 @@ struct dp_display_private {
-> >   	bool hpd_irq_on;
-> >   	bool audio_supported;
-> > +	bool connected;
-> > +
-> >   	struct drm_device *drm_dev;
-> >   	struct platform_device *pdev;
-> >   	struct dentry *root;
-> > @@ -1271,6 +1273,7 @@ static int dp_display_probe(struct platform_device *pdev)
-> >   	if (!desc)
-> >   		return -EINVAL;
-> > +	dp->dp_display.dev = &pdev->dev;
-> >   	dp->pdev = pdev;
-> >   	dp->name = "drm_dp";
-> >   	dp->dp_display.connector_type = desc->connector_type;
-> > @@ -1760,3 +1763,26 @@ void dp_bridge_mode_set(struct drm_bridge *drm_bridge,
-> >   	dp_display->dp_mode.h_active_low =
-> >   		!!(dp_display->dp_mode.drm_mode.flags & DRM_MODE_FLAG_NHSYNC);
-> >   }
-> > +
-> > +void dp_bridge_hpd_notify(struct drm_bridge *bridge,
-> > +			  enum drm_connector_status status)
-> > +{
-> > +	struct msm_dp_bridge *dp_bridge = to_dp_bridge(bridge);
-> > +	struct msm_dp *dp = dp_bridge->dp_display;
-> > +	struct dp_display_private *dp_display = container_of(dp, struct dp_display_private, dp_display);
-> > +	int ret;
-> > +
-> > +	drm_dbg_dp(dp_display->drm_dev, "status: %d connected: %d\n", status, dp_display->connected);
-> > +
-> > +	if (!dp_display->connected && status == connector_status_connected) {
-> > +		dp_display->connected = true;
-> > +		ret = dp_display_usbpd_configure(dp_display);
-> > +		if (!ret)
-> > +			dp_display->hpd_state = ST_MAINLINK_READY;
-> > +	} else if (status != connector_status_connected) {
-> > +		dp_display->connected = false;
-> > +		dp_display_notify_disconnect(dp_display);
-> > +	} else {
-> > +		dp_display_usbpd_attention(dp_display);
-> > +	}
-> > +}
+> > I guess you can get rid of the entire second paragraph.  If the reference to the
+> > spec is useful, then keep it but other sentences are not quite useful.  Perhaps:
+> > 
+> > 	Get the TDREPORT using REPORTDATA as input.  Refer to 22.3.3
+> > 	TDG.MR.REPORT leaf in the TDX Module 1.0 Specification for detail
+> > 	information.
 > 
-> I would assume dp_bridge_hpd_notify() will server same purpose as
-> dp_display_irq_handler() if hpd_notification is enabled.
+> How about following?
+> 
+> Pass REPORTDATA as input and generate TDREPORT using "TDG.MR.REPORT"
+> TDCALL. Refer to 22.3.3 TDG.MR.REPORT leaf in the TDX Module 1.0
+> Specification for detailed information.
+
+No problem.
+
+> 
+> > 
+> > > +	 */
+> > > +	ret = __tdx_module_call(TDX_GET_REPORT, virt_to_phys(tdreport),
+> > > +				virt_to_phys(reportdata), 0, 0, NULL);
+> > > +	if (ret) {
+> > > +		pr_debug("TDREPORT TDCALL failed, status:%lx\n",
+> > > +				TDCALL_STATUS_CODE(ret));
+> > 
+> > You can just print out the exact error code.  It's more informative and can help
+> > to debug.
+> 
+> As per spec, only upper 32 bits has status code. 0:32 does not have any
+> useful info.
+
+Bits 0:31 are also defined by TDX error codes.  For instance, it also prints
+which argument caused this error in case of OPERAND_INVALID.  Why is it not
+useful?
+
+[...]
+
+> > > +	ret = misc_register(&miscdev);
+> > > +	if (ret) {
+> > > +		pr_err("misc device registration failed\n");
+> > 
+> > pr_debug() is used when __tdx_module_call() fails, and in the default case in
+> > tdx_attest_ioctl() too.
+> > 
+> > Shouldn't those error msg be printed using the same way?
+> 
+> For IOCTL case, I expect userspace to print the error. But for init
+> code error, it needs to be handled by kernel. So I have used pr_err
+> here.
+
+I don't quite get.  Why "userspace will print the error or not" has anything to
+do with using pr_debug() vs pr_err() here?
+
+[...]
+
+> 
+> > > +
+> > > +/**
+> > > + * struct tdx_report_req: Get TDREPORT from the TDX module.
+> > 
+> > Just get the TDREPORT is enough I guess.
+> 
+> Get TDREPORT using REPORTDATA as input?
+
+No problem.
+
+> 
+> > 
+> > > + *
+> > > + * @reportdata : User-defined 64-Byte REPORTDATA to be included into
+> > > + *		 TDREPORT. Typically it can be some nonce provided by
+> > > + *		 attestation software so the generated TDREPORT can be
+> > > + *		 uniquely verified.
+> > > + * @tdreport   : TDREPORT output from TDCALL[TDG.MR.REPORT] of size
+> > > + *		 TDX_REPORT_LEN.
+> > > + *
+> > > + * Used in TDX_CMD_GET_REPORT IOCTL request.
+> > > + */
+> > > +struct tdx_report_req {
+> > > +	union {
+> > > +		__u8 reportdata[TDX_REPORTDATA_LEN];
+> > > +		__u8 tdreport[TDX_REPORT_LEN];
+> > > +	};
+> > > +};
+> > 
+> > I am not sure overriding the input is a good idea, but will leave to others.
+> 
+> TDCALL uses it that way. So I have followed the same model.
+
+Which TDCALL?
+
+And TDCALL is kernel internal implementation, but we are talking about userspace
+ABI here.  I don't see any connection between them.
+
+> 
+> > 
+> > > +
+> > > +/* Get TDREPORT from the TDX module using TDCALL[TDG.MR.REPORT) */
+> > 
+> > Just get the TDREPORT is enough I guess.
+> 
+> May be following?
+> 
+> Get TDREPORT using TDCALL[TDG.MR.REPORT)
+
+My thinking is you don't need to call out the exact TDCALL in the uapi header. 
+But no opinion here.  Will leave to maintainers.
+
+> 
+> > 
+> > > +#define TDX_CMD_GET_REPORT		_IOWR('T', 0x01, struct tdx_report_req)
+> > > +
+> > > +#endif /* _UAPI_ASM_X86_TDX_H */
+> > 
 > 
 
-I agree with this statement.
 
-> In that case, should dp_bridge_hpd_notify() add
-> EV_HPD_PLUG_INT/EV_IRQ_HPD_INT/EV_HPD_UNPLUG_INT
-> 
-
-I tried this originally, but couldn't get it to work and expected that
-as the downstream driver doesn't do this, there was some good reason for
-me not to do it either.
-
-> into event q to kick off corresponding
-> dp_hpd_plug_handle()/dp_irq_hpd_handle()/dp_hpd_unplug_handle()?
-> 
-
-But since then the driver has been cleaned up significantly, so I
-decided to give it a test again.
-Unfortunately it still doesn't work, but now it's easier to trace.
-
-Replacing the 3 cases with relevant calls to dp_add_event() results in
-us inserting a EV_HPD_UNPLUG_INT event really early, before things has
-been brought up. This will result in dp_hpd_unplug_handle() trying to
-disable the dp_catalog_hpd_config_intr(), which will crash as the
-hardware isn't yet clocked up.
-
-Further more, this points out the main difference between the normal HPD
-code and the USB HPD code; dp_catalog_hpd_config_intr() will enable the
-plug/unplug interrupts, which it shouldn't do for USB-controlled.
-
-
-So it seems we need two code paths after all.
-
-> By the way, I am going to test this patch out.
-> 
-> Any patches I have to pull in before apply this serial patches?
-> 
-
-The patches applies on Dmitry's msm-next-staging, which I've merged on
-top of linux-next together with a number of pending patches to get the
-DPU up on SM8350 and a pmic_glink driver which I'm about to post.
-
-But to validate that it doesn't affect your non-USB case, Dmitry's
-branch should be sufficient.
-
+-- 
 Thanks,
-Bjorn
+-Kai
 
-> > diff --git a/drivers/gpu/drm/msm/dp/dp_display.h b/drivers/gpu/drm/msm/dp/dp_display.h
-> > index 4f9fe4d7610b..2d2614bc5a14 100644
-> > --- a/drivers/gpu/drm/msm/dp/dp_display.h
-> > +++ b/drivers/gpu/drm/msm/dp/dp_display.h
-> > @@ -11,6 +11,7 @@
-> >   #include "disp/msm_disp_snapshot.h"
-> >   struct msm_dp {
-> > +	struct device *dev;
-> >   	struct drm_device *drm_dev;
-> >   	struct device *codec_dev;
-> >   	struct drm_bridge *bridge;
-> > diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
-> > index 62d58b9c4647..821cfd37b1fb 100644
-> > --- a/drivers/gpu/drm/msm/dp/dp_drm.c
-> > +++ b/drivers/gpu/drm/msm/dp/dp_drm.c
-> > @@ -68,6 +68,7 @@ static const struct drm_bridge_funcs dp_bridge_ops = {
-> >   	.mode_valid   = dp_bridge_mode_valid,
-> >   	.get_modes    = dp_bridge_get_modes,
-> >   	.detect       = dp_bridge_detect,
-> > +	.hpd_notify   = dp_bridge_hpd_notify,
-> >   };
-> >   struct drm_bridge *dp_bridge_init(struct msm_dp *dp_display, struct drm_device *dev,
-> > @@ -138,6 +139,8 @@ struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display)
-> >   	if (IS_ERR(connector))
-> >   		return connector;
-> > +	connector->fwnode = fwnode_handle_get(dev_fwnode(dp_display->dev));
-> > +
-> >   	drm_connector_attach_encoder(connector, dp_display->encoder);
-> >   	return connector;
-> > diff --git a/drivers/gpu/drm/msm/dp/dp_drm.h b/drivers/gpu/drm/msm/dp/dp_drm.h
-> > index f4b1ed1e24f7..3b7480a86844 100644
-> > --- a/drivers/gpu/drm/msm/dp/dp_drm.h
-> > +++ b/drivers/gpu/drm/msm/dp/dp_drm.h
-> > @@ -32,5 +32,7 @@ enum drm_mode_status dp_bridge_mode_valid(struct drm_bridge *bridge,
-> >   void dp_bridge_mode_set(struct drm_bridge *drm_bridge,
-> >   			const struct drm_display_mode *mode,
-> >   			const struct drm_display_mode *adjusted_mode);
-> > +void dp_bridge_hpd_notify(struct drm_bridge *bridge,
-> > +			  enum drm_connector_status status);
-> >   #endif /* _DP_DRM_H_ */
+

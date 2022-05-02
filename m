@@ -2,98 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 658C3516D99
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 11:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1953516DA9
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 11:47:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384348AbiEBJob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 05:44:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47056 "EHLO
+        id S1381379AbiEBJuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 05:50:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384402AbiEBJn6 (ORCPT
+        with ESMTP id S1384371AbiEBJuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 05:43:58 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A03A111D;
-        Mon,  2 May 2022 02:40:30 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651484429;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jYGGwnXeFPcIOHQmhzSCBgH4HMwEO9aRAXTxvIySbxU=;
-        b=xRWWMcx6q1hFZvKKcNEOiGEFpsCUiKlY3VDrrJdA8NHIq54CXy7UgGxYIgzdrLUKPVauf0
-        WSQlkGf1n6FdJbu4X74JyfeuhB9d+ZwAQNEmSxp1+MyX+kkH3q6zKnRPbOXiXjYoth8uDD
-        sAV576M4VAGOoMYcjo1+6PVJVxCvHQQjHZRYBES853/sY3GVU3pFSbI3f72cKVIgGsmGDn
-        mMFdpXX/e5b6df01EgTZSHHQ8LHWsWKsp2Az2u5dChqNNJqNiJQOLKM/DTSUJGZvrooQgX
-        9Xr8hWfvLEUOC5/+pUe9Sso7X7doWNQiKXxg4xKte2TWxeElwlW3ZCQBQout0Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651484429;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jYGGwnXeFPcIOHQmhzSCBgH4HMwEO9aRAXTxvIySbxU=;
-        b=dOSkoFARma2uJzbg6ynhp4U13J6hLMTQeSZWPMHb9PQQCFgpLOuL3PitpqCpKJt9Ievkw+
-        VKQ03GE9hEn4MmBw==
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        bp@alien8.de
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Arnd Bergmann <arnd@arndb.de>, x86@kernel.org
-Subject: Re: [PATCH v7 13/17] x86/asm: use fallback for random_get_entropy()
- instead of zero
-In-Reply-To: <20220426083301.816458-1-Jason@zx2c4.com>
-References: <YmbZZwXxaC+S863+@zx2c4.com>
- <20220426083301.816458-1-Jason@zx2c4.com>
-Date:   Mon, 02 May 2022 11:40:28 +0200
-Message-ID: <87v8uomfw3.ffs@tglx>
+        Mon, 2 May 2022 05:50:35 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A205413F1A
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 02:47:00 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2429khig030092;
+        Mon, 2 May 2022 04:46:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1651484803;
+        bh=/f3+ZN1BRGOPjS26Jk9C7pfpeHeos4hddQADZyloaso=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=hpBeSDROS88ZzV1RwsUTd7IItg2jtfZ2v+SJLCd58Q2vsh1C5YCSDaRbcrahEj2Ot
+         CtJ3+FKrrfvt7h2eZrNsyu+ormjOBXRGT+e5ONlQHSMJmNv/lrf//sL2xcbwHFHw7G
+         uMh5uIx7B7RGfuF96cxXXJMNgLbR39N56LfFJqDE=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2429khF9042579
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 2 May 2022 04:46:43 -0500
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 2
+ May 2022 04:46:43 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 2 May 2022 04:46:43 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2429kgkh040255;
+        Mon, 2 May 2022 04:46:43 -0500
+Date:   Mon, 2 May 2022 15:16:42 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-kernel@vger.kernel.org>, <linux-mtd@lists.infradead.org>
+Subject: Re: [PATCH v3 2/2] mtd: spi-nor: expose internal parameters via
+ debugfs
+Message-ID: <20220502094642.trl7fggx6se5cqhg@ti.com>
+References: <20220429102018.2361038-1-michael@walle.cc>
+ <20220429102018.2361038-2-michael@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220429102018.2361038-2-michael@walle.cc>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26 2022 at 10:33, Jason A. Donenfeld wrote:
+On 29/04/22 12:20PM, Michael Walle wrote:
+> There is no way to gather all information to verify support for a new
+> flash chip. Also if you want to convert an existing flash chip to the
+> new SFDP parsing, there is not enough information to determine if the
+> flash will work like before. To ease this development, expose internal
+> parameters via the debugfs.
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
 
-Subject: x86/tsc: Use .....
+Did some basic testing, seems fine to me. I'll wait a couple more days 
+if someone has any comments or else I'll apply it.
 
-This has absolutely nothing to do with ASM and the sentence after the
-colon starts with an uppercase letter.
+Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
 
-> In the event that random_get_entropy() can't access a cycle counter or
-> similar, falling back to returning 0 is suboptimal. Instead, fallback
-> to calling random_get_entropy_fallback(), which isn't extremely high
-> precision or guaranteed to be entropic, but is certainly better than
-> returning zero all the time.
->
-> If CONFIG_X86_TSC=n, then it's possible for the kernel to run on systems
-> without RDTSC, such as 486 and certain 586, so the fallback code is only
-> required for that case.
->
-> As well, fix up both the new function and the get_cycles() function from
-> which it was derived to use cpu_feature_enabled() rather than
-> boot_cpu_has(), and use !IS_ENABLED() instead of #ifndef.
->
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: x86@kernel.org
-
-Same comments vs. Cc's
-
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
-> Changes v6->v7:
-> - Adjust commit subject and body to match tip commit style.
-
-Mostly ... :)
-
-With that fixed:
-
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

@@ -2,92 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53495516A62
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 07:42:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1781516A6C
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 07:46:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383362AbiEBFp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 01:45:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48678 "EHLO
+        id S1383363AbiEBFuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 01:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349296AbiEBFpz (ORCPT
+        with ESMTP id S234166AbiEBFuM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 01:45:55 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953AB35847;
-        Sun,  1 May 2022 22:42:27 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id e2so18211216wrh.7;
-        Sun, 01 May 2022 22:42:27 -0700 (PDT)
+        Mon, 2 May 2022 01:50:12 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1313F3EA86;
+        Sun,  1 May 2022 22:46:44 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id j70so42978pge.1;
+        Sun, 01 May 2022 22:46:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=SFf90Cp87yxtikwr5SrnqckhY2eRdXiPSkqLmdjSB0Y=;
-        b=mdV8gUBfaGKV1xac9Fiq0BXYwgb3hP57li604oiegba4cvbj1pMaXz/DN3sYIqhhQJ
-         1jU8oDoMqE5mXAFxOieJKCSi39cshQTbMNHkSSwmWq65LOgTNnEpRESqalbv+tSPWJIR
-         uy7UI+FzEjUZlyXN8+xikq6VznA4QpzvpT1tEYOj/SPlE3jjx/A6cspg9FQnqpHqn6KQ
-         yIp1dvoSjMDYUZdy+hOqsKd7YrFT5ZfrrRcpv+eWPO7xcAzoXcZqhbJQAuWFix4VkW3v
-         hR7L3/p0AqS6TXhTf5hBlYXiKYEMIow7cX939169/z2xX0giDSazAI1pPNmStA6KJpDs
-         0LWA==
+        h=from:to:cc:subject:date:message-id:organization;
+        bh=d2sZ6LAA6PR0x27xVOtSQG3kRY2KKeJ2IQ3gWRqZVIo=;
+        b=T8sg8k9C909HP0duHI63v0WZEYqGHr5ItIb7FPVV9puDAWn40w/mJNDlWJh3sr1gkg
+         dGKY5saYavSKmFsOiZxmI41WxUpbgeg+lkOd6QB/VYO0rtSLSwwkIvkIrKldbL9e4R9v
+         gHgTBnkD8TItilnYqDRBsxOJto/cBLvoLXvtOqaiNviww5G4i+LqAYJFabA8f9R7GG9T
+         x8nzo9z21yF1wwLNy6SpgEtq3LVv1e3pKcOUzeVxSzFmGuK5Dg57LQlnnh0zcW/lKX1T
+         HRSJ3GakzcUqF5Pn5/DCdfsNDc7qcv6qXBwxb97LnogR7KONlNewfDgrenQiVMUg6LZR
+         F57w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=SFf90Cp87yxtikwr5SrnqckhY2eRdXiPSkqLmdjSB0Y=;
-        b=qnF5tAFmWx4JVGq0j/4N+Ii9Q6pUOUHjzCjkaOaZK3jyrcDL7N3tFZV5uUWJ7/qk0J
-         PlfpCiMmKl7enmh67dyJS5+0THszmVY2KHpfdQU0g/TntfG4ToYEbGs5WHAbn1z6oIBw
-         8UWN0hB8x466mtzQlw4JKz2/0GTxtj1llZP+npLKDG/zJGl3SUOYCP58oJYSLEso6SDq
-         1YpSBS//cbF8jgMZfKr83qi+QxYIWhISbTM2IdaNgs0y0XJwGjPYZu+BCXfXJ5fsaYF0
-         dso+/DgjCPAUJc/IDrE+oPPKgu1LaVmzUgAerPI89LXSvQ91R61Q9s/hiPys6Cyir7sH
-         j3Lw==
-X-Gm-Message-State: AOAM530RaxQJJS+DbxsLMSN7P0Fn96HxYfSBvYx9IHg/IqVD63JjQEPG
-        V5BqduDg6Owhm8ALEEirnww=
-X-Google-Smtp-Source: ABdhPJyZAcTn+ctBQ3cxL4EATaIUzzLMQqvYgKQQ4Qhmg9bQpcj1kAPOtDlrfaCGmcSPEu7FoGQmKw==
-X-Received: by 2002:a05:6000:1681:b0:20c:5aa2:ae14 with SMTP id y1-20020a056000168100b0020c5aa2ae14mr4740062wrd.443.1651470146011;
-        Sun, 01 May 2022 22:42:26 -0700 (PDT)
-Received: from ?IPV6:2a06:a003:501a:a7ce:5405:3d01:56ff:a60d? ([2a06:a003:501a:a7ce:5405:3d01:56ff:a60d])
-        by smtp.gmail.com with ESMTPSA id 6-20020a05600c230600b003942a244ecfsm5397359wmo.20.2022.05.01.22.42.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 01 May 2022 22:42:25 -0700 (PDT)
-Message-ID: <abf8fb56-2ad0-8128-ccd4-105055af9226@gmail.com>
-Date:   Mon, 2 May 2022 08:42:24 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: [PATCH v2 1/2] dt-bindings: mtd: partitions: Add binding for Sercomm
- parser
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     NOGUCHI Hiroshi <drvlabo@gmail.com>, Karim <Karimdplay@gmail.com>,
-        M <x1@disroot.org>, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220406195557.1956-1-csharper2005@gmail.com>
- <20220406195946.2019-1-csharper2005@gmail.com>
- <8d0d8b27-35ff-3693-cf80-897b80c26b4e@linaro.org>
- <57bebf2f-af4c-b2d9-10e5-19e5104946fb@gmail.com>
- <29cfa017-bbaf-3aba-fe1d-06771957dbaa@linaro.org>
- <1b391399-984b-7a63-3265-62ef09caec39@gmail.com>
- <bd533827-b575-caad-c230-af060851b231@gmail.com>
- <db70e53b-7484-43bf-e9c8-b6a2dce1fbb5@linaro.org>
- <25da3f43-c46e-8108-2da9-0e4f2b7cc1a4@gmail.com>
- <b279040a-a782-a2ca-2acb-2d8f07709081@linaro.org>
- <1c19faf9-fc1c-9adf-d038-97b673a8f0be@gmail.com>
- <a84df850-149e-9656-43fa-1f040368a9f1@linaro.org>
- <0450d781-c506-c28e-a0e5-435bee16721f@gmail.com>
- <2e51842a-d2c9-8953-13aa-02ad3abb3f14@linaro.org>
- <ee5f293a-e59a-03d8-d9e4-ef35d33b5383@gmail.com>
- <6c3ba4a7-80b0-5fd1-eb08-1f9e256b02c4@linaro.org>
- <909094fd-ded0-38f9-b374-dd5f7b63e298@gmail.com>
- <11fbbafd-e7ce-f921-2073-146e96f01f6b@linaro.org>
-From:   Mikhail Zhilkin <csharper2005@gmail.com>
-In-Reply-To: <11fbbafd-e7ce-f921-2073-146e96f01f6b@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:organization;
+        bh=d2sZ6LAA6PR0x27xVOtSQG3kRY2KKeJ2IQ3gWRqZVIo=;
+        b=wWAy0G9qrAPnoyKHYYHFNTDHfy6BokvPV6YU7a++zVvsoYxNbSg4SWEYEaMOu5zL9K
+         xpjMQJXOKY/g0Lzmjc2rHMKnW8oDpW+3bbjVFY0sHa8jhzj1qpmcWGnmFBMnZZb51m+7
+         frz+uXgn1xwBxLiwFG+qkHA9hvXR8frD1kwNnWSfSGQdFQC4xX2PnG76T2MuoP0AD3Un
+         irGlZuUsVPaekcR6GmGwNzlXEsAU+nuyWdujvjJD47tBpUvgU2fGGNLaZMcfeJIkFaMI
+         1YL0vvniDnKcQbZWgLA8MR5CpTPcccJGZ3PDm5b/qMhOVoTHCeOgwFXKF3fPGaaxJvHh
+         nZ0A==
+X-Gm-Message-State: AOAM5320yO/TpwOPsSml2HbGmhvluQZnSh3vWeOj9jRTbUOtprthxuPs
+        33zIB2B0Bu+7h0XlFOTKU0g=
+X-Google-Smtp-Source: ABdhPJyk/Nt4ElAZAqLKKwQRG8TYcrx9es15INWArvFBRZIb9QURz78XomggWsGCMne2rbLgR3jW0w==
+X-Received: by 2002:a63:8342:0:b0:3c2:1938:236a with SMTP id h63-20020a638342000000b003c21938236amr2879326pge.48.1651470403219;
+        Sun, 01 May 2022 22:46:43 -0700 (PDT)
+Received: from localhost.localdomain ([123.201.245.164])
+        by smtp.googlemail.com with ESMTPSA id q20-20020a62e114000000b0050dc76281c8sm3787490pfh.162.2022.05.01.22.46.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 May 2022 22:46:42 -0700 (PDT)
+From:   Dharmendra Singh <dharamhans87@gmail.com>
+To:     miklos@szeredi.hu
+Cc:     Dharmendra Singh <dharamhans87@gmail.com>,
+        linux-fsdevel@vger.kernel.org, fuse-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, bschubert@ddn.com
+Subject: [PATCH v3 0/3] FUSE: Implement atomic lookup + open/create
+Date:   Mon,  2 May 2022 11:16:25 +0530
+Message-Id: <20220502054628.25826-1-dharamhans87@gmail.com>
+X-Mailer: git-send-email 2.17.1
+Organization: DDN STORAGE
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -98,105 +66,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/1/2022 7:17 PM, Krzysztof Kozlowski wrote:
+In FUSE, as of now, uncached lookups are expensive over the wire.
+E.g additional latencies and stressing (meta data) servers from
+thousands of clients. These lookup calls possibly can be avoided
+in some cases. Incoming three patches address this issue.
 
-> On 01/05/2022 16:51, Mikhail Zhilkin wrote:
->> On 5/1/2022 11:17 AM, Krzysztof Kozlowski wrote:
->>
->>> On 30/04/2022 20:54, Mikhail Zhilkin wrote:
->>>>  patternProperties:
->>>>    "@[0-9a-f]+$":
->>>> -    $ref: "partition.yaml#"
->>>> +    allOf:
->>>> +      - $ref: "partition.yaml#"
->>>> +      - if:
->>>> +          properties:
->>>> +            compatible:
->>>> +              contains:
->>>> +                const: sercomm,sc-partitions
->>>> +        then:
->>>> +          properties:
->>>> +            sercomm,scpart-id:
->>>> +              description: Partition id in Sercomm partition map. Parser
->>>> +                uses this id to get partition offset and size values from
->>>> +                dynamic partition map.
->>> Partition offset and size values are not derived from scpart-id. I am
->>> sorry but after all these questions - it's the third time now - you
->>> never answer why do you need this property and what is it used for. From
->>> all the examples it could be simply removed and the partition map will
->>> be exactly the same.
->> scpart-id is necessary to get (using mtd parser) partition offset and
->> size from dynamic partition map (NOT from the reg property):
->>
->> ❯ xxd -e -c 12 -s $((0x800)) -l $((0x78)) mtd1
->> 00000800: 00000000 00000000 00100000  ............
->> 0000080c: 00000001 00100000 00100000  ............
->> 00000818: 00000002 00200000 00100000  ...... .....
->> 00000824: 00000003 00300000 00100000  ......0.....
->> 00000830: 00000004 00400000 00600000  ......@...`.
->> 0000083c: 00000005 00a00000 00600000  ..........`.
->> 00000848: 00000006 01000000 02000000  ............
->> 00000854: 00000007 03000000 02000000  ............
->> 00000860: 00000008 05000000 01400000  ..........@.
->> 0000086c: 00000009 06400000 01b80000  ......@.....
->>           scpart-id  offset      size
->>
->> With sercomm,sc-partitions the reg property will be ignored (offset =
->> 0x200000, size = 0x100000) and the values will be taken from partition map.
->>
->> For example we have this is dts:
->>
->> partition@200000 {
->>             label = "Factory";
->>             reg = <0x200000 0x100000>;
->>             sercomm,scpart-id = <2>;
->>             read-only;
->>         };
->>
->> Dynamic partition map:
->>
->> scpart-id = 2; offset = 0x00200000; size = 0x00100000
->>
->> 00000002 00200000 00100000  ...... .....
->>
->> In this example the offset and size are the same in reg and dynamic
->> partition map. If device have bad blocks on NAND the values will be a
->> little different. And we have to take partition offsets from partition
->> map to avoid boot loops, wrong eeprom location and other bad things.
->>
->> Is there anything that needs to be explained in more detail?
-> Thanks a lot, this clarifies the topic. Looks good. Maybe you could put
-> parts of this into the scpart-id field description?
 
-Thank you for you support! I updated the scpart-id description and hope
-this should be clear enough. If so, I'll prepare PATCH v3.
+Fist patch handles the case where we are creating a file with O_CREAT.
+Before we go for file creation, we do a lookup on the file which is most
+likely non-existent. After this lookup is done, we again go into libfuse
+to create file. Such lookups where file is most likely non-existent, can
+be avoided.
 
- patternProperties:
-   "@[0-9a-f]+$":
--    $ref: "partition.yaml#"
-+    allOf:
-+      - $ref: "partition.yaml#"
-+      - if:
-+          properties:
-+            compatible:
-+              contains:
-+                const: sercomm,sc-partitions
-+        then:
-+          properties:
-+            sercomm,scpart-id:
-+              description: Partition id in Sercomm partition map. Mtd
-+                parser uses this id to find a record in the partiton map
-+                containing offset and size of the current partition. The
-+                values from partition map overrides partition offset and
-+                size defined in reg property of the dts. Frequently these
-+                values are the same, but may differ if device has bad
-+                eraseblocks on a flash.
-+              $ref: /schemas/types.yaml#/definitions/uint32
+Second patch handles the case where we open first time a file/dir
+but do a lookup first on it. After lookup is performed we make another
+call into libfuse to open the file. Now these two separate calls into 
+libfuse can be combined and performed as a single call into libfuse.
 
-> Best regards,
-> Krzysztof
+Third patch handles the case when we are opening an already existing file
+(positive dentry). Before this open call, we re-validate the inode and
+this re-validation does a lookup on the file and verify the inode.
+This separate lookup also can be avoided (for non-dir) and combined
+with open call into libfuse. After open returns we can revalidate the inode.
+This optimisation is performed only when we do not have default permissions
+enabled.
+
+Here is the link to performance numbers 
+https://lore.kernel.org/linux-fsdevel/20220322121212.5087-1-dharamhans87@gmail.com/
+
+Dharmendra Singh (3):
+  FUSE: Implement atomic lookup + create
+  Implement atomic lookup + open
+  Avoid lookup in d_revalidate()
+
+ fs/fuse/dir.c             | 210 +++++++++++++++++++++++++++++++++++---
+ fs/fuse/file.c            |  30 +++++-
+ fs/fuse/fuse_i.h          |  16 ++-
+ fs/fuse/inode.c           |   4 +-
+ fs/fuse/ioctl.c           |   2 +-
+ include/uapi/linux/fuse.h |   5 +
+ 6 files changed, 245 insertions(+), 22 deletions(-)
 
 -- 
-Best regards,
-Mikhail
+2.17.1
 

@@ -2,67 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EAED5172AC
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 17:34:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A895B5172BD
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 17:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385852AbiEBPhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 11:37:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43008 "EHLO
+        id S1385869AbiEBPhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 11:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355963AbiEBPhF (ORCPT
+        with ESMTP id S1358130AbiEBPhm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 11:37:05 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABDCBC22;
-        Mon,  2 May 2022 08:33:35 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-ed9ac77cbbso4020345fac.1;
-        Mon, 02 May 2022 08:33:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=dD2Y3vOMl2tr/XEHZTE9aVU35/4IL1e3I9wJvGZpl2M=;
-        b=M7pYKdd2uedkmcrcRbthb/xGW+RthwBl0cryFQvRKbCrZVC8lWrGfvRsEha25wDRC3
-         4Lmqt9fJ9ahiPAmdnuX/x1Dyj/KLEE1O+dOXqJH4ru8imIVMBi/M9FTIfWbc4uX5JqAh
-         WOvSoNQgGAFlS2ljWLI+5yQnR7iwe2rEuXnrhD4AHe9iuU2HKnsYF/s6dm5J/EmUwF3f
-         /sAzN53emB7lfQl0Al5U2uR3IhNZFSEX9iZ0OabC58cez+z4CMS0RfdFRQROeq8ynptl
-         MJh/4h0ni+niJ7772p3blsHidKhzwjjpoaRZyG+16m0MoBOJ0D5SGmG4B5KNLRgGJFr5
-         CY9A==
-X-Gm-Message-State: AOAM531jqHDFcJYG+qJRW8Y3H7nXjJukhF0hC/bt8BmxXDe9oEId7KC6
-        WkWMvg+QYDNl4YxEmtOiJhVqbGCBJw==
-X-Google-Smtp-Source: ABdhPJwlvrfdTgjaRkOgo9CjTot/4UQsJOPWIqMwz3jzRpOIldIk7cbmsTcBnhJhaUqFMsfxE8sRng==
-X-Received: by 2002:a05:6870:e9a0:b0:e6:9d2:ff42 with SMTP id r32-20020a056870e9a000b000e609d2ff42mr5126607oao.7.1651505614677;
-        Mon, 02 May 2022 08:33:34 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r4-20020a056830120400b0060603221240sm2950294otp.16.2022.05.02.08.33.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 08:33:34 -0700 (PDT)
-Received: (nullmailer pid 1161773 invoked by uid 1000);
-        Mon, 02 May 2022 15:33:29 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?b?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        kernel@collabora.com, Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mediatek@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-In-Reply-To: <20220429211111.2214119-2-nfraprado@collabora.com>
-References: <20220429211111.2214119-1-nfraprado@collabora.com> <20220429211111.2214119-2-nfraprado@collabora.com>
-Subject: Re: [PATCH 1/2] dt-bindings: remoteproc: mediatek: Fix optional reg-names for mtk,scp
-Date:   Mon, 02 May 2022 10:33:29 -0500
-Message-Id: <1651505609.475123.1161772.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,PP_MIME_FAKE_ASCII_TEXT,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        Mon, 2 May 2022 11:37:42 -0400
+Received: from mail.pcs.gmbh (mail.pcs.gmbh [89.27.162.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B285BDF81;
+        Mon,  2 May 2022 08:34:09 -0700 (PDT)
+Received: from mail.csna.de (mail.csna.de [89.27.162.50])
+        by mail.pcs.gmbh with ESMTPA
+        ; Mon, 2 May 2022 17:34:03 +0200
+Received: from EXCHANGE2019.pcs.ditec.de (mail.pcs.com [89.27.162.5])
+        by mail.csna.de with ESMTPA
+        ; Mon, 2 May 2022 17:34:03 +0200
+Received: from EXCHANGE2019.pcs.ditec.de (192.168.8.214) by
+ EXCHANGE2019.pcs.ditec.de (192.168.8.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 2 May 2022 17:34:03 +0200
+Received: from lxtpfaff.pcs.ditec.de (192.168.9.96) by
+ EXCHANGE2019.pcs.ditec.de (192.168.8.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22
+ via Frontend Transport; Mon, 2 May 2022 17:34:03 +0200
+Date:   Mon, 2 May 2022 17:34:03 +0200
+From:   Thomas Pfaff <tpfaff@pcs.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+CC:     <linux-kernel@vger.kernel.org>, <linux-rt-users@vger.kernel.org>,
+        Marc Zyngier <maz@kernel.org>, Lukas Wunner <lukas@wunner.de>
+Subject: Re: [PATCH v3] irq/core: synchronize irq_thread startup
+In-Reply-To: <87mtg0m2jb.ffs@tglx>
+Message-ID: <bbe3603c-df84-290-fb3c-10f450c21518@pcs.com>
+References: <552fe7b4-9224-b183-bb87-a8f36d335690@pcs.com> <87mtg0m2jb.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="US-ASCII"
+X-KSE-ServerInfo: EXCHANGE2019.pcs.ditec.de, 9
+X-KSE-AntiSpam-Interceptor-Info: white sender email list
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 02.05.2022 14:16:00
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,83 +55,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 29 Apr 2022 17:11:09 -0400, Nícolas F. R. A. Prado wrote:
-> The SCP has three memory regions: sram, l1tcm and cfg. Only sram is
-> required, the other two are optional. Fix the dt-binding so that the
-> optional regions can be omitted and passed in any order.
+
+
+On Mon, 2 May 2022, Thomas Gleixner wrote:
+
+> But free_irq() stopped issuing synchronize_irq() with commit
+> 519cc8652b3a ("genirq: Synchronize only with single thread on
+> free_irq()"). And that turns out to be the root cause of the problem.
+> I should have caught that back then, but in hindsight ....
 > 
-> Also add the missing minItems to the reg property and update the
-> description.
-> 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> 
+> While the proposed patch works, I think the real solution is to ensure
+> that both the hardware interrupt _and_ the interrupt threads which are
+> associated to the removed action are in quiescent state. This should
+> catch the case you observed.
+
+I can confirm that your patch works.
+And it also explains why I never had this issue on a 4.4 kernel with
+realtime patch ...
+
 > ---
+> Subject: genirq: Quiesce interrupt threads in free_irq()
+> From: Thomas Gleixner <tglx@linutronix.de>
+> Date: Mon, 02 May 2022 15:40:25 +0200
 > 
->  .../devicetree/bindings/remoteproc/mtk,scp.yaml      | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
+> Fill void...
+> 
+> Fixes: 519cc8652b3a ("genirq: Synchronize only with single thread on free_irq()")
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> ---
+>  kernel/irq/manage.c |   25 +++++++++++++++++++++----
+>  1 file changed, 21 insertions(+), 4 deletions(-)
+> 
+> --- a/kernel/irq/manage.c
+> +++ b/kernel/irq/manage.c
+> @@ -1914,6 +1914,22 @@ static struct irqaction *__free_irq(stru
+>  	 */
+>  	__synchronize_hardirq(desc, true);
+>  
+> +	/*
+> +	 * Wait for associated interrupt threads to complete. This cannot
+> +	 * use synchronize_irq() due to interrupt sharing in the PCIe
+> +	 * layer. See 519cc8652b3a ("genirq: Synchronize only with single
+> +	 * thread on free_irq()") for further explanation.
+> +	 */
+> +	if (action->thread) {
+> +		unsigned int thread_mask = action->thread_mask;
+> +
+> +		if (action->secondary)
+> +			thread_mask |= action->secondary->thread_mask;
+> +
+> +		wait_event(desc->wait_for_threads,
+> +			   !(atomic_read(&desc->threads_active) & thread_mask));
+> +	}
+> +
+>  #ifdef CONFIG_DEBUG_SHIRQ
+>  	/*
+>  	 * It's a shared IRQ -- the driver ought to be prepared for an IRQ
+> @@ -1931,10 +1947,11 @@ static struct irqaction *__free_irq(stru
+>  #endif
+>  
+>  	/*
+> -	 * The action has already been removed above, but the thread writes
+> -	 * its oneshot mask bit when it completes. Though request_mutex is
+> -	 * held across this which prevents __setup_irq() from handing out
+> -	 * the same bit to a newly requested action.
+> +	 * The action has already been removed above and both the hardware
+> +	 * interrupt and the associated threads have been synchronized,
+> +	 * which means they are in quiescent state. request_mutex is still
+> +	 * held which prevents __setup_irq() from handing out action's
+> +	 * thread_mask to a newly requested action.
+>  	 */
+>  	if (action->thread) {
+>  		kthread_stop(action->thread);
+> 
+> 
 > 
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+Tested-by: Thomas Pfaff <tpfaff@pcs.com>
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+Thank you,
+	Thomas
 
-Full log is available here: https://patchwork.ozlabs.org/patch/
-
-
-scp@10500000: interrupts: [[0, 174, 4]] is not of type 'object'
-	arch/arm64/boot/dts/mediatek/mt8183-evb.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-burnet.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-cozmo.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-damu.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14-sku2.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku1.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku6.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku7.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-juniper-sku16.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kappa.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kenzo.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-sku0.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-sku1.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu-sku22.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku16.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku272.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku288.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku32.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku0.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku176.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dtb
-
-scp@10500000: memory-region: [[25]] is not of type 'object'
-	arch/arm64/boot/dts/mediatek/mt8183-evb.dtb
-
-scp@10500000: memory-region: [[27]] is not of type 'object'
-	arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dtb
-
-scp@10500000: memory-region: [[28]] is not of type 'object'
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-burnet.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-cozmo.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-damu.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14-sku2.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku1.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku6.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku7.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-juniper-sku16.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kappa.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kenzo.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-sku0.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-sku1.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu-sku22.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku16.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku272.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku288.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku32.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku0.dtb
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku176.dtb
 

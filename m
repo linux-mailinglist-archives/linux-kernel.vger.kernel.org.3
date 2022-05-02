@@ -2,301 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A41516D4E
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 11:24:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4139F516D50
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 11:24:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384181AbiEBJ2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 05:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35016 "EHLO
+        id S1384165AbiEBJ15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 05:27:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384160AbiEBJ2A (ORCPT
+        with ESMTP id S235203AbiEBJ1v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 05:28:00 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915733BBF4;
-        Mon,  2 May 2022 02:24:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651483472; x=1683019472;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Un8ROf/YYHiOCU6+fstsqJ861Fy1UPDTbQBPV60OZOg=;
-  b=K0YfWsP0Vew4CwH7SRWc5nsuv7s33I55CIGiZeHW007NtVn++ZVIC2CM
-   a3zxYYQ8SKy3U7qEC9tR26F4N4txmgIkEuJJsh8zPussV7+raYcpTVupQ
-   /6CSpP+xzkwEcDJkAck1uNWMA/QCelU6jFor/KoFd+2ORoo6awi1YkqvI
-   EZKVPAoLgTBqdtHUhoMq3sO4iBc5bkOAzwZP9VFIatBb2DrPFIHtEVreL
-   Suz7lCNGyqI8OF4Bj18w1AwE6qvRpkLbZKmJewPHw1FZmRfXEOEWS1l1m
-   2b94JZT2MYX8zsAVmkC0naqNH4e78bHhgCjHocb2gpmNE/yrcBwjxNKhF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="327704199"
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="327704199"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 02:24:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="546067712"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 02 May 2022 02:24:30 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nlSI9-0009Rn-Ao;
-        Mon, 02 May 2022 09:24:29 +0000
-Date:   Mon, 2 May 2022 17:24:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dharmendra Singh <dharamhans87@gmail.com>, miklos@szeredi.hu
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Dharmendra Singh <dharamhans87@gmail.com>,
-        linux-fsdevel@vger.kernel.org, fuse-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, bschubert@ddn.com
-Subject: Re: [PATCH v3 3/3] Avoid lookup in d_revalidate()
-Message-ID: <202205021705.GXaOa8o4-lkp@intel.com>
-References: <20220502054628.25826-4-dharamhans87@gmail.com>
+        Mon, 2 May 2022 05:27:51 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523563BBD8;
+        Mon,  2 May 2022 02:24:22 -0700 (PDT)
+Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D18AF1EC01E0;
+        Mon,  2 May 2022 11:24:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1651483456;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=RPW0vagqKHOtl5OB781xZjCEvbh3RFdFvxOJZCu3QUw=;
+        b=EtlnoMp+siF7Jcq0gACzieL4K0m888hyMlxHxdG1g7w4LfENPSuEEXNchtcWBjtH3tZLrX
+        wRnerGphpHZcj4pUEvHQ3nYTqoMeFOEKd2YdeTRj0Hw+bo3Q3b5Hi+5Mttc7F+m585JaJs
+        Xr3AectX74zsO2xVhTKwjCGtB0AbV3Q=
+Date:   Mon, 2 May 2022 11:24:14 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     linux-edac <linux-edac@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v2] EDAC: Use kcalloc()
+Message-ID: <Ym+jPgjk/KJPMvx4@zn.tnic>
+References: <20220412211957.28899-1-bp@alien8.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220502054628.25826-4-dharamhans87@gmail.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220412211957.28899-1-bp@alien8.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dharmendra,
+On Tue, Apr 12, 2022 at 11:19:57PM +0200, Borislav Petkov wrote:
 
-Thank you for the patch! Perhaps something to improve:
+v2 with one forgotten instance converted:
 
-[auto build test WARNING on v5.18-rc5]
-[cannot apply to mszeredi-fuse/for-next next-20220429]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+---
+From: Borislav Petkov <bp@suse.de>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dharmendra-Singh/FUSE-Implement-atomic-lookup-open-create/20220502-134729
-base:    672c0c5173427e6b3e2a9bbb7be51ceeec78093a
-config: hexagon-randconfig-r045-20220502 (https://download.01.org/0day-ci/archive/20220502/202205021705.GXaOa8o4-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a531ce8124c046dffefe5cd731c952c8f7248c5b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Dharmendra-Singh/FUSE-Implement-atomic-lookup-open-create/20220502-134729
-        git checkout a531ce8124c046dffefe5cd731c952c8f7248c5b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/fuse/
+It is syntactic sugar anyway:
 
-If you fix the issue, kindly add following tag as appropriate
+  # drivers/edac/edac_mc.o:
+
+   text    data     bss     dec     hex filename
+  13378     324       8   13710    358e edac_mc.o.before
+  13378     324       8   13710    358e edac_mc.o.after
+
+md5:
+   70a53ee3ac7f867730e35c2be9110748  edac_mc.o.before.asm
+   70a53ee3ac7f867730e35c2be9110748  edac_mc.o.after.asm
+
+  # drivers/edac/edac_device.o:
+
+   text    data     bss     dec     hex filename
+   5704     120       4    5828    16c4 edac_device.o.before
+   5704     120       4    5828    16c4 edac_device.o.after
+
+md5:
+   880563c859da6eb9aca85ec431fdbaeb  edac_device.o.before.asm
+   880563c859da6eb9aca85ec431fdbaeb  edac_device.o.after.asm
+
+No functional changes.
+
 Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+---
+ drivers/edac/edac_device.c | 13 ++++---------
+ drivers/edac/edac_mc.c     |  2 +-
+ 2 files changed, 5 insertions(+), 10 deletions(-)
 
-All warnings (new ones prefixed by >>):
+diff --git a/drivers/edac/edac_device.c b/drivers/edac/edac_device.c
+index b737349184e3..19522c568aa5 100644
+--- a/drivers/edac/edac_device.c
++++ b/drivers/edac/edac_device.c
+@@ -70,26 +70,21 @@ edac_device_alloc_ctl_info(unsigned pvt_sz, char *dev_name, unsigned nr_instance
+ 	if (!dev_ctl)
+ 		return NULL;
+ 
+-	dev_inst = kmalloc_array(nr_instances,
+-				 sizeof(struct edac_device_instance),
+-				 GFP_KERNEL | __GFP_ZERO);
++	dev_inst = kcalloc(nr_instances, sizeof(struct edac_device_instance), GFP_KERNEL);
+ 	if (!dev_inst)
+ 		goto free;
+ 
+ 	dev_ctl->instances = dev_inst;
+ 
+-	dev_blk = kmalloc_array(nr_instances * nr_blocks,
+-				sizeof(struct edac_device_block),
+-				GFP_KERNEL | __GFP_ZERO);
++	dev_blk = kcalloc(nr_instances * nr_blocks, sizeof(struct edac_device_block), GFP_KERNEL);
+ 	if (!dev_blk)
+ 		goto free;
+ 
+ 	dev_ctl->blocks = dev_blk;
+ 
+ 	if (nr_attrib) {
+-		dev_attrib = kmalloc_array(nr_attrib,
+-					   sizeof(struct edac_dev_sysfs_block_attribute),
+-					   GFP_KERNEL | __GFP_ZERO);
++		dev_attrib = kcalloc(nr_attrib, sizeof(struct edac_dev_sysfs_block_attribute),
++				     GFP_KERNEL);
+ 		if (!dev_attrib)
+ 			goto free;
+ 
+diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
+index 387b6851c975..eb58644bb019 100644
+--- a/drivers/edac/edac_mc.c
++++ b/drivers/edac/edac_mc.c
+@@ -366,7 +366,7 @@ struct mem_ctl_info *edac_mc_alloc(unsigned int mc_num,
+ 	if (!mci)
+ 		return NULL;
+ 
+-	mci->layers = kmalloc_array(n_layers, sizeof(struct edac_mc_layer), GFP_KERNEL | __GFP_ZERO);
++	mci->layers = kcalloc(n_layers, sizeof(struct edac_mc_layer), GFP_KERNEL);
+ 	if (!mci->layers)
+ 		goto error;
+ 
+-- 
+2.35.1
 
->> fs/fuse/dir.c:571:5: warning: no previous prototype for function 'fuse_do_atomic_common' [-Wmissing-prototypes]
-   int fuse_do_atomic_common(struct inode *dir, struct dentry *entry,
-       ^
-   fs/fuse/dir.c:571:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int fuse_do_atomic_common(struct inode *dir, struct dentry *entry,
-   ^
-   static 
->> fs/fuse/dir.c:668:63: warning: variable 'fi' is uninitialized when used here [-Wuninitialized]
-                   err = fuse_atomic_open_revalidate_inode(reval_inode, entry, fi,
-                                                                               ^~
-   fs/fuse/dir.c:585:23: note: initialize the variable 'fi' to silence this warning
-           struct fuse_inode *fi;
-                                ^
-                                 = NULL
-   2 warnings generated.
-
-
-vim +/fuse_do_atomic_common +571 fs/fuse/dir.c
-
-   564	
-   565	
-   566	/*
-   567	 * This is common function for initiating atomic operations into libfuse.
-   568	 * Currently being used by Atomic create(atomic lookup + create) and
-   569	 * Atomic open(atomic lookup + open).
-   570	 */
- > 571	int fuse_do_atomic_common(struct inode *dir, struct dentry *entry,
-   572				  struct dentry **alias, struct file *file,
-   573				  struct inode *reval_inode, unsigned int flags,
-   574				  umode_t mode, uint32_t opcode)
-   575	{
-   576		int err;
-   577		struct inode *inode;
-   578		struct fuse_mount *fm = get_fuse_mount(dir);
-   579		struct fuse_conn *fc = get_fuse_conn(dir);
-   580		FUSE_ARGS(args);
-   581		struct fuse_forget_link *forget;
-   582		struct fuse_create_in inarg;
-   583		struct fuse_open_out outopen;
-   584		struct fuse_entry_out outentry;
-   585		struct fuse_inode *fi;
-   586		struct fuse_file *ff;
-   587		struct dentry *res = NULL;
-   588		void *security_ctx = NULL;
-   589		u32 security_ctxlen;
-   590		bool atomic_create = (opcode == FUSE_ATOMIC_CREATE ? true : false);
-   591		bool create_op = (opcode == FUSE_CREATE ||
-   592				  opcode == FUSE_ATOMIC_CREATE) ? true : false;
-   593		u64 attr_version = fuse_get_attr_version(fm->fc);
-   594	
-   595		if (alias)
-   596			*alias = NULL;
-   597	
-   598		/* Userspace expects S_IFREG in create mode */
-   599		BUG_ON(create_op && (mode & S_IFMT) != S_IFREG);
-   600	
-   601		forget = fuse_alloc_forget();
-   602		err = -ENOMEM;
-   603		if (!forget)
-   604			goto out_err;
-   605	
-   606		err = -ENOMEM;
-   607		ff = fuse_file_alloc(fm);
-   608		if (!ff)
-   609			goto out_put_forget_req;
-   610	
-   611		if (!fc->dont_mask)
-   612			mode &= ~current_umask();
-   613	
-   614		flags &= ~O_NOCTTY;
-   615		memset(&inarg, 0, sizeof(inarg));
-   616		memset(&outentry, 0, sizeof(outentry));
-   617		inarg.flags = flags;
-   618		inarg.mode = mode;
-   619		inarg.umask = current_umask();
-   620	
-   621		if (fm->fc->handle_killpriv_v2 && (flags & O_TRUNC) &&
-   622		    !(flags & O_EXCL) && !capable(CAP_FSETID)) {
-   623			inarg.open_flags |= FUSE_OPEN_KILL_SUIDGID;
-   624		}
-   625	
-   626		args.opcode = opcode;
-   627		args.nodeid = get_node_id(dir);
-   628		args.in_numargs = 2;
-   629		args.in_args[0].size = sizeof(inarg);
-   630		args.in_args[0].value = &inarg;
-   631		args.in_args[1].size = entry->d_name.len + 1;
-   632		args.in_args[1].value = entry->d_name.name;
-   633		args.out_numargs = 2;
-   634		args.out_args[0].size = sizeof(outentry);
-   635		args.out_args[0].value = &outentry;
-   636		args.out_args[1].size = sizeof(outopen);
-   637		args.out_args[1].value = &outopen;
-   638	
-   639		if (fm->fc->init_security) {
-   640			err = get_security_context(entry, mode, &security_ctx,
-   641						   &security_ctxlen);
-   642			if (err)
-   643				goto out_put_forget_req;
-   644	
-   645			args.in_numargs = 3;
-   646			args.in_args[2].size = security_ctxlen;
-   647			args.in_args[2].value = security_ctx;
-   648		}
-   649	
-   650		err = fuse_simple_request(fm, &args);
-   651		kfree(security_ctx);
-   652		if (err)
-   653			goto out_free_ff;
-   654	
-   655		err = -EIO;
-   656		if (!S_ISREG(outentry.attr.mode) || invalid_nodeid(outentry.nodeid) ||
-   657		    fuse_invalid_attr(&outentry.attr))
-   658			goto out_free_ff;
-   659	
-   660		ff->fh = outopen.fh;
-   661		ff->nodeid = outentry.nodeid;
-   662		ff->open_flags = outopen.open_flags;
-   663	
-   664		/* Inode revalidation was bypassed previously for type other than
-   665		 * directories, revalidate now as we got fresh attributes.
-   666		 */
-   667		if (reval_inode) {
- > 668			err = fuse_atomic_open_revalidate_inode(reval_inode, entry, fi,
-   669								forget, &outentry,
-   670								attr_version);
-   671			if (err)
-   672				goto out_free_ff;
-   673			inode = reval_inode;
-   674			kfree(forget);
-   675			goto out_finish_open;
-   676		}
-   677		inode = fuse_iget(dir->i_sb, outentry.nodeid, outentry.generation,
-   678				  &outentry.attr, entry_attr_timeout(&outentry), 0);
-   679		if (!inode) {
-   680			flags &= ~(O_CREAT | O_EXCL | O_TRUNC);
-   681			fuse_sync_release(NULL, ff, flags);
-   682			fuse_queue_forget(fm->fc, forget, outentry.nodeid, 1);
-   683			err = -ENOMEM;
-   684			goto out_err;
-   685		}
-   686		kfree(forget);
-   687		/*
-   688		 * In atomic create, we skipped lookup and it is very much likely that
-   689		 * dentry has DCACHE_PAR_LOOKUP flag set on it so call d_splice_alias().
-   690		 * Note: Only REG file is allowed under create/atomic create.
-   691		 */
-   692		/* There is special case when at very first call where we check if
-   693		 * atomic create is implemented by USER SPACE/libfuse or not, we
-   694		 * skipped lookup. Now, in case where atomic create is not implemented
-   695		 * underlying, we fall back to FUSE_CREATE. here we are required to handle
-   696		 * DCACHE_PAR_LOOKUP flag.
-   697		 */
-   698		if (!atomic_create && !d_in_lookup(entry) && fm->fc->no_atomic_create)
-   699			d_instantiate(entry, inode);
-   700		else {
-   701			res = d_splice_alias(inode, entry);
-   702			if (res) {
-   703				 /* Close the file in user space, but do not unlink it,
-   704				  * if it was created - with network file systems other
-   705				  * clients might have already accessed it.
-   706				  */
-   707				if (IS_ERR(res)) {
-   708					fi = get_fuse_inode(inode);
-   709					fuse_sync_release(fi, ff, flags);
-   710					fuse_queue_forget(fm->fc, forget, outentry.nodeid, 1);
-   711					err = PTR_ERR(res);
-   712					goto out_err;
-   713				}
-   714				entry = res;
-   715				if (alias)
-   716					*alias = res;
-   717			}
-   718		}
-   719		fuse_change_entry_timeout(entry, &outentry);
-   720		/*
-   721		 * In case of atomic create, we want to indicate directory change
-   722		 * only if USER SPACE actually created the file.
-   723		 */
-   724		if (!atomic_create || (outopen.open_flags & FOPEN_FILE_CREATED))
-   725			fuse_dir_changed(dir);
-   726		err = finish_open(file, entry, generic_file_open);
-   727	out_finish_open:
-   728		if (err) {
-   729			fi = get_fuse_inode(inode);
-   730			fuse_sync_release(fi, ff, flags);
-   731		} else {
-   732			file->private_data = ff;
-   733			fuse_finish_open(inode, file);
-   734		}
-   735		return err;
-   736	
-   737	out_free_ff:
-   738		fuse_file_free(ff);
-   739	out_put_forget_req:
-   740		kfree(forget);
-   741	out_err:
-   742		return err;
-   743	}
-   744	
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

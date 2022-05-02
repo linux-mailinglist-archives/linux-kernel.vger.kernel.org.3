@@ -2,85 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D86516F51
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 14:08:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F000516F55
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 14:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384906AbiEBMLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 08:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34984 "EHLO
+        id S1384913AbiEBMOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 08:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384909AbiEBML0 (ORCPT
+        with ESMTP id S1384622AbiEBMOc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 08:11:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E45140FB;
-        Mon,  2 May 2022 05:07:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 60621612C9;
-        Mon,  2 May 2022 12:07:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B240AC385AC;
-        Mon,  2 May 2022 12:07:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651493276;
-        bh=zH2JcPp93hhXKO2FfuIW5JhzudLikwLODK+XcpVnpr0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hIGvj5ylzXIGwnN46d+L669DA/lp2myUd5Uzhms1Zbpap/5w97HFOrldCZSGfhHhB
-         KGvjkU5WjjtEfzhx44dYS1Rbe6tzoQOfbCz8hs7oBnnDh7YtpFUj+2eqjE5kees9c4
-         CetMKXTHgyFa/+CWsFtSni8aRTisvW2ZlAY7XV38=
-Date:   Mon, 2 May 2022 14:07:55 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        jirislaby@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        quic_msavaliy@quicinc.com, quic_vtanuku@quicinc.com
-Subject: Re: [PATCH 2/2] tty: serial: qcom_geni_serial: Disable MMIO tracing
-Message-ID: <Ym/Jm0MSRCQEt77B@kroah.com>
-References: <1651488314-19382-1-git-send-email-quic_vnivarth@quicinc.com>
- <1651488314-19382-3-git-send-email-quic_vnivarth@quicinc.com>
+        Mon, 2 May 2022 08:14:32 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158F3BFA;
+        Mon,  2 May 2022 05:11:04 -0700 (PDT)
+Date:   Mon, 02 May 2022 12:11:01 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651493462;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DqLyU6eqOYm5mbsrgaYZRI+vMRTFZkpfrcGpvit8sCs=;
+        b=lfASwGypYDAxvZnjOsBm4ApDvAjAkjdu/FCKFjVtUiheCv+RHaBRPU0gndgZEpxnN9OEod
+        NCspsyMQEBIMdHG3CG0Jr3nemhpSHBvrDTDtanay/gDRhm+00c3UycX4GX2Tvkts2kf+an
+        q6qVwVKgsBUKHlyZWhN4uY8a2Gf3tL+ghNHaSFeUhVYetrt9yHOxA5UGZcgeFj7PcJskS9
+        aeePq6XOysgwj8tJsCh4SKwQ1qS9MFHAZESg1cMLmaIkNmeu47sDcuZq4Vt/wLMzTZQDk6
+        Ohph7tvNE6u3f/3+rQU2Hmyre8HfipgUhLwy/dGUwLYEtYPRTsX4MJnDdEZLng==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651493462;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DqLyU6eqOYm5mbsrgaYZRI+vMRTFZkpfrcGpvit8sCs=;
+        b=JcWQUm6Z51InkI7cK1DYUOhX1XFMuQ/ShJFozA3/cG5yHC5kBruHWnpslSV6NypSpCNpv/
+        NMLLHVkjZ/5kDUDQ==
+From:   "tip-bot2 for Minghao Chi" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: irq/core] genirq: Use pm_runtime_resume_and_get() instead of
+ pm_runtime_get_sync()
+Cc:     Zeal Robot <zealci@zte.com.cn>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, maz@kernel.org
+In-Reply-To: <20220418110716.2559453-1-chi.minghao@zte.com.cn>
+References: <20220418110716.2559453-1-chi.minghao@zte.com.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1651488314-19382-3-git-send-email-quic_vnivarth@quicinc.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <165149346127.4207.7891496748759999918.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 02, 2022 at 04:15:14PM +0530, Vijaya Krishna Nivarthi wrote:
-> Register read/write tracing is causing excessive
-> logging and filling the rtb buffer and effecting
-> performance.
-> 
-> Disabled MMIO tracing to disable register
-> read/write tracing.
-> 
-> Signed-off-by: Visweswara Tanuku <quic_vtanuku@quicinc.com>
-> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-> ---
->  drivers/tty/serial/qcom_geni_serial.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-> index f496102..aa8facb 100644
-> --- a/drivers/tty/serial/qcom_geni_serial.c
-> +++ b/drivers/tty/serial/qcom_geni_serial.c
-> @@ -1,5 +1,11 @@
->  // SPDX-License-Identifier: GPL-2.0
-> -// Copyright (c) 2017-2018, The Linux foundation. All rights reserved.
-> +/*
-> + * Copyright (c) 2017-2018, The Linux foundation. All rights reserved.
-> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+The following commit has been merged into the irq/core branch of tip:
 
-As stated before, this change is not proper.
+Commit-ID:     ce4818957fdc5bca57fc2c92b0dfe109d26bcc47
+Gitweb:        https://git.kernel.org/tip/ce4818957fdc5bca57fc2c92b0dfe109d26bcc47
+Author:        Minghao Chi <chi.minghao@zte.com.cn>
+AuthorDate:    Mon, 18 Apr 2022 11:07:16 
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Mon, 02 May 2022 14:08:08 +02:00
 
-thanks,
+genirq: Use pm_runtime_resume_and_get() instead of pm_runtime_get_sync()
 
-greg k-h
+pm_runtime_resume_and_get() achieves the same and simplifies the code.
+
+[ tglx: Simplify it further by presetting retval ]
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Link: https://lore.kernel.org/r/20220418110716.2559453-1-chi.minghao@zte.com.cn
+---
+ kernel/irq/chip.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
+
+diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
+index 54af0de..e6b8e56 100644
+--- a/kernel/irq/chip.c
++++ b/kernel/irq/chip.c
+@@ -1573,17 +1573,12 @@ static struct device *irq_get_parent_device(struct irq_data *data)
+ int irq_chip_pm_get(struct irq_data *data)
+ {
+ 	struct device *dev = irq_get_parent_device(data);
+-	int retval;
++	int retval = 0;
+ 
+-	if (IS_ENABLED(CONFIG_PM) && dev) {
+-		retval = pm_runtime_get_sync(dev);
+-		if (retval < 0) {
+-			pm_runtime_put_noidle(dev);
+-			return retval;
+-		}
+-	}
++	if (IS_ENABLED(CONFIG_PM) && dev)
++		retval = pm_runtime_resume_and_get(dev);
+ 
+-	return 0;
++	return retval;
+ }
+ 
+ /**

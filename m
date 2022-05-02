@@ -2,211 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A24651750B
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47FA651752A
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386389AbiEBQzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 12:55:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35244 "EHLO
+        id S242245AbiEBQ6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 12:58:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243598AbiEBQzI (ORCPT
+        with ESMTP id S236543AbiEBQ62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 12:55:08 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F18AE42
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 09:51:37 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id y63so15762795oia.7
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 09:51:37 -0700 (PDT)
+        Mon, 2 May 2022 12:58:28 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D5B06273
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 09:54:59 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 4so19034145ljw.11
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 09:54:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=WQqGy9/cAtVs0rYLMmKAdIwpOUTHX81bUyFE+Uvv2gE=;
-        b=NcXfUDSWHsIAofMX/GKhg1VN4gKrGgzzc/Kb/ahx4U1bLirmQsRQkwYr9kPzv9BrUI
-         XyokdoAYCCDvYD1v+EHnatssF+T8x8GdlO1M+uq+j0Qgsej/GuduhNlhQHgXqevnRBDT
-         fOCWLNBmTJpm3VfQlSzhf/m8/BI1H4ry+oczo5XCLDWu5YcXjeEOIV8Vlvs1BSUk+rlr
-         gF2rmTZKI9EsC+45WyhPEsqtmgcSNb8vQOGshtfU/FSxHRTfiQYv3tvbz9wuRalASvZR
-         T28f5WI3egA6226XuKPIdX+8we5ZyVhXngq/+FRYFTn4Onkwi/RgBGsOVXB1HrGbFvLy
-         6yKw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tuwSXDS47usg98UbOCK/I9oPEzbY53h2cc8iNFbvNdQ=;
+        b=aMhh8jxi4MJNkWjHLMMsq21pu+OlopMpNWh/ZkcBXDP72LSQ4XoW3ys9Aid/fsiFyo
+         6f33+KLowYyiwr5MPmEx92h34cmNTRYgDAIVeUP2R88OpMo9h8QovxDHFK3K2MgcpUKz
+         ozK4fCy0XFBENiG1s2ch0aKV/O5ZaTi/x/rf3Gu3d/Ty0zraKgMEMbwQcDjlCH+O5H5M
+         jNvG/4k8zJtPPOkFF25ROWlzpr84s1xlORhrOMkw2L/V/mYnL6wRS4MiqeHULVlFyJ/P
+         5XgedszkbvcnOnkQ/YO2on9T3IYpk0esfVTWBj0ne3SrkozSH0e7Ug//kG0aP0qbR925
+         4x6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=WQqGy9/cAtVs0rYLMmKAdIwpOUTHX81bUyFE+Uvv2gE=;
-        b=OXe/E5oRebXIgevUEMgeR7gkaitRN6bJvLTCRSuS3/gnYT2tp2EcDjyskMSH0yprdx
-         1AKp2shsWiSZvFHpGctPc8WoDqsDtMrvpIDln1Cwg0SUJjGuU7qTP61jfAbECRDK8aIh
-         yrPqBB16Su0wl+ZfVj1lcPxvPSSlvl1RntJbUE9cmTQTasqKd3jYIXLqSTU7HkeXB02H
-         ldBxRKjYQbxmmXYMHJiEyqlIqc9DIMhwMYtd1D1liGnmzQPJgS3FJlevK7Y0pxeU+yoQ
-         /ZMOF7GxsZLlVDrmAUmD9lDuGcTOtA8crG5WIRrgbYy9jR/7O0C7D/4Bd715ogp00p65
-         e7zg==
-X-Gm-Message-State: AOAM533kyj8vFQT/X3xkP5YDkfxEI7UOz/VEWRZjUm0yWPkfwvO0yfei
-        vG9tnxwC/1HCIXo1+yTzQaEsGA==
-X-Google-Smtp-Source: ABdhPJxGUGnYgijgOuwgEEEHawCtTKNkif8bNgtzd1O6MMWsWF1x8UKYWT5NJqYOoLdQVxWq53KdlQ==
-X-Received: by 2002:a05:6808:2396:b0:325:b6e:6cf0 with SMTP id bp22-20020a056808239600b003250b6e6cf0mr22930oib.288.1651510297242;
-        Mon, 02 May 2022 09:51:37 -0700 (PDT)
-Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id h11-20020a4add8b000000b0035eb4e5a6ccsm4029422oov.34.2022.05.02.09.51.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 09:51:36 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     Stephen Boyd <swboyd@chromium.org>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH v4 5/5] drm/msm/dp: Implement hpd_notify()
-Date:   Mon,  2 May 2022 09:53:16 -0700
-Message-Id: <20220502165316.4167199-6-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220502165316.4167199-1-bjorn.andersson@linaro.org>
-References: <20220502165316.4167199-1-bjorn.andersson@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tuwSXDS47usg98UbOCK/I9oPEzbY53h2cc8iNFbvNdQ=;
+        b=E+ff8O4vgVkdCmGiCGu0eSpjv0w4JBH513jJH8o9kyh0P7LJWUfO/WlWEry8yvtkPD
+         rkpv6jITGLiAf+vh+ggdJTunx0ho9eJelZoJOVq9CFwYQ/xJdfAWqhzJplAdgDZ8CWYl
+         Tx25s/JVuZ8xOj6zaK+gpzL3HfmTxQFpR2mZHAahmA5cj0H15ert/Ah2G+4vl0z/5XXx
+         IUsHchAA8q3zyS9pVWrs3pQVM1Bl7ZRKqzmY66PghTOAGZ/4WiQzwyRzNly/XV2kPFlv
+         4HpeHe6mOdFTZ8ww64I9htAY3fx/R3A9L1AXpf1xEwIGs0azGsuDe9YDGPfH7/8Pv6//
+         7QEQ==
+X-Gm-Message-State: AOAM530U0F6WRZFuG/euz0MAGehNgC4ZJeCzAkHMo/3vsqgHfYG7ctQZ
+        1hx/GduDDi3DvkadXwaszSZ0PcHlSDxZ/j/b8+HZag==
+X-Google-Smtp-Source: ABdhPJxidiAuNREg4SBCMW3M8snJ5Qcx2YyO7ESaLOxRuKvXGNp4UO7ALmr+WQsQqrydLCtL70Bgahl47Xz4JvKAbVg=
+X-Received: by 2002:a05:651c:104f:b0:24f:3fc4:1892 with SMTP id
+ x15-20020a05651c104f00b0024f3fc41892mr8053610ljm.399.1651510497220; Mon, 02
+ May 2022 09:54:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220420214317.3303360-1-kaleshsingh@google.com> <165117574186.3115452.6818682378273681624.b4-ty@kernel.org>
+In-Reply-To: <165117574186.3115452.6818682378273681624.b4-ty@kernel.org>
+From:   Kalesh Singh <kaleshsingh@google.com>
+Date:   Mon, 2 May 2022 09:54:45 -0700
+Message-ID: <CAC_TJve+n8gXbG_XY_rb+DC7399SSmP6BRc5x7X=cvht50XLYA@mail.gmail.com>
+Subject: Re: [PATCH v8 0/6] KVM: arm64: Hypervisor stack enhancements
+To:     Marc Zyngier <maz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Fuad Tabba <tabba@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        kvmarm <kvmarm@lists.cs.columbia.edu>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Changbin Du <changbin.du@intel.com>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Qualcomm DisplayPort driver contains traces of the necessary
-plumbing to hook up USB HPD, in the form of the dp_hpd module and the
-dp_usbpd_cb struct. Use this as basis for implementing the
-hpd_notify() callback, by amending the dp_hpd module with the
-missing logic.
+On Thu, Apr 28, 2022 at 12:55 PM Marc Zyngier <maz@kernel.org> wrote:
+>
+> On Wed, 20 Apr 2022 14:42:51 -0700, Kalesh Singh wrote:
+> > This is v8 of the nVHE hypervisor stack enhancements. This version is based
+> > on 5.18-rc3.
+> >
+> > Previous versions can be found at:
+> > v7: https://lore.kernel.org/r/20220408200349.1529080-1-kaleshsingh@google.com/
+> > v6: https://lore.kernel.org/r/20220314200148.2695206-1-kaleshsingh@google.com/
+> > v5: https://lore.kernel.org/r/20220307184935.1704614-1-kaleshsingh@google.com/
+> > v4: https://lore.kernel.org/r/20220225033548.1912117-1-kaleshsingh@google.com/
+> > v3: https://lore.kernel.org/r/20220224051439.640768-1-kaleshsingh@google.com/
+> > v2: https://lore.kernel.org/r/20220222165212.2005066-1-kaleshsingh@google.com/
+> > v1: https://lore.kernel.org/r/20220210224220.4076151-1-kaleshsingh@google.com/
+> >
+> > [...]
+>
+> Applied to next, thanks!
+>
+> [1/6] KVM: arm64: Introduce hyp_alloc_private_va_range()
+>       commit: 92abe0f81e1385afd8f1dc66206b5be9a514899b
+> [2/6] KVM: arm64: Introduce pkvm_alloc_private_va_range()
+>       commit: f922c13e778d6d5343d4576be785a8204c595113
+> [3/6] KVM: arm64: Add guard pages for KVM nVHE hypervisor stack
+>       commit: ce3354318a57875dc59f4bb841662e95bfba03db
+> [4/6] KVM: arm64: Add guard pages for pKVM (protected nVHE) hypervisor stack
+>       commit: 1a919b17ef012ca0572bae759c27e5ea02bfb47f
+> [5/6] KVM: arm64: Detect and handle hypervisor stack overflows
+>       commit: 66de19fad9ef47c5376a99bb2b00661f1c788a94
+> [6/6] KVM: arm64: Symbolize the nVHE HYP addresses
+>       commit: 6ccf9cb557bd32073b0d68baed97f1bd8a40ff1d
 
-Overall the solution is similar to what's done downstream, but upstream
-all the code to disect the HPD notification lives on the calling side of
-drm_connector_oob_hotplug_event().
+Thanks for applying these Marc.
 
-drm_connector_oob_hotplug_event() performs the lookup of the
-drm_connector based on fwnode, hence the need to assign the fwnode in
-dp_drm_connector_init().
+I was wondering if instead of taking these through kvm-arm64/next,
+could Catalin consolidated these in arm64 for-next/core with Mark
+Ruthland's and Madhavan's stacktrace patches[1]? This avoids conflict
+and would allow for the hypervisor unwinding changes[2] to apply
+cleanly.
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
+[1] https://lore.kernel.org/r/20220413145910.3060139-1-mark.rutland@arm.com/
+[2]  https://lore.kernel.org/r/20220427184716.1949239-1-kaleshsingh@google.com/
 
-Changes since v3:
-- Implements hpd_notify instead of oob_hotplug_event
-- Rebased on new cleanup patch from Dmitry
-- Set hpd_state to ST_MAINLINK_READY when dp_display_usbpd_configure() succeeds
-
- drivers/gpu/drm/msm/dp/dp_display.c | 26 ++++++++++++++++++++++++++
- drivers/gpu/drm/msm/dp/dp_display.h |  1 +
- drivers/gpu/drm/msm/dp/dp_drm.c     |  3 +++
- drivers/gpu/drm/msm/dp/dp_drm.h     |  2 ++
- 4 files changed, 32 insertions(+)
-
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index b447446d75e9..080294ac6144 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -83,6 +83,8 @@ struct dp_display_private {
- 	bool hpd_irq_on;
- 	bool audio_supported;
- 
-+	bool connected;
-+
- 	struct drm_device *drm_dev;
- 	struct platform_device *pdev;
- 	struct dentry *root;
-@@ -1271,6 +1273,7 @@ static int dp_display_probe(struct platform_device *pdev)
- 	if (!desc)
- 		return -EINVAL;
- 
-+	dp->dp_display.dev = &pdev->dev;
- 	dp->pdev = pdev;
- 	dp->name = "drm_dp";
- 	dp->dp_display.connector_type = desc->connector_type;
-@@ -1760,3 +1763,26 @@ void dp_bridge_mode_set(struct drm_bridge *drm_bridge,
- 	dp_display->dp_mode.h_active_low =
- 		!!(dp_display->dp_mode.drm_mode.flags & DRM_MODE_FLAG_NHSYNC);
- }
-+
-+void dp_bridge_hpd_notify(struct drm_bridge *bridge,
-+			  enum drm_connector_status status)
-+{
-+	struct msm_dp_bridge *dp_bridge = to_dp_bridge(bridge);
-+	struct msm_dp *dp = dp_bridge->dp_display;
-+	struct dp_display_private *dp_display = container_of(dp, struct dp_display_private, dp_display);
-+	int ret;
-+
-+	drm_dbg_dp(dp_display->drm_dev, "status: %d connected: %d\n", status, dp_display->connected);
-+
-+	if (!dp_display->connected && status == connector_status_connected) {
-+		dp_display->connected = true;
-+		ret = dp_display_usbpd_configure(dp_display);
-+		if (!ret)
-+			dp_display->hpd_state = ST_MAINLINK_READY;
-+	} else if (status != connector_status_connected) {
-+		dp_display->connected = false;
-+		dp_display_notify_disconnect(dp_display);
-+	} else {
-+		dp_display_usbpd_attention(dp_display);
-+	}
-+}
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.h b/drivers/gpu/drm/msm/dp/dp_display.h
-index 4f9fe4d7610b..2d2614bc5a14 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.h
-+++ b/drivers/gpu/drm/msm/dp/dp_display.h
-@@ -11,6 +11,7 @@
- #include "disp/msm_disp_snapshot.h"
- 
- struct msm_dp {
-+	struct device *dev;
- 	struct drm_device *drm_dev;
- 	struct device *codec_dev;
- 	struct drm_bridge *bridge;
-diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
-index 62d58b9c4647..821cfd37b1fb 100644
---- a/drivers/gpu/drm/msm/dp/dp_drm.c
-+++ b/drivers/gpu/drm/msm/dp/dp_drm.c
-@@ -68,6 +68,7 @@ static const struct drm_bridge_funcs dp_bridge_ops = {
- 	.mode_valid   = dp_bridge_mode_valid,
- 	.get_modes    = dp_bridge_get_modes,
- 	.detect       = dp_bridge_detect,
-+	.hpd_notify   = dp_bridge_hpd_notify,
- };
- 
- struct drm_bridge *dp_bridge_init(struct msm_dp *dp_display, struct drm_device *dev,
-@@ -138,6 +139,8 @@ struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display)
- 	if (IS_ERR(connector))
- 		return connector;
- 
-+	connector->fwnode = fwnode_handle_get(dev_fwnode(dp_display->dev));
-+
- 	drm_connector_attach_encoder(connector, dp_display->encoder);
- 
- 	return connector;
-diff --git a/drivers/gpu/drm/msm/dp/dp_drm.h b/drivers/gpu/drm/msm/dp/dp_drm.h
-index f4b1ed1e24f7..3b7480a86844 100644
---- a/drivers/gpu/drm/msm/dp/dp_drm.h
-+++ b/drivers/gpu/drm/msm/dp/dp_drm.h
-@@ -32,5 +32,7 @@ enum drm_mode_status dp_bridge_mode_valid(struct drm_bridge *bridge,
- void dp_bridge_mode_set(struct drm_bridge *drm_bridge,
- 			const struct drm_display_mode *mode,
- 			const struct drm_display_mode *adjusted_mode);
-+void dp_bridge_hpd_notify(struct drm_bridge *bridge,
-+			  enum drm_connector_status status);
- 
- #endif /* _DP_DRM_H_ */
--- 
-2.35.1
-
+Thanks,
+Kalesh
+>
+> Cheers,
+>
+>         M.
+> --
+> Without deviation from the norm, progress is not possible.
+>
+>

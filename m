@@ -2,193 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 812C1516B71
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 09:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8EB3516B77
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 09:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359079AbiEBHz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 03:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49508 "EHLO
+        id S1359014AbiEBH7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 03:59:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358993AbiEBHzY (ORCPT
+        with ESMTP id S243888AbiEBH7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 03:55:24 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7363E2C649
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 00:51:55 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id e2so18533910wrh.7
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 00:51:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=f/iZcbm+HsfS7NtVRG8PqR/TcI1wEubO1WbobcyN2js=;
-        b=NrF1p/vNwCzwdOYH7qCK1EBvF/CKACJY2M9sKOXdr6oQJseU4N4LwaXAB6h2h5cNWq
-         0lxfrVjHZkVZV/LXmNg4T9vhuLCrzjRXijIwClM9wI1G3XRMOYjNobEoosZIiOgOvzZq
-         2mDl8j8F0eKZuYiYPNOQ0ONvaf7yL+d1UqgN6bWUHX41ncUrQLxCnVRxSvADN2hGmRgK
-         WOS4Yn/c06NzsBUhv3MFLh+ln9zmVdzkPTAuPdRRp3Ir4TDN8edrajtGYYe+yla24mpZ
-         it1GjNJoKk3JzC6K+QNAqqptIH41WfOJXzIcTejDGsFy3SCtiiogW7z7Xg0EZowfP/VF
-         N+kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=f/iZcbm+HsfS7NtVRG8PqR/TcI1wEubO1WbobcyN2js=;
-        b=VSRUs9P7vSZdJrAJZC4nEzFgjFmB2UxIAq3zcnhCpyXjDK/u0BcRn9CvGBv8d3nJGZ
-         pgUpf2wfViwT9OTbZKhditPGm9k7ylkSgfVlWdNTjTru4smDu+2zsvFJzNq6Zwl3JAjb
-         oSFYznbIs+7fhl9Zo8hAG0GEL8Ga8Amuhi9Rgv7azWpBMtqFmcQZVTygpreB/H0JZsoi
-         kim3iKhlOhikOTHpb2ik6/dWkMulQ1pqvlHhivCMAqF9qfYSDpViyj3v4PTXHgiZX5Xy
-         MwMFlA9xc+nZI4u1GU/Xqz2WljtKqZXeU/R2O/mn6NH+ZwwqWO5Kc3sYofw6yJi7revB
-         YsfA==
-X-Gm-Message-State: AOAM5310e+arqNBTFCacTAc8goyIurYWcBdw6q+byFx4YmQBRj8XkIye
-        jRc7SEneGP78xw3eOQiOhzIU3Q==
-X-Google-Smtp-Source: ABdhPJxsSzLA8P20zIPWb1gO6clHzj+py+j7QZhWipmTlyvk1D+UG5nDQrYdqbUSvV1EkldQMALWLw==
-X-Received: by 2002:adf:f0cb:0:b0:20a:ef39:d42b with SMTP id x11-20020adff0cb000000b0020aef39d42bmr8699587wro.8.1651477913781;
-        Mon, 02 May 2022 00:51:53 -0700 (PDT)
-Received: from elver.google.com ([2a00:79e0:15:13:ee30:3795:2e49:1a19])
-        by smtp.gmail.com with ESMTPSA id z10-20020a1c4c0a000000b003942a244f54sm5668256wmf.45.2022.05.02.00.51.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 00:51:53 -0700 (PDT)
-Date:   Mon, 2 May 2022 09:51:46 +0200
-From:   Marco Elver <elver@google.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, linux-mm <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [next] i386: kunit: ASSERTION FAILED at
- mm/kfence/kfence_test.c:547
-Message-ID: <Ym+NkkglHI5D89Dx@elver.google.com>
-References: <CA+G9fYu2kS0wR4WqMRsj2rePKV9XLgOU1PiXnMvpT+Z=c2ucHA@mail.gmail.com>
- <YmwPocGA9vRSvAEN@elver.google.com>
- <87fslup9dx.fsf@jogness.linutronix.de>
+        Mon, 2 May 2022 03:59:31 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C089C29CA9
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 00:56:03 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1651478162;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oSTsTvc0i3X+jcobiwC8b/0Z6n30nlP5evwaZXnZegM=;
+        b=okjCS72WW/zgt3w/ziE/MMfsTjIrUSVQFO0RXs+GPl/L9V76kOYHdWayuBtXsDLniKL8Ql
+        fuxxGyMEWoQRXwpt9aTog7sizd/eBmdS4MXUC/xyANVtDhkKF25G+YGNJaxRUfrS7rdkz5
+        3vQp0XI3AuMI0qj0a+nB0r9ykYUuRSh4D1HRFMJ4sbxg8qhyNtItcVaLb1pOJqQlAWd6Zo
+        lypOuA4db3vKV5IJxfqRabOuOHwLPuWmqkVuLieSGG2dnrnVQ9ojon6q/widLLXlcq7YUB
+        gqveHUiRSirDtR1eyC7V9A8JTOtf55hOvMF0ycxnKoEhH/J+oM1weyXD7pmcNA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1651478162;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oSTsTvc0i3X+jcobiwC8b/0Z6n30nlP5evwaZXnZegM=;
+        b=70uwt0LUFfpBzUcqZQ/4Uo/fGpZCStcsokrQ6yEFiIW3asCuHZJ7tZjUFw+tWrsCV8lmDV
+        H81sBkHYEShx40DQ==
+To:     Waiman Long <longman@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Feng Tang <feng.tang@intel.com>,
+        Bill Gray <bgray@redhat.com>, Jirka Hladky <jhladky@redhat.com>
+Subject: Re: [PATCH 2/2] x86/tsc_sync: Add synchronization overhead to tsc
+ adjustment
+In-Reply-To: <b86038fe-43f8-4e16-f57d-8283b7da0bb4@redhat.com>
+References: <20220314194630.1726542-1-longman@redhat.com>
+ <20220314194630.1726542-3-longman@redhat.com> <87czhymql2.ffs@tglx>
+ <d1a04785-4822-3a3f-5c37-81329a562364@redhat.com> <87levx8kou.ffs@tglx>
+ <4f02fe46-b253-2809-0af7-f2e9da091fe9@redhat.com> <87czh50xwf.ffs@tglx>
+ <68837b1a-f85b-e842-f8c0-1cad162856f4@redhat.com> <87h76ew3sb.ffs@tglx>
+ <b86038fe-43f8-4e16-f57d-8283b7da0bb4@redhat.com>
+Date:   Mon, 02 May 2022 09:56:01 +0200
+Message-ID: <87a6c0nzam.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87fslup9dx.fsf@jogness.linutronix.de>
-User-Agent: Mutt/2.1.4 (2021-12-11)
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 30, 2022 at 11:14PM +0206, John Ogness wrote:
-[...]
-> I am not familiar with how this works. Is the tracepoint getting set on
-> call_console_drivers()? Or on call_console_driver()?
+On Fri, Apr 29 2022 at 13:41, Waiman Long wrote:
+> On 4/27/22 18:38, Thomas Gleixner wrote:
+>> I grant you that it does not matter for the loop under the assumption
+>> that the loop runs at constant frequency, but is that a guarantee that
+>> it does not matter later on?
+> Yes, that is my point that frequency doesn't matter if frequency remain=20
+> the same. Of course, all bets are off if frequency really change.
 
-It's at the start of call_console_drivers(). See trace_console_rcuidle()
-call.
+Frequency changes after boot.
 
-> If so, there are a couple problems with that. First off, the prototype
-> for that function has changed. Second, that function is called when text
-> is printed, but this is not when the text was created. With the
-> kthreads, the printing can be significantly delayed.
-> 
-> Since printk() is now lockless and console printing is delayed, it
-> becomes a bit tricky to parse the records in the existing code using a
-> tracepoint.
-> 
-> I wonder if creating a NOP function for the kfence probe to attach to
-> would be more appropriate. In printk_sprint() we get the text after
-> space has been reserved, but before the text is committed to the
-> ringbuffer. This is guaranteed to be called from within the printk()
-> context.
+>> If you overcompensate by a factor of 3 because the upcoming CPU ran at
+>> the lowest frequency, then it might become visible later when everything
+>> runs at full speed.
+> I don't think the overhead will be directly proportional to the cpu=20
+> frequency. A 3X increase in frequency will certainly cause the overhead=20
+> to be lowered, but it won't be 1/3. Maybe 1/2 at most.
 
-I think we just need to fix the existing tracepoint, since it has
-changed its semantics vs. what it was intended to be:
+It's very close to proportional according to my experiments.
 
- | commit 95100358491abaa2e9a5483811370059bbca4645
- | Author: Johannes Berg <johannes.berg@intel.com>
- | Date:   Thu Nov 24 20:03:08 2011 +0100
- |
- |     printk/tracing: Add console output tracing
- |
- |     Add a printk.console trace point to record any printk
- |     messages into the trace, regardless of the current
- |     console loglevel. This can help correlate (existing)
- |     printk debugging with other tracing.
- |
- |     Link: http://lkml.kernel.org/r/1322161388.5366.54.camel@jlt3.sipsolutions.net
- |
- |     Acked-by: Frederic Weisbecker <fweisbec@gmail.com>
- |     Cc: Christoph Hellwig <hch@infradead.org>
- |     Cc: Ingo Molnar <mingo@redhat.com>
- |     Acked-by: Peter Zijlstra <a.p.zijlstra@chello.nl>
- |     Acked-by: Thomas Gleixner <tglx@linutronix.de>
- |     Signed-off-by: Johannes Berg <johannes.berg@intel.com>
- |     Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
+>>> However about we half the measure sync_overhead as compensation to avoid
+>>> over-estimation, but probably increase the chance that we need a second
+>>> adjustment of TSC wrap.
+>> Half of what?
+>
+> What I mean is
+>
+> @@ -533,7 +551,7 @@ void check_tsc_sync_target(void)
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * really depends on CPU=
+, node distance and frequency. Add the
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * estimated sync overhe=
+ad to the adjustment value.
+>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 cur->adjusted +=3D cur_max_warp + s=
+ync_overhead;
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 cur->adjusted +=3D cur_max_warp + s=
+ync_overhead/2;
 
-Specifically using it to "correlate (existing) printk debugging with
-other tracing" is now broken.
+The point is? Make it magically half while it still jumps around:
 
-> Here is an example of what I am thinking...
-> 
-> --- a/kernel/printk/printk.c
-> +++ b/kernel/printk/printk.c
-> @@ -2227,6 +2227,10 @@ static u16 printk_sprint(char *text, u16 size, int facility,
->  		}
->  	}
->  
-> +#ifdef CONFIG_KFENCE_KUNIT_TEST
-> +	printk_kfence_check(text, text_len);
-> +#endif
-> +
->  	return text_len;
->  }
->  
-> The probe_console() could attach to a NOP function printk_kfence_check().
+>>> With this patch applied, the measured overhead on the same CooperLake
+>>> system on different reboot runs varies from 104 to 326.
+>> Half of something which jumps around? Not convinced. :)
 
-Thanks for this! However, I think we can't have a KFENCE-specific
-helper, it needs to be a tracepoint, because there are more tests that
-want to check console output (kernel/kcsan/kcsan_test.c did this before
-the KFENCE test actually).
+...
 
-My proposal would be to fix the tracepoint like so:
+> I have applied your patch with some modification and below was the=20
+> relevant part of the boot up log on a Cooperlake system with this TSC=20
+> sync problem.
+>
+> [=C2=A0=C2=A0=C2=A0 0.008858] smpboot: CPU 36 Converting physical 0 to lo=
+gical die 2
+> [=C2=A0=C2=A0=C2=A0 0.008858] Sync overhead: 230
+> [=C2=A0=C2=A0=C2=A0 0.008858] Sync overhead: 547 A: 149597 M: 149596 F: 2=
+500016
+> [=C2=A0=C2=A0=C2=A0 0.008858] TSC ADJUST compensate: CPU36 observed 76342=
+ warp=20
+> (overhead 230). Adjust: 76457
+> [=C2=A0=C2=A0=C2=A0 0.008858] smpboot: CPU 54 Converting physical 0 to lo=
+gical die 3
+> [=C2=A0=C2=A0=C2=A0 0.008858] Sync overhead: 178
+> [=C2=A0=C2=A0=C2=A0 0.008858] Sync overhead: 658 A: 177970 M: 177968 F: 2=
+500028
+> [=C2=A0=C2=A0=C2=A0 0.008858] TSC ADJUST compensate: CPU54 observed 76568=
+ warp=20
+> (overhead 178). Adjust: 76657
+>
+> BTW, CPUs 36 and 54 are the first CPU of socket 2 and 3 respectively. It=
+=20
+> is always these CPUs that need TSC adjustment.
+>
+> I have no idea why the sync overhead actually increase in the subsequent=
+=20
+> measurement as the frequency was set at 2.5GHz, I think.
 
- | --- a/kernel/printk/printk.c
- | +++ b/kernel/printk/printk.c
- | @@ -2002,8 +2002,6 @@ static void call_console_driver(struct console *con, const char *text, size_t le
- |  {
- |  	size_t dropped_len;
- |  
- | -	trace_console_rcuidle(text, len);
- | -
- |  	if (con->dropped && dropped_text) {
- |  		dropped_len = snprintf(dropped_text, DROPPED_TEXT_MAX,
- |  				       "** %lu printk messages dropped **\n",
- | @@ -2178,6 +2176,8 @@ static u16 printk_sprint(char *text, u16 size, int facility,
- |  		}
- |  	}
- |  
- | +	trace_console_rcuidle(text, text_len);
- | +
- |  	return text_len;
- |  }
+See, that's the thing I'm worried about. An allegedly remote lock takes
+178 cycles, but a loop of cache local lock operations takes on average
+658 cycles.
 
-This fixes the KFENCE and KCSAN tests.
+That does not make sense and I haven't seen that behaviour on any of my
+machines I ran that on. The average was always less than the initial
+measurement.
 
-Unless I hear objections, I'll prepare a patch explaining why we need to
-fix the tracepoint.
+> I tried to offline all the CPUs in a socket and then online the first=20
+> CPU as suggested. However, I was not able to cause the tsc_sync loop
+> to run.
 
-Thanks,
--- Marco
+It runs for sure when the first CPU on a socket goes online except when
+TSC is already disabled. It does not matter whether it was online before
+or not.
+
+> BTW, without my patch the same system will boot up with the following
+> log:
+
+We know that by now.
+
+> How about we add the full sync_overhead at bootup stage, but then half=20
+> sync_overhead after boot in case the tsc_sync loop is run again for new=20
+> online CPUs? Or any other scheme that you think is appropriate.
+
+Can you please stop grasping for straws?
+
+I'm as much interested as you to get this solved, but I'm not interested
+in 'works for me' and 'we don't know why it works' solutions simply
+because they end up on my desk sooner than later again.
+
+Thanks
+
+        tglx

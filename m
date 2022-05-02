@@ -2,96 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D0E4516983
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 04:57:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85166516987
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 04:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240798AbiEBDAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 23:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33698 "EHLO
+        id S244361AbiEBDBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 23:01:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234855AbiEBDAf (ORCPT
+        with ESMTP id S234855AbiEBDBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 23:00:35 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52380DEFD
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 19:57:07 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id p12so11368414pfn.0
-        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 19:57:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bxWDbRcGNbfBiVZOS5Mg7GqLQnS0yNnvrGftZ6iHRTU=;
-        b=OXusriHnyQ1M56It+EFHe11gDa1XKKY3gvIt8MNW2aR/GOYGxNX6sDPZhGDcE9FvTw
-         X47nJd877qh8hkwgtpx+ON4kUxdeEvOYuKy0qr3T6WIdIHBuyXLJIbBfuxN6BBSHE3fK
-         d/8HPYCH4ugYzF6xGvVonqZsG47e9VhGDw8qluuhu2WFBC4zfnLaZBRxIycAnzpfrWgK
-         Q+XM/KRj7mhLAqNzjfTFRhLP1jcAc4JfZHVYmf+FtVC26h3oDvfQwjzz2thKs8D5f0lR
-         uCpLOLyznptZN0yHR7EAg3iwQyO+vkFy4qQ70i3vEa5cLbfzWwZPvQHeWmbNPN38Kcyq
-         Qrow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bxWDbRcGNbfBiVZOS5Mg7GqLQnS0yNnvrGftZ6iHRTU=;
-        b=HSUC9ngpXfboq/UVnkJCU0rHtFgmwigjIsWj+j2tH1nYczfLGf2XhiKgHiige2tFzI
-         8QAC8ZASENphx3wiKtzYc1YM0PcZ092qMb/eKV9zHadOKfPTm73tUDbbnWDonFedd/ZD
-         t4DhXYmWNZn+N3yUZpREZ68S+BObkmZh4Q+HsXMksbwjsyNy9sjVcYJvi3C0HVF7ra99
-         MUbNv7aFpJeeoCuuN0Pr2g8/i//QtvpdkniHlohDckv2RnIYww5T+O4IHRqzr/sYKPIy
-         /8JwrsnG2PTSazs7T8M8MOlgenwYzQsv9+HYKSMGS4EfPi9udYNP0GEr1M2eokueP5Zm
-         9c6w==
-X-Gm-Message-State: AOAM532CAg7rWxdBqMp/LgT8KbBeEo53YMpM01TcDq63ue0SoEZs+R4o
-        ihVWDLqadVOh1GAkP/YSRQw=
-X-Google-Smtp-Source: ABdhPJwoUi5/Ouj6rosnJWs8sDcix0jHTTOgXNFVt0/4KK/KOEcsC5/HcGp33j53Qlv/icHJIbTwhQ==
-X-Received: by 2002:a65:6805:0:b0:3c1:bb28:6bd4 with SMTP id l5-20020a656805000000b003c1bb286bd4mr8177281pgt.585.1651460226819;
-        Sun, 01 May 2022 19:57:06 -0700 (PDT)
-Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:fa8:c0d6:ea14:bd48])
-        by smtp.gmail.com with ESMTPSA id t3-20020aa79383000000b0050dc762815asm3514694pfe.52.2022.05.01.19.57.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 May 2022 19:57:06 -0700 (PDT)
-From:   Max Filippov <jcmvbkbc@gmail.com>
-To:     linux-xtensa@linux-xtensa.org
-Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
-        Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH] xtensa: fix declaration of _SecondaryResetVector_text_*
-Date:   Sun,  1 May 2022 19:56:59 -0700
-Message-Id: <20220502025659.1695726-1-jcmvbkbc@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Sun, 1 May 2022 23:01:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB8EADEFB
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 19:57:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651460271;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gWY6k1lplnoSScpXUZwqx/l3MDoKL2LgUHMZvlCwKFY=;
+        b=iNrmqvbR2irRIGb9rD10ubn047XBW0tuEzF1dKrAYVfUdQ8Y442A04HA/6oqZSXpuNqSrc
+        qVw57yazI2v6shfI2t0G3lZkMlMrIess6gQp5U/KvWXLFeKpjbyBaxw0CQtQl+wMS+qFfv
+        DH+cTnq9b/WlKnNil1keMZPZ50Eb284=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-363-UahhAIegNFCQR8mxzE_mFg-1; Sun, 01 May 2022 22:57:48 -0400
+X-MC-Unique: UahhAIegNFCQR8mxzE_mFg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 46953185A79C;
+        Mon,  2 May 2022 02:57:48 +0000 (UTC)
+Received: from [10.72.12.86] (ovpn-12-86.pek2.redhat.com [10.72.12.86])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B829AC28103;
+        Mon,  2 May 2022 02:57:41 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v6 06/18] KVM: arm64: Support SDEI_EVENT_CONTEXT hypercall
+To:     Oliver Upton <oupton@google.com>
+Cc:     kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
+        eauger@redhat.com, Jonathan.Cameron@huawei.com,
+        vkuznets@redhat.com, will@kernel.org, shannon.zhaosl@gmail.com,
+        james.morse@arm.com, mark.rutland@arm.com, maz@kernel.org,
+        pbonzini@redhat.com, shan.gavin@gmail.com
+References: <20220403153911.12332-1-gshan@redhat.com>
+ <20220403153911.12332-7-gshan@redhat.com> <Ym1PyIQY4m4/9IVi@google.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <84e52a58-523d-15bd-d537-81d1bfa29af7@redhat.com>
+Date:   Mon, 2 May 2022 10:57:38 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Ym1PyIQY4m4/9IVi@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Secondary reset vector is defined, compiled and used when
-CONFIG_SECONDARY_RESET_VECTOR is enabled, not only on SMP.
-Make declarations of _SecondaryResetVector_text_* symbols available
-accordingly.
+Hi Oliver,
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
- arch/xtensa/include/asm/sections.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 4/30/22 11:03 PM, Oliver Upton wrote:
+> On Sun, Apr 03, 2022 at 11:38:59PM +0800, Gavin Shan wrote:
+>> This supports SDEI_EVENT_CONTEXT hypercall. It's used by the guest
+>> to retrieve the registers (x0 - x17) from the interrupted or preempted
+>> context in the event handler. The interrupted or preempted context
+>> is saved prior to handling the event by executing its handler and
+>> restored after that.
+>>
+>> Signed-off-by: Gavin Shan <gshan@redhat.com>
+>> ---
+>>   arch/arm64/kvm/sdei.c | 34 ++++++++++++++++++++++++++++++++++
+>>   1 file changed, 34 insertions(+)
+>>
+>> diff --git a/arch/arm64/kvm/sdei.c b/arch/arm64/kvm/sdei.c
+>> index 941263578b30..af5d11b8eb2f 100644
+>> --- a/arch/arm64/kvm/sdei.c
+>> +++ b/arch/arm64/kvm/sdei.c
+>> @@ -140,6 +140,37 @@ static unsigned long hypercall_enable(struct kvm_vcpu *vcpu, bool enable)
+>>   	return ret;
+>>   }
+>>   
+>> +static unsigned long hypercall_context(struct kvm_vcpu *vcpu)
+>> +{
+>> +	struct kvm_sdei_vcpu *vsdei = vcpu->arch.sdei;
+>> +	struct kvm_sdei_vcpu_context *context;
+>> +	unsigned long param_id = smccc_get_arg(vcpu, 1);
+>> +	unsigned long ret = SDEI_SUCCESS;
+>> +
+>> +	spin_lock(&vsdei->lock);
+>> +
+>> +	/* Check if we have events are being handled */
+>> +	context = &vsdei->context[SDEI_EVENT_PRIORITY_CRITICAL];
+>> +	context = context->event ? context : NULL;
+>> +	context = context ? : &vsdei->context[SDEI_EVENT_PRIORITY_NORMAL];
+>> +	context = context->event ? context : NULL;
+>> +	if (!context) {
+>> +		ret = SDEI_DENIED;
+>> +		goto unlock;
+>> +	}
+> 
+> Eek! You'll probably be able to drop all of this and just check the SDEI
+> active flag.
+>
 
-diff --git a/arch/xtensa/include/asm/sections.h b/arch/xtensa/include/asm/sections.h
-index a8c42d08e281..3bc6b9afa993 100644
---- a/arch/xtensa/include/asm/sections.h
-+++ b/arch/xtensa/include/asm/sections.h
-@@ -29,7 +29,7 @@ extern char _Level5InterruptVector_text_end[];
- extern char _Level6InterruptVector_text_start[];
- extern char _Level6InterruptVector_text_end[];
- #endif
--#ifdef CONFIG_SMP
-+#ifdef CONFIG_SECONDARY_RESET_VECTOR
- extern char _SecondaryResetVector_text_start[];
- extern char _SecondaryResetVector_text_end[];
- #endif
--- 
-2.30.2
+Yep, the event's active state will be checked instead in next respin :)
+
+Thanks,
+Gavin
+
 

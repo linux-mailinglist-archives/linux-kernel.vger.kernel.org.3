@@ -2,127 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A9835170D3
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 15:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9405B5170D7
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 15:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385392AbiEBNrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 09:47:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52718 "EHLO
+        id S1385411AbiEBNrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 09:47:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242565AbiEBNrO (ORCPT
+        with ESMTP id S1385431AbiEBNra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 09:47:14 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63BA288;
-        Mon,  2 May 2022 06:43:43 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 35F31C000D;
-        Mon,  2 May 2022 13:43:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1651499022;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rTNTBDxgKfkBKLVRJS6UhHxHs1szeuwpqo0QEGwYx7Q=;
-        b=UkiAgflMq3OoaHbggQd0NS0/zduGzlUMCyALI3kHiXg7gWA2J/uDsAVmLsICsMkgPkzJd+
-        XMEDtKiURDChQVwwbPFRvGa4G7VVupAEYSXuHzxavduYZ7J949sEJ2hCUsxVU6GwX5nNB3
-        qIhZW3o/2h4A045/2QcjuQCiBhcdLClcxgja55wM4fRjExUngPwMK9xAd5ZgeHDVA6f6EH
-        XVlQIiZkJyf1WkXxtOu+kI7crbWM6ZP8e2vEff4dXDNFeNVGpzx4r4YdB1HlMpFpRhM/Ce
-        sbHgQRxwVxxcots4dufruojEKQYZZaR9IXQCqw6H/T3NIQDjUCPpRpDJCBGIbw==
-Date:   Mon, 2 May 2022 15:43:38 +0200
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [net-next v2 02/12] net: dsa: add Renesas RZ/N1 switch tag
- driver
-Message-ID: <20220502154338.201a7416@xps-bootlin>
-In-Reply-To: <baec3c8d-72f1-b1b5-f472-ee73be1047d6@gmail.com>
-References: <20220429143505.88208-1-clement.leger@bootlin.com>
-        <20220429143505.88208-3-clement.leger@bootlin.com>
-        <baec3c8d-72f1-b1b5-f472-ee73be1047d6@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-pc-linux-gnu)
+        Mon, 2 May 2022 09:47:30 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0410E1276F;
+        Mon,  2 May 2022 06:43:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651499038; x=1683035038;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=TxRhC+xkcMIDEeWKsFRO7rKwaJaujGtLJjq0HY5brGs=;
+  b=GWPgJ7Xf21MWoijEsUgftnmCfRLduJvmg31q1iQeuuDrTfrLUXBqQMyp
+   V022WtMEgR38v2PN7yOIcbvVJW8i4pL5vU27ywQo31OjN8kOc4peUqzss
+   jaQWC9j26b87H0P4X1aqxQ+EqYvNQu61jir+nMJIDertambEgVP2r5gey
+   U=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 02 May 2022 06:43:57 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 06:43:56 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 2 May 2022 06:43:56 -0700
+Received: from [10.216.10.218] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 2 May 2022
+ 06:43:52 -0700
+Message-ID: <0243675f-2083-f5cc-5570-d880889daa8b@quicinc.com>
+Date:   Mon, 2 May 2022 19:13:49 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v12 4/4] arm64: dts: qcom: sc7280-herobrine: Add lpi
+ pinmux properties for CRD 3.0/3.1
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        <quic_rohkumar@quicinc.com>,
+        "Srinivas Kandagatla" <srinivas.kandagatla@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Judy Hsiao <judyhsiao@chromium.org>,
+        "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
+References: <1651079383-7665-1-git-send-email-quic_srivasam@quicinc.com>
+ <1651079383-7665-5-git-send-email-quic_srivasam@quicinc.com>
+ <YmsrB6Q89II5w1+9@google.com>
+ <CAD=FV=XxeZsiOVVBDK_vmx0nhT7roB2FqcaPXsH3+jzTHFXMxw@mail.gmail.com>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <CAD=FV=XxeZsiOVVBDK_vmx0nhT7roB2FqcaPXsH3+jzTHFXMxw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Fri, 29 Apr 2022 09:22:21 -0700,
-Florian Fainelli <f.fainelli@gmail.com> a =C3=A9crit :
 
-> On 4/29/22 07:34, Cl=C3=A9ment L=C3=A9ger wrote:
-> > The switch that is present on the Renesas RZ/N1 SoC uses a specific
-> > VLAN value followed by 6 bytes which contains forwarding
-> > configuration.
-> >=20
-> > Signed-off-by: Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com>
-> > --- =20
->=20
-> [snip]
->=20
-> > +struct a5psw_tag {
-> > +	__be16 ctrl_tag;
-> > +	__be16 ctrl_data;
-> > +	__be16 ctrl_data2_hi;
-> > +	__be16 ctrl_data2_lo;
-> > +} __packed; =20
->=20
-> The structure should already be naturally aligned.
-
-Indeed, I'll remove this packed attribute.
-
->=20
-> > +
-> > +static struct sk_buff *a5psw_tag_xmit(struct sk_buff *skb, struct
-> > net_device *dev) +{
-> > +	struct dsa_port *dp =3D dsa_slave_to_port(dev);
-> > +	struct a5psw_tag *ptag;
-> > +	u32 data2_val;
-> > +
-> > +	BUILD_BUG_ON(sizeof(*ptag) !=3D A5PSW_TAG_LEN);
-> > +
-> > +	/* The Ethernet switch we are interfaced with needs
-> > packets to be at
-> > +	 * least 64 bytes (including FCS) otherwise they will be
-> > discarded when
-> > +	 * they enter the switch port logic. When tagging is
-> > enabled, we need
-> > +	 * to make sure that packets are at least 68 bytes
-> > (including FCS and
-> > +	 * tag). =20
->=20
-> Did you mean 70 bytes since your tag is 6, and not 4 bytes?
-
-Yes you are right, this should be 70 bytes. Additionnaly, I forgot to
-add the FCS len to the number of byte to be padded below.
-
-
+On 4/29/2022 9:40 PM, Doug Anderson wrote:
+Thanks for your time Doug Anderson!!!
+> Hi,
+>
+> On Thu, Apr 28, 2022 at 5:02 PM Matthias Kaehlcke <mka@chromium.org> wrote:
+>> On Wed, Apr 27, 2022 at 10:39:43PM +0530, Srinivasa Rao Mandadapu wrote:
+>>> Add LPASS LPI pinctrl properties, which are required for Audio
+>>> functionality on herobrine based platforms of rev5+
+>>> (aka CRD 3.0/3.1) boards.
+>>>
+>>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>>> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+>>> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+>> I'm not super firm in pinctrl territory, a few maybe silly questions
+>> below.
+>>
+>>>   arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts | 84 +++++++++++++++++++++++
+>>>   1 file changed, 84 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+>>> index deaea3a..dfc42df 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+>>> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts
+>>> @@ -111,6 +111,90 @@ ap_ts_pen_1v8: &i2c13 {
+>>>    * - If a pin is not hooked up on Qcard, it gets no name.
+>>>    */
+>>>
+>>> +&lpass_dmic01 {
+>>> +     clk {
+>>> +             drive-strength = <8>;
+>>> +     };
+> Ugh, I've been distracted and I hadn't realized we were back to the
+> two-level syntax. Definitely not my favorite for all the reasons I
+> talked about [1]. I guess you took Bjorn's silence to my response to
+> mean that you should switch back to this way? :(
+>
+> Bjorn: can you clarify?
+>
+> [1] https://lore.kernel.org/r/CAD=FV=VicFiX6QkBksZs1KLwJ5x4eCte6j5RWOBPN+WwiXm2Cw@mail.gmail.com/
+Actually Your comment addressed for MI2S pin control nodes, but missed 
+here. Will address same here.
+>>> +};
+>>> +
+>>> +&lpass_dmic01_sleep {
+>>> +     clk {
+>>> +             drive-strength = <2>;
+>> Does the drive strength really matter in the sleep state, is the SoC actively
+>> driving the pin?
+> My understanding is that if a pin is left as an output in sleep state
+> that there is a slight benefit to switching it to drive-strength 2.
+Okay. Will keep this setting as it is. Please correct me if my 
+understanding is wrong.
+>
+>
+>>> +             bias-disable;
+>> What should this be in active/default state? If I understand correctly
+>> after a transition from 'sleep' to 'default' this setting will remain,
+>> since the default config doesn't specify a setting for bias.
+> Your understanding matches mine but I haven't tested it and I remember
+> sometimes being surprised in this corner of pinmux before. I think
+> it's better to put the bias in the default state if it should be that
+> way all the time, or have a bias in both the default and sleep state
+> if they need to be different.
+Okay. Will update accordingly.

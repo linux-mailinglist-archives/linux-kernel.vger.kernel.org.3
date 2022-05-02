@@ -2,69 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81BAC516BB0
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 10:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DADE4516BB3
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 10:08:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359196AbiEBIJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 04:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53112 "EHLO
+        id S1359281AbiEBIJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 04:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383646AbiEBIJE (ORCPT
+        with ESMTP id S1383712AbiEBIJY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 04:09:04 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F5337BDE
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 01:05:36 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2f16645872fso139596217b3.4
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 01:05:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pkED2ob7beSbV7dxZktMXjEINCdftZ7x+GOUm/NUPeI=;
-        b=TAvAENhMvrGwzmPBadnLxV8W7lPrEBQhCdgtGGiuvwg9C7UqfCJ5weozGQFVEcVeDy
-         9zHHts4vJYenln1281EwtIB/mmbMbqUZ/Bzx1MU80ZGS0Jkk/e8q4r3uuOXPw0EcpLLD
-         g9+d2t2UrJ7ncBVRs0Z4NGNTmhcOuZpIOKGOLFFpAu71wYnR61d3a5i69LHavy9BbE1L
-         icR4rHqLySa96fCcjA6fxV8aSaY8Wyh142DZ+GxyDmXjkIK51kpoqEUwZc89AZgRnzqL
-         CzqSVQc5StRFBzYrE1HGn9NnhCuPdgV+vDID7D1fkEZEkRzXK+v1faqzEheFGPAxm1ec
-         yoow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pkED2ob7beSbV7dxZktMXjEINCdftZ7x+GOUm/NUPeI=;
-        b=iXJbeniNj5VIDTPSbowvDDIr/y9irgicOgsqAN9O03KbqBHUdKcB/EvFogdFVJPuhv
-         NnaxkM4X1EmAgAAHy0iAMmqsJFBxHrcfIJ4Aqb283r/vzskbehYD0DY7WwhIR8U6wXCc
-         WzqMjA/kns31L6RCpPZyLny5g8EU3CAJEPfX+Uh/kFruYJebQk1fTWMzHwj73rmzwroL
-         SjJS1kc776OXSgUMvUxLxuxiPIvAD6NVmAOBjGOeLYWqwgdrSTBlFlbRd+7/Rzd/CiiM
-         smyEtY8hy1vMaEAJ5zNuZfkxf9Vy2edOzIxumqse4y/sXlVi9ptEFOG59Ny4siDR4FBF
-         6wLg==
-X-Gm-Message-State: AOAM532cFa38v26a40kp3UmIjIgu3vX9zWIg5+OBKmnhj4PHddMi/RAJ
-        PxVcK+PZq6EXmTAiZOL59xdcD9J/Ya99uRMq+rnOhw==
-X-Google-Smtp-Source: ABdhPJxjd/UXBkLDQ8v0mFv7qO6LcXwqsQ00DKef/H8r0Zu4XJme0fm1NhlnpF7VjbqgBLVTYHmD7fYUsLF7zRWf/mk=
-X-Received: by 2002:a81:4c11:0:b0:2d1:1925:cd70 with SMTP id
- z17-20020a814c11000000b002d11925cd70mr10043140ywa.101.1651478735419; Mon, 02
- May 2022 01:05:35 -0700 (PDT)
+        Mon, 2 May 2022 04:09:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA203B012
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 01:05:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EFD660ECB
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 08:05:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3F43C385AF;
+        Mon,  2 May 2022 08:05:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651478754;
+        bh=13tm6JeNVfLfUpR+NJlHymQGWGkCOsEh9w23Yb+IBJ8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DeSi1ml1gIOLAymAio4jlQjrmZBIHRNI5MaXHxo7KXgozwg2tqyFiV5d9QpDLAmxM
+         0ZM+UjTg1gxw2fF6BEWtVJNzRa8UDeGLvTAHPphgwW2OC49FLZeddJUOAVTSRIziHk
+         mhwrP3VK1Ca1n7hS2TQ+zZBM9CbPkOiDLQ+UzAdMR8TqZhLSURvlNlFE0P/y5BrXAR
+         ayP5jgB2YZNZrnaSY2XMzaNM2IPKJEZQKserNvtJaZ3UUH5HryVmQVgUI1KucHgvl/
+         RdLr/d3eZmipAPFneErebm0hnOKp6fIpXFLjltD1nDfCZIJj18C8l20XCyaEaF/sZd
+         Yc0xV3FZmVNtQ==
+From:   Oded Gabbay <ogabbay@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Yuri Nudelman <ynudelman@habana.ai>
+Subject: [PATCH 1/6] habanalabs: hide memory manager page shift
+Date:   Mon,  2 May 2022 11:05:44 +0300
+Message-Id: <20220502080549.230411-1-ogabbay@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <1650952931-31988-1-git-send-email-quic_vpolimer@quicinc.com>
- <CAE-0n52cSR_xCxF+_UeK8CaHqsu=4HOtfWQ3BMmx2Tx3kmk-ZA@mail.gmail.com>
- <e20d94d7-a865-21f7-0514-706992294614@linaro.org> <200eddae-02b8-5479-3e81-1f3885200ac0@quicinc.com>
-In-Reply-To: <200eddae-02b8-5479-3e81-1f3885200ac0@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Mon, 2 May 2022 11:05:24 +0300
-Message-ID: <CAA8EJppVawrs+i0JBfmyO=68yKqA=2+ixm-KN+70Ah9OaUvG9g@mail.gmail.com>
-Subject: Re: [Freedreno] [PATCH] drm/msm/disp/dpu1: avoid clearing hw
- interrupts if hw_intr is null during drm uninit
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        quic_kalyant@quicinc.com, robdclark@gmail.com,
-        linux-kernel@vger.kernel.org, dianders@chromium.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,123 +51,278 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2 May 2022 at 04:38, Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
->
-> Looks like our new CI has given all the answers we need :) which is a
-> great win for the CI in my opinion.
->
-> Take a look at this report :
-> https://gitlab.freedesktop.org/drm/msm/-/jobs/22015361
->
-> This issue seems to be because this change
-> https://github.com/torvalds/linux/commit/169466d4e59ca204683998b7f45673ebf0eb2de6
-> is missing in our tree.
->
-> Without this change, what happens is that we are not hitting the return
-> 0 because we check for ENODEV.
->
->
->    /*
->       * External bridges are mandatory for eDP interfaces: one has to
->       * provide at least an eDP panel (which gets wrapped into
-> panel-bridge).
->       *
->       * For DisplayPort interfaces external bridges are optional, so
->       * silently ignore an error if one is not present (-ENODEV).
->       */
->      rc = dp_parser_find_next_bridge(dp_priv->parser);
->      if (!dp->is_edp && rc == -ENODEV)
->          return 0;
->
-> So, I think we should do both:
->
-> 1) Since we are running CI on the tree, backport this change so that
-> this error path doesnt hit?
->
-> 2) Add this protection as well because this shows that we can indeed hit
-> this path in EDEFER cases causing this crash.
+From: Yuri Nudelman <ynudelman@habana.ai>
 
-I have been waiting for v2 for the last week or so. It should include
-a fixed Fixes tag and an updated description (which should note that
-this happens in the error path, etc) as requested by Stephen.
+The new unified memory manager uses page offset to pass buffer handle
+during the mmap operation. One problem with this approach is that it
+requires the handle to always be divisible by the page size, else, the
+user would not be able to pass it correctly as an argument to the mmap
+system call.
 
->
-> Thanks
->
-> Abhinav
->
-> On 4/27/2022 3:53 AM, Dmitry Baryshkov wrote:
-> > On 27/04/2022 00:50, Stephen Boyd wrote:
-> >> Quoting Vinod Polimera (2022-04-25 23:02:11)
-> >>> Avoid clearing irqs and derefernce hw_intr when hw_intr is null.
-> >>
-> >> Presumably this is only the case when the display driver doesn't fully
-> >> probe and something probe defers? Can you clarify how this situation
-> >> happens?
-> >>
-> >>>
-> >>> BUG: Unable to handle kernel NULL pointer dereference at virtual
-> >>> address 0000000000000000
-> >>>
-> >>> Call trace:
-> >>>   dpu_core_irq_uninstall+0x50/0xb0
-> >>>   dpu_irq_uninstall+0x18/0x24
-> >>>   msm_drm_uninit+0xd8/0x16c
-> >>>   msm_drm_bind+0x580/0x5fc
-> >>>   try_to_bring_up_master+0x168/0x1c0
-> >>>   __component_add+0xb4/0x178
-> >>>   component_add+0x1c/0x28
-> >>>   dp_display_probe+0x38c/0x400
-> >>>   platform_probe+0xb0/0xd0
-> >>>   really_probe+0xcc/0x2c8
-> >>>   __driver_probe_device+0xbc/0xe8
-> >>>   driver_probe_device+0x48/0xf0
-> >>>   __device_attach_driver+0xa0/0xc8
-> >>>   bus_for_each_drv+0x8c/0xd8
-> >>>   __device_attach+0xc4/0x150
-> >>>   device_initial_probe+0x1c/0x28
-> >>>
-> >>> Fixes: a73033619ea ("drm/msm/dpu: squash dpu_core_irq into
-> >>> dpu_hw_interrupts")
-> >>
-> >> The fixes tag looks odd. In dpu_core_irq_uninstall() at that commit it
-> >> is dealing with 'irq_obj' which isn't a pointer. After commit
-> >> f25f656608e3 ("drm/msm/dpu: merge struct dpu_irq into struct
-> >> dpu_hw_intr") dpu_core_irq_uninstall() starts using 'hw_intr' which is
-> >> allocated on the heap. If we backported this patch to a place that had
-> >> a73033619ea without f25f656608e3 it wouldn't make any sense.
-> >
-> > I'd agree here. The following tag would be correct:
-> >
-> > Fixes: f25f656608e3 ("drm/msm/dpu: merge struct dpu_irq into struct
-> > dpu_hw_intr")
-> >
-> >
-> >>
-> >>> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
-> >>> ---
-> >>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c | 3 +++
-> >>>   1 file changed, 3 insertions(+)
-> >>>
-> >>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
-> >>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
-> >>> index c515b7c..ab28577 100644
-> >>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
-> >>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
-> >>> @@ -599,6 +599,9 @@ void dpu_core_irq_uninstall(struct dpu_kms *dpu_kms)
-> >>>   {
-> >>>          int i;
-> >>>
-> >>> +       if (!dpu_kms->hw_intr)
-> >>> +               return;
-> >>> +
-> >>>          pm_runtime_get_sync(&dpu_kms->pdev->dev);
-> >>>          for (i = 0; i < dpu_kms->hw_intr->total_irqs; i++)
-> >
-> >
+Previously, this was achieved by shifting the handle left after alloc
+operation, and shifting it right before get operation. This was done in
+the user code. This creates code duplication, and, what's worse,
+requires some knowledge from the user regarding the handle internal
+structure, hurting the encapsulation.
 
+This patch encloses all the page shifts inside memory manager functions.
+This way, the user can take the handle as a black box, and simply use
+it, without any concert about how it actually works.
 
+Signed-off-by: Yuri Nudelman <ynudelman@habana.ai>
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+---
+ .../habanalabs/common/command_submission.c    | 12 ++-------
+ drivers/misc/habanalabs/common/device.c       |  3 ++-
+ drivers/misc/habanalabs/common/habanalabs.h   | 20 ++++++++------
+ drivers/misc/habanalabs/common/memory.c       | 10 +++----
+ drivers/misc/habanalabs/common/memory_mgr.c   | 27 +++++++++----------
+ 5 files changed, 32 insertions(+), 40 deletions(-)
 
+diff --git a/drivers/misc/habanalabs/common/command_submission.c b/drivers/misc/habanalabs/common/command_submission.c
+index 6c13ae3ffa7c..a189157be104 100644
+--- a/drivers/misc/habanalabs/common/command_submission.c
++++ b/drivers/misc/habanalabs/common/command_submission.c
+@@ -2952,7 +2952,7 @@ static int _hl_interrupt_wait_ioctl(struct hl_device *hdev, struct hl_ctx *ctx,
+ 				bool register_ts_record, u64 ts_handle, u64 ts_offset,
+ 				u32 *status, u64 *timestamp)
+ {
+-	u32 cq_patched_handle, ts_patched_handle;
++	u32 cq_patched_handle;
+ 	struct hl_user_pending_interrupt *pend;
+ 	struct hl_mmap_mem_buf *buf;
+ 	struct hl_cb *cq_cb;
+@@ -2974,15 +2974,7 @@ static int _hl_interrupt_wait_ioctl(struct hl_device *hdev, struct hl_ctx *ctx,
+ 	if (register_ts_record) {
+ 		dev_dbg(hdev->dev, "Timestamp registration: interrupt id: %u, ts offset: %llu, cq_offset: %llu\n",
+ 					interrupt->interrupt_id, ts_offset, cq_counters_offset);
+-
+-		/* TODO:
+-		 * See if this can be removed.
+-		 * Embedding type in handle will no longer be needed as soon as we
+-		 * switch to using a single memory manager for all memory types.
+-		 * We may still need the page shift, though.
+-		 */
+-		ts_patched_handle = lower_32_bits(ts_handle >> PAGE_SHIFT);
+-		buf = hl_mmap_mem_buf_get(mmg, ts_patched_handle);
++		buf = hl_mmap_mem_buf_get(mmg, ts_handle);
+ 		if (!buf) {
+ 			rc = -EINVAL;
+ 			goto put_cq_cb;
+diff --git a/drivers/misc/habanalabs/common/device.c b/drivers/misc/habanalabs/common/device.c
+index 350cd61e06c1..bd74e0359473 100644
+--- a/drivers/misc/habanalabs/common/device.c
++++ b/drivers/misc/habanalabs/common/device.c
+@@ -384,13 +384,14 @@ static int hl_mmap(struct file *filp, struct vm_area_struct *vma)
+ 	}
+ 
+ 	vm_pgoff = vma->vm_pgoff;
+-	vma->vm_pgoff = HL_MMAP_OFFSET_VALUE_GET(vm_pgoff);
+ 
+ 	switch (vm_pgoff & HL_MMAP_TYPE_MASK) {
+ 	case HL_MMAP_TYPE_CB:
++		vma->vm_pgoff = HL_MMAP_OFFSET_VALUE_GET(vm_pgoff);
+ 		return hl_cb_mmap(hpriv, vma);
+ 
+ 	case HL_MMAP_TYPE_BLOCK:
++		vma->vm_pgoff = HL_MMAP_OFFSET_VALUE_GET(vm_pgoff);
+ 		return hl_hw_block_mmap(hpriv, vma);
+ 
+ 	case HL_MMAP_TYPE_TS_BUFF:
+diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
+index 19f6af59cfc9..ea5cfea21a2c 100644
+--- a/drivers/misc/habanalabs/common/habanalabs.h
++++ b/drivers/misc/habanalabs/common/habanalabs.h
+@@ -750,21 +750,25 @@ struct hl_mem_mgr {
+ };
+ 
+ /**
+- * struct hl_mmap_mem_buf_ops - describes unified memory manager buffer behavior
++ * struct hl_mmap_mem_buf_behavior - describes unified memory manager buffer behavior
++ * @mem_id: memory type identifier, embedded in the handle and used to identify
++ *          the memory type by handle.
+  * @alloc: callback executed on buffer allocation, shall allocate the memory,
+  *         set it under buffer private, and set mappable size.
+  * @mmap: callback executed on mmap, must map the buffer to vma
+  * @release: callback executed on release, must free the resources used by the buffer
+  */
+-struct hl_mmap_mem_buf_ops {
++struct hl_mmap_mem_buf_behavior {
++	u64 mem_id;
++
+ 	int (*alloc)(struct hl_mmap_mem_buf *buf, gfp_t gfp, void *args);
+ 	int (*mmap)(struct hl_mmap_mem_buf *buf, struct vm_area_struct *vma, void *args);
+ 	void (*release)(struct hl_mmap_mem_buf *buf);
+ };
+ 
+ /**
+- * struct hl_mmap_mem_buf_ops - describes a single unified memory buffer
+- * @ops: buffer behavior
++ * struct hl_mmap_mem_buf - describes a single unified memory buffer
++ * @behavior: buffer behavior
+  * @mmg: back pointer to the unified memory manager
+  * @refcount: reference counter for buffer users
+  * @private: pointer to buffer behavior private data
+@@ -776,14 +780,14 @@ struct hl_mmap_mem_buf_ops {
+  * @handle: the buffer id in mmg handles store
+  */
+ struct hl_mmap_mem_buf {
+-	struct hl_mmap_mem_buf_ops *ops;
++	struct hl_mmap_mem_buf_behavior *behavior;
+ 	struct hl_mem_mgr *mmg;
+ 	struct kref refcount;
+ 	void *private;
+ 	atomic_t mmap;
+ 	u64 real_mapped_size;
+ 	u64 mappable_size;
+-	u32 handle;
++	u64 handle;
+ };
+ 
+ /**
+@@ -3288,11 +3292,11 @@ void hl_mem_mgr_fini(struct hl_mem_mgr *mmg);
+ int hl_mem_mgr_mmap(struct hl_mem_mgr *mmg, struct vm_area_struct *vma,
+ 		    void *args);
+ struct hl_mmap_mem_buf *hl_mmap_mem_buf_get(struct hl_mem_mgr *mmg,
+-						   u32 handle);
++						   u64 handle);
+ int hl_mmap_mem_buf_put(struct hl_mmap_mem_buf *buf);
+ struct hl_mmap_mem_buf *
+ hl_mmap_mem_buf_alloc(struct hl_mem_mgr *mmg,
+-		      struct hl_mmap_mem_buf_ops *behavior, gfp_t gfp,
++		      struct hl_mmap_mem_buf_behavior *behavior, gfp_t gfp,
+ 		      void *args);
+ 
+ #ifdef CONFIG_DEBUG_FS
+diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
+index 6face45c57e3..e7a0c44c487d 100644
+--- a/drivers/misc/habanalabs/common/memory.c
++++ b/drivers/misc/habanalabs/common/memory.c
+@@ -2140,7 +2140,8 @@ static int hl_ts_alloc_buf(struct hl_mmap_mem_buf *buf, gfp_t gfp, void *args)
+ 	return -ENOMEM;
+ }
+ 
+-static struct hl_mmap_mem_buf_ops hl_ts_behavior = {
++static struct hl_mmap_mem_buf_behavior hl_ts_behavior = {
++	.mem_id = HL_MMAP_TYPE_TS_BUFF,
+ 	.mmap = hl_ts_mmap,
+ 	.alloc = hl_ts_alloc_buf,
+ 	.release = ts_buff_release,
+@@ -2175,12 +2176,7 @@ static int allocate_timestamps_buffers(struct hl_fpriv *hpriv, struct hl_mem_in
+ 	if (!buf)
+ 		return -ENOMEM;
+ 
+-	/* TODO:
+-	 * Remove HL_MMAP_TYPE_TS_BUFF.
+-	 * Embedding type in handle will no longer be needed as soon as we
+-	 * switch to using a single memory manager for all memory types.
+-	 */
+-	*handle = ((u64)buf->handle | HL_MMAP_TYPE_TS_BUFF) << PAGE_SHIFT;
++	*handle = buf->handle;
+ 
+ 	return 0;
+ }
+diff --git a/drivers/misc/habanalabs/common/memory_mgr.c b/drivers/misc/habanalabs/common/memory_mgr.c
+index 1bc23362e61d..1cc2f2ebe3b6 100644
+--- a/drivers/misc/habanalabs/common/memory_mgr.c
++++ b/drivers/misc/habanalabs/common/memory_mgr.c
+@@ -17,16 +17,16 @@
+  * @return Find the buffer in the store and return a pointer to its descriptor.
+  *         Increase buffer refcount. If not found - return NULL.
+  */
+-struct hl_mmap_mem_buf *hl_mmap_mem_buf_get(struct hl_mem_mgr *mmg, u32 handle)
++struct hl_mmap_mem_buf *hl_mmap_mem_buf_get(struct hl_mem_mgr *mmg, u64 handle)
+ {
+ 	struct hl_mmap_mem_buf *buf;
+ 
+ 	spin_lock(&mmg->lock);
+-	buf = idr_find(&mmg->handles, handle);
++	buf = idr_find(&mmg->handles, lower_32_bits(handle >> PAGE_SHIFT));
+ 	if (!buf) {
+ 		spin_unlock(&mmg->lock);
+ 		dev_warn(mmg->dev,
+-			 "Buff get failed, no match to handle %u\n", handle);
++			 "Buff get failed, no match to handle %llu\n", handle);
+ 		return NULL;
+ 	}
+ 	kref_get(&buf->refcount);
+@@ -51,8 +51,8 @@ static void hl_mmap_mem_buf_release(struct kref *kref)
+ 	idr_remove(&buf->mmg->handles, lower_32_bits(buf->handle >> PAGE_SHIFT));
+ 	spin_unlock(&buf->mmg->lock);
+ 
+-	if (buf->ops->release)
+-		buf->ops->release(buf);
++	if (buf->behavior->release)
++		buf->behavior->release(buf);
+ 
+ 	kfree(buf);
+ }
+@@ -83,7 +83,7 @@ int hl_mmap_mem_buf_put(struct hl_mmap_mem_buf *buf)
+  */
+ struct hl_mmap_mem_buf *
+ hl_mmap_mem_buf_alloc(struct hl_mem_mgr *mmg,
+-		      struct hl_mmap_mem_buf_ops *behavior, gfp_t gfp,
++		      struct hl_mmap_mem_buf_behavior *behavior, gfp_t gfp,
+ 		      void *args)
+ {
+ 	struct hl_mmap_mem_buf *buf;
+@@ -102,19 +102,18 @@ hl_mmap_mem_buf_alloc(struct hl_mem_mgr *mmg,
+ 		goto free_buf;
+ 	}
+ 
+-	buf->handle = rc;
+ 	buf->mmg = mmg;
+-	buf->ops = behavior;
++	buf->behavior = behavior;
++	buf->handle = (((u64)rc | buf->behavior->mem_id) << PAGE_SHIFT);
+ 	kref_init(&buf->refcount);
+ 
+-	rc = buf->ops->alloc(buf, gfp, args);
++	rc = buf->behavior->alloc(buf, gfp, args);
+ 	if (rc) {
+ 		dev_err(mmg->dev, "Failure in buffer alloc callback %d\n",
+ 			rc);
+ 		goto remove_idr;
+ 	}
+ 
+-	dev_dbg(mmg->dev, "Created buff object handle %u\n", buf->handle);
+ 	return buf;
+ 
+ remove_idr:
+@@ -169,20 +168,20 @@ int hl_mem_mgr_mmap(struct hl_mem_mgr *mmg, struct vm_area_struct *vma,
+ {
+ 	struct hl_mmap_mem_buf *buf;
+ 	u64 user_mem_size;
+-	u32 handle;
++	u64 handle;
+ 	int rc;
+ 
+ 	/* We use the page offset to hold the idr and thus we need to clear
+ 	 * it before doing the mmap itself
+ 	 */
+-	handle = vma->vm_pgoff;
++	handle = vma->vm_pgoff << PAGE_SHIFT;
+ 	vma->vm_pgoff = 0;
+ 
+ 	/* Reference was taken here */
+ 	buf = hl_mmap_mem_buf_get(mmg, handle);
+ 	if (!buf) {
+ 		dev_err(mmg->dev,
+-			"Memory mmap failed, no match to handle %u\n", handle);
++			"Memory mmap failed, no match to handle %llu\n", handle);
+ 		return -EINVAL;
+ 	}
+ 
+@@ -223,7 +222,7 @@ int hl_mem_mgr_mmap(struct hl_mem_mgr *mmg, struct vm_area_struct *vma,
+ 
+ 	vma->vm_private_data = buf;
+ 
+-	rc = buf->ops->mmap(buf, vma, args);
++	rc = buf->behavior->mmap(buf, vma, args);
+ 	if (rc) {
+ 		atomic_set(&buf->mmap, 0);
+ 		goto put_mem;
 -- 
-With best wishes
-Dmitry
+2.25.1
+

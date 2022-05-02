@@ -2,75 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E44B5173EB
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35BEA5173E9
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:11:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386193AbiEBQPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 12:15:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57346 "EHLO
+        id S1378574AbiEBQPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 12:15:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386111AbiEBQPS (ORCPT
+        with ESMTP id S1381745AbiEBQPN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 12:15:18 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12982DF52;
-        Mon,  2 May 2022 09:11:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1651507909; x=1683043909;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=KVc/+HNOqS4/r7m8XfOVVRZ+wIWothref+39qtK2eSk=;
-  b=V6Ycg7uKvQUAdLJwV5SkasjALwcQEX4rk/HJu27V6G5FqkVDYIKCxv89
-   gaP/We1G/pVzAmye3bJ8wr+kEMbyfPxPnOl8kwxxN4HOzooA7OvFZRq0e
-   gFR0X1V4YlFQIGA8XmhgTvGFmyIUw2dguFqkqjeSOfR7f5MAxQb7kNmlY
-   N3W7YWjFfxqFjF/sEFulpvvKBKYuJpzvLTHv/5J6plwkWDmWj8qcyTyKx
-   UY9yUAvWbmyFbqhPq8xLmERWA3vCmz+o53Y0F+a2F8Ke8ZO9X3deFuPmt
-   we5mt6zdEFcXzKX1zDO+nGVPwDrY5E0r6RnBvyfLv4CZ7G/lsusc6Lt26
-   w==;
+        Mon, 2 May 2022 12:15:13 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28EC4DF46
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 09:11:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651507904; x=1683043904;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5RkFu7RGdekF8YRk+MaXd9FdONacRRdqciWJdrkldEc=;
+  b=CF55sLDE+LlTahWHJPHegIHpKJrtYgbqP9YbkVjOZ0ei5qgxflZpPKQ3
+   UtaxDNFA40xEuyJql58aWyY/Vi6P8EZzUlB2TXvlVL/utrPDgFlz7Oakx
+   uuYBDeuqiq6C1Gt3+cPlL+CCElL9CAZbOJlhDgi82Ez8Zg20W4QOh+8d6
+   tE4I9wOxvLjv3WJHP2U3At049rOdpnp6NMJxgt7eM/fEL/wRa8wCKv+dX
+   TIIyCsnBVrZPn4DdNIq416oM09vAtv9dY6pVXSB3Pu+O4w27WJo6xrhPS
+   taHpqKV1mkujYodFBmLCWM/aa1DpTWCB5blUDCYa3NS6gZyIytc0BIZGn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="330241762"
 X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
-   d="scan'208";a="162033711"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 May 2022 09:11:48 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 2 May 2022 09:11:47 -0700
-Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Mon, 2 May 2022 09:11:26 -0700
-From:   Arun Ramadoss <arun.ramadoss@microchip.com>
-To:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     KP Singh <kpsingh@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Yonghong Song <yhs@fb.com>, Song Liu <songliubraving@fb.com>,
-        "Martin KaFai Lau" <kafai@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Vladimir Oltean" <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "Vivien Didelot" <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, <UNGLinuxDriver@microchip.com>,
-        Woojung Huh <woojung.huh@microchip.com>
-Subject: [Patch net-next v12 13/13] net: dsa: microchip: add support for vlan operations
-Date:   Mon, 2 May 2022 21:41:20 +0530
-Message-ID: <20220502161120.7441-1-arun.ramadoss@microchip.com>
-X-Mailer: git-send-email 2.33.0
+   d="scan'208";a="330241762"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 09:11:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
+   d="scan'208";a="652880913"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 02 May 2022 09:11:40 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nlYeC-0009g3-4q;
+        Mon, 02 May 2022 16:11:40 +0000
+Date:   Tue, 3 May 2022 00:11:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     John Efstathiades <john.efstathiades@pebblebay.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: drivers/net/usb/lan78xx.c:4573:8: warning: Local variable 'ret'
+ shadows outer variable [shadowVariable]
+Message-ID: <202205030045.IFzrRoky-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,261 +61,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   672c0c5173427e6b3e2a9bbb7be51ceeec78093a
+commit: 5f4cc6e25148cc141f97afb41b4dfe9eb1cce613 lan78xx: Fix race conditions in suspend/resume handling
+date:   8 months ago
+compiler: arc-elf-gcc (GCC) 11.3.0
+reproduce (cppcheck warning):
+        # apt-get install cppcheck
+        git checkout 5f4cc6e25148cc141f97afb41b4dfe9eb1cce613
+        cppcheck --quiet --enable=style,performance,portability --template=gcc FILE
 
-Support for VLAN add, del, prepare and filtering operations.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The VLAN aware is a global setting. Mixed vlan filterings
-are not supported. vlan_filtering_is_global is made as true
-in lan937x_setup function.
 
-Signed-off-by: Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
-Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
----
- drivers/net/dsa/microchip/lan937x_dev.h  |  10 ++
- drivers/net/dsa/microchip/lan937x_main.c | 186 +++++++++++++++++++++++
- 2 files changed, 196 insertions(+)
+cppcheck warnings: (new ones prefixed by >>)
+        ^
+   drivers/net/usb/lan78xx.c:1873:6: note: ret is overwritten
+    ret = lan78xx_write_reg(dev, MII_ACC, addr);
+        ^
+   drivers/net/usb/lan78xx.c:1131:7: warning: Local variable 'i' shadows outer variable [shadowVariable]
+     int i;
+         ^
+   drivers/net/usb/lan78xx.c:1100:6: note: Shadowed declaration
+    int i;
+        ^
+   drivers/net/usb/lan78xx.c:1131:7: note: Shadow variable
+     int i;
+         ^
+>> drivers/net/usb/lan78xx.c:4573:8: warning: Local variable 'ret' shadows outer variable [shadowVariable]
+      int ret = usb_submit_urb(dev->urb_intr, GFP_KERNEL);
+          ^
+   drivers/net/usb/lan78xx.c:4557:6: note: Shadowed declaration
+    int ret;
+        ^
+   drivers/net/usb/lan78xx.c:4573:8: note: Shadow variable
+      int ret = usb_submit_urb(dev->urb_intr, GFP_KERNEL);
+          ^
 
-diff --git a/drivers/net/dsa/microchip/lan937x_dev.h b/drivers/net/dsa/microchip/lan937x_dev.h
-index da8c708a03ea..2ce4d60b477e 100644
---- a/drivers/net/dsa/microchip/lan937x_dev.h
-+++ b/drivers/net/dsa/microchip/lan937x_dev.h
-@@ -104,6 +104,16 @@ struct lan_alu_struct {
- 	u8	mac[ETH_ALEN];
- };
- 
-+struct lan937x_vlan {
-+	/* entry 1 */
-+	bool valid;
-+	u8 fid;
-+	/* entry 2 */
-+	u32 untag_prtmap;
-+	/* entry 3 */
-+	u32 fwd_map;
-+};
-+
- extern const struct dsa_switch_ops lan937x_switch_ops;
- extern const struct ksz_dev_ops lan937x_dev_ops;
- extern const struct mib_names lan937x_mib_names[];
-diff --git a/drivers/net/dsa/microchip/lan937x_main.c b/drivers/net/dsa/microchip/lan937x_main.c
-index 516ab563721d..a509f0fc6347 100644
---- a/drivers/net/dsa/microchip/lan937x_main.c
-+++ b/drivers/net/dsa/microchip/lan937x_main.c
-@@ -17,6 +17,14 @@
- #include "ksz_common.h"
- #include "lan937x_dev.h"
- 
-+static int lan937x_wait_vlan_ctrl_ready(struct ksz_device *dev)
-+{
-+	unsigned int val;
-+
-+	return regmap_read_poll_timeout(dev->regmap[0], REG_SW_VLAN_CTRL, val,
-+					!(val & VLAN_START), 10, 1000);
-+}
-+
- static u8 lan937x_get_fid(u16 vid)
- {
- 	if (vid > ALU_FID_SIZE)
-@@ -25,6 +33,97 @@ static u8 lan937x_get_fid(u16 vid)
- 		return vid;
- }
- 
-+static int lan937x_get_vlan_table(struct ksz_device *dev, u16 vid,
-+				  struct lan937x_vlan *vlan_entry)
-+{
-+	u32 data;
-+	int ret;
-+
-+	mutex_lock(&dev->vlan_mutex);
-+
-+	ret = ksz_write16(dev, REG_SW_VLAN_ENTRY_INDEX__2, vid & VLAN_INDEX_M);
-+	if (ret < 0)
-+		goto exit;
-+
-+	ret = ksz_write8(dev, REG_SW_VLAN_CTRL, VLAN_READ | VLAN_START);
-+	if (ret < 0)
-+		goto exit;
-+
-+	/* wait to be cleared */
-+	ret = lan937x_wait_vlan_ctrl_ready(dev);
-+	if (ret < 0)
-+		goto exit;
-+
-+	ret = ksz_read32(dev, REG_SW_VLAN_ENTRY__4, &data);
-+	if (ret < 0)
-+		goto exit;
-+
-+	vlan_entry->valid = !!(data & VLAN_VALID);
-+	vlan_entry->fid	= data & VLAN_FID_M;
-+
-+	ret = ksz_read32(dev, REG_SW_VLAN_ENTRY_UNTAG__4,
-+			 &vlan_entry->untag_prtmap);
-+	if (ret < 0)
-+		goto exit;
-+
-+	ret = ksz_read32(dev, REG_SW_VLAN_ENTRY_PORTS__4,
-+			 &vlan_entry->fwd_map);
-+	if (ret < 0)
-+		goto exit;
-+
-+	ret = ksz_write8(dev, REG_SW_VLAN_CTRL, 0);
-+	if (ret < 0)
-+		goto exit;
-+
-+exit:
-+	mutex_unlock(&dev->vlan_mutex);
-+
-+	return ret;
-+}
-+
-+static int lan937x_set_vlan_table(struct ksz_device *dev, u16 vid,
-+				  struct lan937x_vlan *vlan_entry)
-+{
-+	u32 data;
-+	int ret;
-+
-+	mutex_lock(&dev->vlan_mutex);
-+
-+	data = vlan_entry->valid ? VLAN_VALID : 0;
-+	data |= vlan_entry->fid;
-+
-+	ret = ksz_write32(dev, REG_SW_VLAN_ENTRY__4, data);
-+	if (ret < 0)
-+		goto exit;
-+
-+	ret = ksz_write32(dev, REG_SW_VLAN_ENTRY_UNTAG__4,
-+			  vlan_entry->untag_prtmap);
-+	if (ret < 0)
-+		goto exit;
-+
-+	ret = ksz_write32(dev, REG_SW_VLAN_ENTRY_PORTS__4, vlan_entry->fwd_map);
-+	if (ret < 0)
-+		goto exit;
-+
-+	ret = ksz_write16(dev, REG_SW_VLAN_ENTRY_INDEX__2, vid & VLAN_INDEX_M);
-+	if (ret < 0)
-+		goto exit;
-+
-+	ret = ksz_write8(dev, REG_SW_VLAN_CTRL, VLAN_START | VLAN_WRITE);
-+	if (ret < 0)
-+		goto exit;
-+
-+	/* wait to be cleared */
-+	ret = lan937x_wait_vlan_ctrl_ready(dev);
-+	if (ret < 0)
-+		goto exit;
-+
-+exit:
-+	mutex_unlock(&dev->vlan_mutex);
-+
-+	return ret;
-+}
-+
- static int lan937x_read_table(struct ksz_device *dev, u32 *table)
- {
- 	int ret;
-@@ -129,6 +228,90 @@ static void lan937x_port_stp_state_set(struct dsa_switch *ds, int port,
- 	ksz_port_stp_state_set(ds, port, state, P_STP_CTRL);
- }
- 
-+static int lan937x_port_vlan_filtering(struct dsa_switch *ds, int port,
-+				       bool flag,
-+				       struct netlink_ext_ack *extack)
-+{
-+	struct ksz_device *dev = ds->priv;
-+
-+	/* enable/disable VLAN mode, once enabled, look up process starts
-+	 * and then forwarding and discarding are done based on port
-+	 * membership of the VLAN table
-+	 */
-+	return lan937x_cfg(dev, REG_SW_LUE_CTRL_0, SW_VLAN_ENABLE, flag);
-+}
-+
-+static int lan937x_port_vlan_add(struct dsa_switch *ds, int port,
-+				 const struct switchdev_obj_port_vlan *vlan,
-+				 struct netlink_ext_ack *extack)
-+{
-+	bool untagged = vlan->flags & BRIDGE_VLAN_INFO_UNTAGGED;
-+	struct ksz_device *dev = ds->priv;
-+	struct lan937x_vlan vlan_entry;
-+	int ret;
-+
-+	ret = lan937x_get_vlan_table(dev, vlan->vid, &vlan_entry);
-+	if (ret < 0) {
-+		NL_SET_ERR_MSG_MOD(extack, "Failed to get vlan table");
-+		return ret;
-+	}
-+
-+	vlan_entry.fid = lan937x_get_fid(vlan->vid);
-+	vlan_entry.valid = true;
-+
-+	/* set/clear switch port when updating vlan table registers */
-+	if (untagged)
-+		vlan_entry.untag_prtmap |= BIT(port);
-+	else
-+		vlan_entry.untag_prtmap &= ~BIT(port);
-+
-+	vlan_entry.fwd_map |= BIT(port);
-+
-+	ret = lan937x_set_vlan_table(dev, vlan->vid, &vlan_entry);
-+	if (ret < 0) {
-+		NL_SET_ERR_MSG_MOD(extack, "Failed to set vlan table");
-+		return ret;
-+	}
-+
-+	/* change PVID */
-+	if (vlan->flags & BRIDGE_VLAN_INFO_PVID) {
-+		ret = lan937x_pwrite16(dev, port, REG_PORT_DEFAULT_VID,
-+				       vlan->vid);
-+		if (ret < 0) {
-+			NL_SET_ERR_MSG_MOD(extack, "Failed to set pvid");
-+			return ret;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int lan937x_port_vlan_del(struct dsa_switch *ds, int port,
-+				 const struct switchdev_obj_port_vlan *vlan)
-+{
-+	struct ksz_device *dev = ds->priv;
-+	struct lan937x_vlan vlan_entry;
-+	int ret;
-+
-+	ret = lan937x_get_vlan_table(dev, vlan->vid, &vlan_entry);
-+	if (ret < 0) {
-+		dev_err(dev->dev, "Failed to get vlan table\n");
-+		return ret;
-+	}
-+
-+	/* clear port fwd map & untag entries*/
-+	vlan_entry.fwd_map &= ~BIT(port);
-+	vlan_entry.untag_prtmap &= ~BIT(port);
-+
-+	ret = lan937x_set_vlan_table(dev, vlan->vid, &vlan_entry);
-+	if (ret < 0) {
-+		dev_err(dev->dev, "Failed to set vlan table\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
- static int lan937x_port_fdb_add(struct dsa_switch *ds, int port,
- 				const unsigned char *addr, u16 vid,
- 				struct dsa_db db)
-@@ -1030,6 +1213,9 @@ const struct dsa_switch_ops lan937x_switch_ops = {
- 	.port_bridge_leave = ksz_port_bridge_leave,
- 	.port_stp_state_set = lan937x_port_stp_state_set,
- 	.port_fast_age = ksz_port_fast_age,
-+	.port_vlan_filtering = lan937x_port_vlan_filtering,
-+	.port_vlan_add = lan937x_port_vlan_add,
-+	.port_vlan_del = lan937x_port_vlan_del,
- 	.port_fdb_dump = lan937x_port_fdb_dump,
- 	.port_fdb_add = lan937x_port_fdb_add,
- 	.port_fdb_del = lan937x_port_fdb_del,
+cppcheck possible warnings: (new ones prefixed by >>, may not real problems)
+
+        ^
+   drivers/net/usb/lan78xx.c:1873:6: note: ret is overwritten
+    ret = lan78xx_write_reg(dev, MII_ACC, addr);
+        ^
+>> drivers/net/usb/lan78xx.c:1048:23: warning: Parameter 'addr' can be declared with const [constParameter]
+           int index, u8 addr[ETH_ALEN])
+                         ^
+>> drivers/net/usb/lan78xx.c:793:25: warning: Parameter 'data' can be declared with const [constParameter]
+           u32 length, u8 *data)
+                           ^
+
+vim +/ret +4573 drivers/net/usb/lan78xx.c
+
+  4552	
+  4553	static int lan78xx_resume(struct usb_interface *intf)
+  4554	{
+  4555		struct lan78xx_net *dev = usb_get_intfdata(intf);
+  4556		bool dev_open;
+  4557		int ret;
+  4558	
+  4559		mutex_lock(&dev->dev_mutex);
+  4560	
+  4561		netif_dbg(dev, ifup, dev->net, "resuming device");
+  4562	
+  4563		dev_open = test_bit(EVENT_DEV_OPEN, &dev->flags);
+  4564	
+  4565		if (dev_open) {
+  4566			bool pipe_halted = false;
+  4567	
+  4568			ret = lan78xx_flush_tx_fifo(dev);
+  4569			if (ret < 0)
+  4570				goto out;
+  4571	
+  4572			if (dev->urb_intr) {
+> 4573				int ret = usb_submit_urb(dev->urb_intr, GFP_KERNEL);
+  4574	
+  4575				if (ret < 0) {
+  4576					if (ret == -ENODEV)
+  4577						netif_device_detach(dev->net);
+  4578	
+  4579				netdev_warn(dev->net, "Failed to submit intr URB");
+  4580				}
+  4581			}
+  4582	
+  4583			spin_lock_irq(&dev->txq.lock);
+  4584	
+  4585			if (netif_device_present(dev->net)) {
+  4586				pipe_halted = lan78xx_submit_deferred_urbs(dev);
+  4587	
+  4588				if (pipe_halted)
+  4589					lan78xx_defer_kevent(dev, EVENT_TX_HALT);
+  4590			}
+  4591	
+  4592			clear_bit(EVENT_DEV_ASLEEP, &dev->flags);
+  4593	
+  4594			spin_unlock_irq(&dev->txq.lock);
+  4595	
+  4596			if (!pipe_halted &&
+  4597			    netif_device_present(dev->net) &&
+  4598			    (skb_queue_len(&dev->txq) < dev->tx_qlen))
+  4599				netif_start_queue(dev->net);
+  4600	
+  4601			ret = lan78xx_start_tx_path(dev);
+  4602			if (ret < 0)
+  4603				goto out;
+  4604	
+  4605			tasklet_schedule(&dev->bh);
+  4606	
+  4607			if (!timer_pending(&dev->stat_monitor)) {
+  4608				dev->delta = 1;
+  4609				mod_timer(&dev->stat_monitor,
+  4610					  jiffies + STAT_UPDATE_TIMER);
+  4611			}
+  4612	
+  4613		} else {
+  4614			clear_bit(EVENT_DEV_ASLEEP, &dev->flags);
+  4615		}
+  4616	
+  4617		ret = lan78xx_write_reg(dev, WUCSR2, 0);
+  4618		if (ret < 0)
+  4619			goto out;
+  4620		ret = lan78xx_write_reg(dev, WUCSR, 0);
+  4621		if (ret < 0)
+  4622			goto out;
+  4623		ret = lan78xx_write_reg(dev, WK_SRC, 0xFFF1FF1FUL);
+  4624		if (ret < 0)
+  4625			goto out;
+  4626	
+  4627		ret = lan78xx_write_reg(dev, WUCSR2, WUCSR2_NS_RCD_ |
+  4628						     WUCSR2_ARP_RCD_ |
+  4629						     WUCSR2_IPV6_TCPSYN_RCD_ |
+  4630						     WUCSR2_IPV4_TCPSYN_RCD_);
+  4631		if (ret < 0)
+  4632			goto out;
+  4633	
+  4634		ret = lan78xx_write_reg(dev, WUCSR, WUCSR_EEE_TX_WAKE_ |
+  4635						    WUCSR_EEE_RX_WAKE_ |
+  4636						    WUCSR_PFDA_FR_ |
+  4637						    WUCSR_RFE_WAKE_FR_ |
+  4638						    WUCSR_WUFR_ |
+  4639						    WUCSR_MPR_ |
+  4640						    WUCSR_BCST_FR_);
+  4641		if (ret < 0)
+  4642			goto out;
+  4643	
+  4644		ret = 0;
+  4645	out:
+  4646		mutex_unlock(&dev->dev_mutex);
+  4647	
+  4648		return ret;
+  4649	}
+  4650	
+
 -- 
-2.33.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

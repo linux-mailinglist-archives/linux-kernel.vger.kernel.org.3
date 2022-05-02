@@ -2,134 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 954AC51760A
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 19:41:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D508E5175FF
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 19:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386711AbiEBRon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 13:44:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46858 "EHLO
+        id S244094AbiEBRob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 13:44:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244389AbiEBRod (ORCPT
+        with ESMTP id S235860AbiEBRo3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 13:44:33 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5947421B4;
-        Mon,  2 May 2022 10:41:03 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id w4so20403591wrg.12;
-        Mon, 02 May 2022 10:41:03 -0700 (PDT)
+        Mon, 2 May 2022 13:44:29 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659CF2B2
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 10:40:59 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id y3so29025935ejo.12
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 10:40:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=5yilTDVWyYVQnat0wTW/cshHY+EZUdB/qoHF/HgKqh0=;
-        b=b5t3fQ/sc6WafpGvCpiTDmwe3DSD9Yby3pt2wIsQT7bEHa9TxNfH77jTWrmVEbXWxA
-         cZaPeDyBcyK6NQ/LmprunhCxGTPygSeR5bbfTUuzcVEFnTXZUlVVDYkqjo/xnt/NAs6r
-         jzIj+2nw8hdtCD17bTlCjgzZTI3GnlOfNVBnqp13eAOY+xWZT20UnHbUsiBZgkfUaufI
-         oR0QVi7JMCCi+xVFp+6Gg53rQQasX3deNRymuQjbPpHrPJiaq/F6tzdlmTXFL8AQg/FQ
-         EhW6UrpH7nmXmGZ5pULLkrdPabj8ULkG9W3rc3JFbX6JK3fWCfJICLwBpkCIjLtuQn6N
-         vpuQ==
+        d=linaro.org; s=google;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=T2pqf/ZsMQSKMuxK+/c6zd6+ftGPVEK7T/AqUXfVSTg=;
+        b=w6Xa++C37JYlMsXY8QYku3gyilnsILyuKs9Dhiv+0xVGxcRpR1l9UyjuSRbRuoB4OX
+         mWKbJ2RxY536xewVProPrUHcnc15MO66QJyK+fVdfgc5ET37LGJGdxIbIyJ+7tSDxLET
+         US5eXo9xo1b+FK4u77L4wNSq57GgzoNX3ACtcUwX+ytbowUsxN1R1s8gPd6T9/LnsjYJ
+         fOwO2nHL/geYwmSsT4qbGgY/+epHWZeOZpjIMIzrOGPOS1i6SoIc7n9GhGLHaW44qBT2
+         6RqSwh1TT9mc1RNogQFamC/AtRI+VoVa8CeTygEWw/5V1mx/BYDJF0cdBplf1deSlqd6
+         iruQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=5yilTDVWyYVQnat0wTW/cshHY+EZUdB/qoHF/HgKqh0=;
-        b=nwYA1rE0NKnv66ZfmVaat9Yl2QAKdTlfL3ovwxLT+jX+E9rrdArrlvJte3Qjc+1R97
-         JoAjcZt364b6BkoTyKJL/pxtU8JskVVokZ65jlm9qFcDm+QUglo+Mi7CUHajwyuiqmOw
-         RSpMEvCGGiEZmjrsnilRWhTQSN4erX//eKRvN4l9HaKl5fPMjp+7X4txieHgTtUu7mAG
-         XInsO/dlAiyRmdLL2Ku3yiFQBvn/1V8X3dU4MjV2rMFM3xghWZiQgJw8ehEJ4FYt/yox
-         o31DyTAObwsF+utb8n/YCyTY6Yz5dI489LXrlAZ++njQBHmnZ6Tb1Vz/1kCm7VfqojrG
-         25ZA==
-X-Gm-Message-State: AOAM533Et4hNnfiN8PNCFfX2DJhkSjQVgls+J9SSCtrC0otC1lw06xm4
-        vvpLo9FJohXBlxsq485vULis/H9wXVw=
-X-Google-Smtp-Source: ABdhPJxywibdFq1ctsjS/GPe80Fc7DTC9r2SQDQ3wmUuqEQ6EQpJb07yaHE/CoAXsaiZmQ9A7GCLcA==
-X-Received: by 2002:a05:6000:110d:b0:20a:ea3b:8d48 with SMTP id z13-20020a056000110d00b0020aea3b8d48mr10313168wrw.196.1651513261679;
-        Mon, 02 May 2022 10:41:01 -0700 (PDT)
-Received: from [192.168.8.198] ([85.255.235.73])
-        by smtp.gmail.com with ESMTPSA id y20-20020a7bc194000000b003942a244f48sm6657482wmi.33.2022.05.02.10.41.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 10:41:00 -0700 (PDT)
-Message-ID: <2436d42c-85ca-d060-6508-350c769804f1@gmail.com>
-Date:   Mon, 2 May 2022 18:40:36 +0100
+        bh=T2pqf/ZsMQSKMuxK+/c6zd6+ftGPVEK7T/AqUXfVSTg=;
+        b=XHPo0ykmSxxhedH8rQdcBSxX5Wosj52UbGdmx3drNPbiwjQA/FL422P4XvLTTiM88Y
+         H1t6SuLv/I+7rfRUttqxcHLv74AY6MWn7GUXUG09aZo7U4aXsZkjiwZIp/VQVw33NBrT
+         JXWHDOPKhjdfOJJjI8VHiAXKfkblYjjANYvYkNZ1URnK2YWvR32K3ICdo/iA5OG0PNl7
+         IbEWHGwTMT5klgqpZ0b6eVUcg6XL+gWxwKZysGPxU0NljnseUMa/yx+sG9qGim7uBcLL
+         3W2JHbR7fPXFablthdz2iz58TM+W5hyNSY52wZDitH5WWYmv/oikE7Qprz+qcr8q81tZ
+         7DnA==
+X-Gm-Message-State: AOAM5322xS9pM21bx4murV1EQgIahSwViODOBMG+I14JQBgkCBSargdK
+        pSBl/i21G8NDo64CKe2t1z1hHA==
+X-Google-Smtp-Source: ABdhPJwVvu+lkFY73eVNrxet+GQc/E+bRy1O6uMwXhMPN5GQLVixiDxsLFoDD0I94kAPgjYCuasVdg==
+X-Received: by 2002:a17:907:7810:b0:6e7:ef73:8326 with SMTP id la16-20020a170907781000b006e7ef738326mr12088942ejc.429.1651513258023;
+        Mon, 02 May 2022 10:40:58 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id n9-20020aa7c689000000b0042617ba639csm6908547edq.38.2022.05.02.10.40.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 May 2022 10:40:57 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] soc/PM/arm64: qcom: Add initial version of bwmon
+Date:   Mon,  2 May 2022 19:40:42 +0200
+Message-Id: <20220502174046.139234-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [REGRESSION] lxc-stop hang on 5.17.x kernels
-Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>,
-        Daniel Harding <dharding@living180.net>
-Cc:     regressions@lists.linux.dev, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <7925e262-e0d4-6791-e43b-d37e9d693414@living180.net>
- <6ad38ecc-b2a9-f0e9-f7c7-f312a2763f97@kernel.dk>
- <ccf6cea1-1139-cd73-c4e5-dc9799708bdd@living180.net>
- <bb283ff5-6820-d096-2fca-ae7679698a50@kernel.dk>
- <371c01dd-258c-e428-7428-ff390b664752@kernel.dk>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <371c01dd-258c-e428-7428-ff390b664752@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/2/22 18:00, Jens Axboe wrote:
-> On 5/2/22 7:59 AM, Jens Axboe wrote:
->> On 5/2/22 7:36 AM, Daniel Harding wrote:
->>> On 5/2/22 16:26, Jens Axboe wrote:
->>>> On 5/2/22 7:17 AM, Daniel Harding wrote:
->>>>> I use lxc-4.0.12 on Gentoo, built with io-uring support
->>>>> (--enable-liburing), targeting liburing-2.1.  My kernel config is a
->>>>> very lightly modified version of Fedora's generic kernel config. After
->>>>> moving from the 5.16.x series to the 5.17.x kernel series, I started
->>>>> noticed frequent hangs in lxc-stop.  It doesn't happen 100% of the
->>>>> time, but definitely more than 50% of the time.  Bisecting narrowed
->>>>> down the issue to commit aa43477b040251f451db0d844073ac00a8ab66ee:
->>>>> io_uring: poll rework. Testing indicates the problem is still present
->>>>> in 5.18-rc5. Unfortunately I do not have the expertise with the
->>>>> codebases of either lxc or io-uring to try to debug the problem
->>>>> further on my own, but I can easily apply patches to any of the
->>>>> involved components (lxc, liburing, kernel) and rebuild for testing or
->>>>> validation.  I am also happy to provide any further information that
->>>>> would be helpful with reproducing or debugging the problem.
->>>> Do you have a recipe to reproduce the hang? That would make it
->>>> significantly easier to figure out.
->>>
->>> I can reproduce it with just the following:
->>>
->>>      sudo lxc-create --n lxc-test --template download --bdev dir --dir /var/lib/lxc/lxc-test/rootfs -- -d ubuntu -r bionic -a amd64
->>>      sudo lxc-start -n lxc-test
->>>      sudo lxc-stop -n lxc-test
->>>
->>> The lxc-stop command never exits and the container continues running.
->>> If that isn't sufficient to reproduce, please let me know.
->>
->> Thanks, that's useful! I'm at a conference this week and hence have
->> limited amount of time to debug, hopefully Pavel has time to take a look
->> at this.
-> 
-> Didn't manage to reproduce. Can you try, on both the good and bad
-> kernel, to do:
+Hi,
 
-Same here, it doesn't reproduce for me
+BWMON is a data bandwidth monitor providing throughput/bandwidth over certain
+interconnect links in a SoC.  It might be used to gather current bus usage and
+vote for interconnect bandwidth, thus adjusting the bus speed based on actual
+usage.
 
+The work is built on top of Thara Gopinath's patches with several cleanups,
+changes and simplifications.
 
-> # echo 1 > /sys/kernel/debug/tracing/events/io_uring/enable
-> 
-> run lxc-stop
-> 
-> # cp /sys/kernel/debug/tracing/trace ~/iou-trace
-> 
-> so we can see what's going on? Looking at the source, lxc is just using
-> plain POLL_ADD, so I'm guessing it's not getting a notification when it
-> expects to, or it's POLL_REMOVE not doing its job. If we have a trace
-> from both a working and broken kernel, that might shed some light on it.
+This is "initial version", which means the work is not finished.  The goal is
+to add support for further devices (version 5 of bwmon) and usage of devfreq
+governors, similarly to tegra30 devfreq driver.
+
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (4):
+  dt-bindings: interconnect: qcom,sdm845-cpu-bwmon: add BWMON device
+  opp: Add apis to retrieve opps with interconnect bandwidth
+  soc: qcom: icc-bwmon: Add bandwidth monitoring driver
+  arm64: dts: qcom: sdm845: Add CPU BWMON
+
+ .../interconnect/qcom,sdm845-cpu-bwmon.yaml   | 105 ++++++
+ MAINTAINERS                                   |   7 +
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |  60 ++++
+ drivers/opp/core.c                            | 120 +++++++
+ drivers/soc/qcom/Kconfig                      |  10 +
+ drivers/soc/qcom/Makefile                     |   1 +
+ drivers/soc/qcom/icc-bwmon.c                  | 328 ++++++++++++++++++
+ include/linux/pm_opp.h                        |  19 +
+ 8 files changed, 650 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml
+ create mode 100644 drivers/soc/qcom/icc-bwmon.c
 
 -- 
-Pavel Begunkov
+2.32.0
+

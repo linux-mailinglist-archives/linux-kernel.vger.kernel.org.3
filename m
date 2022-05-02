@@ -2,356 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E680051723E
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 17:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7504B517245
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 17:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385670AbiEBPLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 11:11:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
+        id S1385686AbiEBPNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 11:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352318AbiEBPLL (ORCPT
+        with ESMTP id S1352318AbiEBPNj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 11:11:11 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF74211A20
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 08:07:40 -0700 (PDT)
-Date:   Mon, 2 May 2022 23:08:15 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1651504058;
+        Mon, 2 May 2022 11:13:39 -0400
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3405311A21;
+        Mon,  2 May 2022 08:10:09 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id E7FE0240003;
+        Mon,  2 May 2022 15:10:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1651504204;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=pAsrVPwwMe1ey1EltZSu/7ualzBfPJpsOxaHqeGmNrE=;
-        b=vJFId66tF13eIq5GDcbcBJ7xkPJhXYSdJLq8IvGrZRaTvdspMMkgD/Dhop4dLLHYuiDV5U
-        hk5h6+CGSrsTdQQjyhqqGQ/ZzRpRCosZVNocPOvz9ooZ0WMZkiMfweZjzrl6PUMxXR0xKQ
-        Oag/bb/9BsCHU1f7FH4NI1z39/6yA9s=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Tao Zhou <tao.zhou@linux.dev>
-To:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Tao Zhou <tao.zhou@linux.dev>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, linux-kernel@vger.kernel.org, parth@linux.ibm.com,
-        qais.yousef@arm.com, chris.hyser@oracle.com, vschneid@redhat.com,
-        patrick.bellasi@matbug.net, David.Laight@aculab.com,
-        pjt@google.com, pavel@ucw.cz, tj@kernel.org, qperret@google.com,
-        tim.c.chen@linux.intel.com
-Subject: Re: [RFC 5/6] sched/fair: Take into account latency nice at wakeup
-Message-ID: <Ym/z39Qk/QDJckKE@geo.homenetwork>
-References: <20220311161406.23497-1-vincent.guittot@linaro.org>
- <20220311161406.23497-6-vincent.guittot@linaro.org>
- <Ym6uMoHVkqr9zOpj@geo.homenetwork>
- <CAKfTPtD2Hb_ZU8x1J9B6he7fYNvw2AyUBOKdfRk6zcSvJEvYTg@mail.gmail.com>
- <CAKfTPtCkMGnATuBZObRTabn0-OTUbB6j8f_Sg57HCg4cgQ96rQ@mail.gmail.com>
+        bh=za927fpKikdw7PliunLHAWJEoeYWCuskj6yGi1D7Ozc=;
+        b=Z1LvIl9xyl/xEIQi4dtlKJgKmI46QfH3fQBm9jDTREx/8s108jliKTJDpmwmPirh/5ea79
+        KQ0I1h/uZxnm71CCY1ihIhOqHExlKkf0zdi5IerYlVy2QRkzVWvvbyfCXqgptcoOnAt5ok
+        DDQHVp5FpQ1vg+HHfdoij3Z3H9/1Pt6J3PyMoGVknfUw+4wvxB7nC+V3VnajlkRFqKoTFW
+        QnCQR9DhP/OC/uXWbU0GUxxRk77iT2SMUot3Hj1pm4gyBY2Ett9KvkA6O2tmjIypOvC6lo
+        ty3Iuge8/OiiWLRfslMQXZjHsnCavv6sRMlGTpSJP9MEjowL5ZDBRbntp19LNg==
+Date:   Mon, 2 May 2022 17:08:46 +0200
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Subject: Re: [net-next v2 00/12] add support for Renesas RZ/N1 ethernet
+ subsystem devices
+Message-ID: <20220502170846.24e5e003@fixe.home>
+In-Reply-To: <CAMuHMdVKY7=CjfazEjNw-5vGP0_eQFX=K1H7DOSWajo2u-dkAQ@mail.gmail.com>
+References: <20220429143505.88208-1-clement.leger@bootlin.com>
+ <20220429123235.3098ed12@kernel.org>
+ <20220502085103.19b4f47b@fixe.home>
+ <CAMuHMdVKY7=CjfazEjNw-5vGP0_eQFX=K1H7DOSWajo2u-dkAQ@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtCkMGnATuBZObRTabn0-OTUbB6j8f_Sg57HCg4cgQ96rQ@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_BTC_ID,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 02, 2022 at 02:30:55PM +0200, Vincent Guittot wrote:
+Le Mon, 2 May 2022 14:27:38 +0200,
+Geert Uytterhoeven <geert@linux-m68k.org> a =C3=A9crit :
 
-> On Mon, 2 May 2022 at 11:54, Vincent Guittot <vincent.guittot@linaro.org> wrote:
-> >
-> > Hi Tao,
-> >
-> > On Sun, 1 May 2022 at 17:58, Tao Zhou <tao.zhou@linux.dev> wrote:
+> Hi Cl=C3=A9ment,
+>=20
+> On Mon, May 2, 2022 at 8:52 AM Cl=C3=A9ment L=C3=A9ger
+> <clement.leger@bootlin.com> wrote:
+> > Le Fri, 29 Apr 2022 12:32:35 -0700,
+> > Jakub Kicinski <kuba@kernel.org> a =C3=A9crit :
+> > =20
+> > > On Fri, 29 Apr 2022 16:34:53 +0200 Cl=C3=A9ment L=C3=A9ger wrote: =20
+> > > > The Renesas RZ/N1 SoCs features an ethernet subsystem which
+> > > > contains (most notably) a switch, two GMACs, and a MII
+> > > > converter [1]. This series adds support for the switch and the
+> > > > MII converter.
+> > > >
+> > > > The MII converter present on this SoC has been represented as a
+> > > > PCS which sit between the MACs and the PHY. This PCS driver is
+> > > > probed from the device-tree since it requires to be configured.
+> > > > Indeed the MII converter also contains the registers that are
+> > > > handling the muxing of ports (Switch, MAC, HSR, RTOS, etc)
+> > > > internally to the SoC.
+> > > >
+> > > > The switch driver is based on DSA and exposes 4 ports + 1 CPU
+> > > > management port. It include basic bridging support as well as
+> > > > FDB and statistics support. =20
 > > >
-> > > Hi Vincent,
+> > > Build's not happy (W=3D1 C=3D1):
 > > >
-> > > Change to Valentin Schneider's now using mail address.
+> > > drivers/net/dsa/rzn1_a5psw.c:574:29: warning: symbol
+> > > 'a5psw_switch_ops' was not declared. Should it be static? In file
+> > > included from ../drivers/net/dsa/rzn1_a5psw.c:17:
+> > > drivers/net/dsa/rzn1_a5psw.h:221:1: note: offset of packed
+> > > bit-field =E2=80=98port_mask=E2=80=99 has changed in GCC 4.4 221 | } =
+__packed; | ^
+> > > =20
 > >
-> > Thanks
+> > Hi Jakub, I only had this one (due to the lack of W=3D1 C=3D1 I guess)
+> > which I thought (wrongly) that it was due to my GCC version:
 > >
-> > >
-> > > On Fri, Mar 11, 2022 at 05:14:05PM +0100, Vincent Guittot wrote:
-> > >
-> > > > Take into account the nice latency priority of a thread when deciding to
-> > > > preempt the current running thread. We don't want to provide more CPU
-> > > > bandwidth to a thread but reorder the scheduling to run latency sensitive
-> > > > task first whenever possible.
-> > > >
-> > > > As long as a thread didn't use its bandwidth, it will be able to preempt
-> > > > the current thread.
-> > > >
-> > > > At the opposite, a thread with a low latency priority will preempt current
-> > > > thread at wakeup only to keep fair CPU bandwidth sharing. Otherwise it will
-> > > > wait for the tick to get its sched slice.
-> > > >
-> > > >                                    curr vruntime
-> > > >                                        |
-> > > >                       sysctl_sched_wakeup_granularity
-> > > >                                    <-->
-> > > > ----------------------------------|----|-----------------------|---------------
-> > > >                                   |    |<--------------------->
-> > > >                                   |    .  sysctl_sched_latency
-> > > >                                   |    .
-> > > > default/current latency entity    |    .
-> > > >                                   |    .
-> > > > 1111111111111111111111111111111111|0000|-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-
-> > > > se preempts curr at wakeup ------>|<- se doesn't preempt curr -----------------
-> > > >                                   |    .
-> > > >                                   |    .
-> > > >                                   |    .
-> > > > low latency entity                |    .
-> > > >                                    ---------------------->|
-> > > >                                % of sysctl_sched_latency  |
-> > > > 1111111111111111111111111111111111111111111111111111111111|0000|-1-1-1-1-1-1-1-
-> > > > preempt ------------------------------------------------->|<- do not preempt --
-> > > >                                   |    .
-> > > >                                   |    .
-> > > >                                   |    .
-> > > > high latency entity               |    .
-> > > >          |<-----------------------|    .
-> > > >          | % of sysctl_sched_latency   .
-> > > > 111111111|0000|-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1
-> > > > preempt->|<- se doesn't preempt curr ------------------------------------------
-> > > >
-> > > > Tests results of nice latency impact on heavy load like hackbench:
-> > > >
-> > > > hackbench -l (2560 / group) -g group
-> > > > group        latency 0             latency 19
-> > > > 1            1.450(+/- 0.60%)      1.376(+/- 0.54%) + 5%
-> > > > 4            1.537(+/- 1.75%)      1.335(+/- 1.81%) +13%
-> > > > 8            1.414(+/- 1.91%)      1.348(+/- 1.88%) + 5%
-> > > > 16           1.423(+/- 1.65%)      1.374(+/- 0.58%) + 3%
-> > > >
-> > > > hackbench -p -l (2560 / group) -g group
-> > > > group
-> > > > 1            1.416(+/- 3.45%)      0.886(+/- 0.54%) +37%
-> > > > 4            1.634(+/- 7.14%)      0.888(+/- 5.40%) +45%
-> > > > 8            1.449(+/- 2.14%)      0.804(+/- 4.55%) +44%
-> > > > 16           0.917(+/- 4.12%)      0.777(+/- 1.41%) +15%
-> > > >
-> > > > By deacreasing the latency prio, we reduce the number of preemption at
-> > >
-> > > s/deacreasing/decreasing/
+> >   CC      net/dsa/switch.o
+> >   CC      net/dsa/tag_8021q.o
+> > In file included from ../drivers/net/dsa/rzn1_a5psw.c:17:
+> > ../drivers/net/dsa/rzn1_a5psw.h:221:1: note: offset of packed
+> > bit-field =E2=80=98port_mask=E2=80=99 has changed in GCC 4.4 221 | } __=
+packed;
+> >       | ^
+> >   CC      kernel/module.o
+> >   CC      drivers/net/ethernet/stmicro/stmmac/dwmac1000_core.o
+> >   CC      drivers/net/ethernet/stmicro/stmmac/dwmac100_core.o
 > >
-> > yes
-> >
-> > > s/reduce/increase/
-> >
-> > not in the case of hackbench tests above. By decreasing the latency
-> > prio of all hackbench threads, we make sure that they will not preempt
-> > the current thread and let it move forward so we reduce the number of
-> > preemption.
-> >
-> > >
-> > > > wakeup and help hackbench making progress.
-> > > >
-> > > > Test results of nice latency impact on short live load like cyclictest
-> > > > while competing with heavy load like hackbench:
-> > > >
-> > > > hackbench -l 10000 -g group &
-> > > > cyclictest --policy other -D 5 -q -n
-> > > >         latency 0           latency -20
-> > > > group   min  avg    max     min  avg    max
-> > > > 0       16    17     28      15   17     27
-> > > > 1       61   382  10603      63   89   4628
-> > > > 4       52   437  15455      54   98  16238
-> > > > 8       56   728  38499      61  125  28983
-> > > > 16      53  1215  52207      61  183  80751
-> > > >
-> > > > group = 0 means that hackbench is not running.
-> > > >
-> > > > The avg is significantly improved with nice latency -20 especially with
-> > > > large number of groups but min and max remain quite similar. If we add the
-> > > > histogram parameters to get details of latency, we have :
-> > > >
-> > > > hackbench -l 10000 -g 16 &
-> > > > cyclictest --policy other -D 5 -q -n  -H 20000 --histfile data.txt
-> > > >               latency 0    latency -20
-> > > > Min Latencies:    63           62
-> > > > Avg Latencies:  1397          218
-> > > > Max Latencies: 44926        42291
-> > > > 50% latencies:   100           98
-> > > > 75% latencies:   762          116
-> > > > 85% latencies:  1118          126
-> > > > 90% latencies:  1540          130
-> > > > 95% latencies:  5610          138
-> > > > 99% latencies: 13738          266
-> > > >
-> > > > With percentile details, we see the benefit of nice latency -20 as
-> > > > 1% of the latencies stays above 266us whereas the default latency has
-> > > > got 25% are above 762us and 10% over the 1ms.
-> > > >
-> >
-> > [..]
-> >
-> > > > +static long wakeup_latency_gran(int latency_weight)
-> > > > +{
-> > > > +     long thresh = sysctl_sched_latency;
-> > > > +
-> > > > +     if (!latency_weight)
-> > > > +             return 0;
-> > > > +
-> > > > +     if (sched_feat(GENTLE_FAIR_SLEEPERS))
-> > > > +             thresh >>= 1;
-> > > > +
-> > > > +     /*
-> > > > +      * Clamp the delta to stay in the scheduler period range
-> > > > +      * [-sysctl_sched_latency:sysctl_sched_latency]
-> > > > +      */
-> > > > +     latency_weight = clamp_t(long, latency_weight,
-> > > > +                             -1 * NICE_LATENCY_WEIGHT_MAX,
-> > > > +                             NICE_LATENCY_WEIGHT_MAX);
-> > > > +
-> > > > +     return (thresh * latency_weight) >> NICE_LATENCY_SHIFT;
-> > > > +}
-> > > > +
-> > > >  static unsigned long wakeup_gran(struct sched_entity *se)
-> > > >  {
-> > > >       unsigned long gran = sysctl_sched_wakeup_granularity;
-> > > > @@ -7008,6 +7059,10 @@ static int
-> > > >  wakeup_preempt_entity(struct sched_entity *curr, struct sched_entity *se)
-> > > >  {
-> > > >       s64 gran, vdiff = curr->vruntime - se->vruntime;
-> > > > +     int latency_weight = se->latency_weight - curr->latency_weight;
-> > > > +
-> > > > +     latency_weight = min(latency_weight, se->latency_weight);
-> > >
-> > > Let lable A=se->latency_weight, B=curr->latency_weight, C=A-B.
-> > >
-> > > 1 A>0 B>0
-> > >     ::C=A-B<0, min(C,A)=C, latency decrease, C is the real diff value no matter
-> > >       what A is. That means it can be very 'long'(-sched_latency) and vdiff is
-> > >       more possible to be in <= 0 case and return -1.
-> > >     ::C=A-B>0, min(C,A)=A, latency increase, but it is conservative. Limit to
-> >
-> > A>0 and B>0  then min(C=A-B, A) = C
+> > I'll fix the other errors which are more trivial, however, I did not
+> > found a way to fix the packed bit-field warning. =20
+>=20
+> The "port_mask" field is split across 2 u8s.
+> What about using u16 instead, and adding explicit padding while
+> at it? The below gets rid of the warning, while the generated code
+> is the same.
+>=20
+> --- a/drivers/net/dsa/rzn1_a5psw.h
+> +++ b/drivers/net/dsa/rzn1_a5psw.h
+> @@ -169,10 +169,11 @@
+>=20
+>  struct fdb_entry {
+>         u8 mac[ETH_ALEN];
+> -       u8 valid:1;
+> -       u8 is_static:1;
+> -       u8 prio:3;
+> -       u8 port_mask:5;
+> +       u16 valid:1;
+> +       u16 is_static:1;
+> +       u16 prio:3;
+> +       u16 port_mask:5;
+> +       u16 reserved:6;
+>  } __packed;
 
-It's my mistake. And in this case the calculating of value added to vdiff
-for latency increase and deleted to vdiff for latency decrease is the same.
+Hi Geert ! Indeed, while looking a bit more in depth at this error I
+found that using u16 avoids this error. I did switch to u16 but did not
+add any "reserved" field at the end and there is no more error. Do you
+think adding the "reserved" field would be preferable ?
 
-> >
-> > >       A/1024*sched_latency.
-> > >     When latecy is decreased, the negtive value added to vdiff is larger than the
-> > >     positive value added to vdiff when latency is increased.
-> >
-> > When the weight > 0, the tasks have some latency requirements so we
-> > use their relative priority to decide if we can preempt current which
-> > also has some latency requirement
-> >
-> > >
-> > > 2 A>0 B<0
-> > >     ::C=A-B>0 and C>A, min(C,A)=A, latency increase and it is conservative.
-> 
-> For this one we want to use delta like for UC 1 above
-> 
-> > >
-> > > 3 A<0 B<0
-> > >     ::C=A-B>0, min(C,A)=A, latency increase but min(C,A)<0, I think if latency
-> > >     increase means the value added to vdiff will be a positive value to increase
-> > >     the chance to return 1. I would say it is max(C,A)=C
-> > >     ::C=A-B<0, min(C,A)=A, latency decrease and the real negtive value.
-> >
-> > When the weight < 0, the tasks haven't latency requirement and even
-> > don't care of being scheduled "quickly". In this case, we don't care
-> > about the relative priority but we want to minimize the preemption of
-> > current so we use the weight
-> >
-> > >
-> > > 4 A<0,B>0
-> > >     ::C=A-B<0, min(C,A)=C, latency decrease and the real negtive value.
-> 
-> And for this one we probably want to use A like for other UC with A < 0
-> 
-> I'm going to update the way the weight is computed to match this
+Thanks
 
-According to your explanations, the min(C,A) is used for A and B both in
-the negtive region or in the postive region, the max(C,A) is use for A and
-B both not in the same region.
+>=20
+>  union lk_data {
+>=20
+> Gr{oetje,eeting}s,
+>=20
+>                         Geert
+>=20
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 --
+> geert@linux-m68k.org
+>=20
+> In personal conversations with technical people, I call myself a
+> hacker. But when I'm talking to journalists I just say "programmer"
+> or something like that. -- Linus Torvalds
 
-if ((A>>31)^(B>>31))
-  max(C,A)
-else
-  min(C,A)
-
-
-wakeup_preempt_entity(struct sched_entity *curr, struct sched_entity *se)
-{
-    s64 gran, vdiff = curr->vruntime - se->vruntime;
-    int latency_weight = se->latency_weight - curr->latency_weight;
-
-    if ((se->latency_weight>>(WMULT_SHIFT-1)) ^
-         curr->latency_weight>>(WMULT_SHIFT-1))
-        latency_weight = max(latency_weight, se->latency_weight);
-    else
-        latency_weight = min(latency_weight, se->latency_weight);
-
-    vdiff += wakeup_latency_gran(latency_weight);
-    ...
-}
-
-> > >
-> > > Is there a reason that the value when latency increase and latency decrease
-> > > be treated differently. Latency increase value is limited to se's latency_weight
-> >
-> > I have tried to explain why I treat differently if weight is > 0 or < 0.
-> >
-> > > but latency decrease value can extend to -sched_latency or treat them the same.
-> > > Penalty latency decrease and conserve latency increase.
-> > >
-> > >
-> > > There is any value that this latency_weight can be considered to be a average.
-> > >
-> > > The delta value choose is ~%5 to 1024. %5*sched_latency=0.05*6ms=0.3ms.(no scale)
-> > > I do not think over that vdiff equation  and others though.
-> > >
-> > > Thanks,
-> > > Tao
-> > > > +     vdiff += wakeup_latency_gran(latency_weight);
-> > > >
-> > > >       if (vdiff <= 0)
-> > > >               return -1;
-> > > > @@ -7117,6 +7172,7 @@ static void check_preempt_wakeup(struct rq *rq, struct task_struct *p, int wake_
-> > > >               return;
-> > > >
-> > > >       update_curr(cfs_rq_of(se));
-> > > > +
-> > > >       if (wakeup_preempt_entity(se, pse) == 1) {
-> > > >               /*
-> > > >                * Bias pick_next to pick the sched entity that is
-> > > > diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> > > > index 456ad2159eb1..dd92aa9c36f9 100644
-> > > > --- a/kernel/sched/sched.h
-> > > > +++ b/kernel/sched/sched.h
-> > > > @@ -122,6 +122,17 @@ extern void call_trace_sched_update_nr_running(struct rq *rq, int count);
-> > > >   * Default tasks should be treated as a task with latency_nice = 0.
-> > > >   */
-> > > >  #define DEFAULT_LATENCY_NICE 0
-> > > > +#define DEFAULT_LATENCY_PRIO (DEFAULT_LATENCY_NICE + LATENCY_NICE_WIDTH/2)
-> > > > +
-> > > > +/*
-> > > > + * Convert user-nice values [ -20 ... 0 ... 19 ]
-> > > > + * to static latency [ 0..39 ],
-> > > > + * and back.
-> > > > + */
-> > > > +#define NICE_TO_LATENCY(nice)        ((nice) + DEFAULT_LATENCY_PRIO)
-> > > > +#define LATENCY_TO_NICE(prio)        ((prio) - DEFAULT_LATENCY_PRIO)
-> > > > +#define NICE_LATENCY_SHIFT   (SCHED_FIXEDPOINT_SHIFT)
-> > > > +#define NICE_LATENCY_WEIGHT_MAX      (1L << NICE_LATENCY_SHIFT)
-> > > >
-> > > >  /*
-> > > >   * Increase resolution of nice-level calculations for 64-bit architectures.
-> > > > @@ -2098,6 +2109,7 @@ static_assert(WF_TTWU == SD_BALANCE_WAKE);
-> > > >
-> > > >  extern const int             sched_prio_to_weight[40];
-> > > >  extern const u32             sched_prio_to_wmult[40];
-> > > > +extern const int             sched_latency_to_weight[40];
-> > > >
-> > > >  /*
-> > > >   * {de,en}queue flags:
-> > > > --
-> > > > 2.17.1
-> > > >

@@ -2,158 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 582E2517AFB
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 01:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5348C517AF4
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 01:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231151AbiEBXt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 19:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41264 "EHLO
+        id S229929AbiEBXvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 19:51:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233030AbiEBXsD (ORCPT
+        with ESMTP id S230113AbiEBXv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 19:48:03 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CEE32046;
-        Mon,  2 May 2022 16:44:18 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id l16so9492283oil.6;
-        Mon, 02 May 2022 16:44:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=MTteb5sMoZQoMYDC0F86+T8JJmRGlnCtTb7EX41wdAE=;
-        b=bTKEVOi1LgUTsWANRXrxnTNJ3igDHbHVa6Pw6YgqbT50XukoLf45SgTavaDAAadHXH
-         CF90ocCXfiD5yXMz0IRQYjfuEFdmKJFGix2SCeOJrG6wH7kFw/Apceft0tTckE6X2Hip
-         +ccIMoUdTDDv+cxuiYqSy849+qx8aHrv4DexO0wxm+C4AH27j/Ha96BSrvhYRL7SV3kb
-         PFBkOuBIEPErT2h/3s0JzgAs85Yh0WDLt7N3FANC+DMYZw68iry4EshsTdB6eNiaYJ3f
-         Q1dZxopqI/Z3uk9+MShISuvj6z70ugF9jTAZxpMqwew3YYeG2mvBZxgjQHdzivafL02x
-         PgUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=MTteb5sMoZQoMYDC0F86+T8JJmRGlnCtTb7EX41wdAE=;
-        b=yJ5uL2H3eBIVlD2xyd3P/dSZOkKPwj+mwwRz96bErNSvgV2m5m6YFDNMMebdj2DgxS
-         86uTyM/8P3Aprxl+l79t93luWgWZiMgSBXNGzGU8bSTgpuu2yCtVfMqRw6mIpdRISFs8
-         J6f/6UGZNPnjFuDcCxzYqSkeuHg9RR3CYhEbG1mR+ZfQMVf1t2zq4t9FZzz0o6yvMyoK
-         +hWe0vsn8Joj+ZcSZyi6TIvmMbHP9aJvbsqyn0B0YJsOJRtjxiSYic3igubRnkcpwdrq
-         kJDth6PegMTNoMbQ7AcUt+RD4RDU9O60phRN7bckv9wGt6zkDWvMBYtMezTJo+rwKtL+
-         a2hg==
-X-Gm-Message-State: AOAM531KBKnftTazlOfAxx5eDrjUXEhkrucAITNwxfC84rhdzXoPd7+h
-        MFRIo3x66/2c6WwaVZ2AxCI=
-X-Google-Smtp-Source: ABdhPJzIwi2s9JFo/Xccrd150mB92nsm7xNAmRDeYenkL1WhAjpnvJ+Co11DNfrol85R4RG8c1JQjw==
-X-Received: by 2002:a05:6808:124b:b0:2da:38f0:945f with SMTP id o11-20020a056808124b00b002da38f0945fmr725099oiv.171.1651535054959;
-        Mon, 02 May 2022 16:44:14 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w10-20020a056830060a00b0060603221253sm3412819oti.35.2022.05.02.16.43.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 16:43:51 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <367acd5f-9130-f071-7146-21212b578043@roeck-us.net>
-Date:   Mon, 2 May 2022 16:43:41 -0700
+        Mon, 2 May 2022 19:51:27 -0400
+Received: from skyrocket.fabmicro.ru (skyrocket.fabmicro.ru [217.116.57.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6943056D
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 16:47:55 -0700 (PDT)
+Received: from mail.fabmicro.ru (skyrocket.fabmicro.ru [217.116.57.130])
+        by skyrocket.fabmicro.ru (8.14.9/8.14.9) with ESMTP id 242Nl6QG033711;
+        Mon, 2 May 2022 23:47:06 GMT
+        (envelope-from rz@fabmicro.ru)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 2/2] hwmon: acpi_power_meter: convert to
- hwmon_device_register_with_info
-Content-Language: en-US
-To:     Armin Wolf <W_Armin@gmx.de>, LABBE Corentin <clabbe@baylibre.com>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220502124249.682058-1-clabbe@baylibre.com>
- <20220502124249.682058-2-clabbe@baylibre.com>
- <0b154a30-7765-e3ac-9980-0ecc7447d7ad@roeck-us.net> <YnAqDxfTU27USQI+@Red>
- <1b2bf215-faa1-649d-5ab4-85fc0b907ec2@gmx.de>
- <dabc2be2-36ce-a9d4-8aa5-ae3f2a57f904@roeck-us.net>
- <72cce35f-a227-cd18-17f0-00eee350bcf4@gmx.de>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <72cce35f-a227-cd18-17f0-00eee350bcf4@gmx.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Date:   Tue, 03 May 2022 04:47:06 +0500
+From:   Ruslan Zalata <rz@fabmicro.ru>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v2] hwmon: (sun4i-lradc) Add driver for LRADC found on
+ Allwinner A13/A20 SoC
+In-Reply-To: <59e91f45-7263-eb41-4b47-db217af54910@roeck-us.net>
+References: <20220428210906.29527-1-rz@fabmicro.ru>
+ <f79a8edf-36d4-02af-da8f-32b4e491bd47@roeck-us.net>
+ <e0b57c7587dded38a92411994f353b3d@fabmicro.ru>
+ <e4d1a6c8-1afd-671e-76bf-b5bde9dc282f@roeck-us.net>
+ <59e91f45-7263-eb41-4b47-db217af54910@roeck-us.net>
+User-Agent: Roundcube Webmail/1.4.3
+Message-ID: <f315a4ddb51cdfd8596103836acbe7dd@fabmicro.ru>
+X-Sender: rz@fabmicro.ru
+Organization: Fabmicro, LLC.
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/2/22 14:00, Armin Wolf wrote:
-> Am 02.05.22 um 22:42 schrieb Guenter Roeck:
->> On 5/2/22 13:31, Armin Wolf wrote:
->>> Am 02.05.22 um 20:59 schrieb LABBE Corentin:
->>>
->>>> Le Mon, May 02, 2022 at 06:34:44AM -0700, Guenter Roeck a écrit :
->>>>> On 5/2/22 05:42, Corentin Labbe wrote:
->>>>>> Booting lead to a hwmon_device_register() is deprecated. Please
->>>>>> convert the driver to use hwmon_device_register_with_info().
->>>>>> So let's convert the driver to use hwmon_device_register_with_info().
->>>>>>
->>>>>> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
->>>>>> ---
->>>>>>    drivers/hwmon/acpi_power_meter.c | 5 ++++-
->>>>>>    1 file changed, 4 insertions(+), 1 deletion(-)
->>>>>>
->>>>>> diff --git a/drivers/hwmon/acpi_power_meter.c
->>>>>> b/drivers/hwmon/acpi_power_meter.c
->>>>>> index d2545a1be9fc..98293727f980 100644
->>>>>> --- a/drivers/hwmon/acpi_power_meter.c
->>>>>> +++ b/drivers/hwmon/acpi_power_meter.c
->>>>>> @@ -891,7 +891,10 @@ static int acpi_power_meter_add(struct
->>>>>> acpi_device *device)
->>>>>>        if (res)
->>>>>>            goto exit_free_capability;
->>>>>>
->>>>>> -    resource->hwmon_dev = hwmon_device_register(&device->dev);
->>>>>> +    resource->hwmon_dev =
->>>>>> hwmon_device_register_with_info(&device->dev,
->>>>>> + ACPI_POWER_METER_DEVICE_NAME,
->>>>>> +                                  NULL, NULL,
->>>>>> +                                  NULL);
->>>>> NACK. That isn't a conversion to the new API, it just abuses the fact
->>>>> that the new API has to accept a NULL info pointer for historic
->>>>> reasons.
->>>>>
->>>> Hello
->>>>
->>>> I am sorry, I found a driver doing it, so I believed it was okay.
->>>> Converting seems not to hard but, by using the new API, how can I
->>>> convert power1_model_number/power1_is_battery attribute ?
->>>> There are the remaining attributes I dont find how to convert.
->>>>
->>>> Regards
->>>
->>> Hi,
->>>
->>> for allowing the driver to provide nonstandard attributes,
->>> hwmon_device_register_with_info()
->>> has the argument "extra_groups" which is an pointer to a list of
->>> sysfs attribute groups.
->>> There are some drivers which are using this functionality, maybe you
->>> can use them as an
->>> inspiration.
->>>
->>> Just a question: what is the name of the driver you originally used
->>> as an inspiration?
->>>
->>
->> Originally it was for drivers/thermal/thermal_hwmon.c. Now there is also
->> drivers/platform/mips/cpu_hwmon.c which is clearly an abuse. I may have
->> missed others.
->>
->> Guenter
-> Should we notify the maintainers of cpu_hwmon.c about that?
-> This could potentially prevent such incidents from happening again.
+Hi Guenter,
+
+I'm sorry to disappoint you, but continuous mode for LRADC works only 
+for key presses (significant voltage change), it does not work for raw 
+data. Here's an excerpt from the manual that supports my discovery 
+(punctuation and grammar preserved):
+
+> The LRADC have three mode, Normal Mode、Single Mode and Continue Mode. 
+> Normal mode is that the LRADC will
+> report the result data of each convert all the time when the key is 
+> down. Single Mode is that the LRADC
+> will only report the first convert result data when the key is down. 
+> Continue Mode is that the LRADC will
+> report one of 8*(N+1) (N is program can set) sample convert result data 
+> when key is down.
+
+In other words, all three modes require key down event (voltage change) 
+and IRQ is the only way to get continuous raw data updates from LRADC. 
+I've experimented quite a lot with this for past few days, there are no 
+changes to values in ADC data regs except in DATA IRQ mode.
+
+Regarding variant structure. Vref is not the only difference between 
+different implementations of LRADC in different Allwinner SoCs. For 
+example, A83T has only one channel LRADC instead of two channels in 
+A10/A13/A20. Some other SoCs may have even more differences. I 
+introduced hwmon_chip_info structure into variant to encapsulate such 
+differences in one place. Patch version 3 will follow. Thank you.
+
+---
+Regards,
+Ruslan.
+
+Fabmicro, LLC.
+
+On 2022-04-29 11:03, Guenter Roeck wrote:
+> On 4/28/22 22:32, Guenter Roeck wrote:
+>> On 4/28/22 17:28, Ruslan Zalata wrote:
+>>> Thank you Guenter for your valuable time.
+>>> 
+>>> I have added update_interval option (it's in ms units, right?) and 
+>>> fixed all other issues you pointed to. Will test it on real hardware 
+>>> and send third version of the patch for review.
+>>> 
+>>> Regarding IRQ. Alternatively the driver would need to sit and poll 
+>>> conversion ready bit in a loop which might cause a much worse load on 
+>>> system, is not it ? Anyway, the real problem with this piece of 
+>>> hardware is that there's no "conversion ready bit" provided, the only 
+>>> way to know data ready status is to receive an interrupt.
+>>> 
+>> 
+>> Not necessarily. The data does not have to be "current", after all,
+>> if the hardware is able to continuously convert. If not, the question
+>> is how long a conversion takes. If it doesn't take too long, it would
+>> be better to initiate a conversion and then wait for the completion.
+>> 
+>>> I think it still needs a semaphore/seqlock to synchronize conversions 
+>>> and reads. I.e. two consequent reads should not return same old 
+>>> value. Although it's not an issue in my case, but could be a problem 
+>>> for others.
+>>> 
+>> Why ? That happens for almost all hwmon devices. They will all report
+>> the most recent conversion value. Some of them can take seconds
+>> to complete a new conversion, so the reported value is always "old"
+>> for a given defition of old (ie any time smaller than a conversion
+>> interval).
+>> 
+>> Sigh. Looks like I'll have to dig up the documentation and read about
+>> the ADC myself.
+>> 
 > 
-
-I am more inclined to create a special API for thermal, call it from
-the thermal code, and issue a warning with backtrace if anyone else
-calls hwmon_device_register_with_info() with NULL info pointer.
-And explain all that in detail in the API documentation.
-
-Guenter
+> I did, for both A13 and A20. The ADC supports continuous mode. That
+> means it can be configured accordingly, and reading the ADC value
+> just returns the most recent conversion value. There is absolutely
+> no need to keep reading the conversion values using interrupts.
+> 
+> Also,
+> 
+> +struct lradc_variant {
+> +	u32 bits;
+> +	u32 resolution;
+> +	u32 vref;
+> +};
+> 
+> is unnecessary because the values are the same for both supported 
+> chips.
+> That means that defines can and should be used. Yes, I can see that
+> A83T uses a different voltage, but even that doesn't need a structure -
+> the voltage can be set in struct sun4i_lradc_data if/when needed,
+> and the resolution and number of bits is still the same.
+> 
+> Guenter

@@ -2,155 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 034575175B9
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 19:27:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E6295173D1
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:09:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243899AbiEBRas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 13:30:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37050 "EHLO
+        id S241045AbiEBQMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 12:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235761AbiEBRar (ORCPT
+        with ESMTP id S240612AbiEBQMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 13:30:47 -0400
-X-Greylist: delayed 4693 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 02 May 2022 10:27:17 PDT
-Received: from 6.mo548.mail-out.ovh.net (6.mo548.mail-out.ovh.net [188.165.58.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F701A1A1
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 10:27:17 -0700 (PDT)
-Received: from mxplan5.mail.ovh.net (unknown [10.109.143.206])
-        by mo548.mail-out.ovh.net (Postfix) with ESMTPS id 40C7320A88;
-        Mon,  2 May 2022 16:09:01 +0000 (UTC)
-Received: from kaod.org (37.59.142.107) by DAG4EX1.mxp5.local (172.16.2.31)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 2 May
- 2022 18:08:59 +0200
-Authentication-Results: garm.ovh; auth=pass (GARM-107S0015a36cd29-1587-4259-883a-5c3137477e16,
-                    1C738C3314058F8CE8CF02D37F1FC3678EA14F63) smtp.auth=clg@kaod.org
-X-OVh-ClientIp: 82.64.250.170
-Message-ID: <449f47d2-f700-e71d-996b-ce30c6906d89@kaod.org>
-Date:   Mon, 2 May 2022 18:08:56 +0200
+        Mon, 2 May 2022 12:12:50 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF88CDEFB;
+        Mon,  2 May 2022 09:09:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651507761; x=1683043761;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=HIEm6DHONqf1fh3RVxZ900oiPNIDtiHGMYYJWK8XUcg=;
+  b=Q4w7ye9PAR2TVYI9BijEFAPzOy/MfHnyE2ylzEfcl0PBTbv2obfr7TeG
+   TvXyF1oWFrZunnfULG/p91ktPcxB+owr5lxrvdEgL6zC5AFP9I7CYdSyJ
+   3SuOIkvVF6fXCfJ3LFqskXgklXcGOZD4o27VCQDxFqWb5OYRHlLWxoy0/
+   /EySVOxmwbI0Dn5kVmYzUtpr7k5yzPw11kVggf8hZh5oNYA2OqQTJ0vh8
+   +teExmAEehtd8JwQL4WJN+yOTlM+FrOxgkeGrh5tEtoCvc4IiH6qW89ir
+   nQ6C/RjeLX7VEV2tXr6qov7f5I6y58OEEZYxdNyM5BoyjLWCQNZzJHXNr
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="330241183"
+X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
+   d="scan'208";a="330241183"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 09:09:21 -0700
+X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
+   d="scan'208";a="583770530"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.59.59])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 09:09:13 -0700
+Message-ID: <8510a140-e2e2-39ce-b344-b456f069a9d0@intel.com>
+Date:   Mon, 2 May 2022 19:09:08 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v5 02/11] dt-bindings: spi: Add Aspeed SMC controllers
- device tree binding
+ Firefox/91.0 Thunderbird/91.8.1
+Subject: Re: [PATCH v4 3/6] perf stat: Avoid printing cpus with no counters
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-CC:     Joel Stanley <joel@jms.id.au>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        <linux-kernel@vger.kernel.org>, Tao Ren <rentao.bupt@gmail.com>,
-        Andrew Jeffery <andrew@aj.id.au>, <linux-spi@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>,
-        Jae Hyun Yoo <quic_jaehyoo@quicinc.com>,
-        <linux-aspeed@lists.ozlabs.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>
-References: <20220502081341.203369-1-clg@kaod.org>
- <20220502081341.203369-3-clg@kaod.org>
- <1651505609.452113.1161768.nullmailer@robh.at.kernel.org>
-From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
-In-Reply-To: <1651505609.452113.1161768.nullmailer@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [37.59.142.107]
-X-ClientProxiedBy: DAG2EX2.mxp5.local (172.16.2.12) To DAG4EX1.mxp5.local
- (172.16.2.31)
-X-Ovh-Tracer-GUID: 256f9c92-6a2e-4112-84d2-d224bad78371
-X-Ovh-Tracer-Id: 152277964116167437
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehgdeljecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeevrogurhhitggpnfgvpgfiohgrthgvrhcuoegtlhhgsehkrghougdrohhrgheqnecuggftrfgrthhtvghrnhepudehkedtudfhgfelgffggfeffeefgefhudejvdekveeuveegieelteejiedugeevnecuffhomhgrihhnpehoiihlrggsshdrohhrghenucfkpheptddrtddrtddrtddpfeejrdehledrudegvddruddtjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehrihgthhgrrhgusehnohgurdgrth
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+To:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        German Gomez <german.gomez@arm.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Alexander Antonov <alexander.antonov@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>
+References: <20220430062324.1565215-1-irogers@google.com>
+ <20220430062324.1565215-4-irogers@google.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20220430062324.1565215-4-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/2/22 17:33, Rob Herring wrote:
-> On Mon, 02 May 2022 10:13:32 +0200, Cédric Le Goater wrote:
->> The "interrupt" property is optional because it is only necessary for
->> controllers supporting DMAs (Not implemented yet in the new driver).
->>
->> Cc: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
->> Tested-by: Joel Stanley <joel@jms.id.au>
->> Tested-by: Tao Ren <rentao.bupt@gmail.com>
->> Tested-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
->> Reviewed-by: Joel Stanley <joel@jms.id.au>
->> Reviewed-by: Rob Herring <robh@kernel.org>
->> Signed-off-by: Cédric Le Goater <clg@kaod.org>
->> ---
->>   .../bindings/spi/aspeed,ast2600-fmc.yaml      | 82 +++++++++++++++++++
->>   MAINTAINERS                                   |  9 ++
->>   2 files changed, 91 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
->>
+On 30/04/22 09:23, Ian Rogers wrote:
+> perf_evlist's user_requested_cpus can contain CPUs not present in any
+> evsel's cpus, for example uncore counters. Avoid printing the prefix and
+> trailing \n until the first valid counter is encountered.
 > 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> ./Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml:62:1: [error] syntax error: found character '\t' that cannot start any token (syntax)
+> Signed-off-by: Ian Rogers <irogers@google.com>
 
-drat. I forgot to rerun the check after prettifying the example.
+Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
 
-Will resend a v6 without the tabs.
-
-Thanks,
-
-C.
-
+> ---
+>  tools/perf/util/stat-display.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 > 
-> dtschema/dtc warnings/errors:
-> make[1]: *** Deleting file 'Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.example.dts'
-> Traceback (most recent call last):
->    File "/usr/local/bin/dt-extract-example", line 52, in <module>
->      binding = yaml.load(open(args.yamlfile, encoding='utf-8').read())
->    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/main.py", line 434, in load
->      return constructor.get_single_data()
->    File "/usr/local/lib/python3.10/dist-packages/ruamel/yaml/constructor.py", line 119, in get_single_data
->      node = self.composer.get_single_node()
->    File "_ruamel_yaml.pyx", line 706, in _ruamel_yaml.CParser.get_single_node
->    File "_ruamel_yaml.pyx", line 724, in _ruamel_yaml.CParser._compose_document
->    File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
->    File "_ruamel_yaml.pyx", line 889, in _ruamel_yaml.CParser._compose_mapping_node
->    File "_ruamel_yaml.pyx", line 773, in _ruamel_yaml.CParser._compose_node
->    File "_ruamel_yaml.pyx", line 848, in _ruamel_yaml.CParser._compose_sequence_node
->    File "_ruamel_yaml.pyx", line 904, in _ruamel_yaml.CParser._parse_next_event
-> ruamel.yaml.scanner.ScannerError: while scanning a block scalar
->    in "<unicode string>", line 49, column 5
-> found a tab character where an indentation space is expected
->    in "<unicode string>", line 62, column 1
-> make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.example.dts] Error 1
-> make[1]: *** Waiting for unfinished jobs....
-> ./Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml:  while scanning a block scalar
->    in "<unicode string>", line 49, column 5
-> found a tab character where an indentation space is expected
->    in "<unicode string>", line 62, column 1
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml: ignoring, error parsing file
-> make: *** [Makefile:1401: dt_binding_check] Error 2
-> 
-> doc reference errors (make refcheckdocs):
-> 
-> See https://patchwork.ozlabs.org/patch/
-> 
-> This check can fail if there are any dependencies. The base for a patch
-> series is generally the most recent rc1.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit.
-> 
+> diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
+> index d9629a83aa78..13f705737367 100644
+> --- a/tools/perf/util/stat-display.c
+> +++ b/tools/perf/util/stat-display.c
+> @@ -948,8 +948,6 @@ static void print_no_aggr_metric(struct perf_stat_config *config,
+>  		struct evsel *counter;
+>  		bool first = true;
+>  
+> -		if (prefix)
+> -			fputs(prefix, config->output);
+>  		evlist__for_each_entry(evlist, counter) {
+>  			u64 ena, run, val;
+>  			double uval;
+> @@ -961,6 +959,8 @@ static void print_no_aggr_metric(struct perf_stat_config *config,
+>  
+>  			id = aggr_cpu_id__cpu(cpu, /*data=*/NULL);
+>  			if (first) {
+> +				if (prefix)
+> +					fputs(prefix, config->output);
+>  				aggr_printout(config, counter, id, 0);
+>  				first = false;
+>  			}
+> @@ -972,7 +972,8 @@ static void print_no_aggr_metric(struct perf_stat_config *config,
+>  			printout(config, id, 0, counter, uval, prefix,
+>  				 run, ena, 1.0, &rt_stat);
+>  		}
+> -		fputc('\n', config->output);
+> +		if (!first)
+> +			fputc('\n', config->output);
+>  	}
+>  }
+>  
 

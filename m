@@ -2,131 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5BA517A08
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 00:33:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E15517A0D
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 00:37:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237666AbiEBWg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 18:36:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36542 "EHLO
+        id S232355AbiEBWk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 18:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345562AbiEBWgy (ORCPT
+        with ESMTP id S231661AbiEBWk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 18:36:54 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78271101C5;
-        Mon,  2 May 2022 15:33:21 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id k2so21194062wrd.5;
-        Mon, 02 May 2022 15:33:21 -0700 (PDT)
+        Mon, 2 May 2022 18:40:56 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667F3BE34
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 15:37:26 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id y21so18144033edo.2
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 15:37:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NCEj5GMAzzn+PrpVx+OQFAucjbV/+hpyT4Q10dBlXEU=;
-        b=LWsRTqbs1XNCflqZ21mUl3rc0f8DxhKJqSu+tqf6Vz72OyAwDqIwup6swLoyMW1tw6
-         PRUP5y82v9AKO7H+ZY7qYabv0VWd9XTIrlqf1CFKZv5rUvPTPFPaOBPd6oAvTTmleyQ1
-         mpO0pXHfgkv7W7oKa1fRe7waTVbVAHxv6RMluypQyHEzV463uIuqn6KXZhiiE4Pc+mIG
-         kzFZ0TCz4waoQQAKwvBuJ8kW0QkFwLYs4vGtCgy2cwxfhlPqXnOPTaAULc7DHOeEL4Vz
-         fOIxgupb1io7kfcJzkTQVC7BWUabG3kduYhwLTkbmSuYvJ0LmriTF50NKwo9na1aXg/m
-         bCIg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=E0CI0L8FLznl+zpxus1ooWUihJs/c/FZ66YeO2QuIbM=;
+        b=bilfqug9/u+JZhH84+svlZRP72aMOiEVNWug2iPMUFX96FsRUAJqwwFHtQi/xn+Mql
+         PrnLmb8tyQp1BlslX5JvlzwFYryoeGmDCteqh/g76tAhbhR4MzjPvPmf3LeoHanEWe6C
+         egzctu32JbbU74GvBRYKIkhSk9fblUY3UP5osBlr0J7AOusfiE5xuHMkdJoZgsfmzt9H
+         x/x/9SZfVfxedF8x14IH7uys1w93PdWdNff6ezCa2l5Bf/dTca4uYsTeTDj8kbhN5UYj
+         xu7qgrGgBSiLkXnqpOii1dV26oNtWPTLtqqFMS9JTyPzHsO5CjHG4ZU4wmp2TfJPwtFp
+         CCYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NCEj5GMAzzn+PrpVx+OQFAucjbV/+hpyT4Q10dBlXEU=;
-        b=7n0CHecF6ngTBCaVt/ibVPV6HTA0F+YhaQjo8BXfuKAY/oEs623K8txtGe/zK/uJsM
-         d5FXFi8ci5++NFXk/zKEx4pKImbC5MbkiiWYWxZJT94GLt/LXuGQO1oVjUrUEL6dp9Oz
-         56CocnxN87t4hILLpQvM4w0MoKa+gueBdU7Jpp1j8e5LIOYGNCzycYl/LPQdjM1qVGrD
-         4TL3mZ9cFiBZ4/TU2X8ogroOSqicwDy84GS+S7ZF/VBBOtKEkt2VFSOmnk1b1Zz6VEBC
-         NFePfoh+FN+v8BPZybbjPfk5MnqDzBes8BlnoXvNHC86gtloBJN8Px4kjqgf2NyibgGr
-         7XYA==
-X-Gm-Message-State: AOAM530XU/QQ5SUTuHo1OJeGvtrpIUxY4/PuM41sWxhDXiMwYUlca1bK
-        2qqCfYd6coBCqNnLRTbIYB0=
-X-Google-Smtp-Source: ABdhPJy7HO/WgOLZBexxRyUdlQ7CvaTY0gtiJk/WABDxjWcGGOi7Qrf25z9a19KkEFFZ2jqk4OJhOw==
-X-Received: by 2002:adf:d1ec:0:b0:20c:61ef:93b6 with SMTP id g12-20020adfd1ec000000b0020c61ef93b6mr5704971wrd.694.1651530799883;
-        Mon, 02 May 2022 15:33:19 -0700 (PDT)
-Received: from localhost.localdomain ([2603:c020:c001:7eff:ffff:ffff:ffff:ff00])
-        by smtp.googlemail.com with ESMTPSA id bh19-20020a05600c3d1300b003942a244f45sm346682wmb.30.2022.05.02.15.33.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 15:33:19 -0700 (PDT)
-From:   Matthew Hagan <mnhagan88@gmail.com>
-Cc:     Matthew Hagan <mnhagan88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] net: sfp: Add tx-fault workaround for Huawei MA5671A SFP ONT
-Date:   Mon,  2 May 2022 23:33:15 +0100
-Message-Id: <20220502223315.1973376-1-mnhagan88@gmail.com>
-X-Mailer: git-send-email 2.27.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=E0CI0L8FLznl+zpxus1ooWUihJs/c/FZ66YeO2QuIbM=;
+        b=fdkUaIW+oB1+kgH3i1g51NwNis95Bu/Uvq3kdbLphgohKUGDLI1jPXidy9SHW3Klcf
+         W8/IKTvjA0d0LjugnS0xT6wwLKiN8Xdi3n7XvL2sKnNNXJjI3MAS5Vq3MojCOWL/PERl
+         NMsCqchOEMNsCi3wEs67mJey/o9BsrhsVE90QtRg8uW9Z50MJQkggpE4iAPkU8woVtFq
+         ze1jSWVRcN6w5PZLQcGR7/LIFbuqC6EY+OgD8V4ONM5xttwTqjLWjx0xGgYTh1TBsjUy
+         Q4gP4TV5RYBPAhsBy2hGkBekbdGYIyOydI8f73X5ODs43RZubkTv3JrHHe+ES8p4/Zjh
+         TRww==
+X-Gm-Message-State: AOAM530I0pnljssI7AynyKojDK0dcgFkCqT2A3Xqn0uQHEEflTsOx/sc
+        raJS1Kk+iXm9K8LnpcqdCaH62QlAkygC2uUn8eZMNQ==
+X-Google-Smtp-Source: ABdhPJy7kCW4kIlfBmICFCPRDAJzjcxlbeLzjYkaXGT0caseN13/5/Obe1GLCoeeWBnaCpp+Ag4p9GXLq/e58bwAyMY=
+X-Received: by 2002:a05:6402:28b6:b0:425:e137:e31a with SMTP id
+ eg54-20020a05640228b600b00425e137e31amr15491035edb.215.1651531044738; Mon, 02
+ May 2022 15:37:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220430045639.839186-1-davidgow@google.com>
+In-Reply-To: <20220430045639.839186-1-davidgow@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Mon, 2 May 2022 17:37:13 -0500
+Message-ID: <CAGS_qxrVnDnUD=0f8vX5C2SWG2mxxXdAWU9A+P7h-K2Y1nm88A@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: Add list of all valid test configs on UML
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As noted elsewhere, various GPON SFP modules exhibit non-standard
-TX-fault behaviour. In the tested case, the Huawei MA5671A, when used
-in combination with a Marvell mv88e6085 switch, was found to
-persistently assert TX-fault, resulting in the module being disabled.
+On Fri, Apr 29, 2022 at 11:56 PM David Gow <davidgow@google.com> wrote:
+>
+> It's often desirable (particularly in test automation) to run as many
+> tests as possible. This config enables all the tests which work as
+> builtins under UML at present, increasing the total tests run from 156
+> to 342 (not counting 36 'skipped' tests).
 
-This patch adds a quirk to ignore the SFP_F_TX_FAULT state, allowing the
-module to function.
+Just to clear up potential confusion for others, I'll note that these
+aren't counting test cases.
+This is from kunit.py's output, so it counts each parameter from
+parameterized tests as "subtests."
 
-Change from v1: removal of erroneous return statment (Andrew Lunn)
+Copying my command from
+https://kunit-review.googlesource.com/c/linux/+/5249, one can use this
+to count the # of test cases.
+$ ./tools/testing/kunit/kunit.py run --kunitconfig=...
+--raw_output=kunit --kernel_args=kunit.action=list | egrep
+'^[a-z0-9_-]+\.[a-z0-9_-]+'
 
-Signed-off-by: Matthew Hagan <mnhagan88@gmail.com>
----
- drivers/net/phy/sfp.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+I see this enabling a total of 260 test _cases_ (including skipped).
 
-diff --git a/drivers/net/phy/sfp.c b/drivers/net/phy/sfp.c
-index 4dfb79807823..9a5d5a10560f 100644
---- a/drivers/net/phy/sfp.c
-+++ b/drivers/net/phy/sfp.c
-@@ -250,6 +250,7 @@ struct sfp {
- 	struct sfp_eeprom_id id;
- 	unsigned int module_power_mW;
- 	unsigned int module_t_start_up;
-+	bool tx_fault_ignore;
- 
- #if IS_ENABLED(CONFIG_HWMON)
- 	struct sfp_diag diag;
-@@ -1956,6 +1957,12 @@ static int sfp_sm_mod_probe(struct sfp *sfp, bool report)
- 	else
- 		sfp->module_t_start_up = T_START_UP;
- 
-+	if (!memcmp(id.base.vendor_name, "HUAWEI          ", 16) &&
-+	    !memcmp(id.base.vendor_pn, "MA5671A         ", 16))
-+		sfp->tx_fault_ignore = true;
-+	else
-+		sfp->tx_fault_ignore = false;
-+
- 	return 0;
- }
- 
-@@ -2409,7 +2416,10 @@ static void sfp_check_state(struct sfp *sfp)
- 	mutex_lock(&sfp->st_mutex);
- 	state = sfp_get_state(sfp);
- 	changed = state ^ sfp->state;
--	changed &= SFP_F_PRESENT | SFP_F_LOS | SFP_F_TX_FAULT;
-+	if (sfp->tx_fault_ignore)
-+		changed &= SFP_F_PRESENT | SFP_F_LOS;
-+	else
-+		changed &= SFP_F_PRESENT | SFP_F_LOS | SFP_F_TX_FAULT;
- 
- 	for (i = 0; i < GPIO_MAX; i++)
- 		if (changed & BIT(i))
--- 
-2.27.0
+The default (basically just CONFIG_KUNIT_ALL_TESTS=y) gives 192
+(including skipped).
 
+>
+> They can be run with:
+> ./tools/testing/kunit/kunit.py run
+> --kunitconfig=./tools/testing/kunit/configs/all_tests_uml.config
+>
+> This acts as an in-between point between the KUNIT_ALL_TESTS config
+> (which enables only tests whose dependencies are already enabled), and
+> the kunit_tool --alltests option, which tries to use allyesconfig,
+> taking a very long time to build and breaking very often.
+>
+> Signed-off-by: David Gow <davidgow@google.com>
+
+Tested-by: Daniel Latypov <dlatypov@google.com>
+
+Looks good to me, some small comments below.
+
+> ---
+>  .../kunit/configs/all_tests_uml.config        | 37 +++++++++++++++++++
+>  1 file changed, 37 insertions(+)
+>  create mode 100644 tools/testing/kunit/configs/all_tests_uml.config
+>
+> diff --git a/tools/testing/kunit/configs/all_tests_uml.config b/tools/testing/kunit/configs/all_tests_uml.config
+> new file mode 100644
+> index 000000000000..bdee36bef4a3
+> --- /dev/null
+> +++ b/tools/testing/kunit/configs/all_tests_uml.config
+> @@ -0,0 +1,37 @@
+> +# This config enables as many tests as possible under UML.
+> +# It is intended for use in continuous integration systems and similar for
+> +# automated testing of as much as possible.
+> +# The config is manually maintained, though it uses KUNIT_ALL_TESTS=y to enable
+> +# any tests whose dependencies are already satisfied. Please feel free to add
+> +# more options if they any new tests.
+
+missing: "enable"?
+"if they enable any new tests"
+
+Hmm, should we state a preference for how heavy (time or
+resource-wise) tests should be?
+Because the comment says it's meant for automation, but I can imagine
+humans wanting to run it.
+(I'm completely fine with us not stating one, just throwing the idea
+out there for discussion)
+
+Currently, I get this with an incremental rebuild:
+Elapsed time: 141.627s total, 1.384s configuring, 136.175s building,
+3.970s running
+
+But we do have tests on other arches that take ~30s to run (kfence),
+for example.
+Would such tests be candidates for inclusion in this file?
+Or is it only problematic when they start taking a couple minutes each?

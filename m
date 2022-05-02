@@ -2,56 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E389517A36
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 00:51:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7312B517A4A
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 01:01:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244702AbiEBWy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 18:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48360 "EHLO
+        id S233996AbiEBXEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 19:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236061AbiEBWxk (ORCPT
+        with ESMTP id S232743AbiEBXEr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 18:53:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8CED911A2C
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 15:50:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651531789;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=teevnqkm14nHJRBfyCMDeZXlCSbdTUq69zQhC9ksboU=;
-        b=JQrjCwqByb8SG9pP7hZVV7E3f+Fv1l5w5yF64kJ+v1jZFV6tvDgXB6zuh8dIe1azn3IAaz
-        iYwE0BgoEy637R0QX/6nUqr9GNqVA/pYuBt8LY8l1t6INwqIR7i+0ViFTmlrZ54mWG54Wx
-        rCNHHYEnJwiR11YXD8AqIU+6hNOnd80=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-528-cj8PsvapOTaO0EDOQlRiCQ-1; Mon, 02 May 2022 18:49:46 -0400
-X-MC-Unique: cj8PsvapOTaO0EDOQlRiCQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0091C3C10AA2;
-        Mon,  2 May 2022 22:49:46 +0000 (UTC)
-Received: from jsavitz-csb.redhat.com (unknown [10.22.10.142])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 885AD554A1E;
-        Mon,  2 May 2022 22:49:45 +0000 (UTC)
-From:   Joel Savitz <jsavitz@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Joel Savitz <jsavitz@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Nico Pache <npache@redhat.com>,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests: clarify common error when running gup_test
-Date:   Mon,  2 May 2022 18:49:42 -0400
-Message-Id: <20220502224942.995427-1-jsavitz@redhat.com>
+        Mon, 2 May 2022 19:04:47 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BFCFFD11;
+        Mon,  2 May 2022 16:01:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651532477; x=1683068477;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=rbE6sU7GPVqQxj9BkFwHlP98+kDpzgDLB9cnLW3GKnU=;
+  b=Z1OKyISFRS/sLc84oC1qmDP0/ccTESxIwb2fKhIK1L5On47k5R1KCMcn
+   r4fWTWD4LrF2nWabNZUPDE6K0Z0QiY5JPliWi66MaubOVfDKAHP9SreFS
+   I8G3y70xH+y/fXxqaOETATfqZa3gbpSrKSyTwMY1natfOPAKDXEpZazUh
+   0=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 02 May 2022 16:01:16 -0700
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 16:01:16 -0700
+Received: from [10.110.52.47] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 2 May 2022
+ 16:01:16 -0700
+Message-ID: <53c3036e-9f19-5027-50a6-7964bc632fd8@quicinc.com>
+Date:   Mon, 2 May 2022 16:01:15 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH V7 0/7] Add driver support for Data Capture and Compare
+ Engine(DCC) for SM8150,SC7280,SC7180,SDM845
+Content-Language: en-US
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rob Herring" <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@codeaurora.org>,
+        <vkoul@kernel.org>
+References: <cover.1646285069.git.quic_schowdhu@quicinc.com>
+From:   Trilok Soni <quic_tsoni@quicinc.com>
+In-Reply-To: <cover.1646285069.git.quic_schowdhu@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,46 +71,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/2/2022 10:27 PM, Souradeep Chowdhury wrote:
+> DCC(Data Capture and Compare) is a DMA engine designed for debugging purposes.
+> In case of a system crash or manual software triggers by the user the DCC hardware
+> stores the value at the register addresses which can be used for debugging purposes.
+> The DCC driver provides the user with debugfs interface to configure the register
+> addresses. The options that the DCC hardware provides include reading from registers,
+> writing to registers, first reading and then writing to registers and looping
+> through the values of the same register.
+> 
 
-The gup_test binary will fail showing only the output of perror("open") in
-the case that /sys/kernel/debug/gup_test is not found. This will almost
-always be due to CONFIG_GUP_TEST not being set, which enables
-compilation of a kernel that provides this file.
+Bjorn, can you please take a look at this series, it is pending review 
+from last two months now.
 
-Add a short error message to clarify this failure and point the user to
-the solution.
-
-Signed-off-by: Joel Savitz <jsavitz@redhat.com>
----
- tools/testing/selftests/vm/gup_test.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/vm/gup_test.c b/tools/testing/selftests/vm/gup_test.c
-index cda837a14736..ac4e804d47f0 100644
---- a/tools/testing/selftests/vm/gup_test.c
-+++ b/tools/testing/selftests/vm/gup_test.c
-@@ -18,6 +18,8 @@
- #define FOLL_WRITE	0x01	/* check pte is writable */
- #define FOLL_TOUCH	0x02	/* mark page accessed */
- 
-+#define GUP_TEST_FILE "/sys/kernel/debug/gup_test"
-+
- static unsigned long cmd = GUP_FAST_BENCHMARK;
- static int gup_fd, repeats = 1;
- static unsigned long size = 128 * MB;
-@@ -204,9 +206,11 @@ int main(int argc, char **argv)
- 	if (write)
- 		gup.gup_flags |= FOLL_WRITE;
- 
--	gup_fd = open("/sys/kernel/debug/gup_test", O_RDWR);
-+	gup_fd = open(GUP_TEST_FILE, O_RDWR);
- 	if (gup_fd == -1) {
- 		perror("open");
-+		fprintf(stderr, "Unable to open %s: check that CONFIG_GUP_TEST=y\n",
-+				GUP_TEST_FILE);
- 		exit(1);
- 	}
- 
--- 
-2.27.0
-
+---Trilok Soni

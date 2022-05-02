@@ -2,69 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A7BC517164
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 16:15:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D7D351716A
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 16:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238052AbiEBOTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 10:19:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55808 "EHLO
+        id S1352468AbiEBOVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 10:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385627AbiEBOS5 (ORCPT
+        with ESMTP id S232083AbiEBOU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 10:18:57 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95167DED5;
-        Mon,  2 May 2022 07:15:27 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id a1so16782820edt.3;
-        Mon, 02 May 2022 07:15:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PR2akzjSHzRoLtewUgMac6+Y64PGqXA5YmcADTBjoU4=;
-        b=X7wEduK/sxNWcNtLYd0sc7+yrcRgmJh25G5yNy5TWFjEQdBZCMPhgaVDdOumB9XAMC
-         7xQxydrHn/tGdmLO9sK536W9YcTX8qRpG5zcaQEmHJuP0ohRIRIeXDicO0mNCYM65Teu
-         fBZbPs4HFzP7x1d7WBHr6flZpeyDaRwskBFU1FoPlE6CnEXHndnzPZe118SZSUMB/MDi
-         F3ZoZAiEowignsRgGSCUkAADIyAehrvUI8ekDGRi7PlavmoIan/OVGS7hXNHQve8OVOq
-         hRLepkxyn1ECWbKGdcANNmIIlxsWgEBgM7c8bbnucktUTSyR0pUncsIOMNyYWtfaGD0+
-         tbIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PR2akzjSHzRoLtewUgMac6+Y64PGqXA5YmcADTBjoU4=;
-        b=erqnaEvt/3J5F5JMmtkSP1q7k7XvtmvVpO2tkAJ/FJbOkoqPDw15/OT4LpbFCCfiy0
-         a7hozlRvgsDNULKiR5MBn4wbTCQFYFqmwk0ez1VBQbMmJzYjQKhpTBw+ig6Ck4lWnnvJ
-         S/pMCpik0RYcmtMlazA8a/NEwIBLK5OrFZVymKxVTtIWLak5G7MLreAGYXtf3mXXDUy4
-         IU1qW9ZjNctyuh3Q7Xl9otSblBM14HF5YSyXcXZiY515004NwXCZojwvYx9ox2nYhL/W
-         XEE+MeqcV7w9EqzgCd5XIz95vm530oUKpAtKlKOLXOZ8loIKX7or18hvP5mUsGqKaJTZ
-         rdxQ==
-X-Gm-Message-State: AOAM533JkfwhaWrn+jxVJvsSRguhS6iDdNzuEPx9a6Cuu3/t5oLk5sDc
-        an0PL5m9tTUHXycUhbfhKzEThoITvNE=
-X-Google-Smtp-Source: ABdhPJw+jDtp4IfHKIp26ybwHOkEk7fjBevcj7sFZ4t1Gq4UbzD+N99TSN8TYTqNZ3C95MsC3MT1yA==
-X-Received: by 2002:aa7:df15:0:b0:41d:675f:ea9a with SMTP id c21-20020aa7df15000000b0041d675fea9amr13886093edy.148.1651500926165;
-        Mon, 02 May 2022 07:15:26 -0700 (PDT)
-Received: from debianHome.localdomain (dynamic-077-001-135-067.77.1.pool.telefonica.de. [77.1.135.67])
-        by smtp.gmail.com with ESMTPSA id ig11-20020a1709072e0b00b006f3ef214e2dsm3771770ejc.147.2022.05.02.07.15.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 07:15:25 -0700 (PDT)
-From:   =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
-To:     selinux@vger.kernel.org
-Cc:     Paul Moore <paul@paul-moore.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Zhongjun Tan <tanzhongjun@yulong.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] selinux: include necessary headers in headers
-Date:   Mon,  2 May 2022 16:15:20 +0200
-Message-Id: <20220502141524.35268-1-cgzones@googlemail.com>
-X-Mailer: git-send-email 2.36.0
+        Mon, 2 May 2022 10:20:59 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5111A17049;
+        Mon,  2 May 2022 07:17:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651501051; x=1683037051;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=CJgkaS9O4REA+/QIrvQMB9jS3Pr7zFdaQtj+hUxh90g=;
+  b=a+VF1qzaTWMD8IoK9br7kV59IneIkZ2tURUCjnU66UsecbxNrYUeS897
+   5lF/+0RV0eH6mn6ElPIWOY673DokMxJzGHgg4ltJ9W38vMPHqtS68A5VM
+   LgXNKeAxpGeFiyWZaWdDMDBzAHnU83t9baEBfndaoBSQ1FvDPLU9E0GK7
+   7viwFSc9ImOk4rq51chwAnL64Fdlw6Ra/QeRHvFsKPHaMMS9swKEg+4Cf
+   Ppuo9rC86thrB78NT3Aq1kdLo/EcXnz237EI802pPtkfVk4hveokHNk5V
+   UUUkPuk9VUV6Tysgi3sEEHF8Qcl5nF3oAurGC8zhrk1hHV9abhcn4gYZB
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="327763628"
+X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
+   d="scan'208";a="327763628"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 07:17:30 -0700
+X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
+   d="scan'208";a="663538658"
+Received: from gsteinke-mobl.amr.corp.intel.com (HELO [10.209.165.8]) ([10.209.165.8])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 07:17:29 -0700
+Message-ID: <8d5715b5-d561-f482-af11-03a9a46e651a@intel.com>
+Date:   Mon, 2 May 2022 07:17:48 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 13/21] x86/virt/tdx: Allocate and set up PAMTs for
+ TDMRs
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        isaku.yamahata@intel.com
+References: <cover.1649219184.git.kai.huang@intel.com>
+ <ffc2eefdd212a31278978e8bfccd571355db69b0.1649219184.git.kai.huang@intel.com>
+ <c9b17e50-e665-3fc6-be8c-5bb16afa784e@intel.com>
+ <3664ab2a8e0b0fcbb4b048b5c3aa5a6e85f9618a.camel@intel.com>
+ <5984b61f-6a4a-c12a-944d-f4a78bdefc3d@intel.com>
+ <af603d66512ec5dca0c240cf81c83de7dfe730e7.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <af603d66512ec5dca0c240cf81c83de7dfe730e7.camel@intel.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,100 +74,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Include header files required for struct or typedef declarations in
-header files.  This is for example helpful when working with an IDE, which
-needs to resolve those symbols.
+On 5/1/22 22:59, Kai Huang wrote:
+> On Fri, 2022-04-29 at 07:20 -0700, Dave Hansen wrote:
+> How about adding below in the changelog:
+> 
+> "
+> However using alloc_contig_pages() to allocate large physically contiguous
+> memory at runtime may fail.  The larger the allocation, the more likely it is to
+> fail.  Due to the fragmentation, the kernel may need to move pages out of the
+> to-be-allocated contiguous memory range but it may fail to move even the last
+> stubborn page.  A good way (although not foolproof) is to launch a TD VM early
+> in boot to get PAMTs allocated before memory gets fragmented or consumed.
+> "
 
-Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
----
- security/selinux/include/audit.h   | 3 +++
- security/selinux/include/avc_ss.h  | 2 +-
- security/selinux/include/ibpkey.h  | 2 ++
- security/selinux/include/netnode.h | 2 ++
- security/selinux/include/netport.h | 2 ++
- security/selinux/include/xfrm.h    | 2 ++
- 6 files changed, 12 insertions(+), 1 deletion(-)
+Better, although it's getting a bit off topic for this changelog.
 
-diff --git a/security/selinux/include/audit.h b/security/selinux/include/audit.h
-index 073a3d34a0d2..be42d7dc2c0c 100644
---- a/security/selinux/include/audit.h
-+++ b/security/selinux/include/audit.h
-@@ -12,6 +12,9 @@
- #ifndef _SELINUX_AUDIT_H
- #define _SELINUX_AUDIT_H
- 
-+#include <linux/audit.h>
-+#include <linux/types.h>
-+
- /**
-  *	selinux_audit_rule_init - alloc/init an selinux audit rule structure.
-  *	@field: the field this rule refers to
-diff --git a/security/selinux/include/avc_ss.h b/security/selinux/include/avc_ss.h
-index 88c384c5c09e..66a87559b788 100644
---- a/security/selinux/include/avc_ss.h
-+++ b/security/selinux/include/avc_ss.h
-@@ -7,7 +7,7 @@
- #ifndef _SELINUX_AVC_SS_H_
- #define _SELINUX_AVC_SS_H_
- 
--#include "flask.h"
-+#include <linux/types.h>
- 
- struct selinux_avc;
- int avc_ss_reset(struct selinux_avc *avc, u32 seqno);
-diff --git a/security/selinux/include/ibpkey.h b/security/selinux/include/ibpkey.h
-index e6ac1d23320b..c992f83b0aae 100644
---- a/security/selinux/include/ibpkey.h
-+++ b/security/selinux/include/ibpkey.h
-@@ -14,6 +14,8 @@
- #ifndef _SELINUX_IB_PKEY_H
- #define _SELINUX_IB_PKEY_H
- 
-+#include <linux/types.h>
-+
- #ifdef CONFIG_SECURITY_INFINIBAND
- void sel_ib_pkey_flush(void);
- int sel_ib_pkey_sid(u64 subnet_prefix, u16 pkey, u32 *sid);
-diff --git a/security/selinux/include/netnode.h b/security/selinux/include/netnode.h
-index e3f784a85840..9b8b655a8cd3 100644
---- a/security/selinux/include/netnode.h
-+++ b/security/selinux/include/netnode.h
-@@ -17,6 +17,8 @@
- #ifndef _SELINUX_NETNODE_H
- #define _SELINUX_NETNODE_H
- 
-+#include <linux/types.h>
-+
- void sel_netnode_flush(void);
- 
- int sel_netnode_sid(void *addr, u16 family, u32 *sid);
-diff --git a/security/selinux/include/netport.h b/security/selinux/include/netport.h
-index 31bc16e29cd1..9096a8289948 100644
---- a/security/selinux/include/netport.h
-+++ b/security/selinux/include/netport.h
-@@ -16,6 +16,8 @@
- #ifndef _SELINUX_NETPORT_H
- #define _SELINUX_NETPORT_H
- 
-+#include <linux/types.h>
-+
- void sel_netport_flush(void);
- 
- int sel_netport_sid(u8 protocol, u16 pnum, u32 *sid);
-diff --git a/security/selinux/include/xfrm.h b/security/selinux/include/xfrm.h
-index 74159400eeee..c75839860200 100644
---- a/security/selinux/include/xfrm.h
-+++ b/security/selinux/include/xfrm.h
-@@ -8,7 +8,9 @@
- #ifndef _SELINUX_XFRM_H_
- #define _SELINUX_XFRM_H_
- 
-+#include <linux/lsm_audit.h>
- #include <net/flow.h>
-+#include <net/xfrm.h>
- 
- int selinux_xfrm_policy_alloc(struct xfrm_sec_ctx **ctxp,
- 			      struct xfrm_user_sec_ctx *uctx,
--- 
-2.36.0
+Just be short and sweet:
 
+1. the allocation can fail
+2. Launch a VM early to (badly) mitigate this
+3. the only way to fix it is to add a boot option
+
+
+>>>>> +	/*
+>>>>> +	 * One TDMR must cover at least one (or partial) RAM entry,
+>>>>> +	 * otherwise it is kernel bug.  WARN_ON() in this case.
+>>>>> +	 */
+>>>>> +	if (WARN_ON_ONCE((start >= end) || start >= TDMR_END(tdmr)))
+>>>>> +		return 0;
+>>
+>> This really means "no RAM found for this TDMR", right?  Can we say that,
+>> please.
+> 
+> OK will add it.  How about:
+> 
+> 	/*
+> 	 * No RAM found for this TDMR.  WARN() in this case, as it
+> 	 * cannot happen otherwise it is a kernel bug.
+> 	 */
+
+The only useful information in that comment is the first sentence.  The
+jibberish about WARN() is patently obvious from the next two lines of code.
+
+*WHY* can't this happen?  How might it have actually happened?

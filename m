@@ -2,109 +2,429 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5A13516963
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 04:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15AC8516978
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 04:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356799AbiEBCVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 1 May 2022 22:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55378 "EHLO
+        id S1356739AbiEBCf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 1 May 2022 22:35:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245558AbiEBCVK (ORCPT
+        with ESMTP id S229931AbiEBCf0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 1 May 2022 22:21:10 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5707D3F329;
-        Sun,  1 May 2022 19:17:42 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ks6Dx3Lcgz4xdK;
-        Mon,  2 May 2022 12:17:37 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651457857;
-        bh=oCHuLM+Twa0KW/0Rao6m39tBwQtrdlow9N7TrfkpjXE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=tnyavbJvW4POG27Bdr15ta+J2JmVfXPoNca+16LvXJfl8qIWIDXB8poB+pYsYdCvO
-         dG1CDj0482t/8IPcizBt7ETI6I3La9me8cyqtM3SQnF9oNJYmOMtG8SsZBIjygKYrQ
-         XG+0k4e9/tG7RQJY/rABNGrujvHMcKOX59UwRKPuzHG29dIhpdgwCSzKTP2KY0tTBU
-         /0JaiJ2BZyje8Gl2YsXU75k0G9He8mkw9ZtPOsN+PFDs+TVUlLcanEaYPIX9XZSTlC
-         iGMGSI852EqMMf2uiw0OZcHKWZwd2qgxew1rNfju7DLuxzRTvqq9ef9UW+8GDz6iC8
-         zInWP0ynU/QVQ==
-Date:   Mon, 2 May 2022 12:17:36 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Fabien Parent <fparent@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the input tree
-Message-ID: <20220502121736.57b06150@canb.auug.org.au>
-In-Reply-To: <20220427104825.15a04680@canb.auug.org.au>
-References: <20220427104825.15a04680@canb.auug.org.au>
+        Sun, 1 May 2022 22:35:26 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DB648315
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 19:31:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651458718; x=1682994718;
+  h=message-id:subject:from:to:cc:in-reply-to:references:
+   mime-version:date:content-transfer-encoding;
+  bh=qdGiTFSAhUOISGQ4Y6BexDCA87n/zRd7RhSdbnUGp1M=;
+  b=abgY28E1VyHAjGU50mjYyspaGgP2VgOObgUkNjUlHyGh1obePQZLEo//
+   AYR59+44GQYaGVrrvdRxxYjngVsDXoWH9oy4pzeZjJPxo7z1fScHQfc+9
+   MQ+SZeuidXgiR+GOEpc7pgGedVU/yy0ptlfHaPpQcdKVOa4t6JYKy0sEC
+   gNcbfxnj7twcyLLy/70yPBVS0OEGBx2CCrsp1qB+H00IkG9u5mMUNMyrV
+   7k9vhv7w+UXGk7MuRP0Vf8+Z/mpB5ZTzjUkNk4wxN7UGfIExTkTldVDCT
+   KSa2B9c6ddIBI4UP3btmLD+aw+3eeJj2ghsvgVEvtQoAiTxBFbo4MfA1O
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="247014478"
+X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
+   d="scan'208";a="247014478"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 19:31:57 -0700
+X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
+   d="scan'208";a="598415941"
+Received: from bwu50-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.2.219])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 19:31:53 -0700
+Message-ID: <5473f606bd8e60dd7b8d58a540285d126a1361bd.camel@intel.com>
+Subject: Re: [PATCH v5 1/3] x86/tdx: Add TDX Guest attestation interface
+ driver
+From:   Kai Huang <kai.huang@intel.com>
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220501183500.2242828-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+References: <20220501183500.2242828-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <20220501183500.2242828-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/cqmxetHSojN.V3L2ZDJqX0i";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Mon, 02 May 2022 14:31:03 +1200
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/cqmxetHSojN.V3L2ZDJqX0i
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Sun, 2022-05-01 at 11:34 -0700, Kuppuswamy Sathyanarayanan wrote:
+> In TDX guest, attestation is used to verify the trustworthiness of a TD
+> to other entities before provisioning secrets to the TD.
+>    
+> One usage example is, when a TD guest uses encrypted drive and if the
+> decryption keys required to access the drive are stored in a secure 3rd
+> party keyserver, the key server can use attestation to verify TD's
+> trustworthiness and release the decryption keys to the TD.
+> 
+> The attestation process consists of two steps: TDREPORT generation and
+> Quote generation.
+> 
+> TDREPORT (TDREPORT_STRUCT) is a fixed-size data structure generated by
+> the TDX module which contains TD-specific information (such as TD
+> measurements), platform security version, and the MAC to protect the
+> integrity of the TDREPORT. The TD kernel uses TDCALL[TDG.MR.REPORT] to
+> get the TDREPORT from the TDX module. A user-provided 64-Byte
+> REPORTDATA is used as input and included in the TDREPORT. Typically it
+> can be some nonce provided by attestation service so the TDREPORT can
+> be verified uniquely. More details about TDREPORT can be found in
+> Intel TDX Module specification, section titled "TDG.MR.REPORT Leaf".
+> 
+> After getting the TDREPORT, the second step of the attestation process
+> is to send the TDREPORT to Quoting Enclave (QE) or Quote Generation
+> Service (QGS) to generate the Quote. However the method of sending the
+> TDREPORT to QE/QGS, communication channel used and data format used is
+> specific to the implementation of QE/QGS.
+> 
+> A typical implementation is, TD userspace attestation software gets the
+> TDREPORT from TD kernel, sends it to QE/QGS, and QE/QGS returns the
+> Quote. TD attestation software can use any available communication
+> channel to talk to QE/QGS, such as using vsock and tcp/ip.
+> 
+> To support the case that those communication channels are not directly
+> available to the TD, TDX also defines TDVMCALLs to allow TD to ask VMM
+> to help with sending the TDREPORT and receiving the Quote. This support
+> is documented in the GHCI spec section titled "5.4 TD attestation".
 
-Hi all,
+Sorry I didn't think thoroughly in the reply to v4.  I think it's still
+necessary to mention TDREPORT can only be verified locally, because otherwise
+Quote isn't conceptually needed.  And above 3 paragraphs are too verbose I
+guess.  How about below:
 
-On Wed, 27 Apr 2022 10:48:25 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the input tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->=20
-> drivers/input/keyboard/mtk-pmic-keys.c:93:36: error: 'MT6359_TOPSTATUS' u=
-ndeclared here (not in a function); did you mean 'MT6358_TOPSTATUS'?
->    93 |                 MTK_PMIC_KEYS_REGS(MT6359_TOPSTATUS,
->       |                                    ^~~~~~~~~~~~~~~~
-> drivers/input/keyboard/mtk-pmic-keys.c:48:35: note: in definition of macr=
-o 'MTK_PMIC_KEYS_REGS'
->    48 |         .deb_reg                =3D _deb_reg,             \
->       |                                   ^~~~~~~~
-> drivers/input/keyboard/mtk-pmic-keys.c:98:25: error: 'MT6359_TOP_RST_MISC=
-' undeclared here (not in a function); did you mean 'MT6358_TOP_RST_MISC'?
->    98 |         .pmic_rst_reg =3D MT6359_TOP_RST_MISC,
->       |                         ^~~~~~~~~~~~~~~~~~~
->       |                         MT6358_TOP_RST_MISC
->=20
-> Caused by commit
->=20
->   0f97adf64314 ("Input: mtk-pmic-keys - add support for MT6359")
->=20
-> I have used the input tree from next-20220426 for today.
+"
+TDREPORT can only be verified locally as the MAC key is bound to the platform. 
+TDX attestation leverages Intel SGX Quote Enclave (QE) to verify the TDREPORT
+locally and convert it to a remote verifiable Quote to support remote
+attestation of the TDREPORT. 
 
-I am still getting this failure.
+TD userspace attestation software firstly gets the TDREPORT from the TD kernel,
+and then sends it to the QE to generate a TD Quote.  The QE sends the Quote back
+after it is generated.  How is the data sent and received is QE implementation
+and deployment specific.  TD userspace attestation software can use whatever
+communication channel available (i.e. tcp/ip, vsock) to communicate with the QE
+using whatever data format.  TDX also defines TDVMCALLs to allow TD to ask VMM
+to facilitate sending/receiving data between TD attestation software and the QE.
+This support is documented in GHCI 1.0 spec "5.4 TD attestation".
 
---=20
-Cheers,
-Stephen Rothwell
+Implement a basic attestation driver to ...
+"
 
---Sig_/cqmxetHSojN.V3L2ZDJqX0i
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+> 
+> Implement a basic attestation driver to allow TD userspace to get the
+> TDREPORT, which is sent to QE by the attestation software to generate
+> a Quote for remote verification.
+> 
+> Also note that explicit access permissions are not enforced in this
+> driver because the quote and measurements are not a secret. However
+> the access permissions of the device node can be used to set any
+> desired access policy. The udev default is usually root access
+> only.
 
------BEGIN PGP SIGNATURE-----
+The IOCTL vs /sysfs isn't discussed.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJvP0AACgkQAVBC80lX
-0Gz/2Qf/Xi4WxgKu9cc10EF+dNPgIaCJek+cf0oj4Z022oAwlaokU+0PAZVoxfYZ
-wh71IqYPglhmfVXDVZ2+3tDRxBmyk0fzj3NgQ4dQVhfPyyMvai8nNw+dljBhPguZ
-8O4xV0RrQessuaDERPgRa8l26sU8ohdmHxhllbJkxQN5kfMJhkDDqa2Y5Tom40D7
-YgI6J/1dQHLVhi0F78Eu0WAm29v8W900i1QtJByVsjiq9FCk2if/nPphxcg2oVtx
-2IuMtqE3afE8vbt0304vNupva7gHUQk3WK4nxamyu7NzUrAuVl+HNwtPTXx5o6BQ
-Ai60k7YIGPYGufo6d+9rjAgp2wYVbg==
-=4grN
------END PGP SIGNATURE-----
+For instance, after rough thinking, why is the IOCTL better than below approach
+using /sysfs?
 
---Sig_/cqmxetHSojN.V3L2ZDJqX0i--
+echo <REPORTDATA> > /sys/kernel/coco/tdx/attest/reportdata
+cat /sys/kernel/coco/tdx/attest/tdreport
+
+Each "echo <REPORTDATA>" to '/sys/.../reportdata' triggers the driver to call
+TDCALL to get the TDREPORT, which is available at '/sys/.../tdreport'.
+
+The benefit of using IOCTL I can think of now is it is perhaps more secure, as
+with IOCTL the REPORTDATA and the TDREPORT is visible to the process which calls
+the IOCTL, while using the /sysfs they are potentially visible to any process. 
+Especially the REPORTDATA, i.e. it can come from attestation service after the
+TD attestation agent sets up a secure connection with it.
+
+Anyway, my 2cents above.
+
+> 
+> Reviewed-by: Tony Luck <tony.luck@intel.com>
+> Reviewed-by: Andi Kleen <ak@linux.intel.com>
+> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> ---
+>  arch/x86/coco/tdx/Makefile      |   2 +-
+>  arch/x86/coco/tdx/attest.c      | 138 ++++++++++++++++++++++++++++++++
+>  arch/x86/include/uapi/asm/tdx.h |  36 +++++++++
+>  3 files changed, 175 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/x86/coco/tdx/attest.c
+>  create mode 100644 arch/x86/include/uapi/asm/tdx.h
+> 
+> diff --git a/arch/x86/coco/tdx/Makefile b/arch/x86/coco/tdx/Makefile
+> index 46c55998557d..d2db3e6770e5 100644
+> --- a/arch/x86/coco/tdx/Makefile
+> +++ b/arch/x86/coco/tdx/Makefile
+> @@ -1,3 +1,3 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+> -obj-y += tdx.o tdcall.o
+> +obj-y += tdx.o tdcall.o attest.o
+> diff --git a/arch/x86/coco/tdx/attest.c b/arch/x86/coco/tdx/attest.c
+> new file mode 100644
+> index 000000000000..4543a0264ce7
+> --- /dev/null
+> +++ b/arch/x86/coco/tdx/attest.c
+> @@ -0,0 +1,138 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * attest.c - TDX guest attestation interface driver.
+> + *
+> + * Implements user interface to trigger attestation process.
+> + *
+> + * Copyright (C) 2022 Intel Corporation
+> + *
+> + */
+> +
+> +#define pr_fmt(fmt) "x86/tdx: attest: " fmt
+> +
+> +#include <linux/module.h>
+
+Still need this?
+
+> +#include <linux/miscdevice.h>
+> +#include <linux/uaccess.h>
+> +#include <linux/fs.h>
+> +#include <linux/mm.h>
+> +#include <linux/slab.h>
+> +#include <linux/set_memory.h>
+> +#include <linux/dma-mapping.h>
+
+Still need above two?
+
+> +#include <linux/jiffies.h>
+
+Don't need this either.
+
+> +#include <linux/io.h>
+> +#include <asm/apic.h>
+> +#include <asm/tdx.h>
+> +#include <asm/irq_vectors.h>
+> +#include <uapi/asm/tdx.h>
+
+Please get rid of unnecessary headers.
+
+> +
+> +#define DRIVER_NAME "tdx-attest"
+> +
+> +/* TDREPORT module call leaf ID */
+> +#define TDX_GET_REPORT			4
+> +
+> +/* Upper 32 bits has the status code, so mask it */
+> +#define TDCALL_STATUS_CODE_MASK		0xffffffff00000000
+> +#define TDCALL_STATUS_CODE(a)		((a) & TDCALL_STATUS_CODE_MASK)
+> +
+> +static struct miscdevice miscdev;
+> +
+> +static long tdx_get_report(void __user *argp)
+> +{
+> +	void *reportdata = NULL, *tdreport = NULL;
+> +	long ret = 0;
+> +
+> +	/* Allocate buffer space for REPORTDATA */
+> +	reportdata = kmalloc(TDX_REPORTDATA_LEN, GFP_KERNEL);
+> +	if (!reportdata)
+> +		return -ENOMEM;
+> +
+> +	/* Allocate buffer space for TDREPORT */
+> +	tdreport = kmalloc(TDX_REPORT_LEN, GFP_KERNEL);
+> +	if (!tdreport) {
+> +		ret = -ENOMEM;
+> +		goto failed;
+
+Perhaps 'failed' -> 'out'.  That code is for both error and non-error case.
+
+> +	}
+> +
+> +	/* Copy REPORTDATA from the user buffer */
+> +	if (copy_from_user(reportdata, argp, TDX_REPORTDATA_LEN)) {
+> +		ret = -EFAULT;
+> +		goto failed;
+> +	}
+> +
+> +	/*
+> +	 * Generate TDREPORT using "TDG.MR.REPORT" TDCALL.
+> +	 *
+> +	 * Pass the physical address of user generated REPORTDATA
+> +	 * and the physical address of the output buffer to the TDX
+> +	 * module to generate the TDREPORT. Generated data contains
+> +	 * measurements/configuration data of the TD guest. More info
+> +	 * about ABI can be found in TDX 1.0 Module specification, sec
+> +	 * titled "TDG.MR.REPORT".
+
+I guess you can get rid of the entire second paragraph.  If the reference to the
+spec is useful, then keep it but other sentences are not quite useful.  Perhaps:
+
+	Get the TDREPORT using REPORTDATA as input.  Refer to 22.3.3 
+	TDG.MR.REPORT leaf in the TDX Module 1.0 Specification for detail
+	information.
+
+> +	 */
+> +	ret = __tdx_module_call(TDX_GET_REPORT, virt_to_phys(tdreport),
+> +				virt_to_phys(reportdata), 0, 0, NULL);
+> +	if (ret) {
+> +		pr_debug("TDREPORT TDCALL failed, status:%lx\n",
+> +				TDCALL_STATUS_CODE(ret));
+
+You can just print out the exact error code.  It's more informative and can help
+to debug.
+
+> +		ret = -EIO;
+> +		goto failed;
+> +	}
+> +
+> +	/* Copy TDREPORT back to the user buffer */
+> +	if (copy_to_user(argp, tdreport, TDX_REPORT_LEN))
+> +		ret = -EFAULT;
+> +
+> +failed:
+> +	kfree(reportdata);
+> +	kfree(tdreport);
+> +	return ret;
+> +}
+> +
+> +static long tdx_attest_ioctl(struct file *file, unsigned int cmd,
+> +			     unsigned long arg)
+> +{
+> +	void __user *argp = (void __user *)arg;
+> +	long ret = 0;
+
+If you initialize ret to -EINVAL here, then ...
+> +
+> +	switch (cmd) {
+> +	case TDX_CMD_GET_REPORT:
+> +		ret = tdx_get_report(argp);
+> +		break;
+> +	default:
+> +		pr_debug("cmd %d not supported\n", cmd);
+> +		ret = -EINVAL;
+
+You don't have to set it here.
+
+> +		break;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct file_operations tdx_attest_fops = {
+> +	.owner		= THIS_MODULE,
+> +	.unlocked_ioctl	= tdx_attest_ioctl,
+> +	.llseek		= no_llseek,
+> +};
+> +
+> +static int __init tdx_attestation_init(void)
+> +{
+> +	long ret;
+> +
+> +	/* Make sure we are in a valid TDX platform */
+> +	if (!cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
+> +		return -EIO;
+> +
+> +	miscdev.name = DRIVER_NAME;
+> +	miscdev.minor = MISC_DYNAMIC_MINOR;
+> +	miscdev.fops = &tdx_attest_fops;
+> +
+> +	ret = misc_register(&miscdev);
+> +	if (ret) {
+> +		pr_err("misc device registration failed\n");
+
+pr_debug() is used when __tdx_module_call() fails, and in the default case in
+tdx_attest_ioctl() too.
+
+Shouldn't those error msg be printed using the same way?
+
+> +		return ret;
+> +	}
+> +
+> +	pr_debug("module initialization success\n");
+
+I don't think it's a module anymore?
+
+Also perhaps just pr_info()?
+
+> +
+> +	return 0;
+> +}
+> +device_initcall(tdx_attestation_init)
+> diff --git a/arch/x86/include/uapi/asm/tdx.h b/arch/x86/include/uapi/asm/tdx.h
+> new file mode 100644
+> index 000000000000..9a7377723667
+> --- /dev/null
+> +++ b/arch/x86/include/uapi/asm/tdx.h
+> @@ -0,0 +1,36 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> +#ifndef _UAPI_ASM_X86_TDX_H
+> +#define _UAPI_ASM_X86_TDX_H
+> +
+> +#include <linux/types.h>
+> +#include <linux/ioctl.h>
+> +
+> +/* Length of the REPORTDATA used in TDG.MR.REPORT TDCALL */
+> +#define TDX_REPORTDATA_LEN		64
+> +
+> +/* Length of TDREPORT used in TDG.MR.REPORT TDCALL */
+> +#define TDX_REPORT_LEN			1024
+
+I prefer TDX_TDREPORT_LEN.
+
+> +
+> +/**
+> + * struct tdx_report_req: Get TDREPORT from the TDX module.
+
+Just get the TDREPORT is enough I guess.
+
+> + *
+> + * @reportdata : User-defined 64-Byte REPORTDATA to be included into
+> + *		 TDREPORT. Typically it can be some nonce provided by
+> + *		 attestation software so the generated TDREPORT can be
+> + *		 uniquely verified.
+> + * @tdreport   : TDREPORT output from TDCALL[TDG.MR.REPORT] of size
+> + *		 TDX_REPORT_LEN.
+> + *
+> + * Used in TDX_CMD_GET_REPORT IOCTL request.
+> + */
+> +struct tdx_report_req {
+> +	union {
+> +		__u8 reportdata[TDX_REPORTDATA_LEN];
+> +		__u8 tdreport[TDX_REPORT_LEN];
+> +	};
+> +};
+
+I am not sure overriding the input is a good idea, but will leave to others.
+
+> +
+> +/* Get TDREPORT from the TDX module using TDCALL[TDG.MR.REPORT) */
+
+Just get the TDREPORT is enough I guess.
+
+> +#define TDX_CMD_GET_REPORT		_IOWR('T', 0x01, struct tdx_report_req)
+> +
+> +#endif /* _UAPI_ASM_X86_TDX_H */
+

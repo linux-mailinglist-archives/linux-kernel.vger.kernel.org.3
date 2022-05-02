@@ -2,124 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D657517829
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 22:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C502517846
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 22:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387413AbiEBUfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 16:35:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
+        id S236868AbiEBUjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 16:39:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350516AbiEBUfk (ORCPT
+        with ESMTP id S234868AbiEBUiq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 16:35:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C31B1E2;
-        Mon,  2 May 2022 13:32:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E657660B00;
-        Mon,  2 May 2022 20:32:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFB14C385A4;
-        Mon,  2 May 2022 20:32:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651523528;
-        bh=xyHnevJ0bkGZ99FU3xXECPdssgskXtwRkKrhR/D9hOk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=MQtRi7FlqJJpVvSQnmizAN4fk541RLiiKL8fVIjFlJTtJlV43GsqRvatoB40sjtnz
-         NuAyDcsgB85FayQ1smVmZJHW5xINveJYIrYEHX0OrSKzaAQZPoxf7fUrzkTCZar4Vl
-         RFDlsrIrIOngDEEEt2YgIF7PeYypOxmkBZRYQ9J9rmYJtE2YwOFKcdlt02293Xz6QG
-         AdzwCaWKiYmr1MLdaFr6mT65SIy4qlgUqtJPo/uaxPOOPhhWfZiwlM3Pn+Tj3RWfAf
-         JfLa6V4oJWkNo6gFB8HmlUwlzGfRB7ukea7oZXiwGGYdEKnVsyEpzrl79oSQN2i2XD
-         yO+ogbdgQ6vLQ==
-Date:   Mon, 2 May 2022 15:32:05 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Myron Stowe <myron.stowe@redhat.com>,
-        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
-        Benoit =?iso-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
-        Hui Wang <hui.wang@canonical.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v2 0/3] x86/PCI: Log E820 clipping
-Message-ID: <20220502203205.GA349835@bhelgaas>
+        Mon, 2 May 2022 16:38:46 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D7021A6;
+        Mon,  2 May 2022 13:35:16 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id y63so16356881oia.7;
+        Mon, 02 May 2022 13:35:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=Wbb/YCuXfU00DfHND/DHy2kwUE+lT6TSINXYpJ/qV5I=;
+        b=FLLW/uyff9Ycgsqvr7B/1rKKbYcqxPHcB/Z4Dzkise/sBahurt9MkB5d2Pwdq0mBx6
+         JBZ79EtlI9uPK5x9zPokW236sVzMczhGdVx1gIMZGk636HBXuHx4CTnG4GED7AvGzHUW
+         Thvss09ZX4qJwF85xOtO/5anUeLJUCJLQqE2oTAv7ob7MgOQbZ8FIG2ataSCB11SLPi/
+         zWRPk8cies0VayUBETQZF0ATO7Ph0YxmHCoLhEDbHA/tOq7AD79YUjIKnbLY1pjSmHsB
+         fjVxpaNMsC7JbyjvdifBLlvwCFZr+BZVQ35H0Bzt/dw9KykTjCJryLdhyJ23VfF7JeHa
+         F90Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=Wbb/YCuXfU00DfHND/DHy2kwUE+lT6TSINXYpJ/qV5I=;
+        b=ozV8FDbO8mlL5w2pcJ57nvVIUa+TRjkC1wVDhF2V35UGVtT9YlED0K4hAGo0Dx3kES
+         rPmKeh6ZzkFvnZGqjmVOJkCGNYassAytxhi7kAnHYVT9no6wsMZ7VK75817MuKTaHDJE
+         6rVhfuPoetwvXXN7Z4XN+SNfgMjb/2u1PuHOG3exg87uqIEqxXv+vF8qU6nif3OW4b4A
+         bS8e7o54rxu+m0znTxeCQXcnqvaaznSkgq2654Dpv1ch+6GSXX8Vp2kCMHzTIPTeqUD4
+         oxTBIWoj8dSXMoVeVu/09PCj8ymRvqd/5R6iM5aVeu/4iR6rBDnQQ13ltFhgBw3get+n
+         a8NQ==
+X-Gm-Message-State: AOAM531kngqZ9obTjKD55+i6DE0ZN6M8zie4DUrFwc93fxP7/x04Rogq
+        D+p3Ou0uelVDh7XHmbokqPE=
+X-Google-Smtp-Source: ABdhPJwiM/GiwIXmL7hyCptsmhhiYotg3kbrvacK9o0+PJRo8UrmYe/PJoRe3aFR7xYQMKwGGCJYVg==
+X-Received: by 2002:a05:6808:1311:b0:325:bb64:ced6 with SMTP id y17-20020a056808131100b00325bb64ced6mr454522oiv.13.1651523716162;
+        Mon, 02 May 2022 13:35:16 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e2-20020a4aa602000000b0035ef3da8387sm1302819oom.4.2022.05.02.13.35.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 May 2022 13:35:15 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <c001d58e-9a78-6338-a533-d0f215b3dfd1@roeck-us.net>
+Date:   Mon, 2 May 2022 13:35:11 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7bbd9205-aa35-4a27-0df4-8f2b22603831@redhat.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+References: <20220419163810.2118169-1-arnd@kernel.org>
+ <3b4046ed-fd75-13ea-fac3-06469172806c@roeck-us.net>
+ <CAK8P3a1LzEG1vo+5nMrnL3TOMcbSKJ3u=StcfY8dajV2raUBjA@mail.gmail.com>
+ <3df135a2-17f5-d6c6-b4a8-e1a60e254297@roeck-us.net>
+ <CAK8P3a2EHMQPN4ny9sXXuReFG0jN0hyRV7h9v_AR_0pqpOU41w@mail.gmail.com>
+ <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
+ <6f1b27fa-96d1-4be7-ac6a-762610314f2a@roeck-us.net>
+ <8d6d453a-e6fc-439b-2f34-e60c22fc9e98@roeck-us.net>
+ <CAK8P3a2Ekvis1YcrJZtuga+XQdbeTC98PkOszCpS2DiZri7VMQ@mail.gmail.com>
+ <149509dd-f43d-1b27-4395-81eab4ff3455@roeck-us.net>
+ <CAK8P3a05vFdBnXXAMPVS82xX29+uinvWPcWxAgvj0TfoOk+1kg@mail.gmail.com>
+ <b13783aa-9225-d52a-3800-c97ad772688b@roeck-us.net>
+ <CAK8P3a3S5OjkKq_u5FpnwzYv+0+typya6Z4MzTez5ZH+do00xQ@mail.gmail.com>
+ <CAK8P3a3jiqf_zpBsZyvAb5ZtkwDa7KkqExqDAdpY_pYqkr_NgQ@mail.gmail.com>
+ <4dcdbfe2-9edf-320b-d123-3b62c8b5e28e@roeck-us.net>
+ <CAK8P3a0ogn1wgPBDHkT=Fb8ufA+y8Ax1Qov2-vRXfC08QqnrQA@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
+In-Reply-To: <CAK8P3a0ogn1wgPBDHkT=Fb8ufA+y8Ax1Qov2-vRXfC08QqnrQA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 02, 2022 at 02:24:26PM +0200, Hans de Goede wrote:
-> On 4/19/22 18:45, Bjorn Helgaas wrote:
-> > On Tue, Apr 19, 2022 at 05:16:44PM +0200, Hans de Goede wrote:
-> >> On 4/19/22 17:03, Bjorn Helgaas wrote:
-> >>> On Tue, Apr 19, 2022 at 11:59:17AM +0200, Hans de Goede wrote:
-
-> >>>> So what is the plan to actually fix the issue seen on some
-> >>>> Lenovo models and Clevo Barebones ?   As I mentioned previously
-> >>>> I think that since all our efforts have failed so far that we
-> >>>> should maybe reconsider just using DMI quirks to ignore the
-> >>>> E820 reservation windows for host bridges on affected models ?
-> >>>
-> >>> I have been resisting DMI quirks but I'm afraid there's no other
-> >>> way.
-> >>
-> >> Well there is the first match adjacent windows returned by _CRS
-> >> and only then do the "covers whole region" exception check. I
-> >> still think that would work at least for the chromebook
-> >> regression...
-> > 
-> > Without a crystal clear strategy, I think we're going to be
-> > tweaking the algorithm forever as the _CRS/E820 mix changes.
-> > That's why I think that in the long term, a "use _CRS only, with
-> > quirks for exceptions" strategy will be simplest.
+On 5/2/22 12:21, Arnd Bergmann wrote:
+> On Mon, May 2, 2022 at 6:26 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> With v5.18-rc1-49-gcb813018b5c1, I still get:
+>>
+>> [    0.797668] RAMDISK: Couldn't find valid RAM disk image starting at 0.
+>> [    0.805262] /dev/root: Can't open blockdev
+>> [    0.805487] VFS: Cannot open root device "(null)" or unknown-block(0,0): error -6
+>> [    0.805674] Please append a correct "root=" boot option; here are the available partitions:
+>>
+>> when trying to boot z2 from initrd.
+>>
+>> The other problems are gone.
 > 
-> Looking at the amount of exception we already now about I'm not sure
-> if that will work well.
-
-It's possible that many quirks will be required.  But I think in the
-long run the value of the simplest, most obvious strategy is huge.
-It's laid out in the spec already and it's the clearest way to
-agreement between firmware and OS.  When we trip over something, it's
-very easy to determine whether _CRS is wrong or Linux is using it
-wrong.  If we have to bring in question of looking at E820 entries,
-possibly merging them, using them or not based on overlaps ... that's
-a much more difficult conversation without a clear resolution.
-
-> > So I think we should go ahead with DMI quirks instead of trying to
-> > make the algorithm smarter, and yes, I think we will need commandline
-> > arguments, probably one to force E820 clipping for future machines,
-> > and one to disable it for old machines.
+> Ok, progress!
 > 
-> So what you are suggesting is to go back to a bios-date based approach
-> (to determine old vs new machines) combined with DMI quirks to force
-> E820 clipping on new machines which turn out to need it despite them
-> being new ?
+> What is your qemu command line? I see that z2 has no pcmcia device, so
+> I tried booting
+> from MMC, but this already fails with 5.18-rc1 without any of my
+> patches, giving me
+> 
+> [    0.697481] Creating 3 MTD partitions on "physmap-flash":
+> [    0.698161] 0x000000000000-0x000000040000 : "U-Boot Bootloader"
+> [    0.702815] 0x000000040000-0x000000060000 : "U-Boot Environment"
+> [    0.706541] 0x000000060000-0x000000800000 : "Flash"
+> [    0.718066] pxa2xx-mci pxa2xx-mci.0: incomplete constraints, dummy
+> supplies not allowed
+> [    0.718501] pxa2xx-mci pxa2xx-mci.0: incomplete constraints, dummy
+> supplies not allowed
+> 
 
-Yes.  It's ugly but I think the 10-year outlook is better.
+To boot from initrd:
 
-> I have the feeling that if we switch to top-down allocating
-> that we can then switch to just using _CRS and that everything
-> will then just work, because we then match what Windows is doing...
+qemu-system-arm -M z2 -kernel \
+      arch/arm/boot/zImage -no-reboot -initrd \
+      rootfs-armv5.cpio --append \
+      "panic=-1 slub_debug=FZPUA rdinit=/sbin/init console=ttyS0" -nographic \
+      -monitor null -serial stdio
 
-Yes, it might.  But I'm not 100% comfortable because it basically
-sweeps _CRS bugs under the rug, and we may trip over them as we do
-more hotplug and (eventually) resource rebalancing.  I think we need
-to work toward getting _CRS more reliable.
+where rootfs-armv5.cpio is from my repository at github.com.
 
-Bjorn
+https://github.com/groeck/linux-build-test/blob/master/rootfs/arm/rootfs-armv5.cpio.gz
+
+> Do  you have MMC or some other rootfs working without my patch series?
+> 
+
+I can boot z2 from mmc and flash, but I have a number of configuration
+flags enabled on top of pxa_defconfig. That also works with your latest patch
+series. See
+https://kerneltests.org/builders/qemu-arm-testing/builds/75/steps/qemubuildcommand/logs/stdio
+
+     # Always enable ...
+     enable_config "${defconfig}" CONFIG_DEVTMPFS CONFIG_DEVTMPFS_MOUNT CONFIG_BLK_DEV_INITRD
+     # Options needed to be built into the kernel for device support
+     # on pxa devices
+     # MTD, squashfs
+     enable_config_cond "${defconfig}" CONFIG_MTD_BLOCK CONFIG_MTD_PXA2XX CONFIG_SQUASHFS
+     # MMC
+     enable_config_cond "${defconfig}" CONFIG_MMC_BLOCK CONFIG_MMC_PXA
+     # PCMCIA
+     enable_config_cond "${defconfig}" CONFIG_ATA CONFIG_BLK_DEV_SD CONFIG_PCCARD
+     enable_config_cond "${defconfig}" CONFIG_PCMCIA CONFIG_PATA_PCMCIA CONFIG_PCMCIA_PXA2XX
+     # USB
+     enable_config_cond "${defconfig}" CONFIG_USB CONFIG_USB_STORAGE CONFIG_USB_OHCI_HCD CONFIG_USB_OHCI_HCD_PXA27X
+
+Hope this helps,
+Guenter

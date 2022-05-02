@@ -2,111 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B7E516A37
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 07:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A493516A3C
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 07:16:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383306AbiEBFHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 01:07:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44336 "EHLO
+        id S1357759AbiEBFT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 01:19:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346303AbiEBFHe (ORCPT
+        with ESMTP id S242649AbiEBFTY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 01:07:34 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B5E18B2F;
-        Sun,  1 May 2022 22:04:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651467847; x=1683003847;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=V1kJORjn9br3AwkVpZzF5nhWVGElfcC89uM3ZN5Q7cY=;
-  b=gVJwl2PMfLj6VpOQNkWMvxOuwhnAbKplGGK7G3Jx+6gZ4rezkXjKajpA
-   c8RWIIhQeXMK2jjKjrvEnTdT7yRsIvV0cWSjmSNvtc/LPAnI/EfUubqxm
-   cAyhG6BHvQBQB93ydUfndyLy4+X+09MAiv2wfvVS1vIq0dNbeZDgm2Aik
-   aNc8vmIyLluBVXhokmeBTynPPmZCzZybP7v81IY8Nati2m6bn56Iy/Aky
-   64jmCvA/Jfwhud+rjagttrRqwGwN1H5iRuBw8oxYBVfmPUMlQ81dUIAq2
-   Hm5O2c0unCMlzpAyd7sFP4NRpdsYvxCAuWlwC8+Uv7FO8mFjn5l67cowd
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="247674779"
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="247674779"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 22:04:07 -0700
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="886061235"
-Received: from bwu50-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.2.219])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2022 22:04:04 -0700
-Message-ID: <33e3c91973dd22cada87d9c78e3e4b9eb4da9778.camel@intel.com>
-Subject: Re: [PATCH v3 09/21] x86/virt/tdx: Get information about TDX module
- and convertible memory
-From:   Kai Huang <kai.huang@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        isaku.yamahata@intel.com
-Date:   Mon, 02 May 2022 17:04:02 +1200
-In-Reply-To: <4aea41ea-211f-fbde-34e9-4c4467ebc848@intel.com>
-References: <cover.1649219184.git.kai.huang@intel.com>
-         <145620795852bf24ba2124a3f8234fd4aaac19d4.1649219184.git.kai.huang@intel.com>
-         <f929fb7a-5bdc-2567-77aa-762a098c8513@intel.com>
-         <0bab7221179229317a11311386c968bd0d40e344.camel@intel.com>
-         <98f81eed-e532-75bc-d2d8-4e020517b634@intel.com>
-         <be31134cf44a24d6d38fbf39e9e18ef223e216c6.camel@intel.com>
-         <4aea41ea-211f-fbde-34e9-4c4467ebc848@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Mon, 2 May 2022 01:19:24 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6DE0BE25;
+        Sun,  1 May 2022 22:15:56 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 15so10917598pgf.4;
+        Sun, 01 May 2022 22:15:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=P0VubNrQWYHk4IlQD+kxXHZzHAldnrU5eq+ivCmkfLU=;
+        b=KkR7X/snPIE3XMgJ0HxwJcymPlARTygWmRMP8MpCKWyk8oS+hH89cSkJMaHhGkC22D
+         zRvT8HIrXpoORVRsjzQbtTbsiQGfzoeDVs75Z6Egv0jwOLHJKnSC0UmFzvwIqmjDbah3
+         hyedoI6C5mwFuM+VksuOKzMkVGY/qPue01ozH0VoGIDEllcH97XAxWqaO3+q88mDez5n
+         175zLK5dFhak10yCfxrT8DJXOTdc13rgDwRw5VLzJodkhRfge88st/GJQW6MXuDo9GSY
+         i2o/3/ipIE9ghWnmaR5DDpRv9rU7VQAfNNvmFaDjyEcNj9kHZQu2/cp9+PP42+O8z+EX
+         d/LA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=P0VubNrQWYHk4IlQD+kxXHZzHAldnrU5eq+ivCmkfLU=;
+        b=XLniLXXNNYy+tc9B56N6vS89sAL3PGZySb7NPilVU731vUMIRz2mWsuDyrlx3WHYs4
+         irxgspRlE+Qs4i4+uyptWxtjbZrKJnCjS9jCAXztH/Lv2PoL9jyvdiPO2JBju/xdzhtH
+         l952s8VH1L8qbZ5qPHuHAZp1ptANLq6pvI+9IBVQbr3EeeZSjgLcRXa1Js9sfDgAIZOb
+         3J3zy0AoUbLQA+lVyFfTW/yDWuVUBmpKFNc8mSbAAoTO37uo1Ra2x06pVjFK79ts9TwP
+         WiuyBmo8d6PRKYnv86+r3qMnhM6glHIyCeOCtF7fEXCBMl8kAATB2y1XlLUYE/rflwjm
+         5LVg==
+X-Gm-Message-State: AOAM5339nk0Evr5CQGo55t5+YGCenwaKzxbPVznO1E+xw0HmGQSlh0HR
+        KG6E1UyRUDhs0FhS6HdwGHLVtC0q/vjKig==
+X-Google-Smtp-Source: ABdhPJw/YEtcJ3NYNLsPSznJMmKPEcHZcURomlUZzqjadz4cqXXix5uDPn+SrqlvcdEwvtv1UHCuvA==
+X-Received: by 2002:a65:6e92:0:b0:3c1:c903:e5fe with SMTP id bm18-20020a656e92000000b003c1c903e5femr8529040pgb.424.1651468555540;
+        Sun, 01 May 2022 22:15:55 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-92.three.co.id. [180.214.232.92])
+        by smtp.gmail.com with ESMTPSA id g14-20020aa7874e000000b0050dc7628139sm3849561pfo.19.2022.05.01.22.15.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 May 2022 22:15:55 -0700 (PDT)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     linux-doc@vger.kernel.org
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: [PATCH] firmware_loader: describe 'module' parameter of firmware_upload_register()
+Date:   Mon,  2 May 2022 12:14:56 +0700
+Message-Id: <20220502051456.30741-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-29 at 10:47 -0700, Dave Hansen wrote:
-> On 4/28/22 16:14, Kai Huang wrote:
-> > On Thu, 2022-04-28 at 07:06 -0700, Dave Hansen wrote:
-> > > On 4/27/22 17:15, Kai Huang wrote:
-> > > > > Couldn't we get rid of that comment if you did something like:
-> > > > > 
-> > > > > 	ret = tdx_get_sysinfo(&tdx_cmr_array, &tdx_sysinfo);
-> > > > 
-> > > > Yes will do.
-> > > > 
-> > > > > and preferably make the variables function-local.
-> > > > 
-> > > > 'tdx_sysinfo' will be used by KVM too.
-> > > 
-> > > In other words, it's not a part of this series so I can't review whether
-> > > this statement is correct or whether there's a better way to hand this
-> > > information over to KVM.
-> > > 
-> > > This (minor) nugget influencing the design also isn't even commented or
-> > > addressed in the changelog.
-> > 
-> > TDSYSINFO_STRUCT is 1024B and CMR array is 512B, so I don't think it should be
-> > in the stack.  I can change to use dynamic allocation at the beginning and free
-> > it at the end of the function.  KVM support patches can change it to static
-> > variable in the file.
-> 
-> 2k of stack is big, but it isn't a deal breaker for something that's not
-> nested anywhere and that's only called once in a pretty controlled
-> setting and not in interrupt context.  I wouldn't cry about it.
+Stephen Rothwell reported kernel-doc warning:
 
-OK.  I'll change to use function local variables for both of them.
+drivers/base/firmware_loader/sysfs_upload.c:285: warning: Function parameter or member 'module' not described in 'firmware_upload_register'
 
+Fix the warning by describing the 'module' parameter.
+
+Fixes: 97730bbb242cde ("firmware_loader: Add firmware-upload support")
+Link: https://lore.kernel.org/linux-next/20220502083658.266d55f8@canb.auug.org.au/
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Russ Weight <russell.h.weight@intel.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc: Linux Next Mailing List <linux-next@vger.kernel.org>
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ This patch is based on driver-core-next tree.
+
+ drivers/base/firmware_loader/sysfs_upload.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/base/firmware_loader/sysfs_upload.c b/drivers/base/firmware_loader/sysfs_upload.c
+index 8cdcf3516c7e94..87044d52322aa2 100644
+--- a/drivers/base/firmware_loader/sysfs_upload.c
++++ b/drivers/base/firmware_loader/sysfs_upload.c
+@@ -266,6 +266,7 @@ int fw_upload_start(struct fw_sysfs *fw_sysfs)
+ 
+ /**
+  * firmware_upload_register() - register for the firmware upload sysfs API
++ * @module: kernel module of this device
+  * @parent: parent device instantiating firmware upload
+  * @name: firmware name to be associated with this device
+  * @ops: pointer to structure of firmware upload ops
+
+base-commit: f8ae07f4b8bfde0f33761e1a1aaee45a4e85e9d6
 -- 
-Thanks,
--Kai
-
+An old man doll... just what I always wanted! - Clara
 

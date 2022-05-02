@@ -2,59 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68B91516E61
+	by mail.lfdr.de (Postfix) with ESMTP id A2D84516E62
 	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 12:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384590AbiEBKwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 06:52:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42638 "EHLO
+        id S1384642AbiEBKwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 06:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358404AbiEBKwg (ORCPT
+        with ESMTP id S1384582AbiEBKwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 06:52:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F2AF1B6
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 03:49:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 2 May 2022 06:52:39 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58CB1B6;
+        Mon,  2 May 2022 03:49:10 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5728EB810C6
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 10:49:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AC88C385A4;
-        Mon,  2 May 2022 10:49:04 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="axGemv1N"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1651488542;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BDxeUUQ1mW3QD3Cl4K2XoeRHmRJQjJKbTLQKrompsuo=;
-        b=axGemv1NqcfwCtwBjuEOsP03dYWRyUyP3O4BWrlsUTWNlcyQwuxwJ0q3nmQo+jFdSAfn8I
-        BKyX6FBJgeo0hOciySfNZEnRo+bD4WgAgILBO7e+HFdsfbcYVpoI6OPSoDxfiJmeclFUr2
-        bIJBCwJEuKDMpR/fS5wJMIWUfhocREg=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id e82d0061 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 2 May 2022 10:49:02 +0000 (UTC)
-Date:   Mon, 2 May 2022 12:49:00 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Larry Finger <Larry.Finger@lwfinger.net>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: Re: Changes in kernel 5.18-rc1 leads to crashes in VirtualBox
- Virtual Machines
-Message-ID: <Ym+3HHaSBeeekuvz@zx2c4.com>
-References: <7f01221d-f693-adf8-f5a5-d71944b44162@lwfinger.net>
- <Ym7Hw9GDPP838JoH@zx2c4.com>
- <6bd35831-2d7a-77ee-55e9-755ca752b0c8@lwfinger.net>
- <Ym8YlXYM4HQg8tq7@zx2c4.com>
- <Ym8hoW7J60xAQv8f@zx2c4.com>
- <Ym8uPcuQpq1xBS6d@zx2c4.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KsKb603ntz4xdK;
+        Mon,  2 May 2022 20:49:05 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1651488546;
+        bh=Qin3clB8EKdwJwy5QZOYM8XR5Qx9CNnFDTHRGLBe1+A=;
+        h=Date:From:To:Cc:Subject:From;
+        b=U7Xt4Vgb9yA6inQ7E+PH+Bp5NLIQrJ1elwiypHGePkoWWxW52UXoGkAtMY59vN34j
+         Famoc9VbX0Th76ygMlPoHJy1ckn8BPhPCpBBaDK4jlti9hKsEHYTBXnj0ACrXDuHH3
+         Gi49doHUzp3v9iMpZOQoV+RWWcgjfIno/X52L3yE66ZnRxDk2gnG/bl963bgsMitYl
+         xyVr/m/7W3kowW0VxJOQdJjQUAT2EVZ798/P4RSjhBmbaulEBFgKjKp4kIrnTvqsta
+         EuAm8HAN+aVA6oEBqzxXRuheR1JnqZUgqgAnstWAgZk4zf69VRTKK/t0xARvKUs2go
+         FmuivK38f2ctw==
+Date:   Mon, 2 May 2022 20:49:03 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the mm tree
+Message-ID: <20220502204903.64e94442@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Ym8uPcuQpq1xBS6d@zx2c4.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/ad1p+TVqUiLDL1ymLLms_.1";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,110 +51,210 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Larry,
+--Sig_/ad1p+TVqUiLDL1ymLLms_.1
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 2, 2022 at 4:55 AM Larry Finger <Larry.Finger@lwfinger.net> wrote:
-> On 5/1/22 20:05, Jason A. Donenfeld wrote:
-> > Hi Larry,
-> >
-> > On Mon, May 02, 2022 at 02:11:13AM +0200, Jason A. Donenfeld wrote:
-> >> Hey again,
-> >>
-> >> I just installed VirtualBox ontop of 5.18-rc4, and then I made a new VM
-> >> with a fresh install of OpenSUSE, and everything is fine. No issues at
-> >> all.
-> >>
-> >> So you're going to have to provide more information.
-> >>
-> >> Jason
-> >
-> > With still no more information provided from you, I've gone scouring and
-> > found your much more informative bug report here:
-> > https://www.virtualbox.org/ticket/20914 along with a larger log here
-> > https://www.virtualbox.org/attachment/ticket/20914/Windows%2010%20Clone-2022-04-24-20-55-56.log
-> >
-> > Why would you not have sent me all this information right away? Surely
-> > you know how to report bugs. If you're going to concern me with the
-> > possibility that I've broken something, at least give me enough detail
-> > to be able to do something. Otherwise it's pure frustration.
-> >
-> > Anyway, it's still too little information, but I could extract the
-> > Windows build from that log file, pull down ntoskrnl.exe and hope it
-> > roughly matches, and then go to work in IDA Pro trying to figure out
-> > what's going on at ntoskrnl.exe+3f7d50, and if I managed to grab the
-> > right build -- which I more than likely did not -- then that's a `mov
-> > byte ptr gs:853h, 0` in KiInterruptDispatch, which seems entirely
-> > unrelated to the change you mentioned.
-> >
-> > So I think it'd be a good moment for you to show your bisect logs so we
-> > can be certain we're after the right thing.
->
-> LKML removed from cc due to large files.
->
-> Yes, I do know how to report bugs. If you remember my first E-mail, I was just
-> looking for some suggestions on how using rdrand and rdseed could conflict with
-> your changes. I'm sorry that you think I'm wasting your time.
->
-> Where did you get your copy of VirtualBox? Perhaps they have some fixes that I
-> do not know about.
+Hi all,
 
-I patched
-<https://dev.gentoo.org/~polynomial-c/virtualbox/vbox-kernel-module-src-6.1.34.tar.xz>
-using <https://xn--4db.cc/AtB1jwli>.
+After merging the mm tree, today's linux-next build (arm
+multi_v7_defconfig) failed like this:
 
-> My bisect logs are gone. I will need to recreate them and I should have them
-> tomorrow. I do have my paper log to create the bisect. I will have it for you
-> tomorrow.
->
-> I ran the VM again and got a slightly different result. The kernel exception was
-> at ntoskrnl.exe+458647.The mini dump is attached. The ntosknl.exe is available
-> at https:/lwfinger.com/download/ntosknl.exe.gz.
+In file included from <command-line>:
+mm/shmem.c: In function 'shmem_add_to_page_cache.constprop':
+include/linux/compiler_types.h:352:45: error: call to '__compiletime_assert=
+_267' declared with attribute error: BUILD_BUG failed
+  352 |         _compiletime_assert(condition, msg, __compiletime_assert_, =
+__COUNTER__)
+      |                                             ^
+include/linux/compiler_types.h:333:25: note: in definition of macro '__comp=
+iletime_assert'
+  333 |                         prefix ## suffix();                        =
+     \
+      |                         ^~~~~~
+include/linux/compiler_types.h:352:9: note: in expansion of macro '_compile=
+time_assert'
+  352 |         _compiletime_assert(condition, msg, __compiletime_assert_, =
+__COUNTER__)
+      |         ^~~~~~~~~~~~~~~~~~~
+include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_a=
+ssert'
+   39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+      |                                     ^~~~~~~~~~~~~~~~~~
+include/linux/build_bug.h:59:21: note: in expansion of macro 'BUILD_BUG_ON_=
+MSG'
+   59 | #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
+      |                     ^~~~~~~~~~~~~~~~
+include/linux/vm_event_item.h:147:27: note: in expansion of macro 'BUILD_BU=
+G'
+  147 | #define THP_FILE_ALLOC ({ BUILD_BUG(); 0; })
+      |                           ^~~~~~~~~
+mm/shmem.c:743:40: note: in expansion of macro 'THP_FILE_ALLOC'
+  743 |                         count_vm_event(THP_FILE_ALLOC);
+      |                                        ^~~~~~~~~~~~~~
+In file included from include/linux/math64.h:6,
+                 from include/linux/time64.h:5,
+                 from include/linux/restart_block.h:10,
+                 from include/linux/thread_info.h:14,
+                 from include/asm-generic/preempt.h:5,
+                 from ./arch/arm/include/generated/asm/preempt.h:1,
+                 from include/linux/preempt.h:78,
+                 from include/linux/spinlock.h:55,
+                 from include/linux/wait.h:9,
+                 from include/linux/wait_bit.h:8,
+                 from include/linux/fs.h:6,
+                 from mm/shmem.c:24:
+mm/shmem.c: In function 'shmem_getpage_gfp.constprop':
+include/linux/compiler_types.h:352:45: error: call to '__compiletime_assert=
+_275' declared with attribute error: BUILD_BUG failed
+  352 |         _compiletime_assert(condition, msg, __compiletime_assert_, =
+__COUNTER__)
+      |                                             ^
+include/linux/math.h:15:46: note: in definition of macro '__round_mask'
+   15 | #define __round_mask(x, y) ((__typeof__(x))((y)-1))
+      |                                              ^
+mm/shmem.c:1892:26: note: in expansion of macro 'round_down'
+ 1892 |                 hindex =3D round_down(index, HPAGE_PMD_NR);
+      |                          ^~~~~~~~~~
+include/linux/compiler_types.h:340:9: note: in expansion of macro '__compil=
+etime_assert'
+  340 |         __compiletime_assert(condition, msg, prefix, suffix)
+      |         ^~~~~~~~~~~~~~~~~~~~
+include/linux/compiler_types.h:352:9: note: in expansion of macro '_compile=
+time_assert'
+  352 |         _compiletime_assert(condition, msg, __compiletime_assert_, =
+__COUNTER__)
+      |         ^~~~~~~~~~~~~~~~~~~
+include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_a=
+ssert'
+   39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+      |                                     ^~~~~~~~~~~~~~~~~~
+include/linux/build_bug.h:59:21: note: in expansion of macro 'BUILD_BUG_ON_=
+MSG'
+   59 | #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
+      |                     ^~~~~~~~~~~~~~~~
+include/linux/huge_mm.h:307:28: note: in expansion of macro 'BUILD_BUG'
+  307 | #define HPAGE_PMD_SHIFT ({ BUILD_BUG(); 0; })
+      |                            ^~~~~~~~~
+include/linux/huge_mm.h:105:26: note: in expansion of macro 'HPAGE_PMD_SHIF=
+T'
+  105 | #define HPAGE_PMD_ORDER (HPAGE_PMD_SHIFT-PAGE_SHIFT)
+      |                          ^~~~~~~~~~~~~~~
+include/linux/huge_mm.h:106:26: note: in expansion of macro 'HPAGE_PMD_ORDE=
+R'
+  106 | #define HPAGE_PMD_NR (1<<HPAGE_PMD_ORDER)
+      |                          ^~~~~~~~~~~~~~~
+mm/shmem.c:1892:44: note: in expansion of macro 'HPAGE_PMD_NR'
+ 1892 |                 hindex =3D round_down(index, HPAGE_PMD_NR);
+      |                                            ^~~~~~~~~~~~
+In file included from <command-line>:
+include/linux/compiler_types.h:352:45: error: call to '__compiletime_assert=
+_276' declared with attribute error: BUILD_BUG failed
+  352 |         _compiletime_assert(condition, msg, __compiletime_assert_, =
+__COUNTER__)
+      |                                             ^
+include/linux/compiler_types.h:333:25: note: in definition of macro '__comp=
+iletime_assert'
+  333 |                         prefix ## suffix();                        =
+     \
+      |                         ^~~~~~
+include/linux/compiler_types.h:352:9: note: in expansion of macro '_compile=
+time_assert'
+  352 |         _compiletime_assert(condition, msg, __compiletime_assert_, =
+__COUNTER__)
+      |         ^~~~~~~~~~~~~~~~~~~
+include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_a=
+ssert'
+   39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+      |                                     ^~~~~~~~~~~~~~~~~~
+include/linux/build_bug.h:59:21: note: in expansion of macro 'BUILD_BUG_ON_=
+MSG'
+   59 | #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
+      |                     ^~~~~~~~~~~~~~~~
+include/linux/huge_mm.h:307:28: note: in expansion of macro 'BUILD_BUG'
+  307 | #define HPAGE_PMD_SHIFT ({ BUILD_BUG(); 0; })
+      |                            ^~~~~~~~~
+include/linux/huge_mm.h:105:26: note: in expansion of macro 'HPAGE_PMD_SHIF=
+T'
+  105 | #define HPAGE_PMD_ORDER (HPAGE_PMD_SHIFT-PAGE_SHIFT)
+      |                          ^~~~~~~~~~~~~~~
+include/linux/huge_mm.h:106:26: note: in expansion of macro 'HPAGE_PMD_ORDE=
+R'
+  106 | #define HPAGE_PMD_NR (1<<HPAGE_PMD_ORDER)
+      |                          ^~~~~~~~~~~~~~~
+mm/shmem.c:1915:34: note: in expansion of macro 'HPAGE_PMD_NR'
+ 1915 |                         hindex + HPAGE_PMD_NR - 1) {
+      |                                  ^~~~~~~~~~~~
+In file included from <command-line>:
+In function 'can_split_folio',
+    inlined from 'shrink_page_list' at mm/vmscan.c:1719:11:
+include/linux/compiler_types.h:352:45: error: call to '__compiletime_assert=
+_195' declared with attribute error: BUILD_BUG failed
+  352 |         _compiletime_assert(condition, msg, __compiletime_assert_, =
+__COUNTER__)
+      |                                             ^
+include/linux/compiler_types.h:333:25: note: in definition of macro '__comp=
+iletime_assert'
+  333 |                         prefix ## suffix();                        =
+     \
+      |                         ^~~~~~
+include/linux/compiler_types.h:352:9: note: in expansion of macro '_compile=
+time_assert'
+  352 |         _compiletime_assert(condition, msg, __compiletime_assert_, =
+__COUNTER__)
+      |         ^~~~~~~~~~~~~~~~~~~
+include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_a=
+ssert'
+   39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+      |                                     ^~~~~~~~~~~~~~~~~~
+include/linux/build_bug.h:59:21: note: in expansion of macro 'BUILD_BUG_ON_=
+MSG'
+   59 | #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
+      |                     ^~~~~~~~~~~~~~~~
+include/linux/huge_mm.h:351:9: note: in expansion of macro 'BUILD_BUG'
+  351 |         BUILD_BUG();
+      |         ^~~~~~~~~
 
-You spelled your URL wrong in two places. Had to guess how to fix it.
-Please spend more time with your bug reports. This is already more
-painful than it should be.
+Reverting the following commits makes the problem go away:
 
-From looking at the minidump you sent, I don't see how this is related
-to the RNG. Maybe something else is wrong with your VirtualBox, and
-you're just experiencing a 5.17->5.18 transition. The VirtualBox team
-themselves said they haven't released the modules for 5.18 yet.
-Then on top of that, maybe you're bisecting wrong.
+  2b58b3f33ba2 ("mm/shmem: convert shmem_swapin_page() to shmem_swapin_foli=
+o()")
+  94cdf3e8c0bf ("mm/shmem: convert shmem_getpage_gfp to use a folio")
+  3674fd6cadf5 ("mm/shmem: convert shmem_alloc_and_acct_page to use a folio=
+")
+  b0bb08b2d5f3 ("mm/shmem: turn shmem_alloc_page() into shmem_alloc_folio()=
+")
+  8d657a77c6fe ("mm/shmem: turn shmem_should_replace_page into shmem_should=
+_replace_folio")
+  9a44f3462edc ("mm/shmem: convert shmem_add_to_page_cache to take a folio")
+  561fd8bee1dc ("mm/swap: add folio_throttle_swaprate")
+  cb4e56ee240d ("mm/shmem: use a folio in shmem_unused_huge_shrink")
+  22bf1b68e572 ("vmscan: remove remaining uses of page in shrink_page_list")
+  7d15d41b7c4a ("vmscan: convert the activate_locked portion of shrink_page=
+_list to folios")
+  8a6aff9c51c7 ("vmscan: move initialisation of mapping down")
+  b79338b3d217 ("vmscan: convert lazy freeing to folios")
+  719426e40146 ("vmscan: convert page buffer handling to use folios")
+  339ba7502e13 ("vmscan: convert dirty page handling to folios")
 
-Anyway, from that minidump...
+--=20
+Cheers,
+Stephen Rothwell
 
-PROCESS_NAME:  svchost.exe
-STACK_TEXT:
-ffff8603`177407f8 fffff806`30464647     : 00000000`0000001e ffffffff`c0000005 fffff806`3062797c 00000000`00000000 : nt!KeBugCheckEx
-ffff8603`17740800 fffff806`30415dac     : 00000000`00001000 ffff8603`177410a0 ffff8000`00000000 00000000`00000000 : nt!KiDispatchException+0x17c287
-ffff8603`17740ec0 fffff806`30411f43     : 00000000`00000001 ffffa20d`a3e00340 00000000`00000060 00000000`00000000 : nt!KiExceptionDispatch+0x12c
-ffff8603`177410a0 fffff806`3062797c     : 00000000`000000c8 fffff806`30248da4 00000000`00000000 00000000`00000001 : nt!KiPageFault+0x443
-ffff8603`17741230 fffff806`3064606e     : 00000000`00000000 ffffdd8e`e4fe9970 00000000`00000000 00000000`00000000 : nt!MiPfPrepareReadList+0x4c
-ffff8603`17741320 fffff806`30645de4     : ffffa20d`ac52dcc0 00000000`00000000 00000000`00000000 ffffdd8e`e4fe9970 : nt!MmPrefetchPagesEx+0x96
-ffff8603`17741390 fffff806`3064b349     : 00000000`00000000 ffff8603`00000000 ffffa20d`00000000 00000000`00000006 : nt!PfpPrefetchFilesTrickle+0x2a8
-ffff8603`17741480 fffff806`3064bb6e     : ffffa20d`abf59000 ffffa20d`abf59000 ffff8603`177416a0 00000000`00000000 : nt!PfpPrefetchRequestPerform+0x299
-ffff8603`177415f0 fffff806`30651679     : 00000000`00000001 fffff806`302c0c01 ffffdd8e`e9e81760 ffffa20d`abf59000 : nt!PfpPrefetchRequest+0x132
-ffff8603`17741670 fffff806`3065050d     : ffffdd8e`00000000 00000000`00000000 00000000`1d16c86a 00000000`1d16c801 : nt!PfSetSuperfetchInformation+0x155
-ffff8603`17741770 fffff806`304156b5     : 00000000`00000000 00000000`00000000 ffff8603`17741b80 00000000`00000000 : nt!NtSetSystemInformation+0x9bd
-ffff8603`17741b00 00007fff`5b9b0274     : 00000000`00000000 00000000`00000000 00000000`00000000 00000000`00000000 : nt!KiSystemServiceCopyEnd+0x25
-00000075`ba37f9c8 00000000`00000000     : 00000000`00000000 00000000`00000000 00000000`00000000 00000000`00000000 : 0x00007fff`5b9b0274
-SYMBOL_NAME:  nt!MiPfPrepareReadList+4c
-MODULE_NAME: nt
-IMAGE_VERSION:  10.0.19041.1682
+--Sig_/ad1p+TVqUiLDL1ymLLms_.1
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Loading up the kernel image, we see:
+-----BEGIN PGP SIGNATURE-----
 
-PAGE:000000014061B946                 mov     r13, rcx
-[...]
-PAGE:000000014061B96F                 mov     rax, [r13+0]
-[...]
-PAGE:000000014061B97C                 mov     rdx, [rax+28h]
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJvtx8ACgkQAVBC80lX
+0Gzhewf/bSibuH23I0UsCOQb6rP2cPCDTuTvmdGlY2VYC6CFW4nDpcNtEetIe24U
+MUK9t5cLY9xYsAop/SCfwFSqz0yJ79OiIKwhbTqERQjBQ95/PEg4UfL81+KdN4NP
+VU+vzC/FDkaf2hwLjbbk3R1LdiLaGV5zyBEnmLCkRjthUJksM8LJMqr0yluLgRtf
++LTK9YogL9kQBrX4fYC5FUSwjlxOXzJAlOWHrS9u8MREcTtUpz7/w784VyhzRxL8
+owIQkNCEoCP0bZG0yP+DotVECJFW7DQQfOUMVDJlwIc6RFS6oeSKvD85DYDuSeD2
+qGE1EPx3ckzsccsXXY4he86ydScw6A==
+=Ao7f
+-----END PGP SIGNATURE-----
 
-So it dereferences the first argument of MiPfPrepareReadList(), and then
-dereferences offset 0x28 of that, and crashes there. Looks like the same
-thing happens in your other traces too, based on the bugcheck code
-showing offset 0x28 in those too.
-
-Anyway, until I can see that bisect log, this is beginning to smell like
-a big waste of time.
-
-Jason
+--Sig_/ad1p+TVqUiLDL1ymLLms_.1--

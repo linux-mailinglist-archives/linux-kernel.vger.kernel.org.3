@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE03C516F27
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 13:57:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E42D516F30
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 14:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384830AbiEBMAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 08:00:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51068 "EHLO
+        id S1384835AbiEBMFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 08:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384823AbiEBMAl (ORCPT
+        with ESMTP id S233285AbiEBME5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 08:00:41 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899FA1B79A
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 04:57:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651492632; x=1683028632;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nZP/1+6lT8kAc58d0aWd4V/lSg7XdvpNjFkvBSMZQLU=;
-  b=bxetFV9gaEapfGvQfgjo7cSVIyU5Sdm8YU4aCYfuhBTODoP8nI4bspDZ
-   IMtLBWQmPqdi6j3TqV7oRnK6O/XTI0i/TY8IXEZ4xeDo/1BUpqsbHGk4v
-   Fi75uQz6ahFoRfvp6JxmFo3G3xP+45Xa//i/oDW6IYqUwXStIhmEdDFj1
-   pJwoxy2emzzmd2PQ4dv1WJFkEjpxtINk7uYR3JhihwXq9mskn5pGzHK/R
-   kYyMxTEYnmZPRTXrRwf8GYezpaDVVG4gY7ee4O9J0wCNOquelko9LhLKj
-   HqQdJHOzYkKxIzGYVOoZGdJrivfZCQ4dl+YZBMOkkwBBdFlbHVj5wssVX
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10334"; a="247100668"
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="247100668"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 04:57:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,190,1647327600"; 
-   d="scan'208";a="707576172"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 02 May 2022 04:57:11 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nlUfu-0009X9-JN;
-        Mon, 02 May 2022 11:57:10 +0000
-Date:   Mon, 2 May 2022 19:56:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dafna Hirschfeld <dhirschfeld@habana.ai>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Oded Gabbay <ogabbay@kernel.org>
-Subject: [ogabbay:habanalabs-next 44/44]
- drivers/misc/habanalabs/gaudi/gaudi.c:4743:5: warning: no previous prototype
- for 'gaudi_scrub_device_dram'
-Message-ID: <202205021930.5T9x6nUF-lkp@intel.com>
+        Mon, 2 May 2022 08:04:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82001BA4;
+        Mon,  2 May 2022 05:01:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41A05B816B3;
+        Mon,  2 May 2022 12:01:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20BB5C385AC;
+        Mon,  2 May 2022 12:01:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651492886;
+        bh=BO6LwlJ2aRePANHThfcAB5WN+7rxFLdfIADusHG87Xw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e3nv69OLpF4JRUNJ+6tQKk6DcF4x3kMtBy8oBhs2HLXx7cObZlFh9tgr/7iN5PaZY
+         0MaI2nnU5ErUChjOmVXixJ8G+fpkGguNEMX/+ZSVHRXXD437zBKfOLb/kU8JMsHONW
+         SMJ+s9B7A9ezyajNrWVYusXbyLP221nNOnVrjGstwnm8fpVfsfl//46AfBtAh0CSnR
+         EeRN8mpqIOx/k2YBzKBXKwo3cM71vEm6ePvC+Q4UImZNAd13jPX0IMpdruuL8tSRBr
+         RKiP3fn8atVK21MldTQBrXliNfX4I6M2igG6vLXfqA3/B5hGv22QSNiyxICVSlbxRV
+         HEWcyL9YF+VLA==
+Date:   Mon, 2 May 2022 17:31:21 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Evan Green <evgreen@chromium.org>
+Subject: Re: [PATCH 2/2] phy: qcom-qmp: fix pipe-clock imbalance on power-on
+ failure
+Message-ID: <Ym/IEbrYRXIxFPV5@matsya>
+References: <20220420152331.5527-1-johan+linaro@kernel.org>
+ <20220420152331.5527-3-johan+linaro@kernel.org>
+ <Ym+t5YVL8HdJaBl4@matsya>
+ <Ym+yGa0xT82d9XOf@hovoldconsulting.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <Ym+yGa0xT82d9XOf@hovoldconsulting.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,97 +62,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git habanalabs-next
-head:   70f82d1e3fe1618ef992a2bb3cf4af85eaed0f5a
-commit: 70f82d1e3fe1618ef992a2bb3cf4af85eaed0f5a [44/44] habanalabs: add device memory scrub ability through debugfs
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220502/202205021930.5T9x6nUF-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git/commit/?id=70f82d1e3fe1618ef992a2bb3cf4af85eaed0f5a
-        git remote add ogabbay https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git
-        git fetch --no-tags ogabbay habanalabs-next
-        git checkout 70f82d1e3fe1618ef992a2bb3cf4af85eaed0f5a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/misc/
+On 02-05-22, 12:27, Johan Hovold wrote:
+> On Mon, May 02, 2022 at 03:39:41PM +0530, Vinod Koul wrote:
+> > On 20-04-22, 17:23, Johan Hovold wrote:
+> > > Make sure to disable the pipe clock also if ufs-reset deassertion fails
+> > > during power on.
+> > > 
+> > > Note that the ufs-reset is asserted in qcom_qmp_phy_com_exit().
+> > > 
+> > > Fixes: c9b589791fc1 ("phy: qcom: Utilize UFS reset controller")
+> > > Cc: Evan Green <evgreen@chromium.org>
+> > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > > ---
+> > >  drivers/phy/qualcomm/phy-qcom-qmp.c | 14 +++++++-------
+> > >  1 file changed, 7 insertions(+), 7 deletions(-)
+> > > 
+> > > diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
+> > > index 8c2300bfe489..7d2d1ab061f7 100644
+> > > --- a/drivers/phy/qualcomm/phy-qcom-qmp.c
+> > > +++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
+> > > @@ -5375,14 +5375,14 @@ static int qcom_qmp_phy_power_on(struct phy *phy)
+> > >  		if (ret) {
+> > >  			dev_err(qmp->dev, "lane%d reset deassert failed\n",
+> > >  				qphy->index);
+> > > -			goto err_lane_rst;
+> > > +			return ret;
+> > 
+> > This can be skipped if we retain the err_lane_rst label
+> > 
+> > >  		}
+> > >  	}
+> > >  
+> > >  	ret = clk_prepare_enable(qphy->pipe_clk);
+> > >  	if (ret) {
+> > >  		dev_err(qmp->dev, "pipe_clk enable failed err=%d\n", ret);
+> > > -		goto err_clk_enable;
+> > > +		goto err_reset_lane;
+> > >  	}
+> > >  
+> > >  	/* Tx, Rx, and PCS configurations */
+> > > @@ -5433,7 +5433,7 @@ static int qcom_qmp_phy_power_on(struct phy *phy)
+> > >  
+> > >  	ret = reset_control_deassert(qmp->ufs_reset);
+> > >  	if (ret)
+> > > -		goto err_lane_rst;
+> > > +		goto err_disable_pipe_clk;
+> > 
+> > this is the actual fix...
+> 
+> Right, but with a one-line fix this would read
+> 
+> 	goto err_pcs_ready;
+> 
+> which makes no sense at all. Is that really what you prefer?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Yes I feel for a fix we should always have the minimal changes.. makes
+porting easier
 
-All warnings (new ones prefixed by >>):
+> 
+> Renaming just this one and the below one, would leave the error labels
+> named using two different schemes, which also isn't very nice, but
+> perhaps ok.
+> 
+> > >  
+> > >  	qcom_qmp_phy_configure(pcs_misc, cfg->regs, cfg->pcs_misc_tbl,
+> > >  			       cfg->pcs_misc_tbl_num);
+> > > @@ -5472,17 +5472,17 @@ static int qcom_qmp_phy_power_on(struct phy *phy)
+> > >  					 PHY_INIT_COMPLETE_TIMEOUT);
+> > >  		if (ret) {
+> > >  			dev_err(qmp->dev, "phy initialization timed-out\n");
+> > > -			goto err_pcs_ready;
+> > > +			goto err_disable_pipe_clk;
+> > 
+> > same rename here
+> > 
+> > >  		}
+> > >  	}
+> > >  	return 0;
+> > >  
+> > > -err_pcs_ready:
+> > > +err_disable_pipe_clk:
+> > >  	clk_disable_unprepare(qphy->pipe_clk);
+> > > -err_clk_enable:
+> > > +err_reset_lane:
+> > >  	if (cfg->has_lane_rst)
+> > >  		reset_control_assert(qphy->lane_rst);
+> > > -err_lane_rst:
+> > > +
+> > >  	return ret;
+> > 
+> > while I feel the names given by this patch are better, they should not
+> > be in a fix patch. We should just add the one line fix here and do
+> > renames later
+> 
+> I'll respin if you prefer, just want to double check that you really
+> want a one line fix (i.e. goto err_pcs_ready).
 
->> drivers/misc/habanalabs/gaudi/gaudi.c:4743:5: warning: no previous prototype for 'gaudi_scrub_device_dram' [-Wmissing-prototypes]
-    4743 | int gaudi_scrub_device_dram(struct hl_device *hdev, u64 val)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~
+Yes please
 
-
-vim +/gaudi_scrub_device_dram +4743 drivers/misc/habanalabs/gaudi/gaudi.c
-
-  4742	
-> 4743	int gaudi_scrub_device_dram(struct hl_device *hdev, u64 val)
-  4744	{
-  4745		struct asic_fixed_properties *prop = &hdev->asic_prop;
-  4746		u64  cur_addr = DRAM_BASE_ADDR_USER;
-  4747		u32 chunk_size, busy;
-  4748		int rc, dma_id;
-  4749	
-  4750		while (cur_addr < prop->dram_end_address) {
-  4751			for (dma_id = 0 ; dma_id < DMA_NUMBER_OF_CHANNELS ; dma_id++) {
-  4752				u32 dma_offset = dma_id * DMA_CORE_OFFSET;
-  4753	
-  4754				chunk_size =
-  4755				min((u64)SZ_2G, prop->dram_end_address - cur_addr);
-  4756	
-  4757				dev_dbg(hdev->dev,
-  4758					"Doing HBM scrubbing for 0x%09llx - 0x%09llx\n",
-  4759					cur_addr, cur_addr + chunk_size);
-  4760	
-  4761				WREG32(mmDMA0_CORE_SRC_BASE_LO + dma_offset,
-  4762						lower_32_bits(val));
-  4763				WREG32(mmDMA0_CORE_SRC_BASE_HI + dma_offset,
-  4764						upper_32_bits(val));
-  4765				WREG32(mmDMA0_CORE_DST_BASE_LO + dma_offset,
-  4766							lower_32_bits(cur_addr));
-  4767				WREG32(mmDMA0_CORE_DST_BASE_HI + dma_offset,
-  4768							upper_32_bits(cur_addr));
-  4769				WREG32(mmDMA0_CORE_DST_TSIZE_0 + dma_offset,
-  4770						chunk_size);
-  4771				WREG32(mmDMA0_CORE_COMMIT + dma_offset,
-  4772						((1 << DMA0_CORE_COMMIT_LIN_SHIFT) |
-  4773						(1 << DMA0_CORE_COMMIT_MEM_SET_SHIFT)));
-  4774	
-  4775				cur_addr += chunk_size;
-  4776	
-  4777				if (cur_addr == prop->dram_end_address)
-  4778					break;
-  4779			}
-  4780	
-  4781			for (dma_id = 0 ; dma_id < DMA_NUMBER_OF_CHANNELS ; dma_id++) {
-  4782				u32 dma_offset = dma_id * DMA_CORE_OFFSET;
-  4783	
-  4784				rc = hl_poll_timeout(
-  4785					hdev,
-  4786					mmDMA0_CORE_STS0 + dma_offset,
-  4787					busy,
-  4788					((busy & DMA0_CORE_STS0_BUSY_MASK) == 0),
-  4789					1000,
-  4790					HBM_SCRUBBING_TIMEOUT_US);
-  4791	
-  4792				if (rc) {
-  4793					dev_err(hdev->dev,
-  4794						"DMA Timeout during HBM scrubbing of DMA #%d\n",
-  4795						dma_id);
-  4796					return -EIO;
-  4797				}
-  4798			}
-  4799		}
-  4800	
-  4801		return 0;
-  4802	}
-  4803	
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+~Vinod

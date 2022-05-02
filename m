@@ -2,127 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA738516EE1
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 13:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B317F516EE2
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 13:29:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384721AbiEBLbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 07:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47748 "EHLO
+        id S1384733AbiEBLcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 07:32:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384719AbiEBLbS (ORCPT
+        with ESMTP id S1384723AbiEBLcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 07:31:18 -0400
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B360513E23
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 04:27:49 -0700 (PDT)
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 242BRMTj031467
-        for <linux-kernel@vger.kernel.org>; Mon, 2 May 2022 20:27:23 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 242BRMTj031467
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1651490843;
-        bh=jRIYi0K/zXrncbt7rG02dALfK/eGcYU2kRYa0B8Stt0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cVBg9HlKk3ruwhOY/GFYGkF3SnRDC9FGk56vxfHM6gZmV636bKMbRtzIXcg9YrHbs
-         AQMRePWqD0iafJhGBxUg+L1YY0GXSi4Nur+vqDke3L4dfghs5a2rVKha4W1fJK5qLO
-         eeszXAGFlnZXLcTJp0oq7SkH/2fLgQdDHtP9kjt8NL0LkQOopiDf+KFlrJ119VmZG0
-         BBPFuEi5Yu8mjQCizXhUfd8hj9w2300tVIKT5pKkBj5spxXRZc3FDJ33+MpLWC8XJ3
-         sVvGHlbNC8aF6XpGon8GwW1Yte/7eDl2hozlDec91BYNG1qDYXBfz7qBlTNBMfV/4Y
-         NCbcqcTs1vy9g==
-X-Nifty-SrcIP: [209.85.214.177]
-Received: by mail-pl1-f177.google.com with SMTP id k1so3616818pll.4
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 04:27:22 -0700 (PDT)
-X-Gm-Message-State: AOAM531A7Chq2SQKlgbUz1NT5RyYiUVaMqwSzu6NmgHe2yOUREPao7PM
-        mEFGQ/Yg4G5JzfDsnVohiKSWvYNzwZS3jpd9aHY=
-X-Google-Smtp-Source: ABdhPJxPmiNjTbkZ5ORDpWpTcCe8fvXO0EY0VtkkcMJcO157hziUiL1uEE/25A5KVgrKfTdLtP+uhiWraqAMectCbiE=
-X-Received: by 2002:a17:902:bf07:b0:158:d334:852f with SMTP id
- bi7-20020a170902bf0700b00158d334852fmr11419010plb.136.1651490842179; Mon, 02
- May 2022 04:27:22 -0700 (PDT)
+        Mon, 2 May 2022 07:32:21 -0400
+Received: from mail.pcs.gmbh (mail.pcs.gmbh [89.27.162.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0C9FD;
+        Mon,  2 May 2022 04:28:52 -0700 (PDT)
+Received: from mail.csna.de (mail.csna.de [89.27.162.50])
+        by mail.pcs.gmbh with ESMTPA
+        ; Mon, 2 May 2022 13:28:28 +0200
+Received: from EXCHANGE2019.pcs.ditec.de (mail.pcs.com [89.27.162.5])
+        by mail.csna.de with ESMTPA
+        ; Mon, 2 May 2022 13:28:28 +0200
+Received: from EXCHANGE2019.pcs.ditec.de (192.168.8.214) by
+ EXCHANGE2019.pcs.ditec.de (192.168.8.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 2 May 2022 13:28:29 +0200
+Received: from lxtpfaff.pcs.ditec.de (192.168.9.96) by
+ EXCHANGE2019.pcs.ditec.de (192.168.8.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22
+ via Frontend Transport; Mon, 2 May 2022 13:28:29 +0200
+Date:   Mon, 2 May 2022 13:28:29 +0200
+From:   Thomas Pfaff <tpfaff@pcs.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+CC:     <linux-kernel@vger.kernel.org>, <linux-rt-users@vger.kernel.org>,
+        Marc Zyngier <maz@kernel.org>
+Subject: [PATCH v3] irq/core: synchronize irq_thread startup
+Message-ID: <552fe7b4-9224-b183-bb87-a8f36d335690@pcs.com>
 MIME-Version: 1.0
-References: <202205020142.tuVjG3mE-lkp@intel.com>
-In-Reply-To: <202205020142.tuVjG3mE-lkp@intel.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 2 May 2022 20:26:16 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAS6sQ0+9qWz8Xi8P9x8Hszpq_KBsqSfZJbO64-ZnvaCiA@mail.gmail.com>
-Message-ID: <CAK7LNAS6sQ0+9qWz8Xi8P9x8Hszpq_KBsqSfZJbO64-ZnvaCiA@mail.gmail.com>
-Subject: Re: [masahiroy:lto-cleanup-v2 48/55] s390-linux-ld:
- .tmp_vmlinux.kallsyms1: warning: allocated section `.rodata' not in segment
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+X-KSE-ServerInfo: EXCHANGE2019.pcs.ditec.de, 9
+X-KSE-AntiSpam-Interceptor-Info: white sender email list
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 02.05.2022 09:21:00
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 2, 2022 at 2:31 AM kernel test robot <lkp@intel.com> wrote:
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git lto-cleanup-v2
-> head:   0f0c2c6e09ad55e3c5ddb69915460ee54eb913e4
-> commit: 58024b1713c48e2cc450f3301fc48077638298cc [48/55] kbuild: embed symbol versions at final link of vmlinux or modules
-> config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20220502/202205020142.tuVjG3mE-lkp@intel.com/config)
-> compiler: s390-linux-gcc (GCC) 11.3.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git/commit/?id=58024b1713c48e2cc450f3301fc48077638298cc
->         git remote add masahiroy https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
->         git fetch --no-tags masahiroy lto-cleanup-v2
->         git checkout 58024b1713c48e2cc450f3301fc48077638298cc
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+From: Thomas Pfaff <tpfaff@pcs.com>
+
+While running
+"while /bin/true; do setserial /dev/ttyS0 uart none;
+setserial /dev/ttyS0 uart 16550A; done"
+on a kernel with threaded irqs, setserial is hung after some calls.
+
+setserial opens the device, this will install an irq handler if the uart is
+not none, followed by TIOCGSERIAL and TIOCSSERIAL ioctls.
+Then the device is closed. On close, synchronize_irq() is called by
+serial_core.
+
+If the close comes too fast, the irq_thread does not really start,
+it is terminated immediately without going into irq_thread().
+But an interrupt might already been handled by
+irq_default_primary_handler(), going to __irq_wake_thread() and
+incrementing threads_active.
+If this happens, synchronize_irq() will hang forever, because the
+irq_thread is already dead, and threads_active will never be decremented.
+
+The fix is to make sure that the irq_thread is really started
+during __setup_irq().
+
+Signed-off-by: Thomas Pfaff <tpfaff@pcs.com>
+---
+v2-v3:
+  - initialize wait_for_threads waitqueue early
+  - be more precise about flag and function names
+diff --git a/kernel/irq/internals.h b/kernel/irq/internals.h
+index 99cbdf55a8bd..f09c60393e55 100644
+--- a/kernel/irq/internals.h
++++ b/kernel/irq/internals.h
+@@ -29,12 +29,14 @@ extern struct irqaction chained_action;
+  * IRQTF_WARNED    - warning "IRQ_WAKE_THREAD w/o thread_fn" has been printed
+  * IRQTF_AFFINITY  - irq thread is requested to adjust affinity
+  * IRQTF_FORCED_THREAD  - irq action is force threaded
++ * IRQTF_READY     - signals that irq thread is ready
+  */
+ enum {
+ 	IRQTF_RUNTHREAD,
+ 	IRQTF_WARNED,
+ 	IRQTF_AFFINITY,
+ 	IRQTF_FORCED_THREAD,
++	IRQTF_READY,
+ };
+ 
+ /*
+diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
+index 939d21cd55c3..02f3b5bf5145 100644
+--- a/kernel/irq/irqdesc.c
++++ b/kernel/irq/irqdesc.c
+@@ -407,6 +407,7 @@ static struct irq_desc *alloc_desc(int irq, int node, unsigned int flags,
+ 	lockdep_set_class(&desc->lock, &irq_desc_lock_class);
+ 	mutex_init(&desc->request_mutex);
+ 	init_rcu_head(&desc->rcu);
++	init_waitqueue_head(&desc->wait_for_threads);
+ 
+ 	desc_set_defaults(irq, desc, node, affinity, owner);
+ 	irqd_set(&desc->irq_data, flags);
+@@ -575,6 +576,7 @@ int __init early_irq_init(void)
+ 		raw_spin_lock_init(&desc[i].lock);
+ 		lockdep_set_class(&desc[i].lock, &irq_desc_lock_class);
+ 		mutex_init(&desc[i].request_mutex);
++		init_waitqueue_head(&desc->wait_for_threads);
+ 		desc_set_defaults(i, &desc[i], node, NULL, NULL);
+ 	}
+ 	return arch_early_irq_init();
+diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
+index f1d5a94c6c9f..4dca48506d38 100644
+--- a/kernel/irq/manage.c
++++ b/kernel/irq/manage.c
+@@ -1263,6 +1263,31 @@ static void irq_wake_secondary(struct irq_desc *desc, struct irqaction *action)
+ 	raw_spin_unlock_irq(&desc->lock);
+ }
+ 
++/*
++ * Internal function to notify that irq_thread is ready
++ */
++static void irq_thread_set_ready(struct irq_desc *desc,
++				 struct irqaction *action)
++{
++	set_bit(IRQTF_READY, &action->thread_flags);
++	wake_up(&desc->wait_for_threads);
++}
++
++/*
++ * Internal function to wake up irq_thread
++ * and wait until it is ready
++ */
++static void wake_up_and_wait_for_irq_thread_ready(struct irq_desc *desc,
++						  struct irqaction *action)
++{
++	if (!action || !action->thread)
++		return;
++
++	wake_up_process(action->thread);
++	wait_event(desc->wait_for_threads,
++		   test_bit(IRQTF_READY, &action->thread_flags));
++}
++
+ /*
+  * Interrupt handler thread
+  */
+@@ -1287,6 +1312,8 @@ static int irq_thread(void *data)
+ 
+ 	irq_thread_check_affinity(desc, action);
+ 
++	irq_thread_set_ready(desc, action);
++
+ 	while (!irq_wait_for_interrupt(action)) {
+ 		irqreturn_t action_ret;
+ 
+@@ -1698,8 +1725,6 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
+ 	}
+ 
+ 	if (!shared) {
+-		init_waitqueue_head(&desc->wait_for_threads);
+-
+ 		/* Setup the type (level, edge polarity) if configured: */
+ 		if (new->flags & IRQF_TRIGGER_MASK) {
+ 			ret = __irq_set_trigger(desc,
+@@ -1795,14 +1820,8 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
+ 
+ 	irq_setup_timings(desc, new);
+ 
+-	/*
+-	 * Strictly no need to wake it up, but hung_task complains
+-	 * when no hard interrupt wakes the thread up.
+-	 */
+-	if (new->thread)
+-		wake_up_process(new->thread);
+-	if (new->secondary)
+-		wake_up_process(new->secondary->thread);
++	wake_up_and_wait_for_irq_thread_ready(desc, new);
++	wake_up_and_wait_for_irq_thread_ready(desc, new->secondary);
+ 
+ 	register_irq_proc(irq, desc);
+ 	new->dir = NULL;
 
 
-Hmm, OK.
-CONFIG_MODULE_REL_CRCS needs more effort.
-
-I will fix it in v3.
-Thanks for the report.
-
-
-
-
-
-
-
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
-> >> s390-linux-ld: .tmp_vmlinux.kallsyms1: warning: allocated section `.rodata' not in segment
->    s390-linux-ld: kernel/dma/coherent.o: in function `dma_init_coherent_memory':
->    coherent.c:(.text+0xea): undefined reference to `memremap'
->    s390-linux-ld: coherent.c:(.text+0x1f8): undefined reference to `memunmap'
->    s390-linux-ld: kernel/dma/coherent.o: in function `dma_declare_coherent_memory':
->    coherent.c:(.text+0x5e4): undefined reference to `memunmap'
->    s390-linux-ld: drivers/irqchip/irq-al-fic.o: in function `al_fic_init_dt':
->    irq-al-fic.c:(.init.text+0x7a): undefined reference to `of_iomap'
->    s390-linux-ld: irq-al-fic.c:(.init.text+0x4f4): undefined reference to `iounmap'
->    s390-linux-ld: drivers/clk/clk-fixed-mmio.o: in function `fixed_mmio_clk_setup':
->    clk-fixed-mmio.c:(.text+0x90): undefined reference to `of_iomap'
->    s390-linux-ld: clk-fixed-mmio.c:(.text+0xcc): undefined reference to `iounmap'
->    s390-linux-ld: drivers/clocksource/timer-of.o: in function `timer_of_init':
->    timer-of.c:(.init.text+0x144): undefined reference to `of_iomap'
->    s390-linux-ld: timer-of.c:(.init.text+0x76e): undefined reference to `iounmap'
->    s390-linux-ld: drivers/clocksource/timer-of.o: in function `timer_of_cleanup':
->    timer-of.c:(.init.text+0x968): undefined reference to `iounmap'
->    s390-linux-ld: drivers/clocksource/timer-microchip-pit64b.o: in function `mchp_pit64b_dt_init_timer':
->    timer-microchip-pit64b.c:(.init.text+0x684): undefined reference to `of_iomap'
->    s390-linux-ld: timer-microchip-pit64b.c:(.init.text+0xcda): undefined reference to `iounmap'
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
-
-
-
--- 
-Best Regards
-Masahiro Yamada

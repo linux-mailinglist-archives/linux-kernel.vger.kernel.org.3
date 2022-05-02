@@ -2,57 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E4EC517790
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 21:46:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB73251779A
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 21:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387162AbiEBTti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 15:49:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32944 "EHLO
+        id S234125AbiEBT70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 15:59:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238542AbiEBTtg (ORCPT
+        with ESMTP id S229585AbiEBT7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 15:49:36 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0387565BD
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 12:46:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651520762; x=1683056762;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=M4niFshntDK2QmAcs2/a7uHttMZ31/JR2/RX9cUSQiY=;
-  b=TzY8khPahPW/xDLbrsL+cngPiKU3cC2EWHOv+jlOq/L89cbeACV0V6e8
-   D2ksFctfjzw7lmRE/x3Kcu3Qu5IyMU5lYT8QVvGi4nAnXXubERk1CYXUY
-   85JfQ+skAqYr8f5Qn4gf7zyQ39umSRLZs5y+fw2rcIwB0c9uNcjtl9Oj3
-   NGo3EJdrYjGCxgu2HeLBu/pOTEeLkAdKjhk+2aiwNQTAXPyaADDtkElCP
-   goQCANMqvQSnCgru7hj2Wb6t6vQvELHmkel47CUz0Ovh7xZ7lzpZHRdQK
-   Uob6VZSPzzwhjBlwzfyMLau3SIqswxhn+D/JbQBLEvb9YpQyLaEydSJbE
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="330305168"
-X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="330305168"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 12:46:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="546592237"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 02 May 2022 12:46:01 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nlbzc-0009p0-R3;
-        Mon, 02 May 2022 19:46:00 +0000
-Date:   Tue, 3 May 2022 03:45:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/100-shutdown-notifier 4/20] kernel/reboot.o:
- warning: objtool: sys_off_handler_power_off() falls through to next function
- type_store()
-Message-ID: <202205030300.tbyjHXmy-lkp@intel.com>
+        Mon, 2 May 2022 15:59:21 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D11BC39;
+        Mon,  2 May 2022 12:55:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=mYYa7YhSPmVPESGC3WBfSUVLu7/5dL6ovKiS3tnTNxc=; b=X7JjkI1eS+hZwlLL/I9p7ec0h2
+        UeIxqvrdiJt3meq6ElbsNEDYIxW+qZz/j2FrSu6coXltcfr4QtTMMPFDzslv9IR5A31jl1ddBKnH9
+        c2qsGdbgoQzF9iywxqp5QHtMYcYLEB3+RVk8mUsIOTnJ93L7VRDhLz56q/kJE1S8EfyygaZ+EPJH4
+        +lUKye+VxqZ8KUh1eKBescSHXrCybAweDQoUoV1TG8LbXYRpZEdQGzvMqMTJ67eTO75Z/LyqmGrAJ
+        WIdEZp2LKR7NJxMrEW0UmH4MNpVWroXNW+J0b79QIxFrPP2W8RHSAR29nZiASkc9sS+Ga1qVVPW+d
+        6RQX6kKQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nlc8m-00AZWD-7z; Mon, 02 May 2022 19:55:28 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 772E030017D;
+        Mon,  2 May 2022 21:55:25 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5223120288CEB; Mon,  2 May 2022 21:55:25 +0200 (CEST)
+Date:   Mon, 2 May 2022 21:55:25 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
+        linux-hardening@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        llvm@lists.linux.dev
+Subject: Re: [RFC PATCH 00/21] KCFI support
+Message-ID: <YnA3Le2uJRaFF4TC@hirez.programming.kicks-ass.net>
+References: <20220429203644.2868448-1-samitolvanen@google.com>
+ <202204291545.47C6A97EA2@keescook>
+ <Ymz7DWkRJy3PMaHm@hirez.programming.kicks-ass.net>
+ <CABCJKuckt75qA1op-LpkJnQsJC36m9fstbY3uD=7pET2VyyZSg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <CABCJKuckt75qA1op-LpkJnQsJC36m9fstbY3uD=7pET2VyyZSg@mail.gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -63,27 +73,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/100-shutdown-notifier
-head:   06115822707a3ed6f89da2ea9c157c283b6750ee
-commit: 6025f4b3d1a321e1cfc8a6b6651395cc43ceb2f3 [4/20] kernel: Add combined power-off+restart handler call chain API
-config: x86_64-randconfig-a011 (https://download.01.org/0day-ci/archive/20220503/202205030300.tbyjHXmy-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/AsahiLinux/linux/commit/6025f4b3d1a321e1cfc8a6b6651395cc43ceb2f3
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/100-shutdown-notifier
-        git checkout 6025f4b3d1a321e1cfc8a6b6651395cc43ceb2f3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On Mon, May 02, 2022 at 08:22:57AM -0700, Sami Tolvanen wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> > Anyway, I think I hate that __builtin, I'd *much* rather see a variable
+> > attribute or qualifier for this, such that one can mark a function
+> > pointer as not doing CFI.
+> >
+> > I simply doesn't make sense to have a builtin that operates on an
+> > expression. The whole thing is about indirect calls, IOW function
+> > pointers.
+> 
+> I also thought an attribute would be more convenient, but the compiler
+> folks prefer a built-in:
+> 
+> https://reviews.llvm.org/D122673
 
-All warnings (new ones prefixed by >>):
+That seems to mostly worry about C++ things (overload sets, template
+specialization, name mangling) we kernel folks don't seem to much care
+about.
 
->> kernel/reboot.o: warning: objtool: sys_off_handler_power_off() falls through to next function type_store()
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I'll stick with saying type system makes more sense to me though.

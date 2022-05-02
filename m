@@ -2,93 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1BCD5173BD
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 069AD5173BF
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:07:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240809AbiEBQK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 12:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51284 "EHLO
+        id S241115AbiEBQKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 12:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbiEBQKZ (ORCPT
+        with ESMTP id S240854AbiEBQKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 12:10:25 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4C61144
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 09:06:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651507616; x=1683043616;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=7KvW+TU9RcNd/L37Pd/DZ8yozqIscYOfchJ7RfEHxHU=;
-  b=niKyaDFH9b5iZERcdXcADWKI0Nis7V9N7ssWRJO1mGre7iH2XBVvJFUF
-   hxfRc9WpfcZle+b2fj6CCK3mvNYCMtw96v+RO7PhPsW1KikaaMPaYttTF
-   1i+NMhCsDrx34Oi83b3DtMxi49S1Qy0xv/o+/A/Dfq74rljjxGohzOIqN
-   GUE+avhupDbuPKPfe0BjppWRznWJOimbyLim2uzYFaukiNudQBpsrjY6G
-   2k7tiOqBZxSPNXX1gDKsUxVM/FtVy6tyRGwkywEqapig3hHqpBqL1q5I+
-   j9VqaciOkUtw2RsbuiQSAW1ldA2V74NkfkzZIXjFhI4PtzOUB5KHBy01I
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="247799059"
-X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
-   d="scan'208";a="247799059"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 09:06:56 -0700
-X-IronPort-AV: E=Sophos;i="5.91,192,1647327600"; 
-   d="scan'208";a="583769372"
-Received: from wahmed-mobl.amr.corp.intel.com (HELO [10.209.71.202]) ([10.209.71.202])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 09:06:55 -0700
-Message-ID: <c27a2132-8fbc-8c02-9c1b-b91336133d61@linux.intel.com>
-Date:   Mon, 2 May 2022 09:06:54 -0700
+        Mon, 2 May 2022 12:10:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E49EDE95
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 09:07:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651507636;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=s70MT6Y6b+EWzPq4TYtvjBhW+c7gKt8WCUmst+yWMcA=;
+        b=NOoPok6F3YLUvVYVKt0qwJG6RoU5PWdXFGSPb9ePPBDnF6dxQn3TlXsrV4i0w/NbtB6mG6
+        +OHYXJTom6VrDI5UcXv0MxtAklLUkuXb6tgcBc3hFOe1xuxBvuh6eq80E3f76Cz0ieGcGQ
+        +Raf/RLlEpAe0C5hcIlJSERBXN0UnZI=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-86-XKnsIJCBPLGUprwFo3Bohg-1; Mon, 02 May 2022 12:07:15 -0400
+X-MC-Unique: XKnsIJCBPLGUprwFo3Bohg-1
+Received: by mail-ej1-f71.google.com with SMTP id cw19-20020a170906479300b006f3e54b1dbcso4951204ejc.4
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 09:07:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=s70MT6Y6b+EWzPq4TYtvjBhW+c7gKt8WCUmst+yWMcA=;
+        b=qXGRC+Y/RdSA97IPrU6G1JKxZLy3ZWjUcPFVAUQ7SUG+W8o+dsUiCDd8nwToDp4gF+
+         p4cPJ2HADe8lnNYm/jiyHOonPjT2DW39Jrmrbq+lNcKh2UnMaM9VjKQn/AA0x+5gtoP5
+         mH39oTT7g+J0T8hdFBFPAkZxJBKUNuHWoRvD5KuQbBmhMYcGQW7xHAPE+Cshto2Plot+
+         1+x5sUAV70MepUjV7TT25W3RBA1ApIYHJBaisW5hVA9C6KbL5iOebAOAl5VVQ0hNYtzf
+         wmtYb4dW++RM6PeudlV6hBvk2ktuLwqbo0Hq+kjydI6bpgLtQ2djIf1iOomncyU1gb5r
+         +tmA==
+X-Gm-Message-State: AOAM532Zc535wyI6+nQYemDJpR0eFhKRA4ntNNqyGcN/F5MGCcKAQZB6
+        E3bwlNWpYNnS/iWdssEcxXFNOKueiIlQbnMN5HtfRG71XpSOCVCqHnfu3JF3l3rUEs3r4v2eXlM
+        2PC0qxiU4lgyQZ5KQj1dC4g5j
+X-Received: by 2002:a17:907:72d4:b0:6f4:7b2:1dea with SMTP id du20-20020a17090772d400b006f407b21deamr12049351ejc.532.1651507634255;
+        Mon, 02 May 2022 09:07:14 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxHV9JQOzWXQ2/EuMLNL2Sk7plhApTBZcA1FAn/4yisC7DdLA+Ho0CT7zFqHqrSbD0Bufb/EQ==
+X-Received: by 2002:a17:907:72d4:b0:6f4:7b2:1dea with SMTP id du20-20020a17090772d400b006f407b21deamr12049334ejc.532.1651507634023;
+        Mon, 02 May 2022 09:07:14 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id zp1-20020a17090684e100b006f3ef214df0sm3710399ejb.86.2022.05.02.09.07.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 May 2022 09:07:13 -0700 (PDT)
+Message-ID: <a06997fe-8dd7-e91a-2017-912827f554e7@redhat.com>
+Date:   Mon, 2 May 2022 18:07:11 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.7.0
-Subject: Re: [PATCH v5 1/3] x86/tdx: Add TDX Guest attestation interface
- driver
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v9 8/9] KVM: x86: Allow userspace set maximum VCPU id for
+ VM
 Content-Language: en-US
-To:     Wander Lairson Costa <wander@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+To:     Zeng Guang <guang.zeng@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
         Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-References: <20220501183500.2242828-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220501183500.2242828-2-sathyanarayanan.kuppuswamy@linux.intel.com>
- <Ym/MJlHrDoinrxnn@fedora>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <Ym/MJlHrDoinrxnn@fedora>
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        Kai Huang <kai.huang@intel.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Robert Hu <robert.hu@intel.com>, Gao Chao <chao.gao@intel.com>
+References: <20220419154444.11888-1-guang.zeng@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220419154444.11888-1-guang.zeng@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 4/19/22 17:44, Zeng Guang wrote:
+> +Userspace is able to calculate the limit to APIC ID values from designated CPU
+> +topology. This capability allows userspace to specify maximum possible APIC ID
+> +assigned for current VM session prior to the creation of vCPUs. By design, it
+> +can set only once and doesn't accept change any more. KVM will manage memory
+> +allocation of VM-scope structures which depends on the value of APIC ID.
+> +
+> +Calling KVM_CHECK_EXTENSION for this capability returns the value of maximum APIC
+> +ID that KVM supports at runtime. It sets as KVM_MAX_VCPU_IDS by default.
 
+Better:
 
-On 5/2/22 5:18 AM, Wander Lairson Costa wrote:
->> +	ret = __tdx_module_call(TDX_GET_REPORT, virt_to_phys(tdreport),
->> +				virt_to_phys(reportdata), 0, 0, NULL);
->> +	if (ret) {
->> +		pr_debug("TDREPORT TDCALL failed, status:%lx\n",
->> +				TDCALL_STATUS_CODE(ret));
-> Should we use pr_err instead?
+This capability allows userspace to specify maximum possible APIC ID
+assigned for current VM session prior to the creation of vCPUs, saving
+memory for data structures indexed by the APIC ID.  Userspace is able
+to calculate the limit to APIC ID values from designated
+CPU topology.
 
-I expect user app will handle this error case and print debug info.
-So we don't need to use pr_err.
+The value can be changed only until KVM_ENABLE_CAP is set to a nonzero
+value or until a vCPU is created.  Upon creation of the first vCPU,
+if the value was set to zero or KVM_ENABLE_CAP was not invoked, KVM
+uses the return value of KVM_CHECK_EXTENSION(KVM_CAP_MAX_VCPU_ID) as
+the maximum APIC ID.
 
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+>   	case KVM_CAP_MAX_VCPU_ID:
+> -		r = KVM_MAX_VCPU_IDS;
+> +		if (!kvm->arch.max_vcpu_ids)
+> +			r = KVM_MAX_VCPU_IDS;
+> +		else
+> +			r = kvm->arch.max_vcpu_ids;
+
+I think returning the constant KVM_CAP_MAX_VCPU_IDS is better.
+
+Paolo
+

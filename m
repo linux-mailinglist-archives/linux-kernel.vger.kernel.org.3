@@ -2,104 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E5A516E4E
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 12:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D19516E50
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 12:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384652AbiEBKqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 06:46:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55174 "EHLO
+        id S1383465AbiEBKra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 06:47:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384670AbiEBKqe (ORCPT
+        with ESMTP id S234384AbiEBKrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 06:46:34 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD6B1EC6E
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 03:42:52 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id y32so24548580lfa.6
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 03:42:52 -0700 (PDT)
+        Mon, 2 May 2022 06:47:24 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9860DF34
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 03:43:55 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id l18so26960235ejc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 03:43:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=gJW2hpX0jDXzFSio868cnZYVwu80EHBYg4jMatUzfuo=;
-        b=H0lDuGWxfOP2AzWshD1t3hIT54ArwKdHMwwIH0aEvePpuw1tyEgIVWneFG6ipMo3oR
-         oOWmxaBqh40ckpKhnMUqBkWG9N1QNb5X6QysDvnKjWCsKAPhU102olPSxYREqaV2GVko
-         ZAcaCokSB0sxgrWDAjLjUW5Ft1SEXmXGQQd06Pz6L5Dcpb8zHZaKZkt7PZpnKFuEtKG5
-         iRVAGDYHaefsn1A8cNCWBrmsDtKl+wNkRMbOZObbUBJb4a5NT+mgTEdPhADD0o6BmH22
-         2teumeELF2eeF+0V98AUikaTZFyPfvEzs1lUhIo2XJcl9w1coq7Lj2hmhJyJNGbhaepc
-         vmVQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=QRCVia859CvI1FcacIK/vRlTfJd+SbxpysHOvI3snNU=;
+        b=JzyaFcUZGLafCnGVkuITvq7Fny5tLwae6pd7PJffkyCgHTtY+M4tBVeFt1RH7HrN/q
+         YvpV4SfU2F7fkUUzn72oknHijExLJ0hGAz/uUFYrgsE2u7MZiA91RuxeAuVLOzUsPekS
+         o6DEKdJOfcN7WryS5GLWhKCRfLsp5FnX6JbTzfJydbQWyFadZgmaxcBEJ9t5Lc1Gr52M
+         I2FVcrB+kq+7CeH7eeI279x1Yb+VXTeglTt3+h1/iWS6ycN9HHJtdKd5j4ShQNcPBeOZ
+         C42ciV9PCO95404/tLvFOuzFAHY7XhoXz7uKeELjbHpMtkHE2CGSqyJwDmCk85MpB+e+
+         UaEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gJW2hpX0jDXzFSio868cnZYVwu80EHBYg4jMatUzfuo=;
-        b=45MyYCthtA8EorVkv8p8o9ujp4You03mZUg9cvdMEiJTN8luOtwkUknJ3Xh+vyhsxm
-         xC6ia7FHl0ekZz7wG9l2tBgYRdezqvDHAMKccrWLlyjky2ChQexZHeeHemjxD27tzuwa
-         KseD0AoMIR8+Gqrqr/Vx2f9HOTXQTyXM/eEyP4ZLIePNl4JPl4sEmZ43PXQ9ufUaOhlm
-         dFPACKF5l7wikDFrawVofMiRlAsqMVX3S9mMJuezdfMIs96wqfXQMHJLHN2paj66/qn1
-         7KH7OqZBgohBRTbM6eLmUMtN70XMjvgQM3mrU9hB+hIiSKAvVkfQXR+ajbpoIYsCW723
-         RCPQ==
-X-Gm-Message-State: AOAM532Z/SHMfxDfLOqFXSjQi6wd6jZsi65rYKo6AixyN+radO9Gsozo
-        2eD+SqKpisOa//aAEyEZf15J9Q==
-X-Google-Smtp-Source: ABdhPJwhS9zpzLBSwfTZ54BY2m//olODt6cmW03GY4OQEa2073XfSdto2TGmuUAYeO8WFx8PeClbpg==
-X-Received: by 2002:ac2:4250:0:b0:44a:ff88:3795 with SMTP id m16-20020ac24250000000b0044aff883795mr8649215lfl.384.1651488171034;
-        Mon, 02 May 2022 03:42:51 -0700 (PDT)
-Received: from eriador.lan ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id q12-20020ac25a0c000000b0047255d211dfsm670929lfn.270.2022.05.02.03.42.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 03:42:50 -0700 (PDT)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com
-Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] PCI: qcom-ep: use qcom_pcie_disable_resources() in qcom_pcie_ep_remove()
-Date:   Mon,  2 May 2022 13:42:50 +0300
-Message-Id: <20220502104250.73311-1-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220502044625.25210-1-manivannan.sadhasivam@linaro.org>
-References: <20220502044625.25210-1-manivannan.sadhasivam@linaro.org>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=QRCVia859CvI1FcacIK/vRlTfJd+SbxpysHOvI3snNU=;
+        b=rPseCHIX1gZQ1FY9n3u7cc1Yo6HpHVII0zZJj1rGluuFiA1x4ZcinQSSFYlghaHkkO
+         C0oEdpKeJ/y8sd6k2/+EE+2+6BqLU40x36NaC9kfio5/8cFDdnHXtbhBbXZWdm2zEYrn
+         vdX8Ka01b1yWD7blUUxGHJfasJYkOrcXi88lnUytDFCgvPHzAXY+JqDtDa6tQRMS4ucI
+         9xb4czlI/VX/GgyAOGjnF9hfvJQ/34a3FR5g7dFjNk1MLR35vUoQbvgqZTTBpkM3KO+J
+         +BLfH5J/u8coollQjPeuGNChy/jrp86FB6loDtNDRUt2ZhCTHRy4fuXo2GmTOwu3JY4B
+         HnQg==
+X-Gm-Message-State: AOAM530JHVsnDZ+TPxPuV00e187JHXYB3G9/A5Wzki1m+YlirvBs3acu
+        Mj6JFl1I7sadBByAImEn/ZV3T8hvqTnKWO/SkQc=
+X-Google-Smtp-Source: ABdhPJwX32mVDittCrr/FnxJT4YNU7ivtuvSeUWx/kN74Y415B67ohZgceWlW8yWqP+lt7tJWgK+D/aOdfTRcY/EuuA=
+X-Received: by 2002:a17:907:1ca8:b0:6f3:6d36:b2e3 with SMTP id
+ nb40-20020a1709071ca800b006f36d36b2e3mr10695736ejc.88.1651488234231; Mon, 02
+ May 2022 03:43:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a54:3147:0:0:0:0:0 with HTTP; Mon, 2 May 2022 03:43:53 -0700 (PDT)
+From:   Frank David <frankdavidloanfirm3@gmail.com>
+Date:   Mon, 2 May 2022 03:43:53 -0700
+Message-ID: <CACPaKznaCEkrv_3oE3PfM+MNNsDv6r2ppBCBNoBjmSC14EjK_w@mail.gmail.com>
+Subject: =?UTF-8?B?0J7RhNC10YDRgtCwINC30LAg0LfQsNC10Lw=?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove code duplication between qcom_pcie_disable_resources() and
-qcom_pcie_ep_remove().
-
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
-
-Could you please squash the following patch and repost it?
-
----
- drivers/pci/controller/dwc/pcie-qcom-ep.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/drivers/pci/controller/dwc/pcie-qcom-ep.c b/drivers/pci/controller/dwc/pcie-qcom-ep.c
-index 80a9acf683ba..11f40a6467ba 100644
---- a/drivers/pci/controller/dwc/pcie-qcom-ep.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom-ep.c
-@@ -689,10 +689,7 @@ static int qcom_pcie_ep_remove(struct platform_device *pdev)
- 	if (pcie_ep->link_status == QCOM_PCIE_EP_LINK_DISABLED)
- 		return 0;
- 
--	phy_power_off(pcie_ep->phy);
--	phy_exit(pcie_ep->phy);
--	clk_bulk_disable_unprepare(ARRAY_SIZE(qcom_pcie_ep_clks),
--				   qcom_pcie_ep_clks);
-+	qcom_pcie_disable_resources(pcie_ep);
- 
- 	return 0;
- }
--- 
-2.35.1
-
+0JfQtNGA0LDQstC10LnRgtC1Lg0KDQrQotC+0LLQsCDQuNC80LAg0LfQsCDRhtC10Lsg0LTQsCDQ
+uNC90YTQvtGA0LzQuNGA0LAg0YjQuNGA0L7QutCw0YLQsCDQvtCx0YnQtdGB0YLQstC10L3QvtGB
+0YIsINGH0LUg0LMt0L0g0KTRgNCw0L3Qug0K0JTQtdC50LLQuNC0LCDRh9Cw0YHRgtC10L0g0LfQ
+sNC10Lwg0L7RgiDQt9Cw0LXQvNC+0LTQsNGC0LXQuywg0L7RgtCy0L7RgNC4INC40LrQvtC90L7Q
+vNC40YfQtdGB0LrQsCDQstGK0LfQvNC+0LbQvdC+0YHRgiDQt9CwDQrRgtC10LfQuCwg0LrQvtC4
+0YLQviDRgdC1INC90YPQttC00LDRj9GCINC+0YIg0YTQuNC90LDQvdGB0L7QstCwINC/0L7QvNC+
+0YkuINCd0LjQtSDQvtGC0L/Rg9GB0LrQsNC80LUg0LfQsNC10LzQuCDQvdCwDQrRhNC40LfQuNGH
+0LXRgdC60Lgg0LvQuNGG0LAsINGE0LjRgNC80Lgg0Lgg0YTQuNGA0LzQuCDQv9GA0Lgg0Y/RgdC9
+0Lgg0Lgg0YDQsNC30LHQuNGA0LDQtdC80Lgg0YPRgdC70L7QstC40Y8g0YEg0LvQuNGF0LLQsCDQ
+vtGCDQrRgdCw0LzQviAzJS4g0YHQstGK0YDQttC10YLQtSDRgdC1INGBINC90LDRgSDQtNC90LXR
+gSDRh9GA0LXQtyDQuNC80LXQudC7OiAoDQpmcmFua2RhdmlkbG9hbmZpcm0zQGdtYWlsLmNvbSks
+INC30LAg0LTQsCDQvNC+0LbQtdC8INC00LAg0LLQuCDQv9GA0LXQtNC+0YHRgtCw0LLQuNC8INC9
+0LDRiNC40YLQtQ0K0YPRgdC70L7QstC40Y8g0LfQsCDQt9Cw0LXQvC4NCg0K0JjQndCk0J7QoNCc
+0JDQptCY0K8g0LrRitC8INC60YDQtdC00LjRgtC+0L/QvtC70YPRh9Cw0YLQtdC70Y8NCg0KMSkg
+0JjQvNC1OiAuLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4g
+Li4uLg0KDQoyKSDQlNGK0YDQttCw0LLQsDogLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
+Li4uLi4uLi4uLi4uLi4uLiAuDQoNCjMpINCQ0LTRgNC10YE6IC4uLi4uLi4uLi4uLi4uLi4uLi4u
+Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4gLg0KDQo0KSDQn9C+0Ls6IC4uLi4uLi4uLi4uLi4u
+Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLiAuLi4uLg0KDQo1KSDQodC10LzQtdC5
+0L3QviDQv9C+0LvQvtC20LXQvdC40LU6IC4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
+Li4uLi4uLi4NCg0KNikg0J/RgNC+0YTQtdGB0LjRjzogLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
+Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLg0KDQo3KSDQotC10LvQtdGE0L7QvTogLi4uLi4uLi4u
+Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uDQoNCjgpINCa0LDQvdC00LjQ
+tNCw0YLRgdGC0LLQsNC70Lgg0LvQuCDRgdGC0LUg0L/RgNC10LTQuCAuLi4uLi4uLi4uLi4uLi4u
+Li4uLi4uLi4uLi4uLi4uLi4NCg0KOSkg0JzQtdGB0LXRh9C10L0g0LTQvtGF0L7QtDogLi4uLi4u
+Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLg0KDQoxMCkg0J3QtdC+0LHRhdC+0LTQ
+uNC80LAg0YHRg9C80LAg0L3QsCDQt9Cw0LXQvNCwOiAuLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
+Li4uLi4uLi4uLg0KDQoxMSkg0J/RgNC+0LTRitC70LbQuNGC0LXQu9C90L7RgdGCINC90LAg0LfQ
+sNC10LzQsDogLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLg0K
+DQoxMikg0KbQtdC7INC90LAg0LfQsNC10LzQsDogLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
+Li4uLi4uLi4uLi4uLi4uLi4uLi4uDQoNCjEzKSDQoNC10LvQuNCz0LjRjzogLi4uLi4uLi4uLi4u
+Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uIC4NCg0KDQrQl9CwINCy0YDRitC3
+0LrQsDogKCBmcmFua2RhdmlkbG9hbmZpcm0zQGdtYWlsLmNvbSApIHdoYXRzYXBwOyArMjM0NzAz
+MjkwOTcyOA0KDQoNCtCR0LvQsNCz0L7QtNCw0YDRjywNCtCTLdC9INCk0YDQsNC90Log0JTQtdC5
+0LLQuNC0DQo=

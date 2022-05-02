@@ -2,161 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6EA517B18
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 02:00:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4767C517B1D
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 02:03:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbiECAAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 20:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51538 "EHLO
+        id S229930AbiECADf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 20:03:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231989AbiEBX7E (ORCPT
+        with ESMTP id S229905AbiECADM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 19:59:04 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80F06344
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 16:55:28 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id a15-20020a17090ad80f00b001dc2e23ad84so776587pjv.4
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 16:55:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KF+0hHq9SEiR1B1K23N9qqmjFGxNYyDbMKeM3XCoCIA=;
-        b=lazFntWQL/l49iNuHrVAg+ZM2my/Zj1tAQupWNwnULXQWQ6RaIywfzw7Ji2YH00tfF
-         bZtIiCT+3Rh8Dbvp0GdIEA9WJc0Wc4PseZLS0cItxB7zQTQAd8dPd96WihSJujy5RV/T
-         90ZqnDWg+FYE9fwKzM0MYncZ2AEpJoVHQ49KsiZJ/RvQhJ0VdCZLlbfElbhN35xlBRlS
-         jDV8p8rFteDGJZier8572E1WzRDr9PwzVjzTg++6z/8nWJjhwMzgl95vk/jYNui4TvuR
-         GaI8BFeRU2fq/3gT+zTMsJMi6NMn7mfQxMUHecg6OM6JjB5yXhqbd+/HmirCHY9cBtcn
-         HYWg==
+        Mon, 2 May 2022 20:03:12 -0400
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05345344D6;
+        Mon,  2 May 2022 16:59:38 -0700 (PDT)
+Received: by mail-ot1-f53.google.com with SMTP id 31-20020a9d0822000000b00605f1807664so7663718oty.3;
+        Mon, 02 May 2022 16:59:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:references
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=KF+0hHq9SEiR1B1K23N9qqmjFGxNYyDbMKeM3XCoCIA=;
-        b=i7rQwpYiLEp1Iusng6VLBYS3f3yGzxAKlLrBproA6isVdBDivV6UWMXvIueRXg4DMm
-         FMFDqSNvSULbwQv+tdLxzKTDUcrMbuY18x0wWjipkDQhfhe3JJ877PUG5zgEvfkVNycT
-         9oNSnubZ0tfkRI0Spi/7Wbiq4l9nnOHYZrNMHt2JdHwkXmpY7s7fgET9e6v1fWL8KEnv
-         XJzJcSV7G2XX49ihCJI44pwwq/i3lvoDdgozGz6aIzCTVaQJmfyLobPMmgtM7OH+TtRF
-         kXbzQG+654oyF/F5axrvmdueHisWo1Xuu8HigI+dawPXTBwCeqHTzJvO4Y3CkwVj4nfV
-         uqgw==
-X-Gm-Message-State: AOAM5323fQfhGeXfaXVXKF/m3UGEEz++Tvw6RZO/wGgUKXBpNA5Pj6iO
-        AtOPUNM3EV8IUvg7N//joUD7mA==
-X-Google-Smtp-Source: ABdhPJxpaMM2fi5EZQja67jPxxKDSFZl//fXpAE1n0fwEK0QxIJzBAkYYQYIvcxXlPckj892rv/ZEw==
-X-Received: by 2002:a17:90a:9ea:b0:1dc:1c48:eda with SMTP id 97-20020a17090a09ea00b001dc1c480edamr1808249pjo.38.1651535728233;
-        Mon, 02 May 2022 16:55:28 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id d8-20020aa78e48000000b0050dc7628199sm5232277pfr.115.2022.05.02.16.55.27
+        bh=gezA+FgfQIOeosXiXauEFuGOC1DO4zlGtjWK/c4Mmoo=;
+        b=ImQrAU+Gy9zV0JUNN4v5kSmZgKbfE6rmzOlf5BEuT7tyWUh2f/HjxJkeH/UJz1PVqa
+         kvndIeNf2e3vF+OiCX0GEw1Idj+UIyeBehdfFByUAo5KjwPR2QAsdBl//3mpIEN7IqX0
+         vvixmzxroMOV7r6SqK1bwjkAeKJVu5/RdZjWsJKeIfy3ChvtG9MlQpRM8J58FYURbV4I
+         K6EkXtHJ6ura5KUoPGiY1nNDRZk3twHKT1P1f3czZpk3n32FN0MyhYddkTdGB+TC94SL
+         LVwWdTECO00x3ZnusXBjau9OLuINKinbPgDV6V4zwmzQviDUtrreHh7zLc71PcBWD1Zi
+         Pmjg==
+X-Gm-Message-State: AOAM532v+4QXWCfiKQ0ydkuQXN3acYgGPCjetc3pjgmMPmbHVAEldnwF
+        LD8xq5lKErD7Khb6xA2OPg==
+X-Google-Smtp-Source: ABdhPJyLUr8CePi/NiyCU4NOTuQg5eORG04y++TX2wMUO+0xhMygAcWkga2uJnvHK7HmmMiL5LKfyg==
+X-Received: by 2002:a05:6830:22e1:b0:605:e40d:d606 with SMTP id t1-20020a05683022e100b00605e40dd606mr5162983otc.205.1651535978105;
+        Mon, 02 May 2022 16:59:38 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w10-20020a056830060a00b0060603221253sm3424123oti.35.2022.05.02.16.59.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 16:55:27 -0700 (PDT)
-Date:   Mon, 2 May 2022 23:55:24 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH v2] KVM: x86/mmu: Update number of zapped pages even if
- page list is stable
-Message-ID: <YnBvbHXTseOZkmHF@google.com>
-References: <20211129235233.1277558-1-seanjc@google.com>
- <YlCNpQ9nkD1ToY13@google.com>
+        Mon, 02 May 2022 16:59:37 -0700 (PDT)
+Received: (nullmailer pid 2058233 invoked by uid 1000);
+        Mon, 02 May 2022 23:59:36 -0000
+Date:   Mon, 2 May 2022 18:59:36 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Marcel Ziswiler <marcel@ziswiler.com>
+Cc:     Matthias Schiffer <matthias.schiffer@tq-group.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Denys Drozdov <denys.drozdov@toradex.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Tim Harvey <tharvey@gateworks.com>, devicetree@vger.kernel.org,
+        Frank Rowand <frowand.list@gmail.com>,
+        Marek Vasut <marex@denx.de>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Subject: Re: [PATCH v2 08/14] dt-bindings: arm: fsl: add
+ toradex,colibri-imx6ull
+Message-ID: <YnBwaHRcamhz1hMe@robh.at.kernel.org>
+References: <20220425162356.176665-1-marcel@ziswiler.com>
+ <20220425162356.176665-9-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YlCNpQ9nkD1ToY13@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20220425162356.176665-9-marcel@ziswiler.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022, Sean Christopherson wrote:
-> Very high latency ping, this is still problematic and still applies cleanly.
-
-PING!  PING!  PING!  PING!
-
-Don't make me write a script to ping you every hour :-)
-
-> On Mon, Nov 29, 2021, Sean Christopherson wrote:
-> > When zapping obsolete pages, update the running count of zapped pages
-> > regardless of whether or not the list has become unstable due to zapping
-> > a shadow page with its own child shadow pages.  If the VM is backed by
-> > mostly 4kb pages, KVM can zap an absurd number of SPTEs without bumping
-> > the batch count and thus without yielding.  In the worst case scenario,
-> > this can cause a soft lokcup.
-> > 
-> >  watchdog: BUG: soft lockup - CPU#12 stuck for 22s! [dirty_log_perf_:13020]
-> >    RIP: 0010:workingset_activation+0x19/0x130
-> >    mark_page_accessed+0x266/0x2e0
-> >    kvm_set_pfn_accessed+0x31/0x40
-> >    mmu_spte_clear_track_bits+0x136/0x1c0
-> >    drop_spte+0x1a/0xc0
-> >    mmu_page_zap_pte+0xef/0x120
-> >    __kvm_mmu_prepare_zap_page+0x205/0x5e0
-> >    kvm_mmu_zap_all_fast+0xd7/0x190
-> >    kvm_mmu_invalidate_zap_pages_in_memslot+0xe/0x10
-> >    kvm_page_track_flush_slot+0x5c/0x80
-> >    kvm_arch_flush_shadow_memslot+0xe/0x10
-> >    kvm_set_memslot+0x1a8/0x5d0
-> >    __kvm_set_memory_region+0x337/0x590
-> >    kvm_vm_ioctl+0xb08/0x1040
-> > 
-> > Fixes: fbb158cb88b6 ("KVM: x86/mmu: Revert "Revert "KVM: MMU: zap pages in batch""")
-> > Reported-by: David Matlack <dmatlack@google.com>
-> > Reviewed-by: Ben Gardon <bgardon@google.com>
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> > 
-> > v2:
-> >  - Rebase to kvm/master, commit 30d7c5d60a88 ("KVM: SEV: expose...")
-> >  - Collect Ben's review, modulo bad splat.
-> >  - Copy+paste the correct splat and symptom. [David].
-> > 
-> > @David, I kept the unstable declaration out of the loop, mostly because I
-> > really don't like putting declarations in loops, but also because
-> > nr_zapped is declared out of the loop and I didn't want to change that
-> > unnecessarily or make the code inconsistent.
-> > 
-> >  arch/x86/kvm/mmu/mmu.c | 10 ++++++----
-> >  1 file changed, 6 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index 0c839ee1282c..208c892136bf 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -5576,6 +5576,7 @@ static void kvm_zap_obsolete_pages(struct kvm *kvm)
-> >  {
-> >  	struct kvm_mmu_page *sp, *node;
-> >  	int nr_zapped, batch = 0;
-> > +	bool unstable;
-> >  
-> >  restart:
-> >  	list_for_each_entry_safe_reverse(sp, node,
-> > @@ -5607,11 +5608,12 @@ static void kvm_zap_obsolete_pages(struct kvm *kvm)
-> >  			goto restart;
-> >  		}
-> >  
-> > -		if (__kvm_mmu_prepare_zap_page(kvm, sp,
-> > -				&kvm->arch.zapped_obsolete_pages, &nr_zapped)) {
-> > -			batch += nr_zapped;
-> > +		unstable = __kvm_mmu_prepare_zap_page(kvm, sp,
-> > +				&kvm->arch.zapped_obsolete_pages, &nr_zapped);
-> > +		batch += nr_zapped;
-> > +
-> > +		if (unstable)
-> >  			goto restart;
-> > -		}
-> >  	}
-> >  
-> >  	/*
-> > -- 
-> > 2.34.0.rc2.393.gf8c9666880-goog
+On Mon, 25 Apr 2022 18:23:50 +0200, Marcel Ziswiler wrote:
+> From: Denys Drozdov <denys.drozdov@toradex.com>
 > 
+> Add toradex,colibri-imx6ull for carrier board dts,
+> including aster, iris and iris-v2 device tree,
+> wifi and nonwifi variants for NAND and eMMC modules.
+> 
+> Signed-off-by: Denys Drozdov <denys.drozdov@toradex.com>
+> Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+> 
+> ---
+> 
+> Changes in v2:
+> - Fixed long line as pointed out by Rob's bot.
+> - Added V3 to Colibri Evaluation Board as done elsewhere.
+> 
+>  .../devicetree/bindings/arm/fsl.yaml          | 25 +++++++++++++------
+>  1 file changed, 17 insertions(+), 8 deletions(-)
+> 
+
+Acked-by: Rob Herring <robh@kernel.org>

@@ -2,60 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB275516A1A
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 06:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29205516A1E
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 06:46:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381663AbiEBEnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 00:43:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43124 "EHLO
+        id S1383241AbiEBEuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 00:50:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350459AbiEBEnU (ORCPT
+        with ESMTP id S1350459AbiEBEuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 00:43:20 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE7B3FD94
-        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 21:39:52 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id m14-20020a17090a34ce00b001d5fe250e23so11845677pjf.3
-        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 21:39:52 -0700 (PDT)
+        Mon, 2 May 2022 00:50:14 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407AB20190
+        for <linux-kernel@vger.kernel.org>; Sun,  1 May 2022 21:46:47 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id h12so11604584plf.12
+        for <linux-kernel@vger.kernel.org>; Sun, 01 May 2022 21:46:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Q6JAdcJJ5Qoz6lAJknf+7RgOR6g1kzTLvudjVEl/CYY=;
-        b=k9DoJBIeLjtq7XTDsgDYhnunfFtS3OjDrzj25MKoXmKOVHaSvYwy4wWxKR7RLP1C4p
-         ahOFyr2uL2oR+LXLd1Xh0rjo/t83aM/td7si3cf3mwZAEQf7QdnI95XorOKffwUqxhai
-         KfWzGfOzeBSYn+20ZegeUpXcHtSJZFqABrsm2nZogrmy8eCLI9O/G9URUmLNNnyYIdiU
-         7omSW+Ib7TyNhC0W/oL0C2bMp3oaR9c7g20RfYRYu9+tefwj2DrAG9HMXnE3yxHbr4mj
-         tKDFYgtBNKK/IkK6k0bdPwx/P74KUgXErxS8IC6NUtus3pAh/uy13mXV+8BpjexUCZri
-         zSGQ==
+        bh=s57ARSA94pPZPqDottlmXRZq12YDZaNbYb69xMN7IG4=;
+        b=ytWdhCoC34qw4fTbqu60vecvNnmKWy7jGvokRxmcYhPIMMTjVWdyy5hq/p/Dz4qxRl
+         Ur4Z2h2hINXCYmiPYTW77cVt18nRooMetzcWeEsH8eq1/wtF6d5IgrpyV3MIx+O2fpyv
+         +aPCLx1C+iY4b0wLyfePD68clv0yzj/kIQALWLJe+Hz1SMLu0VcvWc62bW+KmjsAQcBN
+         PHGHFi264goOdeyD/qK8CokMU+8Pd1K2bYh8nQv8+Qx5iQV83wIhQ2SRX34HHqUNC+jN
+         fXoEcOGbWQTSmhMFDddbTqKdDPTFIhSyj8rivaT5YvWCgq9j+59NACGnslVIaqCzeX7T
+         jmDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Q6JAdcJJ5Qoz6lAJknf+7RgOR6g1kzTLvudjVEl/CYY=;
-        b=3kh5uqw3FJApmW6KtLV+doAphWKBrw60e9dWTTtxXUomdNTxm9mHyF33mxe2y05NgE
-         T4xM6HGD8nhfY4WfLoGW88XdHz3DItJYKxM4/FoVbf4kl7priAR6KyFbgMGBIR9rvbIY
-         oPB3XYM5rrmLU/JQzjnnI+WaaMqYnKFMBrETkoPe5+ctBr8Jt1U4jxADvI5IBrRmvzuo
-         SogmF+RYr4DBUaHDI191+vO+xRE/WPIQb4wiElynd9cqngaDB9ETLS2GTH6A06Xtjynv
-         d+LzWzJ7RXgQOUgvobie/QIUTsZEmpHViNFq9AA4oi1WIjqYnlCWatkPEvBiMvbuvEWE
-         d9PQ==
-X-Gm-Message-State: AOAM531JvCAfO/mTYaXW7eIVnxtUrDPOyFhXi2ARpdYfz9RRYtQ4O2MU
-        U6doI+RCw7iwZOv+51FKp/iZ
-X-Google-Smtp-Source: ABdhPJws5mLlqRV9/kn0AvQrQHPyMTyEdrmcG2GWvpHvmg9kKNkP/Ht87dmDzG//yhrRrCUyc0qasg==
-X-Received: by 2002:a17:90a:dd46:b0:1b8:8:7303 with SMTP id u6-20020a17090add4600b001b800087303mr16177172pjv.197.1651466392013;
-        Sun, 01 May 2022 21:39:52 -0700 (PDT)
+        bh=s57ARSA94pPZPqDottlmXRZq12YDZaNbYb69xMN7IG4=;
+        b=ZXNAR4L9Q3nq3BFA91ubjCBIxpODmcYYIrZPvYyjQ0pLD4PL/fXgvQJH6UsrWy4gyU
+         +G25Fi1yw4RCfA0lYjPUhib84+NS2sym9/Rw7Ol8QhpV7IrVnAoGiEBGtDknZEThxgYk
+         IGwtvkBE51rmImaMRCWH0w8ENC7Mf7CnsKp3JRgOtkXttf3nkA/T3tEud9+7Fu+d6ieU
+         hqkFJqjUa7NyOZprf1i941hV7mMGijNJl+aUgqRjdG4cXxWjkNuapw+O5RUHiIG86ZOJ
+         raQx6Sl2own1SOgCEUGuoHRokgwXKWrtlYD+GJ9x4tXAzHzxgs8bBT5gwHIfr3pOwTam
+         VK4g==
+X-Gm-Message-State: AOAM531tb4PhXV+Rql99C4qopBrhi70w4o7my6DOzxAreegX39szlyEt
+        CD5xwuGMyzZJifl4k96ec4Jj
+X-Google-Smtp-Source: ABdhPJzCUjDUYqxv8Wa4kYEoqw6GPAng1W0s+fb29/aRsm5fulQ9nXySkKxO0DwzKZvkvdXnu/7nRQ==
+X-Received: by 2002:a17:903:1211:b0:15e:8208:8cc0 with SMTP id l17-20020a170903121100b0015e82088cc0mr10184715plh.52.1651466806727;
+        Sun, 01 May 2022 21:46:46 -0700 (PDT)
 Received: from localhost.localdomain ([27.111.75.99])
-        by smtp.gmail.com with ESMTPSA id s25-20020a62e719000000b0050dc76281cbsm3644657pfh.165.2022.05.01.21.39.49
+        by smtp.gmail.com with ESMTPSA id r13-20020a62e40d000000b0050dc76281bcsm3659243pfh.150.2022.05.01.21.46.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 May 2022 21:39:51 -0700 (PDT)
+        Sun, 01 May 2022 21:46:46 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     mhi@lists.linux.dev
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
+To:     lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com
+Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v2] bus: mhi: ep: Power up/down MHI stack during MHI RESET
-Date:   Mon,  2 May 2022 10:09:46 +0530
-Message-Id: <20220502043946.24432-1-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH] PCI: qcom-ep: Move enable/disable resources code to common functions
+Date:   Mon,  2 May 2022 10:16:25 +0530
+Message-Id: <20220502044625.25210-1-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -69,85 +71,164 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During graceful shutdown scenario, host will issue MHI RESET to the
-endpoint device before initiating shutdown. In that case, it makes sense
-to completely power down the MHI stack as sooner or later the access to
-MMIO registers will be prohibited. Also, the stack needs to be powered
-up in the case of SYS_ERR to recover the device.
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
+Remove code duplication by moving the code related to enabling/disabling
+the resources (PHY, CLK, Reset) to common functions so that they can be
+called from multiple places.
+
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+[mani: renamed the functions and reworded the commit message]
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
+ drivers/pci/controller/dwc/pcie-qcom-ep.c | 86 ++++++++++++-----------
+ 1 file changed, 45 insertions(+), 41 deletions(-)
 
-Changes in v2:
-
-* Removed unused variables
-
- drivers/bus/mhi/ep/main.c | 35 +++++++----------------------------
- 1 file changed, 7 insertions(+), 28 deletions(-)
-
-diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
-index 40109a79017a..59fe8633d4c9 100644
---- a/drivers/bus/mhi/ep/main.c
-+++ b/drivers/bus/mhi/ep/main.c
-@@ -973,11 +973,9 @@ static void mhi_ep_abort_transfer(struct mhi_ep_cntrl *mhi_cntrl)
- static void mhi_ep_reset_worker(struct work_struct *work)
- {
- 	struct mhi_ep_cntrl *mhi_cntrl = container_of(work, struct mhi_ep_cntrl, reset_work);
--	struct device *dev = &mhi_cntrl->mhi_dev->dev;
- 	enum mhi_state cur_state;
--	int ret;
- 
--	mhi_ep_abort_transfer(mhi_cntrl);
-+	mhi_ep_power_down(mhi_cntrl);
- 
- 	spin_lock_bh(&mhi_cntrl->state_lock);
- 	/* Reset MMIO to signal host that the MHI_RESET is completed in endpoint */
-@@ -990,27 +988,8 @@ static void mhi_ep_reset_worker(struct work_struct *work)
- 	 * issue reset during shutdown also and we don't need to do re-init in
- 	 * that case.
- 	 */
--	if (cur_state == MHI_STATE_SYS_ERR) {
--		mhi_ep_mmio_init(mhi_cntrl);
--
--		/* Set AMSS EE before signaling ready state */
--		mhi_ep_mmio_set_env(mhi_cntrl, MHI_EE_AMSS);
--
--		/* All set, notify the host that we are ready */
--		ret = mhi_ep_set_ready_state(mhi_cntrl);
--		if (ret)
--			return;
--
--		dev_dbg(dev, "READY state notification sent to the host\n");
--
--		ret = mhi_ep_enable(mhi_cntrl);
--		if (ret) {
--			dev_err(dev, "Failed to enable MHI endpoint: %d\n", ret);
--			return;
--		}
--
--		enable_irq(mhi_cntrl->irq);
--	}
-+	if (cur_state == MHI_STATE_SYS_ERR)
-+		mhi_ep_power_up(mhi_cntrl);
+diff --git a/drivers/pci/controller/dwc/pcie-qcom-ep.c b/drivers/pci/controller/dwc/pcie-qcom-ep.c
+index 6ce8eddf3a37..1c38dcf3e52e 100644
+--- a/drivers/pci/controller/dwc/pcie-qcom-ep.c
++++ b/drivers/pci/controller/dwc/pcie-qcom-ep.c
+@@ -223,11 +223,8 @@ static void qcom_pcie_dw_stop_link(struct dw_pcie *pci)
+ 	disable_irq(pcie_ep->perst_irq);
  }
  
- /*
-@@ -1089,11 +1068,11 @@ EXPORT_SYMBOL_GPL(mhi_ep_power_up);
- 
- void mhi_ep_power_down(struct mhi_ep_cntrl *mhi_cntrl)
+-static int qcom_pcie_perst_deassert(struct dw_pcie *pci)
++static int qcom_pcie_enable_resources(struct qcom_pcie_ep *pcie_ep)
  {
--	if (mhi_cntrl->enabled)
-+	if (mhi_cntrl->enabled) {
- 		mhi_ep_abort_transfer(mhi_cntrl);
--
--	kfree(mhi_cntrl->mhi_event);
--	disable_irq(mhi_cntrl->irq);
-+		kfree(mhi_cntrl->mhi_event);
-+		disable_irq(mhi_cntrl->irq);
+-	struct qcom_pcie_ep *pcie_ep = to_pcie_ep(pci);
+-	struct device *dev = pci->dev;
+-	u32 val, offset;
+ 	int ret;
+ 
+ 	ret = clk_bulk_prepare_enable(ARRAY_SIZE(qcom_pcie_ep_clks),
+@@ -247,6 +244,38 @@ static int qcom_pcie_perst_deassert(struct dw_pcie *pci)
+ 	if (ret)
+ 		goto err_phy_exit;
+ 
++	return 0;
++
++err_phy_exit:
++	phy_exit(pcie_ep->phy);
++err_disable_clk:
++	clk_bulk_disable_unprepare(ARRAY_SIZE(qcom_pcie_ep_clks),
++				   qcom_pcie_ep_clks);
++
++	return ret;
++}
++
++static void qcom_pcie_disable_resources(struct qcom_pcie_ep *pcie_ep)
++{
++	phy_power_off(pcie_ep->phy);
++	phy_exit(pcie_ep->phy);
++	clk_bulk_disable_unprepare(ARRAY_SIZE(qcom_pcie_ep_clks),
++				   qcom_pcie_ep_clks);
++}
++
++static int qcom_pcie_perst_deassert(struct dw_pcie *pci)
++{
++	struct qcom_pcie_ep *pcie_ep = to_pcie_ep(pci);
++	struct device *dev = pci->dev;
++	u32 val, offset;
++	int ret;
++
++	ret = qcom_pcie_enable_resources(pcie_ep);
++	if (ret) {
++		dev_err(dev, "Failed to enable resources: %d\n", ret);
++		return ret;
 +	}
- }
- EXPORT_SYMBOL_GPL(mhi_ep_power_down);
++
+ 	/* Assert WAKE# to RC to indicate device is ready */
+ 	gpiod_set_value_cansleep(pcie_ep->wake, 1);
+ 	usleep_range(WAKE_DELAY_US, WAKE_DELAY_US + 500);
+@@ -335,7 +364,7 @@ static int qcom_pcie_perst_deassert(struct dw_pcie *pci)
+ 	ret = dw_pcie_ep_init_complete(&pcie_ep->pci.ep);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to complete initialization: %d\n", ret);
+-		goto err_phy_power_off;
++		goto err_disable_resources;
+ 	}
  
+ 	/*
+@@ -355,13 +384,8 @@ static int qcom_pcie_perst_deassert(struct dw_pcie *pci)
+ 
+ 	return 0;
+ 
+-err_phy_power_off:
+-	phy_power_off(pcie_ep->phy);
+-err_phy_exit:
+-	phy_exit(pcie_ep->phy);
+-err_disable_clk:
+-	clk_bulk_disable_unprepare(ARRAY_SIZE(qcom_pcie_ep_clks),
+-				   qcom_pcie_ep_clks);
++err_disable_resources:
++	qcom_pcie_disable_resources(pcie_ep);
+ 
+ 	return ret;
+ }
+@@ -376,10 +400,7 @@ static void qcom_pcie_perst_assert(struct dw_pcie *pci)
+ 		return;
+ 	}
+ 
+-	phy_power_off(pcie_ep->phy);
+-	phy_exit(pcie_ep->phy);
+-	clk_bulk_disable_unprepare(ARRAY_SIZE(qcom_pcie_ep_clks),
+-				   qcom_pcie_ep_clks);
++	qcom_pcie_disable_resources(pcie_ep);
+ 	pcie_ep->link_status = QCOM_PCIE_EP_LINK_DISABLED;
+ }
+ 
+@@ -643,43 +664,26 @@ static int qcom_pcie_ep_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = clk_bulk_prepare_enable(ARRAY_SIZE(qcom_pcie_ep_clks),
+-				      qcom_pcie_ep_clks);
+-	if (ret)
++	ret = qcom_pcie_enable_resources(pcie_ep);
++	if (ret) {
++		dev_err(dev, "Failed to enable resources: %d\n", ret);
+ 		return ret;
+-
+-	ret = qcom_pcie_ep_core_reset(pcie_ep);
+-	if (ret)
+-		goto err_disable_clk;
+-
+-	ret = phy_init(pcie_ep->phy);
+-	if (ret)
+-		goto err_disable_clk;
+-
+-	/* PHY needs to be powered on for dw_pcie_ep_init() */
+-	ret = phy_power_on(pcie_ep->phy);
+-	if (ret)
+-		goto err_phy_exit;
++	}
+ 
+ 	ret = dw_pcie_ep_init(&pcie_ep->pci.ep);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to initialize endpoint: %d\n", ret);
+-		goto err_phy_power_off;
++		goto err_disable_resources;
+ 	}
+ 
+ 	ret = qcom_pcie_ep_enable_irq_resources(pdev, pcie_ep);
+ 	if (ret)
+-		goto err_phy_power_off;
++		goto err_disable_resources;
+ 
+ 	return 0;
+ 
+-err_phy_power_off:
+-	phy_power_off(pcie_ep->phy);
+-err_phy_exit:
+-	phy_exit(pcie_ep->phy);
+-err_disable_clk:
+-	clk_bulk_disable_unprepare(ARRAY_SIZE(qcom_pcie_ep_clks),
+-				   qcom_pcie_ep_clks);
++err_disable_resources:
++	qcom_pcie_disable_resources(pcie_ep);
+ 
+ 	return ret;
+ }
 -- 
 2.25.1
 

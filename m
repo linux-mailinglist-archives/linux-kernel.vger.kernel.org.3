@@ -2,104 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 998BE516D74
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 11:36:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95E31516D76
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 11:36:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384266AbiEBJjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 05:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35436 "EHLO
+        id S1384256AbiEBJkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 05:40:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384257AbiEBJjh (ORCPT
+        with ESMTP id S1384262AbiEBJkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 05:39:37 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C472D36699;
-        Mon,  2 May 2022 02:36:06 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 2 May 2022 05:40:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C241645AF0;
+        Mon,  2 May 2022 02:36:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KsHyr4Zdjz4xLS;
-        Mon,  2 May 2022 19:36:04 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1651484165;
-        bh=Tl85NKAKsV+hP4G9r7CY88kWbQ/hZj5rpBTRcLc6UF8=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E2CA611D6;
+        Mon,  2 May 2022 09:36:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDDF1C385AC;
+        Mon,  2 May 2022 09:36:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651484208;
+        bh=9BAQqLLOLL2trD6C1GTCsmN5pgx0ztTic3hcYSWhX9A=;
         h=Date:From:To:Cc:Subject:From;
-        b=ZUsBlQXzxTdvtBvvM+o68aVlXtDQGEXWk5zVOrYwwV67p+7SjC8tCnhdAg0a64GiT
-         pdQGjPdDssqBbv/esz3GX3AGM2+OcznN7ANNkucmUqc+27ak3Q3mSRqWiFRi/Fbj4W
-         CZkSiY2oSdzLKg+igLXliWvPf4PhXrh6efNmOWaz67m8b+55O1QHtlDGoWdinM7wOh
-         JCWUBIpG05AQ5IDQDEKta2PsO7HVFh20+W6uH+laTEBSPh1LmZndXwpGPKgXn7fM2B
-         DnLjcnygIFF/yFQKugJU9bBMuCESpFeuJ+az8OPXyiDr1iktbkg7jliGC4hszIyl5n
-         TYvwTayzggqbQ==
-Date:   Mon, 2 May 2022 19:36:03 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        NeilBrown <neilb@suse.de>
-Subject: linux-next: manual merge of the mm tree with the folio tree
-Message-ID: <20220502193603.77d31442@canb.auug.org.au>
+        b=oUxQcaHM94xydxjvrkgSw7NmKshl+4h5S4T5rb4cqqPnvNZKwuu5M2wMUBPZ47qTk
+         3saZe7V6J5rhz5bzxG1j/TiorgbmXoq0b5oDsBcU/DL5EP3wntWBaaA4KovkksdWza
+         7pUZVAvYBX/QCF2yXj/P3LEmzeg34mTDIf3H7fxKDELdw3aPpypuufSM4Es7rzKM7f
+         llRT6M7wmTM5DFie+q/JrZEcn3bykvPHWpdV7DgTViKBRaEYp/UngYXtmi5SzOmAfq
+         TGwKui26HxsYysoDnsFGpo8OfOK1Ye5RcZagalecH6Zm9vD7Yp31BFYHYNRawVaStF
+         9pyiErpIANLqg==
+Date:   Mon, 2 May 2022 11:36:25 +0200
+From:   Miguel Ojeda <ojeda@kernel.org>
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] kunit: take `kunit_assert` as `const`
+Message-ID: <20220502093625.GA23225@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+lqtycQY9/F/58=Rsx8/1UA";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: elm/2
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/+lqtycQY9/F/58=Rsx8/1UA
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The `kunit_do_failed_assertion` function passes its
+`struct kunit_assert` argument to `kunit_fail`. This one,
+in turn, calls its `format` field passing the assert again
+as a `const` pointer.
 
-Hi all,
+Therefore, the whole chain may be made `const`.
 
-Today's linux-next merge of the mm tree got a conflict in:
+Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+---
+ include/kunit/test.h | 2 +-
+ lib/kunit/test.c     | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-  mm/page_io.c
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 00b9ff7783ab..2eff4f1beb42 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -774,7 +774,7 @@ void __printf(2, 3) kunit_log_append(char *log, const char *fmt, ...);
+ void kunit_do_failed_assertion(struct kunit *test,
+ 			       const struct kunit_loc *loc,
+ 			       enum kunit_assert_type type,
+-			       struct kunit_assert *assert,
++			       const struct kunit_assert *assert,
+ 			       const char *fmt, ...);
+ 
+ #define KUNIT_ASSERTION(test, assert_type, pass, assert_class, INITIALIZER, fmt, ...) do { \
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index 3bca3bf5c15b..b84aed09a009 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -241,7 +241,7 @@ static void kunit_print_string_stream(struct kunit *test,
+ }
+ 
+ static void kunit_fail(struct kunit *test, const struct kunit_loc *loc,
+-		       enum kunit_assert_type type, struct kunit_assert *assert,
++		       enum kunit_assert_type type, const struct kunit_assert *assert,
+ 		       const struct va_format *message)
+ {
+ 	struct string_stream *stream;
+@@ -281,7 +281,7 @@ static void __noreturn kunit_abort(struct kunit *test)
+ void kunit_do_failed_assertion(struct kunit *test,
+ 			       const struct kunit_loc *loc,
+ 			       enum kunit_assert_type type,
+-			       struct kunit_assert *assert,
++			       const struct kunit_assert *assert,
+ 			       const char *fmt, ...)
+ {
+ 	va_list args;
+-- 
+2.35.3
 
-between commit:
-
-  f6c95ae9b2c7 ("mm: Convert swap_readpage to call read_folio instead of re=
-adpage")
-
-from the folio tree and commits:
-
-  152ac2c67212 ("mm: introduce ->swap_rw and use it for reads from SWP_FS_O=
-PS swap-space")
-  8272c4afbe68 ("mm: submit multipage reads for SWP_FS_OPS swap-space")
-
-from the mm tree.
-
-I fixed it up (I just dorpped the folio tree change) and can carry the
-fix as necessary. This is now fixed as far as linux-next is concerned,
-but any non trivial conflicts should be mentioned to your upstream
-maintainer when your tree is submitted for merging.  You may also want
-to consider cooperating with the maintainer of the conflicting tree to
-minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/+lqtycQY9/F/58=Rsx8/1UA
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJvpgMACgkQAVBC80lX
-0GyjgAf/WjVBXl+jJ0+1fspCiEkIaUxQEv3sufEc/dMRUugTXEQqlcFVkfduL6wc
-5qaGUEqDAvFAD8K+w9jEY4gvGzPtvVosd6JZtRgXZrxHZKZmuCdo/DoEInyWHKga
-/cnVaWuv+aW89exrdW7/Sy9v1cJTS9tQsFRMhB6N9ZUF8PrnpVIGG7/l7NlMXtp9
-jmAJZlXBvRVlU+0WhRsWkMJOQwErCm9bkYElEW2YQ60fUR4BJGqLbIObU64ls09f
-KSUgMeYvwPuoXfPFnbM/biJlp5iSvA3k08YL9VCTuIF/hm5IibgFEF08hrlRPxUH
-QiIhDvp78JW+r/sHsgaAHZ2Ry+K0tA==
-=VV2J
------END PGP SIGNATURE-----
-
---Sig_/+lqtycQY9/F/58=Rsx8/1UA--

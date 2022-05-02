@@ -2,113 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62DC05174ED
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:51:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22FFC517505
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 18:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386380AbiEBQyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 12:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
+        id S241076AbiEBQy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 12:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243487AbiEBQyg (ORCPT
+        with ESMTP id S234379AbiEBQyw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 12:54:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9CB6245
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 09:51:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BBC8DB818F3
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 16:51:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AB65C385AC;
-        Mon,  2 May 2022 16:51:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651510263;
-        bh=evXzquTG5OP5CT6Eo1Ps8xgMCDBksIf8xNaifuB2KeE=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=HvgQVIkF/x88AdMBrnoflX10ZnFDFVMuxa2WjR5Qs3vHKag3NmZ/bGlDLo987Jdwh
-         mTdHw7KWN70HLJPsmSuuGF2Bhae0KK8NuMFTbK24Cc35WNjBYmKXZ2kp3YQCMWumHq
-         w6JZYeXJtmKo+aQ/PD5VtciCqT8xc63KK3iX1KO/PH85ahUjaUmYkVVfUOXhpYFjU2
-         THLSVAujxScFYulOYyqGpdt5zmtsw8HY2ZvihkZH3gj6U4DvxOG4r7OSwpNOpVI2ZW
-         O61UqG+x4OUXXMsylvyTHJQQOAI2wM0WPccIkSfqz9Vi+vli6lNsw3NkXJi/Kh6hYf
-         TWpQmmhudX+6w==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 5D5165C08DB; Mon,  2 May 2022 09:50:58 -0700 (PDT)
-Date:   Mon, 2 May 2022 09:50:58 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     Luc Maranget <luc.maranget@inria.fr>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -lkmm] tools/memory-model/README: Update klitmus7 compat
- table
-Message-ID: <20220502165058.GA1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <2b237126-88d1-17f2-ce94-2cb679f0b285@gmail.com>
+        Mon, 2 May 2022 12:54:52 -0400
+Received: from gardel.0pointer.net (gardel.0pointer.net [IPv6:2a01:238:43ed:c300:10c3:bcf3:3266:da74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437436245;
+        Mon,  2 May 2022 09:51:22 -0700 (PDT)
+Received: from gardel-login.0pointer.net (gardel-mail [85.214.157.71])
+        by gardel.0pointer.net (Postfix) with ESMTP id A92E1E804AA;
+        Mon,  2 May 2022 18:51:19 +0200 (CEST)
+Received: by gardel-login.0pointer.net (Postfix, from userid 1000)
+        id 50F04160011; Mon,  2 May 2022 18:51:19 +0200 (CEST)
+Date:   Mon, 2 May 2022 18:51:19 +0200
+From:   Lennart Poettering <mzxreary@0pointer.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Alexander Graf <graf@amazon.com>,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        Torben Hansen <htorben@amazon.co.uk>,
+        Jann Horn <jannh@google.com>
+Subject: Re: [PATCH 2/2] random: add fork_event sysctl for polling VM forks
+Message-ID: <YnAMBzhcJhGR5XOK@gardel-login>
+References: <20220502140602.130373-1-Jason@zx2c4.com>
+ <20220502140602.130373-2-Jason@zx2c4.com>
+ <Ym/7UlgQ5VjjC76P@gardel-login>
+ <YnAC00VtU8MGb7vO@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <2b237126-88d1-17f2-ce94-2cb679f0b285@gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YnAC00VtU8MGb7vO@zx2c4.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 02, 2022 at 09:05:09PM +0900, Akira Yokosawa wrote:
-> EXPORT_SYMBOL of do_exec() was removed in v5.17.  Unfortunately,
-> kernel modules from klitmus7 7.56 have do_exec() at the end of
-> each kthread.
-> 
-> herdtools7 7.56.1 has addressed the issue.
-> 
-> Update the compatibility table accordingly.
-> 
-> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-> Cc: Luc Maranget <luc.maranget@inria.fr>
-> Cc: Jade Alglave <j.alglave@ucl.ac.uk>
-> Cc: stable@vger.kernel.org # v5.17+
-> ---
-> Hi Paul,
-> 
-> herdtools7 release 7.56.1 is available at
-> https://github.com/herd/herdtools7/releases/tag/7.56.1,
-> and "opam update/upgrade" should catch it soon.
+On Mo, 02.05.22 18:12, Jason A. Donenfeld (Jason@zx2c4.com) wrote:
 
-Good catch, thank you!
+> > > In order to inform userspace of virtual machine forks, this commit adds
+> > > a "fork_event" sysctl, which does not return any data, but allows
+> > > userspace processes to poll() on it for notification of VM forks.
+> > >
+> > > It avoids exposing the actual vmgenid from the hypervisor to userspace,
+> > > in case there is any randomness value in keeping it secret. Rather,
+> > > userspace is expected to simply use getrandom() if it wants a fresh
+> > > value.
+> >
+> > Wouldn't it make sense to expose a monotonic 64bit counter of detected
+> > VM forks since boot through read()? It might be interesting to know
+> > for userspace how many forks it missed the fork events for. Moreover it
+> > might be interesting to userspace to know if any fork happened so far
+> > *at* *all*, by checking if the counter is non-zero.
+>
+> "Might be interesting" is different from "definitely useful". I'm not
+> going to add this without a clear use case. This feature is pretty
+> narrowly scoped in its objectives right now, and I intend to keep it
+> that way if possible.
 
-> I think this is worth for v5.18, albeit it is a minor update
-> in documentation.
+Sure, whatever. I mean, if you think it's preferable to have 3 API
+abstractions for the same concept each for it's special usecase, then
+that's certainly one way to do things. I personally would try to
+figure out a modicum of generalization for things like this. But maybe
+that' just me…
 
-Good point, but let me give it some thought.
+I can just tell you, that in systemd we'd have a usecase for consuming
+such a generation counter: we try to provide stable MAC addresses for
+synthetic network interfaces managed by networkd, so we hash them from
+/etc/machine-id, but otoh people also want them to change when they
+clone their VMs. We could very nicely solve this if we had a
+generation counter easily accessible from userspace, that starts at 0
+initially. Because then we can hash as we always did when the counter
+is zero, but otherwise use something else, possibly hashed from the
+generation counter.
 
-							Thanx, Paul
+But anyway, I understand you are not interested in
+generalization/other usecases, so I'll shut up.
 
-> Thoughts?
-> 
->         Thanks, Akira
-> --
->  tools/memory-model/README | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/memory-model/README b/tools/memory-model/README
-> index 9edd402704c4..dab38904206a 100644
-> --- a/tools/memory-model/README
-> +++ b/tools/memory-model/README
-> @@ -54,7 +54,8 @@ klitmus7 Compatibility Table
->  	     -- 4.14  7.48 --
->  	4.15 -- 4.19  7.49 --
->  	4.20 -- 5.5   7.54 --
-> -	5.6  --       7.56 --
-> +	5.6  -- 5.16  7.56 --
-> +	5.17 --       7.56.1 --
->  	============  ==========
->  
->  
-> -- 
-> 2.25.1
-> 
+Lennart
+
+--
+Lennart Poettering, Berlin

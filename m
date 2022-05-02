@@ -2,67 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78507516DFF
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 12:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57BDA516E01
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 12:15:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384427AbiEBKRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 06:17:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51550 "EHLO
+        id S1384438AbiEBKSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 06:18:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384417AbiEBKRt (ORCPT
+        with ESMTP id S235855AbiEBKSl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 06:17:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E9E23C;
-        Mon,  2 May 2022 03:14:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5B2C61238;
-        Mon,  2 May 2022 10:14:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29D33C385A4;
-        Mon,  2 May 2022 10:14:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651486460;
-        bh=Ytg1tQ2oxulHa1Lh+RCOt+LqpTtcT9uXRgZ8Buq1CMI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SpmIMQ5eVc/hxV+PCQoHr4To19kotvQqy9Sf6WUumVcluu9KbVh3VRMBFCaHVM663
-         Mit0v4iFrBvDWm4shFNDiy+QcSMDPdBnDRoZ4DBk5lsjjTlj1dNNIatlEf8VS5zhlI
-         YIGGySaDOmEuQm7nK+cMqMdvif2aE6UIRQ7/xFshx9c0Z/2Qj39lHfdQsqGEGOqJuH
-         E9EZuzGjTtNUexiZshZX2Qts/VrP0/zJ6Ppdl7Nfi+CfTRJvyAhNA4U1uJv7Zthnqm
-         wt4qraGinyDsAOBvCWUaW3pRapIkfWLTDyFTXx0BLhoNjLZ6078GvB2b476D0lpp1P
-         52Rrr7XWBI7Wg==
-Date:   Mon, 2 May 2022 15:44:15 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Wangseok Lee <wangseok.lee@samsung.com>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        robh+dt <robh+dt@kernel.org>, krzk+dt <krzk+dt@kernel.org>,
-        kishon <kishon@ti.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "jesper.nilsson" <jesper.nilsson@axis.com>,
-        "lars.persson" <lars.persson@axis.com>,
-        bhelgaas <bhelgaas@google.com>,
-        linux-phy <linux-phy@lists.infradead.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        "lorenzo.pieralisi" <lorenzo.pieralisi@arm.com>, kw <kw@linux.com>,
-        linux-arm-kernel <linux-arm-kernel@axis.com>,
-        kernel <kernel@axis.com>, Moon-Ki Jun <moonki.jun@samsung.com>,
-        Dongjin Yang <dj76.yang@samsung.com>
-Subject: Re: [PATCH 0/5] Add support for Axis, ARTPEC-8 PCIe driver
-Message-ID: <Ym+u9yYrV9mxkyWX@matsya>
-References: <4a6dd90c-3f8e-ad18-0136-88b75f4d9cf9@kernel.org>
- <20220418072049epcms2p463a9f01d8ae3e29f75b746a0dce934f1@epcms2p4>
- <CGME20220418072049epcms2p463a9f01d8ae3e29f75b746a0dce934f1@epcms2p1>
- <20220421235725epcms2p1fc34c904f960cba958fa692c6d5dad9c@epcms2p1>
+        Mon, 2 May 2022 06:18:41 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD39A23C
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 03:15:11 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1nlT50-00066e-Rq; Mon, 02 May 2022 12:14:58 +0200
+Message-ID: <5e93e411e1100c5d8292327b9aea560bfcbda7d1.camel@pengutronix.de>
+Subject: Re: [PATCH v1 4/4] arm64: dts: imx8mm.dtsi: Add resets for dispmix
+ power domain.
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Viraj Shah <viraj.shah@linutronix.de>, shawnguo@kernel.org,
+        s.hauer@pengutronix.de
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Adam Ford <aford173@gmail.com>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Peng Fan <peng.fan@nxp.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Date:   Mon, 02 May 2022 12:14:57 +0200
+In-Reply-To: <20220502100233.6023-5-viraj.shah@linutronix.de>
+References: <20220502100233.6023-1-viraj.shah@linutronix.de>
+         <20220502100233.6023-5-viraj.shah@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220421235725epcms2p1fc34c904f960cba958fa692c6d5dad9c@epcms2p1>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,27 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-04-22, 08:57, Wangseok Lee wrote:
-> > On 18/04/2022 09:20, Wangseok Lee wrote:
+Am Montag, dem 02.05.2022 um 12:02 +0200 schrieb Viraj Shah:
+> The resets are controlled from src. From reference manual page
+> 959, display controller needs DISP_RESET bit to be set to reset
+> dispmix.
+> 
+This reset is driven by the GPC hardware logic. Only if you are 100%
+sure that this is not the case should a reset be added to the DT, as
+handling it both from the GPC HW sequencing and software has proven to
+be problematic and result in sporadic hangs.
 
-> > Maybe, quite probably. The reluctance to extend any existing code makes
-> > me doubting this, but I admit that there are many differences.
-> > 
-> >> For these reasons, my opinion is that better to create
-> >> a phy, controller both driver with a new file.
-> >> Please let me know your opinion.
-> > 
-> > At the end it's mostly the decision of PCIe and phy subsystem
-> > maintainers whether they want to have separate drivers for DWC PCIe
-> > blocks in ARMv8 Samsung SoCs.
-> > 
-> > In any case, the driver code looks like copied-pasted from some vendor
-> > sources, so you need to bring it to shape.
+Regards,
+Lucas
 
-I think havong a common driver helps everyone, many vendors do that
-already. If you have a technical issue of adding and maintaining a
-common driver upstream we would be eager to understand and help with
-that...
+> Signed-off-by: Viraj Shah <viraj.shah@linutronix.de>
+> ---
+>  arch/arm64/boot/dts/freescale/imx8mm.dtsi | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mm.dtsi b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
+> index 1ee05677c2dd..11a6cae5bb99 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
+> @@ -734,6 +734,7 @@
+>  						assigned-clock-parents = <&clk IMX8MM_SYS_PLL2_1000M>,
+>  									 <&clk IMX8MM_SYS_PLL1_800M>;
+>  						assigned-clock-rates = <500000000>, <200000000>;
+> +						resets = <&src IMX8MQ_RESET_DISP_RESET>;
+>  					};
+>  
+>  					pgc_mipi: power-domain@11 {
 
--- 
-~Vinod
+

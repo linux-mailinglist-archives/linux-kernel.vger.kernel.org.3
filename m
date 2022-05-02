@@ -2,185 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B316F517675
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 20:23:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 809DB517689
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 20:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386840AbiEBS1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 14:27:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43230 "EHLO
+        id S1386868AbiEBSdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 14:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238642AbiEBS1U (ORCPT
+        with ESMTP id S244630AbiEBSc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 14:27:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 76F0765A1
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 11:23:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651515829;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type;
-        bh=YnGgV3cBQdP4rRNzFtYz1sHu9jEFYB/GjRyc9H3flIg=;
-        b=ZxaaQbuYAISnMaD8w4ncGFcRXmpal5tS5iw/LWECNIuUbp9HtIwCfxdteG72IoKcj7ECU2
-        6hYc2jRpd2Rj0tOR1Us9nHYpjdE/BR26Udv1ITshffxgCQS8RTFXpfG3uVtGFQe5XsI1XR
-        UZm1UjB6IhM70xCWUlD9PW5Owspaa7c=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-28-BWrhfp0QNx2yZGDGpirCqQ-1; Mon, 02 May 2022 14:23:48 -0400
-X-MC-Unique: BWrhfp0QNx2yZGDGpirCqQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 2 May 2022 14:32:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67082A18E;
+        Mon,  2 May 2022 11:29:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2E2133C18520;
-        Mon,  2 May 2022 18:23:48 +0000 (UTC)
-Received: from redhat.com (unknown [10.2.16.77])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0F387463E05;
-        Mon,  2 May 2022 18:23:48 +0000 (UTC)
-Received: from fche by redhat.com with local (Exim 4.94.2)
-        (envelope-from <fche@redhat.com>)
-        id 1nlai3-0006yl-3U; Mon, 02 May 2022 14:23:47 -0400
-Date:   Mon, 2 May 2022 14:23:47 -0400
-From:   "Frank Ch. Eigler" <fche@redhat.com>
-To:     systemtap@sourceware.org, linux-kernel@vger.kernel.org, lwn@lwn.net
-Subject: systemtap 4.7 release
-Message-ID: <20220502182347.GA26805@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1BEE6B81993;
+        Mon,  2 May 2022 18:29:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6768C385AC;
+        Mon,  2 May 2022 18:29:24 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="km1BOBr0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1651516162;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+fT/ZO4MRn1mE8ke5ueoSvGQBtzZFvFBsQi3J5N7udw=;
+        b=km1BOBr0xEObFETcqhHSD3EWsKWRp8drIkeVvTeEK4wOwvMermCN1T8ZZoACvTZ4vROQZ7
+        88KoDEdLWozvbXmpfPbK4hJYNrec57hOOqGE4A6S0DkiSstKF20s5B1b0PNpK/dgYfwNxK
+        kCX3y59fkLIP0A/20xQUT19gPBWDPjA=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7171b4a8 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Mon, 2 May 2022 18:29:22 +0000 (UTC)
+Date:   Mon, 2 May 2022 20:29:11 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Alexander Graf <graf@amazon.com>
+Cc:     Lennart Poettering <mzxreary@0pointer.de>,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        Torben Hansen <htorben@amazon.co.uk>,
+        Jann Horn <jannh@google.com>
+Subject: Re: [PATCH 2/2] random: add fork_event sysctl for polling VM forks
+Message-ID: <YnAiylnSytuYM53z@zx2c4.com>
+References: <20220502140602.130373-1-Jason@zx2c4.com>
+ <20220502140602.130373-2-Jason@zx2c4.com>
+ <Ym/7UlgQ5VjjC76P@gardel-login>
+ <YnAC00VtU8MGb7vO@zx2c4.com>
+ <YnAMBzhcJhGR5XOK@gardel-login>
+ <7a1cfd1c-9f0e-f134-e544-83ee6d3cd9c9@amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.12.0 (2019-05-25)
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <7a1cfd1c-9f0e-f134-e544-83ee6d3cd9c9@amazon.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Alex,
 
-The SystemTap team announces release 4.7
+On Mon, May 02, 2022 at 07:59:08PM +0200, Alexander Graf wrote:
+> to collect the use cases we all have and evaluate whether this patch is 
+> a good stepping stone towards the final solution.
 
-Enhancements to this release include: a new stap-profile-annotate
-tool, a new --sign-module module signing option, -d is now implied for
-processes specified with -c/-x
+Indeed, I'm all for collecting use cases. What I meant to say is that
+we're not going to add something "just 'cuz"; I'd like to have some
+concrete things in mind.
 
-= Where to get it
+To date, I've basically had your s2n case in mind, but as you haven't
+responded to this in the last month, I started looking to see if this
+was useful elsewhere or if I should abandon it, so I filed this issue
+with the Go project: <https://github.com/golang/go/issues/52544>. We're
+over halfway through 5.18 now, and only at this point have you arrived
+to discuss and finalize things. So in all likelihood we'll wind up
+tabling this until 5.20 or never, since what I thought was an easy
+consensus before now apparently is not.
 
-  https://sourceware.org/systemtap/ - our project page
-  https://sourceware.org/systemtap/ftp/releases/
-  https://koji.fedoraproject.org/koji/packageinfo?packageID=615
-  git tag release-4.7 (commit 0c335a75a789ff44b514e567d458881e15cc283d)
+> 1) A way for libraries such as s2n to identify that a clone occurred. 
+> Because it's a deep-down library with no access to its own thread or the 
+> main loop, it can not rely on poll/select. Mmap of a file however would 
+> work great, as you can create transactions on top of a 64bit mmap'ed 
+> value for example.
 
-  There have been over 105 commits since the last release.
-  There have been 17+ bugs fixed / features added since the last release.
+I didn't realize that s2n can't poll. That's surprising. In the worst
+case, can't you just spawn a thread?
 
-= SystemTap frontend (stap) changes
+> 2) A way to notify larger applications (think Java here) that a system 
+> is going to be suspended soon so it can wipe PII before it gets cloned 
+> for example.
 
-- Regular expressions may now include non capturing groups, e.g.
-  (abc) matches abc and \1 expands to abc. 
-  (?:abc) matches abc but does no grouping.
+Suspension, like S3 power notification stuff? Talk to Rafael about that;
+this isn't related to the VM fork issue. I use those PM notifiers
+happily in kernel space but AFAICT, there's still no userspace thing for
+it. This seems orthogonal to this conversation though, so let's not veer
+off into that topic.
 
-- Validate sprintf precision parameter.  Check for case where a
-  precision=-1 sentinel value got interpreted as UINT_MAX.
+If you didn't mean S3 but actually meant notification prior to snapshot
+taking, we don't have any virtual hardware for that, so it's a moot
+point.
 
-- The -d option is now implied for -c/-x.  The symbol and unwind
-  information for processes specified with -c/-x is now included.
+> 3) Notifications after clone so applications know they can regenerate VM 
+> unique data based on randomness.
 
-- Avoid a dtrace race condition when generating the same file.  This can
-  occur when different targets happen to map to the same file.
+You mean this as "the same as (1) but with poll() instead of mmap()",
+right?
 
-= SystemTap backend changes
+> Lennart, looking at the current sysctl proposal, systemd could poll() on 
+> the fork file. It would then be able to generate a /run/fork-id file 
+> which it can use for the flow above, right?
 
-- Set default per-cpu buffer size (stap -s) to 16MB and repair -b bulk-mode
-  operation and performance.
-    
-- Fix runtime VMA-tracking timing to give symbol info to early-process probes.
+For the reasons I gave in my last email to Lennart, I don't think
+there's a good way for systemd to generate a fork-id file on its own
+either. I don't think systemd should really be involved here as a
+provider of values, just as a potential consumer of what the kernel
+provides.
 
-- Improve synchronization when multiple stap modules are being loaded.
+> The sysctl proposal also gives us 3, if we implement the inhibitor 
+> proposal [1] in systemd.
 
-- Add the --sign-module option to enable users to mok sign their own modules
-  e.g.  stap --sign-module -e 'SCRIPT'
-  will sign the module, assuming there is a common systemtap mok key.
+These userspace components you're proposing seem like a lot of
+overengineering for little gain, which is why this conversation went
+nowhere when Amazon attempted all this year. But it sounds like you
+agree with me based on your remark below about systemd-less interfaces
+provided by the kernel.
 
-- Add stap-profile-annotate tool, which combines systemtap and
-  debuginfod to annotate source code with system-wide profiling statistics.
+> Overall, it sounds to me like the sysctl poll based kernel interface in 
+> this patch in combination with systemd inhibitors gives us an answer to 
+> most of the flows above.
+> 
+> I can see attractiveness in providing the /run/fork-id directly from the 
+> kernel though, to remove the dependency on systemd for poll-less 
+> notification of libraries.
+>
+> Jason, how much complexity would it add to provide an mmap() and read() 
+> interface to a fork counter value to the sysctl? Read sounds like a 
+> trivial change on top of what you have already, mmap a bit more heavy 
+> lift. If we had both, it would allow us to implement a Linux standard 
+> fork detect path in libraries that does not rely on systemd.
 
-- Continue probing without doing liveness analysis for situations
-  where liveness analysis does not succeed.
+mmap() does not give us anything if we're not going to expose the raw
+ACPI-mapped ID directly. It will still be a racy mechanism until we do
+that. So I think we should wait until there's a proper vmgenid
+word-sized counter to expose something mmap()able. If you have the
+energy to talk to Microsoft about this and make it happen, please be my
+guest. As I wrote at the beginning of this email. I haven't gotten a
+response from you at all about this stuff in quite some time, so I'm not
+really itching take that on alone now.
 
-= SystemTap tapset changes
-
-- Add probes for python function entry and python function return.
-
-- Attempt userspace string access if kernel access fails for some $variables$.
-
-- Support the memfd_secret and faccessat2 syscalls and update support for
-  the sched_getattr, setns, sigpending, vmsplice, adjtimex syscalls.
-
-- Correct nfs-related tapsets for more context variable accesses.
-
-= SystemTap sample scripts
-
-- All 180+ examples can be found at https://sourceware.org/systemtap/examples/
-
-- New sample scripts:
-
-  security-band-aids/cve-2021-4034.stp
-  security-band-aids/cve-2021-4155.stp
-  Historical emergency security band-aid scripts for example purposes only
-
-= Examples of tested kernel versions
-
-  2.6.32 (RHEL6 x86_64, i686)
-  3.10.0 (RHEL7 x86_64)
-  4.15.0 (Ubuntu 18.04 x86_64)
-  4.18.0 (RHEL8 x86_64, aarch64, ppc64le, s390x)
-  5.14.0 (CentOS Stream release 9 x86_64 / aarch64 / ppc64le)
-  5.14.16 (Fedora 34 x86_64)
-  5.16.14 (Fedora 35 x86_64)
-  5.17.3 (Fedora 36 x86_64)
-  5.18-rc (Fedora rawhide x86_64)
-
-= Known issues with this release
-
-- There are intermittent buffer transmission failures for high-trace-rate
-  scripts.  Bulk mode (stap -b) helps. (PR29108)
-
-- There are known issues on kernel 5.10+ after adapting to set_fs()
-  removal, with some memory accesses that previously returned valid data
-  instead returning -EFAULT (see PR26811).
-
-= Contributors for this release
-
-Sultan Alsawaf, *Marco Benatto, Martin Cermak, Di Chen, William Cohen, Stan Cox,
-Frank Ch. Eigler, *Dann Frazier, Serhei Makarov, Aaron Merey, *Noah Sanci, 
-*Jonathan Wakely
-
-Special thanks to new contributors, marked with '*' above.
-
-Thanks to Stan Cox for assembling these notes.
-
-= Bugs fixed for this release <https://sourceware.org/PR#####>
-
-26184 fullpath_struct_file does not handle struct dentry on 5.6.19-300.fc32.x86_64
-28394 Systemtap 4.6 on Centos 8.4/4.18 kernel died in nfsd-trace example         
-28418 Add support for new syscall memfd_secret
-28557 unable to probe function in kernel module (xfs:xfs_ilock &others?)         
-28633 examples/io/iostat-scsi.stp needs porting for kernel 5.16.0-0.rc2         
-28634 ioscheduler.stp broken with new kernel 5.16.0-0.rc2
-28767 Unable to run script on Ubuntu 20.04
-28778 printf() generated code causes GCC errors
-28781 make -c/-x imply -d
-28788 consider low-security stap-server-less secureboot mode 
-28790 Replace deprecated C++98 constructs with lambdas
-28804 reduce default buffer sizes on small memory machines
-28830 GCC 12 warnings
-28923 dtrace predictable temp file causes race
-28974 runtime event misordering between vma tracker and probe triggering         
-29076 user_string_quoted() doesn't properly generate strings in .rodata on x86_64 
-28958 Current git + RHEL (4.18.0) has 3 working NFSd examples, and one broken. 
-29028 Linux 5.18.0 kernels changed struct kretprobe_instance member fields
-29094 rpm_finder.cxx build broken by rpm-4.18.0-0.alpha1 moving rpmFreeCrypto
-
+Jason

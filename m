@@ -2,115 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C9275176C2
-	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 20:45:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1665176C6
+	for <lists+linux-kernel@lfdr.de>; Mon,  2 May 2022 20:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349221AbiEBSsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 14:48:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57148 "EHLO
+        id S1356287AbiEBStO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 14:49:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242074AbiEBSsf (ORCPT
+        with ESMTP id S1387018AbiEBStF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 14:48:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46117630C;
-        Mon,  2 May 2022 11:45:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 08E7CB8189B;
-        Mon,  2 May 2022 18:45:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74F4AC385A4;
-        Mon,  2 May 2022 18:45:02 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="E0jTeuTl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1651517101;
+        Mon, 2 May 2022 14:49:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE7E8B7CA
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 11:45:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651517135;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=ngT+dxmZ+phqFLY0ltuLJNhJ9ikGaeg4l5pQC/Bb7fA=;
-        b=E0jTeuTlKkxy9lDYvmZlLhh0ekMEpwlLoSsKFlxExAx90L5v0gD4GqdGhWEqvfVbwZ1Opn
-        ViqT5JADtiohu35kfe33IzWH0Q9g3x7yFeP5dp7lSp5YEALWCfyFzNO6GFtV3ege7zwYwY
-        dSwcZvLkv0IhO+zLcCkdKh9fKxfg0Xc=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 33445ff8 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 2 May 2022 18:45:00 +0000 (UTC)
-Date:   Mon, 2 May 2022 20:44:52 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Lennart Poettering <mzxreary@0pointer.de>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Alexander Graf <graf@amazon.com>,
-        Colm MacCarthaigh <colmmacc@amazon.com>,
-        Torben Hansen <htorben@amazon.co.uk>,
-        Jann Horn <jannh@google.com>
-Subject: Re: [PATCH 2/2] random: add fork_event sysctl for polling VM forks
-Message-ID: <YnAmpDZZIQLbNkpi@zx2c4.com>
-References: <20220502140602.130373-1-Jason@zx2c4.com>
- <20220502140602.130373-2-Jason@zx2c4.com>
- <Ym/7UlgQ5VjjC76P@gardel-login>
- <YnAC00VtU8MGb7vO@zx2c4.com>
- <YnAMBzhcJhGR5XOK@gardel-login>
- <YnAc4hwPyByF4kZ5@zx2c4.com>
+        bh=YnpbZs50SiOUxfAVjbV2pZV2prkPBtBeiEirw1AUs2U=;
+        b=GcYRAQuMd7R5PUji1Fd4P7AmBzSZVEtNz2fXHV0i/K6QSB2t+tsOsa03ot4QSCKnmxxwzv
+        l/WT4fbXSQoolF1lhBdqeUyNnYkzGM7KnxrAm++9uiUmYaobjmZxgfcuIPU+L89BXMe7Go
+        k4bktLUhAt2zMcZ9hAeI/gw+FH9sxAg=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-622-nj22mpb1NO6Gfw_0Sqr2BQ-1; Mon, 02 May 2022 14:45:33 -0400
+X-MC-Unique: nj22mpb1NO6Gfw_0Sqr2BQ-1
+Received: by mail-wr1-f71.google.com with SMTP id g7-20020adfbc87000000b0020ac76d254bso5592367wrh.6
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 11:45:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YnpbZs50SiOUxfAVjbV2pZV2prkPBtBeiEirw1AUs2U=;
+        b=dFG6n5mc7GEJEWx/KvadE9QVORbeTWLqKwnSLmAGzG9RYS+X6BMGFr945w8aG1WdRP
+         VCcB7SZDhN8g5hTFjhvj5N43VCp/rdUcGo5Gepbp+8cKGPClVrO1bz8pKrWocv4yePQ3
+         12zK7dWcrFTSjq8o2BI+OBtLKFMeI3aljhCYEtIaP61f+xc1yt0ldxrsVpKp64FlxpaI
+         UglmUpeX3l7XjQecaN+Mdm5bioO+1p1+RGwdsnY3h/TNKM5jfxxzEhf8UlHIS6UkQCp7
+         cXF8aM4fvHFpx6zRtaIeUBKsKWkrUY9BBdTXVm8///dwBh6dRnlmi/fLcDQaq4TL2a9U
+         YanQ==
+X-Gm-Message-State: AOAM531wZvFaT5DO2q3bkvhX6wBxC6ZTUAVM8UssIasoMejC8vseOhNF
+        lorExl1Zxmz1PNiztqrOj+WmDmHnJoXjicnGDjV7Ap3IxO7pn/iPOn/FYML5a1/RRNBxscKruOB
+        8ejqpge3Mk+e8FdsU0C9poAQ=
+X-Received: by 2002:adf:de04:0:b0:20a:da05:39b with SMTP id b4-20020adfde04000000b0020ada05039bmr10116696wrm.550.1651517132776;
+        Mon, 02 May 2022 11:45:32 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx0CRrYsZbpYaf26cjkrGdBToN8jh082LL+RimY903CNaZts3xfryiuVWt6qLIKcs5La+OBdw==
+X-Received: by 2002:adf:de04:0:b0:20a:da05:39b with SMTP id b4-20020adfde04000000b0020ada05039bmr10116681wrm.550.1651517132544;
+        Mon, 02 May 2022 11:45:32 -0700 (PDT)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id l12-20020adfbd8c000000b0020c5253d8edsm7822588wrh.57.2022.05.02.11.45.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 May 2022 11:45:31 -0700 (PDT)
+Date:   Mon, 2 May 2022 19:45:30 +0100
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "cl@linux.com" <cl@linux.com>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "atomlin@atomlin.com" <atomlin@atomlin.com>,
+        "ghalat@redhat.com" <ghalat@redhat.com>,
+        "oleksandr@natalenko.name" <oleksandr@natalenko.name>,
+        "neelx@redhat.com" <neelx@redhat.com>
+Subject: Re: [PATCH v4 2/2] module: Introduce module unload taint tracking
+Message-ID: <20220502184530.qjbl7rkilmxtmsgg@ava.usersys.com>
+X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
+X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
+References: <20220425090841.3958494-1-atomlin@redhat.com>
+ <20220425090841.3958494-3-atomlin@redhat.com>
+ <73869e4f-7190-221c-897b-fc13ec54c8cb@csgroup.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YnAc4hwPyByF4kZ5@zx2c4.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <73869e4f-7190-221c-897b-fc13ec54c8cb@csgroup.eu>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Err...
+On Mon 2022-05-02 11:07 +0000, Christophe Leroy wrote:
+> > @@ -150,6 +160,41 @@ int unregister_module_notifier(struct notifier_block *nb)
+> >   }
+> >   EXPORT_SYMBOL(unregister_module_notifier);
+> >   
+> > +#ifdef CONFIG_MODULE_UNLOAD_TAINT_TRACKING
+> > +static int try_add_tainted_module(struct module *mod)
+> > +{
+> > +	struct mod_unload_taint *mod_taint;
+> > +
+> > +	module_assert_mutex_or_preempt();
+> > +
+> > +	list_for_each_entry_rcu(mod_taint, &unloaded_tainted_modules, list,
+> > +				lockdep_is_held(&module_mutex)) {
+> > +		size_t len = strlen(mod_taint->name);
+> 
+> Why do you need that strlen() at all, can't you just use strcmp() ?
+> With strncmp() what happens if for instance mod_taint->name is "dead" 
+> and mod->name is "deadbeef" ?
 
-On Mon, May 02, 2022 at 08:04:21PM +0200, Jason A. Donenfeld wrote:
-> This doesn't work, because you could have memory-A split into memory-A.1
-> and memory-A.2, and both A.2 and A.1 would ++counter, and wind up with
-> the same new value "2". The solution is to instead have the hypervisor
-> pass a unique value and a counter. We currently have a 16 byte unique
-> value from the hypervisor, which I'm keeping as a kernel space secret
-> for the RNG; we're waiting on a word-sized monotonic counter interface
-> from hypervisors in the future. When we have the latter, then we can
-> start talking about mmapable things. Your use case would probably be
-> served by exposing that 16-byte unique value (hashed with some constant
-> for safety I suppose), but I'm hesitant to start going down that route
-> all at once, especially if we're to have a more useful counter in the
-> future.
+Hi Christophe,
 
-I kind of muddled things a bit by conflating two issues.
+Thanks for your feedback.
 
-I'd like the hypervisor to provide a counter so that we can mmap it to
-userspace so that userspace programs can do word-sized comparisons on
-mmap'd counters, avoiding the race that currently exists from relying on
-the async ACPI notification, which arrives after the system is already
-up and running. That's one thing, but not what we're talking about here
-with the MAC addresses.
+I see that. Furthermore, the length of a module's name is fixed.
+Hence strcmp() should be fine.
 
-The point over here is that neither the guest *nor* the hypervisor can
-maintain a counter that actually represents something unique. A.1 and
-A.2 will both ++counter to the same value in the example above. The
-guest can't do it (neither in systemd nor in the kernel), because it
-will always start with the same counter value of A and ++ it to the same
-next value. The hypervisor can't do it either, because snapshots can be
-shipped around to different computers that aren't coordinated.
 
-So, put that way, the counter thing that I'd like wouldn't be for having
-a unique snapshot ID, but just as a mmap-able way of learning when a
-snapshot forks. It wouldn't be more useful than that.
+Kind regards,
 
-If you want a unique ID, we have two options for that: the first is
-exposing the vmgenid 16 byte value to userspace (which I don't want to
-do). The second is just calling getrandom() after you get a poll()
-notification, and that'll be guaranteed to be unique to that VM because
-of the vmgenid driver in 5.18.
+-- 
+Aaron Tomlin
 
-This last suggestion is thus what you should do for your MAC addresses.
-
-Jason

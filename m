@@ -2,119 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A627F518937
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:58:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EEAE518939
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:59:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239065AbiECQBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 12:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44592 "EHLO
+        id S238855AbiECQCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 12:02:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238844AbiECQBs (ORCPT
+        with ESMTP id S238803AbiECQCx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 12:01:48 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9AE131DFF;
-        Tue,  3 May 2022 08:58:15 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id t11so13723540qto.11;
-        Tue, 03 May 2022 08:58:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=66qLlJx7nKrNSsQ33ieGox6v7vdk5wYAsgHq0JYbR7U=;
-        b=GU7ZZ/4jdmm749iUiJVRCIcPeLZcuoc09ThrWS55XaIe0iWJcOrq3NCgG1FOka+F3C
-         ZmkSJ4HFoVOyzzf3+xlOWOJxi8mU+ckUhZbyIJXEeYec1x43FV5KAfgJOvN439PiZtkm
-         NlUdvMEqaNQt2RyjERWTx84VUQGo6QHDQjHxe+/Gp4FLE1v87lDZ3a91JQAS5D7IBdA8
-         gguUf+C8ZN4inU2sk1Gx5IZtDWh99fsY8eiH8tumQCfFSYWNMJ0QeahN1MKGK0GsZPBl
-         XbmlDVpzpFHBnLSaGQxOQotypnLnwC9WJzN3nj7AUNPbERXgPqM/nwm7NPRA5tG+BqCB
-         k2sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=66qLlJx7nKrNSsQ33ieGox6v7vdk5wYAsgHq0JYbR7U=;
-        b=0+SqBgxTyXPAIpHgYOnVZ0ZeZ/XgFrU8ANyLLX5eBMoApQ3ON7kzonxorU+CUGjW6i
-         p6xgUeSGOPaaxj0h32w60kWzucMoaPwauZJN7Odlrv6SWArJPObqECnI0Z688HbfRIgv
-         PKnCR0lTHgpXB+pNYRYjB2cpQQ7cDKEDRzFmGDYVy5+/t9ryzaeo8F26on+LqXL9bXST
-         KcnMvKaf89b3Ub4olCHHgSsXDfvadGk7nyZaEUwOp9Cf6woyqqWcqt242bWH/DcmRPK2
-         9ZSEGIIuIFXnWiZyfuBcvLLepyVv6+2PdLiHZbhIvrthXWFVGRFFs52RYliBDvtVOCv+
-         RSDQ==
-X-Gm-Message-State: AOAM530uMGKxMiyzmkShtNYFl72CrIcRlm1dBNh47mhZs1MbAII3aS2Y
-        E1/fRO51QTSO1drGIT6uaUunKziTb+4adFJ0EgA=
-X-Google-Smtp-Source: ABdhPJwSVdBAXX6iPX6P1vVEDTK43ohrO2wPIvLWaEqfD4QNwUWnOiDyLgYzKn27UDN3LLuxuLcLlcHI870+g4wbN44=
-X-Received: by 2002:a05:622a:155:b0:2f3:9484:c38e with SMTP id
- v21-20020a05622a015500b002f39484c38emr15379813qtw.494.1651593494861; Tue, 03
- May 2022 08:58:14 -0700 (PDT)
+        Tue, 3 May 2022 12:02:53 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85AD13C722
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 08:59:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id EE608CE1E2F
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 15:59:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37067C385A4;
+        Tue,  3 May 2022 15:59:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651593558;
+        bh=XY9ch2qBQz1SEgroJDBDxJ7tbxMsdOzqeG8iF4Vg6NA=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=j51WGuTq2KD/fLVJmuUDFZe+OZdWlAv8lR3nxVgu+whTaECowisgCxpMK7kYHvjo7
+         hMee1gp1pLguQI0tuxugGNPQcOkcl4vX5MpuH2efetRFWh0F6qOkcahZQFDaqnLOBP
+         90Pgrsy3CtA6Dx/y9sp7axtpqPASAG5tmz6jsoIUv79pV7KPq6V2oh72kM4Y4qVHPw
+         b4OOBDRWHrvs/YLISULk0upIqPoN0nHAJTqylDO/aPa3KjayQ6OnEcLCedZJ0hjh+Z
+         I37cepvKUZKOWILyaTJVa6bXzJHD0sjkB9rarzL2oKySkt3T0cOtWd9rEQv8+hQjbM
+         lsYTkvd69L0qA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 0F0AA5C0115; Tue,  3 May 2022 08:59:13 -0700 (PDT)
+Date:   Tue, 3 May 2022 08:59:13 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     liam.howlett@oracle.com, willy@infradead.org, walken.cr@gmail.com,
+        mhocko@suse.com, hannes@cmpxchg.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Memory allocation on speculative fastpaths
+Message-ID: <20220503155913.GA1187610@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
-References: <20211009221711.2315352-1-robimarko@gmail.com> <163890036783.24891.8718291787865192280.kvalo@kernel.org>
- <CAOX2RU5mqUfPRDsQNSpVPdiz6sE_68KN5Ae+2bC_t1cQzdzgTA@mail.gmail.com>
- <09a27912-9ea4-fe75-df72-41ba0fa5fd4e@gmail.com> <CAOX2RU6qaZ7NkeRe1bukgH6OxXOPvJS=z9PRp=UYAxMfzwD2oQ@mail.gmail.com>
- <EC2778B3-B957-4F3F-B299-CC18805F8381@slashdirt.org> <CAOX2RU7FOdSuo2Jgo0i=8e-4bJwq7ahvQxLzQv_zNCz2HCTBwA@mail.gmail.com>
- <CAOX2RU7d9amMseczgp-PRzdOvrgBO4ZFM_+hTRSevCU85qT=kA@mail.gmail.com>
- <70a8dd7a-851d-686b-3134-50f21af0450c@gmail.com> <7DCB1B9A-D08E-4837-B2FE-6DA476B54B0D@slashdirt.org>
-In-Reply-To: <7DCB1B9A-D08E-4837-B2FE-6DA476B54B0D@slashdirt.org>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Tue, 3 May 2022 17:58:03 +0200
-Message-ID: <CAOX2RU7kF8Da8p_tHwuE-8YMXr5ZtWU2iL6ZY+UR+1OvGcyn+w@mail.gmail.com>
-Subject: Re: [PATCH] ath10k: support bus and device specific API 1 BDF selection
-To:     Thibaut <hacks@slashdirt.org>
-Cc:     Christian Lamparter <chunkeey@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>, kvalo@codeaurora.org,
-        davem@davemloft.net, kuba@kernel.org, ath10k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Feb 2022 at 22:55, Thibaut <hacks@slashdirt.org> wrote:
->
-> Hi,
->
-> > Le 16 f=C3=A9vr. 2022 =C3=A0 22:19, Christian Lamparter <chunkeey@gmail=
-.com> a =C3=A9crit :
-> >
-> > Hi,
-> >
-> > On 16/02/2022 14:38, Robert Marko wrote:
-> >> Silent ping,
-> >> Does anybody have an opinion on this?
-> >
-> > As a fallback, I've cobbled together from the old scripts that
-> > "concat board.bin into a board-2.bin. Do this on the device
-> > in userspace on the fly" idea. This was successfully tested
-> > on one of the affected devices (MikroTik SXTsq 5 ac (RBSXTsqG-5acD))
-> > and should work for all MikroTik.
-> >
-> > "ipq40xx: dynamically build board-2.bin for Mikrotik"
-> > <https://git.openwrt.org/?p=3Dopenwrt/staging/chunkeey.git;a=3Dcommit;h=
-=3D52f3407d94da62b99ba6c09f3663464cccd29b4f>
-> > (though I don't think this link will stay active for
-> > too long.)
->
-> IMHO Robert=E2=80=99s patch addresses an actual bug in ath10k whereby the=
- driver sends the same devpath for two different devices when requesting bo=
-ard-1 BDF, which doesn=E2=80=99t seem right.
->
-> Your proposal is less straightforward than using unmodified board-1 data =
-(as could be done if the above bug did not occur) and negates the previous =
-efforts not to store this data on flash (using instead the kernel=E2=80=99s=
- documented firmware sysfs loading facility - again possible without the ab=
-ove issue).
->
-> HTH
-> T-Bone
+Hello!
 
-Kalle, any chance of reviewing this?
-It just brings the board data in line with caldata as far as naming goes.
+Just following up from off-list discussions yesterday.
 
-Regards,
-Robert
+The requirements to allocate on an RCU-protected speculative fastpath
+seem to be as follows:
+
+1.	Never sleep.
+2.	Never reclaim.
+3.	Leave emergency pools alone.
+
+Any others?
+
+If those rules suffice, and if my understanding of the GFP flags is
+correct (ha!!!), then the following GFP flags should cover this:
+
+	__GFP_NOMEMALLOC | __GFP_NOWARN
+
+Or is this just a fancy way of always returning NULL or some such?  ;-)
+
+							Thanx, Paul

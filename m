@@ -2,154 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F06517F1C
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 09:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CDD5517F26
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 09:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232434AbiECHrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 03:47:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56452 "EHLO
+        id S232239AbiECHwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 03:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbiECHrL (ORCPT
+        with ESMTP id S231856AbiECHwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 03:47:11 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B2537BF4;
-        Tue,  3 May 2022 00:43:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651563819; x=1683099819;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Mad1uBVm2XH6WaLsxjiK6woIkr1Z52tvNOx62IoUvuA=;
-  b=YezqqDq8pmDvt3qt8kOUXeyrsk0nYs7eB2IyD+wS+egXaBg7Nso2RuDm
-   AGsuGSZ6eI1cfHooGgzGV9LWnC2LDfdvXrhkB7Kikp4xAd4PESAIzUM9Z
-   xWuKr3hrpykMH4rncIwr584GfnBaWM7XwpBpBK3ZYiPcD7GkAgADi6tMQ
-   wu2ECY6jZPy3pI09j67vuzbat7ClOV4QF1Ju/xqgCShVUTCcjcDvTRkxb
-   zCEWhHhebWEmruym6p2frMWsfkAZU2V+NYlht6zKkyOkOwPupRJe9/Wwk
-   fkk4m3NnkDAmWtzgsEmfszuL5AjSSavDIGpJketfTdEDwxveV0L44v5MC
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="247967183"
-X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
-   d="scan'208";a="247967183"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 00:43:39 -0700
-X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
-   d="scan'208";a="584098882"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.32.209])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 00:43:31 -0700
-Message-ID: <b94f3863-c690-e0f7-5cde-18fbf24143e5@intel.com>
-Date:   Tue, 3 May 2022 10:43:27 +0300
+        Tue, 3 May 2022 03:52:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48B2A205C8
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 00:48:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651564108;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RK4+d7IXOmnVvMuBtdXRM0A5n8ssUbmBR+IC4Lj417Y=;
+        b=Y6+xiWT8KH5q6hivjGp2YhtqI3wds2P+up2rx9/WdXa4M/Q25yywapYOYFhZi06caYaR0N
+        SdZqmQFH5e/WT2MtNZiV0XP2OFXu+fR4JN3znWalRed92VMjYAidlcOgV3NoYMXx9iGhN5
+        gWupVhSwZ8YN9mNCIB+lIlwxWSwLSII=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-19-lCQbyzxjP9q_U-HPtzJ3UQ-1; Tue, 03 May 2022 03:48:25 -0400
+X-MC-Unique: lCQbyzxjP9q_U-HPtzJ3UQ-1
+Received: by mail-ed1-f70.google.com with SMTP id cf16-20020a0564020b9000b00425d543c75dso9604886edb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 00:48:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=RK4+d7IXOmnVvMuBtdXRM0A5n8ssUbmBR+IC4Lj417Y=;
+        b=4Vg5Xmukgo9aPuRAeobu0OMQkBlb9omNu8sS14/50pB9fFH6ag+MALZf90aj5Vkn4Q
+         zS0HMABVRALEWv3phml9v9sxsUl0nc7CfD/GAyUcAq0l4LNnSoux5SIF8kRAXNeqogAL
+         WE1y8eGQxh9ci7oC1LANFTD8hSJT1zuY56KcDyPGH274oadr511yWniG0MgcZwBav5aR
+         +QfpSx/Mdvp8b8brKyurHI9zEOT5R0X36rl1pm1JdzfphPfB2qV13Z+C2X2zthLwlam2
+         +6J97lBP/JRbRisJwnDU3arrFwiPwschf7qiojKpmKhBHm25l4fhdDPFfAnHeL8GiMU3
+         bHbA==
+X-Gm-Message-State: AOAM530BBj7UaLgR+XzQS0HPGNS+XTmz5do4f5ntreSlP9HVl0W6wOKO
+        9QghwtC4sA0YT10ZQCcWDganO2i/sAiiZhGnEmd0SGcvGtNDD7Z2ve2WZht+G1u6XBvEwo5KuNq
+        ZLdK8UBRgD75QUIDGkCfGaxvc
+X-Received: by 2002:a17:906:19c3:b0:6ec:c7b:ed28 with SMTP id h3-20020a17090619c300b006ec0c7bed28mr14140040ejd.612.1651564103919;
+        Tue, 03 May 2022 00:48:23 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwAaULOlxzyT0iv2iUzlfT8MNaSJkBtBPmhJ5VcL6pKgzwEbSFqaxeTus5zp8qT3F+CAYQj5A==
+X-Received: by 2002:a17:906:19c3:b0:6ec:c7b:ed28 with SMTP id h3-20020a17090619c300b006ec0c7bed28mr14140028ejd.612.1651564103744;
+        Tue, 03 May 2022 00:48:23 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id dq10-20020a170907734a00b006f3ef214deasm4366641ejc.80.2022.05.03.00.48.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 00:48:23 -0700 (PDT)
+Message-ID: <84b5b002-9d5f-e87d-ef54-95a161a72718@redhat.com>
+Date:   Tue, 3 May 2022 09:48:22 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.8.1
-Subject: Re: [PATCH v5 4/6] perf cpumap: Handle dummy maps as empty in subset
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 0/4] platform: allow ATOM PMC code to be optional
 Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        German Gomez <german.gomez@arm.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Alexander Antonov <alexander.antonov@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>
-References: <20220503041757.2365696-1-irogers@google.com>
- <20220503041757.2365696-5-irogers@google.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20220503041757.2365696-5-irogers@google.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Paul Gortmaker <paul.gortmaker@windriver.com>,
+        linux-kernel@vger.kernel.org,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+References: <20220428062430.31010-1-paul.gortmaker@windriver.com>
+ <YmpoeJtFNSyCq1QL@smile.fi.intel.com> <20220428181131.GG12977@windriver.com>
+ <827dc313-33ff-1c91-afaf-7645b655a1be@redhat.com>
+ <YnABLhyUGR+ZRQ+u@smile.fi.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <YnABLhyUGR+ZRQ+u@smile.fi.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/05/22 07:17, Ian Rogers wrote:
-> perf_cpu_map__empty is true for empty and dummy maps. Make is_subset
-> respect that.
+Hi,
 
-As I wrote before, I am not keen on this because it prevents -1, as a
-valid 3rd parameter to perf_event_open(), from being represented
-in merged evsel cpu maps.
-
-Why do you want this?
-
+On 5/2/22 18:05, Andy Shevchenko wrote:
+> On Mon, May 02, 2022 at 04:30:57PM +0200, Hans de Goede wrote:
+>> On 4/28/22 20:11, Paul Gortmaker wrote:
 > 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/lib/perf/cpumap.c   |  4 ++--
->  tools/perf/tests/cpumap.c | 10 +++++++++-
->  2 files changed, 11 insertions(+), 3 deletions(-)
+> ...
 > 
-> diff --git a/tools/lib/perf/cpumap.c b/tools/lib/perf/cpumap.c
-> index 384d5e076ee4..9c83675788c2 100644
-> --- a/tools/lib/perf/cpumap.c
-> +++ b/tools/lib/perf/cpumap.c
-> @@ -322,9 +322,9 @@ struct perf_cpu perf_cpu_map__max(struct perf_cpu_map *map)
->  /** Is 'b' a subset of 'a'. */
->  bool perf_cpu_map__is_subset(const struct perf_cpu_map *a, const struct perf_cpu_map *b)
->  {
-> -	if (a == b || !b)
-> +	if (a == b || perf_cpu_map__empty(b))
->  		return true;
-> -	if (!a || b->nr > a->nr)
-> +	if (perf_cpu_map__empty(a) || b->nr > a->nr)
->  		return false;
->  
->  	for (int i = 0, j = 0; i < a->nr; i++) {
-> diff --git a/tools/perf/tests/cpumap.c b/tools/perf/tests/cpumap.c
-> index f94929ebb54b..d52b58395385 100644
-> --- a/tools/perf/tests/cpumap.c
-> +++ b/tools/perf/tests/cpumap.c
-> @@ -128,13 +128,21 @@ static int test__cpu_map_merge(struct test_suite *test __maybe_unused, int subte
->  	struct perf_cpu_map *a = perf_cpu_map__new("4,2,1");
->  	struct perf_cpu_map *b = perf_cpu_map__new("4,5,7");
->  	struct perf_cpu_map *c = perf_cpu_map__merge(a, b);
-> +	struct perf_cpu_map *d = perf_cpu_map__dummy_new();
-> +	struct perf_cpu_map *e = perf_cpu_map__merge(b, d);
->  	char buf[100];
->  
->  	TEST_ASSERT_VAL("failed to merge map: bad nr", perf_cpu_map__nr(c) == 5);
->  	cpu_map__snprint(c, buf, sizeof(buf));
->  	TEST_ASSERT_VAL("failed to merge map: bad result", !strcmp(buf, "1-2,4-5,7"));
-> -	perf_cpu_map__put(b);
-> +
-> +	TEST_ASSERT_VAL("failed to merge map: bad nr", perf_cpu_map__nr(e) == 3);
-> +	cpu_map__snprint(e, buf, sizeof(buf));
-> +	TEST_ASSERT_VAL("failed to merge map: bad result", !strcmp(buf, "4-5,7"));
-> +
->  	perf_cpu_map__put(c);
-> +	perf_cpu_map__put(d);
-> +	perf_cpu_map__put(e);
->  	return 0;
->  }
->  
+>> As for users breaking support for BYT/CHT setups because they forget
+>> to enable this, without X86_INTEL_LPSS being enabled BYT/CHT are pretty
+>> much broken anyways and since patch 2/4 adds a "select PMC_ATOM" to the
+>> X86_INTEL_LPSS Kconfig option I'm not really worried about that.
+>>
+>> I'm afraid this patch-set might break some randomconfig builds though,
+>> but I cannot see anything obviously causing such breakage here, so
+>> I think it would be fine to just merge this series as is and then
+>> see if we get any breakage reports.
+>>
+>> Andy, are you ok with me moving ahead and merging this series as is?
+> 
+> It seems as is can't be fulfilled due to your own comment, but in general I'm
+> not objecting the idea. So, go ahead if you feel it's ready.
+
+Right, my later comment to just replace PMC_ATOM with X86_INTEL_LPSS
+supersedes this.
+
+I'll send out a patch with that approach so that this can get some
+comments / review.
+
+Regards,
+
+Hans
+
+  
 

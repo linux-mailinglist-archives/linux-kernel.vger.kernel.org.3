@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D727517D6C
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 08:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43593517D6E
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 08:32:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbiECGfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 02:35:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
+        id S230019AbiECGf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 02:35:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbiECGe7 (ORCPT
+        with ESMTP id S229895AbiECGfA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 02:34:59 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57159381AF;
+        Tue, 3 May 2022 02:35:00 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960AF381B1;
         Mon,  2 May 2022 23:31:28 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id EFB92210EE;
-        Tue,  3 May 2022 06:31:26 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTP id 3B8CB1F74A;
+        Tue,  3 May 2022 06:31:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1651559486; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1651559487; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7ytM5kTlhfOQM6IG3OcCbjJmaCYay4pn3Lo26jfdHWE=;
-        b=nRidPY8mC0MDHLS4HCFIYDsJYXv8fCSaTj0BWC5AVOU43vPcu6L2R1xy1aOuyPfKaVT/fA
-        rXZcS4v0pm4pM5VADGVQmPigdpdvVQHqHpbcMKPxmN7SJGAQmVyGpjl5xVZacJQOEWR+ZM
-        olCykiczgjscDYXB4AgaYxwRIS2r7gM=
+        bh=mDGq2MehCOuWbouH8qY7t2f0w7/Wwz3YBeWZPEhcmus=;
+        b=FKJ8qSQJInvQR3s5rJMHC9K+NJk9VbJ7/e4VvVXMP3P28/siEuTnY4Fy45CwsFsELW8RVJ
+        wr1w5R7pF6/NLCYrtyRrdn7X5pW3I1iD1EYqMSun1NlWlVrgXW4g5P1KueJ0SyXCSrRPeI
+        o7MctBUPzKFET8c1l/429EAQ+1XLyPY=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1651559486;
+        s=susede2_ed25519; t=1651559487;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7ytM5kTlhfOQM6IG3OcCbjJmaCYay4pn3Lo26jfdHWE=;
-        b=3cA9kMxo9F4eQVSxgHQm3qqmzr5En3M/kY/cxRfcDNfBJQgsT68W879fHDDtYUrSvFFrK3
-        c68PZlbS/JS+ynCw==
+        bh=mDGq2MehCOuWbouH8qY7t2f0w7/Wwz3YBeWZPEhcmus=;
+        b=KDD3IkJ2LZ6OIyANkpCZUBsxLCPHiMTRkCgmpmhMnZP85FChGfQ/cBqTttbyvr6V2jaFPB
+        d7Yl1bkS+hiOyUAg==
 Received: from localhost.localdomain (unknown [10.100.208.98])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id C56172C143;
-        Tue,  3 May 2022 06:31:26 +0000 (UTC)
+        by relay2.suse.de (Postfix) with ESMTPS id 0DD9A2C141;
+        Tue,  3 May 2022 06:31:27 +0000 (UTC)
 From:   Jiri Slaby <jslaby@suse.cz>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH 03/11] serial: pic32: remove constants from struct pic32_sport
-Date:   Tue,  3 May 2022 08:31:14 +0200
-Message-Id: <20220503063122.20957-4-jslaby@suse.cz>
+Subject: [PATCH 04/11] serial: pic32: simplify clk handling
+Date:   Tue,  3 May 2022 08:31:15 +0200
+Message-Id: <20220503063122.20957-5-jslaby@suse.cz>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220503063122.20957-1-jslaby@suse.cz>
 References: <20220503063122.20957-1-jslaby@suse.cz>
@@ -63,86 +63,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All the irqflags_* in struct pic32_sport are set to IRQF_NO_THREAD and
-never updated. So remove pic32_sport::irqflags_* and use the flag
-directly.
+struct pic32_sport::ref_clk is only set, but not read. That means we can
+remove it. And when we do so, pic32_enable_clock() and
+pic32_disable_clock() are simple wrappers around clk_prepare_enable()
+and clk_disable_unprepare() respectively. So we can remove the former
+two from the code and replace it by the latter two.
 
 Signed-off-by: Jiri Slaby <jslaby@suse.cz>
 ---
- drivers/tty/serial/pic32_uart.c | 15 +++------------
- 1 file changed, 3 insertions(+), 12 deletions(-)
+ drivers/tty/serial/pic32_uart.c | 28 +++++-----------------------
+ 1 file changed, 5 insertions(+), 23 deletions(-)
 
 diff --git a/drivers/tty/serial/pic32_uart.c b/drivers/tty/serial/pic32_uart.c
-index a1b8c05f3d46..1e8ff6004e8e 100644
+index 1e8ff6004e8e..42269e96b3f8 100644
 --- a/drivers/tty/serial/pic32_uart.c
 +++ b/drivers/tty/serial/pic32_uart.c
-@@ -45,13 +45,10 @@
-  * @port: uart port descriptor
-  * @idx: port index
-  * @irq_fault: virtual fault interrupt number
-- * @irqflags_fault: flags related to fault irq
-  * @irq_fault_name: irq fault name
-  * @irq_rx: virtual rx interrupt number
-- * @irqflags_rx: flags related to rx irq
-  * @irq_rx_name: irq rx name
-  * @irq_tx: virtual tx interrupt number
-- * @irqflags_tx: : flags related to tx irq
-  * @irq_tx_name: irq tx name
-  * @cts_gpio: clear to send gpio
-  * @dev: device descriptor
-@@ -61,13 +58,10 @@ struct pic32_sport {
- 	int idx;
+@@ -68,7 +68,6 @@ struct pic32_sport {
+ 	bool hw_flow_ctrl;
+ 	int cts_gpio;
  
- 	int irq_fault;
--	int irqflags_fault;
- 	const char *irq_fault_name;
- 	int irq_rx;
--	int irqflags_rx;
- 	const char *irq_rx_name;
- 	int irq_tx;
--	int irqflags_tx;
- 	const char *irq_tx_name;
- 	u8 enable_tx_irq;
+-	int ref_clk;
+ 	struct clk *clk;
  
-@@ -533,7 +527,7 @@ static int pic32_uart_startup(struct uart_port *port)
- 	}
- 	irq_set_status_flags(sport->irq_fault, IRQ_NOAUTOEN);
- 	ret = request_irq(sport->irq_fault, pic32_uart_fault_interrupt,
--			  sport->irqflags_fault, sport->irq_fault_name, port);
-+			  IRQF_NO_THREAD, sport->irq_fault_name, port);
- 	if (ret) {
- 		dev_err(port->dev, "%s: request irq(%d) err! ret:%d name:%s\n",
- 			__func__, sport->irq_fault, ret,
-@@ -551,7 +545,7 @@ static int pic32_uart_startup(struct uart_port *port)
- 	}
- 	irq_set_status_flags(sport->irq_rx, IRQ_NOAUTOEN);
- 	ret = request_irq(sport->irq_rx, pic32_uart_rx_interrupt,
--			  sport->irqflags_rx, sport->irq_rx_name, port);
-+			  IRQF_NO_THREAD, sport->irq_rx_name, port);
- 	if (ret) {
- 		dev_err(port->dev, "%s: request irq(%d) err! ret:%d name:%s\n",
- 			__func__, sport->irq_rx, ret,
-@@ -569,7 +563,7 @@ static int pic32_uart_startup(struct uart_port *port)
- 	}
- 	irq_set_status_flags(sport->irq_tx, IRQ_NOAUTOEN);
- 	ret = request_irq(sport->irq_tx, pic32_uart_tx_interrupt,
--			  sport->irqflags_tx, sport->irq_tx_name, port);
-+			  IRQF_NO_THREAD, sport->irq_tx_name, port);
- 	if (ret) {
- 		dev_err(port->dev, "%s: request irq(%d) err! ret:%d name:%s\n",
- 			__func__, sport->irq_tx, ret,
-@@ -918,11 +912,8 @@ static int pic32_uart_probe(struct platform_device *pdev)
+ 	struct device *dev;
+@@ -138,23 +137,6 @@ static inline void pic32_wait_deplete_txbuf(struct pic32_sport *sport)
+ 		udelay(1);
+ }
  
- 	sport->idx		= uart_idx;
- 	sport->irq_fault	= irq_of_parse_and_map(np, 0);
--	sport->irqflags_fault	= IRQF_NO_THREAD;
- 	sport->irq_rx		= irq_of_parse_and_map(np, 1);
--	sport->irqflags_rx	= IRQF_NO_THREAD;
- 	sport->irq_tx		= irq_of_parse_and_map(np, 2);
--	sport->irqflags_tx	= IRQF_NO_THREAD;
- 	sport->clk		= devm_clk_get(&pdev->dev, NULL);
- 	sport->cts_gpio		= -EINVAL;
- 	sport->dev		= &pdev->dev;
+-static inline int pic32_enable_clock(struct pic32_sport *sport)
+-{
+-	int ret = clk_prepare_enable(sport->clk);
+-
+-	if (ret)
+-		return ret;
+-
+-	sport->ref_clk++;
+-	return 0;
+-}
+-
+-static inline void pic32_disable_clock(struct pic32_sport *sport)
+-{
+-	sport->ref_clk--;
+-	clk_disable_unprepare(sport->clk);
+-}
+-
+ /* serial core request to check if uart tx buffer is empty */
+ static unsigned int pic32_uart_tx_empty(struct uart_port *port)
+ {
+@@ -491,7 +473,7 @@ static int pic32_uart_startup(struct uart_port *port)
+ 
+ 	local_irq_save(flags);
+ 
+-	ret = pic32_enable_clock(sport);
++	ret = clk_prepare_enable(sport->clk);
+ 	if (ret) {
+ 		local_irq_restore(flags);
+ 		goto out_done;
+@@ -611,7 +593,7 @@ static void pic32_uart_shutdown(struct uart_port *port)
+ 	spin_lock_irqsave(&port->lock, flags);
+ 	pic32_uart_dsbl_and_mask(port);
+ 	spin_unlock_irqrestore(&port->lock, flags);
+-	pic32_disable_clock(sport);
++	clk_disable_unprepare(sport->clk);
+ 
+ 	/* free all 3 interrupts for this UART */
+ 	free_irq(sport->irq_fault, port);
+@@ -835,7 +817,7 @@ static int pic32_console_setup(struct console *co, char *options)
+ 		return -ENODEV;
+ 	port = pic32_get_port(sport);
+ 
+-	ret = pic32_enable_clock(sport);
++	ret = clk_prepare_enable(sport->clk);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -965,7 +947,7 @@ static int pic32_uart_probe(struct platform_device *pdev)
+ 		/* The peripheral clock has been enabled by console_setup,
+ 		 * so disable it till the port is used.
+ 		 */
+-		pic32_disable_clock(sport);
++		clk_disable_unprepare(sport->clk);
+ 	}
+ #endif
+ 
+@@ -986,7 +968,7 @@ static int pic32_uart_remove(struct platform_device *pdev)
+ 	struct pic32_sport *sport = to_pic32_sport(port);
+ 
+ 	uart_remove_one_port(&pic32_uart_driver, port);
+-	pic32_disable_clock(sport);
++	clk_disable_unprepare(sport->clk);
+ 	platform_set_drvdata(pdev, NULL);
+ 	pic32_sports[sport->idx] = NULL;
+ 
 -- 
 2.36.0
 

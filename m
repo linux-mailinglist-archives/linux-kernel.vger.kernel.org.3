@@ -2,163 +2,664 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3CC518FF6
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 23:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20BA5518FF8
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 23:22:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242795AbiECVVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 17:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33722 "EHLO
+        id S242700AbiECVXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 17:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242726AbiECVVW (ORCPT
+        with ESMTP id S229849AbiECVXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 17:21:22 -0400
-Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE09640929
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 14:17:45 -0700 (PDT)
-Received: by mail-oo1-xc30.google.com with SMTP id o10-20020a4abe8a000000b0035eac0a004aso2628328oop.11
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 14:17:45 -0700 (PDT)
+        Tue, 3 May 2022 17:23:38 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF4140918;
+        Tue,  3 May 2022 14:20:03 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id k25-20020a056830169900b00605f215e55dso9123463otr.13;
+        Tue, 03 May 2022 14:20:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=JBcUXt5dt4Py/iqZdre4Zy424VTqJ8vz54Hn9FgKdxs=;
-        b=G8KQVq6J/KLIzXxh/gCjlEbeH5myusk0qfSJ+kOnrXRM6suRjc/cRd11ipsFif0iW8
-         5Sa8FtrQt7pm0l0ckHDYes4z463oi5Id1/KwoUukneYOQvjP+sDXHJGMqnhE9nzj8LDQ
-         VJDg34XWtAhhbrtEtRs2IVEWoImvmCpAry2xND3O/uhLuqJD98jPC225AlIH+ACitKL5
-         ZEci23lUxJLDLh9I5BPhR+t7lasdKgR79DkpBuHpfcyVmh4FkY6F8MPrw9KhSuoBrZYA
-         Zp8YDqZ61rwpDe4AG7P8aYaH9wWdC1QSeG1cnZlUBXpKK2ZnuqoyFE45WxmzBKoLD7lM
-         e5IA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Dx5XsBT6PARbrle2xEtaM8IpH1XBV5e8ywqS1he24jU=;
+        b=gtxC8WR/kasXgYsFv0Qkulgc/+UE91je4Y/EPRnVr/T+mKTIxEq1FGrfS58NhwWe4H
+         FrGBOOoiUlkOoTvZ9P+YynWhMlcjbOAmF6ztgwnO2dUkLxc4qYckeL9f/tGAE7tcLx5k
+         gAwcCQUf0czCX5wABCdWVnqZWr2XvFhffJnF7abxDngn5wa6xNgUgQJYXpB+SWKBriyt
+         BjZHR1km7qx8J3cBvt7iTPqwnAMgRE0rdH1hdaXlsIeZf48rrth04v8HhtLyNnyrjE+L
+         j7LtzXLjJQ186RW4g1y4Y2tX490Op3G5/2ykic6Gi1WxFd434MDvx/ftFqtZH4GDOdza
+         nZaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JBcUXt5dt4Py/iqZdre4Zy424VTqJ8vz54Hn9FgKdxs=;
-        b=2BaYDnMtY95DwYJQwSe9+taWTbM2MhJ+zJI+gMEzmi/WWdE5z97tg09DMmjm8XLXHF
-         PUBBaaYpNUXg0p0D7noMBgF9TqTWaxnPLuF48XZMur7lCK6p4NEHZS5zkNv71wTMzJoQ
-         vshFfeES7sxau+hRbU1qz/FSeczGyw2uboLSZFbzk3LC64MggJI2X3Lw71/8P4yAivhj
-         fKAnFII6JAe7pAADUtofAq/+ontqZ1Fq7f9ga8L/r0USJG2LYYxSs9jjWbEnC32RN8RK
-         zI9QolVa2qIsOoDK8BWLn3832VBMctj8NrHHvNFT/+n9uV3lyRfdFtqqtOP/pKe2MS+n
-         aDGQ==
-X-Gm-Message-State: AOAM532OYetwxFwvgwZK/XGreLtDDKr1Qtm1bfvg5Jhk9wYyyy3iiGhk
-        iH9djALrUvA2xX2hfvHxfODXzQ==
-X-Google-Smtp-Source: ABdhPJyf2RQj+l4lDSS1iSQb6aXRzO2rbt5RlRQcGdLnQvfRr5ayUX2SKaYBWt2w5H2xWB0bVkYeVA==
-X-Received: by 2002:a4a:8242:0:b0:33a:336b:8a00 with SMTP id t2-20020a4a8242000000b0033a336b8a00mr6358546oog.72.1651612665125;
-        Tue, 03 May 2022 14:17:45 -0700 (PDT)
-Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id b3-20020a056830104300b0060603221263sm4305906otp.51.2022.05.03.14.17.44
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Dx5XsBT6PARbrle2xEtaM8IpH1XBV5e8ywqS1he24jU=;
+        b=xMvIe3pgDxqSNYC5E1Q3HAv6Zvmm/n27BZcev45mayy3mGUd3kvAyboupXdOhe9SnC
+         s6hYOiDI7bRZlWO7nPzIQ2KIYQUb79HjMp2k23wB4E9/z92BF91MN/L3gCSdJIXH8l2d
+         Tt+zWEjCXDwuwOYvcpxEpbzFdYgnRr65nNwHxaHwj9/5508sWPfX1mXCI3LS7yZ5lNsL
+         CDbn5aw6+oIBhvcxIJoOHNvCVKbuxTvSi6IYjjH/ew5/kMssJH7hp1AJl4+XFxRlDHwg
+         q6E6SHrbiqVuel4sbVnDcIc/aVzuGtOMrxQ4y5AQDdQwcW7TO+Iru40s+26WFE2rwKJ2
+         C3Jg==
+X-Gm-Message-State: AOAM533UlTrRmX0U56mKkGf/4uHHVspp3J26J600sWghC6qk3jnwyZwn
+        d+AipVDxyFtngwBeksj+hXA=
+X-Google-Smtp-Source: ABdhPJytVRRwWewEMG1iJJK/tffrl0KtmSMqfmxy1U94mS9ssLH0ceD9XJVxWiPd6r+4IHQF4wZjjA==
+X-Received: by 2002:a05:6830:1613:b0:605:e75c:52d0 with SMTP id g19-20020a056830161300b00605e75c52d0mr6249096otr.378.1651612802222;
+        Tue, 03 May 2022 14:20:02 -0700 (PDT)
+Received: from xps8900.attlocal.net ([2600:1700:2442:6db0:253a:a0c9:3eee:7e0d])
+        by smtp.gmail.com with ESMTPSA id t13-20020a05683014cd00b0060603221245sm4393769otq.21.2022.05.03.14.20.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 14:17:44 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Georgi Djakov <djakov@kernel.org>,
-        Steev Klimaszewski <steev@kali.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] interconnect: qcom: sc8180x: Mark some BCMs keepalive
-Date:   Tue,  3 May 2022 14:19:25 -0700
-Message-Id: <20220503211925.1022169-5-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220503211925.1022169-1-bjorn.andersson@linaro.org>
-References: <20220503211925.1022169-1-bjorn.andersson@linaro.org>
+        Tue, 03 May 2022 14:20:01 -0700 (PDT)
+From:   frowand.list@gmail.com
+To:     Rob Herring <robh+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        pantelis.antoniou@konsulko.com, Tim Harvey <tharvey@gateworks.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Michal Simek <michal.simek@xilinx.com>, monstr@monstr.eu,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Michael Walle <michael@walle.cc>,
+        Alex Marginean <alexandru.marginean@nxp.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Jason Liu <jason.hui.liu@nxp.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org
+Subject: [PATCH v2 1/1] of: overlay: rename overlay source files from .dts to .dtso
+Date:   Tue,  3 May 2022 16:19:54 -0500
+Message-Id: <20220503211954.1428919-1-frowand.list@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In line with other platforms, mark BCMs controlling paths between the
-CPU, AOSS, GIC and memory as keepalive.
+From: Frank Rowand <frank.rowand@sony.com>
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+In drivers/of/unittest-data/:
+   - Rename .dts overlay source files to use .dtso suffix.
+   - Add Makefile rule to build .dtbo.o assembly file from overlay
+     .dtso source file.
+   - Update Makefile to build .dtbo.o objects instead of .dtb.o from
+     unittest overlay source files.
+
+Modify driver/of/unitest.c to use .dtbo.o based symbols instead of
+.dtb.o
+
+Modify scripts/Makefile.lib %.dtbo rule to depend upon %.dtso instead
+of %.dts
+
+Rename .dts overlay source files to use .dtso suffix in:
+   arch/arm64/boot/dts/freescale/
+   arch/arm64/boot/dts/xilinx/
+
+Signed-off-by: Frank Rowand <frank.rowand@sony.com>
 ---
- drivers/interconnect/qcom/sc8180x.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/interconnect/qcom/sc8180x.c b/drivers/interconnect/qco=
-m/sc8180x.c
-index 86500d05caa3..1a9a39ab9c05 100644
---- a/drivers/interconnect/qcom/sc8180x.c
-+++ b/drivers/interconnect/qcom/sc8180x.c
-@@ -173,29 +173,29 @@ DEFINE_QNODE(slv_qup_core_1, SC8180X_SLAVE_QUP_CORE_1=
-, 1, 4);
- DEFINE_QNODE(slv_qup_core_2, SC8180X_SLAVE_QUP_CORE_2, 1, 4);
-=20
- DEFINE_QBCM(bcm_acv, "ACV", false, &slv_ebi);
--DEFINE_QBCM(bcm_mc0, "MC0", false, &slv_ebi);
--DEFINE_QBCM(bcm_sh0, "SH0", false, &slv_qns_llcc);
-+DEFINE_QBCM(bcm_mc0, "MC0", true, &slv_ebi);
-+DEFINE_QBCM(bcm_sh0, "SH0", true, &slv_qns_llcc);
- DEFINE_QBCM(bcm_mm0, "MM0", false, &slv_qns_mem_noc_hf);
- DEFINE_QBCM(bcm_co0, "CO0", false, &slv_qns_cdsp_mem_noc);
- DEFINE_QBCM(bcm_ce0, "CE0", false, &mas_qxm_crypto);
--DEFINE_QBCM(bcm_cn0, "CN0", false, &mas_qnm_snoc, &slv_qhs_a1_noc_cfg, &sl=
-v_qhs_a2_noc_cfg, &slv_qhs_ahb2phy_refgen_center, &slv_qhs_ahb2phy_refgen_e=
-ast, &slv_qhs_ahb2phy_refgen_west, &slv_qhs_ahb2phy_south, &slv_qhs_aop, &s=
-lv_qhs_aoss, &slv_qhs_camera_cfg, &slv_qhs_clk_ctl, &slv_qhs_compute_dsp, &=
-slv_qhs_cpr_cx, &slv_qhs_cpr_mmcx, &slv_qhs_cpr_mx, &slv_qhs_crypto0_cfg, &=
-slv_qhs_ddrss_cfg, &slv_qhs_display_cfg, &slv_qhs_emac_cfg, &slv_qhs_glm, &=
-slv_qhs_gpuss_cfg, &slv_qhs_imem_cfg, &slv_qhs_ipa, &slv_qhs_mnoc_cfg, &slv=
-_qhs_npu_cfg, &slv_qhs_pcie0_cfg, &slv_qhs_pcie1_cfg, &slv_qhs_pcie2_cfg, &=
-slv_qhs_pcie3_cfg, &slv_qhs_pdm, &slv_qhs_pimem_cfg, &slv_qhs_prng, &slv_qh=
-s_qdss_cfg, &slv_qhs_qspi_0, &slv_qhs_qspi_1, &slv_qhs_qupv3_east0, &slv_qh=
-s_qupv3_east1, &slv_qhs_qupv3_west, &slv_qhs_sdc2, &slv_qhs_sdc4, &slv_qhs_=
-security, &slv_qhs_snoc_cfg, &slv_qhs_spss_cfg, &slv_qhs_tcsr, &slv_qhs_tlm=
-m_east, &slv_qhs_tlmm_south, &slv_qhs_tlmm_west, &slv_qhs_tsif, &slv_qhs_uf=
-s_card_cfg, &slv_qhs_ufs_mem0_cfg, &slv_qhs_ufs_mem1_cfg, &slv_qhs_usb3_0, =
-&slv_qhs_usb3_1, &slv_qhs_usb3_2, &slv_qhs_venus_cfg, &slv_qhs_vsense_ctrl_=
-cfg, &slv_srvc_cnoc);
-+DEFINE_QBCM(bcm_cn0, "CN0", true, &mas_qnm_snoc, &slv_qhs_a1_noc_cfg, &slv=
-_qhs_a2_noc_cfg, &slv_qhs_ahb2phy_refgen_center, &slv_qhs_ahb2phy_refgen_ea=
-st, &slv_qhs_ahb2phy_refgen_west, &slv_qhs_ahb2phy_south, &slv_qhs_aop, &sl=
-v_qhs_aoss, &slv_qhs_camera_cfg, &slv_qhs_clk_ctl, &slv_qhs_compute_dsp, &s=
-lv_qhs_cpr_cx, &slv_qhs_cpr_mmcx, &slv_qhs_cpr_mx, &slv_qhs_crypto0_cfg, &s=
-lv_qhs_ddrss_cfg, &slv_qhs_display_cfg, &slv_qhs_emac_cfg, &slv_qhs_glm, &s=
-lv_qhs_gpuss_cfg, &slv_qhs_imem_cfg, &slv_qhs_ipa, &slv_qhs_mnoc_cfg, &slv_=
-qhs_npu_cfg, &slv_qhs_pcie0_cfg, &slv_qhs_pcie1_cfg, &slv_qhs_pcie2_cfg, &s=
-lv_qhs_pcie3_cfg, &slv_qhs_pdm, &slv_qhs_pimem_cfg, &slv_qhs_prng, &slv_qhs=
-_qdss_cfg, &slv_qhs_qspi_0, &slv_qhs_qspi_1, &slv_qhs_qupv3_east0, &slv_qhs=
-_qupv3_east1, &slv_qhs_qupv3_west, &slv_qhs_sdc2, &slv_qhs_sdc4, &slv_qhs_s=
-ecurity, &slv_qhs_snoc_cfg, &slv_qhs_spss_cfg, &slv_qhs_tcsr, &slv_qhs_tlmm=
-_east, &slv_qhs_tlmm_south, &slv_qhs_tlmm_west, &slv_qhs_tsif, &slv_qhs_ufs=
-_card_cfg, &slv_qhs_ufs_mem0_cfg, &slv_qhs_ufs_mem1_cfg, &slv_qhs_usb3_0, &=
-slv_qhs_usb3_1, &slv_qhs_usb3_2, &slv_qhs_venus_cfg, &slv_qhs_vsense_ctrl_c=
-fg, &slv_srvc_cnoc);
- DEFINE_QBCM(bcm_mm1, "MM1", false, &mas_qxm_camnoc_hf0_uncomp, &mas_qxm_ca=
-mnoc_hf1_uncomp, &mas_qxm_camnoc_sf_uncomp, &mas_qxm_camnoc_hf0, &mas_qxm_c=
-amnoc_hf1, &mas_qxm_mdp0, &mas_qxm_mdp1);
- DEFINE_QBCM(bcm_qup0, "QUP0", false, &mas_qup_core_0, &mas_qup_core_1, &ma=
-s_qup_core_2);
- DEFINE_QBCM(bcm_sh2, "SH2", false, &slv_qns_gem_noc_snoc);
- DEFINE_QBCM(bcm_mm2, "MM2", false, &mas_qxm_camnoc_sf, &mas_qxm_rot, &mas_=
-qxm_venus0, &mas_qxm_venus1, &mas_qxm_venus_arm9, &slv_qns2_mem_noc);
--DEFINE_QBCM(bcm_sh3, "SH3", false, &mas_acm_apps);
-+DEFINE_QBCM(bcm_sh3, "SH3", true, &mas_acm_apps);
- DEFINE_QBCM(bcm_sn0, "SN0", false, &slv_qns_gemnoc_sf);
- DEFINE_QBCM(bcm_sn1, "SN1", false, &slv_qxs_imem);
--DEFINE_QBCM(bcm_sn2, "SN2", false, &slv_qns_gemnoc_gc);
-+DEFINE_QBCM(bcm_sn2, "SN2", true, &slv_qns_gemnoc_gc);
- DEFINE_QBCM(bcm_co2, "CO2", false, &mas_qnm_npu);
- DEFINE_QBCM(bcm_ip0, "IP0", false, &slv_ipa_core_slave);
--DEFINE_QBCM(bcm_sn3, "SN3", false, &slv_srvc_aggre1_noc, &slv_qns_cnoc);
-+DEFINE_QBCM(bcm_sn3, "SN3", true, &slv_srvc_aggre1_noc, &slv_qns_cnoc);
- DEFINE_QBCM(bcm_sn4, "SN4", false, &slv_qxs_pimem);
- DEFINE_QBCM(bcm_sn8, "SN8", false, &slv_xs_pcie_0, &slv_xs_pcie_1, &slv_xs=
-_pcie_2, &slv_xs_pcie_3);
- DEFINE_QBCM(bcm_sn9, "SN9", false, &mas_qnm_aggre1_noc);
- DEFINE_QBCM(bcm_sn11, "SN11", false, &mas_qnm_aggre2_noc);
- DEFINE_QBCM(bcm_sn14, "SN14", false, &slv_qns_pcie_mem_noc);
--DEFINE_QBCM(bcm_sn15, "SN15", false, &mas_qnm_gemnoc);
-+DEFINE_QBCM(bcm_sn15, "SN15", true, &mas_qnm_gemnoc);
-=20
- static struct qcom_icc_bcm * const aggre1_noc_bcms[] =3D {
- 	&bcm_sn3,
---=20
-2.35.1
+Testing by arm64 people would be much appreciated.
+
+Applies on branch dt/next, commit 4fb74186cee8 of Rob's kernel.org tree.
+git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux
+
+version 1 patch:
+   https://lore.kernel.org/r/20210324223713.1334666-1-frowand.list@gmail.com
+
+changes from version 1:
+   - rebase to 5.18-rc1 plus many patches already accepted by Rob
+     Applies on branch dt/next, commit 4fb74186cee8 of Rob's kernel.org tree.
+   - Add new overlay source files in:
+      arch/arm64/boot/dts/freescale/
+      arch/arm64/boot/dts/xilinx/
+   - Do not delete overlay documentation file
+
+ ...qds-13bb.dts => fsl-ls1028a-qds-13bb.dtso} |  0
+ ...qds-65bb.dts => fsl-ls1028a-qds-65bb.dtso} |  0
+ ...qds-7777.dts => fsl-ls1028a-qds-7777.dtso} |  0
+ ...qds-85bb.dts => fsl-ls1028a-qds-85bb.dtso} |  0
+ ...qds-899b.dts => fsl-ls1028a-qds-899b.dtso} |  0
+ ...qds-9999.dts => fsl-ls1028a-qds-9999.dtso} |  0
+ ...ts => imx8mm-venice-gw72xx-0x-imx219.dtso} |  0
+ ...=> imx8mm-venice-gw72xx-0x-rs232-rts.dtso} |  0
+ ...dts => imx8mm-venice-gw72xx-0x-rs422.dtso} |  0
+ ...dts => imx8mm-venice-gw72xx-0x-rs485.dtso} |  0
+ ...ts => imx8mm-venice-gw73xx-0x-imx219.dtso} |  0
+ ...=> imx8mm-venice-gw73xx-0x-rs232-rts.dtso} |  0
+ ...dts => imx8mm-venice-gw73xx-0x-rs422.dtso} |  0
+ ...dts => imx8mm-venice-gw73xx-0x-rs485.dtso} |  0
+ ...v-g-revA.dts => zynqmp-sck-kv-g-revA.dtso} |  0
+ ...v-g-revB.dts => zynqmp-sck-kv-g-revB.dtso} |  0
+ drivers/of/unittest-data/Makefile             | 86 ++++++++++++-------
+ .../{overlay.dts => overlay.dtso}             |  0
+ .../{overlay_0.dts => overlay_0.dtso}         |  0
+ .../{overlay_1.dts => overlay_1.dtso}         |  0
+ .../{overlay_10.dts => overlay_10.dtso}       |  0
+ .../{overlay_11.dts => overlay_11.dtso}       |  0
+ .../{overlay_12.dts => overlay_12.dtso}       |  0
+ .../{overlay_13.dts => overlay_13.dtso}       |  0
+ .../{overlay_15.dts => overlay_15.dtso}       |  0
+ .../{overlay_16.dts => overlay_16.dtso}       |  0
+ .../{overlay_17.dts => overlay_17.dtso}       |  0
+ .../{overlay_18.dts => overlay_18.dtso}       |  0
+ .../{overlay_19.dts => overlay_19.dtso}       |  0
+ .../{overlay_2.dts => overlay_2.dtso}         |  0
+ .../{overlay_20.dts => overlay_20.dtso}       |  0
+ .../{overlay_3.dts => overlay_3.dtso}         |  0
+ .../{overlay_4.dts => overlay_4.dtso}         |  0
+ .../{overlay_5.dts => overlay_5.dtso}         |  0
+ .../{overlay_6.dts => overlay_6.dtso}         |  0
+ .../{overlay_7.dts => overlay_7.dtso}         |  0
+ .../{overlay_8.dts => overlay_8.dtso}         |  0
+ .../{overlay_9.dts => overlay_9.dtso}         |  0
+ ...node.dts => overlay_bad_add_dup_node.dtso} |  0
+ ...prop.dts => overlay_bad_add_dup_prop.dtso} |  0
+ ...d_phandle.dts => overlay_bad_phandle.dtso} |  0
+ ...bad_symbol.dts => overlay_bad_symbol.dtso} |  0
+ .../{overlay_base.dts => overlay_base.dtso}   |  0
+ ...erlay_gpio_01.dts => overlay_gpio_01.dtso} |  0
+ ...lay_gpio_02a.dts => overlay_gpio_02a.dtso} |  0
+ ...lay_gpio_02b.dts => overlay_gpio_02b.dtso} |  0
+ ...erlay_gpio_03.dts => overlay_gpio_03.dtso} |  0
+ ...lay_gpio_04a.dts => overlay_gpio_04a.dtso} |  0
+ ...lay_gpio_04b.dts => overlay_gpio_04b.dtso} |  0
+ .../{static_base_1.dts => static_base_1.dtso} |  0
+ .../{static_base_2.dts => static_base_2.dtso} |  0
+ .../{testcases.dts => testcases.dtso}         |  0
+ drivers/of/unittest.c                         | 48 +++++------
+ scripts/Makefile.lib                          |  2 +-
+ 54 files changed, 78 insertions(+), 58 deletions(-)
+ rename arch/arm64/boot/dts/freescale/{fsl-ls1028a-qds-13bb.dts => fsl-ls1028a-qds-13bb.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{fsl-ls1028a-qds-65bb.dts => fsl-ls1028a-qds-65bb.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{fsl-ls1028a-qds-7777.dts => fsl-ls1028a-qds-7777.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{fsl-ls1028a-qds-85bb.dts => fsl-ls1028a-qds-85bb.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{fsl-ls1028a-qds-899b.dts => fsl-ls1028a-qds-899b.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{fsl-ls1028a-qds-9999.dts => fsl-ls1028a-qds-9999.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw72xx-0x-imx219.dts => imx8mm-venice-gw72xx-0x-imx219.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw72xx-0x-rs232-rts.dts => imx8mm-venice-gw72xx-0x-rs232-rts.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw72xx-0x-rs422.dts => imx8mm-venice-gw72xx-0x-rs422.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw72xx-0x-rs485.dts => imx8mm-venice-gw72xx-0x-rs485.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw73xx-0x-imx219.dts => imx8mm-venice-gw73xx-0x-imx219.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw73xx-0x-rs232-rts.dts => imx8mm-venice-gw73xx-0x-rs232-rts.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw73xx-0x-rs422.dts => imx8mm-venice-gw73xx-0x-rs422.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw73xx-0x-rs485.dts => imx8mm-venice-gw73xx-0x-rs485.dtso} (100%)
+ rename arch/arm64/boot/dts/xilinx/{zynqmp-sck-kv-g-revA.dts => zynqmp-sck-kv-g-revA.dtso} (100%)
+ rename arch/arm64/boot/dts/xilinx/{zynqmp-sck-kv-g-revB.dts => zynqmp-sck-kv-g-revB.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay.dts => overlay.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_0.dts => overlay_0.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_1.dts => overlay_1.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_10.dts => overlay_10.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_11.dts => overlay_11.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_12.dts => overlay_12.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_13.dts => overlay_13.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_15.dts => overlay_15.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_16.dts => overlay_16.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_17.dts => overlay_17.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_18.dts => overlay_18.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_19.dts => overlay_19.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_2.dts => overlay_2.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_20.dts => overlay_20.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_3.dts => overlay_3.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_4.dts => overlay_4.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_5.dts => overlay_5.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_6.dts => overlay_6.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_7.dts => overlay_7.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_8.dts => overlay_8.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_9.dts => overlay_9.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_bad_add_dup_node.dts => overlay_bad_add_dup_node.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_bad_add_dup_prop.dts => overlay_bad_add_dup_prop.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_bad_phandle.dts => overlay_bad_phandle.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_bad_symbol.dts => overlay_bad_symbol.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_base.dts => overlay_base.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_gpio_01.dts => overlay_gpio_01.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_gpio_02a.dts => overlay_gpio_02a.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_gpio_02b.dts => overlay_gpio_02b.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_gpio_03.dts => overlay_gpio_03.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_gpio_04a.dts => overlay_gpio_04a.dtso} (100%)
+ rename drivers/of/unittest-data/{overlay_gpio_04b.dts => overlay_gpio_04b.dtso} (100%)
+ rename drivers/of/unittest-data/{static_base_1.dts => static_base_1.dtso} (100%)
+ rename drivers/of/unittest-data/{static_base_2.dts => static_base_2.dtso} (100%)
+ rename drivers/of/unittest-data/{testcases.dts => testcases.dtso} (100%)
+
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-13bb.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-13bb.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-13bb.dts
+rename to arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-13bb.dtso
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dts
+rename to arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dtso
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-7777.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-7777.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-7777.dts
+rename to arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-7777.dtso
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-85bb.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-85bb.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-85bb.dts
+rename to arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-85bb.dtso
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-899b.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-899b.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-899b.dts
+rename to arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-899b.dtso
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-9999.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-9999.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-9999.dts
+rename to arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-9999.dtso
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-imx219.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-imx219.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-imx219.dts
+rename to arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-imx219.dtso
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs232-rts.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs232-rts.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs232-rts.dts
+rename to arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs232-rts.dtso
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs422.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs422.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs422.dts
+rename to arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs422.dtso
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs485.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs485.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs485.dts
+rename to arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs485.dtso
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-imx219.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-imx219.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-imx219.dts
+rename to arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-imx219.dtso
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs232-rts.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs232-rts.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs232-rts.dts
+rename to arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs232-rts.dtso
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs422.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs422.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs422.dts
+rename to arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs422.dtso
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs485.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs485.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs485.dts
+rename to arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs485.dtso
+diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dts
+rename to arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dtso
+diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dts b/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dts
+rename to arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dtso
+diff --git a/drivers/of/unittest-data/Makefile b/drivers/of/unittest-data/Makefile
+index d072f3ba3971..df2ca1820273 100644
+--- a/drivers/of/unittest-data/Makefile
++++ b/drivers/of/unittest-data/Makefile
+@@ -1,38 +1,58 @@
+ # SPDX-License-Identifier: GPL-2.0
+-obj-y += testcases.dtb.o
+ 
+-obj-$(CONFIG_OF_OVERLAY) += overlay.dtb.o \
+-			    overlay_0.dtb.o \
+-			    overlay_1.dtb.o \
+-			    overlay_2.dtb.o \
+-			    overlay_3.dtb.o \
+-			    overlay_4.dtb.o \
+-			    overlay_5.dtb.o \
+-			    overlay_6.dtb.o \
+-			    overlay_7.dtb.o \
+-			    overlay_8.dtb.o \
+-			    overlay_9.dtb.o \
+-			    overlay_10.dtb.o \
+-			    overlay_11.dtb.o \
+-			    overlay_12.dtb.o \
+-			    overlay_13.dtb.o \
+-			    overlay_15.dtb.o \
+-			    overlay_16.dtb.o \
+-			    overlay_17.dtb.o \
+-			    overlay_18.dtb.o \
+-			    overlay_19.dtb.o \
+-			    overlay_20.dtb.o \
+-			    overlay_bad_add_dup_node.dtb.o \
+-			    overlay_bad_add_dup_prop.dtb.o \
+-			    overlay_bad_phandle.dtb.o \
+-			    overlay_bad_symbol.dtb.o \
+-			    overlay_base.dtb.o \
+-			    overlay_gpio_01.dtb.o \
+-			    overlay_gpio_02a.dtb.o \
+-			    overlay_gpio_02b.dtb.o \
+-			    overlay_gpio_03.dtb.o \
+-			    overlay_gpio_04a.dtb.o \
+-			    overlay_gpio_04b.dtb.o
++# Generate an assembly file to wrap the output of the device tree compiler
++quiet_cmd_dt_S_dtbo= DTB     $@
++cmd_dt_S_dtbo=\
++{							\
++	echo '\#include <asm-generic/vmlinux.lds.h>';	\
++	echo '.section .dtb.init.rodata,"a"';		\
++	echo '.balign STRUCT_ALIGNMENT';		\
++	echo '.global __dtbo_$(subst -,_,$(*F))_begin';	\
++	echo '__dtbo_$(subst -,_,$(*F))_begin:';	\
++	echo '.incbin "$<" ';				\
++	echo '__dtbo_$(subst -,_,$(*F))_end:';		\
++	echo '.global __dtbo_$(subst -,_,$(*F))_end';	\
++	echo '.balign STRUCT_ALIGNMENT';		\
++} > $@
++
++
++$(obj)/%.dtbo.S: $(obj)/%.dtbo FORCE
++	$(call if_changed,dt_S_dtbo)
++
++obj-y += testcases.dtbo.o
++
++obj-$(CONFIG_OF_OVERLAY) += overlay.dtbo.o \
++			    overlay_0.dtbo.o \
++			    overlay_1.dtbo.o \
++			    overlay_2.dtbo.o \
++			    overlay_3.dtbo.o \
++			    overlay_4.dtbo.o \
++			    overlay_5.dtbo.o \
++			    overlay_6.dtbo.o \
++			    overlay_7.dtbo.o \
++			    overlay_8.dtbo.o \
++			    overlay_9.dtbo.o \
++			    overlay_10.dtbo.o \
++			    overlay_11.dtbo.o \
++			    overlay_12.dtbo.o \
++			    overlay_13.dtbo.o \
++			    overlay_15.dtbo.o \
++			    overlay_16.dtbo.o \
++			    overlay_17.dtbo.o \
++			    overlay_18.dtbo.o \
++			    overlay_19.dtbo.o \
++			    overlay_20.dtbo.o \
++			    overlay_bad_add_dup_node.dtbo.o \
++			    overlay_bad_add_dup_prop.dtbo.o \
++			    overlay_bad_phandle.dtbo.o \
++			    overlay_bad_symbol.dtbo.o \
++			    overlay_base.dtbo.o \
++			    overlay_gpio_01.dtbo.o \
++			    overlay_gpio_02a.dtbo.o \
++			    overlay_gpio_02b.dtbo.o \
++			    overlay_gpio_03.dtbo.o \
++			    overlay_gpio_04a.dtbo.o \
++			    overlay_gpio_04b.dtbo.o
+ 
+ # enable creation of __symbols__ node
+ DTC_FLAGS_overlay += -@
+diff --git a/drivers/of/unittest-data/overlay.dts b/drivers/of/unittest-data/overlay.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay.dts
+rename to drivers/of/unittest-data/overlay.dtso
+diff --git a/drivers/of/unittest-data/overlay_0.dts b/drivers/of/unittest-data/overlay_0.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_0.dts
+rename to drivers/of/unittest-data/overlay_0.dtso
+diff --git a/drivers/of/unittest-data/overlay_1.dts b/drivers/of/unittest-data/overlay_1.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_1.dts
+rename to drivers/of/unittest-data/overlay_1.dtso
+diff --git a/drivers/of/unittest-data/overlay_10.dts b/drivers/of/unittest-data/overlay_10.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_10.dts
+rename to drivers/of/unittest-data/overlay_10.dtso
+diff --git a/drivers/of/unittest-data/overlay_11.dts b/drivers/of/unittest-data/overlay_11.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_11.dts
+rename to drivers/of/unittest-data/overlay_11.dtso
+diff --git a/drivers/of/unittest-data/overlay_12.dts b/drivers/of/unittest-data/overlay_12.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_12.dts
+rename to drivers/of/unittest-data/overlay_12.dtso
+diff --git a/drivers/of/unittest-data/overlay_13.dts b/drivers/of/unittest-data/overlay_13.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_13.dts
+rename to drivers/of/unittest-data/overlay_13.dtso
+diff --git a/drivers/of/unittest-data/overlay_15.dts b/drivers/of/unittest-data/overlay_15.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_15.dts
+rename to drivers/of/unittest-data/overlay_15.dtso
+diff --git a/drivers/of/unittest-data/overlay_16.dts b/drivers/of/unittest-data/overlay_16.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_16.dts
+rename to drivers/of/unittest-data/overlay_16.dtso
+diff --git a/drivers/of/unittest-data/overlay_17.dts b/drivers/of/unittest-data/overlay_17.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_17.dts
+rename to drivers/of/unittest-data/overlay_17.dtso
+diff --git a/drivers/of/unittest-data/overlay_18.dts b/drivers/of/unittest-data/overlay_18.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_18.dts
+rename to drivers/of/unittest-data/overlay_18.dtso
+diff --git a/drivers/of/unittest-data/overlay_19.dts b/drivers/of/unittest-data/overlay_19.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_19.dts
+rename to drivers/of/unittest-data/overlay_19.dtso
+diff --git a/drivers/of/unittest-data/overlay_2.dts b/drivers/of/unittest-data/overlay_2.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_2.dts
+rename to drivers/of/unittest-data/overlay_2.dtso
+diff --git a/drivers/of/unittest-data/overlay_20.dts b/drivers/of/unittest-data/overlay_20.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_20.dts
+rename to drivers/of/unittest-data/overlay_20.dtso
+diff --git a/drivers/of/unittest-data/overlay_3.dts b/drivers/of/unittest-data/overlay_3.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_3.dts
+rename to drivers/of/unittest-data/overlay_3.dtso
+diff --git a/drivers/of/unittest-data/overlay_4.dts b/drivers/of/unittest-data/overlay_4.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_4.dts
+rename to drivers/of/unittest-data/overlay_4.dtso
+diff --git a/drivers/of/unittest-data/overlay_5.dts b/drivers/of/unittest-data/overlay_5.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_5.dts
+rename to drivers/of/unittest-data/overlay_5.dtso
+diff --git a/drivers/of/unittest-data/overlay_6.dts b/drivers/of/unittest-data/overlay_6.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_6.dts
+rename to drivers/of/unittest-data/overlay_6.dtso
+diff --git a/drivers/of/unittest-data/overlay_7.dts b/drivers/of/unittest-data/overlay_7.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_7.dts
+rename to drivers/of/unittest-data/overlay_7.dtso
+diff --git a/drivers/of/unittest-data/overlay_8.dts b/drivers/of/unittest-data/overlay_8.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_8.dts
+rename to drivers/of/unittest-data/overlay_8.dtso
+diff --git a/drivers/of/unittest-data/overlay_9.dts b/drivers/of/unittest-data/overlay_9.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_9.dts
+rename to drivers/of/unittest-data/overlay_9.dtso
+diff --git a/drivers/of/unittest-data/overlay_bad_add_dup_node.dts b/drivers/of/unittest-data/overlay_bad_add_dup_node.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_bad_add_dup_node.dts
+rename to drivers/of/unittest-data/overlay_bad_add_dup_node.dtso
+diff --git a/drivers/of/unittest-data/overlay_bad_add_dup_prop.dts b/drivers/of/unittest-data/overlay_bad_add_dup_prop.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_bad_add_dup_prop.dts
+rename to drivers/of/unittest-data/overlay_bad_add_dup_prop.dtso
+diff --git a/drivers/of/unittest-data/overlay_bad_phandle.dts b/drivers/of/unittest-data/overlay_bad_phandle.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_bad_phandle.dts
+rename to drivers/of/unittest-data/overlay_bad_phandle.dtso
+diff --git a/drivers/of/unittest-data/overlay_bad_symbol.dts b/drivers/of/unittest-data/overlay_bad_symbol.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_bad_symbol.dts
+rename to drivers/of/unittest-data/overlay_bad_symbol.dtso
+diff --git a/drivers/of/unittest-data/overlay_base.dts b/drivers/of/unittest-data/overlay_base.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_base.dts
+rename to drivers/of/unittest-data/overlay_base.dtso
+diff --git a/drivers/of/unittest-data/overlay_gpio_01.dts b/drivers/of/unittest-data/overlay_gpio_01.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_gpio_01.dts
+rename to drivers/of/unittest-data/overlay_gpio_01.dtso
+diff --git a/drivers/of/unittest-data/overlay_gpio_02a.dts b/drivers/of/unittest-data/overlay_gpio_02a.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_gpio_02a.dts
+rename to drivers/of/unittest-data/overlay_gpio_02a.dtso
+diff --git a/drivers/of/unittest-data/overlay_gpio_02b.dts b/drivers/of/unittest-data/overlay_gpio_02b.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_gpio_02b.dts
+rename to drivers/of/unittest-data/overlay_gpio_02b.dtso
+diff --git a/drivers/of/unittest-data/overlay_gpio_03.dts b/drivers/of/unittest-data/overlay_gpio_03.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_gpio_03.dts
+rename to drivers/of/unittest-data/overlay_gpio_03.dtso
+diff --git a/drivers/of/unittest-data/overlay_gpio_04a.dts b/drivers/of/unittest-data/overlay_gpio_04a.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_gpio_04a.dts
+rename to drivers/of/unittest-data/overlay_gpio_04a.dtso
+diff --git a/drivers/of/unittest-data/overlay_gpio_04b.dts b/drivers/of/unittest-data/overlay_gpio_04b.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/overlay_gpio_04b.dts
+rename to drivers/of/unittest-data/overlay_gpio_04b.dtso
+diff --git a/drivers/of/unittest-data/static_base_1.dts b/drivers/of/unittest-data/static_base_1.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/static_base_1.dts
+rename to drivers/of/unittest-data/static_base_1.dtso
+diff --git a/drivers/of/unittest-data/static_base_2.dts b/drivers/of/unittest-data/static_base_2.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/static_base_2.dts
+rename to drivers/of/unittest-data/static_base_2.dtso
+diff --git a/drivers/of/unittest-data/testcases.dts b/drivers/of/unittest-data/testcases.dtso
+similarity index 100%
+rename from drivers/of/unittest-data/testcases.dts
+rename to drivers/of/unittest-data/testcases.dtso
+diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
+index dff55ae09d97..1d3c170d95db 100644
+--- a/drivers/of/unittest.c
++++ b/drivers/of/unittest.c
+@@ -1423,12 +1423,12 @@ static int __init unittest_data_add(void)
+ 	void *unittest_data_align;
+ 	struct device_node *unittest_data_node = NULL, *np;
+ 	/*
+-	 * __dtb_testcases_begin[] and __dtb_testcases_end[] are magically
+-	 * created by cmd_dt_S_dtb in scripts/Makefile.lib
++	 * __dtbo_testcases_begin[] and __dtbo_testcases_end[] are
++	 * created by cmd_dt_S_dtbo in Makefile
+ 	 */
+-	extern uint8_t __dtb_testcases_begin[];
+-	extern uint8_t __dtb_testcases_end[];
+-	const int size = __dtb_testcases_end - __dtb_testcases_begin;
++	extern uint8_t __dtbo_testcases_begin[];
++	extern uint8_t __dtbo_testcases_end[];
++	const int size = __dtbo_testcases_end - __dtbo_testcases_begin;
+ 	int rc;
+ 	void *ret;
+ 
+@@ -1443,7 +1443,7 @@ static int __init unittest_data_add(void)
+ 		return -ENOMEM;
+ 
+ 	unittest_data_align = PTR_ALIGN(unittest_data, FDT_ALIGN_SIZE);
+-	memcpy(unittest_data_align, __dtb_testcases_begin, size);
++	memcpy(unittest_data_align, __dtbo_testcases_begin, size);
+ 
+ 	ret = of_fdt_unflatten_tree(unittest_data_align, NULL, &unittest_data_node);
+ 	if (!ret) {
+@@ -3009,24 +3009,24 @@ static inline void __init of_unittest_overlay(void) { }
+ #ifdef CONFIG_OF_OVERLAY
+ 
+ /*
+- * __dtb_ot_begin[] and __dtb_ot_end[] are created by cmd_dt_S_dtb
+- * in scripts/Makefile.lib
++ * __dtbo_##overlay_name##_begin[] and __dtbo_##overlay_name##_end[] are
++ * created by cmd_dt_S_dtbo in Makefile
+  */
+ 
+-#define OVERLAY_INFO_EXTERN(name) \
+-	extern uint8_t __dtb_##name##_begin[]; \
+-	extern uint8_t __dtb_##name##_end[]
++#define OVERLAY_INFO_EXTERN(overlay_name) \
++	extern uint8_t __dtbo_##overlay_name##_begin[]; \
++	extern uint8_t __dtbo_##overlay_name##_end[]
+ 
+-#define OVERLAY_INFO(overlay_name, expected)             \
+-{	.dtb_begin       = __dtb_##overlay_name##_begin, \
+-	.dtb_end         = __dtb_##overlay_name##_end,   \
+-	.expected_result = expected,                     \
+-	.name            = #overlay_name,                \
++#define OVERLAY_INFO(overlay_name, expected)               \
++{	.dtbo_begin       = __dtbo_##overlay_name##_begin, \
++	.dtbo_end         = __dtbo_##overlay_name##_end,   \
++	.expected_result = expected,                       \
++	.name            = #overlay_name,                  \
+ }
+ 
+ struct overlay_info {
+-	uint8_t		*dtb_begin;
+-	uint8_t		*dtb_end;
++	uint8_t		*dtbo_begin;
++	uint8_t		*dtbo_end;
+ 	int		expected_result;
+ 	int		ovcs_id;
+ 	char		*name;
+@@ -3100,7 +3100,7 @@ static struct overlay_info overlays[] = {
+ 	OVERLAY_INFO(overlay_bad_phandle, -EINVAL),
+ 	OVERLAY_INFO(overlay_bad_symbol, -EINVAL),
+ 	/* end marker */
+-	{.dtb_begin = NULL, .dtb_end = NULL, .expected_result = 0, .name = NULL}
++	{.dtbo_begin = NULL, .dtbo_end = NULL, .expected_result = 0, .name = NULL}
+ };
+ 
+ static struct device_node *overlay_base_root;
+@@ -3157,13 +3157,13 @@ void __init unittest_unflatten_overlay_base(void)
+ 		return;
+ 	}
+ 
+-	data_size = info->dtb_end - info->dtb_begin;
++	data_size = info->dtbo_end - info->dtbo_begin;
+ 	if (!data_size) {
+ 		pr_err("No dtb 'overlay_base' to attach\n");
+ 		return;
+ 	}
+ 
+-	size = fdt_totalsize(info->dtb_begin);
++	size = fdt_totalsize(info->dtbo_begin);
+ 	if (size != data_size) {
+ 		pr_err("dtb 'overlay_base' header totalsize != actual size");
+ 		return;
+@@ -3175,7 +3175,7 @@ void __init unittest_unflatten_overlay_base(void)
+ 		return;
+ 	}
+ 
+-	memcpy(new_fdt, info->dtb_begin, size);
++	memcpy(new_fdt, info->dtbo_begin, size);
+ 
+ 	__unflatten_device_tree(new_fdt, NULL, &overlay_base_root,
+ 				dt_alloc_memory, true);
+@@ -3210,11 +3210,11 @@ static int __init overlay_data_apply(const char *overlay_name, int *ovcs_id)
+ 		return 0;
+ 	}
+ 
+-	size = info->dtb_end - info->dtb_begin;
++	size = info->dtbo_end - info->dtbo_begin;
+ 	if (!size)
+ 		pr_err("no overlay data for %s\n", overlay_name);
+ 
+-	ret = of_overlay_fdt_apply(info->dtb_begin, size, &info->ovcs_id);
++	ret = of_overlay_fdt_apply(info->dtbo_begin, size, &info->ovcs_id);
+ 	if (ovcs_id)
+ 		*ovcs_id = info->ovcs_id;
+ 	if (ret < 0)
+diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+index 9f69ecdd7977..b409bec5fa45 100644
+--- a/scripts/Makefile.lib
++++ b/scripts/Makefile.lib
+@@ -363,7 +363,7 @@ endef
+ $(obj)/%.dtb: $(src)/%.dts $(DTC) $(DT_TMP_SCHEMA) FORCE
+ 	$(call if_changed_rule,dtc)
+ 
+-$(obj)/%.dtbo: $(src)/%.dts $(DTC) FORCE
++$(obj)/%.dtbo: $(src)/%.dtso $(DTC) FORCE
+ 	$(call if_changed_dep,dtc)
+ 
+ dtc-tmp = $(subst $(comma),_,$(dot-target).dts.tmp)
+-- 
+Frank Rowand <frank.rowand@sony.com>
 

@@ -2,182 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C30BD517CBC
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 07:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17D73517CBD
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 07:00:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231327AbiECEzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 00:55:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41782 "EHLO
+        id S231337AbiECE5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 00:57:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiECEzd (ORCPT
+        with ESMTP id S231252AbiECE5v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 00:55:33 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3233EAB0;
-        Mon,  2 May 2022 21:52:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651553521; x=1683089521;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=JhLlnE22AX4SPpYs1fnyNeGyJkKqqNt7Ru8jbYm+1kc=;
-  b=ImZpeyAqq7llDYnWC+eG44dgFgfbgNzDJoUgapCDUKzdyv6VO5Uwwk3X
-   D2enElZc8CBCJDhtRXQoSb6mGiszeJbFvGSuwnA8JVJk2S7e0JfuTLZut
-   5OeWtnn39O9E8nFAsj6br/G7qM+qtbW+CCmcSsLkXKxNP2W5kY3xJNm1y
-   VBOUlBJ7N/wMp2SftLTDzLk2hpVdXZiiuNOiSq4Pg2EAeg9ItiG4AaRi6
-   ZZdWsZn7C5cv3u3XXEuhOp+GqbSb6y0mi5UUIOjyELhGYaJ7wNWE8QhMk
-   grZI3hh6hrp3gv1QPoFJPLNqd0IGbeuMxTYqDBeXMay0X+WBsZspN19r7
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="267274436"
-X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
-   d="scan'208";a="267274436"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 21:52:01 -0700
-X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
-   d="scan'208";a="584043550"
-Received: from albertmo-mobl2.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.32.209])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 21:51:53 -0700
-Message-ID: <5e8cd38c-1384-ed7e-3f92-f7e5f7c1578b@intel.com>
-Date:   Tue, 3 May 2022 07:51:50 +0300
+        Tue, 3 May 2022 00:57:51 -0400
+Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B250F3EB9F
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 21:54:18 -0700 (PDT)
+Received: by mail-vk1-xa2e.google.com with SMTP id o132so7457030vko.11
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 21:54:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=j6k4+uRS4RtRRD9pAYteN/2lL426z4uuqpmrOuos+wU=;
+        b=X3+OREgzoKbkR52iSFa+ODyi84z3Y3eFEPvZy4Z0Toi+pWOyIguOJw7WZKPSuusELW
+         oMmYnXbdFYk25o8PV/X8oO84lPkVInsBXipEbSs4yW4Fc65rk7UmWMaqzy8r7CEILwaU
+         KGD4E+OOZGNTdd4W5dwsuNMm0SKUzQEiYgyOcUxANR3LhK/18hb6pF6FdpaioYcr3gNP
+         QPb85KnFTC0F3o+NzP2cZfMO/yhoIeJ4mUDbQM/AtAkvSWY8mupn9UWntFm8t1iAf9OB
+         YB4i+Ii+b8S5UtwTIW+2dYknhlrO5THd8JSKhPGgT50nBkpqixe9umyPe+zqBtumRkjd
+         d7+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=j6k4+uRS4RtRRD9pAYteN/2lL426z4uuqpmrOuos+wU=;
+        b=FEqwMxS9Lw98DXfsDXRpmIxnBpuRo3srTjNAbWJYSlMS7+rCVP5+YxgSrUR1VFmJmd
+         KKly3uY0dTcVJnh2XoHDstUYOh/daCOw0ztX1AZDPXeOAxSy82JRf8kCdeYVVbKI2Uxe
+         v4UEq1AWvTkNFnapKjA7kPtCfUxkvCpbbRNwabSEu4cMjY3RKJStKB43n8OWEQETSZxN
+         v6ZoB5jADnK6CpYVuNG3GjCdRekzbuiMu1ph9yG5GAPJa62CwaKsN2I5T2uunef1PkNr
+         0TuU47nRjskU4UfjuW0P6vk22LBbuCmdhNqnDknqxSpwVd+AMAD9RWDmvvwczRYuENgC
+         vUhA==
+X-Gm-Message-State: AOAM533BKcOlTvveTbpBhheZniz/HWs32m4oMtpbV9Tp4tya5Go/f3Mf
+        Yhna2pw6cerMafl9c198Oalyt0p//0ZsHXo394o=
+X-Google-Smtp-Source: ABdhPJxi4K7ooy7zP18S8ctwiI71GstX9ECLUp6QsclPPYhrdPsrt1N8MkntVqS22G8/6za1j5Qtug0zTB3MbcVi1uo=
+X-Received: by 2002:ac5:cda2:0:b0:351:cba8:d5eb with SMTP id
+ l2-20020ac5cda2000000b00351cba8d5ebmr818072vka.23.1651553657717; Mon, 02 May
+ 2022 21:54:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.8.1
-Subject: Re: [PATCH v4 4/6] perf cpumap: Handle dummy maps as empty in subset
-Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        German Gomez <german.gomez@arm.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Alexander Antonov <alexander.antonov@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-References: <20220430062324.1565215-1-irogers@google.com>
- <20220430062324.1565215-5-irogers@google.com>
- <b0551170-f559-4801-1cb4-3653b9685474@intel.com>
- <CAP-5=fWwDEW=Vhw1B9i3JN9wr1FJ_+dfaWXjJ7vXeKWfZNaz0g@mail.gmail.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <CAP-5=fWwDEW=Vhw1B9i3JN9wr1FJ_+dfaWXjJ7vXeKWfZNaz0g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a59:470c:0:b0:2b5:9e73:ceab with HTTP; Mon, 2 May 2022
+ 21:54:17 -0700 (PDT)
+Reply-To: mrs.bill.chantalone01@gmail.com
+From:   Mrs B Chantal <g123355t@gmail.com>
+Date:   Tue, 3 May 2022 06:54:17 +0200
+Message-ID: <CAOyzzCnr_h5jnmByFqwDRedYYeCdA5jwiY1J+ac6ix2gc28dpg@mail.gmail.com>
+Subject: hello....
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:a2e listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [g123355t[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mrs.bill.chantalone01[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.4 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  1.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/05/22 20:04, Ian Rogers wrote:
-> On Mon, May 2, 2022 at 9:13 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->>
->> On 30/04/22 09:23, Ian Rogers wrote:
->>> perf_cpu_map__empty is true for empty and dummy maps. Make is_subset
->>> respect that.
->>
->> I think this might be the opposite of what I am trying to do, which is
->> enable all_cpus to represent all the "cpu" values (3rd parameter of
->> perf_event_open()) to iterate over including -1 so that per-thread and
->> per-cpu events can be mixed.
-> 
-> Wouldn't you iterate over the cpus of the evsel?
+You have been compensated with the sum of  5 million dollars in this
+united nation the payment will be issue into atm visa  card and send
+to you from the santander bank we need your address and your
+Whatsapp number  + 1 6465853907  this my email.ID
+(  mrs.bill.chantal0101@gmail.com )  contact  me
 
-When mmapping perf events, it is necessary to iterate all (user_requested)
-cpus / threads in order to conveniently set-output events on the same
-cpu / thread.
+Thanks my
 
->                                                  I'm not sure using
-> all_cpus in that way makes sense
-
-It does if you want to mix per-cpu and per-thread (cpu == -1) events.
-As I wrote previously, the cpus is then seen as a list of values for
-parameter 3 of perf_event_open(), and therefore includes -1.
-
->                                   it also violates the definition of
-> empty.
-
-That can be renamed, since it is typically being used to mean
-per-thread (i.e. per-task context)
-
-> 
-> Thanks,
-> Ian
-> 
->>>
->>> Signed-off-by: Ian Rogers <irogers@google.com>
->>> ---
->>>  tools/lib/perf/cpumap.c   |  4 ++--
->>>  tools/perf/tests/cpumap.c | 10 +++++++++-
->>>  2 files changed, 11 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/tools/lib/perf/cpumap.c b/tools/lib/perf/cpumap.c
->>> index 384d5e076ee4..9c83675788c2 100644
->>> --- a/tools/lib/perf/cpumap.c
->>> +++ b/tools/lib/perf/cpumap.c
->>> @@ -322,9 +322,9 @@ struct perf_cpu perf_cpu_map__max(struct perf_cpu_map *map)
->>>  /** Is 'b' a subset of 'a'. */
->>>  bool perf_cpu_map__is_subset(const struct perf_cpu_map *a, const struct perf_cpu_map *b)
->>>  {
->>> -     if (a == b || !b)
->>> +     if (a == b || perf_cpu_map__empty(b))
->>>               return true;
->>> -     if (!a || b->nr > a->nr)
->>> +     if (perf_cpu_map__empty(a) || b->nr > a->nr)
->>>               return false;
->>>
->>>       for (int i = 0, j = 0; i < a->nr; i++) {
->>> diff --git a/tools/perf/tests/cpumap.c b/tools/perf/tests/cpumap.c
->>> index f94929ebb54b..d52b58395385 100644
->>> --- a/tools/perf/tests/cpumap.c
->>> +++ b/tools/perf/tests/cpumap.c
->>> @@ -128,13 +128,21 @@ static int test__cpu_map_merge(struct test_suite *test __maybe_unused, int subte
->>>       struct perf_cpu_map *a = perf_cpu_map__new("4,2,1");
->>>       struct perf_cpu_map *b = perf_cpu_map__new("4,5,7");
->>>       struct perf_cpu_map *c = perf_cpu_map__merge(a, b);
->>> +     struct perf_cpu_map *d = perf_cpu_map__dummy_new();
->>> +     struct perf_cpu_map *e = perf_cpu_map__merge(b, d);
->>>       char buf[100];
->>>
->>>       TEST_ASSERT_VAL("failed to merge map: bad nr", perf_cpu_map__nr(c) == 5);
->>>       cpu_map__snprint(c, buf, sizeof(buf));
->>>       TEST_ASSERT_VAL("failed to merge map: bad result", !strcmp(buf, "1-2,4-5,7"));
->>> -     perf_cpu_map__put(b);
->>> +
->>> +     TEST_ASSERT_VAL("failed to merge map: bad nr", perf_cpu_map__nr(e) == 3);
->>> +     cpu_map__snprint(e, buf, sizeof(buf));
->>> +     TEST_ASSERT_VAL("failed to merge map: bad result", !strcmp(buf, "4-5,7"));
->>> +
->>>       perf_cpu_map__put(c);
->>> +     perf_cpu_map__put(d);
->>> +     perf_cpu_map__put(e);
->>>       return 0;
->>>  }
->>>
->>
-
+mrs bill chantal

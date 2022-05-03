@@ -2,133 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0BC518979
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 18:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E60DF51897C
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 18:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239267AbiECQSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 12:18:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57426 "EHLO
+        id S239275AbiECQSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 12:18:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239256AbiECQSL (ORCPT
+        with ESMTP id S239268AbiECQSY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 12:18:11 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B693B29F
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 09:14:38 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id l7so34442593ejn.2
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 09:14:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bOowZENKEYBOQ5gQtuLs74mzTNH8Gi+Wvcp/0afqUT4=;
-        b=EEwYnpnu/2Fhr2sQHT2uhYWiyPhvmtU8DzHokKeYAXu5vlR0UiuNcMwlij7eWJT/Nd
-         KGBSe8Pej98sSFsthhMfgTmsJ5yPc7UFnVb+KTUDaeG/1/BJHloKuzgbBAk7p6W+v8RQ
-         xOP2eAJC4V5tKxUYoLIDLfVmxDH3iyr65NTWU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bOowZENKEYBOQ5gQtuLs74mzTNH8Gi+Wvcp/0afqUT4=;
-        b=wRVWswraKtWFIkrk2CWklF7c7Sjz6Cmzm91d6ltr3++LQfJFO1OLQOXpGeUbeIFonN
-         ITzfyuHn/5cn/ETgJ2UWacfTv9YYdZQ6LNH0GdPklbTtshRBnMr54TCjGOaon6bV+dWF
-         KwdJyiQaScQXSHAu2QB1JiDavacEyVWuNPd+cTOUOftnhbqt8FwVp7/jv4mK99KdOfzd
-         a6WXODrAoAcB2k1PZU8St18YF5dFGuZWq+BNR6E8lbGzpBhPT/RHhBKbb8anO3BUpaab
-         jUSzMFHEYL4g65DuTQZDefw28pa7m42zR52hBtfLIemzS41snFMZK+vUTNkc5Hn9Lhjw
-         mYIA==
-X-Gm-Message-State: AOAM533xVywIoFRhruYFzIoBtXXUyOEtlFogCdgoGi9TgI39T49UGxbA
-        3bSoV9AZw+vZcbDFWfC5RK4cjywIk7FWmeC9
-X-Google-Smtp-Source: ABdhPJz6pj4HHgPnZlzEb79O2O1+j5MI2/03yKzcVgidabW85U43pbRk3v4l0+H1zL3PeQB+a79f6Q==
-X-Received: by 2002:a17:907:1c87:b0:6f0:29ea:cc01 with SMTP id nb7-20020a1709071c8700b006f029eacc01mr16455099ejc.671.1651594477006;
-        Tue, 03 May 2022 09:14:37 -0700 (PDT)
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
-        by smtp.gmail.com with ESMTPSA id y5-20020a056402170500b0042617ba63d3sm8095549edu.93.2022.05.03.09.14.34
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 May 2022 09:14:35 -0700 (PDT)
-Received: by mail-wr1-f46.google.com with SMTP id b19so24019499wrh.11
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 09:14:34 -0700 (PDT)
-X-Received: by 2002:adf:f50d:0:b0:20a:e096:ef with SMTP id q13-20020adff50d000000b0020ae09600efmr13256382wro.679.1651594474057;
- Tue, 03 May 2022 09:14:34 -0700 (PDT)
+        Tue, 3 May 2022 12:18:24 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16CCD3B29F;
+        Tue,  3 May 2022 09:14:51 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 7EB60320094C;
+        Tue,  3 May 2022 12:14:49 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Tue, 03 May 2022 12:14:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1651594488; x=1651680888; bh=eE6eGyd0dl
+        PvEc94UVUT/f7gT2Hb5vI5mPIwodd+6xY=; b=MHJ7F2iS0dRh6TQQrhw80qfulK
+        aCyBP4HU+m3J5VECiyqYDVzjxopYt33olDf4huoqTjyotocx0DCV0xWL3wbXq16P
+        mUxelYPlq+FpxMW0k5FexTdSutoacfEqiShu13p8rK88gwhiNASlNbn/6wQZqJAQ
+        36ixkM0rxj1lnLcd9qSojHBQIXtOTFDWowLTaRRZ+mDaP086pouGSSVCJyipULJm
+        U/xW4IfF2jeP2aGfbS3s32uyom9j5MaQlfpgftM/v4FumFvqZLo5kv82RKJG0GGU
+        2xhIbcr7Ryd4tR+nBJUv58ma0dQau3Hgs6RMDdySpkHllfqj++OdcPYjNBgA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651594488; x=
+        1651680888; bh=eE6eGyd0dlPvEc94UVUT/f7gT2Hb5vI5mPIwodd+6xY=; b=o
+        RwkM7FSUhkbCGGCrwqSynOQJsGCqU5G51BiDRUD6uBoo53i0Bmzv2zCB5xEbdH/U
+        OZAH0akcjpp0tydSg0WLa9DfkxYBkeT7tkLYarxYO0VbPv4qdoTpLrBqO7Uoo+Az
+        1Pb664/UQF060KPTEjU66YI7Ilf4mewUi3hZGsyNIsqM3MLR64ZDxYFZfTnh4HKF
+        4kuv8ZuXhuPV+Wi1SOUkCSaY7Y5wC2VF9vsWukbBTJdiu7dUDAM0WkGvUPLIJJc1
+        HYKRLknmI2uLyICp/KRtMtlFT/PqmeyDBxz78alKEFQdJ4KipF6WuzkVGz0W2828
+        eKNu2u2QRRVjSxofedOIA==
+X-ME-Sender: <xms:-FRxYuyWVZehrcvrb9cR0hhjcLq3-bj_OlfH9jWMMwp_pzjJsdr_NQ>
+    <xme:-FRxYqRmj2aALivmWhsom-bDosv8ccQsnUaHbF9RJ9slYG7OK9kZkgd3hEO6DlGvx
+    VCLAULoMvURO3MYzqQ>
+X-ME-Received: <xmr:-FRxYgVk1k9Kn9fmhRmC__Sc3Clfn1BjrznXpYmRzdFUn2L2jm87uO1I9DzxSTFccpXFz_ATXS60giV2VEIVi7iEROaIVXG5QNIGzOw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejgdelkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
+    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:-FRxYkiApGu4RvKI6SvOMNYmv2WQC6KS-n5wv0rs_KI8kezSh72CkQ>
+    <xmx:-FRxYgAT7461MCUbdBcY4ByDQ2O5KpFteBv8BWnKqC6wQlI_LgjYjA>
+    <xmx:-FRxYlKzw6sjuQC53yBNWFGO_9iJqK1MM-trIk-ZK_j4JWaCFqjtwg>
+    <xmx:-FRxYgtDetsZCD8M60OmlUh-_NpvnzPHCOqVRzapvqMhkgFsjQuDsA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 3 May 2022 12:14:48 -0400 (EDT)
+Date:   Tue, 3 May 2022 18:14:46 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Ruslan Zalata <rz@fabmicro.ru>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        Jean Delvare <jdelvare@suse.com>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v2] hwmon: (sun4i-lradc) Add driver for LRADC found on
+ Allwinner A13/A20 SoC
+Message-ID: <20220503161446.tl3qoqqnkzq2f3hn@houat>
+References: <20220428210906.29527-1-rz@fabmicro.ru>
+ <20220502110010.q7vvdkdpaiz5acjl@houat>
+ <7433B295-D896-4BF8-87DF-87EB89D7A550@aosc.io>
+ <20220502112112.3ne7zy4b6gggxzoo@houat>
+ <4aabfd63-18e2-65c5-d1c2-d7600afc1c40@roeck-us.net>
+ <97e3af18e947492b1ac968c058ba509f@fabmicro.ru>
 MIME-Version: 1.0
-References: <20220503042242.3597561-1-swboyd@chromium.org> <20220503042242.3597561-2-swboyd@chromium.org>
- <2280875f-fbd8-0dfd-5a0a-1d7fceb856e4@linaro.org> <CAD=FV=UEBi9dctmhaAi1z+c+Sj5gtcRrc3FRW294T55dTiAidQ@mail.gmail.com>
- <cd1da207-1f15-f3f1-7190-56b983e75024@kernel.org>
-In-Reply-To: <cd1da207-1f15-f3f1-7190-56b983e75024@kernel.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 3 May 2022 09:14:21 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XHNuvhekh=hepGePftaMXnDJGeJP=Lg8VfqmGdKt7HEA@mail.gmail.com>
-Message-ID: <CAD=FV=XHNuvhekh=hepGePftaMXnDJGeJP=Lg8VfqmGdKt7HEA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: google,cros-ec-keyb: Introduce
- switches only compatible
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
-        chrome-platform@lists.linux.dev,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        "Joseph S. Barrera III" <joebar@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="q53czbjv7t5deybk"
+Content-Disposition: inline
+In-Reply-To: <97e3af18e947492b1ac968c058ba509f@fabmicro.ru>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Tue, May 3, 2022 at 8:54 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->
-> On 03/05/2022 17:46, Doug Anderson wrote:
-> > Hi,
-> >
-> > On Tue, May 3, 2022 at 8:42 AM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>
-> >> On 03/05/2022 06:22, Stephen Boyd wrote:
-> >>> If the ChromeOS board is a detachable, this cros-ec-keyb device won't
-> >>> have a matrix keyboard but it may have some button switches, e.g. volume
-> >>> buttons and power buttons. The driver still registers a keyboard though
-> >>> and that leads to userspace confusion around where the keyboard is.
-> >>
-> >> (...)
-> >>
-> >>>
-> >>> +if:
-> >>> +  properties:
-> >>> +    compatible:
-> >>> +      contains:
-> >>> +        const: google,cros-ec-keyb
-> >>> +then:
-> >>> +  allOf:
-> >>> +    - $ref: "/schemas/input/matrix-keymap.yaml#"
-> >>> +  required:
-> >>> +    - keypad,num-rows
-> >>> +    - keypad,num-columns
-> >>> +    - linux,keymap
-> >>
-> >> else:
-> >>   properties:
-> >>     function-row-phsymap: false
-> >>     google,needs-ghost-filter: false
-> >>
-> >> Because these are not valid for the non-matrix-keyboard case, right?
-> >
-> > Isn't that implicit because this file has `unevaluatedProperties: false` ?
->
-> But they are evaluated here, aren't they?
+--q53czbjv7t5deybk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Only if the "if" test, though? ...ah, or is this a difference between
-"unevaluatedProperties" and "additionalProperties" ?
+On Tue, May 03, 2022 at 08:26:18PM +0500, Ruslan Zalata wrote:
+> LRADC does generate continuous interrupts as long as input voltage is bel=
+ow
+> LevelB threshold. The max possible LevelB is 0x3C which in case of A20 SoC
+> is close to 1.90V and that's what my driver sets LevelB to. Perhaps this
+> needs to be documented more thoroughly.
+>=20
+> It is possible to implement this same driver for IIO subsystem, but I wou=
+ld
+> prefer to keep it in hwmon along with many other simple ADC drivers used =
+for
+> temp and battery status monitoring.
 
--Doug
+If you can get it work reliably enough, I think IIO+iio-hwmon is still
+the way to go
+
+The main issue here is that drivers that are decided at compile time are
+kind of a pain as soon as you try to install a generic distro.
+
+At the hardware level, I'd assume you would either use the LRADC as an
+actual ADC, or use it to drive buttons, right?
+
+So, you would have to change the device tree accordingly anyway, to
+either list buttons and their associated voltages or use it to probe
+whatever signal to have there.
+
+So I don't think a new device tree binding is such a deal breaker since
+you have to describe it differently anyway.
+
+Since that would be a completely different use-case, the IIO driver
+doesn't have to support input right away, it can be done later if
+needed.
+
+And you could have the two drivers compiled at the same time.
+
+Maxime
+
+--q53czbjv7t5deybk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYnFU9gAKCRDj7w1vZxhR
+xWCtAP48uwYuvDG3xl2RWzF5C2D3hGwJp2/yzgWFxZrWWCibeAD/Wsgdx1c84HUJ
+tIvyginSC9xJNYtGNE897hcLT6NaGgg=
+=TR7u
+-----END PGP SIGNATURE-----
+
+--q53czbjv7t5deybk--

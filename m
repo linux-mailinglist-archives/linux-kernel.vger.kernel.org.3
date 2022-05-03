@@ -2,626 +2,332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F8A751863F
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D39FC51863B
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:12:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236771AbiECOQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 10:16:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35072 "EHLO
+        id S236750AbiECOPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 10:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236013AbiECOQQ (ORCPT
+        with ESMTP id S236013AbiECOPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 10:16:16 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F47D13F65;
-        Tue,  3 May 2022 07:12:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1651587032;
-        bh=jBf0jkgXes2Bgvz1mr0yTofTeW0CJcZ+iijJU1rFRkA=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=hw2PQaLw/ZvT//biTMBcCkn13OhYbNvQ6wTYb3SbSJJRw8o0lHAJTvzKLI13U7jP2
-         5cxIpubl5IGIN6RfPuKJJt+OuM8JzFYg+fjKkkeGA0eFy9S3Ounb6LS/J1KTTFn+bd
-         VkAIW6VriU18sIlhnomWKFGMGYuMEb/SzN6nHc8k=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [80.245.79.168] ([80.245.79.168]) by web-mail.gmx.net
- (3c-app-gmx-bap25.server.lan [172.19.172.95]) (via HTTP); Tue, 3 May 2022
- 16:10:32 +0200
-MIME-Version: 1.0
-Message-ID: <trinity-cda3b94f-8556-4b83-bc34-d2c215f93bcd-1651587032669@3c-app-gmx-bap25>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Ungerer <gerg@kernel.org>,
-        =?UTF-8?Q?Ren=C3=A9_van_Dorst?= <opensource@vdorst.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Frank Wunderlich <linux@fw-web.de>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        Tue, 3 May 2022 10:15:41 -0400
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A451581B;
+        Tue,  3 May 2022 07:12:08 -0700 (PDT)
+Received: by mail-oo1-f50.google.com with SMTP id y27-20020a4a9c1b000000b0032129651bb0so3113840ooj.2;
+        Tue, 03 May 2022 07:12:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=+YF29TZi131w+V+niyw8f+5BrVYB2TL4PkQPvgOxC1c=;
+        b=kyjmNVAk+5Plm1ZZ7PK1tWgvYl3lczYhmf44lu0dWmNQN8CK1R08C5aJmn7JyX53vX
+         gF+vZrFRPRMsdQkO9PRtqQAqjTdezF7eHbkti2w1N+AxyU0XsKuuPlKRhU/N/dm41ZOC
+         srFlJ1Ioqqo/vZ8TiQbdjGh2ks+2vPxfZvboffrEqPLQiy6GPynM1Y/daTjK6EsUg4fw
+         lyYpOx8UPbQNJDZ5ywKkEb48Bxg184+aKl70tbqRzYCkqj9vjTKua8XK4XFW6+aW+aoY
+         NuFpNQyRHiS8yhkzzOQR87/ezEtn5k1L7nxTnjTF3IInx8St3Rwnd1ivf430WC6edHWQ
+         j7/Q==
+X-Gm-Message-State: AOAM531UnVipyNF/ECr1Z8wzBZmUE8fHXH3vv7yI3/6KGkO67QyuGp6W
+        PHB9ewQpnBlWuYmn8LjD6w==
+X-Google-Smtp-Source: ABdhPJxkPagr4DtftAZPsUY7FNqg5juEjTTAW1X5Ft6g2qNU4vcojndBMTr46RVJBtG9EyVK+zpt+A==
+X-Received: by 2002:a4a:e8cc:0:b0:35f:6c5:a41a with SMTP id h12-20020a4ae8cc000000b0035f06c5a41amr2262794ooe.74.1651587127814;
+        Tue, 03 May 2022 07:12:07 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id f9-20020a0568301c2900b0060603221247sm3981516ote.23.2022.05.03.07.12.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 07:12:07 -0700 (PDT)
+Received: (nullmailer pid 3564454 invoked by uid 1000);
+        Tue, 03 May 2022 14:12:06 -0000
+Date:   Tue, 3 May 2022 09:12:06 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
+Cc:     Frank Rowand <frowand.list@gmail.com>,
+        Pantelis Antoniou <pantelis.antoniou@konsulko.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Thomas Petazzoni <thomas.petazonni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Aw: Re: [RFC v1] dt-bindings: net: dsa: convert binding for
- mediatek switches
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 3 May 2022 16:10:32 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <d29637f8-87ff-b5f0-9604-89b51a2ba7c1@linaro.org>
-References: <20220502153238.85090-1-linux@fw-web.de>
- <d29637f8-87ff-b5f0-9604-89b51a2ba7c1@linaro.org>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:O5oBof9XGL3SxmQsXmJowuqSpbkg8qCPhR75Rqj8d7AWC0TscwGJa0vS4RQCp8q3HxeFt
- 66exxqD6usZY2JU0sPJpokt5fCdbgHA8DIKLGjCQnD07s1XPN5wm51EFS4FBZyEa13y1ksjpJPz7
- X0luNj1XJO/2ff6Ic3TAnikuk13kEO0jAEY6lCQu0ur5TmVDk1XcjdynDsbBb6arWo0FpFCgX74v
- VdB6M09uzDjabMUnZlaYV4FnjRoxdXS1HoEA5pOoG94xpfgL5UJgjkip7NPt8PhHGTxM0Sx4LTve
- SI=
-X-UI-Out-Filterresults: notjunk:1;V03:K0:WhcYUwKPK54=:mjGQ2JYTdacnqf++cuEFfa
- aUu8RvnvGlhBUgCnvPyEBLTlZFA2TAyTtknQyLbFIr6JfDAimT1vFl/1YjFsh4S+/GHOEjypp
- QG8HkYsZYmsXHwsGopwb2MrzuJgODuyfbK2YaT1WyY5hU+/yUsirtpFpj7dB7waTtPQ95GzT5
- goTDIRjYAm7/xjShlJLaz2o+V0BVAZqVnGwCechdeXAWfLm8PEF4dB5prr4tXOsSE4DjtPlYH
- OH/ul3FdGijAXiRe6wZXF4SAldnxySwWo0ulC6zUDPdCyyRS0P4v7DCAaBOYGDxb2HU/JFsAf
- 8CJP3vGJ/UYEGFYXGhGvUgyMj9f5Kb8380mYNpR/vp83aaXOgWT8BS85Lo6aYf1IhBnwQls82
- FltGU1+eeSsu1OHPiQnjLoe0xICgS3HEPVpTPh1K6B2zjcvgi0UgKVVMYSiXnl1QY1ltr1p0B
- tEhWYnsMymSBxSXnUpyU7C9MJd59JdkgrY5gs6FbxCf6GgYfJl/LCfscxD0F9DxiwR6g2MhRh
- GbLP7+c0s1vDGIwloZCrgMxIdZwvfs0/u/UQ9OSWZx0oWbVYPtQVdPJiHzQejUE/oQ5RJR8vH
- jaES1RmAW2LRlCx7vuWHhsmfZ2UBIjPr/NcHnoXNce+fjP7bqPg6m906fYkFyZa7nucFvf3md
- Jv1xZ8GrR2N1CRBWXXEYIFAEpxlbW3Qq4Ot0FdtZ0pfq8jgJc5UbwDrfsC3XdjQXvm3OR1Oej
- axa4xi2A3mUV2cXG41kEnw7fM9slU256BNQ/Bx3UShyX5MyR5ioKxdQgJRn5St43Qd57q0n/o
- PC6turt
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Hans de Goede <hdegoede@redhat.com>,
+        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH 2/3] PCI: of: create DT nodes for PCI devices if they do
+ not exists
+Message-ID: <YnE4Ni+QUJT/CXV4@robh.at.kernel.org>
+References: <20220427094502.456111-1-clement.leger@bootlin.com>
+ <20220427094502.456111-3-clement.leger@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220427094502.456111-3-clement.leger@bootlin.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Apr 27, 2022 at 11:45:01AM +0200, Clément Léger wrote:
+> In order to apply overlays to PCI device nodes, the nodes must first
+> exist. This commit add support to populate a skeleton tree for PCI bus
+> and devices. These nodes can then be used by drivers to apply overlays.
+> 
 
-thank you for first review.
+While I implemented this creating the nodes as the PCI devices are 
+created, I think probably we're going to want to create the device node 
+and any needed parent nodes on demand. Otherwise, just turning on 
+CONFIG_OF could break platforms.
 
-> Gesendet: Dienstag, 03. Mai 2022 um 14:05 Uhr
-> Von: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
-> Betreff: Re: [RFC v1] dt-bindings: net: dsa: convert binding for mediate=
-k switches
->
-> On 02/05/2022 17:32, Frank Wunderlich wrote:
-> > From: Frank Wunderlich <frank-w@public-files.de>
-> >
-> > Convert txt binding to yaml binding for Mediatek switches.
-> >
-> > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> > ---
-> >  .../devicetree/bindings/net/dsa/mediatek.yaml | 435 +++++++++++++++++=
-+
-> >  .../devicetree/bindings/net/dsa/mt7530.txt    | 327 -------------
-> >  2 files changed, 435 insertions(+), 327 deletions(-)
-> >  create mode 100644 Documentation/devicetree/bindings/net/dsa/mediatek=
-.yaml
-> >  delete mode 100644 Documentation/devicetree/bindings/net/dsa/mt7530.t=
-xt
-> >
-> > diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek.yaml b=
-/Documentation/devicetree/bindings/net/dsa/mediatek.yaml
-> > new file mode 100644
-> > index 000000000000..c1724809d34e
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/net/dsa/mediatek.yaml
->
-> Specific name please, so previous (with vendor prefix) was better:
-> mediatek,mt7530.yaml
+One potential issue is that fwnode assumes there is either a DT node or 
+ACPI node. With this, we have the potential for both. I'm not sure how 
+much that's going to be an issue.
 
-ok, named it mediatek only because mt7530 is only one possible chip and dr=
-iver handles 3 different "variants".
+> Co-developed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+> ---
+>  drivers/pci/of.c | 184 +++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 184 insertions(+)
+> 
+> diff --git a/drivers/pci/of.c b/drivers/pci/of.c
+> index cb2e8351c2cc..f2325708726e 100644
+> --- a/drivers/pci/of.c
+> +++ b/drivers/pci/of.c
+> @@ -16,12 +16,194 @@
+>  #include "pci.h"
+>  
+>  #ifdef CONFIG_PCI
+> +static int of_pci_add_property(struct of_changeset *ocs, struct device_node *np,
+> +			       const char *name, const void *value, int length)
 
-> > @@ -0,0 +1,435 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->
-> You should CC previous contributors and get their acks on this. You
-> copied here a lot of description.
+Nothing really PCI specific about this function.
 
-added 3 Persons that made commits to txt before to let them know about thi=
-s change
+The kernel support for creating nodes and properties is pretty poor. We 
+should improve it with functions like this (in drivers/of/). Maybe the 
+changeset part should be separate though. We have some cases of creating 
+properties or nodes already, and whatever new APIs we make those 
+cases should be able to use them. And if they are converted, then it can 
+be merged sooner rather than when all the PCI parts are ready.
 
-and yes, i tried to define at least the phy-mode requirement as yaml-depen=
-cy, but failed because i cannot match
-compatible in subnode.
+> +{
+> +	struct property *prop;
+> +	int ret = -ENOMEM;
+> +
+> +	prop = kzalloc(sizeof(*prop), GFP_KERNEL);
+> +	if (!prop)
+> +		return -ENOMEM;
+> +
+> +	prop->name = kstrdup(name, GFP_KERNEL);
+> +	if (!prop->name)
+> +		goto out_err;
+> +
+> +	if (value) {
+> +		prop->value = kmemdup(value, length, GFP_KERNEL);
+> +		if (!prop->value)
+> +			goto out_err;
+> +	} else {
+> +		/*
+> +		 * Even if the property has no value, it must be set to a
+> +		 * non-null value since of_get_property() is used to check
+> +		 * some values that might or not have a values (ranges for
+> +		 * instance). Moreover, when the node is released, prop->value
+> +		 * is kfreed so the memory must come from kmalloc.
+> +		 */
+> +		prop->value = kmalloc(1, GFP_KERNEL);
+> +		if (!prop->value)
+> +			goto out_err;
+> +	}
+> +
+> +	of_property_set_flag(prop, OF_DYNAMIC);
+> +
+> +	prop->length = length;
+> +
+> +	ret = of_changeset_add_property(ocs, np, prop);
+> +	if (!ret)
+> +		return 0;
+> +
+> +out_err:
+> +	kfree(prop->value);
+> +	kfree(prop->name);
+> +	kfree(prop);
+> +
+> +	return ret;
+> +}
+> +
+> +static struct device_node *of_pci_make_node(void)
+> +{
 
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/net/dsa/mediatek.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Mediatek MT7530 Ethernet switch
-> > +
-> > +maintainers:
-> > +  - Sean Wang <sean.wang@mediatek.com>
-> > +  - Landen Chao <Landen.Chao@mediatek.com>
-> > +  - DENG Qingfang <dqfext@gmail.com>
-> > +
-> > +description: |
-> > +  Port 5 of mt7530 and mt7621 switch is muxed between:
-> > +  1. GMAC5: GMAC5 can interface with another external MAC or PHY.
-> > +  2. PHY of port 0 or port 4: PHY interfaces with an external MAC lik=
-e 2nd GMAC
-> > +     of the SOC. Used in many setups where port 0/4 becomes the WAN p=
-ort.
-> > +     Note: On a MT7621 SOC with integrated switch: 2nd GMAC can only =
-connected to
-> > +       GMAC5 when the gpios for RGMII2 (GPIO 22-33) are not used and =
-not
-> > +       connected to external component!
-> > +
-> > +  Port 5 modes/configurations:
-> > +  1. Port 5 is disabled and isolated: An external phy can interface t=
-o the 2nd
-> > +     GMAC of the SOC.
-> > +     In the case of a build-in MT7530 switch, port 5 shares the RGMII=
- bus with 2nd
-> > +     GMAC and an optional external phy. Mind the GPIO/pinctl settings=
- of the SOC!
-> > +  2. Port 5 is muxed to PHY of port 0/4: Port 0/4 interfaces with 2nd=
- GMAC.
-> > +     It is a simple MAC to PHY interface, port 5 needs to be setup fo=
-r xMII mode
-> > +     and RGMII delay.
-> > +  3. Port 5 is muxed to GMAC5 and can interface to an external phy.
-> > +     Port 5 becomes an extra switch port.
-> > +     Only works on platform where external phy TX<->RX lines are swap=
-ped.
-> > +     Like in the Ubiquiti ER-X-SFP.
-> > +  4. Port 5 is muxed to GMAC5 and interfaces with the 2nd GAMC as 2nd=
- CPU port.
-> > +     Currently a 2nd CPU port is not supported by DSA code.
-> > +
-> > +  Depending on how the external PHY is wired:
-> > +  1. normal: The PHY can only connect to 2nd GMAC but not to the swit=
-ch
-> > +  2. swapped: RGMII TX, RX are swapped; external phy interface with t=
-he switch as
-> > +     a ethernet port. But can't interface to the 2nd GMAC.
-> > +
-> > +    Based on the DT the port 5 mode is configured.
-> > +
-> > +  Driver tries to lookup the phy-handle of the 2nd GMAC of the master=
- device.
-> > +  When phy-handle matches PHY of port 0 or 4 then port 5 set-up as mo=
-de 2.
-> > +  phy-mode must be set, see also example 2 below!
-> > +  * mt7621: phy-mode =3D "rgmii-txid";
-> > +  * mt7623: phy-mode =3D "rgmii";
-> > +
-> > +  CPU-Ports need a phy-mode property:
-> > +    Allowed values on mt7530 and mt7621:
-> > +      - "rgmii"
-> > +      - "trgmii"
-> > +    On mt7531:
-> > +      - "1000base-x"
-> > +      - "2500base-x"
-> > +      - "sgmii"
-> > +
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - mediatek,mt7530
-> > +      - mediatek,mt7531
-> > +      - mediatek,mt7621
-> > +
-> > +  "#address-cells":
-> > +    const: 1
-> > +
-> > +  "#size-cells":
-> > +    const: 0
-> > +
-> > +  core-supply:
-> > +    description: |
-> > +      Phandle to the regulator node necessary for the core power.
-> > +
-> > +  "#gpio-cells":
-> > +    description: |
-> > +      Must be 2 if gpio-controller is defined.
-> > +    const: 2
-> > +
-> > +  gpio-controller:
-> > +    type: boolean
-> > +    description: |
-> > +      Boolean; if defined, MT7530's LED controller will run on
->
-> No need to repeat Boolean.
+This isn't PCI specific either.
 
-ok, will change
+> +	struct device_node *node;
+> +
+> +	node = kzalloc(sizeof(*node), GFP_KERNEL);
+> +	if (!node)
+> +		return NULL;
+> +
+> +	of_node_set_flag(node, OF_DYNAMIC);
+> +	of_node_set_flag(node, OF_DETACHED);
+> +	of_node_init(node);
+> +
+> +	return node;
+> +}
+> +
+> +static int of_pci_add_cells_props(struct device_node *node,
+> +				  struct of_changeset *cs, int n_addr_cells,
+> +				  int n_size_cells)
+> +{
+> +	__be32 val;
+> +	int ret;
+> +
+> +	ret = of_pci_add_property(cs, node, "ranges", NULL, 0);
 
-> > +      GPIO mode.
-> > +
-> > +  "#interrupt-cells":
-> > +    const: 1
-> > +
-> > +  interrupt-controller:
-> > +    type: boolean
-> > +    description: |
-> > +      Boolean; Enables the internal interrupt controller.
->
-> Skip description.
+The host bridge node is going to need to fill in 'ranges'. Empty ranges 
+is not valid when there's a change in number of cells.
 
-ok
-
-> > +
-> > +  interrupts:
-> > +    description: |
-> > +      Parent interrupt for the interrupt controller.
->
-> Skip description.
-ok
-
-> > +    maxItems: 1
-> > +
-> > +  io-supply:
-> > +    description: |
-> > +      Phandle to the regulator node necessary for the I/O power.
-> > +      See Documentation/devicetree/bindings/regulator/mt6323-regulato=
-r.txt
-> > +      for details for the regulator setup on these boards.
-> > +
-> > +  mediatek,mcm:
-> > +    type: boolean
-> > +    description: |
-> > +      Boolean;
->
-> No need to repeat Boolean.
-
-ack
-
-> > if defined, indicates that either MT7530 is the part
-> > +      on multi-chip module belong to MT7623A has or the remotely stan=
-dalone
-> > +      chip as the function MT7623N reference board provided for.
-> > +
-> > +  reset-gpios:
-> > +    description: |
-> > +      Should be a gpio specifier for a reset line.
-> > +    maxItems: 1
-> > +
-> > +  reset-names:
-> > +    description: |
-> > +      Should be set to "mcm".
-> > +    const: mcm
-> > +
-> > +  resets:
-> > +    description: |
-> > +      Phandle pointing to the system reset controller with
-> > +      line index for the ethsys.
-> > +    maxItems: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
->
-> What about address/size cells?
-
-you're right even if they are const to a value they need to be set
-
-> > +
-> > +allOf:
-> > +  - $ref: "dsa.yaml#"
-> > +  - if:
-> > +      required:
-> > +        - mediatek,mcm
->
-> Original bindings had this reversed.
-
-i know, but i think it is better readable and i will drop the else-part la=
-ter.
-Driver supports optional reset ("mediatek,mcm" unset and without reset-gpi=
-os)
-as this is needed if there is a shared reset-line for gmac and switch like=
- on R2 Pro.
-
-i left this as separate commit to be posted later to have a nearly 1:1 con=
-version here.
-
-> > +    then:
-> > +      required:
-> > +        - resets
-> > +        - reset-names
-> > +    else:
-> > +      required:
-> > +        - reset-gpios
-> > +
-> > +  - if:
-> > +      required:
-> > +        - interrupt-controller
-> > +    then:
-> > +      required:
-> > +        - "#interrupt-cells"
->
-> This should come from dt schema already...
-
-so i should drop (complete block for interrupt controller)?
-
-> > +        - interrupts
-> > +
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          items:
-> > +            - const: mediatek,mt7530
-> > +    then:
-> > +      required:
-> > +        - core-supply
-> > +        - io-supply
-> > +
-> > +
-> > +patternProperties:
-> > +  "^ports$":
->
-> It''s not a pattern, so put it under properties, like regular property.
-
-can i then make the subnodes match? so the full block will move above requ=
-ired between "mediatek,mcm" and "reset-gpios"
-
-  ports:
-    type: object
-
-    patternProperties:
-      "^port@[0-9]+$":
-        type: object
-        description: Ethernet switch ports
-
-        properties:
-          reg:
-            description: |
-              Port address described must be 5 or 6 for CPU port and from =
-0 to 5 for user ports.
-
-        unevaluatedProperties: false
-
-        allOf:
-          - $ref: dsa-port.yaml#
-          - if:
-....
-
-basicly this "ports"-property should be required too, right?
-
-
-> > +    type: object
-> > +
-> > +    patternProperties:
-> > +      "^port@[0-9]+$":
-> > +        type: object
-> > +        description: Ethernet switch ports
-> > +
-> > +        $ref: dsa-port.yaml#
->
-> This should go to allOf below.
-
-see above
-
-> > +
-> > +        properties:
-> > +          reg:
-> > +            description: |
-> > +              Port address described must be 6 for CPU port and from =
-0 to 5 for user ports.
-> > +
-> > +        unevaluatedProperties: false
-> > +
-> > +        allOf:
-> > +          - if:
-> > +              properties:
-> > +                label:
-> > +                  items:
-> > +                    - const: cpu
-> > +            then:
-> > +              required:
-> > +                - reg
-> > +                - phy-mode
-> > +
-> > +unevaluatedProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    mdio0 {
->
-> Just mdio
-
-ok
-
-> > +        #address-cells =3D <1>;
-> > +        #size-cells =3D <0>;
-> > +        switch@0 {
-> > +            compatible =3D "mediatek,mt7530";
-> > +            #address-cells =3D <1>;
-> > +            #size-cells =3D <0>;
-> > +            reg =3D <0>;
-> > +
-> > +            core-supply =3D <&mt6323_vpa_reg>;
-> > +            io-supply =3D <&mt6323_vemc3v3_reg>;
-> > +            reset-gpios =3D <&pio 33 0>;
->
-> Use GPIO flag define/constant.
-
-this example seems to be taken from bpi-r2 (i had taken it from the txt). =
-In dts for this board there are no
-constants too.
-
-i guess
-include/dt-bindings/gpio/gpio.h:14:#define GPIO_ACTIVE_HIGH 0
-
-for 33 there seem no constant..all other references to pio node are with n=
-umbers too and there seem no binding
-header defining the gpio pins (only functions in include/dt-bindings/pinct=
-rl/mt7623-pinfunc.h)
-
-> > +
-> > +            ports {
-> > +                #address-cells =3D <1>;
-> > +                #size-cells =3D <0>;
-> > +                port@0 {
-> > +                    reg =3D <0>;
-> > +                    label =3D "lan0";
-> > +                };
-> > +
-> > +                port@1 {
-> > +                    reg =3D <1>;
-> > +                    label =3D "lan1";
-> > +                };
-> > +
-> > +                port@2 {
-> > +                    reg =3D <2>;
-> > +                    label =3D "lan2";
-> > +                };
-> > +
-> > +                port@3 {
-> > +                    reg =3D <3>;
-> > +                    label =3D "lan3";
-> > +                };
-> > +
-> > +                port@4 {
-> > +                    reg =3D <4>;
-> > +                    label =3D "wan";
-> > +                };
-> > +
-> > +                port@6 {
-> > +                    reg =3D <6>;
-> > +                    label =3D "cpu";
-> > +                    ethernet =3D <&gmac0>;
-> > +                    phy-mode =3D "trgmii";
-> > +                    fixed-link {
-> > +                        speed =3D <1000>;
-> > +                        full-duplex;
-> > +                    };
-> > +                };
-> > +            };
-> > +        };
-> > +    };
-> > +
-> > +  - |
-> > +    //Example 2: MT7621: Port 4 is WAN port: 2nd GMAC -> Port 5 -> PH=
-Y port 4.
-> > +
-> > +    eth {
->
-> s/eth/ethernet/
-
-ok
-
-> > +        #address-cells =3D <1>;
-> > +        #size-cells =3D <0>;
-> > +        gmac0: mac@0 {
-> > +            compatible =3D "mediatek,eth-mac";
-> > +            reg =3D <0>;
-> > +            phy-mode =3D "rgmii";
-> > +
-> > +            fixed-link {
-> > +                speed =3D <1000>;
-> > +                full-duplex;
-> > +                pause;
-> > +            };
-> > +        };
-> > +
-> > +        gmac1: mac@1 {
-> > +            compatible =3D "mediatek,eth-mac";
-> > +            reg =3D <1>;
-> > +            phy-mode =3D "rgmii-txid";
-> > +            phy-handle =3D <&phy4>;
-> > +        };
-> > +
-> > +        mdio: mdio-bus {
-> > +            #address-cells =3D <1>;
-> > +            #size-cells =3D <0>;
-> > +
-> > +            /* Internal phy */
-> > +            phy4: ethernet-phy@4 {
-> > +                reg =3D <4>;
-> > +            };
-> > +
-> > +            mt7530: switch@1f {
-> > +                compatible =3D "mediatek,mt7621";
-> > +                #address-cells =3D <1>;
-> > +                #size-cells =3D <0>;
-> > +                reg =3D <0x1f>;
-> > +                mediatek,mcm;
-> > +
-> > +                resets =3D <&rstctrl 2>;
-> > +                reset-names =3D "mcm";
-> > +
-> > +                ports {
-> > +                    #address-cells =3D <1>;
-> > +                    #size-cells =3D <0>;
-> > +
-> > +                    port@0 {
-> > +                        reg =3D <0>;
-> > +                        label =3D "lan0";
-> > +                    };
-> > +
-> > +                    port@1 {
-> > +                        reg =3D <1>;
-> > +                        label =3D "lan1";
-> > +                    };
-> > +
-> > +                    port@2 {
-> > +                        reg =3D <2>;
-> > +                        label =3D "lan2";
-> > +                    };
-> > +
-> > +                    port@3 {
-> > +                        reg =3D <3>;
-> > +                        label =3D "lan3";
-> > +                    };
-> > +
-> > +        /* Commented out. Port 4 is handled by 2nd GMAC.
-> > +                    port@4 {
-> > +                        reg =3D <4>;
-> > +                        label =3D "lan4";
-> > +                    };
-> > +        */
->
-> Messed up indentation
-
-will fix it
-
-> > +
-> > +                    port@6 {
-> > +                        reg =3D <6>;
-> > +                        label =3D "cpu";
-> > +                        ethernet =3D <&gmac0>;
-> > +                        phy-mode =3D "rgmii";
-> > +
-> > +                        fixed-link {
-> > +                            speed =3D <1000>;
-> > +                            full-duplex;
-> > +                            pause;
-> > +                        };
-> > +                    };
-> > +                };
-> > +            };
-> > +        };
-> > +    };
-> > +
-> > +  - |
-> > +    //Example 3: MT7621: Port 5 is connected to external PHY: Port 5 =
--> external PHY.
-> > +
-> > +    eth {
->
-> Also ethernet?
-
-will do
-
-> Best regards,
-> Krzysztof
-
-regards Frank
+The root node also will need "#address-cells" and "#size-cells".
+ 
+> +	if (ret)
+> +		return ret;
+> +
+> +	val = __cpu_to_be32(n_addr_cells);
+> +	ret = of_pci_add_property(cs, node, "#address-cells", &val,
+> +				  sizeof(__be32));
+> +	if (ret)
+> +		return ret;
+> +
+> +	val = __cpu_to_be32(n_size_cells);
+> +	return of_pci_add_property(cs, node, "#size-cells", &val,
+> +				   sizeof(__be32));
+> +}
+> +
+> +static int of_pci_add_pci_bus_props(struct device_node *node,
+> +				    struct of_changeset *cs)
+> +{
+> +	int ret;
+> +
+> +	ret = of_pci_add_property(cs, node, "device_type", "pci",
+> +				  strlen("pci") + 1);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return of_pci_add_cells_props(node, cs, 3, 2);
+> +}
+> +
+> +static void of_pci_make_dev_node(struct pci_dev *dev)
+> +{
+> +	static struct of_changeset cs;
+> +	const char *pci_type = "dev";
+> +	struct device_node *node;
+> +	__be32 val[5] = {0};
+> +	int ret;
+> +
+> +	node = of_pci_make_node();
+> +	if (!node)
+> +		return;
+> +
+> +	node->parent = dev->bus->dev.of_node;
+> +	of_changeset_init(&cs);
+> +
+> +	if (pci_is_bridge(dev)) {
+> +		ret = of_pci_add_pci_bus_props(node, &cs);
+> +		if (ret)
+> +			goto changeset_destroy;
+> +		pci_type = "pci";
+> +	}
+> +
+> +	node->full_name = kasprintf(GFP_KERNEL, "%s@%x,%x", pci_type,
+> +				    PCI_SLOT(dev->devfn), PCI_FUNC(dev->devfn));
+> +
+> +	val[0] = __cpu_to_be32(dev->devfn << 8);
+> +	val[4] = __cpu_to_be32(SZ_4K);
+> +	ret = of_pci_add_property(&cs, node, "reg", val, 5 * sizeof(__be32));
+> +	if (ret)
+> +		goto changeset_destroy;
+> +
+> +	ret = of_changeset_attach_node(&cs, node);
+> +	if (ret)
+> +		goto changeset_destroy;
+> +
+> +	ret = of_changeset_apply(&cs);
+> +	if (ret)
+> +		goto changeset_destroy;
+> +
+> +	dev->dev.of_node = node;
+> +
+> +	return;
+> +
+> +changeset_destroy:
+> +	of_changeset_destroy(&cs);
+> +	kfree(node);
+> +}
+> +
+> +static struct device_node *of_pci_create_root_bus_node(struct pci_bus *bus)
+> +{
+> +	static struct of_changeset cs;
+> +	struct device_node *node;
+> +	int ret;
+> +
+> +	node = of_pci_make_node();
+> +	if (!node)
+> +		return NULL;
+> +
+> +	node->full_name = "pci";
+> +	node->parent = of_root;
+> +
+> +	of_changeset_init(&cs);
+> +	ret = of_pci_add_pci_bus_props(node, &cs);
+> +	if (ret)
+> +		goto changeset_destroy;
+> +
+> +	ret = of_changeset_attach_node(&cs, node);
+> +	if (ret)
+> +		goto changeset_destroy;
+> +
+> +	ret = of_changeset_apply(&cs);
+> +	if (ret)
+> +		goto changeset_destroy;
+> +
+> +	return node;
+> +
+> +changeset_destroy:
+> +	of_changeset_destroy(&cs);
+> +	kfree(node);
+> +
+> +	return NULL;
+> +}
+> +
+>  void pci_set_of_node(struct pci_dev *dev)
+>  {
+>  	if (!dev->bus->dev.of_node)
+>  		return;
+>  	dev->dev.of_node = of_pci_find_child_device(dev->bus->dev.of_node,
+>  						    dev->devfn);
+> +	if (!dev->dev.of_node)
+> +		of_pci_make_dev_node(dev);
+>  	if (dev->dev.of_node)
+>  		dev->dev.fwnode = &dev->dev.of_node->fwnode;
+>  }
+> @@ -39,6 +221,8 @@ void pci_set_bus_of_node(struct pci_bus *bus)
+>  
+>  	if (bus->self == NULL) {
+>  		node = pcibios_get_phb_of_node(bus);
+> +		if (!node)
+> +			node = of_pci_create_root_bus_node(bus);
+>  	} else {
+>  		node = of_node_get(bus->self->dev.of_node);
+>  		if (node && of_property_read_bool(node, "external-facing"))
+> -- 
+> 2.34.1
+> 
+> 

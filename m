@@ -2,94 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E5951C473
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:01:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51B7451C53A
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 18:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381565AbiEEQFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 12:05:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53998 "EHLO
+        id S1382086AbiEEQjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 12:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237837AbiEEQEz (ORCPT
+        with ESMTP id S243243AbiEEQiz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 12:04:55 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45ED6205CF
-        for <linux-kernel@vger.kernel.org>; Thu,  5 May 2022 09:01:16 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2f7c57ee6feso53738397b3.2
-        for <linux-kernel@vger.kernel.org>; Thu, 05 May 2022 09:01:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DcrivyRXvs78RFPsaHX0wtRuc37eGonVpkZc+fBUUp4=;
-        b=SWulOcJxmVeZWRUP1r6ihWVnsx4vTmwi4LLMgKz74yg3+KJ+ewPEUGHzph6ZBsR7QZ
-         haxC8UhbOAPhatpgkvmR/Z0HRRx55tsMFnC7gxS2LGQXN7HnykS4CwtaRiK942O3wUKs
-         qq7RDt1iU7ye3njrHkDpfcGYzJOBhIvjlCrLcHN2SxElDLdjKCX5+N9AQDaeLr+h6/Hf
-         TF8MWUYRetgCTAH5kOeSGpj1SY3scjUUziOdTuetbjph81XA+lyZc07zWmOfjgZ8vZFf
-         waw0UDrA/7G20XsiZcN9b6KVrkqZAiOyy6KeEVEWmIIe3q5I8FjCPuxlZkcbx449hoV+
-         +rPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DcrivyRXvs78RFPsaHX0wtRuc37eGonVpkZc+fBUUp4=;
-        b=fmJG15FWWL21rmu2psxT72McOguVdnYMl7YRACIEQhywH5a3G9vJfUBmlez+cM8pIV
-         OhUB+T6ectifylyAcC63aep3O4260FbOgOHf1/SpvnC/vlIeIVYlIkKI0rb27NoaxoV6
-         +UYmawhvy4gQzlpOdEgcyhjK522zUi000swkjORFAf1ezj3xKy2bdK+QucrBh3tINmXo
-         JFmeTRygarhfoiif2hO+auq72NxqsscfzCKim1MXGtSZDeYc178M69HIGal8esEjq6Go
-         4HsylgfWlAEXJEBFuGyv/o+ik/zFQy8wlpHi3jBAXNcmHeYrM02nhXt04i739AhcIQ7g
-         GvhQ==
-X-Gm-Message-State: AOAM531uPzVHv0e7Evy2WSMCCM2tPiN2heKx/en1rAkyEkjeP98C9HR7
-        ORhVux0N+FT97Pk/6jYBymF9f49YPRilSTGeO/u4jw==
-X-Google-Smtp-Source: ABdhPJyeRJ1A9AX0DmoDqRxo1/DLQHUcof5m2XXSj8lNypY3bHNmQWOqrUEnbss0WuBMSpwMGU3MP94Rte1iYZrYks8=
-X-Received: by 2002:a81:8d02:0:b0:2f8:c9f7:4041 with SMTP id
- d2-20020a818d02000000b002f8c9f74041mr24674320ywg.117.1651766475264; Thu, 05
- May 2022 09:01:15 -0700 (PDT)
+        Thu, 5 May 2022 12:38:55 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79254D4C;
+        Thu,  5 May 2022 09:35:15 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 242MuHJu018680;
+        Tue, 3 May 2022 00:52:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2021-07-09;
+ bh=YDpybZyMtUto8vzB7am4iv3VtisKb3L6fXgrRs5sN9s=;
+ b=xxIyeuW5EZadlLJb3Kn928Omyai87Hz6btNX6PGK9Ya5irtQo6toZxvB5IH58cg5gPX4
+ 5sB+duHYXCJvGyUBSwCcesmTF/wpLCGWCwd0jgPxwrktRxPZbyg0ZS0CDahAO8Ta9jOO
+ x1A7/EXyAqIokZ+PoL7zRg7Xl625MHGPlC5LJx+/MkrVvqcEgyUH8KuSYPb3rovdmzg+
+ 9Fef3o0M3FimBH1g1TbKg/ZnY0AvIAFttHDFq4Eah9B2Pl4fiVTEFWpw4tiwbK6gmkmQ
+ ojbW/Ep3+cUc6IsItoRpJIUjbxSMG5FnYGp2/41KhpTXrlrmzoyxfI6dUF8Ov/7eqE8U 4g== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3frwnt4kx7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 03 May 2022 00:52:05 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 2430orCC009030;
+        Tue, 3 May 2022 00:52:04 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83xbb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 03 May 2022 00:52:04 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2430plju010389;
+        Tue, 3 May 2022 00:52:03 GMT
+Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x4g-30;
+        Tue, 03 May 2022 00:52:03 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     Enze Li <lienze@kylinos.cn>, jejb@linux.ibm.com
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH v2] scsi: sr: add handling of memory allocation failures when calling get_capabilities
+Date:   Mon,  2 May 2022 20:51:40 -0400
+Message-Id: <165153836364.24053.1228657933500703944.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.35.2
+In-Reply-To: <20220427025647.298358-1-lienze@kylinos.cn>
+References: <20220413100008.522912-1-lienze@kylinos.cn> <20220427025647.298358-1-lienze@kylinos.cn>
 MIME-Version: 1.0
-References: <20220429203644.2868448-1-samitolvanen@google.com>
- <YnKnLyyXPJl5Llc0@FVFF77S0Q05N> <CABCJKudT9r=r0an4BwNp0-E1wC94wLWiHvUX4_vA8tDkQ=uHKQ@mail.gmail.com>
- <CABCJKuc-6daZd8N6hQV6i_TtCtVpfzxJ2UW6xwxC2vxTmJ2deg@mail.gmail.com> <YnPEzeab/R270gAZ@FVFF77S0Q05N.cambridge.arm.com>
-In-Reply-To: <YnPEzeab/R270gAZ@FVFF77S0Q05N.cambridge.arm.com>
-From:   Sami Tolvanen <samitolvanen@google.com>
-Date:   Thu, 5 May 2022 09:00:39 -0700
-Message-ID: <CABCJKuced3-MoZoBdpL+=h1PC32C-5C12HZH96+dfEp43dJwaQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/21] KCFI support
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-hardening@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: DFm3DGdgo6sAmZIKJAHLWD1d82YL0M0b
+X-Proofpoint-GUID: DFm3DGdgo6sAmZIKJAHLWD1d82YL0M0b
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 5, 2022 at 5:36 AM Mark Rutland <mark.rutland@arm.com> wrote:
-> FWIW, a `-DLLVM_ENABLE_ASSERTIONS=ON` build also seems to work for me when
-> building a kernel with CONFIG_CFI_CLANG=y. It's much slower than a regular
-> Release build, so I'm still waiting for that to finish building a kernel, but
-> it has gotten much further through the build without issues.
+On Wed, 27 Apr 2022 10:56:47 +0800, Enze Li wrote:
 
-Thanks for confirming. This issue should be fixed here if you want to
-give it another try:
+> The function get_capabilities() has the possibility of failing to
+> allocate transfer buffer, but it does not currently handle this, which
+> may lead to exceptions when accessing the buffer.
+> 
+> This patch adds handling when memory allocation fails.
+> 
+> 
+> [...]
 
-https://github.com/samitolvanen/llvm-project/commits/kcfi
+Applied to 5.19/scsi-queue, thanks!
 
-Sami
+[1/1] scsi: sr: add handling of memory allocation failures when calling get_capabilities
+      https://git.kernel.org/mkp/scsi/c/ebc95c790653
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering

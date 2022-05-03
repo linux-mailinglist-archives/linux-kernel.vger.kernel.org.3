@@ -2,149 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05ADC518D6F
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:49:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C352D518D75
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:49:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238908AbiECTxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 15:53:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46878 "EHLO
+        id S235041AbiECTxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 15:53:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233678AbiECTxF (ORCPT
+        with ESMTP id S232984AbiECTxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 15:53:05 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B4E3EA86
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 12:49:31 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 243J1UIL022213;
-        Tue, 3 May 2022 19:49:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=WLZLXscr2VBP3BdiRkQ3rfSjgF3tQrVA/XAtG/j9RXY=;
- b=P0FJnPOTXZSKSrqNeO5lseIQFJOmpKLteMCA8i57RsJ9p717BuDvdK+MPJSbNASYoU/A
- dXViSLH8b6AcmOTp1edwrjsLTisMCdYJ37gtZA5pbAm7hKkd5k4IV7VGadUKTfTLI0rk
- lRxMy8fyCLVA6Lijtun2FPOwD1TnEdxQf1y1cXlx2WRC1iuaTjooReG2MBsZ1+j5F/4f
- W3bxGGcNXjI9Q8b4MV8bcVhXQj9yWfXKBTX9dqqqoczjYJ4H023FAW7OlGKlKbehlM3m
- Gqc2xsexfV6xpFaRjJBsxB8SNUwbW/SNK0geuGBZ38UK9CS1/7cXUOGUIPGimbWOt8ak VQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fu8u6thk1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 May 2022 19:49:03 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 243J1kDr023386;
-        Tue, 3 May 2022 19:49:02 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fu8u6thjg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 May 2022 19:49:02 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 243JmfcE002899;
-        Tue, 3 May 2022 19:49:01 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03fra.de.ibm.com with ESMTP id 3fscdk32d0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 May 2022 19:49:00 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 243JmuSq23724376
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 3 May 2022 19:48:56 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 722ED42041;
-        Tue,  3 May 2022 19:48:57 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CE07F4203F;
-        Tue,  3 May 2022 19:48:56 +0000 (GMT)
-Received: from osiris (unknown [9.145.13.65])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue,  3 May 2022 19:48:56 +0000 (GMT)
-Date:   Tue, 3 May 2022 21:48:55 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Liam Howlett <liam.howlett@oracle.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Yu Zhao <yuzhao@google.com>, Juergen Gross <jgross@suse.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andreas Krebbel <krebbel@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: Re: [PATCH v8 23/70] mm/mmap: change do_brk_flags() to expand
- existing VMA and add do_brk_munmap()
-Message-ID: <YnGHJ7oroqF+v1u+@osiris>
-References: <20220426150616.3937571-1-Liam.Howlett@oracle.com>
- <20220426150616.3937571-24-Liam.Howlett@oracle.com>
- <20220428201947.GA1912192@roeck-us.net>
- <20220429003841.cx7uenepca22qbdl@revolver>
- <20220428181621.636487e753422ad0faf09bd6@linux-foundation.org>
- <20220502001358.s2azy37zcc27vgdb@revolver>
- <20220501172412.50268e7b217d0963293e7314@linux-foundation.org>
- <Ym+v4lfU5IyxkGc4@osiris>
- <20220502133050.kuy2kjkzv6msokeb@revolver>
- <YnAn3FI9aVCi/xKd@osiris>
+        Tue, 3 May 2022 15:53:20 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399BE3F88A;
+        Tue,  3 May 2022 12:49:46 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id AFC11210E4;
+        Tue,  3 May 2022 19:49:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1651607384; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9BjCsNyhWrFhajIPGqZcKtHERzRUauTrhIQt2R+1HS0=;
+        b=x74SWPj5lGZTVIeu5kHB7KOvBdLAMWOJ9MzTKPcraNvyAgog5Z4WGg6GX2drGe+BCv8FCO
+        1vJblvVsNI/sDjjECCl01lTBxW3uwzzDfnQYKxZ7BzvgWK8CsGqrqqVmfNMc3J8ugXBmRs
+        GKWEFHHOL78Muie3Rrq8KNenw+NBCE8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1651607384;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9BjCsNyhWrFhajIPGqZcKtHERzRUauTrhIQt2R+1HS0=;
+        b=aPs7YCK6PUz6/Zd1NZ4LV3QGTAKxYUSIaKi2rjAj7hT/4dOGfcpUqRxyjuCMzXpdKKirxI
+        u/pqrktMmBqyrzAQ==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id B656D2C145;
+        Tue,  3 May 2022 19:49:43 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 57731A0629; Tue,  3 May 2022 21:49:43 +0200 (CEST)
+Date:   Tue, 3 May 2022 21:49:43 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Guowei Du <duguoweisz@gmail.com>
+Cc:     jack@suse.cz, amir73il@gmail.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jmorris@namei.org, serge@hallyn.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, linux-security-module@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org, paul@paul-moore.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        keescook@chromium.org, anton@enomsg.org, ccross@android.com,
+        tony.luck@intel.com, selinux@vger.kernel.org,
+        duguowei <duguowei@xiaomi.com>
+Subject: Re: [PATCH] fsnotify: add generic perm check for unlink/rmdir
+Message-ID: <20220503194943.6bcmsxjvinfjrqxa@quack3.lan>
+References: <20220503183750.1977-1-duguoweisz@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YnAn3FI9aVCi/xKd@osiris>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: bI5So3mPXdQRVQdgmVXx9GXvSXlaKqu_
-X-Proofpoint-GUID: Gelui_emMWTs-GJS8TzHUuqq2kXjrreL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-03_08,2022-05-02_03,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- impostorscore=0 bulkscore=0 phishscore=0 spamscore=0 adultscore=0
- priorityscore=1501 mlxlogscore=634 lowpriorityscore=0 suspectscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205030122
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220503183750.1977-1-duguoweisz@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 02, 2022 at 08:50:04PM +0200, Heiko Carstens wrote:
-> On Mon, May 02, 2022 at 01:31:00PM +0000, Liam Howlett wrote:
-> > * Heiko Carstens <hca@linux.ibm.com> [220502 06:18]:
-> > > On Sun, May 01, 2022 at 05:24:12PM -0700, Andrew Morton wrote:
-> > > > (cc S390 maintainers)
-> > > > (cc stable & Greg)
-...
-> > > > > booting.  The last thing I see is:
-> > > > > 
-> > > > > "[    4.668916] Spectre V2 mitigation: execute trampolines"
-> > > > > 
-> > > > > I've bisected back to commit e553f62f10d9 (mm, page_alloc: fix
-> > > > > build_zonerefs_node())
-> > > > > 
-> > > > > With the this commit, I am unable to boot one out of three times.  When
-> > > > > using the previous commit I was not able to get it to hang after trying
-> > > > > 10+ times.  This is a qemu s390 install with KASAN on and I see no error
-> > > > > messages.  I think it's likely it is this patch, but no guaranteed.
-...
-> > > Liam, could you share your kernel config?
-> > 
-> > Sure thing.  See attached.
+On Wed 04-05-22 02:37:50, Guowei Du wrote:
+> From: duguowei <duguowei@xiaomi.com>
 > 
-> So, I can reproduce the hanging system now. However this looks like a
-> qemu problem on s390, since I can reproduce this only with Qemu+TCG.
-> Qemu with kvm works without any problems (same if I use z/VM as
-> hypervisor).
+> For now, there have been open/access/open_exec perms for file operation,
+> so we add new perms check with unlink/rmdir syscall. if one app deletes
+> any file/dir within pubic area, fsnotify can sends fsnotify_event to
+> listener to deny that, even if the app have right dac/mac permissions.
 > 
-> Janosch, Claudio, can you have a look at this please?
+> Signed-off-by: duguowei <duguowei@xiaomi.com>
 
-So, at least for me this problem also exists with plain v5.17.
-Switching off KASAN, or alternatively switching to KASAN_INLINE
-"fixes" it for me with Qemu+TCG.
+Before we go into technical details of implementation can you tell me more
+details about the usecase? Why do you need to check specifically for unlink
+/ delete?
 
-Liam, could you please also try to disable KASAN in your config? With
-that I think we can be almost sure this could be some bug in Qemu.
+Also on the design side of things: Do you realize these permission events
+will not be usable together with other permission events like
+FAN_OPEN_PERM? Because these require notification group returning file
+descriptors while your events will return file handles... I guess we should
+somehow fix that.
+
+
+								Honza
+> ---
+>  fs/notify/fsnotify.c             |  2 +-
+>  include/linux/fs.h               |  2 ++
+>  include/linux/fsnotify.h         | 16 ++++++++++++++++
+>  include/linux/fsnotify_backend.h |  6 +++++-
+>  security/security.c              | 12 ++++++++++--
+>  security/selinux/hooks.c         |  4 ++++
+>  6 files changed, 38 insertions(+), 4 deletions(-)
+> 
+> diff --git a/fs/notify/fsnotify.c b/fs/notify/fsnotify.c
+> index 70a8516b78bc..9c03a5f84be0 100644
+> --- a/fs/notify/fsnotify.c
+> +++ b/fs/notify/fsnotify.c
+> @@ -581,7 +581,7 @@ static __init int fsnotify_init(void)
+>  {
+>  	int ret;
+>  
+> -	BUILD_BUG_ON(HWEIGHT32(ALL_FSNOTIFY_BITS) != 25);
+> +	BUILD_BUG_ON(HWEIGHT32(ALL_FSNOTIFY_BITS) != 27);
+>  
+>  	ret = init_srcu_struct(&fsnotify_mark_srcu);
+>  	if (ret)
+> diff --git a/include/linux/fs.h b/include/linux/fs.h
+> index bbde95387a23..9c661584db7d 100644
+> --- a/include/linux/fs.h
+> +++ b/include/linux/fs.h
+> @@ -100,6 +100,8 @@ typedef int (dio_iodone_t)(struct kiocb *iocb, loff_t offset,
+>  #define MAY_CHDIR		0x00000040
+>  /* called from RCU mode, don't block */
+>  #define MAY_NOT_BLOCK		0x00000080
+> +#define MAY_UNLINK		0x00000100
+> +#define MAY_RMDIR		0x00000200
+>  
+>  /*
+>   * flags in file.f_mode.  Note that FMODE_READ and FMODE_WRITE must correspond
+> diff --git a/include/linux/fsnotify.h b/include/linux/fsnotify.h
+> index bb8467cd11ae..68f5d4aaf1ae 100644
+> --- a/include/linux/fsnotify.h
+> +++ b/include/linux/fsnotify.h
+> @@ -80,6 +80,22 @@ static inline int fsnotify_parent(struct dentry *dentry, __u32 mask,
+>  	return fsnotify(mask, data, data_type, NULL, NULL, inode, 0);
+>  }
+>  
+> +static inline int fsnotify_path_perm(struct path *path, struct dentry *dentry, __u32 mask)
+> +{
+> +	__u32 fsnotify_mask = 0;
+> +
+> +	if (!(mask & (MAY_UNLINK | MAY_RMDIR)))
+> +		return 0;
+> +
+> +	if (mask & MAY_UNLINK)
+> +		fsnotify_mask |= FS_UNLINK_PERM;
+> +
+> +	if (mask & MAY_RMDIR)
+> +		fsnotify_mask |= FS_RMDIR_PERM;
+> +
+> +	return fsnotify_parent(dentry, fsnotify_mask, path, FSNOTIFY_EVENT_PATH);
+> +}
+> +
+>  /*
+>   * Simple wrappers to consolidate calls to fsnotify_parent() when an event
+>   * is on a file/dentry.
+> diff --git a/include/linux/fsnotify_backend.h b/include/linux/fsnotify_backend.h
+> index 0805b74cae44..0e2e240e8234 100644
+> --- a/include/linux/fsnotify_backend.h
+> +++ b/include/linux/fsnotify_backend.h
+> @@ -54,6 +54,8 @@
+>  #define FS_OPEN_PERM		0x00010000	/* open event in an permission hook */
+>  #define FS_ACCESS_PERM		0x00020000	/* access event in a permissions hook */
+>  #define FS_OPEN_EXEC_PERM	0x00040000	/* open/exec event in a permission hook */
+> +#define FS_UNLINK_PERM		0x00080000	/* unlink event in a permission hook */
+> +#define FS_RMDIR_PERM		0x00100000	/* rmdir event in a permission hook */
+>  
+>  #define FS_EXCL_UNLINK		0x04000000	/* do not send events if object is unlinked */
+>  /*
+> @@ -79,7 +81,9 @@
+>  #define ALL_FSNOTIFY_DIRENT_EVENTS (FS_CREATE | FS_DELETE | FS_MOVE | FS_RENAME)
+>  
+>  #define ALL_FSNOTIFY_PERM_EVENTS (FS_OPEN_PERM | FS_ACCESS_PERM | \
+> -				  FS_OPEN_EXEC_PERM)
+> +				  FS_OPEN_EXEC_PERM | \
+> +				  FS_UNLINK_PERM | \
+> +				  FS_RMDIR_PERM)
+>  
+>  /*
+>   * This is a list of all events that may get sent to a parent that is watching
+> diff --git a/security/security.c b/security/security.c
+> index b7cf5cbfdc67..8efc00ec02ed 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -1160,16 +1160,24 @@ EXPORT_SYMBOL(security_path_mkdir);
+>  
+>  int security_path_rmdir(const struct path *dir, struct dentry *dentry)
+>  {
+> +	int ret;
+>  	if (unlikely(IS_PRIVATE(d_backing_inode(dir->dentry))))
+>  		return 0;
+> -	return call_int_hook(path_rmdir, 0, dir, dentry);
+> +	ret = call_int_hook(path_rmdir, 0, dir, dentry);
+> +	if (ret)
+> +		return ret;
+> +	return fsnotify_path_perm(dir, dentry, MAY_RMDIR);
+>  }
+>  
+>  int security_path_unlink(const struct path *dir, struct dentry *dentry)
+>  {
+> +	int ret;
+>  	if (unlikely(IS_PRIVATE(d_backing_inode(dir->dentry))))
+>  		return 0;
+> -	return call_int_hook(path_unlink, 0, dir, dentry);
+> +	ret = call_int_hook(path_unlink, 0, dir, dentry);
+> +	if (ret)
+> +		return ret;
+> +	return fsnotify_path_perm(dir, dentry, MAY_UNLINK);
+>  }
+>  EXPORT_SYMBOL(security_path_unlink);
+>  
+> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> index e9e959343de9..f0780f0eb903 100644
+> --- a/security/selinux/hooks.c
+> +++ b/security/selinux/hooks.c
+> @@ -1801,8 +1801,12 @@ static int may_create(struct inode *dir,
+>  }
+>  
+>  #define MAY_LINK	0
+> +#ifndef MAY_UNLINK
+>  #define MAY_UNLINK	1
+> +#endif
+> +#ifndef MAY_RMDIR
+>  #define MAY_RMDIR	2
+> +#endif
+>  
+>  /* Check whether a task can link, unlink, or rmdir a file/directory. */
+>  static int may_link(struct inode *dir,
+> -- 
+> 2.17.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

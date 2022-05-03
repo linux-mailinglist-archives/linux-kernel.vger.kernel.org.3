@@ -2,138 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E25C6518DAC
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 22:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F247518F0E
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 22:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235423AbiECUEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 16:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33244 "EHLO
+        id S236187AbiECUmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 16:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbiECUEV (ORCPT
+        with ESMTP id S230391AbiECUme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 16:04:21 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8513E1901C;
-        Tue,  3 May 2022 13:00:47 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id g6so35482420ejw.1;
-        Tue, 03 May 2022 13:00:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=uxaT5a9mxFo9vHNrfWPQOIvrWpFwZ29kzFdHY5abTLk=;
-        b=SudvmlcWADSJQkKpoHHqF0lk+miCNeKd36HwnL4xED11ceBjqenq4OyQD8FJDOEqda
-         piJ3iYeVFonfKEFWO8oI7GvHW4+KhKI+AgzGJD44ArTrmuNV6jiyzKw1n+WVlz3DmdFK
-         3db6plX+sCWyJffcuwUzfEKxBZWtdwKtd8NgI/OeDqNmxli/usCnWEdloXZBPeJJHD9Z
-         CsyUabIpRY5DQvfzEVjxrpL7dJh1Tguk+xFr3V2hHS4tqGShmljvUiIAJXRObJo1lW6H
-         txq8sDJei57ibuqbrE03/ru9Mel3b1He3kMyuvUw/rSWJA94uGl9Yzrp+rTRMZs6eKDx
-         bz+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=uxaT5a9mxFo9vHNrfWPQOIvrWpFwZ29kzFdHY5abTLk=;
-        b=oSOhz0xztg6L9l+SBx3DNYYgGWp2ROVpE1R6w3FAIu39UMI5CVKFqvp0xn4dv0rOx2
-         jV4suyYYtwm+b0CB3fNpG0LhIrpcrc+aKr046RQ9m0+k4HU0reqUb+lN1YNqPdb/IGzL
-         L1L2o/jiRfMQ9Xo6MgJ449ppAAUTgdo1KXYuMPeLFnBl8+tJdn4TTvzLG31CNSPlOc1M
-         W/QNTWL8TeIU4Adbvp7cY+FMRPMY+etC1cTzTc/idMRsnA/+z7vaFjWZ9Qq5RS7gtGVx
-         lTG+nW8ZkgLUgo3XWmbK6DnFjfaoDgHFl5Awlqo1w91AKyIWDmr/T6Oh5yKG88M7Xp3J
-         ilJw==
-X-Gm-Message-State: AOAM530csYcnA67eGIPcvjtkEVXVdIgeOtdXuBXhZGBM7pqsAZ4IBlIv
-        RczpyZW4Gqo6Nrya4CHZZbYVjFOdx9VvMQ==
-X-Google-Smtp-Source: ABdhPJzfrMrzIlChURZtsBvey/f1dntHqFDytb5e+YSbS0KU0oan+7WxNSX9HDWcYqkPKf3yjCYFOg==
-X-Received: by 2002:a17:906:99c4:b0:6f4:56d2:4bbd with SMTP id s4-20020a17090699c400b006f456d24bbdmr10109597ejn.754.1651608046101;
-        Tue, 03 May 2022 13:00:46 -0700 (PDT)
-Received: from kista.localnet (cpe1-3-76.cable.triera.net. [213.161.3.76])
-        by smtp.gmail.com with ESMTPSA id hz12-20020a1709072cec00b006f3ef214dcbsm4945057ejc.49.2022.05.03.13.00.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 13:00:45 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Chen-Yu Tsai <wens@csie.org>, Chukun Pan <amadeus@jmu.edu.cn>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Chukun Pan <amadeus@jmu.edu.cn>
-Subject: Re: Re: [PATCH] arm64: dts: allwinner: define USB3 Ethernet on NanoPi R1S H5
-Date:   Tue, 03 May 2022 22:00:44 +0200
-Message-ID: <1818121.CQOukoFCf9@kista>
-In-Reply-To: <4393725.LvFx2qVVIh@kista>
-References: <20220502144009.44575-1-amadeus@jmu.edu.cn> <4393725.LvFx2qVVIh@kista>
+        Tue, 3 May 2022 16:42:34 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BCF22511;
+        Tue,  3 May 2022 13:39:01 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 242MkbAd018676;
+        Tue, 3 May 2022 00:52:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2021-07-09;
+ bh=WIoVTgq0vIEZvmnR+NEgL1XkmCDUTNJpZDr6GzvN/kc=;
+ b=U0SpwCyy8dC27IPsfbkPvqS0fqmLoYUhJ1e8+yJpvu5h1d7JtzTSjHphkVRrBc0HzQ5v
+ 3p3l9vv8D+vDV/08aERL4G8v/amn5J5MRvXZMmlQ/gxUSpZgQ2Vb334zCl/D9W1C4wjY
+ SMfpcC2b382skaKqJHNzXty+T1ree5hwA6Nsd/7jFv0NWIFTUS5zNwX+Orm9Bu/CJzdP
+ QjEcYBE0o4Xx31r/KdoWv1JCslyHi2RDRNcJecBX5PXxskbHp1p41fSn6irGq7Rn3JWK
+ dToYT0MAGi8oFPsVQ73OboV5y50/Ta1NlJcICPAjVMfy2RX13AX2eJ9B1IA65o0BgVqw YA== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3frwnt4kx2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 03 May 2022 00:52:01 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 2430opOY008941;
+        Tue, 3 May 2022 00:52:00 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x9x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 03 May 2022 00:52:00 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2430pljg010389;
+        Tue, 3 May 2022 00:52:00 GMT
+Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x4g-23;
+        Tue, 03 May 2022 00:51:59 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     John Garry <john.garry@huawei.com>, jejb@linux.ibm.com
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH v2] scsi: core: Refine how we set tag_set NUMA node
+Date:   Mon,  2 May 2022 20:51:33 -0400
+Message-Id: <165153836362.24053.7061141693570031456.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.35.2
+In-Reply-To: <1648640315-21419-1-git-send-email-john.garry@huawei.com>
+References: <1648640315-21419-1-git-send-email-john.garry@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: 0SWjchfUlf8QrgHUKMczPIsYukTmH39J
+X-Proofpoint-GUID: 0SWjchfUlf8QrgHUKMczPIsYukTmH39J
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne torek, 03. maj 2022 ob 19:54:34 CEST je Jernej =C5=A0krabec napisal(a):
-> Dne ponedeljek, 02. maj 2022 ob 16:40:09 CEST je Chukun Pan napisal(a):
-> > The NanoPi R1S H5 has a Realtek RTL8153B USB 3.0 Ethernet chip
-> > connected to the USB 2.0 port of the Allwinner H5 SoC.
-> >=20
-> > Signed-off-by: Chukun Pan <amadeus@jmu.edu.cn>
-> > ---
-> >  arch/arm64/boot/dts/allwinner/sun50i-h5-nanopi-r1s-h5.dts | 8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h5-nanopi-r1s-h5.dts =
-b/
-> arch/arm64/boot/dts/allwinner/sun50i-h5-nanopi-r1s-h5.dts
-> > index 55b369534a08..dd655a491549 100644
-> > --- a/arch/arm64/boot/dts/allwinner/sun50i-h5-nanopi-r1s-h5.dts
-> > +++ b/arch/arm64/boot/dts/allwinner/sun50i-h5-nanopi-r1s-h5.dts
-> > @@ -21,7 +21,8 @@ / {
-> > =20
-> >  	aliases {
-> >  		ethernet0 =3D &emac;
-> > -		ethernet1 =3D &rtl8189etv;
-> > +		ethernet1 =3D &rtl8153;
-> > +		ethernet2 =3D &rtl8189etv;
+On Wed, 30 Mar 2022 19:38:35 +0800, John Garry wrote:
 
-Additionally, it's not a good idea to change order of ethernet nodes. It ca=
-n=20
-affect mac address assigning procedure in bootloader.
+> For SCSI hosts which enable host_tagset the NUMA node returned from
+> blk_mq_hw_queue_to_node() is NUMA_NO_NODE always. Then, since in
+> scsi_mq_setup_tags() the default we choose for the tag_set NUMA node is
+> NUMA_NO_NODE, we always evaluate the NUMA node as NUMA_NO_NODE in
+> functions like blk_mq_alloc_rq_map().
+> 
+> The reason we get NUMA_NO_NODE from blk_mq_hw_queue_to_node() is that
+> the hctx_idx passed is BLK_MQ_NO_HCTX_IDX - so we can't match against a
+> (HW) queue mapping index.
+> 
+> [...]
 
-Best regards,
-Jernej
+Applied to 5.19/scsi-queue, thanks!
 
-> >  		serial0 =3D &uart0;
-> >  	};
-> > =20
-> > @@ -116,6 +117,11 @@ &cpu0 {
-> > =20
-> >  &ehci1 {
-> >  	status =3D "okay";
->=20
-> You need to add #address-cells and #size-cells properties, otherwise "mak=
-e=20
-> dtbs_check W=3D1" generates warnings.
->=20
-> Best regards,
-> Jernej
->=20
-> > +
-> > +	rtl8153: device@1 {
-> > +		compatible =3D "usbbda,8153";
-> > +		reg =3D <1>;
-> > +	};
-> >  };
-> > =20
-> >  &ehci2 {
-> > --=20
-> > 2.25.1
-> >=20
-> >=20
->=20
->=20
->=20
+[1/1] scsi: core: Refine how we set tag_set NUMA node
+      https://git.kernel.org/mkp/scsi/c/973dac8a8a14
 
-
+-- 
+Martin K. Petersen	Oracle Linux Engineering

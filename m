@@ -2,377 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2744A518871
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:23:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45408518885
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238373AbiECP0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 11:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59610 "EHLO
+        id S238464AbiECPa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 11:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238362AbiECP0i (ORCPT
+        with ESMTP id S238439AbiECPay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 11:26:38 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4FD14039
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 08:23:05 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id q8so18081405oif.13
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 08:23:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4P5u4OI435MR6q9gonw3hHdJ5OVddGQ9PjO+Qc38Sqg=;
-        b=oh5WuUGpmKwqn+E873tD5aaCBYM9lw2MPw1kPZKC2KZQHVOUY66AXNNNSmwK5ea4Pp
-         94btZNhWmdkTvAVSoI9oVaCyqvn1aRNL9stI4xRkc8rTQt0dTfv3hmNMhvHMQrfXf7dV
-         AL/gVdsphj+WY84o9r+I2UglHHSWfFcGXtF/Q/Muz8ZYQ/Aqri2a0sAjar/BtnDsKqiz
-         zwR/axThmpZgTfrHXPocOKrACAbeZPRSuiXLNt5RM9MUISqPmI2XmGa9IfPvRnSOG6Ts
-         ejKat0QjL6b8Hpa3VdJZrGK4TNhv2sCnApo/sZtWXOTFiKHpltuDrs/rx2XPQ1/lD/u2
-         yFiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4P5u4OI435MR6q9gonw3hHdJ5OVddGQ9PjO+Qc38Sqg=;
-        b=VuNXCYXF3ni/dzrPj0l4xqYEEkY29XVPiGWpcGXmUxbygI0OkRSCFNTwBcWWmVSCYf
-         4Y1aDCDexusKnqhKZSCFZBBh3k2Tsie+qoi1QK1WKjcGXQsCw6LpD0wbbSMo3kUmkOiz
-         t2l8wshMViRp5z3QmpckV0HzcjujcqCSLMCTv0xmaOY1sM8cxlthBDxXIqrmfGQrz9tc
-         6Tfg7Pmgy+T9C66IxDyX9v4qNhcSvAyA6bSdV2JJ4Cfxm8GTDrpk0ATbZdFtvBc7Z43x
-         sViuAMAJl9gT6gdMfV3RglfP+NWppMpti/I0hsvAzf2wUdFtzBDnEoxy8J1LT2XjK2+W
-         dgpg==
-X-Gm-Message-State: AOAM533rZz77mwPj126o2t5lyMyGbQDfwNjQbaX0cSs1bABz+MSsUhvs
-        FMZls99sqP5tssRQA3XISGl+Kg==
-X-Google-Smtp-Source: ABdhPJyend/3+6xY469d/PjqFIHV3pliLy+ub0ALUoV+NiRLHJ1lem9ABT/kcCmd1y3mBdXMtBfxBQ==
-X-Received: by 2002:a05:6808:7d1:b0:325:9728:7a2b with SMTP id f17-20020a05680807d100b0032597287a2bmr2049729oij.76.1651591384014;
-        Tue, 03 May 2022 08:23:04 -0700 (PDT)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id w7-20020a9d5387000000b005b22a0d826csm3985356otg.1.2022.05.03.08.23.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 08:23:03 -0700 (PDT)
-Date:   Tue, 3 May 2022 08:24:50 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <quic_tdas@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] clk: qcom: rcg2: Cache CFG register updates for
- parked RCGs
-Message-ID: <YnFJQiRkbn3C6KP1@ripper>
-References: <20220426212136.1543984-1-bjorn.andersson@linaro.org>
+        Tue, 3 May 2022 11:30:54 -0400
+Received: from skyrocket.fabmicro.ru (skyrocket.fabmicro.ru [217.116.57.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2347D24587
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 08:27:20 -0700 (PDT)
+Received: from mail.fabmicro.ru (skyrocket.fabmicro.ru [217.116.57.130])
+        by skyrocket.fabmicro.ru (8.14.9/8.14.9) with ESMTP id 243FQIbs075026;
+        Tue, 3 May 2022 15:26:18 GMT
+        (envelope-from rz@fabmicro.ru)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220426212136.1543984-1-bjorn.andersson@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Date:   Tue, 03 May 2022 20:26:18 +0500
+From:   Ruslan Zalata <rz@fabmicro.ru>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Maxime Ripard <maxime@cerno.tech>, Icenowy Zheng <icenowy@aosc.io>,
+        Jean Delvare <jdelvare@suse.com>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v2] hwmon: (sun4i-lradc) Add driver for LRADC found on
+ Allwinner A13/A20 SoC
+In-Reply-To: <4aabfd63-18e2-65c5-d1c2-d7600afc1c40@roeck-us.net>
+References: <20220428210906.29527-1-rz@fabmicro.ru>
+ <20220502110010.q7vvdkdpaiz5acjl@houat>
+ <7433B295-D896-4BF8-87DF-87EB89D7A550@aosc.io>
+ <20220502112112.3ne7zy4b6gggxzoo@houat>
+ <4aabfd63-18e2-65c5-d1c2-d7600afc1c40@roeck-us.net>
+User-Agent: Roundcube Webmail/1.4.3
+Message-ID: <97e3af18e947492b1ac968c058ba509f@fabmicro.ru>
+X-Sender: rz@fabmicro.ru
+Organization: Fabmicro, LLC.
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 26 Apr 14:21 PDT 2022, Bjorn Andersson wrote:
+Hi Guenter,
 
-(+ Taniya's new email address)
+LRADC does generate continuous interrupts as long as input voltage is 
+below LevelB threshold. The max possible LevelB is 0x3C which in case of 
+A20 SoC is close to 1.90V and that's what my driver sets LevelB to. 
+Perhaps this needs to be documented more thoroughly.
 
-> As GDSCs are turned on and off some associated clocks are momentarily
-> enabled for house keeping purposes. For this, and similar, purposes the
-> "shared RCGs" will park the RCG on a source clock which is known to be
-> available.
-> When the RCG is parked, a safe clock source will be selected and
-> committed, then the original source would be written back and upon enable
-> the change back to the unparked source would be committed.
-> 
-> But starting with SM8350 this fails, as the value in CFG is committed by
-> the GDSC handshake and without a ticking parent the GDSC enablement will
-> time out.
-> 
-> This becomes a concrete problem if the runtime supended state of a
-> device includes disabling such rcg's parent clock. As the device
-> attempts to power up the domain again the rcg will fail to enable and
-> hence the GDSC enablement will fail, preventing the device from
-> returning from the suspended state.
-> 
-> This can be seen in e.g. the display stack during probe on SM8350.
-> 
-> To avoid this problem, the software needs to ensure that the RCG is
-> configured to a active parent clock while it is disabled. This is done
-> by caching the CFG register content while the shared RCG is parked on
-> this safe source.
-> 
-> Writes to M, N and D registers are committed as they are requested. New
-> helpers for get_parent() and recalc_rate() are extracted from their
-> previous implementations and __clk_rcg2_configure() is modified to allow
-> it to operate on the cached value.
-> 
-> Fixes: 7ef6f11887bd ("clk: qcom: Configure the RCGs to a safe source as needed")
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+It is possible to implement this same driver for IIO subsystem, but I 
+would prefer to keep it in hwmon along with many other simple ADC 
+drivers used for temp and battery status monitoring.
 
-Ping?
+If we talk about IIO, it will be necessary to implement serialization of 
+reads and updates which brings up some complexity I would try to avoid 
+at the moment. :)
 
-Thanks,
-Bjorn
+---
+Regards,
+Ruslan.
 
-> ---
+Fabmicro, LLC.
+
+On 2022-05-03 07:02, Guenter Roeck wrote:
+> On 5/2/22 04:21, Maxime Ripard wrote:
+>> On Mon, May 02, 2022 at 07:15:01PM +0800, Icenowy Zheng wrote:
+>>> 
+>>> 
+>>> 于 2022年5月2日 GMT+08:00 下午7:00:10, Maxime Ripard <maxime@cerno.tech> 
+>>> 写到:
+>>>> Hi,
+>>>> 
+>>>> On Thu, Apr 28, 2022 at 09:09:03PM +0000, Ruslan Zalata wrote:
+>>>>> Some Allwinner SoCs like A13, A20 or T2 are equipped with 
+>>>>> two-channel
+>>>>> low rate (6 bit) ADC that is often used for extra keys. There's a 
+>>>>> driver
+>>>>> for that already implementing standard input device, but it has 
+>>>>> these
+>>>>> limitations: 1) it cannot be used for general ADC data equisition, 
+>>>>> and
+>>>>> 2) it uses only one LRADC channel of two available.
+>>>>> 
+>>>>> This driver provides basic hwmon interface to both channels of 
+>>>>> LRADC on
+>>>>> such Allwinner SoCs.
+>>>>> 
+>>>>> Signed-off-by: Ruslan Zalata <rz@fabmicro.ru>
+>>>>> ---
+>>>>>   MAINTAINERS                       |   6 +
+>>>>>   drivers/hwmon/Kconfig             |  13 ++
+>>>>>   drivers/hwmon/Makefile            |   1 +
+>>>>>   drivers/hwmon/sun4i-lradc-hwmon.c | 280 
+>>>>> ++++++++++++++++++++++++++++++
+>>>>>   4 files changed, 300 insertions(+)
+>>>>>   create mode 100644 drivers/hwmon/sun4i-lradc-hwmon.c
+>>>>> 
+>>>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>>>> index 5e8c2f61176..d9c71e94133 100644
+>>>>> --- a/MAINTAINERS
+>>>>> +++ b/MAINTAINERS
+>>>>> @@ -18861,6 +18861,12 @@ S:	Maintained
+>>>>>   
+>>>>> F:	Documentation/devicetree/bindings/input/allwinner,sun4i-a10-lradc-keys.yaml
+>>>>>   F:	drivers/input/keyboard/sun4i-lradc-keys.c
+>>>>>   +SUN4I LOW RES ADC HWMON DRIVER
+>>>>> +M:	Ruslan Zalata <rz@fabmicro.ru>
+>>>>> +L:	linux-hwmon@vger.kernel.org
+>>>>> +S:	Maintained
+>>>>> +F:	drivers/hwmon/sun4i-lradc-hwmon.c
+>>>>> +
+>>>>>   SUNDANCE NETWORK DRIVER
+>>>>>   M:	Denis Kirjanov <kda@linux-powerpc.org>
+>>>>>   L:	netdev@vger.kernel.org
+>>>>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+>>>>> index 68a8a27ab3b..86776488a81 100644
+>>>>> --- a/drivers/hwmon/Kconfig
+>>>>> +++ b/drivers/hwmon/Kconfig
+>>>>> @@ -1691,6 +1691,19 @@ config SENSORS_SIS5595
+>>>>>   	  This driver can also be built as a module. If so, the module
+>>>>>   	  will be called sis5595.
+>>>>>   +config SENSORS_SUN4I_LRADC
+>>>>> +	tristate "Allwinner A13/A20 LRADC hwmon"
+>>>>> +	depends on ARCH_SUNXI && !KEYBOARD_SUN4I_LRADC
+>>>>> +	help
+>>>>> +	  Say y here to support the LRADC found in Allwinner A13/A20 
+>>>>> SoCs.
+>>>>> +	  Both channels are supported.
+>>>>> +
+>>>>> +	  This driver can also be built as module. If so, the module
+>>>>> +	  will be called sun4i-lradc-hwmon.
+>>>>> +
+>>>>> +	  This option is not compatible with KEYBOARD_SUN4I_LRADC, one
+>>>>> +	  of these must be used at a time.
+>>>> 
+>>>> How do you plan on enforcing that?
+>>>> 
+>>>> I guess a better path forward would be to either register an hwmon
+>>>> device in the original driver, or convert that driver to iio and use
+>>>> iio-hwmon.
+>>> 
+>>> I think this driver should be use IIO, and then try to probe an IIO 
+>>> input
+>>> if possible.
+>> 
+>> It's been a while, but if I remember well we couldn't use IIO for that
+>> driver because it's not generating interrupts all the time but only 
+>> when
+>> it goes over a given threshold:
+>> 
+>> https://lore.kernel.org/all/52C5E9F1.9010700@redhat.com/
+>> 
+>> I'm not sure if it's still relevant, so we might just need to add an
+>> hwmon driver to the existing driver
+>> 
 > 
-> Changes since v3:
-> - Three more __clk_is_enabled() replaced with clk_hw_is_enabled()
-> - Fix spelling used -> use in two places
+> So now we have conflicting claims that the hwmon driver would need
+> to implement continuous interrupts because the chip otherwise doesn't
+> continuously measure ADC input, and that implementing an IIO driver
+> isn't possible or doesn't make sense because the chip would not support
+> generating continuous interrupts. Which one is it ? Am I missing 
+> something ?
 > 
->  drivers/clk/qcom/clk-rcg.h  |   2 +
->  drivers/clk/qcom/clk-rcg2.c | 126 ++++++++++++++++++++++++++++--------
->  2 files changed, 101 insertions(+), 27 deletions(-)
-> 
-> diff --git a/drivers/clk/qcom/clk-rcg.h b/drivers/clk/qcom/clk-rcg.h
-> index 00cea508d49e..012e745794fd 100644
-> --- a/drivers/clk/qcom/clk-rcg.h
-> +++ b/drivers/clk/qcom/clk-rcg.h
-> @@ -140,6 +140,7 @@ extern const struct clk_ops clk_dyn_rcg_ops;
->   * @freq_tbl: frequency table
->   * @clkr: regmap clock handle
->   * @cfg_off: defines the cfg register offset from the CMD_RCGR + CFG_REG
-> + * @parked_cfg: cached value of the CFG register for parked RCGs
->   */
->  struct clk_rcg2 {
->  	u32			cmd_rcgr;
-> @@ -150,6 +151,7 @@ struct clk_rcg2 {
->  	const struct freq_tbl	*freq_tbl;
->  	struct clk_regmap	clkr;
->  	u8			cfg_off;
-> +	u32			parked_cfg;
->  };
->  
->  #define to_clk_rcg2(_hw) container_of(to_clk_regmap(_hw), struct clk_rcg2, clkr)
-> diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
-> index f675fd969c4d..c913fd326f1a 100644
-> --- a/drivers/clk/qcom/clk-rcg2.c
-> +++ b/drivers/clk/qcom/clk-rcg2.c
-> @@ -73,16 +73,11 @@ static int clk_rcg2_is_enabled(struct clk_hw *hw)
->  	return (cmd & CMD_ROOT_OFF) == 0;
->  }
->  
-> -static u8 clk_rcg2_get_parent(struct clk_hw *hw)
-> +static u8 __clk_rcg2_get_parent(struct clk_hw *hw, u32 cfg)
->  {
->  	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
->  	int num_parents = clk_hw_get_num_parents(hw);
-> -	u32 cfg;
-> -	int i, ret;
-> -
-> -	ret = regmap_read(rcg->clkr.regmap, RCG_CFG_OFFSET(rcg), &cfg);
-> -	if (ret)
-> -		goto err;
-> +	int i;
->  
->  	cfg &= CFG_SRC_SEL_MASK;
->  	cfg >>= CFG_SRC_SEL_SHIFT;
-> @@ -91,12 +86,27 @@ static u8 clk_rcg2_get_parent(struct clk_hw *hw)
->  		if (cfg == rcg->parent_map[i].cfg)
->  			return i;
->  
-> -err:
->  	pr_debug("%s: Clock %s has invalid parent, using default.\n",
->  		 __func__, clk_hw_get_name(hw));
->  	return 0;
->  }
->  
-> +static u8 clk_rcg2_get_parent(struct clk_hw *hw)
-> +{
-> +	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
-> +	u32 cfg;
-> +	int ret;
-> +
-> +	ret = regmap_read(rcg->clkr.regmap, RCG_CFG_OFFSET(rcg), &cfg);
-> +	if (ret) {
-> +		pr_debug("%s: Unable to read CFG register for %s\n",
-> +			 __func__, clk_hw_get_name(hw));
-> +		return 0;
-> +	}
-> +
-> +	return __clk_rcg2_get_parent(hw, cfg);
-> +}
-> +
->  static int update_config(struct clk_rcg2 *rcg)
->  {
->  	int count, ret;
-> @@ -163,12 +173,10 @@ calc_rate(unsigned long rate, u32 m, u32 n, u32 mode, u32 hid_div)
->  }
->  
->  static unsigned long
-> -clk_rcg2_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
-> +__clk_rcg2_recalc_rate(struct clk_hw *hw, unsigned long parent_rate, u32 cfg)
->  {
->  	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
-> -	u32 cfg, hid_div, m = 0, n = 0, mode = 0, mask;
-> -
-> -	regmap_read(rcg->clkr.regmap, RCG_CFG_OFFSET(rcg), &cfg);
-> +	u32 hid_div, m = 0, n = 0, mode = 0, mask;
->  
->  	if (rcg->mnd_width) {
->  		mask = BIT(rcg->mnd_width) - 1;
-> @@ -189,6 +197,17 @@ clk_rcg2_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
->  	return calc_rate(parent_rate, m, n, mode, hid_div);
->  }
->  
-> +static unsigned long
-> +clk_rcg2_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
-> +{
-> +	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
-> +	u32 cfg;
-> +
-> +	regmap_read(rcg->clkr.regmap, RCG_CFG_OFFSET(rcg), &cfg);
-> +
-> +	return __clk_rcg2_recalc_rate(hw, parent_rate, cfg);
-> +}
-> +
->  static int _freq_tbl_determine_rate(struct clk_hw *hw, const struct freq_tbl *f,
->  				    struct clk_rate_request *req,
->  				    enum freq_policy policy)
-> @@ -262,7 +281,8 @@ static int clk_rcg2_determine_floor_rate(struct clk_hw *hw,
->  	return _freq_tbl_determine_rate(hw, rcg->freq_tbl, req, FLOOR);
->  }
->  
-> -static int __clk_rcg2_configure(struct clk_rcg2 *rcg, const struct freq_tbl *f)
-> +static int __clk_rcg2_configure(struct clk_rcg2 *rcg, const struct freq_tbl *f,
-> +				u32 *_cfg)
->  {
->  	u32 cfg, mask, d_val, not2d_val, n_minus_m;
->  	struct clk_hw *hw = &rcg->clkr.hw;
-> @@ -304,15 +324,27 @@ static int __clk_rcg2_configure(struct clk_rcg2 *rcg, const struct freq_tbl *f)
->  	cfg |= rcg->parent_map[index].cfg << CFG_SRC_SEL_SHIFT;
->  	if (rcg->mnd_width && f->n && (f->m != f->n))
->  		cfg |= CFG_MODE_DUAL_EDGE;
-> -	return regmap_update_bits(rcg->clkr.regmap, RCG_CFG_OFFSET(rcg),
-> -					mask, cfg);
-> +
-> +	*_cfg &= ~mask;
-> +	*_cfg |= cfg;
-> +
-> +	return 0;
->  }
->  
->  static int clk_rcg2_configure(struct clk_rcg2 *rcg, const struct freq_tbl *f)
->  {
-> +	u32 cfg;
->  	int ret;
->  
-> -	ret = __clk_rcg2_configure(rcg, f);
-> +	ret = regmap_read(rcg->clkr.regmap, RCG_CFG_OFFSET(rcg), &cfg);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = __clk_rcg2_configure(rcg, f, &cfg);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = regmap_write(rcg->clkr.regmap, RCG_CFG_OFFSET(rcg), cfg);
->  	if (ret)
->  		return ret;
->  
-> @@ -979,11 +1011,12 @@ static int clk_rcg2_shared_set_rate(struct clk_hw *hw, unsigned long rate,
->  		return -EINVAL;
->  
->  	/*
-> -	 * In case clock is disabled, update the CFG, M, N and D registers
-> -	 * and don't hit the update bit of CMD register.
-> +	 * In case clock is disabled, update the M, N and D registers, cache
-> +	 * the CFG value in parked_cfg and don't hit the update bit of CMD
-> +	 * register.
->  	 */
-> -	if (!__clk_is_enabled(hw->clk))
-> -		return __clk_rcg2_configure(rcg, f);
-> +	if (!clk_hw_is_enabled(hw))
-> +		return __clk_rcg2_configure(rcg, f, &rcg->parked_cfg);
->  
->  	return clk_rcg2_shared_force_enable_clear(hw, f);
->  }
-> @@ -1007,6 +1040,11 @@ static int clk_rcg2_shared_enable(struct clk_hw *hw)
->  	if (ret)
->  		return ret;
->  
-> +	/* Write back the stored configuration corresponding to current rate */
-> +	ret = regmap_write(rcg->clkr.regmap, rcg->cmd_rcgr + CFG_REG, rcg->parked_cfg);
-> +	if (ret)
-> +		return ret;
-> +
->  	ret = update_config(rcg);
->  	if (ret)
->  		return ret;
-> @@ -1017,13 +1055,12 @@ static int clk_rcg2_shared_enable(struct clk_hw *hw)
->  static void clk_rcg2_shared_disable(struct clk_hw *hw)
->  {
->  	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
-> -	u32 cfg;
->  
->  	/*
->  	 * Store current configuration as switching to safe source would clear
->  	 * the SRC and DIV of CFG register
->  	 */
-> -	regmap_read(rcg->clkr.regmap, rcg->cmd_rcgr + CFG_REG, &cfg);
-> +	regmap_read(rcg->clkr.regmap, rcg->cmd_rcgr + CFG_REG, &rcg->parked_cfg);
->  
->  	/*
->  	 * Park the RCG at a safe configuration - sourced off of safe source.
-> @@ -1041,17 +1078,52 @@ static void clk_rcg2_shared_disable(struct clk_hw *hw)
->  	update_config(rcg);
->  
->  	clk_rcg2_clear_force_enable(hw);
-> +}
->  
-> -	/* Write back the stored configuration corresponding to current rate */
-> -	regmap_write(rcg->clkr.regmap, rcg->cmd_rcgr + CFG_REG, cfg);
-> +static u8 clk_rcg2_shared_get_parent(struct clk_hw *hw)
-> +{
-> +	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
-> +
-> +	/* If the shared rcg is parked use the cached cfg instead */
-> +	if (!clk_hw_is_enabled(hw))
-> +		return __clk_rcg2_get_parent(hw, rcg->parked_cfg);
-> +
-> +	return clk_rcg2_get_parent(hw);
-> +}
-> +
-> +static int clk_rcg2_shared_set_parent(struct clk_hw *hw, u8 index)
-> +{
-> +	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
-> +
-> +	/* If the shared rcg is parked only update the cached cfg */
-> +	if (!clk_hw_is_enabled(hw)) {
-> +		rcg->parked_cfg &= ~CFG_SRC_SEL_MASK;
-> +		rcg->parked_cfg |= rcg->parent_map[index].cfg << CFG_SRC_SEL_SHIFT;
-> +
-> +		return 0;
-> +	}
-> +
-> +	return clk_rcg2_set_parent(hw, index);
-> +}
-> +
-> +static unsigned long
-> +clk_rcg2_shared_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
-> +{
-> +	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
-> +
-> +	/* If the shared rcg is parked use the cached cfg instead */
-> +	if (!clk_hw_is_enabled(hw))
-> +		return __clk_rcg2_recalc_rate(hw, parent_rate, rcg->parked_cfg);
-> +
-> +	return clk_rcg2_recalc_rate(hw, parent_rate);
->  }
->  
->  const struct clk_ops clk_rcg2_shared_ops = {
->  	.enable = clk_rcg2_shared_enable,
->  	.disable = clk_rcg2_shared_disable,
-> -	.get_parent = clk_rcg2_get_parent,
-> -	.set_parent = clk_rcg2_set_parent,
-> -	.recalc_rate = clk_rcg2_recalc_rate,
-> +	.get_parent = clk_rcg2_shared_get_parent,
-> +	.set_parent = clk_rcg2_shared_set_parent,
-> +	.recalc_rate = clk_rcg2_shared_recalc_rate,
->  	.determine_rate = clk_rcg2_determine_rate,
->  	.set_rate = clk_rcg2_shared_set_rate,
->  	.set_rate_and_parent = clk_rcg2_shared_set_rate_and_parent,
-> -- 
-> 2.35.1
-> 
+> Guenter

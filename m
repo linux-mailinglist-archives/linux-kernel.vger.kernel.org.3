@@ -2,48 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B0A518EE8
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 22:36:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6425E518EE5
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 22:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237202AbiECUeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 16:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43672 "EHLO
+        id S237735AbiECUhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 16:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232927AbiECUeT (ORCPT
+        with ESMTP id S235722AbiECUhR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 16:34:19 -0400
+        Tue, 3 May 2022 16:37:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2644920F78
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 13:30:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7643389A;
+        Tue,  3 May 2022 13:33:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A2F0160FD6
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 20:30:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3540C385B1;
-        Tue,  3 May 2022 20:30:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF5CB61228;
+        Tue,  3 May 2022 20:33:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4210FC385A4;
+        Tue,  3 May 2022 20:33:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651609844;
-        bh=mVOGOpBYm+Bzhe/7VV0Fmk4EZbmIIpgNhl6/C1CkJlo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fEYQfHh8q/fYnUgf6snM5cXsjOCXkcs50x7ugGNUOG0SaivZSJgrAHBGPF+CyO6wM
-         D0+W6cAwprtt8rExly4zdSAKRu5xSgZf6awUjKJlXPmCRMg+FfeDTmibtWqjnajGnM
-         eqtj4GLrLSGDqGaQDr8ZbOBnOHOPJWDi1GU3Ku97qG+Revw7GNwxEZD1TdGTd0IikF
-         4Lyx+/srcisy9Zp83jt6t1vWhHKpGmlC/9nCrcIUnpemqo5yCetFu85O3Mg182pAsY
-         M01K0wth2JG8uAaQBQi5yJ0e52dTkSCgL6BWUoYriNUqu3HJ1HE8vwfH3f8K5gJyyk
-         cDrPM3qieTqxg==
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [PATCH 2/2] f2fs: avoid to select pinned section during checkpoint=disable
-Date:   Tue,  3 May 2022 13:30:40 -0700
-Message-Id: <20220503203040.365028-2-jaegeuk@kernel.org>
-X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-In-Reply-To: <20220503203040.365028-1-jaegeuk@kernel.org>
-References: <20220503203040.365028-1-jaegeuk@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        s=k20201202; t=1651610023;
+        bh=+S+gI1rUYoYq98LrroKUD/OVNIAreoq4PC0e3oaD+DM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=q6x1lzU+6y4QJQE53ZAVYfNknpKqET8REpetEZQOASqdJqet0iFBjVOQXjdxCNW4j
+         4yCJzqLFjtQ1hF0FsD4bjwdTYumlcYknmcnG00CnhjFSJNsl3mpWhcrxANWjStmP+2
+         GdGBOX0Rh4RQzXuRGojk34t2bw2lfhwxVk8QYOlfIK16nVF/smo5oiVSLrIgLpEWPa
+         qrvhFY4BLfC9/WgqlPOhIKXnrE9tVcVlDDZpQJEgNC4knATTysgnvtqvNNWvdlQ3c3
+         gtSsrM95ANJIndvWT5eukBbKDhcjtFLsUVQjx49n42kpHhevPAGkcRV+g+o+zatF0V
+         DoI+2rKPXiglQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nlzDI-008jtX-PA; Tue, 03 May 2022 21:33:40 +0100
+Date:   Tue, 03 May 2022 21:33:40 +0100
+Message-ID: <878rriicez.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v7 0/9] KVM: arm64: Add support for hypercall services selection
+In-Reply-To: <CAJHc60xp=UQT_CX0zoiSjAmkS8JSe+NB5Gr+F5mmybjJAWkUtQ@mail.gmail.com>
+References: <20220502233853.1233742-1-rananta@google.com>
+        <878rri8r78.wl-maz@kernel.org>
+        <CAJHc60xp=UQT_CX0zoiSjAmkS8JSe+NB5Gr+F5mmybjJAWkUtQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: rananta@google.com, drjones@redhat.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, pbonzini@redhat.com, catalin.marinas@arm.com, will@kernel.org, pshier@google.com, ricarkol@google.com, oupton@google.com, reijiw@google.com, jingzhangos@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -54,32 +79,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The f2fs_gc uses a bitmap to indicate pinned sections, but when disabling
-chckpoint, we call f2fs_gc() with NULL_SEGNO which selects the same dirty
-segment as a victim all the time, resulting in checkpoint=disable failure.
-Let's pick another one, if we fail to collect it.
+On Tue, 03 May 2022 19:49:13 +0100,
+Raghavendra Rao Ananta <rananta@google.com> wrote:
+>=20
+> Hi Marc,
+>=20
+> On Tue, May 3, 2022 at 10:24 AM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On Tue, 03 May 2022 00:38:44 +0100,
+> > Raghavendra Rao Ananta <rananta@google.com> wrote:
+> > >
+> > > Hello,
+> > >
+> > > Continuing the discussion from [1], the series tries to add support
+> > > for the userspace to elect the hypercall services that it wishes
+> > > to expose to the guest, rather than the guest discovering them
+> > > unconditionally. The idea employed by the series was taken from
+> > > [1] as suggested by Marc Z.
+> >
+> > As it took some time to get there, and that there was still a bunch of
+> > things to address, I've taken the liberty to apply my own fixes to the
+> > series.
+> >
+> > Please have a look at [1], and let me know if you're OK with the
+> > result. If you are, I'll merge the series for 5.19.
+> >
+> > Thanks,
+> >
+> >         M.
+> >
+> Thank you for speeding up the process; appreciate it. However, the
+> series's selftest patches have a dependency on Oliver's
+> PSCI_SYSTEM_SUSPEND's selftest patches [1][2]. Can we pull them in
+> too?
 
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
----
- fs/f2fs/gc.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+Urgh... I guess this is the time to set some ground rules:
 
-diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-index 4d47723523c3..5ba8104e138b 100644
---- a/fs/f2fs/gc.c
-+++ b/fs/f2fs/gc.c
-@@ -1838,10 +1838,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, bool sync,
- 	if (gc_type == FG_GC)
- 		sbi->cur_victim_sec = NULL_SEGNO;
- 
--	if (sync)
--		goto stop;
--
--	if (!has_not_enough_free_secs(sbi, sec_freed, 0))
-+	if (!has_not_enough_free_secs(sbi, sec_freed, 0) && seg_freed)
- 		goto stop;
- 
- 	if (skipped_round <= MAX_SKIP_GC_COUNT || skipped_round * 2 < round) {
--- 
-2.36.0.464.gb9c8b46e94-goog
+- Please don't introduce dependencies between series, that's
+  unmanageable. I really need to see each series independently, and if
+  there is a merge conflict, that's my job to fix (and I don't really
+  mind).
 
+- If there is a dependency between series, please post a version of
+  the required patches as a prefix to your series, assuming this
+  prefix is itself standalone. If it isn't, then something really is
+  wrong, and the series should be resplit.
+
+- You also should be basing your series on an *official* tag from
+  Linus' tree (preferably -rc1, -rc2 or -rc3), and not something
+  random like any odd commit from the KVM tree (I had conflicts while
+  applying this on -rc3, probably due to the non-advertised dependency
+  on Oliver's series).
+
+>=20
+> aarch64/hypercalls.c: In function =E2=80=98guest_test_hvc=E2=80=99:
+> aarch64/hypercalls.c:95:30: error: storage size of =E2=80=98res=E2=80=99 =
+isn=E2=80=99t known
+>    95 |         struct arm_smccc_res res;
+>       |                              ^~~
+> aarch64/hypercalls.c:103:17: warning: implicit declaration of function
+> =E2=80=98smccc_hvc=E2=80=99 [-Wimplicit-function-declaration]
+>   103 |                 smccc_hvc(hc_info->func_id, hc_info->arg1, 0,
+> 0, 0, 0, 0, 0, &res);
+>       |                 ^~~~~~~~~
+>
+
+I've picked the two patches, which means they will most likely appear
+twice in the history. In the future, please reach out so that we can
+organise this better.
+
+> Also, just a couple of readability nits in the fixed version:
+>=20
+> 1. Patch-2/9, hypercall.c:kvm_hvc_call_default_allowed(), in the
+> 'default' case, do you think we should probably add a small comment
+> that mentions we are checking for func_id in the PSCI range?
+
+Dumped a one-liner there.
+
+> 2. Patch-2/9, arm_hypercall.h, clear all the macros in this patch
+> itself instead of doing it in increments (unless there's some reason
+> that I'm missing)?
+
+Ah, rebasing leftovers, now gone.
+
+I've pushed an updated branch again, please have a look.
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.

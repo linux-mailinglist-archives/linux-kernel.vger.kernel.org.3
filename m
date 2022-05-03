@@ -2,103 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15693518734
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47275518738
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237410AbiECOxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 10:53:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46906 "EHLO
+        id S237482AbiECOx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 10:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237321AbiECOxf (ORCPT
+        with ESMTP id S237450AbiECOxt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 10:53:35 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFEDB393C5;
-        Tue,  3 May 2022 07:50:02 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id CD385320069B;
-        Tue,  3 May 2022 10:49:58 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Tue, 03 May 2022 10:49:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1651589398; x=1651675798; bh=4wCZd6tNt0
-        GFdbI9b6HXPE8Ofc+zrjZS5CX4WMYzeMg=; b=a4GW4wc97v0wpbEaxMrf2p2umE
-        EK2gf4eamynZnnJgcp9N0AsaQwglPoWQLImAqecdWQbAHR9WFlP+txH+B/7p6E+R
-        IC/l8vaTGjdijku1FDtHDoPghrcIMIWEqzZGuLFW2ELV5ifDbcLoCM0/bIHP9jnf
-        240oMfw5/ZxOqky9TA2OEsdzs8oLSXALuBC/kWNqS5d/+duv9bVTugPg7pUOl7MZ
-        vsQH/HhAW6RmV3vH2cUCNZU90fECfjzfkWfwJ46H3Dak39lfYU4VVNcKJN6LTOiB
-        J2JcViUcwRmp6W9UDr/XVZEzsyptzmVktxISsziNY4dlLKnelf8HNCPN9nbg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651589398; x=
-        1651675798; bh=4wCZd6tNt0GFdbI9b6HXPE8Ofc+zrjZS5CX4WMYzeMg=; b=L
-        1wYd64YRlHfuOQGcsjfwnx7XcilEdPLk8XuzRDc0uwVIjOWp+r5HR0jWkMwoN1wx
-        KjESrFRaJH17BcFIJcfQYDe016FluSFY5tiOMSzCwVu3JdUDJFdUg8zaUTm44DNY
-        qI1HEckTGNAOgsY5PSAvDqLBisbHqNFmtE5RclGu1MMsN4Rh9B3N/NQX1Iqq4V68
-        dfUB7y7idC3PNSkZmKi4egL6JbMXREsq+S/072ILn4TZQ7LFKaEK/spV88hOMkVg
-        1jF4rm2IzwTeYS5MqC10eCyYsftVjKGUqWNNCtBsOqdVOi0S/P1+djQxKMh5u1sv
-        DcjDs0MsP/vTxYRC/FPug==
-X-ME-Sender: <xms:FUFxYmknQGOFZvzVOdW6rFXrCCauCzqTp7r2ZwdjF3sXP3gUMkbl0g>
-    <xme:FUFxYt05e5DTZ_rAlJjMyU1PCNHFz_j2gjwH6OTCaswSpk3Xgs_fY1H8YBrMItp6p
-    _-A4gVPBHwooQ>
-X-ME-Received: <xmr:FUFxYkqJkC-TAERwgVfqc6uv6PW1p9CtMiU_Nwi8c7qvFwQ9TUcS90QrTfQwYC1Mkg-CnGrG5KWWW2F_d0uz-J-b5sUm>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejgdekudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvve
-    dvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
-    drtghomh
-X-ME-Proxy: <xmx:FUFxYqlc_hwYTx-fH1M7nbNj82E4m4Kn2xkDzahR76M7sUM3PUnBWA>
-    <xmx:FUFxYk0OnRVJWtigWi5v7OkaxXNFzXorWlYSyaf04Je6Zzvm9MITFA>
-    <xmx:FUFxYhvhmsRpCcOcjr_pPDp48nLBuI9LByzNZtdNKwJuyQ7sgC7MMA>
-    <xmx:FkFxYlJY_GH_CZmC1VSVczamOK2eeHr_faVGNWNUdKpOh3F5EzUD0g>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 3 May 2022 10:49:57 -0400 (EDT)
-Date:   Tue, 3 May 2022 16:49:56 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the usb tree
-Message-ID: <YnFBFOrvlLnDwZe9@kroah.com>
-References: <20220502210728.0b36f3cd@canb.auug.org.au>
+        Tue, 3 May 2022 10:53:49 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E4F82643;
+        Tue,  3 May 2022 07:50:17 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1127)
+        id B010220EB0C2; Tue,  3 May 2022 07:50:16 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B010220EB0C2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1651589416;
+        bh=0Hrt9d53XFYn9YSRDobyKkPMyz3dSW6P495Q/i0i1Ps=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Kh3Rj//hhW+2Kh5YVIiJjwhYzkhhH9wtCU83cMWz9hDFOjbMNhnwDYsK/zWyjCpG9
+         dpze87O/ppLvHW2o4T+Kvkuwz0GY/rQPnF59tpiEwDf2OxmMdm1JTHtH3sNCRrOYgH
+         ucDAp4wSxdiocvG4ZmLgMJ0RwWQANoGmnu26dVk4=
+Date:   Tue, 3 May 2022 07:50:16 -0700
+From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+To:     Dexuan Cui <decui@microsoft.com>
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        "drawat.floss@gmail.com" <drawat.floss@gmail.com>,
+        "airlied@linux.ie" <airlied@linux.ie>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Subject: Re: [PATCH v4] drm/hyperv: Add error message for fb size greater
+ than allocated
+Message-ID: <20220503145016.GA25079@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1649737739-10113-1-git-send-email-ssengar@linux.microsoft.com>
+ <BYAPR21MB127064CAEA28FBBFB34672C3BFED9@BYAPR21MB1270.namprd21.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220502210728.0b36f3cd@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <BYAPR21MB127064CAEA28FBBFB34672C3BFED9@BYAPR21MB1270.namprd21.prod.outlook.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 02, 2022 at 09:07:28PM +1000, Stephen Rothwell wrote:
-> Hi all,
+On Tue, Apr 12, 2022 at 05:06:07AM +0000, Dexuan Cui wrote:
+> > From: Saurabh Sengar <ssengar@linux.microsoft.com>
+> > Sent: Monday, April 11, 2022 9:29 PM
+> >  ...
+> > Add error message when the size of requested framebuffer is more than
+> > the allocated size by vmbus mmio region for framebuffer
 > 
-> After merging the usb tree, today's linux-next build (x86_64
-> modules_install) failed like this:
+> The line lacks a period, but I guess the maintainer may help fix it for you :-)
+>  
+> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
 > 
-> depmod: ERROR: Cycle detected: usbcore -> onboard_usb_hub -> usbcore
-> depmod: ERROR: Found 2 modules in dependency cycles!
-> 
-> Caused by commit
-> 
->   c40b62216c1a ("usb: core: hcd: Create platform devices for onboard hubs in probe()")
-> 
-> I have reverted that commit for today.
+> Reviewed-by: Dexuan Cui <decui@microsoft.com>
 
-Series is now reverted in my tree, thanks for the report.
-
-greg k-h
+Can this be queued for next ? please let me know in case any clarification required.

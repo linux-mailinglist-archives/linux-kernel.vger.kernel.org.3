@@ -2,66 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6990F517B40
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 02:37:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50ADE517B43
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 02:37:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbiECAjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 20:39:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43074 "EHLO
+        id S229988AbiECAkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 20:40:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbiECAjl (ORCPT
+        with ESMTP id S229484AbiECAkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 20:39:41 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A81638BEC
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 17:36:06 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id n14so6867690plf.3
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 17:36:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uqiaq7Jqs3Kyzc97Ns7y2Q4dTJuj+TxHkNHfjMJ/lmU=;
-        b=ejvH4/c2stqT98pdw1Fp7eB8qphh7WHLRxZuBH6OLtPxNaQhMKKijIdWEoYn68PNWD
-         Lggq8xbxLbtpsay8ghlOKYxLQYY8jP0VoriJK8DYX0uAmgG2+lJoRfofltqr54Zh+nYI
-         qX1HgaOKO3K6/9CzN8iFw55x7NUAFxnU8bD2E=
+        Mon, 2 May 2022 20:40:45 -0400
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32BA4D26C;
+        Mon,  2 May 2022 17:37:09 -0700 (PDT)
+Received: by mail-oi1-f169.google.com with SMTP id m25so2921127oih.2;
+        Mon, 02 May 2022 17:37:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uqiaq7Jqs3Kyzc97Ns7y2Q4dTJuj+TxHkNHfjMJ/lmU=;
-        b=ADtSgfqRmuAcQh6Z9KzsAxIKYQH7GKxygwnBWh/HR7wYagnYcZbitNO1RVS3MXnklz
-         P8FHlrdASpVqgWyNeHpRto9HXfYFVg56W78SObTLx6N8xfJ8j/gd9FFKBVlZKsUaroHH
-         RZAjB9Tv23Akm775dF29I+K5DVNO1HPtNhuDtUaroAEVpuD9scsobMhmlEFf+RwsBv0u
-         h/LF1LEUKHTGBYzZYBDZmKkE7j8kRBmZ2x+nh2vlwjhIrA0qrGTPu/NOgD2RercSttH0
-         U8+iQiI17v6RMH705vxAf6Mevzyg5XEH9yQACLoNVsrp3dAUEzzi7pkYgFUB+jMY87o2
-         9CJw==
-X-Gm-Message-State: AOAM533xIJtFY3sJTQRuxf9q06qDxsNIjsssFNIysm0n7Al374Q4mWlF
-        1gOls0zTE2EsqwiV0MGLnurGnQ==
-X-Google-Smtp-Source: ABdhPJwCS6A1z84jdM1427Au2WBhQuzjFtJIpPBB5tzeBQ+TItFksouHXRb54ywuVzNVXXP2gp+SiA==
-X-Received: by 2002:a17:90a:4581:b0:1bc:d215:8722 with SMTP id v1-20020a17090a458100b001bcd2158722mr1908183pjg.149.1651538046729;
-        Mon, 02 May 2022 17:34:06 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:b078:bf46:ffc:3276])
-        by smtp.gmail.com with ESMTPSA id t4-20020a170902bc4400b0015e8d4eb1f9sm5187303plz.67.2022.05.02.17.34.05
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oPoGfUm6HdS/RdvyDE4eYbdws9jspTBGYeir1rydtWI=;
+        b=A9TJ4JBeUXaqY3c1CO3CTAGFlCGj44sMrKZZbpkgnKkWWuWuLe7WzuuEjqV69qGR9r
+         BKC0sY6Xs0O6wvycVkhfajCTVq8IQudPwMCXzluHZqQKiGr5HzFcH7PaDdkiN3S1oH1v
+         zNOtx7/iLP8Wv1pz3mw69uN8l4ddGwHJR2p+e/CsYanwofqbncdWMVIMpKdg/x+2ZLBl
+         gtY+ptHYsS/txx2k7pRgvw9gh9BqJJ/ftoydNu9bTeKcO/Sd+91nqZiOcCYxEGh41005
+         aUwpalXYm0YCrapYuisbCP/QaJo5Xnqqug2zJ83SsqwLLL9AXdyhM2b7+wieQS4TxmAz
+         Ym5g==
+X-Gm-Message-State: AOAM5301DSzukuyLe79dJi+AZKgWWpwHfByjoGa69jXZqBhjDAHmi6D2
+        saPowshxHMmAUSlp4evKJw==
+X-Google-Smtp-Source: ABdhPJw3ddsqRq6pulMnNx0Fn+HlUlJlRBvLqA0Dm6SigHDMb7V21SDoPfc90N/p+iaBz3w66JpvOA==
+X-Received: by 2002:a05:6808:3083:b0:325:f167:415f with SMTP id bl3-20020a056808308300b00325f167415fmr846706oib.160.1651538096054;
+        Mon, 02 May 2022 17:34:56 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id ay7-20020a056808300700b00325cda1ff8csm2864803oib.11.2022.05.02.17.34.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 17:34:06 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-Cc:     matvore@chromium.org,
-        "Reviewed-by : Stephen Boyd" <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] soc: qcom: socinfo: Add another ID for sc7180
-Date:   Mon,  2 May 2022 17:33:45 -0700
-Message-Id: <20220502173338.1.I26eca1856f99e6160d30de6d50ecab60e6226354@changeid>
-X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
+        Mon, 02 May 2022 17:34:55 -0700 (PDT)
+Received: (nullmailer pid 2117695 invoked by uid 1000);
+        Tue, 03 May 2022 00:34:54 -0000
+Date:   Mon, 2 May 2022 19:34:54 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Keerthy <j-keerthy@ti.com>
+Cc:     kristo@kernel.org, amitk@kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski@linaro.org,
+        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, vigneshr@ti.com,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v6 1/4] dt-bindings: thermal: k3-j72xx: Add VTM bindings
+ documentation
+Message-ID: <YnB4rtn87l5nXtRM@robh.at.kernel.org>
+References: <20220427064635.24898-1-j-keerthy@ti.com>
+ <20220427064635.24898-2-j-keerthy@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220427064635.24898-2-j-keerthy@ti.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,28 +67,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It appears the some sc7180 devices, like the one in my
-sc7180-trogdor-homestar, report an ID of 407 instead of 425. Add
-another ID into the list.
+On Wed, 27 Apr 2022 12:16:32 +0530, Keerthy wrote:
+> Add VTM bindings documentation. In the Voltage Thermal
+> Management Module(VTM), K3 J72XX supplies a voltage
+> reference and a temperature sensor feature that are gathered in the band
+> gap voltage and temperature sensor (VBGAPTS) module. The band
+> gap provides current and voltage reference for its internal
+> circuits and other analog IP blocks. The analog-to-digital
+> converter (ADC) produces an output value that is proportional
+> to the silicon temperature.
+> 
+> Signed-off-by: Keerthy <j-keerthy@ti.com>
+> ---
+>  .../bindings/thermal/ti,j72xx-thermal.yaml    | 64 +++++++++++++++++++
+>  1 file changed, 64 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+> 
 
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
-
- drivers/soc/qcom/socinfo.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
-index cee579a267a6..2ef1dc2a1dd3 100644
---- a/drivers/soc/qcom/socinfo.c
-+++ b/drivers/soc/qcom/socinfo.c
-@@ -318,6 +318,7 @@ static const struct soc_id soc_id[] = {
- 	{ 396, "IPQ8071A" },
- 	{ 402, "IPQ6018" },
- 	{ 403, "IPQ6028" },
-+	{ 407, "SC7180" },
- 	{ 421, "IPQ6000" },
- 	{ 422, "IPQ6010" },
- 	{ 425, "SC7180" },
--- 
-2.36.0.464.gb9c8b46e94-goog
-
+Reviewed-by: Rob Herring <robh@kernel.org>

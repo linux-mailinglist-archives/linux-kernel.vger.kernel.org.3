@@ -2,114 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B62518817
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:14:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1FD551881A
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:15:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238072AbiECPST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 11:18:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46146 "EHLO
+        id S238078AbiECPT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 11:19:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232306AbiECPSQ (ORCPT
+        with ESMTP id S238090AbiECPS7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 11:18:16 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB373A714;
-        Tue,  3 May 2022 08:14:43 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id k2so7193634qtp.1;
-        Tue, 03 May 2022 08:14:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vuqvJ8A4FAPCd0ZxLOVcJFiWq1cjGCU3yw1SfcBfSUY=;
-        b=kzKzv3NsXMvjvu1MlZgBFVmD91rFPoTzjrJ2cUZ3tIWOgXoc+s+4GrxtRxTSr1Mxab
-         ApzybxelwdHze5Xmq6vH0KQCKguGSNdCYOj2bOjeFly7Q1IjNoy9Yb+BCB8f1huhcAqC
-         k40vKwB4nKAqQM4+ekc9iHBrbxyN7MXBSd+W4pI9sxXh97alepbvUMQqOTaslybLp4+D
-         hRFtry5y3FiAB63k3qa88Cw+6+/mn84vG/epS8gnCHc66XJViQqT+gXDoZjeKk/2qnzb
-         2oJBHpsOlNvkhYFuD+EcItAgPN5PWZ9SomdTJPbVu1yH6RLDx0B8/8kogRLq1WnIc+w7
-         kMyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vuqvJ8A4FAPCd0ZxLOVcJFiWq1cjGCU3yw1SfcBfSUY=;
-        b=JOLFYkBq4xGdHT33N3/d2T4n+UYnLaUpFANKqTfKWlnqpc7rAdfylqvwRq+rKP+FVO
-         YjSSpSsRKcZLLHGudqp3mamuCBNuGH1A4fvEJ9ZP3BdSNuT29/X13eH8jUQeW1X3myAH
-         1aa4655GJpaRncmSaRxxjstKmSG3UiX461KCTvCFpGv4Q+qnsy31izGaP5fcgm/T6cdv
-         BuEcNvQs8kmTXgnj2M+PuQgaq79V8Moe/ocfH1kaVBuur0BbrQJ0NpOoXuKCyDHYmU0/
-         uuqomCHCL9hhGouFfskIzMc2K4SFbJ7JgYrslV8bWGm1eWvIs/aflUzSSY7kR9LHETYv
-         itig==
-X-Gm-Message-State: AOAM533km2AkrsC7LRJwFXXJctVMe0PBsiNY4SNZ6BrbHYGTOhxlKLIm
-        My18WFfYDNti9H9y7iH/vBceg4zaj0EF7kGPlxQ=
-X-Google-Smtp-Source: ABdhPJwkmrc8+A8LLLRMtq2qm8/vNyS036IFhaV1AfKVJA/p+3tLccnsxkgGbgL2IHademLNBz1XLf8TdlEeJeOhD/U=
-X-Received: by 2002:a05:622a:c9:b0:2f3:b100:648c with SMTP id
- p9-20020a05622a00c900b002f3b100648cmr1883202qtw.157.1651590883121; Tue, 03
- May 2022 08:14:43 -0700 (PDT)
+        Tue, 3 May 2022 11:18:59 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6675D1FCEA;
+        Tue,  3 May 2022 08:15:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651590926; x=1683126926;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=SAvtnj8H2V8n6qwqUBlvJTEgN+vKWN6fJ/OR2VQoynY=;
+  b=QREXGvjHfPMvML/M5vaSawgOjLL9/hJ655OYL9eU9gBqR+SDu62Cytiv
+   /fz9lzzCO0ivciMiTnyOpQTTVU2ZOKE68z4tuXGIBbVtST9HHZGUbewHc
+   49BJK5f9ZlJOss6O9KsRsBeKnv7I+z54hUJ7btIsru3JXzadbTfU0IYED
+   LilBhcvNkISRUMCpxZKtVV/M3O33zrD0vEiXH06Kkp6iqxIpfyH/yba26
+   E9PRe3rHRJdgzwlNZsj+OFoIZ2zJk1fcEjGMIhfGNFiC9HvEsPA8rKif+
+   q2r86FwUX33vk1SogE8vmCMrKdlo0fzP3/5FqxhkZk0nfHhTLFHP870K+
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="328042678"
+X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
+   d="scan'208";a="328042678"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 08:15:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
+   d="scan'208";a="567677331"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga007.fm.intel.com with ESMTP; 03 May 2022 08:15:18 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id DDB46179; Tue,  3 May 2022 18:15:19 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Michael Walle <michael@walle.cc>,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] pinctrl: microchip-sgpio: Switch to use fwnode instead of of_node
+Date:   Tue,  3 May 2022 18:15:17 +0300
+Message-Id: <20220503151517.59115-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com> <CAOQ4uxim+JmFbXPQcasELDEgRDP-spdPtJrLuhvSiyxErSUkvw@mail.gmail.com>
- <YnFB/ct2Q/yYBnm8@kroah.com> <CAJfpegtZjRca5QPm2QgPtPG0-BJ=15Vtd48OTnRnr5G7ggAtmA@mail.gmail.com>
-In-Reply-To: <CAJfpegtZjRca5QPm2QgPtPG0-BJ=15Vtd48OTnRnr5G7ggAtmA@mail.gmail.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Tue, 3 May 2022 18:14:31 +0300
-Message-ID: <CAOQ4uxiBsQXbxQJf7Az3T+gq7Oph4joykqMB0EP87U=bj4LvSg@mail.gmail.com>
-Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Dave Chinner <david@fromorbit.com>,
-        "Theodore Ts'o" <tytso@mit.edu>, Karel Zak <kzak@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        LSM <linux-security-module@vger.kernel.org>,
-        Ian Kent <raven@themaw.net>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 3, 2022 at 6:04 PM Miklos Szeredi <miklos@szeredi.hu> wrote:
->
-> On Tue, 3 May 2022 at 16:53, Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Tue, May 03, 2022 at 05:39:46PM +0300, Amir Goldstein wrote:
->
-> > > It should be noted that while this API mandates text keys,
-> > > it does not mandate text values, so for example, sb iostats could be
-> > > exported as text or as binary struct, or as individual text/binary records or
-> > > all of the above.
-> >
-> > Ugh, no, that would be a total mess.  Don't go exporting random binary
-> > structs depending on the file, that's going to be completely
-> > unmaintainable.  As it is, this is going to be hard enough with random
-> > text fields.
-> >
-> > As for this format, it needs to be required to be documented in
-> > Documentation/ABI/ for each entry and key type so that we have a chance
-> > of knowing what is going on and tracking how things are working and
-> > validating stuff.
->
-> My preference would be a single text value for each key.
->
-> Contents of ":mnt:info" contradicts that, but mountinfo has a long
-> established, well documented format, and nothing prevents exporting
-> individual attributes with separate names as well (the getvalues(2)
-> patch did exactly that).
->
+GPIO library now accepts fwnode as a firmware node, so
+switch the driver to use it.
 
-Right, the fun is that ":mnt:info" and ":mnt:info:" can co-exist.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/pinctrl/pinctrl-microchip-sgpio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
-Amir.
+diff --git a/drivers/pinctrl/pinctrl-microchip-sgpio.c b/drivers/pinctrl/pinctrl-microchip-sgpio.c
+index 80a8939ad0c0..71367ed04082 100644
+--- a/drivers/pinctrl/pinctrl-microchip-sgpio.c
++++ b/drivers/pinctrl/pinctrl-microchip-sgpio.c
+@@ -840,7 +840,7 @@ static int microchip_sgpio_register_bank(struct device *dev,
+ 	gc			= &bank->gpio;
+ 	gc->label		= pctl_desc->name;
+ 	gc->parent		= dev;
+-	gc->of_node		= to_of_node(fwnode);
++	gc->fwnode		= fwnode;
+ 	gc->owner		= THIS_MODULE;
+ 	gc->get_direction	= microchip_sgpio_get_direction;
+ 	gc->direction_input	= microchip_sgpio_direction_input;
+-- 
+2.35.1
+

@@ -2,130 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E41A5190D7
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 00:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 152875190DC
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 00:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231982AbiECWAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 18:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44284 "EHLO
+        id S243475AbiECWHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 18:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241165AbiECWAe (ORCPT
+        with ESMTP id S234803AbiECWHx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 18:00:34 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D2341F94
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 14:57:00 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id s27so23690495ljd.2
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 14:57:00 -0700 (PDT)
+        Tue, 3 May 2022 18:07:53 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85FB9424B5
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 15:04:19 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-e2fa360f6dso18598641fac.2
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 15:04:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=IYNCSYzQEXjV7ANQ+gYRAk9M4A9JcODWNhWQSnhodG0=;
-        b=ZQEap/fOGdFnCaZLSph51y+I8n6YL6ijpRYS32erFuFJM2ay7sXNpiJQ5fN/hFOEIr
-         9NTjxIVpB2MTACZmmge9+z/8GrikSf9oaQnG5aA30+ZZNqLL5tsvWKwT8QnCVHeSitC4
-         ZldGkTPsewrnYG7FJvYVynR2uAAyiFyWW5h53a7VXPN8c5xH3Dafb+vRfi1Fo1E4elud
-         WcJjZEjm+0XMXX5X/A5/zlsJdG58pOvl5EpLM/BLP04RX33rc+hQ/LnruHyYpVdDwFpx
-         2ZEGLxAZrYpinEUIsDVc9v4/wPEhYPu0M53iKpyVnkKg9C53tWdFg/fnLjLZM7ymj1tz
-         2xFg==
+        bh=czLZHU7MG6H1spBLHXY5jaZbzV59tXkMuN+Ck8Z7wc4=;
+        b=hhWjsHnmVba6J3iaRJaO09nZL4LxjIq8C9W91LOfNC4XgTIwgTHymewopsSR7xhrbE
+         wJfMPDofFT9Orm5X1Xmnq6csdeG70AmAjQHsJ6oidSvnu+c5NqT0zTpfwvGt6c7imJaY
+         Yx4JIofQGY7s+yKOtcqFuF1p2zpjcELmsl0YE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=IYNCSYzQEXjV7ANQ+gYRAk9M4A9JcODWNhWQSnhodG0=;
-        b=xaYnis6PeRx4xmvT123lSdflI+Ws0+xUdSTV8MRT3YYGRk/kFQY+n5PFiAaIQa65fi
-         9NG4M2/sR3xxlv04ZwP0P2ko6pkzGeMy0LTu+xzP9X1m3GkRqI6soPsQWlwkMPT1lj6f
-         /nlV7VelO7u2RhTBlue99K7rm6Z1PT2aRtGEFXyIBYGuAEAeje43JuKFyMOhc2aZI5Bd
-         Cy/Y8XLBkJefADoIn1ZTsiRO1IlqfVkmuxphT0tXryyL+/D/JXRw/wdT0Y0wAZ08NUd+
-         qHKYoE0zIsmnw+hXv9vE0Ft2CtOYgRtp1Ckhy6yT3R9eLOgxgB8p+1PnolrLJ9s3Q4J9
-         2Vbw==
-X-Gm-Message-State: AOAM5321MLay4Xs/vN71PRDRgaCZU5ASZ1TrniFWmnNGDvZl349auGcH
-        TSM7YYuM6LWAKiBtJZAK+CuD0WFQVWEPQ4Tc1pKXcA==
-X-Google-Smtp-Source: ABdhPJwI3TzytjNvKh8yN2cfEECQgt2JS+4EpyDOTadY8Qulev4S7kt34QBMMGGeGqgIjLkzOWMoEuJ4WlYlPdhI0Eg=
-X-Received: by 2002:a05:651c:552:b0:250:5c23:d0f2 with SMTP id
- q18-20020a05651c055200b002505c23d0f2mr5664571ljp.239.1651615018300; Tue, 03
- May 2022 14:56:58 -0700 (PDT)
+        bh=czLZHU7MG6H1spBLHXY5jaZbzV59tXkMuN+Ck8Z7wc4=;
+        b=wQRguaFNdmzFsqJ2OgQd9uSHQYMqJu/+kp2fFKGqum10vQjkTnzWwGpp8VYOqWjFdb
+         0ZLQ90qLVMQZwJ17/8JslDxi6dYObyOg3LKuMakH3NmktoI1Jp1p1KI6h7qGgjgtkH5v
+         bIqM0/njMSa5kam3ZVjo0TJPC9cyVYyYzUXpKSdqj2refYtzb6Y+0vmLHoaR4bGAqxcb
+         cWOi8QzxvqX1dW+YmDCzy67BC8uGGWJtrVF/ksfu4Bs5wTlKpBEgcNWQIPNbYiZWDvPb
+         SJ8fNIeOXelPr+47BwDppjKJQWRQavAV2eG8KhZZjFUgFaD8+yIxhFvh8PBc+GYneZxQ
+         VQFg==
+X-Gm-Message-State: AOAM532oEsiBoZI2xEVgK+NTxvVzwdMVxOUeSiMeWXbiNRFlrBy5eu54
+        6RAbdkJGBAjo7LGf+oXrOuHEhZXTJ3mzYCcE
+X-Google-Smtp-Source: ABdhPJwOb/qzyuR68vReISWKevDz751vc+wAhgknWNITAbyuZCNR/h2mpSfAhuhY63iZtN/pnXaQgA==
+X-Received: by 2002:a05:6870:d68e:b0:e2:af08:6cc3 with SMTP id z14-20020a056870d68e00b000e2af086cc3mr2682022oap.189.1651615458636;
+        Tue, 03 May 2022 15:04:18 -0700 (PDT)
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com. [209.85.167.175])
+        by smtp.gmail.com with ESMTPSA id r4-20020a056830120400b0060603221240sm4405948otp.16.2022.05.03.15.04.18
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 15:04:18 -0700 (PDT)
+Received: by mail-oi1-f175.google.com with SMTP id m11so19573516oib.11
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 15:04:18 -0700 (PDT)
+X-Received: by 2002:a05:6808:219a:b0:325:93fc:e0fd with SMTP id
+ be26-20020a056808219a00b0032593fce0fdmr2775646oib.241.1651615054192; Tue, 03
+ May 2022 14:57:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220501084032.1025918-1-masahiroy@kernel.org> <20220501084032.1025918-13-masahiroy@kernel.org>
-In-Reply-To: <20220501084032.1025918-13-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 3 May 2022 14:56:47 -0700
-Message-ID: <CAKwvOdn7qKKXj61htkJVDOE-ZSx4CcWpqjfquiCSVT1=R0xMGA@mail.gmail.com>
-Subject: Re: [PATCH v2 12/26] modpost: make sym_add_exported() always allocate
- a new symbol
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>
+References: <20220427224924.592546-1-gpiccoli@igalia.com> <20220427224924.592546-5-gpiccoli@igalia.com>
+ <CAE=gft5Pq25L4KFoPWbftkPF-JN1ex2yws77mMJ4GQnn9W0L2g@mail.gmail.com> <adcf6d0e-c37c-6ede-479e-29959d03d8c0@igalia.com>
+In-Reply-To: <adcf6d0e-c37c-6ede-479e-29959d03d8c0@igalia.com>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Tue, 3 May 2022 14:56:58 -0700
+X-Gmail-Original-Message-ID: <CAE=gft623NxqetRssrZnaRmJLSP4BT5=-sVVwtYoHuspO_gULQ@mail.gmail.com>
+Message-ID: <CAE=gft623NxqetRssrZnaRmJLSP4BT5=-sVVwtYoHuspO_gULQ@mail.gmail.com>
+Subject: Re: [PATCH 04/30] firmware: google: Convert regular spinlock into
+ trylock on panic path
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, bhe@redhat.com,
+        pmladek@suse.com, kexec@lists.infradead.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Jonathan Corbet <corbet@lwn.net>, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de,
+        Kees Cook <keescook@chromium.org>, luto@kernel.org,
+        mhiramat@kernel.org, mingo@redhat.com, paulmck@kernel.org,
+        peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, Alan Stern <stern@rowland.harvard.edu>,
+        Thomas Gleixner <tglx@linutronix.de>, vgoyal@redhat.com,
+        vkuznets@redhat.com, Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        David Gow <davidgow@google.com>,
+        Julius Werner <jwerner@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 1, 2022 at 1:42 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> Currently, sym_add_exported() does not allocate a symbol if the same
-> name symbol already exists in the hash table.
->
-> This does not reflect the real use cases. You can let an external
-> module override the in-tree one. In this case, the external module
-> will export the same name symbols as the in-tree one. However,
-> modpost simply ignores those symbols, then Module.symvers for the
-> external module loses its symbols.
->
-> sym_add_exported() should allocate a new symbol.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Hi Guilherme,
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+On Tue, May 3, 2022 at 12:12 PM Guilherme G. Piccoli
+<gpiccoli@igalia.com> wrote:
+>
+> On 03/05/2022 15:03, Evan Green wrote:
+> > [...]
+> > gsmi_shutdown_reason() is a common function called in other scenarios
+> > as well, like reboot and thermal trip, where it may still make sense
+> > to wait to acquire a spinlock. Maybe we should add a parameter to
+> > gsmi_shutdown_reason() so that you can get your change on panic, but
+> > we don't convert other callbacks into try-fail scenarios causing us to
+> > miss logs.
+> >
+>
+> Hi Evan, thanks for your feedback, much appreciated!
+> What I've done in other cases like this was to have a helper checking
+> the spinlock in the panic notifier - if we can acquire that, go ahead
+> but if not, bail out. For a proper example of an implementation, check
+> patch 13 of the series:
+> https://lore.kernel.org/lkml/20220427224924.592546-14-gpiccoli@igalia.com/ .
+>
+> Do you agree with that, or prefer really a parameter in
+> gsmi_shutdown_reason() ? I'll follow your choice =)
 
-> ---
->
-> (no changes since v1)
->
->  scripts/mod/modpost.c | 10 ++++------
->  1 file changed, 4 insertions(+), 6 deletions(-)
->
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 1f01fc942f94..c9b75697d0fc 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -412,19 +412,17 @@ static struct symbol *sym_add_exported(const char *name, struct module *mod,
->  {
->         struct symbol *s = find_symbol(name);
->
-> -       if (!s) {
-> -               s = new_symbol(name, mod, export);
-> -               list_add_tail(&s->list, &mod->exported_symbols);
-> -       } else if (!external_module || s->module->is_vmlinux ||
-> -                  s->module == mod) {
-> +       if (s && (!external_module || s->module->is_vmlinux || s->module == mod)) {
->                 error("%s: '%s' exported twice. Previous export was in %s%s\n",
->                       mod->name, name, s->module->name,
->                       s->module->is_vmlinux ? "" : ".ko");
-> -               return s;
->         }
->
-> +       s = new_symbol(name, mod, export);
->         s->module = mod;
->         s->export    = export;
-> +       list_add_tail(&s->list, &mod->exported_symbols);
-> +
->         return s;
->  }
->
-> --
-> 2.32.0
->
+I'm fine with either, thanks for the link. Mostly I want to make sure
+other paths to gsmi_shutdown_reason() aren't also converted to a try.
 
+>
+>
+> > Though thinking more about it, is this really a Good Change (TM)? The
+> > spinlock itself already disables interrupts, meaning the only case
+> > where this change makes a difference is if the panic happens from
+> > within the function that grabbed the spinlock (in which case the
+> > callback is also likely to panic), or in an NMI that panics within
+> > that window. The downside of this change is that if one core was
+> > politely working through an event with the lock held, and another core
+> > panics, we now might lose the panic log, even though it probably would
+> > have gone through fine assuming the other core has a chance to
+> > continue.
+>
+> My feeling is that this is a good change, indeed - a lot of places are
+> getting changed like this, in this series.
+>
+> Reasoning: the problem with your example is that, by default, secondary
+> CPUs are disabled in the panic path, through an IPI mechanism. IPIs take
+> precedence and interrupt the work in these CPUs, effectively
+> interrupting the "polite work" with the lock held heh
 
--- 
-Thanks,
-~Nick Desaulniers
+The IPI can only interrupt a CPU with irqs disabled if the IPI is an
+NMI. I haven't looked before to see if we use NMI IPIs to corral the
+other CPUs on panic. On x86, I grepped my way down to
+native_stop_other_cpus(), which looks like it does a normal IPI, waits
+1 second, then does an NMI IPI. So, if a secondary CPU has the lock
+held, on x86 it has roughly 1s to finish what it's doing and re-enable
+interrupts before smp_send_stop() brings the NMI hammer down. I think
+this should be more than enough time for the secondary CPU to get out
+and release the lock.
+
+So then it makes sense to me that you're fixing cases where we
+panicked with the lock held, or hung with the lock held. Given the 1
+second grace period x86 gives us, I'm on board, as that helps mitigate
+the risk that we bailed out early with the try and should have spun a
+bit longer instead. Thanks.
+
+-Evan
+
+>
+> Then, such CPU is put to sleep and we finally reach the panic notifier
+> hereby discussed, in the main CPU. If the other CPU was shut-off *with
+> the lock held*, it's never finishing such work, so the lock is never to
+> be released. Conclusion: the spinlock can't be acquired, hence we broke
+> the machine (which is already broken, given it's panic) in the path of
+> this notifier.
+> This should be really rare, but..possible. So I think we should protect
+> against this scenario.
+>
+> We can grab others' feedback if you prefer, and of course you have the
+> rights to refuse this change in the gsmi code, but from my
+> point-of-view, I don't see any advantage in just assume the risk,
+> specially since the change is very very simple.
+>
+> Cheers,
+>
+>
+> Guilherme

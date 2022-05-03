@@ -2,129 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 921F5517BA9
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 03:26:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4524B517BD0
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 04:15:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiECB3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 21:29:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
+        id S229829AbiECCIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 22:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiECB3K (ORCPT
+        with ESMTP id S229873AbiECCIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 21:29:10 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114A7DFB3
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 18:25:40 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id p12so28123544lfs.5
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 18:25:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=12DhJbkUccsFRkzufYi61LPquO7lkrys8l909zLJMkU=;
-        b=xsWQuinaF9UY2JPbckte3C1gC+gOuZH+9m0e0Re6snILcV3hTNvqRezWZgbhNP5oY3
-         IsaIbKWgLFhlMCap/f5oQsMY/sivXwFcKjYklWh11BKSJG+VJEJ6RfQ/MIak+1i1VmVe
-         sr4lIpstlJy5/qe2YZhd3VCq8bac0td9c5O1C5GgokvCj4nF8iCqyekWXVnxfnxqxyCR
-         Noagb8rVvrQWhXiwWzC0KKBNa6mySHKavPia0zu5vKcq1cxaO1vCa0LFD/Kqa3BMUwx2
-         3w1Kb4dRk1D14xMlKojLBX7QiwPhR2RuJ2MW7aBhtKVDc47l/vqZ3qfvSOXPySTH2BtO
-         FrXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=12DhJbkUccsFRkzufYi61LPquO7lkrys8l909zLJMkU=;
-        b=axEL5V7BTEeZmZ9Gja6k7+lphNRCdeZGyVoEMWdKlZPQmHXipYlMwbm35SClTc2ci7
-         pPJ/jkkxE+Wtl59xapINkkvPB+BC7wWLfKHJKA+acJ23u/HWDKmiB+PPT6QQsEVS6dKj
-         tLbVcWoUhk5W8TIXf5faxY2uFYjdwPPWpwc2OqTCcNOAtuMWzCrxvRsf5RiEMeHSBj8z
-         xr6Lx5byVwNoGXkKbmtlX0uTyZJ7VxAPeEBqKia4bWj3M4uKs2YoRotTPLma/v172fnU
-         cfY4xKefjFajKjQ6xaRrnAXBWB1E1EeIRO9AF+XniGH/a/1fkQYJ3tkYxuSXUlEJc2iv
-         FUMA==
-X-Gm-Message-State: AOAM532eS+J2hoXJqsEL3nkAGWk68Z1MWtGrBMP/dr0PKVXvbSoMC0qM
-        cHVlqlw/v5fM24khSew2CNio7Q==
-X-Google-Smtp-Source: ABdhPJwheyfTGhc9tlqGwF4SkfwUwjiEA01Fj9wW9bRfUMadvazII1MVioy5YvxjmBVQ/o0ykt60jw==
-X-Received: by 2002:a19:6f0a:0:b0:472:2ed2:dc with SMTP id k10-20020a196f0a000000b004722ed200dcmr9924608lfc.99.1651541138420;
-        Mon, 02 May 2022 18:25:38 -0700 (PDT)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id s9-20020a19ad49000000b0047255d2114fsm833302lfd.126.2022.05.02.18.25.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 18:25:37 -0700 (PDT)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id C8102104AD8; Tue,  3 May 2022 04:27:21 +0300 (+03)
-Date:   Tue, 3 May 2022 04:27:21 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 3/3] x86/tdx: Add Quote generation support
-Message-ID: <20220503012721.ok7fbvxmnvsr6qny@box.shutemov.name>
-References: <20220501183500.2242828-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220501183500.2242828-4-sathyanarayanan.kuppuswamy@linux.intel.com>
- <243e918c523320ba3d216cbe22d24fe5ce33f370.camel@intel.com>
+        Mon, 2 May 2022 22:08:40 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EAEF3AA7A
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 19:05:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651543510; x=1683079510;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/hXC35HPvlxH3T+ghZTTmqCyfsWHn/R3ik2lq6LAws8=;
+  b=Hi/HCQTHDIjiLZtjBlngcaMhj05TmZrfG2dSznkNDGSpgJ2Wyi7Uvt5d
+   N+iptLmbkFaIpGQPNB6h7yWakmvXoxl/IiaS6+I9kgA6AVy/AX0qWVGos
+   tUw2obx2w09apWPuWnTPQOpaRAflwHaidvLYAmVaauhg0x1vNwZ2yYuGC
+   WVIBgx/yYd76WjiuHOt/4BMvuUID6OwJMf7INXrhia6nxxf9sloS6NHzK
+   DSQBRfcvjwO4SgIpmVdQ4FffwIXXh0hiE5FVsgsqbWHh/ibHMmsYMlNdE
+   CAeGBC2Tgmr8aWa7BFVM4C1mSFqdoDoD+unIvc9LU3/WhTzXD12BSYE90
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="353812747"
+X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
+   d="scan'208";a="353812747"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 18:26:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
+   d="scan'208";a="620150460"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 02 May 2022 18:26:12 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nlhIq-000A2p-1K;
+        Tue, 03 May 2022 01:26:12 +0000
+Date:   Tue, 3 May 2022 09:25:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Nathan Chancellor <natechancellor@gmail.com>
+Subject: drivers/gpu/drm/i915/i915_sw_fence.c:90:20: error: unused function
+ 'debug_fence_init_onstack'
+Message-ID: <202205030929.Dk88nH74-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <243e918c523320ba3d216cbe22d24fe5ce33f370.camel@intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 02, 2022 at 02:40:26PM +1200, Kai Huang wrote:
-> 
-> > +
-> > +	/* Get order for Quote buffer page allocation */
-> > +	order = get_order(quote_req.len);
-> > +
-> > +	/*
-> > +	 * Allocate buffer to get TD Quote from the VMM.
-> > +	 * Size needs to be 4KB aligned (which is already
-> > +	 * met in page allocation).
-> > +	 */
-> > +	tdquote = (void *)__get_free_pages(GFP_KERNEL | __GFP_ZERO, order);
-> > +	if (!tdquote) {
-> > +		ret = -ENOMEM;
-> > +		goto quote_failed;
-> > +	}
-> 
-> You can use alloc_pages_exact().
-> 
-> > +
-> > +	/*
-> > +	 * Since this buffer will be shared with the VMM via GetQuote
-> > +	 * hypercall, decrypt it.
-> > +	 */
-> > +	ret = set_memory_decrypted((unsigned long)tdquote, 1UL << order);
-> > +	if (ret)
-> > +		goto quote_failed;
-> 
-> 
-> Again, Dave and Andi already commented you should use vmap() to avoid breaking
-> up the direct-mapping.  Please use vmap() instead.
-> 
-> https://lore.kernel.org/all/ce0feeec-a949-35f8-3010-b0d69acbbc2e@linux.intel.com/
-> 
-> Will review the rest later.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9050ba3a61a4b5bd84c2cde092a100404f814f31
+commit: 9f4069b055d1508c833115df7493b6e0001e5c9b drm/i915: re-disable -Wframe-address
+date:   2 years ago
+config: x86_64-randconfig-r023-20220502 (https://download.01.org/0day-ci/archive/20220503/202205030929.Dk88nH74-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 09325d36061e42b495d1f4c7e933e260eac260ed)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9f4069b055d1508c833115df7493b6e0001e5c9b
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 9f4069b055d1508c833115df7493b6e0001e5c9b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
 
-I would rather convert it to use DMA API for memory allocation. It will
-tap into swiotlb buffer that already converted and there's no need to
-touch direct mapping. Both allocation and freeing such memory is cheaper
-because of that.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/i915/i915_sw_fence.c:90:20: error: unused function 'debug_fence_init_onstack' [-Werror,-Wunused-function]
+   static inline void debug_fence_init_onstack(struct i915_sw_fence *fence)
+                      ^
+>> drivers/gpu/drm/i915/i915_sw_fence.c:111:20: error: unused function 'debug_fence_free' [-Werror,-Wunused-function]
+   static inline void debug_fence_free(struct i915_sw_fence *fence)
+                      ^
+   2 errors generated.
+
+
+vim +/debug_fence_init_onstack +90 drivers/gpu/drm/i915/i915_sw_fence.c
+
+fc1584059d6c43 Chris Wilson 2016-11-25   89  
+214707fc2ce08d Chris Wilson 2017-10-12  @90  static inline void debug_fence_init_onstack(struct i915_sw_fence *fence)
+214707fc2ce08d Chris Wilson 2017-10-12   91  {
+214707fc2ce08d Chris Wilson 2017-10-12   92  }
+214707fc2ce08d Chris Wilson 2017-10-12   93  
+fc1584059d6c43 Chris Wilson 2016-11-25   94  static inline void debug_fence_activate(struct i915_sw_fence *fence)
+fc1584059d6c43 Chris Wilson 2016-11-25   95  {
+fc1584059d6c43 Chris Wilson 2016-11-25   96  }
+fc1584059d6c43 Chris Wilson 2016-11-25   97  
+fc1584059d6c43 Chris Wilson 2016-11-25   98  static inline void debug_fence_set_state(struct i915_sw_fence *fence,
+fc1584059d6c43 Chris Wilson 2016-11-25   99  					 int old, int new)
+fc1584059d6c43 Chris Wilson 2016-11-25  100  {
+fc1584059d6c43 Chris Wilson 2016-11-25  101  }
+fc1584059d6c43 Chris Wilson 2016-11-25  102  
+fc1584059d6c43 Chris Wilson 2016-11-25  103  static inline void debug_fence_deactivate(struct i915_sw_fence *fence)
+fc1584059d6c43 Chris Wilson 2016-11-25  104  {
+fc1584059d6c43 Chris Wilson 2016-11-25  105  }
+fc1584059d6c43 Chris Wilson 2016-11-25  106  
+fc1584059d6c43 Chris Wilson 2016-11-25  107  static inline void debug_fence_destroy(struct i915_sw_fence *fence)
+fc1584059d6c43 Chris Wilson 2016-11-25  108  {
+fc1584059d6c43 Chris Wilson 2016-11-25  109  }
+fc1584059d6c43 Chris Wilson 2016-11-25  110  
+fc1584059d6c43 Chris Wilson 2016-11-25 @111  static inline void debug_fence_free(struct i915_sw_fence *fence)
+fc1584059d6c43 Chris Wilson 2016-11-25  112  {
+fc1584059d6c43 Chris Wilson 2016-11-25  113  }
+fc1584059d6c43 Chris Wilson 2016-11-25  114  
+
+:::::: The code at line 90 was first introduced by commit
+:::::: 214707fc2ce08d09982bc4fe4b7a1c1f010e82be drm/i915/selftests: Wrap a timer into a i915_sw_fence
+
+:::::: TO: Chris Wilson <chris@chris-wilson.co.uk>
+:::::: CC: Chris Wilson <chris@chris-wilson.co.uk>
 
 -- 
- Kirill A. Shutemov
+0-DAY CI Kernel Test Service
+https://01.org/lkp

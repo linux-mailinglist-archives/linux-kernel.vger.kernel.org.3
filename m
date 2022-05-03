@@ -2,91 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8505C518D61
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:45:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F996518D64
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242088AbiECTsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 15:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43312 "EHLO
+        id S242107AbiECTtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 15:49:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242086AbiECTsw (ORCPT
+        with ESMTP id S237504AbiECTtd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 15:48:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D3239C
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 12:45:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F2844B81D9D
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 19:45:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A726C385A9
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 19:45:10 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="h9tiuuki"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1651607108;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=TEfxPcioLMI2VTe+eBWZJz8nu3ZlasYCXDFLZIcWWZ0=;
-        b=h9tiuuki1j/xMd7cvnbMEyr+2CEbGONsIVn0Ph1spocyBN9B7WeRttMek9mz2oCTNrzTNn
-        r6lp2ZAICE0rg1Yf0Eo0o2+3mh0I9I4BJJ33HWmqUIU2TRHzsrmlrd9vs1i4d3rwObhKYz
-        ONJvzLwD2yicGGhi8dzAPPNIDHOl+1o=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f2460506 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 3 May 2022 19:45:08 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH] random: fix sysctl documentation nits
-Date:   Tue,  3 May 2022 21:45:05 +0200
-Message-Id: <20220503194505.675301-1-Jason@zx2c4.com>
+        Tue, 3 May 2022 15:49:33 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474E01EC69;
+        Tue,  3 May 2022 12:46:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651607160; x=1683143160;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=AzhBhxOhbCgOB3+iQ2HWZ9hfSjIgWo+A1YlkKhyilzw=;
+  b=PWg2/8mu8FSl5jkaVUdwvZ4tM7KrRdpmG5IXY1nVWrSypcqXu0uHr7Rl
+   DUbC1cs71YGX398+gonOZfF4/JOCLSeITU+Wtjb/k94gcdpYslVOhRybq
+   TdA1ykgc8iAa9Cs1eTv9Y8s0j3SYEL5FOikxFxdYgAEqcUVNWMvyKLS7v
+   5LrTF/X7ZpcgradWie25mB5w9g9kdO1N5aWWrwH/yrqrHxBt+S2mZ9vaO
+   wAaygTPd1aE05q0VmVK6ilBTnfJiNOf02gw7sxZF/1Ua+E2aslh9uf0PC
+   A9cDebHUH8WQ5ERVranC6ZJaRXAkrcxOQ2wm7E5pEPZQo8SrOZwlHWulh
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="248114158"
+X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
+   d="scan'208";a="248114158"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 12:45:59 -0700
+X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
+   d="scan'208";a="584345937"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 12:45:59 -0700
+From:   matthew.gerlach@linux.intel.com
+To:     dinguyen@kernel.org, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: [PATCH v2 0/3] Add device tree for Intel n6000
+Date:   Tue,  3 May 2022 12:45:43 -0700
+Message-Id: <20220503194546.1287679-1-matthew.gerlach@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A semicolon was missing, and the almost-alphabetical-but-not ordering
-was confusing, so regroup these by category instead.
+From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- Documentation/admin-guide/sysctl/kernel.rst | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+This patch set adds a device tree for the Hard Processor System (HPS)
+on an Agilex based Intel n6000 board.
 
-diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
-index 1144ea3229a3..e9c18dabc552 100644
---- a/Documentation/admin-guide/sysctl/kernel.rst
-+++ b/Documentation/admin-guide/sysctl/kernel.rst
-@@ -994,6 +994,9 @@ This is a directory, with the following entries:
- * ``boot_id``: a UUID generated the first time this is retrieved, and
-   unvarying after that;
- 
-+* ``uuid``: a UUID generated every time this is retrieved (this can
-+  thus be used to generate UUIDs at will);
-+
- * ``entropy_avail``: the pool's entropy count, in bits;
- 
- * ``poolsize``: the entropy pool size, in bits;
-@@ -1001,10 +1004,7 @@ This is a directory, with the following entries:
- * ``urandom_min_reseed_secs``: obsolete (used to determine the minimum
-   number of seconds between urandom pool reseeding). This file is
-   writable for compatibility purposes, but writing to it has no effect
--  on any RNG behavior.
--
--* ``uuid``: a UUID generated every time this is retrieved (this can
--  thus be used to generate UUIDs at will);
-+  on any RNG behavior;
- 
- * ``write_wakeup_threshold``: when the entropy count drops below this
-   (as a number of bits), processes waiting to write to ``/dev/random``
+Patch 1 defines the device tree binding for the HPS Copy Engine IP
+used to copy a bootable image from host memory to HPS DDR.
+
+Patch 2 defines the binding for the Intel n6000 board itself.
+
+Patch 3 adds the device tree for the n6000 board.
+
+Changelog v1 -> v2:
+  - add dt binding for copy enging
+  - add dt binding for n6000 board
+  - fix copy engine node name
+  - fix compatible field for copy engine
+  - remove redundant status field
+  - add compatibility field for the board
+  - fix SPDX
+  - fix how osc1 clock frequency is set
+
+
+Matthew Gerlach (3):
+  dt-bindings: misc: add bindings for Intel HPS Copy Engine
+  dt-bindings: intel: add binding for Intel n6000
+  arm64: dts: intel: add device tree for n6000
+
+ .../bindings/arm/intel,socfpga.yaml           |  1 +
+ .../bindings/misc/intel,hps-copy-engine.yaml  | 48 ++++++++++++
+ arch/arm64/boot/dts/intel/Makefile            |  3 +-
+ .../boot/dts/intel/socfpga_agilex_n6000.dts   | 76 +++++++++++++++++++
+ 4 files changed, 127 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/misc/intel,hps-copy-engine.yaml
+ create mode 100644 arch/arm64/boot/dts/intel/socfpga_agilex_n6000.dts
+
 -- 
-2.35.1
+2.25.1
 

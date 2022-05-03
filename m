@@ -2,92 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 908FA51913D
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 00:21:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7954F51915F
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 00:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243601AbiECWYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 18:24:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
+        id S243702AbiECWb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 18:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233742AbiECWYH (ORCPT
+        with ESMTP id S235020AbiECWby (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 18:24:07 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FE5101FB;
-        Tue,  3 May 2022 15:20:34 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2430TJqd004092;
-        Tue, 3 May 2022 00:51:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=HA3cSEb/S4T7sQu1MN6rSA97SIBLNaaqi7XaMI6TnDo=;
- b=xGdUjMyckOpjfrVIYHu27CgEGnt5Dx/K+fzTTzWDAdlWte97GK8HRn70+59r1pgvIdhf
- TstbVrAU9iDGsWFEDlMce9WyxvpipVg4k49eM4bU6nevHNRPY4bFH5XN3KQhdO0/gKc1
- LnJRyCHqCSDkxDMJPtpTik0gYZT3nbzURBGnp3z5iaHBvwxyxKlYMGz94YPPv4LXlosw
- IN+kICardc9kxsftr3VhJTG2DHQ/MonQUY2IlCEaixYbjHEKwKcubFtcBc74gpai8x/X
- 8NeKet/KYmjBMrpRIQ1jnBCyHValm9PWUZc4ZfJSD3/D3iXeFws9Df0eyHHVO5Wd/IkY 4Q== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3frw0amhj3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 03 May 2022 00:51:53 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 2430oo12008891;
-        Tue, 3 May 2022 00:51:52 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x6p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 03 May 2022 00:51:52 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2430pljE010389;
-        Tue, 3 May 2022 00:51:51 GMT
-Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x4g-9;
-        Tue, 03 May 2022 00:51:51 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     LKML <linux-kernel@vger.kernel.org>, Borislav Petkov <bp@alien8.de>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
-        linux-scsi@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: Re: [PATCH 01/11] scsi: aacraid: Fix undefined behavior due to shift overflowing the constant
-Date:   Mon,  2 May 2022 20:51:19 -0400
-Message-Id: <165153836359.24053.2564518469406332154.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220405151517.29753-2-bp@alien8.de>
-References: <20220405151517.29753-1-bp@alien8.de> <20220405151517.29753-2-bp@alien8.de>
+        Tue, 3 May 2022 18:31:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A02725C5A
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 15:28:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651616900;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XuOARFW3gYZOmM4Y4nSXFBD8lHm6BchzW975izB6OwE=;
+        b=iuBRe20hnQHQVQ0swIUR96GUeNQGJnMv7wv9r87aIyy08tnwLb0gWhiH6ScRw6cLfGiTlX
+        ixMtg4sS1gNcl8V6wmaVoEOP4iJO8bbDfjPo0uzq8Z07JuSMTUwbJQadrNcURt/zwFkhYr
+        ugc9Zrea8eiWpeImx666Qk9IyOfa3KQ=
+Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com
+ [209.85.160.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-627-jzvhMj81N7y9tKQjdCVuKQ-1; Tue, 03 May 2022 16:21:09 -0400
+X-MC-Unique: jzvhMj81N7y9tKQjdCVuKQ-1
+Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-e1fa5c533eso6398262fac.19
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 13:21:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=XuOARFW3gYZOmM4Y4nSXFBD8lHm6BchzW975izB6OwE=;
+        b=wtdmET3sB2ox6gIQ/lfvZq/Y5mkOQRZH3N+2zdKkkFrrq6js89hUo6iJ3xlLto5zTY
+         17/HgCsAAeCS9YPcwEGue5mv56Q5//M5W4uxRlTVOJBW0FkQpHoHV+etgIrp9qJdgMVk
+         V5nRz0rwKToxz6UOK95Awa1GDUc0LpReC6MYLcFXYdSjEQ1w9OF0P15nIAFlA38nTOi9
+         HCrdeZwJLjfTqhvOoiLdxkdm3pVNZ8Fgc7kMSaPWTz2uYygAyMpsYnowbbvhV/aSvhvn
+         zVw8y7T59dtqZ/l4miLFQl2ukBdn7wCr9sYX4IbSuIjc9+zSt3owvt8jn+AyiEYmAIhS
+         EL7g==
+X-Gm-Message-State: AOAM532FIK2NE1+gnuuPHx/3jTxo3H2+gCLagQ4T89trf25M6C2D7SBr
+        z0chpbcL3UYe2bL9+8WJim224zQYXZCfVqQK4GgztHfczIGyouBXEPGHT8XQJBLYskAfMYVf6jX
+        vS4iK80cquCcgLa3CCzIoZgsS
+X-Received: by 2002:a05:6808:14d3:b0:325:ed6b:e748 with SMTP id f19-20020a05680814d300b00325ed6be748mr2683340oiw.105.1651609267936;
+        Tue, 03 May 2022 13:21:07 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwKRbb5OLkMV2UmDQ1VLpoVhTPJwDt2cIVnFXrIsYyzxEIudxX/SPJKn8BJ62U+FH4qM5Vz5Q==
+X-Received: by 2002:a05:6808:14d3:b0:325:ed6b:e748 with SMTP id f19-20020a05680814d300b00325ed6be748mr2683301oiw.105.1651609267392;
+        Tue, 03 May 2022 13:21:07 -0700 (PDT)
+Received: from [10.10.69.234] ([8.34.116.185])
+        by smtp.gmail.com with ESMTPSA id w11-20020a4adecb000000b0035eb4e5a6cesm5328939oou.36.2022.05.03.13.21.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 13:21:06 -0700 (PDT)
+Message-ID: <2bb92a84-18f4-d007-9465-fdc19f6f1c86@redhat.com>
+Date:   Tue, 3 May 2022 22:21:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: PfUYvM5O-7BqHhvZ4hEv1YEJZLotvuTH
-X-Proofpoint-ORIG-GUID: PfUYvM5O-7BqHhvZ4hEv1YEJZLotvuTH
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCHv5 02/12] mm: Add support for unaccepted memory
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+References: <20220425033934.68551-1-kirill.shutemov@linux.intel.com>
+ <20220425033934.68551-3-kirill.shutemov@linux.intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220425033934.68551-3-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 5 Apr 2022 17:15:07 +0200, Borislav Petkov wrote:
 
-> From: Borislav Petkov <bp@suse.de>
-> 
-> Fix
-> 
->   drivers/scsi/aacraid/commsup.c: In function ‘aac_handle_sa_aif’:
->   drivers/scsi/aacraid/commsup.c:1983:2: error: case label does not reduce to an integer constant
->     case SA_AIF_BPCFG_CHANGE:
->     ^~~~
-> 
-> [...]
+>  
+> +/*
+> + * Page acceptance can be very slow. Do not call under critical locks.
+> + */
+> +static void accept_page(struct page *page, unsigned int order)
+> +{
+> +	phys_addr_t start = page_to_phys(page);
+> +	int i;
+> +
+> +	accept_memory(start, start + (PAGE_SIZE << order));
+> +
+> +	for (i = 0; i < (1 << order); i++) {
+> +		if (PageUnaccepted(page + i))
+> +			__ClearPageUnaccepted(page + i);
+> +	}
+> +}
 
-Applied to 5.19/scsi-queue, thanks!
+What was the rationale of leaving PageUnaccepted() set on sub-pages when
+merging pages?
 
-[01/11] scsi: aacraid: Fix undefined behavior due to shift overflowing the constant
-        https://git.kernel.org/mkp/scsi/c/331c6e910f1a
+I'd just clear the flag when merging and avoid the loop here. You could
+even assert here that we don't have any PageUnaccepted() on tail pages.
 
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+Thanks,
+
+David / dhildenb
+

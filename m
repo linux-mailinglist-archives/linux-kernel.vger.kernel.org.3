@@ -2,131 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08C915187EC
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7F765187DE
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:07:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237939AbiECPLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 11:11:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36800 "EHLO
+        id S237807AbiECPKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 11:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237895AbiECPLD (ORCPT
+        with ESMTP id S237777AbiECPKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 11:11:03 -0400
-Received: from mailgw.felk.cvut.cz (mailgw.felk.cvut.cz [147.32.82.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD193A5D1;
-        Tue,  3 May 2022 08:07:25 -0700 (PDT)
-Received: from mailgw.felk.cvut.cz (localhost.localdomain [127.0.0.1])
-        by mailgw.felk.cvut.cz (Proxmox) with ESMTP id DCEF030B294B;
-        Tue,  3 May 2022 17:07:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        cmp.felk.cvut.cz; h=cc:cc:content-transfer-encoding:content-type
-        :content-type:date:from:from:in-reply-to:message-id:mime-version
-        :references:reply-to:subject:subject:to:to; s=felkmail; bh=4P1L2
-        McRFcrXjxO7ZhfB8SkAYy+Wz107djIKnsuzQ8w=; b=ibNg1fvSzVenJE8mislPb
-        mMPjFDuTppdbFCVkq5SqvzUxfxh3nXotqpYokniv+99dvuPRFqJBzvA7neVzVfrn
-        Bjlzi4nb+0saXR5a2AzqiomQ14doe9ux5rZRz4PF4D65KRHmvMlMkHPbqOCItMe3
-        Ed19miLuYU6vezl5HAWpiK9CB7kKLg/jHaBRqzmWemFeZ13ECejslwvRPR2ZtXbf
-        wzr1GTYDnG9BfDZP0IARyjpvPKXB6IiIUor7CHY7borZA6g3wChYOgOZtFmRMB/w
-        xcDM5DG+xIR+o3EeqwJIAqyA+I066ZIMnAkH5+H1OiM5qLwxpcpS1DL4+QR7CTlc
-        A==
-Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
-        by mailgw.felk.cvut.cz (Proxmox) with ESMTPS id 6555E30ADE4B;
-        Tue,  3 May 2022 17:07:22 +0200 (CEST)
-Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
-        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 243F7M6l003342;
-        Tue, 3 May 2022 17:07:22 +0200
-Received: (from pisa@localhost)
-        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 243F7LcQ003341;
-        Tue, 3 May 2022 17:07:21 +0200
-X-Authentication-Warning: haar.felk.cvut.cz: pisa set sender to pisa@cmp.felk.cvut.cz using -f
-From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH v8 5/7] can: ctucanfd: CTU CAN FD open-source IP core - platform/SoC support.
-Date:   Tue, 3 May 2022 17:07:21 +0200
-User-Agent: KMail/1.9.10
-Cc:     linux-can@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "Marc Kleine-Budde" <mkl@pengutronix.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        David Miller <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Carsten Emde <c.emde@osadl.org>, armbru@redhat.com,
-        netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Marin Jerabek <martin.jerabek01@gmail.com>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        Jiri Novak <jnovak@fel.cvut.cz>,
-        Jaroslav Beran <jara.beran@gmail.com>,
-        Petr Porazil <porazil@pikron.com>, Pavel Machek <pavel@ucw.cz>,
-        Drew Fustini <pdp7pdp7@gmail.com>
-References: <cover.1647904780.git.pisa@cmp.felk.cvut.cz> <4d5c53499bafe7717815f948801bd5aedaa05c12.1647904780.git.pisa@cmp.felk.cvut.cz> <CAMuHMdXY_sHw4W8_y+r1LMhGM+CF7RQtRFQzEC8wYKYSR98Daw@mail.gmail.com>
-In-Reply-To: <CAMuHMdXY_sHw4W8_y+r1LMhGM+CF7RQtRFQzEC8wYKYSR98Daw@mail.gmail.com>
-X-KMail-QuotePrefix: > 
+        Tue, 3 May 2022 11:10:31 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0FD2019B;
+        Tue,  3 May 2022 08:06:59 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id v11so5471995pff.6;
+        Tue, 03 May 2022 08:06:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OSMLSuAh9ZaOYgp6DvdsEDlozfxSlnsFvoNeJKVnepo=;
+        b=PXHQ9B2dxdQLqnlS6VrGKXnDno9p5J8Jtz5tucPJkQuECIJP+K1AW+7cXASdAe2qZy
+         +OZx+5ABjQpu5eVQh0ahQGiHRyXNJPCk35ihzsV181MpgUrF1tf4x0P7UWykT92fxXFm
+         2JfErHjGcg3TSNf1gz6Of+F16rmtp9b2ZI7mrGssJk92XvH/XzOi237NlBe3d7D6t5lI
+         nWccAixnwX/KAvwfz/z3Em2z3JsmHGp/JdO8aPLspRiX06I3wg+K8fYXNy51axTNDCKX
+         ZGkwISM78XplytiLHzIE2W9raZnFzKT9YcZCawPJ//R8z1x+0sER6v/22cCGm17fLq1h
+         DO0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OSMLSuAh9ZaOYgp6DvdsEDlozfxSlnsFvoNeJKVnepo=;
+        b=xwVmYL5zcVXmpN3+QiMS97LkPEBg9i6oaCpU6u+4nZx8/zrXrP6L5z986tdB2SR0Xv
+         N03LNqIBOexm5PivvLWH4Vfe7lBmCk5L6/yz0GphT8rgUuuwNjPFBKxFIm2FMM6KjsL7
+         c/p4IMGi4xduXpqX2tJmwDN7SWTIS9ksS2j8q4SDPzT4VkLVNFJhbMD3vVwDHGtGXTQ3
+         Nkg9CiNs7x+VBXaPbfI6GBx0euUFgI3eeDGKRl7SUrS42b/vVmABkfIV1I6cBECtxmJj
+         Pv6QMjEHUmhVK7ntfaT7XS2CCWpS8Lrxtu98DyGhZEkWTQFPwcAb8adH/rhFp8seZ3eF
+         zKGQ==
+X-Gm-Message-State: AOAM533GvVIwqLdZ9y+jFVX4L0sFCbcQzICgItzFSWjJimQq7TAJQ3he
+        X6uJDiK/mu1kVYEF/ulFkF7t28/X+6o=
+X-Google-Smtp-Source: ABdhPJxVjZUmBGs8NcQw1/467jjwyFLNaaByMOc3V4JAOuXeTcLJYh8FdWsMEobIftnlwKMyEdzg7Q==
+X-Received: by 2002:aa7:8256:0:b0:4e0:78ad:eb81 with SMTP id e22-20020aa78256000000b004e078adeb81mr16398424pfn.30.1651590418427;
+        Tue, 03 May 2022 08:06:58 -0700 (PDT)
+Received: from localhost ([47.251.4.198])
+        by smtp.gmail.com with ESMTPSA id c22-20020a62e816000000b0050dc76281e3sm6360530pfi.189.2022.05.03.08.06.57
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 03 May 2022 08:06:58 -0700 (PDT)
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Lai Jiangshan <jiangshan.ljs@antgroup.com>
+Subject: [PATCH V2 0/7] KVM: X86/MMU: Use one-off special shadow page for special roots
+Date:   Tue,  3 May 2022 23:07:28 +0800
+Message-Id: <20220503150735.32723-1-jiangshanlai@gmail.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
 MIME-Version: 1.0
-Content-Type: Text/Plain;
-  charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-Message-Id: <202205031707.21405.pisa@cmp.felk.cvut.cz>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Geert,
+From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 
-On Tuesday 03 of May 2022 13:37:46 Geert Uytterhoeven wrote:
-> Hi Pavel,
-> > --- /dev/null
-> > +++ b/drivers/net/can/ctucanfd/ctucanfd_platform.c
-> >
-> > +/* Match table for OF platform binding */
-> > +static const struct of_device_id ctucan_of_match[] = {
-> > +       { .compatible = "ctu,ctucanfd-2", },
->
-> Do you need to match on the above compatible value?
-> The driver seems to treat the hardware the same, and the DT
-> bindings state the compatible value below should always be present.
+Current code uses mmu->pae_root, mmu->pml4_root, and mmu->pml5_root to
+setup special roots.  The initialization code is complex and the roots
+are not associated with struct kvm_mmu_page which causes the code more
+complex.
 
-I would keep it because there will be newer revisions and releases
-of the core and I consider "ctu,ctucanfd" as the match to generic
-one with maximal attempt to adjust to the version from provided
-info registers but identification with the fixed version
-"ctu,ctucanfd-2" ensures that some old hardware which is
-in the wild is directly recognized even at /sys level
-and if we need to do some workarounds for autodetection
-etc. it can be recognized.
+So add new special shadow pages to simplify it.
 
-I understand that in ideal world that should never be required
-if we keep compatability right and if there is really new major
-completely incompatible revision we would need to use new
-identifier anyway. But we and the world is not perfect, so
-I would keep that safety option.
+The special shadow pages are associated with struct kvm_mmu_page and
+VCPU-local.
 
-May it be there are designs with 5 years old IP core version
-in the wild and may it be even with this ID.... May be they
-need some version specific adjustment... Yes version should be
-readable from IP, hopefully, but that was experimental version
-and I am not sure how much register map changed from that days
-(can be analyzed from GIT if support request appears).
-You know how it works with feebacks when chain of subcontracted
-companies does integration for carmaker etc...
+The special shadow pages are created and freed when the roots are
+changed (or one-off) which can be optimized but not in the patchset
+since the re-creating is light way (in normal case only the struct
+kvm_mmu_page needs to be re-allocated and sp->spt doens't, because
+it is likely to be mmu->pae_root)
 
-For example there appears questions and interest to update it to actual
-Debian for LinCAN after ten or 15 years of silence because that
-or origina CAN drivers solution works somewhere...
+Changed from v1:
+	Rebase to newest kvm/queue. Slightly update patch4.
 
-So I am personally more inclined to keep versionned ID.
+[V1]: https://lore.kernel.org/lkml/20220420132605.3813-1-jiangshanlai@gmail.com/
 
-Best wishes,
+Lai Jiangshan (7):
+  KVM: X86/MMU: Add using_special_root_page()
+  KVM: X86/MMU: Add special shadow pages
+  KVM: X86/MMU: Link PAE root pagetable with its children
+  KVM: X86/MMU: Activate special shadow pages and remove old logic
+  KVM: X86/MMU: Remove the check of the return value of to_shadow_page()
+  KVM: X86/MMU: Allocate mmu->pae_root for PAE paging on-demand
+  KVM: X86/MMU: Remove mmu_alloc_special_roots()
 
-Pavel
+ arch/x86/include/asm/kvm_host.h |   3 -
+ arch/x86/kvm/mmu/mmu.c          | 487 ++++++++++----------------------
+ arch/x86/kvm/mmu/mmu_internal.h |  10 -
+ arch/x86/kvm/mmu/paging_tmpl.h  |  14 +-
+ arch/x86/kvm/mmu/spte.c         |   7 +
+ arch/x86/kvm/mmu/spte.h         |   1 +
+ arch/x86/kvm/mmu/tdp_mmu.h      |   7 +-
+ 7 files changed, 178 insertions(+), 351 deletions(-)
 
+-- 
+2.19.1.6.gb485710b
 

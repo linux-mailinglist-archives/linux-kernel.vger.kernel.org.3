@@ -2,81 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3A31518677
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:20:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D3E451867A
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236962AbiECOXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 10:23:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48070 "EHLO
+        id S230012AbiECOYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 10:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236890AbiECOX2 (ORCPT
+        with ESMTP id S237028AbiECOXu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 10:23:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0357529C83;
-        Tue,  3 May 2022 07:19:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B59F3B81ED0;
-        Tue,  3 May 2022 14:19:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F756C385A9;
-        Tue,  3 May 2022 14:19:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651587593;
-        bh=m1gj6+3YfWLYuNch8icQuX4tVXD7bLAGeCx2hhQWcR8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K8qJWPmO2q681rj2MA+bg8H/9W6AW9+bcV6+a2yCVtViK8mh1+5HcIy3vvobjB5Ia
-         6ml6Ynv74RDdAZ4/ZTrJTdiR7U83U6F/k2cg94zwdjIyRCQk6j2MNDfj+a6n3DYesC
-         m1XxpA6fNnBLWTuLhgyJagOgKDdBR32OIwL/FZh8ZZKAokNn249IAVUcqiGkDubu/O
-         5GovoMTqBIl2Kw7iznCFz5WSFDAZjyYnegFKltO48Vpjqw4dGLjGxlBk5JlGTLPU2Z
-         IXVGMLYKeR/ApV8uQOnhDFBCu9PlJciF34irgX+kjDatLajzFaBPo0i8x4AcjBKEQ2
-         m0LGo2NXTVDDg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id E6298400B1; Tue,  3 May 2022 11:19:50 -0300 (-03)
-Date:   Tue, 3 May 2022 11:19:50 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        German Gomez <german.gomez@arm.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Alexander Antonov <alexander.antonov@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v5 3/6] perf stat: Avoid printing cpus with no counters
-Message-ID: <YnE6Bvju43ohfFip@kernel.org>
-References: <20220503041757.2365696-1-irogers@google.com>
- <20220503041757.2365696-4-irogers@google.com>
+        Tue, 3 May 2022 10:23:50 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE8541136
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 07:20:14 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 934D51042;
+        Tue,  3 May 2022 07:20:14 -0700 (PDT)
+Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 55AB63F774;
+        Tue,  3 May 2022 07:20:13 -0700 (PDT)
+Date:   Tue, 3 May 2022 15:20:06 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, elver@google.com, jbaron@akamai.com,
+        rostedt@goodmis.org, ardb@kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH 2/3] x86/cpu: Elide KCSAN for cpu_has() and friends
+Message-ID: <YnE6Fjums+jTH96Y@lakrids>
+References: <20220502110741.951055904@infradead.org>
+ <20220502111216.290518605@infradead.org>
+ <20220502184747.cr5ssem3g4mel4qq@treble>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220503041757.2365696-4-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220502184747.cr5ssem3g4mel4qq@treble>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,59 +46,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, May 02, 2022 at 09:17:54PM -0700, Ian Rogers escreveu:
-> perf_evlist's user_requested_cpus can contain CPUs not present in any
-> evsel's cpus, for example uncore counters. Avoid printing the prefix and
-> trailing \n until the first valid counter is encountered.
+On Mon, May 02, 2022 at 11:47:47AM -0700, Josh Poimboeuf wrote:
+> On Mon, May 02, 2022 at 01:07:43PM +0200, Peter Zijlstra wrote:
+> > vmlinux.o: warning: objtool: enter_from_user_mode+0x24: call to __kcsan_check_access() leaves .noinstr.text section
+> > vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x28: call to __kcsan_check_access() leaves .noinstr.text section
+> > vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x24: call to __kcsan_check_access() leaves .noinstr.text section
+> > vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x24: call to __kcsan_check_access() leaves .noinstr.text section
+> > 
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 > 
-> Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
+> An explanation about *why* this fixes it would help, as I have no idea
+> from looking at the patch.
 
+How about something like:
 
-Thanks, applied.
+| As x86 uses the <asm-generic/bitops/instrumented-*.h> headers, the
+| regular forms of all bitops are instrumented with explicit calls to
+| KASAN and KCSAN checks. As these are explicit calls, these are not
+| suppressed by the noinstr function attribute.
+|
+| This can result in calls to those check functions in noinstr code, which
+| objtool warns about:
+|
+| vmlinux.o: warning: objtool: enter_from_user_mode+0x24: call to __kcsan_check_access() leaves .noinstr.text section
+| vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x28: call to __kcsan_check_access() leaves .noinstr.text section
+| vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x24: call to __kcsan_check_access() leaves .noinstr.text section
+| vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x24: call to __kcsan_check_access() leaves .noinstr.text section
+|
+| Prevent this by using the arch_*() bitops, which are the underlying
+| bitops without explciit instrumentation.
 
-- Arnaldo
+Thanks,
+Mark.
 
-
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/util/stat-display.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
 > 
-> diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
-> index d9629a83aa78..13f705737367 100644
-> --- a/tools/perf/util/stat-display.c
-> +++ b/tools/perf/util/stat-display.c
-> @@ -948,8 +948,6 @@ static void print_no_aggr_metric(struct perf_stat_config *config,
->  		struct evsel *counter;
->  		bool first = true;
->  
-> -		if (prefix)
-> -			fputs(prefix, config->output);
->  		evlist__for_each_entry(evlist, counter) {
->  			u64 ena, run, val;
->  			double uval;
-> @@ -961,6 +959,8 @@ static void print_no_aggr_metric(struct perf_stat_config *config,
->  
->  			id = aggr_cpu_id__cpu(cpu, /*data=*/NULL);
->  			if (first) {
-> +				if (prefix)
-> +					fputs(prefix, config->output);
->  				aggr_printout(config, counter, id, 0);
->  				first = false;
->  			}
-> @@ -972,7 +972,8 @@ static void print_no_aggr_metric(struct perf_stat_config *config,
->  			printout(config, id, 0, counter, uval, prefix,
->  				 run, ena, 1.0, &rt_stat);
->  		}
-> -		fputc('\n', config->output);
-> +		if (!first)
-> +			fputc('\n', config->output);
->  	}
->  }
->  
+> > ---
+> >  arch/x86/include/asm/cpufeature.h |    2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > --- a/arch/x86/include/asm/cpufeature.h
+> > +++ b/arch/x86/include/asm/cpufeature.h
+> > @@ -51,7 +51,7 @@ extern const char * const x86_power_flag
+> >  extern const char * const x86_bug_flags[NBUGINTS*32];
+> >  
+> >  #define test_cpu_cap(c, bit)						\
+> > -	 test_bit(bit, (unsigned long *)((c)->x86_capability))
+> > +	 arch_test_bit(bit, (unsigned long *)((c)->x86_capability))
+> >  
+> >  /*
+> >   * There are 32 bits/features in each mask word.  The high bits
+> > 
+> > 
+> 
 > -- 
-> 2.36.0.464.gb9c8b46e94-goog
-
--- 
-
-- Arnaldo
+> Josh
+> 

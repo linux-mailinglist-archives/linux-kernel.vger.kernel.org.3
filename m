@@ -2,90 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C6AA5189D4
+	by mail.lfdr.de (Postfix) with ESMTP id 2A3A25189D3
 	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 18:26:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239329AbiECQ30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 12:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42708 "EHLO
+        id S239530AbiECQ3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 12:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234031AbiECQ3T (ORCPT
+        with ESMTP id S236784AbiECQ3U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 12:29:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8BA22292
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 09:25:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A3F1061736
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 16:25:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FF69C385A9;
-        Tue,  3 May 2022 16:25:41 +0000 (UTC)
-Date:   Tue, 3 May 2022 12:25:33 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH 2/2] recordmcount: Handle sections with no non-weak
- symbols
-Message-ID: <20220503122533.6033647e@rorschach.local.home>
-In-Reply-To: <6d5ff91a-560e-56ea-0047-175f712872c2@csgroup.eu>
-References: <cover.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
-        <1b9566f0e7185fb8fd8ef2535add7a081501ccc8.1651047542.git.naveen.n.rao@linux.vnet.ibm.com>
-        <20220427095415.594e5120@gandalf.local.home>
-        <1651129169.fpixr00hgx.naveen@linux.ibm.com>
-        <20220428100602.7b215e52@gandalf.local.home>
-        <819939e3-285b-2a65-9c4c-85640d2a3a02@csgroup.eu>
-        <20220502195251.5d862365@rorschach.local.home>
-        <6d5ff91a-560e-56ea-0047-175f712872c2@csgroup.eu>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 3 May 2022 12:29:20 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C09245AF;
+        Tue,  3 May 2022 09:25:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651595145; x=1683131145;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=XUNvuxnwMARaOjUov73VAGop00ml9m7FBckSe+F8Mus=;
+  b=FBY/g70hH0lhUAuDHrsUUtQQYmbVZmC6vrIRbpqMeWU9hnER6GLv7YOe
+   DBNaHEYs+L5ivmgZ9RU4X1jiareyu7bCTrONy0GmSYrBDYs7XFkMCTBjB
+   lrxurUFuaJ0FoPW+WsjVzpOopeE2kVucL1CarC76s3AmsJLDCyUau+aMi
+   Y=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 03 May 2022 09:25:45 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 09:25:44 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 3 May 2022 09:25:44 -0700
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 3 May 2022 09:25:43 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
+        <airlied@linux.ie>, <agross@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3] drm/msm/dp: fix event thread stuck in wait_event after kthread_stop()
+Date:   Tue, 3 May 2022 09:25:36 -0700
+Message-ID: <1651595136-24312-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 3 May 2022 11:20:22 +0000
-Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
+Event thread supposed to exit from its while loop after kthread_stop().
+However there may has possibility that event thread is pending in the
+middle of wait_event due to condition checking never become true.
+To make sure event thread exit its loop after kthread_stop(), this
+patch OR kthread_should_stop() into wait_event's condition checking
+so that event thread will exit its loop after kernal_stop().
 
-> Maybe I misunderstood. When you say 'after linking', do you mean vmlinux 
-> or vmlinux.o ?
+Changes in v2:
+--  correct spelling error at commit title
 
-Whichever ;-)
+Changes in v3:
+-- remove unnecessary parenthesis
+-- while(1) to replace while (!kthread_should_stop())
 
-> 
-> In vmlinux, the addresses to be saved in __mcount_loc table might not 
-> contain anymore a call to _mcount but a call to a trampoline that jumps 
-> to _mcount, in case _mcount is too far from the said location at link 
-> time. That's what I meant.
+Reported-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Fixes: 570d3e5d28db ("drm/msm/dp: stop event kernel thread when DP unbind")
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+---
+ drivers/gpu/drm/msm/dp/dp_display.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-But how is that different than what is done today? And at linking,
-everything still calls mcount. It's not until runtime things change.
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index c388323..da5c03a 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -1103,15 +1103,20 @@ static int hpd_event_thread(void *data)
+ 
+ 	dp_priv = (struct dp_display_private *)data;
+ 
+-	while (!kthread_should_stop()) {
++	while (1) {
+ 		if (timeout_mode) {
+ 			wait_event_timeout(dp_priv->event_q,
+-				(dp_priv->event_pndx == dp_priv->event_gndx),
+-						EVENT_TIMEOUT);
++				(dp_priv->event_pndx == dp_priv->event_gndx) ||
++					kthread_should_stop(), EVENT_TIMEOUT);
+ 		} else {
+ 			wait_event_interruptible(dp_priv->event_q,
+-				(dp_priv->event_pndx != dp_priv->event_gndx));
++				(dp_priv->event_pndx != dp_priv->event_gndx) ||
++					kthread_should_stop());
+ 		}
++
++		if (kthread_should_stop())
++			break;
++
+ 		spin_lock_irqsave(&dp_priv->event_lock, flag);
+ 		todo = &dp_priv->event_list[dp_priv->event_gndx];
+ 		if (todo->delay) {
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
-The point I'm talking about is that after linking, if the linker
-removed unused code (which would include unused weak functions,
-right?), then the calls to mcount that were in the weak functions would
-be gone too, and they would not be added by recordmcount, and for those
-that are still around, then using their symbols as the reference point
-would also not be an issue.
-
-The problem we have right now is that the only symbol we have is a weak
-function to reference the mcount call location in the __mcount_loc
-section. But if all the global entries are not used and the linker
-removes them, then the references using those symbols in the
-__mcount_loc section will be "undefined". After linking, everything in
-the vmlinux(.o) is set, and we are free to use that as a reference
-point for the call sites.
-
--- Steve

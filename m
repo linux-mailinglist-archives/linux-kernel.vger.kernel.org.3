@@ -2,160 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75989517BE4
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 04:23:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F8D517BE2
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 04:23:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbiECCVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 22:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53924 "EHLO
+        id S230062AbiECCWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 22:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbiECCVp (ORCPT
+        with ESMTP id S229882AbiECCWl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 22:21:45 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17792126D
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 19:18:14 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id q8so16557934oif.13
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 19:18:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=laGkwi2JMs5cKXNdFPiuyuaZlbZLsdgpAHyD6QKor6E=;
-        b=jEi963cY0xSdF6MSjXXJz/sx7W/ReDryUgIFdwijSV6cirSdAl0OISyAOGKPQvvYLS
-         VDDd/DogiFDG4NWFJBaqKvRacbPPQrQGSjdnQC6xIoVSplCgt6eysx3zeYAvOfRMr337
-         7t4wjETW0dbuPRAqA4bNaP8sKag+zRo2ceatk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=laGkwi2JMs5cKXNdFPiuyuaZlbZLsdgpAHyD6QKor6E=;
-        b=1OcQPs5IumuxZwhs3usiwdwz42HJzlLJp63TLKr1EDH7Wc3e1+hwdCGI5T4JNWCQLD
-         aEqImfvL5ZVEoAeDJbtEW0QOEmNV/iD+ULxW1x65dm2X1LZD88uJgOkbvZS9b08fuEKM
-         71Rrfh8yudnqqRzLGvwDr5h2dYL7Cf3b4+DjD7yRyADb2e1VadQEMA2dv47PemtB3A+O
-         p/NB2P0AZYR3XxjwIwOgR8JxK8NZT6nHGwCuYLDF0gwQq6buS4WVQ0Kp1Ff9fZsA8XYj
-         GqZAOKpZOkzBZY97JEXwQXs9OBz23zTDBcieHNjnh/nQLeVCvV5tRo9BtOEIYJ9Y/UBg
-         j/RA==
-X-Gm-Message-State: AOAM530EzoQ4RdWp6Amzi7WvAuWvTvqLZd0DvKIK9dkbcM2hTqoyn1ui
-        tcEG/BMubyMsJJlkkuFeHWcqBUzhJPWpejwak2aBow==
-X-Google-Smtp-Source: ABdhPJwgxF7e7OaUmsTN9DQ1tI6Tga8Ca0OfGo5t/zHKneNAjjo8vRB3fW9fyLwGOXW1Tc/9OrGCxyOtKdMftc7cQn0=
-X-Received: by 2002:aca:bd41:0:b0:2ec:ff42:814f with SMTP id
- n62-20020acabd41000000b002ecff42814fmr977960oif.63.1651544294289; Mon, 02 May
- 2022 19:18:14 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 2 May 2022 19:18:13 -0700
+        Mon, 2 May 2022 22:22:41 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EECEA23BF6;
+        Mon,  2 May 2022 19:19:08 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=31;SR=0;TI=SMTPD_---0VC4Od8S_1651544341;
+Received: from 30.39.210.51(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VC4Od8S_1651544341)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 03 May 2022 10:19:03 +0800
+Message-ID: <48a05075-a323-e7f1-9e99-6c0d106eb2cb@linux.alibaba.com>
+Date:   Tue, 3 May 2022 10:19:46 +0800
 MIME-Version: 1.0
-In-Reply-To: <CAD=FV=W5SeUNAiQi_h8LyUn+7EQG1Sf9N6Nq9HtVnQWqr0Ltsw@mail.gmail.com>
-References: <20220429233112.2851665-1-swboyd@chromium.org> <20220429233112.2851665-3-swboyd@chromium.org>
- <CAD=FV=WAbfe9BC5QPDezz3FSEwHRFdQeZpARJYT4b9V1rNp_nA@mail.gmail.com>
- <CAE-0n53x77n2ACuMYsFrdGhSkmO_4f8Uocnb+vKhcgoiY4RPQg@mail.gmail.com> <CAD=FV=W5SeUNAiQi_h8LyUn+7EQG1Sf9N6Nq9HtVnQWqr0Ltsw@mail.gmail.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Mon, 2 May 2022 19:18:13 -0700
-Message-ID: <CAE-0n50jO8Kj1d4g-2JVQpAhJ1bjy3RM5sajDs92bz=sO1g=zg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] Input: cros-ec-keyb - skip keyboard registration
- for switches compatible
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
-        chrome-platform@lists.linux.dev,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        "Joseph S. Barrera III" <joebar@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 3/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when
+ unmapping
+To:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Cc:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org
+References: <cover.1651216964.git.baolin.wang@linux.alibaba.com>
+ <c91e04ebb792ef7b72966edea8bd6fa2dfa5bfa7.1651216964.git.baolin.wang@linux.alibaba.com>
+ <20220429220214.4cfc5539@thinkpad>
+ <bcb4a3b0-4fcd-af3a-2a2c-fd662d9eaba9@linux.alibaba.com>
+ <20220502160232.589a6111@thinkpad>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20220502160232.589a6111@thinkpad>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.5 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Doug Anderson (2022-05-02 18:06:39)
-> Hi,
->
-> On Mon, May 2, 2022 at 3:02 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> >
-> > Quoting Doug Anderson (2022-05-02 10:02:54)
-> > > On Fri, Apr 29, 2022 at 4:31 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> > > >
-> > > >
-> > > > diff --git a/drivers/input/keyboard/cros_ec_keyb.c b/drivers/input/keyboard/cros_ec_keyb.c
-> > > > index eef909e52e23..1bbe2987bf52 100644
-> > > > --- a/drivers/input/keyboard/cros_ec_keyb.c
-> > > > +++ b/drivers/input/keyboard/cros_ec_keyb.c
-> > > > @@ -536,6 +536,12 @@ static int cros_ec_keyb_register_matrix(struct cros_ec_keyb *ckdev)
-> > > >         u32 *physmap;
-> > > >         u32 key_pos;
-> > > >         unsigned int row, col, scancode, n_physmap;
-> > > > +       bool register_keyboard;
-> > > > +
-> > > > +       /* Skip matrix registration if no keyboard */
-> > > > +       register_keyboard = device_get_match_data(dev);
-> > > > +       if (!register_keyboard)
-> > > > +               return 0;
-> > > >
-> > > >         /*
-> > > >          * No rows and columns? There isn't a matrix but maybe there are
-> > >
-> > > As per my comments in patch #1, I wonder if it makes sense to delete
-> > > the "No rows and columns?" logic and settle on the compatible as the
-> > > one true way to specify this.
-> > >
-> >
-> > Ok. My only concern is that means we have to check for both compatibles
-> > which is not really how DT compatible strings work. The compatible
-> > string usually finds the more specific compatible that is first in the
-> > list of compatibles in DT. You're essentially proposing that the
-> > switches compatible could be first or last, the order doesn't matter.
->
-> It's not quite what I was proposing. I think my summary really sums it up:
 
-Alright, I'm glad I misunderstood.
 
->
-> 1. If you have a matrix keyboard and maybe also some buttons/switches
-> then use the compatible: google,cros-ec-keyb
->
-> 2. If you only have buttons/switches but you want to be compatible
-> with the old driver in Linux that looked for the compatible
-> "google,cros-ec-keyb" and required the matrix properties, use the
-> compatible: "google,cros-ec-keyb-switches", "google,cros-ec-keyb"
->
-> 3. If you have only buttons/switches and don't need compatibility with
-> old Linux drivers, use the compatible: "google,cros-ec-keyb-switches"
->
-> ...but just to say it another way:
->
-> * If you have the compatible "google,cros-ec-keyb-switches" I mean to
-> say that you _only_ have switches and buttons. You'd _never_ have this
-> compatible string if you truly have a matrix keyboard. If you have
-> this, it will always be first.
->
-> * If you only have switches and buttons but you care about backward
-> compatibility then you can add a fallback compatible second:
-> "google,cros-ec-keyb"
->
-> * In order for the fallback compatible to be at all useful as a
-> fallback (it's only useful at all if you're on an old driver), if you
-> specify it you should pretend that you have matrix properties even
-> though you don't really have them, just like we used to do.
->
+On 5/2/2022 10:02 PM, Gerald Schaefer wrote:
+> On Sat, 30 Apr 2022 11:22:33 +0800
+> Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
+> 
+>>
+>>
+>> On 4/30/2022 4:02 AM, Gerald Schaefer wrote:
+>>> On Fri, 29 Apr 2022 16:14:43 +0800
+>>> Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
+>>>
+>>>> On some architectures (like ARM64), it can support CONT-PTE/PMD size
+>>>> hugetlb, which means it can support not only PMD/PUD size hugetlb:
+>>>> 2M and 1G, but also CONT-PTE/PMD size: 64K and 32M if a 4K page
+>>>> size specified.
+>>>>
+>>>> When unmapping a hugetlb page, we will get the relevant page table
+>>>> entry by huge_pte_offset() only once to nuke it. This is correct
+>>>> for PMD or PUD size hugetlb, since they always contain only one
+>>>> pmd entry or pud entry in the page table.
+>>>>
+>>>> However this is incorrect for CONT-PTE and CONT-PMD size hugetlb,
+>>>> since they can contain several continuous pte or pmd entry with
+>>>> same page table attributes, so we will nuke only one pte or pmd
+>>>> entry for this CONT-PTE/PMD size hugetlb page.
+>>>>
+>>>> And now we only use try_to_unmap() to unmap a poisoned hugetlb page,
+>>>> which means now we will unmap only one pte entry for a CONT-PTE or
+>>>> CONT-PMD size poisoned hugetlb page, and we can still access other
+>>>> subpages of a CONT-PTE or CONT-PMD size poisoned hugetlb page,
+>>>> which will cause serious issues possibly.
+>>>>
+>>>> So we should change to use huge_ptep_clear_flush() to nuke the
+>>>> hugetlb page table to fix this issue, which already considered
+>>>> CONT-PTE and CONT-PMD size hugetlb.
+>>>>
+>>>> Note we've already used set_huge_swap_pte_at() to set a poisoned
+>>>> swap entry for a poisoned hugetlb page.
+>>>>
+>>>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>>>> ---
+>>>>    mm/rmap.c | 34 +++++++++++++++++-----------------
+>>>>    1 file changed, 17 insertions(+), 17 deletions(-)
+>>>>
+>>>> diff --git a/mm/rmap.c b/mm/rmap.c
+>>>> index 7cf2408..1e168d7 100644
+>>>> --- a/mm/rmap.c
+>>>> +++ b/mm/rmap.c
+>>>> @@ -1564,28 +1564,28 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
+>>>>    					break;
+>>>>    				}
+>>>>    			}
+>>>> +			pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
+>>>
+>>> Unlike in your patch 2/3, I do not see that this (huge) pteval would later
+>>> be used again with set_huge_pte_at() instead of set_pte_at(). Not sure if
+>>> this (huge) pteval could end up at a set_pte_at() later, but if yes, then
+>>> this would be broken on s390, and you'd need to use set_huge_pte_at()
+>>> instead of set_pte_at() like in your patch 2/3.
+>>
+>> IIUC, As I said in the commit message, we will only unmap a poisoned
+>> hugetlb page by try_to_unmap(), and the poisoned hugetlb page will be
+>> remapped with a poisoned entry by set_huge_swap_pte_at() in
+>> try_to_unmap_one(). So I think no need change to use set_huge_pte_at()
+>> instead of set_pte_at() for other cases, since the hugetlb page will not
+>> hit other cases.
+>>
+>> if (PageHWPoison(subpage) && !(flags & TTU_IGNORE_HWPOISON)) {
+>> 	pteval = swp_entry_to_pte(make_hwpoison_entry(subpage));
+>> 	if (folio_test_hugetlb(folio)) {
+>> 		hugetlb_count_sub(folio_nr_pages(folio), mm);
+>> 		set_huge_swap_pte_at(mm, address, pvmw.pte, pteval,
+>> 				     vma_mmu_pagesize(vma));
+>> 	} else {
+>> 		dec_mm_counter(mm, mm_counter(&folio->page));
+>> 		set_pte_at(mm, address, pvmw.pte, pteval);
+>> 	}
+>>
+>> }
+> 
+> OK, but wouldn't the pteval be overwritten here with
+> pteval = swp_entry_to_pte(make_hwpoison_entry(subpage))?
+> IOW, what sense does it make to save the returned pteval from
+> huge_ptep_clear_flush(), when it is never being used anywhere?
 
-Another important point is that the matrix properties are willfully
-ignored by the new driver if the "google,cros-ec-keyb-switches"
-compatible is present. Maybe it should be "google,cros-ec-no-keyb" to
-describe the true intent, i.e. ignore the keyboard properties. Or
-"google,cros-ec-keyboardless". I think it's confusing that I put
-"switches" in the compatible. It really should be about not registering
-the keyboard input device.
+Please see previous code, we'll use the original pte value to check if 
+it is uffd-wp armed, and if need to mark it dirty though the hugetlbfs 
+is set noop_dirty_folio().
 
-Anyway, I agree that we don't need to use the matrix keyboard properties
-to figure out what to do. In fact, it isn't possible to remove the
-properties if "google,cros-ec-keyb" is present, so checking for them is
-redundant.
+pte_install_uffd_wp_if_needed(vma, address, pvmw.pte, pteval);
+
+/* Set the dirty flag on the folio now the pte is gone. */
+if (pte_dirty(pteval))
+	folio_mark_dirty(folio);

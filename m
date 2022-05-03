@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 982E6517E00
+	by mail.lfdr.de (Postfix) with ESMTP id E081F517E01
 	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 09:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231621AbiECHFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 03:05:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58302 "EHLO
+        id S230511AbiECHFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 03:05:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231324AbiECHEq (ORCPT
+        with ESMTP id S231629AbiECHFG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 03:04:46 -0400
-Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37A9220C5
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 00:01:13 -0700 (PDT)
+        Tue, 3 May 2022 03:05:06 -0400
+Received: from out203-205-221-202.mail.qq.com (out203-205-221-202.mail.qq.com [203.205.221.202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322B32229C
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 00:01:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1651561270;
-        bh=z7k7wTsvrI8fXqJLaHdr3/8X38tXovOFrYAX07qVmJk=;
+        s=s201512; t=1651561293;
+        bh=OWbtuVJZ9U3e0kRU290fgZR2YK74JKN66/5fnkRXd4k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Mce6O1Cn7suT9puufD0icKsXZ5qlcHJMOwIPacgmG4OhDbrwTdpZ5BvapD4RKabXs
-         rInYLODTGH4oEQHWdoYXeNIqYSwf1jHVPE9WIjRbRiUfxpF/1s6lhB5ypIro5S7h9/
-         7kE+mXEOIbBrBQ4FqUDU6EuxGWdaGLzMWXcCpo5o=
+        b=qNpN2y2GQ0bagZxATiyLzXmLd+7jfuT4prjFoGBrnp4ivTq2aRTo+dBNl1njsaDuw
+         eKyuo2Hx2Tbp0V6VWkAmc+lVqVXNGQ4WkDqRT0arFPkRARYWwfneDEABgKHi7CW8F6
+         FtW41PNmzHYspr6gh9dLGS67ip41SlI5iIvyU1V4=
 Received: from localhost.localdomain ([59.172.176.242])
-        by newxmesmtplogicsvrszb7.qq.com (NewEsmtp) with SMTP
-        id 47B2A2E; Tue, 03 May 2022 15:01:07 +0800
-X-QQ-mid: xmsmtpt1651561267tyfxpeng7
-Message-ID: <tencent_9F682882C21F9576FFA9407C989373913809@qq.com>
-X-QQ-XMAILINFO: OCzxluqIaPHWvIXZHtlLtD7iWT1bC1Lh8aJmKj9qLArGKHdwufoP//lHCAaMd8
-         K5GSnOZOlDOL8hgkCkXL+Q+WIfvUSA14pBo9X5UVbos7ZBAd/Qu+7Gy9+Tg6pQ8oMJ0NQGURqyeL
-         5wQ1M5h/d2sJlcsUbLvoWuSjuTUnjJ4KspaTuzQA8EerXazMLyV60k2Wc6PdAej7q9A4OsYfD8aj
-         WoPLsm3mX/M//RlzkQxdTaovwWEWOhES5yd3NwEVD/gkmjOHghgFZsziSRSakrUGkDuzdQUwzxLr
-         Y2xP5EACCr8FLOSmkHB04cfCIjqXpzy862FUWwkQb0000YFI/OsOMIE8UKeGCY8s/fMRNhCCsc+K
-         8D5nBOR+HqLRUoDLnMEfVFk4a/nRa7g9QKsL6+JyVjKnXd0BOLXcuPQyQSdwZNN9AI//kjwDZwpy
-         kmaZ2m4EzmbFxCKfB3drmARBmM7lHFtiPptER6mNrrG1xJdujU5/W6SdYsgbpuKabc7QqBmK0N/5
-         +qt8EYJP7scz/HUGgEZR63M3Eiv77ofFTeGY3eYE4kRVXMFgWyASU/yVsQZ0oAfQXp2eyk2eODsA
-         ElGL68ZP7Xbh05fl4+iqc5i2qgmIkWvNODfkFBU3dUgW1hoKj+A8nWVsXmQjyhO8bHy829ooWqbl
-         CpWHSd7tuzmQlFIo/lM2t+AEgQvCi7Dq4viNHfa11tsM64qfC9xAbtNKGJLgEN84k4h3AdJDJzrc
-         0ALIM6vPrX8cLv2iGGELaPmOB8ZpmEj0s7aYtbLU9bFUQO1I8fuzXpNocgkiSweBm3rcntcP9zcn
-         gfiyN56KbeD6E19ucV9isyIzv9Pf/5wqM4uwTgeTSnH7u22l/mMEcskW8ut/Bo5F3kXLnPPrSlPQ
-         gjQ2WZ3xnDMPSE2xulbe261sGh5FWko9BqPHYGeHmTabqTl3fUtkma+LN3dqrgK9vwh4kwDYYJox
-         JNTunyMqNxSk5Gl3DyDAwNfcRiz9ofHny4rL4hQF8oIKZBEoHT2Bc92am8I85P
+        by newxmesmtplogicsvrsza5.qq.com (NewEsmtp) with SMTP
+        id 5E3F88A; Tue, 03 May 2022 15:01:30 +0800
+X-QQ-mid: xmsmtpt1651561290trm599m8a
+Message-ID: <tencent_EA8B79235780C38F022D9C4389E75F0B6405@qq.com>
+X-QQ-XMAILINFO: M4iqtcQzl/9FsP2jsSxfmBTxVNr75GrLeDtc6JEsSF1TQO8IGkorOBz3GyRok8
+         3AlThxfdybKWWZwIWOBrp4tArX69z4B0vHujyewfAZr/aU/evMUFMu8GqaozxBVgnd1REfN5k3eY
+         Zad0f05O8+5EMBKj6Uy9X+L3sKjIbv+UZOUbgRo+aaVnxYBFnqoneEytpThF+UYGqih9Quk8xDR/
+         RkuZMnfErt35actBwPx+V5651XS7r3IEVabbSHGtdatFB7GNaYNCheoO9lc7YCP5R1ts1CwyVY0A
+         Gb/qydxdFVMb153M7MtFoaR9E9pP81lsaXQoi2We7dkqC13WZyKhbBL80lAKkXnZEutfapVzgfvS
+         q+z24mGjawqjMNrafHMW/Q+ckp05y9H4l3YbILRDCmmOqwp+zn2paEYSA1LVwjyXhvxLYXKxgEzM
+         0G8cFTwtY5VnZRB6/lP8ALLqBR7684vkHIa7RjZMgo32lSGIm6kt02t1I6ghbhC6t4rlTPSonv0k
+         IFahdY9ZYyPDNHPhSmvEihpIqAMXcU1Nwq5qJPKa/5//bCk0oi8iYAYDlbcvzs3sL+qZ7vava70s
+         xA9nSswIf9yLE02i/4xsR+W3PpupbxO3ydKKzBavGoDGhDrfloGWKPFUMAvAd/n/8ES4RwnwBz0b
+         R99qRTtAeLKtfDv8ZTKwYNuJV+i46WoFwr526uD9mu7iT6DDq5uANYsipEREI+ua6jJ3Dv78YYUA
+         +/+bNTlWWYi8ZkIIs8+c2DFMICrcwB0ypas+cyUE97tRosBW6sqFb3IhVNquQC6Y85mUR+yTKnCM
+         ns9DEkhr8jU6cy7s9m48aO++mk++72AesIYsOwbMrHoXcx58shu6eVUbqEZjRYjEA9uBBJiOEVkp
+         Kr7nRCxcdn1sPLjFVKeWTnYYoJi5jnc5WaIawQ4lzNL50Y5+1uRDQrDm5ZLIV8978+YQvx4fSfVZ
+         YCWGV5KycvuK2+bZ8fe+UNabaYp7Osedu27I87k8cDTDZr/rPL3sR9ZHJ+hYLMAkGvTIgFnWs=
 From:   xkernel.wang@foxmail.com
-To:     gregkh@linuxfoundation.org
+To:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        gregkh@linuxfoundation.org
 Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH 08/12] staging: rtl8723bs: fix potential memory leak in rtw_init_drv_sw()
-Date:   Tue,  3 May 2022 15:00:57 +0800
-X-OQ-MSGID: <20220503070057.3325-1-xkernel.wang@foxmail.com>
+Subject: [PATCH 09/12] staging: r8188eu: fix a potential memory leak in _rtw_init_cmd_priv()
+Date:   Tue,  3 May 2022 15:01:17 +0800
+X-OQ-MSGID: <20220503070117.3346-1-xkernel.wang@foxmail.com>
 In-Reply-To: <tencent_A80380E4306BE7BA73E450F084232B4DFC0A@qq.com>
 References: <tencent_A80380E4306BE7BA73E450F084232B4DFC0A@qq.com>
 MIME-Version: 1.0
@@ -65,114 +66,66 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-In rtw_init_drv_sw(), there are various init functions are called to
-populate the padapter structure and some checks for their return value.
-However, except for the first one error path, the other five error paths
-do not properly release the previous allocated resources, which leads to
-various memory leaks.
+In _rtw_init_cmd_priv(), if `pcmdpriv->rsp_allocated_buf` is allocated
+in failure, then `pcmdpriv->cmd_allocated_buf` will not be properly
+released. Besides, considering there are only two error paths and the
+first one can directly return, we do not need to implicitly jump to the
+`exit` tag to execute the error handling code.
 
-This patch fixes this and keeps the success and error separate.
+So this patch added `kfree(pcmdpriv->cmd_allocated_buf);` on the error
+path to release the resource and simplified the return logic of
+_rtw_init_cmd_priv().
 
 Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
 ---
- drivers/staging/rtl8723bs/os_dep/os_intfs.c | 60 +++++++++++----------
- 1 file changed, 31 insertions(+), 29 deletions(-)
+ drivers/staging/r8188eu/core/rtw_cmd.c | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/staging/rtl8723bs/os_dep/os_intfs.c b/drivers/staging/rtl8723bs/os_dep/os_intfs.c
-index 380d8c9..68bba3c 100644
---- a/drivers/staging/rtl8723bs/os_dep/os_intfs.c
-+++ b/drivers/staging/rtl8723bs/os_dep/os_intfs.c
-@@ -664,51 +664,36 @@ void rtw_reset_drv_sw(struct adapter *padapter)
+diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
+index 06523d9..37b68a9 100644
+--- a/drivers/staging/r8188eu/core/rtw_cmd.c
++++ b/drivers/staging/r8188eu/core/rtw_cmd.c
+@@ -58,8 +58,6 @@ static int _rtw_enqueue_cmd(struct __queue *queue, struct cmd_obj *obj)
  
- u8 rtw_init_drv_sw(struct adapter *padapter)
+ u32	rtw_init_cmd_priv(struct cmd_priv *pcmdpriv)
  {
--	u8 ret8 = _SUCCESS;
+-	u32 res = _SUCCESS;
 -
- 	rtw_init_default_value(padapter);
+ 	init_completion(&pcmdpriv->enqueue_cmd);
+ 	/* sema_init(&(pcmdpriv->cmd_done_sema), 0); */
+ 	init_completion(&pcmdpriv->start_cmd_thread);
+@@ -74,27 +72,25 @@ u32	rtw_init_cmd_priv(struct cmd_priv *pcmdpriv)
+ 	pcmdpriv->cmd_allocated_buf = kzalloc(MAX_CMDSZ + CMDBUFF_ALIGN_SZ,
+ 					      GFP_KERNEL);
  
- 	rtw_init_hal_com_default_value(padapter);
- 
--	if (rtw_init_cmd_priv(&padapter->cmdpriv)) {
--		ret8 = _FAIL;
+-	if (!pcmdpriv->cmd_allocated_buf) {
+-		res = _FAIL;
 -		goto exit;
 -	}
-+	if (rtw_init_cmd_priv(&padapter->cmdpriv))
++	if (!pcmdpriv->cmd_allocated_buf)
 +		return _FAIL;
  
- 	padapter->cmdpriv.padapter = padapter;
+ 	pcmdpriv->cmd_buf = pcmdpriv->cmd_allocated_buf  +  CMDBUFF_ALIGN_SZ - ((size_t)(pcmdpriv->cmd_allocated_buf) & (CMDBUFF_ALIGN_SZ - 1));
  
--	if (rtw_init_evt_priv(&padapter->evtpriv)) {
--		ret8 = _FAIL;
+ 	pcmdpriv->rsp_allocated_buf = kzalloc(MAX_RSPSZ + 4, GFP_KERNEL);
+ 
+ 	if (!pcmdpriv->rsp_allocated_buf) {
+-		res = _FAIL;
 -		goto exit;
--	}
-+	if (rtw_init_evt_priv(&padapter->evtpriv))
-+		goto free_cmd_priv;
++		kfree(pcmdpriv->cmd_allocated_buf);
++		pcmdpriv->cmd_allocated_buf = NULL;
++		return _FAIL;
+ 	}
  
--
--	if (rtw_init_mlme_priv(padapter) == _FAIL) {
--		ret8 = _FAIL;
--		goto exit;
--	}
-+	if (rtw_init_mlme_priv(padapter) == _FAIL)
-+		goto free_evt_priv;
+ 	pcmdpriv->rsp_buf = pcmdpriv->rsp_allocated_buf  +  4 - ((size_t)(pcmdpriv->rsp_allocated_buf) & 3);
  
- 	init_mlme_ext_priv(padapter);
- 
--	if (_rtw_init_xmit_priv(&padapter->xmitpriv, padapter) == _FAIL) {
--		ret8 = _FAIL;
--		goto exit;
--	}
-+	if (_rtw_init_xmit_priv(&padapter->xmitpriv, padapter) == _FAIL)
-+		goto free_mlme_ext;
- 
--	if (_rtw_init_recv_priv(&padapter->recvpriv, padapter) == _FAIL) {
--		ret8 = _FAIL;
--		goto exit;
--	}
-+	if (_rtw_init_recv_priv(&padapter->recvpriv, padapter) == _FAIL)
-+		goto free_xmit_priv;
- 	/*  add for CONFIG_IEEE80211W, none 11w also can use */
- 	spin_lock_init(&padapter->security_key_mutex);
- 
- 	/*  We don't need to memset padapter->XXX to zero, because adapter is allocated by vzalloc(). */
- 	/* memset((unsigned char *)&padapter->securitypriv, 0, sizeof (struct security_priv)); */
- 
--	if (_rtw_init_sta_priv(&padapter->stapriv) == _FAIL) {
--		ret8 = _FAIL;
--		goto exit;
--	}
-+	if (_rtw_init_sta_priv(&padapter->stapriv) == _FAIL)
-+		goto free_recv_priv;
- 
- 	padapter->stapriv.padapter = padapter;
- 	padapter->setband = GHZ24_50;
-@@ -719,9 +704,26 @@ u8 rtw_init_drv_sw(struct adapter *padapter)
- 
- 	rtw_hal_dm_init(padapter);
- 
+ 	pcmdpriv->cmd_done_cnt = 0;
+ 	pcmdpriv->rsp_cnt = 0;
 -exit:
-+	return _SUCCESS;
-+
-+free_recv_priv:
-+	_rtw_free_recv_priv(&padapter->recvpriv);
-+
-+free_xmit_priv:
-+	_rtw_free_xmit_priv(&padapter->xmitpriv);
-+
-+free_mlme_ext:
-+	free_mlme_ext_priv(&padapter->mlmeextpriv);
  
--	return ret8;
-+	rtw_free_mlme_priv(&padapter->mlmepriv);
-+
-+free_evt_priv:
-+	rtw_free_evt_priv(&padapter->evtpriv);
-+
-+free_cmd_priv:
-+	rtw_free_cmd_priv(&padapter->cmdpriv);
-+
-+	return _FAIL;
+-	return res;
++	return _SUCCESS;
  }
  
- void rtw_cancel_all_timer(struct adapter *padapter)
+ u32 rtw_init_evt_priv(struct evt_priv *pevtpriv)
 -- 

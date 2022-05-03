@@ -2,94 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 338D9518441
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 14:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D541C51843E
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 14:26:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235257AbiECM3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 08:29:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40852 "EHLO
+        id S235254AbiECM3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 08:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235252AbiECM3j (ORCPT
+        with ESMTP id S235239AbiECM3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 08:29:39 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C452937AAD
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 05:26:06 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2f83983782fso177629077b3.6
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 05:26:06 -0700 (PDT)
+        Tue, 3 May 2022 08:29:30 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0603636E3C
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 05:25:57 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id t5so9014983edw.11
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 05:25:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fooishbar-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/kdLTIP5KWv/w0AGbW53dgxr50ylE5lpuqrP/XFE1k0=;
-        b=sZ1hgtTI7fxvaZ0k0uOV0GVYFCdwj7DY7WyRTiIERlNBLwVMA0aHkM9eKI80hA90uD
-         TXVIUXOGNCaChIHkrDbRhvfjvJ0FLlxpCu/9Fcn4eqBj6GWfHbSOtkkgrbdVdckmuHJO
-         QMdo8MDD6ZfD78z6MNJYaz4rHtJumcdPKAyidpPq6G6BV//fDOirycvGWFrXm7CGonHd
-         jdt8JKOKbEldXBTe+9cfzR5GgqTyKwjsF2/aeOcX/05Xhs9WsVZW9XRZwxak4N+E2GlS
-         VCEGLtHKm24ij5PYMb7kqfkjC9t8ITlg/FFNoZl2N4ZKuZ9lIWVaA4+F+58PlU6+2wEs
-         L6BQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=GCGJOVaFvPi2cdZAa6UPkRWwapZJfoD9FjLKsOzvOl8=;
+        b=zZpYb09NzsULIdZvqjDWB34wsfCyTIW5qhy/Esiwqa0TJfdQ0n7LVmNrsNmV9pyYX/
+         DOXjArMo3aj+3DszDWbmUxffbbzRcO+PfFNXvLHttb9IL3AsZ4t55iSPu5Kep3RbgDEI
+         On09x1duQp/RjmK699DnwteUsXUHhTlQEUoRxhk2VrDxk3RpN38pfzvawTR0tWOjYm9M
+         NsQGospBzheK8/z/zqufHgKDQv1LNN2yESPk6B4p4fhOF/kUPU3RIFmN0X0DTOwxxVbx
+         J7mFj0hO6o6JoWysUrtCd3xUCy3izDNsJTqNfb6Cw4OqLBR3Y44FMnkLGAYLH4Gox31N
+         zHyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/kdLTIP5KWv/w0AGbW53dgxr50ylE5lpuqrP/XFE1k0=;
-        b=HlTPdvHftIq0XAzHAac8sSaIJsjsB1bm2nIlMZCD68yfzerCofgAyYp2mj4n7/GAWw
-         bfXypdclyct7KKO5QuTHHwBxvLNDp5DXJWuHk1Pc+s3CCh3cqJdYAQ0trzWk3L2834tw
-         tuNSBCTcHoOglyAkN66FZnxORUd9vuYI35o9GnmRjUNZLX1x20CjcqO9lM4sUMVwknCV
-         vSA0OLnE6UPlwQDKkXOxmIQxsQ03SbdnJdu3fLikXDPKfp2QeC8Y55nBn7QY0BVzB9pb
-         X6UH2SSIv5u+CTdI08TBVAnYFQLXtf854bBn7hKkzKVuGvKiLqtrLVPfD1oUpLZ8stPD
-         UgnA==
-X-Gm-Message-State: AOAM531/Ur+tV25KYcytoqte6XolrdhyN2keECAESU5EYMNtuTe0jTKj
-        Z+cKuRVAfWnSDU+scdprjs9/X+gOGp97ZRV1s3MjsA==
-X-Google-Smtp-Source: ABdhPJy748BeoJGvdERlz6RifdnU94P5oaWHAfAf55iJWUIXN/sTYUf3fG9793RzhGeYw55AQSLOvtiy7IjggXp0lMY=
-X-Received: by 2002:a0d:e5c6:0:b0:2f8:c866:7af9 with SMTP id
- o189-20020a0de5c6000000b002f8c8667af9mr15130119ywe.268.1651580765968; Tue, 03
- May 2022 05:26:05 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=GCGJOVaFvPi2cdZAa6UPkRWwapZJfoD9FjLKsOzvOl8=;
+        b=x7oB58nkzY7FuROtZtR6vx5Z1UoASZQAQWPNll/gfDsC1IalUfTKhM8RnstGcFIB1l
+         yAP8AF7cIBamzMx7URvoE/8QDF4x7WHKSfd9r/1nyJKZpCIS0yVRLcpQc7kFbfe0c4S8
+         cf9eBpxuVLRz9fUMXpc4Fu0QsDzq8DTnf8oO7oMD2fpjV/1wWOOgcVHEkCkYp5xqJ3nq
+         C6Jlom1/RdaOM8QlEnTdxwyLhxOFAyQd0TglP8K/Oq/6Ty4Dvs02xW4lw6DpR863VAF+
+         En9agawiJlqMEEZZivOyOHvqDMsO1R5nnh2fEawnQB7Ir6F6RnKuoPvLiQwTux9dPO3n
+         9U4w==
+X-Gm-Message-State: AOAM5301dPPrY/mwLKkVCi2QtYyS3Z5lGIh9f8gy2ROrOQVeGkZVtv2g
+        86ZnsuD/dcJ/i2gX5XFSqTR0mA==
+X-Google-Smtp-Source: ABdhPJxaIEfqBaZo/WyNo6ukWwIiffhWb+nMnmw0GMvJWG2DxptvaFbjV2ed02Ff/JuclfPWdiESsQ==
+X-Received: by 2002:a05:6402:2554:b0:423:f3e3:81da with SMTP id l20-20020a056402255400b00423f3e381damr17651983edb.87.1651580756428;
+        Tue, 03 May 2022 05:25:56 -0700 (PDT)
+Received: from [192.168.0.203] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id ia15-20020a170907a06f00b006f3ef214e78sm4554780ejc.222.2022.05.03.05.25.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 05:25:55 -0700 (PDT)
+Message-ID: <9868ae89-57fc-0f1a-89a5-5ee0cd9207aa@linaro.org>
+Date:   Tue, 3 May 2022 14:25:54 +0200
 MIME-Version: 1.0
-References: <20220412215000.897344-1-richard.gong@amd.com> <d4ba3998-34aa-86d2-bde9-bc6ae9d8d08d@molgen.mpg.de>
- <CADnq5_MgvcGPWf2gYn_3qCr+Gq1P39tvv-W-o8NhivvMpMwUBA@mail.gmail.com>
- <91e916e3-d793-b814-6cbf-abee0667f5f8@molgen.mpg.de> <94fd858d-1792-9c05-b5c6-1b028427687d@amd.com>
- <efc1dfd1-2b54-aee5-1497-4b800a468141@molgen.mpg.de> <237da02b-0ed8-6b1c-3eaf-5574aab4f13f@amd.com>
- <294555b4-2d1b-270f-6682-3a17e9df133c@molgen.mpg.de> <5adfe067-dc00-6567-e218-c5c68670cf5b@amd.com>
- <543a9e76-ca90-984b-b155-a0647cdeacff@molgen.mpg.de>
-In-Reply-To: <543a9e76-ca90-984b-b155-a0647cdeacff@molgen.mpg.de>
-From:   Daniel Stone <daniel@fooishbar.org>
-Date:   Tue, 3 May 2022 13:25:53 +0100
-Message-ID: <CAPj87rOERk-kNa6n-UdjQsDKXP9zzm8=an=FHcM+33yebW6ECw@mail.gmail.com>
-Subject: Re: [PATCHv4] drm/amdgpu: disable ASPM on Intel Alder Lake based systems
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Richard Gong <richard.gong@amd.com>,
-        Dave Airlie <airlied@linux.ie>,
-        Xinhui Pan <xinhui.pan@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org,
-        Alexander Deucher <alexander.deucher@amd.com>,
-        dri-devel@lists.freedesktop.org,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 3/4] dt-bindings: arm-smmu: Add binding for SDX65 SMMU
+Content-Language: en-US
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, will@kernel.org,
+        robin.murphy@arm.com, joro@8bytes.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, ulf.hansson@linaro.org,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        adrian.hunter@intel.com, bhupesh.sharma@linaro.org
+Cc:     linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <1651480665-14978-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1651480665-14978-4-git-send-email-quic_rohiagar@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1651480665-14978-4-git-send-email-quic_rohiagar@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 1 May 2022 at 08:08, Paul Menzel <pmenzel@molgen.mpg.de> wrote:
-> Am 26.04.22 um 15:53 schrieb Gong, Richard:
-> > I think so. We captured dmesg log.
->
-> Then the (whole) system did *not* freeze, if you could still log in
-> (maybe over network) and execute `dmesg`. Please also paste the
-> amdgpu(?) error logs in the commit message.
->
-> > As mentioned early we need support from Intel on how to get ASPM working
-> > for VI generation on Intel Alder Lake, but we don't know where things
-> > currently stand.
->
-> Who is working on this, and knows?
+On 02/05/2022 10:37, Rohit Agarwal wrote:
+> Add devicetree binding for Qualcomm SDX65 SMMU.
+> 
+> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
 
-This has gone beyond the point of a reasonable request. The amount of
-detail you're demanding is completely unnecessary.
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof

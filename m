@@ -2,48 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C26D45184ED
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 15:04:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCACD5184F1
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 15:04:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235758AbiECNIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 09:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48526 "EHLO
+        id S235773AbiECNIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 09:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233312AbiECNII (ORCPT
+        with ESMTP id S231274AbiECNIM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 09:08:08 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A62213EB3;
-        Tue,  3 May 2022 06:04:36 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: benjamin.gaignard)
-        with ESMTPSA id 6F4981F4430A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651583074;
-        bh=hkr05uuJPKXMb5S1cAIIku4fMqp84TgWb1SiORt8AWI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=m48zmX1FqcMp7Rmqpr8fVbb9KjjIepgPaqdA+qTeJG1JniCd93QZaj+rrVM1AW08B
-         8t5p7yV2S1h7D6Lfw0C4uKSDt5ont1dXw71XXyNiO1Z6QRTyo54e/+sdPcRWSvom5W
-         fAEz5wylc3kDOz4DVTKe7XIgtRT6Ew2qqAhERaWIbMELnSG3hSzXtZ/fj1OMAZCgj5
-         T8e/GGkL8faSvMssJTHvybmsgWjMkUAW/nvl7Yc6TplYxdNblOxigeN7j5klC09ciw
-         il1ge3ft0h7Dn2f7gv+G1xkiC4EvkLrH8RpEqxjUl8Vtx/8KNuM3U6y1RmdVNndjhA
-         BFD3xaYr1phVA==
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        mchehab@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        jon@nanocrew.net, aford173@gmail.com, kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH] media: hantro: HEVC: Fix reference frames management
-Date:   Tue,  3 May 2022 15:04:22 +0200
-Message-Id: <20220503130422.622682-1-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.32.0
+        Tue, 3 May 2022 09:08:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6539E22510;
+        Tue,  3 May 2022 06:04:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1DD7CB81E5F;
+        Tue,  3 May 2022 13:04:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D99E7C385B3;
+        Tue,  3 May 2022 13:04:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651583077;
+        bh=IdSAzMybVRLKN4AFDOTIxWqFez/RALrhrUunMeJzeKE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=CqnpHbyKGE0sKKpZMtH3fXMylGqWPteGkZ9aZrOqXT208NXckFU78g9AC+/VPFy/t
+         Qn7jaKdgDOx5QfHpFFf7bc9LXYUa/NPGKgDWKhFfKnwh/f1OtoXnM97TwxpCJ9vKim
+         kcUZjrLhXxyY1S8t+a28pimurmNfrbQb/KD+xCNBcwiEGDwBHUVsc9g1+FreX+O2nA
+         tKw1MITmoSF/W+iyRrZUM9D1hwkj7IBeQ5fM3oiOh4EQjow0h4MLJuKZ1urApAEHmy
+         4/5OU6Ve6HzZmPh5HaAyCV75QfMZLjXk5tZXNm6LkDuNEOhp2bKetoSQifJXcw3DL9
+         T/tMvQnfEvJuA==
+Received: by mail-pj1-f43.google.com with SMTP id r9so15234422pjo.5;
+        Tue, 03 May 2022 06:04:37 -0700 (PDT)
+X-Gm-Message-State: AOAM532xz46HDYJ9p/gIAVkc5R1oSIrvi4aivhzH+Ux0ncA/G+19Gxdy
+        azuiMyesCY7Ry1Mm9cJm1j5YqNae1MluqeU92g==
+X-Google-Smtp-Source: ABdhPJyahR+0DO3NSgFi6ExO8mn7JDDzpO5E6qP01/f5TuYbXi/hLZSVssQ3itrMFpAjw2J/Bw41+w2gNHG+Q0pRbpU=
+X-Received: by 2002:a17:902:6a8a:b0:156:8ff6:daf0 with SMTP id
+ n10-20020a1709026a8a00b001568ff6daf0mr16347250plk.117.1651583077384; Tue, 03
+ May 2022 06:04:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+References: <20220428114049.1456382-1-michael@walle.cc> <20220428114049.1456382-2-michael@walle.cc>
+In-Reply-To: <20220428114049.1456382-2-michael@walle.cc>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 3 May 2022 08:04:23 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKmgsErk41D8MBsQxLfmk16UYVu8+Z5SkwJ6W-obhtysQ@mail.gmail.com>
+Message-ID: <CAL_JsqKmgsErk41D8MBsQxLfmk16UYVu8+Z5SkwJ6W-obhtysQ@mail.gmail.com>
+Subject: Re: [PATCH net-next 1/2] dt-bindings: net: lan966x: remove PHY reset
+To:     Michael Walle <michael@walle.cc>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        netdev <netdev@vger.kernel.org>, devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,117 +70,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PoC shall be int the range of -2^31 to 2^31 -1
-(HEVC spec section 8.3.1 Decoding process for picture order count).
-The current way to know if an entry in reference picture array is free
-is to test if PoC = UNUSED_REF. Since UNUSED_REF is defined as '-1' that
-could lead to decode issue if one PoC also equal '-1'.
-That is the case in fluster test SLIST_B_Sony_9.
+On Thu, Apr 28, 2022 at 6:40 AM Michael Walle <michael@walle.cc> wrote:
+>
+> The PHY reset was intended to be a phandle for a special PHY reset
+> driver for the integrated PHYs as well as any external PHYs. It turns
+> out, that the culprit is how the reset of the switch device is done.
+> In particular, the switch reset also affects other subsystems like
+> the GPIO and the SGPIO block and it happens to be the case that the
+> reset lines of the external PHYs are connected to a common GPIO line.
+> Thus as soon as the switch issues a reset during probe time, all the
+> external PHYs will go into reset because all the GPIO lines will
+> switch to input and the pull-down on that signal will take effect.
+>
+> So even if there was a special PHY reset driver, it (1) won't fix
+> the root cause of the problem and (2) it won't fix all the other
+> consumers of GPIO lines which will also be reset.
+>
+> It turns out, the Ocelot SoC has the same weird behavior (or the
+> lack of a dedicated switch reset) and there the problem is already
+> solved and all the bits and pieces are already there and this PHY
+> reset property isn't not needed at all.
+>
+> There are no users of this binding. Just remove it.
 
-Change the way unused entries are managed in reference pictures array to
-avoid using PoC to detect then.
+Seems there was 1 user:
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
----
- .../staging/media/hantro/hantro_g2_hevc_dec.c |  6 ++---
- drivers/staging/media/hantro/hantro_hevc.c    | 27 +++----------------
- drivers/staging/media/hantro/hantro_hw.h      |  2 +-
- 3 files changed, 6 insertions(+), 29 deletions(-)
+/builds/robherring/linux-dt/Documentation/devicetree/bindings/net/microchip,lan966x-switch.example.dtb:
+switch@e0000000: resets: [[4294967295, 0], [4294967295, 0]] is too
+long
+ From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml
+/builds/robherring/linux-dt/Documentation/devicetree/bindings/net/microchip,lan966x-switch.example.dtb:
+switch@e0000000: reset-names: ['switch', 'phy'] is too long
+ From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml
 
-diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-index 0a8c01ff2fa7..b7835bbf5e98 100644
---- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-+++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-@@ -473,8 +473,8 @@ static int set_ref(struct hantro_ctx *ctx)
- 
- 	set_ref_pic_list(ctx);
- 
--	/* We will only keep the references picture that are still used */
--	ctx->hevc_dec.ref_bufs_used = 0;
-+	/* We will only keep the references pictures that are still used */
-+	hantro_hevc_ref_init(ctx);
- 
- 	/* Set up addresses of DPB buffers */
- 	dpb_longterm_e = 0;
-@@ -515,8 +515,6 @@ static int set_ref(struct hantro_ctx *ctx)
- 	hantro_write_addr(vpu, G2_OUT_CHROMA_ADDR, chroma_addr);
- 	hantro_write_addr(vpu, G2_OUT_MV_ADDR, mv_addr);
- 
--	hantro_hevc_ref_remove_unused(ctx);
--
- 	for (; i < V4L2_HEVC_DPB_ENTRIES_NUM_MAX; i++) {
- 		hantro_write_addr(vpu, G2_REF_LUMA_ADDR(i), 0);
- 		hantro_write_addr(vpu, G2_REF_CHROMA_ADDR(i), 0);
-diff --git a/drivers/staging/media/hantro/hantro_hevc.c b/drivers/staging/media/hantro/hantro_hevc.c
-index 7d4b1d72255c..7fdec50dc853 100644
---- a/drivers/staging/media/hantro/hantro_hevc.c
-+++ b/drivers/staging/media/hantro/hantro_hevc.c
-@@ -25,15 +25,11 @@
- #define MAX_TILE_COLS 20
- #define MAX_TILE_ROWS 22
- 
--#define UNUSED_REF	-1
--
--static void hantro_hevc_ref_init(struct hantro_ctx *ctx)
-+void hantro_hevc_ref_init(struct hantro_ctx *ctx)
- {
- 	struct hantro_hevc_dec_hw_ctx *hevc_dec = &ctx->hevc_dec;
--	int i;
- 
--	for (i = 0;  i < NUM_REF_PICTURES; i++)
--		hevc_dec->ref_bufs_poc[i] = UNUSED_REF;
-+	hevc_dec->ref_bufs_used = 0;
- }
- 
- dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx,
-@@ -60,7 +56,7 @@ int hantro_hevc_add_ref_buf(struct hantro_ctx *ctx, int poc, dma_addr_t addr)
- 
- 	/* Add a new reference buffer */
- 	for (i = 0; i < NUM_REF_PICTURES; i++) {
--		if (hevc_dec->ref_bufs_poc[i] == UNUSED_REF) {
-+		if (!(hevc_dec->ref_bufs_used & 1 << i)) {
- 			hevc_dec->ref_bufs_used |= 1 << i;
- 			hevc_dec->ref_bufs_poc[i] = poc;
- 			hevc_dec->ref_bufs[i].dma = addr;
-@@ -71,23 +67,6 @@ int hantro_hevc_add_ref_buf(struct hantro_ctx *ctx, int poc, dma_addr_t addr)
- 	return -EINVAL;
- }
- 
--void hantro_hevc_ref_remove_unused(struct hantro_ctx *ctx)
--{
--	struct hantro_hevc_dec_hw_ctx *hevc_dec = &ctx->hevc_dec;
--	int i;
--
--	/* Just tag buffer as unused, do not free them */
--	for (i = 0;  i < NUM_REF_PICTURES; i++) {
--		if (hevc_dec->ref_bufs_poc[i] == UNUSED_REF)
--			continue;
--
--		if (hevc_dec->ref_bufs_used & (1 << i))
--			continue;
--
--		hevc_dec->ref_bufs_poc[i] = UNUSED_REF;
--	}
--}
--
- static int tile_buffer_reallocate(struct hantro_ctx *ctx)
- {
- 	struct hantro_dev *vpu = ctx->dev;
-diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-index 9f31cce609d6..5de558386179 100644
---- a/drivers/staging/media/hantro/hantro_hw.h
-+++ b/drivers/staging/media/hantro/hantro_hw.h
-@@ -337,9 +337,9 @@ int hantro_hevc_dec_init(struct hantro_ctx *ctx);
- void hantro_hevc_dec_exit(struct hantro_ctx *ctx);
- int hantro_g2_hevc_dec_run(struct hantro_ctx *ctx);
- int hantro_hevc_dec_prepare_run(struct hantro_ctx *ctx);
-+void hantro_hevc_ref_init(struct hantro_ctx *ctx);
- dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx, s32 poc);
- int hantro_hevc_add_ref_buf(struct hantro_ctx *ctx, int poc, dma_addr_t addr);
--void hantro_hevc_ref_remove_unused(struct hantro_ctx *ctx);
- 
- static inline unsigned short hantro_vp9_num_sbs(unsigned short dimension)
- {
--- 
-2.32.0
+Please fix as this is now failing in linux-next.
 
+Rob

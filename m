@@ -2,52 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03453519185
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 00:39:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E076D519190
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 00:41:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243738AbiECWmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 18:42:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59346 "EHLO
+        id S243757AbiECWo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 18:44:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiECWmh (ORCPT
+        with ESMTP id S230073AbiECWoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 18:42:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CA0427E8;
-        Tue,  3 May 2022 15:39:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3FE7EB8221B;
-        Tue,  3 May 2022 22:39:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D36DC385A9;
-        Tue,  3 May 2022 22:39:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651617540;
-        bh=2Bi1K4m6B7eQOJ9MZayL2Ps1PpMoB2mm7sab67Dy6VM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=D6QaewuBp9l4Z26rjlkFelSZYaxGf2VKrgkDxMbpsrANS5DJ8q0azhxcPvN/+L/3p
-         YROTn8ISmBPGf9MQu32SvF/dKpfeF3Up7S9h3uTtVr59MtR7k6oeDu9hgVpieWOvgR
-         YFyI9mx0xfK3XbHk4j+6NvXVwY2Zfjbtq+oGh+HcV79yk4Am6+JHKM0SZbwSSwU7bx
-         G3BFAwQuItj2J+iM+P4ZbhbBOFvqAYWIlTEcFFJQfqlcfS55lJHSPz92nWw03hPwft
-         Uj2QU7oOhJ5Vdd/ho7pDAukGO5HX6kdEtKmPVLlVsMndTE38zIfQHFFbqSgBIEQvID
-         pD1rhLJwOo0Tw==
-Date:   Tue, 3 May 2022 17:38:57 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Yicong Yang <yangyicong@hisilicon.com>
-Cc:     bhelgaas@google.com, rafael@kernel.org, linux-pci@vger.kernel.org,
-        linux-acpi@vger.kernel.org, lenb@kernel.org,
-        linux-kernel@vger.kernel.org, linuxarm@huawei.com
-Subject: Re: [PATCH] PCI/ACPI: Always advertise ASPM support if
- CONFIG_PCIEASPM=y
-Message-ID: <20220503223857.GA414278@bhelgaas>
+        Tue, 3 May 2022 18:44:25 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E3F2DA89
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 15:40:52 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id n8so16205008plh.1
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 15:40:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=z4jQqLRjT5d2UYQiVLjONfc4f34INRSeov1NA+mVkes=;
+        b=CR3c66gXlI7dp0GBAFTU6S4A96UiPfse88KiZYhRAnyvdsiEtq5+rIgzLTXLBAgAFL
+         rU4spHhLilzT+XqFo07FtFJT+O0In8w0k8D2zdB9Dgl1tea50Azb8JKw4BpEBlbhl6BQ
+         P8/vwL4+iRR/6ZBfz77yKapJZq/VOVXeRz+5I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=z4jQqLRjT5d2UYQiVLjONfc4f34INRSeov1NA+mVkes=;
+        b=NgoXKhxOeifYg2J91hiX2X2F1iVnVhdiPleBln2zopBYmS/gJi92GdFhxCULiEdPBb
+         1uCpeqeoaPlntSUW90wcifalPoTelYL+IztndMXwPoqUdF5CpB5IfP3HMQLiAtvBKyFX
+         89NtpWgs7tPqfF3m+p1Spk4EDW+klhlZz+C/h7erRkFCGno70gwvZDuuN7nPxacLusee
+         jno802456bblWcSD/JRRM3wKmUMhfw+ZX0MHBYCCZfOJmfQ7uHjgxbbhmcVCHeRnIY8x
+         EYHyVxFTHy5tE3jXukZcR9Kxn0Uu7V81y9ff0KYpjRnxSbBAUSMEasHhXCg65Ok8ll0n
+         Y9nw==
+X-Gm-Message-State: AOAM532eMSL+m0dnmCziNJEtm3luXcmL7HlVFn4FdRrz5oic7NQUXxos
+        oSaWQB+hpcc8dfXqhKRGJ+sX0w==
+X-Google-Smtp-Source: ABdhPJzYaUyozHYiMHueXIGD9R5owe6Q0eQLyLYo/8TUtTmGnNhSX5JUoZ8jDGchkO1aSnwI/fJfAQ==
+X-Received: by 2002:a17:902:d1cd:b0:15d:1483:6ed6 with SMTP id g13-20020a170902d1cd00b0015d14836ed6mr19614970plb.58.1651617651626;
+        Tue, 03 May 2022 15:40:51 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:93ca:84cb:c452:c0a3])
+        by smtp.gmail.com with ESMTPSA id az12-20020a170902a58c00b0015e8d4eb27esm6803778plb.200.2022.05.03.15.40.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 15:40:51 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Philip Chen <philipchen@chromium.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] drm/dp: Make DP AUX bus usage easier; use it on ps8640
+Date:   Tue,  3 May 2022 15:40:27 -0700
+Message-Id: <20220503224029.3195306-1-dianders@chromium.org>
+X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220425070634.28227-1-yangyicong@hisilicon.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,60 +83,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 03:06:34PM +0800, Yicong Yang wrote:
-> When we have CONFIG_PCIEASPM enabled it means OS can always support ASPM no
-> matter user have disabled it through pcie_aspm=off or not. But currently we
-> won't advertise ASPM support in _OSC negotiation if user disables it, which
-> doesn't match the fact. This will also have side effects that other PCIe
-> services like AER and hotplug will be disabled as ASPM support is required
-> and we won't negotiate other services if ASPM support is absent.
-> 
-> So this patch makes OS always advertising ASPM support if CONFIG_PCIEASPM=y.
-> It intends no functional change to pcie_aspm=off as it will still mark
-> aspm_disabled=1 and aspm_support_enabled=false, driver will check these
-> status before configuring ASPM.
->
-> Tested this patch with pcie_aspm=off:
-> estuary:/$ dmesg | egrep -i "aspm|osc"
-> [    0.000000] PCIe ASPM is disabled
-> [    8.706961] acpi PNP0A08:00: _OSC: OS supports [ExtendedConfig ASPM
-> ClockPM Segments MSI EDR HPX-Type3]
-> [    8.726032] acpi PNP0A08:00: _OSC: platform does not support [LTR]
-> [    8.742818] acpi PNP0A08:00: _OSC: OS now controls [PCIeHotplug PME
-> AER PCIeCapability DPC]
-> estuary:/sys/module/pcie_aspm/parameters$ cat policy
-> [default] performance powersave powersupersave
-> estuary:/sys/module/pcie_aspm/parameters$ echo powersave > policy
-> bash: echo: write error: Operation not permitted
-> 
-> Cc: Rafael J. Wysocki <rafael@kernel.org>
-> Suggested-by: Bjorn Helgaas <bhelgaas@google.com>
-> [https://lore.kernel.org/linux-pci/20220407154257.GA235990@bhelgaas/]
-> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> ---
->  drivers/acpi/pci_root.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/acpi/pci_root.c b/drivers/acpi/pci_root.c
-> index 6f9e75d14808..17e78582e633 100644
-> --- a/drivers/acpi/pci_root.c
-> +++ b/drivers/acpi/pci_root.c
-> @@ -393,7 +393,7 @@ static u32 calculate_support(void)
->  	support |= OSC_PCI_HPX_TYPE_3_SUPPORT;
->  	if (pci_ext_cfg_avail())
->  		support |= OSC_PCI_EXT_CONFIG_SUPPORT;
-> -	if (pcie_aspm_support_enabled())
-> +	if (IS_ENABLED(CONFIG_PCIEASPM))
+This patch is v2 of the first 2 patches from my RFC series ("drm/dp: Improvements
+for DP AUX channel") [1]. I've broken the series in two so we can make
+progress on the two halves separately.
 
-Is there any way firmware could tell the difference between
-"CONFIG_PCIEASPM not set" and "CONFIG_PCIEASPM=y and booted with
-'pcie_aspm=off'"?
+v2 of this series tries to incorporate all the feedback from v1. Hopefully
+things are less confusing and simpler this time around. The one thing that got
+slightly more confusing is that the done_probing() callback can't return
+-EPROBE_DEFER in most cases so we have to adjust drivers a little more.
 
-If not, why would we even check whether CONFIG_PCIEASPM is set?
+The idea for this series came up during the review process of
+Sankeerth's series trying to add eDP for Qualcomm SoCs [2].
 
->  		support |= OSC_PCI_ASPM_SUPPORT | OSC_PCI_CLOCK_PM_SUPPORT;
->  	if (pci_msi_enabled())
->  		support |= OSC_PCI_MSI_SUPPORT;
-> -- 
-> 2.24.0
-> 
+This _doesn't_ attempt to fix the Analogix driver. If this works out,
+ideally someone can post a patch up to do that.
+
+[1] https://lore.kernel.org/r/20220409023628.2104952-1-dianders@chromium.org/
+[2] https://lore.kernel.org/r/1648656179-10347-2-git-send-email-quic_sbillaka@quicinc.com/
+
+Changes in v2:
+- Change to assume exactly one device.
+- Have a probe callback instead of an extra sub device.
+- Rewrote atop new method introduced by patch #1.
+
+Douglas Anderson (2):
+  drm/dp: Add callbacks to make using DP AUX bus properly easier
+  drm/bridge: parade-ps8640: Handle DP AUX more properly
+
+ drivers/gpu/drm/bridge/parade-ps8640.c   |  77 +++++---
+ drivers/gpu/drm/display/drm_dp_aux_bus.c | 215 +++++++++++++++--------
+ include/drm/display/drm_dp_aux_bus.h     |  24 ++-
+ 3 files changed, 216 insertions(+), 100 deletions(-)
+
+-- 
+2.36.0.464.gb9c8b46e94-goog
+

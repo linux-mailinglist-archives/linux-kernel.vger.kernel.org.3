@@ -2,52 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4190851C6A2
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 19:57:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F247651C8EC
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 21:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382951AbiEESBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 5 May 2022 14:01:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51414 "EHLO
+        id S1384992AbiEET3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 5 May 2022 15:29:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382941AbiEESBW (ORCPT
+        with ESMTP id S232129AbiEET3s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 5 May 2022 14:01:22 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E7611C36;
-        Thu,  5 May 2022 10:57:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 416F7CE2F54;
-        Thu,  5 May 2022 17:57:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39AD6C385A8;
-        Thu,  5 May 2022 17:57:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651773458;
-        bh=CXgvnZVu0rwEM0ACvUhkHVFy8LvlpA+vkKO1Hu87/OY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kqo51bgwhbaxDJ2jGEqRneRMCLEY6acJI2GErjjdVUF9aBaJxGCug2WFcGraBKuei
-         Hsdr2h9XW580LBQ80eUepJUXEexRuaPRWiRbOqyHd9iZavkcQgnqfjSz52uIVmg11t
-         rLJ7JVRCuXahgxMzyFsq8Pz9b/LZAoEvZGuZyVRs=
-Date:   Thu, 5 May 2022 19:57:37 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     Frank Wunderlich <linux@fw-web.de>, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [RFC v1] opp: add config option for debug
-Message-ID: <YnQQEZ7eoa/ZbmEj@kroah.com>
-References: <20220504174823.156709-1-linux@fw-web.de>
- <YnLEwEIOqnLGxFjJ@kroah.com>
- <E08A9747-2F96-42A7-A427-0E00D4075CF0@public-files.de>
+        Thu, 5 May 2022 15:29:48 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F741F614;
+        Thu,  5 May 2022 12:26:07 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 242MEVYs026258;
+        Tue, 3 May 2022 00:51:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2021-07-09;
+ bh=d6ct1UaLVba3yw63uAkNVfq9np3/Rqs6yhb3xK0+OpM=;
+ b=x2opaEy79OWCROeSa1n03EBsLrLvExky2JzpiJkzaYj1Y74T2aGMG5DGjjGrlID+pldb
+ t94tdMR2dVdHiXmvBWbmbUmQn5LGvjd+tgi7sYL2yroIvSEn4XYWZ+4sj7LGgfhs6KOE
+ mas05oz+PqBDq/BdUe0XDvl58UScciUgSKzda86lbSLfjjJ8gNcG5OSgI3jiGf0JtuLB
+ whIzqlFS0o0i2vbwuzHoObry1x2ArioNQpSEO512YmMAvE0MKbAf3WkNvB/9BxDuEhOJ
+ 6NRvnVHGrOADQGxsEJSui9faj1HzivLAo5N6AyeivI0UZn4NznYuc3yEX1K40m9OGPvV DA== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3fruhc4m4u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 03 May 2022 00:51:51 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 2430oou6008900;
+        Tue, 3 May 2022 00:51:50 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x61-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 03 May 2022 00:51:50 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2430plj8010389;
+        Tue, 3 May 2022 00:51:50 GMT
+Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x4g-6;
+        Tue, 03 May 2022 00:51:50 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     Haowen Bai <baihaowen@meizu.com>, jejb@linux.ibm.com
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH] scsi: mac53c94: fix warning comparing pointer to 0
+Date:   Mon,  2 May 2022 20:51:16 -0400
+Message-Id: <165153836359.24053.3311971754935367894.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.35.2
+In-Reply-To: <1647244711-31575-1-git-send-email-baihaowen@meizu.com>
+References: <1647244711-31575-1-git-send-email-baihaowen@meizu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <E08A9747-2F96-42A7-A427-0E00D4075CF0@public-files.de>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: nxzsRVDO7-q06fkTPZkhIg9eMB_E2sBQ
+X-Proofpoint-ORIG-GUID: nxzsRVDO7-q06fkTPZkhIg9eMB_E2sBQ
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,85 +69,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 05, 2022 at 07:50:56PM +0200, Frank Wunderlich wrote:
-> Hi,
-> 
-> Am 4. Mai 2022 20:24:00 MESZ schrieb Greg Kroah-Hartman <gregkh@linuxfoundation.org>:
-> >On Wed, May 04, 2022 at 07:48:23PM +0200, Frank Wunderlich wrote:
-> >> From: Frank Wunderlich <frank-w@public-files.de>
-> >> 
-> >> Currently OPP debug is enabled by DEBUG_DRIVER option. This is
-> >generic
-> >> driver debug and opp floods serial console. This is annoying if opp
-> >is
-> >> not needed so give it an additional config-key.
-> >> 
-> >> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> >> ---
-> >>  drivers/base/Kconfig | 1 +
-> >>  drivers/opp/Kconfig  | 7 +++++++
-> >>  drivers/opp/Makefile | 2 +-
-> >>  3 files changed, 9 insertions(+), 1 deletion(-)
-> >> 
-> >> diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
-> >> index 6f04b831a5c0..8ae826c95d5f 100644
-> >> --- a/drivers/base/Kconfig
-> >> +++ b/drivers/base/Kconfig
-> >> @@ -130,6 +130,7 @@ config DEV_COREDUMP
-> >>  config DEBUG_DRIVER
-> >>  	bool "Driver Core verbose debug messages"
-> >>  	depends on DEBUG_KERNEL
-> >> +	imply DEBUG_OPP
-> >
-> >This should not be needed, otherwise we would have to do that for all
-> >random driver subsystem in the kernel.
-> 
-> Have added this to have same behaviour if anyone sets DEBUG_DRIVER via defconfig. Else this is disabled by default.
-> 
-> >>  	help
-> >>  	  Say Y here if you want the Driver core to produce a bunch of
-> >>  	  debug messages to the system log. Select this if you are having a
-> >> diff --git a/drivers/opp/Kconfig b/drivers/opp/Kconfig
-> >> index e8ce47b32735..6a2d2c6c1143 100644
-> >> --- a/drivers/opp/Kconfig
-> >> +++ b/drivers/opp/Kconfig
-> >> @@ -12,3 +12,10 @@ config PM_OPP
-> >>  	  representing individual voltage domains and provides SOC
-> >>  	  implementations a ready to use framework to manage OPPs.
-> >>  	  For more information, read <file:Documentation/power/opp.rst>
-> >> +
-> >> +menu "Operating Performance Points (OPP)"
-> >> +config DEBUG_OPP
-> >> +	bool "Debug Operating Performance Points"
-> >> +	help
-> >> +	  enable opp debugging
-> >> +endmenu
-> >> diff --git a/drivers/opp/Makefile b/drivers/opp/Makefile
-> >> index f65ed5985bb4..2589915eef95 100644
-> >> --- a/drivers/opp/Makefile
-> >> +++ b/drivers/opp/Makefile
-> >> @@ -1,5 +1,5 @@
-> >>  # SPDX-License-Identifier: GPL-2.0-only
-> >> -ccflags-$(CONFIG_DEBUG_DRIVER)	:= -DDEBUG
-> >> +ccflags-$(CONFIG_DEBUG_OPP)	:= -DDEBUG
-> >
-> >This feels wrong, you shouldn't need a -DDEBUG for anything if all is
-> >going correctly.  Why is opp so odd this way?  Just use the normal
-> >dev_dbg() macros and all will be fine, nothing special should be needed
-> >at all.
-> 
-> I have looked more into it,just wanted to get driver debug (probing/binding) and dev_dbg messages without the opp spam (floods serial console).
-> 
-> >And don't use a config option for it either, no one will turn it on, it
-> >needs to "just work" for all systems.
-> 
-> Config option is to enable if needed and not via driver-debug.
+On Mon, 14 Mar 2022 15:58:31 +0800, Haowen Bai wrote:
 
-Please do not do that, you should never need subsystem/driver Kconfig
-options like this.  Distros will never enable them and you can't ask a
-user to rebuild their kernel easily.  Just rely on the same
-infrastructure like all other subsystems do please.
+> Fix the following coccicheck warning:
+> drivers/scsi/mac53c94.c:237:12-13: WARNING comparing pointer to 0
+> 
+> 
 
-thanks,
+Applied to 5.19/scsi-queue, thanks!
 
-greg k-h
+[1/1] scsi: mac53c94: fix warning comparing pointer to 0
+      https://git.kernel.org/mkp/scsi/c/93de8df20537
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering

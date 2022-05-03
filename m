@@ -2,177 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AF4F51926C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 01:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03453519185
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 00:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244368AbiECXts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 19:49:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35330 "EHLO
+        id S243738AbiECWmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 18:42:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232653AbiECXtr (ORCPT
+        with ESMTP id S230073AbiECWmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 19:49:47 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2056.outbound.protection.outlook.com [40.107.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8306429CAA
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 16:46:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RhiyMucqYvrnA/TJb7ILPsYQQdpfkJpUSOWQdxmvpgT9XEC+KtvJ7+mxbBcQ/FdjMokZbhKJAbmWDLG0fHU01kRRM95nFbe5bCYr9rL/tAUS907f7mJYtBEBQ26QyPC7Sni1tpBoqUDejEkxWJzm/T1MuCYw0/NqKsfGAkKpaUsLzRQwZHq+7meHlT3sX/c1nsLBBmzttgjPOhsyREC4biTXos5J+CiC8RWptDKvAwFIwEqWXGQDxdNXiQvv0UTz9e6Ihxym3rE70FdqHFhoIW63GTV6kaRR1APmImZYYJXnCdtPbpEQxwsk2plnG0Kh2mf+pF0qs/gweUGUWxqAxA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dCnw1llZv9PeQUxzbu8LuvQQ1C+IxDladDLcbz1XjRk=;
- b=InnkxLCq8uh01ZypFc584Ydlu2mz4tIgJX8VqDEnfeFsZytjY9Kl8cMN8OWXOfrFsWG/oIXTwTAue+Gmt+2Gua9pfl0tXulDbwpWB11obo2opf5WQT6jRfcNQKzl0NGASNVl/N+KV7hhjHgUyilFubGF+TCnEtlS794QGMmBSCb1tf2afPHzIpLOUS9UcDnuegiSUzYdeQEaNJu59kFGDWflE2qEr6e01hZNJQ21pVgH0ANQrYaKSZPUjQ+fh/3/nIR+M6WLf6cf0gkIsNgesQsKtq2mNTi5KXQWGDovbty2gTpi5kj8c5cx1N3dtDdi53x5SyHS1RznIFIuOrBDcw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dCnw1llZv9PeQUxzbu8LuvQQ1C+IxDladDLcbz1XjRk=;
- b=JTEQz7jEEBNZx4cjbzwzawtVhGSC5myQxYpxjkF4ZeYT38vJyFhAV9xedXqTphhHcLaBHGFMHpwLo+8yEujm2S4/uJzCrJnFfI7F4/E5lvnfz/TCmqm3fShi67a54KU9MPPK6nzjVzYKvlcU9WwHZHHKT4VxKF2/4sq4WMakPNdUJfUKQPIkwYWSz/1pkcwVAS0poNUyr8Lnwat6l3HyyzN3d4igw5KmgdX4poQINl65aU7RWKXJwtniLLnPOQ/+p4zRILJb4Pbm2bLUKYuN8T9S7KIcf5zZMX2qy4vINM6y3urI3G9A4GYBeJffr6g0wiRa7xegfXvsEUO/PX1img==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
- by BL0PR12MB4722.namprd12.prod.outlook.com (2603:10b6:208:8c::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.12; Tue, 3 May
- 2022 23:46:11 +0000
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::2d17:b68a:e101:4c18]) by BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::2d17:b68a:e101:4c18%6]) with mapi id 15.20.5186.028; Tue, 3 May 2022
- 23:46:10 +0000
-From:   Alistair Popple <apopple@nvidia.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Davidlohr Bueso <dave@stgolabs.net>, Wei Xu <weixugc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Yang Shi <shy828301@gmail.com>, Linux MM <linux-mm@kvack.org>,
-        Greg Thelen <gthelen@google.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Feng Tang <feng.tang@intel.com>, Jonathan.Cameron@huawei.com
-Subject: Re: RFC: Memory Tiering Kernel Interfaces
-Date:   Wed, 04 May 2022 08:35:56 +1000
-References: <CAAPL-u9sVx94ACSuCVN8V0tKp+AMxiY89cro0japtyB=xNfNBw@mail.gmail.com>
- <20220501175813.tvytoosygtqlh3nn@offworld>
- <87o80eh65f.fsf@nvdebian.thelocal>
- <e47bf89c-cee7-3006-5c1b-c76f640c3e23@intel.com>
-User-agent: mu4e 1.6.9; emacs 27.1
-In-reply-to: <e47bf89c-cee7-3006-5c1b-c76f640c3e23@intel.com>
-Message-ID: <87mtfygoxs.fsf@nvdebian.thelocal>
-Content-Type: multipart/mixed; boundary="=-=-="
-X-ClientProxiedBy: SA9PR13CA0051.namprd13.prod.outlook.com
- (2603:10b6:806:22::26) To BYAPR12MB3176.namprd12.prod.outlook.com
- (2603:10b6:a03:134::26)
+        Tue, 3 May 2022 18:42:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CA0427E8;
+        Tue,  3 May 2022 15:39:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3FE7EB8221B;
+        Tue,  3 May 2022 22:39:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D36DC385A9;
+        Tue,  3 May 2022 22:39:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651617540;
+        bh=2Bi1K4m6B7eQOJ9MZayL2Ps1PpMoB2mm7sab67Dy6VM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=D6QaewuBp9l4Z26rjlkFelSZYaxGf2VKrgkDxMbpsrANS5DJ8q0azhxcPvN/+L/3p
+         YROTn8ISmBPGf9MQu32SvF/dKpfeF3Up7S9h3uTtVr59MtR7k6oeDu9hgVpieWOvgR
+         YFyI9mx0xfK3XbHk4j+6NvXVwY2Zfjbtq+oGh+HcV79yk4Am6+JHKM0SZbwSSwU7bx
+         G3BFAwQuItj2J+iM+P4ZbhbBOFvqAYWIlTEcFFJQfqlcfS55lJHSPz92nWw03hPwft
+         Uj2QU7oOhJ5Vdd/ho7pDAukGO5HX6kdEtKmPVLlVsMndTE38zIfQHFFbqSgBIEQvID
+         pD1rhLJwOo0Tw==
+Date:   Tue, 3 May 2022 17:38:57 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Yicong Yang <yangyicong@hisilicon.com>
+Cc:     bhelgaas@google.com, rafael@kernel.org, linux-pci@vger.kernel.org,
+        linux-acpi@vger.kernel.org, lenb@kernel.org,
+        linux-kernel@vger.kernel.org, linuxarm@huawei.com
+Subject: Re: [PATCH] PCI/ACPI: Always advertise ASPM support if
+ CONFIG_PCIEASPM=y
+Message-ID: <20220503223857.GA414278@bhelgaas>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2fb01e51-a4ab-408d-ad3e-08da2d5f19aa
-X-MS-TrafficTypeDiagnostic: BL0PR12MB4722:EE_
-X-Microsoft-Antispam-PRVS: <BL0PR12MB4722E76DD0F6A3FA8827E574DFC09@BL0PR12MB4722.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DJocxAp+NM/3tX5KAP/ldE3fXHn4Fwul27EOATPsSWpzgRMmGbrQlCSbzAP7fRjdllA4bwQfcc1RZjl3r+6I/xwsrx+M9DgMDNMGJiXrgVmsPGe5EHlSpATatBz3eNceUNcSUmfXvTIC2wnecNmFrieZ/vv/azZy3oGsG16LLztELJLtAeMPnf2fplbTT7eV8RhlcTE8VkfIZPNXdHuZJjQYZ+DiSyTLFl+8Dlu4BLJbXOtQmijlYJBimsK9Gt95IAtjgd+nIiOHDQwY7ehxNEyU4M+6AO/DKEF4YX186P77E2An/NNfaAJLJwzu4LXJtPsjDfeKoVaj1Z3zi0TyDKsJjb2bTntCBk8V4Ox9AB89fcBNW3N05WgAyWoq8mgLZLXooGQ8oL2sLhX+XhH8pqrC5vGtb/RhH947+tXaFJjvD7GC+g061iPs13u69CwFxXRMgNzObHp/a/D9vBtoe15lgtPF19qhuw9n25cE4Ftc+Jw2QK6zH78QB+fiWw9Nm5HZMhcVr3fwSHUpARHDmM2osNRs6aC0e2Iex0se2uKCtQaiPg1QtAjkcVgopePYxbfk5wZ+58MX7FIaVtPMHzz4KIu1v9m0Ql9cGARCHiD5V3WrtWIPF9NJTg0V0kQ/692cn8v3juWBGldAFgQ//Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(86362001)(5660300002)(6486002)(8936002)(7416002)(6506007)(53546011)(44144004)(6666004)(2906002)(26005)(6512007)(38100700002)(83380400001)(186003)(66946007)(66556008)(66476007)(6916009)(54906003)(4326008)(316002)(8676002)(9686003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?uzIscV1rR3X1UvXiE1FplspUwW5nGRFlPobhFmDq/3f51PJPKkrnTaAZDC/Q?=
- =?us-ascii?Q?lLzc0Pk4vyWpGwPatWLns0LzCtMdgZ5GA3dxpZqAeuv+etMcQKoz3X/VLLYm?=
- =?us-ascii?Q?UWPaOnBgeDvMQtwhCpZjDc/5LMtSXngCKwJeX0zU4xcFQEcM/Ot/oviZR1Gb?=
- =?us-ascii?Q?VmalkKBmuAoVLNbkv8eWN2hqX/BF8VnismouR7oymkeYsRwPRQ3jEBKXfXXr?=
- =?us-ascii?Q?aBBuowJUog0vdR6ZjrZUu3B5yz/sVQju+olJzF+UnzwerYTm+5qrH6ssQ43s?=
- =?us-ascii?Q?S9mtPZYD0LbmcZGFdFvt4TzWdqcOvUMCIPGLOrFL24vzqWe5xXmJ28tXau2w?=
- =?us-ascii?Q?dYtBKEj4QL6fwKa7B4cZ2qOJWHaLISI3bKou2Hg1/MaY1LPTKMnymdzSRMSf?=
- =?us-ascii?Q?nHjaBQ0EEqvC6CX6pFno7aMtqjqybJlMG2gjhavKTPigj4dCKoG+miJg/lWX?=
- =?us-ascii?Q?VK1FVrsRWQMSd13B6MMTPGBBKSOuHo25hxKsqNEMyVdNHRVX5FkjT28gJpfK?=
- =?us-ascii?Q?LWFzMhRx1b4rZ3sDzALZlJe3O464o/Wn29LnU+bAkTJ+GdS4RdQ88OaH+9EH?=
- =?us-ascii?Q?onp4PWnNq6MPg5stwbjdsdwpzNfQ4FBhV7sfPPDZMvXYCTwmnN24KwoO8Xk9?=
- =?us-ascii?Q?EOYfKXSyX65qgMF87elDGzn4gWVfT7eT+5UyP0emuJXdJTPENnI6Dr8eWv7b?=
- =?us-ascii?Q?aMQkPCNUjp4qTywumS1xuzlPyfhLEnsaWAp+BimZp7TQlWAu8i+V5ZYTitBN?=
- =?us-ascii?Q?wDJAKzngSJwOGfFhinyKNFmxqPK+1rAAOv/vgr+zyuGVtO5m409ed0HjrNhY?=
- =?us-ascii?Q?1sOjzsCwnds+QYd9Po0Cc86rCe+LZCL6duyirpdHpcrxbXthVwndsqIU8OA4?=
- =?us-ascii?Q?3kYdYpf9mcrcjPLz+2My8v4oP/mcgtOTGodbQ9pZ/8i/Gi7nKrLCLvv9cHhL?=
- =?us-ascii?Q?01/gOBz581UtSxKlz1sYEgc0IrUz6my9ACs8o6Up8rIz1Rc1mpBkN8/DeZCx?=
- =?us-ascii?Q?Ut9noJiX2GigKpaq77BEVCjJvxjhwOi7Pn5MB5bGqDFitgDZo/nYcJE7/+jr?=
- =?us-ascii?Q?Rh0IPhNK0LSlJOShH8Fx7svFVxDsi/xDccu15WcpZ8XuYiUkz0CIKghrzAHB?=
- =?us-ascii?Q?Dlwxn5HYliQ1bEoVnqdZD6zJ1KQ98N0N1TZ/Pruvyl0Y3aNA7fMucPKyWAH2?=
- =?us-ascii?Q?hROFaud9v+eBHbYUGq6VjH1azsm0AIQ9Ipjznkke4TSX/uIegZdVFZN6nrn0?=
- =?us-ascii?Q?sNBrgQhbvZct2HJSNWZMwtZ/l6l8PKEmk4BY0Itrm+WIdW/TjcEBin5u8ul/?=
- =?us-ascii?Q?SHkks8YA2MSH+5YVfKBHcHJZm1MEwHyK2XZOuAVYjWGAiH2CetlkSsP7lPIw?=
- =?us-ascii?Q?IWw6wRefh6iOc4p/AnRt4GXWUbJgFymevOu7kAoWNbysLSNXlcix47CAwKJ7?=
- =?us-ascii?Q?KW1kULCfOf2bFQp3qGuRrOgNvCqoK8dVq47HhWZP41AJwz3I8ulHshmqTD9F?=
- =?us-ascii?Q?92fZsc5dEE0dwu7XU43t8lV7/WOjduX42OHBQa/m2QL+Jmn8WGdlYr3nhvSy?=
- =?us-ascii?Q?eA81cbynzCN6gm7zOEgILDm19JFBUP9oD9HSuR1UlaBhwZ2S+d4BleD+Q8hk?=
- =?us-ascii?Q?FDzYiP1NorhpVAcCNWMjJ8PwYfGCp0HuYOPG+vN+V39AuRp936bcUJ2dnk59?=
- =?us-ascii?Q?FCAy1Bs/aaYvXlKbq75060+n1SI4+kYgCvq5K3j8I2FJsQDPcWk0bL2G67CT?=
- =?us-ascii?Q?PNbidWeAxw=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2fb01e51-a4ab-408d-ad3e-08da2d5f19aa
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 May 2022 23:46:10.5073
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NxNl9kH4NlgtZGgeeclXBXs2XNjgMpoyTDO1IAtCrQUyDwiDYFocudTkdj1jeWQ3LzjWkZAOKTtRVQdj+LKw0w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4722
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220425070634.28227-1-yangyicong@hisilicon.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Disposition: inline
-
-Dave Hansen <dave.hansen@intel.com> writes:
-
-> On 5/3/22 10:14, Alistair Popple wrote:
->> I would certainly be interested in figuring out how HW could provide some sort
->> of heatmap to identify which pages are hot and which processing unit is using
->> them. Currently for these systems users have to manually assign memory policy to
->> get any reasonable performance, both to disable NUMA balancing and make sure
->> memory is allocated on the right node.
+On Mon, Apr 25, 2022 at 03:06:34PM +0800, Yicong Yang wrote:
+> When we have CONFIG_PCIEASPM enabled it means OS can always support ASPM no
+> matter user have disabled it through pcie_aspm=off or not. But currently we
+> won't advertise ASPM support in _OSC negotiation if user disables it, which
+> doesn't match the fact. This will also have side effects that other PCIe
+> services like AER and hotplug will be disabled as ASPM support is required
+> and we won't negotiate other services if ASPM support is absent.
+> 
+> So this patch makes OS always advertising ASPM support if CONFIG_PCIEASPM=y.
+> It intends no functional change to pcie_aspm=off as it will still mark
+> aspm_disabled=1 and aspm_support_enabled=false, driver will check these
+> status before configuring ASPM.
 >
-> Autonuma-induced page faults are a total non-starter for lots of
-> workloads, even ignoring GPUs.  Basically anyone who is latency
-> sensitive stays far, far away from autonuma.
->
-> As for improving on page faults for data collection...
->
-> *Can* hardware provide this information?  Definitely.
->
-> Have hardware vendors been motivated enough to add hardware to do this?
->  Nope, not yet.
+> Tested this patch with pcie_aspm=off:
+> estuary:/$ dmesg | egrep -i "aspm|osc"
+> [    0.000000] PCIe ASPM is disabled
+> [    8.706961] acpi PNP0A08:00: _OSC: OS supports [ExtendedConfig ASPM
+> ClockPM Segments MSI EDR HPX-Type3]
+> [    8.726032] acpi PNP0A08:00: _OSC: platform does not support [LTR]
+> [    8.742818] acpi PNP0A08:00: _OSC: OS now controls [PCIeHotplug PME
+> AER PCIeCapability DPC]
+> estuary:/sys/module/pcie_aspm/parameters$ cat policy
+> [default] performance powersave powersupersave
+> estuary:/sys/module/pcie_aspm/parameters$ echo powersave > policy
+> bash: echo: write error: Operation not permitted
+> 
+> Cc: Rafael J. Wysocki <rafael@kernel.org>
+> Suggested-by: Bjorn Helgaas <bhelgaas@google.com>
+> [https://lore.kernel.org/linux-pci/20220407154257.GA235990@bhelgaas/]
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> ---
+>  drivers/acpi/pci_root.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/acpi/pci_root.c b/drivers/acpi/pci_root.c
+> index 6f9e75d14808..17e78582e633 100644
+> --- a/drivers/acpi/pci_root.c
+> +++ b/drivers/acpi/pci_root.c
+> @@ -393,7 +393,7 @@ static u32 calculate_support(void)
+>  	support |= OSC_PCI_HPX_TYPE_3_SUPPORT;
+>  	if (pci_ext_cfg_avail())
+>  		support |= OSC_PCI_EXT_CONFIG_SUPPORT;
+> -	if (pcie_aspm_support_enabled())
+> +	if (IS_ENABLED(CONFIG_PCIEASPM))
 
-Not entirely true. The GPUs on POWER9 have performance counters capable of
-collecting this kind of information for memory accessed from the GPU. I will
-admit though that sadly most people probably don't have a P9 sitting under their
-desk :)
+Is there any way firmware could tell the difference between
+"CONFIG_PCIEASPM not set" and "CONFIG_PCIEASPM=y and booted with
+'pcie_aspm=off'"?
 
-For various reasons these counters weren't exposed to the kernel but that's
-something I would like to work on fixing.
+If not, why would we even check whether CONFIG_PCIEASPM is set?
 
-> Do you know anyone that works for any hardware companies? ;)
-
-Maybe ;)
-
-> Seriously, though.  Folks at Intel _are_ thinking about this problem.
-> I'm hoping we have hardware some day to help lend a hand.  The more
-> hardware vendors that do this, the more likely it is that we'll have
-> good kernel code to consume data from the hardware.
-
-Agreed.
-
---=-=-=--
+>  		support |= OSC_PCI_ASPM_SUPPORT | OSC_PCI_CLOCK_PM_SUPPORT;
+>  	if (pci_msi_enabled())
+>  		support |= OSC_PCI_MSI_SUPPORT;
+> -- 
+> 2.24.0
+> 

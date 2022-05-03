@@ -2,71 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4306C518F3A
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 22:45:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2578518F35
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 22:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240605AbiECUqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 16:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52284 "EHLO
+        id S240923AbiECUqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 16:46:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238648AbiECUpv (ORCPT
+        with ESMTP id S241919AbiECUqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 16:45:51 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763DA2B19C
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 13:42:18 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id cx11-20020a17090afd8b00b001d9fe5965b3so3339894pjb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 13:42:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=yWTG6qR6PAsl5ztcLukE6FJQRLR4F9ygwETJyaOlpe4=;
-        b=Xkyhnyn2iM1JvpehHToV52oJSUr9tjvV7dxzdT878Wp72btp/tN7Yra4Gg50LjAY11
-         9/HCmMeyESxUqEsoWar713A+KF+AqbEoZksU5yRmzjhfiKeZHP9F7qFYRzBxBGObK9i1
-         MnE4y/EVQa+HvqVQqvBIdLsbnyeQ5HXD1g8Ak=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=yWTG6qR6PAsl5ztcLukE6FJQRLR4F9ygwETJyaOlpe4=;
-        b=q67mpffMT/BZWMe7iJu9dDuutEHyD2kCN589WNyDFnvLKJ5oZfO8Uh3plNi8AUxHZh
-         Huu5W5j+tOCkTZznJv0hwpMaOc5rBLrLRw6lsrSAi0/Of5mV+h4hCwYw3wDU6C75GhGQ
-         oIkvjrL/xR5M0a6tqFW7LulAmaN8FDpAzXkqUIXtQ4b3EcMBLL3gaNutIasNxQeyH+/Y
-         YZ/yBD9yHLdkm2sJEvZF261cIVvYt9oCi7Tf4jUM3K1odSy3DM+f0tOxhpZ7Btc2INqy
-         fb0/0qVkIUsQ9e6woAm56983W3Ev2r5YC+YnRi0l7mT9lndrchy0d6arpWsgW2CvbkZE
-         Dgxg==
-X-Gm-Message-State: AOAM531RksDT3R7TEudW6ILbeMt8JVWnadJaxcQaFTw2+H9lkLepd7fV
-        Rd2qfepMnkvxM7VwypUmYIe2vg==
-X-Google-Smtp-Source: ABdhPJzYYojbmtuI9J7qVitArEwpEuYIjEFGujZTHvq7ZDXGmDZ1G9wykRXBgwgk4zGtkUrd9tZjvA==
-X-Received: by 2002:a17:902:bb90:b0:156:2c05:b34f with SMTP id m16-20020a170902bb9000b001562c05b34fmr18881814pls.53.1651610538012;
-        Tue, 03 May 2022 13:42:18 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:202:201:15e:c760:9a04:7fbe])
-        by smtp.gmail.com with ESMTPSA id x18-20020aa79192000000b0050dc76281e4sm6702081pfa.190.2022.05.03.13.42.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 13:42:17 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        chrome-platform@lists.linux.dev,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        "Joseph S. Barrera III" <joebar@chromium.org>
-Subject: [PATCH v4 2/2] Input: cros-ec-keyb - skip keyboard registration w/o cros-ec-keyb compatible
-Date:   Tue,  3 May 2022 13:42:12 -0700
-Message-Id: <20220503204212.3907925-3-swboyd@chromium.org>
-X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
-In-Reply-To: <20220503204212.3907925-1-swboyd@chromium.org>
-References: <20220503204212.3907925-1-swboyd@chromium.org>
+        Tue, 3 May 2022 16:46:03 -0400
+Received: from mxout01.lancloud.ru (mxout01.lancloud.ru [45.84.86.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3904732EF8;
+        Tue,  3 May 2022 13:42:22 -0700 (PDT)
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout01.lancloud.ru EDDEA20E410A
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Subject: [PATCH v4] sh: avoid using IRQ0 on SH3/4
+To:     Rich Felker <dalias@libc.org>, <linux-sh@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Organization: Open Mobile Platform
+Message-ID: <b2bccbca-6acf-7129-0099-7ad21bf13430@omp.ru>
+Date:   Tue, 3 May 2022 23:42:18 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,79 +47,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In commit 4352e23a7ff2 ("Input: cros-ec-keyb - only register keyboard if
-rows/columns exist") we skipped registration of the keyboard if the
-row/columns property didn't exist, but that has a slight problem for
-existing DTBs. The DTBs have the rows/columns properties, so removing
-the properties to indicate only switches exist makes this keyboard
-driver fail to probe, resulting in broken power and volume buttons. Ease
-the migration of existing DTBs by skipping keyboard registration if the
-google,cros-ec-keyb-switches compatible exists.
+Using IRQ0 by the platform devices is going to be disallowed soon (see [1])
+and even now, when IRQ0 is about to be returned by platfrom_get_irq(), you
+see a big warning.  The code supporting SH3/4 SoCs maps the IRQ #s starting
+at 0 -- modify that code to start the IRQ #s from 16 instead.
 
-The end result is that new DTBs can either choose to remove the matrix
-keymap properties or leave them in place and add this new compatible
-indicating the matrix keyboard properties should be ignored. Existing
-DTBs will continue to work, but they will keep registering the keyboard
-that does nothing. To fix that problem we can add this extra compatible
-to existing devicetrees and the keyboard will stop being registered.
-Finally, if google,cros-ec-keyb is missing then this driver won't even
-attempt to register the matrix keyboard. Of course, this driver won't
-probe until this patch is applied in that scenario, but that's OK. This
-last case is likely only going to be used by new devicetrees created
-after this commit.
+The patch should mostly affect the AP-SH4A-3A/AP-SH4AD-0A boards as they
+indeed use IRQ0 for the SMSC911x compatible Ethernet chip...
 
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: <devicetree@vger.kernel.org>
-Cc: Benson Leung <bleung@chromium.org>
-Cc: Guenter Roeck <groeck@chromium.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Cc: Hsin-Yi Wang <hsinyi@chromium.org>
-Cc: "Joseph S. Barrera III" <joebar@chromium.org>
-Fixes: 4352e23a7ff2 ("Input: cros-ec-keyb - only register keyboard if rows/columns exist")
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+[1] https://lore.kernel.org/all/025679e1-1f0a-ae4b-4369-01164f691511@omp.ru/
+
+Fixes: a85a6c86c25b ("driver core: platform: Clarify that IRQ 0 is invalid")
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Tested-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+
 ---
- drivers/input/keyboard/cros_ec_keyb.c | 19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
+The patch is against Linus Torvalds' 'linux.git' repo.
 
-diff --git a/drivers/input/keyboard/cros_ec_keyb.c b/drivers/input/keyboard/cros_ec_keyb.c
-index eef909e52e23..7684caf9b209 100644
---- a/drivers/input/keyboard/cros_ec_keyb.c
-+++ b/drivers/input/keyboard/cros_ec_keyb.c
-@@ -536,14 +536,10 @@ static int cros_ec_keyb_register_matrix(struct cros_ec_keyb *ckdev)
- 	u32 *physmap;
- 	u32 key_pos;
- 	unsigned int row, col, scancode, n_physmap;
-+	bool has_keyboard;
- 
--	/*
--	 * No rows and columns? There isn't a matrix but maybe there are
--	 * switches to register in cros_ec_keyb_register_bs() because
--	 * this is a detachable device.
--	 */
--	if (!device_property_present(dev, "keypad,num-rows") &&
--	    !device_property_present(dev, "keypad,num-cols"))
-+	has_keyboard = device_get_match_data(dev);
-+	if (!has_keyboard)
- 		return 0;
- 
- 	err = matrix_keypad_parse_properties(dev, &ckdev->rows, &ckdev->cols);
-@@ -718,8 +714,13 @@ static int cros_ec_keyb_remove(struct platform_device *pdev)
- 
- #ifdef CONFIG_OF
- static const struct of_device_id cros_ec_keyb_of_match[] = {
--	{ .compatible = "google,cros-ec-keyb" },
--	{},
-+	{
-+		/* Must be first */
-+		.compatible = "google,cros-ec-keyb",
-+		.data = (void *)true
-+	},
-+	{ .compatible = "google,cros-ec-keyb-switches" },
-+	{}
- };
- MODULE_DEVICE_TABLE(of, cros_ec_keyb_of_match);
+Changes in version 4:
+- fixed up the off-chip base IRQ #s for the Dreamcast/Highlander/R2D/SE7724
+  boards.
+
+Changes in version 3:
+- added an appropriate Fixes: tag and added a passage about it to the patch
+  description;
+- added actual cases of the boards using IRQ0 to the patch description;
+- added Geert Uytterhoeven's and John Paul Adrian Glaubitz's tags;
+- updated the link to point to the version 2 of the patch.
+
+Changes in version 2:
+- changed cmp/ge to cmp/hs in the assembly code.
+
+ arch/sh/include/mach-common/mach/highlander.h |    2 +-
+ arch/sh/include/mach-common/mach/r2d.h        |    2 +-
+ arch/sh/include/mach-dreamcast/mach/sysasic.h |    2 +-
+ arch/sh/include/mach-se/mach/se7724.h         |    2 +-
+ arch/sh/kernel/cpu/sh3/entry.S                |    4 ++--
+ include/linux/sh_intc.h                       |    6 +++---
+ 6 files changed, 9 insertions(+), 9 deletions(-)
+
+Index: linux/arch/sh/include/mach-common/mach/highlander.h
+===================================================================
+--- linux.orig/arch/sh/include/mach-common/mach/highlander.h
++++ linux/arch/sh/include/mach-common/mach/highlander.h
+@@ -176,7 +176,7 @@
+ #define IVDR_CK_ON	4		/* iVDR Clock ON */
  #endif
--- 
-https://chromeos.dev
-
+ 
+-#define HL_FPGA_IRQ_BASE	200
++#define HL_FPGA_IRQ_BASE	(200 + 16)
+ #define HL_NR_IRL		15
+ 
+ #define IRQ_AX88796		(HL_FPGA_IRQ_BASE + 0)
+Index: linux/arch/sh/include/mach-common/mach/r2d.h
+===================================================================
+--- linux.orig/arch/sh/include/mach-common/mach/r2d.h
++++ linux/arch/sh/include/mach-common/mach/r2d.h
+@@ -47,7 +47,7 @@
+ 
+ #define IRLCNTR1	(PA_BCR + 0)	/* Interrupt Control Register1 */
+ 
+-#define R2D_FPGA_IRQ_BASE	100
++#define R2D_FPGA_IRQ_BASE	(100 + 16)
+ 
+ #define IRQ_VOYAGER		(R2D_FPGA_IRQ_BASE + 0)
+ #define IRQ_EXT			(R2D_FPGA_IRQ_BASE + 1)
+Index: linux/arch/sh/include/mach-dreamcast/mach/sysasic.h
+===================================================================
+--- linux.orig/arch/sh/include/mach-dreamcast/mach/sysasic.h
++++ linux/arch/sh/include/mach-dreamcast/mach/sysasic.h
+@@ -22,7 +22,7 @@
+    takes.
+ */
+ 
+-#define HW_EVENT_IRQ_BASE  48
++#define HW_EVENT_IRQ_BASE  (48 + 16)
+ 
+ /* IRQ 13 */
+ #define HW_EVENT_VSYNC     (HW_EVENT_IRQ_BASE +  5) /* VSync */
+Index: linux/arch/sh/include/mach-se/mach/se7724.h
+===================================================================
+--- linux.orig/arch/sh/include/mach-se/mach/se7724.h
++++ linux/arch/sh/include/mach-se/mach/se7724.h
+@@ -37,7 +37,7 @@
+ #define IRQ2_IRQ        evt2irq(0x640)
+ 
+ /* Bits in IRQ012 registers */
+-#define SE7724_FPGA_IRQ_BASE	220
++#define SE7724_FPGA_IRQ_BASE	(220 + 16)
+ 
+ /* IRQ0 */
+ #define IRQ0_BASE	SE7724_FPGA_IRQ_BASE
+Index: linux/arch/sh/kernel/cpu/sh3/entry.S
+===================================================================
+--- linux.orig/arch/sh/kernel/cpu/sh3/entry.S
++++ linux/arch/sh/kernel/cpu/sh3/entry.S
+@@ -470,9 +470,9 @@ ENTRY(handle_interrupt)
+ 	mov	r4, r0		! save vector->jmp table offset for later
+ 
+ 	shlr2	r4		! vector to IRQ# conversion
+-	add	#-0x10, r4
+ 
+-	cmp/pz	r4		! is it a valid IRQ?
++	mov	#0x10, r5
++	cmp/hs	r5, r4		! is it a valid IRQ?
+ 	bt	10f
+ 
+ 	/*
+Index: linux/include/linux/sh_intc.h
+===================================================================
+--- linux.orig/include/linux/sh_intc.h
++++ linux/include/linux/sh_intc.h
+@@ -13,9 +13,9 @@
+ /*
+  * Convert back and forth between INTEVT and IRQ values.
+  */
+-#ifdef CONFIG_CPU_HAS_INTEVT
+-#define evt2irq(evt)		(((evt) >> 5) - 16)
+-#define irq2evt(irq)		(((irq) + 16) << 5)
++#ifdef CONFIG_CPU_HAS_INTEVT	/* Avoid IRQ0 (invalid for platform devices) */
++#define evt2irq(evt)		((evt) >> 5)
++#define irq2evt(irq)		((irq) << 5)
+ #else
+ #define evt2irq(evt)		(evt)
+ #define irq2evt(irq)		(irq)

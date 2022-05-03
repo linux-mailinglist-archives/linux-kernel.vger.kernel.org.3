@@ -2,129 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F51651B599
-	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 04:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B4351B639
+	for <lists+linux-kernel@lfdr.de>; Thu,  5 May 2022 04:58:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237160AbiEECEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 22:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40544 "EHLO
+        id S240290AbiEEDAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 23:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237038AbiEECEG (ORCPT
+        with ESMTP id S240161AbiEEDAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 22:04:06 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C4713F4C
-        for <linux-kernel@vger.kernel.org>; Wed,  4 May 2022 19:00:27 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id BBCCA2C03CF;
-        Thu,  5 May 2022 02:00:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1651716023;
-        bh=MXQGLE3PMSE+ZlDALFAVLjIjqtR06nI/TcFrL6QpaP0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=h/60BWpJbbPgH89KKXaocO/QFQKeXk9t5ZPn3Bk6ioe8ooHKylfQhzHW/k+xJsWjp
-         jIOZUkBUyVnzrnGr+HwmfKDQM6RZ6tO433JoENDYkFkEEiCsM/s0Ug5VM0L+HVDkL6
-         BsvhKZhWXvndJpOQkDJoMDXCg5wSsGeE0tnPPedLiLdAhoa5a09kDVBkPtYWuf2jKd
-         EN173NDcTsCRqCGlQZDD6iu0hE4dFJ6j0j+nXs2gkAY5eGQhAvj8tNGXFyaCe+uyvF
-         9w/KV0VDLalBXEzl53MwLXfMCh6l80rUjaWIMDn5El3T85BkOpOz7pjp463Rwu5Zn9
-         iwR6xjJhLg/HA==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B62732fb70000>; Thu, 05 May 2022 14:00:23 +1200
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-        by pat.atlnz.lc (Postfix) with ESMTP id 8C54E13EE37;
-        Thu,  5 May 2022 14:00:23 +1200 (NZST)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id 87AED2A0475; Thu,  5 May 2022 14:00:23 +1200 (NZST)
-From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
-To:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        tgraf@suug.ch, lokesh.dhoundiyal@alliedtelesis.co.nz
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [net PATCH] ipv4: drop dst in multicast routing path
-Date:   Thu,  5 May 2022 14:00:17 +1200
-Message-Id: <20220505020017.3111846-1-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.36.0
+        Wed, 4 May 2022 23:00:08 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5493313DC8;
+        Wed,  4 May 2022 19:56:30 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 242Nnl5h025194;
+        Tue, 3 May 2022 00:51:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2021-07-09;
+ bh=DZRyLUARGbpvjj9KLE8couN5sqcicCf2H9NcWm/lQeo=;
+ b=tZUt5C97u62nlPQz4nVrqHZ99oviz+0sWlquG9KEV6KSJmIUy7eSIdQ/28AriRhAzaN+
+ gw8yF2P3QrRDDyKv4DbXCzeGh8NjzWjAlxZn61P5AA/0qj+LvSzbUFUw4FJvzcIHw1ym
+ dRJnANaLmjX9gZUAP6SDTnFDHGA2AwKJTwd+qnnNBRpLi7LQI7SxVadtIVNjVwSAOUDa
+ CVgd8/v544Tf34CEQcRppFk5Jj6jSoxgyhjjqi3cWC9mal5SNH0LbI6WKh0yOh4zDOGP
+ M+5c9kvpAA5/avqRKNKFVJzS4QjOhBrLm2Paw8ZFG+pYjWE2h08auytyp9jscz0cbXSr yg== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3fruw2cnx5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 03 May 2022 00:51:50 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 2430oo10008891;
+        Tue, 3 May 2022 00:51:49 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x5k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 03 May 2022 00:51:49 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2430plj4010389;
+        Tue, 3 May 2022 00:51:49 GMT
+Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x4g-4;
+        Tue, 03 May 2022 00:51:49 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     Haowen Bai <baihaowen@meizu.com>, jejb@linux.ibm.com
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH] scsi: fnic: remove redundant NULL check
+Date:   Mon,  2 May 2022 20:51:14 -0400
+Message-Id: <165153836360.24053.10929907009827872411.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.35.2
+In-Reply-To: <1647309219-12772-1-git-send-email-baihaowen@meizu.com>
+References: <1647309219-12772-1-git-send-email-baihaowen@meizu.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=C7GXNjH+ c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=oZkIemNP1mAA:10 a=trTq1hty2DfEG8aEAKMA:9
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: dTvflSWKDBRWbpLhG3m55XEtZwl1Pw43
+X-Proofpoint-ORIG-GUID: dTvflSWKDBRWbpLhG3m55XEtZwl1Pw43
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lokesh Dhoundiyal <lokesh.dhoundiyal@alliedtelesis.co.nz>
+On Tue, 15 Mar 2022 09:53:39 +0800, Haowen Bai wrote:
 
-kmemleak reports the following when routing multicast traffic over an
-ipsec tunnel.
+> Fix below warnings reported by coccicheck:
+> drivers/scsi/fnic/fnic_debugfs.c:90:2-7: WARNING: NULL check before some freeing functions is not needed.
+> 
+> 
 
-Kmemleak output:
-unreferenced object 0x8000000044bebb00 (size 256):
-  comm "softirq", pid 0, jiffies 4294985356 (age 126.810s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 80 00 00 00 05 13 74 80  ..............t.
-    80 00 00 00 04 9b bf f9 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<00000000f83947e0>] __kmalloc+0x1e8/0x300
-    [<00000000b7ed8dca>] metadata_dst_alloc+0x24/0x58
-    [<0000000081d32c20>] __ipgre_rcv+0x100/0x2b8
-    [<00000000824f6cf1>] gre_rcv+0x178/0x540
-    [<00000000ccd4e162>] gre_rcv+0x7c/0xd8
-    [<00000000c024b148>] ip_protocol_deliver_rcu+0x124/0x350
-    [<000000006a483377>] ip_local_deliver_finish+0x54/0x68
-    [<00000000d9271b3a>] ip_local_deliver+0x128/0x168
-    [<00000000bd4968ae>] xfrm_trans_reinject+0xb8/0xf8
-    [<0000000071672a19>] tasklet_action_common.isra.16+0xc4/0x1b0
-    [<0000000062e9c336>] __do_softirq+0x1fc/0x3e0
-    [<00000000013d7914>] irq_exit+0xc4/0xe0
-    [<00000000a4d73e90>] plat_irq_dispatch+0x7c/0x108
-    [<000000000751eb8e>] handle_int+0x16c/0x178
-    [<000000001668023b>] _raw_spin_unlock_irqrestore+0x1c/0x28
+Applied to 5.19/scsi-queue, thanks!
 
-The metadata dst is leaked when ip_route_input_mc() updates the dst for
-the skb. Commit f38a9eb1f77b ("dst: Metadata destinations") correctly
-handled dropping the dst in ip_route_input_slow() but missed the
-multicast case which is handled by ip_route_input_mc(). Drop the dst in
-ip_route_input_mc() avoiding the leak.
+[1/1] scsi: fnic: remove redundant NULL check
+      https://git.kernel.org/mkp/scsi/c/1dcd96c4d0b7
 
-Fixes: f38a9eb1f77b ("dst: Metadata destinations")
-Signed-off-by: Lokesh Dhoundiyal <lokesh.dhoundiyal@alliedtelesis.co.nz>
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
-
-Notes:
-    We started seeing this leak in our scenario after commit c0d59da79534
-    ("ip_gre: Make none-tun-dst gre tunnel store tunnel info as metadat_d=
-st
-    in recv") but there may be other paths that hit the leak so I've set =
-the
-    fixes tag as f38a9eb1f77b ("dst: Metadata destinations").
-
- net/ipv4/route.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-index 98c6f3429593..57abd27e842c 100644
---- a/net/ipv4/route.c
-+++ b/net/ipv4/route.c
-@@ -1753,6 +1753,7 @@ static int ip_route_input_mc(struct sk_buff *skb, _=
-_be32 daddr, __be32 saddr,
- #endif
- 	RT_CACHE_STAT_INC(in_slow_mc);
-=20
-+	skb_dst_drop(skb);
- 	skb_dst_set(skb, &rth->dst);
- 	return 0;
- }
---=20
-2.36.0
-
+-- 
+Martin K. Petersen	Oracle Linux Engineering

@@ -2,101 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F61E51911E
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 00:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89289519128
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 00:16:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbiECWQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 18:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56340 "EHLO
+        id S243553AbiECWRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 18:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235790AbiECWQo (ORCPT
+        with ESMTP id S235790AbiECWRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 18:16:44 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2E8122BD0
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 15:13:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651615990; x=1683151990;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=9y1o13Jnc3sNHkfQ4nWL2H1O8Uay9UdoCnrexGtkWpg=;
-  b=n3+zLmRGMn5FC0SOf5STwMpkiy9khOeH9eRj096VhTwBEu6H7HPDKRdc
-   BCo5PnhDqW0RZN6eL9V0WpETT8AGyFgxb14VJUDHF/+rIpCD0rWQYr74u
-   UNzHZCiqT9od/VqhvVFiA0Db4JIq3FQX44bVdFQ9GTmEm2WTZL0qZNrl9
-   gsQuEYJlULqw3fRYPCRlGuxfs8T7dM0hZFil71EyyEcpxlrQqIBjvxa/c
-   XBSefXhcFS//Msi8GarMx5G7AscwIQKoMbxB3TE+JtLkkyuwdiEe1abGR
-   apR6uOADi+txqmKTAsdYLL8we5h89nndwLn5Kq1TSIF9ZfV6CkwAno66/
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="247508585"
-X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="247508585"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 15:13:10 -0700
-X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="708204922"
-Received: from hsuhsiao-mobl2.gar.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.61.84])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 15:13:07 -0700
-Message-ID: <44c001bc83efa58df7cd8f67cd1fb0916e8a3e9d.camel@intel.com>
-Subject: Re: [PATCH v5 3/3] x86/tdx: Add Quote generation support
-From:   Kai Huang <kai.huang@intel.com>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 04 May 2022 10:13:05 +1200
-In-Reply-To: <ac299f99-7ef6-7fc2-a9fe-7ed2586b9b09@linux.intel.com>
-References: <20220501183500.2242828-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-         <20220501183500.2242828-4-sathyanarayanan.kuppuswamy@linux.intel.com>
-         <243e918c523320ba3d216cbe22d24fe5ce33f370.camel@intel.com>
-         <20220503012721.ok7fbvxmnvsr6qny@box.shutemov.name>
-         <4cf22a0799cc13fa6f09ffbf0e5d83ed7eeb32ad.camel@intel.com>
-         <ac299f99-7ef6-7fc2-a9fe-7ed2586b9b09@linux.intel.com>
+        Tue, 3 May 2022 18:17:38 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E292ED78
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 15:14:04 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id a24-20020a17090a8c1800b001d98eff7882so7755122pjo.8
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 15:14:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=VS+cZBe/F+V5XVdy41nyQYEcNSsK7oQL3Q7KYNlaZYY=;
+        b=NB0cWlqq8l9J6viXcISkx6p1um2SBpCPPgM3hB/Xfxb0vebMy0IDNjk8LaC1PjdwmO
+         xKZI1Ol6/kfTAaNvu+APTxnVSJ7fWeHqVYK2U6ljtE3yvgkCbfo27sBVqRN8gj35rUj5
+         MeqUyjTKckVdHAcVc1UY0sL0W3eUnGygzLHGEm2vC29014Q2XVLKTKLojt2bpG0Ywcf6
+         zaHKY77StU7GsHxEMCAq4dMLmD6eRQDQif/pcaPc0V5S/2NwlnI/COU2BgEWMT49FQpL
+         wzXUR4AstcsuRhxeiFQkPhfSGWja5ZwjG5ywq0gldpXXSmSYloYAioDCikZkXp2dL52i
+         9SfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=VS+cZBe/F+V5XVdy41nyQYEcNSsK7oQL3Q7KYNlaZYY=;
+        b=hmQQ7nAH/ydQsMw1ZY9byYFZALgucE0d3HLSmK66i8vqw6hekcOh2EnUfZV/K+s1U4
+         4ndXUuOqktmqNvOeuDSNYJCpsLN7vHQOQz/s54TrAVSic2nnrke/MSrHs+3KNhlDoihE
+         AwbfUcRPzGN8Tkb2/6mE5X1clPGP5p3cds+zR71wA3gBsc+AWNUOqPZzfa0sUmpm2XbN
+         0MJGkwI+OTwPVkKEUtCwA5h/J3c0muKLEuR3gCmFp1cz0l4NViNx06czxK3dMt7iwAJ7
+         B18gHzlnQ8Dy+QScHLzVvL+K1VzEgHgPt8z9tuBd6BWRqU5oHYJThSZ21JJBt/AEYTvG
+         u+EQ==
+X-Gm-Message-State: AOAM531zSMEFsenIH/nBTOXBDjJsSLAYJQ/PiqjZDIsYjs/skXV0B/UZ
+        NWqir6IIOfaD3Hm+i3g/2eOn6b3W+e/i
+X-Google-Smtp-Source: ABdhPJwbYJ0pPCjgpDE1/BMvj2CtY+VLbYaKhkzHIiix4Z2nsbdSJXLWISM3RHg7iPF0w86JjlUmJWVD86OH
+X-Received: from vipinsh.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:36b0])
+ (user=vipinsh job=sendgmr) by 2002:a17:903:2310:b0:15e:bc9c:18b9 with SMTP id
+ d16-20020a170903231000b0015ebc9c18b9mr3656980plh.58.1651616043565; Tue, 03
+ May 2022 15:14:03 -0700 (PDT)
+Date:   Tue,  3 May 2022 22:13:57 +0000
+Message-Id: <20220503221357.943536-1-vipinsh@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
+Subject: [PATCH RFC] KVM: x86/mmu: Remove KVM memory shrinker
+From:   Vipin Sharma <vipinsh@google.com>
+To:     pbonzini@redhat.com, seanjc@google.com, dmatlack@google.com
+Cc:     vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, bgardon@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Vipin Sharma <vipinsh@google.com>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-05-02 at 19:39 -0700, Sathyanarayanan Kuppuswamy wrote:
-> > 
-> > Using vmap() we can still (almost) avoid private/shared conversion at IOCTL
-> > time
-> > by allocating a default size buffer (which is large enough to cover 99%
-> > cases,
-> > etc) at driver initialization time:
-> 
-> Allocating fixed size buffer pool will work for dma buffer allocation
-> as well.
-> 
-> So the comparison is between platform driver boilerplate code vs vmap
-> and shared/unshared code addition. It is arguable which is better. I
-> think it is about preference.
+KVM memory shrinker is only used in the shadow paging. Most of the L1
+guests are backed by TDP (Two Dimensional Paging) which do not use the
+shrinker, only L2 guests are backed by shadow paging.
 
-Not really.  DMA buffer is guaranteed to be shared for now, but it's not
-guaranteed in the future generations of TDX.
+KVM memory shrinker can cause guests performance to degrade if any other
+process (VM or non-VM) in the same or different cgroup in kernel causes
+memory shrinker to run.
 
+The KVM memory shrinker was introduced in 2008,
+commit 3ee16c814511 ("KVM: MMU: allow the vm to shrink the kvm mmu
+shadow caches"), each invocation of shrinker only released 1 shadow page
+in 1 VM. This behavior was not effective until the batch zapping commit
+was added in 2020, commit ebdb292dac79 ("KVM: x86/mmu: Batch zap MMU
+pages when shrinking the slab"), which zaps multiple pages but still in
+1 VM for each shrink invocation. Overall, this feature existed for many
+years without providing meaningful benefit.
+
+Signed-off-by: Vipin Sharma <vipinsh@google.com>
+---
+ arch/x86/kvm/mmu/mmu.c | 99 ++----------------------------------------
+ 1 file changed, 3 insertions(+), 96 deletions(-)
+
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 4e8d546431eb..80618c847ce2 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -178,7 +178,6 @@ struct kvm_shadow_walk_iterator {
+ 
+ static struct kmem_cache *pte_list_desc_cache;
+ struct kmem_cache *mmu_page_header_cache;
+-static struct percpu_counter kvm_total_used_mmu_pages;
+ 
+ static void mmu_spte_set(u64 *sptep, u64 spte);
+ 
+@@ -1658,16 +1657,9 @@ static int is_empty_shadow_page(u64 *spt)
+ }
+ #endif
+ 
+-/*
+- * This value is the sum of all of the kvm instances's
+- * kvm->arch.n_used_mmu_pages values.  We need a global,
+- * aggregate version in order to make the slab shrinker
+- * faster
+- */
+-static inline void kvm_mod_used_mmu_pages(struct kvm *kvm, long nr)
++static inline void kvm_used_mmu_pages(struct kvm *kvm, long nr)
+ {
+ 	kvm->arch.n_used_mmu_pages += nr;
+-	percpu_counter_add(&kvm_total_used_mmu_pages, nr);
+ }
+ 
+ static void kvm_mmu_free_page(struct kvm_mmu_page *sp)
+@@ -1725,7 +1717,7 @@ static struct kvm_mmu_page *kvm_mmu_alloc_page(struct kvm_vcpu *vcpu, int direct
+ 	 */
+ 	sp->mmu_valid_gen = vcpu->kvm->arch.mmu_valid_gen;
+ 	list_add(&sp->link, &vcpu->kvm->arch.active_mmu_pages);
+-	kvm_mod_used_mmu_pages(vcpu->kvm, +1);
++	kvm_used_mmu_pages(vcpu->kvm, 1);
+ 	return sp;
+ }
+ 
+@@ -2341,7 +2333,7 @@ static bool __kvm_mmu_prepare_zap_page(struct kvm *kvm,
+ 			list_add(&sp->link, invalid_list);
+ 		else
+ 			list_move(&sp->link, invalid_list);
+-		kvm_mod_used_mmu_pages(kvm, -1);
++		kvm_used_mmu_pages(kvm, -1);
+ 	} else {
+ 		/*
+ 		 * Remove the active root from the active page list, the root
+@@ -5801,11 +5793,6 @@ static void kvm_mmu_zap_all_fast(struct kvm *kvm)
+ 		kvm_tdp_mmu_zap_invalidated_roots(kvm);
+ }
+ 
+-static bool kvm_has_zapped_obsolete_pages(struct kvm *kvm)
+-{
+-	return unlikely(!list_empty_careful(&kvm->arch.zapped_obsolete_pages));
+-}
+-
+ static void kvm_mmu_invalidate_zap_pages_in_memslot(struct kvm *kvm,
+ 			struct kvm_memory_slot *slot,
+ 			struct kvm_page_track_notifier_node *node)
+@@ -6159,77 +6146,6 @@ void kvm_mmu_invalidate_mmio_sptes(struct kvm *kvm, u64 gen)
+ 	}
+ }
+ 
+-static unsigned long
+-mmu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
+-{
+-	struct kvm *kvm;
+-	int nr_to_scan = sc->nr_to_scan;
+-	unsigned long freed = 0;
+-
+-	mutex_lock(&kvm_lock);
+-
+-	list_for_each_entry(kvm, &vm_list, vm_list) {
+-		int idx;
+-		LIST_HEAD(invalid_list);
+-
+-		/*
+-		 * Never scan more than sc->nr_to_scan VM instances.
+-		 * Will not hit this condition practically since we do not try
+-		 * to shrink more than one VM and it is very unlikely to see
+-		 * !n_used_mmu_pages so many times.
+-		 */
+-		if (!nr_to_scan--)
+-			break;
+-		/*
+-		 * n_used_mmu_pages is accessed without holding kvm->mmu_lock
+-		 * here. We may skip a VM instance errorneosly, but we do not
+-		 * want to shrink a VM that only started to populate its MMU
+-		 * anyway.
+-		 */
+-		if (!kvm->arch.n_used_mmu_pages &&
+-		    !kvm_has_zapped_obsolete_pages(kvm))
+-			continue;
+-
+-		idx = srcu_read_lock(&kvm->srcu);
+-		write_lock(&kvm->mmu_lock);
+-
+-		if (kvm_has_zapped_obsolete_pages(kvm)) {
+-			kvm_mmu_commit_zap_page(kvm,
+-			      &kvm->arch.zapped_obsolete_pages);
+-			goto unlock;
+-		}
+-
+-		freed = kvm_mmu_zap_oldest_mmu_pages(kvm, sc->nr_to_scan);
+-
+-unlock:
+-		write_unlock(&kvm->mmu_lock);
+-		srcu_read_unlock(&kvm->srcu, idx);
+-
+-		/*
+-		 * unfair on small ones
+-		 * per-vm shrinkers cry out
+-		 * sadness comes quickly
+-		 */
+-		list_move_tail(&kvm->vm_list, &vm_list);
+-		break;
+-	}
+-
+-	mutex_unlock(&kvm_lock);
+-	return freed;
+-}
+-
+-static unsigned long
+-mmu_shrink_count(struct shrinker *shrink, struct shrink_control *sc)
+-{
+-	return percpu_counter_read_positive(&kvm_total_used_mmu_pages);
+-}
+-
+-static struct shrinker mmu_shrinker = {
+-	.count_objects = mmu_shrink_count,
+-	.scan_objects = mmu_shrink_scan,
+-	.seeks = DEFAULT_SEEKS * 10,
+-};
+-
+ static void mmu_destroy_caches(void)
+ {
+ 	kmem_cache_destroy(pte_list_desc_cache);
+@@ -6325,13 +6241,6 @@ int kvm_mmu_vendor_module_init(void)
+ 	if (!mmu_page_header_cache)
+ 		goto out;
+ 
+-	if (percpu_counter_init(&kvm_total_used_mmu_pages, 0, GFP_KERNEL))
+-		goto out;
+-
+-	ret = register_shrinker(&mmu_shrinker);
+-	if (ret)
+-		goto out;
+-
+ 	return 0;
+ 
+ out:
+@@ -6350,8 +6259,6 @@ void kvm_mmu_destroy(struct kvm_vcpu *vcpu)
+ void kvm_mmu_vendor_module_exit(void)
+ {
+ 	mmu_destroy_caches();
+-	percpu_counter_destroy(&kvm_total_used_mmu_pages);
+-	unregister_shrinker(&mmu_shrinker);
+ }
+ 
+ /*
 -- 
-Thanks,
--Kai
-
+2.36.0.464.gb9c8b46e94-goog
 

@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49F66517D28
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 08:08:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 680A3517D25
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 08:08:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbiECGLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 02:11:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36738 "EHLO
+        id S229812AbiECGLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 02:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiECGLX (ORCPT
+        with ESMTP id S229761AbiECGLg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 02:11:23 -0400
+        Tue, 3 May 2022 02:11:36 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C02935DE6;
-        Mon,  2 May 2022 23:07:49 -0700 (PDT)
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by gandalf.ozlabs.org (Postfix) with ESMTP id 4KsqJ324jYz4yST;
-        Tue,  3 May 2022 16:07:47 +1000 (AEST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFACE36178;
+        Mon,  2 May 2022 23:07:54 -0700 (PDT)
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by gandalf.ozlabs.org (Postfix) with ESMTP id 4KsqJ9398sz4xbw;
+        Tue,  3 May 2022 16:07:53 +1000 (AEST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KsqHx6WDkz4ySc;
-        Tue,  3 May 2022 16:07:41 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KsqJ35lKPz4ySc;
+        Tue,  3 May 2022 16:07:47 +1000 (AEST)
 From:   =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
 To:     linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org
 Cc:     Mark Brown <broonie@kernel.org>,
@@ -37,12 +37,12 @@ Cc:     Mark Brown <broonie@kernel.org>,
         Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
         devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Tao Ren <rentao.bupt@gmail.com>,
-        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>,
-        Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-Subject: [PATCH v6 10/11] ARM: dts: aspeed-g4: Set spi-max-frequency for all flashes
-Date:   Tue,  3 May 2022 08:06:33 +0200
-Message-Id: <20220503060634.122722-11-clg@kaod.org>
+        Potin Lai <potin.lai@quantatw.com>,
+        Jae Hyun Yoo <quic_jaehyoo@quicinc.com>,
+        =?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@kaod.org>
+Subject: [PATCH v6 11/11] mtd: spi-nor: aspeed: set the decoding size to at least 2MB for AST2600
+Date:   Tue,  3 May 2022 08:06:34 +0200
+Message-Id: <20220503060634.122722-12-clg@kaod.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220503060634.122722-1-clg@kaod.org>
 References: <20220503060634.122722-1-clg@kaod.org>
@@ -58,52 +58,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tao Ren <rentao.bupt@gmail.com>
+From: Potin Lai <potin.lai@quantatw.com>
 
-Set "spi-max-frequency" to 50 MHz for all the flashes under the FMC
-controller to ensure the clock frequency is calculated correctly.
+In AST2600, the unit of SPI CEx decoding range register is 1MB, and end
+address offset is set to the acctual offset - 1MB. If the flash only has
+1MB, the end address will has same value as start address, which will
+causing unexpected errors.
 
-Suggested-by: Cédric Le Goater <clg@kaod.org>
+This patch set the decoding size to at least 2MB to avoid decoding errors.
+
+Tested:
+root@bletchley:~# dmesg | grep "aspeed-smc 1e631000.spi: CE0 window"
+[   59.328134] aspeed-smc 1e631000.spi: CE0 window resized to 2MB (AST2600 Decoding)
+[   59.343001] aspeed-smc 1e631000.spi: CE0 window [ 0x50000000 - 0x50200000 ] 2MB
+root@bletchley:~# devmem 0x1e631030
+0x00100000
+
 Tested-by: Jae Hyun Yoo <quic_jaehyoo@quicinc.com>
-Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
+Signed-off-by: Potin Lai <potin.lai@quantatw.com>
+[ clg : Ported on new spi-mem driver ]
 Signed-off-by: Cédric Le Goater <clg@kaod.org>
 ---
- arch/arm/boot/dts/aspeed-g4.dtsi | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/spi/spi-aspeed-smc.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/arch/arm/boot/dts/aspeed-g4.dtsi b/arch/arm/boot/dts/aspeed-g4.dtsi
-index 1c6354cec9f2..530491ae5eb2 100644
---- a/arch/arm/boot/dts/aspeed-g4.dtsi
-+++ b/arch/arm/boot/dts/aspeed-g4.dtsi
-@@ -72,24 +72,28 @@ flash@1 {
- 				reg = < 1 >;
- 				compatible = "jedec,spi-nor";
- 				spi-rx-bus-width = <2>;
-+				spi-max-frequency = <50000000>;
- 				status = "disabled";
- 			};
- 			flash@2 {
- 				reg = < 2 >;
- 				compatible = "jedec,spi-nor";
- 				spi-rx-bus-width = <2>;
-+				spi-max-frequency = <50000000>;
- 				status = "disabled";
- 			};
- 			flash@3 {
- 				reg = < 3 >;
- 				compatible = "jedec,spi-nor";
- 				spi-rx-bus-width = <2>;
-+				spi-max-frequency = <50000000>;
- 				status = "disabled";
- 			};
- 			flash@4 {
- 				reg = < 4 >;
- 				compatible = "jedec,spi-nor";
- 				spi-rx-bus-width = <2>;
-+				spi-max-frequency = <50000000>;
- 				status = "disabled";
- 			};
- 		};
+diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
+index 35f6934847b7..496f3e1e9079 100644
+--- a/drivers/spi/spi-aspeed-smc.c
++++ b/drivers/spi/spi-aspeed-smc.c
+@@ -474,6 +474,8 @@ static int aspeed_spi_set_window(struct aspeed_spi *aspi,
+  *   is correct.
+  */
+ static const struct aspeed_spi_data ast2500_spi_data;
++static const struct aspeed_spi_data ast2600_spi_data;
++static const struct aspeed_spi_data ast2600_fmc_data;
+ 
+ static int aspeed_spi_chip_adjust_window(struct aspeed_spi_chip *chip,
+ 					 u32 local_offset, u32 size)
+@@ -497,6 +499,17 @@ static int aspeed_spi_chip_adjust_window(struct aspeed_spi_chip *chip,
+ 			 chip->cs, size >> 20);
+ 	}
+ 
++	/*
++	 * The decoding size of AST2600 SPI controller should set at
++	 * least 2MB.
++	 */
++	if ((aspi->data == &ast2600_spi_data || aspi->data == &ast2600_fmc_data) &&
++	    size < SZ_2M) {
++		size = SZ_2M;
++		dev_info(aspi->dev, "CE%d window resized to %dMB (AST2600 Decoding)",
++			 chip->cs, size >> 20);
++	}
++
+ 	aspeed_spi_get_windows(aspi, windows);
+ 
+ 	/* Adjust this chip window */
 -- 
 2.35.1
 

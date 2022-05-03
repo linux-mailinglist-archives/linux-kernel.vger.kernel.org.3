@@ -2,150 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39B41518B86
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 19:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 234F4518B8C
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 19:54:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240680AbiECRxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 13:53:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42848 "EHLO
+        id S240738AbiECR5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 13:57:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240692AbiECRxi (ORCPT
+        with ESMTP id S240643AbiECR5b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 13:53:38 -0400
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18F529813;
-        Tue,  3 May 2022 10:50:05 -0700 (PDT)
-Received: by mail-ot1-f49.google.com with SMTP id 88-20020a9d0ee1000000b005d0ae4e126fso12121741otj.5;
-        Tue, 03 May 2022 10:50:05 -0700 (PDT)
+        Tue, 3 May 2022 13:57:31 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B2A2B186
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 10:53:58 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id o190so1465162iof.10
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 10:53:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=digitalocean.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=SVhjOiW58CpvHdw8quBjHckuBkf97wIVcsnDQs7q8QU=;
+        b=WhnMhXBei59t1jNzijf4GwhnGdkGwN7ffbcmzUwyQYhduCWf8Qeo3tk24P9gnYmmgi
+         0HHEZS5CQADa0mC0uxaTLt0esAR/BsI/iTYa5GUg0KlqM6jg6U/Pw3lo40TTPlA6Bdkf
+         Wa7bD2wxX0/u5RLDworIKuwVz75s9nO1i4Nzg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=vhN5KYczMmv9TNqtRlooIo1ReYjcW4rlopTFOjfZfxg=;
-        b=Q+3X+Ho1oeRngLCagsyeDyi1D+8FD57AJRmgSonq9QkSnjHmUWIjEqSef/roiVnNAO
-         bOqrcM8BB4UYK+yPnIEcRmfSs4y3sRJwYM1iYUc6wkc7lVPvympLK+Wi1uL04nJhGGuP
-         kyX/2hhqU8iggnGnSTEIPlXfMq/4QxqJpZzAb0N3umraKaCImuo+1cfH1CutccUT/Psu
-         UqmfpBPE8BYVMNSjwHfKctwa5mTTg2EUfJfuVnxZjpryivliTqlGzifOCM69Z8PNuBXT
-         yVVkhCBbpDYQpe8qGLCkdEVrkxSBQnH/2AobuX1Cc94Ori4FajeMiedFzypiPTS8nXli
-         6MDw==
-X-Gm-Message-State: AOAM531TZJwoNQla8e1kKac9dsXdAJpoAm8YicTBG2UHJ4Yi0gaUoDt8
-        VyUzzYtnjgZy46JnvqkYaA==
-X-Google-Smtp-Source: ABdhPJwzR+vsrHG/iK5QzquHREpyKtDwFyhoKABv6B6DjZnIdhtBOWnkv7gmbbHlpz7BD8FJ9Gq8cw==
-X-Received: by 2002:a9d:19a3:0:b0:605:9af6:225c with SMTP id k32-20020a9d19a3000000b006059af6225cmr6226688otk.195.1651600205064;
-        Tue, 03 May 2022 10:50:05 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i5-20020a9d68c5000000b0060603221236sm4179544oto.6.2022.05.03.10.50.04
+        bh=SVhjOiW58CpvHdw8quBjHckuBkf97wIVcsnDQs7q8QU=;
+        b=7U4LRJTfYTCCPaxHHveF5R6cfTgwBHLNhMCGb4nLV8YMTJGMtBSMvSiUA+hfYWp6nH
+         aRRUhpE48sbgQ2uWWhBzEniTRJp6Nyix2fUad9boog3fJaejMpm30zXLFaaSx5KsjWRR
+         nNjR7SF1plHdSM6PO20BPCbaTjlh5GG0inozzMy/hAApvGfv5wZepaeZ7H00keIYJTq0
+         i7u6BcskAXoMVbVwT4sBO8TaLsvwELK27kaHoz6UW9gbbKiauzJ93VzwfT4Yr5VL1voT
+         wQFTrANey9yawcwRnTJqb06GBcjQzHRI+xGcF6DCo/QGSU6Ad5KFCvd6ovHmlRQfUMmt
+         a9ow==
+X-Gm-Message-State: AOAM531hrcWCMVMM3gjOsQfcVS9+5gI0eSEpsRwBzVGZCxVCIT2qeMaf
+        B05vCXrMQ57Uch0vSKzstIWmTw==
+X-Google-Smtp-Source: ABdhPJy0OSUvbC7ByJK8FyKfREM7VamZ4yekW+hdrBnj5rlTwAOTmC0Twkj41WY2MeZnllF6AOEr6Q==
+X-Received: by 2002:a05:6638:2588:b0:32a:beec:a5cc with SMTP id s8-20020a056638258800b0032abeeca5ccmr7850035jat.191.1651600437949;
+        Tue, 03 May 2022 10:53:57 -0700 (PDT)
+Received: from localhost ([2605:a601:ac0f:820:80d8:f53c:c84d:deaa])
+        by smtp.gmail.com with ESMTPSA id y4-20020a02ce84000000b0032b3a7817b1sm4055949jaq.117.2022.05.03.10.53.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 10:50:04 -0700 (PDT)
-Received: (nullmailer pid 3948010 invoked by uid 1000);
-        Tue, 03 May 2022 17:50:04 -0000
-Date:   Tue, 3 May 2022 12:50:04 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Li-hao Kuo <lhjeff911@gmail.com>
-Cc:     krzk@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
-        amitk@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 2/2] dt-bindings:thermal: Add Sunplus schema
-Message-ID: <YnFrTAqRJziPeo5T@robh.at.kernel.org>
-References: <cover.1651543731.git.lhjeff911@gmail.com>
- <e9f65ca9a2b3205b91210398d743415f6c799d90.1651543731.git.lhjeff911@gmail.com>
+        Tue, 03 May 2022 10:53:57 -0700 (PDT)
+Date:   Tue, 3 May 2022 12:53:56 -0500
+From:   Seth Forshee <sforshee@digitalocean.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: Re: [PATCH v2] entry/kvm: Make vCPU tasks exit to userspace when a
+ livepatch is pending
+Message-ID: <YnFsNB9Ppvd0cTFS@do-x1extreme>
+References: <20220503174934.2641605-1-sforshee@digitalocean.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e9f65ca9a2b3205b91210398d743415f6c799d90.1651543731.git.lhjeff911@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220503174934.2641605-1-sforshee@digitalocean.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 03, 2022 at 10:13:08AM +0800, Li-hao Kuo wrote:
-> Add bindings for Sunplus thermal driver
+On Tue, May 03, 2022 at 12:49:34PM -0500, Seth Forshee wrote:
+> A task can be livepatched only when it is sleeping or it exits to
+> userspace. This may happen infrequently for a heavily loaded vCPU task,
+> leading to livepatch transition failures.
 > 
-> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
+> Fake signals will be sent to tasks which fail patching via stack
+> checking. This will cause running vCPU tasks to exit guest mode, but
+> since no signal is pending they return to guest execution without
+> exiting to userspace. Fix this by treating a pending livepatch migration
+> like a pending signal, exiting to userspace with EINTR. This allows the
+> task to be patched, and userspace should re-excecute KVM_RUN to resume
+> guest execution.
+> 
+> In my testing, systems where livepatching would timeout after 60 seconds
+> were able to load livepatches within a couple of seconds with this
+> change.
+> 
+> Signed-off-by: Seth Forshee <sforshee@digitalocean.com>
 > ---
-> Changes in v8:
->  - Modify yaml file.
->    modify the setting compatible
->  - Change yaml file name.
->  - Modify driver.
->    mosdify and simply the nvmem setting and remove valiable
-> 
->  .../bindings/thermal/sunplus,thermal.yaml          | 43 ++++++++++++++++++++++
->  MAINTAINERS                                        |  1 +
->  2 files changed, 44 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/sunplus,thermal.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/sunplus,thermal.yaml b/Documentation/devicetree/bindings/thermal/sunplus,thermal.yaml
-> new file mode 100644
-> index 0000000..1ecf6f6
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/sunplus,thermal.yaml
-> @@ -0,0 +1,43 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +# Copyright (C) Sunplus Co., Ltd.
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/sunplus,thermal.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Sunplus Thermal controller
-> +
-> +maintainers:
-> +  - Li-hao Kuo <lhjeff911@gmail.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - sunplus,thermal
+> Changes in v2:
+>  - Added _TIF_SIGPENDING to XFER_TO_GUEST_MODE_WORK
 
-I don't think is is what was suggested. This must be SoC specific.
-
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  nvmem-cells:
-> +    maxItems: 1
-> +
-> +  nvmem-cell-names:
-> +    const: calib
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - nvmem-cells
-> +  - nvmem-cell-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    thermal@9c000280 {
-> +        compatible = "sunplus,thermal";
-> +        reg = <0x9c000280 0xc>;
-> +        nvmem-cells = <&calib>;
-> +        nvmem-cell-names = "calib";
-> +    };
-> +...
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 82143ff..ff49023 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -18900,6 +18900,7 @@ SUNPLUS THERMAL DRIVER
->  M:	Li-hao Kuo <lhjeff911@gmail.com>
->  L:	linux-pm@vger.kernel.org
->  S:	Maintained
-> +F:	Documentation/devicetree/bindings/thermal/sunplus,thermal.yaml
->  F:	drivers/thermal/sunplus_thermal.c
->  
->  SUNPLUS UART DRIVER
-> -- 
-> 2.7.4
-> 
-> 
+Clearly I meant _TIF_PATCH_PENDING here and not _TIF_SIGPENDING.

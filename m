@@ -2,203 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B0A251848B
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 14:45:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 411B3518492
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 14:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235531AbiECMtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 08:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57816 "EHLO
+        id S235572AbiECMt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 08:49:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235604AbiECMsz (ORCPT
+        with ESMTP id S235535AbiECMt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 08:48:55 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900D8192A6
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 05:45:22 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id t5so9075329edw.11
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 05:45:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=X5xc8khrWfXRyyoC9UiryZoQ9oxBaqA5OpwQNPSrCwg=;
-        b=tGLokiH9nEwrsuNK1MHu3mZOtVER/Jz0IVTajxe17Qk7fXo7UPs9r0K6oT6cnrtFEC
-         Y39aeuWA0TEcoazrEDtEHZ/pE0CzZVooQQqASUU6uJXaoTujl7cL4xm5k9dWKh6VwiGU
-         rcCVw6zP8beksMWgBxvw/a3DXQzE4oMzJR6OW22nQ2+9LedzvoshdxaR+96EL6s6bBgc
-         piwrG0e0608Z7ZBagaDhFwtwVJg9sh1ErSXexIE0o7wH1E4Jf4STPh+lryBPENgjkCbq
-         43DAwvrCVOBC/sZC/y+PVR5+qrC5R14vzmvNlyZh0pnpcFiA1dvxBku5GAnvhEumNKyQ
-         RB3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=X5xc8khrWfXRyyoC9UiryZoQ9oxBaqA5OpwQNPSrCwg=;
-        b=uL59dWMPtiRYl6iKOuCaN/3qBNNYmX1hNwj2fWyvGeZ2yRGZV2DqsDGmP+SxfxkwOE
-         Te0dhlVuBOL/mWulPdzLe464ohtT5dZcVdq6qa5aIsu5xb0VUgU5ftaTNRbZdkecIXHu
-         fj2zwW8pFc77HtI6R+mL1U2weozreXM0lSqEht1bGAmZY0uxE4eQAeChSRiMEvsB2ZxB
-         zZFlGv1hqzzQrJnJX76UwkYng9Y72OGKJcVkuppZmkX56LtLHmC2DS6Xgwk5RP7sL8dW
-         A05B635yvx0i8F3Ga3wqFnWSEYpF8aWgiBv1CbxyY8zdszzDTcvB/e44QZVfvxO+1gzw
-         Sjwg==
-X-Gm-Message-State: AOAM531QtSXuNCVna/0/7lE5n263U9Dmbed6K0TnkVUut1jVRZBArgl0
-        usbAxU+keEGXmO5BgjXSf1LVtw==
-X-Google-Smtp-Source: ABdhPJxTStsbY/p6UStlTDO7k8CzuStWVcAMOGXPE9UDmDIlgD9sPTlihPh4SfAec3T7nTDorsdJaQ==
-X-Received: by 2002:a05:6402:d0e:b0:413:3d99:f2d6 with SMTP id eb14-20020a0564020d0e00b004133d99f2d6mr17883961edb.189.1651581921201;
-        Tue, 03 May 2022 05:45:21 -0700 (PDT)
-Received: from [192.168.0.203] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id jl6-20020a17090775c600b006f3ef214e64sm4533443ejc.202.2022.05.03.05.45.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 May 2022 05:45:20 -0700 (PDT)
-Message-ID: <e00ff3b2-d5d1-706d-49cc-e70fe2cc9cab@linaro.org>
-Date:   Tue, 3 May 2022 14:45:19 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 4/4] mux: lan966: Add support for flexcom mux controller
-Content-Language: en-US
-To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        krzysztof.kozlowski+dt@linaro.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        peda@axentia.se
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, lee.jones@linaro.org,
-        linux@armlinux.org.uk, Manohar.Puri@microchip.com,
-        UNGLinuxDriver@microchip.com
-References: <20220503105528.12824-1-kavyasree.kotagiri@microchip.com>
- <20220503105528.12824-5-kavyasree.kotagiri@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220503105528.12824-5-kavyasree.kotagiri@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 3 May 2022 08:49:26 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31D21A839;
+        Tue,  3 May 2022 05:45:53 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 243AHhcD018592;
+        Tue, 3 May 2022 12:45:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=z5pRrwadTvaMNn3IfMVuln6dl3dg7299RmoATTWlzwg=;
+ b=D0+Qdgb0wJMI40BA+uEYDB2P6ae4KozbuZ5K2JQhR9fNK/vvaCLl8k/uzHk+kiFMdb7H
+ frtHTtYr0bpz3U0IBPVI0yQiqYkMij/Qoal91w/qxWeeTfyH0L7yu9WYWJMH3RduaEWk
+ S6cryHXPNrOrbD1mNOGwPNQlFI6C53VncjhyvgIMu1Jg+xG0WtcFVVuOcaCsVeeVCOiR
+ 0uhyts6SV9au3nINgAaS/hrT/qrRyKsFOW8eEMnTceJ/nZod58M93wWyEA61QO4+KW5i
+ 9z5ydpwqezzhj4U7nSkKGL5hsRg1/vAaS0NeoTph0IkgsHmgbps2PLUqi8Ikbl+Z9nUM uA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fu2gx29ac-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 May 2022 12:45:28 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 243CT501031317;
+        Tue, 3 May 2022 12:45:27 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fu2gx299h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 May 2022 12:45:27 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 243CgoEL007825;
+        Tue, 3 May 2022 12:45:24 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06fra.de.ibm.com with ESMTP id 3fttcj0kqv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 May 2022 12:45:24 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 243CjMSU52232586
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 3 May 2022 12:45:22 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7E1005204F;
+        Tue,  3 May 2022 12:45:22 +0000 (GMT)
+Received: from sig-9-145-89-42.uk.ibm.com (unknown [9.145.89.42])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 7FCD85204E;
+        Tue,  3 May 2022 12:45:21 +0000 (GMT)
+Message-ID: <867e70df01fc938abf93ffa15a3f1989a8fb136b.camel@linux.ibm.com>
+Subject: Re: [RFC v2 21/39] net: add HAS_IOPORT dependencies
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Arnd Bergmann <arnd@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        "open list:CAN NETWORK DRIVERS" <linux-can@vger.kernel.org>,
+        "moderated list:INTEL ETHERNET DRIVERS" 
+        <intel-wired-lan@lists.osuosl.org>,
+        "open list:AX.25 NETWORK LAYER" <linux-hams@vger.kernel.org>
+Date:   Tue, 03 May 2022 14:45:21 +0200
+In-Reply-To: <alpine.DEB.2.21.2205012324130.9383@angie.orcam.me.uk>
+References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
+         <20220429135108.2781579-36-schnelle@linux.ibm.com>
+         <alpine.DEB.2.21.2205012324130.9383@angie.orcam.me.uk>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: UXMkE0Jl2bfDY_C86ZbGXUit00mBBjDH
+X-Proofpoint-ORIG-GUID: K2hn79ghKwvBH28giVmJiMbz3A6Tgxi4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-03_03,2022-05-02_03,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1011
+ mlxscore=0 malwarescore=0 mlxlogscore=474 bulkscore=0 impostorscore=0
+ lowpriorityscore=0 adultscore=0 phishscore=0 suspectscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205030092
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/05/2022 12:55, Kavyasree Kotagiri wrote:
-> +#include <linux/err.h>
-> +#include <linux/module.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/property.h>
-> +#include <linux/mux/driver.h>
-> +#include <linux/io.h>
-> +
-> +#define FLEX_SHRD_MASK		0x1FFFFF
-> +#define LAN966_MAX_CS		21
-> +
-> +static void __iomem *flx_shared_base;
+On Sun, 2022-05-01 at 23:48 +0100, Maciej W. Rozycki wrote:
+> On Fri, 29 Apr 2022, Niklas Schnelle wrote:
+> 
+> > In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> > not being declared. We thus need to add HAS_IOPORT as dependency for
+> > those drivers using them. It also turns out that with HAS_IOPORT handled
+> > explicitly HAMRADIO does not need the !S390 dependency and successfully
+> > builds the bpqether driver.
+> [...]
+> > diff --git a/drivers/net/fddi/Kconfig b/drivers/net/fddi/Kconfig
+> > index 846bf41c2717..fa3f1e0fe143 100644
+> > --- a/drivers/net/fddi/Kconfig
+> > +++ b/drivers/net/fddi/Kconfig
+> > @@ -29,7 +29,7 @@ config DEFZA
+> >  
+> >  config DEFXX
+> >  	tristate "Digital DEFTA/DEFEA/DEFPA adapter support"
+> > -	depends on FDDI && (PCI || EISA || TC)
+> > +	depends on FDDI && (PCI || EISA || TC) && HAS_IOPORT
+> >  	help
+> >  	  This is support for the DIGITAL series of TURBOchannel (DEFTA),
+> >  	  EISA (DEFEA) and PCI (DEFPA) controllers which can connect you
+> 
+>  NAK, this has to be sorted out differently (and I think we discussed it 
+> before).
+> 
+>  The driver works just fine with MMIO where available, so if `inb'/`outb' 
+> do get removed, then only parts that rely on port I/O need to be disabled.  
+> In fact there's already such provision there in drivers/net/fddi/defxx.c 
+> for TURBOchannel systems (CONFIG_TC), which have no port I/O space either:
+> 
+> #if defined(CONFIG_EISA) || defined(CONFIG_PCI)
+> #define dfx_use_mmio bp->mmio
+> #else
+> #define dfx_use_mmio true
+> #endif
+> 
+> so I guess it's just the conditional that will have to be changed to:
+> 
+> #ifdef CONFIG_HAS_IOPORT
+> 
+> replacing the current explicit bus dependency list.  The compiler will 
+> then optimise away all the port I/O stuff (though I suspect dummy function 
+> declarations may be required for `inb'/`outb', etc.).
+> 
+>  I can verify a suitable change with a TURBOchannel configuration once the 
+> MIPS part has been sorted.
+> 
+>   Maciej
 
-Why do you have file-scope shared variable? Cannot it be passed via
-private data?
+With dfx_use_mmio changed as you propose above things compile on s390
+which previously ran into missing (now __compile_error()) inl() via
+dfx_port_read_long() -> dfx_inl() ->  inl().
 
-> +struct mux_lan966x {
-> +	u32 offset;
-> +	u32 ss_pin;
-> +};
-> +
-> +static int mux_lan966x_set(struct mux_control *mux, int state)
-> +{
-> +	struct mux_lan966x *mux_lan966x = mux_chip_priv(mux->chip);
-> +	u32 val;
-> +
-> +	val = ~(1 << mux_lan966x[state].ss_pin) & FLEX_SHRD_MASK;
-> +	writel(val, flx_shared_base + mux_lan966x[state].offset);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct mux_control_ops mux_lan966x_ops = {
-> +	.set = mux_lan966x_set,
-> +};
-> +
-> +static const struct of_device_id mux_lan966x_dt_ids[] = {
-> +	{ .compatible = "microchip,lan966-flx-mux", },
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, mux_lan966x_dt_ids);
-> +
-> +static int mux_lan966x_probe(struct platform_device *pdev)
-> +{
-> +	struct device_node *np = pdev->dev.of_node;
-> +	struct device *dev = &pdev->dev;
-> +	struct mux_lan966x *mux_lan966x;
-> +	struct mux_chip *mux_chip;
-> +	int ret, num_fields, i;
-> +
-> +	ret = of_property_count_u32_elems(np, "mux-offset-pin");
-> +	if (ret == 0 || ret % 2)
-> +		ret = -EINVAL;
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret,
-> +				     "mux-offset-pin property missing or invalid");
-> +	num_fields = ret / 2;
-> +
-> +	mux_chip = devm_mux_chip_alloc(dev, num_fields, sizeof(*mux_lan966x));
-> +	if (IS_ERR(mux_chip))
-> +		return dev_err_probe(dev, PTR_ERR(mux_chip),
-> +				     "failed to allocate mux_chips\n");
-> +
-> +	mux_lan966x = mux_chip_priv(mux_chip);
-> +
-> +	flx_shared_base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
-> +	if (IS_ERR(flx_shared_base))
-> +		return dev_err_probe(dev, PTR_ERR(flx_shared_base),
-> +				     "failed to get flexcom shared base address\n");
-> +
-> +	for (i = 0; i < num_fields; i++) {
-> +		struct mux_control *mux = &mux_chip->mux[i];
-> +		u32 offset, shared_pin;
-> +
-> +		ret = of_property_read_u32_index(np, "mux-offset-pin",
-> +						 2 * i, &offset);
-> +		if (ret == 0)
-> +			ret = of_property_read_u32_index(np, "mux-offset-pin",
-> +							 2 * i + 1,
-> +							 &shared_pin);
-> +		if (ret < 0)
-> +			return dev_err_probe(dev, ret,
-> +					     "failed to read mux-offset-pin property: %d", i);
-> +
-> +		if (shared_pin >= LAN966_MAX_CS)
-> +			return -EINVAL;
-> +
-> +		mux_lan966x[i].offset = offset;
-> +		mux_lan966x[i].ss_pin = shared_pin;
-> +
-> +		mux->states = LAN966_MAX_CS;
-> +	}
-> +
-> +	mux_chip->ops = &mux_lan966x_ops;
-> +
-> +	ret = devm_mux_chip_register(dev, mux_chip);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver mux_lan966x_driver = {
-> +	.driver = {
-> +		.name = "lan966-mux",
-> +		.of_match_table	= of_match_ptr(mux_lan966x_dt_ids),
+Looking at the other uses of dfx_use_mmio I notice however that in
+dfx_get_bars(), inb() actually gets called when dfx_use_mmio is true.
+This happens if dfx_bus_eisa is also true. Now that variable is just
+the cached result of DFX_BUS_EISA(dev) which is defined to 0 if
+CONFIG_EISA is unset. I'm not 100% sure if going through a local
+variable is still considered trivial enough dead code elimination, at
+least it works for me™. I did also check the GCC docs and they
+explicitly say that __attribute__(error) is supposed to be used when
+dead code elimination gets rid of the error paths.
 
-of_match_ptr comes with maybe_unused on data structure. Are you sure it
-does not have W=1 warnings during compile tests? Just drop the of_match_ptr.
+I think we also need a "depends on HAS_IOPORT" for "config HAVE_EISA"
+just as I'm adding for "config ISA".
 
-> +	},
-> +	.probe = mux_lan966x_probe,
-> +};
-> +
-> +module_platform_driver(mux_lan966x_driver);
-
-Missing MODULE() stuff.
-
-
-Best regards,
-Krzysztof

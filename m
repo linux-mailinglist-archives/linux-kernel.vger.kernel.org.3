@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFDDB51800A
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 10:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2596518011
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 10:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233117AbiECIuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 04:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59182 "EHLO
+        id S232977AbiECIxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 04:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233041AbiECIte (ORCPT
+        with ESMTP id S231958AbiECIxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 04:49:34 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47D635ABB;
-        Tue,  3 May 2022 01:45:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1651567559; x=1683103559;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=U/CKKh3POM+OwTtOgQF4Jp8Ls8i/luVYOEHzUs8doLs=;
-  b=O34AD+BA2epE45bU59Z0YyDpQO30Rw82T6AdUuGPpQvz7JqUQSDhZwp2
-   xcJb0yDhxGTstnDVXGSbNVmXwJGeSt7VoUvDVgPqAKeH5Uc2DICKd+bw6
-   w0/Vwoiz85CqzDkU+/BSsHhanuihys7unHwGx04nbpMDJ55aDoMSCRb5N
-   S9eBgTR66D0WUWxASb6BkbKE8OdkzLHfvXEvx/6Ukp+8rmgWwaZGJ+FG+
-   HjukJYDPNrUAytcJs9ylpGV7Vkz+ptH0y80DxkNNl5zkg4z9rVYXT/eDw
-   gVsF70qd68A6w2kZIIwM7xNYTwmKo3NfN7muxxeZ52hyJdGY6Mp4YjZK8
-   g==;
+        Tue, 3 May 2022 04:53:03 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F196220CA
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 01:49:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651567771; x=1683103771;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LmE6upOavE1RXU9aw5uXcrjSqvaKF0NkfkbYeYXWhH4=;
+  b=BOKmtWQ9s8zeCWlLpeZ1scVHLGfoOsca+H1sq4mA1odKrKgzZmK9+3P2
+   XU4a/be9SetU57m5ywhbtO+NoaJCms8Dfw6pEf1k4HLFv4SrKDZ8ha1Q1
+   vhtEiCE1Ka/b5gfDCO8QsG7Q1W3SPolayQ/6mxOpzM7HxJgcJgDnOFcji
+   KI6Z9VlBn9PIR7NromHsO3SNjtRKbOd1lYiRaNioMwf16B88Mdqdlp1XG
+   HxNN/I5Mvxs3z9XUV83mw6bue+yUFLgfj+sMHKEn0rTK6rENSe9wXGkMD
+   3zlfOJPVVxOZpso+PmJVRSHiDgrKMMHTvC8e2/Nps0mFn5KazX8wLmLcd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="266276759"
 X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
-   d="scan'208";a="162525584"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 May 2022 01:45:58 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 3 May 2022 01:45:58 -0700
-Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Tue, 3 May 2022 01:45:46 -0700
-From:   Eugen Hristev <eugen.hristev@microchip.com>
-To:     <linux-media@vger.kernel.org>, <hverkuil@xs4all.nl>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <jacopo@jmondi.org>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v10 8/8] dt-bindings: media: microchip,xisc: add bus-width of 14
-Date:   Tue, 3 May 2022 11:44:21 +0300
-Message-ID: <20220503084421.40682-9-eugen.hristev@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220503084421.40682-1-eugen.hristev@microchip.com>
-References: <20220503084421.40682-1-eugen.hristev@microchip.com>
+   d="scan'208";a="266276759"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 01:49:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
+   d="scan'208";a="567560241"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 03 May 2022 01:49:29 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nloDp-000AIx-1R;
+        Tue, 03 May 2022 08:49:29 +0000
+Date:   Tue, 3 May 2022 16:48:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [asahilinux:bits/110-smc 11/14]
+ drivers/power/reset/macsmc-reboot.c:142:37: warning: declaration of 'struct
+ power_off_data' will not be visible outside of this function
+Message-ID: <202205031650.5NKbmyGx-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,28 +63,239 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Microchip XISC supports a bus width of 14 bits.
-Add it to the supported bus widths.
+tree:   https://github.com/AsahiLinux/linux bits/110-smc
+head:   dc3db43287ff1d44b447fff8ed6386b28b339f1c
+commit: c65d40d51ad43c1cb61a2e8658005340a622b826 [11/14] power: reset: macsmc-reboot: Add driver for rebooting via Apple SMC
+config: arm64-randconfig-r034-20220501 (https://download.01.org/0day-ci/archive/20220503/202205031650.5NKbmyGx-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/AsahiLinux/linux/commit/c65d40d51ad43c1cb61a2e8658005340a622b826
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/110-smc
+        git checkout c65d40d51ad43c1cb61a2e8658005340a622b826
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/input/misc/ drivers/power/reset/
 
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-Acked-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/media/microchip,xisc.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/Documentation/devicetree/bindings/media/microchip,xisc.yaml b/Documentation/devicetree/bindings/media/microchip,xisc.yaml
-index 086e1430af4f..3be8f64c3e21 100644
---- a/Documentation/devicetree/bindings/media/microchip,xisc.yaml
-+++ b/Documentation/devicetree/bindings/media/microchip,xisc.yaml
-@@ -67,7 +67,7 @@ properties:
-           remote-endpoint: true
- 
-           bus-width:
--            enum: [8, 9, 10, 11, 12]
-+            enum: [8, 9, 10, 11, 12, 14]
-             default: 12
- 
-           hsync-active:
+All warnings (new ones prefixed by >>):
+
+   drivers/power/reset/macsmc-reboot.c:54:25: error: field has incomplete type 'struct sys_off_handler'
+           struct sys_off_handler sys_off;
+                                  ^
+   drivers/power/reset/macsmc-reboot.c:54:9: note: forward declaration of 'struct sys_off_handler'
+           struct sys_off_handler sys_off;
+                  ^
+>> drivers/power/reset/macsmc-reboot.c:142:37: warning: declaration of 'struct power_off_data' will not be visible outside of this function [-Wvisibility]
+   static void macsmc_power_off(struct power_off_data *data)
+                                       ^
+   drivers/power/reset/macsmc-reboot.c:144:37: error: incomplete definition of type 'struct power_off_data'
+           struct macsmc_reboot *reboot = data->cb_data;
+                                          ~~~~^
+   drivers/power/reset/macsmc-reboot.c:142:37: note: forward declaration of 'struct power_off_data'
+   static void macsmc_power_off(struct power_off_data *data)
+                                       ^
+>> drivers/power/reset/macsmc-reboot.c:156:35: warning: declaration of 'struct restart_data' will not be visible outside of this function [-Wvisibility]
+   static void macsmc_restart(struct restart_data *data)
+                                     ^
+   drivers/power/reset/macsmc-reboot.c:158:37: error: incomplete definition of type 'struct restart_data'
+           struct macsmc_reboot *reboot = data->cb_data;
+                                          ~~~~^
+   drivers/power/reset/macsmc-reboot.c:156:35: note: forward declaration of 'struct restart_data'
+   static void macsmc_restart(struct restart_data *data)
+                                     ^
+>> drivers/power/reset/macsmc-reboot.c:170:42: warning: declaration of 'struct reboot_prep_data' will not be visible outside of this function [-Wvisibility]
+   static void macsmc_reboot_prepare(struct reboot_prep_data *data)
+                                            ^
+   drivers/power/reset/macsmc-reboot.c:172:37: error: incomplete definition of type 'struct reboot_prep_data'
+           struct macsmc_reboot *reboot = data->cb_data;
+                                          ~~~~^
+   drivers/power/reset/macsmc-reboot.c:170:42: note: forward declaration of 'struct reboot_prep_data'
+   static void macsmc_reboot_prepare(struct reboot_prep_data *data)
+                                            ^
+   drivers/power/reset/macsmc-reboot.c:176:14: error: incomplete definition of type 'struct reboot_prep_data'
+           switch (data->mode) {
+                   ~~~~^
+   drivers/power/reset/macsmc-reboot.c:170:42: note: forward declaration of 'struct reboot_prep_data'
+   static void macsmc_reboot_prepare(struct reboot_prep_data *data)
+                                            ^
+   drivers/power/reset/macsmc-reboot.c:289:37: error: use of undeclared identifier 'RESTART_PRIO_HIGH'
+           reboot->sys_off.restart_priority = RESTART_PRIO_HIGH;
+                                              ^
+   drivers/power/reset/macsmc-reboot.c:292:8: error: call to undeclared function 'devm_register_sys_off_handler'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           ret = devm_register_sys_off_handler(&pdev->dev, &reboot->sys_off);
+                 ^
+   3 warnings and 7 errors generated.
+
+
+vim +142 drivers/power/reset/macsmc-reboot.c
+
+    50	
+    51	struct macsmc_reboot {
+    52		struct device *dev;
+    53		struct apple_smc *smc;
+  > 54		struct sys_off_handler sys_off;
+    55	
+    56		union {
+    57			struct macsmc_reboot_nvmem nvm;
+    58			struct nvmem_cell *nvm_cells[ARRAY_SIZE(nvmem_names)];
+    59		};
+    60	};
+    61	
+    62	/* Helpers to read/write a u8 given a struct nvmem_cell */
+    63	static int nvmem_cell_get_u8(struct nvmem_cell *cell)
+    64	{
+    65		size_t len;
+    66		u8 val;
+    67		void *ret = nvmem_cell_read(cell, &len);
+    68	
+    69		if (IS_ERR(ret))
+    70			return PTR_ERR(ret);
+    71	
+    72		if (len < 1) {
+    73			kfree(ret);
+    74			return -EINVAL;
+    75		}
+    76	
+    77		val = *(u8 *)ret;
+    78		kfree(ret);
+    79		return val;
+    80	}
+    81	
+    82	static int nvmem_cell_set_u8(struct nvmem_cell *cell, u8 val)
+    83	{
+    84		return nvmem_cell_write(cell, &val, sizeof(val));
+    85	}
+    86	
+    87	static ssize_t macsmc_ac_power_mode_store(struct device *dev, struct device_attribute *attr,
+    88						  const char *buf, size_t n)
+    89	{
+    90		struct macsmc_reboot *reboot = dev_get_drvdata(dev);
+    91		int mode;
+    92		int ret;
+    93	
+    94		mode = sysfs_match_string(ac_power_modes, buf);
+    95		if (mode < 0)
+    96			return mode;
+    97	
+    98		ret = nvmem_cell_set_u8(reboot->nvm.pm_setting, ac_power_mode_map[mode]);
+    99		if (ret < 0)
+   100			return ret;
+   101	
+   102		return n;
+   103	}
+   104	
+   105	static ssize_t macsmc_ac_power_mode_show(struct device *dev,
+   106						 struct device_attribute *attr, char *buf)
+   107	{
+   108		struct macsmc_reboot *reboot = dev_get_drvdata(dev);
+   109		int len = 0;
+   110		int i;
+   111		int mode = nvmem_cell_get_u8(reboot->nvm.pm_setting);
+   112	
+   113		if (mode < 0)
+   114			return mode;
+   115	
+   116		for (i = 0; i < ARRAY_SIZE(ac_power_mode_map); i++)
+   117			if (mode == ac_power_mode_map[i])
+   118				len += scnprintf(buf+len, PAGE_SIZE-len,
+   119						 "[%s] ", ac_power_modes[i]);
+   120			else
+   121				len += scnprintf(buf+len, PAGE_SIZE-len,
+   122						 "%s ", ac_power_modes[i]);
+   123		buf[len-1] = '\n';
+   124		return len;
+   125	}
+   126	static DEVICE_ATTR(ac_power_mode, 0644, macsmc_ac_power_mode_show,
+   127			   macsmc_ac_power_mode_store);
+   128	
+   129	/*
+   130	 * SMC 'MBSE' key actions:
+   131	 *
+   132	 * 'offw' - shutdown warning
+   133	 * 'slpw' - sleep warning
+   134	 * 'rest' - restart warning
+   135	 * 'off1' - shutdown (needs PMU bit set to stay on)
+   136	 * 'susp' - suspend
+   137	 * 'phra' - restart ("PE Halt Restart Action"?)
+   138	 * 'panb' - panic beginning
+   139	 * 'pane' - panic end
+   140	 */
+   141	
+ > 142	static void macsmc_power_off(struct power_off_data *data)
+   143	{
+   144		struct macsmc_reboot *reboot = data->cb_data;
+   145	
+   146		dev_info(reboot->dev, "Issuing power off (off1)\n");
+   147	
+   148		if (apple_smc_write_u32_atomic(reboot->smc, SMC_KEY(MBSE), SMC_KEY(off1)) < 0) {
+   149			dev_err(reboot->dev, "Failed to issue MBSE = off1 (power_off)\n");
+   150		} else {
+   151			mdelay(100);
+   152			WARN_ON(1);
+   153		}
+   154	}
+   155	
+ > 156	static void macsmc_restart(struct restart_data *data)
+   157	{
+   158		struct macsmc_reboot *reboot = data->cb_data;
+   159	
+   160		dev_info(reboot->dev, "Issuing restart (phra)\n");
+   161	
+   162		if (apple_smc_write_u32_atomic(reboot->smc, SMC_KEY(MBSE), SMC_KEY(phra)) < 0) {
+   163			dev_err(reboot->dev, "Failed to issue MBSE = phra (restart)\n");
+   164		} else {
+   165			mdelay(100);
+   166			WARN_ON(1);
+   167		}
+   168	}
+   169	
+ > 170	static void macsmc_reboot_prepare(struct reboot_prep_data *data)
+   171	{
+   172		struct macsmc_reboot *reboot = data->cb_data;
+   173		u32 val;
+   174		u8 shutdown_flag;
+   175	
+   176		switch (data->mode) {
+   177			case SYS_RESTART:
+   178				val = SMC_KEY(rest);
+   179				shutdown_flag = 0;
+   180				break;
+   181			case SYS_POWER_OFF:
+   182				val = SMC_KEY(offw);
+   183				shutdown_flag = 1;
+   184				break;
+   185			default:
+   186				return;
+   187		}
+   188	
+   189		dev_info(reboot->dev, "Preparing for reboot (%p4ch)\n", &val);
+   190	
+   191		/* On the Mac Mini, this will turn off the LED for power off */
+   192		if (apple_smc_write_u32(reboot->smc, SMC_KEY(MBSE), val) < 0)
+   193			dev_err(reboot->dev, "Failed to issue MBSE = %p4ch (reboot_prepare)\n", &val);
+   194	
+   195		/* Set the boot_stage to 0, which means we're doing a clean shutdown/reboot. */
+   196		if (reboot->nvm.boot_stage &&
+   197		    nvmem_cell_set_u8(reboot->nvm.boot_stage, BOOT_STAGE_SHUTDOWN) < 0)
+   198			dev_err(reboot->dev, "Failed to write boot_stage\n");
+   199	
+   200		/*
+   201		 * Set the PMU flag to actually reboot into the off state.
+   202		 * Without this, the device will just reboot. We make it optional in case it is no longer
+   203		 * necessary on newer hardware.
+   204		 */
+   205		if (reboot->nvm.shutdown_flag &&
+   206		    nvmem_cell_set_u8(reboot->nvm.shutdown_flag, shutdown_flag) < 0)
+   207			dev_err(reboot->dev, "Failed to write shutdown_flag\n");
+   208	
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

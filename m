@@ -2,191 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30018518A4C
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 18:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82072518A50
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 18:45:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239752AbiECQrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 12:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38260 "EHLO
+        id S239730AbiECQtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 12:49:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239730AbiECQq7 (ORCPT
+        with ESMTP id S239766AbiECQtT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 12:46:59 -0400
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1482C138
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 09:43:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1651596206; x=1683132206;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=gtowxbHk/V4v64RtsKyaAcMJzf5VQm5Xqlz1mGZPWVc=;
-  b=UuimcHFNqGY/ydZ3zk+0WP3roBVXJhLTI7+CwXN4V3hC0ecBIU+1fxyr
-   5D1rAjKKCIMV5rwYsgWwgbBSF4yAySPunAFYeXVfxbFiO+EIEmh4m47T5
-   ZueNBpc1rjGKSu563LcDt98anpVvCRUFA/VJcqjDFvquINMndT7xSGYGJ
-   VnJnYJlougX/WWd65dXAHEGDSDYnRqJ7e4dT8U/vW0QItRDT30Nw1Qp3G
-   TXGUq7+FcvpZ06/ri8RchK1E78XKXu2WH3xqwJ9S0JzRG5+HDaTRh9vbZ
-   PZM78vRQC38Wk1m0mwCsi0WWOTsBYySFMsUC3kPo//vupSulV16+/v9LH
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.91,195,1647273600"; 
-   d="scan'208";a="204304553"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 04 May 2022 00:43:24 +0800
-IronPort-SDR: LW7TYsoun5gZqxXLFOthLgSeEnORpZ8aOwHMKzfLLuiSRLN5CBFKo4doIgdmD5p3uoZ6l5O1OU
- V7ivVJ6Hoqi80P+L1ZekRkA2wny5YRnvEsNS3+/FCJjxFCYYU3bibQMbYH/Y2EcRVy5DwwULEJ
- DaJFpCHZYDdp57nlTArf/mf3NiO0QbGJTAlrSm68jgCJ8hh7P7LiToIuZ6/oiFuD8ozfD/eBbi
- WTXSbBzZzfSd94PIbAzbps5gshcO27WS2ht61LP6mr09Kgonrj+i4XEzWCJd6XWWv4jurVzxnv
- 2eUmIs+261xgo1TD/krIInDO
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 03 May 2022 09:14:08 -0700
-IronPort-SDR: OqQUJ4gpBCIipshDrM2UC+zaLxjPpD/ftHrB5lFX31VlKCs2YtPz5zgHNKDb8603nb2tRzblQq
- 84Ja7eUDpgTtjCbZGJ8BDVgBK2/ZwzZT0XEI1I9e+7liI2tTNyQaXEK/oXSu1R12gF/SlhFeAS
- 7+vZT2/t6qHxNs4/iN0AF9Cn7/iVEKnILXLLlI7gxPWLB1H/Drg7JBuDeUMjcPy+vTi2Y9PyTc
- gprVJtj4hoJwsMmPOyzm/00gwts4NVt8ByoE0Y/CbjDETDdJbaexlrgm+CfOAj+lZxqelOnXBr
- fPE=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 03 May 2022 09:43:25 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Kt5PS40JHz1Rvlx
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 09:43:24 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1651596203; x=1654188204; bh=gtowxbHk/V4v64RtsKyaAcMJzf5VQm5Xqlz
-        1mGZPWVc=; b=kcyTVUQijJjNqFplnGo8HKlYc0HiINJOmX4zf5eOserrUbRTMOn
-        YXMVAlSIZ2bMCoOrQDR4Jmy+RLEs296UujzAbqNHOInGBSH4H6nIzo26tog37ggh
-        CaNs7bGBi+CPrY1jX/gw44Ven3i5IGGJMhCDv1WNXpnf6m1Ub1SWFzbsaFkwMSNj
-        X971wrkoCJlGbG8weHoPBvT7RQivmhR8IZQG7bXL4fxwgm5u5apTjuD2LnPkTh4+
-        rs/RucYrAJOLR9JTudxvxCVF2DWjlNMHqDOYstMeaMvYAZ8dGc5UQGUdZKdUhQBd
-        j1Z6U+4LPn5mXtJBrWjQwFUsHEwYVvWKPUA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id qTcq8XAYLvlZ for <linux-kernel@vger.kernel.org>;
-        Tue,  3 May 2022 09:43:23 -0700 (PDT)
-Received: from [10.225.81.200] (hq6rw33.ad.shared [10.225.81.200])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Kt5PN0Cqnz1Rvlc;
-        Tue,  3 May 2022 09:43:19 -0700 (PDT)
-Message-ID: <2c275ab0-c813-22ae-16e3-b16885d06c4c@opensource.wdc.com>
-Date:   Wed, 4 May 2022 01:43:19 +0900
+        Tue, 3 May 2022 12:49:19 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8F130F60
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 09:45:46 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id z144so16979509vsz.13
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 09:45:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mEhaO2VPQGWGGw5hqYFADWCcKvr48MqA446UlAU+u6w=;
+        b=ihBy0nfgFvQDwq0V/txi6ueM4+pRCxeyNKqD1ZGtCvH67DXsAtw210EzAfGrof3gFw
+         anFjAp4RnT8H4m08ykPMTJc2epSwi0cWgJm9nBcen3B9Z+KOh02kaIvt9Tq5GDDj6zeE
+         DdJXRhawHB7zzEO4+oVd397TkpjUzQYaF1ZDJ1eCvYobjkJznud1el91ow29OySch1iV
+         RnEEHL7yBhnFQQFyhJmrYXy5a3zTVrrZbq0uSgn065RwNw0xM4lpIhdcgGRjmfHF6atB
+         eVnXYbc/2MxonRzPkj9dVOW2k4p297ysSK2FpWGAKClXx9b5oaLdQAfu4T2udzzPKe54
+         nMbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mEhaO2VPQGWGGw5hqYFADWCcKvr48MqA446UlAU+u6w=;
+        b=8G8KwPdCIEzv7u3hC2asDNFAv5qj6KqKD6b+zaNyOg+D3gc3hJrjIzHZi1qy8KAc71
+         qiAoPKzfg+z2oNH0H9dhJc/F0tyxlDTvrE5XlgbEm1iGhVScA2hfQdEqgJrkP8o0U+jd
+         irGj2xFuLv2xlKKzI5uIEOx37Em/uXf34uchNzIql8rgzGoM+FZTNGJb5K7VnmL2W2+2
+         YiCWI8zTNbh1pCuR5hKkAs0rLe9NnDYKPVMmR/yeEMH9jDctHlgWj8gml0eBD5bowl89
+         TU9aRRmebxPVRPK0+tjTUTPU21IUt41EF7QsKeGo3wI32a35sgS3YW/gOwOKQA/Ta0Py
+         Y2DA==
+X-Gm-Message-State: AOAM533YckgV3xnBQvpJkhZVdvidqLohf9gdOxiQ8m+3oWeuWxOvATe1
+        IBSSOjh775lhtfOfEl5X2TEqJvzdATmDXxMRokb8sZ0TeoT1u1ZN
+X-Google-Smtp-Source: ABdhPJxOoxJmJG8LzxWmoJNOJsNmzcTFnjlgtb69g6tB1S0/7oqHricRjcACgGeSnyOKjEz3INsZGKVBW2fi841XSL8=
+X-Received: by 2002:a67:af01:0:b0:32d:3d57:cff with SMTP id
+ v1-20020a67af01000000b0032d3d570cffmr3398577vsl.8.1651596345258; Tue, 03 May
+ 2022 09:45:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.1
-Subject: Re: [PATCH 01/16] block: make blkdev_nr_zones and blk_queue_zone_no
- generic for npo2 zsze
-Content-Language: en-US
-To:     Bart Van Assche <bvanassche@acm.org>,
-        Pankaj Raghav <p.raghav@samsung.com>, jaegeuk@kernel.org,
-        axboe@kernel.dk, snitzer@kernel.org, hch@lst.de, mcgrof@kernel.org,
-        naohiro.aota@wdc.com, sagi@grimberg.me, dsterba@suse.com,
-        johannes.thumshirn@wdc.com
-Cc:     linux-kernel@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        clm@fb.com, gost.dev@samsung.com, chao@kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, josef@toxicpanda.com,
-        jonathan.derrick@linux.dev, agk@redhat.com, kbusch@kernel.org,
-        kch@nvidia.com, linux-nvme@lists.infradead.org,
-        dm-devel@redhat.com, jiangbo.365@bytedance.com,
-        linux-fsdevel@vger.kernel.org, matias.bjorling@wdc.com,
-        linux-block@vger.kernel.org
-References: <20220427160255.300418-1-p.raghav@samsung.com>
- <CGME20220427160257eucas1p21fb58d0129376a135fdf0b9c2fe88895@eucas1p2.samsung.com>
- <20220427160255.300418-2-p.raghav@samsung.com>
- <3a178153-62c0-e298-ccb0-0edfd41b7ee2@acm.org>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <3a178153-62c0-e298-ccb0-0edfd41b7ee2@acm.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220422162402.147958-1-adrian.hunter@intel.com> <20220422162402.147958-3-adrian.hunter@intel.com>
+In-Reply-To: <20220422162402.147958-3-adrian.hunter@intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 3 May 2022 09:45:33 -0700
+Message-ID: <CAP-5=fU-FiHWZKaV-1qEXyE23TRVmZTZ2gXLE7KMS=B7VZ=aOw@mail.gmail.com>
+Subject: Re: [PATCH RFC 02/21] libperf evsel: Add perf_evsel__enable_thread()
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/05/04 1:37, Bart Van Assche wrote:
-> On 4/27/22 09:02, Pankaj Raghav wrote:
->> Adapt blkdev_nr_zones and blk_queue_zone_no function so that it can
->> also work for non-power-of-2 zone sizes.
->>
->> As the existing deployments of zoned devices had power-of-2
->> assumption, power-of-2 optimized calculation is kept for those devices.
->>
->> There are no direct hot paths modified and the changes just
->> introduce one new branch per call.
->>
->> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
->> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
->> ---
->>   block/blk-zoned.c      | 8 +++++++-
->>   include/linux/blkdev.h | 8 +++++++-
->>   2 files changed, 14 insertions(+), 2 deletions(-)
->>
->> diff --git a/block/blk-zoned.c b/block/blk-zoned.c
->> index 38cd840d8838..1dff4a8bd51d 100644
->> --- a/block/blk-zoned.c
->> +++ b/block/blk-zoned.c
->> @@ -117,10 +117,16 @@ EXPORT_SYMBOL_GPL(__blk_req_zone_write_unlock);
->>   unsigned int blkdev_nr_zones(struct gendisk *disk)
->>   {
->>   	sector_t zone_sectors = blk_queue_zone_sectors(disk->queue);
->> +	sector_t capacity = get_capacity(disk);
->>   
->>   	if (!blk_queue_is_zoned(disk->queue))
->>   		return 0;
->> -	return (get_capacity(disk) + zone_sectors - 1) >> ilog2(zone_sectors);
->> +
->> +	if (is_power_of_2(zone_sectors))
->> +		return (capacity + zone_sectors - 1) >>
->> +		       ilog2(zone_sectors);
->> +
->> +	return div64_u64(capacity + zone_sectors - 1, zone_sectors);
->>   }
->>   EXPORT_SYMBOL_GPL(blkdev_nr_zones);
-> 
-> Does anyone need support for more than 4 billion sectors per zone? If 
-> not, do_div() should be sufficient.
-> 
->> diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
->> index 60d016138997..c4e4c7071b7b 100644
->> --- a/include/linux/blkdev.h
->> +++ b/include/linux/blkdev.h
->> @@ -665,9 +665,15 @@ static inline unsigned int blk_queue_nr_zones(struct request_queue *q)
->>   static inline unsigned int blk_queue_zone_no(struct request_queue *q,
->>   					     sector_t sector)
->>   {
->> +	sector_t zone_sectors = blk_queue_zone_sectors(q);
->> +
->>   	if (!blk_queue_is_zoned(q))
->>   		return 0;
->> -	return sector >> ilog2(q->limits.chunk_sectors);
->> +
->> +	if (is_power_of_2(zone_sectors))
->> +		return sector >> ilog2(zone_sectors);
->> +
->> +	return div64_u64(sector, zone_sectors);
->>   }
-> 
-> Same comment here.
+On Fri, Apr 22, 2022 at 9:24 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>
+> Add perf_evsel__enable_thread() as a counterpart to
+> perf_evsel__enable_cpu(), to enable all events for a thread.
+>
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+> ---
+>  tools/lib/perf/evsel.c              | 10 ++++++++++
+>  tools/lib/perf/include/perf/evsel.h |  1 +
+>  2 files changed, 11 insertions(+)
+>
+> diff --git a/tools/lib/perf/evsel.c b/tools/lib/perf/evsel.c
+> index 20ae9f5f8b30..2a1f07f877be 100644
+> --- a/tools/lib/perf/evsel.c
+> +++ b/tools/lib/perf/evsel.c
+> @@ -360,6 +360,16 @@ int perf_evsel__enable_cpu(struct perf_evsel *evsel, int cpu_map_idx)
+>         return perf_evsel__run_ioctl(evsel, PERF_EVENT_IOC_ENABLE, NULL, cpu_map_idx);
+>  }
+>
+> +int perf_evsel__enable_thread(struct perf_evsel *evsel, int thread)
+> +{
+> +       int err = 0;
+> +       int i;
+> +
+> +       for (i = 0; i < xyarray__max_x(evsel->fd) && !err; i++)
+> +               err = perf_evsel__ioctl(evsel, PERF_EVENT_IOC_ENABLE, NULL, i, thread);
 
-sector_t is 64-bits even on 32-bits arch, no ?
-so div64_u64 is needed here I think, which will be a simple regular division for
-64-bit arch.
+Looking at the argument names to perf_evsel__ioctl, i is the
+cpu_map_idx. Would it be more intention revealing here to do:
 
-> 
-> Thanks,
-> 
-> Bart.
+perf_cpu_map__for_each_cpu(cpu, idx, evsel->cpus) {
+   if (err = perf_evsel__ioctl(evsel, PERF_EVENT_IOC_ENABLE, NULL, idx, thread))
+     break;
+}
 
+or perhaps:
 
--- 
-Damien Le Moal
-Western Digital Research
+for (idx = 0; idx < perf_cpu_map__nr(evsel->fd) && !err; idx++)
+
+Thanks,
+Ian
+
+> +       return err;
+> +}
+> +
+>  int perf_evsel__enable(struct perf_evsel *evsel)
+>  {
+>         int i;
+> diff --git a/tools/lib/perf/include/perf/evsel.h b/tools/lib/perf/include/perf/evsel.h
+> index 2a9516b42d15..699c0ed97d34 100644
+> --- a/tools/lib/perf/include/perf/evsel.h
+> +++ b/tools/lib/perf/include/perf/evsel.h
+> @@ -36,6 +36,7 @@ LIBPERF_API int perf_evsel__read(struct perf_evsel *evsel, int cpu_map_idx, int
+>                                  struct perf_counts_values *count);
+>  LIBPERF_API int perf_evsel__enable(struct perf_evsel *evsel);
+>  LIBPERF_API int perf_evsel__enable_cpu(struct perf_evsel *evsel, int cpu_map_idx);
+> +LIBPERF_API int perf_evsel__enable_thread(struct perf_evsel *evsel, int thread);
+>  LIBPERF_API int perf_evsel__disable(struct perf_evsel *evsel);
+>  LIBPERF_API int perf_evsel__disable_cpu(struct perf_evsel *evsel, int cpu_map_idx);
+>  LIBPERF_API struct perf_cpu_map *perf_evsel__cpus(struct perf_evsel *evsel);
+> --
+> 2.25.1
+>

@@ -2,140 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 245F5518D3A
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:37:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FFA5518D42
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241864AbiECTlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 15:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36016 "EHLO
+        id S241941AbiECTnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 15:43:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiECTk7 (ORCPT
+        with ESMTP id S239300AbiECTnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 15:40:59 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B9924597;
-        Tue,  3 May 2022 12:37:26 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:56078)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nlyKo-00AaEh-5z; Tue, 03 May 2022 13:37:22 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:36796 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nlyKn-007Sew-2a; Tue, 03 May 2022 13:37:21 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org,
-        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>
-References: <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
-        <20220429214837.386518-6-ebiederm@xmission.com>
-        <20220502143750.GC17276@redhat.com>
-Date:   Tue, 03 May 2022 14:36:55 -0500
-In-Reply-To: <20220502143750.GC17276@redhat.com> (Oleg Nesterov's message of
-        "Mon, 2 May 2022 16:37:51 +0200")
-Message-ID: <87y1zio1bc.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 3 May 2022 15:43:13 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91F82FFE8
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 12:39:40 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id g3so14783169pgg.3
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 12:39:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ppinaPJbJgnZ4lYEqEvTzKJ3KVzhWfLCUNKpobV/uMY=;
+        b=GZDeuBBjdMiuh/0GD4S5Z7CgdVlfhqyeR9pyDRdIelbo2EyhbeprTZG0UPddoltyRe
+         YWfDjfPBAwwodFAHt/hTo5mCvpD+K0h+ojF2FG2IP3+iWe0lLVFg4Zly+NPfk+Ohz7YA
+         lpuB0QfbsIb6ogjiopQIq82iN7cahaV/R2oEo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ppinaPJbJgnZ4lYEqEvTzKJ3KVzhWfLCUNKpobV/uMY=;
+        b=g5mkbkEp2kUMKyHqF/hLM8iZ463tQdVkwf4+MtiToZsOa7eQQSRPLfAJ786IuUX0ls
+         H+upfgnJasoRZztZJGr+cd9rbUSS0On1PxL90/ZLOeLl0TQSW11K3wiUejY2pA2WZpBy
+         2oDWccwQTQVor3QRdSu+fxC5aRnYP1eS6YcUS5uRnEoxi/7ZU7ANgzvhO6+7SRb1hId2
+         IBWpuGkZyOrO/BxpdtNd5tNHGAxIF5n4pQYoltVXryPn+moOwpxVHyy6iJ7ChY4WGSJW
+         tNVFXREDFTShjJtTM6ePRLq/kDM0x4Q0AbNxulbZ9bidszRQxkRYJmT8J9jPQQf9m54e
+         p6yw==
+X-Gm-Message-State: AOAM5320u5cMwZqBMSEU/xsFURRS31LCI8MUd9wfmCRzvisXCOkcCryU
+        vA/NEIujrPW7tyCkLQ4i9sMj04FmGmbSKw==
+X-Google-Smtp-Source: ABdhPJyZI+fpaSs+G3ah33WViC0DquG+m5KKFzchEtRgKTakKTw0bcLyUz7uyKzt4loAHdyoWdKh9A==
+X-Received: by 2002:a63:2a0d:0:b0:3ab:392c:f45c with SMTP id q13-20020a632a0d000000b003ab392cf45cmr15076384pgq.575.1651606780120;
+        Tue, 03 May 2022 12:39:40 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:202:201:15e:c760:9a04:7fbe])
+        by smtp.gmail.com with ESMTPSA id e25-20020aa78c59000000b0050dc7628154sm6680804pfd.46.2022.05.03.12.39.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 12:39:38 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Subject: [PATCH v2 0/2] iio: sx9324: Support CS idle mode
+Date:   Tue,  3 May 2022 12:39:35 -0700
+Message-Id: <20220503193937.3794477-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nlyKn-007Sew-2a;;;mid=<87y1zio1bc.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1+j7nUi9NCECp7X522Zs1J0RePdyckNPD8=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Oleg Nesterov <oleg@redhat.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 521 ms - load_scoreonly_sql: 0.06 (0.0%),
-        signal_user_changed: 10 (1.9%), b_tie_ro: 8 (1.5%), parse: 1.09 (0.2%),
-         extract_message_metadata: 13 (2.4%), get_uri_detail_list: 1.50 (0.3%),
-         tests_pri_-1000: 7 (1.3%), tests_pri_-950: 1.44 (0.3%),
-        tests_pri_-900: 1.23 (0.2%), tests_pri_-90: 193 (37.1%), check_bayes:
-        183 (35.1%), b_tokenize: 8 (1.6%), b_tok_get_all: 8 (1.6%),
-        b_comp_prob: 2.7 (0.5%), b_tok_touch_all: 159 (30.5%), b_finish: 1.09
-        (0.2%), tests_pri_0: 280 (53.8%), check_dkim_signature: 1.08 (0.2%),
-        check_dkim_adsp: 3.2 (0.6%), poll_dns_idle: 0.90 (0.2%), tests_pri_10:
-        2.4 (0.5%), tests_pri_500: 9 (1.6%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v2 06/12] ptrace: Reimplement PTRACE_KILL by always
- sending SIGKILL
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Oleg Nesterov <oleg@redhat.com> writes:
+I need one more property to set another regsiter field for 
+how to configure the CS pins during idle and sleep modes. This is based
+on the latest patch series from Gwendal[1]
 
-> On 04/29, Eric W. Biederman wrote:
->>
->> Call send_sig_info in PTRACE_KILL instead of ptrace_resume.  Calling
->> ptrace_resume is not safe to call if the task has not been stopped
->> with ptrace_freeze_traced.
->
-> Oh, I was never, never able to understand why do we have PTRACE_KILL
-> and what should it actually do.
->
-> I suggested many times to simply remove it but OK, we probably can't
-> do this.
+Changes from v1 (https://lore.kernel.org/r/20220503004156.3559940-1-swboyd@chromium.org):
+ * Change 'hz' to 'hi-z'
+ * Add property to example
 
-I thought I remembered you suggesting fixing it in some other way.
+Stephen Boyd (2):
+  dt-bindings: iio: sx9324: Add CS idle/sleep mode
+  iio: sx9324: Add setting for CS idle mode
 
-I took at quick look in codesearch.debian.net and PTRACE_KILL is
-definitely in use. I find uses in gcc-10, firefox-esr_91.8,
-llvm_toolchain, qtwebengine.  At which point I stopped looking.
+ .../bindings/iio/proximity/semtech,sx9324.yaml   |  9 +++++++++
+ drivers/iio/proximity/sx9324.c                   | 16 ++++++++++++++++
+ 2 files changed, 25 insertions(+)
+
+[1] https://lore.kernel.org/all/20220429220144.1476049-1-gwendal@chromium.org/
 
 
->> --- a/kernel/ptrace.c
->> +++ b/kernel/ptrace.c
->> @@ -1238,7 +1238,7 @@ int ptrace_request(struct task_struct *child, long request,
->>  	case PTRACE_KILL:
->>  		if (child->exit_state)	/* already dead */
->>  			return 0;
->> -		return ptrace_resume(child, request, SIGKILL);
->> +		return send_sig_info(SIGKILL, SEND_SIG_NOINFO, child);
->
-> Note that currently ptrace(PTRACE_KILL) can never fail (yes, yes, it
-> is unsafe), but send_sig_info() can. If we do not remove PTRACE_KILL,
-> then I'd suggest
->
-> 	case PTRACE_KILL:
-> 		if (!child->exit_state)
-> 			send_sig_info(SIGKILL);
-> 		return 0;
->
-> to make this change a bit more compatible.
+base-commit: d79478a79cfa393cde46bccb05d52fc7d875d2e2
+prerequisite-patch-id: 05986765e921df4c9725d10a3f51e68b0b5cc211
+prerequisite-patch-id: 5e47b28af046dce1eb7d7ca492c466df0f30e07c
+prerequisite-patch-id: adb59d1a14b74ddfe02c442da8bcca04765e7d15
+prerequisite-patch-id: ec6069ee00463db27826962537ff880e69522f70
+prerequisite-patch-id: e40f2a3048da2ff28bb426b85e41d277f29f18ef
+prerequisite-patch-id: 82077662b97c09014c5b291fe5a42938a29ddbcd
+prerequisite-patch-id: d02f0ec3be1fa9cdbf02a22c700982008d0550bd
+prerequisite-patch-id: a02a8faefc5b7b68b99c0cc326973948c9356b60
+prerequisite-patch-id: 522c808e4b8bf99b8404c01d495526a685e5b97a
+-- 
+https://chromeos.dev
 
-
-Quite.  The only failure I can find from send_sig_info is if
-lock_task_sighand fails and PTRACE_KILL is deliberately ignoring errors
-when the target task has exited.
-
- 	case PTRACE_KILL:
- 		send_sig_info(SIGKILL);
- 		return 0;
-
-I think that should suffice.
-
-
-> Also, please remove the note about PTRACE_KILL in
-> set_task_blockstep().
-
-Good catch, thank you.
-
-Eric

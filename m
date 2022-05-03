@@ -2,78 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0534B518BBF
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 20:03:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2915518BC4
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 20:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240678AbiECSG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 14:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56434 "EHLO
+        id S240915AbiECSGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 14:06:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239160AbiECSGX (ORCPT
+        with ESMTP id S230251AbiECSGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 14:06:23 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47233EA8E
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 11:02:50 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id j9so14374718qkg.1
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 11:02:50 -0700 (PDT)
+        Tue, 3 May 2022 14:06:48 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C081D3EA8C
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 11:03:14 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id m25so5063846oih.2
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 11:03:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=Uyl9FgqCpk0Nf843k4+zgAZBrShtUTws+zDSvi2LfUM=;
-        b=HASzNM8N5KvGdhci2AiFzKOaJQwN9mxfIDe/lkZJ5ShoUtwlUdYMfOFqvjDXyIJbF4
-         yaCwBO/1X43osNrP+A0r7dVcuxLftUPcVym8xAbVVku9NRSgvrtT3UelMCZeHJLzuNfL
-         /5clZPtUWO33c4TklN3NmqsrqPCjOhgAcTCkIEOzaMYJ+wD9Tt0duo4/8BLzMAiOuNdH
-         Th8ElVEgO5wkiBNqADw6YU6YJxaC9PMmi42uZc7tbY4rLb7pZRcZVhFjQU2SahZBEiCr
-         HiDdRYiv2HnjeJQfP+uXqwRIbMnNmiSSP232+3Utj39UgC6S/OvJYFIF+2Ox/UbleRkj
-         /E0g==
+        bh=pHp7YwoTf2Vdk24QufCdmU2MrD/gn+v9TqyvkBKPilQ=;
+        b=oASUIWSunTEb1LBbrg5c0vQj/FEZjRLhcFe23l2VL/75O7EiwL4bpik2++AxxzDO+G
+         XJQbak7untc//EOnU6bTNiKJ0riyrO6bySzh5j2YdwvJQfSAvOPdph+zRxfYKLduUpCP
+         j68cNCGiYKXGwdWlqSmnS3TjZ9a6sDsJ4vIaNdDR6UoKXTLZLcub4Nv2wHP4hoMaIgrg
+         lX63KTc8AJ7qByKPWfZvmzT65C2h2APShFIUC6zsZEo4SMRWcb45UXB0glEduI+vGu7T
+         3GZ07vqfIdb/8zd116T/IZIikZX8kIySOa6xUqYqkb8KTwMvuDYRk/BuFb85TiAbnC6q
+         c4UA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Uyl9FgqCpk0Nf843k4+zgAZBrShtUTws+zDSvi2LfUM=;
-        b=RASqUQEDlP9lNqPJ9DRYXcL96hyOfLFQ3zdZAalNxL8+RwmVxM62jauJU2nSAFhm0A
-         wgpSpuw4BMLnklKtzGHbC5bRjTUlFKpBExegr8L+uCZLzcvd+0i3uHxATKIud/jnySLt
-         k9wZHdUBdXBHuei5spNskSYMmQL/evNdZpovzHnGhv1u0swSBDk8H3sowUVXDCEkmdqL
-         wv6ybQzfVkB5oLqYWVoRqB55f98pHjxpZmBUMdcMckOwU0dP54bkk2xvyOCNFEmmU5DF
-         rlQroyQOUmPzTL+k+VtLmE7XJMySr9fo1HryHjc6iobBoHkRUUNMIg5jGf2RKupPo67v
-         Op0Q==
-X-Gm-Message-State: AOAM5309Qx1SJ15esAW5k2IVXf5tp7IzkSOgBnBzww2VrcTbt8KwSkMz
-        dJqX64aQ1Z5WwBRqxsfSc5l3gA==
-X-Google-Smtp-Source: ABdhPJy6ETxhDfU1H18vwQw8SjcmvvfRmmnBdOiKVkVcmW4w4SWSAwiUMPGahiMaZ41Ml+rD4xkWVw==
-X-Received: by 2002:a05:620a:414a:b0:69f:d123:6011 with SMTP id k10-20020a05620a414a00b0069fd1236011mr9378899qko.89.1651600969861;
-        Tue, 03 May 2022 11:02:49 -0700 (PDT)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id b24-20020ac86bd8000000b002f39b99f67esm6180531qtt.24.2022.05.03.11.02.46
+        bh=pHp7YwoTf2Vdk24QufCdmU2MrD/gn+v9TqyvkBKPilQ=;
+        b=yMm9lGpOkLP5IpKwnSNLjjWaHrvio6v5KXlv5DnxJM6YMdEPKNQExks9wNBphgSHC5
+         csRND7+Y3GLNgE4Q9amXopDg34MPqcqAIXMPlQtIh2DqSXmcYjQNSDQTX+Ybam7Hcd0S
+         YXeuMxLwgsnn7FxFAqQpQqUMS6cx086vNtqSmicOI0HJZT2jFkDcA+9ml5OWNaZt8E4Z
+         QujhakHQ+X1r+1EkLKEf0BVpmhh+YVA1Smypl2BBl5bjPyZlWVXO2r/E+KMDC0L24kLy
+         EB7mHayz56rSiZoaz8ZqObmcznBfwbTAB312xt9fZsm4hzQqbgA494gp7UM6m4OqQxPW
+         QOvw==
+X-Gm-Message-State: AOAM5335t1ni8hEU6OsJk+rWsiknV12fuih2eAW4s5SPId6qTSHBqRX8
+        khCJGYtDyfehk28gw1MqZtSVHA==
+X-Google-Smtp-Source: ABdhPJwEBnus5YhDU9Wtk4POgwJH9KNS5mGSyWLeYc0ZszWEV4GQsb9nh1nQKsfM7G4ownHcnanz2g==
+X-Received: by 2002:a05:6808:30a9:b0:325:e5a7:1c49 with SMTP id bl41-20020a05680830a900b00325e5a71c49mr2265762oib.153.1651600992543;
+        Tue, 03 May 2022 11:03:12 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id g6-20020a056830160600b0060603221266sm4198960otr.54.2022.05.03.11.03.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 11:02:49 -0700 (PDT)
-Date:   Tue, 3 May 2022 19:02:22 +0100
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 02/12] iommu: Add pasid_bits field in struct dev_iommu
-Message-ID: <YnFuLsvWcjjKBWNy@myrica>
-References: <20220502014842.991097-1-baolu.lu@linux.intel.com>
- <20220502014842.991097-3-baolu.lu@linux.intel.com>
+        Tue, 03 May 2022 11:03:11 -0700 (PDT)
+Date:   Tue, 3 May 2022 13:03:09 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Alex Elder <elder@ieee.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@codeaurora.org>, vkoul@kernel.org
+Subject: Re: [PATCH V7 2/7] soc: qcom: dcc:Add driver support for Data
+ Capture and Compare unit(DCC)
+Message-ID: <YnFuXYEXxLQkak24@builder.lan>
+References: <cover.1646285069.git.quic_schowdhu@quicinc.com>
+ <bc8504bdaf24d98762e2dbad7d084ca247380f06.1646285069.git.quic_schowdhu@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220502014842.991097-3-baolu.lu@linux.intel.com>
+In-Reply-To: <bc8504bdaf24d98762e2dbad7d084ca247380f06.1646285069.git.quic_schowdhu@quicinc.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,71 +77,199 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 02, 2022 at 09:48:32AM +0800, Lu Baolu wrote:
-> Use this field to save the pasid/ssid bits that a device is able to
-> support with its IOMMU hardware. It is a generic attribute of a device
-> and lifting it into the per-device dev_iommu struct makes it possible
-> to allocate a PASID for device without calls into the IOMMU drivers.
-> Any iommu driver which suports PASID related features should set this
-> field before features are enabled on the devices.
-> 
-> For initialization of this field in the VT-d driver, the
-> info->pasid_supported is only set for PCI devices. So the status is
-> that non-PCI SVA hasn't been supported yet. Setting this field only for
-> PCI devices has no functional change.
-> 
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+On Thu 03 Mar 00:27 CST 2022, Souradeep Chowdhury wrote:
 
-Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
-
+> The DCC is a DMA Engine designed to capture and store data
+> during system crash or software triggers. The DCC operates
+> based on user inputs via the sysfs interface. The user gives
+> addresses as inputs and these addresses are stored in the
+> dcc sram. In case of a system crash or a manual software
+> trigger by the user through the debugfs interface,
+> the dcc captures and stores the values at these addresses.
+> This patch contains the driver which has all the methods
+> pertaining to the debugfs interface, auxiliary functions to
+> support all the four fundamental operations of dcc namely
+> read, write, read/modify/write and loop. The probe method
+> here instantiates all the resources necessary for dcc to
+> operate mainly the dedicated dcc sram where it stores the
+> values. The DCC driver can be used for debugging purposes
+> without going for a reboot since it can perform software
+> triggers as well based on user inputs.
+> 
+> Also added the documentation for debugfs entries and explained
+> the functionalities of each debugfs file that has been created
+> for dcc.
+> 
+> The following is the justification of using debugfs interface
+> over the other alternatives like sysfs/ioctls
+> 
+> i) As can be seen from the debugfs attribute descriptions,
+> some of the debugfs attribute files here contains multiple
+> arguments which needs to be accepted from the user. This goes
+> against the design style of sysfs.
+> 
+> ii) The user input patterns have been made simple and convenient
+> in this case with the use of debugfs interface as user doesn't
+> need to shuffle between different files to execute one instruction
+> as was the case on using other alternatives.
+> 
+> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
 > ---
->  include/linux/iommu.h                       | 1 +
->  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 2 ++
->  drivers/iommu/intel/iommu.c                 | 5 ++++-
->  3 files changed, 7 insertions(+), 1 deletion(-)
+>  Documentation/ABI/testing/debugfs-driver-dcc |  124 +++
+>  drivers/soc/qcom/Kconfig                     |    8 +
+>  drivers/soc/qcom/Makefile                    |    1 +
+>  drivers/soc/qcom/dcc.c                       | 1465 ++++++++++++++++++++++++++
+>  4 files changed, 1598 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/debugfs-driver-dcc
+>  create mode 100644 drivers/soc/qcom/dcc.c
 > 
-> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-> index 5e1afe169549..b8ffaf2cb1d0 100644
-> --- a/include/linux/iommu.h
-> +++ b/include/linux/iommu.h
-> @@ -373,6 +373,7 @@ struct dev_iommu {
->  	struct iommu_fwspec		*fwspec;
->  	struct iommu_device		*iommu_dev;
->  	void				*priv;
-> +	unsigned int			pasid_bits;
->  };
->  
->  int iommu_device_register(struct iommu_device *iommu,
-> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> index 627a3ed5ee8f..afc63fce6107 100644
-> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> @@ -2681,6 +2681,8 @@ static struct iommu_device *arm_smmu_probe_device(struct device *dev)
->  	    smmu->features & ARM_SMMU_FEAT_STALL_FORCE)
->  		master->stall_enabled = true;
->  
-> +	dev->iommu->pasid_bits = master->ssid_bits;
+> diff --git a/Documentation/ABI/testing/debugfs-driver-dcc b/Documentation/ABI/testing/debugfs-driver-dcc
+> new file mode 100644
+> index 0000000..70029ab
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/debugfs-driver-dcc
+> @@ -0,0 +1,124 @@
+> +What:          /sys/kernel/debug/dcc/.../trigger
+> +Date:          March 2022
+> +Contact:       Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+> +Description:
+> +		This is the debugfs interface for manual software
+> +		triggers. The user can simply enter a 1 against
+> +		the debugfs file and enable a manual trigger.
+> +		Example:
+> +		echo  1 > /sys/kernel/debug/dcc/.../trigger
 > +
->  	return &smmu->iommu;
->  
->  err_free_master:
-> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-> index cf43e8f9091b..170eb777d57b 100644
-> --- a/drivers/iommu/intel/iommu.c
-> +++ b/drivers/iommu/intel/iommu.c
-> @@ -4611,8 +4611,11 @@ static struct iommu_device *intel_iommu_probe_device(struct device *dev)
->  			if (pasid_supported(iommu)) {
->  				int features = pci_pasid_features(pdev);
->  
-> -				if (features >= 0)
-> +				if (features >= 0) {
->  					info->pasid_supported = features | 1;
-> +					dev->iommu->pasid_bits =
-> +						fls(pci_max_pasids(pdev)) - 1;
-> +				}
->  			}
->  
->  			if (info->ats_supported && ecap_prs(iommu->ecap) &&
-> -- 
-> 2.25.1
-> 
+> +What:          /sys/kernel/debug/dcc/.../enable
+> +Date:          March 2022
+> +Contact:       Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+> +Description:
+> +		This debugfs interface is used for enabling the
+> +		the dcc hardware. On enabling the dcc, all the
+> +		addresses entered by the user is written into
+> +		dcc sram which is read by the dcc hardware on
+> +		manual or crash induced triggers.
+> +		Example:
+> +		echo  0 > /sys/bus/platform/devices/.../enable
+> +		(disable dcc)
+> +		echo  1 > /sys/bus/platform/devices/.../enable
+> +		(enable dcc)
+> +
+> +What:          /sys/kernel/debug/dcc/.../config_read
+
+As mentioned last time, I don't like this interface of having 6 files
+that the user can write to in order to append items in the currently
+selected linked list.
+
+Why can't this be a single "config" which takes a multiline string of
+operations? (Bonus point for supporting appending to the list).
+
+
+This would also serve as a natural place to dump the linked list back to
+the user for inspection.
+
+> +Date:          March 2022
+> +Contact:       Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+> +Description:
+> +		This stores the addresses of the registers which
+> +		needs to be read in case of a hardware crash or
+> +		manual software triggers. The address entered here
+> +		are considered under read type instruction.
+> +		Example:
+> +		echo <1> <2> <3> >/sys/kernel/debug/dcc/../config_read
+> +		1->Address to be considered for reading the value.
+> +		2->The word count of the addresses, read n words
+> +		   starting from address <1>.
+> +		3->Can be a 1 or 0 which indicates if it is apb or ahb
+> +		bus respectively.
+> +
+> +What:          /sys/kernel/debug/dcc/.../config_write
+> +Date:          March 2022
+> +Contact:       Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+> +Description:
+> +		This file allows user to write a value to the register
+> +		address given as argument. The reason for this feature
+> +		of dcc is that for accessing certain registers it is
+> +		necessary to set some bits of some other register.
+> +		Example:
+> +		echo <1> <2> <3> > /sys/bus/platform/devices/.../config_write
+> +		1->Address to be considered for writing the value.
+> +		2->The value that needs to be written at the location.
+> +		3->Can be a 1 or 0 which indicates if it is apb or ahb
+> +		bus respectively.
+> +
+> +What:          /sys/kernel/debug/dcc/.../config_reset
+> +Date:          March 2022
+> +Contact:       Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+> +Description:
+> +		This file is used to reset the configuration of
+> +		a dcc driver to the default configuration. This
+> +		means that all the previous addresses stored in
+> +		the driver gets removed and user needs to enter
+> +		the address values from the start.
+> +		Example:
+> +		echo  1 > /sys/bus/platform/devices/.../config_reset
+> +
+> +What:          /sys/kernel/debug/dcc/.../config_loop
+> +Date:		March 2022
+> +Contact:       Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+> +Description:
+> +		This file is used to enter the loop type addresses for
+> +		dcc. DCC hardware provides feature to loop among multiple
+> +		addresses. For debugging purposes register values need to
+> +		be captured repeatedly in a loop. On giving the loop count
+> +		as n, the value at address will be captured n times in a
+> +		loop. At most 8 loop addresses can be configured at once.
+> +		Example:
+> +		echo <1> <2> <3> > /sys/kernel/debug/dcc/../config_loop
+> +		1->The loop count, the number of times the value of the
+> +		   addresses will be captured.
+> +		2->The address count, total number of addresses to be
+> +		   entered in this instruction.
+> +		3->The series of addresses to be entered separated by a
+> +		   space like <addr1> <addr2>... and so on.
+> +
+> +What:          /sys/kernel/debug/dcc/.../config_read_write
+> +Date:          March 2022
+> +Contact:       Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+> +Description:
+> +		This file is used to read the value of the register
+> +		and then write the value given as an argument to the
+> +		register address. The address argument should be given
+> +		of the form <addr> <mask> <value>.For debugging purposes
+> +		sometimes we need to first read from a register and then
+> +		set some values to the register.
+> +		Example:
+> +		echo <1> <2> <3> > /sys/kernel/debug/dcc/.../config_read_write
+> +		1->The address which needs to be considered for read then write.
+> +		2->The value that needs to be written on the address.
+> +		3->The mask of the value to be written.
+> +
+> +What:		/sys/kernel/debug/dcc/.../ready
+> +Date:		March 2022
+> +Contact	Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+> +Description:
+> +		This file is used to check the status of the dcc
+> +		hardware if it's ready to take the inputs. A 0
+> +		here indicates dcc is in a ready condition.
+> +		Example:
+> +		cat /sys/kernel/debug/dcc/.../ready
+> +
+> +What:		/sys/kernel/debug/dcc/.../curr_list
+
+I still don't like the idea of having a single set of files to interface
+with all N lists. I think you should discover how many lists you have
+and create N directories of files, each on operating on a given list.
+
+> +Date:		March 2022
+> +Contact:	Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+> +Description:
+> +		This attribute is used to enter the linklist to be
+> +		used while appending addresses. The range of values
+> +		for this is advertised either by a register or is
+> +		predefined. Max value for this can be till 8.
+> +		Example:
+> +		echo 0 > /sys/kernel/debug/dcc/...curr_list
+> +
+
+Regards,
+Bjorn

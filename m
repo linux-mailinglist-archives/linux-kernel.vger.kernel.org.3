@@ -2,115 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B8251859B
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 15:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF7A5185C7
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 15:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236240AbiECNkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 09:40:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57364 "EHLO
+        id S236321AbiECNow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 09:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230367AbiECNj4 (ORCPT
+        with ESMTP id S236296AbiECNos (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 09:39:56 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1078A24598;
-        Tue,  3 May 2022 06:36:23 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 86FD492009C; Tue,  3 May 2022 15:36:21 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 8082392009B;
-        Tue,  3 May 2022 14:36:21 +0100 (BST)
-Date:   Tue, 3 May 2022 14:36:21 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Arnd Bergmann <arnd@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        "open list:CAN NETWORK DRIVERS" <linux-can@vger.kernel.org>,
-        "moderated list:INTEL ETHERNET DRIVERS" 
-        <intel-wired-lan@lists.osuosl.org>,
-        "open list:AX.25 NETWORK LAYER" <linux-hams@vger.kernel.org>
-Subject: Re: [RFC v2 21/39] net: add HAS_IOPORT dependencies
-In-Reply-To: <867e70df01fc938abf93ffa15a3f1989a8fb136b.camel@linux.ibm.com>
-Message-ID: <alpine.DEB.2.21.2205031359490.64520@angie.orcam.me.uk>
-References: <20220429135108.2781579-1-schnelle@linux.ibm.com>  <20220429135108.2781579-36-schnelle@linux.ibm.com>  <alpine.DEB.2.21.2205012324130.9383@angie.orcam.me.uk> <867e70df01fc938abf93ffa15a3f1989a8fb136b.camel@linux.ibm.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Tue, 3 May 2022 09:44:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8AC1D30C;
+        Tue,  3 May 2022 06:41:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84C73B81EAE;
+        Tue,  3 May 2022 13:41:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92CFCC385A4;
+        Tue,  3 May 2022 13:41:12 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="JhhZhcKF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1651585270;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=p7mWXnm8GbdgjRIQ9Al0yBRSBRXht2MCYEZpE7Y9jd4=;
+        b=JhhZhcKFUNrhyY6TMHw4gMhygQ/MvjkoWAnfLWjpzVaqcn5fYzdgQqtfm6LxG0EfKaF2ij
+        Fz7cI5Bh2M3sJ5dT8USFeNye/mUf0QjpNJ2Z8cNg4dBSXu33P/SQ3Vbwz+17yP+YkK6xyF
+        Ax1jRH497v4VR8v5LWWXWN/SqnpdDi4=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b2825271 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 3 May 2022 13:41:10 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: [PATCH RFC v1] random: use static branch for crng_ready()
+Date:   Tue,  3 May 2022 15:40:52 +0200
+Message-Id: <20220503134052.646325-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 3 May 2022, Niklas Schnelle wrote:
+Since crng_ready() is only false briefly during initialization and then
+forever after becomes true, we don't need to evaluate it after, making
+it a prime candidate for a static branch.
 
-> >  The driver works just fine with MMIO where available, so if `inb'/`outb' 
-> > do get removed, then only parts that rely on port I/O need to be disabled.  
-> > In fact there's already such provision there in drivers/net/fddi/defxx.c 
-> > for TURBOchannel systems (CONFIG_TC), which have no port I/O space either:
-> > 
-> > #if defined(CONFIG_EISA) || defined(CONFIG_PCI)
-> > #define dfx_use_mmio bp->mmio
-> > #else
-> > #define dfx_use_mmio true
-> > #endif
-> > 
-> > so I guess it's just the conditional that will have to be changed to:
-> > 
-> > #ifdef CONFIG_HAS_IOPORT
-> > 
-> > replacing the current explicit bus dependency list.  The compiler will 
-> > then optimise away all the port I/O stuff (though I suspect dummy function 
-> > declarations may be required for `inb'/`outb', etc.).
-[...]
-> With dfx_use_mmio changed as you propose above things compile on s390
-> which previously ran into missing (now __compile_error()) inl() via
-> dfx_port_read_long() -> dfx_inl() ->  inl().
+One complication, however, is that it changes state in a particular call
+to credit_entropy_bits(), which might be made from atomic context. So
+rather than changing it then, we keep around the same state variable we
+had before, but the next time it's used from non-atomic context, we
+change it lazily then.
 
- Great, thanks for checking!  And I note referring `__compile_error' is 
-roughly equivalent to a dummy declaration, so you've got that part sorted.
+This is an RFC for now because it seems a bit complicated and fiddly,
+and potentially not worth the complexity. I'm interested to hear if
+people have opinions about this or if there's a better way to do it.
 
-> Looking at the other uses of dfx_use_mmio I notice however that in
-> dfx_get_bars(), inb() actually gets called when dfx_use_mmio is true.
-> This happens if dfx_bus_eisa is also true. Now that variable is just
-> the cached result of DFX_BUS_EISA(dev) which is defined to 0 if
-> CONFIG_EISA is unset. I'm not 100% sure if going through a local
-> variable is still considered trivial enough dead code elimination, at
-> least it works for me™. I did also check the GCC docs and they
-> explicitly say that __attribute__(error) is supposed to be used when
-> dead code elimination gets rid of the error paths.
+Cc: Theodore Ts'o <tytso@mit.edu>
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/char/random.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
- Yeah, dead code elimination is supposed to handle such cases.  The local
-automatic variable is essentially a syntactic feature not to use the same 
-expression inline over and over throughout a function (for clarity the 
-variable should probably be declared `const', but that is not essential) 
-and it is up to the compiler whether to reuse the value previously 
-calculated or to re-evaluate the expression.
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 845f610b6611..977093022430 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -75,12 +75,13 @@
+  * crng_init =  0 --> Uninitialized
+  *		1 --> Initialized
+  *		2 --> Initialized from input_pool
++ *		3 --> Initialized from input_pool and static key set
+  *
+  * crng_init is protected by base_crng->lock, and only increases
+- * its value (from 0->1->2).
++ * its value (from 0->1->2->3).
+  */
+ static int crng_init = 0;
+-#define crng_ready() (likely(crng_init > 1))
++static DEFINE_STATIC_KEY_FALSE(crng_ready_static);
+ /* Various types of waiters for crng_init->2 transition. */
+ static DECLARE_WAIT_QUEUE_HEAD(crng_init_wait);
+ static struct fasync_struct *fasync;
+@@ -96,6 +97,17 @@ static int ratelimit_disable __read_mostly;
+ module_param_named(ratelimit_disable, ratelimit_disable, int, 0644);
+ MODULE_PARM_DESC(ratelimit_disable, "Disable random ratelimit suppression");
+ 
++static bool crng_ready_slowpath(void)
++{
++	if (crng_init <= 1)
++		return false;
++	if (in_atomic() || irqs_disabled() || cmpxchg(&crng_init, 2, 3) != 2)
++		return true;
++	static_branch_enable(&crng_ready_static);
++	return true;
++}
++#define crng_ready() (static_branch_likely(&crng_ready_static) || unlikely(crng_ready_slowpath()))
++
+ /*
+  * Returns whether or not the input pool has been seeded and thus guaranteed
+  * to supply cryptographically secure random numbers. This applies to: the
+-- 
+2.35.1
 
-> I think we also need a "depends on HAS_IOPORT" for "config HAVE_EISA"
-> just as I'm adding for "config ISA".
-
- Oh absolutely!  There's the slot-specific port I/O space that is used to 
-identify EISA option cards in device discovery, so no EISA device will 
-ever work without port I/O.  Have a look at `decode_eisa_sig' in 
-drivers/eisa/eisa-bus.c for the very obvious code.  Note that some ISA 
-cards can be configured to appear as EISA devices as well (I have a 3c509B 
-Ethernet NIC set up that way).
-
-  Maciej

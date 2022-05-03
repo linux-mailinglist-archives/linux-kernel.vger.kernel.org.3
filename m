@@ -2,124 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55AAC518C8F
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 20:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54CA7518C92
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 20:48:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241635AbiECSvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 14:51:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40134 "EHLO
+        id S241643AbiECSwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 14:52:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233688AbiECSvs (ORCPT
+        with ESMTP id S233688AbiECSwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 14:51:48 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4263F888
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 11:48:13 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id qe3-20020a17090b4f8300b001dc24e4da73so2191894pjb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 11:48:13 -0700 (PDT)
+        Tue, 3 May 2022 14:52:18 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE53124F39
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 11:48:44 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id l18so35094014ejc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 11:48:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=zepmySBnv63WSkAXdeQNdsshIcZAMk3EbNb3138mR5I=;
-        b=bPTLq9HfixcNLyVJaD/IrjOzYpPYh6ISpk4y9g70RAzYOYURAhNFSKi9A8tlEgtCuJ
-         iHj76bj+ybFYWsdpewyIJ3JKcaRbYMR7FX+0Q/hYkNlr8qX9BEK1lv4F9wffhLucBx3q
-         SylUmT+RO9ZZ/BVTL5k64FhSzsgHlNaUBFLmE/U4/LP9YcLC2OZCh7DaHU0TaxBPJ2Dx
-         2NbnofXzs6vgcN9+tV/SLoEc+zEYD3D5rICX0xAIdUFNtq7wKMpc5IglomUTKK4yxDaY
-         ShhRYAJ/B66lGc7uGfFrMJbYDfmbVro4tMSlHoufl/pWmplvDYL/1g+YQftWwZAso+8+
-         8HlQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=B6iYV5uPdXrRA/+rFiUJ0dX1+T8qkpqbtKApdzTC9jU=;
+        b=fN4aZ5Pkz4/NffcBeusp6ZmX6xWXXm6KVaRLrLOhrVik3VekQpp5XYbUkUXDZmfcOb
+         LpA1MJ5Nr0R9JmutYt0RNhaFmNIisNhoW22tepfDY8yYh2so5MF4Z6gt7hKsMCu9dTco
+         Pmf2nJuaek4ZgeVVDgTitiwbL+s5efgc2qVZdxGifFlANxcwUZ06BgMX7pRPyJFqvnxi
+         i9RYMHR4QIZOSegomOzd2xPQ4vpEsWRjqLyoLYF6rfI58pGIFSZzXTnwRXbCvuMjgrAV
+         ISgU55gNYOKkyHV2XFMITxM3FQ5AHDGaToRNYItvQzy+1XQJSFQLdcxQJD/O/IvYZ/3O
+         +5bA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zepmySBnv63WSkAXdeQNdsshIcZAMk3EbNb3138mR5I=;
-        b=Npzq9f4GgdqxVk6Im99OOnSnmZkkHPolWUKSoUjI3fjY4orn8YTh6/KR44n1yq4dyh
-         8ueeOhbJZhdR9dWhlBc5kmZXCQxPaTcC4H0HwOVs0lxzzqgnyF1WI4MwzpkEr6lFCy0Z
-         JVxQ2hGX4BeP/6ghhtSpcI5uZWgap7Uz5AOaeKgo1qpt0I5VmZ35eDJjM9YmBY9iFbuM
-         GV33F9VdHoPrBFv2x56qxehdsshWFwSL9oLrBOEAaB19WC7juU3kYp9JRfNS9ILh1arq
-         igLqqG8oAYqspu1E6w3YuiN1XCmDIBoz/8jc5dpbOWKX3J2g8FL7f7m/jVXbsMmSdpEm
-         rm8A==
-X-Gm-Message-State: AOAM531XGDX8I/caQt/PRSokzhYYYkYJ2avDC1JivhFEl+Q3GAouBGme
-        pvE/jA9Sx7LR6lttaJe/965hMQ==
-X-Google-Smtp-Source: ABdhPJzGH6bZd7Lk7Z4f76hg2wclxCUfrHdcZ+b6yafpH1Mw5FD+OJyW444A9VnG32wg6W+XMssHDQ==
-X-Received: by 2002:a17:903:246:b0:153:857c:a1f6 with SMTP id j6-20020a170903024600b00153857ca1f6mr17679441plh.153.1651603692636;
-        Tue, 03 May 2022 11:48:12 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id 30-20020a63125e000000b003c291b46f7esm824358pgs.18.2022.05.03.11.48.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 11:48:12 -0700 (PDT)
-Date:   Tue, 3 May 2022 18:48:08 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 00/12] KVM: SVM: Fix soft int/ex re-injection
-Message-ID: <YnF46K33TOKqpAUs@google.com>
-References: <cover.1651440202.git.maciej.szmigiero@oracle.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=B6iYV5uPdXrRA/+rFiUJ0dX1+T8qkpqbtKApdzTC9jU=;
+        b=ToonJUNdobnW9ZM3mMPm2IhGb1eZWS39igAc4XQt4A//tRoIhz/uDbJworW3zNPQlD
+         sUANZft5esKvyYRD8ADhUAZM8hkjzW8jRT4cqFEdjLobrJfjLBG0ryBWuaaC4Ykge5Vh
+         UGHUI1O1ZVGXlGrfhVSYexmsZllmNAVLsq/5lwFPUHaRgodlxtzs/Ag0BKHuQ2KTj6Qt
+         nHV0hx4DkIDc4GKKeJQrqmhZ5Z90V0RgBsNBWUPQsq/zVxOU3Zt9rq5GpAeTptBZNybo
+         lLyyNPS+Px5ZBnC7JA2+hRCW0d8mMMTWcayk+rMbyHXa9S6a4k+gQmKzim5D4mGZNxQq
+         TAEA==
+X-Gm-Message-State: AOAM530WDEPvi0LzbNb3VTlA18GqFrelQELCLFaTbRjlMkeX6Rafgc2r
+        JTXw5ZuCLMduXocNd+HiADKJ+Skljuls4OTc2kSHbQ==
+X-Google-Smtp-Source: ABdhPJxTs3UtrVmHXECRu6bpJzFvoIrg+BgnljB4OAgBhf3PrID6OZTOQO/sPQIwP5bxJaaMLCVJBrJlPFbkq+RHFnQ=
+X-Received: by 2002:a17:907:72ce:b0:6f4:5a57:320c with SMTP id
+ du14-20020a17090772ce00b006f45a57320cmr9404297ejc.75.1651603723165; Tue, 03
+ May 2022 11:48:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1651440202.git.maciej.szmigiero@oracle.com>
+References: <20220430045639.839186-1-davidgow@google.com> <CAGS_qxrVnDnUD=0f8vX5C2SWG2mxxXdAWU9A+P7h-K2Y1nm88A@mail.gmail.com>
+ <CABVgOS=W8ub72D2LWwDsbfNBO6mFpceZWm+r+8Ct53pUcFJ_4g@mail.gmail.com>
+In-Reply-To: <CABVgOS=W8ub72D2LWwDsbfNBO6mFpceZWm+r+8Ct53pUcFJ_4g@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 3 May 2022 13:48:31 -0500
+Message-ID: <CAGS_qxpOFQ-ZpV2Jw1VEfggxKDqA57zRTY2LWZiK=iNMMo5QLA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: Add list of all valid test configs on UML
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 02, 2022, Maciej S. Szmigiero wrote:
-> From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
-> 
-> This series is an updated version of Sean's SVM soft interrupt/exception
-> re-injection fixes patch set, which in turn extended and generalized my
-> nSVM L1 -> L2 event injection fixes series.
-> 
-> Detailed list of changes in this version:
-> * "Downgraded" the commit affecting !nrips CPUs to just drop nested SVM
-> support for such parts instead of SVM support in general,
-> 
-> * Removed the BUG_ON() from svm_inject_irq() completely, instead of
-> replacing it with WARN() - Maxim has pointed out it can still be triggered
-> by userspace via KVM_SET_VCPU_EVENTS,
-> 
-> * Updated the new KVM self-test to switch to an alternate IDT before attempting
-> a second L1 -> L2 injection to cause intervening NPF again,
-> 
-> * Added a fix for L1/L2 NMI state confusion during L1 -> L2 NMI re-injection,
-> 
-> * Updated the new KVM self-test to also check for the NMI injection
-> scenario being fixed (that was found causing issues with a real guest),
-> 
-> * Changed "kvm_inj_virq" trace event "reinjected" field type to bool,
-> 
-> * Integrated the fix from patch 5 for nested_vmcb02_prepare_control() call
-> argument in svm_set_nested_state() to patch 1,
-> 
-> * Collected Maxim's "Reviewed-by:" for tracepoint patches.
-> 
-> Previous versions:
-> Sean's v2:
-> https://lore.kernel.org/kvm/20220423021411.784383-1-seanjc@google.com
-> 
-> Sean's v1:
-> https://lore.kernel.org/kvm/20220402010903.727604-1-seanjc@google.com
-> 
-> My original series:
-> https://lore.kernel.org/kvm/cover.1646944472.git.maciej.szmigiero@oracle.com
-> 
-> Maciej S. Szmigiero (4):
->   KVM: nSVM: Sync next_rip field from vmcb12 to vmcb02
->   KVM: SVM: Don't BUG if userspace injects an interrupt with GIF=0
+On Tue, May 3, 2022 at 1:37 AM David Gow <davidgow@google.com> wrote:
+>
+> On Tue, May 3, 2022 at 6:37 AM Daniel Latypov <dlatypov@google.com> wrote:
+> >
+> > On Fri, Apr 29, 2022 at 11:56 PM David Gow <davidgow@google.com> wrote:
+> > >
+> > > It's often desirable (particularly in test automation) to run as many
+> > > tests as possible. This config enables all the tests which work as
+> > > builtins under UML at present, increasing the total tests run from 156
+> > > to 342 (not counting 36 'skipped' tests).
+> >
+> > Just to clear up potential confusion for others, I'll note that these
+> > aren't counting test cases.
+> > This is from kunit.py's output, so it counts each parameter from
+> > parameterized tests as "subtests."
+> >
+> > Copying my command from
+> > https://kunit-review.googlesource.com/c/linux/+/5249, one can use this
+> > to count the # of test cases.
+> > $ ./tools/testing/kunit/kunit.py run --kunitconfig=...
+> > --raw_output=kunit --kernel_args=kunit.action=list | egrep
+> > '^[a-z0-9_-]+\.[a-z0-9_-]+'
+> >
+> > I see this enabling a total of 260 test _cases_ (including skipped).
+> >
+> > The default (basically just CONFIG_KUNIT_ALL_TESTS=y) gives 192
+> > (including skipped).
+> >
+>
+> Yup, that's definitely the case. I guess I still was thinking in KTAP
+> terms, where all subtests are effectively tests.
+>
+> That being said, I do think the total (sub)test (including parameters,
+> etc) number is the one that's more visible: not only does kunit_tool
+> print it, but it's also what we've been using as our go to "number of
+> tests" generally.
 
-LOL, this should win some kind of award for most ridiculous multi-author patch :-)
+Yes, I agree it's the number to use here.
+If there's a v2 of this patch, we could also reword the commit message
+a bit to make it more explicit.
+If not, this seems fine as-is. The only issue I saw was a minor typo.
 
-Series looks good, thanks!
+Re goto for "number of tests."
+Reminder, we've also been using this to count "# tests" :P
+$ git grep 'KUNIT_CASE' | grep -Ev
+'^Documentation/|get_metrics.sh|include/kunit/test.h' | wc -l
+This avoids us having to figure out how to build all the tests,
+sidesteps the problem that subtests can be dynamically generated via
+parameterized testing, etc.
+
+>
+> > >
+> > > They can be run with:
+> > > ./tools/testing/kunit/kunit.py run
+> > > --kunitconfig=./tools/testing/kunit/configs/all_tests_uml.config
+> > >
+> > > This acts as an in-between point between the KUNIT_ALL_TESTS config
+> > > (which enables only tests whose dependencies are already enabled), and
+> > > the kunit_tool --alltests option, which tries to use allyesconfig,
+> > > taking a very long time to build and breaking very often.
+> > >
+> > > Signed-off-by: David Gow <davidgow@google.com>
+> >
+> > Tested-by: Daniel Latypov <dlatypov@google.com>
+> >
+> > Looks good to me, some small comments below.
+> >
+> > > ---
+> > >  .../kunit/configs/all_tests_uml.config        | 37 +++++++++++++++++++
+> > >  1 file changed, 37 insertions(+)
+> > >  create mode 100644 tools/testing/kunit/configs/all_tests_uml.config
+> > >
+> > > diff --git a/tools/testing/kunit/configs/all_tests_uml.config b/tools/testing/kunit/configs/all_tests_uml.config
+> > > new file mode 100644
+> > > index 000000000000..bdee36bef4a3
+> > > --- /dev/null
+> > > +++ b/tools/testing/kunit/configs/all_tests_uml.config
+> > > @@ -0,0 +1,37 @@
+> > > +# This config enables as many tests as possible under UML.
+> > > +# It is intended for use in continuous integration systems and similar for
+> > > +# automated testing of as much as possible.
+> > > +# The config is manually maintained, though it uses KUNIT_ALL_TESTS=y to enable
+> > > +# any tests whose dependencies are already satisfied. Please feel free to add
+> > > +# more options if they any new tests.
+> >
+> > missing: "enable"?
+> > "if they enable any new tests"
+> >
+> Whoops, I was switching from "there are any" to "if they enable any"
+> and clearly got distracted halfway through. :-)
+>
+> > Hmm, should we state a preference for how heavy (time or
+> > resource-wise) tests should be?
+> > Because the comment says it's meant for automation, but I can imagine
+> > humans wanting to run it.
+> > (I'm completely fine with us not stating one, just throwing the idea
+> > out there for discussion)
+>
+> I think we're probably okay with being a little bit lenient on test
+> times. The time_test_cases.time64_to_tm_test_date_range and similar
+> tests take quite a long time in some situations already (older hw,
+> running under some emulators), but is generally pretty close to
+> instant under most UML setups. Particularly given that not building
+> with allyesconfig already saves us many, many minutes of time.
+
+Agreed on all points.
+I personally think it's reasonable to leave things as-is.
+
+We don't have any problematic tests that work on UML yet.

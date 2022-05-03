@@ -2,62 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11211519104
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 00:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB84519121
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 00:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232923AbiECWJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 18:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51284 "EHLO
+        id S243500AbiECWLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 18:11:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233631AbiECWJa (ORCPT
+        with ESMTP id S233631AbiECWLv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 18:09:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E850201BB;
-        Tue,  3 May 2022 15:05:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 25834B82028;
-        Tue,  3 May 2022 22:05:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAFFEC385A9;
-        Tue,  3 May 2022 22:05:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651615553;
-        bh=oXRDlcllC0cjULPtqKpnnLAaTtBjrH2yAKjYZHOmxEg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kOgp61XjaLQHEUr+7iCLidSubGhFGYa9ZfqSwTIe88Kaow5K0+WdhIpmXruBl0hJA
-         jOAPSXk5fDbtvCumHKrFR/rbTbt42IZvFALXjqsLVOO4797SHPZmsM38XK7JXYbbZQ
-         HR1y9+53GpK168pLYVviAKv6nD5Jbknho+UWI/sveR8DsXGI3e3i3RHUeYR01HOzy3
-         8veDQD03CMdNrxdDpW1gBWnSrSFunUW8VJXlHnOGJqDcfTBFi3Vu+z+bY586dIfQgy
-         GLhrRsdGut+aqUnxntNe+l/OWXTAsN9JrO6awlelfPG2X+1lQQD5kMgw/wzDfwW7b8
-         2r33J7HeuBZCA==
-Received: by pali.im (Postfix)
-        id CD3D398A; Wed,  4 May 2022 00:05:50 +0200 (CEST)
-Date:   Wed, 4 May 2022 00:05:50 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Tzung-Bi Shih <tzungbi@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] watchdog: max63xx_wdt: Add support for specifying
- WDI logic via GPIO
-Message-ID: <20220503220550.3jczn2hzc5me34qj@pali>
-References: <20220429131349.21229-1-pali@kernel.org>
- <20220429131349.21229-2-pali@kernel.org>
- <YnCoQUGQsXIfbowQ@google.com>
- <6f69677c-18d9-abd9-93d7-cf1f29603ed6@roeck-us.net>
+        Tue, 3 May 2022 18:11:51 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0761E41F94
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 15:08:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651615698; x=1683151698;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=nerbnEt4SBOpwjFze36Ela4kKXjEwa3lOOtHVDvZlP0=;
+  b=aE6nPrTcecYb6HLvI34C3NWspuWUcvQOIINm7ptnIeHGhDx8cE7v2zN3
+   qtBf63CGfHZ0z2NJgSvElOFTJFxuKrxOFSO/sb0s6od8H8mv6LTd03UZG
+   zDRCUymrFxlnYz+kOYAOkM14oiQLcAR7/VJuWy3IhHDy3R//OfIgItUqG
+   Q67m/WR8494v+NyvpJYe78X2gTvRm/JV9BuCzVx01VQ2lUxidJkkkvvdD
+   gAEKjLI3LOxRhQhuOD92KIYRG/Ua8O5uTsq9zOiVL3dTT3Kk/TiZzkaBO
+   VuuAp61aSwtbM7XnH6l4HrOluHizwaKrTnFPHJZ1zks+l1MKQaT+rAC1U
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="266445598"
+X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
+   d="scan'208";a="266445598"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 15:08:17 -0700
+X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
+   d="scan'208";a="536539873"
+Received: from hsuhsiao-mobl2.gar.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.61.84])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 15:08:13 -0700
+Message-ID: <42e1af54bef03361c1a23dac8d1e4ffd8e66114a.camel@intel.com>
+Subject: Re: [PATCH v5 1/3] x86/tdx: Add TDX Guest attestation interface
+ driver
+From:   Kai Huang <kai.huang@intel.com>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Wander Costa <wander@redhat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Wed, 04 May 2022 10:08:11 +1200
+In-Reply-To: <cd48825b-7197-fc04-51e6-04bd8502d286@linux.intel.com>
+References: <20220501183500.2242828-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <20220501183500.2242828-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <5473f606bd8e60dd7b8d58a540285d126a1361bd.camel@intel.com>
+         <e5aed619-20ce-7eb3-22a3-64b51de9cce3@linux.intel.com>
+         <b8eadd3079101a2cf93ee87d36dbedf93d8a2725.camel@intel.com>
+         <e673ea3d-ae4f-39ed-33a5-c6480e58c6d8@linux.intel.com>
+         <CAAq0SU=TPHQ4q8Dj583m0yfVytygN81BTEe8vU5GCOoFau+LWw@mail.gmail.com>
+         <cd48825b-7197-fc04-51e6-04bd8502d286@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6f69677c-18d9-abd9-93d7-cf1f29603ed6@roeck-us.net>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,66 +79,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday 02 May 2022 21:37:16 Guenter Roeck wrote:
-> On 5/2/22 20:57, Tzung-Bi Shih wrote:
-> > On Fri, Apr 29, 2022 at 03:13:49PM +0200, Pali Rohár wrote:
-> > > @@ -27,6 +27,7 @@
-> > >   #include <linux/io.h>
-> > >   #include <linux/slab.h>
-> > >   #include <linux/property.h>
-> > > +#include <linux/gpio/consumer.h>
-> > 
-> > It would be better to keep them alphabetically.  Anyway, they aren't sorted
-> > originally...
-> > 
-> > > +static void max63xx_gpio_ping(struct max63xx_wdt *wdt)
-> > > +{
-> > > +	spin_lock(&wdt->lock);
-> > 
-> > Does it really need to acquire the lock?  It looks like the lock is to prevent
-> > concurrent accesses to the mmap in max63xx_mmap_ping() and max63xx_mmap_set().
-> > 
+On Tue, 2022-05-03 at 08:09 -0700, Sathyanarayanan Kuppuswamy wrote:
 > 
-> Actually, that doesn't work at all. spin_lock() directly contradicts
-> with gpiod_set_value_cansleep().
+> On 5/3/22 7:38 AM, Wander Costa wrote:
+> > > I don't want to pollute the dmesg logs if possible. For IOCTL use case,
+> > > the return value can be used to understand the failure reason from user
+> > > code. But for initcall failure, pr_err message is required to understand
+> > > the failure reason.
+> > How often is this call expected to fail?
 > 
-> > > +	gpiod_set_value_cansleep(wdt->gpio_wdi, 1);
-> > > +	udelay(1);
-> > 
-> > Doesn't it need to include <linux/delay.h> for udelay()?
-> > 
-> > > @@ -225,10 +240,19 @@ static int max63xx_wdt_probe(struct platform_device *pdev)
-> > >   		return -EINVAL;
-> > >   	}
-> > > +	wdt->gpio_wdi = devm_gpiod_get(dev, NULL, GPIOD_FLAGS_BIT_DIR_OUT);
-> > > +	if (IS_ERR(wdt->gpio_wdi) && PTR_ERR(wdt->gpio_wdi) != -ENOENT)
-> > 
-> > Use devm_gpiod_get_optional() to make the intent clear.  Also, it gets rid of
-> > the check for -ENOENT.
-> > 
-> > > +		return dev_err_probe(dev, PTR_ERR(wdt->gpio_wdi),
-> > > +				     "unable to request gpio: %ld\n",
-> > > +				     PTR_ERR(wdt->gpio_wdi));
-> > 
-> > It doesn't need to again print for PTR_ERR(wdt->gpio_wdi).  dev_err_probe()
-> > prints the error.
-> > 
-> > >   	err = max63xx_mmap_init(pdev, wdt);
-> > >   	if (err)
-> > >   		return err;
-> > > +	if (!IS_ERR(wdt->gpio_wdi))
-> > > +		wdt->ping = max63xx_gpio_ping;
-> > 
-> > Thus, the max63xx_gpio_ping() overrides max63xx_mmap_ping() if the GPIO was
-> > provided?  It would be better to mention the behavior in the commit message.
-> > 
-> > Also, could both the assignments of `wdt->gpio_wdi` and `wdt->ping` happen
-> > after max63xx_mmap_init()?
+> In general, it should not fail (so very low fail frequency). But the
+> point is, we can easily understand this failure from user end. So we
+> don't need to print more in non-debug environment.
 > 
+> > 
 
-Hello! I'm going to look at all these issues. Recently I sent max63
-watchdog driver also into U-Boot and seems that I mixed DTS and driver
-code between U-Boot and Kernel... and tested something mixed.
+To support your statement, all the error codes return to userspace need to be
+clearly documented around the IOCTL in the uapi header.  But I think you have to
+do this anyway.
 
-I will do new testing again, and will check that I'm testing correct
-code.
+-- 
+Thanks,
+-Kai
+
+

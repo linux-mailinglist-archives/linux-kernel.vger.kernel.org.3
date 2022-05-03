@@ -2,107 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCACD5184F1
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 15:04:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC805184F2
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 15:04:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235773AbiECNIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 09:08:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48588 "EHLO
+        id S235776AbiECNIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 09:08:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231274AbiECNIM (ORCPT
+        with ESMTP id S235783AbiECNIT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 09:08:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6539E22510;
-        Tue,  3 May 2022 06:04:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1DD7CB81E5F;
-        Tue,  3 May 2022 13:04:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D99E7C385B3;
-        Tue,  3 May 2022 13:04:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651583077;
-        bh=IdSAzMybVRLKN4AFDOTIxWqFez/RALrhrUunMeJzeKE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=CqnpHbyKGE0sKKpZMtH3fXMylGqWPteGkZ9aZrOqXT208NXckFU78g9AC+/VPFy/t
-         Qn7jaKdgDOx5QfHpFFf7bc9LXYUa/NPGKgDWKhFfKnwh/f1OtoXnM97TwxpCJ9vKim
-         kcUZjrLhXxyY1S8t+a28pimurmNfrbQb/KD+xCNBcwiEGDwBHUVsc9g1+FreX+O2nA
-         tKw1MITmoSF/W+iyRrZUM9D1hwkj7IBeQ5fM3oiOh4EQjow0h4MLJuKZ1urApAEHmy
-         4/5OU6Ve6HzZmPh5HaAyCV75QfMZLjXk5tZXNm6LkDuNEOhp2bKetoSQifJXcw3DL9
-         T/tMvQnfEvJuA==
-Received: by mail-pj1-f43.google.com with SMTP id r9so15234422pjo.5;
-        Tue, 03 May 2022 06:04:37 -0700 (PDT)
-X-Gm-Message-State: AOAM532xz46HDYJ9p/gIAVkc5R1oSIrvi4aivhzH+Ux0ncA/G+19Gxdy
-        azuiMyesCY7Ry1Mm9cJm1j5YqNae1MluqeU92g==
-X-Google-Smtp-Source: ABdhPJyahR+0DO3NSgFi6ExO8mn7JDDzpO5E6qP01/f5TuYbXi/hLZSVssQ3itrMFpAjw2J/Bw41+w2gNHG+Q0pRbpU=
-X-Received: by 2002:a17:902:6a8a:b0:156:8ff6:daf0 with SMTP id
- n10-20020a1709026a8a00b001568ff6daf0mr16347250plk.117.1651583077384; Tue, 03
- May 2022 06:04:37 -0700 (PDT)
+        Tue, 3 May 2022 09:08:19 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF5E924977
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 06:04:44 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 95D8C1042;
+        Tue,  3 May 2022 06:04:44 -0700 (PDT)
+Received: from [10.57.80.111] (unknown [10.57.80.111])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CCE073F774;
+        Tue,  3 May 2022 06:04:42 -0700 (PDT)
+Message-ID: <8b3d31ef-caf7-da92-fa95-0df378d5b091@arm.com>
+Date:   Tue, 3 May 2022 14:04:37 +0100
 MIME-Version: 1.0
-References: <20220428114049.1456382-1-michael@walle.cc> <20220428114049.1456382-2-michael@walle.cc>
-In-Reply-To: <20220428114049.1456382-2-michael@walle.cc>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 3 May 2022 08:04:23 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqKmgsErk41D8MBsQxLfmk16UYVu8+Z5SkwJ6W-obhtysQ@mail.gmail.com>
-Message-ID: <CAL_JsqKmgsErk41D8MBsQxLfmk16UYVu8+Z5SkwJ6W-obhtysQ@mail.gmail.com>
-Subject: Re: [PATCH net-next 1/2] dt-bindings: net: lan966x: remove PHY reset
-To:     Michael Walle <michael@walle.cc>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        netdev <netdev@vger.kernel.org>, devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [RESEND PATCH v8 00/11] Fix BUG_ON in vfio_iommu_group_notifier()
+Content-Language: en-GB
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        Qian Cai <quic_qiancai@quicinc.com>
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+References: <20220418005000.897664-1-baolu.lu@linux.intel.com>
+ <20220502161204.GA22@qian> <20220502164216.GP8364@nvidia.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220502164216.GP8364@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 6:40 AM Michael Walle <michael@walle.cc> wrote:
->
-> The PHY reset was intended to be a phandle for a special PHY reset
-> driver for the integrated PHYs as well as any external PHYs. It turns
-> out, that the culprit is how the reset of the switch device is done.
-> In particular, the switch reset also affects other subsystems like
-> the GPIO and the SGPIO block and it happens to be the case that the
-> reset lines of the external PHYs are connected to a common GPIO line.
-> Thus as soon as the switch issues a reset during probe time, all the
-> external PHYs will go into reset because all the GPIO lines will
-> switch to input and the pull-down on that signal will take effect.
->
-> So even if there was a special PHY reset driver, it (1) won't fix
-> the root cause of the problem and (2) it won't fix all the other
-> consumers of GPIO lines which will also be reset.
->
-> It turns out, the Ocelot SoC has the same weird behavior (or the
-> lack of a dedicated switch reset) and there the problem is already
-> solved and all the bits and pieces are already there and this PHY
-> reset property isn't not needed at all.
->
-> There are no users of this binding. Just remove it.
+On 2022-05-02 17:42, Jason Gunthorpe wrote:
+> On Mon, May 02, 2022 at 12:12:04PM -0400, Qian Cai wrote:
+>> On Mon, Apr 18, 2022 at 08:49:49AM +0800, Lu Baolu wrote:
+>>> Hi Joerg,
+>>>
+>>> This is a resend version of v8 posted here:
+>>> https://lore.kernel.org/linux-iommu/20220308054421.847385-1-baolu.lu@linux.intel.com/
+>>> as we discussed in this thread:
+>>> https://lore.kernel.org/linux-iommu/Yk%2Fq1BGN8pC5HVZp@8bytes.org/
+>>>
+>>> All patches can be applied perfectly except this one:
+>>>   - [PATCH v8 02/11] driver core: Add dma_cleanup callback in bus_type
+>>> It conflicts with below refactoring commit:
+>>>   - 4b775aaf1ea99 "driver core: Refactor sysfs and drv/bus remove hooks"
+>>> The conflict has been fixed in this post.
+>>>
+>>> No functional changes in this series. I suppress cc-ing this series to
+>>> all v8 reviewers in order to avoid spam.
+>>>
+>>> Please consider it for your iommu tree.
+>>
+>> Reverting this series fixed an user-after-free while doing SR-IOV.
+>>
+>>   BUG: KASAN: use-after-free in __lock_acquire
+>>   Read of size 8 at addr ffff080279825d78 by task qemu-system-aar/22429
+>>   CPU: 24 PID: 22429 Comm: qemu-system-aar Not tainted 5.18.0-rc5-next-20220502 #69
+>>   Call trace:
+>>    dump_backtrace
+>>    show_stack
+>>    dump_stack_lvl
+>>    print_address_description.constprop.0
+>>    print_report
+>>    kasan_report
+>>    __asan_report_load8_noabort
+>>    __lock_acquire
+>>    lock_acquire.part.0
+>>    lock_acquire
+>>    _raw_spin_lock_irqsave
+>>    arm_smmu_detach_dev
+>>    arm_smmu_detach_dev at drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c:2377
+>>    arm_smmu_attach_dev
+> 
+> Hum.
+> 
+> So what has happened is that VFIO does this sequence:
+> 
+>   iommu_detach_group()
+>   iommu_domain_free()
+>   iommu_group_release_dma_owner()
+> 
+> Which, I think should be valid, API wise.
+> 
+>  From what I can see reading the code SMMUv3 blows up above because it
+> doesn't have a detach_dev op:
+> 
+> 	.default_domain_ops = &(const struct iommu_domain_ops) {
+> 		.attach_dev		= arm_smmu_attach_dev,
+> 		.map_pages		= arm_smmu_map_pages,
+> 		.unmap_pages		= arm_smmu_unmap_pages,
+> 		.flush_iotlb_all	= arm_smmu_flush_iotlb_all,
+> 		.iotlb_sync		= arm_smmu_iotlb_sync,
+> 		.iova_to_phys		= arm_smmu_iova_to_phys,
+> 		.enable_nesting		= arm_smmu_enable_nesting,
+> 		.free			= arm_smmu_domain_free,
+> 	}
+> 
+> But it is internally tracking the domain inside the master - so when
+> the next domain is attached it does this:
+> 
+> static void arm_smmu_detach_dev(struct arm_smmu_master *master)
+> {
+> 	struct arm_smmu_domain *smmu_domain = master->domain;
+> 
+> 	spin_lock_irqsave(&smmu_domain->devices_lock, flags);
+> 
+> And explodes as the domain has been freed but master->domain was not
+> NULL'd.
+> 
+> It worked before because iommu_detach_group() used to attach the
+> default group and that was before the domain was freed in the above
+> sequence.
 
-Seems there was 1 user:
+Oof, I totally overlooked the significance of that little subtlety in 
+review :(
 
-/builds/robherring/linux-dt/Documentation/devicetree/bindings/net/microchip,lan966x-switch.example.dtb:
-switch@e0000000: resets: [[4294967295, 0], [4294967295, 0]] is too
-long
- From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml
-/builds/robherring/linux-dt/Documentation/devicetree/bindings/net/microchip,lan966x-switch.example.dtb:
-switch@e0000000: reset-names: ['switch', 'phy'] is too long
- From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml
+> I'm guessing SMMU3 needs to call it's arm_smmu_detach_dev(master) from
+> the detach_dev op and null it's cached copy of the domain, but I don't
+> know this driver.. Robin?
 
-Please fix as this is now failing in linux-next.
+The original intent was that .detach_dev is deprecated in favour of 
+default domains, and when the latter are in use, a device is always 
+attached *somewhere* once probed (i.e. group->domain is never NULL). At 
+face value, the neatest fix IMO would probably be for SMMUv3's 
+.domain_free to handle smmu_domain->devices being non-empty and detach 
+them at that point. However that wouldn't be viable for virtio-iommu or 
+anyone else keeping an internal one-way association of devices to their 
+current domains.
 
-Rob
+If we're giving up entirely on that notion of .detach_dev going away 
+then all default-domain-supporting drivers probably want checking to 
+make sure that path hasn't bitrotted; both Arm SMMU drivers had it 
+proactively removed 6 years ago; virtio-iommu never had it at all; newer 
+drivers like apple-dart have some code there, but it won't have ever run 
+until now.
+
+We *could* stay true to the original paradigm by introducing some real 
+usage of IOMMU_DOMAIN_BLOCKED, such that we could keep one or more of 
+those around to actively attach to instead of having groups in this 
+unattached limbo state, but that's a bigger job involving adding support 
+to drivers as well; too much for a quick fix now...
+
+Robin.

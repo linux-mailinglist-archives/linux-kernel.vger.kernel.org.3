@@ -2,46 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80389517F5B
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 10:04:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E90B517F6A
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 10:06:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232596AbiECIIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 04:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42976 "EHLO
+        id S232617AbiECIIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 04:08:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232408AbiECIIB (ORCPT
+        with ESMTP id S232588AbiECIIV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 04:08:01 -0400
+        Tue, 3 May 2022 04:08:21 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB5C618381;
-        Tue,  3 May 2022 01:04:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D83241EAFA
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 01:04:47 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 73BDA1516;
-        Tue,  3 May 2022 01:04:29 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A5BD11516;
+        Tue,  3 May 2022 01:04:47 -0700 (PDT)
 Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 4A6D03F774;
-        Tue,  3 May 2022 01:04:27 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E55EE3F774;
+        Tue,  3 May 2022 01:04:46 -0700 (PDT)
 From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Scott Branden <sbranden@broadcom.com>,
-        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Ray Jui <rjui@broadcom.com>, Liviu Dudau <liviu.dudau@arm.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>, Rob Herring <robh@kernel.org>
-Subject: Re: (subset) [PATCH v2 4/9] arm64: dts: juno: drop useless 'dma-channels/requests' properties
-Date:   Tue,  3 May 2022 09:04:24 +0100
-Message-Id: <165156475719.2920732.8758785469502064309.b4-ty@arm.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>, linux-kernel@vger.kernel.org
+Cc:     Cristian Marussi <cristian.marussi@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] firmware: arm_scmi: Set clock latency to U32_MAX if it is not supported
+Date:   Tue,  3 May 2022 09:04:45 +0100
+Message-Id: <165156489185.2921185.14872526406815086549.b4-ty@arm.com>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220430121902.59895-5-krzysztof.kozlowski@linaro.org>
-References: <20220430121902.59895-1-krzysztof.kozlowski@linaro.org> <20220430121902.59895-5-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220428122913.1654821-1-sudeep.holla@arm.com>
+References: <20220428122913.1654821-1-sudeep.holla@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,20 +43,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 30 Apr 2022 14:18:57 +0200, Krzysztof Kozlowski wrote:
-> The pl330 DMA controller provides number of DMA channels and requests
-> through its registers, so duplicating this information (with a chance of
-> mistakes) in DTS is pointless.  Additionally the DTS used always wrong
-> property names which causes DT schema check failures - the bindings
-> documented 'dma-channels' and 'dma-requests' properties without leading
-> hash sign.
+On Thu, 28 Apr 2022 13:29:13 +0100, Sudeep Holla wrote:
+> As per the spec, the clock_enable_delay is the worst case latency
+> incurred by the platform to enable the clock. The value of 0 indicates
+> that the platform doesn't support the same and must be considered as
+> maximum latency for practical purposes.
+> 
+> Currently the value of 0 is assigned as is and is propogated to the clock
+> framework which can assume that the clock can support atomic enable operation.
 > 
 > [...]
 
-Applied to sudeep.holla/linux (for-next/juno), thanks!
 
-[4/9] arm64: dts: juno: drop useless 'dma-channels/requests' properties
-      https://git.kernel.org/sudeep.holla/c/b30ae5638d
+Applied to sudeep.holla/linux (for-next/scmi), thanks!
+
+[1/1] firmware: arm_scmi: Set clock latency to U32_MAX if it is not supported
+      https://git.kernel.org/sudeep.holla/c/7ad6b6ccba
 
 --
 Regards,

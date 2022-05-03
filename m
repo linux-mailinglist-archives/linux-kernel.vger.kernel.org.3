@@ -2,102 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E317D51971C
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 07:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E09519801
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 09:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344779AbiEDGDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 4 May 2022 02:03:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34586 "EHLO
+        id S1345344AbiEDHZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 4 May 2022 03:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344788AbiEDGDM (ORCPT
+        with ESMTP id S1345338AbiEDHZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 4 May 2022 02:03:12 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5AF2AE12;
-        Tue,  3 May 2022 22:59:36 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KtR433QQ5z4xXS;
-        Wed,  4 May 2022 15:59:31 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1651643971;
-        bh=C8XFNo0MACWuzzd3GeNsre8CYszj5XfLhRDPTpa0WTs=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=odIvWeIo7sy+7E938rOqDN4nNheG/V9tcPuj5+9aZeDCrqs4lBdqW90f3DZ4ygj33
-         fpNG17LjwHCdAf5yhIgbY+W0xg1LyDy8uFe3x2H07adoJikyiKiCv+wP2cokE0mY3Z
-         byt94S3010u4Tb+68MPxaG44Rs5IrNHuR0x2U/Pj2r6ffil2jRl5zPOehqBe4xWigQ
-         H+GcrF8y1ffJQUj+FUGBoO4b3xxXqhS+8p/4Da5U5jXmbLjni7Dj4DjwkuCjBWg3Lk
-         cOPOa5PtbIQQNisaEDy93H1ABL8cGgtUtPJqakI6OJUl6z19edrlKIckmN+dE0yoRe
-         EOrYRG8c/Nz2w==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Laurent Dufour <ldufour@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        stable@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v2] powerpc/rtas: Keep MSR[RI] set when calling RTAS
-In-Reply-To: <c33a2be3-d4b7-9b3b-c980-552f5de081be@linux.ibm.com>
-References: <20220401140634.65726-1-ldufour@linux.ibm.com>
- <87r15aveny.fsf@mpe.ellerman.id.au>
- <c33a2be3-d4b7-9b3b-c980-552f5de081be@linux.ibm.com>
-Date:   Wed, 04 May 2022 15:59:29 +1000
-Message-ID: <87ee19vnwe.fsf@mpe.ellerman.id.au>
+        Wed, 4 May 2022 03:25:21 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8896167F1;
+        Wed,  4 May 2022 00:21:46 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 242MCRCj030007;
+        Tue, 3 May 2022 00:51:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2021-07-09;
+ bh=g9paThm+Fsnp2BWLsmTw8WxlestNVGXIq3xS3NKyV2I=;
+ b=rEwDYggF5Wl2D1qSGwK6g1jUEdauuI2RYg4idRmm2NitjNsFCpUkwhbd6AVeLd25lFt4
+ 09hlxaXCPVPkDjreqs6/XFDQZd+YZlwm/Cv4O4U49c7yCgb/SRoax25PHT0kOBu4bCLQ
+ Sr2GdAT1jrA9S73RdU7pA+/nMXvD3RtJzOgkn08M5bJ9AMIh22UJHdfbTBDLA5yqfsvj
+ EbAL+n3yHWj5X+088IblmI/7fz9uVin5chS6l/6s6Hvpyk/AlQh25wsKlxdvitSwn/Lk
+ P6Zef9YOozAZpCp8wUFPvgF4vyaz9l22S6tlJFOfRaSFygT6VI3he30iOZCYlWGVCC8o ew== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3fruq0cp5h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 03 May 2022 00:51:55 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 2430op0L008940;
+        Tue, 3 May 2022 00:51:54 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x7p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 03 May 2022 00:51:54 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 2430pljM010389;
+        Tue, 3 May 2022 00:51:54 GMT
+Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fruj83x4g-13;
+        Tue, 03 May 2022 00:51:54 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     cgel.zte@gmail.com, kashyap.desai@broadcom.com,
+        sumit.saxena@broadcom.com
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        megaraidlinux.pdl@broadcom.com, linux-kernel@vger.kernel.org,
+        jejb@linux.ibm.com, Zeal Robot <zealci@zte.com.cn>,
+        shivasharan.srikanteshwara@broadcom.com,
+        Lv Ruyi <lv.ruyi@zte.com.cn>, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH] megaraid: fix error check return value of register_chrdev()
+Date:   Mon,  2 May 2022 20:51:23 -0400
+Message-Id: <165153836363.24053.6805660896758836737.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.35.2
+In-Reply-To: <20220418105755.2558828-1-lv.ruyi@zte.com.cn>
+References: <20220418105755.2558828-1-lv.ruyi@zte.com.cn>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: WgBq_sepvIPlWDiVpNmgjWGvceU0XsUy
+X-Proofpoint-GUID: WgBq_sepvIPlWDiVpNmgjWGvceU0XsUy
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Laurent Dufour <ldufour@linux.ibm.com> writes:
-> On 03/05/2022, 17:06:41, Michael Ellerman wrote:
->> Laurent Dufour <ldufour@linux.ibm.com> writes:
-...
->>> diff --git a/arch/powerpc/kernel/rtas.c b/arch/powerpc/kernel/rtas.c
->>> index 1f42aabbbab3..d7775b8c8853 100644
->>> --- a/arch/powerpc/kernel/rtas.c
->>> +++ b/arch/powerpc/kernel/rtas.c
->>> @@ -49,6 +49,11 @@ void enter_rtas(unsigned long);
->>>  
->>>  static inline void do_enter_rtas(unsigned long args)
->>>  {
->>> +	unsigned long msr;
->>> +
->>> +	msr = mfmsr();
->>> +	BUG_ON(!(msr & MSR_RI));
->> 
->> I'm not sure about this.
->> 
->> We call RTAS in some low-level places, so if we ever hit this BUG_ON
->> then it might cause us to crash badly, or recursively BUG.
->> 
->> A WARN_ON_ONCE() might be safer?
->
-> I'm afraid a BUG_ON is required here. Since MSR[RI] is set on RTAS exit so
-> if it was not set when calling RTAS, that's a real issue and should
-> generate unexpected behaviour.
->
-> Do you have places in mind where RTAS could be called with !MSR[RI]?
+On Mon, 18 Apr 2022 10:57:55 +0000, cgel.zte@gmail.com wrote:
 
-The main one I can think of is if someone is using
-CONFIG_UDBG_RTAS_CONSOLE, then udbg_rtascon_putc() is wired up as
-udbg_putc() and that might be called from anywhere, including xmon.
+> From: Lv Ruyi <lv.ruyi@zte.com.cn>
+> 
+> If major equal 0, register_chrdev() returns error code when it fails.
+> This function dynamically allocate a major and return its number on
+> success, so we should use "< 0" to check it instead of "!".
+> 
+> 
+> [...]
 
-There's also RTAS calls in low-level xics interrupt code, that might get
-called during panic/crash.
+Applied to 5.19/scsi-queue, thanks!
 
-I don't expect any of those places to be called with MSR[RI] unset, but
-I'm worried that if we're already crashing and for some reason MSR[RI]
-is unset, then that BUG_ON will just make things worse.
+[1/1] megaraid: fix error check return value of register_chrdev()
+      https://git.kernel.org/mkp/scsi/c/c5acd61dbb32
 
-eg. imagine taking a BUG_ON() for every character we try to print as
-part of an oops.
-
-Admittedly CONFIG_UDBG_RTAS_CONSOLE is old and probably not used much
-anymore, but I'm still a bit paranoid :)
-
-cheers
+-- 
+Martin K. Petersen	Oracle Linux Engineering

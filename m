@@ -2,112 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 800CB518489
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 14:45:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B0A251848B
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 14:45:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235526AbiECMsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 08:48:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56670 "EHLO
+        id S235531AbiECMtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 08:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235047AbiECMse (ORCPT
+        with ESMTP id S235604AbiECMsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 08:48:34 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B2322BC3
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 05:45:00 -0700 (PDT)
-Received: from [192.168.0.7] (ip5f5aed95.dynamic.kabel-deutschland.de [95.90.237.149])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 81BF061EA1935;
-        Tue,  3 May 2022 14:44:57 +0200 (CEST)
-Message-ID: <5a530210-2c22-d8e6-02e0-f321ba5e0e60@molgen.mpg.de>
-Date:   Tue, 3 May 2022 14:44:56 +0200
+        Tue, 3 May 2022 08:48:55 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900D8192A6
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 05:45:22 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id t5so9075329edw.11
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 05:45:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=X5xc8khrWfXRyyoC9UiryZoQ9oxBaqA5OpwQNPSrCwg=;
+        b=tGLokiH9nEwrsuNK1MHu3mZOtVER/Jz0IVTajxe17Qk7fXo7UPs9r0K6oT6cnrtFEC
+         Y39aeuWA0TEcoazrEDtEHZ/pE0CzZVooQQqASUU6uJXaoTujl7cL4xm5k9dWKh6VwiGU
+         rcCVw6zP8beksMWgBxvw/a3DXQzE4oMzJR6OW22nQ2+9LedzvoshdxaR+96EL6s6bBgc
+         piwrG0e0608Z7ZBagaDhFwtwVJg9sh1ErSXexIE0o7wH1E4Jf4STPh+lryBPENgjkCbq
+         43DAwvrCVOBC/sZC/y+PVR5+qrC5R14vzmvNlyZh0pnpcFiA1dvxBku5GAnvhEumNKyQ
+         RB3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=X5xc8khrWfXRyyoC9UiryZoQ9oxBaqA5OpwQNPSrCwg=;
+        b=uL59dWMPtiRYl6iKOuCaN/3qBNNYmX1hNwj2fWyvGeZ2yRGZV2DqsDGmP+SxfxkwOE
+         Te0dhlVuBOL/mWulPdzLe464ohtT5dZcVdq6qa5aIsu5xb0VUgU5ftaTNRbZdkecIXHu
+         fj2zwW8pFc77HtI6R+mL1U2weozreXM0lSqEht1bGAmZY0uxE4eQAeChSRiMEvsB2ZxB
+         zZFlGv1hqzzQrJnJX76UwkYng9Y72OGKJcVkuppZmkX56LtLHmC2DS6Xgwk5RP7sL8dW
+         A05B635yvx0i8F3Ga3wqFnWSEYpF8aWgiBv1CbxyY8zdszzDTcvB/e44QZVfvxO+1gzw
+         Sjwg==
+X-Gm-Message-State: AOAM531QtSXuNCVna/0/7lE5n263U9Dmbed6K0TnkVUut1jVRZBArgl0
+        usbAxU+keEGXmO5BgjXSf1LVtw==
+X-Google-Smtp-Source: ABdhPJxTStsbY/p6UStlTDO7k8CzuStWVcAMOGXPE9UDmDIlgD9sPTlihPh4SfAec3T7nTDorsdJaQ==
+X-Received: by 2002:a05:6402:d0e:b0:413:3d99:f2d6 with SMTP id eb14-20020a0564020d0e00b004133d99f2d6mr17883961edb.189.1651581921201;
+        Tue, 03 May 2022 05:45:21 -0700 (PDT)
+Received: from [192.168.0.203] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id jl6-20020a17090775c600b006f3ef214e64sm4533443ejc.202.2022.05.03.05.45.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 05:45:20 -0700 (PDT)
+Message-ID: <e00ff3b2-d5d1-706d-49cc-e70fe2cc9cab@linaro.org>
+Date:   Tue, 3 May 2022 14:45:19 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCHv4] drm/amdgpu: disable ASPM on Intel Alder Lake based
- systems
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 4/4] mux: lan966: Add support for flexcom mux controller
 Content-Language: en-US
-To:     Daniel Stone <daniel@fooishbar.org>
-Cc:     Dave Airlie <airlied@linux.ie>,
-        Richard Gong <richard.gong@amd.com>,
-        Xinhui Pan <xinhui.pan@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Alexander Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>
-References: <20220412215000.897344-1-richard.gong@amd.com>
- <d4ba3998-34aa-86d2-bde9-bc6ae9d8d08d@molgen.mpg.de>
- <CADnq5_MgvcGPWf2gYn_3qCr+Gq1P39tvv-W-o8NhivvMpMwUBA@mail.gmail.com>
- <91e916e3-d793-b814-6cbf-abee0667f5f8@molgen.mpg.de>
- <94fd858d-1792-9c05-b5c6-1b028427687d@amd.com>
- <efc1dfd1-2b54-aee5-1497-4b800a468141@molgen.mpg.de>
- <237da02b-0ed8-6b1c-3eaf-5574aab4f13f@amd.com>
- <294555b4-2d1b-270f-6682-3a17e9df133c@molgen.mpg.de>
- <5adfe067-dc00-6567-e218-c5c68670cf5b@amd.com>
- <543a9e76-ca90-984b-b155-a0647cdeacff@molgen.mpg.de>
- <CAPj87rOERk-kNa6n-UdjQsDKXP9zzm8=an=FHcM+33yebW6ECw@mail.gmail.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <CAPj87rOERk-kNa6n-UdjQsDKXP9zzm8=an=FHcM+33yebW6ECw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        krzysztof.kozlowski+dt@linaro.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        peda@axentia.se
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, lee.jones@linaro.org,
+        linux@armlinux.org.uk, Manohar.Puri@microchip.com,
+        UNGLinuxDriver@microchip.com
+References: <20220503105528.12824-1-kavyasree.kotagiri@microchip.com>
+ <20220503105528.12824-5-kavyasree.kotagiri@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220503105528.12824-5-kavyasree.kotagiri@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Daniel,
+On 03/05/2022 12:55, Kavyasree Kotagiri wrote:
+> +#include <linux/err.h>
+> +#include <linux/module.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/property.h>
+> +#include <linux/mux/driver.h>
+> +#include <linux/io.h>
+> +
+> +#define FLEX_SHRD_MASK		0x1FFFFF
+> +#define LAN966_MAX_CS		21
+> +
+> +static void __iomem *flx_shared_base;
+
+Why do you have file-scope shared variable? Cannot it be passed via
+private data?
+
+> +struct mux_lan966x {
+> +	u32 offset;
+> +	u32 ss_pin;
+> +};
+> +
+> +static int mux_lan966x_set(struct mux_control *mux, int state)
+> +{
+> +	struct mux_lan966x *mux_lan966x = mux_chip_priv(mux->chip);
+> +	u32 val;
+> +
+> +	val = ~(1 << mux_lan966x[state].ss_pin) & FLEX_SHRD_MASK;
+> +	writel(val, flx_shared_base + mux_lan966x[state].offset);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct mux_control_ops mux_lan966x_ops = {
+> +	.set = mux_lan966x_set,
+> +};
+> +
+> +static const struct of_device_id mux_lan966x_dt_ids[] = {
+> +	{ .compatible = "microchip,lan966-flx-mux", },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, mux_lan966x_dt_ids);
+> +
+> +static int mux_lan966x_probe(struct platform_device *pdev)
+> +{
+> +	struct device_node *np = pdev->dev.of_node;
+> +	struct device *dev = &pdev->dev;
+> +	struct mux_lan966x *mux_lan966x;
+> +	struct mux_chip *mux_chip;
+> +	int ret, num_fields, i;
+> +
+> +	ret = of_property_count_u32_elems(np, "mux-offset-pin");
+> +	if (ret == 0 || ret % 2)
+> +		ret = -EINVAL;
+> +	if (ret < 0)
+> +		return dev_err_probe(dev, ret,
+> +				     "mux-offset-pin property missing or invalid");
+> +	num_fields = ret / 2;
+> +
+> +	mux_chip = devm_mux_chip_alloc(dev, num_fields, sizeof(*mux_lan966x));
+> +	if (IS_ERR(mux_chip))
+> +		return dev_err_probe(dev, PTR_ERR(mux_chip),
+> +				     "failed to allocate mux_chips\n");
+> +
+> +	mux_lan966x = mux_chip_priv(mux_chip);
+> +
+> +	flx_shared_base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
+> +	if (IS_ERR(flx_shared_base))
+> +		return dev_err_probe(dev, PTR_ERR(flx_shared_base),
+> +				     "failed to get flexcom shared base address\n");
+> +
+> +	for (i = 0; i < num_fields; i++) {
+> +		struct mux_control *mux = &mux_chip->mux[i];
+> +		u32 offset, shared_pin;
+> +
+> +		ret = of_property_read_u32_index(np, "mux-offset-pin",
+> +						 2 * i, &offset);
+> +		if (ret == 0)
+> +			ret = of_property_read_u32_index(np, "mux-offset-pin",
+> +							 2 * i + 1,
+> +							 &shared_pin);
+> +		if (ret < 0)
+> +			return dev_err_probe(dev, ret,
+> +					     "failed to read mux-offset-pin property: %d", i);
+> +
+> +		if (shared_pin >= LAN966_MAX_CS)
+> +			return -EINVAL;
+> +
+> +		mux_lan966x[i].offset = offset;
+> +		mux_lan966x[i].ss_pin = shared_pin;
+> +
+> +		mux->states = LAN966_MAX_CS;
+> +	}
+> +
+> +	mux_chip->ops = &mux_lan966x_ops;
+> +
+> +	ret = devm_mux_chip_register(dev, mux_chip);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static struct platform_driver mux_lan966x_driver = {
+> +	.driver = {
+> +		.name = "lan966-mux",
+> +		.of_match_table	= of_match_ptr(mux_lan966x_dt_ids),
+
+of_match_ptr comes with maybe_unused on data structure. Are you sure it
+does not have W=1 warnings during compile tests? Just drop the of_match_ptr.
+
+> +	},
+> +	.probe = mux_lan966x_probe,
+> +};
+> +
+> +module_platform_driver(mux_lan966x_driver);
+
+Missing MODULE() stuff.
 
 
-Am 03.05.22 um 14:25 schrieb Daniel Stone:
-> On Sun, 1 May 2022 at 08:08, Paul Menzel <pmenzel@molgen.mpg.de> wrote:
->> Am 26.04.22 um 15:53 schrieb Gong, Richard:
->>> I think so. We captured dmesg log.
->>
->> Then the (whole) system did *not* freeze, if you could still log in
->> (maybe over network) and execute `dmesg`. Please also paste the
->> amdgpu(?) error logs in the commit message.
->>
->>> As mentioned early we need support from Intel on how to get ASPM working
->>> for VI generation on Intel Alder Lake, but we don't know where things
->>> currently stand.
->>
->> Who is working on this, and knows?
-> 
-> This has gone beyond the point of a reasonable request. The amount of
-> detail you're demanding is completely unnecessary.
-
-If a quirk is introduced possibly leading to higher power consumption, 
-especially on systems nobody has access to yet, then the detail, where 
-the system hangs/freezes is not unreasonable at all.
-
-In the Linux logs from the issue there are messages like
-
-     [   58.101385] Freezing of tasks failed after 20.003 seconds (4 
-tasks refusing to freeze, wq_busy=0):
-
-     [   78.278403] Freezing of tasks failed after 20.008 seconds (4 
-tasks refusing to freeze, wq_busy=0):
-
-and it looks like several suspend/resume cycles were done.
-
-I see a lot of commit messages over the whole Linux kernel, where this 
-level of detail is provided (by default), and
-
-The second question was not for the commit message, but just for 
-documentation purpose when the problem is going to be fixed properly. 
-And it looks like (at least publicly) analyzing the root cause is not 
-happening, and once the quirk lands, nobody is going to feel the 
-pressure to work on it, as everyone’s plates are full.
-
-
-Kind regards,
-
-Paul
+Best regards,
+Krzysztof

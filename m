@@ -2,216 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A900E518976
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 18:14:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0BC518979
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 18:14:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239250AbiECQRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 12:17:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57226 "EHLO
+        id S239267AbiECQSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 12:18:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239137AbiECQRw (ORCPT
+        with ESMTP id S239256AbiECQSL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 12:17:52 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50E43A195;
-        Tue,  3 May 2022 09:14:18 -0700 (PDT)
-Received: from fraeml744-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Kt4hJ65g4z67tG2;
-        Wed,  4 May 2022 00:11:12 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml744-chm.china.huawei.com (10.206.15.225) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 3 May 2022 18:14:16 +0200
-Received: from localhost (10.202.226.42) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 3 May
- 2022 17:14:15 +0100
-Date:   Tue, 3 May 2022 17:14:13 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-CC:     "Weiny, Ira" <ira.weiny@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        <linux-cxl@vger.kernel.org>, Linux PCI <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH V8 04/10] cxl/pci: Create auxiliary devices for each DOE
- mailbox
-Message-ID: <20220503171413.00001297@Huawei.com>
-In-Reply-To: <CAPcyv4huH2TPnVEzMmsKR=EGXv5A-4wd38M2nzRa-tkxeECV_Q@mail.gmail.com>
-References: <20220414203237.2198665-1-ira.weiny@intel.com>
-        <20220414203237.2198665-5-ira.weiny@intel.com>
-        <20220427181942.00003492@Huawei.com>
-        <YmsCfHf/HMuqBkTk@iweiny-server>
-        <20220429173843.00006dcd@Huawei.com>
-        <CAPcyv4huH2TPnVEzMmsKR=EGXv5A-4wd38M2nzRa-tkxeECV_Q@mail.gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Tue, 3 May 2022 12:18:11 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B693B29F
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 09:14:38 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id l7so34442593ejn.2
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 09:14:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bOowZENKEYBOQ5gQtuLs74mzTNH8Gi+Wvcp/0afqUT4=;
+        b=EEwYnpnu/2Fhr2sQHT2uhYWiyPhvmtU8DzHokKeYAXu5vlR0UiuNcMwlij7eWJT/Nd
+         KGBSe8Pej98sSFsthhMfgTmsJ5yPc7UFnVb+KTUDaeG/1/BJHloKuzgbBAk7p6W+v8RQ
+         xOP2eAJC4V5tKxUYoLIDLfVmxDH3iyr65NTWU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bOowZENKEYBOQ5gQtuLs74mzTNH8Gi+Wvcp/0afqUT4=;
+        b=wRVWswraKtWFIkrk2CWklF7c7Sjz6Cmzm91d6ltr3++LQfJFO1OLQOXpGeUbeIFonN
+         ITzfyuHn/5cn/ETgJ2UWacfTv9YYdZQ6LNH0GdPklbTtshRBnMr54TCjGOaon6bV+dWF
+         KwdJyiQaScQXSHAu2QB1JiDavacEyVWuNPd+cTOUOftnhbqt8FwVp7/jv4mK99KdOfzd
+         a6WXODrAoAcB2k1PZU8St18YF5dFGuZWq+BNR6E8lbGzpBhPT/RHhBKbb8anO3BUpaab
+         jUSzMFHEYL4g65DuTQZDefw28pa7m42zR52hBtfLIemzS41snFMZK+vUTNkc5Hn9Lhjw
+         mYIA==
+X-Gm-Message-State: AOAM533xVywIoFRhruYFzIoBtXXUyOEtlFogCdgoGi9TgI39T49UGxbA
+        3bSoV9AZw+vZcbDFWfC5RK4cjywIk7FWmeC9
+X-Google-Smtp-Source: ABdhPJz6pj4HHgPnZlzEb79O2O1+j5MI2/03yKzcVgidabW85U43pbRk3v4l0+H1zL3PeQB+a79f6Q==
+X-Received: by 2002:a17:907:1c87:b0:6f0:29ea:cc01 with SMTP id nb7-20020a1709071c8700b006f029eacc01mr16455099ejc.671.1651594477006;
+        Tue, 03 May 2022 09:14:37 -0700 (PDT)
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
+        by smtp.gmail.com with ESMTPSA id y5-20020a056402170500b0042617ba63d3sm8095549edu.93.2022.05.03.09.14.34
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 09:14:35 -0700 (PDT)
+Received: by mail-wr1-f46.google.com with SMTP id b19so24019499wrh.11
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 09:14:34 -0700 (PDT)
+X-Received: by 2002:adf:f50d:0:b0:20a:e096:ef with SMTP id q13-20020adff50d000000b0020ae09600efmr13256382wro.679.1651594474057;
+ Tue, 03 May 2022 09:14:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhreml723-chm.china.huawei.com (10.201.108.74) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220503042242.3597561-1-swboyd@chromium.org> <20220503042242.3597561-2-swboyd@chromium.org>
+ <2280875f-fbd8-0dfd-5a0a-1d7fceb856e4@linaro.org> <CAD=FV=UEBi9dctmhaAi1z+c+Sj5gtcRrc3FRW294T55dTiAidQ@mail.gmail.com>
+ <cd1da207-1f15-f3f1-7190-56b983e75024@kernel.org>
+In-Reply-To: <cd1da207-1f15-f3f1-7190-56b983e75024@kernel.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 3 May 2022 09:14:21 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XHNuvhekh=hepGePftaMXnDJGeJP=Lg8VfqmGdKt7HEA@mail.gmail.com>
+Message-ID: <CAD=FV=XHNuvhekh=hepGePftaMXnDJGeJP=Lg8VfqmGdKt7HEA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: google,cros-ec-keyb: Introduce
+ switches only compatible
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
+        chrome-platform@lists.linux.dev,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        "Joseph S. Barrera III" <joebar@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 29 Apr 2022 10:01:09 -0700
-Dan Williams <dan.j.williams@intel.com> wrote:
+Hi,
 
-> On Fri, Apr 29, 2022 at 9:39 AM Jonathan Cameron
-> <Jonathan.Cameron@huawei.com> wrote:
+On Tue, May 3, 2022 at 8:54 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>
+> On 03/05/2022 17:46, Doug Anderson wrote:
+> > Hi,
 > >
-> > On Thu, 28 Apr 2022 14:09:38 -0700
-> > ira.weiny@intel.com wrote:
-> >  
-> > > On Wed, Apr 27, 2022 at 06:19:42PM +0100, Jonathan Cameron wrote:  
-> > > > On Thu, 14 Apr 2022 13:32:31 -0700
-> > > > ira.weiny@intel.com wrote:
-> > > >  
-> > > > > From: Ira Weiny <ira.weiny@intel.com>
-> > > > >
-> > > > > CXL kernel drivers optionally need to access DOE mailbox capabilities.
-> > > > > Access to mailboxes for things such as CDAT, SPDM, and IDE are needed by
-> > > > > the kernel while other access is designed towards user space usage.  An
-> > > > > example of this is for CXL Compliance Testing (see CXL 2.0 14.16.4
-> > > > > Compliance Mode DOE) which offers a mechanism to set different test
-> > > > > modes for a device.
-> > > > >
-> > > > > There is no anticipated need for the kernel to share an individual
-> > > > > mailbox with user space.  Thus developing an interface to marshal access
-> > > > > between the kernel and user space for a single mailbox is unnecessary
-> > > > > overhead.  However, having the kernel relinquish some mailboxes to be
-> > > > > controlled by user space is a reasonable compromise to share access to
-> > > > > the device.
-> > > > >
-> > > > > The auxiliary bus provides an elegant solution for this.  Each DOE
-> > > > > capability is given its own auxiliary device.  This device is controlled
-> > > > > by a kernel driver by default which restricts access to the mailbox.
-> > > > > Unbinding the driver from a single auxiliary device (DOE mailbox
-> > > > > capability) frees the mailbox for user space access.  This architecture
-> > > > > also allows a clear picture on which mailboxes are kernel controlled vs
-> > > > > not.
-> > > > >
-> > > > > Iterate each DOE mailbox capability and create auxiliary bus devices.
-> > > > > Follow on patches will define a driver for the newly created devices.
-> > > > >
-> > > > > sysfs shows the devices.
-> > > > >
-> > > > > $ ls -l /sys/bus/auxiliary/devices/
-> > > > > total 0
-> > > > > lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.0 -> ../../../devices/pci0000:bf/0000:bf:00.0/0000:c0:00.0/cxl_pci.doe.0
-> > > > > lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.1 -> ../../../devices/pci0000:bf/0000:bf:01.0/0000:c1:00.0/cxl_pci.doe.1
-> > > > > lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.2 -> ../../../devices/pci0000:35/0000:35:00.0/0000:36:00.0/cxl_pci.doe.2
-> > > > > lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.3 -> ../../../devices/pci0000:35/0000:35:01.0/0000:37:00.0/cxl_pci.doe.3
-> > > > > lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.4 -> ../../../devices/pci0000:35/0000:35:00.0/0000:36:00.0/cxl_pci.doe.4
-> > > > > lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.5 -> ../../../devices/pci0000:bf/0000:bf:00.0/0000:c0:00.0/cxl_pci.doe.5
-> > > > > lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.6 -> ../../../devices/pci0000:35/0000:35:01.0/0000:37:00.0/cxl_pci.doe.6
-> > > > > lrwxrwxrwx 1 root root 0 Mar 24 10:47 cxl_pci.doe.7 -> ../../../devices/pci0000:bf/0000:bf:01.0/0000:c1:00.0/cxl_pci.doe.7
-> > > > >
-> > > > > Signed-off-by: Ira Weiny <ira.weiny@intel.com>  
-> > > >
-> > > > I'm not 100% happy with effectively having one solution for CXL
-> > > > and probably a different one for DOEs on switch ports
-> > > > (which I just hacked into a port service driver to convince
-> > > > myself there was at least one plausible way of doing that) but if
-> > > > this effectively separates the two discussions then I guess I can
-> > > > live with it for now ;)  
-> > >
-> > > I took some time this morning to mull this over and talk to Dan...
-> > >
-> > > :-(
-> > >
-> > > Truthfully the aux driver does very little except provide a way for admins to
-> > > trigger the driver to stop/start accessing the Mailbox.
-> > >
-> > > I suppose a simple sysfs interface could be done to do the same?
-> > >
-> > > I'll let Dan weigh in here.  
+> > On Tue, May 3, 2022 at 8:42 AM Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 03/05/2022 06:22, Stephen Boyd wrote:
+> >>> If the ChromeOS board is a detachable, this cros-ec-keyb device won't
+> >>> have a matrix keyboard but it may have some button switches, e.g. volume
+> >>> buttons and power buttons. The driver still registers a keyboard though
+> >>> and that leads to userspace confusion around where the keyboard is.
+> >>
+> >> (...)
+> >>
+> >>>
+> >>> +if:
+> >>> +  properties:
+> >>> +    compatible:
+> >>> +      contains:
+> >>> +        const: google,cros-ec-keyb
+> >>> +then:
+> >>> +  allOf:
+> >>> +    - $ref: "/schemas/input/matrix-keymap.yaml#"
+> >>> +  required:
+> >>> +    - keypad,num-rows
+> >>> +    - keypad,num-columns
+> >>> +    - linux,keymap
+> >>
+> >> else:
+> >>   properties:
+> >>     function-row-phsymap: false
+> >>     google,needs-ghost-filter: false
+> >>
+> >> Because these are not valid for the non-matrix-keyboard case, right?
 > >
-> > I wonder if best short term option is to not provide a means of
-> > removing it at all (separate from the PCI driver that is).
-> > Then we can take our time to decide on the interface if we ever
-> > get much demand for one.
-> >  
-> > >  
-> > > >
-> > > > Once this is merged we can start the discussion about how to
-> > > > handle switch ports with DOEs both for CDAT and SPDM.  
-> > >
-> > > I'm ok with that too.  However, I was thinking that this was not a user ABI.
-> > > But it really is.  If user space starts writing script to unbind drivers and
-> > > then we drop the aux driver support it will break them...
-> > >  
-> > > >
-> > > > I'll send out an RFC that is so hideous it will get people to
-> > > > suggestion how to do it better!  
-> > >
-> > > I think I'd like to see that.  
-> >
-> > Fair enough. It may muddy the waters a bit :( I'll send an RFC
-> > next week.  I've not looked at how the CXL region code etc would
-> > actually get to the latency / bandwidth info from the driver yet
-> > it just goes as far as reading a CDAT length. I also want to actually
-> > hook up some decent switch CDAT emulation in the QEMU code
-> > (right now it's giving the same default table as for a type 3 device).
-> >
-> > I just hope we don't bikeshed around the RFC in a fashion that slows
-> > this series moving forwards.  
-> 
-> I think we have time in the sense that the worst that happens is that
-> tooling picks the wrong CFMWS to dynamically create a region and the
-> performance ends up being sub-optimal. That's tolerable to work around
-> in userspace in the near term. I want to get some wider confidence in
-> the DOE ABI with respect to the known protocols and what to do about
-> the vendor-specific protocols that may conflict and will be driven
-> from userspace issued config-cycles. 
-Hi Dan,
+> > Isn't that implicit because this file has `unevaluatedProperties: false` ?
+>
+> But they are evaluated here, aren't they?
 
-Ok, though I would like to try to push the conversation forwards beyond where
-we got to last year. IIRC the general conclusion was that all protocols
-sharing a DOE instance (and more generally because they all share
-discovery) must be mediated by the kernel and that we would not be
-supporting a generic access interface (there was one in a much earlier
-version of this patch set).  Whilst it's far from the only thing that needs
-resolving, this DOE question is also a blocker on getting anywhere with
-CMA/SPDM.  Unbinding a driver as the means to stop the kernel accessing
-a DOE is reliant on the host driver not deciding to do any more protocol
-discovery - we can probably rely on that but it's not pretty.
+Only if the "if" test, though? ...ah, or is this a difference between
+"unevaluatedProperties" and "additionalProperties" ?
 
-> That likely means that no DOE ABI
-> is the best ABI to start which means not moving forward with
-> aux-devices so scripts do not become attached to something that is not
-> fully committed to being carried forward.
-
-This isn't really DOE ABI we are currently discussing, it's a CXL subsystem ABI.
-If we decided to only expose the DOE as an internal implementation
-detail (calls made directly from appropriate existing CXL driver) then
-there wouldn't be an ABI question. We would be limiting DOE access
-for other protocols but personally I don't see that as a problem
-in the short to medium term.
-
-Things may be more 'interesting' for the PCIe port services driver though
-(see RFC just sent out)
-https://lore.kernel.org/linux-cxl/20220503153449.4088-1-Jonathan.Cameron@huawei.com/T/#t
-Perhaps if we can resolve what that should look like, the CXL EP side
-of things will be much easier to figure out?
-
-> 
-> I still want to refresh the request_config_region() support for at
-> least having the kernel warn on userspace conflicting configuration
-> writes to config areas claimed by a driver.
-
-Great, that seems like a sensible step to do in parallel.
-
-Jonathan
-
-
+-Doug

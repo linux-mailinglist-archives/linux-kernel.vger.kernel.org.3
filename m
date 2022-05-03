@@ -2,85 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 135F9518856
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB2D5187FB
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:09:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238312AbiECPXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 11:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51750 "EHLO
+        id S237978AbiECPMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 11:12:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238433AbiECPXQ (ORCPT
+        with ESMTP id S237928AbiECPLz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 11:23:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C0C13D1DF
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 08:19:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651591114;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fB+GyMb8KaE7uGv5sjOmUbdvZf3IS0zLisgeiZ4V7NY=;
-        b=KE1jdc//PDiDUuYHzUgU7zK8fu0wqfphmXD2DT2Ow/MhCXIeDFHu3HD56vYFX0q6+K3F/w
-        FtlB5UOMukDz1+4jOXqsdjLffGUH+90845DGbWCQK+iLzry4b16NurOVs81GurlcDMjf5q
-        I8t6u3APM2EM8r5Rgq2XmdpuTZGSY2o=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        Tue, 3 May 2022 11:11:55 -0400
+Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [207.211.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C30D37A8D
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 08:08:22 -0700 (PDT)
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-131-oQEIyqTjMkqFzOBWMnv_aA-1; Tue, 03 May 2022 11:18:07 -0400
-X-MC-Unique: oQEIyqTjMkqFzOBWMnv_aA-1
-Received: by mail-wr1-f72.google.com with SMTP id s8-20020adf9788000000b0020adb01dc25so6461031wrb.20
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 08:18:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fB+GyMb8KaE7uGv5sjOmUbdvZf3IS0zLisgeiZ4V7NY=;
-        b=rFRmR7mPNB5TrbwUL1hkl4H6c4dl5Lu+LmZjD2+1+BgR4UpRvoxEBOYQiFAzblyOzD
-         +x7VyhqiX2t8AlnQGCw5JAU5nzB7rav1sQW6e5D1WmoRuwn/eX9MaB/IY26ipKPVAAOv
-         xFTrVEy6RKMgfFYq3yhS0PfoMDVxmLvrrw+UhQ77qmaeCE5J72TX68/WUHkt8TkGazCD
-         ClGbDUet9ysk9Byjow7yKoSz+zpgNRsTcJiSe69+kJT7ot+eeEd3ieMOfqOSDoMR88tW
-         +ja9QIvu59ECFkWRS+gSSVw6K0bQXPaV6av+BxPHDJvLbrLXeR4TFH/VRUeLx8D2rMkD
-         w/AQ==
-X-Gm-Message-State: AOAM531j55Yj2cJPqFdA4S0/ya5S4blwtBXoSQmSzWBqO+m1T1uDcf7a
-        wTt9O5CoEEFGfw54ClMnEYzWJV3dzc2QHwm6nELytKL4wzgek8mul47uMY55Np7HsPU5Qc3rny8
-        b8KAP4p39Or4QQGNW+18csvgxtXyLvb+aYHyoJkd8
-X-Received: by 2002:a05:600c:9:b0:393:ea67:1c68 with SMTP id g9-20020a05600c000900b00393ea671c68mr3474355wmc.92.1651584637395;
-        Tue, 03 May 2022 06:30:37 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw7bH3mc1FPFlDf07JG+TUgh9rQ7tQ4fVJ4ozC/QuGkpTOD2TIrV73xrb2nVvU3PCYuP5d2VRZ3rMe13IvIpZA=
-X-Received: by 2002:a05:600c:9:b0:393:ea67:1c68 with SMTP id
- g9-20020a05600c000900b00393ea671c68mr3474343wmc.92.1651584637194; Tue, 03 May
- 2022 06:30:37 -0700 (PDT)
+ us-mta-453-75oE-M6RP7eBPNBNfwRyUg-1; Tue, 03 May 2022 11:05:38 -0400
+X-MC-Unique: 75oE-M6RP7eBPNBNfwRyUg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0F29F3D32CC7;
+        Tue,  3 May 2022 13:40:18 +0000 (UTC)
+Received: from comp-core-i7-2640m-0182e6.redhat.com (unknown [10.36.110.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D9EF19E60;
+        Tue,  3 May 2022 13:40:09 +0000 (UTC)
+From:   Alexey Gladkov <legion@kernel.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Daniel Walsh <dwalsh@redhat.com>,
+        Davidlohr Bueso <dbueso@suse.de>,
+        Kirill Tkhai <ktkhai@virtuozzo.com>,
+        Linux Containers <containers@lists.linux.dev>,
+        Manfred Spraul <manfred@colorfullife.com>,
+        Serge Hallyn <serge@hallyn.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Vasily Averin <vvs@virtuozzo.com>
+Subject: Re: [PATCH v1 2/4] ipc: Use proper ipc namespace 
+Date:   Tue,  3 May 2022 15:39:53 +0200
+Message-Id: <cover.1651584847.git.legion@kernel.org>
+In-Reply-To: <87sfprudal.fsf@email.froward.int.ebiederm.org>
+References: <87sfprudal.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-References: <20220426145445.2282274-1-agruenba@redhat.com> <CAHk-=wi7o+fHYBTuCQQdHD112YHQtO21Y3+wxNYypjdo8feKFg@mail.gmail.com>
- <CAHc6FU48681X8aUK+g7UUN7q5b6rkVBzTP7h_zbE4XqZYAiw3g@mail.gmail.com>
- <CAHk-=wjMB1-xCOCBtsSMmQuFV9G+vNyCY1O_LsoqOd=0QS4yYg@mail.gmail.com>
- <CAHc6FU5Bag5W2t79+WzUq=NibtEF+7z6=jyNCkLMMp9Yqvpmqw@mail.gmail.com>
- <CAHk-=whaz-g_nOOoo8RRiWNjnv2R+h6_xk2F1J4TuSRxk1MtLw@mail.gmail.com>
- <CAHc6FU5654k7QBU97g_Ubj8cJEWuA_bXPuXOPpBBYoXVPMJG=g@mail.gmail.com>
- <CAHk-=wgSYSNc5sF2EVxhjbSc+c4LTs90aYaK2wavNd_m2bUkGg@mail.gmail.com>
- <CAHc6FU69E4ke4Xg3zQ2MqjLbfM65D9ZajdY5MRDLN0azZOGmVQ@mail.gmail.com>
- <CAHk-=whQxvMvty8SjiGMh+gM4VmCYvqn6EAwmrDXJaHT2Aa+UA@mail.gmail.com>
- <CAHk-=wicJdoCjPLu7FhaErr6Z3UaW820U2b+F-8P4qwSFUZ0mg@mail.gmail.com>
- <CAHc6FU7GkXLkns5PONLvsSi6HB+rjaNSyFeQFS034tKL-JueMw@mail.gmail.com>
- <CAHk-=wg4ypnZUA5BOHAF1miKvOhW2yQSruuBKNXMDR=dTmp+ww@mail.gmail.com>
- <CAHc6FU6VgQDO7HT5f4S_4f=9hczKGRDQ6SbQ5kNHMi4i-6rxVA@mail.gmail.com>
- <CAHk-=whL74iP6v2P+OafGO0H72ag4wt42k+Kc_01boLP8aqUNQ@mail.gmail.com> <CAHc6FU77KGn76B4ieu9Tn895deK-1yV4y=8ou4gTfUf=7C-4XQ@mail.gmail.com>
-In-Reply-To: <CAHc6FU77KGn76B4ieu9Tn895deK-1yV4y=8ou4gTfUf=7C-4XQ@mail.gmail.com>
-From:   Andreas Gruenbacher <agruenba@redhat.com>
-Date:   Tue, 3 May 2022 15:30:25 +0200
-Message-ID: <CAHc6FU7i4GJaSodNX+o44VgWyo1LTPdYkBnypYS3GYa1atYAZA@mail.gmail.com>
-Subject: Re: [GIT PULL] gfs2 fix
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        cluster-devel <cluster-devel@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,134 +60,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 3, 2022 at 10:56 AM Andreas Gruenbacher <agruenba@redhat.com> wrote:
-> On Mon, May 2, 2022 at 8:32 PM Linus Torvalds <torvalds@linux-foundation.org> wrote:
-> > On Thu, Apr 28, 2022 at 10:39 AM Andreas Gruenbacher <agruenba@redhat.com> wrote:
-> > >
-> > > Yes, but note that it's gfs2_file_buffered_write() that fails. When
-> > > the pagefault_disable/enable() around iomap_file_buffered_write() is
-> > > removed, the corruption goes away.
-> >
-> > I looked some more at this on and off, and ended up even more confused.
-> >
-> > For some reason, I'd mostly looked at the read case, because I had
-> > mis-read some of your emails and thought it was the buffered reads
-> > that caused problems.
-> >
-> > Then I went back more carefully, and realized you had always said
-> > gfs2_file_buffered_write() was where the issues happened, and looked
-> > at that path more, and that confused me even *MORE*.
-> >
-> > Because that case has always done the copy from user space with page
-> > faults disabled, because of the traditional deadlock with reading from
-> > user space while holding the page lock on the target page cache page.
-> >
-> > So that is not really about the new deadlock with filesystem locks,
-> > that was fixed by 00bfe02f4796 ("gfs2: Fix mmap + page fault deadlocks
-> > for buffered I/O").
-> >
-> > So now that I'm looking at the right function (maybe) I'm going "huh",
-> > because it's none of the complex cases that would seem to fail, it's
-> > literally just the fault_in_iov_iter_readable() that we've always done
-> > in iomap_write_iter() that presumably starts failing.
-> >
-> > But *that* old code seems bogus too. It's doing
-> >
-> >                 if (unlikely(fault_in_iov_iter_readable(i, bytes) == bytes)) {
-> >                         status = -EFAULT;
-> >                         break;
-> >                 }
-> >
-> > which on the face of it is sane: it's saying "if we can't fault in any
-> > bytes, then stop trying".
-> >
-> > And it's good, and correct, but it does leave one case open.
-> >
-> > Because what if the result is "we can fault things in _partially_"?
-> >
-> > The code blithely goes on and tries to do the whole 'bytes' range _anyway_.
-> >
-> > Now, with a bug-free filesystem, this really shouldn't matter, since
-> > the later copy_page_from_iter_atomic() thing should then DTRT anyway,
-> > but this does mean that one fundamental thing that that commit
-> > 00bfe02f4796 changed is that it basically disabled that
-> > fault_in_iov_iter_readable() that *used* to fault in the whole range,
-> > and now potentially only faults in a small area.
-> >
-> > That, in turn, means that in practice it *used* to do "write_end()"
-> > with a fully successful range, ie when it did that
-> >
-> >                 status = a_ops->write_end(file, mapping, pos, bytes, copied,
-> >                                                 page, fsdata);
-> >
-> > then "bytes" and "copied" were the same.
-> >
-> > But now that commit 00bfe02f4796 added the "disable_pagefault()"
-> > around the whole thing, fault_in_iov_iter_readable() will easily fail
-> > half-way instead of bringing the next page in, and then that
-> > ->write_begin() to ->write_end() sequence will see the copy in the
-> > middle failing half-way too, and you'll have that write_end()
-> > condition with the write _partially_ succeeding.
-> >
-> > Which is the complex case for write_end() that you practically
-> > speaking never saw before (it *could* happen with a race with swap-out
-> > or similar, but it was not really something you could trigger in real
-> > life.
-> >
-> > And I suspect this is what bites you with gfs2
-> >
-> > To *test* that hypothesis, how about you try this attached patch? The
-> > generic_perform_write() function in mm/filemap.c has the same exact
-> > pattern, but as mentioned, a filesystem really needs to be able to
-> > handle the partial write_end() case, so it's not a *bug* in that code,
-> > but it migth be triggering a bug in gfs2.
-> >
-> > And gfs2 only uses the iomap_write_iter() case, I think. So that's the
-> > only case this attached patch changes.
-> >
-> > Again - I think the unpatched iomap_write_iter() code is fine, but I
-> > think it may be what then triggers the real bug in gfs2. So this patch
-> > is not wrong per se, but this patch is basically a "hide the problem"
-> > patch, and it would be very interesting to hear if it does indeed fix
-> > your test-case.
->
-> We still get data corruption with the patch applied. The
-> WARN_ON_ONCE(!bytes) doesn't trigger.
->
-> As an additional experiment, I've added code to check the iterator
-> position that iomap_file_buffered_write() returns, and it's all
-> looking good as well: an iov_iter_advance(orig_from, written) from the
-> original position always gets us to the same iterator.
->
-> This points at gfs2 getting things wrong after a short write, for
-> example, marking a page / folio uptodate that isn't. But the uptodate
-> handling happens at the iomap layer, so this doesn't leave me with an
-> immediate suspect.
->
-> We're on filesystems with block size == page size, so none of the
-> struct iomap_page uptodata handling should be involved, either.
+On Mon, May 02, 2022 at 11:09:22AM -0500, Eric W. Biederman wrote:
+> Alexey Gladkov <legion@kernel.org> writes:
+> 
+> > As Eric Biederman pointed out, changing the namespace broke checkpoint
+> > restore. I have reverted my previous changes.
+> 
+> Can you remind me the bug that is being fixed here?
+> 
+> I am probably just going to fast to see it, but it would be good to have
+> it described in the commit comment.
 
-The rounding around the hole punching in gfs2_iomap_end() looks wrong.
-I'm trying a fix now.
+It was preparation for the "ipc: Check permissions for checkpoint_restart
+sysctls at open time". I wanted to split the commit and make it more readable,
+but it looks like I just confused everyone. This change should be part of the
+next commit.
 
-> > Because that would pinpoint exactly what the bug is.
-> >
-> > I'm adding Christoph and Darrick as iomap maintainers here to the
-> > participants (and Dave Chinner in case he's also the temporary
-> > maintainer because Darrick is doing reviews) not because they
-> > necessarily care, but just because this test-patch obviously involves
-> > the iomap code.
-> >
-> > NOTE! This patch is entirely untested. I also didn't actually yet go
-> > look at what gfs2 does when 'bytes' and 'copied' are different. But
-> > since I finally think I figured out what might be going on, I decided
-> > I'd send this out sooner rather than later.
-> >
-> > Because this is the first thing that makes me go "Aaahh.. This might
-> > explain it".
-> >
-> >                    Linus
->
-> Thanks,
-> Andreas
+Here is a new version of the patchset where I moved the bugfix to a separate
+commit as you requested in the next email.
+
+Does that look better?
+
+--
+
+Alexey Gladkov (4):
+  ipc: Use the same namespace to modify and validate
+  ipc: Remove extra1 field abuse to pass ipc namespace
+  ipc: Check permissions for checkpoint_restart sysctls at open time
+  ipc: Remove extra braces
+
+ ipc/ipc_sysctl.c | 108 +++++++++++++++++++++--------------------------
+ 1 file changed, 49 insertions(+), 59 deletions(-)
+
+-- 
+2.33.3
 

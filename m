@@ -2,100 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 234F4518B8C
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 19:54:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E7C0518B8E
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 19:54:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240738AbiECR5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 13:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48288 "EHLO
+        id S240756AbiECR6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 13:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240643AbiECR5b (ORCPT
+        with ESMTP id S240745AbiECR6L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 13:57:31 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B2A2B186
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 10:53:58 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id o190so1465162iof.10
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 10:53:58 -0700 (PDT)
+        Tue, 3 May 2022 13:58:11 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B891B2BB1A;
+        Tue,  3 May 2022 10:54:37 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id ba17so659288edb.5;
+        Tue, 03 May 2022 10:54:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=digitalocean.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SVhjOiW58CpvHdw8quBjHckuBkf97wIVcsnDQs7q8QU=;
-        b=WhnMhXBei59t1jNzijf4GwhnGdkGwN7ffbcmzUwyQYhduCWf8Qeo3tk24P9gnYmmgi
-         0HHEZS5CQADa0mC0uxaTLt0esAR/BsI/iTYa5GUg0KlqM6jg6U/Pw3lo40TTPlA6Bdkf
-         Wa7bD2wxX0/u5RLDworIKuwVz75s9nO1i4Nzg=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=DYnWSimLii7XmldXmtY2L01MclTrGLMilzsrbNwgPjk=;
+        b=Z7OEEo6j2fNdaFTwVE47DarXux+705QL5n+yJ8Pfvm5DWGEz59nbOyDURUpT9QPHz5
+         PNmaG2PCWtkrV1hfpLE5MSTik9c4YHZVObdY1ILBwRldIhLqnEhZvTqYBGWOv1ih49hx
+         vYU9jochiOKhn5tin10fSHl0v8sszkDykyhDkmB6OHTGZlp3LdMjSkn3/78BVSBdSGuq
+         xOe9zOBlFMrjBGR3rpBndsRjFwJwHY1G+VGjPNFITYgRB7DjnT9WFApeCi6EvRdAYELL
+         cCaDNjb/ZlEyMQcQav41fHzmqqzFKM8xWqbJoqC3OmqZfaFLXq3SzzKuheCs9K/wAWQe
+         nq+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SVhjOiW58CpvHdw8quBjHckuBkf97wIVcsnDQs7q8QU=;
-        b=7U4LRJTfYTCCPaxHHveF5R6cfTgwBHLNhMCGb4nLV8YMTJGMtBSMvSiUA+hfYWp6nH
-         aRRUhpE48sbgQ2uWWhBzEniTRJp6Nyix2fUad9boog3fJaejMpm30zXLFaaSx5KsjWRR
-         nNjR7SF1plHdSM6PO20BPCbaTjlh5GG0inozzMy/hAApvGfv5wZepaeZ7H00keIYJTq0
-         i7u6BcskAXoMVbVwT4sBO8TaLsvwELK27kaHoz6UW9gbbKiauzJ93VzwfT4Yr5VL1voT
-         wQFTrANey9yawcwRnTJqb06GBcjQzHRI+xGcF6DCo/QGSU6Ad5KFCvd6ovHmlRQfUMmt
-         a9ow==
-X-Gm-Message-State: AOAM531hrcWCMVMM3gjOsQfcVS9+5gI0eSEpsRwBzVGZCxVCIT2qeMaf
-        B05vCXrMQ57Uch0vSKzstIWmTw==
-X-Google-Smtp-Source: ABdhPJy0OSUvbC7ByJK8FyKfREM7VamZ4yekW+hdrBnj5rlTwAOTmC0Twkj41WY2MeZnllF6AOEr6Q==
-X-Received: by 2002:a05:6638:2588:b0:32a:beec:a5cc with SMTP id s8-20020a056638258800b0032abeeca5ccmr7850035jat.191.1651600437949;
-        Tue, 03 May 2022 10:53:57 -0700 (PDT)
-Received: from localhost ([2605:a601:ac0f:820:80d8:f53c:c84d:deaa])
-        by smtp.gmail.com with ESMTPSA id y4-20020a02ce84000000b0032b3a7817b1sm4055949jaq.117.2022.05.03.10.53.57
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=DYnWSimLii7XmldXmtY2L01MclTrGLMilzsrbNwgPjk=;
+        b=oqrssnKxk0Neu0J7+2v/ib85pAYiOMntViOXuzkakncnzWBXtWutpiRl2tibXZ2brp
+         xPPg7YDdGXlkHJm/yAiHFnGSuXpJaG2jW9lNQL+oVCd4gFILj+X2xfhzQSWK3n4aYOW/
+         dBNanatnthIT9x8JAlTWnJUUqDttKwETBHKlsI8uk+7vK6iTcH7F6+RcUwjsSxxnZk7S
+         7wTk3yYqcOBHLLc7ALKL2cf04DVUkYI+TqBRiFVGGzh59grxOwydNeyYTXf5SWYZ3FZj
+         iiAZuYAzMNt6nGhrt7thqXMISR61zyMA3Wbv3AzX4CSRcVNx3cGgAuW/QKTSBeJFCZw+
+         3PhQ==
+X-Gm-Message-State: AOAM5316E2Vwu8UHTDOUCUpX2D7nGmsTlwtdC8eIEiEsOkYA8+FwSbTp
+        JHnehys+1Yb91CGeORqTRmUEt5/d1gg=
+X-Google-Smtp-Source: ABdhPJxuZO00Q1eHmTZPmNGW7ManjOSzRlW8AwOypcs2vrYzGgOspXEleSxteXoztBVce5zDqER1zA==
+X-Received: by 2002:aa7:c790:0:b0:41d:7e0f:f15c with SMTP id n16-20020aa7c790000000b0041d7e0ff15cmr18965786eds.129.1651600476354;
+        Tue, 03 May 2022 10:54:36 -0700 (PDT)
+Received: from kista.localnet (cpe1-3-76.cable.triera.net. [213.161.3.76])
+        by smtp.gmail.com with ESMTPSA id bm13-20020a0564020b0d00b0042617ba63cfsm8234900edb.89.2022.05.03.10.54.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 10:53:57 -0700 (PDT)
-Date:   Tue, 3 May 2022 12:53:56 -0500
-From:   Seth Forshee <sforshee@digitalocean.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        kvm@vger.kernel.org
-Subject: Re: [PATCH v2] entry/kvm: Make vCPU tasks exit to userspace when a
- livepatch is pending
-Message-ID: <YnFsNB9Ppvd0cTFS@do-x1extreme>
-References: <20220503174934.2641605-1-sforshee@digitalocean.com>
+        Tue, 03 May 2022 10:54:35 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Chen-Yu Tsai <wens@csie.org>, Chukun Pan <amadeus@jmu.edu.cn>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Chukun Pan <amadeus@jmu.edu.cn>
+Subject: Re: [PATCH] arm64: dts: allwinner: define USB3 Ethernet on NanoPi R1S H5
+Date:   Tue, 03 May 2022 19:54:34 +0200
+Message-ID: <4393725.LvFx2qVVIh@kista>
+In-Reply-To: <20220502144009.44575-1-amadeus@jmu.edu.cn>
+References: <20220502144009.44575-1-amadeus@jmu.edu.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220503174934.2641605-1-sforshee@digitalocean.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 03, 2022 at 12:49:34PM -0500, Seth Forshee wrote:
-> A task can be livepatched only when it is sleeping or it exits to
-> userspace. This may happen infrequently for a heavily loaded vCPU task,
-> leading to livepatch transition failures.
+Dne ponedeljek, 02. maj 2022 ob 16:40:09 CEST je Chukun Pan napisal(a):
+> The NanoPi R1S H5 has a Realtek RTL8153B USB 3.0 Ethernet chip
+> connected to the USB 2.0 port of the Allwinner H5 SoC.
 > 
-> Fake signals will be sent to tasks which fail patching via stack
-> checking. This will cause running vCPU tasks to exit guest mode, but
-> since no signal is pending they return to guest execution without
-> exiting to userspace. Fix this by treating a pending livepatch migration
-> like a pending signal, exiting to userspace with EINTR. This allows the
-> task to be patched, and userspace should re-excecute KVM_RUN to resume
-> guest execution.
-> 
-> In my testing, systems where livepatching would timeout after 60 seconds
-> were able to load livepatches within a couple of seconds with this
-> change.
-> 
-> Signed-off-by: Seth Forshee <sforshee@digitalocean.com>
+> Signed-off-by: Chukun Pan <amadeus@jmu.edu.cn>
 > ---
-> Changes in v2:
->  - Added _TIF_SIGPENDING to XFER_TO_GUEST_MODE_WORK
+>  arch/arm64/boot/dts/allwinner/sun50i-h5-nanopi-r1s-h5.dts | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h5-nanopi-r1s-h5.dts b/
+arch/arm64/boot/dts/allwinner/sun50i-h5-nanopi-r1s-h5.dts
+> index 55b369534a08..dd655a491549 100644
+> --- a/arch/arm64/boot/dts/allwinner/sun50i-h5-nanopi-r1s-h5.dts
+> +++ b/arch/arm64/boot/dts/allwinner/sun50i-h5-nanopi-r1s-h5.dts
+> @@ -21,7 +21,8 @@ / {
+>  
+>  	aliases {
+>  		ethernet0 = &emac;
+> -		ethernet1 = &rtl8189etv;
+> +		ethernet1 = &rtl8153;
+> +		ethernet2 = &rtl8189etv;
+>  		serial0 = &uart0;
+>  	};
+>  
+> @@ -116,6 +117,11 @@ &cpu0 {
+>  
+>  &ehci1 {
+>  	status = "okay";
 
-Clearly I meant _TIF_PATCH_PENDING here and not _TIF_SIGPENDING.
+You need to add #address-cells and #size-cells properties, otherwise "make 
+dtbs_check W=1" generates warnings.
+
+Best regards,
+Jernej
+
+> +
+> +	rtl8153: device@1 {
+> +		compatible = "usbbda,8153";
+> +		reg = <1>;
+> +	};
+>  };
+>  
+>  &ehci2 {
+> -- 
+> 2.25.1
+> 
+> 
+
+

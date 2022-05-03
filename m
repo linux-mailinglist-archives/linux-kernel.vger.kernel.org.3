@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C13FB518308
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 13:06:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B84518307
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 13:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234603AbiECLIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 07:08:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46494 "EHLO
+        id S234580AbiECLIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 07:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234535AbiECLIh (ORCPT
+        with ESMTP id S233840AbiECLIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 3 May 2022 07:08:37 -0400
 Received: from mail.schwermer.no (mail.schwermer.no [49.12.228.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E279E33375;
-        Tue,  3 May 2022 04:05:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689513389C;
+        Tue,  3 May 2022 04:05:02 -0700 (PDT)
 X-Virus-Scanned: Yes
 From:   Sven Schwermer <sven@svenschwermer.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=svenschwermer.de;
-        s=mail; t=1651575898;
-        bh=f7LOPbAVv1vwG5hpUbka3+lbR6oTfswOHOcwYhEpF88=;
+        s=mail; t=1651575899;
+        bh=2uuu+yuJXc4Y3si40nnMPwy4Mz/cdP0i8l5Ix0V6TVU=;
         h=From:To:Cc:Subject:In-Reply-To:References;
-        b=qyoE/dlTXwTBA+zlQ/8IZClSvD6AdZ5IMUDzVnQsY62rV/sHJ8m+IBt2euZJbtLi3
-         xLgwLH8t4oujcsKVCBVFQv6EQnt9zgGYIrQ1u7FTejKBQzjyUNSxiHaPJZP6dxBQMx
-         lZilLrbFaTADBPxnmH0Ty31cwyN1G47JR/Dcr9vxt/TsQ4qVpef5m81LTioUN80Soo
-         eFE/8O0hOAEWjv2o8AArvlz8ZXQ9hFi3Nn1BOmIIlYDn18ocMXeuB9CVG5Rfbi2tcL
-         VHkPNw/Nq/AXrXQn7QrstHGQm/wATUnQngo0YfWy8+HHnOVpCaMXbx4uVaC9sqhjO9
-         S9gSAF1a7eWmA==
+        b=cqrRFVXpIDOxvl2xIXy+L8TKjfcSyYT+ZsI6epH0Bf0y9GeOBVyMGqhr0+Ts4zgCl
+         L38rDk2Alw8QfFhwGj1eBa8ZPjVv2OrJtspfv7vY50opl1LrAeGpsUHQ4yX2V+hGTW
+         ozkK1O8A7ntkEovZ3T2/h+1/gyTKAN9nYBhcUQQTKkWoMw/Ou4qQTH8TR/E9GyCz8N
+         wFvZQM8660dPi4U8lm0tzfRySovjEwiM6eSm2AbFD7mHomCK9sX9TgbSx5D9WmVTzG
+         h4G7yGnO1zmDUwgRHwuaRJIhCW9peCETVb3xcAxUbZpXxo8mxUfq5Q9tVfB3X7AOyK
+         kFxklU3WYKwIw==
 To:     linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
         pavel@ucw.cz, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, dmurphy@ti.com,
         devicetree@vger.kernel.org
 Cc:     Sven Schwermer <sven.schwermer@disruptive-technologies.com>
-Subject: [PATCH v1 1/2] dt-bindings: leds: Add multi-color default-intensities property
-Date:   Tue,  3 May 2022 13:04:50 +0200
-Message-Id: <364df52a196fa0ae5db07e599995fcf8dfafb43e.1651575831.git.sven.schwermer@disruptive-technologies.com>
-In-Reply-To: <20220502204616.GA27288@ucw.cz>
-References: <20220502204616.GA27288@ucw.cz>
+Subject: [PATCH v1 2/2] leds: multicolor: Read default-intensities property
+Date:   Tue,  3 May 2022 13:04:51 +0200
+Message-Id: <03decec200aa7550f66be8454438eb3db6a2378a.1651575831.git.sven.schwermer@disruptive-technologies.com>
+In-Reply-To: <364df52a196fa0ae5db07e599995fcf8dfafb43e.1651575831.git.sven.schwermer@disruptive-technologies.com>
+References: <364df52a196fa0ae5db07e599995fcf8dfafb43e.1651575831.git.sven.schwermer@disruptive-technologies.com>
 Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -50,33 +50,64 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Sven Schwermer <sven.schwermer@disruptive-technologies.com>
 
-This allows to assign intensity values to the indivisual sub LEDs
-(colors) at driver probe time, i.e. most commonly at kernel boot time.
-This is crucial for setting a specific color early in the boot process.
+This allows to assign intensity values taken from the firmware interface
+(if available) to the indivisual sub LEDs (colors) at driver probe time,
+i.e. most commonly at kernel boot time. This is crucial for setting a
+specific color and early in the boot process. While it would be possible
+to set a static color in the bootloader, this mechanism allows setting a
+pattern (e.g. blinking) at a specific color.
 
 Signed-off-by: Sven Schwermer <sven.schwermer@disruptive-technologies.com>
 ---
- .../devicetree/bindings/leds/leds-class-multicolor.yaml    | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/leds/led-class-multicolor.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/leds/leds-class-multicolor.yaml b/Documentation/devicetree/bindings/leds/leds-class-multicolor.yaml
-index 37445c68cdef..c483967a847c 100644
---- a/Documentation/devicetree/bindings/leds/leds-class-multicolor.yaml
-+++ b/Documentation/devicetree/bindings/leds/leds-class-multicolor.yaml
-@@ -31,6 +31,13 @@ patternProperties:
-           include/linux/leds/common.h.
-         enum: [ 8, 9 ]
+diff --git a/drivers/leds/led-class-multicolor.c b/drivers/leds/led-class-multicolor.c
+index e317408583df..eb7f11345ec1 100644
+--- a/drivers/leds/led-class-multicolor.c
++++ b/drivers/leds/led-class-multicolor.c
+@@ -9,6 +9,7 @@
+ #include <linux/module.h>
+ #include <linux/slab.h>
+ #include <linux/uaccess.h>
++#include <linux/property.h>
  
-+      default-intensities:
-+        description: |
-+          This parameter, if present, sets the initial intensities of the
-+          individual colors. This array must have the same length as the
-+          multi-color LED has sub LEDs (colors).
-+        $ref: /schemas/types.yaml#/definitions/uint32-array
+ #include "leds.h"
+ 
+@@ -116,6 +117,23 @@ static struct attribute *led_multicolor_attrs[] = {
+ };
+ ATTRIBUTE_GROUPS(led_multicolor);
+ 
++static void multi_load_default_intensities(struct device *parent,
++					   struct led_classdev_mc *mcled_cdev,
++					   struct fwnode_handle *fwnode)
++{
++	u32 intensities[LED_COLOR_ID_MAX];
++	int ret;
++	int i;
 +
-     $ref: "common.yaml#"
++	ret = fwnode_property_read_u32_array(fwnode, "default-intensities",
++					     intensities, mcled_cdev->num_colors);
++	if (ret < 0 && ret != -ENODATA)
++		dev_warn(parent, "failed to read default-intensities property: %d", ret);
++
++	for (i = 0; i < ret; i++)
++		mcled_cdev->subled_info[i].intensity = intensities[i];
++}
++
+ int led_classdev_multicolor_register_ext(struct device *parent,
+ 				     struct led_classdev_mc *mcled_cdev,
+ 				     struct led_init_data *init_data)
+@@ -134,6 +152,9 @@ int led_classdev_multicolor_register_ext(struct device *parent,
+ 	led_cdev = &mcled_cdev->led_cdev;
+ 	mcled_cdev->led_cdev.groups = led_multicolor_groups;
  
-     required:
++	if (init_data && init_data->fwnode)
++		multi_load_default_intensities(parent, mcled_cdev, init_data->fwnode);
++
+ 	return led_classdev_register_ext(parent, led_cdev, init_data);
+ }
+ EXPORT_SYMBOL_GPL(led_classdev_multicolor_register_ext);
 -- 
 2.36.0
 

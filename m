@@ -2,106 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A58045191A2
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 00:44:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 297FD51919D
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 00:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243778AbiECWp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 18:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34040 "EHLO
+        id S243801AbiECWqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 18:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbiECWp1 (ORCPT
+        with ESMTP id S236973AbiECWqq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 18:45:27 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA982DA89
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 15:41:54 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id p10so32645735lfa.12
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 15:41:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aJ6LSQS2hZp/i3Er1PZcJDTlIm5WitovxDQeaGU9cAY=;
-        b=WTLzW2HJFi/Z1y+N4gAHgVKK1VuC87VXq9k0nNYsUTnMvX9bd+jxioIwGpNC9V+CSI
-         KELuVjTwGzBhxLqNqagoquMhsrEJefNChCLonIzL0jpLz3Yq97uKmCn83uHtsaxrcB19
-         tgu7+VGYMG4ZeZ5/Ml6eBX4/cTUM1LBycamnI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aJ6LSQS2hZp/i3Er1PZcJDTlIm5WitovxDQeaGU9cAY=;
-        b=sfrLbh/dF9XnsSBT+djeOAmtY0k92IBeWlC0jhtm5Cbcw7xFK8f3A+pQmIdpfVkCXz
-         hGm9Lruf1abmUZ/6OBnNkKYeAfinx/ubZZccmuag+t8w2OJJ8SgNCwjGJFKCm2sHaD0b
-         iqTXzLUuIh87QJ0DMAQQvuUEAej1Ch5hp6Bv2TIhZeuPfSofycX8m77Mf6uFFZR/BJd4
-         mVo4E9hlFPOYJP53isTGzC549Gz4sNGDb1PRcsNZLgjVOn/tekIaCl5uulY5xhAwNrbu
-         LirpMNMvEin3WdwsAIl2FyA86uO6OmJ7zTQdLBhdzD1KGdAx1LwQEBtGC+vxGIyoG/Qm
-         +T+g==
-X-Gm-Message-State: AOAM531/cWefpqnll0mSDue1N69+JQ/REkKZ0XmZdqL2sf6t7D5eWNJ/
-        0CHX69AlY8zKCvENPmej5kTPr1aan0DTyBpM
-X-Google-Smtp-Source: ABdhPJyjHx1ZXHtfbTeCgKDij1keG9l9NuQNH5uSez+k6iyPgcXvXmhiFMZgdrMK6fOpjhdWf5C/sg==
-X-Received: by 2002:a05:6512:1398:b0:445:bcef:e4fd with SMTP id p24-20020a056512139800b00445bcefe4fdmr12350269lfa.398.1651617711757;
-        Tue, 03 May 2022 15:41:51 -0700 (PDT)
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com. [209.85.167.42])
-        by smtp.gmail.com with ESMTPSA id p10-20020a05651238ca00b0047255d21138sm1049306lft.103.2022.05.03.15.41.49
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 May 2022 15:41:50 -0700 (PDT)
-Received: by mail-lf1-f42.google.com with SMTP id i10so4651863lfg.13
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 15:41:49 -0700 (PDT)
-X-Received: by 2002:a05:6512:a8f:b0:473:a826:bfd0 with SMTP id
- m15-20020a0565120a8f00b00473a826bfd0mr3724913lfu.435.1651617709017; Tue, 03
- May 2022 15:41:49 -0700 (PDT)
+        Tue, 3 May 2022 18:46:46 -0400
+Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 80A662DA8D;
+        Tue,  3 May 2022 15:43:12 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-2-147.pa.nsw.optusnet.com.au [49.181.2.147])
+        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id DCC56534356;
+        Wed,  4 May 2022 08:43:06 +1000 (AEST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1nm1EX-007glS-UL; Wed, 04 May 2022 08:43:05 +1000
+Date:   Wed, 4 May 2022 08:43:05 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     linux-fsdevel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
+        Karel Zak <kzak@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
+        Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Amir Goldstein <amir73il@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
+Message-ID: <20220503224305.GF1360180@dread.disaster.area>
+References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com>
 MIME-Version: 1.0
-References: <20220426145445.2282274-1-agruenba@redhat.com> <CAHk-=wi7o+fHYBTuCQQdHD112YHQtO21Y3+wxNYypjdo8feKFg@mail.gmail.com>
- <CAHc6FU48681X8aUK+g7UUN7q5b6rkVBzTP7h_zbE4XqZYAiw3g@mail.gmail.com>
- <CAHk-=wjMB1-xCOCBtsSMmQuFV9G+vNyCY1O_LsoqOd=0QS4yYg@mail.gmail.com>
- <CAHc6FU5Bag5W2t79+WzUq=NibtEF+7z6=jyNCkLMMp9Yqvpmqw@mail.gmail.com>
- <CAHk-=whaz-g_nOOoo8RRiWNjnv2R+h6_xk2F1J4TuSRxk1MtLw@mail.gmail.com>
- <CAHc6FU5654k7QBU97g_Ubj8cJEWuA_bXPuXOPpBBYoXVPMJG=g@mail.gmail.com>
- <CAHk-=wgSYSNc5sF2EVxhjbSc+c4LTs90aYaK2wavNd_m2bUkGg@mail.gmail.com>
- <CAHc6FU69E4ke4Xg3zQ2MqjLbfM65D9ZajdY5MRDLN0azZOGmVQ@mail.gmail.com>
- <CAHk-=whQxvMvty8SjiGMh+gM4VmCYvqn6EAwmrDXJaHT2Aa+UA@mail.gmail.com>
- <CAHk-=wicJdoCjPLu7FhaErr6Z3UaW820U2b+F-8P4qwSFUZ0mg@mail.gmail.com>
- <CAHc6FU7GkXLkns5PONLvsSi6HB+rjaNSyFeQFS034tKL-JueMw@mail.gmail.com>
- <CAHk-=wg4ypnZUA5BOHAF1miKvOhW2yQSruuBKNXMDR=dTmp+ww@mail.gmail.com>
- <CAHk-=whL74iP6v2P+OafGO0H72ag4wt42k+Kc_01boLP8aqUNQ@mail.gmail.com>
- <CAHc6FU77KGn76B4ieu9Tn895deK-1yV4y=8ou4gTfUf=7C-4XQ@mail.gmail.com>
- <CAHc6FU7i4GJaSodNX+o44VgWyo1LTPdYkBnypYS3GYa1atYAZA@mail.gmail.com> <20220503213524.3273690-1-agruenba@redhat.com>
-In-Reply-To: <20220503213524.3273690-1-agruenba@redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 3 May 2022 15:41:32 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjQwqW+FJ_dsq8M58=5joQdV+8Q51bmyjvrBV6Z68VF0Q@mail.gmail.com>
-Message-ID: <CAHk-=wjQwqW+FJ_dsq8M58=5joQdV+8Q51bmyjvrBV6Z68VF0Q@mail.gmail.com>
-Subject: Re: [GIT PULL] gfs2 fix
-To:     Andreas Gruenbacher <agruenba@redhat.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        cluster-devel <cluster-devel@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=VuxAv86n c=1 sm=1 tr=0 ts=6271afff
+        a=ivVLWpVy4j68lT4lJFbQgw==:117 a=ivVLWpVy4j68lT4lJFbQgw==:17
+        a=kj9zAlcOel0A:10 a=oZkIemNP1mAA:10 a=7-415B0cAAAA:8
+        a=yUZlb4BpVi82aJ1b07cA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 3, 2022 at 2:35 PM Andreas Gruenbacher <agruenba@redhat.com> wrote:
->
-> More testing still ongoing, but the following patch seems to fix the
-> data corruption.
+On Tue, May 03, 2022 at 02:23:23PM +0200, Miklos Szeredi wrote:
+> This is a simplification of the getvalues(2) prototype and moving it to the
+> getxattr(2) interface, as suggested by Dave.
+> 
+> The patch itself just adds the possibility to retrieve a single line of
+> /proc/$$/mountinfo (which was the basic requirement from which the fsinfo
+> patchset grew out of).
+> 
+> But this should be able to serve Amir's per-sb iostats, as well as a host of
+> other cases where some statistic needs to be retrieved from some object.  Note:
+> a filesystem object often represents other kinds of objects (such as processes
+> in /proc) so this is not limited to fs attributes.
+> 
+> This also opens up the interface to setting attributes via setxattr(2).
+> 
+> After some pondering I made the namespace so:
+> 
+> : - root
+> bar - an attribute
+> foo: - a folder (can contain attributes and/or folders)
+> 
+> The contents of a folder is represented by a null separated list of names.
+> 
+> Examples:
+> 
+> $ getfattr -etext -n ":" .
+> # file: .
+> :="mnt:\000mntns:"
+> 
+> $ getfattr -etext -n ":mnt:" .
+> # file: .
+> :mnt:="info"
+> 
+> $ getfattr -etext -n ":mnt:info" .
+> # file: .
+> :mnt:info="21 1 254:0 / / rw,relatime - ext4 /dev/root rw\012"
+> 
+> $ getfattr -etext -n ":mntns:" .
+> # file: .
+> :mntns:="21:\00022:\00024:\00025:\00023:\00026:\00027:\00028:\00029:\00030:\00031:"
+> 
+> $ getfattr -etext -n ":mntns:28:" .
+> # file: .
+> :mntns:28:="info"
+> 
+> Comments?
 
-Fingers crossed.
+I like. :)
 
-> +               truncate_pagecache_range(inode, hstart, hend - 1);
-> +               if (hstart < hend)
-> +                       punch_hole(ip, hstart, hend - hstart);
+> Thanks,
+> Miklos
+> 
+> ---
+>  fs/Makefile            |    2 
+>  fs/mount.h             |    8 +
+>  fs/namespace.c         |   15 ++-
+>  fs/pnode.h             |    2 
+>  fs/proc_namespace.c    |   15 ++-
+>  fs/values.c            |  242 +++++++++++++++++++++++++++++++++++++++++++++++++
+>  fs/xattr.c             |   16 ++-
+>  include/linux/values.h |   11 ++
 
-Why doesn't that "hstart < hend" condition cover both the truncate and
-the hole punch?
+"values" is a very generic name - probably should end up being
+something more descriptive of the functionality is provides,
+especially if the header file is going to be dumped in
+include/linux/. I don't really have a good suggestion at the moment,
+though. 
 
-             Linus
+....
+
+> +
+> +enum {
+> +	VAL_MNT_INFO,
+> +};
+> +
+> +static struct val_desc val_mnt_group[] = {
+> +	{ VD_NAME("info"),		.idx = VAL_MNT_INFO		},
+> +	{ }
+> +};
+....
+> +
+> +
+> +static struct val_desc val_toplevel_group[] = {
+> +	{ VD_NAME("mnt:"),	.get = val_mnt_get,	},
+> +	{ VD_NAME("mntns:"),	.get = val_mntns_get,	},
+> +	{ },
+> +};
+
+I know this is an early POC, my main question is how do you
+envisiage this table driven structure being extended down from just
+the mount into the filesystem so we can expose filesystem specific
+information that isn't covered by generic interfaces like statx?
+
+Cheers,
+
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com

@@ -2,196 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A53A517FDF
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 10:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF07517FE9
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 10:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbiECImg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 04:42:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53896 "EHLO
+        id S232851AbiECIrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 04:47:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiECImd (ORCPT
+        with ESMTP id S231951AbiECIrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 04:42:33 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFBF340ED
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 01:39:00 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id A79C732009F3;
-        Tue,  3 May 2022 04:38:57 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Tue, 03 May 2022 04:38:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1651567137; x=1651653537; bh=BzAECZIEHC
-        c0MWNfVYa4bChSwxuC5HSH+DCEkLNcaNM=; b=CDf/p+7ulMxSnPaS/Fsq4RY9u7
-        EFFOSKyyilt4W7gLiMnXK8IasANlvZdhrEElFG2IpdqxqtTOiea5ajZ0smItnWjz
-        HBXQhSIfA678dmO750PHfFXv7GPB645kWm2wFthLuOA+6MB/rV3kaauqahsFqLK7
-        dAfonHkIt9TSkkd+958T4ZM7R0ti0NXJ7qvQ1BhC9qwcM4DuLjTuEvG5IFn2iv93
-        Moko+fQZgstF76TS4xEBFThoxBuZKsV1eOI9RR3kcwwyRc8H3msu7HTld4oba/7e
-        8u7L0+ZHi1YGbJ13tdOfg/eXkp3lvkCThEQRJAXEZpjXAskeR/4yYwLbQfPw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651567137; x=
-        1651653537; bh=BzAECZIEHCc0MWNfVYa4bChSwxuC5HSH+DCEkLNcaNM=; b=c
-        0gNCcsBOndSK74KDP3QyeWMqPZMnZzbKJ+ts34mmKlHpEgovc8zgwu0fjx8c325R
-        o7JYWern9ApalkHN9+cGgWkN/lcz5B0IuGUCwG0601MYl7+kJP0kYS7Pl5vkqOMY
-        5Bn2Ww8zIUmjsQnGBMRbJFPqGyvBMj56T/9zVBRvrg8L++i35i1+6X9BaBcGl9ns
-        7cOtDUH9stxSAlV6zDI12azeUng5Q8yP7W+GVAqzRwci0tmu+sWVoM7xTcTooYLA
-        bTOQqjgEb0CXp9hxumDL3YdYjGB+0ACj5U+qzDIx+unjH3hHb+IjBM0goQORxZvO
-        DXU9ld1colPzuDwx1HlUA==
-X-ME-Sender: <xms:H-pwYvdDq3Zazof8DVN0DqZEWW2gHPMb7Uf9tqbAdWDs4MozIF5kdQ>
-    <xme:H-pwYlP2pYetacNmvUdxYdTl2uP1M_-yXU2v7LPtJRIKM8N73DnTyh1SUUJAknAYQ
-    Yq5IhokigyF8sx8VVc>
-X-ME-Received: <xmr:H-pwYojL3OKgZkTpuh-tktW3b5Uws5yGPC0BTyDczMDESLhvFEGp5JVs9sz2GCM6JMma0IEND4383q-p4UGZs7MfYV-eZTo1IPmNn0g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejgddtiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
-    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:H-pwYg9FIs0ySLv8K8nMSOoiMaCq9HC5fQIdAe0XKmek8m3lhHMjJw>
-    <xmx:H-pwYrulugmwWxw_jEBgeqsixVvYmH0bWiKk0xBRUWsaXAtloGKWDA>
-    <xmx:H-pwYvEuqUhkzJFQjIdx4OUH2sVeP-PG6J0LS9TZ8NZ_zsaELThMRA>
-    <xmx:IepwYhCm9cSYl5sG7umuIA0n7KsIHZgXOgKDSGvFUdnLskqj95Wzdw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 3 May 2022 04:38:54 -0400 (EDT)
-Date:   Tue, 3 May 2022 10:38:52 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Sugar Zhang <sugar.zhang@rock-chips.com>
-Cc:     broonie@kernel.org, Dmitry Osipenko <digetx@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] ASoC: hdmi-codec: Add option for ELD bypass
-Message-ID: <20220503083852.be2aihvkd3gestdw@houat>
-References: <20220430134006.v2.1.Ide2a04ad0c123cc6990a63632e6f9bb7d7f9be13@changeid>
+        Tue, 3 May 2022 04:47:17 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CFD534B9C
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 01:43:44 -0700 (PDT)
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220503084340epoutp03cb44c0d8188039a391f3d9b1b81ef7e8~ri9GeW19F3005330053epoutp03q
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 08:43:40 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220503084340epoutp03cb44c0d8188039a391f3d9b1b81ef7e8~ri9GeW19F3005330053epoutp03q
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1651567420;
+        bh=E/kNS8J6LGsDH5KxU/vYXIpphusvX+Z+Ji7rYA+GplI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=oW3cf9zrbeA7GMWe//1IljgwZdec8yTRZlsPVrbRDGDB6j/st5K6ch2+Nyutiduk7
+         o3BYWoUlzIsJDELdjbwYbXLKEg4PT0EGs3570pNaw3DQjYe1lkch1SL9gIyMxYXcQI
+         UlayzwL9CR741E3pjoKAXY6iSScCJO54jK6JWx4Q=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20220503084340epcas2p3e77cf06771fd036b1571b72c7fb1f235~ri9F-I4OL1935719357epcas2p3e;
+        Tue,  3 May 2022 08:43:40 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.100]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4Kstls2pMhz4x9Q2; Tue,  3 May
+        2022 08:43:37 +0000 (GMT)
+Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        91.9E.09694.93BE0726; Tue,  3 May 2022 17:43:37 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+        20220503084336epcas2p385b5af3e2bd129a9984c9b6c345b51fc~ri9CcSV0g1184411844epcas2p3b;
+        Tue,  3 May 2022 08:43:36 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220503084336epsmtrp2d7ec30bf4e483855e523b6b646a97826~ri9CbfVUF2822328223epsmtrp2x;
+        Tue,  3 May 2022 08:43:36 +0000 (GMT)
+X-AuditID: b6c32a48-47fff700000025de-a5-6270eb391658
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        DE.B7.08924.83BE0726; Tue,  3 May 2022 17:43:36 +0900 (KST)
+Received: from ubuntu (unknown [10.229.95.128]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220503084336epsmtip1a9e605007c0456735db18148872a076f~ri9CNlw7t1852718527epsmtip1i;
+        Tue,  3 May 2022 08:43:36 +0000 (GMT)
+Date:   Tue, 3 May 2022 17:41:58 +0900
+From:   Jung Daehwan <dh10.jung@samsung.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Howard Yen <howardyen@google.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Puma Hsu <pumahsu@google.com>,
+        "J . Avila" <elavila@google.com>, sc.suh@samsung.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: Re: [PATCH v4 5/5] usb: host: add xhci-exynos driver
+Message-ID: <20220503084158.GA38006@ubuntu>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vsmb6pic4bsb7zjz"
-Content-Disposition: inline
-In-Reply-To: <20220430134006.v2.1.Ide2a04ad0c123cc6990a63632e6f9bb7d7f9be13@changeid>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <0f84e8d4-451f-693a-d098-517dc6235a0f@linux.intel.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrBJsWRmVeSWpSXmKPExsWy7bCmqa7l64Ikg9srWC2eHFnEbtG8eD2b
+        xfU/7xkt2p9fYLPY+PYHk8XlXXPYLBYta2W2aN40hdXi9YcmFouZa5Utuu7eYHTg9pjV0Mvm
+        cbmvl8ljwaZSj8V7XjJ5zDsZ6LF/7hp2j74tqxg9Pm+SC+CIyrbJSE1MSS1SSM1Lzk/JzEu3
+        VfIOjneONzUzMNQ1tLQwV1LIS8xNtVVy8QnQdcvMATpTSaEsMacUKBSQWFyspG9nU5RfWpKq
+        kJFfXGKrlFqQklNgXqBXnJhbXJqXrpeXWmJlaGBgZApUmJCdsXHlDdaCdvWKw3e9GhhvyHUx
+        cnJICJhI3NmwkK2LkYtDSGAHo8StvrWMEM4nRonLHe+hnM+MEu8v9DDDtOx4vYMJIrGLUaK3
+        /zmU84RR4sXMPjaQKhYBFYl3j6aB2WwCWhL3fpwA6xYRMJT4dmk72FhmgTnMEteW3GABSQgL
+        2Er82rqTEcTmFdCWmP5vL5QtKHFy5hOwGk4BZ4kLmx8ADeLgEAVa8OpgPcgcCYGVHBInnh9i
+        hzjPReLTt1ZGCFtY4tXxLVBxKYnP7/ayQdjFErs+tTJBNDcwSjQ+OAH1m7HErGftYM3MAhkS
+        Wx5eZQNZJiGgLHHkFgtEmE+i4/Bfdogwr0RHmxBEp7LE9MsTWCFsSYmDr89BTfSQ+PZ0IzSA
+        3zBJ/Jp4h3kCo/wsJK/NQrINwtaRWLD7E5DNAWRLSyz/xwFhakqs36W/gJF1FaNYakFxbnpq
+        sVGBCTy2k/NzNzGCk7CWxw7G2W8/6B1iZOJgPMQowcGsJMLrvLQgSYg3JbGyKrUoP76oNCe1
+        +BCjKTCiJjJLiSbnA/NAXkm8oYmlgYmZmaG5kamBuZI4r1fKhkQhgfTEktTs1NSC1CKYPiYO
+        TqkGJv3Ec6wPkmWSLhnJiBz2XR8nOa1sWVj4qpCzv87/Waiz75TYG2sOn8qn/Mu1Piot4Vtn
+        ZRdfF8auEDVRMmamz9qTl/TjXN/cdfb57+8UnKD9mePfobsTNsrUvGffkKalLSx4Z3J0UkKJ
+        QOXasG0PH7+aU5ly09uR7Xbinl9hF45HRXA+eLqQY8mvPXGx6mUfpjRXJ0rkTnbiS22QaZpw
+        bPuueVmsfMUdZdM0//ycpvbu2UxhQb7AjVZzPp+ZxvvKim1t/cHVocH7fz5j8do9bXIV672r
+        Nb+OfH0xc/tF8bv+/K9FBXddnfu5PWzRLa3jLVJnRdbFz3iq9eO45KSvVpeOuTHsEXnn3nXq
+        kcxuw8NKLMUZiYZazEXFiQCykvrBSwQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrHLMWRmVeSWpSXmKPExsWy7bCSnK7F64Ikg+1ThC2eHFnEbtG8eD2b
+        xfU/7xkt2p9fYLPY+PYHk8XlXXPYLBYta2W2aN40hdXi9YcmFouZa5Utuu7eYHTg9pjV0Mvm
+        cbmvl8ljwaZSj8V7XjJ5zDsZ6LF/7hp2j74tqxg9Pm+SC+CI4rJJSc3JLEst0rdL4MqY8uQ/
+        a8FxlYp1L/awNjBulOli5OSQEDCR2PF6B1MXIxeHkMAORomlr96xQyQkJZbOvQFlC0vcbznC
+        ClH0iFFi9dmpbCAJFgEViXePpoHZbAJaEvd+nGAGsUUEDCW+XdrOCNLALLCAWeJc2zywImEB
+        W4lfW3cygti8AtoS0//tZYSY+oZJ4u+v9ywQCUGJkzOfgNnMQFNv/HsJdB8HkC0tsfwfB0iY
+        U8BZ4sLmB8wgYVGgI14drJ/AKDgLSfMsJM2zEJoXMDKvYpRMLSjOTc8tNiwwykst1ytOzC0u
+        zUvXS87P3cQIjiItrR2Me1Z90DvEyMTBeIhRgoNZSYTXeWlBkhBvSmJlVWpRfnxRaU5q8SFG
+        aQ4WJXHeC10n44UE0hNLUrNTUwtSi2CyTBycUg1MgpPZPzFxpL8X2J+us76povAKJ9vlPxcX
+        l/QlPfLlst+VwxTYN2+zYsHz+mfzb+vPlhCZdcYpZpbniUXK03qvS3eYnUxRuSdQkFrfdOdC
+        xsuszf5X1ymaaM7Ld1dqtcrj39d3eRfbt9A7LQHiZlOFJ5w6Zau/nelBs+uCCbceTshmZtq9
+        Ob/G5llsrfLD5ZnpPiWF567Oi2bZZSQn9p7jUV6T/HT3p4c+T/arn61xwl9lFsf8U9qvJ0bc
+        rbKTiLxy7UXdmv+vFqxqmb5BcKa4l9rbfRusPuaFncgK7U4ui8zf1MO/6d12tmud9q2yK06v
+        vX7rkaDU4ym/sjYtSYnqXsscdNXwyBu7/adL1HYfVmIpzkg01GIuKk4EAM8wjLURAwAA
+X-CMS-MailID: 20220503084336epcas2p385b5af3e2bd129a9984c9b6c345b51fc
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+        boundary="----kYpNrMA5Q_pRug.oZbu8Kwk_59qkkrrEmQqQB0Vp_jfuzgSx=_60345_"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220426092023epcas2p32946c087135ca4b7e63b03915060c55d
+References: <1650964728-175347-1-git-send-email-dh10.jung@samsung.com>
+        <CGME20220426092023epcas2p32946c087135ca4b7e63b03915060c55d@epcas2p3.samsung.com>
+        <1650964728-175347-6-git-send-email-dh10.jung@samsung.com>
+        <b9fcc518-cc0d-d346-774e-3a9472e664bc@linux.intel.com>
+        <20220428030319.GA139938@ubuntu>
+        <0f84e8d4-451f-693a-d098-517dc6235a0f@linux.intel.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---vsmb6pic4bsb7zjz
-Content-Type: text/plain; charset=us-ascii
+------kYpNrMA5Q_pRug.oZbu8Kwk_59qkkrrEmQqQB0Vp_jfuzgSx=_60345_
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Thu, Apr 28, 2022 at 03:28:49PM +0300, Mathias Nyman wrote:
+> On 28.4.2022 6.03, Jung Daehwan wrote:
+> > On Wed, Apr 27, 2022 at 07:25:21PM +0300, Mathias Nyman wrote:
+> >> On 26.4.2022 12.18, Daehwan Jung wrote:
+> >>> This driver is for Samsung Exynos xhci host conroller. It uses xhci-plat
+> >>> driver mainly and extends some functions by xhci hooks and overrides.
+> >>>
+> >>> It supports USB Audio offload with Co-processor. It only cares DCBAA,
+> >>> Device Context, Transfer Ring, Event Ring, and ERST. They are allocated
+> >>> on specific address with xhci hooks. Co-processor could use them directly
+> >>> without xhci driver after then.
+> >>>
+> >>> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+> >>
+> >> I have to agree with Krzysztof's comments, this is an odd driver stub.
+> >>
+> >> Perhaps open up a bit how the Exynos offloading works so we can figure out
+> >> in more detail what the hardware needs from software.  
+> >>
+> >> (...)
+> > 
+> >>> +static int xhci_alloc_segments_for_ring_uram(struct xhci_hcd *xhci,
+> >>> +		struct xhci_segment **first, struct xhci_segment **last,
+> >>> +		unsigned int num_segs, unsigned int cycle_state,
+> >>> +		enum xhci_ring_type type, unsigned int max_packet, gfp_t flags,
+> >>> +		u32 endpoint_type)
+> >>> +{
+> >>> +	struct xhci_segment *prev;
+> >>> +	bool chain_links = false;
+> >>> +
+> >>> +	while (num_segs > 0) {
+> >>> +		struct xhci_segment *next = NULL;
+> >>> +
+> >>> +		if (!next) {
+> >>> +			prev = *first;
+> >>> +			while (prev) {
+> >>> +				next = prev->next;
+> >>> +				xhci_segment_free(xhci, prev);
+> >>> +				prev = next;
+> >>> +			}
+> >>> +			return -ENOMEM;
+> >>
+> >> This always return -ENOMEM
+> > 
+> > Yes. it's right to return error here.
+> > 
+> 
+> Still don't think that is the case.
+> 
+> So if the num_segs value passed to a function named
+> xhci_alloc_segments_for_ring_uram() is anything else than 0, it will 
+> automatically return -ENOMEM?
+> 
+> >>
+> >> Also this whole function never allocates or remaps any memory.
+> > 
+> > This fuctions is for link segments. Right below function(xhci_ring_alloc_uram)
+> > allocates.
+> 
+> Still doesn't allocate any ring segments.
+> Below function only allocates memory for the
+> ring structure that contains pointers to segments.
+> 
 
-On Sat, Apr 30, 2022 at 01:41:18PM +0800, Sugar Zhang wrote:
-> This patch allow users to enable "ELD Bypass" who don't
-> care anything from EDID Link Data.
->=20
-> Currently, this driver gets ELD(from EDID) to constraint
-> channels and rates.
->=20
-> Unfortunately, EDID is not always valid, maybe caused by
-> the fragile HDMI port or cable, in this situation, the max
-> features are limited to 48kHz stereo.
->=20
-> So, add this option to allow user to select the manual way
-> to output audio as expected. such as multi-channels LPCM(7.1),
-> or HBR bitstream for these sink devices.
->=20
-> Signed-off-by: Sugar Zhang <sugar.zhang@rock-chips.com>
+When I re-check it, it has a problem as you said.
+I will modify it on next submission. Thanks.
 
-I think some more documentation is needed there to describe how it's
-going to be used.
+Best Regards,
+Jung Daehwan
 
-Like, you mention that it's relevant when the EDID is not valid. But if
-the EDID is valid, is bypass still allowed or not?
+> > 
+> >>
+> >>> +		}
+> >>> +		xhci_link_segments(prev, next, type, chain_links);
+> >>> +
+> >>> +		prev = next;
+> >>> +		num_segs--;
+> >>> +	}
+> >>> +	xhci_link_segments(prev, *first, type, chain_links);
+> >>> +	*last = prev;
+> >>> +
+> >>> +	return 0;
+> >>> +}
+> >>> +
+> >>> +static struct xhci_ring *xhci_ring_alloc_uram(struct xhci_hcd *xhci,
+> >>> +		unsigned int num_segs, unsigned int cycle_state,
+> >>> +		enum xhci_ring_type type, unsigned int max_packet, gfp_t flags,
+> >>> +		u32 endpoint_type)
+> >>> +{
+> >>> +	struct xhci_ring	*ring;
+> >>> +	int ret;
+> >>> +	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
+> >>> +
+> >>> +	ring = kzalloc_node(sizeof(*ring), flags, dev_to_node(dev));
+> >>> +	if (!ring)
+> >>> +		return NULL;
+> >>> +
+> >>> +	ring->num_segs = num_segs;
+> >>> +	ring->bounce_buf_len = max_packet;
+> >>> +	INIT_LIST_HEAD(&ring->td_list);
+> >>> +	ring->type = type;
+> >>> +	if (num_segs == 0)
+> >>> +		return ring;
+> >>> +
+> >>> +	ret = xhci_alloc_segments_for_ring_uram(xhci, &ring->first_seg,
+> >>> +			&ring->last_seg, num_segs, cycle_state, type,
+> >>> +			max_packet, flags, endpoint_type);
+> >>> +	if (ret)
+> >>> +		goto fail;
+> >>> +
+> >>> +	/* Only event ring does not use link TRB */
+> >>> +	if (type != TYPE_EVENT) {
+> >>> +		/* See section 4.9.2.1 and 6.4.4.1 */
+> >>> +		ring->last_seg->trbs[TRBS_PER_SEGMENT - 1].link.control |=
+> >>> +			cpu_to_le32(LINK_TOGGLE);
+> >>
+> >> No memory was allocated for trbs
+> > 
+> > Allcation function for trbs are missed. It's done by ioremap.
+> > I will add it on next submission. Thanks for the comment.
+> > 
+> >>
+> >> A lot of this code seems to exists just to avoid xhci driver from allocating
+> >> dma capable memory, we can refactor the existing xhci_mem_init() and move
+> >> dcbaa and event ring allocation and other code to their own overridable
+> >> functions.
+> >>
+> >> This way we can probably get rid of a lot of the code in this series.
+> > 
+> > Yes right. I think it's proper. Do you agree with it or have better way
+> > to do it?
+> 
+> Could be, but I don't have a good picture of how this Exynos audio offloading
+> works, so it's hard to guess.
+> 
+> Thanks
+> -Mathias
+> 
 
-> ---
->=20
-> Changes in v2:
-> - Use MACRO SOC_SINGLE_BOOL_EXT to simplify code.
->   Fix event_missing checked by mixer-test.
->   Add suffix "Switch" for "ELD Bypass".
->=20
->  sound/soc/codecs/hdmi-codec.c | 32 ++++++++++++++++++++++++++++++--
->  1 file changed, 30 insertions(+), 2 deletions(-)
->=20
-> diff --git a/sound/soc/codecs/hdmi-codec.c b/sound/soc/codecs/hdmi-codec.c
-> index b07607a..be46fbd 100644
-> --- a/sound/soc/codecs/hdmi-codec.c
-> +++ b/sound/soc/codecs/hdmi-codec.c
-> @@ -275,6 +275,7 @@ struct hdmi_codec_priv {
->  	unsigned int chmap_idx;
->  	struct mutex lock;
->  	bool busy;
-> +	bool eld_bypass;
->  	struct snd_soc_jack *jack;
->  	unsigned int jack_status;
->  	u8 iec_status[AES_IEC958_STATUS_SIZE];
-> @@ -427,6 +428,31 @@ static int hdmi_codec_iec958_mask_get(struct snd_kco=
-ntrol *kcontrol,
->  	return 0;
->  }
-> =20
-> +static int hdmi_codec_eld_bypass_get(struct snd_kcontrol *kcontrol,
-> +				     struct snd_ctl_elem_value *ucontrol)
-> +{
-> +	struct snd_soc_component *component =3D snd_kcontrol_chip(kcontrol);
-> +	struct hdmi_codec_priv *hcp =3D snd_soc_component_get_drvdata(component=
-);
-> +
-> +	ucontrol->value.integer.value[0] =3D hcp->eld_bypass;
-> +
-> +	return 0;
-> +}
-> +
-> +static int hdmi_codec_eld_bypass_put(struct snd_kcontrol *kcontrol,
-> +				     struct snd_ctl_elem_value *ucontrol)
-> +{
-> +	struct snd_soc_component *component =3D snd_kcontrol_chip(kcontrol);
-> +	struct hdmi_codec_priv *hcp =3D snd_soc_component_get_drvdata(component=
-);
-> +
-> +	if (hcp->eld_bypass =3D=3D ucontrol->value.integer.value[0])
-> +		return 0;
-> +
-> +	hcp->eld_bypass =3D ucontrol->value.integer.value[0];
-> +
-> +	return 1;
-> +}
+------kYpNrMA5Q_pRug.oZbu8Kwk_59qkkrrEmQqQB0Vp_jfuzgSx=_60345_
+Content-Type: text/plain; charset="utf-8"
 
-If the ELD bypass is set, how does it affect the hdmi_codec_params being
-passed to the codec?
 
-Also, what is being returned to the userspace by hdmi_eld_ctl_get once
-the bypass is enabled?
-
-And shouldn't we call get_eld when we remove the bypass?
-
-Maxime
-
---vsmb6pic4bsb7zjz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYnDqHAAKCRDj7w1vZxhR
-xYFvAQC7m4KBlm36tbwsjZTfWnJesyZYJ5lan8/tRFKlZRiidwD/QD7WXOeCP25C
-zFR2E3NRujtrrAzaMkv3nHKGNcZWsQw=
-=QLIB
------END PGP SIGNATURE-----
-
---vsmb6pic4bsb7zjz--
+------kYpNrMA5Q_pRug.oZbu8Kwk_59qkkrrEmQqQB0Vp_jfuzgSx=_60345_--

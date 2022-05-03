@@ -2,117 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68835518888
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A63B51888B
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238497AbiECPbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 11:31:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41800 "EHLO
+        id S238510AbiECPcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 11:32:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238471AbiECPbJ (ORCPT
+        with ESMTP id S236374AbiECPcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 11:31:09 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62FC827B02
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 08:27:34 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id l7so34186308ejn.2
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 08:27:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=L6oXqkRjevAiSpdcYfwuhncdluuEc39LTg7cz7sxv44=;
-        b=p6Wlte4YRrG+PPoS7TrcRAaMr0qDMD7PmWOJ0pJJPpeH1mP4X9eBUE4gCMjniy7uxz
-         7TRw9XBlGC5WN3G9wMym34kIRrPfJZ1gH3lBd7GelJX8UMX+bgNxIhauP2vff+6gtV2u
-         7Xr4SYvE3iqG/A5Oy3ggbYQH9eaWJmLTsi1qbXEvWcQ3Z4No9G8A41dBoGRJhMHeAIN3
-         cuTZIrVB0uMy0tnY3GPAWjQzsu/k0GNhOds+pgjoOIbOwkYafWtLi4mxYKK2barRqIWD
-         nq6XjcsOoELKrONoKu4SNeYzC4Uu4asvRpF+jiQWmRn1BysUbjyROfa8t4mm7JC3DE98
-         2zfw==
+        Tue, 3 May 2022 11:32:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0919A22B38
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 08:28:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651591710;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j50Hj8tQeVhAw3UmlHVgCe3j3gT0Gu2X85okQiDa4t8=;
+        b=IIah3cKIpzLg1XhNGjdv4uJiD6E1So0flN40r1k/kmkY2JL31EOm/7d3GSSFVKv3CLfVs4
+        SGreuHNOpp9oyBdFKyzyFx/lO30KWupIg24UcH9L3TBYe5XQ0oj+9+KzO6VoI5sFSCf2XU
+        vCpD1g/P+hXOT0wOreUisT7HZiOn5iI=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-361-U3_A3T8GNeStRrs9KVoCAw-1; Tue, 03 May 2022 11:28:13 -0400
+X-MC-Unique: U3_A3T8GNeStRrs9KVoCAw-1
+Received: by mail-wm1-f70.google.com with SMTP id r186-20020a1c44c3000000b00393f52ed5ceso1503913wma.7
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 08:28:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=L6oXqkRjevAiSpdcYfwuhncdluuEc39LTg7cz7sxv44=;
-        b=wtL/rTxfDKS8S0L0wN/N8ruRql5VmAZYDGloAjJcanhohZ8di6pdUWkmPAEjq5+pXe
-         XPwjpzGGyiJUcD29qp3j0BbIv0TW2eDkEGU3Z+HhZWHr2rQEQhrVWxvvWtsaOAXJlOcu
-         vff2FeTTs8Lt/iLtCQqvqU13/wmKxYaUQN2GF9zDIIkqplTbWyVamJOlKBQdHRwklN+l
-         c8xv1c5bsfeKMmmhJVh0hfsF5NGKq8TNV0u2l0nkUQg/I3QqjpbCgy6BMjdeI1alAn+E
-         4REzM/9Fnpdja5GwQ34lT/Ur7zAsW5TIqQzWTY+llsnWzt5opKFeEqJTEK2RHkrUob6N
-         DM0w==
-X-Gm-Message-State: AOAM5314JqCnyq+3GE/xvfCVvol4vPCH6e6oZztzDwBlxnvxgyOBLyxC
-        VTUB6HvNFT325U/2T98NzmuYDw==
-X-Google-Smtp-Source: ABdhPJxc19WIlaFr9ahic1DRLVpqXf8A75EvOm0t8s1BnTCQdBOeU9gDZlV2u/An2woqNeimRSjzZA==
-X-Received: by 2002:a17:907:6e2a:b0:6f4:69bb:7ef6 with SMTP id sd42-20020a1709076e2a00b006f469bb7ef6mr7018280ejc.0.1651591652601;
-        Tue, 03 May 2022 08:27:32 -0700 (PDT)
-Received: from [192.168.0.205] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id f12-20020a056402150c00b0042617ba638esm7963161edw.24.2022.05.03.08.27.31
+        bh=j50Hj8tQeVhAw3UmlHVgCe3j3gT0Gu2X85okQiDa4t8=;
+        b=apRB6coDrc/jvXY+L1/QPKEVXHhTBq58MO1BkBfaFLQi9omfV6Ka9D82QUq847hlkc
+         O1umrePIDGIt3LlUBh7bm3IAmlR0a4nrnVjcjCC05U23ZqoRNs/ztclih4OLe3hpmihg
+         9/lOsOA0Hrtyi7OicvLPGe2NvCVh1jTgNTS/j9pS+2sWQyXFtXuCm2U6U5dbYdlpzwCb
+         5qQgjC9myVzcsdQTLHAtUtHYHycQjbU+jgXjqmVYbNCduuC6G9Gc+QKcJ/6rfEQI1R1f
+         G+0V6M1+WWPMPTwVT+Xgqs5/SgPCA4dt9kDLlSr2me+Y6EigMYAhz+ENrqQdqd3DRqiG
+         LNcA==
+X-Gm-Message-State: AOAM5315pVB73KjaC0KD2UpQ1sLFfJfMCmsxHV4cv9UJrn54foe2Iiy7
+        cOpPogFdSuczXLOdnL9W5j3+ixo+fIYRpBcUZOVFXIV9ptHOR3Osmj3cU88a3XDqYCeOuiiOFjz
+        Mw5R6O0f6g1qCT4D1PG/XC7s7xfRBlxVOFAowg6SuhgYpcSFnDSo0wxubQJ1ZDv0HzZXdu++zId
+        o=
+X-Received: by 2002:a05:600c:3c8d:b0:38e:4bc6:abde with SMTP id bg13-20020a05600c3c8d00b0038e4bc6abdemr3770034wmb.13.1651591691511;
+        Tue, 03 May 2022 08:28:11 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz8aKnCRfGAhf0ml55t4COEjHHc51OmLWEBcp/UoDfVA5aOjYQU7dHI4VJyeVwkP7P18G5xAA==
+X-Received: by 2002:a05:600c:3c8d:b0:38e:4bc6:abde with SMTP id bg13-20020a05600c3c8d00b0038e4bc6abdemr3769995wmb.13.1651591690935;
+        Tue, 03 May 2022 08:28:10 -0700 (PDT)
+Received: from [10.201.33.11] ([195.166.127.210])
+        by smtp.gmail.com with ESMTPSA id u21-20020adfa195000000b0020c5253d8c4sm9568792wru.16.2022.05.03.08.28.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 May 2022 08:27:31 -0700 (PDT)
-Message-ID: <bcf0eb84-c749-c900-1be4-aa5ecb1a5a8e@linaro.org>
-Date:   Tue, 3 May 2022 17:27:30 +0200
+        Tue, 03 May 2022 08:28:10 -0700 (PDT)
+Message-ID: <e3ce080c-8ef8-f838-d4a8-b10cd5d5c172@redhat.com>
+Date:   Tue, 3 May 2022 17:28:09 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 4/8] dt-bindings: riscv: microchip: document icicle
- reference design
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2] fbdev: Make fb_release() return -ENODEV if fbdev was
+ unregistered
 Content-Language: en-US
-To:     Conor Dooley <mail@conchuod.ie>, krzk+dt@kernel.org,
-        palmer@dabbelt.com, robh+dt@kernel.org
-Cc:     conor.dooley@microchip.com, Cyril.Jean@microchip.com,
-        daire.mcnamara@microchip.com, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, palmer@rivosinc.com, arnd@arndb.de,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-References: <20220501192557.2631936-1-mail@conchuod.ie>
- <20220501192557.2631936-5-mail@conchuod.ie>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220501192557.2631936-5-mail@conchuod.ie>
+To:     linux-kernel@vger.kernel.org
+Cc:     Maxime Ripard <maxime@cerno.tech>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Junxiao Chang <junxiao.chang@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Helge Deller <deller@gmx.de>, Sam Ravnborg <sam@ravnborg.org>,
+        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        Zack Rusin <zackr@vmware.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Zheyu Ma <zheyuma97@gmail.com>,
+        Zhouyi Zhou <zhouzhouyi@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
+References: <20220502135014.377945-1-javierm@redhat.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20220502135014.377945-1-javierm@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/05/2022 21:25, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+On 5/2/22 15:50, Javier Martinez Canillas wrote:
+> A reference to the framebuffer device struct fb_info is stored in the file
+> private data, but this reference could no longer be valid and must not be
+> accessed directly. Instead, the file_fb_info() accessor function must be
+> used since it does sanity checking to make sure that the fb_info is valid.
 > 
-> Add a compatible for the icicle kit's reference design. This represents
-> the FPGA fabric's contents & is versioned to denote which release of the
-> reference design it applies to.
+> This can happen for example if the registered framebuffer device is for a
+> driver that just uses a framebuffer provided by the system firmware. In
+> that case, the fbdev core would unregister the framebuffer device when a
+> real video driver is probed and ask to remove conflicting framebuffers.
 > 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> The bug has been present for a long time but commit 27599aacbaef ("fbdev:
+> Hot-unplug firmware fb devices on forced removal") unmasked it since the
+> fbdev core started unregistering the framebuffers' devices associated.
+> 
+> Fixes: 27599aacbaef ("fbdev: Hot-unplug firmware fb devices on forced removal")
+> Reported-by: Maxime Ripard <maxime@cerno.tech>
+> Reported-by: Junxiao Chang <junxiao.chang@intel.com>
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
 > ---
->  Documentation/devicetree/bindings/riscv/microchip.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/riscv/microchip.yaml b/Documentation/devicetree/bindings/riscv/microchip.yaml
-> index 3f981e897126..7a1f883a39b5 100644
-> --- a/Documentation/devicetree/bindings/riscv/microchip.yaml
-> +++ b/Documentation/devicetree/bindings/riscv/microchip.yaml
-> @@ -20,8 +20,10 @@ properties:
->      items:
->        - enum:
->            - microchip,mpfs-icicle-kit
-> +          - microchip,mpfs-icicle-reference-rtlv2203
->        - const: microchip,mpfs
->  
-> +
+Applied to drm-misc (drm-misc-fixes).
 
-No need for this line break.
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
->  additionalProperties: true
->  
->  ...
-
-
+-- 
 Best regards,
-Krzysztof
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
+

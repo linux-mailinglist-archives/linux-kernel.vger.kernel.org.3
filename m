@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF1D518F80
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 22:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE6A2518F7D
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 22:57:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237032AbiECU7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 16:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32966 "EHLO
+        id S242437AbiECU70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 16:59:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242174AbiECU6o (ORCPT
+        with ESMTP id S242360AbiECU6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 16:58:44 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500363E5E7
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 13:55:10 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id v11so6224189pff.6
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 13:55:10 -0700 (PDT)
+        Tue, 3 May 2022 16:58:49 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5DCB3E5FC
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 13:55:12 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id j14so544699plx.3
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 13:55:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=0s2l8L34z34MUkPb/xcNxM9oOQ5pfRGE8+PgPesbjxc=;
-        b=bhVNBEZ+27B/SccXVadaHG1jvpOqXyYJ+hj8GEC9P9p9MQDKaF4BLipZ7tMCTUGtNz
-         PICi0sZeHr7t7kjGGRSBO8mzLluE7LOSWG4BnDKhxnnOuZFtTMVW6xXYTxLuym405lSP
-         B3+FxDhigUqiTNZFl1mYMxRpZfBypDicHUpbM=
+        bh=71QHvmVbzbum/E3ZAVgy97tXOS8tK26BfXNggSRktyw=;
+        b=mNBJz/XxKt2KFJk2CFepuhN/xZJ9Uv/rz50WON+4ZRBqQGxaTvzRxuzOr8mgvdSLb1
+         NPLtvHfakt3e74WR26Z3Hp3lQMac4mwkW+TTeTMhZW7eR4xkAOhBJl89txhv7sIl6ZU3
+         R/p0OcsGRJ9TZUFVA94bG5hnIYF/Me0VROUlc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=0s2l8L34z34MUkPb/xcNxM9oOQ5pfRGE8+PgPesbjxc=;
-        b=C5DVAx6iwMu/pVrSbCk4JkmhLhVAmZsLkcKdpL51t9IZTw91/lZDf0aCwE6Usgvo58
-         ByHWiHyHXF+hSIyVR8nwvQ4zW90YpYk+6Jty3MWa9vJEMyxCOgwEXwNjQrA9o8ypGHnJ
-         /CrgHXXaMcEZmTLzsc7ReSTQ5WLqzpW9pqjWXzU/O/IAJ5YrqcDC8tZmPW4MnAp2XX18
-         mDnZMb8Y21IP78SIUNIGfnJSr+f0oxlwKhJ9/Q+p8Kp2/Hng7Fc2TdKD3IJJxANGkANS
-         LwQHGfo39cZNzHzIno6u92i3OG9s0ZYr7HFaeXnrfRdT7khHiXASS+DIQNyI/vq8eJSE
-         Xl8g==
-X-Gm-Message-State: AOAM533EorY+vOVFXssR1b+XnNRlxMX567jzqKnIbrvnvr9lKBdu1rY+
-        Ss4Ps7yB20m6JmxoKXFy0yP+XA==
-X-Google-Smtp-Source: ABdhPJxNh718o6lZcnrjFVdXM6pAZT3sVcEOZcCHQo1I7zTGHYHYdiEGHt2M12oOpzHuik2BFiOqqA==
-X-Received: by 2002:a63:2d46:0:b0:3c1:424a:2a90 with SMTP id t67-20020a632d46000000b003c1424a2a90mr15245588pgt.35.1651611309785;
-        Tue, 03 May 2022 13:55:09 -0700 (PDT)
+        bh=71QHvmVbzbum/E3ZAVgy97tXOS8tK26BfXNggSRktyw=;
+        b=gNwtOWyIjy3QsQ/j1BbmFN7bBJHTMwl4omW/RbXxRuAXoeZ8phcrHDhhsk+syNDUfM
+         revmsK23HC5gvncfZ7uF9IN3Q5LpjIIHSxGc4pU5P4KNVWBjX9L1CS5tW5fbDoZQBKqw
+         w+6vke0sgajxmq+hdo0ez9F4hEaUiK70trWfeP0LHmcZPVR8wYdz1Susr5MBi7CVAZO3
+         vcn1X2Shva71fcESH6z6nb6ix3X+AlxlRzZVMvw8WOh0apHkGJSzpp4tvAhFAVmfLSjy
+         YZf43fNpERseiU6v0Qhi6IzPLTm/zhAvmDfVlWVLRy2pbpVM759pdfX0+e5VTBnRzkk3
+         /UHQ==
+X-Gm-Message-State: AOAM533r4MxoRy1cYaUITuiZtJx+BEtcqv4NhQMF7eIpXPqFUp02tszZ
+        jUwq6RjMj/vaEb5AHsForl29H0d5X4nQvw==
+X-Google-Smtp-Source: ABdhPJwVWBkyzyFxX6liiB55m10I4fUKnwsv3ihyDoa4NBY+1rzycYUA4hGuRSyZWfG4uHgq2ucCWg==
+X-Received: by 2002:a17:902:b694:b0:153:1d9a:11a5 with SMTP id c20-20020a170902b69400b001531d9a11a5mr18075548pls.151.1651611311893;
+        Tue, 03 May 2022 13:55:11 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id e24-20020a63f558000000b003c14af50638sm3571630pgk.80.2022.05.03.13.55.08
+        by smtp.gmail.com with ESMTPSA id t7-20020a62ea07000000b0050dc76281f1sm6709358pfh.203.2022.05.03.13.55.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 13:55:08 -0700 (PDT)
+        Tue, 03 May 2022 13:55:10 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Bill Wendling <morbo@google.com>
 Cc:     Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org,
@@ -53,14 +53,14 @@ Cc:     Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org,
         David Howells <dhowells@redhat.com>,
         Jeff Layton <jlayton@kernel.org>, linux-kernel@vger.kernel.org,
         linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH 4/6] randstruct: Split randstruct Makefile and CFLAGS
-Date:   Tue,  3 May 2022 13:55:01 -0700
-Message-Id: <20220503205503.3054173-5-keescook@chromium.org>
+Subject: [PATCH 5/6] randstruct: Move seed generation into scripts/basic/
+Date:   Tue,  3 May 2022 13:55:02 -0700
+Message-Id: <20220503205503.3054173-6-keescook@chromium.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220503205503.3054173-1-keescook@chromium.org>
 References: <20220503205503.3054173-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6703; h=from:subject; bh=ZEmrZ0k2Reix3PKt6lfCkuyHYsw1YqQ5sKxXW11+HTw=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBicZam4zhEqDWTM2MIktnKTuhNVNv/8H6Fea3xejgt HnjQkAKJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYnGWpgAKCRCJcvTf3G3AJq7lEA CuZ+xeZNdVslL1dtCv78SwqgkVF0Irvo2o5Ics+MdKOz0zPRHZP6oMToUFSgisWVwucBw1doPlHwwF zhbFZ5b9Z/mtyEvMqJQMoRsw/4Z7muCHglm3Dv8O47FpzI+yiiO30zPSHWfI74tHx92EWmSpJ/2Gxj R+Q4E8GQUabJY6Jh+dJuOpyF5HHJViaVqL7bdj5/mm5HymCYOEq5Jr71Cw/oyS7FGHAeEqyoaT1KUx srmuQy5RY0pPrL9SMAlO6//qsp85AalH8rgppGOsAl/H2/MkYpbouZtgklux7zpjPVLXrZxWWs3FL8 j0IynPZlYJImwZQlLdXPHm3O1BmKSHCQgQ8932YDoPHTJpTomyOeIjSvUD0FM1CGs4IisY5almpKHa 7mI4Ac0Zq7V2/VjDhtDgt343eONTqXX0hdzLr8CAK/ZlwFgi3TrXwqP7LN+t9Deb3tAzJPl1P4SNPK 09KMgW8IobL0wwL3um45dfvqf4uIvDJyAW1pcWbkWPuanq553xzB0h3RhRqtGB4+2uCCRbl9O1hXrT iBZ1IJYTRPfXawzfDUNGV73thtPTZmvfKZTnocs6/UKcP6sCw3XM8DEYkh/GE0q1u68QlcGu6agRXQ uUIg1L8Hn/FAG0pt19d+14PNYE3uHeKpWoNkw7Dva1Fdd9aWiHHtqQbmnoww==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6991; h=from:subject; bh=POSwG5vGM5ePjK+NnCJy7zXZuBYgVkMBrdQajWqSdos=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBicZamheMTQbFPcgMuGPTOLLAi+SSC63O6IOd2ZB8G s01qn/WJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYnGWpgAKCRCJcvTf3G3AJmrYD/ 9/S4SyNCCc6JysEizCShXfywKRGd/VypdZzFIpfGVbMWoWwduoZHcTO2KvS/88sMU72c4E6tNHVTRW JNSdq6HqbNyLDa2c3Dr07Ke9TEO3YZJ/bWwUeEOvEiKdyRNOMFU5picScsWYclKC8xdqB/Nq3wXBbd Syaf1Pdc6CFYgTnv6Ve4xYPoQAl0Pl4SxmPZV7QhdnJlRh0sGZzcRQJHdIn2MKAzEJLjCdPSTPJeqV OympuT/CPrl65t1f3iQN/m62UbI2nL8alWR7RHtr3qQ4HhZYIh+b2JufhOxFBEW/4BGFvEPSA3UsOG Q0SZwl70gwV44QEX/3jgTI86Lyld20sO8Px5z9cwUb0L004gQA+AR9sPwkEfe7QOEqEwDXJfyqtfMP cjy+VOCP7JFHS07booUAPGlUozGNlpzI2aT4rC4QiBQa0lcOEwXEzy8D9RrGj1zD0V/dz0e65UeQrg 2+Ibt4ziS+cHW6V+xUWPVZiQEKR+KyFb4aoHY+KCo3WR4LxiNbBNYWL6rUOXurCrSohkdU5mhkXyMH BmD60mww0e9EASzMySkYpkNIdlzimz0ekp8TAxceKDEb206dnxQOucbY9ntdg07Ffyf3pC5dywOqgy quouzBQoX6hoUJwnW2nDegfzTxW0QgU8tYhLnXP0sZvayjjDxnZhkl0UpOig==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -73,152 +73,171 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To enable the new Clang randstruct implementation[1], move
-randstruct into its own Makefile and split the CFLAGS from
-GCC_PLUGINS_CFLAGS into RANDSTRUCT_CFLAGS.
-
-[1] https://reviews.llvm.org/D121556
+To enable Clang randstruct support, move the structure layout
+randomization seed generation out of scripts/gcc-plugins/ into
+scripts/basic/ so it happens early enough that it can be used by either
+compiler implementation. The gcc-plugin still builds its own header file,
+but now does so from the common "randstruct.seed" file.
 
 Cc: linux-hardening@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- Makefile                        |  1 +
- arch/arm/vdso/Makefile          |  2 +-
- arch/arm64/kernel/vdso/Makefile |  3 ++-
- arch/sparc/vdso/Makefile        |  3 ++-
- arch/x86/entry/vdso/Makefile    |  3 ++-
- scripts/Makefile.gcc-plugins    |  8 ++------
- scripts/Makefile.randstruct     | 14 ++++++++++++++
- 7 files changed, 24 insertions(+), 10 deletions(-)
- create mode 100644 scripts/Makefile.randstruct
+ Documentation/dontdiff                       |  1 +
+ Documentation/kbuild/reproducible-builds.rst |  5 +++--
+ include/linux/vermagic.h                     |  2 +-
+ scripts/basic/.gitignore                     |  1 +
+ scripts/basic/Makefile                       | 11 +++++++++++
+ scripts/gcc-plugins/Makefile                 | 15 ++++++++++-----
+ scripts/gcc-plugins/gen-random-seed.sh       |  9 ---------
+ scripts/gen-randstruct-seed.sh               |  7 +++++++
+ security/Kconfig.hardening                   |  9 +++++----
+ 9 files changed, 39 insertions(+), 21 deletions(-)
+ delete mode 100755 scripts/gcc-plugins/gen-random-seed.sh
+ create mode 100755 scripts/gen-randstruct-seed.sh
 
-diff --git a/Makefile b/Makefile
-index 29e273d3f8cc..91c91fcf3c24 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1011,6 +1011,7 @@ include-$(CONFIG_KASAN)		+= scripts/Makefile.kasan
- include-$(CONFIG_KCSAN)		+= scripts/Makefile.kcsan
- include-$(CONFIG_UBSAN)		+= scripts/Makefile.ubsan
- include-$(CONFIG_KCOV)		+= scripts/Makefile.kcov
-+include-$(CONFIG_RANDSTRUCT)	+= scripts/Makefile.randstruct
- include-$(CONFIG_GCC_PLUGINS)	+= scripts/Makefile.gcc-plugins
+diff --git a/Documentation/dontdiff b/Documentation/dontdiff
+index 910b30a2a7d9..352ff53a2306 100644
+--- a/Documentation/dontdiff
++++ b/Documentation/dontdiff
+@@ -211,6 +211,7 @@ r200_reg_safe.h
+ r300_reg_safe.h
+ r420_reg_safe.h
+ r600_reg_safe.h
++randstruct.seed
+ randomize_layout_hash.h
+ randomize_layout_seed.h
+ recordmcount
+diff --git a/Documentation/kbuild/reproducible-builds.rst b/Documentation/kbuild/reproducible-builds.rst
+index 81ff30505d35..071f0151a7a4 100644
+--- a/Documentation/kbuild/reproducible-builds.rst
++++ b/Documentation/kbuild/reproducible-builds.rst
+@@ -100,8 +100,9 @@ Structure randomisation
+ -----------------------
  
- include $(addprefix $(srctree)/, $(include-y))
-diff --git a/arch/arm/vdso/Makefile b/arch/arm/vdso/Makefile
-index ec52b776f926..8ca1c9f262a2 100644
---- a/arch/arm/vdso/Makefile
-+++ b/arch/arm/vdso/Makefile
-@@ -28,7 +28,7 @@ CPPFLAGS_vdso.lds += -P -C -U$(ARCH)
- CFLAGS_REMOVE_vdso.o = -pg
+ If you enable ``CONFIG_RANDSTRUCT``, you will need to pre-generate
+-the random seed in ``scripts/gcc-plugins/randomize_layout_seed.h``
+-so the same value is used in rebuilds.
++the random seed in ``scripts/basic/randstruct.seed`` so the same
++value is used by each build. See ``scripts/gen-randstruct-seed.sh``
++for details.
  
- # Force -O2 to avoid libgcc dependencies
--CFLAGS_REMOVE_vgettimeofday.o = -pg -Os $(GCC_PLUGINS_CFLAGS)
-+CFLAGS_REMOVE_vgettimeofday.o = -pg -Os $(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS)
- ifeq ($(c-gettimeofday-y),)
- CFLAGS_vgettimeofday.o = -O2
- else
-diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
-index 172452f79e46..d9147fba1a0b 100644
---- a/arch/arm64/kernel/vdso/Makefile
-+++ b/arch/arm64/kernel/vdso/Makefile
-@@ -32,7 +32,8 @@ ccflags-y += -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO
- # -Wmissing-prototypes and -Wmissing-declarations are removed from
- # the CFLAGS of vgettimeofday.c to make possible to build the
- # kernel with CONFIG_WERROR enabled.
--CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE) -Os $(CC_FLAGS_SCS) $(GCC_PLUGINS_CFLAGS) \
-+CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE) -Os $(CC_FLAGS_SCS) \
-+				$(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) \
- 				$(CC_FLAGS_LTO) -Wmissing-prototypes -Wmissing-declarations
- KASAN_SANITIZE			:= n
- KCSAN_SANITIZE			:= n
-diff --git a/arch/sparc/vdso/Makefile b/arch/sparc/vdso/Makefile
-index c5e1545bc5cf..77d7b9032158 100644
---- a/arch/sparc/vdso/Makefile
-+++ b/arch/sparc/vdso/Makefile
-@@ -58,7 +58,7 @@ CFL := $(PROFILING) -mcmodel=medlow -fPIC -O2 -fasynchronous-unwind-tables -m64
+ Debug info conflicts
+ --------------------
+diff --git a/include/linux/vermagic.h b/include/linux/vermagic.h
+index efb51a2da599..a54046bf37e5 100644
+--- a/include/linux/vermagic.h
++++ b/include/linux/vermagic.h
+@@ -33,7 +33,7 @@
+ #define MODULE_VERMAGIC_MODVERSIONS ""
+ #endif
+ #ifdef RANDSTRUCT
+-#include <generated/randomize_layout_hash.h>
++#include <generated/randstruct_hash.h>
+ #define MODULE_RANDSTRUCT "RANDSTRUCT_" RANDSTRUCT_HASHED_SEED
+ #else
+ #define MODULE_RANDSTRUCT
+diff --git a/scripts/basic/.gitignore b/scripts/basic/.gitignore
+index 961c91c8a884..07c195f605a1 100644
+--- a/scripts/basic/.gitignore
++++ b/scripts/basic/.gitignore
+@@ -1,2 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ /fixdep
++/randstruct.seed
+diff --git a/scripts/basic/Makefile b/scripts/basic/Makefile
+index eeb6a38c5551..dd289a6725ac 100644
+--- a/scripts/basic/Makefile
++++ b/scripts/basic/Makefile
+@@ -3,3 +3,14 @@
+ # fixdep: used to generate dependency information during build process
  
- SPARC_REG_CFLAGS = -ffixed-g4 -ffixed-g5 -fcall-used-g5 -fcall-used-g7
+ hostprogs-always-y	+= fixdep
++
++# randstruct: the seed is needed before building the gcc-plugin or
++# before running a Clang kernel build.
++gen-randstruct-seed	:= $(srctree)/scripts/gen-randstruct-seed.sh
++quiet_cmd_create_randstruct_seed = GENSEED $@
++cmd_create_randstruct_seed = \
++	$(CONFIG_SHELL) $(gen-randstruct-seed) \
++		$@ $(objtree)/include/generated/randstruct_hash.h
++$(obj)/randstruct.seed: $(gen-randstruct-seed) FORCE
++	$(call if_changed,create_randstruct_seed)
++always-$(CONFIG_RANDSTRUCT) += randstruct.seed
+diff --git a/scripts/gcc-plugins/Makefile b/scripts/gcc-plugins/Makefile
+index 1952d3bb80c6..148f4639cf09 100644
+--- a/scripts/gcc-plugins/Makefile
++++ b/scripts/gcc-plugins/Makefile
+@@ -1,12 +1,17 @@
+ # SPDX-License-Identifier: GPL-2.0
  
--$(vobjs): KBUILD_CFLAGS := $(filter-out $(GCC_PLUGINS_CFLAGS) $(SPARC_REG_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
-+$(vobjs): KBUILD_CFLAGS := $(filter-out $(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) $(SPARC_REG_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
+-$(obj)/randomize_layout_plugin.so: $(objtree)/$(obj)/randomize_layout_seed.h
+-quiet_cmd_create_randomize_layout_seed = GENSEED $@
++$(obj)/randomize_layout_plugin.so: $(obj)/randomize_layout_seed.h
++quiet_cmd_create_randomize_layout_seed = SEEDHDR $@
+ cmd_create_randomize_layout_seed = \
+-  $(CONFIG_SHELL) $(srctree)/$(src)/gen-random-seed.sh $@ $(objtree)/include/generated/randomize_layout_hash.h
+-$(objtree)/$(obj)/randomize_layout_seed.h: FORCE
++	SEED=$$(cat $(filter-out FORCE,$^) </dev/null); \
++	echo '/*' > $@; \
++	echo ' * This file is automatically generated. Keep it private.' >> $@; \
++	echo ' * Exposing this value will expose the layout of randomized structures.' >> $@; \
++	echo ' */' >> $@; \
++	echo "const char *randstruct_seed = \"$$SEED\";" >> $@
++$(obj)/randomize_layout_seed.h: $(objtree)/scripts/basic/randstruct.seed FORCE
+ 	$(call if_changed,create_randomize_layout_seed)
+-targets += randomize_layout_seed.h randomize_layout_hash.h
++targets += randomize_layout_seed.h
  
+ # Build rules for plugins
  #
- # vDSO code runs in userspace and -pg doesn't help with profiling anyway.
-@@ -88,6 +88,7 @@ $(obj)/vdso32.so.dbg: asflags-$(CONFIG_SPARC64) += -m32
- KBUILD_CFLAGS_32 := $(filter-out -m64,$(KBUILD_CFLAGS))
- KBUILD_CFLAGS_32 := $(filter-out -mcmodel=medlow,$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 := $(filter-out -fno-pic,$(KBUILD_CFLAGS_32))
-+KBUILD_CFLAGS_32 := $(filter-out $(RANDSTRUCT_CFLAGS),$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 := $(filter-out $(GCC_PLUGINS_CFLAGS),$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 := $(filter-out $(SPARC_REG_CFLAGS),$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 += -m32 -msoft-float -fpic
-diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
-index 693f8b9031fb..c2a8b76ae0bc 100644
---- a/arch/x86/entry/vdso/Makefile
-+++ b/arch/x86/entry/vdso/Makefile
-@@ -91,7 +91,7 @@ ifneq ($(RETPOLINE_VDSO_CFLAGS),)
- endif
- endif
- 
--$(vobjs): KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO) $(GCC_PLUGINS_CFLAGS) $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
-+$(vobjs): KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO) $(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
- 
- #
- # vDSO code runs in userspace and -pg doesn't help with profiling anyway.
-@@ -148,6 +148,7 @@ KBUILD_CFLAGS_32 := $(filter-out -m64,$(KBUILD_CFLAGS))
- KBUILD_CFLAGS_32 := $(filter-out -mcmodel=kernel,$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 := $(filter-out -fno-pic,$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 := $(filter-out -mfentry,$(KBUILD_CFLAGS_32))
-+KBUILD_CFLAGS_32 := $(filter-out $(RANDSTRUCT_CFLAGS),$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 := $(filter-out $(GCC_PLUGINS_CFLAGS),$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 := $(filter-out $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS_32))
- KBUILD_CFLAGS_32 := $(filter-out $(CC_FLAGS_LTO),$(KBUILD_CFLAGS_32))
-diff --git a/scripts/Makefile.gcc-plugins b/scripts/Makefile.gcc-plugins
-index 827c47ce5c73..692d64a70542 100644
---- a/scripts/Makefile.gcc-plugins
-+++ b/scripts/Makefile.gcc-plugins
-@@ -22,12 +22,6 @@ export DISABLE_STRUCTLEAK_PLUGIN
- gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_STRUCTLEAK)		\
- 		+= -DSTRUCTLEAK_PLUGIN
- 
--gcc-plugin-$(CONFIG_GCC_PLUGIN_RANDSTRUCT)	+= randomize_layout_plugin.so
--gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_RANDSTRUCT)		\
--		+= -DRANDSTRUCT
--gcc-plugin-cflags-$(CONFIG_RANDSTRUCT_PERFORMANCE)		\
--		+= -fplugin-arg-randomize_layout_plugin-performance-mode
+diff --git a/scripts/gcc-plugins/gen-random-seed.sh b/scripts/gcc-plugins/gen-random-seed.sh
+deleted file mode 100755
+index 68af5cc20a64..000000000000
+--- a/scripts/gcc-plugins/gen-random-seed.sh
++++ /dev/null
+@@ -1,9 +0,0 @@
+-#!/bin/sh
+-# SPDX-License-Identifier: GPL-2.0
 -
- gcc-plugin-$(CONFIG_GCC_PLUGIN_STACKLEAK)	+= stackleak_plugin.so
- gcc-plugin-cflags-$(CONFIG_GCC_PLUGIN_STACKLEAK)		\
- 		+= -DSTACKLEAK_PLUGIN
-@@ -60,6 +54,8 @@ KBUILD_CFLAGS += $(GCC_PLUGINS_CFLAGS)
- # be included in GCC_PLUGIN so they can get built.
- gcc-plugin-external-$(CONFIG_GCC_PLUGIN_SANCOV)			\
- 	+= sancov_plugin.so
-+gcc-plugin-external-$(CONFIG_GCC_PLUGIN_RANDSTRUCT)		\
-+	+= randomize_layout_plugin.so
- 
- # All enabled GCC plugins are collected here for building in
- # scripts/gcc-scripts/Makefile.
-diff --git a/scripts/Makefile.randstruct b/scripts/Makefile.randstruct
-new file mode 100644
-index 000000000000..4d741e6db554
+-if [ ! -f "$1" ]; then
+-	SEED=`od -A n -t x8 -N 32 /dev/urandom | tr -d ' \n'`
+-	echo "const char *randstruct_seed = \"$SEED\";" > "$1"
+-	HASH=`echo -n "$SEED" | sha256sum | cut -d" " -f1 | tr -d ' \n'`
+-	echo "#define RANDSTRUCT_HASHED_SEED \"$HASH\"" > "$2"
+-fi
+diff --git a/scripts/gen-randstruct-seed.sh b/scripts/gen-randstruct-seed.sh
+new file mode 100755
+index 000000000000..61017b36c464
 --- /dev/null
-+++ b/scripts/Makefile.randstruct
-@@ -0,0 +1,14 @@
++++ b/scripts/gen-randstruct-seed.sh
+@@ -0,0 +1,7 @@
++#!/bin/sh
 +# SPDX-License-Identifier: GPL-2.0
 +
-+randstruct-cflags-y += -DRANDSTRUCT
-+
-+ifdef CONFIG_GCC_PLUGIN_RANDSTRUCT
-+randstruct-cflags-y	\
-+	+= -fplugin=$(objtree)/scripts/gcc-plugins/randomize_layout_plugin.so
-+randstruct-cflags-$(CONFIG_RANDSTRUCT_PERFORMANCE)		\
-+	+= -fplugin-arg-randomize_layout_plugin-performance-mode
-+endif
-+
-+export RANDSTRUCT_CFLAGS := $(randstruct-cflags-y)
-+
-+KBUILD_CFLAGS	+= $(RANDSTRUCT_CFLAGS)
++SEED=$(od -A n -t x8 -N 32 /dev/urandom | tr -d ' \n')
++echo "$SEED" > "$1"
++HASH=$(echo -n "$SEED" | sha256sum | cut -d" " -f1)
++echo "#define RANDSTRUCT_HASHED_SEED \"$HASH\"" > "$2"
+diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
+index 364e3f8c6eea..0277ba578779 100644
+--- a/security/Kconfig.hardening
++++ b/security/Kconfig.hardening
+@@ -284,10 +284,11 @@ choice
+ 	  tools like Volatility against the system (unless the kernel
+ 	  source tree isn't cleaned after kernel installation).
+ 
+-	  The seed used for compilation is located at
+-	  scripts/randomize_layout_seed.h. It remains after a "make clean"
+-	  to allow for external modules to be compiled with the existing
+-	  seed and will be removed by a "make mrproper" or "make distclean".
++	  The seed used for compilation is in scripts/basic/randomize.seed.
++	  It remains after a "make clean" to allow for external modules to
++	  be compiled with the existing seed and will be removed by a
++	  "make mrproper" or "make distclean". This file should not be made
++	  public, or the structure layout can be determined.
+ 
+ 	config RANDSTRUCT_NONE
+ 		bool "Disable structure layout randomization"
 -- 
 2.32.0
 

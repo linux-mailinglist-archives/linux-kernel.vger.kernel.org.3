@@ -2,107 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A404A518FED
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 23:22:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F93518FF4
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 23:22:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242691AbiECVU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 17:20:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33166 "EHLO
+        id S242703AbiECVVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 17:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231410AbiECVUw (ORCPT
+        with ESMTP id S240310AbiECVVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 17:20:52 -0400
-Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E03403F8;
-        Tue,  3 May 2022 14:17:18 -0700 (PDT)
-Date:   Tue, 03 May 2022 21:17:12 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-        s=protonmail2; t=1651612636;
-        bh=/0vA9ZHk4nsZ0nCXCjLXR4yS03kjJuP+2lBwjcWkdXE=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
-         Feedback-ID:Message-ID;
-        b=aJ1ZgPcJ65nOsqK7ExE22Smle/lqrYGbDdj6OPcm39fYQWRKkRMQR+GP5Eh3dn0ml
-         CN0YoHydSjz6UTrdfC/8UYeH1ImXW6HU6vI1EvXdhGnMX/47c4d0uOw+zEwVHd7orf
-         h7d6LByhwtn1cqScJGYsp3sn3NCIxp2MuQmo91KqbY3q4NGfFBHED5deH0YqeAA/Y4
-         96B2+13mb9I4Hdh9gpzK7RQbFAE7O4K+2tQzwIXtrTVz2h9ZBuSW38zEALj5aB3JvG
-         EUifxFReuyQuYuPlaJkukVq5MjzSuotz5ZPZduw+ClRF33CdmhNVifSN1AughSGNsP
-         nIkJFvhNd+ASQ==
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexander Lobakin <alobakin@pm.me>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Song Liu <songliubraving@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: Re: [PATCH v2 bpf 00/11] bpf: random unpopular userspace fixes (32 bit et al)
-Message-ID: <20220503211001.160060-1-alobakin@pm.me>
-In-Reply-To: <CAADnVQJJiBO5T3dvYaifhu3crmce7CH9b5ioc1u4=Y25SUxVRA@mail.gmail.com>
-References: <20220421003152.339542-1-alobakin@pm.me> <CAADnVQJJiBO5T3dvYaifhu3crmce7CH9b5ioc1u4=Y25SUxVRA@mail.gmail.com>
-Feedback-ID: 22809121:user:proton
+        Tue, 3 May 2022 17:21:15 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A50F40918
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 14:17:41 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-d39f741ba0so18450643fac.13
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 14:17:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Q3pgt9cmaFJwCOzqFkw/yJ3I2pr8XT7y2l81WiGQbVo=;
+        b=BPnq8tFJhhx5gM69LeYM5FiQ5Kuj7OWMKuGSUFPLWm4GXYdtiPfrky/YfMQivy+FtR
+         Ic8ktnQeRIIXvw73Qm9/6VereVp/QTV+q1F9QijFsC40qMT0OP4x2AWFxyKbojyu1lNI
+         mPxXMTCzZbjgUi9jbqsCmyrXiVahELJ6/UYWKezxXpqkCKPZwErA8NIedLl4mUt7dLys
+         wUVgybqUfyIYvvPdZ3qBlsID5S/yWHd7Ue/bl1O5QkKfz1fzWcNl3DncMTFff/HEnZUo
+         K1WNJQAikFGjVQare6A4izLeSv+jzpQBORreUzOLnWDs7bW2UsMqP5j4B30P2yrFWov+
+         kaow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Q3pgt9cmaFJwCOzqFkw/yJ3I2pr8XT7y2l81WiGQbVo=;
+        b=ubGs/JZXFv/9AHuaGfCDVe36uf2ewcPBx3nvFsryhkDjwxlEs0cSpgJiDEqUXueQJW
+         vqh+1GJ+JkoRH3+XGuZ7ka4yfj/xiU24FT1VO6JK4mD0LiQcdoSa/nhRaSeNqAXxHwvQ
+         UdOKzW8KRXP24gVJBsZ9Oy4I0kMEqTsuFCv0lUUQbxJVBQ+lCTR7L4sg3Z/bs7hRlWWx
+         En66HhaBE8BLCK7B+gLagO6xqFAi/NLv7SGL53KldVytn6zEInOBB2icNbkdeYX/wxw6
+         6MdD4aTXhohQ+lVSWe6ZqJumCYg2fnz1R64ej4CT1/JmRoOkahK1nZulFoyWPa72dQ8B
+         BWOw==
+X-Gm-Message-State: AOAM530UZ88nJB1+6g+l+/u14+lRAVwyTxhGcVOfODiM2agbEU8ZOZ0D
+        PyEk3is+3ulfxn6fXTVfLj7uKg==
+X-Google-Smtp-Source: ABdhPJz3OFX7D35HbbGETgFkObGRd9Zgwy8xomhAvxAMoEli8r69eer8ytSgC8BemD4JuGxHhsgViA==
+X-Received: by 2002:a05:6870:32cb:b0:e5:a428:97ab with SMTP id r11-20020a05687032cb00b000e5a42897abmr2702036oac.128.1651612660908;
+        Tue, 03 May 2022 14:17:40 -0700 (PDT)
+Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id b3-20020a056830104300b0060603221263sm4305906otp.51.2022.05.03.14.17.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 14:17:40 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Georgi Djakov <djakov@kernel.org>,
+        Steev Klimaszewski <steev@kali.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] interconnect: qcom: sc8180x: Some fixes
+Date:   Tue,  3 May 2022 14:19:21 -0700
+Message-Id: <20220503211925.1022169-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 20 Apr 2022 17:40:34 -0700
+This contains a few fixes for the sc8180x interconnect provider driver to make
+it functional.
 
-> On Wed, Apr 20, 2022 at 5:38 PM Alexander Lobakin <alobakin@pm.me> wrote:
->
-> Again?
->
-> -----BEGIN PGP MESSAGE-----
-> Version: ProtonMail
->
-> wcFMA165ASBBe6s8AQ/8C9y4TqXgASA5xBT7UIf2GyTQRjKWcy/6kT1dkjkF
-> FldAOhehhgLYjLJzNAIkecOQfz/XNapW3GdrQDq11pq9Bzs1SJJekGXlHVIW
+Bjorn Andersson (4):
+  dt-bindings: interconnect: Add SC8180X QUP0 virt provider
+  interconnect: qcom: sc8180x: Modernize sc8180x probe
+  interconnect: qcom: sc8180x: Fix QUP0 nodes
+  interconnect: qcom: sc8180x: Mark some BCMs keepalive
 
-ProtonMail support:
+ .../bindings/interconnect/qcom,rpmh.yaml      |   1 +
+ drivers/interconnect/qcom/sc8180x.c           | 139 +++++-------------
+ drivers/interconnect/qcom/sc8180x.h           |   7 +
+ .../dt-bindings/interconnect/qcom,sc8180x.h   |   7 +
+ 4 files changed, 51 insertions(+), 103 deletions(-)
 
-"
-The reason that some of the recipients are receiving PGP-encrypted
-emails is that kernel.org is providing public keys for those
-recipients (ast@kernel.org and toke@kernel.org specifically) via WKD
-(Web Key Directory), and our API automatically encrypts messages
-when a key is served over WKD.
-
-Unfortunately, there is currently no way to disable encryption for
-recipients that server keys over WKD but the recipients should be
-able to decrypt the messages using the secret keys that correspond
-to their public keys provided by kernel.org.
-This is applicable both to messages sent via the ProtonMail web app,
-and messages sent via Bridge app.
-
-We have forwarded your feedback to the appropriate teams, and we
-will see if we can implement a disable encryption option for these
-cases. Unfortunately, we cannot speculate when we might implement
-such an option.
-"
-
-Weeeeeird, it wasn't like that a year ago.
-Anyway, since it's address specific and for now I observed this only
-for ast@ and toke@, can I maybe send the series adding your Gmail
-account rather that korg one? Alternatively, I can send it from my
-Intel address if you prefer (thankfully, it doesn't encrypt anything
-without asking), I just didn't want to mix personal stuff with corp.
-
->
-> Sorry I'm tossing the series out of patchwork.
-
-Thanks,
-Al
+-- 
+2.35.1
 

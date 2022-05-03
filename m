@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40BD1517DC7
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 08:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29460517DC0
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 08:54:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbiECG40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 02:56:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46222 "EHLO
+        id S231372AbiECG4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 02:56:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbiECGzp (ORCPT
+        with ESMTP id S230386AbiECG4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 02:55:45 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C27519022
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 23:51:59 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id bv19so31645786ejb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 23:51:59 -0700 (PDT)
+        Tue, 3 May 2022 02:56:09 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4E7193C0
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 23:52:06 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id a1so18842840edt.3
+        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 23:52:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=vWso6SETa3zmnQdk3zavu/Qn/dZv2mGNi7dOArTUaJU=;
-        b=w3sCbaVhdxKfSGWyhX040512wTc69vx2SUBodkB0g2Tdbg0kRkxlZ6AWWb/9BruAhv
-         V2Qx7wQg2daDTYJiZhgtCdUQlgUu2YwGHybtQr03nAZKxawAJjgl0mO8sUcBkBnJDy/L
-         PFNJrEde2YyZrkDYKDCoPqL/mYeNSrz6ywbQxepw4yFPAkkZFMklxcOKP4Id5ThCQpXt
-         Wrsn79iQxXbMs16ic6AaUDN6Vb0+MzQoL5lz+BGEmLHwOHE79P6vq+DQpOPDYnQWH/Ut
-         uucQJdSGjvInbTaiaX1fiedUMqnhnNc2aj6lRRJw/m1DlhCwnkenjQQDmSbowNJ5M6+q
-         +KlQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Wp5ik2GdEev2NmO5gs/P/79zTEq06l4C05o8sV/RNnI=;
+        b=dwc1l5uUjBpcBzeNqqV6uPUcG4Rh6r22xGKSU5WrYVIcJ6QnV299Vc9+cWU43uuRBT
+         rYHTWBWAfo2Exan37L7y04t5y/vV7OlaIyvYMcb+eiYWUnjOs7wvUBhnl5xprzPqAGZw
+         qYw8YfTlTjzCDRy8RaVr5P/zIdWt5OzlXhFv4yJ3LUn61g9ZarmFkxGydCPqQGAq5XXX
+         AaeN82Ma3kB4wFZiHpgYON4ehgZpPVIFmNAdMl2WwpaoD01GcRpn/Rj6SGIqC1gVe9+s
+         o40pU3AgHSBB28jIguo5zZPcBuz3Jbp+bZ5TnnXTcorPHub5axHY6NxqPGqAq90qma0X
+         hgcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=vWso6SETa3zmnQdk3zavu/Qn/dZv2mGNi7dOArTUaJU=;
-        b=KtGOnU2keX2n63znmuaRTQMJ0o3W778ZInYThsz3YOkASSdkJ3ekxkFEbKlTwZQoZl
-         PcgQu39qS/vxi9cA85N9k5wOCuaR5s+Rc/O9ND4gtN4JYl1O2h1jwwZlGheQCxXwHHbZ
-         tptW9FrLQVe+bY6+PNY2odf5fPyuqPqQWqrHIOhhneoDRBb3cH5ggkCLE34Ag1mOPOSV
-         mTmOUoXNtY61umTHl+JTyDv0GXuVxJ2J50HDSMHLSWEVaTHXr/EC7pnjFesWyFSIG9SG
-         C9r394WsCCsPGiTYxYUfSWuC1AbLyJD1wzDOqCxeZTzjcz7IwNnWFl2QeHplzXAZQdwJ
-         eVrA==
-X-Gm-Message-State: AOAM531MD2zmkxOQP7Y8PqpIZfAErMAhZynI7MwiEpiUfg5Z8h712oqW
-        +ZoEQ2PduInRDnLbhCpfDi0q6beF4rvf3w==
-X-Google-Smtp-Source: ABdhPJwz38M4xbaO2wUwwhfgjWjZcDTE1d5C1v2hzgq3bOMG27kZiRkxckaXy2K4QNxkqurHswPA0g==
-X-Received: by 2002:a17:906:cb09:b0:6f3:87ca:1351 with SMTP id lk9-20020a170906cb0900b006f387ca1351mr14242199ejb.674.1651560717964;
-        Mon, 02 May 2022 23:51:57 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Wp5ik2GdEev2NmO5gs/P/79zTEq06l4C05o8sV/RNnI=;
+        b=xQRoGVsdqc6gOlzjM4HPSCWUNteSquVmuLMiSglIS8r2m8FY7UedmBlKsOMcetf5hq
+         G5yQrPDnuNRS1yjqJiBxED1XNo72GckRtiDZb9INjrD4Y4W9xwZQjDlsqTAb55Yye0iT
+         VyD9NviZgs4AYdGAQ5Y2GDct7qBE0SGR9LUX//Nsp4ORRobSIgfqct31vXsGtHrZcguY
+         d96r1+XZGuel+ACwL7Sq5qLN2peJIPE7eWUzDrVVhgIFhJwru/gJS3pfKQrOYssMEDTc
+         6M6ss3YMvJYD1XXwtOnvosDF+L2UObvEAtXhMy9xVbD1PWcQft2CQupxaTXGJDvZY3qZ
+         hBtA==
+X-Gm-Message-State: AOAM533VRzm7L7CrHiyluY6zTlEX9ah8G8xgIb2NHjGEKOtQyO9jljWw
+        j3ASFnMImA2lHuZF/b54tOLTFQ==
+X-Google-Smtp-Source: ABdhPJxzaCAaSP3LdqlHPSEj2BHrm34n5Vg2UqJQXsTFeyj/wLsLrky2XRmSW1F6r5amjsyfRLtmAQ==
+X-Received: by 2002:a50:9f06:0:b0:425:c1ba:5037 with SMTP id b6-20020a509f06000000b00425c1ba5037mr16909166edf.285.1651560725209;
+        Mon, 02 May 2022 23:52:05 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id h20-20020a1709070b1400b006f3ef214db8sm4246237ejl.30.2022.05.02.23.51.56
+        by smtp.gmail.com with ESMTPSA id hf27-20020a1709072c5b00b006f3ef214e2fsm4382915ejc.149.2022.05.02.23.52.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 23:51:57 -0700 (PDT)
+        Mon, 02 May 2022 23:52:04 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>, Sekhar Nori <nsekhar@ti.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Vinod Koul <vkoul@kernel.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        dmaengine@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 3/3] arm64: dts: sprd: use new 'dma-channels' property
-Date:   Tue,  3 May 2022 08:51:47 +0200
-Message-Id: <20220503065147.51728-4-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 0/6] dmaengine/ARM: ti/am33xx: use proper 'dma-channels/requests' properties
+Date:   Tue,  3 May 2022 08:51:55 +0200
+Message-Id: <20220503065201.51818-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220503065147.51728-1-krzysztof.kozlowski@linaro.org>
-References: <20220503065147.51728-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,39 +76,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The '#dma-channels' property was deprecated in favor of one defined by
-generic dma-common DT bindings.  Add new property while keeping old one
-for backwards compatibility.
+Hi,
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/sprd/whale2.dtsi | 4 ++++
- 1 file changed, 4 insertions(+)
+The core DT schema defines generic 'dma-channels' and 'dma-requests'
+properties, so in preparation to moving bindings to DT schema, convert
+existing users of '#dma-channels' and '#dma-requests' to the generic
+variant.
 
-diff --git a/arch/arm64/boot/dts/sprd/whale2.dtsi b/arch/arm64/boot/dts/sprd/whale2.dtsi
-index 79b9591c37aa..89d91abbd5d1 100644
---- a/arch/arm64/boot/dts/sprd/whale2.dtsi
-+++ b/arch/arm64/boot/dts/sprd/whale2.dtsi
-@@ -126,7 +126,9 @@ ap_dma: dma-controller@20100000 {
- 				reg = <0 0x20100000 0 0x4000>;
- 				interrupts = <GIC_SPI 42 IRQ_TYPE_LEVEL_HIGH>;
- 				#dma-cells = <1>;
-+				/* For backwards compatibility: */
- 				#dma-channels = <32>;
-+				dma-channels = <32>;
- 				clock-names = "enable";
- 				clocks = <&apahb_gate CLK_DMA_EB>;
- 			};
-@@ -272,7 +274,9 @@ agcp_dma: dma-controller@41580000 {
- 				compatible = "sprd,sc9860-dma";
- 				reg = <0 0x41580000 0 0x4000>;
- 				#dma-cells = <1>;
-+				/* For backwards compatibility: */
- 				#dma-channels = <32>;
-+				dma-channels = <32>;
- 				clock-names = "enable", "ashb_eb";
- 				clocks = <&agcp_gate CLK_AGCP_DMAAP_EB>,
- 				       <&agcp_gate CLK_AGCP_AP_ASHB_EB>;
+Not tested on hardware.
+
+The patchset is bisectable - please pick up through independent trees.
+
+Changes since v2
+================
+1. Keep old properties, so the patchset is bisectable.
+2. Add review tags.
+
+Changes since v1
+================
+1. Add missing TI patches.
+
+See also:
+[1] https://lore.kernel.org/linux-devicetree/fedb56be-f275-aabb-cdf5-dbd394b8a7bd@linaro.org/T/#m6235f451045c337d70a62dc65eab9a716618550b
+
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (6):
+  dt-bindings: usb: am33xx-usb: deprecate '#dma-channels'
+  dt-bindings: usb: da8xx-usb: deprecate '#dma-channels'
+  dmaengine: ti: deprecate '#dma-channels'
+  ARM: dts: am33xx: use new 'dma-channels/requests' properties
+  ARM: dts: da850: use new 'dma-channels' property
+  ARM: dts: dm81xx: use new 'dma-channels/requests' properties
+
+ Documentation/devicetree/bindings/usb/am33xx-usb.txt | 7 ++++---
+ Documentation/devicetree/bindings/usb/da8xx-usb.txt  | 5 +++--
+ arch/arm/boot/dts/am33xx.dtsi                        | 3 +++
+ arch/arm/boot/dts/da850.dtsi                         | 2 ++
+ arch/arm/boot/dts/dm814x.dtsi                        | 3 +++
+ arch/arm/boot/dts/dm816x.dtsi                        | 3 +++
+ drivers/dma/ti/cppi41.c                              | 6 +++++-
+ 7 files changed, 23 insertions(+), 6 deletions(-)
+
 -- 
 2.32.0
 

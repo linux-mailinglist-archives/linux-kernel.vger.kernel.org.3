@@ -2,98 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0D74518F18
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 22:42:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2EB3518F1B
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 22:42:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237819AbiECUnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 16:43:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48626 "EHLO
+        id S237834AbiECUpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 16:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbiECUn3 (ORCPT
+        with ESMTP id S229535AbiECUpF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 16:43:29 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F39B33A1B
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 13:39:53 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id z126so14733967qkb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 13:39:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=marek-ca.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=CF1rRZMBdGFikP/j43V46JlTy9v9S59RO3PJDooXZCk=;
-        b=s4MMs4b32ZZlqeuY7DthE+KfUczBMMggh5ly/jPZxCKBUh11m+/esR549euW/Q7UY8
-         NVlyl1RSnMXxUjsoElM0SIYxLJexmAeA7Mam8Ofsk/zZJVMK2ulqDKbTAw8USZ1OP00S
-         KSGN3LqcSwpTSBJWQG3sNs5jlms2w6iWNECQ73xaHxG5yMlNdbOOHQ/RPyTKUEQ2Dn+1
-         GXsgLUpy5eHISipD2maX85qvG2d184/ss3Vejuub114MCzJi/N9OPmJqJQ1IokBSuskl
-         kH7k4tU6Aem/mtTobdtDvKpNCEdBwAhPtd2S0hFO7Gdfb2jETPvquu8Qk1ZKJ0B36pk2
-         aNiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=CF1rRZMBdGFikP/j43V46JlTy9v9S59RO3PJDooXZCk=;
-        b=p7yD/3kTTIAi+hHCD9ENwDX37M/QnGDKK5yzKpc9sg5eoOepCrQbWvZaqUtGXSGbTS
-         niVN+XRt4ka4iQVGQkw2oL6UE26+uFI3Vz2FZST8/FvZdqrVWhKCdDbpZedZ9g1YIjlP
-         XftgjfkJb38AJL1zG7XaYyi/Pv8xoMlkzbdqGK3Ujvwn6YXIf1nwxyFmy/yjADUX3BFh
-         Vt/tXEU+edla8IaidcoEgJIvZq3wUhdsm1dyLO1kRzMjdzTvSCK3yrP83xiVtAhZNV97
-         /iPLPXA/DLBHdGnhSyVtpYJeca2rMc2s3cye9260pbgZOY1qrEA5gpgLzuckwY7UeFyn
-         HguA==
-X-Gm-Message-State: AOAM530o6MyMFwZOgsnnj9tXHqO0PgFYI5htG/YsSz24hJZKjuqm7kdH
-        8+LwCx9VxAJ6GLIeYPTNCbjLeQ==
-X-Google-Smtp-Source: ABdhPJxqJm0wwuWGMwBvmBmgvducSLG4QQzA7m59lPsrpRYVx2+ZymLmVLU1Tjr0wZ0b/FZ5UPc6cQ==
-X-Received: by 2002:a05:620a:d87:b0:67b:3105:4f7f with SMTP id q7-20020a05620a0d8700b0067b31054f7fmr13658867qkl.230.1651610392536;
-        Tue, 03 May 2022 13:39:52 -0700 (PDT)
-Received: from [192.168.0.189] (modemcable134.222-177-173.mc.videotron.ca. [173.177.222.134])
-        by smtp.gmail.com with ESMTPSA id y8-20020ae9f408000000b0069fc13ce20fsm6271493qkl.64.2022.05.03.13.39.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 May 2022 13:39:51 -0700 (PDT)
-Subject: Re: [PATCH v2 4/8] clk: qcom: add support for SM8350 GPUCC
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>
-Cc:     agross@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzk+dt@kernel.org, tdas@codeaurora.org,
-        anischal@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-References: <20220503130448.520470-1-robert.foss@linaro.org>
- <20220503130448.520470-4-robert.foss@linaro.org>
- <YnFkn3CMS+VdJ9u7@builder.lan>
-From:   Jonathan Marek <jonathan@marek.ca>
-Message-ID: <e7935b8e-1e4c-a424-7d77-307e346f507f@marek.ca>
-Date:   Tue, 3 May 2022 16:39:41 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Tue, 3 May 2022 16:45:05 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105B615A08;
+        Tue,  3 May 2022 13:41:31 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id 321911F400A7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1651610490;
+        bh=6LlYKh046C6Z3Am//641lVVpWpuYaRN/WaDnK7FKMPM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Jq2n3gj2aIDxNSouNUQgKaOCvhCEGcMWOhu/x9UZgaU5fCvDTXJL0gIzEF3qN1+J2
+         xYBwnPi72TT4R0uA+xJf3yAdRRUbPtKmLa0Be20hULZr/eIqCEa9VELb3/u2ToKL3m
+         zeI/AoF3KTOT+3FCOXl16JABfhpRZlBudzc4pr8H2jhK3bCfGfjH5V9OO6SGaStLtZ
+         s+C+IchA4wSnLgCbsleanjZ34/go6DvEUruGtSw4DTTpJrCNyKH0jUe1++SCfmSp8J
+         Rxp7qbjoG8IujYBSJxxS4kUjsajdyfD09QrFSETDeLN7+B4KCU72ZpvCxq6HOGVeEu
+         6DuToMHDjadeA==
+Date:   Tue, 3 May 2022 16:41:25 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        kernel@collabora.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: remoteproc: mediatek: Fix optional
+ reg-names for mtk,scp
+Message-ID: <20220503204125.a4xwd7a5e3fxf7et@notapiano>
+References: <20220429211111.2214119-1-nfraprado@collabora.com>
+ <20220429211111.2214119-2-nfraprado@collabora.com>
+ <a95fc4a9-af6b-e2c2-ef41-df9742d393de@linaro.org>
+ <4bf2343b-3760-6ebf-7463-0b25fe9d942e@collabora.com>
 MIME-Version: 1.0
-In-Reply-To: <YnFkn3CMS+VdJ9u7@builder.lan>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4bf2343b-3760-6ebf-7463-0b25fe9d942e@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/3/22 1:21 PM, Bjorn Andersson wrote:
-> On Tue 03 May 08:04 CDT 2022, Robert Foss wrote:
+On Tue, May 03, 2022 at 02:26:15PM +0200, AngeloGioacchino Del Regno wrote:
+> Il 03/05/22 14:19, Krzysztof Kozlowski ha scritto:
+> > On 29/04/2022 23:11, Nícolas F. R. A. Prado wrote:
+> > > The SCP has three memory regions: sram, l1tcm and cfg. Only sram is
+> > > required, the other two are optional. Fix the dt-binding so that the
+> > > optional regions can be omitted and passed in any order.
+> > 
+> > No, cannot be passed in any order.
+> > 
+> > > 
+> > > Also add the missing minItems to the reg property and update the
+> > > description.
+> > > 
+> > > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> > > 
+> > > ---
+> > > 
+> > >   .../devicetree/bindings/remoteproc/mtk,scp.yaml      | 12 +++++++++---
+> > >   1 file changed, 9 insertions(+), 3 deletions(-)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml b/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml
+> > > index 823a236242de..ec9ddeb6ca2c 100644
+> > > --- a/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml
+> > > +++ b/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml
+> > > @@ -24,14 +24,20 @@ properties:
+> > >     reg:
+> > >       description:
+> > >         Should contain the address ranges for memory regions SRAM, CFG, and
+> > > -      L1TCM.
+> > > +      L1TCM. Only SRAM is required, while CFG and L1TCM are optional.
+> > > +    minItems: 1
+> > >       maxItems: 3
+> > >     reg-names:
+> > > +    minItems: 1
+> > >       items:
+> > >         - const: sram
+> > > -      - const: cfg
+> > > -      - const: l1tcm
+> > > +      - enum:
+> > > +          - l1tcm
+> > > +          - cfg
+> > > +      - enum:
+> > > +          - l1tcm
+> > > +          - cfg
+> > 
+> > This allows them in any combination which is not what we want. If both
+> > are optional and both can appear, then last should be a const:l1tcm.
+> > 
+> > Best regards,
+> > Krzysztof
 > 
->> From: Jonathan Marek <jonathan@marek.ca>
->>
->> The GPUCC manages the clocks for the Adreno GPU found on the
->> sm8350 SoCs.
->>
+> Nicolas, I think that you weren't clear about what you're trying to solve with this
+> commit in the description.
 > 
-> If the patch is authored by Jonathan, we need Jonathan's S-o-b as well.
+> I remember you had this kind of instance, but I don't really remember if it was
+> about mtk,scp or (and?) something else.... so.... are you trying to fix issues
+> with devicetrees declaring
 > 
+> 	reg-names = "sram", "l1tcm"; ?
+> 
+> Was this giving dtbs_check errors?
 
-Signed-off-by: Jonathan Marek <jonathan@marek.ca>
+Hi Angelo,
 
-(but I didn't change much from downstream, I never submitted this patch 
-so didn't clean up things like using ARRAY_SIZE, etc.)
+yes, some devicetrees (like mt8183) have
+
+ 	reg-names = "sram", "cfg";
+
+I'll include mention of this in the commit description for v3.
+
+This was also supposed to fix the warning for mt8192, where the order is
+different: "sram", "l1tcm", "cfg". But since Krzysztof said that we want a fixed
+order, then the mt8192 DT will need to be updated. (I also just noticed that
+it's just l1tcm that is optional, I was just being blind, so I'll also fix that
+in v3)
+
+Thanks,
+Nícolas
+
+> 
+> Cheers,
+> Angelo

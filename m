@@ -2,72 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47AD55190F5
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 00:07:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8725190FD
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 00:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243492AbiECWIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 18:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49422 "EHLO
+        id S243451AbiECWFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 18:05:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243507AbiECWIG (ORCPT
+        with ESMTP id S243318AbiECWFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 18:08:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00B48427ED
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 15:04:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651615468;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NCw2YbW2b06vdpfX9KTc0Sz/4kzxAVFUC7Z0+7uCYMw=;
-        b=QV8SeB9u1oxu2AZzk6hjOS1LlKtUj2LpNBB5DLkROzHeqEfTakgB5/zp2s3Bd/4AEf4bJE
-        orXaoq+FmnrdoK05RC6Wz/OgM+A64sto7wsFhpc+CLUM5uXBqDumNUE1VhTO5zpFdGu/gr
-        tAnahlJciSAzmonKdlU1+uwL/hGM4ng=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-616-1pWux-LAMiOgjaI_OcHTsQ-1; Tue, 03 May 2022 18:01:47 -0400
-X-MC-Unique: 1pWux-LAMiOgjaI_OcHTsQ-1
-Received: by mail-wm1-f69.google.com with SMTP id c125-20020a1c3583000000b0038e3f6e871aso6285507wma.8
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 15:01:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NCw2YbW2b06vdpfX9KTc0Sz/4kzxAVFUC7Z0+7uCYMw=;
-        b=HrRQusNDCfI8eJYT5sK5VtZ/Hu7fpLhAXzNDSCKhzhi9MUy30Zzoi59GuHr5rsljz/
-         u2B9Loi+q8rVtiIxVJb++B2WtRoCh5iZqb8ly7r4UxcL/1q744sYIlnR1bCvycE/l44t
-         SDBgPo9/f0XbAnO/S5VThYUgPFm9H/By3lYc7yOkx/nA8c8XkQz15jFDxV56xkGap3c/
-         +WrANk0a8Zy98D/VhJ/RF02KhmtIyWch8O303QWhV0k4rjVJoDaXLnO2RtFqUvkQaNrX
-         /V+wn039iEcRnwOVokYQHTjAHZpoD3VcH5oiVYPXVXD+r+ypVYYYPN/2pmII1gMugrs/
-         7ECg==
-X-Gm-Message-State: AOAM533U7J57vkaP68q6aPSm9SyfagF4oBDlpbEnwDU9ocouWXUN+rw4
-        +e23VQohsmtuWMNgOcTAdEAsya0DsNVmbzXg7B5dBfKfKbL/BhshMneRAGDG3/IZGtA/vWO1Rxo
-        YDs9WOjifXMcbJEK8/Y1DgBHd09AnnOJb+k++G+oa
-X-Received: by 2002:a5d:4a81:0:b0:207:9abe:2908 with SMTP id o1-20020a5d4a81000000b002079abe2908mr14084331wrq.341.1651615305548;
-        Tue, 03 May 2022 15:01:45 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzDZF5QtU8eWm5iH5MBr3nBAiPSuIRf8s8hX0zAE2sJW3Opo+sznt5voV5+vjORprV7H4visxp4de0FdVUYT74=
-X-Received: by 2002:a5d:4a81:0:b0:207:9abe:2908 with SMTP id
- o1-20020a5d4a81000000b002079abe2908mr14084317wrq.341.1651615305322; Tue, 03
- May 2022 15:01:45 -0700 (PDT)
+        Tue, 3 May 2022 18:05:43 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A822424A4;
+        Tue,  3 May 2022 15:02:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 86416CE22C8;
+        Tue,  3 May 2022 22:02:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CC68C385A4;
+        Tue,  3 May 2022 22:02:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651615326;
+        bh=nNwLfZyICjcyMLgHH7iT+5XX5lVbO1RBfjuW/N6BTLI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Vg4d5xX0/qdcvR5lRmnj3/L4Wyo04ZFQjaTlgojfJ0e5N9gLePT64Yw0B7/baxn2S
+         jhdS7Mbam/fYH81IBAq6s82Jcqg0giJI9qb7Ilvk1YjW/G0PTePrrLsJXOLSxRBB4E
+         LXSr7qMDU9V1gMHhdMu95RB+QaZDROUkdOEpSwGRyj5/zeAoUSbstruGAC412K+Y/b
+         mRM7Zv63L5h6tCcERHZpwcehSRn2+5MLOluVTqc2QHet/SdjwTPal892P7kCgrjxik
+         FoTI3zrrhAXSPWYJ87Wjkzeet1XeNQJupzMaoE1YH3rPHQ9hqJTEdauQCyFL33jYpN
+         fgtutnJexEuCg==
+Received: by pali.im (Postfix)
+        id 2F8BD98A; Wed,  4 May 2022 00:02:03 +0200 (CEST)
+Date:   Wed, 4 May 2022 00:02:02 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: watchdog: max63xx: Add GPIO binding
+Message-ID: <20220503220202.ksxq65sbacxvituy@pali>
+References: <20220429131349.21229-1-pali@kernel.org>
+ <YnGj6eZGx+8gVKGW@robh.at.kernel.org>
 MIME-Version: 1.0
-References: <20220429195350.85620-1-lyude@redhat.com> <CACO55ttsBxe6V88CTtGZgUj8k+gT+ne+FD_9FD_OxowF1XG5Bg@mail.gmail.com>
-In-Reply-To: <CACO55ttsBxe6V88CTtGZgUj8k+gT+ne+FD_9FD_OxowF1XG5Bg@mail.gmail.com>
-From:   Karol Herbst <kherbst@redhat.com>
-Date:   Wed, 4 May 2022 00:01:34 +0200
-Message-ID: <CACO55tv=u+HNKS9tH-ggy_O0YRiZQvAyb48gxRVqrz-fmWcvwA@mail.gmail.com>
-Subject: Re: [PATCH] drm/nouveau/subdev/bus: Ratelimit logging for fault errors
-To:     Lyude Paul <lyude@redhat.com>
-Cc:     nouveau <nouveau@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YnGj6eZGx+8gVKGW@robh.at.kernel.org>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,115 +61,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Actually, there is another place we have to put this, we can spam
-"SCHED_ERROR" things which are triggered within multiple
-drivers/gpu/drm/nouveau/nvkm/engine/fifo/ files.
-
-On Tue, May 3, 2022 at 9:23 PM Karol Herbst <kherbst@redhat.com> wrote:
->
-> not able to hit any error on my machine, but regardless:
->
-> Reviewed-by: Karol Herbst <kherbst@redhat.com>
->
-> I suspect there are more places where we could put it, but we can add
-> those later.
->
-> Anyway, I think it's valuable to push it through fixes, not sure how
-> far back we want to CC stable though.
->
-> On Fri, Apr 29, 2022 at 9:54 PM Lyude Paul <lyude@redhat.com> wrote:
-> >
-> > There's plenty of ways to fudge the GPU when developing on nouveau by
-> > mistake, some of which can result in nouveau seriously spamming dmesg with
-> > fault errors. This can be somewhat annoying, as it can quickly overrun the
-> > message buffer (or your terminal emulator's buffer) and get rid of actually
-> > useful feedback from the driver. While working on my new atomic only MST
-> > branch, I ran into this issue a couple of times.
-> >
-> > So, let's fix this by adding nvkm_error_ratelimited(), and using it to
-> > ratelimit errors from faults. This should be fine for developers, since
-> > it's nearly always only the first few faults that we care about seeing.
-> > Plus, you can turn off rate limiting in the kernel if you really need to.
-> >
-> > Signed-off-by: Lyude Paul <lyude@redhat.com>
+On Tuesday 03 May 2022 16:51:37 Rob Herring wrote:
+> On Fri, Apr 29, 2022 at 03:13:48PM +0200, Pali Rohár wrote:
+> > GPIO is optional and used for WDI logic.
+> 
+> Nowhere is WDI defined.
+> 
+> > 
+> > Signed-off-by: Pali Rohár <pali@kernel.org>
 > > ---
-> >  drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h |  2 ++
-> >  drivers/gpu/drm/nouveau/nvkm/subdev/bus/gf100.c    | 14 +++++++-------
-> >  drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv31.c     |  6 +++---
-> >  drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv50.c     |  6 +++---
-> >  4 files changed, 15 insertions(+), 13 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h b/drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h
-> > index 1665738948fb..96113c8bee8c 100644
-> > --- a/drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h
-> > +++ b/drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h
-> > @@ -62,4 +62,6 @@ void nvkm_subdev_intr(struct nvkm_subdev *);
-> >  #define nvkm_debug(s,f,a...) nvkm_printk((s), DEBUG,   info, f, ##a)
-> >  #define nvkm_trace(s,f,a...) nvkm_printk((s), TRACE,   info, f, ##a)
-> >  #define nvkm_spam(s,f,a...)  nvkm_printk((s),  SPAM,    dbg, f, ##a)
-> > +
-> > +#define nvkm_error_ratelimited(s,f,a...) nvkm_printk((s), ERROR, err_ratelimited, f, ##a)
-> >  #endif
-> > diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/gf100.c b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/gf100.c
-> > index 53a6651ac225..80b5aaceeaad 100644
-> > --- a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/gf100.c
-> > +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/gf100.c
-> > @@ -35,13 +35,13 @@ gf100_bus_intr(struct nvkm_bus *bus)
-> >                 u32 addr = nvkm_rd32(device, 0x009084);
-> >                 u32 data = nvkm_rd32(device, 0x009088);
-> >
-> > -               nvkm_error(subdev,
-> > -                          "MMIO %s of %08x FAULT at %06x [ %s%s%s]\n",
-> > -                          (addr & 0x00000002) ? "write" : "read", data,
-> > -                          (addr & 0x00fffffc),
-> > -                          (stat & 0x00000002) ? "!ENGINE " : "",
-> > -                          (stat & 0x00000004) ? "PRIVRING " : "",
-> > -                          (stat & 0x00000008) ? "TIMEOUT " : "");
-> > +               nvkm_error_ratelimited(subdev,
-> > +                                      "MMIO %s of %08x FAULT at %06x [ %s%s%s]\n",
-> > +                                      (addr & 0x00000002) ? "write" : "read", data,
-> > +                                      (addr & 0x00fffffc),
-> > +                                      (stat & 0x00000002) ? "!ENGINE " : "",
-> > +                                      (stat & 0x00000004) ? "PRIVRING " : "",
-> > +                                      (stat & 0x00000008) ? "TIMEOUT " : "");
-> >
-> >                 nvkm_wr32(device, 0x009084, 0x00000000);
-> >                 nvkm_wr32(device, 0x001100, (stat & 0x0000000e));
-> > diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv31.c b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv31.c
-> > index ad8da523bb22..c75e463f3501 100644
-> > --- a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv31.c
-> > +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv31.c
-> > @@ -45,9 +45,9 @@ nv31_bus_intr(struct nvkm_bus *bus)
-> >                 u32 addr = nvkm_rd32(device, 0x009084);
-> >                 u32 data = nvkm_rd32(device, 0x009088);
-> >
-> > -               nvkm_error(subdev, "MMIO %s of %08x FAULT at %06x\n",
-> > -                          (addr & 0x00000002) ? "write" : "read", data,
-> > -                          (addr & 0x00fffffc));
-> > +               nvkm_error_ratelimited(subdev, "MMIO %s of %08x FAULT at %06x\n",
-> > +                                      (addr & 0x00000002) ? "write" : "read", data,
-> > +                                      (addr & 0x00fffffc));
-> >
-> >                 stat &= ~0x00000008;
-> >                 nvkm_wr32(device, 0x001100, 0x00000008);
-> > diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv50.c b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv50.c
-> > index 3a1e45adeedc..2055d0b100d3 100644
-> > --- a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv50.c
-> > +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv50.c
-> > @@ -60,9 +60,9 @@ nv50_bus_intr(struct nvkm_bus *bus)
-> >                 u32 addr = nvkm_rd32(device, 0x009084);
-> >                 u32 data = nvkm_rd32(device, 0x009088);
-> >
-> > -               nvkm_error(subdev, "MMIO %s of %08x FAULT at %06x\n",
-> > -                          (addr & 0x00000002) ? "write" : "read", data,
-> > -                          (addr & 0x00fffffc));
-> > +               nvkm_error_ratelimited(subdev, "MMIO %s of %08x FAULT at %06x\n",
-> > +                                      (addr & 0x00000002) ? "write" : "read", data,
-> > +                                      (addr & 0x00fffffc));
-> >
-> >                 stat &= ~0x00000008;
-> >                 nvkm_wr32(device, 0x001100, 0x00000008);
-> > --
-> > 2.35.1
-> >
+> >  Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
+> > index ab9641e845db..a97aa0135ef9 100644
+> > --- a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
+> > +++ b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
+> > @@ -27,6 +27,10 @@ properties:
+> >      description: This is a 1-byte memory-mapped address
+> >      maxItems: 1
+> >  
+> > +  gpios:
+> 
+> Usually, we want a name here. Maybe wdi-gpios, but I don't know what WDI 
+> is nor have I read the pin name in the datasheet for inspiration.
 
+WDI is name of logic used in the datasheet, it is abbreviation of
+WatchDog Input (meaning that from watchdog chip this GPIO has input
+direction).
+
+I'm not sure if we need to put gpio direction into the property name or
+also word watchdog (or its some abbrev) into name. As node is already
+named "watchdog" and direction depends on point of view (chip vs CPU),
+which can be in DTS misleading (because DTS describe direction from CPU
+point of view).
+
+What for sure makes sense is extending description by explaining WDI
+abbreviation.
+
+> > +    description: Optional GPIO used for controlling WDI when WDI bit is not mapped to memory
+> > +    maxItems: 1
+> > +
+> >  required:
+> >    - compatible
+> >    - reg
+> > -- 
+> > 2.20.1
+> > 
+> > 

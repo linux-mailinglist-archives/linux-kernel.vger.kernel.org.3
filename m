@@ -2,81 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A208F518D32
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:29:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 680AB518D35
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:33:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241953AbiECTdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 15:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58402 "EHLO
+        id S240070AbiECThC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 15:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241934AbiECTdF (ORCPT
+        with ESMTP id S229480AbiECTg7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 15:33:05 -0400
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB492ED6C;
-        Tue,  3 May 2022 12:29:33 -0700 (PDT)
-Received: by mail-oi1-f175.google.com with SMTP id l16so11961506oil.6;
-        Tue, 03 May 2022 12:29:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=N6FBWOVMzK5yNDB3jrOFO2jTg3V4GRtMSkZ1a8GNUMQ=;
-        b=fUeXEpjZo/P9Uv31ODlUMIGHXVeAlf4azp+TTjVusct4pXQfxJJTFxwXxF2CoPW5rN
-         olYf+9ZD12qrhWxNoW01v33ciYfdXAtXVz7W1+0kn4DUZ0rXdK+1Kzgc7djBzCpoIT8w
-         1uxmsN0A00k+oPxJlqgFPkvDLp8o1TLf+l/Hxd73Y0Upj0G7HyJRI/tQjSvdKrPRsqvs
-         gFFDXDVesfMw8ISklnemqad3z462+BEfyLv9hjmaENIPDuwcl6B39stdI0NHKIG1M6WU
-         MRf6DE7YWQwjGcjVY7o7mlV8+e1XU3Z8bo2nzwpIT+LBWU9SjzXpM5SUqq4MYlxz5km0
-         X7pg==
-X-Gm-Message-State: AOAM5334RDr4me+ODFso3okLhSk8ZXEeKxvcWv+TX80MScPmZJ4HO0fs
-        s8qusZ/o7dbVaIzdU/S1nA==
-X-Google-Smtp-Source: ABdhPJwHStHNylKAW5q1CVdmc/nFF0J7q1+CmHjl7uJiGrks+Q8zBnDcOHfO7bLb+qwWjN1Rxd07PQ==
-X-Received: by 2002:a05:6808:1a1d:b0:325:c812:496b with SMTP id bk29-20020a0568081a1d00b00325c812496bmr2515687oib.106.1651606172384;
-        Tue, 03 May 2022 12:29:32 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p203-20020acaf1d4000000b00325cda1ffacsm3617063oih.43.2022.05.03.12.29.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 12:29:32 -0700 (PDT)
-Received: (nullmailer pid 4088847 invoked by uid 1000);
-        Tue, 03 May 2022 19:29:31 -0000
-Date:   Tue, 3 May 2022 14:29:31 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        broonie@kernel.org, julianbraha@gmail.com, robh+dt@kernel.org,
-        trevor.wu@mediatek.com, linux-mediatek@lists.infradead.org,
-        linux-kernel@vger.kernel.org, aaronyu@google.com,
-        angelogioacchino.delregno@collabora.com, tzungbi@google.com,
-        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        matthias.bgg@gmail.com, devicetree@vger.kernel.org
-Subject: Re: [v4 14/18] dt-bindings: mediatek: mt8186: add audio afe document
-Message-ID: <YnGCmwNRZst+W5nb@robh.at.kernel.org>
-References: <20220428093355.16172-1-jiaxin.yu@mediatek.com>
- <20220428093355.16172-15-jiaxin.yu@mediatek.com>
+        Tue, 3 May 2022 15:36:59 -0400
+Received: from mxout03.lancloud.ru (mxout03.lancloud.ru [45.84.86.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E862E6BB;
+        Tue,  3 May 2022 12:33:21 -0700 (PDT)
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru B5F5020FC81C
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Subject: Re: [PATCH v3] sh: avoid using IRQ0 on SH3/4
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Rob Landley <rob@landley.net>
+CC:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Rich Felker <dalias@libc.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <2584ba18-9653-9310-efc1-8b3b3e221eea@omp.ru>
+ <11021433-66c0-3c56-42bd-207a5ae8d267@physik.fu-berlin.de>
+ <2ebef1ac-e5c5-980c-9413-22a6cccdfa1d@landley.net>
+ <CAMuHMdWN0vRYhK7O0MgOSCtisw3RDvp4vxSS2VF-9uGDdOEb7g@mail.gmail.com>
+ <59faed1d-3878-ce75-9f62-aaf4338d0ad1@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <520ab5ce-021a-bbd9-7303-3f7695631ba5@omp.ru>
+Date:   Tue, 3 May 2022 22:33:15 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220428093355.16172-15-jiaxin.yu@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <59faed1d-3878-ce75-9f62-aaf4338d0ad1@omp.ru>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Apr 2022 17:33:51 +0800, Jiaxin Yu wrote:
-> Add mt8186 audio afe document.
-> 
-> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  .../bindings/sound/mt8186-afe-pcm.yaml        | 175 ++++++++++++++++++
->  1 file changed, 175 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sound/mt8186-afe-pcm.yaml
-> 
+On 5/2/22 11:56 PM, Sergey Shtylyov wrote:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+[...]
+>>>>> Using IRQ0 by the platform devices is going to be disallowed soon (see [1])
+>>>>> and even now, when IRQ0 is about to be returned by platfrom_get_irq(), you
+>>>>> see a big warning.  The code supporting SH3/4 SoCs maps the IRQ #s starting
+>>>>> at 0 -- modify that code to start the IRQ #s from 16 instead.
+>>>>>
+>>>>> The patch should mostly affect the AP-SH4A-3A/AP-SH4AD-0A boards as they
+>>>>> indeed use IRQ0 for the SMSC911x compatible Ethernet chip...
+>>
+>>> As I told him in IRC, the problem is still that sh4 never gives me a shell
+>>> prompt with this patch applied. I just reconfirmed it against current git:
+>>>
+>>> Freeing unused kernel image (initmem) memory: 124K
+>>> This architecture does not have kernel memory protection.
+>>> Run /init as init process
+>>> mountpoint: dev/pts: No such file or directory
+>>> 8139cp 0000:00:02.0 eth0: link up, 100Mbps, full-duplex, lpa 0x05E1
+>>>
+>>> It makes it partway through the init script, but it hangs with qemu-system-sh4
+>>> stuck in a CPU-eating loop before finishing. Without the patch, I get a shell
+>>> prompt.
+>>
+>> I regularly test on qemu rts7751r2d, but couldn't produce your
+>> issue.  Until I tried "ifconfig eth0 up", which causes a lock-up.
+>> Interestingly, the 8139 irq was 112 with and without Sergey's patch,
+>> so there must be an irq remapping missing.
+>>
+>> I also test regularly on landisk, where 8139 Ethernet works fine.
+>> Turns out landisk uses arch/sh/drivers/pci/fixups-landisk.c to fixup
+>> the irq...
+>>
+>> arch/sh/include/mach-common/mach/r2d.h has:
+>> #define R2D_FPGA_IRQ_BASE       100
+>> Subtracting 16 here does not help.
+> 
+>    Why subtract when you contrariwise need to add? :-)
+> 
+>> With this (gmail-whitespace-damaged) patch:
+>>
+>> --- a/arch/sh/drivers/pci/fixups-rts7751r2d.c
+>> +++ b/arch/sh/drivers/pci/fixups-rts7751r2d.c
+>> @@ -31,9 +31,9 @@ static char lboxre2_irq_tab[] = {
+>>  int pcibios_map_platform_irq(const struct pci_dev *pdev, u8 slot, u8 pin)
+>>  {
+>>         if (mach_is_lboxre2())
+>> -               return lboxre2_irq_tab[slot];
+>> +               return lboxre2_irq_tab[slot] - 16;
+> 
+>    This table contains the values #define'd via evt2irq(), so
+> shouldn't need to subtract anything...
+> 
+>>         else
+>> -               return rts7751r2d_irq_tab[slot];
+>> +               return rts7751r2d_irq_tab[slot] - 16;
+> 
+>    How about + 16?
+> 
+>>  }
+>>
+>>  int pci_fixup_pcic(struct pci_channel *chan)
+>>
+>> it no longer crashes, but ifconfig still fails:
+>>
+>> / # ifconfig eth0 up
+>> ifconfig: ioctl 0x8914 failed: Invalid argument
+> 
+>    I'm still not sure you used the correct IRQ #s...
+> 
+>> Note that there are more implementations of pcibios_map_platform_irq()
+>> that do not use evt2irq(), and thus are probably broken by this patch.
+> 
+>    That doesn't sound encouraging... :-/
+
+   Actually, of those only Dreamcast didn't use evt2irq()...
+   Now I'm wondering whether all #define *_IRQ_BASE should be visited as well...
+
+>> Gr{oetje,eeting}s,
+>>
+>>                         Geert
+
+MBR, Sergey

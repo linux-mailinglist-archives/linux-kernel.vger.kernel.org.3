@@ -2,207 +2,626 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F54651862F
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:09:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F8A751863F
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236724AbiECOMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 10:12:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
+        id S236771AbiECOQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 10:16:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236690AbiECOMo (ORCPT
+        with ESMTP id S236013AbiECOQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 10:12:44 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77AB83879A;
-        Tue,  3 May 2022 07:09:12 -0700 (PDT)
-Received: from pps.filterd (m0134422.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 243DK3lO000871;
-        Tue, 3 May 2022 14:08:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pps0720;
- bh=pKwh5hyfKZ6wyu4Xfjkyfg6iLbTDZu0l8wrYdjJKM00=;
- b=PHJESw4X8+7L7OE7IiWFMfAs8Izuxj6izsmDbDt9uXoMj8rJxug1IHW+SHTmYDvNsvuY
- h/5x0WT38/r7SAMPBENI1f4v3Cex7Xtnm7SkKkSiuOBWDU4JgGBftuUI+2Yt2nwzAqUM
- AKfiEuqEHv0gXXGczhDl9DxXLVgkSld3Ua0NMYN9b4VkGqOvbEP9kA68XaAKTpBnZCV+
- dgyBVsOoKYOY6CvkwmRBDp149ZoXtcy3HSI+AFK61EHs58MLP6/87TO1Ev6oHKL5DwHf
- gmLbvh95x4+DN8I3BZwJDoo9BVQ/Y+lvM9j5iP8g22k/vDuveJ9RwRwnFmVMi4GYOs0u sw== 
-Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3fu1f92b57-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 May 2022 14:08:58 +0000
-Received: from p1wg14924.americas.hpqcorp.net (unknown [10.119.18.113])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by p1lg14881.it.hpe.com (Postfix) with ESMTPS id 8DE98805E0B;
-        Tue,  3 May 2022 14:08:57 +0000 (UTC)
-Received: from p1wg14927.americas.hpqcorp.net (10.119.18.117) by
- p1wg14924.americas.hpqcorp.net (10.119.18.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 3 May 2022 02:08:51 -1200
-Received: from p1wg14923.americas.hpqcorp.net (10.119.18.111) by
- p1wg14927.americas.hpqcorp.net (10.119.18.117) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 3 May 2022 02:08:51 -1200
-Received: from p1wg14919.americas.hpqcorp.net (16.230.19.122) by
- p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15
- via Frontend Transport; Tue, 3 May 2022 02:08:51 -1200
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (192.58.206.38)
- by edge.it.hpe.com (16.230.19.122) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 3 May 2022 02:08:33 -1200
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XuSu/tpGgpAFGyA0nvvE3B2KNlhXltwcEEkpYmqhM0EGzkpA/zKzquG2oiIKTkSvi9HSVOtfOBfEdXrndB8ANs2SolukUgqRV0SCkwQj2HcENQlh6Y1WZILk9dYPwkr0n9E8U55YBPDT/6UTgFO3d1T/bf+lrXPMrSKFyyiX+tNktSocNu0LKzC/lBvTTa875g/LoSxqzwHZlvxuGKMCSFWJ3aDqdqYSJDh2vwgYzm/CBlhxCK6HltWxJIY8Ct9ixMewn883USjn0+07MpPANXnI2/34SSMheu8adUzie6g+8YKMlSrL5YCZPF72G0J8ZiyzArT1BAIavA+5cVTSBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pKwh5hyfKZ6wyu4Xfjkyfg6iLbTDZu0l8wrYdjJKM00=;
- b=MKKxeJxztIqcP7ud1syyjZ1CsAT7hAJkoQDl4PZdlkQekFh5aV+lKHbV13QI5P9D4dpa++TH7ScILz0TukQDugKcS1yMUpMP54Z8gKIE4IYi/i4J6ClXTwzjjK/G1MpHNRgV4oZ5m37QbGajmXz1tlwsl5xerPChCLomNT23CmQbv9b3B6WIYh/dlkXFZbt05b61k/8IgnhEL2WTqieYdNjwJmh435fI+phEZ9MFPVQNuUUklSkP3KQTZM9Nq63F7zG97DfftVjxw4DMhyVGqj2vy+d9ciFuBCVkJDq4UzTVM48s6P7w/Rtq9hKSc3QXUZmY7uqrl21Adbn0Ny6f5w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
- header.d=hpe.com; arc=none
-Received: from PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:172::21)
- by SJ0PR84MB1387.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:a03:431::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24; Tue, 3 May
- 2022 14:08:32 +0000
-Received: from PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::6055:1602:5a0a:1562]) by PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::6055:1602:5a0a:1562%8]) with mapi id 15.20.5206.024; Tue, 3 May 2022
- 14:08:32 +0000
-From:   "Hawkins, Nick" <nick.hawkins@hpe.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "joel@jms.id.au" <joel@jms.id.au>, "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Olof Johansson <olof@lixom.net>, "soc@kernel.org" <soc@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: RE: [PATCH v6 7/8] ARM: dts: Introduce HPE GXP Device tree
-Thread-Topic: [PATCH v6 7/8] ARM: dts: Introduce HPE GXP Device tree
-Thread-Index: AQHYXmTKMgAnIeG/Tk629X6tcmENZa0M7HeAgABB+qA=
-Date:   Tue, 3 May 2022 14:08:31 +0000
-Message-ID: <PH0PR84MB1718A4E67E6B7585099B84EB88C09@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
-References: <20220502204050.88316-1-nick.hawkins@hpe.com>
- <20220502204050.88316-7-nick.hawkins@hpe.com>
- <c4d85ebc-05f1-95d5-ac71-ba92527a32d5@linaro.org>
-In-Reply-To: <c4d85ebc-05f1-95d5-ac71-ba92527a32d5@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9939ce11-7264-44a1-07da-08da2d0e67b5
-x-ms-traffictypediagnostic: SJ0PR84MB1387:EE_
-x-microsoft-antispam-prvs: <SJ0PR84MB13870F0D143DA3B3B5DC008E88C09@SJ0PR84MB1387.NAMPRD84.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 16k/HtEaZk7Hr+ayLHOdvDx+Urs/JD+Xqe0CrFRzzPvlqVI2xWhqFjSH0+Z05HIsp3W1wF7KyV/r5HtJywOCiBGEvDfFN1I3rWZ4W+6M3P6K0/DCYNkWCrd7LpY9JnhtjgZp832H/3i3gWqvtbPZVf9kIbqtiw8Z70ORFvQO32WqVR4drljtYCFEI9jdFONlLIvLylQZXWaoHx/nD92K+kD5sk5e/He+pltLsDQ5TRRLqkizma8TSfV5uwGpxBdua1kgiJxcWgNd8DOVbjxdFBnNN2ejoZG0116DNm0kTrsaCQrtfwkSv1+3U74CIu9D1XoTSuGtus/ozL1WqzC5g9VTO+dGqm1d24NIOZLj76MoBkBLez18/Uv4+rIyYIG0j/TH7gQNMEaPhToByzKaE8AFFXPP9+f/S8JKTJyF6jRRHok34xzGubeeuqiEV6CZQUyCxj3dYO5knuvTocMPONy3ry9XMEK+E5YiY15HgDKBFjOTmsslYr6TKr1GkmirF9LTTixjNjzTQz4c98f9Ex43sUy2wCXBt7LvflqyAkYvN1Rez0BiIHiTX6Q0fLi/J9pfp/fK6aHy4vSh2F/KE60f0GXyWc8/eohJEQ/TTGkHBETd37P38pf8IEdhZKxGhShilZ/JanPlTyluAXQ4SR6w2lPnolWL6NWQdtS1JA6Iq7P9ARu3dgdB7XRhNCTtyT11ntm57ZLN2qK98BM1ag==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(366004)(33656002)(64756008)(316002)(76116006)(4326008)(66556008)(66946007)(8676002)(52536014)(66476007)(66446008)(5660300002)(83380400001)(54906003)(8936002)(508600001)(71200400001)(110136005)(55016003)(2906002)(7416002)(9686003)(26005)(86362001)(55236004)(53546011)(6506007)(122000001)(7696005)(38100700002)(38070700005)(82960400001)(186003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ckRpT010WjNlb3dtdHlQNzJ1ckZ5dytCd2NWYzJVMlczRnhzTXptaVY1MGVj?=
- =?utf-8?B?WjlPQXEvdnNsWTdJTnE0T25TaXNtajltSW85ZW9qR2xGUnpVZk5vbHh3akNS?=
- =?utf-8?B?aEMxTmoxZStnM1FWNVVoMmIrS1B0ZWx3RzlBcWNOVkxwZmE0L2hBdnJrQkZX?=
- =?utf-8?B?aHROOFEzVDJoTlRXelRZeDdHNnBZZ0RlSkV3a2xGN0RSR2pvZytsdHNpajVP?=
- =?utf-8?B?d2tkTWZrRUxPUUdkVWNpdHIrK00wcGNLUXJBVE1GZ0QvQ1ljc3d0aXAzRGox?=
- =?utf-8?B?SlNZNDdsYzVZRUMzb3J0dDFuZFIwblFGMW4zZW85WHZuKy83THpEZFVmeGJm?=
- =?utf-8?B?bDV4cTlYZjFjT3ZwOWVxWnFTM2xKQWMzRVlPQnU2RWFJM1N1bm1waVdkaTNE?=
- =?utf-8?B?UVZ0TDFHajZBL2QxYWU3aGRaUk85RWpHWWNvV01hYUhvQzlybE1CaE1qKy9D?=
- =?utf-8?B?UzlLMms1YnRDRFBJUUxhSkRZZXgwYy94UEw4NFNoQThaQ0VWN3oxZkRvWTF3?=
- =?utf-8?B?YVJodmZsTDRVMXU4TS9qN0ZrVVBaK3MrUTgxeVYrY3lZbFZUNXpsU0ZOVUFG?=
- =?utf-8?B?QkgzOHhlNkpKWk0rdk94QzNxdE41SGtIek5ERWd3bFd0cHRzc2NUbGxDKzJ6?=
- =?utf-8?B?cS9samFlLzU0YjJ1bGJwU0habmtYcnFTYlhCTDF4dlBhbFhsQnNKVXRXeDQv?=
- =?utf-8?B?Z3dDWWlVQlFrb1lVL1ErUGJZTkVjS1hEd2JIYWpVSElpME8waTQ3WTVlUmZ3?=
- =?utf-8?B?K2NuTUpmdGlxUmsxZXFFTmtXTVlORjBnTEF0SUlobkI3Zk9xRlpRMTY1MTVQ?=
- =?utf-8?B?cndhN1FiNEpmODloOEZFVGgwd0ZBYUhZUE9vSkVBam5jWXJrYno5dUZnUzlo?=
- =?utf-8?B?ampLNlM5OEFudUZxdiswQTZEcmp5TFNWTmIxbUlyTnd1eW1oRjZieWkrTGtx?=
- =?utf-8?B?dHdLM0ZWOG4zdVBaVXN3ZmRoMjhiMWFXT200NzNSakxmamhWemRQZHVxdjFv?=
- =?utf-8?B?b1Fzd25EcXhzRnluN0hRbzR0SUgyUTBLWDFUVFBIZnA2YmhjT3pPUW41QUNF?=
- =?utf-8?B?bmMyakN0aUNmaUNCb0pHZHF4emxZTk5TVHcwV2tRa0JuQ0E2SW5GL2dwRkJt?=
- =?utf-8?B?TlMwQnRUdTQyNnJSMkYzOTBINUpLck95Tk1KWVdVZXo1ditmdmpyVzNHdWYy?=
- =?utf-8?B?M0Z1bUl0MlFOMWM3RHVaVDNuR3cxYWt4eTBoQVFqSWxYWVZaR0dNeXEzTWY1?=
- =?utf-8?B?dndEd25DRjdEdnh2UjJnYkorMWJ5U1hpcWU2Si9mSCswWG5veERNYnNWSnR0?=
- =?utf-8?B?TGtDNVVtVjRHblpneDRhTStFTER6MVduWm9wQkEwSkljQlV2K1ljQUtiSzRn?=
- =?utf-8?B?NVlyRE0vc01mcCsreDFqR0dDaThoUTI0bFB2eVhOdVNLQy92VWtnQXlpeUla?=
- =?utf-8?B?UE1QNjVWUy9jRDVmUkR1cHRMNlFOTTVhN04ranE0NElRRnhlUmxuY2wyQ0Q0?=
- =?utf-8?B?bVZacnpZTUM3eW5GNzNTWi9VWTgzQnd2SmgwRjBuS0FjT3ZwMksxblcyakRG?=
- =?utf-8?B?a05aVnlEWGxyTmpUNURNYm5GL1M1WC9xNGtVSVBKcmgxaGdBOEZwS3JUVlVI?=
- =?utf-8?B?bEpxbTZLTjdXS29uSnR3OFludTN0bHJtRzlwVkl5TzRRUG1ldUczYkdPVjdh?=
- =?utf-8?B?dzlmaDhHa3JaLzcrUkc2cVd4RnBQdDRIV0FibHV3czhYMHUrZERPOStPNmJR?=
- =?utf-8?B?YTVHNHc0WSs2N0FSaVJFR1ZKVXRUWDl5bCtUVFFuVzNUcEFXdWowNFBzNDhT?=
- =?utf-8?B?MlA3dEUyMHdTWUZKaDMrZkI2cksxN0crY21xWGJWeFVGdEN0WFVKbElKUWhD?=
- =?utf-8?B?UldWK2xlc0Z1L1hQcmxnVFZQWnB3cFd2bllrczFXMUxYZ2RpME0yZEd5azha?=
- =?utf-8?B?dEJvQjY1TWtlZzRLQXVtY1ZyNWF5OHpicHhicUN3RzN5ODJMZUVrNEdmNjBO?=
- =?utf-8?B?MHd0bGFISk1JNVhiQXVydi9OOXN0cW45R2dTY0M3VldVNDFBTHAwOU1pQ2l5?=
- =?utf-8?B?MHdrZDl6c1BOKzM2Zy9JVG1yWGIyUjhPTjROUjhhaWR2d01qTjRTQ0pYSWdR?=
- =?utf-8?B?MTVlajVWKzU0QmhSMEFkd29VaGlQYkM4K0xDVEczRGE5RGpEUkczRVlrR1Fo?=
- =?utf-8?B?QzVwRTRLdk96QnhGdG15dEU0b0RMNVUrcHB0NzJKQUhtb0lZZGRpeC9WWkZO?=
- =?utf-8?B?aWNwdFJnZlVuZTBaZE5yamZhZWY0Yit2UUYrU1ZrVXR4N2htMkUwVytyOEZI?=
- =?utf-8?B?Z2p0K2M4Nlp0eURid04xMXNGTVM0U1NQY1dUSkdGR3UrWC9rRjRWQT09?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 3 May 2022 10:16:16 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F47D13F65;
+        Tue,  3 May 2022 07:12:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1651587032;
+        bh=jBf0jkgXes2Bgvz1mr0yTofTeW0CJcZ+iijJU1rFRkA=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=hw2PQaLw/ZvT//biTMBcCkn13OhYbNvQ6wTYb3SbSJJRw8o0lHAJTvzKLI13U7jP2
+         5cxIpubl5IGIN6RfPuKJJt+OuM8JzFYg+fjKkkeGA0eFy9S3Ounb6LS/J1KTTFn+bd
+         VkAIW6VriU18sIlhnomWKFGMGYuMEb/SzN6nHc8k=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [80.245.79.168] ([80.245.79.168]) by web-mail.gmx.net
+ (3c-app-gmx-bap25.server.lan [172.19.172.95]) (via HTTP); Tue, 3 May 2022
+ 16:10:32 +0200
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9939ce11-7264-44a1-07da-08da2d0e67b5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 May 2022 14:08:31.9055
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: QzwFA8NZ7dMMK3lD/LefJ88fh2g9Cnx1BwwVCFlnKlUusa67/Z9Y9bS3x8vWZkpBnMmorTCoqDeBQTOggwTfFg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR84MB1387
-X-OriginatorOrg: hpe.com
-X-Proofpoint-GUID: 7vQBehy7XI2PraCZFK_tbAirsc-cG05k
-X-Proofpoint-ORIG-GUID: 7vQBehy7XI2PraCZFK_tbAirsc-cG05k
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-03_05,2022-05-02_03,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
- mlxscore=0 spamscore=0 lowpriorityscore=0 mlxlogscore=760 impostorscore=0
- priorityscore=1501 bulkscore=0 clxscore=1015 phishscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205030102
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <trinity-cda3b94f-8556-4b83-bc34-d2c215f93bcd-1651587032669@3c-app-gmx-bap25>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Greg Ungerer <gerg@kernel.org>,
+        =?UTF-8?Q?Ren=C3=A9_van_Dorst?= <opensource@vdorst.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     Frank Wunderlich <linux@fw-web.de>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Aw: Re: [RFC v1] dt-bindings: net: dsa: convert binding for
+ mediatek switches
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 3 May 2022 16:10:32 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <d29637f8-87ff-b5f0-9604-89b51a2ba7c1@linaro.org>
+References: <20220502153238.85090-1-linux@fw-web.de>
+ <d29637f8-87ff-b5f0-9604-89b51a2ba7c1@linaro.org>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:O5oBof9XGL3SxmQsXmJowuqSpbkg8qCPhR75Rqj8d7AWC0TscwGJa0vS4RQCp8q3HxeFt
+ 66exxqD6usZY2JU0sPJpokt5fCdbgHA8DIKLGjCQnD07s1XPN5wm51EFS4FBZyEa13y1ksjpJPz7
+ X0luNj1XJO/2ff6Ic3TAnikuk13kEO0jAEY6lCQu0ur5TmVDk1XcjdynDsbBb6arWo0FpFCgX74v
+ VdB6M09uzDjabMUnZlaYV4FnjRoxdXS1HoEA5pOoG94xpfgL5UJgjkip7NPt8PhHGTxM0Sx4LTve
+ SI=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:WhcYUwKPK54=:mjGQ2JYTdacnqf++cuEFfa
+ aUu8RvnvGlhBUgCnvPyEBLTlZFA2TAyTtknQyLbFIr6JfDAimT1vFl/1YjFsh4S+/GHOEjypp
+ QG8HkYsZYmsXHwsGopwb2MrzuJgODuyfbK2YaT1WyY5hU+/yUsirtpFpj7dB7waTtPQ95GzT5
+ goTDIRjYAm7/xjShlJLaz2o+V0BVAZqVnGwCechdeXAWfLm8PEF4dB5prr4tXOsSE4DjtPlYH
+ OH/ul3FdGijAXiRe6wZXF4SAldnxySwWo0ulC6zUDPdCyyRS0P4v7DCAaBOYGDxb2HU/JFsAf
+ 8CJP3vGJ/UYEGFYXGhGvUgyMj9f5Kb8380mYNpR/vp83aaXOgWT8BS85Lo6aYf1IhBnwQls82
+ FltGU1+eeSsu1OHPiQnjLoe0xICgS3HEPVpTPh1K6B2zjcvgi0UgKVVMYSiXnl1QY1ltr1p0B
+ tEhWYnsMymSBxSXnUpyU7C9MJd59JdkgrY5gs6FbxCf6GgYfJl/LCfscxD0F9DxiwR6g2MhRh
+ GbLP7+c0s1vDGIwloZCrgMxIdZwvfs0/u/UQ9OSWZx0oWbVYPtQVdPJiHzQejUE/oQ5RJR8vH
+ jaES1RmAW2LRlCx7vuWHhsmfZ2UBIjPr/NcHnoXNce+fjP7bqPg6m906fYkFyZa7nucFvf3md
+ Jv1xZ8GrR2N1CRBWXXEYIFAEpxlbW3Qq4Ot0FdtZ0pfq8jgJc5UbwDrfsC3XdjQXvm3OR1Oej
+ axa4xi2A3mUV2cXG41kEnw7fM9slU256BNQ/Bx3UShyX5MyR5ioKxdQgJRn5St43Qd57q0n/o
+ PC6turt
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMDIvMDUvMjAyMiAyMjo0MCwgbmljay5oYXdraW5zQGhwZS5jb20gd3JvdGU6DQo+ID4gRnJv
-bTogTmljayBIYXdraW5zIDxuaWNrLmhhd2tpbnNAaHBlLmNvbT4NCj4gPiANCj4gPiBUaGUgSFBF
-IFNvQyBpcyBuZXcgdG8gbGludXguIEEgYmFzaWMgZGV2aWNlIHRyZWUgbGF5b3V0IHdpdGggbWlu
-aW11bSANCj4gPiByZXF1aXJlZCBmb3IgbGludXggdG8gYm9vdCBpbmNsdWRpbmcgYSB0aW1lciBh
-bmQgd2F0Y2hkb2cgc3VwcG9ydCBoYXMgDQo+ID4gYmVlbiBjcmVhdGVkLg0KPiA+IA0KPiA+IFRo
-ZSBkdHMgZmlsZSBpcyBlbXB0eSBhdCB0aGlzIHBvaW50IGJ1dCB3aWxsIGJlIHVwZGF0ZWQgaW4g
-c3Vic2VxdWVudCANCj4gPiB1cGRhdGVzIGFzIGJvYXJkIHNwZWNpZmljIGZlYXR1cmVzIGFyZSBl
-bmFibGVkLg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IE5pY2sgSGF3a2lucyA8bmljay5oYXdr
-aW5zQGhwZS5jb20+DQo+ID4gDQo+ID4gLS0tDQo+ID4gdjY6DQo+ID4gKiBBZGRlZCBjYWNoZS1j
-b250cm9sbGVyIHRvIENQVQ0KPiA+ICogUmVtb3ZlZCBocGUsZ3hwLXdkdCBhbmQgcmVtb3ZlZCBz
-aW1wbGUtbWZkIGZyb20gaHBlLGd4cC10aW1lcg0KPiA+ICogQWRkZWQgc3BhY2UgYWZ0ZXIgJywn
-IGluIGNvbXBhdGlibGUgbGlzdHMgY29udGFpbmluZyBtb3JlIHRoYW4gb25lDQo+ID4gICBpdGVt
-DQoNCj4gSG1tbS4uLi4NCg0KPiA+ICAJaW50ZWdyYXRvcmFwLWltLXBkMS5kdGIgXA0KPiA+IGRp
-ZmYgLS1naXQgYS9hcmNoL2FybS9ib290L2R0cy9ocGUtYm1jLWRsMzYwZ2VuMTAuZHRzIA0KPiA+
-IGIvYXJjaC9hcm0vYm9vdC9kdHMvaHBlLWJtYy1kbDM2MGdlbjEwLmR0cw0KPiA+IG5ldyBmaWxl
-IG1vZGUgMTAwNjQ0DQo+ID4gaW5kZXggMDAwMDAwMDAwMDAwLi42OWU5YzY2NzJlYTgNCj4gPiAt
-LS0gL2Rldi9udWxsDQo+ID4gKysrIGIvYXJjaC9hcm0vYm9vdC9kdHMvaHBlLWJtYy1kbDM2MGdl
-bjEwLmR0cw0KPiA+IEBAIC0wLDAgKzEsMTMgQEANCj4gPiArLy8gU1BEWC1MaWNlbnNlLUlkZW50
-aWZpZXI6IEdQTC0yLjANCj4gPiArLyoNCj4gPiArICogRGV2aWNlIFRyZWUgZmlsZSBmb3IgSFBF
-IERMMzYwR2VuMTAgICovDQo+ID4gKw0KPiA+ICsvaW5jbHVkZS8gImhwZS1neHAuZHRzaSINCj4g
-PiArDQo+ID4gKy8gew0KPiA+ICsJI2FkZHJlc3MtY2VsbHMgPSA8MT47DQo+ID4gKwkjc2l6ZS1j
-ZWxscyA9IDwxPjsNCj4gPiArCWNvbXBhdGlibGUgPSAiaHBlLGd4cC1kbDM2MGdlbjEwIiwiaHBl
-LGd4cCI7DQoNCj4gTWlzc2luZyBzcGFjZSBhZnRlciAnLCcNCg0KPiBXaXRoIHRoaXMgZml4ZWQ6
-DQo+IFJldmlld2VkLWJ5OiBLcnp5c3p0b2YgS296bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tp
-QGxpbmFyby5vcmc+DQoNCkkgZm9yZ290IHRvIGNoZWNrIHRoaXMgZmlsZSB3aGlsZSBmaXhpbmcg
-dGhlIHNwYWNpbmcuIFRoYW5rIHlvdSBmb3IgeW91ciByZXZpZXcgYW5kIGFwb2xvZ2llcyBhYm91
-dCBtaXNzaW5nIHRoaXMuDQoNClRoYW5rcywNCg0KLU5pY2sgSGF3a2lucw0K
+Hi,
+
+thank you for first review.
+
+> Gesendet: Dienstag, 03. Mai 2022 um 14:05 Uhr
+> Von: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+> Betreff: Re: [RFC v1] dt-bindings: net: dsa: convert binding for mediate=
+k switches
+>
+> On 02/05/2022 17:32, Frank Wunderlich wrote:
+> > From: Frank Wunderlich <frank-w@public-files.de>
+> >
+> > Convert txt binding to yaml binding for Mediatek switches.
+> >
+> > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> > ---
+> >  .../devicetree/bindings/net/dsa/mediatek.yaml | 435 +++++++++++++++++=
++
+> >  .../devicetree/bindings/net/dsa/mt7530.txt    | 327 -------------
+> >  2 files changed, 435 insertions(+), 327 deletions(-)
+> >  create mode 100644 Documentation/devicetree/bindings/net/dsa/mediatek=
+.yaml
+> >  delete mode 100644 Documentation/devicetree/bindings/net/dsa/mt7530.t=
+xt
+> >
+> > diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek.yaml b=
+/Documentation/devicetree/bindings/net/dsa/mediatek.yaml
+> > new file mode 100644
+> > index 000000000000..c1724809d34e
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/net/dsa/mediatek.yaml
+>
+> Specific name please, so previous (with vendor prefix) was better:
+> mediatek,mt7530.yaml
+
+ok, named it mediatek only because mt7530 is only one possible chip and dr=
+iver handles 3 different "variants".
+
+> > @@ -0,0 +1,435 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>
+> You should CC previous contributors and get their acks on this. You
+> copied here a lot of description.
+
+added 3 Persons that made commits to txt before to let them know about thi=
+s change
+
+and yes, i tried to define at least the phy-mode requirement as yaml-depen=
+cy, but failed because i cannot match
+compatible in subnode.
+
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/net/dsa/mediatek.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Mediatek MT7530 Ethernet switch
+> > +
+> > +maintainers:
+> > +  - Sean Wang <sean.wang@mediatek.com>
+> > +  - Landen Chao <Landen.Chao@mediatek.com>
+> > +  - DENG Qingfang <dqfext@gmail.com>
+> > +
+> > +description: |
+> > +  Port 5 of mt7530 and mt7621 switch is muxed between:
+> > +  1. GMAC5: GMAC5 can interface with another external MAC or PHY.
+> > +  2. PHY of port 0 or port 4: PHY interfaces with an external MAC lik=
+e 2nd GMAC
+> > +     of the SOC. Used in many setups where port 0/4 becomes the WAN p=
+ort.
+> > +     Note: On a MT7621 SOC with integrated switch: 2nd GMAC can only =
+connected to
+> > +       GMAC5 when the gpios for RGMII2 (GPIO 22-33) are not used and =
+not
+> > +       connected to external component!
+> > +
+> > +  Port 5 modes/configurations:
+> > +  1. Port 5 is disabled and isolated: An external phy can interface t=
+o the 2nd
+> > +     GMAC of the SOC.
+> > +     In the case of a build-in MT7530 switch, port 5 shares the RGMII=
+ bus with 2nd
+> > +     GMAC and an optional external phy. Mind the GPIO/pinctl settings=
+ of the SOC!
+> > +  2. Port 5 is muxed to PHY of port 0/4: Port 0/4 interfaces with 2nd=
+ GMAC.
+> > +     It is a simple MAC to PHY interface, port 5 needs to be setup fo=
+r xMII mode
+> > +     and RGMII delay.
+> > +  3. Port 5 is muxed to GMAC5 and can interface to an external phy.
+> > +     Port 5 becomes an extra switch port.
+> > +     Only works on platform where external phy TX<->RX lines are swap=
+ped.
+> > +     Like in the Ubiquiti ER-X-SFP.
+> > +  4. Port 5 is muxed to GMAC5 and interfaces with the 2nd GAMC as 2nd=
+ CPU port.
+> > +     Currently a 2nd CPU port is not supported by DSA code.
+> > +
+> > +  Depending on how the external PHY is wired:
+> > +  1. normal: The PHY can only connect to 2nd GMAC but not to the swit=
+ch
+> > +  2. swapped: RGMII TX, RX are swapped; external phy interface with t=
+he switch as
+> > +     a ethernet port. But can't interface to the 2nd GMAC.
+> > +
+> > +    Based on the DT the port 5 mode is configured.
+> > +
+> > +  Driver tries to lookup the phy-handle of the 2nd GMAC of the master=
+ device.
+> > +  When phy-handle matches PHY of port 0 or 4 then port 5 set-up as mo=
+de 2.
+> > +  phy-mode must be set, see also example 2 below!
+> > +  * mt7621: phy-mode =3D "rgmii-txid";
+> > +  * mt7623: phy-mode =3D "rgmii";
+> > +
+> > +  CPU-Ports need a phy-mode property:
+> > +    Allowed values on mt7530 and mt7621:
+> > +      - "rgmii"
+> > +      - "trgmii"
+> > +    On mt7531:
+> > +      - "1000base-x"
+> > +      - "2500base-x"
+> > +      - "sgmii"
+> > +
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - mediatek,mt7530
+> > +      - mediatek,mt7531
+> > +      - mediatek,mt7621
+> > +
+> > +  "#address-cells":
+> > +    const: 1
+> > +
+> > +  "#size-cells":
+> > +    const: 0
+> > +
+> > +  core-supply:
+> > +    description: |
+> > +      Phandle to the regulator node necessary for the core power.
+> > +
+> > +  "#gpio-cells":
+> > +    description: |
+> > +      Must be 2 if gpio-controller is defined.
+> > +    const: 2
+> > +
+> > +  gpio-controller:
+> > +    type: boolean
+> > +    description: |
+> > +      Boolean; if defined, MT7530's LED controller will run on
+>
+> No need to repeat Boolean.
+
+ok, will change
+
+> > +      GPIO mode.
+> > +
+> > +  "#interrupt-cells":
+> > +    const: 1
+> > +
+> > +  interrupt-controller:
+> > +    type: boolean
+> > +    description: |
+> > +      Boolean; Enables the internal interrupt controller.
+>
+> Skip description.
+
+ok
+
+> > +
+> > +  interrupts:
+> > +    description: |
+> > +      Parent interrupt for the interrupt controller.
+>
+> Skip description.
+ok
+
+> > +    maxItems: 1
+> > +
+> > +  io-supply:
+> > +    description: |
+> > +      Phandle to the regulator node necessary for the I/O power.
+> > +      See Documentation/devicetree/bindings/regulator/mt6323-regulato=
+r.txt
+> > +      for details for the regulator setup on these boards.
+> > +
+> > +  mediatek,mcm:
+> > +    type: boolean
+> > +    description: |
+> > +      Boolean;
+>
+> No need to repeat Boolean.
+
+ack
+
+> > if defined, indicates that either MT7530 is the part
+> > +      on multi-chip module belong to MT7623A has or the remotely stan=
+dalone
+> > +      chip as the function MT7623N reference board provided for.
+> > +
+> > +  reset-gpios:
+> > +    description: |
+> > +      Should be a gpio specifier for a reset line.
+> > +    maxItems: 1
+> > +
+> > +  reset-names:
+> > +    description: |
+> > +      Should be set to "mcm".
+> > +    const: mcm
+> > +
+> > +  resets:
+> > +    description: |
+> > +      Phandle pointing to the system reset controller with
+> > +      line index for the ethsys.
+> > +    maxItems: 1
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+>
+> What about address/size cells?
+
+you're right even if they are const to a value they need to be set
+
+> > +
+> > +allOf:
+> > +  - $ref: "dsa.yaml#"
+> > +  - if:
+> > +      required:
+> > +        - mediatek,mcm
+>
+> Original bindings had this reversed.
+
+i know, but i think it is better readable and i will drop the else-part la=
+ter.
+Driver supports optional reset ("mediatek,mcm" unset and without reset-gpi=
+os)
+as this is needed if there is a shared reset-line for gmac and switch like=
+ on R2 Pro.
+
+i left this as separate commit to be posted later to have a nearly 1:1 con=
+version here.
+
+> > +    then:
+> > +      required:
+> > +        - resets
+> > +        - reset-names
+> > +    else:
+> > +      required:
+> > +        - reset-gpios
+> > +
+> > +  - if:
+> > +      required:
+> > +        - interrupt-controller
+> > +    then:
+> > +      required:
+> > +        - "#interrupt-cells"
+>
+> This should come from dt schema already...
+
+so i should drop (complete block for interrupt controller)?
+
+> > +        - interrupts
+> > +
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          items:
+> > +            - const: mediatek,mt7530
+> > +    then:
+> > +      required:
+> > +        - core-supply
+> > +        - io-supply
+> > +
+> > +
+> > +patternProperties:
+> > +  "^ports$":
+>
+> It''s not a pattern, so put it under properties, like regular property.
+
+can i then make the subnodes match? so the full block will move above requ=
+ired between "mediatek,mcm" and "reset-gpios"
+
+  ports:
+    type: object
+
+    patternProperties:
+      "^port@[0-9]+$":
+        type: object
+        description: Ethernet switch ports
+
+        properties:
+          reg:
+            description: |
+              Port address described must be 5 or 6 for CPU port and from =
+0 to 5 for user ports.
+
+        unevaluatedProperties: false
+
+        allOf:
+          - $ref: dsa-port.yaml#
+          - if:
+....
+
+basicly this "ports"-property should be required too, right?
+
+
+> > +    type: object
+> > +
+> > +    patternProperties:
+> > +      "^port@[0-9]+$":
+> > +        type: object
+> > +        description: Ethernet switch ports
+> > +
+> > +        $ref: dsa-port.yaml#
+>
+> This should go to allOf below.
+
+see above
+
+> > +
+> > +        properties:
+> > +          reg:
+> > +            description: |
+> > +              Port address described must be 6 for CPU port and from =
+0 to 5 for user ports.
+> > +
+> > +        unevaluatedProperties: false
+> > +
+> > +        allOf:
+> > +          - if:
+> > +              properties:
+> > +                label:
+> > +                  items:
+> > +                    - const: cpu
+> > +            then:
+> > +              required:
+> > +                - reg
+> > +                - phy-mode
+> > +
+> > +unevaluatedProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    mdio0 {
+>
+> Just mdio
+
+ok
+
+> > +        #address-cells =3D <1>;
+> > +        #size-cells =3D <0>;
+> > +        switch@0 {
+> > +            compatible =3D "mediatek,mt7530";
+> > +            #address-cells =3D <1>;
+> > +            #size-cells =3D <0>;
+> > +            reg =3D <0>;
+> > +
+> > +            core-supply =3D <&mt6323_vpa_reg>;
+> > +            io-supply =3D <&mt6323_vemc3v3_reg>;
+> > +            reset-gpios =3D <&pio 33 0>;
+>
+> Use GPIO flag define/constant.
+
+this example seems to be taken from bpi-r2 (i had taken it from the txt). =
+In dts for this board there are no
+constants too.
+
+i guess
+include/dt-bindings/gpio/gpio.h:14:#define GPIO_ACTIVE_HIGH 0
+
+for 33 there seem no constant..all other references to pio node are with n=
+umbers too and there seem no binding
+header defining the gpio pins (only functions in include/dt-bindings/pinct=
+rl/mt7623-pinfunc.h)
+
+> > +
+> > +            ports {
+> > +                #address-cells =3D <1>;
+> > +                #size-cells =3D <0>;
+> > +                port@0 {
+> > +                    reg =3D <0>;
+> > +                    label =3D "lan0";
+> > +                };
+> > +
+> > +                port@1 {
+> > +                    reg =3D <1>;
+> > +                    label =3D "lan1";
+> > +                };
+> > +
+> > +                port@2 {
+> > +                    reg =3D <2>;
+> > +                    label =3D "lan2";
+> > +                };
+> > +
+> > +                port@3 {
+> > +                    reg =3D <3>;
+> > +                    label =3D "lan3";
+> > +                };
+> > +
+> > +                port@4 {
+> > +                    reg =3D <4>;
+> > +                    label =3D "wan";
+> > +                };
+> > +
+> > +                port@6 {
+> > +                    reg =3D <6>;
+> > +                    label =3D "cpu";
+> > +                    ethernet =3D <&gmac0>;
+> > +                    phy-mode =3D "trgmii";
+> > +                    fixed-link {
+> > +                        speed =3D <1000>;
+> > +                        full-duplex;
+> > +                    };
+> > +                };
+> > +            };
+> > +        };
+> > +    };
+> > +
+> > +  - |
+> > +    //Example 2: MT7621: Port 4 is WAN port: 2nd GMAC -> Port 5 -> PH=
+Y port 4.
+> > +
+> > +    eth {
+>
+> s/eth/ethernet/
+
+ok
+
+> > +        #address-cells =3D <1>;
+> > +        #size-cells =3D <0>;
+> > +        gmac0: mac@0 {
+> > +            compatible =3D "mediatek,eth-mac";
+> > +            reg =3D <0>;
+> > +            phy-mode =3D "rgmii";
+> > +
+> > +            fixed-link {
+> > +                speed =3D <1000>;
+> > +                full-duplex;
+> > +                pause;
+> > +            };
+> > +        };
+> > +
+> > +        gmac1: mac@1 {
+> > +            compatible =3D "mediatek,eth-mac";
+> > +            reg =3D <1>;
+> > +            phy-mode =3D "rgmii-txid";
+> > +            phy-handle =3D <&phy4>;
+> > +        };
+> > +
+> > +        mdio: mdio-bus {
+> > +            #address-cells =3D <1>;
+> > +            #size-cells =3D <0>;
+> > +
+> > +            /* Internal phy */
+> > +            phy4: ethernet-phy@4 {
+> > +                reg =3D <4>;
+> > +            };
+> > +
+> > +            mt7530: switch@1f {
+> > +                compatible =3D "mediatek,mt7621";
+> > +                #address-cells =3D <1>;
+> > +                #size-cells =3D <0>;
+> > +                reg =3D <0x1f>;
+> > +                mediatek,mcm;
+> > +
+> > +                resets =3D <&rstctrl 2>;
+> > +                reset-names =3D "mcm";
+> > +
+> > +                ports {
+> > +                    #address-cells =3D <1>;
+> > +                    #size-cells =3D <0>;
+> > +
+> > +                    port@0 {
+> > +                        reg =3D <0>;
+> > +                        label =3D "lan0";
+> > +                    };
+> > +
+> > +                    port@1 {
+> > +                        reg =3D <1>;
+> > +                        label =3D "lan1";
+> > +                    };
+> > +
+> > +                    port@2 {
+> > +                        reg =3D <2>;
+> > +                        label =3D "lan2";
+> > +                    };
+> > +
+> > +                    port@3 {
+> > +                        reg =3D <3>;
+> > +                        label =3D "lan3";
+> > +                    };
+> > +
+> > +        /* Commented out. Port 4 is handled by 2nd GMAC.
+> > +                    port@4 {
+> > +                        reg =3D <4>;
+> > +                        label =3D "lan4";
+> > +                    };
+> > +        */
+>
+> Messed up indentation
+
+will fix it
+
+> > +
+> > +                    port@6 {
+> > +                        reg =3D <6>;
+> > +                        label =3D "cpu";
+> > +                        ethernet =3D <&gmac0>;
+> > +                        phy-mode =3D "rgmii";
+> > +
+> > +                        fixed-link {
+> > +                            speed =3D <1000>;
+> > +                            full-duplex;
+> > +                            pause;
+> > +                        };
+> > +                    };
+> > +                };
+> > +            };
+> > +        };
+> > +    };
+> > +
+> > +  - |
+> > +    //Example 3: MT7621: Port 5 is connected to external PHY: Port 5 =
+-> external PHY.
+> > +
+> > +    eth {
+>
+> Also ethernet?
+
+will do
+
+> Best regards,
+> Krzysztof
+
+regards Frank

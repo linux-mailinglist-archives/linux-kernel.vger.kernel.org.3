@@ -2,95 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA65519278
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 01:54:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 166D551927B
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 01:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244408AbiECX5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 19:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39274 "EHLO
+        id S244412AbiECX73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 19:59:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230087AbiECX5u (ORCPT
+        with ESMTP id S230087AbiECX70 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 19:57:50 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2459E2D1C4
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 16:54:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651622056; x=1683158056;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=K8SvhxQm1P62rJiCvMA6jYehYxpt5BXqhVT4BJHzqCc=;
-  b=cfuj9TgIlHxV3jgOtttBOUu7YbI/vb1yqUlZ9eW2kP2eWnWnXC6ACGm/
-   1sPyxRtp6GfVq/0N+AtWMKO00KAkdU40X6/z5Vwq2a8DVV7dP0iQZxlvM
-   +AMn2xOYoVmxSiiy4XSs3GqWxnOnhYXveBqT67yWIeDuRTvJXiYuOEg39
-   bq26vZxqwadK3KT7IONGV0pZAUqXoe3DXRVyqA28qNUXx9KEHbJ3CbhBc
-   EmN1x+REKSb4gf5YO1UV+qC357iBBZc0P+VV5HzBdoAVw1SMNRctXSMrv
-   nL4u/aZqONF/cP59RRIHHQnIw7mz8wkPg21PiUudsyYwSF20jcTaa1pQ2
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="248163425"
-X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="248163425"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 16:54:15 -0700
-X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="664202274"
-Received: from dbandax-mobl2.amr.corp.intel.com (HELO [10.209.188.251]) ([10.209.188.251])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 16:54:14 -0700
-Message-ID: <9fb22767-54de-d316-7e6b-5aac375c9c49@intel.com>
-Date:   Tue, 3 May 2022 16:54:34 -0700
+        Tue, 3 May 2022 19:59:26 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D494186DD;
+        Tue,  3 May 2022 16:55:50 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1nm2Mp-0004gB-UB; Wed, 04 May 2022 01:55:43 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     krzk+dt@kernel.org, palmer@dabbelt.com, robh+dt@kernel.org,
+        linux-riscv@lists.infradead.org
+Cc:     conor.dooley@microchip.com, Cyril.Jean@microchip.com,
+        daire.mcnamara@microchip.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, palmer@rivosinc.com, arnd@arndb.de,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Conor Dooley <mail@conchuod.ie>
+Subject: Re: [PATCH v3 8/8] riscv: dts: microchip: add the sundance polarberry
+Date:   Wed, 04 May 2022 01:55:42 +0200
+Message-ID: <3101012.5fSG56mABF@phil>
+In-Reply-To: <20220501192557.2631936-9-mail@conchuod.ie>
+References: <20220501192557.2631936-1-mail@conchuod.ie> <20220501192557.2631936-9-mail@conchuod.ie>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: RFC: Memory Tiering Kernel Interfaces
-Content-Language: en-US
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     Davidlohr Bueso <dave@stgolabs.net>, Wei Xu <weixugc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Yang Shi <shy828301@gmail.com>, Linux MM <linux-mm@kvack.org>,
-        Greg Thelen <gthelen@google.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Feng Tang <feng.tang@intel.com>, Jonathan.Cameron@huawei.com
-References: <CAAPL-u9sVx94ACSuCVN8V0tKp+AMxiY89cro0japtyB=xNfNBw@mail.gmail.com>
- <20220501175813.tvytoosygtqlh3nn@offworld> <87o80eh65f.fsf@nvdebian.thelocal>
- <e47bf89c-cee7-3006-5c1b-c76f640c3e23@intel.com>
- <87mtfygoxs.fsf@nvdebian.thelocal>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <87mtfygoxs.fsf@nvdebian.thelocal>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/3/22 15:35, Alistair Popple wrote:
-> Not entirely true. The GPUs on POWER9 have performance counters capable of
-> collecting this kind of information for memory accessed from the GPU. I will
-> admit though that sadly most people probably don't have a P9 sitting under their
-> desk :)
+Am Sonntag, 1. Mai 2022, 21:25:59 CEST schrieb Conor Dooley:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> Add a minimal device tree for the PolarFire SoC based Sundance
+> PolarBerry.
+> 
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
-Well, x86 CPUs have performance monitoring hardware that can
-theoretically collect physical access information too.  But, this
-performance monitoring hardware wasn't designed for this specific use
-case in mind.  So, in practice, these events (PEBS) weren't very useful
-for driving memory tiering.
+[...]
 
-Are you saying that the GPUs on POWER9 have performance counters that
-can drive memory tiering in practice?  I'd be curious if there's working
-code to show how they get used.  Maybe the hardware is better than the
-x86 PMU or the software consuming it is more clever than what we did.
-But, I'd love to see it either way.
+> diff --git a/arch/riscv/boot/dts/microchip/mpfs-polarberry.dts b/arch/riscv/boot/dts/microchip/mpfs-polarberry.dts
+> new file mode 100644
+> index 000000000000..96ec589d1571
+> --- /dev/null
+> +++ b/arch/riscv/boot/dts/microchip/mpfs-polarberry.dts
+> @@ -0,0 +1,95 @@
+> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +/* Copyright (c) 2020-2022 Microchip Technology Inc */
+> +
+> +/dts-v1/;
+> +
+> +#include "mpfs.dtsi"
+> +#include "mpfs-polarberry-fabric.dtsi"
+> +
+> +/* Clock frequency (in Hz) of the rtcclk */
+> +#define MTIMER_FREQ	1000000
+> +
+> +/ {
+> +	model = "Sundance PolarBerry";
+> +	compatible = "sundance,polarberry", "microchip,mpfs";
+> +
+> +	aliases {
+> +		serial0 = &mmuart0;
+> +		ethernet0 = &mac1;
+
+I guess you could sort them alphabetically (ethernet above serial0)
+
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = "serial0:115200n8";
+> +	};
+> +
+> +	cpus {
+> +		timebase-frequency = <MTIMER_FREQ>;
+> +	};
+> +
+> +	ddrc_cache_lo: memory@80000000 {
+> +		device_type = "memory";
+> +		reg = <0x0 0x80000000 0x0 0x2e000000>;
+> +		status = "okay";
+
+"okay" is implied I think, so when you only add the node
+here, you probably don't need to specify the status.
+
+> +	};
+> +
+> +	ddrc_cache_hi: memory@1000000000 {
+> +		device_type = "memory";
+> +		reg = <0x10 0x00000000 0x0 0xC0000000>;
+> +		status = "okay";
+> +	};
+> +};
+> +
+> +&refclk {
+> +	clock-frequency = <125000000>;
+> +};
+> +
+> +&mmuart0 {
+> +	status = "okay";
+> +};
+> +
+> +&mmc {
+> +	status = "okay";
+
+having the status property last (below sd-uhssdr104) can be helpful
+for readability, as readers would know where to expect it.
+
+> +	bus-width = <4>;
+> +	disable-wp;
+> +	cap-sd-highspeed;
+> +	cap-mmc-highspeed;
+> +	card-detect-delay = <200>;
+> +	mmc-ddr-1_8v;
+> +	mmc-hs200-1_8v;
+> +	sd-uhs-sdr12;
+> +	sd-uhs-sdr25;
+> +	sd-uhs-sdr50;
+> +	sd-uhs-sdr104;
+> +};
+> +
+> +&mac1 {
+> +	status = "okay";
+> +	phy-mode = "sgmii";
+> +	phy-handle = <&phy1>;
+> +	phy1: ethernet-phy@5 {
+> +		reg = <5>;
+> +		ti,fifo-depth = <0x01>;
+> +	};
+> +	phy0: ethernet-phy@4 {
+> +		reg = <4>;
+> +		ti,fifo-depth = <0x01>;
+> +	};
+> +};
+> +
+> +&mac0 {
+> +	status = "disabled";
+
+mac0 is already disabled in the mpfs.dtsi, so you either don't
+need to duplicate it here, or if it's a reminder of something,
+I guess a comment for the "why" would be helpful.
+
+> +	phy-mode = "sgmii";
+> +	phy-handle = <&phy0>;
+> +};
+> +
+> +&rtc {
+> +	status = "okay";
+> +};
+> +
+> +&mbox {
+> +	status = "okay";
+> +};
+> +
+> +&syscontroller {
+> +	status = "okay";
+> +};
+
+My personal preference would be alphabetical sorting also for
+phandles, so
+
+&mac0 {}
+&mac1 {}
+&mbox {}
+&refclk {}
+&rtc {}
+
+etc - makes finding things a lot easier in the long run
+especially when files get longer.
+
+
+Heiko
+
+
+

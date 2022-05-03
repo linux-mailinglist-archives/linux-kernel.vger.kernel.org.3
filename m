@@ -2,106 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D045189D9
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 18:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D6AB5189E9
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 18:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239556AbiECQaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 12:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44244 "EHLO
+        id S239591AbiECQcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 12:32:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239538AbiECQ37 (ORCPT
+        with ESMTP id S236416AbiECQb5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 12:29:59 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB21A25C79;
-        Tue,  3 May 2022 09:26:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651595186; x=1683131186;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=MQ85w7Epamx1hF9B682F4eoCXfpBJrXR4QrzZ3a76lg=;
-  b=Kps7qH2/5WhItb6RzR0InxnBYzawSnafuy8pD3iegVUb6IPtf4jFYfhu
-   h/eK4ygzw42SgQuubLOAXO/nbEnzEdQ0ConFfG0qs8uUYUab1j0MSx1ub
-   s5EIQaynFdrqcMSLAHTs1dHF7YOd7puabvK0C/zdAXCVQX9b0aQln/4CW
-   WloJn0Yfwnu/4nWEF6GAIVzzSMqgQFsPX5D4AUGzOpKnGqoFfMSR/2oxJ
-   k7I5GL+UDtzQwljRoWd+9Ns5Urt8+2gHUsx4GcXUbHwZxjMNrOWw4iB19
-   Vgbttxd5tIx1j5QfVDqfJ2ZPcrI0H1OVsSvgNZpe1Fz/FvDv4yWj2fL8c
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="292710795"
-X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
-   d="scan'208";a="292710795"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 09:26:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
-   d="scan'208";a="562277407"
-Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
-  by orsmga007.jf.intel.com with ESMTP; 03 May 2022 09:26:22 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Tue, 3 May 2022 09:26:22 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Tue, 3 May 2022 09:26:21 -0700
-Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
- fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.027;
- Tue, 3 May 2022 09:26:21 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Borislav Petkov <bp@alien8.de>, Hans de Goede <hdegoede@redhat.com>
-CC:     "markgross@kernel.org" <markgross@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "Joseph, Jithu" <jithu.joseph@intel.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
-Subject: RE: [PATCH v5 00/10] Introduce In Field Scan driver
-Thread-Topic: [PATCH v5 00/10] Introduce In Field Scan driver
-Thread-Index: AQHYWxYVdsKdZt61BUSHj1qB1cqAT60MLiKAgAGW8wD//5MXcIAABnSA
-Date:   Tue, 3 May 2022 16:26:21 +0000
-Message-ID: <ed069ff97fc5413795b43a00d88b7f8a@intel.com>
-References: <20220422200219.2843823-1-tony.luck@intel.com>
- <20220428153849.295779-1-tony.luck@intel.com>
- <13054c5c-ed48-b7a2-a800-25b9b1b1ab0d@redhat.com> <YnFK+gXFx0jQB1dz@zn.tnic>
- <c30f82f1d4544ebb8a15da1f6fc033ac@intel.com>
-In-Reply-To: <c30f82f1d4544ebb8a15da1f6fc033ac@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.401.20
-x-originating-ip: [10.1.200.100]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 3 May 2022 12:31:57 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729663CFDA
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 09:28:24 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id y2so31957321ybi.7
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 09:28:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OioOkp+daVjcm8WittR1Tk/UQnINHvqB9L6l895CXcU=;
+        b=f1y/Ry6FhhCoj1O6PNJ4u5oIsObhMzvEvN+EpK/DPgP920QWICa8XWxxM25XxlWXdv
+         obO4g6HLcH9ipII7mEKHk9PRypuAKrviNfo558KwuHEF8fBitw+prwaFnLfwUa+1nhIH
+         /P21JCHt8jb7Swm3CCCtQhFK7/V68tTG4IlpU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OioOkp+daVjcm8WittR1Tk/UQnINHvqB9L6l895CXcU=;
+        b=U5pHK9P+VBTMaeMu3V+tTbC05k5uK0kt/tQ8RI1i+bdaTAjXfECwGNjQAF5F8xMz4Y
+         q4uGOFOPWztq+wosa93Y0oZb/rkv8dgkRd8Pk3rg09OtP4q9RQUThAf1jdSWVVZX3VZi
+         9O7lN5NaLqrF41lPatx0R2dgggO8qB0ZtqLQaYcx4dD3cyZ+8p6FlMfdzqYiJmO+s9ht
+         iJOPktcZ9TPvtt+F8o7ku7mkQIsiNivhPhVioXZCLsyU0opcxmwz/vYxVE5boZgJ+8ur
+         zw9wkF04zIBff7DCEg0IwwDJVj6vVEzvy+R2uPtGHjuOXQOesePGezcB+YlytdzNl6a1
+         yVSQ==
+X-Gm-Message-State: AOAM532HEliBvAADRyBE71hcqqynwXS2goWzxjt6u74+jIC6Xhm0uQNB
+        7ZYcjjPd9xXEz4y/yaDecT9JjO9E5O8h/YzdPlIpcA==
+X-Google-Smtp-Source: ABdhPJxFCzQne8oT1CxNLdigS5RxYgArTKd3K7idnnn5ydcbSbJ7D8zB9paqLbN4J1UhMNtOHiclj9HdbDT1+FIkJcs=
+X-Received: by 2002:a25:4c2:0:b0:648:6a77:5da0 with SMTP id
+ 185-20020a2504c2000000b006486a775da0mr13553377ybe.203.1651595303696; Tue, 03
+ May 2022 09:28:23 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220419081246.2546159-1-wenst@chromium.org>
+In-Reply-To: <20220419081246.2546159-1-wenst@chromium.org>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Wed, 4 May 2022 00:28:12 +0800
+Message-ID: <CAGXv+5FSscb0F2VBMbSOHRneksZi-WSFTeFATDkY_JHoY=my+A@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/7] clk: mediatek: Move to struct clk_hw provider APIs
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-clk@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        linux-kernel@vger.kernel.org, Miles Chen <miles.chen@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBDYW4geW91IGNoZWNrIHRoYXQgSSBmaXhlZCB0aGUgaXNzdWVzIGluIHBhcnQgMDEvMTAgdGhh
-dCB5b3UgcmVwb3J0ZWQgaW4gdjMgb2YgdGhpcw0KPiBzZXJpZXMgYW5kIGdpdmUgYW4gQWNrIHRv
-IEhhbnM/DQoNCk9vcHMgLi4uIHJlYWRpbmcgZS1tYWlsIG91dCBvZiBvcmRlciAuLi4gSSBzZWUg
-dGhhdCB5b3UgYWxyZWFkeSBnYXZlIHRoZSBBY2suICBUaGFua3MhDQoNCi1Ub255DQo=
+Hi Stephen,
+
+On Tue, Apr 19, 2022 at 4:12 PM Chen-Yu Tsai <wenst@chromium.org> wrote:
+>
+> Hi everyone,
+>
+> This is part 2 of my proposed MediaTek clk driver cleanup work [1].
+>
+> Part 2 involves moving the whole MediaTek clk driver library from the
+> old `struct clk` provider API to the new `struct clk_hw` provider API.
+>
+> Parts of this series were done with coccinelle scripts, while others
+> were done by hand. To facilitate review, these parts are currently split
+> into different patches. As a result however, this series is not fully
+> bisectable. Later on, the related parts should be squashed together.
+>
+> Patch 1 and 2 are minor cleanups around code that is touched by later
+> patches.
+
+[...]
+
+> Chen-Yu Tsai (7):
+>   clk: mediatek: Make mtk_clk_register_composite() static
+>   clk: mediatek: apmixed: Drop error message from clk_register() failure
+
+Could you take a quick look at the first two patches and pick them up?
+They are unrelated cleanups that touch the same code sections as the
+other patches in this series, and thus were included.
+
+
+Thanks
+ChenYu

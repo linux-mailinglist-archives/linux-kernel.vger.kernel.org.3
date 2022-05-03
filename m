@@ -2,141 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 680AB518D35
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:33:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 245F5518D3A
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240070AbiECThC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 15:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34000 "EHLO
+        id S241864AbiECTlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 15:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiECTg7 (ORCPT
+        with ESMTP id S229480AbiECTk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 15:36:59 -0400
-Received: from mxout03.lancloud.ru (mxout03.lancloud.ru [45.84.86.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E862E6BB;
-        Tue,  3 May 2022 12:33:21 -0700 (PDT)
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru B5F5020FC81C
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH v3] sh: avoid using IRQ0 on SH3/4
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Rob Landley <rob@landley.net>
-CC:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Rich Felker <dalias@libc.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <2584ba18-9653-9310-efc1-8b3b3e221eea@omp.ru>
- <11021433-66c0-3c56-42bd-207a5ae8d267@physik.fu-berlin.de>
- <2ebef1ac-e5c5-980c-9413-22a6cccdfa1d@landley.net>
- <CAMuHMdWN0vRYhK7O0MgOSCtisw3RDvp4vxSS2VF-9uGDdOEb7g@mail.gmail.com>
- <59faed1d-3878-ce75-9f62-aaf4338d0ad1@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <520ab5ce-021a-bbd9-7303-3f7695631ba5@omp.ru>
-Date:   Tue, 3 May 2022 22:33:15 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Tue, 3 May 2022 15:40:59 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B9924597;
+        Tue,  3 May 2022 12:37:26 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:56078)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nlyKo-00AaEh-5z; Tue, 03 May 2022 13:37:22 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:36796 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nlyKn-007Sew-2a; Tue, 03 May 2022 13:37:21 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org,
+        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>
+References: <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
+        <20220429214837.386518-6-ebiederm@xmission.com>
+        <20220502143750.GC17276@redhat.com>
+Date:   Tue, 03 May 2022 14:36:55 -0500
+In-Reply-To: <20220502143750.GC17276@redhat.com> (Oleg Nesterov's message of
+        "Mon, 2 May 2022 16:37:51 +0200")
+Message-ID: <87y1zio1bc.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <59faed1d-3878-ce75-9f62-aaf4338d0ad1@omp.ru>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nlyKn-007Sew-2a;;;mid=<87y1zio1bc.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1+j7nUi9NCECp7X522Zs1J0RePdyckNPD8=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;Oleg Nesterov <oleg@redhat.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 521 ms - load_scoreonly_sql: 0.06 (0.0%),
+        signal_user_changed: 10 (1.9%), b_tie_ro: 8 (1.5%), parse: 1.09 (0.2%),
+         extract_message_metadata: 13 (2.4%), get_uri_detail_list: 1.50 (0.3%),
+         tests_pri_-1000: 7 (1.3%), tests_pri_-950: 1.44 (0.3%),
+        tests_pri_-900: 1.23 (0.2%), tests_pri_-90: 193 (37.1%), check_bayes:
+        183 (35.1%), b_tokenize: 8 (1.6%), b_tok_get_all: 8 (1.6%),
+        b_comp_prob: 2.7 (0.5%), b_tok_touch_all: 159 (30.5%), b_finish: 1.09
+        (0.2%), tests_pri_0: 280 (53.8%), check_dkim_signature: 1.08 (0.2%),
+        check_dkim_adsp: 3.2 (0.6%), poll_dns_idle: 0.90 (0.2%), tests_pri_10:
+        2.4 (0.5%), tests_pri_500: 9 (1.6%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v2 06/12] ptrace: Reimplement PTRACE_KILL by always
+ sending SIGKILL
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/2/22 11:56 PM, Sergey Shtylyov wrote:
+Oleg Nesterov <oleg@redhat.com> writes:
 
-[...]
->>>>> Using IRQ0 by the platform devices is going to be disallowed soon (see [1])
->>>>> and even now, when IRQ0 is about to be returned by platfrom_get_irq(), you
->>>>> see a big warning.  The code supporting SH3/4 SoCs maps the IRQ #s starting
->>>>> at 0 -- modify that code to start the IRQ #s from 16 instead.
->>>>>
->>>>> The patch should mostly affect the AP-SH4A-3A/AP-SH4AD-0A boards as they
->>>>> indeed use IRQ0 for the SMSC911x compatible Ethernet chip...
+> On 04/29, Eric W. Biederman wrote:
 >>
->>> As I told him in IRC, the problem is still that sh4 never gives me a shell
->>> prompt with this patch applied. I just reconfirmed it against current git:
->>>
->>> Freeing unused kernel image (initmem) memory: 124K
->>> This architecture does not have kernel memory protection.
->>> Run /init as init process
->>> mountpoint: dev/pts: No such file or directory
->>> 8139cp 0000:00:02.0 eth0: link up, 100Mbps, full-duplex, lpa 0x05E1
->>>
->>> It makes it partway through the init script, but it hangs with qemu-system-sh4
->>> stuck in a CPU-eating loop before finishing. Without the patch, I get a shell
->>> prompt.
->>
->> I regularly test on qemu rts7751r2d, but couldn't produce your
->> issue.  Until I tried "ifconfig eth0 up", which causes a lock-up.
->> Interestingly, the 8139 irq was 112 with and without Sergey's patch,
->> so there must be an irq remapping missing.
->>
->> I also test regularly on landisk, where 8139 Ethernet works fine.
->> Turns out landisk uses arch/sh/drivers/pci/fixups-landisk.c to fixup
->> the irq...
->>
->> arch/sh/include/mach-common/mach/r2d.h has:
->> #define R2D_FPGA_IRQ_BASE       100
->> Subtracting 16 here does not help.
-> 
->    Why subtract when you contrariwise need to add? :-)
-> 
->> With this (gmail-whitespace-damaged) patch:
->>
->> --- a/arch/sh/drivers/pci/fixups-rts7751r2d.c
->> +++ b/arch/sh/drivers/pci/fixups-rts7751r2d.c
->> @@ -31,9 +31,9 @@ static char lboxre2_irq_tab[] = {
->>  int pcibios_map_platform_irq(const struct pci_dev *pdev, u8 slot, u8 pin)
->>  {
->>         if (mach_is_lboxre2())
->> -               return lboxre2_irq_tab[slot];
->> +               return lboxre2_irq_tab[slot] - 16;
-> 
->    This table contains the values #define'd via evt2irq(), so
-> shouldn't need to subtract anything...
-> 
->>         else
->> -               return rts7751r2d_irq_tab[slot];
->> +               return rts7751r2d_irq_tab[slot] - 16;
-> 
->    How about + 16?
-> 
->>  }
->>
->>  int pci_fixup_pcic(struct pci_channel *chan)
->>
->> it no longer crashes, but ifconfig still fails:
->>
->> / # ifconfig eth0 up
->> ifconfig: ioctl 0x8914 failed: Invalid argument
-> 
->    I'm still not sure you used the correct IRQ #s...
-> 
->> Note that there are more implementations of pcibios_map_platform_irq()
->> that do not use evt2irq(), and thus are probably broken by this patch.
-> 
->    That doesn't sound encouraging... :-/
+>> Call send_sig_info in PTRACE_KILL instead of ptrace_resume.  Calling
+>> ptrace_resume is not safe to call if the task has not been stopped
+>> with ptrace_freeze_traced.
+>
+> Oh, I was never, never able to understand why do we have PTRACE_KILL
+> and what should it actually do.
+>
+> I suggested many times to simply remove it but OK, we probably can't
+> do this.
 
-   Actually, of those only Dreamcast didn't use evt2irq()...
-   Now I'm wondering whether all #define *_IRQ_BASE should be visited as well...
+I thought I remembered you suggesting fixing it in some other way.
 
->> Gr{oetje,eeting}s,
->>
->>                         Geert
+I took at quick look in codesearch.debian.net and PTRACE_KILL is
+definitely in use. I find uses in gcc-10, firefox-esr_91.8,
+llvm_toolchain, qtwebengine.  At which point I stopped looking.
 
-MBR, Sergey
+
+>> --- a/kernel/ptrace.c
+>> +++ b/kernel/ptrace.c
+>> @@ -1238,7 +1238,7 @@ int ptrace_request(struct task_struct *child, long request,
+>>  	case PTRACE_KILL:
+>>  		if (child->exit_state)	/* already dead */
+>>  			return 0;
+>> -		return ptrace_resume(child, request, SIGKILL);
+>> +		return send_sig_info(SIGKILL, SEND_SIG_NOINFO, child);
+>
+> Note that currently ptrace(PTRACE_KILL) can never fail (yes, yes, it
+> is unsafe), but send_sig_info() can. If we do not remove PTRACE_KILL,
+> then I'd suggest
+>
+> 	case PTRACE_KILL:
+> 		if (!child->exit_state)
+> 			send_sig_info(SIGKILL);
+> 		return 0;
+>
+> to make this change a bit more compatible.
+
+
+Quite.  The only failure I can find from send_sig_info is if
+lock_task_sighand fails and PTRACE_KILL is deliberately ignoring errors
+when the target task has exited.
+
+ 	case PTRACE_KILL:
+ 		send_sig_info(SIGKILL);
+ 		return 0;
+
+I think that should suffice.
+
+
+> Also, please remove the note about PTRACE_KILL in
+> set_task_blockstep().
+
+Good catch, thank you.
+
+Eric

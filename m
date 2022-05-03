@@ -2,127 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE517518B2F
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 19:35:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37DB7518B31
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 19:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240566AbiECRjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 13:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
+        id S240467AbiECRkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 13:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240544AbiECRjD (ORCPT
+        with ESMTP id S232024AbiECRkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 13:39:03 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFBE5205CD
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 10:35:30 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id h10-20020a056830400a00b00605e92cc450so10128367ots.11
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 10:35:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=QfFh0JorF10YS8jRL4ot/BDPWmDj6EZaL7oZvjv3Y4g=;
-        b=ZmPQGGxZ1xNN/3ZnxABfH+S4dxGHSOp4xV35ALw7zVi0fEbQqhjvdLL33LibysCLc6
-         gndVhg10yKBFoPGn++Q1Bjr1fGYAHLH89H69AumHDYCEvZRTJkLZcFWHu1rS6kS4yt/H
-         YNtgfRTi1E3KvA/oPx/GVRJbBIYkaRYcUNaf8iq16nd6zoyd3HL9LbytMd4ijZ/qh6Qb
-         +JLlP7UrqDZMTfq7gBD/ige/UEfSJ2LGEGUUSGqjNmG2qNuwFB0M0hJO/mgp78zhmprQ
-         E/RjYf8s4qXceb2u7XoFE4QwO1sKpOYyOUSz+epbIY/4EcjmqfjflN10M/9hu4sOOPSf
-         euXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QfFh0JorF10YS8jRL4ot/BDPWmDj6EZaL7oZvjv3Y4g=;
-        b=ejXy32EgXrr06xIKhS3f0kpmkIuAjzI/LxQdt1cL+FLW3PuxlGeDSiZe2yjY8MPHMm
-         dZJC/ifwPhvUpogkr9OAZa+E5r/Ajzbi3TyIwcw8AXgCzV1tc1uFIiQ1YUkvffkRhBse
-         qwY/XF3ThqDt/mjchsglXdK/i5KFSnRG+DLgYDn8PYXE7lsvcVibmcw5KiNldd+EfeWn
-         VIgy0+hl+pLuxGGnjRI+1vPUzu1DnVq7kk4/IwC3ILnESCoBYOPU87tkcWbkOEBhf4/D
-         0VxihgtlX941W67TU6Y17/VNDc/RYWQi54MI57DkgG6wFKfjtYqi5cbSdBmHAQ0TNarx
-         yDVQ==
-X-Gm-Message-State: AOAM532+tsQjMP2RXuwrc11bbYc7f85DWE8XN1+O+wD+D6QJcLXJsg1Y
-        9YSFPsT9qIpjjMcHLuClVA7zbg==
-X-Google-Smtp-Source: ABdhPJxT1Ilrm5hn2NJmQeaKaOKr12fYEZTHVrzNifiz+9FWtgnvvqVNJXC95vLYjSotHlZFpe8Z6w==
-X-Received: by 2002:a9d:480e:0:b0:606:59b:2b2 with SMTP id c14-20020a9d480e000000b00606059b02b2mr5490428otf.277.1651599329952;
-        Tue, 03 May 2022 10:35:29 -0700 (PDT)
-Received: from [192.168.11.16] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
-        by smtp.gmail.com with ESMTPSA id p203-20020acaf1d4000000b00325cda1ffacsm3507693oih.43.2022.05.03.10.35.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 May 2022 10:35:29 -0700 (PDT)
-Message-ID: <c9da618b-8910-d878-cb78-6304c687f725@kali.org>
-Date:   Tue, 3 May 2022 12:35:27 -0500
+        Tue, 3 May 2022 13:40:16 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59EBD24F0E;
+        Tue,  3 May 2022 10:36:43 -0700 (PDT)
+Received: from zn.tnic (p5de8eeb4.dip0.t-ipconnect.de [93.232.238.180])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DD9031EC0354;
+        Tue,  3 May 2022 19:36:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1651599398;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=Ck+uGn0FFYbKWUnm+9BbC6zDql8IAMFJc7yr1uqhvvQ=;
+        b=sMlUAoI8K7II7r28TyRvkgIF0qp14gICloiB9vUrautcXJtuY2Mrh8TuXWU35LmYC6Oz4t
+        iayZdB1TIhL71NnMG69c5fP8YuHNXHwf4Zh68xPHjOkkomAELGDkRpnubaV5RSQGe6nEyV
+        YAaAtNXwtjTJVffalgoVECtlWE6dchQ=
+Date:   Tue, 3 May 2022 19:36:35 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Vit Kabele <vit@kabele.me>
+Cc:     platform-driver-x86@vger.kernel.org, r.marek@assembler.cz,
+        x86@kernel.org, linux-kernel@vger.kernel.org, rafael@kernel.org,
+        mingo@redhat.com
+Subject: Re: [PATCH v2] arch/x86: Check validity of EBDA pointer in mpparse.c
+Message-ID: <YnFoIzmt1qJSucAd@zn.tnic>
+References: <CAJZ5v0gBbdzUO9MRxbKESEnaeaNAu-+3oP6ADMretch=iHPNJA@mail.gmail.com>
+ <Yk/2dh4kDobivStp@czspare1-lap.sysgo.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.1
-Subject: Re: [PATCH] PCI: qcom: Remove ddrss_sf_tbu clock from sc8180x
-Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220331013415.592748-1-bjorn.andersson@linaro.org>
-From:   Steev Klimaszewski <steev@kali.org>
-In-Reply-To: <20220331013415.592748-1-bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yk/2dh4kDobivStp@czspare1-lap.sysgo.cz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Apr 08, 2022 at 10:46:46AM +0200, Vit Kabele wrote:
+> The pointer to EBDA area is retrieved from a word at 0x40e in BDA.
+> In case that the memory there is not initialized and contains garbage,
+> it might happen that the kernel touches memory above 640K.
 
-On 3/30/22 8:34 PM, Bjorn Andersson wrote:
-> The Qualcomm SC8180X platform was piggy backing on the SM8250
-> qcom_pcie_cfg, but the platform doesn't have the ddrss_sf_tbu clock, so
-> it now fails to probe due to the missing clock.
->
-> Give SC8180X its own qcom_pcie_cfg, without the ddrss_sf_tbu flag set.
->
-> Fixes: 0614f98bbb9f ("PCI: qcom: Add ddrss_sf_tbu flag")
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->   drivers/pci/controller/dwc/pcie-qcom.c | 7 ++++++-
->   1 file changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> index 6ab90891801d..816028c0f6ed 100644
-> --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> @@ -1550,6 +1550,11 @@ static const struct qcom_pcie_cfg sc7280_cfg = {
->   	.pipe_clk_need_muxing = true,
->   };
->   
-> +static const struct qcom_pcie_cfg sc8180x_cfg = {
-> +	.ops = &ops_1_9_0,
-> +	.has_tbu_clk = true,
-> +};
+This is where I'm missing the "why do this" at all. Grepping back in
+my mbox, I see another thread from you where you say something about
+"testing custom virtualization platform".
+
+So I'd like to see why this fix is needed so feel free to elaborate in the
+commit message what the situation is and why you're doing this.
+
+> This may cause unwanted reads from VGA memory which may not be decoded,
+> or even present when running under virtualization.
+> 
+> This patch adds sanity check for the EBDA pointer retrieved from the memory
+
+Avoid having "This patch" or "This commit" in the commit message. It is
+tautologically useless.
+
+IOW,
+
+s/This patch adds/Add/
+
+> diff --git a/arch/x86/kernel/mpparse.c b/arch/x86/kernel/mpparse.c
+> index fed721f90116..9e0b4820f33b 100644
+> --- a/arch/x86/kernel/mpparse.c
+> +++ b/arch/x86/kernel/mpparse.c
+> @@ -633,8 +633,18 @@ void __init default_find_smp_config(void)
+>  	 */
+>  
+>  	address = get_bios_ebda();
+> -	if (address)
+> -		smp_scan_config(address, 0x400);
 > +
->   static const struct dw_pcie_ops dw_pcie_ops = {
->   	.link_up = qcom_pcie_link_up,
->   	.start_link = qcom_pcie_start_link,
-> @@ -1656,7 +1661,7 @@ static const struct of_device_id qcom_pcie_match[] = {
->   	{ .compatible = "qcom,pcie-qcs404", .data = &ipq4019_cfg },
->   	{ .compatible = "qcom,pcie-sdm845", .data = &sdm845_cfg },
->   	{ .compatible = "qcom,pcie-sm8250", .data = &sm8250_cfg },
-> -	{ .compatible = "qcom,pcie-sc8180x", .data = &sm8250_cfg },
-> +	{ .compatible = "qcom,pcie-sc8180x", .data = &sc8180x_cfg },
->   	{ .compatible = "qcom,pcie-sm8450-pcie0", .data = &sm8450_pcie0_cfg },
->   	{ .compatible = "qcom,pcie-sm8450-pcie1", .data = &sm8450_pcie1_cfg },
->   	{ .compatible = "qcom,pcie-sc7280", .data = &sc7280_cfg },
+> +	/*
+> +	 * Check that the EBDA address is sane and the get_bios_ebda() did not
+> +	 * return just garbage from memory.
+> +	 * The upper bound is considered valid if it points below 1K before
+> +	 * end of the lower memory (i.e. 639K). The EBDA can be smaller
+> +	 * than 1K in which case the pointer will point above 639K but that
+> +	 * case is handled in step 2) above, and we don't need to adjust scan
+> +	 * size to not bump into the memory above 640K.
+> +	 */
+> +	if (address >= BIOS_START_MIN && address < (BIOS_START_MAX - 1024))
+> +		smp_scan_config(address, 1024);
+>  }
 
-Hi Bjorn,
+I guess but looking at reserve_bios_regions(), that function is already
+doing kinda the same along with being a bit more careful to figure out
+bios_start so you could unify the code into a common helper and use it
+at both places?
 
-Tested on the Lenovo Flex 5G and fixes the issue I saw.
+Thx.
 
-Tested-by: Steev Klimaszewski <steev@kali.org>
+-- 
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

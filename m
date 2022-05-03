@@ -2,314 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51465517F4A
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 09:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 351D3517F4D
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 10:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232516AbiECIDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 04:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39076 "EHLO
+        id S232568AbiECIEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 04:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231962AbiECIDF (ORCPT
+        with ESMTP id S232521AbiECID4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 04:03:05 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E99F82B254
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 00:59:32 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R951e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0VC5Qqjm_1651564766;
-Received: from B-X3VXMD6M-2058.local(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VC5Qqjm_1651564766)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 03 May 2022 15:59:28 +0800
-Reply-To: xhao@linux.alibaba.com
-Subject: Re: [PATCH v4 03/21] x86/resctrl: Add domain online callback for
- resctrl work
-To:     James Morse <james.morse@arm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        shameerali.kolothum.thodi@huawei.com,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        lcherian@marvell.com, bobo.shaobowang@huawei.com,
-        tan.shaopeng@fujitsu.com, Jamie Iles <quic_jiles@quicinc.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com
-References: <20220412124419.30689-1-james.morse@arm.com>
- <20220412124419.30689-4-james.morse@arm.com>
- <3acfb11b-eba2-3eb0-94d1-d24a24d03d1f@linux.alibaba.com>
-From:   Xin Hao <xhao@linux.alibaba.com>
-Message-ID: <6b96076c-a8f2-2d55-d977-a5e91c2b0cba@linux.alibaba.com>
-Date:   Tue, 3 May 2022 15:59:26 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.14.0
+        Tue, 3 May 2022 04:03:56 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F281BE
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 01:00:25 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id j7-20020a056e02218700b002cd9e2f0ac7so8519493ila.16
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 01:00:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=DtIPv5yFBYKusT8mskdhmPUJ7UyZ51XiNQ6j7J1NCIM=;
+        b=s87N6236R3SYUfLPWUD4tKSAyUmK3XjAgxqn+uAAJhcRZUo22cB23x5trkWBvlo+RA
+         tIPLQFD2F1xK8K0t2He7P+FtpCsYA0ams71VkcztB+xKIEhjclHrNUfakx8IwWIAzhpT
+         D7qtZwT924BMBpJAFtO6Z/DvKMPstdEq0+NvqQ3eHHzZjiHjdgrYBNE5qKyE7EaA2ukE
+         fdZ8J9EVr7i3RiJB5djA3X4zW+8DSuJX+3BiWezTTiBqbJLe9ag/KfgfOqGDLD8S8NsB
+         YHMa4SCImkucOa/G6zfYKvX+JOYJ3CYw09OgUs+D4Wv5TUNZin198rQtqLYrw05TviwN
+         97BA==
+X-Gm-Message-State: AOAM532fPZqoGmArBN9ctnywI5GrhN/5BoVrPJt7az2eNc0F93AJgydp
+        87+YQzXhCwWPIA39alrM8OOcKs41Ym4LrSghy2hFljvbAIQU
+X-Google-Smtp-Source: ABdhPJxEW3DxKPozMbE8VkazFxVnJsSTONXeSOu3P0Zz1ISlsi7I2BQR9iXR/42aD57sB+tPFOs5CGFC5oWAjx8byFJUBEjMSs85
 MIME-Version: 1.0
-In-Reply-To: <3acfb11b-eba2-3eb0-94d1-d24a24d03d1f@linux.alibaba.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-12.8 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:12c4:b0:2cd:8f5e:7587 with SMTP id
+ i4-20020a056e0212c400b002cd8f5e7587mr6245568ilm.187.1651564824367; Tue, 03
+ May 2022 01:00:24 -0700 (PDT)
+Date:   Tue, 03 May 2022 01:00:24 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ae165e05de16e60a@google.com>
+Subject: [syzbot] linux-next boot error: kernel panic: VFS: Unable to mount
+ root fs on unknown-block(NUM,NUM)
+From:   syzbot <syzbot+76d3c2bc1d4d59794f86@syzkaller.appspotmail.com>
+To:     axboe@kernel.dk, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com, vgoyal@redhat.com,
+        viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-On 4/17/22 12:06 AM, Xin Hao wrote:
->
->
-> On 4/12/22 8:44 PM, James Morse wrote:
->> Because domains are exposed to user-space via resctrl, the filesystem
->> must update its state when CPU hotplug callbacks are triggered.
->>
->> Some of this work is common to any architecture that would support
->> resctrl, but the work is tied up with the architecture code to
->> allocate the memory.
->>
->> Move domain_setup_mon_state(), the monitor subdir creation call and the
->> mbm/limbo workers into a new resctrl_online_domain() call. These bits
->> are not specific to the architecture. Grouping them in one function
->> allows that code to be moved to /fs/ and re-used by another architecture.
->>
->> Reviewed-by: Jamie Iles<quic_jiles@quicinc.com>
->> Tested-by: Xin Hao<xhao@linux.alibaba.com>
->> Reviewed-by: Shaopeng Tan<tan.shaopeng@fujitsu.com>
->> Tested-by: Shaopeng Tan<tan.shaopeng@fujitsu.com>
->> Tested-by: Cristian Marussi<cristian.marussi@arm.com>
->> Signed-off-by: James Morse<james.morse@arm.com>
->> ---
->> Changes since v2:
->>   * Fixed kfree(d) rebase artefact.
->>
->> Changes since v1:
->>   * Capitalisation
->>   * Removed inline comment
->>   * Added to the commit message
->> ---
->>   arch/x86/kernel/cpu/resctrl/core.c     | 57 ++++------------------
->>   arch/x86/kernel/cpu/resctrl/internal.h |  2 -
->>   arch/x86/kernel/cpu/resctrl/rdtgroup.c | 65 ++++++++++++++++++++++++--
->>   include/linux/resctrl.h                |  1 +
->>   4 files changed, 69 insertions(+), 56 deletions(-)
->>
->> diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
->> index 2f87177f1f69..25f30148478b 100644
->> --- a/arch/x86/kernel/cpu/resctrl/core.c
->> +++ b/arch/x86/kernel/cpu/resctrl/core.c
->> @@ -443,42 +443,6 @@ static int domain_setup_ctrlval(struct rdt_resource *r, struct rdt_domain *d)
->>   	return 0;
->>   }
->>   
->> -static int domain_setup_mon_state(struct rdt_resource *r, struct rdt_domain *d)
->> -{
->> -	size_t tsize;
->> -
->> -	if (is_llc_occupancy_enabled()) {
->> -		d->rmid_busy_llc = bitmap_zalloc(r->num_rmid, GFP_KERNEL);
->> -		if (!d->rmid_busy_llc)
->> -			return -ENOMEM;
->> -		INIT_DELAYED_WORK(&d->cqm_limbo, cqm_handle_limbo);
->> -	}
->> -	if (is_mbm_total_enabled()) {
->> -		tsize = sizeof(*d->mbm_total);
->> -		d->mbm_total = kcalloc(r->num_rmid, tsize, GFP_KERNEL);
->> -		if (!d->mbm_total) {
->> -			bitmap_free(d->rmid_busy_llc);
->> -			return -ENOMEM;
->> -		}
->> -	}
->> -	if (is_mbm_local_enabled()) {
->> -		tsize = sizeof(*d->mbm_local);
->> -		d->mbm_local = kcalloc(r->num_rmid, tsize, GFP_KERNEL);
->> -		if (!d->mbm_local) {
->> -			bitmap_free(d->rmid_busy_llc);
->> -			kfree(d->mbm_total);
->> -			return -ENOMEM;
->> -		}
->> -	}
->> -
->> -	if (is_mbm_enabled()) {
->> -		INIT_DELAYED_WORK(&d->mbm_over, mbm_handle_overflow);
->> -		mbm_setup_overflow_handler(d, MBM_OVERFLOW_INTERVAL);
->> -	}
->> -
->> -	return 0;
->> -}
->> -
->>   /*
->>    * domain_add_cpu - Add a cpu to a resource's domain list.
->>    *
->> @@ -498,6 +462,7 @@ static void domain_add_cpu(int cpu, struct rdt_resource *r)
->>   	struct list_head *add_pos = NULL;
->>   	struct rdt_hw_domain *hw_dom;
->>   	struct rdt_domain *d;
->> +	int err;
->>   
->>   	d = rdt_find_domain(r, id, &add_pos);
->>   	if (IS_ERR(d)) {
->> @@ -527,21 +492,15 @@ static void domain_add_cpu(int cpu, struct rdt_resource *r)
->>   		return;
->>   	}
->>   
->> -	if (r->mon_capable && domain_setup_mon_state(r, d)) {
->> -		kfree(hw_dom->ctrl_val);
->> -		kfree(hw_dom->mbps_val);
->> -		kfree(hw_dom);
->> -		return;
->> -	}
->> -
->>   	list_add_tail(&d->list, add_pos);
->>   
->> -	/*
->> -	 * If resctrl is mounted, add
->> -	 * per domain monitor data directories.
->> -	 */
->> -	if (static_branch_unlikely(&rdt_mon_enable_key))
->> -		mkdir_mondata_subdir_allrdtgrp(r, d);
->> +	err = resctrl_online_domain(r, d);
->> +	if (err) {
->> +		list_del(&d->list);
->> +		kfree(hw_dom->ctrl_val);
->> +		kfree(hw_dom->mbps_val);
->> +		kfree(hw_dom);
->> +	}
->>   }
->>   
->>   static void domain_remove_cpu(int cpu, struct rdt_resource *r)
->> diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
->> index 8828b5c1b6d2..be48a682dbdb 100644
->> --- a/arch/x86/kernel/cpu/resctrl/internal.h
->> +++ b/arch/x86/kernel/cpu/resctrl/internal.h
->> @@ -524,8 +524,6 @@ void mon_event_count(void *info);
->>   int rdtgroup_mondata_show(struct seq_file *m, void *arg);
->>   void rmdir_mondata_subdir_allrdtgrp(struct rdt_resource *r,
->>   				    unsigned int dom_id);
->> -void mkdir_mondata_subdir_allrdtgrp(struct rdt_resource *r,
->> -				    struct rdt_domain *d);
->>   void mon_event_read(struct rmid_read *rr, struct rdt_resource *r,
->>   		    struct rdt_domain *d, struct rdtgroup *rdtgrp,
->>   		    int evtid, int first);
->> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
->> index 651ff5288e85..53bdc07f9dac 100644
->> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
->> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
->> @@ -2565,16 +2565,13 @@ static int mkdir_mondata_subdir(struct kernfs_node *parent_kn,
->>    * Add all subdirectories of mon_data for "ctrl_mon" groups
->>    * and "monitor" groups with given domain id.
->>    */
->> -void mkdir_mondata_subdir_allrdtgrp(struct rdt_resource *r,
->> -				    struct rdt_domain *d)
->> +static void mkdir_mondata_subdir_allrdtgrp(struct rdt_resource *r,
->> +					   struct rdt_domain *d)
->>   {
->>   	struct kernfs_node *parent_kn;
->>   	struct rdtgroup *prgrp, *crgrp;
->>   	struct list_head *head;
->>   
->> -	if (!r->mon_capable)
->> -		return;
->> -
->>   	list_for_each_entry(prgrp, &rdt_all_groups, rdtgroup_list) {
->>   		parent_kn = prgrp->mon.mon_data_kn;
->>   		mkdir_mondata_subdir(parent_kn, d, r, prgrp);
->> @@ -3236,6 +3233,64 @@ static int __init rdtgroup_setup_root(void)
->>   	return ret;
->>   }
->>   
->> +static int domain_setup_mon_state(struct rdt_resource *r, struct rdt_domain *d)
->> +{
->> +	size_t tsize;
->> +
->> +	if (is_llc_occupancy_enabled()) {
->> +		d->rmid_busy_llc = bitmap_zalloc(r->num_rmid, GFP_KERNEL);
->> +		if (!d->rmid_busy_llc)
->> +			return -ENOMEM;
->> +	}
->> +	if (is_mbm_total_enabled()) {
->> +		tsize = sizeof(*d->mbm_total);
->> +		d->mbm_total = kcalloc(r->num_rmid, tsize, GFP_KERNEL);
->> +		if (!d->mbm_total) {
->> +			bitmap_free(d->rmid_busy_llc);
->> +			return -ENOMEM;
->> +		}
->> +	}
->> +	if (is_mbm_local_enabled()) {
->> +		tsize = sizeof(*d->mbm_local);
->> +		d->mbm_local = kcalloc(r->num_rmid, tsize, GFP_KERNEL);
->> +		if (!d->mbm_local) {
->> +			bitmap_free(d->rmid_busy_llc);
->> +			kfree(d->mbm_total);
->> +			return -ENOMEM;
->> +		}
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +int resctrl_online_domain(struct rdt_resource *r, struct rdt_domain *d)
->> +{
->> +	int err;
->> +
->> +	lockdep_assert_held(&rdtgroup_mutex);
->> +
->> +	if (!r->mon_capable)
->> +		return 0;
->
-> This return value "0" may not quite correct, in code where it is 
-> called, if err = 0,  i think if  mon_capable is not supported, the 
-> hw_dom->mbps_val also need to be released?  if I get this wrong，please 
-> let me know.
->
-> +	err = resctrl_online_domain(r, d);
-> +	if (err) {
-> +		list_del(&d->list);
-> +		kfree(hw_dom->ctrl_val);
-> +		kfree(hw_dom->mbps_val);
-> +		kfree(hw_dom);
-> +	}
->> +
->> +	err = domain_setup_mon_state(r, d);
->> +	if (err)
->> +		return err;
->> +
->> +	if (is_mbm_enabled()) {
->> +		INIT_DELAYED_WORK(&d->mbm_over, mbm_handle_overflow);
->> +		mbm_setup_overflow_handler(d, MBM_OVERFLOW_INTERVAL);
->> +	}
->> +
->> +	if (is_llc_occupancy_enabled())
->> +		INIT_DELAYED_WORK(&d->cqm_limbo, cqm_handle_limbo);
->> +
->> +	/* If resctrl is mounted, add per domain monitor data directories. */
->> +	if (static_branch_unlikely(&rdt_mon_enable_key))
->> +		mkdir_mondata_subdir_allrdtgrp(r, d);
->> +
->> +	return 0;
->> +}
->> +
->>   /*
->>    * rdtgroup_init - rdtgroup initialization
->>    *
->> diff --git a/include/linux/resctrl.h b/include/linux/resctrl.h
->> index 8180c539800d..d512455b4c3a 100644
->> --- a/include/linux/resctrl.h
->> +++ b/include/linux/resctrl.h
->> @@ -192,5 +192,6 @@ u32 resctrl_arch_get_num_closid(struct rdt_resource *r);
->>   int resctrl_arch_update_domains(struct rdt_resource *r, u32 closid);
->>   u32 resctrl_arch_get_config(struct rdt_resource *r, struct rdt_domain *d,
->>   			    u32 closid, enum resctrl_conf_type type);
->> +int resctrl_online_domain(struct rdt_resource *r, struct rdt_domain *d);
->>   
->>   #endif /* _RESCTRL_H */
-> -- 
-> Best Regards!
-> Xin Hao
+syzbot found the following issue on:
 
--- 
-Best Regards!
-Xin Hao
+HEAD commit:    44a2f39e611a Add linux-next specific files for 20220503
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=12487e32f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b442536afa797746
+dashboard link: https://syzkaller.appspot.com/bug?extid=76d3c2bc1d4d59794f86
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+76d3c2bc1d4d59794f86@syzkaller.appspotmail.com
+
+rdma_rxe: loaded
+cfg80211: Loading compiled-in X.509 certificates for regulatory database
+cfg80211: Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
+ALSA device list:
+  #0: Dummy 1
+  #1: Loopback 1
+  #2: Virtual MIDI Card 1
+md: Waiting for all devices to be available before autodetect
+md: If you don't use raid, use raid=noautodetect
+md: Autodetecting RAID arrays.
+md: autorun ...
+md: ... autorun DONE.
+VFS: Cannot open root device "sda1" or unknown-block(0,0): error -6
+Please append a correct "root=" boot option; here are the available partitions:
+0100            4096 ram0 
+ (driver?)
+0101            4096 ram1 
+ (driver?)
+0102            4096 ram2 
+ (driver?)
+0103            4096 ram3 
+ (driver?)
+0104            4096 ram4 
+ (driver?)
+0105            4096 ram5 
+ (driver?)
+0106            4096 ram6 
+ (driver?)
+0107            4096 ram7 
+ (driver?)
+0108            4096 ram8 
+ (driver?)
+0109            4096 ram9 
+ (driver?)
+010a            4096 ram10 
+ (driver?)
+010b            4096 ram11 
+ (driver?)
+010c            4096 ram12 
+ (driver?)
+010d            4096 ram13 
+ (driver?)
+010e            4096 ram14 
+ (driver?)
+010f            4096 ram15 
+ (driver?)
+fa00       262144000 nullb0 
+ (driver?)
+1f00             128 mtdblock0 
+ (driver?)
+Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0)
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.18.0-rc5-next-20220503-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ panic+0x2d7/0x636 kernel/panic.c:274
+ mount_block_root+0x237/0x312 init/do_mounts.c:432
+ mount_root+0x36e/0x3be init/do_mounts.c:592
+ prepare_namespace+0x1ff/0x234 init/do_mounts.c:644
+ kernel_init_freeable+0x722/0x73a init/main.c:1631
+ kernel_init+0x1a/0x1d0 init/main.c:1507
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+ </TASK>
+Kernel Offset: disabled
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

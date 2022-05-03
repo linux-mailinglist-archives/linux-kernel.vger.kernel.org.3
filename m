@@ -2,134 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82072518A50
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 18:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69463518A53
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 18:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239730AbiECQtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 12:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40922 "EHLO
+        id S239766AbiECQuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 12:50:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239766AbiECQtT (ORCPT
+        with ESMTP id S238946AbiECQuG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 12:49:19 -0400
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8F130F60
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 09:45:46 -0700 (PDT)
-Received: by mail-vs1-xe2f.google.com with SMTP id z144so16979509vsz.13
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 09:45:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mEhaO2VPQGWGGw5hqYFADWCcKvr48MqA446UlAU+u6w=;
-        b=ihBy0nfgFvQDwq0V/txi6ueM4+pRCxeyNKqD1ZGtCvH67DXsAtw210EzAfGrof3gFw
-         anFjAp4RnT8H4m08ykPMTJc2epSwi0cWgJm9nBcen3B9Z+KOh02kaIvt9Tq5GDDj6zeE
-         DdJXRhawHB7zzEO4+oVd397TkpjUzQYaF1ZDJ1eCvYobjkJznud1el91ow29OySch1iV
-         RnEEHL7yBhnFQQFyhJmrYXy5a3zTVrrZbq0uSgn065RwNw0xM4lpIhdcgGRjmfHF6atB
-         eVnXYbc/2MxonRzPkj9dVOW2k4p297ysSK2FpWGAKClXx9b5oaLdQAfu4T2udzzPKe54
-         nMbg==
+        Tue, 3 May 2022 12:50:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B7C032E6B6
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 09:46:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651596381;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=TrllH04Z0FbJPqB+LsRh6m4pc02+JciRd8et3EmsDus=;
+        b=e52gLVeXFX7zxkUjpZDVVvpbJbfwi262wwrPT78Jm5BSQ4q9ZVJ33ZAS8iojdV6nghJjQW
+        JMvZAZsmtQaJe1kOQBNSqnvDvdF26T3HWWW80hSiEEHpXawVpvKXYIg8FiijtD4Ej8wNxq
+        VahFy6Di7VoNoZRU1ICzKVkFP2r2aJ4=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-341--lX_ItTLPp-welrokSauuw-1; Tue, 03 May 2022 12:46:24 -0400
+X-MC-Unique: -lX_ItTLPp-welrokSauuw-1
+Received: by mail-wm1-f71.google.com with SMTP id c62-20020a1c3541000000b0038ec265155fso1596929wma.6
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 09:46:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mEhaO2VPQGWGGw5hqYFADWCcKvr48MqA446UlAU+u6w=;
-        b=8G8KwPdCIEzv7u3hC2asDNFAv5qj6KqKD6b+zaNyOg+D3gc3hJrjIzHZi1qy8KAc71
-         qiAoPKzfg+z2oNH0H9dhJc/F0tyxlDTvrE5XlgbEm1iGhVScA2hfQdEqgJrkP8o0U+jd
-         irGj2xFuLv2xlKKzI5uIEOx37Em/uXf34uchNzIql8rgzGoM+FZTNGJb5K7VnmL2W2+2
-         YiCWI8zTNbh1pCuR5hKkAs0rLe9NnDYKPVMmR/yeEMH9jDctHlgWj8gml0eBD5bowl89
-         TU9aRRmebxPVRPK0+tjTUTPU21IUt41EF7QsKeGo3wI32a35sgS3YW/gOwOKQA/Ta0Py
-         Y2DA==
-X-Gm-Message-State: AOAM533YckgV3xnBQvpJkhZVdvidqLohf9gdOxiQ8m+3oWeuWxOvATe1
-        IBSSOjh775lhtfOfEl5X2TEqJvzdATmDXxMRokb8sZ0TeoT1u1ZN
-X-Google-Smtp-Source: ABdhPJxOoxJmJG8LzxWmoJNOJsNmzcTFnjlgtb69g6tB1S0/7oqHricRjcACgGeSnyOKjEz3INsZGKVBW2fi841XSL8=
-X-Received: by 2002:a67:af01:0:b0:32d:3d57:cff with SMTP id
- v1-20020a67af01000000b0032d3d570cffmr3398577vsl.8.1651596345258; Tue, 03 May
- 2022 09:45:45 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TrllH04Z0FbJPqB+LsRh6m4pc02+JciRd8et3EmsDus=;
+        b=K4vRX62T5gJl5426XJcJWlRt28f7KX+M0MygcQN90G1vVrBOsAGkoFkhgnSkBjI+Zz
+         2NBCbgJUi1gAk+8xPwEZeu6AZZK3OFAt3/Mcw+n5nIACSwc8p2uElOdaJ3u8QvoI3hUF
+         evvtPM5gQu7oYgxP0AqxbeyYj4b/DfMcxj/JKZc7GMpywYT5ETFrB/xXI4RGQD1sExqN
+         yxqYctMXhl5LHwuzb0OXmUvF4A/scKnEGVV6O8Dx/1guqFKIckAAe8ZPDlrg0eKQiVOd
+         pI3GWBw6mviTwYG9iBVTRgpYseKW/dTIeHsLobGctJGvr0BFMWNAv1s/60J9ytgAmdI8
+         ZEbw==
+X-Gm-Message-State: AOAM533fsFfFZuNWr7RNjJRwGQqPnwECnX1zZunlFcJbxYose061jbnk
+        zfGhCg9new3vUEeIBKQL9OKHRjJJNBbOMKMiv7kXpEO4aMjwx/eLiEsyy/z5+LNdqEe9WrGTFfD
+        5AuAMbdvHRVM8uaTjnz/DJGiIyyXYkh14oaXgABQh/KRVlFWt+A4ADvM6lG7Hqiel9miU1bDYU8
+        c=
+X-Received: by 2002:a05:6000:381:b0:20c:6911:f85b with SMTP id u1-20020a056000038100b0020c6911f85bmr6156742wrf.406.1651596382439;
+        Tue, 03 May 2022 09:46:22 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwkoJMsy81rmxcDC++KPTzOsGoeFw5o8PT1mfBlyxN/nPJryyfAclRKStt6h+SOtC5xpxk/lw==
+X-Received: by 2002:a05:6000:381:b0:20c:6911:f85b with SMTP id u1-20020a056000038100b0020c6911f85bmr6156722wrf.406.1651596382079;
+        Tue, 03 May 2022 09:46:22 -0700 (PDT)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id f11-20020adfc98b000000b0020c5253d910sm10464327wrh.92.2022.05.03.09.46.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 09:46:21 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Maxime Ripard <maxime@cerno.tech>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Junxiao Chang <junxiao.chang@intel.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org
+Subject: [PATCH] fbdev: Use helper to get fb_info in all file operations
+Date:   Tue,  3 May 2022 18:46:16 +0200
+Message-Id: <20220503164616.663796-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220422162402.147958-1-adrian.hunter@intel.com> <20220422162402.147958-3-adrian.hunter@intel.com>
-In-Reply-To: <20220422162402.147958-3-adrian.hunter@intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 3 May 2022 09:45:33 -0700
-Message-ID: <CAP-5=fU-FiHWZKaV-1qEXyE23TRVmZTZ2gXLE7KMS=B7VZ=aOw@mail.gmail.com>
-Subject: Re: [PATCH RFC 02/21] libperf evsel: Add perf_evsel__enable_thread()
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 9:24 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> Add perf_evsel__enable_thread() as a counterpart to
-> perf_evsel__enable_cpu(), to enable all events for a thread.
->
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-> ---
->  tools/lib/perf/evsel.c              | 10 ++++++++++
->  tools/lib/perf/include/perf/evsel.h |  1 +
->  2 files changed, 11 insertions(+)
->
-> diff --git a/tools/lib/perf/evsel.c b/tools/lib/perf/evsel.c
-> index 20ae9f5f8b30..2a1f07f877be 100644
-> --- a/tools/lib/perf/evsel.c
-> +++ b/tools/lib/perf/evsel.c
-> @@ -360,6 +360,16 @@ int perf_evsel__enable_cpu(struct perf_evsel *evsel, int cpu_map_idx)
->         return perf_evsel__run_ioctl(evsel, PERF_EVENT_IOC_ENABLE, NULL, cpu_map_idx);
->  }
->
-> +int perf_evsel__enable_thread(struct perf_evsel *evsel, int thread)
-> +{
-> +       int err = 0;
-> +       int i;
-> +
-> +       for (i = 0; i < xyarray__max_x(evsel->fd) && !err; i++)
-> +               err = perf_evsel__ioctl(evsel, PERF_EVENT_IOC_ENABLE, NULL, i, thread);
+A reference to the framebuffer device struct fb_info is stored in the file
+private data, but this reference could no longer be valid and must not be
+accessed directly. Instead, the file_fb_info() accessor function must be
+used since it does sanity checking to make sure that the fb_info is valid.
 
-Looking at the argument names to perf_evsel__ioctl, i is the
-cpu_map_idx. Would it be more intention revealing here to do:
+This can happen for example if the registered framebuffer device is for a
+driver that just uses a framebuffer provided by the system firmware. In
+that case, the fbdev core would unregister the framebuffer device when a
+real video driver is probed and ask to remove conflicting framebuffers.
 
-perf_cpu_map__for_each_cpu(cpu, idx, evsel->cpus) {
-   if (err = perf_evsel__ioctl(evsel, PERF_EVENT_IOC_ENABLE, NULL, idx, thread))
-     break;
-}
+Most fbdev file operations already use the helper to get the fb_info but
+get_fb_unmapped_area() and fb_deferred_io_fsync() don't. Fix those two.
 
-or perhaps:
+Since fb_deferred_io_fsync() is not in fbmem.o, the helper has to be
+exported. Rename it and add a fb_ prefix to denote that is public now.
 
-for (idx = 0; idx < perf_cpu_map__nr(evsel->fd) && !err; idx++)
+Reported-by: Junxiao Chang <junxiao.chang@intel.com>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+---
 
-Thanks,
-Ian
+ drivers/video/fbdev/core/fb_defio.c |  5 ++++-
+ drivers/video/fbdev/core/fbmem.c    | 24 +++++++++++++++---------
+ include/linux/fb.h                  |  1 +
+ 3 files changed, 20 insertions(+), 10 deletions(-)
 
-> +       return err;
-> +}
-> +
->  int perf_evsel__enable(struct perf_evsel *evsel)
->  {
->         int i;
-> diff --git a/tools/lib/perf/include/perf/evsel.h b/tools/lib/perf/include/perf/evsel.h
-> index 2a9516b42d15..699c0ed97d34 100644
-> --- a/tools/lib/perf/include/perf/evsel.h
-> +++ b/tools/lib/perf/include/perf/evsel.h
-> @@ -36,6 +36,7 @@ LIBPERF_API int perf_evsel__read(struct perf_evsel *evsel, int cpu_map_idx, int
->                                  struct perf_counts_values *count);
->  LIBPERF_API int perf_evsel__enable(struct perf_evsel *evsel);
->  LIBPERF_API int perf_evsel__enable_cpu(struct perf_evsel *evsel, int cpu_map_idx);
-> +LIBPERF_API int perf_evsel__enable_thread(struct perf_evsel *evsel, int thread);
->  LIBPERF_API int perf_evsel__disable(struct perf_evsel *evsel);
->  LIBPERF_API int perf_evsel__disable_cpu(struct perf_evsel *evsel, int cpu_map_idx);
->  LIBPERF_API struct perf_cpu_map *perf_evsel__cpus(struct perf_evsel *evsel);
-> --
-> 2.25.1
->
+diff --git a/drivers/video/fbdev/core/fb_defio.c b/drivers/video/fbdev/core/fb_defio.c
+index 842c66b3e33d..ac1c88b3fbb5 100644
+--- a/drivers/video/fbdev/core/fb_defio.c
++++ b/drivers/video/fbdev/core/fb_defio.c
+@@ -68,12 +68,15 @@ static vm_fault_t fb_deferred_io_fault(struct vm_fault *vmf)
+ 
+ int fb_deferred_io_fsync(struct file *file, loff_t start, loff_t end, int datasync)
+ {
+-	struct fb_info *info = file->private_data;
++	struct fb_info *info = fb_file_fb_info(file->private_data);
+ 	struct inode *inode = file_inode(file);
+ 	int err = file_write_and_wait_range(file, start, end);
+ 	if (err)
+ 		return err;
+ 
++	if (!info)
++		return -ENODEV;
++
+ 	/* Skip if deferred io is compiled-in but disabled on this fbdev */
+ 	if (!info->fbdefio)
+ 		return 0;
+diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
+index 97eb0dee411c..f924fda89dd5 100644
+--- a/drivers/video/fbdev/core/fbmem.c
++++ b/drivers/video/fbdev/core/fbmem.c
+@@ -745,7 +745,7 @@ static const struct seq_operations __maybe_unused proc_fb_seq_ops = {
+  * So look up the fb_info using the inode minor number,
+  * and just verify it against the reference we have.
+  */
+-static struct fb_info *file_fb_info(struct file *file)
++struct fb_info *fb_file_fb_info(struct file *file)
+ {
+ 	struct inode *inode = file_inode(file);
+ 	int fbidx = iminor(inode);
+@@ -755,12 +755,13 @@ static struct fb_info *file_fb_info(struct file *file)
+ 		info = NULL;
+ 	return info;
+ }
++EXPORT_SYMBOL(fb_file_fb_info);
+ 
+ static ssize_t
+ fb_read(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+ {
+ 	unsigned long p = *ppos;
+-	struct fb_info *info = file_fb_info(file);
++	struct fb_info *info = fb_file_fb_info(file);
+ 	u8 *buffer, *dst;
+ 	u8 __iomem *src;
+ 	int c, cnt = 0, err = 0;
+@@ -825,7 +826,7 @@ static ssize_t
+ fb_write(struct file *file, const char __user *buf, size_t count, loff_t *ppos)
+ {
+ 	unsigned long p = *ppos;
+-	struct fb_info *info = file_fb_info(file);
++	struct fb_info *info = fb_file_fb_info(file);
+ 	u8 *buffer, *src;
+ 	u8 __iomem *dst;
+ 	int c, cnt = 0, err = 0;
+@@ -1181,7 +1182,7 @@ static long do_fb_ioctl(struct fb_info *info, unsigned int cmd,
+ 
+ static long fb_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+ {
+-	struct fb_info *info = file_fb_info(file);
++	struct fb_info *info = fb_file_fb_info(file);
+ 
+ 	if (!info)
+ 		return -ENODEV;
+@@ -1293,7 +1294,7 @@ static int fb_get_fscreeninfo(struct fb_info *info, unsigned int cmd,
+ static long fb_compat_ioctl(struct file *file, unsigned int cmd,
+ 			    unsigned long arg)
+ {
+-	struct fb_info *info = file_fb_info(file);
++	struct fb_info *info = fb_file_fb_info(file);
+ 	const struct fb_ops *fb;
+ 	long ret = -ENOIOCTLCMD;
+ 
+@@ -1333,7 +1334,7 @@ static long fb_compat_ioctl(struct file *file, unsigned int cmd,
+ static int
+ fb_mmap(struct file *file, struct vm_area_struct * vma)
+ {
+-	struct fb_info *info = file_fb_info(file);
++	struct fb_info *info = fb_file_fb_info(file);
+ 	int (*fb_mmap_fn)(struct fb_info *info, struct vm_area_struct *vma);
+ 	unsigned long mmio_pgoff;
+ 	unsigned long start;
+@@ -1434,7 +1435,7 @@ fb_release(struct inode *inode, struct file *file)
+ __acquires(&info->lock)
+ __releases(&info->lock)
+ {
+-	struct fb_info * const info = file_fb_info(file);
++	struct fb_info * const info = fb_file_fb_info(file);
+ 
+ 	if (!info)
+ 		return -ENODEV;
+@@ -1453,8 +1454,13 @@ unsigned long get_fb_unmapped_area(struct file *filp,
+ 				   unsigned long addr, unsigned long len,
+ 				   unsigned long pgoff, unsigned long flags)
+ {
+-	struct fb_info * const info = filp->private_data;
+-	unsigned long fb_size = PAGE_ALIGN(info->fix.smem_len);
++	struct fb_info * const info = fb_file_fb_info(filp->private_data);
++	unsigned long fb_size;
++
++	if (!info)
++		return -ENODEV;
++
++	fb_size = PAGE_ALIGN(info->fix.smem_len);
+ 
+ 	if (pgoff > fb_size || len > fb_size - pgoff)
+ 		return -EINVAL;
+diff --git a/include/linux/fb.h b/include/linux/fb.h
+index 9a77ab615c36..3004b8b8c5c2 100644
+--- a/include/linux/fb.h
++++ b/include/linux/fb.h
+@@ -624,6 +624,7 @@ extern int fb_get_color_depth(struct fb_var_screeninfo *var,
+ 			      struct fb_fix_screeninfo *fix);
+ extern int fb_get_options(const char *name, char **option);
+ extern int fb_new_modelist(struct fb_info *info);
++extern struct fb_info *fb_file_fb_info(struct file *file);
+ 
+ extern struct fb_info *registered_fb[FB_MAX];
+ extern int num_registered_fb;
+-- 
+2.35.1
+

@@ -2,104 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DECD5181CB
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 11:57:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 700245181CF
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 11:58:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233834AbiECKA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 06:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
+        id S233857AbiECKBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 06:01:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233856AbiECKAW (ORCPT
+        with ESMTP id S233698AbiECKBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 06:00:22 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A96377CA;
-        Tue,  3 May 2022 02:56:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651571810; x=1683107810;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PUacBmRLtoeErgelcVZt5P+I5fws4ubK0fCTyWDi7Wg=;
-  b=hV2thJmRw6jiwtjgl0frdLfSTP/kLQYyHSIjvytOLaGEAH3t7zxCgDMq
-   VaLV/H5b9G4UYtzLpZeh4LIAa1R0BSIjyMHNX/0z466txzp/DpRVeW6jS
-   gqCnpT0pZU8SuZX7GVfvI6cuzcv+X+rCK3+HUl/eCGzfy3IVh76G0rCBr
-   nVczz9k0g1wc2cNB28lQf7Mjx24yy1IEL2OFT3dgegvkLmoD8Cinhqur3
-   Z/3z1bsHxYiPfISuRKyjQAj4H3PkgyooHBdZwtb6HOIFQA0kelr7ZcU7u
-   stCOb6N8oK3Q5zYU4fauyPqfKBaaiRS0BZN+vBvH+IsI1aQC8uiVamXNo
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="330430289"
-X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
-   d="scan'208";a="330430289"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 02:56:49 -0700
-X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
-   d="scan'208";a="653202205"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 02:56:47 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nlpGu-00BOXO-F8;
-        Tue, 03 May 2022 12:56:44 +0300
-Date:   Tue, 3 May 2022 12:56:44 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Peter Hurley <peter@hurleysoftware.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] serial: 8250: core: Remove unneeded
- <linux/pm_runtime.h>
-Message-ID: <YnD8XDP4bjzFvMBM@smile.fi.intel.com>
-References: <2545eaa7fc552013a5d04c4df027255204e64834.1651494971.git.geert+renesas@glider.be>
+        Tue, 3 May 2022 06:01:41 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998BB35DE2
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 02:58:09 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id n10so15017230ejk.5
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 02:58:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Z6vn8RV+oPJamH1qeu3cvsWts9bI2+OweL8gu7X/8vA=;
+        b=W5JJnAcNeGAKsYC8o/kXmqVrceo6nc9cLrogb7rhvZowJ++q8nOgznj84QF0gXE7Mc
+         yXmO4c/FMcATY9A4k85VMp7syj0DQr3gsBahcDzOQXnY2MYEIq0t+vijqxtiPm96qITE
+         BIkDpJOzuk2KlC8GCAHNKuyePjcaztOEFoWQBKIfSRK4e2lRZhaHcScIwyb9hHh2ulce
+         JSfWqc5W8mRzDUFe4XPug9NC0BGjhCDNBFaqstW9W7/zN6bUAL7yD8SSQ/op15J3U7GZ
+         027Nlw6egZcFlnhvTqIQANwxyt6GZhTKWMz5wL7nwnoDnW1vjkSiQ6477jQCsRPfG8Xc
+         HeLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Z6vn8RV+oPJamH1qeu3cvsWts9bI2+OweL8gu7X/8vA=;
+        b=zz/zdHlJEySjii3wqfTY00QEEVoplP3NG6XA2eBu1SwcVKNxpCJtgvwJHhjvZJ+AOx
+         Eye0YLp6KX0RqQ9+xV1dubmPAbEamjwl1k0CiYygT4q/lhbqgAevmGRMu/yx77MoIHAl
+         w3Sg9elK9nUq6VQId5YlMNQZyDDqRyNsMuF27mgUeqM59g/AsUHC2719PaYEqxagQ7V6
+         wcHBULNSMbuhNbtP8rJsRHbhGTa6iyX3jDSkVRVdkKWmPYCW2mRAQ/VRVtJq/D/6OCtf
+         GR8v3x42EVRtB2Pzfl8j0IJGLwcL5pg1YPJVezrEOaSQE5dDZNQGeUleEVHC1ikHNkky
+         eLyw==
+X-Gm-Message-State: AOAM532RyxjYQ1X1Lx4OJBUPB1qHaWpMkiI381JqbylDQ4k5k1zgj3hJ
+        MH7q6uG0yNZ9AGuoFhqd2nk3oA==
+X-Google-Smtp-Source: ABdhPJwg5UlqU1Tyo9LaWEKwvdRYNzgjscMYLGM93oxn2dLEJvVzs39lGK1JLxztUdkGt39ON9n8tQ==
+X-Received: by 2002:a17:907:62a1:b0:6da:7952:d4d2 with SMTP id nd33-20020a17090762a100b006da7952d4d2mr14759958ejc.260.1651571888174;
+        Tue, 03 May 2022 02:58:08 -0700 (PDT)
+Received: from [192.168.0.201] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id jl22-20020a17090775d600b006f3ef214d9esm4452253ejc.4.2022.05.03.02.58.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 02:58:07 -0700 (PDT)
+Message-ID: <dc005fa0-fee7-1ca8-11ea-b984b1ab3365@linaro.org>
+Date:   Tue, 3 May 2022 11:58:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2545eaa7fc552013a5d04c4df027255204e64834.1651494971.git.geert+renesas@glider.be>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v6 5/8] dt-bindings: timer: hpe,gxp-timer: Creation
+Content-Language: en-US
+To:     nick.hawkins@hpe.com, verdun@hpe.com, nick@hpe.com, joel@jms.id.au,
+        arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org
+References: <20220502204050.88316-1-nick.hawkins@hpe.com>
+ <20220502204050.88316-5-nick.hawkins@hpe.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220502204050.88316-5-nick.hawkins@hpe.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 02, 2022 at 02:37:05PM +0200, Geert Uytterhoeven wrote:
-> The last calls into Runtime PM were moved to 8250_port.c a long time
-> ago.
-
-Both
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-> Fixes: b6830f6df8914faa ("serial: 8250: Split base port operations from universal driver")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+On 02/05/2022 22:40, nick.hawkins@hpe.com wrote:
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+> 
+> Add support for the HPE GXP Timer and Watchdog. There are multiple
+> timers on the SoC but only one is enabled at this time.
+> 
+> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+> 
 > ---
->  drivers/tty/serial/8250/8250_core.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
-> index 01d30f6ed8fb5931..cfbd2de0ca6e4bcd 100644
-> --- a/drivers/tty/serial/8250/8250_core.c
-> +++ b/drivers/tty/serial/8250/8250_core.c
-> @@ -32,7 +32,6 @@
->  #include <linux/mutex.h>
->  #include <linux/slab.h>
->  #include <linux/uaccess.h>
-> -#include <linux/pm_runtime.h>
->  #include <linux/io.h>
->  #ifdef CONFIG_SPARC
->  #include <linux/sunserialcore.h>
-> -- 
-> 2.25.1
-> 
+> v6:
+> * Removed simple-mfd compatible, timer will create watchdog without
+>   watchdog node.
+> * Removed timer0 label
+> * Changed title from HPE GXP TIMER to HPE GXP Timer
+> * Changed clock name iopclk to iop
+> * Set additionalProperties to false
+> * Added space after ',' in the compatible list
+> * Changed subject to match the log better
 
--- 
-With Best Regards,
-Andy Shevchenko
+The subject after prefixes does not match it better. What is "creation"?
+"Add HPE GXP Timer and Watchdog"
 
+Rest is okay, so this could be fixed while applying (if you are going to
+resend, don't loose that comment and don't loose the tag):
 
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof

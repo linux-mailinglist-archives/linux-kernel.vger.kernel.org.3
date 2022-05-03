@@ -2,227 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99530518AB9
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 19:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2AAC518ABF
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 19:11:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240081AbiECRNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 13:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57500 "EHLO
+        id S240104AbiECRPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 13:15:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240069AbiECRNK (ORCPT
+        with ESMTP id S240088AbiECRPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 13:13:10 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE65D3A5C7;
-        Tue,  3 May 2022 10:09:36 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id b18so12478313lfv.9;
-        Tue, 03 May 2022 10:09:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=zJs4+MMRWZw/5d9ErRntMPYDHkeYPubfbBu5PoJ/OL4=;
-        b=M8YnGgqOtzjrYDRuAmiWTIN0idz0aB1XK23Uw+aNk4CfbYy5aKVITKbBOMASf1yAua
-         BgpgVejpIWt8F6mYbpZ1fCm1sjp9iu2AjIo/0vd3sBkasOA0RrTEuUAJ6mQOWQqVeq/O
-         BqSxjkrx9WDaAFcutE4wvDiQqMrbSgdyiQ0TOVxxXqv5w8GeoXBgF7aZ+MxcSzk15Y8e
-         +1W9wBTeyxRmh+fB0IFa3uURqquKs04Bl4ddkmB4yTgcmom0ydsORiv+WE2n/M+E59Wk
-         su6MC/cBHQzbjTguGmt0qezOEvsqpcxwEsxAmk4LvxoqWGtGAocx94WxhC2Ls1TnRWy9
-         06JA==
+        Tue, 3 May 2022 13:15:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C8A031CFC8
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 10:11:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651597898;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PmDpcAKRURnYViq/lT/qk3yWWoPeoPeLoyR0xccq8g0=;
+        b=OVrN68JxCuXd78k32SJL0CvGSnYSDyf1ulZad/gsZreO+T1BvFkQkDHr3LVVLhIO8f/x6p
+        4/7EnviCqP0ekD9rKOcKvtwjgkVbIPqMWu67ActN5ZAu0aPPaYI2LWK4LR/9X0bmRWvkNe
+        YQPVrpeVRTRWzuWIIRm9ChdMfoSkoH8=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-161-m0AF_WF2OR-MOpneDhKZsw-1; Tue, 03 May 2022 13:11:27 -0400
+X-MC-Unique: m0AF_WF2OR-MOpneDhKZsw-1
+Received: by mail-io1-f69.google.com with SMTP id ay13-20020a5d9d8d000000b0065a631e7632so4294912iob.14
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 10:11:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=zJs4+MMRWZw/5d9ErRntMPYDHkeYPubfbBu5PoJ/OL4=;
-        b=g7SZgGoVpqY9yEJbf3g4WpNSbgR+IA+jvx8HEvdTevxLgz/e8BQFSJu2W9r8FmMkFM
-         QTtL2JcxBVivLUfK9IO0EnUCqI0vacj/HQ2e5lwJ4LlnxljziLenTCgpfNix5n3OS7Zx
-         IKc8QWqzBNouy0iEONYLaM8YeNQmU9yjLdU+SUk99fhpXr0qwichIuoMS7x7DUwpPleD
-         XjW1tExRJ0fdmFS/CRQATjdVYYMigMnYR8NvsQQT/bU/iHtCxw4M+gob1yX/mYiV8Slk
-         8F8G2HFP8LWwqLX1OP6FDm918gBMaQz5rXgyKL8zc9Tiee6sG2p7+27A4WjoDEqymHQo
-         mBGQ==
-X-Gm-Message-State: AOAM531DdzehwnSMr/ktSx0InpCeMAxfsAG1vFmnub076ZuMtvxK/F6C
-        IMV04KgUSIp7YS/IDQtlHBQ=
-X-Google-Smtp-Source: ABdhPJzv6H6M8/xo8EzW/O4pDdx28m5jcypFmJdLpM4hdPg4n724T8DEh4HH50LEA43Trj5o8JzjrQ==
-X-Received: by 2002:ac2:4add:0:b0:471:fc6d:a71d with SMTP id m29-20020ac24add000000b00471fc6da71dmr12040907lfp.350.1651597775052;
-        Tue, 03 May 2022 10:09:35 -0700 (PDT)
-Received: from [192.168.1.7] ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id f15-20020a19ae0f000000b0046ba69295e6sm991362lfc.1.2022.05.03.10.09.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 May 2022 10:09:33 -0700 (PDT)
-Subject: Re: [PATCH V1 4/6] dt-bindings: Add xen,dev-domid property
- description for xen-grant DMA ops
-To:     Rob Herring <robh@kernel.org>
-Cc:     xen-devel@lists.xenproject.org,
-        virtualization@lists.linux-foundation.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Julien Grall <julien@xen.org>, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>
-References: <1650646263-22047-1-git-send-email-olekstysh@gmail.com>
- <1650646263-22047-5-git-send-email-olekstysh@gmail.com>
- <YnBUUclJqkvKsV2o@robh.at.kernel.org>
-From:   Oleksandr <olekstysh@gmail.com>
-Message-ID: <accbc6be-82c1-dfd2-586f-816141415d7c@gmail.com>
-Date:   Tue, 3 May 2022 20:09:32 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=PmDpcAKRURnYViq/lT/qk3yWWoPeoPeLoyR0xccq8g0=;
+        b=SnAP1PKLTBxbGbeIedUT9k9hi2LbIyd5LRcE7HOITpNlx2jAdcQcroDxGuBgskEejW
+         v4Spf97RMrL++mwKwRswbJUVV9uuC9L3eNeDJnOIFAKjKs1CF8PJzajL8po3RaPltGD4
+         l+g8MX9HIJjAVTtuzgTECLiKlSuLs2sf/dt5KzDeZt02liZClJu6kBwnM4DyItJw5MB6
+         9H6LqasDMRYVmz/MPqUjUPrKF4hKGdkBEqeH8q5JM0ToBtDMckN4wAkKEPSqgEOsvE/L
+         nKyIkjYiVYNxjfTyToLgohJ5oPoghcV/NKaWcnlW6QcirlS7nyP8WGQKBDZ2UkNlgaGY
+         Pq0Q==
+X-Gm-Message-State: AOAM531uCVTsnf569PM9DXavxwONcmCSqIxEcMUZCQ9MnEZC5UJRZ/df
+        M3kO6inF4IDDSrzPaZS9ETqw5KLiylAEvk2xsPN+vtInALWsGB/PVRbDMxKzdxmQdDkz45cqoEZ
+        Eh6q8qAkpiluRuvFTkOnriAyw
+X-Received: by 2002:a92:3405:0:b0:2c8:70ad:fa86 with SMTP id b5-20020a923405000000b002c870adfa86mr6944735ila.268.1651597887005;
+        Tue, 03 May 2022 10:11:27 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx7d7yOwkgKoHubTk3YAA9A5VeFfPMRsv66nBH6pKBak6btih6TX9vYxf5tX3YhN+5w9tPJ4w==
+X-Received: by 2002:a92:3405:0:b0:2c8:70ad:fa86 with SMTP id b5-20020a923405000000b002c870adfa86mr6944714ila.268.1651597886678;
+        Tue, 03 May 2022 10:11:26 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id r2-20020a92c502000000b002cde6e352e2sm3578912ilg.44.2022.05.03.10.11.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 10:11:25 -0700 (PDT)
+Date:   Tue, 3 May 2022 11:11:24 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Abhishek Sahu <abhsahu@nvidia.com>
+Cc:     Cornelia Huck <cohuck@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH v3 4/8] vfio/pci: Add support for setting driver data
+ inside core layer
+Message-ID: <20220503111124.38b07a9e.alex.williamson@redhat.com>
+In-Reply-To: <20220425092615.10133-5-abhsahu@nvidia.com>
+References: <20220425092615.10133-1-abhsahu@nvidia.com>
+        <20220425092615.10133-5-abhsahu@nvidia.com>
+Organization: Red Hat
 MIME-Version: 1.0
-In-Reply-To: <YnBUUclJqkvKsV2o@robh.at.kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 25 Apr 2022 14:56:11 +0530
+Abhishek Sahu <abhsahu@nvidia.com> wrote:
 
-On 03.05.22 00:59, Rob Herring wrote:
+> The vfio driver is divided into two layers: core layer (implemented in
+> vfio_pci_core.c) and parent driver (For example, vfio_pci, mlx5_vfio_pci,
+> hisi_acc_vfio_pci, etc.). All the parent driver calls dev_set_drvdata()
+> and assigns its own structure as driver data. Some of the callback
+> functions are implemented in the core layer and these callback functions
+> provide the reference of 'struct pci_dev' or 'struct device'. Currently,
+> we use vfio_device_get_from_dev() which provides reference to the
+> vfio_device for a device. But this function follows long path to extract
+> the same. There are few cases, where we don't need to go through this
+> long path if we get this through drvdata.
+> 
+> This patch moves the setting of drvdata inside the core layer. If we see
+> the current implementation of parent driver structure implementation,
+> then 'struct vfio_pci_core_device' is a first member so the pointer of
+> the parent structure and 'struct vfio_pci_core_device' should be the same.
+> 
+> struct hisi_acc_vf_core_device {
+>     struct vfio_pci_core_device core_device;
+>     ...
+> };
+> 
+> struct mlx5vf_pci_core_device {
+>     struct vfio_pci_core_device core_device;
+>     ...
+> };
+> 
+> The vfio_pci.c uses 'struct vfio_pci_core_device' itself.
+> 
+> To support getting the drvdata in both the layers, we can put the
+> restriction to make 'struct vfio_pci_core_device' as a first member.
+> Also, vfio_pci_core_register_device() has this validation which makes sure
+> that this prerequisite is always satisfied.
+> 
+> Signed-off-by: Abhishek Sahu <abhsahu@nvidia.com>
+> ---
+>  .../vfio/pci/hisilicon/hisi_acc_vfio_pci.c    |  4 ++--
+>  drivers/vfio/pci/mlx5/main.c                  |  3 +--
+>  drivers/vfio/pci/vfio_pci.c                   |  4 ++--
+>  drivers/vfio/pci/vfio_pci_core.c              | 24 ++++++++++++++++---
+>  include/linux/vfio_pci_core.h                 |  7 +++++-
+>  5 files changed, 32 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+> index 767b5d47631a..c76c09302a8f 100644
+> --- a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+> +++ b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+> @@ -1274,11 +1274,11 @@ static int hisi_acc_vfio_pci_probe(struct pci_dev *pdev, const struct pci_device
+>  					  &hisi_acc_vfio_pci_ops);
+>  	}
+>  
+> -	ret = vfio_pci_core_register_device(&hisi_acc_vdev->core_device);
+> +	ret = vfio_pci_core_register_device(&hisi_acc_vdev->core_device,
+> +					    hisi_acc_vdev);
+>  	if (ret)
+>  		goto out_free;
+>  
+> -	dev_set_drvdata(&pdev->dev, hisi_acc_vdev);
+>  	return 0;
+>  
+>  out_free:
+> diff --git a/drivers/vfio/pci/mlx5/main.c b/drivers/vfio/pci/mlx5/main.c
+> index bbec5d288fee..8689248f66f3 100644
+> --- a/drivers/vfio/pci/mlx5/main.c
+> +++ b/drivers/vfio/pci/mlx5/main.c
+> @@ -614,11 +614,10 @@ static int mlx5vf_pci_probe(struct pci_dev *pdev,
+>  		}
+>  	}
+>  
+> -	ret = vfio_pci_core_register_device(&mvdev->core_device);
+> +	ret = vfio_pci_core_register_device(&mvdev->core_device, mvdev);
+>  	if (ret)
+>  		goto out_free;
+>  
+> -	dev_set_drvdata(&pdev->dev, mvdev);
+>  	return 0;
+>  
+>  out_free:
+> diff --git a/drivers/vfio/pci/vfio_pci.c b/drivers/vfio/pci/vfio_pci.c
+> index 2b047469e02f..e0f8027c5cd8 100644
+> --- a/drivers/vfio/pci/vfio_pci.c
+> +++ b/drivers/vfio/pci/vfio_pci.c
+> @@ -151,10 +151,10 @@ static int vfio_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>  		return -ENOMEM;
+>  	vfio_pci_core_init_device(vdev, pdev, &vfio_pci_ops);
+>  
+> -	ret = vfio_pci_core_register_device(vdev);
+> +	ret = vfio_pci_core_register_device(vdev, vdev);
+>  	if (ret)
+>  		goto out_free;
+> -	dev_set_drvdata(&pdev->dev, vdev);
+> +
+>  	return 0;
+>  
+>  out_free:
+> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
+> index 1271728a09db..953ac33b2f5f 100644
+> --- a/drivers/vfio/pci/vfio_pci_core.c
+> +++ b/drivers/vfio/pci/vfio_pci_core.c
+> @@ -1822,9 +1822,11 @@ void vfio_pci_core_uninit_device(struct vfio_pci_core_device *vdev)
+>  }
+>  EXPORT_SYMBOL_GPL(vfio_pci_core_uninit_device);
+>  
+> -int vfio_pci_core_register_device(struct vfio_pci_core_device *vdev)
+> +int vfio_pci_core_register_device(struct vfio_pci_core_device *vdev,
+> +				  void *driver_data)
+>  {
+>  	struct pci_dev *pdev = vdev->pdev;
+> +	struct device *dev = &pdev->dev;
+>  	int ret;
+>  
+>  	if (pdev->hdr_type != PCI_HEADER_TYPE_NORMAL)
+> @@ -1843,6 +1845,17 @@ int vfio_pci_core_register_device(struct vfio_pci_core_device *vdev)
+>  		return -EBUSY;
+>  	}
+>  
+> +	/*
+> +	 * The 'struct vfio_pci_core_device' should be the first member of the
+> +	 * of the structure referenced by 'driver_data' so that it can be
+> +	 * retrieved with dev_get_drvdata() inside vfio-pci core layer.
+> +	 */
+> +	if ((struct vfio_pci_core_device *)driver_data != vdev) {
+> +		pci_warn(pdev, "Invalid driver data\n");
+> +		return -EINVAL;
+> +	}
 
-Hello Rob
+It seems a bit odd to me to add a driver_data arg to the function,
+which is actually required to point to the same thing as the existing
+function arg.  Is this just to codify the requirement?  Maybe others
+can suggest alternatives.
 
+We also need to collaborate with Jason's patch:
 
-> On Fri, Apr 22, 2022 at 07:51:01PM +0300, Oleksandr Tyshchenko wrote:
->> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
->>
->> Introduce Xen specific binding for the virtualized device (e.g. virtio)
->> to be used by Xen grant DMA-mapping layer in the subsequent commit.
->>
->> This binding indicates that Xen grant mappings scheme needs to be
->> enabled for the device which DT node contains that property and specifies
->> the ID of Xen domain where the corresponding backend resides. The ID
->> (domid) is used as an argument to the grant mapping APIs.
->>
->> This is needed for the option to restrict memory access using Xen grant
->> mappings to work which primary goal is to enable using virtio devices
->> in Xen guests.
->>
->> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
->> ---
->> Changes RFC -> V1:
->>     - update commit subject/description and text in description
->>     - move to devicetree/bindings/arm/
->> ---
->>   .../devicetree/bindings/arm/xen,dev-domid.yaml     | 37 ++++++++++++++++++++++
->>   1 file changed, 37 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/arm/xen,dev-domid.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/arm/xen,dev-domid.yaml b/Documentation/devicetree/bindings/arm/xen,dev-domid.yaml
->> new file mode 100644
->> index 00000000..ef0f747
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/arm/xen,dev-domid.yaml
->> @@ -0,0 +1,37 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/arm/xen,dev-domid.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Xen specific binding for the virtualized device (e.g. virtio)
->> +
->> +maintainers:
->> +  - Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
->> +
->> +select: true
-> Do we really need to support this property everywhere?
+https://lore.kernel.org/all/0-v2-0f36bcf6ec1e+64d-vfio_get_from_dev_jgg@nvidia.com/
 
- From my understanding - yes.
+(and maybe others)
 
-As, I think, any device node describing virtulized device in the guest 
-device tree can have this property.  Initially (in the RFC series) the 
-"solution to restrict memory access using Xen grant mappings" was 
-virtio-specific.
+If we implement a change like proposed here that vfio-pci-core sets
+drvdata then we don't need for each variant driver to implement their
+own wrapper around err_handler or err_detected as Jason proposes in the
+linked patch.  Thanks,
 
-Although the support of virtio is a primary target of this series, we 
-decided to generalize this work and expand it to any device [1]. So the 
-Xen grant mappings scheme (this property to be used for) can be 
-theoretically used for any device emulated by the Xen backend.
+Alex
 
-
->> +
->> +description:
->> +  This binding indicates that Xen grant mappings scheme needs to be enabled
->> +  for that device and specifies the ID of Xen domain where the corresponding
->> +  device (backend) resides. This is needed for the option to restrict memory
->> +  access using Xen grant mappings to work.
->> +
->> +properties:
->> +  xen,dev-domid:
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    description:
->> +      The domid (domain ID) of the domain where the device (backend) is running.
->> +
->> +additionalProperties: true
->> +
->> +examples:
->> +  - |
->> +    virtio_block@3000 {
-> virtio@3000
-
-ok, will change
-
-
->
->> +            compatible = "virtio,mmio";
->> +            reg = <0x3000 0x100>;
->> +            interrupts = <41>;
->> +
->> +            /* The device is located in Xen domain with ID 1 */
->> +            xen,dev-domid = <1>;
-> This fails validation:
->
-> Documentation/devicetree/bindings/arm/xen,dev-domid.example.dtb: virtio_block@3000: xen,dev-domid: [[1]] is not of type 'object'
->          From schema: /home/rob/proj/git/linux-dt/Documentation/devicetree/bindings/virtio/mmio.yaml
-
-Thank you for pointing this out, my fault, I haven't "properly" checked 
-this before. I think, we need to remove "compatible = "virtio,mmio"; here
-
-
-diff --git a/Documentation/devicetree/bindings/arm/xen,dev-domid.yaml 
-b/Documentation/devicetree/bindings/arm/xen,dev-domid.yaml
-index 2daa8aa..d2f2140 100644
---- a/Documentation/devicetree/bindings/arm/xen,dev-domid.yaml
-+++ b/Documentation/devicetree/bindings/arm/xen,dev-domid.yaml
-@@ -28,7 +28,7 @@ additionalProperties: true
-  examples:
-    - |
-      virtio_block@3000 {
--            compatible = "virtio,mmio";
-+            /* ... */
-              reg = <0x3000 0x100>;
-              interrupts = <41>;
-
-
-
->
-> The property has to be added to the virtio/mmio.yaml schema. If it is
-> not needed elsewhere, then *just* add the property there.
-
-As I described above, the property is not virtio specific and can be 
-used for any virtualized device for which Xen grant mappings scheme 
-needs to be enabled (xen-grant DMA-mapping layer).
-
-
-[1] 
-https://lore.kernel.org/xen-devel/alpine.DEB.2.22.394.2204181202080.915916@ubuntu-linux-20-04-desktop/
-
-
->
-> Rob
-
--- 
-Regards,
-
-Oleksandr Tyshchenko
+> +	dev_set_drvdata(dev, driver_data);
+> +
+>  	if (pci_is_root_bus(pdev->bus)) {
+>  		ret = vfio_assign_device_set(&vdev->vdev, vdev);
+>  	} else if (!pci_probe_reset_slot(pdev->slot)) {
+> @@ -1856,10 +1869,10 @@ int vfio_pci_core_register_device(struct vfio_pci_core_device *vdev)
+>  	}
+>  
+>  	if (ret)
+> -		return ret;
+> +		goto out_drvdata;
+>  	ret = vfio_pci_vf_init(vdev);
+>  	if (ret)
+> -		return ret;
+> +		goto out_drvdata;
+>  	ret = vfio_pci_vga_init(vdev);
+>  	if (ret)
+>  		goto out_vf;
+> @@ -1890,6 +1903,8 @@ int vfio_pci_core_register_device(struct vfio_pci_core_device *vdev)
+>  		vfio_pci_set_power_state(vdev, PCI_D0);
+>  out_vf:
+>  	vfio_pci_vf_uninit(vdev);
+> +out_drvdata:
+> +	dev_set_drvdata(dev, NULL);
+>  	return ret;
+>  }
+>  EXPORT_SYMBOL_GPL(vfio_pci_core_register_device);
+> @@ -1897,6 +1912,7 @@ EXPORT_SYMBOL_GPL(vfio_pci_core_register_device);
+>  void vfio_pci_core_unregister_device(struct vfio_pci_core_device *vdev)
+>  {
+>  	struct pci_dev *pdev = vdev->pdev;
+> +	struct device *dev = &pdev->dev;
+>  
+>  	vfio_pci_core_sriov_configure(pdev, 0);
+>  
+> @@ -1907,6 +1923,8 @@ void vfio_pci_core_unregister_device(struct vfio_pci_core_device *vdev)
+>  
+>  	if (!disable_idle_d3)
+>  		vfio_pci_set_power_state(vdev, PCI_D0);
+> +
+> +	dev_set_drvdata(dev, NULL);
+>  }
+>  EXPORT_SYMBOL_GPL(vfio_pci_core_unregister_device);
+>  
+> diff --git a/include/linux/vfio_pci_core.h b/include/linux/vfio_pci_core.h
+> index 505b2a74a479..3c7d65e68340 100644
+> --- a/include/linux/vfio_pci_core.h
+> +++ b/include/linux/vfio_pci_core.h
+> @@ -225,7 +225,12 @@ void vfio_pci_core_close_device(struct vfio_device *core_vdev);
+>  void vfio_pci_core_init_device(struct vfio_pci_core_device *vdev,
+>  			       struct pci_dev *pdev,
+>  			       const struct vfio_device_ops *vfio_pci_ops);
+> -int vfio_pci_core_register_device(struct vfio_pci_core_device *vdev);
+> +/*
+> + * The 'struct vfio_pci_core_device' should be the first member
+> + * of the structure referenced by 'driver_data'.
+> + */
+> +int vfio_pci_core_register_device(struct vfio_pci_core_device *vdev,
+> +				  void *driver_data);
+>  void vfio_pci_core_uninit_device(struct vfio_pci_core_device *vdev);
+>  void vfio_pci_core_unregister_device(struct vfio_pci_core_device *vdev);
+>  int vfio_pci_core_sriov_configure(struct pci_dev *pdev, int nr_virtfn);
 

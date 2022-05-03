@@ -2,86 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39EF951845F
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 14:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 963C6518461
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 14:34:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235375AbiECMhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 08:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47650 "EHLO
+        id S235384AbiECMiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 08:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232602AbiECMhP (ORCPT
+        with ESMTP id S232602AbiECMiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 08:37:15 -0400
-Received: from gardel.0pointer.net (gardel.0pointer.net [85.214.157.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8899F1EAE4;
-        Tue,  3 May 2022 05:33:42 -0700 (PDT)
-Received: from gardel-login.0pointer.net (gardel-mail [IPv6:2a01:238:43ed:c300:10c3:bcf3:3266:da74])
-        by gardel.0pointer.net (Postfix) with ESMTP id 5366FE804AA;
-        Tue,  3 May 2022 14:33:40 +0200 (CEST)
-Received: by gardel-login.0pointer.net (Postfix, from userid 1000)
-        id C5E07160011; Tue,  3 May 2022 14:33:39 +0200 (CEST)
-Date:   Tue, 3 May 2022 14:33:39 +0200
-From:   Lennart Poettering <mzxreary@0pointer.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Alexander Graf <graf@amazon.com>, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Colm MacCarthaigh <colmmacc@amazon.com>,
-        Torben Hansen <htorben@amazon.co.uk>,
-        Jann Horn <jannh@google.com>
-Subject: Re: [PATCH 2/2] random: add fork_event sysctl for polling VM forks
-Message-ID: <YnEhI3IX0oerUbsZ@gardel-login>
-References: <20220502140602.130373-1-Jason@zx2c4.com>
- <20220502140602.130373-2-Jason@zx2c4.com>
- <Ym/7UlgQ5VjjC76P@gardel-login>
- <YnAC00VtU8MGb7vO@zx2c4.com>
- <YnAMBzhcJhGR5XOK@gardel-login>
- <7a1cfd1c-9f0e-f134-e544-83ee6d3cd9c9@amazon.com>
- <YnDn/d6iB0aUZkWJ@gardel-login>
- <YnEYN+Q3q76NVX3Q@zx2c4.com>
+        Tue, 3 May 2022 08:38:16 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6541EAE4
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 05:34:44 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id p18so19665060edr.7
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 05:34:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ESzdvB4/btl/1VCow2f5NIGlHBg35qVo2qLML71Yw3o=;
+        b=DIsjTh73iE8Rod04+zulq6nGoNU0zcbcSAPgifnn3mAUZWqziW4iFRcBOAeaL1enXq
+         GI5CyuaYx3wCYCnzhWR9YFn97IYPDtz9V4WgcdyHKJm6p9NtZlR1KwhlLzUpCD2SUpHA
+         IX5Hu+vR6qGxrUPDATcDWaFvxnpQLtcTDCveaK9yhzJhTIC+DZRnHhhuPlUSlNYJf/H2
+         suUhmJD4gQSXmbme1yHsQpHyXzTAiYQgqWzvsnOCeK/gOf2SDGli3m8b899kwrGAYxRh
+         wMIsHASIbtfGmHQS0gFCDW3ca+q8EapxiHdeYuWFJdkkCuUyOG7dUhCAidR2CjXFenW3
+         cQgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ESzdvB4/btl/1VCow2f5NIGlHBg35qVo2qLML71Yw3o=;
+        b=rvW8lQkSGC7LLViomJu2OXD3dJIZWyAfuUFWOHJDhYdQ2jE9wePqp783+KMZM6uu0t
+         vrRHZ8zCsP1OriI/RNc+PbCBHOExZPBu94colqHhzztt0zat4TTqnwFlX9Ftd/gnKxt2
+         mUm45Dcw46QEqRTeRg8lWmSCnIklkUOqucB9SZ9OyUZapq4L0gaKBhbmN12h8CZNugDz
+         K8lEqE/31EvahhvhgPxi3M8lc1HWROTYSF8Cakpy89+zpN6klqRcMbZOR37A2KHlJrfj
+         hLVwGhi3gthSqdHF6T1DFrCgKT087Uma/oc19DA51jBBpbzKIBG/1+S2Adl17fqn9Cz8
+         aAGQ==
+X-Gm-Message-State: AOAM5302tCexDu6foGhJzOUHk+uYj5wwU3IVBXAqgTlM7heg2/qXJLrL
+        YHphUYaq1knhfWvdZo925w09UQ==
+X-Google-Smtp-Source: ABdhPJwnw3kZXCYUj/4HGLMHRU8PEvlEVEU0guicE86J3K3VdGDVcBLLFwNDGN6Cdg7KX1WQKAnZ+w==
+X-Received: by 2002:aa7:d9d6:0:b0:425:dafc:2fc6 with SMTP id v22-20020aa7d9d6000000b00425dafc2fc6mr17434815eds.340.1651581283193;
+        Tue, 03 May 2022 05:34:43 -0700 (PDT)
+Received: from [192.168.0.203] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id l16-20020a056402125000b0041d527833b9sm7875940edw.3.2022.05.03.05.34.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 05:34:42 -0700 (PDT)
+Message-ID: <4c4b08a1-de08-d00f-dd4a-aeff2e1a9261@linaro.org>
+Date:   Tue, 3 May 2022 14:34:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnEYN+Q3q76NVX3Q@zx2c4.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/4] dt-bindings: mfd: atmel,flexcom: Convert to
+ json-schema
+Content-Language: en-US
+To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        krzysztof.kozlowski+dt@linaro.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        peda@axentia.se
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, lee.jones@linaro.org,
+        linux@armlinux.org.uk, Manohar.Puri@microchip.com,
+        UNGLinuxDriver@microchip.com
+References: <20220503105528.12824-1-kavyasree.kotagiri@microchip.com>
+ <20220503105528.12824-2-kavyasree.kotagiri@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220503105528.12824-2-kavyasree.kotagiri@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Di, 03.05.22 13:55, Jason A. Donenfeld (Jason@zx2c4.com) wrote:
+On 03/05/2022 12:55, Kavyasree Kotagiri wrote:
+> Convert the Atmel flexcom device tree bindings to json schema.
+> 
+> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+> ---
+>  .../bindings/mfd/atmel,flexcom.yaml           | 68 +++++++++++++++++++
+>  .../devicetree/bindings/mfd/atmel-flexcom.txt | 63 -----------------
+>  2 files changed, 68 insertions(+), 63 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-flexcom.txt
+> 
 
-> I'm still not convinced there's value in having a counter or a UUID, but
-> if you had to choose, would you prefer a counter or a UUID? It sounds
-> like the former, because you see a use for distinguishing between zero
-> and non-zero? Or did you finally agree with me that vmgenid isn't
-> granular enough for that?
+Thank you for your patch. There is something to discuss/improve.
 
-I would prefer a monotonic counter, since it allows answering
-questions like the following:
+> diff --git a/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml b/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
+> new file mode 100644
+> index 000000000000..62dea9b891d8
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
+> @@ -0,0 +1,68 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/atmel,flexcom.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Device tree bindings for Atmel Flexcom (Flexible Serial Communication Unit)
+> +
+> +maintainers:
+> +  - Rob Herring <robh+dt@kernel.org>
 
-1. Did this image get cloned at all? (i.e. counter != 0; usecase as per the MAC address
-   discussion)
+Person with access to hardware/datasheet/knowledge should be here, not
+DT bindings maintainer.
 
-2. Did the image get cloned since the last time I looked? (i.e. counter
-   != my_previously_saved_counter; usecase: detect clones in an "offline"
-   fashion, i.e. from a component that doesn't continously run, but
-   only from time to time)
+> +
+> +description: |
 
-3. How many clones did I miss? (i.e. missed_clones =
-   my_previously_saved_counter - counter; usecase: catch up with
-   generating proxy D-Bus signal messages for clones).
+No need for "|"
 
-There might be more.
+> +  The Atmel Flexcom is just a wrapper which embeds a SPI controller,
+> +  an I2C controller and an USART. Only one function can be used at a
+> +  time and is chosen at boot time according to the device tree.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - atmel,sama5d2-flexcom
+> +
+> +  reg:
+> +    minItems: 1
 
-Using a UUID would not give us #1 or #3. It would deliver #2 however.
+no need for minItems
 
-Lennart
+> +    items:
+> +      - description: Flexcom registers
 
---
-Lennart Poettering, Berlin
+Description is obvious, so just replace all three lines with
+	maxItems: 1
+
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  "#address-cells": true
+> +
+> +  "#size-cells": true
+
+
+These should have some fixed value (e.g. const: 1).
+Second question - they do not look valid since you do not have any
+children nodes. It looks like you want children, so you need to define them.
+
+> +
+> +  ranges:
+> +    description:
+> +      One range for the full I/O register region. (including USART,
+> +      TWI and SPI registers).
+> +    items:
+> +      minItems: 3
+
+no need for minItems
+
+> +      maxItems: 3
+> +
+> +  atmel,flexcom-mode:
+> +    description:
+> +      One of the values. UART, I2C, SPI.
+
+This does not describe anything.
+
+If you have defines here, mention the header.
+
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [0, 1, 2]
+
+Here is 0 not UART?
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    flx0: flexcom@f8034000 {> +          compatible = "atmel,sama5d2-flexcom";
+> +          reg = <0xf8034000 0x200>;
+> +          clocks = <&flx0_clk>;
+> +          #address-cells = <1>;
+> +          #size-cells = <1>;
+
+No need for address/size - no children here.
+
+> +          ranges = <0x0 0xf8034000 0x800>;
+
+Why do you need ranges without children?
+
+
+Best regards,
+Krzysztof

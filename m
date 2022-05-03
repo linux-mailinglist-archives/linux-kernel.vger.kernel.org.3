@@ -2,104 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9949651866D
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3A31518677
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:20:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236971AbiECOWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 10:22:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47112 "EHLO
+        id S236962AbiECOXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 10:23:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236956AbiECOWS (ORCPT
+        with ESMTP id S236890AbiECOX2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 10:22:18 -0400
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C8125E9E;
-        Tue,  3 May 2022 07:18:46 -0700 (PDT)
-Received: by mail-ot1-f47.google.com with SMTP id h10-20020a056830400a00b00605e92cc450so9769965ots.11;
-        Tue, 03 May 2022 07:18:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/aMt+iUL1CVqIgS6yg9mheyNXMFTAG1uctDwp9jLpck=;
-        b=Q0QTK4WNQAPlrFIeLia3/2cJGbVsHF1aLl2dgwpWT07gqFsVqL1hNNI3hnYTcumels
-         TAUhHWzTB44wZvCLZKWEV7Qp0LBwqqQTQKJuSgGdJwNuIzOb6R71qe0vA6HSLCWIuR/M
-         Y9scMmgqTytpq3pf+AMIyi5aPkRfXKWV7quV+YojAt+l6O67ZR9K1ALPlOAT9yjWFzEj
-         yB0aOjrph+SUpmVmIdxqivp7zjkYcXGIJdkMdZ/422mrkfeX2u4RjkzUJZslaNtJdpO0
-         EKEAnCF38+Qij8aGFGGcGxLpYfQpBzTzXI6XxmfzghhdzaJQV55RezlbfxuFubQmmc6s
-         mz0A==
-X-Gm-Message-State: AOAM533qinW4iQyuTYiNkPEV7CU8LW73KeGC2iV+N3ujCwCW/D+1MhD4
-        lEh684E0J0FPP68tWAqePczVE+vOIw==
-X-Google-Smtp-Source: ABdhPJy2p5eNvTSK+e4lPTi3BIf7IcquwGcze73MguD+vpeB8vzEjETxR5Ny0gGxkZHOQEReDlENHw==
-X-Received: by 2002:a9d:5913:0:b0:5cd:a050:8f55 with SMTP id t19-20020a9d5913000000b005cda0508f55mr5967584oth.44.1651587525443;
-        Tue, 03 May 2022 07:18:45 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id l24-20020a056820031800b0035eb4e5a6b0sm4984867ooe.6.2022.05.03.07.18.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 07:18:44 -0700 (PDT)
-Received: (nullmailer pid 3575356 invoked by uid 1000);
-        Tue, 03 May 2022 14:18:44 -0000
-Date:   Tue, 3 May 2022 09:18:44 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Jonathan Cameron <jic23@kernel.org>, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, devicetree@vger.kernel.org,
-        linux-iio@vger.kernel.org, Gwendal Grignou <gwendal@chromium.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: iio: sx9324: Add CS idle/sleep mode
-Message-ID: <YnE5xMS13oSuR5rx@robh.at.kernel.org>
-References: <20220503004156.3559940-1-swboyd@chromium.org>
- <20220503004156.3559940-2-swboyd@chromium.org>
+        Tue, 3 May 2022 10:23:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0357529C83;
+        Tue,  3 May 2022 07:19:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B59F3B81ED0;
+        Tue,  3 May 2022 14:19:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F756C385A9;
+        Tue,  3 May 2022 14:19:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651587593;
+        bh=m1gj6+3YfWLYuNch8icQuX4tVXD7bLAGeCx2hhQWcR8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=K8qJWPmO2q681rj2MA+bg8H/9W6AW9+bcV6+a2yCVtViK8mh1+5HcIy3vvobjB5Ia
+         6ml6Ynv74RDdAZ4/ZTrJTdiR7U83U6F/k2cg94zwdjIyRCQk6j2MNDfj+a6n3DYesC
+         m1XxpA6fNnBLWTuLhgyJagOgKDdBR32OIwL/FZh8ZZKAokNn249IAVUcqiGkDubu/O
+         5GovoMTqBIl2Kw7iznCFz5WSFDAZjyYnegFKltO48Vpjqw4dGLjGxlBk5JlGTLPU2Z
+         IXVGMLYKeR/ApV8uQOnhDFBCu9PlJciF34irgX+kjDatLajzFaBPo0i8x4AcjBKEQ2
+         m0LGo2NXTVDDg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id E6298400B1; Tue,  3 May 2022 11:19:50 -0300 (-03)
+Date:   Tue, 3 May 2022 11:19:50 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        German Gomez <german.gomez@arm.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Alexander Antonov <alexander.antonov@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v5 3/6] perf stat: Avoid printing cpus with no counters
+Message-ID: <YnE6Bvju43ohfFip@kernel.org>
+References: <20220503041757.2365696-1-irogers@google.com>
+ <20220503041757.2365696-4-irogers@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220503004156.3559940-2-swboyd@chromium.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220503041757.2365696-4-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 02, 2022 at 05:41:55PM -0700, Stephen Boyd wrote:
-> We need to configure the sleep and idle mode of the CS pins for this
-> device. Add a DT property to do this so pins are in a proper state
-> during sleep (either hi-z, grounded, or pulled up to vdd).
+Em Mon, May 02, 2022 at 09:17:54PM -0700, Ian Rogers escreveu:
+> perf_evlist's user_requested_cpus can contain CPUs not present in any
+> evsel's cpus, for example uncore counters. Avoid printing the prefix and
+> trailing \n until the first valid counter is encountered.
 > 
-> Cc: Gwendal Grignou <gwendal@chromium.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
+
+
+Thanks, applied.
+
+- Arnaldo
+
+
+> Signed-off-by: Ian Rogers <irogers@google.com>
 > ---
->  .../devicetree/bindings/iio/proximity/semtech,sx9324.yaml | 8 ++++++++
->  1 file changed, 8 insertions(+)
+>  tools/perf/util/stat-display.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/iio/proximity/semtech,sx9324.yaml b/Documentation/devicetree/bindings/iio/proximity/semtech,sx9324.yaml
-> index d265eb5258c8..6cec3481c8b2 100644
-> --- a/Documentation/devicetree/bindings/iio/proximity/semtech,sx9324.yaml
-> +++ b/Documentation/devicetree/bindings/iio/proximity/semtech,sx9324.yaml
-> @@ -126,6 +126,14 @@ properties:
->        UINT_MAX (4294967295) represents infinite. Other values
->        represent 1-1/N.
+> diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
+> index d9629a83aa78..13f705737367 100644
+> --- a/tools/perf/util/stat-display.c
+> +++ b/tools/perf/util/stat-display.c
+> @@ -948,8 +948,6 @@ static void print_no_aggr_metric(struct perf_stat_config *config,
+>  		struct evsel *counter;
+>  		bool first = true;
 >  
-> +  semtech,cs-idle-sleep:
-> +    description:
-> +      State of CS pins during sleep mode and idle time.
-> +    enum:
-> +      - hz
-
-I was trying to figure out how Hertz was a pin state. 'hiz' or 'hi-z' 
-instead?
-
-> +      - gnd
-> +      - vdd
-> +
->    semtech,int-comp-resistor:
->      description:
->        Internal resistor setting for compensation.
+> -		if (prefix)
+> -			fputs(prefix, config->output);
+>  		evlist__for_each_entry(evlist, counter) {
+>  			u64 ena, run, val;
+>  			double uval;
+> @@ -961,6 +959,8 @@ static void print_no_aggr_metric(struct perf_stat_config *config,
+>  
+>  			id = aggr_cpu_id__cpu(cpu, /*data=*/NULL);
+>  			if (first) {
+> +				if (prefix)
+> +					fputs(prefix, config->output);
+>  				aggr_printout(config, counter, id, 0);
+>  				first = false;
+>  			}
+> @@ -972,7 +972,8 @@ static void print_no_aggr_metric(struct perf_stat_config *config,
+>  			printout(config, id, 0, counter, uval, prefix,
+>  				 run, ena, 1.0, &rt_stat);
+>  		}
+> -		fputc('\n', config->output);
+> +		if (!first)
+> +			fputc('\n', config->output);
+>  	}
+>  }
+>  
 > -- 
-> https://chromeos.dev
-> 
-> 
+> 2.36.0.464.gb9c8b46e94-goog
+
+-- 
+
+- Arnaldo

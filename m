@@ -2,120 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2861451917A
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 00:34:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC94051917D
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 00:35:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243769AbiECWeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 18:34:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50952 "EHLO
+        id S243720AbiECWjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 18:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243721AbiECWdy (ORCPT
+        with ESMTP id S230073AbiECWjV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 18:33:54 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442D263F6
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 15:30:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651617020; x=1683153020;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=KRGplk1PXSs6YCwoA2AQza8ZMubL668imWRZfi8qVho=;
-  b=UIWrMQvxhi5QUAJrK85tejeWyz2TlVXmr6/nIC10pLGoGMSVw8FYIatL
-   es14Cx7FFJtMeDq0lUw1zHL1DanDwSCiB6Lj3aM/0RRYi5exb0YD7QvKX
-   xIp0deb3aE06NKPXJPeRNymsftTufSBitY9LEIPGNAhXW4dsh7avQLi34
-   s6H0rfjUOyc8EJS1KuavVpRbYCJuU6cHUTvS6deNr5QsPAo5mXmRKiNQ6
-   5029qVJB8MFPcQ2cQKS7vRai259rjBsGIP6yBAez6j0X4UAFQZCMvR8+z
-   7MWAD8PDvZVLmFky+ISjlshjG5dVuYPia7SVv8ibcXKwpy6zU4sLwVw6/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="267202029"
-X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="267202029"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 15:30:19 -0700
-X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="734120737"
-Received: from gxu1-mobl3.amr.corp.intel.com (HELO [10.212.251.19]) ([10.212.251.19])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 15:30:19 -0700
-Message-ID: <4497f49a-0581-822b-6b00-8ad2a6e108d2@linux.intel.com>
-Date:   Tue, 3 May 2022 15:30:19 -0700
+        Tue, 3 May 2022 18:39:21 -0400
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76EC427DB
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 15:35:46 -0700 (PDT)
+Received: by mail-vs1-xe2b.google.com with SMTP id c62so17844885vsc.10
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 15:35:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8uN3rj4E61pEiXuH0S044PiehAa3W3BMN3Lqc1kk7Uw=;
+        b=Ue8FeaYYp63Oq+H4NMZb+pBRhFnk/iofdWy5gXeIg5QTwAVaQhcPh7NJMycsbGfWZE
+         Fc+5btEiGJmM5fEXhaxOFjxGU7fzkiSoqnkUqFrl1ZRRzs4ig52ohWMhFGSgHhm+VyaG
+         TWPDOh3RfjJbT1pjROk+5GJXdEClUvyooIraMli+y9nHLH03LpgjlCrH+hdF8m40WCQE
+         E5GOMstVRJssp5a6VJFS+WxZDfGT+cOVRpciMnyrojahl/hfM9ETPdwkTCKcre9KwcNY
+         l73O7V2zpphu3uEFz9tC/hRsuke1nKrMRDzlaIhhkSYfm4lNq2qk0/FjvFICEl6nNSsW
+         YGgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8uN3rj4E61pEiXuH0S044PiehAa3W3BMN3Lqc1kk7Uw=;
+        b=3Jj9rV5i4CYm5M02p6Fr0MwrVwLpXunEQsN2mOMODcFN/+61CAo68Tp40Gu9b18kQ3
+         5Cu5RN/8AwcCP6BGPeS0JSyZkHMoWzqOI4n/jGTKRr2b+yd1Cy2pqZ9E2n4saNF1kNwb
+         JGFeri+4ugIvzhrwB9mAMuH4iYH/4dHGJAWhd/rjoZbmTP2tiJjPP77e7pTVeKjFdzrr
+         tGEsHmT1PR/f+plR3/gPLWSmjjfde+IyeRcKWl4Zm2CVN5Jkzq/HSAvk1n2tp60jhP+s
+         qpO/bwe0SlL+kRwhMw8rvwLYl2zmI24cO3dEBnsSu5vYpzOpwpGsLupypC3BF17vRU1q
+         oo2w==
+X-Gm-Message-State: AOAM5305haY2PYDDjeUmXohaouoeHbS+FayvKqJkYDITEoI0yLGuzXHn
+        ZcJoQDqj1kVwTvNxukTLTUdwn0hoLAUQ2+MEbWc9pQ==
+X-Google-Smtp-Source: ABdhPJyL+ddQCd6SprqNHsm9X7kOXr4Vs6rtLnwYWhuO4UVCOvXbzKSI2dWSxbo9OUaHxwRSd1gZJrBcmkLhnuY7a5Y=
+X-Received: by 2002:a67:c408:0:b0:32d:1319:2e38 with SMTP id
+ c8-20020a67c408000000b0032d13192e38mr6059296vsk.72.1651617345595; Tue, 03 May
+ 2022 15:35:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.7.0
-Subject: Re: [PATCH v5 3/3] x86/tdx: Add Quote generation support
-Content-Language: en-US
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Kai Huang <kai.huang@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-References: <20220501183500.2242828-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220501183500.2242828-4-sathyanarayanan.kuppuswamy@linux.intel.com>
- <243e918c523320ba3d216cbe22d24fe5ce33f370.camel@intel.com>
- <20220503012721.ok7fbvxmnvsr6qny@box.shutemov.name>
- <58d07b2d-cef5-17ed-9c57-e12fe5665e04@intel.com>
- <cc8d777a-3f09-f439-69ac-2d4d4cd5fca9@linux.intel.com>
-In-Reply-To: <cc8d777a-3f09-f439-69ac-2d4d4cd5fca9@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220429203644.2868448-1-samitolvanen@google.com>
+ <202204291545.47C6A97EA2@keescook> <Ymz7DWkRJy3PMaHm@hirez.programming.kicks-ass.net>
+ <CABCJKuckt75qA1op-LpkJnQsJC36m9fstbY3uD=7pET2VyyZSg@mail.gmail.com> <YnA3Le2uJRaFF4TC@hirez.programming.kicks-ass.net>
+In-Reply-To: <YnA3Le2uJRaFF4TC@hirez.programming.kicks-ass.net>
+From:   Peter Collingbourne <pcc@google.com>
+Date:   Tue, 3 May 2022 15:35:34 -0700
+Message-ID: <CAMn1gO614sMzKzP6qTCcXB0QCeEu-G7CHn_h=6ikCLkFo_Z2Dg@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/21] KCFI support
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Sami Tolvanen <samitolvanen@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>, X86 ML <x86@kernel.org>,
+        linux-hardening@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, May 2, 2022 at 1:02 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Mon, May 02, 2022 at 08:22:57AM -0700, Sami Tolvanen wrote:
+>
+> > > Anyway, I think I hate that __builtin, I'd *much* rather see a variable
+> > > attribute or qualifier for this, such that one can mark a function
+> > > pointer as not doing CFI.
+> > >
+> > > I simply doesn't make sense to have a builtin that operates on an
+> > > expression. The whole thing is about indirect calls, IOW function
+> > > pointers.
+> >
+> > I also thought an attribute would be more convenient, but the compiler
+> > folks prefer a built-in:
+> >
+> > https://reviews.llvm.org/D122673
+>
+> That seems to mostly worry about C++ things (overload sets, template
+> specialization, name mangling) we kernel folks don't seem to much care
+> about.
+>
+> I'll stick with saying type system makes more sense to me though.
 
+I'd say it's not only the C++ issues but more the "action at a
+distance" that's implied by having this be part of the type system.
+With this being in the function type it's hard to tell whether any
+particular call will have CFI disabled, without needing to go and look
+at how the function pointer is defined. On the other hand, if we
+explicitly mark up the calls with CFI disabled, the code becomes
+easier to audit (think Rust "unsafe" blocks).
 
-On 5/3/22 3:28 PM, Sathyanarayanan Kuppuswamy wrote:
-> 
-> 
-> On 5/3/22 3:24 PM, Dave Hansen wrote:
->> On 5/2/22 18:27, Kirill A. Shutemov wrote:
->>>> Again, Dave and Andi already commented you should use vmap() to 
->>>> avoid breaking
->>>> up the direct-mapping.  Please use vmap() instead.
->>>>
->>>> https://lore.kernel.org/all/ce0feeec-a949-35f8-3010-b0d69acbbc2e@linux.intel.com/ 
->>>>
->>>>
->>>> Will review the rest later.
->>> I would rather convert it to use DMA API for memory allocation. It will
->>> tap into swiotlb buffer that already converted and there's no need to
->>> touch direct mapping. Both allocation and freeing such memory is cheaper
->>> because of that.
->>
->> Sathya, I don't quite understand why you are so forcefully declining to
->> incorporate review feedback on this point.  I gave very specific
->> feedback about the kind of mapping you need and that you should avoid
->> fragmenting the direct map if at all possible.
->>
->> Why is this code still fragmenting the direct map?
-> 
-> I have already implemented it and testing it now.
+Does it seem any better to you to have this be marked up via the
+function expression, rather than the call? The idea is that this would
+always compile to a check-free function call, no matter what "func"
+is:
 
-I mean, I have already implemented the vmap based solution.
+__builtin_kcfi_call_unchecked(func)(args)
 
-> 
-> In this discussion, we are comparing the use of DMA API for memory
-> allocation vs vmap/sharing it in driver itself.
-> 
+We already have this, to some degree, with KCFI as implemented: CFI
+checks are disabled if the function expression refers to a declared
+function. The builtin would allow overriding the decision to also
+disable CFI checks for function expressions that use the builtin. It
+also wouldn't preclude a type based system later on (the builtin would
+become effectively a cast to the "unchecked" type).
 
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+Peter

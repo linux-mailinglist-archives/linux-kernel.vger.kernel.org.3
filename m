@@ -2,144 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38063518C9B
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 20:49:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 329CC518CA0
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 20:52:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241662AbiECSxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 14:53:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41072 "EHLO
+        id S239858AbiECSzv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 3 May 2022 14:55:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241673AbiECSxF (ORCPT
+        with ESMTP id S238360AbiECSzt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 14:53:05 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D79F3F8BD
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 11:49:24 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2f7d19cac0bso189688127b3.13
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 11:49:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=2RVFHg4J+XiYNHLd6mO9jBpgTMA8wJDRHLKt8HLDZag=;
-        b=D8eHTcfTZf0aangD3/F507rAzlAJhrb5z3tZDy1kbX20PciK6IfBwz/4PNfuleSx0Q
-         Q0xU7/YQtPzsLyeLgw1EAa1R8W73BCJmdkq5MMpFtJNdr6ZvwYyxjYSWDH3eTqNsXRMB
-         tbCxbVWfMhpiKcj3/ASXTdhk5YNGZjKX6kOl5X4ZHYOs4V0Fa+ZbhGRjXdYgY/Erom7f
-         kmCXngcb/dxpkWWMSzCaE7lFNfN+fVCBzvJ/rNdquW8eZvEpSpOqjnzlsDZ+HgIWJEnj
-         vduTalPXsNoQB+nme19yLfsZu0p6LTEluDGahZfkayRKYiJqoVrjAQpWzOGig+3e8eto
-         7PAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=2RVFHg4J+XiYNHLd6mO9jBpgTMA8wJDRHLKt8HLDZag=;
-        b=df3zoPwpnZzZdIRPmf58UanGEqGaN0WjHGKr6mURtYmvFlBLiR+iumeziyek/+86lT
-         CWHu/BFfjsMGsH9Ml9hLf8189gU8q/g1RxFJxuraFA/OkKl5MkPw09FAjacyTc7rlueQ
-         l4LMNpLsBXkaPQl1eGFzLeTyDgp+vgYu57id7yzPAe5Ak1IJKudXMdp0GXfnzNnqAojP
-         OfuX1iKWvYTkuvT+Hh5/fOV5Q+UZvTwQUH1rYN6ugBNXseJtcZVm9QczCbdEByzuFoKP
-         m4crIT0tPz9GY1K2DGvJcgQMEPyq2WTu5WnpjEZlvuKYTnZXKNkpDeLOri3rPCtCelLM
-         6BQA==
-X-Gm-Message-State: AOAM533x48d6QgjOkOYIYxNRRL+UpGmQnKfy/vjSiKUHNlXkGxNkA4+/
-        tdn/l4tze5SvxzVhZH95uPOl+IpTXDv3TBamjHxqlQ==
-X-Google-Smtp-Source: ABdhPJwlC5LLT8qc2EBu/75ZFoBSCD2aheEv/0F0Bxd/JtnhVZiAZdUSCNlpn7PYi6ZP9gaCJKYUVW6yxjrPsLKdXKQ=
-X-Received: by 2002:a0d:dd90:0:b0:2f8:5459:486e with SMTP id
- g138-20020a0ddd90000000b002f85459486emr16835296ywe.427.1651603763187; Tue, 03
- May 2022 11:49:23 -0700 (PDT)
+        Tue, 3 May 2022 14:55:49 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A7F3E0E0;
+        Tue,  3 May 2022 11:52:16 -0700 (PDT)
+Received: from mail-wm1-f44.google.com ([209.85.128.44]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MfpjF-1oInGp2N1F-00gLLA; Tue, 03 May 2022 20:52:14 +0200
+Received: by mail-wm1-f44.google.com with SMTP id m2-20020a1ca302000000b003943bc63f98so1769167wme.4;
+        Tue, 03 May 2022 11:52:14 -0700 (PDT)
+X-Gm-Message-State: AOAM531mzLg7si5OAq0avNV7Ha2RpN2utcqpOAAJNsLPB1OYJjpgBt4d
+        vwYVHNzEcBtKbozSwA5OdlfT8VdifWlYpNA3a1I=
+X-Google-Smtp-Source: ABdhPJyFxZHeczulnRk5F/j/XWW7voWgdpSEJbZ4in7QcrhpmS9ObsygrzvxaEaLCYD+JtFscKTMOPnYlEX8WarqA8s=
+X-Received: by 2002:a05:600c:3798:b0:394:454a:df74 with SMTP id
+ o24-20020a05600c379800b00394454adf74mr4638390wmr.174.1651603934090; Tue, 03
+ May 2022 11:52:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220502233853.1233742-1-rananta@google.com> <878rri8r78.wl-maz@kernel.org>
-In-Reply-To: <878rri8r78.wl-maz@kernel.org>
-From:   Raghavendra Rao Ananta <rananta@google.com>
-Date:   Tue, 3 May 2022 11:49:13 -0700
-Message-ID: <CAJHc60xp=UQT_CX0zoiSjAmkS8JSe+NB5Gr+F5mmybjJAWkUtQ@mail.gmail.com>
-Subject: Re: [PATCH v7 0/9] KVM: arm64: Add support for hypercall services selection
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Andrew Jones <drjones@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20220502204050.88316-1-nick.hawkins@hpe.com> <20220502204050.88316-3-nick.hawkins@hpe.com>
+ <c0262cf4-dfeb-c9a9-bcb2-24af006e6d4d@roeck-us.net> <PH0PR84MB1718D28F1846F54DB5766E6D88C09@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+ <d88523a8-a240-915d-9ae7-54b2277e424a@roeck-us.net>
+In-Reply-To: <d88523a8-a240-915d-9ae7-54b2277e424a@roeck-us.net>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 3 May 2022 20:51:57 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3t7-ozDHu18vMKEWxfNS4yd_BNHUh7hQ24rfS20tssDg@mail.gmail.com>
+Message-ID: <CAK8P3a3t7-ozDHu18vMKEWxfNS4yd_BNHUh7hQ24rfS20tssDg@mail.gmail.com>
+Subject: Re: [PATCH v6 3/8] watchdog: hpe-wdt: Introduce HPE GXP Watchdog
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     "Hawkins, Nick" <nick.hawkins@hpe.com>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "joel@jms.id.au" <joel@jms.id.au>, "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:U4Q3GC1XA3xQUfqfYUAqUs40vRqbuQ4M4ZUBsrPkjaagSx/jyAQ
+ J3MK6Z/c6xsuExGG6rYPEuC1OzYjwVUoUZQEaw9v4RrefEuaS8OQQLA/B8um/lhv/pnbMOM
+ J3c8pUl3Ay7x5rELZK8VeIpt8D6IRWbipD/JSwl6QD/ySHMuIj4R0x4d+K1gULdGqENm4hj
+ 6K8U7fcnotJEkw/lX8GHg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:mXH/6uPB0SQ=:TQj7BbkSos/c8vFS/FfPZo
+ k2+zWJClfrIg25JFLA7FHiSiqLn/vqxyPkXofUHSbowXYlSkDMx9ez5HwQ1lhOo9KF0X2wmf2
+ Ts1ucpiGFj628/af05DUOKG1wey72uJrnqyZMSnl9AHOqyRY8cl0qfPMN19hRZJv18RAzK/QV
+ p5XQw4sxtkLUOwylzZvXfJiF0PGvQIz0x5/ghdKNPY8EPp8JTWbvhEIDTAPKdOq6b9QKyYWFP
+ M8wTaFMtuLGRALxUcL8Rk4vlZj3faYwoo8XE0/CbdyHpnfIN+Kg4mEIUhewGUOcWwGPUfXsIm
+ s7uQaqNBAplOd64gUgz7nyz0IoDO7WrcbWh+PbHtc6e7znl4BG3YBo500nUdme+HGVbG6w75A
+ MJq9aHg1OHYKEQ89szzkZUDVcIvYiBt9PcFoYQszyxYlA7vgIi1cH2CQbfuGnwhvj5BaTfLc0
+ 8lK6mgvjR/UmHvoP+ddbCDT0Ti3e0ZY/T7ViYZFTyR1+dtjNUEMXAreQzoUE25vXmZ/6nCSkP
+ OGAT0Oa93kTKu7ejJzQUI0gxKnrNl5o2ZELpqajGRNXekasaxALrcPcGWsqGtrKblxM4/Jf1b
+ AQtyVjo1bhjQBT0fNbTz5D9/78LZuXjH3Tn7bw31aycmxH3dd4SoT1RDAGJFeuos6LUQ4iIlo
+ 1QQmJTpGFhscOgDAC2oNkeeCrPS95o78N92b0Jq3453My/fxY9OfpsPVdzbKPkr6A8/ga1ROf
+ v7l8cm4u+o3HUAhfloMuNi49t4sTsyzLp1B72yrEh7/YJD3LrPZWkolHsFVHe13wbS2NVLinV
+ +DrM9bL7hOs9YgGhEj2oPCk0whFqPewVYqkBBddeKBL3artB4Q=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
+On Tue, May 3, 2022 at 6:53 PM Guenter Roeck <linux@roeck-us.net> wrote:
 
-On Tue, May 3, 2022 at 10:24 AM Marc Zyngier <maz@kernel.org> wrote:
->
-> On Tue, 03 May 2022 00:38:44 +0100,
-> Raghavendra Rao Ananta <rananta@google.com> wrote:
+> > Just to clarify for my understanding are you asking that in the device structure I use the "void *platform_data" to pass "struct *resource"? If I am incorrect here can you elaborate on what you would like to be done? Based on feedback in review for the device tree; the watchdog is being created as a child to the timer. Therefore the conclusion reached was there should not be a gxp-wdt listed in the device tree files. I took this implementation based on what I found in ixp4xx_wdt.c.
 > >
-> > Hello,
-> >
-> > Continuing the discussion from [1], the series tries to add support
-> > for the userspace to elect the hypercall services that it wishes
-> > to expose to the guest, rather than the guest discovering them
-> > unconditionally. The idea employed by the series was taken from
-> > [1] as suggested by Marc Z.
 >
-> As it took some time to get there, and that there was still a bunch of
-> things to address, I've taken the liberty to apply my own fixes to the
-> series.
+> One bad deed tends to multiply.
 >
-> Please have a look at [1], and let me know if you're OK with the
-> result. If you are, I'll merge the series for 5.19.
->
-> Thanks,
->
->         M.
->
-Thank you for speeding up the process; appreciate it. However, the
-series's selftest patches have a dependency on Oliver's
-PSCI_SYSTEM_SUSPEND's selftest patches [1][2]. Can we pull them in
-too?
+> No, I didn't ask to pass a struct resource as platform data.
+> That would be no different to the current code. Resources
+> can be added to a platform device using
+> platform_device_add_resources(), and the platform driver
+> can then use platform_get_resource() to use it. This
+> would make it independent of a "private" mechanism.
 
-aarch64/hypercalls.c: In function =E2=80=98guest_test_hvc=E2=80=99:
-aarch64/hypercalls.c:95:30: error: storage size of =E2=80=98res=E2=80=99 is=
-n=E2=80=99t known
-   95 |         struct arm_smccc_res res;
-      |                              ^~~
-aarch64/hypercalls.c:103:17: warning: implicit declaration of function
-=E2=80=98smccc_hvc=E2=80=99 [-Wimplicit-function-declaration]
-  103 |                 smccc_hvc(hc_info->func_id, hc_info->arg1, 0,
-0, 0, 0, 0, 0, &res);
-      |                 ^~~~~~~~~
+Unfortunately there is no resource type for __iomem tokens,
+only for physical addresses, so you'd end up having to do
+ioremap() of the same address twice to map it into both the
+timer and the watchdog driver . Not the end of the world
+of course, but that doesn't seem much better than abusing the
+device private data.
 
-Also, just a couple of readability nits in the fixed version:
-
-1. Patch-2/9, hypercall.c:kvm_hvc_call_default_allowed(), in the
-'default' case, do you think we should probably add a small comment
-that mentions we are checking for func_id in the PSCI range?
-2. Patch-2/9, arm_hypercall.h, clear all the macros in this patch
-itself instead of doing it in increments (unless there's some reason
-that I'm missing)?
-
-Regards,
-Raghavendra
-
-[1]: https://lore.kernel.org/all/20220409184549.1681189-10-oupton@google.co=
-m/
-[2]: https://lore.kernel.org/all/20220409184549.1681189-11-oupton@google.co=
-m/
-
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git=
-/log/?h=3Dkvm-arm64/hcall-selection
->
-> --
-> Without deviation from the norm, progress is not possible.
+       Arnd

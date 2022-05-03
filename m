@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A09B518261
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 12:31:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC258518268
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 12:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234173AbiECKeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 06:34:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51008 "EHLO
+        id S234199AbiECKh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 06:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232488AbiECKen (ORCPT
+        with ESMTP id S232986AbiECKhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 06:34:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1981FA67;
-        Tue,  3 May 2022 03:31:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6840FB81D6B;
-        Tue,  3 May 2022 10:31:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F31DC385A9;
-        Tue,  3 May 2022 10:31:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651573869;
-        bh=hdMtNCaYZb86oM3x0a1mVVawEaUeAE4STWQUnxJJi7c=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pyOU36JoQjIY3f3xcV03lOxBlmovJ70oM98C7WYLtygXDq8nSkLE9m8Qd1vnAT05u
-         FnbS2lrnrvrmoWjfW4TiY6oOT1S8yU7fMTzJen/TfnuVbYuFSSKQLWgY2Q5RNwLQp9
-         IrTSDPwn1pVX5LTYZiryHhDhXUwUsCMkMTYMsObJXnWV703f4h8QKe7zNbdpY9q1KW
-         EDq0pS8TMBX5CpQzIxL1kNTU9XFV3K22C8McPEnVMufYq94kPXxY5iU1n9rTuAcTnK
-         nZEHV4SN9CSag2DBiq68Yo3FGI+9WQeF91CvA521w9XXcfW4FP8usQu9WKJDw6aYBt
-         SXtVOKGmzU9Qw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=hot-poop.lan)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nlpoA-008cWg-Mt; Tue, 03 May 2022 11:31:06 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     kvmarm@lists.cs.columbia.edu, Oliver Upton <oupton@google.com>
-Cc:     suzuki.poulose@arm.com, ricarkol@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        james.morse@arm.com, reijiw@google.com, alexandru.elisei@arm.com
-Subject: Re: [PATCH v4 0/7] KVM: arm64: Limit feature register reads from AArch32
-Date:   Tue,  3 May 2022 11:31:02 +0100
-Message-Id: <165157375706.3129182.12268321822257676050.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220503060205.2823727-1-oupton@google.com>
-References: <20220503060205.2823727-1-oupton@google.com>
+        Tue, 3 May 2022 06:37:52 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DBC20F6D
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 03:34:19 -0700 (PDT)
+Received: from mail-yw1-f181.google.com ([209.85.128.181]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N3KDM-1nvQc403O6-010OMa for <linux-kernel@vger.kernel.org>; Tue, 03 May
+ 2022 12:34:18 +0200
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-2f7d19cac0bso174490657b3.13
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 03:34:17 -0700 (PDT)
+X-Gm-Message-State: AOAM530/H8duqrlsNjG2ggiQv49PuEvPiaPyouL5rCVB0JLFXGtDcBAf
+        kfwap7fDUtcS+pCUtH0Ptp5wdC2o+zM8L6Atvc4=
+X-Google-Smtp-Source: ABdhPJzUhd/SRVeuLHKrdLGjDxrwdOOO1gscgt/p427vKURvKahU6VmLi/hh2DlrSJ/efTw+kpU2KUf0BD/9dSUwBjk=
+X-Received: by 2002:a81:5594:0:b0:2f8:f39c:4cfc with SMTP id
+ j142-20020a815594000000b002f8f39c4cfcmr11730580ywb.495.1651574056880; Tue, 03
+ May 2022 03:34:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: kvmarm@lists.cs.columbia.edu, oupton@google.com, suzuki.poulose@arm.com, ricarkol@google.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, james.morse@arm.com, reijiw@google.com, alexandru.elisei@arm.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220502204050.88316-1-nick.hawkins@hpe.com> <20220502204050.88316-4-nick.hawkins@hpe.com>
+In-Reply-To: <20220502204050.88316-4-nick.hawkins@hpe.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 3 May 2022 12:34:00 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a19pe=ehX1CR9RQz6MH=4YmTN9s7aW5LGFOPypDYjckbg@mail.gmail.com>
+Message-ID: <CAK8P3a19pe=ehX1CR9RQz6MH=4YmTN9s7aW5LGFOPypDYjckbg@mail.gmail.com>
+Subject: Re: [PATCH v6 4/8] clocksource/drivers/timer-gxp: Add HPE GXP Timer
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
+Cc:     "Verdun, Jean-Marie" <verdun@hpe.com>, nick@hpe.com,
+        Joel Stanley <joel@jms.id.au>, Arnd Bergmann <arnd@arndb.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:QxOKCPXCF4ZeVm8KcSaZ0o3DY4KlpjC3PXU121O6TGMGC1e7iwD
+ HnUcUZSFpTKE2ycjw6ptLUA5C8meOfiGPZVPnnMhIO4Qr7b3GMpYa6aQZC/RebaabPGEx4j
+ NlKQbh8VZmmX/BSJKDcKOrq/ru55XVqtB2BCp9ommga21PGBk7MZxu3fHNHoNS1N8JULEt6
+ ztx+oCUMnM+6YuMKU4Sdg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:4sBHvXa30Wc=:uhDU3lOCbuXV5GL/KOWCJm
+ T00MPZYnCmmiUttgU2XdZ/CNXJSRdCMQacO7EVurdg++0vndMJnBwxrO/R0PjrpxPGXSqIKxB
+ oOuysm/Vz4Kboyg+xpXmfSQHrr/z9hyG7Oim8zqCT3qz0e7NBhQi3MQz5Zy6hxB6YQxw0Fffb
+ L++gq7ZdpTQ6B0qt1Wvr1kfs7KvDjyBdRWcTqYW6KBAcKqfQ74DTZBjQw2GtlotCvn/DpKt3q
+ +V9OnMPEqhXDPSkRtV6whOZvT5Bqu7vUqV46MiMeTjZ9hLbFtZjgt1m5RUtsJ+waO/MNmphbj
+ zJSF0rdtWADU+H4LgGHV4BR6IriAARFbkZXrZp6+MiAjKGHl28afly3Jhn67iQ5EhEsBuhCw+
+ xeiYMp/qMBZjcOG00b8E/7T5bYOrEMrG22q6J2ZxmNL2gwpVRatqNHP4rSH5ujA6Rmz5q+VHv
+ M0KfILhDyemygWRQO4Awj3togfse5lZZ69q+oMVLvGobJzWl1sGuSasC/7gGF1o9+5kYZqYPo
+ LWcxNHEDKomZo7FcLikaKx1+1PPjU51V/Va6jE0Qat5MA7rSAD69xvtwH8+2EmmgWXqwczjGd
+ fO91RniBps5iVqJCBhVLerxFTvIrnZQJFq5IyC1aa6URhOyIr+4ZyFtmM0osfHtyHL0dcIMwy
+ eX3D3v3L7ZMWOnIEspwo7+6GrH6tN7j6uo50xEIgtbvKt/tHgCRwZYYDcIcwkiV/Kc4Y=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,43 +67,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 3 May 2022 06:01:58 +0000, Oliver Upton wrote:
-> KVM/arm64 does not restrict the guest's view of the AArch32 feature
-> registers when read from AArch32. HCR_EL2.TID3 is cleared for AArch32
-> guests, meaning that register reads come straight from hardware. This is
-> problematic as KVM relies on read_sanitised_ftr_reg() to expose a set of
-> features consistent for a particular system.
-> 
-> Appropriate handlers must first be put in place for CP10 and CP15 ID
-> register accesses before setting TID3. Rather than exhaustively
-> enumerating each of the encodings for CP10 and CP15 registers, take the
-> lazy route and aim the register accesses at the AArch64 system register
-> table.
-> 
-> [...]
+On Mon, May 2, 2022 at 10:40 PM <nick.hawkins@hpe.com> wrote:
+>
+> +config GXP_TIMER
+> +       bool "GXP timer driver" if COMPILE_TEST
+> +       depends on ARCH_HPE
+> +       default y
 
-Applied to next, thanks!
+I don't think this does what you intended: with the COMPILE_TEST option,
+you make it possible to disable the driver when ARCH_HPE is set,
+but you don't allow enabling it on other platforms, which is actually the
+point of compile testing.
 
-Note that I have dropped the revert for now, as the original patch
-lives in a separate branch. I'll clean things up at -rc1.
+Maybe instead use
 
-[1/7] KVM: arm64: Return a bool from emulate_cp()
-      commit: 001bb819994cd1bd037b6aefdb233f1720ee2126
-[2/7] KVM: arm64: Don't write to Rt unless sys_reg emulation succeeds
-      commit: 28eda7b5e82489b9dcffc630af68c207552b4f4d
-[3/7] KVM: arm64: Wire up CP15 feature registers to their AArch64 equivalents
-      commit: e65197666773f39e4378161925e5a1c7771cff29
-[4/7] KVM: arm64: Plumb cp10 ID traps through the AArch64 sysreg handler
-      commit: 9369bc5c5e35985f38d04bd98c6d28a032e84b17
-[5/7] KVM: arm64: Start trapping ID registers for 32 bit guests
-      commit: fd1264c4ca610a99d52c35a37e5551eec442723d
-[6/7] KVM/arm64: Hide AArch32 PMU registers when not available
-      commit: a9e192cd4fc738469448803693c9dc730898b8f1
+config GXP_TIMER
+       bool "GXP timer driver" if COMPILE_TEST && !ARCH_HPE
+       default ARCH_HPE
 
-Cheers,
+Also change the prompt to be more specific and mention HPE,
+as the 'GXP timer' is not a particularly obvious name for random
+users.
 
-	M.
--- 
-Without deviation from the norm, progress is not possible.
+You probably also need
+
+        select TIMER_OF if OF
 
 
+> +/*
+> + * This probe gets called after the timer is already up and running. This will create
+> + * the watchdog device as a child since the registers are shared.
+> + */
+> +
+> +static int gxp_timer_probe(struct platform_device *pdev)
+> +{
+> +       struct platform_device *gxp_watchdog_device;
+> +       struct device *dev = &pdev->dev;
+> +
+> +       if (!gxp_timer) {
+> +               pr_err("Gxp Timer not initialized, cannot create watchdog");
+> +               return -ENOMEM;
+> +       }
+> +
+> +       gxp_watchdog_device = platform_device_alloc("gxp-wdt", -1);
+> +       if (!gxp_watchdog_device) {
+> +               pr_err("Timer failed to allocate gxp-wdt");
+> +               return -ENOMEM;
+> +       }
+> +
+> +       /* Pass the base address (counter) as platform data and nothing else */
+> +       gxp_watchdog_device->dev.platform_data = gxp_timer->counter;
+> +       gxp_watchdog_device->dev.parent = dev;
+> +
+> +       return platform_device_add(gxp_watchdog_device);
+> +}
+
+This looks good to me now.
+
+        Arnd

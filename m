@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92334517F68
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 10:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3BB6517F7C
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 10:09:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232636AbiECIJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 04:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45462 "EHLO
+        id S232754AbiECIM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 04:12:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232619AbiECIJr (ORCPT
+        with ESMTP id S232762AbiECIML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 04:09:47 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A4E20F5A;
-        Tue,  3 May 2022 01:06:15 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 1CFE9210E5;
-        Tue,  3 May 2022 08:06:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1651565174; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ECu5gs4Na4QCx3MdAZscC5hEAd3uD+930KihhgMqo+g=;
-        b=0t0WBLkRPpnbG5Rz/Q0xOIzDEvzKG6LcU1ZOE/l1sdQVgXdq9v/DmJpdnFNkepgTjiEARx
-        5ACVvNNwo5QYiItuZMVvSKtSLzhxRGEEwQ3bzXD0/KO7Y2C0SoBQuX3VM5wV50Tyqv+XbI
-        4wcEXjdg28GfPG51QWjlHxJbGT+/A7Q=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1651565174;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ECu5gs4Na4QCx3MdAZscC5hEAd3uD+930KihhgMqo+g=;
-        b=rKX81hd2r72cG0nw9Qh5hiQE9cvWFh2FyS1S/LKNd9V+r0msD1fuOmFfK7hHYRGGABSxz2
-        B4hWKKeRmGnmcPCg==
-Received: from localhost.localdomain (unknown [10.100.208.98])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id E67922C143;
-        Tue,  3 May 2022 08:06:13 +0000 (UTC)
-From:   Jiri Slaby <jslaby@suse.cz>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH 1/7] serial: pch: move size check from pop_tx one level up
-Date:   Tue,  3 May 2022 10:06:07 +0200
-Message-Id: <20220503080613.27601-2-jslaby@suse.cz>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220503080613.27601-1-jslaby@suse.cz>
-References: <20220503080613.27601-1-jslaby@suse.cz>
+        Tue, 3 May 2022 04:12:11 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74FEE22B2A
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 01:08:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651565316; x=1683101316;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=V5iy/pmbsgE83uxZtTIgP9o2pAS7H/HgWQCDUkuX3CM=;
+  b=MH0k5o7CqfcdKTy7ESiiWgLaF6YT8vOj6zZARRsXGe0yVmbxRXre/f6P
+   /Moa+74L4A/pC1tao1WySKcfG8osQGEPnMkt1QWdd60pOBY2TA0gMv8qJ
+   bWf3nBAlwVSzlHboK9aNDGXiaiLP7ChVuZmXxapcaGeyCC5VhMW7WnQQ0
+   V6II1GirKIreBmW16Wp+mIKK6rl77hDJpUgU5vSsx2Aill9mYoLx+JZCr
+   Ywcfm2bSpwgXJNtcmV9tQGhA4SamgQhj63az805BIC9z/gryPxVonSVo+
+   DRNaHjNfv6l57/E3OuX4DQN53s++EKET0H07W/lJqB7VxxqCtGCKlnpEa
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="267016994"
+X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
+   d="scan'208";a="267016994"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 01:08:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
+   d="scan'208";a="691623942"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 03 May 2022 01:08:30 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nlna7-000AGh-MX;
+        Tue, 03 May 2022 08:08:27 +0000
+Date:   Tue, 3 May 2022 16:07:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [frederic-dynticks:rcu/context-tracking-v2 13/21]
+ drivers/cpuidle/cpuidle-riscv-sbi.c:118:9: error: implicit declaration of
+ function 'rcu_irq_enter_irqson'; did you mean 'ct_irq_enter_irqson'?
+Message-ID: <202205031636.PVdam5cD-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,54 +63,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'count' is zero in the pop_tx()'s comparison against 'size'. So the 'if'
-tries to find out if 'size' is negative or zero and returns in that
-case. But it cannot be negative, due to previous (size < 0) check in the
-caller: handle_tx().
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git rcu/context-tracking-v2
+head:   2be9784d1c23f2654f1817ca18c5c07f6699a8fd
+commit: 4f3661b7f8682fbfc88ad23003e413062b5c4b5e [13/21] rcu/context-tracking: Remove rcu_irq_enter/exit()
+config: riscv-randconfig-r042-20220501 (https://download.01.org/0day-ci/archive/20220503/202205031636.PVdam5cD-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git/commit/?id=4f3661b7f8682fbfc88ad23003e413062b5c4b5e
+        git remote add frederic-dynticks https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
+        git fetch --no-tags frederic-dynticks rcu/context-tracking-v2
+        git checkout 4f3661b7f8682fbfc88ad23003e413062b5c4b5e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/
 
-So simply move this check from pop_tx() to handle_tx(). Now it's clear
-that pop_tx() is called only if fifo_size is non-zero.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
----
- drivers/tty/serial/pch_uart.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+All errors (new ones prefixed by >>):
 
-diff --git a/drivers/tty/serial/pch_uart.c b/drivers/tty/serial/pch_uart.c
-index affe71f8b50c..f872613a5e83 100644
---- a/drivers/tty/serial/pch_uart.c
-+++ b/drivers/tty/serial/pch_uart.c
-@@ -791,7 +791,7 @@ static int pop_tx(struct eg20t_port *priv, int size)
- 	struct uart_port *port = &priv->port;
- 	struct circ_buf *xmit = &port->state->xmit;
- 
--	if (uart_tx_stopped(port) || uart_circ_empty(xmit) || count >= size)
-+	if (uart_tx_stopped(port) || uart_circ_empty(xmit))
- 		goto pop_tx_end;
- 
- 	do {
-@@ -895,14 +895,16 @@ static unsigned int handle_tx(struct eg20t_port *priv)
- 		tx_empty = 0;
- 		fifo_size--;
- 	}
-+
- 	size = min(xmit->head - xmit->tail, fifo_size);
- 	if (size < 0)
- 		size = fifo_size;
--
--	tx_size = pop_tx(priv, size);
--	if (tx_size > 0) {
--		port->icount.tx += tx_size;
--		tx_empty = 0;
-+	if (size) {
-+		tx_size = pop_tx(priv, size);
-+		if (tx_size > 0) {
-+			port->icount.tx += tx_size;
-+			tx_empty = 0;
-+		}
- 	}
- 
- 	priv->tx_empty = tx_empty;
+   drivers/cpuidle/cpuidle-riscv-sbi.c: In function '__sbi_enter_domain_idle_state':
+>> drivers/cpuidle/cpuidle-riscv-sbi.c:118:9: error: implicit declaration of function 'rcu_irq_enter_irqson'; did you mean 'ct_irq_enter_irqson'? [-Werror=implicit-function-declaration]
+     118 |         rcu_irq_enter_irqson();
+         |         ^~~~~~~~~~~~~~~~~~~~
+         |         ct_irq_enter_irqson
+>> drivers/cpuidle/cpuidle-riscv-sbi.c:123:9: error: implicit declaration of function 'rcu_irq_exit_irqson'; did you mean 'ct_irq_exit_irqson'? [-Werror=implicit-function-declaration]
+     123 |         rcu_irq_exit_irqson();
+         |         ^~~~~~~~~~~~~~~~~~~
+         |         ct_irq_exit_irqson
+   In file included from include/asm-generic/bug.h:22,
+                    from arch/riscv/include/asm/bug.h:83,
+                    from include/linux/bug.h:5,
+                    from include/linux/mmdebug.h:5,
+                    from include/linux/percpu.h:5,
+                    from include/linux/cpuidle.h:14,
+                    from drivers/cpuidle/cpuidle-riscv-sbi.c:11:
+   drivers/cpuidle/cpuidle-riscv-sbi.c: In function 'sbi_cpuidle_init_cpu':
+   drivers/cpuidle/cpuidle-riscv-sbi.c:350:26: error: implicit declaration of function 'cpuid_to_hartid_map' [-Werror=implicit-function-declaration]
+     350 |                          cpuid_to_hartid_map(cpu));
+         |                          ^~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:418:33: note: in definition of macro 'printk_index_wrap'
+     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                                 ^~~~~~~~~~~
+   include/linux/printk.h:132:17: note: in expansion of macro 'printk'
+     132 |                 printk(fmt, ##__VA_ARGS__);             \
+         |                 ^~~~~~
+   include/linux/printk.h:576:9: note: in expansion of macro 'no_printk'
+     576 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+         |         ^~~~~~~~~
+   drivers/cpuidle/cpuidle-riscv-sbi.c:349:17: note: in expansion of macro 'pr_debug'
+     349 |                 pr_debug("HART%ld: failed to parse DT idle states\n",
+         |                 ^~~~~~~~
+   include/linux/kern_levels.h:5:25: warning: format '%ld' expects argument of type 'long int', but argument 2 has type 'int' [-Wformat=]
+       5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
+         |                         ^~~~~~
+   include/linux/printk.h:418:25: note: in definition of macro 'printk_index_wrap'
+     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ^~~~
+   include/linux/printk.h:132:17: note: in expansion of macro 'printk'
+     132 |                 printk(fmt, ##__VA_ARGS__);             \
+         |                 ^~~~~~
+   include/linux/printk.h:576:9: note: in expansion of macro 'no_printk'
+     576 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+         |         ^~~~~~~~~
+   include/linux/kern_levels.h:15:25: note: in expansion of macro 'KERN_SOH'
+      15 | #define KERN_DEBUG      KERN_SOH "7"    /* debug-level messages */
+         |                         ^~~~~~~~
+   include/linux/printk.h:576:19: note: in expansion of macro 'KERN_DEBUG'
+     576 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+         |                   ^~~~~~~~~~
+   drivers/cpuidle/cpuidle-riscv-sbi.c:349:17: note: in expansion of macro 'pr_debug'
+     349 |                 pr_debug("HART%ld: failed to parse DT idle states\n",
+         |                 ^~~~~~~~
+   include/linux/kern_levels.h:5:25: warning: format '%ld' expects argument of type 'long int', but argument 2 has type 'int' [-Wformat=]
+       5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
+         |                         ^~~~~~
+   include/linux/printk.h:418:25: note: in definition of macro 'printk_index_wrap'
+     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ^~~~
+   include/linux/printk.h:489:9: note: in expansion of macro 'printk'
+     489 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+         |         ^~~~~~
+   include/linux/kern_levels.h:11:25: note: in expansion of macro 'KERN_SOH'
+      11 | #define KERN_ERR        KERN_SOH "3"    /* error conditions */
+         |                         ^~~~~~~~
+   include/linux/printk.h:489:16: note: in expansion of macro 'KERN_ERR'
+     489 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+         |                ^~~~~~~~
+   drivers/cpuidle/cpuidle-riscv-sbi.c:358:17: note: in expansion of macro 'pr_err'
+     358 |                 pr_err("HART%ld: failed to init idle states\n",
+         |                 ^~~~~~
+   drivers/cpuidle/cpuidle-riscv-sbi.c: In function 'sbi_cpuidle_probe':
+   include/linux/kern_levels.h:5:25: warning: format '%ld' expects argument of type 'long int', but argument 2 has type 'int' [-Wformat=]
+       5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
+         |                         ^~~~~~
+   include/linux/printk.h:418:25: note: in definition of macro 'printk_index_wrap'
+     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ^~~~
+   include/linux/printk.h:132:17: note: in expansion of macro 'printk'
+     132 |                 printk(fmt, ##__VA_ARGS__);             \
+         |                 ^~~~~~
+   include/linux/printk.h:576:9: note: in expansion of macro 'no_printk'
+     576 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+         |         ^~~~~~~~~
+   include/linux/kern_levels.h:15:25: note: in expansion of macro 'KERN_SOH'
+      15 | #define KERN_DEBUG      KERN_SOH "7"    /* debug-level messages */
+         |                         ^~~~~~~~
+   include/linux/printk.h:576:19: note: in expansion of macro 'KERN_DEBUG'
+     576 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+         |                   ^~~~~~~~~~
+   drivers/cpuidle/cpuidle-riscv-sbi.c:566:25: note: in expansion of macro 'pr_debug'
+     566 |                         pr_debug("HART%ld: idle driver init failed\n",
+         |                         ^~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +118 drivers/cpuidle/cpuidle-riscv-sbi.c
+
+6abf32f1d9c5009 Anup Patel 2022-02-10  102  
+6abf32f1d9c5009 Anup Patel 2022-02-10  103  static int __sbi_enter_domain_idle_state(struct cpuidle_device *dev,
+6abf32f1d9c5009 Anup Patel 2022-02-10  104  					  struct cpuidle_driver *drv, int idx,
+6abf32f1d9c5009 Anup Patel 2022-02-10  105  					  bool s2idle)
+6abf32f1d9c5009 Anup Patel 2022-02-10  106  {
+6abf32f1d9c5009 Anup Patel 2022-02-10  107  	struct sbi_cpuidle_data *data = this_cpu_ptr(&sbi_cpuidle_data);
+6abf32f1d9c5009 Anup Patel 2022-02-10  108  	u32 *states = data->states;
+6abf32f1d9c5009 Anup Patel 2022-02-10  109  	struct device *pd_dev = data->dev;
+6abf32f1d9c5009 Anup Patel 2022-02-10  110  	u32 state;
+6abf32f1d9c5009 Anup Patel 2022-02-10  111  	int ret;
+6abf32f1d9c5009 Anup Patel 2022-02-10  112  
+6abf32f1d9c5009 Anup Patel 2022-02-10  113  	ret = cpu_pm_enter();
+6abf32f1d9c5009 Anup Patel 2022-02-10  114  	if (ret)
+6abf32f1d9c5009 Anup Patel 2022-02-10  115  		return -1;
+6abf32f1d9c5009 Anup Patel 2022-02-10  116  
+6abf32f1d9c5009 Anup Patel 2022-02-10  117  	/* Do runtime PM to manage a hierarchical CPU toplogy. */
+6abf32f1d9c5009 Anup Patel 2022-02-10 @118  	rcu_irq_enter_irqson();
+6abf32f1d9c5009 Anup Patel 2022-02-10  119  	if (s2idle)
+6abf32f1d9c5009 Anup Patel 2022-02-10  120  		dev_pm_genpd_suspend(pd_dev);
+6abf32f1d9c5009 Anup Patel 2022-02-10  121  	else
+6abf32f1d9c5009 Anup Patel 2022-02-10  122  		pm_runtime_put_sync_suspend(pd_dev);
+6abf32f1d9c5009 Anup Patel 2022-02-10 @123  	rcu_irq_exit_irqson();
+6abf32f1d9c5009 Anup Patel 2022-02-10  124  
+6abf32f1d9c5009 Anup Patel 2022-02-10  125  	if (sbi_is_domain_state_available())
+6abf32f1d9c5009 Anup Patel 2022-02-10  126  		state = sbi_get_domain_state();
+6abf32f1d9c5009 Anup Patel 2022-02-10  127  	else
+6abf32f1d9c5009 Anup Patel 2022-02-10  128  		state = states[idx];
+6abf32f1d9c5009 Anup Patel 2022-02-10  129  
+6abf32f1d9c5009 Anup Patel 2022-02-10  130  	ret = sbi_suspend(state) ? -1 : idx;
+6abf32f1d9c5009 Anup Patel 2022-02-10  131  
+6abf32f1d9c5009 Anup Patel 2022-02-10  132  	rcu_irq_enter_irqson();
+6abf32f1d9c5009 Anup Patel 2022-02-10  133  	if (s2idle)
+6abf32f1d9c5009 Anup Patel 2022-02-10  134  		dev_pm_genpd_resume(pd_dev);
+6abf32f1d9c5009 Anup Patel 2022-02-10  135  	else
+6abf32f1d9c5009 Anup Patel 2022-02-10  136  		pm_runtime_get_sync(pd_dev);
+6abf32f1d9c5009 Anup Patel 2022-02-10  137  	rcu_irq_exit_irqson();
+6abf32f1d9c5009 Anup Patel 2022-02-10  138  
+6abf32f1d9c5009 Anup Patel 2022-02-10  139  	cpu_pm_exit();
+6abf32f1d9c5009 Anup Patel 2022-02-10  140  
+6abf32f1d9c5009 Anup Patel 2022-02-10  141  	/* Clear the domain state to start fresh when back from idle. */
+6abf32f1d9c5009 Anup Patel 2022-02-10  142  	sbi_clear_domain_state();
+6abf32f1d9c5009 Anup Patel 2022-02-10  143  	return ret;
+6abf32f1d9c5009 Anup Patel 2022-02-10  144  }
+6abf32f1d9c5009 Anup Patel 2022-02-10  145  
+
+:::::: The code at line 118 was first introduced by commit
+:::::: 6abf32f1d9c5009dcccded2c1e7ca899a4ab587b cpuidle: Add RISC-V SBI CPU idle driver
+
+:::::: TO: Anup Patel <anup.patel@wdc.com>
+:::::: CC: Palmer Dabbelt <palmer@rivosinc.com>
+
 -- 
-2.36.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

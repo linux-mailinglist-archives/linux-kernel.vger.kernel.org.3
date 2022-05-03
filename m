@@ -2,80 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD21351871F
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D760518725
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:47:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237379AbiECOtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 10:49:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43722 "EHLO
+        id S237359AbiECOuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 10:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237453AbiECOtF (ORCPT
+        with ESMTP id S229655AbiECOuc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 10:49:05 -0400
+        Tue, 3 May 2022 10:50:32 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF9A438A0
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 07:45:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4949835A9B
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 07:46:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651589131;
+        s=mimecast20190719; t=1651589217;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=p/leNrelgl/HZAWXeORX5HQyPeyTuqazjrfynX0fQ1U=;
-        b=BKLBUbOe+a9wDr2CpAFAZjHUrT6UFe2KdO7zoY98sZwJ/PEWUDVLG+lM90YNQvaBHZMeEo
-        0I9MwxHC/phAVHhSvdxWH6ULgpi3eC2qAmGBbepJ0NNiAyY6MfqF0/DqLBvvZDr+gJuHs1
-        XHDe+z4uu1rItxWT+yarwmUHEGclEvE=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding;
+        bh=83wy3D5dt5Ummd3Bx/sB0t7+Cs+0z1iy7in3UM+60Qw=;
+        b=LSD4YEz5FYf16kJAPdJ19vXP+nfSHMDV5360DBImXCSCRj50tpGKnQLr061vFBHju3rKOy
+        Jb6ng1ZJXlNZSaAqDTHmOqBbP09ciaPRb5AIuSNG5sNdhGbyqnFEClSa7FmoPDQn5IKee5
+        eQ+UOGAmxA6cUfoulQFiYVch9PGoq0U=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-81-Xwj7ytWcNCC4FPnmVt0q7Q-1; Tue, 03 May 2022 10:45:16 -0400
-X-MC-Unique: Xwj7ytWcNCC4FPnmVt0q7Q-1
-Received: by mail-wm1-f71.google.com with SMTP id t184-20020a1c46c1000000b00394209f54f1so3564105wma.4
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 07:45:14 -0700 (PDT)
+ us-mta-299-jgjTXxaaPv6ib_ZxI4jnfg-1; Tue, 03 May 2022 10:46:06 -0400
+X-MC-Unique: jgjTXxaaPv6ib_ZxI4jnfg-1
+Received: by mail-wm1-f72.google.com with SMTP id q6-20020a1cf306000000b0038c5726365aso850065wmq.3
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 07:46:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=p/leNrelgl/HZAWXeORX5HQyPeyTuqazjrfynX0fQ1U=;
-        b=L4B7zlIVidoM/KNvtCs1sss4+1u/i4Bg9uBfCxFq3BPLXazmiZdCfVBFeRHW1bks+q
-         jwcPr6dKLFjPllLaKbj0C2U2KlP9HjIZ4KtxsoXwU8d5KbeDhP8NqOPyUgChr5msOsUk
-         ilsZxC55tCIxzqF4I8t8E0MIRE+4Zn+SjF9knFfm5UIBBac4xB5VJeu7bZESBysTBSKt
-         YwSSpaAt66yqEeYG5LKbHM5onwl19x9vDBPNO4LOptN/JPUWSRsuuqyFWfOKsEhLeW8g
-         ndOkFQClarTuKBO8k7brJ7MHbyfpwLcEfTXCHkdtt30VLknTRx2Cc6nGctg4Sz6pYT9R
-         g9bg==
-X-Gm-Message-State: AOAM533cqTXgVsB/g+yMx47ylS1WEQyXHDoedArT3GBGqImq25JYaSSi
-        I/4QRGiRK+c9bmFCJbyUEWy1NEtfrewLpVMOXorTm44G4DYjZumU6wYlwxBWi/rQIc5/yMt6DvN
-        oEEgjDR71rmiIyCnQX0bBpAt7
-X-Received: by 2002:a5d:598e:0:b0:20c:57ef:6083 with SMTP id n14-20020a5d598e000000b0020c57ef6083mr10651669wri.457.1651578178805;
-        Tue, 03 May 2022 04:42:58 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyFCTj/hW6a3/q2+UxX6KyNmoEgzZ1BzSWF1KPdBOLjK9gFp9tyUKQVn/9tXOms/YvMyC236A==
-X-Received: by 2002:a5d:598e:0:b0:20c:57ef:6083 with SMTP id n14-20020a5d598e000000b0020c57ef6083mr10651656wri.457.1651578178588;
-        Tue, 03 May 2022 04:42:58 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-115-66.dyn.eolo.it. [146.241.115.66])
-        by smtp.gmail.com with ESMTPSA id e11-20020a05600c4e4b00b003942a244f36sm1554831wmq.15.2022.05.03.04.42.57
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=83wy3D5dt5Ummd3Bx/sB0t7+Cs+0z1iy7in3UM+60Qw=;
+        b=ouu6jKU67XfdGgCkLYApUmw5D6nmGphRVfbkXU8qkuZBx9T3duXeP++MH62bKVL15g
+         llW1cai/tHRw7npjX7mMGCBQBT+OMOqgNizNgYxLIYusquTA5KlRIc8H+NF+FNvzY819
+         u90M9jYj9L9ne65ZlUufP8ISW+9lmkUI6wKU4vlqfgOAMDSr5RjSSXNVPiJ5OpxhUnC4
+         ox99Vre68DgzMD9fqUtZ9lzAnyzfvIexMpVxHPYlj6a2SKBoielyKdUhrLc833l2FFbv
+         qH2vqrd/COnGtTLDFbC2Bkuu1S77ugfZmVGyIR13CPNeN3uH0oCTgcLGS3OYUkr9FyK6
+         8oeQ==
+X-Gm-Message-State: AOAM532iJrH81CkKHTsl9gOYfhnEUDTabe5JG8UQdzlLsDFk8uP97PKb
+        dIUILod+1KkRQQol4v6z05f9qeB9ddv4WkqEXxrgQrdM6A9VcZFTokHjCEgXy6ZVsuF5zt6e+gt
+        Fs/VkTLciAn5qwWkrNxw72cPR
+X-Received: by 2002:a17:907:1623:b0:6e8:8678:640d with SMTP id hb35-20020a170907162300b006e88678640dmr15141677ejc.189.1651578613924;
+        Tue, 03 May 2022 04:50:13 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwgDSCmimGS4eep27PTOqrwdW6NzkICeJYxvlFa/x2oEMAH8qT4xJYqw/QzH9kG9LMxlrJyzA==
+X-Received: by 2002:a17:907:1623:b0:6e8:8678:640d with SMTP id hb35-20020a170907162300b006e88678640dmr15141658ejc.189.1651578613740;
+        Tue, 03 May 2022 04:50:13 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:8308:b106:e300:32b0:6ebb:8ca4:d4d3])
+        by smtp.gmail.com with ESMTPSA id m21-20020aa7c2d5000000b0042617ba6395sm7740445edp.31.2022.05.03.04.50.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 04:42:58 -0700 (PDT)
-Message-ID: <f277699b10b28b0553c8bbfc296e14096b9f402a.camel@redhat.com>
-Subject: Re: [PATCH] net/macsec copy salt to MACSec ctx for XPN
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Carlos Fernansez <carlos.escuin@gmail.com>
-Cc:     carlos.fernandez@technica-enineering.de,
-        Carlos Fernandez <carlos.fernandez@technica-engineering.de>,
+        Tue, 03 May 2022 04:50:12 -0700 (PDT)
+From:   Ondrej Mosnacek <omosnace@redhat.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 03 May 2022 13:42:56 +0200
-In-Reply-To: <20220502121837.22794-1-carlos.escuin@gmail.com>
-References: <XPN copy to MACSec context>
-         <20220502121837.22794-1-carlos.escuin@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Brian Masney <bmasney@redhat.com>,
+        linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH] crypto: qcom-rng - fix infinite loop on requests not multiple of WORD_SZ
+Date:   Tue,  3 May 2022 13:50:10 +0200
+Message-Id: <20220503115010.1750296-1-omosnace@redhat.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,24 +79,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The commit referenced in the Fixes tag removed the 'break' from the else
+branch in qcom_rng_read(), causing an infinite loop whenever 'max' is
+not a multiple of WORD_SZ. This can be reproduced e.g. by running:
 
-On Mon, 2022-05-02 at 14:18 +0200, Carlos Fernansez wrote:
-> From: Carlos Fernandez <carlos.fernandez@technica-engineering.de>
-> 
-> Salt and KeyId copied to offloading context.
-> 
-> If not, offloaded phys cannot work with XPN
-> 
-> Signed-off-by: Carlos Fernandez <carlos.fernandez@technica-engineering.de>
+    kcapi-rng -b 67 >/dev/null
 
-This looks like a bugfix, could you please provide a relevant 'Fixes'
-tag? (in a v2).
+There are many ways to fix this without adding back the 'break', but
+they all seem more awkward than simply adding it back, so do just that.
 
-Additionally could you please expand the commit message a bit?
+Tested on a machine with Qualcomm Amberwing processor.
 
-Thanks!
+Fixes: a680b1832ced ("crypto: qcom-rng - ensure buffer for generate is completely filled")
+Cc: stable@vger.kernel.org
+Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
+---
+ drivers/crypto/qcom-rng.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Paolo
-
+diff --git a/drivers/crypto/qcom-rng.c b/drivers/crypto/qcom-rng.c
+index 11f30fd48c141..031b5f701a0a3 100644
+--- a/drivers/crypto/qcom-rng.c
++++ b/drivers/crypto/qcom-rng.c
+@@ -65,6 +65,7 @@ static int qcom_rng_read(struct qcom_rng *rng, u8 *data, unsigned int max)
+ 		} else {
+ 			/* copy only remaining bytes */
+ 			memcpy(data, &val, max - currsize);
++			break;
+ 		}
+ 	} while (currsize < max);
+ 
+-- 
+2.35.1
 

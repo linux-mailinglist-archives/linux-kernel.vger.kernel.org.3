@@ -2,63 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C889518920
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:53:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E49FC518927
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238911AbiECP4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 11:56:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40468 "EHLO
+        id S239002AbiECP5M convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 3 May 2022 11:57:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234395AbiECP4e (ORCPT
+        with ESMTP id S238925AbiECP5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 11:56:34 -0400
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADD63B283;
-        Tue,  3 May 2022 08:53:01 -0700 (PDT)
-Received: by mail-ot1-f41.google.com with SMTP id g11-20020a9d648b000000b00605e4278793so10945295otl.7;
-        Tue, 03 May 2022 08:53:01 -0700 (PDT)
+        Tue, 3 May 2022 11:57:09 -0400
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 715553B56C;
+        Tue,  3 May 2022 08:53:36 -0700 (PDT)
+Received: by mail-qv1-f42.google.com with SMTP id ke5so12466255qvb.5;
+        Tue, 03 May 2022 08:53:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=O/VorzOR56WTDjehRhSMK8LAzwC+xTJ10pdPBqWQa/w=;
-        b=JZyHccr1b8zVoj8k8ZWNVOsTF+2phSSt2BweSTj0RWC7GPaVX7PtrzE7Py9xbuPJjN
-         OncER3USBLVb9KFtXFk5vDVqx8Gs5VPjdCHkyCRCSMu1/1B4iaXLDsL7NVUR/TwkyD+g
-         lDF6KMV4NDZQLQHdIg3xfCtKqsKgMadaAgVXTwY1clegkrFs5CD0gygp01NDTS1AWSYs
-         UQir/yoRYHvW7UKR9CH1tCHbEekLrPrf9pkH0CWEwCvtEUQHmDEqqbkgN9C3a9UVltnL
-         VOBUpt8BZVm9LKmm+iHdncLQ+/rejpzWj++vmmTQa9h+Bvyu0M27Uwbs4Iad14Y7hUAl
-         QXrw==
-X-Gm-Message-State: AOAM532GPNyU4qC59fMDNGZ9kahhhHd1tJ9PECKy+a+023lQM0FkOXFk
-        jdDtVO6j4lsX9X8UofaXxQ==
-X-Google-Smtp-Source: ABdhPJw1G98NTO6a1c3CpiXHWrP6FSOoG8WJv5RMlXbGCgu1vAO2Tm+NHbG7kF7E7UVgPTuww9cgbQ==
-X-Received: by 2002:a9d:7e87:0:b0:605:fa3c:95ba with SMTP id m7-20020a9d7e87000000b00605fa3c95bamr6021382otp.66.1651593180862;
-        Tue, 03 May 2022 08:53:00 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g14-20020a05683030ae00b0060603221239sm4038007ots.9.2022.05.03.08.53.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 08:53:00 -0700 (PDT)
-Received: (nullmailer pid 3768349 invoked by uid 1000);
-        Tue, 03 May 2022 15:52:59 -0000
-Date:   Tue, 3 May 2022 10:52:59 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Robert Marko <robimarko@gmail.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, amitk@kernel.org,
-        rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] dt-bindings: thermal: tsens: Add ipq8074
- compatible
-Message-ID: <YnFP2x113LdM5p3Q@robh.at.kernel.org>
-References: <20220501182200.47328-1-robimarko@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=xvR8faQDJaeveOR0Qcn9d2ECF2rJcFcyUs3ADmoPK9I=;
+        b=56vogaJcR0Wkt8tOvJtqtL7jNep1Xf2b8nHgyRXDMYi9MeCBxJFSa6a3kFmZ/scm2T
+         mr9+9T7O5QmRvP6H1XZPSXk16ZHQDD65KOnOQtgDy1l8oZE3/OtpDrNAEeUq5ixvI3fb
+         hVTYKdSit3J6cCm4/gZCCAWOej60Vq7lRMo4sqd1DSHDffU6pte7aMK6KJ2VlwR/4t+f
+         /rta7aa4Y1Y0oGiwwiJLf+YTySHgvvX6+f1wFgRxfE2i+53uFlDbGnvDZR7lSviwY3vN
+         obeB6n5MJt8JRhkuiIt5Ze9rvWpbx5e9HkS09PZkW3sVsh04ispqccdYpkPZvEh1/6KT
+         Rc9w==
+X-Gm-Message-State: AOAM531RFV6c3GoEseuScyNbC/yVNtbmt05hKVOXLv6ZwdyCc3kl2MJs
+        d4NkLYrOmr0Mav/s0M9HAO8YoAPphAHBrQ==
+X-Google-Smtp-Source: ABdhPJw9kdkPNOIfzgKxpe2Cjg7Kc/swj7gKKtIAzrGkm63aCDaCwag8sYqB7aYd0GnVN90s+mrTfA==
+X-Received: by 2002:a0c:fd8d:0:b0:456:3481:603c with SMTP id p13-20020a0cfd8d000000b004563481603cmr14175646qvr.69.1651593215274;
+        Tue, 03 May 2022 08:53:35 -0700 (PDT)
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
+        by smtp.gmail.com with ESMTPSA id b13-20020a05620a088d00b0069fd2a10ef7sm4325466qka.100.2022.05.03.08.53.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 08:53:34 -0700 (PDT)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-2f863469afbso160412567b3.0;
+        Tue, 03 May 2022 08:53:34 -0700 (PDT)
+X-Received: by 2002:a81:6588:0:b0:2f8:b75e:1e1a with SMTP id
+ z130-20020a816588000000b002f8b75e1e1amr16162028ywb.358.1651593214307; Tue, 03
+ May 2022 08:53:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220501182200.47328-1-robimarko@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220429143505.88208-1-clement.leger@bootlin.com> <20220429143505.88208-5-clement.leger@bootlin.com>
+In-Reply-To: <20220429143505.88208-5-clement.leger@bootlin.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 3 May 2022 17:53:10 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV1anDky+_hyCnsptuDnCN=eaY6RrsTVU36jujkFr+DqQ@mail.gmail.com>
+Message-ID: <CAMuHMdV1anDky+_hyCnsptuDnCN=eaY6RrsTVU36jujkFr+DqQ@mail.gmail.com>
+Subject: Re: [net-next v2 04/12] net: pcs: add Renesas MII converter driver
+To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?Q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,162 +85,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 01, 2022 at 08:21:56PM +0200, Robert Marko wrote:
-> Qualcomm IPQ8074 has tsens v2.3.0 block, though unlike existing v2 IP it
-> only uses one IRQ, so tsens v2 compatible cannot be used as the fallback.
-> 
-> We also have to make sure that correct interrupts are set according to
-> compatibles, so populate interrupt information per compatibles.
-> 
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
-> ---
-> Changes in v2:
-> * No need for a list in compatible check
-> * Specify minItems and maxItems for interrupt and interrupt-names
-> ---
->  .../bindings/thermal/qcom-tsens.yaml          | 74 +++++++++++++++++--
->  1 file changed, 67 insertions(+), 7 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> index b6406bcc683f..e9b85c99bb60 100644
-> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> @@ -56,6 +56,10 @@ properties:
->                - qcom,sm8350-tsens
->            - const: qcom,tsens-v2
->  
-> +      - description: v2 of TSENS with combined interrupt
-> +        enum:
-> +          - qcom,ipq8074-tsens
+Hi Clément,
+
+On Fri, Apr 29, 2022 at 4:36 PM Clément Léger <clement.leger@bootlin.com> wrote:
+> Add a PCS driver for the MII converter that is present on the Renesas
+> RZ/N1 SoC. This MII converter is reponsible for converting MII to
+> RMII/RGMII or act as a MII pass-trough. Exposing it as a PCS allows to
+> reuse it in both the switch driver and the stmmac driver. Currently,
+> this driver only allows the PCS to be used by the dual Cortex-A7
+> subsystem since the register locking system is not used.
+>
+> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+
+> --- a/drivers/net/pcs/Kconfig
+> +++ b/drivers/net/pcs/Kconfig
+> @@ -18,4 +18,11 @@ config PCS_LYNX
+>           This module provides helpers to phylink for managing the Lynx PCS
+>           which is part of the Layerscape and QorIQ Ethernet SERDES.
+>
+> +config PCS_RZN1_MIIC
+> +       tristate "Renesas RZ/N1 MII converter"
+
+depends on ARCH_RZN1 || COMPILE_TEST
+
+> +       help
+> +         This module provides a driver for the MII converter that is available
+> +         on RZ/N1 SoCs. This PCS convert MII to RMII/RGMII or can be set in
+
+converts
+
+> +         pass-through mode for MII.
 > +
->    reg:
->      items:
->        - description: TM registers
-> @@ -63,15 +67,11 @@ properties:
->  
->    interrupts:
->      minItems: 1
-> -    items:
-> -      - description: Combined interrupt if upper or lower threshold crossed
-> -      - description: Interrupt if critical threshold crossed
-> +    maxItems: 2
->  
->    interrupt-names:
->      minItems: 1
-> -    items:
-> -      - const: uplow
-> -      - const: critical
-> +    maxItems: 2
->  
->    nvmem-cells:
->      minItems: 1
-> @@ -125,21 +125,66 @@ allOf:
->        properties:
->          interrupts:
->            maxItems: 1
 
-You can drop 'maxItems' as it is implied by 'items' length.
+> --- /dev/null
+> +++ b/drivers/net/pcs/pcs-rzn1-miic.c
 
-> +          items:
-> +            - description: Combined interrupt if upper or lower threshold crossed
->          interrupt-names:
->            maxItems: 1
-
-ditto
-
-> +          items:
-> +            - const: uplow
->  
-> -    else:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,msm8953-tsens
-> +              - qcom,msm8996-tsens
-> +              - qcom,msm8998-tsens
-> +              - qcom,sc7180-tsens
-> +              - qcom,sc7280-tsens
-> +              - qcom,sc8180x-tsens
-> +              - qcom,sdm630-tsens
-> +              - qcom,sdm845-tsens
-> +              - qcom,sm8150-tsens
-> +              - qcom,sm8250-tsens
-> +              - qcom,sm8350-tsens
-> +              - qcom,tsens-v2
-> +    then:
->        properties:
->          interrupts:
->            minItems: 2
-
-Same for minItems.
-
-> +          items:
-> +            - description: Combined interrupt if upper or lower threshold crossed
-> +            - description: Interrupt if critical threshold crossed
->          interrupt-names:
->            minItems: 2
-
-ditto
-
-> +          items:
-> +            - const: uplow
-> +            - const: critical
->  
->    - if:
->        properties:
->          compatible:
->            contains:
->              enum:
-> +              - qcom,ipq8074-tsens
-> +    then:
-> +      properties:
-> +        interrupts:
-> +          maxItems: 1
-
-ditto
-
-> +          items:
-> +            - description: Combined interrupt if upper, lower or critical thresholds crossed
-> +        interrupt-names:
-> +          maxItems: 1
-
-ditto
-
-> +          items:
-> +            - const: combined
+> +static int miic_probe(struct platform_device *pdev)
+> +{
+> +       struct device *dev = &pdev->dev;
+> +       struct miic *miic;
+> +       u32 mode_cfg;
+> +       int ret;
 > +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,ipq8074-tsens
->                - qcom,tsens-v0_1
->                - qcom,tsens-v1
->                - qcom,tsens-v2
-> @@ -222,4 +267,19 @@ examples:
->             #qcom,sensors = <13>;
->             #thermal-sensor-cells = <1>;
->      };
+> +       ret = miic_parse_dt(dev, &mode_cfg);
+> +       if (ret < 0)
+> +               return -EINVAL;
 > +
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    // Example 4 (for any IPQ8074 based SoC-s):
-> +    tsens4: thermal-sensor@4a9000 {
-> +           compatible = "qcom,ipq8074-tsens";
-> +           reg = <0x4a9000 0x1000>,
-> +                 <0x4a8000 0x1000>;
+> +       miic = devm_kzalloc(dev, sizeof(*miic), GFP_KERNEL);
+> +       if (!miic)
+> +               return -ENOMEM;
 > +
-> +           interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
-> +           interrupt-names = "combined";
+> +       spin_lock_init(&miic->lock);
+> +       miic->dev = dev;
+> +       miic->base = devm_platform_ioremap_resource(pdev, 0);
+> +       if (!miic->base)
+> +               return -EINVAL;
 > +
-> +           #qcom,sensors = <16>;
-> +           #thermal-sensor-cells = <1>;
-> +    };
->  ...
-> -- 
-> 2.35.1
-> 
-> 
+> +       miic->nclk = devm_clk_bulk_get_all(dev, &miic->clks);
+> +       if (miic->nclk < 0)
+> +               return miic->nclk;
+> +
+> +       ret = clk_bulk_prepare_enable(miic->nclk, miic->clks);
+> +       if (ret)
+> +               return ret;
+
+As you don't seem to need any knowledge about the clocks' properties,
+perhaps you can use Runtime PM instead?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

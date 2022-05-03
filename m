@@ -2,52 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6F7517E0E
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 09:06:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0160517E0F
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 09:07:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231487AbiECHKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 03:10:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36944 "EHLO
+        id S231501AbiECHKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 03:10:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230427AbiECHJ7 (ORCPT
+        with ESMTP id S230427AbiECHK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 03:09:59 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2522AC4D
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 00:06:27 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id j16-20020a056e02125000b002cc39632ab9so8477826ilq.9
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 00:06:27 -0700 (PDT)
+        Tue, 3 May 2022 03:10:29 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8EB22AC67
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 00:06:57 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id g23so18837262edy.13
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 00:06:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kc27XkBGcgpvj03uAIYtN/02TiD3/pa2n1+ce6OYwxU=;
+        b=oiujbke1mRaMlkrcvlJUsyRrSeYQQfI74Nfjm3EQNjNj1vJPnauGqf8I9d/0ottIAO
+         9blvr38o8Rx9hytaNwfDaQsSyqkgbczUToEqrMYzmV0IHAsfmBj0QSXXAGsx7WFNyTxy
+         435x0+jDlBxN0vM9vG3RcXG4spjyxafTf2YUHIRJ4zBYN6e/LnFpdxUNvo5QsYxpjQBO
+         6qeXC1TJYSr8NUBIAfIcmDZwu0/6StMwPGQdzfcBGX4JrmN8AIsVffC8MCECL7PFGQeh
+         gDwdI4BEFBo0albVdfwjVn+rJM9UpO/hdMWSnCxWr2jSaIYyOv5RBqGgz99p8Uh2m1xG
+         nBgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=CitJ2jAIqYvqUc9ni5kUYdgty2ChYsOADDS45Ei2Eac=;
-        b=SNc0w6XQbMRzrJuz5h8XPEU2T3B4/NpZlDiVqPfvh/SIEBoj15gfG9u/jYgEAfQW1F
-         rwOPxDuy1x079jEEk6pUj15K/9M0cAoCcDkV1Z4S1cCNzyJvXNpnSV///zM6NJGu593n
-         ytohCZQBX/tBOmpuZa/UmYpGnQgW8TETjJ9wiGW6xgoOH9ai5tnxGSQUmgOkAnXn1R3/
-         P4OT6Q7x7tTjSiJ5OjFeHf3HltMOaGs8nXVtpsw4X24H9MbSFn0J4kxNbIED73akYUGW
-         xkUmCODTk2M7o5cLUs7zPwYh6U/JQmQJ0y8lQ+9/BkmfocvUn1sEqYLWGiQR0gIsbQS6
-         +evg==
-X-Gm-Message-State: AOAM5315RVXvyP+IVSRRwSg840TBQXR6odulpk22yJCFg3DoIVuzEkbH
-        7NMBv8hmGl6MXTqHBFqQN3v68EiRWI0WxDFxkomO3a43SWQd
-X-Google-Smtp-Source: ABdhPJyUiKVWB9F68ylOJOw81KBHZ/vUOjCHaezWuOkXL34CuGFOWMvNH9d3Tx2ovlFiOBwOHvgz6khC2TMiN5Hmn6xhPnsadMRf
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kc27XkBGcgpvj03uAIYtN/02TiD3/pa2n1+ce6OYwxU=;
+        b=en4W/MQDafmQCtoZT+Tu0v3zwxJ3lB5exWbz4m71uAaw6ZLwLyBVx9KGRKMr1D53LN
+         MgoDw5l2wmcFzjqWIzBV8ivP18eKuza6NJ34G+G5ScITBdFJd2wDatWqRxI5+RvcZxlk
+         QaAlSAI3MxeOnvi4ejFeOJ4wAuAcaQipJE2On0hZHPYoKezDfwqIx1iBEbw8Cr40OcS0
+         N6oZe63D2GVRVAe602nu8sbV9Z71tHM/l/uMqnqzCwA3osZkVQVyD1Vi4ugUvoSV5p/t
+         5NBkqbAva3C4aETvkp2R/0BvejsuaSDZn0LwXibiGuqRIVB9aHH8zfjDtCmWZ+h3S1yC
+         XhUQ==
+X-Gm-Message-State: AOAM533kZK4dtyOBjouG8x3n4ZQapDPvcy9jb8kuk80C1CDq9S7rVGeQ
+        7MgPTQj4+Vy5FSiHZoYR0FINCw==
+X-Google-Smtp-Source: ABdhPJx6otopPtL/mDsEY9EYB6OU78ELkUNRo7Bc1zygiqHJ0krCRFZejUlcSAKWtlvTUFjS9GkqFA==
+X-Received: by 2002:aa7:d407:0:b0:425:f57e:7ae5 with SMTP id z7-20020aa7d407000000b00425f57e7ae5mr16536588edq.393.1651561616510;
+        Tue, 03 May 2022 00:06:56 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id ze16-20020a170906ef9000b006f3ef214e37sm4300593ejb.157.2022.05.03.00.06.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 00:06:56 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        arm@kernel.org, soc@kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL] memory: drivers for v5.19, part two
+Date:   Tue,  3 May 2022 09:06:52 +0200
+Message-Id: <20220503070652.54091-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:1392:b0:32b:8496:2c83 with SMTP id
- w18-20020a056638139200b0032b84962c83mr476408jad.136.1651561587282; Tue, 03
- May 2022 00:06:27 -0700 (PDT)
-Date:   Tue, 03 May 2022 00:06:27 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000bc1eab05de1625c4@google.com>
-Subject: [syzbot] KASAN: global-out-of-bounds Read in mac802154_header_create
-From:   syzbot <syzbot+f4751c2cc423e56e9e79@syzkaller.appspotmail.com>
-To:     alex.aring@gmail.com, davem@davemloft.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-wpan@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        stefan@datenfreihafen.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,93 +69,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi,
 
-syzbot found the following issue on:
+On top of previous pull (tags/memory-controller-drv-5.19).
 
-HEAD commit:    8f4dd16603ce Merge branch 'akpm' (patches from Andrew)
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=110ecc12f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d21a72f6016e37e8
-dashboard link: https://syzkaller.appspot.com/bug?extid=f4751c2cc423e56e9e79
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f4751c2cc423e56e9e79@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: global-out-of-bounds in get_unaligned_be64 include/asm-generic/unaligned.h:67 [inline]
-BUG: KASAN: global-out-of-bounds in ieee802154_be64_to_le64 include/net/mac802154.h:367 [inline]
-BUG: KASAN: global-out-of-bounds in mac802154_header_create+0x4f6/0x530 net/mac802154/iface.c:455
-Read of size 8 at addr ffffffff8a597460 by task dhcpcd/3342
-
-CPU: 3 PID: 3342 Comm: dhcpcd Not tainted 5.18.0-rc4-syzkaller-00064-g8f4dd16603ce #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0xf/0x467 mm/kasan/report.c:313
- print_report mm/kasan/report.c:429 [inline]
- kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
- get_unaligned_be64 include/asm-generic/unaligned.h:67 [inline]
- ieee802154_be64_to_le64 include/net/mac802154.h:367 [inline]
- mac802154_header_create+0x4f6/0x530 net/mac802154/iface.c:455
- dev_hard_header include/linux/netdevice.h:2983 [inline]
- vlan_dev_hard_header+0x13d/0x510 net/8021q/vlan_dev.c:82
- dev_hard_header include/linux/netdevice.h:2983 [inline]
- lapbeth_data_transmit+0x29f/0x350 drivers/net/wan/lapbether.c:257
- lapb_data_transmit+0x8f/0xc0 net/lapb/lapb_iface.c:447
- lapb_transmit_buffer+0x183/0x390 net/lapb/lapb_out.c:149
- lapb_send_control+0x1c7/0x370 net/lapb/lapb_subr.c:251
- lapb_establish_data_link+0xe7/0x110 net/lapb/lapb_out.c:163
- lapb_device_event+0x395/0x560 net/lapb/lapb_iface.c:512
- notifier_call_chain+0xb5/0x200 kernel/notifier.c:84
- call_netdevice_notifiers_info+0xb5/0x130 net/core/dev.c:1938
- call_netdevice_notifiers_extack net/core/dev.c:1976 [inline]
- call_netdevice_notifiers net/core/dev.c:1990 [inline]
- __dev_notify_flags+0x110/0x2b0 net/core/dev.c:8471
- dev_change_flags+0x112/0x170 net/core/dev.c:8509
- devinet_ioctl+0x15d1/0x1ca0 net/ipv4/devinet.c:1148
- inet_ioctl+0x1e6/0x320 net/ipv4/af_inet.c:969
- sock_do_ioctl+0xcc/0x230 net/socket.c:1122
- sock_ioctl+0x2f1/0x640 net/socket.c:1239
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f934e09d0e7
-Code: 3c 1c e8 1c ff ff ff 85 c0 79 87 49 c7 c4 ff ff ff ff 5b 5d 4c 89 e0 41 5c c3 66 0f 1f 84 00 00 00 00 00 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 61 9d 0c 00 f7 d8 64 89 01 48
-RSP: 002b:00007ffc98450468 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f934dfaf6c8 RCX: 00007f934e09d0e7
-RDX: 00007ffc98460658 RSI: 0000000000008914 RDI: 0000000000000008
-RBP: 00007ffc98470808 R08: 00007ffc98460618 R09: 00007ffc984605c8
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffc98460658 R14: 0000000000000028 R15: 0000000000008914
- </TASK>
-
-The buggy address belongs to the variable:
- bcast_addr+0x0/0x14a0
-
-Memory state around the buggy address:
- ffffffff8a597300: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffffffff8a597380: 00 00 00 00 00 00 00 00 00 f9 f9 f9 f9 f9 f9 f9
->ffffffff8a597400: 00 00 00 00 00 00 f9 f9 f9 f9 f9 f9 06 f9 f9 f9
-                                                       ^
- ffffffff8a597480: f9 f9 f9 f9 00 00 00 00 00 06 f9 f9 f9 f9 f9 f9
- ffffffff8a597500: 03 f9 f9 f9 f9 f9 f9 f9 00 00 00 00 00 f9 f9 f9
-==================================================================
+Best regards,
+Krzysztof
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+The following changes since commit d37b07897e5024088b2170b8e6e1c68d567b9be6:
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+  memory: fsl-corenet-cf: Use helper function devm_platform_ioremap_resource() (2022-04-19 16:59:03 +0200)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-mem-ctrl.git tags/memory-controller-drv-5.19-2
+
+for you to fetch changes up to 854fd9209b20837ab48c2e6714e5e44dd8ea33a2:
+
+  memory: omap-gpmc: Allow building as a module (2022-04-29 08:57:36 +0200)
+
+----------------------------------------------------------------
+Memory controller drivers for v5.19, part two
+
+1. Cleanup: simplify platform_get_resource() calls by using
+   devm_platform_get_and_ioremap_resource() helper.
+2. OMAP: allow building omap-gpmc as module and make it visible (it is
+   not selected by platform anymore).
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (7):
+      memory: da8xx-ddrctl: simplify platform_get_resource()
+      memory: emif: simplify platform_get_resource()
+      memory: ti-emif: simplify platform_get_resource()
+      memory: ti-emif-pm: simplify platform_get_resource()
+      memory: tegra: mc: simplify platform_get_resource()
+      memory: brcmstb_dpfe: simplify platform_get_resource_byname()
+      memory: renesas-rpc-if: simplify platform_get_resource_byname()
+
+Roger Quadros (2):
+      memory: omap-gpmc: Make OMAP_GPMC config visible and selectable
+      memory: omap-gpmc: Allow building as a module
+
+ drivers/memory/Kconfig          |  2 +-
+ drivers/memory/brcmstb_dpfe.c   | 10 +++-------
+ drivers/memory/da8xx-ddrctl.c   |  3 +--
+ drivers/memory/emif.c           |  4 +---
+ drivers/memory/omap-gpmc.c      | 43 ++++++++++++++++++++++-------------------
+ drivers/memory/renesas-rpc-if.c |  3 +--
+ drivers/memory/tegra/mc.c       |  4 +---
+ drivers/memory/ti-aemif.c       |  4 +---
+ drivers/memory/ti-emif-pm.c     |  6 +++---
+ 9 files changed, 35 insertions(+), 44 deletions(-)

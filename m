@@ -2,122 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC1E451810E
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 11:30:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4230D518111
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 11:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233412AbiECJde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 05:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36192 "EHLO
+        id S233426AbiECJgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 05:36:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233397AbiECJdb (ORCPT
+        with ESMTP id S232146AbiECJgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 05:33:31 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1C6369D5
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 02:29:56 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id t5so8563294edw.11
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 02:29:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zB5e/Eye7NKTiR0iDf6A/QHPDIG8VOEpDlGbZQKTb30=;
-        b=BR6BitziOi0WXcjIJLa6fbzR99D1RO1QuZQlrMCVfu5IezrVdh94Je492bhD3tuePW
-         Vblf0IULaKsW3hkFdtR/JnR7P830V9R0yRz7ZsYDIngTVZA0O/Re1G+Q9y7ET6yAgTPX
-         tRpx+VIlUGwMeQHSYoyDWAm1BwalfVQyq3/DGy1iy+qaFlcLfCbGxL81eKnPmG/8w7Ww
-         n+lrtGmFl+HBIYtq5rWpKLfTU++lasaMTHN0TscdXYkcLRRcfbtXZSmhXwtOXKFR4/Rl
-         MbRT/oQFm7HNGHtoFhLEKxL95g0ZoNIAxQ7e8M2SdHtOBJvZKT/01Zcej5S4gQ6VnPN7
-         REUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zB5e/Eye7NKTiR0iDf6A/QHPDIG8VOEpDlGbZQKTb30=;
-        b=2mgg7nJG8LQtsLK0iciZ8ZzDEW24hsapDaKSNXx19xpcj/OMkCwCkirtZBGrxlTa7K
-         vC98U/3GIHfuvoLqq390atKtqic+4Z6I5Q28HMIAx0Z00xE2FziXN55aZneHzMnDxBBY
-         L1MtElYdQKFr+UG/i+WYabRgUZ8cRmSaYMaKI10hOQXSKiTBOv6WcbkmHKpMuy+4eRb9
-         2E2+9uy/H7tr/OZIDoAi2Vvt30b4BbT2AQIbMvJvNjw1+IFzDC5XVYWgOiV8OW1ZtHEn
-         808y7fQotNX1v15AF3JUbKBEPd4aFvv0u3SWxoj3iWGW4lpgX5CD96/Wpsk5DMAe7Q0v
-         h1yQ==
-X-Gm-Message-State: AOAM530razN6jV0CRzN4GoET+jH8kSZ4LZPDLnBDfI6kF0PAvHhaYIHz
-        3i8DDFIFWayt9IXZAkNB/DI7Mw==
-X-Google-Smtp-Source: ABdhPJw0CvtF1J8tlcNgNaOLoUi82bOqMVPxdlnIrx9IBPryH5dVXVAGmSZQkuKIy+RfCoXWk/K6Rw==
-X-Received: by 2002:a50:9f06:0:b0:425:c1ba:5037 with SMTP id b6-20020a509f06000000b00425c1ba5037mr17363890edf.285.1651570194908;
-        Tue, 03 May 2022 02:29:54 -0700 (PDT)
-Received: from [192.168.0.201] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id og13-20020a1709071dcd00b006f3ef214e3fsm4398405ejc.165.2022.05.03.02.29.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 May 2022 02:29:54 -0700 (PDT)
-Message-ID: <5a89e9bf-1004-500a-75e1-995732629937@linaro.org>
-Date:   Tue, 3 May 2022 11:29:53 +0200
+        Tue, 3 May 2022 05:36:02 -0400
+Received: from gardel.0pointer.net (gardel.0pointer.net [85.214.157.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7BC289B7;
+        Tue,  3 May 2022 02:32:29 -0700 (PDT)
+Received: from gardel-login.0pointer.net (gardel-mail [IPv6:2a01:238:43ed:c300:10c3:bcf3:3266:da74])
+        by gardel.0pointer.net (Postfix) with ESMTP id 434ACE804AA;
+        Tue,  3 May 2022 11:32:27 +0200 (CEST)
+Received: by gardel-login.0pointer.net (Postfix, from userid 1000)
+        id B99BF160011; Tue,  3 May 2022 11:32:26 +0200 (CEST)
+Date:   Tue, 3 May 2022 11:32:26 +0200
+From:   Lennart Poettering <mzxreary@0pointer.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Alexander Graf <graf@amazon.com>,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        Torben Hansen <htorben@amazon.co.uk>,
+        Jann Horn <jannh@google.com>
+Subject: Re: [PATCH 2/2] random: add fork_event sysctl for polling VM forks
+Message-ID: <YnD2qu8eVn5ix5H7@gardel-login>
+References: <20220502140602.130373-1-Jason@zx2c4.com>
+ <20220502140602.130373-2-Jason@zx2c4.com>
+ <Ym/7UlgQ5VjjC76P@gardel-login>
+ <YnAC00VtU8MGb7vO@zx2c4.com>
+ <YnAMBzhcJhGR5XOK@gardel-login>
+ <YnAc4hwPyByF4kZ5@zx2c4.com>
+ <YnDc8A+oTxsQs/hq@gardel-login>
+ <YnDxK/O2E6LUhP/2@zx2c4.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v5 2/6] dt-bindings: PCI: renesas,pci-rcar-gen2: Add
- device tree support for r9a06g032
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Herve Codina <herve.codina@bootlin.com>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-References: <20220429134143.628428-1-herve.codina@bootlin.com>
- <20220429134143.628428-4-herve.codina@bootlin.com>
- <29ba3db6-e5c7-06d3-29d9-918ee5b34555@linaro.org>
- <CAMuHMdWN_ni_V+e3QipWH2qKXeNPkEcVpHpb5iBYw1YQSAnCDA@mail.gmail.com>
- <YnA0id1rXlNHNz+N@robh.at.kernel.org>
- <CAMuHMdWktaRAw8Y6TR93_rH8v4mPR2yt3wGqeXeTA2p_Dh--wA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAMuHMdWktaRAw8Y6TR93_rH8v4mPR2yt3wGqeXeTA2p_Dh--wA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnDxK/O2E6LUhP/2@zx2c4.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/05/2022 08:51, Geert Uytterhoeven wrote:
->>>> This should not be a reason why a property is or is not required. Either
->>>> this is required for device operation or not. If it is required, should
->>>> be in the bindings. Otherwise what are you going to do in the future?
->>>> Add a required property breaking the ABI?
->>>
->>> The problem is that there are no bindings for the reset controller
->>> (actually the reset controller feature of the system-controller) yet.
->>> Yeah, we can just add #reset-cells = <1> to the system-controller
->>> device node, but we cannot add the actual resets properties to the
->>> consumers, until the actual cell values are defined.
->>
->> Sounds like you should implement providers first. Or just live with the
->> warning as a reminder to implement the reset provider?
-> 
-> I'd go for the latter. The upstream r9a06g032.dtsi is still under active
-> development. Until very recently, the only device supported was the
-> serial console.
+On Di, 03.05.22 11:08, Jason A. Donenfeld (Jason@zx2c4.com) wrote:
 
-For clocks we use in such cases fixed-clock placeholders or empty
-phandles. Maybe something like that would work here as well?
+> Hey Lennart,
+>
+> On Tue, May 03, 2022 at 09:42:40AM +0200, Lennart Poettering wrote:
+> > For this MAC address usecase it's entirely sufficient to be able to
+> > distinguish if the system was closed at all, i.e. if the counter is
+> > zero or is non-zero. Because that would already be great for a policy
+> > of "hash it in a stable way from /etc/machine-id, if counter == 0" +
+> > "use random MAC once counter > 0".
+>
+> Hm, are you sure that's actually what you want? It turns out this
+> vmgenid notification from the hypervisor might not be sufficiently
+> granular for this use case:
+>
+> - vmgenid changes when you fork a new snapshot, so now you have two VMs
+> - vmgenid also changes when you rewind to 2 minutes ago
+>
+> The first is what I assume you care about for this networkd business.
+> The second is probably not what any networkd user expects.
 
-Best regards,
-Krzysztof
+So first of all, it appears to me that rewinding a VM is something people
+would do for debugging things, i.e. not how things are done on
+deployment.
+
+> >From the perspective of randomness, both of these events imply the same
+> thing. The situation is BAD; reseed immediately. From the perspective of
+> MAC addresses, though, these events would imply different behavior,
+> right? So it seems like vmgenid might need an additional field for this
+> use case. Relatedly, VMware has that prompt where you select about your
+> VM whether, "I moved it" or "I copied it." Presumably something like
+> that would play a part in what is decided as part of this hypothetical
+> second field.
+
+networkd doesn't change MAC addresses in the middle of everything, but
+only when a network interface is downed and upped again. This for
+example happens when a link beat goes away and comes back. In the
+rewind-2min case i'd assume the link beat would probably be restored
+to what it was 2min ago (and thus stay online), but in the clone case
+it would probably drop momentarily and be restored than, to tell
+software to reacquire dhcp and so on.
+
+or in other words: if the hypervisor wants the system to
+reconfigure/reacquire its network there are explicit ways already, and
+they work afaics. what's missing tehre is simply a reasonable way to
+ensure that we won't end up sticking to the same fixed MAC address
+when we set things up in order to acquire a new DHCP lease.
+
+So I am not too concerned.
+
+Lennart
+
+--
+Lennart Poettering, Berlin

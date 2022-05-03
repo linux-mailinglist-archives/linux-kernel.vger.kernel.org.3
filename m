@@ -2,156 +2,419 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12FE8518AAE
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 19:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B67C1518AB0
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 19:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240032AbiECRGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 13:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54214 "EHLO
+        id S240041AbiECRHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 13:07:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240012AbiECRGb (ORCPT
+        with ESMTP id S240012AbiECRHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 13:06:31 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1668530F42;
-        Tue,  3 May 2022 10:02:59 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id b24so20568077edu.10;
-        Tue, 03 May 2022 10:02:59 -0700 (PDT)
+        Tue, 3 May 2022 13:07:21 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4824F30F42
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 10:03:48 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id cu23-20020a17090afa9700b001d98d8e53b7so2298377pjb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 10:03:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0ebsl3t9Q4A5ZhggZdMt0K6huVQ4nPLjVF1HT4eHwHY=;
-        b=HaGnyx7pBoke+0aSLZ+0Cl9i2Z3rtc277xsE07lgnGx2lIPgKNR+/cHf1BHMJd+tWY
-         xLxDVjfXM0LpLkK6W47aSnLqvt4qcngT1GxJ9qnMFGWSSL68ZSpCJur0Qp+flnz9TG9V
-         8iSPz7fXNdaty2uNHB4TWoNsqJrz0v03bb5rxLo5UKkUbCeepA8IK+d4f511ABt2QcWd
-         ZpC42ODRQgilCYofK3JnmcBW/XdrLxgbLavwJlZDJe38uRpGjKQRfb1xNvaHi8pmKFwS
-         8RYFI+ibpzWIAh8L22MX0fUODrvS/rlJYgws3AcC0d8zDmBJEhPw91evXIyGqHtd9B1w
-         9Xiw==
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IjVj+j0wcqG2qWfi9ZUk9Zme1lvxnBeBUR3gvmGnn0k=;
+        b=LW99cICxS1s6ASvPK1CKgM8Kn3S7QvzTTVyEwIgoI4aKP+LHf4FqD518zAnXOoxHGP
+         MM3Sjerse/q3dlHha9alIaYHzq6YkQkIzjwBc83Vf3vFMEDuye1kPLLB1i31tdStlba3
+         UbHRgMvFk0W2G0YMDckocnmERcEmgh2rXgd9uG0tv4Gy5OeZjpUdpzLAG8Dhgrdj0FNJ
+         sYzQl5X6G1+PVsugHWc1O9vlj3SwIuiqGCRXZDAvSM7vIpeYdQZ7xYfsGclRpnD7ZO3y
+         ami9B6edGCdcx4gQFf7Nli06z2ayogFmnNueGp7Bzzz1XxOmpyA1C7T+G/CzMLHmvD/X
+         JdZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0ebsl3t9Q4A5ZhggZdMt0K6huVQ4nPLjVF1HT4eHwHY=;
-        b=im+01IOU4Zoy13pHmsTejb3PMVCiXvIelSdvFm7ZuPdaApVanG/iC7B5SyButNzh88
-         MmkjbG7NCIs9itc0Zv/QaCWOfvkmeHMaVyZ4d110cjTn1f8vOS8I/CqRYS1r84q4XiQ6
-         ogmIkWFjwiX5rFwsEx3RReBqKuwOA9DcbFgNLsnihu60fPj4rGiLMEZufbHyCzS6m7tc
-         NAd2OYYWBXTdT0YGlZKAz/s/SKdzNszQ7m6UzNZaEI3cgosU6to6Sd4aSweRXYVekDm6
-         vu7Y13ecVaHQ1I2CMhr5EB0/Bsfzgom0QMKZpMIeAsQdvOXO9IfvEXaU6MtDPmsDbCdh
-         lFgQ==
-X-Gm-Message-State: AOAM5309Om5VFGj4a+z32x3cDRW4j58y9elGbwyHdKnw2sgqUPjXP5a/
-        8qejceBq9hrDU5OLOG79eX5lijrt784=
-X-Google-Smtp-Source: ABdhPJwhqGbymFuBTyPLL+yyc+nnpILMy/ni7d7XOhYbnZCBoZ0oS8dRxaoc/0h9PTlfn8SevSJmlw==
-X-Received: by 2002:a05:6402:1941:b0:413:2822:9c8 with SMTP id f1-20020a056402194100b00413282209c8mr18716302edz.13.1651597377548;
-        Tue, 03 May 2022 10:02:57 -0700 (PDT)
-Received: from kista.localnet (cpe1-3-76.cable.triera.net. [213.161.3.76])
-        by smtp.gmail.com with ESMTPSA id q8-20020aa7cc08000000b0042617ba637esm8000905edt.8.2022.05.03.10.02.55
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=IjVj+j0wcqG2qWfi9ZUk9Zme1lvxnBeBUR3gvmGnn0k=;
+        b=QhWvRm1kT4cKiWfD36ugT/BcvvjpW0+ug+2ryy4pYVem7DbtRNe4Lz4UGKCbBO4Y6x
+         1OnVOfTIBBB07VJhLtoz21ZhjUDLdb+IKM5EiyZha7yv8jZjDYb5o605NZkuM5MN+Ukj
+         rVVULwQGgqOEFTXWtZwKYIEeQTM57IzBHfCj/IsX60uiJAOfx7w5TI5Gt97BnKRZFRHo
+         hJ2UKza+Gso/SUOCasWp0+f6QPvSJfcQwRMnXRhJUVUflyg/RO9/l0eAJVvZfFAOGJ0o
+         ubLKbOCjm95LWAmEnVb3pLIce7O2isnzNfHy4X246WO3A6pWAH63LEj+eXaTKhubz89D
+         dLQw==
+X-Gm-Message-State: AOAM53245x2BvmMMIcysGfOLI2rCXntgPgyciaDNfOIRvILTQFCwCROx
+        bJgYrGW76bO/fghKwW9wlmQorMjZ4MM=
+X-Google-Smtp-Source: ABdhPJycQ/TE90aE9EuBeldXndWs73Ty0I6ylcgRQcDH3FfjFQq8/2r3QLkkXgXStZgmn2Zkz/6AsA==
+X-Received: by 2002:a17:903:32d0:b0:15e:8cbc:fd39 with SMTP id i16-20020a17090332d000b0015e8cbcfd39mr17608566plr.95.1651597427404;
+        Tue, 03 May 2022 10:03:47 -0700 (PDT)
+Received: from bbox-1.mtv.corp.google.com ([2620:15c:211:201:8998:54e:9def:1e7c])
+        by smtp.gmail.com with ESMTPSA id fz16-20020a17090b025000b001dbe11be891sm1555476pjb.44.2022.05.03.10.03.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 10:02:56 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     linux-kernel@vger.kernel.org,
-        Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-mediatek@lists.infradead.org,
-        linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, spice-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v3 2/3] drm/fb-helper: Rename preferred_bpp drm_fbdev_generic_setup() parameter
-Date:   Tue, 03 May 2022 19:02:54 +0200
-Message-ID: <2626921.mvXUDI8C0e@kista>
-In-Reply-To: <20220503071540.471667-3-javierm@redhat.com>
-References: <20220503071540.471667-1-javierm@redhat.com> <20220503071540.471667-3-javierm@redhat.com>
+        Tue, 03 May 2022 10:03:46 -0700 (PDT)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+From:   Minchan Kim <minchan@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        John Dias <joaodias@google.com>,
+        Tim Murray <timmurray@google.com>,
+        Minchan Kim <minchan@kernel.org>
+Subject: [PATCH] mm: don't be stuck to rmap lock on reclaim path
+Date:   Tue,  3 May 2022 10:03:41 -0700
+Message-Id: <20220503170341.1413961-1-minchan@kernel.org>
+X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne torek, 03. maj 2022 ob 09:15:39 CEST je Javier Martinez Canillas 
-napisal(a):
-> By default the bits per pixel for the emulated framebuffer device is set
-> to dev->mode_config.preferred_depth, but some devices need another value.
-> 
-> Since this second parameter is only used by a few drivers, and to allow
-> drivers to use it for passing other configurations when registering the
-> fbdev, rename @preferred_bpp to @options and make it a multi-field param.
-> 
-> The DRM_FB_OPTION() and DRM_FB_GET_OPTION() macros are provided to drivers
-> for computing options bitfield values and getting the values respectively
-> 
-> For now, only the DRM_FB_BPP option exists but other options can be added.
-> 
-> Suggested-by: Thomas Zimmermann <tzimmermann@suse.de>
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> ---
-> 
-> Changes in v3:
-> - Drop the preferred_bpp local variable (Laurent Pinchart).
-> - Add a const qualifier to options parameter (Laurent Pinchart).
-> 
-> Changes in v2:
-> - Rename DRM_FB_SET_OPTION() to DRM_FB_OPTION() and make more clear in
->   the kernel-doc what this macro does (Laurent Pinchart).
-> - Fix some kernel-doc issues I didn't notice in v1.
-> - Add Reviewed-by tags from Thomas and Laurent.
-> 
->  drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c       |  6 +++--
->  drivers/gpu/drm/arm/hdlcd_drv.c               |  2 +-
->  drivers/gpu/drm/arm/malidp_drv.c              |  2 +-
->  drivers/gpu/drm/aspeed/aspeed_gfx_drv.c       |  2 +-
->  drivers/gpu/drm/ast/ast_drv.c                 |  2 +-
->  drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_dc.c  |  2 +-
->  drivers/gpu/drm/drm_drv.c                     |  2 +-
->  drivers/gpu/drm/drm_fb_helper.c               | 26 ++++++++++++-------
->  drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c     |  2 +-
->  .../gpu/drm/hisilicon/kirin/kirin_drm_drv.c   |  2 +-
->  drivers/gpu/drm/imx/dcss/dcss-kms.c           |  2 +-
->  drivers/gpu/drm/imx/imx-drm-core.c            |  2 +-
->  drivers/gpu/drm/ingenic/ingenic-drm-drv.c     |  2 +-
->  drivers/gpu/drm/mcde/mcde_drv.c               |  2 +-
->  drivers/gpu/drm/mediatek/mtk_drm_drv.c        |  2 +-
->  drivers/gpu/drm/meson/meson_drv.c             |  2 +-
->  drivers/gpu/drm/mxsfb/mxsfb_drv.c             |  2 +-
->  drivers/gpu/drm/pl111/pl111_drv.c             |  2 +-
->  drivers/gpu/drm/qxl/qxl_drv.c                 |  2 +-
->  drivers/gpu/drm/rcar-du/rcar_du_drv.c         |  2 +-
->  drivers/gpu/drm/sti/sti_drv.c                 |  2 +-
->  drivers/gpu/drm/stm/drv.c                     |  2 +-
->  drivers/gpu/drm/sun4i/sun4i_drv.c             |  2 +-
+The rmap locks(i_mmap_rwsem and anon_vma->root->rwsem) could be
+contented under memory pressure if processes keep working on
+their vmas(e.g., fork, mmap, munmap). It makes reclaim path
+stuck. In our real workload traces, we see kswapd is waiting the
+lock for 300ms+(worst case, a sec) and it makes other processes
+entering direct reclaim, which were also stuck on the lock.
 
-For sun4i:
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+This patch makes LRU aging path try_lock mode like shink_page_list
+so the reclaim context will keep working with next LRU pages
+without being stuck.
 
-Best regard,
-Jernej
+Signed-off-by: Minchan Kim <minchan@kernel.org>
+---
+ include/linux/fs.h   |  5 +++++
+ include/linux/ksm.h  |  4 ++--
+ include/linux/rmap.h | 28 +++++++++++++++++-------
+ mm/ksm.c             | 10 +++++++--
+ mm/memory-failure.c  |  2 +-
+ mm/rmap.c            | 52 ++++++++++++++++++++++++++++++++++----------
+ mm/vmscan.c          |  6 ++++-
+ 7 files changed, 82 insertions(+), 25 deletions(-)
 
->  drivers/gpu/drm/tidss/tidss_drv.c             |  2 +-
->  drivers/gpu/drm/tilcdc/tilcdc_drv.c           |  2 +-
->  drivers/gpu/drm/tiny/arcpgu.c                 |  2 +-
->  drivers/gpu/drm/tiny/bochs.c                  |  2 +-
->  drivers/gpu/drm/tve200/tve200_drv.c           |  2 +-
->  drivers/gpu/drm/vboxvideo/vbox_drv.c          |  2 +-
->  drivers/gpu/drm/vc4/vc4_drv.c                 |  2 +-
->  drivers/gpu/drm/virtio/virtgpu_drv.c          |  2 +-
->  drivers/gpu/drm/xlnx/zynqmp_dpsub.c           |  2 +-
->  include/drm/drm_fb_helper.h                   | 14 +++++++++-
->  33 files changed, 64 insertions(+), 42 deletions(-)
-
-
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index f5ec00b2f073..5a169066f463 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -477,6 +477,11 @@ static inline void i_mmap_unlock_write(struct address_space *mapping)
+ 	up_write(&mapping->i_mmap_rwsem);
+ }
+ 
++static inline int i_mmap_trylock_read(struct address_space *mapping)
++{
++	return down_read_trylock(&mapping->i_mmap_rwsem);
++}
++
+ static inline void i_mmap_lock_read(struct address_space *mapping)
+ {
+ 	down_read(&mapping->i_mmap_rwsem);
+diff --git a/include/linux/ksm.h b/include/linux/ksm.h
+index 0630e545f4cb..0b4f17418f64 100644
+--- a/include/linux/ksm.h
++++ b/include/linux/ksm.h
+@@ -51,7 +51,7 @@ static inline void ksm_exit(struct mm_struct *mm)
+ struct page *ksm_might_need_to_copy(struct page *page,
+ 			struct vm_area_struct *vma, unsigned long address);
+ 
+-void rmap_walk_ksm(struct folio *folio, const struct rmap_walk_control *rwc);
++void rmap_walk_ksm(struct folio *folio, struct rmap_walk_control *rwc);
+ void folio_migrate_ksm(struct folio *newfolio, struct folio *folio);
+ 
+ #else  /* !CONFIG_KSM */
+@@ -79,7 +79,7 @@ static inline struct page *ksm_might_need_to_copy(struct page *page,
+ }
+ 
+ static inline void rmap_walk_ksm(struct folio *folio,
+-			const struct rmap_walk_control *rwc)
++			struct rmap_walk_control *rwc)
+ {
+ }
+ 
+diff --git a/include/linux/rmap.h b/include/linux/rmap.h
+index cbe279a6f0de..9ec23138e410 100644
+--- a/include/linux/rmap.h
++++ b/include/linux/rmap.h
+@@ -128,6 +128,11 @@ static inline void anon_vma_lock_read(struct anon_vma *anon_vma)
+ 	down_read(&anon_vma->root->rwsem);
+ }
+ 
++static inline int anon_vma_trylock_read(struct anon_vma *anon_vma)
++{
++	return down_read_trylock(&anon_vma->root->rwsem);
++}
++
+ static inline void anon_vma_unlock_read(struct anon_vma *anon_vma)
+ {
+ 	up_read(&anon_vma->root->rwsem);
+@@ -366,17 +371,14 @@ int pfn_mkclean_range(unsigned long pfn, unsigned long nr_pages, pgoff_t pgoff,
+ 
+ void remove_migration_ptes(struct folio *src, struct folio *dst, bool locked);
+ 
+-/*
+- * Called by memory-failure.c to kill processes.
+- */
+-struct anon_vma *folio_lock_anon_vma_read(struct folio *folio);
+-void page_unlock_anon_vma_read(struct anon_vma *anon_vma);
+ int page_mapped_in_vma(struct page *page, struct vm_area_struct *vma);
+ 
+ /*
+  * rmap_walk_control: To control rmap traversing for specific needs
+  *
+  * arg: passed to rmap_one() and invalid_vma()
++ * try_lock: bail out if the rmap lock is contended
++ * contended: indicate the rmap traversal bailed out due to lock contention
+  * rmap_one: executed on each vma where page is mapped
+  * done: for checking traversing termination condition
+  * anon_lock: for getting anon_lock by optimized way rather than default
+@@ -384,6 +386,8 @@ int page_mapped_in_vma(struct page *page, struct vm_area_struct *vma);
+  */
+ struct rmap_walk_control {
+ 	void *arg;
++	bool try_lock;
++	bool contended;
+ 	/*
+ 	 * Return false if page table scanning in rmap_walk should be stopped.
+ 	 * Otherwise, return true.
+@@ -391,12 +395,20 @@ struct rmap_walk_control {
+ 	bool (*rmap_one)(struct folio *folio, struct vm_area_struct *vma,
+ 					unsigned long addr, void *arg);
+ 	int (*done)(struct folio *folio);
+-	struct anon_vma *(*anon_lock)(struct folio *folio);
++	struct anon_vma *(*anon_lock)(struct folio *folio,
++				      struct rmap_walk_control *rwc);
+ 	bool (*invalid_vma)(struct vm_area_struct *vma, void *arg);
+ };
+ 
+-void rmap_walk(struct folio *folio, const struct rmap_walk_control *rwc);
+-void rmap_walk_locked(struct folio *folio, const struct rmap_walk_control *rwc);
++void rmap_walk(struct folio *folio, struct rmap_walk_control *rwc);
++void rmap_walk_locked(struct folio *folio, struct rmap_walk_control *rwc);
++
++/*
++ * Called by memory-failure.c to kill processes.
++ */
++struct anon_vma *folio_lock_anon_vma_read(struct folio *folio,
++					  struct rmap_walk_control *rwc);
++void page_unlock_anon_vma_read(struct anon_vma *anon_vma);
+ 
+ #else	/* !CONFIG_MMU */
+ 
+diff --git a/mm/ksm.c b/mm/ksm.c
+index ee607d3f8720..26da7f813f23 100644
+--- a/mm/ksm.c
++++ b/mm/ksm.c
+@@ -2614,7 +2614,7 @@ struct page *ksm_might_need_to_copy(struct page *page,
+ 	return new_page;
+ }
+ 
+-void rmap_walk_ksm(struct folio *folio, const struct rmap_walk_control *rwc)
++void rmap_walk_ksm(struct folio *folio, struct rmap_walk_control *rwc)
+ {
+ 	struct stable_node *stable_node;
+ 	struct rmap_item *rmap_item;
+@@ -2638,7 +2638,13 @@ void rmap_walk_ksm(struct folio *folio, const struct rmap_walk_control *rwc)
+ 		struct vm_area_struct *vma;
+ 
+ 		cond_resched();
+-		anon_vma_lock_read(anon_vma);
++		if (!anon_vma_trylock_read(anon_vma)) {
++			if (rwc->try_lock) {
++				rwc->contended = true;
++				return;
++			}
++			anon_vma_lock_read(anon_vma);
++		}
+ 		anon_vma_interval_tree_foreach(vmac, &anon_vma->rb_root,
+ 					       0, ULONG_MAX) {
+ 			unsigned long addr;
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index a83d32bbc567..09d60bc93140 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -485,7 +485,7 @@ static void collect_procs_anon(struct page *page, struct list_head *to_kill,
+ 	struct anon_vma *av;
+ 	pgoff_t pgoff;
+ 
+-	av = folio_lock_anon_vma_read(folio);
++	av = folio_lock_anon_vma_read(folio, NULL);
+ 	if (av == NULL)	/* Not actually mapped anymore */
+ 		return;
+ 
+diff --git a/mm/rmap.c b/mm/rmap.c
+index 61e63db5dc6f..bbf32dbeb8ee 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -527,9 +527,11 @@ struct anon_vma *page_get_anon_vma(struct page *page)
+  *
+  * Its a little more complex as it tries to keep the fast path to a single
+  * atomic op -- the trylock. If we fail the trylock, we fall back to getting a
+- * reference like with page_get_anon_vma() and then block on the mutex.
++ * reference like with page_get_anon_vma() and then block on the mutex
++ * on !rwc->try_lock case.
+  */
+-struct anon_vma *folio_lock_anon_vma_read(struct folio *folio)
++struct anon_vma *folio_lock_anon_vma_read(struct folio *folio,
++					  struct rmap_walk_control *rwc)
+ {
+ 	struct anon_vma *anon_vma = NULL;
+ 	struct anon_vma *root_anon_vma;
+@@ -557,6 +559,12 @@ struct anon_vma *folio_lock_anon_vma_read(struct folio *folio)
+ 		goto out;
+ 	}
+ 
++	if (rwc && rwc->try_lock) {
++		anon_vma = NULL;
++		rwc->contended = true;
++		goto out;
++	}
++
+ 	/* trylock failed, we got to sleep */
+ 	if (!atomic_inc_not_zero(&anon_vma->refcount)) {
+ 		anon_vma = NULL;
+@@ -883,7 +891,8 @@ static bool invalid_folio_referenced_vma(struct vm_area_struct *vma, void *arg)
+  *
+  * Quick test_and_clear_referenced for all mappings of a folio,
+  *
+- * Return: The number of mappings which referenced the folio.
++ * Return: The number of mappings which referenced the folio. Return -1 if
++ * the function bailed out due to lock contention.
+  */
+ int folio_referenced(struct folio *folio, int is_locked,
+ 		     struct mem_cgroup *memcg, unsigned long *vm_flags)
+@@ -897,6 +906,7 @@ int folio_referenced(struct folio *folio, int is_locked,
+ 		.rmap_one = folio_referenced_one,
+ 		.arg = (void *)&pra,
+ 		.anon_lock = folio_lock_anon_vma_read,
++		.try_lock = true,
+ 	};
+ 
+ 	*vm_flags = 0;
+@@ -927,7 +937,7 @@ int folio_referenced(struct folio *folio, int is_locked,
+ 	if (we_locked)
+ 		folio_unlock(folio);
+ 
+-	return pra.referenced;
++	return rwc.contended ? -1 : pra.referenced;
+ }
+ 
+ static int page_vma_mkclean_one(struct page_vma_mapped_walk *pvmw)
+@@ -2307,12 +2317,12 @@ void __put_anon_vma(struct anon_vma *anon_vma)
+ }
+ 
+ static struct anon_vma *rmap_walk_anon_lock(struct folio *folio,
+-					const struct rmap_walk_control *rwc)
++					    struct rmap_walk_control *rwc)
+ {
+ 	struct anon_vma *anon_vma;
+ 
+ 	if (rwc->anon_lock)
+-		return rwc->anon_lock(folio);
++		return rwc->anon_lock(folio, rwc);
+ 
+ 	/*
+ 	 * Note: remove_migration_ptes() cannot use folio_lock_anon_vma_read()
+@@ -2324,7 +2334,17 @@ static struct anon_vma *rmap_walk_anon_lock(struct folio *folio,
+ 	if (!anon_vma)
+ 		return NULL;
+ 
++	if (anon_vma_trylock_read(anon_vma))
++		goto out;
++
++	if (rwc->try_lock) {
++		anon_vma = NULL;
++		rwc->contended = true;
++		goto out;
++	}
++
+ 	anon_vma_lock_read(anon_vma);
++out:
+ 	return anon_vma;
+ }
+ 
+@@ -2338,7 +2358,7 @@ static struct anon_vma *rmap_walk_anon_lock(struct folio *folio,
+  * contained in the anon_vma struct it points to.
+  */
+ static void rmap_walk_anon(struct folio *folio,
+-		const struct rmap_walk_control *rwc, bool locked)
++		struct rmap_walk_control *rwc, bool locked)
+ {
+ 	struct anon_vma *anon_vma;
+ 	pgoff_t pgoff_start, pgoff_end;
+@@ -2386,7 +2406,7 @@ static void rmap_walk_anon(struct folio *folio,
+  * contained in the address_space struct it points to.
+  */
+ static void rmap_walk_file(struct folio *folio,
+-		const struct rmap_walk_control *rwc, bool locked)
++		struct rmap_walk_control *rwc, bool locked)
+ {
+ 	struct address_space *mapping = folio_mapping(folio);
+ 	pgoff_t pgoff_start, pgoff_end;
+@@ -2405,8 +2425,18 @@ static void rmap_walk_file(struct folio *folio,
+ 
+ 	pgoff_start = folio_pgoff(folio);
+ 	pgoff_end = pgoff_start + folio_nr_pages(folio) - 1;
+-	if (!locked)
++	if (!locked) {
++		if (i_mmap_trylock_read(mapping))
++			goto lookup;
++
++		if (rwc->try_lock) {
++			rwc->contended = true;
++			return;
++		}
++
+ 		i_mmap_lock_read(mapping);
++	}
++lookup:
+ 	vma_interval_tree_foreach(vma, &mapping->i_mmap,
+ 			pgoff_start, pgoff_end) {
+ 		unsigned long address = vma_address(&folio->page, vma);
+@@ -2428,7 +2458,7 @@ static void rmap_walk_file(struct folio *folio,
+ 		i_mmap_unlock_read(mapping);
+ }
+ 
+-void rmap_walk(struct folio *folio, const struct rmap_walk_control *rwc)
++void rmap_walk(struct folio *folio, struct rmap_walk_control *rwc)
+ {
+ 	if (unlikely(folio_test_ksm(folio)))
+ 		rmap_walk_ksm(folio, rwc);
+@@ -2439,7 +2469,7 @@ void rmap_walk(struct folio *folio, const struct rmap_walk_control *rwc)
+ }
+ 
+ /* Like rmap_walk, but caller holds relevant rmap lock */
+-void rmap_walk_locked(struct folio *folio, const struct rmap_walk_control *rwc)
++void rmap_walk_locked(struct folio *folio, struct rmap_walk_control *rwc)
+ {
+ 	/* no ksm support for now */
+ 	VM_BUG_ON_FOLIO(folio_test_ksm(folio), folio);
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index c6918fff06e1..e68c5715270a 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -1391,6 +1391,10 @@ static enum page_references folio_check_references(struct folio *folio,
+ 	if (vm_flags & VM_LOCKED)
+ 		return PAGEREF_ACTIVATE;
+ 
++	/* page_referenced didn't work due to lock contention */
++	if (referenced_ptes == -1)
++		return PAGEREF_KEEP;
++
+ 	if (referenced_ptes) {
+ 		/*
+ 		 * All mapped folios start out with page table
+@@ -2492,7 +2496,7 @@ static void shrink_active_list(unsigned long nr_to_scan,
+ 		}
+ 
+ 		if (folio_referenced(folio, 0, sc->target_mem_cgroup,
+-				     &vm_flags)) {
++				     &vm_flags) > 0) {
+ 			/*
+ 			 * Identify referenced, file-backed active pages and
+ 			 * give them one more trip around the active list. So
+-- 
+2.36.0.464.gb9c8b46e94-goog
 

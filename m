@@ -2,188 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9868751849C
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 14:51:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B6F51849E
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 14:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235578AbiECMzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 08:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34982 "EHLO
+        id S235590AbiECM4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 08:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230339AbiECMzS (ORCPT
+        with ESMTP id S230339AbiECM4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 08:55:18 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421081EEE1;
-        Tue,  3 May 2022 05:51:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651582306; x=1683118306;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WX6XFwDnmHmpDEaYBGqBQvPfcxBsdxudi3zrPKmjFJA=;
-  b=V9bUy+jLpOu/0KEJoTsYzW5ZssELHirqG4IPT4Ys+CWgE3iqJ9he3QYU
-   NB4kiGmMus94gDaXposepCDE6kMU8w4ZUyMAdZA/MjwV5az0vIs1umPrV
-   OucaNw95Zo0xRgycFr5kOauBLP0td47UCqGP2tZhmfORpjUk+nEuxlT+r
-   YUfmPJsxwmUtTCUzvvb0Owhr/GbzIEHWwsN2sGlTvVKzx6czGUYLpGw2J
-   slbWYyz+sbcBT308h0PnbhAk5z+w3vXXg0bfSHtOnmHV7BYCheZhMTHVt
-   yS+miw1YMvY9sNRwA2xztE2lihxirm0DrcEusQB6tlNl+38r6BSiP8VG/
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="267060710"
-X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
-   d="scan'208";a="267060710"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 05:51:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
-   d="scan'208";a="547492780"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 03 May 2022 05:51:43 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nls0E-000ATS-7R;
-        Tue, 03 May 2022 12:51:42 +0000
-Date:   Tue, 3 May 2022 20:51:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linexp.org>, rafael@kernel.org,
-        daniel.lezcano@linaro.org
-Cc:     kbuild-all@lists.01.org, khilman@baylibre.com,
-        abailon@baylibre.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 01/15] thermal/core: Rename thermal_zone_device to
- thermal_zone
-Message-ID: <202205032051.rSqUYbp8-lkp@intel.com>
-References: <20220426221523.3056696-2-daniel.lezcano@linexp.org>
+        Tue, 3 May 2022 08:56:34 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D0A1EEE1;
+        Tue,  3 May 2022 05:53:00 -0700 (PDT)
+Received: from mail-yw1-f175.google.com ([209.85.128.175]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Mo6zF-1oATOS0uOB-00pc0n; Tue, 03 May 2022 14:52:59 +0200
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-2f16645872fso178250027b3.4;
+        Tue, 03 May 2022 05:52:58 -0700 (PDT)
+X-Gm-Message-State: AOAM531lrOcqaPKF3QUmTrFCc7E4OZRtgXT1CF/8myugN+srZh06H0Tw
+        T3YCLusH6gNw2r2w+QcW3+HAdPGaR4l8e+Zq69s=
+X-Google-Smtp-Source: ABdhPJyv1laW6E185MTLjPzEFveupItqW/H+SSTMlTqCVUIee6w3ZqqHo0k5z6EM5wkvOIryiG8mHw/gvMCwhJyPJWk=
+X-Received: by 2002:a81:ad7:0:b0:2e6:84de:3223 with SMTP id
+ 206-20020a810ad7000000b002e684de3223mr15626133ywk.209.1651582377937; Tue, 03
+ May 2022 05:52:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220426221523.3056696-2-daniel.lezcano@linexp.org>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220421151055.6851-1-takayoshi.shimamoto.360@gmail.com>
+In-Reply-To: <20220421151055.6851-1-takayoshi.shimamoto.360@gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 3 May 2022 14:52:41 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2pc5nUpGr_KQdhFZPm+vm5SfAzyUEy0=P3FVhfhdbNUQ@mail.gmail.com>
+Message-ID: <CAK8P3a2pc5nUpGr_KQdhFZPm+vm5SfAzyUEy0=P3FVhfhdbNUQ@mail.gmail.com>
+Subject: Re: [PATCH] ARM: dts: BCM5301X: Add DT for WZR-1166DHP,DHP2
+To:     SHIMAMOTO Takayoshi <takayoshi.shimamoto.360@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        SoC Team <soc@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:UUz7elM+auAsRowC7ROfRfxccth75nPAVzGQ1wn0r5L/IY3OB41
+ Xc8JK+/rHEf/lS6gNTmVTnZFvTtX9LLNgfVuXy/CICydWqrcEbq1oqOT3/AMyvOWVy8um0T
+ vEOPvMNglkvi96oJKBoRMCgVvd0hVKIAiXQbjZHcX+00s5cgH+kC97ZpwHfqzuyc5TWVI5a
+ B7fHgyqFo+QQ3imFUczUg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:AzyEmZ610OA=:AKIGkURKteUJ5cbywAANXG
+ K2GiM89LZoSy/zAWY5C/wS3SP+1gAoLgpTqqHa7+Lmoyxom3+VKc3A6IqM86WI96tG+vqrttD
+ yKxagz70iqn9a8KtOUZjw0JgDTShy07n6mwxuxZulanmE0Z9L9bWLR5yoYup8SircTDYL5J7e
+ m/teKOg1WHT3FgjaXDWerXDqITEwSjmdYO0vPE4EsM1g0IrCZ3FVQcA6yb7vT8Qh2vOgutNE9
+ mwaQGP3Xh6Usy8wiFONAmrz3pi0LI8uxgt+FNmM1k5x2qTET6eM7tJOdxCmZGdQX65d013rKq
+ X/7TuiSsBrluXG/bl/vVV281fYzuFvvWbS3l4TouLY8q/AQiXzJtSeCmj0zK994HTtZLIdF5X
+ afVwKol5roweJep8naybXlEqsPczol3C4Vy0/EozrRsyJ6wla4WYylRUciOrnqszh/q/qJUb6
+ aQhfreJvix4RAczUR/ZtGW8cdiyDqeevmiKhhFYZnAmfZ1FvK89mDqVvl7crLLfK79mTNawZb
+ 5kDLwUDzP4q+sQCzJXCZHY/megTgIHY7oviq4g4IIuYZ5qUYbeheXTZNo5pPgT3V/n0oTpF93
+ f1Wd6IM4uYH/axg1pjrntg7WtMiCA4OPLsQdUc50WC4hw/N4AuKeEi2pXRX7MiUbrlEW/t1hY
+ 3s+Wv7wH0cHBrAZmKPJdDUlVbq76Lwz1f3tfoED2NdKDKehc3M4R1Gk52VVclezjkzhU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On Thu, Apr 21, 2022 at 5:10 PM SHIMAMOTO Takayoshi
+<takayoshi.shimamoto.360@gmail.com> wrote:
+>
+>   Buffalo WZR-1166DHP/WZR-1166DHP2  wireless router with
+>
+>     - BCM4708A0
+>     - 128MiB NAND flash
+>     - 2T2R 11ac/a/b/g/n Wi-Fi
+>     - 4x 10/100/1000M ethernet switch
+>     - 1x USB 3.0 port
+>
+>   WZR-1166DHP and WZR-1166DHP2 have different memory capacity.
+>
+>   WZR-1166DHP
+>     - 512 MiB DDR2 SDRAM
+>
+>   WZR-1166DHP2
+>     - 256 MiB DDR2 SDRAM
+>
+>   These hardware components are very similar to the WZR-1750DHP
+>    except for the number of antennas.
+>
+> Signed-off-by: SHIMAMOTO Takayoshi <takayoshi.shimamoto.360@gmail.com>
 
-I love your patch! Yet something to improve:
+This looks ok to me, I expect that Florian will be able to apply this in the
+Broadcom tree if he hasn't already. Note: there is no need to Cc the
+soc@kernel.org address on dts file submissions, this is only necessary
+if you want me to pick it up directly, e.g. for platforms without an active
+maintainer, or when changes need to go across multiple platforms.
 
-[auto build test ERROR on tegra/for-next]
-[also build test ERROR on sre-power-supply/for-next linus/master v5.18-rc5]
-[cannot apply to rafael-pm/thermal next-20220503]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/thermal-OF-rework/20220427-061937
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git for-next
-config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220503/202205032051.rSqUYbp8-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/72a43d27b527d58caee73e164c22f25afe773669
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Lezcano/thermal-OF-rework/20220427-061937
-        git checkout 72a43d27b527d58caee73e164c22f25afe773669
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/power/supply/ab8500_btemp.c: In function 'ab8500_btemp_periodic_work':
->> drivers/power/supply/ab8500_btemp.c:288:39: error: passing argument 1 of 'thermal_zone_get_temp' from incompatible pointer type [-Werror=incompatible-pointer-types]
-     288 |         ret = thermal_zone_get_temp(di->tz, &bat_temp);
-         |                                     ~~^~~~
-         |                                       |
-         |                                       struct thermal_zone_device *
-   In file included from drivers/power/supply/ab8500_btemp.c:29:
-   include/linux/thermal.h:389:48: note: expected 'struct thermal_zone *' but argument is of type 'struct thermal_zone_device *'
-     389 | int thermal_zone_get_temp(struct thermal_zone *tz, int *temp);
-         |                           ~~~~~~~~~~~~~~~~~~~~~^~
-   drivers/power/supply/ab8500_btemp.c: In function 'ab8500_btemp_probe':
->> drivers/power/supply/ab8500_btemp.c:727:16: error: assignment to 'struct thermal_zone_device *' from incompatible pointer type 'struct thermal_zone *' [-Werror=incompatible-pointer-types]
-     727 |         di->tz = thermal_zone_get_zone_by_name("battery-thermal");
-         |                ^
-   cc1: some warnings being treated as errors
-
-
-vim +/thermal_zone_get_temp +288 drivers/power/supply/ab8500_btemp.c
-
-1f855824757efa drivers/power/ab8500_btemp.c        Arun Murthy         2012-02-29  264  
-1f855824757efa drivers/power/ab8500_btemp.c        Arun Murthy         2012-02-29  265  /**
-1f855824757efa drivers/power/ab8500_btemp.c        Arun Murthy         2012-02-29  266   * ab8500_btemp_periodic_work() - Measuring the temperature periodically
-1f855824757efa drivers/power/ab8500_btemp.c        Arun Murthy         2012-02-29  267   * @work:	pointer to the work_struct structure
-1f855824757efa drivers/power/ab8500_btemp.c        Arun Murthy         2012-02-29  268   *
-1f855824757efa drivers/power/ab8500_btemp.c        Arun Murthy         2012-02-29  269   * Work function for measuring the temperature periodically
-1f855824757efa drivers/power/ab8500_btemp.c        Arun Murthy         2012-02-29  270   */
-1f855824757efa drivers/power/ab8500_btemp.c        Arun Murthy         2012-02-29  271  static void ab8500_btemp_periodic_work(struct work_struct *work)
-1f855824757efa drivers/power/ab8500_btemp.c        Arun Murthy         2012-02-29  272  {
-1f855824757efa drivers/power/ab8500_btemp.c        Arun Murthy         2012-02-29  273  	int interval;
-908fe8d6a575e2 drivers/power/ab8500_btemp.c        Hakan Berg          2012-07-17  274  	int bat_temp;
-1f855824757efa drivers/power/ab8500_btemp.c        Arun Murthy         2012-02-29  275  	struct ab8500_btemp *di = container_of(work,
-1f855824757efa drivers/power/ab8500_btemp.c        Arun Murthy         2012-02-29  276  		struct ab8500_btemp, btemp_periodic_work.work);
-2b0e7ac0841b39 drivers/power/supply/ab8500_btemp.c Linus Walleij       2022-01-29  277  	/* Assume 25 degrees celsius as start temperature */
-2b0e7ac0841b39 drivers/power/supply/ab8500_btemp.c Linus Walleij       2022-01-29  278  	static int prev = 25;
-2b0e7ac0841b39 drivers/power/supply/ab8500_btemp.c Linus Walleij       2022-01-29  279  	int ret;
-1f855824757efa drivers/power/ab8500_btemp.c        Arun Murthy         2012-02-29  280  
-f6271b4fb1d5ce drivers/power/ab8500_btemp.c        Jonas Aaberg        2012-02-27  281  	if (!di->initialized) {
-f6271b4fb1d5ce drivers/power/ab8500_btemp.c        Jonas Aaberg        2012-02-27  282  		/* Identify the battery */
-f6271b4fb1d5ce drivers/power/ab8500_btemp.c        Jonas Aaberg        2012-02-27  283  		if (ab8500_btemp_id(di) < 0)
-f6271b4fb1d5ce drivers/power/ab8500_btemp.c        Jonas Aaberg        2012-02-27  284  			dev_warn(di->dev, "failed to identify the battery\n");
-f6271b4fb1d5ce drivers/power/ab8500_btemp.c        Jonas Aaberg        2012-02-27  285  	}
-f6271b4fb1d5ce drivers/power/ab8500_btemp.c        Jonas Aaberg        2012-02-27  286  
-2b0e7ac0841b39 drivers/power/supply/ab8500_btemp.c Linus Walleij       2022-01-29  287  	/* Failover if a reading is erroneous, use last meausurement */
-2b0e7ac0841b39 drivers/power/supply/ab8500_btemp.c Linus Walleij       2022-01-29 @288  	ret = thermal_zone_get_temp(di->tz, &bat_temp);
-2b0e7ac0841b39 drivers/power/supply/ab8500_btemp.c Linus Walleij       2022-01-29  289  	if (ret) {
-2b0e7ac0841b39 drivers/power/supply/ab8500_btemp.c Linus Walleij       2022-01-29  290  		dev_err(di->dev, "error reading temperature\n");
-2b0e7ac0841b39 drivers/power/supply/ab8500_btemp.c Linus Walleij       2022-01-29  291  		bat_temp = prev;
-2b0e7ac0841b39 drivers/power/supply/ab8500_btemp.c Linus Walleij       2022-01-29  292  	} else {
-2b0e7ac0841b39 drivers/power/supply/ab8500_btemp.c Linus Walleij       2022-01-29  293  		/* Convert from millicentigrades to centigrades */
-2b0e7ac0841b39 drivers/power/supply/ab8500_btemp.c Linus Walleij       2022-01-29  294  		bat_temp /= 1000;
-2b0e7ac0841b39 drivers/power/supply/ab8500_btemp.c Linus Walleij       2022-01-29  295  		prev = bat_temp;
-2b0e7ac0841b39 drivers/power/supply/ab8500_btemp.c Linus Walleij       2022-01-29  296  	}
-2b0e7ac0841b39 drivers/power/supply/ab8500_btemp.c Linus Walleij       2022-01-29  297  
-908fe8d6a575e2 drivers/power/ab8500_btemp.c        Hakan Berg          2012-07-17  298  	/*
-908fe8d6a575e2 drivers/power/ab8500_btemp.c        Hakan Berg          2012-07-17  299  	 * Filter battery temperature.
-908fe8d6a575e2 drivers/power/ab8500_btemp.c        Hakan Berg          2012-07-17  300  	 * Allow direct updates on temperature only if two samples result in
-908fe8d6a575e2 drivers/power/ab8500_btemp.c        Hakan Berg          2012-07-17  301  	 * same temperature. Else only allow 1 degree change from previous
-908fe8d6a575e2 drivers/power/ab8500_btemp.c        Hakan Berg          2012-07-17  302  	 * reported value in the direction of the new measurement.
-908fe8d6a575e2 drivers/power/ab8500_btemp.c        Hakan Berg          2012-07-17  303  	 */
-2c4c40ac0052ea drivers/power/ab8500_btemp.c        Rupesh Kumar        2012-08-22  304  	if ((bat_temp == di->prev_bat_temp) || !di->initialized) {
-2c4c40ac0052ea drivers/power/ab8500_btemp.c        Rupesh Kumar        2012-08-22  305  		if ((di->bat_temp != di->prev_bat_temp) || !di->initialized) {
-2c4c40ac0052ea drivers/power/ab8500_btemp.c        Rupesh Kumar        2012-08-22  306  			di->initialized = true;
-908fe8d6a575e2 drivers/power/ab8500_btemp.c        Hakan Berg          2012-07-17  307  			di->bat_temp = bat_temp;
-297d716f6260cc drivers/power/ab8500_btemp.c        Krzysztof Kozlowski 2015-03-12  308  			power_supply_changed(di->btemp_psy);
-908fe8d6a575e2 drivers/power/ab8500_btemp.c        Hakan Berg          2012-07-17  309  		}
-908fe8d6a575e2 drivers/power/ab8500_btemp.c        Hakan Berg          2012-07-17  310  	} else if (bat_temp < di->prev_bat_temp) {
-908fe8d6a575e2 drivers/power/ab8500_btemp.c        Hakan Berg          2012-07-17  311  		di->bat_temp--;
-297d716f6260cc drivers/power/ab8500_btemp.c        Krzysztof Kozlowski 2015-03-12  312  		power_supply_changed(di->btemp_psy);
-908fe8d6a575e2 drivers/power/ab8500_btemp.c        Hakan Berg          2012-07-17  313  	} else if (bat_temp > di->prev_bat_temp) {
-908fe8d6a575e2 drivers/power/ab8500_btemp.c        Hakan Berg          2012-07-17  314  		di->bat_temp++;
-297d716f6260cc drivers/power/ab8500_btemp.c        Krzysztof Kozlowski 2015-03-12  315  		power_supply_changed(di->btemp_psy);
-1f855824757efa drivers/power/ab8500_btemp.c        Arun Murthy         2012-02-29  316  	}
-908fe8d6a575e2 drivers/power/ab8500_btemp.c        Hakan Berg          2012-07-17  317  	di->prev_bat_temp = bat_temp;
-1f855824757efa drivers/power/ab8500_btemp.c        Arun Murthy         2012-02-29  318  
-1f855824757efa drivers/power/ab8500_btemp.c        Arun Murthy         2012-02-29  319  	if (di->events.ac_conn || di->events.usb_conn)
-b0284de05e07d5 drivers/power/ab8500_btemp.c        Lee Jones           2012-11-30  320  		interval = di->bm->temp_interval_chg;
-1f855824757efa drivers/power/ab8500_btemp.c        Arun Murthy         2012-02-29  321  	else
-b0284de05e07d5 drivers/power/ab8500_btemp.c        Lee Jones           2012-11-30  322  		interval = di->bm->temp_interval_nochg;
-1f855824757efa drivers/power/ab8500_btemp.c        Arun Murthy         2012-02-29  323  
-1f855824757efa drivers/power/ab8500_btemp.c        Arun Murthy         2012-02-29  324  	/* Schedule a new measurement */
-1f855824757efa drivers/power/ab8500_btemp.c        Arun Murthy         2012-02-29  325  	queue_delayed_work(di->btemp_wq,
-1f855824757efa drivers/power/ab8500_btemp.c        Arun Murthy         2012-02-29  326  		&di->btemp_periodic_work,
-1f855824757efa drivers/power/ab8500_btemp.c        Arun Murthy         2012-02-29  327  		round_jiffies(interval * HZ));
-1f855824757efa drivers/power/ab8500_btemp.c        Arun Murthy         2012-02-29  328  }
-1f855824757efa drivers/power/ab8500_btemp.c        Arun Murthy         2012-02-29  329  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+       Arnd

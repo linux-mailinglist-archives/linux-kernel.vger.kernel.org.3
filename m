@@ -2,77 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66B54518708
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF9A518716
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:45:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237285AbiECOrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 10:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41596 "EHLO
+        id S237333AbiECOso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 10:48:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237267AbiECOrx (ORCPT
+        with ESMTP id S237302AbiECOsd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 10:47:53 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D6D39145
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 07:44:21 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id g23so20094401edy.13
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 07:44:20 -0700 (PDT)
+        Tue, 3 May 2022 10:48:33 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AEDE3916D
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 07:44:59 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id p6so15533199pjm.1
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 07:44:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=aY4s82XwSrqXdVrj1Gg/ZPd4J9t1Ccsavp0PTdRcSPw=;
-        b=etVEBmTj3fnk5cOi9G+OhkVYOhQUkUlnSMAJFU4KyxOD0KIU41vOb98UqDOZuQ3E9E
-         oZC8hEg0hnEhxDxjjvDrcwQqS5/ZFuwz1ewdeRmHJpG20jN5D4MZJsAKGR+hnsFenmjj
-         MVRJD6cfM+TF0oCgDJhEXCbVmTqTnQNALopxxnQt1fD+1ieXzBeLiMsPcW38cf8T/alh
-         Q8jsNkwqVL+20us+HSrr0+LuUTftNoNMoXcByfYbqGOXgcNe25Q83B8Fa+YYNQmcJ8Cr
-         Y5qPow+KWvn4Y6D+NXrRRoFCa+djW6rMcybwXjP11sNwEUhM80xeqJAkEXgZd5/SzJyf
-         rqlw==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e8AVZNz1T1fbKBPaS1jbLfs2nSYwxCJeZrFfZY3AuXg=;
+        b=YgIR+HSs5Fl2nL+1avLDSIxzGwgrqQZg4BiwSjU0cu9k2bxpynzPGC6wvWGoMkvHfv
+         yMI9a0zmrILdE4gbdtT/4db5hjs7b+NxgPwkibcXWrjxuWgC0hV/jH5qF4vcbryjtJi/
+         KvzOXe86/hQ0c/8QofStHRq2f0dDshoXPcr9I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=aY4s82XwSrqXdVrj1Gg/ZPd4J9t1Ccsavp0PTdRcSPw=;
-        b=CWvw4dMRImyuvqlavtf4BIXe0s8iOOj9sm3fZs+lEzQfTJWzkqKlttrdRgPwvtOTK+
-         TCoS7UHbu8PghSXlvqW+0x6W4a/xENB4cy/kCPbHkCzw3mewpBejjbuxFKV9TPvrROND
-         ThpgCgl3bVBnKoSznf92k0Bzz2Tb6et4NHcg4+HuXpLTwzkSiaQUtB4C8AgeoFwJCh5U
-         Lle6uiG/KbOxigb/3VTczBnspj74oZ6yfQIdJkdyCIjP0kEtX0BDT3k3cKXCYaA0HILR
-         b8EsdCdHqv9OOzXe5kl5COM83Jc6jQMLMHRGpbXC1QQcD12b4IFZGH0Yqpmm+sIt9QVN
-         gULA==
-X-Gm-Message-State: AOAM531LnmHqOAq1WumP6YNOi5rx7Ukj1yrFHxAUZULeDEFB/k3P/O/m
-        2rvVv3OH8I5wmksTWvctoUkgnQ==
-X-Google-Smtp-Source: ABdhPJxpfh0y/LqVlOfJQR1BB3AT0qQiNxhOj7CgucuGZhv207wHkqq8MYHox38zzpF8jJTWjtV2mQ==
-X-Received: by 2002:aa7:d9d6:0:b0:425:dafc:2fc6 with SMTP id v22-20020aa7d9d6000000b00425dafc2fc6mr17994605eds.340.1651589059417;
-        Tue, 03 May 2022 07:44:19 -0700 (PDT)
-Received: from [192.168.0.203] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id gv26-20020a1709072bda00b006f3a8b81ff7sm4682592ejc.3.2022.05.03.07.44.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 May 2022 07:44:17 -0700 (PDT)
-Message-ID: <d91eaef9-562b-27ff-9164-518b0666d7a5@linaro.org>
-Date:   Tue, 3 May 2022 16:44:16 +0200
+        bh=e8AVZNz1T1fbKBPaS1jbLfs2nSYwxCJeZrFfZY3AuXg=;
+        b=nRAXsp93MQg/cPmPNQ1JH+nlACWQcJJPzuLFc+3FnGd9N+FTan3MBL7KRbvQfVBnSF
+         BSaFS1S1AkQx4Iqp08h+6mo25O/IUIvqTisGevShMkhKr/4ChO3Kh4C5te/+flLLFgwX
+         WURIlseMADzAgw080XysifQmXoy7HXYT43ohIogycMA4Qy6wNg7pR1K2RGnNt4WSYg7Y
+         Hn6bzmWKoeoSkV/92VsVYdgaaoVNyK+S+SGWHFi53nHEjelnOQwMfUjAPANmr0KurWxg
+         FXVmajM7Gl7cinqGjXPxmFyWpj9fUnQJZ54wKe5BxPs3Gi7QFrighkfAPma7ovHD4eHf
+         a1SA==
+X-Gm-Message-State: AOAM533UDWxvIkNCDm5hPexVFTqmOjpXmWuA6lMGEL+REhHPqh0ENTcb
+        3BCri1tFFSi0+9p0wGnxGjVLVg==
+X-Google-Smtp-Source: ABdhPJxpqQbtuAURmpaH45+EofYX7rkQQIunIhDE2JG2HBB7V2ZaoSOsrzkTFHzKRa1O/qRfMqbtMA==
+X-Received: by 2002:a17:90a:b106:b0:1d9:7cde:7914 with SMTP id z6-20020a17090ab10600b001d97cde7914mr5052946pjq.56.1651589098978;
+        Tue, 03 May 2022 07:44:58 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id k4-20020a170902ba8400b0015e8d4eb230sm6387973pls.122.2022.05.03.07.44.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 07:44:58 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Raju Rangoju <rajur@chelsio.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        kernel test robot <lkp@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        stable@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] net: chelsio: cxgb4: Avoid potential negative array offset
+Date:   Tue,  3 May 2022 07:44:25 -0700
+Message-Id: <20220503144425.2858110-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: power: Add MediaTek Helio X10 MT6795
- power domains
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, robh+dt@kernel.org
-Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        chun-jie.chen@mediatek.com, weiyi.lu@mediatek.com,
-        mbrugger@suse.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com,
-        nfraprado@collabora.com
-References: <20220503141441.125852-1-angelogioacchino.delregno@collabora.com>
- <20220503141441.125852-2-angelogioacchino.delregno@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220503141441.125852-2-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4431; h=from:subject; bh=+8uAMoqqS0Bcfw8fZYr6KoQkcNcm36Imb2FI1uAd3hw=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBicT/Jv8v/feIVKVuIyt5mmkMRPZzdczQGAeIED/S7 Sue6QWmJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYnE/yQAKCRCJcvTf3G3AJnSlD/ 9g7H+DltIHtP9cfNn3f84D/otBGRybV39ENgfcteZPAekvVAxWbzFXVXjV1DCl2HYb6XH94aYgCCvl VjgPLaI2AgI1z6oeSF4FXEZ8Oj+pmwDMBZOwIXpViXgs7UbPQWvC88ax1BUlLCHKdz1cUtZoY/SohH lRdgXNPqyqFjAUyvop6yPb1TyhHTn6DgIzfF92/c/VwB0rgIci9AuoyQ6xSrrse11Q4Q9IVBGgsUSv IcJThpwqDXdsRe0KtlJf6dRV0aB9v9RX6kEvKrx5T4ovBu6XqgSgW5Kjj1XubGyevRDDyU0k/ttLPh Hpzhx+t9n/UC5k+gCFS3q+e1tGbaVF1LOASAs1nhCw7RnSCT/mekDTlJSKwLN+WxfPvQPjCMCF8wh9 Ra3Gb0Uezm2UiXIkAZ4FbQZPP5MR5zARIfUGmT4ChTTw84uORVP9rRBuv1xxBpuNg3HDmfYzu4/UJM ZDJit+SFwwho3EK2zZlweact3kjnuUzcR+v11rY52Ejxl/H/wf0BVWzmJS7nO3tjeIBLn9E86n5uP+ 3iInLzOk4swgV/dqvq/xjSvecKICXVVtvOgnP1pkYAkguEdt46US/lUJhZI/FMIH7uAcCTbH9ARg/A jTjJNdk3gEUCPfhSDLdbzKvYzfYIr95z2fYT1LAc6hfj/RdtVBlXjY9EhL7g==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,18 +74,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/05/2022 16:14, AngeloGioacchino Del Regno wrote:
-> Add power domains dt-bindings for MediaTek Helio X10 (MT6795).
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  .../power/mediatek,power-controller.yaml         |  2 ++
->  include/dt-bindings/power/mt6795-power.h         | 16 ++++++++++++++++
->  2 files changed, 18 insertions(+)
->  create mode 100644 include/dt-bindings/power/mt6795-power.h
+Using min_t(int, ...) as a potential array index implies to the compiler
+that negative offsets should be allowed. This is not the case, though.
+Replace min_t() with clamp_t(). Fixes the following warning exposed
+under future CONFIG_FORTIFY_SOURCE improvements:
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In file included from include/linux/string.h:253,
+                 from include/linux/bitmap.h:11,
+                 from include/linux/cpumask.h:12,
+                 from include/linux/smp.h:13,
+                 from include/linux/lockdep.h:14,
+                 from include/linux/rcupdate.h:29,
+                 from include/linux/rculist.h:11,
+                 from include/linux/pid.h:5,
+                 from include/linux/sched.h:14,
+                 from include/linux/delay.h:23,
+                 from drivers/net/ethernet/chelsio/cxgb4/t4_hw.c:35:
+drivers/net/ethernet/chelsio/cxgb4/t4_hw.c: In function 't4_get_raw_vpd_params':
+include/linux/fortify-string.h:46:33: warning: '__builtin_memcpy' pointer overflow between offset 29 and size [2147483648, 4294967295] [-Warray-bounds]
+   46 | #define __underlying_memcpy     __builtin_memcpy
+      |                                 ^
+include/linux/fortify-string.h:388:9: note: in expansion of macro '__underlying_memcpy'
+  388 |         __underlying_##op(p, q, __fortify_size);                        \
+      |         ^~~~~~~~~~~~~
+include/linux/fortify-string.h:433:26: note: in expansion of macro '__fortify_memcpy_chk'
+  433 | #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+      |                          ^~~~~~~~~~~~~~~~~~~~
+drivers/net/ethernet/chelsio/cxgb4/t4_hw.c:2796:9: note: in expansion of macro 'memcpy'
+ 2796 |         memcpy(p->id, vpd + id, min_t(int, id_len, ID_LEN));
+      |         ^~~~~~
+include/linux/fortify-string.h:46:33: warning: '__builtin_memcpy' pointer overflow between offset 0 and size [2147483648, 4294967295] [-Warray-bounds]
+   46 | #define __underlying_memcpy     __builtin_memcpy
+      |                                 ^
+include/linux/fortify-string.h:388:9: note: in expansion of macro '__underlying_memcpy'
+  388 |         __underlying_##op(p, q, __fortify_size);                        \
+      |         ^~~~~~~~~~~~~
+include/linux/fortify-string.h:433:26: note: in expansion of macro '__fortify_memcpy_chk'
+  433 | #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
+      |                          ^~~~~~~~~~~~~~~~~~~~
+drivers/net/ethernet/chelsio/cxgb4/t4_hw.c:2798:9: note: in expansion of macro 'memcpy'
+ 2798 |         memcpy(p->sn, vpd + sn, min_t(int, sn_len, SERNUM_LEN));
+      |         ^~~~~~
 
+Additionally remove needless cast from u8[] to char * in last strim()
+call.
 
-Best regards,
-Krzysztof
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/lkml/202205031926.FVP7epJM-lkp@intel.com
+Fixes: fc9279298e3a ("cxgb4: Search VPD with pci_vpd_find_ro_info_keyword()")
+Fixes: 24c521f81c30 ("cxgb4: Use pci_vpd_find_id_string() to find VPD ID string")
+Cc: Raju Rangoju <rajur@chelsio.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org
+Cc: stable@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ drivers/net/ethernet/chelsio/cxgb4/t4_hw.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/net/ethernet/chelsio/cxgb4/t4_hw.c b/drivers/net/ethernet/chelsio/cxgb4/t4_hw.c
+index e7b4e3ed056c..f119ec7323e5 100644
+--- a/drivers/net/ethernet/chelsio/cxgb4/t4_hw.c
++++ b/drivers/net/ethernet/chelsio/cxgb4/t4_hw.c
+@@ -2793,14 +2793,14 @@ int t4_get_raw_vpd_params(struct adapter *adapter, struct vpd_params *p)
+ 		goto out;
+ 	na = ret;
+ 
+-	memcpy(p->id, vpd + id, min_t(int, id_len, ID_LEN));
++	memcpy(p->id, vpd + id, clamp_t(int, id_len, 0, ID_LEN));
+ 	strim(p->id);
+-	memcpy(p->sn, vpd + sn, min_t(int, sn_len, SERNUM_LEN));
++	memcpy(p->sn, vpd + sn, clamp_t(int, sn_len, 0, SERNUM_LEN));
+ 	strim(p->sn);
+-	memcpy(p->pn, vpd + pn, min_t(int, pn_len, PN_LEN));
++	memcpy(p->pn, vpd + pn, clamp_t(int, pn_len, 0, PN_LEN));
+ 	strim(p->pn);
+-	memcpy(p->na, vpd + na, min_t(int, na_len, MACADDR_LEN));
+-	strim((char *)p->na);
++	memcpy(p->na, vpd + na, clamp_t(int, na_len, 0, MACADDR_LEN));
++	strim(p->na);
+ 
+ out:
+ 	vfree(vpd);
+-- 
+2.32.0
+

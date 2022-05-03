@@ -2,102 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD0B1518DD5
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 22:05:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11EAA518DCC
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 22:05:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235623AbiECUJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 16:09:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37756 "EHLO
+        id S238086AbiECUJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 16:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236941AbiECUI5 (ORCPT
+        with ESMTP id S237119AbiECUI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 3 May 2022 16:08:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA032AE0;
-        Tue,  3 May 2022 13:05:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 40D856189A;
-        Tue,  3 May 2022 20:05:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0282C385A4;
-        Tue,  3 May 2022 20:05:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651608321;
-        bh=2OQ31S8saJK84+b60Nks/1nuGKuObPzODZf658f3HMo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z3gmS/aw/5UbzdnldhQqOG3y2Htd54aWj3NdcFNjD/VuO6MUhIRAXm8gaqDMrbl7m
-         0Yd/IIwkIht0j2PXb+Na0iGFxmmXo69g/ybxOPgh9SC99E//dv42kQFiRnnJINmj0G
-         WQVouHUD07VcTCvD102p1MYo7k7OtdRH4nZKSxophQWU5wzuRrxx/mIrjlCvn7kjsq
-         yDReBNF0aClXwfI3zXeCWlW3e+RBMWhcbp6h1csAmjw9TRrSIgu4j5wxKNCdKT+oKm
-         M5ALQh3FJxRyG6IiOBdtF5JBS3VvY3anbsCRiV8IDHss/pgBG5U5QwG09lcuiCVlnW
-         Bdy2Z6nmvE8yA==
-Date:   Tue, 3 May 2022 13:05:19 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Pankaj Raghav <p.raghav@samsung.com>
-Cc:     axboe@kernel.dk, snitzer@kernel.org, hch@lst.de, mcgrof@kernel.org,
-        naohiro.aota@wdc.com, sagi@grimberg.me,
-        damien.lemoal@opensource.wdc.com, dsterba@suse.com,
-        johannes.thumshirn@wdc.com, linux-kernel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, clm@fb.com, gost.dev@samsung.com,
-        chao@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        josef@toxicpanda.com, jonathan.derrick@linux.dev, agk@redhat.com,
-        kbusch@kernel.org, kch@nvidia.com, linux-nvme@lists.infradead.org,
-        dm-devel@redhat.com, bvanassche@acm.org, jiangbo.365@bytedance.com,
-        linux-fsdevel@vger.kernel.org, matias.bjorling@wdc.com,
-        linux-block@vger.kernel.org
-Subject: Re: [PATCH 15/16] f2fs: ensure only power of 2 zone sizes are allowed
-Message-ID: <YnGK/8lu2GW4gEY0@google.com>
-References: <20220427160255.300418-1-p.raghav@samsung.com>
- <CGME20220427160312eucas1p279bcffd97ef83bd3617a38b80d979746@eucas1p2.samsung.com>
- <20220427160255.300418-16-p.raghav@samsung.com>
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CD72DFA;
+        Tue,  3 May 2022 13:05:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=6y73UrLkuBeZbqQWQxE1t7/fvOkdPG7FrQgvW5TbCZk=; b=uV47lbaYCI77SzKFgjANFlLdPi
+        L02iSgJfX9+DktwQKv2+gW04aiFG88sPWwCOpfbWVfsKcu5mcv6/fSFU+nTtYhp4/nG6vb6sK6vO1
+        VuOYw0zbi0N5oB1BXqerDMF7l1psgHzPI174q4fF7eoDfL7w+JUkH5bAerAOHbru+Yd3kpigqC8Qv
+        qaW65HJ2rsoeJpsMNjSwiawKJyE5v7ztmXTNDLnq1z+n3rPjhh/MtEwPoeXxzP0/w7t/fjkR8jMOD
+        yUESiFI99BpsJg2J6h3EUzozTZNBVnIfNljmTXGlRhcUON7mxblWtRdlKKftawmCl9vCGYK6Z3Mag
+        IuaQzkHg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nlylv-007UQd-7t; Tue, 03 May 2022 20:05:23 +0000
+Date:   Tue, 3 May 2022 13:05:23 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     linux-doc@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: [PATCH] firmware_loader: describe 'module' parameter of
+ firmware_upload_register()
+Message-ID: <YnGLA92KGlloOsLf@bombadil.infradead.org>
+References: <20220502051456.30741-1-bagasdotme@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220427160255.300418-16-p.raghav@samsung.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220502051456.30741-1-bagasdotme@gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied to f2fs tree. Thanks,
+On Mon, May 02, 2022 at 12:14:56PM +0700, Bagas Sanjaya wrote:
+> Stephen Rothwell reported kernel-doc warning:
+> 
+> drivers/base/firmware_loader/sysfs_upload.c:285: warning: Function parameter or member 'module' not described in 'firmware_upload_register'
+> 
+> Fix the warning by describing the 'module' parameter.
+> 
+> Fixes: 97730bbb242cde ("firmware_loader: Add firmware-upload support")
+> Link: https://lore.kernel.org/linux-next/20220502083658.266d55f8@canb.auug.org.au/
+> Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+> Cc: Russ Weight <russell.h.weight@intel.com>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+> Cc: Linux Next Mailing List <linux-next@vger.kernel.org>
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-On 04/27, Pankaj Raghav wrote:
-> From: Luis Chamberlain <mcgrof@kernel.org>
-> 
-> F2FS zoned support has power of 2 zone size assumption in many places
-> such as in __f2fs_issue_discard_zone, init_blkz_info. As the power of 2
-> requirement has been removed from the block layer, explicitly add a
-> condition in f2fs to allow only power of 2 zone size devices.
-> 
-> This condition will be relaxed once those calculation based on power of
-> 2 is made generic.
-> 
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
-> ---
->  fs/f2fs/super.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-> index f64761a15df7..db79abf30002 100644
-> --- a/fs/f2fs/super.c
-> +++ b/fs/f2fs/super.c
-> @@ -3685,6 +3685,10 @@ static int init_blkz_info(struct f2fs_sb_info *sbi, int devi)
->  		return 0;
->  
->  	zone_sectors = bdev_zone_sectors(bdev);
-> +	if (!is_power_of_2(zone_sectors)) {
-> +		f2fs_err(sbi, "F2FS does not support non power of 2 zone sizes\n");
-> +		return -EINVAL;
-> +	}
->  
->  	if (sbi->blocks_per_blkz && sbi->blocks_per_blkz !=
->  				SECTOR_TO_BLOCK(zone_sectors))
-> -- 
-> 2.25.1
+Acked-by: Luis Chamberlain <mcgrof@kernel.org>
+
+  Luis

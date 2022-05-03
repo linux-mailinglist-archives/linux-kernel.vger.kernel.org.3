@@ -2,55 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69040518523
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 15:09:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDC53518529
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 15:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235891AbiECNM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 09:12:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60688 "EHLO
+        id S235923AbiECNNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 09:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235892AbiECNMY (ORCPT
+        with ESMTP id S232644AbiECNNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 09:12:24 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B102B276
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 06:08:51 -0700 (PDT)
+        Tue, 3 May 2022 09:13:14 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8A42B259;
+        Tue,  3 May 2022 06:09:41 -0700 (PDT)
 Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 243D8XS7064528;
-        Tue, 3 May 2022 08:08:33 -0500
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 243D8ux6043001;
+        Tue, 3 May 2022 08:08:56 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1651583313;
-        bh=KTPCr/0aiBOeqkppu9KyymNBBNEpv17gShG+xUaiRNU=;
+        s=ti-com-17Q1; t=1651583336;
+        bh=3vIShAAoNpZLtMZtd0E1uDb7nunSsqnUnysIieloaUw=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=otb/DmnBbR7pP2ghUSV9TIEYrhys1NlRt96lnLzzwtIPQDDnl8Il4Hr1JtQVgBDUf
-         SljJ0n2vE3+lzUn9bKgF8JAugyO9EYmeFCx3WU7FHaqgVO6OSySfgdxIw+G+LMHFv7
-         ykQ6XlG0+GoniUze/uZwtMzrmFghmPTdQAUIKe0Y=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 243D8XoN081952
+        b=FawXVzieqpKrR+PRu9xRSx1l1CLani8PFnfCochOQXzdHQrC/eZZGn/5NOQBImvES
+         VRis9xQZ5doy/zqNikcekh/Fez4L1AkSur1urCHCthQ/PLvUe9TGjZgSgKSzbqso0x
+         BSJ5vcKbpQQ1Eqe51rrovkVvIT2e5aA+AVFbtRXk=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 243D8ueH082277
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 3 May 2022 08:08:33 -0500
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 3 May 2022 08:08:56 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 3
- May 2022 08:08:33 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ May 2022 08:08:55 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 3 May 2022 08:08:33 -0500
+ Frontend Transport; Tue, 3 May 2022 08:08:55 -0500
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 243D8XRP048583;
-        Tue, 3 May 2022 08:08:33 -0500
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 243D8tUN096341;
+        Tue, 3 May 2022 08:08:55 -0500
 From:   Nishanth Menon <nm@ti.com>
-To:     Haowen Bai <baihaowen@meizu.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>
-CC:     Nishanth Menon <nm@ti.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] soc: ti: use IS_ERR insead of IS_ERR_OR_NULL when checking knav_queue_open() result
-Date:   Tue, 3 May 2022 08:08:30 -0500
-Message-ID: <165158329738.6333.14689284990960224931.b4-ty@ti.com>
+To:     Santosh Shilimkar <ssantosh@kernel.org>,
+        Dave Gerlach <d-gerlach@ti.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Drew Fustini <dfustini@baylibre.com>
+CC:     Nishanth Menon <nm@ti.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>
+Subject: Re: (subset) [PATCH v3 0/2] soc: ti: wkup_m3_ipc: Add support for IO Isolation
+Date:   Tue, 3 May 2022 08:08:54 -0500
+Message-ID: <165158332118.6421.15725754853562188300.b4-ty@ti.com>
 X-Mailer: git-send-email 2.31.1
-In-Reply-To: <1650765944-20170-1-git-send-email-baihaowen@meizu.com>
-References: <1650765944-20170-1-git-send-email-baihaowen@meizu.com>
+In-Reply-To: <20220414192722.2978837-1-dfustini@baylibre.com>
+References: <20220414192722.2978837-1-dfustini@baylibre.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -65,23 +70,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Haowen Bai,
+Hi Drew Fustini,
 
-On Sun, 24 Apr 2022 10:05:43 +0800, Haowen Bai wrote:
-> As the usage of knav_queue_open():
+On Thu, 14 Apr 2022 12:27:22 -0700, Drew Fustini wrote:
+> TI AM437x SoCs support isolation of the IOs so that control is taken
+> from the peripheral they are connected to and overridden by values
+> present in the control register for that pad. This series documents a
+> new property 'ti,set-io-isolation' and updates the wkup_m3_ipc driver to
+> inform the CM3 firmware when that property is set.
 > 
-> * Returns a handle to the open hardware queue if successful. Use IS_ERR()
-> * to check the returned value for error codes.
-> 
-> It will only return error codes, not null.
+> A prerequisite for this series is:
+> [PATCH v2 0/2] soc: ti: wkup_m3_ipc: support vtt toggle
+> https://lore.kernel.org/lkml/20220409211215.2529387-1-dfustini@baylibre.com/T/
 > 
 > [...]
 
 I have applied the following to branch ti-drivers-soc-next on [1].
 Thank you!
 
-[1/1] soc: ti: use IS_ERR insead of IS_ERR_OR_NULL when checking knav_queue_open() result
-      commit: d4c41d32cf8af10e4c0a35a6d4995de253b54df6
+[2/2] soc: ti: wkup_m3_ipc: Add support for IO Isolation
+      commit: 1dcbae86ee669bdb0338954cd0136863f5c96c0a
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent up the chain during

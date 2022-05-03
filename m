@@ -2,255 +2,513 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F7B55183D2
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 14:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 126D35183ED
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 14:06:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235087AbiECMFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 08:05:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51826 "EHLO
+        id S235089AbiECMJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 08:09:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235054AbiECMFm (ORCPT
+        with ESMTP id S235103AbiECMIu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 08:05:42 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D6531234;
-        Tue,  3 May 2022 05:02:10 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 242Lsafc008207;
-        Tue, 3 May 2022 05:02:09 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : mime-version; s=facebook;
- bh=fYXGZFN7ZxeteAf8JWIwevsVC7k3o/R2Z2ty2uOwwnU=;
- b=KQFRF8f5axQ48M+IQtx0FgS0bmiwHPnZbFneADaHCTelS3vo/6Vize5sIWj4l0vU2XM1
- 1KhoAtrkyljN5sIOs/00wZW/TIeUl9wnDaheFpRbIFIQP3cl3/4j1J1rATj8G2+Xm54h
- +vXfqBBSwwwZjYkWDBmUqcdPcAd87zK4fjk= 
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2101.outbound.protection.outlook.com [104.47.70.101])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fs2uxye41-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 May 2022 05:02:09 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UbuLWgZbJSg8F+jOLDE2N/lavnrCdkUJyrc/FXuOQNe6apkr7hT0jlC/p2ADXXnlxgF2RcWIhgOrW4Fu/s8nB2tN7kxyvjtjtdi1u1FzVMS1I0OgLIUmo1dsV52+kYlx4BoRd5ihureF4ZM8NV/VQ/f/M/pWX4Nju4l2rB2n1NTPByvoGVT6nZADsS1cBtaqP3sAxZuYX5KCFraE82TeL7G9e0CFYEpOqpk9UFrjNpggofnxSaj8uYQp74pOldErRqdsiO2bM5V1F5zhFeI4yrpfpp7fO1u211kPT7RVAlXCW0DcFKmz29vbu5kdN6vtMVNIPZrWmgDO5tgWa0Wk/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fYXGZFN7ZxeteAf8JWIwevsVC7k3o/R2Z2ty2uOwwnU=;
- b=Dp5mRe34BWANz2RPqzg2VpHw15A9bHk9AANEkS8HD9P/mlXZe4ciZFuP62zQsI1coo7F8sXsL5NgSdbhiwcQPUz6FoJHeGcfl2prte+CsQb+OasphXVHWnJeddqYkAAsaC51uLN0dX/TeftcV8wtc8O0gIFSFdycXwlpDOKw7daJot07cTto9EM00F1PyYN+G7ptXGsGx3C/bd32fYA9BLuxnh8WR0AkVCDVC3cWk9rfRcfrM4Knn+B7sTm3gKQJIAhnLUXDlk7QSuu3zE8tsuheTQPdvjPMmCfJhaHh3SWD4nYHnkyaAlvbBwrrZZPRM2pYB+8B2fv0xX+BYOkA8A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SJ0PR15MB4552.namprd15.prod.outlook.com (2603:10b6:a03:379::12)
- by DM6PR15MB3097.namprd15.prod.outlook.com (2603:10b6:5:13d::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24; Tue, 3 May
- 2022 12:02:06 +0000
-Received: from SJ0PR15MB4552.namprd15.prod.outlook.com
- ([fe80::af:a5d5:458b:4f4e]) by SJ0PR15MB4552.namprd15.prod.outlook.com
- ([fe80::af:a5d5:458b:4f4e%9]) with mapi id 15.20.5206.024; Tue, 3 May 2022
- 12:02:06 +0000
-From:   Jonathan McDowell <noodles@fb.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v2] Carry forward IMA measurement log on kexec on x86_64
-Thread-Topic: [PATCH v2] Carry forward IMA measurement log on kexec on x86_64
-Thread-Index: AQHYWY4Q62zi0Q79MUyPBeRhACU9Yq0HbX8AgAWqkgA=
-Date:   Tue, 3 May 2022 12:02:06 +0000
-Message-ID: <YnEZtisrvO0AhrAz@noodles-fedora.dhcp.thefacebook.com>
-References: <YmgjXZphkmDKgaOA@noodles-fedora-PC23Y6EG>
- <7d7fa18d396439d98e26890f647fffdc9e7d8b20.camel@linux.ibm.com>
-In-Reply-To: <7d7fa18d396439d98e26890f647fffdc9e7d8b20.camel@linux.ibm.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: fcc331ce-cda2-4846-1095-08da2cfcbea4
-x-ms-traffictypediagnostic: DM6PR15MB3097:EE_
-x-microsoft-antispam-prvs: <DM6PR15MB3097C2362FCD5AFC220DB85BC1C09@DM6PR15MB3097.namprd15.prod.outlook.com>
-x-fb-source: Internal
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: KKUXIaqei1lyaUOY8iBDwvolyxWXq3iGytoFBE7TqKq4182e9EK8IODOTRf8Cvg9/1XOpGPD6evpOOrdGEUHzT/T0xDHYBWUvOA8JyPGn0dEm6KlecwPDwWewunZeQzknrpBGrYwhO7m/SYMsaY7rP7jhqxQRo7n65vP6kizafTl/A6YSijjnzmd1YnnZ1vA8/hs95mNUI+NcGnE/Zg8WPGUajiu1OWJbxiFjXQlVuMYYQ9PCoFRqmhh0JT7K5PeX3gE/LUBDCYPj/09LZlYCwuchXbPggaG5fseeHouPDyTvcLXGIasSi7s4z8xZWV0NI+KFkukWNKzI7R3ebDgFqxDCELTV+j6rAQ/2djPoe/hAhkJF71WKtLTyT5FTJk/WJl62cr7b4WiAKmXtFTagw3q3bEiyAxkdJLdLoNffBiyphlo7VaH6AV+QHAaTx8QoMfRkfx25vFcGsNR39g9APMR8F5RckIPF6j3i+g+qnsqm56Uu6a29WaIAiHdatRCmOdlpcdJ4mCO0oPh1Wt9ehExN594GUkf+QSTBSl/8f2h3hP21xO7gE/947+WQeIe5In89FFfAv2k12TMvm/p1oiYQlOBU/Ab0/YmOR2S9iQfuGKbxUTn2JBeY3KOKRHsbxVvUOleNh2MxTl2QGyPONxKxl7q7jq1yhc7GmQHczCQVBCpufos9j6XvZoXKgjLbokOdALfkSm+nhHAYRIwOw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR15MB4552.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6916009)(54906003)(71200400001)(86362001)(38100700002)(2906002)(38070700005)(83380400001)(122000001)(6512007)(6506007)(26005)(9686003)(186003)(64756008)(66446008)(66476007)(508600001)(6486002)(76116006)(66946007)(316002)(4326008)(66556008)(8676002)(8936002)(5660300002)(7416002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?pS5et29zEaSJ41XJjvjU2mRB4VanzqHAS+YLzo2NqCDNkZ3wetH05hfcRDal?=
- =?us-ascii?Q?/nxPDemdyvdBmEQ/3jI3tH5sC9urCN7ynmS4LsZ0UYaPKnE7CLFKuFakKG0V?=
- =?us-ascii?Q?uCQFtZsst7ppuLeqYAEUGJhKNJdc+iiWyFKmJRZSKrLWyfQJY/hnmwFEqxtV?=
- =?us-ascii?Q?nX9wWbzvTjVMVL0X5g9YlmVQXYRvI3aaZDqvc0i0YqvTYI+5OK875wKvJMua?=
- =?us-ascii?Q?1BSTLktDGSCLclZwWRN3xPUIZEl5FKy1hS0YZvAYMz2bAA/8nnq7NroKmYdf?=
- =?us-ascii?Q?H9LAp+SO/DTgYYK5hRZru1xsvSgG+TH51lb2GegcFJQUMB9lZlZjdlfwDhGD?=
- =?us-ascii?Q?RQfGfiy20UWhqo2zjbMLVoI1117QOd0AVJcabQRlzI3U45yLjgP7bTxmWzqC?=
- =?us-ascii?Q?oI7Tov0jkO05pUgMRE1LYoKbfZapPITKU1e2Vf3nyajUxHDiFzYfZM7tt0Rb?=
- =?us-ascii?Q?V9xxiLHTBHT5PLGb4zAI085ny0Qk3qQtxsRE9Nc4TVvwxXAlv1Yh6430Lu1J?=
- =?us-ascii?Q?3aXklIOXQGEX8PaqeysA15b9IkWpjYPoesE50jdC4cUdx4w8Y2aPsEPtzzGu?=
- =?us-ascii?Q?3LOHNfM4lFX+yFGAi4ivuG+OipIY+O29WVjEMkGNEl2sDrNecDBDrcJEjtCp?=
- =?us-ascii?Q?BR82jhHai5GdvQ37ghYOXZAAOTOkJPHFtLuGj4SpA0ASK4f92jSLHjlIXCuj?=
- =?us-ascii?Q?6cPGk/H+3PccXxTdiBm44GHBjCnCYXslxLob6XiLAktxNUtbt/Y8ljUNfRKa?=
- =?us-ascii?Q?36sHYmAjfDfzijchby+lwo0tooPYzl0J0bgz532ngeAAwVBKFMqQETdNyvfr?=
- =?us-ascii?Q?V1sl2Gb4pEK/BQiIK1mVzpuHv/LdOY5irrMIbcu11UvmU76capxmeka1jrxg?=
- =?us-ascii?Q?EqgX2FuIvpvWugJ7VluJiHhP5P49mG+EcKMXV79KR1/Td6vTAml77fsZx4yw?=
- =?us-ascii?Q?1knarxQHqHooq0DHCCd7Vr+V0VDJgu5C5YwOcpCdOx9MjlW9/vI+TOnGqTwu?=
- =?us-ascii?Q?I6zI/gujna7emOXSJ59F72WQFaqsWvBNLJslq92GhILuy28vnsbU+oRPw09b?=
- =?us-ascii?Q?iGUrSpZRXn64jniafe4nO65H/Q++BySfKd2n5L/76NpBmXC9mhOU34KCiErk?=
- =?us-ascii?Q?UFrIbNeU/F2yrN+clzOZ67GfGU+5qzpKdI9fkKmxyJs0bHWHrgF95ySubMhG?=
- =?us-ascii?Q?yi8B+zVLCI36sQXMjJg/LjFjc/AXyuTn0cq8mAOfLbFIuKvmU1YSUIU5xXk/?=
- =?us-ascii?Q?Pecxj/4gluMp/oasLmRAUNUZzvyK8+ZrWwtpHmBvdZ94s/7xMYEj8k2Ll0hh?=
- =?us-ascii?Q?dEmF2mwmbnQDP7MJRI1dq9YX58WKfxueGUzmJSpPZ0bsEDInwqPBlR1p91Gi?=
- =?us-ascii?Q?Qs3jiiR3xZIP7EW0tNd7vFieJ4e4TIUg8lh4acQ1wZMoDeziqTgky6+2GFfP?=
- =?us-ascii?Q?hv34t+SR9s8E6CGCq02PquiE/uP7Qkb5Dq9JRS2tWjm0K67Qufcqe0dQ2Qty?=
- =?us-ascii?Q?KjCx1hPppM5UbnhBeqRSPMN9wiyNkjXlKYoMrVTgBWKYNAxWGUX7j9PCK/HG?=
- =?us-ascii?Q?vQL2MthESK2S0psoP354zzulP04ZArmdiqHOJXOprXiNhRZ0lgaIWQ30fZ12?=
- =?us-ascii?Q?5X7da5aiZ+kVRDCBLVlwTspmNRaSPhMYdkXyb0kGeWPmbCn6LZxpwAHUh3I6?=
- =?us-ascii?Q?YrTxxU2yIsKk6+G6ijnMcE84IiZn2WtSsVD7f1nurHzPlz8PrqXXMVxgO430?=
- =?us-ascii?Q?hVO+u0YB6Q=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <B3F8502A1178F7479008D8356D849C7F@namprd15.prod.outlook.com>
+        Tue, 3 May 2022 08:08:50 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8C917E27
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 05:05:17 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id y3so32943902ejo.12
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 05:05:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=LoTzOhcLLyaeikFNfu1k4ItSA3teX///n/LvWB6h734=;
+        b=nIm1iLvs6ZeMffAmJ2tUSrNMMNftyUwBjvAXvb1QKQWdXJhbRb0zvvHcHat7wSc4mK
+         vY2J25Z1K4QQpTadmYr6qw2wCv9a5bHi084tPaKhAbWlO9CSCvmux7p96sCJaxj1HdtU
+         Udiu5cZ5/XuaGLYHoV1WHZY25dEOPlmCUperX4xLmF6gDqc6meZGLnbADXf7NZCXeCgU
+         KpZn3BrxPWXDN7JgzegX0OqMIZ3mmzxZF6+u90964yaPBKnyCIhWBfsO1UDCPkX0P+Os
+         NNxrjq7LLxn4rZnQ4bMrItMQCTLp/KY05m6kay+7z8fDMFmPnOpcRnyM63kZVVHA3E0r
+         5Cug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LoTzOhcLLyaeikFNfu1k4ItSA3teX///n/LvWB6h734=;
+        b=aE1aWiS+t6EZlBAShuOrtv0dqLyO1spk7eEzr4R2vS9D7GnjSMj5wYJVzZzOTftZXw
+         KoPKExyHnH9hP1JJW1W/WewKPQto+/sDeuD2mqKxNYeG/pMr4BvZUPpjF9bQkTONn6cA
+         FrzhrIlAwLnfWTIC4OyiOh3ebWqUm80UiSMO9q/LSg8YqxT4wmPeb5hMwypRw/QdJymx
+         OyYIVkr+TTmYtKDxNTmJ+BXnomnVqDJM/1XcKY8aTZJGfOsoCeD/DfVoW8qbVP8ZgEEO
+         OL8PQTPbMU613q3Fkg1cw6cbQMsYtNDIa08cFv5psuenVUPVKMHqp0c/G3xkGQvdD0eT
+         4YaQ==
+X-Gm-Message-State: AOAM5332KF3KSAa4043q4QUtPon89rlY6k0Am2t7/B4KKi0f8dVAkLe/
+        mjPBsqOfs2KrJNTCjrEdOlEOyg==
+X-Google-Smtp-Source: ABdhPJz4dqaOJ7tVlEDf2hHKffoFY/nbMWJIMF4bj24bO9sm7O2wot/9H3IMtuUAx+lUxyvzGdnsEQ==
+X-Received: by 2002:a17:907:3da2:b0:6f4:78d8:7c23 with SMTP id he34-20020a1709073da200b006f478d87c23mr4569586ejc.233.1651579515831;
+        Tue, 03 May 2022 05:05:15 -0700 (PDT)
+Received: from [192.168.0.202] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id gx21-20020a1709068a5500b006f3ef214dabsm4531141ejc.17.2022.05.03.05.05.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 05:05:15 -0700 (PDT)
+Message-ID: <d29637f8-87ff-b5f0-9604-89b51a2ba7c1@linaro.org>
+Date:   Tue, 3 May 2022 14:05:14 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR15MB4552.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fcc331ce-cda2-4846-1095-08da2cfcbea4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 May 2022 12:02:06.7994
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +uwktJo+hfh7RxSU+u7OCpIi0ctdQlYWrJqBnr9aGdOszrWF3RiBsrPXEoGWk217
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR15MB3097
-X-Proofpoint-ORIG-GUID: BZwHVvDerSBZ3AhCRLc4H5cvrWeKztD0
-X-Proofpoint-GUID: BZwHVvDerSBZ3AhCRLc4H5cvrWeKztD0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-03_03,2022-05-02_03,2022-02-23_01
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC v1] dt-bindings: net: dsa: convert binding for mediatek
+ switches
+Content-Language: en-US
+To:     Frank Wunderlich <linux@fw-web.de>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>
+References: <20220502153238.85090-1-linux@fw-web.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220502153238.85090-1-linux@fw-web.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 05:30:10PM -0400, Mimi Zohar wrote:
-> > diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-> > index 13753136f03f..419c50cfe6b9 100644
-> > --- a/security/integrity/ima/ima_kexec.c
-> > +++ b/security/integrity/ima/ima_kexec.c
-> > @@ -10,6 +10,7 @@
-> >  #include <linux/seq_file.h>
-> >  #include <linux/vmalloc.h>
-> >  #include <linux/kexec.h>
-> > +#include <linux/memblock.h>
-> >  #include <linux/of.h>
-> >  #include <linux/ima.h>
-> >  #include "ima.h"
-> > @@ -134,10 +135,66 @@ void ima_add_kexec_buffer(struct kimage *image)
-> >  }
-> >  #endif /* IMA_KEXEC */
-> >  
-> > +#ifndef CONFIG_OF
-> > +static phys_addr_t ima_early_kexec_buffer_phys;
-> > +static size_t ima_early_kexec_buffer_size;
-> > +
-> > +void __init ima_set_kexec_buffer(phys_addr_t phys_addr, size_t size)
-> > +{
-> > +	if (size == 0)
-> > +		return;
-> > +
-> > +	ima_early_kexec_buffer_phys = phys_addr;
-> > +	ima_early_kexec_buffer_size = size;
-> > +}
-> > +
-> > +int __init ima_free_kexec_buffer(void)
-> > +{
-> > +	int rc;
-> > +
-> > +	if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
-> > +		return -ENOTSUPP;
-> > +
-> > +	if (ima_early_kexec_buffer_size == 0)
-> > +		return -ENOENT;
-> > +
-> > +	rc = memblock_phys_free(ima_early_kexec_buffer_phys,
-> > +				ima_early_kexec_buffer_size);
-> > +	if (rc)
-> > +		return rc;
-> > +
-> > +	ima_early_kexec_buffer_phys = 0;
-> > +	ima_early_kexec_buffer_size = 0;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +int __init ima_get_kexec_buffer(void **addr, size_t *size)
-> > +{
-> > +	if (!IS_ENABLED(CONFIG_HAVE_IMA_KEXEC))
-> > +		return -ENOTSUPP;
-> > +
-> > +	if (ima_early_kexec_buffer_size == 0)
-> > +		return -ENOENT;
-> > +
-> > +	*addr = __va(ima_early_kexec_buffer_phys);
-> > +	*size = ima_early_kexec_buffer_size;
-> > +
-> > +	return 0;
-> > +}
-> > +
+On 02/05/2022 17:32, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
 > 
-> Originally both ima_get_kexec_buffer() and ima_free_kexec_buffer() were
-> architecture specific.  Refer to commit 467d27824920 ("powerpc: ima:
-> get the kexec buffer passed by the previous kernel").  Is there any
-> need for defining them here behind an "#ifndef CONFIG_OF"?
-
-Commit fee3ff99bc67 (powerpc: Move arch independent ima kexec functions
-to drivers/of/kexec.c) moved those functions to drivers/of/kexec.c as a
-more generic implementation so that ARM64 could use them too.
-
-I think for platforms that use device tree that's the way to go, but the
-functions to generically set + get the IMA buffer for non device tree
-systems were useful enough to put in the IMA code rather than being x86
-specific. If you disagree I can move them under arch/x86/ (assuming the
-x86 folk agree using setup_data is the right way to go, I haven't seen
-any of them comment on this approach yet).
-
-> > +#else
-> > +
-> > +void __init ima_set_kexec_buffer(phys_addr_t phys_addr, size_t size)
-> > +{
-> > +	pr_warn("CONFIG_OF enabled, ignoring call to set buffer details.\n");
-> > +}
-> > +#endif /* CONFIG_OF */
-> > +
+> Convert txt binding to yaml binding for Mediatek switches.
 > 
-> Only when "HAVE_IMA_KEXEC" is defined is this file included.  Why is
-> this warning needed?
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
+>  .../devicetree/bindings/net/dsa/mediatek.yaml | 435 ++++++++++++++++++
+>  .../devicetree/bindings/net/dsa/mt7530.txt    | 327 -------------
+>  2 files changed, 435 insertions(+), 327 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/net/dsa/mediatek.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/net/dsa/mt7530.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek.yaml
+> new file mode 100644
+> index 000000000000..c1724809d34e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek.yaml
 
-x86 *can* have device tree enabled, but the only platform I'm aware that
-did it was OLPC and I haven't seen any of the distros enable it. I put
-this in so there's a warning if we have CONFIG_OF enabled on x86 and
-tried to pass the IMA log via setup_data. Can remove (or fold into the
-x86 code if we go that way).
+Specific name please, so previous (with vendor prefix) was better:
+mediatek,mt7530.yaml
 
-> >  /*
-> >   * Restore the measurement list from the previous kernel.
-> >   */
-> > -void ima_load_kexec_buffer(void)
-> > +void __init ima_load_kexec_buffer(void)
-> >  {
-> >  	void *kexec_buffer = NULL;
-> >  	size_t kexec_buffer_size = 0;
+> @@ -0,0 +1,435 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 
-J.
+You should CC previous contributors and get their acks on this. You
+copied here a lot of description.
+
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/dsa/mediatek.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Mediatek MT7530 Ethernet switch
+> +
+> +maintainers:
+> +  - Sean Wang <sean.wang@mediatek.com>
+> +  - Landen Chao <Landen.Chao@mediatek.com>
+> +  - DENG Qingfang <dqfext@gmail.com>
+> +
+> +description: |
+> +  Port 5 of mt7530 and mt7621 switch is muxed between:
+> +  1. GMAC5: GMAC5 can interface with another external MAC or PHY.
+> +  2. PHY of port 0 or port 4: PHY interfaces with an external MAC like 2nd GMAC
+> +     of the SOC. Used in many setups where port 0/4 becomes the WAN port.
+> +     Note: On a MT7621 SOC with integrated switch: 2nd GMAC can only connected to
+> +       GMAC5 when the gpios for RGMII2 (GPIO 22-33) are not used and not
+> +       connected to external component!
+> +
+> +  Port 5 modes/configurations:
+> +  1. Port 5 is disabled and isolated: An external phy can interface to the 2nd
+> +     GMAC of the SOC.
+> +     In the case of a build-in MT7530 switch, port 5 shares the RGMII bus with 2nd
+> +     GMAC and an optional external phy. Mind the GPIO/pinctl settings of the SOC!
+> +  2. Port 5 is muxed to PHY of port 0/4: Port 0/4 interfaces with 2nd GMAC.
+> +     It is a simple MAC to PHY interface, port 5 needs to be setup for xMII mode
+> +     and RGMII delay.
+> +  3. Port 5 is muxed to GMAC5 and can interface to an external phy.
+> +     Port 5 becomes an extra switch port.
+> +     Only works on platform where external phy TX<->RX lines are swapped.
+> +     Like in the Ubiquiti ER-X-SFP.
+> +  4. Port 5 is muxed to GMAC5 and interfaces with the 2nd GAMC as 2nd CPU port.
+> +     Currently a 2nd CPU port is not supported by DSA code.
+> +
+> +  Depending on how the external PHY is wired:
+> +  1. normal: The PHY can only connect to 2nd GMAC but not to the switch
+> +  2. swapped: RGMII TX, RX are swapped; external phy interface with the switch as
+> +     a ethernet port. But can't interface to the 2nd GMAC.
+> +
+> +    Based on the DT the port 5 mode is configured.
+> +
+> +  Driver tries to lookup the phy-handle of the 2nd GMAC of the master device.
+> +  When phy-handle matches PHY of port 0 or 4 then port 5 set-up as mode 2.
+> +  phy-mode must be set, see also example 2 below!
+> +  * mt7621: phy-mode = "rgmii-txid";
+> +  * mt7623: phy-mode = "rgmii";
+> +
+> +  CPU-Ports need a phy-mode property:
+> +    Allowed values on mt7530 and mt7621:
+> +      - "rgmii"
+> +      - "trgmii"
+> +    On mt7531:
+> +      - "1000base-x"
+> +      - "2500base-x"
+> +      - "sgmii"
+> +
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mediatek,mt7530
+> +      - mediatek,mt7531
+> +      - mediatek,mt7621
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+> +
+> +  core-supply:
+> +    description: |
+> +      Phandle to the regulator node necessary for the core power.
+> +
+> +  "#gpio-cells":
+> +    description: |
+> +      Must be 2 if gpio-controller is defined.
+> +    const: 2
+> +
+> +  gpio-controller:
+> +    type: boolean
+> +    description: |
+> +      Boolean; if defined, MT7530's LED controller will run on
+
+No need to repeat Boolean.
+
+> +      GPIO mode.
+> +
+> +  "#interrupt-cells":
+> +    const: 1
+> +
+> +  interrupt-controller:
+> +    type: boolean
+> +    description: |
+> +      Boolean; Enables the internal interrupt controller.
+
+Skip description.
+
+> +
+> +  interrupts:
+> +    description: |
+> +      Parent interrupt for the interrupt controller.
+
+Skip description.
+
+> +    maxItems: 1
+> +
+> +  io-supply:
+> +    description: |
+> +      Phandle to the regulator node necessary for the I/O power.
+> +      See Documentation/devicetree/bindings/regulator/mt6323-regulator.txt
+> +      for details for the regulator setup on these boards.
+> +
+> +  mediatek,mcm:
+> +    type: boolean
+> +    description: |
+> +      Boolean; 
+
+No need to repeat Boolean.
+
+> if defined, indicates that either MT7530 is the part
+> +      on multi-chip module belong to MT7623A has or the remotely standalone
+> +      chip as the function MT7623N reference board provided for.
+> +
+> +  reset-gpios:
+> +    description: |
+> +      Should be a gpio specifier for a reset line.
+> +    maxItems: 1
+> +
+> +  reset-names:
+> +    description: |
+> +      Should be set to "mcm".
+> +    const: mcm
+> +
+> +  resets:
+> +    description: |
+> +      Phandle pointing to the system reset controller with
+> +      line index for the ethsys.
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+
+What about address/size cells?
+
+> +
+> +allOf:
+> +  - $ref: "dsa.yaml#"
+> +  - if:
+> +      required:
+> +        - mediatek,mcm
+
+Original bindings had this reversed.
+
+> +    then:
+> +      required:
+> +        - resets
+> +        - reset-names
+> +    else:
+> +      required:
+> +        - reset-gpios
+> +
+> +  - if:
+> +      required:
+> +        - interrupt-controller
+> +    then:
+> +      required:
+> +        - "#interrupt-cells"
+
+This should come from dt schema already...
+
+> +        - interrupts
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          items:
+> +            - const: mediatek,mt7530
+> +    then:
+> +      required:
+> +        - core-supply
+> +        - io-supply
+> +
+> +
+> +patternProperties:
+> +  "^ports$":
+
+It''s not a pattern, so put it under properties, like regular property.
+
+> +    type: object
+> +
+> +    patternProperties:
+> +      "^port@[0-9]+$":
+> +        type: object
+> +        description: Ethernet switch ports
+> +
+> +        $ref: dsa-port.yaml#
+
+This should go to allOf below.
+
+> +
+> +        properties:
+> +          reg:
+> +            description: |
+> +              Port address described must be 6 for CPU port and from 0 to 5 for user ports.
+> +
+> +        unevaluatedProperties: false
+> +
+> +        allOf:
+> +          - if:
+> +              properties:
+> +                label:
+> +                  items:
+> +                    - const: cpu
+> +            then:
+> +              required:
+> +                - reg
+> +                - phy-mode
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    mdio0 {
+
+Just mdio
+
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        switch@0 {
+> +            compatible = "mediatek,mt7530";
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +            reg = <0>;
+> +
+> +            core-supply = <&mt6323_vpa_reg>;
+> +            io-supply = <&mt6323_vemc3v3_reg>;
+> +            reset-gpios = <&pio 33 0>;
+
+Use GPIO flag define/constant.
+
+> +
+> +            ports {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +                port@0 {
+> +                    reg = <0>;
+> +                    label = "lan0";
+> +                };
+> +
+> +                port@1 {
+> +                    reg = <1>;
+> +                    label = "lan1";
+> +                };
+> +
+> +                port@2 {
+> +                    reg = <2>;
+> +                    label = "lan2";
+> +                };
+> +
+> +                port@3 {
+> +                    reg = <3>;
+> +                    label = "lan3";
+> +                };
+> +
+> +                port@4 {
+> +                    reg = <4>;
+> +                    label = "wan";
+> +                };
+> +
+> +                port@6 {
+> +                    reg = <6>;
+> +                    label = "cpu";
+> +                    ethernet = <&gmac0>;
+> +                    phy-mode = "trgmii";
+> +                    fixed-link {
+> +                        speed = <1000>;
+> +                        full-duplex;
+> +                    };
+> +                };
+> +            };
+> +        };
+> +    };
+> +
+> +  - |
+> +    //Example 2: MT7621: Port 4 is WAN port: 2nd GMAC -> Port 5 -> PHY port 4.
+> +
+> +    eth {
+
+s/eth/ethernet/
+
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        gmac0: mac@0 {
+> +            compatible = "mediatek,eth-mac";
+> +            reg = <0>;
+> +            phy-mode = "rgmii";
+> +
+> +            fixed-link {
+> +                speed = <1000>;
+> +                full-duplex;
+> +                pause;
+> +            };
+> +        };
+> +
+> +        gmac1: mac@1 {
+> +            compatible = "mediatek,eth-mac";
+> +            reg = <1>;
+> +            phy-mode = "rgmii-txid";
+> +            phy-handle = <&phy4>;
+> +        };
+> +
+> +        mdio: mdio-bus {
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            /* Internal phy */
+> +            phy4: ethernet-phy@4 {
+> +                reg = <4>;
+> +            };
+> +
+> +            mt7530: switch@1f {
+> +                compatible = "mediatek,mt7621";
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +                reg = <0x1f>;
+> +                mediatek,mcm;
+> +
+> +                resets = <&rstctrl 2>;
+> +                reset-names = "mcm";
+> +
+> +                ports {
+> +                    #address-cells = <1>;
+> +                    #size-cells = <0>;
+> +
+> +                    port@0 {
+> +                        reg = <0>;
+> +                        label = "lan0";
+> +                    };
+> +
+> +                    port@1 {
+> +                        reg = <1>;
+> +                        label = "lan1";
+> +                    };
+> +
+> +                    port@2 {
+> +                        reg = <2>;
+> +                        label = "lan2";
+> +                    };
+> +
+> +                    port@3 {
+> +                        reg = <3>;
+> +                        label = "lan3";
+> +                    };
+> +
+> +        /* Commented out. Port 4 is handled by 2nd GMAC.
+> +                    port@4 {
+> +                        reg = <4>;
+> +                        label = "lan4";
+> +                    };
+> +        */
+
+Messed up indentation
+> +
+> +                    port@6 {
+> +                        reg = <6>;
+> +                        label = "cpu";
+> +                        ethernet = <&gmac0>;
+> +                        phy-mode = "rgmii";
+> +
+> +                        fixed-link {
+> +                            speed = <1000>;
+> +                            full-duplex;
+> +                            pause;
+> +                        };
+> +                    };
+> +                };
+> +            };
+> +        };
+> +    };
+> +
+> +  - |
+> +    //Example 3: MT7621: Port 5 is connected to external PHY: Port 5 -> external PHY.
+> +
+> +    eth {
+
+Also ethernet?
+
+
+
+Best regards,
+Krzysztof

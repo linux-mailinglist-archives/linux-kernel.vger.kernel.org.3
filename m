@@ -2,112 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E9EE51837E
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 13:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FCF0518380
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 13:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234893AbiECLwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 07:52:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57836 "EHLO
+        id S234906AbiECLyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 07:54:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234880AbiECLwg (ORCPT
+        with ESMTP id S234587AbiECLyG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 07:52:36 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413A535A8A
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 04:49:04 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id s131so17909976oie.1
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 04:49:04 -0700 (PDT)
+        Tue, 3 May 2022 07:54:06 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3F113F38;
+        Tue,  3 May 2022 04:50:33 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id a5so12007854qvx.1;
+        Tue, 03 May 2022 04:50:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=bSXV9PrUUGhVycOu/J4fBj5chKdIrO0Ql5olYi0vSd8=;
-        b=EhLk4QD8o470moC0OQtXUJEkeGOuhJP7m3BdSFzrKvpKeHc++CQ5VcBNB8p+t/+ULb
-         mUs0X7+NoyUX71r4F4Q6AqvPde/whddEC8nQgV7/xuf543eAWAourHoKkPFOJIVkJ7f5
-         y5S8nlT5aC3a9dDgieTz47gxlMOYr7Fq+aor/UlSZpj5j4euCtAGzUU6xKKogQ7B2GID
-         bCDIgFY52vnw19sjxzyI8JFWMW3iwMEo4+N/DPmGXgTUmP0vrhPGU2Yb7CNN3YJ0BJxk
-         v0UUrXC5KaM/A6D9gMwaP6XrN3FgYA8EFuKmgSEuQVmzC+EFHcPsMnGdc4JYv7c99/Go
-         txgQ==
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AfK5VzV7OY5z7mYDkfdtwnn2sckKW7LiSOvSIKrhTZ4=;
+        b=io4AOsON+rOChSAehjoG9IDcfqNiSYJP2iWTgI0DjWN8Y6auP6a0dkkw3gTs9XBU80
+         KTCBBtRru9nWuCuXO6oK3KgZu4lXO4HpQbf0R+Vhh477UHn2gTXTbAFcZVO3d0zGKzCB
+         ItN9Y6cr2gzzAwlGq/bCjm+SinKJsDavp3RbIxWYS/29kHePEungTcqisKiFztv42s4j
+         WS/9/tnp2lQP4aPed8VAWdxA8ONAVd0BI3hM0yU3kJeoo0Ee4V5JzhxBO4zbTL0odL1r
+         gwtKemP5IMWFFlrhC4Yio25GIFvcN80EoKimrRv2byrNf0T5HIW4RO1XuJGnZ4uhsLT/
+         JADw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=bSXV9PrUUGhVycOu/J4fBj5chKdIrO0Ql5olYi0vSd8=;
-        b=eQae7yA+kVG+K4RlCkrYEZL60cfRLQBJerAxDMjkvxrxI7W6RYvm3lMGsYn7ixSwO3
-         /kFb1t0yuJ1nc41E3KM+k1Zq5uXLMaZ/0yBuyh7Wtj+7+6WzSwoqBlbgH1sZrjcyS/EI
-         eBxT6fVHgtJAYnZmthoFF98qu0lUhbPcuNSkjBA+qWYydvXUymFl+wM2vJN0FkjZemMn
-         MrJW/ZsjIXubATHG/PPGzjEFxpy32uyuHVpUFXxF700UWjdYd/k5YUUIGIgH4GxecqRR
-         wfe4tRIDjs1I/7Khbsxbt67pHqaQGWfxWucZFxIgWIGorO52AW2jWBJwYmwQL8M1znvY
-         2/xA==
-X-Gm-Message-State: AOAM532w/HlcQIREsA+kvGsacqGNsZVuwWlvcMuwihR0Gr32d6Ko9Xwx
-        HNK3FIQf4tJhWMAQErPw2d+Dwvd5JKGwptLd7NlkJg==
-X-Google-Smtp-Source: ABdhPJwyBTRJk8+J4ioWmZvVzAmOxgN9NvzBheRx+KThLSEpiOI0+072NTxNv0o0eTMZHbWGo3hi4tpUZTNUUEX+OPQ=
-X-Received: by 2002:a05:6808:f0f:b0:326:29af:dd2d with SMTP id
- m15-20020a0568080f0f00b0032629afdd2dmr1587521oiw.211.1651578543310; Tue, 03
- May 2022 04:49:03 -0700 (PDT)
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AfK5VzV7OY5z7mYDkfdtwnn2sckKW7LiSOvSIKrhTZ4=;
+        b=JUwhTp3DwA4+sN6W2cDQNxbM4sc21mwFNc7y98MQWd7ql1eypGBJU9ABs30lPc4yks
+         mN3gzMp9x6gaF8n7pzL+TFTx9GGRcXBKg/6oWQ7G1l0vkz4iB1BhIKPgrGZe8R+heWZB
+         lzyZnoilOOY2z0WjNHeo/k1rBFg+B7tPjPPeNbPB458tE05w2qmRgSzAbHkPFCWFgeWo
+         3PypdtDI+jL8jnSTFNrfumVad+L6y8Mwkj+IWpQg7dJcZQhPzRsdTR/BYHTo1GwqJ6oS
+         IcA6yL0yVsZJYWuD8FttYoIwkGJZRBKouV/KOGue0vWvQAoizb4RAHaFFYxt2XD8k9QC
+         riHA==
+X-Gm-Message-State: AOAM533/ILz1yzKHvpFNXZeNXbK0kv5TOYQHSCPmdDY1c+4ZtfSuLbMS
+        OS59OMpmVGQekr3V/Gfgu0U=
+X-Google-Smtp-Source: ABdhPJzWivOeozTqw5kESds912tx4dcrY+V8jwp517uxq6uTtalAOu73hdaRAvY1GCE0YnsGCYzI1Q==
+X-Received: by 2002:a05:6214:1bcd:b0:456:4103:7209 with SMTP id m13-20020a0562141bcd00b0045641037209mr12816767qvc.45.1651578632651;
+        Tue, 03 May 2022 04:50:32 -0700 (PDT)
+Received: from [10.32.181.74] (nat-pool-mxp-t.redhat.com. [149.6.153.186])
+        by smtp.googlemail.com with ESMTPSA id h23-20020ac85497000000b002f39b99f6b9sm5694009qtq.83.2022.05.03.04.50.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 04:50:31 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <9085a08b-cbf8-8c79-f75d-61ae03bd92c5@redhat.com>
+Date:   Tue, 3 May 2022 13:50:28 +0200
 MIME-Version: 1.0
-References: <000000000000264b2a05d44bca80@google.com> <00000000000070561105dbd91673@google.com>
-In-Reply-To: <00000000000070561105dbd91673@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 3 May 2022 13:48:52 +0200
-Message-ID: <CACT4Y+aV-3dT7QDSs1a+yuJ_AZHJZQYDEK4fKwC-ZjsP+65LJg@mail.gmail.com>
-Subject: Re: [syzbot] WARNING in cpuset_write_resmask
-To:     syzbot <syzbot+568dc81cd20b72d4a49f@syzkaller.appspotmail.com>
-Cc:     cgroups@vger.kernel.org, changbin.du@intel.com,
-        christian.brauner@ubuntu.com, davem@davemloft.net,
-        edumazet@google.com, hannes@cmpxchg.org, hkallweit1@gmail.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        lizefan.x@bytedance.com, longman@redhat.com, mkoutny@suse.com,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tj@kernel.org, yajun.deng@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] KVM: x86/svm: Account for family 17h event renumberings
+ in amd_pmc_perf_hw_id
+Content-Language: en-US
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Kyle Huey <me@kylehuey.com>, linux-kernel@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        Robert O'Callahan <robert@ocallahan.org>,
+        Keno Fischer <keno@juliacomputing.com>,
+        Like Xu <like.xu.linux@gmail.com>
+References: <20220503050136.86298-1-khuey@kylehuey.com>
+ <20220503094631.1070921-1-pbonzini@redhat.com>
+ <CALMp9eTCY3tMGL4=g4UfxGJoVhVB6KGu+vbwL-aDr+HJyaBBcQ@mail.gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <CALMp9eTCY3tMGL4=g4UfxGJoVhVB6KGu+vbwL-aDr+HJyaBBcQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 4 Apr 2022 at 21:25, syzbot
-<syzbot+568dc81cd20b72d4a49f@syzkaller.appspotmail.com> wrote:
->
-> syzbot suspects this issue was fixed by commit:
->
-> commit d068eebbd4822b6c14a7ea375dfe53ca5c69c776
-> Author: Michal Koutn=C3=BD <mkoutny@suse.com>
-> Date:   Fri Dec 17 15:48:54 2021 +0000
->
->     cgroup/cpuset: Make child cpusets restrict parents on v1 hierarchy
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D142f17f770=
-0000
-> start commit:   e5313968c41b Merge branch 'Split bpf_sk_lookup remote_por=
-t..
-> git tree:       bpf-next
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3Dc40b67275bfe2=
-a58
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3D568dc81cd20b72d=
-4a49f
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D13bb97ce700=
-000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D12062c8e70000=
-0
->
-> If the result looks correct, please mark the issue as fixed by replying w=
-ith:
->
-> #syz fix: cgroup/cpuset: Make child cpusets restrict parents on v1 hierar=
-chy
->
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisect=
-ion
+On 5/3/22 12:00, Jim Mattson wrote:
+>> Queued, thanks.
+> Isn't it better to just drop this entirely, as in
+> https://lore.kernel.org/kvm/20220411093537.11558-12-likexu@tencent.com/?
 
-Based on commit subject looks reasonable:
+I plan to do that on top, this patch is good enough for stable.
 
-#syz fix: cgroup/cpuset: Make child cpusets restrict parents on v1 hierarch=
-y
+Paolo

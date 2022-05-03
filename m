@@ -2,60 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B4615181F0
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 12:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2C65518201
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 12:05:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234044AbiECKFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 06:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51420 "EHLO
+        id S234136AbiECKIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 06:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234047AbiECKFJ (ORCPT
+        with ESMTP id S232077AbiECKIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 06:05:09 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B9E38BD6
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 03:01:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651572097; x=1683108097;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=UOVvEhMCzOfQwujPsMh77Vh4k+bMOG/dOx2XBGFH+Q0=;
-  b=aV+ZUWWi+Lap9XlaRcB8y/97t/vqarP8YN9cLLlgfZ04KGmJ8D8va9rQ
-   vfrbylEBwKO7JGvSglozR3H+TlsMLai77+IlkXhon4Ry6kTw9m1e6cQSv
-   8EfjLa0hoNLciBSz4dO1rr7qWxhWCXJwN+eNaRAXTD2Bzff9sxduVGGA4
-   CVtSyYJx3HXhfWTMcDEGw78/Vw51gZYq4ShSvrHM0ppOjd0poEb6A+CPN
-   Tz27+YSPwXfUsrSdjGK0tG8Fk3KHm6bcDPIT/jREmQnroWRKfDwxxE4mu
-   d35g194Gspirl0sVQ7SmbVofiibH+DdGrDSJjYH6xbe4xYdGxqCT3DAqU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="267598594"
-X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
-   d="scan'208";a="267598594"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 03:01:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
-   d="scan'208";a="810608541"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 03 May 2022 03:01:35 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nlpLa-000AMN-VM;
-        Tue, 03 May 2022 10:01:34 +0000
-Date:   Tue, 03 May 2022 18:00:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/cpu] BUILD SUCCESS
- 2147c438fde135d6c145a96e373d9348e7076f7f
-Message-ID: <6270fd5a.gZamI7q6ZtQ2vGFn%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 3 May 2022 06:08:40 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A382337A14;
+        Tue,  3 May 2022 03:05:07 -0700 (PDT)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2439Huei015493;
+        Tue, 3 May 2022 10:03:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=HjtbuUEJ0/ZOlcQ3ufnF7LffEr7p00FRRLGE0m3GQmI=;
+ b=bCNiQRVYJ0UtJ/P6wwlt+FxTWqgWKs/XNm3CA1W/s3Fj9VvL8Q4WSDIP+68Sa969QX1W
+ yW7FRxTEsNiKJwAN9JFJG2YDdhch7vIfoB1daQ0D1iW4v4zxe2TjCu6lipYVkySJWUMU
+ I+fPcPK3B7o9kboRbYNrfEWIxo2AYtBHQhPdZPnBeTCKtFP7Aibqvn3LGllXmJwv4E3u
+ HkUl1qh9qoP3kc6/6MF3SkUgO0AorSuTurSD097OWTyD+88Rs1GK6y+CTL/mKiEjTxm2
+ lxrvPDCsi4kz/ZqWslXBDo2B0ICLy7AhnLngCvsSn3DJnn8cp4c2rYiKYvA7H/jNO7lc Ag== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fu1mx8nf7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 May 2022 10:03:52 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 243A0EYM002520;
+        Tue, 3 May 2022 10:03:51 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fu1mx8nek-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 May 2022 10:03:51 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2439wHgD022505;
+        Tue, 3 May 2022 10:03:49 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma02fra.de.ibm.com with ESMTP id 3frvr8u79v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 03 May 2022 10:03:49 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 243A3k3X26411316
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 3 May 2022 10:03:46 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6C36DAE057;
+        Tue,  3 May 2022 10:03:46 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 25EF4AE053;
+        Tue,  3 May 2022 10:03:45 +0000 (GMT)
+Received: from thinkpad (unknown [9.171.25.226])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Tue,  3 May 2022 10:03:45 +0000 (GMT)
+Date:   Tue, 3 May 2022 12:03:43 +0200
+From:   Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH 3/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when
+ unmapping
+Message-ID: <20220503120343.6264e126@thinkpad>
+In-Reply-To: <48a05075-a323-e7f1-9e99-6c0d106eb2cb@linux.alibaba.com>
+References: <cover.1651216964.git.baolin.wang@linux.alibaba.com>
+        <c91e04ebb792ef7b72966edea8bd6fa2dfa5bfa7.1651216964.git.baolin.wang@linux.alibaba.com>
+        <20220429220214.4cfc5539@thinkpad>
+        <bcb4a3b0-4fcd-af3a-2a2c-fd662d9eaba9@linux.alibaba.com>
+        <20220502160232.589a6111@thinkpad>
+        <48a05075-a323-e7f1-9e99-6c0d106eb2cb@linux.alibaba.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Vqe6Y27bbncJ_7Ur6Jm01zeitq883Jn7
+X-Proofpoint-ORIG-GUID: UMZQHcP4UgI5USN1f2T3MDEwggwnF1jW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-03_03,2022-05-02_03,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
+ suspectscore=0 adultscore=0 bulkscore=0 lowpriorityscore=0 mlxlogscore=999
+ clxscore=1015 phishscore=0 priorityscore=1501 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205030076
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,311 +109,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/cpu
-branch HEAD: 2147c438fde135d6c145a96e373d9348e7076f7f  x86/speculation: Add missing prototype for unpriv_ebpf_notify()
+On Tue, 3 May 2022 10:19:46 +0800
+Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
 
-elapsed time: 7212m
+> 
+> 
+> On 5/2/2022 10:02 PM, Gerald Schaefer wrote:
+> > On Sat, 30 Apr 2022 11:22:33 +0800
+> > Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
+> > 
+> >>
+> >>
+> >> On 4/30/2022 4:02 AM, Gerald Schaefer wrote:
+> >>> On Fri, 29 Apr 2022 16:14:43 +0800
+> >>> Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
+> >>>
+> >>>> On some architectures (like ARM64), it can support CONT-PTE/PMD size
+> >>>> hugetlb, which means it can support not only PMD/PUD size hugetlb:
+> >>>> 2M and 1G, but also CONT-PTE/PMD size: 64K and 32M if a 4K page
+> >>>> size specified.
+> >>>>
+> >>>> When unmapping a hugetlb page, we will get the relevant page table
+> >>>> entry by huge_pte_offset() only once to nuke it. This is correct
+> >>>> for PMD or PUD size hugetlb, since they always contain only one
+> >>>> pmd entry or pud entry in the page table.
+> >>>>
+> >>>> However this is incorrect for CONT-PTE and CONT-PMD size hugetlb,
+> >>>> since they can contain several continuous pte or pmd entry with
+> >>>> same page table attributes, so we will nuke only one pte or pmd
+> >>>> entry for this CONT-PTE/PMD size hugetlb page.
+> >>>>
+> >>>> And now we only use try_to_unmap() to unmap a poisoned hugetlb page,
+> >>>> which means now we will unmap only one pte entry for a CONT-PTE or
+> >>>> CONT-PMD size poisoned hugetlb page, and we can still access other
+> >>>> subpages of a CONT-PTE or CONT-PMD size poisoned hugetlb page,
+> >>>> which will cause serious issues possibly.
+> >>>>
+> >>>> So we should change to use huge_ptep_clear_flush() to nuke the
+> >>>> hugetlb page table to fix this issue, which already considered
+> >>>> CONT-PTE and CONT-PMD size hugetlb.
+> >>>>
+> >>>> Note we've already used set_huge_swap_pte_at() to set a poisoned
+> >>>> swap entry for a poisoned hugetlb page.
+> >>>>
+> >>>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> >>>> ---
+> >>>>    mm/rmap.c | 34 +++++++++++++++++-----------------
+> >>>>    1 file changed, 17 insertions(+), 17 deletions(-)
+> >>>>
+> >>>> diff --git a/mm/rmap.c b/mm/rmap.c
+> >>>> index 7cf2408..1e168d7 100644
+> >>>> --- a/mm/rmap.c
+> >>>> +++ b/mm/rmap.c
+> >>>> @@ -1564,28 +1564,28 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
+> >>>>    					break;
+> >>>>    				}
+> >>>>    			}
+> >>>> +			pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
+> >>>
+> >>> Unlike in your patch 2/3, I do not see that this (huge) pteval would later
+> >>> be used again with set_huge_pte_at() instead of set_pte_at(). Not sure if
+> >>> this (huge) pteval could end up at a set_pte_at() later, but if yes, then
+> >>> this would be broken on s390, and you'd need to use set_huge_pte_at()
+> >>> instead of set_pte_at() like in your patch 2/3.
+> >>
+> >> IIUC, As I said in the commit message, we will only unmap a poisoned
+> >> hugetlb page by try_to_unmap(), and the poisoned hugetlb page will be
+> >> remapped with a poisoned entry by set_huge_swap_pte_at() in
+> >> try_to_unmap_one(). So I think no need change to use set_huge_pte_at()
+> >> instead of set_pte_at() for other cases, since the hugetlb page will not
+> >> hit other cases.
+> >>
+> >> if (PageHWPoison(subpage) && !(flags & TTU_IGNORE_HWPOISON)) {
+> >> 	pteval = swp_entry_to_pte(make_hwpoison_entry(subpage));
+> >> 	if (folio_test_hugetlb(folio)) {
+> >> 		hugetlb_count_sub(folio_nr_pages(folio), mm);
+> >> 		set_huge_swap_pte_at(mm, address, pvmw.pte, pteval,
+> >> 				     vma_mmu_pagesize(vma));
+> >> 	} else {
+> >> 		dec_mm_counter(mm, mm_counter(&folio->page));
+> >> 		set_pte_at(mm, address, pvmw.pte, pteval);
+> >> 	}
+> >>
+> >> }
+> > 
+> > OK, but wouldn't the pteval be overwritten here with
+> > pteval = swp_entry_to_pte(make_hwpoison_entry(subpage))?
+> > IOW, what sense does it make to save the returned pteval from
+> > huge_ptep_clear_flush(), when it is never being used anywhere?
+> 
+> Please see previous code, we'll use the original pte value to check if 
+> it is uffd-wp armed, and if need to mark it dirty though the hugetlbfs 
+> is set noop_dirty_folio().
+> 
+> pte_install_uffd_wp_if_needed(vma, address, pvmw.pte, pteval);
 
-configs tested: 283
-configs skipped: 6
+Uh, ok, that wouldn't work on s390, but we also don't have
+CONFIG_PTE_MARKER_UFFD_WP / HAVE_ARCH_USERFAULTFD_WP set, so
+I guess we will be fine (for now).
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Still, I find it a bit unsettling that pte_install_uffd_wp_if_needed()
+would work on a potential hugetlb *pte, directly de-referencing it
+instead of using huge_ptep_get().
 
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-arm                           imxrt_defconfig
-powerpc                    sam440ep_defconfig
-arc                         haps_hs_defconfig
-xtensa                          iss_defconfig
-mips                         tb0226_defconfig
-powerpc                      cm5200_defconfig
-powerpc                       holly_defconfig
-xtensa                           allyesconfig
-powerpc                         ps3_defconfig
-arc                     haps_hs_smp_defconfig
-arc                            hsdk_defconfig
-arm                         vf610m4_defconfig
-arm                            zeus_defconfig
-mips                  decstation_64_defconfig
-s390                       zfcpdump_defconfig
-arm                        realview_defconfig
-arm                       multi_v4t_defconfig
-xtensa                  nommu_kc705_defconfig
-sparc64                          alldefconfig
-sh                        sh7763rdp_defconfig
-mips                           ci20_defconfig
-arm                         lubbock_defconfig
-m68k                                defconfig
-sh                          sdk7780_defconfig
-powerpc                     tqm8555_defconfig
-parisc                              defconfig
-sh                         microdev_defconfig
-powerpc                  iss476-smp_defconfig
-powerpc                     tqm8541_defconfig
-riscv                            allmodconfig
-arc                        nsimosci_defconfig
-powerpc                      arches_defconfig
-powerpc                 linkstation_defconfig
-sh                     sh7710voipgw_defconfig
-sh                        edosk7705_defconfig
-mips                           ip32_defconfig
-arm                          lpd270_defconfig
-riscv                            allyesconfig
-mips                        vocore2_defconfig
-mips                          rb532_defconfig
-powerpc                      ppc6xx_defconfig
-arm                      jornada720_defconfig
-sh                           se7619_defconfig
-mips                  maltasmvp_eva_defconfig
-sh                   secureedge5410_defconfig
-sh                            shmin_defconfig
-sh                          r7780mp_defconfig
-parisc                generic-32bit_defconfig
-sh                     magicpanelr2_defconfig
-nios2                               defconfig
-h8300                               defconfig
-sh                          rsk7264_defconfig
-sparc                            alldefconfig
-powerpc                      ep88xc_defconfig
-arc                          axs103_defconfig
-powerpc                    klondike_defconfig
-m68k                       m5208evb_defconfig
-arc                              alldefconfig
-sparc                       sparc64_defconfig
-powerpc                 mpc837x_mds_defconfig
-xtensa                       common_defconfig
-powerpc                    amigaone_defconfig
-microblaze                      mmu_defconfig
-sh                          polaris_defconfig
-xtensa                    smp_lx200_defconfig
-arm                          gemini_defconfig
-sh                        apsh4ad0a_defconfig
-m68k                       m5275evb_defconfig
-mips                            gpr_defconfig
-arm                            lart_defconfig
-sh                          r7785rp_defconfig
-powerpc                 mpc8540_ads_defconfig
-powerpc                mpc7448_hpc2_defconfig
-xtensa                              defconfig
-parisc                generic-64bit_defconfig
-sh                          lboxre2_defconfig
-arm                          pxa910_defconfig
-i386                             alldefconfig
-x86_64                              defconfig
-mips                         db1xxx_defconfig
-powerpc                        cell_defconfig
-powerpc                     taishan_defconfig
-xtensa                  cadence_csp_defconfig
-arm                         assabet_defconfig
-powerpc                     tqm8548_defconfig
-sh                         ecovec24_defconfig
-xtensa                         virt_defconfig
-powerpc                      mgcoge_defconfig
-powerpc                   motionpro_defconfig
-m68k                       m5475evb_defconfig
-m68k                       bvme6000_defconfig
-arm                            qcom_defconfig
-powerpc64                           defconfig
-sh                        edosk7760_defconfig
-s390                          debug_defconfig
-sh                      rts7751r2d1_defconfig
-sh                   sh7724_generic_defconfig
-mips                     loongson1b_defconfig
-m68k                        m5307c3_defconfig
-powerpc                    adder875_defconfig
-mips                            ar7_defconfig
-openrisc                  or1klitex_defconfig
-ia64                            zx1_defconfig
-arm                        cerfcube_defconfig
-m68k                          multi_defconfig
-mips                     decstation_defconfig
-powerpc                         wii_defconfig
-s390                             allyesconfig
-ia64                             alldefconfig
-mips                         cobalt_defconfig
-arm                         nhk8815_defconfig
-arc                        nsim_700_defconfig
-mips                       capcella_defconfig
-powerpc                 mpc837x_rdb_defconfig
-powerpc                       maple_defconfig
-mips                      maltasmvp_defconfig
-sh                             sh03_defconfig
-sh                             espt_defconfig
-openrisc                            defconfig
-sh                          urquell_defconfig
-sh                           se7721_defconfig
-powerpc                           allnoconfig
-powerpc                   currituck_defconfig
-mips                             allyesconfig
-h8300                       h8s-sim_defconfig
-sh                           sh2007_defconfig
-powerpc                     mpc83xx_defconfig
-arm                      integrator_defconfig
-sh                          landisk_defconfig
-i386                                defconfig
-powerpc                     asp8347_defconfig
-mips                       bmips_be_defconfig
-sh                           se7206_defconfig
-sh                   rts7751r2dplus_defconfig
-parisc64                            defconfig
-m68k                             allmodconfig
-arm                        oxnas_v6_defconfig
-sh                           se7705_defconfig
-m68k                         amcore_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220428
-arm                  randconfig-c002-20220501
-arm                  randconfig-c002-20220429
-x86_64               randconfig-c001-20220502
-i386                 randconfig-c001-20220502
-arm                  randconfig-c002-20220502
-ia64                                defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                             allyesconfig
-arc                              allyesconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-sparc                               defconfig
-sparc                            allyesconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-i386                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64               randconfig-a006-20220502
-x86_64               randconfig-a001-20220502
-x86_64               randconfig-a003-20220502
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a016
-i386                          randconfig-a014
-arc                  randconfig-r043-20220428
-arc                  randconfig-r043-20220501
-s390                 randconfig-r044-20220501
-riscv                randconfig-r042-20220501
-arc                  randconfig-r043-20220429
-s390                 randconfig-r044-20220429
-riscv                randconfig-r042-20220429
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-x86_64                    rhel-8.3-kselftests
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                                  kexec
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
+The !pte_none(*pte) check at the beginning would be broken in the
+hugetlb case for s390 (not sure about other archs, but I think s390
+might be the only exception strictly requiring huge_ptep_get()
+for de-referencing hugetlb *pte pointers).
 
-clang tested configs:
-x86_64                        randconfig-c007
-i386                          randconfig-c001
-powerpc              randconfig-c003-20220501
-riscv                randconfig-c006-20220501
-mips                 randconfig-c004-20220501
-arm                  randconfig-c002-20220501
-riscv                randconfig-c006-20220428
-mips                 randconfig-c004-20220428
-arm                  randconfig-c002-20220428
-powerpc              randconfig-c003-20220428
-riscv                randconfig-c006-20220429
-mips                 randconfig-c004-20220429
-arm                  randconfig-c002-20220429
-powerpc              randconfig-c003-20220429
-arm                       spear13xx_defconfig
-mips                   sb1250_swarm_defconfig
-arm                         shannon_defconfig
-arm                         socfpga_defconfig
-arm                        vexpress_defconfig
-arm                         palmz72_defconfig
-arm                       cns3420vb_defconfig
-powerpc                     tqm5200_defconfig
-riscv                    nommu_virt_defconfig
-powerpc                  mpc866_ads_defconfig
-mips                          rm200_defconfig
-arm                          moxart_defconfig
-powerpc                 mpc832x_rdb_defconfig
-mips                     cu1830-neo_defconfig
-powerpc                    mvme5100_defconfig
-powerpc                      ppc44x_defconfig
-arm                         s3c2410_defconfig
-arm64                            allyesconfig
-arm                      pxa255-idp_defconfig
-powerpc                 mpc8315_rdb_defconfig
-mips                           mtx1_defconfig
-powerpc                      walnut_defconfig
-arm                              alldefconfig
-mips                            e55_defconfig
-powerpc                  mpc885_ads_defconfig
-powerpc                      obs600_defconfig
-powerpc                    socrates_defconfig
-arm                         bcm2835_defconfig
-arm                            dove_defconfig
-arm                           spitz_defconfig
-powerpc                        icon_defconfig
-arm                       aspeed_g4_defconfig
-powerpc                      acadia_defconfig
-arm                        magician_defconfig
-arm                          ixp4xx_defconfig
-riscv                          rv32_defconfig
-mips                     cu1000-neo_defconfig
-arm                             mxs_defconfig
-mips                          ath25_defconfig
-powerpc                     skiroot_defconfig
-mips                      bmips_stb_defconfig
-mips                malta_qemu_32r6_defconfig
-powerpc                      pmac32_defconfig
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64               randconfig-a015-20220502
-x86_64               randconfig-a012-20220502
-x86_64               randconfig-a016-20220502
-x86_64               randconfig-a014-20220502
-x86_64               randconfig-a013-20220502
-x86_64               randconfig-a011-20220502
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-riscv                randconfig-r042-20220428
-hexagon              randconfig-r045-20220428
-hexagon              randconfig-r041-20220428
-s390                 randconfig-r044-20220428
+> 
+> /* Set the dirty flag on the folio now the pte is gone. */
+> if (pte_dirty(pteval))
+> 	folio_mark_dirty(folio);
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Ok, that should work fine, huge_ptep_clear_flush() will return
+a pteval properly de-referenced and converted with huge_ptep_get(),
+and that would contain the hugetlb pmd/pud dirty information.

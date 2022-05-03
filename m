@@ -2,114 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5772518730
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15693518734
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237392AbiECOw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 10:52:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46552 "EHLO
+        id S237410AbiECOxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 10:53:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237321AbiECOwy (ORCPT
+        with ESMTP id S237321AbiECOxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 10:52:54 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C130393C5
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 07:49:22 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id l203so18460648oif.0
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 07:49:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=L88EHtQ6nEd2T7lOrwIfVWNdp4VhbNintMvDvOLss8Q=;
-        b=ORflvvEwfGsYDuH3xu13w2z6La7dFK0pcvzJHprpjjZDa7UOodm2NbKomhn0ZxHAv/
-         WeE/Ng3JKryVEH1P+hAiDezRt5zKgpCZFB8g9ORQIIDosgtqZCbSX44tUWWNkJadZB+/
-         f01px+Cg1VZ51LCys1DxkiAGuzIUWsIkAu5kSVwDPiBpmSCQrsc9Wp/cSw9zB0DZW/r2
-         x0RJRXQJtbf49AAbQ/BfojEXpX68Og4gQffmpy/hrwZE0bRI2eZudc34eUEzTMEiAow7
-         NXiA9f5U22R7Ln9pfvBUI+tMK2+425HiEAEphIOSfl/avuv1WHc1jpnEDZOYcXLFF6KN
-         zihQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=L88EHtQ6nEd2T7lOrwIfVWNdp4VhbNintMvDvOLss8Q=;
-        b=hjDnf/VaxV1nkRBXxJ8YP18waIXpnpggI/1AqaVzst3MJzH6ag+mYM7KbIR51NATo1
-         IF65u5ywoTOLeova2fSEoEARYzcTcpT9DZcvg/WbKyGsZYGHzkqmhX+1iD6qHTtEMZPl
-         XXnx6Yf9dxqw4CCeRqhenxz8hJNUggNEr7r1JOEpmvyEk9MF/TWQSkEo3ZUY2J8DV+fj
-         gla5tbeohp1EMqDqYUChrWTgBLlmVTNfE/p9MW1KITDMov75pSohK0ZrGVWu4EXHfrdJ
-         kr1vIANn24rYw1zJAowFrz6NcxO4V42m7OYnhMVOblsylJkCr+XxjJ4X8EesCab8ROuw
-         NEjg==
-X-Gm-Message-State: AOAM532LJktqonPEAgjYml2mcvE0L1173OdMcCjZVZbnF3itwm+TBOmP
-        OFwSPoMxO76foLSO4B7lMEzvxQ==
-X-Google-Smtp-Source: ABdhPJw8xg+KsB8XzF+qTHUK9MDA9KrMrs/SF3SF90jBoUxSXf+/VSVFqz3qHdYKPaSfEzX/l0ykMA==
-X-Received: by 2002:a05:6808:56b:b0:325:9f5e:3fd4 with SMTP id j11-20020a056808056b00b003259f5e3fd4mr1978437oig.199.1651589361547;
-        Tue, 03 May 2022 07:49:21 -0700 (PDT)
-Received: from eze-laptop ([2803:9800:98c2:8470:9f4:8e2a:88e5:ec01])
-        by smtp.gmail.com with ESMTPSA id o20-20020a0568080bd400b00325cda1ffafsm1707597oik.46.2022.05.03.07.49.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 07:49:21 -0700 (PDT)
-Date:   Tue, 3 May 2022 11:49:15 -0300
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     p.zabel@pengutronix.de, mchehab@kernel.org,
-        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, jon@nanocrew.net, aford173@gmail.com,
-        kernel@collabora.com
-Subject: Re: [PATCH v3] media: hantro: HEVC: unconditionnaly set
- pps_{cb/cr}_qp_offset values
-Message-ID: <YnFA6z0VxUdF6zht@eze-laptop>
-References: <20220503135529.683474-1-benjamin.gaignard@collabora.com>
+        Tue, 3 May 2022 10:53:35 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFEDB393C5;
+        Tue,  3 May 2022 07:50:02 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id CD385320069B;
+        Tue,  3 May 2022 10:49:58 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Tue, 03 May 2022 10:49:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1651589398; x=1651675798; bh=4wCZd6tNt0
+        GFdbI9b6HXPE8Ofc+zrjZS5CX4WMYzeMg=; b=a4GW4wc97v0wpbEaxMrf2p2umE
+        EK2gf4eamynZnnJgcp9N0AsaQwglPoWQLImAqecdWQbAHR9WFlP+txH+B/7p6E+R
+        IC/l8vaTGjdijku1FDtHDoPghrcIMIWEqzZGuLFW2ELV5ifDbcLoCM0/bIHP9jnf
+        240oMfw5/ZxOqky9TA2OEsdzs8oLSXALuBC/kWNqS5d/+duv9bVTugPg7pUOl7MZ
+        vsQH/HhAW6RmV3vH2cUCNZU90fECfjzfkWfwJ46H3Dak39lfYU4VVNcKJN6LTOiB
+        J2JcViUcwRmp6W9UDr/XVZEzsyptzmVktxISsziNY4dlLKnelf8HNCPN9nbg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651589398; x=
+        1651675798; bh=4wCZd6tNt0GFdbI9b6HXPE8Ofc+zrjZS5CX4WMYzeMg=; b=L
+        1wYd64YRlHfuOQGcsjfwnx7XcilEdPLk8XuzRDc0uwVIjOWp+r5HR0jWkMwoN1wx
+        KjESrFRaJH17BcFIJcfQYDe016FluSFY5tiOMSzCwVu3JdUDJFdUg8zaUTm44DNY
+        qI1HEckTGNAOgsY5PSAvDqLBisbHqNFmtE5RclGu1MMsN4Rh9B3N/NQX1Iqq4V68
+        dfUB7y7idC3PNSkZmKi4egL6JbMXREsq+S/072ILn4TZQ7LFKaEK/spV88hOMkVg
+        1jF4rm2IzwTeYS5MqC10eCyYsftVjKGUqWNNCtBsOqdVOi0S/P1+djQxKMh5u1sv
+        DcjDs0MsP/vTxYRC/FPug==
+X-ME-Sender: <xms:FUFxYmknQGOFZvzVOdW6rFXrCCauCzqTp7r2ZwdjF3sXP3gUMkbl0g>
+    <xme:FUFxYt05e5DTZ_rAlJjMyU1PCNHFz_j2gjwH6OTCaswSpk3Xgs_fY1H8YBrMItp6p
+    _-A4gVPBHwooQ>
+X-ME-Received: <xmr:FUFxYkqJkC-TAERwgVfqc6uv6PW1p9CtMiU_Nwi8c7qvFwQ9TUcS90QrTfQwYC1Mkg-CnGrG5KWWW2F_d0uz-J-b5sUm>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejgdekudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvve
+    dvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
+    drtghomh
+X-ME-Proxy: <xmx:FUFxYqlc_hwYTx-fH1M7nbNj82E4m4Kn2xkDzahR76M7sUM3PUnBWA>
+    <xmx:FUFxYk0OnRVJWtigWi5v7OkaxXNFzXorWlYSyaf04Je6Zzvm9MITFA>
+    <xmx:FUFxYhvhmsRpCcOcjr_pPDp48nLBuI9LByzNZtdNKwJuyQ7sgC7MMA>
+    <xmx:FkFxYlJY_GH_CZmC1VSVczamOK2eeHr_faVGNWNUdKpOh3F5EzUD0g>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 3 May 2022 10:49:57 -0400 (EDT)
+Date:   Tue, 3 May 2022 16:49:56 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the usb tree
+Message-ID: <YnFBFOrvlLnDwZe9@kroah.com>
+References: <20220502210728.0b36f3cd@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220503135529.683474-1-benjamin.gaignard@collabora.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220502210728.0b36f3cd@canb.auug.org.au>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 03, 2022 at 03:55:29PM +0200, Benjamin Gaignard wrote:
-> Always set pps_cb_qp_offset and pps_cr_qp_offset values in Hantro/G2
-> register whatever is V4L2_HEVC_PPS_FLAG_PPS_SLICE_CHROMA_QP_OFFSETS_PRESENT
-> flag value.
-> The vendor code does the case to set these values.
-> This fix conformance test CAINIT_G_SHARP_3.
+On Mon, May 02, 2022 at 09:07:28PM +1000, Stephen Rothwell wrote:
+> Hi all,
 > 
+> After merging the usb tree, today's linux-next build (x86_64
+> modules_install) failed like this:
+> 
+> depmod: ERROR: Cycle detected: usbcore -> onboard_usb_hub -> usbcore
+> depmod: ERROR: Found 2 modules in dependency cycles!
+> 
+> Caused by commit
+> 
+>   c40b62216c1a ("usb: core: hcd: Create platform devices for onboard hubs in probe()")
+> 
+> I have reverted that commit for today.
 
-Another silly nitpick: s/fix/fixes.
+Series is now reverted in my tree, thanks for the report.
 
-> Fluster HEVC score is increase by one with this patch.
-> 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> ---
->  drivers/staging/media/hantro/hantro_g2_hevc_dec.c | 9 ++-------
->  1 file changed, 2 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-> index 6deb31b7b993..503f4b028bc5 100644
-> --- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-> +++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
-> @@ -194,13 +194,8 @@ static void set_params(struct hantro_ctx *ctx)
->  		hantro_reg_write(vpu, &g2_max_cu_qpd_depth, 0);
->  	}
->  
-> -	if (pps->flags & V4L2_HEVC_PPS_FLAG_PPS_SLICE_CHROMA_QP_OFFSETS_PRESENT) {
-> -		hantro_reg_write(vpu, &g2_cb_qp_offset, pps->pps_cb_qp_offset);
-> -		hantro_reg_write(vpu, &g2_cr_qp_offset, pps->pps_cr_qp_offset);
-> -	} else {
-> -		hantro_reg_write(vpu, &g2_cb_qp_offset, 0);
-> -		hantro_reg_write(vpu, &g2_cr_qp_offset, 0);
-> -	}
-> +	hantro_reg_write(vpu, &g2_cb_qp_offset, pps->pps_cb_qp_offset);
-> +	hantro_reg_write(vpu, &g2_cr_qp_offset, pps->pps_cr_qp_offset);
->  
->  	hantro_reg_write(vpu, &g2_filt_offset_beta, pps->pps_beta_offset_div2);
->  	hantro_reg_write(vpu, &g2_filt_offset_tc, pps->pps_tc_offset_div2);
-> -- 
-> 2.32.0
-> 
+greg k-h

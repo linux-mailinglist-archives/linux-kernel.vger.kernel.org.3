@@ -2,73 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB79518A22
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 18:38:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03EA2518A2C
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 18:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239664AbiECQlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 12:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60394 "EHLO
+        id S235042AbiECQms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 12:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235042AbiECQlf (ORCPT
+        with ESMTP id S239632AbiECQmp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 12:41:35 -0400
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 036F927B1E;
-        Tue,  3 May 2022 09:38:03 -0700 (PDT)
-Received: by mail-pf1-f180.google.com with SMTP id x23so9876327pff.9;
-        Tue, 03 May 2022 09:38:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=lyBgny2owanKpSK297XC+SuygGQevv1e+zn1E24si/Y=;
-        b=2Ko6L0/mzFJEtxbkBdzRf2vCID52PKDCmVCoHfw6K3sCY9bCL53mEHbmDFqtQdVbdj
-         i+H1EVTSfiyHCHIhXWrYuGm6aNKJfkP00t1b0rJROORk8PTONFy2L7KYYI511/n60Wkj
-         S4RIbSjREb2OvJcpPL1IDl6p1B/UoXvVySMFjdrE/Vr23Tq0OEzJTGw2y2sBfvV4K0MO
-         17AyHYrKQRBCaoqrgP75SbBOrkd3R/1fPWbzo7arqnvuDloyt149j/A32ev5caKZxo5V
-         FtGG4WaMTcQxL9A4UCM8eYnRGMAQgamfDu9SgYpFnJBitH6gG4GoS59aq3C59FHJVhlj
-         tXTQ==
-X-Gm-Message-State: AOAM5318ZFXqsrCb8Qzs4MXkq2Pf939JMMFC/vdz+VcrLfmXZN9DFx1I
-        v2Nv3H9SzsH3Rm8IH6reZhU=
-X-Google-Smtp-Source: ABdhPJzonovBzoV4fwi9NXoKhV1eYPIxcI7yjfJw6mLDHLxG6LjY81SsAeWrZCq7zhToKZSiSL9kvA==
-X-Received: by 2002:a63:5020:0:b0:39e:5d26:4316 with SMTP id e32-20020a635020000000b0039e5d264316mr14532146pgb.294.1651595882292;
-        Tue, 03 May 2022 09:38:02 -0700 (PDT)
-Received: from [10.10.69.251] ([8.34.116.185])
-        by smtp.gmail.com with ESMTPSA id u17-20020a170903125100b0015e8d4eb27bsm6564629plh.197.2022.05.03.09.37.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 May 2022 09:38:01 -0700 (PDT)
-Message-ID: <3a178153-62c0-e298-ccb0-0edfd41b7ee2@acm.org>
-Date:   Tue, 3 May 2022 09:37:57 -0700
+        Tue, 3 May 2022 12:42:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A86727CEF
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 09:39:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C5C956174C
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 16:39:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16FB4C385AF;
+        Tue,  3 May 2022 16:39:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651595951;
+        bh=KL8s36Mxf7cX9xP0GXX7OyVZdqJjzw/ipLa9/teybm8=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ld62q2Benx4MXZOvgoVjaD1Hyur/pUhd5YJPyjLhI0ia9tuluGrhPHfgm/yuq2Nhd
+         DVhVKdhhJXl/EnqN8kycC0qaqy9wvWp8gcE7tctfAhbGFR/bc22I7Y7keg0hDUHQVN
+         w7G+faneXSlVrrZOgfPvGfXu0SHUFUS/lmDUmutdut9QYAJ0NmXlcuXgSYwZySWifV
+         /ZCQI8vGipp3ve/0pQSqzCn0tsPkYd7dBIYPgQ20rzk1Zf4han7TTfQV5SyZ+7kyin
+         tZ74cybFyGA+7a34Q8j8DRnZ6hU4YTgVxsiBVkn0bAp5bmCyKos7N0D8I5S7EuqiBC
+         BR/EYfZDUR+5A==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id A45105C0115; Tue,  3 May 2022 09:39:05 -0700 (PDT)
+Date:   Tue, 3 May 2022 09:39:05 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     liam.howlett@oracle.com, willy@infradead.org, walken.cr@gmail.com,
+        hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Memory allocation on speculative fastpaths
+Message-ID: <20220503163905.GM1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220503155913.GA1187610@paulmck-ThinkPad-P17-Gen-1>
+ <YnFSfc8BR8CadOtw@dhcp22.suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 01/16] block: make blkdev_nr_zones and blk_queue_zone_no
- generic for npo2 zsze
-Content-Language: en-US
-To:     Pankaj Raghav <p.raghav@samsung.com>, jaegeuk@kernel.org,
-        axboe@kernel.dk, snitzer@kernel.org, hch@lst.de, mcgrof@kernel.org,
-        naohiro.aota@wdc.com, sagi@grimberg.me,
-        damien.lemoal@opensource.wdc.com, dsterba@suse.com,
-        johannes.thumshirn@wdc.com
-Cc:     linux-kernel@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        clm@fb.com, gost.dev@samsung.com, chao@kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, josef@toxicpanda.com,
-        jonathan.derrick@linux.dev, agk@redhat.com, kbusch@kernel.org,
-        kch@nvidia.com, linux-nvme@lists.infradead.org,
-        dm-devel@redhat.com, jiangbo.365@bytedance.com,
-        linux-fsdevel@vger.kernel.org, matias.bjorling@wdc.com,
-        linux-block@vger.kernel.org
-References: <20220427160255.300418-1-p.raghav@samsung.com>
- <CGME20220427160257eucas1p21fb58d0129376a135fdf0b9c2fe88895@eucas1p2.samsung.com>
- <20220427160255.300418-2-p.raghav@samsung.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220427160255.300418-2-p.raghav@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnFSfc8BR8CadOtw@dhcp22.suse.cz>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,70 +59,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/27/22 09:02, Pankaj Raghav wrote:
-> Adapt blkdev_nr_zones and blk_queue_zone_no function so that it can
-> also work for non-power-of-2 zone sizes.
+On Tue, May 03, 2022 at 06:04:13PM +0200, Michal Hocko wrote:
+> On Tue 03-05-22 08:59:13, Paul E. McKenney wrote:
+> > Hello!
+> > 
+> > Just following up from off-list discussions yesterday.
+> > 
+> > The requirements to allocate on an RCU-protected speculative fastpath
+> > seem to be as follows:
+> > 
+> > 1.	Never sleep.
+> > 2.	Never reclaim.
+> > 3.	Leave emergency pools alone.
+> > 
+> > Any others?
+> > 
+> > If those rules suffice, and if my understanding of the GFP flags is
+> > correct (ha!!!), then the following GFP flags should cover this:
+> > 
+> > 	__GFP_NOMEMALLOC | __GFP_NOWARN
 > 
-> As the existing deployments of zoned devices had power-of-2
-> assumption, power-of-2 optimized calculation is kept for those devices.
+> GFP_NOWAIT | __GFP_NOMEMALLOC | __GFP_NOWARN
+
+Ah, good point on GFP_NOWAIT, thank you!
+
+> > Or is this just a fancy way of always returning NULL or some such?  ;-)
 > 
-> There are no direct hot paths modified and the changes just
-> introduce one new branch per call.
-> 
-> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
-> ---
->   block/blk-zoned.c      | 8 +++++++-
->   include/linux/blkdev.h | 8 +++++++-
->   2 files changed, 14 insertions(+), 2 deletions(-)
-> 
-> diff --git a/block/blk-zoned.c b/block/blk-zoned.c
-> index 38cd840d8838..1dff4a8bd51d 100644
-> --- a/block/blk-zoned.c
-> +++ b/block/blk-zoned.c
-> @@ -117,10 +117,16 @@ EXPORT_SYMBOL_GPL(__blk_req_zone_write_unlock);
->   unsigned int blkdev_nr_zones(struct gendisk *disk)
->   {
->   	sector_t zone_sectors = blk_queue_zone_sectors(disk->queue);
-> +	sector_t capacity = get_capacity(disk);
->   
->   	if (!blk_queue_is_zoned(disk->queue))
->   		return 0;
-> -	return (get_capacity(disk) + zone_sectors - 1) >> ilog2(zone_sectors);
-> +
-> +	if (is_power_of_2(zone_sectors))
-> +		return (capacity + zone_sectors - 1) >>
-> +		       ilog2(zone_sectors);
-> +
-> +	return div64_u64(capacity + zone_sectors - 1, zone_sectors);
->   }
->   EXPORT_SYMBOL_GPL(blkdev_nr_zones);
+> It could fail quite easily. We would also want to guarantee (by
+> documenting I guess) that the page allocator never does anything that
+> would depend or invoke rcu_synchronize or something like that.
 
-Does anyone need support for more than 4 billion sectors per zone? If 
-not, do_div() should be sufficient.
+The GPF_NOWAIT should rule out synchronize_rcu() and similar, correct?
 
-> diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-> index 60d016138997..c4e4c7071b7b 100644
-> --- a/include/linux/blkdev.h
-> +++ b/include/linux/blkdev.h
-> @@ -665,9 +665,15 @@ static inline unsigned int blk_queue_nr_zones(struct request_queue *q)
->   static inline unsigned int blk_queue_zone_no(struct request_queue *q,
->   					     sector_t sector)
->   {
-> +	sector_t zone_sectors = blk_queue_zone_sectors(q);
-> +
->   	if (!blk_queue_is_zoned(q))
->   		return 0;
-> -	return sector >> ilog2(q->limits.chunk_sectors);
-> +
-> +	if (is_power_of_2(zone_sectors))
-> +		return sector >> ilog2(zone_sectors);
-> +
-> +	return div64_u64(sector, zone_sectors);
->   }
+> I believe this is the case currently.
 
-Same comment here.
+Here is hoping!  ;-)
 
-Thanks,
-
-Bart.
+							Thanx, Paul

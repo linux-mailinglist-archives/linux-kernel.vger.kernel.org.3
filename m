@@ -2,53 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 351D3517F4D
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 10:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B70517FB0
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 10:24:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232568AbiECIEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 04:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39808 "EHLO
+        id S232778AbiECI2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 04:28:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232521AbiECID4 (ORCPT
+        with ESMTP id S232773AbiECI2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 04:03:56 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F281BE
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 01:00:25 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id j7-20020a056e02218700b002cd9e2f0ac7so8519493ila.16
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 01:00:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=DtIPv5yFBYKusT8mskdhmPUJ7UyZ51XiNQ6j7J1NCIM=;
-        b=s87N6236R3SYUfLPWUD4tKSAyUmK3XjAgxqn+uAAJhcRZUo22cB23x5trkWBvlo+RA
-         tIPLQFD2F1xK8K0t2He7P+FtpCsYA0ams71VkcztB+xKIEhjclHrNUfakx8IwWIAzhpT
-         D7qtZwT924BMBpJAFtO6Z/DvKMPstdEq0+NvqQ3eHHzZjiHjdgrYBNE5qKyE7EaA2ukE
-         fdZ8J9EVr7i3RiJB5djA3X4zW+8DSuJX+3BiWezTTiBqbJLe9ag/KfgfOqGDLD8S8NsB
-         YHMa4SCImkucOa/G6zfYKvX+JOYJ3CYw09OgUs+D4Wv5TUNZin198rQtqLYrw05TviwN
-         97BA==
-X-Gm-Message-State: AOAM532fPZqoGmArBN9ctnywI5GrhN/5BoVrPJt7az2eNc0F93AJgydp
-        87+YQzXhCwWPIA39alrM8OOcKs41Ym4LrSghy2hFljvbAIQU
-X-Google-Smtp-Source: ABdhPJxEW3DxKPozMbE8VkazFxVnJsSTONXeSOu3P0Zz1ISlsi7I2BQR9iXR/42aD57sB+tPFOs5CGFC5oWAjx8byFJUBEjMSs85
+        Tue, 3 May 2022 04:28:08 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351DD29800
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 01:24:36 -0700 (PDT)
+Received: from mail-ot1-f47.google.com ([209.85.210.47]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Md66H-1oLgcC1DYR-00aADF; Tue, 03 May 2022 10:24:35 +0200
+Received: by mail-ot1-f47.google.com with SMTP id 31-20020a9d0822000000b00605f1807664so8152468oty.3;
+        Tue, 03 May 2022 01:24:34 -0700 (PDT)
+X-Gm-Message-State: AOAM53074jkgLK+v5S2QeAd1nHKqbiNBsFoPaeAmpveEG9ztG5S9Fbbn
+        +xAKNUreKB60yNmbly/v3+td1gGxEsM+b2flrwQ=
+X-Google-Smtp-Source: ABdhPJwrDtRFKbzWyx5Thvx9iv9ah7eyFBtB8lxLn/zZfAdnxobNy3HzZif7KpemB7VbxNVkIL6z9jSMtRXvIKtqCl4=
+X-Received: by 2002:a81:9213:0:b0:2f6:eaae:d22f with SMTP id
+ j19-20020a819213000000b002f6eaaed22fmr14611680ywg.249.1651564406792; Tue, 03
+ May 2022 00:53:26 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:12c4:b0:2cd:8f5e:7587 with SMTP id
- i4-20020a056e0212c400b002cd8f5e7587mr6245568ilm.187.1651564824367; Tue, 03
- May 2022 01:00:24 -0700 (PDT)
-Date:   Tue, 03 May 2022 01:00:24 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ae165e05de16e60a@google.com>
-Subject: [syzbot] linux-next boot error: kernel panic: VFS: Unable to mount
- root fs on unknown-block(NUM,NUM)
-From:   syzbot <syzbot+76d3c2bc1d4d59794f86@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com, vgoyal@redhat.com,
-        viro@zeniv.linux.org.uk
+References: <202205031017.4TwMan3l-lkp@intel.com> <YnCXTPrbLhvfRVDm@e3a974050dc4>
+ <CAK8P3a1xMeLa72YKMufdej6KguDwiSXtZmMqRxOt5B05x_fx3A@mail.gmail.com> <YnDaINQbVtoJz1T3@atomide.com>
+In-Reply-To: <YnDaINQbVtoJz1T3@atomide.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 3 May 2022 09:53:10 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2NOfu52tADw30e6Bfik56_+PbUv6_+ADs=PUE-6NSrbQ@mail.gmail.com>
+Message-ID: <CAK8P3a2NOfu52tADw30e6Bfik56_+PbUv6_+ADs=PUE-6NSrbQ@mail.gmail.com>
+Subject: Re: [PATCH] ARM: dove: fix returnvar.cocci warnings
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
+        kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-omap <linux-omap@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Provags-ID: V03:K1:74Mgwc2DUG5mMwrZ6MNsmoljzN6pyJ9yjLycxRNFA3NqtnvQWvr
+ +XXc1CwiRNmjo/CHNnk9+yENODqvKGuJ7B71HiOOTee+ifhGGaplPvstsZEDQr8Co3QMA6p
+ 5Uk5Xn1+YkJ0lZaorHRMpaPbP4yJtzAU0rnEvz1bCxIg7lyZqZnBc1HbBjBZzINP2n/BLLF
+ TzMmA22OUqRjjhUusxGIw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:IhXJ72qjzsg=:ai2zbYV0s3CvosNkOJkCC+
+ I+UKncQ/z1HuV8EVlSldc2dCNSQCKSO1i9E9aHk3mlczCjBGOs2UCooQuUI+2+EB+ncRlQmkD
+ lM9NSrQqPjnr16wmBNq/Dl7w/7rWUv4OlOMbaHKnrfdu9Yw773DwIZZEsqBjl3n+kFQaeg/F9
+ EE+xs1+Z39JkpiYG5jyxZHgcGlWtssL1hcQZ8wFEl3m03TzMiwryMU1+kPdidX77wPQQknbhZ
+ aJcNJX45pIYuRGCA8pfir82kO9n/D720A4/ctf6g0Pi3z+s/Zh3G7GBZhvO8AOxJiFK6SfI0U
+ qSHfw5qGeoOmxVtOezVW6jjZ8vdY7TTrpbpju+dzrUrjsN9dg4Jf/2Z9ZebtNc5TRGdsIlPlA
+ my5ECci3ACDC90RZFupwgbXMOzQC0Ojf3RHTq9Q4I4jAD6f2Kk8zu1WkhbWbxO3kVYRxTIBsT
+ 6fguHE6+FBeCSQS0MJnFENq7JLiVcauVdzmm1erigXqhe8V74klZKSifl4BNOkh787CKlLKAz
+ DConUfj9JOKeIJUBAC7C+/ZcYjG6wmX7s7e/8aSrWSrKNMn3KE175Ur3Mt+HfaTUakXpIAH5Z
+ 4XinPKuY/XHoXTHZbyaMaKoKirw0gCJCiwHz0BsQwQG5H3gJL9hnW/1AHCAgvd/8qfvu1NIjl
+ PpJkP1tX5RGRanNWo30aZ2Zi4xtK/ZX+mHiUHwc6IxrvpLGxkwk7iu5Quc8kAteA5wrc2ST+t
+ kQhE44+lwERrfvNwLS+rBUd7SFUc1iydKzdJP3C2RMSndS41VNZiFp5a9wpP99loOEZfPOszf
+ JyPYr2AqPiGhxeJbm/BtHkpQghoB3/AnkBOsGSj5GNXyHhiSi8=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,92 +70,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, May 3, 2022 at 9:30 AM Tony Lindgren <tony@atomide.com> wrote:
+> * Arnd Bergmann <arnd@arndb.de> [220503 07:18]:
+> > On Tue, May 3, 2022 at 4:45 AM kernel test robot <lkp@intel.com> wrote:
+> > >
+> > > From: kernel test robot <lkp@intel.com>
+> > >
+> > > arch/arm/mach-omap2/dma.c:82:10-16: Unneeded variable: "errata". Return "0" on line 161
+> > >
+> > >
+> > >  Remove unneeded variable used to store return value.
+> > >
+> > > Generated by: scripts/coccinelle/misc/returnvar.cocci
+> > >
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > Signed-off-by: kernel test robot <lkp@intel.com>
+> >
+> > I checked the patch, and unfortunately it is wrong, the current code
+> > needs to stay.
+> > The problem is the SET_DMA_ERRATA() macro that accesses the
+> > local 'errata' variable.
+>
+> Yeah this one keeps popping up. Maybe we can make SET_DMA_ERRATA
+> into a function or have it at least change it to set the errata
+> value.
 
-syzbot found the following issue on:
+I would just remove the macro and open-code the assignment, which
+I think makes it more readable to both people and tools.
 
-HEAD commit:    44a2f39e611a Add linux-next specific files for 20220503
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=12487e32f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b442536afa797746
-dashboard link: https://syzkaller.appspot.com/bug?extid=76d3c2bc1d4d59794f86
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+76d3c2bc1d4d59794f86@syzkaller.appspotmail.com
-
-rdma_rxe: loaded
-cfg80211: Loading compiled-in X.509 certificates for regulatory database
-cfg80211: Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
-ALSA device list:
-  #0: Dummy 1
-  #1: Loopback 1
-  #2: Virtual MIDI Card 1
-md: Waiting for all devices to be available before autodetect
-md: If you don't use raid, use raid=noautodetect
-md: Autodetecting RAID arrays.
-md: autorun ...
-md: ... autorun DONE.
-VFS: Cannot open root device "sda1" or unknown-block(0,0): error -6
-Please append a correct "root=" boot option; here are the available partitions:
-0100            4096 ram0 
- (driver?)
-0101            4096 ram1 
- (driver?)
-0102            4096 ram2 
- (driver?)
-0103            4096 ram3 
- (driver?)
-0104            4096 ram4 
- (driver?)
-0105            4096 ram5 
- (driver?)
-0106            4096 ram6 
- (driver?)
-0107            4096 ram7 
- (driver?)
-0108            4096 ram8 
- (driver?)
-0109            4096 ram9 
- (driver?)
-010a            4096 ram10 
- (driver?)
-010b            4096 ram11 
- (driver?)
-010c            4096 ram12 
- (driver?)
-010d            4096 ram13 
- (driver?)
-010e            4096 ram14 
- (driver?)
-010f            4096 ram15 
- (driver?)
-fa00       262144000 nullb0 
- (driver?)
-1f00             128 mtdblock0 
- (driver?)
-Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0)
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.18.0-rc5-next-20220503-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- panic+0x2d7/0x636 kernel/panic.c:274
- mount_block_root+0x237/0x312 init/do_mounts.c:432
- mount_root+0x36e/0x3be init/do_mounts.c:592
- prepare_namespace+0x1ff/0x234 init/do_mounts.c:644
- kernel_init_freeable+0x722/0x73a init/main.c:1631
- kernel_init+0x1a/0x1d0 init/main.c:1507
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
- </TASK>
-Kernel Offset: disabled
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+     Arnd

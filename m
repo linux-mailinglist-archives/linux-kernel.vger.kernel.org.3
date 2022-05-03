@@ -2,64 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC258518268
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 12:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA7E251826C
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 12:36:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234199AbiECKh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 06:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53994 "EHLO
+        id S234261AbiECKjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 06:39:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232986AbiECKhw (ORCPT
+        with ESMTP id S234219AbiECKi4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 06:37:52 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DBC20F6D
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 03:34:19 -0700 (PDT)
-Received: from mail-yw1-f181.google.com ([209.85.128.181]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1N3KDM-1nvQc403O6-010OMa for <linux-kernel@vger.kernel.org>; Tue, 03 May
- 2022 12:34:18 +0200
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-2f7d19cac0bso174490657b3.13
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 03:34:17 -0700 (PDT)
-X-Gm-Message-State: AOAM530/H8duqrlsNjG2ggiQv49PuEvPiaPyouL5rCVB0JLFXGtDcBAf
-        kfwap7fDUtcS+pCUtH0Ptp5wdC2o+zM8L6Atvc4=
-X-Google-Smtp-Source: ABdhPJzUhd/SRVeuLHKrdLGjDxrwdOOO1gscgt/p427vKURvKahU6VmLi/hh2DlrSJ/efTw+kpU2KUf0BD/9dSUwBjk=
-X-Received: by 2002:a81:5594:0:b0:2f8:f39c:4cfc with SMTP id
- j142-20020a815594000000b002f8f39c4cfcmr11730580ywb.495.1651574056880; Tue, 03
- May 2022 03:34:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220502204050.88316-1-nick.hawkins@hpe.com> <20220502204050.88316-4-nick.hawkins@hpe.com>
-In-Reply-To: <20220502204050.88316-4-nick.hawkins@hpe.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 3 May 2022 12:34:00 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a19pe=ehX1CR9RQz6MH=4YmTN9s7aW5LGFOPypDYjckbg@mail.gmail.com>
-Message-ID: <CAK8P3a19pe=ehX1CR9RQz6MH=4YmTN9s7aW5LGFOPypDYjckbg@mail.gmail.com>
-Subject: Re: [PATCH v6 4/8] clocksource/drivers/timer-gxp: Add HPE GXP Timer
-To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
-Cc:     "Verdun, Jean-Marie" <verdun@hpe.com>, nick@hpe.com,
-        Joel Stanley <joel@jms.id.au>, Arnd Bergmann <arnd@arndb.de>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:QxOKCPXCF4ZeVm8KcSaZ0o3DY4KlpjC3PXU121O6TGMGC1e7iwD
- HnUcUZSFpTKE2ycjw6ptLUA5C8meOfiGPZVPnnMhIO4Qr7b3GMpYa6aQZC/RebaabPGEx4j
- NlKQbh8VZmmX/BSJKDcKOrq/ru55XVqtB2BCp9ommga21PGBk7MZxu3fHNHoNS1N8JULEt6
- ztx+oCUMnM+6YuMKU4Sdg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:4sBHvXa30Wc=:uhDU3lOCbuXV5GL/KOWCJm
- T00MPZYnCmmiUttgU2XdZ/CNXJSRdCMQacO7EVurdg++0vndMJnBwxrO/R0PjrpxPGXSqIKxB
- oOuysm/Vz4Kboyg+xpXmfSQHrr/z9hyG7Oim8zqCT3qz0e7NBhQi3MQz5Zy6hxB6YQxw0Fffb
- L++gq7ZdpTQ6B0qt1Wvr1kfs7KvDjyBdRWcTqYW6KBAcKqfQ74DTZBjQw2GtlotCvn/DpKt3q
- +V9OnMPEqhXDPSkRtV6whOZvT5Bqu7vUqV46MiMeTjZ9hLbFtZjgt1m5RUtsJ+waO/MNmphbj
- zJSF0rdtWADU+H4LgGHV4BR6IriAARFbkZXrZp6+MiAjKGHl28afly3Jhn67iQ5EhEsBuhCw+
- xeiYMp/qMBZjcOG00b8E/7T5bYOrEMrG22q6J2ZxmNL2gwpVRatqNHP4rSH5ujA6Rmz5q+VHv
- M0KfILhDyemygWRQO4Awj3togfse5lZZ69q+oMVLvGobJzWl1sGuSasC/7gGF1o9+5kYZqYPo
- LWcxNHEDKomZo7FcLikaKx1+1PPjU51V/Va6jE0Qat5MA7rSAD69xvtwH8+2EmmgWXqwczjGd
- fO91RniBps5iVqJCBhVLerxFTvIrnZQJFq5IyC1aa6URhOyIr+4ZyFtmM0osfHtyHL0dcIMwy
- eX3D3v3L7ZMWOnIEspwo7+6GrH6tN7j6uo50xEIgtbvKt/tHgCRwZYYDcIcwkiV/Kc4Y=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Tue, 3 May 2022 06:38:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED70925EF;
+        Tue,  3 May 2022 03:35:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FE2B6156C;
+        Tue,  3 May 2022 10:35:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF5DFC385A4;
+        Tue,  3 May 2022 10:35:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651574123;
+        bh=fb2jgnOf1kY2mxkxQhv8oSBItF0NeX+Q28mnAUhYiXc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uXir4gjhcdyuzV1hBG6YLzfhHYSw85t6VT//XtO1srQ+WEZlcVQIEdatAREcezrbn
+         z1HCD2SQipI+TwH7CJXsMTpJMNE3XB/ZpRY5SgLQCX0LV2O6nHbRFVAjEhQMrJDNVm
+         lvUpdtKArggFJ/YpXFCfWibkXF9HyPdjS4moadMpepu4a9SK0x77rdwjxC5//rkq6Z
+         tBF+5bdA5duv89W22RD1gSszM23izh2Dd2OrU8wG7k5MgqIltnpfW6mQGoNicPQaHK
+         /SA/DEN224cRHG7hqbVECzqKLtZYsARjUk17fxs1bgzQViVzc7FPbxLHhlKGr/e7nV
+         UA/xfF7730OIw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nlpsF-008cat-BF; Tue, 03 May 2022 11:35:19 +0100
+Date:   Tue, 03 May 2022 11:35:19 +0100
+Message-ID: <87ee1a9a54.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v7 1/9] KVM: arm64: Factor out firmware register handling from psci.c
+In-Reply-To: <20220502233853.1233742-2-rananta@google.com>
+References: <20220502233853.1233742-1-rananta@google.com>
+        <20220502233853.1233742-2-rananta@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: rananta@google.com, drjones@redhat.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, pbonzini@redhat.com, catalin.marinas@arm.com, will@kernel.org, pshier@google.com, ricarkol@google.com, oupton@google.com, reijiw@google.com, jingzhangos@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, gshan@redhat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,61 +78,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 2, 2022 at 10:40 PM <nick.hawkins@hpe.com> wrote:
->
-> +config GXP_TIMER
-> +       bool "GXP timer driver" if COMPILE_TEST
-> +       depends on ARCH_HPE
-> +       default y
+On Tue, 03 May 2022 00:38:45 +0100,
+Raghavendra Rao Ananta <rananta@google.com> wrote:
+> 
+> Common hypercall firmware register handing is currently employed
+> by psci.c. Since the upcoming patches add more of these registers,
+> it's better to move the generic handling to hypercall.c for a
+> cleaner presentation.
+> 
+> While we are at it, collect all the firmware registers under
+> fw_reg_ids[] to help implement kvm_arm_get_fw_num_regs() and
+> kvm_arm_copy_fw_reg_indices() in a generic way. Also, define
+> KVM_REG_FEATURE_LEVEL_MASK using a GENMASK instead.
 
-I don't think this does what you intended: with the COMPILE_TEST option,
-you make it possible to disable the driver when ARCH_HPE is set,
-but you don't allow enabling it on other platforms, which is actually the
-point of compile testing.
+Yup. See below though.
 
-Maybe instead use
-
-config GXP_TIMER
-       bool "GXP timer driver" if COMPILE_TEST && !ARCH_HPE
-       default ARCH_HPE
-
-Also change the prompt to be more specific and mention HPE,
-as the 'GXP timer' is not a particularly obvious name for random
-users.
-
-You probably also need
-
-        select TIMER_OF if OF
-
-
-> +/*
-> + * This probe gets called after the timer is already up and running. This will create
-> + * the watchdog device as a child since the registers are shared.
-> + */
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> Reviewed-by: Oliver Upton <oupton@google.com>
+> Reviewed-by: Gavin Shan <gshan@redhat.com>
+> ---
+>  arch/arm64/kvm/guest.c       |   2 +-
+>  arch/arm64/kvm/hypercalls.c  | 185 +++++++++++++++++++++++++++++++++++
+>  arch/arm64/kvm/psci.c        | 183 ----------------------------------
+>  include/kvm/arm_hypercalls.h |   7 ++
+>  include/kvm/arm_psci.h       |   7 --
+>  5 files changed, 193 insertions(+), 191 deletions(-)
+> 
+> diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
+> index 7e15b03fbdf8..0d5cca56cbda 100644
+> --- a/arch/arm64/kvm/guest.c
+> +++ b/arch/arm64/kvm/guest.c
+> @@ -18,7 +18,7 @@
+>  #include <linux/string.h>
+>  #include <linux/vmalloc.h>
+>  #include <linux/fs.h>
+> -#include <kvm/arm_psci.h>
+> +#include <kvm/arm_hypercalls.h>
+>  #include <asm/cputype.h>
+>  #include <linux/uaccess.h>
+>  #include <asm/fpsimd.h>
+> diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
+> index 202b8c455724..fa6d9378d8e7 100644
+> --- a/arch/arm64/kvm/hypercalls.c
+> +++ b/arch/arm64/kvm/hypercalls.c
+> @@ -158,3 +158,188 @@ int kvm_hvc_call_handler(struct kvm_vcpu *vcpu)
+>  	smccc_set_retval(vcpu, val[0], val[1], val[2], val[3]);
+>  	return 1;
+>  }
 > +
-> +static int gxp_timer_probe(struct platform_device *pdev)
+> +static const u64 kvm_arm_fw_reg_ids[] = {
+> +	KVM_REG_ARM_PSCI_VERSION,
+> +	KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1,
+> +	KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2,
+> +	KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_3,
+> +};
+> +
+> +int kvm_arm_get_fw_num_regs(struct kvm_vcpu *vcpu)
 > +{
-> +       struct platform_device *gxp_watchdog_device;
-> +       struct device *dev = &pdev->dev;
-> +
-> +       if (!gxp_timer) {
-> +               pr_err("Gxp Timer not initialized, cannot create watchdog");
-> +               return -ENOMEM;
-> +       }
-> +
-> +       gxp_watchdog_device = platform_device_alloc("gxp-wdt", -1);
-> +       if (!gxp_watchdog_device) {
-> +               pr_err("Timer failed to allocate gxp-wdt");
-> +               return -ENOMEM;
-> +       }
-> +
-> +       /* Pass the base address (counter) as platform data and nothing else */
-> +       gxp_watchdog_device->dev.platform_data = gxp_timer->counter;
-> +       gxp_watchdog_device->dev.parent = dev;
-> +
-> +       return platform_device_add(gxp_watchdog_device);
+> +	return ARRAY_SIZE(kvm_arm_fw_reg_ids);
 > +}
+> +
+> +int kvm_arm_copy_fw_reg_indices(struct kvm_vcpu *vcpu, u64 __user *uindices)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(kvm_arm_fw_reg_ids); i++) {
+> +		if (put_user(kvm_arm_fw_reg_ids[i], uindices++))
+> +			return -EFAULT;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +#define KVM_REG_FEATURE_LEVEL_WIDTH	4
+> +#define KVM_REG_FEATURE_LEVEL_MASK	GENMASK(KVM_REG_FEATURE_LEVEL_WIDTH, 0)
 
-This looks good to me now.
+which translates in GENMASK(4, 0), which is 5 bit wide. Not what you
+want.
 
-        Arnd
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

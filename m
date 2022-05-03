@@ -2,59 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1DEC518AC4
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 19:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68AE9518AC7
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 19:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240117AbiECRRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 13:17:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33446 "EHLO
+        id S240124AbiECRRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 13:17:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240106AbiECRRl (ORCPT
+        with ESMTP id S240119AbiECRRo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 13:17:41 -0400
-Received: from mailrelay3-1.pub.mailoutpod1-cph3.one.com (mailrelay3-1.pub.mailoutpod1-cph3.one.com [46.30.210.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4476C1CFF0
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 10:14:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=Avi++YC8KXmzp+Qk4qV9sWm8T7rfgLH3Hf0948e2pMg=;
-        b=qyPvWgeHzAGohjsYgc3ZWnjoDbna/uTaQSPPNwSL7xDnNOo1Q47Ji/02OMsMu4qBWHEu6Zw6EoIbG
-         jw/g3SVlX16x2aepkBBJPnyX34OA3DWQ/NihzWddrQ2k6JAs11A18r26Pz9M9qrC0F2qIaNck20Cpi
-         GmHNkHf68ifKepTvMlwvHGH3BbbfSsR5rJoRtbMv4p77iuhMtnZzEFn04JcMVMxW8UMA4i20S7yut7
-         lluP0zUNnsVO8jjn4GqwUrE+2OrEJ4ApJpRqGSOWM6fEtLEedqtid9gw9e9hb1W0CYtggXCR2QwSiT
-         aQAqFLXvqG4L+NU/1T0Zq8QFqBXzqEQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=Avi++YC8KXmzp+Qk4qV9sWm8T7rfgLH3Hf0948e2pMg=;
-        b=gpVBElcBjr5YuapCgyRAXILEYvPvn0HuaE/FMglLwovc6+K2T5pSF4vgFkN7eX4GMg5X+ovByah0T
-         B2hOLZlBA==
-X-HalOne-Cookie: 4ebcfbef59c00a5378bef8f3cf6c7ffdddb91d2d
-X-HalOne-ID: 6ec553c4-cb04-11ec-be6b-d0431ea8bb03
-Received: from mailproxy1.cst.dirpod3-cph3.one.com (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
-        by mailrelay3.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id 6ec553c4-cb04-11ec-be6b-d0431ea8bb03;
-        Tue, 03 May 2022 17:14:04 +0000 (UTC)
-Date:   Tue, 3 May 2022 19:14:02 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        Junxiao Chang <junxiao.chang@intel.com>,
-        dri-devel@lists.freedesktop.org, Maxime Ripard <maxime@cerno.tech>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: Re: [PATCH] fbdev: Use helper to get fb_info in all file operations
-Message-ID: <YnFi2nrK0I7893S2@ravnborg.org>
-References: <20220503164616.663796-1-javierm@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220503164616.663796-1-javierm@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Tue, 3 May 2022 13:17:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A572C1CFF0;
+        Tue,  3 May 2022 10:14:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61A28B81F74;
+        Tue,  3 May 2022 17:14:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE9B8C385A9;
+        Tue,  3 May 2022 17:14:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651598049;
+        bh=AplqjMJygV5N2GJ3+bH6/snyHg1GxYj0Pi04o+s5Et0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Hi6mCfouyVmjZxSVbORS/GhkRPnI8onFUPKaZL32RKjhslEyhjFCcgfoHKxl3MFD2
+         mp0RhJ/mF5wujJ+csCdONmvxh/iqPpooUX+SqLoMtumsgGEMUxsKDYu98tdyzxgBAy
+         NitGG9dXGgMCuq61CfZaA3pbu0G6Gx6hB5Z6SnIJtDnE/o6YzJrzTunYhIRdZieTTy
+         a1A+R9HMMO5jTOeiDYLmWEOSamfz1rm/PZRd19SrejUhKGJY42IIWuV2fHVXV83LUP
+         2HbvLHn/rN/rrGo6gwV8mwrAaG+pj4VUPcc9E8aWlVLfsT/BggH0NLG8kyLm8Sj6CX
+         on/ZMB7FSaQPw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nlw6A-008hld-7y; Tue, 03 May 2022 18:14:06 +0100
+Date:   Tue, 03 May 2022 18:14:06 +0100
+Message-ID: <87a6by8roh.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v7 6/9] Docs: KVM: Add doc for the bitmap firmware registers
+In-Reply-To: <20220502233853.1233742-7-rananta@google.com>
+References: <20220502233853.1233742-1-rananta@google.com>
+        <20220502233853.1233742-7-rananta@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: rananta@google.com, drjones@redhat.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, pbonzini@redhat.com, catalin.marinas@arm.com, will@kernel.org, pshier@google.com, ricarkol@google.com, oupton@google.com, reijiw@google.com, jingzhangos@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, gshan@redhat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,46 +78,189 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Javier,
-
-On Tue, May 03, 2022 at 06:46:16PM +0200, Javier Martinez Canillas wrote:
-> A reference to the framebuffer device struct fb_info is stored in the file
-> private data, but this reference could no longer be valid and must not be
-> accessed directly. Instead, the file_fb_info() accessor function must be
-> used since it does sanity checking to make sure that the fb_info is valid.
+On Tue, 03 May 2022 00:38:50 +0100,
+Raghavendra Rao Ananta <rananta@google.com> wrote:
 > 
-> This can happen for example if the registered framebuffer device is for a
-> driver that just uses a framebuffer provided by the system firmware. In
-> that case, the fbdev core would unregister the framebuffer device when a
-> real video driver is probed and ask to remove conflicting framebuffers.
+> Add the documentation for the bitmap firmware registers in
+> hypercalls.rst and api.rst. This includes the details for
+> KVM_REG_ARM_STD_BMAP, KVM_REG_ARM_STD_HYP_BMAP, and
+> KVM_REG_ARM_VENDOR_HYP_BMAP registers.
 > 
-> Most fbdev file operations already use the helper to get the fb_info but
-> get_fb_unmapped_area() and fb_deferred_io_fsync() don't. Fix those two.
+> Since the document is growing to carry other hypercall related
+> information, make necessary adjustments to present the document
+> in a generic sense, rather than being PSCI focused.
 > 
-> Since fb_deferred_io_fsync() is not in fbmem.o, the helper has to be
-> exported. Rename it and add a fb_ prefix to denote that is public now.
-> 
-> Reported-by: Junxiao Chang <junxiao.chang@intel.com>
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> Reviewed-by: Gavin Shan <gshan@redhat.com>
 > ---
+>  Documentation/virt/kvm/api.rst            | 16 ++++
+>  Documentation/virt/kvm/arm/hypercalls.rst | 94 ++++++++++++++++++-----
+>  2 files changed, 92 insertions(+), 18 deletions(-)
 > 
->  drivers/video/fbdev/core/fb_defio.c |  5 ++++-
->  drivers/video/fbdev/core/fbmem.c    | 24 +++++++++++++++---------
->  include/linux/fb.h                  |  1 +
->  3 files changed, 20 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/video/fbdev/core/fb_defio.c b/drivers/video/fbdev/core/fb_defio.c
-> index 842c66b3e33d..ac1c88b3fbb5 100644
-> --- a/drivers/video/fbdev/core/fb_defio.c
-> +++ b/drivers/video/fbdev/core/fb_defio.c
-> @@ -68,12 +68,15 @@ static vm_fault_t fb_deferred_io_fault(struct vm_fault *vmf)
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index 4a900cdbc62e..8ae638be79fd 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -2542,6 +2542,22 @@ arm64 firmware pseudo-registers have the following bit pattern::
 >  
->  int fb_deferred_io_fsync(struct file *file, loff_t start, loff_t end, int datasync)
->  {
-> -	struct fb_info *info = file->private_data;
-> +	struct fb_info *info = fb_file_fb_info(file->private_data);
-This looks wrong. I assume you wanted to write:
-> +	struct fb_info *info = fb_file_fb_info(file);
+>    0x6030 0000 0014 <regno:16>
+>  
+> +arm64 bitmap feature firmware pseudo-registers have the following bit pattern::
+> +
+> +  0x6030 0000 0016 <regno:16>
+> +
+> +The bitmap feature firmware registers exposes the hypercall services that are
+> +available for userspace to configure. The set bits corresponds to the services
+> +that are available for the guests to access. By default, KVM sets all the
+> +supported bits during VM initialization. The userspace can discover the
+> +available services via KVM_GET_ONE_REG, and write back the bitmap corresponding
+> +to the features that it wishes guests to see via KVM_SET_ONE_REG.
+> +
+> +Note: These registers are immutable once any of the vCPUs of the VM has run at
+> +least once. A KVM_SET_ONE_REG in such a scenario will return a -EBUSY to userspace.
+> +
 
+The placement is odd, as SVE uses ID 0x0015, and is *after* this.
 
-	Sam
+> +(See Documentation/virt/kvm/arm/hypercalls.rst for more details.)
+> +
+>  arm64 SVE registers have the following bit patterns::
+>  
+>    0x6080 0000 0015 00 <n:5> <slice:5>   Zn bits[2048*slice + 2047 : 2048*slice]
+> diff --git a/Documentation/virt/kvm/arm/hypercalls.rst b/Documentation/virt/kvm/arm/hypercalls.rst
+> index d52c2e83b5b8..383ca766cf36 100644
+> --- a/Documentation/virt/kvm/arm/hypercalls.rst
+> +++ b/Documentation/virt/kvm/arm/hypercalls.rst
+> @@ -1,32 +1,32 @@
+>  .. SPDX-License-Identifier: GPL-2.0
+>  
+> -=========================================
+> -Power State Coordination Interface (PSCI)
+> -=========================================
+> +=======================
+> +ARM Hypercall Interface
+> +=======================
+>  
+> -KVM implements the PSCI (Power State Coordination Interface)
+> -specification in order to provide services such as CPU on/off, reset
+> -and power-off to the guest.
+> +KVM handles the hypercall services as requested by the guests. New hypercall
+> +services are regularly made available by the ARM specification or by KVM (as
+> +vendor services) if they make sense from a virtualization point of view.
+>  
+> -The PSCI specification is regularly updated to provide new features,
+> -and KVM implements these updates if they make sense from a virtualization
+> -point of view.
+> -
+> -This means that a guest booted on two different versions of KVM can
+> -observe two different "firmware" revisions. This could cause issues if
+> -a given guest is tied to a particular PSCI revision (unlikely), or if
+> -a migration causes a different PSCI version to be exposed out of the
+> -blue to an unsuspecting guest.
+> +This means that a guest booted on two different versions of KVM can observe
+> +two different "firmware" revisions. This could cause issues if a given guest
+> +is tied to a particular version of a hypercall service, or if a migration
+> +causes a different version to be exposed out of the blue to an unsuspecting
+> +guest.
+>  
+>  In order to remedy this situation, KVM exposes a set of "firmware
+>  pseudo-registers" that can be manipulated using the GET/SET_ONE_REG
+>  interface. These registers can be saved/restored by userspace, and set
+> -to a convenient value if required.
+> +to a convenient value as required.
+>  
+> -The following register is defined:
+> +The following registers are defined:
+>  
+>  * KVM_REG_ARM_PSCI_VERSION:
+>  
+> +  KVM implements the PSCI (Power State Coordination Interface)
+> +  specification in order to provide services such as CPU on/off, reset
+> +  and power-off to the guest.
+> +
+>    - Only valid if the vcpu has the KVM_ARM_VCPU_PSCI_0_2 feature set
+>      (and thus has already been initialized)
+>    - Returns the current PSCI version on GET_ONE_REG (defaulting to the
+> @@ -74,4 +74,62 @@ The following register is defined:
+>      KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2_NOT_REQUIRED:
+>        The workaround is always active on this vCPU or it is not needed.
+>  
+> -.. [1] https://developer.arm.com/-/media/developer/pdf/ARM_DEN_0070A_Firmware_interfaces_for_mitigating_CVE-2017-5715.pdf
+> +
+> +Bitmap Feature Firmware Registers
+> +---------------------------------
+> +
+> +Contrary to the above registers, the following registers exposes the hypercall
+> +services in the form of a feature-bitmap to the userspace. This bitmap is
+> +translated to the services that are available to the guest. There is a register
+> +defined per service call owner and can be accessed via GET/SET_ONE_REG interface.
+> +
+> +By default, these registers are set with the upper limit of the features that
+> +are supported. This way userspace can discover all the electable hypercall services
+> +via GET_ONE_REG. The user-space can write-back the desired bitmap back via
+> +SET_ONE_REG. The features for the registers that are untouched, probably because
+> +userspace isn't aware of them, will be exposed as is to the guest.
+> +
+> +Note that KVM would't allow the userspace to configure the registers anymore once
+> +any of the vCPUs has run at least once. Instead, it will return a -EBUSY.
+> +
+
+Formatting is a bit off. We try to stay within the 80 cols format for
+text documents such as this.
+
+> +The psuedo-firmware bitmap register are as follows:
+
+Typo.
+
+> +
+> +* KVM_REG_ARM_STD_BMAP:
+> +    Controls the bitmap of the ARM Standard Secure Service Calls.
+> +
+> +  The following bits are accepted:
+> +
+> +    Bit-0: KVM_REG_ARM_STD_BIT_TRNG_V1_0:
+> +      The bit represents the services offered under v1.0 of ARM True Random
+> +      Number Generator (TRNG) specification, ARM DEN0098.
+> +
+> +* KVM_REG_ARM_STD_HYP_BMAP:
+> +    Controls the bitmap of the ARM Standard Hypervisor Service Calls.
+> +
+> +  The following bits are accepted:
+> +
+> +    Bit-0: KVM_REG_ARM_STD_HYP_BIT_PV_TIME:
+> +      The bit represents the Paravirtualized Time service as represented by
+> +      ARM DEN0057A.
+> +
+> +* KVM_REG_ARM_VENDOR_HYP_BMAP:
+> +    Controls the bitmap of the Vendor specific Hypervisor Service Calls.
+> +
+> +  The following bits are accepted:
+> +
+> +    Bit-0: KVM_REG_ARM_VENDOR_HYP_BIT_FUNC_FEAT
+> +      The bit represents the ARM_SMCCC_VENDOR_HYP_KVM_FEATURES_FUNC_ID
+> +      and ARM_SMCCC_VENDOR_HYP_CALL_UID_FUNC_ID function-ids.
+> +
+> +    Bit-1: KVM_REG_ARM_VENDOR_HYP_BIT_PTP:
+> +      The bit represents the Precision Time Protocol KVM service.
+> +
+> +Errors:
+> +
+> +    =======  =============================================================
+> +    -ENOENT   Unknown register accessed.
+> +    -EBUSY    Attempt a 'write' to the register after the VM has started.
+> +    -EINVAL   Invalid bitmap written to the register.
+> +    =======  =============================================================
+> +
+> +.. [1] https://developer.arm.com/-/media/developer/pdf/ARM_DEN_0070A_Firmware_interfaces_for_mitigating_CVE-2017-5715.pdf
+> \ No newline at end of file
+> -- 
+> 2.36.0.464.gb9c8b46e94-goog
+> 
+> 
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

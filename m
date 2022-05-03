@@ -2,92 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3223519063
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 23:43:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E3B651909F
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 23:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243067AbiECVqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 17:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57408 "EHLO
+        id S243119AbiECVrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 17:47:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbiECVqe (ORCPT
+        with ESMTP id S243100AbiECVrS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 17:46:34 -0400
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C4F24968;
-        Tue,  3 May 2022 14:43:01 -0700 (PDT)
-Received: by mail-ot1-f45.google.com with SMTP id y14-20020a9d460e000000b00605ee347da1so9960425ote.8;
-        Tue, 03 May 2022 14:43:01 -0700 (PDT)
+        Tue, 3 May 2022 17:47:18 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601984162E
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 14:43:40 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id j4so32467038lfh.8
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 14:43:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=C756m5N+PAgQRKxR49lEWlxtJ+9ZyoDvXSPO8NFP/os=;
+        b=e0s9a83f4XxcDt4qv0Yq1NGegacSoMfk1kUMm4iSF83ip1Tf+H2yXLO9VDCeKV7C4c
+         /8Fmu1KMTzgp6siIjz8JWGnr3cdCc8kiVoE5MzTOiLMNsIhmDYLoE5F97ElfwQKZOrcW
+         OEhiqQJIZE73f1Aiyi7UfXo/aixlTJlwy22uL5drkN77lnAKcv8aBj1f8PWsKA0vcKKn
+         RcBS9VX50JEaj+xuhLkaBUifaAVgRauwnUb4L3k2gBQukgd93q3BQ/3OdSnKWPkanfqn
+         mgpAkATGRsyCTEZkwnyUNdbSJetOKwkzvx95wVmWpYQqq6YyZYOAQmE1eJR+hTcPA08/
+         lSVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7Hu0gsr8Y6PWp2FP45L7+RGtOMCVNeN3hbCuvJ2usXo=;
-        b=S1uvi1+HzU2UxJgwdW039AXe8ZKhsF1uBkThEaKk+N+xLyda4IwzUiGo2jDapYR4V/
-         Z9sChaH3+fyFGeqt+ajhSFiGxsdzcWwRvO4Tfk16f16gDoz3+LjqJ1dBstECk7O5RnEZ
-         NL81ZmWih+fRj6GM7ZjC/BVhmCqIizljduaUZ2Leky7H4XiEDbP+gpBLXfCN085Zj3S6
-         rWcZ77tEC7XYYJDDPWRp07bfBUickLoT2WtGmKyKWoueFo3GN7gOywuPA7Vw5m0kv4fQ
-         24FNRUyqSlVet9J2hu4n55jmFn66KNYV3sRUuQVnuQmZ23oxY6nCBxK7P9SIXgr9i9sq
-         M6zg==
-X-Gm-Message-State: AOAM532W01jeXoUGHVNNjH7/cUljsvdwYCVool03vUWrBv1o7oXwweb3
-        eeQtKJqDO0m9aB8JTPPSvQ==
-X-Google-Smtp-Source: ABdhPJz4N4R764kPo+v++/Y+BmcZqqzXF0v6pZHNpMo6V//OxOtU550cg4XA4nzAnBjeZQ2Nv/molw==
-X-Received: by 2002:a9d:1714:0:b0:606:eaf:fa95 with SMTP id i20-20020a9d1714000000b006060eaffa95mr5217807ota.180.1651614180748;
-        Tue, 03 May 2022 14:43:00 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bg1-20020a056808178100b00326414c1bb7sm686470oib.35.2022.05.03.14.42.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 14:43:00 -0700 (PDT)
-Received: (nullmailer pid 82356 invoked by uid 1000);
-        Tue, 03 May 2022 21:42:58 -0000
-Date:   Tue, 3 May 2022 16:42:58 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Jesse Taube <mr.bossman075@gmail.com>
-Cc:     sboyd@kernel.org, linux-clk@vger.kernel.org,
-        daniel.lezcano@linaro.org, leoyang.li@nxp.com,
-        giulio.benetti@benettiengineering.com, festevam@gmail.com,
-        clin@suse.com, s.hauer@pengutronix.de, linux-imx@nxp.com,
-        stefan@agner.ch, tharvey@gateworks.com,
-        linux-arm-kernel@lists.infradead.org, aisheng.dong@nxp.com,
-        robh+dt@kernel.org, tglx@linutronix.de, abel.vesa@nxp.com,
-        sebastian.reichel@collabora.com, dev@lynxeye.de,
-        Mr.Bossman075@gmail.com, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, olof@lixom.net, mturquette@baylibre.com,
-        linux@armlinux.org.uk, linus.walleij@linaro.org,
-        cniedermaier@dh-electronics.com, soc@kernel.org,
-        linux-gpio@vger.kernel.org, shawnguo@kernel.org,
-        marcel.ziswiler@toradex.com, arnd@arndb.de,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 03/15] dt-bindings: gpio: fsl-imx-gpio: Add i.MXRT
- compatibles
-Message-ID: <YnGh4oZOm9eHO9z2@robh.at.kernel.org>
-References: <20220428214838.1040278-1-Mr.Bossman075@gmail.com>
- <20220428214838.1040278-4-Mr.Bossman075@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=C756m5N+PAgQRKxR49lEWlxtJ+9ZyoDvXSPO8NFP/os=;
+        b=QfKfO8b9F+1yz2eJieoxnOgfBxhvdTFt+6rQc69pxU4bnXscOC4014FBnlge1mQQ4t
+         cTRhdkV2AzD61deDIhIRG+07kQZsgKly2M6/9bPbIvajbDteug0uaYySCd83FzAK8WJR
+         qxf8ig8oWJ8+13SHLpA9TSmX9uXLXoa7e7Q5YRJ1JepjboZHY6U+1tngP/0p+ZSEP/zn
+         lRcOms1A7N5aVORJp9HGhNtrqPkPtZtRfwM19SR4R8jZoYeR+seC4isLQweZ+eeuxSxT
+         RTWw+55+tG8JeuI9wP1B4Z7wjwD1UelnRz7sJeii0gK/vy7ZByn4LsosP1vnfbyKEGuS
+         LBzA==
+X-Gm-Message-State: AOAM5325OK5cLcHDwxMuAlpxE3P2r30/iu5TJP6G7Vc4++A/x+pOql/e
+        zGrc4O2dVn0I4JGNk+DrqVCXqMCS7yf0uVCfWD1fzuNtO10=
+X-Google-Smtp-Source: ABdhPJxlgenGdZiH7n9vBibI6qkAxNk/xO71M6pNC8Y64omRpD6gBOoI9tnHyN+y+6OlRQe66kztnErFQ3ZDPAGTT9I=
+X-Received: by 2002:a05:6512:1150:b0:473:bdf0:6267 with SMTP id
+ m16-20020a056512115000b00473bdf06267mr179381lfg.87.1651614218457; Tue, 03 May
+ 2022 14:43:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220428214838.1040278-4-Mr.Bossman075@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220501084032.1025918-1-masahiroy@kernel.org> <20220501084032.1025918-2-masahiroy@kernel.org>
+In-Reply-To: <20220501084032.1025918-2-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 3 May 2022 14:43:26 -0700
+Message-ID: <CAKwvOdkuWSBShjA2uQEYj5Puyn0bJLdK1JE9Y-P+q9uxNk1A5w@mail.gmail.com>
+Subject: Re: [PATCH v2 01/26] modpost: use bool type where appropriate
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Apr 2022 17:48:26 -0400, Jesse Taube wrote:
-> Both the i.MXRT1170 and 1050 have the same gpio controller as
-> "fsl,imx35-gpio". Add i.MXRT to the compatible list.
-> 
-> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
-> ---
-> V1 -> V2:
->  - New commit to fix dtbs_check
-> ---
->  Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+On Sun, May 1, 2022 at 1:42 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
+> index 96d6b3a16ca2..7ccfcc8899c1 100644
+> --- a/scripts/mod/modpost.h
+> +++ b/scripts/mod/modpost.h
+> @@ -1,4 +1,5 @@
+>  /* SPDX-License-Identifier: GPL-2.0 */
+> +#include <stdbool.h>
+>  #include <stdio.h>
+>  #include <stdlib.h>
+>  #include <stdarg.h>
+> @@ -111,11 +112,10 @@ struct module {
+>         struct module *next;
+>         int gpl_compatible;
+>         struct symbol *unres;
+> -       int from_dump;  /* 1 if module was loaded from *.symvers */
+> -       int is_vmlinux;
+> -       int seen;
+> -       int has_init;
+> -       int has_cleanup;
+> +       bool from_dump;         /* true if module was loaded from *.symvers */
+> +       bool is_vmlinux;
+> +       bool seen;
+> +       bool has_init, has_cleanup;
 
-Acked-by: Rob Herring <robh@kernel.org>
+Consider keeping these on separate lines. Either way:
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+-- 
+Thanks,
+~Nick Desaulniers

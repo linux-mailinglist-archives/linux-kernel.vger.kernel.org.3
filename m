@@ -2,142 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F7F517B87
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 03:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1014517B82
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 03:10:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbiECBNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 21:13:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59876 "EHLO
+        id S229831AbiECBN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 21:13:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbiECBNu (ORCPT
+        with ESMTP id S229484AbiECBN1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 21:13:50 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC82C4F9F3
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 18:10:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651540209; x=1683076209;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qln1eOE7PtXZLf4DXtjUFRxKja508JnuDh98umy/EyE=;
-  b=MQOSovXN//ZZvc60zGDM2aCv0MGEf5K69zUb+cU4BBN4qrsvgvqk7AXD
-   ZQ7Smgy2zs+w+o17ZkdtyJ0lVv50lf2iFwivTqgeOP6nULESdCQ2fry1K
-   znutvgLmb+toumVCos8s0tn/h+fzBmMSpV6Vcu0mCrVrZZQUhLERyiwS4
-   W81gJOMmKWnlgyU5TD7k5zr0vIu6VMmgd3NJaIAb+dFOhgZNDsT2YWv/q
-   q/8dWK9LVSQMv3zflf1brmX9BrkeJFQQkQ7c+Cnz9d9QD5xYaa5VKjoCA
-   bsuytDZ2emK06rJ1LDLjlVeLtAHHnGyEUR5GM/sw81XgpS2aEvAvVoSgu
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="249350482"
-X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="249350482"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 18:06:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="631315663"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 02 May 2022 18:06:09 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nlgzQ-000A1v-L1;
-        Tue, 03 May 2022 01:06:08 +0000
-Date:   Tue, 3 May 2022 09:05:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Steve French <stfrench@microsoft.com>
-Subject: [samba-ksmbd:for-next 26/26] fs/cifs/fscache.c:112:67: warning:
- passing argument 2 of 'bset_mem_set_bit' makes pointer from integer without
- a cast
-Message-ID: <202205030951.b4tycp85-lkp@intel.com>
+        Mon, 2 May 2022 21:13:27 -0400
+Received: from szxga01-in.huawei.com (unknown [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878A14F9DD
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 18:09:47 -0700 (PDT)
+Received: from kwepemi500005.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Kshb26v1KzfbDB;
+        Tue,  3 May 2022 09:05:18 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ kwepemi500005.china.huawei.com (7.221.188.179) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 3 May 2022 09:06:20 +0800
+Received: from [10.174.179.234] (10.174.179.234) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 3 May 2022 09:06:18 +0800
+Message-ID: <48f2779d-bc62-c7f5-c40e-7238a16b90fb@huawei.com>
+Date:   Tue, 3 May 2022 09:06:18 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH -next v4 1/7] x86, powerpc: fix function define in
+ copy_mc_to_user
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Mark Rutland <mark.rutland@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "Alexander Viro" <viro@zeniv.linux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>
+CC:     Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Xie XiuQi <xiexiuqi@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Guohanjun <guohanjun@huawei.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20220420030418.3189040-1-tongtiangen@huawei.com>
+ <20220420030418.3189040-2-tongtiangen@huawei.com>
+ <91011a66-b125-b445-1486-bada8e06b994@csgroup.eu>
+From:   Tong Tiangen <tongtiangen@huawei.com>
+In-Reply-To: <91011a66-b125-b445-1486-bada8e06b994@csgroup.eu>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.234]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RDNS_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.samba.org/ksmbd.git for-next
-head:   422ce10d22e2de32427ff611478747dd27af50f8
-commit: 422ce10d22e2de32427ff611478747dd27af50f8 [26/26] mm, netfs, fscache: Stop read optimisation when folio removed from pagecache
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20220503/202205030951.b4tycp85-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add samba-ksmbd git://git.samba.org/ksmbd.git
-        git fetch --no-tags samba-ksmbd for-next
-        git checkout 422ce10d22e2de32427ff611478747dd27af50f8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash fs/cifs/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/bitops.h:33,
-                    from include/linux/thread_info.h:27,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/m68k/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from include/linux/spinlock.h:55,
-                    from include/linux/swap.h:5,
-                    from fs/cifs/fscache.h:12,
-                    from fs/cifs/fscache.c:9:
-   fs/cifs/fscache.c: In function 'cifs_fscache_get_inode_cookie':
->> fs/cifs/fscache.c:112:67: warning: passing argument 2 of 'bset_mem_set_bit' makes pointer from integer without a cast [-Wint-conversion]
-     112 |                 set_bit(AS_NOTIFY_REMOVING_FOLIO, inode->i_mapping->flags);
-         |                                                   ~~~~~~~~~~~~~~~~^~~~~~~
-         |                                                                   |
-         |                                                                   long unsigned int
-   arch/m68k/include/asm/bitops.h:64:54: note: in definition of macro 'set_bit'
-      64 |                                 bset_mem_set_bit(nr, vaddr) : \
-         |                                                      ^~~~~
-   arch/m68k/include/asm/bitops.h:41:69: note: expected 'volatile long unsigned int *' but argument is of type 'long unsigned int'
-      41 | static inline void bset_mem_set_bit(int nr, volatile unsigned long *vaddr)
-         |                                             ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
->> fs/cifs/fscache.c:112:67: warning: passing argument 2 of 'bfset_mem_set_bit' makes pointer from integer without a cast [-Wint-conversion]
-     112 |                 set_bit(AS_NOTIFY_REMOVING_FOLIO, inode->i_mapping->flags);
-         |                                                   ~~~~~~~~~~~~~~~~^~~~~~~
-         |                                                                   |
-         |                                                                   long unsigned int
-   arch/m68k/include/asm/bitops.h:65:55: note: in definition of macro 'set_bit'
-      65 |                                 bfset_mem_set_bit(nr, vaddr))
-         |                                                       ^~~~~
-   arch/m68k/include/asm/bitops.h:50:70: note: expected 'volatile long unsigned int *' but argument is of type 'long unsigned int'
-      50 | static inline void bfset_mem_set_bit(int nr, volatile unsigned long *vaddr)
-         |                                              ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
 
 
-vim +/bset_mem_set_bit +112 fs/cifs/fscache.c
+在 2022/5/2 22:24, Christophe Leroy 写道:
+> 
+> 
+> Le 20/04/2022 à 05:04, Tong Tiangen a écrit :
+>> x86/powerpc has it's implementation of copy_mc_to_user but not use #define
+>> to declare.
+>>
+>> This may cause problems, for example, if other architectures open
+>> CONFIG_ARCH_HAS_COPY_MC, but want to use copy_mc_to_user() outside the
+>> architecture, the code add to include/linux/uaddess.h is as follows:
+>>
+>>       #ifndef copy_mc_to_user
+>>       static inline unsigned long __must_check
+>>       copy_mc_to_user(void *dst, const void *src, size_t cnt)
+>>       {
+>> 	    ...
+>>       }
+>>       #endif
+>>
+>> Then this definition will conflict with the implementation of x86/powerpc
+>> and cause compilation errors as follow:
+>>
+>> Fixes: ec6347bb4339 ("x86, powerpc: Rename memcpy_mcsafe() to copy_mc_to_{user, kernel}()")
+> 
+> I don't understand, what does it fix really ? What was the
+> (existing/real) bug introduced by that patch and that your are fixing ?
+> 
+> If those defined had been expected and missing, we would have had a
+> build failure. If you have one, can you describe it ?
 
-    96	
-    97	void cifs_fscache_get_inode_cookie(struct inode *inode)
-    98	{
-    99		struct cifs_fscache_inode_coherency_data cd;
-   100		struct cifsInodeInfo *cifsi = CIFS_I(inode);
-   101		struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
-   102		struct cifs_tcon *tcon = cifs_sb_master_tcon(cifs_sb);
-   103	
-   104		cifs_fscache_fill_coherency(&cifsi->vfs_inode, &cd);
-   105	
-   106		cifsi->netfs_ctx.cache =
-   107			fscache_acquire_cookie(tcon->fscache, 0,
-   108					       &cifsi->uniqueid, sizeof(cifsi->uniqueid),
-   109					       &cd, sizeof(cd),
-   110					       i_size_read(&cifsi->vfs_inode));
-   111		if (cifsi->netfs_ctx.cache)
- > 112			set_bit(AS_NOTIFY_REMOVING_FOLIO, inode->i_mapping->flags);
-   113	
+There will be build failure after patch 3 is added, there is a little
+confusing for a reader of this commit in isolation.
+In the next version, I will put this patch after patch 3.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Tong.
+> 
+>> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
+>> ---
+>>    arch/powerpc/include/asm/uaccess.h | 1 +
+>>    arch/x86/include/asm/uaccess.h     | 1 +
+>>    2 files changed, 2 insertions(+)
+>>
+>> diff --git a/arch/powerpc/include/asm/uaccess.h b/arch/powerpc/include/asm/uaccess.h
+>> index 9b82b38ff867..58dbe8e2e318 100644
+>> --- a/arch/powerpc/include/asm/uaccess.h
+>> +++ b/arch/powerpc/include/asm/uaccess.h
+>> @@ -358,6 +358,7 @@ copy_mc_to_user(void __user *to, const void *from, unsigned long n)
+>>    
+>>    	return n;
+>>    }
+>> +#define copy_mc_to_user copy_mc_to_user
+>>    #endif
+>>    
+>>    extern long __copy_from_user_flushcache(void *dst, const void __user *src,
+>> diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
+>> index f78e2b3501a1..e18c5f098025 100644
+>> --- a/arch/x86/include/asm/uaccess.h
+>> +++ b/arch/x86/include/asm/uaccess.h
+>> @@ -415,6 +415,7 @@ copy_mc_to_kernel(void *to, const void *from, unsigned len);
+>>    
+>>    unsigned long __must_check
+>>    copy_mc_to_user(void *to, const void *from, unsigned len);
+>> +#define copy_mc_to_user copy_mc_to_user
+>>    #endif
+>>    
+>>    /*

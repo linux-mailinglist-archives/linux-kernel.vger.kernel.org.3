@@ -2,137 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9B1D51860C
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:04:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B9A51860E
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236637AbiECOIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 10:08:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51590 "EHLO
+        id S236658AbiECOIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 10:08:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236230AbiECOIR (ORCPT
+        with ESMTP id S236230AbiECOIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 10:08:17 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29C521274;
-        Tue,  3 May 2022 07:04:43 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id m20so33617722ejj.10;
-        Tue, 03 May 2022 07:04:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uXCKqvLKkB4bXBbfle8OmINHHiIG/p2IXITk55h5KgU=;
-        b=nS+pd5b5Y8vYmII3eSWJN2Lpt8idlIk6j+bktKQncl+ZLXprPbsMVnULqAOu0yGVpX
-         Dkxw++aKU56zFZI8aK1HjXdgl98htcgKcO9k0IP+QQUDb5xbIoh0QnYXE3Ncmx4drsZB
-         PSeTk5h8k6bRoJwUEoZV1JVbDGMXuj9D/h3wUXN1DS/XCXb6z8xT0Stf4/EqFW/UKUmJ
-         gssnq9PSR1r34wW/lnkXyUoNvXLZ94idCNt6fY5daulany5zr+YXzrCm7GoH6bLNhDJ8
-         WRJJINiS/bevITBjvgGsPBPhY0tDuBE8K8R3xzAe7vavl8X+SHxMjwirDdk6ALYhcAJG
-         6NVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uXCKqvLKkB4bXBbfle8OmINHHiIG/p2IXITk55h5KgU=;
-        b=DEbN9EaP1P6bjv3F8b/sJ6q2Ye9JSj6LBHa9Ge9DYEeWA2L8rH2Sj2K4+cRFq57vSB
-         DwZ54PlaPh8JmnVQVf1qegj+gZZZYlGMQJaaH8Y3ENCVJw7OwE6981bujBEbcBt9JYyc
-         CLtED2gtwTx/VfEFtWeQvjR4b6hoca6PeT57x7F653ISbZ5Dk6Eaz/kKJ4dIm2SQ2Gat
-         IxyapqyCdmWomDQOgu1gDo7seak9w1W/VNKxcUhlrFOJgp6pErrc1aea6jb/1VkfKzXE
-         tjsKfq8/v7WPUPhvyU6iZBlO/Pvez7uOpqkZZ5IzkajLZUcGyjXqrAA2SjML/YF8/l6G
-         BPPw==
-X-Gm-Message-State: AOAM531D1jaZo2v+lzZr/r3E0auAhZLAKj7LDBECzvOfi6LCGVFSw7Pb
-        vEQ6nZiYxvOR8cohV/Z9ZlrllwsA9G6VPLJ5Gd0=
-X-Google-Smtp-Source: ABdhPJw5mejn9tBEu18+E0KV5pNN9CQoBPtNOkfQWMp7usK7nHOEoSTTKL2x2iKOTKRWcwLyBQHb6j5LAIQF+H9Y42w=
-X-Received: by 2002:a17:907:86a1:b0:6f4:63ae:768 with SMTP id
- qa33-20020a17090786a100b006f463ae0768mr7442763ejc.639.1651586682466; Tue, 03
- May 2022 07:04:42 -0700 (PDT)
+        Tue, 3 May 2022 10:08:20 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD9D1EADD
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 07:04:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651586687; x=1683122687;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bfu2gyz8tsmL8KmzuHOs9Hvc3SiLM/mU0vR0bwAU/nM=;
+  b=NRaWtn3ipqyfv9k2C105D4w6FSzuaeVc5r1F/UH1jIsmcCzRlz/SHXdZ
+   HB1Ibiw0FTJ5rMyFUR97iAGQy5v5bTvIW9H/fiRUgfifOXZVtBDQGiomL
+   g0PKaRzyQDWEb+dQnx5Z88h2rlLCtdDdVq+UIx220GafFO7i+XWlpT+ka
+   vmEqzZHUvBo/fakxonfj8f/kpwsVxJLpUGho9m8U3SXjFnJlYcLNg5jte
+   PPAEHDtnCeXCXOKkOn8K6CRueuVBKhBi4HWjP5phnqi6hB9VVilEsl01K
+   9LNo2CTm6YTPJceAFrB9ev6p+DR26FyEFyq3eBULrz6kslo71qkcW4PKn
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="353922919"
+X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
+   d="scan'208";a="353922919"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 07:04:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
+   d="scan'208";a="692202842"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 03 May 2022 07:04:45 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nlt8u-000AWV-LM;
+        Tue, 03 May 2022 14:04:44 +0000
+Date:   Tue, 3 May 2022 22:04:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sven Schnelle <svens@linux.ibm.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-audit@redhat.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] audit: add call argument to socketcall auditing
+Message-ID: <202205032153.9OyzkwPS-lkp@intel.com>
+References: <20220503090212.1322050-1-svens@linux.ibm.com>
 MIME-Version: 1.0
-References: <20220426131102.23966-13-andrea.merello@gmail.com>
- <202204271554.EiuIRNPI-lkp@intel.com> <CAHp75Vc34K=5U=kMCqtDm_h3VBmqyCqcWr0em+8fZBiM2n76rA@mail.gmail.com>
- <CAN8YU5OeYjf5pikMuLXyaYTO1bsArdFOQf3M6tYMNubeZxqe7A@mail.gmail.com> <CAN8YU5PNUn9oVz9dRZ7BLzZmqfNpTehJp284ou+Y7-e4XgK7_Q@mail.gmail.com>
-In-Reply-To: <CAN8YU5PNUn9oVz9dRZ7BLzZmqfNpTehJp284ou+Y7-e4XgK7_Q@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 3 May 2022 16:04:06 +0200
-Message-ID: <CAHp75VeEzuQS5rOK7t5Lyq1wQKVQLNoU_W1K1M20Jx=a5U96TQ@mail.gmail.com>
-Subject: Re: [v5 12/14] iio: imu: add BNO055 serdev driver
-To:     Andrea Merello <andrea.merello@gmail.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>, kbuild-all@lists.01.org,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matt Ranostay <matt.ranostay@konsulko.com>,
-        Alexandru Ardelean <ardeleanalex@gmail.com>,
-        jmondi <jacopo@jmondi.org>,
-        Andrea Merello <andrea.merello@iit.it>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220503090212.1322050-1-svens@linux.ibm.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 3, 2022 at 3:30 PM Andrea Merello <andrea.merello@gmail.com> wrote:
->
-> Il giorno mar 3 mag 2022 alle ore 09:48 Andrea Merello
-> <andrea.merello@gmail.com> ha scritto:
->
-> [...]
->
-> > > You need to add a C-file with the only line
-> > >
-> > > #include <..._trace.h>
-> > >
-> > > And drop that include from the _core.c.
-> >
-> > Hum, I'm a bit confused here: the bno055_ser_core.c file explicitly
-> > looks for that tracepoints (e.g. it calls trace_send_chunks() and
-> > friends); dropping the include prevents build here because there would
-> > be no definition for those tracepoints.
-> >
-> > There is already a C file bno055_ser_trace.c that just contains the
-> > said include and it defines CREATE_TRACE_POINTS; I see other drivers
-> > like dwc3 do the same..
->
-> Oops.. it turned out that I just had this almost-empty C file as
-> untracked in my git tree, and it ended up not being included in
-> patches also. Being it laying in my src tree caused the build to
-> succeed.
->
-> I have been misled by the other problem I (still) have (below); I was
-> focused on the wrong thing, sorry.
+Hi Sven,
 
-So, there are two reports:
-1) missed C file;
-2) possible missed prototype.
+I love your patch! Yet something to improve:
 
-To solve 1) you need to add the C file to the patch.
-To solve 2) you need either declare it static or put it into the
-header file (I haven't checked deeply which one is your case).
+[auto build test ERROR on linus/master]
+[also build test ERROR on pcmoore-audit/next v5.18-rc5 next-20220503]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> > But my problem is that I cannot reproduce the issue found by the bot:
-> > the compiler that is downloaded by the script doesn't run on my build
-> > box because it wants a newer libc (I was hoping that those compilers
-> > were statically linked, but they aren't), while any other attempt I
-> > did with other older compilers resulted in either successful build or
-> > failed with other weird, apparently unrelated, errors about relocation
-> > issues (of course I tried with the arch and config used by the build
-> > bot).
+url:    https://github.com/intel-lab-lkp/linux/commits/Sven-Schnelle/audit-add-call-argument-to-socketcall-auditing/20220503-170442
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 9050ba3a61a4b5bd84c2cde092a100404f814f31
+config: x86_64-randconfig-a011 (https://download.01.org/0day-ci/archive/20220503/202205032153.9OyzkwPS-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/b89caaec1c1bd3382c6cef08d08beadbaf808513
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Sven-Schnelle/audit-add-call-argument-to-socketcall-auditing/20220503-170442
+        git checkout b89caaec1c1bd3382c6cef08d08beadbaf808513
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-You may use compilers from kernel.org that don't require any libc at
-all (only good for kernel compilation).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > Is there any build farm publicly available or something like that?
+All error/warnings (new ones prefixed by >>):
 
-Not of my knowledge.
+   net/compat.c: In function '__do_compat_sys_socketcall':
+>> net/compat.c:440:49: warning: passing argument 2 of 'audit_socketcall_compat' makes pointer from integer without a cast [-Wint-conversion]
+     440 |         ret = audit_socketcall_compat(call, len / sizeof(a[0]), a);
+         |                                             ~~~~^~~~~~~~~~~~~~
+         |                                                 |
+         |                                                 long unsigned int
+   In file included from net/compat.c:26:
+   include/linux/audit.h:648:59: note: expected 'u32 *' {aka 'unsigned int *'} but argument is of type 'long unsigned int'
+     648 | static inline int audit_socketcall_compat(int nargs, u32 *args)
+         |                                                      ~~~~~^~~~
+>> net/compat.c:440:15: error: too many arguments to function 'audit_socketcall_compat'
+     440 |         ret = audit_socketcall_compat(call, len / sizeof(a[0]), a);
+         |               ^~~~~~~~~~~~~~~~~~~~~~~
+   In file included from net/compat.c:26:
+   include/linux/audit.h:648:19: note: declared here
+     648 | static inline int audit_socketcall_compat(int nargs, u32 *args)
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~
 
+
+vim +/audit_socketcall_compat +440 net/compat.c
+
+   423	
+   424	COMPAT_SYSCALL_DEFINE2(socketcall, int, call, u32 __user *, args)
+   425	{
+   426		u32 a[AUDITSC_ARGS];
+   427		unsigned int len;
+   428		u32 a0, a1;
+   429		int ret;
+   430	
+   431		if (call < SYS_SOCKET || call > SYS_SENDMMSG)
+   432			return -EINVAL;
+   433		len = nas[call];
+   434		if (len > sizeof(a))
+   435			return -EINVAL;
+   436	
+   437		if (copy_from_user(a, args, len))
+   438			return -EFAULT;
+   439	
+ > 440		ret = audit_socketcall_compat(call, len / sizeof(a[0]), a);
 
 -- 
-With Best Regards,
-Andy Shevchenko
+0-DAY CI Kernel Test Service
+https://01.org/lkp

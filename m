@@ -2,127 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21E6A517B37
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 02:18:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF34B517B3D
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 02:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbiECAUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 20:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59804 "EHLO
+        id S229906AbiECAbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 20:31:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230086AbiECAUD (ORCPT
+        with ESMTP id S229615AbiECAba (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 20:20:03 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA6F37ABF
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 17:16:30 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id v12so21363015wrv.10
-        for <linux-kernel@vger.kernel.org>; Mon, 02 May 2022 17:16:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yYv1vnQn01c0U+UUZJgP9Yz8sP26lRkEbJWLbcJb51Q=;
-        b=ddRoWjOuUxYP6b00lDQWxMC8dG8BaQP8eAa1fxr/MmSiWbQUjDuHEJfp2okyiaEQkl
-         Lg+phFet1W/aw+gC+toCkAmCxHa2I7pdP/F/qkoU3lcZRrvx/iVXfilL8BF88Dc/IU/z
-         +VeMl9WNnkioNB0PHHQEBQR0tD7FOT40FkoWjzWMdD5aA/+B9FbqcqhHLdh0SVqq6oLt
-         JmThc54G6v+6BSgFX6aldwkvPQZraIvnGNo/YRsQLxM4Ia+19s6QC9dnZTy8G1tvq+xv
-         uJTuGkAYmlcuIHBBtL4ST5bNH0KfI8f6oBPHfWt/GWa13xuwQbPMvPlyiX7Gac3w1eeI
-         07LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yYv1vnQn01c0U+UUZJgP9Yz8sP26lRkEbJWLbcJb51Q=;
-        b=nOLN0DkP2tCMc4CushOsWKMQ3ll3eW6j7ZQHDoorR/OD2sgWVMw4Y7d70h+5R+wEUT
-         JM6VJu+0qMoZhdqjlZZMLTDzDprWrcPSJr1RyspU4h/bg34FQWB5RJ6zqSXHfqX8Wzrx
-         LayfFECz27lOeP1FYZPJ9syKo+5epccpfLvDIQGfHYW+JXnqlKuuscm85jQaoenRR3Gj
-         ZVtkP/q8IYg0SyzqnRVbuN5thS+iM06oGdJbySdc3jWrDH6XCeBn/9PatCyBGIXu+2Lj
-         niqPIn8+0jryaJZUgVwSr1uJ+kOXFtAr7vu+0iI4qJseiZl2EDC/A+kBHOkaEhxR6olq
-         VZUA==
-X-Gm-Message-State: AOAM532fOMEV0pKnsVSqM4cuGICx8/h+djcoMjMN54eOFPmJaP7YQ+Q8
-        n7C/7vlD2Hfej7rmgZEHxfiZDKAZeu0x0N5XZw+k
-X-Google-Smtp-Source: ABdhPJx2W6FrPHp5nIaG1ku1K5IvYfvfUoQkOIVxhtgUFxRn+IcKb0D+3Qlo2FAdxwIOQkQmJWw48FxCOzk4sUtqyPM=
-X-Received: by 2002:a05:6000:10cc:b0:20a:de6f:3c48 with SMTP id
- b12-20020a05600010cc00b0020ade6f3c48mr10598403wrx.650.1651536988351; Mon, 02
- May 2022 17:16:28 -0700 (PDT)
+        Mon, 2 May 2022 20:31:30 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39833BBEF
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 17:27:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651537677; x=1683073677;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CmGHRrgx+CxwYNLw/BesYLttTjhouj49t3KPgsopeto=;
+  b=SmliUghjtro16W9PUAKiNqnanX4ijC2NISnSzZXoyoCTTPaOeVweyDXJ
+   i4LoNHTgXMvokyM/r4hmhYBBspZUNbyjXHp1PDdTS4W/gs/jz0A0mdBVK
+   y2jwPFvacUBTYgZu4n7yg8RKgLVivWjIK/s0aCZd6HIPcfJJ2cxDPrI1O
+   1FWz1mBXBK9H2S0NY2tEXAV6Y/0LaX7ISK4HRrGr9ZrEnwdocqAbqjO2U
+   MUDcwq0gPxHaCQMo/S2JLHqVuZlnqXtw34PRgF4XiOln0q2rPJ6ZA+t/p
+   FeXtAgO54HtP8qw15FQ3XWpMtAiJJKAW4sM3unOJJ1DujkTLZaysLDFTM
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="353804637"
+X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
+   d="scan'208";a="353804637"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 17:25:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
+   d="scan'208";a="620135382"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 02 May 2022 17:25:08 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nlgLj-000A0t-So;
+        Tue, 03 May 2022 00:25:07 +0000
+Date:   Tue, 3 May 2022 08:24:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Steve French <stfrench@microsoft.com>
+Subject: [samba-ksmbd:for-next 26/26] fs/cifs/fscache.c:112:67: warning:
+ passing argument 2 of 'set_bit' makes pointer from integer without a cast
+Message-ID: <202205030810.PZQ9Z42o-lkp@intel.com>
 MIME-Version: 1.0
-References: <cover.1651174324.git.rgb@redhat.com> <23c7f206a465d88cc646a944515fcc6a365f5eb2.1651174324.git.rgb@redhat.com>
-In-Reply-To: <23c7f206a465d88cc646a944515fcc6a365f5eb2.1651174324.git.rgb@redhat.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 2 May 2022 20:16:17 -0400
-Message-ID: <CAHC9VhSwVS=u+FhDrC6QucZbm7B1PgFudLeYcT_C111OEEY3rg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] fanotify: Allow audit to use the full permission
- event response
-To:     Richard Guy Briggs <rgb@redhat.com>
-Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>, Jan Kara <jack@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 8:45 PM Richard Guy Briggs <rgb@redhat.com> wrote:
->
-> This patch passes the full value so that the audit function can use all
-> of it. The audit function was updated to log the additional information in
-> the AUDIT_FANOTIFY record. The following is an example of the new record
-> format:
->
-> type=FANOTIFY msg=audit(1600385147.372:590): resp=2 fan_type=1 fan_ctx=17
->
-> Suggested-by: Steve Grubb <sgrubb@redhat.com>
-> Link: https://lore.kernel.org/r/3075502.aeNJFYEL58@x2
-> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
-> Link: https://lore.kernel.org/r/23c7f206a465d88cc646a944515fcc6a365f5eb2.1651174324.git.rgb@redhat.com
-> ---
->  fs/notify/fanotify/fanotify.c |  4 +++-
->  include/linux/audit.h         |  8 ++++----
->  kernel/auditsc.c              | 18 +++++++++++++++---
->  3 files changed, 22 insertions(+), 8 deletions(-)
+tree:   git://git.samba.org/ksmbd.git for-next
+head:   422ce10d22e2de32427ff611478747dd27af50f8
+commit: 422ce10d22e2de32427ff611478747dd27af50f8 [26/26] mm, netfs, fscache: Stop read optimisation when folio removed from pagecache
+config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220503/202205030810.PZQ9Z42o-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add samba-ksmbd git://git.samba.org/ksmbd.git
+        git fetch --no-tags samba-ksmbd for-next
+        git checkout 422ce10d22e2de32427ff611478747dd27af50f8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash fs/cifs/
 
-...
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> index ea2ee1181921..afdbc416069a 100644
-> --- a/kernel/auditsc.c
-> +++ b/kernel/auditsc.c
-> @@ -64,6 +64,7 @@
->  #include <uapi/linux/limits.h>
->  #include <uapi/linux/netfilter/nf_tables.h>
->  #include <uapi/linux/openat2.h> // struct open_how
-> +#include <uapi/linux/fanotify.h>
->
->  #include "audit.h"
->
-> @@ -2893,10 +2894,21 @@ void __audit_log_kern_module(char *name)
->         context->type = AUDIT_KERN_MODULE;
->  }
->
-> -void __audit_fanotify(unsigned int response)
-> +void __audit_fanotify(__u16 response, __u16 type, char *buf)
->  {
-> -       audit_log(audit_context(), GFP_KERNEL,
-> -               AUDIT_FANOTIFY, "resp=%u", response);
-> +       switch (type) {
-> +       case FAN_RESPONSE_INFO_AUDIT_RULE:
-> +               audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
-> +                         "resp=%u fan_type=%u fan_ctx=%u",
-> +                         response, type, (__u32)*buf);
+All warnings (new ones prefixed by >>):
 
-I think the above awkward cast helps the argument that
-fanotify_response:extra_info_buf (and fanotify_perm_event) should
-properly define a union to encapsulate the type specific data.  If you
-defined a common union type you could share it among all of the
-different users.
+   fs/cifs/fscache.c: In function 'cifs_fscache_get_inode_cookie':
+>> fs/cifs/fscache.c:112:67: warning: passing argument 2 of 'set_bit' makes pointer from integer without a cast [-Wint-conversion]
+     112 |                 set_bit(AS_NOTIFY_REMOVING_FOLIO, inode->i_mapping->flags);
+         |                                                   ~~~~~~~~~~~~~~~~^~~~~~~
+         |                                                                   |
+         |                                                                   long unsigned int
+   In file included from include/linux/bitops.h:33,
+                    from include/linux/log2.h:12,
+                    from include/asm-generic/div64.h:55,
+                    from arch/mips/include/asm/div64.h:89,
+                    from include/linux/math.h:6,
+                    from include/linux/math64.h:6,
+                    from include/linux/time64.h:5,
+                    from include/linux/restart_block.h:10,
+                    from include/linux/thread_info.h:14,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/mips/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/swap.h:5,
+                    from fs/cifs/fscache.h:12,
+                    from fs/cifs/fscache.c:9:
+   arch/mips/include/asm/bitops.h:88:70: note: expected 'volatile long unsigned int *' but argument is of type 'long unsigned int'
+      88 | static inline void set_bit(unsigned long nr, volatile unsigned long *addr)
+         |                                              ~~~~~~~~~~~~~~~~~~~~~~~~^~~~
 
 
---
-paul-moore.com
+vim +/set_bit +112 fs/cifs/fscache.c
+
+    96	
+    97	void cifs_fscache_get_inode_cookie(struct inode *inode)
+    98	{
+    99		struct cifs_fscache_inode_coherency_data cd;
+   100		struct cifsInodeInfo *cifsi = CIFS_I(inode);
+   101		struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
+   102		struct cifs_tcon *tcon = cifs_sb_master_tcon(cifs_sb);
+   103	
+   104		cifs_fscache_fill_coherency(&cifsi->vfs_inode, &cd);
+   105	
+   106		cifsi->netfs_ctx.cache =
+   107			fscache_acquire_cookie(tcon->fscache, 0,
+   108					       &cifsi->uniqueid, sizeof(cifsi->uniqueid),
+   109					       &cd, sizeof(cd),
+   110					       i_size_read(&cifsi->vfs_inode));
+   111		if (cifsi->netfs_ctx.cache)
+ > 112			set_bit(AS_NOTIFY_REMOVING_FOLIO, inode->i_mapping->flags);
+   113	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

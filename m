@@ -2,171 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DC52518604
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:03:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9B1D51860C
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:04:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236615AbiECOHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 10:07:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50696 "EHLO
+        id S236637AbiECOIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 10:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235030AbiECOHQ (ORCPT
+        with ESMTP id S236230AbiECOIR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 10:07:16 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1961EAD3
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 07:03:42 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id p4so12895257qtq.12
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 07:03:42 -0700 (PDT)
+        Tue, 3 May 2022 10:08:17 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29C521274;
+        Tue,  3 May 2022 07:04:43 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id m20so33617722ejj.10;
+        Tue, 03 May 2022 07:04:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rEA/WO8Mvi9mkyG5kqELFWFIRU5FfjNv5FVVN5OBPRg=;
-        b=MDQvYf3gHtS8HMjUwWzCiC1Fxsu4angXku7mUGw6MlSIkca0gx06FMTNx90ziQLTSJ
-         HZ9lhSQHa/EVC5868dkxuWAOvyZvMsoYkrz21ar6/5K54iB4gG3yLII8mizfC5izOGhg
-         klbEw4Uz6lDilG7A1yQKqjoJs5bxmZCVvTYE186FFYeDLqZ0QtGW3vB5k8Q3rJrS+q4f
-         kHyhTreXc46uS3u+ahxQtcx7/4fegW8vGCjGHNhJYSJ33xjwcCwj9jk1OsGlGhKhRVWA
-         F3/o+H3gGosX+5Bds/YwlxtRVNephxXBMJSflC65Dd2DQw10H50pNPKWfwebZDRhySKA
-         zSFQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uXCKqvLKkB4bXBbfle8OmINHHiIG/p2IXITk55h5KgU=;
+        b=nS+pd5b5Y8vYmII3eSWJN2Lpt8idlIk6j+bktKQncl+ZLXprPbsMVnULqAOu0yGVpX
+         Dkxw++aKU56zFZI8aK1HjXdgl98htcgKcO9k0IP+QQUDb5xbIoh0QnYXE3Ncmx4drsZB
+         PSeTk5h8k6bRoJwUEoZV1JVbDGMXuj9D/h3wUXN1DS/XCXb6z8xT0Stf4/EqFW/UKUmJ
+         gssnq9PSR1r34wW/lnkXyUoNvXLZ94idCNt6fY5daulany5zr+YXzrCm7GoH6bLNhDJ8
+         WRJJINiS/bevITBjvgGsPBPhY0tDuBE8K8R3xzAe7vavl8X+SHxMjwirDdk6ALYhcAJG
+         6NVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rEA/WO8Mvi9mkyG5kqELFWFIRU5FfjNv5FVVN5OBPRg=;
-        b=rasq2DHTTKpvoAxtYHa7aMumwu8lh+Z1XHWb2YY5gFgQc4AnUUfVu/EU1zL1x0GLOY
-         Mi6adytLJcpfXB4b5gIh2HoEG4GzjD88xqllFshuE5VzswtRCTSqK4PAmcPdgPGVWM9C
-         Oz/FNkKvRWKdwgO47Gh2SkiaodFD6s58AQs21vdkB61EfrQkWKqbGkVp0v7WVd/Ufat+
-         moGi9jsKvrVoCrcIyHNNmOZe9QzeM1JyPh4ZSdVkAsNxK3UjTOAWCSuNRVPnFyhnqeMF
-         z+CIAQl9gT5SvvbQemKh1lJ91ei8kxo1r7i0B4QEARxuPnAmn9R27A8Ir/GMmSVYosBi
-         TVGw==
-X-Gm-Message-State: AOAM530h+IMkQSfjx84q2czkvmeiYHvUAQkBQblyFEJd76sz2OusrRI/
-        sOrb02k6J/oPLY98YtQco0TDhQ==
-X-Google-Smtp-Source: ABdhPJw7Ve6j3sQ7hOzQ1wudzvX76tu9J1CZFDESduQg/nFoUbXy7Wi6oqzqRoi1RsCGOF4EtrRjFQ==
-X-Received: by 2002:ac8:580e:0:b0:2f3:7ff9:39c6 with SMTP id g14-20020ac8580e000000b002f37ff939c6mr14863406qtg.434.1651586621658;
-        Tue, 03 May 2022 07:03:41 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id j6-20020a05620a146600b0069fc13ce217sm5811708qkl.72.2022.05.03.07.03.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 07:03:41 -0700 (PDT)
-Date:   Tue, 3 May 2022 10:03:39 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     'Linus Walleij' <linus.walleij@linaro.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Subject: Re: [RFC v2 10/39] gpio: add HAS_IOPORT dependencies
-Message-ID: <YnE2OxAsXmXSB87L@fedora>
-References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
- <20220429135108.2781579-19-schnelle@linux.ibm.com>
- <Ymv3DnS1vPMY8QIg@fedora>
- <f006229ae056d4cdcf57fc5722a695ad4c257182.camel@linux.ibm.com>
- <YmwGLrh4U+pVJo0m@fedora>
- <CACRpkdaha37y-ZNSqYSbf=TvsJNcvbH1Y=N0JkVCewB-Lvf81Q@mail.gmail.com>
- <c3a3cdd99d4645e2bbbe082808cbb2a5@AcuMS.aculab.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uXCKqvLKkB4bXBbfle8OmINHHiIG/p2IXITk55h5KgU=;
+        b=DEbN9EaP1P6bjv3F8b/sJ6q2Ye9JSj6LBHa9Ge9DYEeWA2L8rH2Sj2K4+cRFq57vSB
+         DwZ54PlaPh8JmnVQVf1qegj+gZZZYlGMQJaaH8Y3ENCVJw7OwE6981bujBEbcBt9JYyc
+         CLtED2gtwTx/VfEFtWeQvjR4b6hoca6PeT57x7F653ISbZ5Dk6Eaz/kKJ4dIm2SQ2Gat
+         IxyapqyCdmWomDQOgu1gDo7seak9w1W/VNKxcUhlrFOJgp6pErrc1aea6jb/1VkfKzXE
+         tjsKfq8/v7WPUPhvyU6iZBlO/Pvez7uOpqkZZ5IzkajLZUcGyjXqrAA2SjML/YF8/l6G
+         BPPw==
+X-Gm-Message-State: AOAM531D1jaZo2v+lzZr/r3E0auAhZLAKj7LDBECzvOfi6LCGVFSw7Pb
+        vEQ6nZiYxvOR8cohV/Z9ZlrllwsA9G6VPLJ5Gd0=
+X-Google-Smtp-Source: ABdhPJw5mejn9tBEu18+E0KV5pNN9CQoBPtNOkfQWMp7usK7nHOEoSTTKL2x2iKOTKRWcwLyBQHb6j5LAIQF+H9Y42w=
+X-Received: by 2002:a17:907:86a1:b0:6f4:63ae:768 with SMTP id
+ qa33-20020a17090786a100b006f463ae0768mr7442763ejc.639.1651586682466; Tue, 03
+ May 2022 07:04:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qkJkToKVV3ZYwUlC"
-Content-Disposition: inline
-In-Reply-To: <c3a3cdd99d4645e2bbbe082808cbb2a5@AcuMS.aculab.com>
+References: <20220426131102.23966-13-andrea.merello@gmail.com>
+ <202204271554.EiuIRNPI-lkp@intel.com> <CAHp75Vc34K=5U=kMCqtDm_h3VBmqyCqcWr0em+8fZBiM2n76rA@mail.gmail.com>
+ <CAN8YU5OeYjf5pikMuLXyaYTO1bsArdFOQf3M6tYMNubeZxqe7A@mail.gmail.com> <CAN8YU5PNUn9oVz9dRZ7BLzZmqfNpTehJp284ou+Y7-e4XgK7_Q@mail.gmail.com>
+In-Reply-To: <CAN8YU5PNUn9oVz9dRZ7BLzZmqfNpTehJp284ou+Y7-e4XgK7_Q@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 3 May 2022 16:04:06 +0200
+Message-ID: <CAHp75VeEzuQS5rOK7t5Lyq1wQKVQLNoU_W1K1M20Jx=a5U96TQ@mail.gmail.com>
+Subject: Re: [v5 12/14] iio: imu: add BNO055 serdev driver
+To:     Andrea Merello <andrea.merello@gmail.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>, kbuild-all@lists.01.org,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matt Ranostay <matt.ranostay@konsulko.com>,
+        Alexandru Ardelean <ardeleanalex@gmail.com>,
+        jmondi <jacopo@jmondi.org>,
+        Andrea Merello <andrea.merello@iit.it>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---qkJkToKVV3ZYwUlC
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, May 03, 2022 at 01:08:04PM +0000, David Laight wrote:
-> From: Linus Walleij
-> > Sent: 01 May 2022 22:56
-> >=20
-> > On Fri, Apr 29, 2022 at 5:37 PM William Breathitt Gray
-> > <william.gray@linaro.org> wrote:
-> > > On Fri, Apr 29, 2022 at 04:46:00PM +0200, Niklas Schnelle wrote:
-> >=20
-> > > > Good question. As far as I can see most (all?) of these have "select
-> > > > ISA_BUS_API" which is "def_bool ISA". Now "config ISA" seems to
-> > > > currently be repeated in architectures and doesn't have an explicit
-> > > > HAS_IOPORT dependency (it maybe should have one). But it does only =
-make
-> > > > sense on architectures with HAS_IOPORT set.
+On Tue, May 3, 2022 at 3:30 PM Andrea Merello <andrea.merello@gmail.com> wrote:
+>
+> Il giorno mar 3 mag 2022 alle ore 09:48 Andrea Merello
+> <andrea.merello@gmail.com> ha scritto:
+>
+> [...]
+>
+> > > You need to add a C-file with the only line
 > > >
-> > > There is such a thing as ISA DMA, but you'll still need to initialize
-> > > the device via the IO Port bus first, so perhaps setting HAS_IOPORT f=
-or
-> > > "config ISA" is the right thing to do: all ISA devices are expected to
-> > > communicate in some way via ioport.
-> >=20
-> > Adding that dependency seems like the right solution to me.
->=20
-> I think it all depends on what HAS_IOPORT is meant to mean and
-> how portable kernel binaries need to be.
->=20
-> x86 is (probably) the only architecture that actually has 'in'
-> and 'out' instructions - but that doesn't mean that some other
-> cpu (and I mean cpu+pcb not architecture) have the ability to
-> generate 'IO' bus cycles on a specific physical bus.
->=20
-> While the obvious case is a physical address window that generates
-> PCI(e) IO cycles from normal memory cycles it isn't the only one.
->=20
-> I've used sparc cpu systems that have pcmcia card slots.
-> These are pretty much ISA and the drivers might expect to
-> access port 0x300 (etc) - certainly that would be right on x86.
->=20
-> In this case is isn't so much that the ISA_BUS depends on support
-> for in/out but that presence of the ISA bus provides the required
-> in/out support.
+> > > #include <..._trace.h>
+> > >
+> > > And drop that include from the _core.c.
+> >
+> > Hum, I'm a bit confused here: the bno055_ser_core.c file explicitly
+> > looks for that tracepoints (e.g. it calls trace_send_chunks() and
+> > friends); dropping the include prevents build here because there would
+> > be no definition for those tracepoints.
+> >
+> > There is already a C file bno055_ser_trace.c that just contains the
+> > said include and it defines CREATE_TRACE_POINTS; I see other drivers
+> > like dwc3 do the same..
+>
+> Oops.. it turned out that I just had this almost-empty C file as
+> untracked in my git tree, and it ended up not being included in
+> patches also. Being it laying in my src tree caused the build to
+> succeed.
+>
+> I have been misled by the other problem I (still) have (below); I was
+> focused on the wrong thing, sorry.
 
-That's true, it does seem somewhat backwards to have a depends on line
-when the bus is really just providing the support for devices that want
-to use it rather than requiring it. Do you think a HAVE_IOPORT line
-should be added independently for each driver instead of adding it to
-ISA_BUS?
+So, there are two reports:
+1) missed C file;
+2) possible missed prototype.
 
-> Now, maybe, the drivers should be using some ioremap variant and
-> then calling ioread8() rather than directly calling inb().
-> But that seems orthogonal to this changeset.
->=20
-> 	David
->=20
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1=
- 1PT, UK
-> Registration No: 1397386 (Wales)
+To solve 1) you need to add the C file to the patch.
+To solve 2) you need either declare it static or put it into the
+header file (I haven't checked deeply which one is your case).
 
-Using ioremap() does have the benefit of making it easier to reuse the
-code for some of these PC104 drivers with their PCI device variants; the
-ioread8() calls and such can stay the same and we just initialize to the
-proper address during probe. I plan to look into this in the future
-then.
+> > But my problem is that I cannot reproduce the issue found by the bot:
+> > the compiler that is downloaded by the script doesn't run on my build
+> > box because it wants a newer libc (I was hoping that those compilers
+> > were statically linked, but they aren't), while any other attempt I
+> > did with other older compilers resulted in either successful build or
+> > failed with other weird, apparently unrelated, errors about relocation
+> > issues (of course I tried with the arch and config used by the build
+> > bot).
 
-William Breathitt Gray
+You may use compilers from kernel.org that don't require any libc at
+all (only good for kernel compilation).
 
---qkJkToKVV3ZYwUlC
-Content-Type: application/pgp-signature; name="signature.asc"
+> > Is there any build farm publicly available or something like that?
 
------BEGIN PGP SIGNATURE-----
+Not of my knowledge.
 
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCYnE2NgAKCRC1SFbKvhIj
-K1ziAQC/Gcd4KmfP+1GLpIrE5Gy3ocse41ufgCdCXVkLTjgj2QEA4Mr46B97PGjA
-9gDCAjBNMj+K03gxZel1wfWWyw4bZwQ=
-=cAd7
------END PGP SIGNATURE-----
 
---qkJkToKVV3ZYwUlC--
+-- 
+With Best Regards,
+Andy Shevchenko

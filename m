@@ -2,70 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE6A2518F7D
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 22:57:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35209518F87
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 22:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242437AbiECU70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 16:59:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33240 "EHLO
+        id S242479AbiECU7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 16:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242360AbiECU6t (ORCPT
+        with ESMTP id S242203AbiECU6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 16:58:49 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5DCB3E5FC
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 13:55:12 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id j14so544699plx.3
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 13:55:12 -0700 (PDT)
+        Tue, 3 May 2022 16:58:44 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6AD3DDC9
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 13:55:11 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id cx11-20020a17090afd8b00b001d9fe5965b3so3368380pjb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 13:55:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=71QHvmVbzbum/E3ZAVgy97tXOS8tK26BfXNggSRktyw=;
-        b=mNBJz/XxKt2KFJk2CFepuhN/xZJ9Uv/rz50WON+4ZRBqQGxaTvzRxuzOr8mgvdSLb1
-         NPLtvHfakt3e74WR26Z3Hp3lQMac4mwkW+TTeTMhZW7eR4xkAOhBJl89txhv7sIl6ZU3
-         R/p0OcsGRJ9TZUFVA94bG5hnIYF/Me0VROUlc=
+        bh=G7gjgj4/4LSK9c/JAyPIXqGgMKHVguykDn2bHyT8voA=;
+        b=lPFLR0C5AR5qKEBPAIWTWtzBk+9lgyDMXniJNA7VZybl5Svtynw7Q/xjEYdb832RxY
+         jR+mmBUtRcDesMD4DEG7CNWGz0KtJaT50b3NMMS76x0LFx22QrYMECu2xX38hf/AwNb7
+         MMJL5gT3MvziRSysXThA4xSGWJAbkPXC9dKQU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=71QHvmVbzbum/E3ZAVgy97tXOS8tK26BfXNggSRktyw=;
-        b=gNwtOWyIjy3QsQ/j1BbmFN7bBJHTMwl4omW/RbXxRuAXoeZ8phcrHDhhsk+syNDUfM
-         revmsK23HC5gvncfZ7uF9IN3Q5LpjIIHSxGc4pU5P4KNVWBjX9L1CS5tW5fbDoZQBKqw
-         w+6vke0sgajxmq+hdo0ez9F4hEaUiK70trWfeP0LHmcZPVR8wYdz1Susr5MBi7CVAZO3
-         vcn1X2Shva71fcESH6z6nb6ix3X+AlxlRzZVMvw8WOh0apHkGJSzpp4tvAhFAVmfLSjy
-         YZf43fNpERseiU6v0Qhi6IzPLTm/zhAvmDfVlWVLRy2pbpVM759pdfX0+e5VTBnRzkk3
-         /UHQ==
-X-Gm-Message-State: AOAM533r4MxoRy1cYaUITuiZtJx+BEtcqv4NhQMF7eIpXPqFUp02tszZ
-        jUwq6RjMj/vaEb5AHsForl29H0d5X4nQvw==
-X-Google-Smtp-Source: ABdhPJwVWBkyzyFxX6liiB55m10I4fUKnwsv3ihyDoa4NBY+1rzycYUA4hGuRSyZWfG4uHgq2ucCWg==
-X-Received: by 2002:a17:902:b694:b0:153:1d9a:11a5 with SMTP id c20-20020a170902b69400b001531d9a11a5mr18075548pls.151.1651611311893;
+        bh=G7gjgj4/4LSK9c/JAyPIXqGgMKHVguykDn2bHyT8voA=;
+        b=DSi1AHFywA6m7B/ZS7pl93mZbecW7ta5b2quKCLoyFLhpdRWHNj+X+bI66Ii3ezC8G
+         AL8RprGeV4O+uPG8iIP+lPxk9bLVlwVFTIg1qzqsfFYAzqo2BxsR1c3iVvFPBWBK8BxJ
+         bCk6PKtF22esZiZxLR75T9XeS1E+S7MPFbBih3rkub5J4uAMgFww5r8dVKvBFivgfEca
+         ToWLePzSfIAxZEmUQy4bspm1Kzlbo5qrH9c/9pIi/p/NYDASWpOvCrDg/v/Elv5+VLuH
+         JiIHRJBpqbf1mdXVHGIUXjwXFw+jvUsZfcxNE4TSSaFMyB0frZiDF+gNCKTJORrc3jBQ
+         MUxA==
+X-Gm-Message-State: AOAM530LAZkucjGlCqK8SoftytNKMhsX2eZ3TEebe+3Y6+K5l9zs/lkK
+        pd5m/oyM/CDbKXtFsQbeIoqTvw==
+X-Google-Smtp-Source: ABdhPJzlRQDlCCwN12p3T2iXLOmaoOKLrPyOTgiWQ5BWcgjSqfBDOLgzhdNXlPBULmM7f+FaLlbpCA==
+X-Received: by 2002:a17:902:bb90:b0:158:a031:2ff2 with SMTP id m16-20020a170902bb9000b00158a0312ff2mr18429818pls.117.1651611311296;
         Tue, 03 May 2022 13:55:11 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id t7-20020a62ea07000000b0050dc76281f1sm6709358pfh.203.2022.05.03.13.55.09
+        by smtp.gmail.com with ESMTPSA id s10-20020a63450a000000b003c14af50607sm13111823pga.31.2022.05.03.13.55.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 03 May 2022 13:55:10 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Bill Wendling <morbo@google.com>
-Cc:     Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org,
+Cc:     Kees Cook <keescook@chromium.org>,
         Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org,
         Nick Desaulniers <ndesaulniers@google.com>,
         David Howells <dhowells@redhat.com>,
         Jeff Layton <jlayton@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH 5/6] randstruct: Move seed generation into scripts/basic/
-Date:   Tue,  3 May 2022 13:55:02 -0700
-Message-Id: <20220503205503.3054173-6-keescook@chromium.org>
+        linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH 6/6] randstruct: Enable Clang support
+Date:   Tue,  3 May 2022 13:55:03 -0700
+Message-Id: <20220503205503.3054173-7-keescook@chromium.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220503205503.3054173-1-keescook@chromium.org>
 References: <20220503205503.3054173-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6991; h=from:subject; bh=POSwG5vGM5ePjK+NnCJy7zXZuBYgVkMBrdQajWqSdos=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBicZamheMTQbFPcgMuGPTOLLAi+SSC63O6IOd2ZB8G s01qn/WJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYnGWpgAKCRCJcvTf3G3AJmrYD/ 9/S4SyNCCc6JysEizCShXfywKRGd/VypdZzFIpfGVbMWoWwduoZHcTO2KvS/88sMU72c4E6tNHVTRW JNSdq6HqbNyLDa2c3Dr07Ke9TEO3YZJ/bWwUeEOvEiKdyRNOMFU5picScsWYclKC8xdqB/Nq3wXBbd Syaf1Pdc6CFYgTnv6Ve4xYPoQAl0Pl4SxmPZV7QhdnJlRh0sGZzcRQJHdIn2MKAzEJLjCdPSTPJeqV OympuT/CPrl65t1f3iQN/m62UbI2nL8alWR7RHtr3qQ4HhZYIh+b2JufhOxFBEW/4BGFvEPSA3UsOG Q0SZwl70gwV44QEX/3jgTI86Lyld20sO8Px5z9cwUb0L004gQA+AR9sPwkEfe7QOEqEwDXJfyqtfMP cjy+VOCP7JFHS07booUAPGlUozGNlpzI2aT4rC4QiBQa0lcOEwXEzy8D9RrGj1zD0V/dz0e65UeQrg 2+Ibt4ziS+cHW6V+xUWPVZiQEKR+KyFb4aoHY+KCo3WR4LxiNbBNYWL6rUOXurCrSohkdU5mhkXyMH BmD60mww0e9EASzMySkYpkNIdlzimz0ekp8TAxceKDEb206dnxQOucbY9ntdg07Ffyf3pC5dywOqgy quouzBQoX6hoUJwnW2nDegfzTxW0QgU8tYhLnXP0sZvayjjDxnZhkl0UpOig==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2492; h=from:subject; bh=70QhakHoqRBTF2BhS4yZEwFNAa1mWnEa/ie6xwzJGBY=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBicZamZGgPTMDtkz2lAP6v2msQMzZKulCSX+KAGB5j E1bmlEqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYnGWpgAKCRCJcvTf3G3AJlU5D/ 9Xyd51aYNqszUUL7SvvNyC19VjSU0o+jEEkpPilQKRN1uRHK9nWVWsrPw3aFhoMz4iTS5XBzAGpYfE DZEIcZQKS7f0MQGz6vgp5cG+EgrB5CcQ4ePyGGRn7IdfAg53lo+OIxP2oilAbt8NP58LUyzfd4EjYV kt5olI/+81/6ht6froYHo+0Qv+4W3GPz9sGufyfAEbFQyXjsEcy9Ro2qAdyOxtoCS8aDDznVpsbfQL 9z41A3ZD5ml0/L04Rk485Bom22yCPUP/1gkISFHvDq23I4slmV8kNHcqAFOPhTq4bc4MJ8+3dUZqmD VvFFb5wmyDS0grBSDnO9ihBplIWn5/Aq5sH2CcmQKp7DKALkQPjHNdED2ABfy/jQdoGogxCHAyuP9F zW7FjuKazB8lTmSMZKxUakxyGS0ANjJR32zyrofE+RdyI7hElnpEzP7vnVTb3vnK8zo+Vk6KYGGEzZ 4yZIbE1lnLdCkvvS3GxZubDQI7e/adQqf/kcL2bKQ9RXvw4IAWaBA4onxJpmaRDtEBar+YGUT9jS3E hcT67gCbpkmG3Vccv5IlmGAI/6hpgM986H4ODejuZbIJymhKClI/n8pqWJdg9ZBGccPsezfwigdKIu oPS4Fo4Cf2D4ZToRh8wuX98q/HcA7kcOkiuSlaUmKQWv49ct43TIINfIBBkQ==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,171 +74,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To enable Clang randstruct support, move the structure layout
-randomization seed generation out of scripts/gcc-plugins/ into
-scripts/basic/ so it happens early enough that it can be used by either
-compiler implementation. The gcc-plugin still builds its own header file,
-but now does so from the common "randstruct.seed" file.
+Clang 15 will support randstruct via the -frandomize-layout-seed-file=...
+option. Update the Kconfig and Makefile to recognize this feature.
 
-Cc: linux-hardening@vger.kernel.org
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- Documentation/dontdiff                       |  1 +
- Documentation/kbuild/reproducible-builds.rst |  5 +++--
- include/linux/vermagic.h                     |  2 +-
- scripts/basic/.gitignore                     |  1 +
- scripts/basic/Makefile                       | 11 +++++++++++
- scripts/gcc-plugins/Makefile                 | 15 ++++++++++-----
- scripts/gcc-plugins/gen-random-seed.sh       |  9 ---------
- scripts/gen-randstruct-seed.sh               |  7 +++++++
- security/Kconfig.hardening                   |  9 +++++----
- 9 files changed, 39 insertions(+), 21 deletions(-)
- delete mode 100755 scripts/gcc-plugins/gen-random-seed.sh
- create mode 100755 scripts/gen-randstruct-seed.sh
+ scripts/Makefile.randstruct |  3 +++
+ security/Kconfig.hardening  | 14 ++++++++++++--
+ 2 files changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/dontdiff b/Documentation/dontdiff
-index 910b30a2a7d9..352ff53a2306 100644
---- a/Documentation/dontdiff
-+++ b/Documentation/dontdiff
-@@ -211,6 +211,7 @@ r200_reg_safe.h
- r300_reg_safe.h
- r420_reg_safe.h
- r600_reg_safe.h
-+randstruct.seed
- randomize_layout_hash.h
- randomize_layout_seed.h
- recordmcount
-diff --git a/Documentation/kbuild/reproducible-builds.rst b/Documentation/kbuild/reproducible-builds.rst
-index 81ff30505d35..071f0151a7a4 100644
---- a/Documentation/kbuild/reproducible-builds.rst
-+++ b/Documentation/kbuild/reproducible-builds.rst
-@@ -100,8 +100,9 @@ Structure randomisation
- -----------------------
+diff --git a/scripts/Makefile.randstruct b/scripts/Makefile.randstruct
+index 4d741e6db554..24e283e89893 100644
+--- a/scripts/Makefile.randstruct
++++ b/scripts/Makefile.randstruct
+@@ -7,6 +7,9 @@ randstruct-cflags-y	\
+ 	+= -fplugin=$(objtree)/scripts/gcc-plugins/randomize_layout_plugin.so
+ randstruct-cflags-$(CONFIG_RANDSTRUCT_PERFORMANCE)		\
+ 	+= -fplugin-arg-randomize_layout_plugin-performance-mode
++else
++randstruct-cflags-y	\
++	+= -frandomize-layout-seed-file=$(objtree)/scripts/basic/randstruct.seed
+ endif
  
- If you enable ``CONFIG_RANDSTRUCT``, you will need to pre-generate
--the random seed in ``scripts/gcc-plugins/randomize_layout_seed.h``
--so the same value is used in rebuilds.
-+the random seed in ``scripts/basic/randstruct.seed`` so the same
-+value is used by each build. See ``scripts/gen-randstruct-seed.sh``
-+for details.
- 
- Debug info conflicts
- --------------------
-diff --git a/include/linux/vermagic.h b/include/linux/vermagic.h
-index efb51a2da599..a54046bf37e5 100644
---- a/include/linux/vermagic.h
-+++ b/include/linux/vermagic.h
-@@ -33,7 +33,7 @@
- #define MODULE_VERMAGIC_MODVERSIONS ""
- #endif
- #ifdef RANDSTRUCT
--#include <generated/randomize_layout_hash.h>
-+#include <generated/randstruct_hash.h>
- #define MODULE_RANDSTRUCT "RANDSTRUCT_" RANDSTRUCT_HASHED_SEED
- #else
- #define MODULE_RANDSTRUCT
-diff --git a/scripts/basic/.gitignore b/scripts/basic/.gitignore
-index 961c91c8a884..07c195f605a1 100644
---- a/scripts/basic/.gitignore
-+++ b/scripts/basic/.gitignore
-@@ -1,2 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0-only
- /fixdep
-+/randstruct.seed
-diff --git a/scripts/basic/Makefile b/scripts/basic/Makefile
-index eeb6a38c5551..dd289a6725ac 100644
---- a/scripts/basic/Makefile
-+++ b/scripts/basic/Makefile
-@@ -3,3 +3,14 @@
- # fixdep: used to generate dependency information during build process
- 
- hostprogs-always-y	+= fixdep
-+
-+# randstruct: the seed is needed before building the gcc-plugin or
-+# before running a Clang kernel build.
-+gen-randstruct-seed	:= $(srctree)/scripts/gen-randstruct-seed.sh
-+quiet_cmd_create_randstruct_seed = GENSEED $@
-+cmd_create_randstruct_seed = \
-+	$(CONFIG_SHELL) $(gen-randstruct-seed) \
-+		$@ $(objtree)/include/generated/randstruct_hash.h
-+$(obj)/randstruct.seed: $(gen-randstruct-seed) FORCE
-+	$(call if_changed,create_randstruct_seed)
-+always-$(CONFIG_RANDSTRUCT) += randstruct.seed
-diff --git a/scripts/gcc-plugins/Makefile b/scripts/gcc-plugins/Makefile
-index 1952d3bb80c6..148f4639cf09 100644
---- a/scripts/gcc-plugins/Makefile
-+++ b/scripts/gcc-plugins/Makefile
-@@ -1,12 +1,17 @@
- # SPDX-License-Identifier: GPL-2.0
- 
--$(obj)/randomize_layout_plugin.so: $(objtree)/$(obj)/randomize_layout_seed.h
--quiet_cmd_create_randomize_layout_seed = GENSEED $@
-+$(obj)/randomize_layout_plugin.so: $(obj)/randomize_layout_seed.h
-+quiet_cmd_create_randomize_layout_seed = SEEDHDR $@
- cmd_create_randomize_layout_seed = \
--  $(CONFIG_SHELL) $(srctree)/$(src)/gen-random-seed.sh $@ $(objtree)/include/generated/randomize_layout_hash.h
--$(objtree)/$(obj)/randomize_layout_seed.h: FORCE
-+	SEED=$$(cat $(filter-out FORCE,$^) </dev/null); \
-+	echo '/*' > $@; \
-+	echo ' * This file is automatically generated. Keep it private.' >> $@; \
-+	echo ' * Exposing this value will expose the layout of randomized structures.' >> $@; \
-+	echo ' */' >> $@; \
-+	echo "const char *randstruct_seed = \"$$SEED\";" >> $@
-+$(obj)/randomize_layout_seed.h: $(objtree)/scripts/basic/randstruct.seed FORCE
- 	$(call if_changed,create_randomize_layout_seed)
--targets += randomize_layout_seed.h randomize_layout_hash.h
-+targets += randomize_layout_seed.h
- 
- # Build rules for plugins
- #
-diff --git a/scripts/gcc-plugins/gen-random-seed.sh b/scripts/gcc-plugins/gen-random-seed.sh
-deleted file mode 100755
-index 68af5cc20a64..000000000000
---- a/scripts/gcc-plugins/gen-random-seed.sh
-+++ /dev/null
-@@ -1,9 +0,0 @@
--#!/bin/sh
--# SPDX-License-Identifier: GPL-2.0
--
--if [ ! -f "$1" ]; then
--	SEED=`od -A n -t x8 -N 32 /dev/urandom | tr -d ' \n'`
--	echo "const char *randstruct_seed = \"$SEED\";" > "$1"
--	HASH=`echo -n "$SEED" | sha256sum | cut -d" " -f1 | tr -d ' \n'`
--	echo "#define RANDSTRUCT_HASHED_SEED \"$HASH\"" > "$2"
--fi
-diff --git a/scripts/gen-randstruct-seed.sh b/scripts/gen-randstruct-seed.sh
-new file mode 100755
-index 000000000000..61017b36c464
---- /dev/null
-+++ b/scripts/gen-randstruct-seed.sh
-@@ -0,0 +1,7 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+
-+SEED=$(od -A n -t x8 -N 32 /dev/urandom | tr -d ' \n')
-+echo "$SEED" > "$1"
-+HASH=$(echo -n "$SEED" | sha256sum | cut -d" " -f1)
-+echo "#define RANDSTRUCT_HASHED_SEED \"$HASH\"" > "$2"
+ export RANDSTRUCT_CFLAGS := $(randstruct-cflags-y)
 diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
-index 364e3f8c6eea..0277ba578779 100644
+index 0277ba578779..bd2aabb2c60f 100644
 --- a/security/Kconfig.hardening
 +++ b/security/Kconfig.hardening
-@@ -284,10 +284,11 @@ choice
- 	  tools like Volatility against the system (unless the kernel
- 	  source tree isn't cleaned after kernel installation).
+@@ -266,9 +266,12 @@ config ZERO_CALL_USED_REGS
  
--	  The seed used for compilation is located at
--	  scripts/randomize_layout_seed.h. It remains after a "make clean"
--	  to allow for external modules to be compiled with the existing
--	  seed and will be removed by a "make mrproper" or "make distclean".
-+	  The seed used for compilation is in scripts/basic/randomize.seed.
-+	  It remains after a "make clean" to allow for external modules to
-+	  be compiled with the existing seed and will be removed by a
-+	  "make mrproper" or "make distclean". This file should not be made
-+	  public, or the structure layout can be determined.
+ endmenu
  
- 	config RANDSTRUCT_NONE
- 		bool "Disable structure layout randomization"
++config CC_HAS_RANDSTRUCT
++	def_bool $(cc-option,-frandomize-layout-seed-file=/dev/null)
++
+ choice
+ 	prompt "Randomize layout of sensitive kernel structures"
+-	default RANDSTRUCT_FULL if COMPILE_TEST && GCC_PLUGINS
++	default RANDSTRUCT_FULL if COMPILE_TEST && (GCC_PLUGINS || CC_HAS_RANDSTRUCT)
+ 	default RANDSTRUCT_NONE
+ 	help
+ 	  If you enable this, the layouts of structures that are entirely
+@@ -297,13 +300,20 @@ choice
+ 
+ 	config RANDSTRUCT_FULL
+ 		bool "Fully randomize structure layout"
+-		depends on GCC_PLUGINS
++		depends on CC_HAS_RANDSTRUCT || GCC_PLUGINS
+ 		select MODVERSIONS if MODULES
+ 		help
+ 		  Fully randomize the member layout of sensitive
+ 		  structures as much as possible, which may have both a
+ 		  memory size and performance impact.
+ 
++		  One difference between the Clang and GCC plugin
++		  implementations is the handling of bitfields. The GCC
++		  plugin treats them as fully separate variables,
++		  introducing sometimes significant padding. Clang tries
++		  to keep adjacent bitfields together, but with their bit
++		  ordering randomized.
++
+ 	config RANDSTRUCT_PERFORMANCE
+ 		bool "Limit randomization of structure layout to cache-lines"
+ 		depends on GCC_PLUGINS
 -- 
 2.32.0
 

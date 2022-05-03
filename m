@@ -2,118 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E967D5185CE
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 15:43:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D1EB5185D1
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 15:44:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236402AbiECNrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 09:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35184 "EHLO
+        id S236422AbiECNrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 09:47:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236380AbiECNrL (ORCPT
+        with ESMTP id S236414AbiECNrl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 09:47:11 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD53C1D32C;
-        Tue,  3 May 2022 06:43:38 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 8A86022239;
-        Tue,  3 May 2022 15:43:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1651585417;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wUhybUQ9wgcQ0ISiRM6y/Kbz55BvTsWvkuDWu8QOB7M=;
-        b=Dv8DNuDpkZlRXdB8+UQL7pAMGq6Ylo/o0fqe612D1mvZYd7KMbJxTD0T5JbYdVTKO4qUgH
-        paYRsNapZPvIwbnXJSxiRDkTtDmrM+PjG+Iqj5+BaaLNL5z/abkqDFrDCggDL3B23DMT3b
-        O3vk8rO8LsEASepsME/hAtxrZKgEEYw=
+        Tue, 3 May 2022 09:47:41 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132591D30A;
+        Tue,  3 May 2022 06:44:08 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id i25-20020a9d6259000000b00605df9afea7so11332075otk.1;
+        Tue, 03 May 2022 06:44:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ekpWvS+anWeQlrfaKFCOj8G7h2lMxD37gWeltGp8A3Y=;
+        b=B9CokLn1GX1NrOT++Z880iU//nFlWlXXo2tNl30LjEVcwWHziZUoAUVc94Lcg6+t+Y
+         Bxxa0s1V44+ZQdZjvgKe1IrEEr0bdT/2jLe/R8LLSvfg2OZFNNPhul5LaF3i7jlGyeso
+         Zv6v9le40JUjZIlPNdWHgtz4Jbl2KPrbOhGhvFBE4m5pCyWjEGhfR6N/iFEvZ0enz+Wu
+         QArbtal9F9MmErL4LtXcwv9nUDOB+rQKANBKz98tVfIpnCxaP4KpQ5LpeoRlitb34oLX
+         AU+pFdcPfN5wkUMAEnnAzqtZPnK6v9Fi6JglZvF6A6f1sruFEdLtVplJkpC2A8ZiT8wQ
+         bC0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=ekpWvS+anWeQlrfaKFCOj8G7h2lMxD37gWeltGp8A3Y=;
+        b=sk6BU/XEta3Q7CCXjX47hXwrhJuUXRZFqYN9Wz8xFKXqdgOeyhH/AA/bFffsLveMNH
+         VHlVj+z9ZACXqUVIQArMY3ArBqiO5sYM43nPrUmR8k+B6/vqwsNEjbxLF9vAfkcmVA/2
+         7Yj5EF7NqrrlD/6sx9jJmXsSbx2ifo5VMs6OXH/pxp085kGcyP7W3C3rnlvqBDkRrisY
+         Ipf6yq/X8uSpylaqOjNhJW9wdT8rgQMDTqcRDIkBJG9QsKBSHMhdM3Sc7eiPVeV+f8NK
+         MUsXcGUzQgACK5P4ynf93+wMk0fD1qpsI/9P8jcskrbP6OY8XMny5ZFz9pdrbyY/PJVx
+         n1FA==
+X-Gm-Message-State: AOAM532q2Dnoxgt4kbXPpTuskSssSJ+MjPYg4Hr+Rk1KtAT7nESXqZLJ
+        X5qOc3vkIoqX4hejrSNl21M=
+X-Google-Smtp-Source: ABdhPJzaXApsk6xgltsIrs7WaOqrd8bF+onKCwGjUKGxWnOlJRJN4qz1KpS5vVV7UWo2NCYk7m/ubQ==
+X-Received: by 2002:a05:6830:25cd:b0:605:c92c:967a with SMTP id d13-20020a05683025cd00b00605c92c967amr5949673otu.306.1651585447382;
+        Tue, 03 May 2022 06:44:07 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 8-20020a056870124800b000e686d13888sm7213907oao.34.2022.05.03.06.44.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 06:44:06 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 3 May 2022 06:44:05 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Camel Guo <camel.guo@axis.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Wolfram Sang <wsa@kernel.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@axis.com
+Subject: Re: [PATCH v4] hwmon: (tmp401) Add OF device ID table
+Message-ID: <20220503134405.GA3208573@roeck-us.net>
+References: <20220503114333.456476-1-camel.guo@axis.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 03 May 2022 15:43:36 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Sean Anderson <sean.anderson@seco.com>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Li Yang <leoyang.li@nxp.com>, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH v3 0/9] nvmem: sfp: binding updates and additions
-In-Reply-To: <7aa5d553-04ad-5198-153c-39a9375a6a12@linaro.org>
-References: <20220428181703.2194171-1-sean.anderson@seco.com>
- <7aa5d553-04ad-5198-153c-39a9375a6a12@linaro.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <3b8fc56f64508f7604f3b9e14b048568@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220503114333.456476-1-camel.guo@axis.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-04-29 17:56, schrieb Srinivas Kandagatla:
-> On 28/04/2022 19:16, Sean Anderson wrote:
->> This adds several properties to the Layerscape Security Fuse Processor
->> (SFP) necessary for writing. Although the Linux driver does not use
->> these bindings, I plan to use them in U-Boot [1]. It also adds a new
->> compatibles for Trust Architecture (TA) 2.1 devices. In addition, it
->> also adds an SFP binding for all TA 2.1 and 3.0 devices.
->> 
->> I would like to get this series merged for 5.18. As noted in patch 2,
->> making the clock property mandatory is not an ABI break, but if this 
->> is
->> not applied then it would become an ABI break. The absolute minimum
->> patches to apply for this would be patches 2 and 5. The rest 
->> (including
->> the regmap changes) could be deferred if necessary.
->> 
->> [1] 
->> https://lore.kernel.org/u-boot/7c8e206a-cd40-2a77-6282-7f4bead2b13a@seco.com/T/#m591f8425b6f096ab3d54e6f7bd258e41cfa4c43b
->> 
->> Changes in v3:
->> - Update commit message to note that this binding has not yet been
->>    present in a relase, so it is OK to make otherwise breaking 
->> changes.
->> 
->> Changes in v2:
->> - Mention "regulator" in the description for ta-prog-sfp-supply
->> - Convert sfp driver to use regmap
->> - Fix various typos in commit messages
->> 
->> Sean Anderson (9):
->>    dt-bindings: nvmem: sfp: Fix typo
->>    dt-bindings: nvmem: sfp: Add clock properties
->>    dt-bindings: nvmem: sfp: Add TA_PROG_SFP supply
->>    dt-bindings: nvmem: sfp: Add compatible binding for TA 2.1 SFPs
->>    arm64: dts: ls1028a: Update SFP binding to include clock
->>    ARM: dts: layerscape: Add SFP binding for TA 2.1 devices
->>    ARM: dts: Add SFP binding for TA 3.0 devices
->>    nvmem: sfp: Use regmap
->>    nvmem: sfp: Add support for TA 2.1 devices
->> 
+On Tue, May 03, 2022 at 01:43:33PM +0200, Camel Guo wrote:
+> This driver doesn't have of_match_table. This makes the kernel module
+> tmp401.ko lack alias patterns (e.g: of:N*T*Cti,tmp411) to match DT node
+> of the supported devices hence this kernel module will not be
+> automatically loaded.
 > 
-> I have applied all the patches except 5/9, 6/9, and 7/9 dts patches
-> which need to go via dts maintainer tree.
+> After adding of_match_table to this driver, the folllowing alias will be
+> added into tmp401.ko.
+> $ modinfo drivers/hwmon/tmp401.ko
+> filename: drivers/hwmon/tmp401.ko
+> ......
+> author:         Hans de Goede <hdegoede@redhat.com>
+> alias:          of:N*T*Cti,tmp435C*
+> alias:          of:N*T*Cti,tmp435
+> alias:          of:N*T*Cti,tmp432C*
+> alias:          of:N*T*Cti,tmp432
+> alias:          of:N*T*Cti,tmp431C*
+> alias:          of:N*T*Cti,tmp431
+> alias:          of:N*T*Cti,tmp411C*
+> alias:          of:N*T*Cti,tmp411
+> alias:          of:N*T*Cti,tmp401C*
+> alias:          of:N*T*Cti,tmp401
+> ......
+> 
+> Fixes: af503716ac14 ("i2c: core: report OF style module alias for devices registered via OF")
+> Signed-off-by: Camel Guo <camel.guo@axis.com>
 
-Ahh. At least the device tree binding change (and the device tree
-changes itself) should be applied as fixes for the 5.18 release,
-so we don't have any conflicting descriptions. My fixes tag was never
-picked up, unfortunately:
-https://lore.kernel.org/linux-devicetree/4a45db184fbadc278624571dfbeb5004@walle.cc/
+Applied.
 
-Srinivas, I've seen you picked it up into your for-next branch.
-Can we fix that?
+Thanks,
+Guenter
 
-I'd guess the layerscape device tree change also need a Fixes: tag.
-
--michael
+> ---
+> 
+> Notes:
+>     v4:
+>      - Rewrite commit message due to improper description in old one
+>     v3:
+>      - Copy commit message from commit 72fc64c68decf119466 ("hwmon: (tmp103)
+>        Add OF device ID table")
+>      - Add Fixes tag
+>     v2:
+>      - Put evidence and circumstances in commit message
+> 
+>  drivers/hwmon/tmp401.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> 
+> base-commit: 38d741cb70b30741c0e802cbed7bd9cf4fd15fa4
+> 
+> diff --git a/drivers/hwmon/tmp401.c b/drivers/hwmon/tmp401.c
+> index b86d9df7105d..52c9e7d3f2ae 100644
+> --- a/drivers/hwmon/tmp401.c
+> +++ b/drivers/hwmon/tmp401.c
+> @@ -708,10 +708,21 @@ static int tmp401_probe(struct i2c_client *client)
+>  	return 0;
+>  }
+>  
+> +static const struct of_device_id __maybe_unused tmp4xx_of_match[] = {
+> +	{ .compatible = "ti,tmp401", },
+> +	{ .compatible = "ti,tmp411", },
+> +	{ .compatible = "ti,tmp431", },
+> +	{ .compatible = "ti,tmp432", },
+> +	{ .compatible = "ti,tmp435", },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, tmp4xx_of_match);
+> +
+>  static struct i2c_driver tmp401_driver = {
+>  	.class		= I2C_CLASS_HWMON,
+>  	.driver = {
+>  		.name	= "tmp401",
+> +		.of_match_table = of_match_ptr(tmp4xx_of_match),
+>  	},
+>  	.probe_new	= tmp401_probe,
+>  	.id_table	= tmp401_id,

@@ -2,65 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E90B517F6A
+	by mail.lfdr.de (Postfix) with ESMTP id 76AB8517F6B
 	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 10:06:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232617AbiECIIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 04:08:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43522 "EHLO
+        id S232588AbiECIJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 04:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232588AbiECIIV (ORCPT
+        with ESMTP id S232614AbiECIJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 04:08:21 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D83241EAFA
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 01:04:47 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A5BD11516;
-        Tue,  3 May 2022 01:04:47 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E55EE3F774;
-        Tue,  3 May 2022 01:04:46 -0700 (PDT)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>, linux-kernel@vger.kernel.org
-Cc:     Cristian Marussi <cristian.marussi@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] firmware: arm_scmi: Set clock latency to U32_MAX if it is not supported
-Date:   Tue,  3 May 2022 09:04:45 +0100
-Message-Id: <165156489185.2921185.14872526406815086549.b4-ty@arm.com>
+        Tue, 3 May 2022 04:09:47 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276F220F51;
+        Tue,  3 May 2022 01:06:15 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id CEC4D210E3;
+        Tue,  3 May 2022 08:06:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1651565173; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=pVdhTO58cA0WGYmIyIFXMLoTyXBBgEwBwsYTj6OYuVw=;
+        b=tBKKadKZaMewyIEkXunzu47o2dCvAecpQNIQ39WOQL/cKt64z8nF4Kpn0bM9FgvaeXbmhO
+        QkJXLbXUHVA8acmWW3oH/mwktHiNsWBq9rxKst6piJ/l0KmkKC+pE6rYGjnS7QMbIxJD1l
+        UDG38pR2Qh187ZyuLROPhwlXTYPZMCU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1651565173;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=pVdhTO58cA0WGYmIyIFXMLoTyXBBgEwBwsYTj6OYuVw=;
+        b=ivRCD+IqY+7m/LG+3Q9JFUvEjBhgRaEQclYoW1TqR8wTZo4AzeC/gVJb3KwbWJD1/dTSMF
+        nhnzCjI4OQvL72Ag==
+Received: from localhost.localdomain (unknown [10.100.208.98])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 9CB682C142;
+        Tue,  3 May 2022 08:06:13 +0000 (UTC)
+From:   Jiri Slaby <jslaby@suse.cz>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jslaby@suse.cz>
+Subject: [PATCH 0/7] serial: pch: cleanup
+Date:   Tue,  3 May 2022 10:06:06 +0200
+Message-Id: <20220503080613.27601-1-jslaby@suse.cz>
 X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220428122913.1654821-1-sudeep.holla@arm.com>
-References: <20220428122913.1654821-1-sudeep.holla@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Apr 2022 13:29:13 +0100, Sudeep Holla wrote:
-> As per the spec, the clock_enable_delay is the worst case latency
-> incurred by the platform to enable the clock. The value of 0 indicates
-> that the platform doesn't support the same and must be considered as
-> maximum latency for practical purposes.
-> 
-> Currently the value of 0 is assigned as is and is propogated to the clock
-> framework which can assume that the clock can support atomic enable operation.
-> 
-> [...]
+This series cleanup the TX path of the pch driver.
 
+Jiri Slaby (7):
+  serial: pch: move size check from pop_tx one level up
+  serial: pch: don't overwrite xmit->buf[0] by x_char
+  serial: pch: decomission pch_uart_hal_write()
+  serial: pch: remove debug print from pop_tx
+  serial: pch: remove xmit circ_buf size double check
+  serial: pch: simplify pop_tx() even more
+  serial: pch: inline pop_tx() into handle_tx()
 
-Applied to sudeep.holla/linux (for-next/scmi), thanks!
+ drivers/tty/serial/pch_uart.c | 77 ++++++-----------------------------
+ 1 file changed, 12 insertions(+), 65 deletions(-)
 
-[1/1] firmware: arm_scmi: Set clock latency to U32_MAX if it is not supported
-      https://git.kernel.org/sudeep.holla/c/7ad6b6ccba
-
---
-Regards,
-Sudeep
+-- 
+2.36.0
 

@@ -2,87 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A1E518CF2
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE72C518CE6
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241794AbiECTQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 15:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44630 "EHLO
+        id S241769AbiECTQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 15:16:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232835AbiECTQe (ORCPT
+        with ESMTP id S241749AbiECTQC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 15:16:34 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028553F8A9;
-        Tue,  3 May 2022 12:13:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=YwqRVzAP9ZbrZ5VBMcTGFQUJhCIOHa56e0xcGxSMZUc=; b=g6wHrcBwrz2KwYvXjjVtORBiHn
-        IYMsR5GaRD/VR0xedfaxvBvF7rTbYR/J22t3j5lb3f06u/Fc1RouLR18wpSiKcYUFYo1Es0dUnLOJ
-        KS0gcPiTX1Gp43QoEXeB9qey3fro+JGWKqZb1HOFCCA1BT9LzygpBsI5rkGlNutynR2bG5HAOwC/E
-        tPyLP92RA6GDIRm0QuhAm+c5aBu4j0UaKxwKd9I7j0kUsDE4qHndJxIdGDBq1RIB7dNA6suRfXZwh
-        e21o4FfMtSVNbUCh0WQI73Gd4fdNm7+rXf7RsUeEiM3OYwwmkesCvbsvfiNKmEoMOIdut9FTHQRzP
-        TtMjBb/w==;
-Received: from [179.113.53.197] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nlxwt-0003VB-Uo; Tue, 03 May 2022 21:12:40 +0200
-Message-ID: <adcf6d0e-c37c-6ede-479e-29959d03d8c0@igalia.com>
-Date:   Tue, 3 May 2022 16:12:09 -0300
+        Tue, 3 May 2022 15:16:02 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5C03F8B8
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 12:12:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651605149; x=1683141149;
+  h=message-id:subject:from:to:date:in-reply-to:references:
+   mime-version:content-transfer-encoding;
+  bh=au8P1JHW90k0N+LFChH9TefW4Iia/a9oVWmfDOi2Aaw=;
+  b=edqY/9b17xs3+zNPBb0mh3UFvsE2Ccgq7rdn7AvdpghtJWseD7zPxeKx
+   bOwyU+toCCD+SoUW2lXvXpo6ZWuR7RKmDGOltLxxTuU6dpJrFiqhzJtmk
+   JcGNHARzTHv8Su6tsDNJlkqJidt/z/Qv/D7wwuzbKpdsa/2F13NVmTPXz
+   aNo7Xc99tDESwcGaFoQMY7S36dLpQHmI3JTrdYJt/AX7ebp8AsN+xuCzq
+   oi5fngPsg6E7azvi2kmR1Ne3AADg6eMsNoG+9Ne7zUvNmsm9fjeVPABTL
+   8DK1ZYzJI2V51eHErb2EfBp4kMhh7+qH8vNOSfgOHJKQQ19EQOGCTs8vd
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="267443651"
+X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
+   d="scan'208";a="267443651"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 12:12:28 -0700
+X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
+   d="scan'208";a="562344288"
+Received: from schen9-mobl.amr.corp.intel.com ([10.212.186.253])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 12:12:28 -0700
+Message-ID: <1b6ab66587cfef8574f38cafdd1796daf2a92346.camel@linux.intel.com>
+Subject: Re: RFC: Memory Tiering Kernel Interfaces
+From:   Tim Chen <tim.c.chen@linux.intel.com>
+To:     Wei Xu <weixugc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Yang Shi <shy828301@gmail.com>, Linux MM <linux-mm@kvack.org>,
+        Greg Thelen <gthelen@google.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alistair Popple <apopple@nvidia.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Michal Hocko <mhocko@kernel.org>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Feng Tang <feng.tang@intel.com>, Jonathan.Cameron@huawei.com
+Date:   Tue, 03 May 2022 12:12:28 -0700
+In-Reply-To: <CAAPL-u9sVx94ACSuCVN8V0tKp+AMxiY89cro0japtyB=xNfNBw@mail.gmail.com>
+References: <CAAPL-u9sVx94ACSuCVN8V0tKp+AMxiY89cro0japtyB=xNfNBw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 04/30] firmware: google: Convert regular spinlock into
- trylock on panic path
-Content-Language: en-US
-To:     Evan Green <evgreen@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, bhe@redhat.com,
-        pmladek@suse.com, kexec@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Jonathan Corbet <corbet@lwn.net>, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de,
-        Kees Cook <keescook@chromium.org>, luto@kernel.org,
-        mhiramat@kernel.org, mingo@redhat.com, paulmck@kernel.org,
-        peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, Alan Stern <stern@rowland.harvard.edu>,
-        Thomas Gleixner <tglx@linutronix.de>, vgoyal@redhat.com,
-        vkuznets@redhat.com, Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        David Gow <davidgow@google.com>,
-        Julius Werner <jwerner@chromium.org>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-5-gpiccoli@igalia.com>
- <CAE=gft5Pq25L4KFoPWbftkPF-JN1ex2yws77mMJ4GQnn9W0L2g@mail.gmail.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <CAE=gft5Pq25L4KFoPWbftkPF-JN1ex2yws77mMJ4GQnn9W0L2g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,61 +73,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/05/2022 15:03, Evan Green wrote:
-> [...]
-> gsmi_shutdown_reason() is a common function called in other scenarios
-> as well, like reboot and thermal trip, where it may still make sense
-> to wait to acquire a spinlock. Maybe we should add a parameter to
-> gsmi_shutdown_reason() so that you can get your change on panic, but
-> we don't convert other callbacks into try-fail scenarios causing us to
-> miss logs.
+On Fri, 2022-04-29 at 19:10 -0700, Wei Xu wrote:
+> The current kernel has the basic memory tiering support: Inactive
+> pages on a higher tier NUMA node can be migrated (demoted) to a lower
+> tier NUMA node to make room for new allocations on the higher tier
+> NUMA node.  Frequently accessed pages on a lower tier NUMA node can be
+> migrated (promoted) to a higher tier NUMA node to improve the
+> performance.
+> 
+> A tiering relationship between NUMA nodes in the form of demotion path
+> is created during the kernel initialization and updated when a NUMA
+> node is hot-added or hot-removed.  The current implementation puts all
+> nodes with CPU into the top tier, and then builds the tiering hierarchy
+> tier-by-tier by establishing the per-node demotion targets based on
+> the distances between nodes.
+
+Thanks for making this proposal.  It has many of the elements needed
+for the tiering support.
+
+> 
+> The current memory tiering interface needs to be improved to address
+> several important use cases:
+> 
+> * The current tiering initialization code always initializes
+>   each memory-only NUMA node into a lower tier.  But a memory-only
+>   NUMA node may have a high performance memory device (e.g. a DRAM
+>   device attached via CXL.mem or a DRAM-backed memory-only node on
+>   a virtual machine) and should be put into the top tier.
+> 
+> * The current tiering hierarchy always puts CPU nodes into the top
+>   tier. But on a system with HBM (e.g. GPU memory) devices, these
+>   memory-only HBM NUMA nodes should be in the top tier, and DRAM nodes
+>   with CPUs are better to be placed into the next lower tier.
+> 
+> * Also because the current tiering hierarchy always puts CPU nodes
+>   into the top tier, when a CPU is hot-added (or hot-removed) and
+>   triggers a memory node from CPU-less into a CPU node (or vice
+>   versa), the memory tiering hierarchy gets changed, even though no
+>   memory node is added or removed.  This can make the tiering
+>   hierarchy much less stable.
+> 
+> * A higher tier node can only be demoted to selected nodes on the
+>   next lower tier, not any other node from the next lower tier.  This
+>   strict, hard-coded demotion order does not work in all use cases
+>   (e.g. some use cases may want to allow cross-socket demotion to
+>   another node in the same demotion tier as a fallback when the
+>   preferred demotion node is out of space), and has resulted in the
+>   feature request for an interface to override the system-wide,
+>   per-node demotion order from the userspace.
+> 
+> * There are no interfaces for the userspace to learn about the memory
+>   tiering hierarchy in order to optimize its memory allocations.
+> 
+> I'd like to propose revised memory tiering kernel interfaces based on
+> the discussions in the threads:
+> 
+> - https://lore.kernel.org/lkml/20220425201728.5kzm4seu7rep7ndr@offworld/T/
+> - https://lore.kernel.org/linux-mm/20220426114300.00003ad8@Huawei.com/t/
+> 
+> 
+> Sysfs Interfaces
+> ================
+> 
+> * /sys/devices/system/node/memory_tiers
+> 
+>   Format: node list (one tier per line, in the tier order)
+> 
+>   When read, list memory nodes by tiers.
+> 
+>   When written (one tier per line), take the user-provided node-tier
+>   assignment as the new tiering hierarchy and rebuild the per-node
+>   demotion order.  It is allowed to only override the top tiers, in
+>   which cases, the kernel will establish the lower tiers automatically.
+> 
+> 
+> Kernel Representation
+> =====================
+> 
+> * nodemask_t node_states[N_TOPTIER_MEMORY]
+> 
+>   Store all top-tier memory nodes.
+> 
+> * nodemask_t memory_tiers[MAX_TIERS]
+> 
+>   Store memory nodes by tiers.
+> 
+> * struct demotion_nodes node_demotion[]
+> 
+>   where: struct demotion_nodes { nodemask_t preferred; nodemask_t allowed; }
+> 
+>   For a node N:
+> 
+>   node_demotion[N].preferred lists all preferred demotion targets;
+> 
+>   node_demotion[N].allowed lists all allowed demotion targets
+>   (initialized to be all the nodes in the same demotion tier).
 > 
 
-Hi Evan, thanks for your feedback, much appreciated!
-What I've done in other cases like this was to have a helper checking
-the spinlock in the panic notifier - if we can acquire that, go ahead
-but if not, bail out. For a proper example of an implementation, check
-patch 13 of the series:
-https://lore.kernel.org/lkml/20220427224924.592546-14-gpiccoli@igalia.com/ .
+I assume that the preferred list is auto-configured/initialized based on
+NUMA distances.  Not sure why "allowed" list is only to the same demotion
+tier?  For example, I think the default should be tier 0 should 
+is allowed to demote to tier 1 and tier 2, not just to tier 1.  So if we
+fail to demote to tier 1, we can demote to tier 2.  
 
-Do you agree with that, or prefer really a parameter in
-gsmi_shutdown_reason() ? I'll follow your choice =)
+Do you also expose the demotion preferred node and allowed
+list via /sys/devices/system/node/memory_tiers, as you have done in the examples?
 
+> Examples
+> ========
+> 
+> * Example 2:
+>   Node 0 & 1 are DRAM nodes.
+>   Node 2 is a PMEM node and closer to node 0.
+> 
+>   Node 0 has node 2 as the preferred and only demotion target.
+> 
+>   Node 1 has no preferred demotion target, but can still demote
+>   to node 2.
+> 
+>   Set mempolicy to prevent cross-socket demotion and memory access,
+>   e.g. cpuset.mems=0,2
 
-> Though thinking more about it, is this really a Good Change (TM)? The
-> spinlock itself already disables interrupts, meaning the only case
-> where this change makes a difference is if the panic happens from
-> within the function that grabbed the spinlock (in which case the
-> callback is also likely to panic), or in an NMI that panics within
-> that window. The downside of this change is that if one core was
-> politely working through an event with the lock held, and another core
-> panics, we now might lose the panic log, even though it probably would
-> have gone through fine assuming the other core has a chance to
-> continue.
+Do we expect to later allow configuration of the demotion list explicitly?
+Something like:
 
-My feeling is that this is a good change, indeed - a lot of places are
-getting changed like this, in this series.
+echo "demotion 0 1 1-3" > /sys/devices/system/node/memory_tiers
 
-Reasoning: the problem with your example is that, by default, secondary
-CPUs are disabled in the panic path, through an IPI mechanism. IPIs take
-precedence and interrupt the work in these CPUs, effectively
-interrupting the "polite work" with the lock held heh
+to set demotion list for node 0, where preferred demote node is 1, 
+allowed demote node list is 1-3.
 
-Then, such CPU is put to sleep and we finally reach the panic notifier
-hereby discussed, in the main CPU. If the other CPU was shut-off *with
-the lock held*, it's never finishing such work, so the lock is never to
-be released. Conclusion: the spinlock can't be acquired, hence we broke
-the machine (which is already broken, given it's panic) in the path of
-this notifier.
-This should be really rare, but..possible. So I think we should protect
-against this scenario.
+Thanks.
 
-We can grab others' feedback if you prefer, and of course you have the
-rights to refuse this change in the gsmi code, but from my
-point-of-view, I don't see any advantage in just assume the risk,
-specially since the change is very very simple.
-
-Cheers,
+Tim
 
 
-Guilherme

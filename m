@@ -2,63 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 897A9518D0B
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:16:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AA54518D18
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239652AbiECTUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 15:20:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48712 "EHLO
+        id S239318AbiECTWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 15:22:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237094AbiECTUE (ORCPT
+        with ESMTP id S238094AbiECTWi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 15:20:04 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C7D3FBCD
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 12:16:30 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id i10so3923117lfg.13
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 12:16:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=wPTnR2Zu/nMupXPED8+6zfG3R03kfxI0ufpTxQT+s40=;
-        b=tjQdxT++eBAtCciDu2vU3NoUP4QW6qBmdwluJN7ZqTxj5rCLdpDXoPA48gZOr5T9JR
-         Te40XWsMzEhOWZumvQ0tidKpqGFo+dZmA84nwmchSTzMnxyLvAWfAxhk6KmTExqHOZ2w
-         BNXaoBlUSVt/2a+kA8BScws+d2nLejwqepBJLd/c4n84GvLJRoqcAge0xcRpuNsjcHKC
-         MKHJmMwbkmyHpazMg6NuqL52MS88IhStwuUzr6I/+6NP9KepZ1guoda30WFcSYGasBnk
-         Z6MdIzaa3k9WdCnxWtr/DghvKxLTu8EFbc/vLdy5GHAALvnLBG2KuGJAvwIqoSo0QOZ/
-         fbkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=wPTnR2Zu/nMupXPED8+6zfG3R03kfxI0ufpTxQT+s40=;
-        b=r+ayzIDKpS0U1ZjN3TsNio5hjFgmTRwYLKCbqbQFdRFyR88E5909H0w2+QcVw9IoA9
-         QxGWS8BY1hBMKxM7FDw3CnxB8OwrzYXiw+YmTe4bB9tD6E1guRuGrEn4VKJLFgByVMzC
-         DgDvwqmPeedsDX2f+gjnH9hvruNXxf3cEfT+4nevE8qflfxuotXgtxpiRh3AabinKtRt
-         z3gXWIWDPKcF6DcFY4xxnOZRleKOskZ5Vd19jW/BE3dREgo2zVKaNEEStHEYMBNHbc8d
-         95pUem9DxDmFUfOiUy4aunujxkNifmL8wHWjWpGaEWkb7fhtsvoL9s6rFNWEMaYhfR9D
-         yzHg==
-X-Gm-Message-State: AOAM531+QvgR2bKVPI+S8beX6yalPFVMj/FHaHl18Ztg2+GZB67WtGtn
-        W4tqmknYTez6esAkciyMUm6W3A==
-X-Google-Smtp-Source: ABdhPJwPzzX7IVXeDUZKXs6KdmMPkgA7AOVPSzXGlSNues3oWyX7bzj63hV8upZvkAXNMXk0YzSTWQ==
-X-Received: by 2002:a05:6512:3f88:b0:44f:567f:8715 with SMTP id x8-20020a0565123f8800b0044f567f8715mr11912202lfa.609.1651605389115;
-        Tue, 03 May 2022 12:16:29 -0700 (PDT)
-Received: from jade (h-79-136-84-253.A175.priv.bahnhof.se. [79.136.84.253])
-        by smtp.gmail.com with ESMTPSA id d10-20020a05651221ca00b0047255d2119bsm1013800lft.202.2022.05.03.12.16.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 12:16:28 -0700 (PDT)
-Date:   Tue, 3 May 2022 21:16:26 +0200
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-To:     arm@kernel.org, soc@kernel.org
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        op-tee@lists.trustedfirmware.org
-Subject: [GIT PULL] TEE menu for v5.19
-Message-ID: <20220503191626.GA3278203@jade>
+        Tue, 3 May 2022 15:22:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70EE3FBE9;
+        Tue,  3 May 2022 12:19:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8292461948;
+        Tue,  3 May 2022 19:19:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEBE0C385A9;
+        Tue,  3 May 2022 19:19:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651605543;
+        bh=S8r5AHZucns0I0daOUq3N1CwlE3hsFkxc7yh810nreU=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=bw7HNipUWvVQAmvSfBp+4cNCpONzg66Mq1gQNQ1prwJNza4BP4VwA3t/aa5GPcgRB
+         sVRPbpX79XPIyPz+bStoZlAd7Sw7PfahlxgrobOEv1p9Jns47R9sq5agA+sl+6JFmr
+         47vTxkOikFB8RorCnPnwDErJhafnBK5RgzY0wozNRFPsZRTetA43tp2aTq8RPDBmh+
+         mZUfFXlxuIvtp5aPGTP114yS1MuAlj+l4XRYURX6Q6iqxF9W2UbYE6g/hQ1//O/mv/
+         fY6o211mifvZ3feH/y5R9c+alyEuJlclmSheeomx16sskw7+5vs+z5VL8VVJgecemo
+         le9lipnnV6bkw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <YmrnMQwIR9wOeoKE@ripper>
+References: <20220422230013.1332993-1-bjorn.andersson@linaro.org> <20220423014824.912ACC385A0@smtp.kernel.org> <YmNsYSxLtwLpw98t@ripper> <20220423031350.01299C385A0@smtp.kernel.org> <YmN11qt/PqogYruQ@ripper> <20220425223426.BE973C385A4@smtp.kernel.org> <3fb043e6-2748-24f8-0115-b5372c747a12@linaro.org> <Ymq6UOjrYgFlzl/W@ripper> <CAA8EJpqBMzTNjTSWN1UMXM61-DmW22RKQJyWoMw3Rds=xEVQaQ@mail.gmail.com> <YmrnMQwIR9wOeoKE@ripper>
+Subject: Re: [PATCH v2 1/2] dt-bindings: clock: Add Qualcomm SC8280XP GCC bindings
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_tdas@quicinc.com
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 03 May 2022 12:19:01 -0700
+User-Agent: alot/0.10
+Message-Id: <20220503191903.CEBE0C385A9@smtp.kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,32 +60,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello arm-soc maintainers,
+Quoting Bjorn Andersson (2022-04-28 12:12:49)
+> On Thu 28 Apr 09:24 PDT 2022, Dmitry Baryshkov wrote:
+>=20
+> > > >
+> > > > And actually might I suggest an alternative approach to manually us=
+ing
+> > > > indices everywhere? What about spending the time once during the bo=
+ot to
+> > > > convert .fw_name and clock_names to parent indices during clock reg=
+istration
+> > > > and then using them for all the further operations?
+> > > >
+> > >
+> > > I'm pretty sure that's what clk_core_fill_parent_index() already does.
+> >=20
+> > In this case I think we should go for clock-name in the DT and
+> > auto-flled indices inside. Stephen, WDYT? Would that fix your concern
+> > for comparing strings each and every time?
+> >=20
+>=20
+> You mean, just continue doing what we've been doing lately with fw_name
+> etc?
+>=20
+> That lookup is the one that Stephen wants to avoid.
+>=20
 
-Please pull this small patch which combines the config and menu for TEE's
-menuconfig into one line.
+Right. Translating .fw_name to indices isn't a solution because I want to=20
 
-Thanks,
-Jens
+ 1. Reduce the number of string comparisons
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+ 2. Shrink the kernel's data section by removing strings
 
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
-
-are available in the Git repository at:
-
-  https://git.linaro.org/people/jens.wiklander/linux-tee.git tags/tee-menu-for-v5.19
-
-for you to fetch changes up to a4b75fe8e1c15c96c4eb083e211ccbbfd56599f9:
-
-  tee: combine "config" and "menu" for TEE's menuconfig (2022-04-05 07:32:23 +0200)
-
-----------------------------------------------------------------
-Combine TEE config and menu in one line
-
-----------------------------------------------------------------
-Jan Engelhardt (1):
-      tee: combine "config" and "menu" for TEE's menuconfig
-
- drivers/tee/Kconfig | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+and having there still be strings works against both points.

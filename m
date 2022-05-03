@@ -2,79 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46010518315
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 13:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E45851831B
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 13:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234601AbiECLPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 07:15:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51816 "EHLO
+        id S234665AbiECLQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 07:16:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233641AbiECLPK (ORCPT
+        with ESMTP id S234676AbiECLQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 07:15:10 -0400
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A583464A;
-        Tue,  3 May 2022 04:11:38 -0700 (PDT)
-Received: by mail-wm1-f49.google.com with SMTP id n126-20020a1c2784000000b0038e8af3e788so1076660wmn.1;
-        Tue, 03 May 2022 04:11:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GsogsT9bhJS0azISfSjF4/Gdtg2bL/l2CaKN/yJOq2U=;
-        b=KMTJX39ow68qWmWxgO+TP55iaLnuVRVItcxZCM/jcq0PDeUUkyUlH2Ta5j4TiY67tq
-         YyUyAMb3Va1AMjWmF8veGu5qMzZuUjBWGmNXmavS8exzwHLMsfphZzNnHv2ppX2DHFjZ
-         wMCFdHKhTnBTJDc+HnHyIg5mAyEKqcGkF1IjVvMxczSXu5Nl194gOsaLXz/yfa8eqPBi
-         B//FIZKXozbu4IwJcrJQ4EjqDdaiUPqt0C6ZAyB0frYn6IpTJxD3LnsDjsQGVM0fmCXj
-         xtXbsXGZ9QNFMU8E2k/CCy7e3Vr1Sf3p/kRAVjemRTqynn+o+ZwOzfGnuLNBPSchnqqQ
-         LkXA==
-X-Gm-Message-State: AOAM5309pMk1fKYbLOTgnX3bNOJrvnHBQ21xbEnFeozjTcrWu2epPEk2
-        JQ7nHJLhhBeWCp+/+HoX3EM=
-X-Google-Smtp-Source: ABdhPJyhUyArLZ6U7eQ4wiMgOJiKkSAK1pVUfdJy3Bn7VLBKr52ZTx0gXisXtzzC4SGwFA0Yn97PTA==
-X-Received: by 2002:a1c:770b:0:b0:394:3fae:ab79 with SMTP id t11-20020a1c770b000000b003943faeab79mr2884315wmi.200.1651576297176;
-        Tue, 03 May 2022 04:11:37 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id n21-20020a7bc5d5000000b003942a244f47sm1708601wmk.32.2022.05.03.04.11.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 04:11:36 -0700 (PDT)
-Date:   Tue, 3 May 2022 11:11:34 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wei Liu <wei.liu@kernel.org>
-Subject: Re: [PATCH v3 07/34] x86/hyperv: Introduce
- HV_MAX_SPARSE_VCPU_BANKS/HV_VCPUS_PER_SPARSE_BANK constants
-Message-ID: <20220503111134.zuzidhqfmac2csfm@liuwe-devbox-debian-v2>
-References: <20220414132013.1588929-1-vkuznets@redhat.com>
- <20220414132013.1588929-8-vkuznets@redhat.com>
+        Tue, 3 May 2022 07:16:12 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263A135A9D;
+        Tue,  3 May 2022 04:12:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1651576359; x=1683112359;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=h3g8eorJz4802t5ftV/zPjq8HQXG/+FZUXPCQKtK8mQ=;
+  b=SJ42f9krUSQgeRwqdVqIm/fThchC5gjV/2ZAGEPYhYSFRl8LZMaXWO/6
+   neiDq4eDyXV33FgvizKrzFTVEv8qLoqcjEQKXmXF3WeWjn7wo8B+W4tNq
+   0dSjwCPyGAlrzjlnibRRrzeo6KiYNrq4R3aRjDm7WStkDPvAcHTfUQGIt
+   nqsTqQ3o+SkmeoN9sWNWGYtVIKykOJ9eGg/ikN450PtzJhor1SHaUuz+w
+   rtoF+inYlLXxaCe0rA9oL+slh28Q1/kFcylhAvBAbXTsCSs9Xpl9lG6v4
+   y5zstw/ftp/n8yrX9pIqTnbs9ITTFhLiPPqXeqhxTmc5VX4rXoUrW/6mN
+   w==;
+X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
+   d="scan'208";a="162129457"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 May 2022 04:12:39 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 3 May 2022 04:12:33 -0700
+Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Tue, 3 May 2022 04:12:28 -0700
+From:   Eugen Hristev <eugen.hristev@microchip.com>
+To:     <linux-media@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <hverkuil-cisco@xs4all.nl>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] media: atmel: atmel-sama7g5-isc: fix warning in configs without OF
+Date:   Tue, 3 May 2022 14:12:16 +0300
+Message-ID: <20220503111216.54352-1-eugen.hristev@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220414132013.1588929-8-vkuznets@redhat.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 03:19:46PM +0200, Vitaly Kuznetsov wrote:
-> It may not come clear from where the magical '64' value used in
-> __cpumask_to_vpset() come from. Moreover, '64' means both the maximum
-> sparse bank number as well as the number of vCPUs per bank. Add defines
-> to make things clear. These defines are also going to be used by KVM.
-> 
-> No functional change.
-> 
-> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+All warnings (new ones prefixed by >>):
 
-Acked-by: Wei Liu <wei.liu@kernel.org>
+>> drivers/media/platform/atmel/atmel-sama7g5-isc.c:610:34: warning: unused variable 'microchip_xisc_of_match' [-Wunused-const-variable]
+   static const struct of_device_id microchip_xisc_of_match[] = {
+                                    ^
+   13 warnings generated.
+
+vim +/microchip_xisc_of_match +610 drivers/media/platform/atmel/atmel-sama7g5-isc.c
+
+   609
+ > 610  static const struct of_device_id microchip_xisc_of_match[] = {
+   611          { .compatible = "microchip,sama7g5-isc" },
+   612          { }
+   613  };
+   614  MODULE_DEVICE_TABLE(of, microchip_xisc_of_match);
+   615
+
+Fixed warning by guarding the atmel_isc_of_match by CONFIG_OF.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: c9aa973884a1 ("media: atmel: atmel-isc: add microchip-xisc driver")
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+---
+ drivers/media/platform/atmel/atmel-sama7g5-isc.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/media/platform/atmel/atmel-sama7g5-isc.c b/drivers/media/platform/atmel/atmel-sama7g5-isc.c
+index 638af8da2694..0cbe84d05eb1 100644
+--- a/drivers/media/platform/atmel/atmel-sama7g5-isc.c
++++ b/drivers/media/platform/atmel/atmel-sama7g5-isc.c
+@@ -621,11 +621,13 @@ static const struct dev_pm_ops microchip_xisc_dev_pm_ops = {
+ 	SET_RUNTIME_PM_OPS(xisc_runtime_suspend, xisc_runtime_resume, NULL)
+ };
+ 
++#if IS_ENABLED(CONFIG_OF)
+ static const struct of_device_id microchip_xisc_of_match[] = {
+ 	{ .compatible = "microchip,sama7g5-isc" },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, microchip_xisc_of_match);
++#endif
+ 
+ static struct platform_driver microchip_xisc_driver = {
+ 	.probe	= microchip_xisc_probe,
+-- 
+2.25.1
+

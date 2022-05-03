@@ -2,90 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B2CA519049
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 23:37:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED4F5519039
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 23:36:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242838AbiECV3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 17:29:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46628 "EHLO
+        id S242704AbiECVb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 17:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243100AbiECV3M (ORCPT
+        with ESMTP id S229451AbiECVb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 17:29:12 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A922AE05;
-        Tue,  3 May 2022 14:25:37 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nfraprado)
-        with ESMTPSA id 046C31F43B53
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651613136;
-        bh=4LP/jKCMumd2WzQHTLcpeW44tdUtgMXLREom1d6+3d8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=U6uwvqLWQz1rrgHBmyInvOdwj2a6NsnXgBaLDmfjzuWitxhBVPkxEfKiQ/zHtLaad
-         hr0qqA7zPswCSym0S5/b/p4XxmNMhoYHcdqd/lWjegnfnDpXEIcsmEbXNztOynVVhl
-         xarPslAab2CEed/rlVqJUSduVQg1MPtDjBk1bf/xxh7kyJzWhTCP3Q0F0bgkA+r8LG
-         vVGjtHfiZLqxzlwXdAobGcCXlCaaumMnVUlg3kHCyMm1EAoSDBuYrOT4v9upgAD6uz
-         xHJ0H/jA9Fshsxgn3EiV1PSpsN2E/+ZNPegH4r4eDNd+wzvKxd0u9ayFLUxS8daiEu
-         Qqw3eEUBib0/w==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH] arm64: dts: mt8192: Follow binding order for SCP registers
-Date:   Tue,  3 May 2022 17:25:31 -0400
-Message-Id: <20220503212531.2657870-1-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.36.0
+        Tue, 3 May 2022 17:31:26 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050674162E;
+        Tue,  3 May 2022 14:27:51 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KtCjb589Xz4xXg;
+        Wed,  4 May 2022 07:27:47 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1651613267;
+        bh=MlslygHg+ZIm0HDbSi/5ulCiI1C3HY1jnz5QkaqB3i8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ar7XZRr2deUzgEjudZefwQbcenETm2jikNtdIlmwzdFuBeG4/WKOsRDj57bVw6A0q
+         FlvgeyA+2ImdmPnL1joJM213D0fufBZVPgRfAUzy+6xuheey2KutJcMJfEXTwm0KO/
+         7WlJjlCEBuc+DUXfN1ywv8NvwOcxlfzfPPbr1dq1plFTWZbPFZ5wfP8AnSj1q+0OXG
+         8u0HzXhbVVOQRaQeziC5kRYu9230l1m0I/atrue6BsoisoJuAGBHZxMIRB7IgU19da
+         0O6eAkbB99baDO1W6s8TGN4N/k1v/W6D2Cv3rP+GBg+0EDDUnx/6ngOIirRugH0AzY
+         ruiObDLXHS4qA==
+Date:   Wed, 4 May 2022 07:27:46 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alexandre Torgue <alexandre.torgue@st.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the stm32 tree
+Message-ID: <20220504072746.0f59f2d9@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/LR6sDwWRFFlp8hfR5pzjMQz";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The dt-binding for SCP documents the reg-names order as sram, cfg,
-l1tcm. Update the SCP node on the mt8192 devicetree to follow that
-order, which gets rid of a dtbs_check warning. This doesn't change any
-behavior since the SCP driver accesses the memory regions through the
-names anyway.
+--Sig_/LR6sDwWRFFlp8hfR5pzjMQz
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Hi all,
 
----
+Commit
 
- arch/arm64/boot/dts/mediatek/mt8192.dtsi | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+  ee5596ec15d8 ("dt-bindings: rcc: Add optional external ethernet RX clock =
+properties")
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-index 26dbe9ecc528..733aec2e7f77 100644
---- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-@@ -699,9 +699,9 @@ spi7: spi@1101e000 {
- 		scp: scp@10500000 {
- 			compatible = "mediatek,mt8192-scp";
- 			reg = <0 0x10500000 0 0x100000>,
--			      <0 0x10700000 0 0x8000>,
--			      <0 0x10720000 0 0xe0000>;
--			reg-names = "sram", "l1tcm", "cfg";
-+			      <0 0x10720000 0 0xe0000>,
-+			      <0 0x10700000 0 0x8000>;
-+			reg-names = "sram", "cfg", "l1tcm";
- 			interrupts = <GIC_SPI 435 IRQ_TYPE_LEVEL_HIGH 0>;
- 			clocks = <&infracfg CLK_INFRA_SCPSYS>;
- 			clock-names = "main";
--- 
-2.36.0
+is missing a Signed-off-by from its committer.
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/LR6sDwWRFFlp8hfR5pzjMQz
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJxnlIACgkQAVBC80lX
+0GwncAf/dmpuimEmXhlqOYlm9viNzHNw4fXvR8usQ8KqSrbrPNHJPtEErfyUuV5b
+91Sy7iOZHQ/lEeSjXClHs1IhpBPWkXJXE74yYM3RFFv40evn0ZR+VBmRpWeACQf3
+ewi4rPZEHJiKCaEnozbbBfPRYHCe+OEeEvgA6xrdGhLEGQlpiqzPXnnAo/cLNNxm
+se3CeZMHGGhpboso7SocupLJILxre1R17fVvoj8wet2kor/8o+UQsUjizYI+OGFS
+nAJFgBb+jLcGBLuNTmOl1+HG+n0TzK3EViVfu6qTXrpF0c+57K09OZir/8GXMQfC
+kBckFaaFml36vGcW9B2s//k2WwlSWw==
+=f0KK
+-----END PGP SIGNATURE-----
+
+--Sig_/LR6sDwWRFFlp8hfR5pzjMQz--

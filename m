@@ -2,58 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC855186CD
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:36:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67AA25186D5
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237113AbiECOj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 10:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35510 "EHLO
+        id S237142AbiECOk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 10:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237109AbiECOj1 (ORCPT
+        with ESMTP id S237127AbiECOkZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 10:39:27 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C0329C89;
-        Tue,  3 May 2022 07:35:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651588554; x=1683124554;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=iEMij0314cRDkFEerNR1vqQNbKVw2VWoGw9pFP2/TyI=;
-  b=ISU4yUTW0ZYdkCtn8BWxxmSk7oDZCybfpSD9ybMfKHUAqlG6E7CUGEN9
-   EiubGNFjYPgUpjQJesJqz/1VHmp6mkcslesLCEek7pmFoNQokhjoFU28X
-   L2+AYUJTPVToFOhNghjcy792fJr1h9zNuyLgvl8SDKNq5cKBmdcX93Wu0
-   P/sU5QrnzhMGJAKJdm+JPGScI42qWfx2zHwakVy2/RTHKbRJqLzPMt7Xw
-   xZVRiAx7qRRBRhEyUfciDYUxn5IesyHaCcYifcu9sU0XVJ0NjAUd1mcbA
-   ZlvfryS77c4KZIRqwjAGkMCQ8HpH4tLA1rfVNF6Ca7zAIJN1q+uAO+y6V
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="267369535"
-X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
-   d="scan'208";a="267369535"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 07:35:53 -0700
-X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
-   d="scan'208";a="733937049"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.43])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 07:35:53 -0700
-Date:   Tue, 3 May 2022 07:35:46 -0700 (PDT)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        dinguyen@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Subject: Re: [PATCH] arm64: dts: intel: add device tree for n6000
-In-Reply-To: <e549b689-4043-e689-d0b0-f274ed08a665@linaro.org>
-Message-ID: <alpine.DEB.2.22.394.2205030727310.244936@rhweight-WRK1>
-References: <20220502165818.4002157-1-matthew.gerlach@linux.intel.com> <e549b689-4043-e689-d0b0-f274ed08a665@linaro.org>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Tue, 3 May 2022 10:40:25 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596252AE32;
+        Tue,  3 May 2022 07:36:53 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id E17A5320094C;
+        Tue,  3 May 2022 10:36:51 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Tue, 03 May 2022 10:36:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1651588611; x=1651675011; bh=wr1yEbLhma
+        vCHn4YSc6slYBn0rcn1MuXeUqJmQnuax0=; b=RslftU20R/juV/ALfzf3oGCJSZ
+        QESr632f4o07zZh+Pbth4vcSXsmv7+9SUYRTg/CeSFhFXYU125KB72Igwi4ZYsK6
+        8oslyn6TUrsAekDjk1Az0gV9JFkpiC+qJ6W4PhJpFSQXXl+V36te5vVLiqDz8tkM
+        fW8yznmVaTyNeK8fxOHJ85upJ2KdKl2J0idxWaSmcDYvbx95ah6RbOrSPuOqZmp1
+        J4a8nKuiq1I0Dsarf5thOxjxGIMFjbX+UyPuOsvVra1p9Bj4fcgNXBLDg4PwfADH
+        ieJKBOlC4tINlTGJ+0nUmi0U0Yix9Khs0CjSoxRXWfcI5OGmLZfDPamlWxvw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651588611; x=
+        1651675011; bh=wr1yEbLhmavCHn4YSc6slYBn0rcn1MuXeUqJmQnuax0=; b=t
+        87Uz7VKSJFjqm0z5f8OEV36+lst3ZW9L5d+5mwYsceXRLDi2YtvxZe24eFxeA+M0
+        KXM0V+ydauwI4srYW9GBTauMap5+5Y7SLFbioVVgIvk1UdS3YVHPM1/BwmuYltMd
+        Jsg04Mq6vgEc8fmwo+9I01sr4CBqPppO/jTaNiuS3NTwjr17n1OoQVWawkb1fMu8
+        A4CipH60iWcEGzr6TSh/tniLqNpUYsooPH6VW/ftKsFCkDio0XL9KKf1+3q4RgyO
+        gvvWNso4EZ3QFOeIEDTxsIr/TG8T2ZpTz9E0T/WzQtwGVWw+Y1HrVo74vfeJPCQ9
+        UfNBEh+Av7Eggl5MsVtrg==
+X-ME-Sender: <xms:Aj5xYpUQUiJc5hXGBP1Y6de-XjaDkx61sK89iioPad0JpcPmv56cAA>
+    <xme:Aj5xYpkJKR_5WbUY1vs5FfzXdyxAF31_CM-B-s_2vWskVReWo3PyXlbi-3tEZ2Mrk
+    QZ4XiuVC9IrYQ>
+X-ME-Received: <xmr:Aj5xYlbkhKHgfW9rtdS-Bw7V9AaOevoe4Ew19j_Zo2GGwejKkRvi_JUYMayX2JguJR4fHKfKW4B1OJTdtajo3khXo4RR>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejgdejkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvve
+    dvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
+    drtghomh
+X-ME-Proxy: <xmx:Aj5xYsXo5YJ8VJIwfy6Z_tnaSukvBZmzIoG2veha1Lh7B1b4d-mUag>
+    <xmx:Aj5xYjne5PLYxCzoEooJh2NZ9-sHTye5bZaL96dwRpJjbw2cKpYuqA>
+    <xmx:Aj5xYpdwjNas8iWccbS90AF343uwPghE1jsZXp-aGWetDc61tdaVQA>
+    <xmx:Az5xYl6OLfuPgOm26kLGvmwnb7GTtsfsirZWnYMYpdb00Mv6tCashg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 3 May 2022 10:36:50 -0400 (EDT)
+Date:   Tue, 3 May 2022 16:36:48 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Sven Peter <sven@svenpeter.dev>
+Subject: Re: linux-next: manual merge of the usb tree with the usb.current
+ tree
+Message-ID: <YnE+ABsiKpUFbZUo@kroah.com>
+References: <20220426150842.473be40e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220426150842.473be40e@canb.auug.org.au>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,92 +85,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Apr 26, 2022 at 03:08:42PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the usb tree got a conflict in:
+> 
+>   drivers/usb/dwc3/drd.c
+> 
+> between commit:
+> 
+>   ab7aa2866d29 ("usb: dwc3: Try usb-role-switch first in dwc3_drd_init")
+> 
+> from the usb.current tree and commit:
+> 
+>   0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral if extcon is present")
+> 
+> from the usb tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc drivers/usb/dwc3/drd.c
+> index 8cad9e7d3368,f277bebdaa09..000000000000
+> --- a/drivers/usb/dwc3/drd.c
+> +++ b/drivers/usb/dwc3/drd.c
+> @@@ -585,14 -539,11 +539,10 @@@ int dwc3_drd_init(struct dwc3 *dwc
+>   	int ret, irq;
+>   
+>   	if (ROLE_SWITCH &&
+>  -	    device_property_read_bool(dwc->dev, "usb-role-switch")) {
+>  -		ret = dwc3_setup_role_switch(dwc);
+>  -		if (ret < 0)
+>  -			return ret;
+>  -	} else if (dwc->edev) {
+>  +	    device_property_read_bool(dwc->dev, "usb-role-switch"))
+>  +		return dwc3_setup_role_switch(dwc);
+>  +
+> - 	dwc->edev = dwc3_get_extcon(dwc);
+> - 	if (IS_ERR(dwc->edev))
+> - 		return PTR_ERR(dwc->edev);
+> - 
+>  +	if (dwc->edev) {
+>   		dwc->edev_nb.notifier_call = dwc3_drd_notifier;
+>   		ret = extcon_register_notifier(dwc->edev, EXTCON_USB_HOST,
+>   					       &dwc->edev_nb);
 
+This should now be resolved in my tree, thanks!
 
-On Tue, 3 May 2022, Krzysztof Kozlowski wrote:
-
-> On 02/05/2022 18:58, matthew.gerlach@linux.intel.com wrote:
->> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->>
->> Add a device tree for the n6000 instantiation of Agilex
->> Hard Processor System (HPS).
->>
->> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->> ---
->>  arch/arm64/boot/dts/intel/Makefile            |  1 +
->>  .../boot/dts/intel/socfpga_agilex_n6000.dts   | 77 +++++++++++++++++++
->>  2 files changed, 78 insertions(+)
->>  create mode 100644 arch/arm64/boot/dts/intel/socfpga_agilex_n6000.dts
->>
->> diff --git a/arch/arm64/boot/dts/intel/Makefile b/arch/arm64/boot/dts/intel/Makefile
->> index 0b5477442263..1425853877cc 100644
->> --- a/arch/arm64/boot/dts/intel/Makefile
->> +++ b/arch/arm64/boot/dts/intel/Makefile
->> @@ -1,5 +1,6 @@
->>  # SPDX-License-Identifier: GPL-2.0-only
->>  dtb-$(CONFIG_ARCH_INTEL_SOCFPGA) += socfpga_agilex_socdk.dtb \
->>  				socfpga_agilex_socdk_nand.dtb \
->> +				socfpga_agilex_n6000.dtb \
->>  				socfpga_n5x_socdk.dtb
->>  dtb-$(CONFIG_ARCH_KEEMBAY) += keembay-evm.dtb
->> diff --git a/arch/arm64/boot/dts/intel/socfpga_agilex_n6000.dts b/arch/arm64/boot/dts/intel/socfpga_agilex_n6000.dts
->> new file mode 100644
->> index 000000000000..07f5a5983e5c
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/intel/socfpga_agilex_n6000.dts
->> @@ -0,0 +1,77 @@
->> +// SPDX-License-Identifier:     GPL-2.0
->
-> Except what Rob said: remove the indentation before license.
-
-Indentation will be removed.  I noticed my checkpatch.pl execution was 
-failing due to missing python module, git.  I installed the git module, 
-but the script didn't report an error.
-
->
->> +/*
->> + * Copyright (C) 2021-2022, Intel Corporation
->> + */
->> +#include "socfpga_agilex.dtsi"
->> +
->> +/ {
->> +	model = "SoCFPGA Agilex n6000";
->> +
->> +	aliases {
->> +		serial0 = &uart1;
->> +		serial1 = &uart0;
->> +		ethernet0 = &gmac0;
->> +		ethernet1 = &gmac1;
->> +		ethernet2 = &gmac2;
->> +	};
->> +
->> +	chosen {
->> +		stdout-path = "serial0:115200n8";
->> +	};
->> +
->> +	memory {
->> +		device_type = "memory";
->> +		/* We expect the bootloader to fill in the reg */
->> +		reg = <0 0 0 0>;
->> +	};
->> +
->> +	soc {
->> +		clocks {
->> +			osc1 {
->> +				clock-frequency = <25000000>;
->
-> This does not look like SoC property... If it is part of Soc, why it is
-> not provided by clock controller? Where compatible?
->
-> If you intended to override nodes, override by label, not by path.
-
-I will make this change.
-
->
-> Best regards,
-> Krzysztof
->
-
-Thank you for the review.
-
-Matthew
+greg k-h

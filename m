@@ -2,174 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06BEC518585
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 15:33:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A6DA51858F
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 15:33:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236237AbiECNg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 09:36:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54182 "EHLO
+        id S236251AbiECNhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 09:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236204AbiECNgT (ORCPT
+        with ESMTP id S234955AbiECNhD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 09:36:19 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDFC33E84;
-        Tue,  3 May 2022 06:32:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651584767; x=1683120767;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JlxBmqr/aIao9xFMLDsFN5AI8Tah43lYMJLHQyXhOXQ=;
-  b=JSLY7m+aal0ZRO/dki6fRnU+Pc7k3c+Cc/onybqG9yhXKuNR1J8//cYF
-   tM8HfRCnqmwCoMJgqdMEakbdsZk80rmITwBnCIbYK01HI6ZPzP/pzgVMf
-   BikbdEMqyWz/2P1RLqVDFhNoChIdQBVVEK2VsQSK8qhl7coxE6h+/pwbf
-   o2DI6qfDO79/B5cqypY6O8mBzIjz/icKrgslMLTbaDFEuditLfrb4urnd
-   WwTNO1rsmxyJKgcLroo87+x94vT7TPkB2Z1N1ojvt4q6q1QE4GcW0A5Om
-   +Pp9s79bTFL59ZICJ4obuAFBRs6SCtw2Xn9V8YYUZxylammnAvFj8p7KL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="267069472"
-X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
-   d="scan'208";a="267069472"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 06:32:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
-   d="scan'208";a="599070638"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 03 May 2022 06:32:44 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nlsdv-000AUZ-Cs;
-        Tue, 03 May 2022 13:32:43 +0000
-Date:   Tue, 3 May 2022 21:32:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, sean.wang@mediatek.com
-Cc:     kbuild-all@lists.01.org, vkoul@kernel.org, matthias.bgg@gmail.com,
-        dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, nfraprado@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH 1/2] dmaengine: mediatek-cqdma: Add SoC-specific match
- data
-Message-ID: <202205032104.sDnKlXcO-lkp@intel.com>
-References: <20220503105328.54755-2-angelogioacchino.delregno@collabora.com>
+        Tue, 3 May 2022 09:37:03 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35257338BD
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 06:33:31 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E221C1042;
+        Tue,  3 May 2022 06:33:30 -0700 (PDT)
+Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DFC813F774;
+        Tue,  3 May 2022 06:33:28 -0700 (PDT)
+Date:   Tue, 3 May 2022 14:33:22 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Phil Auld <pauld@redhat.com>,
+        Alex Belits <abelits@marvell.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yu Liao <liaoyu15@huawei.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Uladzislau Rezki <uladzislau.rezki@sony.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: Re: [PATCH 10/21] context_tracking: Take idle eqs entrypoints over
+ RCU
+Message-ID: <YnEvIhNVOEDyS6/A@lakrids>
+References: <20220503100051.2799723-1-frederic@kernel.org>
+ <20220503100051.2799723-11-frederic@kernel.org>
+ <YnEL23pd9TDOFvYZ@FVFF77S0Q05N>
+ <20220503114225.GA2799075@lothringen>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220503105328.54755-2-angelogioacchino.delregno@collabora.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220503114225.GA2799075@lothringen>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi AngeloGioacchino,
+On Tue, May 03, 2022 at 01:42:25PM +0200, Frederic Weisbecker wrote:
+> On Tue, May 03, 2022 at 12:02:51PM +0100, Mark Rutland wrote:
+> > Hi Frederic,
+> > 
+> > On Tue, May 03, 2022 at 12:00:40PM +0200, Frederic Weisbecker wrote:
+> > > The RCU dynticks counter is going to be merged into the context tracking
+> > > subsystem. Start with moving the idle extended quiescent states
+> > > entrypoints to context tracking. For now those are dumb redirections to
+> > > existing RCU calls.
+> > 
+> > I was a bit confused looking at this, because that redirection only exists for
+> > CONFIG_CONTEXT_TRACKING, and is empty otherwise.
+> > 
+> > I see this patch makes TREE_RCU select CONTEXT_TRACKING, which means that
+> > works. Since that also means building the rest of the context tracking code, I
+> > think it'd be worth mentioning that in the commit message.
+> 
+> Not exactly, it only builds a minimal version of CONTEXT_TRACKING, which maps
+> to roughly the vanilla RCU-idle code.
+> 
+> The user tracking part (which is the vanilla CONTEXT_TRACKING) now becomes
+> CONFIG_CONTEXT_TRACKING_USER
 
-Thank you for the patch! Perhaps something to improve:
+Ah, sorry. That makes sense to me now!
 
-[auto build test WARNING on vkoul-dmaengine/next]
-[also build test WARNING on v5.18-rc5 next-20220503]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> > Do all architectures which can use TREE_RCU today already support context
+> > tracking? If not, do those work by default?
+> 
+> No need to, the old context tracking becomes CONFIG_CONTEXT_TRACKING_USER
+> which is not needed by TREE_RCU.
+> 
+> Ok you're right, this is all very confusing :o)
+> 
+> Let's clarify this, I'm going to do the following on the next version:
+> 
+> * The current CONFIG_CONTEXT_TRACKING becomes CONFIG_CONTEXT_TRACKING_USER.
+>   This part needs support from the architecture.
+> 
+> * The RCU-idle functions that have been moved to context tracking will become
+>   CONFIG_CONTEXT_TRACKING_IDLE. This part doesn't need support from the
+>   architecture and will be set by TREE_RCU.
+> 
+> Would that look clearer?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/AngeloGioacchino-Del-Regno/MediaTek-Helio-X10-MT6795-CQDMA-driver/20220503-185610
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220503/202205032104.sDnKlXcO-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/1516c04b4553b4a3037e86dada37c202af23e4b3
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review AngeloGioacchino-Del-Regno/MediaTek-Helio-X10-MT6795-CQDMA-driver/20220503-185610
-        git checkout 1516c04b4553b4a3037e86dada37c202af23e4b3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/dma/mediatek/
+I think so, yes!
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+It would also help if the prior commit message could be explicit about
+the end result: After the Kconfig rework both
+CONFIG_CONTEXT_TRACKING_USER and CONFIG_CONTEXT_TRACKING exist, but
+CONFIG_CONTEXT_TRACKING will only used to decide whether to build object
+files with common context tracking logic.
 
-All warnings (new ones prefixed by >>):
-
-   drivers/dma/mediatek/mtk-cqdma.c: In function 'mtk_cqdma_start':
-   drivers/dma/mediatek/mtk-cqdma.c:243:42: error: implicit declaration of function 'to_cqma_dev'; did you mean 'to_cqdma_dev'? [-Werror=implicit-function-declaration]
-     243 |         struct mtk_cqdma_device *cqdma = to_cqma_dev(cvd->ch);
-         |                                          ^~~~~~~~~~~
-         |                                          to_cqdma_dev
->> drivers/dma/mediatek/mtk-cqdma.c:243:42: warning: initialization of 'struct mtk_cqdma_device *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-   drivers/dma/mediatek/mtk-cqdma.c:259:30: error: 'struct mtk_cqdma_device' has no member named 'plat'
-     259 |         mtk_dma_set(pc, cqdma->plat->reg_src2, 0);
-         |                              ^~
-   drivers/dma/mediatek/mtk-cqdma.c:267:30: error: 'struct mtk_cqdma_device' has no member named 'plat'
-     267 |         mtk_dma_set(pc, cqdma->plat->reg_dst2, 0);
-         |                              ^~
-   drivers/dma/mediatek/mtk-cqdma.c: At top level:
-   drivers/dma/mediatek/mtk-cqdma.c:754:54: error: expected '=', ',', ';', 'asm' or '__attribute__' before '{' token
-     754 | static const struct mtk_cqdma_plat_data cqdma_mt6765 {
-         |                                                      ^
-   drivers/dma/mediatek/mtk-cqdma.c:760:59: error: 'cqdma_mt6765' undeclared here (not in a function)
-     760 |         { .compatible = "mediatek,mt6765-cqdma", .data = &cqdma_mt6765 },
-         |                                                           ^~~~~~~~~~~~
-   drivers/dma/mediatek/mtk-cqdma.c: In function 'mtk_cqdma_probe':
-   drivers/dma/mediatek/mtk-cqdma.c:777:14: error: 'struct mtk_cqdma_device' has no member named 'plat'
-     777 |         cqdma->plat = device_get_match_data(&pdev->dev);
-         |              ^~
-   drivers/dma/mediatek/mtk-cqdma.c:778:18: error: 'struct mtk_cqdma_device' has no member named 'plat'
-     778 |         if (cqdma->plat)
-         |                  ^~
-   cc1: some warnings being treated as errors
-
-
-vim +243 drivers/dma/mediatek/mtk-cqdma.c
-
-   239	
-   240	static void mtk_cqdma_start(struct mtk_cqdma_pchan *pc,
-   241				    struct mtk_cqdma_vdesc *cvd)
-   242	{
- > 243		struct mtk_cqdma_device *cqdma = to_cqma_dev(cvd->ch);
-   244	
-   245		/* wait for the previous transaction done */
-   246		if (mtk_cqdma_poll_engine_done(pc, true) < 0)
-   247			dev_err(cqdma2dev(to_cqdma_dev(cvd->ch)), "cqdma wait transaction timeout\n");
-   248	
-   249		/* warm reset the dma engine for the new transaction */
-   250		mtk_dma_set(pc, MTK_CQDMA_RESET, MTK_CQDMA_WARM_RST_BIT);
-   251		if (mtk_cqdma_poll_engine_done(pc, true) < 0)
-   252			dev_err(cqdma2dev(to_cqdma_dev(cvd->ch)), "cqdma warm reset timeout\n");
-   253	
-   254		/* setup the source */
-   255		mtk_dma_set(pc, MTK_CQDMA_SRC, cvd->src & MTK_CQDMA_ADDR_LIMIT);
-   256	#ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
-   257		mtk_dma_set(pc, cqdma->plat->reg_src2, cvd->src >> MTK_CQDMA_ADDR2_SHFIT);
-   258	#else
-   259		mtk_dma_set(pc, cqdma->plat->reg_src2, 0);
-   260	#endif
-   261	
-   262		/* setup the destination */
-   263		mtk_dma_set(pc, MTK_CQDMA_DST, cvd->dest & MTK_CQDMA_ADDR_LIMIT);
-   264	#ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
-   265		mtk_dma_set(pc, cqdma->plat->reg_dst2, cvd->dest >> MTK_CQDMA_ADDR2_SHFIT);
-   266	#else
-   267		mtk_dma_set(pc, cqdma->plat->reg_dst2, 0);
-   268	#endif
-   269	
-   270		/* setup the length */
-   271		mtk_dma_set(pc, MTK_CQDMA_LEN1, cvd->len);
-   272	
-   273		/* start dma engine */
-   274		mtk_dma_set(pc, MTK_CQDMA_EN, MTK_CQDMA_EN_BIT);
-   275	}
-   276	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Mark.

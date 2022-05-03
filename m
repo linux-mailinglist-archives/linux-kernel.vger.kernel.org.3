@@ -2,66 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 245CB517C28
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 05:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A500517C34
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 05:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbiECDLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 23:11:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50486 "EHLO
+        id S230371AbiECDYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 23:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230217AbiECDLt (ORCPT
+        with ESMTP id S230340AbiECDY3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 23:11:49 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905A4387AE
-        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 20:08:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651547298; x=1683083298;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QhCZIg9TqfRkZJDSFzHBxZAoXeT7GzvUzfL6hRZHXoc=;
-  b=bLvaBn6Epi9U+KZ/TAdpiDajqoQVjvffnnoaauBVl1joNIWhAF9aBRLe
-   AlS3t5A6G/+xQ9kjQ3jnqWHVHaN+eH2v4D52VAyqkvdL+r4eS1cN2tjTF
-   P3jsmwuZdRG5dTpaW4FLByR0VUQM2zUkpqfaKpz8wnG8vYsEAkLJ+/z14
-   dP2EKj9zrmpOhc9BDrHG3CBieVAOMGNUeOa2Lrn2yjZslH2H99tJ18YJy
-   T1kVuyGN2N8YY58y9qrF5ZkOr7iwgSqfJVjPt77LDV4DYl59L7L7ZK0cV
-   xMMxzQ6xcqKFetlwkVhryhLnNcWiqNOgboROaeuf/j4yFsi1mX5kZGEAP
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="264976244"
-X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="264976244"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 20:08:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="733744061"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 02 May 2022 20:08:15 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nlita-000A6W-Gk;
-        Tue, 03 May 2022 03:08:14 +0000
-Date:   Tue, 3 May 2022 11:07:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tom Rix <trix@redhat.com>, nsaenz@kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, gregkh@linuxfoundation.org,
-        stefan.wahren@i2se.com, gascoar@gmail.com, ojaswin98@gmail.com
-Cc:     kbuild-all@lists.01.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: Re: [PATCH v2] staging: vchiq_arm: change vchiq_platform_init from
- global to static
-Message-ID: <202205031150.FRdwOUbC-lkp@intel.com>
-References: <20220419133616.544255-1-trix@redhat.com>
+        Mon, 2 May 2022 23:24:29 -0400
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2128F29836;
+        Mon,  2 May 2022 20:20:55 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 539AB41DF4;
+        Tue,  3 May 2022 03:20:51 +0000 (UTC)
+Message-ID: <2615501d-7569-41cb-7039-46e690689f1f@marcan.st>
+Date:   Tue, 3 May 2022 12:20:48 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220419133616.544255-1-trix@redhat.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: es-ES
+From:   Hector Martin <marcan@marcan.st>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>,
+        PCI <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220502093832.32778-1-marcan@marcan.st>
+ <20220502093832.32778-4-marcan@marcan.st>
+ <CAL_Jsq+_cWZUXtJVXC_cwhmADj0NQc95v1sqgFioMsfEX6OqGg@mail.gmail.com>
+ <0ccc44cd-21aa-3670-24b3-4ee051dd3c12@marcan.st>
+Subject: Re: [PATCH 3/3] PCI: apple: Add support for optional PWREN GPIO
+In-Reply-To: <0ccc44cd-21aa-3670-24b3-4ee051dd3c12@marcan.st>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,73 +55,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tom,
+On 03/05/2022 00.32, Hector Martin wrote:
+> On 03/05/2022 00.14, Rob Herring wrote:
+>> On Mon, May 2, 2022 at 4:39 AM Hector Martin <marcan@marcan.st> wrote:
+>>>
+>>> WiFi and SD card devices on M1 Macs have a separate power enable GPIO.
+>>> Add support for this to the PCIe controller. This is modeled after how
+>>> pcie-fu740 does it.
+>>
+>> It did, but it's not ideal really. The problem is the GPIO is really
+>> associated with the device (WiFi/SD) rather than the PCI host and
+>> therefore should be part of a WiFi or SD node. You probably don't have
+>> one (yet), but I would suspect that SD will need one for all the
+>> standard MMC/SD DT properties. The secondary issue is we'll end up
+>> adding more power sequencing properties to control ordering and timing
+>> for different devices. The exception here is standard PCI slot
+>> properties like perst#, clkreq, and standard voltage rails can go in
+>> the host bridge (and for new bindings, those should really be in the
+>> root port node). For a complicated example, see Hikey960 or 970.
+>>
+>> Of course with power control related properties there's a chicken or
+>> egg issue that the PCI device is not discoverable until the device is
+>> powered on. This issue comes up over and over with various hacky
+>> solutions in the bindings. The PCI subsystem needs to solve this. My
+>> suggestion is that if the firmware says there is a device on the bus
+>> and it wasn't probed, then we should force probing (or add a pre-probe
+>> hook for drivers). That is what MDIO bus does for example.
+>>
+> 
+> I agree with the premise. Right now macOS does not actually power down
+> these devices as far as I know (except maybe sleep mode? not sure what
+> goes on then yet), but I think the hardware actually has an SD card
+> detect GPIO hookup that would allow us to entirely power down the SD
+> controller when no card is inserted. That would obviously be ideal.
+> 
+> FWIW, we do have the device nodes downstream [1]. I did in fact have to
+> add the SD one for the CD/WP inversion flags (and had to add driver
+> support for that too).
+> 
+> That said, as for how to make this happen in the PCI subsystem
+> properly... I think I'll defer to the maintainers' opinion there before
+> trying to hack something up ;)
+> 
+> Meanwhile, I guess I better get PCIe hotplug working, since doing it in
+> the driver isn't going to work without that first...
+> 
+> [1]
+> https://github.com/AsahiLinux/linux/blob/bits/000-devicetree/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi#L222
 
-I love your patch! Perhaps something to improve:
+Thinking about this some more, I think it still makes sense to have the
+power enable GPIO in the PCI root port node. A generic power enable GPIO
+still makes sense there (think "slot power"). The PCI core could handle
+it properly by default, including turning it on prior to initial probing
+and shutting it down when the device should go into whatever the PCI
+core's idea of D3cold is. AIUI this already happens on some platforms
+via firmware, right? Since D3cold is supposed to be a state where the
+device receives no power after all.
 
-[auto build test WARNING on staging/staging-testing]
+Obviously this can't handle funky power sequencing requirements, but we
+don't have any of those here and we don't know if we ever will (at least
+Apple seems to be a fan of throwing little CPLDs on their boards for
+fine grained power sequencing, driven by a single IO). If we do, then
+that would be the time to have GPIOs in the device node.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tom-Rix/staging-vchiq_arm-change-vchiq_platform_init-from-global-to-static/20220419-213849
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git bed6d200f8ca38e1ecbdd8fb7e0564884002abd1
-config: openrisc-buildonly-randconfig-r003-20220501 (https://download.01.org/0day-ci/archive/20220503/202205031150.FRdwOUbC-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/36525447e8cdf4a25d5217bffc548768c0f7cec1
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Tom-Rix/staging-vchiq_arm-change-vchiq_platform_init-from-global-to-static/20220419-213849
-        git checkout 36525447e8cdf4a25d5217bffc548768c0f7cec1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=openrisc SHELL=/bin/bash drivers/staging/vc04_services/
+In addition, sometimes a single power enable is shared between multiple
+functions of one device. This is the case with WiFi/BT, which is a combo
+chip with two functions. Coordinating GPIO usage between both drivers
+would be problematic if they both try to own it.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The individual device drivers still need to have some kind of API to be
+able to put devices into a low-power state. For example, the WiFi driver
+could outright power down the device when it is wholly unused and the
+interface is down (same for BT, and the PCI core should only put the
+slot GPIO into powerdown if both functions say they should be off).
+Similarly, the SD driver needs to support an external SD detect GPIO,
+and have a mode where it tells the PCI core to shut down the device when
+no SD is inserted, and power it back up on insertion. This all allows
+the devices to behave a users might expect, with the device nodes
+existing and the PCI devices "visible" even when they are powered down
+behind the scenes, until they are needed. AIUI this is already how e.g.
+hybrid graphics power management works, where power is outright yanked
+from the secondary card when it is not needed even though it is still
+visible from the userspace point of view (and it is automatically
+powered and reinitialized on use).
 
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c:16:
-   In function 'memcpy_to_page',
-       inlined from 'free_pagelist' at drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c:434:4:
->> include/linux/highmem.h:353:9: warning: argument 2 null where non-null expected [-Wnonnull]
-     353 |         memcpy(to + offset, from, len);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/string.h:20,
-                    from include/linux/bitmap.h:11,
-                    from include/linux/cpumask.h:12,
-                    from include/linux/mm_types_task.h:14,
-                    from include/linux/mm_types.h:5,
-                    from include/linux/buildid.h:5,
-                    from include/linux/module.h:14,
-                    from drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c:8:
-   drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c: In function 'free_pagelist':
-   arch/openrisc/include/asm/string.h:9:14: note: in a call to function 'memcpy' declared 'nonnull'
-       9 | extern void *memcpy(void *dest, __const void *src, __kernel_size_t n);
-         |              ^~~~~~
-   In file included from drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c:16:
-   In function 'memcpy_to_page',
-       inlined from 'free_pagelist' at drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c:441:4:
->> include/linux/highmem.h:353:9: warning: 'memcpy' offset 0 is out of the bounds [0, 0] [-Warray-bounds]
-     353 |         memcpy(to + offset, from, len);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +353 include/linux/highmem.h
-
-bb90d4bc7b6a53 Ira Weiny         2021-02-09  346  
-bb90d4bc7b6a53 Ira Weiny         2021-02-09  347  static inline void memcpy_to_page(struct page *page, size_t offset,
-bb90d4bc7b6a53 Ira Weiny         2021-02-09  348  				  const char *from, size_t len)
-bb90d4bc7b6a53 Ira Weiny         2021-02-09  349  {
-61b205f579911a Ira Weiny         2021-02-09  350  	char *to = kmap_local_page(page);
-bb90d4bc7b6a53 Ira Weiny         2021-02-09  351  
-ca18f6ea012bf3 Ira Weiny         2021-02-10  352  	VM_BUG_ON(offset + len > PAGE_SIZE);
-bb90d4bc7b6a53 Ira Weiny         2021-02-09 @353  	memcpy(to + offset, from, len);
-8dad53a11f8d94 Christoph Hellwig 2021-07-23  354  	flush_dcache_page(page);
-61b205f579911a Ira Weiny         2021-02-09  355  	kunmap_local(to);
-bb90d4bc7b6a53 Ira Weiny         2021-02-09  356  }
-bb90d4bc7b6a53 Ira Weiny         2021-02-09  357  
+I'm not super familiar with PCI device power states (making brcmfmac
+sleep work properly on these platforms is on my TODO list...) so I'd
+love to get some feedback from the PCI folks on what they think about
+this whole issue.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

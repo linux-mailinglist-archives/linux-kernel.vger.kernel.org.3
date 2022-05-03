@@ -2,125 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BEDD517B8E
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 03:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08E20517B68
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 03:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbiECBQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 2 May 2022 21:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41004 "EHLO
+        id S229800AbiECBNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 2 May 2022 21:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiECBPy (ORCPT
+        with ESMTP id S229831AbiECBNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 2 May 2022 21:15:54 -0400
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163A6E0B;
-        Mon,  2 May 2022 18:12:22 -0700 (PDT)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-e5ca5c580fso15924979fac.3;
-        Mon, 02 May 2022 18:12:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5c3nAib//d7xQj9e0trcxqkLomABnHAZMncp89e42Vk=;
-        b=RzPe4mW6UvjsWb8wB2rnP6OM7EFkyN2oIZxAZ9gfvYBnfZ15lH96wxf2oqSwAEojU/
-         1964ARH6fUomxY+udKQ71of4k4aoMceb6J7RPePU++wyYxBCkwIVVmPYwbFPApyDbhxL
-         TkCEqvCUq8QWF2f5QMuXOE29y3FvjOkQbuTk44+AazstrV6i4bKhfMNwXH1a03TGTLMH
-         vS6atRJhUJ9fK7P2f96z8Vd4dGnNr6HxRFUyg0G/7TLwypei+eabQXlD8UGt9SwAM6zP
-         i1RXmMcMpZkzfMcIBeNZHdQZYgJZNXc1czHboiBEjwU8QFvYtj0/9ZAAqzEdVGPrAIgj
-         DUcA==
-X-Gm-Message-State: AOAM5315j+7kt7ke0Es4YdD7QLe+EYgdjO+28pPSLEKjQfYYloMiojfW
-        EMEXLVS/dSSiYZIFmdCItzl5pqcvBw==
-X-Google-Smtp-Source: ABdhPJx+ieV44C6Sc1L8qds7KFaA1+S433NOiO+oyUItpFP/Y6bCudwTRDB/qJEY8XUvWl81tJHDnw==
-X-Received: by 2002:a05:6870:434d:b0:e5:9115:cb15 with SMTP id x13-20020a056870434d00b000e59115cb15mr841105oah.53.1651539548285;
-        Mon, 02 May 2022 17:59:08 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m63-20020aca5842000000b00325cda1ff9esm2892865oib.29.2022.05.02.17.59.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 17:59:07 -0700 (PDT)
-Received: (nullmailer pid 2159671 invoked by uid 1000);
-        Tue, 03 May 2022 00:59:07 -0000
-Date:   Mon, 2 May 2022 19:59:07 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     frowand.list@gmail.com
-Cc:     Slawomir Stepien <slawomir.stepien@nokia.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        linux-kernel@vger.kernel.org, Slawomir Stepien <sst@poczta.fm>,
-        pantelis.antoniou@konsulko.com, devicetree@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: Re: [PATCH v2 3/3] of: overlay: do not free changeset when
- of_overlay_apply returns error
-Message-ID: <YnB+W6u5dL44vEBL@robh.at.kernel.org>
-References: <20220502181742.1402826-1-frowand.list@gmail.com>
- <20220502181742.1402826-4-frowand.list@gmail.com>
+        Mon, 2 May 2022 21:13:04 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FD759976
+        for <linux-kernel@vger.kernel.org>; Mon,  2 May 2022 18:09:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651540164; x=1683076164;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xcX7ZSUlfJN5lM63F+DM0r69oVAMDHJEKRwiRlW4Bp8=;
+  b=mAz0Eg0JK6kPg5FnqUXIcnvCK6Q71FflojB1XM0u5CPaqgVHbovSL7oG
+   cGImK5csttMbBSszOycgeCvQyYQ4l54mA3qzToCVW2UEV03Jp7jakO0K8
+   LdhkxTX/R1YlOYaU2Gx3XrIi/Gl2M8UjB6IXPb2Rk0QFLv0kbPpsqRX4z
+   XBMvltifxg0laXIWq9ujXnWs7pThuJA5uzJcFvktb0mFssTGfwDeZIQxa
+   waq2KU0rbjL3NEVzha65gZ+Sb2a7qW2tKQeh1Oaviieh7CMbw52R1mnBl
+   ad1JNlZuPwpu6jHUSoKDfgqFe1WWVMmOThXdVbXtj8/MxTd2ZbUWbgxy5
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="267246251"
+X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
+   d="scan'208";a="267246251"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 18:06:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
+   d="scan'208";a="546827160"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 02 May 2022 18:06:09 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nlgzQ-000A1r-JU;
+        Tue, 03 May 2022 01:06:08 +0000
+Date:   Tue, 3 May 2022 09:05:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 3/3] drm: Allow simpledrm to setup its emulated FB as
+ firmware provided
+Message-ID: <202205030810.VwAEOAqj-lkp@intel.com>
+References: <20220502153900.408522-4-javierm@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220502181742.1402826-4-frowand.list@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220502153900.408522-4-javierm@redhat.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 02 May 2022 13:17:42 -0500, frowand.list@gmail.com wrote:
-> From: Frank Rowand <frank.rowand@sony.com>
-> 
-> New unittests for overlay notifiers reveal a memory leak in
-> of_overlay_apply() when a notifier returns an error for action
-> OF_OVERLAY_POST_APPLY.  The pr_err() message is:
-> 
->    OF: ERROR: memory leak, expected refcount 1 instead of 3,
->    of_node_get()/of_node_put() unbalanced - destroy cset entry: attach
->    overlay node /testcase-data/overlay-node/test-bus/test-unittest17
-> 
-> Change the error path to no longer call free_overlay_changeset(),
-> and document that the caller of of_overlay_fdt_apply() may choose
-> to remove the overlay.
-> 
-> Update the unittest that triggered the error to expect the changed
-> return values and to call of_overlay_remove().
-> 
-> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
-> ---
-> Changes since version 1:
->   - patch 1/1 v1 did not apply on Rob's dt/next branch, rebase on top of
->     5f756a2eaa44 of: overlay: do not break notify on NOTIFY_{OK|STOP}
-> 
-> Output of the new overlay notifier unittests, as filtered by
-> scripts/dtc/of_unittest_expect:
-> 
->    ### dt-test ### pass of_unittest_overlay_notify():2825
-> ok OF: overlay: overlay changeset pre-apply notifier error -16, target: /testcase-data/overlay-node/test-bus
->    ### dt-test ### pass of_unittest_overlay_notify():2846
->    ### dt-test ### pass of_unittest_overlay_notify():2851
-> ok OF: overlay: overlay changeset post-apply notifier error -17, target: /testcase-data/overlay-node/test-bus
->    ### dt-test ### pass of_unittest_overlay_notify():2857
->    ### dt-test ### pass of_unittest_overlay_notify():2862
->    ### dt-test ### pass of_unittest_overlay_notify():2866
->    ### dt-test ### pass of_unittest_overlay_notify():2872
->    ### dt-test ### pass of_unittest_overlay_notify():2875
-> ok OF: overlay: overlay changeset pre-remove notifier error -18, target: /testcase-data/overlay-node/test-bus
->    ### dt-test ### pass of_unittest_overlay_notify():2886
->    ### dt-test ### pass of_unittest_overlay_notify():2894
->    ### dt-test ### pass of_unittest_overlay_notify():2898
->    ### dt-test ### pass of_unittest_overlay_notify():2901
-> ok OF: overlay: overlay changeset post-remove notifier error -19, target: /testcase-data/overlay-node/test-bus
->    ### dt-test ### pass of_unittest_overlay_notify():2908
->    ### dt-test ### pass of_unittest_overlay_notify():2915
->    ### dt-test ### pass of_unittest_overlay_notify():2920
->    ### dt-test ### pass of_unittest_overlay_notify():2932
-> 
-> 
->  drivers/of/overlay.c  | 29 ++++++++++++++++++++++++++---
->  drivers/of/unittest.c | 10 ++++++++--
->  2 files changed, 34 insertions(+), 5 deletions(-)
-> 
+Hi Javier,
 
-Applied, thanks!
+I love your patch! Yet something to improve:
+
+[auto build test ERROR on drm/drm-next]
+[also build test ERROR on shawnguo/for-next linus/master linux/master v5.18-rc5 next-20220502]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Javier-Martinez-Canillas/drm-Allow-simpledrm-to-setup-its-emulated-FB-as-firmware-provided/20220502-234145
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: x86_64-randconfig-a011 (https://download.01.org/0day-ci/archive/20220503/202205030810.VwAEOAqj-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/28ef46724e385165777a21d9f661188fa2577a1e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Javier-Martinez-Canillas/drm-Allow-simpledrm-to-setup-its-emulated-FB-as-firmware-provided/20220502-234145
+        git checkout 28ef46724e385165777a21d9f661188fa2577a1e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/gpu/drm/tiny/simpledrm.c: In function 'simpledrm_probe':
+>> drivers/gpu/drm/tiny/simpledrm.c:904:38: error: implicit declaration of function 'DRM_FB_SET_OPTION'; did you mean 'DRM_FB_GET_OPTION'? [-Werror=implicit-function-declaration]
+     904 |         drm_fbdev_generic_setup(dev, DRM_FB_SET_OPTION(DRM_FB_FW, 1));
+         |                                      ^~~~~~~~~~~~~~~~~
+         |                                      DRM_FB_GET_OPTION
+>> drivers/gpu/drm/tiny/simpledrm.c:904:56: error: 'DRM_FB_FW' undeclared (first use in this function)
+     904 |         drm_fbdev_generic_setup(dev, DRM_FB_SET_OPTION(DRM_FB_FW, 1));
+         |                                                        ^~~~~~~~~
+   drivers/gpu/drm/tiny/simpledrm.c:904:56: note: each undeclared identifier is reported only once for each function it appears in
+   cc1: some warnings being treated as errors
+
+
+vim +904 drivers/gpu/drm/tiny/simpledrm.c
+
+   884	
+   885	/*
+   886	 * Platform driver
+   887	 */
+   888	
+   889	static int simpledrm_probe(struct platform_device *pdev)
+   890	{
+   891		struct simpledrm_device *sdev;
+   892		struct drm_device *dev;
+   893		int ret;
+   894	
+   895		sdev = simpledrm_device_create(&simpledrm_driver, pdev);
+   896		if (IS_ERR(sdev))
+   897			return PTR_ERR(sdev);
+   898		dev = &sdev->dev;
+   899	
+   900		ret = drm_dev_register(dev, 0);
+   901		if (ret)
+   902			return ret;
+   903	
+ > 904		drm_fbdev_generic_setup(dev, DRM_FB_SET_OPTION(DRM_FB_FW, 1));
+   905	
+   906		return 0;
+   907	}
+   908	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,91 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEBA45181B8
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 11:53:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C40A25181BD
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 11:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233829AbiECJ4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 05:56:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42444 "EHLO
+        id S233822AbiECJ5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 05:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233811AbiECJ4b (ORCPT
+        with ESMTP id S233360AbiECJ5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 05:56:31 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073CE34B99;
-        Tue,  3 May 2022 02:52:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1651571578; x=1683107578;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Iy7Cqe1rd4eJUoJHEF/V0I7xBTknOl4DOUWOohz8XY8=;
-  b=dWxD6hHsBrz9hyUDUPlPRem/iD2PhSE3xdREPuMW1Bq1M6wzAjDOPBZU
-   yyV8uhSODx0ZXUo2kZEk+AgoBpdWqr7uhQ872wckPP+6px9FnKrxdiY3o
-   hc2MTMLIdLXebB7Zb+9NKM/DNJy6yJUoV1mS0NNEuaiaEqX54e59DxNex
-   hKX8utuxkrcV+RkxtPiN2r8Pqvod1/La/Z4PM4ksu0yMumJO55fL8kHHG
-   vL0OVKRQJtPbAdkTsirsNZIxzk3NLaeOay8Rc5Sd1TDtsFsJ2a6EoViIB
-   Oyut7aw7W6Tmop82vPQnK6d/s8e04lwy2H0vI/BNHbJn+gZinwadPcPXm
+        Tue, 3 May 2022 05:57:08 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C2E34673
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 02:53:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651571616; x=1683107616;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TdFqykA+gKoHJrHd9Cgv0XtmSt0fWi5xch5YYCr32hE=;
+  b=TjJ8qTJT9zojZkXQMPrCuk5YehwCkOqTzT6SX3aoo6X+tsX2C4d0HDbh
+   18IiyyNwkGfWO4oFtOUZMEOKfJ81+/jRhCP7vMarqlT0Ez1yNDwDkISlC
+   ASjGCn1G87lfcERRpX+PGyWVzGur7fSOca2HXHuW/NUrCohZOb5HTsCgS
+   m4OXmBP9UUUhG2Vx7bpNANom3TdiFmH7vTjM0u6EVTTHNWelDtcXh3L8b
+   C9l9ivHITEWrkAYxrEMrWneV/kXGikWk4dO3cv0y5wDVuP9hj2EU4KOeK
+   wPOkhNEIHXefGFvTe+JCYh6k7jpTA3Clq8N0BWPcI67n841cNJOcu1/iv
    g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="267032990"
 X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
-   d="scan'208";a="171747261"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 May 2022 02:52:58 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 3 May 2022 02:52:57 -0700
-Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Tue, 3 May 2022 02:52:45 -0700
-From:   Eugen Hristev <eugen.hristev@microchip.com>
-To:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-media@vger.kernel.org>, <hverkuil@xs4all.nl>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <claudiu.beznea@microchip.com>, <nicolas.ferre@microchip.com>,
-        <jacopo@jmondi.org>, Eugen Hristev <eugen.hristev@microchip.com>
-Subject: [PATCH v10 5/5] ARM: multi_v7_defconfig: add atmel video pipeline modules
-Date:   Tue, 3 May 2022 12:51:27 +0300
-Message-ID: <20220503095127.48710-6-eugen.hristev@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220503095127.48710-1-eugen.hristev@microchip.com>
-References: <20220503095127.48710-1-eugen.hristev@microchip.com>
+   d="scan'208";a="267032990"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 02:53:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
+   d="scan'208";a="888400435"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 03 May 2022 02:53:35 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nlpDq-000ALr-MU;
+        Tue, 03 May 2022 09:53:34 +0000
+Date:   Tue, 3 May 2022 17:53:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] gpio: fix platform_no_drv_owner.cocci warnings
+Message-ID: <YnD7kXLD1CZmHs3b@f0fda554a4b9>
+References: <202205031706.nUBZtKaH-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202205031706.nUBZtKaH-lkp@intel.com>
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add drivers for the atmel video capture pipeline: atmel isc, xisc and
-microchip csi2dc.
+From: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+drivers/gpio/gpio-macsmc.c:230:3-8: No need to set .owner here. The core will do it.
+
+ Remove .owner field if calls are used which set it automatically
+
+Generated by: scripts/coccinelle/api/platform_no_drv_owner.cocci
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
 ---
- arch/arm/configs/multi_v7_defconfig | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index 6e0c8c19b35c..621bd1cbaf7c 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -662,7 +662,10 @@ CONFIG_VIDEO_S5P_MIPI_CSIS=m
- CONFIG_VIDEO_EXYNOS_FIMC_LITE=m
- CONFIG_VIDEO_EXYNOS4_FIMC_IS=m
- CONFIG_VIDEO_RCAR_VIN=m
-+CONFIG_VIDEO_ATMEL_ISC=m
-+CONFIG_VIDEO_ATMEL_XISC=m
- CONFIG_VIDEO_ATMEL_ISI=m
-+CONFIG_VIDEO_MICROCHIP_CSI2DC=m
- CONFIG_V4L_MEM2MEM_DRIVERS=y
- CONFIG_VIDEO_SAMSUNG_S5P_JPEG=m
- CONFIG_VIDEO_SAMSUNG_S5P_MFC=m
--- 
-2.25.1
+tree:   https://github.com/AsahiLinux/linux bits/110-smc
+head:   dc3db43287ff1d44b447fff8ed6386b28b339f1c
+commit: a29b7d982f099846c00493140bbf5b6aff25c948 [3/14] gpio: Add new gpio-macsmc driver for Apple Macs
+:::::: branch date: 26 hours ago
+:::::: commit date: 27 hours ago
 
+ drivers/gpio/gpio-macsmc.c |    1 -
+ 1 file changed, 1 deletion(-)
+
+--- a/drivers/gpio/gpio-macsmc.c
++++ b/drivers/gpio/gpio-macsmc.c
+@@ -227,7 +227,6 @@ static int macsmc_gpio_probe(struct plat
+ static struct platform_driver macsmc_gpio_driver = {
+ 	.driver = {
+ 		.name = "macsmc-gpio",
+-		.owner = THIS_MODULE,
+ 	},
+ 	.probe = macsmc_gpio_probe,
+ };

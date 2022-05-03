@@ -2,60 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F4C5180DB
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 11:19:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9EA95180E3
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 11:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233362AbiECJXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 05:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54770 "EHLO
+        id S233423AbiECJYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 05:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233317AbiECJXE (ORCPT
+        with ESMTP id S233384AbiECJXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 05:23:04 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 956E01FCD5
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 02:19:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651569572; x=1683105572;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xJctIF8PxvmuprZA7iQtJmbIrvppS9aODAGy8PlH6SQ=;
-  b=fXS5PcysxiOAOfOqPMnrncFfJEDUWUP61LH1IKRnBxudSe/8IVmZfZWA
-   EQccw6WLc0rJed0dCWXExQsTFaRX+zxwMx7AewoYvI+jdQV8tUq7CN+Fd
-   PpXplnA/VC5n3N5xuTSDGYjJDv/iGTR2KnZ9DW4kSrQqQLdX2myXFWpz3
-   GaruJHPbz2qvZq/dhVpYhYBKDOGSITrYqBwnF2t/tHVHjFoxfxc1jRrGa
-   1cGg62KU4yQVVrvjvjgUlRdbMSR0aJZu+VC1lOA98EonbgiQq4W/E7lBa
-   Ot05GPbNNhKJ1mrznDKqQUVnq/VV3zRysTu6Pp3b1IndvESv1xbzvk9Dz
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="247342854"
-X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
-   d="scan'208";a="247342854"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 02:19:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
-   d="scan'208";a="547301360"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 03 May 2022 02:19:30 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nlogr-000AKC-Qb;
-        Tue, 03 May 2022 09:19:29 +0000
-Date:   Tue, 3 May 2022 17:19:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [asahilinux:bits/080-wifi 22/28]
- drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:4075:42: sparse:
- sparse: incorrect type in assignment (different base types)
-Message-ID: <202205031736.gRzjuzo3-lkp@intel.com>
+        Tue, 3 May 2022 05:23:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0E42FB;
+        Tue,  3 May 2022 02:20:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 30E12B81BE1;
+        Tue,  3 May 2022 09:20:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E7A45C385B1;
+        Tue,  3 May 2022 09:20:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651569612;
+        bh=EyqTsj+EFSH0FDi1wlRyfZ3SuBunmGQ6/GwrNH9g75M=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=b5QnscaClWg8zHPBXgBLJAKzBa6tXlrPYMROQAcwl3fkUGZRMGULpFcIOYzRFAEtu
+         7OGlmXds2MgCMgvnpYhjgIQjK9LprrtwxrQ2k9jB5eQNnkL6RA5K+Z/LRdU3zphBEj
+         vyJS3woxYsukryJwQqTTBcf3LzY7tDdWzPW4ksTwUvgE+0XBVhzVZTmz7NQb5Pzzjt
+         Qqrcen7RnzioE9OgtG+VnpDUImnRcMzKhcG/t+YfDd7wHb0j3K60DKlMEpsMNjXYVY
+         W56X4jZ41T5K8pC3jYgAhq/pZFNYik2Z1bV9M5W8fkKVQmdXDgZ6SmdFOgvwoT0dr1
+         M1dh+q0OgMuvA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C8616E6D402;
+        Tue,  3 May 2022 09:20:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v3 0/2] emaclite: improve error handling and minor cleanup
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165156961181.14392.1143841142923055391.git-patchwork-notify@kernel.org>
+Date:   Tue, 03 May 2022 09:20:11 +0000
+References: <1651476470-23904-1-git-send-email-radhey.shyam.pandey@xilinx.com>
+In-Reply-To: <1651476470-23904-1-git-send-email-radhey.shyam.pandey@xilinx.com>
+To:     Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        michal.simek@xilinx.com, andrew@lunn.ch, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, git@xilinx.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,86 +58,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/080-wifi
-head:   a61fbffc5fad05fe49dfd9a09b3c2482ac250d46
-commit: 02dc276155c1728343ebf406ab567b56d3891f19 [22/28] brcmfmac: cfg80211: Add support for PMKID_V3 operations
-config: mips-randconfig-s032-20220501 (https://download.01.org/0day-ci/archive/20220503/202205031736.gRzjuzo3-lkp@intel.com/config)
-compiler: mipsel-linux-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/AsahiLinux/linux/commit/02dc276155c1728343ebf406ab567b56d3891f19
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/080-wifi
-        git checkout 02dc276155c1728343ebf406ab567b56d3891f19
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips SHELL=/bin/bash drivers/net/wireless/broadcom/brcm80211/brcmfmac/
+Hello:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This series was applied to netdev/net.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
+On Mon, 2 May 2022 12:57:48 +0530 you wrote:
+> This patchset does error handling for of_address_to_resource() and also
+> removes "Don't advertise 1000BASE-T" and auto negotiation.
+> 
+> Changes for v3:
+> - Resolve git apply conflicts for 2/2 patch.
+> 
+> Changes for v2:
+> - Added Andrew's reviewed by tag in 1/2 patch.
+> - Move ret to down to align with reverse xmas tree style in 2/2 patch.
+> - Also add fixes tag in 2/2 patch.
+> - Specify tree name in subject prefix.
+> 
+> [...]
 
-sparse warnings: (new ones prefixed by >>)
-   command-line: note: in included file:
-   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQUIRE redefined
-   builtin:0:0: sparse: this was the original definition
-   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_SEQ_CST redefined
-   builtin:0:0: sparse: this was the original definition
-   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQ_REL redefined
-   builtin:0:0: sparse: this was the original definition
-   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_RELEASE redefined
-   builtin:0:0: sparse: this was the original definition
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1087:28: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le16 [usertype] version @@     got int @@
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1087:28: sparse:     expected restricted __le16 [usertype] version
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1087:28: sparse:     got int
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1149:38: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [usertype] scan_type @@     got int @@
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1149:38: sparse:     expected restricted __le32 [usertype] scan_type
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:1149:38: sparse:     got int
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:790:30: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned char [usertype] scan_type @@     got restricted __le32 [usertype] scan_type @@
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:790:30: sparse:     expected unsigned char [usertype] scan_type
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:790:30: sparse:     got restricted __le32 [usertype] scan_type
->> drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:4075:42: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [usertype] time_left @@     got unsigned int @@
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:4075:42: sparse:     expected restricted __le32 [usertype] time_left
-   drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c:4075:42: sparse:     got unsigned int
+Here is the summary with links:
+  - [net,v3,1/2] net: emaclite: Don't advertise 1000BASE-T and do auto negotiation
+    https://git.kernel.org/netdev/net/c/b800528b97d0
+  - [net,v3,2/2] net: emaclite: Add error handling for of_address_to_resource()
+    https://git.kernel.org/netdev/net/c/7a6bc33ab549
 
-vim +4075 drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
-
-  4053	
-  4054	static s32
-  4055	brcmf_pmksa_v3_op(struct brcmf_if *ifp, struct cfg80211_pmksa *pmksa,
-  4056			  bool alive)
-  4057	{
-  4058		struct brcmf_pmk_op_v3_le *pmk_op;
-  4059		int length = offsetof(struct brcmf_pmk_op_v3_le, pmk);
-  4060		int ret;
-  4061	
-  4062		pmk_op = kzalloc(sizeof(*pmk_op), GFP_KERNEL);
-  4063		pmk_op->version = cpu_to_le16(BRCMF_PMKSA_VER_3);
-  4064	
-  4065		if (!pmksa) {
-  4066			/* Flush operation, operate on entire list */
-  4067			pmk_op->count = cpu_to_le16(0);
-  4068		} else {
-  4069			/* Single PMK operation */
-  4070			pmk_op->count = cpu_to_le16(1);
-  4071			length += sizeof(struct brcmf_pmksa_v3);
-  4072			memcpy(pmk_op->pmk[0].bssid, pmksa->bssid, ETH_ALEN);
-  4073			memcpy(pmk_op->pmk[0].pmkid, pmksa->pmkid, WLAN_PMKID_LEN);
-  4074			pmk_op->pmk[0].pmkid_len = WLAN_PMKID_LEN;
-> 4075			pmk_op->pmk[0].time_left = alive ? BRCMF_PMKSA_NO_EXPIRY : 0;
-  4076		}
-  4077	
-  4078		pmk_op->length = cpu_to_le16(length);
-  4079	
-  4080		ret = brcmf_fil_iovar_data_set(ifp, "pmkid_info", pmk_op, sizeof(*pmk_op));
-  4081		kfree(pmk_op);
-  4082		return ret;
-  4083	}
-  4084	
-
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

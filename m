@@ -2,456 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD647518BE6
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 20:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C32C518BEB
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 20:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241010AbiECSLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 14:11:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60368 "EHLO
+        id S241033AbiECSLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 14:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238979AbiECSK4 (ORCPT
+        with ESMTP id S240965AbiECSLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 14:10:56 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249193EAAA
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 11:07:22 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id e3so16085502ios.6
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 11:07:22 -0700 (PDT)
+        Tue, 3 May 2022 14:11:30 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73293EAAB
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 11:07:54 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id g6so34986569ejw.1
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 11:07:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=mOzLpToeNi7cqdxC84EYcmPTEFP0phVGBwbe66P0P1U=;
-        b=dnkDAWnTkeTj61Zet+oK6f7ii3U29sPVoBa36qZn/k4Z7cGL0eMVzu6Dg9jmKT87FC
-         0YQxOe3ZEy7XVvtzMKmGQP4KTHmTX4yhcWh+nZNzJ5Od8CqCWt2acfk0K9jexvJl5P+g
-         1PYiCdrAHAlsEReKwAqQ1Jx2rCZ8IddDVizM4=
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=CAlYiIhh6pgNH2aA5Z1WYg+YY5VaTEuIKmdxG9INjP0=;
+        b=Kh1WAjKn9+eoDulUuBkXOif8gJJyDVzvosxRo04NXHiWzAxo49XgCSb71PzbDS/+Jh
+         gY//JhkQdnLdfiWgeNdqNuoCJ1p/SVZEsChjhDaT6jrzArLylfd/+nIiZBFzRAitVWvU
+         EVh+YVCgJzObQhazQTV7X29ZQCAgZHg/fXcvggmB1KDYtT93t/YY0jWjKJcE/RBoeA+w
+         Al4k1lkX3JbUU8dHDrtuHIr7drhMg0QxTd+gzfAadmNsMK9XlpgndsLZJtdJqCHQtIwS
+         ozPBW+jKST3wAOfbWyvLxLh84Stnyn3WC5d5jmt26oyawsuvlNkRatwJZdVmQcDRe+L4
+         153w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=mOzLpToeNi7cqdxC84EYcmPTEFP0phVGBwbe66P0P1U=;
-        b=YxbLJUhuz9Xj97kw7IAIQa4VrTpQqOLWcEL3Y8d7MZbb8CieIDZHs9FHu9cH+OjcWC
-         kVSAaMfwdMQOuCrhtDz6hQvdX/MWOBkGinAcIjRoxMpdTRBVfW4Y5DngHF8iI3ff8lPV
-         kVhk67udQFrZxx7RIglIdSi+ED2mwbvCW7WImiZmD72btwZhH0WxGLzAQtxZXaTyRwYG
-         L5noMCfSIuQ0FM306d/0pv5mQ2Pk9PfjKUeomJ1/7DHnsTiJIDLthCH/ysh4JC++qzqg
-         DV3u4+XwcyDkTJ/B/z7BI4w2ZPIoVaWV17MK8XEND50BG8E0oGoYBiHqFaVtjyc51sex
-         kFDQ==
-X-Gm-Message-State: AOAM532E1UHh/IACAScyVlJCYsA5e6cCJartUhrr9NyQaWx6E9BdrDGI
-        ZchHNolDz2bTBx+m+4ue5hS9dNSiXJHyx4RHWqa5kA==
-X-Google-Smtp-Source: ABdhPJwmWS43f0+ZLjBVLvJJ7JA2ji+c8pVpOGkCgk3WxF80dOMQ3tlGLYOdqgNN/el3xCA6oZ5gBBBEY2v/N/b/9yk=
-X-Received: by 2002:a05:6638:250b:b0:32b:6adc:d9a with SMTP id
- v11-20020a056638250b00b0032b6adc0d9amr4596159jat.31.1651601239878; Tue, 03
- May 2022 11:07:19 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CAlYiIhh6pgNH2aA5Z1WYg+YY5VaTEuIKmdxG9INjP0=;
+        b=jX5iG6HgxZAVbAZe4/3/qAX8s0NTsFnIHSTIbWgCdXWdYZUhwxknqPZPHbo4tzpBrV
+         eyOgdytfUGm6ODQZtNj5rocQ5mLmLpbLVX+Lb1E8tvgDRLfN/NUf74WRw2wBlC0if5BZ
+         AArohDHjUPMsUJMyw2bszThich8Ku/KlVxEKVk8B4zOeAhnLB02SmsCrwOFzJn4qtsJ/
+         pbNoAdoE62Mh2LIs98MyfXhbVsBeZAZMx8mfrTq1sKOhlTJ6RrZBfJjhTkqhH+3ipWW5
+         urAz4byEj8+CW4s2KADlvvq/XI/DxJasDTWX59XyJJXJubSfJ/bcZsUe8vkiTWmErHx0
+         4gtw==
+X-Gm-Message-State: AOAM530ZRqaqiDDmgA9xi3CnLrIIPsLN0mdqxVmgcgmhWBU47qdBroes
+        MWSZ2VIPX+Ns42fkupbzSsaDQQ==
+X-Google-Smtp-Source: ABdhPJzhOeQPH/8j7gVM23B+jQ578rJRgDPkXcwX4cB7js1XoH0ZNbgdqXOgLT7NoLlHZxmSOokqZw==
+X-Received: by 2002:a17:906:79c4:b0:6cf:5489:da57 with SMTP id m4-20020a17090679c400b006cf5489da57mr16263726ejo.48.1651601273400;
+        Tue, 03 May 2022 11:07:53 -0700 (PDT)
+Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id a1-20020aa7cf01000000b0042617ba6398sm7986163edy.34.2022.05.03.11.07.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 11:07:52 -0700 (PDT)
+Date:   Tue, 3 May 2022 19:07:27 +0100
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 03/12] iommu: Add attach/detach_dev_pasid domain ops
+Message-ID: <YnFvX8IUwP2drNoj@myrica>
+References: <20220502014842.991097-1-baolu.lu@linux.intel.com>
+ <20220502014842.991097-4-baolu.lu@linux.intel.com>
 MIME-Version: 1.0
-References: <20220418231746.2464800-1-grundler@chromium.org>
- <CANEJEGtaFCRhVBaVtHrQiJvwsuBk3f_4RNTg87CWERHt+453KA@mail.gmail.com>
- <23cbe4be-7ced-62da-8fdb-366b726fe10f@marvell.com> <CANEJEGtVFE8awJz3j9j7T2BseJ5qMd_7er7WbdPQNgrdz9F5dg@mail.gmail.com>
- <BY3PR18MB4578949E822F4787E95A126CB4C09@BY3PR18MB4578.namprd18.prod.outlook.com>
-In-Reply-To: <BY3PR18MB4578949E822F4787E95A126CB4C09@BY3PR18MB4578.namprd18.prod.outlook.com>
-From:   Grant Grundler <grundler@chromium.org>
-Date:   Tue, 3 May 2022 11:07:08 -0700
-Message-ID: <CANEJEGvsfnry=tFOyx+cTRHJyTo2-TNOe1u4AWV+J=amrFyZpw@mail.gmail.com>
-Subject: Re: [EXT] Re: [PATCH 0/5] net: atlantic: more fuzzing fixes
-To:     Dmitrii Bezrukov <dbezrukov@marvell.com>
-Cc:     Grant Grundler <grundler@chromium.org>,
-        Igor Russkikh <irusskikh@marvell.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Aashay Shringarpure <aashay@google.com>,
-        Yi Chou <yich@google.com>,
-        Shervin Oloumi <enlightened@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220502014842.991097-4-baolu.lu@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitrii!
+On Mon, May 02, 2022 at 09:48:33AM +0800, Lu Baolu wrote:
+> Attaching an IOMMU domain to a PASID of a device is a generic operation
+> for modern IOMMU drivers which support PASID-granular DMA address
+> translation. Currently visible usage scenarios include (but not limited):
+> 
+>  - SVA (Shared Virtual Address)
+>  - kernel DMA with PASID
+>  - hardware-assist mediated device
+> 
+> This adds a pair of common domain ops for this purpose and adds helpers
+> to attach/detach a domain to/from a {device, PASID}. Some buses, like
+> PCI, route packets without considering the PASID value. Thus a DMA target
+> address with PASID might be treated as P2P if the address falls into the
+> MMIO BAR of other devices in the group. To make things simple, these
+> interfaces only apply to devices belonging to the singleton groups, and
+> the singleton is immutable in fabric i.e. not affected by hotplug.
+> 
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 
-On Tue, May 3, 2022 at 4:15 AM Dmitrii Bezrukov <dbezrukov@marvell.com> wro=
-te:
->
-> Hi Grants,
->
-> >[1/5] net: atlantic: limit buff_ring index value
->
-> >diff --git a/drivers/net/ethernet/aquantia/atlantic/hw_atl/hw_atl_b0.c
-> >b/drivers/net/ethernet/aquantia/atlantic/hw_atl/hw_atl_b0.c
-> >index d875ce3ec759..e72b9d86f6ad 100644
-> >--- a/drivers/net/ethernet/aquantia/atlantic/hw_atl/hw_atl_b0.c
-> >+++ b/drivers/net/ethernet/aquantia/atlantic/hw_atl/hw_atl_b0.c
-> >@@ -981,7 +981,9 @@  int hw_atl_b0_hw_ring_rx_receive(struct aq_hw_s
-> >*self, struct aq_ring_s *ring)
-> >
-> >                       if (buff->is_lro) {
-> >                               /* LRO */
-> >-                              buff->next =3D rxd_wb->next_desc_ptr;
-> >+                              buff->next =3D
-> >+                                      (rxd_wb->next_desc_ptr < ring->si=
-ze) ?
-> >+                                      rxd_wb->next_desc_ptr : 0U;
-> >                               ++ring->stats.rx.lro_packets;
-> >                       } else {
-> >                               /* jumbo */
->
-> I don=E2=80=99t find this way correct. At least in this functions there i=
-s no access to buffers by this index "next".
+Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
 
-Did I misunderstand what this code (line 378) is doing in aq_ring.c?
-342 #define AQ_SKB_ALIGN SKB_DATA_ALIGN(sizeof(struct skb_shared_info))
-343 int aq_ring_rx_clean(struct aq_ring_s *self,
-344                      struct napi_struct *napi,
-345                      int *work_done,
-346                      int budget)
-347 {
-...
-371                                 if (buff_->next >=3D self->size) {
-372                                         err =3D -EIO;
-373                                         goto err_exit;
-374                                 }
-375
-376                                 frag_cnt++;
-377                                 next_ =3D buff_->next,
-378                                 buff_ =3D &self->buff_ring[next_];
+just a nit below
 
-My change is redundant with Lines 371-374 - they essentially do the
-same thing and were added on
-2021-12-26 by 5f50153288452 (Zekun Shen)
+> ---
+>  include/linux/iommu.h | 21 ++++++++++++
+>  drivers/iommu/iommu.c | 76 +++++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 97 insertions(+)
+> 
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index b8ffaf2cb1d0..ab36244d4e94 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -263,6 +263,8 @@ struct iommu_ops {
+>   * struct iommu_domain_ops - domain specific operations
+>   * @attach_dev: attach an iommu domain to a device
+>   * @detach_dev: detach an iommu domain from a device
+> + * @attach_dev_pasid: attach an iommu domain to a pasid of device
+> + * @detach_dev_pasid: detach an iommu domain from a pasid of device
+>   * @map: map a physically contiguous memory region to an iommu domain
+>   * @map_pages: map a physically contiguous set of pages of the same size to
+>   *             an iommu domain.
+> @@ -283,6 +285,10 @@ struct iommu_ops {
+>  struct iommu_domain_ops {
+>  	int (*attach_dev)(struct iommu_domain *domain, struct device *dev);
+>  	void (*detach_dev)(struct iommu_domain *domain, struct device *dev);
+> +	int (*attach_dev_pasid)(struct iommu_domain *domain,
+> +				struct device *dev, ioasid_t pasid);
+> +	void (*detach_dev_pasid)(struct iommu_domain *domain,
+> +				 struct device *dev, ioasid_t pasid);
+>  
+>  	int (*map)(struct iommu_domain *domain, unsigned long iova,
+>  		   phys_addr_t paddr, size_t size, int prot, gfp_t gfp);
+> @@ -678,6 +684,10 @@ int iommu_group_claim_dma_owner(struct iommu_group *group, void *owner);
+>  void iommu_group_release_dma_owner(struct iommu_group *group);
+>  bool iommu_group_dma_owner_claimed(struct iommu_group *group);
+>  
+> +int iommu_attach_device_pasid(struct iommu_domain *domain,
+> +			      struct device *dev, ioasid_t pasid);
+> +void iommu_detach_device_pasid(struct iommu_domain *domain,
+> +			       struct device *dev, ioasid_t pasid);
+>  #else /* CONFIG_IOMMU_API */
+>  
+>  struct iommu_ops {};
+> @@ -1051,6 +1061,17 @@ static inline bool iommu_group_dma_owner_claimed(struct iommu_group *group)
+>  {
+>  	return false;
+>  }
+> +
+> +static inline int iommu_attach_device_pasid(struct iommu_domain *domain,
+> +					    struct device *dev, ioasid_t pasid)
+> +{
+> +	return -ENODEV;
+> +}
+> +
+> +static inline void iommu_detach_device_pasid(struct iommu_domain *domain,
+> +					     struct device *dev, ioasid_t pasid)
+> +{
+> +}
+>  #endif /* CONFIG_IOMMU_API */
+>  
+>  /**
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index 29906bc16371..89c9d19ddb28 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -38,6 +38,7 @@ struct iommu_group {
+>  	struct kobject kobj;
+>  	struct kobject *devices_kobj;
+>  	struct list_head devices;
+> +	struct xarray pasid_array;
+>  	struct mutex mutex;
+>  	void *iommu_data;
+>  	void (*iommu_data_release)(void *iommu_data);
+> @@ -630,6 +631,7 @@ struct iommu_group *iommu_group_alloc(void)
+>  	mutex_init(&group->mutex);
+>  	INIT_LIST_HEAD(&group->devices);
+>  	INIT_LIST_HEAD(&group->entry);
+> +	xa_init(&group->pasid_array);
+>  
+>  	ret = ida_simple_get(&iommu_group_ida, 0, 0, GFP_KERNEL);
+>  	if (ret < 0) {
+> @@ -3190,3 +3192,77 @@ bool iommu_group_dma_owner_claimed(struct iommu_group *group)
+>  	return user;
+>  }
+>  EXPORT_SYMBOL_GPL(iommu_group_dma_owner_claimed);
+> +
+> +/*
+> + * Use standard PCI bus topology and isolation features to check immutable
+> + * singleton. Otherwise, assume the bus is static and then singleton can
+> + * know from the device count in the group.
+> + */
 
-The original fuzzing work was done on chromeos-v5.4 kernel and didn't
-include this change. I'll backport 5f50153288452t to chromeos-v5.4 and
-drop my proposed change.
+The comment doesn't really add anything that can't be directly understood
+from the code.
 
-> Following this fix, if it happens then during assembling of LRO session i=
-t could be that this buffer (you suggesting to use buffer with index 0) bec=
-omes a part of current LRO session and will be also processed as a single p=
-acket or as a part of other LRO huge packet.
-> To be honest there are lot of possibilities depends on current values of =
-head and tail which may cause either memory leak or double free or somethin=
-g else.
-
-*nod*
-
-> There is a code which calls this function aq_ring.c: aq_ring_rx_clean.
-
-Exactly.
-
-> From my POV it's better to check that indexes don't point to outside of r=
-ing in code which collects LRO session.
-
-Sounds good to me. I don't have a preference. I'm ok with
-dropping/ignoring [1/5] patch.
-
-> There is expectation that "next" is in range "cleaned" descriptors, which=
- means that HW put data there wrote descriptor and buffers are ready to be =
-process by assembling code.
-> So in case if "next" points to something outside of ring then guess it wo=
-uld be better just to stop collecting these buffers to one huge packet and =
-treat this LRO session as completed.
-> Then rest of buffers (which should be it that chain) will be collected ag=
-ain without beginning and just dropped by stack later.
-
-That makes sense to me. And apologies for not noticing Zekun Shen's
-2021-12-26 change earlier. I've been working on this off and on for
-several months.
-
-> > [4/5] net: atlantic: add check for MAX_SKB_FRAGS
-> >
-> >diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
-> >b/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
-> >index bc1952131799..8201ce7adb77 100644
-> >--- a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
-> >+++ b/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
-> >@@ -363,6 +363,7 @@  int aq_ring_rx_clean(struct aq_ring_s *self,
-> >                       continue;
-> >
-> >               if (!buff->is_eop) {
-> >+                      unsigned int frag_cnt =3D 0U;
-> >                       buff_ =3D buff;
-> >                       do {
-> >                               bool is_rsc_completed =3D true;
-> >@@ -371,6 +372,8 @@  int aq_ring_rx_clean(struct aq_ring_s *self,
-> >                                       err =3D -EIO;
-> >                                       goto err_exit;
-> >                               }
-> >+
-> >+                              frag_cnt++;
-> >                               next_ =3D buff_->next,
-> >                               buff_ =3D &self->buff_ring[next_];
-> >                               is_rsc_completed =3D
-> >@@ -378,7 +381,8 @@  int aq_ring_rx_clean(struct aq_ring_s *self,
-> >                                                           next_,
-> >                                                           self->hw_head=
-);
-> >
-> >-                              if (unlikely(!is_rsc_completed)) {
-> >+                              if (unlikely(!is_rsc_completed) ||
-> >+                                  frag_cnt > MAX_SKB_FRAGS) {
-> >                                       err =3D 0;
-> >                                       goto err_exit;
-> >                               }
->
-> Number of fragments are limited by HW configuration: hw_atl_b0_internal.h=
-: #define HW_ATL_B0_LRO_RXD_MAX 16U.
-
-Should this loop be checking against HW_ATL_B0_LRO_RXD_MAX instead?
-
-> Let's imagine if it happens: driver stucks at this point it will wait for=
- session completion and session will not be completed due to too much fragm=
-ents.
-> Guess in case if number of buffers exceeds this limit then it is required=
- to close session and continue (submit packet to stack and finalize clearin=
-g if processed descriptors/buffers).
-
-Sorry, I'm not understanding your conclusion. Is the "goto err_exit"
-in this case doing what you described?
-Does this patch have the right idea (even if it should test against a
-different constant)?
-
-My main concern is the CPU gets stuck in this loop for a very long
-(infinite?) time.
-
->
-> > [5/5] net: atlantic: verify hw_head_ is reasonable diff --git
-> >a/drivers/net/ethernet/aquantia/atlantic/hw_atl/hw_atl_b0.c
-> >b/drivers/net/ethernet/aquantia/atlantic/hw_atl/hw_atl_b0.c
-> >index e72b9d86f6ad..9b6b93bb3e86 100644
-> >--- a/drivers/net/ethernet/aquantia/atlantic/hw_atl/hw_atl_b0.c
-> >+++ b/drivers/net/ethernet/aquantia/atlantic/hw_atl/hw_atl_b0.c
-> >@@ -889,6 +889,27 @@  int hw_atl_b0_hw_ring_tx_head_update(struct aq_hw_=
-s *self,
-> >               err =3D -ENXIO;
-> >               goto err_exit;
-> >       }
-> >+
-> >+      /* Validate that the new hw_head_ is reasonable. */
-> >+      if (hw_head_ >=3D ring->size) {
-> >+              err =3D -ENXIO;
-> >+              goto err_exit;
-> >+      }
-> >+
-> >+      if (ring->sw_head >=3D ring->sw_tail) {
-> >+              /* Head index hasn't wrapped around to below tail index. =
-*/
-> >+              if (hw_head_ < ring->sw_head && hw_head_ >=3D ring->sw_ta=
-il) {
-> >+                      err =3D -ENXIO;
-> >+                      goto err_exit;
-> >+              }
-> >+      } else {
-> >+              /* Head index has wrapped around and is below tail index.=
- */
-> >+              if (hw_head_ < ring->sw_head || hw_head_ >=3D ring->sw_ta=
-il) {
-> >+                      err =3D -ENXIO;
-> >+                      goto err_exit;
-> >+              }
-> >+      }
-> >+
-> >       ring->hw_head =3D hw_head_;
-> >       err =3D aq_hw_err_from_flags(self);
->
-> Simple example. One packet with one buffer was sent. Sw_tail =3D 1, sw_he=
-ad=3D0. From interrupt this function is called and hw_head_ is 1.
-> Code will follow "else" branch of second "if" that you add and condition =
-"if (hw_head_ < ring->sw_head || hw_head_ >=3D ring->sw_tail) {" will be tr=
-ue which seems to be not expected.
-
-Correct - I've got this wrong (head/tail swapped). Even if I had it
-right, As Igor observed, debatable if it's necessary. Please
-drop/ignore this patch as well. Aashay and I need to discuss this
-more.
-
-thank you again!
-
-cheers,
-grant
-
-
->
-> Best regards,
-> Dmitrii Bezrukov
->
-> -----Original Message-----
-> From: Grant Grundler <grundler@chromium.org>
-> Sent: Tuesday, April 26, 2022 7:21 PM
-> To: Igor Russkikh <irusskikh@marvell.com>
-> Cc: Grant Grundler <grundler@chromium.org>; Dmitrii Bezrukov <dbezrukov@m=
-arvell.com>; Jakub Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.c=
-om>; netdev <netdev@vger.kernel.org>; David S . Miller <davem@davemloft.net=
->; LKML <linux-kernel@vger.kernel.org>; Aashay Shringarpure <aashay@google.=
-com>; Yi Chou <yich@google.com>; Shervin Oloumi <enlightened@google.com>
-> Subject: Re: [EXT] Re: [PATCH 0/5] net: atlantic: more fuzzing fixes
->
-> [reply-all again since I forgot to tell gmail to post this as "plain text=
-"...grrh... so much for AI figuring this stuff out.]
->
->
-> On Tue, Apr 26, 2022 at 9:00 AM Igor Russkikh <irusskikh@marvell.com> wro=
-te:
-> >
-> > Hi Grant,
-> >
-> > Sorry for the delay, I was on vacation.
-> > Thanks for working on this.
->
-> Hi Igor!
-> Very welcome! And yes, I was starting to wonder... but I'm now glad that =
-you didn't review them before you got back. These patches are no reason to =
-ruin a perfectly good vacation. :)
->
-> > I'm adding here Dmitrii, to help me review the patches.
-> > Dmitrii, here is a full series:
-> >
-> > https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__patchwork.kernel=
-.
-> > org_project_netdevbpf_cover_20220418231746.2464800-2D1-2Dgrundler-40ch
-> > romium.org_&d=3DDwIFaQ&c=3DnKjWec2b6R0mOyPaz7xtfQ&r=3DAliKLBUTg9lFc5sIM=
-TzJt8
-> > MdPiAgKbsC8IpLIHmdX9w&m=3D1LeNSCJMgZ7UkGBm56FcvL_Oza8VOX45LEtQf31qPE2KL=
-Q
-> > cr5Q36aMIUR2DzLhi7&s=3DfVFxLPRO8K2DYFpGUOggf38nbDFaHKg8aATsjB1TuB0&e=3D
-> >
-> > Grant, I've reviewed and also quite OK with patches 1-4.
->
-> Excellent! \o/
->
->
-> > For patch 5 - why do you think we need these extra comparisons with sof=
-tware head/tail?
->
-> The ChromeOS security team (CC'd) believes the driver needs to verify "ex=
-pected behavior". In other words, the driver expects the device to provide =
-new values of tail index which are between [tail,head) ("available to fill"=
-).
->
-> Your question makes me chuckle because I asked exactly the same question.=
- :D Everyone agrees it is a minimum requirement to verify the index was "in=
- bounds". And I agree it's prudent to verify the device is "well behaved" w=
-here we can. I haven't looked at the code enough to know what could go wron=
-g if, for example, the tail index is decremented instead of incremented or =
-a "next fragment" index falls in the "available to fill" range.
->
-> However, I didn't run the fuzzer and, for now, I'm taking the ChromeOS se=
-curity team's word that this check is needed. If you (or Dmitrii) feel stro=
-ngly the driver can handle malicious or firmware bugs in other ways, I'm no=
-t offended if you decline this patch. However, I would be curious what thos=
-e other mechanisms are.
->
-> > From what I see in logic, only the size limiting check is enough there.=
-.
-> >
-> > Other extra checks are tricky and non intuitive..
->
-> Yes, somewhat tricky in the code but conceptually simple: For the RX buff=
-er ring, IIUC, [head,tail) is "CPU to process" and [tail, head) is "availab=
-le to fill". New tail values should always be in the latter range.
->
-> The trickiness comes in because this is a ring buffer and [tail, head) it=
- is equally likely that head =3D< tail  or head > tail numerically.
->
-> If you like, feel free to add comments explaining the ring behavior or as=
-k me to add such a comment (and repost #5). I'm a big fan of documenting no=
-n-intuitive things in the code. That way the next person to look at the cod=
-e can verify the code and the IO device do what the comment claims.
->
-> On the RX buffer ring, I'm also wondering if there is a race condition su=
-ch that the driver uses stale values of the tail pointer when walking the R=
-X fragment lists and validating index values. Aashay assures me this race c=
-ondition is not possible and I am convinced this is true for the TX buffer =
-ring where the driver is the "producer"
-> (tells the device what is in the TX ring). I still have to review the RX =
-buffer handling code more and will continue the conversation with him until=
- we agree.
->
-> cheers,
-> grant
->
-> >
-> > Regards,
-> >   Igor
-> >
-> > On 4/21/2022 9:53 PM, Grant Grundler wrote:
-> > > External Email
-> > >
-> > > --------------------------------------------------------------------
-> > > --
-> > > Igor,
-> > > Will you have a chance to comment on this in the near future?
-> > > Should someone else review/integrate these patches?
-> > >
-> > > I'm asking since I've seen no comments in the past three days.
-> > >
-> > > cheers,
-> > > grant
-> > >
-> > >
-> > > On Mon, Apr 18, 2022 at 4:17 PM Grant Grundler
-> > > <grundler@chromium.org>
-> > > wrote:
-> > >>
-> > >> The Chrome OS fuzzing team posted a "Fuzzing" report for atlantic
-> > >> driver in Q4 2021 using Chrome OS v5.4 kernel and "Cable Matters
-> > >> Thunderbolt 3 to 10 Gb Ethernet" (b0 version):
-> > >>
-> > >> https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__docs.google.c=
-o
-> > >> m_document_d_e_2PACX-2D1vT4oCGNhhy-5FAuUqpu6NGnW0N9HF-5Fjxf2kS7raOp
-> > >> OlNRqJNiTHAtjiHRthXYSeXIRTgfeVvsEt0qK9qK_pub&d=3DDwIBaQ&c=3DnKjWec2b=
-6R0
-> > >> mOyPaz7xtfQ&r=3D3kUjVPjrPMvlbd3rzgP63W0eewvCq4D-kzQRqaXHOqU&m=3DQoxR=
-8Wo
-> > >> QQ-hpWu_tThQydP3-6zkRWACvRmj_7aY1qo2FG6DdPdI86vAYrfKQFMHX&s=3D620jqe=
-S
-> > >> vQrGg6aotI35cWwQpjaL94s7TFeFh2cYSyvA&e=3D
-> > >>
-> > >> It essentially describes four problems:
-> > >> 1) validate rxd_wb->next_desc_ptr before populating buff->next
-> > >> 2) "frag[0] not initialized" case in aq_ring_rx_clean()
-> > >> 3) limit iterations handling fragments in aq_ring_rx_clean()
-> > >> 4) validate hw_head_ in hw_atl_b0_hw_ring_tx_head_update()
-> > >>
-> > >> I've added one "clean up" contribution:
-> > >>     "net: atlantic: reduce scope of is_rsc_complete"
-> > >>
-> > >> I tested the "original" patches using chromeos-v5.4 kernel branch:
-> > >>
-> > >> https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__chromium-2Dre=
-v
-> > >> iew.googlesource.com_q_hashtag-3Apcinet-2Datlantic-2D2022q1-2B-28st
-> > >> atus-3Aopen-2520OR-2520status-3Amerged-29&d=3DDwIBaQ&c=3DnKjWec2b6R0=
-mOy
-> > >> Paz7xtfQ&r=3D3kUjVPjrPMvlbd3rzgP63W0eewvCq4D-kzQRqaXHOqU&m=3DQoxR8Wo=
-QQ-
-> > >> hpWu_tThQydP3-6zkRWACvRmj_7aY1qo2FG6DdPdI86vAYrfKQFMHX&s=3D1a1YwJqrY=
--
-> > >> be2oDgGAG5oOyZDnqIok_2p5G-N8djo2I&e=3D
-> > >>
-> > >> The fuzzing team will retest using the chromeos-v5.4 patches and
-> > >> the b0 HW.
-> > >>
-> > >> I've forward ported those patches to 5.18-rc2 and compiled them but
-> > >> am currently unable to test them on 5.18-rc2 kernel (logistics probl=
-ems).
-> > >>
-> > >> I'm confident in all but the last patch:
-> > >>    "net: atlantic: verify hw_head_ is reasonable"
-> > >>
-> > >> Please verify I'm not confusing how ring->sw_head and ring->sw_tail
-> > >> are used in hw_atl_b0_hw_ring_tx_head_update().
-> > >>
-> > >> Credit largely goes to Chrome OS Fuzzing team members:
-> > >>     Aashay Shringarpure, Yi Chou, Shervin Oloumi
-> > >>
-> > >> cheers,
-> > >> grant
+> +static bool device_group_immutable_singleton(struct device *dev)
+> +{
+> +	struct iommu_group *group = iommu_group_get(dev);
+> +	int count;
+> +
+> +	if (!group)
+> +		return false;
+> +
+> +	mutex_lock(&group->mutex);
+> +	count = iommu_group_device_count(group);
+> +	mutex_unlock(&group->mutex);
+> +	iommu_group_put(group);
+> +
+> +	if (count != 1)
+> +		return false;
+> +
+> +	/*
+> +	 * The PCI device could be considered to be fully isolated if all
+> +	 * devices on the path from the device to the host-PCI bridge are
+> +	 * protected from peer-to-peer DMA by ACS.
+> +	 */
+> +	if (dev_is_pci(dev))
+> +		return pci_acs_path_enabled(to_pci_dev(dev), NULL,
+> +					    REQ_ACS_FLAGS);
+> +
+> +	return true;
+> +}
+> +
+> +int iommu_attach_device_pasid(struct iommu_domain *domain,
+> +			      struct device *dev, ioasid_t pasid)
+> +{
+> +	struct iommu_group *group;
+> +	int ret = -EINVAL;
+> +	void *curr;
+> +
+> +	if (!domain->ops->attach_dev_pasid)
+> +		return -EOPNOTSUPP;
+> +
+> +	if (!device_group_immutable_singleton(dev))
+> +		return -EINVAL;
+> +
+> +	group = iommu_group_get(dev);
+> +	mutex_lock(&group->mutex);
+> +	curr = xa_cmpxchg(&group->pasid_array, pasid, NULL, domain, GFP_KERNEL);
+> +	if (curr)
+> +		goto out_unlock;
+> +	ret = domain->ops->attach_dev_pasid(domain, dev, pasid);
+> +	if (ret)
+> +		xa_erase(&group->pasid_array, pasid);
+> +out_unlock:
+> +	mutex_unlock(&group->mutex);
+> +	iommu_group_put(group);
+> +
+> +	return ret;
+> +}
+> +
+> +void iommu_detach_device_pasid(struct iommu_domain *domain,
+> +			       struct device *dev, ioasid_t pasid)
+> +{
+> +	struct iommu_group *group = iommu_group_get(dev);
+> +
+> +	mutex_lock(&group->mutex);
+> +	domain->ops->detach_dev_pasid(domain, dev, pasid);
+> +	xa_erase(&group->pasid_array, pasid);
+> +	mutex_unlock(&group->mutex);
+> +
+> +	iommu_group_put(group);
+> +}
+> -- 
+> 2.25.1
+> 

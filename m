@@ -2,119 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73948518482
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 14:43:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 800CB518489
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 14:45:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235499AbiECMrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 08:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55688 "EHLO
+        id S235526AbiECMsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 08:48:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233245AbiECMrB (ORCPT
+        with ESMTP id S235047AbiECMse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 08:47:01 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD571CB05;
-        Tue,  3 May 2022 05:43:29 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 92C501F4354B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651581805;
-        bh=n9/BmWbN3g+/wyuxwqu1fAbXZTK/mlyH9NhVx5Z5DvM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=BTKgQTkN2YsUXw1djbp3qfuwQbLGIZpI+tVUm0u4oeOlUbPviD9bCK4g9yo3fCd6e
-         prWG0Famn7AwU6UHSLvRl7n/j6PzO57l2AFvD1wjxXDNgv2GJ61yOpDtLRScyc5hU6
-         aA2O9o+24k09YaYa6wWbowIngNtIi1IXYhDPwEVc7sCagym9Ylh9zktGadH3zC08HY
-         2sQDR+/SQQrNuvsRFsNckV8jqDIY3J2atQNUPXkERoyOzZ3AoHB756vNOPSWcDCndQ
-         oNt8r6cG2nSP8Wv4gbGvedE/cpLOzTQMR/Fc7ksjUAho4DDebVJ71LitCPil+05ElK
-         rS44evNa7Vyhw==
-Message-ID: <94dbb7ee-764a-5568-a044-80dbfe77c29a@collabora.com>
-Date:   Tue, 3 May 2022 14:43:21 +0200
+        Tue, 3 May 2022 08:48:34 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B2322BC3
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 05:45:00 -0700 (PDT)
+Received: from [192.168.0.7] (ip5f5aed95.dynamic.kabel-deutschland.de [95.90.237.149])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 81BF061EA1935;
+        Tue,  3 May 2022 14:44:57 +0200 (CEST)
+Message-ID: <5a530210-2c22-d8e6-02e0-f321ba5e0e60@molgen.mpg.de>
+Date:   Tue, 3 May 2022 14:44:56 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/2] dt-bindings: power: Add MediaTek Helio X10 MT6795
- power domains
+ Thunderbird/91.8.1
+Subject: Re: [PATCHv4] drm/amdgpu: disable ASPM on Intel Alder Lake based
+ systems
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        robh+dt@kernel.org
-Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        chun-jie.chen@mediatek.com, weiyi.lu@mediatek.com,
-        mbrugger@suse.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com,
-        nfraprado@collabora.com
-References: <20220503105436.54901-1-angelogioacchino.delregno@collabora.com>
- <20220503105436.54901-2-angelogioacchino.delregno@collabora.com>
- <ac774c74-4577-3dfc-7bf4-3c180d45b420@linaro.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <ac774c74-4577-3dfc-7bf4-3c180d45b420@linaro.org>
+To:     Daniel Stone <daniel@fooishbar.org>
+Cc:     Dave Airlie <airlied@linux.ie>,
+        Richard Gong <richard.gong@amd.com>,
+        Xinhui Pan <xinhui.pan@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Alexander Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>
+References: <20220412215000.897344-1-richard.gong@amd.com>
+ <d4ba3998-34aa-86d2-bde9-bc6ae9d8d08d@molgen.mpg.de>
+ <CADnq5_MgvcGPWf2gYn_3qCr+Gq1P39tvv-W-o8NhivvMpMwUBA@mail.gmail.com>
+ <91e916e3-d793-b814-6cbf-abee0667f5f8@molgen.mpg.de>
+ <94fd858d-1792-9c05-b5c6-1b028427687d@amd.com>
+ <efc1dfd1-2b54-aee5-1497-4b800a468141@molgen.mpg.de>
+ <237da02b-0ed8-6b1c-3eaf-5574aab4f13f@amd.com>
+ <294555b4-2d1b-270f-6682-3a17e9df133c@molgen.mpg.de>
+ <5adfe067-dc00-6567-e218-c5c68670cf5b@amd.com>
+ <543a9e76-ca90-984b-b155-a0647cdeacff@molgen.mpg.de>
+ <CAPj87rOERk-kNa6n-UdjQsDKXP9zzm8=an=FHcM+33yebW6ECw@mail.gmail.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <CAPj87rOERk-kNa6n-UdjQsDKXP9zzm8=an=FHcM+33yebW6ECw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 03/05/22 14:38, Krzysztof Kozlowski ha scritto:
-> On 03/05/2022 12:54, AngeloGioacchino Del Regno wrote:
->> Add power domains dt-bindings for MediaTek Helio X10 (MT6795).
+Dear Daniel,
+
+
+Am 03.05.22 um 14:25 schrieb Daniel Stone:
+> On Sun, 1 May 2022 at 08:08, Paul Menzel <pmenzel@molgen.mpg.de> wrote:
+>> Am 26.04.22 um 15:53 schrieb Gong, Richard:
+>>> I think so. We captured dmesg log.
 >>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> ---
->>   .../power/mediatek,power-controller.yaml         |  2 ++
->>   include/dt-bindings/power/mt6795-power.h         | 16 ++++++++++++++++
->>   2 files changed, 18 insertions(+)
->>   create mode 100644 include/dt-bindings/power/mt6795-power.h
+>> Then the (whole) system did *not* freeze, if you could still log in
+>> (maybe over network) and execute `dmesg`. Please also paste the
+>> amdgpu(?) error logs in the commit message.
 >>
->> diff --git a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
->> index 135c6f722091..b448101fac43 100644
->> --- a/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
->> +++ b/Documentation/devicetree/bindings/power/mediatek,power-controller.yaml
->> @@ -23,6 +23,7 @@ properties:
->>   
->>     compatible:
->>       enum:
->> +      - mediatek,mt6795-power-controller
->>         - mediatek,mt8167-power-controller
->>         - mediatek,mt8173-power-controller
->>         - mediatek,mt8183-power-controller
->> @@ -62,6 +63,7 @@ patternProperties:
->>         reg:
->>           description: |
->>             Power domain index. Valid values are defined in:
->> +              "include/dt-bindings/power/mt6795-power.h" - for MT8167 type power domain.
->>                 "include/dt-bindings/power/mt8167-power.h" - for MT8167 type power domain.
->>                 "include/dt-bindings/power/mt8173-power.h" - for MT8173 type power domain.
->>                 "include/dt-bindings/power/mt8183-power.h" - for MT8183 type power domain.
->> diff --git a/include/dt-bindings/power/mt6795-power.h b/include/dt-bindings/power/mt6795-power.h
->> new file mode 100644
->> index 000000000000..0e27bc7fa748
->> --- /dev/null
->> +++ b/include/dt-bindings/power/mt6795-power.h
->> @@ -0,0 +1,16 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
+>>> As mentioned early we need support from Intel on how to get ASPM working
+>>> for VI generation on Intel Alder Lake, but we don't know where things
+>>> currently stand.
+>>
+>> Who is working on this, and knows?
 > 
-> If it is not a derivative work, should be GPL-2.0 OR BSD
-> 
+> This has gone beyond the point of a reasonable request. The amount of
+> detail you're demanding is completely unnecessary.
 
-On that, I agree with you, fully.
+If a quirk is introduced possibly leading to higher power consumption, 
+especially on systems nobody has access to yet, then the detail, where 
+the system hangs/freezes is not unreasonable at all.
 
-Though, all of the mt(xxxx)-power.h headers provide this license tag and I
-wanted to follow that to give the same.
+In the Linux logs from the issue there are messages like
 
-Should I change it to (GPL-2.0-only OR BSD-2-Clause)?
+     [   58.101385] Freezing of tasks failed after 20.003 seconds (4 
+tasks refusing to freeze, wq_busy=0):
 
-Regards,
-Angelo
+     [   78.278403] Freezing of tasks failed after 20.008 seconds (4 
+tasks refusing to freeze, wq_busy=0):
 
-> 
-> Best regards,
-> Krzysztof
+and it looks like several suspend/resume cycles were done.
 
+I see a lot of commit messages over the whole Linux kernel, where this 
+level of detail is provided (by default), and
+
+The second question was not for the commit message, but just for 
+documentation purpose when the problem is going to be fixed properly. 
+And it looks like (at least publicly) analyzing the root cause is not 
+happening, and once the quirk lands, nobody is going to feel the 
+pressure to work on it, as everyone’s plates are full.
+
+
+Kind regards,
+
+Paul

@@ -2,111 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C49517EB2
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 09:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66DA3517EBC
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 09:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232137AbiECHXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 03:23:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54444 "EHLO
+        id S232097AbiECHZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 03:25:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231147AbiECHXQ (ORCPT
+        with ESMTP id S230427AbiECHZZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 03:23:16 -0400
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091AE39808
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 00:19:15 -0700 (PDT)
-Received: by mail-ua1-x936.google.com with SMTP id v3so6092121uau.4
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 00:19:15 -0700 (PDT)
+        Tue, 3 May 2022 03:25:25 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4010825FF
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 00:21:54 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id k23so31785439ejd.3
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 00:21:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=motec-com-au.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=4NDjuQ75ayo0y02VvOvQTGtjArT2BL7D/bx+PGGT5og=;
-        b=BAEtmxzOwz8J5Up8A7N9UjC8/PEWOjYhRZxZhABtmKjxQIM7YjG963YwAqUMWwEYJi
-         4Ip6kb5BTStei89FlRkKpH4+xzSBuO2i3AvS6iR+t5srxfldrknGIZ4NQJNBvm5DIk/P
-         2kP/RoSqIS86DXQbBG90pNJ61ay9msF0mTf0Mi1vEuiyB5cFf4AeGx66kz3gaRXKRLob
-         dZbgvurwSJo569DlzQmsJoQgCUojS0IWFtjm2XIjNIi6b2H+eOCURe1UjVGtXvaxECQr
-         mKYA56F+lfX4Msi8OjHvb9wD8BVRq+TWPwbgLWKGESOCWIHi8AFI47HGl2oO81jHNqSK
-         9PfA==
+        bh=P3A8Z9h48LHoWnbNOATmNx+a3MlcnNsYt2DmelJVVqo=;
+        b=V7Kx2nSrdZ8JWnUtxCBgvmoNKpccnrSHr1ZOyqcFp2M4rn6TVgeF8KgMEh9zH3kOa/
+         Gc7/SSBQ43sVdJwQhS6s7aupe2d0QZ+p58kBF7L3dcKeFJvOq7M+wkPTum6GturxTn8/
+         0VIF9HvauWy3+PQSMjahdfBjzEXwpXSx1gojmki6odu88nBYc1prETkLaaCjsfJ36zRg
+         dpm9ohWAB8OuD/E3eMguF0docXPBxeOoMVmVBG7/8utucxW1B3xE/j+tAG5T2eLDyfHU
+         mLhw6L950pjMco5cB8Yv86tsOMYRJfx8wPL+91eu6GRMKCA1RwgvowsB/IbWbfop1nQl
+         UB3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=4NDjuQ75ayo0y02VvOvQTGtjArT2BL7D/bx+PGGT5og=;
-        b=wB/SXGDiR/2SuArcdLoLfkfsde0HNsIkRmY9e5LmsRx8UmjBzaYBLZCmq4YMcdbsUC
-         fhFKBwo2e43/Jq71/D2ynbZZD4DhS5bTeOkCKGdztZzBpd7SWFqJDJ0hTc2DiIzWa2sw
-         huSq8OtUaLp2+3hKlFZ8Cp8iyx7weajMESbawimE6+2CxPPvXg9YOSwZuswwKAuVf0Cg
-         acMYdK9d5qBIm03IhBprr/EnLoN6bwgeaPa3IOMFME4BB79cicNB4aKEAWL8/7InCM6F
-         fW4sc9/8qdVsRQZjt7YWSd8LCGyIoI0OfNnksCr/qvRMoiSnUPrM7akMgn2J+C3LGSJI
-         jvuw==
-X-Gm-Message-State: AOAM531sUKFYANU8mIRoQhOXLxAwBki7jEoevF5hx7gFNUhnYZNrM2WO
-        Ee1ruDQstJ1tmZFS1zmsh1u43/0HYvkxuRe1A3EGUw==
-X-Google-Smtp-Source: ABdhPJwav71/tsV6N6y5R9/irAJ+th9eFU4wcvvMvfs7CEykh6R5/wDjP1I4Fg+aKRpI/oPJ3c3k6C4QpqHPDZ1sBEo=
-X-Received: by 2002:ab0:e14:0:b0:360:e13:e5d7 with SMTP id g20-20020ab00e14000000b003600e13e5d7mr4320904uak.95.1651562352788;
- Tue, 03 May 2022 00:19:12 -0700 (PDT)
+        bh=P3A8Z9h48LHoWnbNOATmNx+a3MlcnNsYt2DmelJVVqo=;
+        b=U41JIluGnciBkIGiwBqG6aOPUEg76KosMXAa19xv2kCt4lQLg2QYmzsEl2DvSUWpfZ
+         rneZnJWprOC50vGWAkiBPD6Sd+u+QXap9dOAFYDgqIwqqHiUfYC6WnuEMbKur1hes559
+         lDaxa7L4xNza7wtUwXvp/+jkglyGsCyJrq/rMKxhnhFdQAFL09fT2JdU1sItT8UfRvnP
+         SQsx7Ax957awapSL6a3eBXKDs3ul3NHESoKFE5xYHR8dx+3cKiX7O1TOxerPetX/JjEW
+         OJAI5dvb0XHZBlFYFWVeRxqjGAcABnmwRHVd+pE3s462dn6Bcv0ouXHwydNKAopwFT2J
+         p4iA==
+X-Gm-Message-State: AOAM532CRpYbGL1w/T303+Tv1Qrcb6hT5v+Yawj8zRiIh4gMPacagrhF
+        nnZoycB700HPHWIAznbjvVhik8KyeYMcC1zM12vdrg==
+X-Google-Smtp-Source: ABdhPJzJwFrwxew97oJI1ixgKOy32RNNNtdrIT+fCNH29G0FXa2NYPnSXqHJpXnwqV8904G8Qg9EWUHMNpR3I5ml2kg=
+X-Received: by 2002:a17:907:3f25:b0:6b0:5e9a:83 with SMTP id
+ hq37-20020a1709073f2500b006b05e9a0083mr14749489ejc.659.1651562512804; Tue, 03
+ May 2022 00:21:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAAPL-u9sVx94ACSuCVN8V0tKp+AMxiY89cro0japtyB=xNfNBw@mail.gmail.com>
- <c18e273b-f30c-da5c-581b-0cc4672f4481@intel.com>
-In-Reply-To: <c18e273b-f30c-da5c-581b-0cc4672f4481@intel.com>
-From:   Wei Xu <weixugc@google.com>
-Date:   Tue, 3 May 2022 00:19:01 -0700
-Message-ID: <CAAPL-u8TtNoonOBDU1HZ-XPA31zsDvDAnO2xDigApypX-+jTYA@mail.gmail.com>
-Subject: Re: RFC: Memory Tiering Kernel Interfaces
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Yang Shi <shy828301@gmail.com>, Linux MM <linux-mm@kvack.org>,
-        Greg Thelen <gthelen@google.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alistair Popple <apopple@nvidia.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Michal Hocko <mhocko@kernel.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+References: <cover.1650816929.git.pisa@cmp.felk.cvut.cz> <20220428072239.kfgtu2bfcud6tetc@pengutronix.de>
+ <202204292331.28980.pisa@cmp.felk.cvut.cz> <20220502072151.j6nx5kddqxeyfy3h@pengutronix.de>
+ <CAHQrW0_bxDyTf7pNHgXwcO=-0YRWtsxscOSWWU4fDmNYo8d-9Q@mail.gmail.com> <20220503064626.lcc7nl3rze5txive@pengutronix.de>
+In-Reply-To: <20220503064626.lcc7nl3rze5txive@pengutronix.de>
+From:   Andrew Dennison <andrew.dennison@motec.com.au>
+Date:   Tue, 3 May 2022 17:21:16 +1000
+Message-ID: <CAHQrW09Ajvm_xs2ThBp8xwR6sPj3Q74_kPtMC9oSE7JDmtaEpQ@mail.gmail.com>
+Subject: Re: [PATCH v1 0/4] can: ctucanfd: clenup acoording to the actual
+ rules and documentation linking
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Pavel Pisa <pisa@cmp.felk.cvut.cz>, linux-can@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Marin Jerabek <martin.jerabek01@gmail.com>,
+        Ondrej Ille <ondrej.ille@gmail.com>,
+        Jiri Novak <jnovak@fel.cvut.cz>,
+        Jaroslav Beran <jara.beran@gmail.com>,
+        Petr Porazil <porazil@pikron.com>, Pavel Machek <pavel@ucw.cz>,
+        Carsten Emde <c.emde@osadl.org>,
+        Drew Fustini <pdp7pdp7@gmail.com>,
+        Matej Vasilevski <matej.vasilevski@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 2, 2022 at 8:20 AM Dave Hansen <dave.hansen@intel.com> wrote:
->
-> > The current memory tiering interface needs to be improved to address
-> > several important use cases:
->
-> FWIW, I totally agree.  We knew when that code went in that the default
-> ordering was feeble.  There were patches to export the demotion order
-> and allow it to be modified from userspace, but they were jettisoned at
-> some point.
->
-> > Memory tiering hierarchy is rebuilt upon hot-add or hot-remove of a
-> > memory node, but is NOT rebuilt upon hot-add or hot-remove of a CPU
-> > node.
->
-> Yeah, this would be a welcome improvement if we can get there.
->
-> > * /sys/devices/system/node/memory_tiers
-> >
-> >   Format: node list (one tier per line, in the tier order)
-> >
-> >   When read, list memory nodes by tiers.
->
-> Nit: this would seems to violate the one-value-per-file sysfs guideline.
->  It can be fixed by making tiers actual objects, which would have some
-> other nice benefits too.
->
+plain text this time...
 
-Good point.  One tier per file should work as well.  It can be even
-better to have a separate tier sub-tree.
+On Tue, 3 May 2022 at 16:46, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>
+> On 03.05.2022 16:32:32, Andrew Dennison wrote:
+> > > > When value is configurable then for (uncommon) number
+> > > > of buffers which is not power of two, there will be likely
+> > > > a problem with way how buffers queue is implemented
+> > >
+> >
+> > Only power of 2 makes sense to me: I didn't consider those corner
+> > cases but the driver could just round down to the next power of 2 and
+> > warn about a misconfiguration of the IP core.
+>
+> +1
+>
+> > I added the dynamic detection because the IP core default had changed
+> > to 2 TX buffers and this broke some hard coded assumptions in the
+> > driver in a rather obscure way that had me debugging for a bit...
+>
+> The mainline driver uses a hard coded default of 4 still... Can you
+> provide that patch soonish?
+
+I was using the out of tree driver but can have a look at this, unless
+Pavel wants to merge this in his tree and submit?
+
+>
+> > > You can make use of more TX buffers, if you implement (fully
+> > > hardware based) TX IRQ coalescing (== handle more than one TX
+> > > complete interrupt at a time) like in the mcp251xfd driver, or BQL
+> > > support (== send more than one TX CAN frame at a time). I've played
+> > > a bit with BQL support on the mcp251xfd driver (which is attached by
+> > > SPI), but with mixed results. Probably an issue with proper
+> > > configuration.
+> >
+> > Reducing CAN IRQ load would be good.
+>
+> IRQ coalescing comes at the price of increased latency, but if you have
+> a timeout in hardware you can configure the latencies precisely.
+>
+> > > > We need 2 * priv->ntxbufs range to distinguish empty and full
+> > > > queue... But modulo is not nice either so I probably come with
+> > > > some other solution in a longer term. In the long term, I want to
+> > > > implement virtual queues to allow multiqueue to use dynamic Tx
+> > > > priority of up to 8 the buffers...
+> > >
+> > > ACK, multiqueue TX support would be nice for things like the
+> > > Earliest TX Time First scheduler (ETF). 1 TX queue for ETF, the
+> > > other for bulk messages.
+> >
+> > Would be nice, I have multi-queue in the CAN layer I wrote for a
+> > little RTOS (predates socketcan) and have used for a while.
+>
+> Out of interest:
+> What are the use cases? How did you decide which queue to use?
+
+I had a queue per fd, with queues sorted by id of the next message,
+then sent the lowest ID next for hardware with a single queue. For
+hardware with lots of buffers there was a hw buffer per queue. I
+didn't have to deal with the generic cases that would need to be
+handled in linux. I must say ctucanfd has a much nicer interface than
+the other can hardware I've used.
+
+Kind regards,
+
+Andrew

@@ -2,300 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E710B5185CF
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 15:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E967D5185CE
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 15:43:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236413AbiECNrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 09:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35372 "EHLO
+        id S236402AbiECNrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 09:47:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236415AbiECNrV (ORCPT
+        with ESMTP id S236380AbiECNrL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 09:47:21 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452BC1D337
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 06:43:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651585426; x=1683121426;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=I+ad57DTlQ5+StAlR5dBr8SiSEVqSPWh3Rd1URMec+k=;
-  b=YYDYvzRh1az1W1+eND6oYeXPyFSE3EwaM09vz42l7ZJgJqRAfQoxW5CL
-   SIMhEv2VJ0MylWnhL2MPIqANflCyopHRvJ06gZpH0iHQhf4QWkmZ/QnHR
-   Bt4ioXTfbt0OeUWNUEC3XQMgN9JQ6FOteze0WoIJsx7ePL7ZvmXsKqupY
-   UsR4zB0/g85eX+489nkViLPhsTtD6GvI9FeHcTZCodaX26+lJs2XX4EuH
-   Ekwrn/ZJmFrf5i4jml63qfexX9Ybrt5u/h6dnnraa5Fo5wU40KHwTVt8J
-   zGRLJAgKD59xsxI5ExyweHN/gQdKL5iVHjrZS3HaeBImGJbz0QZh75JA8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="292664340"
-X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
-   d="scan'208";a="292664340"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 06:43:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
-   d="scan'208";a="620345606"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 03 May 2022 06:43:44 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nlsoa-000AVR-0J;
-        Tue, 03 May 2022 13:43:44 +0000
-Date:   Tue, 3 May 2022 21:42:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [asahilinux:bits/110-smc 11/14]
- drivers/power/reset/macsmc-reboot.c:54:25: error: field has incomplete type
- 'struct sys_off_handler'
-Message-ID: <202205032150.wuq5sqcq-lkp@intel.com>
+        Tue, 3 May 2022 09:47:11 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD53C1D32C;
+        Tue,  3 May 2022 06:43:38 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 8A86022239;
+        Tue,  3 May 2022 15:43:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1651585417;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wUhybUQ9wgcQ0ISiRM6y/Kbz55BvTsWvkuDWu8QOB7M=;
+        b=Dv8DNuDpkZlRXdB8+UQL7pAMGq6Ylo/o0fqe612D1mvZYd7KMbJxTD0T5JbYdVTKO4qUgH
+        paYRsNapZPvIwbnXJSxiRDkTtDmrM+PjG+Iqj5+BaaLNL5z/abkqDFrDCggDL3B23DMT3b
+        O3vk8rO8LsEASepsME/hAtxrZKgEEYw=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 03 May 2022 15:43:36 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Sean Anderson <sean.anderson@seco.com>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Li Yang <leoyang.li@nxp.com>, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH v3 0/9] nvmem: sfp: binding updates and additions
+In-Reply-To: <7aa5d553-04ad-5198-153c-39a9375a6a12@linaro.org>
+References: <20220428181703.2194171-1-sean.anderson@seco.com>
+ <7aa5d553-04ad-5198-153c-39a9375a6a12@linaro.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <3b8fc56f64508f7604f3b9e14b048568@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/110-smc
-head:   dc3db43287ff1d44b447fff8ed6386b28b339f1c
-commit: c65d40d51ad43c1cb61a2e8658005340a622b826 [11/14] power: reset: macsmc-reboot: Add driver for rebooting via Apple SMC
-config: arm64-randconfig-r034-20220501 (https://download.01.org/0day-ci/archive/20220503/202205032150.wuq5sqcq-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/AsahiLinux/linux/commit/c65d40d51ad43c1cb61a2e8658005340a622b826
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/110-smc
-        git checkout c65d40d51ad43c1cb61a2e8658005340a622b826
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+Am 2022-04-29 17:56, schrieb Srinivas Kandagatla:
+> On 28/04/2022 19:16, Sean Anderson wrote:
+>> This adds several properties to the Layerscape Security Fuse Processor
+>> (SFP) necessary for writing. Although the Linux driver does not use
+>> these bindings, I plan to use them in U-Boot [1]. It also adds a new
+>> compatibles for Trust Architecture (TA) 2.1 devices. In addition, it
+>> also adds an SFP binding for all TA 2.1 and 3.0 devices.
+>> 
+>> I would like to get this series merged for 5.18. As noted in patch 2,
+>> making the clock property mandatory is not an ABI break, but if this 
+>> is
+>> not applied then it would become an ABI break. The absolute minimum
+>> patches to apply for this would be patches 2 and 5. The rest 
+>> (including
+>> the regmap changes) could be deferred if necessary.
+>> 
+>> [1] 
+>> https://lore.kernel.org/u-boot/7c8e206a-cd40-2a77-6282-7f4bead2b13a@seco.com/T/#m591f8425b6f096ab3d54e6f7bd258e41cfa4c43b
+>> 
+>> Changes in v3:
+>> - Update commit message to note that this binding has not yet been
+>>    present in a relase, so it is OK to make otherwise breaking 
+>> changes.
+>> 
+>> Changes in v2:
+>> - Mention "regulator" in the description for ta-prog-sfp-supply
+>> - Convert sfp driver to use regmap
+>> - Fix various typos in commit messages
+>> 
+>> Sean Anderson (9):
+>>    dt-bindings: nvmem: sfp: Fix typo
+>>    dt-bindings: nvmem: sfp: Add clock properties
+>>    dt-bindings: nvmem: sfp: Add TA_PROG_SFP supply
+>>    dt-bindings: nvmem: sfp: Add compatible binding for TA 2.1 SFPs
+>>    arm64: dts: ls1028a: Update SFP binding to include clock
+>>    ARM: dts: layerscape: Add SFP binding for TA 2.1 devices
+>>    ARM: dts: Add SFP binding for TA 3.0 devices
+>>    nvmem: sfp: Use regmap
+>>    nvmem: sfp: Add support for TA 2.1 devices
+>> 
+> 
+> I have applied all the patches except 5/9, 6/9, and 7/9 dts patches
+> which need to go via dts maintainer tree.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Ahh. At least the device tree binding change (and the device tree
+changes itself) should be applied as fixes for the 5.18 release,
+so we don't have any conflicting descriptions. My fixes tag was never
+picked up, unfortunately:
+https://lore.kernel.org/linux-devicetree/4a45db184fbadc278624571dfbeb5004@walle.cc/
 
-All errors (new ones prefixed by >>):
+Srinivas, I've seen you picked it up into your for-next branch.
+Can we fix that?
 
->> drivers/power/reset/macsmc-reboot.c:54:25: error: field has incomplete type 'struct sys_off_handler'
-           struct sys_off_handler sys_off;
-                                  ^
-   drivers/power/reset/macsmc-reboot.c:54:9: note: forward declaration of 'struct sys_off_handler'
-           struct sys_off_handler sys_off;
-                  ^
-   drivers/power/reset/macsmc-reboot.c:142:37: warning: declaration of 'struct power_off_data' will not be visible outside of this function [-Wvisibility]
-   static void macsmc_power_off(struct power_off_data *data)
-                                       ^
->> drivers/power/reset/macsmc-reboot.c:144:37: error: incomplete definition of type 'struct power_off_data'
-           struct macsmc_reboot *reboot = data->cb_data;
-                                          ~~~~^
-   drivers/power/reset/macsmc-reboot.c:142:37: note: forward declaration of 'struct power_off_data'
-   static void macsmc_power_off(struct power_off_data *data)
-                                       ^
-   drivers/power/reset/macsmc-reboot.c:156:35: warning: declaration of 'struct restart_data' will not be visible outside of this function [-Wvisibility]
-   static void macsmc_restart(struct restart_data *data)
-                                     ^
->> drivers/power/reset/macsmc-reboot.c:158:37: error: incomplete definition of type 'struct restart_data'
-           struct macsmc_reboot *reboot = data->cb_data;
-                                          ~~~~^
-   drivers/power/reset/macsmc-reboot.c:156:35: note: forward declaration of 'struct restart_data'
-   static void macsmc_restart(struct restart_data *data)
-                                     ^
-   drivers/power/reset/macsmc-reboot.c:170:42: warning: declaration of 'struct reboot_prep_data' will not be visible outside of this function [-Wvisibility]
-   static void macsmc_reboot_prepare(struct reboot_prep_data *data)
-                                            ^
->> drivers/power/reset/macsmc-reboot.c:172:37: error: incomplete definition of type 'struct reboot_prep_data'
-           struct macsmc_reboot *reboot = data->cb_data;
-                                          ~~~~^
-   drivers/power/reset/macsmc-reboot.c:170:42: note: forward declaration of 'struct reboot_prep_data'
-   static void macsmc_reboot_prepare(struct reboot_prep_data *data)
-                                            ^
-   drivers/power/reset/macsmc-reboot.c:176:14: error: incomplete definition of type 'struct reboot_prep_data'
-           switch (data->mode) {
-                   ~~~~^
-   drivers/power/reset/macsmc-reboot.c:170:42: note: forward declaration of 'struct reboot_prep_data'
-   static void macsmc_reboot_prepare(struct reboot_prep_data *data)
-                                            ^
->> drivers/power/reset/macsmc-reboot.c:289:37: error: use of undeclared identifier 'RESTART_PRIO_HIGH'
-           reboot->sys_off.restart_priority = RESTART_PRIO_HIGH;
-                                              ^
->> drivers/power/reset/macsmc-reboot.c:292:8: error: call to undeclared function 'devm_register_sys_off_handler'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           ret = devm_register_sys_off_handler(&pdev->dev, &reboot->sys_off);
-                 ^
-   3 warnings and 7 errors generated.
+I'd guess the layerscape device tree change also need a Fixes: tag.
 
-
-vim +54 drivers/power/reset/macsmc-reboot.c
-
-    50	
-    51	struct macsmc_reboot {
-    52		struct device *dev;
-    53		struct apple_smc *smc;
-  > 54		struct sys_off_handler sys_off;
-    55	
-    56		union {
-    57			struct macsmc_reboot_nvmem nvm;
-    58			struct nvmem_cell *nvm_cells[ARRAY_SIZE(nvmem_names)];
-    59		};
-    60	};
-    61	
-    62	/* Helpers to read/write a u8 given a struct nvmem_cell */
-    63	static int nvmem_cell_get_u8(struct nvmem_cell *cell)
-    64	{
-    65		size_t len;
-    66		u8 val;
-    67		void *ret = nvmem_cell_read(cell, &len);
-    68	
-    69		if (IS_ERR(ret))
-    70			return PTR_ERR(ret);
-    71	
-    72		if (len < 1) {
-    73			kfree(ret);
-    74			return -EINVAL;
-    75		}
-    76	
-    77		val = *(u8 *)ret;
-    78		kfree(ret);
-    79		return val;
-    80	}
-    81	
-    82	static int nvmem_cell_set_u8(struct nvmem_cell *cell, u8 val)
-    83	{
-    84		return nvmem_cell_write(cell, &val, sizeof(val));
-    85	}
-    86	
-    87	static ssize_t macsmc_ac_power_mode_store(struct device *dev, struct device_attribute *attr,
-    88						  const char *buf, size_t n)
-    89	{
-    90		struct macsmc_reboot *reboot = dev_get_drvdata(dev);
-    91		int mode;
-    92		int ret;
-    93	
-    94		mode = sysfs_match_string(ac_power_modes, buf);
-    95		if (mode < 0)
-    96			return mode;
-    97	
-    98		ret = nvmem_cell_set_u8(reboot->nvm.pm_setting, ac_power_mode_map[mode]);
-    99		if (ret < 0)
-   100			return ret;
-   101	
-   102		return n;
-   103	}
-   104	
-   105	static ssize_t macsmc_ac_power_mode_show(struct device *dev,
-   106						 struct device_attribute *attr, char *buf)
-   107	{
-   108		struct macsmc_reboot *reboot = dev_get_drvdata(dev);
-   109		int len = 0;
-   110		int i;
-   111		int mode = nvmem_cell_get_u8(reboot->nvm.pm_setting);
-   112	
-   113		if (mode < 0)
-   114			return mode;
-   115	
-   116		for (i = 0; i < ARRAY_SIZE(ac_power_mode_map); i++)
-   117			if (mode == ac_power_mode_map[i])
-   118				len += scnprintf(buf+len, PAGE_SIZE-len,
-   119						 "[%s] ", ac_power_modes[i]);
-   120			else
-   121				len += scnprintf(buf+len, PAGE_SIZE-len,
-   122						 "%s ", ac_power_modes[i]);
-   123		buf[len-1] = '\n';
-   124		return len;
-   125	}
-   126	static DEVICE_ATTR(ac_power_mode, 0644, macsmc_ac_power_mode_show,
-   127			   macsmc_ac_power_mode_store);
-   128	
-   129	/*
-   130	 * SMC 'MBSE' key actions:
-   131	 *
-   132	 * 'offw' - shutdown warning
-   133	 * 'slpw' - sleep warning
-   134	 * 'rest' - restart warning
-   135	 * 'off1' - shutdown (needs PMU bit set to stay on)
-   136	 * 'susp' - suspend
-   137	 * 'phra' - restart ("PE Halt Restart Action"?)
-   138	 * 'panb' - panic beginning
-   139	 * 'pane' - panic end
-   140	 */
-   141	
-   142	static void macsmc_power_off(struct power_off_data *data)
-   143	{
- > 144		struct macsmc_reboot *reboot = data->cb_data;
-   145	
-   146		dev_info(reboot->dev, "Issuing power off (off1)\n");
-   147	
-   148		if (apple_smc_write_u32_atomic(reboot->smc, SMC_KEY(MBSE), SMC_KEY(off1)) < 0) {
-   149			dev_err(reboot->dev, "Failed to issue MBSE = off1 (power_off)\n");
-   150		} else {
-   151			mdelay(100);
-   152			WARN_ON(1);
-   153		}
-   154	}
-   155	
-   156	static void macsmc_restart(struct restart_data *data)
-   157	{
- > 158		struct macsmc_reboot *reboot = data->cb_data;
-   159	
-   160		dev_info(reboot->dev, "Issuing restart (phra)\n");
-   161	
-   162		if (apple_smc_write_u32_atomic(reboot->smc, SMC_KEY(MBSE), SMC_KEY(phra)) < 0) {
-   163			dev_err(reboot->dev, "Failed to issue MBSE = phra (restart)\n");
-   164		} else {
-   165			mdelay(100);
-   166			WARN_ON(1);
-   167		}
-   168	}
-   169	
-   170	static void macsmc_reboot_prepare(struct reboot_prep_data *data)
-   171	{
- > 172		struct macsmc_reboot *reboot = data->cb_data;
-   173		u32 val;
-   174		u8 shutdown_flag;
-   175	
-   176		switch (data->mode) {
-   177			case SYS_RESTART:
-   178				val = SMC_KEY(rest);
-   179				shutdown_flag = 0;
-   180				break;
-   181			case SYS_POWER_OFF:
-   182				val = SMC_KEY(offw);
-   183				shutdown_flag = 1;
-   184				break;
-   185			default:
-   186				return;
-   187		}
-   188	
-   189		dev_info(reboot->dev, "Preparing for reboot (%p4ch)\n", &val);
-   190	
-   191		/* On the Mac Mini, this will turn off the LED for power off */
-   192		if (apple_smc_write_u32(reboot->smc, SMC_KEY(MBSE), val) < 0)
-   193			dev_err(reboot->dev, "Failed to issue MBSE = %p4ch (reboot_prepare)\n", &val);
-   194	
-   195		/* Set the boot_stage to 0, which means we're doing a clean shutdown/reboot. */
-   196		if (reboot->nvm.boot_stage &&
-   197		    nvmem_cell_set_u8(reboot->nvm.boot_stage, BOOT_STAGE_SHUTDOWN) < 0)
-   198			dev_err(reboot->dev, "Failed to write boot_stage\n");
-   199	
-   200		/*
-   201		 * Set the PMU flag to actually reboot into the off state.
-   202		 * Without this, the device will just reboot. We make it optional in case it is no longer
-   203		 * necessary on newer hardware.
-   204		 */
-   205		if (reboot->nvm.shutdown_flag &&
-   206		    nvmem_cell_set_u8(reboot->nvm.shutdown_flag, shutdown_flag) < 0)
-   207			dev_err(reboot->dev, "Failed to write shutdown_flag\n");
-   208	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+-michael

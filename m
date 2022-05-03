@@ -2,91 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9EA95180E3
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 11:22:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECA855180F8
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 11:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233423AbiECJYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 05:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55602 "EHLO
+        id S233374AbiECJ3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 05:29:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233384AbiECJXr (ORCPT
+        with ESMTP id S232938AbiECJ3D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 05:23:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0E42FB;
-        Tue,  3 May 2022 02:20:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30E12B81BE1;
-        Tue,  3 May 2022 09:20:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E7A45C385B1;
-        Tue,  3 May 2022 09:20:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651569612;
-        bh=EyqTsj+EFSH0FDi1wlRyfZ3SuBunmGQ6/GwrNH9g75M=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=b5QnscaClWg8zHPBXgBLJAKzBa6tXlrPYMROQAcwl3fkUGZRMGULpFcIOYzRFAEtu
-         7OGlmXds2MgCMgvnpYhjgIQjK9LprrtwxrQ2k9jB5eQNnkL6RA5K+Z/LRdU3zphBEj
-         vyJS3woxYsukryJwQqTTBcf3LzY7tDdWzPW4ksTwUvgE+0XBVhzVZTmz7NQb5Pzzjt
-         Qqrcen7RnzioE9OgtG+VnpDUImnRcMzKhcG/t+YfDd7wHb0j3K60DKlMEpsMNjXYVY
-         W56X4jZ41T5K8pC3jYgAhq/pZFNYik2Z1bV9M5W8fkKVQmdXDgZ6SmdFOgvwoT0dr1
-         M1dh+q0OgMuvA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C8616E6D402;
-        Tue,  3 May 2022 09:20:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 3 May 2022 05:29:03 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2605A220C0;
+        Tue,  3 May 2022 02:25:31 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id i27so32278503ejd.9;
+        Tue, 03 May 2022 02:25:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=soFnJ41OKBvmqjI8v9ZOzkK4Vn/5GzMNo6xdgyGAsMk=;
+        b=o16dMaBBGcP4ajFdeIc4YtDD431tG9UWQgnozHcChAjvt8RBRtHU8BnLOmEknxo6G0
+         Q9gbNg7ANq7+BnGKYZf0siuSctCicT302Hrn/G2ZCeiCkvCDPqnmEV5Lvxfb55pXRhg8
+         rld0SzvAdBMtfkNyFnfB/N9cBYkrdkgwDFJ2C8+wFhu6TmtgSUVowdOjPytJajfxxwxm
+         DBCcdC0RopnL4uHIP4TjZKa76cwSMnsp4VfP4pNZ68UdbCAP3RtO2+h/DwLaoax6HQP6
+         1K/VNsIEM8BQ52sGkr4r0mqIoVtklaJzJEQ+rdkU9TQ+Ot+GKJQ0zsnOPEUYJRpjhhYp
+         potQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=soFnJ41OKBvmqjI8v9ZOzkK4Vn/5GzMNo6xdgyGAsMk=;
+        b=ZgpcC90dFK7i0A8uEGQAOqbP5b2ksNGi5b78dZTsZsQttNmYVwnZYiQK9VtmY9ROTe
+         wIF6fZpgJt053lR/l2jSEuxpq7vGS/ofysIaib+jndy5iaEUkCFDhKDrXt52h8tu6qA/
+         ydMAQPM/u8bKoqBptos5RUjPeunRZIBTd6Bjt/Y6/qHzhrVUyTHsRR6nM7kyO6RAv4nY
+         /SWbj18U4pLzoqX4doobmHyMFFJC0uZr/pQAmmuwFtccGzEspH5N4w2cHVcgqUfevSQq
+         3eJELsfxrVJJBL4cRhE9JRoy0ArnUCt25591+HC/zAzlMXhxS19TfvA864XRrrNvHD8S
+         aXbA==
+X-Gm-Message-State: AOAM5334xiudVraM/uXROrbf09LVJpS5Fxe2sgOyvsK/e2FDr/qG10So
+        eOrUkkQ+winU+ktOHivAeSGU8LQQTXnY8Ou3paQ=
+X-Google-Smtp-Source: ABdhPJxAZtRQdRTR2mVaCYLHKzLeXAneNCOKyhgEZDPmcSKRYED8zMHxs8Q53/lzrisDk/Exxo47f/kwYbJ5LCX627Q=
+X-Received: by 2002:a17:907:3e8c:b0:6f4:4fdb:6f24 with SMTP id
+ hs12-20020a1709073e8c00b006f44fdb6f24mr8218039ejc.44.1651569929536; Tue, 03
+ May 2022 02:25:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v3 0/2] emaclite: improve error handling and minor cleanup
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165156961181.14392.1143841142923055391.git-patchwork-notify@kernel.org>
-Date:   Tue, 03 May 2022 09:20:11 +0000
-References: <1651476470-23904-1-git-send-email-radhey.shyam.pandey@xilinx.com>
-In-Reply-To: <1651476470-23904-1-git-send-email-radhey.shyam.pandey@xilinx.com>
-To:     Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        michal.simek@xilinx.com, andrew@lunn.ch, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, git@xilinx.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220503080613.27601-1-jslaby@suse.cz> <20220503080613.27601-2-jslaby@suse.cz>
+In-Reply-To: <20220503080613.27601-2-jslaby@suse.cz>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 3 May 2022 11:24:53 +0200
+Message-ID: <CAHp75VfLw2pYMvaEoF+JuqN+H0wyo7ZfbkpefwtebCkOGVT0QQ@mail.gmail.com>
+Subject: Re: [PATCH 1/7] serial: pch: move size check from pop_tx one level up
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Tue, May 3, 2022 at 10:12 AM Jiri Slaby <jslaby@suse.cz> wrote:
+>
+> 'count' is zero in the pop_tx()'s comparison against 'size'. So the 'if'
+> tries to find out if 'size' is negative or zero and returns in that
+> case. But it cannot be negative, due to previous (size < 0) check in the
+> caller: handle_tx().
+>
+> So simply move this check from pop_tx() to handle_tx(). Now it's clear
+> that pop_tx() is called only if fifo_size is non-zero.
 
-This series was applied to netdev/net.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
+I'm in favour of the series, but ideally this driver should be
+converted to be a part of the 8250 family.
 
-On Mon, 2 May 2022 12:57:48 +0530 you wrote:
-> This patchset does error handling for of_address_to_resource() and also
-> removes "Don't advertise 1000BASE-T" and auto negotiation.
-> 
-> Changes for v3:
-> - Resolve git apply conflicts for 2/2 patch.
-> 
-> Changes for v2:
-> - Added Andrew's reviewed by tag in 1/2 patch.
-> - Move ret to down to align with reverse xmas tree style in 2/2 patch.
-> - Also add fixes tag in 2/2 patch.
-> - Specify tree name in subject prefix.
-> 
-> [...]
-
-Here is the summary with links:
-  - [net,v3,1/2] net: emaclite: Don't advertise 1000BASE-T and do auto negotiation
-    https://git.kernel.org/netdev/net/c/b800528b97d0
-  - [net,v3,2/2] net: emaclite: Add error handling for of_address_to_resource()
-    https://git.kernel.org/netdev/net/c/7a6bc33ab549
-
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+With Best Regards,
+Andy Shevchenko

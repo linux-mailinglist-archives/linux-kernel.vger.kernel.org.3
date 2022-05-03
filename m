@@ -2,138 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B9A51860E
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:04:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7A151861B
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:05:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236658AbiECOIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 10:08:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
+        id S236687AbiECOIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 10:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236230AbiECOIU (ORCPT
+        with ESMTP id S236230AbiECOIg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 10:08:20 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD9D1EADD
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 07:04:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651586687; x=1683122687;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bfu2gyz8tsmL8KmzuHOs9Hvc3SiLM/mU0vR0bwAU/nM=;
-  b=NRaWtn3ipqyfv9k2C105D4w6FSzuaeVc5r1F/UH1jIsmcCzRlz/SHXdZ
-   HB1Ibiw0FTJ5rMyFUR97iAGQy5v5bTvIW9H/fiRUgfifOXZVtBDQGiomL
-   g0PKaRzyQDWEb+dQnx5Z88h2rlLCtdDdVq+UIx220GafFO7i+XWlpT+ka
-   vmEqzZHUvBo/fakxonfj8f/kpwsVxJLpUGho9m8U3SXjFnJlYcLNg5jte
-   PPAEHDtnCeXCXOKkOn8K6CRueuVBKhBi4HWjP5phnqi6hB9VVilEsl01K
-   9LNo2CTm6YTPJceAFrB9ev6p+DR26FyEFyq3eBULrz6kslo71qkcW4PKn
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="353922919"
-X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
-   d="scan'208";a="353922919"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 07:04:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
-   d="scan'208";a="692202842"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 03 May 2022 07:04:45 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nlt8u-000AWV-LM;
-        Tue, 03 May 2022 14:04:44 +0000
-Date:   Tue, 3 May 2022 22:04:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sven Schnelle <svens@linux.ibm.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-audit@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] audit: add call argument to socketcall auditing
-Message-ID: <202205032153.9OyzkwPS-lkp@intel.com>
-References: <20220503090212.1322050-1-svens@linux.ibm.com>
+        Tue, 3 May 2022 10:08:36 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36161EADD;
+        Tue,  3 May 2022 07:05:03 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id z8so18283201oix.3;
+        Tue, 03 May 2022 07:05:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=b5zcWYUFPO27QgFEnMVs+54HuZPkQ0FL3sPCUBagWEs=;
+        b=nmtAO8elN+lD21aNW4PeFwV5qviuq6Y4sVLZWcQC9zZn6UqsLXYF5ciWRgl0+lA1Wo
+         Q3rLe4Fskzg95B7RE9bBDzCWYoXQcNXwViucb5QcW8FGpQqDvUf5YZDsdBhza6rYepvt
+         JfGvKjbu2S1tIWfgmVuDBkIJnidthNgLCkvix0KKZ/uKOs1c5s5gsxh2uVagQLRY6nw/
+         ziKH7/MVdkOxup3VPlggEPris50qLUCDUg9E33r7OhDbS5bq0RNLc5yT2Ouqb/LH4LOT
+         N/oRmt4dIHZssgokdRevfTbu/juuu2xeyRBaFEeQbqQW6cVYD7R5t3xz7Vo6hhn100CX
+         OKdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=b5zcWYUFPO27QgFEnMVs+54HuZPkQ0FL3sPCUBagWEs=;
+        b=yDASM6rLJbKX9+ZVLg892YHe+za9Eudw4dVMdkqwtGrE/Fsso8IYnAC6pDNj3glBci
+         h5qmg4AzpgUPm+NZIIzKePXcxlKrKcojE25DvCs+EkMUd/g03kbK2c4e5vLQ+YBxX5Sq
+         tedkXejWxzGvqYo8xhGeAEMyqqpHNBR+/mI4hYUCjGdroTGIY531YrdI1PBIY4Oc/RR9
+         FsGW8BwSprfejNnrqZ7ffZJMU4PQ75dv11xNKpn4uzx+yrsS7dZrdc2Xta1cuvblikHR
+         u/ZB6O5zrAx5E0snvd2ULn5sdIC/gnTHCUOwHXivFgG7KcOURKqzWt+zCuOJ3JQQGRPd
+         kX5A==
+X-Gm-Message-State: AOAM5334v8GF7VvLDFyoThb5yWDY715wrSL36U1B4eQNUHMlIAT44ltn
+        /AIqRT/yMjljZjdbP3069QE=
+X-Google-Smtp-Source: ABdhPJzzGJEdAdih1u7jF2kiLOrOxmCv3lvE9XNEtKe9LYoSPKte95Aq4ECL/l2Oq3F4Q7XGCpzu3g==
+X-Received: by 2002:a05:6808:2007:b0:325:7c10:475e with SMTP id q7-20020a056808200700b003257c10475emr1861677oiw.250.1651586703247;
+        Tue, 03 May 2022 07:05:03 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k6-20020a056830168600b0060603221249sm4013581otr.25.2022.05.03.07.04.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 07:05:00 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <d4eb4752-d8c0-715a-1d69-829f39c88d2e@roeck-us.net>
+Date:   Tue, 3 May 2022 07:04:56 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220503090212.1322050-1-svens@linux.ibm.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+References: <20220419163810.2118169-1-arnd@kernel.org>
+ <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
+ <6f1b27fa-96d1-4be7-ac6a-762610314f2a@roeck-us.net>
+ <8d6d453a-e6fc-439b-2f34-e60c22fc9e98@roeck-us.net>
+ <CAK8P3a2Ekvis1YcrJZtuga+XQdbeTC98PkOszCpS2DiZri7VMQ@mail.gmail.com>
+ <149509dd-f43d-1b27-4395-81eab4ff3455@roeck-us.net>
+ <CAK8P3a05vFdBnXXAMPVS82xX29+uinvWPcWxAgvj0TfoOk+1kg@mail.gmail.com>
+ <b13783aa-9225-d52a-3800-c97ad772688b@roeck-us.net>
+ <CAK8P3a3S5OjkKq_u5FpnwzYv+0+typya6Z4MzTez5ZH+do00xQ@mail.gmail.com>
+ <CAK8P3a3jiqf_zpBsZyvAb5ZtkwDa7KkqExqDAdpY_pYqkr_NgQ@mail.gmail.com>
+ <4dcdbfe2-9edf-320b-d123-3b62c8b5e28e@roeck-us.net>
+ <CAK8P3a0ogn1wgPBDHkT=Fb8ufA+y8Ax1Qov2-vRXfC08QqnrQA@mail.gmail.com>
+ <c001d58e-9a78-6338-a533-d0f215b3dfd1@roeck-us.net>
+ <CAK8P3a1X3YH0RqqmqgqFAaY94yreD-PfY-pvyMf+xU3nGeqvsg@mail.gmail.com>
+ <04840b4f-5b9d-b29a-62f7-e5148d415313@roeck-us.net>
+ <CAK8P3a39oiWyDwp=BHuCsBVwfzyZ802-NwL9G9r-t6X8KSr6nA@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <CAK8P3a39oiWyDwp=BHuCsBVwfzyZ802-NwL9G9r-t6X8KSr6nA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sven,
+On 5/3/22 00:17, Arnd Bergmann wrote:
+> On Tue, May 3, 2022 at 4:55 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>> On 5/2/22 14:03, Arnd Bergmann wrote:
+>>> On Mon, May 2, 2022 at 10:35 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>>>> On 5/2/22 12:21, Arnd Bergmann wrote:
+>>
+>> qemu puts initrd in the middle of available memory. With the image size
+>> being ~1MB larger than with v5.18-rc, this is too much, and the kernel
+>> overwrites part of initrd. This causes it to be corrupted.
+>>
+>> It looks like that would have happened eventually, your patch series just
+>> made it happen now. The kernel is just getting too large to run on such small
+>> systems. I worked around the problem in my version of qemu by loading initrd
+>> at the end of the (small) RAM. With that, I no longer see the boot failure.
+> 
+> Ok, thanks for confirming. If it's just the image size that changed,
+> then I think
+> we can live with it. Having the kernel image grow by 1MB seems excessive
+> though, I'd like to understand better where that increase comes from.
+> 
+> Starting out from pxa_defconfig, I see a 40KB increase from the final patch
+> that moves to multiplatform support, which I think is fine.
+> 
+> If you have a z2 specific config, that would probably not enable CONFIG_OF,
+> which is always turned on for multiplatform, but again that only adds around
+> 250KB in my builds (using gcc-11). This is more than I'd like it to be, but
+> still much less than 1MB.
+> 
 
-I love your patch! Yet something to improve:
+Maybe it is a bit less; I only compared the size of "Image". Either case,
+it is enough to cause the problem. I am not sure if it is worth the time
+trying to track this down further.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on pcmoore-audit/next v5.18-rc5 next-20220503]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Sven-Schnelle/audit-add-call-argument-to-socketcall-auditing/20220503-170442
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 9050ba3a61a4b5bd84c2cde092a100404f814f31
-config: x86_64-randconfig-a011 (https://download.01.org/0day-ci/archive/20220503/202205032153.9OyzkwPS-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/b89caaec1c1bd3382c6cef08d08beadbaf808513
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Sven-Schnelle/audit-add-call-argument-to-socketcall-auditing/20220503-170442
-        git checkout b89caaec1c1bd3382c6cef08d08beadbaf808513
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All error/warnings (new ones prefixed by >>):
-
-   net/compat.c: In function '__do_compat_sys_socketcall':
->> net/compat.c:440:49: warning: passing argument 2 of 'audit_socketcall_compat' makes pointer from integer without a cast [-Wint-conversion]
-     440 |         ret = audit_socketcall_compat(call, len / sizeof(a[0]), a);
-         |                                             ~~~~^~~~~~~~~~~~~~
-         |                                                 |
-         |                                                 long unsigned int
-   In file included from net/compat.c:26:
-   include/linux/audit.h:648:59: note: expected 'u32 *' {aka 'unsigned int *'} but argument is of type 'long unsigned int'
-     648 | static inline int audit_socketcall_compat(int nargs, u32 *args)
-         |                                                      ~~~~~^~~~
->> net/compat.c:440:15: error: too many arguments to function 'audit_socketcall_compat'
-     440 |         ret = audit_socketcall_compat(call, len / sizeof(a[0]), a);
-         |               ^~~~~~~~~~~~~~~~~~~~~~~
-   In file included from net/compat.c:26:
-   include/linux/audit.h:648:19: note: declared here
-     648 | static inline int audit_socketcall_compat(int nargs, u32 *args)
-         |                   ^~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/audit_socketcall_compat +440 net/compat.c
-
-   423	
-   424	COMPAT_SYSCALL_DEFINE2(socketcall, int, call, u32 __user *, args)
-   425	{
-   426		u32 a[AUDITSC_ARGS];
-   427		unsigned int len;
-   428		u32 a0, a1;
-   429		int ret;
-   430	
-   431		if (call < SYS_SOCKET || call > SYS_SENDMMSG)
-   432			return -EINVAL;
-   433		len = nas[call];
-   434		if (len > sizeof(a))
-   435			return -EINVAL;
-   436	
-   437		if (copy_from_user(a, args, len))
-   438			return -EFAULT;
-   439	
- > 440		ret = audit_socketcall_compat(call, len / sizeof(a[0]), a);
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Guenter

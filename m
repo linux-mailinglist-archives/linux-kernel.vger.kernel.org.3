@@ -2,128 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E803518113
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 11:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2180518114
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 11:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233434AbiECJgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 05:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
+        id S233449AbiECJgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 05:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232146AbiECJgU (ORCPT
+        with ESMTP id S232146AbiECJgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 05:36:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0FBC228E2D
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 02:32:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651570365;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QO7u9m/33fXuqnKaaI9617/vJfWpf9h0WEBZgCNeDpE=;
-        b=HtrKcEq37lZjOc4UbYiNiCSxgHi1DnxAw5inxH/aTqjw+xzmPCJxpzNchx3a6GTkx1Ednp
-        GupuZhCX+oa8m2u0cweBAA8jRen814sQ3UrpTG6mHaAoWfq25gSRYwKqX23TsAnWHsxNNG
-        ndWz8M04ds/G5UXe+LU66kg8FT0crpA=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-636-avCOQNVeNiG23yaRsfJHFw-1; Tue, 03 May 2022 05:32:44 -0400
-X-MC-Unique: avCOQNVeNiG23yaRsfJHFw-1
-Received: by mail-wm1-f72.google.com with SMTP id n186-20020a1c27c3000000b00392ae974ca1so624601wmn.0
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 02:32:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QO7u9m/33fXuqnKaaI9617/vJfWpf9h0WEBZgCNeDpE=;
-        b=3kU6Llf48ld/C8UQFRpZ7mscXWd+NqB3xgMlBu/+F4jdjRB9uojCLYeBkA7XQ9J0LR
-         4HmmakP+VOWt+6cPJiF2vtpDjmmL/aKoZ0x/IEV1xCIGe72nKSnEb8gPDB/vYejGhFBy
-         fIHJcBNMD4dYQg2jLrtSjGHGxx5l0Trnikjacvk53aYvqbeVb+teJ8JF/SkAHz6c0CHg
-         gQLWEUxSujDB6a+bNeyhrDvccvHfCx8AiXeL49GK8LXDhgmB4ao7Lrkr5CKN1yWbUEEy
-         o/oTXqnt8jaCH6pUjuJ8hu9qekB3MoMvUCbpfYP/A7qpz3cYtioW8oG23+YNOk4g0YRR
-         9A7w==
-X-Gm-Message-State: AOAM5328+vFMmTWcyiXJPSpU7z4nNU3U3XhpGJJOaUBHPfigPS+hXEpQ
-        /q3SWesN34pz4erRcNNDahHHL/ZJmIc+tHfYHR9ry923JRpNnKqFZTvDlB2frYxQhd7sFLEmMm/
-        eAXr0ojVvVPqytajlLcauHxom
-X-Received: by 2002:a05:600c:4e87:b0:394:4992:ab8a with SMTP id f7-20020a05600c4e8700b003944992ab8amr2548643wmq.97.1651570359984;
-        Tue, 03 May 2022 02:32:39 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwwWll5WaK675NsGg3hsRio/Tn5a0/PsUj7oJJ5eiLm4CLv1T7CdmkmxigBHV2lc+sjusW1sw==
-X-Received: by 2002:a05:600c:4e87:b0:394:4992:ab8a with SMTP id f7-20020a05600c4e8700b003944992ab8amr2548626wmq.97.1651570359712;
-        Tue, 03 May 2022 02:32:39 -0700 (PDT)
-Received: from [10.32.181.74] (nat-pool-mxp-t.redhat.com. [149.6.153.186])
-        by smtp.googlemail.com with ESMTPSA id c3-20020adfc043000000b0020c5253d905sm11253866wrf.81.2022.05.03.02.32.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 May 2022 02:32:38 -0700 (PDT)
-Message-ID: <fa567ab7-bf5d-3c95-aea8-2dcba00d50cd@redhat.com>
-Date:   Tue, 3 May 2022 11:32:30 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2] KVM: x86/mmu: Speed up slot_rmap_walk_next for
- sparsely populated rmaps
-Content-Language: en-US
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     seanjc@google.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        jmattson@google.com, joro@8bytes.org, dmatlack@google.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220502220347.174664-1-vipinsh@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220502220347.174664-1-vipinsh@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 3 May 2022 05:36:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDF6289B7
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 02:33:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 290BEB81D1B
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 09:33:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE23AC385A4;
+        Tue,  3 May 2022 09:33:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651570381;
+        bh=3hJTw2o34sSVVc5erLnf4L9EiyUaTq6gZYXD782ef+I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BMM+LMqpUIvJ2q69Nfjb5EI+KtFimjuy5/MDGeT4KeuelSFkUTZPU2Ml/Rt75gSC9
+         QciiwvSan0443wO+GWP5qRZsFR3Bv5j++BaxepHbf/675SLiPHCmlN7do2a9G5Oef0
+         jZ2xCMPgzxZ1SjplHE/xmfhSTK/ETz5vP2qpIsh1fF5b81nBGMt4GxusM/jt1rJYsu
+         bbRcj/gjcESIZKLlytzQhvU+xt7GhfcU3j/ywmgPbOLQVNtpQMRtixjkiI4W66uzvp
+         Bblr2W2W2EjtO+CLc8Py++6yzqm6zFcy8l3Pwe9YeFAnKrEa6SYWU54DB9nUSktfls
+         3WYDj5hSyhyaw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nlotv-008biW-3g; Tue, 03 May 2022 10:32:59 +0100
+Date:   Tue, 03 May 2022 10:32:58 +0100
+Message-ID: <87fslr7ygl.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        pali@kernel.org
+Subject: Re: irqdomain API: how to set affinity of parent irq of chained irqs?
+In-Reply-To: <20220502174559.78f5cbc0@dellmb>
+References: <20220502102137.764606ee@thinkpad>
+        <87mtg0i8m8.wl-maz@kernel.org>
+        <20220502174559.78f5cbc0@dellmb>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: kabel@kernel.org, linux-kernel@vger.kernel.org, tglx@linutronix.de, pali@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/3/22 00:03, Vipin Sharma wrote:
-> Avoid calling handlers on empty rmap entries and skip to the next non
-> empty rmap entry.
-> 
-> Empty rmap entries are noop in handlers.
-> 
-> Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> ---
-> 
-> v2:
-> - Removed noinline from slot_rmap_walk_next signature
-> 
-> v1:
-> - https://lore.kernel.org/lkml/20220325233125.413634-1-vipinsh@google.com
-> 
->   arch/x86/kvm/mmu/mmu.c | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 77785587332e..4e8d546431eb 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -1501,9 +1501,11 @@ static bool slot_rmap_walk_okay(struct slot_rmap_walk_iterator *iterator)
->   
->   static void slot_rmap_walk_next(struct slot_rmap_walk_iterator *iterator)
->   {
-> -	if (++iterator->rmap <= iterator->end_rmap) {
-> +	while (++iterator->rmap <= iterator->end_rmap) {
->   		iterator->gfn += (1UL << KVM_HPAGE_GFN_SHIFT(iterator->level));
-> -		return;
-> +
-> +		if (iterator->rmap->val)
-> +			return;
->   	}
->   
->   	if (++iterator->level > iterator->end_level) {
-> 
-> base-commit: 71d7c575a673d42ad7175ad5fc27c85c80330311
+On Mon, 02 May 2022 16:45:59 +0100,
+Marek Beh=C3=BAn <kabel@kernel.org> wrote:
+>=20
+> On Mon, 02 May 2022 10:31:11 +0100
+> Marc Zyngier <maz@kernel.org> wrote:
+>=20
+> > On Mon, 02 May 2022 09:21:37 +0100,
+> > Marek Beh=C3=BAn <kabel@kernel.org> wrote:
+> > >=20
+> > > Dear Marc, Thomas,
+> > >=20
+> > > we have encountered the following problem that can hopefully be put
+> > > some light onto: What is the intended way to set affinity (and possib=
+ly
+> > > other irq attributes) of parent IRQ of chained IRQs, when using the
+> > > irqdomain API? =20
+> >=20
+> > Simples: you can't. What sense does it make to change the affinity of
+> > the parent interrupt, given that its fate is tied to *all* of the
+> > other interrupts that are muxed to it?
+>=20
+> Dear Marc,
+>=20
+> thank you for your answer. Still:
+>=20
+> What about when we want to set the same affinity for all the chained
+> interrupts?
+>=20
+> Example: on Armada 385 there are 4 PCIe controllers. Each controller
+> has one interrupt from which we trigger chained interrupts. We would
+> like to configure each controller to trigger interrupt (and thus all
+> chained interrupts in the domain) on different CPU core.
+>=20
+> Moreover we would really like to do this in runtime, through sysfs,
+> depending on for example whether there are cards plugged in the PCIe
+> ports.
+>=20
+> Maybe there should be some mechanism to allow to change affinity for
+> whole irqdomain, or something?
 
-Queued, thanks.
+Should? Maybe. But not for an irqdomain (which really doesn't have
+anything to do with interrupt affinity).
 
-Paolo
+What you may want is a new sysfs interface that would allow a parent
+interrupt affinity being changed, but also exposing to userspace all
+the interrupts this affects *at the same time*. something like:
 
+/sys/kernel/irq/42/smp_affinity_list
+/sys/kernel/irq/42/muxed_irqs/
+/sys/kernel/irq/42/muxed_irqs/56 -> ../../56
+/sys/kernel/irq/42/muxed_irqs/57 -> ../../57
+
+The main issues are that:
+
+- we don't really track the muxing information in any of the data
+  structures, so you can't just walk a short list and generate this
+  information. You'd need to build the topology information at
+  allocation time (or fish it out at runtime, but that's likely a
+  pain).
+
+- sysfs doesn't deal with affinities at all. procfs does, but adding
+  more crap there is frowned upon.
+
+- it *must* be a new interface. You can't repurpose the existing one,
+  as something like irqbalance would be otherwise be massively
+  confused by seeing interrupts moving around behind its back.
+
+- conversely, you'll need to teach irqbalance how to deal with this
+  new interface.
+
+- this needs to be safe against CPU hotplug. It probably already is,
+  but nobody ever tested it, given that userspace can't interact with
+  these interrupts at the moment.
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.

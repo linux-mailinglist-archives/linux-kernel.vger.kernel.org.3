@@ -2,158 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E025190F3
-	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 00:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47AD55190F5
+	for <lists+linux-kernel@lfdr.de>; Wed,  4 May 2022 00:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243417AbiECWEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 18:04:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47538 "EHLO
+        id S243492AbiECWIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 18:08:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243396AbiECWEq (ORCPT
+        with ESMTP id S243507AbiECWIG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 18:04:46 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E1D424A6
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 15:01:12 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id b18so13620887lfv.9
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 15:01:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ea8ABMqaP/3IfqgpahDhXKU84+lj+SYl6kFyqPQMceA=;
-        b=AH9YPAUVmiz2iuZbjpPDKdkQt+022DCzOP92I7vUL/eT3+o5GOyAtgOPpmge4UuirC
-         +sZfPDGGZDXm0e650LP8nnh9j+rbv5Ku1eAMTssdmyN0hpFcqLI8gJ0JoYh1dv9IWXLq
-         XCTvoJ3kynbKyPb/u2a8sRVUfyNUMNw8MTQDFMBNo6eTl5mL/Xb6QXVUZV1HgRz79Lti
-         0Sblnt6FrMDUskK3uxzZp8I051OTw+tHup8Q/T6Nk5L23l3yxDDS7LmNuFHryX56Gbsw
-         wf/yPeZr/YrpgmEn4E3x2wCSDlB9kSLzXT0Kn7HrOk3IhLaBrVOYoTqhkP1aOZF8yQKr
-         +AFA==
+        Tue, 3 May 2022 18:08:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00B48427ED
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 15:04:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651615468;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NCw2YbW2b06vdpfX9KTc0Sz/4kzxAVFUC7Z0+7uCYMw=;
+        b=QV8SeB9u1oxu2AZzk6hjOS1LlKtUj2LpNBB5DLkROzHeqEfTakgB5/zp2s3Bd/4AEf4bJE
+        orXaoq+FmnrdoK05RC6Wz/OgM+A64sto7wsFhpc+CLUM5uXBqDumNUE1VhTO5zpFdGu/gr
+        tAnahlJciSAzmonKdlU1+uwL/hGM4ng=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-616-1pWux-LAMiOgjaI_OcHTsQ-1; Tue, 03 May 2022 18:01:47 -0400
+X-MC-Unique: 1pWux-LAMiOgjaI_OcHTsQ-1
+Received: by mail-wm1-f69.google.com with SMTP id c125-20020a1c3583000000b0038e3f6e871aso6285507wma.8
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 15:01:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ea8ABMqaP/3IfqgpahDhXKU84+lj+SYl6kFyqPQMceA=;
-        b=xwPdsGokGiPu+Hudoe0PvbtEOF1KSF9VLAIvjYQx0+8W2lHe2NgBfcIuhzZqFasKUa
-         ly872hDewfPJiCTXQmCd8xzregFdq0RP9hEfD0+eqBaV+peQqQMxnqz5dJFWbwi1COIo
-         vaIpMXoVMl1b9Ei8RaZ/hvErX88mIwLAgZLltUq2pV1gmw33XsbrmJuvD2q4b/j3lEiq
-         /ljdfcuApp7eS+Ou9euy39EgPoosLL/UuydzHZb2NwZJgGoyk6PWGb2jpwg9UJV2vwtj
-         QzN082w/EWoJIJp8dHJxNUa1fYbt1cFKytempen797hYgEJT7rFFOz4CjKOqvL88sPXg
-         BJaQ==
-X-Gm-Message-State: AOAM5330dJC+x5zrV3M+YG6gfFajQy8Rn75CW1kZLUUcE8LAf1rF0unS
-        QBzEwODopWeSQas+qhHn+RRLCw1JZktQOhCcUmQ0cw==
-X-Google-Smtp-Source: ABdhPJxffvAuirc/Yl0IwGJeECgS6lRo3GxrjgRfTe3QJT6Cq/EQz5ilVvqPJUGgejfuRbwcW6bIIUFaImDQFTdjRYY=
-X-Received: by 2002:a05:6512:48f:b0:472:3c47:94a0 with SMTP id
- v15-20020a056512048f00b004723c4794a0mr12166240lfq.579.1651615270964; Tue, 03
- May 2022 15:01:10 -0700 (PDT)
+        bh=NCw2YbW2b06vdpfX9KTc0Sz/4kzxAVFUC7Z0+7uCYMw=;
+        b=HrRQusNDCfI8eJYT5sK5VtZ/Hu7fpLhAXzNDSCKhzhi9MUy30Zzoi59GuHr5rsljz/
+         u2B9Loi+q8rVtiIxVJb++B2WtRoCh5iZqb8ly7r4UxcL/1q744sYIlnR1bCvycE/l44t
+         SDBgPo9/f0XbAnO/S5VThYUgPFm9H/By3lYc7yOkx/nA8c8XkQz15jFDxV56xkGap3c/
+         +WrANk0a8Zy98D/VhJ/RF02KhmtIyWch8O303QWhV0k4rjVJoDaXLnO2RtFqUvkQaNrX
+         /V+wn039iEcRnwOVokYQHTjAHZpoD3VcH5oiVYPXVXD+r+ypVYYYPN/2pmII1gMugrs/
+         7ECg==
+X-Gm-Message-State: AOAM533U7J57vkaP68q6aPSm9SyfagF4oBDlpbEnwDU9ocouWXUN+rw4
+        +e23VQohsmtuWMNgOcTAdEAsya0DsNVmbzXg7B5dBfKfKbL/BhshMneRAGDG3/IZGtA/vWO1Rxo
+        YDs9WOjifXMcbJEK8/Y1DgBHd09AnnOJb+k++G+oa
+X-Received: by 2002:a5d:4a81:0:b0:207:9abe:2908 with SMTP id o1-20020a5d4a81000000b002079abe2908mr14084331wrq.341.1651615305548;
+        Tue, 03 May 2022 15:01:45 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzDZF5QtU8eWm5iH5MBr3nBAiPSuIRf8s8hX0zAE2sJW3Opo+sznt5voV5+vjORprV7H4visxp4de0FdVUYT74=
+X-Received: by 2002:a5d:4a81:0:b0:207:9abe:2908 with SMTP id
+ o1-20020a5d4a81000000b002079abe2908mr14084317wrq.341.1651615305322; Tue, 03
+ May 2022 15:01:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220501084032.1025918-1-masahiroy@kernel.org> <20220501084032.1025918-14-masahiroy@kernel.org>
-In-Reply-To: <20220501084032.1025918-14-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 3 May 2022 15:00:59 -0700
-Message-ID: <CAKwvOdkRpspJtgeH1ojhM6=twOZ+KJOQGmbEj7OoU+g=BMxSZw@mail.gmail.com>
-Subject: Re: [PATCH v2 13/26] modpost: split new_symbol() to symbol allocation
- and hash table addition
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>
+References: <20220429195350.85620-1-lyude@redhat.com> <CACO55ttsBxe6V88CTtGZgUj8k+gT+ne+FD_9FD_OxowF1XG5Bg@mail.gmail.com>
+In-Reply-To: <CACO55ttsBxe6V88CTtGZgUj8k+gT+ne+FD_9FD_OxowF1XG5Bg@mail.gmail.com>
+From:   Karol Herbst <kherbst@redhat.com>
+Date:   Wed, 4 May 2022 00:01:34 +0200
+Message-ID: <CACO55tv=u+HNKS9tH-ggy_O0YRiZQvAyb48gxRVqrz-fmWcvwA@mail.gmail.com>
+Subject: Re: [PATCH] drm/nouveau/subdev/bus: Ratelimit logging for fault errors
+To:     Lyude Paul <lyude@redhat.com>
+Cc:     nouveau <nouveau@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 1, 2022 at 1:42 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> new_symbol() does two things; allocate a new symbol and register it
-> to the hash table.
->
-> Using a separate function for each is easier to understand.
->
-> Replace new_symbol() with hash_add_symbol(). Remove the second parameter
-> of alloc_symbol().
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
-> Changes in v2:
->   - New patch
->
->  scripts/mod/modpost.c | 18 ++++++++----------
->  1 file changed, 8 insertions(+), 10 deletions(-)
->
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index c9b75697d0fc..b9f359d10968 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -242,34 +242,31 @@ static inline unsigned int tdb_hash(const char *name)
->   * Allocate a new symbols for use in the hash of exported symbols or
->   * the list of unresolved symbols per module
->   **/
-> -static struct symbol *alloc_symbol(const char *name, struct symbol *next)
-> +static struct symbol *alloc_symbol(const char *name)
->  {
->         struct symbol *s = NOFAIL(malloc(sizeof(*s) + strlen(name) + 1));
->
->         memset(s, 0, sizeof(*s));
->         strcpy(s->name, name);
-> -       s->next = next;
->         s->is_static = true;
->         return s;
->  }
->
->  /* For the hash of exported symbols */
-> -static struct symbol *new_symbol(const char *name, struct module *module,
-> -                                enum export export)
+Actually, there is another place we have to put this, we can spam
+"SCHED_ERROR" things which are triggered within multiple
+drivers/gpu/drm/nouveau/nvkm/engine/fifo/ files.
 
-`module` was also previously unused! Yuck. Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+On Tue, May 3, 2022 at 9:23 PM Karol Herbst <kherbst@redhat.com> wrote:
+>
+> not able to hit any error on my machine, but regardless:
+>
+> Reviewed-by: Karol Herbst <kherbst@redhat.com>
+>
+> I suspect there are more places where we could put it, but we can add
+> those later.
+>
+> Anyway, I think it's valuable to push it through fixes, not sure how
+> far back we want to CC stable though.
+>
+> On Fri, Apr 29, 2022 at 9:54 PM Lyude Paul <lyude@redhat.com> wrote:
+> >
+> > There's plenty of ways to fudge the GPU when developing on nouveau by
+> > mistake, some of which can result in nouveau seriously spamming dmesg with
+> > fault errors. This can be somewhat annoying, as it can quickly overrun the
+> > message buffer (or your terminal emulator's buffer) and get rid of actually
+> > useful feedback from the driver. While working on my new atomic only MST
+> > branch, I ran into this issue a couple of times.
+> >
+> > So, let's fix this by adding nvkm_error_ratelimited(), and using it to
+> > ratelimit errors from faults. This should be fine for developers, since
+> > it's nearly always only the first few faults that we care about seeing.
+> > Plus, you can turn off rate limiting in the kernel if you really need to.
+> >
+> > Signed-off-by: Lyude Paul <lyude@redhat.com>
+> > ---
+> >  drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h |  2 ++
+> >  drivers/gpu/drm/nouveau/nvkm/subdev/bus/gf100.c    | 14 +++++++-------
+> >  drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv31.c     |  6 +++---
+> >  drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv50.c     |  6 +++---
+> >  4 files changed, 15 insertions(+), 13 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h b/drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h
+> > index 1665738948fb..96113c8bee8c 100644
+> > --- a/drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h
+> > +++ b/drivers/gpu/drm/nouveau/include/nvkm/core/subdev.h
+> > @@ -62,4 +62,6 @@ void nvkm_subdev_intr(struct nvkm_subdev *);
+> >  #define nvkm_debug(s,f,a...) nvkm_printk((s), DEBUG,   info, f, ##a)
+> >  #define nvkm_trace(s,f,a...) nvkm_printk((s), TRACE,   info, f, ##a)
+> >  #define nvkm_spam(s,f,a...)  nvkm_printk((s),  SPAM,    dbg, f, ##a)
+> > +
+> > +#define nvkm_error_ratelimited(s,f,a...) nvkm_printk((s), ERROR, err_ratelimited, f, ##a)
+> >  #endif
+> > diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/gf100.c b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/gf100.c
+> > index 53a6651ac225..80b5aaceeaad 100644
+> > --- a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/gf100.c
+> > +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/gf100.c
+> > @@ -35,13 +35,13 @@ gf100_bus_intr(struct nvkm_bus *bus)
+> >                 u32 addr = nvkm_rd32(device, 0x009084);
+> >                 u32 data = nvkm_rd32(device, 0x009088);
+> >
+> > -               nvkm_error(subdev,
+> > -                          "MMIO %s of %08x FAULT at %06x [ %s%s%s]\n",
+> > -                          (addr & 0x00000002) ? "write" : "read", data,
+> > -                          (addr & 0x00fffffc),
+> > -                          (stat & 0x00000002) ? "!ENGINE " : "",
+> > -                          (stat & 0x00000004) ? "PRIVRING " : "",
+> > -                          (stat & 0x00000008) ? "TIMEOUT " : "");
+> > +               nvkm_error_ratelimited(subdev,
+> > +                                      "MMIO %s of %08x FAULT at %06x [ %s%s%s]\n",
+> > +                                      (addr & 0x00000002) ? "write" : "read", data,
+> > +                                      (addr & 0x00fffffc),
+> > +                                      (stat & 0x00000002) ? "!ENGINE " : "",
+> > +                                      (stat & 0x00000004) ? "PRIVRING " : "",
+> > +                                      (stat & 0x00000008) ? "TIMEOUT " : "");
+> >
+> >                 nvkm_wr32(device, 0x009084, 0x00000000);
+> >                 nvkm_wr32(device, 0x001100, (stat & 0x0000000e));
+> > diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv31.c b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv31.c
+> > index ad8da523bb22..c75e463f3501 100644
+> > --- a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv31.c
+> > +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv31.c
+> > @@ -45,9 +45,9 @@ nv31_bus_intr(struct nvkm_bus *bus)
+> >                 u32 addr = nvkm_rd32(device, 0x009084);
+> >                 u32 data = nvkm_rd32(device, 0x009088);
+> >
+> > -               nvkm_error(subdev, "MMIO %s of %08x FAULT at %06x\n",
+> > -                          (addr & 0x00000002) ? "write" : "read", data,
+> > -                          (addr & 0x00fffffc));
+> > +               nvkm_error_ratelimited(subdev, "MMIO %s of %08x FAULT at %06x\n",
+> > +                                      (addr & 0x00000002) ? "write" : "read", data,
+> > +                                      (addr & 0x00fffffc));
+> >
+> >                 stat &= ~0x00000008;
+> >                 nvkm_wr32(device, 0x001100, 0x00000008);
+> > diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv50.c b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv50.c
+> > index 3a1e45adeedc..2055d0b100d3 100644
+> > --- a/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv50.c
+> > +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/bus/nv50.c
+> > @@ -60,9 +60,9 @@ nv50_bus_intr(struct nvkm_bus *bus)
+> >                 u32 addr = nvkm_rd32(device, 0x009084);
+> >                 u32 data = nvkm_rd32(device, 0x009088);
+> >
+> > -               nvkm_error(subdev, "MMIO %s of %08x FAULT at %06x\n",
+> > -                          (addr & 0x00000002) ? "write" : "read", data,
+> > -                          (addr & 0x00fffffc));
+> > +               nvkm_error_ratelimited(subdev, "MMIO %s of %08x FAULT at %06x\n",
+> > +                                      (addr & 0x00000002) ? "write" : "read", data,
+> > +                                      (addr & 0x00fffffc));
+> >
+> >                 stat &= ~0x00000008;
+> >                 nvkm_wr32(device, 0x001100, 0x00000008);
+> > --
+> > 2.35.1
+> >
 
-> +static void hash_add_symbol(struct symbol *sym)
->  {
->         unsigned int hash;
->
-> -       hash = tdb_hash(name) % SYMBOL_HASH_SIZE;
-> -       symbolhash[hash] = alloc_symbol(name, symbolhash[hash]);
-> -
-> -       return symbolhash[hash];
-> +       hash = tdb_hash(sym->name) % SYMBOL_HASH_SIZE;
-> +       sym->next = symbolhash[hash];
-> +       symbolhash[hash] = sym;
->  }
->
->  static void sym_add_unresolved(const char *name, struct module *mod, bool weak)
->  {
->         struct symbol *sym;
->
-> -       sym = alloc_symbol(name, NULL);
-> +       sym = alloc_symbol(name);
->         sym->weak = weak;
->
->         list_add_tail(&sym->list, &mod->unresolved_symbols);
-> @@ -418,10 +415,11 @@ static struct symbol *sym_add_exported(const char *name, struct module *mod,
->                       s->module->is_vmlinux ? "" : ".ko");
->         }
->
-> -       s = new_symbol(name, mod, export);
-> +       s = alloc_symbol(name);
->         s->module = mod;
->         s->export    = export;
->         list_add_tail(&s->list, &mod->exported_symbols);
-> +       hash_add_symbol(s);
->
->         return s;
->  }
-> --
-> 2.32.0
->
-
-
--- 
-Thanks,
-~Nick Desaulniers

@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E081F517E01
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 09:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20B83517E06
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 09:04:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230511AbiECHFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 03:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58866 "EHLO
+        id S231617AbiECHFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 03:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231629AbiECHFG (ORCPT
+        with ESMTP id S230360AbiECHFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 03:05:06 -0400
-Received: from out203-205-221-202.mail.qq.com (out203-205-221-202.mail.qq.com [203.205.221.202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322B32229C
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 00:01:34 -0700 (PDT)
+        Tue, 3 May 2022 03:05:49 -0400
+Received: from out203-205-221-153.mail.qq.com (out203-205-221-153.mail.qq.com [203.205.221.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980452317D
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 00:02:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1651561293;
-        bh=OWbtuVJZ9U3e0kRU290fgZR2YK74JKN66/5fnkRXd4k=;
+        s=s201512; t=1651561334;
+        bh=9FDEMiTl+z/wCxW+Guf4auIR1peUkb2NVkPH/qZqMi4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=qNpN2y2GQ0bagZxATiyLzXmLd+7jfuT4prjFoGBrnp4ivTq2aRTo+dBNl1njsaDuw
-         eKyuo2Hx2Tbp0V6VWkAmc+lVqVXNGQ4WkDqRT0arFPkRARYWwfneDEABgKHi7CW8F6
-         FtW41PNmzHYspr6gh9dLGS67ip41SlI5iIvyU1V4=
+        b=Xv9RNCmgpzLO0beVYFDlbaCwa63ue9gKrW6OdUzUCRdLoo+QfWWpdrO7pqCwrAAIv
+         A2qSp1OSdg9TQnFiF73JUs0DZDbdKm9K4OtJTr3FmFqCuXCcMKYK177AtB+XmJfTKP
+         olERmL6Jw3tTlCMEdl4akD9JwFr6avbtNYCNlz58=
 Received: from localhost.localdomain ([59.172.176.242])
-        by newxmesmtplogicsvrsza5.qq.com (NewEsmtp) with SMTP
-        id 5E3F88A; Tue, 03 May 2022 15:01:30 +0800
-X-QQ-mid: xmsmtpt1651561290trm599m8a
-Message-ID: <tencent_EA8B79235780C38F022D9C4389E75F0B6405@qq.com>
-X-QQ-XMAILINFO: M4iqtcQzl/9FsP2jsSxfmBTxVNr75GrLeDtc6JEsSF1TQO8IGkorOBz3GyRok8
-         3AlThxfdybKWWZwIWOBrp4tArX69z4B0vHujyewfAZr/aU/evMUFMu8GqaozxBVgnd1REfN5k3eY
-         Zad0f05O8+5EMBKj6Uy9X+L3sKjIbv+UZOUbgRo+aaVnxYBFnqoneEytpThF+UYGqih9Quk8xDR/
-         RkuZMnfErt35actBwPx+V5651XS7r3IEVabbSHGtdatFB7GNaYNCheoO9lc7YCP5R1ts1CwyVY0A
-         Gb/qydxdFVMb153M7MtFoaR9E9pP81lsaXQoi2We7dkqC13WZyKhbBL80lAKkXnZEutfapVzgfvS
-         q+z24mGjawqjMNrafHMW/Q+ckp05y9H4l3YbILRDCmmOqwp+zn2paEYSA1LVwjyXhvxLYXKxgEzM
-         0G8cFTwtY5VnZRB6/lP8ALLqBR7684vkHIa7RjZMgo32lSGIm6kt02t1I6ghbhC6t4rlTPSonv0k
-         IFahdY9ZYyPDNHPhSmvEihpIqAMXcU1Nwq5qJPKa/5//bCk0oi8iYAYDlbcvzs3sL+qZ7vava70s
-         xA9nSswIf9yLE02i/4xsR+W3PpupbxO3ydKKzBavGoDGhDrfloGWKPFUMAvAd/n/8ES4RwnwBz0b
-         R99qRTtAeLKtfDv8ZTKwYNuJV+i46WoFwr526uD9mu7iT6DDq5uANYsipEREI+ua6jJ3Dv78YYUA
-         +/+bNTlWWYi8ZkIIs8+c2DFMICrcwB0ypas+cyUE97tRosBW6sqFb3IhVNquQC6Y85mUR+yTKnCM
-         ns9DEkhr8jU6cy7s9m48aO++mk++72AesIYsOwbMrHoXcx58shu6eVUbqEZjRYjEA9uBBJiOEVkp
-         Kr7nRCxcdn1sPLjFVKeWTnYYoJi5jnc5WaIawQ4lzNL50Y5+1uRDQrDm5ZLIV8978+YQvx4fSfVZ
-         YCWGV5KycvuK2+bZ8fe+UNabaYp7Osedu27I87k8cDTDZr/rPL3sR9ZHJ+hYLMAkGvTIgFnWs=
+        by newxmesmtplogicsvrszb7.qq.com (NewEsmtp) with SMTP
+        id 8C32A28; Tue, 03 May 2022 15:02:12 +0800
+X-QQ-mid: xmsmtpt1651561332t81yuboxp
+Message-ID: <tencent_1545FC5783843197E6C2738852E884C7280A@qq.com>
+X-QQ-XMAILINFO: MOZWoti2yOjR1WCeDO5N20SjV776IuChw0vIo2aGoKJDSYZyhu4uwROr7MlBXp
+         rOGVD9kGn1+LpU3ojVGy8+Iy+S20GBygglWJ4kuPUNMvi99a02BckC5aW0RtbsfCL4gcPYewBsmt
+         4n80gh1/7M2hySPUT5HTdnLd1XeMIpoSAqNopkiBcvG54VLFfDtk8uDIszUiVtr9iu2uXvNlkVWV
+         7/rCDH/9gGAqBxGqEtZ4UzIpM5A14UEnLqiHybjH7qaAHkpRzgkGc/mJIqb6jSyLvszR3jPlkuQH
+         yUn9f42x7Rcd15GaZHCIIjuNNJzjJWhnbk+mR8WW794ikqrvVjdA3lTWmHuE7AZpXBdK/EXjXqUD
+         IpH1/8+K6rsgVO3L/GDVm3Wd/MypcwLAjeAvXXETW3Ktv7Cs1uhsj+IInxKajlxJOUBAUOaz07nP
+         xUiDAi/1RFp5xtEmmar2f4e1c0eMDRSOaIjsDyJGEV5y+WVjmQ9Q/86bvWBpkbEURLAQH6ixJ1FJ
+         kgXlI6FQpjjJBHUB7l9JxYhxYHGOIxBxV/PtPpsjCDCQS133Qpmrgu4kdM8Duo25erQFs48O7NvO
+         hxL0oF6whaK9iXG4mrtpdHU3yqa+RvMPx2hVmHvVfx5FZEK0uvEoCeuBe0eqgG3E6tW/Tfd2Fq5u
+         M5Z4Peq3x27rCD9A9A+jKbZ6Wk69tGhW89iBj5arnitRdZR+whGrGeXusOGyBJ9g4D3L0Gq/C7KG
+         mXjsWKGM0TII9fM5G4MixMJzrJx2O52xGTLzNyobWZysPf8KbjnEUWYiY+PfWJ5ZQTUiKMFtLXhB
+         jamR8k8EeddpYP7H7Md7pY57b39neajBjKp4xF1e3C2E0/TUvuMsoKkE9PgUuW5Mk0VR+YJ7G/Bf
+         jD16BAHp0mtzl/jR+ZGtNwpLGk9CYd8AgpiVs4qRb8siF69FAg03MhR8/nqu2qcL96oTvg/UddsL
+         tNm7TgVOgiGzUFqVZp0DyWtCm71bHeSusyzNcv8bjuvCHhCJaSdQ==
 From:   xkernel.wang@foxmail.com
 To:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         gregkh@linuxfoundation.org
 Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH 09/12] staging: r8188eu: fix a potential memory leak in _rtw_init_cmd_priv()
-Date:   Tue,  3 May 2022 15:01:17 +0800
-X-OQ-MSGID: <20220503070117.3346-1-xkernel.wang@foxmail.com>
+Subject: [PATCH 10/12] staging: r8188eu: fix potential memory leak in rtw_os_xmit_resource_alloc()
+Date:   Tue,  3 May 2022 15:01:51 +0800
+X-OQ-MSGID: <20220503070151.3369-1-xkernel.wang@foxmail.com>
 In-Reply-To: <tencent_A80380E4306BE7BA73E450F084232B4DFC0A@qq.com>
 References: <tencent_A80380E4306BE7BA73E450F084232B4DFC0A@qq.com>
 MIME-Version: 1.0
@@ -66,66 +66,30 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-In _rtw_init_cmd_priv(), if `pcmdpriv->rsp_allocated_buf` is allocated
-in failure, then `pcmdpriv->cmd_allocated_buf` will not be properly
-released. Besides, considering there are only two error paths and the
-first one can directly return, we do not need to implicitly jump to the
-`exit` tag to execute the error handling code.
-
-So this patch added `kfree(pcmdpriv->cmd_allocated_buf);` on the error
-path to release the resource and simplified the return logic of
-_rtw_init_cmd_priv().
+In rtw_os_xmit_resource_alloc(), if usb_alloc_urb() fails, then the
+memory `pxmitbuf_pallocated_buf` which is allocated by kzalloc() is
+not properly released before returning.
+So this patch add kfree() on the above error path to release it.
 
 Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
 ---
- drivers/staging/r8188eu/core/rtw_cmd.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+ drivers/staging/r8188eu/os_dep/xmit_linux.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
-index 06523d9..37b68a9 100644
---- a/drivers/staging/r8188eu/core/rtw_cmd.c
-+++ b/drivers/staging/r8188eu/core/rtw_cmd.c
-@@ -58,8 +58,6 @@ static int _rtw_enqueue_cmd(struct __queue *queue, struct cmd_obj *obj)
+diff --git a/drivers/staging/r8188eu/os_dep/xmit_linux.c b/drivers/staging/r8188eu/os_dep/xmit_linux.c
+index e430c64..0c448e0 100644
+--- a/drivers/staging/r8188eu/os_dep/xmit_linux.c
++++ b/drivers/staging/r8188eu/os_dep/xmit_linux.c
+@@ -75,8 +75,10 @@ int rtw_os_xmit_resource_alloc(struct adapter *padapter, struct xmit_buf *pxmitb
+ 	pxmitbuf->dma_transfer_addr = 0;
  
- u32	rtw_init_cmd_priv(struct cmd_priv *pcmdpriv)
- {
--	u32 res = _SUCCESS;
--
- 	init_completion(&pcmdpriv->enqueue_cmd);
- 	/* sema_init(&(pcmdpriv->cmd_done_sema), 0); */
- 	init_completion(&pcmdpriv->start_cmd_thread);
-@@ -74,27 +72,25 @@ u32	rtw_init_cmd_priv(struct cmd_priv *pcmdpriv)
- 	pcmdpriv->cmd_allocated_buf = kzalloc(MAX_CMDSZ + CMDBUFF_ALIGN_SZ,
- 					      GFP_KERNEL);
+ 	pxmitbuf->pxmit_urb = usb_alloc_urb(0, GFP_KERNEL);
+-	if (!pxmitbuf->pxmit_urb)
++	if (!pxmitbuf->pxmit_urb) {
++		kfree(pxmitbuf->pallocated_buf);
+ 		return _FAIL;
++	}
  
--	if (!pcmdpriv->cmd_allocated_buf) {
--		res = _FAIL;
--		goto exit;
--	}
-+	if (!pcmdpriv->cmd_allocated_buf)
-+		return _FAIL;
- 
- 	pcmdpriv->cmd_buf = pcmdpriv->cmd_allocated_buf  +  CMDBUFF_ALIGN_SZ - ((size_t)(pcmdpriv->cmd_allocated_buf) & (CMDBUFF_ALIGN_SZ - 1));
- 
- 	pcmdpriv->rsp_allocated_buf = kzalloc(MAX_RSPSZ + 4, GFP_KERNEL);
- 
- 	if (!pcmdpriv->rsp_allocated_buf) {
--		res = _FAIL;
--		goto exit;
-+		kfree(pcmdpriv->cmd_allocated_buf);
-+		pcmdpriv->cmd_allocated_buf = NULL;
-+		return _FAIL;
- 	}
- 
- 	pcmdpriv->rsp_buf = pcmdpriv->rsp_allocated_buf  +  4 - ((size_t)(pcmdpriv->rsp_allocated_buf) & 3);
- 
- 	pcmdpriv->cmd_done_cnt = 0;
- 	pcmdpriv->rsp_cnt = 0;
--exit:
- 
--	return res;
-+	return _SUCCESS;
+ 	return _SUCCESS;
  }
- 
- u32 rtw_init_evt_priv(struct evt_priv *pevtpriv)
 -- 

@@ -2,95 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C40A25181BD
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 11:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0AF35181C4
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 11:56:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233822AbiECJ5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 05:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42990 "EHLO
+        id S232214AbiECJ75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 05:59:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233360AbiECJ5I (ORCPT
+        with ESMTP id S229638AbiECJ7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 05:57:08 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C2E34673
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 02:53:36 -0700 (PDT)
+        Tue, 3 May 2022 05:59:52 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732EC35AB2;
+        Tue,  3 May 2022 02:56:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651571616; x=1683107616;
+  t=1651571780; x=1683107780;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=TdFqykA+gKoHJrHd9Cgv0XtmSt0fWi5xch5YYCr32hE=;
-  b=TjJ8qTJT9zojZkXQMPrCuk5YehwCkOqTzT6SX3aoo6X+tsX2C4d0HDbh
-   18IiyyNwkGfWO4oFtOUZMEOKfJ81+/jRhCP7vMarqlT0Ez1yNDwDkISlC
-   ASjGCn1G87lfcERRpX+PGyWVzGur7fSOca2HXHuW/NUrCohZOb5HTsCgS
-   m4OXmBP9UUUhG2Vx7bpNANom3TdiFmH7vTjM0u6EVTTHNWelDtcXh3L8b
-   C9l9ivHITEWrkAYxrEMrWneV/kXGikWk4dO3cv0y5wDVuP9hj2EU4KOeK
-   wPOkhNEIHXefGFvTe+JCYh6k7jpTA3Clq8N0BWPcI67n841cNJOcu1/iv
+  bh=veuX5Z2XKbOrv1nhy63LuN6Vqs2xfeS7bWo2oDPBDQM=;
+  b=BGpclUgOlZS0w1eHX537b7bbqfccu6l2EXMSb0UpLTYxci4xdmFqmM10
+   HgOQA1vMdHxrs2lIolaLcTXcOXXLUAItyaaTJ+AjPFN942fvLILvYM3Yk
+   Cq6psqvyDhwxpkE+IWVHKFaWM4uiKff307OOcEY8v29gBRiZDu8l5NhLF
+   YtGJGORxja/+Y/e6oD1IzwttM/cyfBiaNK2hq0zeS3fshnjbs7lRFzPqk
+   k9w7NdtcKiw2gisaX3YGPqgUKtuA61n0CE6P6jSiRpiDdssslHUicx2p6
+   3s0lSTQbByY8ofBaejPECvcky1QQ5EDiUxU/JjrKYISNwFQ2LX/vHT+/E
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="267032990"
+X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="267598002"
 X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
-   d="scan'208";a="267032990"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 02:53:36 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="267598002"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 02:56:19 -0700
 X-IronPort-AV: E=Sophos;i="5.91,194,1647327600"; 
-   d="scan'208";a="888400435"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 03 May 2022 02:53:35 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nlpDq-000ALr-MU;
-        Tue, 03 May 2022 09:53:34 +0000
-Date:   Tue, 3 May 2022 17:53:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] gpio: fix platform_no_drv_owner.cocci warnings
-Message-ID: <YnD7kXLD1CZmHs3b@f0fda554a4b9>
-References: <202205031706.nUBZtKaH-lkp@intel.com>
+   d="scan'208";a="733849974"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 02:56:16 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nlpGP-00BOWp-CW;
+        Tue, 03 May 2022 12:56:13 +0300
+Date:   Tue, 3 May 2022 12:56:13 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: Re: [PATCH 2/5] lib: add bitmap_{from,to}_arr64
+Message-ID: <YnD8PSXA2f0ChT4P@smile.fi.intel.com>
+References: <20220428205116.861003-1-yury.norov@gmail.com>
+ <20220428205116.861003-3-yury.norov@gmail.com>
+ <YmvhLbIoHDhEhJFq@smile.fi.intel.com>
+ <YmwIHRhS2f1QTW3b@yury-laptop>
+ <YnA54HzrdfOr2QYl@yury-laptop>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202205031706.nUBZtKaH-lkp@intel.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YnA54HzrdfOr2QYl@yury-laptop>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: kernel test robot <lkp@intel.com>
+On Mon, May 02, 2022 at 01:06:56PM -0700, Yury Norov wrote:
+> On Fri, Apr 29, 2022 at 08:45:35AM -0700, Yury Norov wrote:
+> > On Fri, Apr 29, 2022 at 03:59:25PM +0300, Andy Shevchenko wrote:
+> > > On Thu, Apr 28, 2022 at 01:51:13PM -0700, Yury Norov wrote:
 
-drivers/gpio/gpio-macsmc.c:230:3-8: No need to set .owner here. The core will do it.
+...
 
- Remove .owner field if calls are used which set it automatically
+> > > > +void bitmap_to_arr64(u64 *buf, const unsigned long *bitmap, unsigned int nbits)
+> > > > +{
+> > > > +	const unsigned long *end = bitmap + BITS_TO_LONGS(nbits);
+> > > > +
+> > > > +	while (bitmap < end) {
+> > > > +		*buf = *bitmap++;
+> > > > +		if (bitmap < end)
+> > > > +			*buf |= (u64)(*bitmap++) << 32;
+> > > > +		buf++;
+> > > > +	}
+> > > >  
+> > > > +	/* Clear tail bits in last element of array beyond nbits. */
 
-Generated by: scripts/coccinelle/api/platform_no_drv_owner.cocci
+in the last
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: kernel test robot <lkp@intel.com>
----
+> > > > +	if (nbits % 64)
+> > > > +		buf[-1] &= GENMASK_ULL(nbits, 0);
+> > > 
+> > > Hmm... if nbits is > 0 and < 64, wouldn't be this problematic, since
+> > > end == bitmap? Or did I miss something?
+> > 
+> > BITS_TO_LONGS(0) == 0
+> > BITS_TO_LONGS(1..32) == 1
+> > BITS_TO_LONGS(33..64) == 2
+> > 
+> > The only potential problem with buf[-1] is nbits == 0, but fortunately
+> > (0 % 64) == 0, and it doesn't happen.
 
-tree:   https://github.com/AsahiLinux/linux bits/110-smc
-head:   dc3db43287ff1d44b447fff8ed6386b28b339f1c
-commit: a29b7d982f099846c00493140bbf5b6aff25c948 [3/14] gpio: Add new gpio-macsmc driver for Apple Macs
-:::::: branch date: 26 hours ago
-:::::: commit date: 27 hours ago
+I see, perhaps adding a small comment would be nice to have to explain that -1
+index is safe.
 
- drivers/gpio/gpio-macsmc.c |    1 -
- 1 file changed, 1 deletion(-)
+> Are there any other concerns? If no, I'll fix formatting and append it to
+> bitmap-for-next.
 
---- a/drivers/gpio/gpio-macsmc.c
-+++ b/drivers/gpio/gpio-macsmc.c
-@@ -227,7 +227,6 @@ static int macsmc_gpio_probe(struct plat
- static struct platform_driver macsmc_gpio_driver = {
- 	.driver = {
- 		.name = "macsmc-gpio",
--		.owner = THIS_MODULE,
- 	},
- 	.probe = macsmc_gpio_probe,
- };
+Nope.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

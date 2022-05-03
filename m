@@ -2,66 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FF49518CF5
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EEF7518CFA
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241782AbiECTRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 15:17:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44692 "EHLO
+        id S241815AbiECTRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 15:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241802AbiECTQj (ORCPT
+        with ESMTP id S241804AbiECTRQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 15:16:39 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC1F3FBCD
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 12:13:06 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id p12so31961549lfs.5
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 12:13:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=gScoDEP6H/e2lI5aewxp6CF++a7zPjIJd6rBgjg+7gQ=;
-        b=g80alIQgcsogfvNR+vlagnVLLLFaTSdEq7aWHE+TvhjlAxM19YDbjJaC8hvBvUSdd6
-         X7qzLkX0GNkwIsgjX9VVMTMJp4MllktFpVGEJC+YDwT/qfXsSFTmD0i0+wtnLcEoymqh
-         om5phHKEqnUn/1oPFtYow+DFIxFH0Agn5hj2A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=gScoDEP6H/e2lI5aewxp6CF++a7zPjIJd6rBgjg+7gQ=;
-        b=Bypn0WMNDG/QH3poXL0vKIT9fO5YOfHE0WmToVTqAlh0y3FYqDx5xNhtGxTKFXgW37
-         P89BRSe7ka06D2ih3D+PbMSeBZfUAMpwr1IhUEngoIHTbdRziREMq47FjKLlyyPCAm3Z
-         wUcdcKBPOJMGR/b9V8FBQ0NTX1StIiT2Mhjz7fHvUM7F64gV/QpSr7IzNNzbmT5BsZfM
-         dj48AuikMs9/1eiVLcIIwR3rqvEfuQKUTAqrsmpMDq8IF5E900D3qdH+WosvRmoqCgTd
-         ISQ/+osiKS+UouKLG1nRUb3yV49raSHgxn5effVgzCJG26Iykel8bOLvJNPhI091Lb2U
-         /gXw==
-X-Gm-Message-State: AOAM530gTytzu5ekeaJ8zhRjMQe/79EhDcGWYf+oqdSG2oSFY4gD5XZ+
-        UZP6/z3d1FgkTQsZmIxG2mUk0TJJzM2T3it8tjMwIg==
-X-Google-Smtp-Source: ABdhPJwhnIwiZGhNfy9KvY44aruMr9TzFcBKZpVBHorn7YXHX7AMFkY5pxuQW/7NoScJrtPcWBFyjRS8ez2p4ADQUFY=
-X-Received: by 2002:a19:ac42:0:b0:448:1f15:4b18 with SMTP id
- r2-20020a19ac42000000b004481f154b18mr12184218lfc.32.1651605184466; Tue, 03
- May 2022 12:13:04 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 3 May 2022 12:13:03 -0700
+        Tue, 3 May 2022 15:17:16 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBD93F8BD
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 12:13:43 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: bbeckett)
+        with ESMTPSA id 017E91F44695
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1651605221;
+        bh=lkfS0h4hQ00/zwX5uLOHlh8Z1oRKz8TLsq9x9k0d9gw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Oz/lvbPyoYAHzU1dTR3NmI7mFVTOrjt7ialeDRbeSVstFthOqm3cnO+f58FPFg87Z
+         5TWkaBJmc0ME/UovuMjhwDTcKGcQYdY/kIDtW+aKyitNMXWYCW42KnKJknvwvhdUeq
+         2D4PKVNy7O2M9tY+Xp+7aI1OK3jv/iNAb+KH1UoQgcxlW479Qxm5Z50lRh/gbqoApx
+         DAugKoatCQ9QGgDGCcQOJ5p86c54DDDLQhZVLMPbeujU2994eMcx5nj11RKblVF9mE
+         D0NnPuEcQLcTjP5YvA6ZH3ccm/MP8hYq/DeSNNk7fHQ86FHJrUnZ09GBoEEplT2bMl
+         WslBhgU9Q3rXg==
+From:   Robert Beckett <bob.beckett@collabora.com>
+To:     dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Robert Beckett <bob.beckett@collabora.com>,
+        Matthew Auld <matthew.auld@intel.com>,
+        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/4] drm/i915: add gen6 ppgtt dummy creation function
+Date:   Tue,  3 May 2022 19:13:13 +0000
+Message-Id: <20220503191316.1145124-2-bob.beckett@collabora.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220503191316.1145124-1-bob.beckett@collabora.com>
+References: <20220503191316.1145124-1-bob.beckett@collabora.com>
 MIME-Version: 1.0
-In-Reply-To: <YnE5xMS13oSuR5rx@robh.at.kernel.org>
-References: <20220503004156.3559940-1-swboyd@chromium.org> <20220503004156.3559940-2-swboyd@chromium.org>
- <YnE5xMS13oSuR5rx@robh.at.kernel.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Tue, 3 May 2022 12:13:03 -0700
-Message-ID: <CAE-0n50OM1mV0xc6RrSAo_rC63hWbM6fH4+9pJuwvBCG4YeqwA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: iio: sx9324: Add CS idle/sleep mode
-To:     Rob Herring <robh@kernel.org>
-Cc:     Jonathan Cameron <jic23@kernel.org>, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, devicetree@vger.kernel.org,
-        linux-iio@vger.kernel.org, Gwendal Grignou <gwendal@chromium.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,33 +58,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Rob Herring (2022-05-03 07:18:44)
-> On Mon, May 02, 2022 at 05:41:55PM -0700, Stephen Boyd wrote:
-> > We need to configure the sleep and idle mode of the CS pins for this
-> > device. Add a DT property to do this so pins are in a proper state
-> > during sleep (either hi-z, grounded, or pulled up to vdd).
-> >
-> > Cc: Gwendal Grignou <gwendal@chromium.org>
-> > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> > ---
-> >  .../devicetree/bindings/iio/proximity/semtech,sx9324.yaml | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/iio/proximity/semtech,sx9324.yaml b/Documentation/devicetree/bindings/iio/proximity/semtech,sx9324.yaml
-> > index d265eb5258c8..6cec3481c8b2 100644
-> > --- a/Documentation/devicetree/bindings/iio/proximity/semtech,sx9324.yaml
-> > +++ b/Documentation/devicetree/bindings/iio/proximity/semtech,sx9324.yaml
-> > @@ -126,6 +126,14 @@ properties:
-> >        UINT_MAX (4294967295) represents infinite. Other values
-> >        represent 1-1/N.
-> >
-> > +  semtech,cs-idle-sleep:
-> > +    description:
-> > +      State of CS pins during sleep mode and idle time.
-> > +    enum:
-> > +      - hz
->
-> I was trying to figure out how Hertz was a pin state. 'hiz' or 'hi-z'
-> instead?
+Internal gem objects will soon just be volatile system memory region
+objects.
+To enable this, create a separate dummy object creation function
+for gen6 ppgtt
 
-Sure. I was following the datasheet that has "HZ" but hi-z is better.
+Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+---
+ drivers/gpu/drm/i915/gt/gen6_ppgtt.c | 43 ++++++++++++++++++++++++++--
+ 1 file changed, 40 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/i915/gt/gen6_ppgtt.c b/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
+index 1bb766c79dcb..f3b660cfeb7f 100644
+--- a/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
++++ b/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
+@@ -372,6 +372,45 @@ static const struct drm_i915_gem_object_ops pd_dummy_obj_ops = {
+ 	.put_pages = pd_dummy_obj_put_pages,
+ };
+ 
++static struct drm_i915_gem_object *
++i915_gem_object_create_dummy(struct drm_i915_private *i915, phys_addr_t size)
++{
++	static struct lock_class_key lock_class;
++	struct drm_i915_gem_object *obj;
++	unsigned int cache_level;
++
++	GEM_BUG_ON(!size);
++	GEM_BUG_ON(!IS_ALIGNED(size, PAGE_SIZE));
++
++	if (overflows_type(size, obj->base.size))
++		return ERR_PTR(-E2BIG);
++
++	obj = i915_gem_object_alloc();
++	if (!obj)
++		return ERR_PTR(-ENOMEM);
++
++	drm_gem_private_object_init(&i915->drm, &obj->base, size);
++	i915_gem_object_init(obj, &pd_dummy_obj_ops, &lock_class, 0);
++	obj->mem_flags |= I915_BO_FLAG_STRUCT_PAGE;
++
++	/*
++	 * Mark the object as volatile, such that the pages are marked as
++	 * dontneed whilst they are still pinned. As soon as they are unpinned
++	 * they are allowed to be reaped by the shrinker, and the caller is
++	 * expected to repopulate - the contents of this object are only valid
++	 * whilst active and pinned.
++	 */
++	i915_gem_object_set_volatile(obj);
++
++	obj->read_domains = I915_GEM_DOMAIN_CPU;
++	obj->write_domain = I915_GEM_DOMAIN_CPU;
++
++	cache_level = HAS_LLC(i915) ? I915_CACHE_LLC : I915_CACHE_NONE;
++	i915_gem_object_set_cache_coherency(obj, cache_level);
++
++	return obj;
++}
++
+ static struct i915_page_directory *
+ gen6_alloc_top_pd(struct gen6_ppgtt *ppgtt)
+ {
+@@ -383,9 +422,7 @@ gen6_alloc_top_pd(struct gen6_ppgtt *ppgtt)
+ 	if (unlikely(!pd))
+ 		return ERR_PTR(-ENOMEM);
+ 
+-	pd->pt.base = __i915_gem_object_create_internal(ppgtt->base.vm.gt->i915,
+-							&pd_dummy_obj_ops,
+-							I915_PDES * SZ_4K);
++	pd->pt.base = i915_gem_object_create_dummy(ppgtt->base.vm.gt->i915, I915_PDES * SZ_4K);
+ 	if (IS_ERR(pd->pt.base)) {
+ 		err = PTR_ERR(pd->pt.base);
+ 		pd->pt.base = NULL;
+-- 
+2.25.1
+

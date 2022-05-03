@@ -2,78 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BBDA5187D4
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:04:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE1C5187B8
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:01:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237779AbiECPIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 11:08:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33362 "EHLO
+        id S237716AbiECPFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 11:05:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237762AbiECPIP (ORCPT
+        with ESMTP id S237690AbiECPFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 11:08:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7FDCD3A1BD
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 08:04:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651590282;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=q8KRyeOIJowwgq1LjuL92i0OyzQpFO6OlQ5jrqBwiaQ=;
-        b=GsN2aHEwmnBSqzAAnCWcw7/CJDPv9Fb4L16x/+QNOcdLl9DQOTNve0c9FT4xDsQVSfgIwr
-        aM9cVdd3W5HKV1WkonLjRzAHci+BYJSoVIYTI+HQpiEHA8hy//YAeUNr+HrZ7XRw03fE8e
-        jrjEEt+cw4VBBg8OqyKWAeg+XDx+JJ8=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-515-El3JyjaEMFiFqjRBhvUOMQ-1; Tue, 03 May 2022 11:01:22 -0400
-X-MC-Unique: El3JyjaEMFiFqjRBhvUOMQ-1
-Received: by mail-wm1-f71.google.com with SMTP id c62-20020a1c3541000000b0038ec265155fso1475155wma.6
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 08:01:21 -0700 (PDT)
+        Tue, 3 May 2022 11:05:00 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68143981D
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 08:01:26 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-ed9a75c453so6885708fac.11
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 08:01:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=UfIE70xQm2YU+6K/Ttf9zAPKZ0PU7B5HIydVLGsmlJ4=;
+        b=l36uMbuQkvZDIyOcKxfb1sUiQtpNr89zAPwIB+/FfSpDvk2QOQj529Ex0mPdSgw7IU
+         rCjzODxW+uxMBPDpc9AgPJLDCTSKoVbUCjiNYeom6XP9kYt4ThUNE3hc8XS8SjbJkDZ+
+         P1qM7f94z3bBMJvftCiayATqDJXFPqhkQsMw3zIflRX/uDB3q1la63xCJZIEdw6UgKx1
+         Ly1XLi1d2PrqnoDAjtSNsarad16am9qhT78Vah99PZJXqhWFw1QPIJZd/MeSHe/MwELq
+         VmqWJEN9mbG0jTK5/YlHCKItVBqDF1DIUl0U7JtKysKQxFfnqZO3xwwc7yx5nfT+Km+i
+         XxWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=q8KRyeOIJowwgq1LjuL92i0OyzQpFO6OlQ5jrqBwiaQ=;
-        b=MPxtVmU9TXCzlfICfpo5fW0/37rd+l5l7O/mDsoAC6Jv9Y3Z/5PVgn9urVFa0yc2Al
-         NOKAvLBXd2EVVGM/khMdDa4B4vmQDLfKlCc6an41shsbTvD0CPk6lj5bs4ImE7FnAr7/
-         w3uvh64g22XbA0nWegFks4D07rEZ5dc31AdLno7I1ewC7SC40/xLh1KxZ1b6oumijOMk
-         O+BykDk1yN0G8aQi+O6acyHqEACdMcz0MR2/hwYDM6H41YKaUgu4DfOhdMctvLYmtgWR
-         /PFMZNZF5FCtbZ2QqP8SQPifJGAR8x+wQ2UxoxnSvzsXe+YMZEFKlorD5tLpK6Gqo3bp
-         A8uQ==
-X-Gm-Message-State: AOAM533I3K+67H9wyFL6p5QXHn6R43su/g9wAowd9U7xhDLTaXnQBTl2
-        PD52IVmtG6BIGQ7EsFwyiLiDXXYYLXvU6qJXmWzbtjpHLwXPuKYg86hWNkXR09t5+2h/mbwzWCk
-        bNjN9BSMHKGA2ioPnnTwJRha5ugZ61nOrQYnRwcex3Z9AyH5Xwfntde0V7Vs8npnBeDqQVdcJIv
-        j4
-X-Received: by 2002:a5d:64c1:0:b0:20c:6ff9:3a61 with SMTP id f1-20020a5d64c1000000b0020c6ff93a61mr4770689wri.709.1651590080963;
-        Tue, 03 May 2022 08:01:20 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyFddadb0RhMqbED3cKhIrdL1UAliMUxLFrwK6VNOQYuEXW0q5ELPbxKJShs+8DVKmBmOBFgQ==
-X-Received: by 2002:a5d:64c1:0:b0:20c:6ff9:3a61 with SMTP id f1-20020a5d64c1000000b0020c6ff93a61mr4770661wri.709.1651590080743;
-        Tue, 03 May 2022 08:01:20 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id t1-20020adfba41000000b0020c6fa5a797sm3344358wrg.91.2022.05.03.08.01.19
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UfIE70xQm2YU+6K/Ttf9zAPKZ0PU7B5HIydVLGsmlJ4=;
+        b=2aaWRBJ87moUy3iYjG4AeYsdgIN1m+CWoO4YyWFzt9s05X6/V/v0t3pLRk7RnsJGqn
+         Jccj1QBJzE/X0mTdoghhMHFdCFdpX/dvudJRK3+8c3cUm54iR0t2S3YXvgW+IpyySGBz
+         ZJSSGbUhxiXHKFfuNHmS4V7r3BADBM91qITtRBHJzq1kPwqf3em9snQNVe8KyFEX8fks
+         Wxn1NQbwMHmfyu6Trh8uiBx0n7iGPLJuhw0WIxhiYXJia0pCxvIc34wOobPXxRiN/VD7
+         EDOwdRH0Xl++Ta+r/0IamiL1XL9nE6FRwE+6Bxkw+uw5LjJMYCvw3KuDlBM8XT2nTecw
+         6YnQ==
+X-Gm-Message-State: AOAM533KpGJQG+/kXUvExcDjC+7WIwm2MMeg7AOG8Cs/kD40+MqhLVof
+        0xE4HoZwq0sQs+kIYJPnomUKpw==
+X-Google-Smtp-Source: ABdhPJx8w+yhm4KptfWPxu2XUQshHWFWOqOuN/CC7q0vNKFoXdHftEkryd18W19JwhYmh96Qw36GmA==
+X-Received: by 2002:a05:6870:581b:b0:e5:9baf:cd2a with SMTP id r27-20020a056870581b00b000e59bafcd2amr1810418oap.233.1651590085861;
+        Tue, 03 May 2022 08:01:25 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id o13-20020a9d404d000000b0060603221271sm3976053oti.65.2022.05.03.08.01.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 08:01:20 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 00/34] KVM: x86: hyper-v: Fine-grained TLB flush + L2
- TLB flush feature
-In-Reply-To: <20220414132013.1588929-1-vkuznets@redhat.com>
-References: <20220414132013.1588929-1-vkuznets@redhat.com>
-Date:   Tue, 03 May 2022 17:01:19 +0200
-Message-ID: <87bkwe3bk0.fsf@redhat.com>
+        Tue, 03 May 2022 08:01:25 -0700 (PDT)
+Date:   Tue, 3 May 2022 10:01:21 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     agross@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        robh+dt@kernel.org, krzk+dt@kernel.org, jonathan@marek.ca,
+        tdas@codeaurora.org, anischal@codeaurora.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Steev Klimaszewski <steev@kali.org>
+Subject: Re: [PATCH v2 1/8] clk: qcom: rcg2: Cache rate changes for parked
+ RCGs
+Message-ID: <YnFDwUvFCgrH12zY@builder.lan>
+References: <20220503130448.520470-1-robert.foss@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220503130448.520470-1-robert.foss@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,29 +77,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Vitaly Kuznetsov <vkuznets@redhat.com> writes:
+On Tue 03 May 08:04 CDT 2022, Robert Foss wrote:
 
-> Changes since v1:
+> From: Bjorn Andersson <bjorn.andersson@linaro.org>
+> 
+> As GDSCs are turned on and off some associated clocks are momentarily
+> enabled for house keeping purposes. Failure to enable these clocks seems
+> to have been silently ignored in the past, but starting in SM8350 this
+> failure will prevent the GDSC to turn on.
+> 
+> At least on SM8350 this operation will enable the RCG per the
+> configuration in CFG_REG. This means that the current model where the
+> current configuration is written back to CF_REG immediately after
+> parking the RCG doesn't work.
+> 
+> Instead, keep track of the currently requested rate of the clock and
+> upon enabling the clock reapply the configuration per the saved rate.
+> 
+> Fixes: 7ef6f11887bd ("clk: qcom: Configure the RCGs to a safe source as needed")
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Reviewed-by: Vinod Koul <vkoul@kernel.org>
+> Tested-by: Steev Klimaszewski <steev@kali.org>
+> ---
 
-This should've beed 'since v2', obviously.
+This patch has been iterated since and the latest incarnation can be
+found on below link. A reference to that in the cover letter would be
+sufficient.
 
-...
+https://lore.kernel.org/linux-arm-msm/20220426212136.1543984-1-bjorn.andersson@linaro.org/
 
->
-> Currently, KVM handles HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} requests
-> by flushing the whole VPID and this is sub-optimal. This series introduces
-> the required mechanism to make handling of these requests more 
-> fine-grained by flushing individual GVAs only (when requested). On this
-> foundation, "Direct Virtual Flush" Hyper-V feature is implemented. The 
-> feature allows L0 to handle Hyper-V TLB flush hypercalls directly at
-> L0 without the need to reflect the exit to L1. This has at least two
-> benefits: reflecting vmexit and the consequent vmenter are avoided + L0
-> has precise information whether the target vCPU is actually running (and
-> thus requires a kick).
+Thanks,
+Bjorn
 
-FWIW, patches still apply cleanly to kvm/queue so probably there's no
-need to resend.
-
--- 
-Vitaly
-
+>  drivers/clk/qcom/clk-rcg.h  |  2 ++
+>  drivers/clk/qcom/clk-rcg2.c | 32 +++++++++++++++++---------------
+>  2 files changed, 19 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/clk/qcom/clk-rcg.h b/drivers/clk/qcom/clk-rcg.h
+> index 00cea508d49e..8b41244b8dbf 100644
+> --- a/drivers/clk/qcom/clk-rcg.h
+> +++ b/drivers/clk/qcom/clk-rcg.h
+> @@ -140,6 +140,7 @@ extern const struct clk_ops clk_dyn_rcg_ops;
+>   * @freq_tbl: frequency table
+>   * @clkr: regmap clock handle
+>   * @cfg_off: defines the cfg register offset from the CMD_RCGR + CFG_REG
+> + * @current_rate: cached rate for parked RCGs
+>   */
+>  struct clk_rcg2 {
+>  	u32			cmd_rcgr;
+> @@ -150,6 +151,7 @@ struct clk_rcg2 {
+>  	const struct freq_tbl	*freq_tbl;
+>  	struct clk_regmap	clkr;
+>  	u8			cfg_off;
+> +	unsigned long		current_rate;
+>  };
+>  
+>  #define to_clk_rcg2(_hw) container_of(to_clk_regmap(_hw), struct clk_rcg2, clkr)
+> diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
+> index f675fd969c4d..81fd3a2db709 100644
+> --- a/drivers/clk/qcom/clk-rcg2.c
+> +++ b/drivers/clk/qcom/clk-rcg2.c
+> @@ -167,6 +167,7 @@ clk_rcg2_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
+>  {
+>  	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
+>  	u32 cfg, hid_div, m = 0, n = 0, mode = 0, mask;
+> +	unsigned long rate;
+>  
+>  	regmap_read(rcg->clkr.regmap, RCG_CFG_OFFSET(rcg), &cfg);
+>  
+> @@ -186,7 +187,11 @@ clk_rcg2_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
+>  	hid_div = cfg >> CFG_SRC_DIV_SHIFT;
+>  	hid_div &= mask;
+>  
+> -	return calc_rate(parent_rate, m, n, mode, hid_div);
+> +	rate = calc_rate(parent_rate, m, n, mode, hid_div);
+> +	if (!rcg->current_rate)
+> +		rcg->current_rate = rate;
+> +
+> +	return rate;
+>  }
+>  
+>  static int _freq_tbl_determine_rate(struct clk_hw *hw, const struct freq_tbl *f,
+> @@ -978,12 +983,14 @@ static int clk_rcg2_shared_set_rate(struct clk_hw *hw, unsigned long rate,
+>  	if (!f)
+>  		return -EINVAL;
+>  
+> +	rcg->current_rate = rate;
+> +
+>  	/*
+> -	 * In case clock is disabled, update the CFG, M, N and D registers
+> -	 * and don't hit the update bit of CMD register.
+> +	 * In the case that the shared RCG is parked, current_rate will be
+> +	 * applied as the clock is unparked again, so just return here.
+>  	 */
+>  	if (!__clk_is_enabled(hw->clk))
+> -		return __clk_rcg2_configure(rcg, f);
+> +		return 0;
+>  
+>  	return clk_rcg2_shared_force_enable_clear(hw, f);
+>  }
+> @@ -997,8 +1004,13 @@ static int clk_rcg2_shared_set_rate_and_parent(struct clk_hw *hw,
+>  static int clk_rcg2_shared_enable(struct clk_hw *hw)
+>  {
+>  	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
+> +	const struct freq_tbl *f = NULL;
+>  	int ret;
+>  
+> +	f = qcom_find_freq(rcg->freq_tbl, rcg->current_rate);
+> +	if (!f)
+> +		return -EINVAL;
+> +
+>  	/*
+>  	 * Set the update bit because required configuration has already
+>  	 * been written in clk_rcg2_shared_set_rate()
+> @@ -1007,7 +1019,7 @@ static int clk_rcg2_shared_enable(struct clk_hw *hw)
+>  	if (ret)
+>  		return ret;
+>  
+> -	ret = update_config(rcg);
+> +	ret = clk_rcg2_configure(rcg, f);
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -1017,13 +1029,6 @@ static int clk_rcg2_shared_enable(struct clk_hw *hw)
+>  static void clk_rcg2_shared_disable(struct clk_hw *hw)
+>  {
+>  	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
+> -	u32 cfg;
+> -
+> -	/*
+> -	 * Store current configuration as switching to safe source would clear
+> -	 * the SRC and DIV of CFG register
+> -	 */
+> -	regmap_read(rcg->clkr.regmap, rcg->cmd_rcgr + CFG_REG, &cfg);
+>  
+>  	/*
+>  	 * Park the RCG at a safe configuration - sourced off of safe source.
+> @@ -1041,9 +1046,6 @@ static void clk_rcg2_shared_disable(struct clk_hw *hw)
+>  	update_config(rcg);
+>  
+>  	clk_rcg2_clear_force_enable(hw);
+> -
+> -	/* Write back the stored configuration corresponding to current rate */
+> -	regmap_write(rcg->clkr.regmap, rcg->cmd_rcgr + CFG_REG, cfg);
+>  }
+>  
+>  const struct clk_ops clk_rcg2_shared_ops = {
+> -- 
+> 2.34.1
+> 

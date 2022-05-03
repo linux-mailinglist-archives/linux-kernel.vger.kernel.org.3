@@ -2,82 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E152518128
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 11:38:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CCCC518126
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 11:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233500AbiECJlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 05:41:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51430 "EHLO
+        id S233484AbiECJlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 05:41:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233475AbiECJlS (ORCPT
+        with ESMTP id S233468AbiECJlS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 3 May 2022 05:41:18 -0400
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD06032052;
-        Tue,  3 May 2022 02:37:46 -0700 (PDT)
-Received: by mail-qt1-f173.google.com with SMTP id h3so8318979qtn.4;
-        Tue, 03 May 2022 02:37:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mJS2PbQaE+cZgUG4vlX1mlz4wtA8LAYNn+L6mZu2IK4=;
-        b=IkdKWMoXT0EFYliFo4gJNdonVyaOubKyISyZJifOlDW0LHPJ9PGrxDiFT4egHkKXBz
-         fz4y2Y7NBWp6wDFkjYurjzfq/vp1D2rrkSlcQX45N1G2sxvfVVzFzRxfNKxlqe3vQgCL
-         dqe/7wXUk1W6OZTxzmgNlKWRsm+qsHKaeT4CDqRDMg5teI8Mw7sCcL14pEl+saOF0zFo
-         P/7ymh31h++4Y5xKiNs2/vTmM7q/6KqXJoe5lnY7CVyy2z521XP/vTqTNoEppfuhdBAh
-         H73BjeSLMT6vToymZdDnR+sjz0+UaOgF1BCNT6h2wf3rodxKUZ/Wbfo6p/TnT+OK8zw/
-         RqPA==
-X-Gm-Message-State: AOAM5309Ahcjzkla0KuP2y6O0C0ctbFw4hDD22KtcvjRejlfT6dC8q6W
-        UEKDeG4kD5KrlLsW/OE34sc/Rm3VqypazA==
-X-Google-Smtp-Source: ABdhPJzrZppVyLXFTNKY5hW5T0HmM/K6t//7bK71b2VkBzGFbwCPBlpt0D1+I/SvQ4jZiiNP8u4n7w==
-X-Received: by 2002:a05:622a:20a:b0:2f3:aa7d:626d with SMTP id b10-20020a05622a020a00b002f3aa7d626dmr5204636qtx.270.1651570665618;
-        Tue, 03 May 2022 02:37:45 -0700 (PDT)
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
-        by smtp.gmail.com with ESMTPSA id j6-20020a05620a146600b0069fc13ce217sm5511059qkl.72.2022.05.03.02.37.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 May 2022 02:37:44 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-2f7d19cac0bso173261257b3.13;
-        Tue, 03 May 2022 02:37:44 -0700 (PDT)
-X-Received: by 2002:a81:547:0:b0:2f8:6e8:19d7 with SMTP id 68-20020a810547000000b002f806e819d7mr14558872ywf.383.1651570664082;
- Tue, 03 May 2022 02:37:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220429134143.628428-1-herve.codina@bootlin.com>
- <20220429134143.628428-4-herve.codina@bootlin.com> <29ba3db6-e5c7-06d3-29d9-918ee5b34555@linaro.org>
- <CAMuHMdWN_ni_V+e3QipWH2qKXeNPkEcVpHpb5iBYw1YQSAnCDA@mail.gmail.com>
- <YnA0id1rXlNHNz+N@robh.at.kernel.org> <CAMuHMdWktaRAw8Y6TR93_rH8v4mPR2yt3wGqeXeTA2p_Dh--wA@mail.gmail.com>
- <5a89e9bf-1004-500a-75e1-995732629937@linaro.org>
-In-Reply-To: <5a89e9bf-1004-500a-75e1-995732629937@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 3 May 2022 11:37:31 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVv-qCTyMQzr8ALCP-UmojZe9=NOrExPieJNV2300yzbQ@mail.gmail.com>
-Message-ID: <CAMuHMdVv-qCTyMQzr8ALCP-UmojZe9=NOrExPieJNV2300yzbQ@mail.gmail.com>
-Subject: Re: [PATCH v5 2/6] dt-bindings: PCI: renesas,pci-rcar-gen2: Add
- device tree support for r9a06g032
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        Herve Codina <herve.codina@bootlin.com>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FEB3204F
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 02:37:45 -0700 (PDT)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220503093743epoutp0300d7405c4eca8cbd60da9764cf069036~rjsSxe_wK0773207732epoutp03K
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 09:37:43 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220503093743epoutp0300d7405c4eca8cbd60da9764cf069036~rjsSxe_wK0773207732epoutp03K
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1651570663;
+        bh=eZPCA5Ld61CjuQcfpKdQrmY+FdOllgiJ6OejF1D7514=;
+        h=From:To:In-Reply-To:Subject:Date:References:From;
+        b=dhZAx9C0XSzZVEuHcp9Gs/Hkm0FNzvD3jpPzYCjMsaw0xth3MGi5LkW18avHZG8RB
+         PdwF6hDQlcdrXD2klFioXw3CtIjMeDwFveyU20Mx/AcXAE0qe3vY6YExxvbBtUmcXF
+         F2YWo0DT5+MTP3rtoQUDLlOiaPWLBmRDpa7iW7D8=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20220503093742epcas2p284bf0d52e1dbb7404ba5ca1ccf50c3d5~rjsR-cuhb0806408064epcas2p2w;
+        Tue,  3 May 2022 09:37:42 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.102]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4KsvyF0cjcz4x9Q1; Tue,  3 May
+        2022 09:37:41 +0000 (GMT)
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F3.C6.10069.4E7F0726; Tue,  3 May 2022 18:37:40 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+        20220503093740epcas2p327ab7c0718b4cd1effda87f106ceeebd~rjsPwTRTO1761517615epcas2p3S;
+        Tue,  3 May 2022 09:37:40 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220503093740epsmtrp1fa65665fc1c16dae8f6b4711ac6b85aa~rjsPvfdIb2127221272epsmtrp1c;
+        Tue,  3 May 2022 09:37:40 +0000 (GMT)
+X-AuditID: b6c32a45-a79ff70000002755-22-6270f7e499f2
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        EC.DE.08853.4E7F0726; Tue,  3 May 2022 18:37:40 +0900 (KST)
+Received: from KORCO082417 (unknown [10.229.8.121]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220503093740epsmtip21eafc03609f612cdeef5581012b9e420~rjsPhIF2k2820728207epsmtip20;
+        Tue,  3 May 2022 09:37:40 +0000 (GMT)
+From:   "Chanho Park" <chanho61.park@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
+        "'Rob Herring'" <robh+dt@kernel.org>,
+        "'Krzysztof Kozlowski'" <krzysztof.kozlowski+dt@linaro.org>,
+        "'Alim Akhtar'" <alim.akhtar@samsung.com>,
         <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+In-Reply-To: <20220503092631.174713-1-krzysztof.kozlowski@linaro.org>
+Subject: RE: [PATCH] arm64: dts: exynos: move XTCXO clock frequency to board
+ in Exynos Auto v9
+Date:   Tue, 3 May 2022 18:37:40 +0900
+Message-ID: <02a301d85ed1$6e942cd0$4bbc8670$@samsung.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQM0AewJ+A1wrOc8leVM2OSm1bsp/wEgrbzdqkyYVfA=
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprFJsWRmVeSWpSXmKPExsWy7bCmhe6T7wVJBsf/mVo8mLeNzWL+kXOs
+        Fn0vHjJb7H29ld1i0+NrrBaXd81hs5hxfh+TReveI+wOHB6bVnWyedy5tofNY/OSeo++LasY
+        PT5vkgtgjcq2yUhNTEktUkjNS85PycxLt1XyDo53jjc1MzDUNbS0MFdSyEvMTbVVcvEJ0HXL
+        zAE6RUmhLDGnFCgUkFhcrKRvZ1OUX1qSqpCRX1xiq5RakJJTYF6gV5yYW1yal66Xl1piZWhg
+        YGQKVJiQnfHt+XKmgsfsFa9W/2NvYDzJ1sXIySEhYCLxZcJUli5GLg4hgR2MEp277jFBOJ8Y
+        JZrm7IbKfGOUWDCzgQWmZWXrIUaIxF5GiWd/QVo4gZwXjBKTXzmA2GwC+hIvO7axghSJCNxn
+        kvj8dR4rSIJTwFXi5awfQA0cHMICCRKvF9qAhFkEVCQaT61iBrF5BSwlHjyDsQUlTs58AraY
+        WUBeYvvbOcwQRyhI/Hy6DGykiICVxOJlV5khakQkZne2MYPslRCYyCFxbspdqEddJL5+/Qn1
+        gbDEq+Nb2CFsKYmX/W1QdrHE0lmfmCCaGxglLm/7BdVsLDHrWTsjyNHMApoS63fpg5gSAsoS
+        R25B3cYn0XH4LztEmFeio00IolFd4sD26VBbZSW653xmhSjxkOj5wj2BUXEWkidnIXlyFpJn
+        ZiGsXcDIsopRLLWgODc9tdiowBAe18n5uZsYwYlUy3UH4+S3H/QOMTJxMB5ilOBgVhLhdV5a
+        kCTEm5JYWZValB9fVJqTWnyI0RQY7BOZpUST84GpPK8k3tDE0sDEzMzQ3MjUwFxJnNcrZUOi
+        kEB6YklqdmpqQWoRTB8TB6dUA1PPtKfLHmULCwt/+z1xuzqX1S3F3nTdLft3RsdtqHvYe0g2
+        7JR/ru3RjyVzDkrvmi11RGa7iL/0gdxvb1mM1tlJsfovjlv3p/Ju0ddlpzaJn92d9dhrTZsQ
+        p9YyMwVJjq8rzSp2ZfX8YJMLS0y74md8O9D7zTb1uxPNY0vFN2337tmxie/5h4Mmk7bUvhe/
+        J7pgeWzatV/eEyXy37KzN35+m/3Qrorf8JYZs7pOzOmCR99L5wlNL/12dsofg6VrfWcb9q7u
+        y3vwSz1QRfJkxOE6sUdPcier7D01x0pz7gRTud5o7m1fBHOKtiXtyZyeXX+4+4/S9FPMR2uP
+        rxbp+LnmQ3tN5o7deXsdRb+XSj9UYinOSDTUYi4qTgQAKPiuNS0EAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrNLMWRmVeSWpSXmKPExsWy7bCSvO6T7wVJBksWSFk8mLeNzWL+kXOs
+        Fn0vHjJb7H29ld1i0+NrrBaXd81hs5hxfh+TReveI+wOHB6bVnWyedy5tofNY/OSeo++LasY
+        PT5vkgtgjeKySUnNySxLLdK3S+DK+PZ8OVPBY/aKV6v/sTcwnmTrYuTkkBAwkVjZeoixi5GL
+        Q0hgN6PEzgt7oBKyEs/e7WCHsIUl7rccYYUoesYo8ehGJ1gRm4C+xMuObWAJEYHHTBLN/z5B
+        jZrGKLGyoYERpIpTwFXi5awfTCC2sECcxKlzq8DGsgioSDSeWsUMYvMKWEo8eAZjC0qcnPmE
+        pYuRg4NZQE+ibSPYGGYBeYntb+cwQ1ykIPHz6TJWEFtEwEpi8bKrzBA1IhKzO9uYJzAKzUIy
+        aRbCpFlIJs1C0rGAkWUVo2RqQXFuem6xYYFhXmq5XnFibnFpXrpecn7uJkZw/Ghp7mDcvuqD
+        3iFGJg7GQ4wSHMxKIrzOSwuShHhTEiurUovy44tKc1KLDzFKc7AoifNe6DoZLySQnliSmp2a
+        WpBaBJNl4uCUamCyvnNolaoMVxRTt4PWmv5DPXUBseUaU7naA9kqrh+w++f1zntHuiTHBfd9
+        r3LUXI4+nDgp+9+Zg0/vc3xk0Mq8stPwfNz2LTHLilfNOfUmyev5l6n2SaLZ4kY/uDN/Z6+d
+        sEgsnWNxgKWv0TLpC9ors8yfJvb7JF8Ila/5s34zS//2bZdjxWt6ey/orVvtfmKP+tR6Kc2f
+        JcwVNj/cNu1hudbbtzjVMUJV3KvRLNnTyKfywOIjKjuercztWLploXOp6U7N77cmWmxdO+dW
+        /5Qdq1YfeykdUChw6kNnNG+ox+QVC7/4ztP7FSUsJDtHxsxcXmPXl97fyyvuP3p62cROYIod
+        6+ronVespE+03QlQYinOSDTUYi4qTgQAjnpmng4DAAA=
+X-CMS-MailID: 20220503093740epcas2p327ab7c0718b4cd1effda87f106ceeebd
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220503092638epcas2p368d663b2d309b1fe8ed68b8465c5ff69
+References: <CGME20220503092638epcas2p368d663b2d309b1fe8ed68b8465c5ff69@epcas2p3.samsung.com>
+        <20220503092631.174713-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,42 +123,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+> -----Original Message-----
+> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Sent: Tuesday, May 3, 2022 6:27 PM
+> To: Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
+> <krzysztof.kozlowski+dt@linaro.org>; Alim Akhtar
+<alim.akhtar@samsung.com>;
+> devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+> samsung-soc@vger.kernel.org; linux-kernel@vger.kernel.org
+> Cc: Chanho Park <chanho61.park@samsung.com>; Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org>
+> Subject: [PATCH] arm64: dts: exynos: move XTCXO clock frequency to board
+> in Exynos Auto v9
+> 
+> The external oscillator - XTCXO - is an input to the SoC.  It is defined
+> in the Exynos Auto v9 SoC DTSI, because all boards will provide it and
+> clock controller bindings expect it, however the actual frequency of the
+> clock should be determined by the board.
 
-On Tue, May 3, 2022 at 11:29 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> On 03/05/2022 08:51, Geert Uytterhoeven wrote:
-> >>>> This should not be a reason why a property is or is not required. Either
-> >>>> this is required for device operation or not. If it is required, should
-> >>>> be in the bindings. Otherwise what are you going to do in the future?
-> >>>> Add a required property breaking the ABI?
-> >>>
-> >>> The problem is that there are no bindings for the reset controller
-> >>> (actually the reset controller feature of the system-controller) yet.
-> >>> Yeah, we can just add #reset-cells = <1> to the system-controller
-> >>> device node, but we cannot add the actual resets properties to the
-> >>> consumers, until the actual cell values are defined.
-> >>
-> >> Sounds like you should implement providers first. Or just live with the
-> >> warning as a reminder to implement the reset provider?
-> >
-> > I'd go for the latter. The upstream r9a06g032.dtsi is still under active
-> > development. Until very recently, the only device supported was the
-> > serial console.
->
-> For clocks we use in such cases fixed-clock placeholders or empty
-> phandles. Maybe something like that would work here as well?
+Thanks for the update.
+Reviewed-by: Chanho Park <chanho61.park@samsung.com>
 
-I don't think that works for resets.
-Besides, the driver doesn't need or use the reset anyway.
+Best Regards,
+Chanho Park
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

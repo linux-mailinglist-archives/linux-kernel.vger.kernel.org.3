@@ -2,47 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3265183F7
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 14:12:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C3C25183FA
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 14:12:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235124AbiECMP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 08:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59090 "EHLO
+        id S235136AbiECMQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 08:16:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234572AbiECMP4 (ORCPT
+        with ESMTP id S234572AbiECMQW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 08:15:56 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F1732EEB
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 05:12:24 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1nlrO6-0006cw-5h; Tue, 03 May 2022 14:12:18 +0200
-Message-ID: <86160889d7be260c5012044643b81d10098943fe.camel@pengutronix.de>
-Subject: Re: [PATCH] drm/msm: Limit command submission when no IOMMU
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     Rob Clark <robdclark@chromium.org>,
-        David Airlie <airlied@linux.ie>, linux-arm-msm@vger.kernel.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Luca Weiss <luca@z3ntu.xyz>, Sean Paul <sean@poorly.run>,
-        freedreno@lists.freedesktop.org
-Date:   Tue, 03 May 2022 14:12:15 +0200
-In-Reply-To: <20220502172908.3569799-1-robdclark@gmail.com>
-References: <20220502172908.3569799-1-robdclark@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        Tue, 3 May 2022 08:16:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9032D32EF2;
+        Tue,  3 May 2022 05:12:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F16A16167E;
+        Tue,  3 May 2022 12:12:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38705C385A9;
+        Tue,  3 May 2022 12:12:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651579969;
+        bh=vgFAild2JjYBiqVdCQwJNRs0RnamlbN2uPUvKKoc4mg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tF5zz26H1yJkYXDAQc03mXv/lf0vh1XwDTbX82pjT8iQon2IteOZSzMv0v1gwin+0
+         BoiIH8TZoPvouEI8I6vDY1Qvxz1IpTvCbiX3SvWlszJ2LWCTLRb2H2O4FB1Aio6aDY
+         GdFSpRZQDmmU5NvGQvgG4scB/bruuOahC37yuZCU=
+Date:   Tue, 3 May 2022 14:12:48 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     linux-doc@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: [PATCH] firmware_loader: describe 'module' parameter of
+ firmware_upload_register()
+Message-ID: <YnEcQMZPDGjuOQUh@kroah.com>
+References: <20220502051456.30741-1-bagasdotme@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220502051456.30741-1-bagasdotme@gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,45 +56,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Montag, dem 02.05.2022 um 10:29 -0700 schrieb Rob Clark:
-> From: Rob Clark <robdclark@chromium.org>
+On Mon, May 02, 2022 at 12:14:56PM +0700, Bagas Sanjaya wrote:
+> Stephen Rothwell reported kernel-doc warning:
 > 
-> Running the GPU without an IOMMU is not really a supported (or sane)
-> configuration.  Yet it can be useful during SoC bringup (ie. if the
-> iommu driver doesn't work yet).
+> drivers/base/firmware_loader/sysfs_upload.c:285: warning: Function parameter or member 'module' not described in 'firmware_upload_register'
 > 
-> Lets limit it to users who already have /dev/mem access, to avoid the
-> chance that a user accidentially configures kernel without IOMMU
-> support.
-
-I haven't followed MSM too closely, so ctx->aspace may also include the
-GPU MMU, but if this really only includes the IOMMU (as the commit
-message implies) then this breaks Freedreno on i.MX5.
-
-Regards,
-Lucas
-
+> Fix the warning by describing the 'module' parameter.
 > 
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
->  drivers/gpu/drm/msm/msm_gem_submit.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/msm_gem_submit.c b/drivers/gpu/drm/msm/msm_gem_submit.c
-> index 23b68bc945f6..9cd8c8708990 100644
-> --- a/drivers/gpu/drm/msm/msm_gem_submit.c
-> +++ b/drivers/gpu/drm/msm/msm_gem_submit.c
-> @@ -734,6 +734,11 @@ int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
->  	if (args->pad)
->  		return -EINVAL;
->  
-> +	if (unlikely(!ctx->aspace) && !capable(CAP_SYS_RAWIO)) {
-> +		DRM_ERROR_RATELIMITED("IOMMU support or CAP_SYS_RAWIO required!\n");
-> +		return -EPERM;
-> +	}
-> +
->  	/* for now, we just have 3d pipe.. eventually this would need to
->  	 * be more clever to dispatch to appropriate gpu module:
->  	 */
+> Fixes: 97730bbb242cde ("firmware_loader: Add firmware-upload support")
+> Link: https://lore.kernel.org/linux-next/20220502083658.266d55f8@canb.auug.org.au/
+> Cc: Stephen Rothwell <sfr@canb.auug.org.au>
 
+This should be "Reported-by:"  I'll fix it up when I apply it to my tree
+now, thanks.
 
+greg k-h

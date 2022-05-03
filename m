@@ -2,55 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75295519044
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 23:37:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9A051901E
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 23:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242908AbiECVfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 17:35:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50398 "EHLO
+        id S242938AbiECVht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 17:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiECVfg (ORCPT
+        with ESMTP id S229451AbiECVhq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 17:35:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0ED62F02A;
-        Tue,  3 May 2022 14:32:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81182B81A99;
-        Tue,  3 May 2022 21:32:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AB6DC385B2;
-        Tue,  3 May 2022 21:31:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651613520;
-        bh=oUV5PgMCLnoqfU3So5a2m7tM/4sVepUMn+p9KajRc7Y=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=V3SnkDsUjFOaPhiHQKb0RBPCoZKSlMCLEd43Dgm6LRlKy+tZUmPyE8ygzHJvQtwD0
-         lYCHWR4Cxz44hLEkS8YjazrKWwRUXOYsMuyOJYRfDuS3EBx1tgRb0y/dyf8XkUF21A
-         zM6CqVdJXZMjtWyqZHUM5lFfNfId+5KRabM7ZNAs2eTAsK6OlbRt/6YF4+fEPS+rjv
-         nPe+aIHnM/esQTQiUZ5AheF8VuZq7pe+sqHp4Dfodf6vsYR915ZVb6EjCvN37WIWB5
-         b5Zu1QZfJ8+0J4ET7YIQlyp9hHpY6OO6CVBwgKHQdvVyiHAXan0B0S68ojJp0upkT6
-         Ea2RwA/CBQ51g==
-Message-ID: <7562f8eccd7cc0e447becfe9912179088784e3b9.camel@kernel.org>
-Subject: Re: [PATCH 1/6] netfs: Eliminate Clang randstruct warning
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Kees Cook <keescook@chromium.org>, Bill Wendling <morbo@google.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-Date:   Tue, 03 May 2022 17:31:57 -0400
-In-Reply-To: <20220503205503.3054173-2-keescook@chromium.org>
-References: <20220503205503.3054173-1-keescook@chromium.org>
-         <20220503205503.3054173-2-keescook@chromium.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Tue, 3 May 2022 17:37:46 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AA3329AC
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 14:34:09 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id z5-20020a17090a468500b001d2bc2743c4so3118156pjf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 14:34:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=yWvoulYYPDYzhzuwmw8fpxaZErlTCWK5buejUsnQBTE=;
+        b=Jx4v36StIqgSJms0f7kENWyb1L+GtVG4yXLsmdOMNXNaXYB0iQp8j3Cb6xLOZ+vMUN
+         B0yVZYuGK3RRAZfjzco5ho4ZGJ83bUt4gUGyaOeUcmvXPKAmyQi3aWEpQvncd8MCHxem
+         3NY1HcC9iTU7MM9MIU9muivCH0QOoM9/DPlLE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=yWvoulYYPDYzhzuwmw8fpxaZErlTCWK5buejUsnQBTE=;
+        b=ab8Tmr+Ir1JINxDWzsrxEpiAPWkAjYafwgleAcjTTgNiAG3xFwVBF41UIsf+4ck4Uw
+         CKZ4EazBAAa1rcRhLcGC8TwRVo97pjlj+sR1WZ9FT7WKSJ4f0deENGRWJVtMpqI/FYIJ
+         k5Kw6Wh17n3hQlEMcy5GpcLY2T+s0xmy4oo66O1X2a9jybspB3RLB8VY/4A1g9JvVj2x
+         ilyjZfEDFPhcbMU3ASizIKSQNx7+4KHThGMpe4RGFXlWhhpsVhvFZtgsilSaWFObgTS7
+         c+/D1GQk1LqobolF+d2XaaI1OFuE1Mfqa+Q7tksvNYzqhOgMM3nSeSuErn7jozCmP5Nq
+         o19A==
+X-Gm-Message-State: AOAM531bCTHhJGsgW9AI3EqiKoNqhh4yIJZwPzgDNIkTBy4HNE/f4ZK5
+        Gmt37aW5Xr5gEM8ltZdYCXV5hA==
+X-Google-Smtp-Source: ABdhPJxplZiK0r84aZXH329NdkIsa6Ae1LO/Vr+2W5jE9b8kJmHMBoLqcdq8o89Fkl+wSO77qaSVyg==
+X-Received: by 2002:a17:902:9a42:b0:158:bf91:ecec with SMTP id x2-20020a1709029a4200b00158bf91ececmr18723229plv.115.1651613648934;
+        Tue, 03 May 2022 14:34:08 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d25-20020aa78699000000b0050dc7628140sm6729198pfo.26.2022.05.03.14.34.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 14:34:08 -0700 (PDT)
+Date:   Tue, 3 May 2022 14:34:07 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: [GIT PULL] seccomp fix for v5.18-rc6
+Message-ID: <202205031433.6CB037ED@keescook>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,57 +64,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-05-03 at 13:54 -0700, Kees Cook wrote:
-> Clang's structure layout randomization feature gets upset when it sees
-> struct inode (which is randomized) cast to struct netfs_i_context. This
-> is due to seeing the inode pointer as being treated as an array of inodes,
-> rather than "something else, following struct inode".
-> 
-> Since netfs can't use container_of() (since it doesn't know what the
-> true containing struct is), it uses this direct offset instead. Adjust
-> the code to better reflect what is happening: an arbitrary pointer is
-> being adjusted and cast to something else: use a "void *" for the math.
-> The resulting binary output is the same, but Clang no longer sees an
-> unexpected cross-structure cast:
-> 
-> In file included from ../fs/nfs/inode.c:50:
-> In file included from ../fs/nfs/fscache.h:15:
-> In file included from ../include/linux/fscache.h:18:
-> ../include/linux/netfs.h:298:9: error: casting from randomized structure pointer type 'struct inode *' to 'struct netfs_i_context *'
->         return (struct netfs_i_context *)(inode + 1);
->                ^
-> 1 error generated.
-> 
-> Cc: David Howells <dhowells@redhat.com>
-> Cc: Jeff Layton <jlayton@kernel.org>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  include/linux/netfs.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/netfs.h b/include/linux/netfs.h
-> index c7bf1eaf51d5..0c33b715cbfd 100644
-> --- a/include/linux/netfs.h
-> +++ b/include/linux/netfs.h
-> @@ -295,7 +295,7 @@ extern void netfs_stats_show(struct seq_file *);
->   */
->  static inline struct netfs_i_context *netfs_i_context(struct inode *inode)
->  {
-> -	return (struct netfs_i_context *)(inode + 1);
-> +	return (void *)inode + sizeof(*inode);
->  }
->  
->  /**
-> @@ -307,7 +307,7 @@ static inline struct netfs_i_context *netfs_i_context(struct inode *inode)
->   */
->  static inline struct inode *netfs_inode(struct netfs_i_context *ctx)
->  {
-> -	return ((struct inode *)ctx) - 1;
-> +	return (void *)ctx - sizeof(struct inode);
->  }
->  
->  /**
+Hi Linus,
 
-Looks reasonable.
+Please pull this small seccomp selftest fix for v5.18-rc6. The selftest
+environment assumptions that seccomp depended on changed slightly in
+v5.17 and Jann found a simple fix.
 
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
+Thanks!
+
+-Kees
+
+The following changes since commit ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e:
+
+  Linux 5.18-rc2 (2022-04-10 14:21:36 -1000)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/seccomp-v5.18-rc6
+
+for you to fetch changes up to 2bfed7d2ffa5d86c462d3e2067f2832eaf8c04c7:
+
+  selftests/seccomp: Don't call read() on TTY from background pgrp (2022-04-29 11:28:41 -0700)
+
+----------------------------------------------------------------
+seccomp fix for v5.18-rc6
+
+- Avoid using stdin for read syscall testing (Jann Horn)
+
+----------------------------------------------------------------
+Jann Horn (1):
+      selftests/seccomp: Don't call read() on TTY from background pgrp
+
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+-- 
+Kees Cook

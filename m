@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88626518D30
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A208F518D32
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:29:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241932AbiECTc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 15:32:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58194 "EHLO
+        id S241953AbiECTdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 15:33:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbiECTcz (ORCPT
+        with ESMTP id S241934AbiECTdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 15:32:55 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329B22B184
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 12:29:21 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id bu29so32049188lfb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 12:29:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=vrL7XkKPM/fDDKM+WseGESNouqMD+FfUqKoaeNFxXOw=;
-        b=XWuECTjXnwuPdrZllK4DeqHBBkqyK3F/k+4xtX/o3AuWklbUoso8ijNsaXpy6IQ+c3
-         UdH1qbnVvBOYesa2R8E8Fpzlfq5bg3X7qQvGtEFh8LGYWaI/+RJRLncOt0+Nzw24WAka
-         gVzRyloeN6KRSicVJH0VDKzgBzes8xrfDMcENHbvJ4HseJkNQm/DuVjElzOgm9FlnsX7
-         nCcGIbiFmqeadeJmgsw8mXjzjUPDTq+9NaQOEAbzNIMtAIe++NFEUN8WvCptDH2wUTFG
-         Lhtay5xL0CajMIDc0XtfXBal2lZoxjafp+p6eje9z7wqINLTqp9MAYdzN506ksRmajIJ
-         DIsQ==
+        Tue, 3 May 2022 15:33:05 -0400
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB492ED6C;
+        Tue,  3 May 2022 12:29:33 -0700 (PDT)
+Received: by mail-oi1-f175.google.com with SMTP id l16so11961506oil.6;
+        Tue, 03 May 2022 12:29:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=vrL7XkKPM/fDDKM+WseGESNouqMD+FfUqKoaeNFxXOw=;
-        b=6CR8VX7GVdduGihlOfg0ZyXxPGb4xwPB5qjpwjCrTstG3Q3a390NHzFIK8tNwkztaP
-         bxPpwXMTOJhGF/cJAhU+qRnqY7C8JSgL85EbUwbFceiT05D1kPsKNEh8MR68EwC6K7pA
-         Shb+Lb/fmc4S5mkUD7VrmAfsxNL79A2nctoINKZk10ywLO5Q2sSfNUU3vNGvXBXkfV8U
-         zFo06U6LFEKKr+S5qhVFTPbcQA9sCEBQuc3xqpxxuFMHh4SEkLsybCpSSXjxvDvFeMSo
-         kGYk4hj1xZf1OYw1KJBV8xWvSKPPIm2To56ANeV+WQp8t9esDX/Mtkvo1nLVHX8RMHrG
-         riAQ==
-X-Gm-Message-State: AOAM532OYUTDcyNTWP/NPuT265zgfz9hPHP2CADiY4OL8XyhhVR62qK/
-        BoBdrJlc6onyVJjuAkb9AvVmL4ayxyUWog==
-X-Google-Smtp-Source: ABdhPJzf6t1KXZQ7VbgFSHWEP9s4rPmvnO49pd4XQDm0Sr89zB1DbHVlC9wf5jwU+tibSOhz4uCZ+Q==
-X-Received: by 2002:a05:6512:b11:b0:44a:2ead:daf2 with SMTP id w17-20020a0565120b1100b0044a2eaddaf2mr12201966lfu.642.1651606159560;
-        Tue, 03 May 2022 12:29:19 -0700 (PDT)
-Received: from jade (h-79-136-84-253.A175.priv.bahnhof.se. [79.136.84.253])
-        by smtp.gmail.com with ESMTPSA id a8-20020ac25208000000b0047255d21161sm1015104lfl.144.2022.05.03.12.29.18
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=N6FBWOVMzK5yNDB3jrOFO2jTg3V4GRtMSkZ1a8GNUMQ=;
+        b=fUeXEpjZo/P9Uv31ODlUMIGHXVeAlf4azp+TTjVusct4pXQfxJJTFxwXxF2CoPW5rN
+         olYf+9ZD12qrhWxNoW01v33ciYfdXAtXVz7W1+0kn4DUZ0rXdK+1Kzgc7djBzCpoIT8w
+         1uxmsN0A00k+oPxJlqgFPkvDLp8o1TLf+l/Hxd73Y0Upj0G7HyJRI/tQjSvdKrPRsqvs
+         gFFDXDVesfMw8ISklnemqad3z462+BEfyLv9hjmaENIPDuwcl6B39stdI0NHKIG1M6WU
+         MRf6DE7YWQwjGcjVY7o7mlV8+e1XU3Z8bo2nzwpIT+LBWU9SjzXpM5SUqq4MYlxz5km0
+         X7pg==
+X-Gm-Message-State: AOAM5334RDr4me+ODFso3okLhSk8ZXEeKxvcWv+TX80MScPmZJ4HO0fs
+        s8qusZ/o7dbVaIzdU/S1nA==
+X-Google-Smtp-Source: ABdhPJwHStHNylKAW5q1CVdmc/nFF0J7q1+CmHjl7uJiGrks+Q8zBnDcOHfO7bLb+qwWjN1Rxd07PQ==
+X-Received: by 2002:a05:6808:1a1d:b0:325:c812:496b with SMTP id bk29-20020a0568081a1d00b00325c812496bmr2515687oib.106.1651606172384;
+        Tue, 03 May 2022 12:29:32 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p203-20020acaf1d4000000b00325cda1ffacsm3617063oih.43.2022.05.03.12.29.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 12:29:18 -0700 (PDT)
-Date:   Tue, 3 May 2022 21:29:16 +0200
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-To:     arm@kernel.org, soc@kernel.org
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        op-tee@lists.trustedfirmware.org
-Subject: [GIT PULL] TEE SHM vmalloc for v5.19
-Message-ID: <20220503192916.GA3288817@jade>
+        Tue, 03 May 2022 12:29:32 -0700 (PDT)
+Received: (nullmailer pid 4088847 invoked by uid 1000);
+        Tue, 03 May 2022 19:29:31 -0000
+Date:   Tue, 3 May 2022 14:29:31 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Jiaxin Yu <jiaxin.yu@mediatek.com>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        broonie@kernel.org, julianbraha@gmail.com, robh+dt@kernel.org,
+        trevor.wu@mediatek.com, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org, aaronyu@google.com,
+        angelogioacchino.delregno@collabora.com, tzungbi@google.com,
+        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
+        matthias.bgg@gmail.com, devicetree@vger.kernel.org
+Subject: Re: [v4 14/18] dt-bindings: mediatek: mt8186: add audio afe document
+Message-ID: <YnGCmwNRZst+W5nb@robh.at.kernel.org>
+References: <20220428093355.16172-1-jiaxin.yu@mediatek.com>
+ <20220428093355.16172-15-jiaxin.yu@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220428093355.16172-15-jiaxin.yu@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,33 +68,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello arm-soc maintainers,
+On Thu, 28 Apr 2022 17:33:51 +0800, Jiaxin Yu wrote:
+> Add mt8186 audio afe document.
+> 
+> Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  .../bindings/sound/mt8186-afe-pcm.yaml        | 175 ++++++++++++++++++
+>  1 file changed, 175 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/sound/mt8186-afe-pcm.yaml
+> 
 
-Please pull this patch which enables tee_shm_register_kernel_buf() to
-accept vmalloc()ed buffers.
-
-Thanks,
-Jens
-
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
-
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
-
-are available in the Git repository at:
-
-  https://git.linaro.org/people/jens.wiklander/linux-tee.git tags/tee-shm-vmalloc-for-v5.19
-
-for you to fetch changes up to 3e47235eaee09488c7e467b9aaccb7c93c862c6b:
-
-  tee: make tee_shm_register_kernel_buf vmalloc supported (2022-04-05 08:04:16 +0200)
-
-----------------------------------------------------------------
-TEE accept vmalloc()ed buffers for tee_shm_register_kernel_buf()
-
-----------------------------------------------------------------
-Phil Chang (1):
-      tee: make tee_shm_register_kernel_buf vmalloc supported
-
- drivers/tee/optee/call.c |  2 +-
- drivers/tee/tee_shm.c    | 35 +++++++++++++++++++++++++----------
- 2 files changed, 26 insertions(+), 11 deletions(-)
+Reviewed-by: Rob Herring <robh@kernel.org>

@@ -2,154 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7E13518CA5
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 20:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7368518CB2
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 20:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240651AbiECS7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 14:59:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49232 "EHLO
+        id S240013AbiECTCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 15:02:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240368AbiECS66 (ORCPT
+        with ESMTP id S234645AbiECTCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 14:58:58 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450DF5FCB
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 11:55:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651604124; x=1683140124;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RRH3uGu21hD4LSufA6g3sfh3VROgeSacWtL5YxuG6w8=;
-  b=P0o2fI/9JGvx2mfQqvpplsambVnj1yk0Ot5jHMOCp0pDgGpnSOqGoFQx
-   r7A38ZlaCft6jiuZERsnFz0zsJ7lbubU/BlFd4e/kTrpn1VmAuSy1caHu
-   P8fcfQ3YkTlPgQK8NzCQWOKVWPUfeKX6q0Gvtm2qpQ1hdKySpGvJHVWaq
-   1ySQWM7GI5ntrJmA+0E+zQ+ZITWMZaesLym1d6rLHeqPDBybr7cHjFz1E
-   3USsmDERUaughUzT2yeoeGBY1LZi/bN2Sp85qEZAHYtnPhmwrPaf1GyIw
-   xiAAhW5ZiRd1O+exjO3YZd/IhMz1acStgUkWpQsUN9KkfShfgoB2WVNi2
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="267440136"
-X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="267440136"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 11:55:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,196,1647327600"; 
-   d="scan'208";a="734040047"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 03 May 2022 11:55:22 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nlxg9-000Aj9-R9;
-        Tue, 03 May 2022 18:55:21 +0000
-Date:   Wed, 4 May 2022 02:54:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [asahilinux:bits/110-smc 13/14]
- drivers/input/misc/macsmc-hid.c:59:9: error: call to undeclared function
- 'kernel_can_power_off'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202205040253.wEANtH27-lkp@intel.com>
+        Tue, 3 May 2022 15:02:11 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF6B26541;
+        Tue,  3 May 2022 11:58:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Q8xZuwWHbM5RtbVLpI5p8QHhyHnoykAXVMFnszZxrdg=; b=TqkdHc+398urJjW6/hR3lSmD91
+        Fo7i3n3SNwuNElwVYi/w+KnbhS8+u2vWgV1cIJIjZ8jCkAcSLSvlso5lciPOVsZuwZ60o4GZ0Sqjx
+        22Y1fjpJoK/chqdm1vTsGuRJJqpC4q32E8Os80o8bAzvpNnZtKFYUr9IxCs7Y3+qiYY9v7R2c2HHE
+        u9NeehqoIhEiDWWb10yrMKqoHSbKirkdSM2MnGXbLFUWfXxGVmNdvtyoWTdWi0kALfB+UzyKpCQXc
+        XjY+PUaHj85B5+JbHxedajI8IojA4qagg32dYWLI8h4fZxyG6QPV3ENEKaWRgNkAk597bSNzvAt8G
+        d2ESiTmQ==;
+Received: from [179.113.53.197] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nlxio-0001n9-LT; Tue, 03 May 2022 20:58:06 +0200
+Message-ID: <92dee5a0-f04e-f352-1e22-f990818ca06a@igalia.com>
+Date:   Tue, 3 May 2022 15:57:32 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 16/30] drivers/hv/vmbus, video/hyperv_fb: Untangle and
+ refactor Hyper-V panic notifiers
+Content-Language: en-US
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "bhe@redhat.com" <bhe@redhat.com>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bcm-kernel-feedback-list@broadcom.com" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "openipmi-developer@lists.sourceforge.net" 
+        <openipmi-developer@lists.sourceforge.net>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
+        "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
+        "halves@canonical.com" <halves@canonical.com>,
+        "fabiomirmar@gmail.com" <fabiomirmar@gmail.com>,
+        "alejandro.j.jimenez@oracle.com" <alejandro.j.jimenez@oracle.com>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "d.hatayama@jp.fujitsu.com" <d.hatayama@jp.fujitsu.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "dyoung@redhat.com" <dyoung@redhat.com>,
+        "feng.tang@intel.com" <feng.tang@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "hidehiro.kawai.ez@hitachi.com" <hidehiro.kawai.ez@hitachi.com>,
+        "jgross@suse.com" <jgross@suse.com>,
+        "john.ogness@linutronix.de" <john.ogness@linutronix.de>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "vgoyal@redhat.com" <vgoyal@redhat.com>,
+        vkuznets <vkuznets@redhat.com>,
+        "will@kernel.org" <will@kernel.org>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-17-gpiccoli@igalia.com>
+ <PH0PR21MB30250C9246FFF36AFB1DFDECD7FC9@PH0PR21MB3025.namprd21.prod.outlook.com>
+ <2787b476-6366-1c83-db80-0393da417497@igalia.com>
+ <PH0PR21MB3025A46643EEDA6B14AC1ECED7C09@PH0PR21MB3025.namprd21.prod.outlook.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <PH0PR21MB3025A46643EEDA6B14AC1ECED7C09@PH0PR21MB3025.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/110-smc
-head:   dc3db43287ff1d44b447fff8ed6386b28b339f1c
-commit: 0f263115481acb56629afae7ff2bda87b8aef659 [13/14] Input: macsmc-hid: New driver to handle the Apple Mac SMC buttons/lid
-config: arm64-randconfig-r034-20220501 (https://download.01.org/0day-ci/archive/20220504/202205040253.wEANtH27-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 363b3a645a1e30011cc8da624f13dac5fd915628)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/AsahiLinux/linux/commit/0f263115481acb56629afae7ff2bda87b8aef659
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/110-smc
-        git checkout 0f263115481acb56629afae7ff2bda87b8aef659
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+On 03/05/2022 15:13, Michael Kelley (LINUX) wrote:
+> [...]
+>> (a) We could forget about this change, and always do the clean-up here,
+>> not relying in machine_crash_shutdown().
+>> Pro: really simple, behaves the same as it is doing currently.
+>> Con: less elegant/concise, doesn't allow arm64 customization.
+>>
+>> (b) Add a way to allow ARM64 customization of shutdown crash handler.
+>> Pro: matches x86, more customizable, improves arm64 arch code.
+>> Con: A tad more complex.
+>>
+>> Also, a question that came-up: if ARM64 has no way of calling special
+>> crash shutdown handler, how can you execute hv_stimer_cleanup() and
+>> hv_synic_disable_regs() there? Or are they not required in ARM64?
+>>
+> 
+> My suggestion is to do (a) for now.  I suspect (b) could be a more
+> extended discussion and I wouldn't want your patch set to get held
+> up on that discussion.  I don't know what the sense of the ARM64
+> maintainers would be toward (b).  They have tried to avoid picking
+> up code warts like have accumulated on the x86/x64 side over the
+> years, and I agree with that effort.  But as more and varied
+> hypervisors become available for ARM64, it seems like a framework
+> for supporting a custom shutdown handler may become necessary.
+> But that could take a little time.
+> 
+> You are right about hv_stimer_cleanup() and hv_synic_disable_regs().
+> We are not running these when a panic occurs on ARM64, and we
+> should be, though the risk is small.   We will pursue (b) and add
+> these additional cleanups as part of that.  But again, I would suggest
+> doing (a) for now, and we will switch back to your solution once
+> (b) is in place.
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/input/misc/macsmc-hid.c:59:9: error: call to undeclared function 'kernel_can_power_off'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                                   if (kernel_can_power_off())
-                                       ^
-   drivers/input/misc/macsmc-hid.c:59:9: note: did you mean 'kernel_power_off'?
-   include/linux/reboot.h:72:13: note: 'kernel_power_off' declared here
-   extern void kernel_power_off(void);
-               ^
-   1 error generated.
+Thanks again Michael, I'll stick with (a) for now. I'll check with ARM64
+community about that, and I might even try to implement something in
+parallel (if you are not already working on that - lemme know please),
+so we don't get stuck here. As you said, I feel that this is more and
+more relevant as the number of panic/crash/kexec scenarios tend to
+increase in ARM64.
 
 
-vim +/kernel_can_power_off +59 drivers/input/misc/macsmc-hid.c
+>> [...]
+>> Some ideas of what we can do here:
+>>
+>> I) we could change the framebuffer notifier to rely on trylocks, instead
+>> of risking a lockup scenario, and with that, we can execute it before
+>> the vmbus disconnect in the hypervisor list;
+> 
+> I think we have to do this approach for now.
+> 
+>>
+>> II) we ignore the hypervisor notifier in case of kdump _by default_, and
+>> if the users don't want that, they can always set the panic notifier
+>> level to 4 and run all notifiers prior to kdump; would that be terrible
+>> you think? Kdump users might don't care about the framebuffer...
+>>
+>> III) we go with approach (b) above and refactor arm64 code to allow the
+>> custom crash handler on kdump time, then [with point (I) above] the
+>> logic proposed in this series is still valid - seems more and more the
+>> most correct/complete solution.
+> 
+> But even when/if we get approach (b) implemented, having the
+> framebuffer notifier on the pre_reboot list is still too late with the
+> default of panic_notifier_level = 2.  The kdump path will reset the
+> VMbus connection and then the framebuffer notifier won't work.
+> 
 
-    29	
-    30	static int macsmc_hid_event(struct notifier_block *nb, unsigned long event, void *data)
-    31	{
-    32		struct macsmc_hid *smchid = container_of(nb, struct macsmc_hid, nb);
-    33		u16 type = event >> 16;
-    34		u8 d1 = (event >> 8) & 0xff;
-    35		u8 d2 = event & 0xff;
-    36	
-    37		switch (type) {
-    38		case SMC_EV_BTN:
-    39			switch (d1) {
-    40			case BTN_POWER:
-    41				input_report_key(smchid->input, KEY_POWER, d2);
-    42				input_sync(smchid->input);
-    43				break;
-    44			case BTN_POWER_HELD1:
-    45				/*
-    46				 * TODO: is this pre-warning useful?
-    47				 */
-    48				if (d2)
-    49					dev_warn(smchid->dev, "Power button held down\n");
-    50				break;
-    51			case BTN_POWER_HELD2:
-    52				/*
-    53				 * If we get here, we have about 4 seconds before forced shutdown.
-    54				 * Try to do an emergency shutdown to make sure the NVMe cache is
-    55				 * flushed. macOS actually does this by panicing (!)...
-    56				 */
-    57				if (d2) {
-    58					dev_crit(smchid->dev, "Triggering forced shutdown!\n");
-  > 59					if (kernel_can_power_off())
-    60						kernel_power_off();
-    61					else /* Missing macsmc-reboot driver? */
-    62						kernel_restart("SMC power button triggered restart");
-    63				}
-    64				break;
-    65			default:
-    66				dev_info(smchid->dev, "Unknown SMC button event: %02x %02x\n", d1, d2);
-    67				break;
-    68			}
-    69			return NOTIFY_OK;
-    70		case SMC_EV_LID:
-    71			input_report_switch(smchid->input, SW_LID, d1);
-    72			input_sync(smchid->input);
-    73			return NOTIFY_OK;
-    74		}
-    75	
-    76		return NOTIFY_DONE;
-    77	}
-    78	
+OK, perfect! I'll work something along these lines in V2, allowing the
+FB notifier to always run in the hypervisor list before the vmbus unload
+mechanism.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+
+>> [...]
+>>>> +static int hv_panic_vmbus_unload(struct notifier_block *nb, unsigned long val,
+>>>>  			      void *args)
+>>>> +{
+>>>> +	if (!kexec_crash_loaded())
+>>>
+>>> I'm not clear on the purpose of this condition.  I think it means
+>>> we will skip the vmbus_initiate_unload() if a panic occurs in the
+>>> kdump kernel.  Is there a reason a panic in the kdump kernel
+>>> should be treated differently?  Or am I misunderstanding?
+>>
+>> This is really related with the point discussed in the top of this
+>> response - I assumed both ARM64/x86_64 would behave the same and
+>> disconnect the vmbus through the custom crash handler when kdump is set,
+>> so worth skipping it here in the notifier. But that's not true for ARM64
+>> as you pointed, so this guard against kexec is really part of the
+>> decision/discussion on what to do with ARM64 heh
+> 
+> But note that vmbus_initiate_unload() already has a guard built-in.
+> If the intent of this test is just as a guard against running twice,
+> then it isn't needed.
+
+Since we're going to avoid relying in the custom crash_shutdown(), due
+to the lack of ARM64 support for now, this check will be removed in V2.
+
+Its purpose was to skip the notifier *proactively* in case kexec is set,
+given that...once kexec happens, the custom crash_shutdown() would run
+the same function (wrong assumption for ARM64, my bad).
+
+Postponing that slightly would maybe gain us some time while the
+hypervisor finish its work, so we'd delay less in the vmbus unload path
+- that was the rationale behind this check.
+
+
+Cheers!

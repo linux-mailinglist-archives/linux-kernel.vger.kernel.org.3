@@ -2,56 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4414F518086
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 11:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A29518096
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 11:05:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233196AbiECJGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 05:06:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44474 "EHLO
+        id S233238AbiECJIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 05:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233155AbiECJGp (ORCPT
+        with ESMTP id S233224AbiECJIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 05:06:45 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8A71BE93
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 02:03:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=5O6c3B2G4ATQzt41JF7cPhxmcMJAP+1Vhq3o1ro6XSU=; b=OAYZvaR+RB2+gD4X5imWkyutxy
-        FWa/zLn4b2dByDtc6T5JUVfmxjfUbhwLKj4vN2E3AU6QZF7s4Tvloe4APuHIUsiOOnOiVOLHlwRvl
-        o7SOy5mNE5lTDtZWhmvEOQnqxS2qTEZiiqWnzxEhbZ5H7bVhldeS9Si8SatCH/daPCqp+cUVORMEz
-        kxpUPLtxHr5W9+dbnFxbL4Ucmgl/igBGrdfbv616G+r+uM/FYympu+VQWSCCFWzgNMEXYnf49TGSb
-        tuRIf/KVLy5eJqNJuNJVtVX1/FV+xYu8Dw+Tf561WiA9+qX71nHHkJ2m4yVhLRr8kLpcN7RipKiRB
-        em5cYHuA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nloR2-00FWwt-8Y; Tue, 03 May 2022 09:03:08 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DB1A73005E5;
-        Tue,  3 May 2022 11:03:05 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C47C120288CED; Tue,  3 May 2022 11:03:05 +0200 (CEST)
-Date:   Tue, 3 May 2022 11:03:05 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
+        Tue, 3 May 2022 05:08:45 -0400
+Received: from mail.pcs.gmbh (mail.pcs.gmbh [89.27.162.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC64E1BE93;
+        Tue,  3 May 2022 02:05:09 -0700 (PDT)
+Received: from mail.csna.de (mail.csna.de [89.27.162.50])
+        by mail.pcs.gmbh with ESMTPA
+        ; Tue, 3 May 2022 11:04:56 +0200
+Received: from EXCHANGE2019.pcs.ditec.de (mail.pcs.com [89.27.162.5])
+        by mail.csna.de with ESMTPA
+        ; Tue, 3 May 2022 11:04:56 +0200
+Received: from EXCHANGE2019.pcs.ditec.de (192.168.8.214) by
+ EXCHANGE2019.pcs.ditec.de (192.168.8.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 3 May 2022 11:04:56 +0200
+Received: from lxtpfaff.pcs.ditec.de (192.168.9.96) by
+ EXCHANGE2019.pcs.ditec.de (192.168.8.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22
+ via Frontend Transport; Tue, 3 May 2022 11:04:56 +0200
+Date:   Tue, 3 May 2022 11:04:55 +0200
+From:   Thomas Pfaff <tpfaff@pcs.com>
 To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Filipe Manana <fdmanana@suse.com>
-Subject: Re: [patch 3/3] x86/fpu: Make FPU protection more robust
-Message-ID: <YnDvye07/jRMBiPx@hirez.programming.kicks-ass.net>
-References: <20220501192740.203963477@linutronix.de>
- <20220501193102.704267030@linutronix.de>
+CC:     <linux-kernel@vger.kernel.org>, <linux-rt-users@vger.kernel.org>,
+        Marc Zyngier <maz@kernel.org>
+Subject: [PATCH] genirq: Fix wait_for_threads initialization in
+ early_irq_init
+Message-ID: <e9d64164-4690-5ec8-c1b9-eb1e21c7c5@pcs.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220501193102.704267030@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset="US-ASCII"
+X-KSE-ServerInfo: EXCHANGE2019.pcs.ditec.de, 9
+X-KSE-AntiSpam-Interceptor-Info: white sender email list
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 03.05.2022 06:37:00
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,35 +54,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 01, 2022 at 09:31:47PM +0200, Thomas Gleixner wrote:
-> +void fpregs_lock(void)
-> +{
-> +	if (!IS_ENABLED(CONFIG_PREEMPT_RT))
-> +		local_bh_disable();
-> +	else
-> +		preempt_disable();
-> +
-> +	WARN_ON_ONCE(this_cpu_read(fpu_in_use));
-> +	this_cpu_write(fpu_in_use, true);
+From: Thomas Pfaff <tpfaff@pcs.com>
 
-	barrier();
-> +}
-> +EXPORT_SYMBOL_GPL(fpregs_lock);
+Bugfix for copy and paste error in genirq: Synchronize interrupt thread startup.
 
-> +void fpregs_unlock(void)
-> +{
-	barrier();
+Signed-off-by: Thomas Pfaff <tpfaff@pcs.com>
+---
+diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
+index 02f3b5bf5145..0099b87dd853 100644
+--- a/kernel/irq/irqdesc.c
++++ b/kernel/irq/irqdesc.c
+@@ -576,7 +576,7 @@ int __init early_irq_init(void)
+ 		raw_spin_lock_init(&desc[i].lock);
+ 		lockdep_set_class(&desc[i].lock, &irq_desc_lock_class);
+ 		mutex_init(&desc[i].request_mutex);
+-		init_waitqueue_head(&desc->wait_for_threads);
++		init_waitqueue_head(&desc[i].wait_for_threads);
+ 		desc_set_defaults(i, &desc[i], node, NULL, NULL);
+ 	}
+ 	return arch_early_irq_init();
 
-> +	WARN_ON_ONCE(!this_cpu_read(fpu_in_use));
-> +	this_cpu_write(fpu_in_use, false);
-> +
-> +	if (!IS_ENABLED(CONFIG_PREEMPT_RT))
-> +		local_bh_enable();
-> +	else
-> +		preempt_enable();
-> +}
-> +EXPORT_SYMBOL_GPL(fpregs_unlock);
 
-I think this isn't currently a problem because a function call is a C
-sequence point, but 'funnily' C doesn't preserve sequence points when
-inlining so LTO can actually break this without barrier() on.

@@ -2,200 +2,745 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF950518CD5
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D61E518CD7
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:05:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241664AbiECTH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 15:07:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36972 "EHLO
+        id S241696AbiECTJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 15:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232372AbiECTHz (ORCPT
+        with ESMTP id S241743AbiECTIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 15:07:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC233B3F8;
-        Tue,  3 May 2022 12:04:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A3420B81D9D;
-        Tue,  3 May 2022 19:04:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A07BC385A9;
-        Tue,  3 May 2022 19:04:17 +0000 (UTC)
-Date:   Tue, 3 May 2022 15:04:10 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org
-Subject: : [PATCH] ftrace/x86: Add FTRACE_MCOUNT_MAX_OFFSET to avoid adding
- weak functions
-Message-ID: <20220503150410.2d9e88aa@rorschach.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 3 May 2022 15:08:49 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E9F2F8;
+        Tue,  3 May 2022 12:05:15 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id y3so35145209ejo.12;
+        Tue, 03 May 2022 12:05:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ReSCbdNy0Og1S76F1u9JS65sTg/Pqy670jtM7diePVI=;
+        b=WzVi400X1hn6hRCkmVdt2c8H0xkimKTRAqwA64eNKzIqZNRG4FftfBFAGVmHTlAfIp
+         YI27Y6coPdXaow3KvoVyz0abVy03E66dYf6iekhNSt1R1g1RmhzSuw4bSY0I1WTj9VhJ
+         I8Mg/qMnR25qlk0/d8upFoel2ml0QKj7rErYafbmDufkAimM3D82IKKhZkId+phLl/eb
+         d5c3u4C0yS6opzVrLWJMduEsU1yl96+9qJFjxAKnI8YdUh2Du8DMn2m4W4dehjkTzKpn
+         k7eTZP7457kDE/RC9kg+PU+7Pek0Z899lb1DeUra0zXkzytUGkb+Ft1a0W934kZievLC
+         R1SA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ReSCbdNy0Og1S76F1u9JS65sTg/Pqy670jtM7diePVI=;
+        b=gzg51KMGPj3jEqCj+BoZ5hmblaK6sjhp2vFA7Mnn3IzjZeld9UJsHcyW1i+pfv+dN3
+         GSb4Vl5zAhcMoUby8ae0gPra3hd1mccjnlj9RWcTPFMEwjBJ5lyn6Cb8E4c76Zmhf66Q
+         t5JAGXH5yt/eRGaU9fL4geGeMaTviOWT0n378Q5AkRZw3t+QnLa5hPDwhTKiiSiCUU7N
+         I//xzuFsIiKm1OYMzE9dIbG24sp3itrocUjZuUyJIu/dOhLXhpFU8dFt1e2PsYRsae//
+         BOQ3gnN6l/6NZVpycDcEdQ9LhtIwkWZyiDvcAwdcSwqcc/v0eNuvw+8yl8+5Z4/D+Nkh
+         0/Sw==
+X-Gm-Message-State: AOAM531vXB5PvHwiDZ1k0stTPaRCaBm+Gj+Gls+G3w4NQ7REAL6ojJiY
+        AHe9XcB0V0mNjHhcuCVwwl0=
+X-Google-Smtp-Source: ABdhPJx+TvMkSF72euR0FyFpNSQrKRuHrF2mQYwBmxodntSrbRqkiXY4IJ9au3o+XJ/73toyv+pR2A==
+X-Received: by 2002:a17:907:6da3:b0:6f4:6b70:33d4 with SMTP id sb35-20020a1709076da300b006f46b7033d4mr7555173ejc.51.1651604713457;
+        Tue, 03 May 2022 12:05:13 -0700 (PDT)
+Received: from kista.localnet (cpe1-3-76.cable.triera.net. [213.161.3.76])
+        by smtp.gmail.com with ESMTPSA id qp24-20020a170907a21800b006f3ef214dfbsm4884624ejc.97.2022.05.03.12.05.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 12:05:12 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
+        Andre Przywara <andre.przywara@arm.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 3/6] arm64: dts: allwinner: Add Allwinner H616 .dtsi file
+Date:   Tue, 03 May 2022 21:05:11 +0200
+Message-ID: <3165164.aeNJFYEL58@kista>
+In-Reply-To: <20220428230933.15262-4-andre.przywara@arm.com>
+References: <20220428230933.15262-1-andre.przywara@arm.com> <20220428230933.15262-4-andre.przywara@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Hi!
 
-If an unused weak function was traced, it's call to fentry will still
-exist, which gets added into the __mcount_loc table. Ftrace will use
-kallsyms to retrieve the name for each location in __mcount_loc to display
-it in the available_filter_functions and used to enable functions via the
-name matching in set_ftrace_filter/notrace. Enabling these functions do
-nothing but enable an unused call to ftrace_caller. If a traced weak
-function is overridden, the symbol of the function would be used for it,
-which will either created duplicate names, or if the previous function was
-not traced, it would be incorrectly listed in available_filter_functions
-as a function that can be traced.
+Dne petek, 29. april 2022 ob 01:09:30 CEST je Andre Przywara napisal(a):
+> This (relatively) new SoC is similar to the H6, but drops the (broken)
+> PCIe support and the USB 3.0 controller. It also gets the management
+> controller removed, which in turn removes *some*, but not all of the
+> devices formerly dedicated to the ARISC (CPUS).
+> And while there is still the extra sunxi interrupt controller, the
+> package lacks the corresponding NMI pin, so no interrupts for the PMIC.
+> 
+> The reserved memory node is actually handled by Trusted Firmware now,
+> but U-Boot fails to propagate this to a separately loaded DTB, so we
+> keep it in here for now, until U-Boot learns to do this properly.
+> 
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> ---
+>  .../arm64/boot/dts/allwinner/sun50i-h616.dtsi | 574 ++++++++++++++++++
+>  1 file changed, 574 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi b/arch/arm64/
+boot/dts/allwinner/sun50i-h616.dtsi
+> new file mode 100644
+> index 000000000000..cc06cdd15ba5
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi
+> @@ -0,0 +1,574 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +// Copyright (C) 2020 Arm Ltd.
+> +// based on the H6 dtsi, which is:
+> +//   Copyright (C) 2017 Icenowy Zheng <icenowy@aosc.io>
+> +
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/clock/sun50i-h616-ccu.h>
+> +#include <dt-bindings/clock/sun50i-h6-r-ccu.h>
+> +#include <dt-bindings/reset/sun50i-h616-ccu.h>
+> +#include <dt-bindings/reset/sun50i-h6-r-ccu.h>
+> +
+> +/ {
+> +	interrupt-parent = <&gic>;
+> +	#address-cells = <2>;
+> +	#size-cells = <2>;
+> +
+> +	cpus {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		cpu0: cpu@0 {
+> +			compatible = "arm,cortex-a53";
+> +			device_type = "cpu";
+> +			reg = <0>;
+> +			enable-method = "psci";
+> +			clocks = <&ccu CLK_CPUX>;
+> +		};
+> +
+> +		cpu1: cpu@1 {
+> +			compatible = "arm,cortex-a53";
+> +			device_type = "cpu";
+> +			reg = <1>;
+> +			enable-method = "psci";
+> +			clocks = <&ccu CLK_CPUX>;
+> +		};
+> +
+> +		cpu2: cpu@2 {
+> +			compatible = "arm,cortex-a53";
+> +			device_type = "cpu";
+> +			reg = <2>;
+> +			enable-method = "psci";
+> +			clocks = <&ccu CLK_CPUX>;
+> +		};
+> +
+> +		cpu3: cpu@3 {
+> +			compatible = "arm,cortex-a53";
+> +			device_type = "cpu";
+> +			reg = <3>;
+> +			enable-method = "psci";
+> +			clocks = <&ccu CLK_CPUX>;
+> +		};
+> +	};
+> +
+> +	reserved-memory {
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges;
+> +
+> +		/* 512KiB reserved for ARM Trusted Firmware (BL31) */
+> +		secmon_reserved: secmon@40000000 {
+> +			reg = <0x0 0x40000000 0x0 0x80000>;
+> +			no-map;
+> +		};
+> +	};
 
-This became an issue with BPF[1] as there are tooling that enables the
-direct callers via ftrace but then checks to see if the functions were
-actually enabled. The case of one function that was marked notrace, but
-was followed by an unused weak function that was traced. The unused
-function's call to fentry was added to the __mcount_loc section, and
-kallsyms retrieved the untraced function's symbol as the weak function was
-overridden. Since the untraced function would not get traced, the BPF
-check would detect this and fail.
+I'm not a fan of above. If anything changes in future in BL31, U-Boot would 
+need to reconfigure it anyway. Can we just skip it?
 
-The real fix would be to fix kallsyms to not show address of weak
-functions as the function before it. But that would require adding code in
-the build to add function size to kallsyms so that it can know when the
-function ends instead of just using the start of the next known symbol.
+> +
+> +	osc24M: osc24M-clk {
+> +		#clock-cells = <0>;
+> +		compatible = "fixed-clock";
+> +		clock-frequency = <24000000>;
+> +		clock-output-names = "osc24M";
+> +	};
+> +
+> +	pmu {
+> +		compatible = "arm,cortex-a53-pmu";
+> +		interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 142 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 143 IRQ_TYPE_LEVEL_HIGH>;
+> +		interrupt-affinity = <&cpu0>, <&cpu1>, <&cpu2>, <&cpu3>;
+> +	};
+> +
+> +	psci {
+> +		compatible = "arm,psci-0.2";
+> +		method = "smc";
+> +	};
+> +
+> +	timer {
+> +		compatible = "arm,armv8-timer";
+> +		arm,no-tick-in-suspend;
+> +		interrupts = <GIC_PPI 13
+> +			(GIC_CPU_MASK_SIMPLE(4) | 
+IRQ_TYPE_LEVEL_HIGH)>,
+> +			     <GIC_PPI 14
+> +			(GIC_CPU_MASK_SIMPLE(4) | 
+IRQ_TYPE_LEVEL_HIGH)>,
+> +			     <GIC_PPI 11
+> +			(GIC_CPU_MASK_SIMPLE(4) | 
+IRQ_TYPE_LEVEL_HIGH)>,
+> +			     <GIC_PPI 10
+> +			(GIC_CPU_MASK_SIMPLE(4) | 
+IRQ_TYPE_LEVEL_HIGH)>;
+> +	};
 
-In the mean time, this is a work around. Add a FTRACE_MCOUNT_MAX_OFFSET
-macro that if defined, ftrace will ignore any function that has its call
-to fentry/mcount that has an offset from the symbol that is greater than
-FTRACE_MCOUNT_MAX_OFFSET.
+Vendor kernel sets IRQ to low level. What is the difference?
 
-If CONFIG_HAVE_FENTRY is defined for x86, define FTRACE_MCOUNT_MAX_OFFSET
-to zero, which will have ftrace ignore all locations that are not at the
-start of the function.
+> +
+> +	soc@0 {
+> +		compatible = "simple-bus";
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		ranges = <0x0 0x0 0x0 0x40000000>;
+> +
+> +		syscon: syscon@3000000 {
+> +			compatible = "allwinner,sun50i-h616-system-
+control";
+> +			reg = <0x03000000 0x1000>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges;
+> +
+> +			sram_c: sram@28000 {
+> +				compatible = "mmio-sram";
+> +				reg = <0x00028000 0x30000>;
+> +				#address-cells = <1>;
+> +				#size-cells = <1>;
+> +				ranges = <0 0x00028000 0x30000>;
+> +			};
+> +		};
+> +
+> +		ccu: clock@3001000 {
+> +			compatible = "allwinner,sun50i-h616-ccu";
+> +			reg = <0x03001000 0x1000>;
+> +			clocks = <&osc24M>, <&rtc 0>, <&rtc 2>;
+> +			clock-names = "hosc", "losc", "iosc";
+> +			#clock-cells = <1>;
+> +			#reset-cells = <1>;
+> +		};
+> +
+> +		watchdog: watchdog@30090a0 {
+> +			compatible = "allwinner,sun50i-h616-wdt",
+> +				     "allwinner,sun6i-a31-wdt";
+> +			reg = <0x030090a0 0x20>;
+> +			interrupts = <GIC_SPI 50 
+IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&osc24M>;
+> +		};
+> +
+> +		pio: pinctrl@300b000 {
+> +			compatible = "allwinner,sun50i-h616-pinctrl";
+> +			reg = <0x0300b000 0x400>;
+> +			interrupts = <GIC_SPI 51 
+IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 52 
+IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 53 
+IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 43 
+IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 54 
+IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 55 
+IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 56 
+IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 57 
+IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&ccu CLK_APB1>, <&osc24M>, <&rtc 
+0>;
+> +			clock-names = "apb", "hosc", "losc";
+> +			gpio-controller;
+> +			#gpio-cells = <3>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <3>;
+> +
+> +			ext_rgmii_pins: rgmii-pins {
+> +				pins = "PI0", "PI1", "PI2", "PI3", 
+"PI4",
+> +				       "PI5", "PI7", "PI8", "PI9", 
+"PI10",
+> +				       "PI11", "PI12", "PI13", 
+"PI14", "PI15",
+> +				       "PI16";
+> +				function = "emac0";
+> +				drive-strength = <40>;
+> +			};
+> +
+> +			i2c0_pins: i2c0-pins {
+> +				pins = "PI6", "PI7";
+> +				function = "i2c0";
+> +			};
+> +
+> +			i2c3_ph_pins: i2c3-ph-pins {
+> +				pins = "PH4", "PH5";
+> +				function = "i2c3";
+> +			};
+> +
+> +			ir_rx_pin: ir-rx-pin {
+> +				pins = "PH10";
+> +				function = "ir_rx";
+> +			};
+> +
+> +			mmc0_pins: mmc0-pins {
+> +				pins = "PF0", "PF1", "PF2", "PF3",
+> +				       "PF4", "PF5";
+> +				function = "mmc0";
+> +				drive-strength = <30>;
+> +				bias-pull-up;
+> +			};
+> +
+> +			mmc1_pins: mmc1-pins {
+> +				pins = "PG0", "PG1", "PG2", "PG3",
+> +				       "PG4", "PG5";
+> +				function = "mmc1";
+> +				drive-strength = <30>;
+> +				bias-pull-up;
+> +			};
+> +
+> +			mmc2_pins: mmc2-pins {
+> +				pins = "PC0", "PC1", "PC5", "PC6",
+> +				       "PC8", "PC9", "PC10", 
+"PC11",
+> +				       "PC13", "PC14", "PC15", 
+"PC16";
+> +				function = "mmc2";
+> +				drive-strength = <30>;
+> +				bias-pull-up;
+> +			};
+> +
+> +			spi0_pins: spi0-pins {
+> +				pins = "PC0", "PC2", "PC3", "PC4";
+> +				function = "spi0";
+> +			};
+> +
+> +			spi1_pins: spi1-pins {
+> +				pins = "PH6", "PH7", "PH8";
+> +				function = "spi1";
+> +			};
+> +
+> +			spi1_cs_pin: spi1-cs-pin {
+> +				pins = "PH5";
+> +				function = "spi1";
+> +			};
+> +
+> +			uart0_ph_pins: uart0-ph-pins {
+> +				pins = "PH0", "PH1";
+> +				function = "uart0";
+> +			};
+> +
+> +			uart1_pins: uart1-pins {
+> +				pins = "PG6", "PG7";
+> +				function = "uart1";
+> +			};
+> +
+> +			uart1_rts_cts_pins: uart1-rts-cts-pins {
+> +				pins = "PG8", "PG9";
+> +				function = "uart1";
+> +			};
 
-[1] https://lore.kernel.org/all/20220412094923.0abe90955e5db486b7bca279@kernel.org/
+Please add /omit-if-no-ref/ where applicable.
 
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- arch/x86/include/asm/ftrace.h |  5 ++++
- kernel/trace/ftrace.c         | 50 +++++++++++++++++++++++++++++++++--
- 2 files changed, 53 insertions(+), 2 deletions(-)
+> +		};
+> +
+> +		gic: interrupt-controller@3021000 {
+> +			compatible = "arm,gic-400";
+> +			reg = <0x03021000 0x1000>,
+> +			      <0x03022000 0x2000>,
+> +			      <0x03024000 0x2000>,
+> +			      <0x03026000 0x2000>;
+> +			interrupts = <GIC_PPI 9 
+(GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <3>;
+> +		};
+> +
+> +		mmc0: mmc@4020000 {
+> +			compatible = "allwinner,sun50i-h616-mmc",
+> +				     "allwinner,sun50i-a100-mmc";
+> +			reg = <0x04020000 0x1000>;
+> +			clocks = <&ccu CLK_BUS_MMC0>, <&ccu 
+CLK_MMC0>;
+> +			clock-names = "ahb", "mmc";
+> +			resets = <&ccu RST_BUS_MMC0>;
+> +			reset-names = "ahb";
+> +			interrupts = <GIC_SPI 35 
+IRQ_TYPE_LEVEL_HIGH>;
+> +			pinctrl-names = "default";
+> +			pinctrl-0 = <&mmc0_pins>;
+> +			status = "disabled";
+> +			max-frequency = <150000000>;
+> +			cap-sd-highspeed;
+> +			cap-mmc-highspeed;
+> +			mmc-ddr-3_3v;
+> +			cap-sdio-irq;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +
+> +		mmc1: mmc@4021000 {
+> +			compatible = "allwinner,sun50i-h616-mmc",
+> +				     "allwinner,sun50i-a100-mmc";
+> +			reg = <0x04021000 0x1000>;
+> +			clocks = <&ccu CLK_BUS_MMC1>, <&ccu 
+CLK_MMC1>;
+> +			clock-names = "ahb", "mmc";
+> +			resets = <&ccu RST_BUS_MMC1>;
+> +			reset-names = "ahb";
+> +			interrupts = <GIC_SPI 36 
+IRQ_TYPE_LEVEL_HIGH>;
+> +			pinctrl-names = "default";
+> +			pinctrl-0 = <&mmc1_pins>;
+> +			status = "disabled";
+> +			max-frequency = <150000000>;
+> +			cap-sd-highspeed;
+> +			cap-mmc-highspeed;
+> +			mmc-ddr-3_3v;
+> +			cap-sdio-irq;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +
+> +		mmc2: mmc@4022000 {
+> +			compatible = "allwinner,sun50i-h616-emmc",
+> +				     "allwinner,sun50i-a100-emmc";
+> +			reg = <0x04022000 0x1000>;
+> +			clocks = <&ccu CLK_BUS_MMC2>, <&ccu 
+CLK_MMC2>;
+> +			clock-names = "ahb", "mmc";
+> +			resets = <&ccu RST_BUS_MMC2>;
+> +			reset-names = "ahb";
+> +			interrupts = <GIC_SPI 37 
+IRQ_TYPE_LEVEL_HIGH>;
+> +			pinctrl-names = "default";
+> +			pinctrl-0 = <&mmc2_pins>;
+> +			status = "disabled";
+> +			max-frequency = <150000000>;
+> +			cap-sd-highspeed;
+> +			cap-mmc-highspeed;
+> +			mmc-ddr-3_3v;
+> +			cap-sdio-irq;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +
+> +		uart0: serial@5000000 {
+> +			compatible = "snps,dw-apb-uart";
+> +			reg = <0x05000000 0x400>;
+> +			interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>;
+> +			reg-shift = <2>;
+> +			reg-io-width = <4>;
+> +			clocks = <&ccu CLK_BUS_UART0>;
+> +			resets = <&ccu RST_BUS_UART0>;
+> +			status = "disabled";
+> +		};
+> +
+> +		uart1: serial@5000400 {
+> +			compatible = "snps,dw-apb-uart";
+> +			reg = <0x05000400 0x400>;
+> +			interrupts = <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>;
+> +			reg-shift = <2>;
+> +			reg-io-width = <4>;
+> +			clocks = <&ccu CLK_BUS_UART1>;
+> +			resets = <&ccu RST_BUS_UART1>;
+> +			status = "disabled";
+> +		};
+> +
+> +		uart2: serial@5000800 {
+> +			compatible = "snps,dw-apb-uart";
+> +			reg = <0x05000800 0x400>;
+> +			interrupts = <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>;
+> +			reg-shift = <2>;
+> +			reg-io-width = <4>;
+> +			clocks = <&ccu CLK_BUS_UART2>;
+> +			resets = <&ccu RST_BUS_UART2>;
+> +			status = "disabled";
+> +		};
+> +
+> +		uart3: serial@5000c00 {
+> +			compatible = "snps,dw-apb-uart";
+> +			reg = <0x05000c00 0x400>;
+> +			interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
+> +			reg-shift = <2>;
+> +			reg-io-width = <4>;
+> +			clocks = <&ccu CLK_BUS_UART3>;
+> +			resets = <&ccu RST_BUS_UART3>;
+> +			status = "disabled";
+> +		};
+> +
+> +		uart4: serial@5001000 {
+> +			compatible = "snps,dw-apb-uart";
+> +			reg = <0x05001000 0x400>;
+> +			interrupts = <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>;
+> +			reg-shift = <2>;
+> +			reg-io-width = <4>;
+> +			clocks = <&ccu CLK_BUS_UART4>;
+> +			resets = <&ccu RST_BUS_UART4>;
+> +			status = "disabled";
+> +		};
+> +
+> +		uart5: serial@5001400 {
+> +			compatible = "snps,dw-apb-uart";
+> +			reg = <0x05001400 0x400>;
+> +			interrupts = <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>;
+> +			reg-shift = <2>;
+> +			reg-io-width = <4>;
+> +			clocks = <&ccu CLK_BUS_UART5>;
+> +			resets = <&ccu RST_BUS_UART5>;
+> +			status = "disabled";
+> +		};
+> +
+> +		i2c0: i2c@5002000 {
+> +			compatible = "allwinner,sun50i-h616-i2c",
+> +				     "allwinner,sun6i-a31-i2c";
+> +			reg = <0x05002000 0x400>;
+> +			interrupts = <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&ccu CLK_BUS_I2C0>;
+> +			resets = <&ccu RST_BUS_I2C0>;
+> +			pinctrl-names = "default";
+> +			pinctrl-0 = <&i2c0_pins>;
+> +			status = "disabled";
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +
+> +		i2c1: i2c@5002400 {
+> +			compatible = "allwinner,sun50i-h616-i2c",
+> +				     "allwinner,sun6i-a31-i2c";
+> +			reg = <0x05002400 0x400>;
+> +			interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&ccu CLK_BUS_I2C1>;
+> +			resets = <&ccu RST_BUS_I2C1>;
+> +			status = "disabled";
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +
+> +		i2c2: i2c@5002800 {
+> +			compatible = "allwinner,sun50i-h616-i2c",
+> +				     "allwinner,sun6i-a31-i2c";
+> +			reg = <0x05002800 0x400>;
+> +			interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&ccu CLK_BUS_I2C2>;
+> +			resets = <&ccu RST_BUS_I2C2>;
+> +			status = "disabled";
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +
+> +		i2c3: i2c@5002c00 {
+> +			compatible = "allwinner,sun50i-h616-i2c",
+> +				     "allwinner,sun6i-a31-i2c";
+> +			reg = <0x05002c00 0x400>;
+> +			interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&ccu CLK_BUS_I2C3>;
+> +			resets = <&ccu RST_BUS_I2C3>;
+> +			status = "disabled";
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +
+> +		i2c4: i2c@5003000 {
+> +			compatible = "allwinner,sun50i-h616-i2c",
+> +				     "allwinner,sun6i-a31-i2c";
+> +			reg = <0x05003000 0x400>;
+> +			interrupts = <GIC_SPI 10 
+IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&ccu CLK_BUS_I2C4>;
+> +			resets = <&ccu RST_BUS_I2C4>;
+> +			status = "disabled";
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +
+> +		spi0: spi@5010000 {
+> +			compatible = "allwinner,sun50i-h616-spi",
+> +				     "allwinner,sun8i-h3-spi";
+> +			reg = <0x05010000 0x1000>;
+> +			interrupts = <GIC_SPI 12 
+IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&ccu CLK_BUS_SPI0>, <&ccu 
+CLK_SPI0>;
+> +			clock-names = "ahb", "mod";
+> +			resets = <&ccu RST_BUS_SPI0>;
+> +			pinctrl-names = "default";
+> +			pinctrl-0 = <&spi0_pins>;
+> +			status = "disabled";
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +
+> +		spi1: spi@5011000 {
+> +			compatible = "allwinner,sun50i-h616-spi",
+> +				     "allwinner,sun8i-h3-spi";
+> +			reg = <0x05011000 0x1000>;
+> +			interrupts = <GIC_SPI 13 
+IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&ccu CLK_BUS_SPI1>, <&ccu 
+CLK_SPI1>;
+> +			clock-names = "ahb", "mod";
+> +			resets = <&ccu RST_BUS_SPI1>;
+> +			pinctrl-names = "default";
+> +			pinctrl-0 = <&spi1_pins>;
+> +			status = "disabled";
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +
+> +		emac0: ethernet@5020000 {
+> +			compatible = "allwinner,sun50i-h616-emac",
+> +				     "allwinner,sun50i-a64-emac";
+> +			syscon = <&syscon>;
+> +			reg = <0x05020000 0x10000>;
+> +			interrupts = <GIC_SPI 14 
+IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "macirq";
+> +			resets = <&ccu RST_BUS_EMAC0>;
+> +			reset-names = "stmmaceth";
+> +			clocks = <&ccu CLK_BUS_EMAC0>;
+> +			clock-names = "stmmaceth";
+> +			status = "disabled";
+> +
+> +			mdio0: mdio {
+> +				compatible = "snps,dwmac-mdio";
+> +				#address-cells = <1>;
+> +				#size-cells = <0>;
+> +			};
+> +		};
+> +
+> +		rtc: rtc@7000000 {
+> +			compatible = "allwinner,sun50i-h616-rtc";
+> +			reg = <0x07000000 0x400>;
+> +			interrupts = <GIC_SPI 101 
+IRQ_TYPE_LEVEL_HIGH>;
 
-diff --git a/arch/x86/include/asm/ftrace.h b/arch/x86/include/asm/ftrace.h
-index 024d9797646e..70c88d49bf45 100644
---- a/arch/x86/include/asm/ftrace.h
-+++ b/arch/x86/include/asm/ftrace.h
-@@ -9,6 +9,11 @@
- # define MCOUNT_ADDR		((unsigned long)(__fentry__))
- #define MCOUNT_INSN_SIZE	5 /* sizeof mcount call */
- 
-+/* Ignore unused weak functions which will have non zero offsets */
-+#ifdef CONFIG_HAVE_FENTRY
-+# define FTRACE_MCOUNT_MAX_OFFSET	0
-+#endif
-+
- #ifdef CONFIG_DYNAMIC_FTRACE
- #define ARCH_SUPPORTS_FTRACE_OPS 1
- #endif
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 5c465e70d146..3529c44ab9db 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -3665,6 +3665,31 @@ static void add_trampoline_func(struct seq_file *m, struct ftrace_ops *ops,
- 		seq_printf(m, " ->%pS", ptr);
- }
- 
-+#ifdef FTRACE_MCOUNT_MAX_OFFSET
-+static int print_rec(struct seq_file *m, unsigned long ip)
-+{
-+	unsigned long offset;
-+	char str[KSYM_SYMBOL_LEN];
-+	char *modname;
-+	int ret;
-+
-+	ret = kallsyms_lookup(ip, NULL, &offset, &modname, str);
-+	if (!ret || offset > FTRACE_MCOUNT_MAX_OFFSET)
-+		return -1;
-+
-+	seq_puts(m, str);
-+	if (modname)
-+		seq_printf(m, " [%s]", modname);
-+	return 0;
-+}
-+#else
-+static int print_rec(struct seq_file *m, unsigned long ip)
-+{
-+	seq_printf(m, "%ps", (void *)ip);
-+	return 0;
-+}
-+#endif
-+
- static int t_show(struct seq_file *m, void *v)
- {
- 	struct ftrace_iterator *iter = m->private;
-@@ -3689,7 +3714,9 @@ static int t_show(struct seq_file *m, void *v)
- 	if (!rec)
- 		return 0;
- 
--	seq_printf(m, "%ps", (void *)rec->ip);
-+	if (print_rec(m, rec->ip))
-+		return 0;
-+
- 	if (iter->flags & FTRACE_ITER_ENABLED) {
- 		struct ftrace_ops *ops;
- 
-@@ -4007,6 +4034,24 @@ add_rec_by_index(struct ftrace_hash *hash, struct ftrace_glob *func_g,
- 	return 0;
- }
- 
-+#ifdef FTRACE_MCOUNT_MAX_OFFSET
-+static int lookup_ip(unsigned long ip, char **modname, char *str)
-+{
-+	unsigned long offset;
-+
-+	kallsyms_lookup(ip, NULL, &offset, modname, str);
-+	if (offset > FTRACE_MCOUNT_MAX_OFFSET)
-+		return -1;
-+	return 0;
-+}
-+#else
-+static int lookup_ip(unsigned long ip, char **modname, char *str)
-+{
-+	kallsyms_lookup(ip, NULL, NULL, modname, str);
-+	return 0;
-+}
-+#endif
-+
- static int
- ftrace_match_record(struct dyn_ftrace *rec, struct ftrace_glob *func_g,
- 		struct ftrace_glob *mod_g, int exclude_mod)
-@@ -4014,7 +4059,8 @@ ftrace_match_record(struct dyn_ftrace *rec, struct ftrace_glob *func_g,
- 	char str[KSYM_SYMBOL_LEN];
- 	char *modname;
- 
--	kallsyms_lookup(rec->ip, NULL, NULL, &modname, str);
-+	if (lookup_ip(rec->ip, &modname, str))
-+		return 0;
- 
- 	if (mod_g) {
- 		int mod_matches = (modname) ? ftrace_match(modname, mod_g) : 0;
--- 
-2.35.1
+Above interrupt doesn't seem to be correct according to documentation. It 
+should be 104.
+
+> +			clocks = <&r_ccu CLK_R_APB1_RTC>, <&osc24M>,
+> +				 <&ccu CLK_PLL_SYSTEM_32K>;
+> +			clock-names = "bus", "hosc",
+> +				      "pll-32k";
+> +			clock-output-names = "osc32k", "osc32k-out", 
+"iosc";
+> +			#clock-cells = <1>;
+> +		};
+> +
+> +		r_ccu: clock@7010000 {
+> +			compatible = "allwinner,sun50i-h616-r-ccu";
+> +			reg = <0x07010000 0x210>;
+> +			clocks = <&osc24M>, <&rtc 0>, <&rtc 2>,
+> +				 <&ccu CLK_PLL_PERIPH0>;
+> +			clock-names = "hosc", "losc", "iosc", "pll-
+periph";
+> +			#clock-cells = <1>;
+> +			#reset-cells = <1>;
+> +		};
+> +
+> +		r_pio: pinctrl@7022000 {
+> +			compatible = "allwinner,sun50i-h616-r-
+pinctrl";
+> +			reg = <0x07022000 0x400>;
+> +			interrupts = <GIC_SPI 43 
+IRQ_TYPE_LEVEL_HIGH>;
+
+Above interrupt is already used for port E in first pinctrl. Is this shared 
+somehow?
+
+Best regards,
+Jernej
+
+> +			clocks = <&r_ccu CLK_R_APB1>, <&osc24M>, 
+<&rtc 0>;
+> +			clock-names = "apb", "hosc", "losc";
+> +			gpio-controller;
+> +			#gpio-cells = <3>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <3>;
+> +
+> +			r_i2c_pins: r-i2c-pins {
+> +				pins = "PL0", "PL1";
+> +				function = "s_i2c";
+> +			};
+> +
+> +			r_rsb_pins: r-rsb-pins {
+> +				pins = "PL0", "PL1";
+> +				function = "s_rsb";
+> +			};
+> +		};
+> +
+> +		ir: ir@7040000 {
+> +			compatible = "allwinner,sun50i-h616-ir",
+> +				     "allwinner,sun6i-a31-ir";
+> +			reg = <0x07040000 0x400>;
+> +			interrupts = <GIC_SPI 106 
+IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&r_ccu CLK_R_APB1_IR>,
+> +				 <&r_ccu CLK_IR>;
+> +			clock-names = "apb", "ir";
+> +			resets = <&r_ccu RST_R_APB1_IR>;
+> +			pinctrl-names = "default";
+> +			pinctrl-0 = <&ir_rx_pin>;
+> +			status = "disabled";
+> +		};
+> +
+> +		r_i2c: i2c@7081400 {
+> +			compatible = "allwinner,sun50i-h616-i2c",
+> +				     "allwinner,sun6i-a31-i2c";
+> +			reg = <0x07081400 0x400>;
+> +			interrupts = <GIC_SPI 105 
+IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&r_ccu CLK_R_APB2_I2C>;
+> +			resets = <&r_ccu RST_R_APB2_I2C>;
+> +			status = "disabled";
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +
+> +		r_rsb: rsb@7083000 {
+> +			compatible = "allwinner,sun50i-h616-rsb",
+> +				     "allwinner,sun8i-a23-rsb";
+> +			reg = <0x07083000 0x400>;
+> +			interrupts = <GIC_SPI 109 
+IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&r_ccu CLK_R_APB2_RSB>;
+> +			clock-frequency = <3000000>;
+> +			resets = <&r_ccu RST_R_APB2_RSB>;
+> +			pinctrl-names = "default";
+> +			pinctrl-0 = <&r_rsb_pins>;
+> +			status = "disabled";
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +		};
+> +	};
+> +};
+> -- 
+> 2.35.3
+> 
+> 
+
 

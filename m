@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A5C518CC3
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C40D7518CC4
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 21:01:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239421AbiECTEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 15:04:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33160 "EHLO
+        id S241677AbiECTEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 15:04:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233023AbiECTEj (ORCPT
+        with ESMTP id S235220AbiECTEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 15:04:39 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD5D2B259;
-        Tue,  3 May 2022 12:01:05 -0700 (PDT)
-Date:   Tue, 03 May 2022 19:01:02 -0000
+        Tue, 3 May 2022 15:04:40 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD9E2B266;
+        Tue,  3 May 2022 12:01:06 -0700 (PDT)
+Date:   Tue, 03 May 2022 19:01:03 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651604463;
+        s=2020; t=1651604464;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=n7M0Azw91fCVodeFHNIFS0MZtP2Po+9EbNqB3ca7cok=;
-        b=ttZaMZAxHPGP5pHfmn+9ZR9J7ntPtRh+SnYrCIFixpjuyJCQ8T3ttDwIxKVo2ebTAH90X9
-        JeSJvyaW+lNI8LZy+ltHZPp01QbdsMSdMwhUsmdcngUW1XOHSsn9QKKCBtT/cnMudsbGbl
-        pJYSB4c1ap6BhuvugVGiR2BzUHGiXNChVSkP47AJxJHaapc+Hf2lJjrJauJap1T9i6zjm9
-        v2zL9AEtd03eCYFVQQrfjrsyZsaU5k4wo5h3dH6aE8Z4NxYNMMiWUZiLcMiQe0cLgk6tq3
-        +0caq3OcAB5YNbGOPK0QLSbdL2MJw9fCo0gfXZlH4wGt9KGyY2akHOvPOZ3Xcw==
+        bh=/O9baVx9hBXwJAw0Kwgt2xiQjzil3SDZg0pfPZZRWU4=;
+        b=S7UkiSEnnNGFBcPRgd4SnJSpa+7QL/Q7m9XRIcqnKFc35Q2F8fgvboG6pq6vCNbzn8D5Zl
+        ZXYR2ZVxWUMfEiQFGqEs124X51fah3OCTBUOhPJFef7GGDSildf08NZlHtWrX3kM2VBAbw
+        IHwIYPQEDyn4D5BJLqtNykeGuGX6JAreT6sRo64wkLLngG6OLinJqxcjevjVkteomWP0VX
+        D6IPjMK6/uX6pXEYc/ZcAIaIdXtDx3AwC+fUBLb5z1JlfOP5cJS3f6B70N4Qpvnyc1znKN
+        6y5iKqYQH9IhaiP55JowFm1uvRzRQixFLFkYKKJ5Qqos8GLjM4bA3WwryeVm7A==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651604463;
+        s=2020e; t=1651604464;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=n7M0Azw91fCVodeFHNIFS0MZtP2Po+9EbNqB3ca7cok=;
-        b=HmCdXJwsgscM3chuq+s/XJRQdeD4VLTmn/cOqXNuQ5g3fEvFThgQKVQcOCFujGggCBAy4c
-        0STOeYYJqCyBmxAQ==
+        bh=/O9baVx9hBXwJAw0Kwgt2xiQjzil3SDZg0pfPZZRWU4=;
+        b=iLv00M/j4sh5RcXpmVZrJBNrH862IiOgy3E1WogLLgWQu0Y7pJdcX3ByVbB3AKhL1qspHD
+        TrizeCekP5m3jRDA==
 From:   "tip-bot2 for Lai Jiangshan" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/asm] x86/entry: Convert SWAPGS to swapgs and remove the
- definition of SWAPGS
+Subject: [tip: x86/asm] x86/entry: Don't call error_entry() for XENPV
 Cc:     Lai Jiangshan <jiangshan.ljs@antgroup.com>,
         Borislav Petkov <bp@suse.de>, Juergen Gross <jgross@suse.com>,
         x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220503032107.680190-7-jiangshanlai@gmail.com>
-References: <20220503032107.680190-7-jiangshanlai@gmail.com>
+In-Reply-To: <20220503032107.680190-6-jiangshanlai@gmail.com>
+References: <20220503032107.680190-6-jiangshanlai@gmail.com>
 MIME-Version: 1.0
-Message-ID: <165160446219.4207.15978997115867513161.tip-bot2@tip-bot2>
+Message-ID: <165160446318.4207.9852653161107393222.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,94 +67,52 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/asm branch of tip:
 
-Commit-ID:     c89191ce67efa4e5353db6a67f7287c28e673740
-Gitweb:        https://git.kernel.org/tip/c89191ce67efa4e5353db6a67f7287c28e673740
+Commit-ID:     64cbd0acb58203fb769ed2f4eab526d43e243847
+Gitweb:        https://git.kernel.org/tip/64cbd0acb58203fb769ed2f4eab526d43e243847
 Author:        Lai Jiangshan <jiangshan.ljs@antgroup.com>
-AuthorDate:    Tue, 03 May 2022 11:21:07 +08:00
+AuthorDate:    Tue, 03 May 2022 11:21:06 +08:00
 Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Tue, 03 May 2022 12:26:08 +02:00
+CommitterDate: Tue, 03 May 2022 12:21:35 +02:00
 
-x86/entry: Convert SWAPGS to swapgs and remove the definition of SWAPGS
+x86/entry: Don't call error_entry() for XENPV
 
-XENPV doesn't use swapgs_restore_regs_and_return_to_usermode(),
-error_entry() and the code between entry_SYSENTER_compat() and
-entry_SYSENTER_compat_after_hwframe.
+XENPV guests enter already on the task stack and they can't fault for
+native_iret() nor native_load_gs_index() since they use their own pvop
+for IRET and load_gs_index(). A CR3 switch is not needed either.
 
-Change the PV-compatible SWAPGS to the ASM instruction swapgs in these
-places.
+So there is no reason to call error_entry() in XENPV.
 
-Also remove the definition of SWAPGS since no more users.
+  [ bp: Massage commit message. ]
 
 Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
 Reviewed-by: Juergen Gross <jgross@suse.com>
-Link: https://lore.kernel.org/r/20220503032107.680190-7-jiangshanlai@gmail.com
+Link: https://lore.kernel.org/r/20220503032107.680190-6-jiangshanlai@gmail.com
 ---
- arch/x86/entry/entry_64.S        | 6 +++---
- arch/x86/entry/entry_64_compat.S | 2 +-
- arch/x86/include/asm/irqflags.h  | 8 --------
- 3 files changed, 4 insertions(+), 12 deletions(-)
+ arch/x86/entry/entry_64.S | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
 diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-index 062aa9d..3121866 100644
+index ab6ab6d..062aa9d 100644
 --- a/arch/x86/entry/entry_64.S
 +++ b/arch/x86/entry/entry_64.S
-@@ -1019,7 +1019,7 @@ SYM_CODE_START_LOCAL(error_entry)
- 	 * We entered from user mode or we're pretending to have entered
- 	 * from user mode due to an IRET fault.
- 	 */
--	SWAPGS
-+	swapgs
- 	FENCE_SWAPGS_USER_ENTRY
- 	/* We have user CR3.  Change to kernel CR3. */
- 	SWITCH_TO_KERNEL_CR3 scratch_reg=%rax
-@@ -1051,7 +1051,7 @@ SYM_CODE_START_LOCAL(error_entry)
- 	 * gsbase and proceed.  We'll fix up the exception and land in
- 	 * .Lgs_change's error handler with kernel gsbase.
- 	 */
--	SWAPGS
-+	swapgs
+@@ -336,8 +336,17 @@ SYM_CODE_END(push_and_clear_regs)
+ 	call push_and_clear_regs
+ 	UNWIND_HINT_REGS
  
- 	/*
- 	 * Issue an LFENCE to prevent GS speculation, regardless of whether it is a
-@@ -1072,7 +1072,7 @@ SYM_CODE_START_LOCAL(error_entry)
- 	 * We came from an IRET to user mode, so we have user
- 	 * gsbase and CR3.  Switch to kernel gsbase and CR3:
- 	 */
--	SWAPGS
-+	swapgs
- 	FENCE_SWAPGS_USER_ENTRY
- 	SWITCH_TO_KERNEL_CR3 scratch_reg=%rax
+-	call	error_entry
+-	movq	%rax, %rsp			/* switch to the task stack if from userspace */
++	/*
++	 * Call error_entry() and switch to the task stack if from userspace.
++	 *
++	 * When in XENPV, it is already in the task stack, and it can't fault
++	 * for native_iret() nor native_load_gs_index() since XENPV uses its
++	 * own pvops for IRET and load_gs_index().  And it doesn't need to
++	 * switch the CR3.  So it can skip invoking error_entry().
++	 */
++	ALTERNATIVE "call error_entry; movq %rax, %rsp", \
++		"", X86_FEATURE_XENPV
++
+ 	ENCODE_FRAME_POINTER
+ 	UNWIND_HINT_REGS
  
-diff --git a/arch/x86/entry/entry_64_compat.S b/arch/x86/entry/entry_64_compat.S
-index 4fdb007..c5aeb08 100644
---- a/arch/x86/entry/entry_64_compat.S
-+++ b/arch/x86/entry/entry_64_compat.S
-@@ -50,7 +50,7 @@ SYM_CODE_START(entry_SYSENTER_compat)
- 	UNWIND_HINT_EMPTY
- 	ENDBR
- 	/* Interrupts are off on entry. */
--	SWAPGS
-+	swapgs
- 
- 	pushq	%rax
- 	SWITCH_TO_KERNEL_CR3 scratch_reg=%rax
-diff --git a/arch/x86/include/asm/irqflags.h b/arch/x86/include/asm/irqflags.h
-index 111104d..7793e52 100644
---- a/arch/x86/include/asm/irqflags.h
-+++ b/arch/x86/include/asm/irqflags.h
-@@ -137,14 +137,6 @@ static __always_inline void arch_local_irq_restore(unsigned long flags)
- 	if (!arch_irqs_disabled_flags(flags))
- 		arch_local_irq_enable();
- }
--#else
--#ifdef CONFIG_X86_64
--#ifdef CONFIG_XEN_PV
--#define SWAPGS	ALTERNATIVE "swapgs", "", X86_FEATURE_XENPV
--#else
--#define SWAPGS	swapgs
--#endif
--#endif
- #endif /* !__ASSEMBLY__ */
- 
- #endif

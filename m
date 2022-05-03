@@ -2,77 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B39EF518803
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:09:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA87751886A
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 17:22:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232281AbiECPN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 11:13:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39634 "EHLO
+        id S238304AbiECPZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 11:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238109AbiECPNU (ORCPT
+        with ESMTP id S238042AbiECPZj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 11:13:20 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115AE3B56C
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 08:09:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651590588; x=1683126588;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=IACxIDHwXqlTIFLmAExQlUxosyzk99ozoP6vJrNh0dU=;
-  b=WjpduO+YShmTaznUL0ZYjYUVAbqfnvzptbOyVKmEm9cFK9zBUKKJrpzS
-   sjWORaWDIwm8SSSWA8/dmYEJYihxlT6NO8hEdGIV3EiUfukaYjX4RSzd5
-   agMltmycERc+Fi71o9XdxfgmlZ4TYDwx2P5yZpH0pODtcmhaX/wCfg6m6
-   y8TaRgzCMLIoDYLrvhjiO3IAk3St/Ziw5foWRFqKmM/rPiqjnU5sCm2s8
-   n88cZ4N/meTx3wbnf+JEVMkuk7U8lnLYALGB7dCuLoPN2hCoW6ElvRHzz
-   UuVG47FdbiJtRlb++vDDnvs/vOH7PjN3Pi2Vr2GNGCzcKA6RRmSE8w4E9
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10336"; a="267654839"
-X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
-   d="scan'208";a="267654839"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 08:09:47 -0700
-X-IronPort-AV: E=Sophos;i="5.91,195,1647327600"; 
-   d="scan'208";a="562240918"
-Received: from kputnam-mobl1.amr.corp.intel.com (HELO [10.209.19.155]) ([10.209.19.155])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2022 08:09:46 -0700
-Message-ID: <cd48825b-7197-fc04-51e6-04bd8502d286@linux.intel.com>
-Date:   Tue, 3 May 2022 08:09:45 -0700
+        Tue, 3 May 2022 11:25:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3BD80C24
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 08:22:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651591326;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jUYy8b+KeqsrmdeQpON3aR0duOx1u2ctuvoiS753EAk=;
+        b=WavCwDAH7afkOYue23K6nUg2BmTw9EIvR+2g9te8nA8U29tnU/ZPt9FGV6+EeMFIVZtAoU
+        Rab+/t3KDMMAIE+ZdWdenRG/6u8lOHbcX48WVLHffSOC5FKafisWx92sev1YgZo+zBWxzX
+        MecMFXYExaJRPIW0oRpqn3rn7eJRF0E=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-611-wGa7T4S7MCuxQUmvbAlhTg-1; Tue, 03 May 2022 11:21:21 -0400
+X-MC-Unique: wGa7T4S7MCuxQUmvbAlhTg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C7AE6952760;
+        Tue,  3 May 2022 15:12:13 +0000 (UTC)
+Received: from starship (unknown [10.40.192.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 680D92024CDC;
+        Tue,  3 May 2022 15:12:11 +0000 (UTC)
+Message-ID: <cbd4709bb499874c60986083489e17c93b48d003.camel@redhat.com>
+Subject: Re: [PATCH] KVM: x86/mmu: Do not create SPTEs for GFNs that exceed
+ host.MAXPHYADDR
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>
+Date:   Tue, 03 May 2022 18:12:10 +0300
+In-Reply-To: <e11c21e99e7c4ac758b4417e0ae66d3a2f1fe663.camel@redhat.com>
+References: <337332ca-835c-087c-c99b-92c35ea8dcd3@redhat.com>
+         <Ymv1I5ixX1+k8Nst@google.com>
+         <20e1e7b1-ece7-e9e7-9085-999f7a916ac2@redhat.com>
+         <Ymv5TR76RNvFBQhz@google.com>
+         <e5864cb4-cce8-bd32-04b0-ecb60c058d0b@redhat.com>
+         <YmwL87h6klEC4UKV@google.com>
+         <ac2001e66957edc8a3af2413b78478c15898f86c.camel@redhat.com>
+         <f3ffad3aa8476156f369ff1d4c33f3e127b47d0c.camel@redhat.com>
+         <82d1a5364f1cc479da3762b046d22f136db167e3.camel@redhat.com>
+         <af15fd31f73e8a956da50db6104e690f9d308dad.camel@redhat.com>
+         <YnAMKtfAeoydHr3x@google.com>
+         <e11c21e99e7c4ac758b4417e0ae66d3a2f1fe663.camel@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.7.0
-Subject: Re: [PATCH v5 1/3] x86/tdx: Add TDX Guest attestation interface
- driver
-Content-Language: en-US
-To:     Wander Costa <wander@redhat.com>
-Cc:     Kai Huang <kai.huang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220501183500.2242828-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220501183500.2242828-2-sathyanarayanan.kuppuswamy@linux.intel.com>
- <5473f606bd8e60dd7b8d58a540285d126a1361bd.camel@intel.com>
- <e5aed619-20ce-7eb3-22a3-64b51de9cce3@linux.intel.com>
- <b8eadd3079101a2cf93ee87d36dbedf93d8a2725.camel@intel.com>
- <e673ea3d-ae4f-39ed-33a5-c6480e58c6d8@linux.intel.com>
- <CAAq0SU=TPHQ4q8Dj583m0yfVytygN81BTEe8vU5GCOoFau+LWw@mail.gmail.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <CAAq0SU=TPHQ4q8Dj583m0yfVytygN81BTEe8vU5GCOoFau+LWw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,21 +79,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 2022-05-03 at 12:12 +0300, Maxim Levitsky wrote:
+> On Mon, 2022-05-02 at 16:51 +0000, Sean Christopherson wrote:
+> > On Mon, May 02, 2022, Maxim Levitsky wrote:
+> > > On Mon, 2022-05-02 at 10:59 +0300, Maxim Levitsky wrote:
+> > > > > > Also I can reproduce it all the way to 5.14 kernel (last kernel I have installed in this VM).
+> > > > > > 
+> > > > > > I tested kvm/queue as of today, sadly I still see the warning.
+> > > > > 
+> > > > > Due to a race, the above statements are out of order ;-)
+> > > > 
+> > > > So futher investigation shows that the trigger for this *is* cpu_pm=on :(
+> > > > 
+> > > > So this is enough to trigger the warning when run in the guest:
+> > > > 
+> > > > qemu-system-x86_64  -nodefaults  -vnc none -serial stdio -machine accel=kvm
+> > > > -kernel x86/dummy.flat -machine kernel-irqchip=on -smp 8 -m 1g -cpu host
+> > > > -overcommit cpu-pm=on
+> > > > 
+> > > > 
+> > > > '-smp 8' is needed, and the more vCPUs the more often the warning appears.
+> > > > 
+> > > > 
+> > > > Due to non atomic memslot update bug, I use patched qemu version, with an
+> > > > attached hack, to pause/resume vcpus around the memslot update it does, but
+> > > > even without this hack, you can just ctrl+c the test after it gets the KVM
+> > > > internal error, and then tdp mmu memory leak warning shows up (not always
+> > > > but very often).
+> > > > 
+> > > > 
+> > > > Oh, and if I run the above command on the bare metal, it  never terminates.
+> > > > Must be due to preemption, qemu shows beeing stuck in kvm_vcpu_block. AVIC
+> > > > disabled, kvm/queue.  Bugs, bugs, and features :)
+> > > 
+> > > All right, at least that was because I removed the '-device isa-debug-exit,iobase=0xf4,iosize=0x4',
+> > > which is apparently used by KVM unit tests to signal exit from the VM.
+> > 
+> > Can you provide your QEMU command line for running your L1 VM?  And your L0 and L1
+> > Kconfigs too?  I've tried both the dummy and ipi_stress tests on a variety of hardware,
+> > kernels, QEMUs, etc..., with no luck.
+> > 
+> 
+> So now both L0 and L1 run almost pure kvm/queue)
+> (commit 2764011106d0436cb44702cfb0981339d68c3509)
+> 
+> I have some local patches but they are not relevant to KVM at all, more
+> like various tweaks to sensors, a sad hack for yet another regression
+> in AMDGPU, etc.
+> 
+> The config and qemu command line attached.
+> 
+> AVIC disabled in L0, L0 qemu is from master upstream.
+> Bug reproduces too well IMHO, almost always.
+> 
+> For reference the warning is printed in L1's dmesg.
 
+Tested this without any preemption in L0 and L1 - bug still reproduces just fine.
+(kvm/queue)
 
-On 5/3/22 7:38 AM, Wander Costa wrote:
->> I don't want to pollute the dmesg logs if possible. For IOCTL use case,
->> the return value can be used to understand the failure reason from user
->> code. But for initcall failure, pr_err message is required to understand
->> the failure reason.
-> How often is this call expected to fail?
-
-In general, it should not fail (so very low fail frequency). But the
-point is, we can easily understand this failure from user end. So we
-don't need to print more in non-debug environment.
+Best regards,
+	Maxim Levitsky
 
 > 
+> 
+> 
+> Best regards,
+> 	Maxim Levitsky
 
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+

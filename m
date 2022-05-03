@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3431B518E5A
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 22:11:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B296A518E4E
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 22:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242259AbiECUON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 16:14:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48654 "EHLO
+        id S237670AbiECUOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 16:14:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236380AbiECUNm (ORCPT
+        with ESMTP id S238116AbiECUNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 16:13:42 -0400
+        Tue, 3 May 2022 16:13:43 -0400
 Received: from mail.baikalelectronics.ru (mail.baikalelectronics.com [87.245.175.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6EE5D27143;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C72326AEB;
         Tue,  3 May 2022 13:10:07 -0700 (PDT)
 Received: from mail.baikalelectronics.ru (unknown [192.168.51.25])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 9A53B16DA;
-        Tue,  3 May 2022 23:10:37 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.ru 9A53B16DA
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 8F2A916DC;
+        Tue,  3 May 2022 23:10:38 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.ru 8F2A916DC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1651608637;
-        bh=zHaHwKz/yCVMvZJtPXeZzX7KArDCiwAc5Mq+USo7pmc=;
+        d=baikalelectronics.ru; s=mail; t=1651608638;
+        bh=ghQlSwR0k/fSp9BKKIsDgiCPjiVeG/HGpUtiHAxSYNU=;
         h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=e4NJ0gWE0usDCwyFRiDo57cUnOpQT5zW9B6KhDrD/VXkUAJyCV9vKUs+qnMqq2Qch
-         5Nnj4LSt9kJMFc/ZBv7fOniNyWfK9Tu20JL9YGcMhU+FbGf7BU05OgnGn7ZaAVc0j0
-         nCxeypGD+OBUzHZcS7NWM/Ke7cASfaykBx3zud60=
+        b=meW5KMaUHdkH6n4Q5WaAJPSKTyJTtY1DhwNuCc42mQ/Z1UyLkp9+TR31Dwi4PVgzU
+         4af7/zxv3af+2xGg9Z7N5ZkDfSFJfgAw3fa/MwMXqbKQCqA9RM3q0RrofOnDshZCJY
+         MJCoyziFowwKTbERXUB6f+pRte0daUZLy4EOoP0c=
 Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Tue, 3 May 2022 23:10:03 +0300
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Tue, 3 May 2022 23:10:04 +0300
 From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
 To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         Hans de Goede <hdegoede@redhat.com>,
@@ -38,9 +38,9 @@ CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
         Rob Herring <robh+dt@kernel.org>, <linux-ide@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: [PATCH v2 05/23] ata: libahci_platform: Explicitly set rc on devres_alloc failure
-Date:   Tue, 3 May 2022 23:09:20 +0300
-Message-ID: <20220503200938.18027-6-Sergey.Semin@baikalelectronics.ru>
+Subject: [PATCH v2 06/23] ata: libahci_platform: Convert to using platform devm-ioremap methods
+Date:   Tue, 3 May 2022 23:09:21 +0300
+Message-ID: <20220503200938.18027-7-Sergey.Semin@baikalelectronics.ru>
 In-Reply-To: <20220503200938.18027-1-Sergey.Semin@baikalelectronics.ru>
 References: <20220503200938.18027-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
@@ -56,49 +56,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's better for readability and maintainability to explicitly assign an
-error number to the variable used then as a return value from the method
-on the cleanup-on-error path. So adding new code in the method we won't
-have to think whether the overridden rc-variable is set afterward in case
-of an error. Saving one line of code doesn't worth it especially seeing
-the rest of the ahci_platform_get_resources() function errors handling
-blocks do explicitly write errno to rc.
+Currently the IOMEM AHCI registers space is mapped by means of the
+two functions invocation: platform_get_resource() is used to get the very
+first memory resource and devm_ioremap_resource() is called to remap that
+resource. Device-managed kernel API provides a handy wrapper to perform
+the same in single function call: devm_platform_ioremap_resource().
+
+While at it seeing many AHCI platform drivers rely on having the AHCI CSR
+space marked with "ahci" name let's first try to find and remap the CSR
+IO-mem with that name and only if it fails fallback to getting the very
+first registers space platform resource.
 
 Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
 ---
 
 Changelog v2:
-- Drop rc variable initialization (@Damien)
+- Check whether there is "ahhi" reg resource before using the
+  devm_platform_ioremap_resource_byname() method in order to prevent a
+  false error message printed in the log (@Damien)
+- Slightly update the patch title due to the change above and to be more
+  specific that the platform device managed methods are utilized.
 ---
- drivers/ata/libahci_platform.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/ata/libahci_platform.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/ata/libahci_platform.c b/drivers/ata/libahci_platform.c
-index 32495ae96567..f7f9bfcfc164 100644
+index f7f9bfcfc164..8c9fbcc3043b 100644
 --- a/drivers/ata/libahci_platform.c
 +++ b/drivers/ata/libahci_platform.c
-@@ -389,7 +389,7 @@ struct ahci_host_priv *ahci_platform_get_resources(struct platform_device *pdev,
- 	struct ahci_host_priv *hpriv;
- 	struct clk *clk;
- 	struct device_node *child;
--	int i, enabled_ports = 0, rc = -ENOMEM, child_nodes;
-+	int i, enabled_ports = 0, rc, child_nodes;
- 	u32 mask_port_map = 0;
- 
- 	if (!devres_open_group(dev, NULL, GFP_KERNEL))
-@@ -397,8 +397,10 @@ struct ahci_host_priv *ahci_platform_get_resources(struct platform_device *pdev,
- 
- 	hpriv = devres_alloc(ahci_platform_put_resources, sizeof(*hpriv),
- 			     GFP_KERNEL);
--	if (!hpriv)
-+	if (!hpriv) {
-+		rc = -ENOMEM;
- 		goto err_out;
-+	}
+@@ -404,8 +404,14 @@ struct ahci_host_priv *ahci_platform_get_resources(struct platform_device *pdev,
  
  	devres_add(dev, hpriv);
  
+-	hpriv->mmio = devm_ioremap_resource(dev,
+-			      platform_get_resource(pdev, IORESOURCE_MEM, 0));
++	/*
++	 * If the DT provided an "ahci" named resource, use it. Otherwise,
++	 * fallback to using the default first resource for the device node.
++	 */
++	if (platform_get_resource_byname(pdev, IORESOURCE_MEM, "ahci"))
++		hpriv->mmio = devm_platform_ioremap_resource_byname(pdev, "ahci");
++	else
++		hpriv->mmio = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(hpriv->mmio)) {
+ 		rc = PTR_ERR(hpriv->mmio);
+ 		goto err_out;
 -- 
 2.35.1
 

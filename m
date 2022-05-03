@@ -2,128 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C10AE518788
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 669C751879F
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 16:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237596AbiECPBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 11:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54714 "EHLO
+        id S237645AbiECPDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 11:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237568AbiECPBm (ORCPT
+        with ESMTP id S237619AbiECPDT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 11:01:42 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7C23969C;
-        Tue,  3 May 2022 07:58:09 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id CF5343200984;
-        Tue,  3 May 2022 10:58:07 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 03 May 2022 10:58:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1651589887; x=1651676287; bh=u3/ZTfENb3
-        6qvkDrkbhGccJNHgVBQ0azaIzvNqhQoDA=; b=KMZZ/hu5iJPlXGlgO50mCLMnIx
-        U53mZgwzBD8pSfvPdIkT1Mfhs9gpIPaERDOAw0wwPmkEFV0SexVCJBN+Im8Hq+4D
-        70D/SW3+xEmBG+UaX78M1cQsnsVQK+718vlo4IADXJo1y+hXpQ+vQJ9Lb2nN3PeJ
-        tz4mFBkrO2VI9l67vnccF3fJNNXmWsfDqcpahYLmxMsMFhYiapnwtokwuub2pvdc
-        xJ1W1QRoj5BYnTpMLb9Bx7KKtQx1Q+wBaHEhgsnsLPdX0vpALTNf5c6c0MbHCmhH
-        +x1hOw7qtrmJ4u4iG4KnKuCsTyMsJ1JM4GPwntZmBglRhYa9sjW5W+s2cN7w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1651589887; x=
-        1651676287; bh=u3/ZTfENb36qvkDrkbhGccJNHgVBQ0azaIzvNqhQoDA=; b=e
-        enu4DqsvhhUXtyYtBmttcSTFhVtllQ/uoqiptQTMDqKxUYwi8ZJ+TA9XgCkWlV4A
-        ECZnF5OBoEqxmoVMu0Imo4jSB7Zx0hQj7sJaJKVCO4Tp2aD/OqSiqopRzcTZkUq5
-        XFTABuZ1kqs7gcOkWKGp8hoYCL5tXMB4SEuAQYxE5W9VDye/Sci5v5hmg6k34Z0N
-        xqg7S+U/YtsVnm7qWhMLF0xb3dkFW9xwGOEnC3ba6LEJoZT52m4MpLY4WNCHF1Ou
-        twYi6P/IUIMi0GUuhOO/XoKZBouca68ckvfz9Kjlu89S+G5ghppfeovRAfRG+0ic
-        z+ZtSWK22Lf3FOga5jZNw==
-X-ME-Sender: <xms:_kJxYs5dnO_HKlqFvCR7WXShBS7EGs14ET_AX0hl9hrt62VLWx11iw>
-    <xme:_kJxYt4gueeje4sAfHtutlhsPseor4VP8aoCWoAinKRditld14wEviqE3CIEjC2i-
-    OWVAPOVtgerS1TX40k>
-X-ME-Received: <xmr:_kJxYrfKYsUw9PZpz2IpPpYaX1HaguTOn0ORicFUXiu9Lz9mg2_andM6u1j57qfrEbX30I1WasfBrKaadSBOngyBdhz_t-qjxtbroi0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejgdekfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepteefffefgfektdefgfeludfgtdejfeejvddttdekteeiffejvdfgheehfffh
-    vedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:_kJxYhImyKRXJ4ybMxVrDE1lB33gVdQdLKwZRa0vwBc49zIcnrvQMA>
-    <xmx:_kJxYgImSOz-VxG3T8h2XJzCoWc3I89Y4F-Qr7heQd3HAIlkO5KWkg>
-    <xmx:_kJxYiyXnLOUFb1ZvcaEooP_n3eoQtSg0Zq4WKG4-2vEe58gEA8gSA>
-    <xmx:_0JxYlXvWoR-m8CEqEa2zBOZEB_BVnODc5i7IhVk4xtMmOodfNt5fA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 3 May 2022 10:58:06 -0400 (EDT)
-Date:   Tue, 3 May 2022 16:58:04 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com, linux-clk@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: bcm2835: fix bcm2835_clock_choose_div
-Message-ID: <20220503145804.b2xz4etzc6kpr3fk@houat>
-References: <20220428183010.1635248-1-stefan.wahren@i2se.com>
+        Tue, 3 May 2022 11:03:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 50F8E39801
+        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 07:59:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651589986;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XyarcUrf0R465efktdUAleuyj6ZDMyzyVobCRnMSWN8=;
+        b=NZEMNqQyHoUtZ7ZxJZorjtj/VytvWaInuumxBz0JR99oTUVfEDgP+6BV3JUCCXsoafZ9g6
+        TcvEXdEvpPnk0h0INmsIQy+/gOcB+hk1gqo7CYgZ+i1Fk0F0USgYiqOxZ2dZP3N0BubmuR
+        ZhEDhxLAdRyINFRdCnIklz7MVwrG0/M=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-340-59-kKbrXPAOVc7ZAM1zFeA-1; Tue, 03 May 2022 10:59:33 -0400
+X-MC-Unique: 59-kKbrXPAOVc7ZAM1zFeA-1
+Received: by mail-wm1-f70.google.com with SMTP id 26-20020a05600c021a00b003940660c053so5774693wmi.2
+        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 07:59:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=XyarcUrf0R465efktdUAleuyj6ZDMyzyVobCRnMSWN8=;
+        b=6IPW8hiDAUv+REXFZjXZ0vfKKJb62byRe7VuueU58ihxpuZIQhKvoq/zPwN6RkxhNk
+         0L+b9k/ojKbB/jIVgWjBnf6IV/a1Zdwo9MyiUsMKut85GJ0Q7xKF8FKe3ZZoO+Amut+4
+         uGWpKA8ci39Gl5uN7Ewq4gWqUxDy3eC97a06i1WEkG6Blhs59rU4aShKT0VyVJJ14aOM
+         zuIANyG4sDqvda+GbH834LpxmJyoM1sI3Sgw8wua/bNATpTDpPxrz1Pu7oQdz2qi/MHu
+         ccQHbdPI26jA8Z1Fl/SI+OOm2+MQvq1RCxmKDUnM+nIhIDkTUJhcrMlXe/fComuo7+34
+         Wo1w==
+X-Gm-Message-State: AOAM533xqnVTLY6P3dMPLheIOq/egYlPxPfxpOuJW+/Sec6bZBuJm97U
+        R9T5k2d56xiCrgJ3CZgvtlMd3ugqUBtnf0QjPt0UNmbJrTgBBqpWJ/kQpyRL5wQFaXo4de0fVMA
+        IIp2hpRI7fOtudGvaytA6qUNN
+X-Received: by 2002:a05:600c:3b1f:b0:394:5399:a34 with SMTP id m31-20020a05600c3b1f00b0039453990a34mr1536988wms.40.1651589954226;
+        Tue, 03 May 2022 07:59:14 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyd0dxa95Pj2U+hA9w5BwXWjBAHcElOoTebVuZFbPFkRANcckEwJxnP4Vwxmt5ZItX1z0AydQ==
+X-Received: by 2002:a05:600c:3b1f:b0:394:5399:a34 with SMTP id m31-20020a05600c3b1f00b0039453990a34mr1536968wms.40.1651589954045;
+        Tue, 03 May 2022 07:59:14 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id j28-20020a05600c1c1c00b003942a244f39sm1828183wms.18.2022.05.03.07.59.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 07:59:13 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v3 07/34] x86/hyperv: Introduce
+ HV_MAX_SPARSE_VCPU_BANKS/HV_VCPUS_PER_SPARSE_BANK constants
+In-Reply-To: <19a812b3-73b4-7e5a-8885-ec652598a5ce@wanadoo.fr>
+References: <20220414132013.1588929-1-vkuznets@redhat.com>
+ <20220414132013.1588929-8-vkuznets@redhat.com>
+ <19a812b3-73b4-7e5a-8885-ec652598a5ce@wanadoo.fr>
+Date:   Tue, 03 May 2022 16:59:12 +0200
+Message-ID: <87ee1a3bnj.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="p2wiobkotqpc7edr"
-Content-Disposition: inline
-In-Reply-To: <20220428183010.1635248-1-stefan.wahren@i2se.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Christophe JAILLET <christophe.jaillet@wanadoo.fr> writes:
 
---p2wiobkotqpc7edr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Le 14/04/2022 =C3=A0 15:19, Vitaly Kuznetsov a =C3=A9crit=C2=A0:
 
-Hi,
+...
 
-On Thu, Apr 28, 2022 at 08:30:10PM +0200, Stefan Wahren wrote:
-> The commit 09e3b18ca5de ("clk: bcm2835: Remove unused variable")
-> accidentially breaks the behavior of bcm2835_clock_choose_div() and
-> booting of Raspberry Pi. The removed do_div macro call had side effects,
-> so we need to restore it.
->=20
-> Fixes: 09e3b18ca5de ("clk: bcm2835: Remove unused variable")
-> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+>> @@ -224,7 +225,7 @@ static inline int __cpumask_to_vpset(struct hv_vpset=
+ *vpset,
+>>   	 * structs are not cleared between calls, we risk flushing unneeded
+>>   	 * vCPUs otherwise.
+>>   	 */
+>> -	for (vcpu_bank =3D 0; vcpu_bank <=3D hv_max_vp_index / 64; vcpu_bank++)
+>> +	for (vcpu_bank =3D 0; vcpu_bank <=3D max_vcpu_bank; vcpu_bank++)
+>>   		vpset->bank_contents[vcpu_bank] =3D 0;
+>
+> and here:
+> 	bitmap_clear(vpset->bank_contents, 0, hv_max_vp_index);
+> or maybe even if it is safe to do so:
+> 	bitmap_zero(vpset->bank_contents, hv_max_vp_index);
 
-I only found this patch after debugging why the HDMI driver was
-returning -EINVAL at probe on -rc5.
+Both your suggestions (including the one for "PATCH v3 07/34]") look
+good to me, thanks! I'd however want to send them to linux-hyperv@
+separately when this series lands through KVM tree just to not make this
+heavy series even heavier.
 
-Acked-by: Maxime Ripard <maxime@cerno.tech>
-Tested-by: Maxime Ripard <maxime@cerno.tech>
+--=20
+Vitaly
 
-Thanks!
-Maxime
-
---p2wiobkotqpc7edr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYnFC/AAKCRDj7w1vZxhR
-xaGNAP9Y+6Prx+q4EP/YHCQrzXAiTYGIPXHLEHBJRgXpGPAW3AEAp/a2alQMqIpr
-NxKtSYXFfTi1DT0QYYAxidlxOOAqkwc=
-=gbju
------END PGP SIGNATURE-----
-
---p2wiobkotqpc7edr--

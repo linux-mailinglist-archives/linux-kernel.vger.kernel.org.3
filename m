@@ -2,121 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69EDA518DB2
-	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 22:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7BBB518DB6
+	for <lists+linux-kernel@lfdr.de>; Tue,  3 May 2022 22:04:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236272AbiECUGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 3 May 2022 16:06:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35544 "EHLO
+        id S236291AbiECUHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 3 May 2022 16:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbiECUGT (ORCPT
+        with ESMTP id S230514AbiECUHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 3 May 2022 16:06:19 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B8D403C9
-        for <linux-kernel@vger.kernel.org>; Tue,  3 May 2022 13:02:46 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id t11-20020a17090ad50b00b001d95bf21996so3257586pju.2
-        for <linux-kernel@vger.kernel.org>; Tue, 03 May 2022 13:02:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=lO/St+o2/PonjjcblNEybj23wOVCI5+m6U1+OI/TnZE=;
-        b=PCvGCzsvIlu1EuXOzDqVzSwE4DAmJ15LlcKthP3s6kp4sJdaVpq9wwEcFLGha/McMd
-         E2KG//amULHo4ISJDsiQ3tbmqYzmtcZUlJtCvhMEch/LKDRQZK8W0ShcLlfggWS3h0q7
-         qkw6Ff1OihT0y0Hk+heZknTEeRzZmualGVja8NdrYSVda816O8WOKHPBRZ1XM0xH48Zp
-         pheeFma0vOK2GncA1jZ/fqB0SubqSY44XUX/dLcAp8fUoktfTTqKnq2YJbL+oeV4X4ht
-         4lCKXiUK/OJoyFM/YS8HdWvMOfMgFbGuz2D/V8hmJUhMncrWk2CW4UwrQeubLmzIzkw4
-         k6Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=lO/St+o2/PonjjcblNEybj23wOVCI5+m6U1+OI/TnZE=;
-        b=vsrbZ7y96x89vWYKW5TiSvea7T9MCi/XOEz3JQgPcs1q1N001zjfwGOp5IuqC5NLbt
-         q7hZz0F4z7W40dmKXtFo7mJJqOV7YRPFhC0dTFqywzbnEK1CM9GsF3UUDbPf3PXinS39
-         oywUw2iwvzpdOQQ+LP7ixCoOzUoE7BCYfPuz6/YxjKPyNck97tvBCm7w5Q1W95PyCNan
-         omkkOHDWPTwZc6pCAdCJy4veh9raEYXVf/sSyzIgeb7hj6LAxq47Qe4qGacgogtiE9aN
-         34Z3u9eMHKceEstrisNE80cfZozpYkyFQJ5SS3dGNo2DAIvnNfOgHX0OZgUaBFsgsqrw
-         cc/Q==
-X-Gm-Message-State: AOAM532ZDnI6PsddHdeFnK9ATlGTWVlQYaJlX7f/eofnTIrnqgXYnIkj
-        cb/507o1qLt216t2kWPYCVHvcRrJ9/JjJ9SMBPP7
-X-Google-Smtp-Source: ABdhPJyGr+c8LNlbNNBXcpq/E9lvU6ileaoiIgySTkkuyQiPg6JdjkUnr0umPie0YLBfSrHZOOgapp9FoirQubuXdyk=
-X-Received: by 2002:a17:90a:9294:b0:1b9:48e9:a030 with SMTP id
- n20-20020a17090a929400b001b948e9a030mr6495804pjo.200.1651608165644; Tue, 03
- May 2022 13:02:45 -0700 (PDT)
+        Tue, 3 May 2022 16:07:34 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB18403C6;
+        Tue,  3 May 2022 13:04:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=QwbxKW/u1C+Gw4rhvaiXK5OBQkHPMzPp/1lAC0EgVgY=; b=hXj3RdTJQJZS0m9a+3dmdiPVYD
+        9AKTxlTpaHHH1tc1UZSwB9gfZPqmaH0wTyJiwX+X6NaqIsC+O79vyuLbKIcmbsH27MRBPvYT5Y1nF
+        Gl6bSq+z3ErnocVhEJByW/YhiHi0FsUfD3d9ila4PNOUDiyefh778CeGp5qpDEbcgH9dPlCfyLW8Q
+        a1XWRMdD6YT00hXthG7QDbIVZXp3Yu1r/ZudW5qHaKwjC9xN4lvFEB/n8na/BAslEfYfS53d+JWaz
+        9XRD/fKaHQcuvfyUAI0UEwwefl+Gr0WzgBNLXKmA7zKmsbFqZIrKfIuTVqOmjCcriK/BDYjleZbPk
+        eKnzBIQg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nlykU-007U4h-AT; Tue, 03 May 2022 20:03:54 +0000
+Date:   Tue, 3 May 2022 13:03:54 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     =?iso-8859-1?Q?Thi=E9baud?= Weksteen <tweek@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Qian Cai <quic_qiancai@quicinc.com>,
+        John Stultz <jstultz@google.com>,
+        Jeffrey Vander Stoep <jeffv@google.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Alistair Delva <adelva@google.com>,
+        Adam Shih <adamshih@google.com>, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v4] firmware_loader: use kernel credentials when reading
+ firmware
+Message-ID: <YnGKqjE+KydNnWRw@bombadil.infradead.org>
+References: <20220502004952.3970800-1-tweek@google.com>
 MIME-Version: 1.0
-References: <20220217141858.71281-1-cgzones@googlemail.com>
- <41224e84-2da7-3f69-0fdb-bb309ad6a3d4@schaufler-ca.com> <CAJ2a_Dfqm92Am5PFPh+3itWZmArWRuVadcRO+=i-BPhQ8QmA8Q@mail.gmail.com>
-In-Reply-To: <CAJ2a_Dfqm92Am5PFPh+3itWZmArWRuVadcRO+=i-BPhQ8QmA8Q@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 3 May 2022 16:02:34 -0400
-Message-ID: <CAHC9VhR-Xk65iSfZxVvaK+mJoFszxT2E8vF=cus1aAKcB0EgYg@mail.gmail.com>
-Subject: Re: [PATCH] security: declare member holding string literal const
-To:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
-Cc:     Casey Schaufler <casey@schaufler-ca.com>,
-        SElinux list <selinux@vger.kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>,
-        Todd Kjos <tkjos@google.com>,
-        Olga Kornievskaia <kolga@netapp.com>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
-        linux-security-module@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220502004952.3970800-1-tweek@google.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 2, 2022 at 9:38 AM Christian G=C3=B6ttsche
-<cgzones@googlemail.com> wrote:
-> On Thu, 17 Feb 2022 at 23:50, Casey Schaufler <casey@schaufler-ca.com> wr=
-ote:
-> > On 2/17/2022 6:18 AM, Christian G=C3=B6ttsche wrote:
-> > > The struct security_hook_list member lsm is assigned in
-> > > security_add_hooks() with string literals passed from the individual
-> > > security modules.  Declare the function parameter and the struct memb=
-er
-> > > const to signal their immutability.
-> > >
-> > > Reported by Clang [-Wwrite-strings]:
-> > >
-> > >      security/selinux/hooks.c:7388:63: error: passing 'const char [8]=
-' to parameter of type 'char *' discards qualifiers [-Werror,-Wincompatible=
--pointer-types-discards-qualifiers]
-> > >              security_add_hooks(selinux_hooks, ARRAY_SIZE(selinux_hoo=
-ks), selinux);
-> > >                                                                      =
-     ^~~~~~~~~
-> > >      ./include/linux/lsm_hooks.h:1629:11: note: passing argument to p=
-arameter 'lsm' here
-> > >                                      char *lsm);
-> > >                                            ^
-> > >
-> > > Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
-> >
-> > Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
-> >
->
-> Kindly ping;
-> any progress on this one?
+On Mon, May 02, 2022 at 10:49:52AM +1000, Thiébaud Weksteen wrote:
+> Device drivers may decide to not load firmware when probed to avoid
+> slowing down the boot process should the firmware filesystem not be
+> available yet. In this case, the firmware loading request may be done
+> when a device file associated with the driver is first accessed. The
+> credentials of the userspace process accessing the device file may be
+> used to validate access to the firmware files requested by the driver.
+> Ensure that the kernel assumes the responsibility of reading the
+> firmware.
+> 
+> This was observed on Android for a graphic driver loading their firmware
+> when the device file (e.g. /dev/mali0) was first opened by userspace
+> (i.e. surfaceflinger). The security context of surfaceflinger was used
+> to validate the access to the firmware file (e.g.
+> /vendor/firmware/mali.bin).
+> 
+> Previously, Android configurations were not setting up the
+> firmware_class.path command line argument and were relying on the
+> userspace fallback mechanism. In this case, the security context of the
+> userspace daemon (i.e. ueventd) was consistently used to read firmware
+> files. More Android devices are now found to set firmware_class.path
+> which gives the kernel the opportunity to read the firmware directly
+> (via kernel_read_file_from_path_initns). In this scenario, the current
+> process credentials were used, even if unrelated to the loading of the
+> firmware file.
+> 
+> Signed-off-by: Thiébaud Weksteen <tweek@google.com>
+> Cc: <stable@vger.kernel.org> # 5.10
 
-I've already added my Reviewed-by tag, as has Casey, so I think it's
-pretty "safe" at this point.  The next step is for James to pull this
-into the LSM tree.  If it is still collecting dust at the end of this
-week, ping us again and I can just go ahead and pull it into the
-SELinux tree, it's small enough that it shouldn't cause any problems.
+Acked-by: Luis Chamberlain <mcgrof@kernel.org>
 
---=20
-paul-moore.com
+  Luis
